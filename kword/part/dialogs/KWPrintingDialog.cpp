@@ -24,13 +24,16 @@
 #include "KWPage.h"
 #include "KWView.h"
 #include "KWCanvas.h"
-#include "frames/KWFrameSet.h"
+#include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 #include <kdeversion.h>
 #include <QApplication>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QTextDocument>
 
 KWPrintingDialog::KWPrintingDialog(KWView *view)
         : KoPrintingDialog(view),
@@ -45,6 +48,20 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
             break;
     }
     printer().setFromTo(documentFirstPage(), documentLastPage());
+
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (tfs) {
+            QTextDocument *doc = tfs->document();
+            QTextBlock block = doc->begin();
+            while (block.isValid()) {
+                QTextLayout *layout = block.layout();
+                if (layout)
+                    layout->clearAdditionalFormats();
+                block = block.next();
+            }
+        }
+    }
 }
 
 KWPrintingDialog::~KWPrintingDialog()
