@@ -94,6 +94,8 @@ void TablePageManager::preparePage(int page)
     Q_CHECK_PTR(layout);
     const QList<KoShape*> textShapes = layout->shapes();
     const int masterIndex = textShapes.indexOf(d->master);
+    if (masterIndex < 0)
+        return;  // huh?
     KoShapeContainer* const textShape = dynamic_cast<KoShapeContainer*>(textShapes.value(masterIndex + page - 1));
     if (textShape) {
         TableShape* const shape = new TableShape(d->master->columns(), d->master->rows());
