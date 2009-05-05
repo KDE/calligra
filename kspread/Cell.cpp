@@ -1349,11 +1349,15 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
         kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table,"formula", QString() );
         isFormula = true;
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString() ) );
-        //necessary to remove it to load formula from oocalc2.0 (use namespace)
-        if (oasisFormula.startsWith( "oooc:" ) )
-            oasisFormula= oasisFormula.mid( 5 );
-        else if (oasisFormula.startsWith( "kspr:" ) )
-            oasisFormula= oasisFormula.mid( 5 );
+        // each spreadsheet application likes to safe formulas with a different namespace
+        // prefix, so remove all of them
+        static const char* const prefixes[] = {"oooc:", "kspr:", "of:", "msoxl:", 0};
+        for (const char* const* prefix = prefixes; *prefix; ++prefix) {
+            if (oasisFormula.startsWith( *prefix )) {
+                oasisFormula = oasisFormula.mid( strlen(*prefix) );
+                break;
+            }
+        }
         oasisFormula = Odf::decodeFormula( oasisFormula, locale() );
         setUserInput( oasisFormula );
     }
