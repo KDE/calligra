@@ -748,7 +748,7 @@ bool Doc::completeLoading( KoStore* store )
   kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
 
   setModified( false );
-  bool ok=true;
+  bool ok=map()->completeLoading(store);
   foreach(KoDataCenter *dataCenter, d->dataCenterMap)
   {
     ok = ok && dataCenter->completeLoading(store);
