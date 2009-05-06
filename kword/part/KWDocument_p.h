@@ -22,6 +22,9 @@
 
 #include <QObject>
 
+class KWPage;
+class KWDocument;
+
 /// \internal
 class PageProcessingQueue : public QObject
 {
