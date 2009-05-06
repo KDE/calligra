@@ -178,7 +178,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
         forEachElement(page, pageSequence) {
             if (page.namespaceURI() == KoXmlNS::text && page.localName() == "page") {
                 QString master = page.attributeNS(KoXmlNS::text, "master-page-name", QString());
-                pageManager->insertPage(1, pageManager->pageStyle(master));
+                pageManager->appendPage(pageManager->pageStyle(master));
             }
         }
     }
