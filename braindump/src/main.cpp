@@ -19,7 +19,7 @@
 
 #include <kcmdlineargs.h>
 
-#include <KoApplication.h>
+#include <KApplication>
 #include <memory>
 
 #include "BrainDumpAboutData.h"
@@ -32,10 +32,8 @@ int main( int argc, char **argv )
   KCmdLineOptions options;
   KCmdLineArgs::addCmdLineOptions( options );
 
-  KoApplication app;
+  KApplication app;
 
-  if (!app.start())
-      return 1;
   app.exec();
 
   return 0;
