@@ -23,7 +23,7 @@
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoPACanvas.h>
+#include <Canvas.h>
 
 #include "Document.h"
 

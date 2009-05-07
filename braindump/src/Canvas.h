@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPACANVAS_H
-#define KOPACANVAS_H
+#ifndef _CANVAS_H
+#define _CANVAS_H
 
 #include <QWidget>
 #include <QList>
@@ -31,12 +31,12 @@ class Document;
 class KAction;
 
 /// Widget that shows a KoPAPage
-class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase
+class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit KoPACanvas( KoPAView * view, Document * doc );
-    ~KoPACanvas();
+    explicit Canvas( KoPAView * view, Document * doc );
+    ~Canvas();
 
     /// Returns pointer to the KoPADocument
     Document* document() const { return m_doc; }

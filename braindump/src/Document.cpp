@@ -38,7 +38,7 @@
 
 #include "Section.h"
 
-#include "KoPACanvas.h"
+#include "Canvas.h"
 #include "KoPAView.h"
 #include "commands/KoPAPageDeleteCommand.h"
 #include "BrainDumpAboutData.h"

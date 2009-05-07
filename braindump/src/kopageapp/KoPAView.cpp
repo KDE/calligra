@@ -48,7 +48,7 @@
 #include <KoCopyController.h>
 
 #include "KoShapeTraversal.h"
-#include "KoPACanvas.h"
+#include "Canvas.h"
 #include "Document.h"
 #include "Section.h"
 
@@ -98,7 +98,7 @@ void KoPAView::initGUI()
     gridLayout->setSpacing( 0 );
     setLayout( gridLayout );
 
-    m_canvas = new KoPACanvas( this, m_doc );
+    m_canvas = new Canvas( this, m_doc );
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
     KoToolManager::instance()->addController( m_canvasController );

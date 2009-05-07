@@ -29,7 +29,7 @@
 
 class KoCanvasController;
 class KoFind;
-class KoPACanvas;
+class Canvas;
 class Document;
 class KToggleAction;
 class Section;
@@ -39,7 +39,7 @@ class KoZoomAction;
 class KoZoomController;
 class QTextDocument;
 
-/// Creates a view with a KoPACanvas and rulers
+/// Creates a view with a Canvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
 {
     Q_OBJECT
@@ -62,14 +62,14 @@ public:
 
     void updateReadWrite( bool readwrite );
 
-    virtual KoViewConverter * viewConverter( KoPACanvas * canvas ) { Q_UNUSED( canvas ); return &m_zoomHandler; }
+    virtual KoViewConverter * viewConverter( Canvas * canvas ) { Q_UNUSED( canvas ); return &m_zoomHandler; }
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 
     KoZoomController *zoomController() { return m_zoomController; }
 
-    KoPACanvas * kopaCanvas() { return m_canvas; }
-    KoPACanvas * kopaCanvas() const { return m_canvas; }
+    Canvas * kopaCanvas() { return m_canvas; }
+    Canvas * kopaCanvas() const { return m_canvas; }
 
     Document * document() { return m_doc; }
     /// @return Page that is shown in the canvas
@@ -150,7 +150,7 @@ protected slots:
 
 protected:
     Document *m_doc;
-    KoPACanvas *m_canvas;
+    Canvas *m_canvas;
     Section *m_activeSection;
 
 private:
