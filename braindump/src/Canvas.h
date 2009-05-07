@@ -120,6 +120,11 @@ protected:
     /// Sets the canvas background color to the given color
     void setBackgroundColor( const QColor &color );
 
+    void updateSizeAndOffset();
+    void adjustOrigin();
+    QRectF documentViewRect();
+
+    QRectF m_docViewRect;
     View * m_view;
     Document * m_doc;
     KoShapeManager * m_shapeManager;

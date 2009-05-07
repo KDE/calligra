@@ -20,6 +20,8 @@
 
 #include "Canvas.h"
 
+#include <KoSelection.h>
+#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
@@ -251,5 +253,36 @@ void Canvas::setBackgroundColor( const QColor &color )
     pal.setColor( QPalette::Inactive, backgroundRole(), color );
     setPalette( pal );
 }
+
+void Canvas::updateSizeAndOffset()
+{
+    // save the old view rect for comparing
+    QRectF oldDocumentViewRect = m_docViewRect;
+    m_docViewRect = documentViewRect();
+    // check if the view rect has changed and emit signal if it has
+    if( oldDocumentViewRect != m_docViewRect )
+    {
+        QRectF viewRect = viewConverter()->documentToView( m_docViewRect );
+        KoCanvasController * controller = canvasController();
+        if( controller )
+        {
+            // tell canvas controller the new document size in pixel
+            controller->setDocumentSize( viewRect.size().toSize() );
+            // make sure the actual selection is visible
+            KoSelection * selection = shapeManager()->selection();
+            if( selection->count() )
+                controller->ensureVisible( selection->boundingRect() );
+        }
+    }
+    update();
+}
+
+QRectF Canvas::documentViewRect()
+{
+    QRectF bbox = m_view->activeSection()->boundingRect();
+    m_docViewRect = bbox.adjusted( -100, -100, 100, 100 );
+    return m_docViewRect;
+}
+
 
 #include "Canvas.moc"
