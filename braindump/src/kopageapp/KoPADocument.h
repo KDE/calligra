@@ -33,12 +33,11 @@ class Section;
 
 class KoShapeSavingContext;
 class KoPAPage;
-class KoPAMasterPage;
 class KoPALoadingContext;
 class KoPASavingContext;
 class KoXmlWriter;
 
-/// Document class that stores KoPAPage and KoPAMasterPage objects
+/// Document class that stores Sections
 class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase, public SectionGroup
 {
     Q_OBJECT

@@ -188,10 +188,6 @@ void KoPAView::initActions()
     actionCollection()->addAction( "view_show_guides", m_actionViewShowGuides );
     connect( m_actionViewShowGuides, SIGNAL(triggered(bool)), this, SLOT(viewGuides(bool)));
 
-    m_actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
-    actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );
-    connect( m_actionViewShowMasterPages, SIGNAL( triggered( bool ) ), this, SLOT( setMasterMode( bool ) ) );
-
     m_actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
     actionCollection()->addAction( "page_insertpage", m_actionInsertPage );
     m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
@@ -210,10 +206,6 @@ void KoPAView::initActions()
     m_actionDeletePage->setToolTip( i18n( "Delete the current page" ) );
     m_actionDeletePage->setWhatsThis( i18n( "Delete the current page" ) );
     connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
-
-    m_actionMasterPage = new KAction(i18n("Master Page..."), this);
-    actionCollection()->addAction("format_masterpage", m_actionMasterPage);
-    connect(m_actionMasterPage, SIGNAL(triggered()), this, SLOT(formatMasterPage()));
 
     actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));

@@ -40,7 +40,6 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 , m_doc( doc )
 {
     m_shapeManager = new KoShapeManager( this );
-    m_masterShapeManager = new KoShapeManager( this );
     m_toolProxy = new KoToolProxy( this );
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
@@ -52,7 +51,6 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 KoPACanvas::~KoPACanvas()
 {
     delete m_toolProxy;
-    delete m_masterShapeManager;
     delete m_shapeManager;
 }
 
@@ -79,11 +77,6 @@ void KoPACanvas::addCommand( QUndoCommand *command )
 KoShapeManager * KoPACanvas::shapeManager() const
 {
     return m_shapeManager;
-}
-
-KoShapeManager * KoPACanvas::masterShapeManager() const
-{
-    return m_masterShapeManager;
 }
 
 void KoPACanvas::updateCanvas( const QRectF& rc )

@@ -49,7 +49,6 @@ public:
         ActionInsertPage = 1,
         ActionCopyPage   = 2,
         ActionDeletePage = 4,
-        ActionViewShowMasterPages = 8,
         AllActions       = 0xFF
     };
 
@@ -170,13 +169,10 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGuides;
-    KToggleAction *m_actionViewShowMasterPages;
 
     KAction * m_actionInsertPage;
     KAction * m_actionCopyPage;
     KAction * m_actionDeletePage;
-
-    KAction *m_actionMasterPage;
 
     KToggleAction* m_viewRulers;
 

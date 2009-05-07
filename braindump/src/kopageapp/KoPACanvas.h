@@ -49,7 +49,6 @@ public:
     virtual void addCommand( QUndoCommand *command );
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
-    KoShapeManager * masterShapeManager() const;
     /// reimplemented method
     virtual void updateCanvas( const QRectF& rc );
     /// reimplemented method
@@ -120,7 +119,6 @@ protected:
     KoPAView * m_view;
     KoPADocument * m_doc;
     KoShapeManager * m_shapeManager;
-    KoShapeManager * m_masterShapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;
 };
