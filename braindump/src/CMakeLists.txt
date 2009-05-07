@@ -6,11 +6,10 @@ set(braindump_SRCS
   main.cpp
   BrainDumpDocument.cpp
   BrainDumpView.cpp
+  Section.cpp
 # Imported from kopageapp
   kopageapp/KoPACanvas.cpp
   kopageapp/KoPADocument.cpp
-  kopageapp/KoPAPage.cpp
-  kopageapp/KoPAPageBase.cpp
   kopageapp/KoPAUtil.cpp
   kopageapp/KoPAView.cpp
   kopageapp/KoShapeTraversal.cpp
