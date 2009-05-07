@@ -25,7 +25,7 @@
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
-#include "KoPAPage.h"
+#include "../Section.h"
 
 #include <kxmlguifactory.h>
 
@@ -46,7 +46,6 @@ KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );
     setAutoFillBackground( true );
-    updateSize();
     setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
@@ -55,19 +54,6 @@ KoPACanvas::~KoPACanvas()
     delete m_toolProxy;
     delete m_masterShapeManager;
     delete m_shapeManager;
-}
-
-void KoPACanvas::updateSize()
-{
-    QSize size;
-
-    if ( m_view->activePage() ) {
-        KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-        size.setWidth( qRound( m_view->zoomHandler()->zoomItX( pageLayout.width ) ) );
-        size.setHeight( qRound( m_view->zoomHandler()->zoomItX( pageLayout.height ) ) );
-    }
-
-    emit documentSize(size);
 }
 
 void KoPACanvas::setDocumentOffset(const QPoint &offset) {
@@ -127,17 +113,33 @@ const QPoint & KoPACanvas::documentOffset() const
 
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
-    m_view->viewMode()->paintEvent( this, event );
+    QPainter painter( this );
+    painter.translate( -documentOffset() );
+    painter.setRenderHint( QPainter::Antialiasing );
+    QRectF clipRect = event->rect().translated( documentOffset() );
+    painter.setClipRect( clipRect );
+
+    KoViewConverter * converter = m_view->viewConverter( this );
+    shapeManager()->paint( painter, *converter, false );
+    painter.setRenderHint( QPainter::Antialiasing, false );
+
+    QRectF updateRect = converter->viewToDocument( clipRect );
+    document()->gridData().paintGrid( painter, *converter, updateRect );
+    document()->guidesData().paintGuides( painter, *converter, updateRect );
+
+    painter.setRenderHint( QPainter::Antialiasing );
+    m_toolProxy->paint( painter, *converter );
+    
 }
 
 void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
-    m_view->viewMode()->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
@@ -148,22 +150,45 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
-    m_view->viewMode()->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::keyPressEvent( QKeyEvent *event )
 {
-    m_view->viewMode()->keyPressEvent( event );
+    m_toolProxy->keyPressEvent( event );
+
+    if ( ! event->isAccepted() ) {
+        event->accept();
+
+        switch ( event->key() )
+        {
+            case Qt::Key_Home:
+                m_view->navigatePage( KoPageApp::PageFirst );
+                break;
+            case Qt::Key_PageUp:
+                m_view->navigatePage( KoPageApp::PagePrevious );
+                break;
+            case Qt::Key_PageDown:
+                m_view->navigatePage( KoPageApp::PageNext );
+                break;
+            case Qt::Key_End:
+                m_view->navigatePage( KoPageApp::PageLast );
+                break;
+            default:
+                event->ignore();
+                break;
+        }
+    }
     if (! event->isAccepted()) {
         if (event->key() == Qt::Key_Backtab
                 || (event->key() == Qt::Key_Tab && (event->modifiers() & Qt::ShiftModifier)))
@@ -175,17 +200,17 @@ void KoPACanvas::keyPressEvent( QKeyEvent *event )
 
 void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 {
-    m_view->viewMode()->keyReleaseEvent( event );
+    m_toolProxy->keyReleaseEvent( event );
 }
 
 void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
-    m_view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+    m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
 void KoPACanvas::closeEvent( QCloseEvent * event )
 {
-    m_view->viewMode()->closeEvent( event );
+    event->ignore();
 }
 
 void KoPACanvas::updateInputMethodInfo()
