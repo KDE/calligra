@@ -44,7 +44,7 @@ BrainDumpView::~BrainDumpView()
 {
 }
 
-BrainDocument* BrainDumpView::document() const
+BrainDumpDocument* BrainDumpView::document() const
 {
     return m_document;
 }
