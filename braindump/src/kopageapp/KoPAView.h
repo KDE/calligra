@@ -33,8 +33,7 @@ class KoFind;
 class KoPACanvas;
 class KoPADocument;
 class KToggleAction;
-class KoPAPageBase;
-class KoPAViewMode;
+class Section;
 class KoPADocumentStructureDocker;
 class KoShapeManager;
 class KoZoomAction;
@@ -80,10 +79,10 @@ public:
 
     KoPADocument * kopaDocument() { return m_doc; }
     /// @return Page that is shown in the canvas
-    KoPAPageBase* activePage() const;
+    Section* activeSection() const;
 
     /// Set page shown in the canvas to @p page
-    void setActivePage( KoPAPageBase * page );
+    void setActiveSection( Section * page );
 
     void navigatePage( KoPageApp::PageNavigation pageNavigation );
 
@@ -93,37 +92,17 @@ public:
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
 
-    /// @return the acvive viewMode
-    KoPAViewMode* viewMode() const;
-
-    /**
-     * @brief Set the view mode
-     *
-     * @param mode the new view mode
-     */
-    void setViewMode( KoPAViewMode* mode );
-
-    /**
-     * @brief Enables/Disables the given actions
-     *
-     * The actions are of Type KoPAAction
-     *
-     * @param actions which should be enabled/disabled
-     * @param enable new state of the actions
-     */
-    void setActionEnabled( int actions, bool enable );
-
     /**
      * Set the active page and updates the UI
      */
-    void doUpdateActivePage( KoPAPageBase * page );
+    void doUpdateActiveSection( Section* sectio );
 
     /// reimplemented
     virtual KoPrintJob * createPrintJob();
 
 public slots:
     /// Set the active page and updates the UI
-    void updateActivePage( KoPAPageBase * page );
+    void updateActiveSection( Section * page );
 
     /// Shows/hides the rulers
     void setShowRulers(bool show);
@@ -149,8 +128,6 @@ protected:
 
     /// Update page navigation actions
     void updatePageNavigationActions();
-
-    bool isMasterUsed( KoPAPageBase * page );
 
 protected slots:
     void viewSnapToGrid(bool snap);
@@ -217,8 +194,7 @@ protected slots:
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;
-    KoPAPageBase *m_activePage;
-    KoPAViewMode *m_viewMode;
+    Section *m_activeSection;
 
 private:
 
@@ -248,8 +224,6 @@ private:
     KoZoomAction *m_zoomAction;
 
     KoFind * m_find;
-
-    KoPAViewMode *m_viewModeNormal;
 };
 
 #endif /* KOPAVIEW_H */
