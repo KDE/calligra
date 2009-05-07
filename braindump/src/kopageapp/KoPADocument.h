@@ -53,12 +53,6 @@ public:
 
     bool saveOdf( SavingContext & documentContext );
 
-    /// reimplemented
-    virtual bool completeLoading( KoStore* store );
-
-    /// reimplemented
-    virtual bool completeSaving( KoStore* store );
-
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 

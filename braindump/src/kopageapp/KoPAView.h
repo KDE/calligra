@@ -118,9 +118,6 @@ protected slots:
     void editSelectAll();
     void editDeselectAll();
 
-    /// Called when the canvas controller is resized
-    virtual void canvasControllerResized();
-
     /// Called when the mouse position changes on the canvas
     virtual void updateMousePosition(const QPoint& position);
 

@@ -115,8 +115,6 @@ void KoPAView::initGUI()
 
     gridLayout->addWidget( m_canvasController, 1, 1 );
 
-    connect(m_canvasController, SIGNAL(sizeChanged(const QSize&)),
-             this, SLOT(canvasControllerResized()));
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 

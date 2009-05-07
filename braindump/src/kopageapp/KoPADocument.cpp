@@ -101,16 +101,6 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
   return false;
 }
 
-bool KoPADocument::completeLoading( KoStore* store )
-{
-    bool ok=true;
-    foreach(KoDataCenter *dataCenter, d->dataCenterMap)
-    {
-        ok = ok && dataCenter->completeLoading(store);
-    }
-    return ok;
-}
-
 bool KoPADocument::saveOdf( SavingContext & documentContext )
 {
   qFatal("Unimplemented");
