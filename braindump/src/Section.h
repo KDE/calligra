@@ -21,10 +21,11 @@
 #define _SECTION_H_
 
 #include <KoShapeContainer.h>
+#include "SectionGroup.h"
 
-class Section : public KoShapeContainer {
+class Section : public KoShapeContainer, public SectionGroup {
   public:
-    
+    Section();
 };
 
 #endif

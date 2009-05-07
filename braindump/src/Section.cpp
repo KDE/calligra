@@ -17,3 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "Section.h"
+
+Section::Section() : SectionGroup(0)
+{
+}
