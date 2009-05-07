@@ -47,6 +47,7 @@ Canvas::Canvas( View * view, Document * doc )
     setBackgroundRole( QPalette::Base );
     setAutoFillBackground( true );
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    setBackgroundColor(Qt::white);
 }
 
 Canvas::~Canvas()
@@ -108,6 +109,7 @@ const QPoint & Canvas::documentOffset() const
 void Canvas::paintEvent( QPaintEvent *event )
 {
     QPainter painter( this );
+    
     painter.translate( -documentOffset() );
     painter.setRenderHint( QPainter::Antialiasing );
     QRectF clipRect = event->rect().translated( documentOffset() );
@@ -240,6 +242,14 @@ void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& ac
 KoGuidesData * Canvas::guidesData()
 {
     return &m_doc->guidesData();
+}
+
+void Canvas::setBackgroundColor( const QColor &color )
+{
+    QPalette pal = palette();
+    pal.setColor( QPalette::Normal, backgroundRole(), color );
+    pal.setColor( QPalette::Inactive, backgroundRole(), color );
+    setPalette( pal );
 }
 
 #include "Canvas.moc"

@@ -110,12 +110,15 @@ protected:
     /// reimplemented method from superclass
     virtual void resizeEvent( QResizeEvent * event );
 
+  private:
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
      * @param actionList action list to be inserted into the menu
      */
     void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
+    /// Sets the canvas background color to the given color
+    void setBackgroundColor( const QColor &color );
 
     View * m_view;
     Document * m_doc;
