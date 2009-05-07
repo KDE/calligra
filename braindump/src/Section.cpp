@@ -19,8 +19,12 @@
 
 #include "Section.h"
 
+#include "KoShapeLayer.h"
+
 Section::Section() : SectionGroup(0)
 {
+    KoShapeLayer* layer = new KoShapeLayer;
+    addChild(layer);
 }
 
 bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
