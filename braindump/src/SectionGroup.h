@@ -26,11 +26,17 @@ class Section;
 
 class SectionGroup {
   public:
+    explicit SectionGroup(SectionGroup* parent);
     void insertSection( Section* page, int index );
     void insertSection( Section* page, Section* after = 0 );
     void removeSection( Section* page );
     QList<Section*> sections( ) const;
     Section* newSection( Section* page, Section* after = 0 );
+  protected:
+    virtual void sectionAdded(Section* page);
+    virtual void sectionRemoved(Section* page);
+  private:
+    SectionGroup* m_parent;
 };
 
 #endif

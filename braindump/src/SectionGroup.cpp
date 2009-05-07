@@ -17,4 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "SectionGroup.h"
 
+SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
+{
+}
+
+void SectionGroup::sectionAdded(Section* page)
+{
+  if(m_parent)
+    m_parent->sectionAdded(page);
+}
+
+void SectionGroup::sectionRemoved(Section* page)
+{
+  if(m_parent)
+    m_parent->sectionRemoved(page);
+}
