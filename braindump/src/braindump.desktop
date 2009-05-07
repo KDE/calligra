@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;
+Comment[en_US]=
+Comment=
+Exec=braindump %u
+GenericName=Notes and idea gathering.
+Icon=braindump
+MimeType=application/x-braindump
+Name=Braindump
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=org.kde.braindump
+X-DBUS-StartupType=multi
+X-DocPath=braindump/index.html
+X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
+X-KDE-SubstituteUID=false
+X-KDE-Username=
