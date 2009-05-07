@@ -35,11 +35,6 @@ BrainDumpDocument::~BrainDumpDocument()
 {
 }
 
-KoOdf::DocumentType BrainDumpDocument::documentType() const
-{
-    return KoOdf::Graphics;
-}
-
 KoView* BrainDumpDocument::createViewInstance(QWidget* parent)
 {
     return new BrainDumpView(this, parent);

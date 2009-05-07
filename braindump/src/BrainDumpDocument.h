@@ -31,8 +31,6 @@ class BrainDumpDocument : public KoPADocument
         BrainDumpDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode = false);
         ~BrainDumpDocument();
 
-        virtual KoOdf::DocumentType documentType() const;
-
     signals:
         /// Emitted when the gui needs to be updated.
         void updateGui();
