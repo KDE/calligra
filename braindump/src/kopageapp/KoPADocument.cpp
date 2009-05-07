@@ -32,23 +32,13 @@
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
-#include <KoTextShapeData.h>
-#include <KoTextSharedLoadingData.h>
-#include <KoTextDocumentLayout.h>
-#include <KoInlineTextObjectManager.h>
-#include <KoStyleManager.h>
-#include <KoPathShape.h>
-#include <KoLineBorder.h>
 #include <KoXmlNS.h>
 #include <KoDataCenter.h>
 
+#include "Section.h"
+
 #include "KoPACanvas.h"
 #include "KoPAView.h"
-#include "KoPAPage.h"
-#include "KoPAMasterPage.h"
-#include "KoPASavingContext.h"
-#include "KoPALoadingContext.h"
-#include "KoPAViewMode.h"
 #include "commands/KoPAPageDeleteCommand.h"
 
 #include <kdebug.h>
@@ -62,16 +52,14 @@ class KoPADocument::Private
 public:
     QList<KoPAPageBase*> pages;
     QList<KoPAPageBase*> masterPages;
-    KoInlineTextObjectManager *inlineTextObjectManager;
     bool rulersVisible;
     QMap<QString, KoDataCenter *>  dataCenterMap;
 };
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode ),
+: KoDocument( parentWidget, parent, singleViewMode ), SectionGroup(0),
     d(new Private())
 {
-    d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     // Ask every shapefactory to populate the dataCenterMap
     foreach(const QString & id, KoShapeRegistry::instance()->keys())
@@ -94,10 +82,12 @@ KoPADocument::~KoPADocument()
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 {
-    KoPAPageBase * page = pageByIndex( 0, false );
-    Q_ASSERT( page );
-    QPixmap thumbnail = page->thumbnail( rect.size() );
-    painter.drawPixmap( rect, thumbnail );
+  if(sections().isEmpty()) return;
+  Section* page = sections()[0];
+  Q_ASSERT( page );
+// TODO what ?
+//   QPixmap thumbnail = page->thumbnail( rect.size() );
+//   painter.drawPixmap( rect, thumbnail );
 }
 
 bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
@@ -111,46 +101,8 @@ bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
 
 bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 {
-    emit sigProgress( 0 );
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), componentData() );
-    KoPALoadingContext paContext( loadingContext, dataCenterMap() );
-
-    KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
-
-    if ( realBody.isNull() ) {
-        kError() << "No body tag found!" << endl;
-        return false;
-    }
-
-    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, odfTagName( false ));
-
-    if ( body.isNull() ) {
-        kError() << "No office:" << odfTagName( false ) << " tag found!" << endl;
-        return false;
-    }
-
-    // Load text styles before the corresponding text shapes try to use them!
-    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
-    sharedData->loadOdfStyles(loadingContext, styleManager);
-    paContext.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
-
-    d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
-    d->pages = loadOdfPages( body, paContext );
-
-    if ( !loadOdfEpilogue( body, paContext ) ) {
-        return false;
-    }
-
-    loadOdfDocumentStyles( paContext );
-
-    if ( d->pages.size() > 1 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, false );
-    }
-
-    emit sigProgress( -1 );
-    return true;
+  qFatal("Unimplemented");
+  return false;
 }
 
 bool KoPADocument::completeLoading( KoStore* store )
@@ -165,223 +117,11 @@ bool KoPADocument::completeLoading( KoStore* store )
 
 bool KoPADocument::saveOdf( SavingContext & documentContext )
 {
-    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
-    if ( !contentWriter )
-        return false;
-
-    KoGenStyles mainStyles;
-    KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
-
-    KoPASavingContext paContext( *bodyWriter, mainStyles, documentContext.embeddedSaver, 1, KoShapeSavingContext::Store );
-
-    saveOdfDocumentStyles( paContext );
-
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( odfTagName( true ) );
-
-    if ( !saveOdfPages( paContext, d->pages, d->masterPages ) ) {
-        return false;
-    }
-
-    if ( ! saveOdfEpilogue( paContext ) ) {
-        return false;
-    }
-
-    bodyWriter->endElement(); // office:odfTagName()
-    bodyWriter->endElement(); // office:body
-
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
-
-    documentContext.odfStore.closeContentWriter();
-
-    //add manifest line for content.xml
-    documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
-
-    if ( ! mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ) ) {
-        return false;
-    }
-
-    KoStore * store = documentContext.odfStore.store();
-    if ( ! store->open( "settings.xml" ) ) {
-        return false;
-    }
-
-    saveOdfSettings( store );
-
-    if ( ! store->close() ) {
-        return false;
-    }
-
-    documentContext.odfStore.manifestWriter()->addManifestEntry( "settings.xml", "text/xml" );
-
-    //setModified( false );
-
-    return paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
+  qFatal("Unimplemented");
+  return false;
 }
 
-bool KoPADocument::completeSaving( KoStore* store)
-{
-    Q_UNUSED(store)
-    return true;
-}
-
-QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )
-{
-    context.odfLoadingContext().setUseStylesAutoStyles( true );
-    QList<KoPAPageBase *> masterPages;
-
-    QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
-    for ( ; it != masterStyles.constEnd(); ++it )
-    {
-        kDebug(30010) << "Master:" << it.key();
-        KoPAMasterPage * masterPage = newMasterPage();
-        masterPage->loadOdf( *( it.value() ), context );
-        masterPages.append( masterPage );
-        context.addMasterPage( it.key(), masterPage );
-    }
-    context.odfLoadingContext().setUseStylesAutoStyles( false );
-    return masterPages;
-}
-
-QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context )
-{
-    QList<KoPAPageBase *> pages;
-    KoXmlElement element;
-    forEachElement( element, body )
-    {
-        if ( element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw ) {
-            KoPAPage* page = newPage();
-            page->loadOdf( element, context );
-            pages.append( page );
-        }
-    }
-    return pages;
-}
-
-bool KoPADocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context )
-{
-    Q_UNUSED( body );
-    Q_UNUSED( context );
-    return true;
-}
-
-bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )
-{
-    paContext.addOption( KoPASavingContext::DrawId );
-    paContext.addOption( KoPASavingContext::AutoStyleInStyleXml );
-
-    // save master pages
-    foreach( KoPAPageBase *page, masterPages ) {
-        if ( paContext.isSetClearDrawIds() ) {
-            paContext.clearDrawIds();
-        }
-        page->saveOdf( paContext );
-    }
-
-    paContext.removeOption( KoPASavingContext::AutoStyleInStyleXml );
-
-    // save pages
-    foreach ( KoPAPageBase *page, pages ) {
-        page->saveOdf( paContext );
-        paContext.incrementPage();
-    }
-
-    return true;
-}
-
-bool KoPADocument::saveOdfEpilogue( KoPASavingContext & paContext )
-{
-    Q_UNUSED( paContext );
-    return true;
-}
-
-bool KoPADocument::saveOdfSettings( KoStore * store )
-{
-    KoStoreDevice settingsDev( store );
-    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings" );
-
-    // add this so that OOo reads guides lines and grid data from ooo:view-settings
-    settingsWriter->addAttribute( "xmlns:ooo", "http://openoffice.org/2004/office" );
-
-    settingsWriter->startElement("office:settings");
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "view-settings");
-
-    KoUnit::saveOdf( settingsWriter, unit() );
-
-    settingsWriter->endElement(); // config:config-item-set
-
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "ooo:view-settings");
-    settingsWriter->startElement("config:config-item-map-indexed" );
-    settingsWriter->addAttribute("config:name", "Views" );
-    settingsWriter->startElement("config:config-item-map-entry" );
-
-    guidesData().saveOdfSettings( *settingsWriter );
-    gridData().saveOdfSettings( *settingsWriter );
-
-    settingsWriter->endElement(); // config:config-item-map-entry
-    settingsWriter->endElement(); // config:config-item-map-indexed
-    settingsWriter->endElement(); // config:config-item-set
-
-    settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // office:document-settings
-
-    settingsWriter->endDocument();
-
-    delete settingsWriter;
-
-    return true;
-}
-
-void KoPADocument::loadOdfSettings(  const KoXmlDocument & settingsDoc )
-{
-    if ( settingsDoc.isNull() ) {
-        return ; // not an error if some file doesn't have settings.xml
-    }
-
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    if ( !viewSettings.isNull() ) {
-        setUnit( KoUnit::unit( viewSettings.parseConfigItemString( "unit" ) ) );
-        // FIXME: add other config here.
-    }
-
-    guidesData().loadOdfSettings( settingsDoc );
-    gridData().loadOdfSettings( settingsDoc );
-}
-
-void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
-{
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
-    styleManager->saveOdf( context.mainStyles() );
-}
-
-bool KoPADocument::loadOdfDocumentStyles( KoPALoadingContext & context )
-{
-    Q_UNUSED( context );
-    return true;
-}
-
-KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const
-{
-    if ( masterPage )
-    {
-        return d->masterPages.at( index );
-    }
-    else
-    {
-        return d->pages.at( index );
-    }
-}
-
-int KoPADocument::pageIndex( KoPAPageBase * page ) const
-{
-    const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
-    return pages.indexOf( page );
-}
-
+#if 0
 KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
 {
     const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? d->masterPages : d->pages;
@@ -421,38 +161,36 @@ KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPage
 
     return newPage;
 }
+#endif
 
 void KoPADocument::addShape( KoShape * shape )
 {
-    if(!shape)
-        return;
+#if 0
+  if(!shape)
+      return;
 
-    // the KoShapeController sets the active layer as parent
-    KoPAPageBase * page( pageByShape( shape ) );
+  // the KoShapeController sets the active layer as parent
+  KoPAPageBase * page( pageByShape( shape ) );
 
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->viewMode()->addShape( shape );
-    }
+  foreach( KoView *view, views() )
+  {
+      KoPAView * kopaView = static_cast<KoPAView*>( view );
+      kopaView->viewMode()->addShape( shape );
+  }
 
-    emit shapeAdded( shape );
+  emit shapeAdded( shape );
 
-    // it can happen in kpresenter notes view that there is no page
-    if ( page ) {
-        page->shapeAdded( shape );
-        postAddShape( page, shape );
-    }
-}
-
-void KoPADocument::postAddShape( KoPAPageBase * page, KoShape * shape )
-{
-    Q_UNUSED( page );
-    Q_UNUSED( shape );
+  // it can happen in kpresenter notes view that there is no page
+  if ( page ) {
+      page->shapeAdded( shape );
+      postAddShape( page, shape );
+  }
+#endif
 }
 
 void KoPADocument::removeShape( KoShape *shape )
 {
+#if 0
     if(!shape)
         return;
 
@@ -468,165 +206,12 @@ void KoPADocument::removeShape( KoShape *shape )
 
     page->shapeRemoved( shape );
     postRemoveShape( page, shape );
-}
-
-void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
-{
-    Q_UNUSED( page );
-    Q_UNUSED( shape );
-}
-
-void KoPADocument::removePage( KoPAPageBase * page )
-{
-    KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( this, page );
-    pageRemoved( page, command );
-    addCommand( command );
-}
-
-void KoPADocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
-{
-    Q_UNUSED( page );
-    Q_UNUSED( parent );
+#endif
 }
 
 QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap() const
 {
     return d->dataCenterMap;
-}
-
-KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
-{
-    KoShape * parent = shape;
-    KoPAPageBase * page = 0;
-    while ( !page && ( parent = parent->parent() ) )
-    {
-        page = dynamic_cast<KoPAPageBase*>( parent );
-    }
-    return page;
-}
-
-void KoPADocument::updateViews(KoPAPageBase *page)
-{
-    if (!page) return;
-
-    foreach (KoView *view, views()) {
-        KoPAView *paView = static_cast<KoPAView *>(view);
-        if (paView->activePage() == page)
-            paView->updateActivePage(page);
-    }
-}
-
-KoPageApp::PageType KoPADocument::pageType() const
-{
-    return KoPageApp::Page;
-}
-
-void KoPADocument::setActionEnabled( int actions, bool enable )
-{
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->setActionEnabled( actions, enable );
-    }
-}
-
-void KoPADocument::insertPage( KoPAPageBase* page, int index )
-{
-    if ( !page )
-        return;
-
-    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
-
-    if ( index > pages.size() || index < 0 )
-    {
-        index = pages.size();
-    }
-
-    pages.insert( index, page );
-
-    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
-
-    emit pageAdded( page );
-}
-
-void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
-{
-    if ( !page )
-        return;
-
-    QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
-
-    int index = 0;
-
-    if ( after != 0 )
-    {
-        index = pages.indexOf( after ) + 1;
-
-        // Append the page if after wasn't found in pages
-        if ( index == 0 )
-            index = pages.count();
-    }
-
-    pages.insert( index, page );
-
-    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
-
-    emit pageAdded( page );
-}
-
-int KoPADocument::takePage( KoPAPageBase *page )
-{
-    Q_ASSERT( page );
-
-    QList<KoPAPageBase *>& pages = dynamic_cast<KoPAMasterPage *>( page ) ? d->masterPages : d->pages;
-
-    int index = pages.indexOf( page );
-
-    // it should not be possible to delete the last page
-    Q_ASSERT( pages.size() > 1 );
-
-    if ( index != -1 ) {
-        pages.removeAt( index );
-
-        // change to previous page when the page is the active one if the first one is delete go to the next one
-        int newIndex = index == 0 ? 0 : index - 1;
-        KoPAPageBase * newActivePage = pages.at( newIndex );
-        foreach( KoView *view, views() )
-        {
-            KoPAView * kopaView = static_cast<KoPAView*>( view );
-            if ( page == kopaView->activePage() ) {
-                kopaView->updateActivePage( newActivePage );
-            }
-        }
-    }
-
-    if ( pages.size() == 1 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, false );
-    }
-
-    emit pageRemoved( page );
-
-    return index;
-}
-
-QList<KoPAPageBase*> KoPADocument::pages( bool masterPages ) const
-{
-    return masterPages ? d->masterPages : d->pages;
-}
-
-KoPAPage * KoPADocument::newPage( KoPAMasterPage * masterPage )
-{
-    return new KoPAPage( masterPage );
-}
-
-KoPAMasterPage * KoPADocument::newMasterPage()
-{
-    return new KoPAMasterPage();
-}
-
-/// return the inlineTextObjectManager for this document.
-KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const {
-    return d->inlineTextObjectManager;
 }
 
 void KoPADocument::loadConfig()
@@ -711,15 +296,19 @@ bool KoPADocument::rulersVisible() const
     return d->rulersVisible;
 }
 
-
-int KoPADocument::pageCount() const
-{
-    return d->pages.count();
-}
-
 void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
 {
     d->dataCenterMap[key] = dc;
+}
+
+void KoPADocument::sectionAdded(Section* page)
+{
+  emit(sigSectionAdded(page));
+}
+
+void KoPADocument::sectionRemoved(Section* page)
+{
+  emit(sigSectionRemoved(page));
 }
 
 #include "KoPADocument.moc"

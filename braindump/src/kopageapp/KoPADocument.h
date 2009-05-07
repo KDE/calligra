@@ -38,8 +38,6 @@ class KoPALoadingContext;
 class KoPASavingContext;
 class KoXmlWriter;
 
-class KoInlineTextObjectManager;
-
 /// Document class that stores KoPAPage and KoPAMasterPage objects
 class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase, SectionGroup
 {
@@ -65,9 +63,6 @@ public:
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 
-    /// return the inlineTextObjectManager for this document.
-    KoInlineTextObjectManager *inlineTextObjectManager() const;
-
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
 
@@ -86,16 +81,6 @@ protected:
     void insertIntoDataCenterMap(QString key, KoDataCenter *dc);
 
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
-
-    /**
-     * @brief Enables/Disables the given actions in all views
-     *
-     * The actions are of Type KoPAAction
-     *
-     * @param actions which should be enabled/disabled
-     * @param enable new state of the actions
-     */
-    void setActionEnabled( int actions, bool enable );
 
     /// Load the configuration
     void loadConfig();
