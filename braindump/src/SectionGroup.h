@@ -29,15 +29,19 @@ class SectionGroup {
     explicit SectionGroup(SectionGroup* parent);
     virtual ~SectionGroup();
     void insertSection( Section* page, int index );
-    void insertSection( Section* page, Section* after = 0 );
+    void insertSection( Section* page, Section* before = 0 );
     void removeSection( Section* page );
     QList<Section*> sections( ) const;
-    Section* newSection( Section* page, Section* after = 0 );
+    Section* newSection( Section* before = 0 );
   protected:
     virtual void sectionAdded(Section* page);
     virtual void sectionRemoved(Section* page);
   private:
+    SectionGroup* sectionParent();
+    void setSectionParent(SectionGroup* parent);
+  private:
     SectionGroup* m_parent;
+    QList<Section*> m_children;
 };
 
 #endif

@@ -18,6 +18,7 @@
  */
 
 #include "SectionGroup.h"
+#include "Section.h"
 
 SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
 {
@@ -25,6 +26,52 @@ SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
 
 SectionGroup::~SectionGroup()
 {
+}
+
+void SectionGroup::insertSection( Section* page, int index )
+{
+  if(page->sectionParent() == this ) return;
+  if(page->sectionParent()) page->sectionParent()->removeSection(page);
+  m_children.insert(index, page);
+  page->setSectionParent(this);
+}
+
+void SectionGroup::insertSection( Section* page, Section* before )
+{
+  if(before == 0)
+  {
+    insertSection(page, m_children.count());
+  } else {
+    insertSection(page, m_children.indexOf(before));
+  }
+}
+
+void SectionGroup::removeSection( Section* page )
+{
+  page->setSectionParent(0);
+  m_children.removeAll(page);
+}
+
+QList<Section*> SectionGroup::sections( ) const
+{
+  return m_children;
+}
+
+Section* SectionGroup::newSection( Section* before )
+{
+  Section* section = new Section;
+  insertSection(section, before);
+  return section;
+}
+
+SectionGroup* SectionGroup::sectionParent()
+{
+  return m_parent;
+}
+
+void SectionGroup::setSectionParent(SectionGroup* parent)
+{
+  m_parent = parent;
 }
 
 void SectionGroup::sectionAdded(Section* page)

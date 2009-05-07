@@ -363,7 +363,7 @@ void KoPAView::selectionChanged()
 void KoPAView::insertPage()
 {
     Section * page = 0;
-    page = m_doc->newSection( 0, activeSection() );
+    page = m_doc->newSection( activeSection() );
 
 //     KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
 //     m_canvas->addCommand( command );
