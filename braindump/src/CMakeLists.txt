@@ -1,11 +1,19 @@
 
-include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
+include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/kopageapp )
 
 ### braindump ###
 set(braindump_SRCS
   main.cpp
   BrainDumpDocument.cpp
   BrainDumpView.cpp
+# Imported from kopageapp
+  kopageapp/KoPACanvas.cpp
+  kopageapp/KoPADocument.cpp
+  kopageapp/KoPAPage.cpp
+  kopageapp/KoPAPageBase.cpp
+  kopageapp/KoPAUtil.cpp
+  kopageapp/KoPAView.cpp
+  kopageapp/KoShapeTraversal.cpp
 )
 
 kde4_add_executable(braindump ${braindump_SRCS})
