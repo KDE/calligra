@@ -41,7 +41,7 @@ class KoZoomController;
 class QTextDocument;
 
 /// Creates a view with a Canvas and rulers
-class KOPAGEAPP_EXPORT KoPAView : public KoView
+class KOPAGEAPP_EXPORT View : public KoView
 {
     Q_OBJECT
 public:
@@ -58,8 +58,8 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( Document * document, QWidget * parent = 0 );
-    virtual ~KoPAView();
+    explicit View( Document * document, QWidget * parent = 0 );
+    virtual ~View();
 
     void updateReadWrite( bool readwrite );
 

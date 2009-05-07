@@ -25,7 +25,7 @@
 #include <KoUnit.h>
 
 #include "Document.h"
-#include "KoPAView.h"
+#include "View.h"
 #include "../Section.h"
 
 #include <kxmlguifactory.h>
@@ -34,7 +34,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 
-Canvas::Canvas( KoPAView * view, Document * doc )
+Canvas::Canvas( View * view, Document * doc )
 : QWidget( view )
 , KoCanvasBase( doc )
 , m_view( view )

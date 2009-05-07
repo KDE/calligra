@@ -27,7 +27,7 @@
 
 #include "kopageapp_export.h"
 
-class KoPAView;
+class View;
 class Document;
 class KAction;
 
@@ -36,7 +36,7 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit Canvas( KoPAView * view, Document * doc );
+    explicit Canvas( View * view, Document * doc );
     ~Canvas();
 
     /// Returns pointer to the KoPADocument
@@ -64,7 +64,7 @@ public:
     KoUnit unit() const;
     const QPoint & documentOffset() const;
 
-    KoPAView* koPAView () const { return m_view; }
+    View* koPAView () const { return m_view; }
 
 public slots:
     void setDocumentOffset(const QPoint &offset);
@@ -117,7 +117,7 @@ protected:
      */
     void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
 
-    KoPAView * m_view;
+    View * m_view;
     Document * m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;

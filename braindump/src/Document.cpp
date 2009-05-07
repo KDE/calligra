@@ -39,10 +39,10 @@
 #include "Section.h"
 
 #include "Canvas.h"
-#include "KoPAView.h"
+#include "View.h"
 #include "commands/KoPAPageDeleteCommand.h"
-#include "BrainDumpAboutData.h"
-#include "BrainDumpView.h"
+#include "AboutData.h"
+#include "View.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -168,7 +168,7 @@ void Document::addShape( KoShape * shape )
 
   foreach( KoView *view, views() )
   {
-      KoPAView * kopaView = static_cast<KoPAView*>( view );
+      View * kopaView = static_cast<View*>( view );
       kopaView->viewMode()->addShape( shape );
   }
 
@@ -192,7 +192,7 @@ void Document::removeShape( KoShape *shape )
 
     foreach( KoView *view, views() )
     {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
+        View * kopaView = static_cast<View*>( view );
         kopaView->viewMode()->removeShape( shape );
     }
 
@@ -308,7 +308,7 @@ void Document::sectionRemoved(Section* page)
 
 KoView* Document::createViewInstance(QWidget* parent)
 {
-    return new BrainDumpView(this, parent);
+    return new View(this, parent);
 }
 
 #include "Document.moc"

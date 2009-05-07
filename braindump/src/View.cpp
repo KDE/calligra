@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoPAView.h"
+#include "View.h"
 
 #include <QGridLayout>
 #include <QToolBar>
@@ -62,7 +62,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 
-KoPAView::KoPAView( Document *document, QWidget *parent )
+View::View( Document *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 , m_activeSection( 0 )
@@ -72,26 +72,27 @@ KoPAView::KoPAView( Document *document, QWidget *parent )
 
     if ( m_doc->sections().count() > 0 )
         doUpdateActiveSection( m_doc->sections()[0] );
+    setXMLFile("braindump.rc");
 }
 
-KoPAView::~KoPAView()
+View::~View()
 {
     KoToolManager::instance()->removeCanvasController( m_canvasController );
     delete m_zoomController;
 }
 
 
-Section* KoPAView::activeSection() const
+Section* View::activeSection() const
 {
     return m_activeSection;
 }
 
-void KoPAView::updateReadWrite( bool readwrite )
+void View::updateReadWrite( bool readwrite )
 {
     Q_UNUSED( readwrite );
 }
 
-void KoPAView::initGUI()
+void View::initGUI()
 {
     QGridLayout * gridLayout = new QGridLayout( this );
     gridLayout->setMargin( 0 );
@@ -151,7 +152,7 @@ void KoPAView::initGUI()
     show();
 }
 
-void KoPAView::initActions()
+void View::initActions()
 {
     KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
     new KoCutController(kopaCanvas(), action);
@@ -211,29 +212,29 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
 }
 
-void KoPAView::viewSnapToGrid(bool snap)
+void View::viewSnapToGrid(bool snap)
 {
     m_doc->gridData().setSnapToGrid(snap);
     m_actionViewSnapToGrid->setChecked(snap);
 }
 
-void KoPAView::viewGuides(bool show)
+void View::viewGuides(bool show)
 {
     m_doc->guidesData().setShowGuideLines(show);
     m_canvas->update();
 }
 
-void KoPAView::editPaste()
+void View::editPaste()
 {
     m_canvas->toolProxy()->paste();
 }
 
-void KoPAView::editDeleteSelection()
+void View::editDeleteSelection()
 {
     m_canvas->toolProxy()->deleteSelection();
 }
 
-void KoPAView::editSelectAll()
+void View::editSelectAll()
 {
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( !selection )
@@ -256,7 +257,7 @@ void KoPAView::editSelectAll()
     selectionChanged();
 }
 
-void KoPAView::editDeselectAll()
+void View::editDeselectAll()
 {
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( selection )
@@ -266,26 +267,26 @@ void KoPAView::editDeselectAll()
     kopaCanvas()->update();
 }
 
-void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
+void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
     kopaCanvas()->update();
 }
 
-KoShapeManager* KoPAView::shapeManager() const
+KoShapeManager* View::shapeManager() const
 {
     return m_canvas->shapeManager();
 }
 
-void KoPAView::reinitDocumentDocker()
+void View::reinitDocumentDocker()
 {
 /*    if (shell()) {
         m_documentStructureDocker->setActivePage( m_activePage );
     }*/
 }
 
-void KoPAView::doUpdateActiveSection( Section * page )
+void View::doUpdateActiveSection( Section * page )
 {
     bool pageChanged = page != m_activeSection;
     setActiveSection( page );
@@ -304,7 +305,7 @@ void KoPAView::doUpdateActiveSection( Section * page )
     }
 }
 
-void KoPAView::setActiveSection( Section* page )
+void View::setActiveSection( Section* page )
 {
     if ( !page )
         return;
@@ -325,7 +326,7 @@ void KoPAView::setActiveSection( Section* page )
     }*/
 }
 
-void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
+void View::navigatePage( KoPageApp::PageNavigation pageNavigation )
 {
   Q_UNUSED(pageNavigation);
   qFatal("unimplemented");
@@ -336,7 +337,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     }*/
 }
 
-void KoPAView::updateMousePosition(const QPoint& position)
+void View::updateMousePosition(const QPoint& position)
 {
     QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
     // the offset is positive it the canvas is shown fully visible
@@ -346,11 +347,11 @@ void KoPAView::updateMousePosition(const QPoint& position)
 
 }
 
-void KoPAView::selectionChanged()
+void View::selectionChanged()
 {
 }
 
-void KoPAView::insertPage()
+void View::insertPage()
 {
     Section * page = 0;
     page = m_doc->newSection( activeSection() );
@@ -361,7 +362,7 @@ void KoPAView::insertPage()
     doUpdateActiveSection(page);
 }
 
-void KoPAView::copyPage()
+void View::copyPage()
 {
 #if 0
     QList<KoPAPageBase *> pages;
@@ -373,19 +374,19 @@ void KoPAView::copyPage()
 #endif
 }
 
-void KoPAView::deletePage()
+void View::deletePage()
 {
 #if 0
   m_doc->removePage( m_activePage );
 #endif
 }
 
-// KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const
+// KoPADocumentStructureDocker* View::documentStructureDocker() const
 // {
 //     return m_documentStructureDocker;
 // }
 
-void KoPAView::clipboardDataChanged()
+void View::clipboardDataChanged()
 {
     const QMimeData* data = QApplication::clipboard()->mimeData();
     bool paste = false;
@@ -410,27 +411,27 @@ void KoPAView::clipboardDataChanged()
     m_editPaste->setEnabled(paste);
 }
 
-void KoPAView::goToPreviousPage()
+void View::goToPreviousPage()
 {
   qFatal("unimplemented");
 }
 
-void KoPAView::goToNextPage()
+void View::goToNextPage()
 {
   qFatal("unimplemented");
 }
 
-void KoPAView::goToFirstPage()
+void View::goToFirstPage()
 {
   qFatal("unimplemented");
 }
 
-void KoPAView::goToLastPage()
+void View::goToLastPage()
 {
   qFatal("unimplemented");
 }
 
-void KoPAView::updatePageNavigationActions()
+void View::updatePageNavigationActions()
 {
   // FIXME
     int index = 0 ; //m_doc->pageIndex(activePage());
@@ -442,4 +443,4 @@ void KoPAView::updatePageNavigationActions()
     actionCollection()->action("page_last")->setEnabled(index < pageCount - 1);
 }
 
-#include "KoPAView.moc"
+#include "View.moc"

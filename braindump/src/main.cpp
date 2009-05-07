@@ -22,7 +22,7 @@
 #include <KApplication>
 #include <memory>
 
-#include "BrainDumpAboutData.h"
+#include "AboutData.h"
 #include "Document.h"
 #include <KoMainWindow.h>
 
