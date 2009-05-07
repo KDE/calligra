@@ -10,7 +10,6 @@ set(braindump_SRCS
   Section.cpp
   SectionGroup.cpp
 # Imported from kopageapp
-  kopageapp/KoPAUtil.cpp
   kopageapp/KoPAView.cpp
   kopageapp/KoShapeTraversal.cpp
 )
