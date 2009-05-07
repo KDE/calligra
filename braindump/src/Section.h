@@ -26,6 +26,10 @@
 class Section : public KoShapeContainer, public SectionGroup {
   public:
     Section();
+  public:
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
 };
 
 #endif
