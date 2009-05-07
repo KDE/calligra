@@ -4,13 +4,12 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 ### braindump ###
 set(braindump_SRCS
   main.cpp
-  BrainDumpDocument.cpp
+  Document.cpp
   BrainDumpView.cpp
   Section.cpp
   SectionGroup.cpp
 # Imported from kopageapp
   kopageapp/KoPACanvas.cpp
-  kopageapp/KoPADocument.cpp
   kopageapp/KoPAUtil.cpp
   kopageapp/KoPAView.cpp
   kopageapp/KoShapeTraversal.cpp

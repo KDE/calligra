@@ -23,7 +23,7 @@
 #include <memory>
 
 #include "BrainDumpAboutData.h"
-#include "BrainDumpDocument.h"
+#include "Document.h"
 #include <KoMainWindow.h>
 
 int main( int argc, char **argv )
@@ -36,7 +36,7 @@ int main( int argc, char **argv )
 
   KApplication app;
 
-  BrainDumpDocument* doc = new BrainDumpDocument(0, 0);
+  Document* doc = new Document(0, 0);
   KoMainWindow* shell = new KoMainWindow(doc->componentData());
   doc->addShell(shell);
   shell->setRootDocument(doc);

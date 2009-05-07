@@ -24,18 +24,18 @@
 
 class KAction;
 
-class BrainDumpDocument;
+class Document;
 
 class BrainDumpView : public KoPAView
 {
   Q_OBJECT
 
   public:
-    BrainDumpView(BrainDumpDocument* document, QWidget* parent);
+    BrainDumpView(Document* document, QWidget* parent);
     ~BrainDumpView();
 
     /// Returns the document
-    BrainDumpDocument* document() const;
+    Document* document() const;
 
   protected slots:
     /// Called when the doc emits updateGui
@@ -48,7 +48,7 @@ class BrainDumpView : public KoPAView
     void initializeActions();
 
   private:
-    BrainDumpDocument* m_document;
+    Document* m_document;
 };
 
 #endif

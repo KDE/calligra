@@ -25,9 +25,9 @@
 #include <KoSelection.h>
 #include <KoPACanvas.h>
 
-#include "BrainDumpDocument.h"
+#include "Document.h"
 
-BrainDumpView::BrainDumpView(BrainDumpDocument* document, QWidget* parent)
+BrainDumpView::BrainDumpView(Document* document, QWidget* parent)
   : KoPAView(document, parent), m_document(document)
 {
     Q_ASSERT(m_document);
@@ -44,7 +44,7 @@ BrainDumpView::~BrainDumpView()
 {
 }
 
-BrainDumpDocument* BrainDumpView::document() const
+Document* BrainDumpView::document() const
 {
     return m_document;
 }

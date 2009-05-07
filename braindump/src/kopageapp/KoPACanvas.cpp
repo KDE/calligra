@@ -23,7 +23,7 @@
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 
-#include "KoPADocument.h"
+#include "Document.h"
 #include "KoPAView.h"
 #include "../Section.h"
 
@@ -33,7 +33,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 
-KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
+KoPACanvas::KoPACanvas( KoPAView * view, Document * doc )
 : QWidget( view )
 , KoCanvasBase( doc )
 , m_view( view )

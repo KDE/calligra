@@ -30,7 +30,7 @@
 class KoCanvasController;
 class KoFind;
 class KoPACanvas;
-class KoPADocument;
+class Document;
 class KToggleAction;
 class Section;
 class KoPADocumentStructureDocker;
@@ -57,7 +57,7 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
+    explicit KoPAView( Document * document, QWidget * parent = 0 );
     virtual ~KoPAView();
 
     void updateReadWrite( bool readwrite );
@@ -71,7 +71,7 @@ public:
     KoPACanvas * kopaCanvas() { return m_canvas; }
     KoPACanvas * kopaCanvas() const { return m_canvas; }
 
-    KoPADocument * kopaDocument() { return m_doc; }
+    Document * document() { return m_doc; }
     /// @return Page that is shown in the canvas
     Section* activeSection() const;
 
@@ -149,7 +149,7 @@ protected slots:
     void reinitDocumentDocker();
 
 protected:
-    KoPADocument *m_doc;
+    Document *m_doc;
     KoPACanvas *m_canvas;
     Section *m_activeSection;
 

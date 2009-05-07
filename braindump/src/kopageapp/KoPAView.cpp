@@ -49,7 +49,7 @@
 
 #include "KoShapeTraversal.h"
 #include "KoPACanvas.h"
-#include "KoPADocument.h"
+#include "Document.h"
 #include "Section.h"
 
 #include <kdebug.h>
@@ -62,7 +62,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 
-KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
+KoPAView::KoPAView( Document *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 , m_activeSection( 0 )

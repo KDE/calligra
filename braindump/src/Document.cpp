@@ -1,24 +1,25 @@
-/* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+/*
+ *  Copyright (c) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+ *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
-#include "KoPADocument.h"
+#include "Document.h"
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -40,6 +41,8 @@
 #include "KoPACanvas.h"
 #include "KoPAView.h"
 #include "commands/KoPAPageDeleteCommand.h"
+#include "BrainDumpAboutData.h"
+#include "BrainDumpView.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -47,17 +50,22 @@
 
 #include <typeinfo>
 
-class KoPADocument::Private
+class Document::Private
 {
 public:
     bool rulersVisible;
     QMap<QString, KoDataCenter *>  dataCenterMap;
+    KAboutData* m_aboutData;
+    KComponentData* m_documentData;
 };
 
-KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
+Document::Document( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode ), SectionGroup(0),
     d(new Private())
 {
+  d->m_aboutData = newBrainDumpAboutData();
+  d->m_documentData = new KComponentData(d->m_aboutData);
+  setComponentData(*d->m_documentData, false);
 
     // Ask every shapefactory to populate the dataCenterMap
     foreach(const QString & id, KoShapeRegistry::instance()->keys())
@@ -69,14 +77,14 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     loadConfig();
 }
 
-KoPADocument::~KoPADocument()
+Document::~Document()
 {
     saveConfig();
     qDeleteAll( d->dataCenterMap );
     delete d;
 }
 
-void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
+void Document::paintContent( QPainter &painter, const QRect &rect)
 {
   if(sections().isEmpty()) return;
   Section* page = sections()[0];
@@ -86,7 +94,7 @@ void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 //   painter.drawPixmap( rect, thumbnail );
 }
 
-bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
+bool Document::loadXML( const KoXmlDocument & doc, KoStore * )
 {
     Q_UNUSED( doc );
 
@@ -95,20 +103,20 @@ bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
     return true;
 }
 
-bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
+bool Document::loadOdf( KoOdfReadStore & odfStore )
 {
   qFatal("Unimplemented");
   return false;
 }
 
-bool KoPADocument::saveOdf( SavingContext & documentContext )
+bool Document::saveOdf( SavingContext & documentContext )
 {
   qFatal("Unimplemented");
   return false;
 }
 
 #if 0
-KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
+KoPAPageBase* Document::pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const
 {
     const QList<KoPAPageBase*>& pages = dynamic_cast<KoPAMasterPage *>( currentPage ) ? d->masterPages : d->pages;
 
@@ -149,7 +157,7 @@ KoPAPageBase* KoPADocument::pageByNavigation( KoPAPageBase * currentPage, KoPage
 }
 #endif
 
-void KoPADocument::addShape( KoShape * shape )
+void Document::addShape( KoShape * shape )
 {
 #if 0
   if(!shape)
@@ -174,7 +182,7 @@ void KoPADocument::addShape( KoShape * shape )
 #endif
 }
 
-void KoPADocument::removeShape( KoShape *shape )
+void Document::removeShape( KoShape *shape )
 {
 #if 0
     if(!shape)
@@ -195,12 +203,12 @@ void KoPADocument::removeShape( KoShape *shape )
 #endif
 }
 
-QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap() const
+QMap<QString, KoDataCenter *> Document::dataCenterMap() const
 {
     return d->dataCenterMap;
 }
 
-void KoPADocument::loadConfig()
+void Document::loadConfig()
 {
     KSharedConfigPtr config = componentData().config();
 
@@ -227,7 +235,7 @@ void KoPADocument::loadConfig()
     }
 }
 
-void KoPADocument::saveConfig()
+void Document::saveConfig()
 {
     KSharedConfigPtr config = componentData().config();
     KConfigGroup configGroup = config->group( "Grid" );
@@ -272,29 +280,35 @@ void KoPADocument::saveConfig()
         configGroup.writeEntry("ShowRulers", showRulers);
 }
 
-void KoPADocument::setRulersVisible(bool visible)
+void Document::setRulersVisible(bool visible)
 {
     d->rulersVisible = visible;
 }
 
-bool KoPADocument::rulersVisible() const
+bool Document::rulersVisible() const
 {
     return d->rulersVisible;
 }
 
-void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
+void Document::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
 {
     d->dataCenterMap[key] = dc;
 }
 
-void KoPADocument::sectionAdded(Section* page)
+void Document::sectionAdded(Section* page)
 {
   emit(sigSectionAdded(page));
 }
 
-void KoPADocument::sectionRemoved(Section* page)
+void Document::sectionRemoved(Section* page)
 {
   emit(sigSectionRemoved(page));
 }
 
-#include "KoPADocument.moc"
+
+KoView* Document::createViewInstance(QWidget* parent)
+{
+    return new BrainDumpView(this, parent);
+}
+
+#include "Document.moc"

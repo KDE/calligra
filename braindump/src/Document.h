@@ -1,24 +1,25 @@
-/* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+/*
+ *  Copyright (c) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
-#ifndef KOPADOCUMENT_H
-#define KOPADOCUMENT_H
+#ifndef _DOCUMENT_H
+#define _DOCUMENT_H
 
 #include <QObject>
 
@@ -38,13 +39,13 @@ class KoPASavingContext;
 class KoXmlWriter;
 
 /// Document class that stores Sections
-class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase, public SectionGroup
+class KOPAGEAPP_EXPORT Document : public KoDocument, public KoShapeControllerBase, public SectionGroup
 {
     Q_OBJECT
 public:
 
-    explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
-    virtual ~KoPADocument();
+    explicit Document( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    virtual ~Document();
 
     void paintContent( QPainter &painter, const QRect &rect);
 
@@ -73,12 +74,13 @@ signals:
 protected:
     void insertIntoDataCenterMap(QString key, KoDataCenter *dc);
 
-    virtual KoView *createViewInstance( QWidget *parent ) = 0;
-
     /// Load the configuration
     void loadConfig();
     /// Save the configuration
     void saveConfig();
+protected:
+    /// Creates a BrainDumpView instance and returns it
+    virtual KoView* createViewInstance(QWidget* parent);
 
 private:
     class Private;

@@ -27,7 +27,7 @@
 #include "kopageapp_export.h"
 
 class KoPAView;
-class KoPADocument;
+class Document;
 class KAction;
 
 /// Widget that shows a KoPAPage
@@ -35,11 +35,11 @@ class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit KoPACanvas( KoPAView * view, KoPADocument * doc );
+    explicit KoPACanvas( KoPAView * view, Document * doc );
     ~KoPACanvas();
 
     /// Returns pointer to the KoPADocument
-    KoPADocument* document() const { return m_doc; }
+    Document* document() const { return m_doc; }
 
     /// reimplemented method
     virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
@@ -117,7 +117,7 @@ protected:
     void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
 
     KoPAView * m_view;
-    KoPADocument * m_doc;
+    Document * m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;
