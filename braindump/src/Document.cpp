@@ -159,31 +159,26 @@ KoPAPageBase* Document::pageByNavigation( KoPAPageBase * currentPage, KoPageApp:
 
 void Document::addShape( KoShape * shape )
 {
-#if 0
   if(!shape)
-      return;
-
-  // the KoShapeController sets the active layer as parent
-  KoPAPageBase * page( pageByShape( shape ) );
+    return;
+  Section * page( sectionByShape( shape ) );
 
   foreach( KoView *view, views() )
   {
-      View * kopaView = static_cast<View*>( view );
-      kopaView->viewMode()->addShape( shape );
+    View * kopaView = static_cast<View*>( view );
+    
+    KoPAPage * p;
+    if ( page == kopaView->activeSection() ) {
+        kopaView->kopaCanvas()->shapeManager()->add( shape );
+    }
   }
 
   emit shapeAdded( shape );
-
-  // it can happen in kpresenter notes view that there is no page
-  if ( page ) {
-      page->shapeAdded( shape );
-      postAddShape( page, shape );
-  }
-#endif
 }
 
 void Document::removeShape( KoShape *shape )
 {
+  qFatal("Unimplemented");
 #if 0
     if(!shape)
         return;
@@ -309,6 +304,17 @@ void Document::sectionRemoved(Section* page)
 KoView* Document::createViewInstance(QWidget* parent)
 {
     return new View(this, parent);
+}
+
+Section* Document::sectionByShape( KoShape * shape ) const
+{
+    KoShape * parent = shape;
+    Section* page = 0;
+    while ( !page && ( parent = parent->parent() ) )
+    {
+        page = dynamic_cast<Section*>( parent );
+    }
+    return page;
 }
 
 #include "Document.moc"

@@ -82,6 +82,8 @@ protected:
     /// Creates a BrainDumpView instance and returns it
     virtual KoView* createViewInstance(QWidget* parent);
 
+  private:
+    Section* sectionByShape( KoShape * shape ) const;
 private:
     class Private;
     Private * const d;
