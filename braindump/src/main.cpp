@@ -24,13 +24,12 @@
 
 #include "BrainDumpAboutData.h"
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+int main( int argc, char **argv )
 {
-  std::auto_ptr<KAboutData> about( newBrainDumpAboutData() );
-  KCmdLineArgs::init( argc, argv, about.get() );
+  KAboutData* about = newBrainDumpAboutData();
+  KCmdLineArgs::init( argc, argv, about );
 
   KCmdLineOptions options;
-  options.add("+[file]", ki18n("File to open"));
   KCmdLineArgs::addCmdLineOptions( options );
 
   KoApplication app;
