@@ -29,9 +29,6 @@
 
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
-#include <KoColorBackground.h>
-#include <KoFind.h>
-#include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -40,33 +37,20 @@
 #include <KoShapeManager.h>
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
-#include <KoInlineTextObjectManager.h>
 #include <KoSelection.h>
 #include <KoToolDocker.h>
 #include <KoMainWindow.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
-#include <KoRulerController.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
 
-#include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
-#include "KoPAPage.h"
-#include "KoPAMasterPage.h"
-#include "KoPAViewModeNormal.h"
-#include "KoPAOdfPageSaveHelper.h"
-#include "KoPAPastePage.h"
-#include "KoPAPrintJob.h"
-#include "commands/KoPAPageInsertCommand.h"
-#include "commands/KoPAChangeMasterPageCommand.h"
-#include "dialogs/KoPAMasterPageDialog.h"
-
-#include "KoShapeOdfSaveHelper.h"
+#include "Section.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -81,29 +65,25 @@
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
-, m_activePage( 0 )
-, m_viewMode( 0 )
+, m_activeSection( 0 )
 {
     initGUI();
     initActions();
 
-    if ( m_doc->pageCount() > 0 )
-        doUpdateActivePage( m_doc->pageByIndex( 0, false ) );
+    if ( m_doc->sections().count() > 0 )
+        doUpdateActiveSection( m_doc->sections()[0] );
 }
 
 KoPAView::~KoPAView()
 {
     KoToolManager::instance()->removeCanvasController( m_canvasController );
     delete m_zoomController;
-    // delete only the view mode normal, let the derived class delete the currently
-    // active view mode if it is not view mode normal
-    delete m_viewModeNormal;
 }
 
 
-KoPAPageBase* KoPAView::activePage() const
+Section* KoPAView::activeSection() const
 {
-    return m_activePage;
+    return m_activeSection;
 }
 
 void KoPAView::updateReadWrite( bool readwrite )
@@ -133,38 +113,12 @@ void KoPAView::initGUI()
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
-    m_viewModeNormal = new KoPAViewModeNormal( this, m_canvas );
-    m_viewMode = m_viewModeNormal;
-
-    //Ruler
-    m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter( m_canvas ));
-    m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->setUnit(m_doc->unit());
-    m_verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter( m_canvas ));
-    m_verticalRuler->setUnit(m_doc->unit());
-    m_verticalRuler->setShowMousePosition(true);
-
-    new KoRulerController(m_horizontalRuler, m_canvas->resourceProvider());
-
-    connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
-    connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
-
-    gridLayout->addWidget(m_horizontalRuler, 0, 1);
-    gridLayout->addWidget(m_verticalRuler, 1, 0);
     gridLayout->addWidget( m_canvasController, 1, 1 );
 
-    connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
-            m_horizontalRuler, SLOT(setOffset(int)));
-    connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
-            m_verticalRuler, SLOT(setOffset(int)));
     connect(m_canvasController, SIGNAL(sizeChanged(const QSize&)),
              this, SLOT(canvasControllerResized()));
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
-    connect(m_verticalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
-            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
-    connect(m_horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
-            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     createDockWidget( &toolBoxFactory );
@@ -183,6 +137,7 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
+#if 0
     if (shell()) {
         KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
         m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
@@ -193,6 +148,7 @@ void KoPAView::initGUI()
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
     }
+#endif
 
     show();
 }
@@ -236,12 +192,6 @@ void KoPAView::initActions()
     actionCollection()->addAction( "view_masterpages", m_actionViewShowMasterPages );
     connect( m_actionViewShowMasterPages, SIGNAL( triggered( bool ) ), this, SLOT( setMasterMode( bool ) ) );
 
-    m_viewRulers  = new KToggleAction(i18n("Show Rulers"), this);
-    actionCollection()->addAction("view_rulers", m_viewRulers );
-    m_viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
-    connect(m_viewRulers, SIGNAL(triggered(bool)), this, SLOT(setShowRulers(bool)));
-    setShowRulers(m_doc->rulersVisible());
-
     m_actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
     actionCollection()->addAction( "page_insertpage", m_actionInsertPage );
     m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
@@ -269,13 +219,6 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
     actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
     actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
-
-    KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
-    foreach(QAction *action, m_doc->inlineTextObjectManager()->createInsertVariableActions(m_canvas))
-        actionMenu->addAction(action);
-    actionCollection()->addAction("insert_variable", actionMenu);
-
-    m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
 }
 
 void KoPAView::viewSnapToGrid(bool snap)
@@ -292,20 +235,7 @@ void KoPAView::viewGuides(bool show)
 
 void KoPAView::editPaste()
 {
-    if ( !m_canvas->toolProxy()->paste() ) {
-        const QMimeData * data = QApplication::clipboard()->mimeData();
-
-        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
-
-        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-        {
-            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-                KoPAPastePage paste( m_doc, m_activePage );
-                paste.paste( documentTypes[i], data );
-                break;
-            }
-        }
-    }
+    m_canvas->toolProxy()->paste();
 }
 
 void KoPAView::editDeleteSelection()
@@ -319,7 +249,7 @@ void KoPAView::editSelectAll()
     if( !selection )
         return;
 
-    QList<KoShape*> shapes = activePage()->iterator();
+    QList<KoShape*> shapes = activeSection()->iterator();
 
     foreach( KoShape *shape, shapes ) {
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
@@ -346,24 +276,6 @@ void KoPAView::editDeselectAll()
     kopaCanvas()->update();
 }
 
-void KoPAView::formatMasterPage()
-{
-    KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
-    Q_ASSERT(page);
-    KoPAMasterPageDialog *dialog = new KoPAMasterPageDialog(m_doc, page->masterPage(), m_canvas);
-
-    if (dialog->exec() == QDialog::Accepted) {
-        KoPAMasterPage *masterPage = dialog->selectedMasterPage();
-        KoPAPage *page = dynamic_cast<KoPAPage *>(m_activePage);
-        if (page) {
-            KoPAChangeMasterPageCommand * command = new KoPAChangeMasterPageCommand( m_doc, page, masterPage );
-            m_canvas->addCommand( command );
-        }
-    }
-
-    delete dialog;
-}
-
 void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_UNUSED(mode);
@@ -371,70 +283,24 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
     kopaCanvas()->update();
 }
 
-void KoPAView::setMasterMode( bool master )
-{
-    m_viewMode->setMasterMode( master );
-    if (shell()) {
-        m_documentStructureDocker->setMasterMode(master);
-    }
-    m_actionMasterPage->setEnabled(!master);
-
-    QList<KoPAPageBase*> pages = m_doc->pages( master );
-    m_actionDeletePage->setEnabled( pages.size() > 1 );
-}
-
 KoShapeManager* KoPAView::shapeManager() const
 {
     return m_canvas->shapeManager();
 }
 
-KoPAViewMode* KoPAView::viewMode() const
-{
-    return m_viewMode;
-}
-
-void KoPAView::setViewMode( KoPAViewMode* mode )
-{
-    Q_ASSERT( mode );
-    if ( mode != m_viewMode )
-    {
-        KoPAViewMode * previousViewMode = m_viewMode;
-        m_viewMode->deactivate();
-        m_viewMode = mode;
-        m_viewMode->activate( previousViewMode );
-    }
-}
-
-KoShapeManager* KoPAView::masterShapeManager() const
-{
-    return m_canvas->masterShapeManager();
-}
-
-void KoPAView::updateActivePage( KoPAPageBase * page )
-{
-    m_viewMode->updateActivePage( page );
-}
-
 void KoPAView::reinitDocumentDocker()
 {
-    if (shell()) {
+/*    if (shell()) {
         m_documentStructureDocker->setActivePage( m_activePage );
-    }
+    }*/
 }
 
-void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+void KoPAView::doUpdateActiveSection( Section * page )
 {
-    bool pageChanged = page != m_activePage;
-    setActivePage( page );
+    bool pageChanged = page != m_activeSection;
+    setActiveSection( page );
 
-    m_canvas->updateSize();
-    KoPageLayout &layout = m_activePage->pageLayout();
-    m_horizontalRuler->setRulerLength(layout.width);
-    m_verticalRuler->setRulerLength(layout.height);
-    m_horizontalRuler->setActiveRange(layout.left, layout.width - layout.right);
-    m_verticalRuler->setActiveRange(layout.top, layout.height - layout.bottom);
-
-    QSizeF pageSize( layout.width, layout.height );
+    QSizeF pageSize( 1000, 1000 );
     m_zoomController->setPageSize( pageSize );
     m_zoomController->setDocumentSize( pageSize );
     m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
@@ -448,16 +314,14 @@ void KoPAView::doUpdateActivePage( KoPAPageBase * page )
     }
 }
 
-void KoPAView::setActivePage( KoPAPageBase* page )
+void KoPAView::setActiveSection( Section* page )
 {
     if ( !page )
         return;
 
-    bool pageChanged = page != m_activePage;
-
-    shapeManager()->removeAdditional( m_activePage );
-    m_activePage = page;
-    shapeManager()->addAdditional( m_activePage );
+    shapeManager()->removeAdditional( m_activeSection );
+    m_activeSection = page;
+    shapeManager()->addAdditional( m_activeSection );
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes, false );
     //Make the top most layer active
@@ -466,46 +330,20 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         shapeManager()->selection()->setActiveLayer( layer );
     }
 
-    // if the page is not a master page itself set shapes of the master page
-    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
-    if ( paPage ) {
-        KoPAMasterPage * masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->iterator();
-        masterShapeManager()->setShapes( masterShapes, false );
-        //Make the top most layer active
-        if ( !masterShapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-            masterShapeManager()->selection()->setActiveLayer( layer );
-        }
-    }
-    else {
-        // if the page is a master page no shapes are in the masterShapeManager
-        masterShapeManager()->setShapes( QList<KoShape*>() );
-    }
-
-    if ( shell() && pageChanged ) {
+/*    if ( shell() && pageChanged ) {
         m_documentStructureDocker->setActivePage(m_activePage);
-    }
+    }*/
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
 {
-    KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
+  Q_UNUSED(pageNavigation);
+  qFatal("unimplemented");
+/*    KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
 
     if ( newPage != m_activePage ) {
         doUpdateActivePage( newPage );
-    }
-}
-
-KoPrintJob * KoPAView::createPrintJob()
-{
-    return new KoPAPrintJob(this);
-}
-
-void KoPAView::canvasControllerResized()
-{
-    m_horizontalRuler->setOffset( m_canvasController->canvasOffsetX() );
-    m_verticalRuler->setOffset( m_canvasController->canvasOffsetY() );
+    }*/
 }
 
 void KoPAView::updateMousePosition(const QPoint& position)
@@ -516,112 +354,46 @@ void KoPAView::updateMousePosition(const QPoint& position)
     canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
     QPoint viewPos = position - canvasOffset;
 
-    m_horizontalRuler->updateMouseCoordinate(viewPos.x());
-    m_verticalRuler->updateMouseCoordinate(viewPos.y());
-
-    // Update the selection borders in the rulers while moving with the mouse
-    if(m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0)) {
-        QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
-        m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
-        m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
-    }
 }
 
 void KoPAView::selectionChanged()
 {
-    // Show the borders of the selection in the rulers
-    if(m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0)) {
-        QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
-        m_horizontalRuler->setShowSelectionBorders(true);
-        m_verticalRuler->setShowSelectionBorders(true);
-        m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
-        m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
-    } else {
-        m_horizontalRuler->setShowSelectionBorders(false);
-        m_verticalRuler->setShowSelectionBorders(false);
-    }
-}
-
-void KoPAView::setShowRulers(bool show)
-{
-    m_horizontalRuler->setVisible(show);
-    m_verticalRuler->setVisible(show);
-
-    m_viewRulers->setChecked(show);
-    m_doc->setRulersVisible(show);
 }
 
 void KoPAView::insertPage()
 {
-    KoPAPageBase * page = 0;
-    if ( m_viewMode->masterMode() ) {
-        KoPAMasterPage * masterPage = m_doc->newMasterPage();
-        masterPage->setBackground( new KoColorBackground( Qt::white ) );
-        // use the layout of the current active page for the new page
-        KoPageLayout & layout = masterPage->pageLayout();
-        KoPAMasterPage * activeMasterPage = dynamic_cast<KoPAMasterPage *>( m_activePage );
-        if ( activeMasterPage ) {
-            layout = activeMasterPage->pageLayout();
-        }
-        page = masterPage;
-    }
-    else {
-        KoPAPage * activePage = dynamic_cast<KoPAPage*>( m_activePage );
-        KoPAMasterPage * masterPage = activePage->masterPage();
-        page = m_doc->newPage( masterPage );
-    }
+    Section * page = 0;
+    page = m_doc->newSection( 0, activeSection() );
 
-    KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
-    m_canvas->addCommand( command );
+//     KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
+//     m_canvas->addCommand( command );
 
-    doUpdateActivePage(page);
+    doUpdateActiveSection(page);
 }
 
 void KoPAView::copyPage()
 {
+#if 0
     QList<KoPAPageBase *> pages;
     pages.append( m_activePage );
     KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
     KoDrag drag;
     drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
     drag.addToClipboard();
+#endif
 }
 
 void KoPAView::deletePage()
 {
-    if ( !isMasterUsed( m_activePage ) ) {
-        m_doc->removePage( m_activePage );
-    }
+#if 0
+  m_doc->removePage( m_activePage );
+#endif
 }
 
-void KoPAView::setActionEnabled( int actions, bool enable )
-{
-    if ( actions & ActionInsertPage )
-    {
-        m_actionInsertPage->setEnabled( enable );
-    }
-    if ( actions & ActionCopyPage )
-    {
-        m_actionCopyPage->setEnabled( enable );
-    }
-    if ( actions & ActionDeletePage )
-    {
-        m_actionDeletePage->setEnabled( enable );
-    }
-    if ( actions & ActionViewShowMasterPages )
-    {
-        m_actionViewShowMasterPages->setEnabled( enable );
-    }
-    if ( actions & ActionFormatMasterPage )
-    {
-        m_actionMasterPage->setEnabled( enable );
-    }
-}
-
-KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const
-{
-    return m_documentStructureDocker;
-}
+// KoPADocumentStructureDocker* KoPAView::documentStructureDocker() const
+// {
+//     return m_documentStructureDocker;
+// }
 
 void KoPAView::clipboardDataChanged()
 {
@@ -648,180 +420,36 @@ void KoPAView::clipboardDataChanged()
     m_editPaste->setEnabled(paste);
 }
 
-void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
-{
-    if ( event->widget() == this ) {
-        if ( event->activated() ) {
-            clipboardDataChanged();
-            connect( m_find, SIGNAL( findDocumentSetNext( QTextDocument * ) ), this, SLOT( findDocumentSetNext( QTextDocument * ) ) );
-            connect( m_find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ), this, SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
-        }
-        else {
-            disconnect( m_find, 0, 0, 0 );
-        }
-    }
-
-    KoView::partActivateEvent(event);
-}
-
 void KoPAView::goToPreviousPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier));
+  qFatal("unimplemented");
 }
 
 void KoPAView::goToNextPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier));
+  qFatal("unimplemented");
 }
 
 void KoPAView::goToFirstPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Home, Qt::NoModifier));
+  qFatal("unimplemented");
 }
 
 void KoPAView::goToLastPage()
 {
-    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_End, Qt::NoModifier));
-}
-
-void KoPAView::findDocumentSetNext( QTextDocument * document )
-{
-    KoPAPageBase * page = 0;
-    KoShape * startShape = 0;
-    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout*> ( document->documentLayout() ) : 0;
-    if ( lay != 0 ) {
-        startShape = lay->shapes().value( 0 );
-        Q_ASSERT( startShape->shapeId() == "TextShapeID" );
-        page = m_doc->pageByShape( startShape );
-        if ( m_doc->pageIndex( page ) == -1 ) {
-            page = 0;
-        }
-    }
-
-    if ( page == 0 ) {
-        page = m_activePage;
-        startShape = page;
-    }
-
-    KoShape * shape = startShape;
-
-    do {
-        // find next text shape
-        shape = KoShapeTraversal::nextShape( shape, "TextShapeID" );
-        // get next text shape
-        if ( shape != 0 ) {
-            if ( page != m_activePage ) {
-                setActivePage( page );
-                m_canvas->update();
-            }
-            KoSelection* selection = kopaCanvas()->shapeManager()->selection();
-            selection->deselectAll();
-            selection->select( shape );
-            // TODO can this be done nicer? is there a way to get the shape id and the tool id from the shape?
-            KoToolManager::instance()->switchToolRequested( "TextToolFactory_ID" );
-            break;
-        }
-        else {
-            //if none is found go to next page and try again
-            if ( m_doc->pageIndex( page ) < m_doc->pages().size() - 1 ) {
-                // TODO use also master slides
-                page = m_doc->pageByNavigation( page, KoPageApp::PageNext );
-            }
-            else {
-                page = m_doc->pageByNavigation( page, KoPageApp::PageFirst );
-            }
-            shape = page;
-        }
-        // do until you find the same start shape or you are on the same page again only if there was none
-    } while ( page != startShape );
-}
-
-void KoPAView::findDocumentSetPrevious( QTextDocument * document )
-{
-    KoPAPageBase * page = 0;
-    KoShape * startShape = 0;
-    KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout*> ( document->documentLayout() ) : 0;
-    if ( lay != 0 ) {
-        startShape = lay->shapes().value( 0 );
-        Q_ASSERT( startShape->shapeId() == "TextShapeID" );
-        page = m_doc->pageByShape( startShape );
-        if ( m_doc->pageIndex( page ) == -1 ) {
-            page = 0;
-        }
-    }
-
-    bool check = false;
-    if ( page == 0 ) {
-        page = m_activePage;
-        startShape = KoShapeTraversal::last( page );
-        check = true;
-    }
-
-    KoShape * shape = startShape;
-
-    do {
-        if ( !check || shape->shapeId() != "TextShapeID" ) {
-            shape = KoShapeTraversal::previousShape( shape, "TextShapeID" );
-        }
-        // get next text shape
-        if ( shape != 0 ) {
-            if ( page != m_activePage ) {
-                setActivePage( page );
-                m_canvas->update();
-            }
-            KoSelection* selection = kopaCanvas()->shapeManager()->selection();
-            selection->deselectAll();
-            selection->select( shape );
-            // TODO can this be done nicer? is there a way to get the shape id and the tool id from the shape?
-            KoToolManager::instance()->switchToolRequested( "TextToolFactory_ID" );
-            break;
-        }
-        else {
-            //if none is found go to next page and try again
-            if ( m_doc->pageIndex( page ) > 0 ) {
-                // TODO use also master slides
-                page = m_doc->pageByNavigation( page, KoPageApp::PagePrevious );
-            }
-            else {
-                page = m_doc->pageByNavigation( page, KoPageApp::PageLast );
-            }
-            shape = KoShapeTraversal::last( page );
-            check = true;
-        }
-        // do until you find the same start shape or you are on the same page again only if there was none
-    } while ( shape != startShape );
+  qFatal("unimplemented");
 }
 
 void KoPAView::updatePageNavigationActions()
 {
-    int index = m_doc->pageIndex(activePage());
-    int pageCount = m_doc->pages(m_viewMode->masterMode()).count();
+  // FIXME
+    int index = 0 ; //m_doc->pageIndex(activePage());
+    int pageCount = 0; //m_doc->pages(m_viewMode->masterMode()).count();
 
     actionCollection()->action("page_previous")->setEnabled(index > 0);
     actionCollection()->action("page_first")->setEnabled(index > 0);
     actionCollection()->action("page_next")->setEnabled(index < pageCount - 1);
     actionCollection()->action("page_last")->setEnabled(index < pageCount - 1);
-}
-
-bool KoPAView::isMasterUsed( KoPAPageBase * page )
-{
-    KoPAMasterPage * master = dynamic_cast<KoPAMasterPage *>( page );
-
-    bool used = false;
-
-    if ( master ) {
-        QList<KoPAPageBase*> pages = m_doc->pages();
-        foreach( KoPAPageBase * page, pages ) {
-            KoPAPage * p = dynamic_cast<KoPAPage *>( page );
-            Q_ASSERT( p );
-            if ( p && p->masterPage() == master ) {
-                used = true;
-                break;
-            }
-        }
-    }
-
-    return used;
 }
 
 #include "KoPAView.moc"

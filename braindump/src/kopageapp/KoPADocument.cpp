@@ -50,8 +50,6 @@
 class KoPADocument::Private
 {
 public:
-    QList<KoPAPageBase*> pages;
-    QList<KoPAPageBase*> masterPages;
     bool rulersVisible;
     QMap<QString, KoDataCenter *>  dataCenterMap;
 };
@@ -74,8 +72,6 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
 KoPADocument::~KoPADocument()
 {
     saveConfig();
-    qDeleteAll( d->pages );
-    qDeleteAll( d->masterPages );
     qDeleteAll( d->dataCenterMap );
     delete d;
 }

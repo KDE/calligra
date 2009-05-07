@@ -24,7 +24,6 @@
 
 #include <KoView.h>
 #include <KoZoomHandler.h>
-#include <KoRuler.h>
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
@@ -51,7 +50,6 @@ public:
         ActionCopyPage   = 2,
         ActionDeletePage = 4,
         ActionViewShowMasterPages = 8,
-        ActionFormatMasterPage = 16,
         AllActions       = 0xFF
     };
 
@@ -71,9 +69,6 @@ public:
 
     KoZoomController *zoomController() { return m_zoomController; }
 
-    KoRuler *horizontalRuler() { return m_horizontalRuler; }
-    KoRuler *verticalRuler() { return m_verticalRuler; }
-
     KoPACanvas * kopaCanvas() { return m_canvas; }
     KoPACanvas * kopaCanvas() const { return m_canvas; }
 
@@ -89,24 +84,12 @@ public:
     /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;
 
-    /// @return the master shape manager used for this view
-    KoShapeManager* masterShapeManager() const;
-
     /**
      * Set the active page and updates the UI
      */
     void doUpdateActiveSection( Section* sectio );
 
-    /// reimplemented
-    virtual KoPrintJob * createPrintJob();
-
 public slots:
-    /// Set the active page and updates the UI
-    void updateActiveSection( Section * page );
-
-    /// Shows/hides the rulers
-    void setShowRulers(bool show);
-
     /// Insert a new page after the current one
     void insertPage();
 
@@ -120,11 +103,8 @@ protected:
     /// creates the actions (called from the constructor)
     void initActions();
 
-    /// Returns the document structure docker
-    KoPADocumentStructureDocker* documentStructureDocker() const;
-
-    /// Called when receiving a PartActivateEvent
-    virtual void partActivateEvent(KParts::PartActivateEvent* event);
+//    /// Returns the document structure docker
+//     KoPADocumentStructureDocker* documentStructureDocker() const;
 
     /// Update page navigation actions
     void updatePageNavigationActions();
@@ -138,11 +118,6 @@ protected slots:
     void editDeleteSelection();
     void editSelectAll();
     void editDeselectAll();
-
-    void formatMasterPage();
-
-    /// Change the current view mode to work on master pages
-    void setMasterMode( bool master );
 
     /// Called when the canvas controller is resized
     virtual void canvasControllerResized();
@@ -170,20 +145,6 @@ protected slots:
     void goToFirstPage();
     /// Go to the last page
     void goToLastPage();
-
-    /**
-     * Set the next document that should be used in find
-     *
-     * @param document The current document
-     */
-    void findDocumentSetNext( QTextDocument * document );
-
-    /**
-     * Set the previous document that should be used in find
-     *
-     * @param document The current document
-     */
-    void findDocumentSetPrevious( QTextDocument * document );
 
     /**
      * Re-initialize the document structure docker after active document in this
@@ -217,8 +178,6 @@ private:
 
     KAction *m_actionMasterPage;
 
-    KoRuler *m_horizontalRuler;
-    KoRuler *m_verticalRuler;
     KToggleAction* m_viewRulers;
 
     KoZoomAction *m_zoomAction;

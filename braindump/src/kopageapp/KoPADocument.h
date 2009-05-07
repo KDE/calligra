@@ -39,7 +39,7 @@ class KoPASavingContext;
 class KoXmlWriter;
 
 /// Document class that stores KoPAPage and KoPAMasterPage objects
-class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase, SectionGroup
+class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase, public SectionGroup
 {
     Q_OBJECT
 public:

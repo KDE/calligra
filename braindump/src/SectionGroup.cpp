@@ -23,6 +23,10 @@ SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
 {
 }
 
+SectionGroup::~SectionGroup()
+{
+}
+
 void SectionGroup::sectionAdded(Section* page)
 {
   if(m_parent)
