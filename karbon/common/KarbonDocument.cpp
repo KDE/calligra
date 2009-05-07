@@ -46,6 +46,8 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoImageCollection.h>
 #include <KoDataCenter.h>
+#include <KoStyleManager.h>
+#include <KoTextSharedLoadingData.h>
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
@@ -175,6 +177,9 @@ void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
 
 bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
+    // load text styles used by text shapes
+    loadOdfStyles( context );
+    
     qDeleteAll( d->layers );
     d->layers.clear();
     qDeleteAll( d->objects );
@@ -297,6 +302,9 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
 
     KoShapeSavingContext shapeContext( *bodyWriter, mainStyles, documentContext.embeddedSaver );
 
+    // save text styles
+    saveOdfStyles( shapeContext );
+    
     // save page
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
@@ -330,4 +338,27 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
     }
 
     return mainStyles.saveOdfStylesDotXml( store, documentContext.odfStore.manifestWriter() );
+}
+
+void KarbonDocument::loadOdfStyles( KoShapeLoadingContext & context )
+{
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
+    if( ! styleManager )
+        return;
+    
+    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    if( ! sharedData )
+        return;
+    
+    sharedData->loadOdfStyles( context.odfLoadingContext(), styleManager );
+    context.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
+}
+
+void KarbonDocument::saveOdfStyles( KoShapeSavingContext & context )
+{
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager*>( dataCenterMap()["StyleManager"] );
+    if( ! styleManager )
+        return;
+    
+    styleManager->saveOdf( context.mainStyles() );
 }
