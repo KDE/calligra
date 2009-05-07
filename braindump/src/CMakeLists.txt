@@ -1,5 +1,5 @@
 
-include_directories(${KOGUIUTILS_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
 
 ### braindump ###
 set(braindump_SRCS

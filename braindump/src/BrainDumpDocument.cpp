@@ -23,7 +23,6 @@
 #include <klocale.h>
 
 #include "BrainDumpView.h"
-#include "BrainDumpFactory.h"
 
 // KComponentData* BrainDumpFactory::s_instance = 0;
 // KAboutData* BrainDumpFactory::s_aboutData = 0;
