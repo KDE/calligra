@@ -21,6 +21,7 @@
 #define BRAINDUMPDOCUMENT_H
 
 #include <KoPADocument.h>
+#include <KComponentData>
 
 class BrainDumpDocument : public KoPADocument
 {
@@ -40,6 +41,9 @@ class BrainDumpDocument : public KoPADocument
         /// Creates a BrainDumpView instance and returns it
         virtual KoView* createViewInstance(QWidget* parent);
         const char *odfTagName( bool withNamespace );
+  private:
+    KAboutData* m_aboutData;
+    KComponentData* m_documentData;
 };
 
 #endif

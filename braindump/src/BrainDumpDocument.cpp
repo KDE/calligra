@@ -23,15 +23,12 @@
 #include <klocale.h>
 
 #include "BrainDumpView.h"
-
-// KComponentData* BrainDumpFactory::s_instance = 0;
-// KAboutData* BrainDumpFactory::s_aboutData = 0;
+#include "BrainDumpAboutData.h"
 
 BrainDumpDocument::BrainDumpDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
-  : KoPADocument(parentWidget, parent, singleViewMode)
+  : KoPADocument(parentWidget, parent, singleViewMode), m_aboutData(newBrainDumpAboutData()), m_documentData(new KComponentData(m_aboutData))
 {
-//     setComponentData(BrainDumpFactory::componentData(), false);
-//     setTemplateType("braindump_template");
+    setComponentData(*m_documentData, false);
 }
 
 BrainDumpDocument::~BrainDumpDocument()

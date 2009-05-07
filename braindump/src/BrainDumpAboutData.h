@@ -27,7 +27,7 @@
 static const char* BRAINDUMP_DESCRIPTION = I18N_NOOP("BrainDump: directly from your brain to the computer.");
 static const char* BRAINDUMP_VERSION = "0.9.0";
 
-KAboutData* newBrainDumpAboutData()
+inline KAboutData* newBrainDumpAboutData()
 {
   KAboutData* aboutData = new KAboutData("braindump", 0, ki18n("BrainDump"),
                                 BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION), KAboutData::License_LGPL,
