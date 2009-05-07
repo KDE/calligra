@@ -7,6 +7,7 @@ set(braindump_SRCS
   BrainDumpDocument.cpp
   BrainDumpView.cpp
   Section.cpp
+  SectionGroup.cpp
 # Imported from kopageapp
   kopageapp/KoPACanvas.cpp
   kopageapp/KoPADocument.cpp
