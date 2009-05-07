@@ -48,7 +48,6 @@
 #include <KoCutController.h>
 #include <KoCopyController.h>
 
-#include "KoShapeTraversal.h"
 #include "Canvas.h"
 #include "Document.h"
 #include "Section.h"

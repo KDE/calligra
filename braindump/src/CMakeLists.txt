@@ -11,7 +11,6 @@ set(braindump_SRCS
   SectionGroup.cpp
 # Imported from kopageapp
   kopageapp/KoPAView.cpp
-  kopageapp/KoShapeTraversal.cpp
 )
 
 kde4_add_executable(braindump ${braindump_SRCS})
