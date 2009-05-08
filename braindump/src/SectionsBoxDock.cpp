@@ -20,24 +20,32 @@
 #include "SectionsBoxDock.h"
 
 #include "DocumentModel.h"
+#include "View.h"
 
 SectionsBoxDock::SectionsBoxDock() : m_model(0) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
 
   m_wdgSectionsBox.setupUi(mainWidget);
+  connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
 }
 
 SectionsBoxDock::~SectionsBoxDock()
 {
 }
 
-void SectionsBoxDock::setDocument(Document* document)
+void SectionsBoxDock::setup(Document* document, View* view)
 {
+  m_view = view;
   DocumentModel* model = new DocumentModel(this, document);
   m_wdgSectionsBox.listSections->setModel(model);
   delete m_model;
   m_model = model;
+}
+
+void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
+{
+  m_view->doUpdateActiveSection(m_model->dataFromIndex(index));
 }
 
 #include "SectionsBoxDock.moc"

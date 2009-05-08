@@ -142,7 +142,7 @@ void View::initGUI()
     if (shell()) {
         SectionsBoxDockFactory structureDockerFactory;
         m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( createDockWidget( &structureDockerFactory ) );
-        m_sectionsBoxDock->setDocument(document());
+        m_sectionsBoxDock->setup(document(), this);
 #if 0
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
                 m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );

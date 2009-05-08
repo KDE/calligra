@@ -24,6 +24,7 @@
 
 class Document;
 class DocumentModel;
+class View;
 
 #include <QDockWidget>
 #include <KoDockFactory.h>
@@ -33,10 +34,13 @@ class SectionsBoxDock : public QDockWidget {
   public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
-    void setDocument(Document* document);
+    void setup(Document* document, View* m_view);
+  private slots:
+    void slotSectionActivated(const QModelIndex &);
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
     DocumentModel* m_model;
+    View* m_view;
 };
 
 
