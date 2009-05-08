@@ -23,6 +23,7 @@
 #include "KoDocumentSectionModel.h"
 
 class Document;
+class Section;
 
 class DocumentModel : public KoDocumentSectionModel {
   public:
@@ -34,6 +35,9 @@ class DocumentModel : public KoDocumentSectionModel {
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
     
+  private:
+    Section* dataFromIndex(const QModelIndex& index) const;
+    void* dataToIndex(Section* section) const;
   private:
     Document* m_document;
 };

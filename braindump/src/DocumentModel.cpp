@@ -37,7 +37,7 @@ int DocumentModel::rowCount(const QModelIndex &parent) const
   {
     return m_document->sections().count();
   } else {
-    return static_cast<SectionGroup*>(parent.internalPointer())->sections().count();
+    return dataFromIndex(parent)->sections().count();
   }
 }
 
@@ -52,13 +52,13 @@ QModelIndex DocumentModel::index(int row, int column, const QModelIndex& parent)
   SectionGroup* group;
   if(parent.isValid())
   {
-    group = static_cast<SectionGroup*>(parent.internalPointer());
+    group = dataFromIndex(parent);
   } else {
     group = m_document;
   }
   if(row >= 0 and row < group->sections().count())
   {
-    return createIndex(row, column, static_cast<SectionGroup*>(group->sections()[row]));
+    return createIndex(row, column, dataToIndex(group->sections()[row]));
   } else {
     return QModelIndex();
   }
@@ -68,7 +68,7 @@ QModelIndex DocumentModel::parent( const QModelIndex& child ) const
 {
   if(child.isValid())
   {
-    SectionGroup* childSection = static_cast<SectionGroup*>(child.internalPointer());
+    Section* childSection = dataFromIndex(child);
     SectionGroup* childSectionParent = childSection->sectionParent();
     Q_ASSERT(childSectionParent);
     if( childSectionParent->sectionParent())
@@ -77,7 +77,7 @@ QModelIndex DocumentModel::parent( const QModelIndex& child ) const
       Q_ASSERT(parentAsSection);
       Q_ASSERT(childSectionParent->sectionParent()->sections().contains(parentAsSection));
       return createIndex( childSectionParent->sectionParent()->sections().indexOf(parentAsSection),
-                          1, childSectionParent );
+                          1, dataToIndex(parentAsSection) );
     } else {
       return QModelIndex();
     }
@@ -85,4 +85,15 @@ QModelIndex DocumentModel::parent( const QModelIndex& child ) const
   } else {
     return QModelIndex();
   }
+}
+
+Section* DocumentModel::dataFromIndex(const QModelIndex& index) const
+{
+  Q_ASSERT(index.internalPointer());
+  return static_cast<Section*>(index.internalPointer());
+}
+
+void* DocumentModel::dataToIndex(Section* section) const
+{
+  return section;
 }
