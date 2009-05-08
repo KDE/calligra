@@ -36,7 +36,7 @@ class Section;
 class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
-public:
+  public:
     explicit Canvas( View * view, Document * doc );
     ~Canvas();
 
@@ -67,11 +67,11 @@ public:
 
     View* koPAView () const { return m_view; }
 
-public slots:
+  public slots:
     void setDocumentOffset(const QPoint &offset);
     void sectionChanged(Section* section);
 
-signals:
+  signals:
     void documentSize(const QSize &size);
 
     /**
@@ -83,7 +83,7 @@ signals:
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
 
-protected:
+  protected:
     /// reimplemented method from superclass
     void paintEvent( QPaintEvent* event );
     /// reimplemented method from superclass
