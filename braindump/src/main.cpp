@@ -25,6 +25,7 @@
 #include "AboutData.h"
 #include "Document.h"
 #include <KoMainWindow.h>
+#include <KoGlobal.h>
 
 int main( int argc, char **argv )
 {
@@ -35,6 +36,9 @@ int main( int argc, char **argv )
   KCmdLineArgs::addCmdLineOptions( options );
 
   KApplication app;
+
+  KIconLoader::global()->addAppDir("koffice");
+  KoGlobal::initialize();
 
   Document* doc = new Document(0, 0);
   KoMainWindow* shell = new KoMainWindow(doc->componentData());
