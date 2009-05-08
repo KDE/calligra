@@ -154,33 +154,32 @@ Qt::DropActions DocumentModel::supportedDropActions() const
 
 QStringList DocumentModel::mimeTypes() const
 {
-    QStringList types;
-    types << QLatin1String("application/x-braindumpsectionmodeldatalist");
-    return types;
+  QStringList types;
+  types << QLatin1String("application/x-braindumpsectionmodeldatalist");
+  return types;
 }
 
 QMimeData * DocumentModel::mimeData( const QModelIndexList & indexes ) const
 {
-    // check if there is data to encode
-    if( !indexes.count() )
-        return 0;
+  // check if there is data to encode
+  if( !indexes.count() )
+    return 0;
 
-    // check if we support a format
-    QStringList types = mimeTypes();
-    if( types.isEmpty() )
-        return 0;
+  // check if we support a format
+  QStringList types = mimeTypes();
+  if( types.isEmpty() )
+    return 0;
 
-    QMimeData *data = new QMimeData();
-    QString format = types[0];
-    QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+  QMimeData *data = new QMimeData();
+  QString format = types[0];
+  QByteArray encoded;
+  QDataStream stream(&encoded, QIODevice::WriteOnly);
 
-    // encode the data
-    QModelIndexList::ConstIterator it = indexes.begin();
-    for( ; it != indexes.end(); ++it)
-        stream << qVariantFromValue( qulonglong( it->internalPointer() ) );
+  // encode the data
+  QModelIndexList::ConstIterator it = indexes.begin();
+  for( ; it != indexes.end(); ++it)
+    stream << qVariantFromValue( qulonglong( it->internalPointer() ) );
 
-    data->setData(format, encoded);
-    return data;
+  data->setData(format, encoded);
+  return data;
 }
-
