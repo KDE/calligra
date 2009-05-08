@@ -94,14 +94,14 @@ QVariant DocumentModel::data(const QModelIndex &index, int role ) const
     Section* section = dataFromIndex(index);
     switch (role)
     {
+      case Qt::EditRole:
       case Qt::DisplayRole:
       {
-        return section->caption();
+        return section->name();
       }
     }
-  } else {
-    return QVariant();
   }
+  return QVariant();
 }
 
 Section* DocumentModel::dataFromIndex(const QModelIndex& index) const
