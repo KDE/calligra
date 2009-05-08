@@ -19,6 +19,8 @@
 
 #include "DocumentModel.h"
 
+#include <QMimeData>
+
 #include <KoShapeRenameCommand.h>
 
 #include "Document.h"
@@ -182,4 +184,50 @@ QMimeData * DocumentModel::mimeData( const QModelIndexList & indexes ) const
 
   data->setData(format, encoded);
   return data;
+}
+
+bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
+{
+  Q_UNUSED( row );
+  Q_UNUSED( column );
+
+  // check if the action is supported
+  if( !data or (action != Qt::MoveAction and action != Qt::CopyAction ) )
+      return false;
+  // check if the format is supported
+  QStringList types = mimeTypes();
+  Q_ASSERT(not types.isEmpty());
+  QString format = types[0];
+  if( not data->hasFormat(format) )
+      return false;
+  
+  QByteArray encoded = data->data( format );
+  QDataStream stream(&encoded, QIODevice::ReadOnly);
+  QList<Section*> shapes;
+
+  // decode the data
+  while( ! stream.atEnd() )
+  {
+    QVariant v;
+    stream >> v;
+    shapes.append( static_cast<Section*>( (void*)v.value<qulonglong>() ) );
+  }
+  
+  SectionGroup* group;
+  if(parent.isValid())
+  {
+    group = dataFromIndex(parent);
+  } else {
+    group = m_document;
+  }
+  
+  foreach(Section* section, shapes)
+  {
+    if(action == Qt::CopyAction)
+    {
+      section = new Section(*section);
+    }
+    group->insertSection(section, row);
+  }
+  return true;
 }
