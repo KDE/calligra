@@ -75,7 +75,10 @@ Document::Document( QWidget* parentWidget, QObject* parent, bool singleViewMode 
     }
 
     loadConfig();
-    newSection(); // TODO instead of creating a section... load
+    // TODO instead of creating a section... load
+    newSection();
+    Section* sec = newSection();
+    sec->newSection();
 }
 
 Document::~Document()
