@@ -19,7 +19,9 @@
 
 #include "SectionsBoxDock.h"
 
-SectionsBoxDock::SectionsBoxDock() {
+#include "DocumentModel.h"
+
+SectionsBoxDock::SectionsBoxDock() : m_model(0) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
 
@@ -28,6 +30,14 @@ SectionsBoxDock::SectionsBoxDock() {
 
 SectionsBoxDock::~SectionsBoxDock()
 {
+}
+
+void SectionsBoxDock::setDocument(Document* document)
+{
+  DocumentModel* model = new DocumentModel(this, document);
+  m_wdgSectionsBox.listSections->setModel(model);
+  delete m_model;
+  m_model = model;
 }
 
 #include "SectionsBoxDock.moc"

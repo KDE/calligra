@@ -22,6 +22,9 @@
 
 #include "ui_wdgsectionsbox.h"
 
+class Document;
+class DocumentModel;
+
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
@@ -30,8 +33,10 @@ class SectionsBoxDock : public QDockWidget {
   public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
+    void setDocument(Document* document);
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
+    DocumentModel* m_model;
 };
 
 
