@@ -27,6 +27,10 @@ class Section;
 
 class DocumentModel : public KoDocumentSectionModel {
   public:
+    enum Role {
+      SectionPtr = 0x1252BAD
+    };
+  public:
     DocumentModel( QObject* parent, Document *document );
     ~DocumentModel();
     // from QAbstractItemModel
@@ -43,7 +47,6 @@ class DocumentModel : public KoDocumentSectionModel {
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
   public:
     Section* dataFromIndex(const QModelIndex& index) const;
-  private:
     void* dataToIndex(Section* section) const;
   private:
     Document* m_document;

@@ -103,6 +103,8 @@ QVariant DocumentModel::data(const QModelIndex &index, int role ) const
       {
         return section->name();
       }
+      case SectionPtr:
+        return qVariantFromValue(section);
     }
   }
   return QVariant();

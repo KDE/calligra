@@ -33,4 +33,6 @@ class Section : public KoShapeContainer, public SectionGroup {
   private:
 };
 
+Q_DECLARE_METATYPE(Section*)
+
 #endif

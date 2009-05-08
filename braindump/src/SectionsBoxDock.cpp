@@ -22,6 +22,7 @@
 #include <KMenu>
 
 #include "DocumentModel.h"
+#include "Section.h"
 #include "TreeSortFilter.h"
 #include "View.h"
 
@@ -77,7 +78,8 @@ void SectionsBoxDock::setup(Document* document, View* view)
 
 void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
 {
-  m_view->doUpdateActiveSection(m_model->dataFromIndex(index));
+  Section* section = qVariantValue<Section*>(m_proxy->data(index, DocumentModel::SectionPtr));
+  m_view->doUpdateActiveSection(section);
 }
 
 void SectionsBoxDock::slotMinimalView()
