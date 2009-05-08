@@ -87,6 +87,23 @@ QModelIndex DocumentModel::parent( const QModelIndex& child ) const
   }
 }
 
+QVariant DocumentModel::data(const QModelIndex &index, int role ) const
+{
+  if( index.isValid() )
+  {
+    Section* section = dataFromIndex(index);
+    switch (role)
+    {
+      case Qt::DisplayRole:
+      {
+        return section->caption();
+      }
+    }
+  } else {
+    return QVariant();
+  }
+}
+
 Section* DocumentModel::dataFromIndex(const QModelIndex& index) const
 {
   Q_ASSERT(index.internalPointer());

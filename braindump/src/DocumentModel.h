@@ -34,6 +34,7 @@ class DocumentModel : public KoDocumentSectionModel {
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     
   private:
     Section* dataFromIndex(const QModelIndex& index) const;
