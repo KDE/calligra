@@ -7,9 +7,14 @@ set(braindump_SRCS
   Canvas.cpp
   Document.cpp
   DocumentModel.cpp
+  SectionsBox.cpp
   Section.cpp
   SectionGroup.cpp
   View.cpp
+)
+
+kde4_add_ui_files(braindump_SRCS
+  forms/wdgsectionsbox.ui
 )
 
 kde4_add_executable(braindump ${braindump_SRCS})
