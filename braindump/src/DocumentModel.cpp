@@ -114,3 +114,14 @@ void* DocumentModel::dataToIndex(Section* section) const
 {
   return section;
 }
+
+Qt::ItemFlags DocumentModel::flags(const QModelIndex &index) const
+{
+  if( index.isValid() )
+  {
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable| Qt::ItemIsDropEnabled;
+    return flags;
+  } else {
+    return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+  }
+}
