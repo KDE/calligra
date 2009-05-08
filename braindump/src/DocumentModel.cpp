@@ -19,6 +19,8 @@
 
 #include "DocumentModel.h"
 
+#include <KoShapeRenameCommand.h>
+
 #include "Document.h"
 #include "Section.h"
 
@@ -104,15 +106,23 @@ QVariant DocumentModel::data(const QModelIndex &index, int role ) const
   return QVariant();
 }
 
-Section* DocumentModel::dataFromIndex(const QModelIndex& index) const
+bool DocumentModel::setData(const QModelIndex &index, const QVariant &value, int role )
 {
-  Q_ASSERT(index.internalPointer());
-  return static_cast<Section*>(index.internalPointer());
-}
-
-void* DocumentModel::dataToIndex(Section* section) const
-{
-  return section;
+  if( index.isValid() )
+  {
+    switch (role)
+    {
+      case Qt::DisplayRole:
+      case Qt::EditRole:
+      {
+        QUndoCommand * cmd = new KoShapeRenameCommand( dataFromIndex(index), value.toString() );
+        // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
+        m_document->addCommand( cmd );
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 Qt::ItemFlags DocumentModel::flags(const QModelIndex &index) const
@@ -124,4 +134,15 @@ Qt::ItemFlags DocumentModel::flags(const QModelIndex &index) const
   } else {
     return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
   }
+}
+
+Section* DocumentModel::dataFromIndex(const QModelIndex& index) const
+{
+  Q_ASSERT(index.internalPointer());
+  return static_cast<Section*>(index.internalPointer());
+}
+
+void* DocumentModel::dataToIndex(Section* section) const
+{
+  return section;
 }
