@@ -24,6 +24,7 @@
 
 class Document;
 class DocumentModel;
+class QSortFilterProxyModel;
 class View;
 
 #include <QDockWidget>
@@ -40,10 +41,12 @@ class SectionsBoxDock : public QDockWidget {
     void slotMinimalView();
     void slotDetailedView();
     void slotThumbnailView();
+    void searchBoxUpdated(QString );
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
     DocumentModel* m_model;
     View* m_view;
+    QSortFilterProxyModel* m_proxy;
 };
 
 

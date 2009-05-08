@@ -19,18 +19,23 @@
 
 #include "SectionsBoxDock.h"
 
+#include <QSortFilterProxyModel>
 #include <KMenu>
 
 #include "DocumentModel.h"
 #include "View.h"
 
-SectionsBoxDock::SectionsBoxDock() : m_model(0) {
+SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new QSortFilterProxyModel(this)) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
 
   m_wdgSectionsBox.setupUi(mainWidget);
+  
+  // Setup list sections
   connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
+  m_wdgSectionsBox.listSections->setModel(m_proxy);
 
+  // Setup the view mode button
   KMenu* m_viewModeMenu = new KMenu(this);
   QActionGroup *group = new QActionGroup(this);
   QList<QAction*> actions;
@@ -52,6 +57,9 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0) {
   m_wdgSectionsBox.bnViewMode->setPopupMode(QToolButton::InstantPopup);
   m_wdgSectionsBox.bnViewMode->setIcon(KIcon("view-choose"));
   m_wdgSectionsBox.bnViewMode->setText(i18n("View mode"));
+  
+  // Setup the search box
+  connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), SLOT(searchBoxUpdated(QString)));
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -62,7 +70,7 @@ void SectionsBoxDock::setup(Document* document, View* view)
 {
   m_view = view;
   DocumentModel* model = new DocumentModel(this, document);
-  m_wdgSectionsBox.listSections->setModel(model);
+  m_proxy->setSourceModel(model);
   delete m_model;
   m_model = model;
 }
@@ -86,5 +94,11 @@ void SectionsBoxDock::slotThumbnailView()
 {
   m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
+
+void SectionsBoxDock::searchBoxUpdated(QString str)
+{
+  m_proxy->setFilterRegExp(QRegExp(str));
+}
+
 
 #include "SectionsBoxDock.moc"
