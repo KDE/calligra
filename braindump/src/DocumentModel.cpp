@@ -20,6 +20,7 @@
 #include "DocumentModel.h"
 
 #include "Document.h"
+#include "Section.h"
 
 DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent), m_document(document)
 {
@@ -43,4 +44,21 @@ int DocumentModel::rowCount(const QModelIndex &parent) const
 int DocumentModel::columnCount(const QModelIndex &parent) const
 {
   return 1;
+}
+
+QModelIndex DocumentModel::index(int row, int column, const QModelIndex &parent) const
+{
+  SectionGroup* group;
+  if(parent.isValid())
+  {
+    group = static_cast<SectionGroup*>(parent.internalPointer());
+  } else {
+    group = m_document;
+  }
+  if(row >= 0 and row < group->sections().count())
+  {
+    return createIndex(row, column, static_cast<SectionGroup*>(group->sections()[row]));
+  } else {
+    return QModelIndex();
+  }
 }
