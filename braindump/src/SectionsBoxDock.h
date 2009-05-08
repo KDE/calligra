@@ -26,11 +26,36 @@
 #include <KoDockFactory.h>
 
 class SectionsBoxDock : public QDockWidget {
+    Q_OBJECT
   public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
+};
+
+
+class SectionsBoxDockFactory : public KoDockFactory
+{
+
+public:
+    SectionsBoxDockFactory() { }
+
+    virtual QString id() const {
+        return QString("SectionsBox");
+    }
+
+    virtual QDockWidget* createDockWidget() {
+        SectionsBoxDock * dockWidget = new SectionsBoxDock();
+
+        dockWidget->setObjectName(id());
+
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
+        return DockRight;
+    }
 };
 
 #endif

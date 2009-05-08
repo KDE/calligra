@@ -61,6 +61,7 @@
 #include <kstatusbar.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+#include "SectionsBoxDock.h"
 
 View::View( Document *document, QWidget *parent )
 : KoView( document, parent )
@@ -138,18 +139,18 @@ void View::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-#if 0
     if (shell()) {
-        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
-        m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+        SectionsBoxDockFactory structureDockerFactory;
+        m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( createDockWidget( &structureDockerFactory ) );
+#if 0
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
                 m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
         connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
         connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
-    }
 #endif
+    }
 
     show();
 }

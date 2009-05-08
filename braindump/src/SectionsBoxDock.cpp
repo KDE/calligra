@@ -20,9 +20,14 @@
 #include "SectionsBoxDock.h"
 
 SectionsBoxDock::SectionsBoxDock() {
-  m_wdgSectionsBox.setupUi(this);
+  QWidget* mainWidget = new QWidget(this);
+  setWidget(mainWidget);
+
+  m_wdgSectionsBox.setupUi(mainWidget);
 }
 
 SectionsBoxDock::~SectionsBoxDock()
 {
 }
+
+#include "SectionsBoxDock.moc"

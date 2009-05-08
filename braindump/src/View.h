@@ -34,7 +34,7 @@ class Canvas;
 class Document;
 class KToggleAction;
 class Section;
-class KoPADocumentStructureDocker;
+class SectionsBoxDock;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
@@ -156,7 +156,7 @@ protected:
 
 private:
 
-    KoPADocumentStructureDocker * m_documentStructureDocker;
+    SectionsBoxDock * m_sectionsBoxDock;
 
     KoCanvasController * m_canvasController;
     KoZoomController * m_zoomController;
