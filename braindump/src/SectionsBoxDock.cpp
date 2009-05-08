@@ -19,6 +19,8 @@
 
 #include "SectionsBoxDock.h"
 
+#include <KMenu>
+
 #include "DocumentModel.h"
 #include "View.h"
 
@@ -28,6 +30,28 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0) {
 
   m_wdgSectionsBox.setupUi(mainWidget);
   connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
+
+  KMenu* m_viewModeMenu = new KMenu(this);
+  QActionGroup *group = new QActionGroup(this);
+  QList<QAction*> actions;
+
+  actions << m_viewModeMenu->addAction(KIcon("view-list-text"),
+                                        i18n("Minimal View"), this, SLOT(slotMinimalView()));
+  actions << m_viewModeMenu->addAction(KIcon("view-list-details"),
+                                        i18n("Detailed View"), this, SLOT(slotDetailedView()));
+  actions << m_viewModeMenu->addAction(KIcon("view-preview"),
+                                        i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
+
+  for (int i = 0, n = actions.count(); i < n; ++i) {
+      actions[i]->setCheckable(true);
+      actions[i]->setActionGroup(group);
+  }
+  actions[1]->trigger(); //TODO save/load previous state
+  
+  m_wdgSectionsBox.bnViewMode->setMenu(m_viewModeMenu);
+  m_wdgSectionsBox.bnViewMode->setPopupMode(QToolButton::InstantPopup);
+  m_wdgSectionsBox.bnViewMode->setIcon(KIcon("view-choose"));
+  m_wdgSectionsBox.bnViewMode->setText(i18n("View mode"));
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -46,6 +70,21 @@ void SectionsBoxDock::setup(Document* document, View* view)
 void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
 {
   m_view->doUpdateActiveSection(m_model->dataFromIndex(index));
+}
+
+void SectionsBoxDock::slotMinimalView()
+{
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::MinimalMode);
+}
+
+void SectionsBoxDock::slotDetailedView()
+{
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::DetailedMode);
+}
+
+void SectionsBoxDock::slotThumbnailView()
+{
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
 #include "SectionsBoxDock.moc"

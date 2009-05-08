@@ -37,6 +37,9 @@ class SectionsBoxDock : public QDockWidget {
     void setup(Document* document, View* m_view);
   private slots:
     void slotSectionActivated(const QModelIndex &);
+    void slotMinimalView();
+    void slotDetailedView();
+    void slotThumbnailView();
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
     DocumentModel* m_model;

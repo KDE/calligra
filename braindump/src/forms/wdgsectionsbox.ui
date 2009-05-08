@@ -200,6 +200,9 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="bnViewMode"/>
+     </item>
     </layout>
    </item>
   </layout>
