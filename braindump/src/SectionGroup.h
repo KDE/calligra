@@ -36,8 +36,12 @@ class SectionGroup {
   protected:
     virtual void sectionAdded(Section* page);
     virtual void sectionRemoved(Section* page);
-  private:
+  public:
+    /**
+     * @return the parent section (if any) of that document.
+     */
     SectionGroup* sectionParent();
+  private:
     void setSectionParent(SectionGroup* parent);
   private:
     SectionGroup* m_parent;
