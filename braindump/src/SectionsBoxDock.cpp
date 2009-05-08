@@ -61,6 +61,31 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this
   
   // Setup the search box
   connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
+  
+  // Setup the add button
+  m_wdgSectionsBox.bnAdd->setIcon(SmallIcon("list-add"));
+    
+  KMenu* newSectionMenu = new KMenu(this);
+  m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
+  m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
+  connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));
+  newSectionMenu->addAction(i18n("Add new section bellow current."), this, SLOT(slotNewSectionBellowCurrent()));
+  newSectionMenu->addAction(i18n("Add new section as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
+      
+  // Setup the delete button
+  m_wdgSectionsBox.bnDelete->setIcon(SmallIcon("list-remove"));
+  connect(m_wdgSectionsBox.bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
+
+  // Setup the raise button
+  m_wdgSectionsBox.bnRaise->setEnabled(false);
+  m_wdgSectionsBox.bnRaise->setIcon(SmallIcon("go-up"));
+  connect(m_wdgSectionsBox.bnRaise, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
+
+  // Setup the lower button
+  m_wdgSectionsBox.bnLower->setEnabled(false);
+  m_wdgSectionsBox.bnLower->setIcon(SmallIcon("go-down"));
+  connect(m_wdgSectionsBox.bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
+
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -96,5 +121,14 @@ void SectionsBoxDock::slotThumbnailView()
 {
   m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
+
+//     void slotRmClicked();
+//     void slotRaiseClicked();
+//     void slotLowerClicked();
+//     void slotPropertiesClicked();
+//     void slotDuplicateClicked();
+//     
+//     void slotNewSectionAsChildOfCurrent();
+//     void slotNewSectionBellowCurrent();
 
 #include "SectionsBoxDock.moc"
