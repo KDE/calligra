@@ -25,6 +25,7 @@
 #include "Section.h"
 #include "TreeSortFilter.h"
 #include "View.h"
+#include "Document.h"
 
 SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
@@ -122,13 +123,30 @@ void SectionsBoxDock::slotThumbnailView()
   m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
-//     void slotRmClicked();
-//     void slotRaiseClicked();
-//     void slotLowerClicked();
-//     void slotPropertiesClicked();
-//     void slotDuplicateClicked();
-//     
-//     void slotNewSectionAsChildOfCurrent();
-//     void slotNewSectionBellowCurrent();
+void SectionsBoxDock::slotRmClicked()
+{
+  m_model->removeSection(m_view->activeSection());
+}
+void SectionsBoxDock::slotRaiseClicked()
+{
+  qFatal("Unimplemented");
+}
+
+void SectionsBoxDock::slotLowerClicked()
+{
+  qFatal("Unimplemented");
+}
+
+void SectionsBoxDock::slotDuplicateClicked()
+{
+}
+
+void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
+{
+}
+
+void SectionsBoxDock::slotNewSectionBellowCurrent()
+{
+}
 
 #include "SectionsBoxDock.moc"

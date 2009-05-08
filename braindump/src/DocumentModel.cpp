@@ -233,3 +233,23 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
   }
   return true;
 }
+
+void DocumentModel::removeSection( Section* section )
+{
+  SectionGroup* parentGrp = section->sectionParent();
+  Q_ASSERT(parentGrp);
+  
+  QModelIndex parentIndex = parent( index(section) );
+  int idx = parentGrp->sections().indexOf(section);
+  beginRemoveRows(parentIndex, idx, idx);
+  parentGrp->removeSection(section);
+  endRemoveRows();
+//   delete section; // TODO can it be deleted now ?
+}
+
+QModelIndex DocumentModel::index( Section* section)
+{
+  SectionGroup* group = section->sectionParent();
+  Q_ASSERT(group);
+  return createIndex( group->sections().indexOf(section), 0, dataToIndex(section));
+}

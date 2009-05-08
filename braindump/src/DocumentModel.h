@@ -46,6 +46,9 @@ class DocumentModel : public KoDocumentSectionModel {
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
   public:
+    void removeSection( Section* );
+  public:
+    QModelIndex index( Section* );
     Section* dataFromIndex(const QModelIndex& index) const;
     void* dataToIndex(Section* section) const;
   private:

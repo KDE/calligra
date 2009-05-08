@@ -46,7 +46,6 @@ class SectionsBoxDock : public QDockWidget {
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
-    void slotPropertiesClicked();
     void slotDuplicateClicked();
     
     void slotNewSectionAsChildOfCurrent();
