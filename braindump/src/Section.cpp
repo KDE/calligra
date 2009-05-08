@@ -42,3 +42,13 @@ void Section::paintComponent(QPainter &painter, const KoViewConverter &converter
   Q_UNUSED(painter);
   Q_UNUSED(converter);
 }
+
+void Section::setCaption(const QString& caption)
+{
+  m_caption = caption;
+}
+
+const QString& Section::caption() const
+{
+  return m_caption;
+}
