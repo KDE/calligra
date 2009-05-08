@@ -29,9 +29,10 @@ class DocumentModel : public KoDocumentSectionModel {
     DocumentModel( QObject* parent, Document *document );
     ~DocumentModel();
     // from QAbstractItemModel
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QModelIndex parent( const QModelIndex& child ) const;
     
   private:
     Document* m_document;

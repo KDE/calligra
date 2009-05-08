@@ -43,10 +43,11 @@ int DocumentModel::rowCount(const QModelIndex &parent) const
 
 int DocumentModel::columnCount(const QModelIndex &parent) const
 {
+  Q_UNUSED(parent);
   return 1;
 }
 
-QModelIndex DocumentModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DocumentModel::index(int row, int column, const QModelIndex& parent) const
 {
   SectionGroup* group;
   if(parent.isValid())
@@ -58,6 +59,29 @@ QModelIndex DocumentModel::index(int row, int column, const QModelIndex &parent)
   if(row >= 0 and row < group->sections().count())
   {
     return createIndex(row, column, static_cast<SectionGroup*>(group->sections()[row]));
+  } else {
+    return QModelIndex();
+  }
+}
+
+QModelIndex DocumentModel::parent( const QModelIndex& child ) const
+{
+  if(child.isValid())
+  {
+    SectionGroup* childSection = static_cast<SectionGroup*>(child.internalPointer());
+    SectionGroup* childSectionParent = childSection->sectionParent();
+    Q_ASSERT(childSectionParent);
+    if( childSectionParent->sectionParent())
+    {
+      Section* parentAsSection = dynamic_cast<Section*>(childSectionParent);
+      Q_ASSERT(parentAsSection);
+      Q_ASSERT(childSectionParent->sectionParent()->sections().contains(parentAsSection));
+      return createIndex( childSectionParent->sectionParent()->sections().indexOf(parentAsSection),
+                          1, childSectionParent );
+    } else {
+      return QModelIndex();
+    }
+    
   } else {
     return QModelIndex();
   }
