@@ -10,6 +10,7 @@ set(braindump_SRCS
   SectionsBoxDock.cpp
   Section.cpp
   SectionGroup.cpp
+  TreeSortFilter.cpp
   View.cpp
 )
 

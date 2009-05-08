@@ -19,13 +19,13 @@
 
 #include "SectionsBoxDock.h"
 
-#include <QSortFilterProxyModel>
 #include <KMenu>
 
 #include "DocumentModel.h"
+#include "TreeSortFilter.h"
 #include "View.h"
 
-SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new QSortFilterProxyModel(this)) {
+SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
 
@@ -59,7 +59,7 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new QSortFilterProxyMod
   m_wdgSectionsBox.bnViewMode->setText(i18n("View mode"));
   
   // Setup the search box
-  connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), SLOT(searchBoxUpdated(QString)));
+  connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -94,11 +94,5 @@ void SectionsBoxDock::slotThumbnailView()
 {
   m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
-
-void SectionsBoxDock::searchBoxUpdated(QString str)
-{
-  m_proxy->setFilterRegExp(QRegExp(str));
-}
-
 
 #include "SectionsBoxDock.moc"
