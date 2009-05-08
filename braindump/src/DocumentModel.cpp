@@ -19,12 +19,28 @@
 
 #include "DocumentModel.h"
 
-DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent)
+#include "Document.h"
+
+DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent), m_document(document)
 {
+  Q_ASSERT(m_document);
 }
 
 DocumentModel::~DocumentModel()
 {
 }
 
+int DocumentModel::rowCount(const QModelIndex &parent) const
+{
+  if(not parent.isValid())
+  {
+    return m_document->sections().count();
+  } else {
+    return static_cast<SectionGroup*>(parent.internalPointer())->sections().count();
+  }
+}
 
+int DocumentModel::columnCount(const QModelIndex &parent) const
+{
+  return 1;
+}
