@@ -72,6 +72,7 @@ View::View( Document *document, QWidget *parent )
 
     if ( m_doc->sections().count() > 0 )
         doUpdateActiveSection( m_doc->sections()[0] );
+    Q_ASSERT(activeSection());
     setXMLFile("braindump.rc");
 }
 
@@ -102,6 +103,7 @@ void View::initGUI()
     m_canvas = new Canvas( this, m_doc );
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
+    m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
@@ -294,7 +296,8 @@ void View::doUpdateActiveSection( Section * page )
     QSizeF pageSize( 1000, 1000 );
     m_zoomController->setPageSize( pageSize );
     m_zoomController->setDocumentSize( pageSize );
-    m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
+//     m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
+    m_canvas->sectionChanged(activeSection());
 
     m_canvas->update();
 

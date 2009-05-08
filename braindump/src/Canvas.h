@@ -30,6 +30,7 @@
 class View;
 class Document;
 class KAction;
+class Section;
 
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
@@ -68,6 +69,7 @@ public:
 
 public slots:
     void setDocumentOffset(const QPoint &offset);
+    void sectionChanged(Section* section);
 
 signals:
     void documentSize(const QSize &size);
@@ -120,11 +122,6 @@ protected:
     /// Sets the canvas background color to the given color
     void setBackgroundColor( const QColor &color );
 
-    void updateSizeAndOffset();
-    void adjustOrigin();
-    QRectF documentViewRect();
-
-    QRectF m_docViewRect;
     View * m_view;
     Document * m_doc;
     KoShapeManager * m_shapeManager;

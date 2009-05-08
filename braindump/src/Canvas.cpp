@@ -42,14 +42,14 @@ Canvas::Canvas( View * view, Document * doc )
 , m_view( view )
 , m_doc( doc )
 {
-    m_shapeManager = new KoShapeManager( this );
-    m_toolProxy = new KoToolProxy( this );
-    setFocusPolicy( Qt::StrongFocus );
-    // this is much faster than painting it in the paintevent
-    setBackgroundRole( QPalette::Base );
-    setAutoFillBackground( true );
-    setAttribute(Qt::WA_InputMethodEnabled, true);
-    setBackgroundColor(Qt::white);
+  m_shapeManager = new KoShapeManager( this );
+  m_toolProxy = new KoToolProxy( this );
+  setFocusPolicy( Qt::StrongFocus );
+  // this is much faster than painting it in the paintevent
+  setBackgroundRole( QPalette::Base );
+  setAutoFillBackground( true );
+  setAttribute(Qt::WA_InputMethodEnabled, true);
+  setBackgroundColor(Qt::white);
 }
 
 Canvas::~Canvas()
@@ -228,7 +228,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 
 void Canvas::resizeEvent( QResizeEvent * event )
 {
-    emit sizeChanged( event->size() );
+  emit sizeChanged( event->size() );
 }
 
 void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
@@ -254,34 +254,8 @@ void Canvas::setBackgroundColor( const QColor &color )
     setPalette( pal );
 }
 
-void Canvas::updateSizeAndOffset()
+void Canvas::sectionChanged(Section* section)
 {
-    // save the old view rect for comparing
-    QRectF oldDocumentViewRect = m_docViewRect;
-    m_docViewRect = documentViewRect();
-    // check if the view rect has changed and emit signal if it has
-    if( oldDocumentViewRect != m_docViewRect )
-    {
-        QRectF viewRect = viewConverter()->documentToView( m_docViewRect );
-        KoCanvasController * controller = canvasController();
-        if( controller )
-        {
-            // tell canvas controller the new document size in pixel
-            controller->setDocumentSize( viewRect.size().toSize() );
-            // make sure the actual selection is visible
-            KoSelection * selection = shapeManager()->selection();
-            if( selection->count() )
-                controller->ensureVisible( selection->boundingRect() );
-        }
-    }
-    update();
-}
-
-QRectF Canvas::documentViewRect()
-{
-    QRectF bbox = m_view->activeSection()->boundingRect();
-    m_docViewRect = bbox.adjusted( -100, -100, 100, 100 );
-    return m_docViewRect;
 }
 
 
