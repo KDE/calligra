@@ -19,6 +19,9 @@
 
 #include "SectionGroup.h"
 #include "Section.h"
+#include <klocalizedstring.h>
+
+int SectionGroup::s_count = 0;
 
 SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
 {
@@ -61,6 +64,7 @@ Section* SectionGroup::newSection( Section* before )
 {
   Section* section = new Section;
   insertSection(section, before);
+  section->setName(i18n("Untitled %1", ++s_count));
   return section;
 }
 

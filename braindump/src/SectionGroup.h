@@ -46,6 +46,7 @@ class SectionGroup {
   private:
     SectionGroup* m_parent;
     QList<Section*> m_children;
+    static int s_count;
 };
 
 #endif
