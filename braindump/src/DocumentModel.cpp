@@ -244,7 +244,6 @@ void DocumentModel::removeSection( Section* section )
   beginRemoveRows(parentIndex, idx, idx);
   parentGrp->removeSection(section);
   endRemoveRows();
-//   delete section; // TODO can it be deleted now ?
 }
 
 QModelIndex DocumentModel::index( Section* section)
