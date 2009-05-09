@@ -126,6 +126,7 @@ void SectionsBoxDock::slotThumbnailView()
 void SectionsBoxDock::slotRmClicked()
 {
   m_model->removeSection(m_view->activeSection());
+  slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
 }
 void SectionsBoxDock::slotRaiseClicked()
 {
