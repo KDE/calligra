@@ -27,7 +27,7 @@ KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory( QObject *parent 
 : KoShapeFactory( parent, KarbonCalligraphicShapeId, i18n( "A calligraphic shape" ) )
 {
     setToolTip( i18n( "Calligraphic Shape" ) );
-    setIcon("ellipse-shape");
+    setIcon("calligraphy");
     setLoadingPriority( 1 ); // TODO: to what should this be set??
 }
 
