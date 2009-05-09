@@ -155,10 +155,12 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
-    m_canvas->move( presentationRect.topLeft() );
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
+    // move and resize now as otherwise it is not set when we call activate on the tool.
+    m_canvas->move( presentationRect.topLeft() );
+    m_canvas->resize( presentationRect.size() );
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -175,7 +177,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
             m_presenterViewWidget->move( pvRect.topLeft() );
-            m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() ); 
+            m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() );
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
 
