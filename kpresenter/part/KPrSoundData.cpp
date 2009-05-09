@@ -29,6 +29,7 @@
 #include <KDebug>
 #include <QIODevice>
 
+// make it a QSharedData
 class KPrSoundData::Private {
 public:
     Private(KPrSoundCollection *c)

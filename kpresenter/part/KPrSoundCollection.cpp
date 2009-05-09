@@ -72,19 +72,24 @@ QStringList KPrSoundCollection::titles()
     return list;
 }
 
-bool KPrSoundCollection::completeLoading(KoStore *store) {
+// TODO move to loading of the actual element using the sound
+bool KPrSoundCollection::completeLoading(KoStore *store)
+{
     foreach(KPrSoundData *sound, d->sounds) {
         if(! store->open(sound->storeHref()))
             return false;
         bool ok = sound->loadFromFile(new KoStoreDevice(store));
         store->close();
-        if(! ok)
+        if(! ok) {
             return false;
+        }
     }
     return true;
 }
 
-bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context ) {
+// use a KoSharedSavingData in the context to save which sounds need to be saved
+bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context )
+{
     foreach(KPrSoundData *sound, d->sounds) {
         if(sound->isTaggedForSaving())
         {
