@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,16 +131,13 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
 {
     QString className, iconName, objectName;
     if (set) {
-        if (set->contains("this:classString"))
-            className = (*set)["this:classString"].value().toString();
-        if (set->contains("this:iconName"))
-            iconName = (*set)["this:iconName"].value().toString();
-        const bool useCaptionAsObjectName = set->contains("this:useCaptionAsObjectName")
-                                            && (*set)["this:useCaptionAsObjectName"].value().toBool();
-        if (set->contains(useCaptionAsObjectName ? "caption" : "name"))
-            objectName = (*set)[useCaptionAsObjectName ? "caption" : "name"].value().toString();
-        if (objectName.isEmpty() && useCaptionAsObjectName && set->contains("name")) // get name if there is no caption
-            objectName = (*set)["name"].value().toString();
+        className = set->propertyValue("this:classString").toString();
+        iconName = set->propertyValue("this:iconName").toString();
+        const bool useCaptionAsObjectName = set->propertyValue("this:useCaptionAsObjectName", false).toBool();
+        objectName = set->propertyValue(useCaptionAsObjectName ? "caption" : "objectName").toString();
+        if (objectName.isEmpty() && useCaptionAsObjectName) { // get name if there is no caption
+            objectName = set->propertyValue("objectName").toString();
+        }
     }
     if (!set || objectName.isEmpty()) {
         objectName = textToDisplayForNullSet;
