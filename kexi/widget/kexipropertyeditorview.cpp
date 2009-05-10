@@ -76,10 +76,13 @@ void KexiObjectInfoLabel::setObjectName(const QString& name)
 void KexiObjectInfoLabel::updateName()
 {
     QString txt(m_className);
-    if (txt.isEmpty())
+    if (txt.isEmpty()) {
         txt = m_objectName;
-    else if (!m_objectName.isEmpty())
-        txt += QString(" \"%1\"").arg(m_objectName);
+    }
+    else if (!m_objectName.isEmpty()) {
+        txt = i18nc("Object class \"objectName\", e.g. Text editor \"text\"", "%1 \"%2\"",
+            txt, m_objectName);
+    }
     m_objectNameLabel->setText(txt);
 }
 
