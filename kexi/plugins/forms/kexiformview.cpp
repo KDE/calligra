@@ -379,6 +379,7 @@ void KexiFormView::initForm()
         m_delayedFormContentsResizeOnShow = 3;
     }
 
+    slotPropertySetSwitched(); // this prepares the data source page
     updateDataSourcePage();
 
     if (!newForm && viewMode() == Kexi::DesignViewMode) {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,7 +92,11 @@ protected:
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,
     *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
-    QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
+/*2.0: clear button is available in the combobox itself
+    QToolButton *m_clearWidgetDSButton;*/
+/*2.0: clear button is available in the combobox itself
+    QToolButton *m_clearDSButton;*/
+    QToolButton *m_gotoButton, *m_addField;
 //  QFrame *m_dataSourceSeparator;
     QString m_noDataSourceAvailableSingleText;
     QString m_noDataSourceAvailableMultiText;
