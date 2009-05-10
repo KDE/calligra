@@ -41,6 +41,12 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-05-11
+Forms
+* "Data Source" tab
+** set object class/name in the header also on form loading
+** use the clear buttons of KLineEdit instead of additional buttons in the form data source and field data source combo boxes
+
 2009-04-25..2009-05-10
 Forms
 * WidgetFactory refactored
