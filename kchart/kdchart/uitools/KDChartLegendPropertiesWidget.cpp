@@ -80,7 +80,7 @@ LegendPropertiesWidget::LegendPropertiesWidget( QWidget *parent )
 
 LegendPropertiesWidget::~LegendPropertiesWidget()
 {
-
+   delete _d;
 }
 
 void LegendPropertiesWidget::setLegend( Legend * legend )
