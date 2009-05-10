@@ -43,6 +43,10 @@
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : KexiPropertyPaneViewBase(parent)
+        , m_noDataSourceAvailableSingleText(
+            i18n("No data source could be assigned for this widget.") )
+        , m_noDataSourceAvailableMultiText(
+            i18n("No data source could be assigned for multiple widgets.") )
         , m_insideClearDataSourceSelection(false)
 {
 /*moved
@@ -50,12 +54,6 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_objectInfoLabel = new KexiObjectInfoLabel(this);
     m_objectInfoLabel->setObjectName("KexiObjectInfoLabel");
     vlyr->addWidget(m_objectInfoLabel);*/
-
-    m_noDataSourceAvailableSingleText
-    = i18n("No data source could be assigned for this widget.");
-    m_noDataSourceAvailableMultiText
-    = i18n("No data source could be assigned for multiple widgets.");
-
 //moved    vlyr->addSpacing(8);
 
     //Section 1: Form's/Widget's Data Source

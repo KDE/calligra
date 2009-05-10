@@ -94,8 +94,9 @@ protected:
     *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
     QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
 //  QFrame *m_dataSourceSeparator;
-    QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
-bool m_insideClearDataSourceSelection : 1;
+    QString m_noDataSourceAvailableSingleText;
+    QString m_noDataSourceAvailableMultiText;
+    bool m_insideClearDataSourceSelection : 1;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else
