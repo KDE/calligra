@@ -39,6 +39,7 @@ namespace KoProperty
 class Set;
 }
 
+//! A picture label widget for use within forms
 class KexiPictureLabel : public QLabel
 {
     Q_OBJECT
@@ -50,6 +51,7 @@ public:
     virtual bool setProperty(const char *name, const QVariant &value);
 };
 
+//! A line widget for use within forms
 class Line : public QFrame
 {
     Q_OBJECT
@@ -78,8 +80,7 @@ public:
 
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startEditing(const QByteArray &classname, QWidget *w,
-                              KFormDesigner::Container *container);
+    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
@@ -93,8 +94,16 @@ public:
 
     virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
 
+    //! Moved into public for EditRichTextAction
+    bool editRichText(QWidget *w, QString &text) const { return KFormDesigner::WidgetFactory::editRichText(w, text); }
+
+    //! Moved into public for EditRichTextAction
+    void changeProperty(KFormDesigner::Form *form, QWidget *widget, const char *name,
+        const QVariant &value) { KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value); }
+
 public slots:
-    void  editText();
+// moved to EditRichTextAction
+//    void  editText();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     void  editListContents();
 #endif
@@ -102,7 +111,8 @@ public slots:
 protected:
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
                                            const QByteArray &property, bool isTopLevel);
-    virtual bool changeText(const QString &newText);
+    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
+                                  const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     void saveTreeItem(QTreeWidgetItem *item, QDomNode &parentNode, QDomDocument &domDoc);

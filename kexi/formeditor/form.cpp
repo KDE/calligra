@@ -35,6 +35,8 @@
 #include <KActionCollection>
 #include <KMenu>
 #include <KFontDialog>
+#include <KTextEdit>
+#include <KLineEdit>
 
 #include "FormWidget.h"
 #include "resizehandle.h"
@@ -318,6 +320,14 @@ public:
     QColorGroup* origActiveColors;
 
     QStyle *designModeStyle;
+
+// <moved from WidgetFactory>
+//?    QPointer<QWidget> m_widget;
+    QPointer<QWidget> inlineEditor;
+    QPointer<Container> inlineEditorContainer;
+    QByteArray editedWidgetClass;
+    QString originalInlineText;
+// </moved from WidgetFactory>
 
     Form *q;
 };
@@ -3316,6 +3326,391 @@ void Form::changeFont()
     }
 //! @todo temporary fix for dirty flag
     emit modified();
+}
+
+void Form::setSlotPropertyChangedEnabled(bool set)
+{
+    d->slotPropertyChangedEnabled = set;
+}
+
+//moved from WidgetFactory
+void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args)
+{
+    if (!args.execute)
+        return;
+    if (args.multiLine) {
+        KTextEdit *textedit = new KTextEdit(args.widget->parentWidget());
+        textedit->setPlainText(args.text);
+        textedit->setAlignment(args.alignment);
+        if (dynamic_cast<QTextEdit*>(args.widget)) {
+            textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(args.widget)->wordWrapMode());
+            textedit->setLineWrapMode(dynamic_cast<QTextEdit*>(args.widget)->lineWrapMode());
+        }
+        textedit->setPalette(args.widget->palette());
+        textedit->setFont(args.widget->font());
+        //textedit->setResizePolicy(Q3ScrollView::Manual);
+        textedit->setGeometry(args.geometry);
+        textedit->setBackgroundRole(args.widget->backgroundRole());
+        QPalette pal(textedit->palette());
+        pal.setBrush(textedit->backgroundRole(), args.widget->palette().brush(args.widget->backgroundRole()));
+        textedit->setPalette(pal);
+        //for(int i =0; i <= textedit->paragraphs(); i++)
+        // textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
+        //textedit->selectAll(true);
+        QPalette p(textedit->palette());
+        p.setBrush(textedit->foregroundRole(), args.widget->palette().brush(args.widget->foregroundRole()));
+        textedit->setPalette(p);
+        //textedit->selectAll(false);
+        textedit->moveCursor(QTextEdit::MoveEnd, false);
+        //textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
+        textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //ok?
+        textedit->installEventFilter(this);
+        textedit->setFrameShape(args.useFrame ? QFrame::StyledPanel : QFrame::NoFrame);
+        //textedit->setMargin(2); //to move away from resize handle
+        textedit->show();
+        textedit->setFocus();
+        textedit->selectAll();
+        d->inlineEditor = textedit;
+//2.0        setInlineEditor(w, textedit);
+
+        connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
+        connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+        connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+//#else
+    } else {
+        KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
+        d->inlineEditor = editor;
+        editor->setText(args.text);
+        editor->setAlignment(args.alignment);
+        editor->setPalette(args.widget->palette());
+        editor->setFont(args.widget->font());
+        editor->setGeometry(args.geometry);
+        editor->setBackgroundRole(args.widget->backgroundRole());
+        editor->installEventFilter(this);
+        editor->setFrame(args.useFrame);
+
+        //editor->setContentsMargins(2,2,2,2); //to move away from resize handle
+        editor->show();
+        editor->setFocus();
+        editor->selectAll();
+        connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
+        connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+        connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+
+        d->inlineEditor = editor;
+//2.0        setInlineEditor(w, editor);
+    }
+    //copy properties if available
+    WidgetWithSubpropertiesInterface* subpropIface
+        = dynamic_cast<WidgetWithSubpropertiesInterface*>(args.widget);
+    QWidget *subwidget = (subpropIface && subpropIface->subwidget())
+                         ? subpropIface->subwidget() : args.widget;
+    if (   -1 != KexiUtils::indexOfPropertyWithSuperclasses(d->inlineEditor, "margin")
+        && -1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "margin"))
+    {
+        d->inlineEditor->setProperty("margin", subwidget->property("margin"));
+    }
+//#endif
+    ResizeHandleSet *handles = resizeHandlesForWidget(args.widget);
+    if (handles) {
+        handles->setEditingMode(true);
+        handles->raise();
+    }
+
+    ObjectTreeItem *tree = args.container->form()->objectTree()->lookup(args.widget->objectName());
+    if (!tree)
+        return;
+    tree->eventEater()->setContainer(this);
+
+//2.0    setWidget(w, container);
+    d->inlineEditorContainer = args.container;
+    d->editedWidgetClass = args.classname;
+    d->originalInlineText = args.text;
+
+    changeInlineTextInternal(args.text); // to update size of the widget
+}
+
+//moved from WidgetFactory
+void Form::changeInlineTextInternal(const QString& text)
+{
+    if (d->editedWidgetClass.isEmpty())
+        return;
+    d->slotPropertyChangedEnabled = false;
+    InlineTextEditingCommand *command = new InlineTextEditingCommand(
+        *this, selectedWidget(), d->editedWidgetClass, text);
+    addCommand(command);
+
+#if 0 // 2.0: prev version
+    WidgetInfo *wi = m_lib->widgetInfoForClassName(d->editedWidgetClass);
+    if (!wi)
+        return;
+    if (!wi->factory()->changeInlineText(this, selectedWidget(), text)) {
+        if (wi && wi->inheritedClass()) {
+            wi->inheritedClass()->factory()->changeInlineText(this, selectedWidget(), text);
+        }
+    }
+#endif
+#if 0
+    bool ok = changeInlineText(text);
+    if (!ok) {
+        //try in inherited
+        if (!d->editedWidgetClass.isEmpty()) {
+            WidgetInfo *wi = m_classesByName.value( d->editedWidgetClass );
+            if (wi && wi->inheritedClass()) {
+    //   wi->inheritedClass()->factory()->m_container = m_container;
+                wi->inheritedClass()->factory()->changeInlineText(text);
+            }
+        }
+    }
+#endif
+    d->slotPropertyChangedEnabled = true;
+}
+
+//moved from WidgetFactory
+bool Form::eventFilter(QObject *obj, QEvent *ev)
+{
+    if (   (ev->type() == QEvent::Resize || ev->type() == QEvent::Move)
+        && obj == selectedWidget() && d->inlineEditor)
+    {
+        // resize widget using resize handles
+//2.0        QWidget *ed = editor(m_widget);
+        WidgetInfo *winfo = m_lib->widgetInfoForClassName(obj->metaObject()->className());
+        if (winfo) {
+            winfo->factory()->resizeEditor(
+                d->inlineEditor, selectedWidget(), 
+                selectedWidget()->metaObject()->className());
+        }
+    }
+    else if (   ev->type() == QEvent::Paint && obj == selectedWidget()
+             && d->inlineEditor && d->inlineEditorContainer)
+    {
+        // paint event for container edited (eg button group)
+        return d->inlineEditorContainer->eventFilter(obj, ev);
+    }
+    else if (   ev->type() == QEvent::MouseButtonPress && obj == selectedWidget()
+             && d->inlineEditor && d->inlineEditorContainer)
+    {
+        // click outside editor --> cancel editing
+        Container *cont = d->inlineEditorContainer;
+        resetInlineEditor();
+        return d->inlineEditorContainer->eventFilter(obj, ev);
+    }
+
+    if (ev->type() == QEvent::FocusOut && d->inlineEditor) {
+        QWidget *w = d->inlineEditor;
+        //2.0? if (!w)
+        //2.0    w = selectedWidget();
+        if (obj != w)
+            return false;
+
+        QWidget *focus = w->topLevelWidget()->focusWidget();
+        if (   focus
+            && w != focus
+            && !KexiUtils::findFirstChild<QWidget*>(w, focus->objectName().toLatin1(),
+                                                    focus->metaObject()->className())
+           )
+        {
+            resetInlineEditor();
+        }
+    }
+    else if (ev->type() == QEvent::KeyPress) {
+        QWidget *w = d->inlineEditor;
+//2.0        if (!w)
+//2.0            w = selectedWidget();
+        if (obj != w)
+            return false;
+
+        QKeyEvent *e = static_cast<QKeyEvent*>(ev);
+        if (   (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
+            && e->modifiers() != Qt::AltModifier)
+        {
+            resetInlineEditor();
+        }
+        if (e->key() == Qt::Key_Escape) {
+            setInlineEditorText(d->originalInlineText);
+            resetInlineEditor();
+        }
+    }
+    else if (ev->type() == QEvent::ContextMenu) {
+        QWidget *w = d->inlineEditor;
+        //2.0 if (!w)
+        //2.0    w = selectedWidget();
+        if (obj != w)
+            return false;
+
+        return true;
+    }
+    return false;
+}
+
+//moved from WidgetFactory
+void Form::slotInlineTextChanged()
+{
+    changeInlineTextInternal(inlineEditorText());
+}
+
+//moved from WidgetFactory
+QString Form::inlineEditorText() const
+{
+    QWidget *ed = d->inlineEditor;
+    if (!ed)
+        return QString();
+    return dynamic_cast<KTextEdit*>(ed)
+           ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+}
+
+//moved from WidgetFactory
+void Form::setInlineEditorText(const QString& text)
+{
+    QWidget *ed = d->inlineEditor;
+    if (!ed)
+        return;
+
+    if (dynamic_cast<KTextEdit*>(ed))
+        dynamic_cast<KTextEdit*>(ed)->setPlainText(text);
+    else if (dynamic_cast<KLineEdit*>(ed))
+        dynamic_cast<KLineEdit*>(ed)->setText(text);
+    else
+        qWarning("Inline editor is neither KTextEdit nor KLineEdit");
+}
+
+void Form::disableFilter(QWidget *w, Container *container)
+{
+    ObjectTreeItem *tree = objectTree()->lookup(w->objectName());
+    if (!tree)
+        return;
+    tree->eventEater()->setContainer(this);
+
+    w->setFocus();
+    ResizeHandleSet *handles = resizeHandlesForWidget(w);
+    if (handles) {
+        handles->setEditingMode(true);
+        handles->raise();
+    }
+
+//2.0    setWidget(w, container);
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    d->editedWidgetClass.clear();
+//2.0    setInlineEditor(w, 0);
+
+    // widget is disabled, so we re-enable it while editing
+    if (!tree->isEnabled()) {
+#ifdef __GNUC__
+#warning TODO port to Qt 4 if needed
+#else
+#pragma WARNING( TODO port to Qt 4 if needed )
+#endif
+        QPalette p = w->palette();
+        QColorGroup cg = p.active();
+        p.setActive(p.disabled());
+        p.setDisabled(cg);
+        w->setPalette(p);
+    }
+
+    connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+}
+
+void Form::resetInlineEditor()
+{
+    if (!d->inlineEditorContainer) {
+//! @todo 2.0: OK?
+        return;
+    }
+    d->inlineEditorContainer->stopInlineEditing();
+
+    QWidget *ed = d->inlineEditor;
+    QWidget *widget = selectedWidget();
+    if (widget) {
+        ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
+        if (!tree) {
+            kWarning() << "Cannot find tree item for widget" << widget->objectName();
+            return;
+        }
+        tree->eventEater()->setContainer(d->inlineEditorContainer);
+        if (widget) {// && !ed)
+            setRecursiveCursor(widget, this);
+            if (widget->inherits("QLineEdit") || widget->inherits("QTextEdit")) { //fix weird behaviour
+                widget->unsetCursor();
+                widget->setCursor(Qt::ArrowCursor);
+            }
+        }
+
+        // disable again the widget if needed
+        if (!ed && !tree->isEnabled()) {
+#ifdef __GNUC__
+#warning TODO port to Qt 4 if needed
+#else
+#pragma WARNING( TODO port to Qt 4 if needed )
+#endif
+            QPalette p = widget->palette();
+            QColorGroup cg = p.active();
+            p.setActive(p.disabled());
+            p.setDisabled(cg);
+            widget->setPalette(p);
+        }
+    }
+    if (ed) {
+        changeInlineTextInternal(inlineEditorText());
+        disconnect(ed, 0, this, 0);
+        ed->deleteLater();
+    }
+
+    if (widget) {
+        disconnect(widget, 0, this, 0);
+        widget->update();
+    }
+
+    ResizeHandleSet *handles = resizeHandlesForWidget(widget);
+    if (handles) {
+        handles->setEditingMode(false);
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    d->editedWidgetClass.clear();
+//2.0    setInlineEditor(widget, 0);
+//2.0    setWidget(0, 0);
+//2.0    m_handles = 0;
+}
+
+void Form::widgetDestroyed()
+{
+    if (d->inlineEditor) {
+        d->inlineEditor->deleteLater();
+        d->inlineEditor = 0;
+    }
+
+//js delete m_handles;
+    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget*>(sender()));
+    if (handles) {
+        handles->setEditingMode(false);
+    }
+//2.0    m_widget = 0;
+//2.0    m_handles = 0;
+    d->inlineEditorContainer = 0;
+    d->editedWidgetClass.clear();
+}
+
+void Form::inlineEditorDeleted()
+{
+    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget*>(sender()));
+    if (handles) {
+        handles->setEditingMode(false);
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    d->editedWidgetClass.clear();
+//2.0    setInlineEditor(m_widget, 0);
+//2.0    setWidget(0, 0);
+// m_widget = 0;
+//2.0    m_handles = 0;
+// m_container = 0;
+}
+
+QByteArray Form::editedWidgetClass() const
+{
+    return d->editedWidgetClass;
 }
 
 #include "form.moc"

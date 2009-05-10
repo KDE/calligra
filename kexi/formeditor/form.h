@@ -326,7 +326,7 @@ public:
 
     /*! Internal: called by ResizeHandle when mouse move event causes first
      resize handle's dragging. As a result, current widget's editing (if any)
-     is finished - see WidgetFactory::resetEditor(). */
+     is finished - see resetInlineEditor(). */
 //  void resizeHandleDraggingStarted(QWidget *draggedWidget);
 
     ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
@@ -393,6 +393,9 @@ public:
     void createPropertyCommandsInDesignMode(QWidget* widget, 
                                             const QHash<QByteArray, QVariant> &propValues,
                                             Command *parentCommand, bool addToActiveForm = true);
+
+    //! @return class name of currently edited widget's
+    QByteArray editedWidgetClass() const;
 
 public slots:
 // moved from FormManager::insertWidget()
@@ -556,6 +559,21 @@ public slots:
     /*! Executes font dialog and changes it for currently selected widget(s). */
     void changeFont();
 
+    //! Sets slotPropertyChangedEnabled() enabled or disabled.
+    void setSlotPropertyChangedEnabled(bool set);
+
+// moved from WidgetFactory
+    /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
+    It destroys the editor or installs again the event filter on the widget. */
+    void resetInlineEditor();
+
+// contents moved from WidgetFactory
+    /*! This function provides a simple editing mode: it just disables event filtering
+     for the widget, and it install it again when
+     the widget loose focus or Enter is pressed.
+    */
+    void disableFilter(QWidget *w, Container *container);
+
 protected slots:
     /*! This slot is called when the toplevel widget of this Form is deleted
     (ie the window closed) so that the Form gets deleted at the same time.
@@ -590,6 +608,27 @@ protected slots:
 //2.0: moved    void buddyChosen(QAction *action);
 
 //2.0    void slotFormCommandHistoryChanged();
+
+// moved from WidgetFactory
+    /*! Default implementation changes "text" property.
+    You have to reimplement this function for editing inside the Form to work if your widget's
+    property you want to change isn't named "text".
+    This slot is called when the line edit text changes, and you have to make
+    it really change the good property of the widget using changeProperty() (text, or title, etc.).
+    */
+//    virtual bool changeInlineText(const QString &newText);
+
+// moved from WidgetFactory
+    void changeInlineTextInternal(const QString& text);
+
+    void slotInlineTextChanged();
+
+// moved from WidgetFactory
+    /*! This slot is called when the editor is destroyed.*/
+    void inlineEditorDeleted();
+
+// moved from WidgetFactory
+    void widgetDestroyed();
 
 signals:
     /*! This signal is emitted by selectWidget() when user selects a new widget,
@@ -753,6 +792,19 @@ protected:
       is the name of the modified property, and @a value is the new value of this property. */
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
+//moved from WidgetFactory
+    /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
+    void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
+
+// moved from WidgetFactory::editorText()
+    QString inlineEditorText() const;
+
+// moved from WidgetFactory::setEditorText()
+    void setInlineEditorText(const QString& text);
+
+// moved to WidgetFactory
+    /*! This function destroys the editor when it loses focus or Enter is pressed. */
+    virtual bool eventFilter(QObject *obj, QEvent *ev);
 private:
     void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
@@ -761,6 +813,7 @@ private:
 
 //unused    friend class FormManager;
     friend class FormWidget;
+    friend class WidgetLibrary;
 #ifdef KFD_SIGSLOTS
     friend class ConnectionDialog;
 #endif

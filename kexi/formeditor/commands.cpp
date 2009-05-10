@@ -158,6 +158,11 @@ void PropertyCommand::init()
     }
 }
 
+Form* PropertyCommand::form() const
+{
+    return d->form;
+}
+
 QVariant PropertyCommand::value() const
 {
     return d->value;
@@ -274,6 +279,13 @@ QByteArray PropertyCommand::widgetName() const
     if (d->oldValues.count() != 1)
         return QByteArray();
     return d->oldValues.keys().first();
+}
+
+QVariant PropertyCommand::oldValue() const
+{
+    if (d->oldValues.count() != 1)
+        return QVariant();
+    return d->oldValues.constBegin().value();
 }
 
 KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
@@ -1016,7 +1028,7 @@ void InsertWidgetCommand::execute()
     container->selectWidget(w);
     if (d->form->library()->internalProperty(w->metaObject()->className(),
             "dontStartEditingOnInserting").isEmpty()) {
-        d->form->library()->startEditing(
+        d->form->library()->startInlineEditing(
             w->metaObject()->className(), w, item->container() ? item->container() : container); // we edit the widget on creation
     }
 //! @todo update widget's width for entered text's metrics
@@ -2012,3 +2024,118 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCo
     dbg.nospace() << "PropertyCommandGroup" << static_cast<const Command&>(c);
     return dbg.space();
 }
+
+// InlineTextEditingCommand
+
+namespace KFormDesigner
+{
+class InlineTextEditingCommand::Private
+{
+public:
+    Private()
+     : oldTextKnown(false)
+    {
+    }
+    Form *form;
+    QWidget *widget;
+    QByteArray editedWidgetClass;
+    QString text;
+    QString oldText;
+    /*! Used to make sure that oldText is set only on the first execution
+        of InlineTextEditingCommand::execute() */
+    bool oldTextKnown : 1;
+};
+}
+
+InlineTextEditingCommand::InlineTextEditingCommand(
+    Form& form, QWidget *widget, const QByteArray &editedWidgetClass, 
+    const QString &text, Command *parent)
+ : Command(parent)
+ , d( new Private )
+{
+    d->form = &form;
+    d->widget = widget;
+    d->editedWidgetClass = editedWidgetClass;
+    d->text = text;
+    d->widget = widget;
+}
+
+InlineTextEditingCommand::~InlineTextEditingCommand()
+{
+    delete d;
+}
+
+void InlineTextEditingCommand::execute()
+{
+    WidgetInfo *wi = d->form->library()->widgetInfoForClassName(d->editedWidgetClass);
+    if (!wi)
+        return;
+
+    QString oldText;
+    d->form->setSlotPropertyChangedEnabled(false);
+    bool ok = wi->factory()->changeInlineText(d->form, d->widget, d->text, oldText);
+    if (!ok && wi && wi->inheritedClass()) {
+        ok = wi->inheritedClass()->factory()->changeInlineText(d->form, d->widget, d->text, oldText);
+    }
+    d->form->setSlotPropertyChangedEnabled(true);
+    if (!ok)
+        return;
+    if (!d->oldTextKnown) {
+        d->oldText = oldText;
+        d->oldTextKnown = true;
+    }
+}
+
+void InlineTextEditingCommand::undo()
+{
+    WidgetInfo *wi = d->form->library()->widgetInfoForClassName(d->editedWidgetClass);
+    if (!wi)
+        return;
+
+    QString dummy;
+    d->form->setSlotPropertyChangedEnabled(false);
+    bool ok = wi->factory()->changeInlineText(d->form, d->widget, d->oldText, dummy);
+    if (!ok && wi && wi->inheritedClass()) {
+        ok = wi->inheritedClass()->factory()->changeInlineText(d->form, d->widget, d->oldText, dummy);
+    }
+    d->form->setSlotPropertyChangedEnabled(true);
+}
+
+bool InlineTextEditingCommand::mergeWith(const QUndoCommand * command)
+{
+    if (id() != command->id())
+        return false;
+//    int uniqueId;
+    const InlineTextEditingCommand* inlineTextEditingCommand = static_cast<const InlineTextEditingCommand*>(command);
+//    if (d->uniqueId > 0 && inlineTextEditingCommand->d->uniqueId == d->uniqueId) {
+    if (   form() == inlineTextEditingCommand->form()
+        && text() == inlineTextEditingCommand->oldText())
+    {
+        kDebug() << "Changed from" << text() << "to" << inlineTextEditingCommand->text();
+        d->text = inlineTextEditingCommand->text();
+        return true;
+    }
+    return false;
+}
+
+Form* InlineTextEditingCommand::form() const
+{
+    return d->form;
+}
+
+QString InlineTextEditingCommand::text() const
+{
+    return d->text;
+}
+
+QString InlineTextEditingCommand::oldText() const
+{
+    return d->oldText;
+}
+
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineTextEditingCommand &c)
+{
+    dbg.nospace() << "InlineTextEditingCommand" << static_cast<const Command&>(c);
+    return dbg.space();
+}
+

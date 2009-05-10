@@ -141,9 +141,10 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
     if (startDragging) {
 // m_form->resizeHandleDraggingStarted(m_set->widget());
         m_set->resizeStarted();
-        WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->metaObject()->className());
+/*2.0        WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->metaObject()->className());
         if (wfactory)
-            wfactory->resetEditor();
+            wfactory->resetEditor();*/
+        m_set->form()->resetInlineEditor();
     }
 }
 

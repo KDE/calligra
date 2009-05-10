@@ -386,30 +386,42 @@ WidgetLibrary::createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
     if (!wclass)
         return false;
 
-    wclass->factory()->m_widget = w;
-    wclass->factory()->m_container = container;
-    if (wclass->factory()->createMenuActions(c, w, menu, container))
+//2.0    wclass->factory()->m_widget = w;
+//2.0    wclass->factory()->m_container = container;
+    if (wclass->factory()->createMenuActions(c, w, menu, container)) {
         return true;
+    }
     //try from inherited class
-    if (wclass->inheritedClass())
-        return wclass->inheritedClass()->factory()
-               ->createMenuActions(wclass->className(), w, menu, container);
+    if (wclass->inheritedClass()) {
+        return wclass->inheritedClass()->factory()->createMenuActions(
+                   wclass->className(), w, menu, container);
+    }
     return false;
 }
 
 bool
-WidgetLibrary::startEditing(const QByteArray &classname, QWidget *w, Container *container)
+WidgetLibrary::startInlineEditing(const QByteArray &classname, QWidget *w, Container *container)
 {
     loadFactories();
     WidgetInfo *wclass = d->widgets.value(classname);
     if (!wclass)
         return false;
 
-    if (wclass->factory()->startEditing(classname, w, container))
-        return true;
-    //try from inherited class
-    if (wclass->inheritedClass())
-        return wclass->inheritedClass()->factory()->startEditing(wclass->className(), w, container);
+    {
+        KFormDesigner::WidgetFactory::InlineEditorCreationArguments args(classname, w, container);
+        if (wclass->factory()->startInlineEditing(args)) {
+            args.container->form()->createInlineEditor(args);
+            return true;
+        }
+    }
+    if (wclass->inheritedClass()) {
+        //try from inherited class
+        KFormDesigner::WidgetFactory::InlineEditorCreationArguments args(wclass->className(), w, container);
+        if (wclass->inheritedClass()->factory()->startInlineEditing(args)) {
+            args.container->form()->createInlineEditor(args);
+            return true;
+        }
+    }
     return false;
 }
 

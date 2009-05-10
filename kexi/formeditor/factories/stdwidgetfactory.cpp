@@ -24,7 +24,6 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QSlider>
-#include <q3header.h>
 #include <qdom.h>
 #include <QStyle>
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -38,16 +37,18 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
-#include <klineedit.h>
-#include <kpushbutton.h>
-#include <knuminput.h>
-#include <kcombobox.h>
-#include <ktextedit.h>
-#include <kiconloader.h>
-#include <kicon.h>
-#include <kgenericfactory.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KPushButton.h>
+#include <KNumInput>
+#include <KComboBox>
+#include <KGenericFactory>
+#include <KTextEdit>
+#include <KLineEdit>
+#include <KLocale>
+#include <KDebug>
+#include <kdeversion.h>
+#include <KInputDialog>
+#include <KIcon>
+#include <KAction>
 #include <kdeversion.h>
 
 #include <koproperty/Property.h>
@@ -111,6 +112,65 @@ Line::orientation() const
         return Qt::Horizontal;
     else
         return Qt::Vertical;
+}
+
+/////   Internal actions
+
+//! Action of editing rich text for a label or text editor
+//! Keeps context expressed using container and receiver widget
+class EditRichTextAction : public KAction
+{
+public:
+    EditRichTextAction(KFormDesigner::Container *container,
+                       QWidget *receiver, QObject *parent,
+                       StdWidgetFactory *factory);
+protected slots:
+    void slotTriggered();
+private:
+    KFormDesigner::Container *m_container;
+    QWidget *m_receiver;
+    StdWidgetFactory *m_factory;
+};
+
+EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container, 
+                                       QWidget *receiver, QObject *parent,
+                                       StdWidgetFactory *factory)
+    : KAction(KIcon("document-edit"),
+              i18nc("Edit rich text for a widget", "Edit Rich Text"),
+              parent)
+    , m_container(container)
+    , m_receiver(receiver)
+    , m_factory(factory)
+{
+    connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
+}
+
+void EditRichTextAction::slotTriggered()
+{
+    const QString classname( m_receiver->metaObject()->className() );
+    QString text;
+    if (classname == "KTextEdit") {
+        KTextEdit* te = dynamic_cast<KTextEdit*>(m_receiver);
+        if (te->acceptRichText()) {
+            text = te->toHtml();
+        }
+        else {
+            text = te->toPlainText();
+        }
+    }
+    else if (classname == "QLabel") {
+        text = dynamic_cast<QLabel*>(m_receiver)->text();
+    }
+
+    if (m_factory->editRichText(m_receiver, text)) {
+//! @todo ok?
+        m_factory->changeProperty(m_container->form(), m_receiver, "acceptRichText", true);
+        m_factory->changeProperty(m_container->form(), m_receiver, "text", text);
+    }
+
+    if (classname == "QLabel") {
+        m_receiver->resize(m_receiver->sizeHint());
+    }
 }
 
 // The factory itself
@@ -500,11 +560,11 @@ StdWidgetFactory::previewWidget(const QByteArray &classname,
 }
 
 bool
-StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *,
-                                    QMenu *menu, KFormDesigner::Container *)
+StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
+                                    QMenu *menu, KFormDesigner::Container *container)
 {
     if ((classname == "QLabel") || (classname == "KTextEdit")) {
-        menu->addAction(KIcon("document-properties"), i18n("Edit Rich Text"), this, SLOT(editText()));
+        menu->addAction( new EditRichTextAction(container, w, menu, this) );
         return true;
     }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -519,72 +579,94 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *,
 }
 
 bool
-StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesigner::Container *container)
+StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
-    setWidget(w, container);
+//2.0    setWidget(w, container);
 // m_container = container;
-    if (classname == "KLineEdit") {
-        KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-        createEditor(classname, lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
+    if (args.classname == "KLineEdit") {
+        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+        args.text = lineedit->text();
+        args.alignment = lineedit->alignment();
+        args.useFrame = true;
         return true;
-    } else if (classname == "QLabel") {
-        QLabel *label = static_cast<QLabel*>(w);
+    }
+    else if (args.classname == "QLabel") {
+        QLabel *label = static_cast<QLabel*>(args.widget);
         if (label->textFormat() == Qt::RichText) {
             //m_widget = w;
 //   setWidget(w, container);
-            editText();
-        } else
-            createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+            args.execute = false;
+            EditRichTextAction(args.container, label, 0, this).trigger(); // editText();
+//2.0            editText();
+//! @todo
+        } else {
+//            createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+            args.text = label->text();
+            args.alignment = label->alignment();
+        }
         return true;
-    } else if (classname == "KPushButton") {
-        KPushButton *push = static_cast<KPushButton*>(w);
+    }
+    else if (args.classname == "KPushButton") {
+        KPushButton *push = static_cast<KPushButton*>(args.widget);
         QStyleOption option;
-        option.initFrom(w);
-        const QRect r(w->style()->subElementRect(
-                          QStyle::SE_PushButtonContents, &option, w));
-        const QRect editorRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
+        option.initFrom(push);
+        args.text = push->text();
+        const QRect r(push->style()->subElementRect(
+                          QStyle::SE_PushButtonContents, &option, push));
+        args.geometry = QRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
+//! @todo this is typical alignment, can we get actual from the style?
+        args.alignment = Qt::AlignCenter;
+        args.backgroundMode = Qt::PaletteButton;
         //r.setX(r.x() + 5);
         //r.setY(r.y() + 5);
         //r.setWidth(r.width()-10);
         //r.setHeight(r.height() - 10);
-        createEditor(classname, push->text(), push, container, editorRect, Qt::AlignCenter, false, false, Qt::PaletteButton);
+//        createEditor(classname, push->text(), push, container, editorRect, Qt::AlignCenter, false, false, Qt::PaletteButton);
         return true;
-    } else if (classname == "QRadioButton") {
-        QRadioButton *radio = static_cast<QRadioButton*>(w);
+    }
+    else if (args.classname == "QRadioButton") {
+        QRadioButton *radio = static_cast<QRadioButton*>(args.widget);
         QStyleOption option;
-        option.initFrom(w);
-        const QRect r(w->style()->subElementRect(
-                          QStyle::SE_RadioButtonContents, &option, w));
-        const QRect editorRect(
+        option.initFrom(radio);
+        args.text = radio->text();
+        const QRect r(radio->style()->subElementRect(
+                          QStyle::SE_RadioButtonContents, &option, radio));
+        args.geometry = QRect(
             radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
-        createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
+//        createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
         return true;
-    } else if (classname == "QCheckBox") {
-        QCheckBox *check = static_cast<QCheckBox*>(w);
+    }
+    else if (args.classname == "QCheckBox") {
+        QCheckBox *check = static_cast<QCheckBox*>(args.widget);
         //QRect r(check->geometry());
         //r.setX(r.x() + 20);
         QStyleOption option;
-        option.initFrom(w);
-        const QRect r(w->style()->subElementRect(
-                          QStyle::SE_CheckBoxContents, &option, w));
-        const QRect editorRect(
+        option.initFrom(check);
+        const QRect r(args.widget->style()->subElementRect(
+                          QStyle::SE_CheckBoxContents, &option, check));
+        args.geometry = QRect(
             check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
-        createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
+//        createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
         return true;
-    } else if (classname == "KComboBox") {
+    } else if (args.classname == "KComboBox") {
         QStringList list;
-        KComboBox *combo = dynamic_cast<KComboBox*>(w);
-        for (int i = 0; i < combo->count(); i++)
+        KComboBox *combo = dynamic_cast<KComboBox*>(args.widget);
+        for (int i = 0; i < combo->count(); i++) {
             list.append(combo->itemText(i));
-
-        if (editList(w, list)) {
-            dynamic_cast<KComboBox*>(w)->clear();
-            dynamic_cast<KComboBox*>(w)->addItems(list);
+        }
+        args.execute = false;
+        if (editList(args.widget, list)) {
+            dynamic_cast<KComboBox*>(args.widget)->clear();
+            dynamic_cast<KComboBox*>(args.widget)->addItems(list);
         }
         return true;
-    } else if ((classname == "KTextEdit") || (classname == "KDateTimeWidget") || (classname == "KTimeWidget") ||
-               (classname == "KDateWidget") || (classname == "KIntSpinBox")) {
-        disableFilter(w, container);
+    }
+    else if (   args.classname == "KTextEdit" || args.classname == "KDateTimeWidget" 
+             || args.classname == "KTimeWidget" || args.classname == "KDateWidget"
+             || args.classname == "KIntSpinBox")
+    {
+        args.execute = false;
+        disableFilter(args.widget, args.container);
         return true;
     }
     return false;
@@ -609,14 +691,20 @@ StdWidgetFactory::clearWidgetContent(const QByteArray &classname, QWidget *w)
 }
 
 bool
-StdWidgetFactory::changeText(const QString &text)
+StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget, 
+                                   const QString &text, QString &oldText)
 {
-    QByteArray n = WidgetFactory::widget()->metaObject()->className();
-    QWidget *w = WidgetFactory::widget();
-    if (n == "KIntSpinBox")
-        dynamic_cast<KIntSpinBox*>(w)->setValue(text.toInt());
-    else
-        changeProperty("text", text, m_container->form());
+//2.0    QByteArray n = WidgetFactory::widget()->metaObject()->className();
+    const QString n(widget->metaObject()->className());
+//2.0    QWidget *w = WidgetFactory::widget();
+    if (n == "KIntSpinBox") {
+        oldText = QString::number(dynamic_cast<KIntSpinBox*>(widget)->value());
+        dynamic_cast<KIntSpinBox*>(widget)->setValue(text.toInt());
+    }
+    else {
+        oldText = widget->property("text").toString();
+        changeProperty(form, widget, "text", text);
+    }
 
     /* By-hand method not needed as sizeHint() can do that for us
     QFontMetrics fm = w->fontMetrics();
@@ -929,6 +1017,7 @@ StdWidgetFactory::autoSaveProperties(const QByteArray &classname)
     return l;
 }
 
+#if 0 // moved to EditRichTextAction
 void
 StdWidgetFactory::editText()
 {
@@ -951,6 +1040,7 @@ StdWidgetFactory::editText()
     if (classname == "QLabel")
         widget()->resize(widget()->sizeHint());
 }
+#endif
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void

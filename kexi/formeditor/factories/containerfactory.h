@@ -216,6 +216,8 @@ signals:
     void handleDropEvent(QDropEvent *e);
 };
 
+//! @todo SubForm
+#if 0
 //! A form embedded as a widget inside other form
 class SubForm : public Q3ScrollView
 {
@@ -238,6 +240,7 @@ private:
     QWidget  *m_widget;
     QString   m_formName;
 };
+#endif //0
 
 //! Standard Factory for all container widgets
 class ContainerFactory : public KFormDesigner::WidgetFactory
@@ -253,8 +256,7 @@ public:
                                   CreateWidgetOptions options = DefaultOptions);
     virtual bool createMenuActions(const QByteArray& classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startEditing(const QByteArray& classname, QWidget *w,
-                              KFormDesigner::Container *container);
+    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
     virtual bool previewWidget(const QByteArray& classname, QWidget *widget,
                                KFormDesigner::Container *container);
     virtual bool saveSpecialProperty(const QByteArray& classname, const QString &name,
@@ -266,17 +268,18 @@ public:
 protected:
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
                                            const QByteArray &property, bool isTopLevel);
-    virtual bool changeText(const QString &newText);
+    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
+                                  const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
 public slots:
-    void addTabPage();
-    void addStackPage();
-    void renameTabPage();
-    void removeTabPage();
-    void removeStackPage();
-    void prevStackPage();
-    void nextStackPage();
+//moved to internal AddTabAction       void addTabPage();
+//moved to internal RenameTabAction    void renameTabPage();
+//moved to internal RemoveTabAction    void removeTabPage();
+//moved to internal AddStackPageAction void addStackPage();
+//moved to internal RemoveStackPageAction void removeStackPage();
+//moved to internal GoToStackPageAction   void prevStackPage();
+//moved to internal GoToStackPageAction   void nextStackPage();
     void reorderTabs(int oldpos, int newpos);
 };
 

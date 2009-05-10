@@ -89,6 +89,8 @@ public:
 
     virtual ~PropertyCommand();
 
+    Form* form() const;
+
     virtual int id() const { return 1; }
 
     void setUniqueId(int id);
@@ -106,7 +108,10 @@ public:
     void setValue(const QVariant &value);
     
     const QHash<QByteArray, QVariant>& oldValues() const;
-    
+
+    //! @return old value if there is single value, otherwise null value.
+    QVariant oldValue() const;
+
     //! @return widget name in case when there is only one widget
     //! with changed property in this command
     /*! Otherwise empty value is returned. */
@@ -551,8 +556,38 @@ protected:
     Private * const d;
 };
 
+//! Command is used when inline text is edited for a single widget. 
+class KFORMEDITOR_EXPORT InlineTextEditingCommand : public Command
+{
+public:
+   /*! @a oldValue is the old property value for selected widget. 
+     This enables reverting the change. @a value is the new property value. */
+    InlineTextEditingCommand(
+        Form& form, QWidget *widget, const QByteArray &editedWidgetClass, 
+        const QString &text, Command *parent = 0);
+
+    virtual ~InlineTextEditingCommand();
+
+    virtual int id() const { return 14; }
+
+    virtual bool mergeWith(const QUndoCommand * command);
+
+    virtual void execute();
+    
+    virtual void undo();
+
+    Form* form() const;
+
+    QString text() const;
+
+    QString oldText() const;
+protected:
+    class Private;
+    Private * const d;
+};
+
 //! kDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InlineTextEditingCommand &c); 
 
 }
 
