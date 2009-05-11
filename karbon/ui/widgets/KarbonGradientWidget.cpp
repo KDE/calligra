@@ -257,7 +257,7 @@ int KarbonGradientWidget::moveColorStop( int stopIndex, qreal newPosition )
     const qreal oldPosition = m_stops[stopIndex].first;
     
     // clip new position to [0,1] interval
-    newPosition = qMin(1.0, qMax(0.0,newPosition));
+    newPosition = qBound(qreal(0.0), newPosition, qreal(1.0));
     
     // initialize new stop index to the current index
     int newStopIndex = stopIndex;
