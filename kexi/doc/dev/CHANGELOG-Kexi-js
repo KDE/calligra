@@ -41,11 +41,23 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
-2009-05-11
+2009-05-13
+
+2009-05-11..13
 Forms
+* On loading properties, treat "name" property as "objectName" (1.x compatibility)
+* Set invisible properties in the property editor, but still add them to the set (needed e.g. for "dataSource" property)
 * "Data Source" tab
 ** set object class/name in the header also on form loading
 ** use the clear buttons of KLineEdit instead of additional buttons in the form data source and field data source combo boxes
+** fixed assigning data source for forms and widgets
+Widgets
+* KexiDataSourceComboBox: use object classes like "org.kexi-project.table", not mime types
+KexiDB
+* [API] renamed KexiDB::ObjectTypes to KexiDB::ObjectType
+** (Predicate updated)
+Core
+* [API] renamed KexiPart::ObjectTypes to KexiPart::ObjectType
 
 2009-04-25..2009-05-10
 Forms
