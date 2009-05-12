@@ -43,7 +43,7 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
 namespace Database {     // begin namespace Database
 
-QHash<QString, QString> getNames(KexiDB::ObjectTypes objectType) {
+QHash<QString, QString> getNames(KexiDB::ObjectType objectType) {
     QList<int> objectIds(gConnection->objectIds(objectType));
     QHash<QString, QString> objectNamesForCaptions;
 
