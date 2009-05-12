@@ -330,8 +330,9 @@ void KexiDataSourcePage::slotDataSourceChanged()
     const QString partClass(m_dataSourceCombo->selectedPartClass());
     bool dataSourceFound = false;
     QString name(m_dataSourceCombo->selectedName());
-    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") 
-        && m_dataSourceCombo->isSelectionValid())
+    const bool isPartAcceptable = partClass == QLatin1String("org.kexi-project.table")
+        || partClass == QLatin1String("org.kexi-project.query");
+    if (isPartAcceptable && m_dataSourceCombo->isSelectionValid())
     {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
             m_dataSourceCombo->project()->dbConnection(), name.toLatin1(), 
