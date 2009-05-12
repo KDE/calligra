@@ -121,7 +121,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
         return;
 
     //special item: empty
-    addItem("");
+    addItem(QString());
 #ifdef ADD_DEFINEQUERY_ROW
     //special item: define query
     addItem(i18n("Define Query..."));
@@ -276,13 +276,13 @@ void KexiDataSourceComboBox::slotActivated(int index)
 QString KexiDataSourceComboBox::selectedPartClass() const
 {
     if (selectedName().isEmpty())
-        return "";
+        return QString();
     const int index = currentIndex();
     if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
-        return "kexi/table";
+        return "org.kexi-project.table";
     else if (index >= (int)d->firstQueryIndex() && index < count())
-        return "kexi/query";
-    return "";
+        return "org.kexi-project.query";
+    return QString();
 }
 
 QString KexiDataSourceComboBox::selectedName() const
