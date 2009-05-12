@@ -143,7 +143,7 @@ public:
 };
 
 /*! Object types set like table or query. */
-enum ObjectTypes {
+enum ObjectType {
     UnknownObjectType = -1, //!< helper
     AnyObjectType = 0,      //!< helper
     TableObjectType = 1,
