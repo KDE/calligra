@@ -44,9 +44,11 @@ class GUIClient;
 class StaticInfo;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
-enum ObjectTypes {
-    TableObjectType = KexiDB::TableObjectType, //!< 1, like in KexiDB::ObjectTypes
-    QueryObjectType = KexiDB::QueryObjectType, //!< 2, like in KexiDB::ObjectTypes
+enum ObjectType {
+    UnknownObjectType = KexiDB::UnknownObjectType, //!< -1, helper
+    AnyObjectType = KexiDB::AnyObjectType,         //!<  0, helper
+    TableObjectType = KexiDB::TableObjectType,     //!<  1, like in KexiDB::ObjectType
+    QueryObjectType = KexiDB::QueryObjectType,     //!<  2, like in KexiDB::ObjectType
     FormObjectType = 3,
     ReportObjectType = 4,
     ScriptObjectType = 5,
