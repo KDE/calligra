@@ -2108,7 +2108,6 @@ void Form::createPropertiesForWidget(QWidget *w)
             && meta.isDesignable(subwidget)
             && meta.isWritable()
             && meta.isReadable() && !d->propertySet.contains(propertyName)
-            && isPropertyVisible(propertyName, isTopLevel) // 2.0
            )
         {
             //! \todo add another list for property description
@@ -2155,9 +2154,9 @@ void Form::createPropertiesForWidget(QWidget *w)
             }
 
             d->propertySet.addProperty(newProp);
-//2.0            if (!isPropertyVisible(propertyName, isTopLevel))
-//2.0                newProp->setVisible(false);
-            //! TMP
+            if (!isPropertyVisible(propertyName, isTopLevel))
+                newProp->setVisible(false);
+//! @todo
             if (newProp->type() == 0) // invalid type == null pixmap ?
                 newProp->setType(KoProperty::Pixmap);
         }
