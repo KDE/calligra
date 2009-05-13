@@ -1669,6 +1669,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_checkExternalAppointments = (bool)(element.attribute( "check-external-appointments" ).toInt());
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     m_baselined = (bool)(element.attribute( "baselined" ).toInt());
+    m_schedulerPluginId = element.attribute( "scheduler-plugin-id" );
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -1726,6 +1727,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     el.setAttribute( "baselined", m_baselined );
+    el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
         if ( !s->isDeleted() && s->isScheduled() ) {
