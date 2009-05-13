@@ -2,6 +2,7 @@
 Type=Application
 Name=KOffice
 Name[hi]=के-ऑफ़िस
+Name[mai]=के-ऑफ़िस
 Name[x-test]=xxKOfficexx
 NoDisplay=true
 X-DocPath=koffice/index.html
