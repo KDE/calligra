@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kplato/libs/kernel ${KDE4_INCLUDES} )
+include_directories( ${KOSTORE_INCLUDES} ${CMAKE_SOURCE_DIR}/kplato/libs/kernel ${KDE4_INCLUDES} )
 
 SET ( RCPSScheduler_SRCS
     KPlatoRCPSPlugin.cpp
@@ -10,6 +10,7 @@ kde4_add_plugin( kplatorcpsscheduler ${RCPSScheduler_SRCS} )
 target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     )
