@@ -51,7 +51,8 @@ public:
         ScheduleDistribution,
         ScheduleCalculate,
         SchedulePlannedStart,
-        SchedulePlannedFinish
+        SchedulePlannedFinish,
+        ScheduleScheduler
     };
     const QMetaEnum columnMap() const;
     
@@ -131,6 +132,9 @@ protected:
 
     QVariant schedulingStartTime( const QModelIndex &index, int role ) const;
     bool setSchedulingStartTime( const QModelIndex &index, const QVariant &value, int role );
+
+    QVariant scheduler( const QModelIndex &index, int role ) const;
+    bool setScheduler( const QModelIndex &index, const QVariant &value, int role );
 
 private:
     ScheduleManager *m_manager; // for sanety check

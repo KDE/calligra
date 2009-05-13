@@ -51,6 +51,7 @@ class StandardWorktime;
 class ScheduleManager;
 class XMLLoaderObject;
 class Task;
+class SchedulerPlugin;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -478,6 +479,9 @@ public:
     
     void incProgress();
 
+    void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
+    const QMap<QString, SchedulerPlugin*> &schedulerPlugins() const { return m_schedulerPlugins; }
+
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
@@ -615,6 +619,8 @@ private:
 
     Task *m_taskDefaults;
     int m_progress;
+
+    QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
 
 #ifndef NDEBUG
 public:

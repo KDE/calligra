@@ -47,6 +47,7 @@ class Project;
 class Task;
 class ScheduleManager;
 class XMLLoaderObject;
+class SchedulerPlugin;
 
 /**
  * The Schedule class holds data calculated during project
@@ -590,6 +591,16 @@ public:
     
     void incProgress();
 
+    const QList<SchedulerPlugin*> schedulerPlugins() const;
+    QString schedulerPluginId() const;
+    void setSchedulerPluginId( const QString &id );
+    SchedulerPlugin *schedulerPlugin() const;
+    QStringList schedulerPluginNames() const;
+    int schedulerPluginIndex() const;
+    void setSchedulerPlugin( int index );
+
+    void calculateSchedule();
+
 protected:
     MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
     
@@ -610,6 +621,8 @@ protected:
     MainSchedule *m_pessimistic;
     QList<MainSchedule*> m_schedules;
     QList<ScheduleManager*> m_children;
+
+    QString m_schedulerPluginId;
 };
 
 

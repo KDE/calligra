@@ -26,6 +26,10 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcontext.h"
+#include "kptschedulerpluginloader.h"
+#include "kptschedulerplugin.h"
+#include "kptbuiltinschedulerplugin.h"
+
 //#include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>
@@ -73,7 +77,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.load();
 
-    setProject( new Project() ); // after config is loaded
+    loadSchedulerPlugins();
+
+    setProject( new Project() ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
 }
 
@@ -82,6 +88,23 @@ Part::~Part()
 {
     m_config.save();
     delete m_project;
+}
+
+void Part::loadSchedulerPlugins()
+{
+    // Add built-in scheduler
+    addSchedulerPlugin( "Built-in", new BuiltinSchedulerPlugin( this ) );
+
+    // Add all real scheduler plugins
+    SchedulerPluginLoader *loader = new SchedulerPluginLoader(this);
+    connect(loader, SIGNAL(pluginLoaded(const QString&, SchedulerPlugin*)), this, SLOT(addSchedulerPlugin(const QString&, SchedulerPlugin*)));
+    loader->loadAllPlugins();
+}
+
+void Part::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
+{
+    kDebug()<<plugin;
+    m_schedulerPlugins[key] = plugin;
 }
 
 void Part::configChanged()
@@ -99,6 +122,7 @@ void Part::setProject( Project *project )
     if ( m_project ) {
         connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
         m_project->setTaskDefaults( m_config.taskDefaults() );
+        m_project->setSchedulerPlugins( m_schedulerPlugins );
     }
     emit changed();
 }

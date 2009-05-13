@@ -2843,6 +2843,24 @@ void ModifyScheduleManagerSchedulingDirectionCmd::unexecute()
     m_sm.setSchedulingDirection( oldvalue );
 }
 
+ModifyScheduleManagerSchedulerCmd::ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    oldvalue( sm.schedulerPluginIndex() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerSchedulerCmd::execute()
+{
+    m_sm.setSchedulerPlugin( newvalue );
+}
+
+void ModifyScheduleManagerSchedulerCmd::unexecute()
+{
+    m_sm.setSchedulerPlugin( oldvalue );
+}
+
 CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager &sm, const QString& name )
     : NamedCommand( name ),
     m_node( node ),
@@ -2861,7 +2879,7 @@ void CalculateScheduleCmd::execute()
 {
     if ( m_first ) {
         m_first = false;
-        m_node.calculate( m_sm );
+        m_sm.calculateSchedule();
         m_newexpected = m_sm.expected();
         m_newoptimistic = m_sm.optimistic();
         m_newpessimistic = m_sm.pessimistic();

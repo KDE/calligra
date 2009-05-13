@@ -54,6 +54,9 @@ set(kplatoprivate_LIB_SRCS
     kptpart.cpp
     kptview.cpp
     KPtViewAdaptor.cpp
+
+    kptschedulerpluginloader.cpp
+    kptbuiltinschedulerplugin.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS

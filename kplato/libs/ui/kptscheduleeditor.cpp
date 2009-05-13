@@ -113,7 +113,8 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
         << ScheduleModel::ScheduleOverbooking
         << ScheduleModel::ScheduleDistribution
         << ScheduleModel::SchedulePlannedStart
-        << ScheduleModel::SchedulePlannedFinish;
+        << ScheduleModel::SchedulePlannedFinish
+        << ScheduleModel::ScheduleScheduler;
 
     QList<int> lst;
     for ( int c = 0; c < model()->columnCount(); ++c ) {

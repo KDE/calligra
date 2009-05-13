@@ -26,6 +26,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptxmlloaderobject.h"
+#include "kptschedulerplugin.h"
 
 #include <KoXmlReader.h>
 
@@ -1459,6 +1460,62 @@ void ScheduleManager::setSchedulingDirection( bool on )
     //kDebug()<<on;
     m_schedulingDirection = on;
     m_project.changed( this );
+}
+
+const QList<SchedulerPlugin*> ScheduleManager::schedulerPlugins() const
+{
+    return m_project.schedulerPlugins().values();
+}
+
+QString ScheduleManager::schedulerPluginId() const
+{
+    return m_schedulerPluginId;
+}
+
+void ScheduleManager::setSchedulerPluginId( const QString &id )
+{
+    m_schedulerPluginId = id;
+    m_project.changed( this );
+}
+
+SchedulerPlugin *ScheduleManager::schedulerPlugin() const
+{
+    if ( m_schedulerPluginId.isEmpty() ) {
+        // try to avoid crash
+        return m_project.schedulerPlugins().value( m_project.schedulerPlugins().keys().at( 0 ) );
+    }
+    return m_project.schedulerPlugins().value( m_schedulerPluginId );
+}
+
+QStringList ScheduleManager::schedulerPluginNames() const
+{
+    QStringList lst;
+    QMap<QString, SchedulerPlugin*>::const_iterator it = m_project.schedulerPlugins().constBegin();
+    QMap<QString, SchedulerPlugin*>::const_iterator end = m_project.schedulerPlugins().constEnd();
+    for ( ; it != end; ++it ) {
+        lst << it.value()->name();
+    }
+    return lst;
+}
+
+int ScheduleManager::schedulerPluginIndex() const
+{
+    if ( m_schedulerPluginId.isEmpty() ) {
+        return 0;
+    }
+    return m_project.schedulerPlugins().keys().indexOf( m_schedulerPluginId );
+}
+
+void ScheduleManager::setSchedulerPlugin( int index )
+{
+    m_schedulerPluginId = m_project.schedulerPlugins().keys().at( index );
+    kDebug()<<index<<m_schedulerPluginId;
+    m_project.changed( this );
+}
+
+void ScheduleManager::calculateSchedule()
+{
+    schedulerPlugin()->calculate( m_project, this );
 }
 
 void ScheduleManager::setDeleted( bool on )

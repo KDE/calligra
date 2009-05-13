@@ -43,6 +43,7 @@ class DocumentChild;
 class Project;
 class Context;
 class GanttView;
+class SchedulerPlugin;
 
 class KPLATO_EXPORT Part : public KoDocument
 {
@@ -112,11 +113,14 @@ protected:
 protected slots:
     void slotViewDestroyed();
     virtual void openTemplate( const KUrl& url );
+    void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
 private:
     void loadObjects( const KoXmlElement &element );
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
-    
+
+    void loadSchedulerPlugins();    
+
 private:
     Project *m_project;
     QWidget* m_parentWidget;
@@ -126,6 +130,8 @@ private:
 
     XMLLoaderObject m_xmlLoader;
     bool m_loadingTemplate;
+
+    QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
 };
 
 class DocumentChild : public KoDocumentChild
