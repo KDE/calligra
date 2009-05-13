@@ -5,5 +5,3 @@ X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
 Comment=Genetics based Resource Conflict Project Scheduler
-Name[x-test]=xxRCPS Schedulerxx
-Comment[x-test]=xxGenetics based Resource Conflict Project Schedulerxx
