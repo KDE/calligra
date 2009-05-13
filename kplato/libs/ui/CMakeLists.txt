@@ -73,6 +73,8 @@ set(kplatoui_LIB_SRCS
     kptchart.cpp
     kptchartview.cpp
     kptplotwidget.cpp
+
+    kptrecalculatedialog.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
     kptresourceappointmentsdisplayoptions.ui
@@ -109,6 +111,8 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptresourceassignmentview.ui
     kpttaskstatusviewsettingspanel.ui
     kptperformancestatusviewsettingspanel.ui
+
+    kptrecalculatedialog.ui
 )
 add_definitions(-DKDGANTT_STATICLIB)
 

@@ -29,6 +29,7 @@
 #include "kptdatetime.h"
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
+#include "kptrecalculatedialog.h"
 
 #include <KoDocument.h>
 
@@ -272,7 +273,14 @@ void ScheduleEditor::slotCalculateSchedule()
     if ( sm == 0 ) {
         return;
     }
-    sm->setRecalculate( sm->parentManager() );
+    if ( sm->parentManager() ) {
+        RecalculateDialog dlg;
+        if ( dlg.exec() == QDialog::Rejected ) {
+            return;
+        }
+        sm->setRecalculate( true );
+        sm->setRecalculateFrom( DateTime( KDateTime( dlg.dateTime() ) ) );
+    }
     emit calculateSchedule( m_view->project(), sm );
 }
 
