@@ -49,7 +49,6 @@
 #include <kexidb/utils.h>
 #include <kexidb/preparedstatement.h>
 #include <tableview/kexitableviewdata.h>
-#include <widget/kexipropertyeditorview.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>

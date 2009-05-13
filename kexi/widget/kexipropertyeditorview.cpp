@@ -18,152 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexipropertyeditorview.h"
+#include "KexiPropertyEditorView.h"
+#include "KexiObjectInfoLabel.h"
 #include <KexiMainWindowIface.h>
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Property.h>
 
-#include <klocale.h>
-#include <kiconloader.h>
+#include <QLayout>
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-
-KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
-        : QWidget(parent)
-{
-    QHBoxLayout *hlyr = new QHBoxLayout(this);
-    hlyr->setContentsMargins(0, 0, 0, 0);
-    hlyr->setSpacing(2);
-    m_objectIconLabel = new QLabel(this);
-    m_objectIconLabel->setMargin(2);
-    setFixedHeight(IconSize(KIconLoader::Small) + 2 + 2);
-    hlyr->addWidget(m_objectIconLabel);
-    m_objectNameLabel = new QLabel(this);
-//    m_objectNameLabel->setMargin(2);
-    m_objectNameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    hlyr->addWidget(m_objectNameLabel);
-}
-
-KexiObjectInfoLabel::~KexiObjectInfoLabel()
-{
-}
-
-void KexiObjectInfoLabel::setObjectClassIcon(const QString& name)
-{
-    m_classIcon = name;
-    if (m_classIcon.isEmpty())
-        m_objectIconLabel->setFixedWidth(0);
-    else
-        m_objectIconLabel->setFixedWidth(IconSize(KIconLoader::Small) + 2 + 2);
-    m_objectIconLabel->setPixmap(SmallIcon(name));
-}
-
-void KexiObjectInfoLabel::setObjectClassName(const QString& name)
-{
-    m_className = name;
-    updateName();
-}
-
-void KexiObjectInfoLabel::setObjectName(const QString& name)
-{
-    m_objectName = name;
-    updateName();
-}
-
-void KexiObjectInfoLabel::updateName()
-{
-    QString txt(m_className);
-    if (txt.isEmpty()) {
-        txt = m_objectName;
-    }
-    else if (!m_objectName.isEmpty()) {
-        txt = i18nc("Object class \"objectName\", e.g. Text editor \"text\"", "%1 \"%2\"",
-            txt, m_objectName);
-    }
-    m_objectNameLabel->setText(txt);
-}
-
-void KexiObjectInfoLabel::setBuddy(QWidget * buddy)
-{
-    m_objectNameLabel->setBuddy(buddy);
-}
-
-//------------------------------
-
-//! @internal
-class KexiPropertyPaneViewBase::Private
-{
-public:
-    Private() {
-    }
-    KexiObjectInfoLabel *infoLabel;
-};
-
-KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
-        : QWidget(parent)
-        , d(new Private())
-{
-    //TODO: set a nice icon
-//    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
-
-    QVBoxLayout *lyr = new QVBoxLayout(this);
-    lyr->setContentsMargins(2, 2, 2, 2);
-    lyr->setSpacing(2);
-
-    //add object class info
-    d->infoLabel = new KexiObjectInfoLabel(this);
-    d->infoLabel->setObjectName("KexiObjectInfoLabel");
-    lyr->addWidget(d->infoLabel);
-}
-
-KexiPropertyPaneViewBase::~KexiPropertyPaneViewBase()
-{
-    delete d;
-}
-
-KexiObjectInfoLabel *KexiPropertyPaneViewBase::infoLabel() const
-{
-    return d->infoLabel;
-}
-
-void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
-        KoProperty::Set* set, const QString& textToDisplayForNullSet)
-{
-    QString className, iconName, objectName;
-    if (set) {
-        className = set->propertyValue("this:classString").toString();
-        iconName = set->propertyValue("this:iconName").toString();
-        const bool useCaptionAsObjectName = set->propertyValue("this:useCaptionAsObjectName", false).toBool();
-        objectName = set->propertyValue(useCaptionAsObjectName ? "caption" : "objectName").toString();
-        if (objectName.isEmpty() && useCaptionAsObjectName) { // get name if there is no caption
-            objectName = set->propertyValue("objectName").toString();
-        }
-    }
-    if (!set || objectName.isEmpty()) {
-        objectName = textToDisplayForNullSet;
-        className.clear();
-        iconName.clear();
-    }
-
-    if (className.isEmpty() && objectName.isEmpty())
-        d->infoLabel->hide();
-    else
-        d->infoLabel->show();
-
-    if (d->infoLabel->objectClassName() == className
-            && d->infoLabel->objectClassIcon() == iconName
-            && d->infoLabel->objectName() == objectName)
-        return;
-
-    d->infoLabel->setObjectClassIcon(iconName);
-    d->infoLabel->setObjectClassName(className);
-    d->infoLabel->setObjectName(objectName);
-}
-
-//------------------------------
+#include <KLocale>
 
 //! @internal
 class KexiPropertyEditorView::Private
@@ -174,8 +38,6 @@ public:
     KoProperty::EditorView *editor;
 };
 
-//------------------------------
-
 KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
         : KexiPropertyPaneViewBase(parent)
         , d(new Private())
@@ -185,7 +47,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
     //TODO: set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    d->editor = new KoProperty::EditorView(this); //, true /*AutoSync*/, "propeditor");
+    d->editor = new KoProperty::EditorView(this);
     layout()->addWidget(d->editor);
     setFocusProxy(d->editor);
     infoLabel()->setBuddy(d->editor);
@@ -212,16 +74,6 @@ QSize KexiPropertyEditorView::minimumSizeHint() const
     return QSize(200, 200);//m_editor->sizeHint();
 }
 
-/*void KexiPropertyEditorView::setGeometry ( const QRect &r )
-{
-  QWidget::setGeometry(r);
-}
-
-void KexiPropertyEditorView::resize (  int w, int h  )
-{
-  QWidget::resize( w, h );
-}*/
-
 KoProperty::EditorView *KexiPropertyEditorView::editor() const
 {
     return d->editor;
@@ -234,4 +86,4 @@ void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
     d->editor->setEnabled(set);
 }
 
-#include "kexipropertyeditorview.moc"
+#include "KexiPropertyEditorView.moc"
