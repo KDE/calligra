@@ -22,6 +22,7 @@ set(kplatokernel_LIB_SRCS
     kptwbsdefinition.cpp
     kptcommand.cpp
 
+    kptschedulerplugin.cpp
 )
 
 kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})
@@ -32,3 +33,4 @@ set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERS
 
 install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES kplato_schedulerplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )

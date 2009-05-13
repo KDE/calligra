@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=KPlato Scheduler Plugin
+Name[x-test]=xxKPlato Scheduler Pluginxx
+Type=ServiceType
+X-KDE-ServiceType=KPlato/SchedulerPlugin
+Comment=A plugin that calculates a project schedule
+Comment[x-test]=xxA plugin that calculates a project schedulexx
