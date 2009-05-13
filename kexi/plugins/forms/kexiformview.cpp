@@ -1164,7 +1164,7 @@ KexiFormView::updateDataSourcePage()
         KoProperty::Set &set = form()->propertySet();
         dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
         dataSource = set.propertyValue("dataSource").toString();
-        formPart()->dataSourcePage()->setDataSource(dataSourcePartClass, dataSource);
+        formPart()->dataSourcePage()->setFormDataSource(dataSourcePartClass, dataSource);
     }
 }
 

@@ -41,18 +41,18 @@ public:
     KexiDataSourcePage(QWidget *parent);
     virtual ~KexiDataSourcePage();
 
-    KexiDataSourceComboBox* dataSourceCombo() const {
-        return m_dataSourceCombo;
-    }
+/*2.0    KexiDataSourceComboBox* formDataSourceCombo() const {
+        return m_formDataSourceCombo;
+    }*/
 
 public slots:
     void setProject(KexiProject *prj);
-    void clearDataSourceSelection(bool alsoClearComboBox = true);
+    void clearFormDataSourceSelection(bool alsoClearComboBox = true);
     void clearWidgetDataSourceSelection();
 
     //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
-    void setDataSource(const QString& partClass, const QString& name);
+    void setFormDataSource(const QString& partClass, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
@@ -75,8 +75,8 @@ signals:
                           const QStringList& fields);
 
 protected slots:
-    void slotDataSourceTextChanged(const QString & string);
-    void slotDataSourceChanged();
+    void slotFormDataSourceTextChanged(const QString & string);
+    void slotFormDataSourceChanged();
     void slotFieldSelected();
     void slotGotoSelected();
     void slotInsertSelectedFields();
@@ -87,8 +87,8 @@ protected slots:
 protected:
     void updateSourceFieldWidgetsAvailability();
 
-    KexiFieldComboBox *m_sourceFieldCombo;
-    KexiDataSourceComboBox* m_dataSourceCombo;
+    KexiFieldComboBox *m_widgetDataSourceCombo;
+    KexiDataSourceComboBox* m_formDataSourceCombo;
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,
     *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
@@ -100,7 +100,7 @@ protected:
 //  QFrame *m_dataSourceSeparator;
     QString m_noDataSourceAvailableSingleText;
     QString m_noDataSourceAvailableMultiText;
-    bool m_insideClearDataSourceSelection : 1;
+    bool m_insideClearFormDataSourceSelection : 1;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else
