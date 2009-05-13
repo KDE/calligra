@@ -749,14 +749,21 @@ QModelIndex CompletionEntryItemModel::addRow()
 
 void CompletionEntryItemModel::removeEntry( const QDate date )
 {
-    int i = m_datelist.indexOf( date );
-    if ( i != -1 ) {
-        beginRemoveRows( QModelIndex(), i, i );
-        m_datelist.removeAt( i );
-        endRemoveRows();
-        kDebug()<<date<<" removed"<<endl;
+    removeRow( m_datelist.indexOf( date ) );
+}
+
+void CompletionEntryItemModel::removeRow( int row )
+{
+    if ( row < 0 && row >= rowCount() ) {
+        return;
     }
+    QDate date = m_datelist.value( row );
+    beginRemoveRows( QModelIndex(), row, row );
+    m_datelist.removeAt( row );
+    endRemoveRows();
+    kDebug()<<date<<" removed"<<row;
     m_completion->takeEntry( date );
+    emit changed();
 }
 
 void CompletionEntryItemModel::addEntry( const QDate date )
@@ -794,7 +801,9 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     setItemDelegateForColumn ( 3, new DurationSpinBoxDelegate( this ) );
     
     connect ( m, SIGNAL( rowInserted( const QDate ) ), SIGNAL( rowInserted( const QDate ) ) );
+    connect ( m, SIGNAL( rowRemoved( const QDate ) ), SIGNAL( rowRemoved( const QDate ) ) );
     connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
+    connect ( model(), SIGNAL( changed() ), SIGNAL( changed() ) );
 }
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
@@ -817,8 +826,18 @@ void CompletionEntryEditor::addEntry()
 
 void CompletionEntryEditor::removeEntry()
 {
-    kDebug()<<endl;
-    //static_cast<CompletionEntryItemModel*>( model() )->setCompletion( completion );
+    //kDebug();
+    QModelIndexList lst = selectedIndexes();
+    QMap<int, int> rows;
+    while ( ! lst.isEmpty() ) {
+        QModelIndex idx = lst.takeFirst();
+        rows[ idx.row() ] = 0;
+    }
+    QList<int> r = rows.uniqueKeys();
+    for ( int i = r.count() - 1; i >= 0; --i ) {
+        model()->removeRow( i );
+    }
+
 }
 
 
