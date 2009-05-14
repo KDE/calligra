@@ -21,14 +21,21 @@
 
 #include "kptschedulerplugin_macros.h"
 
+#include "KPlatoRCPSScheduler.h"
+
 #include "kptproject.h"
 #include "kptschedule.h"
+
+#include <librcps.h>
+
+#include <KDebug>
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
+    kDebug()<<rcps_version();
 }
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
@@ -38,6 +45,7 @@ KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm )
 {
     kDebug();
+    KPlatoRCPSScheduler( project, sm );
 }
 
 #include "KPlatoRCPSPlugin.moc"
