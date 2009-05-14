@@ -567,6 +567,9 @@ public:
      */
     virtual uint state( long id = CURRENTSCHEDULE ) const;
 
+    QList<Relation*> parentProxyRelations() const { return  m_parentProxyRelations; }
+    QList<Relation*> childProxyRelations() const { return  m_childProxyRelations; }
+
 protected:
     /// Copy info from parent schedule
     void copySchedule();
