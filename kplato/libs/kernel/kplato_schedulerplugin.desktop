@@ -1,5 +1,13 @@
 [Desktop Entry]
 Name=KPlato Scheduler Plugin
+Name[pt]='Plugin' de Calendarização do KPlato
+Name[pt_BR]='Plugin' de Calendarização do KPlato
+Name[sv]=Kplato insticksprogram för schemaläggning
+Name[uk]=Додаток планування KPlato
 Type=ServiceType
 X-KDE-ServiceType=KPlato/SchedulerPlugin
 Comment=A plugin that calculates a project schedule
+Comment[pt]=Um 'plugin' que calcula o escalonamento de um projecto
+Comment[pt_BR]=Um 'plugin' que calcula o escalonamento de um projecto
+Comment[sv]=Ett insticksprogram som beräknar ett projektschema
+Comment[uk]=Додаток для обчислення розкладу проекту
