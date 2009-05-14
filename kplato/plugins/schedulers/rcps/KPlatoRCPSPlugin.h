@@ -28,7 +28,7 @@ namespace KPlato
 {
 class Project;
 class ScheduleManager;
-};
+}
 
 class KPlatoRCPSPlugin : public KPlato::SchedulerPlugin 
 {
