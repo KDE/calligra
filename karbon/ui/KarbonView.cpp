@@ -400,7 +400,7 @@ void KarbonView::fileImportGraphic()
 
     QStringList filter;
     filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-    KFileDialog *dialog = new KFileDialog(KUrl("foo"), "", 0);
+    QPointer<KFileDialog> dialog = new KFileDialog(KUrl("foo"), "", 0);
     dialog->setCaption(i18n("Choose Graphic to Add"));
     dialog->setModal(true);
     dialog->setMimeFilter( filter, "application/x-karbon" );
@@ -1038,24 +1038,28 @@ void KarbonView::configure()
 {
     debugView("KarbonView::configure()");
 
-    KarbonConfigureDialog dialog( this );
-    dialog.exec();
+    QPointer<KarbonConfigureDialog> dialog = new KarbonConfigureDialog( this );
+    dialog->exec();
+    delete dialog;
 }
 
 void KarbonView::pageLayout()
 {
     debugView("KarbonView::pageLayout()");
 
-    KoPageLayoutDialog dlg( this, part()->pageLayout() );
-    dlg.showPageSpread( false );
-    dlg.showTextDirection( false );
-    dlg.setPageSpread( false );
+    QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog( this, part()->pageLayout() );
+    dlg->showPageSpread( false );
+    dlg->showTextDirection( false );
+    dlg->setPageSpread( false );
 
-    if( dlg.exec() == QDialog::Accepted )
+    if( dlg->exec() == QDialog::Accepted )
     {
-        part()->setPageLayout( dlg.pageLayout() );
-        emit pageLayoutChanged();
+        if( dlg ) {
+            part()->setPageLayout( dlg->pageLayout() );
+            emit pageLayoutChanged();
+        }
     }
+    delete dlg;
 }
 
 void KarbonView::selectionChanged()
