@@ -13,7 +13,7 @@
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
    Copyright (C) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
@@ -87,9 +87,11 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoPathShape.h>
+#include <KoPathPointData.h>
 #include <KoPathCombineCommand.h>
 #include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
+#include <KoPathPointMoveCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -100,6 +102,8 @@
 #include <KoCutController.h>
 #include <KoCopyController.h>
 #include <KoPasteController.h>
+#include <KoSnapGuide.h>
+#include <KoSnapStrategy.h>
 
 // kde header
 #include <kaction.h>
@@ -172,6 +176,7 @@ public:
     KAction * subtractPath;
     KAction * unitePath;
     KAction * excludePath;
+    KAction * pathSnapToGrid;
     KAction * configureAction;
     KAction * deleteSelectionAction;
 
@@ -723,6 +728,60 @@ void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operat
     }
 }
 
+void KarbonView::pathSnapToGrid()
+{
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+    
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoPathPointData> points;
+    QList<QPointF> offsets;
+    
+    // store current grid snap state
+    bool oldSnapToGrid = part()->gridData().snapToGrid();
+    // enable grid snapping
+    part()->gridData().setSnapToGrid(true);
+    
+    KoSnapGuide snapGuide(d->canvas);
+    snapGuide.enableSnapStrategies(KoSnapStrategy::Grid);
+    snapGuide.setSnapDistance(INT_MAX);
+    
+    foreach( KoShape* shape, selectedShapes )
+    {
+        KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(shape);
+        if( paramShape && paramShape->isParametricShape() )
+            continue;
+        
+        KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
+        if( ! path )
+            continue;
+
+        uint subpathCount = path->subpathCount();
+        for( uint i = 0; i < subpathCount; ++i )
+        {
+            uint pointCount = path->pointCountSubpath(i);
+            for( uint j = 0; j < pointCount; ++j )
+            {
+                KoPathPointIndex index(i,j);
+                KoPathPoint * p = path->pointByIndex(index);
+                if( !p )
+                    continue;
+                
+                QPointF docPoint = path->shapeToDocument(p->point());
+                QPointF offset = snapGuide.snap(docPoint, 0) - docPoint;
+                points.append( KoPathPointData(path,index) );
+                offsets.append( offset );
+            }
+        }
+    }
+    
+    // reset grid snapping state to old value
+    part()->gridData().setSnapToGrid(oldSnapToGrid);
+    
+    d->canvas->addCommand( new KoPathPointMoveCommand( points, offsets ) );
+}
+
 void KarbonView::viewModeChanged(bool outlineMode)
 {
     debugView("KarbonView::viewModeChanged()");
@@ -926,6 +985,12 @@ void KarbonView::initActions()
     //d->excludePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->excludePath->setEnabled( false );
     connect(d->excludePath, SIGNAL(triggered()), this, SLOT(excludePaths()));
+    
+    d->pathSnapToGrid = new KAction(i18n("Snap Path to Grid"), this);
+    actionCollection()->addAction("path_snap_to_grid", d->pathSnapToGrid );
+    d->pathSnapToGrid->setEnabled( false );
+    connect(d->pathSnapToGrid, SIGNAL(triggered()), this, SLOT(pathSnapToGrid()));
+    
     // path <-----
 
     d->configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
@@ -1077,6 +1142,7 @@ void KarbonView::selectionChanged()
     d->intersectPath->setEnabled( false );
     d->subtractPath->setEnabled( false );
     d->unitePath->setEnabled( false );
+    d->pathSnapToGrid->setEnabled(false);
 
     kDebug(38000) << count <<" shapes selected";
 
@@ -1115,6 +1181,7 @@ void KarbonView::selectionChanged()
         d->intersectPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->subtractPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->unitePath->setEnabled( selectedPaths + selectedParametrics == 2 );
+        d->pathSnapToGrid->setEnabled( selectedPaths > 0 );
         
         // if only one shape selected, set its parent layer as the active layer
         if( count == 1 )
