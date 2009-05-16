@@ -146,7 +146,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
   Section* section = new Section();
   m_model->insertSection( section, m_view->activeSection(), 0);
-  m_wdgSectionsBox.listSections->setCurrentIndex( m_proxy->mapFromSource( m_model->index(section)) );
+  selectSection(section);
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
@@ -155,7 +155,15 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
   m_model->insertSection( section, m_view->activeSection()->sectionParent(), m_view->activeSection());
   Q_ASSERT(section->sectionParent());
   Q_ASSERT(section->sectionParent() == m_view->activeSection()->sectionParent());
-  m_wdgSectionsBox.listSections->setCurrentIndex( m_proxy->mapFromSource( m_model->index(section)) );
+  selectSection(section);
+}
+
+void SectionsBoxDock::selectSection(Section* section)
+{
+  QModelIndex index = m_proxy->mapFromSource( m_model->index(section));
+  m_wdgSectionsBox.listSections->setExpanded(index, true);
+  m_wdgSectionsBox.listSections->setCurrentIndex( index );
+  slotSectionActivated(index);
 }
 
 #include "SectionsBoxDock.moc"

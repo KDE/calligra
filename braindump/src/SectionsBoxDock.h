@@ -24,6 +24,7 @@
 
 class Document;
 class DocumentModel;
+class Section;
 class TreeSortFilter;
 class View;
 
@@ -50,6 +51,8 @@ class SectionsBoxDock : public QDockWidget {
     
     void slotNewSectionAsChildOfCurrent();
     void slotNewSectionBellowCurrent();
+  private:
+    void selectSection(Section*);
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
     DocumentModel* m_model;
