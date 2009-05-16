@@ -83,7 +83,7 @@ QModelIndex DocumentModel::parent( const QModelIndex& child ) const
       Q_ASSERT(parentAsSection);
       Q_ASSERT(childSectionParent->sectionParent()->sections().contains(parentAsSection));
       return createIndex( childSectionParent->sectionParent()->sections().indexOf(parentAsSection),
-                          1, dataToIndex(parentAsSection) );
+                          0, dataToIndex(parentAsSection) );
     } else {
       return QModelIndex();
     }
