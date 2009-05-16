@@ -24,15 +24,17 @@
 #include <KoShapeRenameCommand.h>
 
 #include "Document.h"
+#include "modeltest.h"
 #include "Section.h"
 
-DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent), m_document(document)
+DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
   Q_ASSERT(m_document);
 }
 
 DocumentModel::~DocumentModel()
 {
+  delete m_modelTest;
 }
 
 int DocumentModel::rowCount(const QModelIndex &parent) const
@@ -252,6 +254,9 @@ void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, Se
   QModelIndex parentIndex = index(parentGrp);
   beginInsertRows(parentIndex, idx, idx);
   parentGrp->insertSection(section, idx);
+  Q_ASSERT(section->sectionParent() == parentGrp);
+  Q_ASSERT( ( not(parentIndex.isValid()) and section->sectionParent() == m_document )
+            or section->sectionParent() == dataFromIndex(parentIndex) );
   endInsertRows();
 }
 

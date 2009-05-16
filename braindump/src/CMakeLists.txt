@@ -12,6 +12,7 @@ set(braindump_SRCS
   SectionGroup.cpp
   TreeSortFilter.cpp
   View.cpp
+  modeltest.cpp
 )
 
 kde4_add_ui_files(braindump_SRCS

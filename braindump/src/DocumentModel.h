@@ -23,6 +23,7 @@
 #include "KoDocumentSectionModel.h"
 
 class Document;
+class ModelTest;
 class Section;
 class SectionGroup;
 
@@ -56,6 +57,7 @@ class DocumentModel : public KoDocumentSectionModel {
     void* dataToIndex(Section* section) const;
   private:
     Document* m_document;
+    ModelTest* m_modelTest;
 };
 
 #endif
