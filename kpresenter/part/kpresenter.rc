@@ -45,6 +45,7 @@
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
+	        <Action name="import_document" />
         </Menu>
         <Menu name="format"><text>F&amp;ormat</text>
             <Action name="format_masterpage"/> 

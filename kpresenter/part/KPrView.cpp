@@ -59,8 +59,9 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     initGUI();
     initActions();
 
-    // Change strings because in KPreenter it's called slides and not pages
+    // Change strings because in KPresenter it's called slides and not pages
     actionCollection()->action("view_masterpages")->setText(i18n("Show Master Slides"));
+    actionCollection()->action("import_document")->setText(i18n("Import Slideshow..."));
     actionCollection()->action("page_insertpage")->setText(i18n( "Insert Slide"));
     actionCollection()->action("page_insertpage")->setToolTip(i18n("Insert a new slide after the current one"));
     actionCollection()->action("page_insertpage")->setWhatsThis(i18n("Insert a new slide after the current one"));
