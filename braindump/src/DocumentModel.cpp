@@ -138,7 +138,7 @@ Qt::ItemFlags DocumentModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable| Qt::ItemIsDropEnabled;
     return flags;
   } else {
-    return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
+    return Qt::ItemIsDropEnabled;
   }
 }
 
