@@ -144,10 +144,18 @@ void SectionsBoxDock::slotDuplicateClicked()
 
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
+  Section* section = new Section();
+  m_model->insertSection( section, m_view->activeSection(), 0);
+  m_wdgSectionsBox.listSections->setCurrentIndex(m_model->index(section));
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
 {
+  Section* section = new Section();
+  m_model->insertSection( section, m_view->activeSection()->sectionParent(), m_view->activeSection());
+  Q_ASSERT(section->sectionParent());
+  Q_ASSERT(section->sectionParent() == m_view->activeSection()->sectionParent());
+  m_wdgSectionsBox.listSections->setCurrentIndex( m_proxy->mapFromSource( m_model->index(section)) );
 }
 
 #include "SectionsBoxDock.moc"

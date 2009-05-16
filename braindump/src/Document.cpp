@@ -77,7 +77,11 @@ Document::Document( QWidget* parentWidget, QObject* parent, bool singleViewMode 
     loadConfig();
     // TODO instead of creating a section... load
     newSection();
+    newSection();
+    newSection();
     Section* sec = newSection();
+    sec->newSection();
+    sec->newSection();
     sec->newSection();
 }
 

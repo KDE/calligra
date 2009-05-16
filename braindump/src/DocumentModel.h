@@ -24,6 +24,7 @@
 
 class Document;
 class Section;
+class SectionGroup;
 
 class DocumentModel : public KoDocumentSectionModel {
   public:
@@ -47,8 +48,10 @@ class DocumentModel : public KoDocumentSectionModel {
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
   public:
     void removeSection( Section* );
+    void insertSection( Section*, SectionGroup* parent, Section* before );
   public:
     QModelIndex index( Section* );
+    QModelIndex index( SectionGroup* );
     Section* dataFromIndex(const QModelIndex& index) const;
     void* dataToIndex(Section* section) const;
   private:

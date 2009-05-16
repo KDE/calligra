@@ -246,9 +246,28 @@ void DocumentModel::removeSection( Section* section )
   endRemoveRows();
 }
 
+void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, Section* before)
+{
+  int idx = (before) ? parentGrp->sections().indexOf(before) : parentGrp->sections().count();
+  QModelIndex parentIndex = index(parentGrp);
+  beginInsertRows(parentIndex, idx, idx);
+  parentGrp->insertSection(section, idx);
+  endInsertRows();
+}
+
 QModelIndex DocumentModel::index( Section* section)
 {
   SectionGroup* group = section->sectionParent();
   Q_ASSERT(group);
   return createIndex( group->sections().indexOf(section), 0, dataToIndex(section));
+}
+
+QModelIndex DocumentModel::index( SectionGroup* section)
+{
+  Section* sec = dynamic_cast<Section*>(section);
+  if(sec) {
+    return index(sec);
+  } else {
+    return QModelIndex();
+  }
 }
