@@ -146,7 +146,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
   Section* section = new Section();
   m_model->insertSection( section, m_view->activeSection(), 0);
-  m_wdgSectionsBox.listSections->setCurrentIndex(m_model->index(section));
+  m_wdgSectionsBox.listSections->setCurrentIndex( m_proxy->mapFromSource( m_model->index(section)) );
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
