@@ -87,6 +87,10 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this
   m_wdgSectionsBox.bnLower->setIcon(SmallIcon("go-down"));
   connect(m_wdgSectionsBox.bnLower, SIGNAL(clicked()), SLOT(slotLowerClicked()));
 
+  // Setup the duplicate button
+  m_wdgSectionsBox.bnDuplicate->setIcon(SmallIcon("edit-copy"));
+  connect(m_wdgSectionsBox.bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
+
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -140,6 +144,9 @@ void SectionsBoxDock::slotLowerClicked()
 
 void SectionsBoxDock::slotDuplicateClicked()
 {
+  Section* section = new Section(*m_view->activeSection());
+  m_model->insertSection( section, m_view->activeSection()->sectionParent(), m_view->activeSection());
+  selectSection(section);
 }
 
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
