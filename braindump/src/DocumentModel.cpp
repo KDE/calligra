@@ -62,7 +62,7 @@ QModelIndex DocumentModel::index(int row, int column, const QModelIndex& parent)
   } else {
     group = m_document;
   }
-  if(row >= 0 and row < group->sections().count())
+  if(row >= 0 and row < group->sections().count() and column == 0)
   {
     return createIndex(row, column, dataToIndex(group->sections()[row]));
   } else {
