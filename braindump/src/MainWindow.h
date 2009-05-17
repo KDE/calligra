@@ -20,19 +20,21 @@
 #ifndef _MAINWINDOW_H_
 #define _MAINWINDOW_H_
 
-#include <kmainwindow.h>
+#include <kxmlguiwindow.h>
 
 class Document;
 class KComponentData;
-class KoView;
+class Canvas;
 
-class MainWindow : public KMainWindow {
+class MainWindow : public KXmlGuiWindow {
   public:
     MainWindow(Document* document, const KComponentData &componentData);
     ~MainWindow();
   private:
+    void setupActions();
+  private:
     Document* doc;
-    KoView* view;
+    Canvas* canvas;
 };
 
 #endif

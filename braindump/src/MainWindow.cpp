@@ -19,18 +19,40 @@
 
 #include "MainWindow.h"
 
+#include <QApplication>
+
+#include <kactioncollection.h>
 #include <kglobal.h>
+#include <kstandardaction.h>
+
 #include "Document.h"
 #include "View.h"
+#include "Canvas.h"
 
 MainWindow::MainWindow(Document* document, const KComponentData &componentData) : doc(document)
 {
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
-  view = doc->createView(this);
-  setCentralWidget(view);
+  
+  canvas = new Canvas(0, doc);
+  setCentralWidget(canvas);
+
+  // then, setup our actions
+  setupActions();
+
+  // a call to KXmlGuiWindow::setupGUI() populates the GUI
+  // with actions, using KXMLGUI.
+  // It also applies the saved mainwindow settings, if any, and ask the
+  // mainwindow to automatically save settings if changed: window size,
+  // toolbar position, icon size, etc.
+  setupGUI();
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::setupActions()
+{
+  KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
 }
