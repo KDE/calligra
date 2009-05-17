@@ -39,8 +39,9 @@
 #include "View.h"
 #include "Canvas.h"
 #include "RootSection.h"
+#include "import/DockerManager.h"
 
-MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document)
+MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(new DockerManager(this))
 {
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);

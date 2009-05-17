@@ -22,6 +22,7 @@
 
 #include <kxmlguiwindow.h>
 
+class DockerManager;
 class RootSection;
 class KComponentData;
 class KoDockFactory;
@@ -34,6 +35,7 @@ class MainWindow : public KXmlGuiWindow {
     ~MainWindow();
   public:
     QDockWidget* createDockWidget(KoDockFactory* factory);
+    DockerManager* dockerManager();
   private:
     void setupActions();
   public slots:
@@ -44,6 +46,7 @@ class MainWindow : public KXmlGuiWindow {
     QMap<QString, QDockWidget*> m_dockWidgetMap;
     QList<QDockWidget*> m_dockWidgets;
     KActionMenu* m_dockWidgetMenu;
+    DockerManager* m_dockerManager;
 };
 
 #endif
