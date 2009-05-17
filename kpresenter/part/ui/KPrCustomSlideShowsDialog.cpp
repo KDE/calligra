@@ -275,6 +275,9 @@ void KPrCustomSlideShowsDialog::removeSlidesFromCurrentSlideShow()
 {
     //get the selected items and slideshow
     QList<QListWidgetItem*> selectedPages = m_uiWidget.currentSlidesList->selectedItems();
+    if( m_selectedSlideShowName.isEmpty())
+        return;
+
     QList<KoPAPageBase*> selectedSlideShow = m_slideShows->getByName( m_selectedSlideShowName );
 
     //remove the slides and update the widget
