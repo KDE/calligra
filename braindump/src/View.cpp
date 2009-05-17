@@ -47,7 +47,9 @@
 #include <KoCopyController.h>
 
 #include "Canvas.h"
+#include "RootSection.h"
 #include "Section.h"
+#include "ViewManager.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,7 +63,7 @@
 #include "SectionsBoxDock.h"
 
 View::View( RootSection *document, QWidget *parent )
-: KoView( document, parent )
+: QWidget( parent )
 , m_doc( document )
 , m_activeSection( 0 )
 {
@@ -72,7 +74,7 @@ View::View( RootSection *document, QWidget *parent )
     initActions();
 
     if ( m_doc->sections().count() > 0 )
-        doUpdateActiveSection( m_doc->sections()[0] );
+        setActiveSection( m_doc->sections()[0] );
     Q_ASSERT(activeSection());
     setXMLFile("braindump.rc");
 }
@@ -88,11 +90,6 @@ View::~View()
 Section* View::activeSection() const
 {
     return m_activeSection;
-}
-
-void View::updateReadWrite( bool readwrite )
-{
-    Q_UNUSED( readwrite );
 }
 
 void View::initGUI()
@@ -113,8 +110,10 @@ void View::initGUI()
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
+#if 0
     m_zoomAction = m_zoomController->zoomAction();
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
+#endif
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
