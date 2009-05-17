@@ -23,11 +23,12 @@
 
 #include <KoShapeRenameCommand.h>
 
-#include "Document.h"
+#include "RootSection.h"
 #include "modeltest.h"
 #include "Section.h"
+#include <kundostack.h>
 
-DocumentModel::DocumentModel( QObject* parent, Document *document ) : KoDocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
+DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : KoDocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
   Q_ASSERT(m_document);
 }
@@ -123,7 +124,7 @@ bool DocumentModel::setData(const QModelIndex &index, const QVariant &value, int
       {
         QUndoCommand * cmd = new KoShapeRenameCommand( dataFromIndex(index), value.toString() );
         // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
-        m_document->addCommand( cmd );
+        m_document->undoStack()->push( cmd );
         return true;
       }
     }

@@ -22,7 +22,7 @@
 
 #include "KoDocumentSectionModel.h"
 
-class Document;
+class RootSection;
 class ModelTest;
 class Section;
 class SectionGroup;
@@ -33,7 +33,7 @@ class DocumentModel : public KoDocumentSectionModel {
       SectionPtr = 0x1252BAD
     };
   public:
-    DocumentModel( QObject* parent, Document *document );
+    DocumentModel( QObject* parent, RootSection *document );
     ~DocumentModel();
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -56,7 +56,7 @@ class DocumentModel : public KoDocumentSectionModel {
     Section* dataFromIndex(const QModelIndex& index) const;
     void* dataToIndex(Section* section) const;
   private:
-    Document* m_document;
+    RootSection* m_document;
     ModelTest* m_modelTest;
 };
 

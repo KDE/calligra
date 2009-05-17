@@ -25,7 +25,7 @@
 #include "Section.h"
 #include "TreeSortFilter.h"
 #include "View.h"
-#include "Document.h"
+#include "RootSection.h"
 
 SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
@@ -97,7 +97,7 @@ SectionsBoxDock::~SectionsBoxDock()
 {
 }
 
-void SectionsBoxDock::setup(Document* document, View* view)
+void SectionsBoxDock::setup(RootSection* document, View* view)
 {
   m_view = view;
   DocumentModel* model = new DocumentModel(this, document);
@@ -109,7 +109,7 @@ void SectionsBoxDock::setup(Document* document, View* view)
 void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
 {
   Section* section = qVariantValue<Section*>(m_proxy->data(index, DocumentModel::SectionPtr));
-  m_view->doUpdateActiveSection(section);
+  m_view->setActiveSection(section);
 }
 
 void SectionsBoxDock::slotMinimalView()

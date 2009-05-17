@@ -22,7 +22,7 @@
 
 #include "ui_wdgsectionsbox.h"
 
-class Document;
+class RootSection;
 class DocumentModel;
 class Section;
 class TreeSortFilter;
@@ -36,7 +36,7 @@ class SectionsBoxDock : public QDockWidget {
   public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
-    void setup(Document* document, View* m_view);
+    void setup(RootSection* document, View* m_view);
   private slots:
     void slotSectionActivated(const QModelIndex &);
     
