@@ -30,6 +30,7 @@ class View;
 class KActionMenu;
 
 class MainWindow : public KXmlGuiWindow {
+    Q_OBJECT
   public:
     MainWindow(RootSection* document, const KComponentData &componentData);
     ~MainWindow();
