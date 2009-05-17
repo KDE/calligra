@@ -73,8 +73,6 @@ protected:
     void initActions();
 
 protected slots:
-    void viewSnapToGrid(bool snap);
-    void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
     void editPaste();
@@ -127,11 +125,6 @@ private:
 
     KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
-
-    KToggleAction *m_actionViewSnapToGrid;
-    KToggleAction *m_actionViewShowGuides;
-
-    KToggleAction* m_viewRulers;
 
     KoZoomAction *m_zoomAction;
 };

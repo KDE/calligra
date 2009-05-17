@@ -171,32 +171,6 @@ void View::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    KToggleAction *showGrid= m_doc->gridData().gridToggleAction(m_canvas);
-    actionCollection()->addAction("view_grid", showGrid );
-
-    m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
-    m_actionViewSnapToGrid->setChecked(m_doc->gridData().snapToGrid());
-    actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
-    connect( m_actionViewSnapToGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewSnapToGrid( bool )));
-
-    m_actionViewShowGuides  = new KToggleAction( KIcon( "guides" ), i18n( "Show Guides" ), this );
-    m_actionViewShowGuides->setChecked( m_doc->guidesData().showGuideLines() );
-    m_actionViewShowGuides->setCheckedState( KGuiItem( i18n( "Hide Guides" ) ) );
-    m_actionViewShowGuides->setToolTip( i18n( "Shows or hides guides" ) );
-    actionCollection()->addAction( "view_show_guides", m_actionViewShowGuides );
-    connect( m_actionViewShowGuides, SIGNAL(triggered(bool)), this, SLOT(viewGuides(bool)));
-}
-
-void View::viewSnapToGrid(bool snap)
-{
-    m_doc->gridData().setSnapToGrid(snap);
-    m_actionViewSnapToGrid->setChecked(snap);
-}
-
-void View::viewGuides(bool show)
-{
-    m_doc->guidesData().setShowGuideLines(show);
-    m_canvas->update();
 }
 
 void View::editPaste()

@@ -44,10 +44,6 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
     RootSection* rootSection() const { return m_doc; }
 
     /// reimplemented method
-    virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
-    /// reimplemented method
-    virtual bool snapToGrid() const;
-    /// reimplemented method
     virtual void addCommand( QUndoCommand *command );
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
@@ -55,8 +51,6 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
     virtual void updateCanvas( const QRectF& rc );
     /// reimplemented method
     virtual void updateInputMethodInfo();
-    /// reimplemented from KoCanvasBase
-    virtual KoGuidesData * guidesData();
 
     KoToolProxy * toolProxy() const { return m_toolProxy; }
     const KoViewConverter *viewConverter() const;

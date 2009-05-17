@@ -28,6 +28,7 @@
 
 #include "RootSection.h"
 #include "View.h"
+#include "ViewManager.h"
 #include "Section.h"
 
 #include <kxmlguifactory.h>
@@ -60,17 +61,6 @@ Canvas::~Canvas()
 
 void Canvas::setDocumentOffset(const QPoint &offset) {
   m_documentOffset = offset;
-}
-
-void Canvas::gridSize( qreal *horizontal, qreal *vertical ) const
-{
-  *horizontal = m_doc->gridData().gridX();
-  *vertical = m_doc->gridData().gridY();
-}
-
-bool Canvas::snapToGrid() const
-{
-  return m_doc->gridData().snapToGrid();
 }
 
 void Canvas::addCommand( QUndoCommand *command )
@@ -122,8 +112,6 @@ void Canvas::paintEvent( QPaintEvent *event )
   painter.setRenderHint( QPainter::Antialiasing, false );
 
   QRectF updateRect = converter->viewToDocument( clipRect );
-  document()->gridData().paintGrid( painter, *converter, updateRect );
-  document()->guidesData().paintGuides( painter, *converter, updateRect );
 
   painter.setRenderHint( QPainter::Antialiasing );
   m_toolProxy->paint( painter, *converter );
@@ -242,11 +230,6 @@ void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& ac
 
   if( menu )
     menu->exec( globalPos );
-}
-
-KoGuidesData * Canvas::guidesData()
-{
-  return &m_doc->guidesData();
 }
 
 void Canvas::setBackgroundColor( const QColor &color )
