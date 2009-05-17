@@ -47,7 +47,6 @@
 #include <KoCopyController.h>
 
 #include "Canvas.h"
-#include "Document.h"
 #include "Section.h"
 
 #include <kdebug.h>
@@ -61,7 +60,7 @@
 #include <kparts/partmanager.h>
 #include "SectionsBoxDock.h"
 
-View::View( Document *document, QWidget *parent )
+View::View( RootSection *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 , m_activeSection( 0 )
