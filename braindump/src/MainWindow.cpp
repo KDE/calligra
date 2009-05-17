@@ -44,8 +44,8 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
   
-  canvas = new Canvas(0, m_doc);
-  setCentralWidget(canvas);
+  view = new View( m_doc, this);
+  setCentralWidget(view);
 
   // then, setup our actions
   setupActions();
