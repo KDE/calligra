@@ -15,6 +15,8 @@ set(braindump_SRCS
   View.cpp
   ViewManager.cpp
   modeltest.cpp
+  # Imported file
+  import/DockerManager.cpp
 )
 
 kde4_add_ui_files(braindump_SRCS
