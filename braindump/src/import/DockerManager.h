@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_DOCKER_MANAGER_H
-#define KO_DOCKER_MANAGER_H
+#ifndef DOCKER_MANAGER_H
+#define DOCKER_MANAGER_H
 
 #include "koguiutils_export.h"
 

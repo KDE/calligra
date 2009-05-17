@@ -162,3 +162,8 @@ void MainWindow::forceDockTabFonts()
         }
     }
 }
+
+DockerManager* MainWindow::dockerManager()
+{
+  return m_dockerManager;
+}

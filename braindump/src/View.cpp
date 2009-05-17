@@ -40,7 +40,6 @@
 #include <KoToolDocker.h>
 #include <KoMainWindow.h>
 #include <KoDockRegistry.h>
-#include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
@@ -51,6 +50,7 @@
 #include "RootSection.h"
 #include "Section.h"
 #include "ViewManager.h"
+#include "import/DockerManager.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -130,16 +130,7 @@ void View::initGUI()
     KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     m_mainWindow->createDockWidget( &toolBoxFactory );
 
-#if 0
-    KoDockerManager *dockerMng = dockerManager();==
-    if (!dockerMng) {
-        dockerMng = new KoDockerManager(this);
-        setDockerManager(dockerMng);
-    }
-
-    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
-#endif
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
