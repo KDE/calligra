@@ -24,18 +24,19 @@
 #include <kactioncollection.h>
 #include <kglobal.h>
 #include <kstandardaction.h>
+#include <kundostack.h>
 
-#include "Document.h"
+#include "RootSection.h"
 #include "View.h"
 #include "Canvas.h"
 #include "RootSection.h"
 
-MainWindow::MainWindow(Document* document, const KComponentData &componentData) : doc(document)
+MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document)
 {
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
   
-  canvas = new Canvas(0, doc);
+  canvas = new Canvas(0, m_doc);
   setCentralWidget(canvas);
 
   // then, setup our actions
