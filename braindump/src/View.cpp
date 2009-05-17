@@ -302,24 +302,4 @@ void View::clipboardDataChanged()
     m_editPaste->setEnabled(paste);
 }
 
-void View::goToPreviousPage()
-{
-  qFatal("unimplemented");
-}
-
-void View::goToNextPage()
-{
-  qFatal("unimplemented");
-}
-
-void View::goToFirstPage()
-{
-  qFatal("unimplemented");
-}
-
-void View::goToLastPage()
-{
-  qFatal("unimplemented");
-}
-
 #include "View.moc"
