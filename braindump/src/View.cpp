@@ -140,14 +140,8 @@ void View::initGUI()
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
     m_sectionsBoxDock->setup(m_doc, this);
-#if 0
-        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-                m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-        connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
-        connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
-        KoToolManager::instance()->requestToolActivation( m_canvasController );
-#endif
+    KoToolManager::instance()->requestToolActivation( m_canvasController );
 
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
