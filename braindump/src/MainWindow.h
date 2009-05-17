@@ -26,6 +26,7 @@ class RootSection;
 class KComponentData;
 class KoDockFactory;
 class Canvas;
+class KActionMenu;
 
 class MainWindow : public KXmlGuiWindow {
   public:
@@ -38,6 +39,9 @@ class MainWindow : public KXmlGuiWindow {
   private:
     RootSection* m_doc;
     Canvas* canvas;
+    QMap<QString, QDockWidget*> m_dockWidgetMap;
+    QList<QDockWidget*> m_dockWidgets;
+    KActionMenu* m_dockWidgetMenu;
 };
 
 #endif
