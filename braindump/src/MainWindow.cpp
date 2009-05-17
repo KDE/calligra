@@ -44,11 +44,12 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
   
-  view = new View( m_doc, this);
-  setCentralWidget(view);
-
   // then, setup our actions
   setupActions();
+  
+  // Setup the view
+  view = new View( m_doc, this);
+  setCentralWidget(view);
 
   // a call to KXmlGuiWindow::setupGUI() populates the GUI
   // with actions, using KXMLGUI.
