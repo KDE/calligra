@@ -7,6 +7,7 @@ set(braindump_SRCS
   Canvas.cpp
   Document.cpp
   DocumentModel.cpp
+  MainWindow.cpp
   SectionsBoxDock.cpp
   Section.cpp
   SectionGroup.cpp

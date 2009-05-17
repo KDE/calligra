@@ -17,40 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kcmdlineargs.h>
+#ifndef _MAINWINDOW_H_
+#define _MAINWINDOW_H_
 
-#include <KApplication>
-#include <memory>
+#include <kmainwindow.h>
 
-#include "AboutData.h"
-#include "Document.h"
-#include <KoMainWindow.h>
-#include "MainWindow.h"
-#include <KoGlobal.h>
+class Document;
+class KComponentData;
+class KoView;
 
-int main( int argc, char **argv )
-{
-  KAboutData* about = newBrainDumpAboutData();
-  KCmdLineArgs::init( argc, argv, about );
+class MainWindow : public KMainWindow {
+  public:
+    MainWindow(Document* document, const KComponentData &componentData);
+    ~MainWindow();
+  private:
+    Document* doc;
+    KoView* view;
+};
 
-  KCmdLineOptions options;
-  KCmdLineArgs::addCmdLineOptions( options );
-
-  KApplication app;
-
-  KIconLoader::global()->addAppDir("koffice");
-  KoGlobal::initialize();
-
-  Document* doc = new Document(0, 0);
-  KoMainWindow* shell = new KoMainWindow(doc->componentData());
-  doc->addShell(shell);
-  shell->setRootDocument(doc);
-  shell->setVisible(true);
-  
-  MainWindow* window = new MainWindow(doc, doc->componentData());
-  window->setVisible(true);
-  
-  app.exec();
-
-  return 0;
-}
+#endif
