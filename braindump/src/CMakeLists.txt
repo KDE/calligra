@@ -5,9 +5,9 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 set(braindump_SRCS
   main.cpp
   Canvas.cpp
-  Document.cpp
   DocumentModel.cpp
   MainWindow.cpp
+  RootSection.cpp
   SectionsBoxDock.cpp
   Section.cpp
   SectionGroup.cpp
