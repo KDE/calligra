@@ -61,8 +61,11 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include "SectionsBoxDock.h"
+#include "KoOdf.h"
 
-View::View( RootSection *document, QWidget *parent )
+#include "MainWindow.h"
+
+View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
 , m_doc( document )
 , m_activeSection( 0 )
@@ -126,25 +129,24 @@ void View::initGUI()
     createDockWidget( &toolBoxFactory );
 
 #if 0
-    KoDockerManager *dockerMng = dockerManager();
+    KoDockerManager *dockerMng = dockerManager();==
     if (!dockerMng) {
         dockerMng = new KoDockerManager(this);
         setDockerManager(dockerMng);
     }
-#endif
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
              dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
+#endif
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    if (shell()) {
-        SectionsBoxDockFactory structureDockerFactory;
-        m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( createDockWidget( &structureDockerFactory ) );
-        m_sectionsBoxDock->setup(document(), this);
+    SectionsBoxDockFactory structureDockerFactory;
+    m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( createDockWidget( &structureDockerFactory ) );
+    m_sectionsBoxDock->setup(m_doc, this);
 #if 0
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
                 m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
@@ -153,7 +155,6 @@ void View::initGUI()
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
 #endif
-    }
 
     show();
 }
@@ -161,9 +162,9 @@ void View::initGUI()
 void View::initActions()
 {
     KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
-    new KoCutController(kopaCanvas(), action);
+    new KoCutController(canvas(), action);
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
-    new KoCopyController(kopaCanvas(), action);
+    new KoCopyController(canvas(), action);
     m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
@@ -185,7 +186,7 @@ void View::editDeleteSelection()
 
 void View::editSelectAll()
 {
-    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     if( !selection )
         return;
 
@@ -208,19 +209,19 @@ void View::editSelectAll()
 
 void View::editDeselectAll()
 {
-    KoSelection* selection = kopaCanvas()->shapeManager()->selection();
+    KoSelection* selection = canvas()->shapeManager()->selection();
     if( selection )
         selection->deselectAll();
 
     selectionChanged();
-    kopaCanvas()->update();
+    canvas()->update();
 }
 
 void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
-    kopaCanvas()->update();
+    canvas()->update();
 }
 
 KoShapeManager* View::shapeManager() const
@@ -260,18 +261,6 @@ void View::setActiveSection( Section* page )
 
     m_canvas->update();
 
-    updatePageNavigationActions();
-}
-
-void View::navigatePage( KoPageApp::PageNavigation pageNavigation )
-{
-  Q_UNUSED(pageNavigation);
-  qFatal("unimplemented");
-/*    KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
-
-    if ( newPage != m_activePage ) {
-        doUpdateActivePage( newPage );
-    }*/
 }
 
 void View::updateMousePosition(const QPoint& position)
@@ -331,18 +320,6 @@ void View::goToFirstPage()
 void View::goToLastPage()
 {
   qFatal("unimplemented");
-}
-
-void View::updatePageNavigationActions()
-{
-  // FIXME
-    int index = 0 ; //m_doc->pageIndex(activePage());
-    int pageCount = 0; //m_doc->pages(m_viewMode->masterMode()).count();
-
-    actionCollection()->action("page_previous")->setEnabled(index > 0);
-    actionCollection()->action("page_first")->setEnabled(index > 0);
-    actionCollection()->action("page_next")->setEnabled(index < pageCount - 1);
-    actionCollection()->action("page_last")->setEnabled(index < pageCount - 1);
 }
 
 #include "View.moc"
