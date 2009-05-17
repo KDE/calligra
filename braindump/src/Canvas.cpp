@@ -247,4 +247,15 @@ void Canvas::sectionChanged(Section* section)
 {
 }
 
+void Canvas::gridSize(qreal *horizontal, qreal *vertical) const
+{
+  *horizontal = 1;
+  *vertical = 1;
+}
+
+bool Canvas::snapToGrid() const
+{
+  return false;
+}
+
 #include "Canvas.moc"

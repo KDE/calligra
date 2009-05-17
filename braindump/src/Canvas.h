@@ -61,6 +61,9 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
 
     View* koPAView () const { return m_view; }
 
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
+    virtual bool snapToGrid() const;
+
   public slots:
     void setDocumentOffset(const QPoint &offset);
     void sectionChanged(Section* section);
