@@ -21,8 +21,9 @@
 #define _ROOT_SECTION_H_
 
 #include "SectionGroup.h"
+#include <KoShapeControllerBase.h>
 
-class RootSection : public SectionGroup {
+class RootSection : public SectionGroup, public KoShapeControllerBase {
   public:
     RootSection();
 };
