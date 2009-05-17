@@ -20,6 +20,8 @@
 
 #include "Canvas.h"
 
+#include "kundostack.h"
+
 #include <KoSelection.h>
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -65,7 +67,7 @@ void Canvas::setDocumentOffset(const QPoint &offset) {
 
 void Canvas::addCommand( QUndoCommand *command )
 {
-  m_doc->undoStack()->addCommand( command );
+  m_doc->undoStack()->push( command );
 }
 
 KoShapeManager * Canvas::shapeManager() const
@@ -90,7 +92,7 @@ const KoViewConverter * Canvas::viewConverter() const
 
 KoUnit Canvas::unit() const
 {
-  return m_doc->unit();
+  return KoUnit(KoUnit::Centimeter);
 }
 
 const QPoint & Canvas::documentOffset() const
@@ -107,7 +109,7 @@ void Canvas::paintEvent( QPaintEvent *event )
   QRectF clipRect = event->rect().translated( documentOffset() );
   painter.setClipRect( clipRect );
 
-  KoViewConverter * converter = m_view->viewConverter( this );
+  const KoViewConverter* converter = viewConverter( );
   shapeManager()->paint( painter, *converter, false );
   painter.setRenderHint( QPainter::Antialiasing, false );
 
@@ -151,10 +153,10 @@ void Canvas::mouseReleaseEvent( QMouseEvent *event )
 void Canvas::keyPressEvent( QKeyEvent *event )
 {
   m_toolProxy->keyPressEvent( event );
+#if 0
 
   if ( ! event->isAccepted() ) {
     event->accept();
-
   switch ( event->key() )
   {
     case Qt::Key_Home:
@@ -185,6 +187,7 @@ void Canvas::keyPressEvent( QKeyEvent *event )
       focusNextPrevChild(true);
     }
   }
+#endif
 }
 
 void Canvas::keyReleaseEvent( QKeyEvent *event )

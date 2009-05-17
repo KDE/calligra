@@ -21,6 +21,7 @@
 #define VIEW_H
 
 #include <QWidget>
+#include <KXMLGUIClient>
 
 #include <KoZoomHandler.h>
 
@@ -36,7 +37,7 @@ class RootSection;
 class Section;
 class SectionsBoxDock;
 
-class View : public QWidget
+class View : public QWidget, public KXMLGUIClient
 {
     Q_OBJECT
 public:
