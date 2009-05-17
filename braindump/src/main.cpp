@@ -20,13 +20,13 @@
 #include <kcmdlineargs.h>
 
 #include <KApplication>
+#include <kiconloader.h>
 #include <memory>
 
 #include "AboutData.h"
-#include "Document.h"
-#include <KoMainWindow.h>
 #include "MainWindow.h"
 #include <KoGlobal.h>
+#include "RootSection.h"
 
 int main( int argc, char **argv )
 {
@@ -41,13 +41,11 @@ int main( int argc, char **argv )
   KIconLoader::global()->addAppDir("koffice");
   KoGlobal::initialize();
 
-  Document* doc = new Document(0, 0);
-  KoMainWindow* shell = new KoMainWindow(doc->componentData());
-  doc->addShell(shell);
-  shell->setRootDocument(doc);
-  shell->setVisible(true);
+  KComponentData* m_documentData = new KComponentData(about);
   
-  MainWindow* window = new MainWindow(doc, doc->componentData());
+  RootSection* doc = new RootSection;
+  
+  MainWindow* window = new MainWindow(doc, *m_documentData);
   window->setVisible(true);
   
   app.exec();
