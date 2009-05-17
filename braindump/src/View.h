@@ -88,12 +88,6 @@ protected slots:
     /// Called when the selection changed
     virtual void selectionChanged();
 
-    /// Copy Page
-    void copyPage();
-
-    /// Delete the current page
-    void deletePage();
-
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
 
