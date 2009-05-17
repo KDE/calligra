@@ -260,8 +260,6 @@ void View::setActiveSection( Section* page )
         shapeManager()->selection()->setActiveLayer( layer );
     }
 
-    bool pageChanged = page != m_activeSection;
-
     QSizeF pageSize( 1000, 1000 );
     m_zoomController->setPageSize( pageSize );
     m_zoomController->setDocumentSize( pageSize );
