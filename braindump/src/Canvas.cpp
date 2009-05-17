@@ -65,7 +65,7 @@ void Canvas::setDocumentOffset(const QPoint &offset) {
 
 void Canvas::addCommand( QUndoCommand *command )
 {
-  m_doc->addCommand( command );
+  m_doc->undoStack()->addCommand( command );
 }
 
 KoShapeManager * Canvas::shapeManager() const
@@ -85,7 +85,7 @@ void Canvas::updateCanvas( const QRectF& rc )
 
 const KoViewConverter * Canvas::viewConverter() const
 {
-  return m_view->viewConverter( const_cast<Canvas *>( this ) );
+  return m_view->zoomHandler();
 }
 
 KoUnit Canvas::unit() const
