@@ -26,6 +26,7 @@
 #include <KoZoomHandler.h>
 
 class Canvas;
+class MainWindow;
 class KAction;
 class KToggleAction;
 class KoZoomAction;
@@ -47,7 +48,7 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit View( RootSection* document, QWidget * parent = 0 );
+    explicit View( RootSection* document, MainWindow* parent );
     virtual ~View();
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }

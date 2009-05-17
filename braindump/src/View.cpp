@@ -125,11 +125,13 @@ void View::initGUI()
     KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     createDockWidget( &toolBoxFactory );
 
+#if 0
     KoDockerManager *dockerMng = dockerManager();
     if (!dockerMng) {
         dockerMng = new KoDockerManager(this);
         setDockerManager(dockerMng);
     }
+#endif
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
              dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
