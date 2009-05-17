@@ -245,6 +245,7 @@ void Canvas::setBackgroundColor( const QColor &color )
 
 void Canvas::sectionChanged(Section* section)
 {
+  Q_UNUSED(section);
 }
 
 void Canvas::gridSize(qreal *horizontal, qreal *vertical) const

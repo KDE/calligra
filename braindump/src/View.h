@@ -97,15 +97,6 @@ protected slots:
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
 
-    /// Go to the previous page
-    void goToPreviousPage();
-    /// Go to the next page
-    void goToNextPage();
-    /// Go to the first page
-    void goToFirstPage();
-    /// Go to the last page
-    void goToLastPage();
-
     /**
      * Re-initialize the document structure docker after active document in this
      * view has been changed
