@@ -69,6 +69,7 @@ View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
 , m_doc( document )
 , m_activeSection( 0 )
+, m_mainWindow(parent)
 {
   
   m_doc->viewManager()->addView(this);
@@ -126,7 +127,7 @@ void View::initGUI()
              this, SLOT(updateMousePosition(const QPoint&)));
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
-    createDockWidget( &toolBoxFactory );
+    m_mainWindow->createDockWidget( &toolBoxFactory );
 
 #if 0
     KoDockerManager *dockerMng = dockerManager();==
@@ -145,7 +146,7 @@ void View::initGUI()
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     SectionsBoxDockFactory structureDockerFactory;
-    m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( createDockWidget( &structureDockerFactory ) );
+    m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
     m_sectionsBoxDock->setup(m_doc, this);
 #if 0
         connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),

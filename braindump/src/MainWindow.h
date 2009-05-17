@@ -24,12 +24,15 @@
 
 class RootSection;
 class KComponentData;
+class KoDockFactory;
 class Canvas;
 
 class MainWindow : public KXmlGuiWindow {
   public:
     MainWindow(RootSection* document, const KComponentData &componentData);
     ~MainWindow();
+  public:
+    QDockWidget* createDockWidget(KoDockFactory* factory);
   private:
     void setupActions();
   private:

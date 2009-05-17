@@ -60,3 +60,8 @@ void MainWindow::setupActions()
   m_doc->undoStack()->createUndoAction(actionCollection());
   m_doc->undoStack()->createRedoAction(actionCollection());
 }
+
+QDockWidget* MainWindow::createDockWidget(KoDockFactory* factory)
+{
+  return 0;
+}

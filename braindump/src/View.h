@@ -103,12 +103,12 @@ protected slots:
      */
     void reinitDocumentDocker();
 
-protected:
+private:
     RootSection* m_doc;
     Canvas* m_canvas;
     Section* m_activeSection;
+    MainWindow* m_mainWindow;
 
-private:
 
     SectionsBoxDock* m_sectionsBoxDock;
 
