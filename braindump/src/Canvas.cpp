@@ -38,7 +38,7 @@
 
 Canvas::Canvas( View * view, RootSection* doc )
 : QWidget( view )
-, KoCanvasBase( doc )
+, KoCanvasBase( doc->viewManager() )
 , m_view( view )
 , m_doc( doc )
 {

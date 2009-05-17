@@ -21,11 +21,15 @@
 #define _ROOT_SECTION_H_
 
 #include "SectionGroup.h"
-#include <KoShapeControllerBase.h>
 
-class RootSection : public SectionGroup, public KoShapeControllerBase {
+class ViewManager;
+
+class RootSection : public SectionGroup {
   public:
     RootSection();
+    ViewManager* viewManager();
+  private:
+    ViewManager* m_viewManager;
 };
 
 #endif

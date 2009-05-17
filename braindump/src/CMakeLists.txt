@@ -13,6 +13,7 @@ set(braindump_SRCS
   SectionGroup.cpp
   TreeSortFilter.cpp
   View.cpp
+  ViewManager.cpp
   modeltest.cpp
 )
 

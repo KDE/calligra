@@ -17,21 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "RootSection.h"
-#include "Section.h"
+#include <KoShapeControllerBase.h>
 
-#include "ViewManager.h"
+class Section;
+class View;
 
-RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager)
-{
-    newSection();
-    newSection();
-    Section* sec = newSection();
-    sec->newSection();
-    sec->newSection();
-}
-
-ViewManager* RootSection::viewManager()
-{
-  return m_viewManager;
-}
+class ViewManager : public KoShapeControllerBase {
+  public:
+    virtual void addShape(KoShape* shape);
+    virtual void removeShape(KoShape* shape);
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const;
+    void addView(View*);
+    void removeView(View*);
+  private:
+    Section* sectionByShape( KoShape * shape ) const;
+    QList<View*> m_views;
+    QMap<QString, KoDataCenter *> m_dataCenterMap;
+};

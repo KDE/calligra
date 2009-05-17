@@ -66,6 +66,9 @@ View::View( Document *document, QWidget *parent )
 , m_doc( document )
 , m_activeSection( 0 )
 {
+  
+  m_doc->viewManager()->addView(this);
+  
     initGUI();
     initActions();
 
@@ -77,6 +80,7 @@ View::View( Document *document, QWidget *parent )
 
 View::~View()
 {
+  m_doc->viewManager()->removeView(this);
     KoToolManager::instance()->removeCanvasController( m_canvasController );
     delete m_zoomController;
 }
