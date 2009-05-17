@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QDockWidget>
 #include <QLayout>
+#include <QTabBar>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -66,6 +67,7 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
           wdg->setVisible(true);
       }
   }
+  forceDockTabFonts();
 }
 
 MainWindow::~MainWindow()
@@ -145,4 +147,17 @@ QDockWidget* MainWindow::createDockWidget(KoDockFactory* factory)
     connect(dockWidget, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(forceDockTabFonts()));
 
     return dockWidget;
+}
+
+void MainWindow::forceDockTabFonts()
+{
+    QObjectList chis = children();
+    for (int i = 0; i < chis.size(); ++i) {
+        if (chis.at(i)->inherits("QTabBar")) {
+            QFont dockWidgetFont  = KGlobalSettings::generalFont();
+            qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
+            dockWidgetFont.setPointSizeF(pointSize);
+            ((QTabBar *)chis.at(i))->setFont(dockWidgetFont);
+        }
+    }
 }

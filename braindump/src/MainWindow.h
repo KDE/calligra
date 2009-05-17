@@ -36,6 +36,8 @@ class MainWindow : public KXmlGuiWindow {
     QDockWidget* createDockWidget(KoDockFactory* factory);
   private:
     void setupActions();
+  public slots:
+    void forceDockTabFonts();
   private:
     RootSection* m_doc;
     View* view;
