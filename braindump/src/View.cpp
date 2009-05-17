@@ -319,7 +319,7 @@ void View::setActiveSection( Section* page )
     m_activeSection = page;
     shapeManager()->addAdditional( m_activeSection );
     QList<KoShape*> shapes = page->iterator();
-    shapeManager()->setShapes( shapes, false );
+    shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
     //Make the top most layer active
     if ( !shapes.isEmpty() ) {
         KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
