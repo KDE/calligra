@@ -33,7 +33,7 @@ class MainWindow : public KXmlGuiWindow {
   private:
     void setupActions();
   private:
-    RootSection* doc;
+    RootSection* m_doc;
     Canvas* canvas;
 };
 

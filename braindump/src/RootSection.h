@@ -23,13 +23,18 @@
 #include "SectionGroup.h"
 
 class ViewManager;
+class QUndoCommand;
+class KUndoStack;
 
 class RootSection : public SectionGroup {
   public:
     RootSection();
+    ~RootSection();
     ViewManager* viewManager();
+    KUndoStack* undoStack();
   private:
     ViewManager* m_viewManager;
+    KUndoStack* m_undoStack;
 };
 
 #endif

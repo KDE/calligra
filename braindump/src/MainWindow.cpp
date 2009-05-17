@@ -28,6 +28,7 @@
 #include "Document.h"
 #include "View.h"
 #include "Canvas.h"
+#include "RootSection.h"
 
 MainWindow::MainWindow(Document* document, const KComponentData &componentData) : doc(document)
 {
@@ -55,4 +56,6 @@ MainWindow::~MainWindow()
 void MainWindow::setupActions()
 {
   KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
+  m_doc->undoStack()->createUndoAction(actionCollection());
+  m_doc->undoStack()->createRedoAction(actionCollection());
 }

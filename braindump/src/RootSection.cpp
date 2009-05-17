@@ -18,20 +18,36 @@
  */
 
 #include "RootSection.h"
+
+#include <KUndoStack>
+
 #include "Section.h"
 
 #include "ViewManager.h"
 
 RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager)
 {
-    newSection();
-    newSection();
-    Section* sec = newSection();
-    sec->newSection();
-    sec->newSection();
+  m_undoStack = new KUndoStack(0);
+  
+  newSection();
+  newSection();
+  Section* sec = newSection();
+  sec->newSection();
+  sec->newSection();
+}
+
+RootSection::~RootSection()
+{
+  delete m_undoStack;
 }
 
 ViewManager* RootSection::viewManager()
 {
   return m_viewManager;
 }
+
+KUndoStack* RootSection::undoStack()
+{
+  return m_undoStack;
+}
+
