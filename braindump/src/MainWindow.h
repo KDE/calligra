@@ -22,18 +22,18 @@
 
 #include <kxmlguiwindow.h>
 
-class Document;
+class RootSection;
 class KComponentData;
 class Canvas;
 
 class MainWindow : public KXmlGuiWindow {
   public:
-    MainWindow(Document* document, const KComponentData &componentData);
+    MainWindow(RootSection* document, const KComponentData &componentData);
     ~MainWindow();
   private:
     void setupActions();
   private:
-    Document* doc;
+    RootSection* doc;
     Canvas* canvas;
 };
 

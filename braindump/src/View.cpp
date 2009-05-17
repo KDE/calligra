@@ -1,6 +1,4 @@
 /*
- *  Copyright (c) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -169,13 +167,6 @@ void View::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    m_deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
-    actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
-    m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
-    m_deleteSelectionAction->setEnabled(false);
-    connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(m_canvas->toolProxy(), SIGNAL(selectionChanged(bool)), m_deleteSelectionAction, SLOT(setEnabled(bool)));
-
     KToggleAction *showGrid= m_doc->gridData().gridToggleAction(m_canvas);
     actionCollection()->addAction("view_grid", showGrid );
 
@@ -190,30 +181,6 @@ void View::initActions()
     m_actionViewShowGuides->setToolTip( i18n( "Shows or hides guides" ) );
     actionCollection()->addAction( "view_show_guides", m_actionViewShowGuides );
     connect( m_actionViewShowGuides, SIGNAL(triggered(bool)), this, SLOT(viewGuides(bool)));
-
-    m_actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
-    actionCollection()->addAction( "page_insertpage", m_actionInsertPage );
-    m_actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
-    m_actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
-    connect( m_actionInsertPage, SIGNAL( triggered() ), this, SLOT( insertPage() ) );
-
-    m_actionCopyPage = new KAction( i18n( "Copy Page" ), this );
-    actionCollection()->addAction( "page_copypage", m_actionCopyPage );
-    m_actionCopyPage->setToolTip( i18n( "Copy the current page" ) );
-    m_actionCopyPage->setWhatsThis( i18n( "Copy the current page" ) );
-    connect( m_actionCopyPage, SIGNAL( triggered() ), this, SLOT( copyPage() ) );
-
-    m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
-    m_actionDeletePage->setEnabled( m_doc->pageCount() > 1 );
-    actionCollection()->addAction( "page_deletepage", m_actionDeletePage );
-    m_actionDeletePage->setToolTip( i18n( "Delete the current page" ) );
-    m_actionDeletePage->setWhatsThis( i18n( "Delete the current page" ) );
-    connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
-
-    actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
-    actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
-    actionCollection()->addAction(KStandardAction::FirstPage,  "page_first", this, SLOT(goToFirstPage()));
-    actionCollection()->addAction(KStandardAction::LastPage,  "page_last", this, SLOT(goToLastPage()));
 }
 
 void View::viewSnapToGrid(bool snap)
@@ -290,26 +257,6 @@ void View::reinitDocumentDocker()
     }*/
 }
 
-void View::doUpdateActiveSection( Section * page )
-{
-    bool pageChanged = page != m_activeSection;
-    setActiveSection( page );
-
-    QSizeF pageSize( 1000, 1000 );
-    m_zoomController->setPageSize( pageSize );
-    m_zoomController->setDocumentSize( pageSize );
-//     m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
-    m_canvas->sectionChanged(activeSection());
-
-    m_canvas->update();
-
-    updatePageNavigationActions();
-
-    if ( pageChanged ) {
-        emit activePageChanged();
-    }
-}
-
 void View::setActiveSection( Section* page )
 {
     if ( !page )
@@ -326,9 +273,16 @@ void View::setActiveSection( Section* page )
         shapeManager()->selection()->setActiveLayer( layer );
     }
 
-/*    if ( shell() && pageChanged ) {
-        m_documentStructureDocker->setActivePage(m_activePage);
-    }*/
+    bool pageChanged = page != m_activeSection;
+
+    QSizeF pageSize( 1000, 1000 );
+    m_zoomController->setPageSize( pageSize );
+    m_zoomController->setDocumentSize( pageSize );
+    m_canvas->sectionChanged(activeSection());
+
+    m_canvas->update();
+
+    updatePageNavigationActions();
 }
 
 void View::navigatePage( KoPageApp::PageNavigation pageNavigation )
@@ -355,41 +309,6 @@ void View::updateMousePosition(const QPoint& position)
 void View::selectionChanged()
 {
 }
-
-void View::insertPage()
-{
-    Section * page = 0;
-    page = m_doc->newSection( activeSection() );
-
-//     KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
-//     m_canvas->addCommand( command );
-
-    doUpdateActiveSection(page);
-}
-
-void View::copyPage()
-{
-#if 0
-    QList<KoPAPageBase *> pages;
-    pages.append( m_activePage );
-    KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
-    KoDrag drag;
-    drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
-    drag.addToClipboard();
-#endif
-}
-
-void View::deletePage()
-{
-#if 0
-  m_doc->removePage( m_activePage );
-#endif
-}
-
-// KoPADocumentStructureDocker* View::documentStructureDocker() const
-// {
-//     return m_documentStructureDocker;
-// }
 
 void View::clipboardDataChanged()
 {

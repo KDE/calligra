@@ -28,7 +28,7 @@
 #include "kopageapp_export.h"
 
 class View;
-class Document;
+class RootSection;
 class KAction;
 class Section;
 
@@ -37,11 +37,11 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
   public:
-    explicit Canvas( View * view, Document * doc );
+    explicit Canvas( View * view, RootSection * doc );
     ~Canvas();
 
     /// Returns pointer to the KoPADocument
-    Document* document() const { return m_doc; }
+    RootSection* rootSection() const { return m_doc; }
 
     /// reimplemented method
     virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
@@ -123,7 +123,7 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
     void setBackgroundColor( const QColor &color );
 
     View * m_view;
-    Document * m_doc;
+    RootSection* m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;

@@ -26,9 +26,9 @@
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 
-#include "Document.h"
+#include "RootSection.h"
 #include "View.h"
-#include "../Section.h"
+#include "Section.h"
 
 #include <kxmlguifactory.h>
 
@@ -36,7 +36,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 
-Canvas::Canvas( View * view, Document * doc )
+Canvas::Canvas( View * view, RootSection* doc )
 : QWidget( view )
 , KoCanvasBase( doc )
 , m_view( view )
