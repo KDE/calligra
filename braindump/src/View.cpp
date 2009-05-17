@@ -39,6 +39,7 @@
 #include <KoSelection.h>
 #include <KoToolDocker.h>
 #include <KoMainWindow.h>
+#include <KoDockRegistry.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoDrag.h>
@@ -156,6 +157,12 @@ void View::initGUI()
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
 #endif
+
+    // add all plugins.
+    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+        KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
+        m_mainWindow->createDockWidget(factory);
+    }
 
     show();
 }
