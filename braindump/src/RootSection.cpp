@@ -18,7 +18,13 @@
  */
 
 #include "RootSection.h"
+#include "Section.h"
 
 RootSection::RootSection() : SectionGroup(0)
 {
+    newSection();
+    newSection();
+    Section* sec = newSection();
+    sec->newSection();
+    sec->newSection();
 }
