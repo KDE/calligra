@@ -25,7 +25,7 @@
 class KUndoStack;
 class QUndoCommand;
 class ViewManager;
-class SectionsSaver;
+class SectionsIO;
 
 class RootSection : public SectionGroup {
   public:
@@ -33,11 +33,11 @@ class RootSection : public SectionGroup {
     ~RootSection();
     ViewManager* viewManager();
     KUndoStack* undoStack();
-    SectionsSaver* sectionsSaver();
+    SectionsIO* sectionsIO();
   private:
     ViewManager* m_viewManager;
     KUndoStack* m_undoStack;
-    SectionsSaver* m_sectionsSaver;
+    SectionsIO* m_sectionsSaver;
 };
 
 #endif

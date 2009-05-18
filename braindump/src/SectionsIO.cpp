@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SectionsSaver.h"
+#include "SectionsIO.h"
 
 #include <QDomDocument>
 #include <QFileInfo>
@@ -30,7 +30,7 @@
 #include "SectionGroup.h"
 #include "Section.h"
 
-SectionsSaver::SectionsSaver(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this))
+SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this))
 {
   m_timer->start(1000000);
   connect(m_timer, SIGNAL(timeout()), SLOT(doSave()));
@@ -38,16 +38,16 @@ SectionsSaver::SectionsSaver(RootSection* rootSection) : m_rootSection(rootSecti
   KGlobal::dirs()->makeDir(m_directory);
 }
 
-SectionsSaver::~SectionsSaver()
+SectionsIO::~SectionsIO()
 {
 }
 
-struct SectionsSaver::SaveContext {
+struct SectionsIO::SaveContext {
   Section* section;
   QString filename;
 };
 
-void SectionsSaver::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
+void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
 {
   foreach(Section* section, root->sections())
   {
@@ -69,7 +69,7 @@ void SectionsSaver::saveTheStructure(QDomDocument& doc, QDomElement& elt, Sectio
   }
 }
 
-void SectionsSaver::doSave()
+void SectionsIO::doSave()
 {
   QList<SaveContext*> contextToRemove = m_contextes.values();
   // First: save the structure
@@ -85,7 +85,7 @@ void SectionsSaver::doSave()
   // Second: save each section
 }
 
-QString SectionsSaver::generateFileName()
+QString SectionsIO::generateFileName()
 {
   for(int i = 0; true; ++i)
   {
@@ -97,7 +97,7 @@ QString SectionsSaver::generateFileName()
   }
 }
 
-bool SectionsSaver::usedFileName(const QString& filename)
+bool SectionsIO::usedFileName(const QString& filename)
 {
   foreach(SaveContext* context, m_contextes.values())
   {
@@ -107,4 +107,4 @@ bool SectionsSaver::usedFileName(const QString& filename)
   return false;
 }
 
-#include "SectionsSaver.moc"
+#include "SectionsIO.moc"

@@ -11,7 +11,7 @@ set(braindump_SRCS
   SectionsBoxDock.cpp
   Section.cpp
   SectionGroup.cpp
-  SectionsSaver.cpp
+  SectionsIO.cpp
   TreeSortFilter.cpp
   View.cpp
   ViewManager.cpp

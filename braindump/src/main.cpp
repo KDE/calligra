@@ -27,7 +27,7 @@
 #include "MainWindow.h"
 #include <KoGlobal.h>
 #include "RootSection.h"
-#include "SectionsSaver.h"
+#include "SectionsIO.h"
 
 int main( int argc, char **argv )
 {
@@ -52,6 +52,6 @@ int main( int argc, char **argv )
   app.exec();
 
   // Ensure the root section is saved
-  doc->sectionsSaver()->doSave();
+  doc->sectionsIO()->doSave();
   return 0;
 }

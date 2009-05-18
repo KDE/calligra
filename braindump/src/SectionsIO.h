@@ -30,11 +30,11 @@ class RootSection;
 class Section;
 class SectionGroup;
 
-class SectionsSaver : public QObject {
+class SectionsIO : public QObject {
   Q_OBJECT
   public:
-    SectionsSaver(RootSection* rootSection);
-    ~SectionsSaver();
+    SectionsIO(RootSection* rootSection);
+    ~SectionsIO();
   public slots:
     void doSave();
   private:
