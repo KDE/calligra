@@ -38,6 +38,8 @@ class SectionsIO : public QObject {
   public slots:
     void doSave();
   private:
+    void load();
+  private:
     RootSection* m_rootSection;
     QTimer* m_timer;
     struct SaveContext;
@@ -51,8 +53,11 @@ class SectionsIO : public QObject {
      *                        associated files
      */
     void saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove);
+    void loadTheStructure(QDomElement& elt, SectionGroup* root);
     QString generateFileName();
     bool usedFileName(const QString&);
+    QString structureFileName();
+    int m_nextNumber;
 };
 
 #endif

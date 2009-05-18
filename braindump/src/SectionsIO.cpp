@@ -30,12 +30,15 @@
 #include "SectionGroup.h"
 #include "Section.h"
 
-SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this))
+SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
   m_timer->start(1000000);
   connect(m_timer, SIGNAL(timeout()), SLOT(doSave()));
   m_directory = KGlobal::dirs()->localkdedir() + "share/apps/braindump/sections/";
   KGlobal::dirs()->makeDir(m_directory);
+  
+  // Finally load
+  load();
 }
 
 SectionsIO::~SectionsIO()
@@ -77,7 +80,7 @@ void SectionsIO::doSave()
   QDomElement root = doc.createElement("RootElement");
   doc.appendChild(root);
   saveTheStructure(doc, root, m_rootSection, contextToRemove);
-  QFile file(m_directory + "structure.xml");
+  QFile file(structureFileName());
   file.open(QIODevice::WriteOnly);
   file.write(doc.toString().toUtf8());
   file.close();
@@ -85,11 +88,49 @@ void SectionsIO::doSave()
   // Second: save each section
 }
 
+#include <iostream>
+
+void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
+{
+  QDomNode n = elt.firstChild();
+  while(!n.isNull()) {
+     QDomElement e = n.toElement(); // try to convert the node to an element.
+     if(!e.isNull() and e.nodeName() == "Section" ) {
+       Section* section = new Section();
+       root->insertSection(section);
+       SaveContext* context = new SaveContext;
+       context->filename = e.attribute("filename", "");
+       context->section = section;
+       m_contextes[section] = context;
+       loadTheStructure(e, section);
+     }
+     n = n.nextSibling();
+  }
+}
+
+void SectionsIO::load()
+{
+  QDomDocument doc;
+  QFile file(structureFileName());
+  if (!file.open(QIODevice::ReadOnly))
+    return;
+  if (!doc.setContent(&file)) {
+    file.close();
+    return;
+  }
+  file.close();
+  
+  QDomElement docElem = doc.documentElement();
+  if(docElem.nodeName() != "RootElement") return;
+
+  loadTheStructure(docElem, m_rootSection);
+}
+
 QString SectionsIO::generateFileName()
 {
-  for(int i = 0; true; ++i)
+  for(; true; ++m_nextNumber)
   {
-    QString filename = "section" + QString::number(i);
+    QString filename = "section" + QString::number(m_nextNumber);
     if( not QFileInfo(m_directory + filename).exists() and not usedFileName(filename))
     {
       return filename;
@@ -105,6 +146,11 @@ bool SectionsIO::usedFileName(const QString& filename)
       return true;
   }
   return false;
+}
+
+QString SectionsIO::structureFileName()
+{
+  return m_directory + "structure.xml";
 }
 
 #include "SectionsIO.moc"
