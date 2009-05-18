@@ -51,6 +51,6 @@ int main( int argc, char **argv )
   
   app.exec();
 
-  doc->sectionsSaver()->doSave();
+//   doc->sectionsSaver()->doSave();
   return 0;
 }

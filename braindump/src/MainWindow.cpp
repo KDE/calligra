@@ -76,6 +76,8 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
 
 MainWindow::~MainWindow()
 {
+  // The view need to be deleted before the dockermanager
+  delete view;
 }
 
 void MainWindow::setupActions()
