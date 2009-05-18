@@ -89,8 +89,8 @@ QString SectionsSaver::generateFileName()
 {
   for(int i = 0; true; ++i)
   {
-    QString filename = m_directory + "section" + QString::number(i);
-    if( not QFileInfo(filename).exists() and not usedFileName(filename))
+    QString filename = "section" + QString::number(i);
+    if( not QFileInfo(m_directory + filename).exists() and not usedFileName(filename))
     {
       return filename;
     }
