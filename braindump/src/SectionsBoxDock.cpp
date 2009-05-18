@@ -91,7 +91,6 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this
   m_wdgSectionsBox.bnDuplicate->setIcon(SmallIcon("edit-copy"));
   connect(m_wdgSectionsBox.bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 
-  updateGUI();
 }
 
 SectionsBoxDock::~SectionsBoxDock()
@@ -111,6 +110,7 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
   m_proxy->setSourceModel(model);
   delete m_model;
   m_model = model;
+  updateGUI();
 }
 
 void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
