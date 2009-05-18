@@ -71,7 +71,7 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this
   m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
   connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));
   newSectionMenu->addAction(i18n("Add new section bellow current."), this, SLOT(slotNewSectionBellowCurrent()));
-  newSectionMenu->addAction(i18n("Add new section as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
+  m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new section as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
       
   // Setup the delete button
   m_wdgSectionsBox.bnDelete->setIcon(SmallIcon("list-remove"));
@@ -91,10 +91,17 @@ SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this
   m_wdgSectionsBox.bnDuplicate->setIcon(SmallIcon("edit-copy"));
   connect(m_wdgSectionsBox.bnDuplicate, SIGNAL(clicked()), SLOT(slotDuplicateClicked()));
 
+  updateGUI();
 }
 
 SectionsBoxDock::~SectionsBoxDock()
 {
+}
+
+void SectionsBoxDock::updateGUI()
+{
+  m_wdgSectionsBox.bnDelete->setEnabled(m_view->activeSection());
+  m_newSectionAsChild->setEnabled(m_view->activeSection());
 }
 
 void SectionsBoxDock::setup(RootSection* document, View* view)
@@ -129,6 +136,7 @@ void SectionsBoxDock::slotThumbnailView()
 
 void SectionsBoxDock::slotRmClicked()
 {
+  Q_ASSERT(m_view->activeSection());
   m_model->removeSection(m_view->activeSection());
   slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
 }
@@ -151,6 +159,7 @@ void SectionsBoxDock::slotDuplicateClicked()
 
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
+  Q_ASSERT(m_view->activeSection());
   Section* section = new Section();
   m_model->insertSection( section, m_view->activeSection(), 0);
   selectSection(section);
@@ -158,10 +167,11 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
 {
+  SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* section = new Section();
-  m_model->insertSection( section, m_view->activeSection()->sectionParent(), m_view->activeSection());
+  m_model->insertSection( section, parentSection, m_view->activeSection());
   Q_ASSERT(section->sectionParent());
-  Q_ASSERT(section->sectionParent() == m_view->activeSection()->sectionParent());
+  Q_ASSERT(section->sectionParent() == parentSection);
   selectSection(section);
 }
 

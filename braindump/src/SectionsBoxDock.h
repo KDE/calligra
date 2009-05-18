@@ -37,6 +37,7 @@ class SectionsBoxDock : public QDockWidget {
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
     void setup(RootSection* document, View* m_view);
+    void updateGUI();
   private slots:
     void slotSectionActivated(const QModelIndex &);
     
@@ -58,6 +59,7 @@ class SectionsBoxDock : public QDockWidget {
     DocumentModel* m_model;
     View* m_view;
     TreeSortFilter* m_proxy;
+    QAction* m_newSectionAsChild;
 };
 
 
