@@ -21,9 +21,14 @@
 #define _SECTIONS_SAVER_H_
 
 #include <QObject>
+#include <QMap>
 
+class QDomDocument;
+class QDomElement;
 class QTimer;
 class RootSection;
+class Section;
+class SectionGroup;
 
 class SectionsSaver : public QObject {
   Q_OBJECT
@@ -35,6 +40,19 @@ class SectionsSaver : public QObject {
   private:
     RootSection* m_rootSection;
     QTimer* m_timer;
+    struct SaveContext;
+    QMap<Section*, SaveContext*> m_contextes;
+    QString m_directory; ///< directory where the sections are saved
+  private:
+    /**
+     * Save the structure and update the m_contextes map
+     * @param contextToRemove contains a list of used context, that need to be removed
+     *                        from that list, otherwise doSave will remove the
+     *                        associated files
+     */
+    void saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove);
+    QString generateFileName();
+    bool usedFileName(const QString&);
 };
 
 #endif
