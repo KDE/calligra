@@ -51,6 +51,7 @@ int main( int argc, char **argv )
   
   app.exec();
 
-//   doc->sectionsSaver()->doSave();
+  // Ensure the root section is saved
+  doc->sectionsSaver()->doSave();
   return 0;
 }
