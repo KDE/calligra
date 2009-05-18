@@ -36,7 +36,7 @@ class SectionsIO : public QObject {
     SectionsIO(RootSection* rootSection);
     ~SectionsIO();
   public slots:
-    void doSave();
+    void save();
   private:
     void load();
   private:
