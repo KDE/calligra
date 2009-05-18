@@ -90,7 +90,7 @@ void DockerManager::removeUnusedOptionWidgets()
     }
 }
 
-void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, KoView *callingView)
+void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap)
 {
     //removeUnusedOptionWidgets(); // will probably be needed to fix multi view problems
 
@@ -100,7 +100,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         j.next();
         j.value()->toggleViewAction()->setVisible(false);
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
-        callingView->removeDockWidget(j.value());
+        d->view->removeDockWidget(j.value());
     }
     d->activeToolDockerMap.clear();
 
@@ -118,7 +118,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
 
         if(!td) {
             KoToolDockerFactory toolDockerFactory(i.value()->objectName());
-            td = qobject_cast<KoToolDocker*>(callingView->createDockWidget(&toolDockerFactory));
+            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
             if (!td)
                 return;
             d->toolDockerMap[i.value()->objectName()] = td;
@@ -126,7 +126,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         }
         td->setWindowTitle(i.key());
         td->newOptionWidget(i.value());
-        callingView->restoreDockWidget(td);
+        d->view->restoreDockWidget(td);
         td->setVisible(d->toolDockerVisibillityMap[i.value()->objectName()]);
         td->toggleViewAction()->setVisible(true);
         d->activeToolDockerMap[i.value()->objectName()] = td;
