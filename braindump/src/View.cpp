@@ -231,11 +231,10 @@ void View::reinitDocumentDocker()
 
 void View::setActiveSection( Section* page )
 {
-    if ( !page )
-        return;
-
-    shapeManager()->removeAdditional( m_activeSection );
-    m_activeSection = page;
+  shapeManager()->removeAdditional( m_activeSection );
+  m_activeSection = page;
+  if(m_activeSection)
+  {
     shapeManager()->addAdditional( m_activeSection );
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
@@ -244,13 +243,14 @@ void View::setActiveSection( Section* page )
         KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
         shapeManager()->selection()->setActiveLayer( layer );
     }
+  }
 
-    QSizeF pageSize( 1000, 1000 );
-    m_zoomController->setPageSize( pageSize );
-    m_zoomController->setDocumentSize( pageSize );
-    m_canvas->sectionChanged(activeSection());
+  QSizeF pageSize( 1000, 1000 );
+  m_zoomController->setPageSize( pageSize );
+  m_zoomController->setDocumentSize( pageSize );
+  m_canvas->sectionChanged(activeSection());
 
-    m_canvas->update();
+  m_canvas->update();
   m_sectionsBoxDock->updateGUI();
 }
 
