@@ -29,12 +29,6 @@
 RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager), m_sectionsSaver(new SectionsIO(this))
 {
   m_undoStack = new KUndoStack(0);
-  
-  newSection();
-  newSection();
-  Section* sec = newSection();
-  sec->newSection();
-  sec->newSection();
 }
 
 RootSection::~RootSection()
