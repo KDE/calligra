@@ -75,26 +75,26 @@ View::View( RootSection *document, MainWindow* parent )
   
   m_doc->viewManager()->addView(this);
   
-    initGUI();
-    initActions();
+  initGUI();
+  initActions();
 
-    if ( m_doc->sections().count() > 0 )
-        setActiveSection( m_doc->sections()[0] );
-    Q_ASSERT(activeSection());
-    setXMLFile("braindump.rc");
+  if ( m_doc->sections().count() > 0 )
+    setActiveSection( m_doc->sections()[0] );
+
+  setXMLFile("braindump.rc");
 }
 
 View::~View()
 {
   m_doc->viewManager()->removeView(this);
-    KoToolManager::instance()->removeCanvasController( m_canvasController );
-    delete m_zoomController;
+  KoToolManager::instance()->removeCanvasController( m_canvasController );
+  delete m_zoomController;
 }
 
 
 Section* View::activeSection() const
 {
-    return m_activeSection;
+  return m_activeSection;
 }
 
 void View::initGUI()
