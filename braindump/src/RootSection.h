@@ -22,9 +22,10 @@
 
 #include "SectionGroup.h"
 
-class ViewManager;
-class QUndoCommand;
 class KUndoStack;
+class QUndoCommand;
+class ViewManager;
+class SectionsSaver;
 
 class RootSection : public SectionGroup {
   public:
@@ -32,9 +33,11 @@ class RootSection : public SectionGroup {
     ~RootSection();
     ViewManager* viewManager();
     KUndoStack* undoStack();
+    SectionsSaver* sectionsSaver();
   private:
     ViewManager* m_viewManager;
     KUndoStack* m_undoStack;
+    SectionsSaver* m_sectionsSaver;
 };
 
 #endif

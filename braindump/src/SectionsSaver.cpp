@@ -17,40 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kcmdlineargs.h>
-
-#include <KApplication>
-#include <kiconloader.h>
-#include <memory>
-
-#include "AboutData.h"
-#include "MainWindow.h"
-#include <KoGlobal.h>
-#include "RootSection.h"
 #include "SectionsSaver.h"
 
-int main( int argc, char **argv )
+#include <QTimer>
+
+SectionsSaver::SectionsSaver(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this))
 {
-  KAboutData* about = newBrainDumpAboutData();
-  KCmdLineArgs::init( argc, argv, about );
-
-  KCmdLineOptions options;
-  KCmdLineArgs::addCmdLineOptions( options );
-
-  KApplication app;
-
-  KIconLoader::global()->addAppDir("koffice");
-  KoGlobal::initialize();
-
-  KComponentData* m_documentData = new KComponentData(about);
-  
-  RootSection* doc = new RootSection;
-  
-  MainWindow* window = new MainWindow(doc, *m_documentData);
-  window->setVisible(true);
-  
-  app.exec();
-
-  doc->sectionsSaver()->doSave();
-  return 0;
+  m_timer->start(1000000);
+  connect(m_timer, SIGNAL(timeout()), SLOT(doSave()));
 }
+
+SectionsSaver::~SectionsSaver()
+{
+}
+
+void SectionsSaver::doSave()
+{
+}
+
+#include "SectionsSaver.moc"

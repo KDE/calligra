@@ -22,10 +22,11 @@
 #include <KUndoStack>
 
 #include "Section.h"
+#include "SectionsSaver.h"
 
 #include "ViewManager.h"
 
-RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager)
+RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager), m_sectionsSaver(new SectionsSaver(this))
 {
   m_undoStack = new KUndoStack(0);
   
@@ -51,3 +52,7 @@ KUndoStack* RootSection::undoStack()
   return m_undoStack;
 }
 
+SectionsSaver* RootSection::sectionsSaver()
+{
+  return m_sectionsSaver;
+}
