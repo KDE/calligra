@@ -27,7 +27,7 @@
 #include "View.h"
 #include "RootSection.h"
 
-SectionsBoxDock::SectionsBoxDock() : m_model(0), m_proxy(new TreeSortFilter(this)) {
+SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
 
