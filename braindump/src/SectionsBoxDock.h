@@ -56,8 +56,8 @@ class SectionsBoxDock : public QDockWidget {
     void selectSection(Section*);
   private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
-    DocumentModel* m_model;
     View* m_view;
+    DocumentModel* m_model;
     TreeSortFilter* m_proxy;
     QAction* m_newSectionAsChild;
 };

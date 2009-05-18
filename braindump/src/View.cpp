@@ -251,7 +251,7 @@ void View::setActiveSection( Section* page )
     m_canvas->sectionChanged(activeSection());
 
     m_canvas->update();
-
+  m_sectionsBoxDock->updateGUI();
 }
 
 void View::updateMousePosition(const QPoint& position)
