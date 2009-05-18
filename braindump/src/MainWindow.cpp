@@ -41,13 +41,16 @@
 #include "RootSection.h"
 #include "import/DockerManager.h"
 
-MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(new DockerManager(this))
+MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(0)
 {
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
   
   // then, setup our actions
   setupActions();
+  
+  // Create the docker manager after setting up the action
+  m_dockerManager = new DockerManager(this);
   
   // Setup the view
   view = new View( m_doc, this);
