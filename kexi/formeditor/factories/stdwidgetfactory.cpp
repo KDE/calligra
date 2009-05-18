@@ -37,7 +37,7 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
-#include <KPushButton.h>
+#include <KPushButton>
 #include <KNumInput>
 #include <KComboBox>
 #include <KGenericFactory>
