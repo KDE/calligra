@@ -222,13 +222,6 @@ KoShapeManager* View::shapeManager() const
     return m_canvas->shapeManager();
 }
 
-void View::reinitDocumentDocker()
-{
-/*    if (shell()) {
-        m_documentStructureDocker->setActivePage( m_activePage );
-    }*/
-}
-
 void View::setActiveSection( Section* page )
 {
   shapeManager()->removeAdditional( m_activeSection );

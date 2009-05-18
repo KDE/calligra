@@ -91,12 +91,6 @@ protected slots:
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
 
-    /**
-     * Re-initialize the document structure docker after active document in this
-     * view has been changed
-     */
-    void reinitDocumentDocker();
-
 private:
     RootSection* m_doc;
     Canvas* m_canvas;
