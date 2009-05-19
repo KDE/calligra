@@ -68,8 +68,12 @@ class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
     void setDocumentOffset(const QPoint &offset);
     void sectionChanged(Section* section);
 
+  protected:
+    virtual void focusInEvent(QFocusEvent * event);
+
   signals:
     void documentSize(const QSize &size);
+    void canvasReceivedFocus();
 
     /**
      * Emitted when the entire controller size changes

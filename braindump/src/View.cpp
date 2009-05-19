@@ -105,6 +105,8 @@ void View::initGUI()
     setLayout( gridLayout );
 
     m_canvas = new Canvas( this, m_doc );
+    connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
+    
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
@@ -289,6 +291,11 @@ void View::clipboardDataChanged()
 void View::focusInEvent(QFocusEvent * event)
 {
   QWidget::focusInEvent(event);
+  m_doc->viewManager()->viewHasFocus(this);
+}
+
+void View::canvasReceivedFocus()
+{
   m_doc->viewManager()->viewHasFocus(this);
 }
 

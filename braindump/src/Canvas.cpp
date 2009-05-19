@@ -259,4 +259,10 @@ bool Canvas::snapToGrid() const
   return false;
 }
 
+void Canvas::focusInEvent(QFocusEvent * event)
+{
+  QWidget::focusInEvent(event);
+  emit(canvasReceivedFocus());
+}
+
 #include "Canvas.moc"
