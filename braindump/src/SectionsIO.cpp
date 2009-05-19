@@ -55,12 +55,16 @@ SectionsIO::~SectionsIO()
 }
 
 struct SectionsIO::SaveContext {
+  enum Version {
+    VERSION_1
+  };
   Section* section;
   QString filename;
-  bool saveContext(SectionsIO* sectionsIO);
+  bool saveSection(SectionsIO* sectionsIO);
+  bool loadSection(SectionsIO* sectionsIO, Version version);
 };
 
-bool SectionsIO::SaveContext::saveContext(SectionsIO* sectionsIO )
+bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
 {
   struct Finally {
       Finally(KoStore *s) : store(s) { }
@@ -143,6 +147,27 @@ bool SectionsIO::SaveContext::saveContext(SectionsIO* sectionsIO )
   return true;
 }
 
+bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::SaveContext::Version version)
+{
+  Q_UNUSED(version);
+  // In case saving problem occured, try to recover a directory either new or old
+  QString fullFileName = sectionsIO->m_directory + filename;
+  QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
+  QString fullFileNameTmpOld = fullFileName + ".tmp_old";
+  if( not QFileInfo(fullFileName).exists() )
+  {
+    if( QFileInfo(fullFileNameTmpNew).exists())
+    {
+      KIO::NetAccess::move(fullFileNameTmpNew, fullFileName);
+    } else if( QFileInfo(fullFileNameTmpOld).exists()) {
+      KIO::NetAccess::move(fullFileNameTmpOld, fullFileName);
+    } else {
+      return false;
+    }
+  }
+  
+}
+
 void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
 {
   foreach(Section* section, root->sections())
@@ -181,7 +206,7 @@ void SectionsIO::save()
   // Second: save each section
   foreach(SaveContext* saveContext, m_contextes)
   {
-    if(not saveContext->saveContext(this))
+    if(not saveContext->saveSection(this))
     {
       kDebug() << "Saving failed"; // TODO: Report it
     }
@@ -205,6 +230,15 @@ void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
        loadTheStructure(e, section);
      }
      n = n.nextSibling();
+  }
+  
+  // Second: load each section
+  foreach(SaveContext* saveContext, m_contextes)
+  {
+    if(not saveContext->loadSection(this))
+    {
+      kDebug() << "Loading failed"; // TODO: Report it
+    }
   }
 }
 
