@@ -31,7 +31,6 @@
 #include "RootSection.h"
 #include "View.h"
 #include "ViewManager.h"
-#include "Section.h"
 
 #include <kxmlguifactory.h>
 

@@ -23,22 +23,4 @@
 
 Section::Section() : SectionGroup(0)
 {
-    KoShapeLayer* layer = new KoShapeLayer;
-    addChild(layer);
-}
-
-bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
-{
-  Q_UNUSED(element);
-  Q_UNUSED(context);
-  return false;
-}
-void Section::saveOdf(KoShapeSavingContext & context) const
-{
-  Q_UNUSED(context);
-}
-void Section::paintComponent(QPainter &painter, const KoViewConverter &converter)
-{
-  Q_UNUSED(painter);
-  Q_UNUSED(converter);
 }

@@ -17,18 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SECTION_H_
-#define _SECTION_H_
+#ifndef _SECTION_CONTAINER_H_
+#define _SECTION_CONTAINER_H_
 
-#include <SectionContainer.h>
+#include <KoShapeContainer.h>
 #include "SectionGroup.h"
 
-class Section : public SectionContainer, public SectionGroup {
+class SectionContainer : public KoShapeContainer {
   public:
-    Section();
+    SectionContainer();
+  public:
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
   private:
 };
-
-Q_DECLARE_METATYPE(Section*)
 
 #endif
