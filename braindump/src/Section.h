@@ -30,10 +30,12 @@ class Section : public SectionGroup {
     Section();
   public:
     KoShapeLayer* layer();
+    KoShapeContainer* container();
     const QString& name() const;
     void setName(const QString& _name);
   private:
     KoShapeLayer* m_layer;
+    KoShapeContainer* m_container;
     QString m_name;
 };
 

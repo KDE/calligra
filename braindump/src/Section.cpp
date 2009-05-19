@@ -20,15 +20,32 @@
 #include "Section.h"
 
 #include "KoShapeLayer.h"
+#include "KoShapeGroup.h"
+
+class FakeContainer : public KoShapeContainer {
+  public:
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) { Q_UNUSED(element); Q_UNUSED(context); return false; }
+    virtual void saveOdf(KoShapeSavingContext & context) const { Q_UNUSED(context); }
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) { Q_UNUSED(painter); Q_UNUSED(converter); }
+  private:
+};
+
 
 Section::Section() : SectionGroup(0)
 {
   m_layer = new KoShapeLayer;
+  m_container = new FakeContainer;
+  m_container->addChild(m_layer);
 }
 
 KoShapeLayer* Section::layer()
 {
   return m_layer;
+}
+
+KoShapeContainer* Section::container()
+{
+  return m_container;
 }
 
 const QString& Section::name() const
