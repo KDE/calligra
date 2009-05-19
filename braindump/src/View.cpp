@@ -286,4 +286,10 @@ void View::clipboardDataChanged()
     m_editPaste->setEnabled(paste);
 }
 
+void View::focusInEvent(QFocusEvent * event)
+{
+  QWidget::focusInEvent(event);
+  m_doc->viewManager()->viewHasFocus(this);
+}
+
 #include "View.moc"

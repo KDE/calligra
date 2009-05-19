@@ -90,7 +90,8 @@ protected slots:
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();
-
+  protected:
+    virtual void focusInEvent(QFocusEvent * event);
 private:
     RootSection* m_doc;
     Canvas* m_canvas;

@@ -25,6 +25,10 @@
 #include "Section.h"
 #include "View.h"
 
+ViewManager::ViewManager() : m_lastViewInFocus(0)
+{
+}
+
 void ViewManager::addShape(KoShape* shape)
 {
   if(!shape)
@@ -88,4 +92,9 @@ void ViewManager::removeView(View* view)
 {
   Q_ASSERT(m_views.contains(view));
   m_views.removeAll(view);
+}
+
+void ViewManager::viewHasFocus(View* view)
+{
+  m_lastViewInFocus = view;
 }

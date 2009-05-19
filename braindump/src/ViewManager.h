@@ -24,12 +24,15 @@ class View;
 
 class ViewManager : public KoShapeControllerBase {
   public:
+    ViewManager();
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
     virtual QMap<QString, KoDataCenter *>  dataCenterMap() const;
     void addView(View*);
     void removeView(View*);
+    void viewHasFocus(View* view);
   private:
+    View* m_lastViewInFocus;
     Section* sectionByShape( KoShape * shape ) const;
     QList<View*> m_views;
     QMap<QString, KoDataCenter *> m_dataCenterMap;
