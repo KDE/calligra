@@ -247,6 +247,14 @@ void SectionsIO::save()
       kDebug() << "Saving failed"; // TODO: Report it
     }
   }
+  
+  // Last remove unused sections
+  foreach( SaveContext* saveContext, contextToRemove)
+  {
+    KIO::NetAccess::del(m_directory + saveContext->filename, 0);
+    m_contextes.remove(saveContext->section);
+    delete saveContext;
+  }
 }
 
 #include <iostream>
