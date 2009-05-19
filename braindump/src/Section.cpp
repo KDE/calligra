@@ -23,22 +23,20 @@
 
 Section::Section() : SectionGroup(0)
 {
-    KoShapeLayer* layer = new KoShapeLayer;
-    addChild(layer);
+  m_layer = new KoShapeLayer;
 }
 
-bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+KoShapeLayer* Section::layer()
 {
-  Q_UNUSED(element);
-  Q_UNUSED(context);
-  return false;
+  return m_layer;
 }
-void Section::saveOdf(KoShapeSavingContext & context) const
+
+const QString& Section::name() const
 {
-  Q_UNUSED(context);
+  return m_name;
 }
-void Section::paintComponent(QPainter &painter, const KoViewConverter &converter)
+
+void Section::setName(const QString& _name)
 {
-  Q_UNUSED(painter);
-  Q_UNUSED(converter);
+  m_name = _name;
 }

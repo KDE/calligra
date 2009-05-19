@@ -23,14 +23,18 @@
 #include <KoShapeContainer.h>
 #include "SectionGroup.h"
 
-class Section : public KoShapeContainer, public SectionGroup {
+class KoShapeLayer;
+
+class Section : public SectionGroup {
   public:
     Section();
   public:
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    KoShapeLayer* layer();
+    const QString& name() const;
+    void setName(const QString& _name);
   private:
+    KoShapeLayer* m_layer;
+    QString m_name;
 };
 
 Q_DECLARE_METATYPE(Section*)

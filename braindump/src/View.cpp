@@ -183,18 +183,11 @@ void View::editSelectAll()
     if( !selection )
         return;
 
-    QList<KoShape*> shapes = activeSection()->iterator();
+    QList<KoShape*> shapes = activeSection()->layer()->iterator();
 
-    foreach( KoShape *shape, shapes ) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
-
-        if ( layer ) {
-            QList<KoShape*> layerShapes( layer->iterator() );
-            foreach( KoShape *layerShape, layerShapes ) {
-                selection->select( layerShape );
-                layerShape->update();
-            }
-        }
+    foreach( KoShape *layerShape, shapes ) {
+        selection->select( layerShape );
+        layerShape->update();
     }
 
     selectionChanged();
@@ -224,18 +217,16 @@ KoShapeManager* View::shapeManager() const
 
 void View::setActiveSection( Section* page )
 {
-  shapeManager()->removeAdditional( m_activeSection );
+  shapeManager()->removeAdditional( m_activeSection->layer() );
   m_activeSection = page;
   if(m_activeSection)
   {
-    shapeManager()->addAdditional( m_activeSection );
-    QList<KoShape*> shapes = page->iterator();
+    shapeManager()->addAdditional( m_activeSection->layer() );
+    QList<KoShape*> shapes;
+    shapes.append( page->layer() );
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
     //Make the top most layer active
-    if ( !shapes.isEmpty() ) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-        shapeManager()->selection()->setActiveLayer( layer );
-    }
+    shapeManager()->selection()->setActiveLayer( page->layer() );
   }
 
   QSizeF pageSize( 1000, 1000 );
