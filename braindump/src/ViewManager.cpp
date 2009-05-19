@@ -69,7 +69,12 @@ void ViewManager::removeShape(KoShape* shape)
 
 QMap<QString, KoDataCenter *> ViewManager::dataCenterMap() const
 {
-  return m_dataCenterMap;
+  Q_ASSERT(m_lastViewInFocus);
+  if(m_lastViewInFocus->activeSection())
+  {
+    return m_lastViewInFocus->activeSection()->dataCenterMap();
+  }
+  return QMap<QString, KoDataCenter *>();
 }
 
 Section* ViewManager::sectionByShape( KoShape * shape ) const

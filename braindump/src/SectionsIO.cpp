@@ -187,8 +187,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Text, false));
   
   KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-  QMap<QString, KoDataCenter *> dataCenter;
-  KoShapeLoadingContext context(loadingContext, dataCenter);
+  KoShapeLoadingContext context(loadingContext, section->dataCenterMap());
 
   KoXmlElement element;
   forEachElement(element, body) {

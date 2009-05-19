@@ -35,5 +35,4 @@ class ViewManager : public KoShapeControllerBase {
     View* m_lastViewInFocus;
     Section* sectionByShape( KoShape * shape ) const;
     QList<View*> m_views;
-    QMap<QString, KoDataCenter *> m_dataCenterMap;
 };
