@@ -26,8 +26,12 @@
 
 Section::Section() : SectionGroup(0)
 {
-    KoShapeLayer* layer = new KoShapeLayer;
-    addChild(layer);
+  KoShapeLayer* layer = new KoShapeLayer;
+  addChild(layer);
+  foreach (QString id, KoShapeRegistry::instance()->keys()) {
+    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+    shapeFactory->populateDataCenterMap(m_dataCenterMap);
+  }
 }
 
 bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -62,4 +66,9 @@ void Section::paintComponent(QPainter &painter, const KoViewConverter &converter
 {
   Q_UNUSED(painter);
   Q_UNUSED(converter);
+}
+
+QMap<QString, KoDataCenter* > Section::dataCenterMap() const
+{
+  return m_dataCenterMap;
 }

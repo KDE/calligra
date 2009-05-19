@@ -30,7 +30,9 @@ class Section : public KoShapeContainer, public SectionGroup {
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    QMap<QString, KoDataCenter *> dataCenterMap() const;
   private:
+    QMap<QString, KoDataCenter *> m_dataCenterMap;
 };
 
 Q_DECLARE_METATYPE(Section*)
