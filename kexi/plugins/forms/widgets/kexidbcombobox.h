@@ -38,9 +38,6 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
     //properties from KexiDBAutoField that should not be visible:
 //2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
-    Q_PROPERTY(QColor foregroundLabelColor DESIGNABLE false)
-    Q_PROPERTY(QColor backgroundLabelColor DESIGNABLE false)
-    Q_PROPERTY(bool autoCaption DESIGNABLE false)
 
 public:
     KexiDBComboBox(QWidget *parent, bool designMode = true);
