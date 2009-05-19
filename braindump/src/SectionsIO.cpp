@@ -38,6 +38,10 @@
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoOdfReadStore.h>
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -165,7 +169,38 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
       return false;
     }
   }
+  kDebug() << "Loading from " << fullFileName;
   
+  const char* mimeType = KoOdf::mimeType(KoOdf::Text);
+  KoStore* store = KoStore::createStore(fullFileName + "/", KoStore::Read, mimeType, KoStore::Directory);
+  KoOdfReadStore odfStore(store);
+
+  QString errorMessage;
+  if (! odfStore.loadAndParse(errorMessage)) {
+    kError() << "loading and parsing failed:" << errorMessage << endl;
+    return false;
+  }
+  
+  KoXmlElement content = odfStore.contentDoc().documentElement();
+  KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+
+  KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Text, false));
+  
+  KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+  QMap<QString, KoDataCenter *> dataCenter;
+  KoShapeLoadingContext context(loadingContext, dataCenter);
+
+  KoXmlElement element;
+  forEachElement(element, body) {
+    kDebug() << "loading shape" << element.nodeName();
+
+    if(element.nodeName() == "braindump:section")
+    {
+      section->loadOdf(element, context);
+      return true;
+    }
+  }
+  return false;
 }
 
 void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
@@ -206,8 +241,9 @@ void SectionsIO::save()
   // Second: save each section
   foreach(SaveContext* saveContext, m_contextes)
   {
-    if(not saveContext->saveSection(this))
-    {
+    if(saveContext->saveSection(this)) {
+      kDebug() << "Sucessfully loaded: " << saveContext->section->name();
+    } else {
       kDebug() << "Saving failed"; // TODO: Report it
     }
   }
@@ -231,15 +267,6 @@ void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
      }
      n = n.nextSibling();
   }
-  
-  // Second: load each section
-  foreach(SaveContext* saveContext, m_contextes)
-  {
-    if(not saveContext->loadSection(this))
-    {
-      kDebug() << "Loading failed"; // TODO: Report it
-    }
-  }
 }
 
 void SectionsIO::load()
@@ -258,6 +285,15 @@ void SectionsIO::load()
   if(docElem.nodeName() != "RootElement") return;
 
   loadTheStructure(docElem, m_rootSection);
+  
+  // Second: load each section
+  foreach(SaveContext* saveContext, m_contextes)
+  {
+    if(not saveContext->loadSection(this, SaveContext::VERSION_1))
+    {
+      kDebug() << "Loading failed"; // TODO: Report it
+    }
+  }
 }
 
 QString SectionsIO::generateFileName()
