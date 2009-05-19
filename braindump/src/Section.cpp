@@ -20,6 +20,9 @@
 #include "Section.h"
 
 #include "KoShapeLayer.h"
+#include "KoShapeRegistry.h"
+#include "KoShapeSavingContext.h"
+#include "KoXmlWriter.h"
 
 Section::Section() : SectionGroup(0)
 {
@@ -29,13 +32,31 @@ Section::Section() : SectionGroup(0)
 
 bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-  Q_UNUSED(element);
-  Q_UNUSED(context);
-  return false;
+  loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+
+  KoXmlElement child;
+  forEachElement(child, element) {
+    KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+    if (shape) {
+      addChild(shape);
+    }
+  }
+  return true;
 }
 void Section::saveOdf(KoShapeSavingContext & context) const
 {
-  Q_UNUSED(context);
+  context.xmlWriter().startElement("braindump:section");
+  saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
+
+  QList<KoShape*> shapes = iterator();
+  qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+  foreach(KoShape* shape, shapes) {
+      shape->saveOdf(context);
+  }
+
+  saveOdfCommonChildElements(context);
+  context.xmlWriter().endElement();
 }
 void Section::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
