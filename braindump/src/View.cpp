@@ -217,7 +217,10 @@ KoShapeManager* View::shapeManager() const
 
 void View::setActiveSection( Section* page )
 {
-  shapeManager()->removeAdditional( m_activeSection->layer() );
+  if(m_activeSection)
+  {
+    shapeManager()->removeAdditional( m_activeSection->layer() );
+  }
   m_activeSection = page;
   if(m_activeSection)
   {
