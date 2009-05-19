@@ -20,12 +20,16 @@
 #ifndef _SECTION_H_
 #define _SECTION_H_
 
-#include <SectionContainer.h>
+#include <KoShapeContainer.h>
 #include "SectionGroup.h"
 
-class Section : public SectionContainer, public SectionGroup {
+class Section : public KoShapeContainer, public SectionGroup {
   public:
     Section();
+  public:
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
   private:
 };
 

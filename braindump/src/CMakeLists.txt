@@ -8,10 +8,9 @@ set(braindump_SRCS
   DocumentModel.cpp
   MainWindow.cpp
   RootSection.cpp
-  Section.cpp
-  SectionContainer.cpp
-  SectionGroup.cpp
   SectionsBoxDock.cpp
+  Section.cpp
+  SectionGroup.cpp
   SectionsIO.cpp
   TreeSortFilter.cpp
   View.cpp
