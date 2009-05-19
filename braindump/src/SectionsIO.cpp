@@ -71,7 +71,7 @@ bool SectionsIO::SaveContext::saveContext(SectionsIO* sectionsIO )
   };
   
   QString fullFileName = sectionsIO->m_directory + filename;
-  QString fullFileNameTmpNew = fullFileName + ".tmp_new";
+  QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
   QString fullFileNameTmpOld = fullFileName + ".tmp_old";
   KIO::NetAccess::del(fullFileNameTmpNew, 0);
   
