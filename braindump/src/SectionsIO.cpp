@@ -23,12 +23,21 @@
 #include <QFileInfo>
 #include <QTimer>
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
 #include "RootSection.h"
 #include "SectionGroup.h"
 #include "Section.h"
+#include <KoStore.h>
+#include <KoOdf.h>
+#include <kio/netaccess.h>
+#include <KoOdfWriteStore.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyles.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -48,7 +57,95 @@ SectionsIO::~SectionsIO()
 struct SectionsIO::SaveContext {
   Section* section;
   QString filename;
+  bool saveContext(SectionsIO* sectionsIO);
 };
+
+bool SectionsIO::SaveContext::saveContext(SectionsIO* sectionsIO )
+{
+  struct Finally {
+      Finally(KoStore *s) : store(s) { }
+      ~Finally() {
+          delete store;
+      }
+      KoStore *store;
+  };
+  
+  QString fullFileName = sectionsIO->m_directory + filename;
+  QString fullFileNameTmpNew = fullFileName + ".tmp_new";
+  QString fullFileNameTmpOld = fullFileName + ".tmp_old";
+  KIO::NetAccess::del(fullFileNameTmpNew, 0);
+  
+  const char* mimeType = KoOdf::mimeType(KoOdf::Text);
+  
+  KoStore* store = KoStore::createStore(fullFileNameTmpNew, KoStore::Write, mimeType, KoStore::Directory);
+  Finally finaly(store);
+
+  KoOdfWriteStore odfStore(store);
+  KoEmbeddedDocumentSaver embeddedSaver;
+  
+  KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+  KoXmlWriter* contentWriter = odfStore.contentWriter();
+  KoXmlWriter* bodyWriter = odfStore.bodyWriter();
+  
+  if(not manifestWriter or not contentWriter or not bodyWriter) {
+    return false;
+  }
+    
+  KoGenStyles mainStyles;
+  KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
+  context->addOption(KoShapeSavingContext::DrawId);
+
+  bodyWriter->startElement("office:body");
+  bodyWriter->startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
+
+  section->saveOdf(*context);
+  
+  bodyWriter->endElement(); // office:element
+  bodyWriter->endElement(); // office:body
+  
+  mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+
+  odfStore.closeContentWriter();
+
+  //add manifest line for content.xml
+  manifestWriter->addManifestEntry("content.xml", "text/xml");
+
+
+  if (not mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
+      return false;
+  }
+
+  if (not context->saveDataCenter(store, manifestWriter)) {
+      kDebug() << "save data centers failed";
+      return false;
+  }
+
+  // Save embedded objects
+  KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+  if (not embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+      kDebug() << "save embedded documents failed";
+      return false;
+  }
+
+  // Write out manifest file
+  if (not odfStore.closeManifestWriter()) {
+      return false;
+  }
+
+  delete store;
+  finaly.store = 0;
+  delete context;
+    
+  QFileInfo fullFileInfo(fullFileName);
+  if(fullFileInfo.exists())
+  {
+    KIO::NetAccess::del(fullFileNameTmpOld, 0);
+    KIO::NetAccess::move( fullFileName, fullFileNameTmpOld, 0);
+    KIO::NetAccess::move( fullFileNameTmpNew, fullFileName, 0);
+    KIO::NetAccess::del( fullFileNameTmpOld, 0);
+  }
+  return true;
+}
 
 void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
 {
@@ -86,6 +183,13 @@ void SectionsIO::save()
   file.close();
   
   // Second: save each section
+  foreach(SaveContext* saveContext, m_contextes)
+  {
+    if(not saveContext->saveContext(this))
+    {
+      kDebug() << "Saving failed"; // TODO: Report it
+    }
+  }
 }
 
 #include <iostream>
