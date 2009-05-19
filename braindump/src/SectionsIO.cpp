@@ -135,15 +135,11 @@ bool SectionsIO::SaveContext::saveContext(SectionsIO* sectionsIO )
   delete store;
   finaly.store = 0;
   delete context;
-    
-  QFileInfo fullFileInfo(fullFileName);
-  if(fullFileInfo.exists())
-  {
-    KIO::NetAccess::del(fullFileNameTmpOld, 0);
-    KIO::NetAccess::move( fullFileName, fullFileNameTmpOld, 0);
-    KIO::NetAccess::move( fullFileNameTmpNew, fullFileName, 0);
-    KIO::NetAccess::del( fullFileNameTmpOld, 0);
-  }
+  
+  KIO::NetAccess::del(fullFileNameTmpOld, 0);
+  KIO::NetAccess::move( fullFileName, fullFileNameTmpOld, 0);
+  KIO::NetAccess::move( fullFileNameTmpNew, fullFileName, 0);
+  KIO::NetAccess::del( fullFileNameTmpOld, 0);
   return true;
 }
 
