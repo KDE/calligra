@@ -4,6 +4,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
   ${KDE4_INCLUDES}
 )
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
+
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL Migration driver")
 IF (MYSQL_FOUND)
@@ -27,7 +29,7 @@ IF(FREETDS_FOUND)
 ENDIF(FREETDS_FOUND)
 
 macro_optional_find_package(XBase)
-macro_log_feature(XBase_FOUND "XBase" "XBase compatible C++ class library" "http://linux.techass.com/projects/xdb/" FALSE "" "Required by Kexi XBase Migration driver")
+macro_log_feature(XBASE_FOUND "XBase" "XBase compatible C++ class library" "http://linux.techass.com/projects/xdb/" FALSE "" "Required by Kexi XBase Migration driver")
 IF(XBASE_FOUND)
   macro_optional_add_subdirectory( xbase )
 ENDIF(XBASE_FOUND)
