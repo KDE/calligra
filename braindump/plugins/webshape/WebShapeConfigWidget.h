@@ -17,14 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeFactory.h"
 
-class WebShapeFactory : public KoShapeFactory {
+#include <KoShapeConfigWidgetBase.h>
+
+#include "ui_WebShapeConfigWidget.h"
+
+class WebShape;
+
+class WebShapeConfigWidget : public KoShapeConfigWidgetBase
+{
+    Q_OBJECT
   public:
-    WebShapeFactory( QObject *parent );
-
-    KoShape* createDefaultShape() const;
-    KoShape* createShape(const KoProperties* params) const;
-    bool supports(const KoXmlElement & e) const;
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    WebShapeConfigWidget();
+    /// reimplemented
+    virtual void open(KoShape *shape);
+    /// reimplemented
+    virtual void save();
+    /// reimplemented
+    virtual bool showOnShapeCreate() { return false; }
+    /// reimplemented
+    virtual QUndoCommand * createCommand();
+  private:
+    void blockChildSignals( bool block );
+  private:
+    WebShape *m_shape;
+    Ui::WebShapeConfigWidget m_widget;
 };

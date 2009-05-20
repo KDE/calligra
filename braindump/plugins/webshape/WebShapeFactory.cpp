@@ -24,9 +24,10 @@
 #include <QWebPage>
 #include <QWebFrame>
 
-#include "WebShape.h"
 #include <KoProperties.h>
-#include <kdebug.h>
+
+#include "WebShape.h"
+#include "WebShapeConfigWidget.h"
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, WEBSHAPEID,
@@ -61,4 +62,11 @@ KoShape* WebShapeFactory::createShape(
 bool WebShapeFactory::supports(const KoXmlElement & e) const
 {
   return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
+}
+
+QList<KoShapeConfigWidgetBase*> WebShapeFactory::createShapeOptionPanels()
+{
+  QList<KoShapeConfigWidgetBase*> answer;
+  answer.append( new WebShapeConfigWidget() );
+  return answer;
 }
