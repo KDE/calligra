@@ -99,6 +99,14 @@ Section* View::activeSection() const
 
 void View::initGUI()
 {
+    // add all plugins.
+    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+      kDebug() << "Creating docker: " << docker;
+      KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
+      m_mainWindow->createDockWidget(factory);
+    }
+    
+    // Init the widgets
     QGridLayout * gridLayout = new QGridLayout( this );
     gridLayout->setMargin( 0 );
     gridLayout->setSpacing( 0 );
@@ -144,12 +152,6 @@ void View::initGUI()
     m_sectionsBoxDock->setup(m_doc, this);
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
-
-    // add all plugins.
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-        KoDockFactory *factory = KoDockRegistry::instance()->value(docker);
-        m_mainWindow->createDockWidget(factory);
-    }
 
     show();
 }
