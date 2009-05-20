@@ -23,7 +23,9 @@
 #include <QWebPage>
 #include <QWebFrame>
 
+#include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
+#include <KoXmlWriter.h>
 
 WebShape::WebShape() : m_webPage(new QWebPage)
 {
@@ -49,6 +51,12 @@ void WebShape::paint( QPainter &painter,
 
 void WebShape::saveOdf(KoShapeSavingContext & context) const
 {
+  KoXmlWriter &writer = context.xmlWriter();
+
+  writer.startElement( "braindump:web" );
+  writer.addAttribute( "url", m_webPage->mainFrame()->url().toString());
+  saveOdfCommonChildElements( context );
+  writer.endElement(); // braindump:web
 }
 
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
