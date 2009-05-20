@@ -24,10 +24,9 @@
 #include "KoShapeSavingContext.h"
 #include "KoXmlWriter.h"
 
-Section::Section() : SectionGroup(0)
+Section::Section() : SectionGroup(0), m_layer(new KoShapeLayer)
 {
-  KoShapeLayer* layer = new KoShapeLayer;
-  addChild(layer);
+  addChild(m_layer);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
     shapeFactory->populateDataCenterMap(m_dataCenterMap);
@@ -42,7 +41,7 @@ bool Section::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &conte
   forEachElement(child, element) {
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
     if (shape) {
-      addChild(shape);
+      m_layer->addChild(shape);
     }
   }
   return true;
@@ -52,7 +51,7 @@ void Section::saveOdf(KoShapeSavingContext & context) const
   context.xmlWriter().startElement("braindump:section");
   saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
 
-  QList<KoShape*> shapes = iterator();
+  QList<KoShape*> shapes = m_layer->iterator();
   qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
   foreach(KoShape* shape, shapes) {

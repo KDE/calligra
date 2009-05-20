@@ -23,6 +23,8 @@
 #include <KoShapeContainer.h>
 #include "SectionGroup.h"
 
+class KoShapeLayer;
+
 class Section : public KoShapeContainer, public SectionGroup {
   public:
     Section();
@@ -33,6 +35,7 @@ class Section : public KoShapeContainer, public SectionGroup {
     QMap<QString, KoDataCenter *> dataCenterMap() const;
   private:
     QMap<QString, KoDataCenter *> m_dataCenterMap;
+    KoShapeLayer* m_layer;
 };
 
 Q_DECLARE_METATYPE(Section*)
