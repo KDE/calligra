@@ -48,7 +48,7 @@ namespace Currency_LNS
         { "$", "", "Dollar", "$" }, // unspecified
         { "$", I18N_NOOP("Australia"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("Canada"), I18N_NOOP("Dollar"), "$" },
-        { "$", I18N_NOOP("Caribbea"), I18N_NOOP("Dollar"), "$" },
+        { "$", I18N_NOOP("Caribbean"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("New Zealand"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("United States"), I18N_NOOP("Dollar"), "$" },
 
