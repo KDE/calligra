@@ -41,7 +41,7 @@ namespace Currency_LNS
     // third column:  currency name (localized)
     // fourth column: displayed currency code (localized but maybe only in
     //                the country language it belongs to)
-    // WARNING: change the "24" in chooseString if you change this array
+    // WARNING: change the "29" in chooseString if you change this array
     static const Money lMoney[] = {
         { "", "", "", ""}, // auto
         { "", "", "", ""}, // extension (codes imported)
@@ -478,7 +478,7 @@ QString Currency::chooseString( int type, bool & ok )
         ok = false;
         return QString();
     }
-    if ( type < 24 )
+    if ( type < 29 )
     {
         QString ret( i18n( gMoneyList[type].name ) );
         if ( gMoneyList[type].country[0] )
