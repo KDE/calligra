@@ -56,3 +56,8 @@ KoShape* WebShapeFactory::createShape(
   // use the params
   return fooShape;
 }
+
+bool WebShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "web" && e.namespaceURI() == "braindump" );
+}

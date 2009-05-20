@@ -20,9 +20,10 @@
 #include "KoShapeFactory.h"
 
 class WebShapeFactory : public KoShapeFactory {
-public:
+  public:
     WebShapeFactory( QObject *parent );
- 
+
     KoShape* createDefaultShape() const;
     KoShape* createShape(const KoProperties* params) const;
+    bool supports(const KoXmlElement & e) const;
 };
