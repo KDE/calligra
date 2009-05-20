@@ -82,6 +82,8 @@ View::View( RootSection *document, MainWindow* parent )
     setActiveSection( m_doc->sections()[0] );
 
   setXMLFile("braindump.rc");
+  
+  m_doc->viewManager()->viewHasFocus(this);
 }
 
 View::~View()
