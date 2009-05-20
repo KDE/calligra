@@ -56,6 +56,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
   writer.startElement( "braindump:web" );
   writer.addAttribute( "url", m_webPage->mainFrame()->url().toString());
+  saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:web
 }
