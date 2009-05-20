@@ -23,7 +23,7 @@
 #include <KoShapeRegistry.h>
 #include "WebShapeFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(webshapelibrary,
+K_EXPORT_COMPONENT_FACTORY(webshape,
     KGenericFactory<WebShapePlugin>( "WebShapePlugin" ) )
  
 WebShapePlugin::WebShapePlugin(QObject *parent, const QStringList&)

@@ -24,10 +24,11 @@
 #include "WebShape.h"
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
-   : KoShapeFactory( parent, "FooShape",
-                     i18n("Foo Shape") )
+   : KoShapeFactory( parent, "WebShape",
+                     i18n("Web Shape") )
 {
-    setToolTip( i18n("A foo shape") );
+  setToolTip( i18n("A web shape") );
+  setIcon( "applications-internet" );
 }
  
 KoShape* WebShapeFactory::createDefaultShape() const
