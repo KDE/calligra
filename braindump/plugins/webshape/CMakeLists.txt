@@ -5,6 +5,7 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 SET (webshape_LIB_SRCS
     WebShape.cpp
     WebShapeFactory.cpp
+    WebShapePlugin.cpp
 )
 
 kde4_add_plugin(webshape ${webshape_LIB_SRCS})
