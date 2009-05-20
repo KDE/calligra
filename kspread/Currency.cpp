@@ -77,7 +77,8 @@ namespace Currency_LNS
 
         { "¥", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "¥" },
 
-        { "AFA", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFA") },
+        { "AFA", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani (old)"), I18N_NOOP("AFA") },
+        { "AFN", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFN") },
         { "ALL", I18N_NOOP("Albania"), I18N_NOOP("Lek"), I18N_NOOP("Lek") },
         { "DZD", I18N_NOOP("Algeria"), I18N_NOOP("Algerian Dinar"), I18N_NOOP("DZD") },
         { "USD", I18N_NOOP("American Samoa"), I18N_NOOP("US Dollar"), I18N_NOOP("USD") },
@@ -88,7 +89,7 @@ namespace Currency_LNS
         { "XCD", I18N_NOOP("Antigua And Barbuda"), I18N_NOOP("East Carribean Dollar"), I18N_NOOP("XCD") },
         { "ARS", I18N_NOOP("Argentina"), I18N_NOOP("Argentine Peso"), I18N_NOOP("ARS") },
         { "AMD", I18N_NOOP("Armenia"), I18N_NOOP("Armenian Dram"), I18N_NOOP("AMD") },
-        { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Guilder"), I18N_NOOP("AWG") },
+        { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Florin"), I18N_NOOP("AWG") },
         { "AUD", I18N_NOOP("Australia"), I18N_NOOP("Australian Dollar"), I18N_NOOP("AUD") },
         { "EUR", I18N_NOOP("Austria"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
         { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("S") },
