@@ -26,6 +26,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 WebShape::WebShape() : m_webPage(new QWebPage)
 {
@@ -61,6 +62,9 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+  loadOdfAttributes( element, context, OdfAllAttributes );
+  m_webPage->mainFrame()->load( element.attribute("url"));
+  return true;
 }
 
 QWebPage* WebShape::webPage()
