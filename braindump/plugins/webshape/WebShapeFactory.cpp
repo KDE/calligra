@@ -21,7 +21,11 @@
 
 #include <klocale.h>
 
+#include <QWebPage>
+#include <QWebFrame>
+
 #include "WebShape.h"
+#include <KoProperties.h>
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, WEBSHAPEID,
@@ -29,6 +33,7 @@ WebShapeFactory::WebShapeFactory(QObject* parent)
 {
   setToolTip( i18n("A web shape") );
   setIcon( "applications-internet" );
+  setOdfElementNames( "braindump", QStringList( "web" ) );
 }
 
 KoShape* WebShapeFactory::createDefaultShape() const
@@ -38,11 +43,15 @@ KoShape* WebShapeFactory::createDefaultShape() const
   // set defaults
   return fooShape;
 }
- 
+
 KoShape* WebShapeFactory::createShape(
                             const KoProperties* params ) const
 {
   WebShape* fooShape = new WebShape();
+  if(params->contains("url"))
+  {
+    fooShape->webPage()->mainFrame()->load(params->property("url").toUrl());
+  }
   fooShape->setShapeId(WEBSHAPEID);
   // use the params
   return fooShape;
