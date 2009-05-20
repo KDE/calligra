@@ -19,7 +19,10 @@
 
 #include "WebShape.h"
 
-WebShape::WebShape()
+#include <QWebPage>
+#include <kurl.h>
+
+WebShape::WebShape() : m_webPage(new QWebPage)
 {
 }
 
@@ -38,4 +41,9 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+}
+
+QWebPage* WebShape::webPage()
+{
+  return m_webPage;
 }

@@ -18,6 +18,7 @@ target_link_libraries(
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTWEBKIT_LIBRARY}
     )
 install(TARGETS webshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
