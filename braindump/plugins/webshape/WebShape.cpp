@@ -19,8 +19,11 @@
 
 #include "WebShape.h"
 
+#include <QPainter>
 #include <QWebPage>
-#include <kurl.h>
+#include <QWebFrame>
+
+#include <KoViewConverter.h>
 
 WebShape::WebShape() : m_webPage(new QWebPage)
 {
@@ -33,6 +36,15 @@ WebShape::~WebShape()
 void WebShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
+  m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
+  QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
+  QPainter imgPainter(&image);
+
+  m_webPage->mainFrame()->render(&imgPainter);
+  imgPainter.end();
+
+  QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
+  painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height()));
 }
 
 void WebShape::saveOdf(KoShapeSavingContext & context) const
