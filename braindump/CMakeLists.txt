@@ -8,4 +8,4 @@ include(MacroLibrary)
 find_package(KOffice REQUIRED)
 
 add_subdirectory(src)
-
+add_subdirectory(plugins)
