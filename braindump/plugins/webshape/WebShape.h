@@ -22,6 +22,8 @@
 
 #include <KoShape.h>
 
+#define WEBSHAPEID "WebShape"
+
 class KUrl;
 class QWebPage;
 

@@ -24,24 +24,26 @@
 #include "WebShape.h"
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
-   : KoShapeFactory( parent, "WebShape",
+   : KoShapeFactory( parent, WEBSHAPEID,
                      i18n("Web Shape") )
 {
   setToolTip( i18n("A web shape") );
   setIcon( "applications-internet" );
 }
- 
+
 KoShape* WebShapeFactory::createDefaultShape() const
 {
-    WebShape* fooShape = new WebShape();
-    // set defaults
-    return fooShape;
+  WebShape* fooShape = new WebShape();
+  fooShape->setShapeId(WEBSHAPEID);
+  // set defaults
+  return fooShape;
 }
  
 KoShape* WebShapeFactory::createShape(
                             const KoProperties* params ) const
 {
-    WebShape* fooShape = new WebShape();
-    // use the params
-    return fooShape;
+  WebShape* fooShape = new WebShape();
+  fooShape->setShapeId(WEBSHAPEID);
+  // use the params
+  return fooShape;
 }
