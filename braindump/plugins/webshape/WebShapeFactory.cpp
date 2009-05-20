@@ -26,6 +26,7 @@
 
 #include "WebShape.h"
 #include <KoProperties.h>
+#include <kdebug.h>
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, WEBSHAPEID,
@@ -33,7 +34,7 @@ WebShapeFactory::WebShapeFactory(QObject* parent)
 {
   setToolTip( i18n("A web shape") );
   setIcon( "applications-internet" );
-  setOdfElementNames( "braindump", QStringList( "web" ) );
+  setOdfElementNames( "http://kde.org/braindump", QStringList( "web" ) );
 }
 
 KoShape* WebShapeFactory::createDefaultShape() const
@@ -59,5 +60,5 @@ KoShape* WebShapeFactory::createShape(
 
 bool WebShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "web" && e.namespaceURI() == "braindump" );
+  return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
 }

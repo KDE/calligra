@@ -104,6 +104,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   context->addOption(KoShapeSavingContext::DrawId);
 
   bodyWriter->startElement("office:body");
+  bodyWriter->addAttribute("xmlns:braindump", "http://kde.org/braindump");
   bodyWriter->startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
   section->saveOdf(*context);
