@@ -64,8 +64,13 @@ Section* SectionGroup::newSection( Section* before )
 {
   Section* section = new Section;
   insertSection(section, before);
-  section->setName(i18n("Untitled %1", ++s_count));
+  section->setName(nextName());
   return section;
+}
+
+QString SectionGroup::nextName()
+{
+  return i18n("Untitled %1", ++s_count);
 }
 
 SectionGroup* SectionGroup::sectionParent()

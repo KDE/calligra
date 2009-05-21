@@ -41,6 +41,7 @@ class SectionGroup {
      * @return the parent section (if any) of that document.
      */
     SectionGroup* sectionParent();
+    static QString nextName();
   private:
     void setSectionParent(SectionGroup* parent);
   private:

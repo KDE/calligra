@@ -161,6 +161,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
   Q_ASSERT(m_view->activeSection());
   Section* section = new Section();
+  section->setName(SectionGroup::nextName());
   m_model->insertSection( section, m_view->activeSection(), 0);
   selectSection(section);
 }
@@ -169,6 +170,7 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
 {
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* section = new Section();
+  section->setName(SectionGroup::nextName());
   m_model->insertSection( section, parentSection, m_view->activeSection());
   Q_ASSERT(section->sectionParent());
   Q_ASSERT(section->sectionParent() == parentSection);
