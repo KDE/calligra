@@ -40,6 +40,7 @@
 #include "Canvas.h"
 #include "RootSection.h"
 #include "import/DockerManager.h"
+#include <kxmlguifactory.h>
 
 MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(0)
 {
@@ -55,7 +56,7 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
   // Setup the view
   view = new View( m_doc, this);
   setCentralWidget(view);
-
+  
   // a call to KXmlGuiWindow::setupGUI() populates the GUI
   // with actions, using KXMLGUI.
   // It also applies the saved mainwindow settings, if any, and ask the
@@ -63,6 +64,8 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
   // toolbar position, icon size, etc.
   setupGUI();
   
+  activateView(view);
+
   // Position and show toolbars according to user's preference
   setAutoSaveSettings(componentData.componentName(), false);
 
@@ -171,4 +174,18 @@ void MainWindow::forceDockTabFonts()
 DockerManager* MainWindow::dockerManager()
 {
   return m_dockerManager;
+}
+
+void MainWindow::activateView(View* view)
+{
+  Q_ASSERT(factory());
+  if(m_activeView)
+  {
+    factory()->removeClient(m_activeView);
+  }
+  m_activeView = view;
+  if(m_activeView)
+  {
+    factory()->addClient(view);
+  }
 }

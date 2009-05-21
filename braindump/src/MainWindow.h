@@ -39,11 +39,14 @@ class MainWindow : public KXmlGuiWindow {
     DockerManager* dockerManager();
   private:
     void setupActions();
+  public:
+    void activateView(View* view);
   public slots:
     void forceDockTabFonts();
   private:
     RootSection* m_doc;
     View* view;
+    View* m_activeView;
     QMap<QString, QDockWidget*> m_dockWidgetMap;
     QList<QDockWidget*> m_dockWidgets;
     KActionMenu* m_dockWidgetMenu;
