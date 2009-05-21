@@ -161,72 +161,72 @@ void View::initGUI()
 
 void View::initActions()
 {
-    KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
-    new KoCutController(canvas(), action);
-    action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
-    new KoCopyController(canvas(), action);
-    m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
-    connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
-    clipboardDataChanged();
-    actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
-    actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
+  KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
+  new KoCutController(canvas(), action);
+  action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
+  new KoCopyController(canvas(), action);
+  m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+  connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
+  connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+  clipboardDataChanged();
+  actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
+  actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
 }
 
 void View::editPaste()
 {
-    m_canvas->toolProxy()->paste();
+  m_canvas->toolProxy()->paste();
 }
 
 void View::editDeleteSelection()
 {
-    m_canvas->toolProxy()->deleteSelection();
+  m_canvas->toolProxy()->deleteSelection();
 }
 
 void View::editSelectAll()
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if( !selection )
-        return;
+  KoSelection* selection = canvas()->shapeManager()->selection();
+  if( !selection )
+    return;
 
-    QList<KoShape*> shapes = activeSection()->sectionContainer()->iterator();
+  QList<KoShape*> shapes = activeSection()->sectionContainer()->iterator();
 
-    foreach( KoShape *shape, shapes ) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
+  foreach( KoShape *shape, shapes ) {
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
 
-        if ( layer ) {
-            QList<KoShape*> layerShapes( layer->iterator() );
-            foreach( KoShape *layerShape, layerShapes ) {
-                selection->select( layerShape );
-                layerShape->update();
-            }
-        }
+    if ( layer ) {
+      QList<KoShape*> layerShapes( layer->iterator() );
+      foreach( KoShape *layerShape, layerShapes ) {
+        selection->select( layerShape );
+        layerShape->update();
+      }
     }
+  }
 
-    selectionChanged();
+  selectionChanged();
 }
 
 void View::editDeselectAll()
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if( selection )
-        selection->deselectAll();
+  KoSelection* selection = canvas()->shapeManager()->selection();
+  if( selection )
+    selection->deselectAll();
 
-    selectionChanged();
-    canvas()->update();
+  selectionChanged();
+  canvas()->update();
 }
 
 void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
-    Q_UNUSED(mode);
-    Q_UNUSED(zoom);
-    canvas()->update();
+  Q_UNUSED(mode);
+  Q_UNUSED(zoom);
+  canvas()->update();
 }
 
 KoShapeManager* View::shapeManager() const
 {
-    return m_canvas->shapeManager();
+  return m_canvas->shapeManager();
 }
 
 void View::setActiveSection( Section* page )
@@ -238,8 +238,8 @@ void View::setActiveSection( Section* page )
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
     //Make the top most layer active
     if ( !shapes.isEmpty() ) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-        shapeManager()->selection()->setActiveLayer( layer );
+      KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+      shapeManager()->selection()->setActiveLayer( layer );
     }
   }
 
@@ -254,12 +254,11 @@ void View::setActiveSection( Section* page )
 
 void View::updateMousePosition(const QPoint& position)
 {
-    QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
-    // the offset is positive it the canvas is shown fully visible
-    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
-    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
-    QPoint viewPos = position - canvasOffset;
-
+  QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
+  // the offset is positive it the canvas is shown fully visible
+  canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
+  canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
+  QPoint viewPos = position - canvasOffset;
 }
 
 void View::selectionChanged()
@@ -268,27 +267,27 @@ void View::selectionChanged()
 
 void View::clipboardDataChanged()
 {
-    const QMimeData* data = QApplication::clipboard()->mimeData();
-    bool paste = false;
+  const QMimeData* data = QApplication::clipboard()->mimeData();
+  bool paste = false;
 
-    if (data)
+  if (data)
+  {
+    // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
+    QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
+    mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
+    mimeTypes << KoOdf::mimeType( KoOdf::Presentation );
+
+    foreach(const QString & mimeType, mimeTypes)
     {
-        // TODO see if we can use the KoPasteController instead of having to add this feature in each koffice app.
-        QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
-        mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
-        mimeTypes << KoOdf::mimeType( KoOdf::Presentation );
-
-        foreach(const QString & mimeType, mimeTypes)
-        {
-            if ( data->hasFormat( mimeType ) ) {
-                paste = true;
-                break;
-            }
-        }
-
+      if ( data->hasFormat( mimeType ) ) {
+        paste = true;
+        break;
+      }
     }
 
-    m_editPaste->setEnabled(paste);
+  }
+
+  m_editPaste->setEnabled(paste);
 }
 
 void View::focusInEvent(QFocusEvent * event)
