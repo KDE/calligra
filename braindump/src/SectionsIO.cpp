@@ -265,23 +265,23 @@ void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
 {
   QDomNode n = elt.firstChild();
   while(!n.isNull()) {
-     QDomElement e = n.toElement(); // try to convert the node to an element.
-     if(!e.isNull() and e.nodeName() == "Section" ) {
-       Section* section = new Section();
-       QString name = e.attribute("name", "");
-       if(name.isEmpty())
-       {
-         name = SectionGroup::nextName();
-       }
-       section->setName(name);
-       root->insertSection(section);
-       SaveContext* context = new SaveContext;
-       context->filename = e.attribute("filename", "");
-       context->section = section;
-       m_contextes[section] = context;
-       loadTheStructure(e, section);
-     }
-     n = n.nextSibling();
+    QDomElement e = n.toElement(); // try to convert the node to an element.
+    if(!e.isNull() and e.nodeName() == "Section" ) {
+      Section* section = new Section();
+      QString name = e.attribute("name", "");
+      if(name.isEmpty())
+      {
+        name = SectionGroup::nextName();
+      }
+      section->setName(name);
+      root->insertSection(section);
+      SaveContext* context = new SaveContext;
+      context->filename = e.attribute("filename", "");
+      context->section = section;
+      m_contextes[section] = context;
+      loadTheStructure(e, section);
+    }
+    n = n.nextSibling();
   }
 }
 
