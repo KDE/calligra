@@ -32,7 +32,7 @@ target_link_libraries(braindump ${KOMAIN_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QT3SUP
 install(TARGETS braindump ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### GUI files ###
-install( FILES braindump.rc DESTINATION ${DATA_INSTALL_DIR}/braindump)
+install( FILES braindumpui.rc braindumpview.rc DESTINATION ${DATA_INSTALL_DIR}/braindump)
 
 ### desktop files ###
 install( FILES braindump.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
