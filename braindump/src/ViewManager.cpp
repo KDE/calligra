@@ -24,6 +24,7 @@
 #include "Canvas.h"
 #include "Section.h"
 #include "View.h"
+#include "SectionContainer.h"
 
 ViewManager::ViewManager() : m_lastViewInFocus(0)
 {
@@ -64,20 +65,25 @@ QMap<QString, KoDataCenter *> ViewManager::dataCenterMap() const
   Q_ASSERT(m_lastViewInFocus);
   if(m_lastViewInFocus->activeSection())
   {
-    return m_lastViewInFocus->activeSection()->dataCenterMap();
+    return m_lastViewInFocus->activeSection()->sectionContainer()->dataCenterMap();
   }
   return QMap<QString, KoDataCenter *>();
 }
 
 Section* ViewManager::sectionByShape( KoShape * shape ) const
 {
-    KoShape * parent = shape;
-    Section* page = 0;
-    while ( !page && ( parent = parent->parent() ) )
-    {
-        page = dynamic_cast<Section*>( parent );
-    }
-    return page;
+  KoShape * parent = shape;
+  SectionContainer* container = 0;
+  while ( !container && ( parent = parent->parent() ) )
+  {
+    container = dynamic_cast<SectionContainer*>( parent );
+  }
+  if( not container)
+  {
+    return 0;
+  } else {
+    return container->section();
+  }
 }
 
 void ViewManager::addView(View* view)

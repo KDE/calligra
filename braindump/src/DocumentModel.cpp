@@ -122,9 +122,9 @@ bool DocumentModel::setData(const QModelIndex &index, const QVariant &value, int
       case Qt::DisplayRole:
       case Qt::EditRole:
       {
-        QUndoCommand * cmd = new KoShapeRenameCommand( dataFromIndex(index), value.toString() );
-        // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
-        m_document->undoStack()->push( cmd );
+//         QUndoCommand * cmd = new KoShapeRenameCommand( dataFromIndex(index), value.toString() );
+        dataFromIndex(index)->setName(value.toString());
+//         m_document->undoStack()->push( cmd );
         return true;
       }
     }

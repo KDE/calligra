@@ -42,6 +42,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include "SectionContainer.h"
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -107,7 +108,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   bodyWriter->addAttribute("xmlns:braindump", "http://kde.org/braindump");
   bodyWriter->startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-  section->saveOdf(*context);
+  section->sectionContainer()->saveOdf(*context);
   
   bodyWriter->endElement(); // office:element
   bodyWriter->endElement(); // office:body
@@ -188,7 +189,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Text, false));
   
   KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-  KoShapeLoadingContext context(loadingContext, section->dataCenterMap());
+  KoShapeLoadingContext context(loadingContext, section->sectionContainer()->dataCenterMap());
 
   KoXmlElement element;
   forEachElement(element, body) {
@@ -196,7 +197,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
 
     if(element.nodeName() == "braindump:section")
     {
-      section->loadOdf(element, context);
+      section->sectionContainer()->loadOdf(element, context);
       return true;
     }
   }

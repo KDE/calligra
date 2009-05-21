@@ -65,6 +65,7 @@
 #include "KoOdf.h"
 
 #include "MainWindow.h"
+#include "SectionContainer.h"
 
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
@@ -189,7 +190,7 @@ void View::editSelectAll()
     if( !selection )
         return;
 
-    QList<KoShape*> shapes = activeSection()->iterator();
+    QList<KoShape*> shapes = activeSection()->sectionContainer()->iterator();
 
     foreach( KoShape *shape, shapes ) {
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
@@ -230,12 +231,10 @@ KoShapeManager* View::shapeManager() const
 
 void View::setActiveSection( Section* page )
 {
-  shapeManager()->removeAdditional( m_activeSection );
   m_activeSection = page;
   if(m_activeSection)
   {
-    shapeManager()->addAdditional( m_activeSection );
-    QList<KoShape*> shapes = page->iterator();
+    QList<KoShape*> shapes = page->sectionContainer()->iterator();
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
     //Make the top most layer active
     if ( !shapes.isEmpty() ) {

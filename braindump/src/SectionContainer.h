@@ -17,22 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "Section.h"
+#ifndef _SECTION_CONTAINER_H_
+#define _SECTION_CONTAINER_H_
 
-#include "SectionContainer.h"
+#include <KoShapeContainer.h>
 
-Section::Section() : SectionGroup(0), m_sectionContainer(new SectionContainer(this))
-{
-}
+class KoShapeLayer;
+class Section;
 
-SectionContainer* Section::sectionContainer() {
-  return m_sectionContainer;
-}
+class SectionContainer : public KoShapeContainer {
+  public:
+    SectionContainer(Section* );
+  public:
+    Section* section();
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    QMap<QString, KoDataCenter *> dataCenterMap() const;
+  private:
+    Section* m_section;
+    QMap<QString, KoDataCenter *> m_dataCenterMap;
+    KoShapeLayer* m_layer;
+};
 
-const QString& Section::name() const {
-  return m_name;
-}
-
-void Section::setName(const QString& _name) {
-  m_name = _name;
-}
+#endif

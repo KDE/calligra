@@ -20,22 +20,21 @@
 #ifndef _SECTION_H_
 #define _SECTION_H_
 
-#include <KoShapeContainer.h>
+#include <QMetaType>
 #include "SectionGroup.h"
 
-class KoShapeLayer;
+class SectionContainer;
 
-class Section : public KoShapeContainer, public SectionGroup {
+class Section :  public SectionGroup {
   public:
     Section();
   public:
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
-    QMap<QString, KoDataCenter *> dataCenterMap() const;
+    SectionContainer* sectionContainer();
+    const QString& name() const;
+    void setName(const QString& _name);
   private:
-    QMap<QString, KoDataCenter *> m_dataCenterMap;
-    KoShapeLayer* m_layer;
+    SectionContainer* m_sectionContainer;
+    QString m_name;
 };
 
 Q_DECLARE_METATYPE(Section*)
