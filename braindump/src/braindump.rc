@@ -22,32 +22,9 @@
         </Menu>
         <Menu name="view">
             <Text>&amp;View</Text>
-            <Action name="view_newview"/>
-            <ActionList name="view_closeallviews"/>
-            <Separator/>
-            <ActionList name="view_split"/>
-            <Separator/>
             <Action name="zoom_out"/>
             <Action name="zoom_in"/>
             <Action name="view_zoom"/>
-            <Separator/>
-            <Action name="view_rulers"/>
-            <Separator/>
-            <Action name="view_grid"/>
-            <Action name="view_snaptogrid"/>
-            <Action name="view_show_guides"/>
-        </Menu>
-        <Menu name="page">
-            <Text>&amp;Page</Text>
-            <Action name="page_insertpage"/>
-            <Action name="page_copypage"/>
-            <Action name="page_deletepage"/>
-            <Separator/>
-            <Action name="page_previous"/>
-            <Action name="page_next"/>
-            <Separator/>
-            <Action name="page_first"/>
-            <Action name="page_last"/>
         </Menu>
     </MenuBar>
 
