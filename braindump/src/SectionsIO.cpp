@@ -222,6 +222,7 @@ void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGr
     QDomElement celt = doc.createElement("Section");
     elt.appendChild(celt);
     celt.setAttribute("filename", context->filename);
+    celt.setAttribute("name", section->name());
     saveTheStructure(doc, celt, section, contextToRemove);
   }
 }
@@ -267,6 +268,12 @@ void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
      QDomElement e = n.toElement(); // try to convert the node to an element.
      if(!e.isNull() and e.nodeName() == "Section" ) {
        Section* section = new Section();
+       QString name = e.attribute("name", "");
+       if(name.isEmpty())
+       {
+         name = SectionGroup::nextName();
+       }
+       section->setName(name);
        root->insertSection(section);
        SaveContext* context = new SaveContext;
        context->filename = e.attribute("filename", "");
