@@ -46,25 +46,17 @@ void ViewManager::addShape(KoShape* shape)
 
 void ViewManager::removeShape(KoShape* shape)
 {
-  Q_UNUSED(shape);
-  qFatal("Unimplemented");
-#if 0
-    if(!shape)
-        return;
+  if(!shape)
+    return;
+  Section * page( sectionByShape( shape ) );
 
-    KoPAPageBase * page( pageByShape( shape ) );
-
-    foreach( KoView *view, views() )
-    {
-        View * kopaView = static_cast<View*>( view );
-        kopaView->viewMode()->removeShape( shape );
+  foreach( View *view, m_views )
+  {
+    
+    if ( page == view->activeSection() ) {
+        view->canvas()->shapeManager()->remove( shape );
     }
-
-    emit shapeRemoved( shape );
-
-    page->shapeRemoved( shape );
-    postRemoveShape( page, shape );
-#endif
+  }
 }
 
 QMap<QString, KoDataCenter *> ViewManager::dataCenterMap() const
