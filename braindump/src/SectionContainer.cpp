@@ -81,7 +81,7 @@ void containerBoundRec( const KoShapeContainer* parent, QRectF& b)
 {
   foreach(KoShape* shape, parent->iterator())
   {
-    b.unite(shape->boundingRect());
+    b |= shape->boundingRect();
     KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
     if(cont)
     {
