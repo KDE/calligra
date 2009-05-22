@@ -35,12 +35,13 @@ void ViewManager::addShape(KoShape* shape)
   if(!shape)
     return;
   Section * page( sectionByShape( shape ) );
-
+  if( not page) {
+    return;
+  }
   foreach( View *view, m_views )
   {
-    
     if ( page == view->activeSection() ) {
-        view->canvas()->shapeManager()->add( shape );
+      view->canvas()->shapeManager()->add( shape );
     }
   }
 }
@@ -50,12 +51,14 @@ void ViewManager::removeShape(KoShape* shape)
   if(!shape)
     return;
   Section * page( sectionByShape( shape ) );
-
+  if( not page) {
+    return;
+  }
   foreach( View *view, m_views )
   {
     
     if ( page == view->activeSection() ) {
-        view->canvas()->shapeManager()->remove( shape );
+      view->canvas()->shapeManager()->remove( shape );
     }
   }
 }
