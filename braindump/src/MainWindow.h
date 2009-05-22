@@ -37,6 +37,8 @@ class MainWindow : public KXmlGuiWindow {
   public:
     QDockWidget* createDockWidget(KoDockFactory* factory);
     DockerManager* dockerManager();
+    void addStatusBarItem(QWidget*, int strech, View* view);
+    void removeStatusBarItem(QWidget*);
   private:
     void setupActions();
   public:
@@ -51,6 +53,8 @@ class MainWindow : public KXmlGuiWindow {
     QList<QDockWidget*> m_dockWidgets;
     KActionMenu* m_dockWidgetMenu;
     DockerManager* m_dockerManager;
+    struct StatusBarItem;
+    QMap<View*, QList<StatusBarItem*> > m_statusBarItems;
 };
 
 #endif

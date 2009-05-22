@@ -41,6 +41,9 @@
 #include "RootSection.h"
 #include "import/DockerManager.h"
 #include <kxmlguifactory.h>
+#include <kdebug.h>
+
+#include "StatusBarItem.h"
 
 MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(0)
 {
@@ -179,13 +182,53 @@ DockerManager* MainWindow::dockerManager()
 void MainWindow::activateView(View* view)
 {
   Q_ASSERT(factory());
+  // Desactivate previous view
   if(m_activeView)
   {
     factory()->removeClient(m_activeView);
+    foreach(StatusBarItem* item, m_statusBarItems[m_activeView])
+    {
+      item->ensureItemHidden(statusBar());
+    }
   }
+
+  // Set the new view
   m_activeView = view;
   if(m_activeView)
   {
     factory()->addClient(view);
+    // Show the status widget for the current view
+    foreach(StatusBarItem* item, m_statusBarItems[m_activeView])
+    {
+      item->ensureItemShown(statusBar());
+    }
   }
+}
+
+void MainWindow::addStatusBarItem(QWidget* _widget, int _stretch, View* _view)
+{
+  Q_ASSERT(view);
+  QList<StatusBarItem*>& list = m_statusBarItems[view];
+  StatusBarItem* item = new StatusBarItem(_widget, _stretch, _view);
+  item->ensureItemShown(statusBar());
+  list.append(item);
+}
+
+void MainWindow::removeStatusBarItem(QWidget* _widget)
+{
+  foreach(View* key, m_statusBarItems.keys())
+  {
+    QList<StatusBarItem*>& list = m_statusBarItems[key];
+    foreach(StatusBarItem* item, list)
+    {
+      if(item->m_widget == _widget)
+      {
+        list.removeAll(item);
+        item->ensureItemHidden(statusBar());
+        delete item;
+        return;
+      }
+    }
+  }
+  kWarning() << "Widget " << _widget << " not found in the status bar";
 }
