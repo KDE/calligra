@@ -838,8 +838,10 @@ void ResourceSchedule::addAppointment( Schedule *node, DateTime &start, DateTime
         return ;
     }
     a = new Appointment( this, node, start, end, load );
-    Q_ASSERT ( add( a ) == true );
-    Q_ASSERT ( node->add( a ) == true );
+    bool result = add( a );
+    Q_ASSERT ( result == true );
+    result = node->add( a );
+    Q_ASSERT ( result == true );
     //kDebug()<<"Added interval to new"<<a;
 }
 
