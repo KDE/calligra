@@ -34,6 +34,7 @@ class SectionContainer : public KoShapeContainer {
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     QMap<QString, KoDataCenter *> dataCenterMap() const;
+    QRectF containerBound() const;
   private:
     Section* m_section;
     QMap<QString, KoDataCenter *> m_dataCenterMap;

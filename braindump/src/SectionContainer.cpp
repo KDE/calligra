@@ -76,3 +76,23 @@ QMap<QString, KoDataCenter* > SectionContainer::dataCenterMap() const
 {
   return m_dataCenterMap;
 }
+
+void containerBoundRec( const KoShapeContainer* parent, QRectF& b)
+{
+  foreach(KoShape* shape, parent->iterator())
+  {
+    b.unite(shape->boundingRect());
+    KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
+    if(cont)
+    {
+      containerBoundRec(cont, b);
+    }
+  }
+}
+
+QRectF SectionContainer::containerBound() const
+{
+  QRectF b;
+  containerBoundRec(this, b);
+  return b;
+}
