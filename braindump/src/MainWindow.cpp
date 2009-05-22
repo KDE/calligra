@@ -207,6 +207,7 @@ void MainWindow::activateView(View* view)
 
 void MainWindow::addStatusBarItem(QWidget* _widget, int _stretch, View* _view)
 {
+  Q_ASSERT(_widget);
   Q_ASSERT(view);
   QList<StatusBarItem*>& list = m_statusBarItems[view];
   StatusBarItem* item = new StatusBarItem(_widget, _stretch, _view);

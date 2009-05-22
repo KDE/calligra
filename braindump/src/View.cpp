@@ -131,10 +131,8 @@ void View::initGUI()
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
-#if 0
     m_zoomAction = m_zoomController->zoomAction();
-    addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
-#endif
+    m_mainWindow->addStatusBarItem( m_zoomAction->createWidget( m_mainWindow->statusBar() ), 0, this );
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
