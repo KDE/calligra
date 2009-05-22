@@ -79,8 +79,11 @@ View::View( RootSection *document, MainWindow* parent )
   initGUI();
   initActions();
 
-  if ( m_doc->sections().count() > 0 )
+  if ( m_doc->sections().count() > 0 ) {
     setActiveSection( m_doc->sections()[0] );
+  } else {
+    setActiveSection(0);
+  }
 
   setXMLFile("braindumpview.rc");
   
@@ -241,6 +244,11 @@ void View::setActiveSection( Section* page )
       KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
       shapeManager()->selection()->setActiveLayer( layer );
     }
+    canvas()->setEnabled(true);
+  } else {
+    shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
+    shapeManager()->selection()->setActiveLayer( 0 );
+    canvas()->setEnabled(false);
   }
 
   QSizeF pageSize( 1000, 1000 );

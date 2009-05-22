@@ -138,7 +138,12 @@ void SectionsBoxDock::slotRmClicked()
 {
   Q_ASSERT(m_view->activeSection());
   m_model->removeSection(m_view->activeSection());
-  slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
+  if( m_model->rowCount() == 0 )
+  {
+    m_view->setActiveSection(0);
+  } else {
+    slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
+  }
 }
 void SectionsBoxDock::slotRaiseClicked()
 {
