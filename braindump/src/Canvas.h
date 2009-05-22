@@ -25,15 +25,13 @@
 #include <QList>
 #include <KoCanvasBase.h>
 
-#include "kopageapp_export.h"
-
 class View;
 class RootSection;
 class KAction;
 class Section;
 
 /// Widget that shows a KoPAPage
-class KOPAGEAPP_EXPORT Canvas : public QWidget, public KoCanvasBase
+class Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
   public:
