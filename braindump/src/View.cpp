@@ -42,7 +42,6 @@
 #include <KoDockRegistry.h>
 #include <KoShapeLayer.h>
 #include <KoDrag.h>
-#include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
 
