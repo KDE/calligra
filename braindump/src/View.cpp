@@ -234,7 +234,7 @@ void View::setActiveSection( Section* page )
 {
   m_activeSection = page;
 
-  QSizeF pageSize( 1000, 1000 );
+  QSizeF pageSize( 400, 400 );
 
   if(m_activeSection)
   {
