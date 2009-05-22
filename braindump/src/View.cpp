@@ -235,6 +235,9 @@ KoShapeManager* View::shapeManager() const
 void View::setActiveSection( Section* page )
 {
   m_activeSection = page;
+
+  QSizeF pageSize( 1000, 1000 );
+
   if(m_activeSection)
   {
     QList<KoShape*> shapes = page->sectionContainer()->iterator();
@@ -244,6 +247,17 @@ void View::setActiveSection( Section* page )
       KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
       shapeManager()->selection()->setActiveLayer( layer );
     }
+
+    // compute the page size
+    QRectF bb = page->sectionContainer()->containerBound();
+    kDebug() << bb;
+    if(not bb.isNull() and not bb.isEmpty())
+    {
+      pageSize = QSizeF(bb.right(), bb.bottom());
+      kDebug() << pageSize;
+    }
+
+    // Make sure the canvas is enabled
     canvas()->setEnabled(true);
   } else {
     shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
@@ -251,7 +265,6 @@ void View::setActiveSection( Section* page )
     canvas()->setEnabled(false);
   }
 
-  QSizeF pageSize( 1000, 1000 );
   m_zoomController->setPageSize( pageSize );
   m_zoomController->setDocumentSize( pageSize );
   m_canvas->sectionChanged(activeSection());

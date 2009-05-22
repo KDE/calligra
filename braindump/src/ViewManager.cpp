@@ -56,7 +56,6 @@ void ViewManager::removeShape(KoShape* shape)
   }
   foreach( View *view, m_views )
   {
-    
     if ( page == view->activeSection() ) {
       view->canvas()->shapeManager()->remove( shape );
     }
