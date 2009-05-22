@@ -1005,7 +1005,8 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
     emit resourceToBeRemoved( resource );
-    Q_ASSERT( removeResourceId( resource->id() ) == true );
+    bool result = removeResourceId( resource->id() );
+    Q_ASSERT( result == true );
     resource->removeRequests(); // not valid anymore
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
