@@ -24,6 +24,7 @@
 
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include "StatesRegistry.h"
@@ -54,7 +55,8 @@ void TodoShape::saveOdf(KoShapeSavingContext & context) const
   KoXmlWriter &writer = context.xmlWriter();
 
   writer.startElement( "braindump:todo" );
-//   writer.addAttribute( "type", m_type);
+  writer.addAttribute( "category", m_categoryId);
+  writer.addAttribute( "state", m_stateId);
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:todo
@@ -63,7 +65,8 @@ void TodoShape::saveOdf(KoShapeSavingContext & context) const
 bool TodoShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
-//   m_type = element.attribute("type");
+  m_categoryId = element.attribute("category");
+  m_stateId = element.attribute("state");
   return true;
 }
 
