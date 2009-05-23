@@ -4,11 +4,11 @@
     <state id="checked" name="Checked" filename="checked.svg" />
   </category>
   <category id="progress" name="Progress">
-    <state id="000" name="0 %" filname="progress-00.svg" />
-    <state id="025" name="25 %" filname="progress-25.svg" />
-    <state id="050" name="50 %" filname="progress-50.svg" />
-    <state id="075" name="75 %" filname="progress-75.svg" />
-    <state id="100" name="100 %" filname="progress-100.svg" />
+    <state id="000" name="0 %" filename="progress-00.svg" />
+    <state id="025" name="25 %" filename="progress-25.svg" />
+    <state id="050" name="50 %" filename="progress-50.svg" />
+    <state id="075" name="75 %" filename="progress-75.svg" />
+    <state id="100" name="100 %" filename="progress-100.svg" />
   </category>
 
 </states>
