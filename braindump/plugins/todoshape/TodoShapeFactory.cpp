@@ -24,7 +24,7 @@
 #include <KoProperties.h>
 
 #include "TodoShape.h"
-// #include "TodoShapeConfigWidget.h"
+#include "TodoShapeConfigWidget.h"
 
 TodoShapeFactory::TodoShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, TODOSHAPEID,
@@ -61,6 +61,6 @@ bool TodoShapeFactory::supports(const KoXmlElement & e) const
 QList<KoShapeConfigWidgetBase*> TodoShapeFactory::createShapeOptionPanels()
 {
   QList<KoShapeConfigWidgetBase*> answer;
-//   answer.append( new TodoShapeConfigWidget() );
+  answer.append( new TodoShapeConfigWidget() );
   return answer;
 }
