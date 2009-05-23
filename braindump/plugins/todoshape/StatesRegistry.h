@@ -20,6 +20,7 @@
 #ifndef _STATES_REGISTRY_H_
 #define _STATES_REGISTRY_H_
 
+#include <QMap>
 #include <QString>
 
 class QSvgRenderer;
@@ -38,8 +39,14 @@ class State {
 };
 
 class StatesRegistry {
+    StatesRegistry();
+  public:
+    static const StatesRegistry* instance();
+    QList<QString> keys() const;
+    const State* state(const QString& _state) const;
   private:
-    
+    static StatesRegistry* s_instance;
+    QMap<QString, State*> m_states;
 };
 
 #endif
