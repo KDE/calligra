@@ -293,8 +293,23 @@ void ScheduleEditor::slotAddSchedule()
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
         part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->expand( model()->index( sm ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     } else {
-        emit addScheduleManager( m_view->project() );
+        Project *p = m_view->project();
+        ScheduleManager *m = p->createScheduleManager();
+        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, i18n( "Add schedule %1", sm->name() ) );
+        part() ->addCommand( cmd );
+        m_view->expand( model()->index( m ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     }
 }
 
@@ -304,10 +319,15 @@ void ScheduleEditor::slotAddSubSchedule()
     ScheduleManager *sm = m_view->currentManager();
     if ( sm ) {
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        
         part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->expand( model()->index( sm ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     } else {
-        emit addScheduleManager( m_view->project() );
+        slotAddSchedule();
     }
 }
 
