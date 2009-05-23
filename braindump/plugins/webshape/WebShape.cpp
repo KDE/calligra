@@ -81,4 +81,7 @@ const KUrl& WebShape::url() {
 void WebShape::setUrl( const KUrl& _url) {
   m_url = _url;
   m_webPage->mainFrame()->load( _url );
+  
+  notifyChanged();
+  update();
 }

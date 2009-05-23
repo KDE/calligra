@@ -30,23 +30,18 @@
 
 class ChangeUrl : public QUndoCommand {
 public:
-  ChangeUrl( WebShapeConfigWidget* widget, WebShape* shape, const QUrl& newUrl ) : m_widget(widget), m_shape(shape), m_newUrl(newUrl), m_oldUrl(shape->url())
+  ChangeUrl( WebShape* shape, const QUrl& newUrl ) : m_shape(shape), m_newUrl(newUrl), m_oldUrl(shape->url())
   {
   }
   virtual void undo()
   {
     m_shape->setUrl(m_oldUrl);
-    if(m_widget->shape() == m_shape)
-      m_widget->open(m_shape);
   }
   virtual void redo()
   {
     m_shape->setUrl(m_newUrl);
-    if(m_widget->shape() == m_shape)
-      m_widget->open(m_shape);
   }
 private:
-  WebShapeConfigWidget *m_widget;
   WebShape *m_shape;
   QUrl m_newUrl;
   QUrl m_oldUrl;
@@ -84,7 +79,7 @@ void WebShapeConfigWidget::save()
     KoCanvasBase* canvas = canvasController->canvas();
     if(newUrl != m_shape->url().url())
     {
-      canvas->addCommand(new ChangeUrl(this, m_shape, newUrl));
+      canvas->addCommand(new ChangeUrl(m_shape, newUrl));
     }
   }
 }
