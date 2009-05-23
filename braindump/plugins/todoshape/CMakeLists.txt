@@ -5,14 +5,14 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 SET (todoshape_LIB_SRCS
     StatesRegistry.cpp
     TodoShape.cpp
-#     TodoShapeConfigWidget.cpp
+    TodoShapeConfigWidget.cpp
     TodoShapeFactory.cpp
     TodoShapePlugin.cpp
 )
 
-# kde4_add_ui_files( todoshape_LIB_SRCS
-#     TodoShapeConfigWidget.ui
-# )
+kde4_add_ui_files( todoshape_LIB_SRCS
+    TodoShapeConfigWidget.ui
+)
 
 kde4_add_plugin(todoshape ${todoshape_LIB_SRCS})
 
