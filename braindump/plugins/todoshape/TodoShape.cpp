@@ -22,6 +22,8 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
+#include <kdebug.h>
+
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
@@ -29,7 +31,7 @@
 
 #include "StatesRegistry.h"
 
-TodoShape::TodoShape() : m_categoryId("todo"), m_stateId("checked")
+TodoShape::TodoShape() : m_categoryId("todo"), m_stateId("unchecked")
 {
   setSize(QSizeF(10, 10));
 }
@@ -47,6 +49,8 @@ void TodoShape::paint( QPainter &painter,
   if(state)
   {
     state->renderer()->render(&painter, target);
+  } else {
+    kError() << "No state found for m_categoryId = " << m_categoryId << " m_stateId = " << m_stateId;
   }
 }
 
