@@ -30,6 +30,7 @@
 
 WebShape::WebShape() : m_webPage(new QWebPage)
 {
+  connect(m_webPage, SIGNAL(loadFinished(bool)), SLOT(loadFinished(bool)));
 }
 
 WebShape::~WebShape()
@@ -85,3 +86,10 @@ void WebShape::setUrl( const KUrl& _url) {
   notifyChanged();
   update();
 }
+
+void WebShape::loadFinished(bool) {
+  update();
+}
+
+
+#include "WebShape.moc"

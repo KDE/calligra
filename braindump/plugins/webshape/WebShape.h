@@ -27,7 +27,8 @@
 
 class QWebPage;
 
-class WebShape : public KoShape {
+class WebShape : public QObject, public KoShape{
+    Q_OBJECT
   public:
     WebShape();
     ~WebShape();
@@ -39,6 +40,8 @@ class WebShape : public KoShape {
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     const KUrl& url();
     void setUrl( const KUrl& _url);
+  private slots:
+    void loadFinished(bool);
   private:
     KUrl m_url;
     QWebPage* m_webPage;
