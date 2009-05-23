@@ -19,14 +19,17 @@
 
 #include "StatesRegistry.h"
 
+#include <QDomDocument>
+#include <QFile>
 #include <QSvgRenderer>
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 #include <QFileInfo>
-#include <QDomDocument>
+#include <QDir>
 
 State::State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName))
 {
@@ -79,13 +82,21 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
 {
   QDomDocument doc;
   QFile file(_filename);
-  if( file.open(QIODevice::ReadOnly) )
+  if(not file.open(QIODevice::ReadOnly) )
+  {
+    kError() << "Can't open " << _filename;
     return;
-  if( not doc.setContent(&file) ) {
+  }
+  QString errMsg;
+  int line, column;
+  if( not doc.setContent(&file, &errMsg, &line, &column) ) {
+    kError() << "At (" << line << ", " << column << ") " << errMsg;
     file.close();
     return;
   }
   file.close();
+  
+  QDir directory = QFileInfo(_filename).absoluteDir();
   
   QDomElement docElem = doc.documentElement();
   if(docElem.nodeName() != "states") {
@@ -99,9 +110,56 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
     {
       QString catId = eCat.attribute("id");
       QString catName = eCat.attribute("name");
-      
+      Category* category = 0;
+      if(catId.isEmpty()) {
+        kError() << "Missing category id";
+      } else {
+        if( m_categories.contains(catId) )
+        {
+          category = m_categories[catId];
+        } else if( not catName.isEmpty() ) {
+          category = new Category(catId, i18n(catName.toUtf8()));
+          m_categories[catId] = category;
+        }
+        if(category){
+          // Parse the states
+          QDomNode nState = eCat.firstChild();
+          while(not nState.isNull())
+          {
+            QDomElement eState = eCat.toElement();
+            if(not eState.isNull() and eState.tagName() == "state")
+            {
+              QString stateId = eState.attribute("id");
+              QString stateName = eState.attribute("name");
+              QString stateFilename = eState.attribute("filename");
+              if(stateId.isEmpty() or stateName.isEmpty() or stateFilename.isEmpty())
+              {
+                kError() << "Missing attribute: id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
+              } else {
+                QString file = directory.absoluteFilePath(stateFilename);
+                if(QFileInfo(file).exists())
+                {
+                  if(category->m_states.contains(stateId))
+                  {
+                    delete category->m_states[stateId];
+                  }
+                  kDebug() << "Adding state id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
+                  category->m_states[stateId] = new State(stateId, stateName, category, file);
+                } else {
+                  kError() << "Missing file " << file;
+                }
+              }
+            } else {
+              kError() << "Invalid node in category " << catId;
+            }
+            nState = nState.nextSibling();
+          }
+        } else {
+          kError() << "Couldn't make a category for " << catId;
+        }
+      }
     } else {
-      kError() << "Invalid tag: " << eCat.tagName();
+      kError() << "Invalid XML node.";
     }
     nCat = nCat.nextSibling();
   }
