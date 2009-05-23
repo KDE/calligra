@@ -66,3 +66,19 @@ bool TodoShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
 //   m_type = element.attribute("type");
   return true;
 }
+
+const QString& TodoShape::categoryId() const {
+  return m_categoryId;
+}
+
+void TodoShape::setCategoryId(const QString& _categoryId) {
+  m_categoryId = _categoryId;
+}
+
+const QString& TodoShape::stateId() const {
+  return m_stateId;
+}
+
+void TodoShape::setStateId(const QString& _stateId) {
+  m_stateId = _stateId;
+}
