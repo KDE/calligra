@@ -45,7 +45,7 @@
 
 #include "StatusBarItem.h"
 
-MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_dockerManager(0)
+MainWindow::MainWindow(RootSection* document, const KComponentData &componentData) : m_doc(document), m_activeView(0), m_dockerManager(0)
 {
   Q_ASSERT(componentData.isValid());
   KGlobal::setActiveComponent(componentData);
