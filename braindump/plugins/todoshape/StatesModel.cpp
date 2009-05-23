@@ -31,9 +31,9 @@ StatesModel::StatesModel() {
       const State* state = StatesRegistry::instance()->state(catId, stateId);
       Q_ASSERT(state);
       m_states.push_back(state);
-      QImage image( 64, 64, QImage::Format_ARGB32);
+      QImage image( 32, 32, QImage::Format_ARGB32);
       QPainter p(&image);
-      state->renderer()->render(&p, QRectF(0,0, 64,64));
+      state->renderer()->render(&p, QRectF(0,0, 32,32));
       m_icons.push_back(image);
     }
   }
