@@ -21,6 +21,7 @@
 
 #include "ui_TodoShapeConfigWidget.h"
 
+class StatesModel;
 class TodoShape;
 
 class TodoShapeConfigWidget : public KoShapeConfigWidgetBase
@@ -40,5 +41,6 @@ class TodoShapeConfigWidget : public KoShapeConfigWidgetBase
     void blockChildSignals( bool block );
   private:
     TodoShape *m_shape;
+    StatesModel* m_model;
     Ui::TodoShapeConfigWidget m_widget;
 };

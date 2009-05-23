@@ -23,11 +23,14 @@
 #include <KoToolManager.h>
 
 #include <TodoShape.h>
+#include "StatesModel.h"
 
 TodoShapeConfigWidget::TodoShapeConfigWidget()
 {
   m_widget.setupUi(this);
   connect(m_widget.stateComboBox, SIGNAL(activated(int)), SIGNAL(propertyChanged()));
+  m_model = new StatesModel();
+  m_widget.stateComboBox->setModel(m_model);
 }
 
 void TodoShapeConfigWidget::blockChildSignals( bool block )
