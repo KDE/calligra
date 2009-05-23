@@ -9,4 +9,3 @@ find_package(KOffice REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(plugins)
-add_subdirectory(data)

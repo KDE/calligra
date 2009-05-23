@@ -31,7 +31,7 @@ TodoShapeFactory::TodoShapeFactory(QObject* parent)
                      i18n("Todo Shape") )
 {
   setToolTip( i18n("A todo shape") );
-  setIcon( "todoshape" );
+  setIcon( "action-todoshape" );
   setOdfElementNames( "http://kde.org/braindump", QStringList( "todo" ) );
 }
 
