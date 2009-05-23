@@ -20,13 +20,17 @@
 #include "TodoShape.h"
 
 #include <QPainter>
+#include <QSvgRenderer>
 
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 
-TodoShape::TodoShape()
+#include "StatesRegistry.h"
+
+TodoShape::TodoShape() : m_categoryId("todo"), m_stateId("checked")
 {
+  setSize(QSizeF(10, 10));
 }
 
 TodoShape::~TodoShape()
@@ -38,6 +42,11 @@ void TodoShape::paint( QPainter &painter,
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
   painter.drawRect(target);
+  const State* state = StatesRegistry::instance()->state(m_categoryId, m_stateId);
+  if(state)
+  {
+    state->renderer()->render(&painter, target);
+  }
 }
 
 void TodoShape::saveOdf(KoShapeSavingContext & context) const

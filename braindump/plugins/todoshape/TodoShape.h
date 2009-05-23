@@ -35,6 +35,7 @@ class TodoShape : public KoShape {
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
   private:
+    QString m_categoryId, m_stateId;
 };
 
 
