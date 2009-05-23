@@ -46,6 +46,7 @@ KoShape* TodoShapeFactory::createDefaultShape() const
 KoShape* TodoShapeFactory::createShape(
                             const KoProperties* params ) const
 {
+  Q_UNUSED(params);
   TodoShape* fooShape = new TodoShape();
   fooShape->setShapeId(TODOSHAPEID);
   // use the params

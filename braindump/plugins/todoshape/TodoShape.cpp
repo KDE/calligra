@@ -20,6 +20,9 @@
 #include "TodoShape.h"
 
 #include <QPainter>
+
+#include <KoShapeSavingContext.h>
+#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 
 TodoShape::TodoShape()
