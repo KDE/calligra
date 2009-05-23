@@ -170,6 +170,7 @@ public:
 signals:
     void changed();
     void rowInserted( const QDate );
+    void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:
     void addEntry();
