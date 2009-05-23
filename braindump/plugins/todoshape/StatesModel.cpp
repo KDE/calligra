@@ -1,0 +1,65 @@
+/*
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * either version 2, or (at your option) any later version of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "StatesModel.h"
+
+#include <QPainter>
+#include <QSvgRenderer>
+
+#include "StatesRegistry.h"
+
+StatesModel::StatesModel() {
+  foreach( QString catId, StatesRegistry::instance()->categorieIds())
+  {
+    foreach( QString stateId, StatesRegistry::instance()->stateIds(catId)) {
+      const State* state = StatesRegistry::instance()->state(catId, stateId);
+      Q_ASSERT(state);
+      m_states.push_back(state);
+      QImage image( 64, 64, QImage::Format_ARGB32);
+      QPainter p(&image);
+      state->renderer()->render(&p, QRectF(0,0, 64,64));
+      m_icons.push_back(image);
+    }
+  }
+  Q_ASSERT(m_states.size() == m_icons.size());
+}
+
+int StatesModel::rowCount(const QModelIndex & parent ) const
+{
+  Q_UNUSED(parent);
+  return m_states.size();
+}
+
+QVariant StatesModel::data(const QModelIndex & index, int role ) const
+{
+  if(index.isValid())
+  {
+    switch(role)
+    {
+      case Qt::DisplayRole:
+        return m_states[index.row()]->name();
+      case Qt::DecorationRole:
+        return m_icons[index.row()];
+    }
+  }
+  return QVariant();
+}
+
+
+
