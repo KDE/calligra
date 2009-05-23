@@ -28,6 +28,7 @@ class StatesModel : public QAbstractListModel {
     StatesModel();
     virtual int rowCount(const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    const State* stateAt(int index) const;
   private:
     QList<const State*> m_states;
     QList<QImage> m_icons;

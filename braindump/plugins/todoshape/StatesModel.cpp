@@ -61,5 +61,7 @@ QVariant StatesModel::data(const QModelIndex & index, int role ) const
   return QVariant();
 }
 
-
-
+const State* StatesModel::stateAt(int index) const {
+  Q_ASSERT(index >= 0 and index < m_states.count());
+  return m_states[index];
+}

@@ -24,6 +24,9 @@
 
 #include <TodoShape.h>
 #include "StatesModel.h"
+#include "StatesRegistry.h"
+#include <KoCanvasBase.h>
+#include "TodoShapeChangeStateCommand.h"
 
 TodoShapeConfigWidget::TodoShapeConfigWidget()
 {
@@ -57,10 +60,11 @@ void TodoShapeConfigWidget::save()
   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
   if ( canvasController ) {
     KoCanvasBase* canvas = canvasController->canvas();
-/*    if(newUrl != m_shape->webPage()->mainFrame()->url().toString())
+    const State* state = m_model->stateAt(m_widget.stateComboBox->currentIndex());
+    if( state->category()->id() != m_shape->categoryId() or state->id() != m_shape->stateId() )
     {
-      canvas->addCommand(new ChangeUrl(this, m_shape, newUrl));
-    }*/
+      canvas->addCommand(new TodoShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));
+    }
   }
 }
 
