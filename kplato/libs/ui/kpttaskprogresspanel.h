@@ -66,6 +66,8 @@ protected slots:
     void slotFillWeekNumbers( int year );
     
 protected:
+    void setFinished();
+
     Task &m_task;
     Completion &m_original;
     Completion m_completion;
