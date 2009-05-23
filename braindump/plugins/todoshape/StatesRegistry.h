@@ -25,28 +25,50 @@
 
 class QSvgRenderer;
 
+class Category;
+class StatesRegistry;
+
 class State {
-  public:
-    State( const QString& _name, const QString& _category, const QString& _fileName);
+    friend class StatesRegistry;
+    State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName);
     ~State();
   public:
     const QString& name() const;
-    const QString& category() const;
+    const QString& id() const;
+    const Category* category() const;
     QSvgRenderer* renderer() const;
   private:
-    QString m_name, m_category;
+    QString m_id, m_name;
+    Category* m_category;
     QSvgRenderer* m_render;
+};
+
+class Category {
+    friend class StatesRegistry;
+    Category( const QString& _id, const QString& _name);
+    ~Category();
+  public:
+    const QString& name() const;
+    const QString& id() const;
+    QList<QString> stateIds() const;
+    const State* state(const QString& ) const;
+  private:
+    QString m_id, m_name;
+    QMap<QString, State*> m_states;
 };
 
 class StatesRegistry {
     StatesRegistry();
   public:
     static const StatesRegistry* instance();
-    QList<QString> keys() const;
-    const State* state(const QString& _state) const;
+    QList<QString> categorieIds() const;
+    QList<QString> stateIds(const QString& _id) const;
+    const State* state(const QString& _category, const QString& _id) const;
+  private:
+    void parseStatesRC(const QString& _filename );
   private:
     static StatesRegistry* s_instance;
-    QMap<QString, State*> m_states;
+    QMap<QString, Category*> m_categories;
 };
 
 #endif
