@@ -80,6 +80,8 @@ const QString& TodoShape::categoryId() const {
 
 void TodoShape::setCategoryId(const QString& _categoryId) {
   m_categoryId = _categoryId;
+  notifyChanged();
+  update();
 }
 
 const QString& TodoShape::stateId() const {
@@ -88,4 +90,6 @@ const QString& TodoShape::stateId() const {
 
 void TodoShape::setStateId(const QString& _stateId) {
   m_stateId = _stateId;
+  notifyChanged();
+  update();
 }
