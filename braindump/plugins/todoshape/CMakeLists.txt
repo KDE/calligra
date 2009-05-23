@@ -3,6 +3,7 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 ########### Flake Plugin library ###############
 
 SET (todoshape_LIB_SRCS
+    StatesRegistry.cpp
     TodoShape.cpp
 #     TodoShapeConfigWidget.cpp
     TodoShapeFactory.cpp
