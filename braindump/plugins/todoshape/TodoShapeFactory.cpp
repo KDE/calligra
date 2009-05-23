@@ -21,27 +21,24 @@
 
 #include <klocale.h>
 
-#include <QWebPage>
-#include <QWebFrame>
-
 #include <KoProperties.h>
 
 #include "TodoShape.h"
-#include "TodoShapeConfigWidget.h"
+// #include "TodoShapeConfigWidget.h"
 
 TodoShapeFactory::TodoShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, TODOSHAPEID,
                      i18n("Todo Shape") )
 {
   setToolTip( i18n("A todo shape") );
-  setIcon( "applications-internet" );
-  setOdfElementNames( "http://kde.org/braindump", QStringList( "web" ) );
+  setIcon( "todoshape" );
+  setOdfElementNames( "http://kde.org/braindump", QStringList( "todo" ) );
 }
 
 KoShape* TodoShapeFactory::createDefaultShape() const
 {
   TodoShape* fooShape = new TodoShape();
-  fooShape->setShapeId(WEBSHAPEID);
+  fooShape->setShapeId(TODOSHAPEID);
   // set defaults
   return fooShape;
 }
@@ -50,23 +47,19 @@ KoShape* TodoShapeFactory::createShape(
                             const KoProperties* params ) const
 {
   TodoShape* fooShape = new TodoShape();
-  if(params->contains("url"))
-  {
-    fooShape->webPage()->mainFrame()->load(params->property("url").toUrl());
-  }
-  fooShape->setShapeId(WEBSHAPEID);
+  fooShape->setShapeId(TODOSHAPEID);
   // use the params
   return fooShape;
 }
 
 bool TodoShapeFactory::supports(const KoXmlElement & e) const
 {
-  return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
+  return ( e.localName() == "todo" && e.namespaceURI() == "http://kde.org/braindump" );
 }
 
 QList<KoShapeConfigWidgetBase*> TodoShapeFactory::createShapeOptionPanels()
 {
   QList<KoShapeConfigWidgetBase*> answer;
-  answer.append( new TodoShapeConfigWidget() );
+//   answer.append( new TodoShapeConfigWidget() );
   return answer;
 }
