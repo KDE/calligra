@@ -284,15 +284,22 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
     enableWidgets();
 }
 
+void TaskProgressPanelImpl::setFinished() {
+    DateTime dt = KDateTime::currentLocalDateTime();
+    m_completion.setFinishTime( dt );
+    finishTime->setDateTime( dt.dateTime() );
+    if ( m_completion.percentFinished() < 100 ) {
+        m_completion.setPercentFinished( dt.date(), 100 );
+        entryTable->setCompletion( &m_completion ); // for refresh
+    }
+}
 
 void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
     kDebug()<<state;
     m_completion.setFinished( state );
     if (state) {
         kDebug()<<state;
-//        percentFinished->setValue(100);
-        m_completion.setFinishTime( KDateTime::currentLocalDateTime() );
-        finishTime->setDateTime( m_completion.finishTime().dateTime() );
+        setFinished();
         kDebug()<<finishTime->dateTime();
         slotCalculateEffort();
     }   
