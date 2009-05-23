@@ -47,7 +47,7 @@ void TodoShapeConfigWidget::open(KoShape *shape)
   if( ! m_shape )
     return;
   blockChildSignals(true);
-//   m_widget.urlEdit->setText(m_shape->webPage()->mainFrame()->url().toString());
+  m_widget.stateComboBox->setCurrentIndex(m_model->indexFor(m_shape->categoryId(), m_shape->stateId()));
   blockChildSignals(false);
 }
 

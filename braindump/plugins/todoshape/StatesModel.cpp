@@ -65,3 +65,15 @@ const State* StatesModel::stateAt(int index) const {
   Q_ASSERT(index >= 0 and index < m_states.count());
   return m_states[index];
 }
+
+int StatesModel::indexFor(const QString& catId, const QString& stateId) const {
+  for(int i = 0; i < m_states.count(); ++i)
+  {
+    const State* state = m_states[i];
+    if( state->category()->id() == catId and state->id() == stateId)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
