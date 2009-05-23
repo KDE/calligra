@@ -21,10 +21,10 @@
 #define _WEBSHAPE_H_
 
 #include <KoShape.h>
+#include <kurl.h>
 
 #define WEBSHAPEID "WebShape"
 
-class KUrl;
 class QWebPage;
 
 class WebShape : public KoShape {
@@ -37,8 +37,10 @@ class WebShape : public KoShape {
                 const KoViewConverter &converter );
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    QWebPage* webPage();
+    const KUrl& url();
+    void setUrl( const KUrl& _url);
   private:
+    KUrl m_url;
     QWebPage* m_webPage;
 };
 

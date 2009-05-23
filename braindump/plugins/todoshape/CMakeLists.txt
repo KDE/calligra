@@ -5,6 +5,7 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 SET (todoshape_LIB_SRCS
     StatesRegistry.cpp
     TodoShape.cpp
+    TodoShapeChangeStateCommand.cpp
     TodoShapeConfigWidget.cpp
     TodoShapeFactory.cpp
     TodoShapePlugin.cpp

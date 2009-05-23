@@ -55,7 +55,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
   KoXmlWriter &writer = context.xmlWriter();
 
   writer.startElement( "braindump:web" );
-  writer.addAttribute( "url", m_webPage->mainFrame()->url().toString());
+  writer.addAttribute( "url", m_url.url());
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:web
@@ -64,11 +64,21 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
-  m_webPage->mainFrame()->load( element.attribute("url"));
+  setUrl(element.attribute("url"));
   return true;
 }
 
-QWebPage* WebShape::webPage()
+/*QWebPage* WebShape::webPage()
 {
   return m_webPage;
+}
+*/
+
+const KUrl& WebShape::url() {
+  return m_url;
+}
+
+void WebShape::setUrl( const KUrl& _url) {
+  m_url = _url;
+  m_webPage->mainFrame()->load( _url );
 }

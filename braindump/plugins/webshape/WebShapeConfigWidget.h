@@ -37,6 +37,7 @@ class WebShapeConfigWidget : public KoShapeConfigWidgetBase
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
     virtual QUndoCommand * createCommand();
+    WebShape *shape();
   private:
     void blockChildSignals( bool block );
   private:

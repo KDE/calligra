@@ -52,7 +52,7 @@ KoShape* WebShapeFactory::createShape(
   WebShape* fooShape = new WebShape();
   if(params->contains("url"))
   {
-    fooShape->webPage()->mainFrame()->load(params->property("url").toUrl());
+    fooShape->setUrl(params->property("url").toUrl());
   }
   fooShape->setShapeId(WEBSHAPEID);
   // use the params
