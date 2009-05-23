@@ -74,8 +74,9 @@ QList<QString> Category::stateIds() const {
 }
 
 const State* Category::state(const QString& _id) const {
-  Q_ASSERT(m_states.contains(_id));
-  return m_states[_id];
+  if(m_states.contains(_id)) return m_states[_id];
+  kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << m_states.keys();
+  return 0;
 }
 
 void StatesRegistry::parseStatesRC(const QString& _filename )
@@ -163,7 +164,6 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
     }
     nCat = nCat.nextSibling();
   }
-  
 }
 
 
@@ -172,7 +172,7 @@ StatesRegistry* StatesRegistry::s_instance = 0;
 StatesRegistry::StatesRegistry() {
   KGlobal::mainComponent().dirs()->addResourceType("todoshape_states", "data", "todoshape/states/");
   QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("todoshape_states", "*.rc",  KStandardDirs::Recursive);
-  
+
   foreach(const QString& filename, statesFilenames)
   {
     kDebug() << "Load state: " << filename;
@@ -198,6 +198,7 @@ QList<QString> StatesRegistry::stateIds(const QString& _id) const {
 }
 
 const State* StatesRegistry::state(const QString& _category, const QString& _state) const {
-  Q_ASSERT(m_categories.contains(_category));
-  return m_categories[_category]->state(_state);
+  if(m_categories.contains(_category)) return m_categories[_category]->state(_state);
+  kWarning() << "No category " << _category << " found among " << m_categories.keys();
+  return 0;
 }
