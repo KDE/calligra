@@ -1,6 +1,6 @@
 <states>
   <category id="todo" name="Todo">
-    <state id="unchecked" name="Unchecked" filename="unckecked.svg" />
+    <state id="unchecked" name="Unchecked" filename="unchecked.svg" />
     <state id="checked" name="Checked" filename="checked.svg" />
   </category>
   <category id="progress" name="Progress">
