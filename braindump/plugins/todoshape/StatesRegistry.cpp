@@ -126,7 +126,7 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
           QDomNode nState = eCat.firstChild();
           while(not nState.isNull())
           {
-            QDomElement eState = eCat.toElement();
+            QDomElement eState = nState.toElement();
             if(not eState.isNull() and eState.tagName() == "state")
             {
               QString stateId = eState.attribute("id");
@@ -178,8 +178,6 @@ StatesRegistry::StatesRegistry() {
     kDebug() << "Load state: " << filename;
     parseStatesRC(filename);
   }
-  
-  qFatal("doh");
 }
 
 const StatesRegistry* StatesRegistry::instance() {
