@@ -23,7 +23,7 @@
 #include <KoShapeRegistry.h>
 #include "TodoShapeFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(webshape,
+K_EXPORT_COMPONENT_FACTORY(todoshape,
     KGenericFactory<TodoShapePlugin>( "TodoShapePlugin" ) )
  
 TodoShapePlugin::TodoShapePlugin(QObject *parent, const QStringList&)

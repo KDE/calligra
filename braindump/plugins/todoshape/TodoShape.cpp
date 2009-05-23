@@ -48,7 +48,7 @@ void TodoShape::saveOdf(KoShapeSavingContext & context) const
 //   writer.addAttribute( "type", m_type);
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
-  writer.endElement(); // braindump:web
+  writer.endElement(); // braindump:todo
 }
 
 bool TodoShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
