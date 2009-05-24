@@ -121,5 +121,8 @@ void WebShape::loadFinished(bool) {
   }
 }
 
+bool WebShape::isCached() const {
+  return m_cached;
+}
 
 #include "WebShape.moc"
