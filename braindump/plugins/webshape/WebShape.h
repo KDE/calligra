@@ -56,7 +56,8 @@ class WebShape : public QObject, public KoShape{
     bool m_cacheLocked;
     bool m_loaded;
     bool m_firstLoad;
-    float m_zoom;
+    qreal m_zoom;
+    QPoint m_scrollPosition;
 };
 
 
