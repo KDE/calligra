@@ -19,7 +19,9 @@
 
 #include "WebShape.h"
 
+#include <QBuffer>
 #include <QPainter>
+#include <QSvgGenerator>
 #include <QWebPage>
 #include <QWebFrame>
 
@@ -28,7 +30,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-WebShape::WebShape() : m_webPage(new QWebPage)
+WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false)
 {
   connect(m_webPage, SIGNAL(loadFinished(bool)), SLOT(loadFinished(bool)));
 }
@@ -89,6 +91,17 @@ void WebShape::setUrl( const KUrl& _url) {
 
 void WebShape::loadFinished(bool) {
   update();
+  m_loaded = true;
+  if(m_cached and not m_cacheLocked)
+  {
+    QSvgGenerator svgGenerator;
+    QBuffer buffer;
+    svgGenerator.setOutputDevice(&buffer);
+    QPainter painter(&svgGenerator);
+    m_webPage->mainFrame()->render(&painter);
+    painter.end();
+    m_cache = buffer.data();
+  }
 }
 
 

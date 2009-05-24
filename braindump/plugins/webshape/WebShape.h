@@ -40,11 +40,19 @@ class WebShape : public QObject, public KoShape{
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     const KUrl& url();
     void setUrl( const KUrl& _url);
+    bool isCached() const;
+    void setCached(bool _cache);
+    void setCache(const QString& );
+    const QString& cache() const;
   private slots:
     void loadFinished(bool);
   private:
     KUrl m_url;
     QWebPage* m_webPage;
+    bool m_cached;
+    QString m_cache;
+    bool m_cacheLocked;
+    bool m_loaded;
 };
 
 
