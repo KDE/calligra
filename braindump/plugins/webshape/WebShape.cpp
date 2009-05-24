@@ -145,4 +145,8 @@ void WebShape::setCache(const QString& _cache) {
   m_cacheLocked = true;
 }
 
+const QString& WebShape::cache() const {
+  return m_cache;
+}
+
 #include "WebShape.moc"
