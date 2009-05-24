@@ -32,7 +32,7 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
-WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false)
+WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false), m_firstLoad(false)
 {
   connect(m_webPage, SIGNAL(loadFinished(bool)), SLOT(loadFinished(bool)));
 }
@@ -71,10 +71,10 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
   if(m_cached)
   {
     writer.addAttribute( "cached", "true");
-    writer.startElement("cache");
-    writer.addTextNode(m_cache); // Save after the attribute otherwise it is seen as 
-    writer.endElement(); // Cache
   }
+  writer.startElement("cache");
+  writer.addTextNode(m_cache); // Save after the attribute otherwise it is seen as 
+  writer.endElement(); // Cache
   writer.endElement(); // braindump:web
 }
 
