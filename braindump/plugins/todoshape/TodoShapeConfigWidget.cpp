@@ -39,7 +39,7 @@ TodoShapeConfigWidget::TodoShapeConfigWidget()
   m_proxyModel = new KCategorizedSortFilterProxyModel();
   m_proxyModel->setSourceModel(m_model);
   m_proxyModel->sort(0);
-  m_proxyModel->setSortRole(Qt::DisplayRole);
+  m_proxyModel->setSortRole(StatesModel::SortRole);
   m_proxyModel->setCategorizedModel(true);
   m_widget.stateComboBox->setModel(m_proxyModel);
   m_widget.stateComboBox->setItemDelegate( new CategorizedItemDelegate(new QItemDelegate));
