@@ -151,11 +151,13 @@ void WebShape::setCached(bool _cache) {
       updateCache();
     }
   }
+  update();
 }
 
 void WebShape::setCache(const QString& _cache) {
   m_cache = _cache;
   m_cacheLocked = true;
+  update();
 }
 
 const QString& WebShape::cache() const {
