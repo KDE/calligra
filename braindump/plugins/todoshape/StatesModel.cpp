@@ -22,6 +22,8 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
+#include <KCategorizedSortFilterProxyModel>
+
 #include "StatesRegistry.h"
 
 StatesModel::StatesModel() {
@@ -56,6 +58,9 @@ QVariant StatesModel::data(const QModelIndex & index, int role ) const
         return m_states[index.row()]->name();
       case Qt::DecorationRole:
         return m_icons[index.row()];
+      case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
+      case KCategorizedSortFilterProxyModel::CategorySortRole:
+          return m_states[index.row()]->category()->name();
     }
   }
   return QVariant();
