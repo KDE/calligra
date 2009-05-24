@@ -591,7 +591,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
     
-    connect( m_view->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
