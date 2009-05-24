@@ -17,30 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _TODOSHAPE_H_
-#define _TODOSHAPE_H_
+#include <KoShapeConfigWidgetBase.h>
 
-#include <KoShape.h>
+#include "ui_StateShapeConfigWidget.h"
 
-#define TODOSHAPEID "TodoShape"
+class KCategorizedSortFilterProxyModel;
+class StatesModel;
+class StateShape;
 
-class TodoShape : public KoShape {
+class StateShapeConfigWidget : public KoShapeConfigWidgetBase
+{
+    Q_OBJECT
   public:
-    TodoShape();
-    ~TodoShape();
-
-    // absolutly necessary:
-    void paint( QPainter &painter,
-                const KoViewConverter &converter );
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const QString& categoryId() const;
-    void setCategoryId(const QString& _categoryId);
-    const QString& stateId() const;
-    void setStateId(const QString& _stateId);
+    StateShapeConfigWidget();
+    /// reimplemented
+    virtual void open(KoShape *shape);
+    /// reimplemented
+    virtual void save();
+    /// reimplemented
+    virtual bool showOnShapeCreate() { return false; }
+    /// reimplemented
+    virtual QUndoCommand * createCommand();
   private:
-    QString m_categoryId, m_stateId;
+    void blockChildSignals( bool block );
+  private:
+    StateShape *m_shape;
+    StatesModel* m_model;
+    KCategorizedSortFilterProxyModel* m_proxyModel;
+    Ui::StateShapeConfigWidget m_widget;
 };
-
-
-#endif

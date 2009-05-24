@@ -17,22 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TodoShapePlugin.h"
+#ifndef _STATE_SHAPE_PLUGIN_
+#define _STATE_SHAPE_PLUGIN_
 
-#include <kgenericfactory.h>
-#include <KoShapeRegistry.h>
-#include "TodoShapeFactory.h"
-
-K_EXPORT_COMPONENT_FACTORY(todoshape,
-    KGenericFactory<TodoShapePlugin>( "TodoShapePlugin" ) )
+#include <QObject>
  
-TodoShapePlugin::TodoShapePlugin(QObject *parent, const QStringList&)
-    : QObject(parent)
-{
-    // register the shape's factory
-    KoShapeRegistry::instance()->add(
-        new TodoShapeFactory( parent ) );
-    // we could register more things here in this same plugin.
-}
+class StateShapePlugin : public QObject {
+    Q_OBJECT
+public:
+    StateShapePlugin(QObject *parent, const QStringList&);
+};
 
-#include "TodoShapePlugin.moc"
+#endif

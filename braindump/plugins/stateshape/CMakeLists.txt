@@ -2,25 +2,25 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 
 ########### Flake Plugin library ###############
 
-SET (todoshape_LIB_SRCS
+SET (stateshape_LIB_SRCS
     CategorizedItemDelegate.cpp
     StatesModel.cpp
     StatesRegistry.cpp
-    TodoShape.cpp
-    TodoShapeChangeStateCommand.cpp
-    TodoShapeConfigWidget.cpp
-    TodoShapeFactory.cpp
-    TodoShapePlugin.cpp
+    StateShape.cpp
+    StateShapeChangeStateCommand.cpp
+    StateShapeConfigWidget.cpp
+    StateShapeFactory.cpp
+    StateShapePlugin.cpp
 )
 
-kde4_add_ui_files( todoshape_LIB_SRCS
-    TodoShapeConfigWidget.ui
+kde4_add_ui_files( stateshape_LIB_SRCS
+    StateShapeConfigWidget.ui
 )
 
-kde4_add_plugin(todoshape ${todoshape_LIB_SRCS})
+kde4_add_plugin(stateshape ${stateshape_LIB_SRCS})
 
 target_link_libraries(
-    todoshape
+    stateshape
     ${KOMAIN_LIBRARY}
     flake
     kostore
@@ -29,11 +29,11 @@ target_link_libraries(
     ${KDE4_KFILE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     )
-install(TARGETS todoshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS stateshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES todoshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES stateshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
 
 add_subdirectory(data)

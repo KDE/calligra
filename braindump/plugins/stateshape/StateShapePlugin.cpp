@@ -17,14 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoShapeFactory.h"
+#include "StateShapePlugin.h"
 
-class TodoShapeFactory : public KoShapeFactory {
-  public:
-    TodoShapeFactory( QObject *parent );
+#include <kgenericfactory.h>
+#include <KoShapeRegistry.h>
+#include "StateShapeFactory.h"
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape(const KoProperties* params) const;
-    bool supports(const KoXmlElement & e) const;
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-};
+K_EXPORT_COMPONENT_FACTORY(stateshape,
+    KGenericFactory<StateShapePlugin>( "StateShapePlugin" ) )
+ 
+StateShapePlugin::StateShapePlugin(QObject *parent, const QStringList&)
+    : QObject(parent)
+{
+    // register the shape's factory
+    KoShapeRegistry::instance()->add(
+        new StateShapeFactory( parent ) );
+    // we could register more things here in this same plugin.
+}
+
+#include "StateShapePlugin.moc"

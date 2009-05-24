@@ -17,17 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QUndoCommand>
+#include "KoShapeFactory.h"
 
-class TodoShape;
+class StateShapeFactory : public KoShapeFactory {
+  public:
+    StateShapeFactory( QObject *parent );
 
-class TodoShapeChangeStateCommand : public QUndoCommand {
-public:
-  TodoShapeChangeStateCommand( TodoShape* _shape, const QString& _newCategoryId, const QString& _newStateId );
-  virtual void undo();
-  virtual void redo();
-private:
-  TodoShape *m_shape;
-  QString m_newCategoryId, m_newStateId;
-  QString m_oldCategoryId, m_oldStateId;
+    KoShape* createDefaultShape() const;
+    KoShape* createShape(const KoProperties* params) const;
+    bool supports(const KoXmlElement & e) const;
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

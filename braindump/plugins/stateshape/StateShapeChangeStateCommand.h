@@ -16,19 +16,18 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TodoShapeChangeStateCommand.h"
-#include "TodoShape.h"
 
-TodoShapeChangeStateCommand::TodoShapeChangeStateCommand( TodoShape* _shape, const QString& _newCategoryId, const QString& _newStateId ) : m_shape(_shape), m_newCategoryId(_newCategoryId), m_newStateId(_newStateId), m_oldCategoryId(m_shape->categoryId()), m_oldStateId(m_shape->stateId()) {
-  
-}
+#include <QUndoCommand>
 
-void TodoShapeChangeStateCommand::undo() {
-  m_shape->setCategoryId(m_oldCategoryId);
-  m_shape->setStateId(m_oldStateId);
-}
+class StateShape;
 
-void TodoShapeChangeStateCommand::redo() {
-  m_shape->setCategoryId(m_newCategoryId);
-  m_shape->setStateId(m_newStateId);
-}
+class StateShapeChangeStateCommand : public QUndoCommand {
+public:
+  StateShapeChangeStateCommand( StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId );
+  virtual void undo();
+  virtual void redo();
+private:
+  StateShape *m_shape;
+  QString m_newCategoryId, m_newStateId;
+  QString m_oldCategoryId, m_oldStateId;
+};

@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TodoShapeConfigWidget.h"
+#include "StateShapeConfigWidget.h"
 
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 
-#include <TodoShape.h>
+#include <StateShape.h>
 #include "StatesModel.h"
 #include "StatesRegistry.h"
 #include <KoCanvasBase.h>
-#include "TodoShapeChangeStateCommand.h"
+#include "StateShapeChangeStateCommand.h"
 #include <KCategorizedSortFilterProxyModel>
 #include <QItemDelegate>
 #include "CategorizedItemDelegate.h"
 
-TodoShapeConfigWidget::TodoShapeConfigWidget()
+StateShapeConfigWidget::StateShapeConfigWidget()
 {
   m_widget.setupUi(this);
   connect(m_widget.stateComboBox, SIGNAL(activated(int)), SIGNAL(propertyChanged()));
@@ -45,14 +45,14 @@ TodoShapeConfigWidget::TodoShapeConfigWidget()
   m_widget.stateComboBox->setItemDelegate( new CategorizedItemDelegate(new QItemDelegate));
 }
 
-void TodoShapeConfigWidget::blockChildSignals( bool block )
+void StateShapeConfigWidget::blockChildSignals( bool block )
 {
   m_widget.stateComboBox->blockSignals(block);
 }
 
-void TodoShapeConfigWidget::open(KoShape *shape)
+void StateShapeConfigWidget::open(KoShape *shape)
 {
-  m_shape = dynamic_cast<TodoShape*>( shape );
+  m_shape = dynamic_cast<StateShape*>( shape );
   if( ! m_shape )
     return;
   blockChildSignals(true);
@@ -62,7 +62,7 @@ void TodoShapeConfigWidget::open(KoShape *shape)
   blockChildSignals(false);
 }
 
-void TodoShapeConfigWidget::save()
+void StateShapeConfigWidget::save()
 {
   if( !m_shape )
     return;
@@ -75,12 +75,12 @@ void TodoShapeConfigWidget::save()
             m_proxyModel->mapToSource(m_proxyModel->index( m_widget.stateComboBox->currentIndex(), 0, QModelIndex()) ).row() );
     if( state->category()->id() != m_shape->categoryId() or state->id() != m_shape->stateId() )
     {
-      canvas->addCommand(new TodoShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));
+      canvas->addCommand(new StateShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));
     }
   }
 }
 
-QUndoCommand * TodoShapeConfigWidget::createCommand()
+QUndoCommand * StateShapeConfigWidget::createCommand()
 {
     save();
 

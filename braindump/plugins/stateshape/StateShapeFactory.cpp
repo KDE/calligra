@@ -17,50 +17,50 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TodoShapeFactory.h"
+#include "StateShapeFactory.h"
 
 #include <klocale.h>
 
 #include <KoProperties.h>
 
-#include "TodoShape.h"
-#include "TodoShapeConfigWidget.h"
+#include "StateShape.h"
+#include "StateShapeConfigWidget.h"
 
-TodoShapeFactory::TodoShapeFactory(QObject* parent) 
-   : KoShapeFactory( parent, TODOSHAPEID,
-                     i18n("Todo Shape") )
+StateShapeFactory::StateShapeFactory(QObject* parent) 
+   : KoShapeFactory( parent, STATESHAPEID,
+                     i18n("State Shape") )
 {
-  setToolTip( i18n("A todo shape") );
-  setIcon( "todoshape" );
-  setOdfElementNames( "http://kde.org/braindump", QStringList( "todo" ) );
+  setToolTip( i18n("A state shape") );
+  setIcon( "stateshape" );
+  setOdfElementNames( "http://kde.org/braindump", QStringList( "state" ) );
 }
 
-KoShape* TodoShapeFactory::createDefaultShape() const
+KoShape* StateShapeFactory::createDefaultShape() const
 {
-  TodoShape* fooShape = new TodoShape();
-  fooShape->setShapeId(TODOSHAPEID);
+  StateShape* fooShape = new StateShape();
+  fooShape->setShapeId(STATESHAPEID);
   // set defaults
   return fooShape;
 }
 
-KoShape* TodoShapeFactory::createShape(
+KoShape* StateShapeFactory::createShape(
                             const KoProperties* params ) const
 {
   Q_UNUSED(params);
-  TodoShape* fooShape = new TodoShape();
-  fooShape->setShapeId(TODOSHAPEID);
+  StateShape* fooShape = new StateShape();
+  fooShape->setShapeId(STATESHAPEID);
   // use the params
   return fooShape;
 }
 
-bool TodoShapeFactory::supports(const KoXmlElement & e) const
+bool StateShapeFactory::supports(const KoXmlElement & e) const
 {
-  return ( e.localName() == "todo" && e.namespaceURI() == "http://kde.org/braindump" );
+  return ( e.localName() == "state" && e.namespaceURI() == "http://kde.org/braindump" );
 }
 
-QList<KoShapeConfigWidgetBase*> TodoShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> StateShapeFactory::createShapeOptionPanels()
 {
   QList<KoShapeConfigWidgetBase*> answer;
-  answer.append( new TodoShapeConfigWidget() );
+  answer.append( new StateShapeConfigWidget() );
   return answer;
 }

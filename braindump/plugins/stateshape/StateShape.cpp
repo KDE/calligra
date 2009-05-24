@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TodoShape.h"
+#include "StateShape.h"
 
 #include <QPainter>
 #include <QSvgRenderer>
@@ -31,16 +31,16 @@
 
 #include "StatesRegistry.h"
 
-TodoShape::TodoShape() : m_categoryId("todo"), m_stateId("unchecked")
+StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked")
 {
   setSize(QSizeF(10, 10));
 }
 
-TodoShape::~TodoShape()
+StateShape::~StateShape()
 {
 }
 
-void TodoShape::paint( QPainter &painter,
+void StateShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
@@ -54,19 +54,19 @@ void TodoShape::paint( QPainter &painter,
   }
 }
 
-void TodoShape::saveOdf(KoShapeSavingContext & context) const
+void StateShape::saveOdf(KoShapeSavingContext & context) const
 {
   KoXmlWriter &writer = context.xmlWriter();
 
-  writer.startElement( "braindump:todo" );
+  writer.startElement( "braindump:state" );
   writer.addAttribute( "category", m_categoryId);
   writer.addAttribute( "state", m_stateId);
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
-  writer.endElement(); // braindump:todo
+  writer.endElement(); // braindump:shape
 }
 
-bool TodoShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
   m_categoryId = element.attribute("category");
@@ -74,21 +74,21 @@ bool TodoShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
   return true;
 }
 
-const QString& TodoShape::categoryId() const {
+const QString& StateShape::categoryId() const {
   return m_categoryId;
 }
 
-void TodoShape::setCategoryId(const QString& _categoryId) {
+void StateShape::setCategoryId(const QString& _categoryId) {
   m_categoryId = _categoryId;
   notifyChanged();
   update();
 }
 
-const QString& TodoShape::stateId() const {
+const QString& StateShape::stateId() const {
   return m_stateId;
 }
 
-void TodoShape::setStateId(const QString& _stateId) {
+void StateShape::setStateId(const QString& _stateId) {
   m_stateId = _stateId;
   notifyChanged();
   update();

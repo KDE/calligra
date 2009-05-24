@@ -180,8 +180,8 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
 StatesRegistry* StatesRegistry::s_instance = 0;
 
 StatesRegistry::StatesRegistry() {
-  KGlobal::mainComponent().dirs()->addResourceType("todoshape_states", "data", "todoshape/states/");
-  QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("todoshape_states", "*.rc",  KStandardDirs::Recursive);
+  KGlobal::mainComponent().dirs()->addResourceType("stateshape_states", "data", "stateshape/states/");
+  QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("stateshape_states", "*.rc",  KStandardDirs::Recursive);
 
   foreach(const QString& filename, statesFilenames)
   {
