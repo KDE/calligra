@@ -32,8 +32,10 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
-WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false), m_firstLoad(false)
+WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false), m_firstLoad(false), m_zoom(1.0)
 {
+  m_webPage->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+  m_webPage->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
   connect(m_webPage, SIGNAL(loadFinished(bool)), SLOT(loadFinished(bool)));
 }
 
@@ -49,14 +51,18 @@ void WebShape::paint( QPainter &painter,
     QSvgRenderer renderer(m_cache.toUtf8());
     renderer.render(&painter, target);
   } else {
-    m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
+    m_webPage->setViewportSize(target.size().toSize());
+    double cz = target.width() / size().width();
+    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
+    m_webPage->mainFrame()->render(&painter);
+/*    m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
     QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
     QPainter imgPainter(&image);
 
     m_webPage->mainFrame()->render(&imgPainter);
     imgPainter.end();
 
-    painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height()));
+    painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height())); */
   }
 }
 
@@ -131,6 +137,7 @@ void WebShape::updateCache() {
   svgGenerator.setOutputDevice(&buffer);
   QPainter painter(&svgGenerator);
   m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
+    m_webPage->mainFrame()->setZoomFactor(1.0);
   m_webPage->mainFrame()->render(&painter);
   painter.end();
   m_cache = buffer.data();
