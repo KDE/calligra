@@ -45,19 +45,8 @@ void WebShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  if((m_cached and m_cacheLocked) or m_firstLoad) {
-    QSvgRenderer renderer(m_cache.toUtf8());
-    renderer.render(&painter, target);
-  } else {
-    m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
-    QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
-    QPainter imgPainter(&image);
-
-    m_webPage->mainFrame()->render(&imgPainter);
-    imgPainter.end();
-
-    painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height()));
-  }
+  QSvgRenderer renderer(m_cache.toUtf8());
+  renderer.render(&painter, target);
 }
 
 void WebShape::saveOdf(KoShapeSavingContext & context) const
@@ -130,6 +119,7 @@ void WebShape::updateCache() {
   QBuffer buffer;
   svgGenerator.setOutputDevice(&buffer);
   QPainter painter(&svgGenerator);
+  m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
   m_webPage->mainFrame()->render(&painter);
   painter.end();
   m_cache = buffer.data();
