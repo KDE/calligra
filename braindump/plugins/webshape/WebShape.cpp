@@ -22,6 +22,7 @@
 #include <QBuffer>
 #include <QPainter>
 #include <QSvgGenerator>
+#include <QSvgRenderer>
 #include <QWebPage>
 #include <QWebFrame>
 
@@ -42,15 +43,20 @@ WebShape::~WebShape()
 void WebShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
-  m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
-  QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
-  QPainter imgPainter(&image);
-
-  m_webPage->mainFrame()->render(&imgPainter);
-  imgPainter.end();
-
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height()));
+  if(m_cached and m_cacheLocked) {
+    QSvgRenderer renderer(m_cache.toUtf8());
+    renderer.render(&painter, target);
+  } else {
+    m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
+    QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
+    QPainter imgPainter(&image);
+
+    m_webPage->mainFrame()->render(&imgPainter);
+    imgPainter.end();
+
+    painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height()));
+  }
 }
 
 void WebShape::saveOdf(KoShapeSavingContext & context) const
@@ -59,6 +65,11 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
   writer.startElement( "braindump:web" );
   writer.addAttribute( "url", m_url.url());
+  if(m_cached)
+  {
+    writer.addAttribute( "cached", m_cached);
+    writer.addTextNode(m_cache);
+  }
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:web
@@ -68,14 +79,17 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
   setUrl(element.attribute("url"));
+  if(element.attribute("cached") == "true")
+  {
+    m_cache = element.text();
+    m_cached = true;
+    m_cacheLocked = true;
+  } else {
+    m_cached = false;
+    m_cacheLocked = false;
+  }
   return true;
 }
-
-/*QWebPage* WebShape::webPage()
-{
-  return m_webPage;
-}
-*/
 
 const KUrl& WebShape::url() {
   return m_url;
@@ -87,6 +101,8 @@ void WebShape::setUrl( const KUrl& _url) {
   
   notifyChanged();
   update();
+  m_loaded = false;
+  m_cacheLocked = false;
 }
 
 void WebShape::loadFinished(bool) {
@@ -101,6 +117,7 @@ void WebShape::loadFinished(bool) {
     m_webPage->mainFrame()->render(&painter);
     painter.end();
     m_cache = buffer.data();
+    m_cacheLocked = true;
   }
 }
 
