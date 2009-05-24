@@ -27,13 +27,22 @@
 #include "StatesRegistry.h"
 #include <KoCanvasBase.h>
 #include "TodoShapeChangeStateCommand.h"
+#include <KCategorizedSortFilterProxyModel>
+#include <QItemDelegate>
+#include "CategorizedItemDelegate.h"
 
 TodoShapeConfigWidget::TodoShapeConfigWidget()
 {
   m_widget.setupUi(this);
   connect(m_widget.stateComboBox, SIGNAL(activated(int)), SIGNAL(propertyChanged()));
   m_model = new StatesModel();
-  m_widget.stateComboBox->setModel(m_model);
+  m_proxyModel = new KCategorizedSortFilterProxyModel();
+  m_proxyModel->setSourceModel(m_model);
+  m_proxyModel->sort(0);
+  m_proxyModel->setSortRole(Qt::DisplayRole);
+  m_proxyModel->setCategorizedModel(true);
+  m_widget.stateComboBox->setModel(m_proxyModel);
+  m_widget.stateComboBox->setItemDelegate( new CategorizedItemDelegate(new QItemDelegate));
 }
 
 void TodoShapeConfigWidget::blockChildSignals( bool block )
@@ -47,7 +56,9 @@ void TodoShapeConfigWidget::open(KoShape *shape)
   if( ! m_shape )
     return;
   blockChildSignals(true);
-  m_widget.stateComboBox->setCurrentIndex(m_model->indexFor(m_shape->categoryId(), m_shape->stateId()));
+  m_widget.stateComboBox->setCurrentIndex(
+          m_proxyModel->mapFromSource(
+               m_model->indexFor(m_shape->categoryId(), m_shape->stateId()) ).row() );
   blockChildSignals(false);
 }
 
@@ -60,7 +71,8 @@ void TodoShapeConfigWidget::save()
   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
   if ( canvasController ) {
     KoCanvasBase* canvas = canvasController->canvas();
-    const State* state = m_model->stateAt(m_widget.stateComboBox->currentIndex());
+    const State* state = m_model->stateAt(
+            m_proxyModel->mapToSource(m_proxyModel->index( m_widget.stateComboBox->currentIndex(), 0, QModelIndex()) ).row() );
     if( state->category()->id() != m_shape->categoryId() or state->id() != m_shape->stateId() )
     {
       canvas->addCommand(new TodoShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));

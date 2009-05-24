@@ -21,6 +21,7 @@
 
 #include "ui_TodoShapeConfigWidget.h"
 
+class KCategorizedSortFilterProxyModel;
 class StatesModel;
 class TodoShape;
 
@@ -42,5 +43,6 @@ class TodoShapeConfigWidget : public KoShapeConfigWidgetBase
   private:
     TodoShape *m_shape;
     StatesModel* m_model;
+    KCategorizedSortFilterProxyModel* m_proxyModel;
     Ui::TodoShapeConfigWidget m_widget;
 };

@@ -71,14 +71,14 @@ const State* StatesModel::stateAt(int index) const {
   return m_states[index];
 }
 
-int StatesModel::indexFor(const QString& catId, const QString& stateId) const {
+QModelIndex StatesModel::indexFor(const QString& catId, const QString& stateId) const {
   for(int i = 0; i < m_states.count(); ++i)
   {
     const State* state = m_states[i];
     if( state->category()->id() == catId and state->id() == stateId)
     {
-      return i;
+      return index(i, 0, QModelIndex());
     }
   }
-  return -1;
+  return QModelIndex();
 }
