@@ -110,19 +110,35 @@ void WebShape::loadFinished(bool) {
   m_loaded = true;
   if(m_cached and not m_cacheLocked)
   {
-    QSvgGenerator svgGenerator;
-    QBuffer buffer;
-    svgGenerator.setOutputDevice(&buffer);
-    QPainter painter(&svgGenerator);
-    m_webPage->mainFrame()->render(&painter);
-    painter.end();
-    m_cache = buffer.data();
-    m_cacheLocked = true;
+    updateCache();
   }
+}
+
+void WebShape::updateCache() {
+  QSvgGenerator svgGenerator;
+  QBuffer buffer;
+  svgGenerator.setOutputDevice(&buffer);
+  QPainter painter(&svgGenerator);
+  m_webPage->mainFrame()->render(&painter);
+  painter.end();
+  m_cache = buffer.data();
+  m_cacheLocked = true;
 }
 
 bool WebShape::isCached() const {
   return m_cached;
+}
+
+void WebShape::setCached(bool _cache) {
+  m_cached = _cache;
+  if(m_cached) {
+    m_cacheLocked = false;
+  }
+}
+
+void WebShape::setCache(const QString& _cache) {
+  m_cache = _cache;
+  m_cacheLocked = true;
 }
 
 #include "WebShape.moc"

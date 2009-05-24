@@ -44,6 +44,8 @@ class WebShape : public QObject, public KoShape{
     void setCached(bool _cache);
     void setCache(const QString& );
     const QString& cache() const;
+  private:
+    void updateCache();
   private slots:
     void loadFinished(bool);
   private:
