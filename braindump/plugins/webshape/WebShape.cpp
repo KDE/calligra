@@ -67,7 +67,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
   writer.addAttribute( "url", m_url.url());
   if(m_cached)
   {
-    writer.addAttribute( "cached", m_cached);
+    writer.addAttribute( "cached", "true");
     writer.addTextNode(m_cache);
   }
   saveOdfAttributes( context, OdfAllAttributes );
