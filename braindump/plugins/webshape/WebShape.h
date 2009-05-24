@@ -55,6 +55,7 @@ class WebShape : public QObject, public KoShape{
     QString m_cache;
     bool m_cacheLocked;
     bool m_loaded;
+    bool m_firstLoad;
 };
 
 

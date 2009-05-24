@@ -30,6 +30,7 @@
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <kdebug.h>
 
 WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false)
 {
@@ -44,7 +45,7 @@ void WebShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  if(m_cached and m_cacheLocked) {
+  if((m_cached and m_cacheLocked) or m_firstLoad) {
     QSvgRenderer renderer(m_cache.toUtf8());
     renderer.render(&painter, target);
   } else {
@@ -65,13 +66,15 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
   writer.startElement( "braindump:web" );
   writer.addAttribute( "url", m_url.url());
+  saveOdfAttributes( context, OdfAllAttributes );
+  saveOdfCommonChildElements( context );
   if(m_cached)
   {
     writer.addAttribute( "cached", "true");
-    writer.addTextNode(m_cache);
+    writer.startElement("cache");
+    writer.addTextNode(m_cache); // Save after the attribute otherwise it is seen as 
+    writer.endElement(); // Cache
   }
-  saveOdfAttributes( context, OdfAllAttributes );
-  saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:web
 }
 
@@ -81,12 +84,19 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
   setUrl(element.attribute("url"));
   if(element.attribute("cached") == "true")
   {
-    m_cache = element.text();
     m_cached = true;
     m_cacheLocked = true;
   } else {
     m_cached = false;
     m_cacheLocked = false;
+  }
+  KoXmlElement childElement;
+  forEachElement(childElement, element) {
+    if(childElement.tagName() == "cache")
+    {
+      m_cache = childElement.text();
+      m_firstLoad = true;
+    }
   }
   return true;
 }
@@ -108,10 +118,11 @@ void WebShape::setUrl( const KUrl& _url) {
 void WebShape::loadFinished(bool) {
   update();
   m_loaded = true;
-  if(m_cached and not m_cacheLocked)
+  if(not m_cacheLocked)
   {
     updateCache();
   }
+  m_firstLoad = false;
 }
 
 void WebShape::updateCache() {
