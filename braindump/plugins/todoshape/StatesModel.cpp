@@ -60,8 +60,9 @@ QVariant StatesModel::data(const QModelIndex & index, int role ) const
         return m_icons[index.row()];
       case SortRole:
         return m_states[index.row()]->priority();
-      case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
       case KCategorizedSortFilterProxyModel::CategorySortRole:
+          return QString::number(m_states[index.row()]->category()->priority()) + m_states[index.row()]->category()->id();
+      case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
           return m_states[index.row()]->category()->name();
     }
   }
