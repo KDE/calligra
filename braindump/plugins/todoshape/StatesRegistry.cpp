@@ -31,7 +31,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-State::State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName))
+State::State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName, int _priority) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName)), m_priority(_priority)
 {
 }
 
@@ -55,7 +55,7 @@ QSvgRenderer* State::renderer() const {
   return m_render;
 }
 
-Category::Category( const QString& _id, const QString& _name) : m_id(_id), m_name(_name) {
+Category::Category( const QString& _id, const QString& _name, int _priority) : m_id(_id), m_name(_name), m_priority(_priority) {
 }
 
 Category::~Category() {
@@ -111,6 +111,7 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
     {
       QString catId = eCat.attribute("id");
       QString catName = eCat.attribute("name");
+      int catPriority = eCat.attribute("priority", "1000").toInt();
       Category* category = 0;
       if(catId.isEmpty()) {
         kError() << "Missing category id";
@@ -119,7 +120,7 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
         {
           category = m_categories[catId];
         } else if( not catName.isEmpty() ) {
-          category = new Category(catId, i18n(catName.toUtf8()));
+          category = new Category(catId, i18n(catName.toUtf8()), catPriority );
           m_categories[catId] = category;
         }
         if(category){
@@ -133,6 +134,7 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
               QString stateId = eState.attribute("id");
               QString stateName = eState.attribute("name");
               QString stateFilename = eState.attribute("filename");
+              int statePriority = eState.attribute("priority", "1000").toInt();
               if(stateId.isEmpty() or stateName.isEmpty() or stateFilename.isEmpty())
               {
                 kError() << "Missing attribute: id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
@@ -145,7 +147,7 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
                     delete category->m_states[stateId];
                   }
                   kDebug() << "Adding state id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
-                  category->m_states[stateId] = new State(stateId, stateName, category, file);
+                  category->m_states[stateId] = new State(stateId, stateName, category, file, statePriority);
                 } else {
                   kError() << "Missing file " << file;
                 }

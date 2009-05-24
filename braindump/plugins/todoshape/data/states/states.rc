@@ -10,5 +10,4 @@
     <state id="075" name="75 %" filename="progress-75.svg" priority="3" />
     <state id="100" name="100 %" filename="progress-100.svg" priority="4" />
   </category>
-
 </states>

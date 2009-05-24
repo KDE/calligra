@@ -30,7 +30,7 @@ class StatesRegistry;
 
 class State {
     friend class StatesRegistry;
-    State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName);
+    State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName, int _priority);
     ~State();
   public:
     const QString& name() const;
@@ -41,11 +41,12 @@ class State {
     QString m_id, m_name;
     Category* m_category;
     QSvgRenderer* m_render;
+    int m_priority;
 };
 
 class Category {
     friend class StatesRegistry;
-    Category( const QString& _id, const QString& _name);
+    Category( const QString& _id, const QString& _name, int _priority);
     ~Category();
   public:
     const QString& name() const;
@@ -55,6 +56,7 @@ class Category {
   private:
     QString m_id, m_name;
     QMap<QString, State*> m_states;
+    int m_priority;
 };
 
 class StatesRegistry {
