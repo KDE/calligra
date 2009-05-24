@@ -55,6 +55,10 @@ QSvgRenderer* State::renderer() const {
   return m_render;
 }
 
+int State::priority() const {
+  return m_priority;
+}
+
 Category::Category( const QString& _id, const QString& _name, int _priority) : m_id(_id), m_name(_name), m_priority(_priority) {
 }
 
@@ -77,6 +81,10 @@ const State* Category::state(const QString& _id) const {
   if(m_states.contains(_id)) return m_states[_id];
   kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << m_states.keys();
   return 0;
+}
+
+int Category::priority() const {
+  return m_priority;
 }
 
 void StatesRegistry::parseStatesRC(const QString& _filename )

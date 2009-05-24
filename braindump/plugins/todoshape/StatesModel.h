@@ -25,6 +25,10 @@ class State;
 
 class StatesModel : public QAbstractListModel {
   public:
+    enum Role {
+      SortRole = 0xF14eb9a0
+    };
+  public:
     StatesModel();
     virtual int rowCount(const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

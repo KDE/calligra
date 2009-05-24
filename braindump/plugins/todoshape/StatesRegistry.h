@@ -37,6 +37,7 @@ class State {
     const QString& id() const;
     const Category* category() const;
     QSvgRenderer* renderer() const;
+    int priority() const;
   private:
     QString m_id, m_name;
     Category* m_category;
@@ -53,6 +54,7 @@ class Category {
     const QString& id() const;
     QList<QString> stateIds() const;
     const State* state(const QString& ) const;
+    int priority() const;
   private:
     QString m_id, m_name;
     QMap<QString, State*> m_states;
