@@ -133,6 +133,10 @@ void WebShape::setCached(bool _cache) {
   m_cached = _cache;
   if(m_cached) {
     m_cacheLocked = false;
+    if(m_loaded)
+    {
+      updateCache();
+    }
   }
 }
 
