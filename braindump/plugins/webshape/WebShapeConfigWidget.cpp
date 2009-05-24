@@ -47,15 +47,42 @@ private:
   QUrl m_oldUrl;
 };
 
+class ChangeCached : public QUndoCommand {
+public:
+  ChangeCached( WebShape* shape ) : m_shape(shape) {
+    if(shape->isCached())
+    {
+      m_cache = shape->cache();
+    }
+  }
+  virtual void undo()
+  {
+    m_shape->setCached( not m_shape->isCached());
+    if(m_shape->isCached())
+    {
+      m_shape->setCache(m_cache);
+    }
+  }
+  virtual void redo()
+  {
+    m_shape->setCached( not m_shape->isCached());
+  }
+private:
+  WebShape *m_shape;
+  QString m_cache;
+};
+
 WebShapeConfigWidget::WebShapeConfigWidget()
 {
   m_widget.setupUi(this);
   connect(m_widget.urlEdit, SIGNAL(editingFinished()), SIGNAL(propertyChanged()));
+  connect(m_widget.useCache, SIGNAL(stateChanged(int)), SIGNAL(propertyChanged()));
 }
 
 void WebShapeConfigWidget::blockChildSignals( bool block )
 {
   m_widget.urlEdit->blockSignals(block);
+  m_widget.useCache->blockSignals(block);
 }
 
 void WebShapeConfigWidget::open(KoShape *shape)
@@ -65,6 +92,7 @@ void WebShapeConfigWidget::open(KoShape *shape)
     return;
   blockChildSignals(true);
   m_widget.urlEdit->setText(m_shape->url().url());
+  m_widget.useCache->setChecked(m_shape->isCached());
   blockChildSignals(false);
 }
 
@@ -74,12 +102,17 @@ void WebShapeConfigWidget::save()
     return;
 
   QString newUrl = m_widget.urlEdit->text();
+  bool newCached = m_widget.useCache->isChecked();
   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
   if ( canvasController ) {
     KoCanvasBase* canvas = canvasController->canvas();
     if(newUrl != m_shape->url().url())
     {
       canvas->addCommand(new ChangeUrl(m_shape, newUrl));
+    }
+    if(newCached != m_shape->isCached())
+    {
+      canvas->addCommand(new ChangeCached(m_shape));
     }
   }
 }

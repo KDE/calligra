@@ -44,7 +44,6 @@ void StateShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  painter.drawRect(target);
   const State* state = StatesRegistry::instance()->state(m_categoryId, m_stateId);
   if(state)
   {
