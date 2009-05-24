@@ -795,6 +795,9 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     
     connect ( m, SIGNAL( rowInserted( const QDate ) ), SIGNAL( rowInserted( const QDate ) ) );
     connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
+
+    connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+
 }
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
@@ -810,6 +813,7 @@ void CompletionEntryEditor::addEntry()
     if ( i.isValid() ) {
         model()->setFlags( i.column(), model()->flags( i ) | Qt::ItemIsEditable );
         setCurrentIndex( i );
+        emit selectionChanged( QItemSelection(), QItemSelection() ); //hmmm, control removeEntryBtn
         edit( i );
         model()->setFlags( i.column(), model()->flags( i ) & ~Qt::ItemIsEditable );
     }
@@ -817,8 +821,19 @@ void CompletionEntryEditor::addEntry()
 
 void CompletionEntryEditor::removeEntry()
 {
-    kDebug()<<endl;
-    //static_cast<CompletionEntryItemModel*>( model() )->setCompletion( completion );
+    //kDebug();
+    QModelIndexList lst = selectedIndexes();
+    kDebug()<<lst;
+    QMap<int, int> rows;
+    while ( ! lst.isEmpty() ) {
+        QModelIndex idx = lst.takeFirst();
+        rows[ idx.row() ] = 0;
+    }
+    QList<int> r = rows.uniqueKeys();
+    kDebug()<<rows<<r;
+    for ( int i = r.count() - 1; i >= 0; --i ) {
+        model()->removeRow( r.at( i ) );
+    }
 }
 
 

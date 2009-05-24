@@ -55,6 +55,7 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime().dateTime());
     finishTime->setDateTime(m_completion.finishTime().dateTime());
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
     
     if (workTime) {
         kDebug()<<"daylength="<<workTime->durationDay().hours();
@@ -237,6 +238,9 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
 {
     setupUi(this);
     
+    connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
+    removeEntryBtn->setEnabled( false );
+
     QButtonGroup *bg = new QButtonGroup( this );
     bg->addButton( optionCompleted, Completion::EnterCompleted );
     bg->addButton( optionEffort, Completion::EnterEffortPerTask );
@@ -251,7 +255,11 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     
     connect(entryTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
     connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotChanged() ) );
-    
+
+    connect(entryTable, SIGNAL(changed() ), SLOT( slotEntryChanged() ) );
+    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotEntryChanged() ) );
+    connect(entryTable, SIGNAL(rowRemoved( const QDate ) ), SLOT( slotEntryChanged() ) );
+
     connect( prevWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotPrevWeekBtnClicked() ) );
     connect( nextWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotNextWeekBtnClicked() ) );
     
@@ -261,6 +269,7 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     int wn = QDate::currentDate().weekNumber( &y );
     setYear( y );
     weekNumber->setCurrentIndex( wn - m_weekOffset );
+
 }
 
 void TaskProgressPanelImpl::slotChanged() {
@@ -285,13 +294,8 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
 }
 
 void TaskProgressPanelImpl::setFinished() {
-    DateTime dt = KDateTime::currentLocalDateTime();
-    m_completion.setFinishTime( dt );
-    finishTime->setDateTime( dt.dateTime() );
-    if ( m_completion.percentFinished() < 100 ) {
-        m_completion.setPercentFinished( dt.date(), 100 );
-        entryTable->setCompletion( &m_completion ); // for refresh
-    }
+    finishTime->setDateTime( QDateTime::currentDateTime() );
+    slotFinishTimeChanged( finishTime->dateTime() );
 }
 
 void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
@@ -308,12 +312,29 @@ void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
 
 void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
 {
+    if ( ! m_completion.isFinished() ) {
+        return;
+    }
     m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    if ( m_completion.percentFinished() == 100 ) {
+        m_completion.takeEntry( m_completion.entryDate() );
+    }
+    if ( m_completion.percentFinished() < 100 ) {
+        m_completion.setPercentFinished( dt.date(), 100 );
+    }
+    entryTable->setCompletion( &m_completion ); // for refresh
 }
 
 void TaskProgressPanelImpl::slotStartTimeChanged( const QDateTime &dt )
 {
     m_completion.setStartTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    
+}
+
+void TaskProgressPanelImpl::slotEntryChanged()
+{
+    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
 }
 
 void TaskProgressPanelImpl::enableWidgets() {
@@ -404,6 +425,11 @@ void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
         weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
         m_lastIsNextYear = true;
     }
+}
+
+void TaskProgressPanelImpl::slotSelectionChanged( const QItemSelection &sel )
+{
+    removeEntryBtn->setEnabled( !sel.isEmpty() );
 }
 
 }  //KPlato namespace

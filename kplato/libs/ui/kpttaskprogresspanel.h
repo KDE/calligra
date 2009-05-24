@@ -57,7 +57,9 @@ public slots:
     void slotPercentFinishedChanged(int value);
     void slotStartTimeChanged( const QDateTime &dt );
     void slotFinishTimeChanged( const QDateTime &dt );
-    
+    void slotEntryChanged();
+    void slotSelectionChanged( const QItemSelection &sel );
+
     void slotPrevWeekBtnClicked();
     void slotNextWeekBtnClicked();
     
