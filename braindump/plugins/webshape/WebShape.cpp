@@ -56,14 +56,6 @@ void WebShape::paint( QPainter &painter,
     m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
     m_webPage->mainFrame()->setScrollPosition(m_scrollPosition);
     m_webPage->mainFrame()->render(&painter);
-/*    m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
-    QImage image(m_webPage->viewportSize(), QImage::Format_ARGB32);
-    QPainter imgPainter(&image);
-
-    m_webPage->mainFrame()->render(&imgPainter);
-    imgPainter.end();
-
-    painter.drawImage(target.toRect(), image, QRect(0, 0, image.width(), image.height())); */
   }
 }
 
