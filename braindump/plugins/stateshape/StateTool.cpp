@@ -68,4 +68,13 @@ void StateTool::mousePressEvent( KoPointerEvent *event )
   }
 }
 
+void StateTool::mouseMoveEvent( KoPointerEvent *event )
+{
+  event->ignore();
+}
+
+void StateTool::mouseReleaseEvent( KoPointerEvent *event )
+{
+  event->ignore();
+}
 #include "StateTool.moc"

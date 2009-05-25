@@ -36,6 +36,10 @@ class StateTool : public KoTool
 
     /// reimplemented
     virtual void mousePressEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
 
   private:
     StateShape* m_currentShape;
