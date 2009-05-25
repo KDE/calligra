@@ -27,6 +27,7 @@ AttachStateShapeCommand::AttachStateShapeCommand( StateShape* _shape, KoShape* _
 void AttachStateShapeCommand::undo() {
   m_shape->attachTo(m_oldShape);
   m_shape->setTransformation(m_oldMatrix);
+  m_shape->update();
 }
 
 void AttachStateShapeCommand::redo() {
