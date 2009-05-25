@@ -18,7 +18,7 @@
  */
 
 #include "StateToolFactory.h"
-// #include "StateTool.h"
+#include "StateTool.h"
 #include "StateShape.h"
 
 #include <klocale.h>
@@ -39,7 +39,7 @@ StateToolFactory::~StateToolFactory()
 
 KoTool * StateToolFactory::createTool( KoCanvasBase * canvas )
 {
-//     return new SateTool( canvas );
+    return new StateTool( canvas );
 }
 
 #include "StateToolFactory.moc"
