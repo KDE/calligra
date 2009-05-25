@@ -27,6 +27,7 @@
 #include "StateShape.h"
 #include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
+#include "AttachStateShapeCommand.h"
 
 StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0)
 {
@@ -92,6 +93,15 @@ void StateTool::mouseMoveEvent( KoPointerEvent *event )
 
 void StateTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-  event->ignore();
+  if( m_tmpShape )
+  {
+    if(m_currentShape)
+    {
+      m_canvas->addCommand(new AttachStateShapeCommand(m_currentShape, m_tmpShape));
+    }
+    m_tmpShape = 0;
+  } else {
+    event->ignore();
+  }
 }
 #include "StateTool.moc"
