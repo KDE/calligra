@@ -72,15 +72,16 @@ void StateShape::saveOdf(KoShapeSavingContext & context) const
 
 bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-  loadOdfAttributes( element, context, OdfAllAttributes );
   m_categoryId = element.attribute("category");
   m_stateId = element.attribute("state");
   if(element.hasAttribute("attached"))
   {
     QString shapeAttached = element.attribute("attached");
     KoShape *shape = context.shapeById( shapeAttached );
+    Q_ASSERT(shape);
     attachTo(shape);
   }
+  loadOdfAttributes( element, context, OdfAllAttributes );
   return true;
 }
 
