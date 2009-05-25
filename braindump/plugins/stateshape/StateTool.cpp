@@ -27,5 +27,11 @@ StateTool::~StateTool()
 {
 }
 
+void StateTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
+  Q_UNUSED(painter);
+  Q_UNUSED(converter);
+}
+
 
 #include "StateTool.moc"

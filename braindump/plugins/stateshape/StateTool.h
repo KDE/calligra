@@ -28,6 +28,9 @@ class StateTool : public KoTool
   public:
     explicit StateTool(KoCanvasBase *canvas);
     ~StateTool();
+    
+    /// reimplemented
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
 };
 
 #endif
