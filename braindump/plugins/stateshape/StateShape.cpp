@@ -31,7 +31,7 @@
 
 #include "StatesRegistry.h"
 
-StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked")
+StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked"), m_shape(0)
 {
   setSize(QSizeF(10, 10));
 }
@@ -91,4 +91,11 @@ void StateShape::setStateId(const QString& _stateId) {
   m_stateId = _stateId;
   notifyChanged();
   update();
+}
+
+void StateShape::attachTo(KoShape* _shape) {
+  if(_shape == m_shape) return;
+  update();
+  
+  qFatal("work in progress");
 }
