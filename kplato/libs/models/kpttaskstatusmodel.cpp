@@ -245,6 +245,11 @@ Qt::ItemFlags TaskStatusItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeActualStart:
                 flags |= Qt::ItemIsEditable;
                 break;
+            case NodeModel::NodeCompleted:
+                if ( t->state() & Node::State_ReadyToStart ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             default: break;
         }
     } else if ( ! t->completion().isFinished() ) {
@@ -363,12 +368,24 @@ QVariant TaskStatusItemModel::name( int row, int role ) const
 
 bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
-    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+    if ( role != Qt::EditRole ) {
+        return false;
+    }
+    if ( node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
-        QDate date = QDate::currentDate();
+        QDateTime dt = QDateTime::currentDateTime();
+        QDate date = dt.date();
         // xgettext: no-c-format
         MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        if ( ! c.isStarted() ) {
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
+        }
         m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
+        if ( value.toInt() == 100 ) {
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+        }
         emit executeCommand( m ); // also adds a new entry if necessary
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
@@ -382,6 +399,22 @@ bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int 
             m->addCommand( cmd );
         }
         return true;
+    }
+    if ( node->type() == Node::Type_Milestone ) {
+        Completion &c = static_cast<Task*>( node )->completion();
+        if ( value.toInt() > 0 ) {
+            QDateTime dt = QDateTime::currentDateTime();
+            QDate date = dt.date();
+            MacroCommand *m = new MacroCommand( i18n( "Set finished" ) );
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, 100 ) );
+            emit executeCommand( m ); // also adds a new entry if necessary
+            return true;
+        }
+        return false;
     }
     return false;
 }
