@@ -93,7 +93,7 @@ void StateTool::mouseMoveEvent( KoPointerEvent *event )
   QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
   foreach( KoShape * shape, shapes )
   {
-    if( not dynamic_cast<StateShape*>( shape ) )
+    if( not dynamic_cast<StateShape*>( shape ) and shape != m_currentShape->attachedShape() )
     {
       m_tmpShape = shape;
     }
