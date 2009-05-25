@@ -78,8 +78,8 @@ void StateTool::mouseMoveEvent( KoPointerEvent *event )
     if( not dynamic_cast<StateShape*>( shape ) )
     {
       m_tmpShape = shape;
-      break;
     }
+    break;
   }
   if( m_tmpShape )
     useCursor( QCursor( Qt::PointingHandCursor ) );
