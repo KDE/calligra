@@ -11,6 +11,8 @@ SET (stateshape_LIB_SRCS
     StateShapeConfigWidget.cpp
     StateShapeFactory.cpp
     StateShapePlugin.cpp
+    StateTool.cpp
+    StateToolFactory.cpp
 )
 
 kde4_add_ui_files( stateshape_LIB_SRCS

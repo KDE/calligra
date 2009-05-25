@@ -17,26 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "StateShapePlugin.h"
+#ifndef _STATETOOLFACTORY_H_
+#define _STATETOOLFACTORY_H_
 
-#include <kgenericfactory.h>
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <KoToolFactory.h>
 
-#include "StateShapeFactory.h"
-#include "StateToolFactory.h"
-
-K_EXPORT_COMPONENT_FACTORY(stateshape,
-    KGenericFactory<StateShapePlugin>( "StateShapePlugin" ) )
- 
-StateShapePlugin::StateShapePlugin(QObject *parent, const QStringList&)
-    : QObject(parent)
+class StateToolFactory : public KoToolFactory
 {
-    // register the shape's factory
-    KoShapeRegistry::instance()->add(
-        new StateShapeFactory( parent ) );
-    // we could register more things here in this same plugin.
-    KoToolRegistry::instance()->add( new StateToolFactory( parent ) );
-}
+    Q_OBJECT
+    public:
+        explicit StateToolFactory( QObject *parent );
+        ~StateToolFactory();
 
-#include "StateShapePlugin.moc"
+        KoTool * createTool( KoCanvasBase *canvas );
+};
+
+#endif
