@@ -797,7 +797,7 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
     setModel( m );
     
-//    setItemDelegateForColumn ( 1, new DoubleSpinBoxDelegate( this ) );
+    setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 3, new DurationSpinBoxDelegate( this ) );
     

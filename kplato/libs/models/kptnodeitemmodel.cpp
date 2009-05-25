@@ -24,6 +24,7 @@
 #include "kptduration.h"
 #include "kptproject.h"
 #include "kptnode.h"
+#include "kpttaskcompletedelegate.h"
 
 #include <QAbstractItemModel>
 #include <QMimeData>
@@ -2437,6 +2438,7 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
 
 bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
+    kDebug()<<node->name()<<value<<role;
     if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
         QDate date = QDate::currentDate();
@@ -2572,6 +2574,7 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         return ItemModelBase::setData( index, value, role );
     }
     if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+        kWarning()<<index<<value<<role;
         return false;
     }
     Node *n = node( index );
@@ -2643,6 +2646,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
 
+        case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
         case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
 

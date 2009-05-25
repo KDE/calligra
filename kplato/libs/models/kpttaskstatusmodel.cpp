@@ -21,6 +21,7 @@
 
 #include "kptglobal.h"
 #include "kptitemmodelbase.h"
+#include "kpttaskcompletedelegate.h"
 #include "kptcommand.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -563,6 +564,7 @@ QVariant TaskStatusItemModel::alignment( int column ) const
 QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
+        case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
         case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
         default: return 0;

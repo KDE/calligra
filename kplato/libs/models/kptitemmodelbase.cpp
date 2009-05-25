@@ -29,6 +29,7 @@
 #include <QStyleOptionViewItem>
 #include <QTimeEdit>
 #include <QPainter>
+#include <QToolTip>
 
 #include <klineedit.h>
 #include <kdebug.h>
@@ -101,6 +102,106 @@ void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &opt
     }
 }
 
+//-----------------------------
+ProgressBarDelegate::ProgressBarDelegate( QObject *parent )
+ : ItemDelegate( parent )
+{
+}
+
+ProgressBarDelegate::~ProgressBarDelegate()
+{
+}
+
+void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option,
+ const QModelIndex &index ) const
+{
+    QStyle *style;
+
+    QStyleOptionViewItemV4 opt = option;
+    //  initStyleOption( &opt, index );
+
+    style = opt.widget ? opt.widget->style() : QApplication::style();
+    style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
+
+    if ( !( opt.state & QStyle::State_Editing ) ) {
+        QStyleOptionProgressBar pbOption;
+        pbOption.QStyleOption::operator=( option );
+        initStyleOptionProgressBar( &pbOption, index );
+
+        style->drawControl( QStyle::CE_ProgressBar, &pbOption, painter );
+        drawFocus( painter, option, option.rect );
+    }
+}
+
+QSize ProgressBarDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    //  initStyleOption( &opt, index );
+
+    QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
+
+    QStyleOptionProgressBar pbOption;
+    pbOption.QStyleOption::operator=( option );
+    initStyleOptionProgressBar( &pbOption, index );
+
+    return style->sizeFromContents( QStyle::CT_ProgressBar, &pbOption, QSize(), opt.widget );
+}
+
+void ProgressBarDelegate::initStyleOptionProgressBar( QStyleOptionProgressBar *option, const QModelIndex &index ) const
+{
+    option->rect.adjust( 0, 1, 0, -1 );
+    option->maximum = 100;
+    option->minimum = 0;
+    option->progress = index.data().toInt();
+    option->text = index.data().toString() + QChar::fromAscii( '%' );
+    option->textAlignment = Qt::AlignCenter;
+    option->textVisible = true;
+}
+
+QWidget *ProgressBarDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &, const QModelIndex & ) const
+{
+    Slider *slider = new Slider( parent );
+    slider->setRange( 0, 100 );
+    slider->setOrientation( Qt::Horizontal );
+    //kDebug()<<slider->minimumSizeHint()<<slider->minimumSize();
+    return slider;
+}
+
+void ProgressBarDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
+{
+    QSlider *slider = static_cast<QSlider *>( editor );
+    slider->setValue( index.data( Qt::EditRole ).toInt() );
+}
+
+void ProgressBarDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
+{
+    QSlider *slider = static_cast<QSlider *>( editor );
+    model->setData( index, slider->value() );
+}
+
+void ProgressBarDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
+{
+    editor->setGeometry( option.rect );
+    //kDebug()<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
+}
+
+Slider::Slider( QWidget *parent )
+  : QSlider( parent )
+{
+    connect( this, SIGNAL(valueChanged(int)), this, SLOT(updateTip(int)) );
+}
+
+void Slider::updateTip( int value )
+{
+    QPoint p;
+    p.setY( height() / 2 );
+    p.setX( style()->sliderPositionFromValue ( minimum(), maximum(), value, width() ) );
+
+    QString text = QString::fromAscii( "%1%" ).arg( value );
+    QToolTip::showText( mapToGlobal( p ), text, this );
+}
+
+//--------------------------------------
 // Hmmm, a bit hacky, but this makes it possible to use index specific editors...
 SelectorDelegate::SelectorDelegate( QObject *parent )
     : ItemDelegate( parent )
