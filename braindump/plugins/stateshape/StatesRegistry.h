@@ -57,7 +57,7 @@ class Category {
     int priority() const;
   private:
     QString m_id, m_name;
-    QMap<QString, State*> m_states;
+    QMap<QString, const State*> m_states;
     int m_priority;
 };
 
@@ -68,6 +68,7 @@ class StatesRegistry {
     QList<QString> categorieIds() const;
     QList<QString> stateIds(const QString& _id) const;
     const State* state(const QString& _category, const QString& _id) const;
+    const State* nextState(const State* _state) const;
   private:
     void parseStatesRC(const QString& _filename );
   private:

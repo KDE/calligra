@@ -212,3 +212,14 @@ const State* StatesRegistry::state(const QString& _category, const QString& _sta
   kWarning() << "No category " << _category << " found among " << m_categories.keys();
   return 0;
 }
+
+const State* StatesRegistry::nextState(const State* _state) const {
+  if(_state) {
+    QList<const State*> states = _state->category()->m_states.values();
+    int idx = states.indexOf(_state);
+    idx += 1;
+    if( idx >= states.count() ) idx = 0;
+    return states[idx];
+  }
+  return 0;
+}
