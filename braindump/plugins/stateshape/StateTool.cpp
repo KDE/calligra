@@ -28,7 +28,7 @@
 #include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
 
-StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas)
+StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0)
 {
 }
 
@@ -70,7 +70,24 @@ void StateTool::mousePressEvent( KoPointerEvent *event )
 
 void StateTool::mouseMoveEvent( KoPointerEvent *event )
 {
-  event->ignore();
+  m_tmpShape = 0;
+  QRectF roi( event->point, QSizeF(1,1) );
+  QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+  foreach( KoShape * shape, shapes )
+  {
+    if( not dynamic_cast<StateShape*>( shape ) )
+    {
+      m_tmpShape = shape;
+      break;
+    }
+  }
+  if( m_tmpShape )
+    useCursor( QCursor( Qt::PointingHandCursor ) );
+  else if( shapes.empty() ) {
+    useCursor( QCursor( Qt::ForbiddenCursor ) );
+  } else {
+    useCursor( QCursor( Qt::ArrowCursor ) );
+  }
 }
 
 void StateTool::mouseReleaseEvent( KoPointerEvent *event )

@@ -23,6 +23,7 @@
 #include <KoTool.h>
 
 class StateShape;
+class KoShape;
 
 class StateTool : public KoTool 
 {
@@ -43,6 +44,7 @@ class StateTool : public KoTool
 
   private:
     StateShape* m_currentShape;
+    KoShape* m_tmpShape;
 };
 
 #endif
