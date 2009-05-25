@@ -22,6 +22,8 @@
 
 #include <KoTool.h>
 
+class StateShape;
+
 class StateTool : public KoTool 
 {
     Q_OBJECT
@@ -31,6 +33,12 @@ class StateTool : public KoTool
     
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
+
+    /// reimplemented
+    virtual void mousePressEvent( KoPointerEvent *event );
+
+  private:
+    StateShape* m_currentShape;
 };
 
 #endif

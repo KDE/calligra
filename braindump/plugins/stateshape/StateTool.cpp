@@ -19,6 +19,13 @@
 
 #include "StateTool.h"
 
+#include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+
+#include "StateShape.h"
+
 StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas)
 {
 }
@@ -33,5 +40,24 @@ void StateTool::paint( QPainter &painter, const KoViewConverter &converter)
   Q_UNUSED(converter);
 }
 
+void StateTool::mousePressEvent( KoPointerEvent *event )
+{
+  StateShape *hit = 0;
+  QRectF roi( event->point, QSizeF(1,1) );
+  QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+  KoSelection *selection = m_canvas->shapeManager()->selection();
+  foreach( KoShape *shape, shapes ) 
+  {
+    hit = dynamic_cast<StateShape*>( shape );
+    if(hit) {
+      if(hit == m_currentShape) {
+      } else {
+        selection->deselectAll();
+        m_currentShape = hit;
+        selection->select( m_currentShape );
+      }
+    }
+  }
+}
 
 #include "StateTool.moc"
