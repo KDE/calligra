@@ -25,6 +25,8 @@
 #include <KoSelection.h>
 
 #include "StateShape.h"
+#include "StatesRegistry.h"
+#include "StateShapeChangeStateCommand.h"
 
 StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas)
 {
@@ -51,6 +53,12 @@ void StateTool::mousePressEvent( KoPointerEvent *event )
     hit = dynamic_cast<StateShape*>( shape );
     if(hit) {
       if(hit == m_currentShape) {
+        const State* state = StatesRegistry::instance()->state(m_currentShape->categoryId(), m_currentShape->stateId());
+        const State* newState = StatesRegistry::instance()->nextState(state);
+        if(newState)
+        {
+          m_canvas->addCommand(new StateShapeChangeStateCommand(m_currentShape, newState->category()->id(), newState->id()));
+        }
       } else {
         selection->deselectAll();
         m_currentShape = hit;
