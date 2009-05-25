@@ -20,6 +20,7 @@
 #include "WebShape.h"
 
 #include <QBuffer>
+// #include <QFile>
 #include <QPainter>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
@@ -47,16 +48,11 @@ void WebShape::paint( QPainter &painter,
                 const KoViewConverter &converter )
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  if((m_cached and m_cacheLocked) or m_firstLoad) {
-    QSvgRenderer renderer(m_cache.toUtf8());
-    renderer.render(&painter, target);
-  } else {
-    m_webPage->setViewportSize(target.size().toSize());
-    double cz = target.width() / size().width();
-    m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-    m_webPage->mainFrame()->setScrollPosition(m_scrollPosition);
-    m_webPage->mainFrame()->render(&painter);
-  }
+  m_webPage->setViewportSize(target.size().toSize());
+  double cz = target.width() / size().width();
+  m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
+  m_webPage->mainFrame()->setScrollPosition(m_scrollPosition);
+  m_webPage->mainFrame()->render(&painter);
 }
 
 void WebShape::saveOdf(KoShapeSavingContext & context) const
@@ -80,7 +76,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
-  setUrl(element.attribute("url"));
+  m_url = element.attribute("url");
   if(element.attribute("cached") == "true")
   {
     m_cached = true;
@@ -95,7 +91,12 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
     {
       m_cache = childElement.text();
       m_firstLoad = true;
+      m_webPage->mainFrame()->setContent(m_cache.toUtf8());
     }
+  }
+  if(not m_cached)
+  {
+    setUrl(m_url);
   }
   return true;
 }
@@ -125,16 +126,7 @@ void WebShape::loadFinished(bool) {
 }
 
 void WebShape::updateCache() {
-  QSvgGenerator svgGenerator;
-  QBuffer buffer;
-  svgGenerator.setOutputDevice(&buffer);
-  QPainter painter(&svgGenerator);
-  m_webPage->setViewportSize(m_webPage->mainFrame()->contentsSize());
-  m_webPage->mainFrame()->setScrollPosition(QPoint(0,0));
-  m_webPage->mainFrame()->setZoomFactor(1.0);
-  m_webPage->mainFrame()->render(&painter);
-  painter.end();
-  m_cache = buffer.data();
+  m_cache = m_webPage->mainFrame()->toHtml();
   m_cacheLocked = true;
 }
 
@@ -150,6 +142,8 @@ void WebShape::setCached(bool _cache) {
     {
       updateCache();
     }
+  } else {
+    m_webPage->mainFrame()->load(m_url);
   }
   update();
 }
@@ -157,6 +151,7 @@ void WebShape::setCached(bool _cache) {
 void WebShape::setCache(const QString& _cache) {
   m_cache = _cache;
   m_cacheLocked = true;
+  m_webPage->mainFrame()->setContent(_cache.toUtf8());
   update();
 }
 
