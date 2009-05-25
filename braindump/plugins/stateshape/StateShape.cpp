@@ -96,8 +96,18 @@ void StateShape::setStateId(const QString& _stateId) {
 void StateShape::attachTo(KoShape* _shape) {
   if(_shape == m_shape) return;
   update();
-  
-  qFatal("work in progress");
+  if(m_shape) {
+    m_shape->removeDependee(this);
+  }
+  m_shape = _shape;
+  if(m_shape)
+  {
+    m_shape->addDependee(this);
+    QRectF r = m_shape->boundingRect();
+    QPointF pt(r.left() - 0.5 * size().width(), 0.5 * (r.top() + r.bottom()));
+    setAbsolutePosition(pt, KoFlake::CenteredPosition);
+  }
+  update();
 }
 
 KoShape* StateShape::attachedShape() {
