@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
@@ -60,6 +61,10 @@ void StateShape::saveOdf(KoShapeSavingContext & context) const
   writer.startElement( "braindump:state" );
   writer.addAttribute( "category", m_categoryId);
   writer.addAttribute( "state", m_stateId);
+  if(m_shape)
+  {
+    writer.addAttribute( "attached", context.drawId(m_shape));
+  }
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:shape
@@ -70,6 +75,12 @@ bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &co
   loadOdfAttributes( element, context, OdfAllAttributes );
   m_categoryId = element.attribute("category");
   m_stateId = element.attribute("state");
+  if(element.hasAttribute("attached"))
+  {
+    QString shapeAttached = element.attribute("attached");
+    KoShape *shape = context.shapeById( shapeAttached );
+    attachTo(shape);
+  }
   return true;
 }
 
