@@ -37,6 +37,23 @@ StateTool::~StateTool()
 {
 }
 
+void StateTool::activate( bool v )
+{
+  KoSelection *selection = m_canvas->shapeManager()->selection();
+  foreach( KoShape *shape, selection->selectedShapes() ) 
+  {
+    m_currentShape = dynamic_cast<StateShape*>( shape );
+    if(m_currentShape)
+      break;
+  }
+  if( m_currentShape == 0 ) 
+  {
+    // none found
+    emit done();
+    return;
+  }
+  KoTool::activate(v);
+}
 void StateTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
   Q_UNUSED(painter);

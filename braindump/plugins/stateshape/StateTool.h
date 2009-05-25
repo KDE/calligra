@@ -33,6 +33,9 @@ class StateTool : public KoTool
     ~StateTool();
     
     /// reimplemented
+    void activate( bool );
+
+    /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     /// reimplemented
