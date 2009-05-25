@@ -106,10 +106,31 @@ void StateShape::attachTo(KoShape* _shape) {
     QRectF r = m_shape->boundingRect();
     QPointF pt(r.left() - 0.5 * size().width(), 0.5 * (r.top() + r.bottom()));
     setAbsolutePosition(pt, KoFlake::CenteredPosition);
+    m_lastOrigin = r.topLeft();
   }
   update();
 }
 
 KoShape* StateShape::attachedShape() {
   return m_shape;
+}
+
+void StateShape::notifyShapeChanged( KoShape * shape, ChangeType type ) {
+  if( shape == m_shape )
+  {
+    if( type == KoShape::Deleted )
+    {
+      m_shape = 0;
+    }
+    else
+    {
+      update();
+      QPointF offset = m_lastOrigin - m_shape->boundingRect().topLeft();
+      QMatrix m;
+      m.translate( -offset.x(), -offset.y() );
+      applyAbsoluteTransformation( m );
+      m_lastOrigin = m_shape->boundingRect().topLeft();
+      update();
+    }
+  }
 }
