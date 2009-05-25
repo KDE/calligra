@@ -17,36 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _STATESHAPE_H_
-#define _STATESHAPE_H_
+#ifndef _ATTACH_STATE_SHAPE_COMMAND_H_
+#define _ATTACH_STATE_SHAPE_COMMAND_H_
 
-#include <KoShape.h>
+#include <QMatrix>
+#include <QUndoCommand>
 
-#define STATESHAPEID "StateShape"
+class KoShape;
+class StateShape;
 
-class StateShape : public KoShape {
-  public:
-    StateShape();
-    ~StateShape();
-
-    // absolutly necessary:
-    void paint( QPainter &painter,
-                const KoViewConverter &converter );
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const QString& categoryId() const;
-    void setCategoryId(const QString& _categoryId);
-    const QString& stateId() const;
-    void setStateId(const QString& _stateId);
-    /**
-     * Attach the shape to that shape
-     */
-    void attachTo(KoShape* _shape);
-    KoShape* attachedShape();
-  private:
-    QString m_categoryId, m_stateId;
-    KoShape* m_shape;
+class AttachStateShapeCommand : public QUndoCommand {
+public:
+  AttachStateShapeCommand( StateShape* _shape, KoShape* _newShape );
+  virtual void undo();
+  virtual void redo();
+private:
+  StateShape *m_shape;
+  KoShape* m_oldShape;
+  QMatrix m_oldMatrix;
+  KoShape* m_newShape;
 };
+
 
 
 #endif

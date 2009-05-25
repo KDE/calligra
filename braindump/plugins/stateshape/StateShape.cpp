@@ -99,3 +99,7 @@ void StateShape::attachTo(KoShape* _shape) {
   
   qFatal("work in progress");
 }
+
+KoShape* StateShape::attachedShape() {
+  return m_shape;
+}

@@ -3,6 +3,7 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 ########### Flake Plugin library ###############
 
 SET (stateshape_LIB_SRCS
+    AttachStateShapeCommand.cpp
     CategorizedItemDelegate.cpp
     StatesModel.cpp
     StatesRegistry.cpp

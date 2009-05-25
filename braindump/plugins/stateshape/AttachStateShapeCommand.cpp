@@ -17,36 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _STATESHAPE_H_
-#define _STATESHAPE_H_
+#include "AttachStateShapeCommand.h"
 
-#include <KoShape.h>
+#include "StateShape.h"
 
-#define STATESHAPEID "StateShape"
+AttachStateShapeCommand::AttachStateShapeCommand( StateShape* _shape, KoShape* _newShape ) : m_shape(_shape), m_oldShape(m_shape->attachedShape()), m_oldMatrix(_shape->transformation()), m_newShape(_newShape) {
+}
 
-class StateShape : public KoShape {
-  public:
-    StateShape();
-    ~StateShape();
+void AttachStateShapeCommand::undo() {
+  m_shape->attachTo(m_oldShape);
+  m_shape->setTransformation(m_oldMatrix);
+}
 
-    // absolutly necessary:
-    void paint( QPainter &painter,
-                const KoViewConverter &converter );
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const QString& categoryId() const;
-    void setCategoryId(const QString& _categoryId);
-    const QString& stateId() const;
-    void setStateId(const QString& _stateId);
-    /**
-     * Attach the shape to that shape
-     */
-    void attachTo(KoShape* _shape);
-    KoShape* attachedShape();
-  private:
-    QString m_categoryId, m_stateId;
-    KoShape* m_shape;
-};
-
-
-#endif
+void AttachStateShapeCommand::redo() {
+  m_shape->attachTo(m_newShape);
+}
