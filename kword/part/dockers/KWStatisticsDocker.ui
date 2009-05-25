@@ -48,6 +48,11 @@
      </item>
      <item>
       <property name="text">
+       <string>East Asian characters</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Flesch reading ease</string>
       </property>
      </item>

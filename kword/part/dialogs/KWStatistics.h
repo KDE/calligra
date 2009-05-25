@@ -47,6 +47,9 @@ private slots:
     void selectionChanged();
 
 private:
+    int countCJKChars(const QString &text);
+
+private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
     KoCanvasResourceProvider *m_resourceProvider;
@@ -63,6 +66,7 @@ private:
     long m_lines;
     long m_syllables;
     long m_paragraphs;
+    long m_cjkChars;
 
     bool m_autoUpdate;
     bool m_showInDocker;
