@@ -282,6 +282,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
             name = "taskstatus_popup";
             break;
         case Node::Type_Summarytask:
+            name = "taskview_summary_popup";
             break;
         default:
             break;
@@ -845,6 +846,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
             name = "taskview_milestone_popup";
             break;
         case Node::Type_Summarytask:
+            name = "taskview_summary_popup";
             break;
         default:
             break;

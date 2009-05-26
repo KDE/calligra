@@ -595,6 +595,7 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
                 name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
                 break;
             default:
                 break;
@@ -812,6 +813,7 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
                 name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
                 break;
             default:
                 break;

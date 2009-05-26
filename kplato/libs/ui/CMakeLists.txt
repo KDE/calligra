@@ -65,6 +65,7 @@ set(kplatoui_LIB_SRCS
     kpttaskgeneralpanel.cpp
     kpttaskprogresspanel.cpp
     kpttaskprogressdialog.cpp
+    kpttasknotesdialog.cpp
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp

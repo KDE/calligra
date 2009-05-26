@@ -73,6 +73,7 @@
 #include "kptchartview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
+#include "kpttasknotesdialog.h"
 #include "kptnode.h"
 #include "kptpart.h"
 #include "kptproject.h"
@@ -216,6 +217,9 @@ View::View( Part* part, QWidget* parent )
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+    actionTaskNotes  = new KAction(KIcon( "document-properties" ), i18n("Notes..."), this);
+    actionCollection()->addAction("task_notes", actionTaskNotes );
+    connect( actionTaskNotes, SIGNAL( triggered( bool ) ), SLOT( slotTaskNotes() ) );
             
     actionIndentTask = new KAction(KIcon( "edit-indent" ), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
@@ -1416,6 +1420,40 @@ void View::slotTaskProgress()
             }
         case Node::Type_Summarytask: {
                 // TODO
+                break;
+            }
+        default:
+            break; // avoid warnings
+    }
+}
+
+void View::slotTaskNotes()
+{
+    //kDebug();
+    Node * node = currentTask();
+    if ( !node )
+        return ;
+
+    switch ( node->type() ) {
+        case Node::Type_Project: {
+                break;
+            }
+        case Node::Type_Subproject:
+            //TODO
+            break;
+        case Node::Type_Task:
+        case Node::Type_Milestone:
+        case Node::Type_Summarytask: {
+                Task *task = dynamic_cast<Task *>( node );
+                Q_ASSERT( task );
+                TaskNotesDialog *dia = new TaskNotesDialog( *task, this );
+                if ( dia->exec()  == QDialog::Accepted) {
+                    QUndoCommand * m = dia->buildCommand();
+                    if ( m ) {
+                        getPart() ->addCommand( m );
+                    }
+                }
+                delete dia;
                 break;
             }
         default:
