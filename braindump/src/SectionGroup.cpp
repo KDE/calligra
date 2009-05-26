@@ -99,3 +99,16 @@ int SectionGroup::indexOf( Section* section )
 {
   return m_children.indexOf(section);
 }
+
+Section* SectionGroup::nextSection( Section* section )
+{
+  int idx = indexOf( section );
+  idx += 1;
+  Q_ASSERT(idx >= 0);
+  if( idx < m_children.count())
+  {
+    return m_children[idx];
+  } else {
+    return 0;
+  }
+}

@@ -75,6 +75,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
   m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
   connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));
   newSectionMenu->addAction(i18n("Add new section bellow current."), this, SLOT(slotNewSectionBellowCurrent()));
+  newSectionMenu->addAction(i18n("Add new section above current."), this, SLOT(slotNewSectionAboveCurrent()));
   m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new section as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
       
   // Setup the delete button
@@ -180,12 +181,21 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
   m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, m_view->activeSection(), m_model, 0));
 }
 
-void SectionsBoxDock::slotNewSectionBellowCurrent()
+void SectionsBoxDock::slotNewSectionAboveCurrent()
 {
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
   m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, parentSection, m_model, m_view->activeSection()));
+}
+
+void SectionsBoxDock::slotNewSectionBellowCurrent()
+{
+  SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
+  Section* above = parentSection->nextSection( m_view->activeSection() );
+  Section* section = new Section();
+  section->setName(SectionGroup::nextName());
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, parentSection, m_model, above));
 }
 
 void SectionsBoxDock::selectSection(Section* section)
