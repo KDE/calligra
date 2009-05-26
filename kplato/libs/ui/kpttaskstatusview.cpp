@@ -236,11 +236,7 @@ void TaskStatusView::setScheduleManager( ScheduleManager *sm )
 
 Node *TaskStatusView::currentNode() const 
 {
-    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
-    if ( n && n->type() != Node::Type_Task ) {
-        return 0;
-    }
-    return n;
+    return m_view->model()->node( m_view->selectionModel()->currentIndex() );
 }
 
 void TaskStatusView::setProject( Project *project )
@@ -282,9 +278,8 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
-            name = "taskstatus_popup";
-            break;
         case Node::Type_Milestone:
+            name = "taskstatus_popup";
             break;
         case Node::Type_Summarytask:
             break;

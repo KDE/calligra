@@ -201,7 +201,7 @@ void TaskStatusItemModel::refresh()
     QDate end = m_nodemodel.now().addDays( m_period );
     
     foreach( Node* n, m_project->allNodes() ) {
-        if ( n->type() != Node::Type_Task ) {
+        if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
         }
         Task *t = static_cast<Task*>( n );
@@ -236,7 +236,10 @@ Qt::ItemFlags TaskStatusItemModel::flags( const QModelIndex &index ) const
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     flags &= ~( Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled );
     Node *n = node( index );
-    if ( n == 0 || n->type() != Node::Type_Task || m_id == -1 || ! n->isScheduled( m_id ) ) {
+    if ( n == 0 || m_id == -1 || ! n->isScheduled( m_id ) ) {
+        return flags;
+    }
+    if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
         return flags;
     }
     Task *t = static_cast<Task*>( n );
