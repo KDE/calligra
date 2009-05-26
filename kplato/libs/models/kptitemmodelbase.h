@@ -72,7 +72,10 @@ public:
     m_lastHint( Delegate::NoHint )
     {}
     
+    /// Extend EndEditHint for movement from edited item to next item to edit
     Delegate::EndEditHint endEditHint() const { return m_lastHint; }
+    /// Increase the sizehint height a little to give room for editors
+    QSize sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
 protected:
     /// Implements arrow key navigation

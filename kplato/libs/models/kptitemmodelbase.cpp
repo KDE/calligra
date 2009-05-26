@@ -102,6 +102,12 @@ void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &opt
     }
 }
 
+QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    // 4 is a bit arbitrary, it gives (most?) editors a usable size
+    return QItemDelegate::sizeHint( option, index ) + QSize( 0, 4 );
+}
+
 //-----------------------------
 ProgressBarDelegate::ProgressBarDelegate( QObject *parent )
  : ItemDelegate( parent )
