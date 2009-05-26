@@ -281,3 +281,10 @@ QModelIndex DocumentModel::index( SectionGroup* section)
     return QModelIndex();
   }
 }
+
+void DocumentModel::changeSectionName( Section* _section, const QString& _name)
+{
+  _section->setName(_name);
+  QModelIndex idx = index(_section);
+  emit(dataChanged(idx, idx));
+}

@@ -51,6 +51,7 @@ class DocumentModel : public KoDocumentSectionModel {
     void removeSection( Section* );
     void insertSection( Section*, SectionGroup* parent, Section* before );
     void insertSection( Section*, SectionGroup* parent, int _idx );
+    void changeSectionName( Section* _section, const QString& _name);
   public:
     QModelIndex index( Section* );
     QModelIndex index( SectionGroup* );
