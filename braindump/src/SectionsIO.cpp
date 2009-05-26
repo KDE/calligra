@@ -251,11 +251,15 @@ void SectionsIO::save()
   // Second: save each section
   foreach(SaveContext* saveContext, m_contextes)
   {
-    if(saveContext->saveSection(this)) {
-      kDebug() << "Sucessfully loaded: " << saveContext->section->name();
-    } else {
-      kDebug() << "Saving failed"; // TODO: Report it
-    }
+    // TODO
+//     if(m_sectionsToSave.contains(saveContext->section) )
+//     {
+      if(saveContext->saveSection(this)) {
+        kDebug() << "Sucessfully loaded: " << saveContext->section->name();
+      } else {
+        kDebug() << "Saving failed"; // TODO: Report it
+      }
+//     }
   }
   
   // Last remove unused sections
