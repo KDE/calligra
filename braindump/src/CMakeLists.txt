@@ -20,6 +20,7 @@ set(braindump_SRCS
   # Commands
   commands/InsertSectionCommand.cpp
   commands/RemoveSectionCommand.cpp
+  commands/RenameSectionCommand.cpp
   # Imported file
   import/DockerManager.cpp
 )

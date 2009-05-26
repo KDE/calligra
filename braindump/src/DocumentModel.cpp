@@ -27,6 +27,7 @@
 #include "modeltest.h"
 #include "Section.h"
 #include <kundostack.h>
+#include "commands/RenameSectionCommand.h"
 
 DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : KoDocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
@@ -122,9 +123,8 @@ bool DocumentModel::setData(const QModelIndex &index, const QVariant &value, int
       case Qt::DisplayRole:
       case Qt::EditRole:
       {
-//         QUndoCommand * cmd = new KoShapeRenameCommand( dataFromIndex(index), value.toString() );
-        dataFromIndex(index)->setName(value.toString());
-//         m_document->undoStack()->push( cmd );
+        Section* section = dataFromIndex(index);
+        m_document->addCommand(section, new RenameSectionCommand(this, section, value.toString()));
         return true;
       }
     }
