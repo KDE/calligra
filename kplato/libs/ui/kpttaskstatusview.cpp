@@ -314,8 +314,9 @@ void TaskStatusView::slotSplitView()
 void TaskStatusView::slotOptions()
 {
     kDebug();
-    TaskStatusViewSettingsDialog dlg( m_view );
-    dlg.exec();
+    TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
@@ -462,8 +463,9 @@ void ProjectStatusView::setupGui()
 void ProjectStatusView::slotOptions()
 {
     kDebug();
-    ProjectStatusViewSettingsDialog dlg( m_view );
-    dlg.exec();
+    ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
@@ -892,8 +894,9 @@ void PerformanceStatusView::setupGui()
 void PerformanceStatusView::slotOptions()
 {
     kDebug();
-    PerformanceStatusViewSettingsDialog dlg( m_view );
-    dlg.exec();
+    PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )

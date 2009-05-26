@@ -295,9 +295,9 @@ void ResourceAppointmentsView::setupGui()
 void ResourceAppointmentsView::slotOptions()
 {
     kDebug();
-    ResourceAppointmentsSettingsDialog
-    dlg( m_view->model() );
-    dlg.exec();
+    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( m_view->model(), this );
+    dlg->exec();
+    delete dlg;
 }
 
 

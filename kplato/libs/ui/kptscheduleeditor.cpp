@@ -263,8 +263,10 @@ void ScheduleEditor::updateReadWrite( bool readwrite )
 void ScheduleEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view, true );
-    dlg.exec();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_view, true, this );
+    dlg->exec();
+    delete dlg;
+
 }
 
 void ScheduleEditor::slotCalculateSchedule()
@@ -508,8 +510,6 @@ void ScheduleLogView::updateReadWrite( bool readwrite )
 void ScheduleLogView::slotOptions()
 {
     kDebug();
-/*    ItemViewSettupDialog dlg( m_view, true );
-    dlg.exec();*/
 }
 
 

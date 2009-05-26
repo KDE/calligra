@@ -495,10 +495,11 @@ void GanttView::setupGui()
 void GanttView::slotOptions()
 {
     kDebug();
-    GanttViewSettingsDialog dlg( m_gantt->treeView(), m_gantt->delegate() );
-    if ( dlg.exec() == QDialog::Accepted ) {
+    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt->treeView(), m_gantt->delegate(), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
         m_gantt->graphicsView()->updateScene();
     }
+    delete dlg;
 }
 
 void GanttView::clear()
@@ -830,8 +831,9 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
 void MilestoneGanttView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_gantt->treeView(), true );
-    dlg.exec();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_gantt->treeView(), true, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )

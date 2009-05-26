@@ -354,8 +354,9 @@ void TaskEditor::slotSplitView()
 void TaskEditor::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void TaskEditor::slotAddTask()
@@ -739,8 +740,9 @@ void TaskView::slotSplitView()
 void TaskView::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool TaskView::loadContext( const KoXmlElement &context )

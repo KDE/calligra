@@ -904,7 +904,7 @@ void View::slotViewSelector( bool show )
 
 void View::slotProjectEdit()
 {
-    MainProjectDialog * dia = new MainProjectDialog( getProject() );
+    MainProjectDialog *dia = new MainProjectDialog( getProject(), this );
     if ( dia->exec()  == QDialog::Accepted) {
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
@@ -916,7 +916,7 @@ void View::slotProjectEdit()
 
 void View::slotProjectWorktime()
 {
-    StandardWorktimeDialog * dia = new StandardWorktimeDialog( getProject() );
+    StandardWorktimeDialog *dia = new StandardWorktimeDialog( getProject(), this );
     if ( dia->exec()  == QDialog::Accepted) {
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
@@ -1152,7 +1152,7 @@ void View::slotAddSubTask()
     // do is to add a first project. We will silently accept the challenge
     // and will not complain.
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts(), this );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1173,7 +1173,7 @@ void View::slotAddSubTask()
 void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts(), this );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1196,7 +1196,7 @@ void View::slotAddMilestone()
     Task * node = getProject().createTask( currentTask() );
     node->estimate() ->clear();
 
-    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts(), this );
     if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1218,19 +1218,20 @@ void View::slotDefineWBS()
 {
     //kDebug();
     Project &p = getProject();
-    WBSDefinitionDialog dia( p, p.wbsDefinition() );
-    if ( dia.exec() == QDialog::Accepted ) {
-        QUndoCommand *cmd = dia.buildCommand();
+    WBSDefinitionDialog *dia = new WBSDefinitionDialog( p, p.wbsDefinition(), this );
+    if ( dia->exec() == QDialog::Accepted ) {
+        QUndoCommand *cmd = dia->buildCommand();
         if ( cmd ) {
             getPart()->addCommand( cmd );
         }
     }
+    delete dia;
 }
 
 void View::slotConfigure()
 {
     //kDebug();
-    ConfigDialog * dia = new ConfigDialog( getPart(), getPart() ->config() );
+    ConfigDialog *dia = new ConfigDialog( getPart(), getPart() ->config(), this );
     dia->exec();
     delete dia;
 }
@@ -1293,7 +1294,7 @@ void View::slotOpenNode( Node *node )
     switch ( node->type() ) {
         case Node::Type_Project: {
                 Project * project = dynamic_cast<Project *>( node );
-                MainProjectDialog *dia = new MainProjectDialog( *project );
+                MainProjectDialog *dia = new MainProjectDialog( *project, this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1309,7 +1310,7 @@ void View::slotOpenNode( Node *node )
         case Node::Type_Task: {
             Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskDialog *dia = new TaskDialog( *task, getProject().accounts() );
+                TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1326,7 +1327,7 @@ void View::slotOpenNode( Node *node )
                 // and hence, create a milestone
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskDialog *dia = new TaskDialog( *task, getProject().accounts() );
+                TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1339,7 +1340,7 @@ void View::slotOpenNode( Node *node )
         case Node::Type_Summarytask: {
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                SummaryTaskDialog *dia = new SummaryTaskDialog( *task );
+                SummaryTaskDialog *dia = new SummaryTaskDialog( *task, this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1396,7 +1397,7 @@ void View::slotTaskProgress()
         case Node::Type_Task: {
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime() );
+                TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime(), this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1408,7 +1409,7 @@ void View::slotTaskProgress()
             }
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
-                MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task );
+                MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task, this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1538,6 +1539,7 @@ void View::slotTaskWorkpackage()
     Task *task = static_cast<Task*>( node );
     WPControlDialog *dlg = new WPControlDialog( this, *task, this );
     dlg->exec();
+    delete dlg;
 //    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, activeScheduleId() );
 }
 
@@ -1643,7 +1645,7 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
 void View::slotModifyRelation( Relation *rel )
 {
     //kDebug();
-    ModifyRelationDialog * dia = new ModifyRelationDialog( getProject(), rel, this );
+    ModifyRelationDialog *dia = new ModifyRelationDialog( getProject(), rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
         if ( dia->relationIsDeleted() ) {
             getPart() ->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete Relation" ) ) );
@@ -1700,7 +1702,7 @@ void View::slotAddResource( ResourceGroup *group )
         return;
     }
     Resource *r = new Resource();
-    ResourceDialog *dia = new ResourceDialog( getProject(), r );
+    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
     if ( dia->exec()  == QDialog::Accepted) {
         MacroCommand *m = new MacroCommand( i18n( "Add resource" ) );
         m->addCommand( new AddResourceCmd( group, r ) );
@@ -1723,7 +1725,7 @@ void View::slotEditResource()
     if ( r == 0 ) {
         return ;
     }
-    ResourceDialog *dia = new ResourceDialog( getProject(), r );
+    ResourceDialog *dia = new ResourceDialog( getProject(), r, this );
     if ( dia->exec()  == QDialog::Accepted) {
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd )
@@ -1966,8 +1968,9 @@ void View::slotViewListItemInserted( ViewListItem *item )
 
 void View::slotCreateView()
 {
-    ViewListDialog dlg( this, *m_viewlist );
-    dlg.exec();
+    ViewListDialog *dlg = new ViewListDialog( this, *m_viewlist, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void View::slotCreateKofficeDocument( KoDocumentEntry &entry)

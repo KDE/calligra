@@ -190,8 +190,9 @@ void RelationEditor::slotOptions()
         v = m_view->masterView();
         col0 = true;
     }
-    ItemViewSettupDialog dlg( v, col0 );
-    dlg.exec();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( v, col0, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void RelationEditor::slotAddRelation()
