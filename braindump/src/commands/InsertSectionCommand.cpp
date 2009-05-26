@@ -17,25 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _REMOVE_SECTION_COMMAND_H_
-#define _REMOVE_SECTION_COMMAND_H_
+#include "InsertSectionCommand.h"
+#include <DocumentModel.h>
 
-#include <QUndoCommand>
+InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(_above)
+{
+  
+}
 
-class DocumentModel;
-class Section;
-class SectionGroup;
+void InsertSectionCommand::undo()
+{
+  m_model->removeSection(m_section);
+}
 
-class RemoveSectionCommand : public QUndoCommand {
-public:
-  RemoveSectionCommand( Section* _section, DocumentModel* _model );
-  virtual void undo();
-  virtual void redo();
-private:
-  Section* m_section;
-  SectionGroup *m_parent;
-  DocumentModel* m_model;
-  int m_index;
-};
-
-#endif
+void InsertSectionCommand::redo()
+{
+  m_model->insertSection(m_section, m_parent, m_above);
+}

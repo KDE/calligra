@@ -27,6 +27,8 @@
 #include "View.h"
 #include "RootSection.h"
 #include "Canvas.h"
+
+#include "commands/InsertSectionCommand.h"
 #include "commands/RemoveSectionCommand.h"
 
 SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this)) {
@@ -175,8 +177,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
   Q_ASSERT(m_view->activeSection());
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
-  m_model->insertSection( section, m_view->activeSection(), 0);
-  selectSection(section);
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, m_view->activeSection(), m_model, 0));
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
@@ -184,10 +185,7 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
-  m_model->insertSection( section, parentSection, m_view->activeSection());
-  Q_ASSERT(section->sectionParent());
-  Q_ASSERT(section->sectionParent() == parentSection);
-  selectSection(section);
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, parentSection, m_model, m_view->activeSection()));
 }
 
 void SectionsBoxDock::selectSection(Section* section)

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _REMOVE_SECTION_COMMAND_H_
-#define _REMOVE_SECTION_COMMAND_H_
+#ifndef _INSERT_SECTION_COMMAND_H_
+#define _INSERT_SECTION_COMMAND_H_
 
 #include <QUndoCommand>
 
@@ -26,16 +26,16 @@ class DocumentModel;
 class Section;
 class SectionGroup;
 
-class RemoveSectionCommand : public QUndoCommand {
+class InsertSectionCommand : public QUndoCommand {
 public:
-  RemoveSectionCommand( Section* _section, DocumentModel* _model );
+  InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above );
   virtual void undo();
   virtual void redo();
 private:
   Section* m_section;
   SectionGroup *m_parent;
   DocumentModel* m_model;
-  int m_index;
+  Section* m_above;
 };
 
 #endif
