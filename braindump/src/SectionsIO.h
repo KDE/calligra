@@ -35,6 +35,11 @@ class SectionsIO : public QObject {
   public:
     SectionsIO(RootSection* rootSection);
     ~SectionsIO();
+  public:
+    /**
+     * push a section to save
+     */
+    void push(Section* _section);
   public slots:
     void save();
   private:
@@ -58,6 +63,7 @@ class SectionsIO : public QObject {
     bool usedFileName(const QString&);
     QString structureFileName();
     int m_nextNumber;
+    QList<Section* > m_sectionsToSave;
 };
 
 #endif

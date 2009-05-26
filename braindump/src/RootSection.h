@@ -22,6 +22,7 @@
 
 #include "SectionGroup.h"
 
+class KActionCollection;
 class KUndoStack;
 class QUndoCommand;
 class ViewManager;
@@ -32,8 +33,9 @@ class RootSection : public SectionGroup {
     RootSection();
     ~RootSection();
     ViewManager* viewManager();
-    KUndoStack* undoStack();
     SectionsIO* sectionsIO();
+    void addCommand(Section* , QUndoCommand* command);
+    void createActions(KActionCollection* );
   private:
     ViewManager* m_viewManager;
     KUndoStack* m_undoStack;

@@ -89,8 +89,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupActions()
 {
   KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection());
-  m_doc->undoStack()->createUndoAction(actionCollection());
-  m_doc->undoStack()->createRedoAction(actionCollection());
+  m_doc->createActions(actionCollection());
   m_dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
   actionCollection()->addAction("settings_dockers_menu", m_dockWidgetMenu);
   m_dockWidgetMenu->setVisible(false);

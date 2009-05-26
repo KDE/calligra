@@ -41,12 +41,18 @@ ViewManager* RootSection::viewManager()
   return m_viewManager;
 }
 
-KUndoStack* RootSection::undoStack()
-{
-  return m_undoStack;
-}
-
 SectionsIO* RootSection::sectionsIO()
 {
   return m_sectionsSaver;
+}
+
+void RootSection::addCommand(Section* _section, QUndoCommand* _command)
+{
+  m_undoStack->push(_command);
+  m_sectionsSaver->push(_section);
+}
+
+void RootSection::createActions(KActionCollection* _actionCollection) {
+  m_undoStack->createUndoAction(_actionCollection);
+  m_undoStack->createRedoAction(_actionCollection);
 }

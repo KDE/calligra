@@ -67,7 +67,7 @@ void Canvas::setDocumentOffset(const QPoint &offset) {
 
 void Canvas::addCommand( QUndoCommand *command )
 {
-  m_doc->undoStack()->push( command );
+  m_doc->addCommand( m_view->activeSection(), command );
 }
 
 KoShapeManager * Canvas::shapeManager() const

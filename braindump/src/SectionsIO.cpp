@@ -59,6 +59,14 @@ SectionsIO::~SectionsIO()
 {
 }
 
+void SectionsIO::push(Section* _section)
+{
+  if(not m_sectionsToSave.contains(_section))
+  {
+    m_sectionsToSave.push_back(_section);
+  }
+}
+
 struct SectionsIO::SaveContext {
   enum Version {
     VERSION_1
