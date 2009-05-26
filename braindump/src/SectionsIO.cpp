@@ -46,7 +46,7 @@
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
-  m_timer->start(1000000);
+  m_timer->start(60 * 1000); // Every minute
   connect(m_timer, SIGNAL(timeout()), SLOT(save()));
   m_directory = KGlobal::dirs()->localkdedir() + "share/apps/braindump/sections/";
   KGlobal::dirs()->makeDir(m_directory);
