@@ -94,3 +94,8 @@ void SectionGroup::sectionRemoved(Section* page)
   if(m_parent)
     m_parent->sectionRemoved(page);
 }
+
+int SectionGroup::indexOf( Section* section )
+{
+  return m_children.indexOf(section);
+}

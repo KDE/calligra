@@ -17,6 +17,8 @@ set(braindump_SRCS
   View.cpp
   ViewManager.cpp
   modeltest.cpp
+  # Commands
+  commands/RemoveSectionCommand.cpp
   # Imported file
   import/DockerManager.cpp
 )

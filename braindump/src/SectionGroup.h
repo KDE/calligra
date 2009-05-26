@@ -33,6 +33,7 @@ class SectionGroup {
     void removeSection( Section* page );
     QList<Section*> sections( ) const;
     Section* newSection( Section* before = 0 );
+    int indexOf( Section* section );
   protected:
     virtual void sectionAdded(Section* page);
     virtual void sectionRemoved(Section* page);

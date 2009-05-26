@@ -252,6 +252,10 @@ void DocumentModel::removeSection( Section* section )
 void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, Section* before)
 {
   int idx = (before) ? parentGrp->sections().indexOf(before) : parentGrp->sections().count();
+  insertSection( section, parentGrp, idx);
+}
+
+void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, int idx ) {
   QModelIndex parentIndex = index(parentGrp);
   beginInsertRows(parentIndex, idx, idx);
   parentGrp->insertSection(section, idx);

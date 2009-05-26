@@ -26,6 +26,8 @@
 #include "TreeSortFilter.h"
 #include "View.h"
 #include "RootSection.h"
+#include "Canvas.h"
+#include "commands/RemoveSectionCommand.h"
 
 SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this)) {
   QWidget* mainWidget = new QWidget(this);
@@ -110,6 +112,10 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
   m_proxy->setSourceModel(model);
   delete m_model;
   m_model = model;
+  
+  connect(m_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(insertedSection(QModelIndex,int)));
+  connect(m_model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(removedSection()));
+  
   updateGUI();
 }
 
@@ -137,13 +143,15 @@ void SectionsBoxDock::slotThumbnailView()
 void SectionsBoxDock::slotRmClicked()
 {
   Q_ASSERT(m_view->activeSection());
-  m_model->removeSection(m_view->activeSection());
-  if( m_model->rowCount() == 0 )
-  {
-    m_view->setActiveSection(0);
-  } else {
-    slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
-  }
+
+  m_view->canvas()->addCommand(new RemoveSectionCommand(m_view->activeSection(), m_model));
+//   if( m_model->rowCount() == 0 )
+//   {
+//     m_view->setActiveSection(0);
+//   } else {
+//     slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
+//   }
+
 }
 void SectionsBoxDock::slotRaiseClicked()
 {
@@ -185,6 +193,23 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
 void SectionsBoxDock::selectSection(Section* section)
 {
   QModelIndex index = m_proxy->mapFromSource( m_model->index(section));
+  m_wdgSectionsBox.listSections->setExpanded(index, true);
+  m_wdgSectionsBox.listSections->setCurrentIndex( index );
+  slotSectionActivated(index);
+}
+
+void SectionsBoxDock::removedSection()
+{
+  if( m_model->rowCount() == 0 )
+  {
+    m_view->setActiveSection(0);
+  } else {
+    slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
+  }
+}
+
+void SectionsBoxDock::insertedSection(const QModelIndex& parent, int idx) {
+  QModelIndex index = m_proxy->mapFromSource( m_model->index(idx, 0, parent));
   m_wdgSectionsBox.listSections->setExpanded(index, true);
   m_wdgSectionsBox.listSections->setCurrentIndex( index );
   slotSectionActivated(index);

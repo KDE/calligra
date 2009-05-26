@@ -52,6 +52,9 @@ class SectionsBoxDock : public QDockWidget {
     
     void slotNewSectionAsChildOfCurrent();
     void slotNewSectionBellowCurrent();
+    
+    void removedSection();
+    void insertedSection(const QModelIndex& parent, int idx);
   private:
     void selectSection(Section*);
   private:
