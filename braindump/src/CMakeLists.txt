@@ -6,6 +6,8 @@ set(braindump_SRCS
   main.cpp
   Canvas.cpp
   DocumentModel.cpp
+  Layout.cpp
+  LayoutRegistry.cpp
   MainWindow.cpp
   RootSection.cpp
   SectionsBoxDock.cpp
@@ -17,6 +19,8 @@ set(braindump_SRCS
   View.cpp
   ViewManager.cpp
   modeltest.cpp
+  # Layouts
+  layouts/FreeLayout.cpp
   # Commands
   commands/InsertSectionCommand.cpp
   commands/RemoveSectionCommand.cpp
