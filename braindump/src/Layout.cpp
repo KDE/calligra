@@ -71,15 +71,19 @@ const QString& Layout::id() const {
 
 void Layout::addShape(KoShape* _shape) {
   Q_ASSERT(not d->shapes.contains(_shape));
+  d->shapes.push_back(_shape);
   shapeAdded(_shape);
   _shape->addDependee(d);
-  d->shapes.push_back(_shape);
 }
 
 void Layout::removeShape(KoShape* _shape) {
   _shape->removeDependee(d);
-  shapeRemoved(_shape);
   d->shapes.removeAll(_shape);
+  shapeRemoved(_shape);
+}
+
+const QList<KoShape*>& Layout::shapes() const {
+  return d->shapes;
 }
 
 #include "Layout.moc"

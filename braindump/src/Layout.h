@@ -37,6 +37,8 @@ class Layout : public QObject {
     void addShape(KoShape* _shape);
     void removeShape(KoShape* _shape);
   protected:
+    const QList<KoShape*>& shapes() const;
+  protected:
     /**
      * This function is called when a shape is added to the layout.
      */
