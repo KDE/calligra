@@ -29,18 +29,6 @@ FreeLayout::FreeLayout() : Layout("freelayout")
 FreeLayout::~FreeLayout() {
 }
 
-void FreeLayout::shapeAdded(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeRemoved(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeGeometryChanged(KoShape* ) {
-  updateSize();
-}
-
 void containerBoundRec( QList<KoShape*> shapes, QRectF& b)
 {
   foreach(KoShape* shape, shapes)
@@ -54,9 +42,25 @@ void containerBoundRec( QList<KoShape*> shapes, QRectF& b)
   }
 }
 
-void FreeLayout::updateSize() {
+QRectF FreeLayout::boundingBox() const {
   QRectF b;
   containerBoundRec(shapes(), b);
+  return b;
+}
+
+void FreeLayout::shapeAdded(KoShape* ) {
+  updateSize();
+}
+
+void FreeLayout::shapeRemoved(KoShape* ) {
+  updateSize();
+}
+
+void FreeLayout::shapeGeometryChanged(KoShape* ) {
+  updateSize();
+}
+void FreeLayout::updateSize() {
+  emit(boundingBoxChanged(boundingBox()));
 }
 
 FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {

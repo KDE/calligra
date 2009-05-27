@@ -27,6 +27,7 @@ class FreeLayout : public Layout {
   public:
     FreeLayout();
     virtual ~FreeLayout();
+    virtual QRectF boundingBox() const;
     virtual void shapeAdded(KoShape* _shape);
     virtual void shapeRemoved(KoShape* _shape);
     virtual void shapeGeometryChanged(KoShape* _shape);
