@@ -233,8 +233,8 @@ void CalendarDayView::slotSetWork()
     if ( lst.isEmpty() ) {
         return;
     }
-    IntervalEditDialog dlg( model()->day( lst.first() ) );
-    if ( dlg.exec() == QDialog::Accepted ) {
+    IntervalEditDialog *dlg = new IntervalEditDialog( model()->day( lst.first() ), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
         bool mod = false;
         MacroCommand *m = new MacroCommand( i18n( "Modify Weekday State" ) );
         foreach ( const QModelIndex &i, lst ) {
@@ -242,7 +242,7 @@ void CalendarDayView::slotSetWork()
             if ( day == 0 ) {
                 continue;
             }
-            MacroCommand *cmd = dlg.buildCommand( model()->calendar(), day );
+            MacroCommand *cmd = dlg->buildCommand( model()->calendar(), day );
             if ( cmd ) {
                 mod = true;
                 m->addCommand( cmd );
@@ -254,6 +254,7 @@ void CalendarDayView::slotSetWork()
             delete m;
         }
     }
+    delete dlg;
 }
 
 void CalendarDayView::slotSetVacation()
@@ -724,8 +725,8 @@ void CalendarEditor::slotSetWork()
     if ( currentCalendar() == 0 || m_currentMenuDateList.isEmpty() ) {
         return;
     }
-    IntervalEditDialog dlg( currentCalendar()->findDay( m_currentMenuDateList.first() ) );
-    if ( dlg.exec() == QDialog::Accepted ) {
+    IntervalEditDialog *dlg = new IntervalEditDialog( currentCalendar()->findDay( m_currentMenuDateList.first() ), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
         bool mod = false;
         MacroCommand *m = new MacroCommand( i18n ( "Modify Calendar" ) );
         foreach ( const QDate &date, m_currentMenuDateList ) {
@@ -733,13 +734,13 @@ void CalendarEditor::slotSetWork()
             if ( day == 0 ) {
                 mod = true;
                 day = new CalendarDay( date, CalendarDay::Working );
-                day->setIntervals( dlg.intervals() );
+                day->setIntervals( dlg->intervals() );
                 m->addCommand( new CalendarAddDayCmd( currentCalendar(), day ) );
                 if ( m_currentMenuDateList.count() == 1 ) {
                     m->setText( i18n( "%1: Set to Working", date.toString() ) );
                 }
             } else {
-                MacroCommand *cmd = dlg.buildCommand( currentCalendar(), day );
+                MacroCommand *cmd = dlg->buildCommand( currentCalendar(), day );
                 if ( cmd ) {
                     mod = true;
                     kDebug()<<date<<"Modify day"<<day;
@@ -757,6 +758,7 @@ void CalendarEditor::slotSetWork()
         }
     }
     m_currentMenuDateList.clear();
+    delete dlg;
 }
 
 void CalendarEditor::slotSetVacation()

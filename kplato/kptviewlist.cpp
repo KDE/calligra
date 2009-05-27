@@ -553,14 +553,17 @@ void ViewListWidget::slotConfigureItem()
     }
     if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
-        ViewListEditCategoryDialog dlg( *this, m_contextitem, this );
-        dlg.exec();
+        ViewListEditCategoryDialog *dlg = new ViewListEditCategoryDialog( *this, m_contextitem, this );
+        dlg->exec();
+        delete dlg;
     } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
-        ViewListEditViewDialog dlg( *this, m_contextitem, this );
-        dlg.exec();
+        ViewListEditViewDialog *dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
+        dlg->exec();
+        delete dlg;
     } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
-        ViewListEditViewDialog dlg( *this, m_contextitem, this );
-        dlg.exec();
+        ViewListEditViewDialog *dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
+        dlg->exec();
+        delete dlg;
     }
 }
 
