@@ -100,6 +100,11 @@ void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &opt
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, 0);
     }
 }
+QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    // 4 is a bit arbitrary, it gives (most?) editors a usable size
+    return QItemDelegate::sizeHint( option, index ) + QSize( 0, 4 );
+}
 
 // Hmmm, a bit hacky, but this makes it possible to use index specific editors...
 SelectorDelegate::SelectorDelegate( QObject *parent )
