@@ -27,6 +27,11 @@ class FreeLayout : public Layout {
   public:
     FreeLayout();
     virtual ~FreeLayout();
+    virtual void shapeAdded(KoShape* _shape);
+    virtual void shapeRemoved(KoShape* _shape);
+    virtual void shapeGeometryChanged(KoShape* _shape);
+  private:
+    void updateSize();
   protected:
 };
 

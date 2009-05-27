@@ -20,6 +20,7 @@
 #include "FreeLayout.h"
 
 #include <klocale.h>
+#include <KoShapeContainer.h>
 
 FreeLayout::FreeLayout() : Layout("freelayout")
 {
@@ -28,6 +29,35 @@ FreeLayout::FreeLayout() : Layout("freelayout")
 FreeLayout::~FreeLayout() {
 }
 
+void FreeLayout::shapeAdded(KoShape* ) {
+  updateSize();
+}
+
+void FreeLayout::shapeRemoved(KoShape* ) {
+  updateSize();
+}
+
+void FreeLayout::shapeGeometryChanged(KoShape* ) {
+  updateSize();
+}
+
+void containerBoundRec( QList<KoShape*> shapes, QRectF& b)
+{
+  foreach(KoShape* shape, shapes)
+  {
+    b |= shape->boundingRect();
+    KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
+    if(cont)
+    {
+      containerBoundRec(cont->iterator(), b);
+    }
+  }
+}
+
+void FreeLayout::updateSize() {
+  QRectF b;
+  containerBoundRec(shapes(), b);
+}
 
 FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {
 }
