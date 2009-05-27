@@ -7,7 +7,8 @@ set(braindump_SRCS
   Canvas.cpp
   DocumentModel.cpp
   Layout.cpp
-  LayoutRegistry.cpp
+  LayoutFactory.cpp
+  LayoutFactoryRegistry.cpp
   MainWindow.cpp
   RootSection.cpp
   SectionsBoxDock.cpp

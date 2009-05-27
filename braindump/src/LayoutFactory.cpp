@@ -17,16 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _FREE_LAYOUT_H_
-#define _FREE_LAYOUT_H_
+#include "LayoutFactory.h"
 
-#include <Layout.h>
+#include <QString>
 
-class FreeLayout : public Layout {
-  public:
-    FreeLayout();
-    virtual ~FreeLayout();
-  protected:
+struct LayoutFactory::Private {
+  QString id;
+  QString name;
 };
 
-#endif
+LayoutFactory::LayoutFactory( const QString& _id, const QString& _name ) : d(new Private) {
+  d->id = _id;
+  d->name = _name;
+}
+
+LayoutFactory::~LayoutFactory() {
+  delete d;
+}
+
+const QString& LayoutFactory::id() const {
+  return d->id;
+}
+
+const QString& LayoutFactory::name() const {
+  return d->name;
+}
