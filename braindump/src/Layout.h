@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-class QRect;
+class QRectF;
 
 class KoShape;
 
@@ -36,7 +36,7 @@ class Layout : public QObject {
   public:
     void addShape(KoShape* _shape);
     void removeShape(KoShape* _shape);
-    virtual QRect boundingBox() const = 0;
+    virtual QRectF boundingBox() const = 0;
   protected:
     const QList<KoShape*>& shapes() const;
   protected:
@@ -53,7 +53,7 @@ class Layout : public QObject {
      */
     virtual void shapeGeometryChanged(KoShape* _shape) = 0;
   signals:
-    void boundingBoxChanged( const QRect& _rect );
+    void boundingBoxChanged( const QRectF& _rect );
   private:
     struct Private;
     Private* const d;
