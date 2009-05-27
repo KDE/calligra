@@ -17,3 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "FreeLayout.h"
+
+#include <klocale.h>
+
+FreeLayout::FreeLayout() : Layout("freelayout")
+{
+}
+
+FreeLayout::~FreeLayout() {
+}
+
+
+FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {
+}
+
+FreeLayoutFactory::~FreeLayoutFactory() {
+}
+
+Layout* FreeLayoutFactory::createLayout() const {
+  return new FreeLayout;
+}

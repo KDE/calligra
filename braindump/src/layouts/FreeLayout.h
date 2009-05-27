@@ -21,12 +21,20 @@
 #define _FREE_LAYOUT_H_
 
 #include <Layout.h>
+#include <LayoutFactory.h>
 
 class FreeLayout : public Layout {
   public:
     FreeLayout();
     virtual ~FreeLayout();
   protected:
+};
+
+class FreeLayoutFactory : public LayoutFactory {
+  public:
+    FreeLayoutFactory();
+    virtual ~FreeLayoutFactory();
+    virtual Layout* createLayout() const;
 };
 
 #endif
