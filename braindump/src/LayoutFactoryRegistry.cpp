@@ -22,6 +22,7 @@
 #include <QMap>
 #include "LayoutFactory.h"
 #include "Layout.h"
+#include "layouts/FreeLayout.h"
 
 struct LayoutFactoryRegistry::Private {
   static LayoutFactoryRegistry* s_instance;
@@ -32,6 +33,7 @@ LayoutFactoryRegistry* LayoutFactoryRegistry::Private::s_instance = 0;
 
 LayoutFactoryRegistry::LayoutFactoryRegistry() : d(new Private)
 {
+  addFactory(new FreeLayoutFactory);
 }
 
 LayoutFactoryRegistry::~LayoutFactoryRegistry() {
