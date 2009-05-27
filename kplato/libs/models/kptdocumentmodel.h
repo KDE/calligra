@@ -84,7 +84,7 @@ public:
 
     Document *document( const QModelIndex &index ) const;
 
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
     QModelIndex insertDocument( Document *doc, Document *after );
 

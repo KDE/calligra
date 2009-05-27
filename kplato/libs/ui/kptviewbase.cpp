@@ -556,7 +556,7 @@ void TreeViewBase::setReadWrite( bool rw )
 void TreeViewBase::createItemDelegates( ItemModelBase *model )
 {
     for ( int c = 0; c < model->columnCount(); ++c ) {
-        QItemDelegate *delegate = model->createDelegate( c, this );
+        QAbstractItemDelegate *delegate = model->createDelegate( c, this );
         if ( delegate ) {
             setItemDelegateForColumn( c, delegate );
         }

@@ -677,7 +677,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case ScheduleModel::ScheduleDirection: return new EnumDelegate( parent );

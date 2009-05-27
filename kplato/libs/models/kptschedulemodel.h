@@ -84,7 +84,7 @@ public:
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
 

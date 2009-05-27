@@ -128,7 +128,7 @@ public:
 
     NodeList *list( const QModelIndex &index ) const;
     Node *node( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     NodeList nodeList( QDataStream &stream );
     static NodeList removeChildNodes( const NodeList nodes );

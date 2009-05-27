@@ -25,7 +25,7 @@
 #include "kptglobal.h"
 
 #include <QAbstractItemModel>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaEnum>
 
 #include <KoXmlReaderForward.h>
@@ -62,13 +62,13 @@ namespace Delegate
 }
 
 /// ItemDelegate implements improved control over closeEditor
-class KPLATOMODELS_EXPORT ItemDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT ItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
     /// Constructor
     explicit ItemDelegate(QObject *parent = 0)
-    : QItemDelegate( parent ),
+    : QStyledItemDelegate( parent ),
     m_lastHint( Delegate::NoHint )
     {}
     
@@ -81,7 +81,7 @@ protected:
     /// Implements arrow key navigation
     bool eventFilter(QObject *object, QEvent *event);
     /// Draw custom focus
-    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const;
+//    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const;
     
 private:
     Delegate::EndEditHint m_lastHint;
@@ -248,7 +248,7 @@ public:
     
     /// Create the correct delegate for @p column. @p parent is the delegates parent widget.
     /// If default should be used, return 0.
-    virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
+    virtual QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
 
     bool setData( const QModelIndex &index, const QVariant &value, int role );
 

@@ -28,7 +28,6 @@
 
 #include <QAbstractItemModel>
 #include <QMimeData>
-#include <QItemDelegate>
 #include <QModelIndex>
 #include <QWidget>
 
@@ -2663,7 +2662,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         //case NodeModel::NodeAllocation: return new ??Delegate( parent );
@@ -3521,7 +3520,7 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case NodeModel::NodeConstraint: return new EnumDelegate( parent );

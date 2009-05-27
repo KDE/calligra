@@ -76,7 +76,7 @@ public:
 
     NodeMap *list( const QModelIndex &index ) const;
     Node *node( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     NodeMap nodeList( QDataStream &stream );
     static NodeMap removeChildNodes( const NodeMap nodes );

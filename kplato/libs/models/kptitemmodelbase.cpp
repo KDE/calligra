@@ -74,38 +74,14 @@ bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
             }
         }
     }
-    return QItemDelegate::eventFilter( object, event );
-}
-
-void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const
-{
-    return QItemDelegate::drawFocus( painter, option, rect );
-    if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
-        return;
-    
-    QStyleOptionFocusRect o;
-    o.QStyleOption::operator=(option);
-    o.rect = rect;
-    o.state |= QStyle::State_KeyboardFocusChange;
-    o.state |= QStyle::State_Item;
-    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
-            ? QPalette::Normal : QPalette::Disabled;
-    o.backgroundColor = option.palette.color(cg, (option.state & QStyle::State_Selected)
-            ? QPalette::Highlight : QPalette::Window);
-    
-    if ( option.state & QStyle::State_Enabled ) {
-        painter->setPen( QColor( Qt::black ) );
-        painter->drawRect( rect.adjusted( 0, 0, -1, -1 ) );
-    } else {
-        QStyle *style = QApplication::style();
-        style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, 0);
-    }
+    return QStyledItemDelegate::eventFilter( object, event );
 }
 
 QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    // 4 is a bit arbitrary, it gives (most?) editors a usable size
-    return QItemDelegate::sizeHint( option, index ) + QSize( 0, 4 );
+    // 18 is a bit arbitrary, it gives (most?) editors a usable size
+    QSize s = QStyledItemDelegate::sizeHint( option, index );
+    return QSize( s.width(), qMax( s.height(), 18 ) );
 }
 
 //-----------------------------
@@ -124,7 +100,7 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
     QStyle *style;
 
     QStyleOptionViewItemV4 opt = option;
-    //  initStyleOption( &opt, index );
+    initStyleOption( &opt, index );
 
     style = opt.widget ? opt.widget->style() : QApplication::style();
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
@@ -135,7 +111,22 @@ void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &
         initStyleOptionProgressBar( &pbOption, index );
 
         style->drawControl( QStyle::CE_ProgressBar, &pbOption, painter );
-        drawFocus( painter, option, option.rect );
+        // Draw focus, copied from qt
+        if (opt.state & QStyle::State_HasFocus) {
+            painter->save();
+            QStyleOptionFocusRect o;
+            o.QStyleOption::operator=( opt );
+            o.rect = style->subElementRect( QStyle::SE_ItemViewItemFocusRect, &opt, opt.widget );
+            o.state |= QStyle::State_KeyboardFocusChange;
+            o.state |= QStyle::State_Item;
+            QPalette::ColorGroup cg = ( opt.state & QStyle::State_Enabled )
+                            ? QPalette::Normal : QPalette::Disabled;
+            o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
+                                            ? QPalette::Highlight : QPalette::Window );
+            style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
+            //kDebug()<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
+            painter->restore();
+        }
     }
 }
 

@@ -116,7 +116,7 @@ public:
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     QMimeData *mimeData( const QModelIndexList & indexes ) const;
     
-    QItemDelegate *createDelegate( int col, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int col, QWidget *parent ) const;
     
     QObject *object( const QModelIndex &index ) const;
     QModelIndex insertGroup( ResourceGroup *g );

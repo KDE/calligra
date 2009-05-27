@@ -30,7 +30,6 @@
 
 #include <QAbstractItemModel>
 #include <QMimeData>
-#include <QItemDelegate>
 #include <QModelIndex>
 
 #include <kglobal.h>
@@ -597,7 +596,7 @@ QVariant TaskStatusItemModel::alignment( int column ) const
     return QVariant();
 }
 
-QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
