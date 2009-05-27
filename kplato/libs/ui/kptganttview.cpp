@@ -238,6 +238,8 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     setLeftView( tv );
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     tv->header()->setStretchLastSection( true );
