@@ -19,8 +19,61 @@
 
 #include "Layout.h"
 
-struct Layout::Private {
+#include <KoShape.h>
+
+struct Layout::Private : public KoShape {
+  Layout* self;
+  QList<KoShape*> shapes;
+  protected:
+    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
+  private:
+    // Fake
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) { Q_UNUSED(painter); Q_UNUSED(converter); qFatal("Shouldn't be called"); }
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) { Q_UNUSED(element); Q_UNUSED(context); qFatal("Shouldn't be called"); return false; }
+    virtual void saveOdf(KoShapeSavingContext & context) const { Q_UNUSED(context); qFatal("Shouldn't be called"); }
+
 };
 
+void Layout::Private::notifyShapeChanged(KoShape * shape, ChangeType type) {
+  switch(type)
+  {
+    case PositionChanged:
+    case RotationChanged:
+    case ScaleChanged:
+    case ShearChanged:
+    case SizeChanged:
+    case GenericMatrixChange:
+      self->shapeGeometryChanged(shape);
+      break;
+    default:
+      break;
+  }
+}
+
+
+Layout::Layout() : d(new Private)
+{
+  d->self = this;
+}
+
+Layout::~Layout() {
+  foreach(KoShape* shape, d->shapes) {
+    shape->removeDependee(d);
+  }
+  delete d;
+}
+
+void Layout::addShape(KoShape* _shape) {
+  Q_ASSERT(not d->shapes.contains(_shape));
+  shapeAdded(_shape);
+  _shape->addDependee(d);
+  d->shapes.push_back(_shape);
+}
+
+void Layout::removeShape(KoShape* _shape) {
+  _shape->removeDependee(d);
+  shapeRemoved(_shape);
+  d->shapes.removeAll(_shape);
+}
 
 #include "Layout.moc"

@@ -29,6 +29,9 @@ class KoShape;
 class Layout : public QObject {
   Q_OBJECT
   public:
+    Layout();
+    virtual ~Layout();
+  public:
     void addShape(KoShape* _shape);
     void removeShape(KoShape* _shape);
   protected:
