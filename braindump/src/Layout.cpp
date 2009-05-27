@@ -24,6 +24,7 @@
 struct Layout::Private : public KoShape {
   Layout* self;
   QList<KoShape*> shapes;
+  QString id;
   protected:
     virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
   private:
@@ -51,9 +52,10 @@ void Layout::Private::notifyShapeChanged(KoShape * shape, ChangeType type) {
 }
 
 
-Layout::Layout() : d(new Private)
+Layout::Layout(const QString& _id) : d(new Private)
 {
   d->self = this;
+  d->id = _id;
 }
 
 Layout::~Layout() {
@@ -61,6 +63,10 @@ Layout::~Layout() {
     shape->removeDependee(d);
   }
   delete d;
+}
+
+const QString& Layout::id() const {
+  return d->id;
 }
 
 void Layout::addShape(KoShape* _shape) {

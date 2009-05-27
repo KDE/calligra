@@ -17,3 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _LAYOUT_FACTORY_REGISTRY_H_
+#define _LAYOUT_FACTORY_REGISTRY_H_
+
+class QString;
+
+class Layout;
+class LayoutFactory;
+
+class LayoutFactoryRegistry {
+    LayoutFactoryRegistry();
+    ~LayoutFactoryRegistry();
+  public:
+    static LayoutFactoryRegistry* instance();
+    void addFactory(LayoutFactory* _factory);
+    Layout* createLayout(const QString& id) const;
+  private:
+    struct Private;
+    Private* const d;
+};
+
+#endif
