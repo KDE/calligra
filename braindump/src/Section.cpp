@@ -21,6 +21,7 @@
 
 #include "SectionContainer.h"
 #include "LayoutFactoryRegistry.h"
+#include "Layout.h"
 
 Section::Section() : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout")), m_sectionContainer(new SectionContainer(this))
 {
@@ -40,4 +41,14 @@ const QString& Section::name() const {
 
 void Section::setName(const QString& _name) {
   m_name = _name;
+}
+
+Layout* Section::layout() {
+  return m_layout;
+}
+
+void Section::setLayout(Layout* layout) {
+  delete m_layout;
+  m_layout = layout;
+  m_layout->replaceLayout(layout);
 }
