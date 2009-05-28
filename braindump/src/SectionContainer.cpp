@@ -56,13 +56,7 @@ class SectionContainerShapePaste : public KoOdfPaste
     {
       KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
       KoShapeLoadingContext context(loadingContext, m_container->dataCenterMap());
-      KoXmlElement element;
-      forEachElement(element, body) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
-        if (shape) {
-          m_layer->addChild(shape);
-        }
-      }
+      m_container->loadOdf(body, context);
       return true;
     }
   private:
