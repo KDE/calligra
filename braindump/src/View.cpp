@@ -65,6 +65,7 @@
 
 #include "MainWindow.h"
 #include "SectionContainer.h"
+#include "Layout.h"
 
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
@@ -231,9 +232,12 @@ KoShapeManager* View::shapeManager() const
 
 void View::setActiveSection( Section* page )
 {
+  if(m_activeSection)
+  {
+    disconnect(m_activeSection->layout(), SIGNAL(boundingBoxChanged(const QRectF& )), this, SLOT(sectionBoundingBoxChanged(const QRectF& )));
+  }
   m_activeSection = page;
 
-  QSizeF pageSize( 400, 400 );
 
   if(m_activeSection)
   {
@@ -245,25 +249,17 @@ void View::setActiveSection( Section* page )
       shapeManager()->selection()->setActiveLayer( layer );
     }
 
-    // compute the page size
-    QRectF bb = page->sectionContainer()->containerBound();
-    kDebug() << bb;
-    if(not bb.isNull() and not bb.isEmpty())
-    {
-      pageSize = QSizeF(bb.right(), bb.bottom());
-      kDebug() << pageSize;
-    }
 
     // Make sure the canvas is enabled
     canvas()->setEnabled(true);
+    connect(m_activeSection->layout(), SIGNAL(boundingBoxChanged(const QRectF& )), SLOT(sectionBoundingBoxChanged(const QRectF& )));
+    sectionBoundingBoxChanged(m_activeSection->layout()->boundingBox());
   } else {
     shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
     shapeManager()->selection()->setActiveLayer( 0 );
     canvas()->setEnabled(false);
   }
 
-  m_zoomController->setPageSize( pageSize );
-  m_zoomController->setDocumentSize( pageSize );
   m_canvas->sectionChanged(activeSection());
 
   m_canvas->update();
@@ -317,6 +313,17 @@ void View::focusInEvent(QFocusEvent * event)
 void View::canvasReceivedFocus()
 {
   m_doc->viewManager()->viewHasFocus(this);
+}
+
+void View::sectionBoundingBoxChanged(const QRectF& bb) {
+  QSizeF pageSize( 400, 400 );
+  // compute the page size
+  if(not bb.isNull() and not bb.isEmpty())
+  {
+    pageSize = QSizeF(bb.right(), bb.bottom());
+  }
+  m_zoomController->setPageSize( pageSize );
+  m_zoomController->setDocumentSize( pageSize );
 }
 
 #include "View.moc"
