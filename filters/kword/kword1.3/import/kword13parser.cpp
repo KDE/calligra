@@ -60,7 +60,7 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
     {
         if ( ! m_currentLayout )
         {
-             kError(30520) << "No current LAYOUT for storing FORMAT property: " << name << endl;
+             kError(30520) << "No current LAYOUT for storing FORMAT property: " << name;
              return false;
         }
         for (int i = 0; i < attributes.count(); ++i )
@@ -78,14 +78,14 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
     {
         if ( ! m_currentFormat )
         {
-             kError(30520) << "No current FORMAT for storing FORMAT property: " << name << endl;
+             kError(30520) << "No current FORMAT for storing FORMAT property: " << name;
              return false;
         }
         KWord13FormatOneData* data = m_currentFormat->getFormatOneData();
         
         if ( ! data )
         {
-             kError(30520) << "Current FORMAT cannot store FORMAT text property: " << name << endl;
+             kError(30520) << "Current FORMAT cannot store FORMAT text property: " << name;
              return false;
         }
         
@@ -106,7 +106,7 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
     }
     else
     {
-        kError(30520) << "Wrong parents for FORMAT property: " << name << endl;
+        kError(30520) << "Wrong parents for FORMAT property: " << name;
         return false;
     }
 }
@@ -133,7 +133,7 @@ bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlA
     }
     else
     {
-        kError(30520) << "No current layout for storing property: " << name << endl;
+        kError(30520) << "No current layout for storing property: " << name;
         return false;
     }
 }
@@ -170,7 +170,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     }
     else if ( stackItem->elementType != KWord13TypeFormatsPlural )
     {
-        kError(30520) << "<FORMAT> is child neither of <FORMATS> nor of <LAYOUT> nor of <STYLE>! Aborting!" << endl;
+        kError(30520) << "<FORMAT> is child neither of <FORMATS> nor of <LAYOUT> nor of <STYLE>! Aborting!";
         return false; // Assume parsing error!
     }
         
@@ -301,13 +301,13 @@ bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes
         }
         else
         {
-            kError(30520) << "Data of <FRAMESET> not found" << endl;
+            kError(30520) << "Data of <FRAMESET> not found";
             return false;
         }
     }
     else if ( stackItem->elementType != KWord13TypeUnknownFrameset )
     {
-        kError(30520) << "<FRAME> not child of <FRAMESET>" << endl;
+        kError(30520) << "<FRAME> not child of <FRAMESET>";
         return false;
     }
     return true;
@@ -321,7 +321,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
     
     if ( frameTypeStr.isEmpty() || frameInfoStr.isEmpty() )
     {
-        kError(30520) << "<FRAMESET> without frameType or frameInfo attribute!" << endl;
+        kError(30520) << "<FRAMESET> without frameType or frameInfo attribute!";
         return false;
     }
     
@@ -358,7 +358,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
         }
         else
         {
-            kError(30520) << "Unknown text frameset!" << endl;
+            kError(30520) << "Unknown text frameset!";
             m_kwordDocument->m_otherFramesetList.append( frameset );
             stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
         }
@@ -409,7 +409,7 @@ bool KWord13Parser::startElementDocumentAttributes( const QString& name, const Q
     }
     else
     {
-        kError(30520) << "Wrong parent!" << endl;
+        kError(30520) << "Wrong parent!";
         return false;
     }
 }
@@ -429,7 +429,7 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
         pic->m_storeName = attributes.value( "name" );
         if ( pic->m_storeName.isEmpty() )
         {
-            kError(30520) << "Picture defined without store name! Aborting!" << endl;
+            kError(30520) << "Picture defined without store name! Aborting!";
             delete pic;
             return false; // Assume parse error
         }
@@ -462,13 +462,13 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
 	    kWarning(30520) << "Anchor of type grpMgr! Not tested!"; // ### TODO
         else if ( anchorType != "frameset" )
 	{
-	    kError(30520) << "Unsupported anchor type: " << anchorType << endl;
+	    kError(30520) << "Unsupported anchor type: " << anchorType;
 	    return false;
 	} 
 	const QString frameset ( attributes.value( "instance" ) );
 	if ( frameset.isEmpty() )
 	{
-	    kError(30520) << "Anchor to an empty frameset name! Aborting!" << endl;
+	    kError(30520) << "Anchor to an empty frameset name! Aborting!";
 	    return false;
 	}
 	if ( m_currentFormat )
@@ -484,7 +484,7 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
     }
     else
     {
-        kError(30520) << "Anchor not child of <FORMAT id=\"6\"> Aborting!" << endl;
+        kError(30520) << "Anchor not child of <FORMAT id=\"6\"> Aborting!";
 	return false;
     }
     return true;
@@ -497,7 +497,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     indent += '*'; //DEBUG
     if (parserStack.isEmpty())
     {
-        kError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)" << endl;
+        kError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)";
         return false;
     }
     
@@ -506,7 +506,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
 
     if (!stackItem)
     {
-        kError(30520) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
+        kError(30520) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)";
         return false;
     }
 
@@ -662,7 +662,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     //kDebug(30520) << indent <<"</" << name <<">"; // DEBUG
     if (parserStack.isEmpty())
     {
-        kError(30520) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
+        kError(30520) << "Stack is empty!! Aborting! (in StructureParser::endElement)";
         return false;
     }
 
@@ -700,7 +700,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
             }
             else
             {
-                kError(30520) << "No paragraph to store <FORMAT>! Aborting!" << endl;
+                kError(30520) << "No paragraph to store <FORMAT>! Aborting!";
                 delete m_currentFormat;
                 m_currentFormat = 0;
                 return false; // Assume parsing error!
@@ -730,7 +730,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
             if ( m_currentLayout->m_name.isEmpty() )
             {
                 // ### TODO: what should be really done with anonymous styles (should not happen but it would have consequences)
-                kError(30520) << "Anonymous style found! Aborting" << endl;
+                kError(30520) << "Anonymous style found! Aborting";
                 return false; // Assume a parsing error!
             }
             m_kwordDocument->m_styles.append( *m_currentLayout );
@@ -751,7 +751,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     if (!success)
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
-        kError(30506) << "Found closing tag name: " << name << " expected: " << stackItem->itemName << endl;
+        kError(30506) << "Found closing tag name: " << name << " expected: " << stackItem->itemName;
     }
     
     delete stackItem;
@@ -780,7 +780,7 @@ bool KWord13Parser :: characters ( const QString & ch )
 
     if (parserStack.isEmpty())
     {
-        kError(30520) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
+        kError(30520) << "Stack is empty!! Aborting! (in StructureParser::characters)";
         return false;
     }
 
@@ -823,7 +823,7 @@ bool KWord13Parser :: characters ( const QString & ch )
         }
         else
         {
-            kError(30520) << "No current paragraph defined! Tag mismatch?" << endl;
+            kError(30520) << "No current paragraph defined! Tag mismatch?";
             success = false;
         }
     }
@@ -833,7 +833,7 @@ bool KWord13Parser :: characters ( const QString & ch )
         if (!success)
         {
             // We have a parsing error, so abort!
-            kError(30520) << "Empty element "<< stackItem->itemName <<" is not empty! Aborting! (in KWordParser::characters)" << endl;
+            kError(30520) << "Empty element "<< stackItem->itemName <<" is not empty! Aborting! (in KWordParser::characters)";
         }
     }
     else
@@ -847,7 +847,7 @@ bool KWord13Parser :: characters ( const QString & ch )
 bool KWord13Parser::warning(const QXmlParseException& exception)
 {
     kWarning(30520) << "XML parsing warning: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     return true;
 }
 
@@ -855,14 +855,14 @@ bool KWord13Parser::error(const QXmlParseException& exception)
 {
     // A XML error is recoverable, so it is only a KDE warning
     kWarning(30520) << "XML parsing error: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     return true;
 }
 
 bool KWord13Parser::fatalError (const QXmlParseException& exception)
 {
     kError(30520) << "XML parsing fatal error: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     // ### TODO: user message box
     return false; // Stop parsing now, we do not need further errors.
 }

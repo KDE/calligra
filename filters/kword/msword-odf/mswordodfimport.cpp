@@ -78,7 +78,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
 	    "application/vnd.oasis.opendocument.text", KoStore::Zip );
     if ( !storeout ) {
-        kWarning() << "Unable to open output file!" << endl;
+        kWarning() << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }
     storeout->disallowNameExpansion();

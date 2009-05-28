@@ -47,7 +47,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     KoStoreDevice* inpdev = m_chain->storageFile( "content.xml", KoStore::Read );
     if ( !inpdev )
     {
-        kError(31000) << "Unable to open input stream" << endl;
+        kError(31000) << "Unable to open input stream";
         return KoFilter::StorageCreationError;
     }
 
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     {
         kError(31000) << "Parsing error! Aborting!" << endl
                       << " In line: " << errorLine << ", column: " << errorColumn << endl
-                      << " Error message: " << errorMsg << endl;
+                      << " Error message: " << errorMsg;
         return KoFilter::ParsingError;
     }
 
@@ -70,7 +70,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     QDomElement realBody( KoDom::namedItemNS( docElem, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
-        kError(31000) << "No office:body found!" << endl;
+        kError(31000) << "No office:body found!";
         //setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return KoFilter::WrongFormat;
     }
@@ -78,7 +78,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "presentation" );
     if ( body.isNull() )
     {
-        kError(32001) << "No office:text found!" << endl;
+        kError(32001) << "No office:text found!";
         return KoFilter::WrongFormat;
     }
 
@@ -97,7 +97,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     // Write output file
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if(!out) {
-        kError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!";
         return KoFilter::StorageCreationError;
     }
     QByteArray cstring = outdoc.toByteArray(); // utf-8 already
@@ -107,7 +107,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     //Write documentinfo.xml
     out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out) {
-        kError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!";
         return KoFilter::StorageCreationError;
     }
     QDomDocument doc = info.save();

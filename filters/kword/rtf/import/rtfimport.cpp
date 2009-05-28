@@ -331,7 +331,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 
     if (!in.open( QIODevice::ReadOnly ))
     {
-	kError(30515) << "Unable to open input file!" << endl;
+	kError(30515) << "Unable to open input file!";
 	in.close();
         if ( !m_batch )
         {
@@ -348,7 +348,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 
     if (token.type != RTFTokenizer::OpenGroup)
     {
-	kError(30515) << "Not an RTF file" << endl;
+	kError(30515) << "Not an RTF file";
 	in.close();
         if ( !m_batch )
         {
@@ -365,7 +365,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 
     if (token.type != RTFTokenizer::ControlWord)
     {
-	kError(30515) << "Wrong document type" << endl;
+	kError(30515) << "Wrong document type";
 	in.close();
         if ( !m_batch )
         {
@@ -382,7 +382,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
         // RTF is normally version 1 but at least Ted uses 0 as version number
         if ( token.value > 1 )
         {
-            kError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            kError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected";
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
         // PocketWord's PWD format is similar to RTF but has a version number of 2.
         if ( token.value != 2 )
         {
-            kError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected" << endl;
+            kError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected";
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -420,7 +420,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
         // URTF seems to have either no version or having version 1
         if ( token.value > 1 )
         {
-            kError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            kError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected";
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -436,7 +436,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
     }
     else
     {
-        kError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf, \\pwd or \\urtf expected" << endl;
+        kError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf, \\pwd or \\urtf expected";
         in.close();
         if ( !m_batch )
         {
@@ -1240,7 +1240,7 @@ void RTFImport::insertUTF8( int ch )
     if (utf8TextCodec)
         textCodec=utf8TextCodec;
     else
-        kError(30515) << "No UTF-8 QTextCodec available" << endl;
+        kError(30515) << "No UTF-8 QTextCodec available";
 
     (this->*destination.destproc)(0L);
 
@@ -1328,7 +1328,7 @@ void RTFImport::parseFontTable( RTFProperty * )
     {
         if (!textCodec)
         {
-            kError(30515) << "No text codec for font!" << endl;
+            kError(30515) << "No text codec for font!";
             return; // We have no text codec, so we cannot proceed!
         }
         // ### TODO VERIFY: a RTF group could be in the middle of the font name
@@ -1532,7 +1532,7 @@ void RTFImport::parsePicture( RTFProperty * )
         if ( dev )
             dev->write(picture.bits.data(),picture.bits.size());
         else
-            kError(30515) << "Could not save: " << pictName << endl;
+            kError(30515) << "Could not save: " << pictName;
 
 
         // Add anchor to rich text destination
@@ -1566,7 +1566,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
 
     if (rawFileName=="\\*")
     {
-        kError(30515) << "Import field without file name!" << endl;
+        kError(30515) << "Import field without file name!";
         return;
     }
 
@@ -1586,7 +1586,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     pic.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     if (pic.isNull())
     {
-        kError(30515) << "Import field: file is empty: " << rawFileName << endl;
+        kError(30515) << "Import field: file is empty: " << rawFileName;
         return;
     }
 
@@ -1609,7 +1609,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     if ( dev )
         pic.save(dev);
     else
-        kError(30515) << "Could not save: " << pictName << endl;
+        kError(30515) << "Could not save: " << pictName;
 
     // Add anchor to rich text destination
     addAnchor( frameName );
@@ -2615,5 +2615,5 @@ void RTFImport::writeOutPart( const char *name, const DomNode& node )
         stream << node.toString();
     }
     else
-        kError(30515) << "Could not write part " << name << endl;
+        kError(30515) << "Could not write part " << name;
 }

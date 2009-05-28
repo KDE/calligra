@@ -140,7 +140,7 @@ void KWord13Document::xmldump( QIODevice* io )
     
     for ( Q3DictIterator<KWord13Picture> it3( m_pictureDict ) ; it3.current(); ++it3 )
     {
-        iostream << "  <key>" << it3.currentKey() << "</key>" << endl;
+        iostream << "  <key>" << it3.currentKey() << "</key>";
     }
     
     iostream << " </pictures>\n";

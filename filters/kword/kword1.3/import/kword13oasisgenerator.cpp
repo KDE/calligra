@@ -584,7 +584,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kError(30520) << "Not possible to generate style.xml" << endl;
+        kError(30520) << "Not possible to generate style.xml";
         return;
     }
 
@@ -653,7 +653,7 @@ void KWord13OasisGenerator::writeContentXml(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kError(30520) << "Not possible to generate content.xml" << endl;
+        kError(30520) << "Not possible to generate content.xml";
         return;
     }
 
@@ -705,7 +705,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kError(30520) << "Not possible to generate meta.xml" << endl;
+        kError(30520) << "Not possible to generate meta.xml";
         return;
     }
 
@@ -828,7 +828,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kError(30520) << "Not possible to generate preview file" << endl;
+        kError(30520) << "Not possible to generate preview file";
         return;
     }
 
@@ -865,7 +865,7 @@ void KWord13OasisGenerator::writePictures( void )
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kError(30520) << "Not possible to generate preview file" << endl;
+        kError(30520) << "Not possible to generate preview file";
         return;
     }
 
@@ -925,7 +925,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
     if ( ! m_store )
     {
-        kError(30520) << "Cannot create output KoStore" << endl;
+        kError(30520) << "Cannot create output KoStore";
         return false;
     }
     m_store->disallowNameExpansion();

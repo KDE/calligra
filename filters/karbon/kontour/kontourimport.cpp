@@ -62,7 +62,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QByteArray& from, const 
 	KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
 	if ( !inpdev )
 	{
-		kError(30502) << "Unable to open input stream" << endl;
+		kError(30502) << "Unable to open input stream";
 		return KoFilter::StorageCreationError;
 	}
 
@@ -74,7 +74,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QByteArray& from, const 
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 	if(!out)
 	{
-		kError(30502) << "Unable to open output file!" << endl;
+		kError(30502) << "Unable to open output file!";
 		return KoFilter::StorageCreationError;
 	}
 	QByteArray cstring = outdoc.toByteArray(); // utf-8 already

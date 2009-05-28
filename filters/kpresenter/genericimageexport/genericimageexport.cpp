@@ -57,7 +57,7 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
     if ( strcmp(document->className(), "KPrDocument") != 0)
     {
         kWarning() << "document isn't a KPrDocument but a "
-                    << document->className() << endl;
+                    << document->className();
         return KoFilter::NotImplemented;
     }
 
