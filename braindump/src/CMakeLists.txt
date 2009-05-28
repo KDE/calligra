@@ -15,6 +15,7 @@ set(braindump_SRCS
   Section.cpp
   SectionContainer.cpp
   SectionGroup.cpp
+  SectionShapeContainerModel.cpp
   SectionsIO.cpp
   TreeSortFilter.cpp
   View.cpp

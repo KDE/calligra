@@ -25,32 +25,17 @@
 class SectionShapeContainerModel: public KoShapeContainerModel
 {
 public:
-    SectionShapeContainerModel() {}
-    ~SectionShapeContainerModel() {}
-    void add(KoShape *child) {
-        if (m_members.contains(child))
-            return;
-        m_members.append(child);
-    }
-    void setClipping(const KoShape *, bool) { }
-    bool childClipped(const KoShape *) const {
-        return false;
-    }
-    void remove(KoShape *child) {
-        m_members.removeAll(child);
-    }
-    int count() const {
-        return m_members.count();
-    }
-    QList<KoShape*> iterator() const {
-        return QList<KoShape*>(m_members);
-    }
-    void containerChanged(KoShapeContainer *) { }
-    void childChanged(KoShape *, KoShape::ChangeType) { }
-    bool isChildLocked(const KoShape *child) const {
-        Q_ASSERT(child->parent());
-        return child->isGeometryProtected() || child->parent()->isGeometryProtected();
-    }
+    SectionShapeContainerModel();
+    ~SectionShapeContainerModel();
+    void add(KoShape *child);
+    void setClipping(const KoShape *, bool);
+    bool childClipped(const KoShape *) const;
+    void remove(KoShape *child);
+    int count() const;
+    QList<KoShape*> iterator() const;
+    void containerChanged(KoShapeContainer *);
+    void childChanged(KoShape *, KoShape::ChangeType);
+    bool isChildLocked(const KoShape *child) const;
 
 private: // members
     QList <KoShape *> m_members;
