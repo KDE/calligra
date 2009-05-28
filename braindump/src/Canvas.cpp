@@ -38,10 +38,12 @@
 #include <KAction>
 #include <QMenu>
 #include <QMouseEvent>
+#include "Layout.h"
 
 Canvas::Canvas( View * view, RootSection* doc )
 : QWidget( view )
 , KoCanvasBase( doc->viewManager() )
+, m_origin(0, 0)
 , m_view( view )
 , m_doc( doc )
 {
@@ -77,7 +79,7 @@ KoShapeManager * Canvas::shapeManager() const
 
 void Canvas::updateCanvas( const QRectF& rc )
 {
-  QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
+  QRect clipRect( viewToWidget( viewConverter()->documentToView( rc ).toRect() ) );
   clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
   clipRect.moveTopLeft( clipRect.topLeft() - m_documentOffset);
   update( clipRect );
@@ -100,6 +102,11 @@ const QPoint & Canvas::documentOffset() const
   return m_documentOffset;
 }
 
+QPoint Canvas::documentOrigin() const
+{
+  return m_origin;
+}
+
 void Canvas::paintEvent( QPaintEvent *event )
 {
   QPainter painter( this );
@@ -108,6 +115,8 @@ void Canvas::paintEvent( QPaintEvent *event )
   painter.setRenderHint( QPainter::Antialiasing );
   QRectF clipRect = event->rect().translated( documentOffset() );
   painter.setClipRect( clipRect );
+
+  painter.translate( m_origin.x(), m_origin.y() );
 
   const KoViewConverter* converter = viewConverter( );
   shapeManager()->paint( painter, *converter, false );
@@ -121,12 +130,12 @@ void Canvas::paintEvent( QPaintEvent *event )
 
 void Canvas::tabletEvent( QTabletEvent *event )
 {
-  m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 }
 
 void Canvas::mousePressEvent( QMouseEvent *event )
 {
-  m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 
   if(!event->isAccepted() && event->button() == Qt::RightButton)
   {
@@ -137,17 +146,17 @@ void Canvas::mousePressEvent( QMouseEvent *event )
 
 void Canvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
-  m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 }
 
 void Canvas::mouseMoveEvent( QMouseEvent *event )
 {
-  m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 }
 
 void Canvas::mouseReleaseEvent( QMouseEvent *event )
 {
-  m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 }
 
 void Canvas::keyPressEvent( QKeyEvent *event )
@@ -197,7 +206,7 @@ void Canvas::keyReleaseEvent( QKeyEvent *event )
 
 void Canvas::wheelEvent ( QWheelEvent * event )
 {
-  m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
+  m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( widgetToView( event->pos() + m_documentOffset ) ) );
 }
 
 void Canvas::closeEvent( QCloseEvent * event )
@@ -263,6 +272,22 @@ void Canvas::focusInEvent(QFocusEvent * event)
 {
   QWidget::focusInEvent(event);
   emit(canvasReceivedFocus());
+}
+
+QPoint Canvas::widgetToView( const QPoint& p ) const {
+  return p - m_origin;
+}
+
+QRect Canvas::widgetToView( const QRect& r ) const {
+  return r.translated( - m_origin );
+}
+
+QPoint Canvas::viewToWidget( const QPoint& p ) const {
+  return p + m_origin;
+}
+
+QRect Canvas::viewToWidget( const QRect& r ) const {
+  return r.translated( m_origin );
 }
 
 #include "Canvas.moc"

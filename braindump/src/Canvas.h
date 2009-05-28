@@ -56,6 +56,7 @@ class Canvas : public QWidget, public KoCanvasBase
     const QWidget* canvasWidget() const { return this; }
     KoUnit unit() const;
     const QPoint & documentOffset() const;
+    QPoint documentOrigin() const;
 
     View* koPAView () const { return m_view; }
 
@@ -112,6 +113,7 @@ class Canvas : public QWidget, public KoCanvasBase
     virtual void resizeEvent( QResizeEvent * event );
 
   private:
+    
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
@@ -121,6 +123,13 @@ class Canvas : public QWidget, public KoCanvasBase
     /// Sets the canvas background color to the given color
     void setBackgroundColor( const QColor &color );
 
+    QPoint widgetToView( const QPoint& p ) const;
+    QRect widgetToView( const QRect& r ) const;
+    QPoint viewToWidget( const QPoint& p ) const;
+    QRect viewToWidget( const QRect& r ) const;
+    
+  private:
+    QPoint m_origin;
     View * m_view;
     RootSection* m_doc;
     KoShapeManager * m_shapeManager;
