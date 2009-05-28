@@ -19,10 +19,18 @@
 
 #include "SectionContainer.h"
 
-#include "KoShapeLayer.h"
-#include "KoShapeRegistry.h"
-#include "KoShapeSavingContext.h"
-#include "KoXmlWriter.h"
+#include <KoDrag.h>
+#include <KoOdf.h>
+#include <KoOdfPaste.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
+#include <KoShapeLoadingContext.h>
+#include <QMimeData>
 
 SectionContainer::SectionContainer(Section* section) : m_section(section), m_layer(new KoShapeLayer)
 {
@@ -33,7 +41,43 @@ SectionContainer::SectionContainer(Section* section) : m_section(section), m_lay
   }
 }
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs ) {
+
+class SectionContainerShapePaste : public KoOdfPaste
+{
+  public:
+    SectionContainerShapePaste(SectionContainer* _container, KoShapeLayer* _layer) : m_container(_container), m_layer(_layer) {}
+    virtual ~SectionContainerShapePaste() {}
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore)
+    {
+      KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+      KoShapeLoadingContext context(loadingContext, m_container->dataCenterMap());
+      KoXmlElement element;
+      forEachElement(element, body) {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
+        if (shape) {
+          m_layer->addChild(shape);
+        }
+      }
+      return true;
+    }
+  private:
+    SectionContainer* m_container;
+    KoShapeLayer* m_layer;
+};
+
+SectionContainer::SectionContainer(const SectionContainer& _rhs ) : KoShapeContainer() {
+  KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->iterator());
+  KoDrag drag;
+  drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+  QMimeData* mimeData = drag.mimeData();
+  
+  Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
+  
+  SectionContainerShapePaste paste(this, m_layer);
+  bool success = paste.paste(KoOdf::Text, mimeData);
+  Q_ASSERT(success);
+  
+  delete mimeData;
 }
 
 Section* SectionContainer::section()
