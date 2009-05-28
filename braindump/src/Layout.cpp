@@ -69,6 +69,12 @@ const QString& Layout::id() const {
   return d->id;
 }
 
+void Layout::replaceLayout(Layout* _layout) {
+  foreach(KoShape* shape, _layout->shapes()) {
+    addShape(shape);
+  }
+}
+
 void Layout::addShape(KoShape* _shape) {
   Q_ASSERT(not d->shapes.contains(_shape));
   d->shapes.push_back(_shape);
