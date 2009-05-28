@@ -29,6 +29,8 @@ class SectionContainer : public KoShapeContainer {
   public:
     SectionContainer(Section* );
     SectionContainer(const SectionContainer& _rhs, Section* );
+  private:
+    void initContainer(Section* );
   public:
     Section* section();
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);

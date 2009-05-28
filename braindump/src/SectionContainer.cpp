@@ -32,13 +32,9 @@
 #include <KoShapeLoadingContext.h>
 #include <QMimeData>
 
-SectionContainer::SectionContainer(Section* section) : m_section(section), m_layer(new KoShapeLayer)
+SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
 {
-  addChild(m_layer);
-  foreach (QString id, KoShapeRegistry::instance()->keys()) {
-    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-    shapeFactory->populateDataCenterMap(m_dataCenterMap);
-  }
+  initContainer(section);
 }
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs) : KoShapeContainer()
@@ -64,12 +60,8 @@ class SectionContainerShapePaste : public KoOdfPaste
     KoShapeLayer* m_layer;
 };
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : KoShapeContainer(), m_section(_section), m_layer(new KoShapeLayer) {
-  addChild(m_layer);
-  foreach (QString id, KoShapeRegistry::instance()->keys()) {
-    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-    shapeFactory->populateDataCenterMap(m_dataCenterMap);
-  }
+SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : KoShapeContainer(),  m_section(0), m_layer(0) {
+  initContainer(_section);
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->iterator());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
@@ -82,6 +74,16 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
   Q_ASSERT(success);
   
   delete mimeData;
+}
+
+void SectionContainer::initContainer(Section* _section) {
+  m_section = _section;
+  m_layer = new KoShapeLayer;
+  addChild(m_layer);
+  foreach (QString id, KoShapeRegistry::instance()->keys()) {
+    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+    shapeFactory->populateDataCenterMap(m_dataCenterMap);
+  }
 }
 
 Section* SectionContainer::section()
