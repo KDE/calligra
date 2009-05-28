@@ -26,6 +26,7 @@ Section::Section() : SectionGroup(0), m_sectionContainer(new SectionContainer(th
 }
 
 Section::Section(const Section& _rhs) : SectionGroup(0), m_sectionContainer(new SectionContainer(this)) {
+  setName(_rhs.name());
 }
 
 SectionContainer* Section::sectionContainer() {
