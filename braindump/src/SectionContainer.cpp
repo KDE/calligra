@@ -19,6 +19,8 @@
 
 #include "SectionContainer.h"
 
+#include <QMimeData>
+
 #include <KoDrag.h>
 #include <KoOdf.h>
 #include <KoOdfPaste.h>
@@ -30,7 +32,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoShapeLoadingContext.h>
-#include <QMimeData>
+
+#include "SectionShapeContainerModel.h"
 
 SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
 {
@@ -78,7 +81,7 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
 
 void SectionContainer::initContainer(Section* _section) {
   m_section = _section;
-  m_layer = new KoShapeLayer;
+  m_layer = new KoShapeLayer(new SectionShapeContainerModel);
   addChild(m_layer);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
