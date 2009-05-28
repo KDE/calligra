@@ -81,7 +81,7 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
 
 void SectionContainer::initContainer(Section* _section) {
   m_section = _section;
-  m_layer = new KoShapeLayer(new SectionShapeContainerModel);
+  m_layer = new KoShapeLayer(new SectionShapeContainerModel(m_section));
   addChild(m_layer);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
