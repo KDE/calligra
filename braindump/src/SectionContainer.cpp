@@ -41,6 +41,11 @@ SectionContainer::SectionContainer(Section* section) : m_section(section), m_lay
   }
 }
 
+SectionContainer::SectionContainer(const SectionContainer& _rhs)
+{
+  Q_UNUSED(_rhs);
+  qFatal("Can't copy");
+}
 
 class SectionContainerShapePaste : public KoOdfPaste
 {
@@ -65,7 +70,7 @@ class SectionContainerShapePaste : public KoOdfPaste
     KoShapeLayer* m_layer;
 };
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs ) : KoShapeContainer() {
+SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : KoShapeContainer(), m_section(_section), m_layer(new KoShapeLayer) {
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->iterator());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
