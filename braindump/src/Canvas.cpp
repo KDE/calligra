@@ -254,7 +254,9 @@ void Canvas::setBackgroundColor( const QColor &color )
 
 void Canvas::sectionChanged(Section* section)
 {
-  Q_UNUSED(section);
+  QRectF rect = section->layout()->boundingBox();
+  QRect documentRect = viewConverter()->documentToView( rect ).toRect();
+  m_origin = -documentRect.topLeft();
 }
 
 void Canvas::gridSize(qreal *horizontal, qreal *vertical) const
