@@ -27,6 +27,13 @@ SectionGroup::SectionGroup(SectionGroup* parent ) : m_parent(parent)
 {
 }
 
+SectionGroup::SectionGroup(const SectionGroup& _rhs) : m_parent(0) {
+  foreach(Section* section, _rhs.m_children)
+  {
+    insertSection(new Section(*section));
+  }
+}
+
 SectionGroup::~SectionGroup()
 {
 }

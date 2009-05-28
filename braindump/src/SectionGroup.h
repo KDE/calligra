@@ -27,6 +27,7 @@ class Section;
 class SectionGroup {
   public:
     explicit SectionGroup(SectionGroup* parent);
+    SectionGroup(const SectionGroup& _rhs);
     virtual ~SectionGroup();
     void insertSection( Section* page, int index );
     void insertSection( Section* page, Section* before = 0 );
