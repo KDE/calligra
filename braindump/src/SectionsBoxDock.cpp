@@ -169,8 +169,7 @@ void SectionsBoxDock::slotLowerClicked()
 void SectionsBoxDock::slotDuplicateClicked()
 {
   Section* section = new Section(*m_view->activeSection());
-  m_model->insertSection( section, m_view->activeSection()->sectionParent(), m_view->activeSection());
-  selectSection(section);
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, m_view->activeSection()->sectionParent(), m_model, m_view->activeSection()));
 }
 
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
