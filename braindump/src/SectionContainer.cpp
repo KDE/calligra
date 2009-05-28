@@ -33,6 +33,9 @@ SectionContainer::SectionContainer(Section* section) : m_section(section), m_lay
   }
 }
 
+SectionContainer::SectionContainer(const SectionContainer& _rhs ) {
+}
+
 Section* SectionContainer::section()
 {
   return m_section;
