@@ -23,6 +23,7 @@
 #include <QMetaType>
 #include "SectionGroup.h"
 
+class Layout;
 class SectionContainer;
 
 class Section :  public SectionGroup {
@@ -33,7 +34,10 @@ class Section :  public SectionGroup {
     SectionContainer* sectionContainer();
     const QString& name() const;
     void setName(const QString& _name);
+    Layout* layout();
+    void setLayout(Layout* layout);
   private:
+    Layout* m_layout;
     SectionContainer* m_sectionContainer;
     QString m_name;
 };

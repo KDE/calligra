@@ -20,12 +20,13 @@
 #include "Section.h"
 
 #include "SectionContainer.h"
+#include "LayoutFactoryRegistry.h"
 
-Section::Section() : SectionGroup(0), m_sectionContainer(new SectionContainer(this))
+Section::Section() : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()->createLayout("freelayout")), m_sectionContainer(new SectionContainer(this))
 {
 }
 
-Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this)) {
+Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout(_rhs.m_layout), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this)) {
   setName(_rhs.name());
 }
 
