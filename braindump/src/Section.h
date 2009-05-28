@@ -28,6 +28,7 @@ class SectionContainer;
 class Section :  public SectionGroup {
   public:
     Section();
+    Section(const Section& _rhs);
   public:
     SectionContainer* sectionContainer();
     const QString& name() const;

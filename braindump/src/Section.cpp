@@ -25,6 +25,9 @@ Section::Section() : SectionGroup(0), m_sectionContainer(new SectionContainer(th
 {
 }
 
+Section::Section(const Section& _rhs) : SectionGroup(0), m_sectionContainer(new SectionContainer(this)) {
+}
+
 SectionContainer* Section::sectionContainer() {
   return m_sectionContainer;
 }
