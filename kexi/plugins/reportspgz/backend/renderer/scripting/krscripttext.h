@@ -76,6 +76,7 @@ public slots:
     QSizeF size();
     void setSize(const QSizeF&);
 
+    void loadFromFile(const QString&);
 private:
     KRTextData *m_text;
 };

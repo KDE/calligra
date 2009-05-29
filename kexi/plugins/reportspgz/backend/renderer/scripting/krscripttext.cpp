@@ -18,6 +18,9 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 #include "krscripttext.h"
+#include <QFile>
+#include <QTextStream>
+#include <kdebug.h>
 
 namespace Scripting
 {
@@ -178,4 +181,24 @@ void Text::setSize(const QSizeF& s)
 {
     m_text->m_size.setPointSize(s);
 }
+
+void Text::loadFromFile(const QString &fn)
+{
+  QFile file(fn);
+  kDebug() << "Loading from " << fn;
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+  {
+    m_text->m_controlSource->setValue("$Unable to read " + fn);
+    return;
+  }
+  QTextStream in(&file);
+  QString data = in.readAll();
+  /*
+  while (!in.atEnd()) {
+    QString line = in.readLine();
+    process_line(line);
+  }*/
+  m_text->m_controlSource->setValue("$" + data);
+}
+
 }

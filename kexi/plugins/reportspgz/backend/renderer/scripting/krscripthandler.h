@@ -25,6 +25,7 @@
 #include <krsectiondata.h>
 #include <kross/core/action.h>
 #include "krscriptconstants.h"
+#include <kdeversion.h>
 
 class KRScriptFunctions;
 class KRScriptDebug;
@@ -67,7 +68,10 @@ private:
 
     Scripting::Report *m_report;
 
+    #if !KDE_IS_VERSION(4,2,88)
     QString fieldFunctions();
+    #endif
+    
     QString scriptCode();
     
     KexiDB::Connection *m_connection;
