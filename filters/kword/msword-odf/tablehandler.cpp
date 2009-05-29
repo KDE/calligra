@@ -52,7 +52,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_cellOpen = false;
 
 #if 1
-    for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)
+    for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++)
         kDebug(30513) << table->m_cellEdges[i];
 #endif
 
@@ -366,7 +366,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
 int KWord::Table::columnNumber(int cellEdge) const
 {
     kDebug(30513) ;
-    for (unsigned int i = 0; i < m_cellEdges.size(); i++)
+    for (unsigned int i = 0; i < (unsigned int)m_cellEdges.size(); i++)
     {
         if (m_cellEdges[i] == cellEdge)
             return i;
