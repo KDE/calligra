@@ -591,15 +591,19 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QString cs = f->m_controlSource->value().toString();
             if (cs.left(1) == "=") { //Everything after = is treated as code
                 if (!cs.contains("PageTotal()")) {
-		    #if KDE_IS_VERSION(4,2,88)
+#if KDE_IS_VERSION(4,2,88)
 		      QVariant v = _handler->evaluate(cs.mid(1));
-		    #else
+#else
 		      QVariant v = _handler->evaluate(f->entityName());
-		    #endif
+#endif
                     
                     str = v.toString();
                 } else {
-                    str = f->entityName();
+#if KDE_IS_VERSION(4,2,88)
+		      str = cs.mid(1);
+#else
+		      str = f->entityName();
+#endif
                     _postProcText.append(tb);
                 }
             } else if (cs.left(1) == "$") { //Everything past $ is treated as a string 
@@ -863,7 +867,11 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             kDebug() << "EntityCheck CS:" << cs;
 
             if (cs.left(1) == "=") {
-                str = _handler->evaluate(cd->entityName()).toString();
+#if KDE_IS_VERSION(4,2,88)
+		      str = _handler->evaluate(cs.mid(1)).toString();
+#else
+		      str = _handler->evaluate(f->entityName()).toString();
+#endif  
             } else {
                 QString qry = "Data Source";
                 QString clm = cd->m_controlSource->value().toString();
