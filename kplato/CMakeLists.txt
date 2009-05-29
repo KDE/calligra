@@ -12,6 +12,7 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kplato/libs/models
     ${CMAKE_SOURCE_DIR}/kplato/libs/ui
     ${CMAKE_BINARY_DIR}/kplato/libs/ui
+    ${CMAKE_BINARY_DIR}/kplato
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
     ${KOGUIUTILS_INCLUDES}
@@ -33,6 +34,7 @@ add_subdirectory( plugins )
 
 include_directories(${KPLATO_INCLUDES})
 
+
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
@@ -41,7 +43,6 @@ set(kplatoprivate_LIB_SRCS
     kptviewlistdialog.cpp
     kptviewlistcommand.cpp
     
-    kptconfigdialog.cpp
     kptconfig.cpp
     kpttaskdefaultpanel.cpp
 
@@ -57,6 +58,8 @@ set(kplatoprivate_LIB_SRCS
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
+
+    kptconfigskeleton.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
@@ -67,7 +70,9 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptconfigtaskpanelbase.ui
 )
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} )
+kde4_add_kcfg_files(kplatosettings_SRCS kplatosettings.kcfgc)
+
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} ${kplatosettings_SRCS} )
 
 target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui koguiutils  ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} komain kostore )
 
@@ -78,7 +83,6 @@ install(TARGETS kplatoprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### KPlato part ###############
 
 set(kplatopart_PART_SRCS kptfactoryinit.cpp )
-
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
@@ -108,4 +112,5 @@ install( FILES  kplatopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kplato.rc kplato_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kplato)
 install( FILES  kplato.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kplatorc DESTINATION ${CONFIG_INSTALL_DIR})
+install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 

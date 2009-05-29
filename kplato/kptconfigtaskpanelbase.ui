@@ -1,54 +1,52 @@
-<ui version="4.0" >
- <author>Dag Andersen &lt;danders@get2net.dk></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
  <class>KPlato::ConfigTaskPanelBase</class>
- <widget class="QWidget" name="KPlato::ConfigTaskPanelBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KPlato::ConfigTaskPanelBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>425</height>
+    <width>317</width>
+    <height>521</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>0</number>
-   </property>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="leaderlabel" >
-       <property name="whatsThis" >
+      <widget class="QLabel" name="leaderlabel">
+       <property name="whatsThis">
         <string>The person responsible for this task.
 
 This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Responsible:</string>
        </property>
-       <property name="wordWrap" >
+       <property name="wordWrap">
         <bool>false</bool>
        </property>
-       <property name="buddy" >
-        <cstring>leaderfield</cstring>
+       <property name="buddy">
+        <cstring>kcfg_Leader</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KLineEdit" name="leaderfield" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+      <widget class="KLineEdit" name="kcfg_Leader">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="whatsThis" >
+       <property name="whatsThis">
         <string>The person responsible for this task.
 
 This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
@@ -56,299 +54,422 @@ This is not limited to persons available in a resource group but can be anyone. 
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="chooseLeader" >
-       <property name="toolTip" >
+      <widget class="QPushButton" name="chooseLeader">
+       <property name="toolTip">
         <string>Insert a person from your address book</string>
        </property>
-       <property name="whatsThis" >
+       <property name="whatsThis">
         <string>Insert a person from your address book.</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Choose...</string>
        </property>
-       <property name="shortcut" >
+       <property name="shortcut">
         <string/>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="QGroupBox" name="schedulingGroup" >
-     <property name="title" >
-      <string>Timing</string>
+   <item row="1" column="0" colspan="3">
+    <widget class="Line" name="line_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="textLabel3" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text" >
-         <string>Schedule:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-        <property name="buddy" >
-         <cstring>scheduleType</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="KComboBox" name="scheduleType" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <item>
-         <property name="text" >
-          <string>As Soon as Possible</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>As Late as Possible</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Must Start On</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Must Finish On</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Start Not Earlier Than</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Finish Not Later Than</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Fixed Interval</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="3" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="KDateWidget" name="scheduleStartDate" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy" >
-           <enum>Qt::WheelFocus</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTimeEdit" name="scheduleStartTime" />
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="3" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="KDateWidget" name="scheduleEndDate" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy" >
-           <enum>Qt::WheelFocus</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTimeEdit" name="scheduleEndTime" />
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="textLabel3_2" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text" >
-         <string>Estimate:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
-       <widget class="KComboBox" name="estimateType" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="editable" >
-         <bool>false</bool>
-        </property>
-        <item>
-         <property name="text" >
-          <string>Effort</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Duration</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Length</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="2" colspan="2" >
-       <widget class="DurationSpinBox" name="estimate" />
-      </item>
-      <item row="3" column="2" colspan="2" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="textLabel1_2" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text" >
-           <string>Optimistic:</string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>optimisticValueoptimisticValue</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="optimisticValue" >
-          <property name="suffix" >
-           <string>%</string>
-          </property>
-          <property name="minimum" >
-           <number>-99</number>
-          </property>
-          <property name="maximum" >
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="textLabel2_2" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text" >
-           <string>Pessimistic:</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>pessimisticValue</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="pessimisticValue" >
-          <property name="suffix" >
-           <string>%</string>
-          </property>
-          <property name="maximum" >
-           <number>999</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QLabel" name="descriptionlabell6" >
-     <property name="text" >
-      <string>Note:</string>
+   <item row="2" column="0">
+    <widget class="QLabel" name="textLabel3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="wordWrap" >
+     <property name="text">
+      <string>Scheduling constraint:</string>
+     </property>
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
-     <property name="buddy" >
-      <cstring>descriptionfield</cstring>
+     <property name="buddy">
+      <cstring>kcfg_ConstraintType</cstring>
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="KTextEdit" name="descriptionfield" />
+   <item row="2" column="1" colspan="2">
+    <widget class="KComboBox" name="kcfg_ConstraintType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>As Soon as Possible</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>As Late as Possible</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Must Start On</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Must Finish On</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Start Not Earlier Than</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Finish Not Later Than</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Fixed Interval</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="textLabel3_5">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Constraint Start time usage:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_ConstraintType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="KComboBox" name="kcfg_StartTimeUsage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Current datetime</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Current date, specified time</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Specified datetime</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="textLabel3_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Constraint start time:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_ConstraintType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="QDateTimeEdit" name="kcfg_ConstraintStartTime">
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="textLabel3_6">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Constraint End time usage:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_ConstraintType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="KComboBox" name="kcfg_EndTimeUsage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Current datetime</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Current date, specified time</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Specified datetime</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="textLabel3_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Constraint end time:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_ConstraintType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="QDateTimeEdit" name="kcfg_ConstraintEndTime">
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="textLabel3_7">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Estimate type:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="KComboBox" name="kcfg_EstimateType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Effort</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Duration</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Length</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="textLabel3_8">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Expected estimate:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QDoubleSpinBox" name="kcfg_ExpectedEstimate"/>
+   </item>
+   <item row="9" column="2">
+    <widget class="KComboBox" name="kcfg_Unit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Day</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Hour</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="textLabel1_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Optimistic estimate:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>optimisticValueoptimisticValue</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QSpinBox" name="kcfg_OptimisticRatio">
+     <property name="suffix">
+      <string>%</string>
+     </property>
+     <property name="minimum">
+      <number>-99</number>
+     </property>
+     <property name="maximum">
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="textLabel2_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Pessimistic estimate:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_PessimisticRatio</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QSpinBox" name="kcfg_PessimisticRatio">
+     <property name="suffix">
+      <string>%</string>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="3">
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="descriptionlabell6">
+     <property name="text">
+      <string>Note:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+     <property name="buddy">
+      <cstring>kcfg_Description</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0" colspan="3">
+    <widget class="KTextEdit" name="kcfg_Description"/>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KDateWidget</class>
-   <extends>QWidget</extends>
-   <header>kdatewidget.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
@@ -362,28 +483,19 @@ This is not limited to persons available in a resource group but can be anyone. 
    <header>ktextedit.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>DurationSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kptdurationspinbox.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>leaderfield</tabstop>
+  <tabstop>kcfg_Leader</tabstop>
   <tabstop>chooseLeader</tabstop>
-  <tabstop>scheduleType</tabstop>
-  <tabstop>scheduleStartDate</tabstop>
-  <tabstop>scheduleEndDate</tabstop>
-  <tabstop>estimateType</tabstop>
-  <tabstop>optimisticValue</tabstop>
-  <tabstop>pessimisticValue</tabstop>
-  <tabstop>descriptionfield</tabstop>
+  <tabstop>kcfg_ConstraintType</tabstop>
+  <tabstop>kcfg_PessimisticRatio</tabstop>
+  <tabstop>kcfg_Description</tabstop>
  </tabstops>
  <includes>
-  <include location="local" >klineedit.h</include>
-  <include location="local" >kcombobox.h</include>
-  <include location="local" >kdatewidget.h</include>
-  <include location="local" >ktextedit.h</include>
+  <include location="local">klineedit.h</include>
+  <include location="local">kcombobox.h</include>
+  <include location="local">kdatewidget.h</include>
+  <include location="local">ktextedit.h</include>
  </includes>
  <resources/>
  <connections/>

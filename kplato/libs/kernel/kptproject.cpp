@@ -47,22 +47,34 @@
 namespace KPlato
 {
 
-
 Project::Project( Node *parent )
         : Node( parent ),
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
-        m_taskDefaults( new Task() ),
+        emptyConfig( new ConfigBase() ),
+        m_config( *emptyConfig ),
         m_schedulerPlugins()
 {
     //kDebug()<<"("<<this<<")";
-    m_constraint = Node::MustStartOn;
-    m_standardWorktime = new StandardWorktime();
+    init();
+}
+
+Project::Project( ConfigBase &config, Node *parent )
+        : Node( parent ),
+        m_accounts( *this ),
+        m_defaultCalendar( 0 ),
+        emptyConfig( 0 ),
+        m_config( config ),
+        m_schedulerPlugins()
+{
+    //kDebug()<<"("<<this<<")";
     init();
 }
 
 void Project::init()
 {
+    m_constraint = Node::MustStartOn;
+    m_standardWorktime = new StandardWorktime();
     m_spec = KDateTime::Spec::LocalZone();
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
@@ -87,7 +99,7 @@ Project::~Project()
     while ( !m_managers.isEmpty() )
         delete m_managers.takeFirst();
     
-    delete m_taskDefaults;
+    delete emptyConfig;
 }
 
 int Project::type() const { return Node::Type_Project; }
@@ -2286,12 +2298,6 @@ QList<Node*> Project::flatNodeList( Node *parent )
         }
     }
     return lst;
-}
-
-void Project::setTaskDefaults( const Task &task )
-{
-    delete m_taskDefaults;
-    m_taskDefaults = new Task( task );
 }
 
 void Project::setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins )

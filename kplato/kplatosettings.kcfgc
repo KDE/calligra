@@ -1,0 +1,6 @@
+File=kplatosettings.kcfg 
+ClassName=KPlatoSettings
+Singleton=true 
+Mutators=true
+Inherits=KPlatoConfigSkeleton
+IncludeFiles="kptconfigskeleton.h"

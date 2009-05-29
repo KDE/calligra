@@ -23,6 +23,8 @@ set(kplatokernel_LIB_SRCS
     kptcommand.cpp
 
     kptschedulerplugin.cpp
+
+    kptconfigbase.cpp
 )
 
 kde4_add_library(kplatokernel SHARED ${kplatokernel_LIB_SRCS})

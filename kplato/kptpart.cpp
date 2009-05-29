@@ -64,6 +64,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false )
 {
+        kDebug()<<&(config());
+        kDebug()<<&(config().taskDefaults());
+        kDebug()<<config().taskDefaults().estimate();
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
     // Add library translation files
@@ -75,18 +78,17 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kdgantt" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
-    m_config.load();
+    //m_config.load();
 
     loadSchedulerPlugins();
 
-    setProject( new Project() ); // after config & plugins are loaded
+    setProject( new Project( m_config ) ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
 }
 
 
 Part::~Part()
 {
-    m_config.save();
     delete m_project;
 }
 
@@ -109,7 +111,7 @@ void Part::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
 
 void Part::configChanged()
 {
-    m_project->setTaskDefaults( m_config.taskDefaults() );
+    //m_project->setConfig( m_config );
 }
 
 void Part::setProject( Project *project )
@@ -121,7 +123,7 @@ void Part::setProject( Project *project )
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
-        m_project->setTaskDefaults( m_config.taskDefaults() );
+//        m_project->setConfig( config() );
         m_project->setSchedulerPlugins( m_schedulerPlugins );
     }
     emit changed();
@@ -198,7 +200,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            Project * newProject = new Project();
+            Project * newProject = new Project( m_config );
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {

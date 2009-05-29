@@ -34,6 +34,7 @@
 #include "kptduration.h"
 #include "kptresource.h"
 #include "kptwbsdefinition.h"
+#include "kptconfigbase.h"
 
 #include <QMap>
 #include <QList>
@@ -75,6 +76,7 @@ class KPLATOKERNEL_EXPORT Project : public Node
     Q_OBJECT
 public:
     explicit Project( Node *parent = 0 );
+    explicit Project( ConfigBase &config, Node *parent = 0 );
     ~Project();
 
     /// Returns the node type. Can be Type_Project or Type_Subproject.
@@ -474,8 +476,7 @@ public:
     
     void generateUniqueIds();
     
-    void setTaskDefaults( const Task &task );
-    const Task &taskDefaults() const { return *m_taskDefaults; }
+    const Task &taskDefaults() const { return m_config.taskDefaults(); }
     
     void incProgress();
 
@@ -484,6 +485,9 @@ public:
 
     void initiateCalculation( MainSchedule &sch );
     void initiateCalculationLists( MainSchedule &sch );
+
+    /// Set configuration data
+    void setConfig( const ConfigBase &config ) { m_config = config; }
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
@@ -617,7 +621,9 @@ private:
     //use in pert to store the project slack
     int m_projectSlack;
 
-    Task *m_taskDefaults;
+    ConfigBase *emptyConfig;
+    ConfigBase &m_config;
+
     int m_progress;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
