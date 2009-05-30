@@ -795,7 +795,7 @@
         <Type range="true">Double</Type>
       </Parameter>
       <Help>
-        <Text>The MODE() function returns the most frequently occuring value in the data set.</Text>
+        <Text>The MODE() function returns the most frequently occurring value in the data set.</Text>
         <Syntax>MODE(number; number2; ...)</Syntax>
         <Syntax>MODE(range)</Syntax>
         <Example>MODE(12; 14; 12; 15) returns 12</Example>
