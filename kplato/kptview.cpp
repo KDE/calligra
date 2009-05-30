@@ -98,7 +98,6 @@
 #include "kptresourcedialog.h"
 #include "kptresource.h"
 #include "kptstandardworktimedialog.h"
-#include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
 #include "kptwpcontroldialog.h"
 #include "kptresourceassignmentview.h"
