@@ -37,9 +37,6 @@ public:
 
     virtual void setDefaultValues( Task &task ) {}
 
-    virtual void load();
-    virtual void save();
-    
 protected:
     bool m_readWrite;
 

@@ -38,9 +38,6 @@ public:
 
     virtual void setDefaultValues( Task &task );
 
-    virtual void load();
-    virtual void save();
-
 };
 
 }  //KPlato namespace

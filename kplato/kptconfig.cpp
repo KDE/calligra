@@ -38,7 +38,6 @@ Config::Config()
 
 Config::~Config()
 {
-    //save();
 }
 
 void Config::readConfig()
@@ -46,7 +45,9 @@ void Config::readConfig()
 }
 void Config::saveSettings()
 {
-//    KPlatoSettings::setResponsible( m_responsible );
+    if ( ! m_readWrite ) {
+        return;
+    }
     KPlatoSettings::self()->writeConfig();
 }
 
@@ -89,74 +90,5 @@ void Config::setDefaultValues( Task &task )
     task.estimate()->setOptimisticRatio( KPlatoSettings::optimisticRatio() );
 }
 
-void Config::load() {
-    kDebug()<<KGlobal::config()->groupList();
-    KSharedConfigPtr config = Factory::global().config();
-    kDebug()<<config->groupList();
-    kDebug()<<(config->componentData() == KGlobal::config()->componentData());
-
-/*    if( config->hasGroup("Behavior"))
-    {
-        config->setGroup("Behavior");
-        m_behavior.calculationMode = config->readEntry("CalculationMode",m_behavior.calculationMode);
-        m_behavior.allowOverbooking =  config->readEntry("AllowOverbooking",m_behavior.allowOverbooking);
-    }*/
-    if( config->hasGroup("Task defaults"))
-    {
-        //TODO: make this default stuff timezone neutral, use LocalZone for now
-        KConfigGroup grp = config->group( "Task defaults" );
-        taskDefaults().setLeader(grp.readEntry("Leader"));
-        taskDefaults().setDescription(grp.readEntry("Description"));
-        taskDefaults().setConstraint((Node::ConstraintType)grp.readEntry("ConstraintType",0));
-        
-        QDateTime dt = QDateTime::fromString(grp.readEntry("ConstraintStartTime", QString()), Qt::ISODate);
-        taskDefaults().setConstraintStartTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
-        kDebug()<<"ConstraintStartTime"<<grp.readEntry("ConstraintStartTime")<<taskDefaults().constraintStartTime().toString();
-        
-        dt = QDateTime::fromString(grp.readEntry("ConstraintEndTime", QString()), Qt::ISODate);
-        taskDefaults().setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
-        
-        taskDefaults().estimate()->setType((Estimate::Type)grp.readEntry("EstimateType",0));
-        taskDefaults().estimate()->setUnit(Duration::unitFromString(grp.readEntry("Unit","h")));
-        double value = grp.readEntry("ExpectedEstimate",1);
-        taskDefaults().estimate()->setExpectedEstimate(grp.readEntry("ExpectedEstimate",1.0));
-        taskDefaults().estimate()->setPessimisticRatio(grp.readEntry("PessimisticEstimate",0));
-        taskDefaults().estimate()->setOptimisticRatio(grp.readEntry("OptimisticEstimate",0));
-    }
-}
-
-void Config::save() {
-    //kDebug()<<m_readWrite;
-    if (!m_readWrite)
-        return;
-
-    KConfigGroup config = Factory::global().config()->group("Task defaults");
-
-    config.writeEntry("Leader", taskDefaults().leader());
-    config.writeEntry("Description", taskDefaults().description());
-    config.writeEntry("ConstraintType", (int)taskDefaults().constraint());
-    config.writeEntry("ConstraintStartTime", taskDefaults().constraintStartTime().dateTime().toString( Qt::ISODate));
-    config.writeEntry("ConstraintEndTime", taskDefaults().constraintEndTime().dateTime().toString( Qt::ISODate));
-    config.writeEntry("EstimateType", (int)taskDefaults().estimate()->type());
-    config.writeEntry("Unit", Duration::unitToString(taskDefaults().estimate()->unit()));
-    config.writeEntry("ExpectedEstimate", taskDefaults().estimate()->expectedEstimate());
-    config.writeEntry("PessimisticEstimate", taskDefaults().estimate()->pessimisticRatio());
-    config.writeEntry("OptimisticEstimate", taskDefaults().estimate()->optimisticRatio());
-
-    KSharedConfigPtr c = Factory::global().config();
-    kDebug()<<"Before sync:";
-    kDebug()<<KGlobal::config()->groupList();
-    kDebug()<<c->groupList();
-    kDebug()<<KGlobal::config()->group("Task defaults").entryMap();
-    kDebug()<<(c->group("Task defaults").entryMap());
-
-    config.sync();
-
-    kDebug()<<"After sync:";
-    kDebug()<<KGlobal::config()->groupList();
-    kDebug()<<c->groupList();
-    kDebug()<<KGlobal::config()->group("Task defaults").entryMap();
-    kDebug()<<(c->group("Task defaults").entryMap());
-}
 
 }  //KPlato namespace

@@ -41,14 +41,6 @@ ConfigBase::~ConfigBase()
     delete m_taskDefaults;
 }
 
-void ConfigBase::load()
-{
-}
-
-void ConfigBase::save()
-{
-}
-
 void ConfigBase::setTaskDefaults( Task *task )
 {
     if ( m_taskDefaults != task ) {
