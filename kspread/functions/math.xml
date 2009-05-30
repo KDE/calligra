@@ -881,7 +881,7 @@
       </Parameter>
       <Help>
 	<Text>Round a number x down to the nearest multiple of the second parameter, Significance.</Text>
-	<Text>The FLOOR() function rounds x down (towards zero) to the nearest mutiple of Significance.
+	<Text>The FLOOR() function rounds x down (towards zero) to the nearest multiple of Significance.
 	The default value for Significance is 1, if x is positive. It is -1, if the value is negative,
 	which means rounding up to the nearest integer.
 	If mode is given and not equal to zero, the amount of x is rounded toward zero to a multiple
