@@ -213,7 +213,7 @@ public:
         return tablePositionsForAliases.value(alias.toLower(), -1);
     }
 
-    inline const int columnPositionForAlias(const QByteArray& alias) const {
+    inline int columnPositionForAlias(const QByteArray& alias) const {
         return columnPositionsForAliases.value(alias.toLower(), -1);
     }
 

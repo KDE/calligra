@@ -17,7 +17,7 @@ cat sqlparser.tab.h >> sqlparser.h
 echo '#endif' >> sqlparser.h
 
 cat sqlparser.tab.c > sqlparser.cpp
-echo "const char * const tname(int offset) { return yytname[offset]; }" >> sqlparser.cpp
+echo "const char* tname(int offset) { return yytname[offset]; }" >> sqlparser.cpp
 
 ./extract_tokens.sh > tokens.cpp
 rm -f sqlparser.tab.h sqlparser.tab.c
