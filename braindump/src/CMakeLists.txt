@@ -15,6 +15,7 @@ set(braindump_SRCS
   Section.cpp
   SectionContainer.cpp
   SectionGroup.cpp
+  SectionPropertiesDock.cpp
   SectionShapeContainerModel.cpp
   SectionsIO.cpp
   TreeSortFilter.cpp
@@ -33,6 +34,7 @@ set(braindump_SRCS
 
 kde4_add_ui_files(braindump_SRCS
   forms/wdgsectionsbox.ui
+    forms/wdgsectionproperties.ui
 )
 
 kde4_add_executable(braindump ${braindump_SRCS})
