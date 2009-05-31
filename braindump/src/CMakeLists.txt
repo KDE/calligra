@@ -23,6 +23,7 @@ set(braindump_SRCS
   ViewManager.cpp
   modeltest.cpp
   # Layouts
+  layouts/ColumnLayout.cpp
   layouts/FreeLayout.cpp
   # Commands
   commands/InsertSectionCommand.cpp
