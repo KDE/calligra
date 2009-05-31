@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef _SECTION_PROPERTIES_DOCK_H_
+#define _SECTION_PROPERTIES_DOCK_H_
+
 #include "ui_wdgsectionproperties.h"
 
 class Section;
@@ -31,6 +34,7 @@ class SectionPropertiesDock : public QDockWidget {
     virtual ~SectionPropertiesDock();
     void setSection(Section* _section);
   private:
+    Ui::WdgSectionProperties m_wdgSectionProperties;
     Section* m_currentSection;
 };
 
@@ -41,7 +45,7 @@ public:
     SectionPropertiesDockFactory() { }
 
     virtual QString id() const {
-        return QString("SectionsBox");
+        return QString("SectionProperties");
     }
 
     virtual QDockWidget* createDockWidget() {
@@ -56,3 +60,5 @@ public:
         return DockRight;
     }
 };
+
+#endif

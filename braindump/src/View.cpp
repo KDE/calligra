@@ -66,6 +66,7 @@
 #include "MainWindow.h"
 #include "SectionContainer.h"
 #include "Layout.h"
+#include "SectionPropertiesDock.h"
 
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
@@ -153,8 +154,13 @@ void View::initGUI()
 
     SectionsBoxDockFactory structureDockerFactory;
     m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>( m_mainWindow->createDockWidget( &structureDockerFactory ) );
+    Q_ASSERT(m_sectionsBoxDock);
     m_sectionsBoxDock->setup(m_doc, this);
 
+    SectionPropertiesDockFactory sectionPropertiesDockerFactory;
+    m_sectionPropertiesDock = qobject_cast<SectionPropertiesDock*>( m_mainWindow->createDockWidget( &sectionPropertiesDockerFactory ) );
+    Q_ASSERT(m_sectionPropertiesDock);
+    
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
     show();
@@ -265,6 +271,7 @@ void View::setActiveSection( Section* page )
 
   m_canvas->update();
   m_sectionsBoxDock->updateGUI();
+  m_sectionPropertiesDock->setSection(m_activeSection);
 }
 
 void View::updateMousePosition(const QPoint& position)

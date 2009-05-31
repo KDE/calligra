@@ -37,6 +37,7 @@ class KoZoomController;
 class RootSection;
 class Section;
 class SectionsBoxDock;
+class SectionPropertiesDock;
 
 class View : public QWidget, public KXMLGUIClient
 {
@@ -104,6 +105,7 @@ private:
 
 
     SectionsBoxDock* m_sectionsBoxDock;
+    SectionPropertiesDock* m_sectionPropertiesDock;
 
     KoCanvasController * m_canvasController;
     KoZoomController * m_zoomController;

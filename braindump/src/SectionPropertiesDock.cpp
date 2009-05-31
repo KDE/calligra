@@ -20,6 +20,11 @@
 #include "SectionPropertiesDock.h"
 
 SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
+  QWidget* mainWidget = new QWidget(this);
+  setWidget(mainWidget);
+  m_wdgSectionProperties.setupUi(mainWidget);
+  
+  
 }
 
 SectionPropertiesDock::~SectionPropertiesDock() {
@@ -28,3 +33,5 @@ SectionPropertiesDock::~SectionPropertiesDock() {
 void SectionPropertiesDock::setSection(Section* _section) {
   m_currentSection = _section;
 }
+
+#include "SectionPropertiesDock.moc"
