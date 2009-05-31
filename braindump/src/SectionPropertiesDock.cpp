@@ -18,13 +18,19 @@
  */
 
 #include "SectionPropertiesDock.h"
+#include "LayoutFactoryRegistry.h"
+#include "Section.h"
+#include "Layout.h"
 
 SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
   m_wdgSectionProperties.setupUi(mainWidget);
   
-  
+  typedef QPair<QString, QString> PairType;
+  foreach(const PairType& pair, LayoutFactoryRegistry::instance()->factories()) {
+    m_wdgSectionProperties.comboBoxLayout->addItem(pair.second, pair.first);
+  }
 }
 
 SectionPropertiesDock::~SectionPropertiesDock() {
@@ -32,6 +38,15 @@ SectionPropertiesDock::~SectionPropertiesDock() {
 
 void SectionPropertiesDock::setSection(Section* _section) {
   m_currentSection = _section;
+  m_wdgSectionProperties.comboBoxLayout->setEnabled(m_currentSection);
+  if(m_currentSection) {
+  for(int i = 0; i < m_wdgSectionProperties.comboBoxLayout->count(); ++i) {
+    if( m_wdgSectionProperties.comboBoxLayout->itemData(i) == m_currentSection->layout()->id() ) {
+      m_wdgSectionProperties.comboBoxLayout->setCurrentIndex(i);
+      break;
+    }
+  }
+  }
 }
 
 #include "SectionPropertiesDock.moc"
