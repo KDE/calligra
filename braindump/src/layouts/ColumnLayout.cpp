@@ -31,7 +31,9 @@ ColumnLayout::~ColumnLayout() {
 }
 
 QRectF ColumnLayout::boundingBox() const {
-  return Layout::boundingBox();
+  QRectF rect = Layout::boundingBox();
+  rect.adjust(-10,0,10,0);
+  return rect;
 }
 
 void ColumnLayout::shapeAdded(KoShape* _shape) {
