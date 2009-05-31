@@ -261,9 +261,11 @@ void Canvas::sectionChanged(Section* section)
 
 void Canvas::updateOrigin()
 {
-  QRectF rect = m_view->activeSection()->layout()->boundingBox();
-  QRect documentRect = viewConverter()->documentToView( rect ).toRect();
-  m_origin = -documentRect.topLeft();
+  if( m_view->activeSection() ) {
+    QRectF rect = m_view->activeSection()->layout()->boundingBox();
+    QRect documentRect = viewConverter()->documentToView( rect ).toRect();
+    m_origin = -documentRect.topLeft();
+  }
 }
 
 void Canvas::gridSize(qreal *horizontal, qreal *vertical) const

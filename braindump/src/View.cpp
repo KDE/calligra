@@ -222,6 +222,7 @@ void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
   Q_UNUSED(mode);
   Q_UNUSED(zoom);
+  canvas()->updateOrigin();
   canvas()->update();
 }
 

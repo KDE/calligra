@@ -62,6 +62,10 @@ class Canvas : public QWidget, public KoCanvasBase
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     virtual bool snapToGrid() const;
+    /**
+     * Update the origin of the document.
+     */
+    void updateOrigin();
 
   public slots:
     void setDocumentOffset(const QPoint &offset);
@@ -127,8 +131,6 @@ class Canvas : public QWidget, public KoCanvasBase
     QRect widgetToView( const QRect& r ) const;
     QPoint viewToWidget( const QPoint& p ) const;
     QRect viewToWidget( const QRect& r ) const;
-    
-    void updateOrigin();
   private:
     QPoint m_origin;
     View * m_view;
