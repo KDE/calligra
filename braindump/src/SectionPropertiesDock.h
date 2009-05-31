@@ -33,6 +33,8 @@ class SectionPropertiesDock : public QDockWidget {
     SectionPropertiesDock();
     virtual ~SectionPropertiesDock();
     void setSection(Section* _section);
+  private slots:
+    void layoutChanged( int index );
   private:
     Ui::WdgSectionProperties m_wdgSectionProperties;
     Section* m_currentSection;

@@ -31,6 +31,7 @@ SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
   foreach(const PairType& pair, LayoutFactoryRegistry::instance()->factories()) {
     m_wdgSectionProperties.comboBoxLayout->addItem(pair.second, pair.first);
   }
+  connect(m_wdgSectionProperties.comboBoxLayout, SIGNAL(currentIndexChanged(int)), SLOT(layoutChanged(int)));
 }
 
 SectionPropertiesDock::~SectionPropertiesDock() {
@@ -42,11 +43,18 @@ void SectionPropertiesDock::setSection(Section* _section) {
   if(m_currentSection) {
   for(int i = 0; i < m_wdgSectionProperties.comboBoxLayout->count(); ++i) {
     if( m_wdgSectionProperties.comboBoxLayout->itemData(i) == m_currentSection->layout()->id() ) {
+      bool v = m_wdgSectionProperties.comboBoxLayout->blockSignals(true);
       m_wdgSectionProperties.comboBoxLayout->setCurrentIndex(i);
+      m_wdgSectionProperties.comboBoxLayout->blockSignals(v);
       break;
     }
   }
   }
+}
+
+void SectionPropertiesDock::layoutChanged( int index ) {
+  Q_ASSERT(m_currentSection);
+  m_currentSection->setLayout(LayoutFactoryRegistry::instance()->createLayout(m_wdgSectionProperties.comboBoxLayout->itemData(index).toString()));
 }
 
 #include "SectionPropertiesDock.moc"
