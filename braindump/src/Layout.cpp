@@ -20,6 +20,7 @@
 #include "Layout.h"
 
 #include <KoShape.h>
+#include <Utils.h>
 
 struct Layout::Private : public KoShape {
   Layout* self;
@@ -86,6 +87,13 @@ void Layout::removeShape(KoShape* _shape) {
   _shape->removeDependee(d);
   d->shapes.removeAll(_shape);
   shapeRemoved(_shape);
+}
+
+
+QRectF Layout::boundingBox() const {
+  QRectF b;
+  Utils::containerBoundRec(shapes(), b);
+  return b;
 }
 
 const QList<KoShape*>& Layout::shapes() const {

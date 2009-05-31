@@ -33,7 +33,7 @@ class ColumnLayout : public Layout {
     virtual void shapeGeometryChanged(KoShape* _shape);
   private:
     void updateSize();
-  protected:
+  private:
 };
 
 class ColumnLayoutFactory : public LayoutFactory {

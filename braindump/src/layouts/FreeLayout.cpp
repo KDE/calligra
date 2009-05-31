@@ -21,19 +21,12 @@
 
 #include <klocale.h>
 #include <KoShapeContainer.h>
-#include <Utils.h>
 
 FreeLayout::FreeLayout() : Layout("freelayout")
 {
 }
 
 FreeLayout::~FreeLayout() {
-}
-
-QRectF FreeLayout::boundingBox() const {
-  QRectF b;
-  Utils::containerBoundRec(shapes(), b);
-  return b;
 }
 
 void FreeLayout::shapeAdded(KoShape* ) {
