@@ -272,8 +272,6 @@ void SectionsIO::save()
   }
 }
 
-#include <iostream>
-
 void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* root)
 {
   QDomNode n = elt.firstChild();
