@@ -34,6 +34,7 @@
 #include <KoShapeLoadingContext.h>
 
 #include "SectionShapeContainerModel.h"
+#include "Utils.h"
 
 SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
 {
@@ -133,22 +134,9 @@ QMap<QString, KoDataCenter* > SectionContainer::dataCenterMap() const
   return m_dataCenterMap;
 }
 
-void containerBoundRec( const KoShapeContainer* parent, QRectF& b)
-{
-  foreach(KoShape* shape, parent->iterator())
-  {
-    b |= shape->boundingRect();
-    KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
-    if(cont)
-    {
-      containerBoundRec(cont, b);
-    }
-  }
-}
-
 QRectF SectionContainer::containerBound() const
 {
   QRectF b;
-  containerBoundRec(this, b);
+  Utils::containerBoundRec(this->iterator(), b);
   return b;
 }
