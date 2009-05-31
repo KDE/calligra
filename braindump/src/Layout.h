@@ -34,13 +34,20 @@ class Layout : public QObject {
   public:
     const QString& id() const;
   public:
-    virtual void replaceLayout(Layout* _layout);
+    void replaceLayout(Layout* layout);
+    virtual void addShapes(QList<KoShape*> _shapes);
     void addShape(KoShape* _shape);
     void removeShape(KoShape* _shape);
     virtual QRectF boundingBox() const;
   protected:
     const QList<KoShape*>& shapes() const;
   protected:
+    /**
+     * This function is called when a list of shapes is added to the layout.
+     *
+     * The default implementation call shapeAdded for each shape
+     */
+    virtual void shapesAdded(QList<KoShape*> _shape);
     /**
      * This function is called when a shape is added to the layout.
      */

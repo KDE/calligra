@@ -26,6 +26,7 @@ struct Layout::Private : public KoShape {
   Layout* self;
   QList<KoShape*> shapes;
   QString id;
+    void removeDependees();
   protected:
     virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
   private:
@@ -35,6 +36,12 @@ struct Layout::Private : public KoShape {
     virtual void saveOdf(KoShapeSavingContext & context) const { Q_UNUSED(context); qFatal("Shouldn't be called"); }
 
 };
+
+void Layout::Private::removeDependees() {
+  foreach(KoShape* shape, shapes) {
+    shape->removeDependee(this);
+  }
+}
 
 void Layout::Private::notifyShapeChanged(KoShape * shape, ChangeType type) {
   switch(type)
@@ -60,9 +67,7 @@ Layout::Layout(const QString& _id) : d(new Private)
 }
 
 Layout::~Layout() {
-  foreach(KoShape* shape, d->shapes) {
-    shape->removeDependee(d);
-  }
+  d->removeDependees();
   delete d;
 }
 
@@ -70,9 +75,18 @@ const QString& Layout::id() const {
   return d->id;
 }
 
-void Layout::replaceLayout(Layout* _layout) {
-  foreach(KoShape* shape, _layout->shapes()) {
-    addShape(shape);
+void Layout::replaceLayout(Layout* layout) {
+  layout->d->removeDependees(); // Avoid both layout to fight for the shapes possition
+  addShapes(layout->d->shapes);
+}
+
+void Layout::addShapes(QList<KoShape*> _shapes) {
+  foreach(KoShape* shape, _shapes) {
+    d->shapes.push_back(shape);
+  }
+  shapesAdded(_shapes);
+  foreach(KoShape* shape, _shapes) {
+    shape->addDependee(d);
   }
 }
 
@@ -87,6 +101,12 @@ void Layout::removeShape(KoShape* _shape) {
   _shape->removeDependee(d);
   d->shapes.removeAll(_shape);
   shapeRemoved(_shape);
+}
+
+void Layout::shapesAdded(QList<KoShape*> _shapes) {
+  foreach(KoShape* shape, _shapes) {
+    shapeAdded(shape);
+  }
 }
 
 
