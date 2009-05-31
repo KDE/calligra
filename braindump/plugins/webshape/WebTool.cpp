@@ -89,7 +89,7 @@ void WebTool::mouseMoveEvent( KoPointerEvent *event )
       break;
     case SCROLL_DRAG:
     {
-      m_currentShape->scrollOf(event->point - m_scrollPoint);
+      m_currentShape->scrollOf(m_scrollPoint - event->point);
       m_scrollPoint = event->point;
       m_currentShape->update();
       break;
