@@ -39,6 +39,7 @@ class ColumnLayout : public Layout {
      */
     int findIndex(KoShape*);
     QList<KoShape*> m_shapes;
+    bool m_isUpdating;
 };
 
 class ColumnLayoutFactory : public LayoutFactory {

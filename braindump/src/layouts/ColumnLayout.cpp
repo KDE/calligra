@@ -25,7 +25,7 @@
 #include <Utils.h>
 #include <KoShape.h>
 
-ColumnLayout::ColumnLayout() : Layout("columnlayout")
+ColumnLayout::ColumnLayout() : Layout("columnlayout"), m_isUpdating(false)
 {
 }
 
@@ -54,6 +54,8 @@ void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
 }
 
 void ColumnLayout::updateShapesPosition() {
+  if(m_isUpdating) return;
+  m_isUpdating = true;
   double y = 0;
   foreach(KoShape* shape, m_shapes) {
     double x =shape->position().x();
@@ -63,6 +65,7 @@ void ColumnLayout::updateShapesPosition() {
   }
   
   emit(boundingBoxChanged(boundingBox()));
+  m_isUpdating = false;
 }
 
 ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("columnlayout", i18n("Column")) {
