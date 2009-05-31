@@ -35,6 +35,7 @@
 
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
+#include "Layout.h"
 
 SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
 {
@@ -98,14 +99,16 @@ Section* SectionContainer::section()
 bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
-
+  QList<KoShape*> shapes;
   KoXmlElement child;
   forEachElement(child, element) {
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
     if (shape) {
       m_layer->addChild(shape);
+      shapes.push_back(shape);
     }
   }
+  m_section->layout()->addShapes(shapes);
   return true;
 }
 void SectionContainer::saveOdf(KoShapeSavingContext & context) const
