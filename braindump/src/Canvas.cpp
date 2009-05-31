@@ -232,6 +232,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 void Canvas::resizeEvent( QResizeEvent * event )
 {
   emit sizeChanged( event->size() );
+  
 }
 
 void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
@@ -254,7 +255,13 @@ void Canvas::setBackgroundColor( const QColor &color )
 
 void Canvas::sectionChanged(Section* section)
 {
-  QRectF rect = section->layout()->boundingBox();
+  Q_ASSERT(m_view->activeSection() == section );
+  updateOrigin();
+}
+
+void Canvas::updateOrigin()
+{
+  QRectF rect = m_view->activeSection()->layout()->boundingBox();
   QRect documentRect = viewConverter()->documentToView( rect ).toRect();
   m_origin = -documentRect.topLeft();
 }

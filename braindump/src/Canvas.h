@@ -128,6 +128,7 @@ class Canvas : public QWidget, public KoCanvasBase
     QPoint viewToWidget( const QPoint& p ) const;
     QRect viewToWidget( const QRect& r ) const;
     
+    void updateOrigin();
   private:
     QPoint m_origin;
     View * m_view;
