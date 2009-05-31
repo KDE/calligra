@@ -40,6 +40,7 @@ void FreeLayout::shapeRemoved(KoShape* ) {
 void FreeLayout::shapeGeometryChanged(KoShape* ) {
   updateSize();
 }
+
 void FreeLayout::updateSize() {
   emit(boundingBoxChanged(boundingBox()));
 }

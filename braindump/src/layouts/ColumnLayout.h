@@ -32,8 +32,13 @@ class ColumnLayout : public Layout {
     virtual void shapeRemoved(KoShape* _shape);
     virtual void shapeGeometryChanged(KoShape* _shape);
   private:
-    void updateSize();
+    void updateShapesPosition();
   private:
+    /**
+     * Look where in the list to insert the shape
+     */
+    int findIndex(KoShape*);
+    QList<KoShape*> m_shapes;
 };
 
 class ColumnLayoutFactory : public LayoutFactory {

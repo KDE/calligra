@@ -22,6 +22,8 @@
 #include <QRectF>
 
 #include <klocale.h>
+#include <Utils.h>
+#include <KoShape.h>
 
 ColumnLayout::ColumnLayout() : Layout("columnlayout")
 {
@@ -37,14 +39,30 @@ QRectF ColumnLayout::boundingBox() const {
 }
 
 void ColumnLayout::shapeAdded(KoShape* _shape) {
+  m_shapes.append(_shape);
+  updateShapesPosition();
 }
 
 void ColumnLayout::shapeRemoved(KoShape* _shape) {
+  m_shapes.removeAll(_shape);
+  updateShapesPosition();
 }
 
 void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
+  Q_UNUSED(_shape);
+  updateShapesPosition();
 }
 
+void ColumnLayout::updateShapesPosition() {
+  double y = 0;
+  foreach(KoShape* shape, m_shapes) {
+    double x =shape->position().x();
+    shape->setPosition(QPointF(x,y));
+    y += shape->size().height();
+  }
+  
+  emit(boundingBoxChanged(boundingBox()));
+}
 
 ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("columnlayout", i18n("Column")) {
 }
