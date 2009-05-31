@@ -17,46 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "FreeLayout.h"
+#include "Utils.h"
 
-#include <klocale.h>
+#include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <Utils.h>
 
-FreeLayout::FreeLayout() : Layout("freelayout")
+void Utils::containerBoundRec( QList<KoShape*> shapes, QRectF& b)
 {
+  foreach(KoShape* shape, shapes)
+  {
+    containerBoundRec(shape, b);
+  }
 }
 
-FreeLayout::~FreeLayout() {
+void Utils::containerBoundRec( KoShape* shape, QRectF& b) {
+  b |= shape->boundingRect();
+  KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
+  if(cont)
+  {
+    containerBoundRec(cont->iterator(), b);
+  }
 }
 
-QRectF FreeLayout::boundingBox() const {
-  QRectF b;
-  Utils::containerBoundRec(shapes(), b);
-  return b;
-}
-
-void FreeLayout::shapeAdded(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeRemoved(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeGeometryChanged(KoShape* ) {
-  updateSize();
-}
-void FreeLayout::updateSize() {
-  emit(boundingBoxChanged(boundingBox()));
-}
-
-FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {
-}
-
-FreeLayoutFactory::~FreeLayoutFactory() {
-}
-
-Layout* FreeLayoutFactory::createLayout() const {
-  return new FreeLayout;
-}

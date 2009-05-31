@@ -19,6 +19,7 @@ set(braindump_SRCS
   SectionShapeContainerModel.cpp
   SectionsIO.cpp
   TreeSortFilter.cpp
+  Utils.cpp
   View.cpp
   ViewManager.cpp
   modeltest.cpp

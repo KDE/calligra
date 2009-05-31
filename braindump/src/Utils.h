@@ -17,46 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "FreeLayout.h"
+#include <QList>
 
-#include <klocale.h>
-#include <KoShapeContainer.h>
-#include <Utils.h>
+class KoShape;
+class QRectF;
 
-FreeLayout::FreeLayout() : Layout("freelayout")
-{
-}
-
-FreeLayout::~FreeLayout() {
-}
-
-QRectF FreeLayout::boundingBox() const {
-  QRectF b;
-  Utils::containerBoundRec(shapes(), b);
-  return b;
-}
-
-void FreeLayout::shapeAdded(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeRemoved(KoShape* ) {
-  updateSize();
-}
-
-void FreeLayout::shapeGeometryChanged(KoShape* ) {
-  updateSize();
-}
-void FreeLayout::updateSize() {
-  emit(boundingBoxChanged(boundingBox()));
-}
-
-FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {
-}
-
-FreeLayoutFactory::~FreeLayoutFactory() {
-}
-
-Layout* FreeLayoutFactory::createLayout() const {
-  return new FreeLayout;
+namespace Utils {
+  void containerBoundRec( QList<KoShape*> shapes, QRectF& b);
+  void containerBoundRec( KoShape* shape, QRectF& b);
+  
 }
