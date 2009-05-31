@@ -17,3 +17,86 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "WebTool.h"
+
+#include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+
+#include "WebShape.h"
+
+WebTool::WebTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0), m_dragMode(NO_DRAG)
+{
+}
+
+WebTool::~WebTool()
+{
+}
+
+void WebTool::activate( bool v )
+{
+  Q_ASSERT(m_dragMode == NO_DRAG);
+  KoSelection *selection = m_canvas->shapeManager()->selection();
+  foreach( KoShape *shape, selection->selectedShapes() ) 
+  {
+    m_currentShape = dynamic_cast<WebShape*>( shape );
+    if(m_currentShape)
+      break;
+  }
+  if( m_currentShape == 0 ) 
+  {
+    // none found
+    emit done();
+    return;
+  }
+  KoTool::activate(v);
+}
+
+void WebTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
+  Q_UNUSED(painter);
+  Q_UNUSED(converter);
+}
+
+void WebTool::mousePressEvent( KoPointerEvent *event )
+{
+  WebShape *hit = 0;
+  QRectF roi( event->point, QSizeF(1,1) );
+  QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+  KoSelection *selection = m_canvas->shapeManager()->selection();
+  foreach( KoShape *shape, shapes ) 
+  {
+    hit = dynamic_cast<WebShape*>( shape );
+    if(hit) {
+      if(hit == m_currentShape) {
+          m_scrollPoint = event->point;
+          Q_ASSERT(m_dragMode == NO_DRAG);
+          m_dragMode = SCROLL_DRAG;
+      } else {
+        selection->deselectAll();
+        m_currentShape = hit;
+        selection->select( m_currentShape );
+      }
+    }
+  }
+}
+
+void WebTool::mouseMoveEvent( KoPointerEvent *event )
+{
+  switch(m_dragMode) {
+    case NO_DRAG:
+      break;
+    case SCROLL_DRAG:
+    {
+      m_currentShape->scrollOf(event->point - m_scrollPoint);
+      m_scrollPoint = event->point;
+      break;
+    }
+  }
+}
+
+void WebTool::mouseReleaseEvent( KoPointerEvent *event )
+{
+  m_dragMode = NO_DRAG;
+}

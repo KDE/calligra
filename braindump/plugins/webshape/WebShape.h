@@ -45,6 +45,7 @@ class WebShape : public QObject, public KoShape{
     void setCached(bool _cache);
     void setCache(const QString& );
     const QString& cache() const;
+    void scrollOf( const QPointF& _scroll);
   private:
     void updateCache();
   private slots:
@@ -58,7 +59,7 @@ class WebShape : public QObject, public KoShape{
     bool m_loaded;
     bool m_firstLoad;
     qreal m_zoom;
-    QPoint m_scrollPosition;
+    QPointF m_scrollPosition;
 };
 
 

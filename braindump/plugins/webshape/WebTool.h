@@ -20,4 +20,40 @@
 #ifndef _WEB_TOOL_H_
 #define _WEB_TOOL_H_
 
+#include <KoTool.h>
+
+class WebShape;
+class KoShape;
+
+class WebTool : public KoTool 
+{
+    Q_OBJECT
+  public:
+    explicit WebTool(KoCanvasBase *canvas);
+    ~WebTool();
+    
+    /// reimplemented
+    void activate( bool );
+
+    /// reimplemented
+    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+
+    /// reimplemented
+    virtual void mousePressEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseMoveEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseReleaseEvent( KoPointerEvent *event );
+
+  private:
+    WebShape* m_currentShape;
+    KoShape* m_tmpShape;
+    enum DragMode {
+        NO_DRAG,
+        SCROLL_DRAG
+    };
+    DragMode m_dragMode;
+    QPointF m_scrollPoint;
+};
+
 #endif

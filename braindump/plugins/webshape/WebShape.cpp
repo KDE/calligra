@@ -51,7 +51,7 @@ void WebShape::paint( QPainter &painter,
   m_webPage->setViewportSize(target.size().toSize());
   double cz = target.width() / size().width();
   m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
-  m_webPage->mainFrame()->setScrollPosition(m_scrollPosition);
+  m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
   m_webPage->mainFrame()->render(&painter);
 }
 
@@ -157,6 +157,10 @@ void WebShape::setCache(const QString& _cache) {
 
 const QString& WebShape::cache() const {
   return m_cache;
+}
+
+void WebShape::scrollOf( const QPointF& _scroll) {
+    m_scrollPosition += _scroll;
 }
 
 #include "WebShape.moc"
