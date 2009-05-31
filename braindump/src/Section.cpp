@@ -48,7 +48,7 @@ Layout* Section::layout() {
 }
 
 void Section::setLayout(Layout* layout) {
+  layout->replaceLayout(m_layout);
   delete m_layout;
   m_layout = layout;
-  m_layout->replaceLayout(layout);
 }
