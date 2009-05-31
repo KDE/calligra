@@ -28,7 +28,7 @@ WebToolFactory::WebToolFactory( QObject *parent )
 {
     setToolTip( i18n("State Tool") );
     setToolType( dynamicToolType() );
-    setIcon ("statetool");
+    setIcon ("applications-internet");
     setPriority( 1 );
     setActivationShapeId( WEBSHAPEID );
 }
