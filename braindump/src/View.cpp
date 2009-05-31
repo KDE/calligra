@@ -325,6 +325,7 @@ void View::sectionBoundingBoxChanged(const QRectF& bb) {
   }
   m_zoomController->setPageSize( pageSize );
   m_zoomController->setDocumentSize( pageSize );
+  m_canvas->updateOrigin();
 }
 
 #include "View.moc"
