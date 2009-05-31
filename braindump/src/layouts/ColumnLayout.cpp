@@ -59,6 +59,7 @@ void ColumnLayout::updateShapesPosition() {
     double x =shape->position().x();
     shape->setPosition(QPointF(x,y));
     y += shape->size().height();
+    shape->update();
   }
   
   emit(boundingBoxChanged(boundingBox()));
