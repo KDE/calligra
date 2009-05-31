@@ -61,3 +61,11 @@ Layout* LayoutFactoryRegistry::createLayout(const QString& id) const {
     return 0;
   }
 }
+
+QList< QPair<QString, QString> > LayoutFactoryRegistry::factories() const {
+  QList< QPair<QString, QString> > lists;
+  foreach( LayoutFactory* factory, d->factories ) {
+    lists.push_back( QPair<QString, QString>( factory->id(), factory->name() ));
+  }
+  return lists;
+}

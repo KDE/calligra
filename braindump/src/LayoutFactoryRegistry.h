@@ -20,6 +20,8 @@
 #ifndef _LAYOUT_FACTORY_REGISTRY_H_
 #define _LAYOUT_FACTORY_REGISTRY_H_
 
+#include <QPair>
+
 class QString;
 
 class Layout;
@@ -32,6 +34,7 @@ class LayoutFactoryRegistry {
     static LayoutFactoryRegistry* instance();
     void addFactory(LayoutFactory* _factory);
     Layout* createLayout(const QString& id) const;
+    QList< QPair<QString, QString> > factories() const;
   private:
     struct Private;
     Private* const d;
