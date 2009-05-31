@@ -237,6 +237,7 @@ void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGr
 
 void SectionsIO::save()
 {
+  if(m_sectionsToSave.isEmpty()) return;
   QList<SaveContext*> contextToRemove = m_contextes.values();
   // First: save the structure
   QDomDocument doc;
@@ -251,16 +252,16 @@ void SectionsIO::save()
   // Second: save each section
   foreach(SaveContext* saveContext, m_contextes)
   {
-    // TODO
-//     if(m_sectionsToSave.contains(saveContext->section) )
-//     {
+    if(m_sectionsToSave.contains(saveContext->section) )
+    {
       if(saveContext->saveSection(this)) {
         kDebug() << "Sucessfully loaded: " << saveContext->section->name();
       } else {
         kDebug() << "Saving failed"; // TODO: Report it
       }
-//     }
+    }
   }
+  m_sectionsToSave.clear();
   
   // Last remove unused sections
   foreach( SaveContext* saveContext, contextToRemove)
