@@ -7,6 +7,8 @@ SET (webshape_LIB_SRCS
     WebShapeConfigWidget.cpp
     WebShapeFactory.cpp
     WebShapePlugin.cpp
+    WebTool.cpp
+    WebToolFactory.cpp
 )
 
 kde4_add_ui_files( webshape_LIB_SRCS
