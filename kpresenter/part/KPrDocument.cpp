@@ -59,6 +59,8 @@ public:
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 , m_customSlideShows(new KPrCustomSlideShows())
+, m_presentationMonitor( 0 )
+, m_presenterViewEnabled( false )
 {
     K_GLOBAL_STATIC( InitOnce, s_initOnce );
     InitOnce * initOnce = s_initOnce;
