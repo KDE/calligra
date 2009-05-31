@@ -43,7 +43,7 @@ void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
 }
 
 
-ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("column", i18n("Column")) {
+ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("columnlayout", i18n("Column")) {
 }
 
 ColumnLayoutFactory::~ColumnLayoutFactory() {
