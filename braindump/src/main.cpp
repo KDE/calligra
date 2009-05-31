@@ -19,7 +19,7 @@
 
 #include <kcmdlineargs.h>
 
-#include <KApplication>
+#include <KUniqueApplication>
 #include <kiconloader.h>
 #include <memory>
 
@@ -37,7 +37,7 @@ int main( int argc, char **argv )
   KCmdLineOptions options;
   KCmdLineArgs::addCmdLineOptions( options );
 
-  KApplication app;
+  KUniqueApplication app;
 
   KIconLoader::global()->addAppDir("koffice");
   KoGlobal::initialize();
