@@ -232,7 +232,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 void Canvas::resizeEvent( QResizeEvent * event )
 {
   emit sizeChanged( event->size() );
-  
+  updateOrigin();
 }
 
 void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
