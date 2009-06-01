@@ -52,7 +52,9 @@ void ColumnLayout::shapeRemoved(KoShape* _shape) {
 
 void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
   Q_UNUSED(_shape);
+  Q_ASSERT(m_shapes.contains(_shape));
   if(m_isUpdating) return;
+  m_shapes.move(m_shapes.indexOf(_shape), findIndex(_shape));
   updateShapesPosition();
 }
 
@@ -80,7 +82,7 @@ int ColumnLayout::findIndex(KoShape* _shape) {
       return i;
     }
   }
-  return m_shapes.count();
+  return m_shapes.count() - 1;
 }
 
 
