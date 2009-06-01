@@ -28,7 +28,8 @@
 
 #include <math.h>
 
-int KarbonPatternEditStrategyBase::m_handleRadius = 3;
+uint KarbonPatternEditStrategyBase::m_handleRadius = 3;
+uint KarbonPatternEditStrategyBase::m_grabSensitivity = 3;
 
 KarbonPatternEditStrategyBase::KarbonPatternEditStrategyBase( KoShape * s, KoImageCollection * imageCollection )
     : m_selectedHandle( -1 )
@@ -85,20 +86,21 @@ QUndoCommand * KarbonPatternEditStrategyBase::createCommand()
 
 void KarbonPatternEditStrategyBase::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const
 {
-    QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
+    QRectF handleRect = converter.viewToDocument( QRectF( 0, 0, 2*m_handleRadius, 2*m_handleRadius ) );
     handleRect.moveCenter( position );
     painter.drawRect( handleRect );
 }
 
-bool KarbonPatternEditStrategyBase::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const
+bool KarbonPatternEditStrategyBase::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos, const KoViewConverter &converter ) const
 {
-    if( mousePos.x() < handlePos.x()-m_handleRadius )
+    qreal grabSensitivityInPt = converter.viewToDocumentX(m_grabSensitivity);
+    if( mousePos.x() < handlePos.x()-grabSensitivityInPt )
         return false;
-    if( mousePos.x() > handlePos.x()+m_handleRadius )
+    if( mousePos.x() > handlePos.x()+grabSensitivityInPt )
         return false;
-    if( mousePos.y() < handlePos.y()-m_handleRadius )
+    if( mousePos.y() < handlePos.y()-grabSensitivityInPt )
         return false;
-    if( mousePos.y() > handlePos.y()+m_handleRadius )
+    if( mousePos.y() > handlePos.y()+grabSensitivityInPt )
         return false;
     return true;
 }
@@ -159,12 +161,12 @@ void KarbonPatternEditStrategy::paint( QPainter &painter, const KoViewConverter 
     paintHandle( painter, converter, directionPoint );
 }
 
-bool KarbonPatternEditStrategy::selectHandle( const QPointF &mousePos )
+bool KarbonPatternEditStrategy::selectHandle( const QPointF &mousePos, const KoViewConverter &converter )
 {
     int handleIndex = 0;
     foreach( const QPointF & handle, m_handles )
     {
-        if( mouseInsideHandle( mousePos, m_matrix.map( m_origin + handle ) ) )
+        if( mouseInsideHandle( mousePos, m_matrix.map( m_origin + handle ), converter ) )
         {
             m_selectedHandle = handleIndex;
             return true;
@@ -276,7 +278,7 @@ void KarbonOdfPatternEditStrategy::paint( QPainter &painter, const KoViewConvert
 
 }
 
-bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos )
+bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos, const KoViewConverter &converter )
 {
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
     if( ! fill )
@@ -287,7 +289,7 @@ bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos )
 
     m_selectedHandle = -1;
 
-    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[size] ) ) )
+    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[size] ), converter ) )
     {
         m_selectedHandle = size;
         return true;
@@ -296,7 +298,7 @@ bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos )
     if( fill->repeat() == KoPatternBackground::Original )
         return false;
 
-    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[origin] ) ) )
+    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[origin] ), converter ) )
     {
         m_selectedHandle = origin;
         return true;

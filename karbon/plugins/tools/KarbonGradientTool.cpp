@@ -140,9 +140,10 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
         }
     }
 
-    QRectF roi( QPointF(), QSizeF( GradientStrategy::handleRadius(), GradientStrategy::handleRadius() ) );
+    qreal grabDist = m_canvas->viewConverter()->viewToDocumentX( GradientStrategy::grabSensitivity() ); 
+    QRectF roi( QPointF(), QSizeF(grabDist, grabDist) );
     roi.moveCenter( event->point );
-    // check if we on a shape without a gradient yet
+    // check if we are on a shape without a gradient yet
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
     KoSelection * selection = m_canvas->shapeManager()->selection();
 
@@ -488,7 +489,8 @@ void KarbonGradientTool::initialize()
 
     delete m_gradient;
     GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_strategies.values().first();
-    strategy->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    GradientStrategy::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    GradientStrategy::setGrabSensitivity( m_canvas->resourceProvider()->grabSensitivity() );
     m_gradient = KarbonGradientHelper::cloneGradient( strategy->gradient() );
     if( m_gradientWidget )
     {
@@ -528,6 +530,9 @@ void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
             foreach( GradientStrategy *strategy, m_strategies )
                 strategy->repaint();
         break;
+        case KoCanvasResource::GrabSensitivity:
+            GradientStrategy::setGrabSensitivity( res.toUInt() );
+            break;
         default:
             return;
     }

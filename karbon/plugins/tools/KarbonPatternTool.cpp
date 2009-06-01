@@ -86,7 +86,7 @@ void KarbonPatternTool::mousePressEvent( KoPointerEvent *event )
 
     foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
-        if( strategy->selectHandle( event->point ) )
+        if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
             m_currentStrategy = strategy;
             m_currentStrategy->repaint();
@@ -115,7 +115,7 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
     }
     foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
-        if( strategy->selectHandle( event->point ) )
+        if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
             useCursor(Qt::SizeAllCursor);
             return;
@@ -239,7 +239,8 @@ void KarbonPatternTool::activate( bool temporary )
     initialize();
 
     KarbonPatternEditStrategyBase::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
-
+    KarbonPatternEditStrategyBase::setGrabSensitivity( m_canvas->resourceProvider()->grabSensitivity() );
+    
     useCursor(Qt::ArrowCursor, true);
 
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
@@ -274,7 +275,10 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
 
             foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
                 strategy->repaint();
-        break;
+            break;
+        case KoCanvasResource::GrabSensitivity:
+            KarbonPatternEditStrategyBase::setGrabSensitivity( res.toUInt() );
+            break;
         default:
             return;
     }

@@ -77,11 +77,17 @@ public:
     /// schedules a repaint of the shape and gradient handles
     void repaint() const;
 
-    /// sets the handle radius used for painting the handles
-    static void setHandleRadius( int radius ) { m_handleRadius = radius; }
+    /// sets the handle radius in pixel used for painting the handles
+    static void setHandleRadius( uint radius ) { m_handleRadius = radius; }
 
-    /// returns the actual handle radius
-    static int handleRadius() { return m_handleRadius; }
+    /// returns the actual handle radius in pixel
+    static uint handleRadius() { return m_handleRadius; }
+
+    /// Sets the grab sensitivity in pixel used for grabbing handles or lines
+    static void setGrabSensitivity( uint grabSensitivity ) { m_grabSensitivity = grabSensitivity; }
+
+    /// Returns the actual grab sensitivity in pixel
+    static uint grabSensitivity() { return m_grabSensitivity; }
 
     /// returns the gradient handles bounding rect
     QRectF boundingRect( const KoViewConverter &converter ) const;
@@ -132,6 +138,9 @@ protected:
     /// Returns the handle rect
     QRectF handleRect( const KoViewConverter &converter ) const;
 
+    /// Returns the grab rect
+    QRectF grabRect( const KoViewConverter &converter ) const;
+    
     /// creates an updated brush from the actual data
     virtual QBrush brush() = 0;
 
@@ -153,7 +162,9 @@ private:
 
     void applyChanges();
 
-    static int m_handleRadius; ///< the handle radius for all gradient strategies
+    static uint m_handleRadius; ///< the handle radius for all gradient strategies
+    static uint m_grabSensitivity; ///< the grabbing sensitivity
+    
     bool m_editing; /// the edit mode flag
     Target m_target; ///< the gradient target
     QPair<int,int> m_gradientLine; ///< the handle indices defining the gradient line
