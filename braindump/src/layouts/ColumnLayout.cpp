@@ -39,9 +39,15 @@ QRectF ColumnLayout::boundingBox() const {
   return rect;
 }
 
+void ColumnLayout::shapesAdded(QList<KoShape*> _shapes) {
+  foreach(KoShape* shape, _shapes) {
+    m_shapes.push_back(shape);
+  }
+  updateShapesPosition();
+}
+
 void ColumnLayout::shapeAdded(KoShape* _shape) {
-  int idx = findIndex(_shape);
-  m_shapes.insert(idx, _shape);
+  m_shapes.push_back(_shape);
   updateShapesPosition();
 }
 
@@ -51,16 +57,22 @@ void ColumnLayout::shapeRemoved(KoShape* _shape) {
 }
 
 void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
-  Q_UNUSED(_shape);
   Q_ASSERT(m_shapes.contains(_shape));
-  if(m_isUpdating) return;
-  m_shapes.move(m_shapes.indexOf(_shape), findIndex(_shape));
   updateShapesPosition();
 }
 
+
+bool shapeIsLessThan(KoShape* s1, KoShape* s2)
+{
+  return s1->position().y() < s2->position().y();
+}
+
 void ColumnLayout::updateShapesPosition() {
-  Q_ASSERT(not m_isUpdating);
+  if(m_isUpdating) return;
   m_isUpdating = true;
+  // First sort them
+  qSort(m_shapes.begin(),m_shapes.end(), shapeIsLessThan);
+  // Update position
   double y = 0;
   foreach(KoShape* shape, m_shapes) {
     shape->update();
@@ -74,24 +86,6 @@ void ColumnLayout::updateShapesPosition() {
   emit(boundingBoxChanged(boundingBox()));
   m_isUpdating = false;
 }
-
-int ColumnLayout::findIndex(KoShape* _shape) {
-  qreal y = _shape->position().y();
-  for(int i = 0; i < m_shapes.count(); ++i) {
-    if(m_shapes[i] == _shape ) {
-      if( i < m_shapes.count() - 1 and m_shapes[i+1]->position().y() < y ) {
-        return i + 1;
-      } else {
-        return i;
-      }
-    } else if(m_shapes[i]->position().y() > y ) {
-      return i;
-    }
-  }
-  kDebug() << "No one";
-  return m_shapes.count() - 1;
-}
-
 
 ColumnLayoutFactory::ColumnLayoutFactory() : LayoutFactory("columnlayout", i18n("Column")) {
 }

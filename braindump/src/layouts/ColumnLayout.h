@@ -28,16 +28,14 @@ class ColumnLayout : public Layout {
     ColumnLayout();
     virtual ~ColumnLayout();
     virtual QRectF boundingBox() const;
+  protected:
+    virtual void shapesAdded(QList<KoShape*> _shape);
     virtual void shapeAdded(KoShape* _shape);
     virtual void shapeRemoved(KoShape* _shape);
     virtual void shapeGeometryChanged(KoShape* _shape);
   private:
     void updateShapesPosition();
   private:
-    /**
-     * Look where in the list to insert the shape
-     */
-    int findIndex(KoShape*);
     QList<KoShape*> m_shapes;
     bool m_isUpdating;
 };

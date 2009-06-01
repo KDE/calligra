@@ -35,7 +35,7 @@ class Layout : public QObject {
     const QString& id() const;
   public:
     void replaceLayout(Layout* layout);
-    virtual void addShapes(QList<KoShape*> _shapes);
+    void addShapes(QList<KoShape*> _shapes);
     void addShape(KoShape* _shape);
     void removeShape(KoShape* _shape);
     virtual QRectF boundingBox() const;
