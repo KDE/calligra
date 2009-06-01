@@ -83,7 +83,8 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
 
 void SectionContainer::initContainer(Section* _section) {
   m_section = _section;
-  m_layer = new KoShapeLayer(new SectionShapeContainerModel(m_section));
+  m_sectionModel = new SectionShapeContainerModel(m_section);
+  m_layer = new KoShapeLayer(m_sectionModel);
   addChild(m_layer);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
@@ -98,6 +99,7 @@ Section* SectionContainer::section()
 
 bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
+  m_sectionModel->setUpdateLayout(false);
   loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
   QList<KoShape*> shapes;
   KoXmlElement child;
@@ -109,6 +111,7 @@ bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingConte
     }
   }
   m_section->layout()->addShapes(shapes);
+  m_sectionModel->setUpdateLayout(true);
   return true;
 }
 void SectionContainer::saveOdf(KoShapeSavingContext & context) const

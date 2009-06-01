@@ -24,6 +24,7 @@
 
 class KoShapeLayer;
 class Section;
+class SectionShapeContainerModel;
 
 class SectionContainer : public KoShapeContainer {
   public:
@@ -44,6 +45,7 @@ class SectionContainer : public KoShapeContainer {
     Section* m_section;
     QMap<QString, KoDataCenter *> m_dataCenterMap;
     KoShapeLayer* m_layer;
+    SectionShapeContainerModel* m_sectionModel;
 };
 
 #endif
