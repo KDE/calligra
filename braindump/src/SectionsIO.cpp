@@ -44,6 +44,7 @@
 #include <KoOdfLoadingContext.h>
 #include "SectionContainer.h"
 #include "Layout.h"
+#include "LayoutFactoryRegistry.h"
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -205,16 +206,23 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   KoShapeLoadingContext context(loadingContext, section->sectionContainer()->dataCenterMap());
 
   KoXmlElement element;
+  QList<KoShape*> shapes;
   forEachElement(element, body) {
     kDebug() << "loading shape" << element.nodeName();
 
     if(element.nodeName() == "braindump:section")
     {
-      section->sectionContainer()->loadOdf(element, context);
-      return true;
+      section->sectionContainer()->loadOdf(element, context, shapes);
+    } else if( element.nodeName() == "braindump:layout" ) {
+      QString type = element.attribute("type");
+      Layout* layout = LayoutFactoryRegistry::instance()->createLayout(type);
+      if(layout) {
+        section->setLayout(layout);
+      }
     }
   }
-  return false;
+  section->layout()->addShapes(shapes);
+  return true;
 }
 
 void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)

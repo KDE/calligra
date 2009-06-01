@@ -35,7 +35,7 @@ class SectionContainer {
   public:
     Section* section();
     KoShapeLayer* layer();
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);
     void saveOdf(KoShapeSavingContext & context) const;
     QMap<QString, KoDataCenter *> dataCenterMap() const;
     QRectF containerBound() const;

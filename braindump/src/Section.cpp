@@ -27,7 +27,7 @@ Section::Section() : SectionGroup(0), m_layout(LayoutFactoryRegistry::instance()
 {
 }
 
-Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout(_rhs.m_layout), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this)) {
+Section::Section(const Section& _rhs) : SectionGroup(_rhs), m_layout( LayoutFactoryRegistry::instance()->createLayout(_rhs.m_layout->id()) ), m_sectionContainer(new SectionContainer(*_rhs.m_sectionContainer, this)) {
   setName(_rhs.name());
 }
 

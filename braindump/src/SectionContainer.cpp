@@ -51,18 +51,21 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs)
 class SectionContainerShapePaste : public KoOdfPaste
 {
   public:
-    SectionContainerShapePaste(SectionContainer* _container, KoShapeLayer* _layer) : m_container(_container), m_layer(_layer) {}
+    SectionContainerShapePaste(SectionContainer* _container, KoShapeLayer* _layer, Layout* _layout) : m_container(_container), m_layer(_layer), m_layout(_layout) {}
     virtual ~SectionContainerShapePaste() {}
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     {
       KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
       KoShapeLoadingContext context(loadingContext, m_container->dataCenterMap());
-      m_container->loadOdf(body, context);
+      QList<KoShape*> shapes;
+      m_container->loadOdf(body, context, shapes);
+      m_layout->addShapes(shapes);
       return true;
     }
   private:
     SectionContainer* m_container;
     KoShapeLayer* m_layer;
+    Layout* m_layout;
 };
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
@@ -74,7 +77,7 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
   
   Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
   
-  SectionContainerShapePaste paste(this, m_layer);
+  SectionContainerShapePaste paste(this, m_layer, _section->layout());
   bool success = paste.paste(KoOdf::Text, mimeData);
   Q_ASSERT(success);
   
@@ -100,10 +103,9 @@ KoShapeLayer* SectionContainer::layer() {
   return m_layer;
 }
 
-bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes)
 {
   m_sectionModel->setUpdateLayout(false);
-  QList<KoShape*> shapes;
   KoXmlElement child;
   forEachElement(child, element) {
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
@@ -112,7 +114,6 @@ bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingConte
       shapes.push_back(shape);
     }
   }
-  m_section->layout()->addShapes(shapes);
   m_sectionModel->setUpdateLayout(true);
   return true;
 }
