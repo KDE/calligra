@@ -42,7 +42,7 @@ SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
   initContainer(section);
 }
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs) : KoShapeContainer()
+SectionContainer::SectionContainer(const SectionContainer& _rhs)
 {
   Q_UNUSED(_rhs);
   qFatal("Can't copy");
@@ -65,7 +65,7 @@ class SectionContainerShapePaste : public KoOdfPaste
     KoShapeLayer* m_layer;
 };
 
-SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : KoShapeContainer(),  m_section(0), m_layer(0) {
+SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
   initContainer(_section);
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->iterator());
   KoDrag drag;
@@ -85,7 +85,6 @@ void SectionContainer::initContainer(Section* _section) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
-  addChild(m_layer);
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
     shapeFactory->populateDataCenterMap(m_dataCenterMap);
@@ -97,10 +96,13 @@ Section* SectionContainer::section()
   return m_section;
 }
 
+KoShapeLayer* SectionContainer::layer() {
+  return m_layer;
+}
+
 bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
   m_sectionModel->setUpdateLayout(false);
-  loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
   QList<KoShape*> shapes;
   KoXmlElement child;
   forEachElement(child, element) {
@@ -117,7 +119,6 @@ bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingConte
 void SectionContainer::saveOdf(KoShapeSavingContext & context) const
 {
   context.xmlWriter().startElement("braindump:section");
-  saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
 
   QList<KoShape*> shapes = m_layer->iterator();
   qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -126,13 +127,7 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
       shape->saveOdf(context);
   }
 
-  saveOdfCommonChildElements(context);
   context.xmlWriter().endElement();
-}
-void SectionContainer::paintComponent(QPainter &painter, const KoViewConverter &converter)
-{
-  Q_UNUSED(painter);
-  Q_UNUSED(converter);
 }
 
 QMap<QString, KoDataCenter* > SectionContainer::dataCenterMap() const
@@ -143,6 +138,6 @@ QMap<QString, KoDataCenter* > SectionContainer::dataCenterMap() const
 QRectF SectionContainer::containerBound() const
 {
   QRectF b;
-  Utils::containerBoundRec(this->iterator(), b);
+  Utils::containerBoundRec(m_layer->iterator(), b);
   return b;
 }

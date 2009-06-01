@@ -197,18 +197,12 @@ void View::editSelectAll()
   if( !selection )
     return;
 
-  QList<KoShape*> shapes = activeSection()->sectionContainer()->iterator();
+  KoShapeLayer *layer = activeSection()->sectionContainer()->layer();
 
-  foreach( KoShape *shape, shapes ) {
-    KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
-
-    if ( layer ) {
-      QList<KoShape*> layerShapes( layer->iterator() );
-      foreach( KoShape *layerShape, layerShapes ) {
-        selection->select( layerShape );
-        layerShape->update();
-      }
-    }
+  QList<KoShape*> layerShapes( layer->iterator() );
+  foreach( KoShape *layerShape, layerShapes ) {
+    selection->select( layerShape );
+    layerShape->update();
   }
 
   selectionChanged();
@@ -248,13 +242,13 @@ void View::setActiveSection( Section* page )
 
   if(m_activeSection)
   {
-    QList<KoShape*> shapes = page->sectionContainer()->iterator();
+    
+    QList<KoShape*> shapes;
+    shapes.push_back(page->sectionContainer()->layer());
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );
-    //Make the top most layer active
-    if ( !shapes.isEmpty() ) {
-      KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-      shapeManager()->selection()->setActiveLayer( layer );
-    }
+
+    KoShapeLayer* layer = page->sectionContainer()->layer();
+    shapeManager()->selection()->setActiveLayer( layer );
 
 
     // Make sure the canvas is enabled

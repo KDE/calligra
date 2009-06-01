@@ -26,7 +26,7 @@ class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
 
-class SectionContainer : public KoShapeContainer {
+class SectionContainer {
   public:
     SectionContainer(Section* );
     SectionContainer(const SectionContainer& _rhs, Section* );
@@ -34,9 +34,9 @@ class SectionContainer : public KoShapeContainer {
     void initContainer(Section* );
   public:
     Section* section();
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
+    KoShapeLayer* layer();
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext & context) const;
     QMap<QString, KoDataCenter *> dataCenterMap() const;
     QRectF containerBound() const;
   private:
