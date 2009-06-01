@@ -43,6 +43,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include "SectionContainer.h"
+#include "Layout.h"
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -117,6 +118,10 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   bodyWriter->startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
   section->sectionContainer()->saveOdf(*context);
+  
+  bodyWriter->startElement("braindump:layout");
+  bodyWriter->addAttribute("braindump:type", section->layout()->id());
+  bodyWriter->endElement(); // braindump:layout
   
   bodyWriter->endElement(); // office:element
   bodyWriter->endElement(); // office:body
