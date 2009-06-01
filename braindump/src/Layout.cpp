@@ -82,6 +82,7 @@ void Layout::replaceLayout(Layout* layout) {
 
 void Layout::addShapes(QList<KoShape*> _shapes) {
   foreach(KoShape* shape, _shapes) {
+    Q_ASSERT(not d->shapes.contains(shape));
     d->shapes.push_back(shape);
   }
   shapesAdded(_shapes);
