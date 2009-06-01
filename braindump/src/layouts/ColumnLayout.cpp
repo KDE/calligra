@@ -58,9 +58,12 @@ void ColumnLayout::updateShapesPosition() {
   m_isUpdating = true;
   double y = 0;
   foreach(KoShape* shape, m_shapes) {
-    double x =shape->position().x();
-    shape->setPosition(QPointF(x,y));
-    y += shape->size().height();
+    shape->update();
+    QRectF b;
+    Utils::containerBoundRec(shape, b);
+    QPointF transfo = QPointF(0.0, y) - b.topLeft();
+    shape->setAbsolutePosition( transfo + shape->absolutePosition(KoFlake::TopLeftCorner), KoFlake::TopLeftCorner);
+    y += b.height();
     shape->update();
   }
   
