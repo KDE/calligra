@@ -78,10 +78,17 @@ void ColumnLayout::updateShapesPosition() {
 int ColumnLayout::findIndex(KoShape* _shape) {
   qreal y = _shape->position().y();
   for(int i = 0; i < m_shapes.count(); ++i) {
-    if(m_shapes[i]->position().y() > y ) {
+    if(m_shapes[i] == _shape ) {
+      if( i < m_shapes.count() - 1 and m_shapes[i+1]->position().y() < y ) {
+        return i + 1;
+      } else {
+        return i;
+      }
+    } else if(m_shapes[i]->position().y() > y ) {
       return i;
     }
   }
+  kDebug() << "No one";
   return m_shapes.count() - 1;
 }
 
