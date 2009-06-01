@@ -38,10 +38,16 @@ class SectionShapeContainerModel: public KoShapeContainerModel
     void containerChanged(KoShapeContainer *);
     void childChanged(KoShape *, KoShape::ChangeType);
     bool isChildLocked(const KoShape *child) const;
+  public:
+    /**
+     * Determine wether to update or not the layout.
+     */
+    void setUpdateLayout(bool v);
 
   private: // members
     QList <KoShape *> m_members;
     Section* m_section;
+    bool m_updateLayout;
 };
 
 #endif

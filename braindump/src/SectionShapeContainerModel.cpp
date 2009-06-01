@@ -22,7 +22,7 @@
 #include <KoShapeContainer.h>
 #include "Layout.h"
 
-SectionShapeContainerModel::SectionShapeContainerModel(Section* _section) : m_section(_section)
+SectionShapeContainerModel::SectionShapeContainerModel(Section* _section) : m_section(_section), m_updateLayout(true)
 {
 }
 
@@ -34,7 +34,9 @@ void SectionShapeContainerModel::add(KoShape *child) {
     if (m_members.contains(child))
         return;
     m_members.append(child);
-    m_section->layout()->addShape(child);
+    if(m_updateLayout) {
+      m_section->layout()->addShape(child);
+    }
 }
 
 void SectionShapeContainerModel::setClipping(const KoShape *, bool) {
@@ -46,7 +48,9 @@ bool SectionShapeContainerModel::childClipped(const KoShape *) const {
 
 void SectionShapeContainerModel::remove(KoShape *child) {
     m_members.removeAll(child);
-    m_section->layout()->removeShape(child);
+    if(m_updateLayout) {
+      m_section->layout()->removeShape(child);
+    }
 }
 
 int SectionShapeContainerModel::count() const {
@@ -66,4 +70,8 @@ void SectionShapeContainerModel::childChanged(KoShape *, KoShape::ChangeType) {
 bool SectionShapeContainerModel::isChildLocked(const KoShape *child) const {
     Q_ASSERT(child->parent());
     return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+}
+
+void SectionShapeContainerModel::setUpdateLayout(bool v) {
+  m_updateLayout = v;
 }
