@@ -75,7 +75,14 @@ void ColumnLayout::updateShapesPosition() {
   // Update position
   double y = 0;
   foreach(KoShape* shape, m_shapes) {
-    if(not shape->hasDependees()) {
+    bool dependOnOtherShape = false;
+    foreach(KoShape* otherShape, m_shapes) {
+      if(otherShape->hasDependee(shape)) {
+        dependOnOtherShape = true;
+        break;
+      }
+    }
+    if(not dependOnOtherShape) {
       shape->update();
       QRectF b;
       Utils::containerBoundRec(shape, b);
