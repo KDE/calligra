@@ -233,6 +233,17 @@ ConfigMiscPage::ConfigMiscPage( KarbonView* view, char* name )
     m_view = view;
     m_config = KarbonFactory::componentData().config();
 
+    m_oldGrabSensitivity = 3;
+    m_oldHandleRadius = 3;
+    
+    if( m_config->hasGroup( "Misc" ) )
+    {
+        KConfigGroup miscGroup = m_config->group( "Misc" );
+        
+        m_oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", m_oldGrabSensitivity);
+        m_oldHandleRadius = miscGroup.readEntry("HandleRadius", m_oldHandleRadius);
+    }
+    
     KoUnit unit = view->part()->unit();
 
     QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), this );
@@ -246,7 +257,7 @@ ConfigMiscPage::ConfigMiscPage( KarbonView* view, char* name )
     //don't load unitType from config file because unit is
     //depend from kword file => unit can be different from config file
 
-    grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 0, 0 );
+    grid->addWidget( new QLabel( i18n( "Units:" ), tmpQGroupBox ), 0, 0 );
 
     m_unit = new KComboBox( tmpQGroupBox );
     m_unit->addItems( KoUnit::listOfUnitName() );
@@ -254,7 +265,23 @@ ConfigMiscPage::ConfigMiscPage( KarbonView* view, char* name )
     m_oldUnit = KoUnit::unit( unitType );
     m_unit->setCurrentIndex( m_oldUnit.indexInList() );
 
-    grid->setRowStretch( 2, 1 );
+    grid->addWidget( new QLabel( i18n( "Handle radius:" ), tmpQGroupBox ), 1, 0 );
+    
+    m_handleRadius = new KIntNumInput( tmpQGroupBox );
+    m_handleRadius->setRange( 3, 20, 1 );
+    m_handleRadius->setSuffix( " px" );
+    m_handleRadius->setValue( m_oldHandleRadius );
+    grid->addWidget( m_handleRadius, 1, 1 );
+
+    grid->addWidget( new QLabel( i18n( "Grab sensitivity:" ), tmpQGroupBox ), 2, 0 );
+    
+    m_grabSensitivity = new KIntNumInput( tmpQGroupBox );
+    m_grabSensitivity->setRange( 3, 20, 1 );
+    m_grabSensitivity->setSuffix( " px" );
+    m_grabSensitivity->setValue( m_oldGrabSensitivity );
+    grid->addWidget( m_grabSensitivity, 2, 1 );
+    
+    grid->setRowStretch( 3, 1 );
 
     tmpQGroupBox->setLayout(grid);
 
@@ -274,6 +301,16 @@ void ConfigMiscPage::apply()
         part->document().setUnit( m_oldUnit );
         part->setUnit( m_oldUnit );
         miscGroup.writeEntry( "Units", KoUnit::unitName( part->unit() ) );
+    }
+    
+    uint currentHandleRadius = m_handleRadius->value();
+    if( currentHandleRadius != m_oldHandleRadius ) {
+        miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
+    }
+    
+    uint currentGrabSensitivity = m_grabSensitivity->value();
+    if( currentGrabSensitivity != m_oldGrabSensitivity ) {
+        miscGroup.writeEntry( "GrabSensitivity", currentGrabSensitivity );
     }
 }
 

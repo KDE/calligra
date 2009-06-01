@@ -104,17 +104,26 @@ public:
             return defaultValue;
     }
     
-    QColor canvasColor( KarbonPart * part )
+    void applyCanvasConfiguration( KarbonCanvas * canvas, KarbonPart * part )
     {
         KSharedConfigPtr config = part->componentData().config();
+        
+        uint grabSensitivity = 3;
+        uint handleRadius = 3;
+        if( config->hasGroup( "Misc" ) ) {
+            KConfigGroup miscGroup = config->group( "Misc" );
+            grabSensitivity = miscGroup.readEntry( "GrabSensitivity", grabSensitivity );
+            handleRadius = miscGroup.readEntry( "HandleRadius", handleRadius );
+        }
+        canvas->resourceProvider()->setHandleRadius( handleRadius );
+        canvas->resourceProvider()->setGrabSensitivity( grabSensitivity );
         
         QColor color( Qt::white );
         if( config->hasGroup( "Interface" ) )
         {
             color = config->group( "Interface" ).readEntry("CanvasColor", color);
         }
-        
-        return color;
+        canvas->setBackgroundColor( color );
     }
 
 
@@ -158,8 +167,12 @@ void KarbonPart::setPageLayout( const KoPageLayout& layout )
 KoView* KarbonPart::createViewInstance( QWidget* parent )
 {
     KarbonView *result = new KarbonView( this, parent );
-    result->canvasWidget()->setBackgroundColor( d->canvasColor(this) );
-    result->canvasWidget()->resourceProvider()->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
+    
+    KoCanvasResourceProvider * provider = result->canvasWidget()->resourceProvider();
+    provider->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
+    
+    d->applyCanvasConfiguration( result->canvasWidget(), this );
+    
     return result;
 }
 
@@ -372,13 +385,11 @@ uint KarbonPart::maxRecentFiles() const
 
 void KarbonPart::reorganizeGUI()
 {
-    QColor canvasColor = d->canvasColor(this);
-
     foreach ( KoView* view, views() ) {
         KarbonView * kv = qobject_cast<KarbonView*>( view );
         if( kv ) {
             kv->reorganizeGUI();
-            kv->canvasWidget()->setBackgroundColor(canvasColor);
+            d->applyCanvasConfiguration( kv->canvasWidget(), this );
         }
     }
 }

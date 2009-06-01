@@ -111,6 +111,10 @@ private:
 
     KoUnit m_oldUnit;
     QComboBox *m_unit;
+    KIntNumInput * m_handleRadius;
+    uint m_oldHandleRadius;
+    KIntNumInput * m_grabSensitivity;
+    uint m_oldGrabSensitivity;
 };
 
 class ConfigDefaultPage : public KVBox

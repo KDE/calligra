@@ -1106,6 +1106,7 @@ void KarbonView::configure()
     QPointer<KarbonConfigureDialog> dialog = new KarbonConfigureDialog( this );
     dialog->exec();
     delete dialog;
+    d->part->reorganizeGUI();
 }
 
 void KarbonView::pageLayout()
