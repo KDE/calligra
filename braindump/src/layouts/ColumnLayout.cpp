@@ -75,13 +75,15 @@ void ColumnLayout::updateShapesPosition() {
   // Update position
   double y = 0;
   foreach(KoShape* shape, m_shapes) {
-    shape->update();
-    QRectF b;
-    Utils::containerBoundRec(shape, b);
-    QPointF transfo = QPointF(0.0, y) - b.topLeft();
-    shape->setAbsolutePosition( transfo + shape->absolutePosition(KoFlake::TopLeftCorner), KoFlake::TopLeftCorner);
-    y += b.height();
-    shape->update();
+    if(not shape->hasDependees()) {
+      shape->update();
+      QRectF b;
+      Utils::containerBoundRec(shape, b);
+      QPointF transfo = QPointF(0.0, y) - b.topLeft();
+      shape->setAbsolutePosition( transfo + shape->absolutePosition(KoFlake::TopLeftCorner), KoFlake::TopLeftCorner);
+      y += b.height();
+      shape->update();
+    }
   }
   emit(boundingBoxChanged(boundingBox()));
   m_isUpdating = false;
