@@ -26,7 +26,7 @@
 
 #include "ViewManager.h"
 
-RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager), m_sectionsSaver(new SectionsIO(this))
+RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this))
 {
   m_undoStack = new KUndoStack(0);
 }
