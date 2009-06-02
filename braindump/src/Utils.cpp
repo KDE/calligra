@@ -21,6 +21,9 @@
 
 #include <KoShape.h>
 #include <KoShapeContainer.h>
+#include "SectionGroup.h"
+#include "Section.h"
+#include "SectionContainer.h"
 
 void Utils::containerBoundRec( QList<KoShape*> shapes, QRectF& b)
 {
@@ -39,3 +42,11 @@ void Utils::containerBoundRec( KoShape* shape, QRectF& b) {
   }
 }
 
+Section* Utils::sectionForLayer(KoShapeLayer* _layer, SectionGroup* _sectionGroup) {
+  foreach(Section* section, _sectionGroup->sections()) {
+    if(section->sectionContainer()->layer() == _layer) {
+      return section;
+    }
+  }
+  return 0;
+}

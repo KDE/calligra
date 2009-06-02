@@ -25,8 +25,11 @@
 #include "Section.h"
 #include "View.h"
 #include "SectionContainer.h"
+#include <KoShapeLayer.h>
+#include "RootSection.h"
+#include "Utils.h"
 
-ViewManager::ViewManager() : m_lastViewInFocus(0)
+ViewManager::ViewManager(RootSection* _rootSection) : m_lastViewInFocus(0), m_rootSection(_rootSection)
 {
 }
 
@@ -75,17 +78,13 @@ QMap<QString, KoDataCenter *> ViewManager::dataCenterMap() const
 Section* ViewManager::sectionByShape( KoShape * shape ) const
 {
   KoShape * parent = shape;
-  SectionContainer* container = 0;
-  while ( !container && ( parent = parent->parent() ) )
+  while( ( parent = parent->parent() ) )
   {
-    container = dynamic_cast<SectionContainer*>( parent );
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( parent );
+    Section* section = Utils::sectionForLayer(layer, m_rootSection);
+    if(section) return section;
   }
-  if( not container)
-  {
-    return 0;
-  } else {
-    return container->section();
-  }
+  return 0;
 }
 
 void ViewManager::addView(View* view)

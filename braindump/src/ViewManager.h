@@ -19,12 +19,13 @@
 
 #include <KoShapeControllerBase.h>
 
+class RootSection;
 class Section;
 class View;
 
 class ViewManager : public KoShapeControllerBase {
   public:
-    ViewManager();
+    ViewManager(RootSection*);
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
     virtual QMap<QString, KoDataCenter *>  dataCenterMap() const;
@@ -35,4 +36,5 @@ class ViewManager : public KoShapeControllerBase {
     View* m_lastViewInFocus;
     Section* sectionByShape( KoShape * shape ) const;
     QList<View*> m_views;
+    RootSection* m_rootSection;
 };
