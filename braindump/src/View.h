@@ -94,7 +94,7 @@ protected slots:
     
   private slots:
     void canvasReceivedFocus();
-    void sectionBoundingBoxChanged(const QRectF& rect);
+    void documentRectChanged(const QRectF& rect);
   protected:
     virtual void focusInEvent(QFocusEvent * event);
 private:

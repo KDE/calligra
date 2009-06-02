@@ -121,6 +121,7 @@ void View::initGUI()
 
     m_canvas = new Canvas( this, m_doc );
     connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
+    connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
     
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
@@ -148,7 +149,6 @@ void View::initGUI()
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
@@ -222,7 +222,7 @@ void View::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 {
   Q_UNUSED(mode);
   Q_UNUSED(zoom);
-  canvas()->updateOrigin();
+  canvas()->updateOriginAndSize();
   canvas()->update();
 }
 
@@ -233,10 +233,6 @@ KoShapeManager* View::shapeManager() const
 
 void View::setActiveSection( Section* page )
 {
-  if(m_activeSection)
-  {
-    disconnect(m_activeSection->layout(), SIGNAL(boundingBoxChanged(const QRectF& )), this, SLOT(sectionBoundingBoxChanged(const QRectF& )));
-  }
   m_activeSection = page;
 
 
@@ -253,8 +249,7 @@ void View::setActiveSection( Section* page )
 
     // Make sure the canvas is enabled
     canvas()->setEnabled(true);
-    connect(m_activeSection->layout(), SIGNAL(boundingBoxChanged(const QRectF& )), SLOT(sectionBoundingBoxChanged(const QRectF& )));
-    sectionBoundingBoxChanged(m_activeSection->layout()->boundingBox());
+    documentRectChanged(m_activeSection->layout()->boundingBox());
   } else {
     shapeManager()->setShapes( QList<KoShape*>(), KoShapeManager::AddWithoutRepaint );
     shapeManager()->selection()->setActiveLayer( 0 );
@@ -317,16 +312,15 @@ void View::canvasReceivedFocus()
   m_doc->viewManager()->viewHasFocus(this);
 }
 
-void View::sectionBoundingBoxChanged(const QRectF& bb) {
+void View::documentRectChanged(const QRectF& bb) {
   QSizeF pageSize( 400, 400 );
-  // compute the page size
+  // Make sure we never use an empty size
   if(not bb.isNull() and not bb.isEmpty())
   {
     pageSize = QSizeF(bb.right(), bb.bottom());
   }
   m_zoomController->setPageSize( pageSize );
   m_zoomController->setDocumentSize( pageSize );
-  m_canvas->updateOrigin();
 }
 
 #include "View.moc"

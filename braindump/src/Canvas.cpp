@@ -23,7 +23,6 @@
 #include "kundostack.h"
 
 #include <KoSelection.h>
-#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
@@ -39,6 +38,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include "Layout.h"
+#include <KoCanvasController.h>
 
 Canvas::Canvas( View * view, RootSection* doc )
 : QWidget( view )
@@ -48,6 +48,7 @@ Canvas::Canvas( View * view, RootSection* doc )
 , m_doc( doc )
 {
   m_shapeManager = new KoShapeManager( this );
+  connect( m_shapeManager, SIGNAL(selectionChanged()), SLOT(updateOriginAndSize()) );
   m_toolProxy = new KoToolProxy( this );
   setFocusPolicy( Qt::StrongFocus );
   // this is much faster than painting it in the paintevent
@@ -70,6 +71,7 @@ void Canvas::setDocumentOffset(const QPoint &offset) {
 void Canvas::addCommand( QUndoCommand *command )
 {
   m_doc->addCommand( m_view->activeSection(), command );
+  updateOriginAndSize();
 }
 
 KoShapeManager * Canvas::shapeManager() const
@@ -232,7 +234,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 void Canvas::resizeEvent( QResizeEvent * event )
 {
   emit sizeChanged( event->size() );
-  updateOrigin();
+  updateOriginAndSize();
 }
 
 void Canvas::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )
@@ -256,15 +258,31 @@ void Canvas::setBackgroundColor( const QColor &color )
 void Canvas::sectionChanged(Section* section)
 {
   Q_ASSERT(m_view->activeSection() == section );
-  updateOrigin();
+  updateOriginAndSize();
 }
 
-void Canvas::updateOrigin()
+void Canvas::updateOriginAndSize()
 {
   if( m_view->activeSection() ) {
     QRectF rect = m_view->activeSection()->layout()->boundingBox();
-    QRect documentRect = viewConverter()->documentToView( rect ).toRect();
-    m_origin = -documentRect.topLeft();
+    if(rect != m_oldDocumentRect) {
+      m_oldDocumentRect = rect;
+      emit(documentRect(rect));
+    }
+    QRect viewRect = viewConverter()->documentToView( rect ).toRect();
+    if( m_oldViewDocumentRect != viewRect )
+    {
+      m_oldViewDocumentRect = viewRect;
+      m_origin = -viewRect.topLeft();
+      KoCanvasController* controller = canvasController();
+      Q_ASSERT( controller );
+      // tell canvas controller the new document size in pixel
+      controller->setDocumentSize( viewRect.size() );
+      // make sure the actual selection is visible
+      KoSelection * selection = m_shapeManager->selection();
+      if( selection->count() )
+          controller->ensureVisible( selection->boundingRect() );
+    }
   }
 }
 

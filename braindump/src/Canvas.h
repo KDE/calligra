@@ -62,12 +62,12 @@ class Canvas : public QWidget, public KoCanvasBase
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     virtual bool snapToGrid() const;
+  public slots:
     /**
      * Update the origin of the document.
      */
-    void updateOrigin();
+    void updateOriginAndSize();
 
-  public slots:
     void setDocumentOffset(const QPoint &offset);
     void sectionChanged(Section* section);
 
@@ -75,7 +75,7 @@ class Canvas : public QWidget, public KoCanvasBase
     virtual void focusInEvent(QFocusEvent * event);
 
   signals:
-    void documentSize(const QSize &size);
+    void documentRect(const QRectF&);
     void canvasReceivedFocus();
 
     /**
@@ -138,6 +138,9 @@ class Canvas : public QWidget, public KoCanvasBase
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;
+    QRectF m_oldDocumentRect;
+    QRect m_oldViewDocumentRect;
+    
 };
 
 #endif /* KOPACANVAS_H */
