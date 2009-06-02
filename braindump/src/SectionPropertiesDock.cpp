@@ -25,6 +25,8 @@
 SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
+  setWindowTitle("Dump properties");
+  
   m_wdgSectionProperties.setupUi(mainWidget);
   
   typedef QPair<QString, QString> PairType;
