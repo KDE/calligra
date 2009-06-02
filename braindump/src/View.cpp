@@ -135,7 +135,7 @@ void View::initGUI()
     m_zoomAction = m_zoomController->zoomAction();
     m_mainWindow->addStatusBarItem( m_zoomAction->createWidget( m_mainWindow->statusBar() ), 0, this );
 
-    m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
+    m_zoomController->setZoomMode( KoZoomMode::ZOOM_WIDTH );
 
     gridLayout->addWidget( m_canvasController, 1, 1 );
 
