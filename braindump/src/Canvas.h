@@ -117,7 +117,7 @@ class Canvas : public QWidget, public KoCanvasBase
     virtual void resizeEvent( QResizeEvent * event );
 
   private:
-    
+    void updateOffset();
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
@@ -138,6 +138,7 @@ class Canvas : public QWidget, public KoCanvasBase
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
     QPoint m_documentOffset;
+    QPoint m_originalOffset;
     QRectF m_oldDocumentRect;
     QRect m_oldViewDocumentRect;
     

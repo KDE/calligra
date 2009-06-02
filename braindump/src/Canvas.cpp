@@ -63,9 +63,10 @@ Canvas::~Canvas()
   delete m_toolProxy;
   delete m_shapeManager;
 }
-
+#include <kdebug.h>
 void Canvas::setDocumentOffset(const QPoint &offset) {
-  m_documentOffset = offset;
+  m_originalOffset = offset;
+  updateOffset();
 }
 
 void Canvas::addCommand( QUndoCommand *command )
@@ -282,8 +283,16 @@ void Canvas::updateOriginAndSize()
       KoSelection * selection = m_shapeManager->selection();
       if( selection->count() )
           controller->ensureVisible( selection->boundingRect() );
+      updateOffset();
     }
   }
+}
+
+void Canvas::updateOffset()
+{
+  qreal dx = qMax( 0, (size().width() - m_oldViewDocumentRect.size().width())/2);
+  qreal dy = qMax( 0, (size().height() - m_oldViewDocumentRect.size().height())/2);
+  m_documentOffset = m_originalOffset - QPoint(dx, dy);
 }
 
 void Canvas::gridSize(qreal *horizontal, qreal *vertical) const
