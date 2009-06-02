@@ -317,7 +317,7 @@ void View::documentRectChanged(const QRectF& bb) {
   // Make sure we never use an empty size
   if(not bb.isNull() and not bb.isEmpty())
   {
-    pageSize = QSizeF(bb.right(), bb.bottom());
+    pageSize = bb.size();
   }
   m_zoomController->setPageSize( pageSize );
   m_zoomController->setDocumentSize( pageSize );
