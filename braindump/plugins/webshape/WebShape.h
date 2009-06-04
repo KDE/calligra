@@ -47,6 +47,10 @@ class WebShape : public QObject, public KoShape{
     const QString& cache() const;
     void scrollOf( const QPointF& _scroll);
     void zoomOf( double z);
+    QPointF scroll() const;
+    void setScroll(const QPointF& point);
+    qreal zoom() const;
+    void setZoom(qreal _zoom);
   private:
     void updateCache();
   private slots:

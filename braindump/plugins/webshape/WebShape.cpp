@@ -174,4 +174,20 @@ void WebShape::zoomOf( double z) {
   if( m_zoom <= 0.01) m_zoom = 0.01;
 }
 
+QPointF WebShape::scroll() const {
+  return m_scrollPosition;
+}
+
+void WebShape::setScroll(const QPointF& point) {
+  m_scrollPosition = point;
+}
+
+qreal WebShape::zoom() const {
+  return m_zoom;
+}
+
+void WebShape::setZoom(qreal _zoom) {
+  m_zoom = _zoom;
+}
+
 #include "WebShape.moc"
