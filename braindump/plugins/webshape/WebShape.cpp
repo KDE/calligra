@@ -61,6 +61,9 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
 
   writer.startElement( "braindump:web" );
   writer.addAttribute( "url", m_url.url());
+  writer.addAttribute( "scroll_x", m_scrollPosition.x());
+  writer.addAttribute( "scroll_y", m_scrollPosition.y());
+  writer.addAttribute( "zoom", m_zoom);
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   if(m_cached)
@@ -77,6 +80,9 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
 {
   loadOdfAttributes( element, context, OdfAllAttributes );
   m_url = element.attribute("url");
+  m_scrollPosition.setX(element.attribute("scroll_x", "0").toDouble());
+  m_scrollPosition.setY(element.attribute("scroll_y", "0").toDouble());
+  m_zoom = element.attribute("zoom", "1.0").toDouble();
   if(element.attribute("cached") == "true")
   {
     m_cached = true;
