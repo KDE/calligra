@@ -73,7 +73,7 @@ void ColumnLayout::updateShapesPosition() {
   // First sort them
   qSort(m_shapes.begin(),m_shapes.end(), shapeIsLessThan);
   // Update position
-  double y = 0;
+  qreal y = 0;
   foreach(KoShape* shape, m_shapes) {
     bool dependOnOtherShape = false;
     foreach(KoShape* otherShape, m_shapes) {

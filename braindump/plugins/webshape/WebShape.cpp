@@ -49,7 +49,7 @@ void WebShape::paint( QPainter &painter,
 {
   QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
   m_webPage->setViewportSize(target.size().toSize());
-  double cz = target.width() / size().width();
+  qreal cz = target.width() / size().width();
   m_webPage->mainFrame()->setZoomFactor(m_zoom * cz);
   m_webPage->mainFrame()->setScrollPosition(m_scrollPosition.toPoint());
   m_webPage->mainFrame()->render(&painter);
@@ -169,7 +169,7 @@ void WebShape::scrollOf( const QPointF& _scroll) {
   m_scrollPosition += _scroll / m_zoom;
 }
 
-void WebShape::zoomOf( double z) {
+void WebShape::zoomOf( qreal z) {
   m_zoom *= z;
   if( m_zoom <= 0.01) m_zoom = 0.01;
 }
