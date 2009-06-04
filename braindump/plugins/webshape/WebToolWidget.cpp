@@ -17,13 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "WebShapeConfigWidget.h"
+#include "WebToolWidget.h"
 
 #include <QUndoCommand>
 #include <QWebPage>
 #include <QWebFrame>
 
 #include "WebShape.h"
+#include "WebTool.h"
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -72,22 +73,23 @@ private:
   QString m_cache;
 };
 
-WebShapeConfigWidget::WebShapeConfigWidget()
+WebToolWidget::WebToolWidget(WebTool* _tool) : m_tool(_tool)
 {
   m_widget.setupUi(this);
-  connect(m_widget.urlEdit, SIGNAL(editingFinished()), SIGNAL(propertyChanged()));
-  connect(m_widget.useCache, SIGNAL(stateChanged(int)), SIGNAL(propertyChanged()));
+  connect(m_widget.urlEdit, SIGNAL(editingFinished()), SLOT(save()));
+  connect(m_widget.useCache, SIGNAL(stateChanged(int)), SLOT(save()));
+  connect(m_tool, SIGNAL(shapeChanged(WebShape*)),SLOT(open(WebShape*)));
 }
 
-void WebShapeConfigWidget::blockChildSignals( bool block )
+void WebToolWidget::blockChildSignals( bool block )
 {
   m_widget.urlEdit->blockSignals(block);
   m_widget.useCache->blockSignals(block);
 }
 
-void WebShapeConfigWidget::open(KoShape *shape)
+void WebToolWidget::open(WebShape *shape)
 {
-  m_shape = dynamic_cast<WebShape*>( shape );
+  m_shape = shape;
   if( !m_shape )
     return;
   blockChildSignals(true);
@@ -96,7 +98,7 @@ void WebShapeConfigWidget::open(KoShape *shape)
   blockChildSignals(false);
 }
 
-void WebShapeConfigWidget::save()
+void WebToolWidget::save()
 {
   if( !m_shape )
     return;
@@ -117,14 +119,14 @@ void WebShapeConfigWidget::save()
   }
 }
 
-QUndoCommand * WebShapeConfigWidget::createCommand()
+QUndoCommand * WebToolWidget::createCommand()
 {
     save();
 
     return 0;
 }
 
-WebShape* WebShapeConfigWidget::shape()
+WebShape* WebToolWidget::shape()
 {
   return m_shape;
 }

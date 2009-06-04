@@ -44,6 +44,10 @@ class WebTool : public KoTool
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+  signals:
+    void shapeChanged(WebShape* );
+  protected:
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
   private:
     WebShape* m_currentShape;

@@ -18,29 +18,30 @@
  */
 
 
-#include <KoShapeConfigWidgetBase.h>
+#include <QWidget>
 
 #include "ui_WebShapeConfigWidget.h"
 
+class QUndoCommand;
 class WebShape;
+class WebTool;
 
-class WebShapeConfigWidget : public KoShapeConfigWidgetBase
+class WebToolWidget : public QWidget
 {
     Q_OBJECT
   public:
-    WebShapeConfigWidget();
+    WebToolWidget(WebTool* _tool);
+  public slots:
+    void open(WebShape *shape);
+    void save();
+  private:
     /// reimplemented
-    virtual void open(KoShape *shape);
-    /// reimplemented
-    virtual void save();
-    /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
-    /// reimplemented
-    virtual QUndoCommand * createCommand();
+    QUndoCommand * createCommand();
     WebShape *shape();
   private:
     void blockChildSignals( bool block );
   private:
+    WebTool* m_tool;
     WebShape *m_shape;
     Ui::WebShapeConfigWidget m_widget;
 };

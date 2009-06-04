@@ -4,10 +4,10 @@ include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCL
 
 SET (webshape_LIB_SRCS
     WebShape.cpp
-    WebShapeConfigWidget.cpp
     WebShapeFactory.cpp
     WebShapePlugin.cpp
     WebTool.cpp
+    WebToolWidget.cpp
     WebToolFactory.cpp
 )
 

@@ -25,6 +25,8 @@
 #include <KoSelection.h>
 
 #include "WebShape.h"
+#include <klocalizedstring.h>
+#include "WebToolWidget.h"
 
 WebTool::WebTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0), m_dragMode(NO_DRAG)
 {
@@ -77,6 +79,7 @@ void WebTool::mousePressEvent( KoPointerEvent *event )
         selection->deselectAll();
         m_currentShape = hit;
         selection->select( m_currentShape );
+        emit(shapeChanged(hit));
       }
     }
   }
@@ -100,4 +103,10 @@ void WebTool::mouseMoveEvent( KoPointerEvent *event )
 void WebTool::mouseReleaseEvent( KoPointerEvent *event )
 {
   m_dragMode = NO_DRAG;
+}
+
+QMap<QString, QWidget *> WebTool::createOptionWidgets() {
+  QMap<QString, QWidget *> widgets;
+  widgets[i18n("Web tool options")] = new WebToolWidget(this);
+  return widgets;
 }

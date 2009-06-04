@@ -27,7 +27,6 @@
 #include <KoProperties.h>
 
 #include "WebShape.h"
-#include "WebShapeConfigWidget.h"
 
 WebShapeFactory::WebShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, WEBSHAPEID,
@@ -67,6 +66,5 @@ bool WebShapeFactory::supports(const KoXmlElement & e) const
 QList<KoShapeConfigWidgetBase*> WebShapeFactory::createShapeOptionPanels()
 {
   QList<KoShapeConfigWidgetBase*> answer;
-  answer.append( new WebShapeConfigWidget() );
   return answer;
 }
