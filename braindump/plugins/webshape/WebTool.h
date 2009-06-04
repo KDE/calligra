@@ -54,7 +54,8 @@ class WebTool : public KoTool
     KoShape* m_tmpShape;
     enum DragMode {
         NO_DRAG,
-        SCROLL_DRAG
+        SCROLL_DRAG,
+        SCROLL_ZOOM
     };
     DragMode m_dragMode;
     QPointF m_scrollPoint;

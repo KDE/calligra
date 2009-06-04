@@ -160,7 +160,12 @@ const QString& WebShape::cache() const {
 }
 
 void WebShape::scrollOf( const QPointF& _scroll) {
-    m_scrollPosition += _scroll;
+  m_scrollPosition += _scroll / m_zoom;
+}
+
+void WebShape::zoomOf( double z) {
+  m_zoom *= z;
+  if( m_zoom <= 0.01) m_zoom = 0.01;
 }
 
 #include "WebShape.moc"

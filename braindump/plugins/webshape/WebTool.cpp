@@ -75,7 +75,12 @@ void WebTool::mousePressEvent( KoPointerEvent *event )
       if(hit == m_currentShape) {
           m_scrollPoint = event->point;
           Q_ASSERT(m_dragMode == NO_DRAG);
-          m_dragMode = SCROLL_DRAG;
+          if( event->modifiers() & Qt::ShiftModifier)
+          {
+            m_dragMode = SCROLL_ZOOM;
+          } else {
+            m_dragMode = SCROLL_DRAG;
+          }
       } else {
         selection->deselectAll();
         m_currentShape = hit;
@@ -97,6 +102,12 @@ void WebTool::mouseMoveEvent( KoPointerEvent *event )
       m_scrollPoint = event->point;
       m_currentShape->update();
       break;
+    }
+    case SCROLL_ZOOM:
+    {
+      m_currentShape->zoomOf( 1.0 - ( event->point.y() - m_scrollPoint.y()) / 100.0 );
+      m_scrollPoint = event->point;
+      m_currentShape->update();
     }
   }
 }
