@@ -46,6 +46,7 @@ void WebTool::activate( bool v )
     if(m_currentShape)
       break;
   }
+  emit(shapeChanged(m_currentShape));
   if( m_currentShape == 0 ) 
   {
     // none found
@@ -79,7 +80,7 @@ void WebTool::mousePressEvent( KoPointerEvent *event )
         selection->deselectAll();
         m_currentShape = hit;
         selection->select( m_currentShape );
-        emit(shapeChanged(hit));
+        emit(shapeChanged(m_currentShape));
       }
     }
   }
@@ -107,6 +108,8 @@ void WebTool::mouseReleaseEvent( KoPointerEvent *event )
 
 QMap<QString, QWidget *> WebTool::createOptionWidgets() {
   QMap<QString, QWidget *> widgets;
-  widgets[i18n("Web tool options")] = new WebToolWidget(this);
+  WebToolWidget* widget = new WebToolWidget(this);
+  widget->open(m_currentShape);
+  widgets[i18n("Web tool options")] = widget;
   return widgets;
 }

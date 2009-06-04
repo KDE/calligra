@@ -73,7 +73,7 @@ private:
   QString m_cache;
 };
 
-WebToolWidget::WebToolWidget(WebTool* _tool) : m_tool(_tool)
+WebToolWidget::WebToolWidget(WebTool* _tool) : m_tool(_tool), m_shape(0)
 {
   m_widget.setupUi(this);
   connect(m_widget.urlEdit, SIGNAL(editingFinished()), SLOT(save()));
