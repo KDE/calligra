@@ -44,6 +44,10 @@ class StateTool : public KoTool
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+  signals:
+    void shapeChanged(StateShape* );
+  protected:
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
   private:
     StateShape* m_currentShape;

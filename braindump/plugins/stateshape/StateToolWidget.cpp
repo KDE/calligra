@@ -17,24 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "StateShapeConfigWidget.h"
+#include "StateToolWidget.h"
 
+#include <QItemDelegate>
+#include <QUndoCommand>
+
+#include <KCategorizedSortFilterProxyModel>
+
+#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 
 #include <StateShape.h>
+#include "StateTool.h"
 #include "StatesModel.h"
 #include "StatesRegistry.h"
-#include <KoCanvasBase.h>
 #include "StateShapeChangeStateCommand.h"
-#include <KCategorizedSortFilterProxyModel>
-#include <QItemDelegate>
 #include "CategorizedItemDelegate.h"
 
-StateShapeConfigWidget::StateShapeConfigWidget()
+StateToolWidget::StateToolWidget(StateTool* _stateTool) : m_tool(_stateTool)
 {
   m_widget.setupUi(this);
-  connect(m_widget.stateComboBox, SIGNAL(activated(int)), SIGNAL(propertyChanged()));
+  connect(m_widget.stateComboBox, SIGNAL(activated(int)), SLOT(save()));
+  connect(m_tool, SIGNAL(shapeChanged(StateShape*)),SLOT(open(StateShape*)));
   m_model = new StatesModel();
   m_proxyModel = new KCategorizedSortFilterProxyModel();
   m_proxyModel->setSourceModel(m_model);
@@ -45,12 +50,12 @@ StateShapeConfigWidget::StateShapeConfigWidget()
   m_widget.stateComboBox->setItemDelegate( new CategorizedItemDelegate(new QItemDelegate));
 }
 
-void StateShapeConfigWidget::blockChildSignals( bool block )
+void StateToolWidget::blockChildSignals( bool block )
 {
   m_widget.stateComboBox->blockSignals(block);
 }
 
-void StateShapeConfigWidget::open(KoShape *shape)
+void StateToolWidget::open(StateShape *shape)
 {
   m_shape = dynamic_cast<StateShape*>( shape );
   if( ! m_shape )
@@ -62,7 +67,7 @@ void StateShapeConfigWidget::open(KoShape *shape)
   blockChildSignals(false);
 }
 
-void StateShapeConfigWidget::save()
+void StateToolWidget::save()
 {
   if( !m_shape )
     return;
@@ -80,7 +85,7 @@ void StateShapeConfigWidget::save()
   }
 }
 
-QUndoCommand * StateShapeConfigWidget::createCommand()
+QUndoCommand * StateToolWidget::createCommand()
 {
     save();
 

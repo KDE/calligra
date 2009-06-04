@@ -28,6 +28,7 @@
 #include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
 #include "AttachStateShapeCommand.h"
+#include "StateToolWidget.h"
 
 StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0)
 {
@@ -46,6 +47,7 @@ void StateTool::activate( bool v )
     if(m_currentShape)
       break;
   }
+  emit(shapeChanged(m_currentShape));
   if( m_currentShape == 0 ) 
   {
     // none found
@@ -81,6 +83,7 @@ void StateTool::mousePressEvent( KoPointerEvent *event )
         selection->deselectAll();
         m_currentShape = hit;
         selection->select( m_currentShape );
+        emit(shapeChanged(m_currentShape));
       }
     }
   }
@@ -121,4 +124,13 @@ void StateTool::mouseReleaseEvent( KoPointerEvent *event )
     event->ignore();
   }
 }
+
+QMap<QString, QWidget *> StateTool::createOptionWidgets() {
+  QMap<QString, QWidget *> widgets;
+  StateToolWidget* widget = new StateToolWidget(this);
+  widget->open(m_currentShape);
+  widgets[i18n("State tool options")] = widget;
+  return widgets;
+}
+
 #include "StateTool.moc"

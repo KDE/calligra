@@ -24,7 +24,6 @@
 #include <KoProperties.h>
 
 #include "StateShape.h"
-#include "StateShapeConfigWidget.h"
 
 StateShapeFactory::StateShapeFactory(QObject* parent) 
    : KoShapeFactory( parent, STATESHAPEID,
@@ -61,6 +60,5 @@ bool StateShapeFactory::supports(const KoXmlElement & e) const
 QList<KoShapeConfigWidgetBase*> StateShapeFactory::createShapeOptionPanels()
 {
   QList<KoShapeConfigWidgetBase*> answer;
-  answer.append( new StateShapeConfigWidget() );
   return answer;
 }

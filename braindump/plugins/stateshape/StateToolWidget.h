@@ -17,30 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KoShapeConfigWidgetBase.h>
+#include <QWidget>
 
 #include "ui_StateShapeConfigWidget.h"
 
+class QUndoCommand;
 class KCategorizedSortFilterProxyModel;
 class StatesModel;
 class StateShape;
+class StateTool;
 
-class StateShapeConfigWidget : public KoShapeConfigWidgetBase
+class StateToolWidget : public QWidget
 {
     Q_OBJECT
   public:
-    StateShapeConfigWidget();
+    StateToolWidget(StateTool* );
+  public slots:
     /// reimplemented
-    virtual void open(KoShape *shape);
+    virtual void open(StateShape *shape);
     /// reimplemented
     virtual void save();
-    /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+  private:
     /// reimplemented
     virtual QUndoCommand * createCommand();
   private:
     void blockChildSignals( bool block );
   private:
+    StateTool* m_tool;
     StateShape *m_shape;
     StatesModel* m_model;
     KCategorizedSortFilterProxyModel* m_proxyModel;

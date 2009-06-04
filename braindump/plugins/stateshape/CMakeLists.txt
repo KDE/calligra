@@ -9,11 +9,11 @@ SET (stateshape_LIB_SRCS
     StatesRegistry.cpp
     StateShape.cpp
     StateShapeChangeStateCommand.cpp
-    StateShapeConfigWidget.cpp
     StateShapeFactory.cpp
     StateShapePlugin.cpp
     StateTool.cpp
     StateToolFactory.cpp
+    StateToolWidget.cpp
 )
 
 kde4_add_ui_files( stateshape_LIB_SRCS
