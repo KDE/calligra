@@ -54,6 +54,9 @@
     <entry name="Unit" type="Enum">
       <label>Estimate time unit</label>
       <choice>
+        <choice name="year"/>
+        <choice name="month"/>
+        <choice name="week"/>
         <choice name="day"/>
         <choice name="hour"/>
       </choice>

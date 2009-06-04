@@ -39,7 +39,7 @@ DurationSpinBox::DurationSpinBox(QWidget *parent)
     : QDoubleSpinBox(parent),
     m_unit( Duration::Unit_d ),
     m_minunit( Duration::Unit_h ),
-    m_maxunit( Duration::Unit_d )
+    m_maxunit( Duration::Unit_Y )
 {
     setUnit( Duration::Unit_h );
     setMaximum(140737488355328.0); //Hmmmm

@@ -44,6 +44,9 @@ Duration::Duration( double value, Duration::Unit unit ) {
     else if (unit == Unit_m) m_ms = (qint64)(value * ( 1000 * 60 ));
     else if (unit == Unit_h) m_ms = (qint64)(value * ( 1000 * 60 * 60 ));
     else if (unit == Unit_d) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 ));
+    else if (unit == Unit_w) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 * 7 ));
+    else if (unit == Unit_M) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 30 ));
+    else if (unit == Unit_Y) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 365 ));
 }
 
 Duration::Duration(const Duration &d) {
@@ -64,6 +67,9 @@ Duration::Duration(const qint64 value, Duration::Unit unit) {
     else if (unit == Unit_m) m_ms = (qint64)(value * ( 1000 * 60 ));
     else if (unit == Unit_h) m_ms = (qint64)(value * ( 1000 * 60 * 60 ));
     else if (unit == Unit_d) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 ));
+    else if (unit == Unit_w) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 * 7 ));
+    else if (unit == Unit_M) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 30 ));
+    else if (unit == Unit_Y) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 365 ));
     else kError()<<"Unknown unit: "<<unit;
 }
 
@@ -191,6 +197,15 @@ QString Duration::toString(Format format) const {
         case Format_i18nDay:
             result = KGlobal::locale()->formatNumber(toDouble(Unit_d), 2);
             break;
+        case Format_i18nWeek:
+            result = this->format( Unit_w, 2, KGlobal::locale() );
+            break;
+        case Format_i18nMonth:
+            result = this->format( Unit_M, 2, KGlobal::locale() );
+            break;
+        case Format_i18nYear:
+            result = this->format( Unit_Y, 2, KGlobal::locale() );
+            break;
         case Format_i18nDayTime:
             ms = m_ms;
             days = m_ms / (1000 * 60 * 60 * 24);
@@ -287,7 +302,10 @@ void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned 
 QStringList Duration::unitList( bool trans )
 {
     QStringList lst;
-    lst << ( trans ? i18n( "d" ) : "d" )
+    lst << ( trans ? i18n( "Y" ) : "Y" )
+        << ( trans ? i18n( "M" ) : "M" )
+        << ( trans ? i18n( "w" ) : "w" )
+        << ( trans ? i18n( "d" ) : "d" )
         << ( trans ? i18n( "h" ) : "h" )
         << ( trans ? i18n( "m" ) : "m" )
         << ( trans ? i18n( "s" ) : "s" )
@@ -297,25 +315,17 @@ QStringList Duration::unitList( bool trans )
 
 QString Duration::unitToString( Duration::Unit unit, bool trans )
 {
-    switch ( unit ) {
-        case Unit_ms: return trans ? i18n( "ms" ) : "ms";
-        case Unit_s: return trans ? i18n( "s" ) : "s";
-        case Unit_m: return trans ? i18n( "m" ) : "m";
-        case Unit_h: return trans ? i18n( "h" ) : "h";
-        case Unit_d: return trans ? i18n( "d" ) : "d";
-    }
-    return QString();
+    return unitList( trans ).at( unit );
 }
 
 Duration::Unit Duration::unitFromString( const QString &u )
 {
-    if (u == "ms") return Unit_ms;
-    else if (u == "s") return Unit_s;
-    else if (u == "m") return Unit_m;
-    else if (u == "h") return Unit_h;
-    else if (u == "d") return Unit_d;
-    else kError()<<"Illegal unit: "<<u<<endl;
-    return Unit_ms; 
+    int i = unitList().indexOf( u );
+    if ( i < 0 ) {
+        kError()<<"Illegal unit: "<<u;
+        return Unit_ms;
+    }
+    return (Duration::Unit)( i ); 
 }
 
 bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {

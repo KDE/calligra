@@ -53,6 +53,18 @@ void EstimateTester::expected() {
     QVERIFY( e1.expectedEstimate() == 1.0 );
     QVERIFY( e1.expectedValue().milliseconds() == 1000*60*60*24 );
 
+    e1.setUnit( Duration::Unit_w );
+    QVERIFY( e1.expectedEstimate() == 1.0 );
+    QVERIFY( e1.expectedValue().milliseconds() == 1000*60*60*24*7 );
+
+    e1.setUnit( Duration::Unit_M );
+    QVERIFY( e1.expectedEstimate() == 1.0 );
+    QCOMPARE( e1.expectedValue().milliseconds(), qint64(1000*60*60) * (24*30) );
+
+    e1.setUnit( Duration::Unit_Y );
+    QVERIFY( e1.expectedEstimate() == 1.0 );
+    QCOMPARE( e1.expectedValue().milliseconds(), qint64(1000*60*60) * (24*365) );
+
 }
 
 void EstimateTester::optimistic() {
@@ -155,7 +167,8 @@ void EstimateTester::ratio() {
 }
 
 void EstimateTester::scale() {
-    QList<double> s; s << 8.0;
+    QList<double> s; s << 365.0 / 30 << 30.0 / 7.0 << 7.0 << 8.0;
+
     Duration d = Estimate::scale( 1.0, Duration::Unit_d, s );
     QVERIFY( d.milliseconds() == 1000*60*60 * 8 );
     QVERIFY( 1.0 == Estimate::scale( d, Duration::Unit_d, s ) );

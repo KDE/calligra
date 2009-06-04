@@ -2296,7 +2296,7 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
         case Qt::EditRole:
             double d( value.toList()[0].toDouble() );
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
-            //kDebug()<<value.toList()[0].toDouble()<<","<<unit<<" ->"<<d.milliseconds();
+            //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
                 if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Modify estimate" ) );
