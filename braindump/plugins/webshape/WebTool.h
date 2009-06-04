@@ -55,10 +55,12 @@ class WebTool : public KoTool
     enum DragMode {
         NO_DRAG,
         SCROLL_DRAG,
-        SCROLL_ZOOM
+        ZOOM_DRAG
     };
     DragMode m_dragMode;
     QPointF m_scrollPoint;
+    qreal m_oldZoom;
+    QPointF m_oldScroll;
 };
 
 #endif
