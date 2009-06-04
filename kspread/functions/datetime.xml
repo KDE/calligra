@@ -420,7 +420,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function DAYSINMONTH() returns number of days in the given year and month.</Text>
+	<Text>The function DAYSINMONTH() returns the number of days in the given year and month.</Text>
 	<Syntax>DAYSINMONTH(year;month)</Syntax>
 	<Example>DAYSINMONTH(2000;2) returns 29</Example>
       </Help>
