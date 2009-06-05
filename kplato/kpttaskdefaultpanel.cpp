@@ -21,6 +21,7 @@
 
 #include "kptduration.h"
 #include "kptmycombobox_p.h"
+#include "kplatosettings.h"
 
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
@@ -45,6 +46,8 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
 {
 
     setupUi(this);
+    kcfg_ExpectedEstimate->setMinimumUnit( (Duration::Unit)KPlatoSettings::self()->minimumDurationUnit() );
+    kcfg_ExpectedEstimate->setMaximumUnit( (Duration::Unit)KPlatoSettings::self()->maximumDurationUnit() );
 
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     

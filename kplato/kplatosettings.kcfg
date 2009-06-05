@@ -77,6 +77,16 @@
     <entry name="Description" type="String">
       <label>Task description</label>
     </entry>
+  </group>
 
+  <group name="Miscellaneous">
+    <entry name="MinimumDurationUnit" type="Int">
+      <label>The smallest duration unit allowed</label>
+      <default>4</default>
+    </entry>
+    <entry name="MaximumDurationUnit" type="Int">
+      <label>The largest duration unit allowed</label>
+      <default>1</default>
+    </entry>
   </group>
 </kcfg>

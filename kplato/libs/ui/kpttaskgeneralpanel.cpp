@@ -83,6 +83,8 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     }
     calendarCombo->setCurrentIndex(cal);
 
+    estimate->setMinimumUnit( (Duration::Unit)(m_project.config().minimumDurationUnit()) );
+    estimate->setMaximumUnit( (Duration::Unit)(m_project.config().maximumDurationUnit()) );
     estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
 

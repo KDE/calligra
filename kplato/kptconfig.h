@@ -38,6 +38,9 @@ public:
 
     virtual void setDefaultValues( Task &task );
 
+    virtual int minimumDurationUnit() const;
+    virtual int maximumDurationUnit() const;
+
 };
 
 }  //KPlato namespace

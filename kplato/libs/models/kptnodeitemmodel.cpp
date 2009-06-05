@@ -337,6 +337,10 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
             return node->estimate()->expectedEstimate();
         case Role::DurationUnit:
             return static_cast<int>( node->estimate()->unit() );
+        case Role::Minimum:
+            return m_project->config().minimumDurationUnit();
+        case Role::Maximum:
+            return m_project->config().maximumDurationUnit();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

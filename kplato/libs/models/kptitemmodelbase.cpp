@@ -322,6 +322,8 @@ void DurationSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &
 {
     DurationSpinBox *dsb = static_cast<DurationSpinBox*>(editor);
 //    dsb->setScales( index.model()->data( index, Role::DurationScales ) );
+    dsb->setMinimumUnit( (Duration::Unit)(index.data( Role::Minimum ).toInt()) );
+    dsb->setMaximumUnit( (Duration::Unit)(index.data( Role::Maximum ).toInt()) );
     dsb->setUnit( (Duration::Unit)( index.model()->data( index, Role::DurationUnit ).toInt() ) );
     dsb->setValue( index.model()->data( index, Qt::EditRole ).toDouble() );
 }

@@ -90,5 +90,14 @@ void Config::setDefaultValues( Task &task )
     task.estimate()->setOptimisticRatio( KPlatoSettings::optimisticRatio() );
 }
 
+int Config::minimumDurationUnit() const
+{
+    return KPlatoSettings::minimumDurationUnit();
+}
+
+int Config::maximumDurationUnit() const
+{
+    return KPlatoSettings::maximumDurationUnit();
+}
 
 }  //KPlato namespace

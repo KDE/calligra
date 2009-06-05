@@ -33,9 +33,12 @@ public:
 
     void setReadWrite(bool readWrite) { m_readWrite = readWrite; }
     Task &taskDefaults() { setDefaultValues( *m_taskDefaults ); return *m_taskDefaults; }
-    void setTaskDefaults( Task *task );
+    void setTaskDefaults( Task * );
 
-    virtual void setDefaultValues( Task &task ) {}
+    virtual void setDefaultValues( Task & ) {}
+    virtual QPair<int, int> durationUnitRange() const { return QPair<int, int>(); }
+    virtual int minimumDurationUnit() const { return Duration::Unit_h; }
+    virtual int maximumDurationUnit() const { return Duration::Unit_Y; }
 
 protected:
     bool m_readWrite;

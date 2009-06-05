@@ -476,6 +476,7 @@ public:
     
     void generateUniqueIds();
     
+    const ConfigBase &config() const { return m_config; }
     const Task &taskDefaults() const { return m_config.taskDefaults(); }
     
     void incProgress();
