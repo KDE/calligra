@@ -463,9 +463,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
             dataThis.setField(t->m_controlSource->value().toString());
             QPointF pos = t->m_pos.toScene();
             QSizeF size = t->m_size.toScene();
-            pos /= 100.0;
             pos += QPointF(_leftMargin, _yOffset);
-            size /= 100.0;
 
             QRectF trf(pos, size);
 
@@ -484,7 +482,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
                 QPrinter prnt(QPrinter::HighResolution);
                 QFontMetrics fm(f, &prnt);
 
-                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
+                int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
 
                 while (qstrValue.length()) {
                     idx = re.indexIn(qstrValue, pos);
@@ -642,7 +640,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QPointF pos = t->m_pos.toScene();
             QSizeF size = t->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
-
+	    
             QRectF trf(pos, size);
 
             int     intLineCounter  = 0;
@@ -665,8 +663,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 QFontMetrics fm(f, &prnt);
 
 //                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-		int   intRectWidth    = (int)(trf.width());
-		
+		int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
+		 
                 while (qstrValue.length()) {
                     idx = re.indexIn(qstrValue, pos);
                     if (idx == -1) {
