@@ -19,11 +19,15 @@
 
 #include "kpttaskdefaultpanel.h"
 
+#include "kptduration.h"
+#include "kptmycombobox_p.h"
+
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
 #include <QDateTime>
 #include <QDateTimeEdit>
+#include <QComboBox>
 
 #include <kdebug.h>
 
@@ -48,7 +52,11 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     
     connect( kcfg_ConstraintEndTime, SIGNAL( dateTimeChanged ( const QDateTime& ) ), SLOT( endDateTimeChanged( const QDateTime& ) ) );
 
-
+    // Hack to have an interface to kcfg wo adding a custom class for this
+    kcfg_Unit->addItems( Duration::unitList( true ) );
+    connect( kcfg_ExpectedEstimate, SIGNAL( unitChanged( int ) ), SLOT( unitChanged( int ) ) );
+    kcfg_Unit->hide();
+    connect( kcfg_Unit, SIGNAL( currentIndexChanged( int ) ), SLOT( currentUnitChanged( int ) ) );
 }
 
 
@@ -75,6 +83,22 @@ void ConfigTaskPanelImpl::endDateTimeChanged( const QDateTime &dt )
     }
 }
 
+void ConfigTaskPanelImpl::unitChanged( int unit )
+{
+    if ( kcfg_Unit->currentIndex() != unit ) {
+        kcfg_Unit->setCurrentIndex( unit );
+        // kcfg uses the activated() signal to track changes
+        emit kcfg_Unit->emitActivated( unit );
+    }
+}
+
+void ConfigTaskPanelImpl::currentUnitChanged( int unit )
+{
+    // to get values set at startup
+    if ( unit != kcfg_ExpectedEstimate->unit() ) {
+        kcfg_ExpectedEstimate->setUnit( (Duration::Unit)unit );
+    }
+}
 
 }  //KPlato namespace
 

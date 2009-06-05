@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,48 +14,29 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKDEFAULTPANEL_H
-#define KPTTASKDEFAULTPANEL_H
+#ifndef KPTMYCOMBOBOX_P_H
+#define KPTMYCOMBOBOX_P_H
 
 #include "kplato_export.h"
 
-#include "ui_kptconfigtaskpanelbase.h"
-
+#include <KComboBox>
 
 namespace KPlato
 {
 
-class DateTime;
-class Task;
-class StandardWorktime;
-class MacroCommand;
-
-
-class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
+class MyComboBox : public KComboBox
 {
-    Q_OBJECT
 public:
-    ConfigTaskPanelImpl( QWidget *parent );
-    
-public slots:
-    virtual void changeLeader();
-    void startDateTimeChanged( const QDateTime& );
-    void endDateTimeChanged( const QDateTime& );
-    void unitChanged( int unit );
-    void currentUnitChanged( int );
+    MyComboBox( QWidget *parent = 0 ) : KComboBox( parent ) {}
+
+    void emitActivated( int i ) { emit activated( i ); }
+
 };
 
-class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl
-{
-    Q_OBJECT
-public:
-    explicit TaskDefaultPanel( QWidget *parent=0 );
-    
-};
 
 } //KPlato namespace
 
-#endif // TASKDEFAULTPANEL_H
+#endif // KPTMYCOMBOBOX_P_H

@@ -59,6 +59,9 @@
         <choice name="week"/>
         <choice name="day"/>
         <choice name="hour"/>
+        <choice name="min"/>
+        <choice name="sec"/>
+        <choice name="ms"/>
       </choice>
     </entry>
     <entry name="ExpectedEstimate" type="Double">

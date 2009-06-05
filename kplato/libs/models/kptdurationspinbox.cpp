@@ -58,25 +58,27 @@ void DurationSpinBox::setUnit( Duration::Unit unit )
 
 void DurationSpinBox::setMaximumUnit( Duration::Unit unit )
 {
-    //NOTE Day = 0, Milliseconds = 3 !!!
+    //NOTE Year = 0, Milliseconds = 7 !!!
     m_maxunit = unit;
     if ( m_minunit < unit ) {
         m_minunit = unit;
     }
     if ( m_unit < unit ) {
         setUnit( unit );
+        emit unitChanged( m_unit );
     }
 }
 
 void DurationSpinBox::setMinimumUnit( Duration::Unit unit )
 {
-    //NOTE Day = 0, Milliseconds = 3 !!!
+    //NOTE Year = 0, Milliseconds = 7 !!!
     m_minunit = unit;
     if ( m_maxunit > unit ) {
         m_maxunit = unit;
     }
     if ( m_unit > unit ) {
         setUnit( unit );
+        emit unitChanged( m_unit );
     }
 }
 
@@ -87,6 +89,7 @@ void DurationSpinBox::stepUnitUp()
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
         // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
+        emit unitChanged( m_unit );
     }
 }
 
@@ -97,6 +100,7 @@ void DurationSpinBox::stepUnitDown()
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
         // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
+        emit unitChanged( m_unit );
     }
 }
 

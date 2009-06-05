@@ -56,6 +56,9 @@ public:
     /// Set maximum unit to @p unit.
     void setMinimumUnit( Duration::Unit unit );
     
+signals:
+    void unitChanged( int );
+
 public slots:
     /// Set the current unit.
     /// If unit is outside minimum- or maximum unit, the limit is adjusted.

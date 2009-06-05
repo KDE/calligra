@@ -15,7 +15,7 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0" colspan="3">
+   <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
@@ -74,7 +74,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </item>
     </layout>
    </item>
-   <item row="1" column="0" colspan="3">
+   <item row="1" column="0" colspan="2">
     <widget class="Line" name="line_4">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -100,7 +100,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="1">
     <widget class="KComboBox" name="kcfg_ConstraintType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -164,7 +164,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
+   <item row="3" column="1">
     <widget class="KComboBox" name="kcfg_StartTimeUsage">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -208,7 +208,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item row="4" column="1">
     <widget class="QDateTimeEdit" name="kcfg_ConstraintStartTime">
      <property name="calendarPopup">
       <bool>true</bool>
@@ -234,7 +234,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="5" column="1" colspan="2">
+   <item row="5" column="1">
     <widget class="KComboBox" name="kcfg_EndTimeUsage">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -278,14 +278,14 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
+   <item row="6" column="1">
     <widget class="QDateTimeEdit" name="kcfg_ConstraintEndTime">
      <property name="calendarPopup">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="3">
+   <item row="7" column="0" colspan="2">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -353,45 +353,14 @@ This is not limited to persons available in a resource group but can be anyone. 
     </widget>
    </item>
    <item row="9" column="1">
-    <widget class="QDoubleSpinBox" name="kcfg_ExpectedEstimate"/>
-   </item>
-   <item row="9" column="2">
-    <widget class="KComboBox" name="kcfg_Unit">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <property name="text">
-       <string>Year</string>
-      </property>
+      <widget class="KPlato::DurationSpinBox" name="kcfg_ExpectedEstimate"/>
      </item>
      <item>
-      <property name="text">
-       <string>Month</string>
-      </property>
+      <widget class="KPlato::MyComboBox" name="kcfg_Unit"/>
      </item>
-     <item>
-      <property name="text">
-       <string>Week</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Day</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Hour</string>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
    <item row="10" column="0">
     <widget class="QLabel" name="textLabel1_3">
@@ -457,7 +426,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="12" column="0" colspan="3">
+   <item row="12" column="0" colspan="2">
     <widget class="Line" name="line_3">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -477,7 +446,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
     </widget>
    </item>
-   <item row="14" column="0" colspan="3">
+   <item row="14" column="0" colspan="2">
     <widget class="KTextEdit" name="kcfg_Description"/>
    </item>
   </layout>
@@ -500,6 +469,16 @@ This is not limited to persons available in a resource group but can be anyone. 
    <extends>QTextEdit</extends>
    <header>ktextedit.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KPlato::DurationSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kptdurationspinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPlato::MyComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kptmycombobox_p.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
