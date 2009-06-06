@@ -25,34 +25,42 @@ Table Of Contents
 
 
 
-1. Database drivers
--------------------
+1. Database and migration drivers
+---------------------------------
 
-Kexi provides database drivers for MySQL and PostgreSQL.  We suggest
-putting each driver in a separate package, and that installation of
+Kexi provides database drivers and migration drivers for a number of
+database types or data sources. The following matrix lists them:
+
+ Name         Database driver files            Migration driver files    
+ ------------------------------------------------------------
+ MDB (MS Access)
+              -                                keximigrate_mdb.so
+                                               keximigrate_mdb.desktop
+ MySQL        kexidb_mysqldriver.so            keximigrate_mysql.so
+              kexidb_mysqldriver.desktop       keximigrate_mysql.desktop
+ PostgreSQL   kexidb_pqxxsqldriver.so          keximigrate_pqxx.so
+              kexidb_pqxxsqldriver.desktop     keximigrate_pqxx.desktop
+ Sybase & MS SQL Server
+              kexidb_sybasedriver.so            keximigrate_sybase.so
+              kexidb_sybasedriver.desktop       keximigrate_sybase.desktop
+ XBase
+              kexidb_xbasedriver.so            keximigrate_xase.so
+              kexidb_xbasedriver.desktop       keximigrate_xbase.desktop
+
+(TODO: oracle driver)
+
+Plugin .so files usually go to $KDEDIR/lib/kde4,
+and .desktop service files go to $KDEDIR/share/services/.
+ 
+We suggest putting each driver in a separate package, and that installation of
 these packages be optional.  Each driver package may then depend on
-the corresponding 'native' libraries: libmysqlclient for MySQL; and
-and libpqxx for PostgreSQL (libpqxx in turn depends on libpq).
-
-Thus, the MySQL driver package could contain:
- lib/kde3/kexidb_mysqldriver.so
- lib/kde3/kexidb_mysqldriver.la
- lib/kde3/keximigrate_mysql.so
- lib/kde3/keximigrate_mysql.la
- share/services/kexidb_mysqldriver.desktop
- share/services/keximigrate_mysql.desktop
-
-The PostgreSQL driver package consists of the following files:
- lib/kde3/kexidb_pqxxsqldriver.so
- lib/kde3/kexidb_pqxxsqldriver.la
- lib/kde3/keximigrate_pqxx.so
- lib/kde3/keximigrate_pqxx.la
- share/services/kexidb_pqxxsqldriver.desktop
- share/services/keximigrate_pqxx.desktop
+the corresponding 'native' libraries.
+For example  libmysqlclient for MySQL and libpqxx for PostgreSQL
+(libpqxx in turn depends on libpq).
 
 Note that you SHOULD NOT care about SQLite database driver or adding 
-dependencies for SQLite, because SQLite support is built into Kexi 
-using a fork of SQLite source code.
+dependencies for SQLite, because SQLite support is currently built into Kexi 
+and the 'native' libsqlite3 library is included in Kexi source code.
 
 
 2. Development files
