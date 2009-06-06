@@ -41,10 +41,10 @@ database types or data sources. The following matrix lists them:
  PostgreSQL   kexidb_pqxxsqldriver.so          keximigrate_pqxx.so
               kexidb_pqxxsqldriver.desktop     keximigrate_pqxx.desktop
  Sybase & MS SQL Server
-              kexidb_sybasedriver.so            keximigrate_sybase.so
-              kexidb_sybasedriver.desktop       keximigrate_sybase.desktop
+              kexidb_sybasedriver.so           keximigrate_sybase.so
+              kexidb_sybasedriver.desktop      keximigrate_sybase.desktop
  XBase
-              kexidb_xbasedriver.so            keximigrate_xase.so
+              kexidb_xbasedriver.so            keximigrate_xbase.so
               kexidb_xbasedriver.desktop       keximigrate_xbase.desktop
 
 (TODO: oracle driver)
