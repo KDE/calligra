@@ -75,7 +75,7 @@ public:
     QUndoCommand * createCommand( QUndoCommand * parent );
 
     /// schedules a repaint of the shape and gradient handles
-    void repaint() const;
+    void repaint( const KoViewConverter &converter ) const;
 
     /// sets the handle radius in pixel used for painting the handles
     static void setHandleRadius( uint radius ) { m_handleRadius = radius; }
@@ -162,7 +162,7 @@ private:
 
     void applyChanges();
 
-    static uint m_handleRadius; ///< the handle radius for all gradient strategies
+    static int m_handleRadius; ///< the handle radius for all gradient strategies
     static uint m_grabSensitivity; ///< the grabbing sensitivity
     
     bool m_editing; /// the edit mode flag

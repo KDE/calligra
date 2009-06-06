@@ -34,9 +34,7 @@
 
 #include <math.h>
 
-#include <kdebug.h>
-
-uint GradientStrategy::m_handleRadius = 3;
+int GradientStrategy::m_handleRadius = 3;
 uint GradientStrategy::m_grabSensitivity = 3;
 
 const qreal stopDistance = 15.0;
@@ -396,8 +394,10 @@ QRectF GradientStrategy::boundingRect( const KoViewConverter &converter ) const
     return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
 }
 
-void GradientStrategy::repaint() const
+void GradientStrategy::repaint( const KoViewConverter &converter ) const
 {
+    QRectF gradientRect = boundingRect( converter ).adjusted( -1, -1, 1, 1 );
+    m_shape->update( m_shape->documentToShape( gradientRect ) );
     m_shape->update();
 }
 
