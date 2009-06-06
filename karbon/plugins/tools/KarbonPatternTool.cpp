@@ -251,12 +251,13 @@ void KarbonPatternTool::deactivate()
     // we are not interested in selection content changes when not active
     disconnect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 
-    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies )
-    {
+    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies ) {
         strategy->repaint();
-        delete strategy;
     }
+
+    qDeleteAll(m_strategies);
     m_strategies.clear();
+    
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->update();
     
