@@ -83,21 +83,14 @@ void KarbonGradientTool::paint( QPainter &painter, const KoViewConverter &conver
     painter.setBrush( Qt::green ); //TODO make configurable
     painter.setPen( Qt::blue ); //TODO make configurable
 
-    // paint all the strategies
-    foreach( GradientStrategy *strategy, m_strategies    )
-    {
-        if( strategy == m_currentStrategy )
-            continue;
+    foreach ( GradientStrategy *strategy, m_strategies ) {
+        bool current = ( strategy == m_currentStrategy );
         painter.save();
-        strategy->paint( painter, converter, false );
+        if ( current ) {
+            painter.setBrush( Qt::red ); //TODO make configurable
+        }
+        strategy->paint( painter, converter, current );
         painter.restore();
-    }
-
-    // paint selected strategy with another color
-    if( m_currentStrategy )
-    {
-        painter.setBrush( Qt::red ); //TODO make configurable
-        m_currentStrategy->paint( painter, converter, true );
     }
 }
 
