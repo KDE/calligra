@@ -66,5 +66,7 @@ int main( int argc, char **argv )
 
   // Ensure the root section is saved
   doc->sectionsIO()->save();
+  
+  delete doc;
   return 0;
 }
