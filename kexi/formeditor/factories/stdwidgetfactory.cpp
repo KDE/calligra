@@ -542,9 +542,10 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     if (w) {
         setObjectName(n);
+        kDebug() << w;
         return w;
     }
-    kDebug() << "WARNING :: w == 0 ";
+    kWarning() << "w == 0";
     return 0;
 }
 
@@ -958,16 +959,16 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
             return false;
     } else if (classname == "KTextEdit")
         ok = m_showAdvancedProperties ||
-             property != "undoDepth"
-             && property != "undoRedoEnabled" //always true!
-             && property != "dragAutoScroll" //always true!
-             && property != "overwriteMode" //always false!
-             && property != "resizePolicy"
-             && property != "autoFormatting" //too complex
+             (   property != "undoDepth"
+              && property != "undoRedoEnabled" //always true!
+              && property != "dragAutoScroll" //always true!
+              && property != "overwriteMode" //always false!
+              && property != "resizePolicy"
+              && property != "autoFormatting" //too complex
 #ifdef KEXI_NO_UNFINISHED
-             && property != "paper"
+              && property != "paper"
 #endif
-             ;
+             );
     else if (classname == "Line") {
         if ((property == "frameShape") || (property == "font") || (property == "margin"))
             return false;

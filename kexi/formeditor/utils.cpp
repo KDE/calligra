@@ -61,7 +61,8 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
     if (!object || !container || !object->isWidgetType())
         return;
 
-    kDebug() << "Installing event filter on widget: " << object->objectName() << " directed to " << container->objectName();
+    kDebug() << "Installing event filter on widget:" << object 
+        << "directed to" << container->objectName();
     object->installEventFilter(container);
     if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
         ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));

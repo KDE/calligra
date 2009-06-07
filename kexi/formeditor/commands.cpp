@@ -878,6 +878,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container, Command *pa
     d->widgetName = d->form->objectTree()->generateUniqueName(
                  d->form->library()->namePrefix(d->_class).toLatin1(),
                  /* !numberSuffixRequired */false);
+    kDebug() << "widgetName:" << d->widgetName;
     d->insertRect = container.selectionOrInsertingRectangle();
     init();
 }
@@ -892,6 +893,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
     d->_class = className;
     d->pos = pos;
     //d->insertRect is null (default)
+    kDebug() << "namePrefix:" << namePrefix;
     if (namePrefix.isEmpty()) {
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      d->form->library()->namePrefix(d->_class).toLatin1());
@@ -899,6 +901,7 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      namePrefix, false /* !numberSuffixRequired */);
     }
+    kDebug() << "widgetName:" << d->widgetName;
     init();
 }
 

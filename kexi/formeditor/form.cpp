@@ -116,6 +116,7 @@ private:
 
     QStyleOption* alterOption(ControlElement element, const QStyleOption *option) const
     {
+        Q_UNUSED(element)
         if (!option)
             return 0;
         QStyleOption* res = 0;
@@ -2067,11 +2068,12 @@ void Form::createPropertiesForWidget(QWidget *w)
     }
 
 //! @todo ineffective, get property names directly
-    QList<QMetaProperty> propList(
+    const QList<QMetaProperty> propList(
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
-    QList<QByteArray> propNames;
+    kDebug() << "propList.count() ==" << propList.count();
+    QSet<QByteArray> propNames;
     foreach(const QMetaProperty& mp, propList) {
-        propNames.append(mp.name());
+        propNames.insert(mp.name());
     }
 
     // add subproperties if available
@@ -2082,19 +2084,20 @@ void Form::createPropertiesForWidget(QWidget *w)
         const QSet<QByteArray> subproperies(subpropIface->subproperies());
         foreach(const QByteArray& propName, subproperies) {
 //   tmpList.append( *it );
-            propNames.append(propName);
+            propNames.insert(propName);
             kDebug() << "Added subproperty: " << propName;
         }
     }
 
     // iterate over the property list, and create Property objects
     foreach(const QByteArray& propName, propNames) {
-        //kDebug() << ">> " << it.current();
+        kDebug() << ">> " << propName;
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
         const QMetaProperty meta = subMeta.isValid() ? subMeta
                                    : KexiUtils::findPropertyWithSuperclasses(w, propName.constData());
         if (!meta.isValid()) {
+            kDebug() << "!meta.isValid()";
             continue;
         }
         const char* propertyName = meta.name();
@@ -2290,7 +2293,7 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
         createPropertiesForWidget(w);
 
         w->installEventFilter(this);
-        connect(w, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
+        connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
     }
     else {
         addWidget(w);
@@ -3226,12 +3229,14 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
             kWarning() << "\"" << it.key() << "\" property not found";
             continue;
         }
-        PropertyCommand *subCommand = new PropertyCommand(*this, widget->objectName().toLatin1(),
-                widget->property(it.key()), it.value(), it.key(), parentCommand);
+        /*PropertyCommand *subCommand =*/
+        (void)new PropertyCommand(*this, widget->objectName().toLatin1(),
+                                  widget->property(it.key()), it.value(), it.key(), parentCommand);
         //2.0 group->addCommand(subCommand, execFlagForSubCommands);
         if (widgetIsSelected) {
-            d->propertySet[it.key()].setValue(it.value());
-        } else {
+            d->propertySet.changeProperty(it.key(), it.value());
+        }
+        else {
             WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
             QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
             if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, it.key())

@@ -110,8 +110,8 @@ class Container::Private
 {
 public:
     Private(Container* toplevel, QWidget *container)
-      : m_toplevel(toplevel)
-      , state(DoingNothing)
+      : state(DoingNothing)
+      , m_toplevel(toplevel)
       , idOfPropertyCommand(0)
       , m_widget(container)
       , insertBegin(-1, -1)
