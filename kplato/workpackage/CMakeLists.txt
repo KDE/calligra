@@ -81,6 +81,12 @@ set(kplatowork_KDEINIT_SRCS main.cpp)
 
 kde4_add_kdeinit_executable( kplatowork ${kplatowork_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kplato.work")
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato Work 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(
     kdeinit_kplatowork
     kplatoworkapp
