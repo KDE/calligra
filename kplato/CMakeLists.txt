@@ -99,6 +99,12 @@ kde4_add_app_icon(kplato_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kplato")
+   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(kdeinit_kplato komain  ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kdeinit_kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})

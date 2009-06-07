@@ -107,6 +107,12 @@ kde4_add_app_icon(kword_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kword.png")
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kword")
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KWord 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
 
 install(TARGETS kdeinit_kword  ${INSTALL_TARGETS_DEFAULT_ARGS})

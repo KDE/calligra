@@ -252,6 +252,12 @@ kde4_add_app_icon(kspread_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kspread")
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KSpread 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
