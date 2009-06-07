@@ -868,7 +868,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 #if KDE_IS_VERSION(4,2,88)
 		      str = _handler->evaluate(cs.mid(1)).toString();
 #else
-		      str = _handler->evaluate(f->entityName()).toString();
+		      str = _handler->evaluate(cd->entityName()).toString();
 #endif  
             } else {
                 QString qry = "Data Source";
