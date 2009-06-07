@@ -806,14 +806,12 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         QString text = container->form()->library()->textForWidgetName(n, c);
         QButtonGroup *group = new Q3ButtonGroup(/*i18n("Button Group")*/text, p);
         w = group;
-        w->setObjectName(n);
         new KFormDesigner::Container(container, group, container);
     } else
 #endif
     if (c == "KFDTabWidget") {
         KFDTabWidget *tab = new KFDTabWidget(container, p);
         w = tab;
-        w->setObjectName(n);
 #if defined(USE_KTabWidget)
         tab->setTabReorderingEnabled(true);
         connect(tab, SIGNAL(movedTab(int, int)), this, SLOT(reorderTabs(int, int)));
@@ -829,12 +827,10 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         }
     } else if (c == "QWidget") {
         w = new ContainerWidget(p);
-        w->setObjectName(n);
         new KFormDesigner::Container(container, w, p);
     } else if (c == "QGroupBox") {
         QString text = container->form()->library()->textForWidgetName(n, c);
         w = new GroupBox(text, p);
-        w->setObjectName(n);
         new KFormDesigner::Container(container, w, container);
     } else if (c == "QFrame") {
         QFrame *frm = new QFrame(p);
@@ -885,7 +881,8 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     }
 
     if (w) {
-        setObjectName(n);
+        w->setObjectName(n);
+        kDebug() << w << w->objectName() << "created";
         return w;
     }
     return 0;

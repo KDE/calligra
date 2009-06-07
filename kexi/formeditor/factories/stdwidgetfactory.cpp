@@ -541,8 +541,8 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     }
 
     if (w) {
-        setObjectName(n);
-        kDebug() << w;
+        w->setObjectName(n);
+        kDebug() << w << w->objectName() << "created";
         return w;
     }
     kWarning() << "w == 0";
