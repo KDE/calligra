@@ -143,6 +143,11 @@ KWCanvas *KWView::kwcanvas() const
     return m_canvas;
 }
 
+const KWPage KWView::currentPage() const
+{
+    return m_currentPage;
+}
+
 QWidget *KWView::canvas() const
 {
     return m_canvas;
