@@ -3269,7 +3269,7 @@ void Form::handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const
         //update autoTabStops setting at KFD::Form level
         setAutoTabStops(value.toBool());
     }
-    if (widget() && name == "geometry") {
+    else if (name == "geometry" && widget()) {
         //fall back to sizeInternal property....
         d->propertySet.changePropertyIfExists("sizeInternal", value.toRect().size());
     }
