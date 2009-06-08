@@ -47,8 +47,10 @@ set( kpresenterprivate_LIB_SRCS
      KPrPlaceholderTextStrategy.cpp
      KPrPresentationHighlightWidget.cpp
      KPrPresentationDrawWidget.cpp
+     KPrPresentationBlackWidget.cpp
      KPrPresentationStrategy.cpp
      KPrPresentationHighlightStrategy.cpp
+     KPrPresentationBlackStrategy.cpp
      KPrPresentationStrategyInterface.cpp
      KPrPresentationDrawStrategy.cpp
 

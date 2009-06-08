@@ -39,10 +39,12 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     QSize size = QSize( rect.width() / 40, rect.width() / 40 );
     m_uiWidget.penButton->setIconSize( size );
     m_uiWidget.highLightButton->setIconSize( size );
+    m_uiWidget.blackButton->setIconSize( size );
     // Set the buttons Icon
     // TODO add tooltip
     m_uiWidget.penButton->setIcon( KIcon( "pen" ) );
     m_uiWidget.highLightButton->setIcon( KIcon( "highlight" ) );
+    m_uiWidget.blackButton->setIcon( KIcon( "black" ) );
 }
 
 void KPrPresentationToolWidget::paintEvent( QPaintEvent *event )

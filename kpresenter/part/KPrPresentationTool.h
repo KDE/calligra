@@ -59,6 +59,7 @@ public slots:
     void deactivate();
     void highLightPresentation();
     void drawOnPresentation();
+    void blackPresentation();
 
 private:
     void finishEventActions();

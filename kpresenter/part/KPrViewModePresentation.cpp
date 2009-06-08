@@ -270,4 +270,3 @@ void KPrViewModePresentation::navigateToPage( int index )
         m_pvAnimationDirector->navigateToPage( index );
     }
 }
-

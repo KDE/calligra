@@ -39,6 +39,7 @@
 #include "KPrPresentationStrategy.h"
 #include "KPrPresentationHighlightStrategy.h"
 #include "KPrPresentationDrawStrategy.h"
+#include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
 
 
@@ -64,6 +65,8 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     // Connections of button clicked to slots
     connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
     connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
+    connect( m_presentationToolWidget->presentationToolUi().blackButton, SIGNAL( clicked() ), this, SLOT( blackPresentation() ) );
+    
 }
 
 KPrPresentationTool::~KPrPresentationTool()
@@ -155,6 +158,9 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
             case Qt::Key_H:
                 highLightPresentation();
                 break;
+            case Qt::Key_B:
+                blackPresentation();
+                break;
             default:
                 event->ignore();
                 break;
@@ -224,6 +230,18 @@ void KPrPresentationTool::drawOnPresentation()
     }
     else {
         strategy = new KPrPresentationDrawStrategy( this );
+    }
+    switchStrategy( strategy );
+}
+
+void KPrPresentationTool::blackPresentation()
+{
+    KPrPresentationStrategyInterface * strategy;
+    if ( dynamic_cast<KPrPresentationBlackStrategy*>( m_strategy ) ) {
+        strategy = new KPrPresentationStrategy( this );
+    }
+    else {
+        strategy = new KPrPresentationBlackStrategy( this );
     }
     switchStrategy( strategy );
 }

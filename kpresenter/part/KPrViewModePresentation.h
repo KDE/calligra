@@ -78,6 +78,7 @@ public:
     void navigate( KPrAnimationDirector::Navigation navigation );
 
     void navigateToPage( int index );
+    void blackPresentation();
 
 protected:
     KoPAViewMode * m_savedViewMode;
