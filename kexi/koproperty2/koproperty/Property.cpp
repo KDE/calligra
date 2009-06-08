@@ -409,7 +409,9 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
 //    if (!d->composed || !useComposedProperty)// || !composed->handleValue())
         d->value = value;
 
-    emitPropertyChanged(); // called as last step in this method!
+    if (!d->parent) { // emit only if parent has not done it
+        emitPropertyChanged(); // called as last step in this method!
+    }
 }
 
 void
