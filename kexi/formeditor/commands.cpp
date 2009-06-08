@@ -962,6 +962,7 @@ void InsertWidgetCommand::execute()
         kWarning() << "ERROR: widget creation failed";
         return;
     }
+    Q_ASSERT(!w->objectName().isEmpty());
 //! @todo allow setting this for data view mode as well
     if (d->form->mode() == Form::DesignMode) {
         //don't generate accelerators for widgets in design mode
