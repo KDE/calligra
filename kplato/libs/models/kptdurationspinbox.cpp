@@ -91,7 +91,7 @@ void DurationSpinBox::stepUnitUp()
     if ( m_unit > m_maxunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
         // line may change length, make sure cursor stays within unit
-        lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
+        lineEdit()->setCursorPosition( lineEdit()->displayText().length() - suffix().length() );
         emit unitChanged( m_unit );
     }
 }
@@ -102,7 +102,7 @@ void DurationSpinBox::stepUnitDown()
     if ( m_unit < m_minunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
         // line may change length, make sure cursor stays within unit
-        lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
+        lineEdit()->setCursorPosition( lineEdit()->displayText().length() - suffix().length() );
         emit unitChanged( m_unit );
     }
 }
@@ -110,7 +110,7 @@ void DurationSpinBox::stepUnitDown()
 void DurationSpinBox::stepBy( int steps )
 {
     //kDebug()<<steps;
-    if ( lineEdit()->cursorPosition() > text().size() - Duration::unitToString( m_unit, true ).size() ) {
+    if ( isOnUnit() ) {
         // we are in unit
         if ( steps > 0 ) {
             stepUnitUp();
@@ -124,7 +124,7 @@ void DurationSpinBox::stepBy( int steps )
 
 QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
 {
-    if ( lineEdit()->cursorPosition() > text().size() - suffix().size() ) {
+    if ( isOnUnit() ) {
         if ( m_unit >= m_minunit ) {
             //kDebug()<<"inside unit, up"<<m_unit<<m_minunit<<m_maxunit;
             return QAbstractSpinBox::StepUpEnabled;
@@ -139,12 +139,17 @@ QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
     return QDoubleSpinBox::stepEnabled();
 }
 
+bool DurationSpinBox::isOnUnit() const
+{
+    int pos = lineEdit()->cursorPosition();
+    return ( pos <= text().size() - suffix().size() ) &&
+           ( pos > text().size() - suffix().size() - Duration::unitToString( m_unit, true ).size() );
+}
+
 void DurationSpinBox::keyPressEvent( QKeyEvent * event )
 {
     //kDebug()<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
-    int pos = lineEdit()->cursorPosition();
-    if ( ( pos < text().size() - suffix().size() ) &&
-         ( pos > text().size() - suffix().size() - Duration::unitToString( m_unit, true ).size() ) ) {
+    if ( isOnUnit() ) {
         // we are in unit
         switch (event->key()) {
         case Qt::Key_Up:
@@ -242,7 +247,10 @@ void DurationSpinBox::updateUnit( Duration::Unit unit )
     } else if ( unit > m_minunit ) {
         m_unit = m_minunit;
     }
-    m_unit = unit;
+    if ( m_unit != unit ) {
+        m_unit = unit;
+        emit unitChanged( unit );
+    }
 }
 
 

@@ -84,6 +84,8 @@ protected:
     /// If unit is outside minimum- or maximum unit, the limit is used.
     void updateUnit( Duration::Unit unit);
 
+    bool isOnUnit() const;
+
 private:
     Duration::Unit m_unit;
     Duration::Unit m_minunit;
