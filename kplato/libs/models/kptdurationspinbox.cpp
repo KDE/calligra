@@ -43,6 +43,9 @@ DurationSpinBox::DurationSpinBox(QWidget *parent)
 {
     setUnit( Duration::Unit_h );
     setMaximum(140737488355328.0); //Hmmmm
+
+    connect( lineEdit(), SIGNAL( textChanged( const QString & ) ), SLOT( editorTextChanged( const QString & ) ) );
+
 }
 
 void DurationSpinBox::setUnit( Duration::Unit unit )
@@ -53,7 +56,7 @@ void DurationSpinBox::setUnit( Duration::Unit unit )
         m_minunit = unit;
     }
     m_unit = unit;
-    setSuffix( Duration::unitToString( m_unit, true ) );
+    setValue( value() );
 }
 
 void DurationSpinBox::setMaximumUnit( Duration::Unit unit )
@@ -139,8 +142,9 @@ QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
 void DurationSpinBox::keyPressEvent( QKeyEvent * event )
 {
     //kDebug()<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
-    
-    if ( lineEdit()->cursorPosition() > text().size() - Duration::unitToString( m_unit, true ).size() ) {
+    int pos = lineEdit()->cursorPosition();
+    if ( ( pos < text().size() - suffix().size() ) &&
+         ( pos > text().size() - suffix().size() - Duration::unitToString( m_unit, true ).size() ) ) {
         // we are in unit
         switch (event->key()) {
         case Qt::Key_Up:
@@ -156,6 +160,89 @@ void DurationSpinBox::keyPressEvent( QKeyEvent * event )
         }
     }
     QDoubleSpinBox::keyPressEvent(event);
+}
+
+// handle unit, QDoubleSpinBox handles value, signals etc
+void DurationSpinBox::editorTextChanged( const QString &text ) {
+    //kDebug()<<text;
+    QString s = text;
+    int pos = lineEdit()->cursorPosition();
+    if ( validate( s, pos ) == QValidator::Acceptable ) {
+        s = extractUnit( s );
+        if ( ! s.isEmpty() ) {
+            updateUnit( (Duration::Unit)Duration::unitList( true ).indexOf( s ) );
+        }
+    }
+}
+
+double DurationSpinBox::valueFromText( const QString & text ) const
+{
+    QString s = extractValue( text );
+    double v = QDoubleSpinBox::valueFromText( s );
+    return v;
+}
+
+QString DurationSpinBox::textFromValue ( double value ) const
+{
+    //kDebug()<<1<<value;
+    QString s = QDoubleSpinBox::textFromValue( value );
+    s += Duration::unitToString( m_unit, true );
+    //kDebug()<<2<<value<<s;
+    return s;
+}
+
+QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
+{
+    //kDebug()<<input;
+    if ( input.isEmpty() ) {
+        return QDoubleSpinBox::validate ( input, pos );
+    }
+    QString s = extractUnit( input );
+    if ( s.isEmpty() ) {
+        return QDoubleSpinBox::validate ( input, pos );
+    }
+    if ( Duration::unitList( true ).contains( s ) ) {
+        s = extractValue( input );
+        return QDoubleSpinBox::validate( s, pos );
+    }
+    return QValidator::Invalid;
+}
+
+QString DurationSpinBox::extractUnit ( const QString &text ) const
+{
+    //kDebug()<<text;
+    QString s;
+    for ( int i = text.length() - 1; i >= 0; --i ) {
+        QChar c = text[ i ];
+        if ( ! c.isLetter() ) {
+            break;
+        }
+        s.prepend( c );
+    }
+    if ( Duration::unitList( true ).contains( s ) ) {
+        return s;
+    }
+    return QString();
+}
+
+QString DurationSpinBox::extractValue ( const QString &text ) const
+{
+    //kDebug()<<text;
+    QString s = extractUnit( text );
+    if ( Duration::unitList( true ).contains( s ) ) {
+        return text.left( text.length() - s.length() );
+    }
+    return text;
+}
+
+void DurationSpinBox::updateUnit( Duration::Unit unit )
+{
+    if ( unit < m_maxunit ) {
+        m_unit = m_maxunit;
+    } else if ( unit > m_minunit ) {
+        m_unit = m_minunit;
+    }
+    m_unit = unit;
 }
 
 

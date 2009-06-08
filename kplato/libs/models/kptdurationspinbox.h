@@ -56,6 +56,10 @@ public:
     /// Set maximum unit to @p unit.
     void setMinimumUnit( Duration::Unit unit );
     
+    double valueFromText( const QString & text ) const;
+    QString textFromValue ( double value ) const;
+    QValidator::State validate ( QString & input, int & pos ) const;
+
 signals:
     void unitChanged( int );
 
@@ -64,12 +68,21 @@ public slots:
     /// If unit is outside minimum- or maximum unit, the limit is adjusted.
     void setUnit( Duration::Unit unit);
 
+protected slots:
+    void editorTextChanged( const QString &text );
+
 protected:
     void keyPressEvent( QKeyEvent * event );
     StepEnabled stepEnabled () const;
 
     void stepUnitUp();
     void stepUnitDown();
+
+    QString extractUnit ( const QString &text ) const;
+    QString extractValue ( const QString &text ) const;
+
+    /// If unit is outside minimum- or maximum unit, the limit is used.
+    void updateUnit( Duration::Unit unit);
 
 private:
     Duration::Unit m_unit;

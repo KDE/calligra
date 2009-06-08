@@ -302,14 +302,14 @@ void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned 
 QStringList Duration::unitList( bool trans )
 {
     QStringList lst;
-    lst << ( trans ? i18n( "Y" ) : "Y" )
-        << ( trans ? i18n( "M" ) : "M" )
-        << ( trans ? i18n( "w" ) : "w" )
-        << ( trans ? i18n( "d" ) : "d" )
-        << ( trans ? i18n( "h" ) : "h" )
-        << ( trans ? i18n( "m" ) : "m" )
-        << ( trans ? i18n( "s" ) : "s" )
-        << ( trans ? i18n( "ms" ) : "ms" );
+    lst << ( trans ? i18nc( "Year. Note: Letter(s) only!", "Y" ) : "Y" )
+        << ( trans ? i18nc( "Month. Note: Letter(s) only!", "M" ) : "M" )
+        << ( trans ? i18nc( "Week. Note: Letter(s) only!", "w" ) : "w" )
+        << ( trans ? i18nc( "Day. Note: Letter(s) only!", "d" ) : "d" )
+        << ( trans ? i18nc( "Hour. Note: Letter(s) only!", "h" ) : "h" )
+        << ( trans ? i18nc( "Minute. Note: Letter(s) only!", "m" ) : "m" )
+        << ( trans ? i18nc( "Second. Note: Letter(s) only!", "s" ) : "s" )
+        << ( trans ? i18nc( "Millisecond. Note: Letter(s) only!", "ms" ) : "ms" );
     return lst;
 }
 
