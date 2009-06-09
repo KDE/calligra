@@ -64,9 +64,6 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false )
 {
-        kDebug()<<&(config());
-        kDebug()<<&(config().taskDefaults());
-        kDebug()<<config().taskDefaults().estimate();
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
     // Add library translation files
@@ -137,7 +134,6 @@ KoView *Part::createViewInstance( QWidget *parent )
 
 bool Part::loadOdf( KoOdfReadStore & odfStore )
 {
-    Q_UNUSED( odfStore );
     kWarning()<< "OpenDocument not supported, let's try native xml format";
     return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
 }
@@ -155,11 +151,11 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
         return false;
     }
@@ -292,9 +288,10 @@ bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
     QByteArray s = doc.toByteArray(); // utf8 already
     dev->open( QIODevice::WriteOnly );
     int nwritten = dev->write( s.data(), s.size() );
-    if ( nwritten != (int)s.size() )
-        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
-        return nwritten == (int)s.size();
+    if ( nwritten != (int)s.size() ) {
+        kWarning()<<"wrote:"<<nwritten<<"- expected:"<< s.size();
+    }
+    return nwritten == (int)s.size();
 }
 
 bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id  )
@@ -387,9 +384,9 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     int errorLine, errorColumn;
     bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
     if ( ! ok ) {
-        kError(30003) << "Parsing error in " << url.url() << "! Aborting!" << endl
+        kError() << "Parsing error in " << url.url() << "! Aborting!" << endl
                 << " In line: " << errorLine << ", column: " << errorColumn << endl
-                << " Error message: " << errorMsg << endl;
+                << " Error message: " << errorMsg;
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
         ok = loadWorkPackageXML( project, store->device(), doc );
@@ -416,11 +413,11 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
@@ -443,12 +440,15 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
 #else
     int numNodes = plan.childNodesCount();
 #endif
+#if 0 
+This test does not work any longer. KoXml adds a couple of elements not present in the file!!
     if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
         kDebug() <<"*** Error ***";
         kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
         return false;
     }
+#endif
     emit sigProgress( 100 ); // the rest is only processing, not loading
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
@@ -544,18 +544,17 @@ void Part::openTemplate( const KUrl& url )
 
 bool Part::completeLoading( KoStore *store )
 {
+    // If we get here the new project is loaded and set
     if ( m_loadingTemplate ) {
-        // If we get here the new project is loaded and set
-        kDebug()<<"Loading template, generate unique ids";
+        //kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
     } else if ( isImporting() ) {
-        // If we get here the new project is loaded and set
-        kDebug()<<"Importing, generate unique node ids";
+        //kDebug()<<"Importing, generate unique node ids";
         m_project->generateUniqueNodeIds();
     }
     if ( store == 0 ) {
         // can happen if loading a template
-        kDebug()<<"No store"<<endl;
+        kDebug()<<"No store";
         return true; // continue anyway
     }
     delete m_context;
@@ -564,7 +563,7 @@ bool Part::completeLoading( KoStore *store )
     if ( loadAndParse( store, "context.xml", doc ) ) {
         store->close();
         m_context->load( doc );
-    } else kWarning()<<"No context"<<endl;
+    } else kWarning()<<"No context";
     return true;
 }
 
@@ -577,8 +576,7 @@ bool Part::completeSaving( KoStore *store )
     if ( view ) {
         m_context = new Context();
         m_context->save( view );
-        if ( store->open( "context.xml" ) )
-        {
+        if ( store->open( "context.xml" ) ) {
             QDomDocument doc = m_context->save( view );
             KoStoreDevice dev( store );
 
@@ -592,11 +590,11 @@ bool Part::completeSaving( KoStore *store )
 
 bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(30003) << "oldLoadAndParse: Trying to open " << filename << endl;
+    //kDebug() << "oldLoadAndParse: Trying to open " << filename;
 
     if (!store->open(filename))
     {
-        kWarning() << "Entry " << filename << " not found!" << endl;
+        kWarning() << "Entry " << filename << " not found!";
 //        d->lastErrorMessage = i18n( "Could not find %1",filename );
         return false;
     }
@@ -608,7 +606,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     {
         kError() << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+            << " Error message: " << errorMsg;
 /*        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
                               ,filename  ,errorLine, errorColumn ,
                               QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
@@ -616,7 +614,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
         store->close();
         return false;
     }
-    kDebug() << "File " << filename << " loaded and parsed" << endl;
+    kDebug() << "File " << filename << " loaded and parsed";
     return true;
 }
 
