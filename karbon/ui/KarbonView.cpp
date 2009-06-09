@@ -631,6 +631,9 @@ void KarbonView::combinePath()
         KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
         if( path )
         {
+            KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(path);
+            if( paramShape && paramShape->isParametricShape() )
+                continue;
             paths << path;
             selection->deselect( shape );
         }
