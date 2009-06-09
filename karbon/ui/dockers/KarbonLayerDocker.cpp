@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -146,8 +146,9 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_model = new KarbonLayerModel( this );
     m_model->setDocument( m_part ? &m_part->document() : 0 );
     m_sortModel = new KarbonLayerSortingModel(this);
+    m_sortModel->setDocument( m_part ? &m_part->document() : 0 );
     m_sortModel->setSourceModel( m_model );
-
+    
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_sortModel );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -155,7 +156,7 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_layerView->setDragDropMode( QAbstractItemView::InternalMove );
     m_layerView->setSortingEnabled(true);
-
+    
     KoDocumentSectionView::DisplayMode mode = KoDocumentSectionView::MinimalMode;
     KSharedConfigPtr config = KarbonFactory::componentData().config();
     if( config->hasGroup( "Interface" ) ) {
@@ -204,10 +205,14 @@ void KarbonLayerDocker::updateView()
 void KarbonLayerDocker::setPart( KParts::Part * part )
 {
     m_part = dynamic_cast<KarbonPart*>( part );
-    if( ! m_part )
+    if( ! m_part ) {
+        m_sortModel->setDocument( 0 );
         m_model->setDocument( 0 );
-    else
+    } else {
+        m_sortModel->setDocument( &m_part->document() );
         m_model->setDocument( &m_part->document() );
+    }
+    m_model->update();
 }
 
 void KarbonLayerDocker::slotButtonClicked( int buttonId )
@@ -274,7 +279,8 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
 void KarbonLayerDocker::addLayer()
 {
     bool ok = true;
-    QString name = KInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
+    QString name = KInputDialog::getText( i18n( "New Layer" ), 
+                                          i18n( "Enter the name of the new layer:" ),
                                           i18n( "New layer" ), &ok, this );
     if( ok )
     {
@@ -411,7 +417,9 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes(
         KoShape *shape = shapeFromIndex( index );
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
         if( layer )
+        {
             layers.append( layer );
+        }
         else if( ! selectedItems.contains( index.parent() ) )
         {
             shapes.append( shape );
@@ -470,7 +478,7 @@ void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
     m_layerView->setDisplayMode(mode);
     m_layerView->setItemsExpandable(expandable);
     m_layerView->setRootIsDecorated(expandable);
-
+    m_layerView->setSortingEnabled(true);
     m_viewModeActions[mode]->setChecked (true);
 }
 

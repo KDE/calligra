@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,13 +22,19 @@
 
 #include <QtGui/QSortFilterProxyModel>
 
+class KarbonDocument;
+
 class KarbonLayerSortingModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
     KarbonLayerSortingModel( QObject * parent );
+    /// Sets a new document to use for sorting
+    void setDocument( KarbonDocument * newDocument );
 protected:
     virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+private:
+    KarbonDocument *m_document; ///< the underlying data structure
 };
 
 #endif // KARBON_LAYER_SORTING_MODEL_H
