@@ -471,6 +471,7 @@ public:
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );
     
+    void generateUniqueNodeIds();
     void generateUniqueIds();
     
     void setTaskDefaults( const Task &task );
