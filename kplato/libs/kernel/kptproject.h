@@ -474,6 +474,7 @@ public:
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );
     
+    void generateUniqueNodeIds();
     void generateUniqueIds();
     
     const ConfigBase &config() const { return m_config; }

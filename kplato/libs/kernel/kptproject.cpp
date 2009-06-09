@@ -104,13 +104,20 @@ Project::~Project()
 
 int Project::type() const { return Node::Type_Project; }
 
-void Project::generateUniqueIds()
+void Project::generateUniqueNodeIds()
 {
     foreach ( Node *n, nodeIdDict ) {
+        QString uid = uniqueNodeId();
         nodeIdDict.remove( n->id() );
-        n->setId( uniqueNodeId() );
-        nodeIdDict[ n->id() ] = n;
+        n->setId( uid );
+        nodeIdDict[ uid ] = n;
     }
+}
+
+void Project::generateUniqueIds()
+{
+    generateUniqueNodeIds();
+
     foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         resourceGroupIdDict.remove( g->id() );
         g->setId( uniqueResourceGroupId() );

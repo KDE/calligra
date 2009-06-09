@@ -546,8 +546,12 @@ bool Part::completeLoading( KoStore *store )
 {
     if ( m_loadingTemplate ) {
         // If we get here the new project is loaded and set
-        //kDebug()<<"Loading template, generate unique ids";
+        kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
+    } else if ( isImporting() ) {
+        // If we get here the new project is loaded and set
+        kDebug()<<"Importing, generate unique node ids";
+        m_project->generateUniqueNodeIds();
     }
     if ( store == 0 ) {
         // can happen if loading a template
