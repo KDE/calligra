@@ -304,7 +304,7 @@ void ScheduleEditor::slotAddSchedule()
     } else {
         Project *p = m_view->project();
         ScheduleManager *m = p->createScheduleManager();
-        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, i18n( "Add schedule %1", sm->name() ) );
+        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, i18n( "Add schedule %1", m->name() ) );
         part() ->addCommand( cmd );
         m_view->expand( model()->index( m ) );
         QModelIndex idx = model()->index( m );
