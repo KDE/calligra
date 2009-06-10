@@ -57,7 +57,7 @@ bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelInde
                 KoShapeContainer * leftParent = leftShape->parent();
                 KoShapeContainer * rightParent = rightShape->parent();
                 if (leftParent && leftParent == rightParent) {
-                    QList<KoShape*> children = leftParent->iterator();
+                    QList<KoShape*> children = leftParent->childShapes();
                     return children.indexOf(leftShape) < children.indexOf(rightShape);
                 } else {
                     return leftShape < rightShape;
