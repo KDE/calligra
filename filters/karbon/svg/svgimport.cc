@@ -167,7 +167,7 @@ void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QLis
         {
             // ungroup toplevel groups
             KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( shape );
-            QList<KoShape*> children = group->iterator();
+            QList<KoShape*> children = group->childShapes();
             KoShapeUngroupCommand cmd( group, children );
             cmd.redo();
             

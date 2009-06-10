@@ -601,7 +601,7 @@ void KarbonView::ungroupSelection()
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
         if( container )
         {
-            new KoShapeUngroupCommand( container, container->iterator(), cmd );
+            new KoShapeUngroupCommand( container, container->childShapes(), cmd );
             new KoShapeDeleteCommand( d->part, container, cmd );
         }
     }

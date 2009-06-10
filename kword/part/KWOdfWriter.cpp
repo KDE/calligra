@@ -484,7 +484,7 @@ void KWOdfWriter::addShapeToTree(KoShape *shape)
     // add the children of a KoShapeContainer
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape* containerShape, container->iterator()) {
+        foreach(KoShape* containerShape, container->childShapes()) {
             addShapeToTree(containerShape);
         }
     }

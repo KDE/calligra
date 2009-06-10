@@ -311,7 +311,7 @@ void KarbonLayerDocker::deleteItem()
             QList<KoShape*> deleteShapes;
             foreach( KoShapeLayer* layer, selectedLayers )
             {
-                deleteShapes += layer->iterator();
+                deleteShapes += layer->childShapes();
                 deleteShapes.append( layer );
             }
             cmd = new KoShapeDeleteCommand( m_part, deleteShapes );
@@ -432,7 +432,7 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes(
 
 void KarbonLayerDocker::addChildsRecursive( KoShapeGroup * parent, QList<KoShape*> &shapes )
 {
-    foreach( KoShape * child, parent->iterator() )
+    foreach( KoShape * child, parent->childShapes() )
     {
         if( ! shapes.contains( child ) )
             shapes.append( child );
