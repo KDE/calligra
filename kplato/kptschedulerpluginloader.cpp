@@ -43,7 +43,7 @@ void SchedulerPluginLoader::loadAllPlugins()
     KService::List offers = KServiceTypeTrader::self()->query("KPlato/SchedulerPlugin");
  
     KService::List::const_iterator iter;
-    for(iter = offers.begin(); iter < offers.end(); ++iter)
+    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
     {
         QString error;
         KService::Ptr service = *iter;

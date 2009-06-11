@@ -137,10 +137,10 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
     qSort( documentLayouts.begin(), documentLayouts.end(), compareLayouts );
     qSort( defaultLayouts.begin(), defaultLayouts.end(), compareLayouts );
 
-    QList<KPrPageLayout *>::const_iterator docIt = documentLayouts.begin();
-    QList<KPrPageLayout *>::const_iterator defaultIt = defaultLayouts.begin();
-    while ( defaultIt != defaultLayouts.end() ) {
-        if ( docIt == documentLayouts.end() || compareLayouts( *defaultIt, *docIt ) ) {
+    QList<KPrPageLayout *>::const_iterator docIt = documentLayouts.constBegin();
+    QList<KPrPageLayout *>::const_iterator defaultIt = defaultLayouts.constBegin();
+    while ( defaultIt != defaultLayouts.constEnd() ) {
+        if ( docIt == documentLayouts.constEnd() || compareLayouts( *defaultIt, *docIt ) ) {
             m_pageLayouts.insert( KPrPageLayoutWrapper( *defaultIt ), *defaultIt );
             ++defaultIt;
         }
