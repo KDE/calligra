@@ -1,4 +1,5 @@
 include_directories(${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+remove_definitions(-DQT3_SUPPORT)
 
 ########### KFormula Library ###############
 

@@ -80,7 +80,7 @@ void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 {
     Q_UNUSED( cursor )
-    m_childElements.remove( child );
+    m_childElements.removeAll( child );
 }
 
 BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
