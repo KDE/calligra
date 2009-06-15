@@ -33,6 +33,8 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
+#include <../../src/Xml.h>
+
 WebShape::WebShape() : m_webPage(new QWebPage), m_cached(false), m_cacheLocked(false), m_loaded(false), m_firstLoad(false), m_zoom(1.0), m_scrollPosition(0,0)
 {
   m_webPage->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
@@ -60,6 +62,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
   KoXmlWriter &writer = context.xmlWriter();
 
   writer.startElement( "braindump:web" );
+  Xml::writeBraindumpNS(writer);
   writer.addAttribute( "url", m_url.url());
   writer.addAttribute( "scroll_x", m_scrollPosition.x());
   writer.addAttribute( "scroll_y", m_scrollPosition.y());

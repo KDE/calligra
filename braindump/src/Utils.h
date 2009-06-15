@@ -19,9 +19,12 @@
 
 #include <QList>
 
+class QRectF;
+
 class KoShape;
 class KoShapeLayer;
-class QRectF;
+class KoXmlWriter;
+
 class Section;
 class SectionGroup;
 

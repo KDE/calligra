@@ -45,6 +45,7 @@
 #include "SectionContainer.h"
 #include "Layout.h"
 #include "LayoutFactoryRegistry.h"
+#include "Xml.h"
 
 SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
@@ -115,7 +116,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   context->addOption(KoShapeSavingContext::DrawId);
 
   bodyWriter->startElement("office:body");
-  bodyWriter->addAttribute("xmlns:braindump", "http://kde.org/braindump");
+  Xml::writeBraindumpNS(*bodyWriter);
   bodyWriter->startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
   section->sectionContainer()->saveOdf(*context);

@@ -32,6 +32,8 @@
 
 #include "StatesRegistry.h"
 
+#include "../../src/Xml.h"
+
 StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked"), m_shape(0)
 {
   setSize(QSizeF(10, 10));
@@ -59,6 +61,7 @@ void StateShape::saveOdf(KoShapeSavingContext & context) const
   KoXmlWriter &writer = context.xmlWriter();
 
   writer.startElement( "braindump:state" );
+  Xml::writeBraindumpNS(writer);
   writer.addAttribute( "category", m_categoryId);
   writer.addAttribute( "state", m_stateId);
   if(m_shape)
