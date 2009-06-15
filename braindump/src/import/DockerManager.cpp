@@ -129,6 +129,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         td->setVisible(d->toolDockerVisibillityMap[i.value()->objectName()]);
         td->toggleViewAction()->setVisible(true);
         d->activeToolDockerMap[i.value()->objectName()] = td;
+        td->raise();
     }
 }
 
