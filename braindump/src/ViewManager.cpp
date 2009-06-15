@@ -53,7 +53,7 @@ void ViewManager::removeShape(KoShape* shape)
 {
   if(!shape)
     return;
-  Section * page( sectionByShape( shape ) );
+  Section * page = sectionByShape( shape );
   if( not page) {
     return;
   }
