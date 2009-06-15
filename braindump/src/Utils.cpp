@@ -47,6 +47,10 @@ Section* Utils::sectionForLayer(KoShapeLayer* _layer, SectionGroup* _sectionGrou
     if(section->sectionContainer()->layer() == _layer) {
       return section;
     }
+    if(Section* ls = sectionForLayer(_layer, section))
+    {
+      return ls;
+    }
   }
   return 0;
 }
