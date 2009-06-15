@@ -58,7 +58,6 @@ DockerManager::DockerManager(MainWindow *view)
         d->toolDockerMap[name] = td;
         d->toolDockerVisibillityMap[name] = false;
     }
-
 }
 
 DockerManager::~DockerManager()

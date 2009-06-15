@@ -78,6 +78,7 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
       }
   }
   forceDockTabFonts();
+  m_dockerManager->removeUnusedOptionWidgets();
 }
 
 MainWindow::~MainWindow()
