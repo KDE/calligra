@@ -53,6 +53,8 @@ endif(SHOULD_BUILD_KARBON)
 
 #macro_optional_add_subdirectory(kivio)
 
+macro_optional_add_subdirectory(kplato)
+
 if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	

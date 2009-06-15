@@ -1,0 +1,12 @@
+[Desktop Entry]
+X-KDE-Export=text/calendar
+ExportDescription=iCalendar
+Icon=
+X-KDE-Import=application/x-vnd.kde.kplato
+X-KDE-Weight=1
+ImportDescription=KPlato
+Name=KPlato iCalendar Export Filter
+Name[x-test]=xxKPlato iCalendar Export Filterxx
+X-KDE-ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Library=libicalendarexport
