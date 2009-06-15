@@ -365,6 +365,11 @@ void KarbonLayerDocker::raiseItem()
     {
         canvas->addCommand( cmd );
         m_model->update();
+
+        // adjust layer selection
+        if( selectedLayers.count() ) {
+            selectLayers(selectedLayers);
+        }
     }
 }
 
@@ -398,6 +403,25 @@ void KarbonLayerDocker::lowerItem()
     {
         canvas->addCommand( cmd );
         m_model->update();
+        
+        // adjust layer selection
+        if( selectedLayers.count() ) {
+            selectLayers(selectedLayers);
+        }
+    }
+}
+
+void KarbonLayerDocker::selectLayers( QList<KoShapeLayer*> layers )
+{
+    uint layerCount = m_part->document().layers().count();
+    QModelIndex root = m_layerView->rootIndex();
+    QItemSelectionModel * selModel = m_layerView->selectionModel();
+    selModel->clearSelection();
+    foreach(KoShapeLayer * layer, layers)
+    {
+        int layerPos = m_part->document().layerPos(layer);
+        QModelIndex child = m_model->index(layerPos, 0);
+        selModel->select( m_sortModel->mapFromSource(child), QItemSelectionModel::Select );
     }
 }
 
