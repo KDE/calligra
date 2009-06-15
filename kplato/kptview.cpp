@@ -185,10 +185,6 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("view_show_selector", actionViewSelector );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
 
-    actionViewResourceAppointments  = new KToggleAction(i18n("Show allocations"), this);
-    actionCollection()->addAction("view_resource_appointments", actionViewResourceAppointments );
-    connect( actionViewResourceAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewResourceAppointments() ) );
-
     // ------ Insert
 
     // ------ Project

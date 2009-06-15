@@ -286,8 +286,6 @@ private:
     // ------ View
     KToggleAction *actionViewSelector;
 
-    KToggleAction *actionViewResourceAppointments;
-
     // ------ Insert
 
     // ------ Project
