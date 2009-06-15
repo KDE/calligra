@@ -68,5 +68,5 @@ int main( int argc, char **argv )
   doc->sectionsIO()->save();
   
   delete doc;
-  return 0;
+  app->exit(0);
 }
