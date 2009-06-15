@@ -489,8 +489,7 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
     
     setContextMenuPolicy ( Qt::DefaultContextMenu );
-    connect( this, SIGNAL( contextMenuRequested( const QPoint& ) ), SLOT( slotContextMenuRequested( const QPoint& ) ) );
-    
+
 }
 
 void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )

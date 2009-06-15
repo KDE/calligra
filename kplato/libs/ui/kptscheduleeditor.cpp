@@ -441,7 +441,6 @@ ScheduleLogView::ScheduleLogView( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void ScheduleLogView::setProject( Project *project )
