@@ -48,8 +48,6 @@ class KoImageCollection;
 class KoStore;
 class KoDataCenter;
 
-typedef QList<KoShapeLayer*> VLayerList;
-
 /**
  * All non-visual, static doc info is in here.
  * The karbon part uses this class.
@@ -160,7 +158,7 @@ public:
      * resembles a root container which can contain other containers in an
      * arbitrary nesting depth.
      */
-    const VLayerList& layers() const;
+    const QList<KoShapeLayer*> layers() const;
 
     /**
      * Returns the list of all shapes of the document.

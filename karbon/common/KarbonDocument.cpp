@@ -82,8 +82,8 @@ public:
 
     QSizeF pageSize; ///< the documents page size
 
-    QList<KoShape*> objects;   ///< The list of all object of the document.
-    VLayerList layers;         ///< The layers in this document.
+    QList<KoShape*> objects;     ///< The list of all object of the document.
+    QList<KoShapeLayer*> layers; ///< The layers in this document.
 
     KoUnit unit; ///< The unit.
     QMap<QString, KoDataCenter*> dataCenterMap;
@@ -271,7 +271,7 @@ void KarbonDocument::setUnit( KoUnit unit )
     d->unit = unit;
 }
 
-const VLayerList& KarbonDocument::layers() const
+const QList<KoShapeLayer*> KarbonDocument::layers() const
 {
     return d->layers;
 }
