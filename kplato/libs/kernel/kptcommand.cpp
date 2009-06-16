@@ -1333,21 +1333,26 @@ ModifyEstimateCmd::~ModifyEstimateCmd()
 }
 void ModifyEstimateCmd::execute()
 {
+    int pess = m_estimate->pessimisticRatio();
+    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_newvalue );
-//    setSchScheduled( false );
     if ( m_cmd ) {
         m_cmd->execute();
     }
+    m_estimate->setPessimisticRatio( pess );
+    m_estimate->setOptimisticRatio( opt );
 
 }
 void ModifyEstimateCmd::unexecute()
 {
+    int pess = m_estimate->pessimisticRatio();
+    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_oldvalue );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }
-//    setSchScheduled();
-
+    m_estimate->setPessimisticRatio( pess );
+    m_estimate->setOptimisticRatio( opt );
 }
 
 EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )
