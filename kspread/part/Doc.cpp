@@ -889,14 +889,6 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
 //   else {
 //     matrix = painter.matrix();
 //   }
-//
-//   QPtrListIterator<KoDocumentChild> it( children() );
-//   for( ; it.current(); ++it ) {
-//     // if ( ((Child*)it.current())->sheet() == sheet &&
-//     //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
-//     if ( ((Child*)it.current())->sheet() == sheet)
-//       rgn -= it.current()->region( matrix );
-//   }
     painter.setClipRegion( rgn );
 
     Region::ConstIterator endOfList(region.constEnd());

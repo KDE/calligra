@@ -30,7 +30,6 @@
 #include <QRect>
 #include <QString>
 #include <QtDBus/QtDBus>
-#include <KoDocumentChild.h>
 #include "kspread_export.h"
 namespace KSpread
 {
@@ -249,11 +248,6 @@ Q_SIGNALS:
 
     /** This signal got emitted if the selection changed. */
     void selectionChanged();
-
-    //void childSelected(KoDocumentChild *sheet);
-    //void childUnselected(KoDocumentChild *sheet);
-    //void childActivated( KoDocumentChild *sheet );
-    //void childDeactivated( KoDocumentChild *sheet );
 
 private:
     View* m_view;

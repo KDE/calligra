@@ -3,7 +3,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kspread/commands
 	${CMAKE_SOURCE_DIR}/kspread/ui
 	${KOTEXT_INCLUDES} 
-	${KOGUIUTILS_INCLUDES}
+	${KOMAIN_INCLUDES} 
 	${KOKROSS_INCLUDES}
 	)
 

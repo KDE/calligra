@@ -6,7 +6,7 @@ if(GSL_FOUND)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread
                      ${CMAKE_SOURCE_DIR}/kspread/ui
-                     ${KOGUIUTILS_INCLUDES}
+                     ${KOMAIN_INCLUDES} 
                      ${GSL_INCLUDE_DIR} )
 
 ########### next target ###############
