@@ -1,7 +1,7 @@
 include_directories( 
         ${KDE4_INCLUDE_DIR} 
         ${QT_INCLUDES} 
-        ${KOGUIUTILS_INCLUDES} 
+        ${KOMAIN_INCLUDES}         
         ${CMAKE_SOURCE_DIR}/karbon/
         ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_SOURCE_DIR}/karbon/ui/dialogs
@@ -44,8 +44,8 @@ kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
 target_link_libraries( karbonui ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY}
                                 karboncommon kostore pigmentcms
-                                komain koresources
-                                koguiutils
+                                komain koresources koresourcewidget kocolorwidgets
+                                
                                 kotext
                                 flake )
 

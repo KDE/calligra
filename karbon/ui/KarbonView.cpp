@@ -209,7 +209,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->canvas = new KarbonCanvas( p );
     d->canvas->setParent( this );
     d->canvas->setDocumentViewMargin( viewMargin );
-    connect( d->canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
+    connect( d->canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ),
              this, SLOT( selectionChanged() ) );
 
     d->canvasController = new KoCanvasController(this);
@@ -242,7 +242,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
     connect( zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));
     connect( zoomController, SIGNAL(zoomedToAll()), this, SLOT(zoomDrawing()));
-    
+
     KarbonSmallStylePreview * smallPreview = new KarbonSmallStylePreview( statusBar() );
     connect( smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
     connect( smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
@@ -280,9 +280,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     connect( d->canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
-    connect( d->vertRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)), 
+    connect( d->vertRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)),
              d->canvasController, SLOT( addGuideLine(Qt::Orientation,int) ) );
-    connect( d->horizRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)), 
+    connect( d->horizRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)),
              d->canvasController, SLOT( addGuideLine(Qt::Orientation,int) ) );
 
     updateRuler();
@@ -306,8 +306,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
             setDockerManager(dockerMng);
         }
 
-        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
+        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
 
@@ -874,7 +874,7 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_duplicate", actionDuplicate );
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
-    
+
     KAction *actionDistributeHorizontalCenter  = new KAction(i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter );
     connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
@@ -1186,7 +1186,6 @@ void KarbonView::selectionChanged()
         d->subtractPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->unitePath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->pathSnapToGrid->setEnabled( selectedPaths > 0 );
-        
         // if only one shape selected, set its parent layer as the active layer
         if( count == 1 )
         {
@@ -1272,7 +1271,7 @@ void KarbonView::applyFillToSelection()
     KoSelection *selection = d->canvas->shapeManager()->selection();
     if( ! selection->count() )
         return;
-    
+
     KoShape * shape = selection->firstSelectedShape();
     d->canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), shape->background() ) );
 }
@@ -1282,7 +1281,7 @@ void KarbonView::applyStrokeToSelection()
     KoSelection *selection = d->canvas->shapeManager()->selection();
     if( ! selection->count() )
         return;
-    
+
     KoShape * shape = selection->firstSelectedShape();
     d->canvas->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), shape->border() ) );
 }

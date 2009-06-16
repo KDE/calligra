@@ -1,5 +1,6 @@
 project(karbon)
 
+IF(SHOULD_BUILD_KARBON)
 
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -17,9 +18,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT
 include_directories(
         ${QT_INCLUDES} 
         ${KDE4_INCLUDE_DIR} 
-        ${KOGUIUTILS_INCLUDES} 
+         
         ${FLAKE_INCLUDES}
         ${KOTEXT_INCLUDES}
+        ${KOMAIN_INCLUDES}
+    	${CMAKE_SOURCE_DIR}/libs/resources
+	    ${CMAKE_SOURCE_DIR}/libs/widgets/resources
+	    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
         ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_SOURCE_DIR}/karbon/common
         ${CMAKE_SOURCE_DIR}/karbon/common/commands
@@ -61,3 +66,5 @@ install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( karbon kdeinit_karbon )
 install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+ENDIF(SHOULD_BUILD_KARBON)
