@@ -7,7 +7,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/kplato/libs/models
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
-    
+    ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
