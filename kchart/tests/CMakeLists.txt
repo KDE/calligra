@@ -5,8 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
-                     ${KOGUIUTILS_INCLUDES}
-                     ${KOTEXT_INCLUDES} )
+                     ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 set( TestProxyModel_test_SRCS TestProxyModel.cpp )
