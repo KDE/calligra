@@ -3,8 +3,7 @@ project(kformula)
 set(KFORMULA_INCLUDES
     ${CMAKE_SOURCE_DIR}/kformula
     ${CMAKE_SOURCE_DIR}/kformula/flake
-    ${KOGUIUTILS_INCLUDES} 
-    ${KOTEXT_INCLUDES}
+    ${KOMAIN_INCLUDES}     
     )
 
 include_directories(${KFORMULA_INCLUDES})
@@ -29,6 +28,7 @@ kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 target_link_libraries(
     kformulaprivate
     kformulalib
+    komain
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
