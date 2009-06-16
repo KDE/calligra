@@ -1,8 +1,6 @@
-
-
-
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
+include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
@@ -29,7 +27,7 @@ kde4_add_plugin(kspreadlatexexport WITH_PREFIX ${kspreadlatexexport_PART_SRCS})
 
 
 
-target_link_libraries(kspreadlatexexport komain ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS} kostore koguiutils )
+target_link_libraries(kspreadlatexexport komain ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS} kostore  )
 
 install(TARGETS kspreadlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

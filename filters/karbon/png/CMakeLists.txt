@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core  ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
 target_link_libraries(
     karbonpngexport
-    koguiutils
+    
     karboncommon
     karbonui
     komain

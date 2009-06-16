@@ -21,6 +21,7 @@ target_link_libraries(
     abiwordimport
     kwordexportfilters
     komain
+    kotext
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRAR}
@@ -43,6 +44,7 @@ target_link_libraries(
     abiwordexport
     kwordexportfilters
     komain
+    kotext
     ${KDE4_KDECORE_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}

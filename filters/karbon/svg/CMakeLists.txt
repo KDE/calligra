@@ -1,6 +1,6 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
@@ -14,7 +14,7 @@ kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
 
 target_link_libraries(
     karbonsvgexport
-    koguiutils
+    
     karboncommon
     karbonui
     flake
@@ -44,7 +44,7 @@ kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
 target_link_libraries(
     karbonsvgimport
-    koguiutils
+    
     karboncommon
     karbonui
     kotext

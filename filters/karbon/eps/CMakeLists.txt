@@ -7,7 +7,7 @@
 
 
 
-#target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+#target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS}  karboncommon )
 
 #install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -27,7 +27,7 @@ kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
 target_link_libraries(
     karbonepsimport
-    koguiutils
+    
     komain
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}

@@ -1,6 +1,4 @@
-
-
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_BINARY_DIR}/filters/)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_BINARY_DIR}/filters/ ${KOMAIN_INCLUDES})
 
 
 ########### next target ###############
