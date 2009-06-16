@@ -46,7 +46,7 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
 
 kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty koguiutils ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(koproperty  ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koproperty  ${INSTALL_TARGETS_DEFAULT_ARGS})

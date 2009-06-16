@@ -52,7 +52,7 @@ set(koproperty_LIB_SRCS
 kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
 
 target_link_libraries(koproperty2
-  koguiutils
+  
   ${KDE4_KDE3SUPPORT_LIBS}
 )
 

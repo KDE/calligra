@@ -23,6 +23,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_B
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
+  ${KOMAIN_INCLUDES}
   koproperty2
   ${KDE4_INCLUDES}
   ${QT_INCLUDES}

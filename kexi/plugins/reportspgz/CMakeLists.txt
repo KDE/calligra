@@ -2,7 +2,7 @@
 #project(reports)
 
 include_directories( ${KOMAIN_INCLUDES} 
-${KOGUIUTILS_INCLUDES} 
+ 
 ${KOODF_INCLUDES} 
 ${CMAKE_SOURCE_DIR}/kexi
 ${CMAKE_SOURCE_DIR}/kexi/koproperty2/
@@ -103,7 +103,7 @@ kde4_add_ui_files(pgzkexireportpart2_LIB_SRCS backend/wrtembed/detailgroupsectio
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
 target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} 
-  ${QT_QTSCRIPT_LIBRARY} ${KDE4_KPARTS_LIBS} kexidb kexicore keximain ${KOPROPERTY_LIBS} koguiutils ${QT_QT3SUPPORT_LIBRARY} kexiguiutils 
+  ${QT_QTSCRIPT_LIBRARY} ${KDE4_KPARTS_LIBS} kexidb kexicore keximain ${KOPROPERTY_LIBS}  ${QT_QT3SUPPORT_LIBRARY} kexiguiutils 
     kexiextendedwidgets kdchart ${KDE4_KROSSCORE_LIBS})
 if (SHOULD_BUILD_KSPREAD)
   target_link_libraries(pgzkexireportpart2 kspreadcommon)
