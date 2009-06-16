@@ -10,12 +10,10 @@ add_subdirectory( part )
 
 #configure_file(config-kpresenter.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kpresenter.h )
 #
-#include_directories(
-#		${KOTEXT_INCLUDES}
-#		${CMAKE_SOURCE_DIR}/libs/kformula
-#		${KOGUIUTILS_INCLUDES}
-#		${KOPAINTER_INCLUDES})
-#
+include_directories(
+		${KOTEXT_INCLUDES}
+        ${KOMAIN_INCLUDES}
+)
 #include_directories( ${X11_dpms_INCLUDE_PATH} )
 #
 #add_subdirectory( autoforms )
@@ -141,7 +139,7 @@ add_subdirectory( styles )
 #
 #kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 #
-#target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS} koguiutils kotext kopainter )
+#target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS}  kotext kopainter )
 #
 #set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 #install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -156,7 +154,7 @@ add_subdirectory( styles )
 #
 #
 #
-#target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate komain koguiutils)
+#target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate komain )
 #
 #install(TARGETS kpresenterpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 #
@@ -168,7 +166,7 @@ add_subdirectory( styles )
 ##
 #kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 #
-#target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} komain koguiutils )
+#target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} komain  )
 #
 #install(TARGETS kdeinit_kpresenter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #
