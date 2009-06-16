@@ -26,7 +26,6 @@
 #include "kplatowork_export.h"
 
 #include <KoMainWindow.h>
-#include <KoQueryTrader.h>
 
 #include <KoApplication.h>
 
@@ -71,10 +70,10 @@ class KPLATOWORK_EXPORT KPlatoWork_MainWindow : public KoMainWindow
 public:
     explicit KPlatoWork_MainWindow( const KComponentData &instance );
     virtual ~KPlatoWork_MainWindow();
-    
+
     bool openDocument( const KUrl &url );
     using KoMainWindow::openDocument;
-    
+
     virtual void setRootDocument( KoDocument *doc );
     /**
     * Update caption from document info - call when document info
@@ -83,16 +82,16 @@ public:
     virtual void updateCaption();
     virtual void updateCaption( const QString &caption, bool modified );
     using KoMainWindow::updateCaption;
-    
+
     virtual QString configFile() const;
-    
+
     KAction* partSpecificHelpAction;
 
     void editDocument( KPlatoWork::Part *part, const KPlato::Document *doc );
-    
+
     bool isEditing() const { return m_editing; }
     bool isModified() const;
-    
+
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
 
@@ -108,15 +107,15 @@ protected slots:
      *  Saves the current document with a new name.
      */
     virtual void slotFileSaveAs();
-    
+
     void sendMail();
-    
+
     void saveAll();
-    
+
     void showPartSpecificHelp();
-    
+
     void tab_contextMenu(QWidget * ,const QPoint &);
-    
+
     void slotKSLoadCompleted();
     void slotKSLoadCanceled (const QString &);
     void slotNewDocumentName();
@@ -136,13 +135,13 @@ protected:
     /// Open KOfficePart document from workpackage store
     bool editKOfficePartDocument( KPlatoWork::Part *part, KMimeType::Ptr mimetype, const KPlato::Document *doc );
     void enableHelp( bool enable );
-    
+
     virtual bool saveDocument( bool saveas = false, bool silent = false );
 
     void setMainDocument( const KoDocument *doc, bool main = true );
     KoDocument *mainDocument() const;
     bool isMainDocument( const KoDocument *doc ) const;
-    
+
 private:
     class Page
     {
@@ -168,9 +167,9 @@ private: // methods
     void closeDocument();
     void saveSettings();
     void switchToPage( int index );
-    
+
     void removePage( KParts::PartBase *doc );
-    
+
 private: // variables
     bool m_editing; // a workpackage doc is open for editing
     int m_activePage;

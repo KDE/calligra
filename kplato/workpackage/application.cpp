@@ -40,44 +40,40 @@
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
+#include <KoDocument.h>
+#include <KoDocumentEntry.h>
+#include <KoDocumentInfo.h>
+#include <KoFilterManager.h>
 #include <KoGlobal.h>
-#include <KoQueryTrader.h>
+#include <KoView.h>
 
-#include <kcomponentdata.h>
-#include <kmimetypetrader.h>
-
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kdesktopfile.h>
-#include <ktemporaryfile.h>
-#include <kfiledialog.h>
-#include <kfileitem.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <kshortcutsdialog.h>
-#include <kstandarddirs.h>
-#include <klibloader.h>
-#include <kmenu.h>
-#include <kservice.h>
-#include <kmessagebox.h>
-#include <krecentdocument.h>
-#include <kparts/partmanager.h>
+#include <kaboutdata.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdeversion.h>
-#include <kaboutdata.h>
-#include <kxmlguifactory.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 #include <kcomponentdata.h>
+#include <kcomponentdata.h>
+#include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kdeversion.h>
+#include <kfiledialog.h>
+#include <kfileitem.h>
 #include <kiconloader.h>
+#include <kiconloader.h>
+#include <klibloader.h>
+#include <klocale.h>
+#include <kmenu.h>
+#include <kmessagebox.h>
+#include <kmimetypetrader.h>
+#include <kparts/partmanager.h>
+#include <krecentdocument.h>
+#include <kservice.h>
+#include <kshortcutsdialog.h>
+#include <kstandarddirs.h>
+#include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
-
-#include <KoQueryTrader.h>
-#include <KoDocumentInfo.h>
-#include <KoDocument.h>
-#include <KoView.h>
-#include <KoFilterManager.h>
-
+#include <kxmlguifactory.h>
 
 KPlatoWork_Application::KPlatoWork_Application()
     : KoApplication()

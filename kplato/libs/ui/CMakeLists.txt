@@ -7,7 +7,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/kplato/libs/models
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
-    ${KOGUIUTILS_INCLUDES}
+    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
@@ -119,7 +119,7 @@ add_definitions(-DKDGANTT_STATICLIB)
 
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 
-target_link_libraries(kplatoui ${KDE4_KABC_LIBS} komain kostore kplatokernel kplatomodels koguiutils ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kplatoui ${KDE4_KABC_LIBS} komain kostore kplatokernel kplatomodels  ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

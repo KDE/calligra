@@ -41,7 +41,6 @@
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
 #include <KoGlobal.h>
-#include <KoQueryTrader.h>
 
 #include <kcomponentdata.h>
 #include <kmimetypetrader.h>
@@ -75,29 +74,28 @@
 #include <kservice.h>
 #include <kio/netaccess.h>
 
-#include <KoQueryTrader.h>
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoView.h>
 #include <KoFilterManager.h>
 
- 
+
 KPlatoWork_MainWindow::KPlatoWork_MainWindow( const KComponentData &instance )
     : KoMainWindow( instance ),
     m_editing( false ),
     m_activePage( -1 )
 {
     kDebug()<<this;
-    
+
     m_pLayout = new QSplitter( centralWidget() );
     m_pFrame = 0;
     setupTabWidget();
 
     connect( this, SIGNAL( documentSaved() ), this, SLOT( slotNewDocumentName() ) );
-    
+
     m_client = new KPlatoWork_MainGUIClient( this );
     createShellGUI();
-    
+
 }
 
 
@@ -134,7 +132,7 @@ KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
     // prevent our parent destructor from doing stupid things
     setDocToOpen( 0 );
     setRootDocumentDirect( 0, Q3PtrList<KoView>() );
-    
+
     saveSettings(); // Now save our settings before exiting
 }
 
@@ -154,7 +152,7 @@ void KPlatoWork_MainWindow::setupTabWidget()
     m_pFrame->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                              QSizePolicy::Preferred ) );
     m_pFrame->setTabPosition( KTabWidget::Bottom );
-    
+
     m_tabCloseButton = new QToolButton( m_pFrame );
     connect( m_tabCloseButton, SIGNAL( clicked() ), this, SLOT( slotFileClose() ) );
     m_tabCloseButton->setIcon( KIcon( "tab-remove" ) );
@@ -166,7 +164,7 @@ void KPlatoWork_MainWindow::setupTabWidget()
     update();
     connect( m_pFrame, SIGNAL( currentChanged( QWidget* ) ), this, SLOT( slotUpdatePart( QWidget* )  ) );
 /*    connect( m_pFrame, SIGNAL( contextMenu(QWidget * ,const QPoint &)), this, SLOT( tab_contextMenu( QWidget * ,const QPoint & ) ) );*/
-    
+
 }
 
 void KPlatoWork_MainWindow::editDocument( KPlatoWork::Part *part, const KPlato::Document *doc )
@@ -190,10 +188,10 @@ bool KPlatoWork_MainWindow::editKPartsDocument(  KPlatoWork::Part *part, KServic
     page.part = ch->editor();
     setupTabWidget();
     m_lstPages.append( page );
-    
+
     page.part->openUrl( ch->url() );
     partManager()->addPart( page.part, false );
-    
+
     m_pFrame->addTab( page.part->widget(), KIconLoader::global()->loadIcon( service->icon(), KIconLoader::Small ), i18n("Empty") );
     switchToPage( m_lstPages.count() - 1 );
     return true;
@@ -343,7 +341,7 @@ void KPlatoWork_MainWindow::setRootDocument( KoDocument * doc )
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     kDebug()<<"setPartManager()"<<partManager();
     v->setPartManager( partManager() );
-    
+
     KMimeType::Ptr mimeType = KMimeType::findByUrl( doc->url() );
     KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimeType->name(),  QString::fromLatin1( "KParts/ReadWritePart" ) );
     QString icon;
@@ -351,7 +349,7 @@ void KPlatoWork_MainWindow::setRootDocument( KoDocument * doc )
         icon = service->icon();
     }
     m_pFrame->addTab( v, KIconLoader::global()->loadIcon( icon, KIconLoader::Small ), i18n("Empty") );
-    
+
     // Create a new page for this doc
     Page page;
     page.isMainDocument = true; // default
@@ -588,7 +586,7 @@ void KPlatoWork_MainWindow::chooseNewDocument( InitDocFlags initDocFlags )
     newdoc->addShell( this );
     newdoc->showStartUpWidget( this, true /*Always show widget*/ );
 }
- 
+
 void KPlatoWork_MainWindow::slotFileNew()
 {
     kDebug();
@@ -602,11 +600,11 @@ void KPlatoWork_MainWindow::slotFileOpen()
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
     dialog->setObjectName( "file dialog" );
     dialog->setMode(KFile::File);
-        
+
     dialog->setCaption( i18n("Open Document") );
 
     QStringList mimeFilter; mimeFilter <<"application/x-vnd.kde.kplato.work";
-   
+
     dialog->setMimeFilter( mimeFilter );
     if(dialog->exec()!=QDialog::Accepted) {
         delete dialog;
@@ -673,13 +671,13 @@ void KPlatoWork_MainWindow::closeDocument()
     // Set the root document to the current one - so that queryClose acts on it
     Page page = m_lstPages[ m_activePage ];
     int index = m_activePage;
-    
+
     Q_ASSERT( m_activePage != -1 );
     if ( page.isKParts ) {
         return; //TODO
     }
     assert( rootDocument() == page.m_pDoc );
-    
+
     // First do the standard queryClose
     kDebug() <<"MainWindow::closeDocument calling standard queryClose";
     if ( KPlatoWork_MainWindow::queryClose() ) {
@@ -835,7 +833,7 @@ void KPlatoWork_MainWindow::tab_contextMenu(QWidget * w,const QPoint &p)
     KIconLoader il;
     QAction *mnuSave = menu.addAction( il.loadIconSet( "document-save", KIconLoader::Small ), i18n("Save") );
     QAction *mnuClose = menu.addAction( il.loadIcon( "window-close", KIconLoader::Small ), i18n("Close") );
-    
+
     int tabnr = m_pFrame->indexOf( w );
     Page page = m_lstPages[tabnr]; //hmmm
     // disable save if there's nothing to save
@@ -847,7 +845,7 @@ void KPlatoWork_MainWindow::tab_contextMenu(QWidget * w,const QPoint &p)
     }
     // show menu
     QAction *choice = menu.exec(p);
-    
+
     if( choice == mnuClose ) {
         const int index = m_pFrame->currentIndex();
         m_pFrame->setCurrentIndex( tabnr );
@@ -866,7 +864,7 @@ void KPlatoWork_MainWindow::slotConfigureKeys()
 {
     KoView *view = rootView();
     KShortcutsDialog dlg(KShortcutsEditor::AllActions,KShortcutsEditor::LetterShortcutsAllowed, this );
-    
+
     dlg.addCollection( actionCollection() );
     if ( view ) {
         dlg.addCollection( view->actionCollection() );

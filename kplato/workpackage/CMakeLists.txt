@@ -24,7 +24,7 @@ target_link_libraries(
     kplatokernel
     kplatomodels
     kplatoui
-    koguiutils
+    
     komain
     kostore
     koodf

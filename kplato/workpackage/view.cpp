@@ -57,7 +57,7 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
-#include <KoQueryTrader.h>
+
 #include <kmessagebox.h>
 #include <krun.h>
 #include <kvbox.h>
@@ -93,7 +93,7 @@ View::View( Part* part, QWidget* parent )
     //kDebug();
 
     setComponentData( Factory::global() );
-    
+
     if ( part->isSingleViewMode() ) { // NOTE: don't use part->isReadWrite() here
         setXMLFile( "kplatowork_readonly.rc" );
     } else {
@@ -102,17 +102,17 @@ View::View( Part* part, QWidget* parent )
 
     m_readWrite = part->isReadWrite();
     kDebug()<<m_readWrite;
-    
+
 //    m_dbus = new ViewAdaptor( this );
 //    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
-    
+
     m_tab = new QTabWidget( this );
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin(0);
     layout->addWidget( m_tab );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     // Add sub views
     createViews();
 
@@ -142,11 +142,11 @@ View::View( Part* part, QWidget* parent )
     slotPlugScheduleActions();
 
     loadContext();
-    
+
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
-    
+
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
-    
+
     actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
@@ -182,16 +182,16 @@ ViewBase *View::createTaskInfoView()
         t = dynamic_cast<Task*>( p.childNode( 0 ) );
     }
     v->setTask( t );
-    
+
     kDebug()<<p.allScheduleManagers();
     v->setScheduleManager( p.allScheduleManagers().value( 0 ) );
-    
+
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    
+
     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-    
+
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -210,13 +210,13 @@ ViewBase *View::createDocumentsView()
     }
     connect( v, SIGNAL( editDocument( Document* ) ), SLOT( slotEditDocument( Document* ) ) );
     connect( v, SIGNAL( viewDocument( Document* ) ), SLOT( slotViewDocument( Document* ) ) );
-    
+
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    
+
     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-    
+
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -541,9 +541,9 @@ void View::updateReadWrite( bool readwrite )
 {
     kDebug()<<m_readWrite<<"->"<<readwrite;
     m_readWrite = readwrite;
-    
+
     actionTaskProgress->setEnabled( readwrite );
-    
+
     emit sigUpdateReadWrite( readwrite );
 }
 

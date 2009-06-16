@@ -24,7 +24,7 @@
 
 #include <QTreeWidget>
 
-#include <KoQueryTrader.h>
+#include <KoDocumentEntry.h>
 
 class QDomElement;
 
@@ -78,7 +78,7 @@ public:
 
     /// Return the category of @p view
     ViewListItem *category( const KoView *view ) const;
-    
+
     void save( QDomElement &element ) const;
 
 protected:
@@ -100,7 +100,7 @@ public:
     ~ViewListWidget();
 
     /// Set read/write permission on all views.
-    void setReadWrite( bool rw ); 
+    void setReadWrite( bool rw );
     /// Add a category if it does not already exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
     /// Return a list of all categories
@@ -110,7 +110,7 @@ public:
     ViewListItem *findCategory( const QString &tag ) const;
     /// Return the category of @p view
     ViewListItem *category( const KoView *view ) const;
-    
+
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
@@ -130,7 +130,7 @@ public:
     int removeViewListItem( ViewListItem *item );
     /// Add @p item to @p parent at @p index, don't emit signal
     void addViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
-    
+
     /// Remove @p item, emit signal
     int takeViewListItem( ViewListItem *item );
     /// Add @p item to @p parent at @ index, emit signal
@@ -157,7 +157,7 @@ protected slots:
     void slotEditDocumentTitle();
     void slotRemoveDocument();
     void slotConfigureItem();
-    
+
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
 
@@ -176,7 +176,7 @@ private:
     QList<QAction*> m_addview;
     QList<QAction*> m_editdocument;
     QList<QAction*> m_adddocument;
-    
+
     QTreeWidgetItem *m_prev;
 };
 

@@ -24,7 +24,7 @@
 #include "kplato_export.h"
 
 #include <KoView.h>
-#include <KoQueryTrader.h>
+#include <KoDocumentEntry.h>
 
 #include "kptcontext.h"
 
@@ -101,7 +101,7 @@ public:
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
-    
+
     QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();
@@ -111,7 +111,7 @@ public:
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
     void setActiveSchedule( long id ) const;
-    
+
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
     ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
     ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
@@ -133,10 +133,10 @@ public:
     ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
 
     KoPrintJob * createPrintJob();
-    
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
-    
+
 public slots:
     void slotUpdate();
     void slotCreateTemplate();
@@ -198,7 +198,7 @@ protected slots:
     void slotMoveTaskUp();
     void slotMoveTaskDown();
     void slotTaskWorkpackage();
-    
+
     void slotConnectNode();
 
     void slotDeleteResource( Resource *resource );
@@ -241,7 +241,7 @@ private slots:
 
 private:
     void createViews();
-    
+
 
     void createChildDocumentViews();
     ViewListItem *createChildDocumentView( DocumentChild *ch );
@@ -272,12 +272,12 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    
+
     bool m_readWrite;
-    
+
     // ------ File
     QAction *actionCreateTemplate;
-    
+
     // ------ Edit
     QAction *actionCut;
     QAction *actionCopy;
@@ -312,7 +312,7 @@ private:
     KAction *actionEditResource;
     KAction *actionEditRelation;
     KAction *actionDeleteRelation;
-    
+
     //Test
     KAction *actNoInformation;
 

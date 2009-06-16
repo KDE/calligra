@@ -26,7 +26,6 @@
 #include "kplatowork_export.h"
 
 #include <KoMainWindow.h>
-#include <KoQueryTrader.h>
 
 #include <KoApplication.h>
 

@@ -15,7 +15,7 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kplato
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
-    ${KOGUIUTILS_INCLUDES}
+    ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
@@ -30,7 +30,7 @@ add_subdirectory( plugins )
 #add_subdirectory( tests )
 
 ## workpackage handler not part of koffice 2.0 release
-#add_subdirectory( workpackage )
+add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 
@@ -58,8 +58,9 @@ set(kplatoprivate_LIB_SRCS
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
-
     kptconfigskeleton.cpp
+    KoChild.cpp
+    KoDocumentChild.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
@@ -74,7 +75,7 @@ kde4_add_kcfg_files(kplatosettings_SRCS kplatosettings.kcfgc)
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} ${kplatosettings_SRCS} )
 
-target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui koguiutils  ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} komain kostore )
+target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui   ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} komain )
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
