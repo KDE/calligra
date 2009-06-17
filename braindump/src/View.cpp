@@ -37,7 +37,6 @@
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoSelection.h>
-#include <KoToolDocker.h>
 #include <KoMainWindow.h>
 #include <KoDockRegistry.h>
 #include <KoShapeLayer.h>

@@ -1,6 +1,6 @@
-/* This file is part of the KDE project
- *
- * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+/*
+ * Copyright (c) 2006 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,31 +17,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DOCKER_MANAGER_H
-#define DOCKER_MANAGER_H
 
-#include <KoView.h>
+#ifndef KOTOOLBOXFACTORY_H
+#define KOTOOLBOXFACTORY_H
 
-class MainWindow;
+#include <KoDockFactory.h>
 
-/**
-   The docker manager makes sure that tool option widgets are shown at the right time.
- */
-class DockerManager : public QObject
+#include <QString>
+#include <QDockWidget>
+
+class KoCanvasController;
+
+class KoToolBoxFactory : public KoDockFactory
 {
-    Q_OBJECT
 public:
-    explicit DockerManager(MainWindow* mainWindow);
-    ~DockerManager();
+    explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
+    ~KoToolBoxFactory();
 
-public slots:
-    /**
-     * Update the option widgets to the argument ones, removing the currently set widgets.
-     */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
-
-    void removeUnusedOptionWidgets();
-
+    virtual QString id() const;
+    KoDockFactory::DockPosition defaultDockPosition() const;
+    QDockWidget* createDockWidget();
+    virtual bool isCollapsable() const { return false; }
 
 private:
     class Private;

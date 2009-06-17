@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,35 +18,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DOCKER_MANAGER_H
-#define DOCKER_MANAGER_H
 
-#include <KoView.h>
+#include "KoToolDockerFactory.h"
 
-class MainWindow;
-
-/**
-   The docker manager makes sure that tool option widgets are shown at the right time.
- */
-class DockerManager : public QObject
-{
-    Q_OBJECT
+class KoToolDockerFactory::Private {
 public:
-    explicit DockerManager(MainWindow* mainWindow);
-    ~DockerManager();
-
-public slots:
-    /**
-     * Update the option widgets to the argument ones, removing the currently set widgets.
-     */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
-
-    void removeUnusedOptionWidgets();
-
-
-private:
-    class Private;
-    Private * const d;
+    Private( QString id ) : dockWidgetId(id) {}
+    QString dockWidgetId;
 };
 
-#endif
+KoToolDockerFactory::KoToolDockerFactory( QString dockWidgetId )
+: d( new Private(dockWidgetId))
+{
+}
+
+KoToolDockerFactory::~KoToolDockerFactory()
+{
+    delete d;
+}
+
+QString KoToolDockerFactory::id() const
+{
+    return d->dockWidgetId;
+}
+
+QDockWidget* KoToolDockerFactory::createDockWidget()
+{
+    KoToolDocker * dockWidget = new KoToolDocker();
+    dockWidget->setObjectName( id() );
+    return dockWidget;
+}

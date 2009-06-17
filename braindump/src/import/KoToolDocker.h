@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,33 +18,40 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DOCKER_MANAGER_H
-#define DOCKER_MANAGER_H
+#ifndef KO_TOOL_DOCKER_H
+#define KO_TOOL_DOCKER_H
 
-#include <KoView.h>
+#include <QDockWidget>
 
-class MainWindow;
+#include "komain_export.h"
+
+class QWidget;
 
 /**
-   The docker manager makes sure that tool option widgets are shown at the right time.
+   The tool docker shows the tool option widget associtated with the
+   current tool and the current canvas.
  */
-class DockerManager : public QObject
+class KOMAIN_EXPORT KoToolDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit DockerManager(MainWindow* mainWindow);
-    ~DockerManager();
+    explicit KoToolDocker(QWidget *parent = 0);
+    ~KoToolDocker();
 
 public slots:
     /**
-     * Update the option widgets to the argument ones, removing the currently set widgets.
+     * Update the option widget to the argument one, removing the currently set widget.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
+    void newOptionWidget(QWidget *widget);
 
-    void removeUnusedOptionWidgets();
-
+    /**
+     * Returns whether the docker has an optionwidget attached
+     */
+    bool hasOptionWidget();
 
 private:
+    Q_PRIVATE_SLOT(d, void optionWidgetDestroyed(QObject*))
+
     class Private;
     Private * const d;
 };
