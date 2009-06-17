@@ -44,7 +44,6 @@ class DocumentModel : public DocumentSectionModel {
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual Qt::DropActions supportedDropActions() const;
-    virtual Qt::DropActions supportedDragActions() const;
     virtual QStringList mimeTypes() const;
     virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );

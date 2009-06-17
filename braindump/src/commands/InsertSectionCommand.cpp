@@ -25,6 +25,10 @@ InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _pa
   
 }
 
+InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(0), m_idx(_idx)
+{
+}
+
 void InsertSectionCommand::undo()
 {
   m_model->removeSection(m_section);
@@ -32,5 +36,9 @@ void InsertSectionCommand::undo()
 
 void InsertSectionCommand::redo()
 {
-  m_model->insertSection(m_section, m_parent, m_above);
+  if(m_above) {
+    m_model->insertSection(m_section, m_parent, m_above);
+  } else {
+    m_model->insertSection(m_section, m_parent, m_idx);
+  }
 }

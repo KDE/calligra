@@ -29,6 +29,7 @@ class SectionGroup;
 class InsertSectionCommand : public QUndoCommand {
 public:
   InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above );
+  InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx );
   virtual void undo();
   virtual void redo();
 private:
@@ -36,6 +37,7 @@ private:
   SectionGroup *m_parent;
   DocumentModel* m_model;
   Section* m_above;
+  int m_idx;
 };
 
 #endif

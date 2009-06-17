@@ -29,6 +29,7 @@
 #include <kundostack.h>
 #include "commands/RenameSectionCommand.h"
 #include <kdebug.h>
+#include "commands/InsertSectionCommand.h"
 
 DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
@@ -160,11 +161,6 @@ Qt::DropActions DocumentModel::supportedDropActions() const
   return Qt::MoveAction | Qt::CopyAction;
 }
 
-Qt::DropActions DocumentModel::supportedDragActions() const
-{
-  return Qt::CopyAction | Qt::MoveAction;
-}
-
 QStringList DocumentModel::mimeTypes() const
 {
   QStringList types;
@@ -236,18 +232,21 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
   {
     if(action == Qt::CopyAction)
     {
-      section = new Section(*section);
+      if(row < 0) {
+        row = group->sections().count();
+      }
+      m_document->addCommand(section, new InsertSectionCommand(new Section(*section), group, this, row));
     } else {
       int idx =group->indexOf(section);
       if( 0 <= idx and idx < row ) {
         --row;
       }
+      if(row < 0) {
+        row = group->sections().count();
+      }
       removeSection(section);
+      insertSection(section, group, row);
     }
-    if(row < 0) {
-      row = group->sections().count();
-    }
-    insertSection(section, group, row);
   }
   return true;
 }
