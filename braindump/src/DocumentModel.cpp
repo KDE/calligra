@@ -159,6 +159,11 @@ Qt::DropActions DocumentModel::supportedDropActions() const
   return Qt::MoveAction | Qt::CopyAction;
 }
 
+Qt::DropActions DocumentModel::supportedDragActions() const
+{
+  return Qt::CopyAction | Qt::MoveAction;
+}
+
 QStringList DocumentModel::mimeTypes() const
 {
   QStringList types;
