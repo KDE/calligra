@@ -198,7 +198,7 @@ void View::editSelectAll()
 
   KoShapeLayer *layer = activeSection()->sectionContainer()->layer();
 
-  QList<KoShape*> layerShapes( layer->iterator() );
+  QList<KoShape*> layerShapes( layer->childShapes() );
   foreach( KoShape *layerShape, layerShapes ) {
     selection->select( layerShape );
     layerShape->update();

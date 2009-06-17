@@ -1,3 +1,13 @@
+FIND_LIBRARY(KOBASE_LIBRARY NAMES kobase
+  PATHS
+  $ENV{KDEDIR}/lib
+  ${KDE4PREFIX}/lib
+  ${CMAKE_INSTALL_PREFIX}/lib
+  /opt/kde4/lib
+  /opt/kde/lib
+  NO_DEFAULT_PATH
+)
+
 FIND_LIBRARY(KOMAIN_LIBRARY NAMES komain
   PATHS
   $ENV{KDEDIR}/lib

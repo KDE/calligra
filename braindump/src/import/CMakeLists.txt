@@ -23,6 +23,7 @@ install( FILES zoom-width.png zoom-page.png zoom-pixels.png DESTINATION ${DATA_I
 
 ########### install files ###############
 install( FILES
+    KoGlobal.h
     KoZoomAction.h
     KoZoomController.h
     KoZoomInput.h

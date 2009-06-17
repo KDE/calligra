@@ -35,9 +35,12 @@ set(braindump_SRCS
   import/KoDocumentSectionDelegate.cpp
   import/KoDocumentSectionToolTip.cpp
   import/KoDocumentSectionView.cpp
+  import/KoGlobal.cpp
   import/KoItemToolTip.cpp
   import/KoToolBox.cpp
   import/KoToolBoxFactory.cpp
+  import/KoToolDocker.cpp
+  import/KoToolDockerFactory.cpp
   import/KoZoomAction.cpp
   import/KoZoomController.cpp
   import/KoZoomInput.cpp
