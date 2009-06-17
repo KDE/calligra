@@ -38,18 +38,8 @@ class StateShape : public KoShape {
     void setCategoryId(const QString& _categoryId);
     const QString& stateId() const;
     void setStateId(const QString& _stateId);
-    /**
-     * Attach the shape to that shape
-     */
-    void attachTo(KoShape* _shape);
-    KoShape* attachedShape();
-  private:
-    /// reimplemented from KoShape
-    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
   private:
     QString m_categoryId, m_stateId;
-    KoShape* m_shape;
-    QPointF m_lastOrigin;
 };
 
 

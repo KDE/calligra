@@ -27,10 +27,9 @@
 #include "StateShape.h"
 #include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
-#include "AttachStateShapeCommand.h"
 #include "StateToolWidget.h"
 
-StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas), m_tmpShape(0)
+StateTool::StateTool(KoCanvasBase *canvas) : KoTool(canvas)
 {
 }
 
@@ -54,6 +53,7 @@ void StateTool::activate( bool v )
     emit done();
     return;
   }
+  useCursor( QCursor( Qt::ArrowCursor ) );
   KoTool::activate(v);
 }
 void StateTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -91,38 +91,12 @@ void StateTool::mousePressEvent( KoPointerEvent *event )
 
 void StateTool::mouseMoveEvent( KoPointerEvent *event )
 {
-  m_tmpShape = 0;
-  QRectF roi( event->point, QSizeF(1,1) );
-  QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
-  foreach( KoShape * shape, shapes )
-  {
-    if( not dynamic_cast<StateShape*>( shape ) and shape != m_currentShape->attachedShape() )
-    {
-      m_tmpShape = shape;
-    }
-    break;
-  }
-  if( m_tmpShape )
-    useCursor( QCursor( Qt::PointingHandCursor ) );
-  else if( shapes.empty() ) {
-    useCursor( QCursor( Qt::ForbiddenCursor ) );
-  } else {
-    useCursor( QCursor( Qt::ArrowCursor ) );
-  }
+  event->ignore();
 }
 
 void StateTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-  if( m_tmpShape )
-  {
-    if(m_currentShape)
-    {
-      m_canvas->addCommand(new AttachStateShapeCommand(m_currentShape, m_tmpShape));
-    }
-    m_tmpShape = 0;
-  } else {
-    event->ignore();
-  }
+  event->ignore();
 }
 
 QMap<QString, QWidget *> StateTool::createOptionWidgets() {

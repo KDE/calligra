@@ -34,7 +34,7 @@
 
 #include "../../src/Xml.h"
 
-StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked"), m_shape(0)
+StateShape::StateShape() : m_categoryId("todo"), m_stateId("unchecked")
 {
   setSize(QSizeF(10, 10));
 }
@@ -64,10 +64,6 @@ void StateShape::saveOdf(KoShapeSavingContext & context) const
   Xml::writeBraindumpNS(writer);
   writer.addAttribute( "category", m_categoryId);
   writer.addAttribute( "state", m_stateId);
-  if(m_shape)
-  {
-    writer.addAttribute( "attached", context.drawId(m_shape));
-  }
   saveOdfAttributes( context, OdfAllAttributes );
   saveOdfCommonChildElements( context );
   writer.endElement(); // braindump:shape
@@ -77,13 +73,6 @@ bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &co
 {
   m_categoryId = element.attribute("category");
   m_stateId = element.attribute("state");
-  if(element.hasAttribute("attached"))
-  {
-    QString shapeAttached = element.attribute("attached");
-    KoShape *shape = context.shapeById( shapeAttached );
-    Q_ASSERT(shape);
-    attachTo(shape);
-  }
   loadOdfAttributes( element, context, OdfAllAttributes );
   return true;
 }
@@ -106,46 +95,4 @@ void StateShape::setStateId(const QString& _stateId) {
   m_stateId = _stateId;
   notifyChanged();
   update();
-}
-
-void StateShape::attachTo(KoShape* _shape) {
-  if(_shape == m_shape) return;
-  update();
-  if(m_shape) {
-    m_shape->removeDependee(this);
-  }
-  m_shape = _shape;
-  if(m_shape)
-  {
-    m_shape->addDependee(this);
-    QRectF r = m_shape->boundingRect();
-    QPointF pt(r.left() - 0.5 * size().width(), 0.5 * (r.top() + r.bottom()));
-    setAbsolutePosition(pt, KoFlake::CenteredPosition);
-    m_lastOrigin = r.topLeft();
-  }
-  update();
-}
-
-KoShape* StateShape::attachedShape() {
-  return m_shape;
-}
-
-void StateShape::notifyShapeChanged( KoShape * shape, ChangeType type ) {
-  if( shape == m_shape )
-  {
-    if( type == KoShape::Deleted )
-    {
-      m_shape = 0;
-    }
-    else
-    {
-      update();
-      QPointF offset = m_lastOrigin - m_shape->boundingRect().topLeft();
-      QMatrix m;
-      m.translate( -offset.x(), -offset.y() );
-      applyAbsoluteTransformation( m );
-      m_lastOrigin = m_shape->boundingRect().topLeft();
-      update();
-    }
-  }
 }

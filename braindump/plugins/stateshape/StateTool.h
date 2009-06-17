@@ -51,7 +51,6 @@ class StateTool : public KoTool
 
   private:
     StateShape* m_currentShape;
-    KoShape* m_tmpShape;
 };
 
 #endif
