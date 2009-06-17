@@ -34,7 +34,7 @@
 #include <QRect>
 
 #include "math.h"
-
+namespace {
 class SectionLayout : public QLayout
 {
 public:
@@ -308,7 +308,7 @@ public:
 private:
     QList <QWidgetItem*> m_sections;
 };
-
+}
 class ToolBox::Private
 {
 public:
