@@ -33,14 +33,12 @@ MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent
 
 void MoveSectionCommand::undo()
 {
-  kDebug() << m_previousIndex;
   m_model->removeSection(m_section);
   m_model->insertSection(m_section, m_previousParent, m_previousIndex);
 }
 
 void MoveSectionCommand::redo()
 {
-  kDebug() << m_idx;
   m_model->removeSection(m_section);
   if(m_above) {
     m_model->insertSection(m_section, m_parent, m_above);

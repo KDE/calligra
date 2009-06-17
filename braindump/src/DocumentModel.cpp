@@ -22,7 +22,6 @@
 #include <QMimeData>
 
 #include <kundostack.h>
-#include <kdebug.h>
 
 #include <KoShapeRenameCommand.h>
 
@@ -230,9 +229,7 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
   
   }
   
-  kDebug() << "Before" << row;
   if( row > group->sections().count() ) row = group->sections().count();
-  kDebug() << "Was too big" << row;
   foreach(Section* section, shapes)
   {
     if(action == Qt::CopyAction)
@@ -243,18 +240,15 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
       m_document->addCommand(section, new InsertSectionCommand(new Section(*section), group, this, row));
     } else {
       int idx =group->indexOf(section);
-      kDebug() << "Before (2)" << row;
       if( 0 <= idx and idx < row ) {
         --row;
       }
-      kDebug() << "After (2)" << row;
       if(row < 0) {
         row = group->sections().count();
         if( group == section->sectionParent()) {
           --row;
         }
       }
-      kDebug() << "Was too small (2)" << row;
       m_document->addCommand(section, new MoveSectionCommand(section, group, this, row));
     }
   }
