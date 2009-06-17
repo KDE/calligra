@@ -23,11 +23,11 @@
 #include "Section.h"
 #include <kdebug.h>
 
-MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(_above), m_previousIndex(_section->sectionParent()->indexOf(_section))
+MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(_above), m_previousIndex(_section->sectionParent()->indexOf(_section))
 {
 }
 
-MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(0), m_idx(_idx), m_previousIndex(_section->sectionParent()->indexOf(_section))
+MoveSectionCommand::MoveSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_section(_section), m_parent(_parent), m_previousParent(_section->sectionParent()), m_model(_model), m_above(0), m_idx(_idx), m_previousIndex(_section->sectionParent()->indexOf(_section))
 {
 }
 
@@ -35,7 +35,7 @@ void MoveSectionCommand::undo()
 {
   kDebug() << m_previousIndex;
   m_model->removeSection(m_section);
-  m_model->insertSection(m_section, m_parent, m_previousIndex);
+  m_model->insertSection(m_section, m_previousParent, m_previousIndex);
 }
 
 void MoveSectionCommand::redo()

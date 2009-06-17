@@ -34,7 +34,8 @@ public:
   virtual void redo();
 private:
   Section* m_section;
-  SectionGroup *m_parent;
+  SectionGroup* m_parent;
+  SectionGroup* m_previousParent;
   DocumentModel* m_model;
   Section* m_above;
   int m_idx;
