@@ -41,6 +41,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
   // Setup list sections
   connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
   m_wdgSectionsBox.listSections->setModel(m_proxy);
+  m_wdgSectionsBox.listSections->setDragDropMode(QAbstractItemView::InternalMove);
 
   // Setup the view mode button
   KMenu* m_viewModeMenu = new KMenu(this);
