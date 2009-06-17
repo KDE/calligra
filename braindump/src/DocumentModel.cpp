@@ -236,8 +236,10 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
     if(action == Qt::CopyAction)
     {
       section = new Section(*section);
+    } else {
+      removeSection(section);
     }
-    group->insertSection(section, row);
+    insertSection(section, group, row);
   }
   return true;
 }
