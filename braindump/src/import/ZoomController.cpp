@@ -27,13 +27,13 @@
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
 
-class KoZoomController::Private
+class ZoomController::Private
 {
 public:
-    Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
+    Private(ZoomController *p, ZoomAction::SpecialButtons specialButtons)
         : canvasController(0), zoomHandler(0), fitMargin(0), parent(p)
     {
-        action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
+        action = new ZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
         action->setSpecialButtons(specialButtons);
     }
     ~Private()
@@ -66,14 +66,14 @@ public:
 
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;
-    KoZoomAction *action;
+    ZoomAction *action;
     QSizeF pageSize;
     QSizeF documentSize;
     int fitMargin;
-    KoZoomController *parent;
+    ZoomController *parent;
 };
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons)
+ZoomController::ZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, ZoomAction::SpecialButtons specialButtons)
     : d(new Private(this, specialButtons))
 {
     d->canvasController = co;
@@ -97,22 +97,22 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     connect(d->canvasController, SIGNAL( zoomBy(const qreal ) ), this, SLOT( requestZoomBy( const qreal ) ) );
 }
 
-KoZoomController::~KoZoomController()
+ZoomController::~ZoomController()
 {
     delete d;
 }
 
-KoZoomAction *KoZoomController::zoomAction() const
+ZoomAction *ZoomController::zoomAction() const
 {
     return d->action;
 }
 
-void KoZoomController::setZoomMode(KoZoomMode::Mode mode)
+void ZoomController::setZoomMode(KoZoomMode::Mode mode)
 {
     setZoom(mode, 1);
 }
 
-void KoZoomController::setPageSize(const QSizeF &pageSize)
+void ZoomController::setPageSize(const QSizeF &pageSize)
 {
     if(d->pageSize == pageSize) return;
     d->pageSize = pageSize;
@@ -123,7 +123,7 @@ void KoZoomController::setPageSize(const QSizeF &pageSize)
         setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
-void KoZoomController::setDocumentSize( const QSizeF &documentSize )
+void ZoomController::setDocumentSize( const QSizeF &documentSize )
 {
     d->documentSize = documentSize;
     d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
@@ -132,7 +132,7 @@ void KoZoomController::setDocumentSize( const QSizeF &documentSize )
     d->canvasController->recenterPreferred();
 }
 
-void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
+void ZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 {
     if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
         return; // no change

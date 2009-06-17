@@ -35,17 +35,17 @@
 
 #include <klocale.h>
 
-class KoDocumentSectionDelegate::Private
+class DocumentSectionDelegate::Private
 {
     public:
-        KoDocumentSectionView *view;
+        DocumentSectionView *view;
         QPointer<QWidget> edit;
-        KoDocumentSectionToolTip tip;
+        DocumentSectionToolTip tip;
         static const int margin = 1;
         Private(): view( 0 ), edit( 0 ) { }
 };
 
-KoDocumentSectionDelegate::KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent )
+DocumentSectionDelegate::DocumentSectionDelegate( DocumentSectionView *view, QObject *parent )
     : super( parent )
     , d( new Private )
 {
@@ -54,12 +54,12 @@ KoDocumentSectionDelegate::KoDocumentSectionDelegate( KoDocumentSectionView *vie
     QApplication::instance()->installEventFilter( this );
 }
 
-KoDocumentSectionDelegate::~KoDocumentSectionDelegate()
+DocumentSectionDelegate::~DocumentSectionDelegate()
 {
     delete d;
 }
 
-QSize KoDocumentSectionDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QSize DocumentSectionDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     switch( d->view->displayMode() )
     {
@@ -77,7 +77,7 @@ QSize KoDocumentSectionDelegate::sizeHint( const QStyleOptionViewItem &option, c
     }
 }
 
-void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index ) const
+void DocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index ) const
 {
     p->save();
     {
@@ -96,7 +96,7 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
     p->restore();
 }
 
-bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
+bool DocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
     if( ( e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick ) && (index.flags() & Qt::ItemIsEnabled ) )
     {
@@ -158,14 +158,14 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
     return false;
 }
 
-QWidget *KoDocumentSectionDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& ) const
+QWidget *DocumentSectionDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& ) const
 {
     d->edit = new QLineEdit( parent );
-    d->edit->installEventFilter( const_cast<KoDocumentSectionDelegate*>( this ) ); //hack?
+    d->edit->installEventFilter( const_cast<DocumentSectionDelegate*>( this ) ); //hack?
     return d->edit;
 }
 
-void KoDocumentSectionDelegate::setEditorData( QWidget *widget, const QModelIndex &index ) const
+void DocumentSectionDelegate::setEditorData( QWidget *widget, const QModelIndex &index ) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>( widget );
     Q_ASSERT( edit );
@@ -173,7 +173,7 @@ void KoDocumentSectionDelegate::setEditorData( QWidget *widget, const QModelInde
     edit->setText( index.data( Qt::DisplayRole ).toString() );
 }
 
-void KoDocumentSectionDelegate::setModelData( QWidget *widget, QAbstractItemModel *model, const QModelIndex &index ) const
+void DocumentSectionDelegate::setModelData( QWidget *widget, QAbstractItemModel *model, const QModelIndex &index ) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>( widget );
     Q_ASSERT( edit );
@@ -181,7 +181,7 @@ void KoDocumentSectionDelegate::setModelData( QWidget *widget, QAbstractItemMode
     model->setData( index, edit->text(), Qt::DisplayRole );
 }
 
-void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     widget->setGeometry( textRect( option, index ).translated( option.rect.topLeft() ) );
 }
@@ -190,7 +190,7 @@ void KoDocumentSectionDelegate::updateEditorGeometry( QWidget *widget, const QSt
 // PROTECTED
 
 
-bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
+bool DocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
 {
     switch( event->type() )
     {
@@ -240,7 +240,7 @@ bool KoDocumentSectionDelegate::eventFilter( QObject *object, QEvent *event )
 // PRIVATE
 
 
-QStyleOptionViewItem KoDocumentSectionDelegate::getOptions( const QStyleOptionViewItem &o, const QModelIndex &index )
+QStyleOptionViewItem DocumentSectionDelegate::getOptions( const QStyleOptionViewItem &o, const QModelIndex &index )
 {
     QStyleOptionViewItem option = o;
     QVariant v = index.data( Qt::FontRole );
@@ -262,7 +262,7 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions( const QStyleOptionVi
    return option;
 }
 
-int KoDocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+int DocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QSize size = index.data( Qt::SizeHintRole ).toSize();
     int width = option.rect.width();
@@ -274,7 +274,7 @@ int KoDocumentSectionDelegate::thumbnailHeight( const QStyleOptionViewItem &opti
         return int( width / ( qreal( size.width() ) / size.height() ) );
 }
 
-int KoDocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
+int DocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
     //this is such a HACK
 {
     int dis = 0;
@@ -294,12 +294,12 @@ int KoDocumentSectionDelegate::availableWidth( const QModelIndex &index ) const
     return d->view->columnWidth( 0 ) - indent;
 }
 
-int KoDocumentSectionDelegate::textBoxHeight( const QStyleOptionViewItem &option ) const
+int DocumentSectionDelegate::textBoxHeight( const QStyleOptionViewItem &option ) const
 {
     return qMax( option.fontMetrics.height(), option.decorationSize.height() );
 }
 
-QRect KoDocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QRect DocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     if( d->view->displayMode() == View::ThumbnailMode )
     {
@@ -328,7 +328,7 @@ QRect KoDocumentSectionDelegate::textRect( const QStyleOptionViewItem &option, c
     }
 }
 
-QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QRect DocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     if( d->view->displayMode() == View::ThumbnailMode )
         return QRect();
@@ -347,7 +347,7 @@ QRect KoDocumentSectionDelegate::iconsRect( const QStyleOptionViewItem &option, 
     return QRect( x, y, iconswidth, option.decorationSize.height() );
 }
 
-QRect KoDocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QRect DocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     if( d->view->displayMode() == View::ThumbnailMode )
         return QRect( 0, 0, option.rect.width(), thumbnailHeight( option, index ) );
@@ -355,7 +355,7 @@ QRect KoDocumentSectionDelegate::thumbnailRect( const QStyleOptionViewItem &opti
         return QRect( 0, 0, option.rect.height(), option.rect.height() );
 }
 
-QRect KoDocumentSectionDelegate::decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QRect DocumentSectionDelegate::decorationRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     int width = option.decorationSize.width();
     if( index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
@@ -386,7 +386,7 @@ QRect KoDocumentSectionDelegate::decorationRect( const QStyleOptionViewItem &opt
     }
 }
 
-QRect KoDocumentSectionDelegate::progressBarRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+QRect DocumentSectionDelegate::progressBarRect( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     if( d->view->displayMode() == View::ThumbnailMode )
         return QRect();
@@ -402,7 +402,7 @@ QRect KoDocumentSectionDelegate::progressBarRect( const QStyleOptionViewItem &op
     }
 }
 
-void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QRect r = textRect( option, index ).translated( option.rect.topLeft() );
 
@@ -428,7 +428,7 @@ void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewIte
     p->restore();
 }
 
-void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QRect r = iconsRect( option, index ).translated( option.rect.topLeft() );
 
@@ -449,7 +449,7 @@ void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewIt
     p->restore();
 }
 
-void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QRect r = thumbnailRect( option, index ).translated( option.rect.topLeft() );
 
@@ -482,7 +482,7 @@ void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionVi
     p->restore();
 }
 
-void KoDocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     const QRect r = decorationRect( option, index ).translated( option.rect.topLeft() );
 
@@ -496,9 +496,9 @@ void KoDocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionV
     p->restore();
 }
 
-void KoDocumentSectionDelegate::drawProgressBar( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+void DocumentSectionDelegate::drawProgressBar( QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    QVariant value = index.data( KoDocumentSectionModel::ProgressRole );
+    QVariant value = index.data( DocumentSectionModel::ProgressRole );
     if( !value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100) )
     {
         const QRect r = progressBarRect( option, index ).translated( option.rect.topLeft() );

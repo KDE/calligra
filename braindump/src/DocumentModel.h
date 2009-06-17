@@ -27,7 +27,7 @@ class ModelTest;
 class Section;
 class SectionGroup;
 
-class DocumentModel : public KoDocumentSectionModel {
+class DocumentModel : public DocumentSectionModel {
   public:
     enum Role {
       SectionPtr = 0x1252BAD

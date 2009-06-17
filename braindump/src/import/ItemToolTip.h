@@ -37,13 +37,13 @@ class QTextDocument;
  * This class is used in two widget libraries; it is directly included
  * in them both and not exported.
  */
-class KoItemToolTip: public QFrame
+class ItemToolTip: public QFrame
 {
     Q_OBJECT
 
     public:
-        KoItemToolTip();
-        virtual ~KoItemToolTip();
+        ItemToolTip();
+        virtual ~ItemToolTip();
         void showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index );
 
     protected:

@@ -23,12 +23,12 @@ License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QStackedWidget>
 
-class KoZoomInput : public QStackedWidget
+class ZoomInput : public QStackedWidget
 {
     Q_OBJECT
     public:
-        explicit KoZoomInput(QWidget* parent = 0);
-        ~KoZoomInput();
+        explicit ZoomInput(QWidget* parent = 0);
+        ~ZoomInput();
 
         void setZoomLevels(const QStringList& levels);
         void setCurrentZoomLevel(const QString& level);

@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <QVBoxLayout>
 
-class KoToolDocker::Private {
+class ToolDocker::Private {
 public:
     Private() : currentWidget(0) {}
     QWidget *currentWidget;
@@ -35,7 +35,7 @@ public:
     }
 };
 
-KoToolDocker::KoToolDocker(QWidget *parent)
+ToolDocker::ToolDocker(QWidget *parent)
     : QDockWidget("Tool Options initial name - never seen", parent),
     d( new Private() )
 {
@@ -43,16 +43,16 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->currentWidget = 0;
 }
 
-KoToolDocker::~KoToolDocker() {
+ToolDocker::~ToolDocker() {
     delete d;
 }
 
-bool KoToolDocker::hasOptionWidget()
+bool ToolDocker::hasOptionWidget()
 {
     return  d->currentWidget != 0;
 }
 
-void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
+void ToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget == optionWidget)
         return;
 /*

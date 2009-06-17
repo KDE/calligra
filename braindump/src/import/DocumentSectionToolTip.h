@@ -22,26 +22,26 @@
 
 #include "ItemToolTip.h"
 
-class KoDocumentSectionModel;
+class DocumentSectionModel;
 
 /**
  * A default tooltip for a KoDocumentSection that shows a thumbnail
  * image and the list of properties associated with the document model.
  */
-class KoDocumentSectionToolTip: public KoItemToolTip
+class DocumentSectionToolTip: public ItemToolTip
 {
     Q_OBJECT
 
     public:
-        KoDocumentSectionToolTip();
-        virtual ~KoDocumentSectionToolTip();
+        DocumentSectionToolTip();
+        virtual ~DocumentSectionToolTip();
 
     protected:
         virtual QTextDocument *createDocument( const QModelIndex &index );
 
     private:
-        typedef KoItemToolTip super;
-        typedef KoDocumentSectionModel Model;
+        typedef ItemToolTip super;
+        typedef DocumentSectionModel Model;
 };
 
 #endif

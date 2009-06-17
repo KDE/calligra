@@ -30,7 +30,7 @@
 #include <QTimerEvent>
 #include <QToolTip>
 
-class KoItemToolTip::Private
+class ItemToolTip::Private
 {
     public:
         QTextDocument *document;
@@ -41,7 +41,7 @@ class KoItemToolTip::Private
         Private(): document( 0 ) { }
 };
 
-KoItemToolTip::KoItemToolTip()
+ItemToolTip::ItemToolTip()
     : d( new Private )
 {
     d->document = new QTextDocument( this );
@@ -51,12 +51,12 @@ KoItemToolTip::KoItemToolTip()
     QApplication::instance()->installEventFilter( this );
 }
 
-KoItemToolTip::~KoItemToolTip()
+ItemToolTip::~ItemToolTip()
 {
     delete d;
 }
 
-void KoItemToolTip::showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
+void ItemToolTip::showTip( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
     QTextDocument *doc = createDocument( index );
 
@@ -79,7 +79,7 @@ void KoItemToolTip::showTip( QWidget *widget, const QPoint &pos, const QStyleOpt
         delete doc;
 }
 
-void KoItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option )
+void ItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option )
 {
     const QRect drect = QApplication::desktop()->availableGeometry( widget );
     const QSize size = sizeHint();
@@ -102,12 +102,12 @@ void KoItemToolTip::updatePosition( QWidget *widget, const QPoint &pos, const QS
     resize( sizeHint() );
  }
 
-QSize KoItemToolTip::sizeHint() const
+QSize ItemToolTip::sizeHint() const
 {
     return d->document->size().toSize();
 }
 
-void KoItemToolTip::paintEvent( QPaintEvent* )
+void ItemToolTip::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
     p.initFrom( this );
@@ -115,7 +115,7 @@ void KoItemToolTip::paintEvent( QPaintEvent* )
     p.drawRect( 0, 0, width() - 1, height() - 1 );
 }
 
-void KoItemToolTip::timerEvent( QTimerEvent *e )
+void ItemToolTip::timerEvent( QTimerEvent *e )
 {
     if( e->timerId() == d->timer.timerId() )
     {
@@ -123,7 +123,7 @@ void KoItemToolTip::timerEvent( QTimerEvent *e )
     }
 }
 
-bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
+bool ItemToolTip::eventFilter( QObject *object, QEvent *event )
 {
     switch( event->type() )
     {

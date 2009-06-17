@@ -68,11 +68,11 @@
 @endcode
 
  */
-class KoDocumentSectionModel: public QAbstractItemModel
+class DocumentSectionModel: public QAbstractItemModel
 {
     public:
 
-    KoDocumentSectionModel( QObject *parent = 0 ): QAbstractItemModel( parent ) { }
+    DocumentSectionModel( QObject *parent = 0 ): QAbstractItemModel( parent ) { }
 
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole
@@ -128,6 +128,6 @@ class KoDocumentSectionModel: public QAbstractItemModel
     typedef QList<Property> PropertyList;
 };
 
-Q_DECLARE_METATYPE( KoDocumentSectionModel::PropertyList )
+Q_DECLARE_METATYPE( DocumentSectionModel::PropertyList )
 
 #endif

@@ -21,30 +21,30 @@
 
 #include "ToolDockerFactory.h"
 
-class KoToolDockerFactory::Private {
+class ToolDockerFactory::Private {
 public:
     Private( QString id ) : dockWidgetId(id) {}
     QString dockWidgetId;
 };
 
-KoToolDockerFactory::KoToolDockerFactory( QString dockWidgetId )
+ToolDockerFactory::ToolDockerFactory( QString dockWidgetId )
 : d( new Private(dockWidgetId))
 {
 }
 
-KoToolDockerFactory::~KoToolDockerFactory()
+ToolDockerFactory::~ToolDockerFactory()
 {
     delete d;
 }
 
-QString KoToolDockerFactory::id() const
+QString ToolDockerFactory::id() const
 {
     return d->dockWidgetId;
 }
 
-QDockWidget* KoToolDockerFactory::createDockWidget()
+QDockWidget* ToolDockerFactory::createDockWidget()
 {
-    KoToolDocker * dockWidget = new KoToolDocker();
+    ToolDocker * dockWidget = new ToolDocker();
     dockWidget->setObjectName( id() );
     return dockWidget;
 }

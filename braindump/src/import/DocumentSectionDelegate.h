@@ -23,21 +23,21 @@
 #include <QAbstractItemDelegate>
 #include "DocumentSectionView.h"
 
-class KoDocumentSectionModel;
+class DocumentSectionModel;
 
 /**
  * The KoDocumentSectionDelegate is the gui pendant of a
  * KoDocumentSectionModel: the graphical representation of one item in
  * a KoDocumentSectionView.
  */
-class KoDocumentSectionDelegate: public QAbstractItemDelegate
+class DocumentSectionDelegate: public QAbstractItemDelegate
 {
     typedef QAbstractItemDelegate super;
     Q_OBJECT
 
     public:
-        explicit KoDocumentSectionDelegate( KoDocumentSectionView *view, QObject *parent = 0 );
-        virtual ~KoDocumentSectionDelegate();
+        explicit DocumentSectionDelegate( DocumentSectionView *view, QObject *parent = 0 );
+        virtual ~DocumentSectionDelegate();
 
         virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
         virtual QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -53,8 +53,8 @@ class KoDocumentSectionDelegate: public QAbstractItemDelegate
 
 
     private:
-        typedef KoDocumentSectionModel Model;
-        typedef KoDocumentSectionView View;
+        typedef DocumentSectionModel Model;
+        typedef DocumentSectionView View;
         class Private;
         Private* const d;
 

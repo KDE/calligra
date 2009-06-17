@@ -32,7 +32,7 @@
  * In a statusbar it provides a scale (slider) plus an editable value plus
  * some buttons for special zoommodes
  */
-class KoZoomAction : public KSelectAction
+class ZoomAction : public KSelectAction
 {
     Q_OBJECT
 public:
@@ -43,8 +43,8 @@ public:
    * @param text The text that will be displayed.
    * @param parent The action's parent object.
    */
-    KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
-    ~KoZoomAction();
+    ZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
+    ~ZoomAction();
 
     /**
      * Reimplemented from QWidgetAction.
@@ -144,12 +144,12 @@ protected:
     void regenerateItems( const qreal zoom, bool asCurrent = false );
 
 private:
-    Q_DISABLE_COPY( KoZoomAction )
+    Q_DISABLE_COPY( ZoomAction )
 
     class Private;
     Private * const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomAction::SpecialButtons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ZoomAction::SpecialButtons)
 
 #endif

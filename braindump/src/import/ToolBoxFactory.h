@@ -28,11 +28,11 @@
 
 class KoCanvasController;
 
-class KoToolBoxFactory : public KoDockFactory
+class ToolBoxFactory : public KoDockFactory
 {
 public:
-    explicit KoToolBoxFactory(KoCanvasController *canvas, const QString& appName);
-    ~KoToolBoxFactory();
+    explicit ToolBoxFactory(KoCanvasController *canvas, const QString& appName);
+    ~ToolBoxFactory();
 
     virtual QString id() const;
     KoDockFactory::DockPosition defaultDockPosition() const;

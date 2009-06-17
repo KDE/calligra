@@ -49,12 +49,12 @@ class KoShapeLayer;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KoToolBox : public QWidget {
+class ToolBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoToolBox(KoCanvasController *canvas);
-    ~KoToolBox();
+    explicit ToolBox(KoCanvasController *canvas);
+    ~ToolBox();
 
     /**
      * Add a button to the toolbox.
@@ -107,13 +107,13 @@ private:
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserver
 {
 public:
-    KoToolBoxDocker(KoToolBox *toolBox);
+    KoToolBoxDocker(ToolBox *toolBox);
 
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private:
-    KoToolBox *m_toolBox;
+    ToolBox *m_toolBox;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -29,11 +29,11 @@ class Canvas;
 class MainWindow;
 class KAction;
 class KToggleAction;
-class KoZoomAction;
+class ZoomAction;
 class KoCanvasController;
 class KoShapeManager;
 class KoViewConverter;
-class KoZoomController;
+class ZoomController;
 class RootSection;
 class Section;
 class SectionsBoxDock;
@@ -54,7 +54,7 @@ public:
 
     KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
 
-    KoZoomController *zoomController() { return m_zoomController; }
+    ZoomController *zoomController() { return m_zoomController; }
 
     Canvas* canvas() { return m_canvas; }
     Canvas* canvas() const { return m_canvas; }
@@ -108,13 +108,13 @@ private:
     SectionPropertiesDock* m_sectionPropertiesDock;
 
     KoCanvasController * m_canvasController;
-    KoZoomController * m_zoomController;
+    ZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 
     KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
 
-    KoZoomAction *m_zoomAction;
+    ZoomAction *m_zoomAction;
 };
 
 #endif /* KOPAVIEW_H */

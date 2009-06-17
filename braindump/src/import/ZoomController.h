@@ -27,7 +27,7 @@
 #include <QSizeF>
 
 class KoCanvasController;
-class KoZoomAction;
+class ZoomAction;
 class KoZoomHandler;
 class KActionCollection;
 class QSize;
@@ -56,7 +56,7 @@ class QSize;
  * except emit the aspectModeChanged signal.
  *
  */
-class KoZoomController : public QObject {
+class ZoomController : public QObject {
 Q_OBJECT
 public:
     /**
@@ -67,13 +67,13 @@ public:
     * @param actionCollection the action collection where the KoZoomAction is added to
     * @param specialButtons controls which special buttons to show
     */
-    KoZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons = 0);
+    ZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, ZoomAction::SpecialButtons specialButtons = 0);
 
     /// destructor
-    ~KoZoomController();
+    ~ZoomController();
 
     /// returns the zoomAction that is maintained by this controller
-    KoZoomAction *zoomAction() const;
+    ZoomAction *zoomAction() const;
 
     /**
      * Alter the current zoom mode which updates the Gui.
@@ -132,7 +132,7 @@ private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
     Q_PRIVATE_SLOT(d, void requestZoomBy(const qreal))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
-    Q_DISABLE_COPY( KoZoomController )
+    Q_DISABLE_COPY( ZoomController )
 
     class Private;
     Private * const d;

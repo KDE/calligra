@@ -29,7 +29,7 @@
 #include <kundostack.h>
 #include "commands/RenameSectionCommand.h"
 
-DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : KoDocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
+DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
   Q_ASSERT(m_document);
 }

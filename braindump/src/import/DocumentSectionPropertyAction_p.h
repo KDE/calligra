@@ -33,7 +33,7 @@
  * associated on/off icons to show their state in the
  * KoDocumentSectionView.
  */
-class KoDocumentSectionView::PropertyAction: public QAction
+class DocumentSectionView::PropertyAction: public QAction
 {
     typedef QAction super;
     Q_OBJECT

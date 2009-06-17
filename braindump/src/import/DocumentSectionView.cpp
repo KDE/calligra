@@ -29,20 +29,20 @@
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
 
-class KoDocumentSectionView::Private
+class DocumentSectionView::Private
 {
     public:
-        KoDocumentSectionDelegate *delegate;
+        DocumentSectionDelegate *delegate;
         DisplayMode mode;
         QPersistentModelIndex hovered;
         Private(): delegate( 0 ), mode( DetailedMode ) { }
 };
 
-KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
+DocumentSectionView::DocumentSectionView( QWidget *parent )
     : QTreeView( parent )
     , d( new Private )
 {
-    d->delegate = new KoDocumentSectionDelegate( this, this );
+    d->delegate = new DocumentSectionDelegate( this, this );
     setMouseTracking( true );
     setVerticalScrollMode( ScrollPerPixel );
     setSelectionMode( SingleSelection );
@@ -54,12 +54,12 @@ KoDocumentSectionView::KoDocumentSectionView( QWidget *parent )
     setDropIndicatorShown(true);
 }
 
-KoDocumentSectionView::~KoDocumentSectionView()
+DocumentSectionView::~DocumentSectionView()
 {
     delete d;
 }
 
-void KoDocumentSectionView::setDisplayMode( DisplayMode mode )
+void DocumentSectionView::setDisplayMode( DisplayMode mode )
 {
     if( d->mode != mode )
     {
@@ -68,12 +68,12 @@ void KoDocumentSectionView::setDisplayMode( DisplayMode mode )
     }
 }
 
-KoDocumentSectionView::DisplayMode KoDocumentSectionView::displayMode() const
+DocumentSectionView::DisplayMode DocumentSectionView::displayMode() const
 {
     return d->mode;
 }
 
-void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &index )
+void DocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &index )
 {
     Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
     for( int i = 0, n = list.count(); i < n; ++i ) {
@@ -87,7 +87,7 @@ void KoDocumentSectionView::addPropertyActions( QMenu *menu, const QModelIndex &
     }
 }
 
-bool KoDocumentSectionView::viewportEvent( QEvent *e )
+bool DocumentSectionView::viewportEvent( QEvent *e )
 {
     if( model() )
     {
@@ -144,7 +144,7 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
     return super::viewportEvent( e );
 }
 
-void KoDocumentSectionView::contextMenuEvent( QContextMenuEvent *e )
+void DocumentSectionView::contextMenuEvent( QContextMenuEvent *e )
 {
     super::contextMenuEvent( e );
     QModelIndex i = indexAt( e->pos() );
@@ -153,12 +153,12 @@ void KoDocumentSectionView::contextMenuEvent( QContextMenuEvent *e )
     showContextMenu( e->globalPos(), i );
 }
 
-void KoDocumentSectionView::showContextMenu( const QPoint &globalPos, const QModelIndex &index )
+void DocumentSectionView::showContextMenu( const QPoint &globalPos, const QModelIndex &index )
 {
     emit contextMenuRequested( globalPos, index );
 }
 
-void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
+void DocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
 {
     super::currentChanged( current, previous );
     if( current != previous /*&& current.isValid()*/ ) //hack?
@@ -168,7 +168,7 @@ void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QM
     }
 }
 
-void KoDocumentSectionView::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
+void DocumentSectionView::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
 {
     super::dataChanged( topLeft, bottomRight );
     for( int x = topLeft.row(); x <= bottomRight.row(); ++x )
@@ -180,14 +180,14 @@ void KoDocumentSectionView::dataChanged( const QModelIndex &topLeft, const QMode
             }
 }
 
-void KoDocumentSectionView::slotActionToggled( bool on, const QPersistentModelIndex &index, int num )
+void DocumentSectionView::slotActionToggled( bool on, const QPersistentModelIndex &index, int num )
 {
     Model::PropertyList list = index.data( Model::PropertiesRole ).value<Model::PropertyList>();
     list[num].state = on;
     const_cast<QAbstractItemModel*>( index.model() )->setData( index, QVariant::fromValue( list ), Model::PropertiesRole );
 }
 
-QStyleOptionViewItem KoDocumentSectionView::optionForIndex( const QModelIndex &index ) const
+QStyleOptionViewItem DocumentSectionView::optionForIndex( const QModelIndex &index ) const
 {
     QStyleOptionViewItem option = viewOptions();
     option.rect = visualRect( index );

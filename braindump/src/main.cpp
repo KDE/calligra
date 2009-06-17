@@ -53,7 +53,7 @@ int main( int argc, char **argv )
 #endif
 
   KIconLoader::global()->addAppDir("koffice");
-  KoGlobal::initialize();
+  Global::initialize();
 
   KComponentData* m_documentData = new KComponentData(about);
   

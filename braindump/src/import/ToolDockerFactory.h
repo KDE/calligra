@@ -24,16 +24,14 @@
 #include "ToolDocker.h"
 #include <KoDockFactory.h>
 
-#include "komain_export.h"
-
 /**
  * The factory class for the KoToolDocker.
  */
-class KOMAIN_EXPORT KoToolDockerFactory : public KoDockFactory
+class ToolDockerFactory : public KoDockFactory
 {
 public:
-    KoToolDockerFactory( QString dockWidgetId = 0 );
-    ~KoToolDockerFactory();
+    ToolDockerFactory( QString dockWidgetId = 0 );
+    ~ToolDockerFactory();
 
     /// reimplemented from parent
     virtual QString id() const;

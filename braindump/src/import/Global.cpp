@@ -39,13 +39,13 @@
 #include <kimageio.h>
 
 
-KoGlobal* KoGlobal::self()
+Global* Global::self()
 {
-    K_GLOBAL_STATIC(KoGlobal, s_instance)
+    K_GLOBAL_STATIC(Global, s_instance)
     return s_instance;
 }
 
-KoGlobal::KoGlobal()
+Global::Global()
         : m_pointSize(-1), m_kofficeConfig(0L)
 {
     // XXX: locale() apparently can be 0 when running from unittests
@@ -73,12 +73,12 @@ KoGlobal::KoGlobal()
 #endif
 }
 
-KoGlobal::~KoGlobal()
+Global::~Global()
 {
     delete m_kofficeConfig;
 }
 
-QFont KoGlobal::_defaultFont()
+QFont Global::_defaultFont()
 {
     QFont font = KGlobalSettings::generalFont();
     // we have to use QFontInfo, in case the font was specified with a pixel size
@@ -94,21 +94,21 @@ QFont KoGlobal::_defaultFont()
     return font;
 }
 
-QStringList KoGlobal::_listOfLanguageTags()
+QStringList Global::_listOfLanguageTags()
 {
     if (m_langMap.isEmpty())
         createListOfLanguages();
     return m_langMap.values();
 }
 
-QStringList KoGlobal::_listOfLanguages()
+QStringList Global::_listOfLanguages()
 {
     if (m_langMap.empty())
         createListOfLanguages();
     return m_langMap.keys();
 }
 
-void KoGlobal::createListOfLanguages()
+void Global::createListOfLanguages()
 {
     KConfig config("all_languages", KConfig::NoGlobals, "locale");
     // Note that we could also use KLocale::allLanguagesTwoAlpha
@@ -161,7 +161,7 @@ void KoGlobal::createListOfLanguages()
     // How to add them?
 }
 
-QString KoGlobal::tagOfLanguage(const QString & _lang)
+QString Global::tagOfLanguage(const QString & _lang)
 {
     const LanguageMap& map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.find(_lang);
@@ -170,7 +170,7 @@ QString KoGlobal::tagOfLanguage(const QString & _lang)
     return QString();
 }
 
-QString KoGlobal::languageFromTag(const QString &langTag)
+QString Global::languageFromTag(const QString &langTag)
 {
     const LanguageMap& map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.begin();
@@ -183,7 +183,7 @@ QString KoGlobal::languageFromTag(const QString &langTag)
     return langTag;
 }
 
-KConfig* KoGlobal::_kofficeConfig()
+KConfig* Global::_kofficeConfig()
 {
     if (!m_kofficeConfig) {
         m_kofficeConfig = new KConfig("kofficerc");
@@ -191,10 +191,10 @@ KConfig* KoGlobal::_kofficeConfig()
     return m_kofficeConfig;
 }
 
-void KoGlobal::setDPI(int x, int y)
+void Global::setDPI(int x, int y)
 {
     //kDebug( 30003 ) << x <<"," << y;
-    KoGlobal* s = self();
+    Global* s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;
 }

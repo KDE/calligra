@@ -25,15 +25,15 @@
 #include <QUrl>
 #include <klocale.h>
 
-KoDocumentSectionToolTip::KoDocumentSectionToolTip()
+DocumentSectionToolTip::DocumentSectionToolTip()
 {
 }
 
-KoDocumentSectionToolTip::~KoDocumentSectionToolTip()
+DocumentSectionToolTip::~DocumentSectionToolTip()
 {
 }
 
-QTextDocument *KoDocumentSectionToolTip::createDocument( const QModelIndex &index )
+QTextDocument *DocumentSectionToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
 

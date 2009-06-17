@@ -35,7 +35,7 @@ License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QKeyEvent>
 #include <QLineEdit>
 
-class KoZoomInput::Private
+class ZoomInput::Private
 {
     public:
         QComboBox* combo;
@@ -43,7 +43,7 @@ class KoZoomInput::Private
         bool inside;
 };
 
-KoZoomInput::KoZoomInput(QWidget* parent)
+ZoomInput::ZoomInput(QWidget* parent)
     : QStackedWidget(parent), d(new Private)
 {
 
@@ -81,12 +81,12 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
 }
 
-KoZoomInput::~KoZoomInput()
+ZoomInput::~ZoomInput()
 {
     delete d;
 }
 
-void KoZoomInput::enterEvent(QEvent* event)
+void ZoomInput::enterEvent(QEvent* event)
 {
     Q_UNUSED(event);
 
@@ -99,7 +99,7 @@ void KoZoomInput::enterEvent(QEvent* event)
     setCurrentIndex(1);
 }
 
-void KoZoomInput::leaveEvent(QEvent* event)
+void ZoomInput::leaveEvent(QEvent* event)
 {
     Q_UNUSED(event);
 
@@ -114,7 +114,7 @@ void KoZoomInput::leaveEvent(QEvent* event)
         setCurrentIndex(0);
 }
 
-void KoZoomInput::keyPressEvent(QKeyEvent* event)
+void ZoomInput::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return ||
         event->key() == Qt::Key_Enter)
@@ -123,19 +123,19 @@ void KoZoomInput::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void KoZoomInput::setZoomLevels(const QStringList& levels)
+void ZoomInput::setZoomLevels(const QStringList& levels)
 {
     d->combo->clear();
     d->combo->addItems(levels);
 }
 
-void KoZoomInput::setCurrentZoomLevel(const QString& level)
+void ZoomInput::setCurrentZoomLevel(const QString& level)
 {
     d->combo->setCurrentIndex(d->combo->findText(level));
     d->label->setText(level);
 }
 
-bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
+bool ZoomInput::eventFilter(QObject* watched, QEvent* event)
 {
     if(watched == d->combo->view() && event->type() == QEvent::Hide)
     {

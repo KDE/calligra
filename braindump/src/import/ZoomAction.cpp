@@ -46,20 +46,20 @@
 
 #include <math.h>
 
-class KoZoomAction::Private
+class ZoomAction::Private
 {
 public:
     KoZoomMode::Modes zoomModes;
     QSlider *slider;
     qreal sliderLookup[33];
-    KoZoomInput* input;
+    ZoomInput* input;
 
     qreal effectiveZoom;
 
-    KoZoomAction::SpecialButtons specialButtons;
+    ZoomAction::SpecialButtons specialButtons;
 };
 
-KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
+ZoomAction::ZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
     : KSelectAction(text, parent)
     ,d(new Private)
 {
@@ -80,18 +80,18 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QO
     connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
 }
 
-KoZoomAction::~KoZoomAction()
+ZoomAction::~ZoomAction()
 {
     delete d;
 }
 
-void KoZoomAction::setZoom( qreal zoom )
+void ZoomAction::setZoom( qreal zoom )
 {
     setEffectiveZoom(zoom);
     regenerateItems( zoom, true );
 }
 
-void KoZoomAction::triggered( const QString& text )
+void ZoomAction::triggered( const QString& text )
 {
     QString zoomString = text;
     zoomString = zoomString.remove( '&' );
@@ -116,13 +116,13 @@ void KoZoomAction::triggered( const QString& text )
     emit zoomChanged( mode, zoom/100.0 );
 }
 
-void KoZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
+void ZoomAction::setZoomModes( KoZoomMode::Modes zoomModes )
 {
     d->zoomModes = zoomModes;
     regenerateItems( d->effectiveZoom );
 }
 
-void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
+void ZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
 {
     // where we'll store sorted new zoom values
     QList<qreal> zoomLevels;
@@ -182,14 +182,14 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     }
 }
 
-void KoZoomAction::sliderValueChanged(int value)
+void ZoomAction::sliderValueChanged(int value)
 {
     setZoom(d->sliderLookup[value]);
 
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value] );
 }
 
-void KoZoomAction::zoomIn()
+void ZoomAction::zoomIn()
 {
     int i=0;
     while(i <= 32 && d->sliderLookup[i] < d->effectiveZoom)
@@ -204,7 +204,7 @@ void KoZoomAction::zoomIn()
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
-void KoZoomAction::zoomOut()
+void ZoomAction::zoomOut()
 {
     int i=0;
     while(i <= 32 && d->sliderLookup[i] < d->effectiveZoom)
@@ -218,7 +218,7 @@ void KoZoomAction::zoomOut()
     emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
 }
 
-QWidget * KoZoomAction::createWidget( QWidget * _parent )
+QWidget * ZoomAction::createWidget( QWidget * _parent )
 {
     // create the custom widget only if we add the action to the status bar
     if( ! qobject_cast<QStatusBar*>(_parent) )
@@ -233,7 +233,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     // this is wrong; createWidget() implies this is a factory method, so we should be able to be called
     // multiple times without problems.  The 'new' here means we can't do that.
     // TODO refactor this method to use connections instead of d-pointer members to communicate so it becomes reentrant.
-    d->input = new KoZoomInput(group);
+    d->input = new ZoomInput(group);
     regenerateItems( d->effectiveZoom, true );
     connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
     layout->addWidget(d->input);
@@ -281,7 +281,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     return group;
 }
 
-void KoZoomAction::setEffectiveZoom(qreal zoom)
+void ZoomAction::setEffectiveZoom(qreal zoom)
 {
     if(d->effectiveZoom == zoom)
         return;
@@ -298,7 +298,7 @@ void KoZoomAction::setEffectiveZoom(qreal zoom)
     }
 }
 
-void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
+void ZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
 {
     QString modeString(KoZoomMode::toString(mode));
     setCurrentAction(modeString);
@@ -307,7 +307,7 @@ void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
         d->input->setCurrentZoomLevel(modeString);
 }
 
-void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
+void ZoomAction::setSpecialButtons( SpecialButtons buttons )
 {
     d->specialButtons = buttons;
 }

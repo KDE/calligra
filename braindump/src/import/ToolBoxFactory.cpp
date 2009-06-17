@@ -22,14 +22,14 @@
 #include <KoToolManager.h>
 #include "ToolBox_p.h"
 
-class KoToolBoxFactory::Private {
+class ToolBoxFactory::Private {
 public:
     KoCanvasController *canvas;
     QString appName;
 };
 
 
-KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& title)
+ToolBoxFactory::ToolBoxFactory(KoCanvasController *canvas, const QString& title)
     : d( new Private())
 {
     if (title.isEmpty()) {
@@ -41,23 +41,23 @@ KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& ti
     d->canvas = canvas;
 }
 
-KoToolBoxFactory::~KoToolBoxFactory() {
+ToolBoxFactory::~ToolBoxFactory() {
     delete d;
 }
 
-QString KoToolBoxFactory::id() const
+QString ToolBoxFactory::id() const
 {
     return QString("ToolBox");
 }
 
-KoDockFactory::DockPosition KoToolBoxFactory::defaultDockPosition() const
+KoDockFactory::DockPosition ToolBoxFactory::defaultDockPosition() const
 {
     return KoDockFactory::DockLeft;
 }
 
-QDockWidget* KoToolBoxFactory::createDockWidget()
+QDockWidget* ToolBoxFactory::createDockWidget()
 {
-    KoToolBox *box = new KoToolBox(d->canvas);
+    ToolBox *box = new ToolBox(d->canvas);
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);
     docker->setWindowTitle(d->appName);
     docker->setObjectName("ToolBox_"+ d->appName);

@@ -23,7 +23,7 @@
 #include <QTreeView>
 
 class QStyleOptionViewItem;
-class KoDocumentSectionModel;
+class DocumentSectionModel;
 
 /**
  * A View widget on document sections (for example, layers, pages,
@@ -39,7 +39,7 @@ class KoDocumentSectionModel;
  * Usage: simply use this widget in your designer .ui file. Krita's
  * and karbon's layerboxes are KoDocumentSectionView based.
  */
-class KoDocumentSectionView: public QTreeView
+class DocumentSectionView: public QTreeView
 {
     typedef QTreeView super;
     Q_OBJECT
@@ -57,8 +57,8 @@ public:
     /**
      * Create a new KoDocumentSectionView.
      */
-    KoDocumentSectionView( QWidget *parent = 0 );
-    virtual ~KoDocumentSectionView();
+    DocumentSectionView( QWidget *parent = 0 );
+    virtual ~DocumentSectionView();
 
     /// how items should be displayed
     enum DisplayMode
@@ -129,12 +129,12 @@ private slots:
 
 private:
     QStyleOptionViewItem optionForIndex( const QModelIndex &index ) const;
-    typedef KoDocumentSectionModel Model;
+    typedef DocumentSectionModel Model;
     class PropertyAction;
     class Private;
     Private* const d;
 };
 
-typedef KoDocumentSectionView DocumentSectionView;
+typedef DocumentSectionView DocumentSectionView;
 
 #endif

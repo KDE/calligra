@@ -309,7 +309,7 @@ private:
     QList <QWidgetItem*> m_sections;
 };
 
-class KoToolBox::Private
+class ToolBox::Private
 {
 public:
     Private(KoCanvasController *c) : layout(0), buttonGroup(0), canvas(c->canvas()) { }
@@ -323,14 +323,14 @@ public:
     QHash<QToolButton*, QString> visibilityCodes;
 };
 
-void KoToolBox::Private::addSection(Section *section, const QString &name)
+void ToolBox::Private::addSection(Section *section, const QString &name)
 {
     section->setName(name);
     layout->addSection(section);
     sections.insert(name, section);
 }
 
-KoToolBox::KoToolBox(KoCanvasController *canvas)
+ToolBox::ToolBox(KoCanvasController *canvas)
     : d( new Private(canvas))
 {
     d->layout = new ToolBoxLayout(this);
@@ -356,12 +356,12 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
             this, SLOT(setButtonsVisible(const KoCanvasController*, QList<QString>)));
 }
 
-KoToolBox::~KoToolBox()
+ToolBox::~ToolBox()
 {
     delete d;
 }
 
-void KoToolBox::addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId)
+void ToolBox::addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId)
 {
     // ensure same L&F
     button->setCheckable(true);
@@ -379,7 +379,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
         d->buttonGroup->addButton(button, buttonGroupId);
 }
 
-void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id)
+void ToolBox::setActiveTool(const KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() != d->canvas)
         return;
@@ -390,7 +390,7 @@ void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id)
         kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
 }
 
-void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes)
+void ToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes)
 {
     if (canvas->canvas() != d->canvas)
         return;
@@ -412,7 +412,7 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
     }
 }
 
-void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
+void ToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
     if (canvas->canvas() != d->canvas)
         return;
@@ -424,12 +424,12 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
     }
 }
 
-void KoToolBox::setCanvas(KoCanvasBase *canvas)
+void ToolBox::setCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
 }
 
-void KoToolBox::paintEvent(QPaintEvent *)
+void ToolBox::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setBrush(palette().shadow());
@@ -475,7 +475,7 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
+KoToolBoxDocker::KoToolBoxDocker(ToolBox *toolBox)
     : m_toolBox(toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);

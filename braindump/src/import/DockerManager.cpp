@@ -35,9 +35,9 @@ class DockerManager::Private {
 public:
     Private() : view(0) {}
     MainWindow *view;
-    QMap<QString, KoToolDocker *> toolDockerMap;
+    QMap<QString, ToolDocker *> toolDockerMap;
     QMap<QString, bool> toolDockerVisibillityMap;
-    QMap<QString, KoToolDocker *> activeToolDockerMap;
+    QMap<QString, ToolDocker *> activeToolDockerMap;
     bool tabToolDockersByDefault;
 };
 
@@ -54,8 +54,8 @@ DockerManager::DockerManager(MainWindow *view)
     QStringListIterator j(strList);
     while (j.hasNext()) {
         QString name = j.next();
-        KoToolDockerFactory toolDockerFactory(name);
-        KoToolDocker *td = qobject_cast<KoToolDocker *>(d->view->createDockWidget(&toolDockerFactory));
+        ToolDockerFactory toolDockerFactory(name);
+        ToolDocker *td = qobject_cast<ToolDocker *>(d->view->createDockWidget(&toolDockerFactory));
         d->toolDockerMap[name] = td;
         d->toolDockerVisibillityMap[name] = false;
     }
@@ -65,7 +65,7 @@ DockerManager::~DockerManager()
 {
     KConfigGroup cfg = KGlobal::config()->group("KoDockerManager");
     QStringList strList;
-    QMapIterator<QString, KoToolDocker *> j(d->toolDockerMap);
+    QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
     while (j.hasNext()) {
         j.next();
         strList += j.key();
@@ -77,7 +77,7 @@ DockerManager::~DockerManager()
 
 void DockerManager::removeUnusedOptionWidgets()
 {
-    QMapIterator<QString, KoToolDocker *> j(d->toolDockerMap);
+    QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
     while (j.hasNext()) {
         j.next();
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
@@ -95,7 +95,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
     //removeUnusedOptionWidgets(); // will probably be needed to fix multi view problems
 
     // First remove the previous active dockers from sight and docker menu
-    QMapIterator<QString, KoToolDocker *> j(d->activeToolDockerMap);
+    QMapIterator<QString, ToolDocker *> j(d->activeToolDockerMap);
     while (j.hasNext()) {
         j.next();
         j.value()->toggleViewAction()->setVisible(false);
@@ -114,11 +114,11 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
             continue; // skip this docker in release build when assert don't crash
         }
 
-        KoToolDocker *td = d->toolDockerMap[i.value()->objectName()];
+        ToolDocker *td = d->toolDockerMap[i.value()->objectName()];
 
         if(!td) {
-            KoToolDockerFactory toolDockerFactory(i.value()->objectName());
-            td = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
+            ToolDockerFactory toolDockerFactory(i.value()->objectName());
+            td = qobject_cast<ToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
             if (!td)
                 return;
             d->toolDockerMap[i.value()->objectName()] = td;

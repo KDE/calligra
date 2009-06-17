@@ -128,7 +128,7 @@ void View::initGUI()
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection());
+    m_zoomController = new ZoomController( m_canvasController, &m_zoomHandler, actionCollection());
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
@@ -142,7 +142,7 @@ void View::initGUI()
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
+    ToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     m_mainWindow->createDockWidget( &toolBoxFactory );
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );

@@ -30,7 +30,7 @@
 
 class KConfig;
 
-class KOMAIN_EXPORT KoGlobal
+class KOMAIN_EXPORT Global
 {
 public:
     /// For KoApplication
@@ -81,11 +81,11 @@ public:
     /// For a given language tag, return its display name
     static QString languageFromTag(const QString &_lang);
 
-    ~KoGlobal();
+    ~Global();
 
 private:
-    static KoGlobal* self();
-    KoGlobal();
+    static Global* self();
+    Global();
     QFont _defaultFont();
     QStringList _listOfLanguages();
     QStringList _listOfLanguageTags();
