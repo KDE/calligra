@@ -57,7 +57,7 @@ int SectionShapeContainerModel::count() const {
     return m_members.count();
 }
 
-QList<KoShape*> SectionShapeContainerModel::iterator() const {
+QList<KoShape*> SectionShapeContainerModel::childShapes() const {
     return QList<KoShape*>(m_members);
 }
 

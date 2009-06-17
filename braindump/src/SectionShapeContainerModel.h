@@ -34,7 +34,7 @@ class SectionShapeContainerModel: public KoShapeContainerModel
     bool childClipped(const KoShape *) const;
     void remove(KoShape *child);
     int count() const;
-    QList<KoShape*> iterator() const;
+    QList<KoShape*> childShapes() const;
     void containerChanged(KoShapeContainer *);
     void childChanged(KoShape *, KoShape::ChangeType);
     bool isChildLocked(const KoShape *child) const;
