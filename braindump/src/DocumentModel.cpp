@@ -28,6 +28,7 @@
 #include "Section.h"
 #include <kundostack.h>
 #include "commands/RenameSectionCommand.h"
+#include <kdebug.h>
 
 DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document), m_modelTest(new ModelTest(this))
 {
@@ -198,7 +199,6 @@ QMimeData * DocumentModel::mimeData( const QModelIndexList & indexes ) const
 
 bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
 {
-  Q_UNUSED( row );
   Q_UNUSED( column );
 
   // check if the action is supported
@@ -231,13 +231,21 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
     group = m_document;
   }
   
+  
   foreach(Section* section, shapes)
   {
     if(action == Qt::CopyAction)
     {
       section = new Section(*section);
     } else {
+      int idx =group->indexOf(section);
+      if( 0 <= idx and idx < row ) {
+        --row;
+      }
       removeSection(section);
+    }
+    if(row < 0) {
+      row = group->sections().count();
     }
     insertSection(section, group, row);
   }
