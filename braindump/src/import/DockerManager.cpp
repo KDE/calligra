@@ -25,8 +25,8 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-#include <KoToolDockerFactory.h>
-#include <KoToolDocker.h>
+#include "ToolDockerFactory.h"
+#include "ToolDocker.h"
 #include <MainWindow.h>
 
 #include <QAction>

@@ -18,37 +18,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KO_TOOL_DOCKER_FACTORY_H
-#define KO_TOOL_DOCKER_FACTORY_H
 
-#include "KoToolDocker.h"
-#include <KoDockFactory.h>
+#include "ToolDockerFactory.h"
 
-#include "komain_export.h"
-
-/**
- * The factory class for the KoToolDocker.
- */
-class KOMAIN_EXPORT KoToolDockerFactory : public KoDockFactory
-{
+class KoToolDockerFactory::Private {
 public:
-    KoToolDockerFactory( QString dockWidgetId = 0 );
-    ~KoToolDockerFactory();
-
-    /// reimplemented from parent
-    virtual QString id() const;
-
-    /// reimplemented from parent
-    QDockWidget* createDockWidget();
-    
-    
-    DockPosition defaultDockPosition() const
-    {
-        return DockRight;
-    }
-private:
-    class Private;
-    Private * const d;
+    Private( QString id ) : dockWidgetId(id) {}
+    QString dockWidgetId;
 };
 
-#endif
+KoToolDockerFactory::KoToolDockerFactory( QString dockWidgetId )
+: d( new Private(dockWidgetId))
+{
+}
+
+KoToolDockerFactory::~KoToolDockerFactory()
+{
+    delete d;
+}
+
+QString KoToolDockerFactory::id() const
+{
+    return d->dockWidgetId;
+}
+
+QDockWidget* KoToolDockerFactory::createDockWidget()
+{
+    KoToolDocker * dockWidget = new KoToolDocker();
+    dockWidget->setObjectName( id() );
+    return dockWidget;
+}

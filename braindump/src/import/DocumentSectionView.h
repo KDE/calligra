@@ -135,4 +135,6 @@ private:
     Private* const d;
 };
 
+typedef KoDocumentSectionView DocumentSectionView;
+
 #endif

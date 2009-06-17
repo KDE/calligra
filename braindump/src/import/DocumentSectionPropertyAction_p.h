@@ -20,8 +20,8 @@
 #ifndef KO_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 #define KO_DOCUMENT_SECTION_PROPERTY_ACTION_P_H
 
-#include "KoDocumentSectionModel.h"
-#include "KoDocumentSectionView.h"
+#include "DocumentSectionModel.h"
+#include "DocumentSectionView.h"
 
 #include <QPersistentModelIndex>
 #include <QAction>

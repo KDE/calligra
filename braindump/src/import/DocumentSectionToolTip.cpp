@@ -16,8 +16,8 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KoDocumentSectionToolTip.h"
-#include "KoDocumentSectionModel.h"
+#include "DocumentSectionToolTip.h"
+#include "DocumentSectionModel.h"
 
 #include <QImage>
 #include <QModelIndex>
@@ -68,4 +68,4 @@ QTextDocument *KoDocumentSectionToolTip::createDocument( const QModelIndex &inde
     return doc;
 }
 
-#include "KoDocumentSectionToolTip.moc"
+#include "DocumentSectionToolTip.moc"

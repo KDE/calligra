@@ -16,10 +16,10 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KoDocumentSectionView.h"
-#include "KoDocumentSectionPropertyAction_p.h"
-#include "KoDocumentSectionDelegate.h"
-#include "KoDocumentSectionModel.h"
+#include "DocumentSectionView.h"
+#include "DocumentSectionPropertyAction_p.h"
+#include "DocumentSectionDelegate.h"
+#include "DocumentSectionModel.h"
 
 #include <QtDebug>
 #include <QContextMenuEvent>
@@ -196,5 +196,5 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex( const QModelIndex &i
     return option;
 }
 
-#include "KoDocumentSectionPropertyAction_p.moc"
-#include "KoDocumentSectionView.moc"
+#include "DocumentSectionPropertyAction_p.moc"
+#include "DocumentSectionView.moc"

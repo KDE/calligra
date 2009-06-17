@@ -25,7 +25,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KoDocumentSectionView" name="listSections" native="true"/>
+    <widget class="DocumentSectionView" name="listSections" native="true"/>
    </item>
    <item>
     <layout class="QHBoxLayout">
@@ -191,9 +191,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoDocumentSectionView</class>
+   <class>DocumentSectionView</class>
    <extends></extends>
-   <header location="global">KoDocumentSectionView.h</header>
+   <header location="global">import/DocumentSectionView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

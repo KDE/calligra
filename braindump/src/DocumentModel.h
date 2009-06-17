@@ -20,7 +20,7 @@
 #ifndef _DOCUMENT_MODEL_H_
 #define _DOCUMENT_MODEL_H_
 
-#include "KoDocumentSectionModel.h"
+#include "import/DocumentSectionModel.h"
 
 class RootSection;
 class ModelTest;

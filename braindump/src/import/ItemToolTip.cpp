@@ -16,7 +16,7 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KoItemToolTip.h"
+#include "ItemToolTip.h"
 
 #include <QApplication>
 #include <QBasicTimer>
@@ -142,4 +142,4 @@ bool KoItemToolTip::eventFilter( QObject *object, QEvent *event )
     return super::eventFilter( object, event );
 }
 
-#include "KoItemToolTip.moc"
+#include "ItemToolTip.moc"

@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoZoomController.h>
+#include "ZoomController.h"
 
 #include <KActionCollection>
 #include <KLocale>
@@ -180,4 +180,4 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     d->canvasController->recenterPreferred();
 }
 
-#include "KoZoomController.moc"
+#include "ZoomController.moc"

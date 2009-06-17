@@ -17,10 +17,10 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KoDocumentSectionDelegate.h"
-#include "KoDocumentSectionModel.h"
-#include "KoDocumentSectionToolTip.h"
-#include "KoDocumentSectionView.h"
+#include "DocumentSectionDelegate.h"
+#include "DocumentSectionModel.h"
+#include "DocumentSectionToolTip.h"
+#include "DocumentSectionView.h"
 
 #include <QtDebug>
 #include <QApplication>
@@ -524,4 +524,4 @@ void KoDocumentSectionDelegate::drawProgressBar( QPainter *p, const QStyleOption
 }
 
 
-#include "KoDocumentSectionDelegate.moc"
+#include "DocumentSectionDelegate.moc"

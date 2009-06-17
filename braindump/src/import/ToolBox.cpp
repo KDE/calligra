@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoToolBox_p.h"
+#include "ToolBox_p.h"
 
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
@@ -487,4 +487,4 @@ void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
     m_toolBox->setCanvas(canvas);
 }
 
-#include "KoToolBox_p.moc"
+#include "ToolBox_p.moc"

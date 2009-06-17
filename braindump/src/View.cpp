@@ -31,11 +31,8 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
-#include <KoToolBoxFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
-#include <KoZoomAction.h>
-#include <KoZoomController.h>
 #include <KoSelection.h>
 #include <KoMainWindow.h>
 #include <KoDockRegistry.h>
@@ -49,6 +46,8 @@
 #include "Section.h"
 #include "ViewManager.h"
 #include "import/DockerManager.h"
+#include "import/ToolBoxFactory.h"
+#include "import/ZoomAction.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -66,6 +65,7 @@
 #include "SectionContainer.h"
 #include "Layout.h"
 #include "SectionPropertiesDock.h"
+#include "import/ZoomController.h"
 
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )

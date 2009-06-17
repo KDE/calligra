@@ -20,7 +20,7 @@
 #ifndef KO_DOCUMENT_SECTION_TOOLTIP_H
 #define KO_DOCUMENT_SECTION_TOOLTIP_H
 
-#include "KoItemToolTip.h"
+#include "ItemToolTip.h"
 
 class KoDocumentSectionModel;
 

@@ -21,7 +21,7 @@
 #ifndef KOZOOMCONTROLLER_H
 #define KOZOOMCONTROLLER_H
 
-#include "KoZoomAction.h"
+#include "ZoomAction.h"
 #include <KoZoomMode.h>
 #include <QObject>
 #include <QSizeF>

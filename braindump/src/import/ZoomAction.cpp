@@ -17,9 +17,9 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "KoZoomAction.h"
+#include "ZoomAction.h"
 #include "KoZoomMode.h"
-#include "KoZoomInput.h"
+#include "ZoomInput.h"
 
 #include <QString>
 #include <QLocale>
@@ -312,4 +312,4 @@ void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
     d->specialButtons = buttons;
 }
 
-#include "KoZoomAction.moc"
+#include "ZoomAction.moc"

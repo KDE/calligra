@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoToolBoxFactory.h"
+#include "ToolBoxFactory.h"
 #include "klocale.h"
 #include <KoToolManager.h>
-#include "KoToolBox_p.h"
+#include "ToolBox_p.h"
 
 class KoToolBoxFactory::Private {
 public:

@@ -1,5 +1,5 @@
 
-include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/import )
+include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR}  )
 
 ### braindump ###
 set(braindump_SRCS
@@ -32,18 +32,18 @@ set(braindump_SRCS
   commands/RenameSectionCommand.cpp
   # Imported file
   import/DockerManager.cpp
-  import/KoDocumentSectionDelegate.cpp
-  import/KoDocumentSectionToolTip.cpp
-  import/KoDocumentSectionView.cpp
-  import/KoGlobal.cpp
-  import/KoItemToolTip.cpp
-  import/KoToolBox.cpp
-  import/KoToolBoxFactory.cpp
-  import/KoToolDocker.cpp
-  import/KoToolDockerFactory.cpp
-  import/KoZoomAction.cpp
-  import/KoZoomController.cpp
-  import/KoZoomInput.cpp
+  import/DocumentSectionDelegate.cpp
+  import/DocumentSectionToolTip.cpp
+  import/DocumentSectionView.cpp
+  import/Global.cpp
+  import/ItemToolTip.cpp
+  import/ToolBox.cpp
+  import/ToolBoxFactory.cpp
+  import/ToolDocker.cpp
+  import/ToolDockerFactory.cpp
+  import/ZoomAction.cpp
+  import/ZoomController.cpp
+  import/ZoomInput.cpp
 )
 
 kde4_add_ui_files(braindump_SRCS

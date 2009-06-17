@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoGlobal.h"
+#include "Global.h"
 
 #define KOFFICEPREFIX "${CMAKE_INSTALL_PREFIX}"
 
