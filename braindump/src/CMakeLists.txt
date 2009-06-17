@@ -27,6 +27,7 @@ set(braindump_SRCS
   layouts/ColumnLayout.cpp
   layouts/FreeLayout.cpp
   # Commands
+  commands/MoveSectionCommand.cpp
   commands/InsertSectionCommand.cpp
   commands/RemoveSectionCommand.cpp
   commands/RenameSectionCommand.cpp
