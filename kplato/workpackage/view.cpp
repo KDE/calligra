@@ -261,7 +261,7 @@ KoDocument *View::hitTest( const QPoint &pos )
     kDebug()<<pos<<gl;
     if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
         // just activating new view on the same doc
-        return koDocument()->hitTest( pos, this );
+        return qobject_cast<KoDocument*>( koDocument()->hitTest( this, pos) );
     }
     return 0;
     kDebug()<<"<----------";

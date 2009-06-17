@@ -38,6 +38,7 @@ class QLabel;
 
 class KUrl;
 
+class KoStore;
 class KoView;
 
 class KPlatoWork_MainWindow;

@@ -40,6 +40,8 @@
 #include <QApplication>
 #include <assert.h>
 
+#include <KoView.h>
+
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
 // so let's simply make it "tar" !
@@ -115,7 +117,7 @@ KoDocument* KoDocumentChild::hitTest(const QPoint& p, KoView* view, const QMatri
     m = matrix() * m;
     m.scale(xScaling(), yScaling());
 
-    return d->m_doc->hitTest(p, view, m);
+    return qobject_cast<KoDocument*>( d->m_doc->hitTest(view, m.map(p)) );
 }
 
 void KoDocumentChild::loadOasis(const KoXmlElement &frameElement, const KoXmlElement& objectElement)

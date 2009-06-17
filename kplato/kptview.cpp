@@ -1910,12 +1910,13 @@ KoDocument *View::hitTest( const QPoint &pos )
         }
     }
     // check child documents
-    return koDocument()->hitTest( pos, this );
+    return qobject_cast<KoDocument*>( koDocument()->hitTest( this, pos ));
 }
 
 void View::createChildDocumentViews()
 {
-    foreach ( KoDocumentChild *ch, getPart()->children() ) {
+    foreach ( QObject* obj, getPart()->children() ) {
+        KoDocumentChild* ch = qobject_cast<KoDocumentChild*>(const_cast<QObject*>(obj));
         if ( ! ch->isDeleted() ) {
             DocumentChild *c = static_cast<DocumentChild*>( ch );
             QTreeWidgetItem *cat = m_viewlist->findItem( c->category(), 0 );

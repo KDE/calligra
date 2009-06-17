@@ -247,8 +247,9 @@ QDomDocument Part::saveXML()
     
     if ( ! children().isEmpty() ) {
         QDomElement el = document.createElement( "objects" );
-        foreach ( KoDocumentChild *ch, children() ) {
-            if ( ch->isDeleted() ) {
+        foreach ( QObject* obj, children() ) {
+            KoDocumentChild *ch = qobject_cast<KoDocumentChild *>(obj);
+            if ( !ch || ch->isDeleted() ) {
                 continue;
             }
             QDomElement e = ch->save( document, false );
@@ -528,7 +529,9 @@ void Part::loadObjects( const KoXmlElement &element )
 bool Part::loadChildren( KoStore* store )
 {
     kDebug();
-    foreach ( KoDocumentChild *ch, children() ) {
+    foreach ( QObject* obj, children() ) {
+        KoDocumentChild *ch = qobject_cast<KoDocumentChild *>(obj);
+        if(!ch) continue;
         ch->loadDocument( store );
     }
     return true;

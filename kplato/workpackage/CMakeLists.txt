@@ -5,7 +5,7 @@ add_subdirectory( pics )
 #add_subdirectory( toolbar )
 #add_subdirectory( tests )
 
-include_directories(${KPLATO_INCLUDES})
+include_directories(${KPLATO_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 
 ########### KPlatoWork private library ###############
@@ -24,7 +24,8 @@ target_link_libraries(
     kplatokernel
     kplatomodels
     kplatoui
-    
+    kplatoprivate
+
     komain
     kostore
     koodf

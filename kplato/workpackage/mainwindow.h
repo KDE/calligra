@@ -39,6 +39,8 @@
 
 #include <kmimetype.h>
 #include <kvbox.h>
+#include <kservice.h>
+#include <KoDocumentEntry.h>
 
 namespace std { }
 using namespace std;
