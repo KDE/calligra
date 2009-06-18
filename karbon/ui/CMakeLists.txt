@@ -15,7 +15,8 @@ set(karbonui_SRCS
     KarbonView.cpp 
     KarbonPrintJob.cpp
     KarbonZoomController.cpp
-
+    KarbonDocumentMergeCommand.cpp
+    
     dialogs/KarbonConfigureDialog.cpp
 
     dockers/KarbonLayerDocker.cpp

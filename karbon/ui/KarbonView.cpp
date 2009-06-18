@@ -59,6 +59,7 @@
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
+#include "KarbonDocumentMergeCommand.h"
 //#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
@@ -404,31 +405,67 @@ void KarbonView::fileImportGraphic()
     debugView("KarbonView::fileImportGraphic()");
 
     QStringList filter;
-    filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl("foo"), "", 0);
+    filter << part()->nativeFormatMimeType();
+    filter << "application/x-karbon";
+    filter << "image/svg+xml";
+    filter << "application/x-wpg";
+    filter << "image/x-wmf";
+    filter << "image/x-eps";
+    filter << "application/postscript";
+    
+    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
     dialog->setCaption(i18n("Choose Graphic to Add"));
     dialog->setModal(true);
-    dialog->setMimeFilter( filter, "application/x-karbon" );
+    dialog->setMimeFilter( filter );
     if(dialog->exec()!=QDialog::Accepted) {
         delete dialog;
         return;
     }
     QString fname = dialog->selectedFile();
-    //kDebug(38000) <<"in :" << fname.latin1();
-    //kDebug(38000) <<"part()->document()->nativeFormatMimeType().latin1() :" << part()->nativeFormatMimeType();
-    //kDebug(38000) <<"dialog->currentMimeFilter().latin1() :" << dialog->currentMimeFilter().latin1();
-    if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().toLatin1() )
-        part()->mergeNativeFormat( fname );
-    else
-    {
-        KoFilterManager man( part() );
-        KoFilter::ConversionStatus status;
+    
+    KarbonPart importPart;
+    // use data centers of this document for importing
+    importPart.document().useExternalDataCenterMap( part()->document().dataCenterMap() );
+
+    bool success = true;
+    
+    if (importPart.nativeFormatMimeType() == dialog->currentMimeFilter()) {
+        // directly load the native format
+        success = importPart.loadNativeFormat( fname );
+        if ( !success ) {
+            importPart.showLoadingErrorDialog();
+        }
+    } else {
+        // use import filters to load the file
+        KoFilterManager man( &importPart );
+        KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument( fname, status );
-        part()->mergeNativeFormat( importedFile );
-        if( !importedFile.isEmpty() )
+        if (status != KoFilter::OK) {
+            importPart.showLoadingErrorDialog();
+            success = false;
+        } 
+        else if( !importedFile.isEmpty() ) {
+            success = importPart.loadNativeFormat( importedFile );
+            if (!success) {
+                importPart.showLoadingErrorDialog();
+            }
+            // remove the temporary file created during format conversion
             unlink( QFile::encodeName( importedFile ) );
+        }
     }
+        
     delete dialog;
+    
+    if (success) {
+        QList<KoShape*> importedShapes = importPart.document().shapes();
+            
+        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importPart);
+        d->canvas->addCommand( cmd );
+
+        foreach( KoShape * shape, importedShapes ) {
+            d->canvas->shapeManager()->selection()->select( shape, false );
+        }
+    }
 }
 
 void KarbonView::selectionDuplicate()

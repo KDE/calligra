@@ -204,8 +204,10 @@ public:
     KoImageCollection * imageCollection();
 
     /// Returns the documents data centers
-    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
+    QMap<QString, KoDataCenter*> dataCenterMap() const;
 
+    /// Sets the data centers to be used by this document
+    void useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters );
 private:
 
     class Private;

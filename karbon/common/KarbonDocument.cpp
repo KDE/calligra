@@ -55,13 +55,13 @@
 #include <qdom.h>
 #include <QRectF>
 
-
 class KarbonDocument::Private
 {
 public:
     Private()
     : pageSize(0.0, 0.0)
     , unit( KoUnit::Millimeter )
+    , hasExternalDataCenterMap(false)
     {
         // Ask every shapefactory to populate the dataCenterMap
         foreach( const QString & id, KoShapeRegistry::instance()->keys())
@@ -77,7 +77,8 @@ public:
         layers.clear();
         qDeleteAll( objects );
         objects.clear();
-        qDeleteAll( dataCenterMap );
+        if (!hasExternalDataCenterMap)
+            qDeleteAll( dataCenterMap );
     }
 
     QSizeF pageSize; ///< the documents page size
@@ -87,6 +88,7 @@ public:
 
     KoUnit unit; ///< The unit.
     QMap<QString, KoDataCenter*> dataCenterMap;
+    bool hasExternalDataCenterMap;
 };
 
 KarbonDocument::KarbonDocument()
@@ -284,6 +286,13 @@ KoImageCollection * KarbonDocument::imageCollection()
 QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
 {
     return d->dataCenterMap;
+}
+
+void KarbonDocument::useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters )
+{
+    qDeleteAll( d->dataCenterMap );
+    d->dataCenterMap = dataCenters;
+    d->hasExternalDataCenterMap = true;
 }
 
 //#############################################################################
