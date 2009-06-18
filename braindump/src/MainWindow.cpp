@@ -34,6 +34,7 @@
 #include <kundostack.h>
 
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
 #include "RootSection.h"
 #include "View.h"
@@ -235,4 +236,17 @@ void MainWindow::removeStatusBarItem(QWidget* _widget)
     }
   }
   kWarning() << "Widget " << _widget << " not found in the status bar";
+}
+
+QList<KoCanvasObserver*> MainWindow::canvasObservers()
+{
+    QList<KoCanvasObserver*> observers;
+
+    foreach(QDockWidget *docker, m_dockWidgets) {
+        KoCanvasObserver *observer = dynamic_cast<KoCanvasObserver*>(docker);
+        if (observer) {
+            observers << observer;
+        }
+    }
+    return observers;
 }

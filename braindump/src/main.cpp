@@ -25,7 +25,7 @@
 
 #include "AboutData.h"
 #include "MainWindow.h"
-#include <KoGlobal.h>
+#include "import/Global.h"
 #include "RootSection.h"
 #include "SectionsIO.h"
 

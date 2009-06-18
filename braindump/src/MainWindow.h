@@ -21,6 +21,7 @@
 #define _MAINWINDOW_H_
 
 #include <kxmlguiwindow.h>
+#include <KoCanvasObserverProvider.h>
 
 class DockerManager;
 class RootSection;
@@ -29,7 +30,7 @@ class KoDockFactory;
 class View;
 class KActionMenu;
 
-class MainWindow : public KXmlGuiWindow {
+class MainWindow : public KXmlGuiWindow, public KoCanvasObserverProvider {
     Q_OBJECT
   public:
     MainWindow(RootSection* document, const KComponentData &componentData);
@@ -43,6 +44,7 @@ class MainWindow : public KXmlGuiWindow {
     void setupActions();
   public:
     void activateView(View* view);
+    QList<KoCanvasObserver*> canvasObservers();
   public slots:
     void forceDockTabFonts();
   private:
