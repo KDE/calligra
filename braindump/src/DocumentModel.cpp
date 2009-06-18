@@ -269,12 +269,14 @@ void DocumentModel::removeSection( Section* section )
 
 void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, Section* before)
 {
+  Q_ASSERT( before == 0 or parentGrp == before->sectionParent());
   int idx = (before) ? parentGrp->sections().indexOf(before) : parentGrp->sections().count();
   insertSection( section, parentGrp, idx);
 }
 
 void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, int idx ) {
   QModelIndex parentIndex = index(parentGrp);
+  Q_ASSERT( idx >= 0 and idx <= parentGrp->sections().count());
   beginInsertRows(parentIndex, idx, idx);
   parentGrp->insertSection(section, idx);
   Q_ASSERT(section->sectionParent() == parentGrp);

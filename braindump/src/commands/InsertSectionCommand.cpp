@@ -18,15 +18,17 @@
  */
 
 #include "InsertSectionCommand.h"
-#include <DocumentModel.h>
+#include "DocumentModel.h"
+#include "Section.h"
 
-InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(_above)
+InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, Section* _above ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(_above), m_idx(-1)
 {
-  
+  Q_ASSERT( _above == 0 or _parent == _above->sectionParent());
 }
 
 InsertSectionCommand::InsertSectionCommand( Section* _section, SectionGroup* _parent, DocumentModel* _model, int _idx ) : m_section(_section), m_parent(_parent), m_model(_model), m_above(0), m_idx(_idx)
 {
+  Q_ASSERT( _idx >= 0 and _idx <= _parent->sections().count());
 }
 
 void InsertSectionCommand::undo()
@@ -36,7 +38,7 @@ void InsertSectionCommand::undo()
 
 void InsertSectionCommand::redo()
 {
-  if(m_above) {
+  if(m_above or m_idx == -1) {
     m_model->insertSection(m_section, m_parent, m_above);
   } else {
     m_model->insertSection(m_section, m_parent, m_idx);
