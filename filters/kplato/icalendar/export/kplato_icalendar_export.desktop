@@ -11,6 +11,7 @@ Name[pt]=Filtro de Exportação de iCalendar para o KPlato
 Name[pt_BR]=Filtro de Exportação de iCalendar para o KPlato
 Name[sv]=Kplato iCalendar exportfilter
 Name[uk]=Фільтр експорту до iCalendar KPlato
+Name[x-test]=xxKPlato iCalendar Export Filterxx
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libicalendarexport
