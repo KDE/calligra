@@ -25,6 +25,7 @@
 
 #include "tablehandler.h"
 #include "versionmagic.h"
+#include "paragraph.h"
 
 #include <wv2/handlers.h>
 #include <wv2/lists.h>
@@ -37,6 +38,7 @@
 #include <KoGenStyles.h>
 
 #include <string>
+#include <vector>
 
 namespace wvWare {
     class Style;
@@ -87,10 +89,10 @@ public:
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
+    //void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString styleName, QString namedStyle);
+    //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString namedStyle);
 
     bool m_writingHeader; //flag for headers & footers, where we write the actual text to styles.xml
     bool m_writeMasterStyleName; //whether to write the style name or not, since it only needs to be the first one
@@ -101,6 +103,7 @@ public:
     QString m_masterStyleName; //need to know what the master style name is so we can write it
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     int m_sectionNumber;
+    QString getFont(unsigned fc) const;
 
     // Communication with Document, without having to know about Document
 signals:
@@ -110,13 +113,13 @@ signals:
     void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void headersFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound(KWord::Table* table);
-    void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
+    void pictureFound( const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
+            const wvWare::FunctorBase* pictureFunctor );
     void updateListDepth( int );
 
 protected:
     QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
     QDomElement insertAnchor( const QString& fsname );
-    QString getFont(unsigned fc) const;
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
 
 private:
@@ -130,8 +133,6 @@ private:
     //int m_listStyleNumber; //number of styles created for lists
 
     // Current paragraph
-    const wvWare::Style* m_currentStyle;
-    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
     int m_index;
@@ -139,15 +140,23 @@ private:
     QDomElement m_oldLayout;
 
     KWord::Table* m_currentTable;
-    //bool m_bInParagraph;
+    //we sometimes have to open another paragraph in the middle of a paragraph
+    // (eg. when parsing footnotes). So, this variable defaults to 0, gets incremented
+    // everytime paragraphStart is called, and decremented everytime paragraphEnd is called.
+    int m_numOpenParagraphs;
+    //pointer to paragraph object
+    Paragraph* m_paragraph;
 
     QString m_fieldValue;
     bool m_insideField;
     bool m_fieldAfterSeparator;
     int m_fieldType; //0 if we're not in a field, -1 for a field we can't handle,
             //anything else is the type of the field
+    bool m_insideFootnote;
+    KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
+    QBuffer* m_footnoteBuffer; //buffer for the footnote data
     int m_maxColumns;//max number of columns in a table
-    
+
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
 };
 

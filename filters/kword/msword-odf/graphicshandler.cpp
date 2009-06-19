@@ -42,6 +42,11 @@ KWordPictureHandler::KWordPictureHandler(Document* doc, KoXmlWriter* bodyWriter,
     m_mainStyles = mainStyles;
 }
 
+void KWordPictureHandler::setBodyWriter( KoXmlWriter* writer )
+{
+    m_bodyWriter = writer;
+}
+
 #ifdef IMAGE_IMPORT
 
 void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )

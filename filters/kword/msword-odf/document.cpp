@@ -72,8 +72,8 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
                  this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                  this, SLOT( slotTableFound(KWord::Table*)));
-        connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
-                 this, SLOT( slotPictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ) );
+        connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ),
+                 this, SLOT( slotPictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
@@ -245,8 +245,19 @@ void Document::processStyles()
 	    kDebug(30513) << "creating ODT style" << name;
 	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
 	    userStyle.addAttribute("style:display-name", displayName);
-	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
-            m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""), QString(""));
+            //set font name in style
+            QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
+            if ( !fontName.isEmpty() )
+            {
+                m_mainStyles->addFontFace( fontName );
+                userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
+            }
+            //process the character properties
+            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
+            //process the paragraph properties
+            Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle );
+	    //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+            //m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""));
 	    //add style to main collection, using the name that it had in the .doc
 	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
 	    kDebug(30513) << "added style " << actualName << "\n";
@@ -256,7 +267,16 @@ void Document::processStyles()
 	    kDebug(30513) << "creating ODT style" << name;
 	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
 	    userStyle.addAttribute("style:display-name", displayName);
-	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+            //set font name in style
+            QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
+            if ( !fontName.isEmpty() )
+            {
+                m_mainStyles->addFontFace( fontName );
+                userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
+            }
+            //process character properties
+            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
+	    //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
 	    //add style to main collection, using the name that it had in the .doc
 	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
 	    kDebug(30513) << "added style " << actualName << "\n";
@@ -676,12 +696,21 @@ void Document::slotTableFound(KWord::Table* table)
 
 //add the picture SubDocument to the queue
 void Document::slotPictureFound( const QString& frameName, const QString& pictureName,
-                                 const wvWare::FunctorBase* pictureFunctor )
+                KoXmlWriter* writer, const wvWare::FunctorBase* pictureFunctor )
 {
     kDebug(30513) ;
+    //if we have a temp writer, tell the pictureHandler
+    if ( writer )
+    {
+        m_pictureHandler->setBodyWriter( writer );
+    }
     SubDocument subdoc( pictureFunctor, 0, frameName, pictureName );
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
+    if ( writer )
+    {
+        m_pictureHandler->setBodyWriter( m_bodyWriter );
+    }
 }
 
 //process through all the subDocs and the tables
