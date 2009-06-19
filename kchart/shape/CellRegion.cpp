@@ -19,42 +19,84 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Local
 #include "CellRegion.h"
 
-#include <kdebug.h>
+// C
+#include <cmath>
 
+// Qt
 #include <QPoint>
 #include <QRect>
 #include <QVector>
 #include <QDebug>
 #include <QStringList>
 
-#include <cmath>
+// KDE
+#include <kdebug.h>
+
 
 using std::pow;
 using namespace KChart;
 
 
-CellRegion::CellRegion()
+class CellRegion::Private
+{
+public:
+    Private();
+    ~Private();
+    
+    QVector<QRect> rects;
+    QRect          boundingRect;
+    // NOTE: Don't forget to extend operator=() if you add new members
+};
+
+
+CellRegion::Private::Private()
 {
 }
 
+CellRegion::Private::~Private()
+{
+}
+
+
+// ================================================================
+//                         Class CellRegion
+
+
+CellRegion::CellRegion()
+    : d( new Private() )
+{
+}
+
+CellRegion::CellRegion( const CellRegion &region )
+    : d( new Private() )
+{
+    // Use operator=(); 
+    *this = region;
+}
+
 CellRegion::CellRegion( const QPoint &point )
+    : d( new Private() )
 {
     add( point );
 }
 
 CellRegion::CellRegion( const QRect &rect )
+    : d( new Private() )
 {
     add( rect );
 }
 
 CellRegion::CellRegion( const QPoint &point, const QSize &size )
+    : d( new Private() )
 {
     add( QRect( point, size ) );
 }
 
 CellRegion::CellRegion( const QVector<QRect> &rects )
+    : d( new Private() )
 {
     add( rects );
 }
@@ -63,24 +105,41 @@ CellRegion::~CellRegion()
 {
 }
 
+
+CellRegion& CellRegion::operator = ( const CellRegion& region )
+{
+    d->rects        = region.d->rects;
+    d->boundingRect = region.d->boundingRect;
+
+    return *this;
+}
+
+bool CellRegion::operator == ( const CellRegion &other ) const
+{
+    return d->rects == other.d->rects;
+}
+
+
+
 QVector<QRect> CellRegion::rects() const
 {
-    return m_rects;
+    return d->rects;
 }
 
 int CellRegion::rectCount() const
 {
-    return m_rects.size();
+    return d->rects.size();
 }
 
 bool CellRegion::isValid() const
 {
-    return m_rects.size() > 0;
+    return d->rects.size() > 0;
 }
+
 
 bool CellRegion::contains( const QPoint &point, bool proper ) const
 {
-    foreach ( const QRect &rect, m_rects ) {
+    foreach ( const QRect &rect, d->rects ) {
         if ( rect.contains( point, proper ) )
             return true;
     }
@@ -90,7 +149,7 @@ bool CellRegion::contains( const QPoint &point, bool proper ) const
 
 bool CellRegion::contains( const QRect &rect, bool proper ) const
 {
-    foreach ( const QRect &r, m_rects ) {
+    foreach ( const QRect &r, d->rects ) {
         if ( r.contains( rect, proper ) )
             return true;
     }
@@ -100,7 +159,7 @@ bool CellRegion::contains( const QRect &rect, bool proper ) const
 
 bool CellRegion::intersects( const QRect &rect ) const
 {
-    foreach ( const QRect &r, m_rects ) {
+    foreach ( const QRect &r, d->rects ) {
         if ( r.intersects( rect ) )
             return true;
     }
@@ -112,7 +171,7 @@ CellRegion CellRegion::intersected( const QRect &rect ) const
 {
     CellRegion intersections;
     
-    foreach ( const QRect &r, m_rects ) {
+    foreach ( const QRect &r, d->rects ) {
         if ( r.intersects( rect ) )
             intersections.add( r.intersected( rect ) );
     }
@@ -122,7 +181,7 @@ CellRegion CellRegion::intersected( const QRect &rect ) const
 
 Qt::Orientation CellRegion::orientation() const
 {
-    foreach ( const QRect &rect, m_rects ) {
+    foreach ( const QRect &rect, d->rects ) {
     	if ( rect.width() > 1 )
     		return Qt::Horizontal;
     	if ( rect.height() > 1 )
@@ -137,11 +196,11 @@ int CellRegion::cellCount() const
 {
     int count = 0;
     if ( orientation() == Qt::Horizontal ) {
-        foreach ( const QRect &rect, m_rects )
+        foreach ( const QRect &rect, d->rects )
             count += rect.width();
     }
     else {
-        foreach( const QRect &rect, m_rects )
+        foreach( const QRect &rect, d->rects )
             count += rect.height();
     }
     
@@ -172,8 +231,8 @@ void CellRegion::add( const QRect &rect )
         return;
     }
     
-    m_rects.append( rect );
-    m_boundingRect |= rect;
+    d->rects.append( rect );
+    d->boundingRect |= rect;
 }
 
 void CellRegion::add( const QVector<QRect> &rects )
@@ -185,15 +244,15 @@ void CellRegion::add( const QVector<QRect> &rects )
 void CellRegion::subtract( const QPoint &point )
 {
     if ( orientation() == Qt::Horizontal ) {
-        for ( int i = 0; i < m_rects.size(); i++ ) {
-            if ( m_rects[ i ].contains( point ) ) {
+        for ( int i = 0; i < d->rects.size(); i++ ) {
+            if ( d->rects[ i ].contains( point ) ) {
 
-                if ( m_rects[ i ].topLeft().x() == point.x() ) {
-                    m_rects[ i ].translate( 1, 0 );
-                    m_rects[ i ].setWidth( m_rects[ i ].width() - 1 );
+                if ( d->rects[ i ].topLeft().x() == point.x() ) {
+                    d->rects[ i ].translate( 1, 0 );
+                    d->rects[ i ].setWidth( d->rects[ i ].width() - 1 );
                 }
-                else if ( m_rects[ i ].topRight().x() == point.x() ) {
-                    m_rects[ i ].setWidth( m_rects[ i ].width() - 1 );
+                else if ( d->rects[ i ].topRight().x() == point.x() ) {
+                    d->rects[ i ].setWidth( d->rects[ i ].width() - 1 );
                 }
 
                 return;
@@ -201,15 +260,15 @@ void CellRegion::subtract( const QPoint &point )
         }
     }
     else {
-        for ( int i = 0; i < m_rects.size(); i++ ) {
-            if ( m_rects[ i ].contains( point ) ) {
+        for ( int i = 0; i < d->rects.size(); i++ ) {
+            if ( d->rects[ i ].contains( point ) ) {
 
-                if ( m_rects[ i ].topLeft().y() == point.y() ) {
-                    m_rects[ i ].translate( 0, 1 );
-                    m_rects[ i ].setHeight( m_rects[ i ].height() - 1 );
+                if ( d->rects[ i ].topLeft().y() == point.y() ) {
+                    d->rects[ i ].translate( 0, 1 );
+                    d->rects[ i ].setHeight( d->rects[ i ].height() - 1 );
                 }
-                else if ( m_rects[ i ].bottomLeft().y() == point.y() ) {
-                    m_rects[ i ].setHeight( m_rects[ i ].height() - 1 );
+                else if ( d->rects[ i ].bottomLeft().y() == point.y() ) {
+                    d->rects[ i ].setHeight( d->rects[ i ].height() - 1 );
                 }
 
                 return;
@@ -218,14 +277,14 @@ void CellRegion::subtract( const QPoint &point )
     }
 
     // Recalculate bounding rectangle
-    m_boundingRect = QRect();
-    foreach ( const QRect &rect, m_rects )
-        m_boundingRect |= rect;
+    d->boundingRect = QRect();
+    foreach ( const QRect &rect, d->rects )
+        d->boundingRect |= rect;
 }
 
 QRect CellRegion::boundingRect() const
 {
-    return m_boundingRect;
+    return d->boundingRect;
 }
 
 QPoint CellRegion::pointAtIndex( int index ) const
@@ -233,7 +292,7 @@ QPoint CellRegion::pointAtIndex( int index ) const
     // sum of all previous rectangle indices
     int i = 0;
     
-    foreach ( const QRect &rect, m_rects ) {
+    foreach ( const QRect &rect, d->rects ) {
         // Rectangle is horizontal
         if ( rect.width() > 1 ) {
             // Found it!
@@ -270,7 +329,7 @@ int CellRegion::indexAtPoint( const QPoint &point ) const
     int indicesLeftToPoint = 0;
     bool found = false;
     
-    foreach ( const QRect &rect, m_rects ) {
+    foreach ( const QRect &rect, d->rects ) {
         if ( !rect.contains( point ) ) {
             indicesLeftToPoint += rect.width() > 1 ? rect.width() : rect.height();
             continue;
@@ -441,7 +500,3 @@ QString CellRegion::regionToString( const QVector<QRect> &region )
     return result;
 }
 
-bool CellRegion::operator == ( const CellRegion &other ) const
-{
-    return m_rects == other.rects();
-}
