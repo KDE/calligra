@@ -17,11 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QFontMetricsF>
 #include "OperatorElement.h"
 #include "RowElement.h"
 #include "AttributeManager.h"
 #include "kdebug.h"
+#include <QFontMetricsF>
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
