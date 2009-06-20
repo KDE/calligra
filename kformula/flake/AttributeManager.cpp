@@ -27,6 +27,30 @@
 #include <QColor>
 #include <kdebug.h>
 
+// Copied from koffice KoUnit.h
+
+// 1 inch ^= 72 pt
+// 1 inch ^= 25.399956 mm (-pedantic ;p)
+// 1 pt = 1/12 pi
+// 1 pt ^= 0.0077880997 cc
+// 1 cc = 12 dd
+// Note: I don't use division but multiplication with the inverse value
+// because it's faster ;p (Werner)
+#define POINT_TO_MM(px) ((px)*0.352777167)
+#define MM_TO_POINT(mm) ((mm)*2.83465058)
+#define POINT_TO_CM(px) ((px)*0.0352777167)
+#define CM_TO_POINT(cm) ((cm)*28.3465058)
+#define POINT_TO_DM(px) ((px)*0.00352777167)
+#define DM_TO_POINT(dm) ((dm)*283.465058)
+#define POINT_TO_INCH(px) ((px)*0.01388888888889)
+#define INCH_TO_POINT(inch) ((inch)*72.0)
+#define MM_TO_INCH(mm) ((mm)*0.039370147)
+#define INCH_TO_MM(inch) ((inch)*25.399956)
+#define POINT_TO_PI(px)((px)*0.083333333)
+#define POINT_TO_CC(px)((px)*0.077880997)
+#define PI_TO_POINT(pi)((pi)*12)
+#define CC_TO_POINT(cc)((cc)*12.840103)
+
 AttributeManager::AttributeManager()
 {
     m_viewConverter = 0;
@@ -66,7 +90,8 @@ bool AttributeManager::boolOf( const QString& attribute,
 double AttributeManager::doubleOf( const QString& attribute,
                                    const BasicElement* element ) const
 {
-    return parseUnit( findValue( attribute, element ), element );
+    
+    return lengthToPixels(parseUnit( findValue( attribute, element ), element ), element, attribute);
 }
 
 QList<double> AttributeManager::doubleListOf( const QString& attribute,
@@ -75,7 +100,7 @@ QList<double> AttributeManager::doubleListOf( const QString& attribute,
     QList<double> doubleList;
     QStringList tmp = findValue( attribute, element ).split( " " );
     foreach( QString doubleValue, tmp )
-        doubleList << parseUnit( doubleValue, element );
+        doubleList << lengthToPixels( parseUnit( doubleValue, element ), element, attribute);
 
     return doubleList;
 }
@@ -189,60 +214,87 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
 {
     // return a thinmathspace which is a good value for layouting
-    return parseUnit( "0.166667em", element );
+    QFontMetricsF fm(font(element));
+    return fm.height() * 0.166667 ;
 }
 
-double AttributeManager::parseUnit( const QString& value,
+double AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const
+{
+    if(length.value == 0) 
+        return 0;
+ 
+    switch(length.unit) {
+    case Length::Em: {
+        QFontMetricsF fm(font(element));
+        return fm.height() * length.value;
+    }
+    case Length::Ex: {
+        QFontMetricsF fm(font(element));
+        return fm.xHeight() * length.value;
+    }
+    case Length::Percentage:	
+        return lengthToPixels( parseUnit( element->attributesDefaultValue(attribute), element),element, attribute) * length.value / 100.0;
+    case Length::Px: //pixels
+        return length.value;
+    case Length::In:  /* Note for the units below we assume point == pixel.  */
+        return INCH_TO_POINT(length.value);
+    case Length::Cm:
+        return CM_TO_POINT(length.value);
+    case Length::Mm:
+        return MM_TO_POINT(length.value);
+    case Length::Pt:
+        return length.value;
+    case Length::Pc:
+        return PI_TO_POINT(length.value);
+    case Length::None:
+    default:
+        return length.value;
+    }
+}
+
+Length AttributeManager::parseUnit( const QString& value,
                                     const BasicElement* element ) const
 {
+    Length length;
+
     if (value.isEmpty())
-        return 0;
-    QRegExp re("(-?[\\d\\.]*)(px|em|ex|in|cm|pc|mm|pt)?", Qt::CaseInsensitive);
+        return length;
+    QRegExp re("(-?[\\d\\.]*) *(px|em|ex|in|cm|pc|mm|pt|%)?", Qt::CaseInsensitive);
     if (re.indexIn(value) == -1)
-        return 0;
+        return length;
     QString real = re.cap(1);
-    QString unit = re.cap(2);
+    QString unit = re.cap(2).toLower();
 
     bool ok;
     qreal number = real.toDouble(&ok);
     if (!ok)
-        return 0;
+        return length;
+
+    length.value = number;
     if(!unit.isEmpty()) {
-        if (unit.compare("em", Qt::CaseInsensitive) == 0) {
-            QFontMetricsF fm(font(element));
-            return fm.height() * number;
-        }
-        else if (unit.compare("ex", Qt::CaseInsensitive) == 0) {
-            QFontMetricsF fm(font(element));
-            return fm.xHeight() * number;
-        }
+        if (unit == "em") 
+            length.unit = Length::Mm;
+        else if (unit == "ex")
+            length.unit = Length::Ex;
+        else if (unit == "px")
+            length.unit = Length::Px;
+        else if (unit == "in")
+            length.unit = Length::In;
+        else if (unit == "cm")
+            length.unit = Length::Cm;
+        else if (unit == "nm")
+            length.unit = Length::Mm;
+        else if (unit == "pt")
+            length.unit = Length::Pt;
+        else if (unit == "pc")
+            length.unit = Length::Pc;
+        else if (unit == "%")
+             length.unit = Length::Percentage;
+        else 
+            length.unit = Length::None;
     }
     
-    return number;
-    
-    //FIXME - parse the other units - in, cm etc
-
-
-    /*
-    // process values with units
-    QString unit = value.right( value.endsWith( '%' ) ? 1 : 2 );
-    double v = value.left( value.length() - unit.length() ).toDouble();
-
-    if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
-        return KoUnit::parseValue( QString::number( v ) + unit );
-    else if( unit == "em" || unit == "ex" ) {
-        // use a postscript paint device so that font metrics returns postscript points
-        KoPostscriptPaintDevice paintDevice;
-        QFontMetricsF fm( font( element ), &paintDevice );
-        return ( unit == "em" ) ? v*fm.width( 'm' ) : v*fm.xHeight();
-    }
-//    else if( unit == "px" )
-//        return m_viewConverter->viewToDocumentX( v.toInt() );
-//    else if( tmpValue.endsWith( '%' ) )
-//        return defaultValueOf( m_attribute ) * ( tmpValue.toDouble()/100 ); 
-    else
-        return 0.0;   // actually a value should never be 0.0
-    */
+    return length;
 }
 
 Align AttributeManager::parseAlign( const QString& value ) const

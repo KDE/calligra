@@ -59,14 +59,21 @@ void FractionElement::layout( const AttributeManager* am )
 {
     // get values of all attributes
     QString value = am->findValue( "linethickness", this );
+    Length length;
     if(value == "thick")
-        m_lineThickness = 2;
+        length.value = 2;
     else if(value == "medium")
-        m_lineThickness = 1;
+        length.value = 1;
     else if(value == "thin")
-        m_lineThickness = 0.5;
+        length.value = 0.5;
     else
-         m_lineThickness = am->parseUnit( value, this );
+        length = am->parseUnit( value, this );
+
+    if(length.unit == Length::None) {
+        length.unit = Length::Em;
+	length.value *= 0.1;
+    }
+    m_lineThickness = am->lengthToPixels(length, this, "linethickness");
 
     // decide which layout is wanted
     if( am->boolOf( "bevelled", this ) )

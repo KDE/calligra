@@ -38,6 +38,26 @@ enum Align {
     InvalidAlign
 };
 
+class Length {
+  public:
+    enum Unit {
+        Em,	/**< ems (font-relative unit traditionally used for horizontal lengths) */
+        Ex, 	/**< exs (font-relative unit traditionally used for vertical lengths) */
+        Px,  	/**< pixels, or pixel size of a "typical computer display" */
+        In,  	/**< inches (1 inch = 2.54 centimeters) */
+        Cm,  	/**< centimeters */
+        Mm,  	/**< millimeters */
+        Pt,  	/**< points (1 point = 1/72 inch) */
+        Pc,  	/**< picas (1 pica = 12 points) */
+        Percentage, /**< percentage of default value */
+        None	/**< For when no unit has been specified */
+    };
+
+    Length() : value(0), unit(None) {};
+    qreal value;
+    Unit unit;
+};
+
 /**
  * @short manages all the attributes, used by the elements to obtain attribute values
  *
@@ -178,7 +198,10 @@ public:
     Qt::PenStyle parsePenStyle( const QString& value ) const;
 
     /// @return The parsed @p value which is given with a unit
-    double parseUnit( const QString& value, const BasicElement* element ) const;
+    Length parseUnit( const QString& value, const BasicElement* element ) const;
+
+    //// @return The given Length converted to units of pixels
+    double lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const;
 
     /// Find a value for @p attribute that applies to @p element
     QString findValue( const QString& attribute, const BasicElement* element ) const;
