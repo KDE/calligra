@@ -133,7 +133,7 @@ public:
 
     /// @return The height of the element
     double height() const;
-    
+
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
 
