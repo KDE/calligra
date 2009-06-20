@@ -41,9 +41,11 @@ QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
     qreal lSpace = manager.parseMathSpace(dict.lSpace(), this);
     path.moveTo( path.currentPosition() + QPointF( lSpace, 0.0 ) );
     QFont font = manager.font(this);
+    font.setStretch(500);
     path.addText( path.currentPosition(), font, raw );
     QFontMetricsF fm(font);
-    return fm.boundingRect(QRect(), Qt::TextIncludeTrailingSpaces, raw).adjusted(0,0,lSpace+rSpace,0).adjusted(0,-fm.ascent(), 0, -fm.ascent());
+    return path.boundingRect().adjusted(0,0,lSpace+rSpace,0);
+//    return fm.boundingRect(QRect(), Qt::TextIncludeTrailingSpaces, raw).adjusted(0,0,lSpace+rSpace,0).adjusted(0,-fm.ascent(), 0, -fm.ascent());
 }
 
 Form OperatorElement::determineOperatorForm() const
