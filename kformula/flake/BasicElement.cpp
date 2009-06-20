@@ -35,6 +35,7 @@ BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
     m_boundingRect.setWidth( 7.0 );       // standard values
     m_boundingRect.setHeight( 10.0 );
+    m_displayStyle = true;
     setBaseLine( 10.0 );
 
 }
@@ -241,3 +242,11 @@ void BasicElement::setScaleFactor( double scaleFactor )
     m_scaleFactor = scaleFactor;
 }
 
+bool BasicElement::displayStyle() const
+{
+    return m_displayStyle;
+}
+void BasicElement::setDisplayStyle(bool displayStyle)
+{
+    m_displayStyle = displayStyle;
+}

@@ -137,11 +137,15 @@ public:
                                         BasicElement* element ) const;
 
     /**
-     * Obtain @p element's scaling factor based on the script level
-     * @param element The element which scaling is determined
+     * Obtain the scaling factor for @p parent's child element at index @p index
+     * Usually the first child is treated different.  For example in 
+     * <msup><mi>b</mi><mn>2</mn></msup>  to represent  b^2,  the 2 is smaller
+     * than the b.
+     * @param element The parent of the element for which scaling is determined
+     * @param index The index of the child element for which scaling is determined
      * @return The scaling factor
      */
-    double scriptLevelScaling( const BasicElement* element ) const;
+    double scriptLevelScaling( const BasicElement* parent, int index ) const;
 
     /// @return A value used for spacing tasks during layouting
     double layoutSpacing( const BasicElement* element ) const;

@@ -19,6 +19,7 @@
 
 #include "AttributeManager.h"
 #include "BasicElement.h"
+#include "ElementFactory.h"
 #include <KoUnit.h>
 #include <KoViewConverter.h>
 #include <KoPostscriptPaintDevice.h>
@@ -128,11 +129,25 @@ QList<Qt::PenStyle> AttributeManager::penStyleListOf( const QString& attribute,
     return penStyleList;
 }
 
-double AttributeManager::scriptLevelScaling( const BasicElement* element ) const
+double AttributeManager::scriptLevelScaling( const BasicElement* parent, int index ) const
 {
-    double multiplier = doubleOf( "scriptsizemultiplier", element );
+    double current_scaling = parent->scaleFactor();
+    double multiplier = doubleOf( "scriptsizemultiplier", parent );
     if( multiplier == 0.0 )
         multiplier = 0.71;
+
+    ElementType parentType = parent->elementType();
+
+    /** First check for types where all children are scaled */
+    if( parentType == Fraction && parent->displayStyle() == false )
+        return multiplier*current_scaling;
+
+    if( index == 0) return current_scaling;
+    /** Now check for types where the first child isn't scaled, but the rest are */
+    if( parentType == SubScript || parentType == SupScript || parentType == SubSupScript )
+        return multiplier * current_scaling;
+
+    return current_scaling;
 /* 
     ElementType parentType = element->parentElement()->elementType();
     if( element->elementType() == Formula ) // Outermost element has scriptlevel 0
@@ -160,8 +175,8 @@ double AttributeManager::scriptLevelScaling( const BasicElement* element ) const
         else
             return multiplier^tmp.toInt() / element->parentElement()->scaleFactor(); 
     }
-    else*/
-        return 1.0;
+    eilse
+        return 1.0; */
 }
 
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
@@ -262,7 +277,12 @@ QFont AttributeManager::font( const BasicElement* element ) const
     // if contains italic -> font.setItalic( true )
     // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
   
-    return QFont();
+    QFont font;
+     if(font.pointSizeF() != -1)
+         font.setPointSizeF(font.pointSizeF() * element->scaleFactor());
+     else
+         font.setPixelSize( font.pixelSize() * element->scaleFactor() );
+     return font;
 }
 
 void AttributeManager::setViewConverter( KoViewConverter* converter )
