@@ -46,6 +46,11 @@ QString Dictionary::rSpace() const
     return m_rspace;
 }
 
+bool Dictionary::stretchy() const
+{
+    return m_stretchy;
+}
+
 QChar Dictionary::mapEntity( const QString& entity )
 {
     if( entity.isEmpty() ) return QChar();

@@ -64,6 +64,19 @@ void RowElement::layout( const AttributeManager* am )
     setBaseLine( topToBaseline );
 }
 
+void RowElement::stretch()
+{
+    //The elements can grow vertically, so make sure we reposition their vertical 
+    //origin appropriately
+    foreach( BasicElement* tmpElement, childElements() ) {
+        tmpElement->stretch();
+        //Set the origin.  Note that we ignore the baseline and center the object
+        //vertically
+        //I think we need to FIXME for symmetric situations or something?
+        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), (height() - tmpElement->height())/2 ));
+//        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), baseLine() - tmpElement->baseLine()));
+    }
+}
 const QList<BasicElement*> RowElement::childElements()
 {
     return m_childElements;

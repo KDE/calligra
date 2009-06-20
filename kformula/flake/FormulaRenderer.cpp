@@ -58,6 +58,7 @@ void FormulaRenderer::layoutElement( BasicElement* element )
         layoutElement( tmp );              // first layout all children
     }
     element->layout( m_attributeManager );      // actually layout the element
+    element->stretch();
 }
 
 void FormulaRenderer::update( QPainter& p, BasicElement* element )

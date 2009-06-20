@@ -57,6 +57,13 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
 
+void BasicElement::stretch()
+{
+    foreach( BasicElement* tmpElement, childElements() ) {
+        tmpElement->stretch();
+    }
+}
+
 BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )

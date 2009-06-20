@@ -107,10 +107,25 @@ public:
     virtual void paint( QPainter& painter, AttributeManager* am );
 
     /**
-     * Calculate the size of the element and the positions of its children
+     * Calculate the minimum size of the element and the positions of its children
+     *
+     * Laying out the items is done in two parts.
+     *
+     * First layout() is called for the topmost element, which in turn calls
+     * layout() for its children, and so on. This sets the minimum size of all elements.
+     *
+     * Then stretch() is called for the topmost element, which in turn calls
+     * stretch() for its children, and so on.  This stretches elements that
+     * are stretchable, up to their maximum size.
+     *
      * @param am The AttributeManager providing information about attributes values
      */
     virtual void layout( const AttributeManager* am );
+
+    /**
+     * Calculate the stretched size of the element.  This is called after layouting.
+     */
+    virtual void stretch();
 
     /**
      * Implement the cursor behaviour for the element
@@ -163,7 +178,6 @@ public:
 
     /// @return The elements scale level
     int scaleLevel() const;
-
 
     /**
      * Set an attribute's value

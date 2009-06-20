@@ -28,7 +28,10 @@
 #include <kdebug.h>
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
-{}
+{
+    m_stretchHorizontally = false;
+    m_stretchVertically = false;
+}
 
 const QList<BasicElement*> TokenElement::childElements()
 {
@@ -39,7 +42,6 @@ const QList<BasicElement*> TokenElement::childElements()
 
     return tmpList;
 }
-
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
     // set the painter to background color and paint it
@@ -49,13 +51,15 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
 
     // set the painter to foreground color and paint the text in the content path
     QColor color = am->colorOf( "mathcolor", this );
-    if (!color.isValid()) {
+    if (!color.isValid())
         color = am->colorOf( "color", this );
-    }
-    
-    painter.setPen( color );
-    painter.setBrush( QBrush( painter.pen().color() ) );
+
     painter.translate( m_xoffset, baseLine() );
+    if(m_stretchHorizontally || m_stretchVertically)
+        painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
+
+    painter.setPen( color );
+    painter.setBrush( QBrush( color ) );
     painter.drawPath( m_contentPath );
 }
 
@@ -74,7 +78,7 @@ void TokenElement::layout( const AttributeManager* am )
         boundingrect = renderToPath(m_rawString, m_contentPath);
      } else {
         // replace all the object replacement characters with glyphs
- 	// We have to keep track of the bounding box at all times
+        // We have to keep track of the bounding box at all times
         QString chunk;
         int counter = 0;
         for( int i = 0; i < m_rawString.length(); i++ ) {
@@ -113,6 +117,7 @@ void TokenElement::layout( const AttributeManager* am )
     setBaseLine( -boundingrect.y() ); // set baseline accordingly
     setWidth( boundingrect.right() + m_xoffset );
     setHeight( boundingrect.height() );
+    m_originalSize = QSizeF(width(), height());
 }
 
 void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
@@ -168,14 +173,14 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
         else if( node.isElement() )
             return false;
         /*
-	else if (node.isEntityReference()) {
+        else if (node.isEntityReference()) {
             Dictionary dict;
             m_rawString.append( dict.mapEntity( node.nodeName() ) );
-	}
+        }
         */
-	else {
+        else {
             m_rawString.append( node.toText().data().trimmed() );
-	}
+        }
 
         node = node.nextSibling();
     }

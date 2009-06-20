@@ -39,7 +39,7 @@ public:
     FormulaElement();
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    virtual ElementType elementType() const;
 };
 
 #endif // FORMULAELEMENT_H

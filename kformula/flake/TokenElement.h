@@ -107,6 +107,14 @@ protected:
     /// @return The font to use
     QFont font() const;
 
+    /// Whether the element should be stretched horizontally (e.g. arrows)
+    bool m_stretchHorizontally;
+    /// Whether the element should be stretched vertically (e.g. brackets)
+    bool m_stretchVertically;
+
+    /// Size to stretch from
+    QSizeF m_originalSize;
+
 private:
     /// The raw string like it is read and written from MathML
     QString m_rawString;

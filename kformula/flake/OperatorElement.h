@@ -50,9 +50,14 @@ public:
     /// Process @p raw and render it to @p path
     QRectF renderToPath( const QString& raw, QPainterPath& path );
 
+    /** Reimplemented from BaseElement
+     *  Sets the height() and baseLine() of the element based on the parent size
+     */
+    virtual void stretch();
 private:
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;
+    Dictionary m_dict;
 
 private:
     Form determineOperatorForm() const;
