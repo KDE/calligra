@@ -48,7 +48,12 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 
     // set the painter to foreground color and paint the text in the content path
-    painter.setPen( am->colorOf( "mathcolor", this ) );
+    QColor color = am->colorOf( "mathcolor", this );
+    if (!color.isValid()) {
+        color = am->colorOf( "color", this );
+    }
+    
+    painter.setPen( color );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.translate( m_xoffset, baseLine() );
     painter.drawPath( m_contentPath );
