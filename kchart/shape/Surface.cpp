@@ -184,7 +184,7 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
             backgroundAttributes.setBrush( brush );
         }
         
-        // Finally
+        // Finally actually set the attributes.
         d->kdPlane->setBackgroundAttributes( backgroundAttributes );
         d->kdPlane->setFrameAttributes( frameAttributes );
     }
@@ -196,15 +196,16 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
     return true;
 }
 
-void Surface::saveOdf( KoShapeSavingContext &context )
+void Surface::saveOdf( KoShapeSavingContext &context, 
+                       const char *elementName )
 {
     KoXmlWriter  &bodyWriter = context.xmlWriter();
     KoGenStyles  &mainStyles = context.mainStyles();
     KoGenStyle    style      = KoGenStyle( KoGenStyle::StyleGraphicAuto, 
                                            "chart" );
 
-    // FIXME: Also save floor
-    bodyWriter.startElement( "chart:wall" );
+    // elementName is chart:floor or chart:wall
+    bodyWriter.startElement( elementName );
 
     QBrush  backgroundBrush = d->kdPlane->backgroundAttributes().brush();
     QPen    framePen = d->kdPlane->frameAttributes().pen();
@@ -214,6 +215,6 @@ void Surface::saveOdf( KoShapeSavingContext &context )
 
     bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( style, "ch" ) );
 
-    bodyWriter.endElement(); // chart:wall
+    bodyWriter.endElement(); // chart:floor or chart:wall
 }
 
