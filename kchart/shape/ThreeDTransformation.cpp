@@ -18,8 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 // Local
 #include "ThreeDTransformation.h"
+
 
 using namespace KChart;
 
@@ -30,4 +32,3 @@ ThreeDTransformation::ThreeDTransformation()
 ThreeDTransformation::~ThreeDTransformation()
 {
 }
-
