@@ -61,27 +61,41 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 void UnderOverElement::layout( const AttributeManager* am )
 {
     double thinSpace   = am->layoutSpacing( this );
-    double accent      = am->boolOf( "accent", this );     //Whether to add a space above
-    double accentUnder = am->boolOf( "accentunder", this );//Whether to add a space below
+    double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
+    double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
 
     double largestWidth = m_baseElement->width();
-    largestWidth = qMax( m_underElement->width(), largestWidth );
+    if(m_elementType != Over)
+        largestWidth = qMax( m_underElement->width(), largestWidth );
+    if(m_elementType != Under)
     largestWidth = qMax( m_overElement->width(), largestWidth );
 
-    QPointF origin( ( largestWidth - m_overElement->width() ) / 2.0, 0.0 );
-    m_overElement->setOrigin( origin );
+    QPointF origin(0.0,0.0);
+    if(m_elementType != Under) {
+        origin.setY(( largestWidth - m_overElement->width() ) / 2.0 ) ;
+        m_overElement->setOrigin( origin );
+
+        origin.setY( ( accent && m_overElement->height() != 0 ) ? thinSpace/2 : thinSpace );
+    }
 
     origin.setX( ( largestWidth - m_baseElement->width() ) / 2.0 );
-    origin.setY( ( accent && m_overElement->height() != 0 ) ? 2*thinSpace : thinSpace );
     m_baseElement->setOrigin( origin );
+    setBaseLine( origin.y() + m_baseElement->baseLine() );
 
-    origin.setX( ( largestWidth - m_underElement->width())/2.0 );
-    origin.setY( origin.y() + accentUnder ? 2*thinSpace : thinSpace );
-    m_underElement->setOrigin( origin );
+    if(m_elementType != Over) {
+        origin.setX( ( largestWidth - m_underElement->width())/2.0 );
+	/* Try to be smart about where to place the under */
+/*	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
+          origin.setY( origin.y() + m_baseElement->baseLine() + (accentUnder ? thinSpace/2 : thinSpace ));
+	else */
+          origin.setY( origin.y() + m_baseElement->height() + (accentUnder ? thinSpace/2 : thinSpace) ); 
+        m_underElement->setOrigin( origin );
+        setHeight( origin.y() + m_underElement->height() );
+    } else {
+        setHeight( origin.y() + m_baseElement->height() );
+    }
 
     setWidth( largestWidth );
-    setHeight( origin.y() + m_underElement->height() );
-    setBaseLine( m_baseElement->origin().y() + m_baseElement->baseLine() );
 }
 
 BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
