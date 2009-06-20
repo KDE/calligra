@@ -46,10 +46,10 @@ BasicElement::~BasicElement()
 
 void BasicElement::paint( QPainter& painter, AttributeManager* )
 { 
-    painter.setPen( QPen( Qt::blue ) );
+/*    painter.setPen( QPen( Qt::blue ) );
     painter.drawRect( QRectF(0.0, 0.0, width(), height()) );
     painter.setPen( QPen( Qt::red, 0, Qt::DashLine ) );
-    painter.drawLine( QPointF(0.0, baseLine()), QPointF(width(), baseLine()));
+    painter.drawLine( QPointF(0.0, baseLine()), QPointF(width(), baseLine()));*/
 }
 
 void BasicElement::layout( const AttributeManager* )
