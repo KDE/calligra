@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007-2008 Inge Wallin    <inge@lysator.liu.se>
+   Copyright 2007-2009 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -261,8 +261,6 @@ public:
     KoShape   *footer;
     Legend    *legend;
     PlotArea  *plotArea;
-    Surface   *wall;
-    Surface   *floor;
 
     // Data
     QAbstractItemModel  *internalModel; // The actual data
@@ -285,8 +283,6 @@ ChartShape::Private::Private( ChartShape *shape )
     footer   = 0;
     legend   = 0;
     plotArea = 0;
-    wall     = 0;
-    floor    = 0;
     model    = 0;
 
     document = 0;
@@ -451,10 +447,6 @@ ChartShape::ChartShape()
     d->footer->setZIndex( 4 );
     setClipping( d->footer, true );
 
-    // Create the Floor and Wall.
-    d->floor = new Surface( d->plotArea );
-    d->wall = new Surface( d->plotArea );
-
     KoColorBackground *background = new KoColorBackground( Qt::white );
     setBackground( background );
 
@@ -472,8 +464,6 @@ ChartShape::~ChartShape()
     delete d->subTitle;
     delete d->footer;
     delete d->document;
-    delete d->floor;
-    delete d->wall;
 }
 
 
@@ -532,16 +522,6 @@ Legend *ChartShape::legend() const
 PlotArea *ChartShape::plotArea() const
 {
     return d->plotArea;
-}
-
-Surface *ChartShape::wall() const
-{
-    return d->wall;
-}
-
-Surface *ChartShape::floor() const
-{
-    return d->floor;
 }
 
 
