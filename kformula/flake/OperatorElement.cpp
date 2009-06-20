@@ -38,10 +38,9 @@ void OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
     AttributeManager manager;
     qreal rSpace = manager.parseMathSpace(dict.rSpace(), this);
     qreal lSpace = manager.parseMathSpace(dict.lSpace(), this);
-    kDebug() << lSpace << " " << raw << " " << rSpace;
     path.moveTo( path.currentPosition() + QPointF( lSpace, 0.0 ) );
     path.addText( path.currentPosition(), manager.font( this ), raw );
-    path.moveTo( path.currentPosition() + QPointF( rSpace, 0.0 ) );
+    path.moveTo( path.boundingRect().right() + rSpace, 0 );
 }
 
 Form OperatorElement::determineOperatorForm() const
