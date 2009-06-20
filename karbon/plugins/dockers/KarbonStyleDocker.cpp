@@ -192,6 +192,9 @@ void KarbonStyleDocker::updateStyle()
 
 void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill )
 {
+    if( ! m_canvas )
+        return;
+    
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
@@ -249,6 +252,9 @@ void KarbonStyleDocker::resourceChanged( int key, const QVariant& )
 
 void KarbonStyleDocker::styleButtonPressed( int buttonId )
 {
+    if( ! m_canvas )
+        return;
+    
     switch( buttonId )
     {
         case KarbonStyleButtonBox::None:
@@ -321,6 +327,9 @@ void KarbonStyleDocker::updateColor( const KoColor &c )
 
 void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & selectedShapes )
 {
+    if( ! m_canvas )
+        return;
+    
     Q_ASSERT( ! selectedShapes.isEmpty()  );
 
     KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
@@ -390,6 +399,9 @@ void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & se
 
 void KarbonStyleDocker::updateGradient( KoResource * item )
 {
+    if( ! m_canvas )
+        return;
+    
     resetColorCommands();
     
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( item );
@@ -458,6 +470,9 @@ void KarbonStyleDocker::updateGradient( KoResource * item )
 
 void KarbonStyleDocker::updatePattern( KoResource * item )
 {
+    if( ! m_canvas )
+        return;
+    
     resetColorCommands();
     
     KoPattern * pattern = dynamic_cast<KoPattern*>( item );
