@@ -137,7 +137,6 @@ ElementType SubSupElement::elementType() const
 
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
-    kDebug() << "Element type is " << elementType();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) { 

@@ -45,7 +45,7 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
     BasicElement::paint(painter, am); // For debugging
     QPen pen;
-    pen.setWidth( 1 );
+    pen.setWidth( m_lineThickness );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
 }
@@ -58,7 +58,11 @@ void RootElement::layout( const AttributeManager* am )
     if( m_radicand->height() > symbolHeight*1.3 ) symbolHeight = m_radicand->height();
     symbolHeight += thinSpace;
     double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
-    double linethickness = 1;
+
+    Length length;
+    length.unit = Length::Em;
+    length.value = 0.1;
+    m_lineThickness = am->lengthToPixels(length, this, QString());
 
     // The root symbol an xOffset and yOffset due to the exponent.
     double xOffset = m_exponent->width() - tickWidth/2;
@@ -77,10 +81,10 @@ void RootElement::layout( const AttributeManager* am )
 
     // Draw the actual root symbol to a path as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( xOffset+linethickness, yOffset +  2.0 * symbolHeight / 3.0 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + symbolHeight - linethickness/2 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + linethickness/2 );
-    m_rootSymbol.lineTo( width()-linethickness/2, yOffset +linethickness/2);
+    m_rootSymbol.moveTo( xOffset+m_lineThickness, yOffset +  2.0 * symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + symbolHeight - m_lineThickness/2 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + m_lineThickness/2 );
+    m_rootSymbol.lineTo( width()-m_lineThickness/2, yOffset + m_lineThickness/2);
 }
 
 const QList<BasicElement*> RootElement::childElements()

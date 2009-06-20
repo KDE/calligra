@@ -100,6 +100,9 @@ private:
 
     /// The QPainterPath that holds the lines for the root sign   
     QPainterPath m_rootSymbol;
+
+    /// Line thickness, in pixels
+    double m_lineThickness;
 };
 
 #endif // ROOTELEMENT_H
