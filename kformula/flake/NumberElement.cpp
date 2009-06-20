@@ -18,14 +18,21 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QFontMetricsF>
+
 #include "NumberElement.h"
+#include "AttributeManager.h"
 
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void NumberElement::renderToPath( const QString& rawString, QPainterPath& path )
+QRectF NumberElement::renderToPath( const QString& rawString, QPainterPath& path )
 {
-    path.addText( path.currentPosition(), font(), rawString );
+    AttributeManager manager;
+    QFont font = manager.font(this);
+    path.addText( path.currentPosition(), font, rawString );
+    QFontMetricsF fm(font);
+    return fm.boundingRect(rawString);
 }
 
 ElementType NumberElement::elementType() const

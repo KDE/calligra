@@ -85,10 +85,10 @@ void UnderOverElement::layout( const AttributeManager* am )
     if(m_elementType != Over) {
         origin.setX( ( largestWidth - m_underElement->width())/2.0 );
 	/* Try to be smart about where to place the under */
-/*	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
+//	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
           origin.setY( origin.y() + m_baseElement->baseLine() + (accentUnder ? thinSpace/2 : thinSpace ));
-	else */
-          origin.setY( origin.y() + m_baseElement->height() + (accentUnder ? thinSpace/2 : thinSpace) ); 
+//	else 
+//          origin.setY( origin.y() + m_baseElement->height() + (accentUnder ? thinSpace/2 : thinSpace) ); 
         m_underElement->setOrigin( origin );
         setHeight( origin.y() + m_underElement->height() );
     } else {

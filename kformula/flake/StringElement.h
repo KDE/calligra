@@ -34,7 +34,7 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-    void renderToPath( const QString& raw, QPainterPath& path );
+    QRectF renderToPath( const QString& raw, QPainterPath& path );
 };
 
 #endif // STRINGELEMENT_H

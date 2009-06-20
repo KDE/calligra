@@ -27,7 +27,7 @@
 /**
  * @short Implementation of the MathML mglyph element
  *
- * GlyphElement uses the the QT font database classes to load the additional fonts to
+ * GlyphElement uses the Qt font database classes to load the additional fonts to
  * display its contents.
  */
 class KOFORMULA_EXPORT GlyphElement : public TokenElement {
@@ -39,7 +39,10 @@ public:
     ElementType elementType() const;
 
     /// Process @p raw and render it to @p path
-    void renderToPath( const QString& raw, QPainterPath& path );
+    QRectF renderToPath( const QString& raw, QPainterPath& path );
+
+    /// get width of character, for layouting
+    double getWidth(const AttributeManager *am);
 
 private:
     bool readMathMLAttributes( const KoXmlElement& element );

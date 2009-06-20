@@ -209,11 +209,11 @@ double AttributeManager::parseUnit( const QString& value,
         return 0;
     if(!unit.isEmpty()) {
         if (unit.compare("em", Qt::CaseInsensitive) == 0) {
-            QFontMetrics fm(font(element));
+            QFontMetricsF fm(font(element));
             return fm.height() * number;
         }
         else if (unit.compare("ex", Qt::CaseInsensitive) == 0) {
-            QFontMetrics fm(font(element));
+            QFontMetricsF fm(font(element));
             return fm.xHeight() * number;
         }
     }
@@ -316,7 +316,7 @@ double AttributeManager::maxWidthOfChildren( BasicElement* element ) const
 }
 double AttributeManager::parseMathSpace( const QString& value, BasicElement *element )  const
 {
-    QFontMetrics fm(font(element));
+    QFontMetricsF fm(font(element));
     qreal conversionEmToPixels = fm.xHeight();
 
     if( value == "negativeveryverythinmathspace" )

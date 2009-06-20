@@ -95,7 +95,7 @@ public:
     double cursorOffset( const FormulaCursor* cursor ) const;
 
     /// Process @p raw and render it to @p path
-    virtual void renderToPath( const QString& raw, QPainterPath& path ) = 0;
+    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) = 0;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
@@ -119,6 +119,8 @@ private:
 
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;
+    /// x offset for painting the path
+    qreal m_xoffset;
 };
 
 #endif // TOKENELEMENT_H

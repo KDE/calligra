@@ -50,7 +50,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     // set the painter to foreground color and paint the text in the content path
     painter.setPen( am->colorOf( "mathcolor", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
-    painter.translate( 0, baseLine() );
+    painter.translate( m_xoffset, baseLine() );
     painter.drawPath( m_contentPath );
 }
 
@@ -58,34 +58,56 @@ void TokenElement::layout( const AttributeManager* am )
 {
     // Query the font to use
     m_font = am->font( this );
+    QFontMetricsF fm(m_font);
 
     // save the token in an empty path
     m_contentPath = QPainterPath();
 
-    // replace all the object replacement characters with glyphs
-    if(m_glyphs.isEmpty())//optimize for the common case
- 	    renderToPath(m_rawString, m_contentPath);
-    else {
+    /* Current bounding box.  Note that the left can be negative, for italics etc */
+    QRectF boundingrect;
+    if(m_glyphs.isEmpty()) {//optimize for the common case
+        boundingrect = renderToPath(m_rawString, m_contentPath);
+     } else {
+        // replace all the object replacement characters with glyphs
+ 	// We have to keep track of the bounding box at all times
         QString chunk;
         int counter = 0;
         for( int i = 0; i < m_rawString.length(); i++ ) {
             if( m_rawString[ i ] != QChar::ObjectReplacementCharacter )
                 chunk.append( m_rawString[ i ] );
             else {
-                renderToPath( chunk, m_contentPath );
-                m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
+                m_contentPath.moveTo(boundingrect.right(), 0);
+                QRectF newbox = renderToPath( chunk, m_contentPath );
+                boundingrect.setRight( boundingrect.right() + newbox.right());
+                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
+                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+
+                m_contentPath.moveTo(boundingrect.right(), 0);
+                newbox = m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
+                boundingrect.setRight( boundingrect.right() + newbox.right());
+                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
+                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+
                 counter++;
                 chunk.clear();
             }
+            if( !chunk.isEmpty() ) {
+                m_contentPath.moveTo(boundingrect.right(), 0);
+                QRectF newbox = renderToPath( chunk, m_contentPath );
+                boundingrect.setRight( boundingrect.right() + newbox.right());
+                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
+                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+            }
         }
-        if( !chunk.isEmpty() )
-            renderToPath( chunk, m_contentPath );
     } 
-    // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
+    //The left side may be negative, because of italised letters etc. we need to adjust for this when painting
+    //The qMax is just incase.  The bounding box left should never be >0
+    m_xoffset = qMax(-boundingrect.left(), (qreal)0.0);
+    // As the text is added to (0,0) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
-    setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
-    setWidth( m_contentPath.boundingRect().right() );
-    setHeight( m_contentPath.boundingRect().height() );
+    setBaseLine( -boundingrect.y() ); // set baseline accordingly
+    setWidth( boundingrect.right() + m_xoffset );
+    setHeight( boundingrect.height() );
 }
 
 void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
