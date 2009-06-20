@@ -57,6 +57,18 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
 
 void FractionElement::layout( const AttributeManager* am )
 {
+    
+    // get values of all attributes
+    QString value = am->findValue( "linethickness", this );
+    if(value == "thick")
+        m_lineThickness = 2;
+    else if(value == "medium")
+        m_lineThickness = 1;
+    else if(value == "thin")
+        m_lineThickness = 0.5;
+    else
+         m_lineThickness = am->parseUnit( value, this );
+
     // decide which layout is wanted
     if( am->boolOf( "bevelled", this ) )
     {
@@ -64,8 +76,6 @@ void FractionElement::layout( const AttributeManager* am )
         return;
     }
 
-    // get values of all attributes
-    m_lineThickness = am->doubleOf( "linethickness", this );
     double distY = am->layoutSpacing( this );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this );

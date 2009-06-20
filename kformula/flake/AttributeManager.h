@@ -169,7 +169,6 @@ public:
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );
 
-private:
     /// @return The parsed the @p value into a Qt::PenStyle
     Qt::PenStyle parsePenStyle( const QString& value ) const;
 
