@@ -63,21 +63,24 @@ void TokenElement::layout( const AttributeManager* am )
     m_contentPath = QPainterPath();
 
     // replace all the object replacement characters with glyphs
-    QString chunk;
-    int counter = 0;
-    for( int i = 0; i < m_rawString.length(); i++ ) {
-        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter )
-            chunk.append( m_rawString[ i ] );
-        else {
-            renderToPath( chunk, m_contentPath );
-            m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
-            counter++;
-            chunk.clear();
+    if(m_glyphs.isEmpty())//optimize for the common case
+ 	    renderToPath(m_rawString, m_contentPath);
+    else {
+        QString chunk;
+        int counter = 0;
+        for( int i = 0; i < m_rawString.length(); i++ ) {
+            if( m_rawString[ i ] != QChar::ObjectReplacementCharacter )
+                chunk.append( m_rawString[ i ] );
+            else {
+                renderToPath( chunk, m_contentPath );
+                m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
+                counter++;
+                chunk.clear();
+            }
         }
-    }
-    if( !chunk.isEmpty() )
-        renderToPath( chunk, m_contentPath );
-
+        if( !chunk.isEmpty() )
+            renderToPath( chunk, m_contentPath );
+    } 
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
     setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
