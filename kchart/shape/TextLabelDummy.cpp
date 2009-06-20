@@ -18,6 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #include "TextLabelDummy.h"
 
 void TextLabelDummy::paint( QPainter&, const KoViewConverter& )

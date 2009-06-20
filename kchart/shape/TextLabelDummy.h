@@ -18,10 +18,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #ifndef TEXTLABELDUMMY_H
 #define TEXTLABELDUMMY_H
 
+
 #include <KoShape.h>
+
 
 class TextLabelDummy : public KoShape
 {
