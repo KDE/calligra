@@ -191,16 +191,10 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     }
 
     m_tool->activate( false );
-
-    emit activated();
-    emit pageChanged( m_animationDirector->currentPage(), m_animationDirector->numStepsInPage() );
-    emit stepChanged( m_animationDirector->currentStep() );
 }
 
 void KPrViewModePresentation::deactivate()
 {
-    emit deactivated();
-
     KoPAPageBase * page = m_view->activePage();
     if ( m_endOfSlideShowPage ) {
         if ( page == m_endOfSlideShowPage ) {
@@ -257,47 +251,12 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
     return m_animationDirector;
 }
 
-int KPrViewModePresentation::numPages() const
-{
-    Q_ASSERT( 0 != m_animationDirector );
-    return m_animationDirector ? m_animationDirector->numPages() : -1;
-}
-
-int KPrViewModePresentation::currentPage() const
-{
-    Q_ASSERT( 0 != m_animationDirector );
-    return m_animationDirector ? m_animationDirector->currentPage() : -1;
-}
-
-int KPrViewModePresentation::numStepsInPage() const
-{
-    Q_ASSERT( 0 != m_animationDirector );
-    return m_animationDirector ? m_animationDirector->numStepsInPage() : -1;
-}
-
-int KPrViewModePresentation::currentStep() const
-{
-    Q_ASSERT( 0 != m_animationDirector );
-    return m_animationDirector ? m_animationDirector->currentStep() : -1;
-}
-
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    Q_ASSERT( 0 != m_animationDirector );
-    if ( 0 == m_animationDirector ) {
-      return;
-    }
-    int previousPage = m_animationDirector->currentPage();
     bool finished = m_animationDirector->navigate( navigation );
     if ( m_pvAnimationDirector ) {
         finished = m_pvAnimationDirector->navigate( navigation ) && finished;
     }
-
-    int newPage = m_animationDirector->currentPage();
-    if ( previousPage != newPage ) {
-        emit pageChanged( newPage, m_animationDirector->numStepsInPage() );
-    }
-    emit stepChanged( m_animationDirector->currentStep() );
 
     if ( finished ) {
         activateSavedViewMode();
@@ -306,15 +265,8 @@ void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigat
 
 void KPrViewModePresentation::navigateToPage( int index )
 {
-    Q_ASSERT( 0 != m_animationDirector );
-    if ( 0 == m_animationDirector ) {
-      return;
-    }
     m_animationDirector->navigateToPage( index );
     if ( m_pvAnimationDirector ) {
         m_pvAnimationDirector->navigateToPage( index );
     }
-
-    emit pageChanged( m_animationDirector->currentPage(), m_animationDirector->numStepsInPage() );
-    emit stepChanged( m_animationDirector->currentStep() );
 }

@@ -279,7 +279,6 @@ KPrCustomSlideShows* KPrDocument::customSlideShows()
 void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
 {
     m_customSlideShows = replacement;
-    emit customSlideShowsModified();
 }
 
 int KPrDocument::presentationMonitor()
@@ -319,10 +318,7 @@ QString KPrDocument::activeCustomSlideShow() const
 
 void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
 {
-    if ( customSlideShow != m_activeCustomSlideShow ) {
-        m_activeCustomSlideShow = customSlideShow;
-        emit activeCustomSlideShowChanged( customSlideShow );
-    }
+    m_activeCustomSlideShow = customSlideShow;
 }
 
 #include "KPrDocument.moc"

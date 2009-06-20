@@ -27,7 +27,6 @@
 #include <KoPAView.h>
 
 class KPrDocument;
-class KPrViewAdaptor;
 class KPrViewModeNotes;
 class KPrViewModePresentation;
 class KPrViewModePresenterView;
@@ -43,48 +42,13 @@ public:
 
     virtual KoViewConverter * viewConverter( KoPACanvas * canvas);
 
-    /**
-     * Get the document object the view was initialised with
-     */
-    KPrDocument * kprDocument() const;
-
-    /**
-     * Get the view's dbus adaptor
-     */
-    virtual KPrViewAdaptor * dbusObject() const;
-
-    /**
-     * Get the presentation view mode
-     */
-    KPrViewModePresentation * presentationMode() const;
-
-    /**
-     * Find whether the presentation view mode is active
-     */
-    bool isPresentationRunning() const;
-
-
-public slots:
-    /**
-     * Activate the presentation view mode
-     */
-    void startPresentation();
-
-    /**
-     * Activate the presentation view mode from the first slide
-     */
-    void startPresentationFromBeginning();
-
-    /**
-     * Stop the presentation and activate the previously active view mode.
-     */
-    void stopPresentation();
-
 protected:
     void initGUI();
     void initActions();
 
 protected slots:
+    void startPresentation();
+    void startPresentationFromBeginning();
     void createAnimation();
     void showNormal();
     void showNotes();
@@ -102,8 +66,6 @@ private:
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
     KPrViewModeNotes *m_notesMode;
-
-    KPrViewAdaptor *m_dbus;
 };
 
 #endif /* KPRVIEW_H */
