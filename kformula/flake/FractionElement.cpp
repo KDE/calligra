@@ -57,7 +57,7 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
 
 void FractionElement::layout( const AttributeManager* am )
 {
-    
+    kDebug() << "Fraction - numerator: " << m_numerator->width() << " denominator: " << m_denominator->width();
     // get values of all attributes
     QString value = am->findValue( "linethickness", this );
     if(value == "thick")
@@ -83,6 +83,7 @@ void FractionElement::layout( const AttributeManager* am )
     // align the numerator and the denominator
     QPointF numeratorOrigin;
     QPointF denominatorOrigin( 0.0, m_numerator->height() + m_lineThickness + 2*distY );
+    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + m_lineThickness*2 );
     
     if( numalign == Right )
         numeratorOrigin.setX( width() - m_numerator->width() - m_lineThickness );
@@ -102,8 +103,6 @@ void FractionElement::layout( const AttributeManager* am )
     m_fractionLine = QLineF( QPointF( m_lineThickness, fractionLineY ),
                              QPointF( width()-m_lineThickness, fractionLineY ) );
 
-    // set the values of this fraction's bounding rectangle
-    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + m_lineThickness*2 );
     setHeight( m_numerator->height() + m_denominator->height() +
                m_lineThickness + 2*distY );
     setBaseLine( denominatorOrigin.y() ); 
