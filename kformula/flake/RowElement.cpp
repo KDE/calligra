@@ -62,6 +62,7 @@ void RowElement::layout( const AttributeManager* am )
     setWidth( width );
     setHeight( topToBaseline + baselineToBottom );
     setBaseLine( topToBaseline );
+    setChildrenBoundingRect(QRectF(0,0, width, height()));
 }
 
 void RowElement::stretch()
@@ -73,8 +74,7 @@ void RowElement::stretch()
         //Set the origin.  Note that we ignore the baseline and center the object
         //vertically
         //I think we need to FIXME for symmetric situations or something?
-        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), (height() - tmpElement->height())/2 ));
-//        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), baseLine() - tmpElement->baseLine()));
+        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), childrenBoundingRect().y() + (childrenBoundingRect().height() - tmpElement->height())/2 ));
     }
 }
 const QList<BasicElement*> RowElement::childElements()

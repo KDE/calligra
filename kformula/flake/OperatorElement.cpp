@@ -87,7 +87,7 @@ void OperatorElement::stretch()
     }
     if(m_stretchVertically) {
         //FIXME - take into account maximum stretch size
-        qreal newHeight = parentElement()->height();
+        qreal newHeight = parentElement()->childrenBoundingRect().height();
         qreal newBaseLine = baseLine() * newHeight / height();
         setBaseLine( newBaseLine );
         setHeight( newHeight );

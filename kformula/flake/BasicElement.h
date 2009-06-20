@@ -152,6 +152,12 @@ public:
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
 
+    /// @return The bounding rectangle of the children, relative to the element
+    const QRectF& childrenBoundingRect() const;
+
+    /// Set the bounding rectangle of the children, relative to the element
+    void setChildrenBoundingRect(const QRectF &rect);
+
     /// Set the element's baseline to @p baseLine
     void setBaseLine( double baseLine );
 
@@ -229,10 +235,15 @@ private:
 
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
+    /** The boundingRect storing the childrens element's width, height, x and y
+     *  The bottomRight hand corner will always be small that then size of
+     *  m_boundingRect
+     */
+    QRectF m_childrenBoundingRect;
 
     /// The position of our base line from the upper border
     double m_baseLine;
-   
+
     /// Factor with which this element is scaled down by
     double m_scaleFactor;
 

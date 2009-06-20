@@ -189,7 +189,16 @@ const QRectF& BasicElement::boundingRect() const
 {
     return m_boundingRect;
 }
-
+const QRectF& BasicElement::childrenBoundingRect() const
+{
+    return m_childrenBoundingRect;
+}
+void BasicElement::setChildrenBoundingRect(const QRectF &rect)
+{
+    m_childrenBoundingRect = rect;
+    Q_ASSERT(m_childrenBoundingRect.bottom() <= m_boundingRect.height());
+    Q_ASSERT(m_childrenBoundingRect.right() <= m_boundingRect.width());
+}
 double BasicElement::height() const
 {
     return m_boundingRect.height();

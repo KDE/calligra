@@ -53,14 +53,19 @@ void SquareRootElement::layout( const AttributeManager* am )
     m_lineThickness = am->lineThickness(this);
 
     // Set the sqrt dimensions 
-    setWidth( tickWidth + width() + thinSpace );
-    setHeight( height() + thinSpace );
-    setBaseLine( baseLine() + thinSpace );
-   
+    QPointF childOffset( tickWidth + thinSpace, thinSpace + m_lineThickness );
+
+    setWidth( width() + childOffset.x());
+    setHeight( height() + childOffset.y());
+    setBaseLine( baseLine() + childOffset.y());
+
     // Adapt the children's positions to the new offset
-    QPointF childOffset( tickWidth + thinSpace, thinSpace );
-    foreach( BasicElement* element, childElements() ) 
+    foreach( BasicElement* element, childElements() )
         element->setOrigin( element->origin() + childOffset );
+
+    QRectF rect = childrenBoundingRect();
+    rect.setTopLeft(childOffset);
+    setChildrenBoundingRect(rect);
 
     // Draw the sqrt symbol into a QPainterPath as buffer
     m_rootSymbol = QPainterPath();
