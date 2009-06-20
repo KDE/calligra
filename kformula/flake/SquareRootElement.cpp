@@ -35,7 +35,7 @@ void SquareRootElement::paint( QPainter& painter, AttributeManager* am )
 {
     BasicElement::paint(painter, am);
     QPen pen;
-    pen.setWidth( 1 );
+    pen.setWidth( m_lineThickness );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
 }
@@ -44,15 +44,16 @@ void SquareRootElement::layout( const AttributeManager* am )
 {
     RowElement::layout( am );
 
-    kDebug(39001) << "Width: " << width();
-    kDebug(39001) << "Height: " << height();
-
     double thinSpace = am->layoutSpacing( this );
-    double linethickness = 1;
     double symbolHeight = baseLine();
     if( height() > symbolHeight*1.3 ) symbolHeight = height();
     symbolHeight += thinSpace;
     double tickWidth = symbolHeight / 3.0;
+
+    Length length;
+    length.unit = Length::Em;
+    length.value = 0.1;
+    m_lineThickness = am->lengthToPixels(length, this, QString());
 
     // Set the sqrt dimensions 
     setWidth( tickWidth + width() + thinSpace );
@@ -61,15 +62,15 @@ void SquareRootElement::layout( const AttributeManager* am )
    
     // Adapt the children's positions to the new offset
     QPointF childOffset( tickWidth + thinSpace, thinSpace );
-    foreach( BasicElement* element, childElements() )
+    foreach( BasicElement* element, childElements() ) 
         element->setOrigin( element->origin() + childOffset );
 
     // Draw the sqrt symbol into a QPainterPath as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( linethickness, 2.0 * symbolHeight / 3.0 );
-    m_rootSymbol.lineTo( 0 + tickWidth/2.0, symbolHeight-linethickness/2 );
-    m_rootSymbol.lineTo( 0 + tickWidth, linethickness/2 );
-    m_rootSymbol.lineTo( width() - linethickness/2, linethickness/2 );
+    m_rootSymbol.moveTo( m_lineThickness, 2.0 * symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( 0 + tickWidth/2.0, symbolHeight-m_lineThickness/2 );
+    m_rootSymbol.lineTo( 0 + tickWidth, m_lineThickness/2 );
+    m_rootSymbol.lineTo( width() - m_lineThickness/2, m_lineThickness/2 );
 
 }
 
