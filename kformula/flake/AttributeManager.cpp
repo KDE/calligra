@@ -211,11 +211,17 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
     }
 }
 
+double AttributeManager::lineThickness( const BasicElement* element ) const
+{
+    QFontMetricsF fm(font(element));
+    return fm.height() * 0.05 ;
+}
+
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
 {
-    // return a thinmathspace which is a good value for layouting
     QFontMetricsF fm(font(element));
-    return fm.height() * 0.166667 ;
+//    return fm.height() * 0.166667 ;
+    return fm.height() * 0.05 ;
 }
 
 double AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const

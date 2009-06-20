@@ -59,10 +59,7 @@ void RootElement::layout( const AttributeManager* am )
     symbolHeight += thinSpace;
     double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
 
-    Length length;
-    length.unit = Length::Em;
-    length.value = 0.1;
-    m_lineThickness = am->lengthToPixels(length, this, QString());
+    m_lineThickness = am->lineThickness(this);
 
     // The root symbol an xOffset and yOffset due to the exponent.
     double xOffset = m_exponent->width() - tickWidth/2;

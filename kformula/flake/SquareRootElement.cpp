@@ -50,10 +50,7 @@ void SquareRootElement::layout( const AttributeManager* am )
     symbolHeight += thinSpace;
     double tickWidth = symbolHeight / 3.0;
 
-    Length length;
-    length.unit = Length::Em;
-    length.value = 0.1;
-    m_lineThickness = am->lengthToPixels(length, this, QString());
+    m_lineThickness = am->lineThickness(this);
 
     // Set the sqrt dimensions 
     setWidth( tickWidth + width() + thinSpace );

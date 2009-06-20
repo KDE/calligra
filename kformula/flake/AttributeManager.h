@@ -167,6 +167,8 @@ public:
      */
     int scriptLevel( const BasicElement* parent, int index ) const;
     
+    /// @return Line thickness for mfrac, mroot etc lines
+    double lineThickness( const BasicElement* element ) const;
 
     /// @return A value used for spacing tasks during layouting
     double layoutSpacing( const BasicElement* element ) const;
