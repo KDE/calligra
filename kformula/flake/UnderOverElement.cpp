@@ -63,19 +63,26 @@ void UnderOverElement::layout( const AttributeManager* am )
     double thinSpace   = am->layoutSpacing( this );
     double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
     double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
+    
+    // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
+    bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
+    bool overStretchy  = m_elementType == Under || am->boolOf( "stretchy", m_overElement );
+    bool baseStretchy  = (underStretchy && overStretchy) || am->boolOf( "stretchy", m_baseElement );  //For sanity, make sure at least one is not stretchy
 
-    double largestWidth = m_baseElement->width();
-    if(m_elementType != Over)
+    double largestWidth = 0;
+    if(!baseStretchy)
+        largestWidth = m_baseElement->width();
+
+    if(m_elementType != Over && !underStretchy)
         largestWidth = qMax( m_underElement->width(), largestWidth );
-    if(m_elementType != Under)
-    largestWidth = qMax( m_overElement->width(), largestWidth );
+    if(m_elementType != Under && !overStretchy)
+        largestWidth = qMax( m_overElement->width(), largestWidth );
 
     QPointF origin(0.0,0.0);
     if(m_elementType != Under) {
-        origin.setY(( largestWidth - m_overElement->width() ) / 2.0 ) ;
+        origin.setX(( largestWidth - m_overElement->width() ) / 2.0 ) ;
         m_overElement->setOrigin( origin );
-
-        origin.setY( ( accent && m_overElement->height() != 0 ) ? thinSpace/2 : thinSpace );
+        origin.setY( m_overElement->height() );
     }
 
     origin.setX( ( largestWidth - m_baseElement->width() ) / 2.0 );
@@ -86,9 +93,9 @@ void UnderOverElement::layout( const AttributeManager* am )
         origin.setX( ( largestWidth - m_underElement->width())/2.0 );
 	/* Try to be smart about where to place the under */
 //	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
-          origin.setY( origin.y() + m_baseElement->baseLine() + (accentUnder ? thinSpace/2 : thinSpace ));
+//          origin.setY( origin.y() + m_baseElement->baseLine() );
 //	else 
-//          origin.setY( origin.y() + m_baseElement->height() + (accentUnder ? thinSpace/2 : thinSpace) ); 
+          origin.setY( origin.y() + m_baseElement->height()); 
         m_underElement->setOrigin( origin );
         setHeight( origin.y() + m_underElement->height() );
     } else {
