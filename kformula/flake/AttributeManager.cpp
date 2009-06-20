@@ -214,7 +214,7 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
 double AttributeManager::lineThickness( const BasicElement* element ) const
 {
     QFontMetricsF fm(font(element));
-    return fm.height() * 0.05 ;
+    return fm.height() * 0.06 ;
 }
 
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
