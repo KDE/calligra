@@ -53,8 +53,8 @@ void FormulaRenderer::layoutElement( BasicElement* element )
     int i = 0;
     element->setDisplayStyle( m_attributeManager->boolOf("displaystyle", element));
     foreach( BasicElement* tmp, element->childElements() ) {
-	qreal scale = m_attributeManager->scriptLevelScaling( element, i++ ); 
-        tmp->setScaleFactor( scale );
+	int scale = m_attributeManager->scriptLevel( element, i++ ); 
+        tmp->setScaleLevel( scale );
         layoutElement( tmp );              // first layout all children
     }
     element->layout( m_attributeManager );      // actually layout the element

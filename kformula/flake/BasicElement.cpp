@@ -32,6 +32,7 @@
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
     m_scaleFactor = 1.0;
+    m_scaleLevel = 1;
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
     m_boundingRect.setWidth( 7.0 );       // standard values
     m_boundingRect.setHeight( 10.0 );
@@ -211,6 +212,10 @@ double BasicElement::scaleFactor() const
 {
     return m_scaleFactor;
 }
+int BasicElement::scaleLevel() const
+{
+    return m_scaleLevel;
+}
 
 void BasicElement::setWidth( double width )
 {
@@ -237,9 +242,15 @@ void BasicElement::setParentElement( BasicElement* parent )
     m_parentElement = parent;
 }
 
-void BasicElement::setScaleFactor( double scaleFactor )
+void BasicElement::setScaleLevel( int scaleLevel )
 {
-    m_scaleFactor = scaleFactor;
+    if(scaleLevel == m_scaleLevel) return;
+
+    m_scaleLevel =  qMax(scaleLevel, 0);
+    int level = scaleLevel;
+    m_scaleFactor = 1.9;
+    while(level-- > 0)  //raise multiplier to the power of level
+        m_scaleFactor *= 0.71;
 }
 
 bool BasicElement::displayStyle() const

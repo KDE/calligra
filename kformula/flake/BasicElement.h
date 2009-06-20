@@ -155,11 +155,15 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
-    /// Set the element's m_scaleFactor to @p scaleFactor
-    void setScaleFactor( double scaleFactor );
-
     /// @return The elements scale factor
     double scaleFactor() const;
+
+    /// Set the elements scale level and sets the scale factor
+    void setScaleLevel( int scaleLevel );
+
+    /// @return The elements scale level
+    int scaleLevel() const;
+
 
     /**
      * Set an attribute's value
@@ -215,8 +219,11 @@ private:
     /// The position of our base line from the upper border
     double m_baseLine;
    
-    /// Factor with which this element is scaled down
+    /// Factor with which this element is scaled down by
     double m_scaleFactor;
+
+    /// Scale level with which this element is scaled down by
+    double m_scaleLevel;
 
     /// Indicates whether this element has displaystyle set
     bool m_displayStyle;

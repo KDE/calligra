@@ -129,54 +129,61 @@ QList<Qt::PenStyle> AttributeManager::penStyleListOf( const QString& attribute,
     return penStyleList;
 }
 
-double AttributeManager::scriptLevelScaling( const BasicElement* parent, int index ) const
+int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
 {
-    double current_scaling = parent->scaleFactor();
-    double multiplier = doubleOf( "scriptsizemultiplier", parent );
-    if( multiplier == 0.0 )
-        multiplier = 0.71;
-
     ElementType parentType = parent->elementType();
+    int current_scaleLevel = parent->scaleLevel();
 
     /** First check for types where all children are scaled */
-    if( parentType == Fraction && parent->displayStyle() == false )
-        return multiplier*current_scaling;
-
-    if( index == 0) return current_scaling;
-    /** Now check for types where the first child isn't scaled, but the rest are */
-    if( parentType == SubScript || parentType == SupScript || parentType == SubSupScript )
-        return multiplier * current_scaling;
-
-    return current_scaling;
-/* 
-    ElementType parentType = element->parentElement()->elementType();
-    if( element->elementType() == Formula ) // Outermost element has scriptlevel 0
-        return 1.0;
-    else if( parentType == Fraction && displayStyle == false )
-        return multiplier;
-    else if( parentType == Sub || parentType == Sup || parentType == SubSup )
-        return multiplier;
-    else if( parentType == Under && accentunder == false )
-    else if( parentType == Over && accent == false )
-    else if( parentType == UnderOver && accent == false && is over )
-        return multiplier;
-    else if( parentType == UnderOver && accentunder == false && is under )
-        return multiplier;
-    else if( parentType == MultiScript )
-        return multiplier ^ ;
-    else if( parentType == Root && element->childElements().indexOf( element ) ==  )
-        return multiplier ^ ;
-    else if( parentType == Table )
-        return multiplier ^ ;
-    else if( element->elementType() == Style ) {
-        QString tmp = element->attribute( "scriptlevel" );
-        if( tmp.startsWith( "+" ) || tmp.startsWith( "-" ) )
-            return multiplier^tmp.remove( 0, 1 ).toInt()
-        else
-            return multiplier^tmp.toInt() / element->parentElement()->scaleFactor(); 
+    switch(parentType) {
+        case Fraction:
+            if( parent->displayStyle() == false )
+                return current_scaleLevel+1;
+	    else 
+		return current_scaleLevel;
+	case Style: {
+            QString tmp = parent->attribute( "scriptlevel" );
+            if( tmp.startsWith( '+' ) )
+		    return current_scaleLevel + tmp.remove(0,1).toInt();
+	    if( tmp.startsWith( '-' ) )
+		    return current_scaleLevel - tmp.remove(0,1).toInt();
+            return tmp.toInt(); 
+	}
+	case MultiScript:
+	    return current_scaleLevel + 1;
+	case Table:
+	    return current_scaleLevel + 1;
+	default:
+	    break;
     }
-    eilse
-        return 1.0; */
+    if( index == 0) return current_scaleLevel;
+    /** Now check for types where the first child isn't scaled, but the rest are */
+    switch(parentType) {
+	    case SubScript:
+	    case SupScript:
+	    case SubSupScript:
+        	return current_scaleLevel + 1;
+	    case Under:
+		if( boolOf("accentunder", parent) )
+	    	    return current_scaleLevel + 1;
+		else
+	    	    return current_scaleLevel;
+	    case Over:
+		if( boolOf("accent", parent) )
+	    	    return current_scaleLevel + 1;
+		else
+	    	    return current_scaleLevel;
+	    case UnderOver:
+		if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) ) 
+	    	    return current_scaleLevel + 1;
+		else
+	    	    return current_scaleLevel;
+	    case Root:
+		/* second argument to root is the base */
+	        return current_scaleLevel + 1;
+            default:
+	    	return current_scaleLevel;
+    }
 }
 
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
