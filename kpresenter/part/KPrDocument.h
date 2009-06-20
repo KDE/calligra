@@ -130,6 +130,21 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+signals:
+    /**
+     * Emitted when the active custom slide show changes.
+     * This is to allow for signalling dbus interfaces.
+     *
+     * @param customSlideShow the new active custom slide show
+     */
+    void activeCustomSlideShowChanged( const QString &customSlideShow );
+
+    /**
+     * Emitted when the custom slide shows have been modified.
+     * This is to allow for signalling dbus interfaces.
+     */
+    void customSlideShowsModified();
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );

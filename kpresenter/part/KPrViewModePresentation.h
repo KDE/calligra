@@ -32,6 +32,8 @@ class KPrEndOfSlideShowPage;
 
 class KPrViewModePresentation : public KoPAViewMode
 {
+    Q_OBJECT
+
 public:
     KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
     ~KPrViewModePresentation();
@@ -73,12 +75,67 @@ public:
     KPrAnimationDirector * animationDirector();
 
     /**
+     * Get the number of pages.
+     *
+     * This assumes that the presentation is active.
+     */
+    int numPages() const;
+
+    /**
+     * Get the current page number.
+     *
+     * This assumes that the presentation is active.
+     */
+    int currentPage() const;
+
+    /**
+     * Get the number of steps in this page.
+     *
+     * This assumes that the presentation is active.
+     */
+    int numStepsInPage() const;
+
+    /**
+     * get the current step.
+     *
+     * This assumes that the presentation is active.
+     */
+    int currentStep() const;
+
+    /**
      * Navigate in the presentation.
      */
     void navigate( KPrAnimationDirector::Navigation navigation );
 
     void navigateToPage( int index );
     void blackPresentation();
+
+signals:
+
+    /**
+     * Emitted when the presentation is activated.
+     */
+    void activated();
+
+    /**
+     * Emitted when the presentation is about to be deactivated.
+     */
+    void deactivated();
+
+    /**
+     * Emitted when the page changes.
+     *
+     * @param page new page index within the current slideshow
+     * @param stepsInPage the number of steps in the new page
+     */
+    void pageChanged( int page, int stepsInPage );
+
+    /**
+     * Emitted when the step changes.
+     *
+     * @param step new step index within the page
+     */
+    void stepChanged( int step );
 
 protected:
     KoPAViewMode * m_savedViewMode;
