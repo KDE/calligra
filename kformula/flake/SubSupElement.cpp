@@ -23,12 +23,14 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
+#include <kdebug.h>
 
-SubSupElement::SubSupElement( BasicElement* parent ) : BasicElement( parent )
+SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
     m_subScript = new BasicElement( this );
     m_superScript = new BasicElement( this );
+    m_elementType = elementType;
 }
 
 SubSupElement::~SubSupElement()
@@ -94,7 +96,12 @@ BasicElement* SubSupElement::acceptCursor( const FormulaCursor* cursor )
 const QList<BasicElement*> SubSupElement::childElements()
 {
     QList<BasicElement*> tmp;
-    return tmp << m_baseElement << m_subScript << m_superScript;
+    tmp << m_baseElement;
+    if(m_elementType != SupScript)
+        tmp << m_subScript;
+    if(m_elementType != SubScript)
+        tmp << m_superScript;
+    return tmp;
 }
 
 void SubSupElement::insertChild( FormulaCursor* cursor, BasicElement* child )
@@ -116,18 +123,21 @@ QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 
 ElementType SubSupElement::elementType() const
 {
-    if( m_subScript->elementType() != Basic &&
+     return m_elementType;
+     // Should we decide the type also on whether the user has entered text for the sup and sub parts?
+ /*    if( m_subScript->elementType() != Basic &&
         m_superScript->elementType() != Basic )
         return SubSupScript;
     else if( m_subScript->elementType() != Basic )
         return SubScript;
     else if( m_superScript->elementType() != Basic )
         return SupScript;
-    return Unknown;
+        return Unknown;*/
 }
 
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
+    kDebug() << "Element type is " << elementType();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) { 
@@ -139,7 +149,7 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_subScript->elementType() == Basic ) {
+        else if( m_subScript->elementType() == Basic && m_elementType != SupScript) {
             delete m_subScript;
             m_subScript = tmpElement;
         }

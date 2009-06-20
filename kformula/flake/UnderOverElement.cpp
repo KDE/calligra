@@ -25,11 +25,12 @@
 #include <kdebug.h>
 #include <QPainter>
 
-UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
+UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
     m_underElement = new BasicElement( this );
     m_overElement = new BasicElement( this );
+    m_elementType = elementType;
 }
 
 UnderOverElement::~UnderOverElement()
@@ -42,7 +43,12 @@ UnderOverElement::~UnderOverElement()
 const QList<BasicElement*> UnderOverElement::childElements()
 {
     QList<BasicElement*> tmp;
-    return tmp << m_baseElement << m_underElement << m_overElement;
+    tmp << m_baseElement;
+    if(m_elementType != Over)
+        tmp << m_underElement;
+    if(m_elementType != Under)
+        tmp << m_overElement;
+    return tmp;
 }
 
 void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
@@ -104,7 +110,6 @@ QString UnderOverElement::attributesDefaultValue( const QString& attribute ) con
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
-    QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) { 
@@ -116,11 +121,11 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( name.contains( "under" ) && m_underElement->elementType() == Basic ) {
+        else if( m_elementType != Over && m_underElement->elementType() == Basic ) {
             delete m_underElement;
             m_underElement = tmpElement;
         }
-        else if( name.contains( "over" ) && m_overElement->elementType() == Basic ) {
+        else if( m_overElement->elementType() == Basic ) {
             delete m_overElement;
             m_overElement = tmpElement;
         }
@@ -135,18 +140,13 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );   // Just save the children in
-    m_underElement->writeMathML( writer );  // the right order
-    m_overElement->writeMathML( writer );
+    if(m_elementType != Over)
+        m_underElement->writeMathML( writer );  // the right order
+    if(m_elementType != Under)
+        m_overElement->writeMathML( writer );
 }
 
 ElementType UnderOverElement::elementType() const
 {
-    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
-        return UnderOver;
-    else if( m_underElement->elementType() != Basic )
-        return Under;
-    else if( m_overElement->elementType() != Basic )
-        return Over;
-    else
-        return UnderOver;
+    return m_elementType;
 }

@@ -93,10 +93,18 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new FencedElement( parent );
     else if ( tagName == "menclose" )
           return new EncloseElement( parent );
-    else if ( tagName == "msub" || tagName == "msup" || tagName == "msubsup" )
-          return new SubSupElement( parent );
-    else if ( tagName == "munder" || tagName == "mover" || tagName == "munderover" )
-          return new UnderOverElement( parent );
+    else if ( tagName == "msub")
+          return new SubSupElement( parent, SubScript );
+    else if ( tagName == "msup")
+          return new SubSupElement( parent, SupScript );
+    else if ( tagName == "msubsup")
+          return new SubSupElement( parent, SubSupScript );
+    else if ( tagName == "munder")
+          return new UnderOverElement( parent, Under );
+    else if ( tagName == "mover")
+          return new UnderOverElement( parent, Over );
+    else if ( tagName == "munderover")
+          return new UnderOverElement( parent, UnderOver );
     else if ( tagName == "mmultiscripts" )
           return new MultiscriptElement( parent );
     
