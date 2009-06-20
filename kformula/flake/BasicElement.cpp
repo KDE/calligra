@@ -164,7 +164,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
 
 void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
-    foreach( QString value, m_attributes )
+    foreach( const QString &value, m_attributes )
         writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
 }
 
