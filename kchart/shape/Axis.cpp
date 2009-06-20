@@ -1370,8 +1370,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     
     Q_ASSERT( newModel );
     
-    if (    isPolar( chartType ) && !isPolar( d->plotAreaChartType )
-         || !isPolar( chartType ) && isPolar( d->plotAreaChartType ) )
+    if (    ( isPolar( chartType ) && !isPolar( d->plotAreaChartType ) )
+         || ( !isPolar( chartType ) && isPolar( d->plotAreaChartType ) ) )
     {
         foreach ( DataSet *dataSet, d->dataSets ) {
             if ( dataSet->chartType() != LastChartType ) {

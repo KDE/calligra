@@ -76,6 +76,7 @@ public slots:
     virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 
+    // The following methods are specific to the chart
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
     void setDataDirection( Qt::Orientation orientation );

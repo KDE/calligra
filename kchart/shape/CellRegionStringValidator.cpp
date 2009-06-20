@@ -56,7 +56,12 @@ CellRegionStringValidator::~CellRegionStringValidator()
 	delete d;
 }
 
-QValidator::State CellRegionStringValidator::validate( QString &string, int &pos ) const
+QValidator::State CellRegionStringValidator::validate( QString &string, 
+                                                       int &pos ) const
 {
-	return d->model->isCellRegionValid(string) ? QValidator::Acceptable : QValidator::Invalid;
+    Q_UNUSED( pos );
+
+    return d->model->isCellRegionValid(string) 
+        ? QValidator::Acceptable
+        : QValidator::Invalid;
 }

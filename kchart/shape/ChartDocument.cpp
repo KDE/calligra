@@ -114,6 +114,9 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
 
 bool ChartDocument::loadXML( const KoXmlDocument &doc, KoStore *)
 {
+    Q_UNUSED( doc );
+
+    // We don't support the old XML format any more.
     return false;
 }
 
