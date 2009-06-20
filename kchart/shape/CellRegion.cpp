@@ -386,7 +386,8 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     QPoint topLeftPoint;
     QPoint bottomRightPoint;
 
-    if ( isPoint && regionStrings.size() < 2 || !isPoint && regionStrings.size() < 3 )
+    if ( ( isPoint && regionStrings.size() < 2 )
+         || ( !isPoint && regionStrings.size() < 3 ) )
     {
         qWarning() << "1) CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
         return QVector<QRect>();

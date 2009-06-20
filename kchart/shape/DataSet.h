@@ -16,17 +16,20 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
+
 
 #ifndef KCHART_DATASET_H
 #define KCHART_DATASET_H
 
-// Local
-#include "ChartShape.h"
-#include "CellRegion.h"
 
 // Qt
 #include <QPen>
+
+// KChart
+#include "ChartShape.h"
+#include "CellRegion.h"
+
 
 namespace KChart {
 
@@ -59,10 +62,10 @@ public:
     bool showValues() const;
     bool showLabels() const;
 
-    QPen pen() const;
+    QPen   pen() const;
     QBrush brush() const;
     QColor color() const;
-    int number() const;
+    int    number() const;
 
     bool showMeanValue() const;
     QPen meanValuePen() const;
