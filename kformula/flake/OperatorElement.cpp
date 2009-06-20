@@ -41,7 +41,6 @@ QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
     qreal lSpace = manager.parseMathSpace(dict.lSpace(), this);
     path.moveTo( path.currentPosition() + QPointF( lSpace, 0.0 ) );
     QFont font = manager.font(this);
-    font.setStretch(500);
     path.addText( path.currentPosition(), font, raw );
     QFontMetricsF fm(font);
     return path.boundingRect().adjusted(0,0,lSpace+rSpace,0);
