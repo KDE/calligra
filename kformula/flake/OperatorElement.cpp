@@ -36,8 +36,8 @@ QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
     AttributeManager manager;
     m_dict.queryOperator( raw, determineOperatorForm() );
 
-    qreal rSpace = am->parseMathSpace(m_dict.rSpace(), this);
-    qreal lSpace = am->parseMathSpace(m_dict.lSpace(), this);
+    qreal rSpace = manager.parseMathSpace(m_dict.rSpace(), this);
+    qreal lSpace = manager.parseMathSpace(m_dict.lSpace(), this);
     path.moveTo( path.currentPosition() + QPointF( lSpace, 0.0 ) );
     QFont font = manager.font(this);
     path.addText( path.currentPosition(), font, raw );
