@@ -38,15 +38,10 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
     p.translate( element->origin() );          // setup painter
-    element->paint( p, m_attributeManager );   // let element paint itsself
+    element->paint( p, m_attributeManager );   // let element paint itself
 
     // eventually paint all its children
-    if( element->childElements().isEmpty() || element->elementType() == Phantom )
-    {
-        p.restore();
-        return;
-    }
-    else
+    if( !element->childElements().isEmpty() && element->elementType() != Phantom )
         foreach( BasicElement* tmpElement, element->childElements() )
             paintElement( p, tmpElement );
 
