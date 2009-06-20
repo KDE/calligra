@@ -30,14 +30,7 @@ void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path )
 {
     AttributeManager manager;
 
-    if( raw.startsWith( '&' ) && raw.endsWith( ';' ) ) {
-        Dictionary dict;
-        QChar mappedEntity = dict.mapEntity( raw );
-        kDebug(39001) << "mappenEntity: " << mappedEntity;
-        path.addText( path.currentPosition(), manager.font( this ), mappedEntity ); 
-    }
-    else
-        path.addText( path.currentPosition(), manager.font( this ), "hallo" );
+    path.addText( path.currentPosition(), manager.font( this ), "hallo" );
 }
 
 ElementType IdentifierElement::elementType() const
