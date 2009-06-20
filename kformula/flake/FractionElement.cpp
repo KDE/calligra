@@ -57,7 +57,6 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
 
 void FractionElement::layout( const AttributeManager* am )
 {
-    kDebug() << "Fraction - numerator: " << m_numerator->width() << " denominator: " << m_denominator->width();
     // get values of all attributes
     QString value = am->findValue( "linethickness", this );
     if(value == "thick")
