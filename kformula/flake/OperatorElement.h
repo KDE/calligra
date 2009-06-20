@@ -54,8 +54,6 @@ private:
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;
 
-    double parseMathSpace( const QString& value ) const;
-
 private:
     Form determineOperatorForm() const;
 };

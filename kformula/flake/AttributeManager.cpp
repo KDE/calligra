@@ -287,4 +287,40 @@ double AttributeManager::maxWidthOfChildren( BasicElement* element ) const
 
     return maxWidth; 
 }
+double AttributeManager::parseMathSpace( const QString& value, BasicElement *element )  const
+{
+    QFontMetrics fm(font(element));
+    qreal conversionEmToPixels = fm.xHeight();
+
+    if( value == "negativeveryverythinmathspace" )
+        return -1*conversionEmToPixels*0.055556;
+    else if( value == "negativeverythinmathspace" )
+        return -1*conversionEmToPixels*0.111111;
+    else if( value == "negativethinmathspace" )
+        return -1*conversionEmToPixels*0.166667;
+    else if( value == "negativemediummathspace" )
+        return -1*conversionEmToPixels*0.222222;
+    else if( value == "negativethickmathspace" )
+        return -1*conversionEmToPixels*0.277778;
+    else if( value == "negativeverythickmathspace" )
+        return -1*conversionEmToPixels*0.333333;
+    else if( value == "negativeveryverythickmathspace" )
+        return -1*conversionEmToPixels*0.388889;
+    else if( value == "veryverythinmathspace" )
+        return conversionEmToPixels*0.055556;
+    else if( value == "verythinmathspace" )
+        return conversionEmToPixels*0.111111;
+    else if( value == "thinmathspace" )
+        return conversionEmToPixels*0.166667;
+    else if( value == "mediummathspace" )
+        return conversionEmToPixels*0.222222;
+    else if( value == "thickmathspace" )
+        return conversionEmToPixels*0.277778;
+    else if( value == "verythickmathspace" )
+        return conversionEmToPixels*0.333333;
+    else if( value == "veryverythickmathspace" )
+        return conversionEmToPixels*0.388889;
+    else
+        return 0;
+}
 
