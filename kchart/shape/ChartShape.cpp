@@ -809,12 +809,12 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     if ( url.startsWith( "./" ) )
         tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
-        tmpURL = url;
+        tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url;
 
     QString path = tmpURL;
     if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
         path = store->currentDirectory();
-        if ( !path.isEmpty() )
+        if ( !path.isEmpty() && !path.endsWith( '/' ) )
             path += '/';
         QString relPath = KUrl( tmpURL ).path();
         path += relPath.mid( 1 ); // remove leading '/'
