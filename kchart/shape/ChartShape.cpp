@@ -917,7 +917,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
 
 bool ChartShape::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
-    loadOdfAttributes( element, context, OdfTransformation | OdfSize );
+    loadOdfAttributes( element, context, OdfTransformation | OdfGeometry );
     return loadOdfFrame( element, context );
 }
 
