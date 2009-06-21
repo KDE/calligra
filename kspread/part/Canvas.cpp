@@ -680,6 +680,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     // flake
     painter.restore();
     d->shapeManager->paint( painter, *viewConverter(), false );
+    painter.setRenderHint( QPainter::Antialiasing, false );
     d->toolProxy->paint( painter, *viewConverter() );
 
     event->accept();
