@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONMERGEDOCUMENTCOMMAND_H_
-#define _KARBONMERGEDOCUMENTCOMMAND_H_
+#ifndef _KARBONDOCUMENTMERGECOMMAND_H_
+#define _KARBONDOCUMENTMERGECOMMAND_H_
 
 #include <QtGui/QUndoCommand>
 
@@ -37,4 +37,4 @@ private:
     Private * const d;
 };
 
-#endif // _KARBONMERGEDOCUMENTCOMMAND_H_
+#endif // _KARBONDOCUMENTMERGECOMMAND_H_
