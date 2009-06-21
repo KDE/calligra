@@ -660,9 +660,9 @@ void Canvas::paintEvent( QPaintEvent* event )
     const QPointF offset = viewConverter()->documentToView(this->offset());
     painter.translate(-offset);
     painter.setClipRegion(event->region().translated(offset.x(), offset.y()));
+    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.save();
 
-    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     qreal zoomX, zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
