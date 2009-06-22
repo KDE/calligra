@@ -123,16 +123,16 @@ The scripting language plugins can be found in:
   koffice/lib/kross/python; and
   koffice/lib/kross/ruby.
 They install as:
-  lib/kde3/krosspython.{la,so}; and
-  lib/kde3/krossruby.{la,so}
+  lib/kde4/krosspython.{la,so}; and
+  lib/kde4/krossruby.{la,so}
 
 It is recommended to put each interpreter plugin into a separate
 package, and the user decide if they would like support for each
 language individually.
 
 For example, the Python scripting package may contain:
-  lib/kde3/krosspython.so
-  lib/kde3/krosspython.la
+  lib/kde4/krosspython.so
+  lib/kde4/krosspython.la
   share/apps/kexi/scripts/exportxhtml/ExportXHTML.py
   share/apps/kexi/scripts/exportxhtml/ExportXHTML.rc
   share/apps/kexi/scripts/importxhtml/ImportXHTML.py
@@ -143,8 +143,8 @@ For example, the Python scripting package may contain:
   share/apps/krita/scripts/reshapehisto.py
 
 and the Ruby scripting package may contain:
-  lib/kde3/krossruby.so
-  lib/kde3/krossruby.la
+  lib/kde4/krossruby.so
+  lib/kde4/krossruby.la
   share/apps/krita/scripts/ruby/invert.rb
   share/apps/krita/scripts/ruby/changecs.rb
   share/apps/krita/scripts/ruby/randompaint.rb
