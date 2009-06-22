@@ -184,6 +184,11 @@ void View::initActions()
   actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
   actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
+  m_deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+  actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
+  m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
+  connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
+  
   // Shapes menu
   KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
   actionCollection()->addAction("shapes_duplicate", actionDuplicate );
