@@ -28,7 +28,7 @@ struct Layout::Private : public KoShape {
   QString id;
     void removeDependees();
   protected:
-    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
+    virtual void shapeChanged(ChangeType type, KoShape * shape );
   private:
     // Fake
     virtual void paint(QPainter &painter, const KoViewConverter &converter) { Q_UNUSED(painter); Q_UNUSED(converter); qFatal("Shouldn't be called"); }
@@ -43,7 +43,7 @@ void Layout::Private::removeDependees() {
   }
 }
 
-void Layout::Private::notifyShapeChanged(KoShape * shape, ChangeType type) {
+void Layout::Private::shapeChanged(ChangeType type, KoShape * shape) {
   switch(type)
   {
     case PositionChanged:
