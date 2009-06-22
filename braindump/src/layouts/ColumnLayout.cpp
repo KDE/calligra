@@ -35,7 +35,7 @@ ColumnLayout::~ColumnLayout() {
 
 QRectF ColumnLayout::boundingBox() const {
   QRectF rect = Layout::boundingBox();
-  rect.adjust(-10,0,10,0);
+  rect.adjust(-10,-10,10,40);
   return rect;
 }
 
