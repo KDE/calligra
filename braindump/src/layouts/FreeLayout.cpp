@@ -22,6 +22,8 @@
 #include <klocale.h>
 #include <KoShapeContainer.h>
 
+#include <kdebug.h>
+
 FreeLayout::FreeLayout() : Layout("freelayout")
 {
 }
@@ -45,6 +47,11 @@ void FreeLayout::shapeRemoved(KoShape* ) {
 
 void FreeLayout::shapeGeometryChanged(KoShape* ) {
   updateSize();
+  kDebug() << "<moh>";
+  foreach(KoShape* _shape, shapes()) {
+    kDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
+  }
+  kDebug() << "</moh>";
 }
 
 void FreeLayout::updateSize() {

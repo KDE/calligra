@@ -21,11 +21,16 @@
 
 #include <KoShape.h>
 #include <Utils.h>
+#include <QEvent>
+#include <qcoreapplication.h>
 
 struct Layout::Private : public KoShape {
+  Private() : eventSent(false) {}
   Layout* self;
   QList<KoShape*> shapes;
   QString id;
+  QList<KoShape*> waitingList;
+  bool eventSent;
     void removeDependees();
   protected:
     virtual void shapeChanged(ChangeType type, KoShape * shape );
@@ -36,6 +41,8 @@ struct Layout::Private : public KoShape {
     virtual void saveOdf(KoShapeSavingContext & context) const { Q_UNUSED(context); qFatal("Shouldn't be called"); }
 
 };
+
+static int event_type_delayed_geometry_changed = QEvent::registerEventType();
 
 void Layout::Private::removeDependees() {
   foreach(KoShape* shape, shapes) {
@@ -52,7 +59,13 @@ void Layout::Private::shapeChanged(ChangeType type, KoShape * shape) {
     case ShearChanged:
     case SizeChanged:
     case GenericMatrixChange:
-      self->shapeGeometryChanged(shape);
+      if(not waitingList.contains(shape)) {
+        waitingList.append(shape);
+      }
+      if(not eventSent) {
+        QCoreApplication::postEvent(self, new QEvent( QEvent::Type(event_type_delayed_geometry_changed)));
+        eventSent = true;
+      }
       break;
     default:
       break;
@@ -119,6 +132,21 @@ QRectF Layout::boundingBox() const {
 
 const QList<KoShape*>& Layout::shapes() const {
   return d->shapes;
+}
+
+bool Layout::event(QEvent * e) {
+  if(e->type() == event_type_delayed_geometry_changed) {
+    Q_ASSERT(d->eventSent);
+    e->accept();
+    foreach(KoShape* shape, d->waitingList) {
+      shapeGeometryChanged(shape);
+    }
+    d->waitingList.clear();
+    d->eventSent = false;
+    return true;
+  } else {
+    return QObject::event(e);
+  }
 }
 
 #include "Layout.moc"
