@@ -38,7 +38,6 @@ public:
     QMap<QString, ToolDocker *> toolDockerMap;
     QMap<QString, bool> toolDockerVisibillityMap;
     QMap<QString, ToolDocker *> activeToolDockerMap;
-    bool tabToolDockersByDefault;
 };
 
 DockerManager::DockerManager(MainWindow *view)
@@ -49,7 +48,6 @@ DockerManager::DockerManager(MainWindow *view)
     KConfigGroup cfg = KGlobal::config()->group("KoDockerManager");
 
     QStringList strList = cfg.readEntry("StatusOfTheseToolDockers", QStringList());
-    d->tabToolDockersByDefault = cfg.readEntry("TabToolDockersByDefault", true);
 
     QStringListIterator j(strList);
     while (j.hasNext()) {
@@ -57,7 +55,7 @@ DockerManager::DockerManager(MainWindow *view)
         ToolDockerFactory toolDockerFactory(name);
         ToolDocker *td = qobject_cast<ToolDocker *>(d->view->createDockWidget(&toolDockerFactory));
         d->toolDockerMap[name] = td;
-        d->toolDockerVisibillityMap[name] = false;
+        d->toolDockerVisibillityMap[name] = true;
     }
 }
 
@@ -68,26 +66,13 @@ DockerManager::~DockerManager()
     QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
     while (j.hasNext()) {
         j.next();
-        strList += j.key();
+        if(d->toolDockerVisibillityMap[j.key()]) {
+          strList += j.key();
+        }
     }
     cfg.writeEntry("StatusOfTheseToolDockers", strList);
     cfg.sync();
     delete d;
-}
-
-void DockerManager::removeUnusedOptionWidgets()
-{
-    QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
-    while (j.hasNext()) {
-        j.next();
-        d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
-        if (!d->activeToolDockerMap.contains(j.key())) {
-            // kDebug(30004) << "removing" << j.key() << ((void*) j.value());
-            j.value()->toggleViewAction()->setVisible(false);
-            d->view->removeDockWidget(j.value());
-            d->toolDockerMap.remove(j.key());
-        }
-    }
 }
 
 void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap)
@@ -100,7 +85,8 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         j.next();
         j.value()->toggleViewAction()->setVisible(false);
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
-        d->view->removeDockWidget(j.value());
+        j.value()->setVisible(false);
+        j.value()->setEnabled(false);
     }
     d->activeToolDockerMap.clear();
 
@@ -124,6 +110,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
             d->toolDockerMap[i.value()->objectName()] = td;
             d->toolDockerVisibillityMap[i.value()->objectName()] =  true;
         }
+        td->setEnabled(true);
         td->setWindowTitle(i.key());
         td->newOptionWidget(i.value());
         d->view->restoreDockWidget(td);
