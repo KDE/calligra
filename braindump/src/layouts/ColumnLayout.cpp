@@ -73,18 +73,13 @@ void ColumnLayout::shapesGeometryChanged(const QList<KoShape*>& _shape) {
 
 bool shapeIsLessThan(KoShape* s1, KoShape* s2)
 {
-  return s1->absolutePosition(KoFlake::TopLeftCorner).y() < s2->absolutePosition(KoFlake::TopLeftCorner).y();
+  return s1->absolutePosition().y() < s2->absolutePosition().y();
 }
 
 void ColumnLayout::updateShapesPosition() {
   if(m_isUpdating) return;
   m_isUpdating = true;
   // First sort them
-  kDebug() << "<moh>";
-  foreach(KoShape* _shape, m_shapes) {
-    kDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y();
-  }
-  kDebug() << "</moh>";
   qSort(m_shapes.begin(),m_shapes.end(), shapeIsLessThan);
   // Update position
   qreal y = 0;
