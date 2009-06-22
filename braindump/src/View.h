@@ -95,6 +95,9 @@ protected slots:
   private slots:
     void canvasReceivedFocus();
     void documentRectChanged(const QRectF& rect);
+    void selectionDuplicate();
+    void groupSelection();
+    void ungroupSelection();
   protected:
     virtual void focusInEvent(QFocusEvent * event);
 private:
@@ -113,7 +116,8 @@ private:
 
     KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
-
+    KAction* m_groupShapes;
+    KAction* m_ungroupShapes;
     ZoomAction *m_zoomAction;
 };
 

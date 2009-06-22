@@ -20,6 +20,12 @@
             <Action name="edit_findprevious"/>
             <Action name="edit_replace"/>
         </Menu>
+        <Menu name="Shapes" >
+            <Text>Shapes</Text>
+            <Action name="shapes_duplicate" />
+            <Action name="shapes_group"/>
+            <Action name="shapes_ungroup"/>
+        </Menu>
         <Menu name="view">
             <Text>&amp;View</Text>
             <Action name="zoom_out"/>

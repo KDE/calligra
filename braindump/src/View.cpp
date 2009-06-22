@@ -59,7 +59,13 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include "SectionsBoxDock.h"
+
 #include "KoOdf.h"
+#include "KoShapeGroup.h"
+#include "KoShapeDeleteCommand.h"
+#include "KoShapeCreateCommand.h"
+#include "KoShapeGroupCommand.h"
+#include "KoShapeUngroupCommand.h"
 
 #include "MainWindow.h"
 #include "SectionContainer.h"
@@ -178,6 +184,22 @@ void View::initActions()
   actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
   actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
+  // Shapes menu
+  KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
+  actionCollection()->addAction("shapes_duplicate", actionDuplicate );
+  actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
+  connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
+
+  m_groupShapes = new KAction(KIcon("object-group"), i18n("Group Shapes"), this);
+  actionCollection()->addAction("shapes_group", m_groupShapes );
+  m_groupShapes->setShortcut(QKeySequence("Ctrl+G"));
+  connect(m_groupShapes, SIGNAL(triggered()), this, SLOT(groupSelection()));
+
+  m_ungroupShapes  = new KAction(KIcon("object-ungroup"), i18n("Ungroup Shapes"), this);
+  actionCollection()->addAction("shapes_ungroup", m_ungroupShapes );
+  m_ungroupShapes->setShortcut(QKeySequence("Ctrl+Shift+G"));
+  connect(m_ungroupShapes, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
+  
 }
 
 void View::editPaste()
@@ -320,6 +342,66 @@ void View::documentRectChanged(const QRectF& bb) {
   }
   m_zoomController->setPageSize( pageSize );
   m_zoomController->setDocumentSize( pageSize );
+}
+
+void View::selectionDuplicate() {
+  m_canvas->toolProxy()->copy();
+  m_canvas->toolProxy()->paste();
+}
+
+void View::groupSelection() {
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> groupedShapes;
+
+    // only group shapes with an unselected parent
+    foreach( KoShape* shape, selectedShapes )
+    {
+        if( selectedShapes.contains( shape->parent() ) )
+            continue;
+        groupedShapes << shape;
+    }
+    KoShapeGroup *group = new KoShapeGroup();
+    if( selection->activeLayer() )
+        selection->activeLayer()->addChild( group );
+    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+    new KoShapeCreateCommand( m_doc->viewManager(), group, cmd );
+    new KoShapeGroupCommand( group, groupedShapes, cmd );
+    m_canvas->addCommand( cmd );  
+}
+
+void View::ungroupSelection() {
+  KoSelection* selection = m_canvas->shapeManager()->selection();
+  if( ! selection )
+    return;
+
+  QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+  QList<KoShape*> containerSet;
+
+  // only ungroup shape containers with an unselected parent
+  foreach( KoShape* shape, selectedShapes )
+  {
+    if( selectedShapes.contains( shape->parent() ) )
+      continue;
+    containerSet << shape;
+  }
+
+  QUndoCommand *cmd = new QUndoCommand( i18n("Ungroup shapes") );
+
+  // add a ungroup command for each found shape container to the macro command
+  foreach( KoShape* shape, containerSet )
+  {
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
+    if( container )
+    {
+      new KoShapeUngroupCommand( container, container->childShapes(), cmd );
+      new KoShapeDeleteCommand( m_doc->viewManager(), container, cmd );
+    }
+  }
+  m_canvas->addCommand( cmd );
 }
 
 #include "View.moc"
