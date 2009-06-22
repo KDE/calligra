@@ -59,7 +59,7 @@ class Layout : public QObject {
     /**
      * This function is called when a shape geometry is changed.
      */
-    virtual void shapeGeometryChanged( KoShape* _shape) = 0;
+    virtual void shapesGeometryChanged(const QList<KoShape*>& _shape) = 0;
     virtual bool event(QEvent * e);
   signals:
     void boundingBoxChanged( const QRectF& _rect );

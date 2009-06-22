@@ -32,7 +32,7 @@ class ColumnLayout : public Layout {
     virtual void shapesAdded(QList<KoShape*> _shape);
     virtual void shapeAdded(KoShape* _shape);
     virtual void shapeRemoved(KoShape* _shape);
-    virtual void shapeGeometryChanged(KoShape* _shape);
+    virtual void shapesGeometryChanged(const QList<KoShape*>& _shape);
   private:
     void updateShapesPosition();
   private:

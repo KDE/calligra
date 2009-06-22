@@ -30,7 +30,7 @@ class FreeLayout : public Layout {
     virtual QRectF boundingBox() const;
     virtual void shapeAdded(KoShape* _shape);
     virtual void shapeRemoved(KoShape* _shape);
-    virtual void shapeGeometryChanged(KoShape* _shape);
+    virtual void shapesGeometryChanged(const QList<KoShape*>& _shape);
   private:
     void updateSize();
   protected:

@@ -56,8 +56,17 @@ void ColumnLayout::shapeRemoved(KoShape* _shape) {
   updateShapesPosition();
 }
 
-void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
-  Q_ASSERT(m_shapes.contains(_shape));
+bool contains( const QList<KoShape*> list1, const QList<KoShape*> list2) {
+  foreach(KoShape* shape, list2) {
+    if( list1.contains(shape) ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void ColumnLayout::shapesGeometryChanged(const QList<KoShape*>& _shape) {
+  Q_ASSERT(contains(m_shapes, _shape));
   updateShapesPosition();
 }
 

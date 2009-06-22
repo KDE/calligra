@@ -45,13 +45,8 @@ void FreeLayout::shapeRemoved(KoShape* ) {
   updateSize();
 }
 
-void FreeLayout::shapeGeometryChanged(KoShape* ) {
+void FreeLayout::shapesGeometryChanged(const QList<KoShape*>& ) {
   updateSize();
-  kDebug() << "<moh>";
-  foreach(KoShape* _shape, shapes()) {
-    kDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
-  }
-  kDebug() << "</moh>";
 }
 
 void FreeLayout::updateSize() {

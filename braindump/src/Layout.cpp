@@ -138,9 +138,7 @@ bool Layout::event(QEvent * e) {
   if(e->type() == event_type_delayed_geometry_changed) {
     Q_ASSERT(d->eventSent);
     e->accept();
-    foreach(KoShape* shape, d->waitingList) {
-      shapeGeometryChanged(shape);
-    }
+    shapesGeometryChanged(d->waitingList);
     d->waitingList.clear();
     d->eventSent = false;
     return true;
