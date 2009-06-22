@@ -102,9 +102,8 @@ void ColumnLayout::updateShapesPosition() {
       shape->update();
       QRectF b;
       Utils::containerBoundRec(shape, b);
-      QPointF transfo = QPointF(0.0, y) - b.topLeft();
+      QPointF transfo = QPointF(0.0, y - b.topLeft().y());
       shape->setAbsolutePosition( transfo + shape->absolutePosition());
-      kDebug() << shape << y << shape->absolutePosition().y() << " " << b;
       y += b.height();
       shape->update();
     }
