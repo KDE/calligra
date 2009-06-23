@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@ public:
     QMap<QString, ToolDocker *> toolDockerMap;
     QMap<QString, bool> toolDockerVisibillityMap;
     QMap<QString, ToolDocker *> activeToolDockerMap;
+    QMap<QString, bool> toolDockerRaisedMap;
 };
 
 DockerManager::DockerManager(MainWindow *view)
@@ -56,6 +58,7 @@ DockerManager::DockerManager(MainWindow *view)
         ToolDocker *td = qobject_cast<ToolDocker *>(d->view->createDockWidget(&toolDockerFactory));
         d->toolDockerMap[name] = td;
         d->toolDockerVisibillityMap[name] = true;
+        d->toolDockerRaisedMap[name] = false;
     }
 }
 
@@ -83,10 +86,23 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
     QMapIterator<QString, ToolDocker *> j(d->activeToolDockerMap);
     while (j.hasNext()) {
         j.next();
+        
+        // Check if the dock is raised or not
+        QList<QDockWidget*> tabedDocks = d->view->tabifiedDockWidgets(j.value());
+        bool isOnTop = true;
+        int idx = d->view->children().indexOf(j.value());
+        foreach(QDockWidget* dock, tabedDocks) {
+          if(d->view->children().indexOf(dock) > idx) {
+            isOnTop = false;
+            break;
+          }
+        }
+        d->toolDockerRaisedMap[j.key()] = isOnTop;
+
         j.value()->toggleViewAction()->setVisible(false);
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
         j.value()->setVisible(false);
-        j.value()->setEnabled(false);
+        j.value()->setEnabled(false);    
     }
     d->activeToolDockerMap.clear();
 
@@ -117,7 +133,9 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         td->setVisible(d->toolDockerVisibillityMap[i.value()->objectName()]);
         td->toggleViewAction()->setVisible(true);
         d->activeToolDockerMap[i.value()->objectName()] = td;
-        td->raise();
+        if(d->toolDockerRaisedMap[i.value()->objectName()]) {
+          td->raise();
+        }
     }
 }
 
