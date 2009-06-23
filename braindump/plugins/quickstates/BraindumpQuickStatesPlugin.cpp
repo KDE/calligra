@@ -20,8 +20,12 @@
 #include "BraindumpQuickStatesPlugin.h"
 
 #include <KActionCollection>
+#include <KActionMenu>
 #include <KGenericFactory>
 #include <KStandardDirs>
+
+#include "State.h"
+#include "StatesRegistry.h"
 
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
@@ -31,9 +35,20 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
 {
   setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
 
-//                    KAction *action  = new KAction(i18n("&Uncheck"), this);
-//   actionCollection()->addAction("QuickStates_Unchecked", action);
-//   connect(action, SIGNAL(triggered()), this, SLOT(slotUnchecked()));
+  KActionMenu* actionMenu = new KActionMenu(i18n("States"), this);
+  actionCollection()->addAction("States", actionMenu);
+  
+  foreach(const QString& catId, StatesRegistry::instance()->categorieIds()) {
+    foreach(const QString& stateId, StatesRegistry::instance()->stateIds(catId)) {
+      const State* state = StatesRegistry::instance()->state(catId, stateId);
+      KAction* action = new KAction(state->name(), this);
+      actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
+      actionMenu->addAction(action);
+//       connect(action, SIGNAL(triggered()), handler, SLOT(makeState()));
+        kDebug() << catId << " " << stateId;
+    }
+    actionMenu->addSeparator();
+  }
 }
 
 BraindumpQuickStatesPlugin::~BraindumpQuickStatesPlugin() {

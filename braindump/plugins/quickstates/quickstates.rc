@@ -1,10 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="braindumpquickstates" version="1">
 <MenuBar>
-    <Menu name="States"><text>&amp;States</text>
-      <Action name="QuickStates_Unchecked"/>
-    </Menu>
-
+    <Action name="States"/>
 </MenuBar>
 
 </kpartgui>
