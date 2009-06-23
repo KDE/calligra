@@ -59,32 +59,42 @@ int State::priority() const {
   return m_priority;
 }
 
-Category::Category( const QString& _id, const QString& _name, int _priority) : m_id(_id), m_name(_name), m_priority(_priority) {
+struct Category::Private {
+  QString id, name;
+  QMap<QString, const State*> states;
+  int priority;
+};
+
+Category::Category( const QString& _id, const QString& _name, int _priority) : d(new Private) {
+  d->id = _id;
+  d->name = _name;
+  d->priority = _priority;
 }
 
 Category::~Category() {
+  delete d;
 }
 
 const QString& Category::name() const {
-  return m_name;
+  return d->name;
 }
 
 const QString& Category::id() const {
-  return m_id;
+  return d->id;
 }
 
 QList<QString> Category::stateIds() const {
-  return m_states.keys();
+  return d->states.keys();
 }
 
 const State* Category::state(const QString& _id) const {
-  if(m_states.contains(_id)) return m_states[_id];
-  kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << m_states.keys();
+  if(d->states.contains(_id)) return d->states[_id];
+  kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
   return 0;
 }
 
 int Category::priority() const {
-  return m_priority;
+  return d->priority;
 }
 
 struct StatesRegistry::Private {
@@ -158,12 +168,12 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
                 QString file = directory.absoluteFilePath(stateFilename);
                 if(QFileInfo(file).exists())
                 {
-                  if(category->m_states.contains(stateId))
+                  if(category->d->states.contains(stateId))
                   {
-                    delete category->m_states[stateId];
+                    delete category->d->states[stateId];
                   }
                   kDebug() << "Adding state id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
-                  category->m_states[stateId] = new State(stateId, stateName, category, file, statePriority);
+                  category->d->states[stateId] = new State(stateId, stateName, category, file, statePriority);
                 } else {
                   kError() << "Missing file " << file;
                 }
@@ -220,7 +230,7 @@ const State* StatesRegistry::state(const QString& _category, const QString& _sta
 
 const State* StatesRegistry::nextState(const State* _state) const {
   if(_state) {
-    QList<const State*> states = _state->category()->m_states.values();
+    QList<const State*> states = _state->category()->d->states.values();
     int idx = states.indexOf(_state);
     idx += 1;
     if( idx >= states.count() ) idx = 0;

@@ -58,9 +58,8 @@ class BRAINDUMPCORE_EXPORT Category {
     const State* state(const QString& ) const;
     int priority() const;
   private:
-    QString m_id, m_name;
-    QMap<QString, const State*> m_states;
-    int m_priority;
+    struct Private;
+    Private* const d;
 };
 
 class BRAINDUMPCORE_EXPORT StatesRegistry {
