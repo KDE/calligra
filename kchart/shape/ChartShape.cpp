@@ -806,10 +806,15 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     QString tmpURL;
     if ( url[0] == '#' )
         url = url.mid( 1 );
-    if ( url.startsWith( "./" ) )
-        tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
+
+    if(KUrl::isRelativeUrl( url )) {
+        if ( url.startsWith( "./" ) )
+            tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
+        else
+            tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url;
+    }
     else
-        tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url;
+        tmpURL = url;
 
     QString path = tmpURL;
     if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
