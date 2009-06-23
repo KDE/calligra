@@ -59,7 +59,10 @@ DockerManager::DockerManager(MainWindow *view)
         d->toolDockerMap[name] = td;
         d->toolDockerVisibillityMap[name] = true;
         d->toolDockerRaisedMap[name] = false;
-    }
+        td->setVisible(false);
+        td->setEnabled(false);    
+        td->toggleViewAction()->setVisible(false);
+   }
 }
 
 DockerManager::~DockerManager()
