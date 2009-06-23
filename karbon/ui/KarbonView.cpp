@@ -1024,6 +1024,8 @@ void KarbonView::reorganizeGUI()
 {
     debugView("KarbonView::reorganizeGUI()");
 
+    if( d->snapGridAction )
+        d->snapGridAction->setChecked( part()->gridData().snapToGrid() );
     if( statusBar() )
         statusBar()->setVisible( part()->showStatusBar() );
 }
