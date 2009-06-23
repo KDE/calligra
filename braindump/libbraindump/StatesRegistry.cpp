@@ -87,7 +87,15 @@ int Category::priority() const {
   return m_priority;
 }
 
-void StatesRegistry::parseStatesRC(const QString& _filename )
+struct StatesRegistry::Private {
+  static StatesRegistry* s_instance;
+  QMap<QString, Category*> categories;
+  void parseStatesRC(const QString& _filename );
+};
+
+StatesRegistry* StatesRegistry::Private::s_instance = 0;
+
+void StatesRegistry::Private::parseStatesRC(const QString& _filename )
 {
   QDomDocument doc;
   QFile file(_filename);
@@ -124,12 +132,12 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
       if(catId.isEmpty()) {
         kError() << "Missing category id";
       } else {
-        if( m_categories.contains(catId) )
+        if( categories.contains(catId) )
         {
-          category = m_categories[catId];
+          category = categories[catId];
         } else if( not catName.isEmpty() ) {
           category = new Category(catId, i18n(catName.toUtf8()), catPriority );
-          m_categories[catId] = category;
+          categories[catId] = category;
         }
         if(category){
           // Parse the states
@@ -176,40 +184,37 @@ void StatesRegistry::parseStatesRC(const QString& _filename )
   }
 }
 
-
-StatesRegistry* StatesRegistry::s_instance = 0;
-
-StatesRegistry::StatesRegistry() {
+StatesRegistry::StatesRegistry() : d(new Private) {
   KGlobal::mainComponent().dirs()->addResourceType("stateshape_states", "data", "stateshape/states/");
   QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("stateshape_states", "*.rc",  KStandardDirs::Recursive);
 
   foreach(const QString& filename, statesFilenames)
   {
     kDebug() << "Load state: " << filename;
-    parseStatesRC(filename);
+    d->parseStatesRC(filename);
   }
 }
 
 const StatesRegistry* StatesRegistry::instance() {
-  if(not s_instance)
+  if(not Private::s_instance)
   {
-    s_instance = new StatesRegistry;
+    Private::s_instance = new StatesRegistry;
   }
-  return s_instance;
+  return Private::s_instance;
 }
 
 QList<QString> StatesRegistry::categorieIds() const {
-  return m_categories.keys();
+  return d->categories.keys();
 }
 
 QList<QString> StatesRegistry::stateIds(const QString& _id) const {
-  Q_ASSERT(m_categories.contains(_id));
-  return m_categories[_id]->stateIds();
+  Q_ASSERT(d->categories.contains(_id));
+  return d->categories[_id]->stateIds();
 }
 
 const State* StatesRegistry::state(const QString& _category, const QString& _state) const {
-  if(m_categories.contains(_category)) return m_categories[_category]->state(_state);
-  kWarning() << "No category " << _category << " found among " << m_categories.keys();
+  if(d->categories.contains(_category)) return d->categories[_category]->state(_state);
+  kWarning() << "No category " << _category << " found among " << d->categories.keys();
   return 0;
 }
 

@@ -72,10 +72,8 @@ class BRAINDUMPCORE_EXPORT StatesRegistry {
     const State* state(const QString& _category, const QString& _id) const;
     const State* nextState(const State* _state) const;
   private:
-    void parseStatesRC(const QString& _filename );
-  private:
-    static StatesRegistry* s_instance;
-    QMap<QString, Category*> m_categories;
+    struct Private;
+    Private* const d;
 };
 
 #endif
