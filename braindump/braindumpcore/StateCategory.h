@@ -17,23 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _STATES_REGISTRY_H_
-#define _STATES_REGISTRY_H_
+#ifndef _STATE_CATEGORY_H_
+#define _STATE_CATEGORY_H_
 
+#include <QMap>
 #include <QString>
 
 #include "braindumpcore_export.h"
 
+class StateCategory;
+class StatesRegistry;
 class State;
 
-class BRAINDUMPCORE_EXPORT StatesRegistry {
-    StatesRegistry();
+class BRAINDUMPCORE_EXPORT StateCategory {
+    friend class StatesRegistry;
+    StateCategory( const QString& _id, const QString& _name, int _priority);
+    ~StateCategory();
   public:
-    static const StatesRegistry* instance();
-    QList<QString> categorieIds() const;
-    QList<QString> stateIds(const QString& _id) const;
-    const State* state(const QString& _category, const QString& _id) const;
-    const State* nextState(const State* _state) const;
+    const QString& name() const;
+    const QString& id() const;
+    QList<QString> stateIds() const;
+    const State* state(const QString& ) const;
+    int priority() const;
   private:
     struct Private;
     Private* const d;

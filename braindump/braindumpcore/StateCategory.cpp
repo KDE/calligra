@@ -17,26 +17,42 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _STATES_REGISTRY_H_
-#define _STATES_REGISTRY_H_
+#include "StateCategory.h"
 
-#include <QString>
+#include <kdebug.h>
 
-#include "braindumpcore_export.h"
+#include "State.h"
+#include "StateCategory_p.h"
 
-class State;
+StateCategory::StateCategory( const QString& _id, const QString& _name, int _priority) : d(new Private) {
+  d->id = _id;
+  d->name = _name;
+  d->priority = _priority;
+}
 
-class BRAINDUMPCORE_EXPORT StatesRegistry {
-    StatesRegistry();
-  public:
-    static const StatesRegistry* instance();
-    QList<QString> categorieIds() const;
-    QList<QString> stateIds(const QString& _id) const;
-    const State* state(const QString& _category, const QString& _id) const;
-    const State* nextState(const State* _state) const;
-  private:
-    struct Private;
-    Private* const d;
-};
+StateCategory::~StateCategory() {
+  delete d;
+}
 
-#endif
+const QString& StateCategory::name() const {
+  return d->name;
+}
+
+const QString& StateCategory::id() const {
+  return d->id;
+}
+
+QList<QString> StateCategory::stateIds() const {
+  return d->states.keys();
+}
+
+const State* StateCategory::state(const QString& _id) const {
+  if(d->states.contains(_id)) return d->states[_id];
+  kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
+  return 0;
+}
+
+int StateCategory::priority() const {
+  return d->priority;
+}
+

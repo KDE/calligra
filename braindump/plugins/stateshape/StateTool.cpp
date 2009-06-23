@@ -27,6 +27,7 @@
 #include <State.h>
 #include <StatesRegistry.h>
 
+#include "StateCategory.h"
 #include "StateShape.h"
 #include "StateShapeChangeStateCommand.h"
 #include "StateToolWidget.h"

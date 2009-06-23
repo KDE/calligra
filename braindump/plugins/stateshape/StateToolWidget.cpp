@@ -29,6 +29,7 @@
 #include <KoToolManager.h>
 
 #include <State.h>
+#include <StateCategory.h>
 #include <StatesRegistry.h>
 
 #include <StateShape.h>
