@@ -28,10 +28,12 @@
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 
+#include <State.h>
+#include <StatesRegistry.h>
+
 #include <StateShape.h>
 #include "StateTool.h"
 #include "StatesModel.h"
-#include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
 #include "CategorizedItemDelegate.h"
 

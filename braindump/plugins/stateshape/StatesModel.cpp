@@ -24,6 +24,7 @@
 
 #include <KCategorizedSortFilterProxyModel>
 
+#include "State.h"
 #include "StatesRegistry.h"
 
 StatesModel::StatesModel() {

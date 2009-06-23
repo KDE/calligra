@@ -1,4 +1,5 @@
 set(braindumpcore_LIB_SRCS
+  State.cpp
   StatesRegistry.cpp
 )
 

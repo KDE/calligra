@@ -30,6 +30,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include "State.h"
 #include "StatesRegistry.h"
 
 #include "../../src/Xml.h"

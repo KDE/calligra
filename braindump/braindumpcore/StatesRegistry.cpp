@@ -21,7 +21,6 @@
 
 #include <QDomDocument>
 #include <QFile>
-#include <QSvgRenderer>
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -31,46 +30,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-struct State::Private {
-    QString id, name;
-    StateCategory* category;
-    QSvgRenderer* render;
-    int priority;
-};
-
-State::State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority) : d(new Private)
-{
-  d->id = _id;
-  d->name = _name;
-  d->category = _category;
-  d->render = new QSvgRenderer(_fileName);
-  d->priority = _priority;
-}
-
-State::~State() {
-  delete d->render;
-  delete d;
-}
-
-const QString& State::name() const {
-  return d->name;
-}
-
-const QString& State::id() const {
-  return d->id;
-}
-
-const StateCategory* State::category() const {
-  return d->category;
-}
-
-QSvgRenderer* State::renderer() const {
-  return d->render;
-}
-
-int State::priority() const {
-  return d->priority;
-}
+#include "State.h"
 
 struct StateCategory::Private {
   QString id, name;

@@ -24,8 +24,10 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
+#include <State.h>
+#include <StatesRegistry.h>
+
 #include "StateShape.h"
-#include "StatesRegistry.h"
 #include "StateShapeChangeStateCommand.h"
 #include "StateToolWidget.h"
 
