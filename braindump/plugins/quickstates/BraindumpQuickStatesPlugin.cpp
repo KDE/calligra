@@ -21,6 +21,7 @@
 
 #include <KActionCollection>
 #include <KGenericFactory>
+#include <KStandardDirs>
 
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
@@ -28,8 +29,10 @@ K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFacto
 BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-  KAction *action  = new KAction(i18n("&Uncheck"), this);
-  actionCollection()->addAction("QuickStates_Unchecked", action);
+  setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
+
+//                    KAction *action  = new KAction(i18n("&Uncheck"), this);
+//   actionCollection()->addAction("QuickStates_Unchecked", action);
 //   connect(action, SIGNAL(triggered()), this, SLOT(slotUnchecked()));
 }
 
