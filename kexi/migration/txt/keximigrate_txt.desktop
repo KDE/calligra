@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Text
+Name[x-test]=xxTextxx
+Comment=Text Migration Driver for Kexi
+X-KDE-Library=keximigrate_txt
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=Text
+X-Kexi-MigrationDriverType=File
+X-Kexi-KexiMigrationVersion=1.1
