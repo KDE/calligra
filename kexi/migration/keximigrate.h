@@ -114,7 +114,7 @@ public:
 
     //! Perform an export operation
     bool performExport(Kexi::ObjectStatus* result = 0);
-
+    
     //! Returns true if the migration driver supports progress updates.
     inline bool progressSupported() {
         return drv_progressSupported();
@@ -144,6 +144,34 @@ public:
      and KexiMigrate::versionMinor() are matching.
      You can reimplement this but always call KexiMigrate::isValid() implementation. */
     virtual bool isValid();
+    
+    //Extension of existing api to provide generic row access to external data.
+    //!Connect to the source data
+    bool connectSource();
+    
+    //! Get table names in source database (driver specific)
+    bool tableNames(QStringList& tablenames);
+
+    //! Read schema for a given table (driver specific)
+    bool readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    
+    //!Position the source dataset at the start of a table    
+    bool readFromTable(const QString& tableName);
+    
+    //!Move to the next row
+    bool moveNext();
+    
+    //!Move to the previous row
+    bool movePrevious();
+    
+    //!Move to the next row
+    bool moveFirst();
+    
+    //!Move to the previous row
+    bool moveLast();
+    
+    //!Read the data at the given row/field
+    QVariant value(uint i);
 
 signals:
     void progressPercent(int percent);
@@ -275,10 +303,27 @@ protected:
 
     //! KexiDB driver. For instance, it is used for escaping identifiers
     QPointer<KexiDB::Driver> m_kexiDBDriver;
-
+    
+    //Extended API
+    //! Position the source dataset at the start of a table
+    virtual bool drv_readFromTable(const QString & tableName){ return false; }
+    
+    //! Move to the next row
+    virtual bool drv_moveNext() { return false; }
+    
+    //! Move to the previous row
+    virtual bool drv_movePrevious() { return false; }
+    
+    //! Move to the next row
+    virtual bool drv_moveFirst() { return false; }
+    
+    //! Move to the previous row
+    virtual bool drv_moveLast() { return false; }
+    
+    //! Read the data at the given row/field
+    virtual QVariant drv_value(uint i){ return QVariant(); };
+    
 private:
-    //! Get the list of tables
-    bool tableNames(QStringList& tablenames);
 
     //! Create the target database project
 //  KexiProject* createProject(Kexi::ObjectStatus* result);
