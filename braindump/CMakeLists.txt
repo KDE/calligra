@@ -7,5 +7,7 @@ include(KDE4Defaults)
 include(MacroLibrary)
 find_package(KOffice REQUIRED)
 
+include_directories (${KDE4_INCLUDES})
+
 add_subdirectory(src)
 add_subdirectory(plugins)
