@@ -19,6 +19,9 @@
 
 #include "BraindumpQuickStatesPlugin.h"
 
+#include <QPainter>
+#include <QSvgRenderer>
+
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KGenericFactory>
@@ -45,7 +48,10 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
       actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
       actionMenu->addAction(action);
 //       connect(action, SIGNAL(triggered()), handler, SLOT(makeState()));
-        kDebug() << catId << " " << stateId;
+      QPixmap image( 32, 32);
+      QPainter p(&image);
+      state->renderer()->render(&p, QRectF(0,0, 32,32));
+      action->setIcon(image);
     }
     actionMenu->addSeparator();
   }
