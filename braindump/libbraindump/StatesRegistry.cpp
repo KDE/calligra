@@ -31,32 +31,45 @@
 #include <QFileInfo>
 #include <QDir>
 
-State::State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName)), m_priority(_priority)
+struct State::Private {
+    QString id, name;
+    StateCategory* category;
+    QSvgRenderer* render;
+    int priority;
+};
+
+State::State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority) : d(new Private)
 {
+  d->id = _id;
+  d->name = _name;
+  d->category = _category;
+  d->render = new QSvgRenderer(_fileName);
+  d->priority = _priority;
 }
 
 State::~State() {
-  delete m_render;
+  delete d->render;
+  delete d;
 }
 
 const QString& State::name() const {
-  return m_name;
+  return d->name;
 }
 
 const QString& State::id() const {
-  return m_id;
+  return d->id;
 }
 
 const StateCategory* State::category() const {
-  return m_category;
+  return d->category;
 }
 
 QSvgRenderer* State::renderer() const {
-  return m_render;
+  return d->render;
 }
 
 int State::priority() const {
-  return m_priority;
+  return d->priority;
 }
 
 struct StateCategory::Private {

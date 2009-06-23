@@ -41,10 +41,8 @@ class BRAINDUMPCORE_EXPORT State {
     QSvgRenderer* renderer() const;
     int priority() const;
   private:
-    QString m_id, m_name;
-    StateCategory* m_category;
-    QSvgRenderer* m_render;
-    int m_priority;
+    struct Private;
+    Private* const d;
 };
 
 class BRAINDUMPCORE_EXPORT StateCategory {
