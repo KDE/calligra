@@ -38,6 +38,8 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
 {
   setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
 
+  // TODO try to use action list, or to get access to the state menu
+  
   KActionMenu* actionMenu = new KActionMenu(i18n("States"), this);
   actionCollection()->addAction("States", actionMenu);
   

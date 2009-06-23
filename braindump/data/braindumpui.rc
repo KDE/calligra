@@ -8,7 +8,6 @@
         <Menu name="Shapes" >
             <Text>Shapes</Text>
         </Menu>
-        <Action name="States"/>
         <Menu name="view" >
             <Text>&amp;View</Text>
         </Menu>
