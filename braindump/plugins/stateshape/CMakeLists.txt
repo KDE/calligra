@@ -5,7 +5,6 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
 SET (stateshape_LIB_SRCS
     CategorizedItemDelegate.cpp
     StatesModel.cpp
-    StatesRegistry.cpp
     StateShape.cpp
     StateShapeChangeStateCommand.cpp
     StateShapeFactory.cpp
@@ -30,6 +29,7 @@ target_link_libraries(
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
+    braindumpcore
     )
 install(TARGETS stateshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -37,5 +37,3 @@ install(TARGETS stateshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES stateshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
-
-add_subdirectory(data)

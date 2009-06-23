@@ -4,7 +4,7 @@ set(braindumpquickstates_PART_SRCS BraindumpQuickStatesPlugin.cpp )
 
 kde4_add_plugin(braindumpquickstates ${braindumpquickstates_PART_SRCS})
 
-target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KDE4_KPARTS_LIBS})
+target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KDE4_KPARTS_LIBS} braindumpcore)
 
 install(TARGETS braindumpquickstates  DESTINATION ${PLUGIN_INSTALL_DIR})
 

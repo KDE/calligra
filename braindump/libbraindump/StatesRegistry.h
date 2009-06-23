@@ -23,12 +23,14 @@
 #include <QMap>
 #include <QString>
 
+#include "braindumpcore_export.h"
+
 class QSvgRenderer;
 
 class Category;
 class StatesRegistry;
 
-class State {
+class BRAINDUMPCORE_EXPORT State {
     friend class StatesRegistry;
     State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName, int _priority);
     ~State();
@@ -45,7 +47,7 @@ class State {
     int m_priority;
 };
 
-class Category {
+class BRAINDUMPCORE_EXPORT Category {
     friend class StatesRegistry;
     Category( const QString& _id, const QString& _name, int _priority);
     ~Category();
@@ -61,7 +63,7 @@ class Category {
     int m_priority;
 };
 
-class StatesRegistry {
+class BRAINDUMPCORE_EXPORT StatesRegistry {
     StatesRegistry();
   public:
     static const StatesRegistry* instance();

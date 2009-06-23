@@ -1,3 +1,5 @@
+add_subdirectory(states)
+
 ### Services ###
 install( FILES
     braindump_extensions.desktop
