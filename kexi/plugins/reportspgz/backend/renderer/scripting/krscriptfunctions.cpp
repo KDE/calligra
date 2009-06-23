@@ -21,9 +21,10 @@
 #include <kexidb/cursor.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(const KexiDB::Cursor *c)
+KRScriptFunctions::KRScriptFunctions(const orQuery *c)
 {
     m_cursor = c;
+    
     m_connection = m_cursor->connection();;
 }
 
@@ -99,11 +100,11 @@ QVariant KRScriptFunctions::value(const QString &field)
     }
 
 
-    KexiDB::QueryColumnInfo::Vector flds = m_cursor->query()->fieldsExpanded();
+    KexiDB::QueryColumnInfo::Vector flds = m_cursor->schema().columns();
     for (int i = 0; i < flds.size() ; ++i) {
 
         if (flds[i]->aliasOrName().toLower() == field.toLower()) {
-            val = const_cast<KexiDB::Cursor*>(m_cursor)->value(i);
+            val = const_cast<orQuery*>(m_cursor)->value(i);
         }
     }
 

@@ -53,10 +53,6 @@ public:
     QString format();
     void setFormat(const QString&);
 
-    ORDataData data() {
-        return ORDataData("Data Source", m_controlSource->value().toString());
-    }
-
 protected:
     QRect _rect();
     KRSize m_size;

@@ -59,9 +59,10 @@ KRReportData::KRReportData(const QDomElement & elemSource)
         QDomElement elemThis = section.item(nodeCounter).toElement();
         if (elemThis.tagName() == "title")
             m_title = elemThis.text();
-        else if (elemThis.tagName() == "datasource")
+        else if (elemThis.tagName() == "datasource") {
             m_query = elemThis.text();
-        else if (elemThis.tagName() == "script") {
+	    m_externalData = elemThis.attribute("external").toInt();
+	} else if (elemThis.tagName() == "script") {
             m_script = elemThis.text();
             m_interpreter = elemThis.attribute("interpreter");
         } else if (elemThis.tagName() == "size") {

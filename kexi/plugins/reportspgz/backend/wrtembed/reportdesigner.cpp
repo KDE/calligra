@@ -63,6 +63,7 @@
 #include <QSplitter>
 
 #include <kexidb/connection.h>
+#include <kexidb/connectiondata.h>
 #include <kexidb/utils.h>
 #include <kexidb/schemadata.h>
 #include <kexiutils/tristate.h>
@@ -144,6 +145,7 @@ ReportDesigner::ReportDesigner(QWidget * parent, KexiDB::Connection *cn)
         : QWidget(parent), d(new Private())
 {
     m_conn = cn;
+    m_external = 0;
     init();
 }
 void ReportDesigner::init()
@@ -160,7 +162,6 @@ void ReportDesigner::init()
     reportHead = reportFoot = 0;
     pageHeadFirst = pageHeadOdd = pageHeadEven = pageHeadLast = pageHeadAny = 0;
     pageFootFirst = pageFootOdd = pageFootEven = pageFootLast = pageFootAny = 0;
-
 
     d->grid = new QGridLayout(this);
     d->grid->setSpacing(0);
@@ -234,6 +235,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                 setReportTitle(it.firstChild().nodeValue());
             } else if (n == "datasource") {
                 setReportDataSource(it.firstChild().nodeValue());
+		m_externalData->setValue(it.toElement().attribute("external"));
             } else if (n == "script") {
                 m_interpreter->setValue(it.toElement().attribute("interpreter"));
                 m_script->setValue(it.firstChild().nodeValue());
@@ -605,6 +607,7 @@ QDomDocument ReportDesigner::document()
     root.appendChild(title);
 
     QDomElement rds = doc.createElement("datasource");
+    rds.setAttribute("external", m_externalData->value().toBool());
     rds.appendChild(doc.createTextNode(reportDataSource()));
     root.appendChild(rds);
 
@@ -822,18 +825,34 @@ QStringList ReportDesigner::fieldList()
     QStringList qs;
     qs << "";
 
-    if (isConnected()) {
-        //Get the list of fields in the selected query
-        KexiDB::TableOrQuerySchema *flds = new KexiDB::TableOrQuerySchema(m_conn, m_dataSource->value().toString().toLocal8Bit());
+    if (!m_externalData->value().toBool()) {
+      if (isConnected()) {
+	  //Get the list of fields in the selected query
+	  KexiDB::TableOrQuerySchema *flds = new KexiDB::TableOrQuerySchema(m_conn, m_dataSource->value().toString().toLocal8Bit());
 
-        KexiDB::QueryColumnInfo::Vector cs = flds->columns();
+	  KexiDB::QueryColumnInfo::Vector cs = flds->columns();
 
-        for (int i = 0 ; i < cs.count(); ++i) {
-            qs << cs[i]->field->name();
-        }
-    } else {
+	  for (int i = 0 ; i < cs.count(); ++i) {
+	      qs << cs[i]->field->name();
+	  }
+      }
+      else {
         kDebug() << "Cannot return field list";
+      }
     }
+    else
+    {
+      if (!m_externalTableName.isEmpty()) {
+	KexiDB::TableSchema ts;
+	m_external->readTableSchema(m_externalTableName, ts);
+      
+	for (unsigned int i = 0; i < ts.fieldCount(); ++i) {
+	  qs << ts.field(i)->name();
+	}
+      }
+      
+    }
+    kDebug() << qs;
     return qs;
 }
 
@@ -893,7 +912,10 @@ void ReportDesigner::createProperties()
 
     keys = queryList();
     m_dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
-
+    m_dataSource->setOption("extraValueAllowed", "true");
+    
+    m_externalData = new KoProperty::Property("ExternalData", QVariant(false), "External Data", "External Data");
+    
     keys.clear();
     keys = pageFormats();
     m_pageSize = new KoProperty::Property("PageSize", keys, keys, "A4", "Page Size");
@@ -930,6 +952,7 @@ void ReportDesigner::createProperties()
     m_script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
     
     m_set->addProperty(m_title);
+    m_set->addProperty(m_externalData);
     m_set->addProperty(m_dataSource);
     m_set->addProperty(m_pageSize);
     m_set->addProperty(m_orientation);
@@ -966,6 +989,22 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
         m_set->property("TopMargin").setOption("unit", newstr);
         m_set->property("BottomMargin").setOption("unit", newstr);
     }
+    if ((p.name() == "DataSource" || p.name() == "ExternalData") && m_externalData->value().toBool())
+    {
+      KexiMigration::MigrateManager mm;
+      QStringList md = m_dataSource->value().toString().split("|");
+      if (md.size() == 3) { //Need 3 paramters
+	m_external = mm.driver(md[0]);
+	KexiDB::ConnectionData cd;
+	cd.setFileName(md[1]);
+	m_externalTableName = md[2];
+	KexiMigration::Data dat;
+	dat.source = &cd;
+	m_external->setData(&dat);
+	m_external->connectSource();
+    }
+    
+  }
 }
 
 /**

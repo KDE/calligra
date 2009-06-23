@@ -104,7 +104,7 @@ kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
 target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} 
   ${QT_QTSCRIPT_LIBRARY} ${KDE4_KPARTS_LIBS} kexidb kexicore keximain ${KOPROPERTY_LIBS}  ${QT_QT3SUPPORT_LIBRARY} kexiguiutils 
-    kexiextendedwidgets kdchart ${KDE4_KROSSCORE_LIBS})
+    kexiextendedwidgets kdchart keximigrate ${KDE4_KROSSCORE_LIBS})
 if (SHOULD_BUILD_KSPREAD)
   target_link_libraries(pgzkexireportpart2 kspreadcommon)
 endif (SHOULD_BUILD_KSPREAD)

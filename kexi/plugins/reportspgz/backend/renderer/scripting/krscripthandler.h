@@ -26,6 +26,7 @@
 #include <kross/core/action.h>
 #include "krscriptconstants.h"
 #include <kdeversion.h>
+#include "orutils.h"
 
 class KRScriptFunctions;
 class KRScriptDebug;
@@ -42,7 +43,7 @@ class KRScriptHandler : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptHandler(const KexiDB::Cursor *, KRReportData*);
+    KRScriptHandler(const orQuery */*KexiDB::Cursor **/, KRReportData*);
     ~KRScriptHandler();
     void setSource(const QString &s);
     QVariant evaluate(const QString&);
@@ -74,9 +75,11 @@ private:
     
     QString scriptCode();
     
-    KexiDB::Connection *m_connection;
-    const KexiDB::Cursor *m_cursor;
+    //KexiDB::Connection *m_connection;
+    //const KexiDB::Cursor *m_cursor;
 
+    const orQuery *m_cursor;
+    
     QString m_source;
     KRReportData  *m_reportData;
 

@@ -44,9 +44,9 @@
 #include <renderobjects.h>
 #include "krscriptdraw.h"
 
-KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
+KRScriptHandler::KRScriptHandler(const orQuery *cu, KRReportData* d)
 {
-    m_connection = cu->connection();
+    //m_connection = cu->connection();
     m_reportData = d;
     m_cursor = cu;
 
