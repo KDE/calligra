@@ -21,9 +21,11 @@
 #define _KARBONPENCILTOOL_H_
 
 #include <KoTool.h>
+#include <QtCore/QRectF>
 
 class KoPathShape;
 class KoLineBorder;
+class KoPathPoint;
 
 class KarbonPencilTool : public KoTool
 {
@@ -56,6 +58,14 @@ private:
     void addPoint( const QPointF & point );
     void finish( bool closePath );
     KoLineBorder * currentBorder();
+    
+    QRectF grabRect(const QPointF &p);
+    /// returns the nearest existing path point 
+    KoPathPoint* endPointAtPosition( const QPointF &position );
+    
+    /// Connects given path with the ones we hit when starting/finishing
+    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
+    
     enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
 
     PencilMode m_mode;
@@ -68,6 +78,8 @@ private:
     QList<QPointF> m_points; // the raw points
 
     KoPathShape * m_shape;
+    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
+    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
 };
 
 #endif // _KARBONPENCILTOOL_H_

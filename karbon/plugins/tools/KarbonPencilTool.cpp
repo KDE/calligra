@@ -21,6 +21,7 @@
 #include "KarbonCurveFit.h"
 
 #include <KoPathShape.h>
+#include <KoParameterShape.h>
 #include <KoLineBorder.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -29,6 +30,9 @@
 #include <KoSelection.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
+#include <KoPathPoint.h>
+#include <KoPathPointData.h>
+#include <KoPathPointMergeCommand.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -43,11 +47,18 @@
 
 #include <math.h>
 
+qreal squareDistance( const QPointF &p1, const QPointF &p2)
+{
+    qreal dx = p1.x()-p2.x();
+    qreal dy = p1.y()-p2.y();
+    return dx*dx + dy*dy;
+}
+
 KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
     : KoTool( canvas ),  m_mode( ModeCurve ), m_optimizeRaw( false )
     , m_optimizeCurve( false ), m_combineAngle( 15.0 ), m_fittingError( 5.0 )
     , m_close( false ), m_shape( 0 )
-
+    , m_existingStartPoint(0), m_existingEndPoint(0)
 {
 }
 
@@ -92,7 +103,13 @@ void KarbonPencilTool::mousePressEvent( KoPointerEvent *event )
         m_shape->setShapeId( KoPathShapeId );
         m_shape->setBorder( currentBorder() );
         m_points.clear();
-        addPoint( event->point );
+        
+        QPointF point = event->point;
+        m_existingStartPoint = endPointAtPosition(point);
+        if (m_existingStartPoint)
+            point = m_existingStartPoint->parent()->shapeToDocument(m_existingStartPoint->point());
+        
+        addPoint( point );
     }
 }
 
@@ -100,6 +117,11 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if( event->buttons() & Qt::LeftButton )
         addPoint( event->point );
+    
+    if (endPointAtPosition(event->point))
+        useCursor(Qt::PointingHandCursor, true);
+    else
+        useCursor(Qt::ArrowCursor, true);
 }
 
 void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -107,13 +129,20 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
     if( ! m_shape )
         return;
     
-    addPoint( event->point );
+    QPointF point = event->point;
+    m_existingEndPoint = endPointAtPosition(point);
+    if (m_existingEndPoint)
+        point = m_existingEndPoint->parent()->shapeToDocument(m_existingEndPoint->point());
+    
+    addPoint( point );
     finish( event->modifiers() & Qt::ShiftModifier );
 
     // the original path may be different from the one added
     m_canvas->updateCanvas( m_shape->boundingRect() );
     delete m_shape;
     m_shape = 0;
+    m_existingStartPoint = 0;
+    m_existingEndPoint = 0;
     m_points.clear();
 }
 
@@ -139,6 +168,8 @@ void KarbonPencilTool::deactivate()
     m_points.clear();
     delete m_shape;
     m_shape = 0;
+    m_existingStartPoint = 0;
+    m_existingEndPoint = 0;
 }
 
 void KarbonPencilTool::addPoint( const QPointF & point )
@@ -229,20 +260,39 @@ void KarbonPencilTool::finish( bool closePath )
     if( ! path )
         return;
 
-    if( closePath )
+    KoShape * startShape = 0;
+    KoShape * endShape = 0;
+    
+    if( closePath ) {
         path->close();
+        path->normalize();
+    }
+    else {
+        path->normalize();
+        if (connectPaths(path, m_existingStartPoint, m_existingEndPoint)) {
+            if (m_existingStartPoint)
+                startShape = m_existingStartPoint->parent();
+            if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint)
+                endShape = m_existingEndPoint->parent();
+        }
+    }
 
     // set the proper shape id
     path->setShapeId( KoPathShapeId );
     path->setBorder( currentBorder() );
-    path->normalize();
-
+    
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( path );
     if( cmd )
     {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
         selection->select( path );
+        
+        if (startShape)
+            m_canvas->shapeController()->removeShape(startShape, cmd);
+        if (endShape && startShape != endShape)
+            m_canvas->shapeController()->removeShape(endShape, cmd);
+        
         m_canvas->addCommand( cmd );
     }
     else
@@ -338,6 +388,138 @@ KoLineBorder * KarbonPencilTool::currentBorder()
     KoLineBorder * border = new KoLineBorder( m_canvas->resourceProvider()->activeBorder() );
     border->setColor( m_canvas->resourceProvider()->foregroundColor().toQColor() ); 
     return border;
+}
+
+QRectF KarbonPencilTool::grabRect(const QPointF &p)
+{
+    uint grabSize = 2*m_canvas->resourceProvider()->grabSensitivity();
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    QRectF hr = converter->viewToDocument(QRectF(0, 0, grabSize, grabSize));
+    hr.moveCenter( p );
+    return hr;
+}
+
+KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
+{
+    QRectF roi = grabRect(position);
+    QList<KoShape *> shapes = m_canvas->shapeManager()->shapesAt(roi);
+    
+    KoPathPoint * nearestPoint = 0;
+    qreal minDistance = HUGE_VAL;
+    uint grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+    qreal maxDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
+    
+    foreach(KoShape *shape, shapes) {
+        KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+        if (!path)
+            continue;
+        KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(shape);
+        if (paramShape && paramShape->isParametricShape())
+            continue;
+        
+        KoPathPoint * p = 0;
+        uint subpathCount = path->subpathCount();
+        for (uint i = 0; i < subpathCount; ++i) {
+            if (path->isClosedSubpath(i))
+                continue;
+            p = path->pointByIndex(KoPathPointIndex(i, 0));
+            // check start of subpath
+            qreal d = squareDistance(position, path->shapeToDocument(p->point()));
+            if (d < minDistance && d < maxDistance) {
+                nearestPoint = p;
+                minDistance = d;
+            }
+            // check end of subpath
+            p = path->pointByIndex(KoPathPointIndex(i, path->pointCountSubpath(i)-1));
+            d = squareDistance(position, path->shapeToDocument(p->point()));
+            if (d < minDistance && d < maxDistance) {
+                nearestPoint = p;
+                minDistance = d;
+            }
+        }
+    }
+    
+    return nearestPoint;
+}
+
+bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd )
+{
+    // at least one point must be valid
+    if (!pointAtStart && !pointAtEnd)
+        return false;
+    // do not allow connecting to the same point twice
+    if (pointAtStart == pointAtEnd)
+        pointAtEnd = 0;
+    
+    // we have hit an existing path point on start/finish
+    // what we now do is:
+    // 1. combine the new created path with the ones we hit on start/finish
+    // 2. merge the endpoints of the corresponding subpaths
+    
+    uint newPointCount = pathShape->pointCountSubpath(0);
+    KoPathPointIndex newStartPointIndex(0, 0);
+    KoPathPointIndex newEndPointIndex(0, newPointCount-1);
+    KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
+    KoPathPoint * newEndPoint = pathShape->pointByIndex(newEndPointIndex);
+    
+    KoPathShape * startShape = pointAtStart ? pointAtStart->parent() : 0;
+    KoPathShape * endShape = pointAtEnd ? pointAtEnd->parent() : 0;
+    
+    // combine with the path we hit on start
+    KoPathPointIndex startIndex(-1,-1);
+    if (pointAtStart) {
+        startIndex = startShape->pathPointIndex(pointAtStart);
+        pathShape->combine(startShape);
+        pathShape->moveSubpath(0, pathShape->subpathCount()-1);
+    }
+    // combine with the path we hit on finish
+    KoPathPointIndex endIndex(-1,-1);
+    if (pointAtEnd) {
+        endIndex = endShape->pathPointIndex(pointAtEnd);
+        if (endShape != startShape) {
+            endIndex.first += pathShape->subpathCount();
+            pathShape->combine(endShape);
+        }
+    }
+    // do we connect twice to a single subpath ?
+    bool connectToSingleSubpath = (startShape == endShape && startIndex.first == endIndex.first);
+    
+    if (startIndex.second == 0 && !connectToSingleSubpath) {
+        pathShape->reverseSubpath(startIndex.first);
+        startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
+    }
+    if (endIndex.second > 0 && !connectToSingleSubpath) {
+        pathShape->reverseSubpath(endIndex.first);
+        endIndex.second = 0;
+    }
+    
+    // after combining we have a path where with the subpaths in the follwing
+    // order:
+    // 1. the subpaths of the pathshape we started the new path at
+    // 2. the subpath we just created
+    // 3. the subpaths of the pathshape we finished the new path at
+    
+    // get the path points we want to merge, as these are not going to
+    // change while merging
+    KoPathPoint * existingStartPoint = pathShape->pointByIndex(startIndex);
+    KoPathPoint * existingEndPoint = pathShape->pointByIndex(endIndex);
+    
+    // merge first two points
+    if (existingStartPoint) {
+        KoPathPointData pd1(pathShape, pathShape->pathPointIndex(existingStartPoint));
+        KoPathPointData pd2(pathShape, pathShape->pathPointIndex(newStartPoint));
+        KoPathPointMergeCommand cmd1(pd1, pd2);
+        cmd1.redo();
+    }
+    // merge last two points
+    if (existingEndPoint) {
+        KoPathPointData pd3(pathShape, pathShape->pathPointIndex(newEndPoint));
+        KoPathPointData pd4(pathShape, pathShape->pathPointIndex(existingEndPoint));
+        KoPathPointMergeCommand cmd2(pd3, pd4);
+        cmd2.redo();
+    }
+    
+    return true;
 }
 
 #include "KarbonPencilTool.moc"
