@@ -9,5 +9,6 @@ find_package(KOffice REQUIRED)
 
 include_directories (${KDE4_INCLUDES})
 
+add_subdirectory(data)
 add_subdirectory(src)
 add_subdirectory(plugins)

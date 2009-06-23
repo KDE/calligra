@@ -58,7 +58,8 @@
 #include <kstatusbar.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
-#include "SectionsBoxDock.h"
+#include <kparts/plugin.h>
+#include <KServiceTypeTrader>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
@@ -69,6 +70,7 @@
 
 #include "MainWindow.h"
 #include "SectionContainer.h"
+#include "SectionsBoxDock.h"
 #include "Layout.h"
 #include "SectionPropertiesDock.h"
 #include "import/ZoomController.h"
@@ -84,6 +86,7 @@ View::View( RootSection *document, MainWindow* parent )
   
   initGUI();
   initActions();
+  loadExtensions();
 
   if ( m_doc->sections().count() > 0 ) {
     setActiveSection( m_doc->sections()[0] );
@@ -206,6 +209,29 @@ void View::initActions()
   connect(m_ungroupShapes, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
   
 }
+
+void View::loadExtensions()
+{
+  KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
+                            QString::fromLatin1("(Type == 'Service') and "
+                                                "([X-Braindump-Version] == 1)"));
+  KService::List::ConstIterator iter;
+  for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+    KService::Ptr service = *iter;
+    int errCode = 0;
+    KParts::Plugin* plugin =
+      KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+    if (plugin) {
+      insertChildClient(plugin);
+    } else {
+      if (errCode == KLibLoader::ErrNoLibrary) {
+        kWarning() << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+      }
+    }
+  }
+}
+
 
 void View::editPaste()
 {

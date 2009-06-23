@@ -31,7 +31,6 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
   KAction *action  = new KAction(i18n("&Uncheck"), this);
   actionCollection()->addAction("QuickStates_Unchecked", action);
 //   connect(action, SIGNAL(triggered()), this, SLOT(slotUnchecked()));
-
 }
 
 BraindumpQuickStatesPlugin::~BraindumpQuickStatesPlugin() {

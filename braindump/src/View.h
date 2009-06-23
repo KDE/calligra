@@ -69,12 +69,12 @@ public:
     /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;
 
-protected:
+private:
     /// creates the widgets (called from the constructor)
     void initGUI();
     /// creates the actions (called from the constructor)
     void initActions();
-
+    void loadExtensions();
 protected slots:
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
