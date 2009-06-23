@@ -27,30 +27,30 @@
 
 class QSvgRenderer;
 
-class Category;
+class StateCategory;
 class StatesRegistry;
 
 class BRAINDUMPCORE_EXPORT State {
     friend class StatesRegistry;
-    State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName, int _priority);
+    State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority);
     ~State();
   public:
     const QString& name() const;
     const QString& id() const;
-    const Category* category() const;
+    const StateCategory* category() const;
     QSvgRenderer* renderer() const;
     int priority() const;
   private:
     QString m_id, m_name;
-    Category* m_category;
+    StateCategory* m_category;
     QSvgRenderer* m_render;
     int m_priority;
 };
 
-class BRAINDUMPCORE_EXPORT Category {
+class BRAINDUMPCORE_EXPORT StateCategory {
     friend class StatesRegistry;
-    Category( const QString& _id, const QString& _name, int _priority);
-    ~Category();
+    StateCategory( const QString& _id, const QString& _name, int _priority);
+    ~StateCategory();
   public:
     const QString& name() const;
     const QString& id() const;

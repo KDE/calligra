@@ -31,7 +31,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-State::State( const QString& _id, const QString& _name, Category* _category, const QString& _fileName, int _priority) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName)), m_priority(_priority)
+State::State( const QString& _id, const QString& _name, StateCategory* _category, const QString& _fileName, int _priority) : m_id(_id), m_name(_name), m_category(_category), m_render(new QSvgRenderer(_fileName)), m_priority(_priority)
 {
 }
 
@@ -47,7 +47,7 @@ const QString& State::id() const {
   return m_id;
 }
 
-const Category* State::category() const {
+const StateCategory* State::category() const {
   return m_category;
 }
 
@@ -59,47 +59,47 @@ int State::priority() const {
   return m_priority;
 }
 
-struct Category::Private {
+struct StateCategory::Private {
   QString id, name;
   QMap<QString, const State*> states;
   int priority;
 };
 
-Category::Category( const QString& _id, const QString& _name, int _priority) : d(new Private) {
+StateCategory::StateCategory( const QString& _id, const QString& _name, int _priority) : d(new Private) {
   d->id = _id;
   d->name = _name;
   d->priority = _priority;
 }
 
-Category::~Category() {
+StateCategory::~StateCategory() {
   delete d;
 }
 
-const QString& Category::name() const {
+const QString& StateCategory::name() const {
   return d->name;
 }
 
-const QString& Category::id() const {
+const QString& StateCategory::id() const {
   return d->id;
 }
 
-QList<QString> Category::stateIds() const {
+QList<QString> StateCategory::stateIds() const {
   return d->states.keys();
 }
 
-const State* Category::state(const QString& _id) const {
+const State* StateCategory::state(const QString& _id) const {
   if(d->states.contains(_id)) return d->states[_id];
   kWarning() << "No shape " << _id << " found in category " << name() << " choices: " << d->states.keys();
   return 0;
 }
 
-int Category::priority() const {
+int StateCategory::priority() const {
   return d->priority;
 }
 
 struct StatesRegistry::Private {
   static StatesRegistry* s_instance;
-  QMap<QString, Category*> categories;
+  QMap<QString, StateCategory*> categories;
   void parseStatesRC(const QString& _filename );
 };
 
@@ -138,7 +138,7 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
       QString catId = eCat.attribute("id");
       QString catName = eCat.attribute("name");
       int catPriority = eCat.attribute("priority", "1000").toInt();
-      Category* category = 0;
+      StateCategory* category = 0;
       if(catId.isEmpty()) {
         kError() << "Missing category id";
       } else {
@@ -146,7 +146,7 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
         {
           category = categories[catId];
         } else if( not catName.isEmpty() ) {
-          category = new Category(catId, i18n(catName.toUtf8()), catPriority );
+          category = new StateCategory(catId, i18n(catName.toUtf8()), catPriority );
           categories[catId] = category;
         }
         if(category){
