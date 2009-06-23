@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=KSpread
+Name[x-test]=xxTextxx
+Comment=KSpread Migration Driver for Kexi
+X-KDE-Library=keximigrate_kspread
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=KSpread
+X-Kexi-MigrationDriverType=File
+X-Kexi-KexiMigrationVersion=1.1
