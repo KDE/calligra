@@ -35,7 +35,7 @@ class KoShape;
  */
 class RememberPositionCommand : public QUndoCommand {
   public:
-    RememberPositionCommand(const QList<KoShape*>& _shapes);
+    RememberPositionCommand(const QList<KoShape*>& _shapes, QUndoCommand *cmd = 0);
     virtual ~RememberPositionCommand();
   public:
     virtual void undo();

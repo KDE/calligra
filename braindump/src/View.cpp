@@ -74,6 +74,7 @@
 #include "Layout.h"
 #include "SectionPropertiesDock.h"
 #include "import/ZoomController.h"
+#include "commands/RememberPositionCommand.h"
 
 View::View( RootSection *document, MainWindow* parent )
 : QWidget( parent )
@@ -430,6 +431,7 @@ void View::ungroupSelection() {
     {
       new KoShapeUngroupCommand( container, container->childShapes(), cmd );
       new KoShapeDeleteCommand( m_doc->viewManager(), container, cmd );
+      new RememberPositionCommand( container->childShapes(), cmd );
     }
   }
   m_canvas->addCommand( cmd );
