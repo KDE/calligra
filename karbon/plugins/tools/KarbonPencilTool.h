@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,6 +59,7 @@ private:
     void finish( bool closePath );
     KoLineBorder * currentBorder();
     
+    QRectF handleRect(const QPointF &p);
     QRectF grabRect(const QPointF &p);
     /// returns the nearest existing path point 
     KoPathPoint* endPointAtPosition( const QPointF &position );
@@ -80,6 +81,7 @@ private:
     KoPathShape * m_shape;
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
+    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
 };
 
 #endif // _KARBONPENCILTOOL_H_

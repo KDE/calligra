@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,7 +58,7 @@ KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
     : KoTool( canvas ),  m_mode( ModeCurve ), m_optimizeRaw( false )
     , m_optimizeCurve( false ), m_combineAngle( 15.0 ), m_fittingError( 5.0 )
     , m_close( false ), m_shape( 0 )
-    , m_existingStartPoint(0), m_existingEndPoint(0)
+    , m_existingStartPoint(0), m_existingEndPoint(0), m_hoveredPoint(0)
 {
 }
 
@@ -68,27 +68,37 @@ KarbonPencilTool::~KarbonPencilTool()
 
 void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    if( ! m_shape )
-        return;
-
-    painter.save();
-
-    painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
-
-    //KoShape::applyConversion( painter, converter );
-
-    painter.save();
-    m_shape->paint( painter, converter );
-    painter.restore();
-
-    if( m_shape->border() )
-    {
+    if (m_shape) {
         painter.save();
-        m_shape->border()->paintBorder( m_shape, painter, converter );
+
+        painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
+
+        painter.save();
+        m_shape->paint( painter, converter );
+        painter.restore();
+
+        if( m_shape->border() )
+        {
+            painter.save();
+            m_shape->border()->paintBorder( m_shape, painter, converter );
+            painter.restore();
+        }
+
         painter.restore();
     }
+    
+    if (m_hoveredPoint) {
+        painter.save();
+        painter.setMatrix(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
+        KoShape::applyConversion(painter, converter);
 
-    painter.restore();
+        int handleRadius = m_canvas->resourceProvider()->handleRadius();
+        painter.setPen(Qt::blue);      //TODO make configurable
+        painter.setBrush(Qt::white);   //TODO make configurable
+        m_hoveredPoint->paint(painter, handleRadius, KoPathPoint::Node);
+        
+        painter.restore();
+    }
 }
 
 void KarbonPencilTool::repaintDecorations()
@@ -118,10 +128,18 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
     if( event->buttons() & Qt::LeftButton )
         addPoint( event->point );
     
-    if (endPointAtPosition(event->point))
-        useCursor(Qt::PointingHandCursor, true);
-    else
-        useCursor(Qt::ArrowCursor, true);
+    KoPathPoint * endPoint = endPointAtPosition(event->point);
+    if (m_hoveredPoint != endPoint) {
+        if (m_hoveredPoint) {
+            QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
+            m_canvas->updateCanvas(handleRect(nodePos));
+        }
+        m_hoveredPoint = endPoint;
+        if (m_hoveredPoint) {
+            QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
+            m_canvas->updateCanvas(handleRect(nodePos));
+        }
+    }
 }
 
 void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -137,12 +155,14 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
     addPoint( point );
     finish( event->modifiers() & Qt::ShiftModifier );
 
+    m_existingStartPoint = 0;
+    m_existingEndPoint = 0;
+    m_hoveredPoint = 0;
+    
     // the original path may be different from the one added
     m_canvas->updateCanvas( m_shape->boundingRect() );
     delete m_shape;
     m_shape = 0;
-    m_existingStartPoint = 0;
-    m_existingEndPoint = 0;
     m_points.clear();
 }
 
@@ -170,6 +190,7 @@ void KarbonPencilTool::deactivate()
     m_shape = 0;
     m_existingStartPoint = 0;
     m_existingEndPoint = 0;
+    m_hoveredPoint = 0;
 }
 
 void KarbonPencilTool::addPoint( const QPointF & point )
@@ -388,6 +409,15 @@ KoLineBorder * KarbonPencilTool::currentBorder()
     KoLineBorder * border = new KoLineBorder( m_canvas->resourceProvider()->activeBorder() );
     border->setColor( m_canvas->resourceProvider()->foregroundColor().toQColor() ); 
     return border;
+}
+
+QRectF KarbonPencilTool::handleRect(const QPointF &p)
+{
+    int handleRadius = m_canvas->resourceProvider()->handleRadius();
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    QRectF hr = converter->viewToDocument(QRectF(0, 0, 2*handleRadius, 2*handleRadius));
+    hr.moveCenter( p );
+    return hr;
 }
 
 QRectF KarbonPencilTool::grabRect(const QPointF &p)
