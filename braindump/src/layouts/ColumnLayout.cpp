@@ -43,17 +43,14 @@ void ColumnLayout::shapesAdded(QList<KoShape*> _shapes) {
   foreach(KoShape* shape, _shapes) {
     m_shapes.push_back(shape);
   }
-  updateShapesPosition();
 }
 
 void ColumnLayout::shapeAdded(KoShape* _shape) {
   m_shapes.push_back(_shape);
-  updateShapesPosition();
 }
 
 void ColumnLayout::shapeRemoved(KoShape* _shape) {
   m_shapes.removeAll(_shape);
-  updateShapesPosition();
 }
 
 bool contains( const QList<KoShape*> list1, const QList<KoShape*> list2) {
@@ -65,9 +62,8 @@ bool contains( const QList<KoShape*> list1, const QList<KoShape*> list2) {
   return false;
 }
 
-void ColumnLayout::shapesGeometryChanged(const QList<KoShape*>& _shape) {
-  Q_ASSERT(contains(m_shapes, _shape));
-  updateShapesPosition();
+void ColumnLayout::shapeGeometryChanged(KoShape* _shape) {
+  Q_ASSERT( m_shapes.contains(_shape));
 }
 
 
@@ -76,7 +72,7 @@ bool shapeIsLessThan(KoShape* s1, KoShape* s2)
   return s1->absolutePosition().y() < s2->absolutePosition().y();
 }
 
-void ColumnLayout::updateShapesPosition() {
+void ColumnLayout::relayout() {
   if(m_isUpdating) return;
   m_isUpdating = true;
   // First sort them

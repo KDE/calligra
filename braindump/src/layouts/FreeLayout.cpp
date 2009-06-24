@@ -38,18 +38,15 @@ QRectF FreeLayout::boundingBox() const {
 }
 
 void FreeLayout::shapeAdded(KoShape* ) {
-  updateSize();
 }
 
 void FreeLayout::shapeRemoved(KoShape* ) {
-  updateSize();
 }
 
-void FreeLayout::shapesGeometryChanged(const QList<KoShape*>& ) {
-  updateSize();
+void FreeLayout::shapeGeometryChanged(KoShape* ) {
 }
 
-void FreeLayout::updateSize() {
+void FreeLayout::relayout() {
   emit(boundingBoxChanged(boundingBox()));
 }
 

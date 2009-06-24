@@ -29,9 +29,9 @@ struct Layout::Private : public KoShape {
   Layout* self;
   QList<KoShape*> shapes;
   QString id;
-  QList<KoShape*> waitingList;
   bool eventSent;
     void removeDependees();
+    void triggerRelayout();
   protected:
     virtual void shapeChanged(ChangeType type, KoShape * shape );
   private:
@@ -42,7 +42,7 @@ struct Layout::Private : public KoShape {
 
 };
 
-static int event_type_delayed_geometry_changed = QEvent::registerEventType();
+static int event_type_delayed_relayout = QEvent::registerEventType();
 
 void Layout::Private::removeDependees() {
   foreach(KoShape* shape, shapes) {
@@ -59,16 +59,19 @@ void Layout::Private::shapeChanged(ChangeType type, KoShape * shape) {
     case ShearChanged:
     case SizeChanged:
     case GenericMatrixChange:
-      if(not waitingList.contains(shape)) {
-        waitingList.append(shape);
-      }
-      if(not eventSent) {
-        QCoreApplication::postEvent(self, new QEvent( QEvent::Type(event_type_delayed_geometry_changed)));
-        eventSent = true;
-      }
+      self->shapeGeometryChanged(shape);
+      triggerRelayout();
       break;
     default:
       break;
+  }
+}
+
+void Layout::Private::triggerRelayout()
+{
+  if(not eventSent) {
+    QCoreApplication::postEvent(self, new QEvent( QEvent::Type(event_type_delayed_relayout)));
+    eventSent = true;
   }
 }
 
@@ -91,6 +94,7 @@ const QString& Layout::id() const {
 void Layout::replaceLayout(Layout* layout) {
   layout->d->removeDependees(); // Avoid both layout to fight for the shapes possition
   addShapes(layout->d->shapes);
+  d->triggerRelayout();
 }
 
 void Layout::addShapes(QList<KoShape*> _shapes) {
@@ -102,6 +106,7 @@ void Layout::addShapes(QList<KoShape*> _shapes) {
   foreach(KoShape* shape, _shapes) {
     shape->addDependee(d);
   }
+  d->triggerRelayout();
 }
 
 void Layout::addShape(KoShape* _shape) {
@@ -109,12 +114,14 @@ void Layout::addShape(KoShape* _shape) {
   d->shapes.push_back(_shape);
   shapeAdded(_shape);
   _shape->addDependee(d);
+  d->triggerRelayout();
 }
 
 void Layout::removeShape(KoShape* _shape) {
   _shape->removeDependee(d);
   d->shapes.removeAll(_shape);
   shapeRemoved(_shape);
+  d->triggerRelayout();
 }
 
 void Layout::shapesAdded(QList<KoShape*> _shapes) {
@@ -135,11 +142,10 @@ const QList<KoShape*>& Layout::shapes() const {
 }
 
 bool Layout::event(QEvent * e) {
-  if(e->type() == event_type_delayed_geometry_changed) {
+  if(e->type() == event_type_delayed_relayout) {
     Q_ASSERT(d->eventSent);
     e->accept();
-    shapesGeometryChanged(d->waitingList);
-    d->waitingList.clear();
+    relayout();
     d->eventSent = false;
     return true;
   } else {
