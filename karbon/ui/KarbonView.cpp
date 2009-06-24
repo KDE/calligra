@@ -421,15 +421,26 @@ void KarbonView::fileImportGraphic()
         delete dialog;
         return;
     }
-    QString fname = dialog->selectedFile();
+    QString fname = dialog ? dialog->selectedFile() : QString();
+    QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
+    delete dialog;
+    
     
     KarbonPart importPart;
     // use data centers of this document for importing
     importPart.document().useExternalDataCenterMap( part()->document().dataCenterMap() );
 
     bool success = true;
-    
-    if (importPart.nativeFormatMimeType() == dialog->currentMimeFilter()) {
+
+    // check if we have an empty mime type (probably because the "All supported files"
+    // filter was active)
+    if (currentMimeFilter.isEmpty()) {
+        // get mime type from file
+        KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
+        if (mimeType && mimeType->is(importPart.nativeFormatMimeType()))
+            currentMimeFilter = importPart.nativeFormatMimeType();
+    }
+    if (importPart.nativeFormatMimeType() == currentMimeFilter) {
         // directly load the native format
         success = importPart.loadNativeFormat( fname );
         if ( !success ) {
@@ -454,8 +465,6 @@ void KarbonView::fileImportGraphic()
         }
     }
         
-    delete dialog;
-    
     if (success) {
         QList<KoShape*> importedShapes = importPart.document().shapes();
             
