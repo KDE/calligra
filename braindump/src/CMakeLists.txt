@@ -29,6 +29,7 @@ set(braindump_SRCS
   # Commands
   commands/MoveSectionCommand.cpp
   commands/InsertSectionCommand.cpp
+  commands/RememberPositionCommand.cpp
   commands/RemoveSectionCommand.cpp
   commands/RenameSectionCommand.cpp
   # Imported file
