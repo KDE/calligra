@@ -22,6 +22,7 @@
 
 #include "ui_wdgsectionproperties.h"
 
+class RootSection;
 class Section;
 
 #include <QDockWidget>
@@ -32,12 +33,14 @@ class SectionPropertiesDock : public QDockWidget {
   public:
     SectionPropertiesDock();
     virtual ~SectionPropertiesDock();
+    void setRootSection(RootSection* _rootSection);
     void setSection(Section* _section);
   private slots:
     void layoutChanged( int index );
   private:
     Ui::WdgSectionProperties m_wdgSectionProperties;
     Section* m_currentSection;
+    RootSection* m_rootSection;
 };
 
 class SectionPropertiesDockFactory : public KoDockFactory

@@ -169,6 +169,7 @@ void View::initGUI()
     SectionPropertiesDockFactory sectionPropertiesDockerFactory;
     m_sectionPropertiesDock = qobject_cast<SectionPropertiesDock*>( m_mainWindow->createDockWidget( &sectionPropertiesDockerFactory ) );
     Q_ASSERT(m_sectionPropertiesDock);
+    m_sectionPropertiesDock->setRootSection(m_doc);
     
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 

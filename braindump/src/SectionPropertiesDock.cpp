@@ -21,8 +21,12 @@
 #include "LayoutFactoryRegistry.h"
 #include "Section.h"
 #include "Layout.h"
+#include "commands/ChangeLayoutCommand.h"
+#include "RootSection.h"
 
-SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
+SectionPropertiesDock::SectionPropertiesDock() :
+    m_currentSection(0)
+{
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
   setWindowTitle("Dump properties");
@@ -36,10 +40,17 @@ SectionPropertiesDock::SectionPropertiesDock() : m_currentSection(0) {
   connect(m_wdgSectionProperties.comboBoxLayout, SIGNAL(currentIndexChanged(int)), SLOT(layoutChanged(int)));
 }
 
-SectionPropertiesDock::~SectionPropertiesDock() {
+SectionPropertiesDock::~SectionPropertiesDock()
+{
 }
 
-void SectionPropertiesDock::setSection(Section* _section) {
+void SectionPropertiesDock::setRootSection(RootSection* _rootSection)
+{
+  m_rootSection = _rootSection;
+}
+
+void SectionPropertiesDock::setSection(Section* _section)
+{
   m_currentSection = _section;
   m_wdgSectionProperties.comboBoxLayout->setEnabled(m_currentSection);
   if(m_currentSection) {
@@ -54,9 +65,14 @@ void SectionPropertiesDock::setSection(Section* _section) {
   }
 }
 
-void SectionPropertiesDock::layoutChanged( int index ) {
+void SectionPropertiesDock::layoutChanged( int index )
+{
   Q_ASSERT(m_currentSection);
-  m_currentSection->setLayout(LayoutFactoryRegistry::instance()->createLayout(m_wdgSectionProperties.comboBoxLayout->itemData(index).toString()));
+  Q_ASSERT(m_rootSection);
+  
+  m_rootSection->addCommand( m_currentSection,
+      new ChangeLayoutCommand(m_currentSection,
+                          m_wdgSectionProperties.comboBoxLayout->itemData(index).toString() ) );
 }
 
 #include "SectionPropertiesDock.moc"
