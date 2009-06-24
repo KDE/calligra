@@ -29,6 +29,7 @@
 RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this))
 {
   m_undoStack = new KUndoStack(0);
+  connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
 }
 
 RootSection::~RootSection()
@@ -56,3 +57,5 @@ void RootSection::createActions(KActionCollection* _actionCollection) {
   m_undoStack->createUndoAction(_actionCollection);
   m_undoStack->createRedoAction(_actionCollection);
 }
+
+#include "RootSection.moc"

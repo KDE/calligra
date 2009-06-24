@@ -20,6 +20,7 @@
 #ifndef _ROOT_SECTION_H_
 #define _ROOT_SECTION_H_
 
+#include <QObject>
 #include "SectionGroup.h"
 
 class KActionCollection;
@@ -28,7 +29,8 @@ class QUndoCommand;
 class ViewManager;
 class SectionsIO;
 
-class RootSection : public SectionGroup {
+class RootSection : public QObject, public SectionGroup {
+    Q_OBJECT
   public:
     RootSection();
     ~RootSection();
@@ -36,6 +38,9 @@ class RootSection : public SectionGroup {
     SectionsIO* sectionsIO();
     void addCommand(Section* , QUndoCommand* command);
     void createActions(KActionCollection* );
+  signals:
+    /// This signal is emited when a command is executed in the undo stack
+    void commandExecuted();
   private:
     ViewManager* m_viewManager;
     KUndoStack* m_undoStack;

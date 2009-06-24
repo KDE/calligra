@@ -36,6 +36,7 @@ class SectionPropertiesDock : public QDockWidget {
     void setRootSection(RootSection* _rootSection);
     void setSection(Section* _section);
   private slots:
+    void reload();
     void layoutChanged( int index );
   private:
     Ui::WdgSectionProperties m_wdgSectionProperties;
