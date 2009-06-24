@@ -1,6 +1,13 @@
 [Desktop Entry]
 Name=KSpread
-Name[x-test]=xxTextxx
+Name[af]=Kspread
+Name[hi]=के-स्प्रेड
+Name[hne]=के-स्प्रेड
+Name[ne]=केडीई स्प्रेड
+Name[sv]=Kspread
+Name[ta]=கேஸ்பிரெட்
+Name[x-test]=xxKSpreadxx
+Name[zh_TW]=工作表_KSpread
 Comment=KSpread Migration Driver for Kexi
 X-KDE-Library=keximigrate_kspread
 X-KDE-ServiceTypes=Kexi/MigrationDriver
