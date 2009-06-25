@@ -1915,7 +1915,7 @@ KoDocument *View::hitTest( const QPoint &pos )
 
 void View::createChildDocumentViews()
 {
-    foreach ( QObject* obj, getPart()->children() ) {
+/*    foreach ( QObject* obj, getPart()->children() ) {
         KoDocumentChild* ch = qobject_cast<KoDocumentChild*>(const_cast<QObject*>(obj));
         if ( ! ch->isDeleted() ) {
             DocumentChild *c = static_cast<DocumentChild*>( ch );
@@ -1928,7 +1928,7 @@ void View::createChildDocumentViews()
             ViewListItem *i = createChildDocumentView( c );
             cat->insertChild( cat->childCount(), i );
         }
-    }
+    }*/
 }
 
 ViewListItem *View::createChildDocumentView( DocumentChild *ch )

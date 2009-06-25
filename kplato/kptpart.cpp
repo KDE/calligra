@@ -29,6 +29,7 @@
 #include "kptschedulerpluginloader.h"
 #include "kptschedulerplugin.h"
 #include "kptbuiltinschedulerplugin.h"
+#include "kptcommand.h"
 
 //#include "KDGanttViewTaskLink.h"
 
@@ -457,6 +458,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 
     bool ok = true;
     m_xmlLoader.startLoad();
+    Project proj;
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -464,8 +466,8 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            m_xmlLoader.setProject( &project );
-            ok = project.load( e, m_xmlLoader );
+            m_xmlLoader.setProject( &proj );
+            ok = proj.load( e, m_xmlLoader );
             if ( ! ok ) {
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 //TODO add some ui here
@@ -477,6 +479,72 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
+    if ( ok ) {
+        const Task *from = qobject_cast<const Task*>( proj.childNode( 0 ) );
+        Task *to = qobject_cast<Task*>( project.findNode( from->id() ) );
+        if ( to && from ) {
+            MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
+            Completion &org = to->completion();
+            const Completion &curr = from->completion();
+            if ( org.entrymode() != curr.entrymode() ) {
+                cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
+            }
+            if ( org.isStarted() != curr.isStarted() ) {
+                cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
+            }
+            if ( org.isFinished() != curr.isFinished() ) {
+                cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+            }
+            if ( org.startTime() != curr.startTime() ) {
+                cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+            }
+            if ( org.finishTime() != curr.finishTime() ) {
+                cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+            }
+            QList<QDate> orgdates = org.entries().keys();
+            QList<QDate> currdates = curr.entries().keys();
+            foreach ( QDate d, orgdates ) {
+                if ( currdates.contains( d ) ) {
+                    if ( curr.entry( d ) == org.entry( d ) ) {
+                        continue;
+                    }
+                    kDebug()<<"modify entry "<<d;
+                    Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
+                    cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
+                } else {
+                    kDebug()<<"remove entry "<<d;
+                    cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
+                }
+            }
+            foreach ( QDate d, currdates ) {
+                if ( ! orgdates.contains( d ) ) {
+                    Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
+                    kDebug()<<"add entry "<<d<<e;
+                    cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+                }
+            }
+            const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
+            foreach ( const Resource *res, map.keys() ) {
+                Resource *r = project.findResource( res->id() );
+                if ( r == 0 ) {
+                    kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+                    continue;
+                }
+                Completion::UsedEffort *ue = map[ r ];
+                if ( ue == 0 ) {
+                    continue;
+                }
+                if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
+                    cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
+                }
+            }
+            if ( cmd->isEmpty() ) {
+                delete cmd;
+            } else {
+                addCommand( cmd );
+            }
+        }
+    }
     emit sigProgress( -1 );
     return ok;
 }

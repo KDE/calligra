@@ -29,7 +29,6 @@ add_subdirectory( toolbar )
 add_subdirectory( plugins )
 #add_subdirectory( tests )
 
-## workpackage handler not part of koffice 2.0 release
 add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
