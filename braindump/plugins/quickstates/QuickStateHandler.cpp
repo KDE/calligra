@@ -56,6 +56,8 @@ void QuickStateHandler::activate() {
   cursor.movePosition(QTextCursor::StartOfBlock);
   
   KoProperties properties;
+  properties.setProperty("category", m_catId);
+  properties.setProperty("state", m_textId);
   KoShape* shape = KoShapeRegistry::instance()->get("StateShape")->createShapeAndInit( &properties,  canvas->shapeController()->dataCenterMap() );
   Q_ASSERT(shape);
   KoTextAnchor *anchor = new KoTextAnchor(shape);
