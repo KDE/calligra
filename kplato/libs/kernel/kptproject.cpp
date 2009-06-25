@@ -934,17 +934,6 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
     me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
 
-//    m_accounts.save( me );
-
-    // save calendars
-/*    foreach ( Calendar *c, calendarIdDict.values() ) {
-        c->save( me );
-    }*/
-    // save standard worktime
-//     if ( m_standardWorktime )
-//         m_standardWorktime->save( me );
-
-    // save project resources, must be after calendars
     QListIterator<ResourceGroup*> git( m_resourceGroups );
     while ( git.hasNext() ) {
         git.next() ->saveWorkPackageXML( me, node->assignedResources( id ) );

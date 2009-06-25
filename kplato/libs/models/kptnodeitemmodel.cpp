@@ -1096,7 +1096,7 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
             if ( t->completion().isStarted() ) {
                 return t->completion().startTime().dateTime();
             }
-            break;
+            return QDateTime::currentDateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

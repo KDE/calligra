@@ -93,6 +93,8 @@ public:
 
     virtual void execute();
     virtual void unexecute();
+
+    bool isEmpty() const { return cmds.isEmpty(); }
     
 protected:
     QList<QUndoCommand*> cmds;

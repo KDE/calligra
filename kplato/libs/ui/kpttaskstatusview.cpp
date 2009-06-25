@@ -278,8 +278,10 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
-        case Node::Type_Milestone:
             name = "taskstatus_popup";
+            break;
+        case Node::Type_Milestone:
+            name = "taskview_milestone_popup";
             break;
         case Node::Type_Summarytask:
             name = "taskview_summary_popup";

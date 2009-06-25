@@ -20,6 +20,8 @@
 #ifndef KPTITEMVIEWSETTUP_H
 #define KPTITEMVIEWSETTUP_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptitemviewsettings.h"
 
 #include <QListWidgetItem>
@@ -34,7 +36,7 @@ namespace KPlato
 class DoubleTreeViewBase;
 class TreeViewBase;
 
-class ItemViewSettup : public QWidget, public Ui::ItemViewSettings
+class KPLATOUI_EXPORT ItemViewSettup : public QWidget, public Ui::ItemViewSettings
 {
     Q_OBJECT
 public:
@@ -63,7 +65,7 @@ private:
     bool m_includeColumn0;
 };
 
-class ItemViewSettupDialog : public KPageDialog
+class KPLATOUI_EXPORT ItemViewSettupDialog : public KPageDialog
 {
     Q_OBJECT
 public:
@@ -76,7 +78,7 @@ private:
     ItemViewSettup *m_panel;
 };
 
-class SplitItemViewSettupDialog : public KPageDialog
+class KPLATOUI_EXPORT SplitItemViewSettupDialog : public KPageDialog
 {
     Q_OBJECT
 public:
