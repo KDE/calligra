@@ -6,6 +6,7 @@ X-KDE-Import=application/x-vnd.kde.kplato
 X-KDE-Weight=1
 ImportDescription=KPlato
 Name=KPlato iCalendar Export Filter
+Name[es]=Filtro de KPlato de exportación a iCalendar
 Name[et]=KPlato iCalendari ekspordifilter
 Name[pt]=Filtro de Exportação de iCalendar para o KPlato
 Name[pt_BR]=Filtro de Exportação de iCalendar para o KPlato
