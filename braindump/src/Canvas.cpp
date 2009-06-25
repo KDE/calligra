@@ -52,10 +52,13 @@ Canvas::Canvas( View * view, RootSection* doc )
   m_toolProxy = new KoToolProxy( this );
   setFocusPolicy( Qt::StrongFocus );
   // this is much faster than painting it in the paintevent
-  setBackgroundRole( QPalette::Base );
+  QPalette pal = palette();
+  pal.setColor(QPalette::Base, Qt::white);
+  pal.setColor(QPalette::Text, Qt::black);
+  setPalette(pal);
+  setBackgroundRole(QPalette::Base);
   setAutoFillBackground( true );
   setAttribute(Qt::WA_InputMethodEnabled, true);
-  setBackgroundColor(Qt::white);
 }
 
 Canvas::~Canvas()
