@@ -74,7 +74,7 @@ protected:
 };
 
 
-class KPLATOUI_EXPORT TaskWorkPackageView : public ViewBase
+class KPLATOWORK_EXPORT TaskWorkPackageView : public ViewBase
 {
     Q_OBJECT
 public:
