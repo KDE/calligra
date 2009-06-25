@@ -132,12 +132,12 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
     if (m_hoveredPoint != endPoint) {
         if (m_hoveredPoint) {
             QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
-            m_canvas->updateCanvas(handleRect(nodePos));
+            m_canvas->updateCanvas(handlePaintRect(nodePos));
         }
         m_hoveredPoint = endPoint;
         if (m_hoveredPoint) {
             QPointF nodePos = m_hoveredPoint->parent()->shapeToDocument(m_hoveredPoint->point());
-            m_canvas->updateCanvas(handleRect(nodePos));
+            m_canvas->updateCanvas(handlePaintRect(nodePos));
         }
     }
 }
@@ -411,27 +411,9 @@ KoLineBorder * KarbonPencilTool::currentBorder()
     return border;
 }
 
-QRectF KarbonPencilTool::handleRect(const QPointF &p)
-{
-    int handleRadius = m_canvas->resourceProvider()->handleRadius();
-    const KoViewConverter * converter = m_canvas->viewConverter();
-    QRectF hr = converter->viewToDocument(QRectF(0, 0, 2*handleRadius, 2*handleRadius));
-    hr.moveCenter( p );
-    return hr;
-}
-
-QRectF KarbonPencilTool::grabRect(const QPointF &p)
-{
-    uint grabSize = 2*m_canvas->resourceProvider()->grabSensitivity();
-    const KoViewConverter * converter = m_canvas->viewConverter();
-    QRectF hr = converter->viewToDocument(QRectF(0, 0, grabSize, grabSize));
-    hr.moveCenter( p );
-    return hr;
-}
-
 KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
 {
-    QRectF roi = grabRect(position);
+    QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = m_canvas->shapeManager()->shapesAt(roi);
     
     KoPathPoint * nearestPoint = 0;

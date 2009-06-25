@@ -59,8 +59,6 @@ private:
     void finish( bool closePath );
     KoLineBorder * currentBorder();
     
-    QRectF handleRect(const QPointF &p);
-    QRectF grabRect(const QPointF &p);
     /// returns the nearest existing path point 
     KoPathPoint* endPointAtPosition( const QPointF &position );
     
