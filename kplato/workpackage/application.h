@@ -30,6 +30,7 @@
 #include <KoApplication.h>
 
 #include <ktabwidget.h>
+#include <kuniqueapplication.h>
 
 #include <q3ptrlist.h>
 #include <QMap>
@@ -61,18 +62,14 @@ class KoView;
 
 class KPlatoWork_MainGUIClient;
 
-class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KoApplication
+class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {
     Q_OBJECT
 public:
     KPlatoWork_Application();
     ~KPlatoWork_Application();
 
-    /// Prepare application for execution
-    virtual bool start();
-
-private:
-//    bool initHack();
+    virtual int newInstance();
 };
 
 

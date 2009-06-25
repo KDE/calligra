@@ -104,7 +104,7 @@ public:
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
 
-    QWidget *canvas() const;
+//    QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();
 
@@ -113,13 +113,18 @@ public:
     ScheduleManager *currentScheduleManager() const;
     long currentScheduleId() const;
     
+    ViewBase *createTaskWorkPackageView();
     ViewBase *createTaskInfoView();
     ViewBase *createDocumentsView();
-    
+    ViewBase *createTaskView();
+
     bool viewDocument( const KUrl &filename );
     
     KPlatoWork_MainWindow *kplatoWorkMainWindow() const;
     
+    Node *currentNode() const;
+    Document *currentDocument() const;
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     void openInternalDocument( KoStore * );
@@ -138,24 +143,19 @@ public slots:
 
 protected slots:
     void slotGuiActivated( ViewBase *view, bool );
-    void slotPlugScheduleActions();
-    void slotViewSchedule( QAction *act );
-    void slotScheduleChanged( MainSchedule* );
-    void slotScheduleAdded( const MainSchedule * );
-    void slotScheduleRemoved( const MainSchedule * );
 
-    void slotAddScheduleManager( Project *project );
-    void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
-    
     void slotProgressChanged( int value );
 
     void slotCurrentChanged( int );
 
+    void slotEditDocument();
     void slotEditDocument( Document *doc );
+    void slotViewDocument();
     void slotViewDocument( Document *doc );
     
     void slotTaskProgress();
-    
+    void slotSendPackage();
+
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
@@ -163,9 +163,6 @@ protected:
     QAction *addScheduleAction( Schedule *sch );
     void setLabel();
     void updateView( QWidget *widget );
-
-private slots:
-    void slotActionDestroyed( QObject *o );
 
 private:
     void createViews();
@@ -195,6 +192,10 @@ private:
     // ------ Settings
     KAction *actionConfigure;
 
+    KAction *actionViewDocument;
+    KAction *actionEditDocument;
+
+    KAction *actionSendPackage;
     KAction *actionTaskProgress;
 };
 

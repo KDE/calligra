@@ -15,6 +15,10 @@ set(kplatoworkfactory_LIB_SRCS
     mainwindow.cpp
     part.cpp
     view.cpp
+    workpackage.cpp
+
+    taskworkpackagemodel.cpp
+    taskworkpackageview.cpp
 )
 
 kde4_add_library(kplatoworkfactory SHARED ${kplatoworkfactory_LIB_SRCS})
@@ -92,6 +96,7 @@ target_link_libraries(
     kdeinit_kplatowork
     kplatoworkapp
     ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
@@ -107,6 +112,7 @@ install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  kplatoworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kplatowork.rc kplatowork_readonly.rc kplatowork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/kplatowork)
+install( FILES  kplatoworkrc DESTINATION ${CONFIG_INSTALL_DIR})
 install( FILES  kplatowork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 

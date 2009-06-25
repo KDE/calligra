@@ -17,7 +17,20 @@
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
         <Separator/>
+        <Action name="edit_sendpackage"/>
         <Action name="task_progress"/>
         <ActionList name="documentseditor_edit_list"/>
     </ToolBar>
+    <Menu name="taskstatus_popup">
+        <Action name="task_progress"/>
+        <Action name="edit_sendpackage"/>
+    </Menu>
+    <Menu name="editdocument_popup">
+        <Action name="view_document"/>
+        <Action name="edit_document"/>
+    </Menu>
+    <Menu name="viewdocument_popup">
+        <Action name="view_document"/>
+    </Menu>
+
 </kpartgui>
