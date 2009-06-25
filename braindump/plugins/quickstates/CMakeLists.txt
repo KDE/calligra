@@ -1,10 +1,12 @@
+include_directories (${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
+
 ########### next target ###############
 
-set(braindumpquickstates_PART_SRCS BraindumpQuickStatesPlugin.cpp )
+set(braindumpquickstates_PART_SRCS BraindumpQuickStatesPlugin.cpp QuickStateHandler.cpp )
 
 kde4_add_plugin(braindumpquickstates ${braindumpquickstates_PART_SRCS})
 
-target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KDE4_KPARTS_LIBS} braindumpcore)
+target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KOBASE_LIBRARY} ${KDE4_KPARTS_LIBS} braindumpcore)
 
 install(TARGETS braindumpquickstates  DESTINATION ${PLUGIN_INSTALL_DIR})
 

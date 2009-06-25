@@ -30,6 +30,8 @@
 #include "State.h"
 #include "StatesRegistry.h"
 
+#include "QuickStateHandler.h"
+
 typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
@@ -49,7 +51,8 @@ BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QS
       KAction* action = new KAction(state->name(), this);
       actionCollection()->addAction(QString("State_%1_%2").arg(catId).arg(stateId), action);
       actionMenu->addAction(action);
-//       connect(action, SIGNAL(triggered()), handler, SLOT(makeState()));
+      QuickStateHandler* handler = new QuickStateHandler( catId, stateId, this );
+      connect(action, SIGNAL(triggered()), handler, SLOT(activate()));
       QPixmap image( 32, 32);
       QPainter p(&image);
       state->renderer()->render(&p, QRectF(0,0, 32,32));
