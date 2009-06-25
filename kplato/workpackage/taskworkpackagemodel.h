@@ -98,7 +98,7 @@ public:
 /*        PackageSendReason,
         PackageSendTime,
         PackageResponseType,*/
-        PackageResponseDue,
+        PackageResponseDue
 //         PackageResponseReason,
 //         PackageResponseTime,
 //         PackageLastAction
