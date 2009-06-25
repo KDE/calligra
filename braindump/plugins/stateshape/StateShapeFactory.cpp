@@ -48,6 +48,12 @@ KoShape* StateShapeFactory::createShape(
   Q_UNUSED(params);
   StateShape* fooShape = new StateShape();
   fooShape->setShapeId(STATESHAPEID);
+  if(params->contains("state")) {
+    fooShape->setStateId(params->stringProperty("state"));
+  }
+  if(params->contains("category")) {
+    fooShape->setCategoryId(params->stringProperty("category"));
+  }
   // use the params
   return fooShape;
 }

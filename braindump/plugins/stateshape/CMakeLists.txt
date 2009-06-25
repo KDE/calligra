@@ -23,8 +23,9 @@ kde4_add_plugin(stateshape ${stateshape_LIB_SRCS})
 target_link_libraries(
     stateshape
     ${KOMAIN_LIBRARY}
-    flake
+    ${FLAKE_LIBRARY}
     kostore
+    ${KOBASE_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBRARY}
