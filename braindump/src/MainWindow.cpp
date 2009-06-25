@@ -20,6 +20,7 @@
 #include "MainWindow.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QDockWidget>
 #include <QLayout>
 #include <QTabBar>
@@ -71,7 +72,19 @@ MainWindow::MainWindow(RootSection* document, const KComponentData &componentDat
   activateView(view);
 
   // Position and show toolbars according to user's preference
-  setAutoSaveSettings(componentData.componentName(), false);
+  setAutoSaveSettings(componentData.componentName());
+
+  const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+  QRect desk = QApplication::desktop()->screenGeometry(scnum);
+
+  // if the desktop is virtual then use virtual screen size
+  if (QApplication::desktop()->isVirtualDesktop())
+      desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+  
+  KConfigGroup config ( KGlobal::config(), componentData.componentName() );
+  const QSize size( config.readEntry( QString::fromLatin1("Width %1").arg(desk.width()), 0 ),
+                    config.readEntry( QString::fromLatin1("Height %1").arg(desk.height()), 0 ) );
+  resize( size );
 
   foreach (QDockWidget *wdg, m_dockWidgets) {
       if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
