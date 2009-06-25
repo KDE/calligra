@@ -20,7 +20,7 @@
 #define __koDocumentChild_h__
 
 #include <KoChild.h>
-#include "komain_export.h"
+#include "kplato_export.h"
 #include <KoXmlReader.h>
 
 #include "KoDocument.h"
@@ -43,7 +43,7 @@ class KoXmlWriter;
  * If you need a representation for embedded documents in your KOffice
  * component then you should inherit from this class.
  */
-class KOMAIN_EXPORT KoDocumentChild : public KoChild
+class KPLATO_EXPORT KoDocumentChild : public KoChild
 {
     Q_OBJECT
 public:

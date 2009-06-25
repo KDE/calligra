@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QMatrix>
 #include <QtGui/QPolygon>
-#include "komain_export.h"
+#include "kplato_export.h"
 
 /**
  * KoChild is an abstract base class that represents the geometry
@@ -39,7 +39,7 @@
  *
  * @see KoDocumentChild KoViewChild
  */
-class KOMAIN_EXPORT KoChild : public QObject
+class KPLATO_EXPORT KoChild : public QObject
 {
     Q_OBJECT
 public:
