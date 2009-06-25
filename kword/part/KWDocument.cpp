@@ -516,7 +516,8 @@ void KWDocument::clear()
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
+    if (dataCenterMap().contains("InlineTextObjectManager"))
+        inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
