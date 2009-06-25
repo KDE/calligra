@@ -40,7 +40,6 @@ set(kplatoprivate_LIB_SRCS
     kptviewlistdocker.cpp
     kptviewlist.cpp
     kptviewlistdialog.cpp
-    kptviewlistcommand.cpp
     
     kptconfig.cpp
     kpttaskdefaultpanel.cpp

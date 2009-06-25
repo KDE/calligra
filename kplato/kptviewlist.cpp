@@ -32,7 +32,6 @@
 
 #include "KoDocument.h"
 
-#include "kptviewlistcommand.h"
 #include "kptviewbase.h"
 #include "kptpart.h"
 #include "kptviewlistdialog.h"
@@ -145,19 +144,6 @@ KoDocument *ViewListItem::document() const
 {
     if ( data(0, ViewListItem::DataRole_Document ).isValid() ) {
         return static_cast<KoDocument*>( data(0, ViewListItem::DataRole_Document ).value<QObject*>() );
-    }
-    return 0;
-}
-
-void ViewListItem::setDocumentChild( DocumentChild *child )
-{
-    setData( 0, ViewListItem::DataRole_ChildDocument,  qVariantFromValue(static_cast<QObject*>( child ) ) );
-}
-
-DocumentChild *ViewListItem::documentChild() const
-{
-    if ( data(0, ViewListItem::DataRole_ChildDocument ).isValid() ) {
-        return static_cast<DocumentChild*>( data(0, ViewListItem::DataRole_ChildDocument ).value<QObject*>() );
     }
     return 0;
 }
@@ -319,13 +305,6 @@ void ViewListWidget::setReadWrite( bool rw )
 void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 {
     //kDebug();
-    if ( item && item->type() == ViewListItem::ItemType_ChildDocument && col == 0 ) {
-        DocumentChild *ch = static_cast<ViewListItem*>(item)->documentChild();
-        if ( ch ) {
-            ch->setTitle( item->text( 0 ) );
-            //kDebug()<<ch->title();
-        }
-    }
 }
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
@@ -400,20 +379,6 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
     item->setFlags( item->flags() | Qt::ItemIsEditable );
     category->insertChild( ( index == -1 ? category->childCount() : index ), item );
     //kDebug() << "added: " << item->tag();
-    return item;
-}
-
-ViewListItem *ViewListWidget::createChildDocumentView( const QString& tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
-{
-    ViewListItem * item = new ViewListItem( uniqueTag( tag ), QStringList( name ), ViewListItem::ItemType_ChildDocument );
-    item->setView( view );
-    item->setDocument( ch->document() );
-    item->setDocumentChild( ch );
-    if ( !icon.isEmpty() ) {
-        item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
-    }
-    item->setFlags( item->flags() | Qt::ItemIsEditable );
-    //kDebug() <<"added:" << item;
     return item;
 }
 
@@ -506,14 +471,6 @@ ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *p
     return 0;
 }
 
-void ViewListWidget::slotCreatePart()
-{
-    const QString entryPath = sender()->objectName();
-    KService::Ptr serv = KService::serviceByDesktopPath( entryPath );
-    KoDocumentEntry entry = KoDocumentEntry( serv );
-    emit createKofficeDocument( entry );
-}
-
 void ViewListWidget::slotAddView()
 {
     emit createView();
@@ -560,10 +517,6 @@ void ViewListWidget::slotConfigureItem()
         ViewListEditViewDialog *dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
         dlg->exec();
         delete dlg;
-    } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
-        ViewListEditViewDialog *dlg = new ViewListEditViewDialog( *this, m_contextitem, this );
-        dlg->exec();
-        delete dlg;
     }
 }
 
@@ -573,14 +526,6 @@ void ViewListWidget::slotEditDocumentTitle()
     if ( m_contextitem ) {
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
         m_viewlist->editItem( m_contextitem );
-    }
-}
-
-void ViewListWidget::slotRemoveDocument()
-{
-    if ( m_contextitem ) {
-        kDebug()<<m_contextitem<<":"<<m_contextitem->type();
-        m_part->addCommand( new DeleteEmbeddedDocumentCmd( this, m_contextitem, i18n( "Remove Document" ) ) );
     }
 }
 
@@ -630,27 +575,6 @@ void ViewListWidget::setupContextMenus()
     QAction *action;
     // document insert actions
     // Query for document types
-#if 0
-    m_lstEntries = KoDocumentEntry::query(KoDocumentEntry::OnlyEmbeddableDocuments);
-    QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
-    for( ; it != m_lstEntries.end(); ++it ) {
-        KService::Ptr serv = (*it).service();
-        // TODO: Make this test safer (possibly add desktopfile to define embeddable parts)
-        if ( serv->genericName().isEmpty() ||
-            serv->serviceTypes().contains( "application/vnd.oasis.opendocument.formula" ) ||
-            serv->serviceTypes().contains( "application/x-vnd.kde.kplato" ) ) {
-            continue;
-            }
-            action = new QAction( KIcon(serv->icon()), serv->genericName().replace('&',"&&"), this );
-            action->setObjectName( serv->entryPath() );
-            connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotCreatePart() ) );
-            m_adddocument.append( action );
-    }
-#endif
-    // no item actions
-    //action = new QAction( KIcon( "document-new" ), i18n( "New Category..." ), this );
-    //m_noitem.append( action );
-
     // view insert actions
     action = new QAction( KIcon( "list-add" ), i18nc( "@action Add View", "View..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
@@ -678,13 +602,6 @@ void ViewListWidget::setupContextMenus()
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_editview.append( action );
 
-    // document edit actions
-    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditDocumentTitle() ) );
-    m_editdocument.append( action );
-    action = new QAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveDocument() ) );
-    m_editdocument.append( action );
 }
 
 void ViewListWidget::renameCategory()
@@ -709,8 +626,6 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
             if ( v ) {
                 lst += v->viewlistActionList();
             }
-        } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
-            lst += m_editdocument;
         }
         if ( ! lst.isEmpty() ) {
             menu.addTitle( i18n( "Edit" ) );
@@ -721,7 +636,6 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
     }
     // then the "add" stuff
     lst = m_addview;
-    lst += m_adddocument;
     if ( ! lst.isEmpty() ) {
         menu.addTitle( i18n( "Insert" ) );
         foreach ( QAction *a, lst ) {

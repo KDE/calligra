@@ -24,7 +24,6 @@
 #include "kplato_export.h"
 
 #include <KoView.h>
-#include <KoDocumentEntry.h>
 
 #include "kptcontext.h"
 
@@ -63,7 +62,6 @@ class ResourceAssignmentView;
 class TaskStatusView;
 class Calendar;
 class Part;
-class DocumentChild;
 class Node;
 class Project;
 class MainSchedule;
@@ -154,7 +152,6 @@ public slots:
     void slotDefineWBS();
 
     void slotCreateView();
-    void slotCreateKofficeDocument( KoDocumentEntry& );
 
     void slotConfigure();
     void slotAddRelation( Node *par, Node *child );
@@ -241,10 +238,6 @@ private slots:
 
 private:
     void createViews();
-
-
-    void createChildDocumentViews();
-    ViewListItem *createChildDocumentView( DocumentChild *ch );
 
 private:
     QSplitter *m_sp;

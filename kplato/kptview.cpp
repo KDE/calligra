@@ -107,7 +107,6 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
-#include "kptviewlistcommand.h"
 
 #include "kplatosettings.h"
 
@@ -157,8 +156,6 @@ View::View( Part* part, QWidget* parent )
 
     // Add sub views
     createViews();
-    // Add child documents
-    createChildDocumentViews();
 
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_viewlist, SIGNAL( viewListItemRemoved( ViewListItem* ) ), SLOT( slotViewListItemRemoved( ViewListItem* ) ) );
@@ -248,7 +245,6 @@ View::View( Part* part, QWidget* parent )
 
     // Viewlist popup
     connect( m_viewlist, SIGNAL( createView() ), SLOT( slotCreateView() ) );
-    connect( m_viewlist, SIGNAL( createKofficeDocument( KoDocumentEntry& ) ), SLOT( slotCreateKofficeDocument( KoDocumentEntry& ) ) );
 
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
@@ -1913,55 +1909,8 @@ KoDocument *View::hitTest( const QPoint &pos )
     return qobject_cast<KoDocument*>( koDocument()->hitTest( this, pos ));
 }
 
-void View::createChildDocumentViews()
-{
-/*    foreach ( QObject* obj, getPart()->children() ) {
-        KoDocumentChild* ch = qobject_cast<KoDocumentChild*>(const_cast<QObject*>(obj));
-        if ( ! ch->isDeleted() ) {
-            DocumentChild *c = static_cast<DocumentChild*>( ch );
-            QTreeWidgetItem *cat = m_viewlist->findItem( c->category(), 0 );
-            if ( cat == 0 ) {
-                kDebug()<<"New category: Documents";
-                cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
-                cat->setIcon( 0, KIcon( "koshell" ) );
-            }
-            ViewListItem *i = createChildDocumentView( c );
-            cat->insertChild( cat->childCount(), i );
-        }
-    }*/
-}
-
-ViewListItem *View::createChildDocumentView( DocumentChild *ch )
-{
-    kDebug()<<ch->title();
-    KoDocument *doc = ch->document();
-
-    QString title = ch->title();
-    if ( title.isEmpty() && doc->documentInfo() ) {
-        title = doc->documentInfo()->aboutInfo( "title" );
-    }
-    if ( title.isEmpty() ) {
-        title = doc->url().pathOrUrl();
-    }
-    if ( title.isEmpty() ) {
-        title = "Untitled";
-    }
-    KoView *v = doc->createView( this );
-    ch->setGeometry( geometry(), true );
-    m_tab->addWidget( v );
-    ViewListItem *i = m_viewlist->createChildDocumentView( doc->objectName(), title, v, ch );
-    if ( ! ch->icon().isEmpty() ) {
-        i->setIcon( 0, KIcon( ch->icon() ) );
-    }
-    return i;
-}
-
 void View::slotViewListItemRemoved( ViewListItem *item )
 {
-    if ( item->documentChild() ) {
-        // This restores basic ui
-        item->documentChild()->setActivated( false, this );
-    }
     m_tab->removeWidget( item->view() );
     if ( item->type() == ViewListItem::ItemType_SubView ) {
         delete item->view();
@@ -1981,38 +1930,9 @@ void View::slotCreateView()
     delete dlg;
 }
 
-void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
-{
-    QString e;
-    KoDocument *doc = entry.createDoc( &e, getPart() );
-    if ( doc == 0 ) {
-        return;
-    }
-    if ( ! doc->showEmbedInitDialog( this ) ) {
-        delete doc;
-        return;
-    }
-    QTreeWidgetItem *cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
-    cat->setIcon( 0, KIcon( "koshell" ) );
-
-    DocumentChild *ch = getPart()->createChild( doc );
-    ch->setIcon( entry.service()->icon() );
-    ViewListItem *i = createChildDocumentView( ch );
-    getPart()->addCommand( new InsertEmbeddedDocumentCmd( m_viewlist, i, cat, i18n( "Insert Document" ) ) );
-    m_viewlist->setSelected( i );
-}
-
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
     //kDebug() <<"item=" << item <<","<<prev;
-    if ( prev && prev->type() != ViewListItem::ItemType_ChildDocument ) {
-        // Remove sub-view specific gui
-        //kDebug()<<"Deactivate:"<<prev;
-        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-        if ( v ) {
-            v->setGuiActive( false );
-        }
-    }
     if ( item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug()<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
@@ -2025,13 +1945,6 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         if ( v ) {
             v->setGuiActive( true );
         }
-        return;
-    }
-    if ( item->type() == ViewListItem::ItemType_ChildDocument ) {
-        //kDebug()<<"Activated:"<<item->view();
-        // changing doc also takes care of all gui
-        m_tab->setCurrentWidget( item->view() );
-        item->documentChild()->setActivated( true, item->view() );
         return;
     }
 }
