@@ -719,6 +719,14 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
+QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
+{
+    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
+    if (importExportType == KoDocument::ForExport)
+        answer.removeAll("application/x-kword"); // we can't save this, only load.
+    return answer;
+}
+
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
     // kDebug(32002) << fs;
