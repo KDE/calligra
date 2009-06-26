@@ -243,20 +243,6 @@ QDomDocument Part::saveXML()
     // Save the project
     m_project->save( doc );
     
-    if ( ! children().isEmpty() ) {
-        QDomElement el = document.createElement( "objects" );
-        foreach ( QObject* obj, children() ) {
-            KoDocumentChild *ch = qobject_cast<KoDocumentChild *>(obj);
-            if ( !ch || ch->isDeleted() ) {
-                continue;
-            }
-            QDomElement e = ch->save( document, false );
-            el.appendChild( e );
-        }
-        if ( el.childNodes().count() > 0 ) {
-            doc.appendChild( el );
-        }
-    }
     return document;
 }
 
