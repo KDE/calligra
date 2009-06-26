@@ -1,7 +1,6 @@
 TODO Items:
 -clean up code - remove unused functions/code that still remain from previous filter
 -header/footer - create another master page for first-page headers and footers
--fix column breaks - may have to change the paragraph style structure some
 -check headings processing & fix "unhandled tab justification code: 6" errors
 -tablehandler - process borders so there are no double borders where there shouldn't be
         -process cell/column width

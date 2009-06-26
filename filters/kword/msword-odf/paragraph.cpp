@@ -62,6 +62,19 @@ Paragraph::~Paragraph()
 
 void Paragraph::addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName )
 {
+    //check for column break in this text string
+    int colBreak = text.indexOf(QChar(0xE));
+    //I think this break always comes at the beginning of the text string
+    if ( colBreak == 0 )
+    {
+        kDebug(30513) << "colBreak = " << colBreak;
+        //add needed attribute to paragraph style
+        //Note: this logic breaks down if this isn't the first string in the paragraph, or there
+        // are other strings with another colBreak later in the same paragraph
+        m_paragraphStyle->addProperty( "fo:break-before", "column", KoGenStyle::ParagraphType );
+        //remove character that signaled a column break
+        text.remove(QChar(0xE));
+    }
     //add text string to list
     m_textStrings.push_back(QString(text));
 
@@ -151,14 +164,6 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
      
             //write text string to writer
 	    //now I just need to write the text:span to the header tag
-            //check for column break
-            int colBreak = m_textStrings[i].indexOf(QChar(0xE));
-            if ( colBreak != -1 )
-            {
-	        //remove character I can't handle
-	        m_textStrings[i].remove(QChar(0xE));
-                kDebug(30513) << "TODO: fix column break at position " << colBreak;
-            }
 	    writer->startElement( "text:span" );
 	    writer->addAttribute( "text:style-name", styleName.toUtf8() );
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
