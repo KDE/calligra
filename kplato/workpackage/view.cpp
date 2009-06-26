@@ -28,7 +28,6 @@
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
-#include <KoDocumentChild.h>
 
 #include <QApplication>
 #include <QLabel>

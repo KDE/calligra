@@ -31,7 +31,6 @@
 #include "kptxmlloaderobject.h"
 
 #include "KoDocument.h"
-#include "KoDocumentChild.h"
 
 class KoView;
 
@@ -102,7 +101,6 @@ signals:
     
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
-    virtual bool loadChildren( KoStore* );
      
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
@@ -116,7 +114,6 @@ protected slots:
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
 private:
-    void loadObjects( const KoXmlElement &element );
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
 
     void loadSchedulerPlugins();    
@@ -134,32 +131,6 @@ private:
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
 };
 
-class DocumentChild : public KoDocumentChild
-{
-public:
-    DocumentChild( KoDocument* parent );
-    DocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
-    //void setEmbedded( bool emb ) { m_embedded = emb; }
-    void setActivated( bool activate, QWidget *w = 0 );
-    virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
-    virtual QDomElement save( QDomDocument &doc, bool uppercase = false );
-    virtual bool load( const KoXmlElement& element, bool uppercase = false );
-    
-    void setIcon( const QString &icon ) { m_icon = icon; }
-    QString icon() const { return m_icon; }
-    
-    void setTitle( const QString &title ) { m_title = title; }
-    QString title() const { return m_title; }
-    
-    void setCategory( const QString &category ) { m_category = category; }
-    QString category() const { return m_category; }
-    
-private:
-    //bool m_embedded;
-    QString m_icon;
-    QString m_title;
-    QString m_category;
-};
 
 }  //KPlato namespace
 

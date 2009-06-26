@@ -210,9 +210,6 @@ This test does not work any longer. KoXml adds a couple of elements not present 
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
                 //TODO add some ui here
             }
-        } else if ( e.tagName() == "objects" ) {
-            kDebug()<<"loadObjects";
-            loadObjects( e );
         }
     }
     m_xmlLoader.stopLoad();
@@ -565,46 +562,6 @@ void Part::activate( QWidget *w )
         manager()->setActivePart( this, w );
 }
 
-DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
-{
-    DocumentChild *ch = new DocumentChild( this, doc, geometry );
-    insertChild( ch );
-    return ch;
-}
-
-void Part::loadObjects( const KoXmlElement &element )
-{
-    kDebug();
-    KoXmlNode n = element.firstChild();
-    for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        if ( ! n.isElement() ) {
-            continue;
-        }
-        KoXmlElement e = n.toElement();
-        if ( e.tagName() == "object" ) {
-            DocumentChild *ch = new DocumentChild( this );
-            if ( ch->load( e ) ) {
-                kDebug()<<"loaded";
-                insertChild( ch );
-            } else {
-                kDebug()<<"Failed to load object";
-                delete ch;
-            }
-        }
-    }
-}
-
-bool Part::loadChildren( KoStore* store )
-{
-    kDebug();
-    foreach ( QObject* obj, children() ) {
-        KoDocumentChild *ch = qobject_cast<KoDocumentChild *>(obj);
-        if(!ch) continue;
-        ch->loadDocument( store );
-    }
-    return true;
-}
-
 void Part::openTemplate( const KUrl& url )
 {
     //kDebug()<<url;
@@ -688,63 +645,6 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     }
     kDebug() << "File " << filename << " loaded and parsed";
     return true;
-}
-
-//--------------------------------
-
-DocumentChild::DocumentChild ( KoDocument* parent )
-    : KoDocumentChild ( parent )
-{
-}
-
-DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry )
-    : KoDocumentChild ( parent, doc, geometry )
-{
-}
-
-void DocumentChild::setActivated( bool act, QWidget *w )
-{
-    if ( document()->manager() ) {
-        if ( act ) {
-            document()->manager()->setActivePart( document(), w );
-        } else if ( parentDocument()->manager() ) {
-            parentDocument()->manager()->setActivePart( parentDocument(), w );
-        } else {
-            document()->manager()->setActivePart( 0, w );
-        }
-    }
-}
-
-KoDocument* DocumentChild::hitTest( const QPoint& , KoView* view, const QMatrix& )
-{
-    if ( document()->views().contains( view ) ) {
-        return document();
-    }
-    return 0;
-}
-
-
-QDomElement DocumentChild::save( QDomDocument &doc, bool uppercase )
-{
-    if ( document() == 0 ) {
-        return QDomElement();
-    }
-    QDomElement e = KoDocumentChild::save( doc, uppercase );
-    kDebug()<<m_title;
-    e.setAttribute( "title", m_title );
-    e.setAttribute( "icon", m_icon );
-    return e;
-}
-
-bool DocumentChild::load( const KoXmlElement& element, bool uppercase )
-{
-    if ( KoDocumentChild::load( element, uppercase ) ) {
-        m_icon = element.attribute( "icon", QString() );
-        m_title = element.attribute( "title", QString() );
-        kDebug()<<m_title;
-        return true;
-    }
-    return false;
 }
 
 
