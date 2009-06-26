@@ -39,6 +39,8 @@ class QToolButton;
 class QStackedWidget;
 class KoColorPopupAction;
 class KoPathShape;
+class QSpacerItem;
+class QGridLayout;
 
 class KarbonStyleDocker : public QDockWidget, public KoCanvasObserver
 {
@@ -61,6 +63,9 @@ private slots:
     void updateGradient( KoResource * item );
     void updatePattern( KoResource * item );
     void updateFillRule( Qt::FillRule fillRule );
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
+    
 private:
     void updateColor( const QColor &c, const QList<KoShape*> & selectedShapes );
     /// Sets the shape border and fill to display
@@ -81,7 +86,9 @@ private:
     KoCanvasBase * m_canvas;
     QToolButton * m_colorSelector;
     KoColorPopupAction *m_actionColor;
-
+    QSpacerItem *m_spacer;
+    QGridLayout *m_layout;
+    
     QTime m_lastColorChange;
     KoShapeBackgroundCommand * m_lastFillCommand;
     KoShapeBorderCommand * m_lastStrokeCommand;
