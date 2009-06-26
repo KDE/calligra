@@ -23,7 +23,6 @@
 #include "kptxmlloaderobject.h"
 
 #include <KoDocument.h>
-#include <KoDocumentChild.h>
 
 #include <QFileInfo>
 #include <QProcess>

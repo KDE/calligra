@@ -39,7 +39,6 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoOdfReadStore.h>
-#include <KoDocumentChild.h>
 
 #include <QApplication>
 #include <qpainter.h>
