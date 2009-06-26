@@ -130,6 +130,9 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+public slots:
+    virtual void initEmpty();
+
 signals:
     /**
      * Emitted when the active custom slide show changes.

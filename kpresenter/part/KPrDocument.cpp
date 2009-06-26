@@ -43,6 +43,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KGlobal>
+#include <KStandardDirs>
 
 class InitOnce
 {
@@ -262,6 +263,19 @@ void KPrDocument::saveKPrConfig()
 KoPageApp::PageType KPrDocument::pageType() const
 {
     return KoPageApp::Slide;
+}
+
+void KPrDocument::initEmpty()
+{
+    QString fileName( KStandardDirs::locate( "kpresenter_template", "Screen/.source/emptyLandscape.otp", componentData() ) );
+    setModified( true );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok ) {
+        // use initEmpty from  kopageapp
+        showLoadingErrorDialog();
+        KoPADocument::initEmpty();
+    }
+    resetURL();
 }
 
 KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
