@@ -130,6 +130,9 @@ public:
      */
     virtual KoPageApp::PageType pageType() const;
 
+public slots:
+    virtual void initEmpty();
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
