@@ -126,6 +126,7 @@ void TableTool::exportDocument()
 
 void TableTool::repaintDecorations()
 {
+    if(!d->tableShape) return;
     // TODO Stefan: restrict to the changed area
     m_canvas->updateCanvas(d->tableShape->boundingRect());
 }
