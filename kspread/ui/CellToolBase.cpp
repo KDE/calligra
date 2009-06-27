@@ -1053,6 +1053,11 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
     }
 }
 
+void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
+{
+    editor()->handleInputMethodEvent(event);
+}
+
 void CellToolBase::activate(bool temporary)
 {
     Q_UNUSED(temporary);
