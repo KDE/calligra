@@ -17,36 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTCHOOSER_H
-#define KARBONGRADIENTCHOOSER_H
+#ifndef KORESOURCEITEMDELEGATE_H
+#define KORESOURCEITEMDELEGATE_H
 
-#include <KoResourceItemChooser.h>
-#include <KoAbstractGradient.h>
-#include <KoResourceServerAdapter.h>
-#include <KoCheckerBoardPainter.h>
+#include <QAbstractItemDelegate>
+#include <../KoCheckerBoardPainter.h>
 
-#include <karbonui_export.h>
-
-class QResizeEvent;
-
-class KARBONUI_EXPORT KarbonGradientChooser : public KoResourceItemChooser
+/// The resource item delegate for rendering the resource preview
+class KoResourceItemDelegate : public QAbstractItemDelegate
 {
-    Q_OBJECT
 public:
-    KarbonGradientChooser( QWidget *parent = 0 );
-    ~KarbonGradientChooser();
-private slots:
-    void addGradient(KoResource* resource);
-    void removeGradient(KoResource* resource);
-    void importGradient();
-    void deleteGradient();
+    KoResourceItemDelegate( QObject * parent = 0 );
+    virtual ~KoResourceItemDelegate() {}
+    /// reimplemented
+    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    /// reimplemented
+    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const;
 private:
-    virtual void resizeEvent ( QResizeEvent * event );
-    virtual void showEvent ( QShowEvent * event );
-
-    KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
-    QMap<KoResource*, KoResourceItem*> m_itemMap;
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-#endif // KARBONGRADIENTCHOOSER_H
+#endif // KORESOURCEITEMDELEGATE_H

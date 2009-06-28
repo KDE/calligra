@@ -18,9 +18,7 @@
  */
 
 #include "KarbonPatternTool.h"
-#include "KarbonPatternChooser.h"
 #include "KarbonPatternEditStrategy.h"
-#include "KarbonPatternItem.h"
 #include <KarbonPatternOptionsWidget.h>
 
 #include <KoCanvasBase.h>
@@ -34,6 +32,10 @@
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
+#include <KoResource.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceItemChooser.h>
+#include <KoResourceServerAdapter.h>
 
 #include <KLocale>
 
@@ -293,9 +295,13 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect( m_optionsWidget, SIGNAL(patternChanged()),
              this, SLOT(patternChanged()) );
 
-    KarbonPatternChooser * chooser = new KarbonPatternChooser();
-    connect( chooser, SIGNAL( itemDoubleClicked(QTableWidgetItem*)),
-             this, SLOT(patternSelected(QTableWidgetItem*)));
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoPattern>(rserver);
+    KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
+    chooser->setObjectName("KarbonPatternChooser");
+
+    connect( chooser, SIGNAL(resourceSelected(KoResource*)),
+             this, SLOT(patternSelected(KoResource*)));
 
     widgets.insert( i18n("Pattern Options"), m_optionsWidget );
     widgets.insert( i18n("Patterns"), chooser );
@@ -305,10 +311,10 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     return widgets;
 }
 
-void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
+void KarbonPatternTool::patternSelected( KoResource * resource )
 {
-    KarbonPatternItem * currentPattern = dynamic_cast<KarbonPatternItem*>(item);
-    if( ! currentPattern || ! currentPattern->pattern()->valid() )
+    KoPattern * currentPattern = dynamic_cast<KoPattern*>(resource);
+    if( ! currentPattern || ! currentPattern->valid() )
         return;
 
     KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
@@ -317,7 +323,7 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
     {
         QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
         KoPatternBackground * newFill = new KoPatternBackground( imageCollection );
-        newFill->setPattern( currentPattern->pattern()->img() );
+        newFill->setPattern( currentPattern->img() );
         m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
         initialize();
     }

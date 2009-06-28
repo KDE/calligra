@@ -24,8 +24,6 @@
 #include <KarbonGradientEditWidget.h>
 #include <KarbonCursor.h>
 #include <KarbonGradientHelper.h>
-#include <KarbonGradientItem.h>
-#include <KarbonGradientChooser.h>
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
@@ -40,6 +38,9 @@
 #include <KoSnapStrategy.h>
 #include <KoGradientBackground.h>
 #include <KoShapeBackground.h>
+#include <KoResource.h>
+#include <KoResourceItemChooser.h>
+#include <KoResourceServerAdapter.h>
 
 #include <KLocale>
 
@@ -538,10 +539,14 @@ QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
 
     connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );
     
-    KarbonGradientChooser * chooser = new KarbonGradientChooser();
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_gradientWidget);
+    chooser->setObjectName("KarbonGradientChooser");
+    chooser->setColumnCount(1);
     
-    connect( chooser, SIGNAL( selected( QTableWidgetItem * ) ), 
-             this, SLOT( gradientSelected( QTableWidgetItem* ) ) );
+    connect( chooser, SIGNAL(resourceSelected( KoResource * ) ),
+             this, SLOT( gradientSelected( KoResource * ) ) );
     
     QMap<QString, QWidget *> widgets;
     widgets.insert( i18n( "Edit Gradient" ), m_gradientWidget );
@@ -565,16 +570,16 @@ QWidget * KarbonGradientTool::createOptionWidget()
     return optionWidget;
 }
 
-void KarbonGradientTool::gradientSelected( QTableWidgetItem* item )
+void KarbonGradientTool::gradientSelected( KoResource * resource )
 {
-    if( ! item )
+    if( ! resource )
         return;
     
-    KarbonGradientItem * gradientItem = dynamic_cast<KarbonGradientItem*>(item);
-    if( ! gradientItem )
+    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    if( ! gradient )
         return;
     
-    QGradient * newGradient = gradientItem->gradient()->toQGradient();
+    QGradient * newGradient = gradient->toQGradient();
     if( newGradient )
     {
         m_gradientWidget->setGradient( *newGradient );

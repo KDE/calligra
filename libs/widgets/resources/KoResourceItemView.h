@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,28 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonPatternItem.h"
-#include <KoPattern.h>
+#ifndef KORESOURCEITEMVIEW_H
+#define KORESOURCEITEMVIEW_H
+
 #include <KoResourceChooser.h>
 
-#define THUMB_SIZE 30
+class KoResourceModel;
 
-KarbonPatternItem::KarbonPatternItem( KoPattern * pattern )
-    : KoResourceItem( pattern)
+/// The resource view
+class KoResourceItemView : public QTableView
 {
-}
+public:
+    KoResourceItemView( QWidget * parent = 0 );
+    virtual ~KoResourceItemView() {}
+    /// reimplemented
+    virtual void resizeEvent ( QResizeEvent * event );
+    /// reimplemented
+    virtual bool viewportEvent( QEvent * event );
+private:
+    KoIconToolTip m_tip;
+};
 
-QVariant KarbonPatternItem::data ( int role ) const
-{
-    if( role == KoResourceChooser::LargeThumbnailRole )
-    {
-        return thumbnail( QSize( 100,100 ) );
-    }
-    else
-        return QTableWidgetItem::data( role );
-}
-
-KoPattern * KarbonPatternItem::pattern()
-{
-    return static_cast<KoPattern*>(resource());
-}
+#endif // KORESOURCEITEMVIEW_H
