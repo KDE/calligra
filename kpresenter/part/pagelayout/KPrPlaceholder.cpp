@@ -26,6 +26,8 @@
 #include <KoPASavingContext.h>
 #include <kdebug.h>
 
+#include "KPrPlaceholderStrategy.h"
+
 KPrPlaceholder::KPrPlaceholder()
 {
 }
@@ -38,9 +40,13 @@ bool KPrPlaceholder::loadOdf( const KoXmlElement & element, const QRectF & pageS
 {
     if ( element.hasAttributeNS( KoXmlNS::presentation, "object" ) ) {
         m_presentationObject = element.attributeNS( KoXmlNS::presentation, "object" );
+        if ( ! KPrPlaceholderStrategy::supported( m_presentationObject ) ) {
+            kDebug(33001) << "unsupported presentation:object" << m_presentationObject;
+            return false;
+        }
     }
     else {
-        // TODO error message
+        kWarning(33001) << "no presentation:object found in placeholder";
         return false;
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "x" ) ) {
