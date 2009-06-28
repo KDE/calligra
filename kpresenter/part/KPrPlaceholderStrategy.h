@@ -45,6 +45,13 @@ public:
      */
     static KPrPlaceholderStrategy * create( const QString & presentationClass );
 
+    /**
+     * Check if the presentation class is supported
+     *
+     * @param presentationClass The presentation:class attribute of the placeholder
+     */
+    static bool supported( const QString & presentationClass );
+
     virtual ~KPrPlaceholderStrategy();
 
     virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
