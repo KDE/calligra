@@ -13,7 +13,7 @@
     <procedure>
       <step>
         <para>
-          Start with the <literal>persons</literal> table. Open it in <interface>Data View</interface> using the <!--<a href="04_06_01_project_navigator.html">--><interface>Project Navigtor</interface>'s context menu.
+          Start with the <literal>persons</literal> table. Open it in <interface>Data View</interface> using the <!--<a href="04_06_01_project_navigator.html">--><interface>Project Navigator</interface>'s context menu.
           The current cell is marked with
           (usually black) thicker border, a <firstterm>cell cursor</firstterm>. The contents
           of the cell, if present, are highlighted with a different color. The current
