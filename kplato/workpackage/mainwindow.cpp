@@ -23,16 +23,15 @@
 
 #include "mainwindow.h"
 #include "part.h"
+#include "view.h"
+
 #include "kptdocuments.h"
 
 #include <QCursor>
 #include <QSplitter>
-#include <q3iconview.h>
 #include <QLabel>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QWidget>
+#include <QUndoStack>
 
 #include <assert.h>
 #include <kicon.h>
@@ -73,18 +72,39 @@
 #include <ktoolinvocation.h>
 #include <kservice.h>
 #include <kio/netaccess.h>
+#include <kxmlguiwindow.h>
 
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoView.h>
 #include <KoFilterManager.h>
 
-//TODO: KoMainWindow ->KMainWindow
-KPlatoWork_MainWindow::KPlatoWork_MainWindow( const KComponentData &instance )
-    : KoMainWindow( instance )
+KPlatoWork_MainWindow::KPlatoWork_MainWindow()
+    : KParts::MainWindow()
 {
     kDebug()<<this;
 
+    m_part = new KPlatoWork::Part( this, this );
+
+    KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+ 
+    KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
+    
+    KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
+
+    QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
+    a->setEnabled( false );
+    connect( m_part->undoStack(), SIGNAL( canUndoChanged( bool ) ), a, SLOT( setEnabled( bool ) ) );
+
+    a = KStandardAction::redo(m_part->undoStack(), SLOT(redo()), actionCollection());
+    a->setEnabled( false );
+    connect( m_part->undoStack(), SIGNAL( canRedoChanged( bool ) ), a, SLOT( setEnabled( bool ) ) );
+    
+    setupGUI( KXmlGuiWindow::Default, "kplatowork_mainwindow.rc" );
+
+    setCentralWidget( m_part->widget() );
+    createGUI( m_part );
+    connect( m_part, SIGNAL( captionChanged( const QString&, bool ) ), SLOT( setCaption( const QString&, bool ) ) );
 }
 
 
@@ -93,27 +113,15 @@ KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
     kDebug();
 }
 
-bool KPlatoWork_MainWindow::loadWorkPackages( KoDocument *doc )
+bool KPlatoWork_MainWindow::openDocument(const KUrl & url)
 {
-    return static_cast<KPlatoWork::Part*>( doc )->loadWorkPackages();
-}
-
-void KPlatoWork_MainWindow::sendMail()
-{
-    kDebug();
-}
-
-bool KPlatoWork_MainWindow::openDocumentInternal( const KUrl & url, KoDocument* )
-{
-    kDebug()<<url.url()<<rootDocument();
-    // this is only called when opening a new file
-    KoDocument *maindoc = rootDocument();
-    return maindoc->openUrl( url );
-}
-
-
-void KPlatoWork_MainWindow::saveSettings()
-{
+    if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
+        KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()));
+//        d->recent->removeUrl(url); //remove the file from the recent-opened-file-list
+//        saveRecentFiles();
+        return false;
+    }
+    return m_part->openUrl( url );
 }
 
 QString KPlatoWork_MainWindow::configFile() const
@@ -122,28 +130,21 @@ QString KPlatoWork_MainWindow::configFile() const
   return QString(); // use UI standards only for now
 }
 
-
 //called from slotFileSave(), slotFileSaveAs(), queryClose(), slotEmailFile()
 bool KPlatoWork_MainWindow::saveDocument( bool saveas, bool silent )
 {
     kDebug()<<saveas<<silent;
-    KoDocument *doc = rootDocument();
+    KPlatoWork::Part *doc = rootDocument();
     if ( doc == 0 ) {
         return true;
     }
-    return static_cast<KPlatoWork::Part*>( doc )->saveWorkPackages( silent );
-}
-
-
-void KPlatoWork_MainWindow::createShellGUI( bool  )
-{
-    guiFactory()->addClient( m_client );
+    return doc->saveWorkPackages( silent );
 }
 
 
 bool KPlatoWork_MainWindow::queryClose()
 {
-    KPlatoWork::Part *part = qobject_cast<KPlatoWork::Part*>( rootDocument() );
+    KPlatoWork::Part *part = rootDocument();
     if ( part == 0 ) {
         return true;
     }
@@ -156,39 +157,18 @@ void KPlatoWork_MainWindow::slotFileClose()
     }
 }
 
-void KPlatoWork_MainWindow::updateCaption()
+void KPlatoWork_MainWindow::slotFileSave()
 {
-    qDebug() << "KPlatoWork_MainWindow::updateCaption()";
-    if ( rootDocument() == 0 ) {
-        return updateCaption(QString(), false);
-    }
-    QString caption;
-    // Get caption from document info (title(), in about page)
-    if (rootDocument()->documentInfo()) {
-        caption = rootDocument()->documentInfo()->aboutInfo("title");
-    }
-    updateCaption(caption, rootDocument()->isModified());
+    saveDocument();
 }
 
-void KPlatoWork_MainWindow::closeEvent(QCloseEvent *e)
+void KPlatoWork_MainWindow::slotFileOpen()
 {
-    KMainWindow::closeEvent( e );
-//     if (queryClose()) {
-//         saveWindowSettings();
-//         setRootDocument(0L);
-//         if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-//             foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
-//                 dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
-//         }
-//         KParts::MainWindow::closeEvent(e);
-//     } else
-//         e->setAccepted(false);
+    QString file = KFileDialog::getOpenFileName( KUrl(), "*.kplatowork" );
+    if ( ! file.isEmpty() ) {
+        openDocument( file );
+    }
 }
 
-///////////////////
-KPlatoWork_MainGUIClient::KPlatoWork_MainGUIClient( KPlatoWork_MainWindow *window ) : KXMLGUIClient()
-{
-    setXMLFile( "kplatowork_mainwindow.rc", true, true );
-}
 
 #include "mainwindow.moc"

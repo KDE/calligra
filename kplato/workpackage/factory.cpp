@@ -53,19 +53,7 @@ KParts::Part *Factory::createPartObject(QWidget *parentWidget,
                                         const char* classname,
                                         const QStringList &)
 {
-    // If classname is "KoDocument", our host is a koffice application
-    // otherwise, the host wants us as a simple part, so switch to readonly
-    // and single view.
-    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
-
-    // parentWidget and widgetName are used by KoDocument for the
-    // "readonly+singleView" case.
-    Part *part = new Part(parentWidget, parent,
-                          !bWantKoDocument);
-
-    if (!bWantKoDocument)
-      part->setReadWrite(false);
-
+    Part *part = new Part( parentWidget, parent );
     return part;
 }
 
@@ -87,7 +75,7 @@ const KComponentData &Factory::global()
         s_global->dirs()->addResourceType("expression", "data", "kplatowork/expression/");
         s_global->dirs()->addResourceType("projects", "data", "kplatowork/projects/");
         
-        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
+//        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");

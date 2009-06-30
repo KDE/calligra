@@ -77,8 +77,6 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     
     createItemDelegates( m );
     
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
@@ -98,6 +96,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     }
     hideColumns( lst1, lst2 );
     slaveView()->setDefaultColumns( show );
+    masterView()->setFocus();
 }
 
 TaskWorkPackageModel *TaskWorkPackageTreeView::model() const
@@ -164,7 +163,7 @@ void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent *event)
 
 //-----------------------------------
 TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
-    : ViewBase( part, parent )
+    : QWidget( parent )
 {
     kDebug()<<"-------------------- creating TaskWorkPackageView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -178,11 +177,20 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
     
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 }
 
 void TaskWorkPackageView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+}
+
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList lst )
+{
+/*    if ( lst.isEmpty() || lst.count() > 1 ) {
+        return;
+    }*/
 }
 
 Node *TaskWorkPackageView::currentNode() const 
@@ -196,11 +204,13 @@ Document *TaskWorkPackageView::currentDocument() const
 }
 
 
-void TaskWorkPackageView::setGuiActive( bool activate )
+void TaskWorkPackageView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<activate;
-//    updateActionsEnabled( true );
-    ViewBase::setGuiActive( activate );
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos, lst.first() );
+    }
 }
 
 void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
@@ -272,7 +282,9 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
-    createOptionAction();
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
 }
 
 void TaskWorkPackageView::slotSplitView()

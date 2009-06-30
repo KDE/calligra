@@ -23,6 +23,8 @@
 #ifndef KPLATOWORK_PART_H
 #define KPLATOWORK_PART_H
 
+#include "kplatowork_export.h"
+
 #include "kptxmlloaderobject.h"
 
 #include <KoDocument.h>
@@ -32,11 +34,17 @@
 
 #include <kmimetype.h>
 #include <kservice.h>
+#include <kparts/part.h>
+
+class QUndoStack;
 
 class KoView;
 class KoStore;
 
 class KProcess;
+class KAction;
+
+class QAction;
 
 namespace KPlato
 {
@@ -125,36 +133,25 @@ protected:
  along with scheduling information and assigned resources.
 */
 
-class Part : public KoDocument
+class KPLATOWORK_EXPORT Part : public KParts::ReadWritePart
 {
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    explicit Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*/ = QVariantList() );
     ~Part();
 
     int docType( const Document *doc ) const;
     
-    void setProject( Project *project );
-    Project &getProject() { return *m_project; }
-    const Project &getProject() const { return *m_project; }
-
     bool setWorkPackage( Project *project );
 
-    virtual void paintContent( QPainter& painter, const QRect& rect);
-    virtual void paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view) {}
-
     bool loadWorkPackages();
-    // The load and save functions.
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     
     bool saveAs( const KUrl &url );
     /// Check if we have documents open for editing before saving
     virtual bool completeSaving( KoStore* store );
-
-    bool saveOdf( SavingContext &documentContext ) { return false; }
-    bool loadOdf( KoOdfReadStore & odfStore );
 
     /// Extract document file from the store to disk
     KUrl extractFile( const Document *doc );
@@ -200,7 +197,10 @@ public:
     
     bool queryClose();
 
-    using KoDocument::setModified;
+    bool openFile();
+    bool saveFile();
+
+    QUndoStack *undoStack() const { return m_undostack; }
 
 public slots:
     /**
@@ -211,16 +211,25 @@ public slots:
 
     virtual void setModified( bool mod );
 
+    void addCommand( QUndoCommand *cmd );
+
+    void viewWorkpackageDocument( Document *doc );
+
 signals:
     void changed();
     void workPackageAdded( WorkPackage *package, int index );
+    void captionChanged( const QString&, bool );
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
     bool completeLoading( KoStore *store );
+
+    bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
+    bool loadNativeFormatFromStore(const QString& file);
+    bool loadNativeFormatFromStoreInternal(KoStore * store);
     
+    bool viewDocument( const KUrl &filename );
+
 private:
-    Project *m_project;
     XMLLoaderObject m_xmlLoader;
     //Config m_config;
     
@@ -229,6 +238,9 @@ private:
 
     bool m_modified;
     bool m_loadingFromProjectStore;
+
+    QUndoStack *m_undostack;
+
 };
 
 

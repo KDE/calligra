@@ -42,6 +42,8 @@
 
 //#include "iconsidepane.h"
 
+class KPlatoWork_MainWindow;
+
 namespace std { }
 using namespace std;
 
@@ -60,8 +62,6 @@ class QSplitter;
 class KoDocumentEntry;
 class KoView;
 
-class KPlatoWork_MainGUIClient;
-
 class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {
     Q_OBJECT
@@ -70,6 +70,9 @@ public:
     ~KPlatoWork_Application();
 
     virtual int newInstance();
+
+private:
+    KPlatoWork_MainWindow *m_mainwindow;
 };
 
 

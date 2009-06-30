@@ -76,7 +76,8 @@
 #include <kxmlguifactory.h>
 
 KPlatoWork_Application::KPlatoWork_Application()
-    : KUniqueApplication()
+    : KUniqueApplication(),
+    m_mainwindow( 0 )
 {
     // Tell the iconloader about share/apps/koffice/icons
 /*    KIconLoader::global()->addAppDir("koffice");
@@ -102,42 +103,15 @@ int KPlatoWork_Application::newInstance()
     QList<KMainWindow*> lst = KMainWindow::memberList();
     qDebug()<<"newInstance() windows"<<lst.count();
     if ( lst.count() > 1 ) {
+        qDebug()<<"newInstance() windows"<<lst.count();
         return 1; // should never happen
     }
-    // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
-    if ( entry.isEmpty() ) {
-        kError() << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError() << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
-        kError() << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-        return false;
-    }
-    KoDocument* doc = 0;
-    KPlatoWork_MainWindow *shell = 0;
     if ( lst.isEmpty() ) {
-        QString errorMsg;
-        doc = entry.createDoc( &errorMsg, 0 );
-        if ( doc == 0 ) {
-            if (!errorMsg.isEmpty()) {
-                KMessageBox::error(0, errorMsg);
-            }
-            return 2;
-        }
-        shell = new KPlatoWork_MainWindow( doc->componentData() );
-        shell->setRootDocument( doc );
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-        shell->show();
-        // open project storage...
-        if ( ! shell->loadWorkPackages( doc ) ) {
-            // failed!?
-        }
-    } else {
-        shell = qobject_cast<KPlatoWork_MainWindow*>( lst.first() );
-        if ( shell == 0 ) {
-            KMessageBox::error(0, "Failed to (re)open KPlatoWork_MainWindow" );
-            return 3;
-        }
-        doc = shell->rootDocument();
+        Q_ASSERT( m_mainwindow == 0 );
+    }
+    if ( m_mainwindow == 0 ) {
+        m_mainwindow = new KPlatoWork_MainWindow();
+        m_mainwindow->show();
     }
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
@@ -146,18 +120,15 @@ int KPlatoWork_Application::newInstance()
         short int n=0; // number of documents open
         for(int i=0; i < argsCount; i++ ) {
             // For now create an empty document
-            if ( ! shell->openDocument( args->url(i) ) ) {
+            if ( ! m_mainwindow->openDocument( args->url(i) ) ) {
                 KMessageBox::error(0, "Failed to open document" );
-
             }
         }
-    } else {
-        shell->setRootDocument( doc );
     }
     args->clear();
     // not calling this before since the program will quit there.
     kDebug()<<"started------------------------";
-    return true;
+    return 0;
 }
 
 #include "application.moc"

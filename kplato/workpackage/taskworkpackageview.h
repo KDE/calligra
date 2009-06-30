@@ -74,20 +74,18 @@ protected:
 };
 
 
-class KPLATOWORK_EXPORT TaskWorkPackageView : public ViewBase
+class KPLATOWORK_EXPORT TaskWorkPackageView : public QWidget, public ViewActionLists
 {
     Q_OBJECT
 public:
     TaskWorkPackageView( Part *part, QWidget *parent );
     
     void setupGui();
-    using ViewBase::draw;
 
     TaskWorkPackageModel *model() const { return m_view->model(); }
     
     virtual void updateReadWrite( bool readwrite );
-    virtual Node *currentNode() const;
-
+    Node *currentNode() const;
     Document *currentDocument() const;
     
     /// Loads context info into this view. Reimplement.
@@ -98,11 +96,10 @@ public:
     KoPrintJob *createPrintJob();
     
 signals:
-    void openNode();
+    void requestPopupMenu( const QString& name, const QPoint &pos );
 
 public slots:
-    /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    void slotHeaderContextMenuRequested( const QPoint& );
 
 protected slots:
     virtual void slotOptions();
@@ -115,7 +112,8 @@ private slots:
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotContextMenuRequested( Document *doc, const QPoint& pos );
     void slotSplitView();
-    
+    void slotSelectionChanged( const QModelIndexList lst );
+
 private:
     TaskWorkPackageTreeView *m_view;
 
