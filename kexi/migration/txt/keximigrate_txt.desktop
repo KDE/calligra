@@ -1,14 +1,18 @@
 [Desktop Entry]
 Name=Text
+Name[es]=Texto
 Name[pt]=Texto
 Name[pt_BR]=Texto
 Name[uk]=Текст
+Name[x-test]=xxTextxx
 Name[zh_TW]=文字
 Comment=Text Migration Driver for Kexi
+Comment[es]=Controlador de migración de texto de Kexi
 Comment[pt]=Controlador de Migração de Texto para o Kexi
 Comment[pt_BR]=Driver de Migração de Texto para o Kexi
 Comment[sv]=Textövergångsdrivrutin för Kexi
 Comment[uk]=Драйвер міграції тексту для Kexi
+Comment[x-test]=xxText Migration Driver for Kexixx
 Comment[zh_TW]=Kexi 的文字轉移驅動程式
 X-KDE-Library=keximigrate_txt
 X-KDE-ServiceTypes=Kexi/MigrationDriver
