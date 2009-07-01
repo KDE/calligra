@@ -36,10 +36,6 @@ public:
     virtual ~MSWordOdfImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
-
-private:
-    class Private;
-    Private* d;
 };
 
 #endif // MSWORDODFIMPORT_H
