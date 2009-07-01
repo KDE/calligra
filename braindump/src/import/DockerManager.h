@@ -33,6 +33,7 @@ class DockerManager : public QObject
 public:
     explicit DockerManager(MainWindow* mainWindow);
     ~DockerManager();
+    void removeUnusedOptionWidgets();
 
 public slots:
     /**

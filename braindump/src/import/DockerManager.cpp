@@ -81,6 +81,20 @@ DockerManager::~DockerManager()
     delete d;
 }
 
+void DockerManager::removeUnusedOptionWidgets()
+{
+  QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
+  while (j.hasNext()) {
+    j.next();
+    if (not d->activeToolDockerMap.contains(j.key())) {
+        // kDebug(30004) << "removing" << j.key() << ((void*) j.value());
+        j.value()->setVisible(false);
+        j.value()->setEnabled(false);    
+        j.value()->toggleViewAction()->setVisible(false);
+    }
+  }
+}
+
 void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap)
 {
     //removeUnusedOptionWidgets(); // will probably be needed to fix multi view problems
