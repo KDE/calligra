@@ -518,12 +518,16 @@ QString FormulaCursor::tokenType ( const QChar& character ) const
     else if ( character == '*' || character == '+' || character == '-' ||
             character == '=' || character == '>' || character == '<' ||
             character == '!' || character == '.' || character == '/' ||
-            character == '?' || character == ',' || character == ':' ) {
+            character == '?' || character == ',' || character == ':' ||
+            character == '(' || character == ')' ||
+            character == '[' || character == ']' ||
+            character == '{' || character == '}' ) {
         return "mo";
     }
     else if (character.isLetter()) {
         return "mi";
     }
+    return "mi";
 }
 
 

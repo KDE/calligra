@@ -70,13 +70,13 @@ public:
      * Insert @p text at @p position
      * @return true, if the insert was succesfull
      */
-    bool insertText( int position, const QString &text );
+    virtual bool insertText( int position, const QString &text );
     
     ///inherited from BasicElement
     virtual bool insertChild ( int position, BasicElement* child );
     
     ///remove the letter after @p position and return a pointer to the glyph if it was one.
-    QList<GlyphElement* > removeText(int position, int length = 1);
+    virtual QList<GlyphElement* > removeText(int position, int length = 1);
     
 
     /**
@@ -128,11 +128,11 @@ protected:
 
     /// Size to stretch from
     QSizeF m_originalSize;
-
-private:
+    
     /// The raw string like it is read and written from MathML
     QString m_rawString;
-
+    
+private:
     /// The cache for the chosen font
     QFont m_font;
 

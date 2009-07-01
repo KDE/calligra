@@ -200,7 +200,7 @@ bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     }
     //Find out, if we should place the cursor before or after the character
     if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
-        i--;
+        --i;
     }
     cursor->setPosition(i);
     return true;
@@ -254,9 +254,8 @@ QFont TokenElement::font() const
 
 void TokenElement::setText ( const QString& text )
 {
-    //TODO: check for ObjectReplacement characters
-    m_rawString=text;
-    m_glyphs.empty();
+    removeText(0,m_rawString.length());
+    insertText(0,text);
 }
 
 
