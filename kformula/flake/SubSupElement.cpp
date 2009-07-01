@@ -91,9 +91,9 @@ void SubSupElement::layout( const AttributeManager* am )
         setHeight( yOffset + m_baseElement->height() );
 }
 
-BasicElement* SubSupElement::acceptCursor( const FormulaCursor* cursor )
+bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return true;
 }
 
 const QList<BasicElement*> SubSupElement::childElements()

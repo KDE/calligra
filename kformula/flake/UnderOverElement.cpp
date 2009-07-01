@@ -105,9 +105,9 @@ void UnderOverElement::layout( const AttributeManager* am )
     setWidth( largestWidth );
 }
 
-BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
+bool UnderOverElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return true;
 }
 
 void UnderOverElement::insertChild( FormulaCursor* cursor, BasicElement* child )

@@ -57,10 +57,10 @@ void UnknownElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     Q_UNUSED( child )
 }
 
-BasicElement* UnknownElement::acceptCursor( const FormulaCursor* cursor )
+bool UnknownElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
-    return 0;
+    return false;
 }
 
 ElementType UnknownElement::elementType() const

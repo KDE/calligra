@@ -136,9 +136,9 @@ const QList<BasicElement*> FractionElement::childElements()
     return list;
 }
 
-BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
+bool FractionElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return this;
+    return true;
 }
 
 int FractionElement::length() const {

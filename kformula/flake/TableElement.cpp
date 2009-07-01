@@ -142,9 +142,9 @@ const QList<BasicElement*> TableElement::childElements()
     return tmp;
 }
 
-BasicElement* TableElement::acceptCursor( const FormulaCursor* cursor )
+bool TableElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return false;
 }
 
 QString TableElement::attributesDefaultValue( const QString& attribute ) const

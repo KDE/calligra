@@ -103,9 +103,9 @@ void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
     m_childElements.removeOne( child );
 }
 
-BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
+bool RowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return this;
+    return true;
 }
 
 bool RowElement::moveCursor(FormulaCursor* cursor) {

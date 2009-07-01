@@ -81,7 +81,7 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
+    bool acceptCursor( const FormulaCursor* cursor );
 
     /// @return The element's ElementType
     ElementType elementType() const;

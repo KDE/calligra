@@ -80,9 +80,9 @@ void TableRowElement::layout( const AttributeManager* am )
     // inside a table where it does not matter if a table row has a baseline or not
 }
 
-BasicElement* TableRowElement::acceptCursor( const FormulaCursor* cursor )
+bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return false;
 }
 
 void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )

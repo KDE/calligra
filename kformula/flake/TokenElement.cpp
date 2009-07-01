@@ -193,10 +193,10 @@ void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
     m_rawString.remove( cursor->position(), 1 );
 }
 
-BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
+bool TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
-    return this;
+    return true;
 }
 
 bool TokenElement::moveCursor(FormulaCursor* cursor) {

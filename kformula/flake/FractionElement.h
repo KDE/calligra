@@ -76,12 +76,8 @@ public:
      */ 
     void removeChild( FormulaCursor* cursor, BasicElement* element );
 
-    /**
-     * Implement the cursor behaviour for the element
-     * @param cursor The FormulaCursor that is moved around
-     * @return A this pointer if the element accepts if not the element to asked instead
-     */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
+    /// inherited from BasicElement
+    bool acceptCursor( const FormulaCursor* cursor );
     
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor* cursor);

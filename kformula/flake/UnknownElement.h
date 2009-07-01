@@ -75,12 +75,8 @@ public:
      */
     void layout( const AttributeManager* am );
 
-    /**
-     * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
-     * @return A this pointer if the element accepts if not the element to asked instead
-     */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
+    /// inherited from BasicElement
+    bool acceptCursor( const FormulaCursor* cursor );
 
     /// @return The element's ElementType
     ElementType elementType() const;

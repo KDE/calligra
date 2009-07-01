@@ -131,9 +131,9 @@ public:
     /**
      * Implement the cursor behaviour for the element
      * @param cursor The FormulaCursor that is moved around
-     * @return A this pointer if the element accepts if not the element to asked instead
+     * @return true, if the element accepts the cursor
      */
-    virtual BasicElement* acceptCursor( const FormulaCursor* cursor );
+    virtual bool acceptCursor( const FormulaCursor* cursor );
     
     /**
      * Return the coordinates of the line, where the cursor should be drawn

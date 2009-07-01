@@ -181,7 +181,7 @@ void FormulaCursor::move( CursorDirection direction )
     if ( m_direction==MoveLeft || m_direction==MoveRight ) {
 	//the cursor is moved horizontally
 	while (m_currentElement->moveCursor( this )) {
-	    if ( m_currentElement->acceptCursor( this )==m_currentElement ) {
+	    if ( m_currentElement->acceptCursor( this ) ) {
 		return;
 	    }
 	}
