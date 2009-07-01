@@ -87,14 +87,15 @@ public:
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
     
+    ///inherited from BasicElement
     virtual bool moveCursor(FormulaCursor* cursor);
     
     /**
      * Obtain the x position of the cursor inside this token element
-     * @oaram cursor The FormulaCursor who is supposed to be used for calculation
+     * @param cursor The FormulaCursor who is supposed to be used for calculation
      * @return The offset from the left origin
      */
-    double cursorOffset( const FormulaCursor* cursor ) const;
+    double cursorOffset( const FormulaCursor* cursor );
 
     /// Process @p raw and render it to @p path
 
@@ -106,7 +107,13 @@ public:
     
     ///inherited from BasicElement
     virtual bool isToken() const;
-
+    
+    ///inherited from BasicElement
+    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    
+    ///inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );

@@ -71,15 +71,48 @@ BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
     return this;
 }
 
-bool BasicElement::moveCursor(FormulaCursor* cursor) {
-    if ( m_parentElement != 0 ) {
+bool BasicElement::moveCursor(FormulaCursor* cursor) 
+{
+    if ( m_parentElement != 0 || 
+	 cursor->direction()==MoveUp ||
+	 cursor->direction()==MoveDown) {
 	cursor->setCurrentElement(parentElement());
-	if (cursor->direction()==MoveLeft) {
-	    cursor->setPosition(m_parentElement->positionOfChild( this ));
-	}
-	else {
+	if (cursor->direction()==MoveRight) {
 	    cursor->setPosition(m_parentElement->positionOfChild( this )+1);
 	}
+	else {
+	    cursor->setPosition(m_parentElement->positionOfChild( this ));
+	}
+	return true;
+    }
+    else {
+	return false;
+    }
+}
+
+QLineF BasicElement::cursorLine(const FormulaCursor* cursor) 
+{
+    QPointF top = absoluteBoundingRect().topLeft();
+    QPointF bottom = top + QPointF( 0.0, height() );
+    return QLineF(top,bottom);   
+}
+
+const QRectF BasicElement::absoluteBoundingRect() const 
+{
+    QPointF neworigin = origin();
+    BasicElement* tmp=parentElement();
+    while (tmp) {
+	neworigin+=tmp->origin();
+	tmp=tmp->parentElement();
+    }
+    return QRectF(neworigin,QSizeF(width(),height()));
+}
+
+bool BasicElement::setCursorTo(FormulaCursor* cursor, QPointF point)
+{
+    if (boundingRect().contains(point)) {
+	cursor->setPosition(0);
+	cursor->setCurrentElement(this);
 	return true;
     }
     else {

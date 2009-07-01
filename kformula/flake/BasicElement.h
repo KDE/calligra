@@ -30,6 +30,7 @@
 #include <QList>
 #include <QString>
 #include <QRectF>
+#include <QLineF>
 class QPainter;
 class QVariant;
 class KoXmlWriter;
@@ -134,6 +135,13 @@ public:
      */
     virtual BasicElement* acceptCursor( const FormulaCursor* cursor );
     
+    /**
+     * Return the coordinates of the line, where the cursor should be drawn
+     * in coordinates relative to the flake shape
+     * @param cursor The FormulaCursor specifing the position
+     * @return The cursor line
+     */
+    virtual QLineF cursorLine(const FormulaCursor* cursor);
     
     /**
      * Move the cursor in the direction specified in cursor
@@ -159,6 +167,21 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+    
+    /// @return The absoulte bounding rectangle of the element
+    const QRectF absoluteBoundingRect() const;
+    
+    /**
+     * place the cursor at the the given point
+     * the point should be placed a the position in the element 
+     * (or it's child) that is closest to the point
+     * in particular the point doesn't have to be within 
+     * boundingBox()
+     * @param cursor The FormulaCursor to modify
+     * @param point The point in coordinates relative to the elements local coordinate system
+     * @return true, iff the cursor could be placed
+     **/
+    virtual bool setCursorTo(FormulaCursor *cursor, QPointF point);
 
     /// @return The bounding rectangle of the children, relative to the element
     const QRectF& childrenBoundingRect() const;

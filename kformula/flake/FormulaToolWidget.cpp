@@ -104,6 +104,7 @@ void FormulaToolWidget::slotLoadFormula()
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( &file, false, 0, 0, 0 );
     m_tool->shape()->loadOdf( tmpDocument.documentElement(), shapeContext );
+    m_tool->resetFormulaCursor();
 }
 
 void FormulaToolWidget::slotSaveFormula()

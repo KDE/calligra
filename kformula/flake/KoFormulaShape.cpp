@@ -39,17 +39,8 @@ KoFormulaShape::~KoFormulaShape()
 
 void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
-//     kDebug()<<"Layouting";
     applyConversion( painter, converter );   // apply zooming and coordinate translation
-//     boundingRect();
-//     kDebug()<<"size "<<size().width() <<" " <<size().height();
-    
     m_formulaRenderer->layoutElement( m_formulaElement );
-//     boundingRect();
-//      kDebug()<<"Painting "<< painter.clipPath().boundingRect().width()<<" "<< painter.clipPath().boundingRect().width();
-//     painter.setClipRect(boundingRect(), Qt::UniteClip);
-//     painter.setClipRect(QRectF(0, 0, size().width(), size().height()),Qt::UniteClip);
-//     kDebug()<<"updated "<< painter.clipPath().boundingRect().width()<<" "<< painter.clipPath().boundingRect().width();
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
 }
 

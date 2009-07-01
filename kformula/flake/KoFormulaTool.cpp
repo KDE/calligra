@@ -210,6 +210,16 @@ KoFormulaShape* KoFormulaTool::shape()
     return m_formulaShape;
 }
 
+void KoFormulaTool::resetFormulaCursor() {
+    m_formulaCursor->setCurrentElement(m_formulaShape->formulaElement());
+    m_formulaCursor->setPosition(0);
+    //we don't know if this cursor is allowed there, so we move it right
+    if ( !m_formulaCursor->currentElement()->acceptCursor(m_formulaCursor) ) {
+	m_formulaCursor->move(MoveRight);
+    }
+}
+
+
 void KoFormulaTool::setupActions()
 {
     KAction* action;

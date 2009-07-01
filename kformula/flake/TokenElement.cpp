@@ -44,10 +44,8 @@ const QList<BasicElement*> TokenElement::childElements()
 }
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
-    kDebug()<<"Some one ispainting me " << painter.clipPath().boundingRect().width()<<
-    " - " << painter.clipPath().boundingRect().height();
     // set the painter to background color and paint it
-    painter.setPen( am->colorOf( "mathbackground", this ) );
+     painter.setPen( am->colorOf( "mathbackground", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 
@@ -76,7 +74,6 @@ bool TokenElement::isToken() const {
 
 void TokenElement::layout( const AttributeManager* am )
 {
-    kDebug()<<"I am getting layouted with " <<m_rawString;
     // Query the font to use
     m_font = am->font( this );
     QFontMetricsF fm(m_font);
@@ -144,6 +141,53 @@ void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 	kDebug() << "-"<<m_rawString << "InputBuffer:"<<cursor->inputBuffer();
 }
 
+bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+    int counter = 0;
+    int i = 0;
+    QPainterPath tmppath;
+    kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
+    cursor->setCurrentElement(this);
+    if (boundingRect().width()<point.x()) {
+	    cursor->setPosition(length());
+	    return true;
+    }
+    double oldx=0;
+    //Find the letter we clicked on
+    for( i = 0; i < m_rawString.length(); i++ ) {
+        //add a character to the string
+	if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
+	    renderToPath( QString(m_rawString[i]), tmppath );
+	}
+        else {
+	    m_glyphs[ counter ]->renderToPath( QString(), tmppath );
+	    counter++;
+        }
+ 	//check if we found the character, on which the point is
+	if (tmppath.boundingRect().right()>=point.x()) {
+	    break;
+	}
+	//save the old width of the path
+	oldx=tmppath.boundingRect().right();
+    }
+    //Find out, if we should place the cursor before or after the character
+    if ((point.x()-oldx)>(tmppath.boundingRect().right()-point.x())) {	
+	i++;
+    }
+    cursor->setPosition(i);
+    return true;
+}
+
+
+QLineF TokenElement::cursorLine(const FormulaCursor* cursor)
+{
+    // inside tokens let the token calculate the cursor x offset
+    double tmp = cursorOffset( cursor );
+    QPointF top = absoluteBoundingRect().topLeft() + QPointF( tmp, 0 );
+    QPointF bottom = top + QPointF( 0.0,height() );
+    return QLineF(top,bottom);
+}
+
+
 void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 {
     m_rawString.remove( cursor->position(), 1 );
@@ -151,34 +195,46 @@ void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 
 BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
-//     Q_UNUSED( cursor )
+    Q_UNUSED( cursor )
     return this;
 }
 
 bool TokenElement::moveCursor(FormulaCursor* cursor) {
-    if ((cursor->isHome() && cursor->direction()==MoveLeft) || (cursor->isEnd() && cursor->direction()==MoveRight)) {
+    if ( (cursor->direction()==MoveUp) ||
+	 (cursor->direction()==MoveDown)) {
+	//we can't move the cursor vertically
+	return false;
+    }
+    if ( (cursor->isHome() && cursor->direction()==MoveLeft) ||
+	 (cursor->isEnd() && cursor->direction()==MoveRight) ) {
 	return BasicElement::moveCursor(cursor);
     }
-    else {
-	if (cursor->direction()==MoveLeft) {
+    switch( cursor->direction() ) {
+	case MoveLeft:
 	    cursor->setPosition(cursor->position()-1);
-	}
-	else {
+	    break;
+	case MoveRight:
 	    cursor->setPosition(cursor->position()+1);
-	}
-	return true;
+	    break;
     }
+    return true;
 }
 
 
-double TokenElement::cursorOffset( const FormulaCursor* cursor ) const
+double TokenElement::cursorOffset( const FormulaCursor* cursor ) 
 {
-    if( m_rawString.contains( QChar::ObjectReplacementCharacter ) ) {
-        // TODO do something special
+    int counter = 0;
+    QPainterPath tmppath;
+    for( int i = 0; i < cursor->position(); i++ ) {
+        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
+	    renderToPath( QString(m_rawString[i]), tmppath );
+	}
+        else {
+	    m_glyphs[ counter ]->renderToPath( QString(), tmppath );
+	    counter++;
+        }
     }
-
-    QFontMetricsF fm( m_font );
-    return fm.width( m_rawString.left( cursor->position() ) );
+    return tmppath.boundingRect().right();
 }
 
 QFont TokenElement::font() const

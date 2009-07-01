@@ -89,8 +89,12 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    
+    /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor* cursor);
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
     
     /// @return The element's ElementType
     ElementType elementType() const;
@@ -101,12 +105,15 @@ public:
      */
     virtual void stretch();
     
-    ///inherited from BasicElement
+    /// inherited from BasicElement
     virtual int length() const;
     
-    ///inherited from BasicElement
+    /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
-
+    
+    /// inherited from BasicElement
+    virtual QLineF cursorLine(const FormulaCursor* cursor);
+   
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );

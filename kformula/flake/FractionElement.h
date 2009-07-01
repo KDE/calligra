@@ -65,7 +65,10 @@ public:
      * @param child A BasicElement to insert
      */
     void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
     /**
      * Remove a child element
      * @param cursor The cursor holding the position where to remove
@@ -79,7 +82,19 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* cursor);
+    
+    /// inherited from BasicElement
+    virtual int length() const;
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// inherited from BasicElement
+    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
     

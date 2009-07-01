@@ -25,6 +25,7 @@
 #include "ElementFactory.h"
 #include "OperatorElement.h"
 #include "IdentifierElement.h"
+#include "FractionElement.h"
 #include <QPainter>
 #include <QPen>
 
@@ -42,32 +43,32 @@ void FormulaCursor::paint( QPainter& painter ) const
 {
     if( !m_currentElement )
         return;
-
-    // start with the topLeft corner of the bounding rect and move the cursor to its pos
-    QPointF top = m_currentElement->boundingRect().topLeft();
-    
-    if( insideToken() ) {
-        // inside tokens let the token calculate the cursor x offset
-        double tmp = static_cast<TokenElement*>( m_currentElement )->cursorOffset( this );
-        top += QPointF( tmp, 0 );
-    }
-    else if( m_currentElement->childElements().isEmpty() )
-        // center cursor in elements that have no children - mostly BasicElements
-        top += QPointF( m_currentElement->width()/2, 0 );
-    else
-    { 
-        // determine the x coordinate by summing up the elements' width before the cursor
-        for( int i = 0; i < m_positionInElement; i++ )
-            top += QPointF( m_currentElement->childElements()[ i ]->width(), 0.0 );
-    }
-   
+ 
     // setup a 1px pen and draw the cursor line with it 
-    QPointF bottom = top + QPointF( 0.0, m_currentElement->height() );
     QPen pen;
-    pen.setWidth( 0 );
+    pen.setWidthF( 0.5 );
     painter.setPen( pen );
-    painter.drawLine( top, bottom );
-    painter.drawRect(m_currentElement->boundingRect());
+    painter.drawLine(m_currentElement->cursorLine( this ));
+    pen.setWidth( 0);
+    
+    switch(m_currentElement->elementType()) {
+	case Number:
+	   painter.setPen(Qt::red);
+	   break;
+	case Identifier:
+	   painter.setPen(Qt::darkMagenta);
+	   break;
+	case Row:
+	   painter.setPen(Qt::green);
+	   break;
+	case Fraction:
+	   painter.setPen(Qt::blue);
+	   break;
+	default:
+	   painter.setPen(Qt::magenta);
+	   break;
+    }
+    painter.drawRect(m_currentElement->absoluteBoundingRect());
 }
 
 void FormulaCursor::insertText( const QString& text )
@@ -173,13 +174,34 @@ void FormulaCursor::move( CursorDirection direction )
     BasicElement* oldCurrentElement= m_currentElement;
     int oldPosition=m_positionInElement;
     
-    while (m_currentElement->moveCursor( this )) {
-	if (m_currentElement->acceptCursor( this )==m_currentElement) {
-	    return;
+    if ( m_direction==MoveLeft || m_direction==MoveRight ) {
+	//the cursor is moved horizontally
+	while (m_currentElement->moveCursor( this )) {
+	    if ( m_currentElement->acceptCursor( this )==m_currentElement ) {
+		return;
+	    }
+	}
+    } else {
+	//the cursor is moved vertically
+	QPointF point=(m_currentElement->cursorLine(this).p1()+m_currentElement->cursorLine(this).p2())/2.;
+	while ( m_currentElement ) {
+	    if ( m_currentElement->moveCursor( this ) ) {
+		//setCursorTo wants the point in coordinates relative to the element, so we transform 
+ 		point-=m_currentElement->absoluteBoundingRect().topLeft();
+		m_currentElement->setCursorTo( this, point );
+		return;
+		//TODO: Find out what to do, if the current position is not accepted
+	    }
+	    if ( m_currentElement->parentElement() ) {
+		//TODO: check if this is really needed, it is just there to keep the cursor in a valid state
+		m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+	    }
+	    m_currentElement=m_currentElement->parentElement();
 	}
     }
     m_currentElement=oldCurrentElement;
     m_positionInElement=oldPosition;
+    m_direction = NoDirection;
 }
 
 void FormulaCursor::moveTo( BasicElement* element, int position )
@@ -193,27 +215,10 @@ void FormulaCursor::moveTo( BasicElement* element, int position )
 
 void FormulaCursor::setCursorTo( const QPointF& point )
 {
-    // find the formulaElement
     BasicElement* formulaElement = m_currentElement;
     while( formulaElement->parentElement() != 0 )
-        formulaElement = formulaElement->parentElement();
-
-    // find the element at the point
-    BasicElement* tmp = formulaElement->childElementAt( point );
-    m_currentElement = tmp;
-
-    // determine the correct position in the new element
-    if( tmp->elementType() == Basic )
-        m_positionInElement = 0;
-    else if( insideToken() ) {
-        // TODO
-    }
-    else if( tmp->parentElement()->elementType() == Row ) {
-        m_currentElement = tmp->parentElement();
-        m_positionInElement = m_currentElement->childElements().indexOf( tmp );
-    }
-    else
-        m_positionInElement = ( point.x() < tmp->boundingRect().center().x() ) ? 0 : 1;
+	formulaElement = formulaElement->parentElement();
+    formulaElement->setCursorTo(this,point);
 }
 
 void FormulaCursor::moveHome()

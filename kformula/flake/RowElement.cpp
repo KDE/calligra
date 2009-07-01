@@ -109,22 +109,69 @@ BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
 }
 
 bool RowElement::moveCursor(FormulaCursor* cursor) {
+    if ( (cursor->direction()==MoveUp) ||
+	 (cursor->direction()==MoveDown)) {
+	//the cursor can't be moved vertically
+	//TODO: check what happens with linebreaks in <mspace> elements
+	return false;
+    }
     if ( (cursor->isHome() && cursor->direction()==MoveLeft) ||
 	 (cursor->isEnd() && cursor->direction()==MoveRight) ) {
 	return BasicElement::moveCursor(cursor);
     }
-    else {
-	if ( cursor->direction() == MoveLeft ) {
+    switch(cursor->direction()) {
+	case MoveLeft:
 	    cursor->setCurrentElement(m_childElements[cursor->position()-1]);
 	    cursor->moveEnd();
-	}
-	else {
+	    break;
+	case MoveRight:
 	    cursor->setCurrentElement(m_childElements[cursor->position()]);
 	    cursor->moveHome();
+	    break;
+    }
+    return true;
+}
+
+QLineF RowElement::cursorLine(const FormulaCursor* cursor) {
+    QPointF top=absoluteBoundingRect().topLeft();
+    if( childElements().isEmpty() ) {
+        // center cursor in elements that have no children
+        top += QPointF( width()/2, 0 );
+    } else { 
+	if ( cursor->isEnd()) {
+	    top += QPointF(width(),0.0);
+	} else {
+	    top += QPointF( childElements()[ cursor->position() ]->boundingRect().left(), 0.0 );
 	}
+    }
+    QPointF bottom = top + QPointF( 0.0, height() );
+    return QLineF(top, bottom);
+}
+
+bool RowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
+{
+    double x=0.0;
+    if (point.x()<0) {
+	cursor->setCurrentElement(this);
+	cursor->setPosition(0);
 	return true;
     }
+    //Find the child element the point is in
+    QList<BasicElement*>::const_iterator tmp=childElements().begin();
+    while (tmp!=childElements().end() && (x+(*tmp)->width()<point.x())) {
+	x+=(*tmp)->width();
+	tmp++;
+    }
+    //check if the point is behind all child elements
+    if (tmp==childElements().end()) {
+	cursor->setCurrentElement(this);
+	cursor->setPosition(length());
+	return true;
+    }
+    point-=(*tmp)->origin();
+    return (*tmp)->setCursorTo(cursor,point);
 }
+
 
 ElementType RowElement::elementType() const
 {

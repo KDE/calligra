@@ -43,7 +43,6 @@ FractionElement::~FractionElement()
 void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
     Q_UNUSED( am )
-
     // return if there is nothing to paint
     if( m_lineThickness == 0.0 )
         return;
@@ -139,24 +138,117 @@ const QList<BasicElement*> FractionElement::childElements()
 
 BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
 {
-    if( cursor->ascending() ) {
-        if( cursor->direction() == MoveUp && cursor->currentElement() == m_denominator )
-            return m_numerator;
-        else if( cursor->direction() == MoveDown &&
-                 cursor->currentElement() == m_numerator )
-            return m_denominator;
-        else
-            return parentElement();
+    return this;
+}
+
+int FractionElement::length() const {
+    return 3;
+}
+
+QLineF FractionElement::cursorLine(const FormulaCursor* cursor) {
+    QPointF top=absoluteBoundingRect().topLeft();
+    QPointF bottom;
+    switch (cursor->position()) {
+	case 0:
+	    top+=m_numerator->origin();
+	    break;
+	case 1:
+	    top+=m_numerator->origin()+QPointF(m_numerator->width(),0.0);
+	    break;
+	case 2:
+	    top+=m_denominator->origin();
+	    break;
+	case 3:
+	    top+=m_denominator->origin()+QPointF(m_denominator->width(),0.0);
+	    break;
+    }
+    if (cursor->position()<=1) {
+	bottom=top+QPointF(0.0,m_numerator->height());
     }
     else {
-        if( cursor->direction() == MoveRight )
-            return m_numerator;
-        else if( cursor->direction() == MoveLeft )
-            return m_denominator;
-        else
-            return parentElement();
-    } 
+	bottom=top+QPointF(0.0,m_denominator->height());
+    }
+    return QLineF(top, bottom);
 }
+
+int FractionElement::positionOfChild(BasicElement* child) const {
+    if (m_numerator==child){
+	return 0;
+    }
+    else if (m_denominator==child) {
+	return 2;
+    }
+    return -1;
+}
+
+bool FractionElement::moveCursor(FormulaCursor* cursor) {
+    if ( ((cursor->position()==0 || cursor->position()==1) && cursor->direction()==MoveUp) ||
+	 ((cursor->position()==2 || cursor->position()==3) && cursor->direction()==MoveDown)) {
+	return false;
+    }
+    if ( ((cursor->position()==0 || cursor->position()==2) && cursor->direction()==MoveLeft) ||
+	 ((cursor->position()==1 || cursor->position()==3) && cursor->direction()==MoveRight) ) {
+	return BasicElement::moveCursor(cursor);
+    }
+    else {
+	switch (cursor->direction()) {
+	    case MoveLeft:
+		cursor->setCurrentElement(cursor->position()==1 ? m_numerator : m_denominator );
+		cursor->moveEnd();
+		break;
+	    case MoveRight:
+		cursor->setCurrentElement(cursor->position()==0 ? m_numerator : m_denominator );
+		cursor->moveHome();
+		break;
+	    case MoveUp:
+		cursor->setCurrentElement(m_numerator );
+		cursor->moveHome();
+		break;
+	    case MoveDown:
+		cursor->setCurrentElement(m_denominator );
+		cursor->moveHome();
+		break;
+	}
+	return true;
+    }
+}
+
+bool FractionElement::setCursorTo( FormulaCursor* cursor, QPointF point ) 
+{
+    kDebug()<<"Punkt: "<<point;
+    //check if the point is above the fration line, the origin is in the top left corner
+    bool inNumerator=point.y() < (m_numerator->boundingRect().bottom() +  m_denominator->boundingRect().top())/2 ;
+    if (point.x() > width()) {
+	if ( inNumerator ) {
+	    cursor->setPosition(1);
+	    cursor->setCurrentElement(this);
+	    return true;
+	} else {
+	    cursor->setPosition(3);
+	    cursor->setCurrentElement(this);
+	    return true;
+	}
+    }
+    if (point.x() < 0) {
+	if ( inNumerator) {
+	    cursor->setPosition(0);
+	    cursor->setCurrentElement(this);
+	    return true;
+	} else {
+	    cursor->setPosition(2);
+    	    cursor->setCurrentElement(this);
+	    return true;
+	}
+    }
+    if ( inNumerator ) {
+	point-=m_numerator->origin();
+	return m_numerator->setCursorTo(cursor,point);
+    } else {
+	point-=m_denominator->origin();
+	return m_denominator->setCursorTo(cursor,point);
+    }
+}
+
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
