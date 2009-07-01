@@ -187,8 +187,8 @@ void KWordTableHandler::tableCellStart()
     // Put a filler in for cells that are part of a merged cell
     // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
     if ( tc.fVertMerge && !tc.fVertRestart ) {
-	m_bodyWriter->startElement("table:covered-table-cell");
-	m_cellOpen = true;
+        m_bodyWriter->startElement("table:covered-table-cell");
+        m_cellOpen = true;
         return;
     }
 
@@ -208,7 +208,7 @@ void KWordTableHandler::tableCellStart()
     kDebug(30513) << "left edge = " << left << ", right edge = " << right;
 
     kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = "
-	<< rightCellNumber;
+        << rightCellNumber;
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
 
@@ -281,7 +281,7 @@ void KWordTableHandler::tableCellStart()
     else {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
     }
-    
+
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");
@@ -298,18 +298,18 @@ void KWordTableHandler::tableCellStart()
     }
 
     QString cellStyleName = m_mainStyles->lookup(cellStyle, QString("cell"));
-    
+
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
     //start table cell in content
     m_bodyWriter->startElement("table:table-cell");
     m_cellOpen = true;
     m_bodyWriter->addAttribute("table:style-name", cellStyleName.toUtf8());
     if(rowSpan > 1) {
-	m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
+        m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
     }
     if(colSpan > 1) {
-	m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
-	m_colSpan = colSpan;
+        m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
+        m_colSpan = colSpan;
     }
     else {
         //if we don't set it to colSpan, we still need to (re)set it to a known value
@@ -323,14 +323,14 @@ void KWordTableHandler::tableCellEnd()
     //end table cell in content
     // but only if we actually opened a cell
     if(m_cellOpen) {
-	m_bodyWriter->endElement();//table:table-cell
-	m_cellOpen = false;
+        m_bodyWriter->endElement();//table:table-cell
+        m_cellOpen = false;
     }
     if(m_colSpan > 1) {
-	for(int i = 1; i < m_colSpan; i++) {
-	    m_bodyWriter->startElement("table:covered-table-cell");
-	    m_bodyWriter->endElement();
-	}
+        for(int i = 1; i < m_colSpan; i++) {
+            m_bodyWriter->startElement("table:covered-table-cell");
+            m_bodyWriter->endElement();
+        }
     }
     m_colSpan = 1;
 }
@@ -349,12 +349,12 @@ void KWord::Table::cacheCellEdge(int cellEdge)
             kDebug(30513) << cellEdge <<" -> found";
             return;
         }
-	//insert it in the right place if necessary
-	if(m_cellEdges[i] > cellEdge) {
-	    m_cellEdges.insert(i, cellEdge);
-	    kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
-	    return;
-	}
+        //insert it in the right place if necessary
+        if(m_cellEdges[i] > cellEdge) {
+            m_cellEdges.insert(i, cellEdge);
+            kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
+            return;
+        }
     }
     //add it at the end if this edge is larger than all the rest
     m_cellEdges.append(cellEdge);

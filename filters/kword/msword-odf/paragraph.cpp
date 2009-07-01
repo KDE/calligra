@@ -32,10 +32,10 @@ Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadi
     m_paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
     if ( inStylesDotXml )
     {
-        kDebug(30513) << "this paragraph is in styles.xml";    
+        kDebug(30513) << "this paragraph is in styles.xml";
         m_inStylesDotXml = true;
         //if we're writing to styles.xml, the style should go there, too
-	m_paragraphStyle->setAutoStyleInStylesDotXml(true);
+        m_paragraphStyle->setAutoStyleInStylesDotXml(true);
     }
     else
     {
@@ -43,7 +43,7 @@ Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadi
     }
     if ( isHeading )
     {
-        kDebug(30513) << "this paragraph is a heading";    
+        kDebug(30513) << "this paragraph is a heading";
         m_isHeading = true;
         m_outlineLevel = ( outlineLevel > 0 ? outlineLevel : 1 );
     }
@@ -104,7 +104,7 @@ void Paragraph::addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Wor
     }
     //set up KoGenStyle from the CHP
     parseCharacterProperties( chp, textStyle, m_parentStyle );
-    
+
     //add text style to list
     m_textStyles.push_back( textStyle );
 }
@@ -128,7 +128,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     }
 
     //add paragraph style to the collection and its name to the content
-    kDebug(30513) << "adding paragraphStyle";    
+    kDebug(30513) << "adding paragraphStyle";
     //add the attribute for our style in <text:p>
     QString styleName("P");
     styleName = m_mainStyles->lookup(*m_paragraphStyle, styleName);
@@ -140,7 +140,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
         writer->endElement(); //text:p
         return;
     }
-    
+
     //loop through each text strings and styles (equal # of both)
     kDebug(30513) << "writing text spans now";
     for ( int i = 0; i < m_textStrings.size(); i++ )
@@ -150,7 +150,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
         if ( m_textStyles[i] == 0 )
         {
             //need to get const char* from the QString
-            kDebug(30513) << "complete element: " << 
+            kDebug(30513) << "complete element: " <<
                 m_textStrings[i].toLocal8Bit().constData();
             writer->addCompleteElement( m_textStrings[i].toLocal8Bit().constData() );
         }
@@ -160,15 +160,15 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
             //put style into m_mainStyles & get its name
             //kDebug(30513) << m_textStyles[i]->type();
             styleName = "T";
-	    styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
-     
+            styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
+
             //write text string to writer
-	    //now I just need to write the text:span to the header tag
-	    writer->startElement( "text:span" );
-	    writer->addAttribute( "text:style-name", styleName.toUtf8() );
+            //now I just need to write the text:span to the header tag
+            writer->startElement( "text:span" );
+            writer->addAttribute( "text:style-name", styleName.toUtf8() );
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
-	    writer->addTextSpan(m_textStrings[i]);
-	    writer->endElement(); //text:span
+            writer->addTextSpan(m_textStrings[i]);
+            writer->endElement(); //text:span
             //cleanup
             delete m_textStyles[i];
             m_textStyles[i] = 0;
@@ -208,7 +208,7 @@ void Paragraph::openInnerParagraph()
     m_parentStyle2 = m_parentStyle;
     m_paragraphProperties2 = m_paragraphProperties;
     m_paragraphProperties = 0;
-    
+
     //move m_textStyles and m_textStrings content to
     //m_textStyles2 and m_textStrings2
     m_textStyles2 = m_textStyles;
@@ -249,17 +249,17 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
 
     //pap is our paragraph properties object
     const wvWare::Word97::PAP& pap = properties.pap();
-    
+
     //paragraph alignment
     //jc = justification code
     if ( pap.jc == 1 ) //1 = center justify
-	style->addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType );
+        style->addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType );
     else if (pap.jc == 2 ) //2 = right justify
-	style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
+        style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
     else if (pap.jc == 3 ) //3 = left & right justify
-	style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
+        style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
     else //0 = left justify
-	style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
+        style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
 
     //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
 
@@ -268,43 +268,43 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
     //dxaRight = indent from right margin (signed)
     if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {
-	style->addProperty( "fo:margin-left", (int)pap.dxaLeft, KoGenStyle::ParagraphType );
-	style->addProperty( "fo:margin-right", (int)pap.dxaRight, KoGenStyle::ParagraphType );
-	style->addProperty( "fo:text-indent", (int)pap.dxaLeft1, KoGenStyle::ParagraphType );
+        style->addProperty( "fo:margin-left", (int)pap.dxaLeft, KoGenStyle::ParagraphType );
+        style->addProperty( "fo:margin-right", (int)pap.dxaRight, KoGenStyle::ParagraphType );
+        style->addProperty( "fo:text-indent", (int)pap.dxaLeft1, KoGenStyle::ParagraphType );
     }
 
     //dyaBefore = vertical spacing before paragraph (unsigned)
     //dyaAfter = vertical spacing after paragraph (unsigned)
     if ( pap.dyaBefore || pap.dyaAfter )
     {
-	style->addProperty( "fo:margin-top", (int)pap.dyaBefore, KoGenStyle::ParagraphType );
-	style->addProperty( "fo:margin-bottom", (int)pap.dyaAfter, KoGenStyle::ParagraphType );
+        style->addProperty( "fo:margin-top", (int)pap.dyaBefore, KoGenStyle::ParagraphType );
+        style->addProperty( "fo:margin-bottom", (int)pap.dyaAfter, KoGenStyle::ParagraphType );
     }
 
     // Linespacing
     //lspd = line spacing descriptor
-    //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double" 
+    //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double"
     //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
-    if ( pap.lspd.fMultLinespace == 1 ) //Word will reserve for each line the 
-				    //(maximal height of the line*lspd.dyaLine)/240
+    if ( pap.lspd.fMultLinespace == 1 ) //Word will reserve for each line the
+                                    //(maximal height of the line*lspd.dyaLine)/240
     {
-	//get the proportion & turn it into a percentage for the attribute
-	QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
-	style->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
+        //get the proportion & turn it into a percentage for the attribute
+        QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
+        style->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
     }
-    else if ( pap.lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space 
-				    //that will be provided for lines in the paragraph in twips
+    else if ( pap.lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space
+                                    //that will be provided for lines in the paragraph in twips
     {
-	// see sprmPDyaLine in generator_wword8.htm
-	double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
-	// lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-	if ( pap.lspd.dyaLine > 0 )
-	    style->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
-	else if (pap.lspd.dyaLine < 0 )
-	    style->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
+        // see sprmPDyaLine in generator_wword8.htm
+        double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
+        // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
+        if ( pap.lspd.dyaLine > 0 )
+            style->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
+        else if (pap.lspd.dyaLine < 0 )
+            style->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
     }
     else
-	    kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
+            kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
     //end linespacing
 
     //fKeep = keep entire paragraph on one page if possible
@@ -312,12 +312,12 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
     //fPageBreakBefore = start this paragraph on new page
     if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
     {
-	if ( pap.fKeep )
-	    style->addProperty( "fo:keep-together", "always", KoGenStyle::ParagraphType );
-	if ( pap.fKeepFollow )
-	    style->addProperty( "fo:keep-with-next", "always", KoGenStyle::ParagraphType );
-	if ( pap.fPageBreakBefore )
-	    style->addProperty( "fo:break-before", "page", KoGenStyle::ParagraphType );
+        if ( pap.fKeep )
+            style->addProperty( "fo:keep-together", "always", KoGenStyle::ParagraphType );
+        if ( pap.fKeepFollow )
+            style->addProperty( "fo:keep-with-next", "always", KoGenStyle::ParagraphType );
+        if ( pap.fPageBreakBefore )
+            style->addProperty( "fo:break-before", "page", KoGenStyle::ParagraphType );
     }
 
     // Borders
@@ -326,77 +326,77 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
     //brcLeft = specification for border to the left of paragraph
     //brcRight = specification for border to the right of paragraph
     //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot, 7=dash large gap,
-    //	8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
+    //  8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
     if ( pap.brcTop.brcType )
     {
-	style->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
+        style->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
     }
     if ( pap.brcBottom.brcType )
     {
-	style->addProperty( "fo:border-bottom", Conversion::setBorderAttributes( pap.brcBottom ), KoGenStyle::ParagraphType );
+        style->addProperty( "fo:border-bottom", Conversion::setBorderAttributes( pap.brcBottom ), KoGenStyle::ParagraphType );
     }
     if ( pap.brcLeft.brcType )
     {
-	style->addProperty( "fo:border-left", Conversion::setBorderAttributes( pap.brcLeft ), KoGenStyle::ParagraphType );
+        style->addProperty( "fo:border-left", Conversion::setBorderAttributes( pap.brcLeft ), KoGenStyle::ParagraphType );
     }
     if ( pap.brcRight.brcType )
     {
-	style->addProperty( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ), KoGenStyle::ParagraphType );
+        style->addProperty( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ), KoGenStyle::ParagraphType );
     }
 
     // Tabulators
     //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
     if ( pap.itbdMac )
     {
-	kDebug(30513) << "processing tab stops";
-	//looks like we need to write these out with an xmlwriter
-	QBuffer buf;
-	buf.open(QIODevice::WriteOnly);
-	KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
-	tmpWriter.startElement("style:tab-stops");
+        kDebug(30513) << "processing tab stops";
+        //looks like we need to write these out with an xmlwriter
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
+        tmpWriter.startElement("style:tab-stops");
         for ( int i = 0 ; i < pap.itbdMac ; ++i )
         {
-	    tmpWriter.startElement("style:tab-stop");
+            tmpWriter.startElement("style:tab-stop");
 
-	    //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
+            //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
-	    //td.dxaTab = position in twips
-	    //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
-	    tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
+            //td.dxaTab = position in twips
+            //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
+            tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
 
-	    //td.tbd.jc = justification code
-	    if ( td.tbd.jc ) //0 = left-aligned = default, so that can just be ignored
-	    {
-		if ( td.tbd.jc == 1 ) { //centered
-		    tmpWriter.addAttribute("style:type", "center");
-		}
-		else if ( td.tbd.jc == 2 ) { //right-aligned
-		    tmpWriter.addAttribute("style:type", "right");
-		}
-		else { //3 = decimal tab -> align on decimal point
-		    //4 = bar -> just creates a vertical bar at that point that's always visible
-		    kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
-		}
-	    }
-	    //td.tbd.tlc = tab leader code
-	    if ( td.tbd.tlc )//0 = no leader, which is default & can just be ignored
-	    {
-		if ( td.tbd.tlc == 1 ) { //1 dotted leader 
-		    tmpWriter.addAttribute("style:leader-text", ".");
-		}
-		else if (td.tbd.tlc == 2 ) { //2 hyphenated leader 
-		    tmpWriter.addAttribute("style:leader-text", "-");
-		}
-		//TODO 3 single line leader 
-		//TODO 4 heavy line leader
-	    }
-	    tmpWriter.endElement();//style:tab-stop
+            //td.tbd.jc = justification code
+            if ( td.tbd.jc ) //0 = left-aligned = default, so that can just be ignored
+            {
+                if ( td.tbd.jc == 1 ) { //centered
+                    tmpWriter.addAttribute("style:type", "center");
+                }
+                else if ( td.tbd.jc == 2 ) { //right-aligned
+                    tmpWriter.addAttribute("style:type", "right");
+                }
+                else { //3 = decimal tab -> align on decimal point
+                    //4 = bar -> just creates a vertical bar at that point that's always visible
+                    kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
+                }
+            }
+            //td.tbd.tlc = tab leader code
+            if ( td.tbd.tlc )//0 = no leader, which is default & can just be ignored
+            {
+                if ( td.tbd.tlc == 1 ) { //1 dotted leader
+                    tmpWriter.addAttribute("style:leader-text", ".");
+                }
+                else if (td.tbd.tlc == 2 ) { //2 hyphenated leader
+                    tmpWriter.addAttribute("style:leader-text", "-");
+                }
+                //TODO 3 single line leader
+                //TODO 4 heavy line leader
+            }
+            tmpWriter.endElement();//style:tab-stop
         }
-	tmpWriter.endElement();//style:tab-stops
-	buf.close();
-	QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-	//now write the tab info to the paragraph style
-	style->addChildElement("style:tab-stops", contents);
+        tmpWriter.endElement();//style:tab-stops
+        buf.close();
+        QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        //now write the tab info to the paragraph style
+        style->addChildElement("style:tab-stops", contents);
     }
 } //end parseParagraphProperties
 
@@ -417,81 +417,81 @@ void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenS
     if ( !refChp || refChp->ico != chp->ico )
     {
         QString color = Conversion::color( chp->ico, -1 );
-	style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
+        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
     }
 
     //hps = font size in half points
     if ( !refChp || refChp->hps != chp->hps )
     {
-	style->addPropertyPt(QString("fo:font-size"), (int)(chp->hps/2), KoGenStyle::TextType);
+        style->addPropertyPt(QString("fo:font-size"), (int)(chp->hps/2), KoGenStyle::TextType);
     }
 
     //fBold = bold text if 1
     if ( !refChp || refChp->fBold != chp->fBold )
-	style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
+        style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
 
     //fItalic = italic text if 1
     if ( !refChp || refChp->fItalic != chp->fItalic )
-	style->addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
+        style->addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
 
     //kul: underline code
     if ( !refChp || refChp->kul != chp->kul )
     {
         switch ( chp->kul ) {
-	case 0: //none
-	    style->addProperty(QString("style:text-underline-style"), QString("none") , KoGenStyle::TextType);
-	    break;
+        case 0: //none
+            style->addProperty(QString("style:text-underline-style"), QString("none") , KoGenStyle::TextType);
+            break;
         case 1: // single
-	    style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    break;
+            style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
+            break;
         case 2: // by word
-	    style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    style->addProperty( "style:text-underline-mode", "skip-white-space" , KoGenStyle::TextType);
-	    break;
-	case 3: // double
-	    style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    style->addProperty( "style:text-underline-type", "double", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
+            style->addProperty( "style:text-underline-mode", "skip-white-space" , KoGenStyle::TextType);
+            break;
+        case 3: // double
+            style->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
+            style->addProperty( "style:text-underline-type", "double", KoGenStyle::TextType );
             break;
         case 4: // dotted
-	    style->addProperty( "style:text-underline-style", "dotted", KoGenStyle::TextType );
-	    break;
+            style->addProperty( "style:text-underline-style", "dotted", KoGenStyle::TextType );
+            break;
         case 5: // hidden - This makes no sense as an underline property!
-	    //I guess we could change this to have an underline the same color
-	    //as the background?
-	    style->addProperty( "style:text-underline-type", "none", KoGenStyle::TextType );
+            //I guess we could change this to have an underline the same color
+            //as the background?
+            style->addProperty( "style:text-underline-type", "none", KoGenStyle::TextType );
             break;
         case 6: // thick
-	    style->addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
-	    style->addProperty( "style:text-underline-weight", "thick", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-weight", "thick", KoGenStyle::TextType );
             break;
         case 7: //dash
-	    style->addProperty( "style:text-underline-style", "dash", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "dash", KoGenStyle::TextType );
             break;
         case 8: //dot (not used, says the docu)
             break;
         case 9: //dot dash
-	    style->addProperty( "style:text-underline-style", "dot-dash", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "dot-dash", KoGenStyle::TextType );
             break;
         case 10: //dot dot dash
-	    style->addProperty( "style:text-underline-style", "dot-dot-dash", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "dot-dot-dash", KoGenStyle::TextType );
             break;
         case 11: //wave
-	    style->addProperty( "style:text-underline-style", "wave", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "wave", KoGenStyle::TextType );
             break;
         default:
-	    style->addProperty( "style:text-underline-style", "none", KoGenStyle::TextType );
+            style->addProperty( "style:text-underline-style", "none", KoGenStyle::TextType );
         };
     }
     //fstrike = use strikethrough if 1
     //fDStrike = use double strikethrough if 1
     if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike )
     {
-	if ( chp->fStrike )
-	    style->addProperty( "style:text-line-through-type", "single", KoGenStyle::TextType );
-	else if ( chp->fDStrike )
-	    style->addProperty( "style:text-line-through-type", "double", KoGenStyle::TextType );
-	else
-	    style->addProperty( "style:text-line-through-type", "none", KoGenStyle::TextType );
+        if ( chp->fStrike )
+            style->addProperty( "style:text-line-through-type", "single", KoGenStyle::TextType );
+        else if ( chp->fDStrike )
+            style->addProperty( "style:text-line-through-type", "double", KoGenStyle::TextType );
+        else
+            style->addProperty( "style:text-line-through-type", "none", KoGenStyle::TextType );
     }
 
     //font attribute (uppercase, lowercase (not in MSWord), small caps)
@@ -499,19 +499,19 @@ void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenS
     //fSmallCaps = displayed with small caps when 1, no small caps when 0
     if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
     {
-	if ( chp->fCaps )
-	    style->addProperty( "fo:text-transform", "uppercase", KoGenStyle::TextType );
-	if ( chp->fSmallCaps )
-	    style->addProperty( "fo:font-variant", "small-caps", KoGenStyle::TextType );
+        if ( chp->fCaps )
+            style->addProperty( "fo:text-transform", "uppercase", KoGenStyle::TextType );
+        if ( chp->fSmallCaps )
+            style->addProperty( "fo:font-variant", "small-caps", KoGenStyle::TextType );
     }
 
     //iss = superscript/subscript indices
     if ( !refChp || refChp->iss != chp->iss )
-    { 
-	if ( chp->iss == 1 ) //superscript
-	    style->addProperty( "style:text-position", "super", KoGenStyle::TextType );
-	else if ( chp->iss == 2 ) //subscript
-	    style->addProperty( "style:text-position", "sub", KoGenStyle::TextType );
+    {
+        if ( chp->iss == 1 ) //superscript
+            style->addProperty( "style:text-position", "super", KoGenStyle::TextType );
+        else if ( chp->iss == 2 ) //subscript
+            style->addProperty( "style:text-position", "sub", KoGenStyle::TextType );
     }
 
     //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
@@ -519,11 +519,11 @@ void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenS
     if ( !refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight ) {
         if ( chp->fHighlight )
         {
-	    QString color = Conversion::color( chp->icoHighlight, -1 );
-	    style->addProperty( "fo:background-color", color, KoGenStyle::TextType );
+            QString color = Conversion::color( chp->icoHighlight, -1 );
+            style->addProperty( "fo:background-color", color, KoGenStyle::TextType );
         } else {
-	    //TODO this should really be the surrounding background color
-	    style->addProperty( "fo:background-color", QString("#FFFFFF"), KoGenStyle::TextType);
+            //TODO this should really be the surrounding background color
+            style->addProperty( "fo:background-color", QString("#FFFFFF"), KoGenStyle::TextType);
         }
     }
 
@@ -532,9 +532,9 @@ void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenS
     if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint )
     {
         if ( chp->fShadow )
-	    style->addProperty( "style:text-shadow", "1pt", KoGenStyle::TextType );
-	if ( chp->fImprint )
-	    style->addProperty( "style:font-relief", "engraved", KoGenStyle::TextType );
+            style->addProperty( "style:text-shadow", "1pt", KoGenStyle::TextType );
+        if ( chp->fImprint )
+            style->addProperty( "style:font-relief", "engraved", KoGenStyle::TextType );
     }
 
 }

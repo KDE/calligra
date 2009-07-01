@@ -6,13 +6,13 @@ add_definitions(${WV2_INCLUDE_DIR} -DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ########### next target ###############
 
-set(mswordodf_import_PART_SRCS 
-   mswordodfimport.cpp 
-   document.cpp 
-   conversion.cpp 
-   texthandler.cpp 
+set(mswordodf_import_PART_SRCS
+   mswordodfimport.cpp
+   document.cpp
+   conversion.cpp
+   texthandler.cpp
    paragraph.cpp
-   tablehandler.cpp 
+   tablehandler.cpp
    graphicshandler.cpp )
 
 
