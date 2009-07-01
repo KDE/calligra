@@ -87,6 +87,12 @@ public:
     /// @return The height of the @p TableRowElement
     double rowHeight( TableRowElement* row );
     
+    /// inherited from BasicElement
+    virtual QLineF cursorLine ( int position ) const;
+    
+    /// inherited from BasicElement
+    virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
+    
     /// @return The element's ElementType
     virtual ElementType elementType() const;
     

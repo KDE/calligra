@@ -105,26 +105,26 @@ void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 
 bool RowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return true;
+        return true;
 }
 bool RowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
 {
     if ( (newcursor->direction()==MoveUp) ||
-	 (newcursor->direction()==MoveDown) ||
-	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
-	//the newcursor can't be moved vertically
-	//TODO: check what happens with linebreaks in <mspace> elements
-	return false;
+        (newcursor->direction()==MoveDown) ||
+        (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+        //the newcursor can't be moved vertically
+        //TODO: check what happens with linebreaks in <mspace> elements
+        return false;
     }
     if (newcursor->hasSelection()) {
-	switch(newcursor->direction()) {
-	case MoveLeft:
-	    newcursor->setPosition(newcursor->position()-1);
-	    break;
-	case MoveRight:
-	    newcursor->setPosition(newcursor->position()+1);
-// 	    break;
+        switch(newcursor->direction()) {
+        case MoveLeft:
+            newcursor->setPosition(newcursor->position()-1);
+            break;
+        case MoveRight:
+            newcursor->setPosition(newcursor->position()+1);
+    // 	    break;
 	}
     } else {
 	switch(newcursor->direction()) {
@@ -147,11 +147,11 @@ QLineF RowElement::cursorLine(int position) const {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
     } else { 
-	if ( position==length()) {
-	    top += QPointF(width(),0.0);
-	} else {
-	    top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
-	}
+        if ( position==length()) {
+            top += QPointF(width(),0.0);
+        } else {
+            top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
+        }
     }
     QPointF bottom = top + QPointF( 0.0, height() );
     return QLineF(top, bottom);

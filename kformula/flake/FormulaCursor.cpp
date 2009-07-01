@@ -25,7 +25,7 @@
 #include "ElementFactory.h"
 #include "OperatorElement.h"
 #include "IdentifierElement.h"
-#include "FractionElement.h"
+#include "ElementFactory.h"
 #include <QPainter>
 #include <QPen>
 
@@ -46,35 +46,41 @@ void FormulaCursor::paint( QPainter& painter ) const
 	<< selectionStartPosition()<<" to " << position();
     if( !m_currentElement )
         return;
-    
+    painter.save();
     QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
     double baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
     painter.setPen( pen );
     painter.drawLine(m_currentElement->cursorLine( m_positionInElement ));
-    pen.setWidth( 0);
+    pen.setWidth( 0.1);
     pen.setColor(Qt::blue);
     pen.setStyle(Qt::DashLine);
     painter.setPen( pen );
-    painter.drawLine( origin+QPointF(0.0,baseline),
-		      origin+QPointF(m_currentElement->width(), baseline) );
+//    painter.drawLine( origin+QPointF(0.0,baseline),
+//        origin+QPointF(m_currentElement->width(), baseline) );
     pen.setStyle(Qt::DotLine);
+    //Only here for debug purpose
     switch(m_currentElement->elementType()) {
 	case Number:
 	   pen.setColor(Qt::red);
 	   break;
 	case Identifier:
-	   pen.setColor(Qt::darkMagenta);
+	   pen.setColor(Qt::darkRed);
 	   break;
 	case Row:
-	   pen.setColor(Qt::green);
+	   pen.setColor(Qt::yellow);
 	   break;
 	case Fraction:
 	   pen.setColor(Qt::blue);
 	   break;
+    case Table:
+       pen.setColor(Qt::darkGreen);
+       break;
+    case TableRow:
+        pen.setColor(Qt::green);
 	default:
-	   pen.setColor(Qt::magenta);
+	   pen.setColor(Qt::darkGray);
 	   break;
     }
     painter.setPen(pen);
@@ -93,6 +99,7 @@ void FormulaCursor::paint( QPainter& painter ) const
 	int p2=position()<selectionStartPosition()? selectionStartPosition() : position() ;
 	painter.drawPath(m_currentElement->selectionRegion(p1,p2));
 // 	painter.drawRect(selectionRect());
+    painter.restore();
     }
 }
 
@@ -197,39 +204,65 @@ void FormulaCursor::move( CursorDirection direction )
 {
     FormulaCursor oldcursor(*this);
     m_direction = direction;
-    //the cursor is moved vertically
-    while ( m_currentElement ) {
-	if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
-	    if (m_currentElement->acceptCursor(this)) {
-		m_direction = NoDirection;
-		return;
-	    }
-	} else {
-	    if ( m_currentElement->parentElement() ) {
-		if (hasSelection()) {
-		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-		}
-		m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-		m_currentElement=m_currentElement->parentElement();
-		if (m_direction==MoveRight) {
-		    m_positionInElement++;
-		    if (m_currentElement->acceptCursor(this)) {
-			m_direction = NoDirection;
-			return;
-		    }
-		} else if (m_direction==MoveLeft) {
-		    if (hasSelection()) {
-			m_selectionStartPosition++;
-		    }
-		    if (m_currentElement->acceptCursor(this)) {
-			m_direction = NoDirection;
-			return;
-		    }
-		}
-	    } else {
-		m_currentElement=m_currentElement->parentElement();
-	    }
-	}
+    
+    //handle selecting and not selecting case seperately, which makes more clear
+    if (hasSelection()) {
+        while ( m_currentElement ) {
+            if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
+                if (m_currentElement->acceptCursor(this)) {
+                    m_direction = NoDirection;
+                    return;
+                }
+            } else {
+                if ( m_currentElement->parentElement() ) {
+                    bool ltr=m_selectionStartPosition<=m_positionInElement;
+                    //update the starting point of the selection
+                    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    //move the cursor to the parent and place it before the old element
+                    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    m_currentElement=m_currentElement->parentElement();
+                    if (ltr) {
+                        m_positionInElement++; //place the cursor behind
+                    } else {
+                        m_selectionStartPosition++; //place the selection beginning behind 
+                    }
+                    if (m_currentElement->acceptCursor(this)) {
+                        m_direction = NoDirection;
+                        return;
+                    }
+                } else {
+                    //we arrived at the toplevel element
+                    break;
+                }
+            }
+        }
+    } else {
+        while ( m_currentElement ) {
+            if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
+                if (m_currentElement->acceptCursor(this)) {
+                    m_direction = NoDirection;
+                    return;
+                }
+            } else {
+                if ( m_currentElement->parentElement() ) {
+                    //move the cursor to the parent and place it before the old element
+                    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+                    m_currentElement=m_currentElement->parentElement();
+                    if (m_direction==MoveRight || m_direction==MoveDown) {
+                        m_positionInElement++; //place the cursor behin
+                    }
+                    if (m_direction==MoveRight || m_direction==MoveLeft) {
+                        if (m_currentElement->acceptCursor(this)) {
+                            m_direction = NoDirection;
+                            return;
+                        }
+                    }   
+                } else {
+                    //We arrived at the top level element
+                    break;
+                }
+            }
+        }
     }
     (*this)=oldcursor;
 }

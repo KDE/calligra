@@ -57,11 +57,8 @@ public:
     /// Resize the shape.
     void resize( const QSizeF &size );
     
-    /// @return Get the size of the shape in pt.
-    QSizeF size() const;
-
     /// @return Get the bounding box of the shape.
-    QRectF boundingRect() const;
+//     QRectF boundingRect() const;
 
     /// @return The formula's root element
     BasicElement* formulaElement() const;

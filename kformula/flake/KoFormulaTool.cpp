@@ -75,15 +75,17 @@ void KoFormulaTool::deactivate()
 
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    painter.setMatrix( painter.matrix() *
-                       m_formulaShape->absoluteTransformation( &converter ) );
-    qreal zoomX, zoomY;              // apply view conversions for painting
-    converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
+    painter.save();
+    // transform painter from view coordinate system to document coordinate system
+    // remember that matrix multiplication is not commutative so painter.matrix
+    // has to come last
+    painter.setMatrix( m_formulaShape->absoluteTransformation( &converter ) * painter.matrix());
+    KoShape::applyConversion(painter,converter);
     //TODO: find out, how to adjust the painter, so that that this also works in 
     // rotated mode
     
     m_formulaCursor->paint( painter );
+    painter.restore();
 }
 
 void KoFormulaTool::repaintCursor()
@@ -186,9 +188,10 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
             break;
         default:
             if( event->text().length() != 0 ) {
+                m_formulaShape->update();
                 m_formulaCursor->insertText( event->text() );
-		m_formulaShape->updateLayout();
-//                 m_formulaShape->update();
+                m_formulaShape->updateLayout();
+                m_formulaShape->update();
             }
     }
 //     kDebug()<<"Going to repaintCursor";

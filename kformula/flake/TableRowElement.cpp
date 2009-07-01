@@ -84,16 +84,17 @@ void TableRowElement::layout( const AttributeManager* am )
 
 bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return (cursor->hasSelection());
+     //return true;
+     return (cursor->hasSelection());
 }
 
 int TableRowElement::positionOfChild(BasicElement* child) const 
 {
     TableEntryElement* temp=dynamic_cast<TableEntryElement*>(child);
     if (temp==0) {
-	return -1;
+        return -1;
     } else {
-	return m_entries.indexOf(temp);
+        return m_entries.indexOf(temp);
     }
 }
 
@@ -124,78 +125,92 @@ QLineF TableRowElement::cursorLine ( int position ) const
 bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
 {
     if (cursor->hasSelection()) {
-	if (m_entries.isEmpty() || point.x()<0.0) {
-	    cursor->setCurrentElement(this);
-	    cursor->setPosition(0);
-	    return true;
-	}
-	//check if the point is behind all child elements
-	if (point.x() >= width()) {
-	    cursor->setCurrentElement(this);
-	    cursor->setPosition(length());
-	    return true;
-	}
+        if (m_entries.isEmpty() || point.x()<0.0) {
+            cursor->setCurrentElement(this);
+            cursor->setPosition(0);
+            return true;
+        }
+        //check if the point is behind all child elements
+        if (point.x() >= width()) {
+            cursor->setCurrentElement(this);
+            cursor->setPosition(length());
+            return true;
+        }
     }
     int i=0;
     double x=0.0;
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     for (; i<m_entries.count()-1; ++i) {
-	//Find the child element the point is in
-	x+=parentTable->columnWidth( i );
-	if (x>=point.x()) {
-	    break;
-	}
+    //Find the child element the point is in
+    x+=parentTable->columnWidth( i );
+    if (x>=point.x()) {
+        break;
+    }
     }
     if (cursor->hasSelection()) {
-	//we don't need to change current element because we are already in this element
-	if (cursor->selectionStartPosition()<=i) {
-	    cursor->setPosition(i+1);
-	}
-	else {
-	    cursor->setPosition(i);
-	}
-	return true;
+    //we don't need to change current element because we are already in this element
+    if (cursor->selectionStartPosition()<=i) {
+        cursor->setPosition(i+1);
+    }
+    else {
+        cursor->setPosition(i);
+    }
+    return true;
     } else {
-	point-=m_entries[i]->origin();
-	return m_entries[i]->setCursorTo(cursor,point);
+    point-=m_entries[i]->origin();
+    return m_entries[i]->setCursorTo(cursor,point);
     }
 }
 
 bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
 {
     //TODO: Moving the cursor vertically in the tableelement is a little bit fragile
-    if ( (newcursor->direction()==MoveUp) ||
-	 (newcursor->direction()==MoveDown) ||
-	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
-	return false;
+    if ( (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+        return false;
     }
     int rowpos=parentElement()->positionOfChild(this);
-    int colpos=newcursor->position();
-    switch(newcursor->direction()) {
-	case MoveLeft:
-	    newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
-	    newcursor->moveEnd();
-	    break;
-	case MoveRight:
-	    newcursor->setCurrentElement(m_entries[newcursor->position()]);
-	    newcursor->moveHome();
-	    break;
-	case MoveUp:
-	    if ( rowpos>1 ) {
-		BasicElement* b=parentElement()->childElements()[rowpos/2-1]->childElements()[colpos];
-		return newcursor->moveCloseTo(b, oldcursor);
-	    } else {
-		return false;
-	    }
-	case MoveDown:
-	    if ( rowpos<length()-1 ) {
-		BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
-		return newcursor->moveCloseTo(b, oldcursor);
-	    } else {
-		return false;
-	    }
+    int colpos=(newcursor->position()!=length() ? newcursor->position() : newcursor->position()-1);
+    if (newcursor->hasSelection()) {
+        switch(newcursor->direction()) {
+        case MoveLeft:
+            newcursor->moveTo(this,newcursor->position()-1);
+            break;
+        case MoveRight:
+            newcursor->moveTo(this,newcursor->position()+1);
+            break;
+        case MoveUp:
+            return false;
+        case MoveDown:
+            return false;
+        }
+    } else {
+        switch(newcursor->direction()) {
+        case MoveLeft:
+            newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
+            newcursor->moveEnd();
+            break;
+        case MoveRight:
+            newcursor->setCurrentElement(m_entries[newcursor->position()]);
+            newcursor->moveHome();
+            break;
+        case MoveUp:
+            if ( rowpos>1 ) {
+                BasicElement* b=parentElement()->childElements()[rowpos/2-1]->childElements()[colpos];
+                return newcursor->moveCloseTo(b, oldcursor);
+            } else {
+                return false;
+            }
+        case MoveDown:
+            if ( rowpos<length()-1 ) {
+                BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
+                return newcursor->moveCloseTo(b, oldcursor);
+            } else {
+                return false;
+            }
+        }
     }
+    
     return true;	
 }
 
@@ -247,11 +262,11 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
     forEachElement( tmp, element )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-	if( tmpElement->elementType() != TableEntry )
+    if( tmpElement->elementType() != TableEntry )
             return false;
 
         m_entries << static_cast<TableEntryElement*>( tmpElement );
-	tmpElement->readMathML( tmp );
+    tmpElement->readMathML( tmp );
     }
 
     return true;

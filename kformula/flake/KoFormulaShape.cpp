@@ -39,13 +39,19 @@ KoFormulaShape::~KoFormulaShape()
 
 void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
+    painter.save();
     applyConversion( painter, converter );   // apply zooming and coordinate translation
     m_formulaRenderer->layoutElement( m_formulaElement );
     m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
+    painter.restore();
 }
 
 void KoFormulaShape::KoFormulaShape::updateLayout() {
-     m_formulaRenderer->layoutElement( m_formulaElement );
+    kDebug() << "before:" << KoShape::size()<<"," <<size(); 
+    m_formulaRenderer->layoutElement( m_formulaElement );
+     
+     KoShape::setSize(m_formulaElement->boundingRect().size());
+     kDebug() << "after:" << KoShape::size()<<"," <<size();
 }
 
 
@@ -54,18 +60,13 @@ BasicElement* KoFormulaShape::elementAt( const QPointF& p )
     return m_formulaElement->childElementAt( p );
 }
 
-QSizeF KoFormulaShape::size() const
-{
-    return m_formulaElement->boundingRect().size();
-}
-
 void KoFormulaShape::resize( const QSizeF& )
 { /* do nothing as FormulaShape is fixed size */ }
 
-QRectF KoFormulaShape::boundingRect() const
-{
-    return matrix().mapRect( m_formulaElement->boundingRect() );
-}
+// QRectF KoFormulaShape::boundingRect() const
+// {
+//     return matrix().mapRect( m_formulaElement->boundingRect() );
+// }
 
 BasicElement* KoFormulaShape::formulaElement() const
 {

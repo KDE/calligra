@@ -280,6 +280,11 @@ void RootElement::fixSelection ( FormulaCursor* cursor )
 }
 
 
+int RootElement::length() const
+{
+    return 3;
+}
+
 
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {

@@ -43,19 +43,21 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
     //    painter.setPen( QPen( m_framePenStyle ) );
     // painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     //}
-    painter.setPen(QPen(Qt::NoPen));//debugging 
+    QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
+    QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
+    kDebug()<<frameSpacing;
+    painter.setPen(QPen(Qt::SolidLine));//debugging 
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines
-    double offset = 0.0;
-    for( int i = 0; i < m_rowHeights.count(); i++ ) {
-	kDebug() << "Jucha";
+    double offset = frameSpacing[1];
+    for( int i = 0; i < m_rowHeights.count()-1; i++ ) {
         offset += m_rowHeights[ i ];
         painter.drawLine( QPointF( 0.0, offset ), QPointF( width(), offset ) );     
     }
 
     // draw columnlines
-    offset = 0.0;
-    for( int i = 0; i < m_colWidths.count(); i++ ) {
+    offset = frameSpacing[0];
+    for( int i = 0; i < m_colWidths.count()-1; i++ ) {
         offset += m_colWidths[ i ];
         painter.drawLine( QPointF( offset, 0.0 ), QPointF( offset, height() ) );
     }
@@ -156,24 +158,38 @@ int TableElement::positionOfChild(BasicElement* child) const
 {
     TableRowElement* temp=dynamic_cast<TableRowElement*>(child);
     if (temp==0) {
-	return -1;
+        return -1;
     } else {
-	int p=m_rows.indexOf(temp);
-	return (p==-1) ? -1 : 2*p;
+        int p=m_rows.indexOf(temp);
+        return (p==-1) ? -1 : 2*p;
     }
 }
 
 
+QLineF TableElement::cursorLine ( int position ) const
+{
+    QPointF top;
+    QRectF rect=m_rows[position/2]->absoluteBoundingRect();
+    if (position%2==0) {
+        //we are in front of a row
+        top=rect.topLeft();
+    } else {
+        top=rect.topRight();
+    }
+    QPointF bottom = top + QPointF( 0.0, rect.height() );
+    return QLineF(top, bottom);
+}
+
 bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
 {
     if (cursor->hasSelection()) {
-	return false;
+        return false;
     }
     int i;
     for (i=0;i<m_rows.count()-1;i++) {
-	if (m_rows[i]->boundingRect().bottom()>point.y()) {
-	    break;
-	}
+        if (m_rows[i]->boundingRect().bottom()>point.y()) {
+            break;
+        }
     }
     point-=m_rows[i]->origin();
     return m_rows[i]->setCursorTo(cursor, point);
@@ -185,57 +201,75 @@ bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
     switch (newcursor->direction()) {
 	case MoveLeft:
 	    if (p%2==0) {
-		//we are in front of a table row
-		return false;
+            //we are in front of a table row
+            return false;
 	    } else {
-		newcursor->moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
-		return true;
+            if (newcursor->hasSelection()) {
+                newcursor->moveTo( this , p-1 );
+            } else {
+                newcursor->moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
+            }
+            break;
 	    }
 	case MoveRight:
 	    if (p%2==1) {
-		//we are behind a table row
-		return false;
+            //we are behind a table row
+            return false;
 	    } else {
-		newcursor->moveTo( m_rows[ p / 2 ] , 0 );
-		return true;
+            if (newcursor->hasSelection()) {
+                newcursor->moveTo( this , p+1 );
+            } else {
+                newcursor->moveTo( m_rows[ p / 2 ] , 0 );
+            }
+            break;
 	    }
 	case MoveUp:
 	    if (p<=1) {
-		return false;
-	    } else if (newcursor->moveCloseTo(m_rows[ p/2 -1],oldcursor)) {
-		return true;
+            return false;
 	    } else {
-		return false;
+            newcursor->moveTo(this,p-2);
+            break;
 	    }
 	case MoveDown:
 	    if (p<(m_rows.count()-1)*2) {
-		if (newcursor->moveCloseTo(m_rows[ p/2 +1],oldcursor)) {
-		    return true;
-		} else {
-		    return false;
-		} 
+            newcursor->moveTo(this,p+2); 
+            break;
 	    } else {
-		return false;
+            return false;
 	    }
     }
-    return false;
+    return true;
 }
 
 int TableElement::length() const 
 {
     if (m_rows.count()>0) {
-	return 2*m_rows.count()-1;
+        return 2*m_rows.count()-1;
     } else {
-	return 1;
+        return 1;
     }
 }
 
 
 bool TableElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return false;
-//     return true;
+//    return false;
+    return cursor->hasSelection();
 }
+
+
+QPainterPath TableElement::selectionRegion ( const int pos1, const int pos2 ) const
+{
+    int p1=pos1 % 2 == 0 ? pos1 : pos1+1; //pos1 should be before an element
+    int p2=pos2 % 2 == 0 ? pos2 : pos2+1; //pos2 should be behind an element
+    QPainterPath P;
+    
+    for (int i=p1;i<p2;i+=2) {
+        P.addRect(m_rows[i/2]->absoluteBoundingRect());
+    }
+    return P;
+}
+
 
 QString TableElement::attributesDefaultValue( const QString& attribute ) const
 {
