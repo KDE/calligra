@@ -158,6 +158,9 @@ public:
     /// @return the bounding rect of the current selection
     QRectF selectionRect() const;
     
+    /// select the element completely
+    void selectElement(BasicElement* element);
+    
 private:
     /// @return true when the cursor is inside a token element
     bool insideToken() const;

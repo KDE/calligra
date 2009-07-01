@@ -98,13 +98,12 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
     // Check if the event is valid means inside the shape
     if( !m_formulaShape->boundingRect().contains( event->point ) )
         return;
-    kDebug() << "MousePressEvent";
     // transform the global coordinates into shape coordinates
     QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
     if (event->modifiers() & Qt::ShiftModifier) {
-	m_formulaCursor->setSelecting(true);
+        m_formulaCursor->setSelecting(true);
     } else {
-	m_formulaCursor->setSelecting(false);
+        m_formulaCursor->setSelecting(false);
     }
     // set the cursor to the element the user clicked on
     m_formulaCursor->setCursorTo( p );
@@ -115,9 +114,19 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 
 void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
-
-    // TODO select whole element
+    if( !m_formulaShape->boundingRect().contains( event->point ) ) {
+        return;
+    }
+    // transform the global coordinates into shape coordinates
+    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
+    
+    //clear the current selection
+    m_formulaCursor->setSelecting(false);
+    //place the cursor
+    m_formulaCursor->setCursorTo(p);
+    m_formulaCursor->selectElement(m_formulaCursor->currentElement());
+    repaintCursor();
+    event->accept();
 }
 
 void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )

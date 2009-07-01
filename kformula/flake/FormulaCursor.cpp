@@ -104,6 +104,16 @@ void FormulaCursor::paint( QPainter& painter ) const
     }
 }
 
+
+void FormulaCursor::selectElement(BasicElement* element)
+{
+    m_selecting=true;
+    m_currentElement=element;
+    m_selectionStartPosition=0;
+    m_positionInElement=m_currentElement->length();
+}
+
+
 void FormulaCursor::insertText( const QString& text )
 {
 //    if ( text == "\\" && m_currentElement != TokenElement )
