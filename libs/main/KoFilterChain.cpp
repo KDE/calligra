@@ -653,6 +653,10 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     return doc;
 }
 
+int KoFilterChain::weight() const
+{
+    return m_chainLinks.count();
+}
 
 namespace KOffice
 {
