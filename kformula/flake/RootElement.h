@@ -24,6 +24,7 @@
 #define ROOTELEMENT_H
 
 #include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 
 #include <QPainterPath>
@@ -31,7 +32,7 @@
 /**
  * @short Implementation of the MathML mroot and msqrt elements 
  */
-class KOFORMULA_EXPORT RootElement : public BasicElement {
+class KOFORMULA_EXPORT RootElement : public FixedElement {
 public:
     /// The standard constructor
     RootElement( BasicElement* parent = 0 );
@@ -44,21 +45,12 @@ public:
      * @return a QList with pointers to all child elements
      */
     const QList<BasicElement*> childElements() const;
-
-    /**
-     * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
-    /**
-     * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
-     */ 
-    void removeChild( FormulaCursor* cursor, BasicElement* element );
-
+    
+    QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+    
+    /// inherited from BasicElement
+    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to

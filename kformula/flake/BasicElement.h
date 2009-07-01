@@ -96,10 +96,10 @@ public:
    
     /**
      * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
+     * @param oldelement the child to replace
+     * @param newelement the child @p oldelement is replaced with
      */ 
-    virtual void removeChild( FormulaCursor* cursor, BasicElement* element );
+    virtual bool replaceChild( BasicElement* oldelement, BasicElement* newelement );
 
     /**
      * Render the element to the given QPainter
@@ -145,6 +145,8 @@ public:
     virtual QLineF cursorLine(int position) const;
     
     virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
+    
+    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
     
     /**
      * Move the cursor in the direction specified in cursor
@@ -219,9 +221,12 @@ public:
      * @param child  the childelement we are looking for
      */
     virtual int positionOfChild(BasicElement* child) const;
+        
+    /// @return the element right before the cursor position @p position and 0 if there is none
+    virtual BasicElement* elementBefore(int position);
     
-    /// @return true if the current element is a token element
-    virtual bool isToken() const;
+    /// @return the element right after the cursor position @p position and 0 if there is none
+    virtual BasicElement* elementAfter(int position);
     
     /// Set the element's m_scaleFactor to @p scaleFactor
     void setScaleFactor( double scaleFactor );

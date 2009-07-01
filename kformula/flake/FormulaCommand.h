@@ -41,11 +41,12 @@ class FormulaCommandAdd : public QUndoCommand {
 public:
     /**
      * The constructor
-     * @param cursor The FormulaCursor where the elements will be added
+     * @param parent The parent where the elements will be added
+     * @param position The position where the elements will be added
      * @param added The list of elements that has been added
      */
-    FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added );
-
+    FormulaCommandAdd( BasicElement* parent, int position, QList<BasicElement*> added );
+    
     /// Execute the command
     void redo();
 

@@ -68,10 +68,6 @@ int TokenElement::length() const
     return m_rawString.length();
 }
 
-bool TokenElement::isToken() const {
-    return true;
-}
-
 void TokenElement::layout( const AttributeManager* am )
 {
     kDebug()<<"Layouting";
@@ -145,8 +141,37 @@ bool TokenElement::insertChild( int position, BasicElement* child )
 bool TokenElement::insertText ( int position, const QString& text )
 {
     m_rawString.insert (position,text);
+    return true;
 }
 
+
+QList<GlyphElement*> TokenElement::removeText ( int position, int length )
+{
+    QList<GlyphElement*> tmp;
+    //find out, how many glyphs we have
+    int counter=0;
+    for (int i=position; i<position+length; ++i) {
+        if (m_rawString[ position ] == QChar::ObjectReplacementCharacter) {
+            counter++;
+        }
+    }
+    
+    int start=0;
+    //find out where we should start removing glyphs
+    if (counter>0) {
+        for (int i=0; i<position; ++i) {
+            if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
+                start++;
+            }
+        }
+    } 
+    for (int i=start; i<start+counter; ++i) {
+        tmp.append(m_glyphs.takeAt(i));
+    }
+    m_rawString.remove(position,length);
+    return tmp;
+    
+}
 
 bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     int counter = 0;
@@ -155,30 +180,30 @@ bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
     cursor->setCurrentElement(this);
     if (boundingRect().width()<point.x()) {
-	    cursor->setPosition(length());
-	    return true;
+        cursor->setPosition(length());
+        return true;
     }
     double oldx=0;
     //Find the letter we clicked on
     for( i = 0; i < m_rawString.length(); i++ ) {
         //add a character to the string
-	if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
-	    renderToPath( QString(m_rawString[i]), tmppath );
-	}
-        else {
-	    m_glyphs[ counter ]->renderToPath( QString(), tmppath );
-	    counter++;
+        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
+            renderToPath( QString(m_rawString[i]), tmppath );
         }
- 	//check if we found the character, on which the point is
-	if (tmppath.boundingRect().right()>=point.x()) {
-	    break;
-	}
-	//save the old width of the path
-	oldx=tmppath.boundingRect().right();
+            else {
+                m_glyphs[ counter ]->renderToPath( QString(), tmppath );
+                counter++;
+            }
+        //check if we found the character, on which the point is
+        if (tmppath.boundingRect().right()>=point.x()) {
+            break;
+        }
+        //save the old width of the path
+        oldx=tmppath.boundingRect().right();
     }
     //Find out, if we should place the cursor before or after the character
     if ((point.x()-oldx)>(tmppath.boundingRect().right()-point.x())) {	
-	i++;
+        i++;
     }
     cursor->setPosition(i);
     return true;
@@ -194,12 +219,6 @@ QLineF TokenElement::cursorLine(int position) const
     return QLineF(top,bottom);
 }
 
-
-void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
-{
-    m_rawString.remove( cursor->position(), 1 );
-}
-
 bool TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
@@ -207,19 +226,19 @@ bool TokenElement::acceptCursor( const FormulaCursor* cursor )
 }
 
 bool TokenElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) {
-    if ( (newcursor->direction()==MoveUp) ||
-	 (newcursor->direction()==MoveDown) ||
-	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
-	return false;
+    if ((newcursor->direction()==MoveUp) ||
+        (newcursor->direction()==MoveDown) ||
+        (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+        return false;
     }
     switch( newcursor->direction() ) {
-	case MoveLeft:
-	    newcursor->setPosition(newcursor->position()-1);
-	    break;
-	case MoveRight:
-	    newcursor->setPosition(newcursor->position()+1);
-	    break;
+    case MoveLeft:
+        newcursor->setPosition(newcursor->position()-1);
+        break;
+    case MoveRight:
+        newcursor->setPosition(newcursor->position()+1);
+        break;
     }
     return true;
 }
@@ -245,6 +264,15 @@ QFont TokenElement::font() const
 {
     return m_font;
 }
+
+
+void TokenElement::setText ( const QString& text )
+{
+    //TODO: check for ObjectReplacement characters
+    m_rawString=text;
+    m_glyphs.empty();
+}
+
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
@@ -297,4 +325,3 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
         }
     }
 }
-

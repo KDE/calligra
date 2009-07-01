@@ -126,8 +126,10 @@ bool BasicElement::insertChild( int position, BasicElement* element )
     return false;
 }
 
-void BasicElement::removeChild( FormulaCursor*, BasicElement* )
-{ /* do nothing a BasicElement has no children */ }
+bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelement)
+{
+    return false;
+}
 
 const QList<BasicElement*> BasicElement::childElements() const
 {
@@ -311,10 +313,6 @@ int BasicElement::positionOfChild(BasicElement* child) const {
     return -1;
 }
 
-bool BasicElement::isToken() const {
-    return false;
-}
-
 void BasicElement::setParentElement( BasicElement* parent )
 {
     m_parentElement = parent;
@@ -330,6 +328,22 @@ void BasicElement::setScaleLevel( int scaleLevel )
     while(level-- > 0)  //raise multiplier to the power of level
         m_scaleFactor *= 0.71;
 }
+BasicElement* BasicElement::elementBefore ( int position )
+{
+    return 0;
+}
+
+BasicElement* BasicElement::elementAfter ( int position )
+{
+    return 0;
+}
+
+QList< BasicElement* > BasicElement::elementsBetween ( int pos1, int pos2 ) const
+{
+    QList<BasicElement*> tmp;
+    return tmp;
+}
+
 
 bool BasicElement::displayStyle() const
 {

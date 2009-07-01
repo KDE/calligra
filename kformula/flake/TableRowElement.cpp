@@ -67,7 +67,7 @@ void TableRowElement::layout( const AttributeManager* am )
             // TableElement::determineDimensions so that it pays attention to baseline.
             // Axis as alignment option is ignored as it is tought to be an option for
             // the table itsself.
-        kDebug() << horizontalAlign[ i ]<<","<<Axis;
+//         kDebug() << horizontalAlign[ i ]<<","<<Axis;
         if( horizontalAlign[ i ] == Center ) {
             hOffset = ( parentTable->columnWidth( i ) - m_entries[ i ]->width() ) / 2;
         }
@@ -87,7 +87,7 @@ void TableRowElement::layout( const AttributeManager* am )
 bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
      //return true;
-     return (cursor->hasSelection());
+     return (cursor->isSelecting());
 }
 
 int TableRowElement::positionOfChild(BasicElement* child) const 
@@ -126,7 +126,7 @@ QLineF TableRowElement::cursorLine ( int position ) const
 
 bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
 {
-    if (cursor->hasSelection()) {
+    if (cursor->isSelecting()) {
         if (m_entries.isEmpty() || point.x()<0.0) {
             cursor->setCurrentElement(this);
             cursor->setPosition(0);
@@ -149,9 +149,9 @@ bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
         break;
     }
     }
-    if (cursor->hasSelection()) {
+    if (cursor->isSelecting()) {
     //we don't need to change current element because we are already in this element
-    if (cursor->selectionStartPosition()<=i) {
+    if (cursor->mark()<=i) {
         cursor->setPosition(i+1);
     }
     else {
@@ -173,7 +173,7 @@ bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
     }
     int rowpos=parentElement()->positionOfChild(this);
     int colpos=(newcursor->position()!=length() ? newcursor->position() : newcursor->position()-1);
-    if (newcursor->hasSelection()) {
+    if (newcursor->isSelecting()) {
         switch(newcursor->direction()) {
         case MoveLeft:
             newcursor->moveTo(this,newcursor->position()-1);

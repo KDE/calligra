@@ -66,6 +66,7 @@ public:
     /// Reset the cursor
     void resetFormulaCursor();
 
+    
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
     void activate( bool temporary=false );

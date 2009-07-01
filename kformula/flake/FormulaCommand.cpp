@@ -22,12 +22,13 @@
 #include "FormulaCommand.h"
 #include "FormulaCursor.h"
 #include <klocale.h> 
+#include "BasicElement.h"
 
-FormulaCommandAdd::FormulaCommandAdd( FormulaCursor* cursor, QList<BasicElement*> added )
+FormulaCommandAdd::FormulaCommandAdd( RowElement* parent, int position, QList<BasicElement*> added )
                  : QUndoCommand()
 {
-    m_ownerElement = cursor()->ownerElement();
-    m_positionInElement = cursor()->position();
+    m_ownerElement = parent;
+    m_positionInElement = position;
     m_addedElements = added;
     setText( i18n( "Add Elements" ) );
 }
@@ -45,8 +46,9 @@ void FormulaCommandAdd::redo()
 
 void FormulaCommandAdd::undo()
 {
-    foreach( BasicElement* tmp, m_addedElements )
-        m_ownerElement->removeElement( tmp );
+    foreach (BasicElement* tmp, m_addedElements) {
+        m_ownerElement->insertChild(m_addedElements);
+    }
 }
 
 

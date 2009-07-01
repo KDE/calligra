@@ -42,7 +42,7 @@ QString TableEntryElement::attributesDefaultValue( const QString& attribute ) co
 
 bool TableEntryElement::moveCursor ( FormulaCursor* newcursor, FormulaCursor* oldcursor )
 {
-    if (newcursor->hasSelection() || 
+    if (newcursor->isSelecting() || 
         newcursor->direction()==MoveLeft || newcursor->direction()==MoveRight) {
         return RowElement::moveCursor(newcursor,oldcursor);
     } else {

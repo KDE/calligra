@@ -23,6 +23,7 @@
 #define FRACTIONELEMENT_H
 
 #include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 #include <QLineF>
 
@@ -33,7 +34,7 @@
  * FractionElement holds two child elements that are the numerator and the
  * denominator.
  */
-class KOFORMULA_EXPORT FractionElement : public BasicElement {
+class KOFORMULA_EXPORT FractionElement : public FixedElement {
 public:
     /// The standard constructor
     FractionElement( BasicElement* parent = 0 );
@@ -59,23 +60,12 @@ public:
      */
     const QList<BasicElement*> childElements() const;
 
-    /**
-     * Insert a new child at the cursor position - reimplemented from BasicElement
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+    /// inherited from BasicElement
+    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
     
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
     
-    /**
-     * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
-     */ 
-    void removeChild( FormulaCursor* cursor, BasicElement* element );
-
     /// inherited from BasicElement
     bool acceptCursor( const FormulaCursor* cursor );
     
@@ -91,15 +81,14 @@ public:
     /// inherited from BasicElement
     virtual QLineF cursorLine(int position) const;
     
-    /// inherited from BasicElement
-    virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
-    
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
     
     /// @return The element's ElementType
     ElementType elementType() const;
 
+    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+    
 protected:
     /// Read all content from the node - reimplemented by child elements
     bool readMathMLContent( const KoXmlElement& parent );

@@ -47,7 +47,7 @@ public:
     RowElement( BasicElement* parent = 0 );
 
     /// The standard destructor
-    ~RowElement();
+    virtual ~RowElement();
 
     /**
      * Calculate the size of the element and the positions of its children
@@ -70,15 +70,20 @@ public:
     const QList<BasicElement*> childElements() const;
 
     /// inherited from BasicElement
+    virtual QList< BasicElement* > elementsBetween ( int pos1, int pos2 ) const;
+    
+    /// inherited from BasicElement
     virtual bool insertChild( int position, BasicElement* child );
-
+    
     /**
      * Remove a child element
-     * @param cursor The cursor holding the position where to remove
      * @param element The BasicElement to remove
      */
-    void removeChild( FormulaCursor* cursor, BasicElement* element );
-
+    bool removeChild( BasicElement* child);
+    
+    ///inherited form BasicElement
+    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    
     /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
@@ -109,7 +114,13 @@ public:
     
     /// inherited from BasicElement
     virtual QLineF cursorLine(int position) const;
-   
+    
+    /// inherited from BasicElement
+    virtual BasicElement* elementAfter ( int position );
+    
+    /// inherited from BasicElement
+    virtual BasicElement* elementBefore ( int position );
+    
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );
