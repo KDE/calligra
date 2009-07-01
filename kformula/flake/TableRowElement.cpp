@@ -55,7 +55,7 @@ void TableRowElement::layout( const AttributeManager* am )
     QPointF origin;
     double hOffset = 0.0;
     for ( int i = 0; i < m_entries.count(); i++ ) {
-        origin = QPointF();
+//         origin = QPointF();
         hOffset = 0.0;
         if( verticalAlign[ i ] == Bottom )
             origin.setY( height() - m_entries[ i ]->height() );

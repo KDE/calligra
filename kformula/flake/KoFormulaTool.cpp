@@ -80,6 +80,8 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
     qreal zoomX, zoomY;              // apply view conversions for painting
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
+    //TODO: find out, how to adjust the painter, so that that this also works in 
+    // rotated mode
     
     m_formulaCursor->paint( painter );
 }

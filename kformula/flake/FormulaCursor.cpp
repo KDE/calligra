@@ -50,7 +50,6 @@ void FormulaCursor::paint( QPainter& painter ) const
     painter.setPen( pen );
     painter.drawLine(m_currentElement->cursorLine( this ));
     pen.setWidth( 0);
-    
     switch(m_currentElement->elementType()) {
 	case Number:
 	   painter.setPen(Qt::red);
@@ -68,7 +67,12 @@ void FormulaCursor::paint( QPainter& painter ) const
 	   painter.setPen(Qt::magenta);
 	   break;
     }
-    painter.drawRect(m_currentElement->absoluteBoundingRect());
+    QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
+    double baseline=m_currentElement->baseLine();
+    painter.drawRect( m_currentElement->absoluteBoundingRect() );
+    painter.setPen( QPen( Qt::blue, 0, Qt::DashLine ) );
+    painter.drawLine( origin+QPointF(0.0,baseline),
+		      origin+QPointF(m_currentElement->width(), baseline) );
 }
 
 void FormulaCursor::insertText( const QString& text )

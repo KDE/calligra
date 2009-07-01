@@ -150,17 +150,17 @@ QLineF RowElement::cursorLine(const FormulaCursor* cursor) {
 
 bool RowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
 {
-    double x=0.0;
     if (point.x()<0) {
 	cursor->setCurrentElement(this);
 	cursor->setPosition(0);
 	return true;
     }
-    //Find the child element the point is in
-    QList<BasicElement*>::const_iterator tmp=childElements().begin();
-    while (tmp!=childElements().end() && (x+(*tmp)->width()<point.x())) {
-	x+=(*tmp)->width();
-	tmp++;
+    QList<BasicElement*>::const_iterator tmp;
+    for (tmp=childElements().begin(); tmp!=childElements().end(); tmp++) {
+	//Find the child element the point is in
+	if ((*tmp)->boundingRect().right()>=point.x()) {
+	    break;
+	}
     }
     //check if the point is behind all child elements
     if (tmp==childElements().end()) {
