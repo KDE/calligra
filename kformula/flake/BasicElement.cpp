@@ -120,10 +120,10 @@ bool BasicElement::setCursorTo(FormulaCursor* cursor, QPointF point)
 }
 
 
-void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
+bool BasicElement::insertChild( int position, BasicElement* element )
 {
     // call the parentElement to notify it that there is something to be inserted
-    m_parentElement->insertChild( cursor, element );
+    return false;
 }
 
 void BasicElement::removeChild( FormulaCursor*, BasicElement* )

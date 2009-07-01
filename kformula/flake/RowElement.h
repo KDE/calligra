@@ -69,12 +69,8 @@ public:
      */
     const QList<BasicElement*> childElements() const;
 
-    /**
-     * Insert a new child at the cursor position - reimplemented from BasicElement
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+    /// inherited from BasicElement
+    virtual bool insertChild( int position, BasicElement* child );
 
     /**
      * Remove a child element

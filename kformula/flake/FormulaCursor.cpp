@@ -43,7 +43,7 @@ FormulaCursor::FormulaCursor( BasicElement* element )
 void FormulaCursor::paint( QPainter& painter ) const
 {
     kDebug() << "Drawing cursor with selecting: "<< hasSelection() << " from "
-	<< selectionStartPosition()<<" to " << position();
+    << selectionStartPosition()<<" to " << position();
     if( !m_currentElement )
         return;
     painter.save();
@@ -63,44 +63,43 @@ void FormulaCursor::paint( QPainter& painter ) const
     pen.setStyle(Qt::DotLine);
     //Only here for debug purpose
     switch(m_currentElement->elementType()) {
-	case Number:
-	   pen.setColor(Qt::red);
-	   break;
-	case Identifier:
-	   pen.setColor(Qt::darkRed);
-	   break;
-	case Row:
-	   pen.setColor(Qt::yellow);
-	   break;
-	case Fraction:
-	   pen.setColor(Qt::blue);
-	   break;
+    case Number:
+        pen.setColor(Qt::red);
+        break;
+    case Identifier:
+        pen.setColor(Qt::darkRed);
+        break;
+    case Row:
+        pen.setColor(Qt::yellow);
+        break;
+    case Fraction:
+        pen.setColor(Qt::blue);
+        break;
     case Table:
-       pen.setColor(Qt::darkGreen);
-       break;
+        pen.setColor(Qt::darkGreen);
+        break;
     case TableRow:
         pen.setColor(Qt::green);
-	default:
-	   pen.setColor(Qt::darkGray);
-	   break;
+        break;
+    default:
+        pen.setColor(Qt::darkGray);
+        break;
     }
     painter.setPen(pen);
     painter.drawRect( m_currentElement->absoluteBoundingRect() );
     //draw the selection rectangle
     if ( m_selecting ) {
-	kDebug() << "Selection is " << selectionRect();
-	QBrush brush;
-	QColor color(Qt::blue);
- 	color.setAlpha(128);
-	brush.setColor(color);
-	brush.setStyle(Qt::SolidPattern);
-	painter.setBrush(brush);
-	painter.setPen(Qt::NoPen);
-	int p1=position()<selectionStartPosition()? position() : selectionStartPosition();
-	int p2=position()<selectionStartPosition()? selectionStartPosition() : position() ;
-	painter.drawPath(m_currentElement->selectionRegion(p1,p2));
-// 	painter.drawRect(selectionRect());
-    painter.restore();
+        QBrush brush;
+        QColor color(Qt::blue);
+        color.setAlpha(128);
+        brush.setColor(color);
+        brush.setStyle(Qt::SolidPattern);
+        painter.setBrush(brush);
+        painter.setPen(Qt::NoPen);
+        int p1=position()<selectionStartPosition()? position() : selectionStartPosition();
+        int p2=position()<selectionStartPosition()? selectionStartPosition() : position() ;
+        painter.drawPath(m_currentElement->selectionRegion(p1,p2));
+        painter.restore();
     }
 }
 
@@ -116,54 +115,49 @@ void FormulaCursor::selectElement(BasicElement* element)
 
 void FormulaCursor::insertText( const QString& text )
 {
-//    if ( text == "\\" && m_currentElement != TokenElement )
-//    TODO   -> go to latex processing
-
-//    if( text.size() != 1 ) // check for single char input after key press
-        // TODO check for text excapting element due to paste of text
-
-    // Filter for things that can be typed in with the keyboard
-    // - operators like: / * + - | ^ % ( )
-    // - other text is put into text accepting elements
-    // - lim, max min
-    m_inputBuffer = text;
-    QChar tmpChar( text[ 0 ] );
-    QString tagname; 
-    ElementType tokentype;
-    if (tmpChar.isNumber()) {
-	tagname="mn";
-	tokentype=Number;
+    if (hasSelection()) {
+        //TODO: implement replacement of Selection
+    } else {
+        m_inputBuffer = text;
+        QChar tmpChar( text[ 0 ] );
+        QString tagname; 
+        ElementType tokentype;
+        if (tmpChar.isNumber()) {
+            tagname="mn";
+            tokentype=Number;
+        }
+        else if ( tmpChar == '*' || tmpChar == '+' || tmpChar == '-' ||
+                tmpChar == '=' || tmpChar == '>' || tmpChar == '<' ||
+                tmpChar == '!' || tmpChar == '.' || tmpChar == '/' ||
+                tmpChar == '?' || tmpChar == ',' || tmpChar == ':' ) {
+            tagname="mo";
+            tokentype=Operator;
+        }
+        else if (tmpChar.isLetter()) {
+            tagname="mi";
+            tokentype=Identifier;
+        }
+        if (!insideToken()) {
+            if (insideInferredRow()) {
+                BasicElement* tmpToken = ElementFactory::createElement(tagname,m_currentElement);
+                m_currentElement->insertChild( m_positionInElement, tmpToken );
+                m_currentElement = tmpToken;
+                m_positionInElement=0;
+            }
+            else {
+                return;
+            }
+        }
+        TokenElement* token=static_cast<TokenElement*>(m_currentElement);
+        token->insertText(m_positionInElement,text);
+        m_positionInElement+=text.length(); //potentially more than one character is added
     }
-    else if ( tmpChar == '*' || tmpChar == '+' || tmpChar == '-' ||
-              tmpChar == '=' || tmpChar == '>' || tmpChar == '<' ||
-              tmpChar == '!' || tmpChar == '.' || tmpChar == '/' ||
-              tmpChar == '?' || tmpChar == ',' || tmpChar == ':' ) {
-	tagname="mo";
-	tokentype=Operator;
-    }
-    else if (tmpChar.isLetter()) {
-	tagname="mi";
-	tokentype=Identifier;
-    }
-    if (m_currentElement->elementType() != tokentype) {
-	// TODO: frac, ... will need special treatment too
-	if (insideToken()) {
-	    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
-	    m_currentElement=m_currentElement->parentElement();
-	}
-	BasicElement* tmpToken = ElementFactory::createElement(tagname,m_currentElement);
-	m_currentElement->insertChild( this, tmpToken );
-	m_currentElement = tmpToken;
-	m_positionInElement = 0; //the cursor is at the beginning of our new token
-    }
-    m_currentElement->insertChild( this, 0 );
-    m_positionInElement+=text.length(); //potentially more than one character is added
 }
 
 void FormulaCursor::insertData( const QString& data )
 {
     BasicElement* elementToInsert = 0;
-
+    kDebug()<<"HAllo";
     // MathML data to load
     if( data.startsWith( '<' ) ) {
         // TODO
@@ -174,7 +168,7 @@ void FormulaCursor::insertData( const QString& data )
     }
     else
         elementToInsert = ElementFactory::createElement( data, m_currentElement );
-
+    
     Q_ASSERT( elementToInsert );
     
     insertElement( elementToInsert );
@@ -182,28 +176,28 @@ void FormulaCursor::insertData( const QString& data )
 
 void FormulaCursor::insertElement( BasicElement* element )
 {
-    if( m_currentElement->elementType() == Basic ) {
-        m_currentElement->parentElement()->insertChild( this, element );
-        delete m_currentElement;
-        m_currentElement = element;
-        m_positionInElement = 1;
-    }
-    else if( insideInferredRow() ) {
-        m_currentElement->insertChild( this, element );
-        m_positionInElement++;
-    }
-    else if( insideToken() ) {
-        // TODO implement token splitting
-    }
-    else {
-        BasicElement* r = ElementFactory::createElement( "mrow",
-                                                    m_currentElement->parentElement() );
-        m_currentElement->parentElement()->insertChild( this, r );
-
-        r->insertChild( this, ( m_positionInElement==0 ) ? element : m_currentElement );
-        r->insertChild( this, ( m_positionInElement==0 ) ? m_currentElement : element );
-        m_currentElement = r;
-    }
+//     if( m_currentElement->elementType() == Basic ) {
+//         m_currentElement->parentElement()->insertChild( this, element );
+//         delete m_currentElement;
+//         m_currentElement = element;
+//         m_positionInElement = 1;
+//     }
+//     else if( insideInferredRow() ) {
+//         m_currentElement->insertChild( this, element );
+//         m_positionInElement++;
+//     }
+//     else if( insideToken() ) {
+//         // TODO implement token splitting
+//     }
+//     else {
+//         BasicElement* r = ElementFactory::createElement( "mrow",
+//                                                     m_currentElement->parentElement() );
+//         m_currentElement->parentElement()->insertChild( this, r );
+// 
+//         r->insertChild( this, ( m_positionInElement==0 ) ? element : m_currentElement );
+//         r->insertChild( this, ( m_positionInElement==0 ) ? m_currentElement : element );
+//         m_currentElement = r;
+//     }
 }
 
 void FormulaCursor::remove( bool elementBeforePosition )
@@ -300,45 +294,45 @@ void FormulaCursor::moveTo( BasicElement* element, int position )
 void FormulaCursor::setCursorTo( const QPointF& point )
 {
     if (m_selecting) {
-	while (!m_currentElement->absoluteBoundingRect().contains(point)) {
-	    if ( m_currentElement->parentElement() ) {
-		
-		m_positionInElement=0;
-		if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
-		    //the point is left of the old selection start, so we move the selection 
-		    //start after the old current element
-		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
-		} else {
-		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-		}
-		m_currentElement=m_currentElement->parentElement();
-	    }
-	    else {
+    while (!m_currentElement->absoluteBoundingRect().contains(point)) {
+        if ( m_currentElement->parentElement() ) {
+        
+        m_positionInElement=0;
+        if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
+            //the point is left of the old selection start, so we move the selection 
+            //start after the old current element
+            m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
+        } else {
+            m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+        }
+        m_currentElement=m_currentElement->parentElement();
+        }
+        else {
 // 		setSelecting(false);
-		return;
-	    }
-	}
-	while (!m_currentElement->setCursorTo(this,point-m_currentElement->absoluteBoundingRect().topLeft())) {
-	    if ( m_currentElement->parentElement() ) {
-		m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-		m_positionInElement=0;
-		if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
-		    //the point is left of the old selection start, so we move the selection 
-		    //start after the old current element
-		    m_selectionStartPosition++;
-		}
-		m_currentElement=m_currentElement->parentElement();
-	    }
-	    else {
-		return;
-	    }
-	}
-	
+        return;
+        }
+    }
+    while (!m_currentElement->setCursorTo(this,point-m_currentElement->absoluteBoundingRect().topLeft())) {
+        if ( m_currentElement->parentElement() ) {
+        m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+        m_positionInElement=0;
+        if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
+            //the point is left of the old selection start, so we move the selection 
+            //start after the old current element
+            m_selectionStartPosition++;
+        }
+        m_currentElement=m_currentElement->parentElement();
+        }
+        else {
+        return;
+        }
+    }
+    
     } else {
-	BasicElement* formulaElement = m_currentElement;
-	while( formulaElement->parentElement() != 0 )
-	    formulaElement = formulaElement->parentElement();
-	formulaElement->setCursorTo(this,point);
+    BasicElement* formulaElement = m_currentElement;
+    while( formulaElement->parentElement() != 0 )
+        formulaElement = formulaElement->parentElement();
+    formulaElement->setCursorTo(this,point);
     }
 }
 
@@ -346,22 +340,6 @@ int FormulaCursor::selectionStartPosition() const
 {
     return m_selectionStartPosition;
 }
-
-QRectF FormulaCursor::selectionRect() const 
-{
-	QLineF l1=m_currentElement->cursorLine(m_positionInElement);
-	QLineF l2=m_currentElement->cursorLine(m_selectionStartPosition);
-	//TODO: find out why doesn't work
-	//QRectF r1(l1.p1(),l1.p2());
-	//QRectF r2(l2.p1(),l2.p2());
-	
-	QRectF r1(l1.p1(),l2.p2());
-	QRectF r2(l2.p1(),l1.p2());
-//	kDebug()<<r1<<r2;
-// 	kDebug()<<r1.united(r2).topLeft()<<" --- "<<r1.united(r2).bottomRight();
-	return r1.unite(r2);
-}
-
 
 void FormulaCursor::moveHome()
 {
@@ -440,14 +418,14 @@ bool FormulaCursor::hasSelection() const
 void FormulaCursor::setSelecting( bool selecting )
 {
     if (selecting) {
-	if (!m_selecting) {
-	    //we start a new selection
-	    m_selecting = selecting;
-	    m_selectionStartPosition=m_positionInElement;
-	}
+        if (!m_selecting) {
+            //we start a new selection
+            m_selecting = selecting;
+            m_selectionStartPosition=m_positionInElement;
+        }
     } else {
-	m_selecting = selecting;
-	m_selectionStartPosition=0;
+        m_selecting = selecting;
+        m_selectionStartPosition=0;
     }
 }
 

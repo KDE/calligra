@@ -155,9 +155,6 @@ public:
     /// @return the selection starting position
     int selectionStartPosition() const;
     
-    /// @return the bounding rect of the current selection
-    QRectF selectionRect() const;
-    
     /// select the element completely
     void selectElement(BasicElement* element);
     

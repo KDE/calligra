@@ -88,13 +88,14 @@ const QList<BasicElement*> RowElement::childElements() const
     return m_childElements;
 }
 
-void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+bool RowElement::insertChild( int position, BasicElement* child )
 {
-    if( cursor->currentElement() == this )
-        m_childElements.insert( cursor->position(), child );
-    kDebug() << "inserting child in Row at " <<cursor->position();
-    // else
-    //     TODO make some error
+    if (0<=position && position<=length()) {
+        m_childElements.insert( position, child );
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )

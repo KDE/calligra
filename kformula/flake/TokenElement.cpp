@@ -74,6 +74,7 @@ bool TokenElement::isToken() const {
 
 void TokenElement::layout( const AttributeManager* am )
 {
+    kDebug()<<"Layouting";
     // Query the font to use
     m_font = am->font( this );
     QFontMetricsF fm(m_font);
@@ -129,17 +130,23 @@ void TokenElement::layout( const AttributeManager* am )
     m_originalSize = QSizeF(width(), height());
 }
 
-void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+bool TokenElement::insertChild( int position, BasicElement* child )
 {
-/*    if( child && child->elementType() == Glyph ) {
-        m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
-        m_glyphs.insert();
+    if( child && child->elementType() == Glyph ) {
+    //    m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
+    //    m_glyphs.insert();
+        return false;
+    } else {
+        return false;
     }
-    else*/ if( !child )
-	//TODO: get the text from child
-        m_rawString.insert( cursor->position(), cursor->inputBuffer() );
-	kDebug() << "-"<<m_rawString << "InputBuffer:"<<cursor->inputBuffer();
 }
+
+
+bool TokenElement::insertText ( int position, const QString& text )
+{
+    m_rawString.insert (position,text);
+}
+
 
 bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     int counter = 0;

@@ -92,7 +92,7 @@ public:
      * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
-    virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
+    virtual bool insertChild( int position, BasicElement* child );
    
     /**
      * Remove a child element

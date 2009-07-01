@@ -110,18 +110,6 @@ bool UnderOverElement::acceptCursor( const FormulaCursor* cursor )
     return true;
 }
 
-void UnderOverElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{
-    if( cursor->currentElement() == m_baseElement )
-        m_baseElement = child;
-    else if( cursor->currentElement() == m_underElement )
-        m_underElement = child;
-    else if( cursor->currentElement() == m_overElement )
-        m_overElement = child;
-//  else
-//      TODO make some error
-}
-
 QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
 {
 /*    if( m_overElement->elementType() == Operator )

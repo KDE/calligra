@@ -67,11 +67,13 @@ public:
     void layout( const AttributeManager* am );
 
     /**
-     * Insert new content that the user typed at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
+     * Insert @p text at @p position
+     * @return true, if the insert was succesfull
      */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+    bool insertText( int position, const QString &text );
+    
+    ///inherited from BasicElement
+    virtual bool insertChild ( int position, BasicElement* child );
     
     /**
      * Remove a child element
