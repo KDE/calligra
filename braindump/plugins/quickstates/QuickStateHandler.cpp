@@ -33,6 +33,7 @@
 #include <KoShapeController.h>
 #include <KoProperties.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoShapeManager.h>
 
 QuickStateHandler::QuickStateHandler(const QString& _catId, const QString& _textId, QObject* _obj) : 
     QObject(_obj),
@@ -66,7 +67,7 @@ void QuickStateHandler::activate() {
   Q_ASSERT(layout);
   Q_ASSERT(layout->inlineTextObjectManager());
   layout->inlineTextObjectManager()->insertInlineObject(cursor, anchor);
-    cursor.insertText("hello");
+  canvas->shapeManager()->add(shape);
 }
 
 #include "QuickStateHandler.moc"

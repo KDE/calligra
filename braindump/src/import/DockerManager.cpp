@@ -95,7 +95,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
         bool isOnTop = true;
         int idx = d->view->children().indexOf(j.value());
         foreach(QDockWidget* dock, tabedDocks) {
-          if(d->view->children().indexOf(dock) > idx) {
+          if(d->view->children().indexOf(dock) > idx and dock->isVisible() and dock->isEnabled()) {
             isOnTop = false;
             break;
           }
@@ -114,7 +114,7 @@ void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidg
     while (i.hasNext()) {
         i.next();
         if (i.value()->objectName().isEmpty()) {
-            kDebug(30004) << "tooldocker widget have no name " << i.key() << " " << i.value()->objectName();
+            kError(30004) << "tooldocker widget have no name " << i.key() << " " << i.value()->objectName();
             Q_ASSERT(!(i.value()->objectName().isEmpty()));
             continue; // skip this docker in release build when assert don't crash
         }
