@@ -67,11 +67,13 @@ void TableRowElement::layout( const AttributeManager* am )
             // TableElement::determineDimensions so that it pays attention to baseline.
             // Axis as alignment option is ignored as it is tought to be an option for
             // the table itsself.
-     
-        if( horizontalAlign[ i ] == Center )
+        kDebug() << horizontalAlign[ i ]<<","<<Axis;
+        if( horizontalAlign[ i ] == Center ) {
             hOffset = ( parentTable->columnWidth( i ) - m_entries[ i ]->width() ) / 2;
-        else if( horizontalAlign[ i ] == Right )
+        }
+        else if( horizontalAlign[ i ] == Right ) {
             hOffset = parentTable->columnWidth( i ) - m_entries[ i ]->width();
+        }
 
         m_entries[ i ]->setOrigin( origin + QPointF( hOffset, 0.0 ) );
         origin += QPointF( parentTable->columnWidth( i ), 0.0 );
@@ -107,16 +109,16 @@ QLineF TableRowElement::cursorLine ( int position ) const
 {
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     QPointF top=absoluteBoundingRect().topLeft();
+    double hOffset = 0;
     if( childElements().isEmpty() ) {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
     } else { 
-	if ( position==length()) {
-	    top += QPointF(width(),0.0);
-	} else {
-	    top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
+        for (int i=0; i<position; ++i) {
+            hOffset+=parentTable->columnWidth(i);
+        }
+        top += QPointF( hOffset, 0.0 );
 	}
-    }
     QPointF bottom = top + QPointF( 0.0, height() );
     return QLineF(top, bottom);
 }
@@ -239,8 +241,7 @@ QList<Align> TableRowElement::alignments( Qt::Orientation orientation )
 
     // get the alignment values of the parental TableElement
     AttributeManager am;
-    QList<Align> parentAlignList = am.alignListOf( align, this );
-
+    QList<Align> parentAlignList = am.alignListOf( align, parentElement() );
     // iterate over all entries and look on per entry specification of alignment
     QList<Align> alignList;
     for( int i = 0; i < m_entries.count(); i++ ) {

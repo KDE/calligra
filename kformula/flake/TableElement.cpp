@@ -43,10 +43,11 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
     //    painter.setPen( QPen( m_framePenStyle ) );
     // painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     //}
+    painter.save();
     QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
     QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
     kDebug()<<frameSpacing;
-    painter.setPen(QPen(Qt::SolidLine));//debugging 
+    painter.setPen(QPen(Qt::NoPen));//debugging 
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines
     double offset = frameSpacing[1];
@@ -61,6 +62,7 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
         offset += m_colWidths[ i ];
         painter.drawLine( QPointF( offset, 0.0 ), QPointF( offset, height() ) );
     }
+    painter.restore();
 }
 
 void TableElement::layout( const AttributeManager* am )

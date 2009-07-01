@@ -51,6 +51,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     double baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
+    pen.setColor(Qt::black);
     painter.setPen( pen );
     painter.drawLine(m_currentElement->cursorLine( m_positionInElement ));
     pen.setWidth( 0.1);

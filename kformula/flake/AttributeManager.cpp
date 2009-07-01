@@ -26,7 +26,6 @@
 #include <QFontMetricsF>
 #include <QColor>
 #include <kdebug.h>
-
 // Copied from koffice KoUnit.h
 
 // 1 inch ^= 72 pt
@@ -63,21 +62,26 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
 {
     // check if the current element has a value assigned
     QString value = element->attribute( attribute );
-    if( !value.isEmpty() )
+    if( !value.isEmpty() ) {
+        kDebug()<<"checking for attribute "<<attribute <<" returning (s)"<<value;
         return value;
-
+    }
     // if not, check if any of the parent elements inherits a value
     BasicElement* tmpParent = element->parentElement();
     while( tmpParent )
     {
         value = tmpParent->inheritsAttribute( attribute );
-        if( !value.isEmpty() )
+        if( !value.isEmpty() ) {
+            kDebug()<<"checking for attribute "<<attribute <<" returning (p)"<<value;
             return value;
-        else
+        }
+        else {
             tmpParent = tmpParent->parentElement();
+        }
     }
-
+    
     // if not, return the default value of the attribute
+    kDebug()<<"checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
     return element->attributesDefaultValue( attribute );
 }
 
@@ -305,6 +309,7 @@ Length AttributeManager::parseUnit( const QString& value,
 
 Align AttributeManager::parseAlign( const QString& value ) const
 {
+    kDebug()<<value;
     if( value == "right" )
         return Right;
     else if( value == "left" )
