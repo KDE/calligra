@@ -18,8 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #ifndef KCHART_THREEDSCENE_H
 #define KCHART_THREEDSCENE_H
+
 
 namespace KChart {
 
@@ -29,6 +31,7 @@ namespace KChart {
  * Currently it is not more than a dummy class, and will be implemented once
  * we have a sane 3D charting backend.
  */
+
 class ThreeDScene
 {
 public:

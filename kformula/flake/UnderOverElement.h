@@ -31,7 +31,7 @@
 class KOFORMULA_EXPORT UnderOverElement : public BasicElement {
 public:
     /// The standard constructor
-    UnderOverElement( BasicElement* parent = 0 );
+    UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
 
     /// The standard destructor
     ~UnderOverElement();
@@ -91,6 +91,9 @@ private:
 
     /// The element that is layouted over the base element
     BasicElement* m_overElement;
+
+    /// The type - one of Under, Over, UnderOver
+    ElementType m_elementType;
 };
 
 #endif // UNDEROVERELEMENT_H

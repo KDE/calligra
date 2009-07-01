@@ -374,11 +374,6 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup(KexiMainWindow *mainWin
 
     Q3WhatsThis::add(m_contents->saveSetupLink, i18n("Saves settings for this setup as default."));
     connect(m_contents->saveSetupLink, SIGNAL(leftClickedUrl()), this, SLOT(slotSaveSetup()));
-#if !KDE_IS_VERSION(3,5,1) && !defined(Q_WS_WIN)
-    //a fix for problems with focusable KUrlLabel on KDElibs<=3.5.0
-    m_contents->openDataLink->setFocusPolicy(NoFocus);
-    m_contents->saveSetupLink->setFocusPolicy(NoFocus);
-#endif
 
     Q3WhatsThis::add(m_contents->addDateTimeCheckbox, i18n("Adds date and time to the header."));
     Q3WhatsThis::add(m_contents->addPageNumbersCheckbox, i18n("Adds page numbers to the footer."));

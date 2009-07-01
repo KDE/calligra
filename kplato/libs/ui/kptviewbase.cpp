@@ -292,8 +292,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 //--------------
 ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     : KoView( doc, parent ),
-    m_readWrite( false ),
-    actionOptions( 0 )
+    m_readWrite( false )
 {
 }
     
@@ -556,7 +555,7 @@ void TreeViewBase::setReadWrite( bool rw )
 void TreeViewBase::createItemDelegates( ItemModelBase *model )
 {
     for ( int c = 0; c < model->columnCount(); ++c ) {
-        QItemDelegate *delegate = model->createDelegate( c, this );
+        QAbstractItemDelegate *delegate = model->createDelegate( c, this );
         if ( delegate ) {
             setItemDelegateForColumn( c, delegate );
         }

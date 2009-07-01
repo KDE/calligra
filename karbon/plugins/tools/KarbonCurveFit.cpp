@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2003 Rob Buis <buis@kde.org>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007, 2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,9 @@
 #include <KoPathShape.h>
 #include <QVector>
 #include <math.h>
+
+/// our equivalent to zero
+const qreal Zero = 10e-12;
 
 /*
 	An Algorithm for Automatically Fitting Digitized Curves
@@ -51,8 +54,9 @@ class FitVector {
 
 	void normalize(){
 		qreal len=length();
-		if(len==0.0f)
-			return;
+        if (qFuzzyCompare(len, 0.0)) {
+            return;
+        }
 		m_X/=len; m_Y/=len;
 	}
 
@@ -63,8 +67,9 @@ class FitVector {
 
 	void scale(qreal s){
 		qreal len = length();
-		if(len==0.0f)
-			return;
+        if (qFuzzyCompare(len, 0.0)) {
+            return;
+        }
 		m_X *= s/len;
 		m_Y *= s/len;
 	}
@@ -127,8 +132,13 @@ static qreal *ChordLengthParameterize(const QList<QPointF> &points,int first,int
 	  			distance(points.at(i), points.at(i-1));
     }
 
+    qreal denominator = u[last-first];
+    if (qFuzzyCompare(denominator, 0.0)) {
+        denominator = Zero;
+    }
+    
     for (i = first + 1; i <= last; ++i) {
-		u[i-first] = u[i-first] / u[last-first];
+        u[i-first] = u[i-first] / denominator;
     }
 
     return(u);
@@ -274,8 +284,11 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal
     det_X_C1  = X[0]    * C[1][1] - X[1]    * C[0][1];
 
     /* Finally, derive alpha values	*/
-    if (det_C0_C1 == 0.0) {
+    if (qFuzzyCompare(det_C0_C1, 0.0)) {
 		det_C0_C1 = (C[0][0] * C[1][1]) * 10e-12;
+        if (qFuzzyCompare(det_C0_C1, 0.0)) {
+            det_C0_C1 = Zero;
+        }
     }
     alpha_l = det_X_C1 / det_C0_C1;
     alpha_r = det_C0_X / det_C0_C1;
@@ -285,8 +298,7 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal
 	/* (if alpha is 0, you get coincident control points that lead to
 	 * divide by zero in any subsequent NewtonRaphsonRootFind() call. */
     if (alpha_l < 1.0e-6 || alpha_r < 1.0e-6) {
-		qreal	dist = distance(points.at(last),points.at(first)) /
-					3.0;
+		qreal dist = distance(points.at(last),points.at(first)) / 3.0;
 
 		curve[0] = points.at(first);
 		curve[3] = points.at(last);
@@ -409,6 +421,10 @@ static qreal NewtonRaphsonRootFind(QPointF *Q,QPointF P,qreal u)
     denominator = (Q1_u.x()) * (Q1_u.x()) + (Q1_u.y()) * (Q1_u.y()) +
 		      	  (Q_u.x() - P.x()) * (Q2_u.x()) + (Q_u.y() - P.y()) * (Q2_u.y());
     
+    if (qFuzzyCompare(denominator, 0.0)) {
+        denominator = Zero;
+    }
+    
     /* u = u - f(u)/f'(u) */
     uPrime = u - (numerator/denominator);
     return (uPrime);
@@ -452,7 +468,7 @@ QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat
 	nPts = last-first+1;
 
 	if(nPts == 2){
-	    	qreal dist = distance(points.at(last), points.at(first)) / 3.0;
+        qreal dist = distance(points.at(last), points.at(first)) / 3.0;
 
 		curve = new QPointF[4];
 		

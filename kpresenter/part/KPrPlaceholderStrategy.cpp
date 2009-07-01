@@ -33,6 +33,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
+#include <kdebug.h>
 
 static const class PlaceholderData {
     public:
@@ -46,6 +47,12 @@ static const class PlaceholderData {
     { "subtitle", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
     { "text", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
     { "notes", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add notes" ) },
+    /*
+    { "date-time", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add data/time" ) },
+    { "footer", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add footer" ) },
+    { "header", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add header" ) },
+    { "page-number", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add page number" ) },
+    */
     { "graphic", "PictureShape", "<draw:image xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>", 
                                        I18N_NOOP( "Double click to add a picture" ) },
     { "chart", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
@@ -82,8 +89,20 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
         if ( s_placeholderMap.contains( presentationClass ) ) {
             strategy = new KPrPlaceholderStrategy( presentationClass );
         }
+        else {
+            kWarning(33001) << "Unsupported placeholder strategy:" << presentationClass;
+        }
     }
     return strategy;
+}
+
+bool KPrPlaceholderStrategy::supported( const QString & presentationClass )
+{
+    if ( s_placeholderMap.isEmpty() ) {
+        fillPlaceholderMap();
+    }
+
+    return s_placeholderMap.contains( presentationClass );
 }
 
 KPrPlaceholderStrategy::KPrPlaceholderStrategy( const QString & presentationClass )

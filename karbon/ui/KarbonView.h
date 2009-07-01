@@ -117,6 +117,8 @@ public slots:
     void unitePaths();
     void excludePaths();
 
+    void pathSnapToGrid();
+    
     void configure();
 
     void pageLayout();

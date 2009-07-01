@@ -30,7 +30,7 @@ KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory(QObject *parent)
 {
     setToolTip( i18n("Calligraphy Tool") );
     setToolType( mainToolType() );
-    setIcon( "draw-calligraphy" );
+    setIcon( "calligraphy" );
     setPriority( 3 );
     setActivationShapeId("flake/edit");
 }

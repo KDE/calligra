@@ -20,14 +20,23 @@
 */
 
 #include "TextElement.h"
+#include "AttributeManager.h"
+#include <QFontMetricsF>
 #include <KoXmlWriter.h>
+#include <kdebug.h>
 
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void TextElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF TextElement::renderToPath( const QString& raw, QPainterPath& path )
 {
-    path.addText( path.currentPosition(), font(), raw );
+    AttributeManager manager;
+
+    QFont font = manager.font(this);
+    path.addText( path.currentPosition(), font, raw );
+    QFontMetricsF fm(font);
+    QRectF box = fm.boundingRect(QRect(), Qt::TextIncludeTrailingSpaces, raw).adjusted(0,-fm.ascent(),0,-fm.ascent());
+    return box;
 }
 
 ElementType TextElement::elementType() const

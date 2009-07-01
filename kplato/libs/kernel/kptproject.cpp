@@ -28,6 +28,7 @@
 #include "kptschedule.h"
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
+#include "kptschedulerplugin.h"
 
 #include <KoXmlReader.h>
 
@@ -46,21 +47,34 @@
 namespace KPlato
 {
 
-
 Project::Project( Node *parent )
         : Node( parent ),
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
-        m_taskDefaults( new Task() )
+        emptyConfig( new ConfigBase() ),
+        m_config( *emptyConfig ),
+        m_schedulerPlugins()
 {
     //kDebug()<<"("<<this<<")";
-    m_constraint = Node::MustStartOn;
-    m_standardWorktime = new StandardWorktime();
+    init();
+}
+
+Project::Project( ConfigBase &config, Node *parent )
+        : Node( parent ),
+        m_accounts( *this ),
+        m_defaultCalendar( 0 ),
+        emptyConfig( 0 ),
+        m_config( config ),
+        m_schedulerPlugins()
+{
+    //kDebug()<<"("<<this<<")";
     init();
 }
 
 void Project::init()
 {
+    m_constraint = Node::MustStartOn;
+    m_standardWorktime = new StandardWorktime();
     m_spec = KDateTime::Spec::LocalZone();
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
@@ -85,18 +99,25 @@ Project::~Project()
     while ( !m_managers.isEmpty() )
         delete m_managers.takeFirst();
     
-    delete m_taskDefaults;
+    delete emptyConfig;
 }
 
 int Project::type() const { return Node::Type_Project; }
 
-void Project::generateUniqueIds()
+void Project::generateUniqueNodeIds()
 {
     foreach ( Node *n, nodeIdDict ) {
+        QString uid = uniqueNodeId();
         nodeIdDict.remove( n->id() );
-        n->setId( uniqueNodeId() );
-        nodeIdDict[ n->id() ] = n;
+        n->setId( uid );
+        nodeIdDict[ uid ] = n;
     }
+}
+
+void Project::generateUniqueIds()
+{
+    generateUniqueNodeIds();
+
     foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         resourceGroupIdDict.remove( g->id() );
         g->setId( uniqueResourceGroupId() );
@@ -191,13 +212,12 @@ void Project::calculate( ScheduleManager &sm )
         incProgress();
         sm.setCalculateAll( false );
         sm.createSchedules();
-        sm.setRecalculateFrom( KDateTime::currentLocalDateTime() );
         if ( sm.parentManager() ) {
             sm.expected()->startTime = sm.parentManager()->expected()->startTime;
             sm.expected()->earlyStart = sm.parentManager()->expected()->earlyStart;
         }
         incProgress();
-        calculate( sm.expected(), KDateTime::currentLocalDateTime() );
+        calculate( sm.expected(), sm.recalculateFrom() );
     } else {
         if ( sm.optimistic() ) {
             maxprogress += nodes * 3;
@@ -914,17 +934,6 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
     me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
 
-//    m_accounts.save( me );
-
-    // save calendars
-/*    foreach ( Calendar *c, calendarIdDict.values() ) {
-        c->save( me );
-    }*/
-    // save standard worktime
-//     if ( m_standardWorktime )
-//         m_standardWorktime->save( me );
-
-    // save project resources, must be after calendars
     QListIterator<ResourceGroup*> git( m_resourceGroups );
     while ( git.hasNext() ) {
         git.next() ->saveWorkPackageXML( me, node->assignedResources( id ) );
@@ -1005,7 +1014,8 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
     emit resourceToBeRemoved( resource );
-    Q_ASSERT( removeResourceId( resource->id() ) == true );
+    bool result = removeResourceId( resource->id() );
+    Q_ASSERT( result == true );
     resource->removeRequests(); // not valid anymore
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
@@ -2286,10 +2296,10 @@ QList<Node*> Project::flatNodeList( Node *parent )
     return lst;
 }
 
-void Project::setTaskDefaults( const Task &task )
+void Project::setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins )
 {
-    delete m_taskDefaults;
-    m_taskDefaults = new Task( task );
+    m_schedulerPlugins = plugins;
+    kDebug()<<m_schedulerPlugins;
 }
 
 #ifndef NDEBUG

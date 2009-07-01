@@ -517,7 +517,8 @@ void KWDocument::clear()
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
+    if (dataCenterMap().contains("InlineTextObjectManager"))
+        inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
@@ -716,6 +717,14 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
 {
     KWOdfWriter writer(this);
     return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
+}
+
+QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const
+{
+    QStringList answer = KoDocument::extraNativeMimeTypes(importExportType);
+    if (importExportType == KoDocument::ForExport)
+        answer.removeAll("application/x-kword"); // we can't save this, only load.
+    return answer;
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)

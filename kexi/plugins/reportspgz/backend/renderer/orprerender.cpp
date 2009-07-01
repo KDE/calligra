@@ -23,7 +23,7 @@
 #include "renderobjects.h"
 #include "orutils.h"
 #include "barcodes.h"
-//#include "graph.h" //TODO Use kdchart or kochart
+#include <kdeversion.h>
 
 #include <QPrinter>
 #include <QFontMetrics>
@@ -91,13 +91,6 @@ public:
     orQuery* _query;
     QList<OROTextBox*> _postProcText;
 
-    QMap<ORDataData, qreal> _subtotPageCheckPoints;
-    QMap<ORDataData, qreal> * _subtotContextMap;
-    KRDetailSectionData * _subtotContextDetail;
-    bool _subtotContextPageFooter;
-
-    bool populateData(const ORDataData &, orData &);
-
     void createNewPage();
     qreal finishCurPage(bool = false);
     qreal finishCurPageSize(bool = false);
@@ -130,11 +123,6 @@ ORPreRenderPrivate::ORPreRenderPrivate()
     _pageCounter = 0;
     _maxHeight = _maxWidth = 0.0;
     _query = 0;
-    _subtotContextMap = 0;
-// _subtotContextDetail = 0;
-    _subtotContextPageFooter = false;
-
-
 }
 
 ORPreRenderPrivate::~ORPreRenderPrivate()
@@ -147,34 +135,10 @@ ORPreRenderPrivate::~ORPreRenderPrivate()
     _postProcText.clear();
 }
 
-bool ORPreRenderPrivate::populateData(const ORDataData & dataSource, orData &dataTarget)
-{
-
-    dataTarget.setQuery(_query);
-    dataTarget.setField(dataSource.column);
-    return true;
-
-}
-
 void ORPreRenderPrivate::createNewPage()
 {
     if (_pageCounter > 0)
         finishCurPage();
-
-#if 0
-    //TODO Totals
-    // get the checkpoints for the page footers
-    QMapIterator<ORDataData, qreal> it(_subtotPageCheckPoints);
-    while (it.hasNext()) {
-        it.next();
-//  qreal d = 0.0;
-        ORDataData data = it.key();
-//  XSqlQuery * xqry = getQuerySource ( data.query )->getQuery();
-//  if ( xqry )
-//   d = xqry->getFieldTotal ( data.column );
-//  _subtotPageCheckPoints.insert ( it.key(), d );
-    }
-#endif
 
     _pageCounter++;
 
@@ -185,6 +149,7 @@ void ORPreRenderPrivate::createNewPage()
     _page = new OROPage(0);
     _document->addPage(_page);
 
+    //TODO calculate past page
     bool lastPage = false;
 
     _yOffset = _topMargin;
@@ -205,7 +170,6 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
 {
     qreal retval = 0.0;
 
-    _subtotContextPageFooter = true;
     if (lastPage && _reportData->pgfoot_last != 0)
         retval = renderSectionSize(* (_reportData->pgfoot_last));
     else if (_pageCounter == 1 && _reportData->pgfoot_first)
@@ -216,7 +180,6 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
         retval = renderSectionSize(* (_reportData->pgfoot_even));
     else if (_reportData->pgfoot_any != 0)
         retval = renderSectionSize(* (_reportData->pgfoot_any));
-    _subtotContextPageFooter = false;
 
     kDebug() << retval;
     return retval;
@@ -229,7 +192,7 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
     qreal retval = 0.0;
 
     kDebug() << offset;
-    _subtotContextPageFooter = true;
+
     if (lastPage && _reportData->pgfoot_last != 0) {
         kDebug() << "Last Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_last));
@@ -251,7 +214,6 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_any));
         retval = renderSection(* (_reportData->pgfoot_any));
     }
-    _subtotContextPageFooter = false;
 
     return retval;
 }
@@ -261,27 +223,19 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
     kDebug();
 
     if (detailData.m_detailSection != 0) {
-        KexiDB::Cursor *curs = 0;
-        _subtotContextDetail = &detailData;
-
         if (_query) {
-            curs = _query->getQuery();
-//    //TODO init the engine earlier?
+	    //TODO init the engine earlier?
             _handler->setSource(_query->getSql());
         }
-        if (curs && !curs->eof()) {
+        if (_query/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
             bool    status;
             int i = 0, pos = 0, cnt = 0;
             ORDetailGroupSectionData * grp = 0;
 
-            curs->moveFirst();
-            if (_query->schema().table() || _query->schema().query()) {
-                _recordCount = KexiDB::rowCount(_query->schema());
-            } else {
-                _recordCount = 1;
-            }
+            _query->moveFirst();
+            _recordCount = _query->recordCount();
 
             kDebug() << "Record Count:" << _recordCount;
 
@@ -295,42 +249,46 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 }
                 keys.append(grp->column);
                 if (!keys[i].isEmpty())
-                    keyValues.append(curs->value(_query->fieldNumber(keys[i])).toString());
+                    keyValues.append(_query->value(_query->fieldNumber(keys[i])).toString());
                 else
                     keyValues.append(QString());
-
-                _subtotContextMap = & (grp->_subtotCheckPoints);
-
+      
                 //Tell interested parties we're about to render a header
                 kDebug() << "EMIT1";
                 emit(enteredGroup(keys[i], keyValues[i]));
 
                 if (grp->head)
                     renderSection(* (grp->head));
-                _subtotContextMap = 0;
             }
 
             do {
-                int l = curs->at();
+		kDebug() << "...getting pos";
+                long l = _query->at();
 
                 kDebug() << "At:" << l << "Y:" << _yOffset;
 
                 if (renderSectionSize(* (detailData.m_detailSection)) + finishCurPageSize((l + 1 == _recordCount)) + _bottomMargin + _yOffset >= _maxHeight) {
-                    if (l > 0)
-                        curs->movePrev();
-                    createNewPage();
-                    if (l > 0)
-                        curs->moveNext();
+                    if (l > 0) {
+			kDebug() << "...moving prev";
+                        _query->movePrevious();
+			kDebug() << "...creating new page";
+			createNewPage();
+			kDebug() << "...moving next";
+                        _query->moveNext();
+		    }
                 }
 
                 renderSection(* (detailData.m_detailSection));
-
-                status = curs->moveNext();
+		kDebug() << "...moving next";
+		if (_query)
+		  status = _query->moveNext();
+		kDebug() << "...done";
+		
                 if (status == true && keys.count() > 0) {
                     // check to see where it is we need to start
                     pos = -1; // if it's still -1 by the time we are done then no keyValues changed
                     for (i = 0; i < keys.count(); i++) {
-                        if (keyValues[i] != curs->value(_query->fieldNumber(keys[i])).toString()) {
+                        if (keyValues[i] != _query->value(_query->fieldNumber(keys[i])).toString()) {
                             pos = i;
                             break;
                         }
@@ -339,7 +297,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                     // don't bother if nothing has changed
                     if (pos != -1) {
                         // roll back the query and go ahead if all is good
-                        status = curs->movePrev();
+                        status = _query->movePrevious();
                         if (status == true) {
                             // print the footers as needed
                             // any changes made in this for loop need to be duplicated
@@ -350,50 +308,38 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                     createNewPage();
                                 do_break = false;
                                 grp = detailData.m_groupList[i];
-                                _subtotContextMap = & (grp->_subtotCheckPoints);
+                              
                                 if (grp->foot) {
                                     if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight)
                                         createNewPage();
                                     renderSection(* (grp->foot));
                                 }
-                                _subtotContextMap = 0;
-                                // reset the sub-total values for this group
-                                QMapIterator<ORDataData, qreal> it(grp->_subtotCheckPoints);
-                                while (it.hasNext()) {
-                                    it.next();
-                                    qreal d = 0.0;
-                                    ORDataData data = it.key();
-                                    KexiDB::Cursor * xqry = _query->getQuery();
-                                    if (xqry) {
-//TODO field totals        d = xqry->getFieldTotal ( data.column );
-                                    }
-                                    grp->_subtotCheckPoints.insert(it.key(), d);
-                                }
+
                                 if (ORDetailGroupSectionData::BreakAfterGroupFoot == grp->pagebreak)
                                     do_break = true;
                             }
                             // step ahead to where we should be and print the needed headers
                             // if all is good
-                            status = curs->moveNext();
+                            status = _query->moveNext();
                             if (do_break)
                                 createNewPage();
                             if (status == true) {
                                 for (i = pos; i < cnt; i++) {
                                     grp = detailData.m_groupList[i];
-                                    _subtotContextMap = & (grp->_subtotCheckPoints);
+                            
                                     if (grp->head) {
                                         if (renderSectionSize(* (grp->head)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight) {
-                                            curs->movePrev();
+                                            _query->movePrevious();
                                             createNewPage();
-                                            curs->moveNext();
+                                            _query->moveNext();
                                         }
 
 
                                         renderSection(* (grp->head));
                                     }
-                                    _subtotContextMap = 0;
+                               
                                     if (!keys[i].isEmpty())
-                                        keyValues[i] = curs->value(_query->fieldNumber(keys[i])).toString();
+                                        keyValues[i] = _query->value(_query->fieldNumber(keys[i])).toString();
 
                                     //Tell interested parties thak key values changed
                                     kDebug() << "EMIT2";
@@ -405,35 +351,21 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 }
             } while (status == true);
 
-            if (keys.size() > 0 && curs->movePrev()) {
+            if (keys.size() > 0 && _query->movePrevious()) {
                 // finish footers
                 // duplicated changes from above here
                 for (i = cnt - 1; i >= 0; i--) {
                     grp = detailData.m_groupList[i];
-                    _subtotContextMap = & (grp->_subtotCheckPoints);
+
                     if (grp->foot) {
                         if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight)
                             createNewPage();
                         renderSection(* (grp->foot));
                         emit(exitedGroup(keys[i], keyValues[i]));
                     }
-                    _subtotContextMap = 0;
-                    // reset the sub-total values for this group
-                    QMapIterator<ORDataData, qreal> it(grp->_subtotCheckPoints);
-                    while (it.hasNext()) {
-                        it.next();
-                        qreal d = 0.0;
-                        ORDataData data = it.key();
-                        KexiDB::Cursor * xqry = _query->getQuery();
-                        if (xqry) {
-//TODO field totals       d = xqry->getFieldTotal ( data.column );
-                        }
-                        grp->_subtotCheckPoints.insert(it.key(), d);
-                    }
                 }
             }
         }
-        _subtotContextDetail = 0;
         if (KRDetailSectionData::BreakAtEnd == detailData.m_pageBreak)
             createNewPage();
     }
@@ -454,18 +386,11 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
         // TODO: See if this can be simplified anymore than it already is.
         //       All we need to know is how much stretch we are going to get.
         if (elemThis->type() == KRObjectData::EntityText) {
-            orData       dataThis;
             KRTextData * t = elemThis->toText();
 
-            populateData(t->data(), dataThis);
-
-            //dataThis.setQuery();
-            dataThis.setField(t->m_controlSource->value().toString());
             QPointF pos = t->m_pos.toScene();
             QSizeF size = t->m_size.toScene();
-            pos /= 100.0;
             pos += QPointF(_leftMargin, _yOffset);
-            size /= 100.0;
 
             QRectF trf(pos, size);
 
@@ -475,7 +400,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
 
             QFont f = t->m_font->value().value<QFont>();
 
-            qstrValue = dataThis.getValue();
+            qstrValue = _query->value(t->m_controlSource->value().toString()).toString();
             if (qstrValue.length()) {
                 int pos = 0;
                 int idx;
@@ -484,7 +409,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
                 QPrinter prnt(QPrinter::HighResolution);
                 QFontMetrics fm(f, &prnt);
 
-                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
+                int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
 
                 while (qstrValue.length()) {
                     idx = re.indexIn(qstrValue, pos);
@@ -526,7 +451,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoGlobal::dpiY();
     kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count();
 
-    _handler->populateEngineParameters(_query->getQuery());
+    //_handler->populateEngineParameters(_query->getQuery());
 
     emit(renderingSection(const_cast<KRSectionData*>(&sectionData), _page, QPointF(_leftMargin, _yOffset)));
 
@@ -571,7 +496,6 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             tb2->setPosition(l->m_pos.toPoint());
             sec->addPrimitive(tb2);
         } else if (elemThis->type() == KRObjectData::EntityField) {
-            orData       dataThis;
             KRFieldData* f = elemThis->toField();
 
             QPointF pos = f->m_pos.toScene();
@@ -591,20 +515,30 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QString cs = f->m_controlSource->value().toString();
             if (cs.left(1) == "=") { //Everything after = is treated as code
                 if (!cs.contains("PageTotal()")) {
-                    QVariant v = _handler->evaluate(f->entityName());
+#if KDE_IS_VERSION(4,2,88)
+		      QVariant v = _handler->evaluate(cs.mid(1));
+#else
+		      QVariant v = _handler->evaluate(f->entityName());
+#endif
+                    
                     str = v.toString();
                 } else {
-                    str = f->entityName();
+#if KDE_IS_VERSION(4,2,88)
+		      str = cs.mid(1);
+#else
+		      str = f->entityName();
+#endif
                     _postProcText.append(tb);
                 }
             } else if (cs.left(1) == "$") { //Everything past $ is treated as a string 
                 str = cs.mid(1);
             } else {
-                QString qry = "Data Source";
+                //QString qry = "Data Source";
                 QString clm = f->m_controlSource->value().toString();
 
-                populateData(f->data(), dataThis);
-                str = dataThis.getValue();
+                //populateData(f->data(), dataThis);
+                //str = dataThis.getValue();
+		str = _query->value(clm).toString();
             }
             tb->setText(str);
             _page->addPrimitive(tb);
@@ -615,18 +549,25 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
 
         } else if (elemThis->type() == KRObjectData::EntityText) {
-            orData       dataThis;
+	    QString qstrValue;
             KRTextData * t = elemThis->toText();
-
-            populateData(t->data(), dataThis);
-
+	    
+	    QString cs = t->m_controlSource->value().toString();
+	    
+	    kDebug() << cs;
+	    
+	    if (cs.left(1) == "$") { //Everything past $ is treated as a string 
+	      qstrValue = cs.mid(1);
+	    } else {
+	      qstrValue = _query->value(t->m_controlSource->value().toString()).toString();
+	    }
+	    
             QPointF pos = t->m_pos.toScene();
             QSizeF size = t->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
-
+	    
             QRectF trf(pos, size);
 
-            QString qstrValue;
             int     intLineCounter  = 0;
             qreal   intStretch      = trf.top() - _yOffset;
             qreal   intBaseTop      = trf.top();
@@ -634,7 +575,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QFont f = t->font();
 
-            qstrValue = dataThis.getValue();
+            kDebug() << qstrValue;
+	    
             if (qstrValue.length()) {
                 QRectF rect = trf;
 
@@ -645,8 +587,9 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 QPrinter prnt(QPrinter::HighResolution);
                 QFontMetrics fm(f, &prnt);
 
-                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
-
+//                int   intRectWidth    = (int)(trf.width() * prnt.resolution()) - 10;
+		int   intRectWidth    = (int)((t->m_size.toPoint().width() / 72) * prnt.resolution());
+		 
                 while (qstrValue.length()) {
                     idx = re.indexIn(qstrValue, pos);
                     if (idx == -1) {
@@ -730,7 +673,6 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             sec->addPrimitive(l2);
         } else if (elemThis->type() == KRObjectData::EntityBarcode) {
             KRBarcodeData * bc = elemThis->toBarcode();
-            orData       dataThis;
 
             QPointF pos = bc->m_pos.toScene();
             QSizeF size = bc->m_size.toScene();
@@ -738,24 +680,23 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QRectF rect = QRectF(pos, size);
 
-            populateData(bc->data(), dataThis);
-
+	    QString val = _query->value(bc->m_controlSource->value().toString()).toString();
             QString fmt = bc->m_format->value().toString();
             int align = bc->alignment();
             if (fmt == "3of9")
-                render3of9(_page, rect, dataThis.getValue(), align);
+                render3of9(_page, rect, val, align);
             else if (fmt == "3of9+")
-                renderExtended3of9(_page, rect, dataThis.getValue(), align);
+                renderExtended3of9(_page, rect, val, align);
             else if (fmt == "128")
-                renderCode128(_page, rect, dataThis.getValue(), align);
+                renderCode128(_page, rect, val, align);
             else if (fmt == "ean13")
-                renderCodeEAN13(_page, rect, dataThis.getValue(), align);
+                renderCodeEAN13(_page, rect, val, align);
             else if (fmt == "ean8")
-                renderCodeEAN8(_page, rect, dataThis.getValue(), align);
+                renderCodeEAN8(_page, rect, val, align);
             else if (fmt == "upc-a")
-                renderCodeUPCA(_page, rect, dataThis.getValue(), align);
+                renderCodeUPCA(_page, rect, val, align);
             else if (fmt == "upc-e")
-                renderCodeUPCE(_page, rect, dataThis.getValue(), align);
+                renderCodeUPCE(_page, rect, val, align);
             else {
                 //logMessage("Encountered unknown barcode format: %s",(const char*)bc->format);
             }
@@ -764,9 +705,9 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QString uudata;
             QByteArray imgdata;
             if (!im->isInline()) {
-                orData dataThis;
-                populateData(im->data(), dataThis);
-                imgdata = dataThis.getRawValue();
+//TODO                orData dataThis;
+//                populateData(im->data(), dataThis);
+//                imgdata = dataThis.getRawValue();
             } else {
                 uudata = im->inlineImageData();
                 imgdata = KCodecs::base64Decode(uudata.toLatin1());
@@ -800,7 +741,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QStringList masterFields = ch->masterFields();
             for (int i = 0; i < masterFields.size(); ++i){
                 if (!masterFields[i].simplified().isEmpty()){
-                    ch->setLinkData(masterFields[i], _query->getQuery()->value(_query->fieldNumber(masterFields[i])));
+        //            ch->setLinkData(masterFields[i], _query->getQuery()->value(_query->fieldNumber(masterFields[i])));
                 }
             }
             ch->populateData();
@@ -826,7 +767,6 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 sec->addPrimitive(p2);
             }
         } else if (elemThis->type() == KRObjectData::EntityCheck) {
-            orData dataThis;
             KRCheckData *cd = elemThis->toCheck();
             OROCheck *chk = new OROCheck();
 
@@ -847,13 +787,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             kDebug() << "EntityCheck CS:" << cs;
 
             if (cs.left(1) == "=") {
-                str = _handler->evaluate(cd->entityName()).toString();
+#if KDE_IS_VERSION(4,2,88)
+		      str = _handler->evaluate(cs.mid(1)).toString();
+#else
+		      str = _handler->evaluate(cd->entityName()).toString();
+#endif  
             } else {
-                QString qry = "Data Source";
                 QString clm = cd->m_controlSource->value().toString();
-
-                populateData(cd->data(), dataThis);
-                str = dataThis.getValue();
+                str = _query->value(clm).toString();
             }
 
             bool v = false;
@@ -877,59 +818,13 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
     _yOffset += intHeight;
 
+    kDebug() << _yOffset;
     return intHeight;
-}
-
-qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint(const ORDataData & d)
-{
-    // use the various contexts setup to determine what we should be
-    // doing and try and locate the nearest subtotal check point value
-    // and return that value... if we are unable to locate one then we
-    // will just return 0.0 which will case the final value to be a
-    // running total
-
-    if (_subtotContextPageFooter) {
-        // first check to see if it's a page footer context
-        // as that can happen from anywhere at any time.
-
-        // TODO Totals
-        if (_subtotPageCheckPoints.contains(d))
-            return _subtotPageCheckPoints[d];
-
-    } else if (_subtotContextMap != 0) {
-        // next if an explicit map is set then we are probably
-        // rendering a group head/foot now so we will use the
-        // available their.. if it's not then we made a mistake
-
-        if (_subtotContextMap->contains(d))
-            return (*_subtotContextMap)[d];
-
-    } else if (_subtotContextDetail != 0) {
-        // finally if we are in a detail section then we will simply
-        // traverse that details sections groups from the most inner
-        // to the most outer and use the first check point we find
-
-        // in actuallity we search from the outer most group to the
-        // inner most group and just take the last value found which
-        // would be the inner most group
-
-        qreal dbl = 0.0;
-        ORDetailGroupSectionData * grp = 0;
-        for (int i = 0; i < (int) _subtotContextDetail->m_groupList.count(); i++) {
-            grp = _subtotContextDetail->m_groupList[i];
-            if (grp->_subtotCheckPoints.contains(d))
-                dbl = grp->_subtotCheckPoints[d];
-        }
-        return dbl;
-
-    }
-
-    return 0.0;
 }
 
 void ORPreRenderPrivate::initEngine()
 {
-    _handler = new KRScriptHandler(_query->getQuery(), _reportData);
+    _handler = new KRScriptHandler(_query, _reportData);
 
     connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
 
@@ -1036,20 +931,13 @@ ORODocument* ORPreRender::generate()
 
     d->_document->setPageOptions(rpo);
 
-// QuerySource * qs = 0;
-
-    d->_query = (new orQuery("Data Source", d->_reportData->query(), true, d->_conn));
-
-//TODO field totals
-// _internal->_subtotPageCheckPoints.clear();
-// for ( int i = 0; i < _internal->_reportData->trackTotal.count(); i++ )
-// {
-//  _internal->_subtotPageCheckPoints.insert ( _internal->_reportData->trackTotal[i], 0 );
-//  XSqlQuery * xqry = _internal->getQuerySource ( _internal->_reportData->trackTotal[i].query )->getQuery();
-//  if ( xqry )
-//   xqry->trackFieldTotal ( _internal->_reportData->trackTotal[i].column );
-// }
-
+    if (!d->_reportData->externalData())  {
+      d->_query = (new orQuery(d->_reportData->query(), d->_conn));
+    }
+    else {
+     d->_query = new orQuery( d->_reportData->query() );
+    }
+    
     d->initEngine();
     d->createNewPage();
     if (!label.isNull()) {
@@ -1084,10 +972,10 @@ ORODocument* ORPreRender::generate()
         KRDetailSectionData * detailData = d->_reportData->detailsection;
         if (detailData->m_detailSection != 0) {
             orQuery *orqThis = d->_query;
-            KexiDB::Cursor *query;
+            //KexiDB::Cursor *query;
 
-            if ((orqThis != 0) && !((query = orqThis->getQuery())->eof())) {
-                query->moveFirst();
+            if ((orqThis != 0))/* && !((query = orqThis->getQuery())->eof()))*/ {
+                //orqThis->moveFirst();
                 do {
                     tmp = d->_yOffset; // store the value as renderSection changes it
                     d->renderSection(* (detailData->m_detailSection));
@@ -1106,7 +994,7 @@ ORODocument* ORPreRender::generate()
                             d->createNewPage();
                         }
                     }
-                } while (query->moveNext());
+                } while (orqThis->moveNext());
             }
         }
 

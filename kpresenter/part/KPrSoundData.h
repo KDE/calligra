@@ -32,6 +32,10 @@ class QIODevice;
  * In KPresenter shapes can have click actions attached to them. One such action is playing sound.
  * The binary data for those sounds are saved in this class.
  */
+
+/* 
+ * TODO needs a file for playing, store it as a tmp file
+ */
 class KPRESENTER_EXPORT KPrSoundData {
 public:
     /**

@@ -227,7 +227,7 @@ chosen chart type different options are available in the
 following steps.
 </para>
 <para>
-After chosing the type you can get to the next step with
+After choosing the type you can get to the next step with
 the <guibutton>Next &gt;</guibutton> button.
 </para>
 </sect2>
@@ -694,7 +694,7 @@ larger font like in the following screenshot.
 <para>
 Note that the font size is set to <guilabel>Relative</guilabel>.
 This means that the font is automatically scaled according
-to the overall chart size. This is quite usefull and most
+to the overall chart size. This is quite useful and most
 of the time what the average user expects.
 </para>
 </sect3>
@@ -1099,7 +1099,7 @@ dialog.</para>
 <term><menuchoice>
 <guimenu>Data Format...</guimenu>
 </menuchoice></term>
-<listitem><para><action>Swap row and colums (x/y flipping).</action></para>
+<listitem><para><action>Swap row and columns (x/y flipping).</action></para>
 </listitem>
 </varlistentry>
 

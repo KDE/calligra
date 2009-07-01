@@ -51,5 +51,5 @@ void KPrMasterPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingCo
             kDebug(33001) << "page layout" << layoutName << layout;
         }
     }
-    placeholders().init( layout, iterator() );
+    placeholders().init( layout, childShapes() );
 }

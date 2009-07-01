@@ -238,6 +238,8 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
     setLeftView( tv );
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     tv->header()->setStretchLastSection( true );
@@ -495,10 +497,11 @@ void GanttView::setupGui()
 void GanttView::slotOptions()
 {
     kDebug();
-    GanttViewSettingsDialog dlg( m_gantt->treeView(), m_gantt->delegate() );
-    if ( dlg.exec() == QDialog::Accepted ) {
+    GanttViewSettingsDialog *dlg = new GanttViewSettingsDialog( m_gantt->treeView(), m_gantt->delegate(), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
         m_gantt->graphicsView()->updateScene();
     }
+    delete dlg;
 }
 
 void GanttView::clear()
@@ -595,6 +598,7 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
                 name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
                 break;
             default:
                 break;
@@ -812,6 +816,7 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
                 name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
                 break;
             default:
                 break;
@@ -828,8 +833,9 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
 void MilestoneGanttView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_gantt->treeView(), true );
-    dlg.exec();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_gantt->treeView(), true, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )

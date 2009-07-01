@@ -852,7 +852,7 @@ CalendarDay *CalendarDayItemModel::day( const QModelIndex &index ) const
     return static_cast<CalendarDay*>( index.internalPointer() );
 }
 
-QItemDelegate *CalendarDayItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *CalendarDayItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         default: return 0;

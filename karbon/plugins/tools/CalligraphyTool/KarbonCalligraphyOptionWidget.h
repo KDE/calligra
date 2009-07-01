@@ -119,25 +119,25 @@ private:
     int profilePosition( const QString &profileName );
 
 private:
-    QMap<QString, Profile *> profiles;
+    QMap<QString, Profile *> m_profiles;
 
-    KComboBox *comboBox;
-    QCheckBox *usePath;
-    QCheckBox *usePressure;
-    QCheckBox *useAngle;
-    QDoubleSpinBox  *widthBox;
-    QDoubleSpinBox  *thinningBox;
-    QSpinBox        *angleBox;
-    QDoubleSpinBox  *capsBox;
-    QDoubleSpinBox  *fixationBox;
-    QDoubleSpinBox  *massBox;
-    QDoubleSpinBox  *dragBox;
+    KComboBox *m_comboBox;
+    QCheckBox *m_usePath;
+    QCheckBox *m_usePressure;
+    QCheckBox *m_useAngle;
+    QDoubleSpinBox  *m_widthBox;
+    QDoubleSpinBox  *m_thinningBox;
+    QSpinBox        *m_angleBox;
+    QDoubleSpinBox  *m_capsBox;
+    QDoubleSpinBox  *m_fixationBox;
+    QDoubleSpinBox  *m_massBox;
+    QDoubleSpinBox  *m_dragBox;
 
-    QToolButton *saveButton;
-    QToolButton *removeButton;
+    QToolButton *m_saveButton;
+    QToolButton *m_removeButton;
 
     // when true updateCurrentProfile() doesn't do anything
-    bool changingProfile;
+    bool m_changingProfile;
 };
 
 #endif // KARBONCALLIGRAPHYOPTIONWIDGET_H

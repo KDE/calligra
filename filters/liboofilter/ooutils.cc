@@ -495,17 +495,17 @@ void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
     }
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlDocument& doc, KoStore *m_store )
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlDocument& doc, KoStore* store )
 {
     kDebug(30518) <<"loadAndParse: Trying to open" << fileName;
 
-    if (!m_store->open(fileName))
+    if (!store->open(fileName))
     {
         kWarning(30519) << "Entry " << fileName << " not found!";
         return KoFilter::FileNotFound;
     }
-    KoFilter::ConversionStatus convertStatus = loadAndParse( m_store->device(),doc, fileName );
-    m_store->close();
+    KoFilter::ConversionStatus convertStatus = loadAndParse( store->device(),doc, fileName );
+    store->close();
     return convertStatus;
 
 }
@@ -531,20 +531,19 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
     kDebug(30519) <<"File" << fileName <<" loaded and parsed!";
 
     return KoFilter::OK;
-
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlDocument& doc, KZip * m_zip)
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlDocument& doc, KZip* zip)
 {
     kDebug(30519) <<"Trying to open" << filename;
 
-    if (!m_zip)
+    if (!zip)
     {
         kError(30519) << "No ZIP file!" << endl;
         return KoFilter::CreationError; // Should not happen
     }
 
-    const KArchiveEntry* entry = m_zip->directory()->entry( filename );
+    const KArchiveEntry* entry = zip->directory()->entry( filename );
     if (!entry)
     {
         kWarning(30519) << "Entry " << filename << " not found!";
@@ -563,18 +562,18 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
     return convertStatus;
 }
 
-KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_zip )
+KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip* zip )
 {
     const QString filename( "Thumbnails/thumbnail.png" );
     kDebug(30519) <<"Trying to open thumbnail" << filename;
 
-    if (!m_zip)
+    if (!zip)
     {
         kError(30519) << "No ZIP file!" << endl;
         return KoFilter::CreationError; // Should not happen
     }
 
-    const KArchiveEntry* entry = m_zip->directory()->entry( filename );
+    const KArchiveEntry* entry = zip->directory()->entry( filename );
     if (!entry)
     {
         kWarning(30519) << "Entry " << filename << " not found!";

@@ -11,6 +11,7 @@ set(mswordodf_import_PART_SRCS
    document.cpp 
    conversion.cpp 
    texthandler.cpp 
+   paragraph.cpp
    tablehandler.cpp 
    graphicshandler.cpp )
 

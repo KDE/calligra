@@ -78,7 +78,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
     const QString fileName( m_chain->inputFile() );
     if ( fileName.isEmpty() )
     {
-        kError() << "No input file name!" << endl;
+        kError() << "No input file name!";
         return KoFilter::StupidError;
     }
 
@@ -89,7 +89,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
 
         if ( ! store->open( "maindoc.xml" ) )
         {
-            kError() << "Opening root has failed" << endl;
+            kError() << "Opening root has failed";
             delete store;
             return KoFilter::StupidError;
         }
@@ -116,7 +116,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
         file.open( QIODevice::ReadOnly );
         if ( ! parseRoot( &file ) )
         {
-            kError() << "Could not process document! Aborting!" << endl;
+            kError() << "Could not process document! Aborting!";
             file.close();
             return KoFilter::StupidError;
         }
@@ -169,7 +169,7 @@ bool KarbonImport::parseRoot( QIODevice* io )
     {
         kError() << "Error while parsing file: "
                 << "at line " << line << " column: " << col
-                << " message: " << errormessage << endl;
+                << " message: " << errormessage;
         // ### TODO: feedback to the user
         return false;
     }

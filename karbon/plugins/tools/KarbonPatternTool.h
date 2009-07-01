@@ -24,10 +24,11 @@
 #include <QtCore/QMap>
 
 class QPainter;
-class QTableWidgetItem;
+class KoResource;
 class KarbonPatternEditStrategyBase;
 class KarbonPatternOptionsWidget;
 class KoShape;
+
 
 class KarbonPatternTool : public KoTool
 {
@@ -52,7 +53,7 @@ protected:
 
 private slots:
     virtual void resourceChanged( int key, const QVariant & res );
-    void patternSelected( QTableWidgetItem * item );
+    void patternSelected( KoResource * resource );
     void initialize();
     /// updates options widget from selected pattern
     void updateOptionsWidget();

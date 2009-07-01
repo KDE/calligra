@@ -3,7 +3,7 @@ project(kwordpart)
 add_subdirectory( frames/tests )
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### KWordPrivate library ###############
 
@@ -77,8 +77,8 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} koguiutils kotext)
-target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES kotext koguiutils ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} komain)
+target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES komain ${QT_QT3SUPPORT_LIBRARY})
 
 set_target_properties(kwordprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
@@ -106,6 +106,12 @@ set(kword_KDEINIT_SRCS main.cpp )
 kde4_add_app_icon(kword_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kword.png")
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
+
+if (Q_WS_MAC)
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kword")
+   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KWord 2")
+endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
 

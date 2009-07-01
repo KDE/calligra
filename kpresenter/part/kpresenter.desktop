@@ -15,6 +15,7 @@ Name[zh_TW]=簡報_KPresenter
 Exec=kpresenter %u
 GenericName=Presentation
 GenericName[ca]=Presentació
+GenericName[cs]=Prezentace
 GenericName[da]=Præsentation
 GenericName[de]=Präsentation
 GenericName[el]=Παρουσίαση

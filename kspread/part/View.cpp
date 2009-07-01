@@ -750,8 +750,8 @@ void View::initView()
         dockerMng = new KoDockerManager(this);
         setDockerManager(dockerMng);
     }
-    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
-             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
+    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1082,7 +1082,7 @@ void View::shapeSelectionChanged()
         {
             // If the anchoring differs between shapes, deselect the anchoring action and stop here.
             d->actions->shapeAnchor->setCurrentAction(0);
-            break; 
+            break;
         }
     }
 }
@@ -1149,7 +1149,7 @@ void View::initialPosition()
     refreshView();
 
     // Activate the cell tool.
-    if (shell()) 
+    if (shell())
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 

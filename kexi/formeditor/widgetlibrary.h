@@ -119,7 +119,7 @@ public:
     QString includeFileName(const QByteArray &classname);
     QString savingName(const QByteArray &classname);
 
-    bool startEditing(const QByteArray &classname, QWidget *w, Container *container);
+    bool startInlineEditing(const QByteArray &classname, QWidget *w, Container *container);
     bool previewWidget(const QByteArray &classname, QWidget *widget, Container *container);
     bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 

@@ -30,7 +30,6 @@
 //#include <QWidget>
 
 #include <KoDocument.h>
-#include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 #include <KoShapeControllerBase.h>
 #include <KoShapeUserData.h>

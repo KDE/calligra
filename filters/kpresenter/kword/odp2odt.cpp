@@ -49,7 +49,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
     KoStoreDevice* inpdev = m_chain->storageFile( "content.xml", KoStore::Read );
     if ( !inpdev )
     {
-        kError(31000) << "Unable to open input stream" << endl;
+        kError(31000) << "Unable to open input stream";
         return KoFilter::StorageCreationError;
     }
 
@@ -64,7 +64,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
     QDomElement realBody( KoDom::namedItemNS( docElem, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
-        kError(31000) << "No office:body found!" << endl;
+        kError(31000) << "No office:body found!";
         //setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return KoFilter::WrongFormat;
     }
@@ -72,7 +72,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
     QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "presentation" );
     if ( body.isNull() )
     {
-        kError(32001) << "No office:text found!" << endl;
+        kError(32001) << "No office:text found!";
         return KoFilter::WrongFormat;
     }
 
@@ -92,7 +92,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
 
     KoStoreDevice* out = m_chain->storageFile( "content.xml", KoStore::Write );
     if(!out) {
-        kError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!";
         return KoFilter::StorageCreationError;
     }
     const QByteArray cstring = doc.toByteArray(); // utf-8 already
@@ -100,7 +100,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
     const int len = cstring.length();
     const int written = out->write( cstring.constData(), len );
     if ( written != len )
-        kError(30502) << "Wrote only " << written << " out of " << len << endl;
+        kError(30502) << "Wrote only " << written << " out of " << len;
     out->close();
 
     return KoFilter::OK;
@@ -167,7 +167,7 @@ void Odp2Odt::copyFile( const QString& fileName )
     KoStoreDevice* inpdev = m_chain->storageFile( fileName, KoStore::Read );
     if ( !inpdev )
     {
-        kError(31000) << "Unable to open " << fileName << endl;
+        kError(31000) << "Unable to open " << fileName;
         return;
     }
 
@@ -175,7 +175,7 @@ void Odp2Odt::copyFile( const QString& fileName )
 
     KoStoreDevice* out = m_chain->storageFile( fileName, KoStore::Write );
     if(!out) {
-        kError(30502) << "Unable to open output file " << fileName << endl;
+        kError(30502) << "Unable to open output file " << fileName;
         return;
     }
 
@@ -191,7 +191,7 @@ void Odp2Odt::adjustStyles()
     KoStoreDevice* inpdev = m_chain->storageFile( "styles.xml", KoStore::Read );
     if ( !inpdev )
     {
-        kError(31000) << "Unable to open styles.xml" << endl;
+        kError(31000) << "Unable to open styles.xml";
         return;
     }
 
@@ -212,7 +212,7 @@ void Odp2Odt::adjustStyles()
     {
         kError(31000) << "Parsing error! Aborting!" << endl
                       << " In line: " << errorLine << ", column: " << errorColumn << endl
-                      << " Error message: " << errorMsg << endl;
+                      << " Error message: " << errorMsg;
         return;
     }
 
@@ -226,7 +226,7 @@ void Odp2Odt::adjustStyles()
 
     KoStoreDevice* out = m_chain->storageFile( "styles.xml", KoStore::Write );
     if(!out) {
-        kError(30502) << "Unable to open output file styles.xml" << endl;
+        kError(30502) << "Unable to open output file styles.xml";
         return;
     }
 
@@ -235,7 +235,7 @@ void Odp2Odt::adjustStyles()
     const int len = cstring.length();
     const int written = out->write( cstring.constData(), len );
     if ( written != len )
-        kError(30502) << "Wrote only " << written << " out of " << len << endl;
+        kError(30502) << "Wrote only " << written << " out of " << len;
     out->close();
 }
 

@@ -34,6 +34,7 @@
 #include "kptduration.h"
 #include "kptresource.h"
 #include "kptwbsdefinition.h"
+#include "kptconfigbase.h"
 
 #include <QMap>
 #include <QList>
@@ -51,6 +52,7 @@ class StandardWorktime;
 class ScheduleManager;
 class XMLLoaderObject;
 class Task;
+class SchedulerPlugin;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -74,6 +76,7 @@ class KPLATOKERNEL_EXPORT Project : public Node
     Q_OBJECT
 public:
     explicit Project( Node *parent = 0 );
+    explicit Project( ConfigBase &config, Node *parent = 0 );
     ~Project();
 
     /// Returns the node type. Can be Type_Project or Type_Subproject.
@@ -471,12 +474,22 @@ public:
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );
     
+    void generateUniqueNodeIds();
     void generateUniqueIds();
     
-    void setTaskDefaults( const Task &task );
-    const Task &taskDefaults() const { return *m_taskDefaults; }
+    const ConfigBase &config() const { return m_config; }
+    const Task &taskDefaults() const { return m_config.taskDefaults(); }
     
     void incProgress();
+
+    void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
+    const QMap<QString, SchedulerPlugin*> &schedulerPlugins() const { return m_schedulerPlugins; }
+
+    void initiateCalculation( MainSchedule &sch );
+    void initiateCalculationLists( MainSchedule &sch );
+
+    /// Set configuration data
+    void setConfig( const ConfigBase &config ) { m_config = config; }
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
@@ -591,9 +604,6 @@ protected:
     DateTime checkStartConstraints( const DateTime &dt ) const;
     DateTime checkEndConstraints( const DateTime &dt ) const;
 
-    void initiateCalculation( MainSchedule &sch );
-    void initiateCalculationLists( MainSchedule &sch );
-
     bool legalParents( const Node *par, const Node *child ) const;
     bool legalChildren( const Node *par, const Node *child ) const;
 
@@ -613,8 +623,12 @@ private:
     //use in pert to store the project slack
     int m_projectSlack;
 
-    Task *m_taskDefaults;
+    ConfigBase *emptyConfig;
+    ConfigBase &m_config;
+
     int m_progress;
+
+    QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
 
 #ifndef NDEBUG
 public:

@@ -60,7 +60,7 @@ KoFilter::ConversionStatus KFormula13Import::convert( const QByteArray& from,
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if( !out )
     {
-        kError(30506) << "KFormula13 Import unable to open output file! (Root)" << endl;
+        kError(30506) << "KFormula13 Import unable to open output file! (Root)";
         KMessageBox::error( NULL, i18n("Unable to save main document."),
                             i18n("KFormula1.3 Import Filter"), 0 );
         return KoFilter::StorageCreationError;

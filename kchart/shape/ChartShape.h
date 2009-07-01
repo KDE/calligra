@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007 Inge Wallin         <inge@lysator.liu.se>
+   Copyright 2007-2009 Inge Wallin         <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -112,9 +112,7 @@ public:
     TextLabelData *footerData() const;
     Legend   *legend() const;
     PlotArea *plotArea() const;
-    Surface  *wall() const;
-    Surface  *floor() const;
-    
+
     void showTitle();
     void showSubTitle();
     void showFooter();

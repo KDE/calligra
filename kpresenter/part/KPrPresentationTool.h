@@ -1,5 +1,10 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Jim Courtiau <jeremy.courtiau@gmail.com>
+ * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2009 Jérémy Lugagne <jejewindsurf@hotmail.com>
+ * Copyright (C) 2009 Johann Hingue <yoan1703@hotmail.fr>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,11 +28,15 @@
 
 #include <QList>
 
+class QFrame;
 class KoEventAction;
 class KPrViewModePresentation;
+class KPrPresentationToolWidget;
+class KPrPresentationStrategyInterface;
 
 /// The tool used for presentations
-class KPrPresentationTool : public KoTool {
+class KPrPresentationTool : public KoTool
+{
     Q_OBJECT
 public:
     explicit KPrPresentationTool( KPrViewModePresentation & viewMode );
@@ -48,12 +57,22 @@ public:
 public slots:
     void activate( bool temporary = false );
     void deactivate();
+    void highLightPresentation();
+    void drawOnPresentation();
+    void blackPresentation();
 
 private:
     void finishEventActions();
+    void switchStrategy( KPrPresentationStrategyInterface * strategy );
+    bool eventFilter( QObject * obj, QEvent * event );
 
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
+
+    KPrPresentationToolWidget * m_presentationToolWidget;
+    QFrame * m_frame;
+    KPrPresentationStrategyInterface * m_strategy;
+    friend class KPrPresentationStrategyInterface;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */

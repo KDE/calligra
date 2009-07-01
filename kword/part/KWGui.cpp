@@ -74,8 +74,8 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
         dockerMng = new KoDockerManager(m_view);
         m_view->setDockerManager(dockerMng);
     }
-    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *)),
-            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *)));
+    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);

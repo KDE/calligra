@@ -23,10 +23,13 @@
 
 #include <QString>
 #include <QStringList>
-#include <QSqlDatabase>
 
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
+
+#include <migration/migratemanager.h>
+#include <migration/keximigrate.h>
+
 //
 // These classes are used by the original orRender class and the new
 // ORPreRenderer class as internal structures for processing. There is
@@ -50,55 +53,47 @@ private:
 
     KexiDB::Connection   *m_connection;
     KexiDB::TableOrQuerySchema *m_schema;
+    
+    KexiMigration::KexiMigrate *m_KexiMigrate;
+    
+    bool executeInternal();
+    
+    bool m_externalData;
 
+    bool m_valid;
+    KexiDB::TableSchema m_TableSchema;
+    
 public:
-    orQuery();
-    orQuery(const QString &, const QString &, bool doexec, KexiDB::Connection *conn = 0);
-
+    orQuery(const QString &, KexiDB::Connection *conn); //Internal Data
+    orQuery(const QString &); //External data
+    
     virtual ~orQuery();
-
-    inline bool queryExecuted() const {
-        return (m_cursor != 0);
+    
+    inline KexiDB::Connection *connection() const {
+      if (!m_externalData)
+	return m_connection;
+	
+      return 0;
     }
-    bool execute();
 
-    inline KexiDB::Cursor *getQuery() {
-        return m_cursor;
-    }
     inline const QString &getSql() const {
         return m_qstrQuery;
     }
-    inline const QString &getName() const {
-        return m_qstrName;
-    }
 
     uint fieldNumber(const QString &fld);
-    KexiDB::TableOrQuerySchema &schema();
-};
-
-
-// Data class
-class orData
-{
-private:
-    orQuery *m_query;
-    QString m_field;
-    QString m_value;
-    bool    m_valid;
-    QByteArray m_rawValue;
-
-public:
-    orData();
-
-    void  setQuery(orQuery *qryPassed);
-    void  setField(const QString &qstrPPassed);
-
-    inline bool  isValid() const {
-        return m_valid;
-    }
-
-    const QString &getValue();
-    const QByteArray &getRawValue();
+    KexiDB::TableOrQuerySchema &schema() const;
+    
+    QVariant value(unsigned int);
+    QVariant value(const QString &);
+    
+    bool moveNext();
+    bool movePrevious();
+    bool moveFirst();
+    bool moveLast();
+    
+    long at() const;
+    
+    long recordCount();
 };
 
 #endif // __ORUTILS_H__

@@ -88,14 +88,18 @@ public:
     typedef QHash<QString, ResizeHandleSet*> Hash;
 
     ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
+
     ~ResizeHandleSet();
 
+    QWidget *widget() const { return m_widget; }
+
     void setWidget(QWidget *modify, bool editing = false);
-    QWidget *widget() const {
-        return m_widget;
-    }
+    
     void raise();
+    
     void setEditingMode(bool editing);
+    
+    Form *form() const { return m_form; }
 
 protected:
     void resizeStarted();

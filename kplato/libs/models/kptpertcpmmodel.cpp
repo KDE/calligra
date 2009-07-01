@@ -771,7 +771,7 @@ QVariant PertResultItemModel::alignment( int column ) const
     return QVariant();
 }
 
-QItemDelegate *PertResultItemModel::createDelegate( int column, QWidget * /*parent*/ ) const
+QAbstractItemDelegate *PertResultItemModel::createDelegate( int column, QWidget * /*parent*/ ) const
 {
     switch ( column ) {
         default: return 0;

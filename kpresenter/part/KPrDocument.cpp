@@ -43,6 +43,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KGlobal>
+#include <KStandardDirs>
 
 class InitOnce
 {
@@ -59,6 +60,8 @@ public:
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 , m_customSlideShows(new KPrCustomSlideShows())
+, m_presentationMonitor( 0 )
+, m_presenterViewEnabled( false )
 {
     K_GLOBAL_STATIC( InitOnce, s_initOnce );
     InitOnce * initOnce = s_initOnce;
@@ -262,6 +265,19 @@ KoPageApp::PageType KPrDocument::pageType() const
     return KoPageApp::Slide;
 }
 
+void KPrDocument::initEmpty()
+{
+    QString fileName( KStandardDirs::locate( "kpresenter_template", "Screen/.source/emptyLandscape.otp", componentData() ) );
+    setModified( true );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok ) {
+        // use initEmpty from  kopageapp
+        showLoadingErrorDialog();
+        KoPADocument::initEmpty();
+    }
+    resetURL();
+}
+
 KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
 {
     KPrPageData * pageData = dynamic_cast<KPrPageData *>( page );
@@ -277,6 +293,7 @@ KPrCustomSlideShows* KPrDocument::customSlideShows()
 void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
 {
     m_customSlideShows = replacement;
+    emit customSlideShowsModified();
 }
 
 int KPrDocument::presentationMonitor()
@@ -316,7 +333,10 @@ QString KPrDocument::activeCustomSlideShow() const
 
 void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
 {
-    m_activeCustomSlideShow = customSlideShow;
+    if ( customSlideShow != m_activeCustomSlideShow ) {
+        m_activeCustomSlideShow = customSlideShow;
+        emit activeCustomSlideShowChanged( customSlideShow );
+    }
 }
 
 #include "KPrDocument.moc"

@@ -1,6 +1,6 @@
 include(MacroAddCompileFlags)
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} ${EIGEN2_INCLUDE_DIR} )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread  ${EIGEN2_INCLUDE_DIR} ${KOMAIN_INCLUDES} ${KDE4_INCLUDES} )
 
 ########### Core Functionality ###############
 

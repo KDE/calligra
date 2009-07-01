@@ -1,6 +1,6 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44019)
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core 
+include_directories(  ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core 
 ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
 ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
@@ -102,7 +102,7 @@ install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ##disabled	../migration/libkeximigrate.la
 #
 #INCLUDES = $(INC_KFEEDBACK) $(LIB_KEXI_KMDI_INCLUDES) \
-#	-I$(top_builddir)/lib/koguiutils -I$(top_srcdir)/lib/koguiutils \
+#	-I$(top_builddir)/lib/ -I$(top_srcdir)/lib/ \
 #	-I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
 #	-I$(top_srcdir)/kexi/main \
 #	-I$(top_srcdir)/kexi/main/startup -I$(top_srcdir)/kexi/widget \

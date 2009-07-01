@@ -23,7 +23,6 @@
 #include "kplato_export.h"
 
 #include "ui_kptconfigtaskpanelbase.h"
-#include "kptduration.h"
 
 
 namespace KPlato
@@ -34,77 +33,27 @@ class Task;
 class StandardWorktime;
 class MacroCommand;
 
+
 class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 {
     Q_OBJECT
 public:
-    ConfigTaskPanelImpl(QWidget *parent, const char *name);
+    ConfigTaskPanelImpl( QWidget *parent );
     
-    virtual int schedulingType() const;
-    virtual int estimationType() const;
-    virtual int optimistic() const;
-    virtual int pessimistic();
-    virtual double estimationValue();
-    virtual QDateTime startDateTime();
-    virtual QDateTime endDateTime();
-    virtual QTime startTime() const;
-    virtual QTime endTime();
-    virtual QDate startDate();
-    virtual QDate endDate();
-
 public slots:
-    virtual void setSchedulingType( int type );
     virtual void changeLeader();
-    virtual void setEstimationType( int type );
-    virtual void setOptimistic( int value );
-    virtual void setPessimistic( int value );
-    virtual void enableDateTime( int scheduleType );
-    virtual void estimationTypeChanged( int type );
-    virtual void setEstimate( double duration );
-    virtual void setEstimateType( int type );
-    virtual void checkAllFieldsFilled();
-//    virtual void setEstimateScales( double day );
-    virtual void startDateChanged();
-    virtual void startTimeChanged( const QTime & time );
-    virtual void endDateChanged();
-    virtual void endTimeChanged( const QTime & time );
-    virtual void scheduleTypeChanged( int value );
-    virtual void setStartTime( const QTime & time );
-    virtual void setEndTime( const QTime & time );
-    virtual void setStartDateTime( const QDateTime & dt );
-    virtual void setEndDateTime( const QDateTime & dt );
-    virtual void setStartDate( const QDate & date );
-    virtual void setEndDate( const QDate & date );
-
-signals:
-    void obligatedFieldsFilled( bool );
-    void schedulingTypeChanged( int );
-    void changed();
-
-protected:
-    bool useTime;
+    void startDateTimeChanged( const QDateTime& );
+    void endDateTimeChanged( const QDateTime& );
+    void unitChanged( int unit );
+    void currentUnitChanged( int );
 };
 
-class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl {
+class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl
+{
     Q_OBJECT
 public:
-    explicit TaskDefaultPanel(Task &task, QWidget *parent=0, const char *name=0);
-
-    MacroCommand *buildCommand();
-
-    bool ok();
-
-    void setStartValues(Task &task);
-
-public slots:
-    virtual void estimationTypeChanged(int type);
-    virtual void scheduleTypeChanged(int value);
+    explicit TaskDefaultPanel( QWidget *parent=0 );
     
-private:
-    Task &m_task;
-    
-    Duration m_estimate;
-    Duration m_duration;
 };
 
 } //KPlato namespace

@@ -25,44 +25,79 @@
 //
 // Class orQuery implementations
 //
-orQuery::orQuery()
-{
-    m_cursor = 0;
-    m_connection = 0;
-}
 
-orQuery::orQuery(const QString &qstrPName, const QString &qstrSQL,
-                 bool doexec, KexiDB::Connection * pDb)
+orQuery::orQuery(const QString &qstrSQL,
+                 KexiDB::Connection * pDb)
 {
     QString qstrParsedSQL(qstrSQL);
     QString qstrParam;
     int     intParamNum;
     int     intStartIndex = 0;
 
+    m_externalData = false;
     m_cursor = 0;
     m_connection = pDb;
     m_schema = 0;
     //  Initialize some privates
-    m_qstrName  = qstrPName;
     m_qstrQuery = qstrSQL;
 
     kDebug() << m_qstrName << ":" << m_qstrQuery;
 
-    //For now, lets assume we only support simple tables or queries
-    if (doexec) {
-        execute();
-    }
+    m_valid = executeInternal();
+}
 
+//!Connect to an external data source
+//!connStr is in the form driver|connection_string|table
+orQuery::orQuery(const QString & connStr)
+{
+  m_externalData = true;
+  m_cursor = 0;
+  
+  QStringList extConn = connStr.split("|");
+  
+  if (extConn.size() == 3)
+  {
+    KexiMigration::MigrateManager mm;
+    
+    m_KexiMigrate = mm.driver(extConn[0]);
+    KexiDB::ConnectionData cd;
+    KexiMigration::Data dat;
+    cd.setFileName(extConn[1]);
+    dat.source = &cd;
+    m_KexiMigrate->setData(&dat);
+    m_valid = m_KexiMigrate->connectSource();
+    QStringList names;
+    
+    if (m_valid) {  
+      m_valid = m_KexiMigrate->readTableSchema(extConn[2], m_TableSchema);
+    }
+    if (m_valid) {
+      m_schema = new KexiDB::TableOrQuerySchema(m_TableSchema);
+    }
+    m_valid = m_KexiMigrate->tableNames(names);
+    if (m_valid && names.contains(extConn[2])){ 
+       m_valid = m_KexiMigrate->readFromTable(extConn[2]);
+    }
+  }
 }
 
 orQuery::~orQuery()
 {
-    m_cursor->close();
-    delete m_cursor;
-    m_cursor = 0;
+  if (m_externalData)
+  {
+    delete m_KexiMigrate;
+  }
+  else
+  {
+    if (m_cursor) {
+      m_cursor->close();
+      delete m_cursor;
+      m_cursor = 0;
+    }
+  }
 }
 
-bool orQuery::execute()
+bool orQuery::executeInternal()
 {
     if (m_connection && m_cursor == 0) {
         //NOTE we can use the variation of executeQuery to pass in parameters
@@ -92,19 +127,29 @@ bool orQuery::execute()
 
 uint orQuery::fieldNumber(const QString &fld)
 {
+  KexiDB::QueryColumnInfo::Vector flds;
+  
     uint x = -1;
-    if (m_cursor->query()) {
-        KexiDB::QueryColumnInfo::Vector flds = m_cursor->query()->fieldsExpanded();
-        for (int i = 0; i < flds.size() ; ++i) {
-            if (fld.toLower() == flds[i]->aliasOrName()) {
-                x = i;
-            }
-        }
+    if (m_externalData) {
+      flds = schema().columns();
     }
+    else {
+      if (m_cursor->query()) {
+	  flds = m_cursor->query()->fieldsExpanded();
+	  
+      }
+    }
+    for (int i = 0; i < flds.size() ; ++i) {
+	  if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
+	    x = i;
+	  }
+    
+    }
+	  
     return x;
 }
 
-KexiDB::TableOrQuerySchema &orQuery::schema()
+KexiDB::TableOrQuerySchema &orQuery::schema() const
 {
     if (m_schema)
         return *m_schema;
@@ -115,43 +160,102 @@ KexiDB::TableOrQuerySchema &orQuery::schema()
     }
 }
 
-//
-// Class orData
-//
-orData::orData()
+QVariant orQuery::value(unsigned int i)
 {
-    m_valid = false;
-    m_query = 0;
+  if(!m_valid)
+    return QVariant();
+  
+  if (m_externalData) {
+    return m_KexiMigrate->value(i); 
+  } else {
+    return m_cursor->value(i);
+  }
 }
 
-void orData::setQuery(orQuery *qryPassed)
+QVariant orQuery::value(const QString &fld)
 {
-    m_query = qryPassed;
-    m_valid = (m_query != 0 && m_field.length());
+  if(!m_valid)
+    return QVariant();
+  
+  int i = fieldNumber(fld);
+  
+  if (m_externalData) {
+    return m_KexiMigrate->value(i); 
+  } else {
+    return m_cursor->value(i);
+  }
 }
 
-void orData::setField(const QString &qstrPPassed)
+bool orQuery::moveNext()
 {
-    m_field = qstrPPassed;
-    m_valid = (m_query != 0 && m_field.length());
+  if (!m_valid)
+    return false;
+  
+  if (m_externalData) {
+    return m_KexiMigrate->moveNext(); 
+  } else {
+    return m_cursor->moveNext();
+  }
 }
 
-const QString &orData::getValue()
+bool orQuery::movePrevious()
 {
-    if (m_valid && m_query->getQuery()) {
-        m_value = m_query->getQuery()->value(m_query->fieldNumber(m_field)).toString();
+  if(!m_valid)
+    return false;
+  
+  if (m_externalData) {
+    return m_KexiMigrate->movePrevious(); 
+  } else {
+    if (m_cursor) return m_cursor->movePrev();
+  }
+}
+
+bool orQuery::moveFirst()
+{
+  if(!m_valid)
+    return false;
+  
+  if (m_externalData) {
+    return m_KexiMigrate->moveFirst(); 
+  } else {
+    if (m_cursor) return m_cursor->moveFirst();
+  }
+}
+
+bool orQuery::moveLast()
+{
+  if(!m_valid)
+    return false;
+  
+  if (m_externalData) {
+    return m_KexiMigrate->moveLast(); 
+  } else {
+    if (m_cursor) return m_cursor->moveLast();
+  }
+}
+
+long orQuery::at() const
+{
+  if(!m_valid)
+    return 0;
+  
+  if (m_externalData) {
+    return 0; 
+  } else {
+    return m_cursor->at();
+  }
+}
+
+long orQuery::recordCount()
+{
+  if (m_externalData) {
+    return 1;
+  }
+  else {
+    if (schema().table() || schema().query()) {
+      return KexiDB::rowCount(schema());
     } else {
-        kDebug() << "Not Valid";
+      return 1;
     }
-    return m_value;
+  }
 }
-
-const QByteArray &orData::getRawValue()
-{
-    if (m_valid && m_query->getQuery()) {
-        m_rawValue = m_query->getQuery()->value(m_query->fieldNumber(m_field)).toByteArray();
-    }
-
-    return m_rawValue;
-}
-

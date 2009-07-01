@@ -331,6 +331,9 @@ void ChartConfigWidget::initTableEditorDialog()
 
 void ChartConfigWidget::open( KoShape* shape )
 {
+    if ( ! shape ) {
+        return;
+    }
     // Find the selected shape and adapt the tool option window to
     // which of the subshapes of the chart widget that was actually
     // selected.  Then select the tab depending on which one it was.

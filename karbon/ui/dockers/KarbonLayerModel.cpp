@@ -205,7 +205,7 @@ QVariant KarbonLayerModel::data( const QModelIndex &index, int role ) const
             if( container )
             {
                 bbox = QRectF();
-                foreach( KoShape* shape, container->iterator() )
+                foreach( KoShape* shape, container->childShapes() )
                     bbox = bbox.united( shape->outline().boundingRect() );
             }
             return qreal(bbox.width()) / bbox.height();
@@ -300,7 +300,7 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
 
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
-        shapes = container->iterator();
+        shapes = container->childShapes();
     else
         shapes.append( shape );
 
@@ -322,12 +322,12 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
 
 KoShape * KarbonLayerModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    return parent->iterator().at( row );
+    return parent->childShapes().at( row );
 }
 
 int KarbonLayerModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
-    return parent->iterator().indexOf( child );
+    return parent->childShapes().indexOf( child );
 }
 
 Qt::DropActions KarbonLayerModel::supportedDropActions () const

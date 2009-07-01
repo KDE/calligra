@@ -48,13 +48,16 @@ public:
     ElementType elementType() const;
 
     /// Process @p raw and render it to @p path
-    void renderToPath( const QString& raw, QPainterPath& path );
+    QRectF renderToPath( const QString& raw, QPainterPath& path );
 
+    /** Reimplemented from BaseElement
+     *  Sets the height() and baseLine() of the element based on the parent size
+     */
+    virtual void stretch();
 private:
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;
-
-    double parseMathSpace( const QString& value ) const;
+    Dictionary m_dict;
 
 private:
     Form determineOperatorForm() const;

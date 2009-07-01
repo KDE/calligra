@@ -41,14 +41,14 @@ namespace Currency_LNS
     // third column:  currency name (localized)
     // fourth column: displayed currency code (localized but maybe only in
     //                the country language it belongs to)
-    // WARNING: change the "24" in chooseString if you change this array
+    // WARNING: change the "29" in chooseString if you change this array
     static const Money lMoney[] = {
         { "", "", "", ""}, // auto
         { "", "", "", ""}, // extension (codes imported)
         { "$", "", "Dollar", "$" }, // unspecified
         { "$", I18N_NOOP("Australia"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("Canada"), I18N_NOOP("Dollar"), "$" },
-        { "$", I18N_NOOP("Caribbea"), I18N_NOOP("Dollar"), "$" },
+        { "$", I18N_NOOP("Caribbean"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("New Zealand"), I18N_NOOP("Dollar"), "$" },
         { "$", I18N_NOOP("United States"), I18N_NOOP("Dollar"), "$" },
 
@@ -77,7 +77,8 @@ namespace Currency_LNS
 
         { "¥", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "¥" },
 
-        { "AFA", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFA") },
+        { "AFA", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani (old)"), I18N_NOOP("AFA") },
+        { "AFN", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFN") },
         { "ALL", I18N_NOOP("Albania"), I18N_NOOP("Lek"), I18N_NOOP("Lek") },
         { "DZD", I18N_NOOP("Algeria"), I18N_NOOP("Algerian Dinar"), I18N_NOOP("DZD") },
         { "USD", I18N_NOOP("American Samoa"), I18N_NOOP("US Dollar"), I18N_NOOP("USD") },
@@ -88,7 +89,7 @@ namespace Currency_LNS
         { "XCD", I18N_NOOP("Antigua And Barbuda"), I18N_NOOP("East Carribean Dollar"), I18N_NOOP("XCD") },
         { "ARS", I18N_NOOP("Argentina"), I18N_NOOP("Argentine Peso"), I18N_NOOP("ARS") },
         { "AMD", I18N_NOOP("Armenia"), I18N_NOOP("Armenian Dram"), I18N_NOOP("AMD") },
-        { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Guilder"), I18N_NOOP("AWG") },
+        { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Florin"), I18N_NOOP("AWG") },
         { "AUD", I18N_NOOP("Australia"), I18N_NOOP("Australian Dollar"), I18N_NOOP("AUD") },
         { "EUR", I18N_NOOP("Austria"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
         { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("S") },
@@ -109,7 +110,7 @@ namespace Currency_LNS
         { "BOV", I18N_NOOP("Bolivia"), I18N_NOOP("Mvdol"), I18N_NOOP("BOV") },
         { "BAM", I18N_NOOP("Bosnia And Herzegovina"), I18N_NOOP("Convertible Marks"), I18N_NOOP("BAM") },
         { "BWP", I18N_NOOP("Botswana"), I18N_NOOP("Pula"), I18N_NOOP("BWP") },
-        { "NOK", I18N_NOOP("Bouvet Island"), I18N_NOOP("Norvegian Krone"), I18N_NOOP("NOK") },
+        { "NOK", I18N_NOOP("Bouvet Island"), I18N_NOOP("Norwegian Krone"), I18N_NOOP("NOK") },
         { "BRL", I18N_NOOP("Brazil"), I18N_NOOP("Brazilian Real"), I18N_NOOP("R$") },
         { "USD", I18N_NOOP("British Indian Ocean Territory"), I18N_NOOP("US Dollar"), I18N_NOOP("USD") },
         { "BND", I18N_NOOP("Brunei Darussalam"), I18N_NOOP("Brunei Dollar"), I18N_NOOP("BND") },
@@ -252,7 +253,7 @@ namespace Currency_LNS
         { "NPR", I18N_NOOP("Nepal"), I18N_NOOP("Nepalese Rupee"), I18N_NOOP("NPR") },
         { "EUR", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
         { "NLG", I18N_NOOP("Netherlands"), I18N_NOOP("Guilder"), I18N_NOOP("fl") },
-        { "ANG", I18N_NOOP("Netherlands Antilles"), I18N_NOOP("Netherlands Antillan Guilder"), I18N_NOOP("ANG") },
+        { "ANG", I18N_NOOP("Netherlands Antilles"), I18N_NOOP("Netherlands Antillean Guilder"), I18N_NOOP("ANG") },
         { "XPF", I18N_NOOP("New Caledonia"), I18N_NOOP("CFP Franc"), I18N_NOOP("XPF") },
         { "NZD", I18N_NOOP("New Zealand"), I18N_NOOP("New Zealand Dollar"), I18N_NOOP("NZD") },
         { "NIO", I18N_NOOP("Nicaragua"), I18N_NOOP("Cordoba Oro"), I18N_NOOP("NIO") },
@@ -478,7 +479,7 @@ QString Currency::chooseString( int type, bool & ok )
         ok = false;
         return QString();
     }
-    if ( type < 24 )
+    if ( type < 29 )
     {
         QString ret( i18n( gMoneyList[type].name ) );
         if ( gMoneyList[type].country[0] )

@@ -43,7 +43,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
 #include <KoOdfStylesReader.h>
-#include <KoQueryTrader.h>
+
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
@@ -272,7 +272,7 @@ Sheet::Sheet(const Sheet& other)
     // flake
 #if 0
     //FIXME This does not work as copySettings does not work. Also createDefaultShapeAndInit without the correct settings can not work
-    //I think this should use saveOdf and loadOdf for copying  
+    //I think this should use saveOdf and loadOdf for copying
     KoShape* shape;
     const QList<KoShape*> shapes = other.d->shapes;
     for (int i = 0; i < shapes.count(); ++i)
@@ -1443,7 +1443,7 @@ void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
 
   int mx = pasteArea.left();
   int my = pasteArea.top();
-  
+
   // split the text into lines and put them into an array value
   QStringList list = _text.split( '\n' );
   Value value( Value::Array );
@@ -1453,7 +1453,7 @@ void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
     value.setElement (0, which++, Value (*it));
 
   Region range (mx, my, 1, list.size());
-  
+
   // create a manipulator, configure it and execute it
   DataManipulator *manipulator = new DataManipulator;
   manipulator->setSheet (this);
@@ -3738,7 +3738,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())
           break;
-        
+
         cell = Cell( this, i, row );
         // if we have a shape anchored to an empty cell, ensure that the cell gets also processed
         int nextShape = tableContext.nextAnchoredShape (this, row, column);
@@ -3746,7 +3746,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
           cell = Cell (this, nextShape, row);
           i = nextShape;
         }
-        
+
         nextCell = d->cellStorage->nextInRow( i, row );
     }
 

@@ -438,7 +438,7 @@ void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command
             const QHash<QByteArray, QVariant>::const_iterator it1(pc1->oldValues().constBegin());
             const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
             if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())
-                d->part->dataSourcePage()->setDataSource(
+                d->part->dataSourcePage()->setFormDataSource(
                     formWidget->dataSourcePartClass(), formWidget->dataSource());
         }
     }

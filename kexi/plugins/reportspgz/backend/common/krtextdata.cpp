@@ -49,6 +49,8 @@ KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
                     kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
+	} else if (n == "name") {
+            m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();
         } else if (n == "bottompad") {
@@ -153,6 +155,7 @@ void KRTextData::createProperties()
     m_backgroundOpacity->setOption("min", 0);
 
     //_set->addProperty ( _query );
+    m_set->addProperty(m_name);
     m_set->addProperty(m_controlSource);
     m_set->addProperty(m_horizontalAlignment);
     m_set->addProperty(m_verticalAlignment);
@@ -172,11 +175,6 @@ void KRTextData::setTextFlags(Qt::Alignment f)
 {
 
 }
-
-//QString KRTextData::query() const
-//{
-// return _query->value().toString();
-//}
 
 QString KRTextData::column() const
 {

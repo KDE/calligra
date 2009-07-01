@@ -45,10 +45,10 @@ public:
      * Hour     = hh:mm
      * HourFraction = h.fraction of an hour
      */
-    enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction, Format_i18nDayTime, Format_i18nDay, Format_i18nHour, Format_i18nHourFraction };
+    enum Format { Format_DayTime, Format_Year, Format_Month, Format_Week, Format_Day, Format_Hour, Format_HourFraction, Format_i18nDayTime, Format_i18nYear, Format_i18nMonth, Format_i18nWeek, Format_i18nDay, Format_i18nHour, Format_i18nHourFraction };
 
     //NOTE: These must match units in DurationSpinBox!
-    enum Unit { Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
+    enum Unit { Unit_Y, Unit_M, Unit_w, Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
     
     Duration();
     Duration(const Duration &d);
@@ -142,6 +142,9 @@ public:
         else if (u == Unit_m) return (double)m_ms/(1000.0*60.0);
         else if (u == Unit_h) return (double)m_ms/(1000.0*60.0*60.0);
         else if (u == Unit_d) return (double)m_ms/(1000.0*60.0*60.0*24.0);
+        else if (u == Unit_w) return (double)m_ms/(1000.0*60.0*60.0*24.0*7.0);
+        else if (u == Unit_M) return (double)m_ms/(1000.0*60.0*60.0*24.0*30); //Month
+        else if (u == Unit_Y) return (double)m_ms/(1000.0*60.0*60.0*24.0*365); // Year
         return (double)m_ms; 
     }
     static QStringList unitList( bool trans = false );

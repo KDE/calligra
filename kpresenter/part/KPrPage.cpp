@@ -66,7 +66,7 @@ KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 , d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );
-    placeholders().init( 0, iterator() );
+    placeholders().init( 0, childShapes() );
 }
 
 KPrPage::~KPrPage()
@@ -103,7 +103,7 @@ void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
     QSizeF pageSize( pageLayout().width, pageLayout().height );
     KPrMasterPage * master = dynamic_cast<KPrMasterPage *>( masterPage() );
     Q_ASSERT( master );
-    placeholders().setLayout( layout, document, iterator(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
+    placeholders().setLayout( layout, document, childShapes(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
     kDebug(33001) << "master placeholders";
     master->placeholders().debug();
 }
@@ -197,7 +197,7 @@ void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext 
             kDebug(33001) << "page layout" << layoutName << layout;
         }
     }
-    placeholders().init( layout, iterator() );
+    placeholders().init( layout, childShapes() );
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const

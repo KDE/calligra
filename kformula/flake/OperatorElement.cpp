@@ -20,6 +20,8 @@
 #include "OperatorElement.h"
 #include "RowElement.h"
 #include "AttributeManager.h"
+#include "kdebug.h"
+#include <QFontMetricsF>
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
@@ -29,23 +31,77 @@ QPainterPath OperatorElement::renderForFence( const QString& raw, Form form )
     return QPainterPath();
 }
 
-void OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
 {
-    Dictionary dict;
-    dict.queryOperator( raw, determineOperatorForm() );
-    
     AttributeManager manager;
-    path.addText( path.currentPosition(), manager.font( this ), raw );
+    m_dict.queryOperator( raw, determineOperatorForm() );
 
-//    path.moveTo( path.currentPosition() + QPointF( lspace, 0.0 ) );
-//    path.moveTo( path.currentPosition() + QPointF( rspace, 0.0 ) );
+    qreal rSpace = manager.parseMathSpace(m_dict.rSpace(), this);
+    qreal lSpace = manager.parseMathSpace(m_dict.lSpace(), this);
+    path.moveTo( path.currentPosition() + QPointF( lSpace, 0.0 ) );
+    QFont font = manager.font(this);
+    path.addText( path.currentPosition(), font, raw );
+    QFontMetricsF fm(font);
+    QRectF rect = path.boundingRect().adjusted(0,0,lSpace+rSpace,0);
+    return rect;
+//    return fm.boundingRect(QRect(), Qt::TextIncludeTrailingSpaces, raw).adjusted(0,0,lSpace+rSpace,0).adjusted(0,-fm.ascent(), 0, -fm.ascent());
 }
 
+/* stretching rules are:
+ * If a stretchy operator or fence is a direct subexpression of an <MROW>, or is the sole direct subexpression of an <MTD> in an <MTR>, then it should stretch to cover the height and depth (above and below the axis) of the non-stretchy subexpressions in the <MROW> or <MTR> element, given the constraints mentioned above. This applies even if the <MTD> and/or <MTR> were inferred, as described in the <MTABLE> section.
+ 
+ * If a stretchy operator is a direct subexpression of an <MUNDER>, <MOVER>, <MUNDEROVER>, or if it is the sole direct subexpression of an <MTD>, then it should stretch to cover the width of the other subexpressions in the given element (or in the same matrix column, in the case of a matrix), given the constraints mentioned above. This applies even if the <MTD> was inferred, as described in the <MTABLE> section.
+ */
+void OperatorElement::stretch()
+{
+    m_stretchVertically = m_stretchHorizontally = false;
+
+    if(!parentElement())
+        return;
+ 
+    if(!m_dict.stretchy())
+        return;
+ 
+    switch(parentElement()->elementType()) {
+    case TableEntry:  //MTD
+        if(parentElement()->childElements().count() == 1) {
+            m_stretchHorizontally = true;
+            if(parentElement()->parentElement() &&
+               parentElement()->parentElement()->elementType() == TableRow)
+                m_stretchVertically = true;
+        }
+        break;
+    case Under:
+    case Over:
+    case UnderOver:
+        m_stretchHorizontally = true;
+        break;
+    default:
+        // There are many element types that inherit Row, so just try casting to
+        // a row to see if it inherits from a row
+        if( dynamic_cast<RowElement*>( parentElement() ) != 0 )
+            m_stretchVertically = true;
+        else
+            return;
+        break;
+    }
+    if(m_stretchVertically) {
+        //FIXME - take into account maximum stretch size
+        qreal newHeight = parentElement()->childrenBoundingRect().height();
+        qreal newBaseLine = baseLine() * newHeight / height();
+        setBaseLine( newBaseLine );
+        setHeight( newHeight );
+    }
+    if(m_stretchHorizontally) {
+        setWidth( parentElement()->width() );
+    }
+}
+ 
 Form OperatorElement::determineOperatorForm() const
 {
     // a bit of a hack - determine the operator's form with its position inside the
     // parent's element list. This is with the assumption that the parent is an 
-    // ( inferred ) row element. If that is not the case return standart Prefix ( ? )
+    // ( inferred ) row element. If that is not the case return standard Prefix ( ? )
  
     if( dynamic_cast<RowElement*>( parentElement() ) == 0 )
         return Prefix;
@@ -57,39 +113,6 @@ Form OperatorElement::determineOperatorForm() const
         return Infix;
 }
 
-double OperatorElement::parseMathSpace( const QString& value )  const
-{
-/*    if( value == "negativeveryverythinmathspace" )
-        return -1*calculateEmExUnits( 0.055556, true );
-    else if( value == "negativeverythinmathspace" )
-        return -1*calculateEmExUnits( 0.111111, true );
-    else if( value == "negativethinmathspace" )
-        return -1*calculateEmExUnits( 0.166667, true );
-    else if( value == "negativemediummathspace" )
-        return -1*calculateEmExUnits( 0.222222, true );
-    else if( value == "negativethickmathspace" )
-        return -1*calculateEmExUnits( 0.277778, true );
-    else if( value == "negativeverythickmathspace" )
-        return -1*calculateEmExUnits( 0.333333, true );
-    else if( value == "negativeveryverythickmathspace" )
-        return -1*calculateEmExUnits( 0.388889, true );
-    else if( value == "veryverythinmathspace" )
-        return calculateEmExUnits( 0.055556, true );
-    else if( value == "verythinmathspace" )
-        return calculateEmExUnits( 0.111111, true );
-    else if( value == "thinmathspace" )
-        return calculateEmExUnits( 0.166667, true );
-    else if( value == "mediummathspace" )
-        return calculateEmExUnits( 0.222222, true );
-    else if( value == "thickmathspace" )
-        return calculateEmExUnits( 0.277778, true );
-    else if( value == "verythickmathspace" )
-        return calculateEmExUnits( 0.333333, true );
-    else if( value == "veryverythickmathspace" )
-        return calculateEmExUnits( 0.388889, true );
-    else*/
-        return -1.0;
-}
 
 Form OperatorElement::parseForm( const QString& value ) const
 {

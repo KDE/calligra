@@ -165,8 +165,8 @@
   <Action name="screen_assigneffect"/>
   <Action name="screen_transeffect"/>
   <Separator/>
-  <Action name="screen_start"/>
   <Action name="screen_startfromfirst"/>
+  <Action name="screen_start"/>
   <Separator/>
   <Action name="custom_slide_show"/>
   <Separator/>

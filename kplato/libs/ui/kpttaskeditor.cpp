@@ -354,8 +354,9 @@ void TaskEditor::slotSplitView()
 void TaskEditor::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void TaskEditor::slotAddTask()
@@ -591,7 +592,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
     
-    connect( m_view->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_view->baseModel(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -689,6 +690,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
                 name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
                 break;
             default:
                 break;
@@ -738,8 +740,9 @@ void TaskView::slotSplitView()
 void TaskView::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool TaskView::loadContext( const KoXmlElement &context )

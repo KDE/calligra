@@ -13,7 +13,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_CURRENT_SOURCE_DIR}/ui
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart
-                     ${KOGUIUTILS_INCLUDES}
+                     ${KOMAIN_INCLUDES}                     
                      ${KOTEXT_INCLUDES}
                      ${EIGEN2_INCLUDE_DIR} )
 
@@ -203,6 +203,7 @@ SET (kspreadcommon_LIB_SRCS
 	ValueConverter.cpp
 	ValueFormatter.cpp
 	ValueParser.cpp
+    KoTabBar.cpp
 	tests/inspector.cpp
 	${chart_DIR_SRCS}
 	${commands_DIR_SRCS}
@@ -219,11 +220,11 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
 	${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KPARTS_LIBS}
-	koguiutils
-	kutils flake
+    komain	
+	kutils 
 	${KDE4_KDE3SUPPORT_LIBS} )
 
-target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES  koguiutils flake ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES komain ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kspreadcommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
@@ -251,6 +252,12 @@ SET (kspread_KDEINIT_SRCS part/Main.cpp )
 kde4_add_app_icon(kspread_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
+
+if (Q_WS_MAC)
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kspread")
+   set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KSpread 2")
+endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 

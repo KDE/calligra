@@ -78,6 +78,7 @@ private:
     KoShape * shapeFromIndex( const QModelIndex &index );
 
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
+    void selectLayers( QList<KoShapeLayer*> layers );
     
     KarbonPart * m_part;
     KarbonLayerModel * m_model;

@@ -18,6 +18,7 @@ target_link_libraries(
     kwordexportfilters
     kostore
     komain
+    kotext
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}

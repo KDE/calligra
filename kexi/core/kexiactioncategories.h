@@ -49,16 +49,16 @@ public:
     /*! Declares action \a name for categories \a category (a combination of ActionCategory enum values).
      The categories is merged with the previous declaration (if any).
      \a supportedObjectTypes can be specified for ActionCategory::WindowAction to declare what object types
-     the action allows, it is a combination of KexiPart::ObjectTypes enum values. */
+     the action allows, it is a combination of KexiPart::ObjectType enum values. */
     void addAction(const char* name, int categories,
-                   KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
-                   KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0);
+                   KexiPart::ObjectType supportedObjectType1 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType2 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType3 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType4 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType5 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType6 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType7 = KexiPart::UnknownObjectType,
+                   KexiPart::ObjectType supportedObjectType8 = KexiPart::UnknownObjectType);
 
     void addGlobalAction(const char* name) {
         addAction(name, Kexi::GlobalActionCategory);
@@ -70,17 +70,18 @@ public:
     }
 
     /*! Convenience function for adding action of category "window", uses \ref addAction().
-     \a supportedObjectTypes is a combination of KexiPart::ObjectTypes enum values describing
+     \a supportedObjectTypes is a combination of KexiPart::ObjectType enum values describing
      object types supported by the action. */
     void addWindowAction(const char* name,
-                         KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
-                         KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0) {
+                         KexiPart::ObjectType supportedObjectType1 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType2 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType3 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType4 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType5 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType6 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType7 = KexiPart::UnknownObjectType,
+                         KexiPart::ObjectType supportedObjectType8 = KexiPart::UnknownObjectType)
+    {
         addAction(name, Kexi::WindowActionCategory, supportedObjectType1, supportedObjectType2,
                   supportedObjectType3, supportedObjectType4, supportedObjectType5, supportedObjectType6,
                   supportedObjectType7, supportedObjectType8);
@@ -97,7 +98,7 @@ public:
 
     /*! \return true if action \a name supports \a objectType.
      Only works for actions of WindowAction category. */
-    bool actionSupportsObjectType(const char* name, KexiPart::ObjectTypes objectType) const;
+    bool actionSupportsObjectType(const char* name, KexiPart::ObjectType objectType) const;
 protected:
     class Private;
     Private *d;

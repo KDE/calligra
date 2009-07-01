@@ -946,7 +946,7 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *parent ) const
+QAbstractItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *parent ) const
 {
     switch ( col ) {
         case ResourceModel::ResourceType: return new EnumDelegate( parent );

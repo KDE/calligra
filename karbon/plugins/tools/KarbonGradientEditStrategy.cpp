@@ -34,9 +34,9 @@
 
 #include <math.h>
 
-#include <kdebug.h>
-
 int GradientStrategy::m_handleRadius = 3;
+uint GradientStrategy::m_grabSensitivity = 3;
+
 const qreal stopDistance = 15.0;
 
 
@@ -93,13 +93,13 @@ void GradientStrategy::setEditing( bool on )
 
 bool GradientStrategy::hitHandle( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
-    QRectF hr = handleRect( converter );
+    QRectF roi = grabRect( converter );
 
     int handleIndex = 0;
     foreach( const QPointF & handle, m_handles )
     {
-        hr.moveCenter( m_matrix.map( handle ) );
-        if( hr.contains( mousePos ) )
+        roi.moveCenter( m_matrix.map( handle ) );
+        if( roi.contains( mousePos ) )
         {
             if( select )
                 setSelection( Handle, handleIndex );
@@ -116,7 +116,7 @@ bool GradientStrategy::hitHandle( const QPointF &mousePos, const KoViewConverter
 
 bool GradientStrategy::hitLine( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
-    qreal maxDistance = handleRect( converter ).size().width();
+    qreal maxDistance = converter.viewToDocumentX(grabSensitivity());
     if( mouseAtLineSegment( mousePos, maxDistance ) )
     {
         m_lastMousePos = mousePos;
@@ -133,15 +133,15 @@ bool GradientStrategy::hitLine( const QPointF &mousePos, const KoViewConverter &
 
 bool GradientStrategy::hitStop( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
-    QRectF hr = handleRect( converter );
+    QRectF roi = grabRect( converter );
 
     QList<StopHandle> handles = stopHandles( converter );
 
     int stopCount = m_stops.count();
     for( int i = 0; i < stopCount; ++i )
     {
-        hr.moveCenter( handles[i].second );
-        if( hr.contains( mousePos ) )
+        roi.moveCenter( handles[i].second );
+        if( roi.contains( mousePos ) )
         {
             if( select )
                 setSelection( Stop, i );
@@ -394,8 +394,10 @@ QRectF GradientStrategy::boundingRect( const KoViewConverter &converter ) const
     return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
 }
 
-void GradientStrategy::repaint() const
+void GradientStrategy::repaint( const KoViewConverter &converter ) const
 {
+    QRectF gradientRect = boundingRect( converter ).adjusted( -1, -1, 1, 1 );
+    m_shape->update( m_shape->documentToShape( gradientRect ) );
     m_shape->update();
 }
 
@@ -491,6 +493,11 @@ void GradientStrategy::setGradientLine( int start, int stop )
 QRectF GradientStrategy::handleRect( const KoViewConverter &converter ) const
 {
     return converter.viewToDocument( QRectF( 0, 0, 2*m_handleRadius, 2*m_handleRadius ) );
+}
+
+QRectF GradientStrategy::grabRect( const KoViewConverter &converter ) const
+{
+    return converter.viewToDocument( QRectF( 0, 0, 2*m_grabSensitivity, 2*m_grabSensitivity ) );
 }
 
 void GradientStrategy::setSelection( SelectionType selection, int index )

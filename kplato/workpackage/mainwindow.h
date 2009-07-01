@@ -25,8 +25,7 @@
 
 #include "kplatowork_export.h"
 
-#include <KoMainWindow.h>
-#include <KoQueryTrader.h>
+#include <kxmlguiwindow.h>
 
 #include <KoApplication.h>
 
@@ -40,10 +39,16 @@
 
 #include <kmimetype.h>
 #include <kvbox.h>
+#include <kservice.h>
+#include <KoDocumentEntry.h>
+#include <kparts/mainwindow.h>
 
 namespace std { }
 using namespace std;
 
+namespace KParts {
+    class PartManager;
+}
 namespace KPlatoWork {
     class DocumentChild;
     class Part;
@@ -64,138 +69,47 @@ class KPlatoWork_MainGUIClient;
 
 /////// class KPlatoWork_MainWindow ////////
 
-class KPLATOWORK_EXPORT KPlatoWork_MainWindow : public KoMainWindow
+class KPLATOWORK_EXPORT KPlatoWork_MainWindow : public KParts::MainWindow
 {
   Q_OBJECT
 
 public:
-    explicit KPlatoWork_MainWindow( const KComponentData &instance );
+    explicit KPlatoWork_MainWindow();
     virtual ~KPlatoWork_MainWindow();
-    
-    bool openDocument( const KUrl &url );
-    using KoMainWindow::openDocument;
-    
-    virtual void setRootDocument( KoDocument *doc );
-    /**
-    * Update caption from document info - call when document info
-    * (title in the about page) changes.
-    */
-    virtual void updateCaption();
-    virtual void updateCaption( const QString &caption, bool modified );
-    using KoMainWindow::updateCaption;
-    
+
+    KPlatoWork::Part *rootDocument() const { return m_part; }
+    bool openDocument(const KUrl & url);
+
     virtual QString configFile() const;
-    
-    KAction* partSpecificHelpAction;
 
-    void editDocument( KPlatoWork::Part *part, const KPlato::Document *doc );
-    
-    bool isEditing() const { return m_editing; }
-    bool isModified() const;
-    
-protected slots:
-    virtual void slotActivePartChanged( KParts::Part *newPart );
+     void editDocument( KPlatoWork::Part *part, const KPlato::Document *doc );
 
-    virtual void slotFileNew();
+//     bool isEditing() const { return m_editing; }
+//     bool isModified() const;
+
+signals:
+    void undo();
+    void redo();
+
+public slots:
     virtual void slotFileClose();
+
+protected slots:
+    virtual bool queryClose();
+
     virtual void slotFileOpen();
     /**
-     *  Saves the current document with the current name.
+     *  Saves all workpackages
      */
     virtual void slotFileSave();
 
-    /**
-     *  Saves the current document with a new name.
-     */
-    virtual void slotFileSaveAs();
-    
-    void sendMail();
-    
-    void saveAll();
-    
-    void showPartSpecificHelp();
-    
-    void tab_contextMenu(QWidget * ,const QPoint &);
-    
-    void slotKSLoadCompleted();
-    void slotKSLoadCanceled (const QString &);
-    void slotNewDocumentName();
-    /**
-    This slot is called whenever the user clicks on a tab to change the document. It looks for the
-    changed widget in the list of all pages and calls switchToPage with the iterator which points
-    to the page corresponding to the widget.
-    @param widget The current widget
-    */
-    void slotUpdatePart( QWidget* widget );
-
 protected:
-    /// Open document from workpackage store
-    bool editWorkpackageDocument( const KPlato::Document *doc, KPlatoWork::Part *part );
-    /// Open KParts document from workpackage store
-    bool editKPartsDocument(  KPlatoWork::Part *part, KService::Ptr service, const KPlato::Document *doc );
-    /// Open KOfficePart document from workpackage store
-    bool editKOfficePartDocument( KPlatoWork::Part *part, KMimeType::Ptr mimetype, const KPlato::Document *doc );
-    void enableHelp( bool enable );
-    
-    virtual bool saveDocument( bool saveas = false, bool silent = false );
+     virtual bool saveDocument( bool saveas = false, bool silent = false );
 
-    void setMainDocument( const KoDocument *doc, bool main = true );
-    KoDocument *mainDocument() const;
-    bool isMainDocument( const KoDocument *doc ) const;
-    
 private:
-    class Page
-    {
-    public:
-        Page() : m_pDoc( 0 ), m_pView( 0 ), part( 0 ), isKParts( false ),  m_id( -1 ), isMainDocument( false ) {}
-        bool operator==( const Page &p ) const { return m_pDoc == p.m_pDoc && m_pView == p.m_pView && isKParts == p.isKParts && m_id == p.m_id && isMainDocument == p.isMainDocument; }
-        bool isEmpty() const { return (*this) == Page(); }
-        KoDocument *m_pDoc;
-        KoView *m_pView;
-        KParts::ReadWritePart *part;
-        bool isKParts;
-        int m_id;
-        bool isMainDocument;
-    };
-
-private: // methods
-    Page findPage( const KParts::ReadWritePart *doc ) const;
-    void setupTabWidget();
-    void chooseNewDocument( InitDocFlags initDocFlags );
-    virtual bool openDocumentInternal( const KUrl & url, KoDocument * newdoc = 0L );
-    virtual bool queryClose();
-    virtual void slotConfigureKeys();
-    void closeDocument();
-    void saveSettings();
-    void switchToPage( int index );
-    
-    void removePage( KParts::PartBase *doc );
-    
-private: // variables
-    bool m_editing; // a workpackage doc is open for editing
-    int m_activePage;
-    QList<Page> m_lstPages;
-
-    QLabel *m_pComponentsLabel;
-    QSplitter *m_pLayout;
-    KTabWidget *m_pFrame;
-    QToolButton *m_tabCloseButton;
-
-    // Saved between openDocument and setRootDocument
-    KoDocumentEntry m_documentEntry;
-
-    KPlatoWork_MainGUIClient *m_client;
-    void createShellGUI( bool create = true );
-
+    KPlatoWork::Part *m_part;
 };
 
-//////// class MainGUIClient //////////
-
-class KPLATOWORK_EXPORT KPlatoWork_MainGUIClient : public KXMLGUIClient
-{
-public:
-    KPlatoWork_MainGUIClient( KPlatoWork_MainWindow *window );
-};
 
 #endif // KPLATOWORK_MAINWINDOW_H
 

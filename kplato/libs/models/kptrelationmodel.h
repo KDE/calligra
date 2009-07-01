@@ -23,7 +23,6 @@
 #include "kptitemmodelbase.h"
 #include "kptschedule.h"
 
-#include <QItemDelegate>
 
 class QMimeData;
 class QModelIndex;
@@ -83,7 +82,7 @@ public:
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     
     Relation *relation( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
 signals:
     void executeCommand( QUndoCommand* );

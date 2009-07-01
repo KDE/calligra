@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 // This is used both for *.kplato and *.kplatowork files as the syntax is identical
-#define XML_FILE_SYNTAX_VERSION "0.6.2"
+#define XML_FILE_SYNTAX_VERSION "0.6.3"
 
 #define CURRENTSCHEDULE     -1
 #define NOTSCHEDULED        -2
@@ -149,6 +149,7 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString scheduleStart();
     static QString scheduleFinish();
     static QString schedulingDirection();
+    static QString scheduleScheduler();
 
     static QString documentUrl();
     static QString documentType();

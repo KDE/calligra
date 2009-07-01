@@ -119,7 +119,8 @@ public:
     void setCurrentMonday( const QDate &date );
 
     QModelIndex addRow();
-    
+    void removeRow( int row );
+
     void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
     
     long id() const { return m_manager == 0 ? -1 : m_manager->id(); }
@@ -169,6 +170,7 @@ public:
 signals:
     void changed();
     void rowInserted( const QDate );
+    void selectionChanged( const QItemSelection&, const QItemSelection& );
 
 public slots:
     void addEntry();

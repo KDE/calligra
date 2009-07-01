@@ -1,4 +1,5 @@
 
+remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
 
 add_subdirectory( sqlite )

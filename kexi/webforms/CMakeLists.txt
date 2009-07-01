@@ -7,6 +7,8 @@ include_directories(
     ${GOOGLE_CTEMPLATE_INCLUDE_DIR}
     ${PionNet_INCLUDE_DIR})
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
+
 # Workaround, exceptions are needed for pion-net
 # FIXME: This won't work for other compilers
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})

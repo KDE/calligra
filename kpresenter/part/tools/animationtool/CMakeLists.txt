@@ -18,7 +18,7 @@ kde4_add_plugin(kpresentertoolanimation ${kpresentertoolanimation_PART_SRCS})
 
 target_link_libraries(
     kpresentertoolanimation
-    koguiutils
+    
     flake
     kpresenterprivate
     kopageapp

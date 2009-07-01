@@ -31,13 +31,15 @@ class QProgressBar;
 class QTabWidget;
 class QPrinter;
 class QPrintDialog;
+class QLabel;
 
 class KAction;
 class KToggleAction;
-class QLabel;
+class KActionCollection;
 
 class KUrl;
 
+class KoStore;
 class KoView;
 
 class KPlatoWork_MainWindow;
@@ -74,59 +76,50 @@ namespace KPlatoWork
 
 class Part;
 class View;
-
+class TaskWorkPackageView;
 
 //-------------
-class View : public KoView
+class View : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit View( Part* part, QWidget* parent = 0 );
+    explicit View( Part* part, QWidget *parent, KActionCollection *collection );
     ~View();
-    /**
-     * Support zooming.
-     */
-    virtual void setZoom( double zoom );
 
-    Part *getPart() const;
-
-    Project& getProject() const;
+    Part *part() const;
 
     virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
     virtual void print( QPrinter &printer, QPrintDialog &printDialog );
 
-    QMenu *popupMenu( const QString& name );
+    QMenu *popupMenu( const QString& name, const QPoint &pos );
 
 //    virtual ViewAdaptor* dbusObject();
 
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
 
-    QWidget *canvas() const;
-
-    //virtual QDockWidget *createToolBox();
-
-    KoDocument *hitTest( const QPoint &viewPos );
-
     ScheduleManager *currentScheduleManager() const;
     long currentScheduleId() const;
     
-    ViewBase *createTaskInfoView();
-    ViewBase *createDocumentsView();
-    
-    bool viewDocument( const KUrl &filename );
-    
+    TaskWorkPackageView *createTaskWorkPackageView();
+//     ViewBase *createTaskInfoView();
+//     ViewBase *createDocumentsView();
+//     ViewBase *createTaskView();
+
     KPlatoWork_MainWindow *kplatoWorkMainWindow() const;
     
+    Node *currentNode() const;
+    Document *currentDocument() const;
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     void openInternalDocument( KoStore * );
     void sigUpdateReadWrite( bool );
 
+    void viewDocument( Document *doc );
+
 public slots:
-    void slotUpdate();
-    
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -135,51 +128,30 @@ public slots:
 
     void slotPopupMenu( const QString& menuname, const QPoint &pos );
 
-protected slots:
-    void slotGuiActivated( ViewBase *view, bool );
-    void slotPlugScheduleActions();
-    void slotViewSchedule( QAction *act );
-    void slotScheduleChanged( MainSchedule* );
-    void slotScheduleAdded( const MainSchedule * );
-    void slotScheduleRemoved( const MainSchedule * );
+    void slotTaskProgress();
 
-    void slotAddScheduleManager( Project *project );
-    void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
-    
+protected slots:
     void slotProgressChanged( int value );
 
-    void slotCurrentChanged( int );
-
+    void slotEditDocument();
     void slotEditDocument( Document *doc );
-    void slotViewDocument( Document *doc );
+    void slotViewDocument();
     
-    void slotTaskProgress();
-    
+    void slotSendPackage();
+
 protected:
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
 
     QAction *addScheduleAction( Schedule *sch );
     void setLabel();
-    void updateView( QWidget *widget );
-
-private slots:
-    void slotActionDestroyed( QObject *o );
+    TaskWorkPackageView *currentView() const;
 
 private:
     void createViews();
-    void addPart( KParts::Part* part, const QString &name );
     
 private:
-    QTabWidget *m_tab;
-    QWidget *m_currentWidget;
-    QMap<QWidget*, KParts::Part*> m_partsMap;
-    int m_viewGrp;
-    int m_defaultFontSize;
+    Part *m_part;
 
-    QLabel *m_estlabel;
-    QProgressBar *m_progress;
-    
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
     ScheduleManager *m_manager;
@@ -194,7 +166,12 @@ private:
     // ------ Settings
     KAction *actionConfigure;
 
+    KAction *actionViewDocument;
+    KAction *actionEditDocument;
+
+    KAction *actionSendPackage;
     KAction *actionTaskProgress;
+
 };
 
 } //KplatoWork namespace

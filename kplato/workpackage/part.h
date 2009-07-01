@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004 - 2009 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
@@ -23,21 +23,28 @@
 #ifndef KPLATOWORK_PART_H
 #define KPLATOWORK_PART_H
 
+#include "kplatowork_export.h"
+
 #include "kptxmlloaderobject.h"
 
 #include <KoDocument.h>
-#include <KoDocumentChild.h>
 
 #include <QFileInfo>
 #include <QProcess>
 
 #include <kmimetype.h>
 #include <kservice.h>
+#include <kparts/part.h>
+
+class QUndoStack;
 
 class KoView;
 class KoStore;
 
 class KProcess;
+class KAction;
+
+class QAction;
 
 namespace KPlato
 {
@@ -53,27 +60,25 @@ namespace KPlatoWork
 
 class View;
 class Part;
-
+class WorkPackage;
 
 /**
  * DocumentChild stores info about documents opened for editing.
  * Editors can be KParts, KOffice or Other.
- *
- * Note: Even if it inherits KoDocumentChild, the functionallity is totally independent.
  */
-class DocumentChild : public KoDocumentChild
+class DocumentChild : public QObject
 {
     Q_OBJECT
 public:
     // The type of document this child handles
     enum DocType { Type_Unknown = 0, Type_KOffice, Type_KParts, Type_Other };
 
-    explicit DocumentChild( Part *parent );
-    DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent);
+    explicit DocumentChild( WorkPackage *parent );
+//    DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent);
     
     ~DocumentChild();
     
-    Part *parentPart() const;
+    WorkPackage *parentPackage() const;
     const Document *doc() const { return m_doc; }
     /// Set document, return true if ok, false if failure
     bool setDoc( const Document *doc );
@@ -122,70 +127,81 @@ protected:
     bool m_filemodified;
 };
 
-
 /**
- This part handles a work package.
+ This part handles work packages.
  A work package file consists of a Project node and one Task node
  along with scheduling information and assigned resources.
 */
 
-class Part : public KoDocument
+class KPLATOWORK_EXPORT Part : public KParts::ReadWritePart
 {
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    explicit Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*/ = QVariantList() );
     ~Part();
 
     int docType( const Document *doc ) const;
     
-    void setProject( Project *project );
-    Project &getProject() { return *m_project; }
-    const Project &getProject() const { return *m_project; }
+    bool setWorkPackage( Project *project );
 
-    virtual void paintContent( QPainter& painter, const QRect& rect);
-    virtual void paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view) {}
-
-    // The load and save functions.
+    bool loadWorkPackages();
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
-    
-    void setTitleModified();
-    using KoDocument::setTitleModified;
     
     bool saveAs( const KUrl &url );
     /// Check if we have documents open for editing before saving
     virtual bool completeSaving( KoStore* store );
 
-    bool saveOdf( SavingContext &documentContext ) { return false; }
-    bool loadOdf( KoOdfReadStore & odfStore );
-
     /// Extract document file from the store to disk
     KUrl extractFile( const Document *doc );
-    /// Copy file @p filename from old store @p from to the new store @p to
-    bool copyFile( KoStore *from, KoStore *to, const QString &filename );
     
     //Config &config() { return m_config; }
     
     /// Open KOffice document for editing
-    DocumentChild *openKOfficeDocument( KMimeType::Ptr mimetype, const Document *doc );
+//     DocumentChild *openKOfficeDocument( KMimeType::Ptr mimetype, const Document *doc );
     /// Open KParts document for editing
-    DocumentChild *openKPartsDocument( KService::Ptr service, const Document *doc );
+//     DocumentChild *openKPartsDocument( KService::Ptr service, const Document *doc );
+    /// Open document for editing, return true if ok, false if failure
+    bool editWorkpackageDocument( const Document *doc );
     /// Open document for editing, return true if ok, false if failure
     bool editOtherDocument( const Document *doc );
     /// Remove the child document
-    void removeChildDocument( DocumentChild *child );
+//    void removeChildDocument( DocumentChild *child );
     /// Find the child that handles document @p doc
     DocumentChild *findChild( const Document *doc ) const;
-    
-    QList<DocumentChild*> childDocs() { return m_childdocs; }
-    void addChild( DocumentChild *child );
-    
-    /// Re-implemented to control docToOpen
-    void showStartUpWidget( KoMainWindow* parent, bool alwaysShow );
-    
+    /// Add @p child document to work package @p wp
+//    void addChild( WorkPackage *wp, DocumentChild *child );
+
+    /// Number of workpackages
+    int workPackageCount() const { return m_packageMap.count(); }
+    /// Work package at index
+    WorkPackage *workPackage( int index ) const { return m_packageMap.values().value( index ); }
+    /// Work package containing node
+    WorkPackage *workPackage( Node *node ) const { 
+        return m_packageMap.value( node->projectNode()->id() + node->id() );
+    }
+    int indexOf( WorkPackage *package ) const { return m_packageMap.values().indexOf( package ); }
+
+    /// Find the work package that handles document @p doc
+    WorkPackage *findWorkPackage( const Document *doc ) const;
+    /// Find the work package that handles document child @p child
+    WorkPackage *findWorkPackage( const DocumentChild *child ) const;
+    /// Find the work package that handles @p node
+    WorkPackage *findWorkPackage( const Node *node ) const;
+
+    /// Save all work packages
+    bool saveWorkPackages( bool silent );
+
     Node *node() const;
     
+    bool queryClose();
+
+    bool openFile();
+    bool saveFile();
+
+    QUndoStack *undoStack() const { return m_undostack; }
+
 public slots:
     /**
      * Called by the undo stack when the document is saved or all changes has been undone
@@ -193,30 +209,38 @@ public slots:
      */
     virtual void setDocumentClean(bool clean);
 
+    virtual void setModified( bool mod );
+
+    void addCommand( QUndoCommand *cmd );
+
+    void viewWorkpackageDocument( Document *doc );
+
 signals:
     void changed();
+    void workPackageAdded( WorkPackage *package, int index );
+    void captionChanged( const QString&, bool );
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
     bool completeLoading( KoStore *store );
+
+    bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
+    bool loadNativeFormatFromStore(const QString& file);
+    bool loadNativeFormatFromStoreInternal(KoStore * store);
     
-    
-protected slots:
-    void slotViewDestroyed();
-    
-    void saveToProjects();
-    void slotChildModified( bool );
-    
+    bool viewDocument( const KUrl &filename );
+
 private:
-    Project *m_project;
     XMLLoaderObject m_xmlLoader;
     //Config m_config;
-    QList<DocumentChild*> m_childdocs;
     
-    QString oldFileName() const { return m_oldFile.isEmpty() ? localFilePath() : m_oldFile; }
-    QString m_oldFile;
+    QMap<QString, WorkPackage*> m_packageMap;
+    WorkPackage *m_currentWorkPackage;
 
     bool m_modified;
+    bool m_loadingFromProjectStore;
+
+    QUndoStack *m_undostack;
+
 };
 
 

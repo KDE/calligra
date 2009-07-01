@@ -220,8 +220,9 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( widget.treeWidgetTaskResult );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void PertResult::slotUpdate(){
@@ -414,8 +415,9 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( widget.cpmTable );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
+    dlg->exec();
+    delete dlg;
 }
 
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )

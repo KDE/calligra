@@ -57,9 +57,9 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
-      m_currentListDepth( -1 ), m_currentListID( 0 ), m_currentStyle( 0L ),/* m_index( 0 ),*/
-      m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false),
+      //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),/* m_index( 0 ),*/
+      m_currentListDepth( -1 ), m_currentListID( 0 ), m_numOpenParagraphs( 0 ), m_paragraph( 0L ), 
+      m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false), m_insideFootnote( false ),
       m_insideField(false), m_fieldAfterSeparator(false), m_fieldType(0), m_maxColumns(0)
 {
 #ifdef IMAGE_IMPORT
@@ -181,28 +181,47 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
 {
     kDebug(30513) ;
 
-    m_bodyWriter->startElement("text:note");
+    m_insideFootnote = true;
+
+    //create temp writer for footnote contentthat we'll add to m_paragraph
+    m_footnoteBuffer = new QBuffer();
+    m_footnoteBuffer->open(QIODevice::WriteOnly);
+    m_footnoteWriter = new KoXmlWriter( m_footnoteBuffer );
+
+    m_footnoteWriter->startElement("text:note");
     //set footnote or endnote
-    m_bodyWriter->addAttribute("text:note-class", type==wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
+    m_footnoteWriter->addAttribute("text:note-class", type==wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
-    m_bodyWriter->startElement("text:note-citation");
+    m_footnoteWriter->startElement("text:note-citation");
     if(character.unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
 	//TODO convert m_endNoteNumber to roman numeral, b/c that's the default in MS Word
-	m_bodyWriter->addTextNode(QString::number(type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber));
+	m_footnoteWriter->addTextNode(QString::number(type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber));
     }
     else {
-	m_bodyWriter->addTextNode(QString(QChar(character.unicode())));
+	m_footnoteWriter->addTextNode(QString(QChar(character.unicode())));
     }
-    m_bodyWriter->endElement();//text:note-citation
+    m_footnoteWriter->endElement();//text:note-citation
     //start the body of the footnote
-    m_bodyWriter->startElement("text:note-body");
+    m_footnoteWriter->startElement("text:note-body");
 
     //signal Document to parse the footnote
     emit footnoteFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
 
     //end the elements
-    m_bodyWriter->endElement();//text:note-body
-    m_bodyWriter->endElement();//text:note
+    m_footnoteWriter->endElement();//text:note-body
+    m_footnoteWriter->endElement();//text:note
+
+    m_insideFootnote = false;
+
+    QString contents = QString::fromUtf8(m_footnoteBuffer->buffer(), m_footnoteBuffer->buffer().size());
+    kDebug(30513) << "add footnote to Paragraph: " << contents;
+    m_paragraph->addRunOfText( contents, 0, QString("") );
+
+    //cleanup
+    delete m_footnoteWriter;
+    m_footnoteWriter = 0;
+    delete m_footnoteBuffer;
+    m_footnoteBuffer = 0;
 
     //bool autoNumbered = (character.unicode() == 2);
     //QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
@@ -270,6 +289,14 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
     kDebug(30513);
+
+    //ignore picture if we're in the first part of a field
+    if ( m_insideField && !m_fieldAfterSeparator )
+    {
+        kDebug(30513) << "ignoring, because it's in first part of a field";
+        return;
+    }
+
     static unsigned int s_pictureNumber = 0;
     QString pictureName = "pictures/picture";
     pictureName += QString::number( s_pictureNumber ); // filenames start at 0
@@ -289,7 +316,26 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
             break;
     }
 
-    emit pictureFound( frameName, pictureName, new wvWare::PictureFunctor( pictureFunctor ) );
+    if ( m_numOpenParagraphs > 0 )
+    {
+        kDebug(30513) << "picture inside paragraph";
+        //create temporary writer for the picture tags
+        QBuffer buf;
+        buf.open(QIODevice::WriteOnly);
+        KoXmlWriter writer(&buf);
+        //signal that we have a picture, with a writer pointer that will be used GraphicsHandler
+        emit pictureFound( frameName, pictureName, &writer, new wvWare::PictureFunctor( pictureFunctor ) );
+        //now add content to our current paragraph
+        QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+        m_paragraph->addRunOfText( contents, 0, QString("") );
+
+    }
+    else
+    {
+        //signal picture without a writer, because it can just write to the default (bodyWriter)
+        emit pictureFound( frameName, pictureName, 0, new wvWare::PictureFunctor( pictureFunctor ) );
+    }
+
 }
 #endif // IMAGE_IMPORT
 
@@ -315,7 +361,6 @@ QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
     return QDomElement();
 }
 
-//sets m_paragraphProperties to the passed-in paragraphProperties
 //sets m_currentStyle with PAP->istd (index to STSH structure)
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
@@ -330,57 +375,178 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         emit tableFound(table);
 	m_maxColumns = 0;
     }
+    //set correct writer and style location
+    KoXmlWriter* writer;
+    bool inStylesDotXml = false;
+    if ( m_insideFootnote )
+    {
+        writer = m_footnoteWriter;
+    }
+    else if ( m_writingHeader )
+    {
+        writer = m_headerWriter;
+        inStylesDotXml = true;
+    }
+    else
+    {
+        writer = m_bodyWriter;
+    }
+    //check list information, because that's bigger than a paragraph, and we'll track that
+    //  here in the TextHandler
+    //And heading information is here too, so track that for opening the Paragraph
+    bool isHeading = false;
+    int outlineLevel = 0;
+    //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
+    if ( paragraphProperties != 0 && paragraphProperties->pap().ilfo > 0 )
+    {
+	//we're in a list in the word document
+	kDebug(30513) << "we're in a list or heading";
+        //listInfo is our list properties object
+	const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
+        //error (or currently unknown case)
+	if ( !listInfo )
+	{
+	    kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
+            //try to make it a heading for now
+            isHeading = true;
+            outlineLevel = paragraphProperties->pap().ilvl + 1;
+	}
+        //looks like a heading, so that'll be processed in Paragraph
+	else if(listInfo->lsid() == 1 && listInfo->numberFormat() == 255)
+        {
+	    kDebug(30513) << "found heading, pap().ilvl=" << paragraphProperties->pap().ilvl;
+            isHeading = true;
+            outlineLevel = paragraphProperties->pap().ilvl + 1;
+	}
+        //list processing
+	else 
+        {
+            kDebug(30513) << "processing list";
+	    writeListInfo(writer, paragraphProperties->pap(), listInfo);
+	}
+    } //end pap.ilfo > 0 (ie. we're in a list or heading)
+    else 
+    {
+	//not in a list at all in the word document, so check if we need to close one in the odt
+        //kDebug(30513) << "Not in a list, so we may need to close a list.";
+	if ( m_currentListID != 0 )
+	{
+	    kDebug(30513) << "closing list " << m_currentListID;
+	    //if pap.ilfo is 0, we should be done with the list, so close <text:list> & <text:list-style>
+	    //TODO should probably test this more, to make sure it does work this way
+	    //for level 0, we need to close the last item and the list
+	    //for level 1, we need to close the last item and the list, and the last item and the list
+	    //for level 2, we need to close the last item and the list, and the last item adn the list, and again
+	    for (int i = 0; i <= m_currentListDepth; i++)
+	    {
+                writer->endElement(); //close the last text:list-item
+                writer->endElement(); //text:list
+	    }
+	    m_currentListID = 0;
+	    m_currentListDepth = -1;
+	    m_listStyleName = "";
+	    kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
+	    emit updateListDepth( m_currentListDepth );
+	}
+    }
+
+    //we need to keep track of how many paragraphs are open
+    kDebug(30513) << "track number of open paragraphs";
+    m_numOpenParagraphs++;
+
+    //if we're in nested paragraphs, open a new paragraph inside existing one
+    if ( m_numOpenParagraphs > 1 )
+    {
+        kDebug(30513) << "open an inner paragraph";
+        m_paragraph->openInnerParagraph();
+    }
+    else
+    {
+        kDebug(30513) << "create new Paragraph";
+        m_paragraph = new Paragraph( m_mainStyles, inStylesDotXml, isHeading, outlineLevel );
+    }
+
     //if ( m_bInParagraph )
     //    paragraphEnd();
     //m_bInParagraph = true;
     //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
-    //m_formats = mainDocument().createElement( "FORMATS" );
-    m_paragraphProperties = paragraphProperties;
+    kDebug(30513) << "set paragraph properties";
+    m_paragraph->setParagraphProperties( paragraphProperties );
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
-    m_currentStyle = 0;
+    //m_currentStyle = 0;
     //check for a named style for this paragraph
     if ( paragraphProperties ) // Always set when called by wv2. But not set when called by tableStart.
     {
-        m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
-        Q_ASSERT( m_currentStyle );
-	//TODO is there anything I need to actually do with styleName?
-	QString namedStyleName = Conversion::string( m_currentStyle->name() );
-	//need to replace all non-alphanumeric characters with hex representation
-	for(int i = 0; i < namedStyleName.size(); i++) {
-	    if(!namedStyleName[i].isLetterOrNumber()) {
-		namedStyleName.remove(i, 1);
-		i--;
-	    }
-	}
-	kDebug(30513) << "styleName = " << namedStyleName;
+        kDebug(30513) << "set parent style";
+        const wvWare::Style* parentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
+        Q_ASSERT( parentStyle );
+        QString parentStyleName = Conversion::string( parentStyle->name() );
+        //need to replace all non-alphanumeric characters with hex representation
+        for(int i = 0; i < parentStyleName.size(); i++) 
+        {
+            if(!parentStyleName[i].isLetterOrNumber()) 
+            {
+                parentStyleName.remove(i, 1);
+	        i--;
+            }
+        }
+        //set current named style in m_paragraph
+        m_paragraph->setParentStyle( parentStyle, parentStyleName );
+
         //write the paragraph formatting
-	KoGenStyle paragraphStyle(KoGenStyle::StyleAuto, "paragraph");
-	writeLayout(*paragraphProperties, &paragraphStyle, m_currentStyle, true, QString("P"), namedStyleName);
+	//KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+	//writeLayout(*paragraphProperties, paragraphStyle, m_currentStyle, true, namedStyleName);
     }
     else
+    {
         kWarning() << "paragraphProperties was NOT set";
-}
+    }
+
+    //check to see if we need a master page name attribute
+    if(m_writeMasterStyleName && !m_writingHeader)
+    {
+	m_paragraph->getParagraphStyle()->addAttribute("style:master-page-name", m_masterStyleName);
+	m_writeMasterStyleName = false;
+    }
+} //end paragraphStart()
 
 void KWordTextHandler::paragraphEnd()
 {
-    kDebug(30513) ;
-    //Q_ASSERT( m_bInParagraph );
-/*    if ( m_currentTable )
-    {
-        emit tableFound( m_currentTable );
-        delete m_currentTable;
-        m_currentTable = 0L;
-    }*/
-    //close the <text:p> tag we opened in writeLayout()
-    //Note: problem if writeLayout wasn't called & text:p/h wasn't opened!
-    if ( !m_writingHeader)
-        m_bodyWriter->endElement();
-    else
-        m_headerWriter->endElement();
-    //reset m_paragraphProperties
-    m_paragraphProperties = 0;
+    kDebug(30513);
+
     //clear our paragraph flag
     //m_bInParagraph = false;
+
+    //write paragraph content to content.xml or styles.xml
+    //we could be writing to the body as normal, or
+    //we may need to write this to styles.xml
+    if ( m_insideFootnote )
+    {
+        kDebug(30513) << "writing a footnote";
+        m_paragraph->writeToFile( m_footnoteWriter );
+    }
+    else if ( !m_writingHeader) {
+	kDebug(30513) << "writing to body";
+	m_paragraph->writeToFile( m_bodyWriter );
+    }
+    else {
+	kDebug(30513) << "writing a header";
+	m_paragraph->writeToFile( m_headerWriter );
+    }
+
+    //close paragraph object
+    if ( m_numOpenParagraphs > 1 )
+    {
+        m_paragraph->closeInnerParagraph();
+    }
+    else
+    {
+        delete m_paragraph;
+        m_paragraph = 0;
+    }
+
+    //track how many open paragraphs we have
+    m_numOpenParagraphs--;
 }//end paragraphEnd()
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
@@ -414,26 +580,28 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
     kDebug(30513);
     //process different fields
     //we could be writing to content or styles.xml (in a header)
-    KoXmlWriter* writer;
-    if(m_writingHeader) {
-        writer = m_headerWriter;
-    }
-    else {
-        writer = m_bodyWriter;
-    }
+
+    //create temp writer that we'll add to m_paragraph
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buf);
     switch(m_fieldType) {
         case 26:
-            writer->startElement("text:page-count");
-            writer->endElement();
+            writer.startElement("text:page-count");
+            writer.endElement();
             break;
         case 33:
-            writer->startElement("text:page-number");
-            writer->addAttribute("text:select-page", "current");
-            writer->endElement();
+            writer.startElement("text:page-number");
+            writer.addAttribute("text:select-page", "current");
+            writer.endElement();
             break;
     }
 
-    // reset
+    //add writer content to m_paragraph as a runOfText with no text style
+    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    m_paragraph->addRunOfText( contents, 0, QString("") );
+
+    // reset/cleanup
     m_fieldValue = "";
     m_fieldType = 0;
     m_insideField = false;
@@ -445,6 +613,10 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
 {
     QConstString newText(Conversion::string(text));
     kDebug(30513) << newText.string();
+
+    //we don't want to do anything with an empty string
+    if(newText.isEmpty())
+        return;
 
     // text after fieldStart and before fieldSeparator is useless
     if( m_insideField && !m_fieldAfterSeparator ) {
@@ -460,188 +632,19 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
         return;
     }
 
-    //write the text with its formatting inside a <text:span> tag
-    KoGenStyle textStyle(KoGenStyle::StyleTextAuto, "text");
-    writeFormattedText(&textStyle, chp, m_currentStyle ? &m_currentStyle->chp() : 0, newText.string(), true, QString("T"));
-
-} //end runOfText()
-
-//this function writes the formatting for a runOfText inside <text:span>
-void KWordTextHandler::writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName)
-{
-    //chp is the actual style for this run of text
-    //refChp comes from m_currentStyle (0 if nothing there)
-    //if statement logic: I guess the assumption is that m_currentStyle (refChp) has already
-    // been applied, so only use chp if refChp doesn't exist or it's different
-
-    kDebug(30513) ;
-    //set the writer for the text
-    KoXmlWriter* writer;
-    if ( m_writingHeader) {
-	writer = m_headerWriter;
-	//set style in styles.xml, too
-	textStyle->setAutoStyleInStylesDotXml(true);
-    }
-    else {
-	writer = m_bodyWriter;
-    }
-
-    //ico = color of text
-    if ( !refChp || refChp->ico != chp->ico )
-    {
-        QString color = Conversion::color( chp->ico, -1 );
-	textStyle->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
-    }
-
     // Font name
     // TBD: We only use the Ascii font code. We should work out how/when to use the FE and Other font codes.
     // ftcAscii = (rgftc[0]) font for ASCII text
-    if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
+    QString fontName = getFont( chp->ftcAscii );
+    if ( !fontName.isEmpty() )
     {
-        QString fontName = getFont( chp->ftcAscii );
-
-        if ( !fontName.isEmpty() )
-        {
-	    m_mainStyles->addFontFace( fontName );
-	    textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
-        }
+        m_mainStyles->addFontFace( fontName );
     }
 
-    //hps = font size in half points
-    if ( !refChp || refChp->hps != chp->hps )
-    {
-	textStyle->addPropertyPt(QString("fo:font-size"), (int)(chp->hps/2), KoGenStyle::TextType);
-    }
+    //add text string and formatting style to m_paragraph
+    m_paragraph->addRunOfText( newText, chp, fontName );
 
-    //fBold = bold text if 1
-    if ( !refChp || refChp->fBold != chp->fBold )
-	textStyle->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
-
-    //fItalic = italic text if 1
-    if ( !refChp || refChp->fItalic != chp->fItalic )
-	textStyle->addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
-
-    //kul: underline code
-    if ( !refChp || refChp->kul != chp->kul )
-    {
-        switch ( chp->kul ) {
-	case 0: //none
-	    textStyle->addProperty(QString("style:text-underline-style"), QString("none") , KoGenStyle::TextType);
-	    break;
-        case 1: // single
-	    textStyle->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    break;
-        case 2: // by word
-	    textStyle->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    textStyle->addProperty( "style:text-underline-mode", "skip-white-space" , KoGenStyle::TextType);
-	    break;
-	case 3: // double
-	    textStyle->addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
-	    textStyle->addProperty( "style:text-underline-type", "double", KoGenStyle::TextType );
-            break;
-        case 4: // dotted
-	    textStyle->addProperty( "style:text-underline-style", "dotted", KoGenStyle::TextType );
-	    break;
-        case 5: // hidden - This makes no sense as an underline property!
-	    //I guess we could change this to have an underline the same color
-	    //as the background?
-	    textStyle->addProperty( "style:text-underline-type", "none", KoGenStyle::TextType );
-            break;
-        case 6: // thick
-	    textStyle->addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
-	    textStyle->addProperty( "style:text-underline-weight", "thick", KoGenStyle::TextType );
-            break;
-        case 7: //dash
-	    textStyle->addProperty( "style:text-underline-style", "dash", KoGenStyle::TextType );
-            break;
-        case 8: //dot (not used, says the docu)
-            break;
-        case 9: //dot dash
-	    textStyle->addProperty( "style:text-underline-style", "dot-dash", KoGenStyle::TextType );
-            break;
-        case 10: //dot dot dash
-	    textStyle->addProperty( "style:text-underline-style", "dot-dot-dash", KoGenStyle::TextType );
-            break;
-        case 11: //wave
-	    textStyle->addProperty( "style:text-underline-style", "wave", KoGenStyle::TextType );
-            break;
-        default:
-	    textStyle->addProperty( "style:text-underline-style", "none", KoGenStyle::TextType );
-        };
-    }
-    //fstrike = use strikethrough if 1
-    //fDStrike = use double strikethrough if 1
-    if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike )
-    {
-	if ( chp->fStrike )
-	    textStyle->addProperty( "style:text-line-through-type", "single", KoGenStyle::TextType );
-	else if ( chp->fDStrike )
-	    textStyle->addProperty( "style:text-line-through-type", "double", KoGenStyle::TextType );
-	else
-	    textStyle->addProperty( "style:text-line-through-type", "none", KoGenStyle::TextType );
-    }
-
-    //font attribute (uppercase, lowercase (not in MSWord), small caps)
-    //fCaps = displayed with all caps when 1, no caps when 0
-    //fSmallCaps = displayed with small caps when 1, no small caps when 0
-    if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
-    {
-	if ( chp->fCaps )
-	    textStyle->addProperty( "fo:text-transform", "uppercase", KoGenStyle::TextType );
-	if ( chp->fSmallCaps )
-	    textStyle->addProperty( "fo:font-variant", "small-caps", KoGenStyle::TextType );
-    }
-
-    //iss = superscript/subscript indices
-    if ( !refChp || refChp->iss != chp->iss )
-    { 
-	if ( chp->iss == 1 ) //superscript
-	    textStyle->addProperty( "style:text-position", "super", KoGenStyle::TextType );
-	else if ( chp->iss == 2 ) //subscript
-	    textStyle->addProperty( "style:text-position", "sub", KoGenStyle::TextType );
-    }
-
-    //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
-    //icoHighlight = highlight color (see chp.ico)
-    if ( !refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight ) {
-        if ( chp->fHighlight )
-        {
-	    QString color = Conversion::color( chp->icoHighlight, -1 );
-	    textStyle->addProperty( "fo:background-color", color, KoGenStyle::TextType );
-        } else {
-	    //TODO this should really be the surrounding background color
-	    textStyle->addProperty( "fo:background-color", QString("#FFFFFF"), KoGenStyle::TextType);
-        }
-    }
-
-    //fShadow = text has shadow if 1
-    //fImprint = text engraved if 1
-    if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint )
-    {
-        if ( chp->fShadow )
-	    textStyle->addProperty( "style:text-shadow", "1pt", KoGenStyle::TextType );
-	if ( chp->fImprint )
-	    textStyle->addProperty( "style:font-relief", "engraved", KoGenStyle::TextType );
-    }
-
-    if(writeText) {
-	//put style into m_mainStyles & get its name
-	styleName = m_mainStyles->lookup(*textStyle, styleName);
-	//now I just need to write the text:span to the header tag
-	writer->startElement( "text:span" );
-	writer->addAttribute( "text:style-name", styleName.toUtf8() );
-	//TODO fix this to actually insert a column break
-	//remove character I can't handle
-	text.remove(QChar(0xE));
-	writer->addTextSpan(text);
-	writer->endElement(); //text:span
-    }
-    else
-    {
-	//if we're not writing the text, we don't need to get the final
-	//stylename, and we don't even add it to m_mainStyles yet
-    }
-} //end writeFormattedText()
+} //end runOfText()
 
 //#define FONT_DEBUG
 
@@ -885,7 +888,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 	    //counterElement.setAttribute( "display-levels", displayLevels );
 	    kDebug(30513) <<"storing suffix" << suffix <<" for depth" << depth;
 	    m_listSuffixes[ depth ] = suffix;
-		}
+	}
 	else
 	{
 	    kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text).string();
@@ -925,265 +928,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     //we always want to open this tag
     writer->startElement( "text:list-item" );
 
-    //now open the paragraph tag as well
-    writer->startElement("text:p");
-
     return true;
-}
-
-//this is where we actually write the formatting for the paragraph
-//Style* style is actually m_currentStyle 
-void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString styleName, QString namedStyle)
-{
-    kDebug(30513);
-
-    //we could be writing to the body as normal, or
-    //we may need to write this to styles.xml
-    KoXmlWriter* writer;
-    if ( !m_writingHeader) {
-	kDebug(30513) << "writing to body";
-	writer = m_bodyWriter;
-    }
-    else {
-	kDebug(30513) << "writing a header";
-	writer = m_headerWriter;
-    }
-
-    //pap is our paragraph properties object
-    const wvWare::Word97::PAP& pap = paragraphProperties.pap();
-    
-    //this needs to be before we open text:p, b/c text:list-item surrounds text:p
-    //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
-    if ( pap.ilfo > 0 )
-    {
-	//we're in a list in the word document
-	kDebug(30513) << "we're in a list or heading";
-        //listInfo is our list properties object
-	const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
-	if ( !listInfo )
-	{
-	    kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
-	    kDebug(30513) << "found heading? style->sti() = " << style->sti();
-	    if(writeContentTags) {
-		writer->startElement("text:h"); //this element will be closed in paragraphEnd(), since no <text:p> tag is opened
-		writer->addAttribute("text:outline-level", pap.ilvl + 1);
-	    }
-	}
-	else if(listInfo->lsid() == 1 && listInfo->numberFormat() == 255) { //we found a heading instead of a list
-	    //TODO look at style->sti()
-	    kDebug(30513) << "found heading: style->sti() = " << style->sti();
-	    if(writeContentTags) {
-		writer->startElement("text:h", false); //this element will be closed in paragraphEnd(), since no <text:p> tag is opened
-		writer->addAttribute("text:outline-level", pap.ilvl + 1);
-	    }
-	}
-	else {
-	    writeListInfo(writer, pap, listInfo);
-	}
-    } //end pap.ilfo > 0 (ie. we're in a list or heading)
-    else {
-	//not in a list at all in the word document, so check if we need to close one in the odt
-	if ( m_currentListID != 0 )
-	{
-	    kDebug(30513) << "closing list " << m_currentListID;
-	    //if pap.ilfo is 0, we should be done with the list, so close <text:list> & <text:list-style>
-	    //TODO should probably test this more, to make sure it does work this way
-	    //for level 0, we need to close the last item and the list
-	    //for level 1, we need to close the last item and the list, and the last item and the list
-	    //for level 2, we need to close the last item and the list, and the last item adn the list, and again
-	    for (int i = 0; i <= m_currentListDepth; i++)
-	    {
-		if(writeContentTags) {
-		    writer->endElement(); //close the last text:list-item
-		    writer->endElement(); //text:list
-		}
-	    }
-	    m_currentListID = 0;
-	    m_currentListDepth = -1;
-	    m_listStyleName = "";
-	    kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
-	    emit updateListDepth( m_currentListDepth );
-	}
-	//we haven't opened the tag anywhere else, so we need to do it here
-	if(writeContentTags) {
-	    writer->startElement("text:p", false);
-	}
-    }
-
-    //write the parent style name if we have it
-    if (!namedStyle.isEmpty()) {
-	paragraphStyle->addAttribute("style:parent-style-name", namedStyle);
-    }
-    //if we're writing to styles.xml, the style should go there, too
-    if(m_writingHeader) { 
-	paragraphStyle->setAutoStyleInStylesDotXml(true);
-    }
-    //check to see if we need a master page name attribute
-    //-not if we're processing a style with no text content, or if we're just
-    //writing a header
-    if(m_writeMasterStyleName && writeContentTags && !m_writingHeader) {
-	paragraphStyle->addAttribute("style:master-page-name", m_masterStyleName);
-	m_writeMasterStyleName = false;
-    }
-
-    //paragraph alignment
-    //jc = justification code
-    if ( pap.jc == 1 ) //1 = center justify
-	paragraphStyle->addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType );
-    else if (pap.jc == 2 ) //2 = right justify
-	paragraphStyle->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
-    else if (pap.jc == 3 ) //3 = left & right justify
-	paragraphStyle->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
-    else //0 = left justify
-	paragraphStyle->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
-
-    //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
-
-    //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
-    //dxaLeft = indent from left margin (signed)
-    //dxaRight = indent from right margin (signed)
-    if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
-    {
-	paragraphStyle->addProperty( "fo:margin-left", (int)pap.dxaLeft, KoGenStyle::ParagraphType );
-	paragraphStyle->addProperty( "fo:margin-right", (int)pap.dxaRight, KoGenStyle::ParagraphType );
-	paragraphStyle->addProperty( "fo:text-indent", (int)pap.dxaLeft1, KoGenStyle::ParagraphType );
-    }
-
-    //dyaBefore = vertical spacing before paragraph (unsigned)
-    //dyaAfter = vertical spacing after paragraph (unsigned)
-    if ( pap.dyaBefore || pap.dyaAfter )
-    {
-	paragraphStyle->addProperty( "fo:margin-top", (int)pap.dyaBefore, KoGenStyle::ParagraphType );
-	paragraphStyle->addProperty( "fo:margin-bottom", (int)pap.dyaAfter, KoGenStyle::ParagraphType );
-    }
-
-    // Linespacing
-    //lspd = line spacing descriptor
-    //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double" 
-    //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
-    if ( pap.lspd.fMultLinespace == 1 ) //Word will reserve for each line the 
-				    //(maximal height of the line*lspd.dyaLine)/240
-    {
-	//get the proportion & turn it into a percentage for the attribute
-	QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
-	paragraphStyle->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
-    }
-    else if ( pap.lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space 
-				    //that will be provided for lines in the paragraph in twips
-    {
-	// see sprmPDyaLine in generator_wword8.htm
-	double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
-	// lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-	if ( pap.lspd.dyaLine > 0 )
-	    paragraphStyle->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
-	else if (pap.lspd.dyaLine < 0 )
-	    paragraphStyle->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
-    }
-    else
-	    kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
-    //end linespacing
-
-    //fKeep = keep entire paragraph on one page if possible
-    //fKeepFollow = keep paragraph on same page with next paragraph if possible
-    //fPageBreakBefore = start this paragraph on new page
-    if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
-    {
-	if ( pap.fKeep )
-	    paragraphStyle->addProperty( "fo:keep-together", "always", KoGenStyle::ParagraphType );
-	if ( pap.fKeepFollow )
-	    paragraphStyle->addProperty( "fo:keep-with-next", "always", KoGenStyle::ParagraphType );
-	if ( pap.fPageBreakBefore )
-	    paragraphStyle->addProperty( "fo:break-before", "page", KoGenStyle::ParagraphType );
-    }
-
-    // Borders
-    //brcTop = specification for border above paragraph
-    //brcBottom = specification for border below paragraph
-    //brcLeft = specification for border to the left of paragraph
-    //brcRight = specification for border to the right of paragraph
-    //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot, 7=dash large gap,
-    //	8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
-    if ( pap.brcTop.brcType )
-    {
-	paragraphStyle->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
-    }
-    if ( pap.brcBottom.brcType )
-    {
-	paragraphStyle->addProperty( "fo:border-bottom", Conversion::setBorderAttributes( pap.brcBottom ), KoGenStyle::ParagraphType );
-    }
-    if ( pap.brcLeft.brcType )
-    {
-	paragraphStyle->addProperty( "fo:border-left", Conversion::setBorderAttributes( pap.brcLeft ), KoGenStyle::ParagraphType );
-    }
-    if ( pap.brcRight.brcType )
-    {
-	paragraphStyle->addProperty( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ), KoGenStyle::ParagraphType );
-    }
-
-    // Tabulators
-    //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
-    if ( pap.itbdMac )
-    {
-	kDebug(30513) << "processing tab stops";
-	//looks like we need to write these out with an xmlwriter
-	QBuffer buf;
-	buf.open(QIODevice::WriteOnly);
-	KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
-	tmpWriter.startElement("style:tab-stops");
-        for ( int i = 0 ; i < pap.itbdMac ; ++i )
-        {
-	    tmpWriter.startElement("style:tab-stop");
-
-	    //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
-            const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
-	    //td.dxaTab = position in twips
-	    //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
-	    tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
-
-	    //td.tbd.jc = justification code
-	    if ( td.tbd.jc ) //0 = left-aligned = default, so that can just be ignored
-	    {
-		if ( td.tbd.jc == 1 ) { //centered
-		    tmpWriter.addAttribute("style:type", "center");
-		}
-		else if ( td.tbd.jc == 2 ) { //right-aligned
-		    tmpWriter.addAttribute("style:type", "right");
-		}
-		else { //3 = decimal tab -> align on decimal point
-		    //4 = bar -> just creates a vertical bar at that point that's always visible
-		    kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
-		}
-	    }
-	    //td.tbd.tlc = tab leader code
-	    if ( td.tbd.tlc )//0 = no leader, which is default & can just be ignored
-	    {
-		if ( td.tbd.tlc == 1 ) { //1 dotted leader 
-		    tmpWriter.addAttribute("style:leader-text", ".");
-		}
-		else if (td.tbd.tlc == 2 ) { //2 hyphenated leader 
-		    tmpWriter.addAttribute("style:leader-text", "-");
-		}
-		//TODO 3 single line leader 
-		//TODO 4 heavy line leader
-	    }
-	    tmpWriter.endElement();//style:tab-stop
-        }
-	tmpWriter.endElement();//style:tab-stops
-	buf.close();
-	QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-	//now write the tab info to the paragraph properties
-	paragraphStyle->addChildElement("style:tab-stops", contents);
-    }
-    
-    //add the attribute for our style in <text:p>
-    if(writeContentTags) {
-	styleName = m_mainStyles->lookup(*paragraphStyle, styleName);
-	writer->addAttribute( "text:style-name", styleName.toUtf8() );
-    }
-    else {
-	//if we're not writing the content tags, we don't even need
-	//to add the style to m_mainStyles yet
-    }
-}
+} //writeListInfo()
 
 #include "texthandler.moc"

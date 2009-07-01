@@ -40,7 +40,7 @@ KoFilter::ConversionStatus Kpr2Odp::convert( const QByteArray& from, const QByte
     KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
     if ( !inpdev )
     {
-        kError(30502) << "Unable to open input stream" << endl;
+        kError(30502) << "Unable to open input stream";
         return KoFilter::StorageCreationError;
     }
 

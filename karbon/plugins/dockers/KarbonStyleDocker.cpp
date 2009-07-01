@@ -67,23 +67,23 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     setWindowTitle( i18n( "Styles" ) );
 
     QWidget *mainWidget = new QWidget( this );
-    QGridLayout * layout = new QGridLayout( mainWidget );
+    m_layout = new QGridLayout( mainWidget );
     
     m_preview = new KarbonStylePreview( mainWidget );
-    layout->addWidget( m_preview, 0, 0, 2, 1 );
+    m_layout->addWidget( m_preview, 0, 0, 2, 1 );
 
     m_buttons = new KarbonStyleButtonBox( mainWidget );
-    layout->addWidget( m_buttons, 0, 1 );
+    m_layout->addWidget( m_buttons, 0, 1);
 
     m_stack = new QStackedWidget( mainWidget );
-    layout->addWidget( m_stack, 1, 1 );
+    m_layout->addWidget( m_stack, 1, 1 );
 
-    layout->setColumnStretch( 0, 1 );
-    layout->setColumnStretch( 1, 3 );
-    layout->setRowStretch( 0, 0 );
-    layout->setRowStretch( 1, 0 );
-    layout->setRowStretch( 2, 1 );
-    layout->setContentsMargins( 0, 0, 0, 0 );
+    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_layout->addItem(m_spacer, 2, 2);
+    
+    m_layout->setMargin(0);
+    m_layout->setVerticalSpacing(0);
+    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     
     m_colorSelector = new QToolButton( m_stack );
     m_actionColor = new KoColorPopupAction(m_stack);
@@ -117,7 +117,9 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
              this, SLOT( updatePattern( KoResource*) ) );
     connect( patternSelector, SIGNAL( resourceApplied( KoResource* ) ), 
              this, SLOT( updatePattern( KoResource*) ) );
-                      
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
+             this, SLOT(locationChanged(Qt::DockWidgetArea)));
+             
     setWidget( mainWidget );
 }
 
@@ -192,6 +194,9 @@ void KarbonStyleDocker::updateStyle()
 
 void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill )
 {
+    if( ! m_canvas )
+        return;
+    
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
@@ -249,6 +254,9 @@ void KarbonStyleDocker::resourceChanged( int key, const QVariant& )
 
 void KarbonStyleDocker::styleButtonPressed( int buttonId )
 {
+    if( ! m_canvas )
+        return;
+    
     switch( buttonId )
     {
         case KarbonStyleButtonBox::None:
@@ -321,6 +329,9 @@ void KarbonStyleDocker::updateColor( const KoColor &c )
 
 void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & selectedShapes )
 {
+    if( ! m_canvas )
+        return;
+    
     Q_ASSERT( ! selectedShapes.isEmpty()  );
 
     KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
@@ -390,6 +401,9 @@ void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & se
 
 void KarbonStyleDocker::updateGradient( KoResource * item )
 {
+    if( ! m_canvas )
+        return;
+    
     resetColorCommands();
     
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( item );
@@ -458,6 +472,9 @@ void KarbonStyleDocker::updateGradient( KoResource * item )
 
 void KarbonStyleDocker::updatePattern( KoResource * item )
 {
+    if( ! m_canvas )
+        return;
+    
     resetColorCommands();
     
     KoPattern * pattern = dynamic_cast<KoPattern*>( item );
@@ -540,6 +557,24 @@ void KarbonStyleDocker::updateStyleButtons( int activeStyle )
         if( m_stack->currentIndex() == 2 )
             m_stack->setCurrentIndex( 0 );
     }
+}
+
+void KarbonStyleDocker::locationChanged(Qt::DockWidgetArea area)
+{
+    switch(area) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            m_spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+            break;
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea:
+            m_spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            break;
+        default:
+            break;
+    }
+    m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    m_layout->invalidate();
 }
 
 #include "KarbonStyleDocker.moc"

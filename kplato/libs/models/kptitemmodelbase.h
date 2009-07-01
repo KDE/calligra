@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2006 - 2009 Dag Andersen <koffice-devel@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 #include "kptglobal.h"
 
 #include <QAbstractItemModel>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QMetaEnum>
 
 #include <KoXmlReaderForward.h>
@@ -62,26 +62,58 @@ namespace Delegate
 }
 
 /// ItemDelegate implements improved control over closeEditor
-class KPLATOMODELS_EXPORT ItemDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT ItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
     /// Constructor
     explicit ItemDelegate(QObject *parent = 0)
-    : QItemDelegate( parent ),
+    : QStyledItemDelegate( parent ),
     m_lastHint( Delegate::NoHint )
     {}
     
+    /// Extend EndEditHint for movement from edited item to next item to edit
     Delegate::EndEditHint endEditHint() const { return m_lastHint; }
+    /// Increase the sizehint height a little to give room for editors
+    QSize sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
 protected:
     /// Implements arrow key navigation
     bool eventFilter(QObject *object, QEvent *event);
     /// Draw custom focus
-    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const;
+//    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const;
     
 private:
     Delegate::EndEditHint m_lastHint;
+};
+
+class KPLATOMODELS_EXPORT ProgressBarDelegate : public ItemDelegate
+{
+  Q_OBJECT
+public:
+    ProgressBarDelegate( QObject *parent = 0 );
+
+    ~ProgressBarDelegate();
+
+    void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+
+    QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+    void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+    void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+
+protected:
+    void initStyleOptionProgressBar( QStyleOptionProgressBar *option, const QModelIndex &index ) const;
+
+};
+
+class Slider : public QSlider {
+    Q_OBJECT
+public:
+    explicit Slider( QWidget *parent );
+private slots:
+    void updateTip( int value );
 };
 
 class KPLATOMODELS_EXPORT SelectorDelegate : public ItemDelegate
@@ -216,7 +248,7 @@ public:
     
     /// Create the correct delegate for @p column. @p parent is the delegates parent widget.
     /// If default should be used, return 0.
-    virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
+    virtual QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
 
     bool setData( const QModelIndex &index, const QVariant &value, int role );
 

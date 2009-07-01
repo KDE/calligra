@@ -18,8 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #ifndef KCHART_THREEDTRANSFORMATION_H
 #define KCHART_THREEDTRANSFORMATION_H
+
 
 namespace KChart {
 

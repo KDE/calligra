@@ -429,14 +429,14 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
-bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context )
+bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
+                        KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
     styleStack.clear();
-    if( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-    {
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
@@ -483,8 +483,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
 
     // Remove all axes before loading new ones
     KoXmlElement e;
-    while( !d->axes.isEmpty() )
-    {
+    while( !d->axes.isEmpty() ) {
         Axis *axis = d->axes.takeLast();
         Q_ASSERT( axis );
         delete axis;
@@ -492,10 +491,10 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
     
     // A data set is always attached to an axis, so load them first
     KoXmlElement n;
-    forEachElement ( n, plotAreaElement )
-    {
+    forEachElement ( n, plotAreaElement ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
+
         if ( n.localName() == "axis" ) {
             Axis *axis = new Axis( this );
             axis->loadOdf( n, context );
@@ -505,18 +504,17 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
     // Load data sets
     d->shape->proxyModel()->loadOdf( plotAreaElement, context );
 
-    forEachElement ( n, plotAreaElement )
-    {
+    forEachElement ( n, plotAreaElement ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
-        if ( n.localName() == "wall" )
-        {
+
+        if ( n.localName() == "wall" ) {
             d->wall->loadOdf( n, context );
         }
-        //else if ( n.localName() == "floor" )
-        //    d->floor->loadOdf( n, context );
-        else if ( n.localName() != "axis" && n.localName() != "series" )
-        {
+        else if ( n.localName() == "floor" ) {
+            d->floor->loadOdf( n, context );
+        }
+        else if ( n.localName() != "axis" && n.localName() != "series" ) {
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
@@ -581,11 +579,11 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     // Save data series
     d->shape->proxyModel()->saveOdf( context );
 
-    d->wall->saveOdf( context );
+    d->floor->saveOdf( context, "chart:floor" );
+    d->wall->saveOdf( context, "chart:wall" );
 
     // TODO chart:series
     // TODO chart:grid
-    // TODO chart:floor
     
     bodyWriter.endElement(); // chart:plot-area
 }

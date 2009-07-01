@@ -505,7 +505,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 
     //dramatic speedup: temporary hide the window and propeditor
     QWidget * propeditor
-    = KexiUtils::findFirstChild<QWidget>(qApp->mainWidget(), "KexiPropertyEditorView");
+        = KexiUtils::findFirstChild<QWidget>(qApp->mainWidget(), "KexiPropertyEditorView");
     if (propeditor)
         propeditor->hide();
     window->hide();

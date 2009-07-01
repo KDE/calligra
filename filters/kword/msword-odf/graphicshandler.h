@@ -61,6 +61,10 @@ public:
     virtual void externalImage( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 #endif // IMAGE_IMPORT
 
+    //lets us write to another writer instead of directly to the main body writer
+    // (as in the case of a picture inside a Paragraph)
+    void setBodyWriter( KoXmlWriter* writer );
+
 private:
     Document* m_doc;
     KoXmlWriter* m_bodyWriter;

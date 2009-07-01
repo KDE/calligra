@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <!-- kcfgfile name="kplatorc"/> Don't, Factory::componentData().config() is used -->
+  <group name="Task defaults">
+    <entry name="Leader" type="String">
+      <label>Name of task responsible</label>
+    </entry>
+    <entry name="ConstraintType" type="Enum">
+      <label>Scheduling constraint type</label>
+      <choice>
+        <choice name="AsSoonAsPossible"/>
+        <choice name="AsLateAsPossible"/>
+        <choice name="MustStartOn"/>
+        <choice name="MustFinishOn"/>
+        <choice name="StartNotEarlierThan"/>
+        <choice name="FinishNotLaterThan"/>
+        <choice name="FixedInterval"/>
+      </choice>
+    </entry>
+    <entry name="StartTimeUsage" type="Enum">
+      <label>Defines how start constraint time is used</label>
+      <choice>
+        <choice name="CurrentdateTime"/>
+        <choice name="CurrentDate"/>
+        <choice name="SpecifiedDateTime"/>
+      </choice>
+    </entry>
+    <entry name="ConstraintStartTime" type="DateTime">
+      <label>Constraint start datetime</label>
+    </entry>
+    <entry name="EndTimeUsage" type="Enum">
+      <label>Defines how end constraint time is used</label>
+      <choice>
+        <choice name="CurrentdateTime"/>
+        <choice name="CurrentDate"/>
+        <choice name="SpecifiedDateTime"/>
+      </choice>
+    </entry>
+    <entry name="ConstraintEndTime" type="DateTime">
+      <label>Constraint end datetime</label>
+    </entry>
+
+    <entry name="EstimateType" type="Int">
+      <label>Type of estimate</label>
+      <choice>
+        <choice name="Effort"/>
+        <choice name="Duration"/>
+        <choice name="Length"/>
+      </choice>
+    </entry>
+    <entry name="Unit" type="Enum">
+      <label>Estimate time unit</label>
+      <choice>
+        <choice name="year"/>
+        <choice name="month"/>
+        <choice name="week"/>
+        <choice name="day"/>
+        <choice name="hour"/>
+        <choice name="min"/>
+        <choice name="sec"/>
+        <choice name="ms"/>
+      </choice>
+    </entry>
+    <entry name="ExpectedEstimate" type="Double">
+      <label>Expected estimate</label>
+    </entry>
+    <entry name="OptimisticRatio" type="Int">
+      <label>Optimistic estimate</label>
+    </entry>
+    <entry name="PessimisticRatio" type="Int">
+      <label>Pessimistic estimate</label>
+    </entry>
+
+    <entry name="Description" type="String">
+      <label>Task description</label>
+    </entry>
+  </group>
+
+  <group name="Miscellaneous">
+    <entry name="MinimumDurationUnit" type="Int">
+      <label>The smallest duration unit allowed</label>
+      <default>4</default>
+    </entry>
+    <entry name="MaximumDurationUnit" type="Int">
+      <label>The largest duration unit allowed</label>
+      <default>1</default>
+    </entry>
+  </group>
+</kcfg>

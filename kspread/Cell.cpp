@@ -1351,10 +1351,10 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString() ) );
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
-        static const char* const prefixes[] = {"oooc:", "kspr:", "of:", "msoxl:", 0};
-        for (const char* const* prefix = prefixes; *prefix; ++prefix) {
-            if (oasisFormula.startsWith( *prefix )) {
-                oasisFormula = oasisFormula.mid( strlen(*prefix) );
+        QStringList prefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
+        foreach (QString prefix, prefixes) {
+            if (oasisFormula.startsWith( prefix )) {
+                oasisFormula = oasisFormula.mid( prefix.length() );
                 break;
             }
         }

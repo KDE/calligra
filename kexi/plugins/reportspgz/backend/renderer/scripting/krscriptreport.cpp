@@ -73,7 +73,7 @@ QObject* Report::objectByName(const QString &n)
                 return new Scripting::Field(o->toField());
                 break;
             case KRObjectData::EntityText:
-                return new Scripting::Field(o->toField());
+                return new Scripting::Text(o->toText());
                 break;
             case KRObjectData::EntityBarcode:
                 return new Scripting::Barcode(o->toBarcode());

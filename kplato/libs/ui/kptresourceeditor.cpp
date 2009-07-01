@@ -292,8 +292,9 @@ void ResourceEditor::slotSplitView()
 void ResourceEditor::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
-    dlg.exec();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
 }
 
 

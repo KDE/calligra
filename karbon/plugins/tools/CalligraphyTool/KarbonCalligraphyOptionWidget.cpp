@@ -55,98 +55,98 @@ TODO: add a reset defaults option?
 const QString RCFILENAME = "karboncalligraphyrc";
 
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
-    : changingProfile(false)
+    : m_changingProfile(false)
 {
     QGridLayout *layout = new QGridLayout( this );
     layout->setContentsMargins( 0, 0, 0, 0 );
     
-    comboBox = new KComboBox( this );
-    layout->addWidget( comboBox, 0, 0 );
+    m_comboBox = new KComboBox( this );
+    layout->addWidget( m_comboBox, 0, 0 );
 
-    saveButton = new QToolButton( this );
-    saveButton->setToolTip( i18n("Save profile as...") );
-    saveButton->setIcon( KIcon("document-save-as") );
-    layout->addWidget( saveButton, 0, 1 );
+    m_saveButton = new QToolButton( this );
+    m_saveButton->setToolTip( i18n("Save profile as...") );
+    m_saveButton->setIcon( KIcon("document-save-as") );
+    layout->addWidget( m_saveButton, 0, 1 );
     
-    removeButton = new QToolButton( this );
-    removeButton->setToolTip( i18n("Remove profile") );
-    removeButton->setIcon( KIcon("list-remove") );
-    layout->addWidget( removeButton, 0, 2 );
+    m_removeButton = new QToolButton( this );
+    m_removeButton->setToolTip( i18n("Remove profile") );
+    m_removeButton->setIcon( KIcon("list-remove") );
+    layout->addWidget( m_removeButton, 0, 2 );
 
     QGridLayout *detailsLayout = new QGridLayout();
     detailsLayout->setContentsMargins( 0, 0, 0, 0 );
     detailsLayout->setVerticalSpacing( 0 );
     
-    usePath = new QCheckBox( i18n("&Follow selected path"), this );
-    detailsLayout->addWidget( usePath, 0, 0, 1, 4 );
+    m_usePath = new QCheckBox( i18n("&Follow selected path"), this );
+    detailsLayout->addWidget( m_usePath, 0, 0, 1, 4 );
     
-    usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
-    detailsLayout->addWidget( usePressure, 1, 0, 1, 4 );
+    m_usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
+    detailsLayout->addWidget( m_usePressure, 1, 0, 1, 4 );
     
     QLabel *widthLabel = new QLabel( i18n( "Width:" ), this );
     widthLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    widthBox = new QDoubleSpinBox;
-    widthBox->setRange( 0.0, 999.0 );
-    widthLabel->setBuddy( widthBox );
+    m_widthBox = new QDoubleSpinBox;
+    m_widthBox->setRange( 0.0, 999.0 );
+    widthLabel->setBuddy( m_widthBox );
     detailsLayout->addWidget( widthLabel, 2, 2 );
-    detailsLayout->addWidget( widthBox, 2, 3 );
+    detailsLayout->addWidget( m_widthBox, 2, 3 );
 
     QLabel *thinningLabel = new QLabel( i18n( "Thinning:" ), this );
     thinningLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    thinningBox = new QDoubleSpinBox;
-    thinningBox->setRange( -1.0, 1.0 );
-    thinningBox->setSingleStep( 0.1 );
-    thinningLabel->setBuddy( thinningBox );
+    m_thinningBox = new QDoubleSpinBox;
+    m_thinningBox->setRange( -1.0, 1.0 );
+    m_thinningBox->setSingleStep( 0.1 );
+    thinningLabel->setBuddy( m_thinningBox );
     detailsLayout->addWidget( thinningLabel, 2, 0 );
-    detailsLayout->addWidget( thinningBox, 2, 1 );
+    detailsLayout->addWidget( m_thinningBox, 2, 1 );
 
-    useAngle = new QCheckBox( i18n("Use tablet &angle"), this );
-    detailsLayout->addWidget( useAngle, 3, 0, 1, 4 );
+    m_useAngle = new QCheckBox( i18n("Use tablet &angle"), this );
+    detailsLayout->addWidget( m_useAngle, 3, 0, 1, 4 );
 
     QLabel *angleLabel = new QLabel( i18n( "Angle:" ), this );
     angleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    angleBox = new QSpinBox;
-    angleBox->setRange( 0, 179 );
-    angleBox->setWrapping( true );
-    angleLabel->setBuddy( angleBox );
+    m_angleBox = new QSpinBox;
+    m_angleBox->setRange( 0, 179 );
+    m_angleBox->setWrapping( true );
+    angleLabel->setBuddy( m_angleBox );
     detailsLayout->addWidget( angleLabel, 4, 0 );
-    detailsLayout->addWidget( angleBox, 4, 1 );
+    detailsLayout->addWidget( m_angleBox, 4, 1 );
 
     QLabel *fixationLabel = new QLabel( i18n( "Fixation:" ), this );
     fixationLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    fixationBox = new QDoubleSpinBox;
-    fixationBox->setRange( 0.0, 1.0 );
-    fixationBox->setSingleStep( 0.1 );
-    fixationLabel->setBuddy( fixationBox );
+    m_fixationBox = new QDoubleSpinBox;
+    m_fixationBox->setRange( 0.0, 1.0 );
+    m_fixationBox->setSingleStep( 0.1 );
+    fixationLabel->setBuddy( m_fixationBox );
     detailsLayout->addWidget( fixationLabel, 5, 0 );
-    detailsLayout->addWidget( fixationBox, 5, 1 );
+    detailsLayout->addWidget( m_fixationBox, 5, 1 );
     
     QLabel *capsLabel = new QLabel( i18n( "Caps:" ), this );
     capsLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    capsBox = new QDoubleSpinBox;
-    capsBox->setRange( 0.0, 2.0 );
-    capsBox->setSingleStep( 0.03 );
-    capsLabel->setBuddy( capsBox );
+    m_capsBox = new QDoubleSpinBox;
+    m_capsBox->setRange( 0.0, 2.0 );
+    m_capsBox->setSingleStep( 0.03 );
+    capsLabel->setBuddy( m_capsBox );
     detailsLayout->addWidget( capsLabel, 5, 2 );
-    detailsLayout->addWidget( capsBox, 5, 3 );
+    detailsLayout->addWidget( m_capsBox, 5, 3 );
     
     QLabel *massLabel = new QLabel( i18n( "Mass:" ), this );
     massLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    massBox = new QDoubleSpinBox;
-    massBox->setRange( 0.0, 20.0 );
-    massBox->setDecimals( 1 );
-    massLabel->setBuddy( massBox );
+    m_massBox = new QDoubleSpinBox;
+    m_massBox->setRange( 0.0, 20.0 );
+    m_massBox->setDecimals( 1 );
+    massLabel->setBuddy( m_massBox );
     detailsLayout->addWidget( massLabel, 6, 0 );
-    detailsLayout->addWidget( massBox, 6, 1 );
+    detailsLayout->addWidget( m_massBox, 6, 1 );
     
     QLabel *dragLabel = new QLabel( i18n( "Drag:" ), this );
     dragLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    dragBox = new QDoubleSpinBox;
-    dragBox->setRange( 0.0, 1.0 );
-    dragBox->setSingleStep( 0.1 );
-    dragLabel->setBuddy( dragBox );
+    m_dragBox = new QDoubleSpinBox;
+    m_dragBox->setRange( 0.0, 1.0 );
+    m_dragBox->setSingleStep( 0.1 );
+    dragLabel->setBuddy( m_dragBox );
     detailsLayout->addWidget( dragLabel, 6, 2 );
-    detailsLayout->addWidget( dragBox, 6, 3 );
+    detailsLayout->addWidget( m_dragBox, 6, 3 );
     
     layout->addLayout( detailsLayout, 1, 0, 1, 3 );
     //layout->setRowStretch( 2, 1 );
@@ -158,7 +158,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 {
-    qDeleteAll( profiles );
+    qDeleteAll( m_profiles );
     kDebug(38000) << "dtor!!!!";
 }
 
@@ -169,21 +169,21 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 
 void KarbonCalligraphyOptionWidget::emitAll()
 {
-    emit usePathChanged( usePath->isChecked() );
-    emit usePressureChanged( usePressure->isChecked() );
-    emit useAngleChanged( useAngle->isChecked() );
-    emit widthChanged( widthBox->value() );
-    emit thinningChanged( thinningBox->value() );
-    emit angleChanged( angleBox->value() );
-    emit fixationChanged( fixationBox->value() );
-    emit capsChanged( capsBox->value() );
-    emit massChanged( massBox->value() );
-    emit dragChanged( dragBox->value() );
+    emit usePathChanged( m_usePath->isChecked() );
+    emit usePressureChanged( m_usePressure->isChecked() );
+    emit useAngleChanged( m_useAngle->isChecked() );
+    emit widthChanged( m_widthBox->value() );
+    emit thinningChanged( m_thinningBox->value() );
+    emit angleChanged( m_angleBox->value() );
+    emit fixationChanged( m_fixationBox->value() );
+    emit capsChanged( m_capsBox->value() );
+    emit massChanged( m_massBox->value() );
+    emit dragChanged( m_dragBox->value() );
 }
 
 void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
 {
-    if ( changingProfile )
+    if ( m_changingProfile )
         return;
     kDebug(38000) << "trying profile" << name;
     // write the new profile in the config file
@@ -203,7 +203,7 @@ void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
 
 void KarbonCalligraphyOptionWidget::updateCurrentProfile()
 {
-    if ( ! changingProfile )
+    if ( ! m_changingProfile )
         saveProfile("Current");
 }
 
@@ -231,7 +231,7 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
             continue; // ask again
         }
 
-        if ( profiles.contains(name) )
+        if ( m_profiles.contains(name) )
         {
             int ret = KMessageBox::warningYesNo( this,
                         i18n("A profile with that name already exists.\n"
@@ -253,32 +253,32 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
 
 void KarbonCalligraphyOptionWidget::removeProfile()
 {
-    removeProfile( comboBox->currentText() );
+    removeProfile( m_comboBox->currentText() );
 }
 
 void KarbonCalligraphyOptionWidget::toggleUseAngle( bool checked )
 {
-    angleBox->setEnabled( ! checked );
+    m_angleBox->setEnabled( ! checked );
 }
 
 void KarbonCalligraphyOptionWidget::increaseWidth()
 {
-    widthBox->setValue( widthBox->value() + 1 );
+    m_widthBox->setValue( m_widthBox->value() + 1 );
 }
 
 void KarbonCalligraphyOptionWidget::decreaseWidth()
 {
-    widthBox->setValue( widthBox->value() - 1 );
+    m_widthBox->setValue( m_widthBox->value() - 1 );
 }
 
 void KarbonCalligraphyOptionWidget::increaseAngle()
 {
-    angleBox->setValue( (angleBox->value() + 3) % 180 );
+    m_angleBox->setValue( (m_angleBox->value() + 3) % 180 );
 }
 
 void KarbonCalligraphyOptionWidget::decreaseAngle()
 {
-    angleBox->setValue( (angleBox->value() - 3) % 180 );
+    m_angleBox->setValue( (m_angleBox->value() - 3) % 180 );
 }
 
 /******************************************************************************
@@ -287,79 +287,79 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect( comboBox, SIGNAL(currentIndexChanged(const QString &)),
+    connect( m_comboBox, SIGNAL(currentIndexChanged(const QString &)),
              SLOT(loadProfile(const QString &)) );
 
 
     // propagate changes
-    connect( usePath, SIGNAL(toggled(bool)),
+    connect( m_usePath, SIGNAL(toggled(bool)),
              SIGNAL(usePathChanged(bool)) );
 
-    connect( usePressure, SIGNAL(toggled(bool)),
+    connect( m_usePressure, SIGNAL(toggled(bool)),
              SIGNAL(usePressureChanged(bool)) );
 
-    connect( useAngle, SIGNAL(toggled(bool)),
+    connect( m_useAngle, SIGNAL(toggled(bool)),
              SIGNAL(useAngleChanged(bool)) );
 
-    connect( widthBox, SIGNAL(valueChanged(double)),
+    connect( m_widthBox, SIGNAL(valueChanged(double)),
              SIGNAL(widthChanged(double)) );
 
-    connect( thinningBox, SIGNAL(valueChanged(double)),
+    connect( m_thinningBox, SIGNAL(valueChanged(double)),
              SIGNAL(thinningChanged(double)) );
 
-    connect( angleBox, SIGNAL(valueChanged(int)),
+    connect( m_angleBox, SIGNAL(valueChanged(int)),
              SIGNAL(angleChanged(int)) );
 
-    connect( fixationBox, SIGNAL(valueChanged(double)),
+    connect( m_fixationBox, SIGNAL(valueChanged(double)),
              SIGNAL(fixationChanged(double)) );
 
-    connect( capsBox, SIGNAL(valueChanged(double)),
+    connect( m_capsBox, SIGNAL(valueChanged(double)),
              SIGNAL(capsChanged(double)) );
 
-    connect( massBox, SIGNAL(valueChanged(double)),
+    connect( m_massBox, SIGNAL(valueChanged(double)),
              SIGNAL(massChanged(double)) );
 
-    connect( dragBox, SIGNAL(valueChanged(double)),
+    connect( m_dragBox, SIGNAL(valueChanged(double)),
              SIGNAL(dragChanged(double)) );
 
 
     // update profile
-    connect( usePath, SIGNAL(toggled(bool)),
+    connect( m_usePath, SIGNAL(toggled(bool)),
              SLOT(updateCurrentProfile()) );
 
-    connect( usePressure, SIGNAL(toggled(bool)),
+    connect( m_usePressure, SIGNAL(toggled(bool)),
              SLOT(updateCurrentProfile()) );
 
-    connect( useAngle, SIGNAL(toggled(bool)),
+    connect( m_useAngle, SIGNAL(toggled(bool)),
              SLOT(updateCurrentProfile()) );
 
-    connect( widthBox, SIGNAL(valueChanged(double)),
+    connect( m_widthBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
-    connect( thinningBox, SIGNAL(valueChanged(double)),
+    connect( m_thinningBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
-    connect( angleBox, SIGNAL(valueChanged(int)),
+    connect( m_angleBox, SIGNAL(valueChanged(int)),
              SLOT(updateCurrentProfile()) );
 
-    connect( fixationBox, SIGNAL(valueChanged(double)),
+    connect( m_fixationBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
-    connect( capsBox, SIGNAL(valueChanged(double)),
+    connect( m_capsBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
-    connect( massBox, SIGNAL(valueChanged(double)),
+    connect( m_massBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
-    connect( dragBox, SIGNAL(valueChanged(double)),
+    connect( m_dragBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
 
-    connect( saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()) );
-    connect( removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
+    connect( m_saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()) );
+    connect( m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
 
     // visualization
-    connect( useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
+    connect( m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
@@ -431,16 +431,16 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
         profile->mass =         profileGroup.readEntry( "mass", 3.0 );
         profile->drag =         profileGroup.readEntry( "drag", 0.7 );
 
-        profiles.insert( profile->name, profile );
+        m_profiles.insert( profile->name, profile );
         ++i;
     }
 
-    changingProfile = true;
-    foreach (const QString &name, profiles.keys())
+    m_changingProfile = true;
+    foreach (const QString &name, m_profiles.keys())
     {
-        comboBox->addItem( name );
+        m_comboBox->addItem( name );
     }
-    changingProfile = false;
+    m_changingProfile = false;
 
     loadCurrentProfile();
 }
@@ -460,23 +460,23 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
         return;
     }
 
-    kDebug(38000) << comboBox->currentIndex() << index;
-    comboBox->setCurrentIndex( index );
+    kDebug(38000) << m_comboBox->currentIndex() << index;
+    m_comboBox->setCurrentIndex( index );
 
-    Profile *profile = profiles[currentProfile];
+    Profile *profile = m_profiles[currentProfile];
 
-    changingProfile = true;
-    usePath->setChecked( profile->usePath );
-    usePressure->setChecked( profile->usePressure );
-    useAngle->setChecked( profile->useAngle );
-    widthBox->setValue( profile->width );
-    thinningBox->setValue( profile->thinning );
-    angleBox->setValue( profile->angle );
-    fixationBox->setValue( profile->fixation );
-    capsBox->setValue( profile->caps );
-    massBox->setValue( profile->mass );
-    dragBox->setValue( profile->drag );
-    changingProfile = false;
+    m_changingProfile = true;
+    m_usePath->setChecked( profile->usePath );
+    m_usePressure->setChecked( profile->usePressure );
+    m_useAngle->setChecked( profile->useAngle );
+    m_widthBox->setValue( profile->width );
+    m_thinningBox->setValue( profile->thinning );
+    m_angleBox->setValue( profile->angle );
+    m_fixationBox->setValue( profile->fixation );
+    m_capsBox->setValue( profile->caps );
+    m_massBox->setValue( profile->mass );
+    m_dragBox->setValue( profile->drag );
+    m_changingProfile = false;
 }
 
 void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
@@ -484,43 +484,43 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     kDebug(38000) << name;
     Profile *profile = new Profile;
     profile->name = name;
-    profile->usePath = usePath->isChecked();
-    profile->usePressure = usePressure->isChecked();
-    profile->useAngle = useAngle->isChecked();
-    profile->width = widthBox->value();
-    profile->thinning = thinningBox->value();
-    profile->angle = angleBox->value();
-    profile->fixation = fixationBox->value();
-    profile->caps = capsBox->value();
-    profile->mass = massBox->value();
-    profile->drag = dragBox->value();
+    profile->usePath = m_usePath->isChecked();
+    profile->usePressure = m_usePressure->isChecked();
+    profile->useAngle = m_useAngle->isChecked();
+    profile->width = m_widthBox->value();
+    profile->thinning = m_thinningBox->value();
+    profile->angle = m_angleBox->value();
+    profile->fixation = m_fixationBox->value();
+    profile->caps = m_capsBox->value();
+    profile->mass = m_massBox->value();
+    profile->drag = m_dragBox->value();
 
-    if ( profiles.contains(name) )
+    if ( m_profiles.contains(name) )
     {
         // there is already a profile with the same name, overwrite
-        profile->index = profiles[name]->index;
-        profiles.insert( name, profile );
+        profile->index = m_profiles[name]->index;
+        m_profiles.insert( name, profile );
     }
     else
     {
         // it is a new profile
-        profile->index = profiles.count();
-        profiles.insert( name, profile );
+        profile->index = m_profiles.count();
+        m_profiles.insert( name, profile );
         // add the profile to the combobox
         kDebug(38000) << "BEFORE:";
         QString dbg;
-        for ( int i = 0; i < comboBox->count(); ++i )
-            dbg += comboBox->itemText(i) + ' ';
+        for ( int i = 0; i < m_comboBox->count(); ++i )
+            dbg += m_comboBox->itemText(i) + ' ';
         kDebug(38000) << dbg;
         int pos = profilePosition(name);
-        changingProfile = true;
-        comboBox->insertItem( pos, name );
-        changingProfile = false;
+        m_changingProfile = true;
+        m_comboBox->insertItem( pos, name );
+        m_changingProfile = false;
          kDebug(38000) << "AFTER:";
-        for ( int i = 0; i < comboBox->count(); ++i )
-            dbg += comboBox->itemText(i) + ' ';
+        for ( int i = 0; i < m_comboBox->count(); ++i )
+            dbg += m_comboBox->itemText(i) + ' ';
         kDebug(38000) << dbg;
-        kDebug(38000) << "new at" << pos << comboBox->itemText(pos) << name;
+        kDebug(38000) << "new at" << pos << m_comboBox->itemText(pos) << name;
     }
 
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
@@ -546,16 +546,16 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     kDebug(38000) << name;
 
     int pos = profilePosition(name);
-    kDebug(38000) << "adding in" << pos << comboBox->itemText(pos);
-    comboBox->setCurrentIndex( profilePosition(name) );
-    kDebug(38000) << comboBox->currentText();
+    kDebug(38000) << "adding in" << pos << m_comboBox->itemText(pos);
+    m_comboBox->setCurrentIndex( profilePosition(name) );
+    kDebug(38000) << m_comboBox->currentText();
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 {
     kDebug(38000) << "removing profile" << name;
     QString dbg;
-    foreach (const QString &n, profiles.keys())
+    foreach (const QString &n, m_profiles.keys())
             dbg += n + ' ';
     kDebug(38000) << dbg;
     int index = profilePosition(name);
@@ -563,24 +563,24 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 
     // remove the file from the config file
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
-    int deletedIndex = profiles[name]->index;
+    int deletedIndex = m_profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number( deletedIndex );
     kDebug(38000) << deletedGroup;
     config.deleteGroup( deletedGroup );
     config.sync();
 
     // and from profiles
-    profiles.remove(name);
+    m_profiles.remove(name);
 
-    comboBox->removeItem(index);
+    m_comboBox->removeItem(index);
 
     // now in the config file there is value ProfileN missing,
     // where N = configIndex, so put the last one there
-    if ( profiles.isEmpty() ) return;
+    if ( m_profiles.isEmpty() ) return;
 
     int lastN = -1;
     Profile *profile = 0; // profile to be moved, will be the last one
-    foreach ( Profile *p, profiles )
+    foreach ( Profile *p, m_profiles )
     {
         if ( p->index > lastN )
         {
@@ -617,7 +617,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 int KarbonCalligraphyOptionWidget::profilePosition( const QString &profileName )
 {
     int res = 0;
-    foreach (const QString &name, profiles.keys())
+    foreach (const QString &name, m_profiles.keys())
     {
         if (name == profileName)
             return res;
@@ -628,5 +628,5 @@ int KarbonCalligraphyOptionWidget::profilePosition( const QString &profileName )
 
 void KarbonCalligraphyOptionWidget::setUsePathEnabled( bool enabled )
 {
-    usePath->setEnabled( enabled );
+    m_usePath->setEnabled( enabled );
 }

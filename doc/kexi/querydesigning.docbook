@@ -9,8 +9,8 @@
       A database's primary purpose is to store and help extract information
       you are looking for. Unlike databases written on a paper sheets, &kexi;
       database allows you to specify more search criteria. Results
-      are returend faster even for large data sets. All this is a power of
-      databases, however to be able to perform efffective <emphasis>queries</emphasis>
+      are returned faster even for large data sets. All this is a power of
+      databases, however to be able to perform effective <emphasis>queries</emphasis>
       in your database, you need to learn how to tell the database what you are
       looking for.
     </para>

@@ -37,7 +37,7 @@ namespace KPlato
 {
 
 ComboBoxDelegate::ComboBoxDelegate(QStringList &list, QObject *parent)
-    : QItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
     kDebug();
     setObjectName("ComboBoxDelegate");

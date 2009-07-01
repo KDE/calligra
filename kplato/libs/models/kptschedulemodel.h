@@ -51,7 +51,8 @@ public:
         ScheduleDistribution,
         ScheduleCalculate,
         SchedulePlannedStart,
-        SchedulePlannedFinish
+        SchedulePlannedFinish,
+        ScheduleScheduler
     };
     const QMetaEnum columnMap() const;
     
@@ -83,7 +84,7 @@ public:
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
 
@@ -131,6 +132,9 @@ protected:
 
     QVariant schedulingStartTime( const QModelIndex &index, int role ) const;
     bool setSchedulingStartTime( const QModelIndex &index, const QVariant &value, int role );
+
+    QVariant scheduler( const QModelIndex &index, int role ) const;
+    bool setScheduler( const QModelIndex &index, const QVariant &value, int role );
 
 private:
     ScheduleManager *m_manager; // for sanety check

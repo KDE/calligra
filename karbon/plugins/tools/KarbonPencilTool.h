@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,9 +21,11 @@
 #define _KARBONPENCILTOOL_H_
 
 #include <KoTool.h>
+#include <QtCore/QRectF>
 
 class KoPathShape;
 class KoLineBorder;
+class KoPathPoint;
 
 class KarbonPencilTool : public KoTool
 {
@@ -56,6 +58,13 @@ private:
     void addPoint( const QPointF & point );
     void finish( bool closePath );
     KoLineBorder * currentBorder();
+    
+    /// returns the nearest existing path point 
+    KoPathPoint* endPointAtPosition( const QPointF &position );
+    
+    /// Connects given path with the ones we hit when starting/finishing
+    bool connectPaths( KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd );
+    
     enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
 
     PencilMode m_mode;
@@ -68,6 +77,9 @@ private:
     QList<QPointF> m_points; // the raw points
 
     KoPathShape * m_shape;
+    KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
+    KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
+    KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
 };
 
 #endif // _KARBONPENCILTOOL_H_

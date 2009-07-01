@@ -18,9 +18,7 @@
  */
 
 #include "KarbonPatternTool.h"
-#include "KarbonPatternChooser.h"
 #include "KarbonPatternEditStrategy.h"
-#include "KarbonPatternItem.h"
 #include <KarbonPatternOptionsWidget.h>
 
 #include <KoCanvasBase.h>
@@ -34,6 +32,10 @@
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
+#include <KoResource.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceItemChooser.h>
+#include <KoResourceServerAdapter.h>
 
 #include <KLocale>
 
@@ -86,7 +88,7 @@ void KarbonPatternTool::mousePressEvent( KoPointerEvent *event )
 
     foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
-        if( strategy->selectHandle( event->point ) )
+        if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
             m_currentStrategy = strategy;
             m_currentStrategy->repaint();
@@ -115,7 +117,7 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
     }
     foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
-        if( strategy->selectHandle( event->point ) )
+        if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
             useCursor(Qt::SizeAllCursor);
             return;
@@ -239,7 +241,8 @@ void KarbonPatternTool::activate( bool temporary )
     initialize();
 
     KarbonPatternEditStrategyBase::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
-
+    KarbonPatternEditStrategyBase::setGrabSensitivity( m_canvas->resourceProvider()->grabSensitivity() );
+    
     useCursor(Qt::ArrowCursor, true);
 
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
@@ -250,12 +253,13 @@ void KarbonPatternTool::deactivate()
     // we are not interested in selection content changes when not active
     disconnect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 
-    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies )
-    {
+    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies ) {
         strategy->repaint();
-        delete strategy;
     }
+
+    qDeleteAll(m_strategies);
     m_strategies.clear();
+    
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->update();
     
@@ -274,7 +278,10 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
 
             foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
                 strategy->repaint();
-        break;
+            break;
+        case KoCanvasResource::GrabSensitivity:
+            KarbonPatternEditStrategyBase::setGrabSensitivity( res.toUInt() );
+            break;
         default:
             return;
     }
@@ -288,9 +295,13 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect( m_optionsWidget, SIGNAL(patternChanged()),
              this, SLOT(patternChanged()) );
 
-    KarbonPatternChooser * chooser = new KarbonPatternChooser();
-    connect( chooser, SIGNAL( itemDoubleClicked(QTableWidgetItem*)),
-             this, SLOT(patternSelected(QTableWidgetItem*)));
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoPattern>(rserver);
+    KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
+    chooser->setObjectName("KarbonPatternChooser");
+
+    connect( chooser, SIGNAL(resourceSelected(KoResource*)),
+             this, SLOT(patternSelected(KoResource*)));
 
     widgets.insert( i18n("Pattern Options"), m_optionsWidget );
     widgets.insert( i18n("Patterns"), chooser );
@@ -300,10 +311,10 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     return widgets;
 }
 
-void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
+void KarbonPatternTool::patternSelected( KoResource * resource )
 {
-    KarbonPatternItem * currentPattern = dynamic_cast<KarbonPatternItem*>(item);
-    if( ! currentPattern || ! currentPattern->pattern()->valid() )
+    KoPattern * currentPattern = dynamic_cast<KoPattern*>(resource);
+    if( ! currentPattern || ! currentPattern->valid() )
         return;
 
     KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
@@ -312,7 +323,7 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
     {
         QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
         KoPatternBackground * newFill = new KoPatternBackground( imageCollection );
-        newFill->setPattern( currentPattern->pattern()->img() );
+        newFill->setPattern( currentPattern->img() );
         m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
         initialize();
     }

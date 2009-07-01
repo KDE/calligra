@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,18 +43,21 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     m_statusbar(statusBar),
     m_view(view),
     m_controller(0),
-    m_currentPageNumber(0),
-    m_zoomWidget(0)
+    m_currentPageNumber(0)
 {
     //KoMainWindow* mainwin = view->shell();
     //m_statusLabel = mainwin ? mainwin->statusBarLabel() : 0;
 
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    KWDocument* const kwdoc = m_view->kwdocument();
-    Q_ASSERT(kwdoc);
-    KWCanvas* const canvas =  m_view->kwcanvas();
+    KWCanvas *const canvas =  m_view->kwcanvas();
     Q_ASSERT(canvas);
+    KoCanvasResourceProvider *resourceprovider = canvas->resourceProvider();
+    Q_ASSERT(resourceprovider);
+    connect(resourceprovider, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)));
+
+    KWDocument *const kwdoc = m_view->kwdocument();
+    Q_ASSERT(kwdoc);
 
     m_pageLabel = new QLabel(m_statusbar);
     m_pageLabel->setFrameShape(QFrame::Panel);
@@ -65,7 +68,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     updatePageCount();
     connect(kwdoc, SIGNAL(pageSetupChanged()), this, SLOT(updatePageCount()));
 
-    QAction* action = new KAction(i18n("Page: current/total"), this);
+    KAction *action = new KAction(i18n("Page: current/total"), this);
     action->setObjectName("pages_current_total");
     action->setCheckable(true);
     action->setChecked(true);
@@ -107,37 +110,29 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
 
     KActionCollection* collection = m_view->actionCollection();
-    KoZoomAction* zoomaction = dynamic_cast<KoZoomAction*>(collection->action("view_zoom"));
-    m_zoomWidget = zoomaction ? zoomaction->createWidget(m_statusbar) : 0;
-    if (m_zoomWidget) {
-        m_statusbar->addWidget(m_zoomWidget);
+    KoZoomAction *zoomaction = dynamic_cast<KoZoomAction*>(collection->action("view_zoom"));
+    QWidget *zoomWidget = zoomaction ? zoomaction->createWidget(m_statusbar) : 0;
+    if (zoomWidget) {
+        m_statusbar->addWidget(zoomWidget);
 
-        QAction* action = new KAction(i18n("Zoom Controller"), this);
+        KAction *action = new KAction(i18n("Zoom Controller"), this);
         action->setObjectName("zoom_controller");
         action->setCheckable(true);
         action->setChecked(true);
         m_statusbar->addAction(action);
-        connect(action, SIGNAL(toggled(bool)), m_zoomWidget, SLOT(setVisible(bool)));
+        connect(action, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
     }
 
     updateCurrentTool();
-    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)), this, SLOT(updateCurrentTool()));
-
-    KoCanvasResourceProvider* resourceprovider = canvas->resourceProvider();
-    Q_ASSERT(resourceprovider);
-    connect(resourceprovider, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)),
+            this, SLOT(updateCurrentTool()));
 }
 
 KWStatusBar::~KWStatusBar()
 {
-    delete m_modifiedLabel;
-    delete m_pageLabel;
-    delete m_mousePosLabel;
-    delete m_statusLabel;
-    delete m_zoomWidget;
 }
 
-void KWStatusBar::setText(const QString& text)
+void KWStatusBar::setText(const QString &text)
 {
     m_statusLabel->setText(text);
 }
@@ -149,13 +144,15 @@ void KWStatusBar::setModified(bool modified)
 
 void KWStatusBar::updatePageCount()
 {
-    KWDocument* kwdoc = m_view->kwdocument();
+    KWDocument *kwdoc = m_view->kwdocument();
     Q_ASSERT(kwdoc);
-    m_pageLabel->setText(i18nPage.subs(m_currentPageNumber + 1).subs(kwdoc->pageCount()).toString());
+    m_pageLabel->setText(i18nPage.subs(m_view->currentPage().pageNumber())
+            .subs(kwdoc->pageCount()).toString());
 }
 
-void KWStatusBar::resourceChanged(int key, const QVariant& value)
+void KWStatusBar::resourceChanged(int key, const QVariant &value)
 {
+    Q_UNUSED(value);
     if (key ==  KWord::CurrentPage)
         updatePageCount();
 }
@@ -164,17 +161,19 @@ void KWStatusBar::updateCurrentTool()
 {
     //kDebug(32003) << "KWStatusBar::updateCurrentTool" << endl;
     if (m_controller) {
-        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(updateMousePosition(const QPoint&)));
+        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)),
+                this, SLOT(updateMousePosition(const QPoint&)));
     }
     m_controller = KoToolManager::instance()->activeCanvasController();
     if (m_controller) {
-        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(updateMousePosition(const QPoint&)));
+        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this,
+                SLOT(updateMousePosition(const QPoint&)));
     } else {
         m_mousePosLabel->setText(QString());
     }
 }
 
-void KWStatusBar::updateMousePosition(const QPoint& pos)
+void KWStatusBar::updateMousePosition(const QPoint &pos)
 {
     //kDebug(32003)<<"KWStatusBar::updateMousePosition"<<endl;
     m_mousePosLabel->setText(QString("%1:%2").arg(pos.x()).arg(pos.y()));

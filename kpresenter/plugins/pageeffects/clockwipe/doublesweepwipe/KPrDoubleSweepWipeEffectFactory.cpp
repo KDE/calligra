@@ -54,8 +54,8 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Parallel Diagonal Bottom Left" ),
     I18N_NOOP( "Parallel Vertical Reverse" ),
     I18N_NOOP( "Parallel Diagonal Reverse" ),
-    I18N_NOOP( "OppositeVertical Reverse" ),
-    I18N_NOOP( "OppositeHorizontal Reverse" ),
+    I18N_NOOP( "Opposite Vertical Reverse" ),
+    I18N_NOOP( "Opposite Horizontal Reverse" ),
     I18N_NOOP( "Parallel Diagonal Top Left Reverse" ),
     I18N_NOOP( "Parallel Diagonal Bottom Left Reverse" )
 };

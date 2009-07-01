@@ -66,6 +66,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent* event);
     virtual void mouseDoubleClickEvent(KoPointerEvent* event);
     virtual void keyPressEvent(QKeyEvent* event);
+    virtual void inputMethodEvent(QInputMethodEvent * event);
 
     virtual Selection* selection() = 0;
 

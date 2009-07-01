@@ -29,6 +29,7 @@
 #include <QStyleOptionViewItem>
 #include <QTimeEdit>
 #include <QPainter>
+#include <QToolTip>
 
 #include <klineedit.h>
 #include <kdebug.h>
@@ -73,34 +74,131 @@ bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
             }
         }
     }
-    return QItemDelegate::eventFilter( object, event );
+    return QStyledItemDelegate::eventFilter( object, event );
 }
 
-void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const
+QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    return QItemDelegate::drawFocus( painter, option, rect );
-    if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
-        return;
-    
-    QStyleOptionFocusRect o;
-    o.QStyleOption::operator=(option);
-    o.rect = rect;
-    o.state |= QStyle::State_KeyboardFocusChange;
-    o.state |= QStyle::State_Item;
-    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
-            ? QPalette::Normal : QPalette::Disabled;
-    o.backgroundColor = option.palette.color(cg, (option.state & QStyle::State_Selected)
-            ? QPalette::Highlight : QPalette::Window);
-    
-    if ( option.state & QStyle::State_Enabled ) {
-        painter->setPen( QColor( Qt::black ) );
-        painter->drawRect( rect.adjusted( 0, 0, -1, -1 ) );
-    } else {
-        QStyle *style = QApplication::style();
-        style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, 0);
+    // 18 is a bit arbitrary, it gives (most?) editors a usable size
+    QSize s = QStyledItemDelegate::sizeHint( option, index );
+    return QSize( s.width(), qMax( s.height(), 18 ) );
+}
+
+//-----------------------------
+ProgressBarDelegate::ProgressBarDelegate( QObject *parent )
+ : ItemDelegate( parent )
+{
+}
+
+ProgressBarDelegate::~ProgressBarDelegate()
+{
+}
+
+void ProgressBarDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option,
+ const QModelIndex &index ) const
+{
+    QStyle *style;
+
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, index );
+
+    style = opt.widget ? opt.widget->style() : QApplication::style();
+    style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter );
+
+    if ( !( opt.state & QStyle::State_Editing ) ) {
+        QStyleOptionProgressBar pbOption;
+        pbOption.QStyleOption::operator=( option );
+        initStyleOptionProgressBar( &pbOption, index );
+
+        style->drawControl( QStyle::CE_ProgressBar, &pbOption, painter );
+        // Draw focus, copied from qt
+        if (opt.state & QStyle::State_HasFocus) {
+            painter->save();
+            QStyleOptionFocusRect o;
+            o.QStyleOption::operator=( opt );
+            o.rect = style->subElementRect( QStyle::SE_ItemViewItemFocusRect, &opt, opt.widget );
+            o.state |= QStyle::State_KeyboardFocusChange;
+            o.state |= QStyle::State_Item;
+            QPalette::ColorGroup cg = ( opt.state & QStyle::State_Enabled )
+                            ? QPalette::Normal : QPalette::Disabled;
+            o.backgroundColor = opt.palette.color( cg, ( opt.state & QStyle::State_Selected )
+                                            ? QPalette::Highlight : QPalette::Window );
+            style->drawPrimitive( QStyle::PE_FrameFocusRect, &o, painter, opt.widget );
+            //kDebug()<<"Focus"<<o.rect<<opt.rect<<pbOption.rect;
+            painter->restore();
+        }
     }
 }
 
+QSize ProgressBarDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    //  initStyleOption( &opt, index );
+
+    QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
+
+    QStyleOptionProgressBar pbOption;
+    pbOption.QStyleOption::operator=( option );
+    initStyleOptionProgressBar( &pbOption, index );
+
+    return style->sizeFromContents( QStyle::CT_ProgressBar, &pbOption, QSize(), opt.widget );
+}
+
+void ProgressBarDelegate::initStyleOptionProgressBar( QStyleOptionProgressBar *option, const QModelIndex &index ) const
+{
+    option->rect.adjust( 0, 1, 0, -1 );
+    option->maximum = 100;
+    option->minimum = 0;
+    option->progress = index.data().toInt();
+    option->text = index.data().toString() + QChar::fromAscii( '%' );
+    option->textAlignment = Qt::AlignCenter;
+    option->textVisible = true;
+}
+
+QWidget *ProgressBarDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &, const QModelIndex & ) const
+{
+    Slider *slider = new Slider( parent );
+    slider->setRange( 0, 100 );
+    slider->setOrientation( Qt::Horizontal );
+    //kDebug()<<slider->minimumSizeHint()<<slider->minimumSize();
+    return slider;
+}
+
+void ProgressBarDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
+{
+    QSlider *slider = static_cast<QSlider *>( editor );
+    slider->setValue( index.data( Qt::EditRole ).toInt() );
+}
+
+void ProgressBarDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
+{
+    QSlider *slider = static_cast<QSlider *>( editor );
+    model->setData( index, slider->value() );
+}
+
+void ProgressBarDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & ) const
+{
+    editor->setGeometry( option.rect );
+    //kDebug()<<editor->minimumSizeHint()<<editor->minimumSize()<<editor->geometry()<<editor->size();
+}
+
+Slider::Slider( QWidget *parent )
+  : QSlider( parent )
+{
+    connect( this, SIGNAL(valueChanged(int)), this, SLOT(updateTip(int)) );
+}
+
+void Slider::updateTip( int value )
+{
+    QPoint p;
+    p.setY( height() / 2 );
+    p.setX( style()->sliderPositionFromValue ( minimum(), maximum(), value, width() ) );
+
+    QString text = QString::fromAscii( "%1%" ).arg( value );
+    QToolTip::showText( mapToGlobal( p ), text, this );
+}
+
+//--------------------------------------
 // Hmmm, a bit hacky, but this makes it possible to use index specific editors...
 SelectorDelegate::SelectorDelegate( QObject *parent )
     : ItemDelegate( parent )
@@ -224,6 +322,8 @@ void DurationSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &
 {
     DurationSpinBox *dsb = static_cast<DurationSpinBox*>(editor);
 //    dsb->setScales( index.model()->data( index, Role::DurationScales ) );
+    dsb->setMinimumUnit( (Duration::Unit)(index.data( Role::Minimum ).toInt()) );
+    dsb->setMaximumUnit( (Duration::Unit)(index.data( Role::Maximum ).toInt()) );
     dsb->setUnit( (Duration::Unit)( index.model()->data( index, Role::DurationUnit ).toInt() ) );
     dsb->setValue( index.model()->data( index, Qt::EditRole ).toDouble() );
 }

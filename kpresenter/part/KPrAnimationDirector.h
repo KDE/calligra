@@ -64,9 +64,24 @@ public:
     KoViewConverter * viewConverter();
 
     /**
+     * get the number of pages
+     */
+    int numPages() const;
+
+    /**
      * get the current page number
      */
     int currentPage() const;
+
+    /**
+     * get the number of steps in this page
+     */
+    int numStepsInPage() const;
+
+    /**
+     * get the current step
+     */
+    int currentStep() const;
 
     /**
      * do the next step in the presentation

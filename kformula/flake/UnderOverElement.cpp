@@ -25,11 +25,12 @@
 #include <kdebug.h>
 #include <QPainter>
 
-UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
+UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
     m_underElement = new BasicElement( this );
     m_overElement = new BasicElement( this );
+    m_elementType = elementType;
 }
 
 UnderOverElement::~UnderOverElement()
@@ -42,7 +43,12 @@ UnderOverElement::~UnderOverElement()
 const QList<BasicElement*> UnderOverElement::childElements()
 {
     QList<BasicElement*> tmp;
-    return tmp << m_baseElement << m_underElement << m_overElement;
+    tmp << m_baseElement;
+    if(m_elementType != Over)
+        tmp << m_underElement;
+    if(m_elementType != Under)
+        tmp << m_overElement;
+    return tmp;
 }
 
 void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
@@ -55,27 +61,48 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 void UnderOverElement::layout( const AttributeManager* am )
 {
     double thinSpace   = am->layoutSpacing( this );
-    double accent      = am->boolOf( "accent", this );     //Whether to add a space above
-    double accentUnder = am->boolOf( "accentunder", this );//Whether to add a space below
+    double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
+    double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
+    
+    // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
+    bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
+    bool overStretchy  = m_elementType == Under || am->boolOf( "stretchy", m_overElement );
+    bool baseStretchy  = (underStretchy && overStretchy) || am->boolOf( "stretchy", m_baseElement );  //For sanity, make sure at least one is not stretchy
 
-    double largestWidth = m_baseElement->width();
-    largestWidth = qMax( m_underElement->width(), largestWidth );
-    largestWidth = qMax( m_overElement->width(), largestWidth );
+    double largestWidth = 0;
+    if(!baseStretchy)
+        largestWidth = m_baseElement->width();
 
-    QPointF origin( ( largestWidth - m_overElement->width() ) / 2.0, 0.0 );
-    m_overElement->setOrigin( origin );
+    if(m_elementType != Over && !underStretchy)
+        largestWidth = qMax( m_underElement->width(), largestWidth );
+    if(m_elementType != Under && !overStretchy)
+        largestWidth = qMax( m_overElement->width(), largestWidth );
+
+    QPointF origin(0.0,0.0);
+    if(m_elementType != Under) {
+        origin.setX(( largestWidth - m_overElement->width() ) / 2.0 ) ;
+        m_overElement->setOrigin( origin );
+        origin.setY( m_overElement->height() );
+    }
 
     origin.setX( ( largestWidth - m_baseElement->width() ) / 2.0 );
-    origin.setY( ( accent && m_overElement->height() != 0 ) ? 2*thinSpace : thinSpace );
     m_baseElement->setOrigin( origin );
+    setBaseLine( origin.y() + m_baseElement->baseLine() );
 
-    origin.setX( ( largestWidth - m_underElement->width())/2.0 );
-    origin.setY( origin.y() + accentUnder ? 2*thinSpace : thinSpace );
-    m_underElement->setOrigin( origin );
+    if(m_elementType != Over) {
+        origin.setX( ( largestWidth - m_underElement->width())/2.0 );
+	/* Try to be smart about where to place the under */
+//	if(m_baseElement->baseLine() + 1.5*thinSpace > m_baseElement->height())
+//          origin.setY( origin.y() + m_baseElement->baseLine() );
+//	else 
+          origin.setY( origin.y() + m_baseElement->height()); 
+        m_underElement->setOrigin( origin );
+        setHeight( origin.y() + m_underElement->height() );
+    } else {
+        setHeight( origin.y() + m_baseElement->height() );
+    }
 
     setWidth( largestWidth );
-    setHeight( origin.y() + m_underElement->height() );
-    setBaseLine( m_baseElement->origin().y() + m_baseElement->baseLine() );
 }
 
 BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
@@ -104,7 +131,6 @@ QString UnderOverElement::attributesDefaultValue( const QString& attribute ) con
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
-    QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) { 
@@ -116,11 +142,11 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( name.contains( "under" ) && m_underElement->elementType() == Basic ) {
+        else if( m_elementType != Over && m_underElement->elementType() == Basic ) {
             delete m_underElement;
             m_underElement = tmpElement;
         }
-        else if( name.contains( "over" ) && m_overElement->elementType() == Basic ) {
+        else if( m_overElement->elementType() == Basic ) {
             delete m_overElement;
             m_overElement = tmpElement;
         }
@@ -135,18 +161,13 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );   // Just save the children in
-    m_underElement->writeMathML( writer );  // the right order
-    m_overElement->writeMathML( writer );
+    if(m_elementType != Over)
+        m_underElement->writeMathML( writer );  // the right order
+    if(m_elementType != Under)
+        m_overElement->writeMathML( writer );
 }
 
 ElementType UnderOverElement::elementType() const
 {
-    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
-        return UnderOver;
-    else if( m_underElement->elementType() != Basic )
-        return Under;
-    else if( m_overElement->elementType() != Basic )
-        return Over;
-    else
-        return UnderOver;
+    return m_elementType;
 }

@@ -1,7 +1,7 @@
 include_directories(
 	${CMAKE_SOURCE_DIR}/kspread
 	${CMAKE_SOURCE_DIR}/kspread/ui
-	${KOGUIUTILS_INCLUDES}
+    ${KOMAIN_INCLUDES}
 	${KOTEXT_INCLUDES}
 	)
 
@@ -22,7 +22,7 @@ SET (tableshape_LIB_SRCS
 
 kde4_add_plugin(spreadsheetshape ${tableshape_LIB_SRCS})
 
-target_link_libraries(spreadsheetshape kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} kotext)
+target_link_libraries(spreadsheetshape kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} flake kotext kobase)
 install(TARGETS spreadsheetshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

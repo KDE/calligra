@@ -160,7 +160,7 @@ void SvgExport::saveLayer( KoShapeLayer * layer )
     printIndentation( m_body, m_indent++ );
     *m_body << "<g" << getID( layer ) << ">" << endl;
 
-    QList<KoShape*> sortedShapes = layer->iterator();
+    QList<KoShape*> sortedShapes = layer->childShapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach( KoShape * shape, sortedShapes )
@@ -185,7 +185,7 @@ void SvgExport::saveGroup( KoShapeContainer * group )
         *m_body << " display=\"none\"";
     *m_body << ">" << endl;
 
-    QList<KoShape*> sortedShapes = group->iterator();
+    QList<KoShape*> sortedShapes = group->childShapes();
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach( KoShape * shape, sortedShapes )

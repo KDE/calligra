@@ -55,13 +55,13 @@
 #include <qdom.h>
 #include <QRectF>
 
-
 class KarbonDocument::Private
 {
 public:
     Private()
     : pageSize(0.0, 0.0)
     , unit( KoUnit::Millimeter )
+    , hasExternalDataCenterMap(false)
     {
         // Ask every shapefactory to populate the dataCenterMap
         foreach( const QString & id, KoShapeRegistry::instance()->keys())
@@ -77,16 +77,18 @@ public:
         layers.clear();
         qDeleteAll( objects );
         objects.clear();
-        qDeleteAll( dataCenterMap );
+        if (!hasExternalDataCenterMap)
+            qDeleteAll( dataCenterMap );
     }
 
     QSizeF pageSize; ///< the documents page size
 
-    QList<KoShape*> objects;   ///< The list of all object of the document.
-    VLayerList layers;         ///< The layers in this document.
+    QList<KoShape*> objects;     ///< The list of all object of the document.
+    QList<KoShapeLayer*> layers; ///< The layers in this document.
 
     KoUnit unit; ///< The unit.
     QMap<QString, KoDataCenter*> dataCenterMap;
+    bool hasExternalDataCenterMap;
 };
 
 KarbonDocument::KarbonDocument()
@@ -271,7 +273,7 @@ void KarbonDocument::setUnit( KoUnit unit )
     d->unit = unit;
 }
 
-const VLayerList& KarbonDocument::layers() const
+const QList<KoShapeLayer*> KarbonDocument::layers() const
 {
     return d->layers;
 }
@@ -284,6 +286,13 @@ KoImageCollection * KarbonDocument::imageCollection()
 QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
 {
     return d->dataCenterMap;
+}
+
+void KarbonDocument::useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters )
+{
+    qDeleteAll( d->dataCenterMap );
+    d->dataCenterMap = dataCenters;
+    d->hasExternalDataCenterMap = true;
 }
 
 //#############################################################################

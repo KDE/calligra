@@ -140,11 +140,44 @@ protected:
     QPointer<PrintingHeaderFooter> m_widget;
 };
 
+class KPLATOUI_EXPORT ViewActionLists
+{
+public:
+    ViewActionLists() : actionOptions( 0 ) {}
+    ~ViewActionLists() {}
+
+    /// Returns the list of action lists that shall be plugged/unplugged
+    QStringList actionListNames() const { return m_actionListMap.keys(); }
+    /// Returns the list of actions associated with the action list name
+    QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
+    /// Add an action to the specified action list
+    void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
+
+    QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
+    void addViewlistAction( QAction *action ) { m_viewlistActionList.append( action ); }
+    
+    QList<QAction*> contextActionList() const { return m_contextActionList; }
+    void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
+
+protected:
+    /// List of all menu/toolbar actions (used for plug/unplug)
+    QMap<QString, QList<QAction*> > m_actionListMap;
+
+    /// List of actions that will be shown in the viewlist context menu
+    QList<QAction*> m_viewlistActionList;
+    
+    /// List of actions that will be shown in the views header context menu
+    QList<QAction*> m_contextActionList;
+    
+    // View options context menu
+    KAction *actionOptions;
+};
+
 /** 
  ViewBase is the baseclass of all sub-views to View.
 
 */
-class KPLATOUI_EXPORT ViewBase : public KoView
+class KPLATOUI_EXPORT ViewBase : public KoView, public ViewActionLists
 {
     Q_OBJECT
 public:
@@ -187,23 +220,10 @@ public:
     /// Reimplement if your view handles relations
     virtual Relation *currentRelation() const { return 0; }
     
-    /// Returns the list of action lists that shall be plugged/unplugged
-    virtual QStringList actionListNames() const { return m_actionListMap.keys(); }
-    /// Returns the list of actions associated with the action list name
-    virtual QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
-    /// Add an action to the specified action list
-    void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
-    
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const {}
-    
-    virtual QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
-    void addViewlistAction( QAction *action ) { m_viewlistActionList.append( action ); }
-    
-    virtual QList<QAction*> contextActionList() const { return m_contextActionList; }
-    void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
     
     virtual ViewBase *hitView( const QPoint &pos );
 
@@ -211,6 +231,8 @@ public:
     PrintingOptions printingOptions() const { return m_printingOptions; }
     void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     
+    void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -231,22 +253,8 @@ protected slots:
 protected:
     void createOptionAction();
     
-    /// List of all menu/toolbar actions (used for plug/unplug)
-    QMap<QString, QList<QAction*> > m_actionListMap;
-
-    /// List of actions that will be shown in the viewlist context menu
-    QList<QAction*> m_viewlistActionList;
-    
-    /// List of actions that will be shown in the views header context menu
-    QList<QAction*> m_contextActionList;
-    
     bool m_readWrite;
-    
     PrintingOptions m_printingOptions;
-    
-    // View options context menu
-    KAction *actionOptions;
-
 };
 
 //------------------

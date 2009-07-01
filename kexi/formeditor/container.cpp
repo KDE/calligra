@@ -110,8 +110,8 @@ class Container::Private
 {
 public:
     Private(Container* toplevel, QWidget *container)
-      : m_toplevel(toplevel)
-      , state(DoingNothing)
+      : state(DoingNothing)
+      , m_toplevel(toplevel)
       , idOfPropertyCommand(0)
       , m_widget(container)
       , insertBegin(-1, -1)
@@ -571,7 +571,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 w = m_moving;
             else
                 w = d->form->selectedWidgets()->last();
-            d->form->library()->startEditing(w->metaObject()->className(), w, this);
+            d->form->library()->startInlineEditing(w->metaObject()->className(), w, this);
         }
         else if (kev->key() == Qt::Key_Escape) {
             if (false) {
@@ -674,7 +674,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             return false;
 
         d->state = Private::InlineEditing;
-        d->form->library()->startEditing(w->metaObject()->className(), w, this);
+        d->form->library()->startInlineEditing(w->metaObject()->className(), w, this);
         return true;
     }
 

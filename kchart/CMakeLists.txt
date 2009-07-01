@@ -9,13 +9,14 @@ add_subdirectory( templates )
 add_subdirectory( tests )
 
 include_directories(
+    ${KOMAIN_INCLUDES}
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/src
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/examples/tools
 	${CMAKE_CURRENT_SOURCE_DIR}/dialogs
 	${CMAKE_CURRENT_SOURCE_DIR}/shape
 	${CMAKE_SOURCE_DIR}/interfaces 
-	${KOGUIUTILS_INCLUDES} )
+	 )
 
 
 ###########  target kchartcommon  ###############
@@ -41,7 +42,6 @@ kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
 target_link_libraries(kchartcommon
 	kochart
-	koguiutils
 	kdchart
 	chartshapelib
     komain

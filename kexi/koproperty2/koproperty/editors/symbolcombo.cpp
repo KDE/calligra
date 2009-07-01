@@ -70,11 +70,7 @@ SymbolCombo::value() const
 void
 SymbolCombo::setValue(const QVariant &value, bool emitChange)
 {
-#if QT_VERSION >= 0x030100
     if (!(value.isNull()))
-#else
-    if (value.canCast(QVariant::Int))
-#endif
     {
         m_edit->blockSignals(true);
         m_edit->setText(QChar(value.toInt()));

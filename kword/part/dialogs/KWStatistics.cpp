@@ -95,6 +95,7 @@ void KWStatistics::updateData()
     m_lines = 0;
     m_syllables = 0;
     m_paragraphs = 0;
+    m_cjkChars = 0;
 
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
@@ -130,6 +131,7 @@ void KWStatistics::updateData()
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
             if (block.layout())
                 m_lines += block.layout()->lineCount();
+            m_cjkChars += countCJKChars(block.text());
 
             QString s = block.text();
 
@@ -235,6 +237,8 @@ void KWStatistics::updateDataUi()
         else if (currentIndex == 5)
             newText = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
         else if (currentIndex == 6)
+            newText = KGlobal::locale()->formatNumber(m_cjkChars, 0);
+        else if (currentIndex == 7)
             newText = flesch;
 
         int top, bottom, left, right;
@@ -260,6 +264,7 @@ void KWStatistics::updateDataUi()
         widget.lines->setText(KGlobal::locale()->formatNumber(m_lines, 0));
         widget.characters->setText(KGlobal::locale()->formatNumber(m_charsWithSpace, 0));
         widget.characters2->setText(KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0));
+        widget.cjkChars->setText(KGlobal::locale()->formatNumber(m_cjkChars, 0));
         if (m_words < 200)   // a kind of warning if too few words:
             flesch = i18n("approximately %1", flesch);
         widget.flesch->setText(flesch);
@@ -297,5 +302,30 @@ void KWStatistics::selectionChanged()
         if (m_autoUpdate)
             connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }
+}
+
+int KWStatistics::countCJKChars(const QString &text)
+{
+    int count = 0;
+
+    QString::const_iterator it;
+    for (it = text.constBegin(); it != text.constEnd(); it++) {
+        QChar qChar = *it;
+        /*
+         * CJK punctuations: 0x3000 - 0x303F (but I believe we shouldn't include this in the statistics)
+         * Hiragana: 0x3040 - 0x309F
+         * Katakana: 0x30A0 - 0x30FF
+         * CJK Unified Ideographs: 4E00 - 9FFF (Chinese Traditional & Simplified, Kanji and Hanja
+         * Hangul: 0xAC00 - 0xD7AF
+         */   
+        if ((qChar >= 0x3040 && qChar <= 0x309F)
+                || (qChar >= 0x30A0 && qChar <= 0x30FF)
+                || (qChar >= 0x4E00 && qChar <= 0x9FFF)
+                || (qChar >= 0xAC00 && qChar <= 0xD7AF)) {
+            count++;
+        }
+    }
+
+    return count;
 }
 

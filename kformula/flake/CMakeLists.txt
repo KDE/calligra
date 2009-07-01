@@ -1,4 +1,5 @@
-include_directories(${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+remove_definitions(-DQT3_SUPPORT)
+include_directories(${QT_INCLUDES} ${KOMAIN_INCLUDES}  )
 
 ########### KFormula Library ###############
 
@@ -40,8 +41,8 @@ set( kformulalib_PART_SRCS
 
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 
-target_link_libraries(kformulalib ${KDE4_KDEUI_LIBS} koguiutils)
-target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES koguiutils)
+target_link_libraries(kformulalib komain ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -66,10 +67,7 @@ kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
 target_link_libraries(
     formulashape
-    kostore
-    koguiutils
     kformulaprivate
-    flake
     kformulalib
     komain
     ${KDE4_KDEUI_LIBS}

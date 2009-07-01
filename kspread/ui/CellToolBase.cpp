@@ -425,7 +425,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Merge the selected region"));
 
     action = new KAction(KIcon("mergecell-horizontal"), i18n("Merge Cells Horizontally"), this);
-    action->setToolTip(i18n("Merge the selected Region.horizontally"));
+    action->setToolTip(i18n("Merge the selected region horizontally"));
     addAction("mergeCellsHorizontal", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeCellsHorizontal()));
 
@@ -1051,6 +1051,11 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
         return;
         break;
     }
+}
+
+void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
+{
+    editor()->handleInputMethodEvent(event);
 }
 
 void CellToolBase::activate(bool temporary)

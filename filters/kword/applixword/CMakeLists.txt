@@ -1,6 +1,4 @@
 
-
-
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 
@@ -17,7 +15,7 @@ target_link_libraries(
     applixwordimport
     komain
     kostore
-    ${KDE4_KDECORE_LIBS}
+    ${KDE4_LIBRARIES}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )

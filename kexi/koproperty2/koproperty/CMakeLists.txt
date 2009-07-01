@@ -52,8 +52,9 @@ set(koproperty_LIB_SRCS
 kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
 
 target_link_libraries(koproperty2
-  koguiutils
+  
   ${KDE4_KDE3SUPPORT_LIBS}
+  kobase
 )
 
 set_target_properties(koproperty2 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

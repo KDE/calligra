@@ -133,8 +133,6 @@ if ! [ -e $DESTINATION/source/$MODULE ]; then
 	(cd $MODULE/lib && $SVN_PROGRAM up koproperty ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
-	echo "cd $MODULE/lib && $SVN_PROGRAM up koguiutils ; cd .." >> $DESTINATION/LOG
-	(cd $MODULE/lib && $SVN_PROGRAM up koguiutils ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up kross ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up kross ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 

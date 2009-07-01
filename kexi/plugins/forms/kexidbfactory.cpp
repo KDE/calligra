@@ -436,23 +436,29 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 }
 
 bool
-KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesigner::Container *container)
+KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
-    m_container = container;
-    if (classname == "KexiDBLineEdit") {
+//2.0    m_container = container;
+    if (args.classname == "KexiDBLineEdit") {
 //! @todo this code should not be copied here but
-//! just inherited StdWidgetFactory::clearWidgetContent() should be called
-        KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-        createEditor(classname, lineedit->text(), lineedit, container,
-                     lineedit->geometry(), lineedit->alignment(), true);
+//! just inherited StdWidgetFactory::startInlineEditing() should be called
+        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+        args.text = lineedit->text();
+        args.alignment = lineedit->alignment();
+        args.useFrame = true;
         return true;
     }
-    if (classname == "KexiDBTextEdit") {
+    else if (args.classname == "KexiDBTextEdit") {
 //! @todo this code should not be copied here but
-//! just inherited StdWidgetFactory::clearWidgetContent() should be called
-        KTextEdit *textedit = static_cast<KTextEdit*>(w);
-        createEditor(classname, textedit->text(), textedit, container,
-                     textedit->geometry(), textedit->alignment(), true, true);
+//! just inherited StdWidgetFactory::startInlineEditing() should be called
+        KTextEdit *textedit = static_cast<KTextEdit*>(args.widget);
+//! @todo rich text?
+        args.text = textedit->toPlainText();
+        args.alignment = textedit->alignment();
+        args.useFrame = true;
+        args.multiLine = true;
+//! @todo
+#if 0 
         //copy a few properties
         KTextEdit *ed = dynamic_cast<KTextEdit *>(editor(w));
         ed->setLineWrapMode(textedit->lineWrapMode());
@@ -462,28 +468,48 @@ KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesign
         ed->setTextFormat(textedit->textFormat());
         ed->setHorizontalScrollBarPolicy(textedit->horizontalScrollBarPolicy());
         ed->setVerticalScrollBarPolicy(textedit->verticalScrollBarPolicy());
+#endif
         return true;
-    } else if (classname == "KexiDBLabel") {
-        KexiDBLabel *label = static_cast<KexiDBLabel*>(w);
-        m_widget = w;
+    }
+    else if (args.classname == "KexiDBLabel") {
+        KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
+//2.0        m_widget = w;
         if (label->textFormat() == Qt::RichText) {
-            QString text = label->text();
-            if (editRichText(label, text)) {
-                changeProperty("textFormat", "RichText", container->form());
-                changeProperty("text", text, container->form());
+            args.execute = false;
+//            QString text = label->text();
+            KFormDesigner::WidgetInfo* wclass = args.container->form()->library()->widgetInfoForClassName(args.classname);
+            if (wclass && wclass->inheritedClass()) {
+                const QByteArray thisClassname = args.classname; //save
+                args.classname = wclass->inheritedClass()->className();
+//! @todo OK?
+                const bool result = wclass->inheritedClass()->factory()->startInlineEditing(args);
+                args.classname = thisClassname;
+                return result;
             }
-
-            if (classname == "KexiDBLabel")
-                w->resize(w->sizeHint());
-        } else {
-            createEditor(classname, label->text(), label, container,
-                         label->geometry(), label->alignment(),
-                         false, label->wordWrap() /*multiline*/);
+            else {
+                return false;
+            }
+//-->               KFormDesigner::EditRichTextAction(args.container, label, 0, this).trigger();
+//2.0 moved to EditRichTextAction:
+//2.0          if (editRichText(label, text)) {
+//2.0              changeProperty(args.container->form(), label, "textFormat", "RichText", );
+//2.0              changeProperty("text", text, args.container->form());
+//2.0            }
+//2.0          if (args.classname == "KexiDBLabel")
+//2.0              args.widget->resize(args.widget->sizeHint());
+        }
+        else {
+            args.text = label->text();
+            args.alignment = label->alignment();
+            args.multiLine = label->wordWrap();
         }
         return true;
-    } else if (classname == "KexiDBSubForm") {
+    }
+    else if (args.classname == "KexiDBSubForm") {
+//! @todo
         // open the form in design mode
-        KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(w);
+        KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(args.widget);
+        args.execute = false;
         if (KexiMainWindowIface::global()) {
             bool openingCancelled;
             KexiMainWindowIface::global()->openObject(
@@ -493,31 +519,41 @@ KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesign
         return true;
     }
 #if 0
-    else if ((classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")
-             /*|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox")*/) {
+    else if (   args.classname == "KexiDBDateEdit" || args.classname == "KexiDBDateTimeEdit"
+             || args.classname == "KexiDBTimeEdit" /*|| classname == "KexiDBIntSpinBox" || classname == "KexiDBDoubleSpinBox"*/)
+    {
         disableFilter(w, container);
         return true;
     }
 #endif
-    else if (classname == "KexiDBAutoField") {
-        if (static_cast<KexiDBAutoField*>(w)->hasAutoCaption())
+    else if (args.classname == "KexiDBAutoField") {
+        if (static_cast<KexiDBAutoField*>(args.widget)->hasAutoCaption())
             return false; // caption is auto, abort editing
-        QLabel *label = static_cast<KexiDBAutoField*>(w)->label();
-        createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
+        QLabel *label = static_cast<KexiDBAutoField*>(args.widget)->label();
+        args.text = label->text();
+        args.widget = label;
+        args.geometry = label->geometry();
+        args.alignment = label->alignment();
+//2.0        createEditor(classname, label->text(), label, container, label, );
         return true;
-    } else if (classname == "KexiDBCheckBox") {
-        KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
-        QRect r(cb->geometry());
+    }
+    else if (args.classname == "KexiDBCheckBox") {
+        KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(args.widget);
         QStyleOption option;
-        option.initFrom(w);
+        option.initFrom(cb);
+        QRect r(cb->geometry());
         r.setLeft(
             r.left() + 2
             + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option, cb).width());
-        createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
+        args.text = cb->text();
+        args.geometry = r;
+//2.0        createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
         return true;
-    } else if (classname == "KexiDBImageBox") {
-        KexiDBImageBox *image = static_cast<KexiDBImageBox*>(w);
+    }
+    else if (args.classname == "KexiDBImageBox") {
+        KexiDBImageBox *image = static_cast<KexiDBImageBox*>(args.widget);
         image->insertFromFile();
+        args.execute = false;
         return true;
     }
     return false;
@@ -643,20 +679,20 @@ KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& 
 }
 
 bool
-KexiDBFactory::changeText(const QString &text)
+KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget, const QString &text)
 {
-    KFormDesigner::Form *form = m_container ? m_container->form() : 0;
-    if (!form)
-        return false;
-    if (!form->selectedWidget())
-        return false;
-    QByteArray n(form->selectedWidget()->metaObject()->className());
+//2.0    if (!form)
+//2.0        return false;
+//2.0    if (!form->selectedWidget())
+//2.0        return false;
+//2.0    QByteArray n(form->selectedWidget()->metaObject()->className());
+    const QString n(widget->metaObject()->className());
 // QWidget *w = WidgetFactory::widget();
     if (n == "KexiDBAutoField") {
-        changeProperty("caption", text, form);
+        changeProperty(form, widget, "caption", text);
         return true;
     }
-    //! \todo check field's geometry
+//! @todo check field's geometry
     return false;
 }
 
@@ -675,7 +711,7 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
     KexiFormView *formView = KexiUtils::findParent<KexiFormView*>((QWidget*)sender());
     if (formView) {
-        changeProperty("pixmapId", (uint)/*! @todo unsafe */id, formView->form());
+        changeProperty(formView->form(), formView, "pixmapId", (uint)/*! @todo unsafe */id);
         formView->setUnsavedLocalBLOB(formView->form()->selectedWidget(), id);
     }
 }

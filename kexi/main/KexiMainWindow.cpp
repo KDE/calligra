@@ -101,7 +101,7 @@
 #include <kexi_global.h>
 
 #include <widget/kexibrowser.h>
-#include <widget/kexipropertyeditorview.h>
+#include <widget/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>

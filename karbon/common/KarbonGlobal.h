@@ -87,7 +87,7 @@ namespace KarbonGlobal
     const qreal parallelTolerance = 0.99;
 
     /**
-    * Returns the sign of paramater a.
+    * Returns the sign of parameter a.
     */
     inline int sign( qreal a )
     {

@@ -73,7 +73,7 @@ public:
     void setVisibleCellRange(const QRect& cellRange);
 
 protected:
-    virtual void shapeChanged(ChangeType type);
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
 private Q_SLOTS:
     void handleDamages( const QList<Damage*>& damages );

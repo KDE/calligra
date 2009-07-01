@@ -44,9 +44,9 @@
 #include <renderobjects.h>
 #include "krscriptdraw.h"
 
-KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
+KRScriptHandler::KRScriptHandler(const orQuery *cu, KRReportData* d)
 {
-    m_connection = cu->connection();
+    //m_connection = cu->connection();
     m_reportData = d;
     m_cursor = cu;
 
@@ -95,8 +95,12 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
     m_action->addObject(m_report, m_reportData->name());
     kDebug() << "Report name is" << m_reportData->name();
     
-    m_action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
-
+    #if KDE_IS_VERSION(4,2,88)
+      m_action->setCode( scriptCode().toLocal8Bit());
+    #else
+      m_action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
+    #endif
+    
     kDebug() << m_action->code();
 
     m_action->trigger();
@@ -170,6 +174,7 @@ void KRScriptHandler::populateEngineParameters(KexiDB::Cursor *q)
 
 }
 
+#if !KDE_IS_VERSION(4,2,88)
 QString KRScriptHandler::fieldFunctions()
 {
     QString funcs;
@@ -201,7 +206,18 @@ QString KRScriptHandler::fieldFunctions()
 
     return funcs;
 }
+#endif
 
+#if KDE_IS_VERSION(4,2,88)
+QVariant KRScriptHandler::evaluate(const QString &code)
+{
+    if (!m_action->hadError()) {
+        return m_action->evaluate(code.toLocal8Bit());
+    } else {
+        return QVariant();
+    }
+}
+#else
 QVariant KRScriptHandler::evaluate(const QString &field)
 {
     QString func = field.toLower() + "_onrender_";
@@ -212,6 +228,8 @@ QVariant KRScriptHandler::evaluate(const QString &field)
         return QVariant();
     }
 }
+#endif
+
 
 void KRScriptHandler::displayErrors()
 {

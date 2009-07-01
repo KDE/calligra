@@ -34,6 +34,7 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
+#include "KPrViewAdaptor.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
@@ -55,12 +56,14 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 , m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
 , m_normalMode( m_viewMode )
 , m_notesMode( new KPrViewModeNotes(this, m_canvas))
+, m_dbus( new KPrViewAdaptor( this ) )
 {
     initGUI();
     initActions();
 
-    // Change strings because in KPreenter it's called slides and not pages
+    // Change strings because in KPresenter it's called slides and not pages
     actionCollection()->action("view_masterpages")->setText(i18n("Show Master Slides"));
+    actionCollection()->action("import_document")->setText(i18n("Import Slideshow..."));
     actionCollection()->action("page_insertpage")->setText(i18n( "Insert Slide"));
     actionCollection()->action("page_insertpage")->setToolTip(i18n("Insert a new slide after the current one"));
     actionCollection()->action("page_insertpage")->setWhatsThis(i18n("Insert a new slide after the current one"));
@@ -88,6 +91,26 @@ KPrView::~KPrView()
 KoViewConverter * KPrView::viewConverter( KoPACanvas * canvas )
 {
     return viewMode()->viewConverter( canvas );
+}
+
+KPrDocument * KPrView::kprDocument() const
+{
+    return static_cast<KPrDocument *>( m_doc );
+}
+
+KPrViewAdaptor * KPrView::dbusObject() const
+{
+    return m_dbus;
+}
+
+KPrViewModePresentation * KPrView::presentationMode() const
+{
+    return m_presentationMode;
+}
+
+bool KPrView::isPresentationRunning() const
+{
+    return ( viewMode() == m_presentationMode );
 }
 
 void KPrView::initGUI()
@@ -173,6 +196,13 @@ void KPrView::startPresentationFromBeginning()
     startPresentation();
 }
 
+void KPrView::stopPresentation()
+{
+    if ( isPresentationRunning() ) {
+        m_presentationMode->activateSavedViewMode();
+    }
+}
+
 void KPrView::createAnimation()
 {
     static int animationcount = 0;
@@ -181,8 +211,7 @@ void KPrView::createAnimation()
     foreach( KoShape * shape, selectedShapes )
     {
         KPrShapeAnimation * animation = new KPrAnimationMoveAppear( shape, animationcount );
-        KPrDocument * doc = dynamic_cast<KPrDocument *>( m_doc );
-        Q_ASSERT( doc );
+        KPrDocument * doc = static_cast<KPrDocument *>( m_doc );
         KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( doc, animation );
         m_canvas->addCommand( command );
     }

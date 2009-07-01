@@ -66,10 +66,14 @@ MacroCommand *MilestoneProgressPanel::buildCommand() {
         cmd->addCommand( new ModifyCompletionStartTimeCmd( m_completion, finishTime->dateTime() ) );
     }
     if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
         Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
         cmd->addCommand( new AddCompletionEntryCmd( m_completion, finishTime->dateTime().date(), e ) );
     } else {
-        // TODO: Remove ??
+        foreach( const QDate &date, m_completion.entries().keys() ) {
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
+            cmd->addCommand( new RemoveCompletionEntryCmd( m_completion, date ) );
+        }
     }
     return cmd;
 }

@@ -5,7 +5,7 @@ add_subdirectory( pics )
 #add_subdirectory( toolbar )
 #add_subdirectory( tests )
 
-include_directories(${KPLATO_INCLUDES})
+include_directories(${KPLATO_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 
 ########### KPlatoWork private library ###############
@@ -15,6 +15,10 @@ set(kplatoworkfactory_LIB_SRCS
     mainwindow.cpp
     part.cpp
     view.cpp
+    workpackage.cpp
+
+    taskworkpackagemodel.cpp
+    taskworkpackageview.cpp
 )
 
 kde4_add_library(kplatoworkfactory SHARED ${kplatoworkfactory_LIB_SRCS})
@@ -24,7 +28,8 @@ target_link_libraries(
     kplatokernel
     kplatomodels
     kplatoui
-    koguiutils
+    kplatoprivate
+
     komain
     kostore
     koodf
@@ -81,10 +86,17 @@ set(kplatowork_KDEINIT_SRCS main.cpp)
 
 kde4_add_kdeinit_executable( kplatowork ${kplatowork_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kplato.work")
+   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato Work 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(
     kdeinit_kplatowork
     kplatoworkapp
     ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
@@ -100,6 +112,7 @@ install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  kplatoworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kplatowork.rc kplatowork_readonly.rc kplatowork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/kplatowork)
+install( FILES  kplatoworkrc DESTINATION ${CONFIG_INSTALL_DIR})
 install( FILES  kplatowork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 

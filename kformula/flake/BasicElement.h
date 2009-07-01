@@ -107,10 +107,25 @@ public:
     virtual void paint( QPainter& painter, AttributeManager* am );
 
     /**
-     * Calculate the size of the element and the positions of its children
+     * Calculate the minimum size of the element and the positions of its children
+     *
+     * Laying out the items is done in two parts.
+     *
+     * First layout() is called for the topmost element, which in turn calls
+     * layout() for its children, and so on. This sets the minimum size of all elements.
+     *
+     * Then stretch() is called for the topmost element, which in turn calls
+     * stretch() for its children, and so on.  This stretches elements that
+     * are stretchable, up to their maximum size.
+     *
      * @param am The AttributeManager providing information about attributes values
      */
     virtual void layout( const AttributeManager* am );
+
+    /**
+     * Calculate the stretched size of the element.  This is called after layouting.
+     */
+    virtual void stretch();
 
     /**
      * Implement the cursor behaviour for the element
@@ -133,9 +148,15 @@ public:
 
     /// @return The height of the element
     double height() const;
-    
+
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+
+    /// @return The bounding rectangle of the children, relative to the element
+    const QRectF& childrenBoundingRect() const;
+
+    /// Set the bounding rectangle of the children, relative to the element
+    void setChildrenBoundingRect(const QRectF &rect);
 
     /// Set the element's baseline to @p baseLine
     void setBaseLine( double baseLine );
@@ -155,11 +176,14 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
-    /// Set the element's m_scaleFactor to @p scaleFactor
-    void setScaleFactor( double scaleFactor );
-
     /// @return The elements scale factor
     double scaleFactor() const;
+
+    /// Set the elements scale level and sets the scale factor
+    void setScaleLevel( int scaleLevel );
+
+    /// @return The elements scale level
+    int scaleLevel() const;
 
     /**
      * Set an attribute's value
@@ -176,7 +200,13 @@ public:
 
     /// @return The default value of the attribute for this element
     virtual QString attributesDefaultValue( const QString& attribute ) const;
+
+    /// Whether displaystyle is set
+    bool displayStyle() const;
     
+    /// Whether displaystyle is set.  This is updated by FormulaRenderer
+    void setDisplayStyle(bool displayStyle);
+
     /// Read the element from MathML
     bool readMathML( const KoXmlElement& element );
 
@@ -205,12 +235,20 @@ private:
 
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
+    /** The boundingRect storing the childrens element's width, height, x and y
+     *  The bottomRight hand corner will always be small that then size of
+     *  m_boundingRect
+     */
+    QRectF m_childrenBoundingRect;
 
     /// The position of our base line from the upper border
     double m_baseLine;
-   
-    /// Factor with which this element is scaled down
+
+    /// Factor with which this element is scaled down by
     double m_scaleFactor;
+
+    /// Scale level with which this element is scaled down by
+    double m_scaleLevel;
 
     /// Indicates whether this element has displaystyle set
     bool m_displayStyle;

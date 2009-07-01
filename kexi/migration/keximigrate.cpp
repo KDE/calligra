@@ -429,15 +429,6 @@ bool KexiMigrate::performExport(Kexi::ObjectStatus* result)
 }
 
 //=============================================================================
-// Functions for getting table data
-bool KexiMigrate::tableNames(QStringList & tn)
-{
-    //! @todo Cache list of table names
-    kDebug() << "Reading list of tables...";
-    return drv_tableNames(tn);
-}
-
-//=============================================================================
 // Progress functions
 bool KexiMigrate::progressInitialise()
 {
@@ -571,6 +562,55 @@ tristate KexiMigrate::drv_querySingleStringFromSQL(
     if (true == res)
         string = stringList.first();
     return res;
+}
+
+//=============================================================================
+//Extended API for access to external data
+bool KexiMigrate::connectSource()
+{
+  return drv_connect(); 
+}
+
+bool KexiMigrate::readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+{
+  return drv_readTableSchema(originalName, tableSchema);
+}
+
+bool KexiMigrate::tableNames(QStringList & tn)
+{
+    //! @todo Cache list of table names
+    kDebug() << "Reading list of tables...";
+    return drv_tableNames(tn);
+}
+
+bool KexiMigrate::readFromTable(const QString & tableName)
+{ 
+  return drv_readFromTable(tableName); 
+}
+    
+bool KexiMigrate::moveNext() 
+{ 
+  return drv_moveNext(); 
+}
+ 
+bool KexiMigrate::movePrevious() 
+{ 
+  return drv_movePrevious(); 
+}
+
+bool KexiMigrate::moveFirst() 
+{ 
+  return drv_moveFirst(); 
+}
+ 
+bool KexiMigrate::moveLast() 
+{ 
+  return drv_moveLast(); 
+}
+   
+QVariant KexiMigrate::value(uint i)
+{ 
+  return drv_value(i); 
 }
 
 #include "keximigrate.moc"

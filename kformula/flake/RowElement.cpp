@@ -62,8 +62,21 @@ void RowElement::layout( const AttributeManager* am )
     setWidth( width );
     setHeight( topToBaseline + baselineToBottom );
     setBaseLine( topToBaseline );
+    setChildrenBoundingRect(QRectF(0,0, width, height()));
 }
 
+void RowElement::stretch()
+{
+    //The elements can grow vertically, so make sure we reposition their vertical 
+    //origin appropriately
+    foreach( BasicElement* tmpElement, childElements() ) {
+        tmpElement->stretch();
+        //Set the origin.  Note that we ignore the baseline and center the object
+        //vertically
+        //I think we need to FIXME for symmetric situations or something?
+        tmpElement->setOrigin( QPointF(tmpElement->origin().x(), childrenBoundingRect().y() + (childrenBoundingRect().height() - tmpElement->height())/2 ));
+    }
+}
 const QList<BasicElement*> RowElement::childElements()
 {
     return m_childElements;
@@ -80,7 +93,7 @@ void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 {
     Q_UNUSED( cursor )
-    m_childElements.remove( child );
+    m_childElements.removeAll( child );
 }
 
 BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )

@@ -136,7 +136,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <title>Stencil Geometry</title>
 <para>For accurately specifying the dimensions of a stencil use the Geometry palette. To display the palette select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Show Geometry</guimenuitem></menuchoice>. The palette contains four spin boxes for specifying the horizontal (<guilabel>X:</guilabel>) and vertical (<guilabel>Y:</guilabel>) position of the stencil and the <guilabel>Width:</guilabel> and <guilabel>Height:</guilabel>.</para>
 
-<tip><para>Although the measurements are displayed in centmeters it is possible to enter other units into the textbox. For example, entering 2.5 mm will be converted into centimeter. Points (pt) and inches (in) are also accepted.</para></tip>
+<tip><para>Although the measurements are displayed in centimeters it is possible to enter other units into the textbox. For example, entering 2.5 mm will be converted into centimeter. Points (pt) and inches (in) are also accepted.</para></tip>
 
 </sect2>
 

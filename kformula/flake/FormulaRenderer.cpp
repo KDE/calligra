@@ -38,16 +38,10 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
     p.translate( element->origin() );          // setup painter
-    p.scale( element->scaleFactor(), element->scaleFactor() );
-    element->paint( p, m_attributeManager );   // let element paint itsself
+    element->paint( p, m_attributeManager );   // let element paint itself
 
     // eventually paint all its children
-    if( element->childElements().isEmpty() || element->elementType() == Phantom )
-    {
-        p.restore();
-        return;
-    }
-    else
+    if( !element->childElements().isEmpty() && element->elementType() != Phantom )
         foreach( BasicElement* tmpElement, element->childElements() )
             paintElement( p, tmpElement );
 
@@ -56,13 +50,15 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 
 void FormulaRenderer::layoutElement( BasicElement* element )
 {
+    int i = 0;
+    element->setDisplayStyle( m_attributeManager->boolOf("displaystyle", element));
     foreach( BasicElement* tmp, element->childElements() ) {
-        // TODO set displaystyle...
-        tmp->setScaleFactor( m_attributeManager->scriptLevelScaling( element ) );
+	int scale = m_attributeManager->scriptLevel( element, i++ ); 
+        tmp->setScaleLevel( scale );
         layoutElement( tmp );              // first layout all children
     }
-
     element->layout( m_attributeManager );      // actually layout the element
+    element->stretch();
 }
 
 void FormulaRenderer::update( QPainter& p, BasicElement* element )

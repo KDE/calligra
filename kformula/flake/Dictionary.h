@@ -61,10 +61,10 @@ public:
     bool separator() const;
 
     /// @return The lspace value of the currently queried operator
-    double lSpace() const;
+    QString lSpace() const;
 
     /// @return The rspace value of the currently queried operator
-    double rSpace() const;
+    QString rSpace() const;
 
     /// @return The stretchy value of the currently queried operator
     bool stretchy() const;

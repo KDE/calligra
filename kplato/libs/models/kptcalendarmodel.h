@@ -152,7 +152,7 @@ public:
     CalendarDay *day( const QModelIndex &index ) const;
     TimeInterval *interval( const QModelIndex &index ) const;
     
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     QModelIndex insertInterval ( TimeInterval *ti, CalendarDay *day );
     void removeInterval( TimeInterval *ti );
     QModelIndex insertDay ( CalendarDay *day );

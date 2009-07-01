@@ -162,7 +162,7 @@ database)</para></listitem>
 
 <para>
 Such a table can be made both in a spreadsheet and in a database.
-Using a spreadsheet is very easy, of couse. What problems do we
+Using a spreadsheet is very easy, of course. What problems do we
 encounter at this stage?
 </para>
 
@@ -172,13 +172,13 @@ encounter at this stage?
 Suppose you are using a spreadsheet and you need to change the address of at
 least one person. You have a small problem: you often have to change the
 address in many rows. For example, Joan takes three rows. A real problem
-will arise if you forget to change one of the rows - the address asigned
+will arise if you forget to change one of the rows - the address assigned
 to this person will be <emphasis>ambiguous</emphasis>, hence
 <emphasis>your data loses integrity</emphasis>.
 </para>
 <para>
 Moreover there is no simple way of deleting a chosen person from the table
-since you have to remember about deleting all rows releted to him or her.
+since you have to remember about deleting all rows related to him or her.
 </para>
 </sect3>
 
@@ -333,7 +333,7 @@ can lead to mistakes. For example, while calculating sums you may think you
 have 100 rows of data while in fact there are 20 rows more hidden.
 </para>
 <para>
-If you want to work on a small subset of data, &eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorect calculations.
+If you want to work on a small subset of data, &eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorrect calculations.
 </para>
 <para>
 To limit the <emphasis>data view</emphasis> database applications offer
@@ -341,7 +341,7 @@ To limit the <emphasis>data view</emphasis> database applications offer
 and <emphasis>reports</emphasis>.
 </para>
 <para>
-A very practical way of limitting is the following extended version of
+A very practical way of limiting is the following extended version of
 the previously described table <guilabel>Persons</guilabel>:
 </para>
 
@@ -394,14 +394,14 @@ is often known as a <guilabel>view</guilabel>.
 <para>
 Your computer is probably quite fast, however you will easily see that it
 doesn't help with slow, large spreadsheets. Their low efficiency is first
-of all due to lack of indexes accelertaing the process of data search
+of all due to lack of indexes accelerating the process of data search
 (databases do offer them). Moreover if you use things like system clipboard,
 even copying data may become troublesome with time.
 </para>
 <para>
 Spreadsheets containing large data sets may take ages to open. A spreadsheet
 loads lots of data to the computer's memory while opening. Most of the data
-loaded are probably useless/unneccessary for you at the moment. Databases
+loaded are probably useless/unnecessary for you at the moment. Databases
 unlike spreadsheets load data from computer storage only when needed.
 </para>
 <para>
@@ -511,7 +511,7 @@ which were assigned to you by setting appropriate access rights.
 </para>
 <para>
 Access rights can affect ability of data editing or only data reading.
-If any data is not avaliable to you, it will not be even sent to your
+If any data is not available to you, it will not be even sent to your
 computer, so there is no possibility of making a copy of the data in such
 easy way as in case of spreadsheet files.
 </para>

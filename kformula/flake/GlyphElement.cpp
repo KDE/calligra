@@ -24,13 +24,14 @@
 #include <KoXmlReader.h>
 
 #include <QFontDatabase>
+#include <QFontMetricsF>
 
 #include <kdebug.h>
 
 GlyphElement::GlyphElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void GlyphElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF GlyphElement::renderToPath( const QString& raw, QPainterPath& path )
 {
     // try to lookup the char in the font database
     AttributeManager am;
@@ -44,9 +45,14 @@ void GlyphElement::renderToPath( const QString& raw, QPainterPath& path )
         tmpFont.setFamily( fontFamily );
         path.addText( path.currentPosition(), tmpFont,
                       QChar( am.stringOf( "index", this ).toInt() ) ); 
+        QFontMetricsF fm(tmpFont);
+        return fm.boundingRect(QChar( am.stringOf( "index", this ).toInt() ) );
     }
-    else // if not found use alt text
+    else { // if not found use alt text
         path.addText( path.currentPosition(), font(), am.stringOf( "alt", this ) );
+        QFontMetricsF fm(font());
+        return fm.boundingRect(am.stringOf( "alt", this ));
+    }
 }
 
 ElementType GlyphElement::elementType() const

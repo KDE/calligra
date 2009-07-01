@@ -29,6 +29,7 @@ class KarbonGradientEditWidget;
 class QUndoCommand;
 class KoShape;
 class QTableWidgetItem;
+class KoResource;
 
 /**
  * A tool for editing gradient backgrounds of shapes.
@@ -64,7 +65,7 @@ private Q_SLOTS:
     virtual void resourceChanged( int key, const QVariant & res );
     void initialize();
     void gradientChanged();
-    void gradientSelected( QTableWidgetItem* );
+    void gradientSelected( KoResource* );
 private:
     QGradient * m_gradient;
     QMultiMap<KoShape*,GradientStrategy*> m_strategies; ///< the list of gradient strategies

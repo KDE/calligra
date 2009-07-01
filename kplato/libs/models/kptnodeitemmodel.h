@@ -24,7 +24,6 @@
 #include "kptschedule.h"
 
 #include <QDate>
-#include <QItemDelegate>
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
 
@@ -269,7 +268,7 @@ public:
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
     Node *node( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
     QModelIndex insertTask( Node *node, Node *after );
     QModelIndex insertSubtask( Node *node, Node *parent );
@@ -378,7 +377,7 @@ public:
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
     Node *node( const QModelIndex &index ) const;
-    virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    virtual QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
     QModelIndex insertTask( Node *node, Node *after );
     QModelIndex insertSubtask( Node *node, Node *parent );

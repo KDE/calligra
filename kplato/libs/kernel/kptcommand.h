@@ -93,6 +93,8 @@ public:
 
     virtual void execute();
     virtual void unexecute();
+
+    bool isEmpty() const { return cmds.isEmpty(); }
     
 protected:
     QList<QUndoCommand*> cmds;
@@ -1488,6 +1490,17 @@ private:
     bool oldvalue, newvalue;
 };
 
+class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulerCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    int oldvalue, newvalue;
+};
 
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
 {

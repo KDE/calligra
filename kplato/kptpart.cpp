@@ -26,6 +26,11 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcontext.h"
+#include "kptschedulerpluginloader.h"
+#include "kptschedulerplugin.h"
+#include "kptbuiltinschedulerplugin.h"
+#include "kptcommand.h"
+
 //#include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>
@@ -71,22 +76,39 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kdgantt" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
-    m_config.load();
 
-    setProject( new Project() ); // after config is loaded
+    loadSchedulerPlugins();
+
+    setProject( new Project( m_config ) ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
 }
 
 
 Part::~Part()
 {
-    m_config.save();
     delete m_project;
+}
+
+void Part::loadSchedulerPlugins()
+{
+    // Add built-in scheduler
+    addSchedulerPlugin( "Built-in", new BuiltinSchedulerPlugin( this ) );
+
+    // Add all real scheduler plugins
+    SchedulerPluginLoader *loader = new SchedulerPluginLoader(this);
+    connect(loader, SIGNAL(pluginLoaded(const QString&, SchedulerPlugin*)), this, SLOT(addSchedulerPlugin(const QString&, SchedulerPlugin*)));
+    loader->loadAllPlugins();
+}
+
+void Part::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
+{
+    kDebug()<<plugin;
+    m_schedulerPlugins[key] = plugin;
 }
 
 void Part::configChanged()
 {
-    m_project->setTaskDefaults( m_config.taskDefaults() );
+    //m_project->setConfig( m_config );
 }
 
 void Part::setProject( Project *project )
@@ -98,7 +120,8 @@ void Part::setProject( Project *project )
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
-        m_project->setTaskDefaults( m_config.taskDefaults() );
+//        m_project->setConfig( config() );
+        m_project->setSchedulerPlugins( m_schedulerPlugins );
     }
     emit changed();
 }
@@ -112,7 +135,6 @@ KoView *Part::createViewInstance( QWidget *parent )
 
 bool Part::loadOdf( KoOdfReadStore & odfStore )
 {
-    Q_UNUSED( odfStore );
     kWarning()<< "OpenDocument not supported, let's try native xml format";
     return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
 }
@@ -130,11 +152,11 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
         return false;
     }
@@ -174,7 +196,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            Project * newProject = new Project();
+            Project * newProject = new Project( m_config );
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {
@@ -187,9 +209,6 @@ This test does not work any longer. KoXml adds a couple of elements not present 
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
                 //TODO add some ui here
             }
-        } else if ( e.tagName() == "objects" ) {
-            kDebug()<<"loadObjects";
-            loadObjects( e );
         }
     }
     m_xmlLoader.stopLoad();
@@ -223,19 +242,6 @@ QDomDocument Part::saveXML()
     // Save the project
     m_project->save( doc );
     
-    if ( ! children().isEmpty() ) {
-        QDomElement el = document.createElement( "objects" );
-        foreach ( KoDocumentChild *ch, children() ) {
-            if ( ch->isDeleted() ) {
-                continue;
-            }
-            QDomElement e = ch->save( document, false );
-            el.appendChild( e );
-        }
-        if ( el.childNodes().count() > 0 ) {
-            doc.appendChild( el );
-        }
-    }
     return document;
 }
 
@@ -267,9 +273,10 @@ bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
     QByteArray s = doc.toByteArray(); // utf8 already
     dev->open( QIODevice::WriteOnly );
     int nwritten = dev->write( s.data(), s.size() );
-    if ( nwritten != (int)s.size() )
-        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
-        return nwritten == (int)s.size();
+    if ( nwritten != (int)s.size() ) {
+        kWarning()<<"wrote:"<<nwritten<<"- expected:"<< s.size();
+    }
+    return nwritten == (int)s.size();
 }
 
 bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id  )
@@ -362,9 +369,9 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     int errorLine, errorColumn;
     bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
     if ( ! ok ) {
-        kError(30003) << "Parsing error in " << url.url() << "! Aborting!" << endl
+        kError() << "Parsing error in " << url.url() << "! Aborting!" << endl
                 << " In line: " << errorLine << ", column: " << errorColumn << endl
-                << " Error message: " << errorMsg << endl;
+                << " Error message: " << errorMsg;
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
         ok = loadWorkPackageXML( project, store->device(), doc );
@@ -391,11 +398,11 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
@@ -418,18 +425,22 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
 #else
     int numNodes = plan.childNodesCount();
 #endif
+#if 0 
+This test does not work any longer. KoXml adds a couple of elements not present in the file!!
     if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
         kDebug() <<"*** Error ***";
         kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
         return false;
     }
+#endif
     emit sigProgress( 100 ); // the rest is only processing, not loading
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
     bool ok = true;
     m_xmlLoader.startLoad();
+    Project proj;
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -437,8 +448,8 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            m_xmlLoader.setProject( &project );
-            ok = project.load( e, m_xmlLoader );
+            m_xmlLoader.setProject( &proj );
+            ok = proj.load( e, m_xmlLoader );
             if ( ! ok ) {
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 //TODO add some ui here
@@ -450,6 +461,72 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
+    if ( ok ) {
+        const Task *from = qobject_cast<const Task*>( proj.childNode( 0 ) );
+        Task *to = qobject_cast<Task*>( project.findNode( from->id() ) );
+        if ( to && from ) {
+            MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
+            Completion &org = to->completion();
+            const Completion &curr = from->completion();
+            if ( org.entrymode() != curr.entrymode() ) {
+                cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
+            }
+            if ( org.isStarted() != curr.isStarted() ) {
+                cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
+            }
+            if ( org.isFinished() != curr.isFinished() ) {
+                cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+            }
+            if ( org.startTime() != curr.startTime() ) {
+                cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+            }
+            if ( org.finishTime() != curr.finishTime() ) {
+                cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+            }
+            QList<QDate> orgdates = org.entries().keys();
+            QList<QDate> currdates = curr.entries().keys();
+            foreach ( QDate d, orgdates ) {
+                if ( currdates.contains( d ) ) {
+                    if ( curr.entry( d ) == org.entry( d ) ) {
+                        continue;
+                    }
+                    kDebug()<<"modify entry "<<d;
+                    Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
+                    cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
+                } else {
+                    kDebug()<<"remove entry "<<d;
+                    cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
+                }
+            }
+            foreach ( QDate d, currdates ) {
+                if ( ! orgdates.contains( d ) ) {
+                    Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
+                    kDebug()<<"add entry "<<d<<e;
+                    cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+                }
+            }
+            const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
+            foreach ( const Resource *res, map.keys() ) {
+                Resource *r = project.findResource( res->id() );
+                if ( r == 0 ) {
+                    kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+                    continue;
+                }
+                Completion::UsedEffort *ue = map[ r ];
+                if ( ue == 0 ) {
+                    continue;
+                }
+                if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
+                    cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
+                }
+            }
+            if ( cmd->isEmpty() ) {
+                delete cmd;
+            } else {
+                addCommand( cmd );
+            }
+        }
+    }
     emit sigProgress( -1 );
     return ok;
 }
@@ -470,44 +547,6 @@ void Part::activate( QWidget *w )
         manager()->setActivePart( this, w );
 }
 
-DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
-{
-    DocumentChild *ch = new DocumentChild( this, doc, geometry );
-    insertChild( ch );
-    return ch;
-}
-
-void Part::loadObjects( const KoXmlElement &element )
-{
-    kDebug();
-    KoXmlNode n = element.firstChild();
-    for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        if ( ! n.isElement() ) {
-            continue;
-        }
-        KoXmlElement e = n.toElement();
-        if ( e.tagName() == "object" ) {
-            DocumentChild *ch = new DocumentChild( this );
-            if ( ch->load( e ) ) {
-                kDebug()<<"loaded";
-                insertChild( ch );
-            } else {
-                kDebug()<<"Failed to load object";
-                delete ch;
-            }
-        }
-    }
-}
-
-bool Part::loadChildren( KoStore* store )
-{
-    kDebug();
-    foreach ( KoDocumentChild *ch, children() ) {
-        ch->loadDocument( store );
-    }
-    return true;
-}
-
 void Part::openTemplate( const KUrl& url )
 {
     //kDebug()<<url;
@@ -519,14 +558,17 @@ void Part::openTemplate( const KUrl& url )
 
 bool Part::completeLoading( KoStore *store )
 {
+    // If we get here the new project is loaded and set
     if ( m_loadingTemplate ) {
-        // If we get here the new project is loaded and set
         //kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
+    } else if ( isImporting() ) {
+        //kDebug()<<"Importing, generate unique node ids";
+        m_project->generateUniqueNodeIds();
     }
     if ( store == 0 ) {
         // can happen if loading a template
-        kDebug()<<"No store"<<endl;
+        kDebug()<<"No store";
         return true; // continue anyway
     }
     delete m_context;
@@ -535,7 +577,7 @@ bool Part::completeLoading( KoStore *store )
     if ( loadAndParse( store, "context.xml", doc ) ) {
         store->close();
         m_context->load( doc );
-    } else kWarning()<<"No context"<<endl;
+    } else kWarning()<<"No context";
     return true;
 }
 
@@ -548,8 +590,7 @@ bool Part::completeSaving( KoStore *store )
     if ( view ) {
         m_context = new Context();
         m_context->save( view );
-        if ( store->open( "context.xml" ) )
-        {
+        if ( store->open( "context.xml" ) ) {
             QDomDocument doc = m_context->save( view );
             KoStoreDevice dev( store );
 
@@ -563,11 +604,11 @@ bool Part::completeSaving( KoStore *store )
 
 bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(30003) << "oldLoadAndParse: Trying to open " << filename << endl;
+    //kDebug() << "oldLoadAndParse: Trying to open " << filename;
 
     if (!store->open(filename))
     {
-        kWarning() << "Entry " << filename << " not found!" << endl;
+        kWarning() << "Entry " << filename << " not found!";
 //        d->lastErrorMessage = i18n( "Could not find %1",filename );
         return false;
     }
@@ -579,7 +620,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     {
         kError() << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+            << " Error message: " << errorMsg;
 /*        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
                               ,filename  ,errorLine, errorColumn ,
                               QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
@@ -587,65 +628,8 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
         store->close();
         return false;
     }
-    kDebug() << "File " << filename << " loaded and parsed" << endl;
+    kDebug() << "File " << filename << " loaded and parsed";
     return true;
-}
-
-//--------------------------------
-
-DocumentChild::DocumentChild ( KoDocument* parent )
-    : KoDocumentChild ( parent )
-{
-}
-
-DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry )
-    : KoDocumentChild ( parent, doc, geometry )
-{
-}
-
-void DocumentChild::setActivated( bool act, QWidget *w )
-{
-    if ( document()->manager() ) {
-        if ( act ) {
-            document()->manager()->setActivePart( document(), w );
-        } else if ( parentDocument()->manager() ) {
-            parentDocument()->manager()->setActivePart( parentDocument(), w );
-        } else {
-            document()->manager()->setActivePart( 0, w );
-        }
-    }
-}
-
-KoDocument* DocumentChild::hitTest( const QPoint& , KoView* view, const QMatrix& )
-{
-    if ( document()->views().contains( view ) ) {
-        return document();
-    }
-    return 0;
-}
-
-
-QDomElement DocumentChild::save( QDomDocument &doc, bool uppercase )
-{
-    if ( document() == 0 ) {
-        return QDomElement();
-    }
-    QDomElement e = KoDocumentChild::save( doc, uppercase );
-    kDebug()<<m_title;
-    e.setAttribute( "title", m_title );
-    e.setAttribute( "icon", m_icon );
-    return e;
-}
-
-bool DocumentChild::load( const KoXmlElement& element, bool uppercase )
-{
-    if ( KoDocumentChild::load( element, uppercase ) ) {
-        m_icon = element.attribute( "icon", QString() );
-        m_title = element.attribute( "title", QString() );
-        kDebug()<<m_title;
-        return true;
-    }
-    return false;
 }
 
 

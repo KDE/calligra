@@ -1368,7 +1368,12 @@ bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
         m_optimisticEstimate = scale(  Duration::fromString(element.attribute("optimistic")), m_unit, s );
         m_pessimisticEstimate = scale( Duration::fromString(element.attribute("pessimistic")), m_unit, s );
     } else {
-        m_unit = (Duration::Unit)(element.attribute("unit", QString().number(Duration::Unit_ms) ).toInt());
+        if ( status.version() <= "0.6.2" ) {
+            // 0 pos in unit is now Unit_Y, so add 3 to get the correct new unit
+            m_unit = (Duration::Unit)(element.attribute("unit", QString().number(Duration::Unit_ms - 3) ).toInt() + 3);
+        } else {
+            m_unit = Duration::unitFromString( element.attribute( "unit" ) );
+        }
         m_expectedEstimate = element.attribute("expected", "0.0").toDouble();
         m_optimisticEstimate = element.attribute("optimistic", "0.0").toDouble();
         m_pessimisticEstimate = element.attribute("pessimistic", "0.0").toDouble();
@@ -1389,7 +1394,7 @@ void Estimate::save(QDomElement &element) const {
         me.setAttribute("calendar-id", m_calendar->id() );
     }
     me.setAttribute("risk", risktypeToString());
-    me.setAttribute("unit", m_unit);
+    me.setAttribute("unit", Duration::unitToString( m_unit ) );
 }
 
 QString Estimate::typeToString( bool trans ) const {
@@ -1543,57 +1548,83 @@ Duration Estimate::expectedValue() const
 
 double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<double> &scales )
 {
+    //kDebug()<<value.toDouble( unit )<<","<<unit<<scales;
     QList<double> lst = scales;
     switch ( lst.count() ) {
         case 0:
-            lst << 24.0; // add hours in day
+            lst << 365.0 / 30; // add months in a year
         case 1:
-            lst << 60.0; // add minutes in hour
+            lst << 30.0 / 7.0; // add weeks in a month
         case 2:
-            lst << 60.0; // add seconds in minute
+            lst << 7.0; // add days in a week
         case 3:
+            lst << 24.0; // add hours in day
+        case 4:
+            lst << 60.0; // add minutes in hour
+        case 5:
+            lst << 60.0; // add seconds in minute
+        case 6:
             lst << 1000.0; // add milliseconds in second
         default:
             break;
     }
     double v = (double)value.milliseconds();
     if (unit == Duration::Unit_ms) return v;
-    v /= lst[3];
+    v /= lst[6];
     if (unit == Duration::Unit_s) return v;
-    v /= lst[2];
+    v /= lst[5];
     if (unit == Duration::Unit_m) return v;
-    v /= lst[1];
+    v /= lst[4];
     if (unit == Duration::Unit_h) return v;
-    v /= lst[0];
+    v /= lst[3];
+    if (unit == Duration::Unit_d) return v;
+    v /= lst[2];
+    if (unit == Duration::Unit_w) return v;
+    v /= lst[1];
+    if (unit == Duration::Unit_M) return v;
+    v /= lst[0]; // Year
     //kDebug()<<value.toString()<<","<<unit<<"="<<v;
     return v;
 }
 
 Duration Estimate::scale( double value, Duration::Unit unit, const QList<double> &scales )
 {
+    //kDebug()<<value<<","<<unit<<scales;
     QList<double> lst = scales;
     switch ( lst.count() ) {
-        case 0:
+        case Duration::Unit_Y:
+            lst << 365.0 / 30.0; // add months in a year
+        case Duration::Unit_M:
+            lst << 30.0 / 7.0; // add weeks in a month
+        case Duration::Unit_w:
+            lst << 7.0; // add days in a week
+        case Duration::Unit_d:
             lst << 24.0; // add hours in day
-        case 1:
+        case Duration::Unit_h:
             lst << 60.0; // add minutes in hour
-        case 2:
+        case Duration::Unit_m:
             lst << 60.0; // add seconds in minute
-        case 3:
+        case Duration::Unit_s:
             lst << 1000.0; // add milliseconds in second
         default:
             break;
     }
     double v = value;
     switch ( unit ) {
-        case Duration::Unit_d:
+        case Duration::Unit_Y:
             v *= lst[0];
-        case Duration::Unit_h:
+        case Duration::Unit_M:
             v *= lst[1];
-        case Duration::Unit_m:
+        case Duration::Unit_w:
             v *= lst[2];
-        case Duration::Unit_s:
+        case Duration::Unit_d:
             v *= lst[3];
+        case Duration::Unit_h:
+            v *= lst[4];
+        case Duration::Unit_m:
+            v *= lst[5];
+        case Duration::Unit_s:
+            v *= lst[6];
         case Duration::Unit_ms:
             break; // nothing
     }
@@ -1614,7 +1645,7 @@ QList<double> Estimate::scales() const
     if ( p == 0 ) {
         return s;
     }
-    s << p->standardWorktime()->day();
+    s << p->standardWorktime()->scales();
     return s;
 }
 

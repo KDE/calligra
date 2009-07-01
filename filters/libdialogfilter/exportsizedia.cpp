@@ -260,7 +260,7 @@ void ExportSizeDia::slotOk()
     int height = heightEdit->value();
 //     kDebug( KFormula::DEBUGID ) 
 //                                  << "(" << width << " " << height << ")"
-//                                  << endl;
+//                                 ;
 //     width = realWidth;
 //     height = realHeight;
     QImage image = formula->drawImage( width, height );

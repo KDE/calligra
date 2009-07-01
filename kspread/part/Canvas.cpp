@@ -85,7 +85,6 @@
 
 // KOffice
 #include <KoCanvasController.h>
-#include <KoDocumentChild.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoToolManager.h>
@@ -661,9 +660,9 @@ void Canvas::paintEvent( QPaintEvent* event )
     const QPointF offset = viewConverter()->documentToView(this->offset());
     painter.translate(-offset);
     painter.setClipRegion(event->region().translated(offset.x(), offset.y()));
+    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.save();
 
-    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     qreal zoomX, zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
@@ -681,6 +680,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     // flake
     painter.restore();
     d->shapeManager->paint( painter, *viewConverter(), false );
+    painter.setRenderHint( QPainter::Antialiasing, false );
     d->toolProxy->paint( painter, *viewConverter() );
 
     event->accept();

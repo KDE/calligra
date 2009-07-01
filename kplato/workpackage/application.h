@@ -26,11 +26,11 @@
 #include "kplatowork_export.h"
 
 #include <KoMainWindow.h>
-#include <KoQueryTrader.h>
 
 #include <KoApplication.h>
 
 #include <ktabwidget.h>
+#include <kuniqueapplication.h>
 
 #include <q3ptrlist.h>
 #include <QMap>
@@ -41,6 +41,8 @@
 #include <kvbox.h>
 
 //#include "iconsidepane.h"
+
+class KPlatoWork_MainWindow;
 
 namespace std { }
 using namespace std;
@@ -60,20 +62,17 @@ class QSplitter;
 class KoDocumentEntry;
 class KoView;
 
-class KPlatoWork_MainGUIClient;
-
-class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KoApplication
+class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {
     Q_OBJECT
 public:
     KPlatoWork_Application();
     ~KPlatoWork_Application();
 
-    /// Prepare application for execution
-    virtual bool start();
+    virtual int newInstance();
 
 private:
-//    bool initHack();
+    KPlatoWork_MainWindow *m_mainwindow;
 };
 
 

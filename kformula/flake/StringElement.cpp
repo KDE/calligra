@@ -22,8 +22,9 @@
 StringElement::StringElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void StringElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF StringElement::renderToPath( const QString& raw, QPainterPath& path )
 {
+    return QRectF();
 }
 
 ElementType StringElement::elementType() const

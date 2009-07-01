@@ -89,7 +89,7 @@ void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
 }
 
-void TableRowElement::removeChild( BasicElement* element )
+void TableRowElement::removeChild(FormulaCursor* cursor, BasicElement* element )
 {
 }
 

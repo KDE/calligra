@@ -1225,6 +1225,11 @@ void StandardWorktime::changed()
     }
 }
 
+QList<double> StandardWorktime::scales() const
+{
+    return QList<double>() << year() / month() << month() / week() << week() / day() << day();
+}
+
 bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug();
     m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); 

@@ -32,9 +32,11 @@
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
     m_scaleFactor = 1.0;
+    m_scaleLevel = 1;
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
     m_boundingRect.setWidth( 7.0 );       // standard values
     m_boundingRect.setHeight( 10.0 );
+    m_displayStyle = true;
     setBaseLine( 10.0 );
 
 }
@@ -46,14 +48,21 @@ BasicElement::~BasicElement()
 
 void BasicElement::paint( QPainter& painter, AttributeManager* )
 { 
-    painter.setPen( QPen( Qt::blue ) );
+/*    painter.setPen( QPen( Qt::blue ) );
     painter.drawRect( QRectF(0.0, 0.0, width(), height()) );
     painter.setPen( QPen( Qt::red, 0, Qt::DashLine ) );
-    painter.drawLine( QPointF(0.0, baseLine()), QPointF(width(), baseLine()));
+    painter.drawLine( QPointF(0.0, baseLine()), QPointF(width(), baseLine()));*/
 }
 
 void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
+
+void BasicElement::stretch()
+{
+    foreach( BasicElement* tmpElement, childElements() ) {
+        tmpElement->stretch();
+    }
+}
 
 BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
 {
@@ -162,7 +171,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
 
 void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 {
-    foreach( QString value, m_attributes )
+    foreach( const QString &value, m_attributes )
         writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
 }
 
@@ -180,20 +189,29 @@ const QRectF& BasicElement::boundingRect() const
 {
     return m_boundingRect;
 }
-
+const QRectF& BasicElement::childrenBoundingRect() const
+{
+    return m_childrenBoundingRect;
+}
+void BasicElement::setChildrenBoundingRect(const QRectF &rect)
+{
+    m_childrenBoundingRect = rect;
+    Q_ASSERT(m_childrenBoundingRect.bottom() <= m_boundingRect.height());
+    Q_ASSERT(m_childrenBoundingRect.right() <= m_boundingRect.width());
+}
 double BasicElement::height() const
 {
-    return m_boundingRect.height()*m_scaleFactor;
+    return m_boundingRect.height();
 }
 
 double BasicElement::width() const
 {
-    return m_boundingRect.width()*m_scaleFactor;
+    return m_boundingRect.width();
 }
 
 double BasicElement::baseLine() const
 {
-    return m_baseLine*m_scaleFactor;
+    return m_baseLine;
 }
 
 QPointF BasicElement::origin() const
@@ -209,6 +227,10 @@ BasicElement* BasicElement::parentElement() const
 double BasicElement::scaleFactor() const
 {
     return m_scaleFactor;
+}
+int BasicElement::scaleLevel() const
+{
+    return m_scaleLevel;
 }
 
 void BasicElement::setWidth( double width )
@@ -236,8 +258,22 @@ void BasicElement::setParentElement( BasicElement* parent )
     m_parentElement = parent;
 }
 
-void BasicElement::setScaleFactor( double scaleFactor )
+void BasicElement::setScaleLevel( int scaleLevel )
 {
-    m_scaleFactor = scaleFactor;
+    if(scaleLevel == m_scaleLevel) return;
+
+    m_scaleLevel =  qMax(scaleLevel, 0);
+    int level = scaleLevel;
+    m_scaleFactor = 1.9;
+    while(level-- > 0)  //raise multiplier to the power of level
+        m_scaleFactor *= 0.71;
 }
 
+bool BasicElement::displayStyle() const
+{
+    return m_displayStyle;
+}
+void BasicElement::setDisplayStyle(bool displayStyle)
+{
+    m_displayStyle = displayStyle;
+}

@@ -411,7 +411,7 @@ QVariant DocumentItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         //case 0: return new KUrlDelegate( parent ); //???????

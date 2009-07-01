@@ -1,6 +1,6 @@
 project(kpresenter)
 
-include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
+include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
@@ -16,6 +16,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrView.cpp
+     KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModePreviewPageEffect.cpp
@@ -45,6 +46,14 @@ set( kpresenterprivate_LIB_SRCS
      KPrPlaceholderStrategy.cpp
      KPrPlaceholderPictureStrategy.cpp
      KPrPlaceholderTextStrategy.cpp
+     KPrPresentationHighlightWidget.cpp
+     KPrPresentationDrawWidget.cpp
+     KPrPresentationBlackWidget.cpp
+     KPrPresentationStrategy.cpp
+     KPrPresentationHighlightStrategy.cpp
+     KPrPresentationBlackStrategy.cpp
+     KPrPresentationStrategyInterface.cpp
+     KPrPresentationDrawStrategy.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
@@ -77,6 +86,7 @@ set( kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.cpp
      ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
+     ui/KPrPresentationToolWidget.cpp
 
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
@@ -86,6 +96,7 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.ui
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
+     ui/KPrPresentationTool.ui
    )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
@@ -122,6 +133,12 @@ kde4_add_app_icon(kpresenter_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/h
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
+if (Q_WS_MAC)
+   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kpresenter")
+   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPresenter 2")
+endif (Q_WS_MAC)
+
 target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
 
 install(TARGETS kdeinit_kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -135,3 +152,5 @@ install( FILES kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
+
+install( FILES kpresenterrc DESTINATION ${CONFIG_INSTALL_DIR} )

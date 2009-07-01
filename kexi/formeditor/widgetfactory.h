@@ -56,7 +56,6 @@ class WidgetLibrary;
 class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
-// removed class WidgetPropertySet;
 class Form;
 
 /**
@@ -238,10 +237,10 @@ private:
 
   <b>Inline editing</b>\n
   KFormDesigner allow you to edit the widget's contents inside Form, without using a dialog.
-  You can of course customize the behaviour of your widgets, using startEditing(). There are some editing
+  You can of course customize the behaviour of your widgets, using startInlineEditing(). There are some editing
   modes already implemented in WidgetFactroy, but you can create your own if you want:
-  \li Editing using a line edit (createEditor()): a line edit is created on top of widget,
-  where the user inputs text. As the text changes, changeText() is called
+  \li Editing using a line edit (createInlineEditor()): a line edit is created on top of widget,
+  where the user inputs text. As the text changes, changeInlineText() is called
   (where you should set your widget's text and resize widget to fit the text if needed) and resizeEditor()
   to update editor's position when widget is moved/resized.\n
   \li Editing by disabling event filter: if you call disableFilter(), the event filter
@@ -275,7 +274,7 @@ private:
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
     e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
-  * "dontStartEditingOnInserting" - if not empty, WidgetFactory::startEditing() will not be executed upon
+  * "dontStartEditingOnInserting" - if not empty, WidgetFactory::startInlineEditing() will not be executed upon
     widget inseting by a user.
   * "forceShowAdvancedProperty:{propertyname}" - set it to "1" for "{propertyname}" advanced property
     if you want to force it to be visible even if WidgetLibrary::setAdvancedPropertiesVisible(false)
@@ -319,7 +318,7 @@ public:
     /**
      * \return all classes which are provided by this factory
      */
-    const WidgetInfo::Hash classes() const {
+    const WidgetInfo::Hash& classes() const {
         return m_classesByName;
     }
 
@@ -347,12 +346,36 @@ public:
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
                                    KFormDesigner::Container *container) = 0;
 
-    /*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
-       (eg creates a line edit to change the text of a label). \a classname is
-       the class the widget belongs to, \a w is the widget to edit
-       and \a container is the parent container of this widget (to access Form etc.).
+    //! Arguments used by Form::createInlineEditor() and startInlineEditing()
+    /*! @a text is the text to display by default in the line edit.
+       @a widget is the edited widget, @a geometry is the geometry the new line
+       edit should have, and @a alignment is Qt::Alignment of the new line edit. 
+       If @a useFrame is false (the default), the line edit has no frame. 
+       if @a multiLine is false (the default), the line edit has single line. 
+       @a background describes line edit's background. 
+       If @a execute is true (the default), createInlineEditor() will be executed. */
+    class KFORMEDITOR_EXPORT InlineEditorCreationArguments {
+    public:
+        InlineEditorCreationArguments(
+            const QByteArray& _classname, QWidget *_widget, Container *_container);
+        QByteArray classname;
+        QString text;
+        QWidget *widget;
+        Container *container;
+        QRect geometry;
+        Qt::Alignment alignment;
+        Qt::BackgroundMode backgroundMode;
+        bool useFrame : 1;
+        bool multiLine : 1;
+        bool execute : 1;
+    };
+
+    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 
+       of the widget directly within the Form,
+       e.g. creates a line edit to change the text of a label. @a args is
+       used to pass the arguments back to the caller.
      */
-    virtual bool startEditing(const QByteArray &classname, QWidget *w, Container *container) = 0;
+    virtual bool startInlineEditing(InlineEditorCreationArguments& args) = 0;
 
     /*! This function is called just before the Form is previewed. It allows widgets
      to make changes before switching (ie for a Spring, hiding the cross) */
@@ -414,6 +437,10 @@ public:
         return m_internalProp[classname+":"+property];
     }
 
+    /*! This function is called when the widget is resized,
+     and the @a editor size needs to be updated. */
+    virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
+
 protected:
     /*! This function is called when we want to know whether the property should be visible.
      Implement it in the factory; don't forget to call implementation in the superclass.
@@ -426,50 +453,40 @@ protected:
     virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
             const QByteArray& property);
 
-    /*! This function creates a KLineEdit to input some text and edit a widget's contents.
-     This can be used in startEditing(). \a text is the text to display by default
-      in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
-       edit should have, and \a alignment is Qt::Alignment of the new line edit. */
-    void createEditor(const QByteArray &classname, const QString &text,
-                      QWidget *w, Container *container, QRect geometry,
-                      Qt::Alignment alignment, bool useFrame = false, bool multiLine = false,
-                      Qt::BackgroundMode background = Qt::NoBackground);
-
-    /*! This function provides a simple editing mode : it justs disable event filtering
-    for the widget, and it install it again when
-      the widget loose focus or Enter is pressed.
+    /*! This function provides a simple editing mode: it just disables event filtering
+     for the widget, and it install it again when
+     the widget loose focus or Enter is pressed.
     */
+// contents moved to Form
     void disableFilter(QWidget *w, Container *container);
 
     /*! This function creates a little dialog (a KEditListBox) to modify the contents
      of a list (of strings). It can be used to modify the contents
      of a combo box for instance. The modified list is copied
-     into \a list when the user presses "Ok".*/
-    bool editList(QWidget *w, QStringList &list);
+     into \a list if the user presses "Ok" and true is returned. 
+     When user presses "Cancel" false is returned. */
+    bool editList(QWidget *w, QStringList &list) const;
 
     /*! This function creates a little editor to modify rich text. It supports alignment,
      subscript and superscript and all basic formatting properties.
-      If the user presses "Ok", the edited text is put in \a text.
-      If he presses "Cancel", nothing happens. */
-    bool editRichText(QWidget *w, QString &text);
+     If the user presses "Ok", the edited text is put into @a text and true is returned. 
+     If he presses "Cancel" false is returned. */
+    bool editRichText(QWidget *w, QString &text) const;
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     /*! This function creates a dialog to modify the contents of a list widget. You can modify both
     columns and list items. The list widget is automatically  updated if the user presses "Ok".*/
-    void editListWidget(QListWidget *listwidget);
+    void editListWidget(QListWidget *listwidget) const;
 #endif
 
     /*! This function destroys the editor when it loses focus or Enter is pressed. */
-    virtual bool  eventFilter(QObject *obj, QEvent *ev);
+// moved to Form
+//    virtual bool  eventFilter(QObject *obj, QEvent *ev);
 
     /*! This function is used to modify a property of a widget (eg after editing it).
     Please use it instead of w->setProperty() to allow sync inside PropertyEditor.
     */
-    void changeProperty(const char *name, const QVariant &value, Form *form);
-
-    /*! This function is called when the widget is resized,
-     and the \a editor size needs to be updated. */
-    virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
+    void changeProperty(Form *form, QWidget *widget, const char *name, const QVariant &value);
 
 //  /*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
 //  void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
@@ -484,51 +501,59 @@ protected:
 
 public slots:
 
+// moved to Form::resetInlineEditor()
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
-    void resetEditor();
+//    void resetEditor();
+
+    //! Changes inline text for widget @a widget to @a text
+    /*! Default implementation changes "text" property of the widget.
+    You have to reimplement this function for inline editing inside the form @a form if your widget's
+    property you want to change is not named "text".
+    This slot is called when the line edit text changes, and you have to make
+    it really change property of the widget using changeProperty() (text, title, etc.). */
+    virtual bool changeInlineText(Form *form, QWidget *widget,
+                                  const QString& text, QString &oldText);
 
 protected slots:
-    /*!
-    Default implementation changes "text" property.
-    You have to reimplement this function for editing inside the Form to work if your widget's
-    property you want to change isn't named "text".
-    This slot is called when the line edit text changes, and you have to make
-    it really change the good property of the widget using changeProperty() (text, or title, etc.).
-    */
-    virtual bool changeText(const QString &newText);
 
-    void changeTextInternal(const QString& text);
+// Moved to Form::changeInlineTextInternal()
+//    void changeTextInternal(const QString& text);
 
-    void slotTextChanged();
+// Moved to Form::slotInlineTextChanged()
+//    void slotTextChanged();
 
+// Moved to Form()
     /*! This slot is called when the editor is destroyed.*/
-    void editorDeleted();
-    void widgetDestroyed();
+//    void editorDeleted();
+// Moved to Form()
+//    void widgetDestroyed();
 
 protected:
-    QString editorText() const;
-    void setEditorText(const QString& text);
+// Moved to Form::inlineEditorText()
+//    QString editorText() const;
+// Moved to Form::setInlineEditorText()
+//    void setEditorText(const QString& text);
+#if 0 //2.0
     void setEditor(QWidget *widget, QWidget *editor);
     QWidget *editor(QWidget *widget) const;
     void setWidget(QWidget *widget, Container *container);
     QWidget *widget() const;
-
+#endif
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe classes' details. */
     void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QString& value);
 
     WidgetLibrary *m_library;
-    QByteArray m_editedWidgetClass;
-//#ifdef KEXI_KTEXTEDIT
-//  QPointer<KTextEdit>  m_editor;
-//#else
-//  QPointer<KLineEdit>  m_editor;
-//#endif
-    QString m_firstText;
-    QPointer<ResizeHandleSet> m_handles;
-    QPointer<Container> m_container;
+// moved to Form
+//    QByteArray m_editedWidgetClass;
+// moved to Form as originalInlineText
+//    QString m_firstText;
+//2.0: removed
+//    QPointer<ResizeHandleSet> m_handles;
+//2.0: moved to Form::Private::inlineEditorContainer
+//    QPointer<Container> m_container;
 //  WidgetInfo::List m_classes;
     WidgetInfo::Hash m_classesByName;
     QSet<QByteArray>* m_hiddenClasses;
@@ -551,8 +576,9 @@ protected:
 
     KXMLGUIClient *m_guiClient;
 
-    QPointer<QWidget> m_widget;
-    QPointer<QWidget> m_editor;
+//2.0    QPointer<QWidget> m_widget;
+// moved to Form as Private::inlineEditor
+//    QPointer<QWidget> m_editor;
 
     friend class WidgetLibrary;
 };

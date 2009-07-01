@@ -1813,7 +1813,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& obj
             strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
         }
         QString filename(href.mid(1));
-        KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        KoPictureKey key(filename, QDateTime::currentDateTime().toUTC());
         picture.setKey(key);
 
         if (!m_zip)

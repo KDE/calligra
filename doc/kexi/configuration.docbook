@@ -17,7 +17,7 @@
       Window Layout
     </title>
     <para>
-      &kexi; provides a <firstterm>Mutiple Document
+      &kexi; provides a <firstterm>Multiple Document
       Interface</firstterm> (MDI).  This means that you can have
       several database objects (such as tables, queries, forms and
       scripts) open at the same time and in the same &kexi; main
@@ -125,7 +125,7 @@
 	</listitem>
 	<listitem>
 	  <para>
-	    more than one montitor.
+	    more than one monitor.
 	  </para>
 	</listitem>
       </itemizedlist>

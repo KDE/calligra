@@ -98,7 +98,7 @@ void KexiFieldComboBox::setProject(KexiProject *prj)
     if ((KexiProject*)d->prj == prj)
         return;
     d->prj = prj;
-    setTableOrQuery("", true);
+    setTableOrQuery(QString(), true);
 }
 
 KexiProject* KexiFieldComboBox::project() const
@@ -112,7 +112,7 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
     d->table = table;
     clear();
     d->captions.clear();
-    addItem("");
+    addItem(QString());
 // delete d->schema;
     if (d->tableOrQueryName.isEmpty() || !d->prj)
         return;

@@ -14,10 +14,6 @@ CCMAIL:danny@commit-digest.org
 TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
 TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
 
-Legend:
-= -a fix for recently introduced bug or a minor/too technical fix not worth 
-   mentioning in the public changelog
-
 ===================== Kexi 2.0 Alpha =====================
 
 TODO Form editor:
@@ -27,6 +23,10 @@ TODO Form editor:
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - move from K3CommandHistory to the QUndo framework
  - remove m_widget and m_container from WidgetLibrary, otherwise multiple form views won't work in parallel
+TODO: setting "enabled" property to false does not work
+TODO: fix the rectangle and repainting when inserting widgets with specified size
+TODO: inserting tab widget does not work
+TODO: no properties visible for Line widget
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -41,6 +41,72 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-05-13
+
+2009-05-11..13
+Forms
+* On loading properties, treat "name" property as "objectName" (1.x compatibility)
+* Set invisible properties in the property editor, but still add them to the set (needed e.g. for "dataSource" property)
+* "Data Source" tab
+** set object class/name in the header also on form loading
+** use the clear buttons of KLineEdit instead of additional buttons in the form data source and field data source combo boxes
+** fixed assigning data source for forms and widgets
+Widgets
+* KexiDataSourceComboBox: use object classes like "org.kexi-project.table", not mime types
+KexiDB
+* [API] renamed KexiDB::ObjectTypes to KexiDB::ObjectType
+** (Predicate updated)
+Core
+* [API] renamed KexiPart::ObjectTypes to KexiPart::ObjectType
+
+2009-04-25..2009-05-10
+Forms
+* WidgetFactory refactored
+** the main change is that we do not keep pointer to a currently handled container/widget/inline-editor in per-factory manner, this is kept per-form, so WidgetFactory::editor(), setEditor(), widget(), setWidget() have been removed
+** added:
+*** InlineEditorCreationArgument class - arguments used by Form::createInlineEditor() and WidgetFactory::startInlineEditing()
+** renamed:
+*** virtual bool startEditing(const QByteArray &classname, QWidget *w, Container *container) = 0 to virtual bool startInlineEditing(InlineEditorCreationArguments& args) = 0
+*** resizeEditor() made public
+*** virtual bool changeText(const QString &newText) renamed to virtual bool changeInlineText(Form *form, QWidget *widget, const QString& text);
+*** void changeProperty(const char *name, const QVariant &value, Form *form) renamed to void changeProperty(Form *form, QWidget *widget, const char *name, const QVariant &value);
+** moved:
+*** void createEditor(const QByteArray &classname, const QString &text, QWidget *w, Container *container, QRect geometry, Qt::Alignment alignment, bool useFrame = false, bool multiLine = false, Qt::BackgroundMode background = Qt::NoBackground) moved to void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
+*** contents of disableFilter() moved to Form
+*** eventFilter() moved to Form::eventFilter()
+*** resetEditor() moved to Form::resetInlineEditor()
+*** disableFilter() moved to Form::disableFilter()
+*** changeInlineTextInternal() moved to Form::changeInlineTextInternal()
+**** now uses InlineTextEditingCommand
+***  inlineEditorDeleted() moved to 
+*** slotTextChanged() moved to Form::slotInlineTextChanged()
+*** editorDeleted() moved to Form::editorDeleted()
+*** widgetDestroyed() moved to Form::widgetDestroyed()
+*** editorText() moved to Form::inlineEditorText()
+*** setEditorText() moved to Form::setInlineEditorText()
+***  m_editedWidgetClass moved to Form::Private::editedWidgetClass
+***  m_firstText moved to Form::Private::originalInlineText
+***  m_editor moved to Form::Private::inlineEditor
+***  m_container moved to Form::Private::inlineEditorContainer;
+** removed:
+*** void setEditor(QWidget *widget, QWidget *editor);
+*** QWidget *editor(QWidget *widget) const;
+*** void setWidget(QWidget *widget, Container *container);
+*** QWidget *widget() const;
+*** QPointer<ResizeHandleSet> m_handles;
+*** QPointer<QWidget> m_widget;
+* ContainerFactory:
+** addTabPage() moved to internal AddTabAction, so context (container, widget) is no longer kept globally
+** similarly, renameTabPage() moved to internal RenameTabAction
+** similarly, removeTabPage() moved to internal RemoveTabAction
+** similarly, addStackPage() moved to internal AddStackPageAction
+** similarly, removeStackPage() moved to internal RemoveStackPageAction
+** similarly, nextStackPage() and prevStackPage() moved to internal GoToStackPageAction
+* ResizeHandleSet:
+** added Form* form() const
+*Commands:
+* use InlineTextEditingCommand in Form::changeInlineTextInternal() to get undo/redo functionality for inline editing
+*KexiDBFactory updated for the new API
 
 2009-04-20..24
 Forms

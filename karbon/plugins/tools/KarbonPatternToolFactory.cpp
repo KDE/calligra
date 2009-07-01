@@ -30,7 +30,7 @@ KarbonPatternToolFactory::KarbonPatternToolFactory(QObject *parent)
 {
     setToolTip( i18n("Pattern Editing Tool") );
     setToolType( mainToolType() );
-    setIcon( "14_pattern" );
+    setIcon( "pattern" );
     setPriority( 3 );
 }
 

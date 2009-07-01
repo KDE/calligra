@@ -29,14 +29,15 @@
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
-//#include "parsexmlutils.h"
-
 #include <krreportdata.h>
 #include <kexidb/connection.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 #include <kdebug.h>
 #include <krobjectdata.h>
+
+#include <migration/keximigrate.h>
+#include <migration/migratemanager.h>
 
 class ReportGridOptions;
 class QDomDocument;
@@ -62,8 +63,7 @@ class ReportDesigner : public QWidget
 {
     Q_OBJECT
 public:
-
-
+  
     ReportDesigner(QWidget *, KexiDB::Connection *);
     ReportDesigner(QWidget *, KexiDB::Connection *, const QString&);
     ~ReportDesigner();
@@ -185,6 +185,9 @@ private:
     void init();
     bool m_modified; // true if this document has been modified, false otherwise
     KexiDB::Connection *m_conn;
+    KexiMigration::KexiMigrate *m_external;
+    QString m_externalTableName;
+    
     QStringList pageFormats();
 
     virtual void resizeEvent(QResizeEvent * event);
@@ -195,6 +198,7 @@ private:
     KoProperty::Set* m_itmset;
     KoProperty::Property* m_title;
     KoProperty::Property* m_dataSource;
+    KoProperty::Property* m_externalData;
     KoProperty::Property* m_pageSize;
     KoProperty::Property* m_orientation;
     KoProperty::Property* m_unit;

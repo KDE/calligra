@@ -112,7 +112,7 @@ void DomNode::addTextNode( const char *text, QTextCodec* codec )
 
     if (!codec)
     {
-        kError(30515) << "No QTextCodec available!" << endl;
+        kError(30515) << "No QTextCodec available!";
         return;
     }
 

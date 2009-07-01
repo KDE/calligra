@@ -95,7 +95,7 @@ public:
     double cursorOffset( const FormulaCursor* cursor ) const;
 
     /// Process @p raw and render it to @p path
-    virtual void renderToPath( const QString& raw, QPainterPath& path ) = 0;
+    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) = 0;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
@@ -106,6 +106,14 @@ protected:
 
     /// @return The font to use
     QFont font() const;
+
+    /// Whether the element should be stretched horizontally (e.g. arrows)
+    bool m_stretchHorizontally;
+    /// Whether the element should be stretched vertically (e.g. brackets)
+    bool m_stretchVertically;
+
+    /// Size to stretch from
+    QSizeF m_originalSize;
 
 private:
     /// The raw string like it is read and written from MathML
@@ -119,6 +127,8 @@ private:
 
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;
+    /// x offset for painting the path
+    qreal m_xoffset;
 };
 
 #endif // TOKENELEMENT_H

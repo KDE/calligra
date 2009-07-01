@@ -2,7 +2,7 @@
 include_directories( 
     ${CMAKE_SOURCE_DIR}/kplato
     ${KPLATO_INCLUDES}
-    ${KOGUIUTILS_INCLUDES}
+    
     ${KOKROSS_INCLUDES}
 )
 

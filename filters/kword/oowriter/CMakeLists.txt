@@ -18,6 +18,7 @@ kde4_add_plugin(oowriterimport WITH_PREFIX ${oowriterimport_PART_SRCS})
 target_link_libraries(
     oowriterimport
     komain
+    kotext
     koodf
     kostore
     ${KDE4_KIO_LIBS}
@@ -41,6 +42,7 @@ kde4_add_plugin(oowriterexport WITH_PREFIX ${oowriterexport_PART_SRCS})
 target_link_libraries(
     oowriterexport
     komain
+    kotext
     kwordexportfilters
     kostore
     koodf

@@ -81,11 +81,11 @@ namespace OoUtils
     void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
 
     void createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KZip * m_zip);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KoStore *m_store );
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KZip* zip);
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KoStore* store );
 
     /// Load an OASIS thumbnail
-    KoFilter::ConversionStatus loadThumbnail( QImage& thumbnail, KZip * m_zip );
+    KoFilter::ConversionStatus loadThumbnail( QImage& thumbnail, KZip* zip );
 
     // Internal
     KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName);

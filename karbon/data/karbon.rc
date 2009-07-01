@@ -118,6 +118,7 @@
             <Action name="subtract_path"/>
             <Action name="unite_path"/>
             <Separator/>
+            <Action name="path_snap_to_grid"/>
         </Menu>
         <Menu name="effects">
             <text>Effe&amp;cts</text>

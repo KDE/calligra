@@ -28,6 +28,7 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 #include "kptdatetime.h"
+#include "kptschedulerplugin.h"
 
 #include <QObject>
 #include <QStringList>
@@ -544,6 +545,46 @@ bool ScheduleItemModel::setSchedulingDirection( const QModelIndex &index, const 
     return false;
 }
 
+QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+            return sm->schedulerPluginId();
+        case Qt::DisplayRole:
+            return sm->schedulerPlugin()->name();
+        case Qt::ToolTipRole:
+            return sm->schedulerPlugin()->comment();
+        case Role::EnumList:
+            return sm->schedulerPluginNames();
+        case Role::EnumListValue:
+            return sm->schedulerPluginIndex();
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool ScheduleItemModel::setScheduler( const QModelIndex &index, const QVariant &value, int role )
+{
+    ScheduleManager *sm = manager( index );
+    if ( sm != 0 ) {
+        switch ( role ) {
+            case Qt::EditRole: {
+                emit executeCommand(new ModifyScheduleManagerSchedulerCmd( *sm, value.toInt(), "Modify Scheduling Direction" ) );
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug()<<index.row()<<","<<index.column();
@@ -557,6 +598,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::ScheduleCalculate: result = calculateAll( index, role ); break;
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
+        case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
         default:
             kDebug()<<"data: invalid display value column"<<index.column();;
             return QVariant();
@@ -588,6 +630,7 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         case ScheduleModel::ScheduleCalculate: return setCalculateAll( index, value, role );
         case ScheduleModel::SchedulePlannedStart: return false;
         case ScheduleModel::SchedulePlannedFinish: return false;
+        case ScheduleModel::ScheduleScheduler: return setScheduler( index, value, role ); break;
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -608,6 +651,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::ScheduleCalculate: return i18n( "Calculate" );
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
+                case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -626,19 +670,21 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             case ScheduleModel::ScheduleCalculate: return ToolTip::scheduleCalculate();
             case ScheduleModel::SchedulePlannedStart: return ToolTip::scheduleStart();
             case ScheduleModel::SchedulePlannedFinish: return ToolTip::scheduleFinish();
+            case ScheduleModel::ScheduleScheduler: return ToolTip::scheduleScheduler();
             default: return QVariant();
         }
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case ScheduleModel::ScheduleDirection: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleOverbooking: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleDistribution: return new EnumDelegate( parent );
         case ScheduleModel::ScheduleCalculate: return new EnumDelegate( parent );
+        case ScheduleModel::ScheduleScheduler: return new EnumDelegate( parent );
     }
     return 0;
 }

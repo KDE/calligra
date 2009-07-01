@@ -41,7 +41,7 @@ static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
     return s1.toLower() < s2.toLower();
 }
 
-static void addList(KexiDB::ObjectTypes objectType, pion::net::HTTPResponseWriterPtr writer) {
+static void addList(KexiDB::ObjectType objectType, pion::net::HTTPResponseWriterPtr writer) {
     KexiWebForms::Model::Database db;
     QHash<QString, QString> oNames(db.getNames(objectType));
     QStringList captions(oNames.uniqueKeys());

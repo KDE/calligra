@@ -31,6 +31,8 @@ set(kplatomodels_LIB_SRCS
     kptaccountsmodel.cpp
     kptpertcpmmodel.cpp
     kptresourceappointmentsmodel.cpp
+
+    kpttaskcompletedelegate.cpp
 )
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})

@@ -57,6 +57,23 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
 
 void FractionElement::layout( const AttributeManager* am )
 {
+    // get values of all attributes
+    QString value = am->findValue( "linethickness", this );
+    Length length;
+    if(value == "thick")
+        length.value = 2;
+    else if(value == "medium")
+        length.value = 1;
+    else if(value == "thin")
+        length.value = 0.5;
+    else
+        length = am->parseUnit( value, this );
+
+    if(length.unit == Length::None)
+        m_lineThickness = am->lineThickness(this) * length.value;
+    else 
+        m_lineThickness = am->lengthToPixels(length, this, "linethickness");
+
     // decide which layout is wanted
     if( am->boolOf( "bevelled", this ) )
     {
@@ -64,8 +81,6 @@ void FractionElement::layout( const AttributeManager* am )
         return;
     }
 
-    // get values of all attributes
-    m_lineThickness = am->doubleOf( "linethickness", this );
     double distY = am->layoutSpacing( this );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this );
@@ -73,6 +88,7 @@ void FractionElement::layout( const AttributeManager* am )
     // align the numerator and the denominator
     QPointF numeratorOrigin;
     QPointF denominatorOrigin( 0.0, m_numerator->height() + m_lineThickness + 2*distY );
+    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + m_lineThickness*2 );
     
     if( numalign == Right )
         numeratorOrigin.setX( width() - m_numerator->width() - m_lineThickness );
@@ -92,8 +108,6 @@ void FractionElement::layout( const AttributeManager* am )
     m_fractionLine = QLineF( QPointF( m_lineThickness, fractionLineY ),
                              QPointF( width()-m_lineThickness, fractionLineY ) );
 
-    // set the values of this fraction's bounding rectangle
-    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + m_lineThickness*2 );
     setHeight( m_numerator->height() + m_denominator->height() +
                m_lineThickness + 2*distY );
     setBaseLine( denominatorOrigin.y() ); 

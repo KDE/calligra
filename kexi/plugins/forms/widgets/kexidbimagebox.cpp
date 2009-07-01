@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,7 @@
 #include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
+#include <KIconEffect>
 
 #include <widget/utils/kexidropdownbutton.h>
 #include <widget/utils/kexicontextmenuutils.h>
@@ -63,6 +64,7 @@
 //! @internal
 struct KexiDBImageBox_Static {
     KexiDBImageBox_Static() : pixmap(0), small(0) {}
+    ~KexiDBImageBox_Static() { delete pixmap; delete small; }
     QPixmap *pixmap;
     QPixmap *small;
 };
@@ -103,7 +105,6 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 //  hlyr->addWidget(m_chooser);
     }
 
-//2.0    setBackgroundMode(Qt::NoBackground);
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
     setFrameColor(Qt::black);
@@ -641,11 +642,8 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
 //Qt3 replaced with 'margins': const int m = realLineWidth() + margin();
     QColor bg(palette().color(backgroundRole())); //Qt3 eraseColor());
     if (m_designMode && pixmap().isNull()) {
-        QPixmap pm(size() - QSize(margins.left + margins.right, margins.top + margins.bottom));
-        QPainter p2;
-//Qt3  p2.begin(&pm, this);
-        p2.begin(&pm);
-        p2.fillRect(0, 0, width(), height(), bg);
+        QRect r(QPoint(margins.left, margins.top), size() - QSize(margins.left + margins.right, margins.top + margins.bottom));
+        p.fillRect(0, 0, width(), height(), bg);
 
         updatePixmap();
         QPixmap *imagBoxPm;
@@ -655,31 +653,18 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         else
             imagBoxPm = KexiDBImageBox_static->pixmap;
         QImage img(imagBoxPm->toImage());
-#ifdef __GNUC__
-#warning Qt4 TODO KexiDBImageBox::paintEvent()
-#else
-#pragma WARNING( Qt4 TODO KexiDBImageBox::paintEvent() )
-#endif
-        /* TODO
-            img = KImageEffect::flatten(img, bg.dark(150),
-              qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));*/
 
         QPixmap converted(QPixmap::fromImage(img));
-//  if (tooLarge)
-//   p2.drawPixmap(2, 2, converted);
-//  else
-        p2.drawPixmap(2, height() - margins.top - margins.bottom - imagBoxPm->height() - 2, converted);
+        p.drawPixmap(2, height() - margins.top - margins.bottom - imagBoxPm->height() - 2, converted);
         QFont f(qApp->font());
-        p2.setFont(f);
-        p2.setPen(KexiUtils::contrastColor(bg));
-        p2.drawText(pm.rect(), Qt::AlignCenter,
-                    dataSource().isEmpty()
-                    ? objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)")
-                    : dataSource());
-        //2.0 bitBlt(this, margins.left, margins.top, &pm);
-        p2.drawPixmap(margins.left, margins.top, pm);
-        p2.end();
-    } else {
+        p.setFont(f);
+        p.setPen(KexiUtils::contrastColor(bg));
+        p.drawText(r, Qt::AlignCenter,
+                 dataSource().isEmpty()
+                 ? objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)")
+                 : dataSource());
+    }
+    else {
         QSize internalSize(size());
         if (m_chooser && m_dropDownButtonVisible && !dataSource().isEmpty())
             internalSize.setWidth(internalSize.width() - m_chooser->width());
@@ -721,17 +706,16 @@ void KexiDBImageBox::updatePixmap()
         return;
 
     if (!KexiDBImageBox_static->pixmap) {
-        QString fname(KStandardDirs::locate("data", QString("kexi/pics/imagebox.png")));
-        KexiDBImageBox_static->pixmap = new QPixmap(fname, "PNG");
-        QImage img(KexiDBImageBox_static->pixmap->toImage());
-        KexiDBImageBox_static->small
-        = new QPixmap(
-            QPixmap::fromImage(
-                img.scaled(
-                    img.width() / 2, img.height() / 2, Qt::KeepAspectRatio,
-                    Qt::SmoothTransformation)
-            )
-        );
+        const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
+        QPixmap pm(fname, "PNG");
+        if (!pm.isNull()) {
+            KIconEffect::semiTransparent(pm);
+        }
+        KexiDBImageBox_static->pixmap = new QPixmap(pm);
+        KexiDBImageBox_static->small = new QPixmap( 
+            KexiDBImageBox_static->pixmap->scaled(
+                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2, 
+                Qt::KeepAspectRatio, Qt::SmoothTransformation) );
     }
 }
 

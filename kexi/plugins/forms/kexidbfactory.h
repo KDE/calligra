@@ -46,7 +46,7 @@ public:
     virtual void createCustomActions(KActionCollection* col);
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
                                    KFormDesigner::Container *container);
-    virtual bool startEditing(const QByteArray &classname, QWidget *w, KFormDesigner::Container *container);
+    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
     virtual bool previewWidget(const QByteArray &, QWidget *, KFormDesigner::Container *);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
@@ -59,7 +59,7 @@ protected slots:
     void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
 
 protected:
-    virtual bool changeText(const QString &newText);
+    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget, const QString &text);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
     virtual bool isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,

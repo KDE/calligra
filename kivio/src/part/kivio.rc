@@ -39,6 +39,10 @@
             <Action name="view_snaptogrid"/>
             <Action name="view_show_guides"/>
         </Menu>
+        <Menu name="insert"><text>&amp;Insert</text>
+            <Action name="insert_variable"/> <!-- menu -->
+	        <Action name="import_document" />
+        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>

@@ -83,6 +83,8 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     }
     calendarCombo->setCurrentIndex(cal);
 
+    estimate->setMinimumUnit( (Duration::Unit)(m_project.config().minimumDurationUnit()) );
+    estimate->setMaximumUnit( (Duration::Unit)(m_project.config().maximumDurationUnit()) );
     estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
 
@@ -228,9 +230,9 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     connect(estimateType, SIGNAL(activated(int)), SLOT(estimationTypeChanged(int)));
     connect(scheduleType, SIGNAL(activated(int)), SLOT(scheduleTypeChanged(int)));
-    connect(scheduleStartDate, SIGNAL(changed(QDate)), SLOT(startDateChanged()));
+    connect(scheduleStartDate, SIGNAL(dateChanged(QDate)), SLOT(startDateChanged()));
     connect(scheduleStartTime, SIGNAL(timeChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
-    connect(scheduleEndDate, SIGNAL(changed(QDate)), SLOT(endDateChanged()));
+    connect(scheduleEndDate, SIGNAL(dateChanged(QDate)), SLOT(endDateChanged()));
     connect(scheduleEndTime, SIGNAL(timeChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
     connect(estimate, SIGNAL(valueChanged(double)), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));

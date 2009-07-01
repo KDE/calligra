@@ -111,7 +111,8 @@ public slots:
     void slotTableFound(KWord::Table* table);
 
     // Write out the frameset and add the key to the PICTURES tag
-    void slotPictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* );
+    void slotPictureFound( const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
+            const wvWare::FunctorBase* );
 
     //track the current list depth when texthandler is parsing lists,
     //because we may need to close the list here

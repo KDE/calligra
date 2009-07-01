@@ -94,7 +94,7 @@ public:
     /*! If you're implementing a new part, set this to value >0 in your ctor
     if you have well known (ie registered ID) for your part.
     So far, table, query, form, report and script part have defined their IDs
-    (see KexiPart::ObjectTypes). */
+    (see KexiPart::ObjectType). */
     int registeredPartID;
 #endif
 

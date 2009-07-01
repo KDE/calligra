@@ -36,6 +36,20 @@ Dictionary::Dictionary()
     m_movablelimits = false;
     m_accent = false;
 }
+QString Dictionary::lSpace() const
+{
+    return m_lspace;
+}
+
+QString Dictionary::rSpace() const
+{
+    return m_rspace;
+}
+
+bool Dictionary::stretchy() const
+{
+    return m_stretchy;
+}
 
 QChar Dictionary::mapEntity( const QString& entity )
 {

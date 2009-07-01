@@ -44,7 +44,7 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter ) const = 0;
 
     /// selects handle at the given position
-    virtual bool selectHandle( const QPointF &mousePos ) = 0;
+    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter ) = 0;
 
     /// mouse position handling for moving handles
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) = 0;
@@ -70,11 +70,17 @@ public:
     /// Returns the shape we are working on
     KoShape * shape() const;
 
-    /// sets the handle radius used for painting the handles
-    static void setHandleRadius( int radius ) { m_handleRadius = radius; }
+    /// sets the handle radius in pixel used for painting the handles
+    static void setHandleRadius( uint radius ) { m_handleRadius = radius; }
 
-    /// returns the actual handle radius
-    static int handleRadius() { return m_handleRadius; }
+    /// returns the actual handle radius in pixel
+    static uint handleRadius() { return m_handleRadius; }
+
+    /// sets the grab sensitivity in pixel used for grabbing the handles
+    static void setGrabSensitivity( uint grabSensitivity ) { m_grabSensitivity = grabSensitivity; }
+
+    /// returns the actual grab sensitivity in pixel
+    static uint grabSensitivity() { return m_grabSensitivity; }
 
     virtual void updateHandles() {}
     
@@ -92,7 +98,7 @@ protected:
     void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const;
 
     /// checks if mouse position is inside handle rect
-    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const;
+    bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos, const KoViewConverter &converter ) const;
 
 
     QList<QPointF> m_handles;  ///< the list of handles
@@ -103,7 +109,8 @@ protected:
 
 private:
 
-    static int m_handleRadius; ///< the handle radius for all gradient strategies
+    static uint m_handleRadius; ///< the handle radius for all gradient strategies
+    static uint m_grabSensitivity; ///< the grab sensitivity
     KoShape *m_shape;          ///< the shape we are working on
     KoImageCollection * m_imageCollection;
     bool m_editing;            ///< the edit mode flag
@@ -117,7 +124,7 @@ public:
     explicit KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
     virtual ~KarbonPatternEditStrategy();
     virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
-    virtual bool selectHandle( const QPointF &mousePos );
+    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
     virtual KoPatternBackground updatedBackground();
@@ -137,7 +144,7 @@ public:
     explicit KarbonOdfPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
     virtual ~KarbonOdfPatternEditStrategy();
     virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
-    virtual bool selectHandle( const QPointF &mousePos );
+    virtual bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
     virtual KoPatternBackground updatedBackground();

@@ -429,7 +429,7 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOdf( settingsWriter, m_document->unit() );
+    m_document->saveUnitOdf(settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-set
 
@@ -484,7 +484,7 @@ void KWOdfWriter::addShapeToTree(KoShape *shape)
     // add the children of a KoShapeContainer
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape* containerShape, container->iterator()) {
+        foreach(KoShape* containerShape, container->childShapes()) {
             addShapeToTree(containerShape);
         }
     }

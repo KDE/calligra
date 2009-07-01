@@ -20,11 +20,14 @@
 
 #include "view.h"
 #include "mainwindow.h"
+#include "taskworkpackageview.h"
+#include "workpackage.h"
+
+#include "kpttaskeditor.h"
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
-#include <KoDocumentChild.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -34,10 +37,9 @@
 #include <QVBoxLayout>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QDomDocument>
 
 #include <kicon.h>
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
@@ -49,15 +51,17 @@
 #include <kdeversion.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
+#include <kxmlguiclient.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
-#include <k3command.h>
+#include <KToolInvocation>
 #include <ktoggleaction.h>
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
-#include <KoQueryTrader.h>
+#include <KActionCollection>
+
 #include <kmessagebox.h>
 #include <krun.h>
 #include <kvbox.h>
@@ -78,163 +82,169 @@
 #include "kptcommand.h"
 #include "kptdocuments.h"
 #include "kpttaskprogressdialog.h"
+#include "kptcalendar.h"
 
 #include <assert.h>
 
 namespace KPlatoWork
 {
 
-View::View( Part* part, QWidget* parent )
-    : KoView( part, parent ),
-    m_currentWidget( 0 ),
+View::View( Part *part,  QWidget *parent, KActionCollection *collection )
+    : QWidget( parent ),
+    m_part( part ),
     m_scheduleActionGroup( new QActionGroup( this ) ),
     m_manager( 0 )
 {
-    //kDebug();
-
-    setComponentData( Factory::global() );
-    
-    if ( part->isSingleViewMode() ) { // NOTE: don't use part->isReadWrite() here
-        setXMLFile( "kplatowork_readonly.rc" );
-    } else {
-        setXMLFile( "kplatowork.rc" );
-    }
-
     m_readWrite = part->isReadWrite();
     kDebug()<<m_readWrite;
-    
+
 //    m_dbus = new ViewAdaptor( this );
 //    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
-    
-    m_tab = new QTabWidget( this );
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin(0);
-    layout->addWidget( m_tab );
+
+//     m_tab = new QTabWidget( this );
+     QVBoxLayout *layout = new QVBoxLayout( this );
+     layout->setMargin(0);
+//     layout->addWidget( m_tab );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     // Add sub views
     createViews();
 
     // The menu items
     // ------ Edit
-    actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
-    actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
-    actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
+    actionCut = collection->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
+    actionCopy = collection->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
+    actionPaste = collection->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
-    // ------ Settings
+    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
+    collection->addAction("task_progress", actionTaskProgress );
+    connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+
+    //------ Settings
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlatoWork..."), this);
-    actionCollection()->addAction("configure", actionConfigure );
+    collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
-    m_progress = 0;
-    m_estlabel = new QLabel( "", 0 );
-    if ( statusBar() ) {
-        addStatusBarItem( m_estlabel, 0, true );
-        //m_progress = new QProgressBar();
-        //addStatusBarItem( m_progress, 0, true );
-        //m_progress->hide();
-    }
-    connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
+    actionEditDocument  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
+    collection->addAction("edit_document", actionEditDocument );
+    connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
 
-    connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
-    connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
-    slotPlugScheduleActions();
+    actionViewDocument  = new KAction(KIcon( "document-properties" ), i18nc( "@verb", "View..."), this);
+    collection->addAction("view_document", actionViewDocument );
+    connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
-    loadContext();
-    
+
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
-    
-    connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
-    
+
+    actionSendPackage  = new KAction(KIcon( "file_send_file" ), i18n("Send Package..."), this);
+    collection->addAction("edit_sendpackage", actionSendPackage );
+    connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
+
     actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
-    actionCollection()->addAction("task_progress", actionTaskProgress );
+    collection->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
     updateReadWrite( m_readWrite );
     //kDebug()<<" end";
 
-    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
+//    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
 }
 
 View::~View()
 {
-    removeStatusBarItem( m_estlabel );
-    delete m_estlabel;
+//    removeStatusBarItem( m_estlabel );
+//    delete m_estlabel;
 }
 
 void View::createViews()
 {
-    createTaskInfoView();
-    createDocumentsView();
+    TaskWorkPackageView * v = createTaskWorkPackageView();
 }
 
-ViewBase *View::createTaskInfoView()
+TaskWorkPackageView *View::createTaskWorkPackageView()
 {
-    kDebug();
-    WorkPackageInfoView *v = new WorkPackageInfoView( getPart(), m_tab );
-    m_tab->addTab( v, i18n( "Information" ) );
-
-    Project &p = getProject();
-    v->setProject( &p );
-    Task *t = 0;
-    if ( p.numChildren() > 0 ) { // should be 1
-        t = dynamic_cast<Task*>( p.childNode( 0 ) );
-    }
-    v->setTask( t );
-    
-    kDebug()<<p.allScheduleManagers();
-    v->setScheduleManager( p.allScheduleManagers().value( 0 ) );
-    
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    TaskWorkPackageView *v = new TaskWorkPackageView( part(), this );
+    layout()->addWidget( v );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    
-    connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-    
+
     v->updateReadWrite( m_readWrite );
     return v;
 }
 
-ViewBase *View::createDocumentsView()
-{
-    kDebug();
-    DocumentsEditor *v = new DocumentsEditor( getPart(), m_tab );
-    m_tab->addTab( v, i18n( "Documents" ) );
+// ViewBase *View::createTaskView()
+// {
+//     TaskView *v = new TaskView( part(), this );
+//     layout()->addWidget( v );
+// //    m_tab->addWidget( v );
+// 
+// //     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, part(), "task_view", index );
+// //     i->setToolTip( 0, tip );
+// 
+//     v->draw( getProject() );
+//     v->setScheduleManager( currentScheduleManager() );
+// 
+//     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+// 
+//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+// 
+//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+//     v->updateReadWrite( m_readWrite );
+//     return v;
+// }
 
-    Project &p = getProject();
-    if ( p.numChildren() > 0 ) { // should be 1
-        Node *n = p.childNode( 0 );
-        kDebug()<<"Node: "<<n->name();
-        v->draw( n->documents() );
-    }
-    connect( v, SIGNAL( editDocument( Document* ) ), SLOT( slotEditDocument( Document* ) ) );
-    connect( v, SIGNAL( viewDocument( Document* ) ), SLOT( slotViewDocument( Document* ) ) );
-    
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+// ViewBase *View::createTaskInfoView()
+// {
+//     kDebug();
+//     WorkPackageInfoView *v = new WorkPackageInfoView( part(), m_tab );
+//     m_tab->addTab( v, i18n( "Information" ) );
+// 
+//     Project &p = getProject();
+//     v->setProject( &p );
+//     Task *t = 0;
+//     if ( p.numChildren() > 0 ) { // should be 1
+//         t = dynamic_cast<Task*>( p.childNode( 0 ) );
+//     }
+//     v->setTask( t );
+// 
+//     kDebug()<<p.allScheduleManagers();
+//     v->setScheduleManager( p.allScheduleManagers().value( 0 ) );
+// 
+//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+// 
+//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+// 
+//     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
+// 
+//     v->updateReadWrite( m_readWrite );
+//     return v;
+// }
 
-    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    
-    connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-    
-    v->updateReadWrite( m_readWrite );
-    return v;
-}
-
-Project& View::getProject() const
-{
-    return getPart() ->getProject();
-}
-
-void View::setZoom( double )
-{
-    //TODO
-}
-
-KPlatoWork_MainWindow *View::kplatoWorkMainWindow() const
-{
-    return dynamic_cast<KPlatoWork_MainWindow*>( topLevelWidget() );
-}
+// ViewBase *View::createDocumentsView()
+// {
+//     kDebug();
+//     DocumentsEditor *v = new DocumentsEditor( part(), m_tab );
+//     m_tab->addTab( v, i18n( "Documents" ) );
+// 
+//     Project &p = getProject();
+//     if ( p.numChildren() > 0 ) { // should be 1
+//         Node *n = p.childNode( 0 );
+//         kDebug()<<"Node: "<<n->name();
+//         v->draw( n->documents() );
+//     }
+//     connect( v, SIGNAL( editDocument( Document* ) ), SLOT( slotEditDocument( Document* ) ) );
+//     connect( v, SIGNAL( viewDocument( Document* ) ), SLOT( slotViewDocument( Document* ) ) );
+// 
+//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+// 
+//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+// 
+//     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
+// 
+//     v->updateReadWrite( m_readWrite );
+//     return v;
+// }
 
 void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
@@ -243,114 +253,6 @@ void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 
 void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
-}
-
-QWidget *View::canvas() const
-{
-    return m_tab->currentWidget();
-}
-
-KoDocument *View::hitTest( const QPoint &pos )
-{
-    kDebug()<<"---------->";
-    // TODO: The gui handling can certainly be simplified (at least I think so),
-    // by someone who have a better understanding of all the possibilities of KParts
-    // than I have.
-    // pos is in m_tab->currentWidget() coordinates
-    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
-    kDebug()<<pos<<gl;
-    if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
-        // just activating new view on the same doc
-        return koDocument()->hitTest( pos, this );
-    }
-    return 0;
-    kDebug()<<"<----------";
-}
-
-void View::slotCurrentChanged( int index )
-{
-    kDebug()<<"---------->";
-    if ( partManager() == 0 ) {
-        kWarning()<<"No partmanager (yet)";
-        kDebug()<<"<----------";
-        return;
-    }
-    KParts::Part *ap = partManager()->activePart();
-    QWidget *aw = partManager()->activeWidget();
-    QWidget *cw = m_tab->currentWidget();
-    kDebug()<<ap<<aw<<cw;
-    if ( cw == m_currentWidget ) {
-        kDebug()<<cw<<m_currentWidget;
-        kDebug()<<"<----------";
-        return;
-    }
-    ViewBase *cv = dynamic_cast<ViewBase*>( m_currentWidget );
-    if ( cv ) {
-        cv->setGuiActive( false );
-    }
-    partManager()->setActivePart( getPart(), this ); // restore my factory and clear ap->factory()
-    cv = dynamic_cast<ViewBase*>( cw );
-    if ( cv ) {
-        cv->setGuiActive( true );
-    } else {
-        // might be a kpart
-        if ( factory() ) kDebug()<<"this:"<<factory()->clients();
-        if ( ap->factory() ) kDebug()<<"ap:"<<ap->factory()->clients();
-
-        if ( m_partsMap.contains( cw ) ) {
-            kDebug()<<"Part found"<<m_partsMap[cw]<<" for widget:"<<cw;
-            if ( m_partsMap[ cw ]->factory() ) kDebug()<<"cp:"<<m_partsMap[ cw ]->factory()->clients();
-            if ( factory() ) {
-                factory()->addClient( m_partsMap[ cw ] );
-            }
-            partManager()->setActivePart( m_partsMap[ cw ] ); // this removes my factory()
-        } else kDebug()<<"No part found for widget:"<<cw;
-    }
-    m_currentWidget = cw;
-    kDebug()<<"<----------";
-}
-
-void View::slotGuiActivated( ViewBase *view, bool activate )
-{
-    kDebug()<<"---------->";
-    if ( activate ) {
-        foreach( QString name, view->actionListNames() ) {
-            kDebug()<<"activate"<<name<<","<<view->actionList( name ).count();
-            plugActionList( name, view->actionList( name ) );
-        }
-    } else {
-        foreach( QString name, view->actionListNames() ) {
-            kDebug()<<"deactivate"<<name;
-            unplugActionList( name );
-        }
-    }
-    kDebug()<<"<----------";
-}
-
-void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-    kDebug()<<"---------->";
-    kDebug()<<ev->activated();
-    kDebug()<<"View:"<<partManager()<<partManager()->parts();
-    kDebug()<<"Active:"<<partManager()->activePart()<<partManager()->activeWidget();
-    kDebug()<<"Clients:"<<factory()->clients();
-    KoView::guiActivateEvent( ev );
-    if ( ev->activated() ) {
-        // plug my own actionlists, they may be gone
-        slotPlugScheduleActions();
-        //Remove gui for all KParts
-        foreach ( KParts::Part *p, m_partsMap ) {
-            if ( p->factory() ) {
-                p->factory()->removeClient( p );
-            }
-        }
-    }
-    // propagate to sub-view
-    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-    if ( v ) {
-        v->setGuiActive( ev->activated() );
-    }
-    kDebug()<<"<----------";
 }
 
 void View::slotEditCut()
@@ -368,157 +270,8 @@ void View::slotEditPaste()
     //kDebug();
 }
 
-void View::slotScheduleRemoved( const MainSchedule *sch )
-{
-    QAction *a = 0;
-    QAction *checked = m_scheduleActionGroup->checkedAction();
-    QMapIterator<QAction*, Schedule*> i( m_scheduleActions );
-    while (i.hasNext()) {
-        i.next();
-        if ( i.value() == sch ) {
-            a = i.key();
-            break;
-        }
-    }
-    if ( a ) {
-        unplugActionList( "view_schedule_list" );
-        delete a;
-        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
-        if ( checked && checked != a ) {
-            checked->setChecked( true );
-        } else if ( ! m_scheduleActions.isEmpty() ) {
-            m_scheduleActions.keys().first()->setChecked( true );
-        }
-    }
-    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
-}
-
-void View::slotScheduleAdded( const MainSchedule *sch )
-{
-    if ( sch->type() != Schedule::Expected ) {
-        return; // Only view expected
-    }
-    MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
-    QAction *checked = m_scheduleActionGroup->checkedAction();
-    if ( ! sch->isDeleted() && sch->isScheduled() ) {
-        unplugActionList( "view_schedule_list" );
-        QAction *act = addScheduleAction( s );
-        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
-        if ( checked ) {
-            checked->setChecked( true );
-        } else if ( act ) {
-            act->setChecked( true );
-        } else if ( ! m_scheduleActions.isEmpty() ) {
-            m_scheduleActions.keys().first()->setChecked( true );
-        }
-    }
-    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
-}
-
-void View::slotScheduleChanged( MainSchedule *sch )
-{
-    //kDebug()<<sch->name()<<" deleted="<<sch->isDeleted();
-    if ( sch->isDeleted() || ! sch->isScheduled() ) {
-        slotScheduleRemoved( sch );
-        return;
-    }
-    if ( m_scheduleActions.values().contains( sch ) ) {
-        slotScheduleRemoved( sch ); // hmmm, how to avoid this?
-    }
-    slotScheduleAdded( sch );
-}
-
-QAction *View::addScheduleAction( Schedule *sch )
-{
-    QAction *act = 0;
-    if ( ! sch->isDeleted() ) {
-        QString n = sch->name();
-        QAction *act = new KToggleAction( n, this);
-        actionCollection()->addAction(n, act );
-        m_scheduleActions.insert( act, sch );
-        m_scheduleActionGroup->addAction( act );
-        //kDebug()<<"Add:"<<n;
-        connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
-    }
-    return act;
-}
-
-void View::slotViewSchedule( QAction *act )
-{
-    //kDebug();
-    if ( act != 0 ) {
-        Schedule *sch = m_scheduleActions.value( act, 0 );
-        m_manager = sch->manager();
-    } else {
-        m_manager = 0;
-    }
-    kDebug()<<m_manager;
-    setLabel();
-    emit currentScheduleManagerChanged( m_manager );
-}
-
-void View::slotActionDestroyed( QObject *o )
-{
-    //kDebug()<<o->name();
-    m_scheduleActions.remove( static_cast<QAction*>( o ) );
-    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
-}
-
-void View::slotPlugScheduleActions()
-{
-    //kDebug();
-    unplugActionList( "view_schedule_list" );
-    foreach( QAction *act, m_scheduleActions.keys() ) {
-        m_scheduleActionGroup->removeAction( act );
-        delete act;
-    }
-    m_scheduleActions.clear();
-    Schedule *cs = getProject().currentSchedule();
-    QAction *ca = 0;
-    foreach( ScheduleManager *sm, getProject().allScheduleManagers() ) {
-        Schedule *sch = sm->expected();
-        if ( sch == 0 ) {
-            continue;
-        }
-        QAction *act = addScheduleAction( sch );
-        if ( act ) {
-            if ( ca == 0 && cs == sch ) {
-                ca = act;
-            }
-        }
-    }
-    plugActionList( "view_schedule_list", m_scheduleActions.keys() );
-    if ( ca == 0 && m_scheduleActionGroup->actions().count() > 0 ) {
-        ca = m_scheduleActionGroup->actions().first();
-    }
-    if ( ca ) {
-        ca->setChecked( true );
-    }
-    slotViewSchedule( ca );
-}
-
 void View::slotProgressChanged( int )
 {
-}
-
-void View::slotAddScheduleManager( Project *project )
-{
-    if ( project == 0 ) {
-        return;
-    }
-    ScheduleManager *sm = project->createScheduleManager();
-    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, i18n( "Add Schedule %1", sm->name() ) );
-    getPart() ->addCommand( cmd );
-}
-
-void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
-{
-    if ( project == 0 || sm == 0) {
-        return;
-    }
-    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete Schedule %1", sm->name() ) );
-    getPart() ->addCommand( cmd );
 }
 
 void View::slotConfigure()
@@ -527,58 +280,49 @@ void View::slotConfigure()
 
 ScheduleManager *View::currentScheduleManager() const
 {
-    Schedule *s = m_scheduleActions.value( m_scheduleActionGroup->checkedAction() );
-    return s == 0 ? 0 : s->manager();
-}
-
-long View::currentScheduleId() const
-{
-    Schedule *s = m_scheduleActions.value( m_scheduleActionGroup->checkedAction() );
-    return s == 0 ? -1 : s->id();
+    return 0; // atm we always work with default manager
 }
 
 void View::updateReadWrite( bool readwrite )
 {
     kDebug()<<m_readWrite<<"->"<<readwrite;
     m_readWrite = readwrite;
-    
-    actionTaskProgress->setEnabled( readwrite );
-    
+
+//    actionTaskProgress->setEnabled( readwrite );
+
     emit sigUpdateReadWrite( readwrite );
 }
 
-Part *View::getPart() const
+Part *View::part() const
 {
-    return ( Part * ) koDocument();
+    return m_part;
 }
 
-QMenu * View::popupMenu( const QString& name )
+void View::slotPopupMenu( const QString& name, const QPoint & pos )
 {
-    //kDebug();
-    Q_ASSERT( factory() );
-    if ( factory() )
-        return ( ( QMenu* ) factory() ->container( name, this ) );
-    return 0L;
-}
-
-void View::slotUpdate()
-{
-    updateView( m_tab->currentWidget() );
-}
-
-void View::updateView( QWidget * )
-{
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-
-    QApplication::restoreOverrideCursor();
-}
-
-void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
-{
-    QMenu * menu = this->popupMenu( menuname );
-    if ( menu ) {
-        //kDebug()<<menu<<":"<<menu->actions().count();
-        menu->exec( pos );
+    Q_ASSERT( m_part->factory() );
+    if ( m_part->factory() == 0 ) {
+        return;
+    }
+    QMenu *menu = ( ( QMenu* ) m_part->factory() ->container( name, m_part ) );
+    if ( menu == 0 ) {
+        return;
+    }
+    QList<QAction*> lst;
+    TaskWorkPackageView *v = currentView();
+    if ( v ) {
+        lst = v->contextActionList();
+        kDebug()<<lst;
+        if ( ! lst.isEmpty() ) {
+            menu->addSeparator();
+            foreach ( QAction *a, lst ) {
+                menu->addAction( a );
+            }
+        }
+    }
+    menu->exec( pos );
+    foreach ( QAction *a, lst ) {
+        menu->removeAction( a );
     }
 }
 
@@ -593,40 +337,9 @@ void View::saveContext( QDomElement &me ) const
     //kDebug()<<endl;
 }
 
-void View::setLabel()
+void View::slotEditDocument()
 {
-    //kDebug();
-    Schedule *s = m_manager == 0 ? 0 : m_manager->expected();
-    if ( s && !s->isDeleted() && s->isScheduled() ) {
-        m_estlabel->setText( m_manager->name() );
-        return;
-    }
-    m_estlabel->setText( i18n( "Not scheduled" ) );
-}
-
-void View::addPart( KParts::Part* part, const QString &name )
-{
-    kDebug()<<"---------->";
-    m_partsMap.insert( part->widget(), part );
-    int tab = m_tab->addTab( part->widget(), name );
-    partManager()->addPart( part, false );
-    if ( factory() ) {
-/*        factory()->addClient( part );
-        kDebug()<<factory()->clients();*/
-    }
-    m_tab->setCurrentIndex( tab );
-    kDebug()<<"<----------";
-}
-
-bool View::viewDocument( const KUrl &filename )
-{
-    kDebug()<<"url:"<<filename;
-    if ( ! filename.isValid() ) {
-        //KMessageBox::error( 0, i18n( "Cannot open document. Invalid url: %1", filename.pathOrUrl() ) );
-        return false;
-    }
-    KRun *run = new KRun( filename, 0 );
-    return true;
+    slotEditDocument( currentDocument() );
 }
 
 void View::slotEditDocument( Document *doc )
@@ -640,54 +353,90 @@ void View::slotEditDocument( Document *doc )
         KMessageBox::error( 0, i18n( "This file is not editable" ) );
         return;
     }
-    KPlatoWork_MainWindow *mw = kplatoWorkMainWindow();
-    if ( mw == 0 ) {
-        kWarning()<<"Not a KPlatoWork main window, can't edit";
-        return;
-    }
-    mw->editDocument( getPart(), doc );
+    part()->editWorkpackageDocument( doc );
 }
 
-void View::slotViewDocument( Document *doc )
+void View::slotViewDocument()
 {
-    kDebug()<<"---------->";
-    kDebug()<<doc;
-    if ( doc == 0 ) {
+    emit viewDocument( currentDocument() );
+}
+
+void View::slotSendPackage()
+{
+    Node *node = currentNode();
+    if ( node == 0 ) {
+        KMessageBox::error(0, i18n("No node selected" ) );
         return;
     }
-    KUrl filename;
-    if ( doc->sendAs() == Document::SendAs_Copy ) {
-        filename = getPart()->extractFile( doc );
-    } else {
-        filename = doc->url();
+    qDebug()<<"View::slotSendPackage:"<<node->name();
+    WorkPackage *wp = part()->findWorkPackage( node );
+    if ( wp == 0 ) {
+        KMessageBox::error(0, i18n("Cannot find work package" ) );
+        return;
     }
-    // open for view
-    viewDocument( filename );
-    kDebug()<<"<----------";
+    if ( wp->isModified() ) {
+        int r = KMessageBox::questionYesNoCancel( 0, i18n("This work package has been modified.\nDo you want to save it before sending?" ), node->name() );
+        switch ( r ) {
+            case KMessageBox::Cancel: return;
+            case KMessageBox::Yes: wp->saveToProjects( part() ); break;
+            default: break;
+        }
+    }
+    QStringList attachURLs;
+    attachURLs << wp->filePath();
+
+    QString to = node->projectNode()->leader();
+    QString cc;
+    QString bcc;
+    QString subject = i18n( "Work Package: %1", node->name() );
+    QString body = node->description();
+    QString messageFile;
+
+    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
+}
+
+TaskWorkPackageView *View::currentView() const
+{
+    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
+    if ( lst.isEmpty() ) {
+        return 0;
+    }
+    return lst.first();
+}
+
+Node *View::currentNode() const
+{
+    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
+    if ( lst.isEmpty() ) {
+        return 0;
+    }
+    return lst.first()->currentNode();
+}
+
+Document *View::currentDocument() const
+{
+    QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
+    if ( lst.isEmpty() ) {
+        return 0;
+    }
+    return lst.first()->currentDocument();
 }
 
 void View::slotTaskProgress()
 {
-    //kDebug();
-    Node * node = getPart()->node();
-    if ( node == 0 ) {
-        return ;
+    qDebug()<<"View::slotTaskProgress:";
+    Task *n = qobject_cast<Task*>( currentNode() );
+    if ( n == 0 ) {
+        return;
     }
-    switch ( node->type() ) {
-        case Node::Type_Task: {
-            Task *task = static_cast<Task *>( node );
-            TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime() );
-            if ( dia->exec()  == QDialog::Accepted) {
-                QUndoCommand * m = dia->buildCommand();
-                if ( m ) {
-                    getPart() ->addCommand( m );
-                }
-            }
-            delete dia;
-            break;
+    StandardWorktime *w = qobject_cast<Project*>( n->projectNode() )->standardWorktime();
+    TaskProgressDialog dlg( *n, currentScheduleManager(), w, this );
+    if ( dlg.exec() == QDialog::Accepted ) {
+        qDebug()<<"View::slotTaskProgress:";
+        QUndoCommand *cmd = dlg.buildCommand();
+        if ( cmd ) {
+            cmd->redo(); //FIXME m_part->addCommand( cmd );
         }
-        default:
-            break; // avoid warnings
     }
 }
 

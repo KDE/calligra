@@ -49,7 +49,6 @@
 #include <kexidb/utils.h>
 #include <kexidb/preparedstatement.h>
 #include <tableview/kexitableviewdata.h>
-#include <widget/kexipropertyeditorview.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
@@ -379,6 +378,7 @@ void KexiFormView::initForm()
         m_delayedFormContentsResizeOnShow = 3;
     }
 
+    slotPropertySetSwitched(); // this prepares the data source page
     updateDataSourcePage();
 
     if (!newForm && viewMode() == Kexi::DesignViewMode) {
@@ -1161,12 +1161,9 @@ KexiFormView::updateDataSourcePage()
     if (viewMode() == Kexi::DesignViewMode) {
         QString dataSourcePartClass, dataSource;
         KoProperty::Set &set = form()->propertySet();
-        if (set.contains("dataSourcePartClass"))
-            dataSourcePartClass = set["dataSourcePartClass"].value().toString();
-        if (set.contains("dataSource"))
-            dataSource = set["dataSource"].value().toString();
-
-        formPart()->dataSourcePage()->setDataSource(dataSourcePartClass, dataSource);
+        dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
+        dataSource = set.propertyValue("dataSource").toString();
+        formPart()->dataSourcePage()->setFormDataSource(dataSourcePartClass, dataSource);
     }
 }
 

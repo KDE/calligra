@@ -1,0 +1,25 @@
+[Desktop Entry]
+Name=KSpread
+Name[af]=Kspread
+Name[hi]=के-स्प्रेड
+Name[hne]=के-स्प्रेड
+Name[ne]=केडीई स्प्रेड
+Name[sv]=Kspread
+Name[ta]=கேஸ்பிரெட்
+Name[x-test]=xxKSpreadxx
+Name[zh_TW]=工作表_KSpread
+Comment=KSpread Migration Driver for Kexi
+Comment[es]=Controlador de migración de KSpread de Kexi
+Comment[pt]=Controlador de Migração do KSpread para o Kexi
+Comment[pt_BR]=Driver de Migração KSpread do Kexi
+Comment[sv]=Kspread-övergångsdrivrutin för Kexi
+Comment[uk]=Драйвер міграції KSpread для Kexi
+Comment[x-test]=xxKSpread Migration Driver for Kexixx
+Comment[zh_TW]=Kexi 的 KSpread 轉移驅動程式
+X-KDE-Library=keximigrate_kspread
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=KSpread
+X-Kexi-MigrationDriverType=File
+X-Kexi-KexiMigrationVersion=1.1

@@ -24,10 +24,10 @@
 #include "kptduration.h"
 #include "kptproject.h"
 #include "kptnode.h"
+#include "kpttaskcompletedelegate.h"
 
 #include <QAbstractItemModel>
 #include <QMimeData>
-#include <QItemDelegate>
 #include <QModelIndex>
 #include <QWidget>
 
@@ -337,6 +337,10 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
             return node->estimate()->expectedEstimate();
         case Role::DurationUnit:
             return static_cast<int>( node->estimate()->unit() );
+        case Role::Minimum:
+            return m_project->config().minimumDurationUnit();
+        case Role::Maximum:
+            return m_project->config().maximumDurationUnit();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1092,7 +1096,7 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
             if ( t->completion().isStarted() ) {
                 return t->completion().startTime().dateTime();
             }
-            break;
+            return QDateTime::currentDateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1983,6 +1987,12 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                             flags |= Qt::ItemIsEditable;
                         }
                         break;
+                    case NodeModel::NodeCompleted:
+                        if ( t->state() & Node::State_ReadyToStart ) {
+                            flags |= Qt::ItemIsEditable;
+                        }
+                        break;
+
                     default: break;
                 }
             } else if ( ! t->completion().isFinished() ) {
@@ -2290,7 +2300,7 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
         case Qt::EditRole:
             double d( value.toList()[0].toDouble() );
             Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
-            //kDebug()<<value.toList()[0].toDouble()<<","<<unit<<" ->"<<d.milliseconds();
+            //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
                 if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Modify estimate" ) );
@@ -2437,12 +2447,25 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
 
 bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
-    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+    kDebug()<<node->name()<<value<<role;
+    if ( role != Qt::EditRole ) {
+        return false;
+    }
+    if ( node->type() == Node::Type_Task ) {
         Completion &c = static_cast<Task*>( node )->completion();
-        QDate date = QDate::currentDate();
+        QDateTime dt = QDateTime::currentDateTime();
+        QDate date = dt.date();
         // xgettext: no-c-format
         MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        if ( ! c.isStarted() ) {
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
+        }
         m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
+        if ( value.toInt() == 100 ) {
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+        }
         emit executeCommand( m ); // also adds a new entry if necessary
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
@@ -2456,6 +2479,22 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
             m->addCommand( cmd );
         }
         return true;
+    }
+    if ( node->type() == Node::Type_Milestone ) {
+        Completion &c = static_cast<Task*>( node )->completion();
+        if ( value.toInt() > 0 ) {
+            QDateTime dt = QDateTime::currentDateTime();
+            QDate date = dt.date();
+            MacroCommand *m = new MacroCommand( i18n( "Set finished" ) );
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, 100 ) );
+            emit executeCommand( m ); // also adds a new entry if necessary
+            return true;
+        }
+        return false;
     }
     return false;
 }
@@ -2572,6 +2611,7 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         return ItemModelBase::setData( index, value, role );
     }
     if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+        kWarning()<<index<<value<<role;
         return false;
     }
     Node *n = node( index );
@@ -2626,7 +2666,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         //case NodeModel::NodeAllocation: return new ??Delegate( parent );
@@ -2643,6 +2683,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
 
+        case NodeModel::NodeCompleted: return new TaskCompleteDelegate( parent );
         case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
         case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
 
@@ -3100,13 +3141,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT(  slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     m_project = project;
@@ -3115,13 +3156,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( project ) {
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     resetModel();
@@ -3483,7 +3524,7 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case NodeModel::NodeConstraint: return new EnumDelegate( parent );

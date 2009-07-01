@@ -198,7 +198,7 @@ public:
     Selection* selection() const;
 
     void handleKeyPressEvent( QKeyEvent* _ev );
-    void handleIMEvent( QInputMethodEvent  * _ev );
+    void handleInputMethodEvent( QInputMethodEvent  * _ev );
     void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
 
     int cursorPosition() const;
@@ -340,7 +340,7 @@ private:
 };
 
 #if 0 // KSPREAD_DISCARD_FORMULA_BAR
-/**
+  /**
  * The widget that appears above the sheet and allows to
  * edit the cells content.
  */

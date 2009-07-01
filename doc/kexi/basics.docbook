@@ -210,7 +210,7 @@ pane <! - - TODO (js) APPENDIX number - - ></a> .
 
 <para>
 Double clicking with the &LMB; on the object's name on the list allows to
-open the object in Data View. If the object's window was alread opened,
+open the object in Data View. If the object's window was already opened,
 the action just activates the window without switching it's view mode.
 </para>
 <para>

@@ -22,6 +22,7 @@
 #include "aboutdata.h"
 #include "application.h"
 
+#include <kuniqueapplication.h>
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
 #include <kmessagebox.h>
@@ -40,12 +41,14 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KPlatoWork_Application app;
-
-    // This is disabled for now so the crude test below will run
-    if (!app.start()) {
-        return 1;
+    if (!KUniqueApplication::start()) {
+       fprintf(stderr, "KPlatoWork is already running!\n");
+       return 0;
     }
+
+    KPlatoWork_Application app;
+    fprintf(stderr, "app created\n");
+
     app.exec();
     return 0;
 }

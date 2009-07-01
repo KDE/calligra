@@ -52,18 +52,19 @@ public:
     Private( DataSet *parent );
     ~Private();
     
-    void updateSize();
-    void updateDiagram() const;
-    ChartType effectiveChartType() const;
-    bool isValidDataPoint( const QPoint &point ) const;
-    QVariant data( const CellRegion &region, int index ) const;
+    void       updateSize();
+    void       updateDiagram() const;
+    ChartType  effectiveChartType() const;
+    bool       isValidDataPoint( const QPoint &point ) const;
+    QVariant   data( const CellRegion &region, int index ) const;
     
-    DataSet *parent;
+    DataSet      *parent;
     
-    ChartType chartType;
-    ChartSubtype chartSubType;
-    ChartType globalChartType;
-    ChartSubtype globalChartSubType;
+    ChartType     chartType;
+    ChartSubtype  chartSubType;
+    ChartType     globalChartType;
+    ChartSubtype  globalChartSubType;
+
     Axis *attachedAxis;
     bool showMeanValue;
     QPen meanValuePen;
@@ -169,12 +170,15 @@ void DataSet::Private::updateDiagram() const
     }
 }
 
-bool DataSet::Private::isValidDataPoint( const QPoint &point ) const {
-    if ( point.y() < 0 ) return false;
-    if ( point.x() < 0 ) return false;
+bool DataSet::Private::isValidDataPoint( const QPoint &point ) const
+{
+    if ( point.y() < 0 || point.x() < 0 )
+        return false;
+
     // We can't point to horizontal and vertical header data at the same time
     if ( point.x() == 0 && point.y() == 0 )
         return false;
+
     return true;
 }
 
@@ -190,10 +194,11 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // The result
     QVariant data;
     
-    // Convert the given index in this dataset to a data point in the source model
+    // Convert the given index in this dataset to a data point in the
+    // source model.
     QPoint dataPoint = region.pointAtIndex( index );
 
-    const bool verticalHeaderData = dataPoint.x() == 0;
+    const bool verticalHeaderData   = dataPoint.x() == 0;
     const bool horizontalHeaderData = dataPoint.y() == 0;
 
     // Check if the data point is valid

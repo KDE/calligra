@@ -70,7 +70,7 @@ private:
     /// Returns the parent model index from the given child shape
     QModelIndex parentIndexFromShape( const KoShape * child ) const;
 
-    KarbonDocument *m_document; ///< the undelying data structure
+    KarbonDocument *m_document; ///< the underlying data structure
 };
 
 #endif // KARBONLAYERMODEL_H

@@ -268,7 +268,7 @@ int KexiDataAwarePropertySet::findRowForPropertyValue(
         KoProperty::Set *set = m_sets.at(i);
         if (!set || !set->contains(propertyName))
             continue;
-        if (set->property(propertyName).value() == value)
+        if (set->propertyValue(propertyName) == value)
             return i;
     }
     return -1;

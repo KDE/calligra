@@ -56,7 +56,7 @@ bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
     {
         kError(30520) << "Parsing error in documentinfo.xml! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+            << " Error message: " << errorMsg;
         // ### TODO: user message
         return false;
     }
@@ -122,7 +122,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
     const QString fileName( m_chain->inputFile() );
     if ( fileName.isEmpty() )
     {
-        kError(30520) << "No input file name!" << endl;
+        kError(30520) << "No input file name!";
         return KoFilter::StupidError;
     }
 
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         // ### TODO: error return values
         if ( ! store->open( "maindoc.xml" ) )
         {
-            kError(30520) << "Opening root has failed" << endl;
+            kError(30520) << "Opening root has failed";
             delete store;
             return KoFilter::StupidError;
         }
@@ -201,7 +201,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         file.open( QIODevice::ReadOnly );
         if ( ! parseRoot( &file, kwordDocument ) )
         {
-            kError(30520) << "Could not process document! Aborting!" << endl;
+            kError(30520) << "Could not process document! Aborting!";
             file.close();
             return KoFilter::StupidError;
         }
@@ -210,7 +210,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
 
     if ( store && ! postParse( store, kwordDocument ) )
     {
-        kError(30520) << "Error during post-parsing! Aborting!" << endl;
+        kError(30520) << "Error during post-parsing! Aborting!";
         return  KoFilter::StupidError;
     }
 
@@ -226,7 +226,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
 
     if ( ! generator.prepare( kwordDocument ) )
     {
-        kError(30520) << "Could not prepare the OASIS document! Aborting!" << endl;
+        kError(30520) << "Could not prepare the OASIS document! Aborting!";
         return KoFilter::StupidError;
     }
 
@@ -234,13 +234,13 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
 
     if ( filenameOut.isEmpty() )
     {
-        kError(30520) << "Empty file name for saving as OASIS! Aborting!" << endl;
+        kError(30520) << "Empty file name for saving as OASIS! Aborting!";
         return KoFilter::StupidError;
     }
 
     if ( ! generator.generate( filenameOut, kwordDocument ) )
     {
-        kError(30520) << "Could not save as OASIS! Aborting!" << endl;
+        kError(30520) << "Could not save as OASIS! Aborting!";
         return KoFilter::StupidError;
     }
 

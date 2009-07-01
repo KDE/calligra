@@ -2,8 +2,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
-                     ${KOGUIUTILS_INCLUDES}
-                     ${KOTEXT_INCLUDES} )
+                     ${KOMAIN_INCLUDES}
+)
 
 ########### Flake Plugin library ###############
 
@@ -48,8 +48,6 @@ target_link_libraries(
     chartshapelib
     kdchart
     flake
-    kotext
-    kostore
     komain
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
@@ -67,6 +65,7 @@ target_link_libraries(
     kdchart
     flake
     kostore
+    komain
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}

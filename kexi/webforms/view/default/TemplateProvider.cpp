@@ -48,7 +48,7 @@ static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
 // Step 1: Fill the queryNames stringlist
 // Step 2: Sort it
 // Step 3: Write the links
-static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName) {
+static void addList(google::TemplateDictionary* dict, KexiDB::ObjectType objectType, const char* uri, const char* keyName) {
     QHash<QString, QString> oNames(KexiWebForms::Model::Database::getNames(objectType));
     QStringList captions(oNames.uniqueKeys());
     qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);

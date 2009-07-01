@@ -24,7 +24,6 @@
 #include "kplato_export.h"
 
 #include <KoView.h>
-#include <KoQueryTrader.h>
 
 #include "kptcontext.h"
 
@@ -63,7 +62,6 @@ class ResourceAssignmentView;
 class TaskStatusView;
 class Calendar;
 class Part;
-class DocumentChild;
 class Node;
 class Project;
 class MainSchedule;
@@ -101,7 +99,7 @@ public:
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
-    
+
     QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();
@@ -111,7 +109,7 @@ public:
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
     void setActiveSchedule( long id ) const;
-    
+
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
     ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
     ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
@@ -133,10 +131,10 @@ public:
     ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
 
     KoPrintJob * createPrintJob();
-    
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
-    
+
 public slots:
     void slotUpdate();
     void slotCreateTemplate();
@@ -154,7 +152,6 @@ public slots:
     void slotDefineWBS();
 
     void slotCreateView();
-    void slotCreateKofficeDocument( KoDocumentEntry& );
 
     void slotConfigure();
     void slotAddRelation( Node *par, Node *child );
@@ -189,6 +186,7 @@ protected slots:
     void slotOpenNode();
     void slotOpenNode( Node *node );
     void slotTaskProgress();
+    void slotTaskNotes();
     void slotDeleteTask( QList<Node*> lst );
     void slotDeleteTask( Node *node );
     void slotDeleteTask();
@@ -197,7 +195,7 @@ protected slots:
     void slotMoveTaskUp();
     void slotMoveTaskDown();
     void slotTaskWorkpackage();
-    
+
     void slotConnectNode();
 
     void slotDeleteResource( Resource *resource );
@@ -240,10 +238,6 @@ private slots:
 
 private:
     void createViews();
-    
-
-    void createChildDocumentViews();
-    ViewListItem *createChildDocumentView( DocumentChild *ch );
 
 private:
     QSplitter *m_sp;
@@ -271,12 +265,12 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    
+
     bool m_readWrite;
-    
+
     // ------ File
     QAction *actionCreateTemplate;
-    
+
     // ------ Edit
     QAction *actionCut;
     QAction *actionCopy;
@@ -284,8 +278,6 @@ private:
 
     // ------ View
     KToggleAction *actionViewSelector;
-
-    KToggleAction *actionViewResourceAppointments;
 
     // ------ Insert
 
@@ -302,6 +294,7 @@ private:
     // ------ Popup
     KAction *actionOpenNode;
     KAction *actionTaskProgress;
+    KAction *actionTaskNotes;
     KAction *actionDeleteTask;
     KAction *actionTaskWorkpackage;
     KAction *actionIndentTask;
@@ -312,7 +305,7 @@ private:
     KAction *actionEditResource;
     KAction *actionEditRelation;
     KAction *actionDeleteRelation;
-    
+
     //Test
     KAction *actNoInformation;
 

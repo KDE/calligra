@@ -139,9 +139,24 @@ KoViewConverter * KPrAnimationDirector::viewConverter()
     return &m_zoomHandler;
 }
 
+int KPrAnimationDirector::numPages() const
+{
+    return m_pages.size();
+}
+
 int KPrAnimationDirector::currentPage() const
 {
     return m_pageIndex;
+}
+
+int KPrAnimationDirector::numStepsInPage() const
+{
+    return m_steps.size();
+}
+
+int KPrAnimationDirector::currentStep() const
+{
+    return m_stepIndex;
 }
 
 bool KPrAnimationDirector::navigate( Navigation navigation )
@@ -235,7 +250,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
         m_view->viewMode()->updateActivePage( page );
     }
     else {
-        QList<KoShape*> shapes = page->iterator();
+        QList<KoShape*> shapes = page->childShapes();
         m_canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
         if ( !shapes.isEmpty() ) {
@@ -248,7 +263,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
         Q_ASSERT( paPage );
         KoPAMasterPage * masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->iterator();
+        QList<KoShape*> masterShapes = masterPage->childShapes();
         m_canvas->masterShapeManager()->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         // Make the top most layer active
         if ( !masterShapes.isEmpty() ) {

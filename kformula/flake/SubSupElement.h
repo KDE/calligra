@@ -30,7 +30,7 @@
 class KOFORMULA_EXPORT SubSupElement : public BasicElement {
 public:
     /// The standard constructor
-    SubSupElement( BasicElement* parent = 0 );
+    SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
 
     /// The destructor
     ~SubSupElement();
@@ -90,6 +90,9 @@ private:
 
     /// The superscript right to the m_baseElement
     BasicElement* m_superScript;
+
+    /// Whether this is a SubScript, SupScript or SubSupScript
+    ElementType m_elementType;
 };
 
 #endif // SUBSUPELEMENT_H

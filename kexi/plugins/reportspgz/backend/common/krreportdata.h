@@ -81,6 +81,11 @@ public:
     QString interpreter() {
         return m_interpreter;
     }
+    
+    bool externalData() const {
+      return m_externalData;
+    }
+    
     KRDetailSectionData* detail() {
         return detailsection;
     }
@@ -94,6 +99,7 @@ protected:
     QString m_query;
     QString m_script;
     QString m_interpreter;
+    bool m_externalData;
 
     ReportPageOptions page;
 

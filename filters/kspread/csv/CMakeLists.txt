@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOMAIN_INCLUDES})
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -8,7 +8,7 @@ set(csvimport_PART_SRCS csvimport.cc)
 
 kde4_add_plugin(csvimport WITH_PREFIX ${csvimport_PART_SRCS})
 
-target_link_libraries(csvimport koguiutils ${KDE4_KDEUI_LIBS} kspreadcommon komain ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(csvimport  ${KDE4_KDEUI_LIBS} kspreadcommon komain ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 

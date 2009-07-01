@@ -185,7 +185,7 @@ void KPrPlaceholders::add( const QList<KoShape *> & shapes )
         }
         KoShapeContainer* container = dynamic_cast<KoShapeContainer*>( shape );
         if ( container ) {
-            add( container->iterator() );
+            add( container->childShapes() );
         }
     }
 }

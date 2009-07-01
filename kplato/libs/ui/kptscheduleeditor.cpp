@@ -29,6 +29,7 @@
 #include "kptdatetime.h"
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
+#include "kptrecalculatedialog.h"
 
 #include <KoDocument.h>
 
@@ -112,7 +113,8 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
         << ScheduleModel::ScheduleOverbooking
         << ScheduleModel::ScheduleDistribution
         << ScheduleModel::SchedulePlannedStart
-        << ScheduleModel::SchedulePlannedFinish;
+        << ScheduleModel::SchedulePlannedFinish
+        << ScheduleModel::ScheduleScheduler;
 
     QList<int> lst;
     for ( int c = 0; c < model()->columnCount(); ++c ) {
@@ -261,8 +263,10 @@ void ScheduleEditor::updateReadWrite( bool readwrite )
 void ScheduleEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view, true );
-    dlg.exec();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( m_view, true, this );
+    dlg->exec();
+    delete dlg;
+
 }
 
 void ScheduleEditor::slotCalculateSchedule()
@@ -272,7 +276,14 @@ void ScheduleEditor::slotCalculateSchedule()
     if ( sm == 0 ) {
         return;
     }
-    sm->setRecalculate( sm->parentManager() );
+    if ( sm->parentManager() ) {
+        RecalculateDialog dlg;
+        if ( dlg.exec() == QDialog::Rejected ) {
+            return;
+        }
+        sm->setRecalculate( true );
+        sm->setRecalculateFrom( DateTime( KDateTime( dlg.dateTime() ) ) );
+    }
     emit calculateSchedule( m_view->project(), sm );
 }
 
@@ -284,8 +295,23 @@ void ScheduleEditor::slotAddSchedule()
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
         part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->expand( model()->index( sm ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     } else {
-        emit addScheduleManager( m_view->project() );
+        Project *p = m_view->project();
+        ScheduleManager *m = p->createScheduleManager();
+        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, i18n( "Add schedule %1", m->name() ) );
+        part() ->addCommand( cmd );
+        m_view->expand( model()->index( m ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     }
 }
 
@@ -295,10 +321,15 @@ void ScheduleEditor::slotAddSubSchedule()
     ScheduleManager *sm = m_view->currentManager();
     if ( sm ) {
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        
         part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->expand( model()->index( sm ) );
+        QModelIndex idx = model()->index( m );
+        if ( idx.isValid() ) {
+            m_view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::NoUpdate );
+        }
     } else {
-        emit addScheduleManager( m_view->project() );
+        slotAddSchedule();
     }
 }
 
@@ -410,7 +441,6 @@ ScheduleLogView::ScheduleLogView( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void ScheduleLogView::setProject( Project *project )
@@ -479,8 +509,6 @@ void ScheduleLogView::updateReadWrite( bool readwrite )
 void ScheduleLogView::slotOptions()
 {
     kDebug();
-/*    ItemViewSettupDialog dlg( m_view, true );
-    dlg.exec();*/
 }
 
 

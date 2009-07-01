@@ -1,6 +1,6 @@
 project(kivio)
 
-include_directories(${KOGUIUTILS_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories( ${KOPAGEAPP_INCLUDES})
 
 ### kivioprivate ###
 set(kivioprivate_LIB_SRCS

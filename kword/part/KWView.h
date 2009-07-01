@@ -94,6 +94,8 @@ public:
     /// show a popup on the view, adding to it a list of actions
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
 
+    const KWPage currentPage() const;
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);

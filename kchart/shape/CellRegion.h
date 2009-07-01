@@ -16,16 +16,20 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KCHART_CELLREGION_H
 #define KCHART_CELLREGION_H
 
-#include "ChartShape.h"
 
+// Qt
 #include <Qt>
 #include <QVector>
 #include <QRect>
+
+// KChart
+#include "ChartShape.h"
+
 
 class QRect;
 class QPoint;
@@ -54,20 +58,24 @@ namespace KChart {
  * top-left item of a QAbstractItemModel.
  *
  * An instance can represent either a simple, continuous region of
- * cells, as in most cases, or a more complex discontinuous region. In
- * its second form, the orientation of each separate continuous region
- * can vary, as well as their sizes.
+ * cells, as in most cases, or a more complex discontinuous region.
+ * In its second form, the orientation of each separate continuous
+ * region can vary, as well as their sizes.
  */
 
 class CHARTSHAPELIB_EXPORT CellRegion
 {
 public:
     CellRegion();
+    CellRegion( const CellRegion& region );
     CellRegion( const QPoint &point );
     CellRegion( const QRect &rect );
     CellRegion( const QPoint &point, const QSize &size );
     CellRegion( const QVector<QRect> &rects );
     ~CellRegion();
+    
+    CellRegion& operator = ( const CellRegion& region );    
+    bool operator == ( const CellRegion &other ) const;
     
     QVector<QRect> rects() const;
     
@@ -95,7 +103,7 @@ public:
     QRect boundingRect() const;
     
     QPoint pointAtIndex( int index ) const;
-    int indexAtPoint( const QPoint &point ) const;
+    int    indexAtPoint( const QPoint &point ) const;
     
     static QString regionToString( const QVector<QRect> &region );
     static QVector<QRect> stringToRegion( const QString &string );
@@ -103,12 +111,10 @@ public:
     static int rangeCharToInt( char c );
     static int rangeStringToInt( const QString &string );
     static QString rangeIntToString( int i );
-    
-    bool operator == ( const CellRegion &other ) const;
 
 private:
-    QVector<QRect> m_rects;
-    QRect m_boundingRect;
+    class Private;
+    Private *const d;
 };
 
 }

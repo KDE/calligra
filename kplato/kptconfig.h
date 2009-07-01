@@ -20,39 +20,26 @@
 #ifndef KPTCONFIG_H
 #define KPTCONFIG_H
 
-#include "kpttask.h"
+#include "kptconfigbase.h"
+
+class KPlatoSettings;
 
 namespace KPlato
 {
 
-// class Behavior {
-// public:
-//     enum CalculationMode { Manual, OnChange };
-//     Behavior() {
-//         calculationMode = Manual;
-//         allowOverbooking = true;
-//     }
-//     int calculationMode;
-//     bool allowOverbooking;
-// };
-
-class Config {
-public:
-    
+class Config : public ConfigBase
+{
+public:    
     Config();
     ~Config();
 
-    void setReadWrite(bool readWrite) { m_readWrite = readWrite; }
-    void load();
-    void save();
+    void readConfig();
+    void saveSettings();
 
-    Task &taskDefaults() { return m_taskDefaults; }
-//    Behavior &behavior() { return m_behavior; }
-    
-private:
-    bool m_readWrite;
-//    Behavior m_behavior;  
-    Task m_taskDefaults;
+    virtual void setDefaultValues( Task &task );
+
+    virtual int minimumDurationUnit() const;
+    virtual int maximumDurationUnit() const;
 
 };
 

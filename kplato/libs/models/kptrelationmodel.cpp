@@ -27,7 +27,6 @@
 #include "kptrelation.h"
 
 #include <QAbstractItemModel>
-#include <QItemDelegate>
 #include <QModelIndex>
 #include <QWidget>
 
@@ -418,7 +417,7 @@ QVariant RelationItemModel::headerData( int section, Qt::Orientation orientation
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-QItemDelegate *RelationItemModel::createDelegate( int column, QWidget *parent ) const
+QAbstractItemDelegate *RelationItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
         case 2: return new EnumDelegate( parent );

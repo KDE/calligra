@@ -24,7 +24,7 @@
 
 #include "ui_kptwbsdefinitionpanelbase.h"
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QWidget>
 
 class QUndoCommand;
@@ -35,7 +35,7 @@ namespace KPlato
 class WBSDefinition;
 class Project;
 
-class ComboBoxDelegate : public QItemDelegate
+class ComboBoxDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
