@@ -22,6 +22,7 @@
 #include "TableElement.h"
 #include "AttributeManager.h"
 #include "TableRowElement.h"
+#include "FormulaCursor.h"
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <QList>
@@ -142,6 +143,18 @@ const QList<BasicElement*> TableElement::childElements()
     return tmp;
 }
 
+int TableElement::positionOfChild(BasicElement* child) const 
+{
+    TableRowElement* temp=dynamic_cast<TableRowElement*>(child);
+    if (temp==0) {
+	return -1;
+    } else {
+	int p=m_rows.indexOf(temp);
+	return (p==-1) ? -1 : 2*p;
+    }
+}
+
+
 bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     int i;
     for (i=0;i<m_rows.count()-1;i++) {
@@ -153,10 +166,61 @@ bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     return m_rows[i]->setCursorTo(cursor, point);
 }
 
+bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    int p=newcursor->position();
+    switch (newcursor->direction()) {
+	case MoveLeft:
+	    if (p%2==0) {
+		//we are in front of a table row
+		return false;
+	    } else {
+		newcursor->moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
+		return true;
+	    }
+	case MoveRight:
+	    if (p%2==1) {
+		//we are behind a table row
+		return false;
+	    } else {
+		newcursor->moveTo( m_rows[ p / 2 ] , 0 );
+		return true;
+	    }
+	case MoveUp:
+	    if (p<=1) {
+		return false;
+	    } else if (newcursor->moveCloseTo(m_rows[ p/2 -1],oldcursor)) {
+		return true;
+	    } else {
+		return false;
+	    }
+	case MoveDown:
+	    if (p<(m_rows.count()-1)*2) {
+		if (newcursor->moveCloseTo(m_rows[ p/2 +1],oldcursor)) {
+		    return true;
+		} else {
+		    return false;
+		} 
+	    } else {
+		return false;
+	    }
+    }	
+}
+
+int TableElement::length() const 
+{
+    if (m_rows.count()>0) {
+	return 2*m_rows.count()-1;
+    } else {
+	return 1;
+    }
+}
+
 
 bool TableElement::acceptCursor( const FormulaCursor* cursor )
 {
     return false;
+//     return true;
 }
 
 QString TableElement::attributesDefaultValue( const QString& attribute ) const

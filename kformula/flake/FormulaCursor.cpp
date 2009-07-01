@@ -178,26 +178,32 @@ void FormulaCursor::move( CursorDirection direction )
     //the cursor is moved vertically
     while ( m_currentElement ) {
 	if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
-	    m_direction = NoDirection;
-	    return;
-	}
-	if ( m_currentElement->parentElement() ) {
-	    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-	    m_currentElement=m_currentElement->parentElement();
-	    if (m_direction==MoveRight) {
-		m_positionInElement++;
-		if (m_currentElement->acceptCursor(this)) {
-		    m_direction = NoDirection;
-		    return;
-		}
-	    } else if (m_direction==MoveLeft) {
-		if (m_currentElement->acceptCursor(this)) {
-		    m_direction = NoDirection;
-		    return;
-		}
+	    if (m_currentElement->acceptCursor(this)) {
+		kDebug() << "Placing at " << position();
+		m_direction = NoDirection;
+		return;
 	    }
 	} else {
-	    m_currentElement=m_currentElement->parentElement();
+	    if ( m_currentElement->parentElement() ) {
+		m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+		m_currentElement=m_currentElement->parentElement();
+		if (m_direction==MoveRight) {
+		    m_positionInElement++;
+		    if (m_currentElement->acceptCursor(this)) {
+			kDebug() << "Placing at " << position();
+			m_direction = NoDirection;
+			return;
+		    }
+		} else if (m_direction==MoveLeft) {
+		    if (m_currentElement->acceptCursor(this)) {
+			kDebug() << "Placing at " << position();
+			m_direction = NoDirection;
+			return;
+		    }
+		}
+	    } else {
+		m_currentElement=m_currentElement->parentElement();
+	    }
 	}
     }
     (*this)=oldcursor;

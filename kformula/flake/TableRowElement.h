@@ -69,7 +69,7 @@ public:
      * @param child A BasicElement to insert
      */
     void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
+    
     /**
      * Remove a child element
      * @param element The BasicElement to remove
@@ -82,6 +82,15 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor* cursor );
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// inherited from BasicElement
+    virtual int length() const;
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);

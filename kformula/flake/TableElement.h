@@ -64,10 +64,19 @@ public:
     const QList<BasicElement*> childElements();
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
+    virtual bool acceptCursor( const FormulaCursor* cursor );
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// inherited from BasicElement
+    virtual int length() const;
     
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;

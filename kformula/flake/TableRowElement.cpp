@@ -22,11 +22,13 @@
 
 #include "TableRowElement.h"
 #include "TableElement.h"
+#include "FormulaCursor.h"
 #include "TableEntryElement.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <QStringList>
 #include <QPainter>
+#include <kdebug.h>
 
 TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -85,6 +87,21 @@ bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
     return false;
 }
 
+int TableRowElement::positionOfChild(BasicElement* child) const 
+{
+    TableEntryElement* temp=dynamic_cast<TableEntryElement*>(child);
+    if (temp==0) {
+	return -1;
+    } else {
+	return m_entries.indexOf(temp);
+    }
+}
+
+int TableRowElement::length() const {
+    return m_entries.count();
+}
+
+
 bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     int i;
     for (i=0; i<m_entries.length()-1; i++) {
@@ -95,6 +112,28 @@ bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     }
     point-=m_entries[i]->origin();
     return m_entries[i]->setCursorTo(cursor,point);
+}
+
+bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    //TODO: Moving the cursor vertically in the tableelement is a little bit fragile
+    if ( (newcursor->direction()==MoveUp) ||
+	 (newcursor->direction()==MoveDown) ||
+	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+	return false;
+    }
+    switch(newcursor->direction()) {
+	case MoveLeft:
+	    newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
+	    newcursor->moveEnd();
+	    break;
+	case MoveRight:
+	    newcursor->setCurrentElement(m_entries[newcursor->position()]);
+	    newcursor->moveHome();
+	    break;
+    }
+    return true;	
 }
 
 
