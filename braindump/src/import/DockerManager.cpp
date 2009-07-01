@@ -40,43 +40,60 @@ public:
     QMap<QString, bool> toolDockerVisibillityMap;
     QMap<QString, ToolDocker *> activeToolDockerMap;
     QMap<QString, bool> toolDockerRaisedMap;
+    void loadDocker(const QString& _name, bool _visible);
 };
+
+void DockerManager::Private::loadDocker(const QString& _name, bool _visible)
+{
+  ToolDockerFactory toolDockerFactory(_name);
+  ToolDocker *td = qobject_cast<ToolDocker *>(view->createDockWidget(&toolDockerFactory));
+  toolDockerMap[_name] = td;
+  toolDockerVisibillityMap[_name] = _visible;
+  toolDockerRaisedMap[_name] = false;
+  td->setVisible(false);
+  td->setEnabled(false);    
+  td->toggleViewAction()->setVisible(false);
+}
 
 DockerManager::DockerManager(MainWindow *view)
     : QObject(view), d( new Private() )
 {
     d->view = view;
 
-    KConfigGroup cfg = KGlobal::config()->group("KoDockerManager");
+    KConfigGroup cfg = KGlobal::config()->group("DockerManager");
 
-    QStringList strList = cfg.readEntry("StatusOfTheseToolDockers", QStringList());
+    QStringList visibleList = cfg.readEntry("VisibleToolDockers", QStringList());
 
-    QStringListIterator j(strList);
+    QStringListIterator j(visibleList);
     while (j.hasNext()) {
-        QString name = j.next();
-        ToolDockerFactory toolDockerFactory(name);
-        ToolDocker *td = qobject_cast<ToolDocker *>(d->view->createDockWidget(&toolDockerFactory));
-        d->toolDockerMap[name] = td;
-        d->toolDockerVisibillityMap[name] = true;
-        d->toolDockerRaisedMap[name] = false;
-        td->setVisible(false);
-        td->setEnabled(false);    
-        td->toggleViewAction()->setVisible(false);
+      QString name = j.next();
+      d->loadDocker(name, true);
    }
+  QStringList hiddenList = cfg.readEntry("HiddenToolDockers", QStringList());
+
+  QStringListIterator j2(hiddenList);
+  while (j2.hasNext()) {
+    QString name = j2.next();
+    d->loadDocker(name, false);
+  }
 }
 
 DockerManager::~DockerManager()
 {
-    KConfigGroup cfg = KGlobal::config()->group("KoDockerManager");
-    QStringList strList;
+    KConfigGroup cfg = KGlobal::config()->group("DockerManager");
+    QStringList visibleList;
+    QStringList hiddenList;
     QMapIterator<QString, ToolDocker *> j(d->toolDockerMap);
     while (j.hasNext()) {
         j.next();
         if(d->toolDockerVisibillityMap[j.key()]) {
-          strList += j.key();
+          visibleList += j.key();
+        } else {
+          hiddenList += j.key();
         }
     }
-    cfg.writeEntry("StatusOfTheseToolDockers", strList);
+    cfg.writeEntry("VisibleToolDockers", visibleList);
+    cfg.writeEntry("HiddenToolDockers", hiddenList);
     cfg.sync();
     delete d;
 }
