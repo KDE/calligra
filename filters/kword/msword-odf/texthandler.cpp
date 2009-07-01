@@ -56,11 +56,27 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles )
-    : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),/* m_index( 0 ),*/
-      m_currentListDepth( -1 ), m_currentListID( 0 ), m_numOpenParagraphs( 0 ), m_paragraph( 0L ),
-      m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false), m_insideFootnote( false ),
-      m_insideField(false), m_fieldAfterSeparator(false), m_fieldType(0), m_maxColumns(0)
+    : m_writingHeader(false),
+    m_writeMasterStyleName(false),
+    m_currentListDepth(-1),
+    m_currentListID(0),
+    m_headerWriter(0),
+    m_mainStyles(0),
+    m_sectionNumber(0),
+    m_parser(parser),
+    m_footNoteNumber(0),
+    m_endNoteNumber(0),
+    m_index(0),
+    m_currentTable(0),
+    m_numOpenParagraphs(0),
+    m_paragraph(0),
+    m_insideField(false),
+    m_fieldAfterSeparator(false),
+    m_fieldType(0),
+    m_insideFootnote(false),
+    m_footnoteWriter(0),
+    m_footnoteBuffer(0),
+    m_maxColumns(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";

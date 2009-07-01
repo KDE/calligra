@@ -24,8 +24,16 @@
 #include <kdebug.h>
 
 Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, int outlineLevel )
-    : m_parentStyle( 0 ), m_parentStyle2( 0 ), m_paragraphProperties( 0 ), m_paragraphProperties2( 0 ),
-    m_paragraphStyle2( 0 )
+    : m_paragraphProperties(0),
+    m_paragraphProperties2(0),
+    m_paragraphStyle(0),
+    m_paragraphStyle2(0),
+    m_mainStyles(0),
+    m_parentStyle(0),
+    m_parentStyle2(0),
+    m_inStylesDotXml(false),
+    m_isHeading(false),
+    m_outlineLevel(0)
 {
     kDebug(30513);
     m_mainStyles = mainStyles;

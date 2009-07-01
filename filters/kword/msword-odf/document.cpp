@@ -46,13 +46,30 @@
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
         KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
-    : m_replacementHandler( new KWordReplacementHandler ),
-      m_tableHandler( 0 ),
-      m_pictureHandler( new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
-      m_textHandler( 0 ), m_headerCount(0), m_hasHeader(false), m_hasFooter(false),
-      m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
-      m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
-      m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
+    : m_replacementHandler(new KWordReplacementHandler),
+    m_tableHandler(0),
+    m_pictureHandler(new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
+    m_textHandler(0),
+    m_chain(chain),
+    m_parser(wvWare::ParserFactory::createParser(fileName)),
+    m_headerFooters(0),
+    m_bodyFound(false),
+    m_evenOpen(false),
+    m_oddOpen(false),
+    m_footNoteNumber(0),
+    m_endNoteNumber(0),
+    m_currentListDepth(-1),
+    m_bodyWriter(0),
+    m_mainStyles(0),
+    m_metaWriter(0),
+    m_masterStyle(0),
+    m_pageLayoutStyle(0),
+    m_writer(0),
+    m_hasHeader(false),
+    m_hasFooter(false),
+    m_buffer(0),
+    m_bufferEven(0),
+    m_headerCount(0)
 {
     kDebug(30513);
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)

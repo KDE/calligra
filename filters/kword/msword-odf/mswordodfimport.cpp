@@ -129,6 +129,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     //actual parsing & action
     if (!document->parse()) //parse file into the queues?
         return KoFilter::CreationError;
+/*
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
     if (!document->bodyFound())
@@ -139,6 +140,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     //save the office:automatic-styles & and fonts in content.xml
     mainStyles->saveOdfFontFaceDecls(contentWriter);
     mainStyles->saveOdfAutomaticStyles(contentWriter, false);
+*/
 
     //close tags in bodyWriter
     bodyWriter->endElement();//office:text
