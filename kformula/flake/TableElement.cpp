@@ -142,6 +142,18 @@ const QList<BasicElement*> TableElement::childElements()
     return tmp;
 }
 
+bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+    int i;
+    for (i=0;i<m_rows.count()-1;i++) {
+	if (m_rows[i]->boundingRect().bottom()>point.y()) {
+	    break;
+	}
+    }
+    point-=m_rows[i]->origin();
+    return m_rows[i]->setCursorTo(cursor, point);
+}
+
+
 bool TableElement::acceptCursor( const FormulaCursor* cursor )
 {
     return false;

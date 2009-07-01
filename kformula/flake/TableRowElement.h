@@ -82,7 +82,10 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor* cursor );
-
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
     /// @return The element's ElementType
     ElementType elementType() const;
 

@@ -182,23 +182,23 @@ void FormulaCursor::move( CursorDirection direction )
 	    return;
 	}
 	if ( m_currentElement->parentElement() ) {
-	    int positioninparent=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-	    switch (m_direction) {
-		case MoveRight:
-		    m_currentElement=m_currentElement->parentElement();
-		    m_positionInElement=positioninparent+1;
+	    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+	    m_currentElement=m_currentElement->parentElement();
+	    if (m_direction==MoveRight) {
+		m_positionInElement++;
+		if (m_currentElement->acceptCursor(this)) {
 		    m_direction = NoDirection;
 		    return;
-		case MoveLeft:
-		    m_currentElement=m_currentElement->parentElement();
-		    m_positionInElement=positioninparent;
+		}
+	    } else if (m_direction==MoveLeft) {
+		if (m_currentElement->acceptCursor(this)) {
 		    m_direction = NoDirection;
 		    return;
-		default:
-		    m_positionInElement=positioninparent;
+		}
 	    }
+	} else {
+	    m_currentElement=m_currentElement->parentElement();
 	}
-	m_currentElement=m_currentElement->parentElement();
     }
     (*this)=oldcursor;
 }

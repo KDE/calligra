@@ -65,7 +65,10 @@ public:
 
     /// inherited from BasicElement
     bool acceptCursor( const FormulaCursor* cursor );
-
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
 
@@ -74,7 +77,9 @@ public:
 
     /// @return The height of the @p TableRowElement
     double rowHeight( TableRowElement* row );
-
+    
+    
+    
 protected:
     /// Read all content from the node - reimplemented by child elements
     bool readMathMLContent( const KoXmlElement& element );

@@ -85,6 +85,19 @@ bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
     return false;
 }
 
+bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+    int i;
+    for (i=0; i<m_entries.length()-1; i++) {
+	//Find the child element the point is in
+	if (m_entries[i]->boundingRect().right()>=point.x()) {
+	    break;
+	}
+    }
+    point-=m_entries[i]->origin();
+    return m_entries[i]->setCursorTo(cursor,point);
+}
+
+
 void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
 }
