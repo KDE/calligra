@@ -96,11 +96,15 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
     // Check if the event is valid means inside the shape
     if( !m_formulaShape->boundingRect().contains( event->point ) )
         return;
-
+    kDebug() << "MousePressEvent";
     // transform the global coordinates into shape coordinates
     QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
-
-    // set the cursor to element the user clicked to
+    if (event->modifiers() & Qt::ShiftModifier) {
+	m_formulaCursor->setSelecting(true);
+    } else {
+	m_formulaCursor->setSelecting(false);
+    }
+    // set the cursor to the element the user clicked on
     m_formulaCursor->setCursorTo( p );
 
     repaintCursor();
@@ -116,13 +120,21 @@ void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
 void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
-
-    if( !m_formulaCursor->hasSelection() )
-        return;
-
+//     Q_UNUSED( event )
+    if (!(event->buttons() & Qt::LeftButton)) {
+	return;
+    }
+    // Check if the event is valid means inside the shape
+    if( !m_formulaShape->boundingRect().contains( event->point ) )
+        kDebug() << "Getting most probably invalid mouseMoveEvent";
+    
+    // transform the global coordinates into shape coordinates
+    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
     //TODO Implement drag and drop of elements
-    //TODO Implement selecting via mouse
+    m_formulaCursor->setSelecting(true);
+    m_formulaCursor->setCursorTo( p );
+    repaintCursor();
+    event->accept();
 }
 
 void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -136,9 +148,16 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
     if( !m_formulaCursor )
         return;
-    kDebug() << "----------------------------------------------------------------------";
-    m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
-
+    
+    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || 
+	event->key() == Qt::Key_Up || event->key() == Qt::Key_Down ||
+	event->key() == Qt::Key_Home || event->key() == Qt::Key_End ) {
+	if (event->modifiers() & Qt::ShiftModifier) {
+	    m_formulaCursor->setSelecting(true);
+	} else {
+	    m_formulaCursor->setSelecting(false);
+	}
+    }
     switch( event->key() )                           // map key to movement or action
     {
         case Qt::Key_Backspace:

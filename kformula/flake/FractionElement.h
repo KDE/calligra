@@ -57,7 +57,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Insert a new child at the cursor position - reimplemented from BasicElement
@@ -89,7 +89,10 @@ public:
     virtual int positionOfChild(BasicElement* child) const;
     
     /// inherited from BasicElement
-    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    virtual QLineF cursorLine(int position) const;
+    
+    /// inherited from BasicElement
+    virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
     
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
@@ -103,6 +106,8 @@ protected:
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     void writeMathMLContent( KoXmlWriter* writer ) const;   
+    
+    void fixSelection(FormulaCursor* cursor);
 
 private:
     /// Layout the fraction in a bevelled way

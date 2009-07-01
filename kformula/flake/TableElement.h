@@ -61,7 +61,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /// inherited from BasicElement
     virtual bool acceptCursor( const FormulaCursor* cursor );

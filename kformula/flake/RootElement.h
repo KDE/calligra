@@ -43,7 +43,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Insert a new child at the cursor position
@@ -80,7 +80,7 @@ public:
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
-    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    virtual QLineF cursorLine(int position) const;
     
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
@@ -89,6 +89,9 @@ public:
     ElementType elementType() const;
 
 protected:
+    ///update the selection in cursor so that a proper range is selected
+    void fixSelection (FormulaCursor* cursor);
+    
     /// Read root contents - reimplemented from BasicElement
     bool readMathMLContent( const KoXmlElement& element );
 

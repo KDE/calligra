@@ -129,7 +129,7 @@ void FractionElement::layoutBevelledFraction( const AttributeManager* am )
                              QPointF( width()-m_denominator->width(), 0.0 ) );
 }
 
-const QList<BasicElement*> FractionElement::childElements()
+const QList<BasicElement*> FractionElement::childElements() const
 {
     QList<BasicElement*> list;
     list << m_denominator << m_numerator;
@@ -145,10 +145,10 @@ int FractionElement::length() const {
     return 3;
 }
 
-QLineF FractionElement::cursorLine(const FormulaCursor* cursor) {
+QLineF FractionElement::cursorLine(int position) const {
     QPointF top=absoluteBoundingRect().topLeft();
     QPointF bottom;
-    switch (cursor->position()) {
+    switch (position) {
 	case 0:
 	    top+=m_numerator->origin();
 	    break;
@@ -162,7 +162,7 @@ QLineF FractionElement::cursorLine(const FormulaCursor* cursor) {
 	    top+=m_denominator->origin()+QPointF(m_denominator->width(),0.0);
 	    break;
     }
-    if (cursor->position()<=1) {
+    if (position<=1) {
 	bottom=top+QPointF(0.0,m_numerator->height());
     }
     else {
@@ -170,6 +170,19 @@ QLineF FractionElement::cursorLine(const FormulaCursor* cursor) {
     }
     return QLineF(top, bottom);
 }
+
+QPainterPath FractionElement::selectionRegion(const int pos1, const int pos2) const 
+{
+    QPainterPath temp;
+    if (pos1==0 && pos2 >0) { 
+	temp.addRect(m_numerator->absoluteBoundingRect());
+    }
+    if (pos1<3 && pos2==3) {
+	temp.addRect(m_denominator->absoluteBoundingRect());
+    }
+    return temp;
+}
+
 
 int FractionElement::positionOfChild(BasicElement* child) const {
     if (m_numerator==child){
@@ -188,103 +201,163 @@ bool FractionElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
 	 ((newcursor->position()==1 || newcursor->position()==3) && newcursor->direction()==MoveRight) ) {
 	return false;
     }
-    else {
-	switch (newcursor->direction()) {
-	    case MoveLeft:
-		newcursor->setCurrentElement(newcursor->position()==1 ? m_numerator : m_denominator );
-		newcursor->moveEnd();
-		return true;
-	    case MoveRight:
-		newcursor->setCurrentElement(newcursor->position()==0 ? m_numerator : m_denominator );
-		newcursor->moveHome();
-		return true;
-	    case MoveUp:
-		if ( oldcursor->currentElement()==this &&
-		     oldcursor->position()==newcursor->position()) {
-		    //we started the movement inside the fraction
-		    if (oldcursor->position()==2) {
-			newcursor->moveTo(this,0);
-			return true;
-		    } else if ( oldcursor->position()==3) {
-			newcursor->moveTo(this,1);
-			return true;
-		    }
-		}	    
-		if (newcursor->moveCloseTo(m_numerator,oldcursor)) {
-		    return true;
-		} else {
-		    if (newcursor->position()==2) {
-			newcursor->moveTo(this,0);
-			return true;
-		    } else if ( newcursor->position()==3) {
-			newcursor->moveTo(this,1);
-			return true;
-		    } else {
-			return false;
-		    }
-		} 
-	    case MoveDown:
-		if ( oldcursor->currentElement()==this &&
-		     oldcursor->position()==newcursor->position()) {
-		    //we started the movement inside the fraction
-		    if (oldcursor->position()==0) {
-			newcursor->moveTo(this,2);
-			return true;
-		    } else if ( oldcursor->position()==1) {
-			newcursor->moveTo(this,3);
-			return true;
-		    }
-		}	    
-		if (newcursor->moveCloseTo(m_denominator,oldcursor)) {
-		    return true;
-		} else {
-		    if (newcursor->position()==0) {
-			newcursor->moveTo(this,2);
-			return true;
-		    } else if ( newcursor->position()==1) {
-			newcursor->moveTo(this,3);
-			return true;
-		    } else {
-			return false;
-		    }
-		}
+    switch (newcursor->direction()) {
+    case MoveLeft:
+	if (newcursor->hasSelection()) {
+	    newcursor->moveTo(this,newcursor->position()==1 ? 0 : 2 );
+	} else {
+	    newcursor->setCurrentElement(newcursor->position()==1 ? m_numerator : m_denominator );
+	    newcursor->moveEnd();
+	}
+	break;
+    case MoveRight:
+	if (newcursor->hasSelection()) {
+	    newcursor->moveTo(this,newcursor->position()==0 ? 1 : 3 );
+	} else {
+	    newcursor->setCurrentElement(newcursor->position()==0 ? m_numerator : m_denominator );
+	    newcursor->moveHome();
+	}
+	break;
+    case MoveUp:
+	if ( newcursor->hasSelection() || 
+	    (oldcursor->currentElement()==this &&
+		oldcursor->position()==newcursor->position())) {
+	    //we started the movement inside the fraction
+	    if (newcursor->position()==2) {
+		newcursor->moveTo(this,0);
+		break;
+	    } else if ( newcursor->position()==3) {
+		newcursor->moveTo(this,1);
+		break;
+	    }
+	}	    
+	if (newcursor->moveCloseTo(m_numerator,oldcursor)) {
+	    return true;
+	} else {
+	    if (newcursor->position()==2) {
+		newcursor->moveTo(this,0);
+		break;
+	    } else if ( newcursor->position()==3) {
+		newcursor->moveTo(this,1);
+		break;
+	    } else {
+		return false;
+	    }
+	} 
+    case MoveDown:
+	if ( newcursor->hasSelection() || 
+	    (oldcursor->currentElement()==this &&
+		oldcursor->position()==newcursor->position())) {
+	    //we started the movement inside the fraction or we are selecting
+	    if (newcursor->position()==0 ) {
+		newcursor->moveTo(this,2);
+		break;
+	    } else if ( newcursor->position()==1 ) {
+		newcursor->moveTo(this,3);
+		break;
+	    }
+	}	    
+	if (newcursor->moveCloseTo(m_denominator,oldcursor)) {
+	    return true;
+	} else {
+	    if (newcursor->position()==0) {
+		newcursor->moveTo(this,2);
+		break;
+	    } else if ( newcursor->position()==1) {
+		newcursor->moveTo(this,3);
+		break;
+	    } else {
+		return false;
+	    }
+	}
+    }
+    fixSelection(newcursor);
+    return true;
+}
+
+
+void FractionElement::fixSelection ( FormulaCursor* cursor )
+{
+    if (cursor->hasSelection()) {
+	if (cursor->position()<2 && cursor->selectionStartPosition()==2) {
+	    cursor->setSelectionStart(1);
+	} else if (cursor->position()==2 && cursor->selectionStartPosition()<2) {
+	    cursor->setPosition(1);
+	} else if (cursor->position()==1 && cursor->selectionStartPosition()>1) {
+	    cursor->setPosition(2);
+	} else if (cursor->position()>1 && cursor->selectionStartPosition()==1) {
+	    cursor->setSelectionStart(2);
 	}
     }
 }
 
+
 bool FractionElement::setCursorTo( FormulaCursor* cursor, QPointF point ) 
 {
-    kDebug()<<"Punkt: "<<point;
-    //check if the point is above the fration line, the origin is in the top left corner
+    //check if the point is above the fraction line, the origin is in the top left corner
     bool inNumerator=point.y() < (m_numerator->boundingRect().bottom() +  m_denominator->boundingRect().top())/2 ;
-    if (point.x() > width()) {
-	if ( inNumerator ) {
-	    cursor->setPosition(1);
-	    cursor->setCurrentElement(this);
-	    return true;
+    if (cursor->hasSelection()) {
+	if (inNumerator) {
+	    //the point is above the fraction line
+	    if (point.x()<m_numerator->boundingRect().left()+m_numerator->boundingRect().width()/2.) {
+		//the point is left of the numerator
+		cursor->moveTo(this, 0);
+		return true;
+	    } else {
+		//the point is right
+		cursor->moveTo(this, 1);
+		return true;
+	    }
 	} else {
-	    cursor->setPosition(3);
-	    cursor->setCurrentElement(this);
+	    //the point is below the fraction line
+	    if (point.x()<m_denominator->boundingRect().left()+m_denominator->boundingRect().width()/2.) {
+		//the point is left of the denominator
+		cursor->moveTo(this, 2);
+		return true;
+	    } else {
+		//the point is right of the denominator
+		cursor->moveTo(this, 3);
+		return true;
+	    }
+	}
+	//clean up the selectionStart
+	if (cursor->selectionStartPosition()==1 && cursor->position()>1) {
+	    cursor->setSelectionStart(2);
+	    return true;
+	} else if (cursor->selectionStartPosition()==2 && cursor->position()<2) {
+	    cursor->setSelectionStart(1);
 	    return true;
 	}
-    }
-    if (point.x() < 0) {
-	if ( inNumerator) {
-	    cursor->setPosition(0);
-	    cursor->setCurrentElement(this);
-	    return true;
-	} else {
-	    cursor->setPosition(2);
-    	    cursor->setCurrentElement(this);
-	    return true;
-	}
-    }
-    if ( inNumerator ) {
-	point-=m_numerator->origin();
-	return m_numerator->setCursorTo(cursor,point);
     } else {
-	point-=m_denominator->origin();
-	return m_denominator->setCursorTo(cursor,point);
+	if (point.x() > width()) {
+	    if ( inNumerator ) {
+		cursor->setPosition(1);
+		cursor->setCurrentElement(this);
+		return true;
+	    } else {
+		cursor->setPosition(3);
+		cursor->setCurrentElement(this);
+		return true;
+	    }
+	}
+	if (point.x() < 0) {
+	    if ( inNumerator) {
+		cursor->setPosition(0);
+		cursor->setCurrentElement(this);
+		return true;
+	    } else {
+		cursor->setPosition(2);
+		cursor->setCurrentElement(this);
+		return true;
+	    }
+	}
+	if ( inNumerator ) {
+	    point-=m_numerator->origin();
+	    return m_numerator->setCursorTo(cursor,point);
+	} else {
+	    point-=m_denominator->origin();
+	    return m_denominator->setCursorTo(cursor,point);
+	}
     }
 }
 

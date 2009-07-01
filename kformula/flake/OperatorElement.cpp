@@ -31,10 +31,10 @@ QPainterPath OperatorElement::renderForFence( const QString& raw, Form form )
     return QPainterPath();
 }
 
-QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
     AttributeManager manager;
-    m_dict.queryOperator( raw, determineOperatorForm() );
+    //m_dict.queryOperator( raw, determineOperatorForm() );
 
     qreal rSpace = manager.parseMathSpace(m_dict.rSpace(), this);
     qreal lSpace = manager.parseMathSpace(m_dict.lSpace(), this);

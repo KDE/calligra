@@ -84,7 +84,7 @@ void TableRowElement::layout( const AttributeManager* am )
 
 bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return false;
+    return (cursor->hasSelection());
 }
 
 int TableRowElement::positionOfChild(BasicElement* child) const 
@@ -102,19 +102,63 @@ int TableRowElement::length() const {
 }
 
 
-bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
-    int i;
+QLineF TableRowElement::cursorLine ( int position ) const
+{
+    TableElement* parentTable = static_cast<TableElement*>( parentElement() );
+    QPointF top=absoluteBoundingRect().topLeft();
+    if( childElements().isEmpty() ) {
+        // center cursor in elements that have no children
+        top += QPointF( width()/2, 0 );
+    } else { 
+	if ( position==length()) {
+	    top += QPointF(width(),0.0);
+	} else {
+	    top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
+	}
+    }
+    QPointF bottom = top + QPointF( 0.0, height() );
+    return QLineF(top, bottom);
+}
+
+
+bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+{
+    if (cursor->hasSelection()) {
+	if (m_entries.isEmpty() || point.x()<0.0) {
+	    cursor->setCurrentElement(this);
+	    cursor->setPosition(0);
+	    return true;
+	}
+	//check if the point is behind all child elements
+	if (point.x() >= width()) {
+	    cursor->setCurrentElement(this);
+	    cursor->setPosition(length());
+	    return true;
+	}
+    }
+    int i=0;
     double x=0.0;
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
-    for (i=0; i<m_entries.length()-1; i++) {
+    for (; i<m_entries.count()-1; ++i) {
 	//Find the child element the point is in
 	x+=parentTable->columnWidth( i );
 	if (x>=point.x()) {
 	    break;
 	}
     }
-    point-=m_entries[i]->origin();
-    return m_entries[i]->setCursorTo(cursor,point);
+    if (cursor->hasSelection()) {
+	//we don't need to change current element because we are already in this element
+	if (cursor->selectionStartPosition()<=i) {
+	    cursor->setPosition(i+1);
+	}
+	else {
+	    cursor->setPosition(i);
+	}
+	return true;
+    } else {
+	point-=m_entries[i]->origin();
+	return m_entries[i]->setCursorTo(cursor,point);
+    }
 }
 
 bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
@@ -164,7 +208,7 @@ void TableRowElement::removeChild(FormulaCursor* cursor, BasicElement* element )
 {
 }
 
-const QList<BasicElement*> TableRowElement::childElements()
+const QList<BasicElement*> TableRowElement::childElements() const
 {
     QList<BasicElement*> tmp;
     foreach( TableEntryElement* element, m_entries )

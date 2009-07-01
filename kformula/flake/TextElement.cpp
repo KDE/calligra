@@ -28,7 +28,7 @@
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QRectF TextElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF TextElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
     AttributeManager manager;
 

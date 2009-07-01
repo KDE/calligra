@@ -39,14 +39,16 @@ TableElement::~TableElement()
 void TableElement::paint( QPainter& painter, AttributeManager* am )
 {
     // draw frame
-    if( m_framePenStyle != Qt::NoPen ) {
-        painter.setPen( QPen( m_framePenStyle ) );
-        painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
-    }
-
+    //if( m_framePenStyle != Qt::NoPen ) {
+    //    painter.setPen( QPen( m_framePenStyle ) );
+    // painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    //}
+    painter.setPen(QPen(Qt::NoPen));//debugging 
+    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines
     double offset = 0.0;
     for( int i = 0; i < m_rowHeights.count(); i++ ) {
+	kDebug() << "Jucha";
         offset += m_rowHeights[ i ];
         painter.drawLine( QPointF( 0.0, offset ), QPointF( width(), offset ) );     
     }
@@ -142,7 +144,7 @@ double TableElement::rowHeight( TableRowElement* row )
     return m_rowHeights[ m_rows.indexOf( row ) ];
 }
 
-const QList<BasicElement*> TableElement::childElements()
+const QList<BasicElement*> TableElement::childElements() const
 {
     QList<BasicElement*> tmp;
     foreach( TableRowElement* tmpRow, m_rows )
@@ -162,7 +164,11 @@ int TableElement::positionOfChild(BasicElement* child) const
 }
 
 
-bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+{
+    if (cursor->hasSelection()) {
+	return false;
+    }
     int i;
     for (i=0;i<m_rows.count()-1;i++) {
 	if (m_rows[i]->boundingRect().bottom()>point.y()) {
@@ -211,7 +217,8 @@ bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
 	    } else {
 		return false;
 	    }
-    }	
+    }
+    return false;
 }
 
 int TableElement::length() const 

@@ -83,7 +83,7 @@ int RowElement::length() const
     return m_childElements.count();
 }
 
-const QList<BasicElement*> RowElement::childElements()
+const QList<BasicElement*> RowElement::childElements() const
 {
     return m_childElements;
 }
@@ -117,7 +117,17 @@ bool RowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor)
 	//TODO: check what happens with linebreaks in <mspace> elements
 	return false;
     }
-    switch(newcursor->direction()) {
+    if (newcursor->hasSelection()) {
+	switch(newcursor->direction()) {
+	case MoveLeft:
+	    newcursor->setPosition(newcursor->position()-1);
+	    break;
+	case MoveRight:
+	    newcursor->setPosition(newcursor->position()+1);
+// 	    break;
+	}
+    } else {
+	switch(newcursor->direction()) {
 	case MoveLeft:
 	    newcursor->setCurrentElement(m_childElements[newcursor->position()-1]);
 	    newcursor->moveEnd();
@@ -126,20 +136,21 @@ bool RowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor)
 	    newcursor->setCurrentElement(m_childElements[newcursor->position()]);
 	    newcursor->moveHome();
 	    break;
+	}
     }
     return true;
 }
 
-QLineF RowElement::cursorLine(const FormulaCursor* cursor) {
+QLineF RowElement::cursorLine(int position) const {
     QPointF top=absoluteBoundingRect().topLeft();
     if( childElements().isEmpty() ) {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
     } else { 
-	if ( cursor->isEnd()) {
+	if ( position==length()) {
 	    top += QPointF(width(),0.0);
 	} else {
-	    top += QPointF( childElements()[ cursor->position() ]->boundingRect().left(), 0.0 );
+	    top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
 	}
     }
     QPointF bottom = top + QPointF( 0.0, height() );
@@ -148,26 +159,38 @@ QLineF RowElement::cursorLine(const FormulaCursor* cursor) {
 
 bool RowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
 {
-    if (point.x()<0) {
+    if (m_childElements.isEmpty() || point.x()<m_childElements[0]->origin().x()) {
 	cursor->setCurrentElement(this);
 	cursor->setPosition(0);
 	return true;
     }
-    QList<BasicElement*>::const_iterator tmp;
-    for (tmp=childElements().begin(); tmp!=childElements().end(); tmp++) {
+    int i;
+    for (i=0; i<m_childElements.count(); i++) {
 	//Find the child element the point is in
-	if ((*tmp)->boundingRect().right()>=point.x()) {
+	if (m_childElements[i]->boundingRect().right()>=point.x()) {
 	    break;
 	}
     }
     //check if the point is behind all child elements
-    if (tmp==childElements().end()) {
+    if (i==m_childElements.count()) {
 	cursor->setCurrentElement(this);
 	cursor->setPosition(length());
 	return true;
+    } else {
+	if (cursor->hasSelection()) {
+	    //we don't need to change current element because we are already in this element
+	    if (cursor->selectionStartPosition()<=i) {
+		cursor->setPosition(i+1);
+	    }
+	    else {
+		cursor->setPosition(i);
+	    }
+	    return true;
+	} else {
+	    point-=m_childElements[i]->origin();
+	    return m_childElements[i]->setCursorTo(cursor,point);
+	}
     }
-    point-=(*tmp)->origin();
-    return (*tmp)->setCursorTo(cursor,point);
 }
 
 

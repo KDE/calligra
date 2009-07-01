@@ -29,6 +29,7 @@ class BasicElement;
 class QString;
 class QPainter;
 class QPointF;
+class QRectF;
 
 enum CursorDirection {
     MoveRight,
@@ -145,9 +146,18 @@ public:
      */ 
     void setSelecting( bool selecting );
 
+    /// set the start position of the selection
+    void setSelectionStart(int position);
+    
     /// @return @c true when the cursor is selecting
     bool hasSelection() const;
-
+    
+    /// @return the selection starting position
+    int selectionStartPosition() const;
+    
+    /// @return the bounding rect of the current selection
+    QRectF selectionRect() const;
+    
 private:
     /// @return true when the cursor is inside a token element
     bool insideToken() const;
@@ -161,7 +171,10 @@ private:
 
     /// The position of the cursor in the current element
     int m_positionInElement;
-
+    
+    /// The position where the current selection starts in the current element
+    int m_selectionStartPosition;
+    
     /// The direction the cursor is moving to
     CursorDirection m_direction;
 

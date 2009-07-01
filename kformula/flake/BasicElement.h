@@ -37,6 +37,7 @@ class KoXmlWriter;
 #include "KoXmlReaderForward.h"
 class AttributeManager;
 class FormulaCursor;
+class QPainterPath;
 
 #define DEBUGID 40000
 
@@ -84,7 +85,7 @@ public:
      * Obtain a list of all child elements of this element - sorted in saving order
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*> childElements();
+    virtual const QList<BasicElement*> childElements() const;
 
     /**
      * Insert a new child at the cursor position
@@ -141,7 +142,9 @@ public:
      * @param cursor The FormulaCursor specifing the position
      * @return The cursor line
      */
-    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    virtual QLineF cursorLine(int position) const;
+    
+    virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
     
     /**
      * Move the cursor in the direction specified in cursor

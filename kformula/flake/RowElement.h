@@ -67,7 +67,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Insert a new child at the cursor position - reimplemented from BasicElement
@@ -112,7 +112,7 @@ public:
     virtual int positionOfChild(BasicElement* child) const;
     
     /// inherited from BasicElement
-    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    virtual QLineF cursorLine(int position) const;
    
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

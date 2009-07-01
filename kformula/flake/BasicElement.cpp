@@ -78,12 +78,28 @@ bool BasicElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
     return false;
 }
 
-QLineF BasicElement::cursorLine(const FormulaCursor* cursor) 
+QLineF BasicElement::cursorLine(int position) const
 {
     QPointF top = absoluteBoundingRect().topLeft();
     QPointF bottom = top + QPointF( 0.0, height() );
     return QLineF(top,bottom);   
 }
+
+QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const 
+{
+	QLineF l1=cursorLine(pos1);
+	QLineF l2=cursorLine(pos2);
+	//TODO: find out why doesn't work
+	//QRectF r1(l1.p1(),l1.p2());
+	//QRectF r2(l2.p1(),l2.p2());
+	
+	QRectF r1(l1.p1(),l2.p2());
+	QRectF r2(l2.p1(),l1.p2());
+	QPainterPath temp;
+	temp.addRect(r1.unite(r2));
+	return temp;
+}
+
 
 const QRectF BasicElement::absoluteBoundingRect() const 
 {
@@ -113,7 +129,7 @@ void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
 void BasicElement::removeChild( FormulaCursor*, BasicElement* )
 { /* do nothing a BasicElement has no children */ }
 
-const QList<BasicElement*> BasicElement::childElements()
+const QList<BasicElement*> BasicElement::childElements() const
 {
     kWarning( 39001) << "Returning no elements from BasicElement";
     return QList<BasicElement*>();

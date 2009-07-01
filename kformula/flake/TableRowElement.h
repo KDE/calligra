@@ -61,7 +61,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
  
     /**
      * Insert a new child at the cursor position
@@ -94,6 +94,9 @@ public:
     
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual QLineF cursorLine ( int position ) const;
     
     /// @return The element's ElementType
     ElementType elementType() const;

@@ -51,7 +51,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Render the element to the given QPainter
@@ -92,16 +92,15 @@ public:
     
     /**
      * Obtain the x position of the cursor inside this token element
-     * @param cursor The FormulaCursor who is supposed to be used for calculation
+     * @param position The cursor position in the element
      * @return The offset from the left origin
      */
-    double cursorOffset( const FormulaCursor* cursor );
+    double cursorOffset( const int position) const;
 
     /// Process @p raw and render it to @p path
 
-    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) = 0;
+    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) const = 0;
 
-    
     ///inherited from BasicElement
     virtual int length() const;
     
@@ -109,7 +108,7 @@ public:
     virtual bool isToken() const;
     
     ///inherited from BasicElement
-    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    virtual QLineF cursorLine(int position) const;
     
     ///inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);

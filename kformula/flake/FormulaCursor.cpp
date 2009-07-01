@@ -35,43 +35,65 @@ FormulaCursor::FormulaCursor( BasicElement* element )
               : m_currentElement( element )
 {
     m_positionInElement = 0;
+    m_selectionStartPosition = 0;
+    m_selecting = false;
     m_direction = NoDirection;
 }
 
 void FormulaCursor::paint( QPainter& painter ) const
 {
+    kDebug() << "Drawing cursor with selecting: "<< hasSelection() << " from "
+	<< selectionStartPosition()<<" to " << position();
     if( !m_currentElement )
         return;
- 
-    // setup a 1px pen and draw the cursor line with it 
+    
+    QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
+    double baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
     painter.setPen( pen );
-    painter.drawLine(m_currentElement->cursorLine( this ));
+    painter.drawLine(m_currentElement->cursorLine( m_positionInElement ));
     pen.setWidth( 0);
-    switch(m_currentElement->elementType()) {
-	case Number:
-	   painter.setPen(Qt::red);
-	   break;
-	case Identifier:
-	   painter.setPen(Qt::darkMagenta);
-	   break;
-	case Row:
-	   painter.setPen(Qt::green);
-	   break;
-	case Fraction:
-	   painter.setPen(Qt::blue);
-	   break;
-	default:
-	   painter.setPen(Qt::magenta);
-	   break;
-    }
-    QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
-    double baseline=m_currentElement->baseLine();
-    painter.drawRect( m_currentElement->absoluteBoundingRect() );
-    painter.setPen( QPen( Qt::blue, 0, Qt::DashLine ) );
+    pen.setColor(Qt::blue);
+    pen.setStyle(Qt::DashLine);
+    painter.setPen( pen );
     painter.drawLine( origin+QPointF(0.0,baseline),
 		      origin+QPointF(m_currentElement->width(), baseline) );
+    pen.setStyle(Qt::DotLine);
+    switch(m_currentElement->elementType()) {
+	case Number:
+	   pen.setColor(Qt::red);
+	   break;
+	case Identifier:
+	   pen.setColor(Qt::darkMagenta);
+	   break;
+	case Row:
+	   pen.setColor(Qt::green);
+	   break;
+	case Fraction:
+	   pen.setColor(Qt::blue);
+	   break;
+	default:
+	   pen.setColor(Qt::magenta);
+	   break;
+    }
+    painter.setPen(pen);
+    painter.drawRect( m_currentElement->absoluteBoundingRect() );
+    //draw the selection rectangle
+    if ( m_selecting ) {
+	kDebug() << "Selection is " << selectionRect();
+	QBrush brush;
+	QColor color(Qt::blue);
+ 	color.setAlpha(128);
+	brush.setColor(color);
+	brush.setStyle(Qt::SolidPattern);
+	painter.setBrush(brush);
+	painter.setPen(Qt::NoPen);
+	int p1=position()<selectionStartPosition()? position() : selectionStartPosition();
+	int p2=position()<selectionStartPosition()? selectionStartPosition() : position() ;
+	painter.drawPath(m_currentElement->selectionRegion(p1,p2));
+// 	painter.drawRect(selectionRect());
+    }
 }
 
 void FormulaCursor::insertText( const QString& text )
@@ -179,24 +201,27 @@ void FormulaCursor::move( CursorDirection direction )
     while ( m_currentElement ) {
 	if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
 	    if (m_currentElement->acceptCursor(this)) {
-		kDebug() << "Placing at " << position();
 		m_direction = NoDirection;
 		return;
 	    }
 	} else {
 	    if ( m_currentElement->parentElement() ) {
+		if (hasSelection()) {
+		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+		}
 		m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
 		m_currentElement=m_currentElement->parentElement();
 		if (m_direction==MoveRight) {
 		    m_positionInElement++;
 		    if (m_currentElement->acceptCursor(this)) {
-			kDebug() << "Placing at " << position();
 			m_direction = NoDirection;
 			return;
 		    }
 		} else if (m_direction==MoveLeft) {
+		    if (hasSelection()) {
+			m_selectionStartPosition++;
+		    }
 		    if (m_currentElement->acceptCursor(this)) {
-			kDebug() << "Placing at " << position();
 			m_direction = NoDirection;
 			return;
 		    }
@@ -215,8 +240,10 @@ bool FormulaCursor::moveCloseTo(BasicElement* element, FormulaCursor* cursor)
 }
 
 
-QPointF FormulaCursor::getCursorPosition() {
-    return (m_currentElement->cursorLine(this).p1()+m_currentElement->cursorLine(this).p2())/2.;
+QPointF FormulaCursor::getCursorPosition() 
+{
+    return ( m_currentElement->cursorLine(m_positionInElement).p1()
+           + m_currentElement->cursorLine(m_positionInElement).p2())/2.;
 }
 
 
@@ -228,11 +255,69 @@ void FormulaCursor::moveTo( BasicElement* element, int position )
 
 void FormulaCursor::setCursorTo( const QPointF& point )
 {
-    BasicElement* formulaElement = m_currentElement;
-    while( formulaElement->parentElement() != 0 )
-	formulaElement = formulaElement->parentElement();
-    formulaElement->setCursorTo(this,point);
+    if (m_selecting) {
+	while (!m_currentElement->absoluteBoundingRect().contains(point)) {
+	    if ( m_currentElement->parentElement() ) {
+		
+		m_positionInElement=0;
+		if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
+		    //the point is left of the old selection start, so we move the selection 
+		    //start after the old current element
+		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
+		} else {
+		    m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+		}
+		m_currentElement=m_currentElement->parentElement();
+	    }
+	    else {
+// 		setSelecting(false);
+		return;
+	    }
+	}
+	while (!m_currentElement->setCursorTo(this,point-m_currentElement->absoluteBoundingRect().topLeft())) {
+	    if ( m_currentElement->parentElement() ) {
+		m_selectionStartPosition=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+		m_positionInElement=0;
+		if (point.x()<m_currentElement->cursorLine(m_selectionStartPosition).p1().x()) {
+		    //the point is left of the old selection start, so we move the selection 
+		    //start after the old current element
+		    m_selectionStartPosition++;
+		}
+		m_currentElement=m_currentElement->parentElement();
+	    }
+	    else {
+		return;
+	    }
+	}
+	
+    } else {
+	BasicElement* formulaElement = m_currentElement;
+	while( formulaElement->parentElement() != 0 )
+	    formulaElement = formulaElement->parentElement();
+	formulaElement->setCursorTo(this,point);
+    }
 }
+
+int FormulaCursor::selectionStartPosition() const 
+{
+    return m_selectionStartPosition;
+}
+
+QRectF FormulaCursor::selectionRect() const 
+{
+	QLineF l1=m_currentElement->cursorLine(m_positionInElement);
+	QLineF l2=m_currentElement->cursorLine(m_selectionStartPosition);
+	//TODO: find out why doesn't work
+	//QRectF r1(l1.p1(),l1.p2());
+	//QRectF r2(l2.p1(),l2.p2());
+	
+	QRectF r1(l1.p1(),l2.p2());
+	QRectF r2(l2.p1(),l1.p2());
+//	kDebug()<<r1<<r2;
+// 	kDebug()<<r1.united(r2).topLeft()<<" --- "<<r1.united(r2).bottomRight();
+	return r1.unite(r2);
+}
+
 
 void FormulaCursor::moveHome()
 {
@@ -310,6 +395,19 @@ bool FormulaCursor::hasSelection() const
 
 void FormulaCursor::setSelecting( bool selecting )
 {
-    m_selecting = selecting;
+    if (selecting) {
+	if (!m_selecting) {
+	    //we start a new selection
+	    m_selecting = selecting;
+	    m_selectionStartPosition=m_positionInElement;
+	}
+    } else {
+	m_selecting = selecting;
+	m_selectionStartPosition=0;
+    }
+}
+
+void FormulaCursor::setSelectionStart(int position) {
+    m_selectionStartPosition=position;
 }
 

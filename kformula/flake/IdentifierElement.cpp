@@ -27,7 +27,7 @@
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QRectF IdentifierElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF IdentifierElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
     AttributeManager manager;
     QFont font = manager.font(this);
