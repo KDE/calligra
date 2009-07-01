@@ -90,6 +90,8 @@ public:
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
 
+    virtual bool moveCursor(FormulaCursor* cursor);
+    
     /// @return The element's ElementType
     ElementType elementType() const;
 

@@ -151,9 +151,25 @@ void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 
 BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
-    Q_UNUSED( cursor )
+//     Q_UNUSED( cursor )
     return this;
 }
+
+bool TokenElement::moveCursor(FormulaCursor* cursor) {
+    if ((cursor->isHome() && cursor->direction()==MoveLeft) || (cursor->isEnd() && cursor->direction()==MoveRight)) {
+	return BasicElement::moveCursor(cursor);
+    }
+    else {
+	if (cursor->direction()==MoveLeft) {
+	    cursor->setPosition(cursor->position()-1);
+	}
+	else {
+	    cursor->setPosition(cursor->position()+1);
+	}
+	return true;
+    }
+}
+
 
 double TokenElement::cursorOffset( const FormulaCursor* cursor ) const
 {

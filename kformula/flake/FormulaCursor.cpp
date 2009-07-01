@@ -67,6 +67,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     pen.setWidth( 0 );
     painter.setPen( pen );
     painter.drawLine( top, bottom );
+    painter.drawRect(m_currentElement->boundingRect());
 }
 
 void FormulaCursor::insertText( const QString& text )
@@ -169,37 +170,16 @@ void FormulaCursor::remove( bool elementBeforePosition )
 void FormulaCursor::move( CursorDirection direction )
 {
     m_direction = direction;
-    BasicElement* tmp = m_currentElement;
-
-    // loop through the element tree and try to find an element that accepts the cursor
-    while( tmp ) {
-        if( tmp->acceptCursor( this ) == tmp )  // an element accepts the cursor
-            break;
-        else if( tmp->acceptCursor( this ) == tmp->parentElement() )
-            m_ascending = true;
-        else
-            m_ascending = false;
-     
-        tmp = tmp->acceptCursor( this );        
+    BasicElement* oldCurrentElement= m_currentElement;
+    int oldPosition=m_positionInElement;
+    
+    while (m_currentElement->moveCursor( this )) {
+	if (m_currentElement->acceptCursor( this )==m_currentElement) {
+	    return;
+	}
     }
-
-    if( !tmp )    // no element accepted or error so quit
-        return;
-    else if( tmp == m_currentElement ) {       // alter the position inside the element
-        if( ( isHome() && m_direction == MoveLeft ) ||
-            ( isEnd() && m_direction == MoveRight ) ||
-            m_direction == MoveUp || m_direction == MoveDown )
-            return;
-        else
-            ( m_direction == MoveLeft ) ? m_positionInElement-- : m_positionInElement++;
-    }
-    else {
-        m_currentElement = tmp;           // assign the new element to the cursor
-        if( m_direction == MoveRight )    // and set position according to movement
-            moveEnd();
-        else
-            moveHome();
-    }
+    m_currentElement=oldCurrentElement;
+    m_positionInElement=oldPosition;
 }
 
 void FormulaCursor::moveTo( BasicElement* element, int position )
@@ -243,10 +223,6 @@ void FormulaCursor::moveHome()
 
 void FormulaCursor::moveEnd()
 {
-//     if( m_currentElement->elementType() == Row )
-// 	m_positionInElement = m_currentElement->childElements().count();
-//     else
-//         m_positionInElement = 1;
     m_positionInElement=m_currentElement->length();
 }
 
@@ -257,10 +233,6 @@ bool FormulaCursor::isHome() const
 
 bool FormulaCursor::isEnd() const
 {
-//     if( currentElement()->elementType() == Row )
-//         return ( m_positionInElement == m_currentElement->childElements().count() );
-//     else
-// 	return ( m_positionInElement == 1 );
     return m_positionInElement == m_currentElement->length();
 }
 
@@ -293,6 +265,14 @@ BasicElement* FormulaCursor::currentElement() const
 int FormulaCursor::position() const
 {
     return m_positionInElement;
+}
+
+void FormulaCursor::setCurrentElement(BasicElement* element) {
+    m_currentElement=element;
+}
+
+void FormulaCursor::setPosition(int position) {
+    m_positionInElement=position;
 }
 
 CursorDirection FormulaCursor::direction() const

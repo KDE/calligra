@@ -86,7 +86,9 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    
+    virtual bool moveCursor(FormulaCursor* cursor);
+    
     /**
      * Obtain the x position of the cursor inside this token element
      * @oaram cursor The FormulaCursor who is supposed to be used for calculation

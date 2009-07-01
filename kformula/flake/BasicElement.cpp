@@ -28,6 +28,7 @@
 #include <QVariant>
 
 #include <kdebug.h>
+#include "FormulaCursor.h"
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
@@ -67,8 +68,25 @@ void BasicElement::stretch()
 BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
-    return 0;
+    return this;
 }
+
+bool BasicElement::moveCursor(FormulaCursor* cursor) {
+    if ( m_parentElement != 0 ) {
+	cursor->setCurrentElement(parentElement());
+	if (cursor->direction()==MoveLeft) {
+	    cursor->setPosition(m_parentElement->positionOfChild( this ));
+	}
+	else {
+	    cursor->setPosition(m_parentElement->positionOfChild( this )+1);
+	}
+	return true;
+    }
+    else {
+	return false;
+    }
+}
+
 
 void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
 {

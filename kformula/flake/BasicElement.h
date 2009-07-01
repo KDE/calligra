@@ -133,7 +133,15 @@ public:
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     virtual BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    
+    
+    /**
+     * Move the cursor in the direction specified in cursor
+     * @param cursor The FormularCursor we move
+     * @return true, if we moved the cursor
+     */
+    virtual bool moveCursor(FormulaCursor* cursor);
+    
     /// @return The element's ElementType
     virtual ElementType elementType() const;
 
@@ -181,7 +189,7 @@ public:
     virtual int length() const;
     
     /** 
-     * @return the position of child in this element and -1 if it isn't a child
+     * @return the cursor position before the child in this element and -1 if it isn't a child
      * @param child  the childelement we are looking for
      */
     virtual int positionOfChild(BasicElement* child) const;

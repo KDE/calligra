@@ -120,7 +120,11 @@ public:
 
     /// @return The current position in m_currentElement
     int position() const;
-
+    
+    void setPosition(int position);
+    
+    void setCurrentElement(BasicElement* element);
+    
     /// @return The current direction the cursor is moving in
     CursorDirection direction() const;
 

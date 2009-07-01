@@ -100,12 +100,30 @@ void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 {
     Q_UNUSED( cursor )
-    m_childElements.removeAll( child );
+    m_childElements.removeOne( child );
 }
 
 BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
 {
     return this;
+}
+
+bool RowElement::moveCursor(FormulaCursor* cursor) {
+    if ( (cursor->isHome() && cursor->direction()==MoveLeft) ||
+	 (cursor->isEnd() && cursor->direction()==MoveRight) ) {
+	return BasicElement::moveCursor(cursor);
+    }
+    else {
+	if ( cursor->direction() == MoveLeft ) {
+	    cursor->setCurrentElement(m_childElements[cursor->position()-1]);
+	    cursor->moveEnd();
+	}
+	else {
+	    cursor->setCurrentElement(m_childElements[cursor->position()]);
+	    cursor->moveHome();
+	}
+	return true;
+    }
 }
 
 ElementType RowElement::elementType() const
