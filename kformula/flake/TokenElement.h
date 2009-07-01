@@ -88,7 +88,7 @@ public:
     bool acceptCursor( const FormulaCursor* cursor );
     
     ///inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* cursor);
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     /**
      * Obtain the x position of the cursor inside this token element

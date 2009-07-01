@@ -36,7 +36,6 @@ FormulaCursor::FormulaCursor( BasicElement* element )
 {
     m_positionInElement = 0;
     m_direction = NoDirection;
-    m_ascending = false;
 }
 
 void FormulaCursor::paint( QPainter& painter ) const
@@ -174,47 +173,51 @@ void FormulaCursor::remove( bool elementBeforePosition )
 
 void FormulaCursor::move( CursorDirection direction )
 {
+    FormulaCursor oldcursor(*this);
     m_direction = direction;
-    BasicElement* oldCurrentElement= m_currentElement;
-    int oldPosition=m_positionInElement;
-    
-    if ( m_direction==MoveLeft || m_direction==MoveRight ) {
-	//the cursor is moved horizontally
-	while (m_currentElement->moveCursor( this )) {
-	    if ( m_currentElement->acceptCursor( this ) ) {
-		return;
+    //the cursor is moved vertically
+    while ( m_currentElement ) {
+	if ( m_currentElement->moveCursor( this, &oldcursor ) ) {
+	    m_direction = NoDirection;
+	    return;
+	}
+	if ( m_currentElement->parentElement() ) {
+	    int positioninparent=m_currentElement->parentElement()->positionOfChild(m_currentElement);
+	    switch (m_direction) {
+		case MoveRight:
+		    m_currentElement=m_currentElement->parentElement();
+		    m_positionInElement=positioninparent+1;
+		    m_direction = NoDirection;
+		    return;
+		case MoveLeft:
+		    m_currentElement=m_currentElement->parentElement();
+		    m_positionInElement=positioninparent;
+		    m_direction = NoDirection;
+		    return;
+		default:
+		    m_positionInElement=positioninparent;
 	    }
 	}
-    } else {
-	//the cursor is moved vertically
-	QPointF point=(m_currentElement->cursorLine(this).p1()+m_currentElement->cursorLine(this).p2())/2.;
-	while ( m_currentElement ) {
-	    if ( m_currentElement->moveCursor( this ) ) {
-		//setCursorTo wants the point in coordinates relative to the element, so we transform 
- 		point-=m_currentElement->absoluteBoundingRect().topLeft();
-		m_currentElement->setCursorTo( this, point );
-		return;
-		//TODO: Find out what to do, if the current position is not accepted
-	    }
-	    if ( m_currentElement->parentElement() ) {
-		//TODO: check if this is really needed, it is just there to keep the cursor in a valid state
-		m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement);
-	    }
-	    m_currentElement=m_currentElement->parentElement();
-	}
+	m_currentElement=m_currentElement->parentElement();
     }
-    m_currentElement=oldCurrentElement;
-    m_positionInElement=oldPosition;
-    m_direction = NoDirection;
+    (*this)=oldcursor;
 }
+
+bool FormulaCursor::moveCloseTo(BasicElement* element, FormulaCursor* cursor) 
+{    
+    return element->setCursorTo(this,cursor->getCursorPosition()-element->absoluteBoundingRect().topLeft());
+}
+
+
+QPointF FormulaCursor::getCursorPosition() {
+    return (m_currentElement->cursorLine(this).p1()+m_currentElement->cursorLine(this).p2())/2.;
+}
+
 
 void FormulaCursor::moveTo( BasicElement* element, int position )
 {
-    if( m_direction == NoDirection ) {
         m_currentElement = element;
         m_positionInElement = position;
-    }
-    m_direction = NoDirection;
 }
 
 void FormulaCursor::setCursorTo( const QPointF& point )
@@ -287,11 +290,6 @@ void FormulaCursor::setPosition(int position) {
 CursorDirection FormulaCursor::direction() const
 {
     return m_direction;
-}
-
-bool FormulaCursor::ascending() const
-{
-    return m_ascending;
 }
 
 QString FormulaCursor::inputBuffer() const

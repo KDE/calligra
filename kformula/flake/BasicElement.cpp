@@ -72,23 +72,10 @@ bool BasicElement::acceptCursor( const FormulaCursor* cursor )
     return true;
 }
 
-bool BasicElement::moveCursor(FormulaCursor* cursor) 
+bool BasicElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
 {
-    if ( m_parentElement != 0 || 
-	 cursor->direction()==MoveUp ||
-	 cursor->direction()==MoveDown) {
-	cursor->setCurrentElement(parentElement());
-	if (cursor->direction()==MoveRight) {
-	    cursor->setPosition(m_parentElement->positionOfChild( this )+1);
-	}
-	else {
-	    cursor->setPosition(m_parentElement->positionOfChild( this ));
-	}
-	return true;
-    }
-    else {
-	return false;
-    }
+    //it is not possible to move the cursor inside the element
+    return false;
 }
 
 QLineF BasicElement::cursorLine(const FormulaCursor* cursor) 

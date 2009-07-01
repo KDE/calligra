@@ -148,7 +148,7 @@ public:
      * @param cursor The FormularCursor we move
      * @return true, if we moved the cursor
      */
-    virtual bool moveCursor(FormulaCursor* cursor);
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     /// @return The element's ElementType
     virtual ElementType elementType() const;

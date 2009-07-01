@@ -199,22 +199,19 @@ bool TokenElement::acceptCursor( const FormulaCursor* cursor )
     return true;
 }
 
-bool TokenElement::moveCursor(FormulaCursor* cursor) {
-    if ( (cursor->direction()==MoveUp) ||
-	 (cursor->direction()==MoveDown)) {
-	//we can't move the cursor vertically
+bool TokenElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) {
+    if ( (newcursor->direction()==MoveUp) ||
+	 (newcursor->direction()==MoveDown) ||
+	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
 	return false;
     }
-    if ( (cursor->isHome() && cursor->direction()==MoveLeft) ||
-	 (cursor->isEnd() && cursor->direction()==MoveRight) ) {
-	return BasicElement::moveCursor(cursor);
-    }
-    switch( cursor->direction() ) {
+    switch( newcursor->direction() ) {
 	case MoveLeft:
-	    cursor->setPosition(cursor->position()-1);
+	    newcursor->setPosition(newcursor->position()-1);
 	    break;
 	case MoveRight:
-	    cursor->setPosition(cursor->position()+1);
+	    newcursor->setPosition(newcursor->position()+1);
 	    break;
     }
     return true;

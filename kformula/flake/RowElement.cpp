@@ -107,26 +107,24 @@ bool RowElement::acceptCursor( const FormulaCursor* cursor )
 {
     return true;
 }
-
-bool RowElement::moveCursor(FormulaCursor* cursor) {
-    if ( (cursor->direction()==MoveUp) ||
-	 (cursor->direction()==MoveDown)) {
-	//the cursor can't be moved vertically
+bool RowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    if ( (newcursor->direction()==MoveUp) ||
+	 (newcursor->direction()==MoveDown) ||
+	 (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+	//the newcursor can't be moved vertically
 	//TODO: check what happens with linebreaks in <mspace> elements
 	return false;
     }
-    if ( (cursor->isHome() && cursor->direction()==MoveLeft) ||
-	 (cursor->isEnd() && cursor->direction()==MoveRight) ) {
-	return BasicElement::moveCursor(cursor);
-    }
-    switch(cursor->direction()) {
+    switch(newcursor->direction()) {
 	case MoveLeft:
-	    cursor->setCurrentElement(m_childElements[cursor->position()-1]);
-	    cursor->moveEnd();
+	    newcursor->setCurrentElement(m_childElements[newcursor->position()-1]);
+	    newcursor->moveEnd();
 	    break;
 	case MoveRight:
-	    cursor->setCurrentElement(m_childElements[cursor->position()]);
-	    cursor->moveHome();
+	    newcursor->setCurrentElement(m_childElements[newcursor->position()]);
+	    newcursor->moveHome();
 	    break;
     }
     return true;

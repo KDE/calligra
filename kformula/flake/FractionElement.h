@@ -80,7 +80,7 @@ public:
     bool acceptCursor( const FormulaCursor* cursor );
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* cursor);
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     /// inherited from BasicElement
     virtual int length() const;

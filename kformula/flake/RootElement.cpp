@@ -137,65 +137,47 @@ bool RootElement::setCursorTo(FormulaCursor* cursor, QPointF point)
     }
 }
 
-bool RootElement::moveCursor(FormulaCursor* cursor) 
+bool RootElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
 {
-    switch (cursor->direction()) {
+    switch (newcursor->direction()) {
 	case MoveLeft:
-	    switch (cursor->position()) {
+	    switch (newcursor->position()) {
 		case 0:
-		    return BasicElement::moveCursor(cursor);
+		    return false;
 		case 1:
-		    cursor->setCurrentElement(m_exponent);
-		    cursor->moveEnd();
+		    newcursor->moveTo(m_exponent, m_exponent->length());
 		    return true;
 		case 2:
-		    cursor->setCurrentElement(this);
-		    cursor->setPosition(1);
+		    newcursor->moveTo(this,1);
 		    return true;
 		case 3:
-		    cursor->setCurrentElement(m_radicand);
-		    cursor->moveEnd();
+		    newcursor->moveTo(m_radicand,m_radicand->length());
 		    return true;
 	    }
 	case MoveRight:
-	    switch (cursor->position()) {
+	    switch (newcursor->position()) {
 		case 3:
-		    return BasicElement::moveCursor(cursor);
+		    return false;
 		case 2:
-		    cursor->setCurrentElement(m_radicand);
-		    cursor->moveHome();
+		    newcursor->moveTo(m_radicand,0);
 		    return true;
 		case 1:
-		    cursor->setCurrentElement(this);
-		    cursor->setPosition(2);
+		    newcursor->moveTo(this,2);
 		    return true;
 		case 0:
-		    cursor->setCurrentElement(m_exponent);
-		    cursor->moveHome();
+		    newcursor->moveTo(m_exponent,0);
 		    return true;
 	    }
 	case MoveUp:
-	    if (cursor->currentElement()==this) {
-		if (cursor->position()==2) {
-		    cursor->setCurrentElement(m_exponent);
-		    cursor->moveEnd();
-		    return true;
-		} else if (cursor->position()==3) {
-		    cursor->setCurrentElement(m_radicand);
-		    cursor->moveHome();
-		    return true;
-		} else {
-		    return false;
-		}
+	    if (newcursor->position()>=2) {
+		newcursor->moveTo(this,1);
+		return true;
+	    } else {
+		return false;
 	    }
 	case MoveDown:
-	    if (cursor->position()==0) {
-		cursor->setCurrentElement(this);
- 		cursor->setPosition(2);
-		return true;
-	    } else if (cursor->position()==1) {
-		cursor->setCurrentElement(this);
- 		cursor->setPosition(3);
+	    if (newcursor->position()<=1) {
+		newcursor->moveTo(this,2);
 		return true;
 	    } else {
 		return false;

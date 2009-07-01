@@ -78,7 +78,7 @@ public:
     virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* cursor);
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
     
     virtual QLineF cursorLine(const FormulaCursor* cursor);
     

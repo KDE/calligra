@@ -181,35 +181,74 @@ int FractionElement::positionOfChild(BasicElement* child) const {
     return -1;
 }
 
-bool FractionElement::moveCursor(FormulaCursor* cursor) {
-    if ( ((cursor->position()==0 || cursor->position()==1) && cursor->direction()==MoveUp) ||
-	 ((cursor->position()==2 || cursor->position()==3) && cursor->direction()==MoveDown)) {
+bool FractionElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor)  {
+    if ( ((newcursor->position()==0 || newcursor->position()==1) && newcursor->direction()==MoveUp) ||
+	 ((newcursor->position()==2 || newcursor->position()==3) && newcursor->direction()==MoveDown) ||
+	 ((newcursor->position()==0 || newcursor->position()==2) && newcursor->direction()==MoveLeft) ||
+	 ((newcursor->position()==1 || newcursor->position()==3) && newcursor->direction()==MoveRight) ) {
 	return false;
     }
-    if ( ((cursor->position()==0 || cursor->position()==2) && cursor->direction()==MoveLeft) ||
-	 ((cursor->position()==1 || cursor->position()==3) && cursor->direction()==MoveRight) ) {
-	return BasicElement::moveCursor(cursor);
-    }
     else {
-	switch (cursor->direction()) {
+	switch (newcursor->direction()) {
 	    case MoveLeft:
-		cursor->setCurrentElement(cursor->position()==1 ? m_numerator : m_denominator );
-		cursor->moveEnd();
-		break;
+		newcursor->setCurrentElement(newcursor->position()==1 ? m_numerator : m_denominator );
+		newcursor->moveEnd();
+		return true;
 	    case MoveRight:
-		cursor->setCurrentElement(cursor->position()==0 ? m_numerator : m_denominator );
-		cursor->moveHome();
-		break;
+		newcursor->setCurrentElement(newcursor->position()==0 ? m_numerator : m_denominator );
+		newcursor->moveHome();
+		return true;
 	    case MoveUp:
-		cursor->setCurrentElement(m_numerator );
-		cursor->moveHome();
-		break;
+		if ( oldcursor->currentElement()==this &&
+		     oldcursor->position()==newcursor->position()) {
+		    //we started the movement inside the fraction
+		    if (oldcursor->position()==2) {
+			newcursor->moveTo(this,0);
+			return true;
+		    } else if ( oldcursor->position()==3) {
+			newcursor->moveTo(this,1);
+			return true;
+		    }
+		}	    
+		if (newcursor->moveCloseTo(m_numerator,oldcursor)) {
+		    return true;
+		} else {
+		    if (newcursor->position()==2) {
+			newcursor->moveTo(this,0);
+			return true;
+		    } else if ( newcursor->position()==3) {
+			newcursor->moveTo(this,1);
+			return true;
+		    } else {
+			return false;
+		    }
+		} 
 	    case MoveDown:
-		cursor->setCurrentElement(m_denominator );
-		cursor->moveHome();
-		break;
+		if ( oldcursor->currentElement()==this &&
+		     oldcursor->position()==newcursor->position()) {
+		    //we started the movement inside the fraction
+		    if (oldcursor->position()==0) {
+			newcursor->moveTo(this,2);
+			return true;
+		    } else if ( oldcursor->position()==1) {
+			newcursor->moveTo(this,3);
+			return true;
+		    }
+		}	    
+		if (newcursor->moveCloseTo(m_denominator,oldcursor)) {
+		    return true;
+		} else {
+		    if (newcursor->position()==0) {
+			newcursor->moveTo(this,2);
+			return true;
+		    } else if ( newcursor->position()==1) {
+			newcursor->moveTo(this,3);
+			return true;
+		    } else {
+			return false;
+		    }
+		}
 	}
-	return true;
     }
 }
 

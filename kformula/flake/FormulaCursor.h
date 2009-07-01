@@ -100,6 +100,9 @@ public:
     /// Move the cursor to @p element
     void moveTo( BasicElement* element, int position );
 
+    /// Put the cursor in @p element, as close as possible to the point where @p cursor is
+    bool moveCloseTo( BasicElement* element, FormulaCursor* cursor);
+    
     /// Move the cursor to the first position in the current element
     void moveHome();
 
@@ -108,7 +111,10 @@ public:
 
     /// Set the cursor to the element at @p point
     void setCursorTo( const QPointF& point );
-
+    
+    /// @return the midpoint of the current cursorLine in global coordinates
+    QPointF getCursorPosition();
+    
     /// @return whether the cursor is at the first position
     bool isHome() const;
 
@@ -121,15 +127,14 @@ public:
     /// @return The current position in m_currentElement
     int position() const;
     
+    /// set the position of the cursor in the current element
     void setPosition(int position);
     
+    /// set the element, in which the cursor is 
     void setCurrentElement(BasicElement* element);
     
     /// @return The current direction the cursor is moving in
     CursorDirection direction() const;
-
-    /// @return whether the cursor is moving up or down in the element tree hierachy
-    bool ascending() const;
 
     /// @return the buffer with the last user input
     QString inputBuffer() const;
@@ -165,9 +170,6 @@ private:
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;
-
-    /// Indicates whether the cursor moves up or down in the element tree
-    bool m_ascending;
 };
 
 #endif // FORMULACURSOR_H
