@@ -339,7 +339,7 @@ void Document::bodyEnd()
         m_textHandler->m_currentListDepth = -1;
         m_textHandler->m_currentListID = 0;
         //close any open list tags in the body writer
-        for (int i = 0; i <= m_currentListDepth; i++)
+        for (int i = 0; i < m_currentListDepth; i++)
         {
             m_bodyWriter->endElement(); //close the text:list-item
             m_bodyWriter->endElement(); //text:list
