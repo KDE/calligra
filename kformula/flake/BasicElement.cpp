@@ -253,6 +253,18 @@ void BasicElement::setBaseLine( double baseLine )
     m_baseLine = baseLine;
 }
 
+int BasicElement::length() const {
+    return 0;
+}
+
+int BasicElement::positionOfChild(BasicElement* child) const {
+    return -1;
+}
+
+bool BasicElement::isToken() const {
+    return false;
+}
+
 void BasicElement::setParentElement( BasicElement* parent )
 {
     m_parentElement = parent;

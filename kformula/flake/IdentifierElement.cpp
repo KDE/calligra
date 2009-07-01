@@ -30,11 +30,11 @@ IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( par
 QRectF IdentifierElement::renderToPath( const QString& raw, QPainterPath& path )
 {
     AttributeManager manager;
-
     QFont font = manager.font(this);
     path.addText( path.currentPosition(), font, raw );
     QFontMetricsF fm(font);
     return fm.boundingRect(raw);
+
 }
 
 ElementType IdentifierElement::elementType() const

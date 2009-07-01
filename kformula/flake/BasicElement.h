@@ -176,6 +176,22 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
+    
+    /// @return The number of possible cursor positions
+    virtual int length() const;
+    
+    /** 
+     * @return the position of child in this element and -1 if it isn't a child
+     * @param child  the childelement we are looking for
+     */
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// @return true if the current element is a token element
+    virtual bool isToken() const;
+    
+    /// Set the element's m_scaleFactor to @p scaleFactor
+    void setScaleFactor( double scaleFactor );
+
     /// @return The elements scale factor
     double scaleFactor() const;
 

@@ -44,6 +44,8 @@ const QList<BasicElement*> TokenElement::childElements()
 }
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
+    kDebug()<<"Some one ispainting me " << painter.clipPath().boundingRect().width()<<
+    " - " << painter.clipPath().boundingRect().height();
     // set the painter to background color and paint it
     painter.setPen( am->colorOf( "mathbackground", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
@@ -63,8 +65,18 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.drawPath( m_contentPath );
 }
 
+int TokenElement::length() const
+{
+    return m_rawString.length();
+}
+
+bool TokenElement::isToken() const {
+    return true;
+}
+
 void TokenElement::layout( const AttributeManager* am )
 {
+    kDebug()<<"I am getting layouted with " <<m_rawString;
     // Query the font to use
     m_font = am->font( this );
     QFontMetricsF fm(m_font);
@@ -127,7 +139,9 @@ void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         m_glyphs.insert();
     }
     else*/ if( !child )
+	//TODO: get the text from child
         m_rawString.insert( cursor->position(), cursor->inputBuffer() );
+	kDebug() << "-"<<m_rawString << "InputBuffer:"<<cursor->inputBuffer();
 }
 
 void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )

@@ -77,6 +77,12 @@ void RowElement::stretch()
         tmpElement->setOrigin( QPointF(tmpElement->origin().x(), childrenBoundingRect().y() + (childrenBoundingRect().height() - tmpElement->height())/2 ));
     }
 }
+
+int RowElement::length() const
+{
+    return m_childElements.count();
+}
+
 const QList<BasicElement*> RowElement::childElements()
 {
     return m_childElements;
@@ -86,6 +92,7 @@ void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
     if( cursor->currentElement() == this )
         m_childElements.insert( cursor->position(), child );
+    kDebug() << "inserting child in Row at " <<cursor->position();
     // else
     //     TODO make some error
 }
@@ -119,6 +126,10 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
             return false;
     }
     return true;
+}
+
+int RowElement::positionOfChild(BasicElement* child) const {
+    return m_childElements.indexOf(child);
 }
 
 void RowElement::writeMathMLContent( KoXmlWriter* writer ) const

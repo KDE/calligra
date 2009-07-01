@@ -23,6 +23,8 @@
 #include "BasicElement.h"
 #include "NumberElement.h"
 #include "ElementFactory.h"
+#include "OperatorElement.h"
+#include "IdentifierElement.h"
 #include <QPainter>
 #include <QPen>
 
@@ -81,38 +83,36 @@ void FormulaCursor::insertText( const QString& text )
     // - lim, max min
     m_inputBuffer = text;
     QChar tmpChar( text[ 0 ] );
-    if( tmpChar.isNumber() ) {
-        if( m_currentElement->elementType() != Number ) {
-            NumberElement* tmpNumber = new NumberElement( m_currentElement );
-            m_currentElement->insertChild( this, tmpNumber );
-            m_currentElement = tmpNumber;
-        }
-        m_currentElement->insertChild( this, 0 );
-        m_positionInElement++;
+    QString tagname; 
+    ElementType tokentype;
+    if (tmpChar.isNumber()) {
+	tagname="mn";
+	tokentype=Number;
     }
-/*    else if ( m_inputBuffer == '*' || m_inputBuffer == '+' || m_inputBuffer == '-' ||
-              m_inputBuffer == '=' || m_inputBuffer == '>' || m_inputBuffer == '<' ||
-              m_inputBuffer == '!' || m_inputBuffer == '.' || m_inputBuffer == '/' ||
-              m_inputBuffer == '?' || m_inputBuffer == ',' || m_inputBuffer == ':' ) {
-        if( m_currentElement->elementType() != Operator ) {
-            OperatorElement* tmpOperator = new OperatorElement( m_currentElement );
-            m_currentElement->insertChild( this, tmpNumber );
-            m_currentElement = tmpNumber;
-        }
-        m_currentElement->insertChild( this, 0 );
-         
-    }*/
-    //else if( tmpChar.isSpace() )
-        // what to do ???
-/*    else if( tmpChar.isLetter() ) {
-        if( m_currentElement->elementType() != Identifier ) {
-            IdentifierElement* tmpIdentifier = new IdentifierElement( m_currentElement );
-            m_currentElement->insertChild( this, tmpIdentifier );
-            m_currentElement = tmpNumber;
-        }
-        m_currentElement->insertChild( this, 0 );
-        m_positionInElement++;
-    }*/
+    else if ( tmpChar == '*' || tmpChar == '+' || tmpChar == '-' ||
+              tmpChar == '=' || tmpChar == '>' || tmpChar == '<' ||
+              tmpChar == '!' || tmpChar == '.' || tmpChar == '/' ||
+              tmpChar == '?' || tmpChar == ',' || tmpChar == ':' ) {
+	tagname="mo";
+	tokentype=Operator;
+    }
+    else if (tmpChar.isLetter()) {
+	tagname="mi";
+	tokentype=Identifier;
+    }
+    if (m_currentElement->elementType() != tokentype) {
+	// TODO: frac, ... will need special treatment too
+	if (insideToken()) {
+	    m_positionInElement=m_currentElement->parentElement()->positionOfChild(m_currentElement)+1;
+	    m_currentElement=m_currentElement->parentElement();
+	}
+	BasicElement* tmpToken = ElementFactory::createElement(tagname,m_currentElement);
+	m_currentElement->insertChild( this, tmpToken );
+	m_currentElement = tmpToken;
+	m_positionInElement = 0; //the cursor is at the beginning of our new token
+    }
+    m_currentElement->insertChild( this, 0 );
+    m_positionInElement+=text.length(); //potentially more than one character is added
 }
 
 void FormulaCursor::insertData( const QString& data )
@@ -194,7 +194,7 @@ void FormulaCursor::move( CursorDirection direction )
             ( m_direction == MoveLeft ) ? m_positionInElement-- : m_positionInElement++;
     }
     else {
-        m_currentElement = tmp;           // asign the new element to the cursor
+        m_currentElement = tmp;           // assign the new element to the cursor
         if( m_direction == MoveRight )    // and set position according to movement
             moveEnd();
         else
@@ -243,10 +243,11 @@ void FormulaCursor::moveHome()
 
 void FormulaCursor::moveEnd()
 {
-    if( m_currentElement->elementType() == Row )
-	m_positionInElement = m_currentElement->childElements().count();
-    else
-        m_positionInElement = 1;
+//     if( m_currentElement->elementType() == Row )
+// 	m_positionInElement = m_currentElement->childElements().count();
+//     else
+//         m_positionInElement = 1;
+    m_positionInElement=m_currentElement->length();
 }
 
 bool FormulaCursor::isHome() const
@@ -256,10 +257,11 @@ bool FormulaCursor::isHome() const
 
 bool FormulaCursor::isEnd() const
 {
-    if( currentElement()->elementType() == Row )
-        return ( m_positionInElement == m_currentElement->childElements().count() );
-    else
-	return ( m_positionInElement == 1 );
+//     if( currentElement()->elementType() == Row )
+//         return ( m_positionInElement == m_currentElement->childElements().count() );
+//     else
+// 	return ( m_positionInElement == 1 );
+    return m_positionInElement == m_currentElement->length();
 }
 
 bool FormulaCursor::insideToken() const

@@ -48,13 +48,15 @@ public:
 
     /// inherited from KoShape
     void paint( QPainter &painter, const KoViewConverter &converter );
-
+    
+    void updateLayout();
+    
     /// @return The element at the point @p p
     BasicElement* elementAt( const QPointF& p );
 
     /// Resize the shape.
     void resize( const QSizeF &size );
-
+    
     /// @return Get the size of the shape in pt.
     QSizeF size() const;
 

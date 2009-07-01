@@ -32,7 +32,7 @@
 #include <KAction>
 #include <QPainter>
 #include "KoFormulaTool.moc"
-
+#include <kdebug.h>
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaCursor( 0 )
@@ -134,7 +134,7 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
     if( !m_formulaCursor )
         return;
-
+    kDebug() << "----------------------------------------------------------------------";
     m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
 
     switch( event->key() )                           // map key to movement or action
@@ -166,9 +166,11 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
         default:
             if( event->text().length() != 0 ) {
                 m_formulaCursor->insertText( event->text() );
-                m_formulaShape->update();
+		m_formulaShape->updateLayout();
+//                 m_formulaShape->update();
             }
     }
+//     kDebug()<<"Going to repaintCursor";
     repaintCursor();
     event->accept();
 }

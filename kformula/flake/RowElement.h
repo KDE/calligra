@@ -92,11 +92,18 @@ public:
 
     /// @return The element's ElementType
     ElementType elementType() const;
+
     /** Reimplemented from parent class
      *
      *  This stretches the children inside, then readjusts their vertical offsets
      */
     virtual void stretch();
+    
+    ///inherited from BasicElement
+    virtual int length() const;
+    
+    ///inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

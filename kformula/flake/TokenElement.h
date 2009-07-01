@@ -72,7 +72,7 @@ public:
      * @param child A BasicElement to insert
      */
     void insertChild( FormulaCursor* cursor, BasicElement* child );
-
+    
     /**
      * Remove a child element
      * @param cursor The cursor holding the position where to remove
@@ -95,7 +95,15 @@ public:
     double cursorOffset( const FormulaCursor* cursor ) const;
 
     /// Process @p raw and render it to @p path
+
     virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) = 0;
+
+    
+    ///inherited from BasicElement
+    virtual int length() const;
+    
+    ///inherited from BasicElement
+    virtual bool isToken() const;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
