@@ -91,6 +91,120 @@ const QList<BasicElement*> RootElement::childElements()
     return tmp;
 }
 
+QLineF RootElement::cursorLine(const FormulaCursor* cursor) 
+{
+    QPointF top=absoluteBoundingRect().topLeft();
+    QPointF bottom;
+    switch (cursor->position()) {
+	case 0:
+	    top+=m_exponent->origin();
+	    break;
+	case 1:
+	    top+=m_exponent->origin()+QPointF(m_exponent->width(),0.0);
+	    break;
+	case 2:
+	    top+=m_radicand->origin();
+	    break;
+	case 3:
+	    top+=m_radicand->origin()+QPointF(m_radicand->width(),0.0);
+	    break;
+    }
+    if (cursor->position()<=1) {
+	bottom=top+QPointF(0.0,m_exponent->height());
+    }
+    else {
+	bottom=top+QPointF(0.0,m_radicand->height());
+    }
+    return QLineF(top, bottom);
+}
+
+int RootElement::positionOfChild(BasicElement* child) const 
+{
+    if (child==m_exponent) {
+	return 0;
+    } else if (child==m_radicand) {
+	return 2;
+    }
+    return -1;
+}
+
+bool RootElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+{
+    if (m_exponent->boundingRect().contains(point)) {
+	return m_exponent->setCursorTo(cursor, point-m_exponent->origin());
+    } else {
+	return m_radicand->setCursorTo(cursor, point-m_radicand->origin());
+    }
+}
+
+bool RootElement::moveCursor(FormulaCursor* cursor) 
+{
+    switch (cursor->direction()) {
+	case MoveLeft:
+	    switch (cursor->position()) {
+		case 0:
+		    return BasicElement::moveCursor(cursor);
+		case 1:
+		    cursor->setCurrentElement(m_exponent);
+		    cursor->moveEnd();
+		    return true;
+		case 2:
+		    cursor->setCurrentElement(this);
+		    cursor->setPosition(1);
+		    return true;
+		case 3:
+		    cursor->setCurrentElement(m_radicand);
+		    cursor->moveEnd();
+		    return true;
+	    }
+	case MoveRight:
+	    switch (cursor->position()) {
+		case 3:
+		    return BasicElement::moveCursor(cursor);
+		case 2:
+		    cursor->setCurrentElement(m_radicand);
+		    cursor->moveHome();
+		    return true;
+		case 1:
+		    cursor->setCurrentElement(this);
+		    cursor->setPosition(2);
+		    return true;
+		case 0:
+		    cursor->setCurrentElement(m_exponent);
+		    cursor->moveHome();
+		    return true;
+	    }
+	case MoveUp:
+	    if (cursor->currentElement()==this) {
+		if (cursor->position()==2) {
+		    cursor->setCurrentElement(m_exponent);
+		    cursor->moveEnd();
+		    return true;
+		} else if (cursor->position()==3) {
+		    cursor->setCurrentElement(m_radicand);
+		    cursor->moveHome();
+		    return true;
+		} else {
+		    return false;
+		}
+	    }
+	case MoveDown:
+	    if (cursor->position()==0) {
+		cursor->setCurrentElement(this);
+ 		cursor->setPosition(2);
+		return true;
+	    } else if (cursor->position()==1) {
+		cursor->setCurrentElement(this);
+ 		cursor->setPosition(3);
+		return true;
+	    } else {
+		return false;
+	    }
+    }
+    return false;
+}
+
+
 
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {

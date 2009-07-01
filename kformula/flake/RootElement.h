@@ -71,13 +71,20 @@ public:
      */
     void layout( const AttributeManager* am );
 
-    /**
-     * Implement the cursor behaviour for the element
-     * @param cursor The FormulaCursor that is moved around
-     * @return A this pointer if the element accepts if not the element to asked instead
-     */
+    /// inherited from BasicElement
     bool acceptCursor( const FormulaCursor* cursor );
-
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* cursor);
+    
+    virtual QLineF cursorLine(const FormulaCursor* cursor);
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
     /// @return The element's ElementType
     ElementType elementType() const;
 
