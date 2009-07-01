@@ -138,7 +138,12 @@ private:
 
     /// A list of pointers to embedded GlyphElements
     QList<GlyphElement*> m_glyphs;
-
+    
+    /// A list of offsets of the letters
+    /// They represent the position of the cursor right of 
+    /// the index, starting with 0.0
+    QList<double> m_offsets;
+    
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;
     /// x offset for painting the path

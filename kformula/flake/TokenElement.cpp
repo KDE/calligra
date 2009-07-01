@@ -70,7 +70,8 @@ int TokenElement::length() const
 
 void TokenElement::layout( const AttributeManager* am )
 {
-    kDebug()<<"Layouting";
+    m_offsets.erase(m_offsets.begin(),m_offsets.end());
+    m_offsets << 0.0;
     // Query the font to use
     m_font = am->font( this );
     QFontMetricsF fm(m_font);
@@ -82,6 +83,9 @@ void TokenElement::layout( const AttributeManager* am )
     QRectF boundingrect;
     if(m_glyphs.isEmpty()) {//optimize for the common case
         boundingrect = renderToPath(m_rawString, m_contentPath);
+        for (int j = 0; j < m_rawString.length(); ++j) {
+                m_offsets.append(fm.width(m_rawString.left(j+1)));
+        }
      } else {
         // replace all the object replacement characters with glyphs
         // We have to keep track of the bounding box at all times
@@ -96,22 +100,29 @@ void TokenElement::layout( const AttributeManager* am )
                 boundingrect.setRight( boundingrect.right() + newbox.right());
                 boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-
+                double glyphoffset = m_offsets.last();
+                for (int j = 0; j < chunk.length(); ++j) {
+                    m_offsets << fm.width(chunk.left(j+1)) + glyphoffset;
+                }
                 m_contentPath.moveTo(boundingrect.right(), 0);
                 newbox = m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
                 boundingrect.setRight( boundingrect.right() + newbox.right());
                 boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-
+                m_offsets.append(newbox.width() + m_offsets.last());
                 counter++;
                 chunk.clear();
             }
-            if( !chunk.isEmpty() ) {
-                m_contentPath.moveTo(boundingrect.right(), 0);
-                QRectF newbox = renderToPath( chunk, m_contentPath );
-                boundingrect.setRight( boundingrect.right() + newbox.right());
-                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
-                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+        }
+        if( !chunk.isEmpty() ) {
+            m_contentPath.moveTo(boundingrect.right(), 0);
+            QRectF newbox = renderToPath( chunk, m_contentPath );
+            boundingrect.setRight( boundingrect.right() + newbox.right());
+            boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
+            boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+            double glyphoffset = m_offsets.last();
+            for (int j = 0; j < chunk.length(); ++j) {
+                m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
             }
         }
     } 
@@ -174,36 +185,22 @@ QList<GlyphElement*> TokenElement::removeText ( int position, int length )
 }
 
 bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
-    int counter = 0;
     int i = 0;
-    QPainterPath tmppath;
     kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
     cursor->setCurrentElement(this);
-    if (boundingRect().width()<point.x()) {
+    if (cursorOffset(length())<point.x()) {
         cursor->setPosition(length());
         return true;
     }
-    double oldx=0;
     //Find the letter we clicked on
-    for( i = 0; i < m_rawString.length(); i++ ) {
-        //add a character to the string
-        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
-            renderToPath( QString(m_rawString[i]), tmppath );
-        }
-            else {
-                m_glyphs[ counter ]->renderToPath( QString(), tmppath );
-                counter++;
-            }
-        //check if we found the character, on which the point is
-        if (tmppath.boundingRect().right()>=point.x()) {
+    for( i = 1; i <= m_rawString.length(); i++ ) {
+        if (point.x() < cursorOffset(i)) {
             break;
         }
-        //save the old width of the path
-        oldx=tmppath.boundingRect().right();
     }
     //Find out, if we should place the cursor before or after the character
-    if ((point.x()-oldx)>(tmppath.boundingRect().right()-point.x())) {	
-        i++;
+    if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
+        i--;
     }
     cursor->setPosition(i);
     return true;
@@ -246,18 +243,7 @@ bool TokenElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
 
 double TokenElement::cursorOffset( const int position) const
 {
-    int counter = 0;
-    QPainterPath tmppath;
-    for( int i = 0; i < position; i++ ) {
-        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter ) {
-	    renderToPath( QString(m_rawString[i]), tmppath );
-	}
-        else {
-	    m_glyphs[ counter ]->renderToPath( QString(), tmppath );
-	    counter++;
-        }
-    }
-    return tmppath.boundingRect().right();
+    return m_offsets[position]+m_xoffset;
 }
 
 QFont TokenElement::font() const
