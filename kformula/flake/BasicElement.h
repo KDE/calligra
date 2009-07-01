@@ -208,7 +208,7 @@ public:
     BasicElement* parentElement() const;
 
     
-    /// @return The number of possible cursor positions
+    /// @return The last cusor position (number of available cursor positions - 1)
     virtual int length() const;
     
     /** 

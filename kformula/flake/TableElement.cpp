@@ -26,6 +26,7 @@
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <QList>
+#include <kdebug.h>
 
 TableElement::TableElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -84,6 +85,12 @@ void TableElement::layout( const AttributeManager* am )
     setHeight( tmpY );
     setBaseLine( height() / 2 );
 }
+
+ElementType TableElement::elementType() const 
+{
+    return Table;
+}
+
 
 void TableElement::determineDimensions()
 {

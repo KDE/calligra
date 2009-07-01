@@ -25,8 +25,8 @@
 TableEntryElement::TableEntryElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void TableEntryElement::layout( const AttributeManager* am )
-{}
+// void TableEntryElement::layout( const AttributeManager* am )
+// {}
 
 QString TableEntryElement::attributesDefaultValue( const QString& attribute ) const
 {

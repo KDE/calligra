@@ -87,7 +87,8 @@ public:
     /// @return The height of the @p TableRowElement
     double rowHeight( TableRowElement* row );
     
-    
+    /// @return The element's ElementType
+    virtual ElementType elementType() const;
     
 protected:
     /// Read all content from the node - reimplemented by child elements

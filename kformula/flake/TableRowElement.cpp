@@ -104,9 +104,12 @@ int TableRowElement::length() const {
 
 bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     int i;
+    double x=0.0;
+    TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     for (i=0; i<m_entries.length()-1; i++) {
 	//Find the child element the point is in
-	if (m_entries[i]->boundingRect().right()>=point.x()) {
+	x+=parentTable->columnWidth( i );
+	if (x>=point.x()) {
 	    break;
 	}
     }
@@ -123,6 +126,8 @@ bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
 	 (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
 	return false;
     }
+    int rowpos=parentElement()->positionOfChild(this);
+    int colpos=newcursor->position();
     switch(newcursor->direction()) {
 	case MoveLeft:
 	    newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
@@ -132,6 +137,20 @@ bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
 	    newcursor->setCurrentElement(m_entries[newcursor->position()]);
 	    newcursor->moveHome();
 	    break;
+	case MoveUp:
+	    if ( rowpos>1 ) {
+		BasicElement* b=parentElement()->childElements()[rowpos/2-1]->childElements()[colpos];
+		return newcursor->moveCloseTo(b, oldcursor);
+	    } else {
+		return false;
+	    }
+	case MoveDown:
+	    if ( rowpos<length()-1 ) {
+		BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
+		return newcursor->moveCloseTo(b, oldcursor);
+	    } else {
+		return false;
+	    }
     }
     return true;	
 }
