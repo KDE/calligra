@@ -359,7 +359,8 @@ void KarbonGradientTool::activate( bool temporary )
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = m_canvas->snapGuide()->enabledSnapStrategies();
     m_canvas->snapGuide()->enableSnapStrategies( KoSnapStrategy::BoundingBox );
-
+    m_canvas->snapGuide()->reset();
+    
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
@@ -511,6 +512,7 @@ void KarbonGradientTool::deactivate()
 
     // restore previously set snap strategies
     m_canvas->snapGuide()->enableSnapStrategies( m_oldSnapStrategies );
+    m_canvas->snapGuide()->reset();
 }
 
 void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
