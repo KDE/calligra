@@ -1847,15 +1847,16 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
+    //qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
     foreach( QString name, view->actionListNames() ) {
-        //kDebug()<<"deactivate"<<name;
+        //qDebug()<<"View::slotGuiActivated:"<<"deactivate"<<name;
         unplugActionList( name );
     }
     if ( activate ) {
         foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<"activate"<<name<<","<<view->actionList( name ).count();
+            //qDebug()<<"View::slotGuiActivated:"<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
         }
     }
@@ -1863,7 +1864,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    kDebug()<<ev->activated();
+    //qDebug()<<"View::guiActivateEvent:"<<ev->activated();
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -1931,7 +1932,13 @@ void View::slotCreateView()
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
-    //kDebug() <<"item=" << item <<","<<prev;
+    //qDebug()<<"View::slotViewActivated:" <<"item=" << item <<","<<prev;
+    if ( prev && prev->type() == ViewListItem::ItemType_SubView ) {
+        ViewBase *v = qobject_cast<ViewBase*>( prev->view() );
+        if ( v ) {
+            v->setGuiActive( false );
+        }
+    }
     if ( item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug()<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
