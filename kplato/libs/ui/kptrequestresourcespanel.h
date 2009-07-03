@@ -44,6 +44,7 @@ class ResourceGroupRequest;
 class ResourceRequest;
 class StandardWorktime;
 class MacroCommand;
+class ResourceAllocationTreeView;
 
 class ResourceTableItem {
 public:
@@ -123,6 +124,23 @@ private:
     GroupLVItem *selectedGroup;
     bool m_blockChanged;
     
+};
+
+class XRequestResourcesPanel : public QWidget
+{
+    Q_OBJECT
+public:
+    XRequestResourcesPanel(QWidget *parent, Task &task, bool baseline=false);
+
+    MacroCommand *buildCommand();
+    
+    bool ok();
+
+signals:
+    void changed();
+
+private:
+    ResourceAllocationTreeView *m_view;
 };
 
 }  //KPlato namespace

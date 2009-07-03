@@ -1723,7 +1723,7 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
             for ( int c = 0; c < model()->columnCount(); ++c ) {
                 if ( ! m_rightview->isColumnHidden( c ) ) {
                     m_leftview->setColumnHidden( c, false );
-                    m_leftview->mapToSection( c, m_rightview->section( c ) + 1 );
+                    m_leftview->mapToSection( c, m_rightview->section( c ) + offset );
                     m_leftview->resizeColumnToContents( c );
                 }
             }

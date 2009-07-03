@@ -75,6 +75,8 @@ set(kplatoui_LIB_SRCS
     kptchartview.cpp
     kptplotwidget.cpp
 
+    kptresourceallocationeditor.cpp
+
     kptrecalculatedialog.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS

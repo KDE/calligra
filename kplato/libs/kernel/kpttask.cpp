@@ -48,14 +48,13 @@ Task::Task(Node *parent)
       m_workPackage( *this )
 {
     //kDebug()<<"("<<this<<')';
+    m_requests.setTask( this );
     Duration d(1, 0, 0);
     m_estimate = new Estimate();
     m_estimate->setOptimisticRatio(-10);
     m_estimate->setPessimisticRatio(20);
     m_estimate->setParentNode( this );
     
-    m_requests = 0;
-
     if (m_parent)
         m_leader = m_parent->leader();
 }
@@ -66,8 +65,7 @@ Task::Task(const Task &task, Node *parent)
       m_workPackage( *this )
 {
     //kDebug()<<"("<<this<<')';
-    m_requests = 0;
-    
+    m_requests.setTask( this );
     delete m_estimate;
     if ( task.estimate() ) {
         m_estimate = new Estimate( *( task.estimate() ) );
@@ -93,7 +91,6 @@ Task::~Task() {
             delete m_schedules.take(k);
         }
     }
-    delete m_requests;
 }
 
 int Task::type() const {
@@ -112,17 +109,13 @@ Duration *Task::getRandomDuration() {
     return 0L;
 }
 
-ResourceGroupRequest *Task::resourceGroupRequest(ResourceGroup *group) const {
-    if (m_requests)
-        return m_requests->find(group);
-    return 0;
+ResourceGroupRequest *Task::resourceGroupRequest(const ResourceGroup *group) const {
+    return m_requests.find(group);
 }
 
 void Task::clearResourceRequests() {
-    if (m_requests) {
-        m_requests->clear();
-        changed( this );
-    }
+    m_requests.clear();
+    changed( this );
 }
 
 void Task::addRequest(ResourceGroup *group, int numResources) {
@@ -131,41 +124,28 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 
 void Task::addRequest(ResourceGroupRequest *request) {
     //kDebug()<<m_name<<request<<request->group()<<request->group()->id()<<request->group()->name();
-    if (!m_requests) {
-        m_requests = new ResourceRequestCollection(*this);
-    }
-    m_requests->addRequest(request);
+    m_requests.addRequest(request);
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
     //kDebug()<<request;
-    if (m_requests) {
-        m_requests->takeRequest(request);
-    }
+    m_requests.takeRequest(request);
 }
 
 QStringList Task::requestNameList() const {
-    QStringList lst;
-    if ( m_requests ) {
-        lst << m_requests->requestNameList();
-    }
-    return lst;
+    return m_requests.requestNameList();
 }
 
 QList<Resource*> Task::requestedResources() const {
-    QList<Resource*> lst;
-    if ( m_requests ) {
-        lst << m_requests->requestedResources();
-    }
-    return lst;
+    return m_requests.requestedResources();
 }
 
 bool Task::containsRequest( const QString &identity ) const {
-    return m_requests == 0 ? false : m_requests->contains( identity );
+    return m_requests.contains( identity );
 }
 
 ResourceRequest *Task::resourceRequest( const QString &name ) const {
-    return m_requests == 0 ? 0 : m_requests->resourceRequest( name );
+    return m_requests.resourceRequest( name );
 }
 
 QStringList Task::assignedNameList( long id) const {
@@ -176,27 +156,21 @@ QStringList Task::assignedNameList( long id) const {
     return s->resourceNameList();
 }
 
-int Task::units() const {
-    if (!m_requests)
-        return 0;
-    return m_requests->units();
-}
+// int Task::units() const {
+//     return m_requests.units();
+// }
 
 int Task::workUnits() const {
-    if (!m_requests)
-        return 0;
-    return m_requests->workUnits();
+    return m_requests.workUnits();
 }
 
 void Task::makeAppointments() {
     if (m_currentSchedule == 0)
         return;
     if (type() == Node::Type_Task) {
-        if (m_requests) {
-            //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
-            m_requests->makeAppointments(m_currentSchedule);
-            //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
-        }
+        //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
+        m_requests.makeAppointments(m_currentSchedule);
+        //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
     } else if (type() == Node::Type_Summarytask) {
         foreach (Node *n, m_nodes) {
             n->makeAppointments();
@@ -371,10 +345,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
         } else if (e.tagName() == "resourcegroup-request") {
             // Load the resource request
             // Handle multiple requests to same group gracefully (Not really allowed)
-            if ( m_requests == 0 ) {
-                m_requests = new ResourceRequestCollection( *this );
-            }
-            ResourceGroupRequest *r = m_requests->findGroupRequestById( e.attribute("group-id") );
+            ResourceGroupRequest *r = m_requests.findGroupRequestById( e.attribute("group-id") );
             if ( r ) {
                 kWarning()<<"Multiple requests to same group, loading into existing group";
                 if ( ! r->load( e, status.project() ) ) {
@@ -448,8 +419,8 @@ void Task::save(QDomElement &element)  const {
             }
         }
     }
-    if (m_requests) {
-        m_requests->save(me);
+    if ( ! m_requests.isEmpty() ) {
+        m_requests.save(me);
     }
     
     m_documents.save( me );
@@ -1669,6 +1640,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
     m_visitedForward = true;
     cs->incProgress();
+    m_requests.resetDynamicAllocations();
     return cs->endTime;
 }
 
@@ -1929,9 +1901,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         default:
             break;
         }
-        if (m_requests) {
-            m_requests->reserve(cs->startTime, cs->duration);
-        }
+        m_requests.reserve(cs->startTime, cs->duration);
     } else if (type() == Node::Type_Milestone) {
         switch (m_constraint) {
         case Node::ASAP:
@@ -2029,6 +1999,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
     m_visitedBackward = true;
     cs->incProgress();
+    m_requests.resetDynamicAllocations();
     return cs->startTime;
 }
 
@@ -2085,12 +2056,12 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     // Already checked: m_currentSchedule and time.
     Duration dur = effort; // use effort as default duration
     if (m_estimate->type() == Estimate::Type_Effort) {
-        if (m_requests == 0 || m_requests->isEmpty()) {
+        if (m_requests.isEmpty()) {
             m_currentSchedule->resourceError = true;
             m_currentSchedule->logError("No resource has been allocated");
             return effort;
         }
-        dur = m_requests->duration(time, effort, m_currentSchedule, backward);
+        dur = m_requests.duration(time, effort, m_currentSchedule, backward);
         if (dur == Duration::zeroDuration) {
             kWarning()<<"zero duration: Resource not available"<<endl;
             m_currentSchedule->resourceNotAvailable = true;
@@ -2360,8 +2331,8 @@ DateTime Task::workTimeAfter(const DateTime &dt) const {
         if ( m_estimate->calendar() ) {
             t = m_estimate->calendar()->firstAvailableAfter( dt, projectNode()->constraintEndTime() );
         }
-    } else if (m_requests) {
-        t = m_requests->workTimeAfter(dt);
+    } else {
+        t = m_requests.workTimeAfter(dt);
     }
     return t.isValid() ? t : dt;
 }
@@ -2372,8 +2343,8 @@ DateTime Task::workTimeBefore(const DateTime &dt) const {
         if ( m_estimate->calendar() ) {
             t = m_estimate->calendar()->firstAvailableBefore( dt, projectNode()->constraintStartTime() );
         }
-    } else if (m_requests) {
-        t = m_requests->workTimeBefore(dt);
+    } else {
+        t = m_requests.workTimeBefore(dt);
     }
     return t.isValid() ? t : dt;
 }
@@ -2385,8 +2356,8 @@ DateTime Task::workStartAfter(const DateTime &dt) {
             m_currentSchedule->logDebug( "workStartAfter: " + dt.toString() + " (" + projectNode()->constraintEndTime().toString() + ")  = " + t.toString() );
             return t.isValid() ? t : dt;
         }
-    } else if (m_requests) {
-        DateTime t = m_requests->availableAfter(dt, m_currentSchedule);
+    } else {
+        DateTime t = m_requests.availableAfter(dt, m_currentSchedule);
         m_currentSchedule->logDebug( "workStartAfter: " + dt.toString() + " = " + t.toString() );
         return t.isValid() ? t : dt;
     }
@@ -2400,8 +2371,8 @@ DateTime Task::workFinishBefore(const DateTime &dt)
             DateTime t = m_estimate->calendar()->firstAvailableBefore( dt, projectNode()->constraintStartTime() );
             return t.isValid() ? t : dt;
         }
-    } else if (m_requests) {
-        DateTime t = m_requests->availableBefore(dt, m_currentSchedule);
+    } else {
+        DateTime t = m_requests.availableBefore(dt, m_currentSchedule);
         //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
         return t.isValid() ? t : dt;
     }
@@ -3542,10 +3513,8 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
     kDebug()<<indent<<"+ Task node:"<<name()<<" type="<<type();
     indent += "!  ";
-    kDebug()<<indent<<"Requested resources (total):"<<units()<<"%";
     kDebug()<<indent<<"Requested resources (work):"<<workUnits()<<"%";
-    if (m_requests)
-        m_requests->printDebug(indent);
+    m_requests.printDebug(indent);
     
     completion().printDebug( indent );
     

@@ -395,12 +395,12 @@ public:
      * Return the resource request made to group
      * (There should be only one)
      */
-    ResourceGroupRequest *resourceGroupRequest(ResourceGroup *group) const;
+    ResourceGroupRequest *resourceGroupRequest(const ResourceGroup *group) const;
     void clearResourceRequests();
     void addRequest(ResourceGroup *group, int numResources);
     void addRequest(ResourceGroupRequest *request);
     void takeRequest(ResourceGroupRequest *request);
-    int units() const;
+//    int units() const;
     int workUnits() const;
     void makeAppointments();
     virtual QStringList requestNameList() const;
@@ -559,8 +559,6 @@ public:
     WorkPackage &workPackage() { return m_workPackage; }
     const WorkPackage &workPackage() const { return m_workPackage; }
 
-    ResourceRequestCollection *requests() const { return m_requests; }
-    
     /**
      * Returns the state of the task
      * @param id The identity of the schedule used when calculating the state
@@ -731,8 +729,6 @@ private:
 private:
     QList<ResourceGroup*> m_resource;
 
-    ResourceRequestCollection *m_requests;
- 
     QList<Relation*> m_parentProxyRelations;
     QList<Relation*> m_childProxyRelations;
     

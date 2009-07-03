@@ -22,6 +22,7 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcalendar.h"
+#include "kptresourceallocationeditor.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -74,21 +75,18 @@ GroupLVItem::GroupLVItem(QTreeWidget *parent, ResourceGroup *group, Task &task)
       m_group(group),
       m_units(0)
 {
-    setText(0, group->name());
-    setText(1, QString("%1").arg(group->units()));
-
     m_request = task.resourceGroupRequest(group);
     if (m_request) {
         m_units = m_request->units();
-    }
-    foreach (Resource *r, group->resources()) {
-        //kDebug()<<"resource="<<r->name();
-        ResourceRequest *req=0;
-        if (m_request) {
-            req = m_request->find(r);
+        foreach (Resource *r, group->resources()) {
+            //kDebug()<<"resource="<<r->name();
+            ResourceRequest *req = m_request->find(r);
+            m_resources.append(new ResourceTableItem(r, req, (bool)req));
         }
-        m_resources.append(new ResourceTableItem(r, req, (bool)req));
     }
+    setText(0, group->name());
+    setText(1, QString("%1").arg(m_units));
+    setText(2, QString("%1").arg(group->units()));
 }
 
 GroupLVItem::~GroupLVItem() {
@@ -260,6 +258,103 @@ bool RequestResourcesPanel::ok() {
 
 void RequestResourcesPanel::sendChanged() {
     if (!m_blockChanged) emit changed();
+}
+//===============================
+XRequestResourcesPanel::XRequestResourcesPanel(QWidget *parent, Task &task, bool)
+    : QWidget(parent)
+{
+    QVBoxLayout *l = new QVBoxLayout( this );
+    m_view = new ResourceAllocationTreeView( this );
+    m_view->setViewSplitMode( false );
+    m_view->masterView()->header()->moveSection( ResourceAllocationModel::RequestType, m_view->masterView()->header()->count() - 1 );
+    m_view->setReadWrite( true );
+    l->addWidget( m_view );
+    m_view->setProject( static_cast<Project*>( task.projectNode() ) );
+    m_view->setTask( &task );
+    m_view->masterView()->header()->resizeSections( QHeaderView::ResizeToContents );
+
+    connect( m_view, SIGNAL( dataChanged() ), SIGNAL( changed() ) );
+}
+
+bool XRequestResourcesPanel::ok()
+{
+    return true;
+}
+
+MacroCommand *XRequestResourcesPanel::buildCommand()
+{
+    Task *t = m_view->task();
+    if ( t == 0 ) {
+        return 0;
+    }
+    MacroCommand *cmd = new MacroCommand( i18n( "Modify resource allocations" ) );
+    Project *p = m_view->project();
+    const QMap<QString, int> &rmap = m_view->resourceCache();
+
+    // First remove all that should be removed
+    for( QMap<QString, int>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
+        Resource *r = p->findResource( rit.key() );
+        if ( r == 0 ) {
+            continue;
+        }
+        if ( rit.value() == 0 ) {
+            ResourceRequest *rr = t->requests().find( r );
+            if ( rr ) {
+                cmd->addCommand( new RemoveResourceRequestCmd( rr->parent(), rr ) );
+            }
+        }
+    }
+    const QMap<QString, int> &gmap = m_view->groupCache();
+    QMap<QString, int>::const_iterator git = gmap.constBegin();
+    for( QMap<QString, int>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
+        ResourceGroup *g = p->findResourceGroup( git.key() );
+        if ( g == 0 ) {
+            continue;
+        }
+        if ( git.value() == 0 ) {
+            ResourceGroupRequest *gr = t->requests().find( g );
+            if ( gr ) {
+                cmd->addCommand( new RemoveResourceGroupRequestCmd( *t, gr ) );
+            }
+        }
+    }
+    // Add/modify
+    for( QMap<QString, int>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
+        ResourceGroup *g = p->findResourceGroup( git.key() );
+        if ( g == 0 ) {
+            continue;
+        }
+        if ( git.value() > 0 ) {
+            ResourceGroupRequest *gr = t->requests().find( g );
+            if ( gr == 0 ) {
+                gr = new ResourceGroupRequest( g, git.value() );
+                cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+            } else {
+                cmd->addCommand( new ModifyResourceGroupRequestUnitsCmd( gr, gr->units(), git.value() ) );
+            }
+        }
+    }
+    for( QMap<QString, int>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
+        Resource *r = p->findResource( rit.key() );
+        if ( r == 0 ) {
+            continue;
+        }
+        if ( rit.value() > 0 ) {
+            ResourceRequest *rr = t->requests().find( r );
+            if ( rr == 0 ) {
+                ResourceGroupRequest *gr = t->requests().find( r->parentGroup() );
+                Q_ASSERT( gr ); // should be here now!
+                cmd->addCommand( new AddResourceRequestCmd( gr, new ResourceRequest( r, rit.value() ) ) );
+            } else {
+                cmd->addCommand( new ModifyResourceRequestUnitsCmd( rr, rr->units(), rit.value() ) );
+            }
+        }
+    }
+    if ( cmd->isEmpty() ) {
+        delete cmd;
+        return 0;
+    }
+    return cmd;
 }
 
 }  //KPlato namespace

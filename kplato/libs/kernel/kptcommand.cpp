@@ -722,12 +722,9 @@ SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const 
     node->setWorkEndTime( node->endTime() );
     
     // Summarytasks can't have resources, so remove resource requests from the new parent
-    ResourceRequestCollection *rc = parent->requests();
-    if ( rc ) {
-        foreach ( ResourceGroupRequest *r, rc->requests() ) {
-            if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
-            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
-        }
+    foreach ( ResourceGroupRequest *r, parent->requests().requests() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
     }
 }
 SubtaskAddCmd::~SubtaskAddCmd()
@@ -969,12 +966,9 @@ void NodeIndentCmd::execute()
         m_newindex = m_newparent->findChildNode( &m_node );
         // Summarytasks can't have resources, so remove resource requests from the new parent
         if ( m_cmd == 0 ) {
-            ResourceRequestCollection *rc = m_newparent->requests();
-            if ( rc ) {
-                foreach ( ResourceGroupRequest *r, rc->requests() ) {
-                    if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
-                    m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
-                }
+            foreach ( ResourceGroupRequest *r, m_newparent->requests().requests() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
             }
         }
         if ( m_cmd ) {
@@ -1088,12 +1082,9 @@ NodeMoveCmd::NodeMoveCmd( Project *project, Node *node, Node *newParent, int new
     m_oldpos = m_oldparent->indexOf( node );
     
     // Summarytasks can't have resources, so remove resource requests from the new parent
-    ResourceRequestCollection *rc = newParent->requests();
-    if ( rc ) {
-        foreach ( ResourceGroupRequest *r, rc->requests() ) {
-            if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
-            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
-        }
+    foreach ( ResourceGroupRequest *r, newParent->requests().requests() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
     }
     // TODO appointments ??
 }
@@ -1306,6 +1297,39 @@ void RemoveResourceRequestCmd::unexecute()
 
 }
 
+ModifyResourceRequestUnitsCmd::ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const QString& name )
+    : NamedCommand( name ),
+    m_request( request ),
+    m_oldvalue( oldvalue ),
+    m_newvalue( newvalue )
+{
+}
+void ModifyResourceRequestUnitsCmd::execute()
+{
+    m_request->setUnits( m_newvalue );
+}
+void ModifyResourceRequestUnitsCmd::unexecute()
+{
+    m_request->setUnits( m_oldvalue );
+}
+
+ModifyResourceGroupRequestUnitsCmd::ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const QString& name )
+    : NamedCommand( name ),
+    m_request( request ),
+    m_oldvalue( oldvalue ),
+    m_newvalue( newvalue )
+{
+}
+void ModifyResourceGroupRequestUnitsCmd::execute()
+{
+    m_request->setUnits( m_newvalue );
+}
+void ModifyResourceGroupRequestUnitsCmd::unexecute()
+{
+    m_request->setUnits( m_oldvalue );
+}
+
+
 ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const QString& name )
     : NamedCommand( name ),
     m_estimate( node.estimate() ),
@@ -1318,12 +1342,9 @@ ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newval
     }*/
     if ( newvalue == 0.0 ) {
         // Milestones can't have resources, so remove resource requests
-        ResourceRequestCollection *rc = node.requests();
-        if ( rc ) {
-            foreach ( ResourceGroupRequest *r, rc->requests() ) {
-                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
-                m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
-            }
+        foreach ( ResourceGroupRequest *r, node.requests().requests() ) {
+            if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
         }
     }
 }
@@ -1511,7 +1532,7 @@ void AddResourceGroupRequestCmd::unexecute()
 
 RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name )
         : NamedCommand( name ),
-        m_task( request->parent() ->task() ),
+        m_task( *(request->parent() ->task()) ),
         m_request( request )
 {
 

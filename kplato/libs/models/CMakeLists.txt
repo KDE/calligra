@@ -31,6 +31,7 @@ set(kplatomodels_LIB_SRCS
     kptaccountsmodel.cpp
     kptpertcpmmodel.cpp
     kptresourceappointmentsmodel.cpp
+    kptresourceallocationmodel.cpp
 
     kpttaskcompletedelegate.cpp
 )

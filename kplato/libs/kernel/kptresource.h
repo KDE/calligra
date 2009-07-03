@@ -56,7 +56,7 @@ class ResourceGroupRequest;
 class Calendar;
 class ResourceRequestCollection;
 class Schedule;
-class Schedule;
+class NodeSchedule;
 class ResourceSchedule;
 class Schedule;
 class XMLLoaderObject;
@@ -108,7 +108,7 @@ public:
          */
     void addResource( int index, Resource*, Risk* );
     Resource *takeResource( Resource *resource );
-    QList<Resource*> &resources() { return m_resources; }
+    QList<Resource*> resources() const { return m_resources; }
     int indexOf( const Resource *resource ) const;
     Resource *resourceAt( int pos ) const { return m_resources.value( pos ); }
     int numResources() const { return m_resources.count(); }
@@ -154,7 +154,7 @@ public:
 
     Calendar *defaultCalendar() { return m_defaultCalendar; }
 
-    int units();
+    int units() const;
 
     void registerRequest( ResourceGroupRequest *request )
     { m_requests.append( request ); }
@@ -428,6 +428,9 @@ public:
     int numExternalAppointments() const { return m_externalAppointments.count(); }
     QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
     
+    /// Return a measure of how suitable the resource is for allocation
+    long allocationSuitability( const DateTime &time, const Duration &duration, bool backward );
+
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
     void externalAppointmentAdded( Resource*, Appointment* );
@@ -525,6 +528,7 @@ public:
     * Get amount of requested resource units in percent
     */
     int units() const;
+    void setUnits( int value );
 
     /**
     * Get amount of requested work units in percent
@@ -552,10 +556,22 @@ public:
     DateTime workTimeAfter(const DateTime &dt);
     DateTime workTimeBefore(const DateTime &dt);
 
+    /// Resource is allocated dynamically by the group request
+    bool isDynamicallyAllocated() const { return m_dynamic; }
+    /// Set resource is allocated dynamically
+    void setAllocatedDynaically( bool dyn ) { m_dynamic = dyn; }
+
+    /// Return a measure of how suitable the resource is for allocation
+    long allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward );
+
+protected:
+    void changed();
+
 private:
     Resource *m_resource;
     int m_units;
     ResourceGroupRequest *m_parent;
+    bool m_dynamic;
 
 #ifndef NDEBUG
 public:
@@ -584,22 +600,22 @@ public:
         delete request;
         changed();
     }
-    
+    int count() const { return m_resourceRequests.count(); }
+
     ResourceRequest *takeResourceRequest( ResourceRequest *request );
-    ResourceRequest *find( Resource *resource );
+    ResourceRequest *find( const Resource *resource ) const;
     ResourceRequest *resourceRequest( const QString &name );
     QStringList requestNameList() const;
     
     bool load( KoXmlElement &element, Project &project );
     void save( QDomElement &element ) const;
 
-    /**
-    * Get total amount of resource units in percent
-    */
+    /// The number of requested resources
     int units() const;
+    void setUnits( int value ) { m_units = value; changed(); }
 
     /**
-    * Get amount of work units in percent
+    * Get amount of allocated work units in percent
     */
     int workUnits() const;
 
@@ -635,6 +651,11 @@ public:
 
     void changed();
     
+    /// Reset dynamic resource allocations
+    void resetDynamicAllocations();
+    /// Allocate dynamic requests. Do nothing if already allocated.
+    void allocateDynamicRequests( const DateTime &time, const Duration &effort, Schedule *ns, bool backward );
+
 private:
     ResourceGroup *m_group;
     int m_units;
@@ -653,7 +674,7 @@ public:
 class KPLATOKERNEL_EXPORT ResourceRequestCollection
 {
 public:
-    ResourceRequestCollection( Task &task );
+    explicit ResourceRequestCollection( Task *task = 0 );
     ~ResourceRequestCollection();
 
     const QList<ResourceGroupRequest*> &requests() const { return m_requests; }
@@ -676,11 +697,16 @@ public:
         }
     }
 
-    ResourceGroupRequest *find( ResourceGroup *resource ) const;
-    ResourceRequest *find( Resource *resource ) const;
+    ResourceGroupRequest *find( const ResourceGroup *resource ) const;
+    ResourceRequest *find( const Resource *resource ) const;
     ResourceRequest *resourceRequest( const QString &name ) const;
+    /// The ResourceRequestCollection has no requests
     bool isEmpty() const;
+    /// Empty the ResourceRequestCollection of all requets
     void clear() { m_requests.clear(); }
+    /// Reset dynamic resource allocations
+    void resetDynamicAllocations();
+
     bool contains( const QString &identity ) const;
     ResourceGroupRequest *findGroupRequestById( const QString &id ) const;
     QStringList requestNameList() const;
@@ -692,10 +718,10 @@ public:
     /**
     * Returns the total amount of resource units in percent
     */
-    int units() const;
+//    int units() const;
 
     /**
-    * Returns the amount of work units in percent
+    * Returns the amount of allocated work units in percent
     */
     int workUnits() const;
 
@@ -707,8 +733,8 @@ public:
 
     DateTime availableAfter( const DateTime &time, Schedule *ns );
     DateTime availableBefore( const DateTime &time, Schedule *ns );
-    DateTime workTimeAfter(const DateTime &dt);
-    DateTime workTimeBefore(const DateTime &dt);
+    DateTime workTimeAfter(const DateTime &dt) const;
+    DateTime workTimeBefore(const DateTime &dt) const;
     
     /**
     * Makes appointments for the task @param task to the requested resources.
@@ -720,7 +746,8 @@ public:
      */
     void reserve( const DateTime &start, const Duration &duration );
 
-    Task &task() const { return m_task; }
+    Task *task() const { return m_task; }
+    void setTask( Task *t ) { m_task = t; }
 
     void changed();
     
@@ -734,7 +761,7 @@ protected:
 
 
 private:
-    Task &m_task;
+    Task *m_task;
     QList<ResourceGroupRequest*> m_requests;
 
 #ifndef NDEBUG
