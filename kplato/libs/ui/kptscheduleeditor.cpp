@@ -561,20 +561,8 @@ ViewBase *ScheduleHandlerView::hitView( const QPoint &glpos )
 
 void ScheduleHandlerView::setGuiActive( bool active ) // virtual slot
 {
-    //kDebug()<<active;
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v  ) {
-            v->setGuiActive( active );
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
-                if ( v ) {
-                    v->setGuiActive( active );
-                }
-            }
-        }
+    foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
+        v->setGuiActive( active );
     }
     m_activeview = active ? this : 0;
     emit guiActivated( this, active );
@@ -587,19 +575,9 @@ void ScheduleHandlerView::slotGuiActivated( ViewBase *, bool )
 QStringList ScheduleHandlerView::actionListNames() const
 {
     QStringList lst;
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v  ) {
-            lst += v->actionListNames();
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
-                lst += v->actionListNames();
-            }
-        }
+    foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
+        lst += v->actionListNames();
     }
-    //kDebug()<<lst;
     return lst;
 }
     
@@ -607,21 +585,9 @@ QList<QAction*> ScheduleHandlerView::actionList( const QString name ) const
 {
     //kDebug()<<name;
     QList<QAction*> lst;
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v ) {
-            lst += v->actionList( name );
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
-                if ( v  ) {
-                    lst += v->actionList( name );
-                }
-            }
-        }
+    foreach ( ViewBase *v, findChildren<ViewBase*>() ) {
+        lst += v->actionList( name );
     }
-    //kDebug()<<lst;
     return lst;
 }
 
