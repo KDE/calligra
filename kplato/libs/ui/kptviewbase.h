@@ -144,16 +144,16 @@ class KPLATOUI_EXPORT ViewActionLists
 {
 public:
     ViewActionLists() : actionOptions( 0 ) {}
-    ~ViewActionLists() {}
+    virtual ~ViewActionLists() {}
 
     /// Returns the list of action lists that shall be plugged/unplugged
-    QStringList actionListNames() const { return m_actionListMap.keys(); }
+    virtual QStringList actionListNames() const { return m_actionListMap.keys(); }
     /// Returns the list of actions associated with the action list name
-    QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
+    virtual QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
     /// Add an action to the specified action list
     void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
 
-    QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
+    virtual QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
     void addViewlistAction( QAction *action ) { m_viewlistActionList.append( action ); }
     
     QList<QAction*> contextActionList() const { return m_contextActionList; }
