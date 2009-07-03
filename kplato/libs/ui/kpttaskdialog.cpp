@@ -50,7 +50,7 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
 
     page =  new KVBox();
     addPage(page, i18n("&Resources"));
-    m_resourcesTab = new XRequestResourcesPanel(page, task);
+    m_resourcesTab = new RequestResourcesPanel(page, task);
     
     page =  new KVBox();
     addPage(page, i18n("&Documents"));

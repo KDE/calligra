@@ -37,7 +37,7 @@ class TaskCostPanel;
 class Task;
 class StandardWorktime;
 class MacroCommand;
-class XRequestResourcesPanel;
+class RequestResourcesPanel;
 
 /**
  * The dialog that shows and allows you to alter any task.
@@ -60,7 +60,7 @@ protected slots:
 
 protected:
     TaskGeneralPanel *m_generalTab;
-    XRequestResourcesPanel *m_resourcesTab;
+    RequestResourcesPanel *m_resourcesTab;
     DocumentsPanel *m_documentsTab;
     TaskCostPanel *m_costTab;
 };
