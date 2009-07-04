@@ -54,6 +54,7 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheet
+GenericName[bg]=Таблици
 GenericName[ca]=Full de càlcul
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation

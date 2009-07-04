@@ -10,6 +10,7 @@ Name[ta]=கேஸ்பிரெட்
 Name[x-test]=xxKSpreadxx
 Name[zh_TW]=工作表_KSpread
 Comment=KSpread Spreadsheet
+Comment[bg]=Таблици
 Comment[ca]=Full de càlcul KSpread
 Comment[da]=KSpread regneark
 Comment[de]=KSpread-Tabellenkalkulation
@@ -41,6 +42,7 @@ Version=4
 
 [Event/DocumentLoaded]
 Name=Document loaded
+Name[bg]=Документът е зареден
 Name[ca]=Document carregat
 Name[da]=Dokument indlæst
 Name[de]=Dokument geladen
@@ -71,6 +73,7 @@ Name[x-test]=xxDocument loadedxx
 Name[zh_CN]=已装入文档
 Name[zh_TW]=文件已載入
 Comment=A document was loaded
+Comment[bg]=Документът е зареден
 Comment[ca]=S'ha carregat un document
 Comment[da]=Et dokument blev indlæst
 Comment[de]=Ein Dokument wurde geladen
@@ -104,6 +107,7 @@ Action=None
 
 [Event/DocumentSaved]
 Name=Document saved
+Name[bg]=Документът е записан
 Name[ca]=Document desat
 Name[da]=Dokument gemt
 Name[de]=Dokument gespeichert
@@ -134,6 +138,7 @@ Name[x-test]=xxDocument savedxx
 Name[zh_CN]=已保存文档
 Name[zh_TW]=文件已儲存
 Comment=A document was saved
+Comment[bg]=Документът е записан
 Comment[ca]=S'ha desat un document
 Comment[da]=Et dokument blev gemt
 Comment[de]=Ein Dokument wurde gespeichert.
@@ -167,6 +172,7 @@ Action=None
 
 [Event/LinkActivated]
 Name=Link activated
+Name[bg]=Препратката е активирана
 Name[ca]=Enllaç activat
 Name[da]=Link aktiveret
 Name[de]=Verknüpfung aktiviert
@@ -197,6 +203,7 @@ Name[x-test]=xxLink activatedxx
 Name[zh_CN]=已激活链接
 Name[zh_TW]=連結已啟動
 Comment=A hyperlink was activated
+Comment[bg]=Хипертекстовата препратка е активирана
 Comment[ca]=S'ha activat un hiperenllaç
 Comment[da]=Et hyperlink blev aktiveret
 Comment[de]=Eine Verknüpfung wurde aktiviert
@@ -230,6 +237,7 @@ Action=None
 
 [Event/ParsingError]
 Name=Parsing failed
+Name[bg]=Грешка при обработката
 Name[ca]=Ha fallat l'anàlisi
 Name[da]=Fortolkning mislykkedes
 Name[de]=Einlesen fehlgeschlagen
@@ -252,6 +260,7 @@ Name[x-test]=xxParsing failedxx
 Name[zh_CN]=分析失败
 Name[zh_TW]=剖析失敗
 Comment=Parsing of a cell's formula failed
+Comment[bg]=Греша при обработката на формулата в клетка
 Comment[ca]=Ha fallat l'anàlisi d'una fórmula de la cel·la
 Comment[da]=Fortolkning af cellens formel mislykkedes
 Comment[de]=Das Einlesen der Formel einer Zelle ist fehlgeschlagen
@@ -275,6 +284,7 @@ Action=None
 
 [Event/ValidityError]
 Name=Validity failed
+Name[bg]=Грешка при проверката
 Name[ca]=Ha fallat la validació
 Name[da]=Validering mislykkedes
 Name[de]=Gültigkeitstest fehlgeschlagen
@@ -300,6 +310,7 @@ Name[uk]=Перевірка зазнала невдачі
 Name[x-test]=xxValidity failedxx
 Name[zh_TW]=正確性檢查失敗
 Comment=Validation for a cell failed
+Comment[bg]=Грешка при проверката на клетка
 Comment[ca]=Ha fallat la validació d'una cel·la
 Comment[da]=Validering af en celle mislykkedes
 Comment[de]=Die Überprüfung einer Zelle ist fehlgeschlagen

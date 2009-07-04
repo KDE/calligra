@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=template_savannah
 Name=Savannah
+Name[bg]=Савана
 Name[de]=Savanne
 Name[el]=Σαβάνα
 Name[es]=Sabana
@@ -32,7 +33,7 @@ Name[uz@cyrillic]=Саванна
 Name[x-test]=xxSavannahxx
 Name[zh_TW]=薩凡納
 Comment=Savannah by dannya
-Comment[bg]=Savannah на dannya
+Comment[bg]=Савана на dannya
 Comment[br]=Savannah gant dannya
 Comment[da]=Savanna af dannya
 Comment[de]=Savanne von dannya

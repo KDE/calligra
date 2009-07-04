@@ -10,6 +10,7 @@ Name[x-test]=xxKSpreadxx
 Name[zh_TW]=工作表_KSpread
 Exec=kspread %u
 GenericName=Spreadsheet
+GenericName[bg]=Таблици
 GenericName[ca]=Full de càlcul
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation

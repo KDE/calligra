@@ -67,6 +67,7 @@ Icon=karbon
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 Categories=Qt;KDE;Office;Graphics;
 Comment=Create scalable vector drawings
+Comment[bg]=Създаване на векторни графики
 Comment[ca]=Crea dibuixos de vectors escalables
 Comment[cs]=Vytvářejte vektorové kresby
 Comment[da]=Tegn skalerbare vektortegninger

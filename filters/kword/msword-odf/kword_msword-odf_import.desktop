@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KWord MS Word-ODF Import Filter
+Name[bg]=Филтър за импортиране от MS Word-ODF в KWord
 Name[ca]=Filtre d'importació MS Word-ODF per al KWord
 Name[cs]=Importní filtr formátu MS Word-ODF pro KWord
 Name[da]=MS Word-ODF-importfilter til KWord

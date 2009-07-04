@@ -2,7 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
-Comment[bg]=Създаване на графични обекти
 Comment[ca]=Factoria base d'estris
 Comment[cy]=Bâs Ffatri Celfigion
 Comment[de]=Basis für die Erstellung von Bedienelementen

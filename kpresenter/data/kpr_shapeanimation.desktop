@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KPresenter/ShapeAnimation
 Comment=Shape animation plugin for KPresenter
+Comment[bg]=Приставка за анимация в KPresenter
 Comment[ca]=Connector d'animació de formes per al KPresenter
 Comment[da]=Form-animationsplugin til KPresenter
 Comment[de]=Objektanimationsmodul für KPresenter

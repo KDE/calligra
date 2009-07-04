@@ -3,7 +3,6 @@ Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Basic Widgets
-Name[bg]=Основни графични обекти
 Name[br]=Widgets Diazez
 Name[ca]=Estris estàndard
 Name[cy]=Celfigion Sylfaenol
