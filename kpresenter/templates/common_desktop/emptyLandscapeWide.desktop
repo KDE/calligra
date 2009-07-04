@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=template_emptylandscape
 Name=Empty 16:10
+Name[bg]=Празен документ 10:16
 Name[ca]=Buit 16:10
 Name[cs]=Prázdné 16:10
 Name[da]=Tom 16:10
@@ -27,6 +28,7 @@ Name[x-test]=xxEmpty 16:10xx
 Name[zh_CN]=空 16:10
 Name[zh_TW]=空白 16:10
 Comment=Empty presentation 10:16
+Comment[bg]=Празна презентация 10:16
 Comment[ca]=Presentació buida 10:16
 Comment[cs]=Prázdná prezentace 10:16
 Comment[da]=Tom præsentation 10:16
