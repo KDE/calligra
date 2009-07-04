@@ -99,8 +99,9 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     //    const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
     //    kDebug(30513) << brc.toString().c_str();
     //}
+    //get row border style, used in tableCellStart()
     const wvWare::Word97::BRC& brc = tap->rgbrcTable[0];
-    borderStyle = Conversion::setBorderAttributes(brc);
+    m_borderStyle = Conversion::setBorderAttributes(brc);
 
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
@@ -239,9 +240,9 @@ void KWordTableHandler::tableCellStart()
 
     KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
     //set borders for the four edges of the cell
-    //use the row border style
+    //m_borderStyle is the row border style, set in tableRowStart
     if(brcTop.brcType == 0) {
-        cellStyle.addProperty("fo:border-top", borderStyle);
+        cellStyle.addProperty("fo:border-top", m_borderStyle);
     }
     //no border
     else if(brcTop.brcType == 255) {
@@ -253,7 +254,7 @@ void KWordTableHandler::tableCellStart()
     }
     //bottom
     if(brcBottom.brcType == 0) {
-        cellStyle.addProperty("fo:border-bottom", borderStyle);
+        cellStyle.addProperty("fo:border-bottom", m_borderStyle);
     }
     else if(brcBottom.brcType == 255) {
         cellStyle.addProperty("fo:border-bottom", "thin none #000000");
@@ -263,7 +264,7 @@ void KWordTableHandler::tableCellStart()
     }
     //left
     if(brcLeft.brcType == 0) {
-        cellStyle.addProperty("fo:border-left", borderStyle);
+        cellStyle.addProperty("fo:border-left", m_borderStyle);
     }
     else if(brcLeft.brcType == 255) {
         cellStyle.addProperty("fo:border-left", "thin none #000000");
@@ -273,7 +274,7 @@ void KWordTableHandler::tableCellStart()
     }
     //right
     if(brcRight.brcType == 0) {
-        cellStyle.addProperty("fo:border-right", borderStyle);
+        cellStyle.addProperty("fo:border-right", m_borderStyle);
     }
     else if(brcRight.brcType == 255) {
         cellStyle.addProperty("fo:border-right", "thin none #000000");
