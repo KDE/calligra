@@ -1177,6 +1177,8 @@ void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*
 {
     unplugActionList("frameset_type_action");
     plugActionList("frameset_type_action", actions);
+    if (factory() == 0) // we are a kpart, the factory is only set on the active component.
+        return;
     QMenu *menu = dynamic_cast<QMenu*>(factory()->container("frame_popup", this));
     if (menu)
         menu->exec(globalPosition);
