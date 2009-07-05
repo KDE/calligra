@@ -33,7 +33,7 @@ TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
     m_stretchVertically = false;
 }
 
-const QList<BasicElement*> TokenElement::childElements()
+const QList<BasicElement*> TokenElement::childElements() const
 {
     // only return the mglyph elements
     QList<BasicElement*> tmpList;
@@ -45,7 +45,7 @@ const QList<BasicElement*> TokenElement::childElements()
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
     // set the painter to background color and paint it
-    painter.setPen( am->colorOf( "mathbackground", this ) );
+     painter.setPen( am->colorOf( "mathbackground", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 
@@ -63,8 +63,15 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.drawPath( m_contentPath );
 }
 
+int TokenElement::length() const
+{
+    return m_rawString.length();
+}
+
 void TokenElement::layout( const AttributeManager* am )
 {
+    m_offsets.erase(m_offsets.begin(),m_offsets.end());
+    m_offsets << 0.0;
     // Query the font to use
     m_font = am->font( this );
     QFontMetricsF fm(m_font);
@@ -76,6 +83,9 @@ void TokenElement::layout( const AttributeManager* am )
     QRectF boundingrect;
     if(m_glyphs.isEmpty()) {//optimize for the common case
         boundingrect = renderToPath(m_rawString, m_contentPath);
+        for (int j = 0; j < m_rawString.length(); ++j) {
+                m_offsets.append(fm.width(m_rawString.left(j+1)));
+        }
      } else {
         // replace all the object replacement characters with glyphs
         // We have to keep track of the bounding box at all times
@@ -90,22 +100,29 @@ void TokenElement::layout( const AttributeManager* am )
                 boundingrect.setRight( boundingrect.right() + newbox.right());
                 boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-
+                double glyphoffset = m_offsets.last();
+                for (int j = 0; j < chunk.length(); ++j) {
+                    m_offsets << fm.width(chunk.left(j+1)) + glyphoffset;
+                }
                 m_contentPath.moveTo(boundingrect.right(), 0);
                 newbox = m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
                 boundingrect.setRight( boundingrect.right() + newbox.right());
                 boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-
+                m_offsets.append(newbox.width() + m_offsets.last());
                 counter++;
                 chunk.clear();
             }
-            if( !chunk.isEmpty() ) {
-                m_contentPath.moveTo(boundingrect.right(), 0);
-                QRectF newbox = renderToPath( chunk, m_contentPath );
-                boundingrect.setRight( boundingrect.right() + newbox.right());
-                boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
-                boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+        }
+        if( !chunk.isEmpty() ) {
+            m_contentPath.moveTo(boundingrect.right(), 0);
+            QRectF newbox = renderToPath( chunk, m_contentPath );
+            boundingrect.setRight( boundingrect.right() + newbox.right());
+            boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
+            boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
+            double glyphoffset = m_offsets.last();
+            for (int j = 0; j < chunk.length(); ++j) {
+                m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
             }
         }
     } 
@@ -120,41 +137,127 @@ void TokenElement::layout( const AttributeManager* am )
     m_originalSize = QSizeF(width(), height());
 }
 
-void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+bool TokenElement::insertChild( int position, BasicElement* child )
 {
-/*    if( child && child->elementType() == Glyph ) {
-        m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
-        m_glyphs.insert();
+    if( child && child->elementType() == Glyph ) {
+    //    m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
+    //    m_glyphs.insert();
+        return false;
+    } else {
+        return false;
     }
-    else*/ if( !child )
-        m_rawString.insert( cursor->position(), cursor->inputBuffer() );
 }
 
-void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
+
+bool TokenElement::insertText ( int position, const QString& text )
 {
-    m_rawString.remove( cursor->position(), 1 );
+    m_rawString.insert (position,text);
+    return true;
 }
 
-BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
+
+QList<GlyphElement*> TokenElement::removeText ( int position, int length )
+{
+    QList<GlyphElement*> tmp;
+    //find out, how many glyphs we have
+    int counter=0;
+    for (int i=position; i<position+length; ++i) {
+        if (m_rawString[ position ] == QChar::ObjectReplacementCharacter) {
+            counter++;
+        }
+    }
+    
+    int start=0;
+    //find out where we should start removing glyphs
+    if (counter>0) {
+        for (int i=0; i<position; ++i) {
+            if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
+                start++;
+            }
+        }
+    } 
+    for (int i=start; i<start+counter; ++i) {
+        tmp.append(m_glyphs.takeAt(i));
+    }
+    m_rawString.remove(position,length);
+    return tmp;
+    
+}
+
+bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+    int i = 0;
+    kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
+    cursor->setCurrentElement(this);
+    if (cursorOffset(length())<point.x()) {
+        cursor->setPosition(length());
+        return true;
+    }
+    //Find the letter we clicked on
+    for( i = 1; i <= m_rawString.length(); i++ ) {
+        if (point.x() < cursorOffset(i)) {
+            break;
+        }
+    }
+    //Find out, if we should place the cursor before or after the character
+    if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
+        --i;
+    }
+    cursor->setPosition(i);
+    return true;
+}
+
+
+QLineF TokenElement::cursorLine(int position) const
+{
+    // inside tokens let the token calculate the cursor x offset
+    double tmp = cursorOffset( position );
+    QPointF top = absoluteBoundingRect().topLeft() + QPointF( tmp, 0 );
+    QPointF bottom = top + QPointF( 0.0,height() );
+    return QLineF(top,bottom);
+}
+
+bool TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
-    return this;
+    return true;
 }
 
-double TokenElement::cursorOffset( const FormulaCursor* cursor ) const
-{
-    if( m_rawString.contains( QChar::ObjectReplacementCharacter ) ) {
-        // TODO do something special
+bool TokenElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) {
+    if ((newcursor->direction()==MoveUp) ||
+        (newcursor->direction()==MoveDown) ||
+        (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+        return false;
     }
+    switch( newcursor->direction() ) {
+    case MoveLeft:
+        newcursor->setPosition(newcursor->position()-1);
+        break;
+    case MoveRight:
+        newcursor->setPosition(newcursor->position()+1);
+        break;
+    }
+    return true;
+}
 
-    QFontMetricsF fm( m_font );
-    return fm.width( m_rawString.left( cursor->position() ) );
+
+double TokenElement::cursorOffset( const int position) const
+{
+    return m_offsets[position]+m_xoffset;
 }
 
 QFont TokenElement::font() const
 {
     return m_font;
 }
+
+
+void TokenElement::setText ( const QString& text )
+{
+    removeText(0,m_rawString.length());
+    insertText(0,text);
+}
+
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
@@ -207,4 +310,3 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
         }
     }
 }
-

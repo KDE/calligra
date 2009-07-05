@@ -20,7 +20,6 @@ endif(SHOULD_BUILD_KRITA)
 if(SHOULD_BUILD_KSPREAD)
 	add_subdirectory(kspread)
 endif(SHOULD_BUILD_KSPREAD)
-add_subdirectory(kword)
 add_subdirectory(thesaurus)
 
 INSTALL(FILES   koffice.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

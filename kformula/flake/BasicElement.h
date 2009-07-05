@@ -30,12 +30,14 @@
 #include <QList>
 #include <QString>
 #include <QRectF>
+#include <QLineF>
 class QPainter;
 class QVariant;
 class KoXmlWriter;
 #include "KoXmlReaderForward.h"
 class AttributeManager;
 class FormulaCursor;
+class QPainterPath;
 
 #define DEBUGID 40000
 
@@ -83,21 +85,21 @@ public:
      * Obtain a list of all child elements of this element - sorted in saving order
      * @return a QList with pointers to all child elements
      */
-    virtual const QList<BasicElement*> childElements();
+    virtual const QList<BasicElement*> childElements() const;
 
     /**
      * Insert a new child at the cursor position
      * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
-    virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
+    virtual bool insertChild( int position, BasicElement* child );
    
     /**
      * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
+     * @param oldelement the child to replace
+     * @param newelement the child @p oldelement is replaced with
      */ 
-    virtual void removeChild( FormulaCursor* cursor, BasicElement* element );
+    virtual bool replaceChild( BasicElement* oldelement, BasicElement* newelement );
 
     /**
      * Render the element to the given QPainter
@@ -130,10 +132,29 @@ public:
     /**
      * Implement the cursor behaviour for the element
      * @param cursor The FormulaCursor that is moved around
-     * @return A this pointer if the element accepts if not the element to asked instead
+     * @return true, if the element accepts the cursor
      */
-    virtual BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    virtual bool acceptCursor( const FormulaCursor* cursor );
+    
+    /**
+     * Return the coordinates of the line, where the cursor should be drawn
+     * in coordinates relative to the flake shape
+     * @param cursor The FormulaCursor specifing the position
+     * @return The cursor line
+     */
+    virtual QLineF cursorLine(int position) const;
+    
+    virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
+    
+    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+    
+    /**
+     * Move the cursor in the direction specified in cursor
+     * @param cursor The FormularCursor we move
+     * @return true, if we moved the cursor
+     */
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    
     /// @return The element's ElementType
     virtual ElementType elementType() const;
 
@@ -151,6 +172,21 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
+    
+    /// @return The absoulte bounding rectangle of the element
+    const QRectF absoluteBoundingRect() const;
+    
+    /**
+     * place the cursor at the the given point
+     * the point should be placed a the position in the element 
+     * (or it's child) that is closest to the point
+     * in particular the point doesn't have to be within 
+     * boundingBox()
+     * @param cursor The FormulaCursor to modify
+     * @param point The point in coordinates relative to the elements local coordinate system
+     * @return true, iff the cursor could be placed
+     **/
+    virtual bool setCursorTo(FormulaCursor *cursor, QPointF point);
 
     /// @return The bounding rectangle of the children, relative to the element
     const QRectF& childrenBoundingRect() const;
@@ -175,6 +211,25 @@ public:
 
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
+
+    
+    /// @return The last cusor position (number of available cursor positions - 1)
+    virtual int length() const;
+    
+    /** 
+     * @return the cursor position before the child in this element and -1 if it isn't a child
+     * @param child  the childelement we are looking for
+     */
+    virtual int positionOfChild(BasicElement* child) const;
+        
+    /// @return the element right before the cursor position @p position and 0 if there is none
+    virtual BasicElement* elementBefore(int position);
+    
+    /// @return the element right after the cursor position @p position and 0 if there is none
+    virtual BasicElement* elementAfter(int position);
+    
+    /// Set the element's m_scaleFactor to @p scaleFactor
+    void setScaleFactor( double scaleFactor );
 
     /// @return The elements scale factor
     double scaleFactor() const;

@@ -26,7 +26,7 @@
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QRectF NumberElement::renderToPath( const QString& rawString, QPainterPath& path )
+QRectF NumberElement::renderToPath( const QString& rawString, QPainterPath& path ) const
 {
     AttributeManager manager;
     QFont font = manager.font(this);

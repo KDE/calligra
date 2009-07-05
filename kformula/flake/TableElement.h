@@ -61,15 +61,23 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
-    /**
-     * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
-     * @return A this pointer if the element accepts if not the element to asked instead
-     */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    /// inherited from BasicElement
+    virtual bool acceptCursor( const FormulaCursor* cursor );
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// inherited from BasicElement
+    virtual int length() const;
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
 
@@ -78,7 +86,16 @@ public:
 
     /// @return The height of the @p TableRowElement
     double rowHeight( TableRowElement* row );
-
+    
+    /// inherited from BasicElement
+    virtual QLineF cursorLine ( int position ) const;
+    
+    /// inherited from BasicElement
+    virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
+    
+    /// @return The element's ElementType
+    virtual ElementType elementType() const;
+    
 protected:
     /// Read all content from the node - reimplemented by child elements
     bool readMathMLContent( const KoXmlElement& element );

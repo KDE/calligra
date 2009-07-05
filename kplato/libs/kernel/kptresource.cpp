@@ -234,9 +234,9 @@ void ResourceGroup::initiateCalculation(Schedule &sch) {
     clearNodes();
 }
 
-int ResourceGroup::units() {
+int ResourceGroup::units() const {
     int u = 0;
-    foreach (Resource *r, m_resources) {
+    foreach ( const Resource *r, m_resources) {
         u += r->units();
     }
     return u;
@@ -954,6 +954,12 @@ AppointmentIntervalList Resource::externalAppointments() const
     return app.intervals();
 }
 
+long Resource::allocationSuitability( const DateTime &time, const Duration &duration, bool backward )
+{
+    // FIXME: This is not *very* intelligent...
+    Duration e = effort( time, duration, backward );
+    return e.minutes();
+}
 
 /////////   Risk   /////////
 Risk::Risk(Node *n, Resource *r, RiskType rt) {
@@ -968,7 +974,9 @@ Risk::~Risk() {
 ResourceRequest::ResourceRequest(Resource *resource, int units)
     : m_resource(resource),
       m_units(units),
-      m_parent(0) {
+      m_parent(0),
+      m_dynamic(false)
+{
     //kDebug()<<"("<<this<<") Request to:"<<(resource ? resource->name() : QString("None"));
 }
 
@@ -1002,16 +1010,29 @@ int ResourceRequest::units() const {
     return m_units;
 }
 
+void ResourceRequest::setUnits( int value )
+{
+    qDebug()<<"ResourceRequest::setUnits:"<<m_units<<value;
+    m_units = value; changed();
+}
+
 int ResourceRequest::workUnits() const {
-    if (m_resource->type() == Resource::Type_Work)
+    if (m_resource->type() == Resource::Type_Work) {
         return units();
-        
+    }
     //kDebug()<<"units=0";
     return 0;
 }
 
 Task *ResourceRequest::task() const {
     return m_parent ? m_parent->task() : 0;
+}
+
+void ResourceRequest::changed()
+{
+    if ( task() ) {
+        task()->changed();
+    }
 }
 
 Schedule *ResourceRequest::resourceSchedule( Schedule *ns )
@@ -1058,6 +1079,12 @@ void ResourceRequest::makeAppointment( Schedule *ns )
     }
 }
 
+long ResourceRequest::allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward )
+{
+    resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
+    return resource()->allocationSuitability( time, duration, backward );
+}
+
 /////////
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
     : m_group(group), m_units(units), m_parent(0) {
@@ -1097,7 +1124,7 @@ ResourceRequest *ResourceGroupRequest::takeResourceRequest(ResourceRequest *requ
     return r;
 }
 
-ResourceRequest *ResourceGroupRequest::find(Resource *resource) {
+ResourceRequest *ResourceGroupRequest::find(const Resource *resource) const {
     foreach (ResourceRequest *gr, m_resourceRequests) {
         if (gr->resource() == resource) {
             return gr;
@@ -1120,7 +1147,7 @@ QStringList ResourceGroupRequest::requestNameList() const {
         lst << m_group->name();
     }
     foreach ( ResourceRequest *r, m_resourceRequests ) {
-        if ( r->resource() ) {
+        if ( r->resource() && ! r->isDynamicallyAllocated() ) {
             lst << r->resource()->name();
         }
     }
@@ -1169,12 +1196,7 @@ void ResourceGroupRequest::save(QDomElement &element) const {
 }
 
 int ResourceGroupRequest::units() const {
-    int units = m_units;
-    foreach (ResourceRequest *r, m_resourceRequests) {
-        units += r->units();
-    }
-    //kDebug()<<"units="<<units;
-    return units;
+    return m_units;
 }
 
 int ResourceGroupRequest::workUnits() const {
@@ -1187,6 +1209,7 @@ int ResourceGroupRequest::workUnits() const {
     //kDebug()<<"units="<<units;
     return units;
 }
+
 
 //TODO: handle nonspecific resources
 Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const {
@@ -1427,7 +1450,7 @@ bool ResourceGroupRequest::isEmpty() const {
 }
 
 Task *ResourceGroupRequest::task() const {
-    return m_parent ? &(m_parent->task()) : 0;
+    return m_parent ? m_parent->task() : 0;
 }
 
 void ResourceGroupRequest::changed()
@@ -1436,8 +1459,54 @@ void ResourceGroupRequest::changed()
          m_parent->changed();
 }
 
+void ResourceGroupRequest::resetDynamicAllocations()
+{
+    QList<ResourceRequest*> lst;
+    foreach ( ResourceRequest *r, m_resourceRequests ) {
+        if ( r->isDynamicallyAllocated() ) {
+            lst << r;
+        }
+    }
+    while ( ! lst.isEmpty() ) {
+        deleteResourceRequest( lst.takeFirst() );
+    }
+}
+
+void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const Duration &effort, Schedule *ns, bool backward )
+{
+    int num = m_units - m_resourceRequests.count();
+    if ( num <= 0 ) {
+        return;
+    }
+    if ( num == m_group->numResources() ) {
+        // TODO: allocate all
+    }
+    Duration e = effort / m_units;
+    QMap<long, ResourceRequest*> map;
+    foreach ( Resource *r, m_group->resources() ) {
+        if ( find( r ) ) {
+            continue;
+        }
+        ResourceRequest *rr = new ResourceRequest( r, r->units() );
+        long s = rr->allocationSuitability( time, e, ns, backward );
+        if ( s == 0 ) {
+            // not suitable at all
+            delete rr;
+        } else {
+            map.insertMulti( s, rr );
+        }
+    }
+    num = qMin( map.count(), num );
+    for ( --num; num >= 0; --num ) {
+        ResourceRequest *r = map.take( map.keys().last() );
+        r->setAllocatedDynaically( true );
+        addResourceRequest( r );
+    }
+    qDeleteAll( map ); // delete the unused
+}
+
 /////////
-ResourceRequestCollection::ResourceRequestCollection(Task &task)
+ResourceRequestCollection::ResourceRequestCollection(Task *task)
     : m_task(task) {
     //kDebug()<<this<<(void*)(&task);
 }
@@ -1454,7 +1523,7 @@ void ResourceRequestCollection::addRequest( ResourceGroupRequest *request )
     foreach ( ResourceGroupRequest *r, m_requests ) {
         if ( r->group() == request->group() ) {
             kError()<<"Request to this group already exists";
-            kError()<<"Task:"<<m_task.name()<<"Group:"<<request->group()->name();
+            kError()<<"Task:"<<m_task->name()<<"Group:"<<request->group()->name();
             Q_ASSERT( r->group() != request->group() );
         }
     }
@@ -1463,7 +1532,7 @@ void ResourceRequestCollection::addRequest( ResourceGroupRequest *request )
     changed();
 }
 
-ResourceGroupRequest *ResourceRequestCollection::find(ResourceGroup *group) const {
+ResourceGroupRequest *ResourceRequestCollection::find(const ResourceGroup *group) const {
     foreach (ResourceGroupRequest *r, m_requests) {
         if (r->group() == group)
             return r; // we assume only one request to the same group
@@ -1471,8 +1540,7 @@ ResourceGroupRequest *ResourceRequestCollection::find(ResourceGroup *group) cons
     return 0;
 }
 
-
-ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
+ResourceRequest *ResourceRequestCollection::find(const Resource *resource) const {
     ResourceRequest *req = 0;
     QListIterator<ResourceGroupRequest*> it(m_requests);
     while (req == 0 && it.hasNext()) {
@@ -1536,15 +1604,15 @@ void ResourceRequestCollection::save(QDomElement &element) const {
     }
 }
 
-int ResourceRequestCollection::units() const {
-    //kDebug();
-    int units = 0;
-    foreach (ResourceGroupRequest *r, m_requests) {
-        units += r->units();
-        //kDebug()<<" Group:"<<r->group()->name()<<" now="<<units;
-    }
-    return units;
-}
+// int ResourceRequestCollection::units() const {
+//     //kDebug();
+//     int units = 0;
+//     foreach (ResourceGroupRequest *r, m_requests) {
+//         units += r->units();
+//         //kDebug()<<" Group:"<<r->group()->name()<<" now="<<units;
+//     }
+//     return units;
+// }
 
 int ResourceRequestCollection::workUnits() const {
     //kDebug();
@@ -1567,13 +1635,13 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
     }
     Duration dur;
     int units = workUnits();
-    if (units == 0)
-        units = 100; //hmmmm
     foreach (ResourceGroupRequest *r, m_requests) {
         if (r->isEmpty())
             continue;
         if (r->group()->type() == ResourceGroup::Type_Work) {
-            Duration d = r->duration(time, (effort*r->workUnits())/units, ns, backward);
+            Duration e = ( effort * r->workUnits() ) / units;
+            r->allocateDynamicRequests( time, e, ns, backward );
+            Duration d = r->duration(time, e, ns, backward);
             if (d > dur)
                 dur = d;
         } else if (r->group()->type() == ResourceGroup::Type_Material) {
@@ -1585,7 +1653,7 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
     return dur;
 }
 
-DateTime ResourceRequestCollection::workTimeAfter(const DateTime &time) {
+DateTime ResourceRequestCollection::workTimeAfter(const DateTime &time) const {
     DateTime start;
     foreach (ResourceGroupRequest *r, m_requests) {
         DateTime t = r->workTimeAfter( time );
@@ -1598,7 +1666,7 @@ DateTime ResourceRequestCollection::workTimeAfter(const DateTime &time) {
     return start;
 }
 
-DateTime ResourceRequestCollection::workTimeBefore(const DateTime &time) {
+DateTime ResourceRequestCollection::workTimeBefore(const DateTime &time) const {
     DateTime end;
     foreach (ResourceGroupRequest *r, m_requests) {
         DateTime t = r->workTimeBefore( time );
@@ -1660,8 +1728,17 @@ bool ResourceRequestCollection::isEmpty() const {
 
 void ResourceRequestCollection::changed()
 {
-    //kDebug()<<(void*)(&m_task);
-    m_task.changed();
+    //kDebug()<<m_task;
+    if ( m_task ) {
+        m_task->changed();
+    }
+}
+
+void ResourceRequestCollection::resetDynamicAllocations()
+{
+    foreach ( ResourceGroupRequest *g, m_requests ) {
+        g->resetDynamicAllocations();
+    }
 }
 
 #ifndef NDEBUG

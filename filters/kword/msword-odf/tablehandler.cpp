@@ -3,21 +3,21 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the Library GNU General Public
    version 2 of the License, or (at your option) version 3 or,
    at the discretion of KDE e.V (which shall act as a proxy as in
    section 14 of the GPLv3), any later version..
 
-   This program is distributed in the hope that it will be useful,
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; see the file COPYING.  If not, write to
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "tablehandler.h"
@@ -99,8 +99,9 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     //    const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
     //    kDebug(30513) << brc.toString().c_str();
     //}
+    //get row border style, used in tableCellStart()
     const wvWare::Word97::BRC& brc = tap->rgbrcTable[0];
-    borderStyle = Conversion::setBorderAttributes(brc);
+    m_borderStyle = Conversion::setBorderAttributes(brc);
 
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
@@ -187,8 +188,8 @@ void KWordTableHandler::tableCellStart()
     // Put a filler in for cells that are part of a merged cell
     // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
     if ( tc.fVertMerge && !tc.fVertRestart ) {
-	m_bodyWriter->startElement("table:covered-table-cell");
-	m_cellOpen = true;
+        m_bodyWriter->startElement("table:covered-table-cell");
+        m_cellOpen = true;
         return;
     }
 
@@ -208,7 +209,7 @@ void KWordTableHandler::tableCellStart()
     kDebug(30513) << "left edge = " << left << ", right edge = " << right;
 
     kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = "
-	<< rightCellNumber;
+        << rightCellNumber;
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
 
@@ -239,9 +240,9 @@ void KWordTableHandler::tableCellStart()
 
     KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
     //set borders for the four edges of the cell
-    //use the row border style
+    //m_borderStyle is the row border style, set in tableRowStart
     if(brcTop.brcType == 0) {
-        cellStyle.addProperty("fo:border-top", borderStyle);
+        cellStyle.addProperty("fo:border-top", m_borderStyle);
     }
     //no border
     else if(brcTop.brcType == 255) {
@@ -253,7 +254,7 @@ void KWordTableHandler::tableCellStart()
     }
     //bottom
     if(brcBottom.brcType == 0) {
-        cellStyle.addProperty("fo:border-bottom", borderStyle);
+        cellStyle.addProperty("fo:border-bottom", m_borderStyle);
     }
     else if(brcBottom.brcType == 255) {
         cellStyle.addProperty("fo:border-bottom", "thin none #000000");
@@ -263,7 +264,7 @@ void KWordTableHandler::tableCellStart()
     }
     //left
     if(brcLeft.brcType == 0) {
-        cellStyle.addProperty("fo:border-left", borderStyle);
+        cellStyle.addProperty("fo:border-left", m_borderStyle);
     }
     else if(brcLeft.brcType == 255) {
         cellStyle.addProperty("fo:border-left", "thin none #000000");
@@ -273,7 +274,7 @@ void KWordTableHandler::tableCellStart()
     }
     //right
     if(brcRight.brcType == 0) {
-        cellStyle.addProperty("fo:border-right", borderStyle);
+        cellStyle.addProperty("fo:border-right", m_borderStyle);
     }
     else if(brcRight.brcType == 255) {
         cellStyle.addProperty("fo:border-right", "thin none #000000");
@@ -281,7 +282,7 @@ void KWordTableHandler::tableCellStart()
     else {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
     }
-    
+
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");
@@ -298,18 +299,18 @@ void KWordTableHandler::tableCellStart()
     }
 
     QString cellStyleName = m_mainStyles->lookup(cellStyle, QString("cell"));
-    
+
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
     //start table cell in content
     m_bodyWriter->startElement("table:table-cell");
     m_cellOpen = true;
     m_bodyWriter->addAttribute("table:style-name", cellStyleName.toUtf8());
     if(rowSpan > 1) {
-	m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
+        m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
     }
     if(colSpan > 1) {
-	m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
-	m_colSpan = colSpan;
+        m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
+        m_colSpan = colSpan;
     }
     else {
         //if we don't set it to colSpan, we still need to (re)set it to a known value
@@ -323,14 +324,14 @@ void KWordTableHandler::tableCellEnd()
     //end table cell in content
     // but only if we actually opened a cell
     if(m_cellOpen) {
-	m_bodyWriter->endElement();//table:table-cell
-	m_cellOpen = false;
+        m_bodyWriter->endElement();//table:table-cell
+        m_cellOpen = false;
     }
     if(m_colSpan > 1) {
-	for(int i = 1; i < m_colSpan; i++) {
-	    m_bodyWriter->startElement("table:covered-table-cell");
-	    m_bodyWriter->endElement();
-	}
+        for(int i = 1; i < m_colSpan; i++) {
+            m_bodyWriter->startElement("table:covered-table-cell");
+            m_bodyWriter->endElement();
+        }
     }
     m_colSpan = 1;
 }
@@ -349,12 +350,12 @@ void KWord::Table::cacheCellEdge(int cellEdge)
             kDebug(30513) << cellEdge <<" -> found";
             return;
         }
-	//insert it in the right place if necessary
-	if(m_cellEdges[i] > cellEdge) {
-	    m_cellEdges.insert(i, cellEdge);
-	    kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
-	    return;
-	}
+        //insert it in the right place if necessary
+        if(m_cellEdges[i] > cellEdge) {
+            m_cellEdges.insert(i, cellEdge);
+            kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
+            return;
+        }
     }
     //add it at the end if this edge is larger than all the rest
     m_cellEdges.append(cellEdge);

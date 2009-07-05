@@ -61,7 +61,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
  
     /**
      * Insert a new child at the cursor position
@@ -69,7 +69,7 @@ public:
      * @param child A BasicElement to insert
      */
     void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
+    
     /**
      * Remove a child element
      * @param element The BasicElement to remove
@@ -81,8 +81,23 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    bool acceptCursor( const FormulaCursor* cursor );
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
+    /// inherited from BasicElement
+    virtual int length() const;
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual QLineF cursorLine ( int position ) const;
+    
     /// @return The element's ElementType
     ElementType elementType() const;
 

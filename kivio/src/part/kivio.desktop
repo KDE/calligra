@@ -8,7 +8,6 @@ Name[x-test]=xxKivioxx
 Name[zh_TW]=流程圖_Kivio
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
-GenericName[bg]=Диаграми и схеми
 GenericName[ca]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů
 GenericName[cy]=Golygu Siartiau Llif & Diagram

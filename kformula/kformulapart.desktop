@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=KOffice Formula Component
-Name[bg]=Компонент за формули в KOffice
 Name[ca]=Component de fórmules del KOffice
 Name[cy]=Cydran Fformiwla KOffice 
 Name[da]=KOffice formelkomponent
@@ -57,7 +56,6 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/x-kformula,application/vnd.oasis.opendocument.formula-template,text/mathml
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder
-GenericName[bg]=Редактор на формули
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
 GenericName[cs]=Editor vzorců

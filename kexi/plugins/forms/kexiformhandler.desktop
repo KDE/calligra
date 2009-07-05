@@ -3,7 +3,6 @@ Type=Service
 X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Forms
-GenericName[bg]=Формуляри
 GenericName[br]=Paperennoù-reol
 GenericName[ca]=Formularis
 GenericName[cs]=Formuláře
@@ -57,7 +56,6 @@ GenericName[x-test]=xxFormsxx
 GenericName[zh_CN]=表单
 GenericName[zh_TW]=表單
 Name=Forms
-Name[bg]=Формуляри
 Name[br]=Paperennoù-reol
 Name[ca]=Formularis
 Name[cs]=Formuláře

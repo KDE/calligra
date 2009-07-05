@@ -32,7 +32,7 @@
 #include <KAction>
 #include <QPainter>
 #include "KoFormulaTool.moc"
-
+#include <kdebug.h>
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaCursor( 0 )
@@ -75,13 +75,17 @@ void KoFormulaTool::deactivate()
 
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    painter.setMatrix( painter.matrix() *
-                       m_formulaShape->absoluteTransformation( &converter ) );
-    qreal zoomX, zoomY;              // apply view conversions for painting
-    converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
+    painter.save();
+    // transform painter from view coordinate system to document coordinate system
+    // remember that matrix multiplication is not commutative so painter.matrix
+    // has to come last
+    painter.setMatrix( m_formulaShape->absoluteTransformation( &converter ) * painter.matrix());
+    KoShape::applyConversion(painter,converter);
+    //TODO: find out, how to adjust the painter, so that that this also works in 
+    // rotated mode
     
     m_formulaCursor->paint( painter );
+    painter.restore();
 }
 
 void KoFormulaTool::repaintCursor()
@@ -91,14 +95,18 @@ void KoFormulaTool::repaintCursor()
 
 void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 {
-    // Check if the event is valid means inside the shape
-    if( !m_formulaShape->boundingRect().contains( event->point ) )
+    // Check if the event is valid means inside the shape 
+    if(!m_formulaShape->boundingRect().contains( event->point )) {
         return;
-
+    }
     // transform the global coordinates into shape coordinates
     QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
-
-    // set the cursor to element the user clicked to
+    if (event->modifiers() & Qt::ShiftModifier) {
+        m_formulaCursor->setSelecting(true);
+    } else {
+        m_formulaCursor->setSelecting(false);
+    }
+    // set the cursor to the element the user clicked on
     m_formulaCursor->setCursorTo( p );
 
     repaintCursor();
@@ -107,20 +115,38 @@ void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 
 void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
-
-    // TODO select whole element
+    if( !m_formulaShape->boundingRect().contains( event->point ) ) {
+        return;
+    }
+    // transform the global coordinates into shape coordinates
+    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
+    
+    //clear the current selection
+    m_formulaCursor->setSelecting(false);
+    //place the cursor
+    m_formulaCursor->setCursorTo(p);
+    m_formulaCursor->selectElement(m_formulaCursor->currentElement());
+    repaintCursor();
+    event->accept();
 }
 
 void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
-
-    if( !m_formulaCursor->hasSelection() )
-        return;
-
+//     Q_UNUSED( event )
+    if (!(event->buttons() & Qt::LeftButton)) {
+	return;
+    }
+    // Check if the event is valid means inside the shape
+    if( !m_formulaShape->boundingRect().contains( event->point ) )
+        kDebug() << "Getting most probably invalid mouseMoveEvent";
+    
+    // transform the global coordinates into shape coordinates
+    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
     //TODO Implement drag and drop of elements
-    //TODO Implement selecting via mouse
+    m_formulaCursor->setSelecting(true);
+    m_formulaCursor->setCursorTo( p );
+    repaintCursor();
+    event->accept();
 }
 
 void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -134,45 +160,60 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
     if( !m_formulaCursor )
         return;
-
-    m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
-
+    
+    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || 
+        event->key() == Qt::Key_Up || event->key() == Qt::Key_Down ||
+        event->key() == Qt::Key_Home || event->key() == Qt::Key_End ) {
+        if (event->modifiers() & Qt::ShiftModifier) {
+            m_formulaCursor->setSelecting(true);
+        } else {
+            m_formulaCursor->setSelecting(false);
+        }
+    }
     switch( event->key() )                           // map key to movement or action
     {
         case Qt::Key_Backspace:
-            remove( true );
+            m_formulaShape->update();
+            m_formulaCursor->remove( true );;
+            m_formulaShape->updateLayout();
+            m_formulaShape->update();
             break;
         case Qt::Key_Delete:
-	    remove( false );
+            m_formulaShape->update();
+            m_formulaCursor->remove( false );;
+            m_formulaShape->updateLayout();
+            m_formulaShape->update();
             break;
         case Qt::Key_Left:
-	    m_formulaCursor->move( MoveLeft );
+            m_formulaCursor->move( MoveLeft );
             break;
         case Qt::Key_Up:
             m_formulaCursor->move( MoveUp );
             break;
         case Qt::Key_Right:
-	    m_formulaCursor->move( MoveRight );
+            m_formulaCursor->move( MoveRight );
             break;
         case Qt::Key_Down:
-	    m_formulaCursor->move( MoveDown );
+            m_formulaCursor->move( MoveDown );
             break;
         case Qt::Key_End:
-	    m_formulaCursor->moveEnd();
+            m_formulaCursor->moveEnd();
             break;
         case Qt::Key_Home:
-	    m_formulaCursor->moveHome();
+            m_formulaCursor->moveHome();
             break;
         default:
             if( event->text().length() != 0 ) {
+                m_formulaShape->update();
                 m_formulaCursor->insertText( event->text() );
+                m_formulaShape->updateLayout();
                 m_formulaShape->update();
             }
     }
     repaintCursor();
     event->accept();
 }
-
+ 
 void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 {
     event->accept();
@@ -180,20 +221,18 @@ void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 
 void KoFormulaTool::remove( bool backSpace )
 {
-    Q_UNUSED( backSpace )
-/*
-    if( m_formulaCursor->hasSelection() )  // remove the selection
-    {
-	 // TODO set the cursor according to backSpace
-//        m_formulaCursor->setCursorTo( );
-    }
-    else         */                         // remove only the current element
-        m_formulaCursor->remove( backSpace );
+    m_formulaShape->update();
+    m_formulaCursor->remove( backSpace );
+    m_formulaShape->updateLayout();
+    m_formulaShape->update();
 }
 
 void KoFormulaTool::insert( QAction* action )
 {
+    m_formulaShape->update();
     m_formulaCursor->insertData( action->data().toString() );
+    m_formulaShape->updateLayout();
+    m_formulaShape->update();
 }
 
 QWidget* KoFormulaTool::createOptionWidget()
@@ -207,6 +246,16 @@ KoFormulaShape* KoFormulaTool::shape()
 {
     return m_formulaShape;
 }
+
+void KoFormulaTool::resetFormulaCursor() {
+    m_formulaCursor->setCurrentElement(m_formulaShape->formulaElement());
+    m_formulaCursor->setPosition(0);
+    //we don't know if this cursor is allowed there, so we move it right
+    if ( !m_formulaCursor->currentElement()->acceptCursor(m_formulaCursor) ) {
+	m_formulaCursor->move(MoveRight);
+    }
+}
+
 
 void KoFormulaTool::setupActions()
 {

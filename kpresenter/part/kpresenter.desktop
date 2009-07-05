@@ -14,6 +14,7 @@ Name[x-test]=xxKPresenterxx
 Name[zh_TW]=簡報_KPresenter
 Exec=kpresenter %u
 GenericName=Presentation
+GenericName[bg]=Екранни презентации
 GenericName[ca]=Presentació
 GenericName[cs]=Prezentace
 GenericName[da]=Præsentation

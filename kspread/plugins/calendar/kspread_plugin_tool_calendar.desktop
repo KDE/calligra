@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calendar Tool
+Name[bg]=Инструмент календар
 Name[ca]=Eina de calendari
 Name[da]=Kalenderværktøj
 Name[de]=Kalender-Werkzeug
@@ -26,6 +27,7 @@ Name[x-test]=xxCalendar Toolxx
 Name[zh_CN]=日历工具
 Name[zh_TW]=行事曆工具
 Comment=Inserts a calendar into a cell range.
+Comment[bg]=Вмъкване на календар в набор от клетки
 Comment[ca]=Insereix un calendari a un interval de cel·la.
 Comment[da]=Indsætter en kalender i et celleområde.
 Comment[de]=Fügt einen Kalender in einen Zellbereich ein.

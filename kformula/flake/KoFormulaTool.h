@@ -62,7 +62,11 @@ public:
 
     /// @return The currently manipulated KoFormulaShape
     KoFormulaShape* shape();
+    
+    /// Reset the cursor
+    void resetFormulaCursor();
 
+    
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
     void activate( bool temporary=false );
@@ -72,7 +76,7 @@ public slots:
 
     /// Insert the element tied to the given @p action
     void insert( QAction* action );
-
+ 
 protected:
     /// Create default option widget
     QWidget* createOptionWidget();

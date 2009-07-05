@@ -4,7 +4,6 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Scripts
 GenericName[be]=Сцэнары
-GenericName[bg]=Скриптове
 GenericName[br]=Urzhiaouegoù
 GenericName[ca]=Seqüències
 GenericName[cs]=Skripty
@@ -56,7 +55,6 @@ GenericName[zh_CN]=脚本
 GenericName[zh_TW]=命令稿
 Name=Scripts
 Name[be]=Сцэнары
-Name[bg]=Скриптове
 Name[br]=Urzhiaouegoù
 Name[ca]=Seqüències
 Name[cs]=Skripty

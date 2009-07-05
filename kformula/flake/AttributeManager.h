@@ -88,7 +88,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QColor colorOf( const QString& attribute, BasicElement* element ) const;
+    QColor colorOf( const QString& attribute, const BasicElement* element  ) const;
 
     /**
      * Obtain the @p attribute's value as boolean
@@ -121,7 +121,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QString stringOf( const QString& attribute, BasicElement* element ) const;
+    QString stringOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
      * Obtain the @p attribute's value as align
@@ -129,7 +129,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    Align alignOf( const QString& attribute, BasicElement* element ) const;
+    Align alignOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
      * Obtain the @p attribute's value as list of aligns
@@ -137,7 +137,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QList<Align> alignListOf( const QString& attribute, BasicElement* element ) const;
+    QList<Align> alignListOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
      * Obtain the @p attribute's value as Qt::PenStyle
@@ -145,7 +145,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    Qt::PenStyle penStyleOf( const QString& attribute, BasicElement* element ) const;
+    Qt::PenStyle penStyleOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
      * Obtain the @p attribute's value as list of Qt::PenStyles
@@ -154,7 +154,7 @@ public:
      * @return The valuefont  that was looked up
      */
     QList<Qt::PenStyle> penStyleListOf( const QString& attribute,
-                                        BasicElement* element ) const;
+                                        const BasicElement* element ) const;
 
     /**
      * Obtain the scaling level for @p parent's child element at index @p index
@@ -178,14 +178,14 @@ public:
      * @param element The element whos children are used
      * @return The maximal height
      */
-    double maxHeightOfChildren( BasicElement* element ) const;
+    double maxHeightOfChildren( const BasicElement* element ) const;
 
     /**
      * Determine the maximal height of an given element's child elements
      * @param element The element whos children are used
      * @return The maximal height
      */
-    double maxWidthOfChildren( BasicElement* element ) const;
+    double maxWidthOfChildren( const BasicElement* element ) const;
 
     /// @return The Align value that was passed as QString @p value
     Align parseAlign( const QString& value ) const;
@@ -209,7 +209,7 @@ public:
     QString findValue( const QString& attribute, const BasicElement* element ) const;
 
     /// Convert a math space string, such as "thinmathspace", to a size in pixels
-    double parseMathSpace( const QString& value, BasicElement *element ) const;
+    double parseMathSpace( const QString& value, const BasicElement *element ) const;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;

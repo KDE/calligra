@@ -648,6 +648,32 @@ private:
 
 };
 
+class KPLATOKERNEL_EXPORT ModifyResourceRequestUnitsCmd : public NamedCommand
+{
+public:
+    ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ResourceRequest *m_request;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class KPLATOKERNEL_EXPORT ModifyResourceGroupRequestUnitsCmd : public NamedCommand
+{
+public:
+    ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ResourceGroupRequest *m_request;
+    int m_oldvalue, m_newvalue;
+
+};
+
 class KPLATOKERNEL_EXPORT ModifyEstimateCmd : public NamedCommand
 {
 public:

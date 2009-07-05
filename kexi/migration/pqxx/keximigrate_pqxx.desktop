@@ -6,7 +6,6 @@ Name[ne]=पोस्टग्रे SQL
 Name[ta]=போஸ்ட்கிரெஸ்கியூஎல்
 Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
-Comment[bg]=Драйвер за мигриране от PostgreSQL към Kexi
 Comment[ca]=Controlador de migració de PostgreSQL per al Kexi
 Comment[cy]=Gyrrydd Mudo PostgreSQL ar gyfer Kexi
 Comment[da]=PostgreSQL Migrationsdriver for Kexi

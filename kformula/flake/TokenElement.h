@@ -51,7 +51,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Render the element to the given QPainter
@@ -67,36 +67,50 @@ public:
     void layout( const AttributeManager* am );
 
     /**
-     * Insert new content that the user typed at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
+     * Insert @p text at @p position
+     * @return true, if the insert was succesfull
      */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
-
-    /**
-     * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
-     */ 
-    void removeChild( FormulaCursor* cursor, BasicElement* element );
+    virtual bool insertText( int position, const QString &text );
+    
+    ///inherited from BasicElement
+    virtual bool insertChild ( int position, BasicElement* child );
+    
+    ///remove the letter after @p position and return a pointer to the glyph if it was one.
+    virtual QList<GlyphElement* > removeText(int position, int length = 1);
+    
 
     /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    bool acceptCursor( const FormulaCursor* cursor );
+    
+    ///inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    
     /**
      * Obtain the x position of the cursor inside this token element
-     * @oaram cursor The FormulaCursor who is supposed to be used for calculation
+     * @param position The cursor position in the element
      * @return The offset from the left origin
      */
-    double cursorOffset( const FormulaCursor* cursor ) const;
+    double cursorOffset( const int position) const;
 
     /// Process @p raw and render it to @p path
-    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) = 0;
-
+    virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) const = 0;
+    
+    ///inherited from BasicElement
+    virtual int length() const;
+    
+    ///inherited from BasicElement
+    virtual QLineF cursorLine(int position) const;
+    
+    ///inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    ///set m_rawString to @p text and empty the glyph list
+    void setText(const QString &text);
+    
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );
@@ -114,17 +128,22 @@ protected:
 
     /// Size to stretch from
     QSizeF m_originalSize;
-
-private:
+    
     /// The raw string like it is read and written from MathML
     QString m_rawString;
-
+    
+private:
     /// The cache for the chosen font
     QFont m_font;
 
     /// A list of pointers to embedded GlyphElements
     QList<GlyphElement*> m_glyphs;
-
+    
+    /// A list of offsets of the letters
+    /// They represent the position of the cursor right of 
+    /// the index, starting with 0.0
+    QList<double> m_offsets;
+    
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;
     /// x offset for painting the path

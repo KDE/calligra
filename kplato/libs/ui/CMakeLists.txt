@@ -75,6 +75,8 @@ set(kplatoui_LIB_SRCS
     kptchartview.cpp
     kptplotwidget.cpp
 
+    kptresourceallocationeditor.cpp
+
     kptrecalculatedialog.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
@@ -97,7 +99,6 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptwbsdefinitionpanelbase.ui
     kptaccountsviewconfigurepanelbase.ui
     kptintervaleditbase.ui
-    kpttaskresourcespanelbase.ui
     kpttaskcostpanelbase.ui
     kpttasknotespanelbase.ui
     kptsummarytaskgeneralpanelbase.ui

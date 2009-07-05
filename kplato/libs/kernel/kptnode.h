@@ -29,6 +29,7 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 #include "kptdocuments.h"
+#include "kptresource.h"
 
 #include <QObject>
 #include <QHash>
@@ -245,7 +246,7 @@ public:
     virtual DateTime mustStartOn() const { return m_constraintStartTime; }
     virtual DateTime mustFinishOn() const { return m_constraintEndTime; }
 
-    virtual ResourceGroupRequest *resourceGroupRequest(ResourceGroup * /*group*/) const { return 0; }
+    virtual ResourceGroupRequest *resourceGroupRequest(const ResourceGroup * /*group*/) const { return 0; }
     virtual QStringList requestNameList() const { return QStringList(); }
     virtual bool containsRequest( const QString &/*identity*/ ) const { return false; }
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const { return 0; }
@@ -485,7 +486,8 @@ public:
     /// Set parent schedule recursivly
     virtual void setParentSchedule(Schedule *sch);
     
-    virtual ResourceRequestCollection *requests() const { return 0; }
+    const ResourceRequestCollection &requests() const { return m_requests; }
+    ResourceRequestCollection &requests() { return m_requests; }
     
     virtual uint state( long ) const { return State_None; }
     
@@ -634,6 +636,8 @@ protected:
     
     Documents m_documents;
     
+    ResourceRequestCollection m_requests;
+
 private:
     void init();
         

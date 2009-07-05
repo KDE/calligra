@@ -105,21 +105,9 @@ void UnderOverElement::layout( const AttributeManager* am )
     setWidth( largestWidth );
 }
 
-BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
+bool UnderOverElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
-}
-
-void UnderOverElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{
-    if( cursor->currentElement() == m_baseElement )
-        m_baseElement = child;
-    else if( cursor->currentElement() == m_underElement )
-        m_underElement = child;
-    else if( cursor->currentElement() == m_overElement )
-        m_overElement = child;
-//  else
-//      TODO make some error
+    return true;
 }
 
 QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const

@@ -4,7 +4,6 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Queries
 GenericName[be]=Запыты
-GenericName[bg]=Заявки
 GenericName[ca]=Consultes
 GenericName[cs]=Dotazy
 GenericName[cy]=Ymholiadau
@@ -56,7 +55,6 @@ GenericName[zh_CN]=查询
 GenericName[zh_TW]=查詢
 Name=Queries
 Name[be]=Запыты
-Name[bg]=Заявки
 Name[ca]=Consultes
 Name[cs]=Dotazy
 Name[cy]=Ymholiadau

@@ -3,7 +3,6 @@ Type=Service
 ServiceTypes=Kexi/Handler
 GenericName=Reports
 GenericName[be]=Справаздачы
-GenericName[bg]=Отчети
 GenericName[ca]=Informes
 GenericName[cs]=Sestavy
 GenericName[cy]=Adroddiadau

@@ -48,8 +48,14 @@ public:
     ElementType elementType() const;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path );
-
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    
+    /// Inherited from TokenElement
+    virtual bool insertText ( int position, const QString& text );
+    
+    /// Inherited from TokenElement
+    virtual bool readMathMLContent ( const KoXmlElement& parent );
+    
     /** Reimplemented from BaseElement
      *  Sets the height() and baseLine() of the element based on the parent size
      */

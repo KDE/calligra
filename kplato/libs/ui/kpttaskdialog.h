@@ -37,6 +37,7 @@ class TaskCostPanel;
 class Task;
 class StandardWorktime;
 class MacroCommand;
+class RequestResourcesPanel;
 
 /**
  * The dialog that shows and allows you to alter any task.

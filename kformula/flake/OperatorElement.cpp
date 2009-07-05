@@ -31,10 +31,9 @@ QPainterPath OperatorElement::renderForFence( const QString& raw, Form form )
     return QPainterPath();
 }
 
-QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path )
+QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
     AttributeManager manager;
-    m_dict.queryOperator( raw, determineOperatorForm() );
 
     qreal rSpace = manager.parseMathSpace(m_dict.rSpace(), this);
     qreal lSpace = manager.parseMathSpace(m_dict.lSpace(), this);
@@ -129,4 +128,20 @@ Form OperatorElement::parseForm( const QString& value ) const
 ElementType OperatorElement::elementType() const
 {
     return Operator;
+}
+
+
+bool OperatorElement::insertText ( int position, const QString& text )
+{   
+    if (m_rawString.isEmpty()) {
+        m_dict.queryOperator( text, determineOperatorForm() );
+    }
+    return TokenElement::insertText ( position, text );
+}
+
+bool OperatorElement::readMathMLContent ( const KoXmlElement& parent )
+{
+    bool tmp = TokenElement::readMathMLContent ( parent );
+    m_dict.queryOperator( m_rawString, determineOperatorForm() );
+    return tmp;
 }

@@ -39,10 +39,11 @@ public:
     ElementType elementType() const;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path );
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
 
     /// get width of character, for layouting
     double getWidth(const AttributeManager *am);
+
 
 private:
     bool readMathMLAttributes( const KoXmlElement& element );

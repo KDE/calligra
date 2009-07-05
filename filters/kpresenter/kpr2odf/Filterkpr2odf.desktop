@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Filter to export KPR files to ODP
+Name[bg]=Филтър за експортиране на файлове от KPR в ODP
 Name[ca]=Filtre per exportar fitxers KPR a ODP
 Name[da]=Filter til eksport af KPR-filer til ODP
 Name[de]=Filter zum Export von KPR-Dateien nach ODP

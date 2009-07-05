@@ -26,7 +26,6 @@
 #include <QFontMetricsF>
 #include <QColor>
 #include <kdebug.h>
-
 // Copied from koffice KoUnit.h
 
 // 1 inch ^= 72 pt
@@ -63,21 +62,26 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
 {
     // check if the current element has a value assigned
     QString value = element->attribute( attribute );
-    if( !value.isEmpty() )
+    if( !value.isEmpty() ) {
+//         kDebug()<<"checking for attribute "<<attribute <<" returning (s)"<<value;
         return value;
-
+    }
     // if not, check if any of the parent elements inherits a value
     BasicElement* tmpParent = element->parentElement();
     while( tmpParent )
     {
         value = tmpParent->inheritsAttribute( attribute );
-        if( !value.isEmpty() )
+        if( !value.isEmpty() ) {
+//             kDebug()<<"checking for attribute "<<attribute <<" returning (p)"<<value;
             return value;
-        else
+        }
+        else {
             tmpParent = tmpParent->parentElement();
+        }
     }
-
+    
     // if not, return the default value of the attribute
+//     kDebug()<<"checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
     return element->attributesDefaultValue( attribute );
 }
 
@@ -105,12 +109,12 @@ QList<double> AttributeManager::doubleListOf( const QString& attribute,
     return doubleList;
 }
 
-QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
+QString AttributeManager::stringOf( const QString& attribute, const BasicElement* element  ) const
 {
     return findValue( attribute, element );
 }
 
-QColor AttributeManager::colorOf( const QString& attribute, BasicElement* element ) const
+QColor AttributeManager::colorOf( const QString& attribute, const BasicElement* element  ) const
 {
     QString tmpColor = findValue( attribute, element );
     if( attribute == "mathbackground" && tmpColor.isEmpty() )
@@ -119,13 +123,13 @@ QColor AttributeManager::colorOf( const QString& attribute, BasicElement* elemen
     return QColor( tmpColor );
 }
 
-Align AttributeManager::alignOf( const QString& attribute, BasicElement* element ) const
+Align AttributeManager::alignOf( const QString& attribute, const BasicElement* element  ) const
 {
     return parseAlign( findValue( attribute, element ) );
 }
 
 QList<Align> AttributeManager::alignListOf( const QString& attribute,
-                                            BasicElement* element ) const
+                                            const BasicElement* element  ) const
 {
     QList<Align> alignList;
     QStringList tmpList = findValue( attribute, element ).split( ' ' );
@@ -137,13 +141,13 @@ QList<Align> AttributeManager::alignListOf( const QString& attribute,
 }
 
 Qt::PenStyle AttributeManager::penStyleOf( const QString& attribute,
-                                           BasicElement* element ) const
+                                           const BasicElement* element  ) const
 {
     return parsePenStyle( findValue( attribute, element ) );
 }
 
 QList<Qt::PenStyle> AttributeManager::penStyleListOf( const QString& attribute,
-                                                      BasicElement* element ) const
+                                                      const BasicElement* element  ) const
 {
     QList<Qt::PenStyle> penStyleList;
     QStringList tmpList = findValue( attribute, element ).split( ' ' );
@@ -217,7 +221,7 @@ double AttributeManager::lineThickness( const BasicElement* element ) const
     return fm.height() * 0.06 ;
 }
 
-double AttributeManager::layoutSpacing( const BasicElement* element ) const
+double AttributeManager::layoutSpacing( const BasicElement* element  ) const
 {
     QFontMetricsF fm(font(element));
 //    return fm.height() * 0.166667 ;
@@ -355,7 +359,7 @@ void AttributeManager::setViewConverter( KoViewConverter* converter )
     m_viewConverter = converter;
 }
 
-double AttributeManager::maxHeightOfChildren( BasicElement* element ) const
+double AttributeManager::maxHeightOfChildren( const BasicElement* element ) const
 {
     double maxHeight = 0.0;
     foreach( BasicElement* tmp, element->childElements() )
@@ -364,7 +368,7 @@ double AttributeManager::maxHeightOfChildren( BasicElement* element ) const
     return maxHeight; 
 }
 
-double AttributeManager::maxWidthOfChildren( BasicElement* element ) const
+double AttributeManager::maxWidthOfChildren( const BasicElement* element  ) const
 {
     double maxWidth = 0.0;
     foreach( BasicElement* tmp, element->childElements() )
@@ -372,7 +376,7 @@ double AttributeManager::maxWidthOfChildren( BasicElement* element ) const
 
     return maxWidth; 
 }
-double AttributeManager::parseMathSpace( const QString& value, BasicElement *element )  const
+double AttributeManager::parseMathSpace( const QString& value, const BasicElement * element )  const
 {
     QFontMetricsF fm(font(element));
     qreal conversionEmToPixels = fm.xHeight();

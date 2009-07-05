@@ -22,9 +22,11 @@
 #include "TableElement.h"
 #include "AttributeManager.h"
 #include "TableRowElement.h"
+#include "FormulaCursor.h"
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <QList>
+#include <kdebug.h>
 
 TableElement::TableElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -37,24 +39,30 @@ TableElement::~TableElement()
 void TableElement::paint( QPainter& painter, AttributeManager* am )
 {
     // draw frame
-    if( m_framePenStyle != Qt::NoPen ) {
-        painter.setPen( QPen( m_framePenStyle ) );
-        painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
-    }
-
+    //if( m_framePenStyle != Qt::NoPen ) {
+    //    painter.setPen( QPen( m_framePenStyle ) );
+    // painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    //}
+    painter.save();
+    QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
+    QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
+    kDebug()<<frameSpacing;
+    painter.setPen(QPen(Qt::NoPen));//debugging 
+    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines
-    double offset = 0.0;
-    for( int i = 0; i < m_rowHeights.count(); i++ ) {
+    double offset = frameSpacing[1];
+    for( int i = 0; i < m_rowHeights.count()-1; i++ ) {
         offset += m_rowHeights[ i ];
         painter.drawLine( QPointF( 0.0, offset ), QPointF( width(), offset ) );     
     }
 
     // draw columnlines
-    offset = 0.0;
-    for( int i = 0; i < m_colWidths.count(); i++ ) {
+    offset = frameSpacing[0];
+    for( int i = 0; i < m_colWidths.count()-1; i++ ) {
         offset += m_colWidths[ i ];
         painter.drawLine( QPointF( offset, 0.0 ), QPointF( offset, height() ) );
     }
+    painter.restore();
 }
 
 void TableElement::layout( const AttributeManager* am )
@@ -83,6 +91,12 @@ void TableElement::layout( const AttributeManager* am )
     setHeight( tmpY );
     setBaseLine( height() / 2 );
 }
+
+ElementType TableElement::elementType() const 
+{
+    return Table;
+}
+
 
 void TableElement::determineDimensions()
 {
@@ -120,7 +134,7 @@ void TableElement::determineDimensions()
 
 double TableElement::columnWidth( int column )
 {
-    if( m_colWidths.isEmpty() )
+    //if( m_colWidths.isEmpty() )
         determineDimensions();
 
     return m_colWidths[ column ];
@@ -128,13 +142,13 @@ double TableElement::columnWidth( int column )
 
 double TableElement::rowHeight( TableRowElement* row )
 {
-    if( m_rowHeights.isEmpty() )
+    //if( m_rowHeights.isEmpty() )
         determineDimensions();
 
     return m_rowHeights[ m_rows.indexOf( row ) ];
 }
 
-const QList<BasicElement*> TableElement::childElements()
+const QList<BasicElement*> TableElement::childElements() const
 {
     QList<BasicElement*> tmp;
     foreach( TableRowElement* tmpRow, m_rows )
@@ -142,10 +156,122 @@ const QList<BasicElement*> TableElement::childElements()
     return tmp;
 }
 
-BasicElement* TableElement::acceptCursor( const FormulaCursor* cursor )
+int TableElement::positionOfChild(BasicElement* child) const 
 {
-    return 0;
+    TableRowElement* temp=dynamic_cast<TableRowElement*>(child);
+    if (temp==0) {
+        return -1;
+    } else {
+        int p=m_rows.indexOf(temp);
+        return (p==-1) ? -1 : 2*p;
+    }
 }
+
+
+QLineF TableElement::cursorLine ( int position ) const
+{
+    QPointF top;
+    QRectF rect=m_rows[position/2]->absoluteBoundingRect();
+    if (position%2==0) {
+        //we are in front of a row
+        top=rect.topLeft();
+    } else {
+        top=rect.topRight();
+    }
+    QPointF bottom = top + QPointF( 0.0, rect.height() );
+    return QLineF(top, bottom);
+}
+
+bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+{
+    if (cursor->isSelecting()) {
+        return false;
+    }
+    int i;
+    for (i=0;i<m_rows.count()-1;i++) {
+        if (m_rows[i]->boundingRect().bottom()>point.y()) {
+            break;
+        }
+    }
+    point-=m_rows[i]->origin();
+    return m_rows[i]->setCursorTo(cursor, point);
+}
+
+bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    int p=newcursor->position();
+    switch (newcursor->direction()) {
+    case MoveLeft:
+        if (p%2==0) {
+            //we are in front of a table row
+            return false;
+        } else {
+            if (newcursor->isSelecting()) {
+                newcursor->moveTo( this , p-1 );
+            } else {
+                newcursor->moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
+            }
+            break;
+        }
+    case MoveRight:
+        if (p%2==1) {
+            //we are behind a table row
+            return false;
+        } else {
+            if (newcursor->isSelecting()) {
+                newcursor->moveTo( this , p+1 );
+            } else {
+                newcursor->moveTo( m_rows[ p / 2 ] , 0 );
+            }
+            break;
+        }
+    case MoveUp:
+        if (p<=1) {
+            return false;
+        } else {
+            newcursor->moveTo(this,p-2);
+            break;
+        }
+    case MoveDown:
+        if (p<(m_rows.count()-1)*2) {
+            newcursor->moveTo(this,p+2); 
+            break;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
+int TableElement::length() const 
+{
+    if (m_rows.count()>0) {
+        return 2*m_rows.count()-1;
+    } else {
+        return 1;
+    }
+}
+
+
+bool TableElement::acceptCursor( const FormulaCursor* cursor )
+{
+//    return false;
+    return cursor->isSelecting();
+}
+
+
+QPainterPath TableElement::selectionRegion ( const int pos1, const int pos2 ) const
+{
+    int p1=pos1 % 2 == 0 ? pos1 : pos1+1; //pos1 should be before an element
+    int p2=pos2 % 2 == 0 ? pos2 : pos2+1; //pos2 should be behind an element
+    QPainterPath P;
+    
+    for (int i=p1;i<p2;i+=2) {
+        P.addRect(m_rows[i/2]->absoluteBoundingRect());
+    }
+    return P;
+}
+
 
 QString TableElement::attributesDefaultValue( const QString& attribute ) const
 {
@@ -194,7 +320,7 @@ bool TableElement::readMathMLContent( const KoXmlElement& element )
             return false;
 
         m_rows << static_cast<TableRowElement*>( tmpElement );
-	tmpElement->readMathML( tmp );
+    tmpElement->readMathML( tmp );
     }
 
     return true;
@@ -203,6 +329,6 @@ bool TableElement::readMathMLContent( const KoXmlElement& element )
 void TableElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     foreach( TableRowElement* tmpRow, m_rows )  // write each mtr element
-	tmpRow->writeMathML( writer );
+    tmpRow->writeMathML( writer );
 }
 

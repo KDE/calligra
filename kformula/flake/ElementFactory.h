@@ -58,7 +58,8 @@ enum ElementType {
     Enclose,
     Phantom,
     Action,
-    Unknown
+    Unknown,
+    Empty
 };
 
 

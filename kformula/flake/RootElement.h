@@ -24,6 +24,7 @@
 #define ROOTELEMENT_H
 
 #include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 
 #include <QPainterPath>
@@ -31,7 +32,7 @@
 /**
  * @short Implementation of the MathML mroot and msqrt elements 
  */
-class KOFORMULA_EXPORT RootElement : public BasicElement {
+class KOFORMULA_EXPORT RootElement : public FixedElement {
 public:
     /// The standard constructor
     RootElement( BasicElement* parent = 0 );
@@ -43,22 +44,13 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
-
-    /**
-     * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
-    /**
-     * Remove a child element
-     * @param cursor The cursor holding the position where to remove
-     * @param element The BasicElement to remove
-     */ 
-    void removeChild( FormulaCursor* cursor, BasicElement* element );
-
+    const QList<BasicElement*> childElements() const;
+    
+    QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+    
+    /// inherited from BasicElement
+    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -71,17 +63,30 @@ public:
      */
     void layout( const AttributeManager* am );
 
-    /**
-     * Implement the cursor behaviour for the element
-     * @param cursor The FormulaCursor that is moved around
-     * @return A this pointer if the element accepts if not the element to asked instead
-     */
-    BasicElement* acceptCursor( const FormulaCursor* cursor );
-
+    /// inherited from BasicElement
+    bool acceptCursor( const FormulaCursor* cursor );
+    
+    /// inherited from BasicElement
+    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    
+    /// inherited from BasicElement
+    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    
+    virtual QLineF cursorLine(int position) const;
+    
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+    
     /// @return The element's ElementType
     ElementType elementType() const;
+    
+    /// @return The element's length
+    virtual int length() const;
 
 protected:
+    ///update the selection in cursor so that a proper range is selected
+    void fixSelection (FormulaCursor* cursor);
+    
     /// Read root contents - reimplemented from BasicElement
     bool readMathMLContent( const KoXmlElement& element );
 

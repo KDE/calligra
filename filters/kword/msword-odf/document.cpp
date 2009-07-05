@@ -3,21 +3,22 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the Library GNU General Public
    version 2 of the License, or (at your option) version 3 or,
    at the discretion of KDE e.V (which shall act as a proxy as in
    section 14 of the GPLv3), any later version..
 
-   This program is distributed in the hope that it will be useful,
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; see the file COPYING.  If not, write to
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
+
 */
 
 #include "document.h"
@@ -46,26 +47,43 @@
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
         KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
-    : m_replacementHandler( new KWordReplacementHandler ),
-      m_tableHandler( 0 ),
-      m_pictureHandler( new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
-      m_textHandler( 0 ), m_headerCount(0), m_hasHeader(false), m_hasFooter(false),
-      m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
-      m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
-      m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
+    : m_replacementHandler(new KWordReplacementHandler),
+    m_tableHandler(0),
+    m_pictureHandler(new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
+    m_textHandler(0),
+    m_chain(chain),
+    m_parser(wvWare::ParserFactory::createParser(fileName)),
+    m_headerFooters(0),
+    m_bodyFound(false),
+    m_evenOpen(false),
+    m_oddOpen(false),
+    m_footNoteNumber(0),
+    m_endNoteNumber(0),
+    m_currentListDepth(-1),
+    m_bodyWriter(0),
+    m_mainStyles(0),
+    m_metaWriter(0),
+    m_masterStyle(0),
+    m_pageLayoutStyle(0),
+    m_writer(0),
+    m_hasHeader(false),
+    m_hasFooter(false),
+    m_buffer(0),
+    m_bufferEven(0),
+    m_headerCount(0)
 {
     kDebug(30513);
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
-	m_bodyWriter = bodyWriter; //pointer for writing to the body
-	m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
-	m_metaWriter = metaWriter; //pointer for writing to meta.xml
-	m_buffer = 0; //set pointers to 0
-	m_bufferEven = 0;
-	m_writer = 0;
+        m_bodyWriter = bodyWriter; //pointer for writing to the body
+        m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
+        m_metaWriter = metaWriter; //pointer for writing to meta.xml
+        m_buffer = 0; //set pointers to 0
+        m_bufferEven = 0;
+        m_writer = 0;
         m_textHandler = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_tableHandler= new KWordTableHandler(bodyWriter, mainStyles),
-	connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
+        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
@@ -111,15 +129,15 @@ void Document::finishDocument()
     //finish a header if we need to - this should only be necessary if there's an even header w/o an odd header
     if(m_oddOpen) {
         QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
-	m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
-	m_oddOpen = false;
-	m_textHandler->m_headerWriter = 0;
-	delete m_writer;
-	m_writer = 0;
-	delete m_buffer;
-	m_buffer = 0;
-	//we're done with this header, so reset to false
-	m_textHandler->m_writingHeader = false;
+        m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+        m_oddOpen = false;
+        m_textHandler->m_headerWriter = 0;
+        delete m_writer;
+        m_writer = 0;
+        delete m_buffer;
+        m_buffer = 0;
+        //we're done with this header, so reset to false
+        m_textHandler->m_writingHeader = false;
     }
 
     const wvWare::Word97::DOP& dop = m_parser->dop();
@@ -180,29 +198,29 @@ void Document::finishDocument()
 }
 
 //write document info, author, fullname, title, about
-void Document::processAssociatedStrings() 
+void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
     wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
     if(!strings.author().isNull()) {
-	m_metaWriter->startElement("meta:initial-creator");
-	m_metaWriter->addTextSpan(Conversion::string(strings.author()).string());
-	m_metaWriter->endElement();
+        m_metaWriter->startElement("meta:initial-creator");
+        m_metaWriter->addTextSpan(Conversion::string(strings.author()).string());
+        m_metaWriter->endElement();
     }
     if(!strings.title().isNull()) {
-	m_metaWriter->startElement("dc:title");
-	m_metaWriter->addTextSpan(Conversion::string(strings.title()).string());
-	m_metaWriter->endElement();
+        m_metaWriter->startElement("dc:title");
+        m_metaWriter->addTextSpan(Conversion::string(strings.title()).string());
+        m_metaWriter->endElement();
     }
     if(!strings.subject().isNull()) {
-	m_metaWriter->startElement("dc:subject");
-	m_metaWriter->addTextSpan(Conversion::string(strings.subject()).string());
-	m_metaWriter->endElement();
+        m_metaWriter->startElement("dc:subject");
+        m_metaWriter->addTextSpan(Conversion::string(strings.subject()).string());
+        m_metaWriter->endElement();
     }
     if(!strings.lastRevBy().isNull()) {
-	m_metaWriter->startElement("dc:creator");
-	m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()).string());
-	m_metaWriter->endElement();
+        m_metaWriter->startElement("dc:creator");
+        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()).string());
+        m_metaWriter->endElement();
     }
 }
 
@@ -217,23 +235,23 @@ void Document::processStyles()
     //loop through each style
     for ( unsigned int i = 0; i < count ; ++i )
     {
-	//grab style
+        //grab style
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
         QConstString displayName = Conversion::string(style->name());
-	QString name = Conversion::string(style->name());
-	//need to replace all non-alphanumeric characters with hex representation
-	for(int i = 0; i < name.size(); i++) {
-	    if(!name[i].isLetterOrNumber()) {
-		name.remove(i, 1);
-		i--;
-	    }
-	}
+        QString name = Conversion::string(style->name());
+        //need to replace all non-alphanumeric characters with hex representation
+        for(int i = 0; i < name.size(); i++) {
+            if(!name[i].isLetterOrNumber()) {
+                name.remove(i, 1);
+                i--;
+            }
+        }
         kDebug(30513) << "Style" << i << ":" << displayName.string();
-	kDebug(30513) << "style->type() = " << style->type();
-	kDebug(30513) << "style->sti() = " << style->sti();
+        kDebug(30513) << "style->type() = " << style->type();
+        kDebug(30513) << "style->sti() = " << style->sti();
 
-	//process paragraph styles
+        //process paragraph styles
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
@@ -242,10 +260,10 @@ void Document::processStyles()
                 QConstString followingName = Conversion::string( followingStyle->name() );
             }
 
-	    //create this style & add formatting info to it
-	    kDebug(30513) << "creating ODT style" << name;
-	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
-	    userStyle.addAttribute("style:display-name", displayName);
+            //create this style & add formatting info to it
+            kDebug(30513) << "creating ODT style" << name;
+            KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
+            userStyle.addAttribute("style:display-name", displayName);
             //set font name in style
             QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
             if ( !fontName.isEmpty() )
@@ -257,17 +275,17 @@ void Document::processStyles()
             Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
             //process the paragraph properties
             Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle );
-	    //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+            //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
             //m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""));
-	    //add style to main collection, using the name that it had in the .doc
-	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
-	    kDebug(30513) << "added style " << actualName << "\n";
+            //add style to main collection, using the name that it had in the .doc
+            QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+            kDebug(30513) << "added style " << actualName << "\n";
         }
-	else if(style && style->type()==wvWare::Style::sgcChp) {
-	    //create this style & add formatting info to it
-	    kDebug(30513) << "creating ODT style" << name;
-	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
-	    userStyle.addAttribute("style:display-name", displayName);
+        else if(style && style->type()==wvWare::Style::sgcChp) {
+            //create this style & add formatting info to it
+            kDebug(30513) << "creating ODT style" << name;
+            KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
+            userStyle.addAttribute("style:display-name", displayName);
             //set font name in style
             QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
             if ( !fontName.isEmpty() )
@@ -277,11 +295,11 @@ void Document::processStyles()
             }
             //process character properties
             Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
-	    //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
-	    //add style to main collection, using the name that it had in the .doc
-	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
-	    kDebug(30513) << "added style " << actualName << "\n";
-	}
+            //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+            //add style to main collection, using the name that it had in the .doc
+            QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+            kDebug(30513) << "added style " << actualName << "\n";
+        }
     }
 }
 
@@ -303,7 +321,7 @@ void Document::bodyStart()
     connect( m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
              this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
     connect( m_textHandler, SIGNAL(updateListDepth( int ) ),
-	     this, SLOT(slotUpdateListDepth( int ) ) );
+             this, SLOT(slotUpdateListDepth( int ) ) );
     m_bodyFound = true;
 }
 
@@ -315,19 +333,19 @@ void Document::bodyEnd()
     //close a list if we need to
     if ( m_currentListDepth >= 0 )
     {
-	kDebug(30513) << "closing the final list in the document body";
-	//m_listStylesWriter->endElement(); //text:list-style
-	//reset listStyleName
-	m_textHandler->m_listStyleName = "";
-	m_textHandler->m_currentListDepth = -1;
-	m_textHandler->m_currentListID = 0;
-	//close any open list tags in the body writer
-        for (int i = 0; i <= m_currentListDepth; i++)
+        kDebug(30513) << "closing the final list in the document body";
+        //m_listStylesWriter->endElement(); //text:list-style
+        //reset listStyleName
+        m_textHandler->m_listStyleName = "";
+        m_textHandler->m_currentListDepth = -1;
+        m_textHandler->m_currentListID = 0;
+        //close any open list tags in the body writer
+        for (int i = 0; i < m_currentListDepth; i++)
         {
-	    m_bodyWriter->endElement(); //close the text:list-item
-	    m_bodyWriter->endElement(); //text:list
-	}
-	m_currentListDepth = -1;
+            m_bodyWriter->endElement(); //close the text:list-item
+            m_bodyWriter->endElement(); //text:list
+        }
+        m_currentListDepth = -1;
     }
 
     disconnect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
@@ -395,18 +413,18 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
     kDebug(30513);
     //set the margins - depends on whether a header/footer is present
     if(m_hasHeader) {
-	kDebug(30513) << "setting margin for header...";
-	m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
+        kDebug(30513) << "setting margin for header...";
+        m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
     }
     else {
-	kDebug(30513) << "setting margin for no header...";
-	m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+        kDebug(30513) << "setting margin for no header...";
+        m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
     }
     if(m_hasFooter) {
-	m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
+        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
     }
     else {
-	m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
     }
     //insert the page-layout style into the collection,
     //and get the name it's assigned
@@ -427,59 +445,59 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 {
     kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")";
     // Werner says the headers are always emitted in the order of the Type enum.
-    //	Header Even, Header Odd, Footer Even, Footer Odd, Header First, Footer First
+    //  Header Even, Header Odd, Footer Even, Footer Odd, Header First, Footer First
 
     m_headerCount++;
 
     switch(type) {
     //TODO fix first header
     case wvWare::HeaderData::HeaderFirst:
-	m_buffer = new QBuffer();
-	m_buffer->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_buffer);
-	break;
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_buffer);
+        break;
     case wvWare::HeaderData::HeaderOdd:
-	//set up buffer & writer for odd header
-	m_buffer = new QBuffer();
-	m_buffer->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_buffer);
-	m_oddOpen = true;
-	m_writer->startElement("style:header");
-	m_hasHeader = true;
-	break;
+        //set up buffer & writer for odd header
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_buffer);
+        m_oddOpen = true;
+        m_writer->startElement("style:header");
+        m_hasHeader = true;
+        break;
     case wvWare::HeaderData::HeaderEven:
-	//write to the buffer for even headers/footers
-	m_bufferEven = new QBuffer();
-	m_bufferEven->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_bufferEven);
-	m_evenOpen = true;
-	m_writer->startElement("style:header-left");
-	m_hasHeader = true;
-	break;
+        //write to the buffer for even headers/footers
+        m_bufferEven = new QBuffer();
+        m_bufferEven->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_bufferEven);
+        m_evenOpen = true;
+        m_writer->startElement("style:header-left");
+        m_hasHeader = true;
+        break;
     //TODO fix first footer
     case wvWare::HeaderData::FooterFirst:
-	m_buffer = new QBuffer();
-	m_buffer->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_buffer);
-	break;
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_buffer);
+        break;
     case wvWare::HeaderData::FooterOdd:
-	//set up buffer & writer for odd header
-	m_buffer = new QBuffer();
-	m_buffer->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_buffer);
-	m_oddOpen = true;
-	m_writer->startElement("style:footer");
-	m_hasFooter = true;
-	break;
+        //set up buffer & writer for odd header
+        m_buffer = new QBuffer();
+        m_buffer->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_buffer);
+        m_oddOpen = true;
+        m_writer->startElement("style:footer");
+        m_hasFooter = true;
+        break;
     case wvWare::HeaderData::FooterEven:
-	//write to the buffer for even headers/footers
-	m_bufferEven = new QBuffer();
-	m_bufferEven->open(QIODevice::WriteOnly);
-	m_writer = new KoXmlWriter(m_bufferEven);
-	m_evenOpen = true;
-	m_writer->startElement("style:footer-left");
-	m_hasFooter = true;
-	break;
+        //write to the buffer for even headers/footers
+        m_bufferEven = new QBuffer();
+        m_bufferEven->open(QIODevice::WriteOnly);
+        m_writer = new KoXmlWriter(m_bufferEven);
+        m_evenOpen = true;
+        m_writer->startElement("style:footer-left");
+        m_hasFooter = true;
+        break;
     }
 
     //tell texthandler we're writing a header
@@ -495,42 +513,42 @@ void Document::headerEnd()
     //close a list if we need to (you can have a list inside a header)
     if ( m_currentListDepth >= 0 )
     {
-	kDebug(30513) << "closing a list in a header/footer";
-	//reset listStyleName, m_currentListDepth, & m_currentListID in m_textHandler
-	m_textHandler->m_currentListDepth = -1;
-	m_textHandler->m_listStyleName = "";
-	m_textHandler->m_currentListID = 0;
-	//close any open list tags in the body writer
+        kDebug(30513) << "closing a list in a header/footer";
+        //reset listStyleName, m_currentListDepth, & m_currentListID in m_textHandler
+        m_textHandler->m_currentListDepth = -1;
+        m_textHandler->m_listStyleName = "";
+        m_textHandler->m_currentListID = 0;
+        //close any open list tags in the body writer
         for (int i = 0; i <= m_currentListDepth; i++)
         {
-	    m_writer->endElement(); //close the text:list-item
-	    m_writer->endElement(); //text:list
-	}
-	m_currentListDepth = -1;
+            m_writer->endElement(); //close the text:list-item
+            m_writer->endElement(); //text:list
+        }
+        m_currentListDepth = -1;
     }
 
     //close writer & add to m_masterStyle
     //if it was a first header/footer, we wrote to this writer, but we won't do anything with it
     //handle the even flag first, because they'll both be open if the even one is, and
-    //	we would want to handle the odd flag when we actually see the odd header/footer
+    //  we would want to handle the odd flag when we actually see the odd header/footer
     if(m_evenOpen) {
-	m_writer->endElement(); //style:header/footer-left
-	m_evenOpen = false;
-	delete m_writer;
-	m_writer = 0;
-	return;
+        m_writer->endElement(); //style:header/footer-left
+        m_evenOpen = false;
+        delete m_writer;
+        m_writer = 0;
+        return;
     }
     if(m_oddOpen) {
-	m_writer->endElement();//style:header/footer
-	//add the even header/footer stuff here
-	if(m_bufferEven) {
-	    m_writer->addCompleteElement(m_bufferEven);
-	    delete m_bufferEven;
-	    m_bufferEven = 0;
-	}
+        m_writer->endElement();//style:header/footer
+        //add the even header/footer stuff here
+        if(m_bufferEven) {
+            m_writer->addCompleteElement(m_bufferEven);
+            delete m_bufferEven;
+            m_bufferEven = 0;
+        }
         QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
-	m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
-	m_oddOpen = false;
+        m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+        m_oddOpen = false;
     }
     m_textHandler->m_headerWriter = 0;
     delete m_writer;

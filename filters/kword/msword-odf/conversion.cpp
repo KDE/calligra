@@ -3,21 +3,22 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the Library GNU General Public
    version 2 of the License, or (at your option) version 3 or,
    at the discretion of KDE e.V (which shall act as a proxy as in
    section 14 of the GPLv3), any later version..
 
-   This program is distributed in the hope that it will be useful,
+   This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
+   Library General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; see the file COPYING.  If not, write to
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
+
 */
 
 #include "conversion.h"
@@ -36,49 +37,49 @@ QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
     switch(number)
     {
-	case 0:
-	    if(defaultWhite)
-		return QString( "#FFFFFF" );
-	case 1://black
-	    return QString( "#000000" );
-	case 2://blue
-	    return QString( "#0000FF" );
-	case 3://cyan
-	    return QString( "#00FFFF" );
-	case 4://green
-	    return QString( "#008000" );
-	case 5://magenta
-	    return QString( "#FF00FF" );
-	case 6://red
-	    return QString( "#FF0000" );
-	case 7://yellow
-	    return QString( "#FFFF00" );
-	case 8://white
-	    return QString( "#FFFFFF" );
-	case 9://dark blue
-	    return QString( "#00008B" );
-	case 10://dark cyan
-	    return QString( "#008B8B" );
-	case 11://dark green
-	    return QString( "#006400" );
-	case 12://dark magenta
-	    return QString( "#8B008B" );
-	case 13://dark red
-	    return QString( "#8B0000" );
-	case 14://dark yellow
-	    return QString( "#808000" );
-	case 15://dark gray
-	    return QString( "#A9A9A9" );
-	case 16://light gray
-	    return QString( "#D3D3D3" );
+        case 0:
+            if(defaultWhite)
+                return QString( "#FFFFFF" );
+        case 1://black
+            return QString( "#000000" );
+        case 2://blue
+            return QString( "#0000FF" );
+        case 3://cyan
+            return QString( "#00FFFF" );
+        case 4://green
+            return QString( "#008000" );
+        case 5://magenta
+            return QString( "#FF00FF" );
+        case 6://red
+            return QString( "#FF0000" );
+        case 7://yellow
+            return QString( "#FFFF00" );
+        case 8://white
+            return QString( "#FFFFFF" );
+        case 9://dark blue
+            return QString( "#00008B" );
+        case 10://dark cyan
+            return QString( "#008B8B" );
+        case 11://dark green
+            return QString( "#006400" );
+        case 12://dark magenta
+            return QString( "#8B008B" );
+        case 13://dark red
+            return QString( "#8B0000" );
+        case 14://dark yellow
+            return QString( "#808000" );
+        case 15://dark gray
+            return QString( "#A9A9A9" );
+        case 16://light gray
+            return QString( "#D3D3D3" );
 
-	default:
+        default:
             kDebug(30513) <<" unknown color:" << number;
-	    if(defaultcolor == -1) //return black
-		return QString( "#000000" );
-	    else //call this function again with the default color value
-		//to see if it works
-		return color(defaultcolor, -1);
+            if(defaultcolor == -1) //return black
+                return QString( "#000000" );
+            else //call this function again with the default color value
+                //to see if it works
+                return color(defaultcolor, -1);
     }
 }
 
@@ -281,21 +282,21 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
     switch ( brc.brcType ) {
     case 0: // none
         //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
-	style = "none";
+        style = "none";
         break;
     case 1: // single
-	//defaults should be good, so do nothing
-	break;
+        //defaults should be good, so do nothing
+        break;
     case 2: //thick
-	width = "thick";
-	break;
+        width = "thick";
+        break;
     case 3: // double
         style = "double";
         break;
     //doesn't seem to be a 4 in the standard?
     case 5: //"hairline"
-	width = "0.0008in"; //this is the smallest width in OOo, so why not?
-	break;
+        width = "0.0008in"; //this is the smallest width in OOo, so why not?
+        break;
 
     //ODF doesn't support dotted, dashed, or wavy borders???
 
@@ -314,12 +315,12 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
     //    break;
     default:
         //if a fancy unsupported border is specified -> better a normal border than none
-	//so just leave values as defaults
+        //so just leave values as defaults
         break;
     }
     //borderElement.setAttribute( prefix.isNull() ? "style" : prefix+"Style", style );
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
-    
+
     //set up color
     color = Conversion::color( brc.ico, -1 );
 
@@ -339,26 +340,26 @@ QString Conversion::numberFormatCode( int nfc )
     {
     case 1: // upper case roman
         value = "I";
-	break;
+        break;
     case 2: // lower case roman
-	value = "i";
-	break;
+        value = "i";
+        break;
     case 3: // upper case letter
-	value = "A";
-	break;
+        value = "A";
+        break;
     case 4: // lower case letter
-	value = "a";
-	break;
+        value = "a";
+        break;
     case 5: // arabic with a trailing dot (added by writeCounter)
     case 6: // numbered (one, two, three) - not supported by KWord
     case 7: // ordinal (first, second, third) - not supported by KWord
     case 22: // leading zero (01-09, 10-99, 100-...) - not supported by KWord
     case 0: // arabic
-	value = "1";
-	break;
+        value = "1";
+        break;
     default:
-	kWarning(30513) << "Unknown NFC: " << nfc;
-	value = "1";
+        kWarning(30513) << "Unknown NFC: " << nfc;
+        value = "1";
     }
     return value;
 }

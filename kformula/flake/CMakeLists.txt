@@ -8,7 +8,9 @@ set( kformulalib_PART_SRCS
    FormulaRenderer.cpp
    FormulaCursor.cpp 
    ElementFactory.cpp 
-   BasicElement.cpp 
+   BasicElement.cpp
+   FixedElement.cpp
+   EmptyElement.cpp
    RowElement.cpp
    FormulaElement.cpp 
    TextElement.cpp

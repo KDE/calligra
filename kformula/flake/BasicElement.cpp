@@ -28,6 +28,7 @@
 #include <QVariant>
 
 #include <kdebug.h>
+#include "FormulaCursor.h"
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
@@ -64,22 +65,73 @@ void BasicElement::stretch()
     }
 }
 
-BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
+
+bool BasicElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
-    return 0;
+    return true;
 }
 
-void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
+bool BasicElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    //it is not possible to move the cursor inside the element
+    return false;
+}
+
+QLineF BasicElement::cursorLine(int position) const
+{
+    QPointF top = absoluteBoundingRect().topLeft();
+    QPointF bottom = top + QPointF( 0.0, height() );
+    return QLineF(top,bottom);   
+}
+
+QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const 
+{
+	QLineF l1=cursorLine(pos1);
+	QLineF l2=cursorLine(pos2);
+	//TODO: find out why doesn't work
+	//QRectF r1(l1.p1(),l1.p2());
+	//QRectF r2(l2.p1(),l2.p2());
+	
+	QRectF r1(l1.p1(),l2.p2());
+	QRectF r2(l2.p1(),l1.p2());
+	QPainterPath temp;
+	temp.addRect(r1.unite(r2));
+	return temp;
+}
+
+
+const QRectF BasicElement::absoluteBoundingRect() const 
+{
+    QPointF neworigin = origin();
+    BasicElement* tmp=parentElement();
+    while (tmp) {
+	neworigin+=tmp->origin();
+	tmp=tmp->parentElement();
+    }
+    return QRectF(neworigin,QSizeF(width(),height()));
+}
+
+bool BasicElement::setCursorTo(FormulaCursor* cursor, QPointF point)
+{
+    cursor->setPosition(0);
+    cursor->setCurrentElement(this);
+    return true;
+}
+
+
+bool BasicElement::insertChild( int position, BasicElement* element )
 {
     // call the parentElement to notify it that there is something to be inserted
-    m_parentElement->insertChild( cursor, element );
+    return false;
 }
 
-void BasicElement::removeChild( FormulaCursor*, BasicElement* )
-{ /* do nothing a BasicElement has no children */ }
+bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelement)
+{
+    return false;
+}
 
-const QList<BasicElement*> BasicElement::childElements()
+const QList<BasicElement*> BasicElement::childElements() const
 {
     kWarning( 39001) << "Returning no elements from BasicElement";
     return QList<BasicElement*>();
@@ -253,6 +305,14 @@ void BasicElement::setBaseLine( double baseLine )
     m_baseLine = baseLine;
 }
 
+int BasicElement::length() const {
+    return 0;
+}
+
+int BasicElement::positionOfChild(BasicElement* child) const {
+    return -1;
+}
+
 void BasicElement::setParentElement( BasicElement* parent )
 {
     m_parentElement = parent;
@@ -268,6 +328,22 @@ void BasicElement::setScaleLevel( int scaleLevel )
     while(level-- > 0)  //raise multiplier to the power of level
         m_scaleFactor *= 0.71;
 }
+BasicElement* BasicElement::elementBefore ( int position )
+{
+    return 0;
+}
+
+BasicElement* BasicElement::elementAfter ( int position )
+{
+    return 0;
+}
+
+QList< BasicElement* > BasicElement::elementsBetween ( int pos1, int pos2 ) const
+{
+    QList<BasicElement*> tmp;
+    return tmp;
+}
+
 
 bool BasicElement::displayStyle() const
 {

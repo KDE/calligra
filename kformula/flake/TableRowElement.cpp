@@ -22,11 +22,13 @@
 
 #include "TableRowElement.h"
 #include "TableElement.h"
+#include "FormulaCursor.h"
 #include "TableEntryElement.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <QStringList>
 #include <QPainter>
+#include <kdebug.h>
 
 TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -55,7 +57,7 @@ void TableRowElement::layout( const AttributeManager* am )
     QPointF origin;
     double hOffset = 0.0;
     for ( int i = 0; i < m_entries.count(); i++ ) {
-        origin = QPointF();
+//         origin = QPointF();
         hOffset = 0.0;
         if( verticalAlign[ i ] == Bottom )
             origin.setY( height() - m_entries[ i ]->height() );
@@ -65,11 +67,13 @@ void TableRowElement::layout( const AttributeManager* am )
             // TableElement::determineDimensions so that it pays attention to baseline.
             // Axis as alignment option is ignored as it is tought to be an option for
             // the table itsself.
-     
-        if( horizontalAlign[ i ] == Center )
+//         kDebug() << horizontalAlign[ i ]<<","<<Axis;
+        if( horizontalAlign[ i ] == Center ) {
             hOffset = ( parentTable->columnWidth( i ) - m_entries[ i ]->width() ) / 2;
-        else if( horizontalAlign[ i ] == Right )
+        }
+        else if( horizontalAlign[ i ] == Right ) {
             hOffset = parentTable->columnWidth( i ) - m_entries[ i ]->width();
+        }
 
         m_entries[ i ]->setOrigin( origin + QPointF( hOffset, 0.0 ) );
         origin += QPointF( parentTable->columnWidth( i ), 0.0 );
@@ -80,10 +84,138 @@ void TableRowElement::layout( const AttributeManager* am )
     // inside a table where it does not matter if a table row has a baseline or not
 }
 
-BasicElement* TableRowElement::acceptCursor( const FormulaCursor* cursor )
+bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+     //return true;
+     return (cursor->isSelecting());
 }
+
+int TableRowElement::positionOfChild(BasicElement* child) const 
+{
+    TableEntryElement* temp=dynamic_cast<TableEntryElement*>(child);
+    if (temp==0) {
+        return -1;
+    } else {
+        return m_entries.indexOf(temp);
+    }
+}
+
+int TableRowElement::length() const {
+    return m_entries.count();
+}
+
+
+QLineF TableRowElement::cursorLine ( int position ) const
+{
+    TableElement* parentTable = static_cast<TableElement*>( parentElement() );
+    QPointF top=absoluteBoundingRect().topLeft();
+    double hOffset = 0;
+    if( childElements().isEmpty() ) {
+        // center cursor in elements that have no children
+        top += QPointF( width()/2, 0 );
+    } else { 
+        for (int i=0; i<position; ++i) {
+            hOffset+=parentTable->columnWidth(i);
+        }
+        top += QPointF( hOffset, 0.0 );
+	}
+    QPointF bottom = top + QPointF( 0.0, height() );
+    return QLineF(top, bottom);
+}
+
+
+bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+{
+    if (cursor->isSelecting()) {
+        if (m_entries.isEmpty() || point.x()<0.0) {
+            cursor->setCurrentElement(this);
+            cursor->setPosition(0);
+            return true;
+        }
+        //check if the point is behind all child elements
+        if (point.x() >= width()) {
+            cursor->setCurrentElement(this);
+            cursor->setPosition(length());
+            return true;
+        }
+    }
+    int i=0;
+    double x=0.0;
+    TableElement* parentTable = static_cast<TableElement*>( parentElement() );
+    for (; i<m_entries.count()-1; ++i) {
+    //Find the child element the point is in
+    x+=parentTable->columnWidth( i );
+    if (x>=point.x()) {
+        break;
+    }
+    }
+    if (cursor->isSelecting()) {
+    //we don't need to change current element because we are already in this element
+    if (cursor->mark()<=i) {
+        cursor->setPosition(i+1);
+    }
+    else {
+        cursor->setPosition(i);
+    }
+    return true;
+    } else {
+    point-=m_entries[i]->origin();
+    return m_entries[i]->setCursorTo(cursor,point);
+    }
+}
+
+bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+{
+    //TODO: Moving the cursor vertically in the tableelement is a little bit fragile
+    if ( (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
+        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+        return false;
+    }
+    int rowpos=parentElement()->positionOfChild(this);
+    int colpos=(newcursor->position()!=length() ? newcursor->position() : newcursor->position()-1);
+    if (newcursor->isSelecting()) {
+        switch(newcursor->direction()) {
+        case MoveLeft:
+            newcursor->moveTo(this,newcursor->position()-1);
+            break;
+        case MoveRight:
+            newcursor->moveTo(this,newcursor->position()+1);
+            break;
+        case MoveUp:
+            return false;
+        case MoveDown:
+            return false;
+        }
+    } else {
+        switch(newcursor->direction()) {
+        case MoveLeft:
+            newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
+            newcursor->moveEnd();
+            break;
+        case MoveRight:
+            newcursor->setCurrentElement(m_entries[newcursor->position()]);
+            newcursor->moveHome();
+            break;
+        case MoveUp:
+            if ( rowpos>1 ) {
+                BasicElement* b=parentElement()->childElements()[rowpos/2-1]->childElements()[colpos];
+                return newcursor->moveCloseTo(b, oldcursor);
+            } else {
+                return false;
+            }
+        case MoveDown:
+            if ( rowpos<length()-1 ) {
+                BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
+                return newcursor->moveCloseTo(b, oldcursor);
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    return true;	
+}
+
 
 void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
@@ -93,7 +225,7 @@ void TableRowElement::removeChild(FormulaCursor* cursor, BasicElement* element )
 {
 }
 
-const QList<BasicElement*> TableRowElement::childElements()
+const QList<BasicElement*> TableRowElement::childElements() const
 {
     QList<BasicElement*> tmp;
     foreach( TableEntryElement* element, m_entries )
@@ -109,8 +241,7 @@ QList<Align> TableRowElement::alignments( Qt::Orientation orientation )
 
     // get the alignment values of the parental TableElement
     AttributeManager am;
-    QList<Align> parentAlignList = am.alignListOf( align, this );
-
+    QList<Align> parentAlignList = am.alignListOf( align, parentElement() );
     // iterate over all entries and look on per entry specification of alignment
     QList<Align> alignList;
     for( int i = 0; i < m_entries.count(); i++ ) {
@@ -132,11 +263,11 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
     forEachElement( tmp, element )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-	if( tmpElement->elementType() != TableEntry )
+    if( tmpElement->elementType() != TableEntry )
             return false;
 
         m_entries << static_cast<TableEntryElement*>( tmpElement );
-	tmpElement->readMathML( tmp );
+    tmpElement->readMathML( tmp );
     }
 
     return true;

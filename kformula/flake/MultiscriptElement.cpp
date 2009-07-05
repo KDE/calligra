@@ -205,9 +205,9 @@ void MultiscriptElement::layout( const AttributeManager* am )
     setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
-BasicElement* MultiscriptElement::acceptCursor( const FormulaCursor* cursor )
+bool MultiscriptElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return false;
 }
 
 const QList<BasicElement*> MultiscriptElement::childElements()

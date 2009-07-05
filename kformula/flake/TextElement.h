@@ -38,7 +38,7 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-    QRectF renderToPath( const QString& raw, QPainterPath& path );
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
 };
 
 #endif // TEXTELEMENT_H
