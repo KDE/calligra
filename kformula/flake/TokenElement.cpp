@@ -282,7 +282,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
         }
         */
         else {
-            m_rawString.append( node.toText().data().trimmed() );
+            m_rawString.append( node.toText().data().simplified() );
         }
 
         node = node.nextSibling();
