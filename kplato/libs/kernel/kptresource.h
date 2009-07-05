@@ -592,20 +592,14 @@ public:
     void unregister( const ResourceGroup *group ) { if ( group == m_group ) m_group = 0; }
     QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
     void addResourceRequest( ResourceRequest *request );
-    void deleteResourceRequest( ResourceRequest *request )
-    {
-        int i = m_resourceRequests.indexOf( request );
-        if ( i != -1 )
-            m_resourceRequests.removeAt( i );
-        delete request;
-        changed();
-    }
+    void deleteResourceRequest( ResourceRequest *request );
     int count() const { return m_resourceRequests.count(); }
 
     ResourceRequest *takeResourceRequest( ResourceRequest *request );
     ResourceRequest *find( const Resource *resource ) const;
     ResourceRequest *resourceRequest( const QString &name );
-    QStringList requestNameList() const;
+    /// Return a list of allocated resources, allocation to group is not included by default.
+    QStringList requestNameList( bool includeGroup = false ) const;
     
     bool load( KoXmlElement &element, Project &project );
     void save( QDomElement &element ) const;
@@ -618,6 +612,11 @@ public:
     * Get amount of allocated work units in percent
     */
     int workUnits() const;
+
+    /**
+    * Get the number of resources allocated
+    */
+    int workAllocation() const;
 
     Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 ) const;
 
@@ -709,7 +708,8 @@ public:
 
     bool contains( const QString &identity ) const;
     ResourceGroupRequest *findGroupRequestById( const QString &id ) const;
-    QStringList requestNameList() const;
+    /// Return a list of allocated resources, allocations to groups are not included by default.
+    QStringList requestNameList( bool includeGroup = false ) const;
     QList<Resource*> requestedResources() const;
     
     //bool load(KoXmlElement &element, Project &project);
@@ -724,6 +724,11 @@ public:
     * Returns the amount of allocated work units in percent
     */
     int workUnits() const;
+
+    /**
+    * Returns the number of allocated working resources
+    */
+    int workAllocation() const;
 
     /**
     * Returns the duration needed to do the effort @param effort

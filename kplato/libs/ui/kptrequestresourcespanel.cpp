@@ -78,36 +78,24 @@ MacroCommand *RequestResourcesPanel::buildCommand()
             }
         }
     }
-    const QMap<QString, int> &gmap = m_view->groupCache();
-    QMap<QString, int>::const_iterator git = gmap.constBegin();
-    for( QMap<QString, int>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
-        ResourceGroup *g = p->findResourceGroup( git.key() );
-        if ( g == 0 ) {
-            continue;
-        }
-        if ( git.value() == 0 ) {
-            ResourceGroupRequest *gr = t->requests().find( g );
-            if ( gr ) {
-                cmd->addCommand( new RemoveResourceGroupRequestCmd( *t, gr ) );
-            }
-        }
-    }
     // Add/modify
+    const QMap<QString, int> &gmap = m_view->groupCache();
     for( QMap<QString, int>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
         ResourceGroup *g = p->findResourceGroup( git.key() );
         if ( g == 0 ) {
             continue;
         }
-        if ( git.value() > 0 ) {
-            ResourceGroupRequest *gr = t->requests().find( g );
-            if ( gr == 0 ) {
+        ResourceGroupRequest *gr = t->requests().find( g );
+        if ( gr == 0 ) {
+            if ( git.value() > 0 ) {
                 gr = new ResourceGroupRequest( g, git.value() );
                 cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
-            } else {
-                cmd->addCommand( new ModifyResourceGroupRequestUnitsCmd( gr, gr->units(), git.value() ) );
-            }
+            } // else nothing
+        } else {
+            cmd->addCommand( new ModifyResourceGroupRequestUnitsCmd( gr, gr->units(), git.value() ) );
         }
     }
+    QMap<ResourceGroup*, ResourceGroupRequest*> groups;
     for( QMap<QString, int>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
         Resource *r = p->findResource( rit.key() );
         if ( r == 0 ) {
@@ -118,11 +106,17 @@ MacroCommand *RequestResourcesPanel::buildCommand()
             if ( rr == 0 ) {
                 ResourceGroupRequest *gr = t->requests().find( r->parentGroup() );
                 if ( gr == 0 ) {
-                    gr = new ResourceGroupRequest( r->parentGroup(), 0 );
-                    cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+                    if ( ! groups.values().contains( gr ) ) {
+                        gr = new ResourceGroupRequest( r->parentGroup(), 0 );
+                        groups[ r->parentGroup() ] = gr;
+                        cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+                    } else {
+                        gr = groups.value( r->parentGroup() );
+                    }
                 }
-                cmd->addCommand( new AddResourceRequestCmd( gr, new ResourceRequest( r, rit.value() ) ) );
-            } else {
+                ResourceRequest *rr = new ResourceRequest( r, rit.value() );
+                cmd->addCommand( new AddResourceRequestCmd( gr, rr ) );
+            } else if ( rit.value() != rr->units() ) {
                 cmd->addCommand( new ModifyResourceRequestUnitsCmd( rr, rr->units(), rit.value() ) );
             }
         }

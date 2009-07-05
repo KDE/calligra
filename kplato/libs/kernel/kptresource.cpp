@@ -1012,7 +1012,6 @@ int ResourceRequest::units() const {
 
 void ResourceRequest::setUnits( int value )
 {
-    qDebug()<<"ResourceRequest::setUnits:"<<m_units<<value;
     m_units = value; changed();
 }
 
@@ -1141,9 +1140,9 @@ ResourceRequest *ResourceGroupRequest::resourceRequest( const QString &name ) {
     return 0;
 }
 
-QStringList ResourceGroupRequest::requestNameList() const {
+QStringList ResourceGroupRequest::requestNameList( bool includeGroup ) const {
     QStringList lst;
-    if ( m_units > 0 && m_group ) {
+    if ( includeGroup && m_units > 0 && m_group ) {
         lst << m_group->name();
     }
     foreach ( ResourceRequest *r, m_resourceRequests ) {
@@ -1210,8 +1209,10 @@ int ResourceGroupRequest::workUnits() const {
     return units;
 }
 
+int ResourceGroupRequest::workAllocation() const {
+    return qMax( m_units, m_resourceRequests.count() );
+}
 
-//TODO: handle nonspecific resources
 Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const {
     Duration e;
     bool sts=false;
@@ -1459,6 +1460,16 @@ void ResourceGroupRequest::changed()
          m_parent->changed();
 }
 
+void ResourceGroupRequest::deleteResourceRequest( ResourceRequest *request )
+{
+    int i = m_resourceRequests.indexOf( request );
+    if ( i != -1 ) {
+        m_resourceRequests.removeAt( i );
+    }
+    delete request;
+    changed();
+}
+
 void ResourceGroupRequest::resetDynamicAllocations()
 {
     QList<ResourceRequest*> lst;
@@ -1558,10 +1569,10 @@ ResourceRequest *ResourceRequestCollection::resourceRequest( const QString &name
     return req;
 }
 
-QStringList ResourceRequestCollection::requestNameList() const {
+QStringList ResourceRequestCollection::requestNameList( bool includeGroup ) const {
     QStringList lst;
     foreach ( ResourceGroupRequest *r, m_requests ) {
-        lst << r->requestNameList();
+        lst << r->requestNameList( includeGroup );
     }
     return lst;
 }
@@ -1624,6 +1635,16 @@ int ResourceRequestCollection::workUnits() const {
     return units;
 }
 
+int ResourceRequestCollection::workAllocation() const {
+    //kDebug();
+    int units = 0;
+    foreach (ResourceGroupRequest *r, m_requests) {
+        units += r->workAllocation();
+    }
+    //kDebug()<<" units="<<units;
+    return units;
+}
+
 // Returns the longest duration needed by any of the groups.
 // The effort is distributed on "work type" resourcegroups in proportion to
 // the amount of resources requested for each group.
@@ -1634,12 +1655,12 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
         return effort;
     }
     Duration dur;
-    int units = workUnits();
+    int total = workAllocation();
     foreach (ResourceGroupRequest *r, m_requests) {
         if (r->isEmpty())
             continue;
         if (r->group()->type() == ResourceGroup::Type_Work) {
-            Duration e = ( effort * r->workUnits() ) / units;
+            Duration e = ( effort * r->workAllocation() ) / total;
             r->allocateDynamicRequests( time, e, ns, backward );
             Duration d = r->duration(time, e, ns, backward);
             if (d > dur)
