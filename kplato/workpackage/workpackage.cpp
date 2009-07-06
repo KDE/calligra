@@ -158,7 +158,7 @@ bool WorkPackage::saveToStream( QIODevice * dev )
 bool WorkPackage::saveNativeFormat( Part *part, const QString &path )
 {
     if ( path.isEmpty() ) {
-        KMessageBox::error( 0, "Cannot save to empty filename" );
+        KMessageBox::error( 0, i18n("Cannot save to empty filename") );
         return false;
     }
     qDebug()<<"WorkPackage::saveNativeFormat:"<<node()->name()<<path;
@@ -255,7 +255,7 @@ void WorkPackage::saveToProjects( Part *part )
         m_fromProjectStore = true;
         m_filePath = path;
     } else {
-        KMessageBox::error( 0, QString( "Cannot save to projects store:\n%1" ).arg( path ) );
+        KMessageBox::error( 0, i18n( "Cannot save to projects store:\n%1" , path ) );
     }
     return;
 }

@@ -351,14 +351,14 @@ bool Part::setWorkPackage( Project *project )
     //qDebug()<<"Part::setWorkPackage:"<<project->name()<<project->childNode( 0 )->name();
     m_currentWorkPackage = 0;
     if ( project->childNodeIterator().isEmpty() ) {
-        KMessageBox::error( 0, "No node in this package" );
+        KMessageBox::error( 0, i18n("No node in this package") );
         return false;
     }
     QString id;
     Node *n = project->childNode( 0 );
     id = project->id() + n->id(); // unique id (may have nodes from same project)
     if ( m_packageMap.contains( id ) ) {
-        if ( KMessageBox::warningContinueCancel( 0, "Project/node already exists, Merge?" ) == KMessageBox::Cancel ) {
+        if ( KMessageBox::warningContinueCancel( 0, i18n("Project/node already exists, Merge?") ) == KMessageBox::Cancel ) {
             delete project;
             return true;
         }
@@ -390,7 +390,7 @@ bool Part::loadWorkPackages()
     //qDebug()<<"Part::loadWorkPackages:"<<lst;
     foreach ( QString file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
-            KMessageBox::information( 0, QString( "Failed to load:\n%1" ).arg( file ) );
+            KMessageBox::information( 0, i18n( "Failed to load:\n%1" , file ) );
         }
     }
     m_loadingFromProjectStore = false;
@@ -542,11 +542,11 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
                 if ( ! setWorkPackage( newProject ) ) {
                     delete newProject;
                     m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Setting of work package failed" );
-                    KMessageBox::error( 0, QString( "Failed to set workpackage, project: %1" ).arg( newProject->name() ) );
+                    KMessageBox::error( 0, i18n( "Failed to set workpackage, project: %1" , newProject->name() ) );
                 }
             } else {
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
-                KMessageBox::error( 0, QString( "Failed to load project: %1" ).arg( newProject->name() ) );
+                KMessageBox::error( 0, i18n( "Failed to load project: %1" , newProject->name() ) );
                 delete newProject;
             }
         } else if ( e.tagName() == "objects" ) {

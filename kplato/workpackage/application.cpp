@@ -121,7 +121,7 @@ int KPlatoWork_Application::newInstance()
         for(int i=0; i < argsCount; i++ ) {
             // For now create an empty document
             if ( ! m_mainwindow->openDocument( args->url(i) ) ) {
-                KMessageBox::error(0, "Failed to open document" );
+                KMessageBox::error(0, i18n("Failed to open document") );
             }
         }
     }
