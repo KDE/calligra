@@ -791,7 +791,7 @@ void TestLoadAndSave::identifierElement()
 
 void TestLoadAndSave::numberElement()
 {
-    test( new IdentifierElement );
+    test( new NumberElement );
 }
 
 void TestLoadAndSave::operatorElement()
