@@ -79,7 +79,7 @@ QVariant AccountModel::data( const Account *a, int property, int role ) const
 
 QVariant AccountModel::name( const Account *a, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug()<<a->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -92,8 +92,8 @@ QVariant AccountModel::name( const Account *a, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
-//FIXME:         case Qt::CheckStateRole:
-//             return a->isDefaultAccount() ? Qt::Checked : Qt::Unchecked;
+         case Qt::CheckStateRole:
+             return a->isDefaultAccount() ? Qt::Checked : Qt::Unchecked;
     }
     return QVariant();
 }
@@ -220,7 +220,7 @@ Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
     }
     if ( account ( index ) ) {
         switch ( index.column() ) {
-            case AccountModel::Name: flags |= ( Qt::ItemIsEditable /*FIXME:| Qt::ItemIsUserCheckable*/ ); break;
+            case AccountModel::Name: flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable ); break;
             default: flags |= Qt::ItemIsEditable; break;
         }
     }
@@ -318,13 +318,13 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
             switch ( value.toInt() ) {
                 case Qt::Unchecked:
                     if ( a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, i18n( "Modify default account" ) ) );
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, i18n( "De-select as default account" ) ) );
                         return true;
                     }
                     break;
                 case Qt::Checked:
                     if ( ! a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, i18n( "Modify default account" ) ) );
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, i18n( "Select as default account" ) ) );
                         return true;
                     }
                     break;
@@ -370,7 +370,8 @@ bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value,
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 ) {
+    if ( ( flags( index ) &( Qt::ItemIsEditable | Qt::CheckStateRole ) ) == 0 ) {
+        Q_ASSERT( true );
         return false;
     }
     Account *a = account( index );
@@ -809,8 +810,18 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
                 }
             }
         }
-    }
-    if ( role == Qt::TextAlignmentRole ) {
+    } else if ( role == Qt::ToolTipRole ) {
+        switch ( index.column() ) {
+            case 0: return a->name();
+            case 1: return a->description();
+            case 2: {
+                double act = m_actualCostMap.value( a ).totalCost();
+                double pl = m_plannedCostMap.value( a ).totalCost();
+                return i18n( "Actual total cost: %1, planned total cost: %2", KGlobal::locale()->formatMoney( act, "", 0 ), KGlobal::locale()->formatMoney( pl, "", 0 ) );
+            }
+            default: break;
+        }
+    } else if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
     return QVariant();
@@ -984,7 +995,7 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             switch ( section ) {
                 case 0: return ToolTip::accountName();
                 case 1: return ToolTip::accountDescription();
-                case 2: return i18n( "The total cost for the account" );
+                case 2: return i18n( "The total cost for the account shown as: Actual cost [ Planned cost ]" );
                 default: return QVariant();
             }
         }

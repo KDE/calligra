@@ -80,6 +80,8 @@ void AccountsTreeView::slotModelReset()
     hideColumns( m_leftview, QList<int>() << 3 << -1 );
     QHeaderView *v = m_leftview->header();
     kDebug()<<v->sectionSize(2)<<v->sectionSizeHint(2)<<v->defaultSectionSize()<<v->minimumSectionSize();
+
+    hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
 }
 
 CostBreakdownItemModel *AccountsTreeView::model() const
