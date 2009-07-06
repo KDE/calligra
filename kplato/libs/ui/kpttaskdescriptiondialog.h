@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKNOTESPANEL_H
-#define KPTTASKNOTESPANEL_H
+#ifndef KPTTASKDESCRIPTIONPANEL_H
+#define KPTTASKDESCRIPTIONPANEL_H
 
 #include "kplatoui_export.h"
 
-#include "ui_kpttasknotespanelbase.h"
+#include "ui_kpttaskdescriptionpanelbase.h"
 
 #include <QWidget>
 
@@ -31,15 +31,15 @@
 namespace KPlato
 {
 
-class TaskNotesPanel;
+class TaskDescriptionPanel;
 class Task;
 class MacroCommand;
         
-class TaskNotesPanelImpl : public QWidget, public Ui_TaskNotesPanelBase
+class TaskDescriptionPanelImpl : public QWidget, public Ui_TaskDescriptionPanelBase
 {
     Q_OBJECT
 public:
-    TaskNotesPanelImpl( Task &task, QWidget *parent );
+    TaskDescriptionPanelImpl( Task &task, QWidget *parent );
         
 public slots:
     virtual void slotChanged();
@@ -51,11 +51,11 @@ protected:
     Task &m_task;
 };
 
-class TaskNotesPanel : public TaskNotesPanelImpl
+class TaskDescriptionPanel : public TaskDescriptionPanelImpl
 {
     Q_OBJECT
 public:
-    explicit TaskNotesPanel( Task &task, QWidget *parent=0 );
+    explicit TaskDescriptionPanel( Task &task, QWidget *parent=0 );
 
     MacroCommand *buildCommand();
 
@@ -65,7 +65,7 @@ public:
 
 };
 
-class KPLATOUI_EXPORT TaskNotesDialog : public KDialog
+class KPLATOUI_EXPORT TaskDescriptionDialog : public KDialog
 {
     Q_OBJECT
 public:
@@ -74,7 +74,7 @@ public:
      * @param task the task to show
      * @param parent parent widget
      */
-    TaskNotesDialog( Task &task, QWidget *parent=0 );
+    TaskDescriptionDialog( Task &task, QWidget *parent=0 );
 
     MacroCommand *buildCommand();
 
@@ -82,9 +82,9 @@ protected slots:
     void slotButtonClicked( int button );
 
 protected:
-    TaskNotesPanel *m_notesTab;
+    TaskDescriptionPanel *m_descriptionTab;
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKNOTESPANEL_H
+#endif // KPTTASKDESCRIPTIONPANEL_H

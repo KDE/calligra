@@ -65,7 +65,7 @@ set(kplatoui_LIB_SRCS
     kpttaskgeneralpanel.cpp
     kpttaskprogresspanel.cpp
     kpttaskprogressdialog.cpp
-    kpttasknotesdialog.cpp
+    kpttaskdescriptiondialog.cpp
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp
@@ -100,7 +100,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptaccountsviewconfigurepanelbase.ui
     kptintervaleditbase.ui
     kpttaskcostpanelbase.ui
-    kpttasknotespanelbase.ui
+    kpttaskdescriptionpanelbase.ui
     kptsummarytaskgeneralpanelbase.ui
     kptmilestoneprogresspanelbase.ui
     resourcedialogbase.ui

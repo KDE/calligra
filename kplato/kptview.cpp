@@ -72,7 +72,7 @@
 #include "kptchartview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
-#include "kpttasknotesdialog.h"
+#include "kpttaskdescriptiondialog.h"
 #include "kptnode.h"
 #include "kptpart.h"
 #include "kptproject.h"
@@ -211,9 +211,9 @@ View::View( Part* part, QWidget* parent )
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
-    actionTaskNotes  = new KAction(KIcon( "document-properties" ), i18n("Notes..."), this);
-    actionCollection()->addAction("task_notes", actionTaskNotes );
-    connect( actionTaskNotes, SIGNAL( triggered( bool ) ), SLOT( slotTaskNotes() ) );
+    actionTaskDescription  = new KAction(KIcon( "document-properties" ), i18n("Description..."), this);
+    actionCollection()->addAction("task_description", actionTaskDescription );
+    connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
     actionIndentTask = new KAction(KIcon( "edit-indent" ), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
@@ -1430,7 +1430,7 @@ void View::slotTaskProgress()
     }
 }
 
-void View::slotTaskNotes()
+void View::slotTaskDescription()
 {
     //kDebug();
     Node * node = currentTask();
@@ -1449,7 +1449,7 @@ void View::slotTaskNotes()
         case Node::Type_Summarytask: {
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskNotesDialog *dia = new TaskNotesDialog( *task, this );
+                TaskDescriptionDialog *dia = new TaskDescriptionDialog( *task, this );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {

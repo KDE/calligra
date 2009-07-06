@@ -186,7 +186,7 @@ protected slots:
     void slotOpenNode();
     void slotOpenNode( Node *node );
     void slotTaskProgress();
-    void slotTaskNotes();
+    void slotTaskDescription();
     void slotDeleteTask( QList<Node*> lst );
     void slotDeleteTask( Node *node );
     void slotDeleteTask();
@@ -294,7 +294,7 @@ private:
     // ------ Popup
     KAction *actionOpenNode;
     KAction *actionTaskProgress;
-    KAction *actionTaskNotes;
+    KAction *actionTaskDescription;
     KAction *actionDeleteTask;
     KAction *actionTaskWorkpackage;
     KAction *actionIndentTask;

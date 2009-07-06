@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kpttasknotesdialog.h"
+#include "kpttaskdescriptiondialog.h"
 #include "kpttask.h"
 #include "kptcommand.h"
 
@@ -29,20 +29,20 @@
 namespace KPlato
 {
 
-TaskNotesPanel::TaskNotesPanel(Task &task, QWidget *p )
-    : TaskNotesPanelImpl( task, p )
+TaskDescriptionPanel::TaskDescriptionPanel(Task &task, QWidget *p )
+    : TaskDescriptionPanelImpl( task, p )
 {
     setStartValues( task );
     descriptionfield->setFocus();
 }
 
-void TaskNotesPanel::setStartValues( Task &task )
+void TaskDescriptionPanel::setStartValues( Task &task )
 {
     namefield->setText(task.name());
     descriptionfield->setText(task.description());
 }
 
-MacroCommand *TaskNotesPanel::buildCommand()
+MacroCommand *TaskDescriptionPanel::buildCommand()
 {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task Note"));
     bool modified = false;
@@ -58,12 +58,12 @@ MacroCommand *TaskNotesPanel::buildCommand()
     return cmd;
 }
 
-bool TaskNotesPanel::ok() {
+bool TaskDescriptionPanel::ok() {
     return true;
 }
 
 //-----------------------------
-TaskNotesPanelImpl::TaskNotesPanelImpl( Task &task, QWidget *p )
+TaskDescriptionPanelImpl::TaskDescriptionPanelImpl( Task &task, QWidget *p )
     : QWidget(p),
       m_task(task)
 {
@@ -73,33 +73,33 @@ TaskNotesPanelImpl::TaskNotesPanelImpl( Task &task, QWidget *p )
     connect( descriptionfield, SIGNAL( textChanged() ), SLOT( slotChanged() ) );
 }
 
-void TaskNotesPanelImpl::slotChanged()
+void TaskDescriptionPanelImpl::slotChanged()
 {
     emit textChanged( descriptionfield->text() != m_task.description() );
 }
 
 //-----------------------------
-TaskNotesDialog::TaskNotesDialog( Task &task, QWidget *p )
+TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p )
     : KDialog(p)
 {
-    setCaption( i18n( "Task Notes" ) );
+    setCaption( i18n( "Task Description" ) );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
 
-    m_notesTab = new TaskNotesPanel( task, this );
-    setMainWidget(m_notesTab);
+    m_descriptionTab = new TaskDescriptionPanel( task, this );
+    setMainWidget(m_descriptionTab);
 
     enableButtonOk(false);
 
-    connect( m_notesTab, SIGNAL( textChanged( bool ) ), this, SLOT( enableButtonOk(bool) ) );
+    connect( m_descriptionTab, SIGNAL( textChanged( bool ) ), this, SLOT( enableButtonOk(bool) ) );
 }
 
-MacroCommand *TaskNotesDialog::buildCommand()
+MacroCommand *TaskDescriptionDialog::buildCommand()
 {
-    MacroCommand *m = new MacroCommand(i18n("Modify Task Notes"));
+    MacroCommand *m = new MacroCommand(i18n("Modify Task Description"));
     bool modified = false;
-    MacroCommand *cmd = m_notesTab->buildCommand();
+    MacroCommand *cmd = m_descriptionTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;
@@ -111,10 +111,10 @@ MacroCommand *TaskNotesDialog::buildCommand()
     return m;
 }
 
-void TaskNotesDialog::slotButtonClicked( int button )
+void TaskDescriptionDialog::slotButtonClicked( int button )
 {
     if (button == KDialog::Ok) {
-        if ( ! m_notesTab->ok() ) {
+        if ( ! m_descriptionTab->ok() ) {
             return;
         }
         accept();
@@ -126,4 +126,4 @@ void TaskNotesDialog::slotButtonClicked( int button )
 
 }  //KPlato namespace
 
-#include "kpttasknotesdialog.moc"
+#include "kpttaskdescriptiondialog.moc"

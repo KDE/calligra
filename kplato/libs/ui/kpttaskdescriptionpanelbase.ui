@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>KPlato::TaskNotesPanelBase</class>
- <widget class="QWidget" name="KPlato::TaskNotesPanelBase">
+ <class>KPlato::TaskDescriptionPanelBase</class>
+ <widget class="QWidget" name="KPlato::TaskDescriptionPanelBase">
   <property name="geometry">
    <rect>
     <x>0</x>

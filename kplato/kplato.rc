@@ -96,12 +96,12 @@
         <Action name="node_properties"/>
     </Menu>
     <Menu name="taskstatus_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <Action name="task_progress"/>
         <Action name="task_workpackagecontrol"/>
     </Menu>
     <Menu name="taskview_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <Action name="task_progress"/>
         <Action name="task_workpackagecontrol"/>
     </Menu>
@@ -110,19 +110,19 @@
         <Action name="task_progress"/>
     </Menu>
     <Menu name="taskview_milestone_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <Action name="task_progress"/>
     </Menu>
     <Menu name="taskview_summary_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <!--<Action name="task_workpackagecontrol"/> -->
     </Menu>
     <Menu name="resourceappointment_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <Action name="task_progress"/>
     </Menu>
     <Menu name="resourceassigment_popup">
-        <Action name="task_notes"/>
+        <Action name="task_description"/>
         <Action name="task_progress"/>
     </Menu>
     <Menu name="resourceeditor_resource_popup">

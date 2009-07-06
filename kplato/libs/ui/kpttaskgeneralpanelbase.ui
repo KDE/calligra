@@ -1,8 +1,9 @@
-<ui version="4.0" >
- <author>Dag Andersen &lt;danders@get2net.dk></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
  <class>KPlato::TaskGeneralPanelBase</class>
- <widget class="QWidget" name="KPlato::TaskGeneralPanelBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KPlato::TaskGeneralPanelBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -10,93 +11,93 @@
     <height>504</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
-   <property name="margin" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="gridLayout_2" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="wbslabel" >
-       <property name="toolTip" >
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="wbslabel">
+       <property name="toolTip">
         <string>Work Breakdown Structure</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>WBS:</string>
        </property>
-       <property name="wordWrap" >
+       <property name="wordWrap">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QLabel" name="wbsfield" >
-       <property name="frameShape" >
+     <item row="0" column="1">
+      <widget class="QLabel" name="wbsfield">
+       <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="frameShadow" >
+       <property name="frameShadow">
         <enum>QFrame::Sunken</enum>
        </property>
-       <property name="text" >
+       <property name="text">
         <string/>
        </property>
-       <property name="wordWrap" >
+       <property name="wordWrap">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="namelabel" >
-       <property name="whatsThis" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="namelabel">
+       <property name="whatsThis">
         <string>The name of the Task.</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Name:</string>
        </property>
-       <property name="wordWrap" >
+       <property name="wordWrap">
         <bool>false</bool>
        </property>
-       <property name="buddy" >
+       <property name="buddy">
         <cstring>namefield</cstring>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="KLineEdit" name="namefield" >
-       <property name="whatsThis" >
+     <item row="1" column="1">
+      <widget class="KLineEdit" name="namefield">
+       <property name="whatsThis">
         <string>The name of the Task.</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" >
-      <widget class="QLabel" name="leaderlabel" >
-       <property name="whatsThis" >
+     <item row="2" column="0">
+      <widget class="QLabel" name="leaderlabel">
+       <property name="whatsThis">
         <string>The person responsible for this task.
 
 This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>Responsible:</string>
        </property>
-       <property name="wordWrap" >
+       <property name="wordWrap">
         <bool>false</bool>
        </property>
-       <property name="buddy" >
+       <property name="buddy">
         <cstring>leaderfield</cstring>
        </property>
       </widget>
      </item>
-     <item row="2" column="1" >
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
+     <item row="2" column="1">
+      <layout class="QHBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="KLineEdit" name="leaderfield" >
-         <property name="whatsThis" >
+        <widget class="KLineEdit" name="leaderfield">
+         <property name="whatsThis">
           <string>The person responsible for this task.
 
 This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
@@ -104,17 +105,17 @@ This is not limited to persons available in a resource group but can be anyone. 
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="chooseLeader" >
-         <property name="toolTip" >
+        <widget class="QPushButton" name="chooseLeader">
+         <property name="toolTip">
           <string>Insert a person from your address book</string>
          </property>
-         <property name="whatsThis" >
+         <property name="whatsThis">
           <string>Insert a person from your address book.</string>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Choose...</string>
          </property>
-         <property name="shortcut" >
+         <property name="shortcut">
           <string/>
          </property>
         </widget>
@@ -124,111 +125,111 @@ This is not limited to persons available in a resource group but can be anyone. 
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="whatsThis" >
+    <widget class="QGroupBox" name="groupBox">
+     <property name="whatsThis">
       <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
 
 The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.</string>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Timing</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QFrame" name="frame" >
-        <property name="frameShape" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QFrame" name="frame">
+        <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow" >
+        <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
+        <layout class="QGridLayout">
+         <property name="margin">
           <number>0</number>
          </property>
-         <property name="spacing" >
+         <property name="spacing">
           <number>6</number>
          </property>
-         <item row="0" column="0" >
-          <widget class="QLabel" name="textLabel3" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+         <item row="0" column="0">
+          <widget class="QLabel" name="textLabel3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Schedule:</string>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy" >
+           <property name="buddy">
             <cstring>scheduleType</cstring>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" >
-          <widget class="KComboBox" name="scheduleType" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <item row="0" column="1">
+          <widget class="KComboBox" name="scheduleType">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>As Soon as Possible</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>As Late as Possible</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Must Start On</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Must Finish On</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Start Not Earlier Than</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Finish Not Later Than</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Fixed Interval</string>
             </property>
            </item>
           </widget>
          </item>
-         <item row="0" column="3" >
-          <widget class="QTimeEdit" name="scheduleStartTime" />
+         <item row="0" column="3">
+          <widget class="QTimeEdit" name="scheduleStartTime"/>
          </item>
-         <item row="1" column="3" >
-          <widget class="QTimeEdit" name="scheduleEndTime" />
+         <item row="1" column="3">
+          <widget class="QTimeEdit" name="scheduleEndTime"/>
          </item>
-         <item row="0" column="2" >
-          <widget class="QDateEdit" name="scheduleStartDate" >
-           <property name="calendarPopup" >
+         <item row="0" column="2">
+          <widget class="QDateEdit" name="scheduleStartDate">
+           <property name="calendarPopup">
             <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="1" column="2" >
-          <widget class="QDateEdit" name="scheduleEndDate" >
-           <property name="calendarPopup" >
+         <item row="1" column="2">
+          <widget class="QDateEdit" name="scheduleEndDate">
+           <property name="calendarPopup">
             <bool>true</bool>
            </property>
           </widget>
@@ -236,178 +237,178 @@ The estimation can be either effort based or duration based. If it is effort bas
         </layout>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QFrame" name="frame_2" >
-        <property name="frameShape" >
+      <item row="1" column="0">
+       <widget class="QFrame" name="frame_2">
+        <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow" >
+        <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout" >
-         <item row="0" column="0" >
-          <widget class="QLabel" name="textLabel3_2" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="textLabel3_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Estimate:</string>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" >
-          <widget class="DurationSpinBox" name="estimate" />
+         <item row="0" column="1">
+          <widget class="DurationSpinBox" name="estimate"/>
          </item>
-         <item row="0" column="2" colspan="2" >
-          <widget class="KComboBox" name="estimateType" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <item row="0" column="2" colspan="2">
+          <widget class="KComboBox" name="estimateType">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="editable" >
+           <property name="editable">
             <bool>false</bool>
            </property>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Effort</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Duration</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Length</string>
             </property>
            </item>
           </widget>
          </item>
-         <item row="0" column="4" colspan="2" >
-          <widget class="KComboBox" name="calendarCombo" />
+         <item row="0" column="4" colspan="2">
+          <widget class="KComboBox" name="calendarCombo"/>
          </item>
-         <item row="1" column="0" >
-          <widget class="QLabel" name="textLabel3_2_3" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+         <item row="1" column="0">
+          <widget class="QLabel" name="textLabel3_2_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="toolTip" >
+           <property name="toolTip">
             <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
            </property>
-           <property name="whatsThis" >
-            <string>&lt;p>Risk controles the PERT distribution used when calculating the actual estimate for the task.
-&lt;b>None&lt;/b> means the Expected estimate is used as is.
-&lt;b>Low risk&lt;/b> means that a normal distribution is used.
-&lt;b>High risk&lt;/b> means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p></string>
+           <property name="whatsThis">
+            <string>&lt;p&gt;Risk controles the PERT distribution used when calculating the actual estimate for the task.
+&lt;b&gt;None&lt;/b&gt; means the Expected estimate is used as is.
+&lt;b&gt;Low risk&lt;/b&gt; means that a normal distribution is used.
+&lt;b&gt;High risk&lt;/b&gt; means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p&gt;</string>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Risk:</string>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy" >
+           <property name="buddy">
             <cstring>risk</cstring>
            </property>
           </widget>
          </item>
-         <item row="1" column="1" >
-          <widget class="KComboBox" name="risk" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <item row="1" column="1">
+          <widget class="KComboBox" name="risk">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="toolTip" >
+           <property name="toolTip">
             <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
            </property>
-           <property name="whatsThis" >
-            <string>&lt;p>Risk controles the PERT distribution used when calculating the actual estimate for the task.
-&lt;b>None&lt;/b> means the Expected estimate is used as is.
-&lt;b>Low risk&lt;/b> means that a normal distribution is used.
-&lt;b>High risk&lt;/b> means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p></string>
+           <property name="whatsThis">
+            <string>&lt;p&gt;Risk controles the PERT distribution used when calculating the actual estimate for the task.
+&lt;b&gt;None&lt;/b&gt; means the Expected estimate is used as is.
+&lt;b&gt;Low risk&lt;/b&gt; means that a normal distribution is used.
+&lt;b&gt;High risk&lt;/b&gt; means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p&gt;</string>
            </property>
-           <property name="editable" >
+           <property name="editable">
             <bool>false</bool>
            </property>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>None</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>Low</string>
             </property>
            </item>
            <item>
-            <property name="text" >
+            <property name="text">
              <string>High</string>
             </property>
            </item>
           </widget>
          </item>
-         <item row="1" column="2" >
-          <widget class="QLabel" name="textLabel1_2" >
-           <property name="text" >
+         <item row="1" column="2">
+          <widget class="QLabel" name="textLabel1_2">
+           <property name="text">
             <string>Optimistic:</string>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy" >
+           <property name="buddy">
             <cstring>optimisticValueoptimisticValue</cstring>
            </property>
           </widget>
          </item>
-         <item row="1" column="3" >
-          <widget class="QSpinBox" name="optimisticValue" >
-           <property name="suffix" >
+         <item row="1" column="3">
+          <widget class="QSpinBox" name="optimisticValue">
+           <property name="suffix">
             <string>%</string>
            </property>
-           <property name="minimum" >
+           <property name="minimum">
             <number>-99</number>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <number>0</number>
            </property>
           </widget>
          </item>
-         <item row="1" column="4" >
-          <widget class="QLabel" name="textLabel2_2" >
-           <property name="text" >
+         <item row="1" column="4">
+          <widget class="QLabel" name="textLabel2_2">
+           <property name="text">
             <string>Pessimistic:</string>
            </property>
-           <property name="alignment" >
+           <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy" >
+           <property name="buddy">
             <cstring>pessimisticValue</cstring>
            </property>
           </widget>
          </item>
-         <item row="1" column="5" >
-          <widget class="QSpinBox" name="pessimisticValue" >
-           <property name="suffix" >
+         <item row="1" column="5">
+          <widget class="QSpinBox" name="pessimisticValue">
+           <property name="suffix">
             <string>%</string>
            </property>
-           <property name="maximum" >
+           <property name="maximum">
             <number>999</number>
            </property>
           </widget>
@@ -419,30 +420,36 @@ The estimation can be either effort based or duration based. If it is effort bas
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="descriptionlabell6" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+    <widget class="QLabel" name="descriptionlabell6">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text" >
-      <string>Note:</string>
+     <property name="text">
+      <string>Description:</string>
      </property>
-     <property name="wordWrap" >
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>descriptionfield</cstring>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KTextEdit" name="descriptionfield" />
+    <widget class="KTextEdit" name="descriptionfield">
+     <property name="whatsThis">
+      <string>A description of the task.
+
+Here you can enter any additional text you want to be stored with the task. This can for example be a short summary of the task or various notes.</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KComboBox</class>
@@ -483,10 +490,10 @@ The estimation can be either effort based or duration based. If it is effort bas
   <tabstop>descriptionfield</tabstop>
  </tabstops>
  <includes>
-  <include location="local" >klineedit.h</include>
-  <include location="local" >kcombobox.h</include>
-  <include location="local" >kdatewidget.h</include>
-  <include location="local" >ktextedit.h</include>
+  <include location="local">klineedit.h</include>
+  <include location="local">kcombobox.h</include>
+  <include location="local">kdatewidget.h</include>
+  <include location="local">ktextedit.h</include>
  </includes>
  <resources/>
  <connections/>
