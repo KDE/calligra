@@ -2533,7 +2533,7 @@ bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role 
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( headerData( i18n( "Modify actual start time" ) );
+            MacroCommand *m = new MacroCommand( i18n( "Modify actual start time" ) );
             if ( ! t->completion().isStarted() ) {
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
