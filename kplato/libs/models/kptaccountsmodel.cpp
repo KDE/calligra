@@ -85,9 +85,9 @@ QVariant AccountModel::name( const Account *a, int role ) const
         case Qt::EditRole:
             return a->name();
         case Qt::ToolTipRole:
-/*FIXME:            if ( a->isDefaultAccount() ) {
+            if ( a->isDefaultAccount() ) {
                 return i18nc( "1=account name", "%1 (Default account)", a->name() );
-            }*/
+            }
             return a->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -318,13 +318,13 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
             switch ( value.toInt() ) {
                 case Qt::Unchecked:
                     if ( a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, ( "Modify default account" ) ) ); //FIXME i18n
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, i18n( "Modify default account" ) ) );
                         return true;
                     }
                     break;
                 case Qt::Checked:
                     if ( ! a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, ( "Modify default account" ) ) ); //FIXME i18n
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, i18n( "Modify default account" ) ) );
                         return true;
                     }
                     break;

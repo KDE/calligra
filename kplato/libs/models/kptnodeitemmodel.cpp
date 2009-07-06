@@ -2533,7 +2533,7 @@ bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role 
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            MacroCommand *m = new MacroCommand( headerData( i18n( "Modify actual start time" ) );
             if ( ! t->completion().isStarted() ) {
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
@@ -2561,7 +2561,7 @@ bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            MacroCommand *m = new MacroCommand( i18n( "Modify actual finish time" ) );
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
