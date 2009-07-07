@@ -24,6 +24,7 @@
 
 #include "SvgGradientHelper.h"
 #include "SvgPatternHelper.h"
+#include "SvgFilterHelper.h"
 #include "svggraphiccontext.h"
 
 #include <QtGui/QGradient>
@@ -68,6 +69,8 @@ protected:
     void parseColorStops( QGradient *, const QDomElement & );
     /// Parses a pattern element
     bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    /// Parses a filter element
+    bool parseFilter( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses a length attribute
     double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
     /// parses a length attribute in x-direction
@@ -107,6 +110,8 @@ protected:
     SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
     /// find pattern with given id in pattern map
     SvgPatternHelper* findPattern( const QString &id, const QString &href = 0 );
+    /// find filter with given id in filter map
+    SvgFilterHelper* findFilter( const QString &id, const QString &href = 0 );
 
     /// Merges two style elements, returning the merged style
     QDomElement mergeStyles( const QDomElement &, const QDomElement & );
@@ -132,11 +137,15 @@ protected:
     /// Applies the current stroke style to the object
     void applyStrokeStyle( KoShape * shape );
 
+    /// Applies the current filter to the object
+    void applyFilter( KoShape * shape );
+
 private:
     QSizeF m_documentSize;
     QStack<SvgGraphicsContext*>    m_gc;
     QMap<QString, SvgGradientHelper>  m_gradients;
     QMap<QString, SvgPatternHelper> m_patterns;
+    QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, QDomElement>     m_defs;
     QHash<QByteArray, QColor>      m_rgbcolors;
     QDomDocument                   m_inpdoc;

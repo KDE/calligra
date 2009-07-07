@@ -37,6 +37,7 @@ set(karbonsvgimport_PART_SRCS
     SvgParser.cpp
     SvgGradientHelper.cpp
     SvgPatternHelper.cpp
+    SvgFilterHelper.cpp
     ${SHAPES_SOURCES} 
 )
 

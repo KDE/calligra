@@ -69,6 +69,7 @@ SvgParser::SvgParser( const QMap<QString, KoDataCenter*> & dataCenters )
     m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
     m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
     m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit"; 
+    m_styleAttributes << "filter";
 }
 
 SvgParser::~SvgParser()
@@ -158,6 +159,9 @@ void SvgParser::addGraphicContext()
     // set as default
     if( ! m_gc.isEmpty() )
         *gc = *( m_gc.top() );
+
+    gc->filterId = QString(); // filters are not inherited
+
     m_gc.push( gc );
 }
 
@@ -370,6 +374,46 @@ SvgPatternHelper* SvgParser::findPattern( const QString &id, const QString &href
 
     if( m_patterns.contains( n ) )
         return &m_patterns[ n ];
+    else
+        return 0L;
+}
+
+SvgFilterHelper* SvgParser::findFilter( const QString &id, const QString &href )
+{
+    // check if filter was already parsed, and return it
+    if( m_filters.contains( id ) )
+        return &m_filters[ id ];
+
+    // check if filter was stored for later parsing
+    if( !m_defs.contains( id ) )
+        return 0L;
+
+    QDomElement e = m_defs[ id ];
+    if(e.childNodes().count() == 0)
+    {
+        QString mhref = e.attribute("xlink:href").mid(1);
+
+        if(m_defs.contains(mhref))
+            return findFilter(mhref, id);
+        else
+            return 0L;
+    }
+    else
+    {
+        // ok parse filter now
+        if( ! parseFilter( m_defs[ id ], m_defs[ href ] ) )
+            return 0L;
+    }
+
+    // return successfully parsed filter or NULL
+    QString n;
+    if(href.isEmpty())
+        n = id;
+    else
+        n = href;
+
+    if( m_filters.contains( n ) )
+        return &m_filters[ n ];
     else
         return 0L;
 }
@@ -863,6 +907,62 @@ bool SvgParser::parsePattern( const QDomElement &e, const QDomElement &reference
     return true;
 }
 
+bool SvgParser::parseFilter( const QDomElement &e, const QDomElement &referencedBy )
+{
+    SvgFilterHelper filter;
+
+    // Use the filter that is referencing, or if there isn't one, the original filter
+    QDomElement b;
+    if( !referencedBy.isNull() )
+        b = referencedBy;
+    else
+        b = e;
+
+    // check if we are referencing another filter
+    if( e.hasAttribute("xlink:href")  )
+    {
+        QString href = e.attribute("xlink:href").mid(1);
+        if( ! href.isEmpty() )
+        {
+            // copy the referenced filter if found
+            SvgFilterHelper * refFilter = findFilter( href );
+            if( refFilter )
+                filter = *refFilter;
+        }
+    }
+    else
+    {
+        filter.setContent( b );
+    }
+
+    if( b.attribute( "filterUnits" ) == "userSpaceOnUse" )
+        filter.setFilterUnits( SvgFilterHelper::UserSpaceOnUse );
+    if( b.attribute( "primitiveUnits" ) == "objectBoundingBox" )
+        filter.setPrimitiveUnits( SvgFilterHelper::ObjectBoundingBox );
+
+    // parse filter region rectangle
+    if( filter.filterUnits() == SvgFilterHelper::UserSpaceOnUse )
+    {
+        filter.setPosition( QPointF( parseUnitX( b.attribute( "x" ) ),
+                                      parseUnitY( b.attribute( "y" ) ) ) );
+        filter.setSize( QSizeF( parseUnitX( b.attribute( "width" ) ),
+                                 parseUnitY( b.attribute( "height" ) ) ) );
+    }
+    else
+    {
+        // x, y, width, height are in percentages of the object referencing the filter
+        // so we just parse the percentages
+        filter.setPosition( QPointF( SvgUtil::fromPercentage( b.attribute( "x" ) ), 
+                                      SvgUtil::fromPercentage( b.attribute( "y" ) ) ) );
+        filter.setSize( QSizeF( SvgUtil::fromPercentage( b.attribute( "width" ) ),
+                                 SvgUtil::fromPercentage( b.attribute( "height" ) ) ) );
+    }
+
+    m_filters.insert( b.attribute( "id" ), filter );
+
+    return true;
+}
+
 bool SvgParser::parseImage( const QString &attribute, QImage &image )
 {
     if( attribute.startsWith( "data:" ) )
@@ -1138,6 +1238,15 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
         if( params == "none" )
             gc->display = false;
     }
+    else if( command == "filter" )
+    {
+        if( params != "none" && params.startsWith( "url(" ) )
+        {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.lastIndexOf(')');
+            gc->filterId = params.mid( start, end - start );
+        }
+    }
 
     gc->fillColor = fillcolor;
     gc->stroke.setColor( strokecolor );
@@ -1184,6 +1293,7 @@ void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
 
     applyFillStyle( obj );
     applyStrokeStyle( obj );
+    applyFilter( obj );
 
     if( ! gc->display )
         obj->setVisible( false );
@@ -1375,6 +1485,27 @@ void SvgParser::applyStrokeStyle( KoShape * shape )
         default:
             shape->setBorder( 0 );
         break;
+    }
+}
+
+void SvgParser::applyFilter( KoShape * shape )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( ! gc )
+        return;
+
+    if( gc->filterId.isEmpty() )
+        return;
+
+    SvgFilterHelper * filter = findFilter( gc->filterId );
+    if( ! filter )
+        return;
+
+    // create the filter effects and add them to the shape
+    for( QDomNode n = filter->content().firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement primitive = n.toElement();
+        kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
     }
 }
 
@@ -1622,6 +1753,10 @@ QList<KoShape*> SvgParser::parseContainer( const QDomElement &e )
         else if( b.tagName() == "pattern" )
         {
             parsePattern( b );
+        }
+        else if( b.tagName() == "filter" )
+        {
+            parseFilter( b );
         }
         else if( b.tagName() == "rect" ||
             b.tagName() == "ellipse" ||

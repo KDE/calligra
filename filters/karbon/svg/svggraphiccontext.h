@@ -55,6 +55,8 @@ public:
     QString      strokeId;  ///< the current stroke id (used for gradient strokes)
     KoLineBorder stroke;    ///< the current stroke
 
+    QString filterId;       ///< the current filter id
+
     QMatrix matrix;         ///< the current transformation matrix
     QFont   font;           ///< the current font
     QColor  currentColor;   ///< the current color
