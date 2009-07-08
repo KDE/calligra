@@ -40,6 +40,8 @@ class ViewListWidget;
 class Part;
 class Context;
 
+#define TIP_USE_DEFAULT_TEXT "TIP_USE_DEFAULT_TEXT"
+
 class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
 {
     public:
@@ -50,8 +52,8 @@ class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
         ViewListItem( const QString &tag, const QStringList &strings, int type = ItemType_Category );
         ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
         ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
-        void setView( KoView *view );
-        KoView *view() const;
+        void setView( ViewBase *view );
+        ViewBase *view() const;
         void setDocument( KoDocument *doc );
         KoDocument *document() const;
 
@@ -60,8 +62,13 @@ class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
 
         void setReadWrite( bool rw );
 
+        void setNameModified( bool on ) { m_namemodified = on; }
+        void setTipModified( bool on ) { m_tipmodified = on; }
+
     private:
         QString m_tag;
+        bool m_namemodified;
+        bool m_tipmodified;
 };
 
 class KPLATO_EXPORT ViewListTreeWidget : public QTreeWidget
@@ -109,7 +116,7 @@ public:
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
-    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString(), int index = -1 );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, ViewBase *view, KoDocument *doc, const QString& icon = QString(), int index = -1 );
 
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *currentItem() const;
@@ -117,7 +124,7 @@ public:
     KoView *findView( const QString &tag ) const;
     ViewListItem *findItem( const QString &tag ) const;
     ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent ) const;
-    ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 ) const;
+    ViewListItem *findItem( const ViewBase *view, QTreeWidgetItem* parent = 0 ) const;
 
     /// Remove @p item, don't emit signal
     int removeViewListItem( ViewListItem *item );
@@ -130,6 +137,8 @@ public:
     void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
 
     void save( QDomElement &element ) const;
+
+    ViewListItem *previousViewItem() const { return m_prev; }
 
 signals:
     void activated( ViewListItem*, ViewListItem* );
@@ -159,11 +168,10 @@ private:
     ViewListTreeWidget *m_viewlist;
 
     ViewListItem *m_contextitem;
-    QList<QAction*> m_editcategory;
-    QList<QAction*> m_editview;
-    QList<QAction*> m_addview;
+    QList<QAction*> m_categoryactions;
+    QList<QAction*> m_viewactions;
 
-    QTreeWidgetItem *m_prev;
+    ViewListItem *m_prev;
 };
 
 } //Kplato namespace

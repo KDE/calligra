@@ -142,64 +142,70 @@ bool AddViewPanel::ok()
     if ( cat == 0 ) {
         return false;
     }
+    ViewBase *v = 0;
     int index = widget.insertAfter->currentIndex();
     switch ( widget.viewtype->currentIndex() ) {
-        case 0: // Resource editor
-            m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 1: // Task editor
-            m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 2: // Work & Vacation Editor
-            m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 3: // Accounts Editor
-            m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 4: // Dependency Editor (Graphic)
-            m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 5: // Dependency Editor (List)
-            m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 6: // Schedules Handler
-            m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 7: // Task status
-            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 8: // Task status
-            m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 9: // Gantt View
-            m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 10: // Milestone Gantt View
-            m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 11: // Resource Assignments
-            m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 12: // Cost Breakdown
-            m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 13: // Project Performance Chart
-            m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
-        case 14: // Task Performance Chart
-            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
-            break;
+        case 0: { // Resource editor
+            v = m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 1: { // Task editor
+            v = m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 2: { // Work & Vacation Editor
+            v = m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 3: { // Accounts Editor
+            v = m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 4: { // Dependency Editor (Graphic)
+            v = m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 5: { // Dependency Editor (List)
+            v = m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 6: { // Schedules Handler
+            v = m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 7: { // Task status
+            v = m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 8: { // Task status
+            v = m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 9: { // Gantt View
+            v = m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 10: { // Milestone Gantt View
+            v = m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 11: { // Resource Assignments
+            v = m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 12: { // Cost Breakdown
+            v = m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 13: { // Project Performance Chart
+            v = m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 14: { // Task Performance Chart
+            v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
 /* Deactivate for koffice 2.0 release
-        case 15: // Performance Status
-            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
-            break;
-        case 16: // Tasks by Resources
-            m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
-            break;
+        case 15: { // Performance Status
+            v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break; }
+        case 16: { // Tasks by Resources
+            v = m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break; }
 */
         default:
             kError()<<"Unknown view type!";
             break;
+    }
+    ViewListItem *item = m_viewlist.findItem( v, cat );
+    if ( item ) {
+        item->setNameModified( true );
+        item->setTipModified( true );
     }
     return true;
 }
@@ -271,8 +277,14 @@ bool EditViewPanel::ok()
     if ( cat == 0 ) {
         return false;
     }
-    m_item->setText( 0, widget.viewname->text() );
-    m_item->setToolTip( 0, widget.tooltip->text() );
+    if ( widget.viewname->text() != m_item->text( 0 ) ) {
+        m_item->setText( 0, widget.viewname->text() );
+        m_item->setNameModified( true );
+    }
+    if ( widget.tooltip->text() != m_item->toolTip( 0 ) ) {
+        m_item->setToolTip( 0, widget.tooltip->text() );
+        m_item->setTipModified( true );
+    }
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
     m_viewlist.addViewListItem( m_item, cat, index );
@@ -357,8 +369,14 @@ EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *it
 
 bool EditCategoryPanel::ok()
 {
-    m_item->setText( 0, widget.viewname->text() );
-    m_item->setToolTip( 0, widget.tooltip->text() );
+    if ( widget.viewname->text() != m_item->text( 0 ) ) {
+        m_item->setText( 0, widget.viewname->text() );
+        m_item->setNameModified( true );
+    }
+    if ( widget.tooltip->text() == m_item->toolTip( 0 ) ) {
+        m_item->setToolTip( 0, widget.tooltip->text() );
+        m_item->setTipModified( true );
+    }
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
     m_viewlist.addViewListItem( m_item, 0, index );
