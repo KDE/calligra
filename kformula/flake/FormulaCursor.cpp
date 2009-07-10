@@ -472,6 +472,10 @@ bool FormulaCursor::hasSelection() const
 
 bool FormulaCursor::isAccepted() const
 {
+    if (mark()<0 || mark()>m_currentElement->length() ||
+        position()<0 || position()>m_currentElement->length()) {
+        return false;
+    }
     if ((m_direction==MoveLeft || m_direction==MoveRight) && !m_selecting) {
         return (m_currentElement->acceptCursor(this) && !nextToEmpty());
     } else {
@@ -591,3 +595,5 @@ bool FormulaCursor::performMovement ( CursorDirection direction, FormulaCursor *
         }
     }
 }
+
+

@@ -93,6 +93,8 @@ private:
 
     /// The FormulaCursor the tool uses to move around in the formula
     FormulaCursor* m_formulaCursor;
+    
+    QList<FormulaCursor*> m_cursorList;
 };
 
 #endif

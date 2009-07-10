@@ -268,6 +268,12 @@ public:
     /// Save the element to MathML 
     void writeMathML( KoXmlWriter* writer ) const;
 
+    /// @return true, if @p other is a descendant of this element
+    bool isDescendant(BasicElement* other) const;
+
+    /// @return the formula element
+    BasicElement* formulaElement();
+
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
     virtual bool readMathMLAttributes( const KoXmlElement& element );

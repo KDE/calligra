@@ -157,7 +157,9 @@ public:
     
     /// return the end and beginning of the current selection where the first element is the smaller one
     QPair<int,int> selection() const;
-    
+   
+    /// @return checks if the cursor is valid were it is
+    bool isAccepted() const;
     
 private:
     /// @return true if the cursor is inside a token element
@@ -175,8 +177,6 @@ private:
     /// @return if the element next to the cursor is an empty element it is returned, otherwise 0
     BasicElement* nextToEmpty() const;
     
-    /// @return checks if the cursor is valid were it is
-    bool isAccepted() const;
     
     /// @return if the element is next to an empty element, it is placed there
     bool moveToEmpty();

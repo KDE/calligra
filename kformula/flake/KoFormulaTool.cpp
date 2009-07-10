@@ -36,12 +36,15 @@
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaCursor( 0 )
-{
+{ 
     setupActions();
 }
 
 KoFormulaTool::~KoFormulaTool()
 {
+    foreach (FormulaCursor* tmp, m_cursorList) {
+        delete tmp;
+    }
     if( m_formulaCursor )
         delete m_formulaCursor;
 }
@@ -56,21 +59,48 @@ void KoFormulaTool::activate( bool temporary )
         if( m_formulaShape )
             break;
     }
+    
     if( m_formulaShape == 0 )  // none found
     {
         emit done();
         return;
     }
-    
     useCursor( Qt::IBeamCursor, true );
-    m_formulaCursor = new FormulaCursor( m_formulaShape->formulaElement() );
+    m_formulaCursor=0;
+    for (int i = 0; i < m_cursorList.count(); i++) {
+        FormulaCursor* cursor = m_cursorList[i];
+        if (cursor->currentElement()->formulaElement() == m_formulaShape->formulaElement()) {
+            //we have to check if the cursors current element is actually a 
+            //child of the m_formulaShape->formulaElement()
+            m_cursorList.removeAll(cursor);
+            if (m_formulaShape->formulaElement()->isDescendant(cursor->currentElement())) {
+                if (cursor->isAccepted()) {
+                    kDebug()<<"Found old cursor";
+                    m_formulaCursor=cursor;      
+                    break;
+                } 
+            }
+            delete cursor;
+        }
+    }
+    if (m_formulaCursor==0) {
+        m_formulaCursor = new FormulaCursor( m_formulaShape->formulaElement() );
+    }
 }
 
 void KoFormulaTool::deactivate()
 {
+    if (m_canvas) {
+        m_cursorList.append(m_formulaCursor);
+        kDebug()<<"Appending cursor";
+    }
+    if (m_cursorList.count() > 20) { // don't let it grow indefinitely
+        //TODO: is this save?
+        delete m_cursorList[0];
+        m_cursorList.removeAt(0);
+    }
     m_formulaShape = 0;
-    delete m_formulaCursor;
-    m_formulaCursor = 0;
+    
 }
 
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
@@ -251,8 +281,8 @@ void KoFormulaTool::resetFormulaCursor() {
     m_formulaCursor->setCurrentElement(m_formulaShape->formulaElement());
     m_formulaCursor->setPosition(0);
     //we don't know if this cursor is allowed there, so we move it right
-    if ( !m_formulaCursor->currentElement()->acceptCursor(m_formulaCursor) ) {
-	m_formulaCursor->move(MoveRight);
+    if ( !m_formulaCursor->isAccepted() ) {
+        m_formulaCursor->move(MoveRight);
     }
 }
 

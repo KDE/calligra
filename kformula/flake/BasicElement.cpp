@@ -353,3 +353,29 @@ void BasicElement::setDisplayStyle(bool displayStyle)
 {
     m_displayStyle = displayStyle;
 }
+
+
+bool BasicElement::isDescendant ( BasicElement* other ) const
+{
+    if (other==this) {
+        return true;
+    }
+    foreach (BasicElement* tmp, childElements()) {
+        if (tmp->isDescendant(other)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//TODO: This should be cached
+BasicElement* BasicElement::formulaElement() 
+{
+    if (parentElement()==0) {
+        return this;
+    } else {
+        return parentElement()->formulaElement();
+    }
+}
+
+
