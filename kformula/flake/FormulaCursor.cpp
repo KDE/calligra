@@ -35,8 +35,8 @@
 
 #include <kdebug.h>
 
-FormulaCursor::FormulaCursor( BasicElement* element )
-              : m_currentElement( element )
+FormulaCursor::FormulaCursor( BasicElement* element, FormulaData* data )
+              : m_currentElement( element ), m_data( data )
 {
     m_position = 0;
     m_mark = 0;
@@ -415,6 +415,19 @@ int FormulaCursor::position() const
 void FormulaCursor::setCurrentElement(BasicElement* element) {
     m_currentElement=element;
 }
+
+
+void FormulaCursor::setData ( FormulaData* data )
+{
+    m_data=data;
+}
+
+
+FormulaData* FormulaCursor::formulaData() const
+{
+    return m_data;
+}
+
 
 void FormulaCursor::setPosition(int position) {
     m_position=position;

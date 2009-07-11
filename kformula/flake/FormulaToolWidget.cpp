@@ -103,10 +103,7 @@ void FormulaToolWidget::slotLoadFormula()
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( &file, false, 0, 0, 0 );
-    m_tool->shape()->update(); //clear the area 
     m_tool->shape()->loadOdf( tmpDocument.documentElement(), shapeContext );
-    m_tool->shape()->update(); //paint our shape again
-    m_tool->resetFormulaCursor();
 }
 
 void FormulaToolWidget::slotSaveFormula()

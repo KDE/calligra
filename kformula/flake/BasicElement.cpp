@@ -355,13 +355,13 @@ void BasicElement::setDisplayStyle(bool displayStyle)
 }
 
 
-bool BasicElement::isDescendant ( BasicElement* other ) const
+bool BasicElement::hasDescendant ( BasicElement* other ) const
 {
     if (other==this) {
         return true;
     }
     foreach (BasicElement* tmp, childElements()) {
-        if (tmp->isDescendant(other)) {
+        if (tmp->hasDescendant(other)) {
             return true;
         }
     }

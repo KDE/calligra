@@ -25,6 +25,7 @@
 
 class BasicElement;
 class FormulaRenderer;
+class FormulaData;
 
 /**
  * @short The flake shape for a formula
@@ -60,8 +61,8 @@ public:
     /// @return Get the bounding box of the shape.
 //     QRectF boundingRect() const;
 
-    /// @return The formula's root element
-    BasicElement* formulaElement() const;
+    /// @return The data shown by the shape
+    FormulaData* formulaData() const;
 
     /**
      * Load a shape from odf - reimplemented from KoShape
@@ -80,8 +81,8 @@ public:
     void saveOdf( KoShapeSavingContext& context ) const;
 
 private:
-    /// The element at the highest level in the formula tree, contains all other elements
-    BasicElement* m_formulaElement;
+    /// The data this shape displays
+    FormulaData* m_formulaData;
 
     /// The renderer that takes care of painting the shape's formula
     FormulaRenderer* m_formulaRenderer;

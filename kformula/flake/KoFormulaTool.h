@@ -44,29 +44,28 @@ public:
 
     /// reimplemented
     void mousePressEvent( KoPointerEvent *event ) ;
-    
+
     /// reimplemented
     void mouseDoubleClickEvent( KoPointerEvent *event );
-    
+
     /// reimplemented
     void mouseMoveEvent( KoPointerEvent *event );
-    
+
     /// reimplemented
     void mouseReleaseEvent( KoPointerEvent *event );
-    
+
     void keyPressEvent( QKeyEvent *event );
-    
+
     void keyReleaseEvent( QKeyEvent *event );
 
     void remove( bool backSpace );
 
     /// @return The currently manipulated KoFormulaShape
     KoFormulaShape* shape();
-    
+
     /// Reset the cursor
     void resetFormulaCursor();
 
-    
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
     void activate( bool temporary=false );
@@ -76,7 +75,10 @@ public slots:
 
     /// Insert the element tied to the given @p action
     void insert( QAction* action );
- 
+
+    /// Reposition the cursor according to the data change
+    void updateCursor();
+
 protected:
     /// Create default option widget
     QWidget* createOptionWidget();
@@ -93,7 +95,7 @@ private:
 
     /// The FormulaCursor the tool uses to move around in the formula
     FormulaCursor* m_formulaCursor;
-    
+
     QList<FormulaCursor*> m_cursorList;
 };
 

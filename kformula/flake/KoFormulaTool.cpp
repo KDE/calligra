@@ -69,23 +69,26 @@ void KoFormulaTool::activate( bool temporary )
     m_formulaCursor=0;
     for (int i = 0; i < m_cursorList.count(); i++) {
         FormulaCursor* cursor = m_cursorList[i];
-        if (cursor->currentElement()->formulaElement() == m_formulaShape->formulaElement()) {
+        FormulaData* formulaData=m_formulaShape->formulaData();
+        if (cursor->formulaData() == formulaData) {
             //we have to check if the cursors current element is actually a 
-            //child of the m_formulaShape->formulaElement()
+            //child of the m_formulaShape->formulaData()
             m_cursorList.removeAll(cursor);
-            if (m_formulaShape->formulaElement()->isDescendant(cursor->currentElement())) {
+            if (formulaData->formulaElement()->hasDescendant(cursor->currentElement())) {
                 if (cursor->isAccepted()) {
                     kDebug()<<"Found old cursor";
                     m_formulaCursor=cursor;      
                     break;
-                } 
+                }
             }
             delete cursor;
         }
     }
     if (m_formulaCursor==0) {
-        m_formulaCursor = new FormulaCursor( m_formulaShape->formulaElement() );
+        m_formulaCursor = new FormulaCursor( m_formulaShape->formulaData()->formulaElement(),
+                                             m_formulaShape->formulaData());
     }
+    connect(m_formulaShape->formulaData(), SIGNAL(dataChanged()), this, SLOT(updateCursor()));
 }
 
 void KoFormulaTool::deactivate()
@@ -102,6 +105,14 @@ void KoFormulaTool::deactivate()
     m_formulaShape = 0;
     
 }
+
+
+void KoFormulaTool::updateCursor()
+{
+    kDebug() << "Updating Cursor";
+    resetFormulaCursor();
+}
+
 
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
@@ -278,8 +289,11 @@ KoFormulaShape* KoFormulaTool::shape()
 }
 
 void KoFormulaTool::resetFormulaCursor() {
-    m_formulaCursor->setCurrentElement(m_formulaShape->formulaElement());
+    m_formulaCursor->setData(m_formulaShape->formulaData());
+    m_formulaCursor->setCurrentElement(m_formulaShape->formulaData()->formulaElement());
     m_formulaCursor->setPosition(0);
+    m_formulaCursor->setSelecting(false);
+    m_formulaCursor->setSelectionStart(0);
     //we don't know if this cursor is allowed there, so we move it right
     if ( !m_formulaCursor->isAccepted() ) {
         m_formulaCursor->move(MoveRight);

@@ -24,16 +24,18 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <kdebug.h>
+#include "FormulaData.h"
 
 KoFormulaShape::KoFormulaShape()
 {
-    m_formulaElement = new FormulaElement();
+    FormulaElement* element= new FormulaElement();
+    m_formulaData = new FormulaData(element);
     m_formulaRenderer = new FormulaRenderer();
 }
 
 KoFormulaShape::~KoFormulaShape()
 {
-    delete m_formulaElement;
+    delete m_formulaData;
     delete m_formulaRenderer;
 }
 
@@ -41,45 +43,42 @@ void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter 
 {
     painter.save();
     applyConversion( painter, converter );   // apply zooming and coordinate translation
-    m_formulaRenderer->layoutElement( m_formulaElement );
-    m_formulaRenderer->paintElement( painter, m_formulaElement );  // paint the formula
+    m_formulaRenderer->layoutElement(  m_formulaData->formulaElement() );
+    m_formulaRenderer->paintElement( painter,  m_formulaData->formulaElement() );  // paint the formula
     painter.restore();
 }
 
 void KoFormulaShape::KoFormulaShape::updateLayout() {
     kDebug() << "before:" << KoShape::size()<<"," <<size(); 
-    m_formulaRenderer->layoutElement( m_formulaElement );
+    m_formulaRenderer->layoutElement( m_formulaData->formulaElement() );
      
-     KoShape::setSize(m_formulaElement->boundingRect().size());
+     KoShape::setSize(m_formulaData->formulaElement()->boundingRect().size());
      kDebug() << "after:" << KoShape::size()<<"," <<size();
 }
 
 
 BasicElement* KoFormulaShape::elementAt( const QPointF& p )
 {
-    return m_formulaElement->childElementAt( p );
+    return m_formulaData->formulaElement()->childElementAt( p );
 }
 
 void KoFormulaShape::resize( const QSizeF& )
 { /* do nothing as FormulaShape is fixed size */ }
 
-// QRectF KoFormulaShape::boundingRect() const
-// {
-//     return matrix().mapRect( m_formulaElement->boundingRect() );
-// }
-
-BasicElement* KoFormulaShape::formulaElement() const
+FormulaData* KoFormulaShape::formulaData() const
 {
-    return m_formulaElement;
+    return  m_formulaData;
 }
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
     Q_UNUSED( context )
-
-    delete m_formulaElement;                     // delete the old formula
-    m_formulaElement = new FormulaElement();     // create a new root element
-    m_formulaElement->readMathML( element );     // and load the new formula
+    update();
+    // delete the old formula
+    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
+    formulaElement->readMathML( element );     // and load the new formula
+    m_formulaData->setFormulaElement(formulaElement);
+    m_formulaData->notifyDataChange();
     updateLayout();
     update();
     return true;
@@ -87,7 +86,7 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
-    if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
+    if( m_formulaData->formulaElement()->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
 
     bool odfFormat = true;
@@ -100,7 +99,7 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
     else
         context.xmlWriter().startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
-    m_formulaElement->writeMathML( &context.xmlWriter() );
+    m_formulaData->formulaElement()->writeMathML( &context.xmlWriter() );
 
     if( odfFormat )
         context.xmlWriter().endElement();

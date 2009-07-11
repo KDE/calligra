@@ -25,6 +25,7 @@
 #include "kformula_export.h"
 #include <QString>
 #include <QPair>
+#include "FormulaData.h"
 
 class BasicElement;
 class QString;
@@ -58,7 +59,7 @@ public:
      * The constructor - set the FormulaCursor right to the beginning
      * @param element The element the FormulaCursor is set to at the beginning
      */
-    explicit FormulaCursor( BasicElement* element );
+    explicit FormulaCursor( BasicElement* element, FormulaData* data );
 
     /**
      * Draw the cursor to the given QPainter
@@ -122,12 +123,18 @@ public:
     /// @return The current position in m_currentElement
     int position() const;
     
+    /// @return The FormulaData which is navigated by this cursor
+    FormulaData* formulaData() const;
+    
     /// set the position of the cursor in the current element
     void setPosition(int position);
-    
+
     /// set the element, in which the cursor is 
     void setCurrentElement(BasicElement* element);
-    
+
+    /// set the FormulaData which is navigated by this cursor
+    void setData(FormulaData* data);
+
     /// @return The current direction the cursor is moving in
     CursorDirection direction() const;
 
@@ -189,6 +196,9 @@ private:
     /// The element that is currently left to the cursor
     BasicElement* m_currentElement;
 
+    /// The formulaData 
+    FormulaData* m_data;
+    
     /// The position of the cursor in the current element
     int m_position;
     

@@ -269,7 +269,7 @@ public:
     void writeMathML( KoXmlWriter* writer ) const;
 
     /// @return true, if @p other is a descendant of this element
-    bool isDescendant(BasicElement* other) const;
+    bool hasDescendant(BasicElement* other) const;
 
     /// @return the formula element
     BasicElement* formulaElement();

@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-                 2006-2007 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2009 Jeremias Epperlein <jeeree@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,28 +17,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FORMULAELEMENT_H
-#define FORMULAELEMENT_H
+#ifndef FORMULADATA_H
+#define FORMULADATA_H
 
-#include "RowElement.h"
+#include "FormulaElement.h"
 #include "kformula_export.h"
 #include <QObject>
 
 /**
- * @short The element of a formula at the highest position.
- *
- * A formula consists of a tree of elements. The FormulaElement is the root of this
- * tree and therefore is the only element that doesn't have a parent element.
- * It's functionality is reduced to layouting its children in a different way. It is
- * the element with highest size and can also dictate the size to all other elements. 
+ * This is a QObject wrapper around a formulaElement, which allows to communicate 
+ * between tool, cursor and shape
  */
-class KOFORMULA_EXPORT FormulaElement : public RowElement {
+class KOFORMULA_EXPORT FormulaData : public QObject {
+Q_OBJECT
 public:
     /// The standard constructor
-    FormulaElement();
+    FormulaData();
+    
+    FormulaData(FormulaElement* element);
+    
+    ~FormulaData();
 
-    /// @return The element's ElementType
-    virtual ElementType elementType() const;
+    /// @return formulaElement that represents the data
+    FormulaElement* formulaElement() const;
+    
+    ///emit a dataChanged signal
+    void notifyDataChange();
+    void setFormulaElement ( FormulaElement* element );
+    
+signals:
+    void dataChanged();
+    
+private:
+    FormulaElement* m_element;
 };
 
 #endif // FORMULAELEMENT_H
