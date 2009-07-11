@@ -20,6 +20,7 @@
 #include "SvgUtil.h"
 
 #include <QtCore/QString>
+#include <QtCore/QRectF>
 
 #define DPI 72.0
 
@@ -47,4 +48,18 @@ double SvgUtil::fromPercentage( QString s )
         return s.remove( '%' ).toDouble() / 100.0;
     else
         return s.toDouble();
+}
+
+QPointF SvgUtil::objectToUserSpace( const QPointF &position, const QRectF &objectBound )
+{
+    qreal x = objectBound.left() + position.x() * objectBound.width(); 
+    qreal y = objectBound.top() + position.y() * objectBound.height(); 
+    return QPointF( x, y );
+}
+
+QSizeF SvgUtil::objectToUserSpace( const QSizeF &size, const QRectF &objectBound )
+{
+    qreal w = size.width() * objectBound.width(); 
+    qreal h = size.height() * objectBound.height(); 
+    return QSizeF( w, h );
 }

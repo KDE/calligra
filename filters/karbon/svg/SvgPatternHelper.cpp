@@ -18,6 +18,7 @@
  */
 
 #include "SvgPatternHelper.h"
+#include "SvgUtil.h"
 
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
@@ -77,9 +78,7 @@ QPointF SvgPatternHelper::position( const QRectF & objectBound ) const
     }
     else
     {
-        qreal x = objectBound.left() + m_position.x() * objectBound.width(); 
-        qreal y = objectBound.top() + m_position.y() * objectBound.height(); 
-        return QPointF( x, y );
+        return SvgUtil::objectToUserSpace(m_position, objectBound);
     }
 }
 
@@ -96,9 +95,7 @@ QSizeF SvgPatternHelper::size( const QRectF & objectBound ) const
     }
     else
     {
-        qreal w = m_size.width() * objectBound.width(); 
-        qreal h = m_size.height() * objectBound.height(); 
-        return QSizeF( w, h );
+        return SvgUtil::objectToUserSpace(m_size, objectBound);
     }
 }
 

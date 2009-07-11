@@ -50,6 +50,8 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffect.h>
 
 #include <KDebug>
 
@@ -450,6 +452,8 @@ QDomElement SvgParser::mergeStyles( const QDomElement &referencedBy, const QDomE
         e.setAttribute( "fill-opacity", referencedBy.attribute( "fill-opacity" ) );
     if( !referencedBy.attribute( "opacity" ).isEmpty() )
         e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
+    if( !referencedBy.attribute( "filter" ).isEmpty() )
+        e.setAttribute( "filter", referencedBy.attribute( "filter" ) );
 
     // build map of style attributes from the element being referenced (original)
     QString origStyle = e.attribute( "style" ).simplified();
@@ -952,10 +956,10 @@ bool SvgParser::parseFilter( const QDomElement &e, const QDomElement &referenced
     {
         // x, y, width, height are in percentages of the object referencing the filter
         // so we just parse the percentages
-        filter.setPosition( QPointF( SvgUtil::fromPercentage( b.attribute( "x" ) ), 
-                                      SvgUtil::fromPercentage( b.attribute( "y" ) ) ) );
-        filter.setSize( QSizeF( SvgUtil::fromPercentage( b.attribute( "width" ) ),
-                                 SvgUtil::fromPercentage( b.attribute( "height" ) ) ) );
+        filter.setPosition( QPointF( SvgUtil::fromPercentage( b.attribute( "x", "-0.1" ) ), 
+                                      SvgUtil::fromPercentage( b.attribute( "y", "-0.1" ) ) ) );
+        filter.setSize( QSizeF( SvgUtil::fromPercentage( b.attribute( "width", "1.2" ) ),
+                                 SvgUtil::fromPercentage( b.attribute( "height", "1.2" ) ) ) );
     }
 
     m_filters.insert( b.attribute( "id" ), filter );
@@ -1501,11 +1505,54 @@ void SvgParser::applyFilter( KoShape * shape )
     if( ! filter )
         return;
 
+    QDomElement content = filter->content();
+
+    // parse filter region
+    QRectF bound( QPoint(), shape->size() );
+    QRectF filterRegion( filter->position(bound), filter->size(bound) );
+
+    KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
+
+    int existingFilterCount = shape->filterEffectStack().count();
     // create the filter effects and add them to the shape
-    for( QDomNode n = filter->content().firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( QDomNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement primitive = n.toElement();
-        kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
+        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive);
+        if (!filterEffect) {
+            kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
+            continue;
+        }
+
+        QRectF subRegion = filterRegion;
+        // parse subregion
+        if( filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse )
+        {
+            if( primitive.hasAttribute( "x" ) )
+                subRegion.setX( parseUnitX( primitive.attribute( "x" ) ) ); 
+            if( primitive.hasAttribute( "y" ) )
+                subRegion.setY( parseUnitY( primitive.attribute( "y" ) ) );
+            if( primitive.hasAttribute( "width" ) )
+                subRegion.setWidth( parseUnitX( primitive.attribute( "width" ) ) );
+            if( primitive.hasAttribute( "height" ) )
+                subRegion.setHeight( parseUnitY( primitive.attribute( "height" ) ) );
+        }
+        else
+        {
+            // x, y, width, height are in percentages of the object referencing the filter
+            // so we just parse the percentages
+            qreal x = SvgUtil::fromPercentage( primitive.attribute( "x", "0" ) ); 
+            qreal y = SvgUtil::fromPercentage( primitive.attribute( "y", "0" ) );
+            qreal w = SvgUtil::fromPercentage( primitive.attribute( "width", "1" ) );
+            qreal h = SvgUtil::fromPercentage( primitive.attribute( "height", "1" ) );
+            subRegion.setTopLeft( SvgUtil::objectToUserSpace( QPointF(x, y), filterRegion) );
+            subRegion.setSize( SvgUtil::objectToUserSpace( QSizeF(w, h), filterRegion) );
+        }
+
+        filterEffect->setClipRect(filterRegion);
+        filterEffect->setFilterRect(subRegion);
+        shape->insertFilterEffect(existingFilterCount, filterEffect);
+        existingFilterCount++;
     }
 }
 

@@ -20,7 +20,11 @@
 #ifndef SVGUTIL_H
 #define SVGUTIL_H
 
+#include <QtCore/QPointF>
+#include <QtCore/QSizeF>
+
 class QString;
+class QRectF;
 
 class SvgUtil
 {
@@ -48,6 +52,17 @@ public:
      * @return the percentage number normalized to 0..1
      */
     static double fromPercentage( QString s );
+
+    /**
+     * Converts position from objectBoundingBox units to userSpace units.
+     */
+    static QPointF objectToUserSpace( const QPointF &position, const QRectF &objectBound );
+
+    /**
+     * Converts size from objectBoundingBox units to userSpace units.
+     */
+    static QSizeF objectToUserSpace( const QSizeF &size, const QRectF &objectBound );
+
 };
 
 #endif // SVGUTIL_H

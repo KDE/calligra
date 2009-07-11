@@ -18,6 +18,7 @@
  */
 
 #include "SvgFilterHelper.h"
+#include "SvgUtil.h"
 
 SvgFilterHelper::SvgFilterHelper()
 : m_filterUnits(ObjectBoundingBox) // default as per svg spec
@@ -58,7 +59,14 @@ void SvgFilterHelper::setPosition( const QPointF & position )
 
 QPointF SvgFilterHelper::position( const QRectF & objectBound ) const
 {
-    return m_position;
+    if( m_filterUnits == UserSpaceOnUse )
+    {
+        return m_position;
+    }
+    else
+    {
+        return SvgUtil::objectToUserSpace(m_position, objectBound);
+    }
 }
 
 void SvgFilterHelper::setSize( const QSizeF & size )
@@ -74,9 +82,7 @@ QSizeF SvgFilterHelper::size( const QRectF & objectBound ) const
     }
     else
     {
-        qreal w = m_size.width() * objectBound.width(); 
-        qreal h = m_size.height() * objectBound.height(); 
-        return QSizeF( w, h );
+        return SvgUtil::objectToUserSpace(m_size, objectBound);
     }
 }
 

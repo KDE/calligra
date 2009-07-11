@@ -56,6 +56,8 @@ public:
     /// Return the filer element
     QDomElement content() const;
 
+    static QPointF toUserSpace( const QPointF &position, const QRectF &objectBound );
+    static QSizeF toUserSpace( const QSizeF &size, const QRectF &objectBound );
 private:
     Units m_filterUnits;
     Units m_primitiveUnits;
