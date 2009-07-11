@@ -1,0 +1,8 @@
+[Desktop Entry]
+Icon=
+Name=Filter Effects
+X-KDE-ServiceTypes=KOffice/FilterEffect
+Type=Service
+X-KDE-Library=karbonfiltereffects
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
