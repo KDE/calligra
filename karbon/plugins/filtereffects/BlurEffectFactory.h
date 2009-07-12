@@ -29,6 +29,7 @@ class BlurEffectFactory : public KoFilterEffectFactory
 public:
     explicit BlurEffectFactory(QObject *parent);
     virtual KoFilterEffect * createFilterEffect() const;
+    virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };
 
 #endif // BLUREFFECTFACTORY_H

@@ -19,6 +19,8 @@
 
 #include "BlurEffectFactory.h"
 #include "BlurEffect.h"
+#include "BlurEffectConfigWidget.h"
+
 #include <KLocale>
 
 BlurEffectFactory::BlurEffectFactory(QObject *parent)
@@ -29,4 +31,9 @@ BlurEffectFactory::BlurEffectFactory(QObject *parent)
 KoFilterEffect * BlurEffectFactory::createFilterEffect() const
 {
     return new BlurEffect();
+}
+
+KoFilterEffectConfigWidgetBase * BlurEffectFactory::createConfigWidget() const
+{
+    return new BlurEffectConfigWidget();
 }

@@ -17,30 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef BLUREFFECT_H
-#define BLUREFFECT_H
+#include "KarbonFilterEffectsToolFactory.h"
+#include "KarbonFilterEffectsTool.h"
 
-#include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include <KoToolRegistry.h>
 
-#define BlurEffectId "feGaussianBlur"
+#include <KLocale>
 
-/// A gaussian blur effect
-class BlurEffect : public KoFilterEffect
+KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory(QObject *parent)
+: KoToolFactory(parent, "KarbonFilterEffectsTool", i18n("Filter effects tool") )
 {
-public:
-    BlurEffect();
-    
-    QPointF deviation() const;
-    void setDeviation(const QPointF &deviation);
-    
-    /// reimplemented from KoFilterEffect
-    virtual void processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
-    /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
-    
-private:
-    QPointF m_deviation;
-};
+    setToolTip( i18n("Filter Effects Editing Tool") );
+    setToolType( mainToolType() );
+    setIcon( "effectimages" );
+    setPriority( 3 );
+}
 
-#endif // BLUREFFECT_H
+KarbonFilterEffectsToolFactory::~KarbonFilterEffectsToolFactory() 
+{
+}
+
+KoTool * KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas) 
+{
+    return new KarbonFilterEffectsTool(canvas);
+}
+
+#include "KarbonFilterEffectsToolFactory.moc"

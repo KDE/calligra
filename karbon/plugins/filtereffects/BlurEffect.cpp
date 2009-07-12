@@ -272,11 +272,26 @@ void fastbluralpha(QImage &img, int radius)
 
 BlurEffect::BlurEffect()
 : KoFilterEffect(BlurEffectId, i18n( "Gaussian blur" ))
+, m_deviation(3,3)
 {
+}
+
+QPointF BlurEffect::deviation() const
+{
+    return m_deviation;
+}
+
+void BlurEffect::setDeviation(const QPointF &deviation)
+{
+    m_deviation.setX(qMax(0.0, deviation.x()));
+    m_deviation.setY(qMax(0.0, deviation.y()));
 }
 
 void BlurEffect::processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
 {
+    if (m_deviation.x() == 0.0 || m_deviation.y() == 0.0)
+        return;
+    
     // TODO: take filter region into account
     // TODO: blur with different kernels in x and y
     QPointF dev = converter.documentToView(m_deviation);

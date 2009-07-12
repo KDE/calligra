@@ -4,6 +4,7 @@ set(karbonfiltereffects_PART_SRCS
     KarbonFilterEffectsPlugin.cpp
     BlurEffect.cpp
     BlurEffectFactory.cpp
+    BlurEffectConfigWidget.cpp
 )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})

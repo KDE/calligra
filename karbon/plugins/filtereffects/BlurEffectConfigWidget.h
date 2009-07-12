@@ -17,30 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef BLUREFFECT_H
-#define BLUREFFECT_H
+#ifndef BLUREFFECTCONFIGWIDGET_H
+#define BLUREFFECTCONFIGWIDGET_H
 
-#include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include "KoFilterEffectConfigWidgetBase.h"
 
-#define BlurEffectId "feGaussianBlur"
+class KoFilterEffect;
+class BlurEffect;
+class KDoubleNumInput;
 
-/// A gaussian blur effect
-class BlurEffect : public KoFilterEffect
+class BlurEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
+    Q_OBJECT
 public:
-    BlurEffect();
+    BlurEffectConfigWidget(QWidget *parent = 0);
     
-    QPointF deviation() const;
-    void setDeviation(const QPointF &deviation);
+    /// reimplemented from KoFilterEffectConfigWidgetBase
+    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
     
-    /// reimplemented from KoFilterEffect
-    virtual void processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
-    /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
-    
+private slots:
+    void stdDeviationChanged(double stdDeviation);
+
 private:
-    QPointF m_deviation;
+    BlurEffect * m_effect;
+    KDoubleNumInput * m_stdDeviation;
 };
 
-#endif // BLUREFFECT_H
+#endif // BLUREFFECTCONFIGWIDGET_H

@@ -17,30 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef BLUREFFECT_H
-#define BLUREFFECT_H
+#ifndef KARBONFILTEREFFECTSTOOLFACTORY_H
+#define KARBONFILTEREFFECTSTOOLFACTORY_H
 
-#include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include <KoToolFactory.h>
 
-#define BlurEffectId "feGaussianBlur"
-
-/// A gaussian blur effect
-class BlurEffect : public KoFilterEffect
+class KarbonFilterEffectsToolFactory : public KoToolFactory
 {
+Q_OBJECT
 public:
-    BlurEffect();
-    
-    QPointF deviation() const;
-    void setDeviation(const QPointF &deviation);
-    
-    /// reimplemented from KoFilterEffect
-    virtual void processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
-    /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
-    
-private:
-    QPointF m_deviation;
+    explicit KarbonFilterEffectsToolFactory(QObject *parent);
+    virtual ~KarbonFilterEffectsToolFactory();
+    virtual KoTool * createTool(KoCanvasBase *canvas);
 };
 
-#endif // BLUREFFECT_H
+#endif // KARBONFILTEREFFECTSTOOLFACTORY_H
