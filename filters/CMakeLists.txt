@@ -36,12 +36,22 @@ set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
 macro_optional_add_subdirectory( generic_wrapper )
 macro_optional_add_subdirectory( libkowmf )
-macro_optional_add_subdirectory(kchart)
-macro_optional_add_subdirectory(kword)
+
+if(SHOULD_BUILD_KCHART)
+    macro_optional_add_subdirectory(kchart)
+endif(SHOULD_BUILD_KCHART)
+
+if (SHOULD_BUILD_KWORD)
+    macro_optional_add_subdirectory(kword)
+endif (SHOULD_BUILD_KWORD)
+
 if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
-macro_optional_add_subdirectory(kformula)
+
+if(SHOULD_BUILD_KFORMULA)
+    macro_optional_add_subdirectory(kformula)
+endif(SHOULD_BUILD_KFORMULA)
 
 if(SHOULD_BUILD_KSPREAD)
     macro_optional_add_subdirectory(kspread)
@@ -51,15 +61,16 @@ if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
-#macro_optional_add_subdirectory(kivio)
+if(SHOULD_BUILD_KIVIO)
+    #macro_optional_add_subdirectory(kivio)
+endif(SHOULD_BUILD_KIVIO)
 
-macro_optional_add_subdirectory(kplato)
+if(SHOULD_BUILD_KPLATO)
+    macro_optional_add_subdirectory(kplato)
+endif(SHOULD_BUILD_KPLATO)
 
 if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	
-
-message (STATUS "Re-add kivio filters, karbon filter, kpresenter filters")
-MESSAGE( STATUS "Readd or not Kformula filter: Status ?")
 
 ########### install files ###############

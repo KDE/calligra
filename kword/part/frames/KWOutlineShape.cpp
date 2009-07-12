@@ -20,7 +20,6 @@
 #include "KWFrame.h"
 
 #include <KoCanvasBase.h>
-#include <KoColor.h>
 #include <KoSelection.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>

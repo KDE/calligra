@@ -1,3 +1,5 @@
 add_subdirectory( calendar )
 add_subdirectory( solver )
+if (NOT TINY)
 add_subdirectory( scripting )
+endif (NOT TINY)

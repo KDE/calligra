@@ -86,7 +86,6 @@
 // KOffice includes
 #include <KoGlobal.h>
 #include <KoCanvasController.h>
-#include <KoColor.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
