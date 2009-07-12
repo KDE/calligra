@@ -36,8 +36,7 @@
 #include <kdebug.h>
 #include <krobjectdata.h>
 
-#include <migration/keximigrate.h>
-#include <migration/migratemanager.h>
+#include "koreportdata.h"
 
 class ReportGridOptions;
 class QDomDocument;
@@ -63,11 +62,14 @@ class ReportDesigner : public QWidget
 {
     Q_OBJECT
 public:
-  
-    ReportDesigner(QWidget *, KexiDB::Connection *);
-    ReportDesigner(QWidget *, KexiDB::Connection *, const QString&);
-    ~ReportDesigner();
+    
+    ReportDesigner(QWidget *);
+    ReportDesigner(QWidget *, QDomElement);
 
+    ~ReportDesigner();
+    
+    void setReportData(KoReportData* kodata);
+    
     ReportSection* getSection(KRSectionData::Section) const;
     void removeSection(KRSectionData::Section);
     void insertSection(KRSectionData::Section);
@@ -79,29 +81,21 @@ public:
     void deleteDetail();
 
     void setReportTitle(const QString &);
-    void setReportDataSource(const QString &);
+//    void setReportDataSource(const QString &);
     void setGridOptions(bool, int);
     QString reportTitle();
-    QString reportDataSource();
+//    QString reportDataSource();
 
-    QDomDocument document();
+    QDomElement document();
 
     bool isModified();
 
-    void setConn(KexiDB::Connection *c) {
-        m_conn = c;
-    }
     KexiDB::Connection *theConn() {
         return m_conn;
     }
     bool isConnected() {
         return m_conn &&  m_conn->isConnected();
     }
-
-    /**
-    \return a list of queries that the report can be based on
-    */
-    QStringList queryList();
 
     /**
     \return a list of fields in the selected query
@@ -145,6 +139,7 @@ public:
 
     /**Checks if the supplied name is unique among all entities*/
     bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
+    
 public slots:
 
     void slotEditDelete();
@@ -184,9 +179,9 @@ private:
 
     void init();
     bool m_modified; // true if this document has been modified, false otherwise
+
     KexiDB::Connection *m_conn;
-    KexiMigration::KexiMigrate *m_external;
-    QString m_externalTableName;
+    KoReportData *m_kordata;
     
     QStringList pageFormats();
 
@@ -197,8 +192,8 @@ private:
     KoProperty::Set* m_set;
     KoProperty::Set* m_itmset;
     KoProperty::Property* m_title;
-    KoProperty::Property* m_dataSource;
-    KoProperty::Property* m_externalData;
+//    KoProperty::Property* m_dataSource;
+//    KoProperty::Property* m_externalData;
     KoProperty::Property* m_pageSize;
     KoProperty::Property* m_orientation;
     KoProperty::Property* m_unit;

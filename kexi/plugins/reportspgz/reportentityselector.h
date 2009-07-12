@@ -15,12 +15,14 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * Please contact info@openmfg.com with any questions on this license.
  */
+
 #ifndef REPORTENTITYSELECTOR_H
 #define REPORTENTITYSELECTOR_H
 
 #include <QWidget>
+#include <QDomElement>
+
 class KPushButton;
 class QVBoxLayout;
 
@@ -35,7 +37,7 @@ public:
     ReportEntitySelector(QWidget *parent = 0);
 
     ~ReportEntitySelector();
-
+    
     QVBoxLayout *layout;
     KPushButton *itemLabel;
     KPushButton *itemField;

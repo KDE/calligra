@@ -21,6 +21,9 @@ set(pgzkexireportpart2_LIB_SRCS
 	kexireportpage.cpp
 	kexireportdesignview.cpp
 	reportentityselector.cpp
+	kexidbreportdata.cpp
+	keximigratereportdata.cpp
+    kexisourceselector.cpp
 	
 	backend/common/krpos.cpp
 	backend/common/krsize.cpp
@@ -45,7 +48,6 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/renderer/code128.cpp
 	backend/renderer/codeean.cpp
 	backend/renderer/ext3of9.cpp
-	backend/renderer/orutils.cpp
 	backend/renderer/renderobjects.cpp
 	backend/renderer/orprintrender.cpp
 	backend/renderer/orprerender.cpp

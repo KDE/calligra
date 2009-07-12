@@ -44,11 +44,11 @@
 #include <renderobjects.h>
 #include "krscriptdraw.h"
 
-KRScriptHandler::KRScriptHandler(const orQuery *cu, KRReportData* d)
+KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
 {
     //m_connection = cu->connection();
     m_reportData = d;
-    m_cursor = cu;
+    m_cursor = kodata;
 
     m_action = 0;
     m_functions = 0;

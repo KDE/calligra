@@ -43,6 +43,8 @@ protected:
 
 private:
     void init(QGraphicsScene*, ReportDesigner *r);
+    QStringList queryList(KexiDB::Connection* conn);
+    
 private slots:
     void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 

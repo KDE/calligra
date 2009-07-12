@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * Please contact info@openmfg.com with any questions on this license.
  */
-
 
 #ifndef _KEXIREPORTPART_H_
 #define _KEXIREPORTPART_H_
@@ -28,47 +26,49 @@
 #include <core/KexiWindowData.h>
 
 #include <QDomDocument>
-
+#include "koreportdata.h"
 
 /**
  * @short Application Main Window
  * @author Adam Pigg <adam@piggz.co.uk>
  * @version 0.1
  */
-class KexiReportPart : public KexiPart::Part
-{
-    Q_OBJECT
-public:
-    /**
-     * Default Constructor
-     */
-    KexiReportPart(QObject *parent, const QStringList &l);
-
-    /**
-     * Default Destructor
-     */
-    virtual ~KexiReportPart();
-    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
-                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
-
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
-
-    class TempData : public KexiWindowData
-    {
+class KexiReportPart : public KexiPart::Part {
+        Q_OBJECT
     public:
-        TempData(QObject* parent);
-        QString document;
-        /*! true, if \a document member has changed in previous view. Used on view switching.
-        Check this flag to see if we should refresh data for DataViewMode. */
-    bool reportSchemaChangedInPreviousView : 1;
-        QString name;
-    };
+        /**
+         * Default Constructor
+         */
+        KexiReportPart ( QObject *parent, const QStringList &l );
 
-private:
-    QString loadReport(const QString&);
-    class Private;
-    Private* d;
+        /**
+         * Default Destructor
+         */
+        virtual ~KexiReportPart();
+        virtual KexiView* createView ( QWidget *parent, KexiWindow* win,
+                                       KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0 );
+        virtual KexiWindowData* createWindowData ( KexiWindow* window );
+
+        virtual void setupCustomPropertyPanelTabs ( KTabWidget *tab );
+        
+        class TempData : public KexiWindowData {
+            public:
+                TempData ( QObject* parent );
+                QString document;
+                QDomElement reportDefinition;
+                QDomElement connectionDefinition;
+
+                /*! true, if \a document member has changed in previous view. Used on view switching.
+                Check this flag to see if we should refresh data for DataViewMode. */
+            bool reportSchemaChangedInPreviousView :
+                1;
+                QString name;
+        };
+
+    private:
+        QString loadReport ( const QString& );
+        class Private;
+        Private* d;
 };
 
 #endif // _KEXIREPORTPART_H_

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * Please contact info@openmfg.com with any questions on this license.
  */
 
 
@@ -30,8 +29,10 @@
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
-#include "reportentityselector.h"
 #include <ktabwidget.h>
+
+#include "reportentityselector.h"
+#include "kexisourceselector.h"
 
 //! @internal
 class KexiReportPart::Private
@@ -39,10 +40,12 @@ class KexiReportPart::Private
 public:
     Private() {
         res = 0;
+        ksrc = 0;
     }
     ~Private() {
     }
     ReportEntitySelector *res;
+    KexiSourceSelector *ksrc;
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
@@ -74,8 +77,10 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 
     if (viewMode == Kexi::DataViewMode) {
         view = new KexiReportView(parent);
+        
     } else if (viewMode == Kexi::DesignViewMode) {
-        view = new KexiReportDesignView(parent, d->res);
+        view = new KexiReportDesignView(parent, d->res, d->ksrc);
+        connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
     }
     return view;
 }
@@ -125,9 +130,12 @@ KexiReportPart::TempData::TempData(QObject* parent)
 
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
+    if (!d->ksrc)
+        d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection() );
+    tab->addTab(d->ksrc, i18n("Source"));
+    
     if (!d->res)
         d->res = new ReportEntitySelector(tab);
-
     tab->addTab(d->res, i18n("Controls"));
 }
 

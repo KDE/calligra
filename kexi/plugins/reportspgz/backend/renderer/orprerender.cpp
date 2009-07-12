@@ -21,7 +21,7 @@
 
 #include "orprerender.h"
 #include "renderobjects.h"
-#include "orutils.h"
+#include "koreportdata.h"
 #include "barcodes.h"
 #include <kdeversion.h>
 
@@ -88,7 +88,7 @@ public:
     int _pageCounter;    // what page are we currently on?
     int _recordCount;
 
-    orQuery* _query;
+    KoReportData* _kodata;
     QList<OROTextBox*> _postProcText;
 
     void createNewPage();
@@ -122,7 +122,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
     _leftMargin = _rightMargin = 0.0;
     _pageCounter = 0;
     _maxHeight = _maxWidth = 0.0;
-    _query = 0;
+    _kodata = 0;
 }
 
 ORPreRenderPrivate::~ORPreRenderPrivate()
@@ -223,19 +223,19 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
     kDebug();
 
     if (detailData.m_detailSection != 0) {
-        if (_query) {
+        if (_kodata) {
 	    //TODO init the engine earlier?
-            _handler->setSource(_query->getSql());
+            _handler->setSource(_kodata->source());
         }
-        if (_query/* && !curs->eof()*/) {
+        if (_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
             bool    status;
             int i = 0, pos = 0, cnt = 0;
             ORDetailGroupSectionData * grp = 0;
 
-            _query->moveFirst();
-            _recordCount = _query->recordCount();
+            _kodata->moveFirst();
+            _recordCount = _kodata->recordCount();
 
             kDebug() << "Record Count:" << _recordCount;
 
@@ -249,7 +249,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 }
                 keys.append(grp->column);
                 if (!keys[i].isEmpty())
-                    keyValues.append(_query->value(_query->fieldNumber(keys[i])).toString());
+                    keyValues.append(_kodata->value(_kodata->fieldNumber(keys[i])).toString());
                 else
                     keyValues.append(QString());
       
@@ -263,32 +263,32 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
             do {
 		kDebug() << "...getting pos";
-                long l = _query->at();
+                long l = _kodata->at();
 
                 kDebug() << "At:" << l << "Y:" << _yOffset;
 
                 if (renderSectionSize(* (detailData.m_detailSection)) + finishCurPageSize((l + 1 == _recordCount)) + _bottomMargin + _yOffset >= _maxHeight) {
                     if (l > 0) {
 			kDebug() << "...moving prev";
-                        _query->movePrevious();
+                        _kodata->movePrevious();
 			kDebug() << "...creating new page";
 			createNewPage();
 			kDebug() << "...moving next";
-                        _query->moveNext();
+                        _kodata->moveNext();
 		    }
                 }
 
                 renderSection(* (detailData.m_detailSection));
 		kDebug() << "...moving next";
-		if (_query)
-		  status = _query->moveNext();
+		if (_kodata)
+		  status = _kodata->moveNext();
 		kDebug() << "...done";
 		
                 if (status == true && keys.count() > 0) {
                     // check to see where it is we need to start
                     pos = -1; // if it's still -1 by the time we are done then no keyValues changed
                     for (i = 0; i < keys.count(); i++) {
-                        if (keyValues[i] != _query->value(_query->fieldNumber(keys[i])).toString()) {
+                        if (keyValues[i] != _kodata->value(_kodata->fieldNumber(keys[i])).toString()) {
                             pos = i;
                             break;
                         }
@@ -297,7 +297,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                     // don't bother if nothing has changed
                     if (pos != -1) {
                         // roll back the query and go ahead if all is good
-                        status = _query->movePrevious();
+                        status = _kodata->movePrevious();
                         if (status == true) {
                             // print the footers as needed
                             // any changes made in this for loop need to be duplicated
@@ -320,7 +320,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                             }
                             // step ahead to where we should be and print the needed headers
                             // if all is good
-                            status = _query->moveNext();
+                            status = _kodata->moveNext();
                             if (do_break)
                                 createNewPage();
                             if (status == true) {
@@ -329,9 +329,9 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                             
                                     if (grp->head) {
                                         if (renderSectionSize(* (grp->head)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight) {
-                                            _query->movePrevious();
+                                            _kodata->movePrevious();
                                             createNewPage();
-                                            _query->moveNext();
+                                            _kodata->moveNext();
                                         }
 
 
@@ -339,7 +339,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                     }
                                
                                     if (!keys[i].isEmpty())
-                                        keyValues[i] = _query->value(_query->fieldNumber(keys[i])).toString();
+                                        keyValues[i] = _kodata->value(_kodata->fieldNumber(keys[i])).toString();
 
                                     //Tell interested parties thak key values changed
                                     kDebug() << "EMIT2";
@@ -351,7 +351,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 }
             } while (status == true);
 
-            if (keys.size() > 0 && _query->movePrevious()) {
+            if (keys.size() > 0 && _kodata->movePrevious()) {
                 // finish footers
                 // duplicated changes from above here
                 for (i = cnt - 1; i >= 0; i--) {
@@ -400,7 +400,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
 
             QFont f = t->m_font->value().value<QFont>();
 
-            qstrValue = _query->value(t->m_controlSource->value().toString()).toString();
+            qstrValue = _kodata->value(t->m_controlSource->value().toString()).toString();
             if (qstrValue.length()) {
                 int pos = 0;
                 int idx;
@@ -538,7 +538,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
                 //populateData(f->data(), dataThis);
                 //str = dataThis.getValue();
-		str = _query->value(clm).toString();
+		str = _kodata->value(clm).toString();
             }
             tb->setText(str);
             _page->addPrimitive(tb);
@@ -559,7 +559,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 	    if (cs.left(1) == "$") { //Everything past $ is treated as a string 
 	      qstrValue = cs.mid(1);
 	    } else {
-	      qstrValue = _query->value(t->m_controlSource->value().toString()).toString();
+	      qstrValue = _kodata->value(t->m_controlSource->value().toString()).toString();
 	    }
 	    
             QPointF pos = t->m_pos.toScene();
@@ -680,7 +680,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QRectF rect = QRectF(pos, size);
 
-	    QString val = _query->value(bc->m_controlSource->value().toString()).toString();
+	    QString val = _kodata->value(bc->m_controlSource->value().toString()).toString();
             QString fmt = bc->m_format->value().toString();
             int align = bc->alignment();
             if (fmt == "3of9")
@@ -794,7 +794,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 #endif  
             } else {
                 QString clm = cd->m_controlSource->value().toString();
-                str = _query->value(clm).toString();
+                str = _kodata->value(clm).toString();
             }
 
             bool v = false;
@@ -824,7 +824,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
 void ORPreRenderPrivate::initEngine()
 {
-    _handler = new KRScriptHandler(_query, _reportData);
+    _handler = new KRScriptHandler(_kodata, _reportData);
 
     connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
 
@@ -931,12 +931,15 @@ ORODocument* ORPreRender::generate()
 
     d->_document->setPageOptions(rpo);
 
+    //TODO!!!
+    /*
     if (!d->_reportData->externalData())  {
-      d->_query = (new orQuery(d->_reportData->query(), d->_conn));
+      d->_kodata = (new orQuery(d->_reportData->query(), d->_conn));
     }
     else {
-     d->_query = new orQuery( d->_reportData->query() );
+     d->_kodata = new orQuery( d->_reportData->query() );
     }
+    */
     
     d->initEngine();
     d->createNewPage();
@@ -971,11 +974,10 @@ ORODocument* ORPreRender::generate()
 
         KRDetailSectionData * detailData = d->_reportData->detailsection;
         if (detailData->m_detailSection != 0) {
-            orQuery *orqThis = d->_query;
-            //KexiDB::Cursor *query;
+            KoReportData *mydata = d->_kodata;
 
-            if ((orqThis != 0))/* && !((query = orqThis->getQuery())->eof()))*/ {
-                //orqThis->moveFirst();
+            if ((mydata != 0))/* && !((query = orqThis->getQuery())->eof()))*/ {
+                mydata->moveFirst();
                 do {
                     tmp = d->_yOffset; // store the value as renderSection changes it
                     d->renderSection(* (detailData->m_detailSection));
@@ -994,7 +996,7 @@ ORODocument* ORPreRender::generate()
                             d->createNewPage();
                         }
                     }
-                } while (orqThis->moveNext());
+                } while (mydata->moveNext());
             }
         }
 
@@ -1003,7 +1005,6 @@ ORODocument* ORPreRender::generate()
         if (d->_reportData->rpthead != 0) {
             d->renderSection(* (d->_reportData->rpthead));
         }
-
 
         if (d->_reportData->detailsection) {
             d->renderDetailSection(* (d->_reportData->detailsection));
@@ -1033,7 +1034,8 @@ ORODocument* ORPreRender::generate()
     d->_handler->displayErrors();
 
     delete d->_handler;
-    delete d->_query;
+    delete d->_kodata
+;
     d->_postProcText.clear();
 
     ORODocument * pDoc = d->_document;

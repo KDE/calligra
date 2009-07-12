@@ -21,7 +21,6 @@
 
 #include "krhtmlrender.h"
 #include "renderobjects.h"
-#include "orutils.h"
 #include "barcodes.h"
 #include <kdebug.h>
 #include <QDir>

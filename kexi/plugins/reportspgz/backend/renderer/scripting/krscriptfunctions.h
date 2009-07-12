@@ -24,7 +24,7 @@
 #include <QString>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
-#include "orutils.h"
+#include "koreportdata.h"
 
 /**
  @author
@@ -33,14 +33,14 @@ class KRScriptFunctions : public QObject
 {
     Q_OBJECT
 public:
-    KRScriptFunctions(const orQuery*);
+    KRScriptFunctions(const KoReportData*);
 
     ~KRScriptFunctions();
     void setWhere(const QString&);
     void setSource(const QString&);
 private:
     KexiDB::Connection *m_connection;
-    const orQuery *m_cursor;
+    const KoReportData *m_cursor;
     QString m_source;
     qreal math(const QString &, const QString &);
 

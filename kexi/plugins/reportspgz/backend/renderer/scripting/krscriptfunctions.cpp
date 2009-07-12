@@ -19,13 +19,13 @@
  */
 #include "krscriptfunctions.h"
 #include <kexidb/cursor.h>
+#include <kexidb/utils.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(const orQuery *c)
+KRScriptFunctions::KRScriptFunctions(const KoReportData *kodata)
 {
-    m_cursor = c;
-    
-    m_connection = m_cursor->connection();;
+    m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
+    m_cursor = kodata;
 }
 
 
@@ -48,7 +48,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
     qreal ret;
     QString sql;
 
-    sql = "SELECT " + function + "(" + field + ") FROM " + m_source;
+    sql = "SELECT " + function + "(" + field + ") FROM (" + m_source + ")" ;
 
     if (!m_where.isEmpty()) {
         sql += " WHERE(" + m_where + ")";
@@ -99,12 +99,13 @@ QVariant KRScriptFunctions::value(const QString &field)
         return val;
     }
 
+    if (m_cursor->schema()) {
+        KexiDB::QueryColumnInfo::Vector flds = static_cast<KexiDB::TableOrQuerySchema*>( m_cursor->schema())->columns();
+        for (int i = 0; i < flds.size() ; ++i) {
 
-    KexiDB::QueryColumnInfo::Vector flds = m_cursor->schema().columns();
-    for (int i = 0; i < flds.size() ; ++i) {
-
-        if (flds[i]->aliasOrName().toLower() == field.toLower()) {
-            val = const_cast<orQuery*>(m_cursor)->value(i);
+            if (flds[i]->aliasOrName().toLower() == field.toLower()) {
+                val = const_cast<KoReportData*>(m_cursor)->value(i);
+            }
         }
     }
 

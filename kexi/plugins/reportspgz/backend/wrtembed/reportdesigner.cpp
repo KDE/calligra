@@ -141,13 +141,14 @@ public:
     QPushButton *pageButton;
 };
 
-ReportDesigner::ReportDesigner(QWidget * parent, KexiDB::Connection *cn)
+ReportDesigner::ReportDesigner(QWidget * parent)
         : QWidget(parent), d(new Private())
 {
-    m_conn = cn;
-    m_external = 0;
+    m_conn = 0;
+    m_kordata = 0;
     init();
 }
+
 void ReportDesigner::init()
 {
     m_modified = false;
@@ -205,25 +206,21 @@ void ReportDesigner::init()
     changeSet(m_set);
 }
 
-ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QString & d) : QWidget(parent), d(new Private())
+ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(parent), d(new Private())
 {
-    kDebug() << "***********************************************************";
-    kDebug() << d;
-    kDebug() << "***********************************************************";
-
-    m_conn = cn;
+    m_conn = 0;
+    m_kordata = 0;
+    
     init();
-    QDomDocument doc;
-    doc.setContent(d);
-    QDomElement root = doc.documentElement();
-    if (root.tagName() != "report") {
+
+    if (data.tagName() != "koreport") {
         // arg we got an xml file but not one i know of
-        kDebug() << "root element was not <report>";;
+        kDebug() << "root element was not <koreport>";;
     }
 
     deleteDetail();
 
-    QDomNodeList nlist = root.childNodes();
+    QDomNodeList nlist = data.childNodes();
     QDomNode it;
 
     for (int i = 0; i < nlist.count(); i++) {
@@ -233,9 +230,9 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
             QString n = it.nodeName();
             if (n == "title") {
                 setReportTitle(it.firstChild().nodeValue());
-            } else if (n == "datasource") {
-                setReportDataSource(it.firstChild().nodeValue());
-		m_externalData->setValue(it.toElement().attribute("external"));
+//TODO            } else if (n == "datasource") {
+//                setReportDataSource(it.firstChild().nodeValue());
+//                m_externalData->setValue(it.toElement().attribute("external"));
             } else if (n == "script") {
                 m_interpreter->setValue(it.toElement().attribute("interpreter"));
                 m_script->setValue(it.firstChild().nodeValue());
@@ -426,6 +423,12 @@ void ReportDesigner::slotSectionEditor()
     delete se;
 }
 
+void ReportDesigner::setReportData(KoReportData* kodata) {
+    kDebug();
+    m_kordata = kodata; m_conn = static_cast<KexiDB::Connection*>(kodata->connection());
+    setModified(true);
+}
+
 ReportSection * ReportDesigner::getSection(KRSectionData::Section s) const
 {
     ReportSection *sec;
@@ -595,10 +598,10 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
     }
 }
 
-QDomDocument ReportDesigner::document()
+QDomElement ReportDesigner::document()
 {
-    QDomDocument doc = QDomDocument("pgzKexiReportDef");
-    QDomElement root = doc.createElement("report");
+    QDomDocument doc = QDomDocument("");
+    QDomElement root = doc.createElement("koreport");
     doc.appendChild(root);
 
     //title
@@ -606,10 +609,10 @@ QDomDocument ReportDesigner::document()
     title.appendChild(doc.createTextNode(reportTitle()));
     root.appendChild(title);
 
-    QDomElement rds = doc.createElement("datasource");
-    rds.setAttribute("external", m_externalData->value().toBool());
-    rds.appendChild(doc.createTextNode(reportDataSource()));
-    root.appendChild(rds);
+//TODO    QDomElement rds = doc.createElement("datasource");
+//    rds.setAttribute("external", m_externalData->value().toBool());
+//    rds.appendChild(doc.createTextNode(reportDataSource()));
+//    root.appendChild(rds);
 
     QDomElement scr = doc.createElement("script");
     scr.setAttribute("interpreter", m_interpreter->value().toString());
@@ -749,7 +752,7 @@ QDomDocument ReportDesigner::document()
         root.appendChild(section);
     }
 
-    return doc;
+    return root;
 }
 
 void ReportDesigner::setReportTitle(const QString & str)
@@ -764,140 +767,89 @@ QString ReportDesigner::reportTitle()
     return m_title->value().toString();
 }
 
-QString ReportDesigner::reportDataSource()
-{
-    return m_dataSource->value().toString();
-}
-void ReportDesigner::setReportDataSource(const QString &q)
-{
-    if (m_dataSource->value().toString() != q) {
-        m_dataSource->setValue(q);
-        setModified(true);
-    }
-}
+//TODO
+//QString ReportDesigner::reportDataSource()
+//{
+//    return m_dataSource->value().toString();
+//}
+
+//void ReportDesigner::setReportDataSource(const QString &q)
+//{
+//    if (m_dataSource->value().toString() != q) {
+//        m_dataSource->setValue(q);
+//        setModified(true);
+//    }
+//}
 
 bool ReportDesigner::isModified()
 {
     return m_modified;
 }
+
 void ReportDesigner::setModified(bool mod)
 {
     m_modified = mod;
  
     if (m_modified) {
         emit(dirty());
-
     }
-}
-
-QStringList ReportDesigner::queryList()
-{
-    //Get the list of queries in the database
-    kDebug();
-    QStringList qs;
-    if (m_conn && m_conn->isConnected()) {
-        QList<int> tids = m_conn->tableIds();
-        qs << "";
-        for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = m_conn->tableSchema(tids[i]);
-            if (tsc)
-                qs << tsc->name();
-            else
-                kDebug() << "Error retrieving table schema: " << tids[i];
-        }
-
-        QList<int> qids = m_conn->queryIds();
-        qs << "";
-        for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = m_conn->querySchema(qids[i]);
-            if (qsc)
-                qs << qsc->name();
-            else
-                kDebug() << "Error retrieving query schema: " << qids[i];
-        }
-    }
-    kDebug() << "done";
-    return qs;
 }
 
 QStringList ReportDesigner::fieldList()
 {
     QStringList qs;
     qs << "";
+    if (m_kordata)
+        qs << m_kordata->fieldNames();
 
-    if (!m_externalData->value().toBool()) {
-      if (isConnected()) {
-	  //Get the list of fields in the selected query
-	  KexiDB::TableOrQuerySchema *flds = new KexiDB::TableOrQuerySchema(m_conn, m_dataSource->value().toString().toLocal8Bit());
-
-	  KexiDB::QueryColumnInfo::Vector cs = flds->columns();
-
-	  for (int i = 0 ; i < cs.count(); ++i) {
-	      qs << cs[i]->field->name();
-	  }
-      }
-      else {
-        kDebug() << "Cannot return field list";
-      }
-    }
-    else
-    {
-      if (!m_externalTableName.isEmpty()) {
-	KexiDB::TableSchema ts;
-	m_external->readTableSchema(m_externalTableName, ts);
-      
-	for (unsigned int i = 0; i < ts.fieldCount(); ++i) {
-	  qs << ts.field(i)->name();
-	}
-      }
-      
-    }
-    kDebug() << qs;
     return qs;
 }
 
 QStringList ReportDesigner::scriptList()
 {
-    QList<int> scriptids = m_conn->objectIds(KexiPart::ScriptObjectType);
     QStringList scripts;
-    QStringList scriptnames = m_conn->objectNames(KexiPart::ScriptObjectType);
-    QString script;
-    
-    int id, i;
-    id = i = 0;
-    
-    kDebug() << scriptids << scriptnames;
-    kDebug() << m_interpreter->value().toString();
-    
-    //A blank entry
-    scripts << "";
     
     if (isConnected()) {
-        foreach (id, scriptids) {
-            kDebug() << "ID:" << id;
-            tristate res;
-            res = m_conn->loadDataBlock(id, script, QString());
-            if (res == true){
-                QDomDocument domdoc;
-                bool parsed = domdoc.setContent(script, false);
+        QList<int> scriptids = m_conn->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = m_conn->objectNames(KexiPart::ScriptObjectType);
+        QString script;
 
-                QDomElement scriptelem = domdoc.namedItem("script").toElement();
-                if (parsed && !scriptelem.isNull()) {
-                    if (m_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
-                        scripts << scriptnames[i];
+        int id, i;
+        id = i = 0;
+
+        kDebug() << scriptids << scriptnames;
+        kDebug() << m_interpreter->value().toString();
+
+        //A blank entry
+        scripts << "";
+
+        if (isConnected()) {
+            foreach (id, scriptids) {
+                kDebug() << "ID:" << id;
+                tristate res;
+                res = m_conn->loadDataBlock(id, script, QString());
+                if (res == true){
+                    QDomDocument domdoc;
+                    bool parsed = domdoc.setContent(script, false);
+
+                    QDomElement scriptelem = domdoc.namedItem("script").toElement();
+                    if (parsed && !scriptelem.isNull()) {
+                        if (m_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
+                            scripts << scriptnames[i];
+                        }
+                    }
+                    else {
+                        kDebug() << "Unable to parse script";
                     }
                 }
-                else {
-                    kDebug() << "Unable to parse script";
+                else{
+                    kDebug() << "Unable to loadDataBlock";
                 }
+                ++i;
             }
-            else{
-                kDebug() << "Unable to loadDataBlock";
-            }
-            ++i;
         }
+        kDebug() << scripts;
     }
-    kDebug() << scripts;
     return scripts;
 }
 
@@ -910,11 +862,11 @@ void ReportDesigner::createProperties()
 
     m_title = new KoProperty::Property("Title", "Report", "Title", "Report Title");
 
-    keys = queryList();
-    m_dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
-    m_dataSource->setOption("extraValueAllowed", "true");
+//    keys = queryList();
+//    m_dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
+//    m_dataSource->setOption("extraValueAllowed", "true");
     
-    m_externalData = new KoProperty::Property("ExternalData", QVariant(false), "External Data", "External Data");
+//    m_externalData = new KoProperty::Property("ExternalData", QVariant(false), "External Data", "External Data");
     
     keys.clear();
     keys = pageFormats();
@@ -952,8 +904,8 @@ void ReportDesigner::createProperties()
     m_script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
     
     m_set->addProperty(m_title);
-    m_set->addProperty(m_externalData);
-    m_set->addProperty(m_dataSource);
+//    m_set->addProperty(m_externalData);
+//    m_set->addProperty(m_dataSource);
     m_set->addProperty(m_pageSize);
     m_set->addProperty(m_orientation);
     m_set->addProperty(m_unit);
@@ -989,22 +941,6 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
         m_set->property("TopMargin").setOption("unit", newstr);
         m_set->property("BottomMargin").setOption("unit", newstr);
     }
-    if ((p.name() == "DataSource" || p.name() == "ExternalData") && m_externalData->value().toBool())
-    {
-      KexiMigration::MigrateManager mm;
-      QStringList md = m_dataSource->value().toString().split("|");
-      if (md.size() == 3) { //Need 3 paramters
-	m_external = mm.driver(md[0]);
-	KexiDB::ConnectionData cd;
-	cd.setFileName(md[1]);
-	m_externalTableName = md[2];
-	KexiMigration::Data dat;
-	dat.source = &cd;
-	m_external->setData(&dat);
-	m_external->connectSource();
-    }
-    
-  }
 }
 
 /**

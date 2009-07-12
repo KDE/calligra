@@ -253,7 +253,6 @@ void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property
         }
     }
 
-
     if (m_reportDesigner) m_reportDesigner->setModified(true);
 
     if (scene()) scene()->update();
@@ -262,6 +261,32 @@ void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property
 
 void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    m_dataSource->setListData(m_reportDesigner->queryList(), m_reportDesigner->queryList());
+    QStringList ql = queryList(m_reportDesigner->theConn());
+    m_dataSource->setListData(ql,ql);
     ReportRectEntity::mousePressEvent(event);
+}
+
+QStringList ReportEntityChart::queryList(KexiDB::Connection* conn)
+{
+    //Get the list of queries in the database
+    QStringList qs;
+    if (conn && conn->isConnected()) {
+        QList<int> tids = conn->tableIds();
+        qs << "";
+        for (int i = 0; i < tids.size(); ++i) {
+            KexiDB::TableSchema* tsc = conn->tableSchema(tids[i]);
+            if (tsc)
+                qs << tsc->name();
+        }
+        
+        QList<int> qids = conn->queryIds();
+        qs << "";
+        for (int i = 0; i < qids.size(); ++i) {
+            KexiDB::QuerySchema* qsc = conn->querySchema(qids[i]);
+            if (qsc)
+                qs << qsc->name();
+        }
+    }
+    
+    return qs;
 }
