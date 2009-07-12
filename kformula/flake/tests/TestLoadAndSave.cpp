@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright 2007-2009 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -255,17 +255,85 @@ void TestLoadAndSave::textElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    addRow( "<mtext></mtext>" );
+    addRow( "<mtext>text</mtext>" );
+    addRow( "<mtext> text </mtext>",
+            "<mtext>text</mtext>");
+    addRow( "<mtext> Theorem 1: </mtext>",
+            "<mtext>Theorem 1:</mtext>" );
+    addRow( "<mtext> &ThinSpace; </mtext>",
+            "<mtext>&ThinSpace;</mtext>" );
+    addRow( "<mtext> &ThickSpace;&ThickSpace; </mtext>",
+            "<mtext>&ThickSpace;&ThickSpace;</mtext>" );
+    addRow( "<mtext> /* a comment */ </mtext>",
+            "<mtext>/* a comment */</mtext>" );
 }
+
+
 
 void TestLoadAndSave::spaceElement_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    addRow( "<mspace/>" );
+
+    // Check operator attributes. Sefction 3.2.7.2
+
+    addRow( "<mspace width=\"10em\"/>" );
+    addRow( "<mspace width=\"10ex\"/>" );
+    addRow( "<mspace width=\"10px\"/>" );
+    addRow( "<mspace width=\"10in\"/>" );
+    addRow( "<mspace width=\"10cm\"/>" );
+    addRow( "<mspace width=\"10mm\"/>" );
+    addRow( "<mspace width=\"10pt\"/>" );
+    addRow( "<mspace width=\"10pc\"/>" );
+    addRow( "<mspace width=\"90%\"/>" );
+    addRow( "<mspace width=\"1.2\"/>" );
+    addRow( "<mspace width=\"veryverythinmathspace\"/>" );
+    addRow( "<mspace width=\"verythinmathspace\"/>" );
+    addRow( "<mspace width=\"thinmathspace\"/>" );
+    addRow( "<mspace width=\"mediummathspace\"/>" );
+    addRow( "<mspace width=\"thickmathspace\"/>" );
+    addRow( "<mspace width=\"verythickmathspace\"/>" );
+    addRow( "<mspace width=\"veryverythickmathspace\"/>" );
+    addRow( "<mspace width=\"negativeveryverythinmathspace\"/>" );
+    addRow( "<mspace width=\"negativeverythinmathspace\"/>" );
+    addRow( "<mspace width=\"negativethinmathspace\"/>" );
+    addRow( "<mspace width=\"negativemediummathspace\"/>" );
+    addRow( "<mspace width=\"negativethickmathspace\"/>" );
+    addRow( "<mspace width=\"negativeverythickmathspace\"/>" );
+    addRow( "<mspace width=\"negativeveryverythickmathspace\"/>" );
+
+    addRow( "<mspace height=\"10em\"/>" );
+    addRow( "<mspace height=\"10ex\"/>" );
+    addRow( "<mspace height=\"10px\"/>" );
+    addRow( "<mspace height=\"10in\"/>" );
+    addRow( "<mspace height=\"10cm\"/>" );
+    addRow( "<mspace height=\"10mm\"/>" );
+    addRow( "<mspace height=\"10pt\"/>" );
+    addRow( "<mspace height=\"10pc\"/>" );
+    addRow( "<mspace height=\"90%\"/>" );
+    addRow( "<mspace height=\"1.2\"/>" );
+
+    addRow( "<mspace depth=\"10em\"/>" );
+    addRow( "<mspace depth=\"10ex\"/>" );
+    addRow( "<mspace depth=\"10px\"/>" );
+    addRow( "<mspace depth=\"10in\"/>" );
+    addRow( "<mspace depth=\"10cm\"/>" );
+    addRow( "<mspace depth=\"10mm\"/>" );
+    addRow( "<mspace depth=\"10pt\"/>" );
+    addRow( "<mspace depth=\"10pc\"/>" );
+    addRow( "<mspace depth=\"90%\"/>" );
+    addRow( "<mspace depth=\"1.2\"/>" );
+
+    addRow( "<mspace linebreak=\"auto\"/>" );
+    addRow( "<mspace linebreak=\"newline\"/>" );
+    addRow( "<mspace linebreak=\"indentingnewline\"/>" );
+    addRow( "<mspace linebreak=\"nobreak\"/>" );
+    addRow( "<mspace linebreak=\"goodbreak\"/>" );
+    addRow( "<mspace linebreak=\"badbreak\"/>" );
+
 }
 
 void TestLoadAndSave::stringElement_data()
@@ -312,7 +380,7 @@ void TestLoadAndSave::mathVariant_data()
      */
     addRow( "<mi mathvariant=\"invalid\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -355,7 +423,7 @@ void TestLoadAndSave::mathSize_data()
      */
     addRow( "<mi mathsize=\"invalid\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -392,7 +460,7 @@ void TestLoadAndSave::mathColor_data()
             "<mi>x</mi>");
     addRow( "<mi mathcolor=\"#abcdefg\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -431,7 +499,7 @@ void TestLoadAndSave::mathBackground_data()
             "<mi>x</mi>");
     addRow( "<mi mathbackground=\"#abcdefg\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -473,7 +541,7 @@ void TestLoadAndSave::fontSize_data()
      */
     addRow( "<mi fontsize=\"invalid\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -505,7 +573,7 @@ void TestLoadAndSave::fontWeight_data()
      */
     addRow( "<mi fontweight=\"invalid\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -537,7 +605,7 @@ void TestLoadAndSave::fontStyle_data()
      */
     addRow( "<mi fontstyle=\"invalid\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
@@ -574,7 +642,7 @@ void TestLoadAndSave::color_data()
             "<mi>x</mi>");
     addRow( "<mi color=\"#abcdefg\">x</mi>",
             "<mi>x</mi>");
-    
+
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
