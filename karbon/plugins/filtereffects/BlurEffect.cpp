@@ -19,11 +19,13 @@
 
 #include "BlurEffect.h"
 #include "KoViewConverter.h"
+#include "KoXmlWriter.h"
 #include <KLocale>
 #include <QtCore/QRect>
 #include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 
+#include <KDebug>
 
 // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 // fixed to handle alpha channel correctly by Zack Rusin
@@ -320,4 +322,17 @@ bool BlurEffect::load(const QDomElement &element)
     }
         
     return true;
+}
+
+void BlurEffect::save(KoXmlWriter &writer)
+{
+    writer.startElement(BlurEffectId);
+    
+    if (m_deviation.x() != m_deviation.y()) {
+        writer.addAttribute("stdDeviation", QString("%1, %2").arg(m_deviation.x()).arg(m_deviation.y()));
+    } else {
+        writer.addAttribute("stdDeviation", m_deviation.x());
+    }
+    
+    writer.endElement();
 }

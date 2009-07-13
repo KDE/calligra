@@ -38,6 +38,8 @@ public:
     virtual void processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
     /// reimplemented from KoFilterEffect
     virtual bool load(const QDomElement &element);
+    /// reimplemented from KoFilterEffect
+    virtual void save(KoXmlWriter &writer);
     
 private:
     QPointF m_deviation;
