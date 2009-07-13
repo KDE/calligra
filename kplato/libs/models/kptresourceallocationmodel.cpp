@@ -244,7 +244,7 @@ QVariant ResourceAllocationModel::maximum( const ResourceGroup *res, int role ) 
         case Qt::EditRole:
             return res->numResources();
         case Qt::ToolTipRole:
-            return i18np( "There are %1 resource available in this group", "There are %1 resources available in this group", res->numResources() );
+            return i18np( "There is %1 resource available in this group", "There are %1 resources available in this group", res->numResources() );
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
