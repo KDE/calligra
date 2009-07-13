@@ -1184,8 +1184,6 @@ bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
 }
 
 void ResourceGroupRequest::save(QDomElement &element) const {
-    if (units() == 0)
-        return;
     QDomElement me = element.ownerDocument().createElement("resourcegroup-request");
     element.appendChild(me);
     me.setAttribute("group-id", m_group->id());
@@ -1535,7 +1533,7 @@ void ResourceRequestCollection::addRequest( ResourceGroupRequest *request )
         if ( r->group() == request->group() ) {
             kError()<<"Request to this group already exists";
             kError()<<"Task:"<<m_task->name()<<"Group:"<<request->group()->name();
-            Q_ASSERT( r->group() != request->group() );
+            Q_ASSERT( false );
         }
     }
     m_requests.append( request );
