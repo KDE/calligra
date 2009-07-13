@@ -59,6 +59,7 @@ public:
         int index = 0;
         foreach(KoFilterEffect *effect, shape->filterEffectStack()) {
             configSelector->addItem(QString("%1 - ").arg(index) + effect->name());
+            index++;
         }
     }
     
