@@ -1324,6 +1324,15 @@ QString Project::uniqueNodeId( int seed )
     return ident;
 }
 
+QString Project::uniqueNodeId( const QList<QString> &existingIds, int seed )
+{
+    QString id = uniqueNodeId( seed );
+    while ( existingIds.contains( id ) ) {
+        id = uniqueNodeId( seed );
+    }
+    return id;
+}
+
 bool Project::removeId( const QString &id )
 {
     //kDebug() <<"id=" << id;

@@ -589,11 +589,13 @@ public:
     ResourceRequestCollection *parent() const { return m_parent; }
 
     ResourceGroup *group() const { return m_group; }
+    void setGroup( ResourceGroup *group ) { m_group = group; }
     void unregister( const ResourceGroup *group ) { if ( group == m_group ) m_group = 0; }
     QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
     void addResourceRequest( ResourceRequest *request );
     void deleteResourceRequest( ResourceRequest *request );
     int count() const { return m_resourceRequests.count(); }
+    ResourceRequest *requestAt( int idx ) const { return m_resourceRequests.value( idx ); }
 
     ResourceRequest *takeResourceRequest( ResourceRequest *request );
     ResourceRequest *find( const Resource *resource ) const;
@@ -687,13 +689,14 @@ public:
         changed();
     }
 
-    void takeRequest( ResourceGroupRequest *request )
+    int takeRequest( ResourceGroupRequest *request )
     {
         int i = m_requests.indexOf( request );
         if ( i != -1 ) {
             m_requests.removeAt( i );
             changed();
         }
+        return i;
     }
 
     ResourceGroupRequest *find( const ResourceGroup *resource ) const;

@@ -206,6 +206,8 @@ protected slots:
 
     void removeProgressBarItems();
 
+    void slotInsertFile();
+
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintSelectedDebug();
@@ -280,13 +282,13 @@ private:
     KToggleAction *actionViewSelector;
 
     // ------ Insert
-
     // ------ Project
     KAction *actionEditMainProject;
     KAction *actionEditStandardWorktime;
 
     // ------ Tools
     KAction *actionDefineWBS;
+    KAction *actionInsertFile;
 
     // ------ Settings
     KAction *actionConfigure;

@@ -57,6 +57,8 @@ set(kplatoprivate_LIB_SRCS
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
     kptconfigskeleton.cpp
+
+    kptinsertfiledlg.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
@@ -65,6 +67,8 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptviewlisteditcategory.ui
 
     kptconfigtaskpanelbase.ui
+
+    kptinsertfilepanel.ui
 )
 
 kde4_add_kcfg_files(kplatosettings_SRCS kplatosettings.kcfgc)

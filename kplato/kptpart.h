@@ -96,6 +96,9 @@ public:
     bool loadWorkPackage( Project &project, const KUrl &url );
     bool loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
     
+    void insertFile( const QString &filename, Node *parent, Node *after = 0 );
+    bool insertProject( Project &project, Node *parent, Node *after );
+
 signals:
     void changed();
     
@@ -106,7 +109,6 @@ protected:
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
     virtual bool completeSaving( KoStore* store );
-
 
 protected slots:
     void slotViewDestroyed();

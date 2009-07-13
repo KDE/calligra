@@ -632,6 +632,39 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     return true;
 }
 
+void Part::insertFile( const QString &filename, Node *parent, Node *after )
+{
+    qDebug()<<"Part::insertFile:"<<filename<<parent->name()<<(after?after->name():"nil");
+    Part part;
+    if ( part.openUrl( KUrl( filename ) ) ) {
+        part.setReadWrite( false );
+        Project &p = part.getProject();
+        qDebug()<<"Part::insertFile:"<<p.name();
+        insertProject( p, parent, after );
+    }
+}
+
+bool Part::insertProject( Project &project, Node *parent, Node *after )
+{
+    qDebug()<<"Part::insertProject:";
+    if ( project.numChildren() == 0 ) {
+        qDebug()<<"Part::insertProject: nothing to insert";
+        return false;
+    }
+    // make sure node ids in new project is unique also in old project
+    QList<QString> existingIds = m_project->nodeDict().keys();
+    foreach ( Node *n, project.allNodes() ) {
+        if ( ! n->id().isEmpty() && ! m_project->findNode( n->id() ) ) {
+            continue; // id is ok to use in m_project
+        }
+        bool res = n->setId( project.uniqueNodeId( existingIds ) );
+        Q_ASSERT( res );
+    }
+    qDebug()<<"Part::insertProject:"<<project.childNodeIterator();
+    addCommand( new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) ) );
+    return true;
+}
+
 
 }  //KPlato namespace
 

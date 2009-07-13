@@ -1661,6 +1661,22 @@ private:
     WBSDefinition m_newvalue, m_oldvalue;
 };
 
+class KPLATOKERNEL_EXPORT InsertProjectCmd : public MacroCommand
+{
+public:
+    InsertProjectCmd( Project &project, Node *parent, Node *after, const QString& name = QString() );
+
+protected:
+    void addCalendars( Calendar *calendar, Calendar *parent, QMap<Calendar*, Calendar*> &map );
+    void addChildNodes( Node *node );
+
+private:
+    Project *m_project;
+    Node *m_parent;
+    Node *m_after;
+
+};
+
 
 }  //KPlato namespace
 

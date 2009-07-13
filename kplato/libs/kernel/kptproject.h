@@ -326,6 +326,9 @@ public:
     /// Create a unique id.
     QString uniqueNodeId( int seed = 1 );
 
+    /// Create a unique id.
+    QString uniqueNodeId( const QList<QString> &existingIds, int seed = 1 );
+
     ResourceGroup *findResourceGroup( const QString &id ) const
     {
         if ( resourceGroupIdDict.contains( id ) )
@@ -379,7 +382,6 @@ public:
     bool setCalendarId( Calendar *calendar );
     /// returns a unique calendar id
     QString uniqueCalendarId() const;
-
     /// Return reference to WBS Definition
     WBSDefinition &wbsDefinition();
     /// Set WBS Definition to @p def

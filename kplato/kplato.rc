@@ -48,6 +48,7 @@
         <Menu name="tools"><text>&amp;Tools</text>
             <Action name="project_worktime"/>
             <Action name="tools_define_wbs"/>
+            <Action name="insert_file"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
             <Action name="configure" group="settings_configure"/>

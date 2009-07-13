@@ -102,6 +102,7 @@
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
+#include "kptinsertfiledlg.h"
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -195,6 +196,10 @@ View::View( Part* part, QWidget* parent )
     actionDefineWBS  = new KAction(KIcon( "configure" ), i18n("Define WBS Pattern..."), this);
     actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
+
+    actionInsertFile  = new KAction(KIcon( "document-import" ), i18n("Insert Project..."), this);
+    actionCollection()->addAction("insert_file", actionInsertFile );
+    connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
     // ------ Settings
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
@@ -1037,6 +1042,15 @@ void View::slotViewSelector( bool show )
     m_viewlist->setVisible( show );
 }
 
+void View::slotInsertFile()
+{
+    qDebug()<<"View::slotInsertFile:";
+    InsertFileDialog *dlg = new InsertFileDialog( getProject(), currentTask(), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
+        getPart()->insertFile( dlg->url().url(), dlg->parentNode(), dlg->afterNode() );
+    }
+    delete dlg;
+}
 
 void View::slotProjectEdit()
 {
