@@ -51,6 +51,8 @@
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <plugins/pictureshape/PictureShape.h>
 #include <KoImageData.h>
+#include "KoFilterEffect.h"
+#include "KoXmlWriter.h"
 
 #include <KGenericFactory>
 #include <KMimeType>
@@ -552,6 +554,7 @@ void SvgExport::getStyle( KoShape * shape, QTextStream * stream )
 {
     getFill( shape, stream );
     getStroke( shape, stream );
+    getEffects( shape, stream );
     if( ! shape->isVisible() )
         *stream << " display=\"none\"";
 }
@@ -652,6 +655,45 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
         }
         *stream << "\"";
     }
+}
+
+void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
+{
+    QList<KoFilterEffect*> filterEffectStack = shape->filterEffectStack();
+    if (!filterEffectStack.count())
+        return;
+
+    QString uid = createUID();
+
+    QRectF filterRegion;
+    foreach(KoFilterEffect* effect, filterEffectStack) {
+        filterRegion |= effect->clipRect();
+    }
+
+    printIndentation( m_defs, m_indent2 );
+
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buffer,m_indent2*2);
+
+    writer.startElement("filter");
+    writer.addAttribute("id", uid);
+    writer.addAttribute("filterUnits", "userSpaceOnUse");
+    writer.addAttribute("primitiveUnits", "userSpaceOnUse");
+    writer.addAttribute("x", SvgUtil::toUserSpace( filterRegion.x() ) );
+    writer.addAttribute("y", SvgUtil::toUserSpace( filterRegion.y() ) );
+    writer.addAttribute("width", SvgUtil::toUserSpace( filterRegion.width() ) );
+    writer.addAttribute("height", SvgUtil::toUserSpace( filterRegion.height() ) );
+
+    foreach(KoFilterEffect *effect, filterEffectStack) {
+        effect->save(writer);
+    }
+    writer.endElement();
+    *m_defs << ba;
+    *m_defs << endl;
+
+    *stream << " filter=\"url(#" << uid << ")\"";
 }
 
 void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
