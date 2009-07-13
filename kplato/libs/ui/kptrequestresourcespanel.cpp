@@ -106,12 +106,12 @@ MacroCommand *RequestResourcesPanel::buildCommand()
             if ( rr == 0 ) {
                 ResourceGroupRequest *gr = t->requests().find( r->parentGroup() );
                 if ( gr == 0 ) {
-                    if ( ! groups.values().contains( gr ) ) {
+                    if ( groups.contains( r->parentGroup() ) ) {
+                        gr = groups[ r->parentGroup() ];
+                    } else {
                         gr = new ResourceGroupRequest( r->parentGroup(), 0 );
                         groups[ r->parentGroup() ] = gr;
                         cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
-                    } else {
-                        gr = groups.value( r->parentGroup() );
                     }
                 }
                 ResourceRequest *rr = new ResourceRequest( r, rit.value() );
