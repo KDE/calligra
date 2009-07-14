@@ -60,7 +60,7 @@
 #include <kdebug.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
-#include <kdeversion.h>
+
 #include <kglobalsettings.h>
 #include <kparts/componentfactory.h>
 #include <ktip.h>

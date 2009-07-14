@@ -64,7 +64,7 @@
 #include <kparts/event.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdeversion.h>
+
 #include <kaboutdata.h>
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>

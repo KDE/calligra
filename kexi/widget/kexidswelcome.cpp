@@ -25,7 +25,7 @@
 #include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kstandardguiitem.h>
-#include <kdeversion.h>
+
 
 #include "kexidatasourcewizard.h"
 #include "kexidswelcome.h"

@@ -26,7 +26,7 @@
 //temporary
 #define KexiStatusBar_KTEXTEDITOR_USED 0
 
-#include <kdeversion.h>
+
 #include <kstatusbar.h>
 #include <qmap.h>
 //Added by qt3to4:

@@ -29,7 +29,7 @@
 
 #include <KoInsets.h>
 #include <KoShapeManager.h>
-#include <kdeversion.h>
+
 #include <QApplication>
 #include <QTextBlock>
 #include <QTextLayout>

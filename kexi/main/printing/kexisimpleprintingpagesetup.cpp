@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kpushbutton.h>
-#include <kdeversion.h>
+
 
 #include <qlabel.h>
 #include <qtimer.h>

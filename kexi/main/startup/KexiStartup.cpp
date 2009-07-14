@@ -39,7 +39,7 @@
 #include <kmimetype.h>
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
-#include <kdeversion.h>
+
 #include <ktextedit.h>
 #include <kuser.h>
 #include <KProgressDialog>

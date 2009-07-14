@@ -22,7 +22,7 @@
 #include <cmath>
 
 #include <klocale.h>
-#include <kdeversion.h>
+
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 

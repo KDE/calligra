@@ -56,7 +56,7 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
-#include <kdeversion.h>
+
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kiconloader.h>

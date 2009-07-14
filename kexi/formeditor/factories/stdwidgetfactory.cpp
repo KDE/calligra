@@ -45,11 +45,11 @@
 #include <KLineEdit>
 #include <KLocale>
 #include <KDebug>
-#include <kdeversion.h>
+
 #include <KInputDialog>
 #include <KIcon>
 #include <KAction>
-#include <kdeversion.h>
+
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>

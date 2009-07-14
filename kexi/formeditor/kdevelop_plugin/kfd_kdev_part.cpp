@@ -25,7 +25,7 @@
 #include <qevent.h>
 #include <qobject.h>
 
-#include <kdeversion.h>
+
 #include <kaction.h>
 #include <kcomponentdata.h>
 #include <klocale.h>

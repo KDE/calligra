@@ -112,7 +112,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdeversion.h>
+
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>

@@ -32,7 +32,7 @@
 #include "oowriterimport.h"
 #include <ooutils.h>
 
-#include <kdeversion.h>
+
 #include <kdebug.h>
 #include <kzip.h>
 

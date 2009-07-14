@@ -40,7 +40,7 @@
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
-#include <kdeversion.h>
+
 #include <kcolorbutton.h>
 #include <KPluginInfo>
 #include <KPluginSelector>

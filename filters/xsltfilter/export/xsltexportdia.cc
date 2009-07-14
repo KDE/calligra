@@ -32,7 +32,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
 #include <ktemporaryfile.h>

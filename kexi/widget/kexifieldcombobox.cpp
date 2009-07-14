@@ -35,7 +35,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kdeversion.h>
+
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <klocale.h>

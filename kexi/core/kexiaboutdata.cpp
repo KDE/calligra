@@ -21,7 +21,7 @@
 
 #include "kexiaboutdata.h"
 #include <kexi_version.h>
-#include <kdeversion.h>
+
 #include <kofficeversion.h> //only for KOFFICE_VERSION_STRING
 #include <klocale.h>
 

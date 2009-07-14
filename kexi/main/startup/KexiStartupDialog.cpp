@@ -45,7 +45,7 @@
 #include <QListView>
 
 #include <klocale.h>
-#include <kdeversion.h>
+
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kpushbutton.h>

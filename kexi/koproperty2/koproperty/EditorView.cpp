@@ -633,7 +633,7 @@ void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& p
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdeversion.h>
+
 
 namespace KoProperty
 {

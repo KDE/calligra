@@ -50,7 +50,7 @@
 #include <ktoolbar.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
-#include <kdeversion.h>
+
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kstandarddirs.h>

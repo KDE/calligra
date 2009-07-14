@@ -26,7 +26,7 @@
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kdeversion.h>
+
 
 #include "kexinewstuff.h"
 

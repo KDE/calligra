@@ -61,7 +61,7 @@
 #include <kcomponentdata.h>
 #include <kdatatool.h>
 #include <kdebug.h>
-#include <kdeversion.h>
+
 #include <KFontChooser>
 #include <kinputdialog.h>
 #include <kmessagebox.h>

@@ -35,7 +35,7 @@
 #include <QFrame>
 #include <QResizeEvent>
 
-#include <kdeversion.h>
+
 #include <kfontrequester.h>
 #include <kacceleratormanager.h>
 #include <klocale.h>

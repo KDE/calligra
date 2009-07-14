@@ -35,7 +35,7 @@
 #include <KLineEdit>
 #include <KLocale>
 #include <KDebug>
-#include <kdeversion.h>
+
 #include <KInputDialog>
 #include <KIcon>
 #include <KAction>
