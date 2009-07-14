@@ -19,9 +19,11 @@
 
 #include "KarbonFilterEffectsPlugin.h"
 #include "BlurEffectFactory.h"
+#include "OffsetEffectFactory.h"
+
 #include "KoFilterEffectRegistry.h"
+
 #include <KGenericFactory>
-#include <KDebug>
 
 K_EXPORT_COMPONENT_FACTORY(
     karbonfiltereffects,
@@ -30,8 +32,8 @@ K_EXPORT_COMPONENT_FACTORY(
 KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QStringList& )
     : QObject(parent)
 {
-    kDebug(38000) << "loading effect plugin";
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"
