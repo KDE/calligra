@@ -1,6 +1,9 @@
 [Desktop Entry]
 Icon=
 Name=Filter Effects
+Name[gl]=Efectos de filtro
+Name[pt]=Efeitos de Filtros
+Name[pt_BR]=Efeitos de Filtros
 Name[sv]=Filtereffekter
 Name[x-test]=xxFilter Effectsxx
 X-KDE-ServiceTypes=KOffice/FilterEffect

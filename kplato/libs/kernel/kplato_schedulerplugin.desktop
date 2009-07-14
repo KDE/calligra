@@ -2,6 +2,8 @@
 Name=KPlato Scheduler Plugin
 Name[es]=Complemento de planificación de KPlato
 Name[et]=KPlato ajakavaplugin
+Name[gl]=Extension de Axenda de KPlato
+Name[nb]=KPlato planleggingsprogramtillegg
 Name[nds]=KPlato-Plaanmoduul
 Name[nl]=KPlato planner-plugin
 Name[pt]='Plugin' de Calendarização do KPlato
@@ -15,6 +17,8 @@ X-KDE-ServiceType=KPlato/SchedulerPlugin
 Comment=A plugin that calculates a project schedule
 Comment[es]=Un complemento que calcula la planificación de un proyecto
 Comment[et]=Projekti ajakava arvutav plugin
+Comment[gl]=Unha extensión que calcula a axenda do proxecto
+Comment[nb]=Et programtillegg som beregner en prosjekt-tidsplan
 Comment[nds]=En Moduul, dat en Projektplaan utreekt
 Comment[nl]=Een plugin, die een projectplanning berekent
 Comment[pt]=Um 'plugin' que calcula o escalonamento de um projecto

@@ -2,6 +2,8 @@
 Name=Text
 Name[es]=Texto
 Name[et]=Tekst
+Name[gl]=Texto
+Name[nb]=Tekst
 Name[pt]=Texto
 Name[pt_BR]=Texto
 Name[uk]=Текст
@@ -10,6 +12,8 @@ Name[zh_TW]=文字
 Comment=Text Migration Driver for Kexi
 Comment[es]=Controlador de migración de texto de Kexi
 Comment[et]=Kexi teksti migreerimisdraiver
+Comment[gl]=Motor de migración de texto para Kexi
+Comment[nb]=Tekst-migreringsdriver for Kexi
 Comment[nds]=Text-Utlagerndriever för Kexi
 Comment[pt]=Controlador de Migração de Texto para o Kexi
 Comment[pt_BR]=Driver de Migração de Texto para o Kexi
