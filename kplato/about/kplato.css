@@ -1,0 +1,17 @@
+#headerL {
+  background-image: url(top-left-kplato.png);
+}
+
+#title {
+  right: 25px;
+}
+
+#tagline {
+  right: 25px;
+}
+
+#boxCenter {
+  padding: 1em;
+}
+
+/* vim:set sw=2 et nocindent smartindent: */

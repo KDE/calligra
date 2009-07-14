@@ -62,6 +62,8 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <KConfigDialog>
+#include <kpimutils/kfileio.h>
+
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 
@@ -103,6 +105,7 @@
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptinsertfiledlg.h"
+#include "kpthtmlview.h"
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -155,6 +158,7 @@ View::View( Part* part, QWidget* parent )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Add sub views
+    createWelcomeView();
     createViews();
 
     connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
@@ -286,9 +290,6 @@ View::View( Part* part, QWidget* parent )
     connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
     connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
-
-    m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
-
 
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
 
@@ -424,8 +425,7 @@ void View::createViews()
                 }
             }
         }
-    }
-    if ( m_tab->count() == 0 ) {
+    } else {
         kDebug()<<"Default";
         ViewListItem *cat;
         cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
@@ -466,7 +466,41 @@ void View::createViews()
 
         // Deactivate for koffice 2.0 release
         //createChartView( cat, "PerformanceChart", i18n( "Performance Chart" ), i18n( "Cost and schedule monitoring" ) );
+
     }
+}
+
+ViewBase *View::createWelcomeView()
+{
+    HtmlView *v = new HtmlView( getPart(), m_tab );
+    v->htmlPart().setJScriptEnabled(false);
+    v->htmlPart().setJavaEnabled(false);
+    v->htmlPart().setMetaRefreshEnabled(false);
+    v->htmlPart().setPluginsEnabled(false);
+
+    QString location = componentData().dirs()->findResource( "kplato_about", "main.html" );
+    QString content = KPIMUtils::kFileToByteArray( location );
+    qDebug()<<"createWelcomeView:"<<endl<<content;
+    content = content.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    if ( QApplication::isRightToLeft() ) {
+        content = content.arg( "@import \"" + KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) +  "\";");
+    } else {
+        content = content.arg( "" );
+    }
+    v->htmlPart().begin(KUrl::fromPath( location ));
+
+    QString fontSize = QString::number( 14 );
+    QString appTitle = i18n( "KPlato" );
+    QString catchPhrase = "";
+    QString quickDescription = i18n( "The KPlato Project Manager is part of the KOffice suite of office applications." );
+    QString info = "Todo";
+    v->htmlPart().write( content.arg( fontSize ).arg( appTitle ).arg( catchPhrase ).arg(  quickDescription ).arg( info ) );
+
+    v->htmlPart().end();
+
+
+    m_tab->addWidget( v );
+    return v;
 }
 
 ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )

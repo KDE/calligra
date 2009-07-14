@@ -233,6 +233,8 @@ protected:
     Calendar *currentCalendar();
     void updateView( QWidget *widget );
 
+    ViewBase *createWelcomeView();
+
 private slots:
     void slotActionDestroyed( QObject *o );
     void slotViewListItemRemoved( ViewListItem *item );
