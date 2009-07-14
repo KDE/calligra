@@ -116,6 +116,8 @@ KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
 
 void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KarbonFilterEffectsTool::activate( bool temporary )
@@ -132,14 +134,17 @@ void KarbonFilterEffectsTool::activate( bool temporary )
 
 void KarbonFilterEffectsTool::mousePressEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
 }
 
 void KarbonFilterEffectsTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
 }
 
 void KarbonFilterEffectsTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
 }
 
 void KarbonFilterEffectsTool::addFilter()

@@ -17,9 +17,6 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include <KoFilterEffectRegistry.h>
-#include <KoFilterEffectFactory.h>
-
 #include "KarbonFilterEffectsPlugin.h"
 #include "BlurEffectFactory.h"
 #include "KoFilterEffectRegistry.h"
