@@ -35,7 +35,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <kiconloader.h>
-#include <ksvgrenderer.h>
+#include <QSvgRenderer>
 
 KPrPageLayout::KPrPageLayout()
 : m_layoutType( Page )
@@ -133,7 +133,7 @@ QPixmap KPrPageLayout::thumbnail() const
 {
     static KIconLoader * loader = KIconLoader::global();
 
-    KSvgRenderer renderer;
+    QSvgRenderer renderer;
 
     QSize size( 80, 60 );
     QPixmap pic( size );
