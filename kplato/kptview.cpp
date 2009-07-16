@@ -398,6 +398,8 @@ void View::createViews()
                         v = createMilestoneGanttView( cat, tag, name, tip );
                     } else if ( type == "ResourceAppointmentsView" ) {
                         v = createResourceAppointmentsView( cat, tag, name, tip );
+                    } else if ( type == "ResourceAppointmentsGanttView" ) {
+                        v = createResourceAppointmentsGanttView( cat, tag, name, tip );
                     } else if ( type == "AccountsView" ) {
                         v = createAccountsView( cat, tag, name, tip );
                     } else if ( type == "ResourceAssignmentView" ) {
@@ -459,6 +461,8 @@ void View::createViews()
 
         createResourceAppointmentsView( cat, "ResourceAppointmentsView", QString(), TIP_USE_DEFAULT_TEXT );
 
+        createResourceAppointmentsGanttView( cat, "ResourceAppointmentsGanttView", QString(), TIP_USE_DEFAULT_TEXT );
+
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
         // Deactivate for koffice 2.0 release
@@ -502,6 +506,35 @@ ViewBase *View::createWelcomeView()
     m_tab->addWidget( v );
     return v;
 }
+
+ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+{
+    ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "resource_view", index );
+    if ( name.isEmpty() ) {
+        i->setText( 0, i18n( "Resource Assignments (Gantt)" ) );
+    }
+    if ( tip == TIP_USE_DEFAULT_TEXT ) {
+        i->setToolTip( 0, i18n( "View resource assignments in gantt chart" ) );
+    } else {
+        i->setToolTip( 0, tip );
+    }
+
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    v->setProject( &( getProject() ) );
+    v->setScheduleManager( currentScheduleManager() );
+    v->updateReadWrite( m_readWrite );
+    return v;
+}
+
 
 ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {

@@ -45,6 +45,8 @@
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
 
+#include "kdganttglobal.h"
+
 #include <kdebug.h>
 
 namespace KPlato
@@ -1114,6 +1116,759 @@ bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::Dro
         emit executeCommand( m );
     }
     return true;
+}
+
+//-------------------------------------------------------
+class ResourceAppointmentsRowModel::Private
+{
+public:
+    enum Type { None, Group, Resource, Appointment, Interval };
+    Private( void *par=0, void *p=0, Type t=None ) : parent( par ), ptr( p ), type( t ) {}
+
+    void *parent;
+    void *ptr;
+    Type type;
+};
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug operator<<( QDebug dbg, ResourceAppointmentsRowModel::Private::Type t)
+{
+  switch(t){
+  case ResourceAppointmentsRowModel::Private::None:       dbg << "Node"; break;
+  case ResourceAppointmentsRowModel::Private::Group:      dbg << "Group"; break;
+  case ResourceAppointmentsRowModel::Private::Resource:   dbg << "Resource"; break;
+  case ResourceAppointmentsRowModel::Private::Appointment:dbg << "Appointment"; break;
+  case ResourceAppointmentsRowModel::Private::Interval:   dbg << "Interval"; break;
+  default: dbg << "Unknown";
+  }
+  return dbg;
+}
+QDebug operator<<( QDebug dbg, const ResourceAppointmentsRowModel::Private& s )
+{
+    dbg <<&s;
+    return dbg;
+}
+QDebug operator<<( QDebug dbg, const ResourceAppointmentsRowModel::Private* s )
+{
+    if ( s == 0 ) {
+        dbg<<"ResourceAppointmentsRowModel::Private[ ("<<(void*)s<<") ]";
+    } else {
+        dbg << "ResourceAppointmentsRowModel::Private[ ("<<(void*)s<<") Type="<<s->type<<" parent=";
+        switch( s->type ) {
+        case ResourceAppointmentsRowModel::Private::Group:
+            dbg<<static_cast<Project*>(s->parent)<<static_cast<Project*>(s->parent)->name();
+            dbg<<" ptr="<<static_cast<ResourceGroup*>(s->ptr)<<static_cast<ResourceGroup*>(s->ptr)->name();
+            break;
+        case ResourceAppointmentsRowModel::Private::Resource:
+            dbg<<static_cast<ResourceGroup*>(s->parent)<<static_cast<ResourceGroup*>(s->parent)->name();
+            dbg<<" ptr="<<static_cast<Resource*>(s->ptr)<<static_cast<Resource*>(s->ptr)->name();
+            break;
+        case ResourceAppointmentsRowModel::Private::Appointment:
+            dbg<<static_cast<Resource*>(s->parent)<<static_cast<Resource*>(s->parent)->name();
+            dbg<<" ptr="<<static_cast<Appointment*>(s->ptr);
+            break;
+        case ResourceAppointmentsRowModel::Private::Interval:
+            dbg<<static_cast<Appointment*>(s->parent)<<" ptr="<<static_cast<AppointmentInterval*>(s->ptr);
+            break;
+        default:
+            dbg<<s->parent<<" ptr="<<s->ptr;
+            break;
+        }
+        dbg<<" ]";
+    }
+
+    return dbg;
+}
+
+#endif
+
+ResourceAppointmentsRowModel::ResourceAppointmentsRowModel( QObject *parent )
+    : ItemModelBase( parent ),
+    m_manager( 0 )
+{
+}
+
+ResourceAppointmentsRowModel::~ResourceAppointmentsRowModel()
+{
+    qDeleteAll( m_datamap );
+}
+
+void ResourceAppointmentsRowModel::setProject( Project *project )
+{
+    //kDebug()<<project;
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
+        disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        
+        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+        
+        disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+      
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        
+        disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT(  slotProjectCalculated( ScheduleManager* ) ) );
+    
+        foreach ( Resource *r, m_project->resourceList() ) {
+            disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
+            disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
+            disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
+            disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
+            disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+        }
+    }
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
+        connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
+        
+        connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
+        
+        connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
+        
+        connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
+        
+        connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
+        
+        connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
+        
+        connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
+        
+        connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
+        
+        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
+      
+        connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+      
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    
+        connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    
+        foreach ( Resource *r, m_project->resourceList() ) {
+            connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
+            connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
+            connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
+            connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
+            connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+        }
+    }
+    reset();
+}
+
+void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<sm;
+    m_manager = sm;
+    qDeleteAll( m_datamap );
+    m_datamap.clear();
+    reset();
+}
+
+long ResourceAppointmentsRowModel::id() const
+{
+    return m_manager ? m_manager->id() : -1;
+}
+
+int ResourceAppointmentsRowModel::columnCount( const QModelIndex & parent ) const
+{
+    return 5;
+}
+
+int ResourceAppointmentsRowModel::rowCount( const QModelIndex & parent ) const
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    if ( ! parent.isValid() ) {
+        return m_project->numResourceGroups();
+    }
+    if ( ResourceGroup *g = resourcegroup( parent ) ) {
+        return g->numResources();
+    }
+    if ( m_manager == 0 ) {
+        return 0;
+    }
+    if ( Resource *r = resource( parent ) ) {
+        return r->numAppointments( id() ); // number of tasks there are appointments with
+    }
+    if ( Appointment *a = appointment( parent ) ) {
+        return a->count(); // number of appointment intervals
+    }
+    return 0;
+}
+
+QVariant ResourceAppointmentsRowModel::data( const ResourceGroup *g, int column, int role ) const
+{
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case 0: return g->name();
+            case 1: return g->typeToString( true );
+            case 2: return " ";
+            case 3: return " ";
+            case 4: return " ";
+        }
+    }
+    return QVariant();
+}
+
+QVariant ResourceAppointmentsRowModel::data( const Resource *r, int column, int role ) const
+{
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case 0: return r->name();
+            case 1: return r->typeToString( true );
+            case 2: return " ";
+            case 3: return " ";
+            case 4: return " ";
+        }
+    }
+    return QVariant();
+}
+
+QVariant ResourceAppointmentsRowModel::data( const Appointment *a, int column, int role ) const
+{
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case 0: return a->node()->node()->name();
+            case 1: return a->node()->node()->typeToString( true );
+            case 2: return a->startTime().dateTime();
+            case 3: return a->endTime().dateTime();
+            case 4: return " ";
+        }
+    }
+    return QVariant();
+}
+
+QVariant ResourceAppointmentsRowModel::data( const AppointmentInterval *a, int column, int role ) const
+{
+    if ( role == Qt::DisplayRole ) {
+        switch ( column ) {
+            case 0: return QVariant();
+            case 1: return i18n( "Interval" );
+            case 2: return a->startTime().dateTime();
+            case 3: return a->endTime().dateTime();
+            case 4: return a->load();
+        }
+    }
+    return QVariant();
+}
+
+QVariant ResourceAppointmentsRowModel::data( const QModelIndex &index, int role ) const
+{
+    //kDebug()<<index<<role;
+
+    if ( m_project == 0 || ! index.isValid() ) {
+        return QVariant();
+    }
+    if ( ResourceGroup *g = resourcegroup( index ) ) {
+        return data( g, index.column(), role );
+    }
+    if ( Resource *r = resource( index ) ) {
+        return data( r, index.column(), role );
+    }
+    if ( m_manager == 0 ) {
+        return QVariant();
+    }
+    if ( Appointment *a = appointment( index ) ) {
+        return data( a, index.column(), role );
+    }
+    if ( AppointmentInterval *i = interval( index ) ) {
+        return data( i, index.column(), role );
+    }
+    return QVariant();
+}
+
+QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( orientation == Qt::Vertical ) {
+        return QVariant();
+    }
+    if ( role == Qt::DisplayRole ) {
+        switch ( section ) {
+            case 0: return i18n( "Name" );
+            case 1: return i18n( "Type" );
+            case 2: return i18n( "Start" );
+            case 3: return i18n( "Finish" );
+            case 4: return i18n( "Load" );
+        }
+    }
+    return QVariant();
+}
+
+QModelIndex ResourceAppointmentsRowModel::parent( const QModelIndex &idx ) const
+{
+    if ( !idx.isValid() || m_project == 0 ) {
+        kWarning()<<"No data "<<idx;
+        return QModelIndex();
+    }
+
+    QModelIndex p;
+    if ( resourcegroup( idx ) ) {
+        // ResourceGroup, no parent
+        return QModelIndex();
+    }
+    if ( ResourceGroup *pg = parentGroup( idx ) ) {
+        // Resource, parent is ResourceGroup
+        int row = m_project->indexOf( pg );
+        p = const_cast<ResourceAppointmentsRowModel*>( this )->createGroupIndex( row, 0, m_project );
+        //kDebug()<<"Parent:"<<p<<r->parentGroup()->name();
+        Q_ASSERT( p.isValid() );
+        return p;
+    }
+    if ( Resource *pr = parentResource( idx ) ) {
+        // Appointment, parent is Resource
+        int row = pr->parentGroup()->indexOf( pr );
+        p = const_cast<ResourceAppointmentsRowModel*>( this )->createResourceIndex( row, 0, pr->parentGroup() );
+        //kDebug()<<"Parent:"<<p<<r->parentGroup()->name();
+        Q_ASSERT( p.isValid() );
+        return p;
+    }
+    if ( Appointment *a = parentAppointment( idx ) ) {
+        // AppointmentInterval, parent is Appointment
+        Q_ASSERT( a->resource()->id() == id() );
+        if ( a->resource() && a->resource()->resource() ) {
+            Resource *r = a->resource()->resource();
+            int row = r->indexOf( a, id() );
+            Q_ASSERT( row >= 0 );
+            p = const_cast<ResourceAppointmentsRowModel*>( this )->createAppointmentIndex( row, 0, r );
+            //kDebug()<<"Parent:"<<p<<r->name();
+            Q_ASSERT( p.isValid() );
+        }
+        return p;
+    }
+    return QModelIndex();
+}
+
+QModelIndex ResourceAppointmentsRowModel::index( ResourceGroup *g ) const
+{
+    if ( m_project == 0 || g == 0 ) {
+        return QModelIndex();
+    }
+    return const_cast<ResourceAppointmentsRowModel*>( this )->createGroupIndex( m_project->indexOf( g ), 0, m_project );
+}
+
+QModelIndex ResourceAppointmentsRowModel::index( Resource *r ) const
+{
+    if ( m_project == 0 || r == 0 ) {
+        return QModelIndex();
+    }
+    return const_cast<ResourceAppointmentsRowModel*>( this )->createResourceIndex( r->parentGroup()->indexOf( r ), 0, r->parentGroup() );
+}
+
+QModelIndex ResourceAppointmentsRowModel::index( Appointment *a ) const
+{
+    if ( m_project == 0 || m_manager == 0 || a == 0 || a->resource()->resource() ) {
+        return QModelIndex();
+    }
+    Resource *r = a->resource()->resource();
+    return const_cast<ResourceAppointmentsRowModel*>( this )->createAppointmentIndex( r->indexOf( a, id() ), 0, r );
+}
+
+QModelIndex ResourceAppointmentsRowModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_project == 0 || row < 0 || column < 0 ) {
+        return QModelIndex();
+    }
+    if ( ! parent.isValid() ) {
+        if ( row < m_project->numResourceGroups() ) {
+            //kDebug()<<"Group: "<<m_project->resourceGroupAt( row );
+            return const_cast<ResourceAppointmentsRowModel*>( this )->createGroupIndex( row, column, m_project );
+        }
+        return QModelIndex();
+    }
+    if ( ResourceGroup *g = resourcegroup( parent ) ) {
+        if ( row < g->numResources() ) {
+            //kDebug()<<"Resource: "<<g->resourceAt( row );
+            return const_cast<ResourceAppointmentsRowModel*>( this )->createResourceIndex( row, column, g );
+        }
+        return QModelIndex();
+    }
+    if ( m_manager == 0 ) {
+        return QModelIndex();
+    }
+    if ( Resource *r = resource( parent ) ) {
+        int num = r->numAppointments( id() );
+        if ( row < num ) {
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() );
+            return const_cast<ResourceAppointmentsRowModel*>( this )->createAppointmentIndex( row, column, r );
+        }
+        return QModelIndex();
+    }
+    if ( Appointment *a = appointment( parent ) ) {
+        int num = a->count();
+        if ( row < num ) {
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() );
+            return const_cast<ResourceAppointmentsRowModel*>( this )->createIntervalIndex( row, column, a );
+        }
+        return QModelIndex();
+    }
+    return QModelIndex();
+}
+
+QModelIndex ResourceAppointmentsRowModel::createGroupIndex( int row, int column, Project *project )
+{
+    Private *p = 0;
+    ResourceGroup *group = project->resourceGroupAt( row );
+    if ( m_datamap.contains( group ) ) {
+        p = m_datamap[ group ];
+    } else {
+        p = new Private( m_project, group, Private::Group );
+        m_datamap.insert( group, p );
+    }
+    QModelIndex idx = createIndex( row, column, p );
+    Q_ASSERT( idx.isValid() );
+    return createIndex( row, column, p );
+}
+
+QModelIndex ResourceAppointmentsRowModel::createResourceIndex( int row, int column, ResourceGroup *g )
+{
+    Private *p = 0;
+    Resource *res = g->resourceAt( row );
+    if ( m_datamap.contains( res ) ) {
+        p = m_datamap[ res ];
+    } else {
+        p = new Private( g, res, Private::Resource );
+        m_datamap.insert( res, p );
+        //qDebug()<<"createResourceIndex: new"<<p;
+    }
+    QModelIndex idx = createIndex( row, column, p );
+    Q_ASSERT( idx.isValid() );
+    return createIndex( row, column, p );
+}
+
+QModelIndex ResourceAppointmentsRowModel::createAppointmentIndex( int row, int column, Resource *r )
+{
+    Private *p = 0;
+    Appointment *a = r->appointmentAt( row, id() );
+    Q_ASSERT( a );
+    if ( m_datamap.contains( a ) ) {
+        p = m_datamap[ a ];
+    } else {
+        p = new Private( r, a, Private::Appointment );
+        m_datamap.insert( a, p );
+        //qDebug()<<"createAppointmentIndex: new"<<p;
+    }
+    QModelIndex idx = createIndex( row, column, p );
+    Q_ASSERT( idx.isValid() );
+    return idx;
+}
+
+QModelIndex ResourceAppointmentsRowModel::createIntervalIndex( int row, int column, Appointment *a )
+{
+    Private *p = 0;
+    AppointmentInterval i = a->intervalAt( row );
+    foreach ( Private *pr, m_datamap.values() ) {
+        if ( pr->parent == a &&
+            pr->type == Private::Interval &&
+            i == *( static_cast<AppointmentInterval*>( pr->ptr ) ) )
+        {
+            p = pr;
+            break;
+        }
+    }
+    if ( p == 0 ) {
+        p = new Private( a, new AppointmentInterval( i ), Private::Interval );
+        m_datamap.insert( p->ptr, p );
+        //qDebug()<<"createIntervalIndex: new"<<p;
+    }
+    QModelIndex idx = createIndex( row, column, p );
+    Q_ASSERT( idx.isValid() );
+    return createIndex( row, column, p );
+}
+
+void ResourceAppointmentsRowModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
+{
+    kDebug()<<group->name()<<row;
+    QModelIndex i = index( const_cast<ResourceGroup*>( group ) );
+    beginInsertRows( i, row, row );
+}
+
+void ResourceAppointmentsRowModel::slotResourceInserted( const Resource *r )
+{
+    kDebug()<<r->name();
+    endInsertRows();
+
+    connect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
+    connect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
+    connect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
+    connect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
+    connect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+}
+
+void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
+{
+    kDebug()<<r->name();
+    int row = r->parentGroup()->indexOf( r );
+
+    beginRemoveRows( index( r->parentGroup() ), row, row );
+    disconnect( r, SIGNAL( externalAppointmentToBeAdded( Resource*, int ) ), this, SLOT( slotAppointmentToBeInserted( Resource*, int ) ) );
+    disconnect( r, SIGNAL( externalAppointmentAdded( Resource*, Appointment* ) ), this, SLOT( slotAppointmentInserted( Resource*, Appointment* ) ) );
+    disconnect( r, SIGNAL( externalAppointmentToBeRemoved( Resource*, int ) ), this, SLOT( slotAppointmentToBeRemoved( Resource*, int ) ) );
+    disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
+    disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
+
+}
+
+void ResourceAppointmentsRowModel::slotResourceRemoved( const Resource *resource )
+{
+    //kDebug()<<resource->name();
+    if ( m_datamap.contains( const_cast<Resource*>( resource ) ) ) {
+        delete m_datamap[ const_cast<Resource*>( resource ) ];
+        m_datamap.remove( const_cast<Resource*>( resource ) );
+        foreach ( Appointment *a, resource->appointments( id() ) ) {
+            QList<Private*> lst;
+            foreach ( Private *i, m_datamap.values() ) {
+                if ( i->parent == a ) {
+                    lst << i;
+                }
+            }
+            while ( ! lst.isEmpty() ) {
+                m_datamap.remove( lst.first() );
+                delete lst.takeFirst();
+            }
+            if ( m_datamap.contains( a ) ) {
+                delete m_datamap[ a ];
+                m_datamap.remove( a );
+            }
+        }
+    }
+    endRemoveRows();
+}
+
+void ResourceAppointmentsRowModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
+{
+    beginInsertRows( QModelIndex(), row, row );
+}
+
+void ResourceAppointmentsRowModel::slotResourceGroupInserted( const ResourceGroup*group )
+{
+    endInsertRows();
+}
+
+void ResourceAppointmentsRowModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
+{
+    //kDebug()<<group->name()<<endl;
+    int row = m_project->indexOf( const_cast<ResourceGroup*>( group ) );
+    beginRemoveRows( QModelIndex(), row, row );
+}
+
+void ResourceAppointmentsRowModel::slotResourceGroupRemoved( const ResourceGroup *group )
+{
+    //kDebug()<<group->name()<<endl;
+    if ( m_datamap.contains( const_cast<ResourceGroup*>( group ) ) ) {
+        delete m_datamap[ const_cast<ResourceGroup*>( group ) ];
+        m_datamap.remove( const_cast<ResourceGroup*>( group ) );
+    }
+    endRemoveRows();
+}
+
+void ResourceAppointmentsRowModel::slotAppointmentToBeInserted( Resource *r, int row )
+{
+    // external appointments only, (Internal handled in slotProjectCalculated)
+    //beginInsertRows( index( r ), row, row );
+}
+
+void ResourceAppointmentsRowModel::slotAppointmentInserted( Resource *r, Appointment *a )
+{
+    // external appointments only, (Internal handled in slotProjectCalculated)
+    //endInsertRows();
+}
+
+void ResourceAppointmentsRowModel::slotAppointmentToBeRemoved( Resource *r, int row )
+{
+    // external appointments only, (Internal handled in slotProjectCalculated)
+    //beginRemoveRows( index( r ), row, row );
+}
+
+void ResourceAppointmentsRowModel::slotAppointmentRemoved()
+{
+    // external appointments only, (Internal handled in slotProjectCalculated)
+    //endRemoveRows();
+}
+
+void ResourceAppointmentsRowModel::slotAppointmentChanged( Resource *r, Appointment *a )
+{
+    // external appointments only, (Internal handled in slotProjectCalculated)
+}
+
+void ResourceAppointmentsRowModel::slotProjectCalculated( ScheduleManager *sm )
+{
+    if ( sm == m_manager ) {
+        setScheduleManager( sm );
+    }
+}
+
+ResourceGroup *ResourceAppointmentsRowModel::parentGroup( const QModelIndex &index ) const
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *ch = static_cast<Private*>( index.internalPointer() );
+        if ( ch->type == Private::Resource ) {
+            return static_cast<ResourceGroup*>( ch->parent );
+        }
+    }
+    return 0;
+}
+
+ResourceGroup *ResourceAppointmentsRowModel::resourcegroup( const QModelIndex &index ) const
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *p = static_cast<Private*>( index.internalPointer() );
+        if ( p->type == Private::Group ) {
+            return static_cast<ResourceGroup*>( p->ptr );
+        }
+    }
+    return 0;
+}
+
+Resource *ResourceAppointmentsRowModel::parentResource( const QModelIndex &index ) const
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *ch = static_cast<Private*>( index.internalPointer() );
+        if ( ch->type == Private::Appointment ) {
+            return static_cast<Resource*>( ch->parent );
+        }
+    }
+    return 0;
+}
+
+
+Resource *ResourceAppointmentsRowModel::resource( const QModelIndex &index ) const
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *p = static_cast<Private*>( index.internalPointer() );
+        if ( p->type == Private::Resource ) {
+            return static_cast<Resource*>( p->ptr );
+        }
+    }
+    return 0;
+}
+
+Appointment *ResourceAppointmentsRowModel::parentAppointment( const QModelIndex &index ) const
+{
+    if ( m_project == 0 || m_manager == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *ch = static_cast<Private*>( index.internalPointer() );
+        if ( ch->type == Private::Interval ) {
+            return static_cast<Appointment*>( ch->parent );
+        }
+    }
+    return 0;
+}
+
+Appointment *ResourceAppointmentsRowModel::appointment( const QModelIndex &index ) const
+{
+    if ( m_project == 0 || m_manager == 0 || ! index.isValid() ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *p = static_cast<Private*>( index.internalPointer() );
+        if ( p->type == Private::Appointment ) {
+            return static_cast<Appointment*>( p->ptr );
+        }
+    }
+    return 0;
+}
+
+AppointmentInterval *ResourceAppointmentsRowModel::interval( const QModelIndex &index ) const
+{
+    if ( m_project == 0 || m_manager == 0 ) {
+        return 0;
+    }
+    if ( m_datamap.values().contains( static_cast<Private*>( index.internalPointer() ) ) ) {
+        Private *p = static_cast<Private*>( index.internalPointer() );
+        if ( p->type == Private::Interval ) {
+            return static_cast<AppointmentInterval*>( p->ptr );
+        }
+    }
+    return 0;
+}
+
+//---------------------------------------------
+ResourceAppointmentsGanttModel::ResourceAppointmentsGanttModel( QObject *parent )
+    : ResourceAppointmentsRowModel( parent )
+{
+}
+
+ResourceAppointmentsGanttModel::~ResourceAppointmentsGanttModel()
+{
+}
+
+QVariant ResourceAppointmentsGanttModel::data( const ResourceGroup *g, int column, int role ) const
+{
+    if ( role == KDGantt::ItemTypeRole ) {
+        return KDGantt::TypeSummary;
+    } else if ( role == KDGantt::StartTimeRole ) {
+        return g->startTime( id() ).dateTime();
+    } else if ( role == KDGantt::EndTimeRole ) {
+        return g->endTime( id() ).dateTime();
+    }
+    return ResourceAppointmentsRowModel::data( g, column, role );
+}
+
+QVariant ResourceAppointmentsGanttModel::data( const Resource *r, int column, int role ) const
+{
+    if ( role == KDGantt::ItemTypeRole ) {
+        return KDGantt::TypeSummary;
+    } else if ( role == KDGantt::StartTimeRole ) {
+        return r->startTime( id() ).dateTime();
+    } else if ( role == KDGantt::EndTimeRole ) {
+        return r->endTime( id() ).dateTime();
+    }
+    return ResourceAppointmentsRowModel::data( r, column, role );
+}
+
+QVariant ResourceAppointmentsGanttModel::data( const Appointment *a, int column, int role ) const
+{
+    //qDebug()<<"data app:"<<column<<role;
+    if ( role == KDGantt::ItemTypeRole ) {
+        return KDGantt::TypeMulti;
+    } else if ( role == KDGantt::StartTimeRole ) {
+        return a->startTime().dateTime();
+    } else if ( role == KDGantt::EndTimeRole ) {
+        return a->endTime().dateTime();
+    }
+    return ResourceAppointmentsRowModel::data( a, column, role );
+}
+
+QVariant ResourceAppointmentsGanttModel::data( const AppointmentInterval *a, int column, int role ) const
+{
+    if ( role == KDGantt::ItemTypeRole ) {
+        return KDGantt::TypeTask;
+    } else if ( role == KDGantt::StartTimeRole ) {
+        return a->startTime().dateTime();
+    } else if ( role == KDGantt::EndTimeRole ) {
+        return a->endTime().dateTime();
+    } else if ( role == KDGantt::TaskCompletionRole ) {
+        return 0;
+    }
+    return ResourceAppointmentsRowModel::data( a, column, role );
 }
 
 

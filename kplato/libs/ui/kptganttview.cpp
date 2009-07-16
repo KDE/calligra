@@ -33,6 +33,7 @@
 #include "kptitemviewsettup.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
+#include "kptresourceappointmentsmodel.h"
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
@@ -860,6 +861,94 @@ KoPrintJob *MilestoneGanttView::createPrintJob()
     return new GanttPrintingDialog( this, m_gantt );
 }
 
+//------------------------------------------
+
+ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite )
+    : ViewBase( part, parent ),
+    m_project( 0 ),
+    m_model( new ResourceAppointmentsGanttModel( this ) )
+{
+    kDebug() <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
+
+    m_gantt = new KDGantt::View( this );
+    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
+    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
+    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
+    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
+    m->setRole( KDGantt::TaskCompletionRole, KDGantt::TaskCompletionRole );
+
+    m_gantt->setModel( m_model );
+
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    l->addWidget( m_gantt );
+
+    setupGui();
+
+    updateReadWrite( readWrite );
+
+    connect( m_gantt->leftView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+
+    connect( m_gantt->leftView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+void ResourceAppointmentsGanttView::setZoom( double )
+{
+    //kDebug() <<"setting gantt zoom:" << zoom;
+    //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
+}
+
+Project *ResourceAppointmentsGanttView::project() const
+{
+    return m_model->project();
+}
+
+void ResourceAppointmentsGanttView::setProject( Project *project )
+{
+    static_cast<KDGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime().dateTime() );
+    m_model->setProject( project );
+}
+
+void ResourceAppointmentsGanttView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<id<<endl;
+    m_model->setScheduleManager( sm );
+}
+
+void ResourceAppointmentsGanttView::setupGui()
+{
+    createOptionAction();
+}
+
+void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+{
+    kDebug();
+}
+
+void ResourceAppointmentsGanttView::slotOptions()
+{
+    kDebug();
+}
+
+bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
+{
+    kDebug();
+}
+
+void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
+{
+    kDebug();
+}
+
+void ResourceAppointmentsGanttView::updateReadWrite( bool on )
+{
+    m_readWrite = on;
+}
+
+KoPrintJob *ResourceAppointmentsGanttView::createPrintJob()
+{
+    return 0;
+}
 
 }  //KPlato namespace
 

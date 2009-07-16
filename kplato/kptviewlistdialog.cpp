@@ -80,6 +80,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Gantt View" )
             << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
+            << i18n( "Resource Assignments (Gantt)" )
             << i18n( "Cost Breakdown" )
             << i18n( "Project Performance Chart" )
             << i18n( "Tasks Performance Chart" );
@@ -181,20 +182,23 @@ bool AddViewPanel::ok()
         case 11: { // Resource Assignments
             v = m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 12: { // Cost Breakdown
+        case 12: { // Resource Assignments (Gantt)
+            v = m_view->createResourceAppointmentsGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 13: { // Cost Breakdown
             v = m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 13: { // Project Performance Chart
+        case 14: { // Project Performance Chart
             v = m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 14: { // Task Performance Chart
+        case 15: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
 /* Deactivate for koffice 2.0 release
-        case 15: { // Performance Status
+        case 16: { // Performance Status
             v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break; }
-        case 16: { // Tasks by Resources
+        case 17: { // Tasks by Resources
             v = m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break; }
 */

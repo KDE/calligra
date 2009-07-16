@@ -181,6 +181,9 @@ public:
 
     void copy( const ResourceGroup *group );
     
+    DateTime startTime( long id ) const;
+    DateTime endTime( long id ) const;
+
 #ifndef NDEBUG
 
     void printDebug( const QString& ident );
@@ -430,6 +433,9 @@ public:
     
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, bool backward );
+
+    DateTime startTime( long id ) const;
+    DateTime endTime( long id ) const;
 
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );

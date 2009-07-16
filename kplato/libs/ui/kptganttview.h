@@ -54,6 +54,7 @@ class TaskAppointmentsView;
 class Node;
 class MilestoneItemModel;
 class GanttItemModel;
+class ResourceAppointmentsGanttModel;
 class Task;
 class Project;
 class Relation;
@@ -319,6 +320,42 @@ private:
     bool m_showCriticalTasks;
     bool m_showNoInformation;
     Project *m_project;
+
+};
+
+class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
+{
+    Q_OBJECT
+public:
+    ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+
+    virtual void setZoom( double zoom );
+    virtual void setProject( Project *project );
+    Project *project() const;
+
+    void setupGui();
+    
+    virtual bool loadContext( const KoXmlElement &context );
+    virtual void saveContext( QDomElement &context ) const;
+
+    void updateReadWrite( bool on );
+
+    KoPrintJob *createPrintJob();
+
+signals:
+    void itemDoubleClicked();
+
+public slots:
+    void setScheduleManager( ScheduleManager *sm );
+
+protected slots:
+    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    virtual void slotOptions();
+
+private:
+    KDGantt::View *m_gantt;
+    Project *m_project;
+    ResourceAppointmentsGanttModel *m_model;
 
 };
 

@@ -37,11 +37,17 @@ class View;
 class Project;
 class Node;
 class Appointment;
+class AppointmentInterval;
 class Resource;
 class ResourceGroup;
 class ScheduleManager;
 class Calendar;
 
+/**
+    The ResourceAppointmentsItemModel organizes appointments
+    as hours booked per day (or week, month).
+    It handles both internal and external appointments.
+*/
 class KPLATOMODELS_EXPORT ResourceAppointmentsItemModel : public ItemModelBase
 {
     Q_OBJECT
@@ -151,6 +157,99 @@ private:
     bool m_showExternal;
 };
 
+/**
+    The ResourceAppointmentsRowModel returns each appointment interval as a new row.
+*/
+class KPLATOMODELS_EXPORT ResourceAppointmentsRowModel : public ItemModelBase
+{
+    Q_OBJECT
+public:
+    explicit ResourceAppointmentsRowModel( QObject *parent = 0 );
+    ~ResourceAppointmentsRowModel();
+
+    virtual void setProject( Project *project );
+    virtual void setScheduleManager( ScheduleManager *sm );
+    long id() const;
+
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+
+    QModelIndex parent( const QModelIndex &idx = QModelIndex() ) const;
+    QModelIndex index(  int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    /// If @p index is a resource, return it's parent group, else 0
+    ResourceGroup *parentGroup( const QModelIndex &index ) const;
+    /// If @p idx is a resource group, return it, else 0
+    ResourceGroup *resourcegroup( const QModelIndex &idx ) const;
+    /// If @p idx is an appointment, return it's parent resource, else 0
+    Resource *parentResource( const QModelIndex &idx ) const;
+    /// If @p idx is a resource, return it, else 0
+    Resource *resource( const QModelIndex &idx ) const;
+    /// If @p idx is an appointment interval, return it's parent appointment, else 0
+    Appointment *parentAppointment( const QModelIndex &idx ) const;
+    /// If @p idx is an appointment, return it, else 0
+    Appointment *appointment( const QModelIndex &idx ) const;
+    /// If @p idx is an appointment interval, return it, else 0
+    AppointmentInterval *interval( const QModelIndex &idx ) const;
+
+    QModelIndex index( ResourceGroup *g ) const;
+    QModelIndex index( Resource *r ) const;
+    QModelIndex index( Appointment *a ) const;
+
+    class Private;
+
+protected slots:
+    void slotResourceToBeInserted( const ResourceGroup *group, int row );
+    void slotResourceInserted( const Resource *r );
+    void slotResourceToBeRemoved( const Resource *r );
+    void slotResourceRemoved( const Resource *resource );
+    void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );
+    void slotResourceGroupInserted( const ResourceGroup* );
+    void slotResourceGroupToBeRemoved( const ResourceGroup *group );
+    void slotResourceGroupRemoved( const ResourceGroup *group );
+    void slotAppointmentToBeInserted( Resource *r, int row );
+    void slotAppointmentInserted( Resource *r, Appointment *a );
+    void slotAppointmentToBeRemoved( Resource *r, int row );
+    void slotAppointmentRemoved();
+    void slotAppointmentChanged( Resource *r, Appointment *a );
+    void slotProjectCalculated( ScheduleManager *sm );
+
+protected:
+    virtual QVariant data( const ResourceGroup *g, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const Resource *r, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const Appointment *a, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const AppointmentInterval *a, int column, int role = Qt::DisplayRole ) const; 
+
+    QModelIndex createGroupIndex( int row, int column, Project *project );
+    QModelIndex createResourceIndex( int row, int column, ResourceGroup *g );
+    QModelIndex createAppointmentIndex( int row, int column, Resource *r );
+    QModelIndex createIntervalIndex( int row, int column, Appointment *a );
+
+private:
+    ScheduleManager *m_manager;
+    QMap<void*, Private*> m_datamap;
+};
+
+/**
+    The ResourceAppointmentsGanttModel specialized for use by KDGantt
+*/
+class KPLATOMODELS_EXPORT ResourceAppointmentsGanttModel : public ResourceAppointmentsRowModel
+{
+    Q_OBJECT
+public:
+    explicit ResourceAppointmentsGanttModel( QObject *parent = 0 );
+    ~ResourceAppointmentsGanttModel();
+
+    using ResourceAppointmentsRowModel::data;
+protected:
+    virtual QVariant data( const ResourceGroup *g, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const Resource *r, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const Appointment *a, int column, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const AppointmentInterval *a, int column, int role = Qt::DisplayRole ) const; 
+};
 
 }  //KPlato namespace
 

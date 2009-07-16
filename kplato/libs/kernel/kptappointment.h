@@ -163,6 +163,8 @@ public:
     void setIntervals(const AppointmentIntervalList &lst);
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
+    int count() const { return m_intervals.count(); }
+    AppointmentInterval intervalAt( int index ) const { return m_intervals.values().value( index ); }
     /// Return intervals between @p start and @p end
     AppointmentIntervalList intervals( const DateTime &start, const DateTime &end ) const;
 

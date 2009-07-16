@@ -264,6 +264,31 @@ Appointment ResourceGroup::appointmentIntervals() const {
     return a;
 }
 
+DateTime ResourceGroup::startTime( long id ) const
+{
+    DateTime dt;
+    foreach ( Resource *r, m_resources ) {
+        DateTime t = r->startTime( id );
+        if ( ! dt.isValid() || t < dt ) {
+            dt = t;
+        }
+    }
+    return dt;
+}
+
+DateTime ResourceGroup::endTime( long id ) const
+{
+    DateTime dt;
+    foreach ( Resource *r, m_resources ) {
+        DateTime t = r->endTime( id );
+        if ( ! dt.isValid() || t > dt ) {
+            dt = t;
+        }
+    }
+    return dt;
+}
+
+
 Resource::Resource()
     : QObject( 0 ), // atm QObject is only for casting
     m_project(0),
@@ -959,6 +984,38 @@ long Resource::allocationSuitability( const DateTime &time, const Duration &dura
     // FIXME: This is not *very* intelligent...
     Duration e = effort( time, duration, backward );
     return e.minutes();
+}
+
+DateTime Resource::startTime( long id ) const
+{
+    DateTime dt;
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return dt;
+    }
+    foreach ( Appointment *a, s->appointments() ) {
+        DateTime t = a->startTime();
+        if ( ! dt.isValid() || t < dt ) {
+            dt = t;
+        }
+    }
+    return dt;
+}
+
+DateTime Resource::endTime( long id ) const
+{
+    DateTime dt;
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return dt;
+    }
+    foreach ( Appointment *a, s->appointments() ) {
+        DateTime t = a->endTime();
+        if ( ! dt.isValid() || t > dt ) {
+            dt = t;
+        }
+    }
+    return dt;
 }
 
 /////////   Risk   /////////
