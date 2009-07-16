@@ -1548,6 +1548,11 @@ void SvgParser::applyFilter( KoShape * shape )
             subRegion.setTopLeft( SvgUtil::objectToUserSpace( QPointF(x, y), filterRegion) );
             subRegion.setSize( SvgUtil::objectToUserSpace( QSizeF(w, h), filterRegion) );
         }
+        
+        if (primitive.hasAttribute("in"))
+            filterEffect->addInput(primitive.attribute("in"));
+        if (primitive.hasAttribute("result"))
+            filterEffect->setOutput(primitive.attribute("result"));
 
         filterEffect->setClipRect(filterRegion);
         filterEffect->setFilterRect(subRegion);

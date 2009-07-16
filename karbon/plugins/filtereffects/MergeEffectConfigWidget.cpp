@@ -17,32 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef OFFSETEFFECT_H
-#define OFFSETEFFECT_H
-
+#include "MergeEffectConfigWidget.h"
+#include "MergeEffect.h"
 #include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include <QtGui/QGridLayout>
 
-#define OffsetEffectId "feOffset"
-
-/// An image offset effect
-class OffsetEffect : public KoFilterEffect
+MergeEffectConfigWidget::MergeEffectConfigWidget(QWidget *parent)
+    : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
 {
-public:
-    OffsetEffect();
+    QGridLayout * g = new QGridLayout(this);
     
-    QPointF offset() const;
-    void setOffset(const QPointF &offset);
-    
-    /// reimplemented from KoFilterEffect
-    virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
-    /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
-    /// reimplemented from KoFilterEffect
-    virtual void save(KoXmlWriter &writer);
-    
-private:
-    QPointF m_offset;
-};
+    setLayout(g);
+}
 
-#endif // OFFSETEFFECT_H
+bool MergeEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+{
+    m_effect = dynamic_cast<MergeEffect*>(filterEffect);
+    if (!m_effect)
+        return false;
+    
+    return true;
+}
+
+#include "MergeEffectConfigWidget.moc"

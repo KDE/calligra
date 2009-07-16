@@ -31,17 +31,20 @@
 #include <KComboBox>
 #include <KLocale>
 #include <KIcon>
+#include <KLineEdit>
 
 #include <QtGui/QWidget>
 #include <QtGui/QGridLayout>
 #include <QtGui/QToolButton>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QLabel>
 
 class KarbonFilterEffectsTool::Private
 {
 public:
     Private()
-    : filterSelector(0), configSelector(0), configStack(0)
+    : filterSelector(0), configSelector(0)
+    , configStack(0) , outputName(0)
     , currentEffect(0), currentPanel(0)
     {
     }
@@ -100,6 +103,7 @@ public:
     KComboBox * filterSelector;
     KComboBox * configSelector;
     QStackedWidget * configStack;
+    KLineEdit * outputName;
     KoFilterEffect * currentEffect;
     KoFilterEffectConfigWidgetBase * currentPanel;
 };
@@ -212,12 +216,21 @@ void KarbonFilterEffectsTool::filterSelected(int index)
         return;
     
     KoFilterEffect * effect = 0;
-    
     QList<KoFilterEffect*> effectStack = shape->filterEffectStack();
     if (index >= 0 && index < effectStack.count()) {
         effect = effectStack[index];
     }
+    
     d->addWidgetForEffect(effect, this);
+    d->outputName->setText(effect ? effect->output() : QString());
+}
+
+void KarbonFilterEffectsTool::outputChanged(const QString &output)
+{
+    if (!d->currentEffect)
+        return;
+    
+    d->currentEffect->setOutput(output);
 }
 
 QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
@@ -225,6 +238,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     QMap<QString, QWidget*> widgets;
     
     KoGenericRegistryModel<KoFilterEffectFactory*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactory*>(KoFilterEffectRegistry::instance());
+    
+    //---------------------------------------------------------------------
     
     QWidget * addFilterWidget = new QWidget();
     addFilterWidget->setObjectName("AddEffect");
@@ -243,26 +258,34 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     
     widgets.insert(i18n("Add Filter"), addFilterWidget);
     
+    //---------------------------------------------------------------------
+    
     QWidget * configFilterWidget = new QWidget();
     configFilterWidget->setObjectName("ConfigEffect");
     QGridLayout * configFilterLayout = new QGridLayout(configFilterWidget);
     
     d->configSelector = new KComboBox(configFilterWidget);
     configFilterLayout->addWidget(d->configSelector, 0, 0);
-    
     connect(d->configSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(filterSelected(int)));
     
     QToolButton * removeButton = new QToolButton(configFilterWidget);
     removeButton->setIcon( KIcon("list-remove") );
     removeButton->setToolTip(i18n("Remove filter effect from shape"));
     configFilterLayout->addWidget(removeButton, 0, 1);
-
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeFilter()));
-    
+
+    configFilterLayout->addWidget(new QLabel(i18n("Output")), 1, 0);
+    d->outputName = new KLineEdit(configFilterWidget);
+    configFilterLayout->addWidget(d->outputName, 1, 1);
+    connect(d->outputName, SIGNAL(returnPressed(const QString&)), 
+             this, SLOT(outputChanged(const QString&)));
+
     d->configStack = new QStackedWidget(configFilterWidget);
-    configFilterLayout->addWidget(d->configStack, 1, 0, 1, 2);
+    configFilterLayout->addWidget(d->configStack, 2, 0, 1, 2);
     
     widgets.insert(i18n("Effect Properties"), configFilterWidget);
+    
+    //---------------------------------------------------------------------
     
     d->fillConfigSelector(m_canvas->shapeManager()->selection()->firstSelectedShape());
     

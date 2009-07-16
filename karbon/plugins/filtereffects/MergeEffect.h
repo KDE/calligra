@@ -17,32 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef OFFSETEFFECT_H
-#define OFFSETEFFECT_H
+#ifndef MERGEEFFECT_H
+#define MERGEEFFECT_H
 
 #include "KoFilterEffect.h"
 #include <QtCore/QPointF>
 
-#define OffsetEffectId "feOffset"
+#define MergeEffectId "feMerge"
 
-/// An image offset effect
-class OffsetEffect : public KoFilterEffect
+/// A gaussian blur effect
+class MergeEffect : public KoFilterEffect
 {
 public:
-    OffsetEffect();
-    
-    QPointF offset() const;
-    void setOffset(const QPointF &offset);
+    MergeEffect();
     
     /// reimplemented from KoFilterEffect
+    virtual bool hasSingleInput() const;
+    /// reimplemented from KoFilterEffect
     virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
+    /// reimplemented from KoFilterEffect
+    virtual QImage processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const;
     /// reimplemented from KoFilterEffect
     virtual bool load(const QDomElement &element);
     /// reimplemented from KoFilterEffect
     virtual void save(KoXmlWriter &writer);
-    
-private:
-    QPointF m_offset;
 };
 
-#endif // OFFSETEFFECT_H
+#endif // MERGEEFFECT_H

@@ -25,8 +25,6 @@
 #include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 
-#include <KDebug>
-
 OffsetEffect::OffsetEffect()
 : KoFilterEffect(OffsetEffectId, i18n( "Offset" ))
 , m_offset(0,0)
@@ -43,13 +41,11 @@ void OffsetEffect::setOffset(const QPointF &offset)
     m_offset = offset;
 }
 
-void OffsetEffect::processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
+QImage OffsetEffect::processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
 {
     if (m_offset.x() == 0.0 && m_offset.y() == 0.0)
-        return;
+        return image;
     
-    // TODO: take filter region into account
-    // TODO: blur with different kernels in x and y
     QPointF offset = converter.documentToView(m_offset);
 
     QImage result(image.size(), image.format());
@@ -57,7 +53,7 @@ void OffsetEffect::processImage(QImage &image, const QRect &filterRegion, const 
     
     QPainter p(&result);
     p.drawImage(filterRegion.topLeft()+offset, image, filterRegion);
-    image = result;
+    return result;
 }
 
 bool OffsetEffect::load(const QDomElement &element)

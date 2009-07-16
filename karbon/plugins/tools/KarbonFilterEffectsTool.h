@@ -50,6 +50,7 @@ private slots:
     void removeFilter();
     void filterChanged();
     void filterSelected(int index);
+    void outputChanged(const QString &output);
     
 private:
     class Private;

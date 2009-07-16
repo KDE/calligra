@@ -53,8 +53,12 @@ bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
     if (!m_effect)
         return false;
     
+    m_offsetX->blockSignals(true);
+    m_offsetY->blockSignals(true);
     m_offsetX->setValue(m_effect->offset().x());
     m_offsetY->setValue(m_effect->offset().y());
+    m_offsetX->blockSignals(false);
+    m_offsetY->blockSignals(false);
     
     return true;
 }

@@ -25,8 +25,6 @@
 #include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 
-#include <KDebug>
-
 // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 // fixed to handle alpha channel correctly by Zack Rusin
 void fastbluralpha(QImage &img, int radius)
@@ -289,15 +287,19 @@ void BlurEffect::setDeviation(const QPointF &deviation)
     m_deviation.setY(qMax(0.0, deviation.y()));
 }
 
-void BlurEffect::processImage(QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
+QImage BlurEffect::processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
 {
     if (m_deviation.x() == 0.0 || m_deviation.y() == 0.0)
-        return;
+        return image;
     
     // TODO: take filter region into account
     // TODO: blur with different kernels in x and y
     QPointF dev = converter.documentToView(m_deviation);
-    fastbluralpha(image, dev.x());
+    
+    QImage result = image;
+    fastbluralpha(result, dev.x());
+    
+    return result;
 }
 
 bool BlurEffect::load(const QDomElement &element)

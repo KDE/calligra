@@ -17,32 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef OFFSETEFFECT_H
-#define OFFSETEFFECT_H
+#include "MergeEffectFactory.h"
+#include "MergeEffect.h"
+#include "MergeEffectConfigWidget.h"
 
-#include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include <KLocale>
 
-#define OffsetEffectId "feOffset"
-
-/// An image offset effect
-class OffsetEffect : public KoFilterEffect
+MergeEffectFactory::MergeEffectFactory(QObject *parent)
+    : KoFilterEffectFactory( parent, MergeEffectId, i18n( "Merge" ) )
 {
-public:
-    OffsetEffect();
-    
-    QPointF offset() const;
-    void setOffset(const QPointF &offset);
-    
-    /// reimplemented from KoFilterEffect
-    virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
-    /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
-    /// reimplemented from KoFilterEffect
-    virtual void save(KoXmlWriter &writer);
-    
-private:
-    QPointF m_offset;
-};
+}
 
-#endif // OFFSETEFFECT_H
+KoFilterEffect * MergeEffectFactory::createFilterEffect() const
+{
+    return new MergeEffect();
+}
+
+KoFilterEffectConfigWidgetBase * MergeEffectFactory::createConfigWidget() const
+{
+    return new MergeEffectConfigWidget();
+}

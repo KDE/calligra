@@ -20,6 +20,7 @@
 #include "KarbonFilterEffectsPlugin.h"
 #include "BlurEffectFactory.h"
 #include "OffsetEffectFactory.h"
+#include "MergeEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
@@ -34,6 +35,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QSt
 {
     KoFilterEffectRegistry::instance()->add(new BlurEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new MergeEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"

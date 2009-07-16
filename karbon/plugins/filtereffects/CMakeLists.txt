@@ -8,6 +8,9 @@ set(karbonfiltereffects_PART_SRCS
     OffsetEffect.cpp
     OffsetEffectFactory.cpp
     OffsetEffectConfigWidget.cpp
+    MergeEffect.cpp
+    MergeEffectFactory.cpp
+    MergeEffectConfigWidget.cpp
 )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
