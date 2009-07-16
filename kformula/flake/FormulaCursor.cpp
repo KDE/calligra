@@ -170,6 +170,7 @@ FormulaCommand* FormulaCursor::insertElement( BasicElement* element )
         } else {
             BasicElement* tmpRow = new RowElement(m_currentElement);
             BasicElement* oldchild;
+            BasicElement* oldpar;
             if (m_currentElement->elementAfter(m_position)!=0) {
                 oldchild=m_currentElement->elementAfter(m_position);
                 tmpRow->insertChild(0,element);
@@ -181,7 +182,7 @@ FormulaCommand* FormulaCursor::insertElement( BasicElement* element )
             }
             oldchild->setParentElement(tmpRow);
             element->setParentElement(tmpRow);
-            undo=new FormulaCommandReplaceSingleElement(m_currentElement,oldchild,tmpRow);
+            undo=new FormulaCommandWrapSingleElement(m_currentElement,oldchild,tmpRow, tmpRow);
         }
     } else if (insideEmptyElement()) {
         undo=new FormulaCommandReplaceSingleElement(m_currentElement->parentElement(),m_currentElement,element);

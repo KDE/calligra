@@ -124,6 +124,25 @@ private:
     BasicElement* m_oldel;
 };
 
+class FormulaCommandWrapSingleElement : public FormulaCommand {
+public:
+    FormulaCommandWrapSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel,BasicElement* oldpar, QUndoCommand *parent=0);
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
+
+private:
+    /// The BasicElement that owns the newly added Text
+    BasicElement* m_ownerElement;
+    BasicElement* m_newel;
+    BasicElement* m_oldel;
+    BasicElement* m_oldpar;
+};
  
 // /**
 //  * @short The command for changes of an element's attributes

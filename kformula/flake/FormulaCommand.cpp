@@ -148,7 +148,7 @@ void FormulaCommandReplaceSingleElement::undo()
     m_oldel->setParentElement(m_ownerElement);
 }
 
-void FormulaCommandReplaceSingleElement::changeCursor ( FormulaCursor* cursor, bool undo ) const 
+void FormulaCommandReplaceSingleElement::changeCursor ( FormulaCursor* cursor, bool undo ) const
 {
     cursor->setCurrentElement(m_ownerElement);
     cursor->setSelecting(false);
@@ -160,6 +160,40 @@ void FormulaCommandReplaceSingleElement::changeCursor ( FormulaCursor* cursor, b
     cursor->moveToEmpty();
 }
 
+FormulaCommandWrapSingleElement::FormulaCommandWrapSingleElement ( BasicElement* owner, BasicElement* oldel, BasicElement* newel, BasicElement* oldpar, QUndoCommand* parent )
+                            : FormulaCommand ( parent )
+{
+    m_ownerElement=owner;
+    m_newel=newel;
+    m_oldel=oldel;
+    m_oldpar=oldpar;
+}
+
+void FormulaCommandWrapSingleElement::redo()
+{
+    m_ownerElement->replaceChild(m_oldel,m_newel);
+    m_oldel->setParentElement(m_oldpar);
+    m_newel->setParentElement(m_ownerElement);
+}
+
+void FormulaCommandWrapSingleElement::undo()
+{
+    m_ownerElement->replaceChild(m_newel,m_oldel);
+    m_newel->setParentElement(0);
+    m_oldel->setParentElement(m_ownerElement);
+}
+
+void FormulaCommandWrapSingleElement::changeCursor ( FormulaCursor* cursor, bool undo ) const
+{
+    cursor->setCurrentElement(m_ownerElement);
+    cursor->setSelecting(false);
+    if (undo) {
+        cursor->setPosition(m_ownerElement->positionOfChild(m_oldel));
+    } else {
+        cursor->setPosition(m_ownerElement->positionOfChild(m_newel));
+    }
+    cursor->moveToEmpty();
+}
 
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )
