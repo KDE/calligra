@@ -44,11 +44,7 @@ void FormulaData::notifyDataChange(FormulaCommand* command, bool undo)
 
 void FormulaData::setFormulaElement ( FormulaElement* element )
 {
-    if (m_element) {
-        delete m_element;
-    }
     m_element=element;
-    notifyDataChange(0,false);
 }
 
 FormulaElement* FormulaData::formulaElement() const

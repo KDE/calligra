@@ -80,6 +80,9 @@ public slots:
     /// Reposition the cursor according to the data change
     void updateCursor(FormulaCommand* command, bool undo);
 
+    void saveFormula();
+
+    void loadFormula();
 protected:
     /// Create default option widget
     QWidget* createOptionWidget();

@@ -22,21 +22,10 @@
 #include "KoFormulaShape.h"
 #include "ElementFactory.h"
 #include "BasicElement.h"
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-
-#include <KoShapeSavingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoOdfStylesReader.h>
-#include <KoGenStyles.h>
-#include <KoEmbeddedDocumentSaver.h>
 
 #include <KAction>
 
-#include <KFileDialog>
 #include <KMessageBox>
-#include <QFile>
 #include <QMenu>
 
 FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
@@ -76,51 +65,13 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
              m_tool, SLOT( insert( QAction* ) ) );
     connect( buttonRoot, SIGNAL( triggered( QAction* ) ),
              m_tool, SLOT( insert( QAction* ) ) );
-    connect( buttonLoad, SIGNAL( clicked() ), this, SLOT( slotLoadFormula() ) );
-    connect( buttonSave, SIGNAL( clicked() ), this, SLOT( slotSaveFormula() ) );
+    connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
+    connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
 }
 
 FormulaToolWidget::~FormulaToolWidget()
 {}
 
-void FormulaToolWidget::slotLoadFormula()
-{
-    // get an url
-    KUrl url = KFileDialog::getOpenUrl();
-    if( url.isEmpty() || !m_tool->shape() )
-        return;
-
-    // open the file the url points to
-    QFile file( url.path() );
-    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
-        return;
-
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext( stylesReader, 0 );
-    QMap<QString, KoDataCenter *> dataCenterMap;
-    KoShapeLoadingContext shapeContext( odfContext, dataCenterMap );
-
-    // setup a DOM structure and start the actual loading process
-    KoXmlDocument tmpDocument;
-    tmpDocument.setContent( &file, false, 0, 0, 0 );
-    m_tool->shape()->loadOdf( tmpDocument.documentElement(), shapeContext );
-}
-
-void FormulaToolWidget::slotSaveFormula()
-{
-    KUrl url = KFileDialog::getSaveUrl();
-    if( url.isEmpty() || !m_tool->shape() )
-        return;
-
-    QFile file( url.path() );
-    KoXmlWriter writer( &file );
-    KoGenStyles styles;
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
-
-    // TODO this should not use saveOdf 
-    m_tool->shape()->saveOdf( shapeSavingContext );
-}
 
 void FormulaToolWidget::setFormulaTool( KoFormulaTool* tool )
 {

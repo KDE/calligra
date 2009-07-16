@@ -32,8 +32,20 @@
 #include <KAction>
 #include <QPainter>
 #include <kdebug.h>
+
+#include <QFile>
+#include <KFileDialog>
+#include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+
 
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
@@ -317,6 +329,47 @@ void KoFormulaTool::resetFormulaCursor() {
     }
 }
 
+void KoFormulaTool::loadFormula()
+{
+    // get an url
+    KUrl url = KFileDialog::getOpenUrl();
+    if( url.isEmpty() || !shape() )
+        return;
+
+    // open the file the url points to
+    QFile file( url.path() );
+    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+        return;
+
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext odfContext( stylesReader, 0 );
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    KoShapeLoadingContext shapeContext( odfContext, dataCenterMap );
+
+    // setup a DOM structure and start the actual loading process
+    KoXmlDocument tmpDocument;
+    tmpDocument.setContent( &file, false, 0, 0, 0 );
+    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
+    formulaElement->readMathML( tmpDocument.documentElement() );     // and load the new formula
+    FormulaCommand* command=new FormulaCommandLoad(m_formulaShape->formulaData(),formulaElement);
+    m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+}
+
+void KoFormulaTool::saveFormula()
+{
+    KUrl url = KFileDialog::getSaveUrl();
+    if( url.isEmpty() || !shape() )
+        return;
+
+    QFile file( url.path() );
+    KoXmlWriter writer( &file );
+    KoGenStyles styles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
+
+    // TODO this should not use saveOdf
+    shape()->saveOdf( shapeSavingContext );
+}
 
 void KoFormulaTool::setupActions()
 {

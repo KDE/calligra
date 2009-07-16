@@ -46,12 +46,6 @@ public:
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );
 
-private slots:
-    /// Slot connected to click of load formula button - initiates loading of a formula
-    void slotLoadFormula();
-
-    /// Slot connected to click of save formula button - initiates saving of a formula
-    void slotSaveFormula();
 
 private:
     /// The KoFormulaTool this options widget belongs to

@@ -195,6 +195,36 @@ void FormulaCommandWrapSingleElement::changeCursor ( FormulaCursor* cursor, bool
     cursor->moveToEmpty();
 }
 
+FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newelement, QUndoCommand* parent )
+                   : FormulaCommand ( parent)
+{
+    m_data=data;
+    m_newel=newelement;
+    m_oldel=data->formulaElement();
+}
+
+void FormulaCommandLoad::redo()
+{
+    m_data->setFormulaElement(m_newel);
+}
+
+void FormulaCommandLoad::undo()
+{
+    m_data->setFormulaElement(m_oldel);
+}
+
+
+void FormulaCommandLoad::changeCursor ( FormulaCursor* cursor, bool undo ) const
+{
+    cursor->setCurrentElement(m_data->formulaElement());
+    cursor->setSelecting(false);
+    cursor->setPosition(0);
+    if (!cursor->isAccepted()) {
+        cursor->move(MoveRight);
+    }
+}
+
+
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )
 //                        : QUndoCommand()

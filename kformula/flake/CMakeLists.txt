@@ -60,6 +60,7 @@ set( formulashape_PART_SRCS
    FormulaCommandUpdate.cpp
    KoFormulaShapeFactory.cpp
    KoFormulaTool.cpp
+   FormulaCommand.cpp
    KoFormulaToolFactory.cpp
    FormulaToolWidget.cpp
 )

@@ -33,6 +33,7 @@ class FormulaData;
 class FormulaCursor;
 class GlyphElement;
 class RowElement;
+class FormulaElement;
 
 class FormulaCommand :  public QUndoCommand {
 public:
@@ -143,7 +144,26 @@ private:
     BasicElement* m_oldel;
     BasicElement* m_oldpar;
 };
- 
+
+
+class FormulaCommandLoad : public FormulaCommand {
+public:
+    FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, QUndoCommand *parent=0);
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
+
+private:
+    FormulaData* m_data;
+    FormulaElement* m_oldel;
+    FormulaElement* m_newel;
+};
+
 // /**
 //  * @short The command for changes of an element's attributes
 //  * 
