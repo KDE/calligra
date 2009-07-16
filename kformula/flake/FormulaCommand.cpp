@@ -23,186 +23,144 @@
 #include "FormulaCursor.h"
 #include <klocale.h> 
 #include "TokenElement.h"
+#include "BasicElement.h"
 #include <kdebug.h>
 
-FormulaCommand::FormulaCommand(QUndoCommand* parent=0)
+FormulaCommand::FormulaCommand(QUndoCommand* parent)
               : QUndoCommand(parent)
 {
 }
 
-FormulaCommandAddText::FormulaCommandAddText( TokenElement* owner, int position, const QString& added , QUndoCommand* parent=0)
-                  : FormulaCommand(parent)
+
+void FormulaCommand::changeCursor ( FormulaCursor* cursor, bool undo ) const
 {
-     m_ownerElement = owner;
-     m_position = position;
-     m_added = added;
-     setText( i18n( "Add text to formula" ) );
 }
 
 
-void FormulaCommandAddText::redo()
+FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , QUndoCommand* parent)
+                  : FormulaCommand(parent)
 {
+    m_ownerElement = owner;
+    m_position = position;
+    m_added = added;
+    m_length = length;
+    m_removedGlyphs=m_ownerElement->glyphList(position,length);
+    m_removed=m_ownerElement->text().mid(position,length);
+    setText( i18n( "Add text to formula" ) );
+}
+
+
+void FormulaCommandReplaceText::redo()
+{
+    if (m_length>0) {
+        m_glyphpos=m_ownerElement->removeText(m_position,m_length);
+    }
     m_ownerElement->insertText(m_position, m_added);
 }
 
 
-void FormulaCommandAddText::undo()
+void FormulaCommandReplaceText::undo()
 {
     m_ownerElement->removeText(m_position,m_added.length());
+    m_ownerElement->insertText(m_position, m_removed);
+    m_ownerElement->insertGlyphs(m_glyphpos,m_removedGlyphs);
 }
 
-void FormulaCommandAddText::changeCursor ( FormulaCursor* cursor , bool undo)
+void FormulaCommandReplaceText::changeCursor ( FormulaCursor* cursor , bool undo) const
 {
     cursor->setCurrentElement(m_ownerElement);
     cursor->setSelecting(false);
     if (!undo) {
         cursor->setPosition(m_position+m_added.length());
     } else {
-        cursor->setPosition(m_position);
+        cursor->setPosition(m_position+m_removed.length());
     }
+    cursor->moveToEmpty();
 }
 
-FormulaCommandRemoveText::FormulaCommandRemoveText ( TokenElement* owner, int position, int length , QUndoCommand* parent)
-                        : FormulaCommand ( parent)
+FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, QUndoCommand* parent )
+                            : FormulaCommand(parent)
 {
     m_ownerElement=owner;
     m_position=position;
+    m_added=elements;
     m_length=length;
-    m_glyphs=m_ownerElement->glyphList(position,length);
-    m_removed=m_ownerElement->text().mid(position,length);
-    setText( i18n("Remove text from formula"));
+    m_removed=m_ownerElement->childElements().mid(m_position,m_length);
 }
 
-void FormulaCommandRemoveText::redo()
+void FormulaCommandReplaceElements::redo()
 {
-    m_glyphpos=m_ownerElement->removeText(m_position,m_length);
+    for (int i=0; i<m_length; ++i) {
+        m_ownerElement->removeChild(m_removed[i]);
+        m_removed[i]->setParentElement(0);
+    }
+    for (int i=0; i<m_added.length(); ++i) {
+        m_ownerElement->insertChild(m_position+i,m_added[i]);
+        m_added[i]->setParentElement(m_ownerElement);
+    }
 }
 
-void FormulaCommandRemoveText::undo()
+void FormulaCommandReplaceElements::undo()
 {
-    m_ownerElement->insertText(m_position,m_removed);
-    m_ownerElement->insertGlyphs(m_glyphpos,m_glyphs);
+
+    for (int i=0; i<m_added.length(); ++i) {
+        m_ownerElement->removeChild(m_added[i]);
+        m_added[i]->setParentElement(0);
+    }
+    for (int i=0; i<m_length; ++i) {
+        m_ownerElement->insertChild(m_position+i,m_removed[i]);
+        m_removed[i]->setParentElement(m_ownerElement);
+    }
 }
 
-void FormulaCommandRemoveText::changeCursor ( FormulaCursor* cursor , bool undo)
+void FormulaCommandReplaceElements::changeCursor ( FormulaCursor* cursor, bool undo ) const
+{
+    cursor->setCurrentElement(m_ownerElement);
+    cursor->setSelecting(false);
+    if (!undo) {
+        cursor->setPosition(m_position+m_added.length());
+    } else {
+        cursor->setPosition(m_position+m_removed.length());
+    }
+    cursor->moveToEmpty();
+
+}
+
+FormulaCommandReplaceSingleElement::FormulaCommandReplaceSingleElement ( BasicElement* owner, BasicElement* oldel, BasicElement* newel, QUndoCommand* parent )
+                            : FormulaCommand ( parent )
+{
+    m_ownerElement=owner;
+    m_newel=newel;
+    m_oldel=oldel;
+}
+
+void FormulaCommandReplaceSingleElement::redo()
+{
+    m_ownerElement->replaceChild(m_oldel,m_newel);
+    m_oldel->setParentElement(0);
+    m_newel->setParentElement(m_ownerElement);
+}
+
+void FormulaCommandReplaceSingleElement::undo()
+{
+    m_ownerElement->replaceChild(m_newel,m_oldel);
+    m_newel->setParentElement(0);
+    m_oldel->setParentElement(m_ownerElement);
+}
+
+void FormulaCommandReplaceSingleElement::changeCursor ( FormulaCursor* cursor, bool undo ) const 
 {
     cursor->setCurrentElement(m_ownerElement);
     cursor->setSelecting(false);
     if (undo) {
-        cursor->setPosition(m_position+m_length);
+        cursor->setPosition(m_ownerElement->positionOfChild(m_oldel));
     } else {
-        cursor->setPosition(m_position);
+        cursor->setPosition(m_ownerElement->positionOfChild(m_newel));
     }
+    cursor->moveToEmpty();
 }
 
 
-// void FormulaCommandAdd::undo()
-// {
-//     foreach (BasicElement* tmp, m_addedElements) {
-//         m_ownerElement->insertChild(m_addedElements);
-//     }
-// }
-
-
-// FormulaCommandAdd::FormulaCommandAdd( RowElement* parent, int position, QList<BasicElement*> added )
-//                  : QUndoCommand()
-// {
-//     m_ownerElement = parent;
-//     m_positionInElement = position;
-//     m_addedElements = added;
-//     setText( i18n( "Add Elements" ) );
-// }
-// 
-// void FormulaCommandAdd::redo()
-// {
-//     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
-//     cursor->setPosition( m_positionInElement );
-//     
-//     foreach( BasicElement* tmp, m_addedElements )
-//         m_ownerElement->insertChild( cursor, tmp );
-// 	
-//     delete cursor;
-// }
-// 
-// void FormulaCommandAdd::undo()
-// {
-//     foreach (BasicElement* tmp, m_addedElements) {
-//         m_ownerElement->insertChild(m_addedElements);
-//     }
-// }
-// 
-// 
-// 
-// FormulaCommandRemove::FormulaCommandRemove( FormulaCursor* cursor,
-//                                             QList<BasicElement*> removed )
-//                     : QUndoCommand()
-// {
-//     m_ownerElement = cursor()->ownerElement();
-//     m_positionInElement = cursor()->position();
-//     m_removedElements = removed;
-//     setText( i18n( "Remove Elements" ) );
-// }
-// 
-// void FormulaCommandRemove::redo()
-// {
-//     foreach( BasicElement* tmp, m_removedElements )
-//         m_ownerElement->removeElement( tmp );
-// }
-// 
-// void FormulaCommandRemove::undo()
-// {
-//     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
-//     cursor->setPosition( m_positionInElement );
-//     
-//     foreach( BasicElement* tmp, m_removedElements )
-//         m_ownerElement->insertChild( cursor, tmp );
-// 	
-//     delete cursor;
-// }
-// 
-// 
-// 
-// FormulaCommandReplace::FormulaCommandReplace( FormulaCursor* cursor,
-//                        QList<BasicElement*> replaced,QList<BasicElement*> replacing )
-//                      : QUndoCommand()
-// {
-//     m_ownerElement = cursor()->ownerElement();
-//     m_positionInElement = cursor()->position();
-//     m_replacedElements = replaced;
-//     m_replacingElements = replacing;
-//     setText( i18n( "Replace Element" ) );
-// }
-// 
-// void FormulaCommandReplace::redo()
-// {
-//     foreach( BasicElement* tmp, m_replacedElements )
-//         m_ownerElement->removeElement( tmp );
-// 
-//     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
-//     cursor->setPosition( m_positionInElement );
-//     
-//     foreach( BasicElement* tmp, m_replacingElements )
-//         m_ownerElement->insertChild( cursor, tmp );
-// 	
-//     delete cursor;
-// }
-// 
-// void FormulaCommandReplace::undo()
-// {
-//     foreach( BasicElement* tmp, m_replacingElements )
-//         m_ownerElement->removeElement( tmp );
-// 
-//     FormulaCursor* cursor = new FormulaCursor( m_ownerElement );
-//     cursor->setPosition( m_positionInElement );
-//     
-//     foreach( BasicElement* tmp, m_replacedElements )
-//         m_ownerElement->insertChild( cursor, tmp );
-// 	
-//     delete cursor;
-// }
-// 
-// 
-// 
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )
 //                        : QUndoCommand()

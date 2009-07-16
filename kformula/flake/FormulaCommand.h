@@ -32,20 +32,21 @@ class TokenElement;
 class FormulaData;
 class FormulaCursor;
 class GlyphElement;
+class RowElement;
 
 class FormulaCommand :  public QUndoCommand {
 public:
-    FormulaCommand(QUndoCommand* parent);
+    FormulaCommand(QUndoCommand* parent=0);
     
-    virtual void changeCursor(FormulaCursor* cursor, bool undo) = 0;
+    virtual void changeCursor(FormulaCursor* cursor, bool undo) const = 0; 
 };
 
 Q_DECLARE_METATYPE(FormulaCommand*)
 
 
-class FormulaCommandAddText : public FormulaCommand {
+class FormulaCommandReplaceText : public FormulaCommand {
 public:
-    FormulaCommandAddText( TokenElement* owner, int position, const QString& added , QUndoCommand *parent);
+    FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , QUndoCommand *parent=0);
 
     /// Execute the command
     void redo();
@@ -53,7 +54,7 @@ public:
     /// Revert the actions done in redo()
     void undo();
 
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo );
+    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
 
 private:
     /// The BasicElement that owns the newly added Text
@@ -63,144 +64,67 @@ private:
     /// The position inside m_ownerElement
     int m_position;
 
-    /// The list of added elements
-    QString m_added;
-};
-
-class FormulaCommandRemoveText : public FormulaCommand {
-public:
-    FormulaCommandRemoveText( TokenElement* owner, int position, int length, QUndoCommand* parent );
-
-    /// Execute the command
-    void redo();
-
-    /// Revert the actions done in redo()
-    void undo();
-
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo );
-private:
-    /// The BasicElement that owns the newly added Text
-    TokenElement* m_ownerElement;
-
-    /// The position inside m_ownerElement
-    int m_position;
-
-    /// The list of added elements
-    QString m_removed;
-
-    ///The list of removed glyphs
-    QList<GlyphElement*> m_glyphs;
-    
-    /// The list of removed elements
     int m_length;
 
-    /// The position of the qlyphs in the glyph list
     int m_glyphpos;
+    
+    /// The list of added elements
+    QString m_added;
+
+    QString m_removed;
+
+    QList<GlyphElement*> m_removedGlyphs;
 };
 
-// class FormulaCommandAdd : public QUndoCommand {
-// public:
-//     /**
-//      * The constructor
-//      * @param parent The parent where the elements will be added
-//      * @param position The position where the elements will be added
-//      * @param added The list of elements that has been added
-//      */
-//     FormulaCommandAdd( BasicElement* parent, int position, QList<BasicElement*> added );
-//     
-//     /// Execute the command
-//     void redo();
-// 
-//     /// Revert the actions done in redo()
-//     void undo();
-// 
-// private:
-//     /// The BasicElement that owns the newly added elements
-//     BasicElement* m_ownerElement;
-// 
-//     /// The position inside m_ownerElement
-//     int m_positionInElement;
-//     
-//     /// The list of added elements
-//     QList<BasicElement*> m_addedElements;
-// };
-// 
-// 
-// /**
-//  * @short The command for removal of elements
-//  * 
-//  * Whenever the user removes elements from his formula an instance of this class is
-//  * created to make it possible to revert the changes. The removed elements may have
-//  * child elements but m_removedElements contains only the top elements that need to
-//  * be added to revert the changes again.
-//  */
-// class FormulaCommandRemove : public QUndoCommand {
-// public:
-//     /**
-//      * The constructor
-//      * @param cursor The FormulaCursor where the elements will be removed
-//      * @param elements The list of removed elements
-//      */
-//     FormulaCommandRemove( FormulaCursor* cursor, QList<BasicElement*> elements );
-// 
-//     /// Execute the command
-//     void redo();
-// 
-//     /// Revert the actions done in redo()
-//     void undo();
-// 
-// private:
-//     /// The BasicElement that owned the removed elements
-//     BasicElement* m_ownerElement;
-//  
-//     /// The position inside m_ownerElement
-//     int m_positionInElement;
-// 
-//     /// The list of removed elements
-//     QList<BasicElement*> m_removedElements;
-// };
-// 
-// 
-// /**
-//  * @short The command for replacing of elements
-//  * 
-//  * Whenever the user replaces elements in his formula an instance of this class is
-//  * created to make it possible to revert the changes. The replaced elements are
-//  * stored in m_replacedElements and the elements that have replaced the old are
-//  * stored in m_replacingElements.
-//  */
-// class FormulaCommandReplace : public QUndoCommand {
-// public:
-//     /**
-//      * The constructor
-//      * @param cursor The FormulaCursor where the elements will be replaced 
-//      * @param replaced The list of elements that have been replaced
-//      * @param replacing The list of elements that has replaced the old elements
-//      */
-//     FormulaCommandReplace( FormulaCursor* cursor, QList<BasicElement*> replaced,
-//                                                   QList<BasicElement*> replacing );
-// 
-//     /// Execute the command
-//     void redo();
-// 
-//     /// Revert the actions done in redo()
-//     void undo();
-// 
-// private:
-//     /// The BasicElement that owned the replaced elements
-//     BasicElement* m_ownerElement;
-// 
-//     /// The position inside m_ownerElement
-//     int m_positionInElement;
-// 
-//     /// The list of the new elements
-//     QList<BasicElement*> m_replacingElements;
-//     
-//     /// The list of replaced elements
-//     QList<BasicElement*> m_replacedElements;
-// };
-// 
-// 
+class FormulaCommandReplaceElements : public FormulaCommand {
+public:
+    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , QUndoCommand *parent=0);
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
+
+private:
+    /// The BasicElement that owns the newly added Text
+    RowElement* m_ownerElement;
+
+    /// The position inside m_ownerElement
+    int m_position;
+
+    int m_length;
+
+    /// The list of added elements
+    QList<BasicElement*> m_added;
+
+    /// The list of removed elements
+    QList<BasicElement*> m_removed;
+
+};
+
+class FormulaCommandReplaceSingleElement : public FormulaCommand {
+public:
+    FormulaCommandReplaceSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel, QUndoCommand *parent=0);
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
+
+private:
+    /// The BasicElement that owns the newly added Text
+    BasicElement* m_ownerElement;
+    BasicElement* m_newel;
+    BasicElement* m_oldel;
+};
+
+ 
 // /**
 //  * @short The command for changes of an element's attributes
 //  * 
