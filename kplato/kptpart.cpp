@@ -70,9 +70,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "kplatokernel" );
-        locale->insertCatalog( "kplatomodels" );
-        locale->insertCatalog( "kplatoui" );
+        locale->insertCatalog( "kplatolibs" );
         locale->insertCatalog( "kdgantt" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
