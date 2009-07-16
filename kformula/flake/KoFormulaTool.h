@@ -25,6 +25,7 @@
 class KoFormulaShape;
 class BasicElement;
 class FormulaCursor;
+class FormulaCommand;
 
 /**
  * @short The flake tool for a formula
@@ -77,7 +78,7 @@ public slots:
     void insert( QAction* action );
 
     /// Reposition the cursor according to the data change
-    void updateCursor();
+    void updateCursor(FormulaCommand* command, bool undo);
 
 protected:
     /// Create default option widget

@@ -29,11 +29,13 @@
 #include "OperatorElement.h"
 #include "IdentifierElement.h"
 #include "ElementFactory.h"
+#include "FormulaCommand.h"
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
 
 #include <kdebug.h>
+#include <QUndoCommand>
 
 FormulaCursor::FormulaCursor( BasicElement* element, FormulaData* data )
               : m_currentElement( element ), m_data( data )
@@ -42,6 +44,7 @@ FormulaCursor::FormulaCursor( BasicElement* element, FormulaData* data )
     m_mark = 0;
     m_selecting = false;
     m_direction = NoDirection;
+    m_data=data;
 }
 
 void FormulaCursor::paint( QPainter& painter ) const
@@ -117,16 +120,16 @@ void FormulaCursor::selectElement(BasicElement* element)
 }
 
 
-void FormulaCursor::insertText( const QString& text )
+FormulaCommand* FormulaCursor::insertText( const QString& text )
 {
+    FormulaCommand *undo=0;
     m_inputBuffer = text;
     if (insideToken()) {
-        if (hasSelection()) {
-            remove(true);
-        }
         TokenElement* token=static_cast<TokenElement*>(m_currentElement);
-        token->insertText(m_position,text);
-        m_position+=text.length(); 
+        if (hasSelection()) {
+            undo = new FormulaCommandRemoveText(token,selection().first,selection().second-selection().first,undo);
+        }
+        undo = new FormulaCommandAddText(token,m_position,text,undo);
     } else {
         TokenElement* token = static_cast<TokenElement*>
             (ElementFactory::createElement(tokenType(text[0]),0));
@@ -134,30 +137,19 @@ void FormulaCursor::insertText( const QString& text )
         insertElement(token);
         moveTo(token,token->length());
     }
-    
+    return undo;
 }
 
-void FormulaCursor::insertData( const QString& data )
+FormulaCommand* FormulaCursor::insertData( const QString& data )
 {
-//     BasicElement* elementToInsert = 0;
-//     // MathML data to load
-//     if( data.startsWith( '<' ) ) {
-//         // TODO
-//     }
-//     // special behaviour for table columns
-//     else if( data == "mtd" ) {
-//         // TODO
-//     }
-//     else
-//         elementToInsert = ElementFactory::createElement( data, m_currentElement );
-//     
     BasicElement* elementToInsert=ElementFactory::createElement("mfrac",0);
-    insertElement( elementToInsert );
+    return insertElement( elementToInsert );
     //FIXME: we leak memory of the insert fails
 }
 
-void FormulaCursor::insertElement( BasicElement* element )
+FormulaCommand* FormulaCursor::insertElement( BasicElement* element )
 {
+    FormulaCommand *undo=0;
     if (insideInferredRow()) {
         if (hasSelection()) {
             remove(true);
@@ -167,7 +159,7 @@ void FormulaCursor::insertElement( BasicElement* element )
     } else if (insideFixedElement()) {
         if (hasSelection()) {
             //TODO
-            return;
+            return 0;
         } else {
             BasicElement* tmpRow = new RowElement(m_currentElement);
             BasicElement* oldchild;
@@ -189,16 +181,17 @@ void FormulaCursor::insertElement( BasicElement* element )
         element->setParentElement(m_currentElement->parentElement());
         delete m_currentElement;
     } else {
-        return;
+        return 0;
     }
     m_currentElement = element;
     m_position=0;
     moveToEmpty();
+    return undo;
 }
 
-void FormulaCursor::remove( bool elementBeforePosition )
+FormulaCommand* FormulaCursor::remove( bool elementBeforePosition )
 {
-      
+    FormulaCommand *undo=0;
     if (insideInferredRow()) {
         RowElement* tmprow=static_cast<RowElement*>(m_currentElement);
         //TODO: store the element for undo/redo
@@ -225,17 +218,12 @@ void FormulaCursor::remove( bool elementBeforePosition )
     } else if (insideToken()) {
         TokenElement* tmptoken=static_cast<TokenElement*>(m_currentElement);
         if (hasSelection()) {
-            tmptoken->removeText(selection().first,selection().second-selection().first);
-            if (m_mark<m_position) {
-                m_position=m_mark;
-            }
-            setSelecting(false);
+            undo=new FormulaCommandRemoveText(tmptoken,selection().first,selection().second-selection().first,undo);
         } else {
             if (elementBeforePosition && !isHome()) {
-                m_position--;
-                tmptoken->removeText(m_position);
+                undo=new FormulaCommandRemoveText(tmptoken,m_position-1,1,undo);
             } else if (!elementBeforePosition && !isEnd()) {
-                tmptoken->removeText(m_position);
+                undo=new FormulaCommandRemoveText(tmptoken,m_position,1,undo);
             }
         }
     } else if (insideFixedElement()) {
@@ -256,6 +244,7 @@ void FormulaCursor::remove( bool elementBeforePosition )
         }
     }
     moveToEmpty();
+    return undo;
 }
 
 void FormulaCursor::move( CursorDirection direction )

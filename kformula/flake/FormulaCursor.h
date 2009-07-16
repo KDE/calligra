@@ -32,6 +32,7 @@ class QString;
 class QPainter;
 class QPointF;
 class QRectF;
+class QUndoCommand;
 
 enum CursorDirection {
     MoveRight,
@@ -71,21 +72,21 @@ public:
      * Insert text content at the current cursor position
      * @param text The text to insert
      */
-    void insertText( const QString& text );
+    FormulaCommand* insertText( const QString& text );
 
     /**
      * Insert an element at the current cursor position
      * @param element The element to be inserted
      */
-    void insertElement( BasicElement* element );
+    FormulaCommand* insertElement( BasicElement* element );
 
-    void insertData( const QString& data );
+    FormulaCommand* insertData( const QString& data );
 
     /**
      * Remove an element from the formula
      * @param elementBeforePosition Indicates removal of element before or after cursor
      */
-    void remove( bool elementBeforePosition );
+    FormulaCommand* remove( bool elementBeforePosition );
 
     /**
      * Move the cursor in the specified @p direction
@@ -107,10 +108,10 @@ public:
 
     /// Set the cursor to the element at @p point
     void setCursorTo( const QPointF& point );
-    
+
     /// @return the midpoint of the current cursorLine in global coordinates
     QPointF getCursorPosition();
-    
+
     /// @return whether the cursor is at the first position
     bool isHome() const;
 
@@ -174,37 +175,36 @@ private:
 
     /// @return true if the cursor is inside a row or inferred row
     bool insideInferredRow() const;
-    
+
     /// @return true if the cursor is inside a element with fixed number of children
     bool insideFixedElement() const;
-    
+
     /// @return true if the cursor is inside an empty element
     bool insideEmptyElement() const;
-    
+
     /// @return if the element next to the cursor is an empty element it is returned, otherwise 0
     BasicElement* nextToEmpty() const;
-    
-    
+
     /// @return if the element is next to an empty element, it is placed there
     bool moveToEmpty();
-    
+
     QString tokenType(const QChar& character) const;
 
     bool performMovement(CursorDirection direction, FormulaCursor* oldcursor);
-    
+
 private:
     /// The element that is currently left to the cursor
     BasicElement* m_currentElement;
 
     /// The formulaData 
     FormulaData* m_data;
-    
+
     /// The position of the cursor in the current element
     int m_position;
-    
+
     /// The position where the current selection starts in the current element
     int m_mark;
-    
+
     /// The direction the cursor is moving to
     CursorDirection m_direction;
 

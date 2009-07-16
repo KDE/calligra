@@ -6,8 +6,9 @@ include_directories(${QT_INCLUDES} ${KOMAIN_INCLUDES}  )
 set( kformulalib_PART_SRCS
    AttributeManager.cpp
    FormulaRenderer.cpp
-   FormulaCursor.cpp 
    FormulaData.cpp
+   FormulaCursor.cpp
+   FormulaCommand.cpp
    ElementFactory.cpp 
    BasicElement.cpp
    FixedElement.cpp
@@ -56,6 +57,7 @@ install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
 set( formulashape_PART_SRCS
    KoFormulaShapePlugin.cpp
    KoFormulaShape.cpp
+   FormulaCommandUpdate.cpp
    KoFormulaShapeFactory.cpp
    KoFormulaTool.cpp
    KoFormulaToolFactory.cpp

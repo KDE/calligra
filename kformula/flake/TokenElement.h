@@ -74,9 +74,14 @@ public:
     
     ///inherited from BasicElement
     virtual bool insertChild ( int position, BasicElement* child );
+
+
+    ///insert a list of glyphs without changing rawString, position points to m_glyphs list
+    void insertGlyphs( int position, QList<GlyphElement*> glyphs);
     
+    QList<GlyphElement*> glyphList(int position, int length);
     ///remove the letter after @p position and return a pointer to the glyph if it was one.
-    virtual QList<GlyphElement* > removeText(int position, int length = 1);
+    virtual int removeText(int position, int length = 1);
     
 
     /**
@@ -110,6 +115,9 @@ public:
     
     ///set m_rawString to @p text and empty the glyph list
     void setText(const QString &text);
+
+    /// @return the raw string
+    const QString& text();
     
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "FormulaData.h"
 #include "KoFormulaShape.h"
 #include "FormulaElement.h"
 #include "FormulaRenderer.h"
@@ -24,7 +25,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <kdebug.h>
-#include "FormulaData.h"
 
 KoFormulaShape::KoFormulaShape()
 {
@@ -48,10 +48,10 @@ void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter 
     painter.restore();
 }
 
-void KoFormulaShape::KoFormulaShape::updateLayout() {
-    kDebug() << "before:" << KoShape::size()<<"," <<size(); 
+void KoFormulaShape::updateLayout() {
+    kDebug() << "before:" << KoShape::size()<<"," <<size();
     m_formulaRenderer->layoutElement( m_formulaData->formulaElement() );
-     
+
      KoShape::setSize(m_formulaData->formulaElement()->boundingRect().size());
      kDebug() << "after:" << KoShape::size()<<"," <<size();
 }
@@ -78,9 +78,7 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     formulaElement->readMathML( element );     // and load the new formula
     m_formulaData->setFormulaElement(formulaElement);
-    m_formulaData->notifyDataChange();
-    updateLayout();
-    update();
+    m_formulaData->notifyDataChange(0,false);
     return true;
 }
 

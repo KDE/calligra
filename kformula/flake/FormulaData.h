@@ -23,6 +23,9 @@
 #include "FormulaElement.h"
 #include "kformula_export.h"
 #include <QObject>
+#include <QUndoCommand>
+#include "FormulaCommand.h"
+#include "KoFormulaShape.h"
 
 /**
  * This is a QObject wrapper around a formulaElement, which allows to communicate 
@@ -31,9 +34,6 @@
 class KOFORMULA_EXPORT FormulaData : public QObject {
 Q_OBJECT
 public:
-    /// The standard constructor
-    FormulaData();
-    
     FormulaData(FormulaElement* element);
     
     ~FormulaData();
@@ -42,14 +42,14 @@ public:
     FormulaElement* formulaElement() const;
     
     ///emit a dataChanged signal
-    void notifyDataChange();
-    void setFormulaElement ( FormulaElement* element );
+    void notifyDataChange(FormulaCommand* command, bool undo);
+    void setFormulaElement ( FormulaElement* element);
     
 signals:
-    void dataChanged();
+    void dataChanged(FormulaCommand* element, bool undo);
     
 private:
     FormulaElement* m_element;
 };
 
-#endif // FORMULAELEMENT_H
+#endif // FORMULADATA_H

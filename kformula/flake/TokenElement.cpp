@@ -139,12 +139,20 @@ void TokenElement::layout( const AttributeManager* am )
 
 bool TokenElement::insertChild( int position, BasicElement* child )
 {
-    if( child && child->elementType() == Glyph ) {
-    //    m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
+    //if( child && child->elementType() == Glyph ) {
+    //m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
     //    m_glyphs.insert();
-        return false;
-    } else {
-        return false;
+    //    return false;
+    //} else {
+    return false;
+    //}
+}
+
+
+void TokenElement::insertGlyphs ( int position, QList< GlyphElement* > glyphs )
+{
+    for (int i=0; i < glyphs.length(); ++i) {
+        m_glyphs.insert(position+i,glyphs[i]);
     }
 }
 
@@ -156,9 +164,34 @@ bool TokenElement::insertText ( int position, const QString& text )
 }
 
 
-QList<GlyphElement*> TokenElement::removeText ( int position, int length )
+QList< GlyphElement* > TokenElement::glyphList ( int position, int length )
 {
     QList<GlyphElement*> tmp;
+    //find out, how many glyphs we have
+    int counter=0;
+    for (int i=position; i<position+length; ++i) {
+        if (m_rawString[ position ] == QChar::ObjectReplacementCharacter) {
+            counter++;
+        }
+    }
+    int start=0;
+    //find out where we should start removing glyphs
+    if (counter>0) {
+        for (int i=0; i<position; ++i) {
+            if (m_rawString[position] == QChar::ObjectReplacementCharacter) {
+                start++;
+            }
+        }
+    }
+    for (int i=start; i<start+counter; ++i) {
+        tmp.append(m_glyphs.at(i));
+    }
+    return tmp;
+}
+
+
+int TokenElement::removeText ( int position, int length )
+{
     //find out, how many glyphs we have
     int counter=0;
     for (int i=position; i<position+length; ++i) {
@@ -177,11 +210,10 @@ QList<GlyphElement*> TokenElement::removeText ( int position, int length )
         }
     } 
     for (int i=start; i<start+counter; ++i) {
-        tmp.append(m_glyphs.takeAt(i));
+        m_glyphs.removeAt(i);
     }
     m_rawString.remove(position,length);
-    return tmp;
-    
+    return start;
 }
 
 bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
@@ -256,6 +288,11 @@ void TokenElement::setText ( const QString& text )
 {
     removeText(0,m_rawString.length());
     insertText(0,text);
+}
+
+const QString& TokenElement::text()
+{
+    return m_rawString;
 }
 
 

@@ -31,8 +31,11 @@
 #include <QKeyEvent>
 #include <KAction>
 #include <QPainter>
-#include "KoFormulaTool.moc"
 #include <kdebug.h>
+#include "FormulaCommand.h"
+#include "FormulaCommandUpdate.h"
+
+
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaCursor( 0 )
@@ -42,11 +45,13 @@ KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
 
 KoFormulaTool::~KoFormulaTool()
 {
+    if( m_formulaCursor ) {
+        m_cursorList.removeAll(m_formulaCursor);
+        delete m_formulaCursor;
+    }
     foreach (FormulaCursor* tmp, m_cursorList) {
         delete tmp;
     }
-    if( m_formulaCursor )
-        delete m_formulaCursor;
 }
 
 void KoFormulaTool::activate( bool temporary )
@@ -88,11 +93,12 @@ void KoFormulaTool::activate( bool temporary )
         m_formulaCursor = new FormulaCursor( m_formulaShape->formulaData()->formulaElement(),
                                              m_formulaShape->formulaData());
     }
-    connect(m_formulaShape->formulaData(), SIGNAL(dataChanged()), this, SLOT(updateCursor()));
+    connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
 }
 
 void KoFormulaTool::deactivate()
 {
+    disconnect(m_formulaShape->formulaData(),0,this,0);
     if (m_canvas) {
         m_cursorList.append(m_formulaCursor);
         kDebug()<<"Appending cursor";
@@ -103,14 +109,19 @@ void KoFormulaTool::deactivate()
         m_cursorList.removeAt(0);
     }
     m_formulaShape = 0;
-    
 }
 
 
-void KoFormulaTool::updateCursor()
+void KoFormulaTool::updateCursor(FormulaCommand* command, bool undo)
 {
-    kDebug() << "Updating Cursor";
-    resetFormulaCursor();
+    if (command!=0) {
+        kDebug()<<"Going to change cursor";
+        command->changeCursor(m_formulaCursor,undo);
+    } else {
+        kDebug()<<"Going to reset cursor";
+        resetFormulaCursor();
+    }
+    repaintCursor();
 }
 
 
@@ -199,9 +210,10 @@ void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 {
+    FormulaCommand *command=0;
     if( !m_formulaCursor )
         return;
-    
+
     if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || 
         event->key() == Qt::Key_Up || event->key() == Qt::Key_Down ||
         event->key() == Qt::Key_Home || event->key() == Qt::Key_End ) {
@@ -215,13 +227,13 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
     {
         case Qt::Key_Backspace:
             m_formulaShape->update();
-            m_formulaCursor->remove( true );;
+            command=m_formulaCursor->remove( true );;
             m_formulaShape->updateLayout();
             m_formulaShape->update();
             break;
         case Qt::Key_Delete:
             m_formulaShape->update();
-            m_formulaCursor->remove( false );;
+            command=m_formulaCursor->remove( false );;
             m_formulaShape->updateLayout();
             m_formulaShape->update();
             break;
@@ -246,15 +258,18 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
         default:
             if( event->text().length() != 0 ) {
                 m_formulaShape->update();
-                m_formulaCursor->insertText( event->text() );
+                command=m_formulaCursor->insertText( event->text() );
                 m_formulaShape->updateLayout();
                 m_formulaShape->update();
             }
     }
+    if (command!=0) {
+        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
+    }
     repaintCursor();
     event->accept();
 }
- 
+
 void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 {
     event->accept();
@@ -270,10 +285,12 @@ void KoFormulaTool::remove( bool backSpace )
 
 void KoFormulaTool::insert( QAction* action )
 {
+    FormulaCommand *command;
     m_formulaShape->update();
-    m_formulaCursor->insertData( action->data().toString() );
-    m_formulaShape->updateLayout();
-    m_formulaShape->update();
+    command=m_formulaCursor->insertData( action->data().toString() );
+    if (command!=0) {
+        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+    }
 }
 
 QWidget* KoFormulaTool::createOptionWidget()

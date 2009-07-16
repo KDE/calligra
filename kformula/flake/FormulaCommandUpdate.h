@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Jeremias Epperlein <jeeree@web.de>
+   Copyright (C) 2009 Jeremias Epperlein
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,43 +17,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FormulaElement.h"
-#include "FormulaCursor.h"
-#include "FormulaData.h"
-#include "FormulaCommand.h"
-#include "KoFormulaShape.h"
+#ifndef FORMULACOMMANDUPDATE_H
+#define FORMULACOMMANDUPDATE_H
+#include <QUndoCommand>
+
+class FormulaCommand;
+class KoFormulaShape;
+class FormulaData;
 
 
-FormulaData::FormulaData(FormulaElement* element)
-           : QObject()
-{
-    m_element=element;
-}
+class FormulaCommandUpdate : public QUndoCommand {
+public:
+    FormulaCommandUpdate(KoFormulaShape* shape, FormulaCommand* command);
 
-FormulaData::~FormulaData() 
-{
-    if (m_element) {
-        delete m_element;
-    }
-}
+    /// Execute the command
+    void redo();
 
-void FormulaData::notifyDataChange(FormulaCommand* command, bool undo)
-{
-    emit dataChanged(command,undo);
-}
-
-void FormulaData::setFormulaElement ( FormulaElement* element )
-{
-    if (m_element) {
-        delete m_element;
-    }
-    m_element=element;
-    notifyDataChange(0,false);
-}
-
-FormulaElement* FormulaData::formulaElement() const
-{
-    return m_element;
-}
+    /// Revert the actions done in redo()
+    void undo();
+    
+private:
+    /// The BasicElement that owns the newly added Text
+    FormulaCommand* m_command;
+    KoFormulaShape* m_shape;
+};
 
 
+#endif // FORMULACOMMANDUPDATE_H
