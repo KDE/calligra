@@ -48,7 +48,9 @@ public:
     
     virtual QVariant value(unsigned int);
     virtual QVariant value(const QString &field);
-    
+
+    virtual bool open() {return true;}
+    virtual bool close() {return true;}
     virtual bool moveNext();
     virtual bool movePrevious();
     virtual bool moveFirst();

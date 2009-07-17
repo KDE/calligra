@@ -123,6 +123,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
     _pageCounter = 0;
     _maxHeight = _maxWidth = 0.0;
     _kodata = 0;
+    _conn = 0;
 }
 
 ORPreRenderPrivate::~ORPreRenderPrivate()
@@ -836,16 +837,10 @@ void ORPreRenderPrivate::initEngine()
 //
 // ORPreRender
 //
-ORPreRender::ORPreRender(KexiDB::Connection *c)
-{
-    d = new ORPreRenderPrivate();
-    setDatabase(c);
-}
 
-ORPreRender::ORPreRender(const QString & pDocument, KexiDB::Connection *c)
+ORPreRender::ORPreRender(const QString & pDocument)
 {
     d = new ORPreRenderPrivate();
-    setDatabase(c);
     setDom(pDocument);
 }
 
@@ -930,17 +925,7 @@ ORODocument* ORPreRender::generate()
     kDebug() << "Page Size:" << d->_maxWidth << d->_maxHeight;
 
     d->_document->setPageOptions(rpo);
-
-    //TODO!!!
-    /*
-    if (!d->_reportData->externalData())  {
-      d->_kodata = (new orQuery(d->_reportData->query(), d->_conn));
-    }
-    else {
-     d->_kodata = new orQuery( d->_reportData->query() );
-    }
-    */
-    
+    d->_kodata->open();
     d->initEngine();
     d->createNewPage();
     if (!label.isNull()) {
@@ -1033,6 +1018,7 @@ ORODocument* ORPreRender::generate()
 
     d->_handler->displayErrors();
 
+    d->_kodata->close();
     delete d->_handler;
     delete d->_kodata
 ;
@@ -1043,18 +1029,23 @@ ORODocument* ORPreRender::generate()
     return pDoc;
 }
 
-void ORPreRender::setDatabase(KexiDB::Connection *c)
+void ORPreRender::setSourceData(KoReportData *data)
 {
-    if (d != 0)
-        d->_conn = c;
+    if (d != 0 && data != 0)
+    {
+        d->_kodata = data;
+        d->_conn  = static_cast<KexiDB::Connection*>(data->connection());
+    }
 }
 
+/*
 KexiDB::Connection* ORPreRender::database() const
 {
     if (d != 0)
         return d->_conn;
     return 0;
 }
+*/
 
 bool ORPreRender::setDom(const QString & docReport)
 {
@@ -1065,10 +1056,8 @@ bool ORPreRender::setDom(const QString & docReport)
         d->_valid = false;
 
         d->_docReport.setContent(docReport);
-        d->_reportData = new KRReportData(d->_docReport.documentElement());
-        //TODO KRReportData->isValid()
-        d->_valid = true;
-
+        d->_reportData = new KRReportData(d->_docReport.documentElement().firstChildElement( "koreport" ));
+        d->_valid = d->_reportData->isValid();
     }
     return isValid();
 }

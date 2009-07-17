@@ -53,10 +53,11 @@ private:
     QScrollArea *m_scrollArea;
     KexiReportPage *m_reportWidget;
     KexiRecordNavigator *m_pageSelector;
-    int m_currentPpage;
+    int m_currentPage;
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;
-
+    KoReportData* sourceData(QDomElement e);
+    
 private slots:
     void nextPage();
     void prevPage();

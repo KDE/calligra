@@ -25,18 +25,28 @@ KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
     m_cursor = 0;
     m_connection = pDb;
     m_schema = 0;
-
     m_qstrQuery = qstrSQL;
-
-    m_valid = executeInternal();
+    open();
+    close();
+    m_valid = true;
 }
 
 KexiDBReportData::~KexiDBReportData() {
+    close();
+}
+
+bool KexiDBReportData::open() {
+    m_valid = executeInternal();
+    return m_valid;
+}
+
+bool KexiDBReportData::close() {
     if ( m_cursor ) {
         m_cursor->close();
         delete m_cursor;
         m_cursor = 0;
     }
+    return true;
 }
 
 bool KexiDBReportData::executeInternal() {
@@ -92,10 +102,13 @@ uint KexiDBReportData::fieldNumber ( const QString &fld ) {
 }
 
 QStringList KexiDBReportData::fieldNames() {
+    QStringList names;
+    open();
     if ( m_cursor->query() ) {
-        return m_cursor->query()->names();
+        names =  m_cursor->query()->names();
     }
-    return QStringList();
+    close();
+    return names;
 }
 
 void* KexiDBReportData::schema() const {
@@ -169,7 +182,8 @@ long KexiDBReportData::at() const {
 }
 
 long KexiDBReportData::recordCount() const {
-    if ( m_schema->table() || m_schema->query() ) {
+    
+    if ( m_schema && (m_schema->table() || m_schema->query()) ) {
         return KexiDB::rowCount ( *m_schema );
     } else {
         return 1;

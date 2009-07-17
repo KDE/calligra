@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <KComboBox>
+#include <QComboBox>
 #include <KLineEdit>
 #include <KPushButton>
 
@@ -46,8 +46,8 @@ class KexiSourceSelector : public QWidget
         KexiDB::Connection *m_conn;
         QStringList queryList();
         QVBoxLayout *m_layout;
-        KComboBox *m_sourceType;
-        KComboBox *m_internalSource;
+        QComboBox *m_sourceType;
+        QComboBox *m_internalSource;
         KLineEdit *m_externalSource;
         KPushButton *m_setData;
 

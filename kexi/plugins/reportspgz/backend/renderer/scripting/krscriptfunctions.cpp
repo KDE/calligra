@@ -24,8 +24,14 @@
 
 KRScriptFunctions::KRScriptFunctions(const KoReportData *kodata)
 {
-    m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
-    m_cursor = kodata;
+    m_connection = 0;
+    m_cursor = 0;
+    
+    if (kodata)
+    {
+        m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
+        m_cursor = kodata;
+    }
 }
 
 

@@ -33,6 +33,8 @@
 #include <QPrintDialog>
 #include <widget/utils/kexirecordnavigator.h>
 #include <core/KexiWindow.h>
+#include "kexidbreportdata.h"
+#include "keximigratereportdata.h"
 
 #ifdef HAVE_KSPREAD
 #include <krkspreadrender.h>
@@ -109,37 +111,37 @@ KexiReportView::~KexiReportView()
 
 void KexiReportView::nextPage()
 {
-    if (m_currentPpage < m_pageCount) {
-        m_currentPpage++;
-        m_reportWidget->renderPage(m_currentPpage);
-        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
+    if (m_currentPage < m_pageCount) {
+        m_currentPage++;
+        m_reportWidget->renderPage(m_currentPage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
     }
 }
 
 void KexiReportView::prevPage()
 {
-    if (m_currentPpage > 1) {
-        m_currentPpage--;
-        m_reportWidget->renderPage(m_currentPpage);
-        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
+    if (m_currentPage > 1) {
+        m_currentPage--;
+        m_reportWidget->renderPage(m_currentPage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
     }
 }
 
 void KexiReportView::firstPage()
 {
-    if (m_currentPpage != 1) {
-        m_currentPpage = 1;
-        m_reportWidget->renderPage(m_currentPpage);
-        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
+    if (m_currentPage != 1) {
+        m_currentPage = 1;
+        m_reportWidget->renderPage(m_currentPage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
     }
 }
 
 void KexiReportView::lastPage()
 {
-    if (m_currentPpage != m_pageCount) {
-        m_currentPpage = m_pageCount;
-        m_reportWidget->renderPage(m_currentPpage);
-        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
+    if (m_currentPage != m_pageCount) {
+        m_currentPage = m_pageCount;
+        m_reportWidget->renderPage(m_currentPage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
     }
 }
 
@@ -219,9 +221,15 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
     if (tempData()->reportSchemaChangedInPreviousView) {
         delete m_preRenderer;
 
-        m_preRenderer = new ORPreRender(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
+        QDomDocument doc;
+        doc.setContent ( tempData()->document );
+        QDomElement root = doc.documentElement();
+        QDomElement conn = root.firstChildElement( "connection" );
+        
+        m_preRenderer = new ORPreRender(tempData()->document);
+        m_preRenderer->setSourceData(sourceData(conn));
         m_preRenderer->setName( tempData()->name );
-        m_currentPpage = 1;
+        m_currentPage = 1;
 
         m_reportDocument = m_preRenderer->generate();
         m_pageCount = m_reportDocument->pages();
@@ -234,6 +242,21 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         tempData()->reportSchemaChangedInPreviousView = false;
     }
     return true;
+}
+
+KoReportData* KexiReportView::sourceData(QDomElement e)
+{
+    KoReportData *kodata;
+    kodata = 0;
+    
+    if (e.attribute("type") == "internal" ) {
+        kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
+    }
+    if (e.attribute("type") ==  "external" ) {
+        kodata = new KexiMigrateReportData(e.attribute("source"));
+    }
+    
+    return kodata;
 }
 
 KexiReportPart::TempData* KexiReportView::tempData() const

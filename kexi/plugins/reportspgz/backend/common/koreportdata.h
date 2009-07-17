@@ -30,6 +30,8 @@ class KoReportData
 public:
     virtual ~KoReportData(){};
 
+    virtual bool open() = 0;
+    virtual bool close() = 0;
     virtual bool moveNext() = 0;
     virtual bool movePrevious() = 0;
     virtual bool moveFirst() = 0;

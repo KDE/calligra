@@ -46,8 +46,8 @@ KRReportData::KRReportData(const QDomElement & elemSource)
     init();
     bool valid; //used for local unit conversions
 
-    if (elemSource.tagName() != "report") {
-        kDebug() << "QDomElement passed to parseReport() was not <report> tag";
+    if (elemSource.tagName() != "koreport") {
+        kDebug() << "QDomElement passed to parseReport() was not <koreport> tag";
         kDebug() << elemSource.text();
         return;
     }

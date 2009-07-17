@@ -58,6 +58,8 @@ class KexiDBReportData : public KoReportData {
         virtual QVariant value ( unsigned int );
         virtual QVariant value ( const QString &field );
 
+        virtual bool open();
+        virtual bool close();
         virtual bool moveNext();
         virtual bool movePrevious();
         virtual bool moveFirst();

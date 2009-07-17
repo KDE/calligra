@@ -47,6 +47,8 @@ public:
     KRReportData();
     ~KRReportData();
 
+    bool isValid() { return m_valid; }
+    
     /**
     \return a list of all objects in the report
     */

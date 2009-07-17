@@ -30,8 +30,8 @@ KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *co
     m_kmd = 0;
     
     m_layout = new QVBoxLayout(this);
-    m_sourceType = new KComboBox(this);
-    m_internalSource = new KComboBox(this);
+    m_sourceType = new QComboBox(this);
+    m_internalSource = new QComboBox(this);
     m_externalSource = new KLineEdit(this);
     m_setData = new KPushButton(i18n("Set Data"));
 
@@ -108,9 +108,9 @@ QDomElement KexiSourceSelector::connectionData()
     QDomElement conndata = d.createElement("connection");
 
     conndata.setAttribute("type", m_sourceType->itemData(m_sourceType->currentIndex()).toString());
-
-    if (m_sourceType->currentText() == "internal") {
-        conndata.setAttribute("source", m_internalSource->itemText(m_internalSource->currentIndex()));
+    
+    if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal") {
+        conndata.setAttribute("source", m_internalSource->currentText());
     }
     else {
         conndata.setAttribute("source", m_externalSource->text());

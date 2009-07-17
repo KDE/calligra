@@ -29,6 +29,8 @@
 class ORPreRenderPrivate;
 class ParameterList;
 class ORODocument;
+class KoReportData;
+
 namespace KexiDB
 {
 class Connection;
@@ -41,17 +43,17 @@ class Connection;
 class ORPreRender
 {
 public:
-    ORPreRender(KexiDB::Connection*c = 0);
-    ORPreRender(const QString &, KexiDB::Connection*c = 0);
+//    ORPreRender(KexiDB::Connection*c = 0);
+    ORPreRender(const QString &);
 
     virtual ~ORPreRender();
 
+    void setSourceData(KoReportData*);
+    
     ORODocument * generate();
 
-    void setDatabase(KexiDB::Connection*);
-    KexiDB::Connection* database() const;
 
-    bool setDom(const QString &);
+//    KexiDB::Connection* database() const;
     
     /**
     @brief Set the name of the report so that it can be used internally by the script engine
@@ -64,6 +66,7 @@ protected:
 
 private:
     ORPreRenderPrivate* d;
+    bool setDom(const QString &);
 
 };
 
