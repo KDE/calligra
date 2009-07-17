@@ -24,15 +24,13 @@
 #include <QtCore/QRect>
 #include <QtXml/QDomElement>
 #include <QtGui/QPainter>
+#include <limits.h>
 
 MergeEffect::MergeEffect()
 : KoFilterEffect(MergeEffectId, i18n( "Merge" ))
 {
-}
-
-bool MergeEffect::hasSingleInput() const
-{
-    return false;
+    setRequiredInputCount(2);
+    setMaximalInputCount(INT_MAX);
 }
 
 QImage MergeEffect::processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const

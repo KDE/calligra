@@ -32,8 +32,6 @@ public:
     MergeEffect();
     
     /// reimplemented from KoFilterEffect
-    virtual bool hasSingleInput() const;
-    /// reimplemented from KoFilterEffect
     virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
     /// reimplemented from KoFilterEffect
     virtual QImage processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const;
