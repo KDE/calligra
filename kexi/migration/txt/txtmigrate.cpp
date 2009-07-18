@@ -131,4 +131,4 @@ QVariant TxtMigrate::drv_value(uint i)
   return QVariant(m_FieldValues[m_Row][i]);
 }
 
-};
+}
