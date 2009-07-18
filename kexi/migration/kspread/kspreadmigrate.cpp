@@ -161,4 +161,4 @@ QVariant KSpreadMigrate::drv_value(uint i)
   return str;
 }
 
-};
+}

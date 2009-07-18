@@ -90,6 +90,6 @@ public:
 
 };
 
-};
+}
 
 #endif
