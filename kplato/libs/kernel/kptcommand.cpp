@@ -3261,7 +3261,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         gr->setGroup( newGroup );
         addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>( *n ), gr, QString("Group %1").arg( ++gi ) ) );
 
-        QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> >::const_iterator i = rreqs.find( gr );
+        QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> >::const_iterator i = rreqs.constFind( gr );
         for ( ; i != rreqs.constEnd() && i.key() == gr; ++i ) {
             ResourceRequest *rr = i.value().first;
             Resource *newRes = i.value().second;
