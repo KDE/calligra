@@ -79,7 +79,7 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
             tmpParent = tmpParent->parentElement();
         }
     }
-    
+
     // if not, return the default value of the attribute
 //     kDebug()<<"checking for attribute "<<attribute <<" returning (d) "<<element->attributesDefaultValue( attribute );
     return element->attributesDefaultValue( attribute );
@@ -94,7 +94,7 @@ bool AttributeManager::boolOf( const QString& attribute,
 double AttributeManager::doubleOf( const QString& attribute,
                                    const BasicElement* element ) const
 {
-    
+
     return lengthToPixels(parseUnit( findValue( attribute, element ), element ), element, attribute);
 }
 
@@ -168,7 +168,7 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
         case Fraction:
             if( parent->displayStyle() == false )
                 return current_scaleLevel+1;
-	    else 
+	    else
 		return current_scaleLevel;
 	case Style: {
             QString tmp = parent->attribute( "scriptlevel" );
@@ -176,7 +176,7 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
 		    return current_scaleLevel + tmp.remove(0,1).toInt();
 	    if( tmp.startsWith( '-' ) )
 		    return current_scaleLevel - tmp.remove(0,1).toInt();
-            return tmp.toInt(); 
+            return tmp.toInt();
 	}
 	case MultiScript:
 	    return current_scaleLevel + 1;
@@ -203,7 +203,7 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
 		else
 	    	    return current_scaleLevel;
 	    case UnderOver:
-		if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) ) 
+		if( (index == 1 && boolOf("accentunder", parent)) || (index == 2 && boolOf("accent", parent)) )
 	    	    return current_scaleLevel + 1;
 		else
 	    	    return current_scaleLevel;
@@ -230,9 +230,9 @@ double AttributeManager::layoutSpacing( const BasicElement* element  ) const
 
 double AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const
 {
-    if(length.value == 0) 
+    if(length.value == 0)
         return 0;
- 
+
     switch(length.unit) {
     case Length::Em: {
         QFontMetricsF fm(font(element));
@@ -242,7 +242,7 @@ double AttributeManager::lengthToPixels( Length length, const BasicElement* elem
         QFontMetricsF fm(font(element));
         return fm.xHeight() * length.value;
     }
-    case Length::Percentage:	
+    case Length::Percentage:
         return lengthToPixels( parseUnit( element->attributesDefaultValue(attribute), element),element, attribute) * length.value / 100.0;
     case Length::Px: //pixels
         return length.value;
@@ -282,7 +282,7 @@ Length AttributeManager::parseUnit( const QString& value,
 
     length.value = number;
     if(!unit.isEmpty()) {
-        if (unit == "em") 
+        if (unit == "em")
             length.unit = Length::Mm;
         else if (unit == "ex")
             length.unit = Length::Ex;
@@ -300,10 +300,10 @@ Length AttributeManager::parseUnit( const QString& value,
             length.unit = Length::Pc;
         else if (unit == "%")
              length.unit = Length::Percentage;
-        else 
+        else
             length.unit = Length::None;
     }
-    
+
     return length;
 }
 
@@ -339,19 +339,19 @@ Qt::PenStyle AttributeManager::parsePenStyle( const QString& value ) const
 
 QFont AttributeManager::font( const BasicElement* element ) const
 {
-    
+
     // TODO process the mathvariant values partly
     // normal -> do nothing.
     // if contains bold -> font.setBold( true )
     // if contains italic -> font.setItalic( true )
     // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
-  
+
     QFont font;
-     if(font.pointSizeF() != -1)
-         font.setPointSizeF(font.pointSizeF() * element->scaleFactor());
-     else
-         font.setPixelSize( font.pixelSize() * element->scaleFactor() );
-     return font;
+    if(font.pointSizeF() != -1)
+        font.setPointSizeF(font.pointSizeF() * element->scaleFactor());
+    else
+        font.setPixelSize( font.pixelSize() * element->scaleFactor() );
+    return font;
 }
 
 void AttributeManager::setViewConverter( KoViewConverter* converter )
@@ -365,7 +365,7 @@ double AttributeManager::maxHeightOfChildren( const BasicElement* element ) cons
     foreach( BasicElement* tmp, element->childElements() )
         maxHeight = qMax( maxHeight, tmp->height() );
 
-    return maxHeight; 
+    return maxHeight;
 }
 
 double AttributeManager::maxWidthOfChildren( const BasicElement* element  ) const
@@ -374,7 +374,7 @@ double AttributeManager::maxWidthOfChildren( const BasicElement* element  ) cons
     foreach( BasicElement* tmp, element->childElements() )
         maxWidth = qMax( maxWidth, tmp->width() );
 
-    return maxWidth; 
+    return maxWidth;
 }
 double AttributeManager::parseMathSpace( const QString& value, const BasicElement * element )  const
 {
