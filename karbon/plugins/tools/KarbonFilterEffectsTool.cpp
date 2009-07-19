@@ -27,11 +27,12 @@
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
+#include "FilterEffectEditWidget.h"
 
 #include <KComboBox>
 #include <KLocale>
 #include <KIcon>
-#include <KLineEdit>
+#include <KDialog>
 
 #include <QtGui/QWidget>
 #include <QtGui/QGridLayout>
@@ -44,7 +45,7 @@ class KarbonFilterEffectsTool::Private
 public:
     Private()
     : filterSelector(0), configSelector(0)
-    , configStack(0) , outputName(0)
+    , configStack(0)
     , currentEffect(0), currentPanel(0)
     {
     }
@@ -103,7 +104,6 @@ public:
     KComboBox * filterSelector;
     KComboBox * configSelector;
     QStackedWidget * configStack;
-    KLineEdit * outputName;
     KoFilterEffect * currentEffect;
     KoFilterEffectConfigWidgetBase * currentPanel;
 };
@@ -200,6 +200,30 @@ void KarbonFilterEffectsTool::removeFilter()
     }
 }
 
+void KarbonFilterEffectsTool::raiseFilter()
+{
+}
+
+void KarbonFilterEffectsTool::lowerFilter()
+{
+}
+
+void KarbonFilterEffectsTool::editFilter()
+{
+    QPointer<KDialog> dlg = new KDialog();
+    dlg->setCaption(i18n("Filter Effect Editor"));
+    dlg->setButtons(KDialog::Close);
+
+    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
+    editor->editShape(shape);
+    
+    dlg->setMainWidget(editor);
+    dlg->exec();
+
+    d->fillConfigSelector(shape);
+}
+
 void KarbonFilterEffectsTool::filterChanged()
 {
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
@@ -222,15 +246,6 @@ void KarbonFilterEffectsTool::filterSelected(int index)
     }
     
     d->addWidgetForEffect(effect, this);
-    d->outputName->setText(effect ? effect->output() : QString());
-}
-
-void KarbonFilterEffectsTool::outputChanged(const QString &output)
-{
-    if (!d->currentEffect)
-        return;
-    
-    d->currentEffect->setOutput(output);
 }
 
 QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
@@ -253,8 +268,13 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     addButton->setIcon( KIcon("list-add") );
     addButton->setToolTip( i18n("Add filter effect to shape") );
     addFilterLayout->addWidget(addButton, 0, 1);
-    
     connect(addButton, SIGNAL(clicked()), this, SLOT(addFilter()));
+    
+    QToolButton * editButton = new QToolButton(addFilterWidget);
+    editButton->setIcon(KIcon("view-filter"));
+    editButton->setToolTip(i18n("View and edit filter"));
+    addFilterLayout->addWidget(editButton, 0, 2);
+    connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
     
     widgets.insert(i18n("Add Filter"), addFilterWidget);
     
@@ -274,14 +294,20 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     configFilterLayout->addWidget(removeButton, 0, 1);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeFilter()));
 
-    configFilterLayout->addWidget(new QLabel(i18n("Output")), 1, 0);
-    d->outputName = new KLineEdit(configFilterWidget);
-    configFilterLayout->addWidget(d->outputName, 1, 1);
-    connect(d->outputName, SIGNAL(returnPressed(const QString&)), 
-             this, SLOT(outputChanged(const QString&)));
+    QToolButton * raiseButton = new QToolButton(configFilterWidget);
+    raiseButton->setIcon(KIcon("arrow-up"));
+    raiseButton->setToolTip(i18n("Move filter effect up"));
+    configFilterLayout->addWidget(raiseButton, 0, 2);
+    connect(raiseButton, SIGNAL(clicked()), this, SLOT(raiseFilter()));
 
+    QToolButton * lowerButton = new QToolButton(configFilterWidget);
+    lowerButton->setIcon(KIcon("arrow-down"));
+    lowerButton->setToolTip(i18n("Move filter effect up"));
+    configFilterLayout->addWidget(lowerButton, 0, 3);
+    connect(lowerButton, SIGNAL(clicked()), this, SLOT(lowerFilter()));
+    
     d->configStack = new QStackedWidget(configFilterWidget);
-    configFilterLayout->addWidget(d->configStack, 2, 0, 1, 2);
+    configFilterLayout->addWidget(d->configStack, 1, 0, 1, 4);
     
     widgets.insert(i18n("Effect Properties"), configFilterWidget);
     

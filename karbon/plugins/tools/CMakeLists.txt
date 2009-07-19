@@ -28,8 +28,12 @@ set(karbon_tools_PART_SRCS
    KarbonPatternEditStrategy.cpp
    KarbonFilterEffectsTool.cpp
    KarbonFilterEffectsToolFactory.cpp
+   FilterEffectEditWidget.cpp
 )
 
+kde4_add_ui_files(karbon_tools_PART_SRCS
+    FilterEffectEditWidget.ui
+)
 
 kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
 

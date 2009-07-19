@@ -48,9 +48,11 @@ protected:
 private slots:
     void addFilter();
     void removeFilter();
+    void raiseFilter();
+    void lowerFilter();
+    void editFilter();
     void filterChanged();
     void filterSelected(int index);
-    void outputChanged(const QString &output);
     
 private:
     class Private;
