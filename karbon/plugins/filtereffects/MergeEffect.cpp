@@ -43,12 +43,14 @@ QImage MergeEffect::processImage(const QImage &image, const QRect &filterRegion,
 
 QImage MergeEffect::processImages(const QList<QImage> &images, const QRect &filterRegion, const KoViewConverter &converter) const
 {
-    Q_ASSERT(images.count() == 2);
-    
     int imageCount = images.count();
+    if(!imageCount)
+        return QImage();
     
     QImage result = images[0];
-    
+    if (imageCount == 1)
+        return result;
+        
     QPainter p(&result);
     
     for (int i = 1; i < imageCount; ++i) {
