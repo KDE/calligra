@@ -29,6 +29,8 @@ set(karbon_tools_PART_SRCS
    KarbonFilterEffectsTool.cpp
    KarbonFilterEffectsToolFactory.cpp
    FilterEffectEditWidget.cpp
+   FilterEffectScene.cpp
+   FilterEffectSceneItems.cpp
 )
 
 kde4_add_ui_files(karbon_tools_PART_SRCS

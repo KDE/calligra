@@ -25,11 +25,8 @@
 
 class KoShape;
 class KoFilterEffect;
-class EffectItemBase;
-class DefaultInputItem;
-class EffectItem;
-class ConnectionItem;
-class QGrapicsItem;
+class FilterEffectScene;
+struct SceneConnection;
 
 class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
 {
@@ -48,26 +45,12 @@ protected:
 private slots:
     void addSelectedEffect();
     void removeSelectedItem();
-    void sceneSelectionChanged();
-    
+    void connectionCreated(SceneConnection connection);
 private:
-    void initScene();
     void fitScene();
-    void layoutConnections();
-    void layoutEffects();
-    void addItem(QGraphicsItem *item);
-    void createEffectItems(KoFilterEffect *effect);
-    EffectItem * nextEffectItemFromIndex(int index);
-    EffectItem * prevEffectItemFromIndex(int index);
-    void removeDefaultInputItem(DefaultInputItem * item);
-    
-    QGraphicsScene * m_scene;
+    FilterEffectScene * m_scene;
     KoShape * m_shape;
     QList<KoFilterEffect*> m_effects;
-    QList<EffectItemBase*> m_items;
-    QList<ConnectionItem*> m_connectionItems;
-    QMap<QString, EffectItemBase*> m_outputs;
-    QSet<QString> m_defaultInputs;
 };
 
 #endif // FILTEREFFECTEDITWIDGET_H

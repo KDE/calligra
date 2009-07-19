@@ -18,194 +18,19 @@
  */
 
 #include "FilterEffectEditWidget.h"
+#include "FilterEffectScene.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
 #include "KoShape.h"
 
-#include <QtGui/QGraphicsRectItem>
+#include <KDebug>
 
-const QSizeF ConnectorSize = QSize(10,10);
-const qreal ItemWidth = 15 * ConnectorSize.height();
-const qreal ItemSpacing = 10.0;
-const qreal FontSize = 8.0;
-const qreal ConnectionDistance = ConnectorSize.height();
-
-class EffectItemBase : public QGraphicsRectItem
-{
-public:
-    EffectItemBase()
-    : QGraphicsRectItem(0)
-    {
-        setZValue(1);
-        setFlags(QGraphicsItem::ItemIsSelectable);
-    }
-    
-    void createText(const QString &text)
-    {
-        QGraphicsSimpleTextItem * textItem = new QGraphicsSimpleTextItem(text, this);
-        QFont font = textItem->font();
-        font.setPointSize(FontSize);
-        textItem->setFont(font);
-        QRectF textBox = textItem->boundingRect();
-        QPointF offset = rect().center()-textBox.center();
-        textItem->translate(offset.x(), offset.y());
-    }
-    
-    void createConnector(const QPointF &position, const QColor &color)
-    {
-        QRectF circle(QPointF(), ConnectorSize);
-        circle.moveCenter(position);
-        QGraphicsEllipseItem * connector = new QGraphicsEllipseItem(circle, this);
-        connector->setBrush(QBrush(color));
-        connector->setCursor(Qt::OpenHandCursor);
-    }
-    
-    void createOutput(const QPointF &position, const QString &name)
-    {
-        createConnector(position, Qt::red);
-        m_outputPosition = position;
-        m_outputName = name;
-    }
-    
-    void createInput(const QPointF &position)
-    {
-        createConnector(position, Qt::green);
-        m_inputPositions.append(position);
-    }
-    
-    QPointF outputPosition() const
-    {
-        return m_outputPosition;
-    }
-    
-    QPointF inputPosition(int index) const
-    {
-        if (index < 0 || index >= m_inputPositions.count())
-            return QPointF();
-        return m_inputPositions[index];
-    }
-    
-    QString outputName() const
-    {
-        return m_outputName;
-    }
-private:
-    QPointF m_outputPosition;
-    QString m_outputName;
-    QList<QPointF> m_inputPositions;
-};
-
-class DefaultInputItem : public EffectItemBase
-{
-public:
-    DefaultInputItem(const QString &inputName)
-    : EffectItemBase(), m_inputName(inputName)
-    {
-        setRect(0, 0, ItemWidth, 20);
-
-        createOutput(QPointF(ItemWidth, 0.5*rect().height()), inputName);
-        createText(inputName);
-        
-        QLinearGradient g(QPointF(0,0), QPointF(1,1));
-        g.setCoordinateMode(QGradient::ObjectBoundingMode);
-        g.setColorAt(0, Qt::white);
-        g.setColorAt(1, QColor(255,168,88));
-        setBrush(QBrush(g));
-    }
-private:
-    QString m_inputName;
-};
-
-class EffectItem : public EffectItemBase
-{
-public:
-    EffectItem(KoFilterEffect *effect)
-    : EffectItemBase(), m_effect(effect)
-    {
-        Q_ASSERT(effect);
-        QRectF circle(QPointF(), ConnectorSize);
-                
-        QPointF position(ItemWidth, ConnectorSize.height());
-        
-        // create input connectors
-        int requiredInputCount = effect->requiredInputCount();
-        for (int i = 0; i < requiredInputCount; ++i) {
-            createInput(position);
-            position.ry() += 1.5*ConnectorSize.height();
-        }
-        // create a new input connector when maximal input count in not reached yet
-        if (requiredInputCount < effect->maximalInputCount()) {
-            createInput(position);
-            position.ry() += 1.5*ConnectorSize.height();
-        }
-        // create output connector
-        position.ry() += 0.5*ConnectorSize.height();
-        createOutput(position, effect->output());
-        
-        setRect(0, 0, ItemWidth, position.y()+ConnectorSize.height());
-
-        createText(effect->id());
-        
-        QLinearGradient g(QPointF(0,0), QPointF(1,1));
-        g.setCoordinateMode(QGradient::ObjectBoundingMode);
-        g.setColorAt(0, Qt::white);
-        g.setColorAt(1, QColor(0,192,192));
-        setBrush(QBrush(g));
-    }
-    
-    KoFilterEffect * effect() const
-    {
-        return m_effect;
-    }
-    
-private:
-    KoFilterEffect * m_effect;
-};
-
-class ConnectionItem : public QGraphicsPathItem
-{
-public:
-    ConnectionItem(EffectItemBase *source, EffectItemBase * target, int targetInput)
-    : QGraphicsPathItem(0), m_source(source), m_target(target), m_targetInput(targetInput)
-    {
-        setPen(QPen(Qt::black));
-    }
-    
-    EffectItemBase * sourceItem() const
-    {
-        return m_source;
-    }
-    
-    EffectItemBase * targetItem() const
-    {
-        return m_target;
-    }
-    
-    int targetInput() const
-    {
-        return m_targetInput;
-    }
-    
-    void setSourceItem(EffectItemBase * source)
-    {
-        m_source = source;
-    }
-    
-    void setTargetItem(EffectItemBase * target, int targetInput)
-    {
-        m_target = target;
-        m_targetInput = targetInput;
-    }
-    
-private:
-    EffectItemBase * m_source;
-    EffectItemBase * m_target;
-    int m_targetInput;
-};
+#include <QtGui/QGraphicsItem>
+#include <QtCore/QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
-: QWidget(parent), m_scene(new QGraphicsScene(this)), m_shape(0)
+: QWidget(parent), m_scene(new FilterEffectScene(this)), m_shape(0)
 {
     setupUi( this );
     
@@ -227,11 +52,8 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     canvas->setRenderHint(QPainter::Antialiasing, true);
     canvas->setResizeAnchor(QGraphicsView::AnchorViewCenter);
     
-    m_defaultInputs << "SourceGraphic" << "SourceAlpha";
-    m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
-    m_defaultInputs << "FillPaint" << "StrokePaint";
-    
-    connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
+    connect(m_scene, SIGNAL(connectionCreated(SceneConnection)),
+             this, SLOT(connectionCreated(SceneConnection)));
 }
 
 void FilterEffectEditWidget::editShape(KoShape *shape)
@@ -242,137 +64,12 @@ void FilterEffectEditWidget::editShape(KoShape *shape)
     }
     
     m_shape = shape;
-    
     if (m_shape) {
         m_effects = m_shape->filterEffectStack();
     }
     
-    initScene();
-}
-
-void FilterEffectEditWidget::addItem(QGraphicsItem *item)
-{
-    m_scene->addItem(item);
-    EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
-    if (effectItem) { 
-        m_items.append(effectItem);
-    } else {
-        ConnectionItem * connectionItem = dynamic_cast<ConnectionItem*>(item);
-        if (connectionItem)
-            m_connectionItems.append(connectionItem);
-    }
-}
-
-void FilterEffectEditWidget::initScene()
-{
-    m_items.clear();
-    m_connectionItems.clear();
-    m_outputs.clear();
-    m_scene->clear();
-    
-    if (!m_effects.count())
-        return;
-    
-    foreach(KoFilterEffect *effect, m_effects) {
-        createEffectItems(effect);
-    }
-    
-    layoutEffects();
-    layoutConnections();
+    m_scene->initialize(m_effects);
     fitScene();
-}
-
-void FilterEffectEditWidget::createEffectItems(KoFilterEffect *effect)
-{
-    QString defaultInput = m_items.count() ? m_items.last()->outputName() : "SourceGraphic";
-    
-    QList<QString> inputs = effect->inputs();
-    for (int i = inputs.count(); i < effect->requiredInputCount(); ++i) {
-        inputs.append(defaultInput);
-    }
-    
-    QSet<QString> defaultItems;
-    foreach(const QString &input, inputs) {
-        if (m_defaultInputs.contains(input) && ! defaultItems.contains(input)) {
-            DefaultInputItem * item = new DefaultInputItem(input);
-            addItem(item);
-            m_outputs.insert(item->outputName(), item);
-            defaultItems.insert(input);
-        }
-    }
-    
-    EffectItem * effectItem = new EffectItem(effect);
-    
-    // create connections
-    int index = 0;
-    foreach(const QString &input, inputs) {
-        EffectItemBase * outputItem = m_outputs.value(input, 0);
-        if (outputItem) {
-            ConnectionItem * connectionItem = new ConnectionItem(outputItem, effectItem, index);
-            addItem(connectionItem);
-        }
-        index++;
-    }
-    
-    addItem(effectItem);
-    
-    defaultInput = effectItem->outputName();
-    m_outputs.insert(defaultInput, effectItem);
-}
-
-void FilterEffectEditWidget::layoutEffects()
-{
-    QPointF position(25,25);
-    foreach(EffectItemBase * item, m_items) {
-        item->setPos(position);
-        position.ry() += item->rect().height() + ItemSpacing;
-    }
-}
-
-void FilterEffectEditWidget::layoutConnections()
-{
-    QList<QPair<int,int> > sortedConnections;
-    
-    // calculate connection sizes from item distances
-    int connectionIndex = 0;
-    foreach(ConnectionItem *item, m_connectionItems) {
-        int sourceIndex = m_items.indexOf(item->sourceItem());
-        int targetIndex = m_items.indexOf(item->targetItem());
-        sortedConnections.append(QPair<int,int>(targetIndex-sourceIndex, connectionIndex));
-        connectionIndex++;
-    }
-    
-    qSort(sortedConnections);
-    qreal distance = ConnectionDistance;
-    int lastSize = -1;
-    int connectionCount = sortedConnections.count();
-    for (int i = 0; i < connectionCount; ++i) {
-        const QPair<int, int> &connection = sortedConnections[i];
-        
-        int size = connection.first;
-        if (size > lastSize) {
-            lastSize = size;
-            distance += ConnectionDistance;
-        }
-        
-        ConnectionItem * connectionItem = m_connectionItems[connection.second];
-        if (!connectionItem)
-            continue;
-        EffectItemBase * sourceItem = connectionItem->sourceItem();
-        EffectItemBase * targetItem = connectionItem->targetItem();
-        if (!sourceItem || ! targetItem)
-            continue;
-        
-        int targetInput = connectionItem->targetInput();
-        QPointF sourcePos = sourceItem->mapToScene(sourceItem->outputPosition());
-        QPointF targetPos = targetItem->mapToScene(targetItem->inputPosition(targetInput));
-        QPainterPath path;
-        path.moveTo(sourcePos+QPointF(0.5*ConnectorSize.width(),0));
-        path.lineTo(sourcePos+QPointF(distance,0));
-        path.lineTo(targetPos+QPointF(distance,0));
-        path.lineTo(targetPos+QPointF(0.5*ConnectorSize.width(),0));
-        connectionItem->setPath(path);
-    }
 }
 
 void FilterEffectEditWidget::fitScene()
@@ -386,11 +83,13 @@ void FilterEffectEditWidget::fitScene()
 
 void FilterEffectEditWidget::resizeEvent( QResizeEvent * event )
 {
+    Q_UNUSED(event);
     fitScene();
 }
 
 void FilterEffectEditWidget::showEvent( QShowEvent * event )
 {
+    Q_UNUSED(event);
     fitScene();
 }
 
@@ -422,34 +121,19 @@ void FilterEffectEditWidget::addSelectedEffect()
         m_effects.append(effect);
     }
     
-    createEffectItems(effect);
-    layoutEffects();
-    layoutConnections();
+    m_scene->initialize(m_effects);
     fitScene();
 }
 
 void FilterEffectEditWidget::removeSelectedItem()
 {
-    QList<QGraphicsItem*> selectedItems = m_scene->selectedItems();
+    QList<SceneItem> selectedItems = m_scene->selectedEffectItems();
     if (!selectedItems.count())
         return;
-    if (!m_items.count())
-        return;
     
-    QList<KoFilterEffect*> effectsToDelete;
-    
-    foreach(QGraphicsItem * item, selectedItems) {
-        // we cannot remove the first predefined input item
-        if (item == m_items.first())
-            continue;
-        int itemIndex = m_items.indexOf(dynamic_cast<EffectItemBase*>(item));
-        if (itemIndex < 0)
-            continue;
-        
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(item);
-        if (effectItem) {
-            // remove effect item and all predefined input items before
-            KoFilterEffect * effect = effectItem->effect();
+    foreach(const SceneItem &item, selectedItems) {
+        KoFilterEffect * effect = item.effect();
+        if (item.type() == SceneItem::EffectItem) {
             int effectIndex = m_effects.indexOf(effect);
             // adjust inputs of all following effects in the stack
             for (int i = effectIndex+1; i < m_effects.count(); ++i) {
@@ -457,7 +141,7 @@ void FilterEffectEditWidget::removeSelectedItem()
                 QList<QString> inputs = nextEffect->inputs();
                 int inputIndex = 0;
                 foreach(const QString &input, inputs) {
-                    if( input == effect->output()) {
+                    if(input == effect->output()) {
                         nextEffect->removeInput(inputIndex);
                         nextEffect->insertInput(inputIndex, "");
                     }
@@ -470,100 +154,99 @@ void FilterEffectEditWidget::removeSelectedItem()
             if (m_shape) {
                 m_shape->update();
                 m_shape->removeFilterEffect(effectIndex);
-                m_effects = m_shape->filterEffectStack();
                 m_shape->update();
+                m_effects = m_shape->filterEffectStack();
             } else {
                 m_effects.removeAt(effectIndex);
             }
-            initScene();
-            
         } else {
-            DefaultInputItem * inputItem = dynamic_cast<DefaultInputItem*>(item);
-            removeDefaultInputItem(inputItem);
-            layoutEffects();
-            layoutConnections();
-            fitScene();
-        }
-    }
-}
-
-void FilterEffectEditWidget::removeDefaultInputItem(DefaultInputItem * item)
-{
-    int itemIndex = m_items.indexOf(item);
-    if (itemIndex < 0)
-        return;
-    
-    // remove predefined input item and adjust input of effect item below
-    EffectItem * nextEffectItem = nextEffectItemFromIndex(itemIndex);
-    EffectItem * prevEffectItem = prevEffectItemFromIndex(itemIndex);
-    Q_ASSERT(nextEffectItem);
-    Q_ASSERT(prevEffectItem);
-    QList<QString> inputs = nextEffectItem->effect()->inputs();
-    int inputIndex = 0;
-    foreach(const QString &input, inputs) {
-        if (input == item->outputName()) {
-            nextEffectItem->effect()->removeInput(inputIndex);
-            nextEffectItem->effect()->insertInput(inputIndex, "");
-            // adjust connection items
-            foreach(ConnectionItem * connectionItem, m_connectionItems) {
-                if (connectionItem->sourceItem() != item)
-                    continue;
-                if (connectionItem->targetItem() != nextEffectItem)
-                    continue;
-                if (connectionItem->targetInput() != inputIndex)
-                    continue;
-                connectionItem->setSourceItem(prevEffectItem);
+            QString outputName = SceneItem::typeToString(item.type());
+            QList<QString> inputs = effect->inputs();
+            int inputIndex = 0;
+            foreach(const QString &input, inputs) {
+                if (input == outputName) {
+                    effect->removeInput(inputIndex);
+                    effect->insertInput(inputIndex, "");
+                }
+                inputIndex++;
             }
         }
-        inputIndex++;
     }
-    // finally delete the item from the scene
-    m_items.removeAt(itemIndex);
-    m_scene->removeItem(item);
-    delete item;
-}
-
-EffectItem * FilterEffectEditWidget::nextEffectItemFromIndex(int index)
-{
-    if(index < 0 || index >= m_items.count())
-        return 0;
     
-    for (int i = index+1; i < m_items.count(); ++i) {
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(m_items[i]);
-        if (effectItem)
-            return effectItem;
-    }
-    return 0;
+    m_scene->initialize(m_effects);
+    fitScene();
 }
 
-EffectItem * FilterEffectEditWidget::prevEffectItemFromIndex(int index)
+void FilterEffectEditWidget::connectionCreated(SceneConnection connection)
 {
-    if(index < 0 || index >= m_items.count())
-        return 0;
+    int sourceEffectIndex = m_effects.indexOf(connection.source.effect());
+    int targetEffectIndex = m_effects.indexOf(connection.target.effect());
+    if (sourceEffectIndex < 0 || targetEffectIndex < 0)
+        return;
     
-    for (int i = index-1; i > 0; --i) {
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(m_items[i]);
-        if (effectItem)
-            return effectItem;
-    }
-    return 0;
-}
-
-void FilterEffectEditWidget::sceneSelectionChanged()
-{
-    QList<QGraphicsItem*> selectedItems = m_scene->selectedItems();
-    if(selectedItems.count()) {
-        foreach(EffectItemBase* item, m_items) {
-            if (item->isSelected())
-                item->setOpacity(1.0);
-            else
-                item->setOpacity(0.25);
+    if (connection.source.type() == SceneItem::EffectItem) {
+        QString sourceName = connection.source.effect()->output();
+        if (targetEffectIndex-sourceEffectIndex > 1) {
+            // there are effects between source effect and target effect
+            // so we have to take extra care
+            bool renameOutput = false;
+            if (sourceName.isEmpty()) {
+                // output is not named so we have to rename the source output
+                // and adjust the next effect in case it uses this output
+                renameOutput = true;
+            } else {
+                // output is named but if there is an effect with the same
+                // output name, we have to rename the source output
+                for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
+                    KoFilterEffect * effect = m_effects[i];
+                    if (effect->output() == sourceName) {
+                        renameOutput = true;
+                        break;
+                    }
+                }
+            }
+            if (renameOutput) {
+                QSet<QString> uniqueOutputNames;
+                foreach(KoFilterEffect *effect, m_effects) {
+                    uniqueOutputNames.insert(effect->output());
+                }
+                int index = 0;
+                QString newOutputName;
+                do {
+                    newOutputName = QString("result%1").arg(index);
+                } while(uniqueOutputNames.contains(newOutputName));
+                
+                // rename soure output
+                connection.source.effect()->setOutput(newOutputName);
+                // adjust following effects
+                for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
+                    KoFilterEffect * effect = m_effects[i];
+                    int inputIndex = 0;
+                    foreach(const QString &input, effect->inputs()) {
+                        if (input.isEmpty() && (i == sourceEffectIndex+1 || input == sourceName)) {
+                            effect->removeInput(inputIndex);
+                            effect->insertInput(inputIndex, newOutputName);
+                        }
+                        inputIndex++;
+                    }
+                    if (sourceName.isEmpty() || effect->output() == sourceName )
+                        break;
+                }
+                sourceName = newOutputName;
+            }
         }
+        // finally set the input of the target
+        connection.target.effect()->removeInput(connection.targetIndex);
+        connection.target.effect()->insertInput(connection.targetIndex, sourceName);
+        
     } else {
-        foreach(EffectItemBase* item, m_items) {
-            item->setOpacity(1);
-        }
+        // source is an predefined input image
+        QString sourceName = SceneItem::typeToString(connection.source.type());
+        connection.target.effect()->removeInput(connection.targetIndex);
+        connection.target.effect()->insertInput(connection.targetIndex, sourceName);
     }
+    m_scene->initialize(m_effects);
+    fitScene();
 }
 
 #include "FilterEffectEditWidget.moc"
