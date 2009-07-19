@@ -105,6 +105,10 @@ public:
         return m_viewMode;
     }
 
+    KWView *view() {
+        return m_view;
+    }
+
 public slots:
     /**
      * sets the document offset in the scrollArea

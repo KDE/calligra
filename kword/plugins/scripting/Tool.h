@@ -73,7 +73,7 @@ public:
         }
         connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SIGNAL(actionTriggered(const QString&)));
 
-        connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)), this, SIGNAL(changedTool()));
+        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)), this, SIGNAL(changedTool()));
     }
     virtual ~Tool() {}
 

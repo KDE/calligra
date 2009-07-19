@@ -118,7 +118,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     if (docker && docker->view() != this) docker->setView(this);
 
     if (statusBar())
-        new KWStatusBar(statusBar(), this);
+        KWStatusBar::addViewControls(statusBar(), this);
 
     // the zoom controller needs to be initialized after the status bar gets initialized as 
     // that resulted in bug 180759

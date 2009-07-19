@@ -22,6 +22,7 @@
 #define KWSTATUSBAR_H
 
 #include <QPointer>
+#include <QMap>
 
 class QPoint;
 class KStatusBar;
@@ -29,15 +30,38 @@ class KWView;
 class QLabel;
 class KSqueezedTextLabel;
 class KoCanvasController;
+class KWDocument;
+class KWCanvas;
+class QAction;
 
 /**
-* The KWStatusBar class implements an extended statusbar for KWord.
-*/
+ * The KWStatusBar class implements an extended statusbar for KWord.
+ */
 class KWStatusBar : public QObject
 {
     Q_OBJECT
 public:
 
+    /**
+    * Destructor.
+    */
+    virtual ~KWStatusBar();
+
+    static void addViewControls(KStatusBar *statusBar, KWView *view);
+
+    void addView(KWView *view);
+
+public slots:
+    void setText(const QString& text);
+
+private slots:
+    void setModified(bool modified);
+    void updatePageCount();
+    void updateMousePosition(const QPoint&);
+    void resourceChanged(int, const QVariant&);
+    void updateCurrentTool(KoCanvasController*);
+
+private:
     /**
     * Constructor.
     *
@@ -48,31 +72,21 @@ public:
     */
     KWStatusBar(KStatusBar* statusBar, KWView* view);
 
-    /**
-    * Destructor.
-    */
-    virtual ~KWStatusBar();
+    void setCurrentCanvas(KWCanvas *view);
 
-public slots:
-    void setText(const QString& text);
-
-private slots:
-    void setModified(bool modified);
-    void updatePageCount();
-    void updateMousePosition(const QPoint&);
-    void resourceChanged(int, const QVariant&);
-    void updateCurrentTool();
-
-private:
     KStatusBar *m_statusbar;
-    KWView *m_view;
+    KWView *m_currentView;
+    QMap<KWView*, QWidget*> m_zoomWidgets;
+    KWDocument *const m_document;
     QPointer<KoCanvasController> m_controller;
     int m_currentPageNumber;
+    QAction *m_zoomAction;
 
     QLabel *m_modifiedLabel;
     QLabel *m_pageLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
+    QList<KWView*> m_views;
 };
 
 #endif
