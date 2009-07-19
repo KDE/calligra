@@ -22,8 +22,6 @@
 #include "KoShape.h"
 #include "KoFilterEffect.h"
 
-#include <KDebug>
-
 const qreal ItemSpacing = 10.0;
 const qreal ConnectionDistance = 10.0;
 
@@ -223,127 +221,6 @@ void FilterEffectScene::layoutConnections()
     }
 }
 
-/*
-void FilterEffectScene::removeSelectedItem()
-{
-    QList<QGraphicsItem*> selectedItems = m_scene->selectedItems();
-    if (!selectedItems.count())
-        return;
-    if (!m_items.count())
-        return;
-    
-    QList<KoFilterEffect*> effectsToDelete;
-    
-    foreach(QGraphicsItem * item, selectedItems) {
-        // we cannot remove the first predefined input item
-        if (item == m_items.first())
-            continue;
-        int itemIndex = m_items.indexOf(dynamic_cast<EffectItemBase*>(item));
-        if (itemIndex < 0)
-            continue;
-        
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(item);
-        if (effectItem) {
-            // remove effect item and all predefined input items before
-            KoFilterEffect * effect = effectItem->effect();
-            int effectIndex = m_effects.indexOf(effect);
-            // adjust inputs of all following effects in the stack
-            for (int i = effectIndex+1; i < m_effects.count(); ++i) {
-                KoFilterEffect * nextEffect = m_effects[i];
-                QList<QString> inputs = nextEffect->inputs();
-                int inputIndex = 0;
-                foreach(const QString &input, inputs) {
-                    if( input == effect->output()) {
-                        nextEffect->removeInput(inputIndex);
-                        nextEffect->insertInput(inputIndex, "");
-                    }
-                }
-                // if one of the next effects has the same output name we stop
-                if (nextEffect->output() == effect->output())
-                    break;
-            }
-            // remove the effect from the stack
-            if (m_shape) {
-                m_shape->update();
-                m_shape->removeFilterEffect(effectIndex);
-                m_effects = m_shape->filterEffectStack();
-                m_shape->update();
-            } else {
-                m_effects.removeAt(effectIndex);
-            }
-            initScene();
-            
-        } else {
-            DefaultInputItem * inputItem = dynamic_cast<DefaultInputItem*>(item);
-            removeDefaultInputItem(inputItem);
-            layoutEffects();
-            layoutConnections();
-        }
-    }
-}
-
-void FilterEffectScene::removeDefaultInputItem(DefaultInputItem * item)
-{
-    int itemIndex = m_items.indexOf(item);
-    if (itemIndex < 0)
-        return;
-    
-    // remove predefined input item and adjust input of effect item below
-    EffectItem * nextEffectItem = nextEffectItemFromIndex(itemIndex);
-    EffectItem * prevEffectItem = prevEffectItemFromIndex(itemIndex);
-    Q_ASSERT(nextEffectItem);
-    Q_ASSERT(prevEffectItem);
-    QList<QString> inputs = nextEffectItem->effect()->inputs();
-    int inputIndex = 0;
-    foreach(const QString &input, inputs) {
-        if (input == item->outputName()) {
-            nextEffectItem->effect()->removeInput(inputIndex);
-            nextEffectItem->effect()->insertInput(inputIndex, "");
-            // adjust connection items
-            foreach(ConnectionItem * connectionItem, m_connectionItems) {
-                if (connectionItem->sourceItem() != item)
-                    continue;
-                if (connectionItem->targetItem() != nextEffectItem)
-                    continue;
-                if (connectionItem->targetInput() != inputIndex)
-                    continue;
-                connectionItem->setSourceItem(prevEffectItem);
-            }
-        }
-        inputIndex++;
-    }
-    // finally delete the item from the scene
-    m_items.removeAt(itemIndex);
-    m_scene->removeItem(item);
-    delete item;
-}
-
-EffectItem * FilterEffectScene::nextEffectItemFromIndex(int index)
-{
-    if(index < 0 || index >= m_items.count())
-        return 0;
-    
-    for (int i = index+1; i < m_items.count(); ++i) {
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(m_items[i]);
-        if (effectItem)
-            return effectItem;
-    }
-    return 0;
-}
-
-EffectItem * FilterEffectScene::prevEffectItemFromIndex(int index)
-{
-    if(index < 0 || index >= m_items.count())
-        return 0;
-    
-    for (int i = index-1; i > 0; --i) {
-        EffectItem * effectItem = dynamic_cast<EffectItem*>(m_items[i]);
-        if (effectItem)
-            return effectItem;
-    }
-    return 0;
-}
-*/
 void FilterEffectScene::selectionChanged()
 {
     if(selectedItems().count()) {

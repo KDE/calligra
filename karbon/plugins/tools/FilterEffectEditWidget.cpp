@@ -24,8 +24,6 @@
 #include "KoFilterEffect.h"
 #include "KoShape.h"
 
-#include <KDebug>
-
 #include <QtGui/QGraphicsItem>
 #include <QtCore/QSet>
 

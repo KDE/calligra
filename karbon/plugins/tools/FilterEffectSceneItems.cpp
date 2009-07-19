@@ -20,8 +20,6 @@
 #include "FilterEffectSceneItems.h"
 #include "KoFilterEffect.h"
 
-#include <KDebug>
-
 #include <QtGui/QPen>
 #include <QtGui/QBrush>
 #include <QtGui/QFont>
