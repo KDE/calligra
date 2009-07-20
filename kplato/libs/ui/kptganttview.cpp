@@ -933,6 +933,7 @@ void ResourceAppointmentsGanttView::slotOptions()
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
+    return false;
 }
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
