@@ -53,9 +53,17 @@ class Length {
         None	/**< For when no unit has been specified */
     };
 
-    Length() : value(0), unit(None) {};
+    enum UnitType {
+        NoType,
+        Relative,
+        Absolute,
+        Pixel
+    };
+
+    Length() : value(0), unit(None), type(NoType) {};
     qreal value;
     Unit unit;
+    UnitType type;
 };
 
 /**

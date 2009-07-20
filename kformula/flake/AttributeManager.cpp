@@ -282,26 +282,46 @@ Length AttributeManager::parseUnit( const QString& value,
 
     length.value = number;
     if(!unit.isEmpty()) {
-        if (unit == "em")
+        if (unit == "em") {
             length.unit = Length::Mm;
-        else if (unit == "ex")
+            length.type = Length::Relative;
+        }
+        else if (unit == "ex") {
             length.unit = Length::Ex;
-        else if (unit == "px")
+            length.type = Length::Relative;
+        }
+        else if (unit == "px") {
             length.unit = Length::Px;
-        else if (unit == "in")
+            length.type = Length::Pixel;
+        }
+        else if (unit == "in") {
             length.unit = Length::In;
-        else if (unit == "cm")
+            length.type = Length::Absolute;
+        }
+        else if (unit == "cm") {
             length.unit = Length::Cm;
-        else if (unit == "nm")
+            length.type = Length::Absolute;
+        }
+        else if (unit == "mm") {
             length.unit = Length::Mm;
-        else if (unit == "pt")
+            length.type = Length::Absolute;
+        }
+        else if (unit == "pt") {
             length.unit = Length::Pt;
-        else if (unit == "pc")
+            length.type = Length::Relative;
+        }
+        else if (unit == "pc") {
             length.unit = Length::Pc;
-        else if (unit == "%")
-             length.unit = Length::Percentage;
-        else
+            length.type = Length::Relative;
+        }
+        else if (unit == "%") {
+            length.unit = Length::Percentage;
+            length.type = Length::Relative;
+        }
+        else {
             length.unit = Length::None;
+            length.type = Length::NoType;
+        }
     }
 
     return length;
