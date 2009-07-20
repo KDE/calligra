@@ -25,6 +25,7 @@ class KWCanvas;
 class KWPageManager;
 class KoViewConverter;
 
+#include "KWPage.h"
 #include "kword_export.h"
 
 #include <QPointF>
@@ -59,6 +60,7 @@ public:
     struct ViewMap {
         QRect clipRect;   ///< the rectangle in the document-space showing (part of) the clip
         QPointF distance; ///< the displacement between the document and the view.
+        KWPage page; ///< The page that this section represents.
     };
 
     /** Document coord -> view coord */

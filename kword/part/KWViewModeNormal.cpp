@@ -77,6 +77,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
         const QRectF pageRect = page.rect();
         const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
         ViewMap vm;
+        vm.page = page;
         //kDebug(32003) <<"page" << page.pageNumber();
         const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
         vm.distance = m_viewConverter->documentToView(QPointF(offsetX, offsetY));

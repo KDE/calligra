@@ -1195,14 +1195,7 @@ void KWView::selectionChanged()
     m_actionFormatFrameSet->setEnabled(shape != 0);
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
-        KWPage currentPage = m_document->pageManager()->page(shape);
-        if (currentPage != m_currentPage) {
-            m_currentPage = currentPage;
-            m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage.pageNumber());
-            m_zoomController->setPageSize(m_currentPage.rect().size());
-            m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
-            m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
-        }
+        setCurrentPage(m_document->pageManager()->page(shape));
         KWFrame *frame = frameForShape(shape);
         KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (fs)
@@ -1222,6 +1215,17 @@ void KWView::selectionChanged()
         variant.setValue<void*>(frame->frameSet());
         m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, variant);
         break;
+    }
+}
+
+void KWView::setCurrentPage(const KWPage &currentPage)
+{
+    if (currentPage != m_currentPage) {
+        m_currentPage = currentPage;
+        m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage.pageNumber());
+        m_zoomController->setPageSize(m_currentPage.rect().size());
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     }
 }
 

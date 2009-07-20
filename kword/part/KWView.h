@@ -93,6 +93,7 @@ public:
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
 
     const KWPage currentPage() const;
+    void setCurrentPage(const KWPage &page);
 
     virtual KoZoomController *zoomController() const { return m_zoomController; }
 
