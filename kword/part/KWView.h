@@ -34,9 +34,7 @@ class KWDocument;
 class KWCanvas;
 class KWFrame;
 class KWGui;
-class KWStatusBar;
 
-class KoShape;
 class KoZoomController;
 class KToggleAction;
 
@@ -60,7 +58,7 @@ public:
      * @param parent a parent widget we show ourselves in.
      */
     KWView(const QString& viewMode, KWDocument *document, QWidget *parent);
-    ~KWView();
+    virtual ~KWView();
 
     /**
      * return the KWDocument that owns this view.
@@ -71,10 +69,10 @@ public:
     }
 
     // interface KoView
-    /// overwritten method from superclass
-    void updateReadWrite(bool readWrite);
-    /// overwritten method from superclass
-    QWidget *canvas() const;
+    /// reimplemented method from superclass
+    virtual void updateReadWrite(bool readWrite);
+    /// reimplemented method from superclass
+    virtual QWidget *canvas() const;
 
     /// returns true if this view has the snap-to-grid enabled.
     bool snapToGrid() const {
@@ -102,7 +100,7 @@ protected:
 
 private:
     void setupActions();
-    virtual KoPrintJob * createPrintJob();
+    virtual KoPrintJob *createPrintJob();
 
 private slots:
     /// displays the KWFrameDialog that allows to alter the frameset properties
