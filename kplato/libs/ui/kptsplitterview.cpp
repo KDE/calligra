@@ -134,26 +134,6 @@ ViewBase *SplitterView::findView( const QPoint &pos ) const
     return const_cast<SplitterView*>( this );
 }
 
-void SplitterView::setZoom(double zoom)
-{
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v ) {
-            v->setZoom( zoom );
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
-                    if ( v ) {
-                        v->setZoom( zoom );
-                    }
-                }
-            }
-        }
-    }
-}
-    
 void SplitterView::setProject( Project *project )
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {

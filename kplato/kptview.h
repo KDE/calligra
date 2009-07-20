@@ -81,10 +81,6 @@ class KPLATO_EXPORT View : public KoView
 public:
     explicit View( Part* part, QWidget* parent = 0 );
     ~View();
-    /**
-     * Support zooming.
-     */
-    virtual void setZoom( double zoom );
 
     Part *getPart() const;
 

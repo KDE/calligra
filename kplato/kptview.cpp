@@ -1074,11 +1074,6 @@ Project& View::getProject() const
     return getPart() ->getProject();
 }
 
-void View::setZoom( double )
-{
-    //TODO
-}
-
 KoPrintJob * View::createPrintJob()
 {
     KoView *v = qobject_cast<KoView*>( canvas() );

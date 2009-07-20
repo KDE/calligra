@@ -62,9 +62,7 @@ public:
     SplitterView(KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~SplitterView() {}
-    
-    /// Set zoom
-    virtual void setZoom( double zoom );
+
     /// Set the project this view shall handle.
     virtual void setProject( Project *project );
     /// Draw data from current part / project

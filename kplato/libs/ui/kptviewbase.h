@@ -194,7 +194,6 @@ public:
     /// Returns true if this view or any child widget has focus
     bool isActive() const;
     
-    virtual void setZoom(double /*zoom*/) {}
     /// Set the project this view shall handle.
     virtual void setProject( Project * /*project*/ ) {}
     /// Return the project
