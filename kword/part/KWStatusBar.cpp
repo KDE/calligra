@@ -25,7 +25,7 @@
 
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
-#include <KoZoomAction.h>
+#include <KoZoomController.h>
 
 #include <QLabel>
 #include <KSqueezedTextLabel>
@@ -196,10 +196,9 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
         return;
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
     if (zoomWidget == 0) { // create it
-        KActionCollection *collection = m_currentView->actionCollection();
-        KoZoomAction *zoomaction = dynamic_cast<KoZoomAction*>(collection->action("view_zoom"));
-        if (zoomaction) {
-            zoomWidget = zoomaction->createWidget(m_statusbar);
+        KoZoomController *zoomController = m_currentView->zoomController();
+        if (zoomController) {
+            zoomWidget = zoomController->zoomAction()->createWidget(m_statusbar);
             m_zoomWidgets.insert(m_currentView, zoomWidget);
         }
     }
