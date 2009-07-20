@@ -33,6 +33,8 @@
 #include <QList>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QContextMenuEvent>
+#include <QDragMoveEvent>
 
 #include <kaction.h>
 #include <kicon.h>

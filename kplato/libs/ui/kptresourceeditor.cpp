@@ -37,7 +37,7 @@
 #include <QList>
 #include <QObject>
 #include <QVBoxLayout>
-
+#include <QDragMoveEvent>
 
 #include <kaction.h>
 #include <kicon.h>

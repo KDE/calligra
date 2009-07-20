@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QMenu>
+#include <QDragMoveEvent>
 
 #include <kicon.h>
 #include <kaction.h>
