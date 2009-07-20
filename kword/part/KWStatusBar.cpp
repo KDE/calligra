@@ -28,6 +28,7 @@
 #include <KoZoomController.h>
 
 #include <QLabel>
+#include <QTimer>
 #include <KSqueezedTextLabel>
 #include <KStatusBar>
 #include <KLocale>
@@ -172,8 +173,7 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
     if (canvas == 0) {
         m_currentView = 0;
         return;
-    }
-    else if (canvas->view() == m_currentView) {
+    } else if (canvas->view() == m_currentView) {
         return;
     }
 
@@ -195,17 +195,14 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
     if (m_currentView == 0)
         return;
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
-    if (zoomWidget == 0) { // create it
-        KoZoomController *zoomController = m_currentView->zoomController();
-        if (zoomController) {
-            zoomWidget = zoomController->zoomAction()->createWidget(m_statusbar);
-            m_zoomWidgets.insert(m_currentView, zoomWidget);
-        }
-    }
     if (zoomWidget) {
         m_statusbar->addWidget(zoomWidget);
         connect(m_zoomAction, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
         zoomWidget->setVisible(m_zoomAction->isChecked());
+    } else {
+        // do it delayed to avoid a race condition where this code
+        // is ran from the constructor of KWView before the zoomController is created.
+        QTimer::singleShot(0, this, SLOT(createZoomWidget()));
     }
 
     KoCanvasResourceProvider *resourceprovider = canvas->resourceProvider();
@@ -213,6 +210,20 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
     connect(resourceprovider, SIGNAL(resourceChanged(int, QVariant)),
         this, SLOT(resourceChanged(int, QVariant)));
     updatePageCount();
+}
+
+void KWStatusBar::createZoomWidget()
+{
+    if (m_currentView) {
+        KoZoomController *zoomController = m_currentView->zoomController();
+        if (zoomController && !m_zoomWidgets.contains(m_currentView)) {
+            QWidget *zoomWidget = zoomController->zoomAction()->createWidget(m_statusbar);
+            m_zoomWidgets.insert(m_currentView, zoomWidget);
+            m_statusbar->addWidget(zoomWidget);
+            connect(m_zoomAction, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
+            zoomWidget->setVisible(m_zoomAction->isChecked());
+        }
+    }
 }
 
 void KWStatusBar::updateMousePosition(const QPoint &pos)
