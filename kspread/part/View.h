@@ -189,6 +189,9 @@ public:
 
     virtual QMatrix matrix() const;
 
+    virtual KoZoomController *zoomController() const;
+
+
 public Q_SLOTS:
     /**
     * refresh view when you hide/show vertical scrollbar

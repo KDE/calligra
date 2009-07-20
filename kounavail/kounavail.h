@@ -76,6 +76,7 @@ class KoUnavailView : public KoView
     Q_OBJECT
 public:
     explicit KoUnavailView( KoUnavailPart* part, QWidget* parent = 0 );
+    virtual KoZoomController *zoomController() const { return 0; }
 
 protected:
     virtual void paintEvent( QPaintEvent* );

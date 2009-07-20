@@ -111,7 +111,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
 
     new KoFind(this, m_canvas->resourceProvider(), actionCollection());
 
-    m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection());
+    m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 
     KWStatisticsDockerFactory statisticsFactory(this);
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
@@ -135,7 +135,6 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
 
 KWView::~KWView()
 {
-    delete m_zoomController;
 }
 
 KWCanvas *KWView::kwcanvas() const

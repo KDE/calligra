@@ -675,7 +675,6 @@ View::~View()
     delete d->calcLabel;
 
     delete d->actions;
-    delete d->zoomController;
     delete d->zoomHandler;
     // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
     //              parent. Otherwise, it leads to crashes, because it tries to
@@ -754,7 +753,7 @@ void View::initView()
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
-    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection() );
+    d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);
     d->zoomController->zoomAction()->setZoomModes( KoZoomMode::ZOOM_CONSTANT );
     addStatusBarItem( d->zoomController->zoomAction()->createWidget( statusBar() ), 0, true );
     connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
@@ -843,6 +842,11 @@ void View::initView()
 Canvas* View::canvasWidget() const
 {
     return d->canvas;
+}
+
+KoZoomController *View::zoomController() const
+{
+    return d->zoomController;
 }
 
 KoCanvasController* View::canvasController() const

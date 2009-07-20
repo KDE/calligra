@@ -67,6 +67,9 @@ public:
 
     KoViewConverter* viewConverter();
 
+    // reimplemented to return 0 as we don't allow zooming in our UI yet
+    virtual KoZoomController *zoomController() const { return 0; }
+
 protected:
     virtual void resizeEvent( QResizeEvent* _ev );
     virtual void focusInEvent( QFocusEvent* );

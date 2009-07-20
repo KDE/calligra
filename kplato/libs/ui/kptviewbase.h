@@ -218,7 +218,9 @@ public:
     virtual Calendar* currentCalendar() const { return 0; }
     /// Reimplement if your view handles relations
     virtual Relation *currentRelation() const { return 0; }
-    
+    /// Reimplement if your view handles zoom
+    virtual KoZoomController *zoomController() const { return 0; }
+
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
     /// Save context info from this view. Reimplement.

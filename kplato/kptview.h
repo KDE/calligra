@@ -129,6 +129,10 @@ public:
 
     KoPrintJob * createPrintJob();
 
+    virtual KoZoomController *zoomController() const {
+        return 0;
+    }
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
 

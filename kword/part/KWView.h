@@ -94,6 +94,8 @@ public:
 
     const KWPage currentPage() const;
 
+    virtual KoZoomController *zoomController() const { return m_zoomController; }
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);

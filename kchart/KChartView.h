@@ -61,6 +61,9 @@ public:
     KChartCanvas    *canvasWidget()  const { return m_canvas; }
     void config(int flag);
 
+    virtual KoZoomController *zoomController() const { return m_zoomController; }
+
+
 public slots:
     void  saveConfig();
     void  loadConfig();
