@@ -42,7 +42,7 @@
 #include <KoStore.h>
 #include <KoFilterChain.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QBuffer>
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
@@ -204,22 +204,22 @@ void Document::processAssociatedStrings()
     wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
     if(!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.author()).string());
+        m_metaWriter->addTextSpan(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
     if(!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        m_metaWriter->addTextSpan(Conversion::string(strings.title()).string());
+        m_metaWriter->addTextSpan(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
     if(!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextSpan(Conversion::string(strings.subject()).string());
+        m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
     if(!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()).string());
+        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
     }
 }
@@ -238,7 +238,7 @@ void Document::processStyles()
         //grab style
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        QConstString displayName = Conversion::string(style->name());
+        QString displayName = Conversion::string(style->name());
         QString name = Conversion::string(style->name());
         //need to replace all non-alphanumeric characters with hex representation
         for(int i = 0; i < name.size(); i++) {
@@ -247,17 +247,13 @@ void Document::processStyles()
                 i--;
             }
         }
-        kDebug(30513) << "Style" << i << ":" << displayName.string();
-        kDebug(30513) << "style->type() = " << style->type();
-        kDebug(30513) << "style->sti() = " << style->sti();
-
         //process paragraph styles
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
             {
-                QConstString followingName = Conversion::string( followingStyle->name() );
+                QString followingName = Conversion::string( followingStyle->name());
             }
 
             //create this style & add formatting info to it
@@ -697,8 +693,8 @@ void Document::slotTableFound(KWord::Table* table)
     kDebug(30513);
 
     m_tableHandler->tableStart(table);
-    Q3ValueList<KWord::Row> &rows = table->rows;
-    for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+    QList<KWord::Row> &rows = table->rows;
+    for( QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
         KWord::TableRowFunctorPtr f = (*it).functorPtr;
         Q_ASSERT( f );
         (*f)(); // call it
@@ -752,8 +748,8 @@ void Document::processSubDocQueue()
         {
             KWord::Table& table = m_tableQueue.front();
             m_tableHandler->tableStart( &table );
-            Q3ValueList<KWord::Row> &rows = table.rows;
-            for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+            QList<KWord::Row> &rows = table.rows;
+            for( QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
                 KWord::TableRowFunctorPtr f = (*it).functorPtr;
                 Q_ASSERT( f );
                 (*f)(); // call it

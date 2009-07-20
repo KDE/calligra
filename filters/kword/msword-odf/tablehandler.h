@@ -26,9 +26,7 @@
 #include <wv2/word97_generated.h> // for TAP
 #include <wv2/handlers.h>
 #include <QString>
-#include <q3valuelist.h>
 #include <QObject>
-//Added by qt3to4:
 #include <QList>
 #include <deque>
 #include <QRectF>
@@ -66,7 +64,7 @@ namespace KWord
     struct Table
     {
         QString name; // kword's grpMgr attribute
-        Q3ValueList<Row> rows; // need to use QValueList to benefit from implicit sharing
+        QList<Row> rows; // need to use QValueList to benefit from implicit sharing
 
         // Word has a very flexible concept of columns: each row can vary the
         // edges of each column. We must map this onto a set of fixed-width columns

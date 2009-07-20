@@ -628,8 +628,8 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
 //this handles a basic section of text
 void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
-    QConstString newText(Conversion::string(text));
-    kDebug(30513) << newText.string();
+    QString newText(Conversion::string(text));
+    kDebug(30513) << newText;
 
     //we don't want to do anything with an empty string
     if(newText.isEmpty())
@@ -645,7 +645,7 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     if(m_insideField && m_fieldAfterSeparator && (m_fieldType > 0))
     {
         kDebug(30513) << "adding this text to field value.";
-        m_fieldValue.append(newText.string());
+        m_fieldValue.append(newText);
         return;
     }
 
@@ -675,9 +675,8 @@ QString KWordTextHandler::getFont(unsigned fc) const
         return QString();
     const wvWare::Word97::FFN& ffn ( m_parser->font( fc ) );
 
-    QConstString fontName( Conversion::string( ffn.xszFfn ) );
-    QString font = fontName.string();
-    return font;
+    QString fontName( Conversion::string( ffn.xszFfn ) );
+    return fontName;
 /*
 #ifdef FONT_DEBUG
     kDebug(30513) <<"    MS-FONT:" << font;
@@ -908,7 +907,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         }
         else
         {
-            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text).string();
+            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
         }
 
         if ( listInfo->startAtOverridden() ) //||

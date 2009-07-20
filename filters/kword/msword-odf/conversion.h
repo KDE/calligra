@@ -42,11 +42,11 @@ namespace wvWare {
 
 namespace Conversion
 {
-    // UString -> QConstString conversion. Use .string() to get the QString.
-    // Always store the QConstString into a variable first, to avoid a deep copy.
-    inline QConstString string( const wvWare::UString& str ) {
+    // UString -> QString conversion. Use .string() to get the QString.
+    // Always store the QString into a variable first, to avoid a deep copy.
+    inline QString string( const wvWare::UString& str ) {
         // Let's hope there's no copying of the QConstString happening...
-        return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+        return QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
     }
 
     // Prepare text for inclusion in XML

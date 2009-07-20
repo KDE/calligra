@@ -26,9 +26,7 @@
 #include <wv2/word97_generated.h>
 
 #include <kdebug.h>
-#include <q3tl.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QRectF>
 
 #include <KoGenStyle.h>
@@ -165,7 +163,7 @@ void KWordTableHandler::tableCellStart()
         //kDebug(30513) <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
-        Q3ValueList<KWord::Row>::Iterator it = m_currentTable->rows.at( m_row + 1 );
+        QList<KWord::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
         for( ; it != m_currentTable->rows.end(); ++it )  {
             // Find cell right below us in row (*it), if any
             KWord::TAPptr tapBelow = (*it).tap;
