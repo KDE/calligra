@@ -367,10 +367,14 @@ QFont AttributeManager::font( const BasicElement* element ) const
     // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
 
     QFont font;
-    if(font.pointSizeF() != -1)
-        font.setPointSizeF(font.pointSizeF() * element->scaleFactor());
-    else
-        font.setPixelSize( font.pixelSize() * element->scaleFactor() );
+    Length unit = parseUnit( findValue( "fontsize", element ), element );
+    if ( unit.type == Length::Absolute ) {
+        font.setPointSizeF( lengthToPixels( unit,  element,  "fontsize" ) );
+    } else if ( unit.type == Length::Relative ) {
+        font.setPointSizeF( lengthToPixels( unit,  element,  "fontsize" ) * element->scaleFactor() );
+    } else if ( unit.type == Length::Pixel ) {
+        font.setPixelSize( lengthToPixels( unit,  element,  "fontsize" ) * element->scaleFactor() );
+    }
     return font;
 }
 
