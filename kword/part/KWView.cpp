@@ -43,6 +43,7 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCutController.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
@@ -1222,7 +1223,7 @@ void KWView::setCurrentPage(const KWPage &currentPage)
 {
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
-        m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage.pageNumber());
+        m_canvas->resourceProvider()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
         m_zoomController->setPageSize(m_currentPage.rect().size());
         m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);

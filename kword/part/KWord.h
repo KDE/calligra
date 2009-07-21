@@ -102,7 +102,6 @@ namespace KWord
         // lets try to put Current in front of everything for ease of reading.
         CurrentFrame,
         CurrentFrameSet,
-        CurrentPage,
         CurrentFrameSetCount,
         CurrentPictureCount,
         CurrentTableCount,
