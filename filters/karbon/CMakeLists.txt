@@ -30,10 +30,12 @@ endif (WPD_FOUND AND LIBWPG_FOUND)
 add_subdirectory( wmf )
 add_subdirectory( karbon1.x )
 add_subdirectory( eps )
-#add_subdirectory( pdf )
 
 # enable again when these filters are ported
+message(STATUS "Still need to port: pdf, ai, kontour, xcf, msod and oodraw filters")
+
 if(FALSE)
+add_subdirectory( pdf )
 add_subdirectory( ai )
 add_subdirectory( kontour )
 add_subdirectory( xcf )
