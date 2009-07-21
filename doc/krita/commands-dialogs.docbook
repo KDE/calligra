@@ -698,7 +698,7 @@ currently selected handle.
 <para>
 You can apply a bumpmap effect and customize it using this dialog. One layer
 is used as bumpmap layer: it is read as grayscale image and the gray values of
-its pixels are used to to distort the other layer for creating the depth
+its pixels are used to distort the other layer for creating the depth
 illusion. High grey values, &ie; more white, mean a larger height, small
 values, &ie; near black, mean a smaller height &mdash; or a larger depth, the
 height can get <quote>below sealevel</quote>. A light source, shining
