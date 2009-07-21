@@ -48,7 +48,6 @@ target_link_libraries(kchartcommon
     kostore
     flake
     ${KDE4_KPARTS_LIBS}
-	${KDE4_KDE3SUPPORT_LIBS}
     )
 
 set_target_properties(kchartcommon
