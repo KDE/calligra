@@ -26,7 +26,8 @@
 class KoShape;
 class KoFilterEffect;
 class FilterEffectScene;
-struct SceneConnection;
+class ConnectionSource;
+class ConnectionTarget;
 
 class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
 {
@@ -45,7 +46,7 @@ protected:
 private slots:
     void addSelectedEffect();
     void removeSelectedItem();
-    void connectionCreated(SceneConnection connection);
+    void connectionCreated(ConnectionSource source, ConnectionTarget target);
 private:
     void fitScene();
     FilterEffectScene * m_scene;

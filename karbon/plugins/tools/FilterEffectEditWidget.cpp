@@ -24,6 +24,8 @@
 #include "KoFilterEffect.h"
 #include "KoShape.h"
 
+#include <KDebug>
+
 #include <QtGui/QGraphicsItem>
 #include <QtCore/QSet>
 
@@ -50,8 +52,8 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     canvas->setRenderHint(QPainter::Antialiasing, true);
     canvas->setResizeAnchor(QGraphicsView::AnchorViewCenter);
     
-    connect(m_scene, SIGNAL(connectionCreated(SceneConnection)),
-             this, SLOT(connectionCreated(SceneConnection)));
+    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
+             this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
 }
 
 void FilterEffectEditWidget::editShape(KoShape *shape)
@@ -125,13 +127,13 @@ void FilterEffectEditWidget::addSelectedEffect()
 
 void FilterEffectEditWidget::removeSelectedItem()
 {
-    QList<SceneItem> selectedItems = m_scene->selectedEffectItems();
+    QList<ConnectionSource> selectedItems = m_scene->selectedEffectItems();
     if (!selectedItems.count())
         return;
     
-    foreach(const SceneItem &item, selectedItems) {
+    foreach(const ConnectionSource &item, selectedItems) {
         KoFilterEffect * effect = item.effect();
-        if (item.type() == SceneItem::EffectItem) {
+        if (item.type() == ConnectionSource::Effect) {
             int effectIndex = m_effects.indexOf(effect);
             // adjust inputs of all following effects in the stack
             for (int i = effectIndex+1; i < m_effects.count(); ++i) {
@@ -158,7 +160,7 @@ void FilterEffectEditWidget::removeSelectedItem()
                 m_effects.removeAt(effectIndex);
             }
         } else {
-            QString outputName = SceneItem::typeToString(item.type());
+            QString outputName = ConnectionSource::typeToString(item.type());
             QList<QString> inputs = effect->inputs();
             int inputIndex = 0;
             foreach(const QString &input, inputs) {
@@ -175,15 +177,15 @@ void FilterEffectEditWidget::removeSelectedItem()
     fitScene();
 }
 
-void FilterEffectEditWidget::connectionCreated(SceneConnection connection)
+void FilterEffectEditWidget::connectionCreated(ConnectionSource source, ConnectionTarget target)
 {
-    int sourceEffectIndex = m_effects.indexOf(connection.source.effect());
-    int targetEffectIndex = m_effects.indexOf(connection.target.effect());
-    if (sourceEffectIndex < 0 || targetEffectIndex < 0)
+    int targetEffectIndex = m_effects.indexOf(target.effect());
+    if (targetEffectIndex < 0)
         return;
     
-    if (connection.source.type() == SceneItem::EffectItem) {
-        QString sourceName = connection.source.effect()->output();
+    if (source.type() == ConnectionSource::Effect) {
+        QString sourceName = source.effect()->output();
+        int sourceEffectIndex = m_effects.indexOf(source.effect());
         if (targetEffectIndex-sourceEffectIndex > 1) {
             // there are effects between source effect and target effect
             // so we have to take extra care
@@ -215,7 +217,7 @@ void FilterEffectEditWidget::connectionCreated(SceneConnection connection)
                 } while(uniqueOutputNames.contains(newOutputName));
                 
                 // rename soure output
-                connection.source.effect()->setOutput(newOutputName);
+                source.effect()->setOutput(newOutputName);
                 // adjust following effects
                 for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
                     KoFilterEffect * effect = m_effects[i];
@@ -234,14 +236,22 @@ void FilterEffectEditWidget::connectionCreated(SceneConnection connection)
             }
         }
         // finally set the input of the target
-        connection.target.effect()->removeInput(connection.targetIndex);
-        connection.target.effect()->insertInput(connection.targetIndex, sourceName);
+        if (m_shape)
+            m_shape->update();
+        target.effect()->removeInput(target.inputIndex());
+        target.effect()->insertInput(target.inputIndex(), sourceName);
+        if (m_shape)
+            m_shape->update();
         
     } else {
         // source is an predefined input image
-        QString sourceName = SceneItem::typeToString(connection.source.type());
-        connection.target.effect()->removeInput(connection.targetIndex);
-        connection.target.effect()->insertInput(connection.targetIndex, sourceName);
+        QString sourceName = ConnectionSource::typeToString(source.type());
+        if (m_shape)
+            m_shape->update();
+        target.effect()->removeInput(target.inputIndex());
+        target.effect()->insertInput(target.inputIndex(), sourceName);
+        if (m_shape)
+            m_shape->update();
     }
     m_scene->initialize(m_effects);
     fitScene();

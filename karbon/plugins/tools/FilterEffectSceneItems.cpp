@@ -24,9 +24,9 @@
 #include <QtGui/QBrush>
 #include <QtGui/QFont>
 
-const QSizeF ConnectorSize = QSize(10,10);
+const QSizeF ConnectorSize = QSize(20,20);
 const qreal ItemWidth = 15 * ConnectorSize.height();
-const qreal FontSize = 8.0;
+const qreal FontSize = 0.8 * ConnectorSize.height();
 
 ConnectorItem::ConnectorItem(ConnectorType type, int index, QGraphicsItem * parent)
 : QGraphicsEllipseItem(parent), m_type(type), m_index(index)
@@ -220,7 +220,7 @@ ConnectorItem * EffectItemBase::connectorAtPosition(const QPointF &scenePosition
 DefaultInputItem::DefaultInputItem(const QString &name, KoFilterEffect *effect)
 : EffectItemBase(effect), m_name(name)
 {
-    setRect(0, 0, ItemWidth, 20);
+    setRect(0, 0, ItemWidth, 2*ConnectorSize.height());
     
     createOutput(QPointF(ItemWidth, 0.5*rect().height()), name);
     createText(name);

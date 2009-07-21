@@ -32,12 +32,13 @@ class EffectItemBase;
 class EffectItem;
 class DefaultInputItem;
 class ConnectionItem;
+class QComboBox;
 
-class SceneItem
+class ConnectionSource 
 {
 public:
-    enum Type { 
-        EffectItem,      ///< a complete effect item
+    enum SourceType { 
+        Effect,          ///< a complete effect item
         SourceGraphic,   ///< SourceGraphic predefined input image
         SourceAlpha,     ///< SourceAlpha predefined input image
         BackgroundImage, ///< BackgroundImage predefined input image
@@ -45,26 +46,35 @@ public:
         FillPaint,       ///< FillPaint predefined input image
         StrokePaint      ///< StrokePaint predefined input image
     };
+    ConnectionSource();
+    ConnectionSource(KoFilterEffect *effect, SourceType type);
+    /// Returns the source type
+    SourceType type() const;
+    /// Returns the corresponding filter effect, or 0 if type == Effect 
+    KoFilterEffect * effect() const;
     
-    SceneItem();
-    SceneItem(KoFilterEffect *effect, Type type);
-    /// Returns the selected items type
-    Type type() const;
+    static SourceType typeFromString(const QString &str);
+    static QString typeToString(SourceType type);
+    
+private:
+    SourceType m_type;         ///< the source type
+    KoFilterEffect * m_effect; ///< the corresponding effect if type == Effect, 0 otherwise
+};
+
+class ConnectionTarget
+{
+public:
+    ConnectionTarget();
+    ConnectionTarget(KoFilterEffect *effect, int inputIndex);
+
+    /// Returns the target input index
+    int inputIndex() const;
     /// Returns the corresponding filter effect 
     KoFilterEffect * effect() const;
     
-    static Type typeFromString(const QString &str);
-    static QString typeToString(Type type);
 private:
-    KoFilterEffect * m_effect;
-    Type m_type;
-};
-
-struct SceneConnection
-{
-    SceneItem source; ///< the start of the connection (effect output)
-    SceneItem target; ///< the end of a connection (effect input)
-    int targetIndex;  ///< the input index of the connection end
+    int m_inputIndex;          ///< the index of the input of the target effect
+    KoFilterEffect * m_effect; ///< the target effect
 };
 
 class FilterEffectScene : public QGraphicsScene
@@ -72,15 +82,16 @@ class FilterEffectScene : public QGraphicsScene
     Q_OBJECT
 public:
     FilterEffectScene(QObject *parent = 0);
+    virtual ~FilterEffectScene();
     
     /// initializes the scene from the filter effect stack
     void initialize(const QList<KoFilterEffect*> &effects);
     
     /// Returns list of selected effect items
-    QList<SceneItem> selectedEffectItems() const;
+    QList<ConnectionSource> selectedEffectItems() const;
     
 signals:
-    void connectionCreated(SceneConnection connection);
+    void connectionCreated(ConnectionSource source, ConnectionTarget target);
     
 protected:
     /// reimplemented from QGraphicsScene
@@ -88,18 +99,20 @@ protected:
     
 private slots:
     void selectionChanged();
-    
+    void defaultInputChanged(int index);
 private:
     void createEffectItems(KoFilterEffect *effect);
     void addSceneItem(QGraphicsItem *item);
     void layoutConnections();
     void layoutEffects();
     
-    QSet<QString> m_defaultInputs;
+    QList<QString> m_defaultInputs;
     QList<KoFilterEffect*> m_effects;
     QList<EffectItemBase*> m_items;
     QList<ConnectionItem*> m_connectionItems;
     QMap<QString, EffectItemBase*> m_outputs;
+    QComboBox * m_defaultInputSelector;
+    QGraphicsProxyWidget *m_defaultInputProxy;
 };
 
 #endif // FILTEREFFECTSCENE_H
