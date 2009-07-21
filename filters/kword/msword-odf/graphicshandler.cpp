@@ -65,12 +65,12 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
     //write picture data to file
     m_store->open(picName);//open picture file
 #define IMG_BUF_SIZE 2048L
-    Q_LONG len = reader.size();
+    long len = reader.size();
     while ( len > 0 )  {
         kDebug(30513) << "len = " << len;
         wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
-        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        long n1 = m_store->write( (const char*)buf, n );
         kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
@@ -99,7 +99,7 @@ void KWordPictureHandler::escherData( std::vector<wvWare::U8> data, SharedPtr<co
     //write picture data to file
     m_store->open(picName);//open picture file
 #define IMG_BUF_SIZE 2048L
-    Q_LONG len = data.size();
+    long len = data.size();
     int index = 0; //index for reading from vector
     while ( len > 0 )  {
         kDebug(30513) << "len = " << len;
@@ -113,7 +113,7 @@ void KWordPictureHandler::escherData( std::vector<wvWare::U8> data, SharedPtr<co
             index++;
         }
         //size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
-        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        long n1 = m_store->write( (const char*)buf, n );
         kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
@@ -193,12 +193,12 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     //write picture data to file
     m_store->open(picName);//open picture file
 #define IMG_BUF_SIZE 2048L
-    Q_LONG len = reader.size();
+    long len = reader.size();
     while ( len > 0 )  {
         kDebug(30513) << "len = " << len;
         wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
-        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        long n1 = m_store->write( (const char*)buf, n );
         kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
