@@ -1,4 +1,4 @@
-
+message(STATUS "KFormula: still need to port: png, latex, svg and kformula1.3 filters")
 
 include_directories( ${KFORMULA_INCLUDES})
 

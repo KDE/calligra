@@ -32,7 +32,7 @@ add_subdirectory( karbon1.x )
 add_subdirectory( eps )
 
 # enable again when these filters are ported
-message(STATUS "Still need to port: pdf, ai, kontour, xcf, msod and oodraw filters")
+message(STATUS "Karbon: still need to port: pdf, ai, kontour, xcf, msod and oodraw filters")
 
 if(FALSE)
 add_subdirectory( pdf )
