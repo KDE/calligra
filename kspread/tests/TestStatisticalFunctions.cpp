@@ -70,7 +70,7 @@ bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& 
     }
 
   // if checkSize is disabled the count of Array array could be lower than result array
-  for (int e=0; e<Array.count(); e++)
+  for (int e=0; e<(int)Array.count(); e++)
   {
     kDebug()<<"check element ("<<e<<") "<<(double)Array.element(e).asFloat()<<" "<<(double)result.element(e).asFloat();
     bool res = (long double) fabsl(Array.element(e).asFloat()-result.element(e).asFloat())<epsilon;
