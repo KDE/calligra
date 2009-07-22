@@ -146,11 +146,13 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
     initConfig();
 
     // set as default paper
-    m_pageLayout.format = KoPageFormat::defaultFormat();
-    m_pageLayout.orientation = KoPageFormat::Portrait;
-    m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
-    m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
-    setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    KoPageLayout pl = pageLayout();
+    pl.format = KoPageFormat::defaultFormat();
+    pl.orientation = KoPageFormat::Portrait;
+    pl.width = MM_TO_POINT( KoPageFormat::width( pageLayout().format, pageLayout().orientation ) );
+    pl.height = MM_TO_POINT( KoPageFormat::height( pageLayout().format, pageLayout().orientation ) );
+    setPageSize( QSizeF( pl.width, pl.height ) );
+    setPageLayout(pl);
 }
 
 KarbonPart::~KarbonPart()
@@ -160,8 +162,8 @@ KarbonPart::~KarbonPart()
 
 void KarbonPart::setPageLayout( const KoPageLayout& layout )
 {
-    m_pageLayout = layout;
-    setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    setPageLayout(layout);
+    setPageSize( QSizeF( layout.width, layout.height ) );
 }
 
 KoView* KarbonPart::createViewInstance( QWidget* parent )
@@ -243,8 +245,8 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     {
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
-        m_pageLayout.loadOdf( *style );
-        setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+        pageLayout().loadOdf( *style );
+        setPageSize( QSizeF( pageLayout().width, pageLayout().height ) );
     }
     else
     {
