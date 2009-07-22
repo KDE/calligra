@@ -69,8 +69,8 @@ if(SHOULD_BUILD_KPLATO)
     macro_optional_add_subdirectory(kplato)
 endif(SHOULD_BUILD_KPLATO)
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
+if(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
 	add_subdirectory(xsltfilter)
-endif(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	
+endif(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	
 
 ########### install files ###############
