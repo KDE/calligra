@@ -21,12 +21,7 @@
 #include <kdebug.h>
 
 #include <kexidb/cursor.h>
-//#include <KexiMainWindowIface.h>
-//#include <kexiproject.h>
-//#include <kexipart.h>
 #include <kexiutils/tristate.h>
-
-#include "../../../scripting/kexiscripting/kexiscriptadaptor.h"
 
 #include "krscriptfunctions.h"
 #include <parsexmlutils.h>
@@ -60,10 +55,6 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     m_action = new Kross::Action(this, "ReportScript");
 
     m_action->setInterpreter(d->interpreter());
-
-    //Add a kexi object to provide kexidb and extra functionality
-    m_kexi = new KexiScriptAdaptor();
-    m_action->addObject( m_kexi, "Kexi" );
     
     //Add math functions to the script
     m_functions = new KRScriptFunctions(m_cursor);
@@ -257,8 +248,8 @@ QString KRScriptHandler::scriptCode()
     
     if (m_connection)
     {
-        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
-        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
+        QList<int> scriptids = m_connection->objectIds(5 /*KexiPart::ScriptObjectType*/);
+        QStringList scriptnames = m_connection->objectNames(5 /*KexiPart::ScriptObjectType*/);
 
         int id;
         int i = 0;
@@ -298,4 +289,9 @@ QString KRScriptHandler::scriptCode()
         }
     }
     return scripts;
+}
+
+void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
+{
+    m_action->addObject(obj, name);
 }

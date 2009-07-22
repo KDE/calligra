@@ -32,6 +32,7 @@ class QScrollArea;
 class KexiReportPage;
 class KexiReportViewPageSelect;
 class KexiRecordNavigator;
+class KexiScriptAdaptor;
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -57,6 +58,7 @@ private:
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;
     KoReportData* sourceData(QDomElement e);
+    KexiScriptAdaptor *m_kexi;
     
 private slots:
     void nextPage();

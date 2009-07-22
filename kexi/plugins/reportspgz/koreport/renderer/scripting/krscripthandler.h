@@ -33,7 +33,6 @@ class KRScriptDebug;
 class KRReportData;
 class OROPage;
 class KRScriptDraw;
-class KexiScriptAdaptor;
 
 namespace Scripting{
     class Report;
@@ -48,6 +47,7 @@ public:
     void setSource(const QString &s);
     QVariant evaluate(const QString&);
     void displayErrors();
+    void registerScriptObject(QObject*, const QString&);
 
 public slots:
 
@@ -64,8 +64,6 @@ private:
     KRScriptConstants *m_constants;
     KRScriptDebug *m_debug;
     KRScriptDraw *m_draw;
-    
-    KexiScriptAdaptor *m_kexi;
 
     Scripting::Report *m_report;
 

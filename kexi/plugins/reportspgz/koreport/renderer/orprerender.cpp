@@ -1069,4 +1069,9 @@ bool ORPreRender::isValid() const
     return false;
 }
 
+void ORPreRender::registerScriptObject(QObject* obj, const QString& name)
+{
+ d->_handler->registerScriptObject(obj, name);
+}
+
 #include <orprerenderprivate.moc>

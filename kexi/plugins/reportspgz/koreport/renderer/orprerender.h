@@ -50,6 +50,7 @@ public:
     virtual ~ORPreRender();
 
     void setSourceData(KoReportData*);
+    void registerScriptObject(QObject*, const QString&);
     
     ORODocument * generate();
 

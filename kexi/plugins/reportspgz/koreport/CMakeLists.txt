@@ -83,7 +83,6 @@ set(koreport_LIB_SRCS
 	wrtembed/codeeanpaint.cpp
 	wrtembed/code128paint.cpp
 	)
-qt4_wrap_cpp(koreport_LIB_SRCS ../../scripting/kexiscripting/kexiscriptadaptor.h)
 
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)
@@ -95,7 +94,7 @@ kde4_add_ui_files(koreport_LIB_SRCS wrtembed/detailgroupsectiondialog.ui wrtembe
 kde4_add_library(koreport SHARED ${koreport_LIB_SRCS})
 
 target_link_libraries(koreport ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY}
-  kexidb kexicore ${KOPROPERTY_LIBS} kdchart ${KDE4_KROSSCORE_LIBS})
+  kexidb ${KOPROPERTY_LIBS} kdchart ${KDE4_KROSSCORE_LIBS})
 if (SHOULD_BUILD_KSPREAD)
     target_link_libraries(koreport kspreadcommon)
 endif (SHOULD_BUILD_KSPREAD)

@@ -27,7 +27,9 @@ set(pgzkexireportpart2_LIB_SRCS
 	keximigratereportdata.cpp
     kexisourceselector.cpp
 	)
-    
+
+qt4_wrap_cpp(pgzkexireportpart2_LIB_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
 target_link_libraries(pgzkexireportpart2 koreport ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} 

@@ -35,6 +35,7 @@
 #include <core/KexiWindow.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
+#include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 #ifdef HAVE_KSPREAD
 #include <krkspreadrender.h>
@@ -231,6 +232,10 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         m_preRenderer->setName( tempData()->name );
         m_currentPage = 1;
 
+        //Add a kexi object to provide kexidb and extra functionality
+        m_kexi = new KexiScriptAdaptor();
+        m_preRenderer->registerScriptObject(m_kexi, "Kexi" );
+        
         m_reportDocument = m_preRenderer->generate();
         m_pageCount = m_reportDocument->pages();
         m_pageSelector->setRecordCount(m_pageCount);
