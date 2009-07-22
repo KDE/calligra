@@ -210,6 +210,11 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
+    // ------ Help
+    actionIntroduction  = new KAction( i18n("KPlato Introduction"), this);
+    actionCollection()->addAction("kplato_introduction", actionIntroduction );
+    connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
+
     // ------ Popup
     actionOpenNode  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
@@ -484,7 +489,6 @@ ViewBase *View::createWelcomeView()
 
     QString location = componentData().dirs()->findResource( "kplato_about", "main.html" );
     QString content = KPIMUtils::kFileToByteArray( location );
-    qDebug()<<"createWelcomeView:"<<endl<<content;
     content = content.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( QApplication::isRightToLeft() ) {
         content = content.arg( "@import \"" + KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) +  "\";");
@@ -497,7 +501,13 @@ ViewBase *View::createWelcomeView()
     QString appTitle = i18n( "KPlato" );
     QString catchPhrase = "";
     QString quickDescription = i18n( "The KPlato Project Manager is part of the KOffice suite of office applications." );
-    QString info = "Todo";
+    QString info = i18n( 
+    "<p><b>Introduction</b></p>"
+    "KPlato is a project management application. It is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, KPlato offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
+    "<p><b>Tips</b></p>"
+    "You can edit attributes in the various editors by selecting the item you want to edit (doubleclick or press F2), or open a dialog using the context menu."
+    "<p>TODO</p>"
+    );
     v->htmlPart().write( content.arg( fontSize ).arg( appTitle ).arg( catchPhrase ).arg(  quickDescription ).arg( info ) );
 
     v->htmlPart().end();
@@ -1458,6 +1468,12 @@ void View::slotConfigure()
     
 }
 
+void View::slotIntroduction()
+{
+    qDebug()<<"slotIntroduction:";
+    m_tab->setCurrentIndex( 0 );
+}
+
 
 Calendar *View::currentCalendar()
 {
@@ -2067,7 +2083,7 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
-    //qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
+    qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
     foreach( QString name, view->actionListNames() ) {
@@ -2152,7 +2168,7 @@ void View::slotCreateView()
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
-    //kDebug() <<"item=" << item <<","<<prev;
+    qDebug()<<"slotViewActivated:"<<"item=" << item <<","<<prev;
     if ( prev && prev->type() == ViewListItem::ItemType_Category && m_viewlist->previousViewItem() ) {
         // A view is shown anyway...
         ViewBase *v = qobject_cast<ViewBase*>( m_viewlist->previousViewItem()->view() );
@@ -2165,7 +2181,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
             v->setGuiActive( false );
         }
     }
-    if ( item->type() == ViewListItem::ItemType_SubView ) {
+    if ( item && item->type() == ViewListItem::ItemType_SubView ) {
         //kDebug()<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
         if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
@@ -2188,9 +2204,10 @@ QWidget *View::canvas() const
 
 void View::slotCurrentChanged( int )
 {
-    kDebug()<<m_tab->currentIndex();
+    qDebug()<<"slotCurrentChanged:"<<m_tab->currentIndex();
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
     if ( item == 0 ) {
+        m_viewlist->setSelected( 0 );
         return;
     }
     kDebug()<<item->text(0);

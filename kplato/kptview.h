@@ -151,6 +151,8 @@ public slots:
     void slotCreateView();
 
     void slotConfigure();
+    void slotIntroduction();
+
     void slotAddRelation( Node *par, Node *child );
     void slotModifyRelation( Relation *rel );
     void slotAddRelation( Node *par, Node *child, int linkType );
@@ -291,6 +293,9 @@ private:
 
     // ------ Settings
     KAction *actionConfigure;
+
+    // ------ Help
+    KAction *actionIntroduction;
 
     // ------ Popup
     KAction *actionOpenNode;

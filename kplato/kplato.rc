@@ -53,6 +53,9 @@
         <Menu name="settings"><text>&amp;Settings</text>
             <Action name="configure" group="settings_configure"/>
         </Menu>
+        <Menu name="help" append="about_merge"><text>&amp;Help</text>
+            <Action name="kplato_introduction"/>
+        </Menu>
     </MenuBar>
 <!--    <ToolBar name="view" position="left"><Text>View</Text>
         <Action name="view_gantt"/>

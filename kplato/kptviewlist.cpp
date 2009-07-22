@@ -328,18 +328,19 @@ void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
-    //kDebug();
-    if ( item == 0 || item->type() == ViewListItem::ItemType_Category ) {
+    qDebug()<<"slotActivated:"<<item<<prev;
+    if ( m_prev ) {
+        m_prev->setData( 0, Qt::BackgroundRole, QVariant() );
+    }
+    if ( item && item->type() == ViewListItem::ItemType_Category ) {
         return ;
     }
-    QVariant v;
-    if ( m_prev ) {
-        m_prev->setData( 0, Qt::BackgroundRole, v );
-    }
     emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
-    v = QBrush( QColor( Qt::yellow ) );
-    item->setData( 0, Qt::BackgroundRole, v );
-    m_prev = static_cast<ViewListItem*>( item );
+    if ( item ) {
+        QVariant v = QBrush( QColor( Qt::yellow ) );
+        item->setData( 0, Qt::BackgroundRole, v );
+        m_prev = static_cast<ViewListItem*>( item );
+    }
 }
 
 ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& name )
@@ -404,8 +405,11 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
 void ViewListWidget::setSelected( QTreeWidgetItem *item )
 {
     //kDebug()<<item<<","<<m_viewlist->currentItem();
-    if ( item == 0 ) {
-        return;
+    if ( item == 0 && m_viewlist->currentItem() ) {
+        m_viewlist->currentItem()->setSelected( false );
+        if ( m_prev ) {
+            m_prev->setData( 0, Qt::BackgroundRole, QVariant() );
+        }
     }
     m_viewlist->setCurrentItem( item );
     //kDebug()<<item<<","<<m_viewlist->currentItem();
