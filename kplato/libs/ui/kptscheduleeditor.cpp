@@ -65,11 +65,6 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     createItemDelegates( m );
 }
 
-void ScheduleTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
     //kDebug()<<sel.indexes().count();
@@ -387,13 +382,6 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
-}
-
-void ScheduleLogTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
 }
 
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )

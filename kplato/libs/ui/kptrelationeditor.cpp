@@ -70,11 +70,6 @@ void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelI
     selectionModel()->select( curr, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
 }
 
-void RelationTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 //-----------------------------------
 RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )

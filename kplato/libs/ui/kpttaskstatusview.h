@@ -81,9 +81,6 @@ public:
     int periodType() const;
     void setPeriodType( int type );
 
-protected slots:
-    void slotActivated( const QModelIndex index );
-    
 protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };

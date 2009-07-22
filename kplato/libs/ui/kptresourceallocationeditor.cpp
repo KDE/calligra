@@ -70,11 +70,6 @@ ResourceAllocationTreeView::ResourceAllocationTreeView( QWidget *parent )
     connect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( dataChanged() ) );
 }
 
-void ResourceAllocationTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 QObject *ResourceAllocationTreeView::currentObject() const
 {
     return model()->object( selectionModel()->currentIndex() );

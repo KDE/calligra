@@ -62,14 +62,6 @@ AccountTreeView::AccountTreeView( QWidget *parent )
     setDropIndicatorShown( false );
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
-
-}
-
-void AccountTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
 }
 
 void AccountTreeView::headerContextMenuRequested( const QPoint &pos )

@@ -56,7 +56,6 @@ public:
     QList<Resource*> selectedResources() const;
 
 protected slots:
-    void slotActivated( const QModelIndex index );
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 

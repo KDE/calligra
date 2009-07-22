@@ -72,11 +72,6 @@ NodeItemModel *NodeTreeView::baseModel() const
     return static_cast<NodeItemModel*>( model() );
 }
     
-void NodeTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
 {
     QModelIndex idx = index;

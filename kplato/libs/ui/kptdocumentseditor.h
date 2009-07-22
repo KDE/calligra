@@ -57,8 +57,6 @@ signals:
     
 protected slots:
     void slotSelectionChanged( const QItemSelection &selected );
-    void slotActivated( const QModelIndex index );
-
 };
 
 class KPLATOUI_EXPORT DocumentsEditor : public ViewBase

@@ -102,7 +102,6 @@ public:
     using DoubleTreeViewBase::saveContext;
 
 protected slots:
-    void slotActivated( const QModelIndex index );
     void slotRefreshed();
 };
 

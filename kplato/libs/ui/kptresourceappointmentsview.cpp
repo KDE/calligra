@@ -118,11 +118,6 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     m_rightview->setObjectName( "ResourceAppointments" );
 }
 
-void ResourceAppointmentsTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
 {
     kDebug();

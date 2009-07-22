@@ -62,7 +62,6 @@ signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
     
 protected slots:
-    void slotActivated( const QModelIndex index );
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 

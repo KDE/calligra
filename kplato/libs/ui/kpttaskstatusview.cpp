@@ -78,8 +78,6 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     
     createItemDelegates( m );
     
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
@@ -155,11 +153,6 @@ Project *TaskStatusTreeView::project() const
 void TaskStatusTreeView::setProject( Project *project )
 {
     model()->setProject( project );
-}
-
-void TaskStatusTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
 }
 
 void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)

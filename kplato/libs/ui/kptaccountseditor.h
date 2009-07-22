@@ -61,7 +61,6 @@ signals:
     
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
-    void slotActivated( const QModelIndex index );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
 

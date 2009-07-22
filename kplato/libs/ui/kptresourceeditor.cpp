@@ -72,11 +72,6 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 
 }
 
-void ResourceTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 void ResourceTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
 {
     if ( model()->dropAllowed( index, dropIndicatorPosition, event->mimeData() ) ) {

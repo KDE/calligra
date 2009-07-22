@@ -61,8 +61,6 @@ public:
 signals:
     void dataChanged();
 
-protected slots:
-    void slotActivated( const QModelIndex index );
 };
 
 class KPLATOUI_EXPORT ResourceAllocationEditor : public ViewBase

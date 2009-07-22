@@ -70,11 +70,6 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     connect( selectionModel(), SIGNAL( selectionChanged ( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
 }
 
-void DocumentTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
-}
-
 Document *DocumentTreeView::currentDocument() const
 {
     return model()->document( selectionModel()->currentIndex() );

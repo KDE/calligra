@@ -74,14 +74,6 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
     setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
-
-}
-
-void CalendarTreeView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
 }
 
 void CalendarTreeView::headerContextMenuRequested( const QPoint &pos )
@@ -320,11 +312,6 @@ void CalendarDayView::slotSetUndefined()
 void CalendarDayView::setCurrentCalendar( Calendar *calendar )
 {
     model()->setCalendar( calendar );
-}
-
-void CalendarDayView::slotActivated( const QModelIndex index )
-{
-    kDebug()<<index.column();
 }
 
 void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
