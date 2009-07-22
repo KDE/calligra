@@ -75,7 +75,7 @@ private:
     
     QString scriptCode();
     
-    //KexiDB::Connection *m_connection;
+    KexiDB::Connection *m_connection;
     //const KexiDB::Cursor *m_cursor;
 
     const KoReportData *m_cursor;

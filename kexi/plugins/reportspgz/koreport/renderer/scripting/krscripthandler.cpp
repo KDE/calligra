@@ -21,9 +21,9 @@
 #include <kdebug.h>
 
 #include <kexidb/cursor.h>
-#include <KexiMainWindowIface.h>
-#include <kexiproject.h>
-#include <kexipart.h>
+//#include <KexiMainWindowIface.h>
+//#include <kexiproject.h>
+//#include <kexipart.h>
 #include <kexiutils/tristate.h>
 
 #include "../../../scripting/kexiscripting/kexiscriptadaptor.h"
@@ -46,7 +46,7 @@
 
 KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
 {
-    //m_connection = cu->connection();
+    m_connection = static_cast<KexiDB::Connection*>(kodata->connection());
     m_reportData = d;
     m_cursor = kodata;
 
@@ -253,46 +253,49 @@ QString KRScriptHandler::where()
 
 QString KRScriptHandler::scriptCode()
 {
-    QList<int> scriptids = KexiMainWindowIface::global()->project()->dbConnection()->objectIds(KexiPart::ScriptObjectType);
-    QStringList scriptnames = KexiMainWindowIface::global()->project()->dbConnection()->objectNames(KexiPart::ScriptObjectType);
     QString scripts;
     
-    int id;
-    int i = 0;
-    QString script;
-   
-    foreach (id, scriptids) {
-        kDebug() << "ID:" << id;
-        tristate res;
-        res = KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(id, script, QString());
-        if (res == true){
-            QDomDocument domdoc;
-            bool parsed = domdoc.setContent(script, false);
+    if (m_connection)
+    {
+        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
 
-            if (! parsed) {
-            kDebug() << "XML parsing error";
-            return false;
-            }
+        int id;
+        int i = 0;
+        QString script;
 
-            QDomElement scriptelem = domdoc.namedItem("script").toElement();
-            if (scriptelem.isNull()) {
-            kDebug() << "script domelement is null";
-            return false;
-            }
+        foreach (id, scriptids) {
+            kDebug() << "ID:" << id;
+            tristate res;
+            res = m_connection->loadDataBlock(id, script, QString());
+            if (res == true){
+                QDomDocument domdoc;
+                bool parsed = domdoc.setContent(script, false);
 
-            QString interpretername = scriptelem.attribute("language");
-            kDebug() << interpretername;
-            kDebug() << scriptelem.attribute("scripttype");
-            
-            if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i] )) {
-                scripts += '\n' + scriptelem.text().toUtf8();
+                if (! parsed) {
+                kDebug() << "XML parsing error";
+                return false;
+                }
+
+                QDomElement scriptelem = domdoc.namedItem("script").toElement();
+                if (scriptelem.isNull()) {
+                kDebug() << "script domelement is null";
+                return false;
+                }
+
+                QString interpretername = scriptelem.attribute("language");
+                kDebug() << interpretername;
+                kDebug() << scriptelem.attribute("scripttype");
+
+                if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i] )) {
+                    scripts += '\n' + scriptelem.text().toUtf8();
+                }
+                ++i;
             }
-            ++i;
-        }
-        else{
-            kDebug() << "Unable to loadDataBlock";
+            else{
+                kDebug() << "Unable to loadDataBlock";
+            }
         }
     }
-    
     return scripts;
 }

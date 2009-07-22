@@ -76,8 +76,6 @@
 #include <KoPageFormat.h>
 #include <kaction.h>
 #include <kdebug.h>
-#include <kexisectionheader.h>
-#include <kexieditor.h>
 #include <kross/core/manager.h>
 
 //
@@ -137,7 +135,6 @@ public:
     KoRuler *hruler;
     KoZoomHandler *zoom;
     QVBoxLayout *vboxlayout;
-    KexiSectionHeader *head;
     QPushButton *pageButton;
 };
 

@@ -35,7 +35,7 @@
 #include <koproperty/Property.h>
 #include <kdebug.h>
 #include <krobjectdata.h>
-
+#include "koreport_export.h"
 #include "koreportdata.h"
 
 class ReportGridOptions;
@@ -58,7 +58,7 @@ class KexiView;
 // Class ReportDesigner
 //     The ReportDesigner is the main widget for designing a report
 //
-class ReportDesigner : public QWidget
+class KOREPORT_EXPORT ReportDesigner : public QWidget
 {
     Q_OBJECT
 public:

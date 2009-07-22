@@ -18,57 +18,44 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef __ORPRERENDER_H__
-#define __ORPRERENDER_H__
+#ifndef __KRHTMLRENDER_H__
+#define __KRHTMLERENDER_H__
 
 #include <QDomDocument>
 #include <QRectF>
 #include <QString>
 #include <QFont>
 
-class ORPreRenderPrivate;
-class ParameterList;
-class ORODocument;
-class KoReportData;
+#include <kurl.h>
+#include "koreport_export.h"
 
+class ORODocument;
 namespace KexiDB
 {
 class Connection;
 }
 //
-// ORPreRender
-// This class takes a report definition and prerenders the result to
-// an ORODocument that can be used to pass to any number of renderers.
+// KRHtmlRender
 //
-class ORPreRender
+class KOREPORT_EXPORT KRHtmlRender
 {
 public:
-//    ORPreRender(KexiDB::Connection*c = 0);
-    ORPreRender(const QString &);
+    KRHtmlRender();
 
-    virtual ~ORPreRender();
+    virtual ~KRHtmlRender();
 
-    void setSourceData(KoReportData*);
-    
-    ORODocument * generate();
-
-
-//    KexiDB::Connection* database() const;
-    
-    /**
-    @brief Set the name of the report so that it can be used internally by the script engine
-    */
-    void setName(const QString &);
-
-    bool isValid() const;
-
-protected:
+    bool render(ORODocument * document, const KUrl& toUrl,  bool css = true);
 
 private:
-    ORPreRenderPrivate* d;
-    bool setDom(const QString &);
+    QString renderCSS(ORODocument*);
+    QString renderTable(ORODocument*);
 
+    //! This is the directory name that will go inside the HTML files
+    QString m_actualDirName;
+
+    //! This is the directory where the image and other files will be temporarily stored
+    QString m_tempDirName;
 };
 
 
-#endif // __ORPRERENDER_H__
+#endif

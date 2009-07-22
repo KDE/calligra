@@ -1,6 +1,5 @@
 /*
- * OpenRPT report writer and rendering engine
- * Copyright (C) 2001-2007 by OpenMFG, LLC
+ * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -18,31 +17,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef __KRSCREENRENDER_H__
-#define __KRSCREENRENDER_H__
+#ifndef KRKSPREADRENDERER_H
+#define KRKSPREADRENDERER_H
 
-#include <QPainter>
+#include "renderobjects.h"
+#include "koreport_export.h"
+#include <kurl.h>
 
-class ORODocument;
-
-class KRScreenRender
+/**
+ @author Adam Pigg <adam@piggz.co.uk>
+*/
+class KOREPORT_EXPORT KRKSpreadRender
 {
 public:
-    KRScreenRender();
-    virtual ~KRScreenRender();
+    KRKSpreadRender();
 
-    void setPainter(QPainter *);
-    QPainter * painter() {
-        return m_painter;
-    }
+    ~KRKSpreadRender();
 
-    bool render(ORODocument *, int);
+    bool render(ORODocument *, const KUrl&);
 
-protected:
-    QPainter* m_painter;
+private:
+
 };
 
-#endif // __ORPRINTRENDER_H__
-
-
-
+#endif

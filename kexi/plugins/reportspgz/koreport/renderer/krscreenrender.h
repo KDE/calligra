@@ -18,43 +18,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef __KRHTMLRENDER_H__
-#define __KRHTMLERENDER_H__
+#ifndef __KRSCREENRENDER_H__
+#define __KRSCREENRENDER_H__
 
-#include <QDomDocument>
-#include <QRectF>
-#include <QString>
-#include <QFont>
-
-#include <kurl.h>
+#include <QPainter>
+#include "koreport_export.h"
 
 class ORODocument;
-namespace KexiDB
-{
-class Connection;
-}
-//
-// KRHtmlRender
-//
-class KRHtmlRender
+
+class KOREPORT_EXPORT KRScreenRender
 {
 public:
-    KRHtmlRender();
+    KRScreenRender();
+    virtual ~KRScreenRender();
 
-    virtual ~KRHtmlRender();
+    void setPainter(QPainter *);
+    QPainter * painter() {
+        return m_painter;
+    }
 
-    bool render(ORODocument * document, const KUrl& toUrl,  bool css = true);
+    bool render(ORODocument *, int);
 
-private:
-    QString renderCSS(ORODocument*);
-    QString renderTable(ORODocument*);
-
-    //! This is the directory name that will go inside the HTML files
-    QString m_actualDirName;
-
-    //! This is the directory where the image and other files will be temporarily stored
-    QString m_tempDirName;
+protected:
+    QPainter* m_painter;
 };
 
+#endif // __ORPRINTRENDER_H__
 
-#endif
+
+

@@ -24,8 +24,9 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include "koreport_export.h"
 
-class ReportPageOptions : public QObject
+class KOREPORT_EXPORT ReportPageOptions : public QObject
 {
     Q_OBJECT
 public:

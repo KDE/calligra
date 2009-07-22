@@ -18,39 +18,58 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef __ORPRINTRENDER_H__
-#define __ORPRINTRENDER_H__
+#ifndef __ORPRERENDER_H__
+#define __ORPRERENDER_H__
 
-#include <QPrinter>
-#include <QPainter>
+#include <QDomDocument>
+#include <QRectF>
+#include <QString>
+#include <QFont>
+#include "koreport_export.h"
 
+class ORPreRenderPrivate;
+class ParameterList;
 class ORODocument;
+class KoReportData;
 
-class ORPrintRender
+namespace KexiDB
+{
+class Connection;
+}
+//
+// ORPreRender
+// This class takes a report definition and prerenders the result to
+// an ORODocument that can be used to pass to any number of renderers.
+//
+class KOREPORT_EXPORT ORPreRender
 {
 public:
-    ORPrintRender();
-    virtual ~ORPrintRender();
+//    ORPreRender(KexiDB::Connection*c = 0);
+    ORPreRender(const QString &);
 
-    void setPrinter(QPrinter *);
-    QPrinter * printer() {
-        return m_printer;
-    }
+    virtual ~ORPreRender();
 
-    void setPainter(QPainter *);
-    QPainter * painter() {
-        return m_painter;
-    }
+    void setSourceData(KoReportData*);
+    
+    ORODocument * generate();
 
-    bool setupPrinter(ORODocument *, QPrinter *);
-    bool render(ORODocument *);
+
+//    KexiDB::Connection* database() const;
+    
+    /**
+    @brief Set the name of the report so that it can be used internally by the script engine
+    */
+    void setName(const QString &);
+
+    bool isValid() const;
 
 protected:
-    QPrinter* m_printer;
-    QPainter* m_painter;
+
+private:
+    ORPreRenderPrivate* d;
+    bool setDom(const QString &);
+
 };
 
-#endif // __ORPRINTRENDER_H__
 
-
-
+#endif // __ORPRERENDER_H__
