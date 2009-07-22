@@ -307,8 +307,8 @@ View::View( Part* part, QWidget* parent )
 
 View::~View()
 {
-    removeStatusBarItem( m_estlabel );
-    delete m_estlabel;
+/*    removeStatusBarItem( m_estlabel );
+    delete m_estlabel;*/
 }
 
 ViewAdaptor* View::dbusObject()
