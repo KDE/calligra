@@ -90,7 +90,7 @@ public:
     uint maxRecentFiles() const;
 
     /// Sets page layout of the document
-    void setPageLayout( const KoPageLayout& layout );
+    virtual void setPageLayout( const KoPageLayout& layout );
 
     bool mergeNativeFormat( const QString & file );
 
