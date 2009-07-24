@@ -606,11 +606,6 @@ QDomElement ReportDesigner::document()
     title.appendChild(doc.createTextNode(reportTitle()));
     root.appendChild(title);
 
-//TODO    QDomElement rds = doc.createElement("datasource");
-//    rds.setAttribute("external", m_externalData->value().toBool());
-//    rds.appendChild(doc.createTextNode(reportDataSource()));
-//    root.appendChild(rds);
-
     QDomElement scr = doc.createElement("script");
     scr.setAttribute("interpreter", m_interpreter->value().toString());
     scr.appendChild(doc.createTextNode(m_script->value().toString()));
@@ -764,20 +759,6 @@ QString ReportDesigner::reportTitle()
     return m_title->value().toString();
 }
 
-//TODO
-//QString ReportDesigner::reportDataSource()
-//{
-//    return m_dataSource->value().toString();
-//}
-
-//void ReportDesigner::setReportDataSource(const QString &q)
-//{
-//    if (m_dataSource->value().toString() != q) {
-//        m_dataSource->setValue(q);
-//        setModified(true);
-//    }
-//}
-
 bool ReportDesigner::isModified()
 {
     return m_modified;
@@ -859,12 +840,6 @@ void ReportDesigner::createProperties()
 
     m_title = new KoProperty::Property("Title", "Report", "Title", "Report Title");
 
-//    keys = queryList();
-//    m_dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
-//    m_dataSource->setOption("extraValueAllowed", "true");
-    
-//    m_externalData = new KoProperty::Property("ExternalData", QVariant(false), "External Data", "External Data");
-    
     keys.clear();
     keys = pageFormats();
     m_pageSize = new KoProperty::Property("PageSize", keys, keys, "A4", "Page Size");
@@ -901,8 +876,6 @@ void ReportDesigner::createProperties()
     m_script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
     
     m_set->addProperty(m_title);
-//    m_set->addProperty(m_externalData);
-//    m_set->addProperty(m_dataSource);
     m_set->addProperty(m_pageSize);
     m_set->addProperty(m_orientation);
     m_set->addProperty(m_unit);
@@ -1180,23 +1153,36 @@ unsigned int ReportDesigner::selectionCount()
     return activeScene()->selectedItems().count();
 }
 
-void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
-{
-    m_sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    m_sectionData->insertItem = typ;
-}
-
 void ReportDesigner::changeSet(KoProperty::Set *s)
 {
     m_itmset = s;
     emit(propertySetChanged());
 }
 
-
-
 //
-// Edit Actions
+// Actions
 //
+
+void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
+{
+    m_sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
+    m_sectionData->insertItem = typ;
+}
+
+void ReportDesigner::slotItem(const QString &entity)
+{
+    if (entity == "action-insert-label") slotItem(KRObjectData::EntityLabel);
+    if (entity == "action-insert-field") slotItem(KRObjectData::EntityField);
+    if (entity == "action-insert-text") slotItem(KRObjectData::EntityText);
+    if (entity == "action-insert-line") slotItem(KRObjectData::EntityLine);
+    if (entity == "action-insert-barcode") slotItem(KRObjectData::EntityBarcode);
+    if (entity == "action-insert-chart") slotItem(KRObjectData::EntityChart);
+    if (entity == "action-insert-check") slotItem(KRObjectData::EntityCheck);
+    if (entity == "action-insert-image") slotItem(KRObjectData::EntityImage);
+    if (entity == "action-insert-shape") slotItem(KRObjectData::EntityShape);
+    
+}
+
 void ReportDesigner::slotEditDelete()
 {
     QGraphicsItem * item = 0;
@@ -1495,4 +1481,49 @@ bool ReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) 
     }
 
     return unique;
+}
+
+QList<QAction*> ReportDesigner::actions()
+{
+    QList<QAction*> actList;
+    QAction *act;
+
+    act = new QAction(KIcon("feed-subscribe"), i18n("Label"), 0);
+    act->setObjectName("action-insert-label");
+    actList << act;
+    
+    act = new QAction(KIcon("edit-rename"), i18n("Field"), 0);
+    act->setObjectName("action-insert-field");
+    actList << act;
+
+    act = new QAction(KIcon("insert-text"), i18n("Text"), 0);
+    act->setObjectName("action-insert-text");
+    actList << act;
+
+    act = new QAction(KIcon("draw-freehand"), i18n("Line"), 0);
+    act->setObjectName("action-insert-line");
+    actList << act;
+    
+    act = new QAction(KIcon("insert-barcode"), i18n("Barcode"), 0);
+    act->setObjectName("action-insert-barcode");
+    actList << act;
+
+    act = new QAction(KIcon("insert-image"), i18n("Image"), 0);
+    act->setObjectName("action-insert-image");
+    actList << act;
+    
+    act = new QAction(KIcon("office-chart-area"), i18n("Chart"), 0);
+    act->setObjectName("action-insert-chart");
+    actList << act;
+    
+    act = new QAction(KIcon("view-statistics"), i18n("Shape"), 0);
+    act->setObjectName("action-insert-shape");
+    actList << act;
+    
+    act = new QAction(KIcon("draw-cross"), i18n("Check"), 0);
+    act->setObjectName("action-insert-check");
+    actList << act;
+    
+    return actList;
+
 }

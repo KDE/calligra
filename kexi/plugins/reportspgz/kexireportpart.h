@@ -45,11 +45,14 @@ class KexiReportPart : public KexiPart::Part {
          * Default Destructor
          */
         virtual ~KexiReportPart();
+
         virtual KexiView* createView ( QWidget *parent, KexiWindow* win,
                                        KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0 );
         virtual KexiWindowData* createWindowData ( KexiWindow* window );
 
         virtual void setupCustomPropertyPanelTabs ( KTabWidget *tab );
+
+        virtual void initPartActions();
         
         class TempData : public KexiWindowData {
             public:
@@ -65,6 +68,9 @@ class KexiReportPart : public KexiPart::Part {
                 QString name;
         };
 
+    private slots:
+        void slotActionTriggered();
+        
     private:
         QString loadReport ( const QString& );
         class Private;

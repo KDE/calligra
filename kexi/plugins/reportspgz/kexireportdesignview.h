@@ -28,7 +28,6 @@
 #include "koreportdata.h"
 
 class QScrollArea;
-class ReportEntitySelector;
 class KexiSourceSelector;
 
 /**
@@ -38,11 +37,14 @@ class KexiReportDesignView : public KexiView
 {
     Q_OBJECT
 public:
-    KexiReportDesignView(QWidget *parent, ReportEntitySelector*, KexiSourceSelector*);
+    KexiReportDesignView(QWidget *parent, KexiSourceSelector*);
 
     ~KexiReportDesignView();
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+
+    void triggerAction(const QString &);
+    
 private:
     ReportDesigner *_rd;
     KoProperty::Set *_set;
@@ -59,7 +61,6 @@ private:
     KAction *itemRaiseAction;
     KAction *itemLowerAction;
 
-    ReportEntitySelector* res;
     KexiSourceSelector *srcsel;
 protected:
     virtual KoProperty::Set *propertySet();
@@ -68,14 +69,6 @@ protected:
 
 private slots:
     void slotDesignerPropertySetChanged();
-    void slotLabel(){_rd->slotItem(KRObjectData::EntityLabel);};
-    void slotField(){_rd->slotItem(KRObjectData::EntityField);};
-    void slotText(){_rd->slotItem(KRObjectData::EntityText);};
-    void slotChart(){_rd->slotItem(KRObjectData::EntityChart);};
-    void slotBarcode(){_rd->slotItem(KRObjectData::EntityBarcode);};
-    void slotImage(){_rd->slotItem(KRObjectData::EntityImage);};
-    void slotLine(){_rd->slotItem(KRObjectData::EntityLine);};
-    void slotCheck(){_rd->slotItem(KRObjectData::EntityCheck);};
 
     public slots:
     void slotSetData(KoReportData*);

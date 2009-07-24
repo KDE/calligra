@@ -31,7 +31,6 @@
 #include <core/KexiMainWindowIface.h>
 #include <ktabwidget.h>
 
-#include "reportentityselector.h"
 #include "kexisourceselector.h"
 
 //! @internal
@@ -39,12 +38,10 @@ class KexiReportPart::Private
 {
 public:
     Private() {
-        res = 0;
         ksrc = 0;
     }
     ~Private() {
     }
-    ReportEntitySelector *res;
     KexiSourceSelector *ksrc;
 };
 
@@ -79,10 +76,21 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
         view = new KexiReportView(parent);
         
     } else if (viewMode == Kexi::DesignViewMode) {
-        view = new KexiReportDesignView(parent, d->res, d->ksrc);
+        view = new KexiReportDesignView(parent, d->ksrc);
         connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
     }
     return view;
+}
+
+void KexiReportPart::initPartActions()
+{
+    KexiMainWindowIface *win = KexiMainWindowIface::global();
+    QList<QAction*> reportActions = ReportDesigner::actions();
+    
+    foreach( QAction* action, reportActions ) {
+        connect(action, SIGNAL(triggered()), this, SLOT(slotActionTriggered()));
+        win->addToolBarAction("report", action);
+    }
 }
 
 QString KexiReportPart::loadReport(const QString& name)
@@ -133,10 +141,28 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     if (!d->ksrc)
         d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection() );
     tab->addTab(d->ksrc, i18n("Source"));
+}
+
+void KexiReportPart::slotActionTriggered()
+{
+    QObject *theSender = sender();
+    if (!theSender)
+        return;
     
-    if (!d->res)
-        d->res = new ReportEntitySelector(tab);
-    tab->addTab(d->res, i18n("Controls"));
+    QString senderName = sender()->objectName();
+    KexiMainWindowIface *mainwin = KexiMainWindowIface::global();
+
+    KexiWindow *win = mainwin->currentWindow();
+
+    if (!win)
+        return;
+
+    KexiView *designView = win->viewForMode(Kexi::DesignViewMode);
+
+    if (designView) {
+        KexiReportDesignView *dv = dynamic_cast<KexiReportDesignView*>(designView);
+        dv->triggerAction(senderName);
+    }
 }
 
 #include "kexireportpart.moc"

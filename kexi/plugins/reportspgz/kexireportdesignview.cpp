@@ -23,15 +23,13 @@
 #include <kdebug.h>
 #include <QScrollArea>
 #include <core/KexiWindow.h>
-#include "reportentityselector.h"
 #include "kexisourceselector.h"
 #include <KPushButton>
 
-KexiReportDesignView::KexiReportDesignView ( QWidget *parent, ReportEntitySelector* r , KexiSourceSelector *s)
+KexiReportDesignView::KexiReportDesignView ( QWidget *parent, KexiSourceSelector *s)
         : KexiView ( parent ) {
     scr = new QScrollArea ( this );
     layout()->addWidget ( scr );
-    res = r;
     srcsel = s;
     
     _rd = 0;
@@ -182,17 +180,6 @@ tristate KexiReportDesignView::afterSwitchFrom ( Kexi::ViewMode mode ) {
 
     connect ( sectionEdit, SIGNAL ( activated() ), _rd, SLOT ( slotSectionEditor() ) );
 
-    //Control Actions
-    connect ( res->itemLabel, SIGNAL ( clicked() ), this, SLOT ( slotLabel() ) );
-    connect ( res->itemField, SIGNAL ( clicked() ), this, SLOT ( slotField() ) );
-    connect ( res->itemText, SIGNAL ( clicked() ), this, SLOT ( slotText() ) );
-    connect ( res->itemLine, SIGNAL ( clicked() ), this, SLOT ( slotLine() ) );
-    connect ( res->itemBarcode, SIGNAL ( clicked() ), this, SLOT ( slotBarcode() ) );
-    connect ( res->itemChart, SIGNAL ( clicked() ),this, SLOT ( slotChart() ) );
-    connect ( res->itemImage, SIGNAL ( clicked() ), this, SLOT ( slotImage() ) );
-    connect ( res->itemShape, SIGNAL ( clicked() ), this, SLOT ( slotShape() ) );
-    connect ( res->itemCheck, SIGNAL ( clicked() ), this, SLOT ( slotCheck() ) );
-
     //Raise/Lower
     connect ( itemRaiseAction, SIGNAL ( activated() ), _rd, SLOT ( slotRaiseSelected() ) );
     connect ( itemLowerAction, SIGNAL ( activated() ), _rd, SLOT ( slotLowerSelected() ) );
@@ -205,4 +192,9 @@ KexiReportPart::TempData* KexiReportDesignView::tempData() const {
 
 void KexiReportDesignView::slotSetData ( KoReportData* kodata ) {
     _rd->setReportData ( kodata );
+}
+
+void KexiReportDesignView::triggerAction(const QString &action)
+{
+    _rd->slotItem(action);
 }

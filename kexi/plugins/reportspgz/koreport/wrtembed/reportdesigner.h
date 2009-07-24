@@ -139,6 +139,8 @@ public:
 
     /**Checks if the supplied name is unique among all entities*/
     bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
+
+    static QList<QAction*> actions();
     
 public slots:
 
@@ -149,7 +151,8 @@ public slots:
     void slotEditPaste(QGraphicsScene *, const QPointF &);
 
     void slotItem(KRObjectData::EntityTypes);
-
+    void slotItem(const QString&);
+    
     void slotSectionEditor();
 
     void slotRaiseSelected();
