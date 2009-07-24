@@ -242,12 +242,14 @@ EffectItem::EffectItem(KoFilterEffect *effect)
     
     // create input connectors
     int requiredInputCount = effect->requiredInputCount();
-    for (int i = 0; i < requiredInputCount; ++i) {
+    int usedInputCount = qMax(requiredInputCount, effect->inputs().count());
+    for (int i = 0; i < usedInputCount; ++i) {
         createInput(position);
         position.ry() += 1.5*ConnectorSize.height();
     }
+    
     // create a new input connector when maximal input count in not reached yet
-    if (requiredInputCount < effect->maximalInputCount()) {
+    if (usedInputCount < effect->maximalInputCount()) {
         createInput(position);
         position.ry() += 1.5*ConnectorSize.height();
     }
