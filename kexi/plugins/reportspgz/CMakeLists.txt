@@ -22,7 +22,6 @@ set(pgzkexireportpart2_LIB_SRCS
 	kexireportview.cpp
 	kexireportpage.cpp
 	kexireportdesignview.cpp
-	reportentityselector.cpp
 	kexidbreportdata.cpp
 	keximigratereportdata.cpp
     kexisourceselector.cpp
