@@ -152,6 +152,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
 
     //loop through each text strings and styles (equal # of both)
     kDebug(30513) << "writing text spans now";
+    QString oldStyleName = "initial span";
     for ( int i = 0; i < m_textStrings.size(); i++ )
     {
         //if style is null, we have an inner paragraph and add the
@@ -171,18 +172,24 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
             styleName = "T";
             styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
 
+            if(oldStyleName != styleName) {
+                if (oldStyleName != "initial span")
+                    writer->endElement(); //text:span
+                writer->startElement( "text:span" );
+                writer->addAttribute( "text:style-name", styleName.toUtf8() );
+                oldStyleName = styleName;
+            }
             //write text string to writer
             //now I just need to write the text:span to the header tag
-            writer->startElement( "text:span" );
-            writer->addAttribute( "text:style-name", styleName.toUtf8() );
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
             writer->addTextSpan(m_textStrings[i]);
-            writer->endElement(); //text:span
             //cleanup
             delete m_textStyles[i];
             m_textStyles[i] = 0;
         }
     }
+    if (oldStyleName != "initial span") // we actually wrote some text so make sure we close the span tag
+        writer->endElement(); //text:span
 
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
