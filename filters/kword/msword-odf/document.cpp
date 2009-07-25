@@ -257,7 +257,7 @@ void Document::processStyles()
             }
 
             //create this style & add formatting info to it
-            kDebug(30513) << "creating ODT style" << name;
+            kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
             //set font name in style
@@ -279,8 +279,8 @@ void Document::processStyles()
         }
         else if(style && style->type()==wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
-            kDebug(30513) << "creating ODT style" << name;
-            KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
+            kDebug(30513) << "creating ODT textstyle" << name;
+            KoGenStyle userStyle(KoGenStyle::StyleUser, "text");
             userStyle.addAttribute("style:display-name", displayName);
             //set font name in style
             QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
@@ -295,6 +295,7 @@ void Document::processStyles()
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
             kDebug(30513) << "added style " << actualName << "\n";
+kDebug(30513) << "creat as default style " << userStyle.isDefaultStyle();
         }
     }
 }
