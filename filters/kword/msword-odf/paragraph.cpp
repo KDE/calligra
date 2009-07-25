@@ -473,7 +473,7 @@ void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenS
 
     //fItalic = italic text if 1
     if ( !refChp || refChp->fItalic != chp->fItalic )
-        style->addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
+        style->addProperty(QString("fo:font-style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
 
     //kul: underline code
     if ( !refChp || refChp->kul != chp->kul )
