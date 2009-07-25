@@ -69,7 +69,7 @@ Paragraph::~Paragraph()
     m_paragraphStyle = 0;
 }
 
-void Paragraph::addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName )
+void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles)
 {
     //check for column break in this text string
     int colBreak = text.indexOf(QChar(0xE));
@@ -84,26 +84,48 @@ void Paragraph::addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Wor
         //remove character that signaled a column break
         text.remove(QChar(0xE));
     }
+
     //add text string to list
     m_textStrings.push_back(QString(text));
 
-    //set up text style
-    KoGenStyle* textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
-    if ( m_inStylesDotXml )
-    {
-        textStyle->setAutoStyleInStylesDotXml(true);
-    }
+    // Now find out what style to assoiciate with the string
 
-    //process null chp - just add a null style & return from function
-    if ( chp == 0 )
-    {
+
+    if (chp == 0 ) {
+        // if inner paragraph - just add a null style & return from function
         KoGenStyle* style = 0;
         m_textStyles.push_back( style );
         return;
     }
 
+    const wvWare::Style* msTextStyle = styles.styleByIndex( chp->istd );
+    Q_ASSERT( msTextStyle );
+    QString msTextStyleName = Conversion::string( msTextStyle->name() );
+    kDebug(30513) << "text has characterstyle " << msTextStyleName;
+
+    //need to replace all non-alphanumeric characters with hex representation
+    for(int i = 0; i < msTextStyleName.size(); i++)
+    {
+        if(!msTextStyleName[i].isLetterOrNumber())
+        {
+            msTextStyleName.remove(i, 1);
+            i--;
+        }
+    }
+
+    //We have a specific desciption (equivalent to our autostyles) so set up an auto text style
+/*
+    KoGenStyle* textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+    if ( m_inStylesDotXml )
+    {
+        textStyle->setAutoStyleInStylesDotXml(true);
+    }
+*/
+    const KoGenStyle *textStyle = m_mainStyles->style(msTextStyleName);
+kDebug(30513) << "the named style " << msTextStyleName;
+kDebug(30513) << "is looked up as " << textStyle << "default=" << textStyle->isDefaultStyle();
     //if we have a new font, process that
-    const wvWare::Word97::CHP* refChp = &m_parentStyle->chp();
+/*    const wvWare::Word97::CHP* refChp = &m_parentStyle->chp();
     if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
     {
         if ( !fontName.isEmpty() )
@@ -113,6 +135,7 @@ void Paragraph::addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Wor
     }
     //set up KoGenStyle from the CHP
     parseCharacterProperties( chp, textStyle, m_parentStyle );
+*/
 
     //add text style to list
     m_textStyles.push_back( textStyle );
@@ -154,19 +177,15 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     kDebug(30513) << "writing text spans now";
     QString oldStyleName;
     bool startedSpan = false;
-    for ( int i = 0; i < m_textStrings.size(); i++ )
-    {
-        //if style is null, we have an inner paragraph and add the
-        // complete paragraph element to writer
-        if ( m_textStyles[i] == 0 )
-        {
+    for ( int i = 0; i < m_textStrings.size(); i++ ) {
+        if ( m_textStyles[i] == 0 ) {
+            //if style is null, we have an inner paragraph and add the
+            // complete paragraph element to writer
             //need to get const char* from the QString
             kDebug(30513) << "complete element: " <<
                 m_textStrings[i].toLocal8Bit().constData();
             writer->addCompleteElement( m_textStrings[i].toLocal8Bit().constData() );
-        }
-        else
-        {
+        } else {
             //add text style to collection
             //put style into m_mainStyles & get its name
             //kDebug(30513) << m_textStyles[i]->type();
@@ -174,23 +193,27 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
             styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
 
             if(oldStyleName != styleName) {
-                if (startedSpan)
+                if (startedSpan) {
                     writer->endElement(); //text:span
-                writer->startElement( "text:span" );
-                writer->addAttribute( "text:style-name", styleName.toUtf8() );
+                    startedSpan = false;
+                }
+                if(styleName != "DefaultParagraphFont") {
+                    writer->startElement( "text:span" );
+                    writer->addAttribute( "text:style-name", styleName.toUtf8() );
+                    startedSpan = true;
+                }
                 oldStyleName = styleName;
-                startedSpan = true;
             }
             //write text string to writer
             //now I just need to write the text:span to the header tag
             kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
             writer->addTextSpan(m_textStrings[i]);
             //cleanup
-            delete m_textStyles[i];
+            //delete m_textStyles[i];
             m_textStyles[i] = 0;
         }
     }
-    if (startedSpan) // we actually wrote some text so make sure we close the span tag
+    if (startedSpan) // we wrote a span of text so make sure we close the span tag
         writer->endElement(); //text:span
 
     //close the <text:p> or <text:h> tag we opened

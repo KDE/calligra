@@ -42,7 +42,7 @@ class Paragraph
         Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0 );
         ~Paragraph();
         void writeToFile( KoXmlWriter* writer );
-        void addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName );
+        void addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles);
         void openInnerParagraph();
         void closeInnerParagraph();
         void setParagraphProperties( wvWare::SharedPtr<const wvWare::ParagraphProperties> properties );
@@ -64,8 +64,8 @@ class Paragraph
         const wvWare::Style* m_parentStyle2; //store parent style when in inner paragraph
         std::vector<QString> m_textStrings; //store list of text strings within a paragraph
         std::vector<QString> m_textStrings2; //store original list when in inner paragraph
-        std::vector<KoGenStyle*> m_textStyles; //store list of styles for text within a paragraph
-        std::vector<KoGenStyle*> m_textStyles2; //store original list when in inner paragraph
+        std::vector<const KoGenStyle*> m_textStyles; //store list of styles for text within a paragraph
+        std::vector<const KoGenStyle*> m_textStyles2; //store original list when in inner paragraph
         bool m_inStylesDotXml; //let us know if we're in content.xml or styles.xml
         bool m_isHeading; //information for writing a heading instead of a paragraph
                           // (odt looks formats them similarly)

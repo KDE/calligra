@@ -232,7 +232,7 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
 
     QString contents = QString::fromUtf8(m_footnoteBuffer->buffer(), m_footnoteBuffer->buffer().size());
     kDebug(30513) << "add footnote to Paragraph: " << contents;
-    m_paragraph->addRunOfText( contents, 0, QString("") );
+    m_paragraph->addRunOfText( contents, 0, QString(""), m_parser->styleSheet());
 
     //cleanup
     delete m_footnoteWriter;
@@ -616,7 +616,7 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
 
     //add writer content to m_paragraph as a runOfText with no text style
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-    m_paragraph->addRunOfText( contents, 0, QString("") );
+    m_paragraph->addRunOfText( contents, 0, QString(""), m_parser->styleSheet());
 
     // reset/cleanup
     m_fieldValue = "";
@@ -659,7 +659,7 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     }
 
     //add text string and formatting style to m_paragraph
-    m_paragraph->addRunOfText( newText, chp, fontName );
+    m_paragraph->addRunOfText( newText, chp, fontName, m_parser->styleSheet());
 
 } //end runOfText()
 
