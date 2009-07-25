@@ -344,7 +344,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
         emit pictureFound( frameName, pictureName, &writer, new wvWare::PictureFunctor( pictureFunctor ) );
         //now add content to our current paragraph
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        m_paragraph->addRunOfText( contents, 0, QString("") );
+        m_paragraph->addRunOfText( contents, 0, QString(""), m_parser->styleSheet() );
 
     }
     else
