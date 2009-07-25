@@ -927,6 +927,19 @@ ORODocument* ORPreRender::generate()
     d->_document->setPageOptions(rpo);
     d->_kodata->open();
     d->initEngine();
+
+    //Loop through all abjects that have been registered, and register them with the script handler
+    if (d->_handler) {
+        QMapIterator<QString, QObject*> i(m_scriptObjects);
+        while (i.hasNext()) {
+            i.next();
+            d->_handler->registerScriptObject(i.value(), i.key());
+        }
+    }
+    
+    //execute the script
+    d->_handler->trigger();
+    
     d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
@@ -1071,7 +1084,8 @@ bool ORPreRender::isValid() const
 
 void ORPreRender::registerScriptObject(QObject* obj, const QString& name)
 {
- d->_handler->registerScriptObject(obj, name);
+    kDebug() << name;
+    m_scriptObjects[name] = obj;
 }
 
 #include <orprerenderprivate.moc>

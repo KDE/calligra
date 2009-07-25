@@ -91,7 +91,10 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KRReportData* d)
     #else
       m_action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
     #endif
-    
+}
+
+void KRScriptHandler::trigger()
+{
     kDebug() << m_action->code();
 
     m_action->trigger();
@@ -293,5 +296,7 @@ QString KRScriptHandler::scriptCode()
 
 void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
 {
-    m_action->addObject(obj, name);
+    kDebug();
+    if (m_action)
+        m_action->addObject(obj, name);
 }

@@ -25,6 +25,7 @@
 #include <QRectF>
 #include <QString>
 #include <QFont>
+#include <QMap>
 #include "koreport_export.h"
 
 class ORPreRenderPrivate;
@@ -69,8 +70,7 @@ protected:
 private:
     ORPreRenderPrivate* d;
     bool setDom(const QString &);
-
+    QMap<QString, QObject*> m_scriptObjects;
 };
-
 
 #endif // __ORPRERENDER_H__
