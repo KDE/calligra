@@ -63,6 +63,16 @@ public:
      */
     static QSizeF objectToUserSpace( const QSizeF &size, const QRectF &objectBound );
 
+    /**
+     * Converts position from userSpace units to objectBoundingBox units.
+     */
+    static QPointF userSpaceToObject( const QPointF &position, const QRectF &objectBound );
+
+    /**
+     * Converts size from userSpace units to objectBoundingBox units.
+     */
+    static QSizeF userSpaceToObject( const QSizeF &size, const QRectF &objectBound );
+
 };
 
 #endif // SVGUTIL_H

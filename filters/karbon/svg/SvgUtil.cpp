@@ -63,3 +63,17 @@ QSizeF SvgUtil::objectToUserSpace( const QSizeF &size, const QRectF &objectBound
     qreal h = size.height() * objectBound.height(); 
     return QSizeF( w, h );
 }
+
+QPointF SvgUtil::userSpaceToObject( const QPointF &position, const QRectF &objectBound )
+{
+    qreal x = (position.x() - objectBound.x()) / objectBound.width();
+    qreal y = (position.y() - objectBound.y()) / objectBound.height();
+    return QPointF(x, y);
+}
+
+QSizeF SvgUtil::userSpaceToObject( const QSizeF &size, const QRectF &objectBound )
+{
+    qreal w = size.width() / objectBound.width();
+    qreal h = size.height() / objectBound.height();
+    return QSizeF(w, h);
+}

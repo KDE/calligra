@@ -1511,6 +1511,11 @@ void SvgParser::applyFilter( KoShape * shape )
     QRectF bound( QPoint(), shape->size() );
     QRectF filterRegion( filter->position(bound), filter->size(bound) );
 
+    // convert filter region to boundingbox units 
+    QRectF objectFilterRegion;
+    objectFilterRegion.setTopLeft(SvgUtil::userSpaceToObject(filterRegion.topLeft(), bound));
+    objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
+
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 
     int existingFilterCount = shape->filterEffectStack().count();
@@ -1536,6 +1541,8 @@ void SvgParser::applyFilter( KoShape * shape )
                 subRegion.setWidth( parseUnitX( primitive.attribute( "width" ) ) );
             if( primitive.hasAttribute( "height" ) )
                 subRegion.setHeight( parseUnitY( primitive.attribute( "height" ) ) );
+            subRegion.setTopLeft(SvgUtil::userSpaceToObject(subRegion.topLeft(), filterRegion));
+            subRegion.setSize(SvgUtil::userSpaceToObject(subRegion.size(), filterRegion));
         }
         else
         {
@@ -1545,16 +1552,14 @@ void SvgParser::applyFilter( KoShape * shape )
             qreal y = SvgUtil::fromPercentage( primitive.attribute( "y", "0" ) );
             qreal w = SvgUtil::fromPercentage( primitive.attribute( "width", "1" ) );
             qreal h = SvgUtil::fromPercentage( primitive.attribute( "height", "1" ) );
-            subRegion.setTopLeft( SvgUtil::objectToUserSpace( QPointF(x, y), filterRegion) );
-            subRegion.setSize( SvgUtil::objectToUserSpace( QSizeF(w, h), filterRegion) );
+            subRegion = QRectF(QPointF(x, y), QSizeF(w, h));
         }
-        
         if (primitive.hasAttribute("in"))
             filterEffect->addInput(primitive.attribute("in"));
         if (primitive.hasAttribute("result"))
             filterEffect->setOutput(primitive.attribute("result"));
 
-        filterEffect->setClipRect(filterRegion);
+        filterEffect->setClipRect(objectFilterRegion);
         filterEffect->setFilterRect(subRegion);
         shape->insertFilterEffect(existingFilterCount, filterEffect);
         existingFilterCount++;

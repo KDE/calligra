@@ -679,12 +679,12 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
 
     writer.startElement("filter");
     writer.addAttribute("id", uid);
-    writer.addAttribute("filterUnits", "userSpaceOnUse");
+    writer.addAttribute("filterUnits", "objectBoundingBox");
     writer.addAttribute("primitiveUnits", "userSpaceOnUse");
-    writer.addAttribute("x", SvgUtil::toUserSpace( filterRegion.x() ) );
-    writer.addAttribute("y", SvgUtil::toUserSpace( filterRegion.y() ) );
-    writer.addAttribute("width", SvgUtil::toUserSpace( filterRegion.width() ) );
-    writer.addAttribute("height", SvgUtil::toUserSpace( filterRegion.height() ) );
+    writer.addAttribute("x", filterRegion.x() );
+    writer.addAttribute("y", filterRegion.y() );
+    writer.addAttribute("width", filterRegion.width() );
+    writer.addAttribute("height", filterRegion.height() );
 
     foreach(KoFilterEffect *effect, filterEffectStack) {
         effect->save(writer);
