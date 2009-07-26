@@ -195,6 +195,8 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
                                       wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                       const wvWare::FootnoteFunctor& parseFootnote )
 {
+    Q_UNUSED(chp);
+
     kDebug(30513) ;
 
     m_insideFootnote = true;
@@ -264,6 +266,8 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
 //create an element for the variable
 QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
 {
+    Q_UNUSED(chp);
+
     kDebug(30513) ;
     //m_paragraph += '#';
 
@@ -362,6 +366,8 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
 
 QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 {
+    Q_UNUSED(fsname);
+
     kDebug(30513) ;
     //m_paragraph += '#';
 
@@ -575,6 +581,8 @@ void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::Share
 
 void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
+    Q_UNUSED(chp);
+
     kDebug(30513);
     //process different fields
     //we could be writing to content or styles.xml (in a header)
@@ -804,7 +812,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         listStyleWriter.addAttribute( "text:level", pap.ilvl+1 );
         //*************************************
         int depth = pap.ilvl; //both are 0 based
-        int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
+        //int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
         // Heading styles don't set the ilvl, but must have a depth coming
         // from their heading level (the style's STI)
         //bool isHeading = style->sti() >= 1 && style->sti() <= 9;
