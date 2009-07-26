@@ -260,6 +260,12 @@ void Document::processStyles()
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
+
+            const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
+            if ( parentStyle ) {
+                userStyle.addAttribute( "style:parent-style-name", Conversion::string(parentStyle->name()));
+            }
+
             //set font name in style
             QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
             if ( !fontName.isEmpty() )
@@ -268,7 +274,7 @@ void Document::processStyles()
                 userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
             }
             //process the character properties
-            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
+            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, parentStyle );
             //process the paragraph properties
             Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle );
             //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
@@ -282,16 +288,15 @@ void Document::processStyles()
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::StyleUser, "text");
             userStyle.addAttribute("style:display-name", displayName);
-            //set font name in style
-            QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
-            if ( !fontName.isEmpty() )
-            {
-                m_mainStyles->addFontFace( fontName );
-                userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
+
+            const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
+            if ( parentStyle ) {
+                userStyle.addAttribute( "style:parent-style-name", Conversion::string(parentStyle->name()));
             }
-            //process character properties
-            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, 0 );
-            //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+
+            // even if we were able to process character properties in the chpx lists then we don't need to
+            // the design is such that the styles are modied during processing of text runs
+
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
             kDebug(30513) << "added style " << actualName << "\n";

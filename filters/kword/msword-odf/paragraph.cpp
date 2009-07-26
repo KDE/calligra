@@ -113,29 +113,28 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         }
     }
 
-    //We have a specific desciption (equivalent to our autostyles) so set up an auto text style
-/*
-    KoGenStyle* textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
-    if ( m_inStylesDotXml )
-    {
-        textStyle->setAutoStyleInStylesDotXml(true);
-    }
-*/
-    const KoGenStyle *textStyle = m_mainStyles->style(msTextStyleName);
-kDebug(30513) << "the named style " << msTextStyleName;
-kDebug(30513) << "is looked up as " << textStyle << "default=" << textStyle->isDefaultStyle();
-    //if we have a new font, process that
-/*    const wvWare::Word97::CHP* refChp = &m_parentStyle->chp();
-    if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
-    {
-        if ( !fontName.isEmpty() )
+    KoGenStyle *textStyle = m_mainStyles->styleForModification(msTextStyleName);
+
+    // modify the character style if we detect any diif between the chp of the paragraph and the summed chp
+    const wvWare::Style* parentStyle = styles.styleByIndex( msTextStyle->m_std->istdBase );
+    if (parentStyle) {
+        parseCharacterProperties( chp, textStyle, m_parentStyle );
+        //if we have a new font, process that
+        const wvWare::Word97::CHP* refChp = &m_parentStyle->chp();
+        if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
         {
-            textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
+            if ( !fontName.isEmpty() )
+            {
+                textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
+            }
         }
+    } else {
+        textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
+        if (m_inStylesDotXml) {
+            textStyle->setAutoStyleInStylesDotXml(true);
+        }
+        parseCharacterProperties( chp, textStyle, m_parentStyle );
     }
-    //set up KoGenStyle from the CHP
-    parseCharacterProperties( chp, textStyle, m_parentStyle );
-*/
 
     //add text style to list
     m_textStyles.push_back( textStyle );
