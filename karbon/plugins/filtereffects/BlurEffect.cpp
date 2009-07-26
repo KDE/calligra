@@ -330,6 +330,8 @@ void BlurEffect::save(KoXmlWriter &writer)
 {
     writer.startElement(BlurEffectId);
     
+    saveCommonAttributes(writer);
+    
     if (m_deviation.x() != m_deviation.y()) {
         writer.addAttribute("stdDeviation", QString("%1, %2").arg(m_deviation.x()).arg(m_deviation.y()));
     } else {

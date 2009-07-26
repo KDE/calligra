@@ -73,6 +73,8 @@ void OffsetEffect::save(KoXmlWriter &writer)
 {
     writer.startElement(OffsetEffectId);
 
+    saveCommonAttributes(writer);
+    
     if (m_offset.x() != 0.0)
         writer.addAttribute("dx", m_offset.x());
     if (m_offset.y() != 0.0)

@@ -680,7 +680,7 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
     writer.startElement("filter");
     writer.addAttribute("id", uid);
     writer.addAttribute("filterUnits", "objectBoundingBox");
-    writer.addAttribute("primitiveUnits", "userSpaceOnUse");
+    writer.addAttribute("primitiveUnits", "objectBoundingBox");
     writer.addAttribute("x", filterRegion.x() );
     writer.addAttribute("y", filterRegion.y() );
     writer.addAttribute("width", filterRegion.width() );

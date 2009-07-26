@@ -80,7 +80,9 @@ void MergeEffect::save(KoXmlWriter &writer)
 {
     writer.startElement(MergeEffectId);
     
-    foreach (QString input, inputs()) {
+    saveCommonAttributes(writer);
+    
+    foreach (const QString &input, inputs()) {
         writer.startElement("feMergeNode");
         writer.addAttribute("in", input);
         writer.endElement();
