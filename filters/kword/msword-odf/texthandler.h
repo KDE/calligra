@@ -39,6 +39,7 @@
 
 #include <string>
 #include <vector>
+#include <stack>
 
 namespace wvWare {
     class Style;
@@ -132,6 +133,26 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
+    //save/restore for processing footnotes (very similar to the wv2 method)
+    struct State
+    {
+        State( KWord::Table* curTab, Paragraph* para, QString lStyleName,
+               int curListDepth, int curListID ) :
+               currentTable( curTab ), paragraph( para ), listStyleName( lStyleName ),
+               currentListDepth( curListDepth ), currentListID( curListID ) {}
+                                       
+        KWord::Table* currentTable;
+        Paragraph* paragraph;
+        QString listStyleName;
+        int currentListDepth; //tells us which list level we're on (-1 if not in a list)
+        int currentListID; //tracks the id of the current list - 0 if no list
+    };
+          
+    std::stack<State> m_oldStates;
+    void saveState();
+    void restoreState();
+
+
     // Current paragraph
     wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
@@ -140,10 +161,6 @@ private:
     QDomElement m_oldLayout;
 
     KWord::Table* m_currentTable;
-    //we sometimes have to open another paragraph in the middle of a paragraph
-    // (eg. when parsing footnotes). So, this variable defaults to 0, gets incremented
-    // everytime paragraphStart is called, and decremented everytime paragraphEnd is called.
-    int m_numOpenParagraphs;
     //pointer to paragraph object
     Paragraph* m_paragraph;
 

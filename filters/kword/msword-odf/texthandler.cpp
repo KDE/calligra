@@ -69,7 +69,6 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
     m_endNoteNumber(0),
     m_index(0),
     m_currentTable(0),
-    m_numOpenParagraphs(0),
     m_paragraph(0),
     m_insideField(false),
     m_fieldAfterSeparator(false),
@@ -221,8 +220,12 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 
+    //save the state of tables & paragraphs because we'll get new ones in the footnote
+    saveState();
     //signal Document to parse the footnote
     emit footnoteFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
+    //and now restore state
+    restoreState();
 
     //end the elements
     m_footnoteWriter->endElement();//text:note-body
@@ -333,7 +336,8 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
             break;
     }
 
-    if ( m_numOpenParagraphs > 0 )
+    //if we're inside a paragraph
+    if ( m_paragraph != 0 )
     {
         kDebug(30513) << "picture inside paragraph";
         //create temporary writer for the picture tags
@@ -467,21 +471,8 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         }
     }
 
-    //we need to keep track of how many paragraphs are open
-    kDebug(30513) << "track number of open paragraphs";
-    m_numOpenParagraphs++;
-
-    //if we're in nested paragraphs, open a new paragraph inside existing one
-    if ( m_numOpenParagraphs > 1 )
-    {
-        kDebug(30513) << "open an inner paragraph";
-        m_paragraph->openInnerParagraph();
-    }
-    else
-    {
-        kDebug(30513) << "create new Paragraph";
-        m_paragraph = new Paragraph( m_mainStyles, inStylesDotXml, isHeading, outlineLevel );
-    }
+    kDebug(30513) << "create new Paragraph";
+    m_paragraph = new Paragraph( m_mainStyles, inStylesDotXml, isHeading, outlineLevel );
 
     //if ( m_bInParagraph )
     //    paragraphEnd();
@@ -551,19 +542,9 @@ void KWordTextHandler::paragraphEnd()
         m_paragraph->writeToFile( m_headerWriter );
     }
 
-    //close paragraph object
-    if ( m_numOpenParagraphs > 1 )
-    {
-        m_paragraph->closeInnerParagraph();
-    }
-    else
-    {
-        delete m_paragraph;
-        m_paragraph = 0;
-    }
+    delete m_paragraph;
+    m_paragraph = 0;
 
-    //track how many open paragraphs we have
-    m_numOpenParagraphs--;
 }//end paragraphEnd()
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
@@ -946,5 +927,45 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 
     return true;
 } //writeListInfo()
+
+void KWordTextHandler::saveState()
+{
+    kDebug(30513);
+    m_oldStates.push( State( m_currentTable, m_paragraph, m_listStyleName, 
+                m_currentListDepth, m_currentListID ) );
+    m_currentTable = 0;
+    m_paragraph = 0;
+    m_listStyleName = "";
+    m_currentListDepth = -1;
+    m_currentListID = 0;
+}
+
+void KWordTextHandler::restoreState()
+{
+    kDebug(30513);
+    //if the stack is corrupt, we won't even try to set it correctly
+    if ( m_oldStates.empty() )
+    {
+        kWarning() << "Error: save/restore stack is corrupt!";
+        return;
+    }
+    State s( m_oldStates.top() );
+    m_oldStates.pop();
+
+    //warn if pointers weren't reset properly, but restore state anyway
+    if ( m_paragraph != 0 )
+    {
+        kWarning() << "m_paragraph pointer wasn't reset";
+    }
+    m_paragraph = s.paragraph;
+    if ( m_currentTable != 0 )
+    {
+        kWarning() << "m_currentTable pointer wasn't reset";
+    }
+    m_currentTable = s.currentTable;
+    m_listStyleName = s.listStyleName;
+    m_currentListDepth = s.currentListDepth;
+    m_currentListID = s.currentListID;
+}
 
 #include "texthandler.moc"
