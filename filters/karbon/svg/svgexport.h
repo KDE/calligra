@@ -39,7 +39,6 @@ class KoShape;
 class KoPathShape;
 class KoShapeBorderModel;
 class ArtisticTextShape;
-class PictureShape;
 class KoEllipseShape;
 class KoRectangleShape;
 class KoPatternBackground;
@@ -68,7 +67,7 @@ private:
     void saveEllipse( KoEllipseShape * ellipse );
     void saveRectangle( KoRectangleShape * rectangle );
 
-    void saveImage( PictureShape * picture );
+    void saveImage(KoShape *picture);
     void saveText( ArtisticTextShape * text );
 
     void getStyle( KoShape * shape, QTextStream * stream );

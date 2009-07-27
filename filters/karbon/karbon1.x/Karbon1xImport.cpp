@@ -1293,7 +1293,7 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
 
     QImage img( fname );
 
-    KoImageData * data = m_document.imageCollection()->getImage( QImage( fname ).mirrored( false, true ) );
+    KoImageData * data = m_document.imageCollection()->createImageData( QImage( fname ).mirrored( false, true ) );
 
     PictureShape * picture = new PictureShape();
     picture->setUserData( data );

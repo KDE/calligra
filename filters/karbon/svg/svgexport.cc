@@ -49,7 +49,6 @@
 #include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
-#include <plugins/pictureshape/PictureShape.h>
 #include <KoImageData.h>
 #include "KoFilterEffect.h"
 #include "KoXmlWriter.h"
@@ -229,9 +228,9 @@ void SvgExport::saveShape( KoShape * shape )
         {
             saveText( static_cast<ArtisticTextShape*>( shape ) );
         }
-        else if( shape->shapeId() == PICTURESHAPEID )
+        else if( shape->shapeId() == "PictureShape" )
         {
-            saveImage( static_cast<PictureShape*>( shape ) );
+            saveImage(shape);
         }
     }
 }
@@ -785,7 +784,7 @@ void SvgExport::saveText( ArtisticTextShape * text )
     *m_body << "</text>" << endl;
 }
 
-void SvgExport::saveImage( PictureShape * picture )
+void SvgExport::saveImage(KoShape *picture)
 {
     KoImageData * imageData = dynamic_cast<KoImageData*>( picture->userData() );
     if( ! imageData )
@@ -819,8 +818,7 @@ void SvgExport::saveImage( PictureShape * picture )
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
-        if( imageData->saveToFile( buffer ) )
-        {
+        if (imageData->saveData(buffer)) {
             const QString mimeType( KMimeType::findByContent( ba )->name() );
             *m_body << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
         }
@@ -829,7 +827,7 @@ void SvgExport::saveImage( PictureShape * picture )
     {
         // write to a temp file first
         KTemporaryFile imgFile;
-        if( imageData->saveToFile( imgFile ) )
+        if( imageData->saveData( imgFile ) )
         {
             // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content

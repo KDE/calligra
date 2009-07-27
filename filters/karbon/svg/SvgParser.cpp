@@ -43,7 +43,6 @@
 #include <KoUnit.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
@@ -2238,13 +2237,13 @@ KoShape * SvgParser::createObject( const QDomElement &b, const QDomElement &styl
         QImage img;
         if( parseImage( fname, img ) )
         {
-            KoShape * picture = createShape( PICTURESHAPEID );
+            KoShape * picture = createShape( "PictureShape" );
             KoImageCollection * imageCollection = dynamic_cast<KoImageCollection *>( m_dataCenters["ImageCollection"] );
             
             if( picture && imageCollection )
             {
                 // TODO use it already for loading
-                KoImageData * data = imageCollection->getImage(img);
+                KoImageData * data = imageCollection->createImageData(img);
 
                 picture->setUserData( data );
                 picture->setSize( QSizeF(w,h) );

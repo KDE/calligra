@@ -493,7 +493,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
 
         KoImageCollection *collection = dynamic_cast<KoImageCollection*>(m_document->dataCenterMap()["ImageCollection"]);
         Q_ASSERT(collection);
-        KoImageData *data = collection->getImage(imageKey.filename, m_store);
+        KoImageData *data = collection->createImageData(imageKey.filename, m_store);
         shape->setUserData(data);
 
         KWFrame *f = new KWFrame(shape, fs);

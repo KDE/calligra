@@ -391,7 +391,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 
 
 void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
-    KoImageData * data = mDoc->imageCollection()->getImage( image );
+    KoImageData * data = mDoc->imageCollection()->createImageData( image );
     if( ! data )
         return;
 
