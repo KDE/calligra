@@ -51,9 +51,9 @@ class Paragraph
         KoGenStyle* getOdfParagraphStyle();
 
         //static functions for parsing wvWare properties into KoGenStyles
-        static void parseParagraphProperties( const wvWare::ParagraphProperties& properties,
-                KoGenStyle* style );
-        static void parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle );
+        static void parseParagraphProperties(const wvWare::ParagraphProperties& properties,
+                KoGenStyle* style, const wvWare::Style* parentStyle);
+        static void parseCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle);
     private:
         wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
         wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;

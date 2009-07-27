@@ -145,7 +145,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     kDebug(30513);
 
     //set up paragraph style
-    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle);
+//    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle);
 
     //open paragraph or heading tag
     if ( m_isHeading )
@@ -282,82 +282,112 @@ void Paragraph::setParagraphProperties( wvWare::SharedPtr<const wvWare::Paragrap
     m_paragraphProperties = properties;
 }
 
-void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& properties,
-                KoGenStyle* style)
+void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& properties,
+                KoGenStyle* style, const wvWare::Style* parentStyle)
 {
     kDebug(30513);
+
+    const wvWare::Word97::PAP* refPap;
+    if ( parentStyle )
+    {
+        refPap = &parentStyle->paragraphProperties().pap();
+    }
+    else
+    {
+        refPap = 0;
+    }
 
     //pap is our paragraph properties object
     const wvWare::Word97::PAP& pap = properties.pap();
 
     //paragraph alignment
     //jc = justification code
-    if ( pap.jc == 1 ) //1 = center justify
-        style->addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType );
-    else if (pap.jc == 2 ) //2 = right justify
-        style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
-    else if (pap.jc == 3 ) //3 = left & right justify
-        style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
-    else //0 = left justify
-        style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
-
-    //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
+    if (!refPap || refPap->jc != pap.jc) {
+        if ( pap.jc == 1 ) //1 = center justify
+            style->addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType );
+        else if (pap.jc == 2 ) //2 = right justify
+            style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
+        else if (pap.jc == 3 ) //3 = left & right justify
+            style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
+        else //0 = left justify
+            style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
+    }
 
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
     //dxaLeft = indent from left margin (signed)
     //dxaRight = indent from right margin (signed)
-    if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
-    {
-        style->addProperty( "fo:margin-left", (int)pap.dxaLeft, KoGenStyle::ParagraphType );
-        style->addProperty( "fo:margin-right", (int)pap.dxaRight, KoGenStyle::ParagraphType );
-        style->addProperty( "fo:text-indent", (int)pap.dxaLeft1, KoGenStyle::ParagraphType );
+    if (!refPap || refPap->dxaLeft != pap.dxaLeft) {
+        // apply twip -> pt conversion
+        style->addPropertyPt( "fo:margin-left", (double)pap.dxaLeft / 20.0, KoGenStyle::ParagraphType );
+    }
+    if (!refPap || refPap->dxaRight != pap.dxaRight) {
+        // apply twip -> pt conversion
+        style->addPropertyPt( "fo:margin-right", (double)pap.dxaRight / 20.0, KoGenStyle::ParagraphType );
+    }
+    if (!refPap || refPap->dxaLeft1 != pap.dxaLeft1) {
+        // apply twip -> pt conversion
+        style->addPropertyPt( "fo:text-indent", (double)pap.dxaLeft1 / 20.0, KoGenStyle::ParagraphType );
     }
 
     //dyaBefore = vertical spacing before paragraph (unsigned)
     //dyaAfter = vertical spacing after paragraph (unsigned)
-    if ( pap.dyaBefore || pap.dyaAfter )
-    {
-        style->addProperty( "fo:margin-top", (int)pap.dyaBefore, KoGenStyle::ParagraphType );
-        style->addProperty( "fo:margin-bottom", (int)pap.dyaAfter, KoGenStyle::ParagraphType );
+    if (!refPap || refPap->dyaBefore != pap.dyaBefore) {
+        // apply twip -> pt conversion
+        style->addPropertyPt( "fo:margin-top", (double)pap.dyaBefore / 20.0, KoGenStyle::ParagraphType );
+    }
+    if (!refPap || refPap->dyaAfter != pap.dyaAfter) {
+        // apply twip -> pt conversion
+        style->addPropertyPt( "fo:margin-bottom", (double)pap.dyaAfter / 20.0, KoGenStyle::ParagraphType );
     }
 
     // Linespacing
     //lspd = line spacing descriptor
     //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double"
     //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
-    if ( pap.lspd.fMultLinespace == 1 ) //Word will reserve for each line the
-                                    //(maximal height of the line*lspd.dyaLine)/240
-    {
-        //get the proportion & turn it into a percentage for the attribute
-        QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
-        style->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
+    if (!refPap || refPap->lspd.fMultLinespace != pap.lspd.fMultLinespace || refPap->lspd.dyaLine != pap.lspd.dyaLine) {
+        if ( pap.lspd.fMultLinespace == 1 ) { //Word will reserve for each line the
+                                        //(maximal height of the line*lspd.dyaLine)/240
+            //get the proportion & turn it into a percentage for the attribute
+            QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
+            style->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
+        }
+        else if ( pap.lspd.fMultLinespace == 0 ) {
+            //magnitude of lspd.dyaLine specifies the amount of space
+            //that will be provided for lines in the paragraph in twips
+
+            // see sprmPDyaLine in generator_wword8.htm
+            double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
+            // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
+            if ( pap.lspd.dyaLine > 0 )
+                style->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
+            else if (pap.lspd.dyaLine < 0 )
+                style->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
+        }
+        else
+                kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
     }
-    else if ( pap.lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space
-                                    //that will be provided for lines in the paragraph in twips
-    {
-        // see sprmPDyaLine in generator_wword8.htm
-        double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
-        // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-        if ( pap.lspd.dyaLine > 0 )
-            style->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
-        else if (pap.lspd.dyaLine < 0 )
-            style->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
-    }
-    else
-            kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
     //end linespacing
 
     //fKeep = keep entire paragraph on one page if possible
     //fKeepFollow = keep paragraph on same page with next paragraph if possible
     //fPageBreakBefore = start this paragraph on new page
-    if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
-    {
-        if ( pap.fKeep )
-            style->addProperty( "fo:keep-together", "always", KoGenStyle::ParagraphType );
-        if ( pap.fKeepFollow )
+    if (!refPap || refPap->fKeep != pap.fKeep) {
+        if(pap.fKeep)
+            style->addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+        else
+            style->addProperty("fo:keep-together", "auto", KoGenStyle::ParagraphType);
+    }
+    if (!refPap || refPap->fKeepFollow != pap.fKeepFollow) {
+        if(pap.fKeepFollow)
             style->addProperty( "fo:keep-with-next", "always", KoGenStyle::ParagraphType );
-        if ( pap.fPageBreakBefore )
+        else
+            style->addProperty( "fo:keep-with-next", "auto", KoGenStyle::ParagraphType );
+    }
+    if (!refPap || refPap->fPageBreakBefore != pap.fPageBreakBefore) {
+        if(pap.fPageBreakBefore)
             style->addProperty( "fo:break-before", "page", KoGenStyle::ParagraphType );
+        else
+            style->addProperty( "fo:break-before", "auto", KoGenStyle::ParagraphType );
     }
 
     // Borders
@@ -367,22 +397,24 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
     //brcRight = specification for border to the right of paragraph
     //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot, 7=dash large gap,
     //  8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
-    if ( pap.brcTop.brcType )
+    if ( !refPap || refPap->brcTop.brcType != pap.brcTop.brcType )
     {
         style->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
     }
-    if ( pap.brcBottom.brcType )
+    if ( !refPap || refPap->brcBottom.brcType != pap.brcBottom.brcType )
     {
         style->addProperty( "fo:border-bottom", Conversion::setBorderAttributes( pap.brcBottom ), KoGenStyle::ParagraphType );
     }
-    if ( pap.brcLeft.brcType )
+    if ( !refPap || refPap->brcLeft.brcType != pap.brcLeft.brcType )
     {
         style->addProperty( "fo:border-left", Conversion::setBorderAttributes( pap.brcLeft ), KoGenStyle::ParagraphType );
     }
-    if ( pap.brcRight.brcType )
+    if ( !refPap || refPap->brcRight.brcType != pap.brcRight.brcType )
     {
         style->addProperty( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ), KoGenStyle::ParagraphType );
     }
+
+//TODO introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators
     //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
@@ -440,7 +472,7 @@ void Paragraph::parseParagraphProperties( const wvWare::ParagraphProperties& pro
     }
 } //end parseParagraphProperties
 
-void Paragraph::parseCharacterProperties( const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle )
+void Paragraph::parseCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;

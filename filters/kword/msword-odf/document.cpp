@@ -276,9 +276,8 @@ void Document::processStyles()
             //process the character properties
             Paragraph::parseCharacterProperties( &style->chp(), &userStyle, parentStyle );
             //process the paragraph properties
-            Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle );
-            //m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
-            //m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""));
+            Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle, parentStyle );
+
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
             kDebug(30513) << "added style " << actualName << "\n";
@@ -295,7 +294,7 @@ void Document::processStyles()
             }
 
             // even if we were able to process character properties in the chpx lists then we don't need to
-            // the design is such that the styles are modied during processing of text runs
+            // the design is such that the styles are modified during processing of text runs
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
