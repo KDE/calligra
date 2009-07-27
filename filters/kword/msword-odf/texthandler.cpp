@@ -491,21 +491,21 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     //check for a named style for this paragraph
     if ( paragraphProperties ) // Always set when called by wv2. But not set when called by tableStart.
     {
-        kDebug(30513) << "set parent style";
-        const wvWare::Style* parentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
-        Q_ASSERT( parentStyle );
-        QString parentStyleName = Conversion::string( parentStyle->name() );
+        kDebug(30513) << "set paragraph style";
+        const wvWare::Style* paragraphStyle = styles.styleByIndex( paragraphProperties->pap().istd );
+        Q_ASSERT( paragraphStyle );
+        QString paragraphStyleName = Conversion::string( paragraphStyle->name() );
         //need to replace all non-alphanumeric characters with hex representation
-        for(int i = 0; i < parentStyleName.size(); i++)
+        for(int i = 0; i < paragraphStyleName.size(); i++)
         {
-            if(!parentStyleName[i].isLetterOrNumber())
+            if(!paragraphStyleName[i].isLetterOrNumber())
             {
-                parentStyleName.remove(i, 1);
+                paragraphStyleName.remove(i, 1);
                 i--;
             }
         }
         //set current named style in m_paragraph
-        m_paragraph->setParentStyle( parentStyle, parentStyleName );
+        m_paragraph->setParagraphStyle( paragraphStyle, paragraphStyleName );
 
         //write the paragraph formatting
         //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
@@ -519,7 +519,7 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     //check to see if we need a master page name attribute
     if(m_writeMasterStyleName && !m_writingHeader)
     {
-        m_paragraph->getParagraphStyle()->addAttribute("style:master-page-name", m_masterStyleName);
+        m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name", m_masterStyleName);
         m_writeMasterStyleName = false;
     }
 } //end paragraphStart()

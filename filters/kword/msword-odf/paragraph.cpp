@@ -27,24 +27,24 @@
 Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, int outlineLevel )
     : m_paragraphProperties(0),
     m_paragraphProperties2(0),
+    m_odfParagraphStyle(0),
+    m_odfParagraphStyle2(0),
+    m_mainStyles(0),
     m_paragraphStyle(0),
     m_paragraphStyle2(0),
-    m_mainStyles(0),
-    m_parentStyle(0),
-    m_parentStyle2(0),
     m_inStylesDotXml(false),
     m_isHeading(false),
     m_outlineLevel(0)
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
-    m_paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
+    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
     if ( inStylesDotXml )
     {
         kDebug(30513) << "this paragraph is in styles.xml";
         m_inStylesDotXml = true;
         //if we're writing to styles.xml, the style should go there, too
-        m_paragraphStyle->setAutoStyleInStylesDotXml(true);
+        m_odfParagraphStyle->setAutoStyleInStylesDotXml(true);
     }
     else
     {
@@ -65,8 +65,8 @@ Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadi
 
 Paragraph::~Paragraph()
 {
-    delete m_paragraphStyle;
-    m_paragraphStyle = 0;
+    delete m_odfParagraphStyle;
+    m_odfParagraphStyle = 0;
 }
 
 void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles)
@@ -80,7 +80,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         //add needed attribute to paragraph style
         //Note: this logic breaks down if this isn't the first string in the paragraph, or there
         // are other strings with another colBreak later in the same paragraph
-        m_paragraphStyle->addProperty( "fo:break-before", "column", KoGenStyle::ParagraphType );
+        m_odfParagraphStyle->addProperty( "fo:break-before", "column", KoGenStyle::ParagraphType );
         //remove character that signaled a column break
         text.remove(QChar(0xE));
     }
@@ -118,9 +118,9 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
     // modify the character style if we detect any diif between the chp of the paragraph and the summed chp
     const wvWare::Style* parentStyle = styles.styleByIndex( msTextStyle->m_std->istdBase );
     if (parentStyle) {
-        parseCharacterProperties( chp, textStyle, m_parentStyle );
+        parseCharacterProperties( chp, textStyle, m_paragraphStyle );
         //if we have a new font, process that
-        const wvWare::Word97::CHP* refChp = &m_parentStyle->chp();
+        const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
         {
             if ( !fontName.isEmpty() )
@@ -133,7 +133,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
-        parseCharacterProperties( chp, textStyle, m_parentStyle );
+        parseCharacterProperties( chp, textStyle, m_paragraphStyle );
     }
 
     //add text style to list
@@ -145,7 +145,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     kDebug(30513);
 
     //set up paragraph style
-    parseParagraphProperties(*m_paragraphProperties, m_paragraphStyle);
+    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle);
 
     //open paragraph or heading tag
     if ( m_isHeading )
@@ -162,7 +162,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     kDebug(30513) << "adding paragraphStyle";
     //add the attribute for our style in <text:p>
     QString styleName("P");
-    styleName = m_mainStyles->lookup(*m_paragraphStyle, styleName);
+    styleName = m_mainStyles->lookup(*m_odfParagraphStyle, styleName);
     writer->addAttribute( "text:style-name", styleName.toUtf8() );
 
     //just close the paragraph if there's no content
@@ -219,16 +219,16 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     writer->endElement();
 }
 
-void Paragraph::setParentStyle( const wvWare::Style* parentStyle, QString parentStyleName )
+void Paragraph::setParagraphStyle( const wvWare::Style* paragraphStyle, QString paragraphStyleName )
 {
     kDebug(30513);
-    m_parentStyle = parentStyle;
-    m_paragraphStyle->addAttribute( "style:parent-style-name", parentStyleName );
+    m_paragraphStyle = paragraphStyle;
+    m_odfParagraphStyle->addAttribute( "style:parent-style-name", paragraphStyleName );
 }
 
-KoGenStyle* Paragraph::getParagraphStyle()
+KoGenStyle* Paragraph::getOdfParagraphStyle()
 {
-    return m_paragraphStyle;
+    return m_odfParagraphStyle;
 }
 
 //open/closeInnerParagraph functions:
@@ -243,9 +243,9 @@ void Paragraph::openInnerParagraph()
     kDebug(30513);
 
     //copy parent and paragraph styles
+    m_odfParagraphStyle2 = m_odfParagraphStyle;
+    m_odfParagraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
     m_paragraphStyle2 = m_paragraphStyle;
-    m_paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
-    m_parentStyle2 = m_parentStyle;
     m_paragraphProperties2 = m_paragraphProperties;
     m_paragraphProperties = 0;
 
@@ -262,11 +262,11 @@ void Paragraph::closeInnerParagraph()
     kDebug(30513);
 
     //clear temp variables and restore originals
-    delete m_paragraphStyle;
+    delete m_odfParagraphStyle;
+    m_odfParagraphStyle = m_odfParagraphStyle2;
+    m_odfParagraphStyle2 = 0;
     m_paragraphStyle = m_paragraphStyle2;
     m_paragraphStyle2 = 0;
-    m_parentStyle = m_parentStyle2;
-    m_parentStyle2 = 0;
     m_paragraphProperties = m_paragraphProperties2;
     m_paragraphProperties2 = 0;
     m_textStyles.clear();

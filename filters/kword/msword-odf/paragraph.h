@@ -47,8 +47,8 @@ class Paragraph
         void closeInnerParagraph();
         void setParagraphProperties( wvWare::SharedPtr<const wvWare::ParagraphProperties> properties );
         //set the general named style that applies to this paragraph
-        void setParentStyle( const wvWare::Style* parentStyle, QString parentStyleName );
-        KoGenStyle* getParagraphStyle();
+        void setParagraphStyle( const wvWare::Style* paragraphStyle, QString paragraphStyleName );
+        KoGenStyle* getOdfParagraphStyle();
 
         //static functions for parsing wvWare properties into KoGenStyles
         static void parseParagraphProperties( const wvWare::ParagraphProperties& properties,
@@ -57,11 +57,11 @@ class Paragraph
     private:
         wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
         wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
-        KoGenStyle* m_paragraphStyle; //pointer to KOffice structure for paragraph formatting
-        KoGenStyle* m_paragraphStyle2; //place to store original style when we have an inner paragraph
+        KoGenStyle* m_odfParagraphStyle; //pointer to KOffice structure for paragraph formatting
+        KoGenStyle* m_odfParagraphStyle2; //place to store original style when we have an inner paragraph
         KoGenStyles* m_mainStyles; //pointer to style collection for this document
-        const wvWare::Style* m_parentStyle; //parent style for the paragraph
-        const wvWare::Style* m_parentStyle2; //store parent style when in inner paragraph
+        const wvWare::Style* m_paragraphStyle; // ms style for the paragraph
+        const wvWare::Style* m_paragraphStyle2; //store ms style when in inner paragraph
         std::vector<QString> m_textStrings; //store list of text strings within a paragraph
         std::vector<QString> m_textStrings2; //store original list when in inner paragraph
         std::vector<const KoGenStyle*> m_textStyles; //store list of styles for text within a paragraph
