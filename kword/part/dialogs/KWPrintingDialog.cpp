@@ -84,22 +84,6 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
 
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
     const qreal offsetInDocument = page.offsetInDocument();
-    // find images
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        if (fs->frameCount() == 0) continue;
-        KWFrame *frame = fs->frames().at(0);
-        if (frame == 0) continue;
-        QRectF bound = frame->shape()->boundingRect();
-        if (offsetInDocument > bound.bottom() || offsetInDocument + page.height() < bound.top())
-            continue;
-        KoImageData *imageData = dynamic_cast<KoImageData*>(frame->shape()->userData());
-        if (imageData) {
-            if (imageData->imageQuality() != KoImageData::HighQuality) {
-                m_originalImages.insert(imageData, imageData->imageQuality());
-                imageData->setImageQuality(KoImageData::HighQuality);
-            }
-        }
-    }
 
     const int pageOffset = qRound(POINT_TO_INCH(resolution * offsetInDocument));
 
@@ -130,8 +114,6 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 
 void KWPrintingDialog::printingDone()
 {
-    foreach (KoImageData *image, m_originalImages.keys())
-        image->setImageQuality(m_originalImages[image]);
 }
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
