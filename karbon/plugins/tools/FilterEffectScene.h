@@ -32,7 +32,7 @@ class EffectItemBase;
 class EffectItem;
 class DefaultInputItem;
 class ConnectionItem;
-class QComboBox;
+class KComboBox;
 
 class ConnectionSource 
 {
@@ -111,7 +111,7 @@ private:
     QList<EffectItemBase*> m_items;
     QList<ConnectionItem*> m_connectionItems;
     QMap<QString, EffectItemBase*> m_outputs;
-    QComboBox * m_defaultInputSelector;
+    KComboBox * m_defaultInputSelector;
     QGraphicsProxyWidget *m_defaultInputProxy;
 };
 

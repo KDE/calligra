@@ -23,8 +23,8 @@
 #include "KoFilterEffect.h"
 
 #include <KDebug>
+#include <KComboBox>
 
-#include <QtGui/QComboBox>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QPushButton>
 
@@ -115,7 +115,7 @@ FilterEffectScene::FilterEffectScene(QObject *parent)
     m_defaultInputs << "FillPaint" << "StrokePaint";
     m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
     
-    m_defaultInputSelector = new QComboBox(0);
+    m_defaultInputSelector = new KComboBox(static_cast<QWidget*>(0));
     foreach (const QString &input, m_defaultInputs) 
         m_defaultInputSelector->addItem(input);
     m_defaultInputSelector->setCurrentIndex(0);
