@@ -142,8 +142,7 @@ void FilterEffectEditWidget::removeSelectedItem()
                 int inputIndex = 0;
                 foreach(const QString &input, inputs) {
                     if(input == effect->output()) {
-                        nextEffect->removeInput(inputIndex);
-                        nextEffect->insertInput(inputIndex, "");
+                        nextEffect->setInput(inputIndex, "");
                     }
                 }
                 // if one of the next effects has the same output name we stop
@@ -165,8 +164,7 @@ void FilterEffectEditWidget::removeSelectedItem()
             int inputIndex = 0;
             foreach(const QString &input, inputs) {
                 if (input == outputName) {
-                    effect->removeInput(inputIndex);
-                    effect->insertInput(inputIndex, "");
+                    effect->setInput(inputIndex, "");
                 }
                 inputIndex++;
             }
@@ -216,7 +214,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                     newOutputName = QString("result%1").arg(index);
                 } while(uniqueOutputNames.contains(newOutputName));
                 
-                // rename soure output
+                // rename source output
                 source.effect()->setOutput(newOutputName);
                 // adjust following effects
                 for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
@@ -224,8 +222,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                     int inputIndex = 0;
                     foreach(const QString &input, effect->inputs()) {
                         if (input.isEmpty() && (i == sourceEffectIndex+1 || input == sourceName)) {
-                            effect->removeInput(inputIndex);
-                            effect->insertInput(inputIndex, newOutputName);
+                            effect->setInput(inputIndex, newOutputName);
                         }
                         inputIndex++;
                     }
@@ -238,8 +235,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
         // finally set the input of the target
         if (m_shape)
             m_shape->update();
-        target.effect()->removeInput(target.inputIndex());
-        target.effect()->insertInput(target.inputIndex(), sourceName);
+        target.effect()->setInput(target.inputIndex(), sourceName);
         if (m_shape)
             m_shape->update();
         
@@ -248,8 +244,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
         QString sourceName = ConnectionSource::typeToString(source.type());
         if (m_shape)
             m_shape->update();
-        target.effect()->removeInput(target.inputIndex());
-        target.effect()->insertInput(target.inputIndex(), sourceName);
+        target.effect()->setInput(target.inputIndex(), sourceName);
         if (m_shape)
             m_shape->update();
     }
