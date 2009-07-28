@@ -216,7 +216,7 @@ void KarbonFilterEffectsTool::editFilter()
 
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
-    editor->editShape(shape);
+    editor->editShape(shape, m_canvas);
     
     dlg->setMainWidget(editor);
     dlg->exec();

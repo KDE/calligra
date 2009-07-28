@@ -19,10 +19,12 @@
 
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
+#include "FilterInputChangeCommand.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
 #include "KoShape.h"
+#include "KoCanvasBase.h"
 
 #include <KDebug>
 
@@ -30,7 +32,7 @@
 #include <QtCore/QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
-: QWidget(parent), m_scene(new FilterEffectScene(this)), m_shape(0)
+: QWidget(parent), m_scene(new FilterEffectScene(this)), m_shape(0), m_canvas(0)
 {
     setupUi( this );
     
@@ -48,15 +50,15 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     removePreset->setIcon(KIcon("list-remove"));
     copyPreset->setIcon(KIcon("edit-copy"));
     
-    canvas->setScene(m_scene);
-    canvas->setRenderHint(QPainter::Antialiasing, true);
-    canvas->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+    view->setScene(m_scene);
+    view->setRenderHint(QPainter::Antialiasing, true);
+    view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
     
     connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
              this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
 }
 
-void FilterEffectEditWidget::editShape(KoShape *shape)
+void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
 {
     if (!m_shape) {
         qDeleteAll(m_effects);
@@ -64,6 +66,8 @@ void FilterEffectEditWidget::editShape(KoShape *shape)
     }
     
     m_shape = shape;
+    m_canvas = canvas;
+    
     if (m_shape) {
         m_effects = m_shape->filterEffectStack();
     }
@@ -77,8 +81,8 @@ void FilterEffectEditWidget::fitScene()
     QRectF bbox = m_scene->itemsBoundingRect();
     m_scene->setSceneRect(bbox);
     bbox.adjust(-25,-25,25,25);
-    canvas->centerOn(bbox.center());
-    canvas->fitInView(bbox, Qt::KeepAspectRatio);
+    view->centerOn(bbox.center());
+    view->fitInView(bbox, Qt::KeepAspectRatio);
 }
 
 void FilterEffectEditWidget::resizeEvent( QResizeEvent * event )
@@ -131,6 +135,8 @@ void FilterEffectEditWidget::removeSelectedItem()
     if (!selectedItems.count())
         return;
     
+    QList<InputChangeData> changeData;
+    
     foreach(const ConnectionSource &item, selectedItems) {
         KoFilterEffect * effect = item.effect();
         if (item.type() == ConnectionSource::Effect) {
@@ -142,7 +148,8 @@ void FilterEffectEditWidget::removeSelectedItem()
                 int inputIndex = 0;
                 foreach(const QString &input, inputs) {
                     if(input == effect->output()) {
-                        nextEffect->setInput(inputIndex, "");
+                        InputChangeData data(nextEffect, inputIndex, input, "");
+                        changeData.append(data);
                     }
                 }
                 // if one of the next effects has the same output name we stop
@@ -164,13 +171,22 @@ void FilterEffectEditWidget::removeSelectedItem()
             int inputIndex = 0;
             foreach(const QString &input, inputs) {
                 if (input == outputName) {
-                    effect->setInput(inputIndex, "");
+                    InputChangeData data(effect, inputIndex, input, "");
+                    changeData.append(data);
                 }
                 inputIndex++;
             }
         }
     }
-    
+    if (changeData.count()) {
+        QUndoCommand * cmd = new FilterInputChangeCommand(changeData, m_shape);
+        if (m_canvas) {
+            m_canvas->addCommand(cmd);
+        } else {
+            cmd->redo();
+            delete cmd;
+        }
+    }
     m_scene->initialize(m_effects);
     fitScene();
 }
@@ -181,8 +197,11 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     if (targetEffectIndex < 0)
         return;
     
+    QList<InputChangeData> changeData;
+    QString sourceName;
+    
     if (source.type() == ConnectionSource::Effect) {
-        QString sourceName = source.effect()->output();
+        sourceName = source.effect()->output();
         int sourceEffectIndex = m_effects.indexOf(source.effect());
         if (targetEffectIndex-sourceEffectIndex > 1) {
             // there are effects between source effect and target effect
@@ -222,7 +241,8 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                     int inputIndex = 0;
                     foreach(const QString &input, effect->inputs()) {
                         if (input.isEmpty() && (i == sourceEffectIndex+1 || input == sourceName)) {
-                            effect->setInput(inputIndex, newOutputName);
+                            InputChangeData data(effect, inputIndex, input, newOutputName);
+                            changeData.append(data);
                         }
                         inputIndex++;
                     }
@@ -232,21 +252,29 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 sourceName = newOutputName;
             }
         }
-        // finally set the input of the target
-        if (m_shape)
-            m_shape->update();
-        target.effect()->setInput(target.inputIndex(), sourceName);
-        if (m_shape)
-            m_shape->update();
-        
     } else {
         // source is an predefined input image
-        QString sourceName = ConnectionSource::typeToString(source.type());
-        if (m_shape)
-            m_shape->update();
-        target.effect()->setInput(target.inputIndex(), sourceName);
-        if (m_shape)
-            m_shape->update();
+        sourceName = ConnectionSource::typeToString(source.type());
+    }
+    
+    // finally set the input of the target
+    if (target.inputIndex() >= target.effect()->inputs().count()) {
+        // insert new input here
+        target.effect()->addInput(sourceName);
+    } else {
+        QString oldInput = target.effect()->inputs()[target.inputIndex()];
+        InputChangeData data(target.effect(), target.inputIndex(), oldInput, sourceName);
+        changeData.append(data);
+    }
+    
+    if (changeData.count()) {
+        QUndoCommand * cmd = new FilterInputChangeCommand(changeData, m_shape);
+        if (m_canvas) {
+            m_canvas->addCommand(cmd);
+        } else {
+            cmd->redo();
+            delete cmd;
+        }
     }
     m_scene->initialize(m_effects);
     fitScene();

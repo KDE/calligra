@@ -17,43 +17,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef FILTEREFFECTEDITWIDGET_H
-#define FILTEREFFECTEDITWIDGET_H
+#ifndef FILTERINPUTCHANGECOMMAND_H
+#define FILTERINPUTCHANGECOMMAND_H
 
-#include "ui_FilterEffectEditWidget.h"
-#include <QtGui/QWidget>
+#include <QtGui/QUndoCommand>
 
 class KoShape;
-class KoCanvasBase;
 class KoFilterEffect;
-class FilterEffectScene;
-class ConnectionSource;
-class ConnectionTarget;
 
-class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
+struct InputChangeData 
 {
-    Q_OBJECT
-public:
-    FilterEffectEditWidget(QWidget *parent = 0);
+    InputChangeData(KoFilterEffect *effect, int index, const QString &oldIn, const QString &newIn)
+        : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn)
+    {
+    }
     
-    /// Edits effects of given shape
-    void editShape(KoShape *shape, KoCanvasBase * canvas);
-    
-protected:
-    /// reimplemented from QWidget
-    virtual void resizeEvent ( QResizeEvent * event );
-    /// reimplemented from QWidget
-    virtual void showEvent ( QShowEvent * event );
-private slots:
-    void addSelectedEffect();
-    void removeSelectedItem();
-    void connectionCreated(ConnectionSource source, ConnectionTarget target);
-private:
-    void fitScene();
-    FilterEffectScene * m_scene;
-    KoShape * m_shape;
-    KoCanvasBase * m_canvas;
-    QList<KoFilterEffect*> m_effects;
+    KoFilterEffect * filterEffect;
+    int inputIndex;
+    QString oldInput;
+    QString newInput;
 };
 
-#endif // FILTEREFFECTEDITWIDGET_H
+class FilterInputChangeCommand : public QUndoCommand
+{
+public:
+    FilterInputChangeCommand( const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
+    
+    FilterInputChangeCommand( const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
+    
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
+private:
+    QList<InputChangeData> m_data;
+    KoShape * m_shape;
+};
+
+#endif // FILTERINPUTCHANGECOMMAND_H
