@@ -1,7 +1,7 @@
-add_subdirectory( converter )
-add_subdirectory( thumbnail )
-add_subdirectory( kthesaurus )
-add_subdirectory( quickprint )
+macro_optional_add_subdirectory( converter )
+macro_optional_add_subdirectory( thumbnail )
+macro_optional_add_subdirectory( kthesaurus )
+macro_optional_add_subdirectory( quickprint )
 
 # strigi ships with the odfsaxanalyzer which does already fetch the meta-data of
 # odf files. Also the current implementations of the analyzers are deactivated
