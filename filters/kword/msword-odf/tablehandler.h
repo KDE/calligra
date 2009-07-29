@@ -108,7 +108,8 @@ private:
     wvWare::SharedPtr<const wvWare::Word97::TAP> m_tap;
     bool m_cellOpen;
     int m_colSpan;
-    QString m_borderStyle;
+    QString m_borderStyle[6];
+    QString m_margin[6];
 };
 
 #endif // TABLEHANDLER_H

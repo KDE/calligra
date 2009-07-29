@@ -91,15 +91,24 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
     QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
 
-    //TODO figure out what the six different BRC objects are for,
-    // instead of just using one of them to set the whole border
-    //for(int i = 0; i < 6; i++) {
-    //    const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
-    //    kDebug(30513) << brc.toString().c_str();
-    //}
-    //get row border style, used in tableCellStart()
-    const wvWare::Word97::BRC& brc = tap->rgbrcTable[0];
-    m_borderStyle = Conversion::setBorderAttributes(brc);
+    // The 6 BRC objects are for left, right, top, bottom, diagonal \ and diagonal / (not sure of the order)
+    for(int i = 0; i < 6; i++) {
+        const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
+        kDebug(30513) << brc.toString().c_str();
+        m_borderStyle[i] = Conversion::setBorderAttributes(brc);
+        m_margin[i] = QString::number(brc.dptSpace) + "pt";
+    }
+    // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
+
+    if (tap->dyaRowHeight > 0) {
+        rowStyle.addProperty("style:min-row-height", tap->dyaRowHeight);
+    } else if (tap->dyaRowHeight > 0) {
+        rowStyle.addProperty("style:row-height", -tap->dyaRowHeight);
+    }
+
+    if (tap->fCantSplit) {
+        rowStyle.addProperty("style:keep-together", "always");
+    }
 
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
@@ -135,6 +144,7 @@ void KWordTableHandler::tableCellStart()
     // Get table cell descriptor
     //merging, alignment, ... information
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
+    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
     //left boundary of current cell
     int left = m_tap->rgdxaCenter[ m_column ]; // in DXAs
@@ -240,7 +250,7 @@ void KWordTableHandler::tableCellStart()
     //set borders for the four edges of the cell
     //m_borderStyle is the row border style, set in tableRowStart
     if(brcTop.brcType == 0) {
-        cellStyle.addProperty("fo:border-top", m_borderStyle);
+        cellStyle.addProperty("fo:border-top", m_borderStyle[0]);
     }
     //no border
     else if(brcTop.brcType == 255) {
@@ -252,7 +262,7 @@ void KWordTableHandler::tableCellStart()
     }
     //bottom
     if(brcBottom.brcType == 0) {
-        cellStyle.addProperty("fo:border-bottom", m_borderStyle);
+        cellStyle.addProperty("fo:border-bottom", m_borderStyle[1]);
     }
     else if(brcBottom.brcType == 255) {
         cellStyle.addProperty("fo:border-bottom", "thin none #000000");
@@ -262,7 +272,7 @@ void KWordTableHandler::tableCellStart()
     }
     //left
     if(brcLeft.brcType == 0) {
-        cellStyle.addProperty("fo:border-left", m_borderStyle);
+        cellStyle.addProperty("fo:border-left", m_borderStyle[2]);
     }
     else if(brcLeft.brcType == 255) {
         cellStyle.addProperty("fo:border-left", "thin none #000000");
@@ -272,7 +282,7 @@ void KWordTableHandler::tableCellStart()
     }
     //right
     if(brcRight.brcType == 0) {
-        cellStyle.addProperty("fo:border-right", m_borderStyle);
+        cellStyle.addProperty("fo:border-right", m_borderStyle[3]);
     }
     else if(brcRight.brcType == 255) {
         cellStyle.addProperty("fo:border-right", "thin none #000000");
@@ -281,10 +291,15 @@ void KWordTableHandler::tableCellStart()
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
     }
 
+    kDebug(30513) <<" shading " << shd.ipat;
+    if(shd.ipat == 0 && shd.icoBack != 0)
+        cellStyle.addProperty("fo:background-color", Conversion::color(shd.icoBack, -1));
+
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");
     //}
+
     //vertical alignment
     if(tc.vertAlign == 0) {
         cellStyle.addProperty("style:vertical-align", "top");
