@@ -240,6 +240,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * No tests. 
  * Uses khtml.
  * import/export
+ * crashes 2.1
 
 === kword 1.3 ===
 
@@ -266,7 +267,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * Compiled
  * No tests -- though Tuubaku has a test set and some automation.
  * import
- * works in 2.1
+ * works in 2.1 for boemann, I cannot seem to be able to import any document (but they were saved by ooo)
 
 === oowriter ===
 
@@ -286,6 +287,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * Compiled
  * no tests
  * import/export
+ * import works in 2.1
 
 === starwriter ===
 
