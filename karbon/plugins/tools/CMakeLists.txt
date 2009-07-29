@@ -5,6 +5,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/karbon 
     ${CMAKE_SOURCE_DIR}/karbon/ui
     ${CMAKE_SOURCE_DIR}/karbon/ui/widgets 
+    ${CMAKE_CURRENT_SOURCE_DIR}/filterEffectTool
 )
 
 ########### next target ###############
