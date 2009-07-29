@@ -267,16 +267,14 @@ void Conversion::setColorAttributes( QDomElement& element, int ico, const QStrin
 QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
 {
     kDebug(30153) << "brc.brcType = " << brc.brcType;
+    kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
 
     QString width( "thin" ); //reasonable default
     QString style( "solid" ); //reasonable default
     QString color( "#000000" ); //reasonable default
 
-    //TODO fix this!
-    //setColorAttributes( borderElement, brc.ico, prefix, false );
-
-    //borderElement.setAttribute( prefix.isNull() ? "width" : prefix+"Width",
-    //                            (double)brc.dptLineWidth / 8.0 );
+    //set the border width
+    width =  QString::number(brc.dptLineWidth / 8.0) + "pt";
 
     //QString style = "0"; // KWord: solid
     switch ( brc.brcType ) {
@@ -318,11 +316,10 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
         //so just leave values as defaults
         break;
     }
-    //borderElement.setAttribute( prefix.isNull() ? "style" : prefix+"Style", style );
-    // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
 
     //set up color
-    color = Conversion::color( brc.ico, -1 );
+    color = Conversion::color(brc.ico, -1);
+    kDebug(30153) << "brc.ico = " << brc.ico <<" converted to " << color;
 
     QString value( width );
     value.append( " " );
