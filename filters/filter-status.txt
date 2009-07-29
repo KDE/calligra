@@ -1,0 +1,368 @@
+= KOffice filters and State =
+
+The KOffice file import and export filters are ''not'' in a good state. This document tries to make an inventory of all our filters, whether they are still useful and worth maintaining and whether they crash when used in KOffice 2.0.
+
+Note: for testing the filters there exists svn.kde.org/home/kde/trunk/tests/kofficetests/ repository with test documents, some of which are no longer supported and an abortive attempt at creating an automated test application
+
+Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, excel and powerpoint filters.
+
+== karbon ==
+
+=== ai ===
+
+ * Not compiled.
+ * import
+
+=== applixgraphics ===
+
+ * Not compiled -- not even mentioned in the CMakeLists.txt
+ * import
+
+=== eps ===
+
+ * Compiled
+ * import/export 
+ 
+=== karbon1.x ===
+
+ * Compiled
+ * import
+
+=== kontour === 
+
+ * Not compiled
+ * import
+
+=== msod ===
+
+ * MS-Office draw. 
+ * Not compiled. 
+ * Only example of a KoEmbeddedFilter.
+ * import
+
+=== oodraw ===
+
+ * Not compiled
+ * import
+
+=== pdf  ===
+
+ * Not compiled
+ * import
+
+=== png  ===
+
+ * Compiled.
+ * export
+
+=== svg  ===
+
+ * Compiled.
+ * has tests
+ * import seems to work
+ * import/export
+
+=== wmf  ===
+
+ * Compiled.
+ * import/export
+ * no tests
+
+=== wpg  ===
+
+ * Compiled.
+ * import
+
+=== xaml === 
+
+ * Not compiled, not in CMakeLists.txt
+ * import/export
+
+=== xcf  ===
+
+ * Not compiled.
+ * export
+
+=== xfig ===
+
+ * Not compiled, not in CMakeLists.txt
+ * import
+
+== kchart ==
+
+=== svg ===
+
+ * Compiled.
+ * export
+
+=== generic image export ===
+
+ * Compiled.
+ * export
+
+== KFormula ==
+
+=== kformula1.3 ===
+
+ * Not compiled.
+ * import
+
+=== latex ===
+
+ * Not compiled.
+ * export
+
+=== png ===
+
+ * Not compiled.
+ * export
+
+=== svg ===
+
+ * Not compiled.
+ * export
+
+=== mathml ===
+
+ * native, not a filter
+ * crashes 2.1
+
+== kivio ==
+
+=== generic image export ===
+
+ * Not compiled.
+ * export
+
+== kplato ==
+
+=== icalendar ===
+
+ * Compiled.
+ * Export
+
+== KPresenter ==
+
+=== genericimageexport ===
+
+ * Not compiled.
+ * export
+
+=== kword ===
+
+ * Not compiled
+ * export
+
+=== ooimpress ===
+
+ * Not compiled
+ * has tests
+ * import/export
+
+=== powerpoint ===
+
+ * Compiled
+ * crashes 2.1
+ * import
+
+=== magicpoint ===
+
+ * Not compiled
+ * import
+ * python script
+
+=== kpr ===
+
+ * Not compiled
+ * import/export
+
+== kpr2odf ===
+
+ * Compiled
+ * import
+
+=== ooppt ===
+
+ * Not compiled
+ * import
+ * uses openoffice
+
+=== svg ===
+
+ * Not compiled
+ * export
+
+== kword ==
+
+=== abiword === 
+
+ * Compiled. 
+ * No tests.
+
+=== amipro ===
+
+ * compiled
+ * 2.0 crashes, 2.1 works
+ * Amipro is probably not all that useful or worth maintaining anymore since it was never a popular or much used word processor. https://bugs.kde.org/201458. 
+ * has tests.
+
+=== applixword ===
+
+ * Compiled. 
+ * No tests.
+ * import/export
+
+=== ascii ===
+
+ * Compiled. 
+ * Has tests.
+ * works in 2.1, crashes 2.0
+ * import/export
+
+=== docbook ===
+
+ * Compiled. 
+ * No Tests.
+ * export
+
+=== hancomword ===
+
+ * 2.0, 2.1: the mimetype system doesn't recognize the file extension anymore? 
+ * compiled, not on Windows, because the ui file is Qt3.
+ * There are tests.
+ * crashes 2.1
+ * import
+ * mime type is shown as type, not description in filter chooser dialog
+
+=== html ===
+
+ * Compiled. 
+ * No tests. 
+ * Uses khtml.
+ * import/export
+
+=== kword 1.3 ===
+
+ * Compiled. 
+ * Tests in kofficetests/documents/native/kword (or is that 1.4?)
+ * import
+
+=== latex ===
+
+ * Not compiled. 
+ * No tests.
+ * import/export
+
+=== mswrite ===
+
+ * 2.0 crashes. https://bugs.kde.org/201461. 
+ * 2.1 works
+ * There are tests.
+ * Compiled
+ * import/export
+
+=== msword-odf ===
+
+ * Compiled
+ * No tests -- though Tuubaku has a test set and some automation.
+ * import
+ * works in 2.1
+
+=== oowriter ===
+
+ * Compiled. 
+ * Has tests.
+ * works in 2.1
+ * import/export
+
+=== palmdoc ===
+ 
+ * Compiled
+ * no tests
+ * import/export
+ 
+=== rtf ===
+
+ * Compiled
+ * no tests
+ * import/export
+
+=== starwriter ===
+
+ * not compiled (not in CMakeLists.txt
+ * has tests
+ * import
+
+=== wml ===
+
+ * compiled
+ * has tests
+ * seems broken (no text visible after importing)
+
+=== wordperfect ===
+
+ * compiled
+ * has tests, tests have already been copied to koffice/filters/kword/wordperfect from kofficetests
+ * wp files aren't recognized, mime-type not listed
+ * import/export
+
+== kspread ==
+
+=== applixspread === 
+
+ * compiled
+ * no tests
+ * import
+
+=== csv ===
+
+ * compiled
+ * no tests
+ * import/export
+
+=== dbase ===
+
+ * compiled
+ * has tests
+ * 2.0 works fine.
+ * import
+
+=== excel ===
+
+ * compiled
+ * has tests
+ * 2.0 works fine. Known problem on arm: crashes because of int alignment issues.
+ * import
+
+=== gnumeric ===
+
+ * compiled
+ * no tests
+ * import/export
+ 
+=== html ===
+
+ * compiled
+ * no tests
+ * export
+
+=== latex ===
+
+ * compiled
+ * no tests
+ * export
+
+=== opencalc ===
+
+ * compiled
+ * has tests
+ * crashes in 2.1
+ * import/export
+
+=== qpro ===
+ 
+ * compiled
+ * has tests
+ * mime type isn't recognized
+ * crashes in 2.1
+ * import
