@@ -113,7 +113,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     int numColumns = sep->ccolM1 + 1;
 
     //page layout could change
-    if(sep->bkc >= 2) {
+    if(sep->bkc != 1) {
         emit sectionFound(sep);
     }
     //check for a column break

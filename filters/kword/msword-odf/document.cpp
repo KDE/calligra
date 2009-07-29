@@ -372,8 +372,10 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
     m_textHandler->m_writeMasterStyleName = true;
 
+    // ----------------------
     //create page layout style here
     m_pageLayoutStyle = new KoGenStyle(KoGenStyle::StylePageLayout);
+    QString pageLayoutStyleName("Mpm");
 
     //get width & height in points
     double width = (double)sep->xaPage / 20.0;
@@ -403,6 +405,8 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
     m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
+    pageLayoutStyleName = m_mainStyles->lookup(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
+    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutStyleName);
 
     // TODO apply brcTop/brcLeft etc. to the main FRAME
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
