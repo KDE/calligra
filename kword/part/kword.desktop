@@ -12,6 +12,7 @@ Exec=kword %u
 GenericName=Word Processor
 GenericName[bg]=Текстообработваща програма
 GenericName[ca]=Processador de textos
+GenericName[cs]=Textový procesor
 GenericName[da]=Tekstbehandling
 GenericName[de]=Textverarbeitung
 GenericName[el]=Επεξεργασία κειμένου

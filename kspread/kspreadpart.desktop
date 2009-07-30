@@ -56,6 +56,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-templa
 GenericName=Spreadsheet
 GenericName[bg]=Таблици
 GenericName[ca]=Full de càlcul
+GenericName[cs]=Sešit
 GenericName[da]=Regneark
 GenericName[de]=Tabellenkalkulation
 GenericName[el]=Λογιστικό φύλλο
