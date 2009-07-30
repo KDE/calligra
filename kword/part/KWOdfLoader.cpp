@@ -96,7 +96,9 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     bool hasMainText = false;
     KoXmlElement childElem;
     forEachElement(childElem, body) {
-        if (childElem.namespaceURI() == KoXmlNS::text) {
+        if (childElem.namespaceURI() == KoXmlNS::text
+                && childElem.localName() != "page-sequence"
+                && childElem.localName() != "tracked-changes") {
             hasMainText = true;
             break;
         }
