@@ -786,7 +786,7 @@ void SvgExport::saveText( ArtisticTextShape * text )
 
 void SvgExport::saveImage(KoShape *picture)
 {
-    KoImageData * imageData = dynamic_cast<KoImageData*>( picture->userData() );
+    KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
     if( ! imageData )
     {
         qWarning() << "Picture has no image data. Omitting.";
