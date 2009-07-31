@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -173,6 +174,7 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     m_view->horizontalRuler()->setActiveRange(layout.left, layout.width - layout.right);
     m_view->verticalRuler()->setActiveRange(layout.top, layout.height - layout.bottom);
 
+    m_canvas->setDocumentOrigin( QPointF( 0, 0 ) );
     m_view->zoomController()->setPageSize(size);
     m_view->zoomController()->setDocumentSize(size);
     m_canvas->update();
