@@ -166,10 +166,6 @@ void KarbonFilterEffectsTool::addFilter()
     
     KoFilterEffect * effect = factory->createFilterEffect();
     
-    QRectF clipRect(-0.1*bbox.width(), -0.1*bbox.height(), 1.2*bbox.width(), 1.2*bbox.height());
-    effect->setClipRect(clipRect);
-    effect->setFilterRect(clipRect);
-    
     int shapeFilterCount = shape->filterEffectStack().count();
     shape->update();
     shape->insertFilterEffect(shapeFilterCount, effect);

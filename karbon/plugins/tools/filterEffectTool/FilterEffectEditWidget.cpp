@@ -106,15 +106,6 @@ void FilterEffectEditWidget::addSelectedEffect()
 
     KoFilterEffect * effect = factory->createFilterEffect();
     
-    QRectF bbox(0,0,1,1);
-    if (m_shape) {
-        bbox = QRectF(QPointF(), m_shape->size());
-    }
-    
-    QRectF clipRect(-0.1*bbox.width(), -0.1*bbox.height(), 1.2*bbox.width(), 1.2*bbox.height());
-    effect->setClipRect(clipRect);
-    effect->setFilterRect(clipRect);
-    
     if (m_shape) {
         int shapeFilterCount = m_shape->filterEffectStack().count();
         m_shape->update();
