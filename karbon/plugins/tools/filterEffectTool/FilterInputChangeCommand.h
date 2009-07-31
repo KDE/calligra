@@ -38,12 +38,13 @@ struct InputChangeData
     QString newInput;
 };
 
+/// A command to change the input of a filter effect
 class FilterInputChangeCommand : public QUndoCommand
 {
 public:
-    FilterInputChangeCommand( const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
+    explicit FilterInputChangeCommand( const InputChangeData &data, KoShape *shape = 0, QUndoCommand *parent = 0);
     
-    FilterInputChangeCommand( const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
+    explicit FilterInputChangeCommand( const QList<InputChangeData> &data, KoShape * shape = 0, QUndoCommand *parent = 0);
     
     /// redo the command
     virtual void redo();
