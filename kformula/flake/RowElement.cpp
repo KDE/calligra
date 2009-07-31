@@ -250,7 +250,12 @@ QList< BasicElement* > RowElement::elementsBetween ( int pos1, int pos2 ) const
 
 bool RowElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
 {
-        m_childElements.replace(m_childElements.indexOf(oldelement),newelement);
+    int oldElementIndex = m_childElements.indexOf(oldelement);
+    if( oldElementIndex < 0)
+        return false;
+
+    m_childElements.replace(oldElementIndex,newelement);
+    return true;
 }
 
 

@@ -509,7 +509,9 @@ bool FormulaCursor::moveToEmpty()
         if (isSelecting()) {
             m_mark=0;
         }
+        return true;
     }
+    return false;
 }
 
 
