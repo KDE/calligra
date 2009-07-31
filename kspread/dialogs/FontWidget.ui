@@ -208,7 +208,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
   <customwidgets>
   <customwidget>
    <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
+   <extends>QFrame</extends>
    <header>q3listbox.h</header>
   </customwidget>
   <customwidget>

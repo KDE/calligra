@@ -387,7 +387,7 @@
   </customwidget>
   <customwidget>
    <class>Q3ListView</class>
-   <extends>Q3Frame</extends>
+   <extends>QFrame</extends>
    <header>q3listview.h</header>
   </customwidget>
   <customwidget>

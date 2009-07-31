@@ -166,7 +166,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <customwidgets>
   <customwidget>
    <class>Q3ListView</class>
-   <extends>Q3Frame</extends>
+   <extends>QFrame</extends>
    <header>q3listview.h</header>
   </customwidget>
   <customwidget>

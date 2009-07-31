@@ -320,7 +320,7 @@
                 <number>0</number>
               </property>
               <item row="0" column="0" >
-                <widget class="Q3Frame" name="frame3" >
+                <widget class="QFrame" name="frame3" >
                   <property name="frameShape" >
                     <enum>NoFrame</enum>
                   </property>
