@@ -19,8 +19,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-
-
 #include "KFormulaPartDocument.h"
 #include "KFormulaPartView.h"
 #include "KFormulaPartFactory.h"
@@ -28,6 +26,8 @@
 
 #include <QPainter>
 #include <QString>
+#include <QUndoCommand>
+#include <QUndoStack>
 
 #include <KoGlobal.h>
 #include <KoXmlWriter.h>
@@ -45,7 +45,7 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
 {
     setComponentData( KFormulaPartFactory::global(), false );
 
-    m_commandHistory = new K3CommandHistory( actionCollection() );
+    m_commandHistory = new QUndoStack(this);
     m_formulaElement = new FormulaElement;
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),
 		         this, SLOT( slotExecuted() ) );
@@ -56,7 +56,6 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
 
 KFormulaPartDocument::~KFormulaPartDocument()
 {
-    delete m_commandHistory;
 }
 
 

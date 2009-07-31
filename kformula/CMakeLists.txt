@@ -8,8 +8,6 @@ set(KFORMULA_INCLUDES
 
 include_directories(${KFORMULA_INCLUDES})
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 add_subdirectory( pics )
 add_subdirectory( flake )
 
@@ -31,8 +29,6 @@ target_link_libraries(
     komain
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

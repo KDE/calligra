@@ -28,12 +28,12 @@
 #include <KoShapeControllerBase.h>
 #include "KFormulaPartView.h"
 #include <QPainter>
-#include <k3command.h>
 #include "kformula_export.h"
 
 class QIODevice;
-class KoXmlWriter;
+class QUndoStack;
 class KoDataCenter;
+class KoXmlWriter;
 
 class FormulaElement;
 
@@ -82,8 +82,8 @@ public:
     /// reimplemented from KoDocument
     bool showEmbedInitDialog(QWidget* parent);
 
-	/// Return our Formula container
-	FormulaElement* formulaElement() const { return m_formulaElement; }
+    /// Return our Formula container
+    FormulaElement* formulaElement() const { return m_formulaElement; }
 	
 protected slots:
     void commandExecuted();
@@ -96,7 +96,7 @@ protected:
 private:
     FormulaElement* m_formulaElement;
     /// The undo stack
-    K3CommandHistory* m_commandHistory;
+    QUndoStack* m_commandHistory;
 
 };
 
