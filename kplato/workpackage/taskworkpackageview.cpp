@@ -321,6 +321,7 @@ void TaskWorkPackageView::saveContext( QDomElement &context ) const
 KoPrintJob *TaskWorkPackageView::createPrintJob()
 {
 //    return m_view->createPrintJob( this );
+    return 0;
 }
 
 

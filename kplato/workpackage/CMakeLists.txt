@@ -51,7 +51,7 @@ set(kplatoworkpart_PART_SRCS factoryinit.cpp )
 
 kde4_add_plugin(kplatoworkpart WITH_PREFIX ${kplatoworkpart_PART_SRCS})
 
-target_link_libraries(kplatoworkpart kplatoworkfactory)
+target_link_libraries(kplatoworkpart ${QT_QTCORE_LIBRARY} ${KDE4_KPARTS_LIBS} kplatoworkfactory)
 
 install(TARGETS kplatoworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
