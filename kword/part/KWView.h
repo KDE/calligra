@@ -172,6 +172,8 @@ private slots:
     void handleDeletePageAction();
     /// set the status of the show-statusbar action to reflect the current setting.
     void updateStatusBarAction();
+    /// insert image
+    void insertImage();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

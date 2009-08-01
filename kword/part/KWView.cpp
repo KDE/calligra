@@ -43,6 +43,8 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoShapeCreateCommand.h>
+#include <KoImageSelectionWidget.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoCutController.h>
 #include <KoPasteController.h>
@@ -240,6 +242,11 @@ void KWView::setupActions()
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
+
+    action = new KAction(i18n("Insert Picture..."), this);
+    action->setToolTip(i18n("Insert a picture into document"));
+    actionCollection()->addAction("insert_picture", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertImage()));
 
     action = new KAction(i18n("Frame Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
@@ -1168,6 +1175,19 @@ void KWView::createCustomOutline()
     }
 
     KoToolManager::instance()->switchToolRequested("PathToolFactoryId");
+}
+
+void KWView::insertImage()
+{
+    KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->dataCenterMap(), this);
+    if (shape) {
+        // TODO move the shape to a pos in doc that I'm looking at now.
+        KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_document, shape);
+        KoSelection *selection = m_canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
+        m_document->addCommand(cmd);
+    }
 }
 
 
