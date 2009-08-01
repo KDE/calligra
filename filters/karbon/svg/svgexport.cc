@@ -51,6 +51,7 @@
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <KoImageData.h>
 #include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 #include "KoXmlWriter.h"
 
 #include <KGenericFactory>
@@ -658,16 +659,17 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
 
 void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
 {
-    QList<KoFilterEffect*> filterEffectStack = shape->filterEffectStack();
-    if (!filterEffectStack.count())
+    KoFilterEffectStack * filterStack = shape->filterEffectStack();
+    if (!filterStack)
+        return;
+
+    QList<KoFilterEffect*> filterEffects = filterStack->filterEffects();
+    if (!filterEffects.count())
         return;
 
     QString uid = createUID();
 
-    QRectF filterRegion;
-    foreach(KoFilterEffect* effect, filterEffectStack) {
-        filterRegion |= effect->clipRect();
-    }
+    QRectF filterRegion = filterStack->clipRect();
 
     printIndentation( m_defs, m_indent2 );
 
@@ -685,7 +687,7 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
     writer.addAttribute("width", filterRegion.width() );
     writer.addAttribute("height", filterRegion.height() );
 
-    foreach(KoFilterEffect *effect, filterEffectStack) {
+    foreach(KoFilterEffect *effect, filterEffects) {
         effect->save(writer);
     }
     writer.endElement();

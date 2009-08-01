@@ -27,6 +27,7 @@
 
 class KoShape;
 class KoFilterEffect;
+class KoFilterEffectStack;
 class QGraphicsItem;
 class EffectItemBase;
 class EffectItem;
@@ -85,7 +86,7 @@ public:
     virtual ~FilterEffectScene();
     
     /// initializes the scene from the filter effect stack
-    void initialize(const QList<KoFilterEffect*> &effects);
+    void initialize(KoFilterEffectStack *effectStack);
     
     /// Returns list of selected effect items
     QList<ConnectionSource> selectedEffectItems() const;
@@ -107,7 +108,7 @@ private:
     void layoutEffects();
     
     QList<QString> m_defaultInputs;
-    QList<KoFilterEffect*> m_effects;
+    KoFilterEffectStack * m_effectStack;
     QList<EffectItemBase*> m_items;
     QList<ConnectionItem*> m_connectionItems;
     QMap<QString, EffectItemBase*> m_outputs;

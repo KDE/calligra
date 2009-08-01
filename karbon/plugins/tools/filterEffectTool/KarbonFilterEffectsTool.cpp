@@ -21,6 +21,7 @@
 
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 #include "KoFilterEffectFactory.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffectConfigWidgetBase.h"
@@ -57,11 +58,11 @@ public:
         
         configSelector->clear();
         
-        if (!shape)
+        if (!shape || !shape->filterEffectStack())
             return;
         
         int index = 0;
-        foreach(KoFilterEffect *effect, shape->filterEffectStack()) {
+        foreach(KoFilterEffect *effect, shape->filterEffectStack()->filterEffects()) {
             configSelector->addItem(QString("%1 - ").arg(index) + effect->name());
             index++;
         }
@@ -165,10 +166,13 @@ void KarbonFilterEffectsTool::addFilter()
     QRectF bbox(QPointF(), shape->size());
     
     KoFilterEffect * effect = factory->createFilterEffect();
-    
-    int shapeFilterCount = shape->filterEffectStack().count();
+    KoFilterEffectStack * effectStack = shape->filterEffectStack();
+    if (!effectStack ) {
+        effectStack = new KoFilterEffectStack();
+        shape->setFilterEffectStack(effectStack);
+    }
     shape->update();
-    shape->insertFilterEffect(shapeFilterCount, effect);
+    effectStack->appendFilterEffect(effect);
     shape->update();
     
     d->fillConfigSelector(shape);
@@ -177,17 +181,17 @@ void KarbonFilterEffectsTool::addFilter()
 void KarbonFilterEffectsTool::removeFilter()
 {
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape )
+    if( ! shape || !shape->filterEffectStack())
         return;
     
-    QList<KoFilterEffect*> effectStack = shape->filterEffectStack();
+    QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
     
     int index = d->configSelector->currentIndex();
-    if (index >= 0 && index < effectStack.count()) {
-        KoFilterEffect * effect = effectStack[index];
+    if (index >= 0 && index < filterEffects.count()) {
+        KoFilterEffect * effect = filterEffects[index];
         
         shape->update();
-        shape->removeFilterEffect(index);
+        shape->filterEffectStack()->removeFilterEffect(index);
         shape->update();
         
         delete effect;
@@ -232,13 +236,13 @@ void KarbonFilterEffectsTool::filterChanged()
 void KarbonFilterEffectsTool::filterSelected(int index)
 {
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape )
+    if( ! shape || ! shape->filterEffectStack())
         return;
     
     KoFilterEffect * effect = 0;
-    QList<KoFilterEffect*> effectStack = shape->filterEffectStack();
-    if (index >= 0 && index < effectStack.count()) {
-        effect = effectStack[index];
+    QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
+    if (index >= 0 && index < filterEffects.count()) {
+        effect = filterEffects[index];
     }
     
     d->addWidgetForEffect(effect, this);

@@ -21,6 +21,7 @@
 #include "FilterEffectSceneItems.h"
 #include "KoShape.h"
 #include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 
 #include <KDebug>
 #include <KComboBox>
@@ -110,6 +111,7 @@ KoFilterEffect * ConnectionTarget::effect() const
 
 FilterEffectScene::FilterEffectScene(QObject *parent)
 : QGraphicsScene(parent), m_defaultInputSelector(0), m_defaultInputProxy(0)
+, m_effectStack(0)
 {
     m_defaultInputs << "SourceGraphic" << "SourceAlpha";
     m_defaultInputs << "FillPaint" << "StrokePaint";
@@ -133,7 +135,7 @@ FilterEffectScene::~FilterEffectScene()
     delete m_defaultInputSelector;
 }
 
-void FilterEffectScene::initialize(const QList<KoFilterEffect*> &effects)
+void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
 {
     if (m_defaultInputProxy) {
         m_defaultInputProxy->hide();
@@ -145,12 +147,16 @@ void FilterEffectScene::initialize(const QList<KoFilterEffect*> &effects)
     m_outputs.clear();
     clear();
     
-    m_effects = effects;
+    m_effectStack = effectStack;
 
-    if (!m_effects.count())
+    if (!m_effectStack)
+        return;
+
+    QList<KoFilterEffect*> filterEffects = m_effectStack->filterEffects();
+    if (! filterEffects.count())
         return;
     
-    foreach(KoFilterEffect *effect, m_effects) {
+    foreach(KoFilterEffect *effect, filterEffects) {
         createEffectItems(effect);
     }
     

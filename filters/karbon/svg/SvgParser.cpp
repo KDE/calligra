@@ -51,6 +51,7 @@
 #include <KoPatternBackground.h>
 #include <KoFilterEffectRegistry.h>
 #include <KoFilterEffect.h>
+#include "KoFilterEffectStack.h"
 
 #include <KDebug>
 
@@ -1517,7 +1518,8 @@ void SvgParser::applyFilter( KoShape * shape )
 
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 
-    int existingFilterCount = shape->filterEffectStack().count();
+    KoFilterEffectStack * filterStack = 0;
+
     // create the filter effects and add them to the shape
     for( QDomNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -1558,10 +1560,16 @@ void SvgParser::applyFilter( KoShape * shape )
         if (primitive.hasAttribute("result"))
             filterEffect->setOutput(primitive.attribute("result"));
 
-        filterEffect->setClipRect(objectFilterRegion);
         filterEffect->setFilterRect(subRegion);
-        shape->insertFilterEffect(existingFilterCount, filterEffect);
-        existingFilterCount++;
+        
+        if (!filterStack)
+            filterStack = new KoFilterEffectStack();
+
+        filterStack->appendFilterEffect(filterEffect);
+    }
+    if (filterStack) {
+        filterStack->setClipRect(objectFilterRegion);
+        shape->setFilterEffectStack(filterStack);
     }
 }
 

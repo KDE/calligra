@@ -23,6 +23,7 @@
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
+#include "KoFilterEffectStack.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
 
@@ -32,7 +33,8 @@
 #include <QtCore/QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
-: QWidget(parent), m_scene(new FilterEffectScene(this)), m_shape(0), m_canvas(0)
+: QWidget(parent), m_scene(new FilterEffectScene(this))
+, m_shape(0), m_canvas(0), m_effects(0)
 {
     setupUi( this );
     
@@ -58,11 +60,17 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
              this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
 }
 
+FilterEffectEditWidget::~FilterEffectEditWidget()
+{
+    if (!m_shape) {
+        delete m_effects;
+    }
+}
+
 void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
 {
     if (!m_shape) {
-        qDeleteAll(m_effects);
-        m_effects.clear();
+        delete m_effects;
     }
     
     m_shape = shape;
@@ -70,6 +78,8 @@ void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
     
     if (m_shape) {
         m_effects = m_shape->filterEffectStack();
+    } else {
+        m_effects = new KoFilterEffectStack();
     }
     
     m_scene->initialize(m_effects);
@@ -101,20 +111,20 @@ void FilterEffectEditWidget::addSelectedEffect()
 {
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
     KoFilterEffectFactory * factory = registry->values()[effectSelector->currentIndex()];
-    if( ! factory )
+    if (!factory)
         return;
 
     KoFilterEffect * effect = factory->createFilterEffect();
+    if (!effect)
+        return;
     
-    if (m_shape) {
-        int shapeFilterCount = m_shape->filterEffectStack().count();
+    if (m_shape)
         m_shape->update();
-        m_shape->insertFilterEffect(shapeFilterCount, effect);
+    
+    m_effects->appendFilterEffect(effect);
+
+    if (m_shape)
         m_shape->update();
-        m_effects = m_shape->filterEffectStack();
-    } else {
-        m_effects.append(effect);
-    }
     
     m_scene->initialize(m_effects);
     fitScene();
@@ -127,14 +137,15 @@ void FilterEffectEditWidget::removeSelectedItem()
         return;
     
     QList<InputChangeData> changeData;
+    QList<KoFilterEffect*> filterEffects = m_effects->filterEffects();
     
     foreach(const ConnectionSource &item, selectedItems) {
         KoFilterEffect * effect = item.effect();
         if (item.type() == ConnectionSource::Effect) {
-            int effectIndex = m_effects.indexOf(effect);
+            int effectIndex = filterEffects.indexOf(effect);
             // adjust inputs of all following effects in the stack
-            for (int i = effectIndex+1; i < m_effects.count(); ++i) {
-                KoFilterEffect * nextEffect = m_effects[i];
+            for (int i = effectIndex+1; i < filterEffects.count(); ++i) {
+                KoFilterEffect * nextEffect = filterEffects[i];
                 QList<QString> inputs = nextEffect->inputs();
                 int inputIndex = 0;
                 foreach(const QString &input, inputs) {
@@ -148,14 +159,13 @@ void FilterEffectEditWidget::removeSelectedItem()
                     break;
             }
             // remove the effect from the stack
-            if (m_shape) {
+            if (m_shape)
                 m_shape->update();
-                m_shape->removeFilterEffect(effectIndex);
+            
+            m_effects->removeFilterEffect(effectIndex);
+            
+            if (m_shape)
                 m_shape->update();
-                m_effects = m_shape->filterEffectStack();
-            } else {
-                m_effects.removeAt(effectIndex);
-            }
         } else {
             QString outputName = ConnectionSource::typeToString(item.type());
             QList<QString> inputs = effect->inputs();
@@ -184,7 +194,9 @@ void FilterEffectEditWidget::removeSelectedItem()
 
 void FilterEffectEditWidget::connectionCreated(ConnectionSource source, ConnectionTarget target)
 {
-    int targetEffectIndex = m_effects.indexOf(target.effect());
+    QList<KoFilterEffect*> filterEffects = m_effects->filterEffects();
+    
+    int targetEffectIndex = filterEffects.indexOf(target.effect());
     if (targetEffectIndex < 0)
         return;
     
@@ -193,7 +205,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     
     if (source.type() == ConnectionSource::Effect) {
         sourceName = source.effect()->output();
-        int sourceEffectIndex = m_effects.indexOf(source.effect());
+        int sourceEffectIndex = filterEffects.indexOf(source.effect());
         if (targetEffectIndex-sourceEffectIndex > 1) {
             // there are effects between source effect and target effect
             // so we have to take extra care
@@ -206,7 +218,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 // output is named but if there is an effect with the same
                 // output name, we have to rename the source output
                 for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
-                    KoFilterEffect * effect = m_effects[i];
+                    KoFilterEffect * effect = filterEffects[i];
                     if (effect->output() == sourceName) {
                         renameOutput = true;
                         break;
@@ -215,7 +227,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
             }
             if (renameOutput) {
                 QSet<QString> uniqueOutputNames;
-                foreach(KoFilterEffect *effect, m_effects) {
+                foreach(KoFilterEffect *effect, filterEffects) {
                     uniqueOutputNames.insert(effect->output());
                 }
                 int index = 0;
@@ -228,7 +240,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
                 source.effect()->setOutput(newOutputName);
                 // adjust following effects
                 for (int i = sourceEffectIndex+1; i < targetEffectIndex; ++i) {
-                    KoFilterEffect * effect = m_effects[i];
+                    KoFilterEffect * effect = filterEffects[i];
                     int inputIndex = 0;
                     foreach(const QString &input, effect->inputs()) {
                         if (input.isEmpty() && (i == sourceEffectIndex+1 || input == sourceName)) {

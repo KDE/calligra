@@ -25,7 +25,7 @@
 
 class KoShape;
 class KoCanvasBase;
-class KoFilterEffect;
+class KoFilterEffectStack;
 class FilterEffectScene;
 class ConnectionSource;
 class ConnectionTarget;
@@ -35,6 +35,7 @@ class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
     Q_OBJECT
 public:
     FilterEffectEditWidget(QWidget *parent = 0);
+    ~FilterEffectEditWidget();
     
     /// Edits effects of given shape
     void editShape(KoShape *shape, KoCanvasBase * canvas);
@@ -53,7 +54,7 @@ private:
     FilterEffectScene * m_scene;
     KoShape * m_shape;
     KoCanvasBase * m_canvas;
-    QList<KoFilterEffect*> m_effects;
+    KoFilterEffectStack * m_effects;
 };
 
 #endif // FILTEREFFECTEDITWIDGET_H
