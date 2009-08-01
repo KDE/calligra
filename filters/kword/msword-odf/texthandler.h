@@ -97,8 +97,8 @@ public:
 
     bool m_writingHeader; //flag for headers & footers, where we write the actual text to styles.xml
     bool m_writeMasterStyleName; //whether to write the style name or not, since it only needs to be the first one
-    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
-    int m_currentListID; //tracks the id of the current list - 0 if no list
+    bool listIsOpen(); //tell us whether a list is open
+    void closeList();
     KoXmlWriter* m_headerWriter; //for header/footer writing in styles.xml
     QString m_listStyleName; //track the name of the list style
     QString m_masterStyleName; //need to know what the master style name is so we can write it
@@ -175,6 +175,8 @@ private:
     int m_maxColumns;//max number of columns in a table
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
+    int m_currentListID; //tracks the id of the current list - 0 if no list
 };
 
 #endif // TEXTHANDLER_H

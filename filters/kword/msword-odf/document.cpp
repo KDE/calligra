@@ -59,7 +59,6 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
     m_oddOpen(false),
     m_footNoteNumber(0),
     m_endNoteNumber(0),
-    m_currentListDepth(-1),
     m_bodyWriter(0),
     m_mainStyles(0),
     m_metaWriter(0),
@@ -320,32 +319,17 @@ void Document::bodyStart()
              this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
     connect( m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
              this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
-    connect( m_textHandler, SIGNAL(updateListDepth( int ) ),
-             this, SLOT(slotUpdateListDepth( int ) ) );
     m_bodyFound = true;
 }
 
 //disconnects firstSectionFound signal & slot
 void Document::bodyEnd()
 {
-    kDebug(30513) << "m_currentListDepth = " << m_currentListDepth;
-
     //close a list if we need to
-    if ( m_currentListDepth >= 0 )
+    if ( m_textHandler->listIsOpen() )
     {
         kDebug(30513) << "closing the final list in the document body";
-        //m_listStylesWriter->endElement(); //text:list-style
-        //reset listStyleName
-        m_textHandler->m_listStyleName = "";
-        m_textHandler->m_currentListDepth = -1;
-        m_textHandler->m_currentListID = 0;
-        //close any open list tags in the body writer
-        for (int i = 0; i < m_currentListDepth; i++)
-        {
-            m_bodyWriter->endElement(); //close the text:list-item
-            m_bodyWriter->endElement(); //text:list
-        }
-        m_currentListDepth = -1;
+        m_textHandler->closeList();
     }
 
     disconnect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
@@ -515,20 +499,10 @@ void Document::headerEnd()
 {
     kDebug(30513) ;
     //close a list if we need to (you can have a list inside a header)
-    if ( m_currentListDepth >= 0 )
+    if ( m_textHandler->listIsOpen() )
     {
         kDebug(30513) << "closing a list in a header/footer";
-        //reset listStyleName, m_currentListDepth, & m_currentListID in m_textHandler
-        m_textHandler->m_currentListDepth = -1;
-        m_textHandler->m_listStyleName = "";
-        m_textHandler->m_currentListID = 0;
-        //close any open list tags in the body writer
-        for (int i = 0; i <= m_currentListDepth; i++)
-        {
-            m_writer->endElement(); //close the text:list-item
-            m_writer->endElement(); //text:list
-        }
-        m_currentListDepth = -1;
+        m_textHandler->closeList();
     }
 
     //close writer & add to m_masterStyle
@@ -571,12 +545,6 @@ void Document::footnoteStart()
 void Document::footnoteEnd()
 {
     kDebug(30513);
-}
-
-void Document::slotUpdateListDepth( int depth )
-{
-    kDebug(30513) << "setting m_currentListDepth = " << depth;
-    m_currentListDepth = depth;
 }
 
 //disable this for now - we should be able to do everything in TableHandler

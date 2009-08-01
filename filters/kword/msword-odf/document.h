@@ -114,10 +114,6 @@ public slots:
     void slotPictureFound( const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
             const wvWare::FunctorBase* );
 
-    //track the current list depth when texthandler is parsing lists,
-    //because we may need to close the list here
-    void slotUpdateListDepth( int depth );
-
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
     //void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
@@ -144,7 +140,6 @@ private:
     bool m_oddOpen; //we're processing an odd header or footer
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
-    int m_currentListDepth; //track list depth in case we need to close a list here (-1 if no list)
     KoXmlWriter* m_bodyWriter; //for writing to the body of content.xml
     KoGenStyles* m_mainStyles; //for collecting styles
     KoXmlWriter* m_metaWriter; //for writing to meta.xml

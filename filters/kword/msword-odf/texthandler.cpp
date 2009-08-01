@@ -456,24 +456,10 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     {
         //not in a list at all in the word document, so check if we need to close one in the odt
         //kDebug(30513) << "Not in a list, so we may need to close a list.";
-        if ( m_currentListID != 0 )
+        if ( listIsOpen() )
         {
-            kDebug(30513) << "closing list " << m_currentListID;
-            //if pap.ilfo is 0, we should be done with the list, so close <text:list> & <text:list-style>
-            //TODO should probably test this more, to make sure it does work this way
-            //for level 0, we need to close the last item and the list
-            //for level 1, we need to close the last item and the list, and the last item and the list
-            //for level 2, we need to close the last item and the list, and the last item adn the list, and again
-            for (int i = 0; i <= m_currentListDepth; i++)
-            {
-                writer->endElement(); //close the last text:list-item
-                writer->endElement(); //text:list
-            }
-            m_currentListID = 0;
-            m_currentListDepth = -1;
-            m_listStyleName = "";
-            kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
-            emit updateListDepth( m_currentListDepth );
+            //kDebug(30513) << "closing list " << m_currentListID;
+            closeList();
         }
     }
 
@@ -744,11 +730,21 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         writer->addAttribute( "text:style-name", m_listStyleName );
         //set flag to true because it's a new list, so we need to write that tag
         newListLevelStyle = true;
+        m_currentListDepth = pap.ilvl;
+        if ( m_currentListDepth > 0 )
+        {
+            for ( int i = 0; i < m_currentListDepth; i++ )
+            {
+                writer->startElement( "text:list-item" );
+                writer->startElement( "text:list" );
+            }
+        }
     }
     else if ( pap.ilvl > m_currentListDepth )
     {
     //we're going to a new level in the list
     kDebug(30513) << "going to a new level in list" << m_currentListID;
+    m_currentListDepth++;
     //open a new <text:list>
     writer->startElement( "text:list" );
     //it's a new level, so we need to configure this level
@@ -758,6 +754,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     {
     //we're backing out a level in the list
     kDebug(30513) << "backing out a level in list" << m_currentListID;
+    m_currentListDepth--;
     //close the last <text:list-item of the level
     writer->endElement();
     //close <text:list> for the level
@@ -925,16 +922,50 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     QString name("listlevels");
     listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
     }//end write list level stuff
-    //now update m_currentListDepth
-    m_currentListDepth = pap.ilvl;
-    //update the list depth in Document
-    kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
-    emit updateListDepth( m_currentListDepth );
+
     //we always want to open this tag
     writer->startElement( "text:list-item" );
 
     return true;
 } //writeListInfo()
+
+void KWordTextHandler::closeList()
+{
+    kDebug(30513);
+    //set writer
+    KoXmlWriter *writer;
+    //TODO create m_writer, and just keep it pointing to the current writer
+    if ( m_insideFootnote )
+    {
+        writer = m_footnoteWriter;
+    }
+    else if ( m_writingHeader )
+    {
+        writer = m_headerWriter;
+    }
+    else
+    {
+        writer = m_bodyWriter;
+    }
+
+    //TODO should probably test this more, to make sure it does work this way
+    //for level 0, we need to close the last item and the list
+    //for level 1, we need to close the last item and the list, and the last item and the list
+    //for level 2, we need to close the last item and the list, and the last item adn the list, and again
+    for (int i = 0; i <= m_currentListDepth; i++)
+    {
+        writer->endElement(); //close the last text:list-item
+        writer->endElement(); //text:list
+    }
+    m_currentListID = 0;
+    m_currentListDepth = -1;
+    m_listStyleName = "";
+}
+
+bool KWordTextHandler::listIsOpen()
+{
+    return m_currentListID != 0;
+}
 
 void KWordTextHandler::saveState()
 {
