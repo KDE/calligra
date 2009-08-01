@@ -94,7 +94,8 @@ void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
     
     if (m_shape) {
         m_effects = m_shape->filterEffectStack();
-    } else {
+    }
+    if (!m_effects) {
         m_effects = new KoFilterEffectStack();
     }
     
@@ -138,6 +139,9 @@ void FilterEffectEditWidget::addSelectedEffect()
         m_shape->update();
     
     m_effects->appendFilterEffect(effect);
+    
+    if (m_shape && ! m_shape->filterEffectStack())
+        m_shape->setFilterEffectStack(m_effects);
 
     if (m_shape)
         m_shape->update();
