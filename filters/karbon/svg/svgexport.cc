@@ -669,8 +669,6 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
 
     QString uid = createUID();
 
-    QRectF filterRegion = filterStack->clipRect();
-
     printIndentation( m_defs, m_indent2 );
 
     QByteArray ba;
@@ -678,19 +676,8 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer,m_indent2*2);
 
-    writer.startElement("filter");
-    writer.addAttribute("id", uid);
-    writer.addAttribute("filterUnits", "objectBoundingBox");
-    writer.addAttribute("primitiveUnits", "objectBoundingBox");
-    writer.addAttribute("x", filterRegion.x() );
-    writer.addAttribute("y", filterRegion.y() );
-    writer.addAttribute("width", filterRegion.width() );
-    writer.addAttribute("height", filterRegion.height() );
-
-    foreach(KoFilterEffect *effect, filterEffects) {
-        effect->save(writer);
-    }
-    writer.endElement();
+    filterStack->save(writer, uid);
+    
     *m_defs << ba;
     *m_defs << endl;
 
