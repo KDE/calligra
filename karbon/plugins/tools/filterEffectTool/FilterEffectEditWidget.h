@@ -49,6 +49,7 @@ private slots:
     void addSelectedEffect();
     void removeSelectedItem();
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
+    void addToPresets();
 private:
     void fitScene();
     FilterEffectScene * m_scene;

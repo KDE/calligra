@@ -110,8 +110,8 @@ KoFilterEffect * ConnectionTarget::effect() const
 
 
 FilterEffectScene::FilterEffectScene(QObject *parent)
-: QGraphicsScene(parent), m_defaultInputSelector(0), m_defaultInputProxy(0)
-, m_effectStack(0)
+: QGraphicsScene(parent), m_effectStack(0)
+, m_defaultInputSelector(0), m_defaultInputProxy(0)
 {
     m_defaultInputs << "SourceGraphic" << "SourceAlpha";
     m_defaultInputs << "FillPaint" << "StrokePaint";

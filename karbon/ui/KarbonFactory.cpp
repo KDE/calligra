@@ -117,6 +117,7 @@ const KComponentData &KarbonFactory::componentData()
         s_instance->dirs()->addResourceType( "karbon_gradient", "data","krita/gradients/" );
         s_instance->dirs()->addResourceType( "karbon_clipart", "data", "karbon/cliparts/" );
         s_instance->dirs()->addResourceType( "karbon_template", "data", "karbon/templates/" );
+        s_instance->dirs()->addResourceType( "karbon_effects", "data", "karbon/effects/" );
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
     }

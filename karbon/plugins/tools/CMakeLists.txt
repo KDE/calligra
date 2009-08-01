@@ -33,6 +33,8 @@ set(karbon_tools_PART_SRCS
    filterEffectTool/FilterEffectScene.cpp
    filterEffectTool/FilterEffectSceneItems.cpp
    filterEffectTool/FilterInputChangeCommand.cpp
+   filterEffectTool/FilterEffectResource.cpp
+   filterEffectTool/FilterResourceServerProvider.cpp
 )
 
 kde4_add_ui_files(karbon_tools_PART_SRCS

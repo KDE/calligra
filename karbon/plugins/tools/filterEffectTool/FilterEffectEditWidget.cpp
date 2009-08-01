@@ -19,6 +19,8 @@
 
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectScene.h"
+#include "FilterEffectResource.h"
+#include "FilterResourceServerProvider.h"
 #include "FilterInputChangeCommand.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
@@ -26,10 +28,13 @@
 #include "KoFilterEffectStack.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
+#include "KoResourceModel.h"
+#include "KoResourceServerAdapter.h"
 
 #include <KDebug>
 
 #include <QtGui/QGraphicsItem>
+#include <QtGui/QInputDialog>
 #include <QtCore/QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
@@ -37,6 +42,14 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 , m_shape(0), m_canvas(0), m_effects(0)
 {
     setupUi( this );
+    
+    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    KoAbstractResourceServerAdapter * adapter = new KoResourceServerAdapter<FilterEffectResource>(server);
+    
+    KoResourceModel * model = new KoResourceModel(adapter, this);
+    model->setColumnCount(1);
+    presets->setModel(model);
     
     KoGenericRegistryModel<KoFilterEffectFactory*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactory*>(KoFilterEffectRegistry::instance());
     
@@ -48,7 +61,10 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     
     raiseEffect->setIcon(KIcon("arrow-up"));
     lowerEffect->setIcon(KIcon("arrow-down"));
+    
     addPreset->setIcon(KIcon("list-add"));
+    connect(addPreset, SIGNAL(clicked()), this, SLOT(addToPresets()));
+    
     removePreset->setIcon(KIcon("list-remove"));
     copyPreset->setIcon(KIcon("edit-copy"));
     
@@ -281,6 +297,47 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     }
     m_scene->initialize(m_effects);
     fitScene();
+}
+
+void FilterEffectEditWidget::addToPresets()
+{
+    if (!m_effects)
+        return;
+
+    bool ok = false;
+    QString effectName = QInputDialog::getText(this,
+                                               i18n("Effect name"), 
+                                               i18n("Please enter a name for the filter effect"),
+                                               QLineEdit::Normal,
+                                               QString::null,
+                                               &ok);
+    if (!ok)
+        return;
+    
+    FilterEffectResource * resource = FilterEffectResource::fromFilterEffectStack(m_effects);
+    if (!resource)
+        return;
+    
+    resource->setName(effectName);
+    
+    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    
+    QString savePath = server->saveLocation();
+    
+    int i = 1;
+    QFileInfo fileInfo;
+    
+    do {
+        fileInfo.setFile(savePath + QString("%1.svg").arg(i++, 4, 10, QChar('0')));
+    }
+    while(fileInfo.exists());
+    
+    resource->setFilename(fileInfo.filePath());
+    resource->setValid(true);
+    
+    if (!server->addResource(resource))
+        delete resource;
 }
 
 #include "FilterEffectEditWidget.moc"
