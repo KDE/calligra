@@ -587,7 +587,7 @@ int Part::docType( const Document *doc ) const
 
 DocumentChild *Part::findChild( const Document *doc ) const
 {
-    foreach ( const WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( const WorkPackage *wp, m_packageMap ) {
         DocumentChild *c = wp->findChild( doc );
         if ( c ) {
             return c;
@@ -598,7 +598,7 @@ DocumentChild *Part::findChild( const Document *doc ) const
 
 WorkPackage *Part::findWorkPackage( const Document *doc ) const
 {
-    foreach ( const WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( const WorkPackage *wp, m_packageMap ) {
         if ( wp->contains( doc ) ) {
             return const_cast<WorkPackage*>( wp );
         }
@@ -608,7 +608,7 @@ WorkPackage *Part::findWorkPackage( const Document *doc ) const
 
 WorkPackage *Part::findWorkPackage( const DocumentChild *child ) const
 {
-    foreach ( const WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( const WorkPackage *wp, m_packageMap ) {
         if ( wp->contains( child ) ) {
             return const_cast<WorkPackage*>( wp );
         }
@@ -736,7 +736,7 @@ void Part::setDocumentClean( bool clean )
         return setModified( ! clean );
     }
     bool mod = false;
-    foreach ( WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( WorkPackage *wp, m_packageMap ) {
         foreach( DocumentChild *ch, wp->childDocs() ) {
             if ( ch->isModified() || ch->isFileModified() ) {
                 mod = true;
@@ -763,7 +763,7 @@ bool Part::saveAs( const KUrl &url )
 
 bool Part::saveWorkPackages( bool silent )
 {
-    foreach ( WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( WorkPackage *wp, m_packageMap ) {
         wp->saveToProjects( this );
     }
     m_undostack->setClean();
@@ -785,7 +785,7 @@ bool Part::queryClose()
 {
     m_currentWorkPackage = 0;
     QList<WorkPackage*> modifiedList;
-    foreach ( WorkPackage *wp, m_packageMap.values() ) {
+    foreach ( WorkPackage *wp, m_packageMap ) {
         switch ( wp->queryClose( this ) ) {
             case KMessageBox::No:
                 modifiedList << wp;

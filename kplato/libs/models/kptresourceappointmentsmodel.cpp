@@ -1570,7 +1570,7 @@ QModelIndex ResourceAppointmentsRowModel::createIntervalIndex( int row, int colu
 {
     Private *p = 0;
     AppointmentInterval i = a->intervalAt( row );
-    foreach ( Private *pr, m_datamap.values() ) {
+    foreach ( Private *pr, m_datamap ) {
         if ( pr->parent == a &&
             pr->type == Private::Interval &&
             i == *( static_cast<AppointmentInterval*>( pr->ptr ) ) )
@@ -1630,7 +1630,7 @@ void ResourceAppointmentsRowModel::slotResourceRemoved( const Resource *resource
         m_datamap.remove( const_cast<Resource*>( resource ) );
         foreach ( Appointment *a, resource->appointments( id() ) ) {
             QList<Private*> lst;
-            foreach ( Private *i, m_datamap.values() ) {
+            foreach ( Private *i, m_datamap ) {
                 if ( i->parent == a ) {
                     lst << i;
                 }

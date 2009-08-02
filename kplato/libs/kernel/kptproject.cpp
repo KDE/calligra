@@ -469,7 +469,7 @@ Duration *Project::getRandomDuration()
 DateTime Project::checkStartConstraints( const DateTime &dt ) const
 {
     DateTime t = dt;
-    foreach ( Node *n, nodeIdDict.values() ) {
+    foreach ( Node *n, nodeIdDict ) {
         if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
             switch ( n->constraint() ) {
                 case Node::FixedInterval:
@@ -487,7 +487,7 @@ DateTime Project::checkStartConstraints( const DateTime &dt ) const
 DateTime Project::checkEndConstraints( const DateTime &dt ) const
 {
     DateTime t = dt;
-    foreach ( Node *n, nodeIdDict.values() ) {
+    foreach ( Node *n, nodeIdDict ) {
         if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
             switch ( n->constraint() ) {
                 case Node::FixedInterval:
