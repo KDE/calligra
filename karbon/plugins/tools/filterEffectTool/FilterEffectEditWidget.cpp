@@ -464,7 +464,9 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
 {
     if (m_currentItem.type() == ConnectionSource::Effect)
         return;
-    if (!m_currentItem.effect())
+    
+    KoFilterEffect * filterEffect = m_currentItem.effect();
+    if (!filterEffect)
         return;
     
     if (m_shape)
@@ -472,14 +474,27 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
     
     QString oldInput = ConnectionSource::typeToString(m_currentItem.type());
     QString newInput = m_defaultSourceSelector->itemText(index);
-    int currentIndex = 0;
-    foreach(const QString &input, m_currentItem.effect()->inputs()) {
-        if (input == oldInput) {
-            m_currentItem.effect()->setInput(currentIndex, newInput);
+    
+    const QString defInput = "SourceGraphic";
+    int effectIndex = m_effects->filterEffects().indexOf(filterEffect);
+
+    InputChangeData data;
+    int inputIndex = 0;
+    foreach(const QString &input, filterEffect->inputs()) {
+        if (input == oldInput || (effectIndex == 0 && oldInput == defInput)) {
+            data = InputChangeData(filterEffect, inputIndex, input, newInput);
             break;
         }
-        currentIndex++;
+        inputIndex++;
     }
+    QUndoCommand * cmd = new FilterInputChangeCommand(data, m_shape);
+    if (m_canvas && m_shape) {
+        m_canvas->addCommand(cmd);
+    } else {
+        cmd->redo();
+        delete cmd;
+    }
+    
     if (m_shape)
         m_shape->update();
     

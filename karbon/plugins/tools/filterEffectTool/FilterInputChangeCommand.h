@@ -27,6 +27,11 @@ class KoFilterEffect;
 
 struct InputChangeData 
 {
+    InputChangeData()
+        : filterEffect(0), inputIndex(-1)
+    {
+    }
+    
     InputChangeData(KoFilterEffect *effect, int index, const QString &oldIn, const QString &newIn)
         : filterEffect(effect), inputIndex(index), oldInput(oldIn), newInput(newIn)
     {
