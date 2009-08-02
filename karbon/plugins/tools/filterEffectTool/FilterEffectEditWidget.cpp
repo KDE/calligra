@@ -47,9 +47,9 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
     KoAbstractResourceServerAdapter * adapter = new KoResourceServerAdapter<FilterEffectResource>(server);
     
-    KoResourceModel * model = new KoResourceModel(adapter, this);
-    model->setColumnCount(1);
-    presets->setModel(model);
+    presets->setResourceAdapter(adapter);
+    presets->setDisplayMode(KoResourceSelector::TextMode);
+    presets->setColumnCount(1);
     
     KoGenericRegistryModel<KoFilterEffectFactory*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactory*>(KoFilterEffectRegistry::instance());
     
