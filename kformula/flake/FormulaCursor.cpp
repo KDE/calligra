@@ -78,7 +78,7 @@ int FormulaCursorPosition::mark() const
 
 bool FormulaCursorPosition::selecting() const
 {
-    return m_mark;
+    return m_selecting;
 }
 
 void FormulaCursorPosition::setCurrentElement ( BasicElement* element )
@@ -600,17 +600,17 @@ bool FormulaCursor::moveToEmpty()
 
 QString FormulaCursor::tokenType ( const QChar& character ) const
 {
-    
+    QChar::Category chat=character.category();
     if (character.isNumber()) {
         return "mn";
     }
-    else if ( character == '*' || character == '+' || character == '-' ||
-            character == '=' || character == '>' || character == '<' ||
-            character == '!' || character == '.' || character == '/' ||
-            character == '?' || character == ',' || character == ':' ||
-            character == '(' || character == ')' ||
-            character == '[' || character == ']' ||
-            character == '{' || character == '}' ) {
+    else if (chat==QChar::Punctuation_Connector ||
+             chat==QChar::Punctuation_Dash ||
+             chat==QChar::Punctuation_Open ||
+             chat==QChar::Punctuation_Close ||
+             chat==QChar::Punctuation_InitialQuote ||
+             chat==QChar::Punctuation_FinalQuote ||
+             chat==QChar::Symbol_Math) {
         return "mo";
     }
     else if (character.isLetter()) {
