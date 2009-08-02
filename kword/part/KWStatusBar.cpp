@@ -119,6 +119,8 @@ KWStatusBar::~KWStatusBar()
     delete m_pageLabel;
     delete m_mousePosLabel;
     delete m_statusLabel;
+    foreach (QWidget *widget, m_zoomWidgets)
+        widget->deleteLater();
 
     m_statusbar->setProperty(KWSTATUSBAR, QVariant());
 }
