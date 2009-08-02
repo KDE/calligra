@@ -35,6 +35,7 @@ TestCursor.cpp
    ../KoFormulaShapeFactory.cpp
    ../KoFormulaTool.cpp
    ../FormulaCommand.cpp
+   ../FormulaCursor.cpp
 )
 
 kde4_add_ui_files( TestCursor_SRCS
