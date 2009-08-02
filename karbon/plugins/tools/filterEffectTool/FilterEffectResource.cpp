@@ -148,7 +148,7 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
         QRectF subRegion(QPointF(x, y), QSizeF(w, h));
 
         if (primitive.hasAttribute("in"))
-            filterEffect->addInput(primitive.attribute("in"));
+            filterEffect->setInput(0, primitive.attribute("in"));
         if (primitive.hasAttribute("result"))
             filterEffect->setOutput(primitive.attribute("result"));
         

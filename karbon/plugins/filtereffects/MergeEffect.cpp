@@ -65,11 +65,18 @@ bool MergeEffect::load(const QDomElement &element)
     if (element.tagName() != id())
         return false;
 
+    int inputCount = inputs().count();
+    int inputIndex = 0;
     for (QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement node = n.toElement();
         if (node.tagName() == "feMergeNode") {
-            if( node.hasAttribute("in"))
-                addInput(node.attribute("in"));
+            if( node.hasAttribute("in")) {
+                if (inputIndex < inputCount)
+                    setInput(inputIndex, node.attribute("in"));
+                else
+                    addInput(node.attribute("in"));
+                inputIndex++;
+            }
         }
     }
 
