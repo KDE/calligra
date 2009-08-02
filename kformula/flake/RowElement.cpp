@@ -92,6 +92,7 @@ bool RowElement::insertChild( int position, BasicElement* child )
 {
     if (0<=position && position<=length()) {
         m_childElements.insert( position, child );
+        child->setParentElement(this);
         return true;
     } else {
         return false;
@@ -100,7 +101,11 @@ bool RowElement::insertChild( int position, BasicElement* child )
 
 bool RowElement::removeChild( BasicElement* child )
 {
-    return m_childElements.removeOne(child);
+    bool tmp=m_childElements.removeOne(child);
+    if (tmp) {
+        child->setParentElement(0);
+    }
+    return tmp;
 }
 
 bool RowElement::acceptCursor( const FormulaCursor* cursor )
@@ -255,6 +260,8 @@ bool RowElement::replaceChild ( BasicElement* oldelement, BasicElement* neweleme
         return false;
 
     m_childElements.replace(oldElementIndex,newelement);
+    oldelement->setParentElement(0);
+    newelement->setParentElement(this);
     return true;
 }
 

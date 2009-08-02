@@ -226,31 +226,15 @@ FormulaCommand* FormulaCursor::insertData( const QString& data )
 
 FormulaCommand* FormulaCursor::insertElement( BasicElement* element )
 {
-    BasicElement* emptydesc=element->emptyDescendant();
     FormulaCommand *undo = 0;
     if (insideInferredRow()) {
         RowElement* tmprow=static_cast<RowElement*>(m_currentElement);
         QList<BasicElement*> list;
         list<<element;
         if (hasSelection()) {
-            if (emptydesc!=0) {
-                if (emptydesc->parentElement()==0) {
-                    return 0;
-                }
-                RowElement* newrow=new RowElement(emptydesc->parentElement());
-                QList<BasicElement*> replaced=tmprow->childElements().mid(selection().first,selection().second-selection().first);
-                foreach (BasicElement *tmp, replaced) {
-                    tmp->setParentElement(newrow);
-                    newrow->insertChild(newrow->length(),tmp);
-                }
-                emptydesc->parentElement()->replaceChild(emptydesc,newrow);
-                delete emptydesc;
-                undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list,true);
-            } else {
-                undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list,false);
-            }
+            undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list,true);
         } else {
-            undo=new FormulaCommandReplaceElements(tmprow,m_position,0,list);
+            undo=new FormulaCommandReplaceElements(tmprow,m_position,0,list,false);
         }
     } else if (insideFixedElement()) {
         if (hasSelection()) {

@@ -29,6 +29,7 @@
 FormulaCommand::FormulaCommand(QUndoCommand* parent)
               : QUndoCommand(parent)
 {
+    m_done=false;
 }
 
 void FormulaCommand::changeCursor ( FormulaCursor* cursor, bool undo ) const
@@ -74,6 +75,7 @@ FormulaCommandReplaceText::~FormulaCommandReplaceText()
 
 void FormulaCommandReplaceText::redo()
 {
+    m_done=true;
     if (m_length>0) {
         m_glyphpos=m_ownerElement->removeText(m_position,m_length);
     }
@@ -82,6 +84,7 @@ void FormulaCommandReplaceText::redo()
 
 void FormulaCommandReplaceText::undo()
 {
+    m_done=false;
     m_ownerElement->removeText(m_position,m_added.length());
     m_ownerElement->insertText(m_position, m_removed);
     m_ownerElement->insertGlyphs(m_glyphpos,m_removedGlyphs);
@@ -97,37 +100,74 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner
     m_wrap=wrap;
     m_removed=m_ownerElement->childElements().mid(m_position,m_length);
     //we have to remember to which descendant of m_added the elements got moved
-    m_newParent=(m_wrap ? m_removed[0]->parentElement() : 0);
+    if (m_wrap) {
+        foreach (BasicElement* tmp, m_added) {
+            if (m_oldPlaceholder=tmp->emptyDescendant()) {
+                break;
+            }
+        }
+        if (m_oldPlaceholder) {
+            m_newPlaceholder=new RowElement(m_oldPlaceholder->parentElement());
+        }
+    } else {
+        m_oldPlaceholder=0;
+        m_newPlaceholder=0;
+    }
     setUndoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_removed.length()));
     setRedoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_added.length()));
 }
 
 FormulaCommandReplaceElements::~FormulaCommandReplaceElements()
 {
+    if (m_done) {
+        if (m_oldPlaceholder!=0) {
+            delete m_oldPlaceholder;
+        } else {
+            foreach (BasicElement* tmp, m_removed) {
+                delete tmp;
+            }
+        }
+    } else {
+        if (m_oldPlaceholder!=0) {
+            delete m_newPlaceholder;
+        }
+        foreach (BasicElement* tmp, m_added) {
+            delete tmp;
+        }
+    }
 }
 
 void FormulaCommandReplaceElements::redo()
 {
+    m_done=true;
     for (int i=0; i<m_length; ++i) {
         m_ownerElement->removeChild(m_removed[i]);
-        m_removed[i]->setParentElement(m_newParent);
+    }
+    if (m_oldPlaceholder!=0) {
+            foreach (BasicElement *tmp, m_removed) {
+                m_newPlaceholder->insertChild(m_newPlaceholder->length(),tmp);
+            }
+            m_oldPlaceholder->parentElement()->replaceChild(m_oldPlaceholder,m_newPlaceholder);
     }
     for (int i=0; i<m_added.length(); ++i) {
         m_ownerElement->insertChild(m_position+i,m_added[i]);
-        m_added[i]->setParentElement(m_ownerElement);
     }
 }
 
 void FormulaCommandReplaceElements::undo()
 {
-
+    m_done=false;
     for (int i=0; i<m_added.length(); ++i) {
         m_ownerElement->removeChild(m_added[i]);
-        m_added[i]->setParentElement(0);
+    }
+    if (m_oldPlaceholder!=0) {
+        foreach (BasicElement *tmp, m_removed) {
+            m_newPlaceholder->removeChild(tmp);
+        }
+        m_oldPlaceholder->parentElement()->replaceChild(m_oldPlaceholder,m_newPlaceholder);
     }
     for (int i=0; i<m_length; ++i) {
         m_ownerElement->insertChild(m_position+i,m_removed[i]);
-        m_removed[i]->setParentElement(m_ownerElement);
     }
 }
 
@@ -144,10 +184,14 @@ FormulaCommandReplaceSingleElement::FormulaCommandReplaceSingleElement ( BasicEl
 
 FormulaCommandReplaceSingleElement::~FormulaCommandReplaceSingleElement()
 {
+    if (m_done) {
+    } else {
+    }
 }
 
 void FormulaCommandReplaceSingleElement::redo()
 {
+    m_done=true;
     m_ownerElement->replaceChild(m_oldel,m_newel);
     m_oldel->setParentElement(0);
     m_newel->setParentElement(m_ownerElement);
@@ -155,6 +199,7 @@ void FormulaCommandReplaceSingleElement::redo()
 
 void FormulaCommandReplaceSingleElement::undo()
 {
+    m_done=false;
     m_ownerElement->replaceChild(m_newel,m_oldel);
     m_newel->setParentElement(0);
     m_oldel->setParentElement(m_ownerElement);
@@ -173,11 +218,15 @@ FormulaCommandWrapSingleElement::FormulaCommandWrapSingleElement ( BasicElement*
 
 FormulaCommandWrapSingleElement::~FormulaCommandWrapSingleElement()
 {
+    if (m_done) {
+    } else {
+    }
 }
 
 
 void FormulaCommandWrapSingleElement::redo()
 {
+    m_done=true;
     m_ownerElement->replaceChild(m_oldel,m_newel);
     m_oldel->setParentElement(m_oldpar);
     m_newel->setParentElement(m_ownerElement);
@@ -185,6 +234,7 @@ void FormulaCommandWrapSingleElement::redo()
 
 void FormulaCommandWrapSingleElement::undo()
 {
+    m_done=false;
     m_ownerElement->replaceChild(m_newel,m_oldel);
     m_newel->setParentElement(0);
     m_oldel->setParentElement(m_ownerElement);
@@ -202,15 +252,20 @@ FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newe
 
 FormulaCommandLoad::~FormulaCommandLoad()
 {
+    if (m_done) {
+    } else {
+    }
 }
 
 void FormulaCommandLoad::redo()
 {
+    m_done=true;
     m_data->setFormulaElement(m_newel);
 }
 
 void FormulaCommandLoad::undo()
 {
+    m_done=false;
     m_data->setFormulaElement(m_oldel);
 }
 

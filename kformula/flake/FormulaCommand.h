@@ -44,7 +44,10 @@ public:
 
     void setUndoCursorPosition(const FormulaCursorPosition& position);
     void setRedoCursorPosition(const FormulaCursorPosition& position);
-    
+
+protected:
+    bool m_done;
+
 private:
     FormulaCursorPosition m_undoCursorPosition;
     FormulaCursorPosition m_redoCursorPosition;
@@ -107,7 +110,9 @@ private:
 
     bool m_wrap;
 
-    BasicElement* m_newParent;
+    RowElement* m_newPlaceholder;
+
+    BasicElement* m_oldPlaceholder;
 
     /// The list of added elements
     QList<BasicElement*> m_added;
