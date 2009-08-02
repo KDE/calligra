@@ -89,12 +89,13 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     m_actionColor = new KoColorPopupAction(m_stack);
     m_colorSelector->setDefaultAction(m_actionColor);
 
-    KoAbstractResourceServerAdapter * gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer());
+    KoResourceServerProvider * serverProvider = KoResourceServerProvider::instance();
+    KoAbstractResourceServerAdapter * gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
     KoResourceSelector * gradientSelector = new KoResourceSelector( gradientResourceAdapter, this );
     gradientSelector->setColumnCount( 1 );
     gradientSelector->setRowHeight( 20 );
 
-    KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer());
+    KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     KoResourceSelector * patternSelector = new KoResourceSelector( patternResourceAdapter, this );
     patternSelector->setColumnCount( 5 );
     patternSelector->setRowHeight( 30 );
