@@ -42,6 +42,34 @@ enum CursorDirection {
     NoDirection
 };
 
+class  FormulaCursorPosition {
+    public:
+        FormulaCursorPosition(BasicElement* element, bool selecting, int position, int mark);
+        FormulaCursorPosition(BasicElement* element, int position);
+        FormulaCursorPosition();
+        void setCurrentElement(BasicElement* element);
+        void setPosition(int position);
+        void setMark(int mark);
+        void setSelecting(bool selecting);
+        BasicElement* currentElement() const;
+        int position() const;
+        int mark() const;
+        bool selecting() const;
+        
+    private:
+        /// The element that is currently left to the cursor
+        BasicElement* m_currentElement;
+
+        /// The position of the cursor in the current element
+        int m_position;
+
+        /// The position where the current selection starts in the current element
+        int m_mark;
+
+        /// Indicates whether the cursor is currently selecting
+        bool m_selecting;
+};
+
 /**
  * @short The cursor being moved through a formula
  *
@@ -97,6 +125,8 @@ public:
     /// Move the cursor to @p element
     void moveTo( BasicElement* element, int position );
 
+    void moveTo( const FormulaCursorPosition& pos);
+    
     /// Put the cursor in @p element, as close as possible to the point where @p cursor is
     bool moveCloseTo( BasicElement* element, FormulaCursor* cursor);
     

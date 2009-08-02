@@ -26,20 +26,28 @@
 #include <QList>
 #include <QHash>
 #include <QMetaType>
-
-class BasicElement;
+#include "FormulaCursor.h"
+// class BasicElement;
 class TokenElement;
 class FormulaData;
-class FormulaCursor;
 class GlyphElement;
-class RowElement;
-class FormulaElement;
+// class RowElement;
+// class FormulaElement;
+// class FormulaCursor;
+// class FormulaCursorPosition;
 
 class FormulaCommand :  public QUndoCommand {
 public:
     FormulaCommand(QUndoCommand* parent=0);
     
-    virtual void changeCursor(FormulaCursor* cursor, bool undo) const = 0; 
+    virtual void changeCursor(FormulaCursor* cursor, bool undo) const; 
+
+    void setUndoCursorPosition(const FormulaCursorPosition& position);
+    void setRedoCursorPosition(const FormulaCursorPosition& position);
+    
+private:
+    FormulaCursorPosition m_undoCursorPosition;
+    FormulaCursorPosition m_redoCursorPosition;
 };
 
 Q_DECLARE_METATYPE(FormulaCommand*)
@@ -56,8 +64,6 @@ public:
 
     /// Revert the actions done in redo()
     void undo();
-
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
 
 private:
     /// The BasicElement that owns the newly added Text
@@ -90,8 +96,6 @@ public:
     /// Revert the actions done in redo()
     void undo();
 
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
-
 private:
     /// The BasicElement that owns the newly added Text
     RowElement* m_ownerElement;
@@ -120,8 +124,6 @@ public:
     /// Revert the actions done in redo()
     void undo();
 
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
-
 private:
     /// The BasicElement that owns the newly added Text
     BasicElement* m_ownerElement;
@@ -139,8 +141,6 @@ public:
 
     /// Revert the actions done in redo()
     void undo();
-
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
 
 private:
     /// The BasicElement that owns the newly added Text
@@ -162,8 +162,6 @@ public:
 
     /// Revert the actions done in redo()
     void undo();
-
-    virtual void changeCursor ( FormulaCursor* cursor, bool undo ) const;
 
 private:
     FormulaData* m_data;

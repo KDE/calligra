@@ -37,6 +37,68 @@
 #include <kdebug.h>
 #include <QUndoCommand>
 
+FormulaCursorPosition::FormulaCursorPosition(BasicElement* element, bool selecting, int position, int mark) {
+    m_currentElement=element;
+    m_selecting=selecting;
+    m_position=position;
+    m_mark=mark;
+}
+
+FormulaCursorPosition::FormulaCursorPosition ( BasicElement* element, int position )
+{
+    m_currentElement=element;
+    m_position=position;
+    m_mark=0;
+    m_selecting=false;
+}
+
+
+FormulaCursorPosition::FormulaCursorPosition()
+{
+    FormulaCursorPosition(0,0);
+}
+
+
+BasicElement* FormulaCursorPosition::currentElement() const
+{
+    return m_currentElement;
+}
+
+int FormulaCursorPosition::position() const
+{
+    return m_position;
+}
+
+int FormulaCursorPosition::mark() const 
+{
+    return m_mark;
+}
+
+bool FormulaCursorPosition::selecting() const
+{
+    return m_mark;
+}
+
+void FormulaCursorPosition::setCurrentElement ( BasicElement* element )
+{
+    m_currentElement=element;
+}
+
+void FormulaCursorPosition::setMark ( int mark )
+{
+    m_mark=mark;
+}
+
+void FormulaCursorPosition::setPosition ( int position )
+{
+    m_position=position;
+}
+
+void FormulaCursorPosition::setSelecting ( bool selecting )
+{
+    m_selecting=selecting;
+}
+
 FormulaCursor::FormulaCursor( BasicElement* element, FormulaData* data )
               : m_currentElement( element ), m_data( data )
 {
@@ -136,8 +198,10 @@ FormulaCommand* FormulaCursor::insertText( const QString& text )
             (ElementFactory::createElement(tokenType(text[0]),0));
         token->insertText(0,text);
         undo=insertElement(token);
+        if (undo) {
+            undo->setRedoCursorPosition(FormulaCursorPosition(token,text.length()));
+        }
     }
-
     if (undo) {
         undo->setText("Add text");
     }
@@ -277,9 +341,19 @@ QPointF FormulaCursor::getCursorPosition()
 
 void FormulaCursor::moveTo( BasicElement* element, int position )
 {
-        m_currentElement = element;
-        m_position = position;
+    m_currentElement = element;
+    m_position = position;
 }
+
+
+void FormulaCursor::moveTo ( const FormulaCursorPosition& pos )
+{
+    m_currentElement=pos.currentElement();
+    m_position=pos.position();
+    m_selecting=pos.selecting();
+    m_mark=pos.mark();
+}
+
 
 void FormulaCursor::setCursorTo( const QPointF& point )
 {

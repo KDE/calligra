@@ -24,8 +24,9 @@
 #include "kformula_export.h"
 #include <QObject>
 #include <QUndoCommand>
-#include "FormulaCommand.h"
 #include "KoFormulaShape.h"
+
+class FormulaCommand;
 
 /**
  * This is a QObject wrapper around a formulaElement, which allows to communicate 
