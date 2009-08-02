@@ -31,11 +31,9 @@ FormulaCommand::FormulaCommand(QUndoCommand* parent)
 {
 }
 
-
 void FormulaCommand::changeCursor ( FormulaCursor* cursor, bool undo ) const
 {
 }
-
 
 FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int position, int length, const QString& added , QUndoCommand* parent)
                   : FormulaCommand(parent)
@@ -50,6 +48,11 @@ FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int p
 }
 
 
+FormulaCommandReplaceText::~FormulaCommandReplaceText()
+{
+}
+
+
 void FormulaCommandReplaceText::redo()
 {
     if (m_length>0) {
@@ -57,7 +60,6 @@ void FormulaCommandReplaceText::redo()
     }
     m_ownerElement->insertText(m_position, m_added);
 }
-
 
 void FormulaCommandReplaceText::undo()
 {
@@ -86,6 +88,10 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner
     m_added=elements;
     m_length=length;
     m_removed=m_ownerElement->childElements().mid(m_position,m_length);
+}
+
+FormulaCommandReplaceElements::~FormulaCommandReplaceElements()
+{
 }
 
 void FormulaCommandReplaceElements::redo()
@@ -134,6 +140,11 @@ FormulaCommandReplaceSingleElement::FormulaCommandReplaceSingleElement ( BasicEl
     m_oldel=oldel;
 }
 
+
+FormulaCommandReplaceSingleElement::~FormulaCommandReplaceSingleElement()
+{
+}
+
 void FormulaCommandReplaceSingleElement::redo()
 {
     m_ownerElement->replaceChild(m_oldel,m_newel);
@@ -169,6 +180,11 @@ FormulaCommandWrapSingleElement::FormulaCommandWrapSingleElement ( BasicElement*
     m_oldpar=oldpar;
 }
 
+FormulaCommandWrapSingleElement::~FormulaCommandWrapSingleElement()
+{
+}
+
+
 void FormulaCommandWrapSingleElement::redo()
 {
     m_ownerElement->replaceChild(m_oldel,m_newel);
@@ -201,6 +217,11 @@ FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newe
     m_data=data;
     m_newel=newelement;
     m_oldel=data->formulaElement();
+}
+
+FormulaCommandLoad::~FormulaCommandLoad()
+{
+
 }
 
 void FormulaCommandLoad::redo()

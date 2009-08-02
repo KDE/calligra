@@ -49,6 +49,8 @@ class FormulaCommandReplaceText : public FormulaCommand {
 public:
     FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , QUndoCommand *parent=0);
 
+    ~FormulaCommandReplaceText();
+
     /// Execute the command
     void redo();
 
@@ -60,7 +62,6 @@ public:
 private:
     /// The BasicElement that owns the newly added Text
     TokenElement* m_ownerElement;
-
 
     /// The position inside m_ownerElement
     int m_position;
@@ -81,6 +82,8 @@ class FormulaCommandReplaceElements : public FormulaCommand {
 public:
     FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , QUndoCommand *parent=0);
 
+    ~FormulaCommandReplaceElements();
+    
     /// Execute the command
     void redo();
 
@@ -110,6 +113,7 @@ class FormulaCommandReplaceSingleElement : public FormulaCommand {
 public:
     FormulaCommandReplaceSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel, QUndoCommand *parent=0);
 
+    ~FormulaCommandReplaceSingleElement ();
     /// Execute the command
     void redo();
 
@@ -129,6 +133,7 @@ class FormulaCommandWrapSingleElement : public FormulaCommand {
 public:
     FormulaCommandWrapSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel,BasicElement* oldpar, QUndoCommand *parent=0);
 
+    ~FormulaCommandWrapSingleElement ();
     /// Execute the command
     void redo();
 
@@ -150,6 +155,8 @@ class FormulaCommandLoad : public FormulaCommand {
 public:
     FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, QUndoCommand *parent=0);
 
+    ~FormulaCommandLoad ();
+    
     /// Execute the command
     void redo();
 
