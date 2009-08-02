@@ -18,7 +18,6 @@
  */
 
 #include "FilterEffectEditWidget.h"
-#include "FilterEffectScene.h"
 #include "FilterEffectResource.h"
 #include "FilterResourceServerProvider.h"
 #include "FilterInputChangeCommand.h"
@@ -26,6 +25,7 @@
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
+#include "KoFilterEffectConfigWidgetBase.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
 #include "KoResourceModel.h"
@@ -63,16 +63,18 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     removeEffect->setIcon(KIcon("list-remove"));
     connect(removeEffect, SIGNAL(clicked()), this, SLOT(removeSelectedItem()));
     addEffect->setIcon(KIcon("list-add"));
+    addEffect->setToolTip(i18n("Add effect to current filter stack"));
     connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
     
     raiseEffect->setIcon(KIcon("arrow-up"));
     lowerEffect->setIcon(KIcon("arrow-down"));
     
     addPreset->setIcon(KIcon("list-add"));
+    addPreset->setToolTip(i18n("Add to filter presets"));
     connect(addPreset, SIGNAL(clicked()), this, SLOT(addToPresets()));
     
     removePreset->setIcon(KIcon("list-remove"));
-    copyPreset->setIcon(KIcon("edit-copy"));
+    removePreset->setToolTip(i18n("Remove filter preset"));
     
     view->setScene(m_scene);
     view->setRenderHint(QPainter::Antialiasing, true);
@@ -80,6 +82,18 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     
     connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
              this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
+    connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
+    
+    m_defaultSourceSelector = new KComboBox(this);
+    m_defaultSourceSelector->addItem("SourceGraphic");
+    m_defaultSourceSelector->addItem("SourceAlpha");
+    m_defaultSourceSelector->addItem("FillPaint");
+    m_defaultSourceSelector->addItem("StrokePaint");
+    m_defaultSourceSelector->addItem("BackgroundImage");
+    m_defaultSourceSelector->addItem("BackgroundAlpha");
+    m_defaultSourceSelector->hide();
+    connect(m_defaultSourceSelector, SIGNAL(currentIndexChanged(int)), 
+            this, SLOT(defaultSourceChanged(int)));
 }
 
 FilterEffectEditWidget::~FilterEffectEditWidget()
@@ -373,6 +387,102 @@ void FilterEffectEditWidget::presetSelected(KoResource *resource)
         m_shape->update();
     }
 
+    m_scene->initialize(m_effects);
+    fitScene();
+}
+
+void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
+{
+    // get the filter effect from the item
+    KoFilterEffect * filterEffect = item.effect();
+    if (item.type() != ConnectionSource::Effect)
+        filterEffect = 0;
+    
+    KoFilterEffect * currentEffect = m_currentItem.effect();
+    if (m_currentItem.type() != ConnectionSource::Effect)
+        currentEffect = 0;
+    
+    m_defaultSourceSelector->hide();
+    
+    // remove current widget if new effect is zero or effect type has changed
+    if( !filterEffect || !currentEffect || (filterEffect->id() != currentEffect->id())) {
+        while (configStack->count())
+            configStack->removeWidget(configStack->widget(0));
+    }
+
+    m_currentItem = item;
+
+    KoFilterEffectConfigWidgetBase * currentPanel = 0;
+    
+    if( ! filterEffect ) {
+        if (item.type() != ConnectionSource::Effect) {
+            configStack->insertWidget(0, m_defaultSourceSelector);
+            m_defaultSourceSelector->blockSignals(true);
+            m_defaultSourceSelector->setCurrentIndex(item.type()-1);
+            m_defaultSourceSelector->blockSignals(false);
+            m_defaultSourceSelector->show();
+        }
+    }  else if (!currentEffect || currentEffect->id() != filterEffect->id()) {
+        // when a shape is set and is differs from the previous one
+        // get the config widget and insert it into the option widget
+        
+        KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
+        KoFilterEffectFactory * factory = registry->value(filterEffect->id());
+        if (!factory)
+            return;
+        
+        currentPanel = factory->createConfigWidget();
+        if( ! currentPanel )
+            return;
+        
+        configStack->insertWidget( 0, currentPanel );
+        connect( currentPanel, SIGNAL(filterChanged()), this, SLOT(filterChanged()));
+    }
+
+    currentPanel = qobject_cast<KoFilterEffectConfigWidgetBase*>(configStack->widget(0));
+    if( currentPanel )
+        currentPanel->editFilterEffect(filterEffect);
+}
+
+void FilterEffectEditWidget::filterChanged()
+{
+    if (m_shape)
+        m_shape->update();
+}
+
+void FilterEffectEditWidget::sceneSelectionChanged()
+{
+    QList<ConnectionSource> selectedItems = m_scene->selectedEffectItems();
+    if (!selectedItems.count()) {
+        addWidgetForItem(ConnectionSource());
+    } else {
+        addWidgetForItem(selectedItems.first());
+    }
+}
+
+void FilterEffectEditWidget::defaultSourceChanged(int index)
+{
+    if (m_currentItem.type() == ConnectionSource::Effect)
+        return;
+    if (!m_currentItem.effect())
+        return;
+    
+    if (m_shape)
+        m_shape->update();
+    
+    QString oldInput = ConnectionSource::typeToString(m_currentItem.type());
+    QString newInput = m_defaultSourceSelector->itemText(index);
+    int currentIndex = 0;
+    foreach(const QString &input, m_currentItem.effect()->inputs()) {
+        if (input == oldInput) {
+            m_currentItem.effect()->setInput(currentIndex, newInput);
+            break;
+        }
+        currentIndex++;
+    }
+    if (m_shape)
+        m_shape->update();
+    
     m_scene->initialize(m_effects);
     fitScene();
 }

@@ -100,7 +100,6 @@ protected:
     
 private slots:
     void selectionChanged();
-    void defaultInputChanged(int index);
 private:
     void createEffectItems(KoFilterEffect *effect);
     void addSceneItem(QGraphicsItem *item);
@@ -112,7 +111,6 @@ private:
     QList<EffectItemBase*> m_items;
     QList<ConnectionItem*> m_connectionItems;
     QMap<QString, EffectItemBase*> m_outputs;
-    KComboBox * m_defaultInputSelector;
     QGraphicsProxyWidget *m_defaultInputProxy;
 };
 

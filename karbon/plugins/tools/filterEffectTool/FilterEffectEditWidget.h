@@ -21,14 +21,13 @@
 #define FILTEREFFECTEDITWIDGET_H
 
 #include "ui_FilterEffectEditWidget.h"
+#include "FilterEffectScene.h"
 #include <QtGui/QWidget>
 
 class KoShape;
 class KoCanvasBase;
+class KoFilterEffect;
 class KoFilterEffectStack;
-class FilterEffectScene;
-class ConnectionSource;
-class ConnectionTarget;
 
 class FilterEffectEditWidget : public QWidget, Ui::FilterEffectEditWidget
 {
@@ -51,12 +50,19 @@ private slots:
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
     void addToPresets();
     void presetSelected(KoResource *resource);
+    void filterChanged();
+    void sceneSelectionChanged();
+    void defaultSourceChanged(int);
 private:
     void fitScene();
+    void addWidgetForItem(ConnectionSource item);
+    
     FilterEffectScene * m_scene;
     KoShape * m_shape;
     KoCanvasBase * m_canvas;
     KoFilterEffectStack * m_effects;
+    ConnectionSource m_currentItem;
+    KComboBox * m_defaultSourceSelector;
 };
 
 #endif // FILTEREFFECTEDITWIDGET_H

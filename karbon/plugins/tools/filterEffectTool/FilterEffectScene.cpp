@@ -111,37 +111,20 @@ KoFilterEffect * ConnectionTarget::effect() const
 
 FilterEffectScene::FilterEffectScene(QObject *parent)
 : QGraphicsScene(parent), m_effectStack(0)
-, m_defaultInputSelector(0), m_defaultInputProxy(0)
 {
     m_defaultInputs << "SourceGraphic" << "SourceAlpha";
     m_defaultInputs << "FillPaint" << "StrokePaint";
     m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
-    
-    m_defaultInputSelector = new KComboBox(static_cast<QWidget*>(0));
-    foreach (const QString &input, m_defaultInputs) 
-        m_defaultInputSelector->addItem(input);
-    m_defaultInputSelector->setCurrentIndex(0);
-    m_defaultInputSelector->hide();
-    m_defaultInputProxy = addWidget(m_defaultInputSelector);
-    m_defaultInputProxy->setZValue(2);
-    connect(m_defaultInputSelector, SIGNAL(currentIndexChanged(int)),
-                this, SLOT(defaultInputChanged(int)));
     
     connect(this, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 FilterEffectScene::~FilterEffectScene()
 {
-    delete m_defaultInputSelector;
 }
 
 void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
 {
-    if (m_defaultInputProxy) {
-        m_defaultInputProxy->hide();
-        removeItem(m_defaultInputProxy);
-    }
-    
     m_items.clear();
     m_connectionItems.clear();
     m_outputs.clear();
@@ -162,10 +145,6 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
     
     layoutEffects();
     layoutConnections();
-    
-    if (m_defaultInputProxy) {
-        addItem(m_defaultInputProxy);
-    }
 }
 
 void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
@@ -281,67 +260,18 @@ void FilterEffectScene::layoutConnections()
 void FilterEffectScene::selectionChanged()
 {
     if(selectedItems().count()) {
-        bool showSelector = false;
         foreach(EffectItemBase* item, m_items) {
             if (item->isSelected()) {
                 item->setOpacity(1.0);
-                DefaultInputItem * defInput = dynamic_cast<DefaultInputItem*>(item);
-                if (defInput) {
-                    QRectF itemRect = defInput->mapRectToScene(defInput->boundingRect());
-                    m_defaultInputProxy->setGeometry(itemRect);
-                    QFont font = m_defaultInputSelector->font();
-                    font.setPointSize(0.4*itemRect.height());
-                    m_defaultInputSelector->setFont(font);
-                    int inputIndex = m_defaultInputs.indexOf(defInput->outputName());
-                    if (inputIndex >= 0) {
-                        m_defaultInputSelector->blockSignals(true);
-                        m_defaultInputSelector->setCurrentIndex(inputIndex);
-                        m_defaultInputSelector->blockSignals(false);
-                    }
-                    showSelector = true;
-                }
             } else {
                 item->setOpacity(0.25);
             }
         }
-        if (showSelector)
-            m_defaultInputProxy->show();
-        else
-            m_defaultInputProxy->hide();
     } else {
         foreach(EffectItemBase* item, m_items) {
             item->setOpacity(1);
         }
     }
-}
-
-void FilterEffectScene::defaultInputChanged(int index)
-{
-    if(!selectedItems().count())
-        return;
-    
-    DefaultInputItem * defInput = 0;
-    
-    foreach(EffectItemBase* item, m_items) {
-        if (item->isSelected()) {
-            defInput = dynamic_cast<DefaultInputItem*>(item);
-            if (defInput)
-                break;
-        }
-    }
-    if (!defInput)
-        return;
-    
-    ConnectionSource::SourceType sourceType = ConnectionSource::typeFromString(m_defaultInputs[index]);
-    int inputIndex = 0;
-    foreach(const QString &input, defInput->effect()->inputs()) {
-        if (input == defInput->outputName())
-            break;
-        inputIndex++;
-    }
-    ConnectionSource source(0, sourceType);
-    ConnectionTarget target(defInput->effect(), inputIndex); 
-    emit connectionCreated(source, target);
 }
 
 QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
@@ -355,10 +285,6 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
         return effectItems;
     
     foreach(QGraphicsItem * item, selectedGraphicsItems) {
-        // we cannot remove the first predefined input item
-        if (item == m_items.first())
-            continue;
-        
         EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(item);
         if (!item)
             continue;
