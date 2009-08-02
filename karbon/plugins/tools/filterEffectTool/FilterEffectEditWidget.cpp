@@ -51,6 +51,12 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     presets->setDisplayMode(KoResourceSelector::TextMode);
     presets->setColumnCount(1);
     
+    connect(presets, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(presetSelected(KoResource*)));
+
+    connect(presets, SIGNAL(resourceApplied(KoResource*)),
+            this, SLOT(presetSelected(KoResource*)));
+                      
     KoGenericRegistryModel<KoFilterEffectFactory*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactory*>(KoFilterEffectRegistry::instance());
     
     effectSelector->setModel(filterEffectModel);
@@ -342,6 +348,33 @@ void FilterEffectEditWidget::addToPresets()
     
     if (!server->addResource(resource))
         delete resource;
+}
+
+void FilterEffectEditWidget::presetSelected(KoResource *resource)
+{
+    FilterEffectResource * effectResource = dynamic_cast<FilterEffectResource*>(resource);
+    if (!effectResource)
+        return;
+    
+    KoFilterEffectStack * filterStack = effectResource->toFilterStack();
+    if (!filterStack)
+        return;
+    
+    if (m_shape) {
+        m_shape->update();
+        m_shape->setFilterEffectStack(0);
+    }
+    
+    delete m_effects;
+    m_effects = filterStack;
+    
+    if (m_shape) {
+        m_shape->setFilterEffectStack(m_effects);
+        m_shape->update();
+    }
+
+    m_scene->initialize(m_effects);
+    fitScene();
 }
 
 #include "FilterEffectEditWidget.moc"

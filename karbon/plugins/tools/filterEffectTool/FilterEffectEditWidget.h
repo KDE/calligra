@@ -50,6 +50,7 @@ private slots:
     void removeSelectedItem();
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
     void addToPresets();
+    void presetSelected(KoResource *resource);
 private:
     void fitScene();
     FilterEffectScene * m_scene;
