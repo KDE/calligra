@@ -238,14 +238,7 @@ void Document::processStyles()
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
         QString displayName = Conversion::string(style->name());
-        QString name = Conversion::string(style->name());
-        //need to replace all non-alphanumeric characters with hex representation
-        for(int i = 0; i < name.size(); i++) {
-            if(!name[i].isLetterOrNumber()) {
-                name.remove(i, 1);
-                i--;
-            }
-        }
+        QString name = Conversion::styleNameString(style->name());
         //process paragraph styles
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
@@ -262,7 +255,8 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
             if ( parentStyle ) {
-                userStyle.addAttribute( "style:parent-style-name", Conversion::string(parentStyle->name()));
+                userStyle.addAttribute( "style:parent-style-name", 
+                        Conversion::styleNameString(parentStyle->name()));
             }
 
             //set font name in style
@@ -289,7 +283,8 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
             if ( parentStyle ) {
-                userStyle.addAttribute( "style:parent-style-name", Conversion::string(parentStyle->name()));
+                userStyle.addAttribute( "style:parent-style-name", 
+                        Conversion::styleNameString(parentStyle->name()));
             }
 
             // even if we were able to process character properties in the chpx lists then we don't need to

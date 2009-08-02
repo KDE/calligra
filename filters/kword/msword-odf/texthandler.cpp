@@ -480,18 +480,8 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         kDebug(30513) << "set paragraph style";
         const wvWare::Style* paragraphStyle = styles.styleByIndex( paragraphProperties->pap().istd );
         Q_ASSERT( paragraphStyle );
-        QString paragraphStyleName = Conversion::string( paragraphStyle->name() );
-        //need to replace all non-alphanumeric characters with hex representation
-        for(int i = 0; i < paragraphStyleName.size(); i++)
-        {
-            if(!paragraphStyleName[i].isLetterOrNumber())
-            {
-                paragraphStyleName.remove(i, 1);
-                i--;
-            }
-        }
         //set current named style in m_paragraph
-        m_paragraph->setParagraphStyle( paragraphStyle, paragraphStyleName );
+        m_paragraph->setParagraphStyle( paragraphStyle );
 
         //write the paragraph formatting
         //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::StyleAuto, "paragraph");

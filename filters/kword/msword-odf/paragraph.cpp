@@ -100,20 +100,14 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
 
     const wvWare::Style* msTextStyle = styles.styleByIndex( chp->istd );
     Q_ASSERT( msTextStyle );
-    QString msTextStyleName = Conversion::string( msTextStyle->name() );
+    QString msTextStyleName = Conversion::styleNameString( msTextStyle->name() );
     kDebug(30513) << "text has characterstyle " << msTextStyleName;
 
-    //need to replace all non-alphanumeric characters with hex representation
-    for(int i = 0; i < msTextStyleName.size(); i++)
-    {
-        if(!msTextStyleName[i].isLetterOrNumber())
-        {
-            msTextStyleName.remove(i, 1);
-            i--;
-        }
-    }
-
     KoGenStyle *textStyle = m_mainStyles->styleForModification(msTextStyleName);
+    if ( !textStyle )
+    {
+        kWarning() << "Couldn't retrieve style for modification!";
+    }
 
     // modify the character style if we detect any diif between the chp of the paragraph and the summed chp
     const wvWare::Style* parentStyle = styles.styleByIndex( msTextStyle->m_std->istdBase );
@@ -219,11 +213,12 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     writer->endElement();
 }
 
-void Paragraph::setParagraphStyle( const wvWare::Style* paragraphStyle, QString paragraphStyleName )
+void Paragraph::setParagraphStyle( const wvWare::Style* paragraphStyle )
 {
     kDebug(30513);
     m_paragraphStyle = paragraphStyle;
-    m_odfParagraphStyle->addAttribute( "style:parent-style-name", paragraphStyleName );
+    m_odfParagraphStyle->addAttribute( "style:parent-style-name", 
+            Conversion::styleNameString(m_paragraphStyle->name()) );
 }
 
 KoGenStyle* Paragraph::getOdfParagraphStyle()

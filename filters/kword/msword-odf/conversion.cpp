@@ -33,6 +33,31 @@
 #include <QString>
 #include <klocale.h>
 
+QString Conversion::styleNameString( const wvWare::UString& str )
+{
+    QString string = QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+    //first replace all spaces with _20_
+    string.replace( " ", "_20_" );
+    //now remove random characters
+    for ( int i = 0; i < string.size(); i++ )
+    {
+        if ( !string[i].isLetterOrNumber() )
+        {
+            if ( string[i] != '_' )
+            {
+                string.remove( i, 1 );
+                i--;
+            }
+        }
+    }
+    //if first character is a digit, it doesn't validate properly
+    if ( string[0].isDigit() )
+    {
+        string.prepend("s");
+    }
+    return string;
+}
+
 QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
     switch(number)

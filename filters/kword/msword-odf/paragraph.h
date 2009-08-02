@@ -47,7 +47,7 @@ class Paragraph
         void closeInnerParagraph();
         void setParagraphProperties( wvWare::SharedPtr<const wvWare::ParagraphProperties> properties );
         //set the general named style that applies to this paragraph
-        void setParagraphStyle( const wvWare::Style* paragraphStyle, QString paragraphStyleName );
+        void setParagraphStyle( const wvWare::Style* paragraphStyle );
         KoGenStyle* getOdfParagraphStyle();
 
         //static functions for parsing wvWare properties into KoGenStyles

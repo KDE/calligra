@@ -49,6 +49,10 @@ namespace Conversion
         return QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
     }
 
+    //special version of string() that replaces spaces with _20_,
+    //since style names can't have spaces in them
+    QString styleNameString( const wvWare::UString& str );
+
     // Prepare text for inclusion in XML
     void encodeText(QString &text);
 
