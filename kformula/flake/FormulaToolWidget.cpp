@@ -56,8 +56,11 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     buttonRoot->setMenu( &m_rootMenu );
     buttonRoot->setDefaultAction( m_tool->action( "insert_root" ) );
     buttonFraction->setMenu( &m_fractionMenu );
+    buttonFraction->setDefaultAction(m_tool->action("insert_fraction"));
     buttonTable->setMenu( &m_tableMenu );
+    buttonTable->setDefaultAction(m_tool->action( "insert_33table"));
     buttonScript->setMenu( &m_scriptsMenu );
+    buttonScript->setDefaultAction(m_tool->action( "insert_subsupscript"));
 
     // setup the buttons for symbol insertion
     buttonArrows->setText(QChar(0x2190));

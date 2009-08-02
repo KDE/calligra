@@ -339,7 +339,8 @@ void KoFormulaTool::resetFormulaCursor() {
     m_formulaCursor->setPosition(0);
     m_formulaCursor->setSelecting(false);
     m_formulaCursor->setSelectionStart(0);
-    //we don't know if this cursor is allowed there, so we move it right
+    //if the cursor is not allowed at the beginning of the formula, move it right
+    //TODO: check, if this can ever happen
     if ( !m_formulaCursor->isAccepted() ) {
         m_formulaCursor->move(MoveRight);
     }
@@ -394,30 +395,31 @@ void KoFormulaTool::setupActions()
     action = new KAction( i18n( "Insert fence" ), this );
     action->setData( QString( "mfenced" ) ); 
     addAction( "insert_fence", action );
+    action->setIcon(KIcon("brackets"));
 
     action = new KAction( i18n( "Insert root" ), this );
     action->setData( QString( "mroot" ) ); 
     addAction( "insert_root", action );
+    action->setIcon(KIcon("sqrt"));
 
     action = new KAction( i18n( "Insert square root" ), this );
     action->setData( QString( "msqrt" ) ); 
     addAction( "insert_sqrt", action );
+    action->setIcon(KIcon("sqrt"));
 
     action = new KAction( i18n( "Insert fraction" ), this );
-    action->setData( QString( "mfrac" ) ); 
+    action->setData( QString( "<mfrac><mrow/><mrow/></mfrac>" ));
     addAction( "insert_fraction", action );
+    action->setIcon(KIcon("frac"));
 
     action = new KAction( i18n( "Insert 3x3 table" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_33table", action );
-
+    action->setIcon(KIcon("matrix"));
+    
     action = new KAction( i18n( "Insert 2x2 table" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_22table", action );
-
-    action = new KAction( i18n( "Insert 3 dimensional vector" ), this );
-    action->setData( QString( "mtable" ) ); 
-    addAction( "insert_31table", action );
 
     action = new KAction( i18n( "Insert 2 dimensional vector" ), this );
     action->setData( QString( "mtable" ) ); 
@@ -431,16 +433,9 @@ void KoFormulaTool::setupActions()
     action->setData( QString( "mtd" ) ); 
     addAction( "insert_tablecol", action );
 
-    action = new KAction( i18n( "Insert subscript" ), this );
-    action->setData( QString( "msub" ) ); 
-    addAction( "insert_subscript", action );
-
-    action = new KAction( i18n( "Insert superscript" ), this );
-    action->setData( QString( "msup" ) ); 
-    addAction( "insert_supscript", action );
-
     action = new KAction( i18n( "Insert sub- and superscript" ), this );
     action->setData( QString( "msubsup" ) ); 
     addAction( "insert_subsupscript", action );
+    action->setIcon( KIcon("rsub"));
 }
 
