@@ -271,6 +271,9 @@ public:
     /// @return true, if @p other is a descendant of this element
     bool hasDescendant(BasicElement* other) const;
 
+    /// @return first empty element, that is a descendant of this element, if there is one
+    BasicElement* emptyDescendant();
+
     /// @return the formula element
     BasicElement* formulaElement();
 

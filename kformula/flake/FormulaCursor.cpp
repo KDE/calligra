@@ -36,6 +36,8 @@
 
 #include <kdebug.h>
 #include <QUndoCommand>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 
 FormulaCursorPosition::FormulaCursorPosition(BasicElement* element, bool selecting, int position, int mark) {
     m_currentElement=element;
@@ -210,20 +212,43 @@ FormulaCommand* FormulaCursor::insertText( const QString& text )
 
 FormulaCommand* FormulaCursor::insertData( const QString& data )
 {
-    BasicElement* elementToInsert=ElementFactory::createElement("mfrac",0);
-    return insertElement( elementToInsert );
+    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext odfContext( stylesReader, 0 );
+    // setup a DOM structure and start the actual loading process
+    KoXmlDocument tmpDocument;
+    tmpDocument.setContent( QString(data), false, 0, 0, 0 );
+    BasicElement* element=ElementFactory::createElement(tmpDocument.documentElement().tagName(),0);
+    element->readMathML( tmpDocument.documentElement() );     // and load the new formula
+    return insertElement( element );
     //FIXME: we leak memory of the insert fails
 }
 
 FormulaCommand* FormulaCursor::insertElement( BasicElement* element )
 {
+    BasicElement* emptydesc=element->emptyDescendant();
     FormulaCommand *undo = 0;
     if (insideInferredRow()) {
         RowElement* tmprow=static_cast<RowElement*>(m_currentElement);
         QList<BasicElement*> list;
         list<<element;
         if (hasSelection()) {
-            undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list);
+            if (emptydesc!=0) {
+                if (emptydesc->parentElement()==0) {
+                    return 0;
+                }
+                RowElement* newrow=new RowElement(emptydesc->parentElement());
+                QList<BasicElement*> replaced=tmprow->childElements().mid(selection().first,selection().second-selection().first);
+                foreach (BasicElement *tmp, replaced) {
+                    tmp->setParentElement(newrow);
+                    newrow->insertChild(newrow->length(),tmp);
+                }
+                emptydesc->parentElement()->replaceChild(emptydesc,newrow);
+                delete emptydesc;
+                undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list,true);
+            } else {
+                undo=new FormulaCommandReplaceElements(tmprow,selection().first,selection().second-selection().first,list,false);
+            }
         } else {
             undo=new FormulaCommandReplaceElements(tmprow,m_position,0,list);
         }

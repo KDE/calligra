@@ -86,10 +86,10 @@ private:
 
 class FormulaCommandReplaceElements : public FormulaCommand {
 public:
-    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , QUndoCommand *parent=0);
+    FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , bool wrap=false, QUndoCommand *parent=0);
 
     ~FormulaCommandReplaceElements();
-    
+
     /// Execute the command
     void redo();
 
@@ -105,12 +105,15 @@ private:
 
     int m_length;
 
+    bool m_wrap;
+
+    BasicElement* m_newParent;
+
     /// The list of added elements
     QList<BasicElement*> m_added;
 
     /// The list of removed elements
     QList<BasicElement*> m_removed;
-
 };
 
 class FormulaCommandReplaceSingleElement : public FormulaCommand {

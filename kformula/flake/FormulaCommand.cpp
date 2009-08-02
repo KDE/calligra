@@ -87,14 +87,17 @@ void FormulaCommandReplaceText::undo()
     m_ownerElement->insertGlyphs(m_glyphpos,m_removedGlyphs);
 }
 
-FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, QUndoCommand* parent )
+FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner, int position, int length, QList< BasicElement* > elements, bool wrap,QUndoCommand* parent )
                             : FormulaCommand(parent)
 {
     m_ownerElement=owner;
     m_position=position;
     m_added=elements;
     m_length=length;
+    m_wrap=wrap;
     m_removed=m_ownerElement->childElements().mid(m_position,m_length);
+    //we have to remember to which descendant of m_added the elements got moved
+    m_newParent=(m_wrap ? m_removed[0]->parentElement() : 0);
     setUndoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_removed.length()));
     setRedoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_added.length()));
 }
@@ -107,7 +110,7 @@ void FormulaCommandReplaceElements::redo()
 {
     for (int i=0; i<m_length; ++i) {
         m_ownerElement->removeChild(m_removed[i]);
-        m_removed[i]->setParentElement(0);
+        m_removed[i]->setParentElement(m_newParent);
     }
     for (int i=0; i<m_added.length(); ++i) {
         m_ownerElement->insertChild(m_position+i,m_added[i]);

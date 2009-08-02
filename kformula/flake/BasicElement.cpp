@@ -368,6 +368,23 @@ bool BasicElement::hasDescendant ( BasicElement* other ) const
     return false;
 }
 
+
+BasicElement* BasicElement::emptyDescendant()
+{
+    BasicElement* tmp;
+    //FIXME: When conversion of EmptyElements to RowElements is done, we can drop one of the cases
+    if ((elementType()==Row && length()<=1) || elementType()==Empty) {
+        return this;
+    }
+    foreach (BasicElement* child, childElements()) {
+        if (tmp=child->emptyDescendant()) {
+            return tmp;
+        }
+    }
+    return 0;
+}
+
+
 //TODO: This should be cached
 BasicElement* BasicElement::formulaElement() 
 {
