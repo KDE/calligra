@@ -25,6 +25,7 @@
 #include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
+class QTableWidgetItem;
 
 /**
  * @short A widget providing options for the FormulaTool
@@ -46,7 +47,14 @@ public:
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );
 
+public slots:
+    void insertSymbol(QTableWidgetItem* item);
 
+private:
+    void setupButton(QToolButton* button, QMenu& menu, const QString& text, QList<QString>, int length=8);
+
+    static QList<QString> symbolsInRange(int start, int length);
+    
 private:
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;
@@ -56,6 +64,11 @@ private:
     QMenu m_tableMenu;
     QMenu m_fenceMenu;
     QMenu m_rootMenu;
+    QMenu m_arrowMenu;
+    QMenu m_greekMenu;
+    QMenu m_miscMenu;
+    QMenu m_relationMenu;
+    QMenu m_operatorMenu;
 };
 
 #endif // FORMULATOOLWIDGET_H

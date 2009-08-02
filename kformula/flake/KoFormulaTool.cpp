@@ -302,6 +302,18 @@ void KoFormulaTool::insert( QAction* action )
     }
 }
 
+
+void KoFormulaTool::insertSymbol ( const QString& symbol )
+{
+    FormulaCommand *command;
+    m_formulaShape->update();
+    command=m_formulaCursor->insertText( symbol );
+    if (command!=0) {
+        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+    }
+}
+
+
 QWidget* KoFormulaTool::createOptionWidget()
 {
     FormulaToolWidget* options = new FormulaToolWidget( this );
