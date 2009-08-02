@@ -393,17 +393,17 @@ void KoFormulaTool::setupActions()
     KAction* action;
 
     action = new KAction( i18n( "Insert fence" ), this );
-    action->setData( QString( "mfenced" ) ); 
+    action->setData( QString( "<mfenced><mrow/></mfenced>" ) );
     addAction( "insert_fence", action );
     action->setIcon(KIcon("brackets"));
 
     action = new KAction( i18n( "Insert root" ), this );
-    action->setData( QString( "mroot" ) ); 
+    action->setData( QString( "<mroot><mrow/><mrow/></mroot>" ) );
     addAction( "insert_root", action );
     action->setIcon(KIcon("sqrt"));
 
     action = new KAction( i18n( "Insert square root" ), this );
-    action->setData( QString( "msqrt" ) ); 
+    action->setData( QString( "<msqrt><mrow/></msqrt>" ) );
     addAction( "insert_sqrt", action );
     action->setIcon(KIcon("sqrt"));
 
@@ -413,28 +413,26 @@ void KoFormulaTool::setupActions()
     action->setIcon(KIcon("frac"));
 
     action = new KAction( i18n( "Insert 3x3 table" ), this );
-    action->setData( QString( "mtable" ) ); 
+    action->setData( QString( "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>") );
     addAction( "insert_33table", action );
     action->setIcon(KIcon("matrix"));
     
-    action = new KAction( i18n( "Insert 2x2 table" ), this );
-    action->setData( QString( "mtable" ) ); 
-    addAction( "insert_22table", action );
-
     action = new KAction( i18n( "Insert 2 dimensional vector" ), this );
-    action->setData( QString( "mtable" ) ); 
+    action->setData( QString( "<mtable><mtr><mtd></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ) );
     addAction( "insert_21table", action );
 
-    action = new KAction( i18n( "Insert table row" ), this );
-    action->setData( QString( "mtr" ) ); 
-    addAction( "insert_tablerow", action );
-
-    action = new KAction( i18n( "Insert table column" ), this );
-    action->setData( QString( "mtd" ) ); 
-    addAction( "insert_tablecol", action );
+//     action = new KAction( i18n( "Insert table row" ), this );
+//     action->setData( QString( "mtr" ) ); 
+//     addAction( "insert_tablerow", action );
+// 
+//     action = new KAction( i18n( "Insert table column" ), this );
+//     action->setData( QString( "mtd" ) ); 
+//     addAction( "insert_tablecol", action );
 
     action = new KAction( i18n( "Insert sub- and superscript" ), this );
-    action->setData( QString( "msubsup" ) ); 
+    action->setData( QString( "<msubsup><mrow/><mrow/></msubsup>" ) );
     addAction( "insert_subsupscript", action );
     action->setIcon( KIcon("rsub"));
 }
