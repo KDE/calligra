@@ -24,3 +24,22 @@ target_link_libraries(TestLoadAndSave kformulalib ${QT_QTTEST_LIBRARY})
 set(TestLayout_SRCS TestLayout.cpp)
 kde4_add_unit_test(TestLayout TESTNAME kformula-LoadAndSave  ${TestLayout_SRCS})
 target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})
+
+########### Cursor Test ###############
+
+set(TestCursor_SRCS
+TestCursor.cpp
+   ../KoFormulaShape.cpp
+   ../FormulaToolWidget.cpp
+   ../FormulaCommandUpdate.cpp
+   ../KoFormulaShapeFactory.cpp
+   ../KoFormulaTool.cpp
+   ../FormulaCommand.cpp
+)
+
+kde4_add_ui_files( TestCursor_SRCS
+    ../FormulaToolWidget.ui
+)
+
+kde4_add_unit_test(TestCursor TESTNAME kformula-Cursor  ${TestCursor_SRCS})
+target_link_libraries(TestCursor kformulalib ${QT_QTTEST_LIBRARY})

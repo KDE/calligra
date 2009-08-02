@@ -64,6 +64,9 @@ public:
     /// @return The currently manipulated KoFormulaShape
     KoFormulaShape* shape();
 
+    /// @return The currently active cursor
+    FormulaCursor* formulaCursor();
+
     /// Reset the cursor
     void resetFormulaCursor();
 

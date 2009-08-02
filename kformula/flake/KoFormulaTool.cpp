@@ -269,10 +269,7 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
             break;
         default:
             if( event->text().length() != 0 ) {
-                m_formulaShape->update();
                 command=m_formulaCursor->insertText( event->text() );
-                m_formulaShape->updateLayout();
-                m_formulaShape->update();
             }
     }
     if (command!=0) {
@@ -316,6 +313,13 @@ KoFormulaShape* KoFormulaTool::shape()
 {
     return m_formulaShape;
 }
+
+
+FormulaCursor* KoFormulaTool::formulaCursor()
+{
+    return m_formulaCursor;
+}
+
 
 void KoFormulaTool::resetFormulaCursor() {
     m_formulaCursor->setData(m_formulaShape->formulaData());
