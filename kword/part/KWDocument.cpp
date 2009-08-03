@@ -133,8 +133,6 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 {
     m_frameLayout.setDocument(this);
 
-    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
-            inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
     setComponentData(KWFactory::componentData(), false);
     setTemplateType("kword_template");
 
@@ -149,6 +147,9 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         shapeFactory->setOptionPanels(panels);
         shapeFactory->populateDataCenterMap(m_dataCenterMap);
     }
+
+    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
+            inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
 
     m_config.load(this);
     clear();
