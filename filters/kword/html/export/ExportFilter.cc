@@ -20,13 +20,14 @@
 
 #include <QString>
 #include <QTextCodec>
+#include <QPainter>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
-#include <q3picture.h>
-//Added by qt3to4:
 #include <QList>
 #include <QTextStream>
+#include <QSvgGenerator>
+#include <QPicture>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -169,7 +170,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         else if ( extension == "qpic" )
         {
 
-            Q3Picture picture;
+            QPicture picture;
 
             QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
             if (!io)
@@ -178,10 +179,10 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 return false;
             }
 
-            // TODO: if we have alreasy SVG, do *not* go through QPicture!
+            // TODO: if we have already SVG, do *not* go through QPicture!
+            // convert the qpic picture to svg.
             if (picture.load(io))
             {
-
                 // Save picture as SVG
                 *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
                 *m_streamOut << " type=\"image/svg+xml\"";
@@ -190,13 +191,24 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 // TODO: other props for image
 
                 kDebug(30506) <<"Trying to save clipart to" << strImageName;
-                if (!picture.save(strImagePath,"svg"))
+                QSvgGenerator svgGenerator;
+                svgGenerator.setFileName(strImagePath);
+                svgGenerator.setViewBox(picture.boundingRect());
+                svgGenerator.setSize(picture.boundingRect().size());
+                QPainter gc;
+                gc.begin(&svgGenerator);
+                picture.play(&gc);
+                gc.end();
+                
+                // svgGenerator has no explicit save?
+/*                
+                if (!picture.save(strImagePath, "svg"))
                 {
                     kError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
                         << " to " << strImageName << endl;
                     return false;
                 }
-
+*/
             }
         }
         else
