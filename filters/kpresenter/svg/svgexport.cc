@@ -17,22 +17,21 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA  02110-1301  USA.
 */
+#include "svgexport.h"
 
-#include <q3picture.h>
+#include <QSvgGenerator>
 #include <QPainter>
 
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>
 #include <KoStore.h>
-//#include <KoStoreDevice.h>
 #include <kgenericfactory.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrCanvas.h"
 
-#include "svgexport.h"
 
 
 typedef KGenericFactory<SvgExport> SvgExportFactory;
@@ -80,17 +79,17 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     int width =  int( layoutPage.ptWidth );
     int height = int( layoutPage.ptHeight );
     
-    Q3Picture  picture;
-    QPainter  painter(&picture);
-    QRect     rect(QPoint(0, 0), QPoint(width, height));
+    QSvgGenerator  picture;
+    QRect rect(QPoint(0, 0), QPoint(width, height));
+    picture.setFileName(path);
+    picture.setSize(rect.size());
+    picture.setViewBox(rect);
+    
+    QPainter painter;
+    painter.begin(&picture);
     kpresenterdoc->paintContent(painter, rect, false);
     painter.end();
-    
-    if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "SVG Export Error" ) );
-    }
-	
+
     return KoFilter::OK;
 }
 
