@@ -107,13 +107,13 @@ bool KPrSoundData::saveToFile(QIODevice *device)
         if(bytes == 0)
             break;
         else if(bytes == -1) {
-            kWarning() << "Failed to read data from the tmpfile\n";
+            kWarning() << "Failed to read data from the tmpfile";
             failed = true;
         }
         while(! failed && bytes > 0) {
             qint64 written = device->write(data, bytes);
             if(written < 0) {// error!
-                kWarning() << "Failed to copy the sound from the temp file\n";
+                kWarning() << "Failed to copy the sound from the temp file";
                 failed = true;
             }
             bytes -= written;
@@ -160,13 +160,13 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
         if(bytes == 0)
             break;
         else if(bytes == -1) {
-            kWarning() << "Failed to read sound data\n";
+            kWarning() << "Failed to read sound data";
             failed = true;
         }
         while(! failed && bytes > 0) {
             qint64 written = d->tempFile->write(data, bytes);
             if(written < 0) {// error!
-                kWarning() << "Failed to copy the sound to temp\n";
+                kWarning() << "Failed to copy the sound to temp";
                 failed = true;
             }
             bytes -= written;

@@ -260,7 +260,7 @@ void KWDocument::removePage(int pageNumber)
 
     KWPage page = m_pageManager.page(pageNumber);
     if (! page.isValid()) {
-        kWarning() << "remove page requested for a non exiting page!\n";
+        kWarning() << "remove page requested for a non exiting page!";
         return;
     }
     addCommand(new KWPageRemoveCommand(this, page));
@@ -654,7 +654,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         if (fs->frameCount() > 0) {
             KWFrame *frame = fs->frame(0);
             if (frame->isCopy()) {
-                kWarning() << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting\n";
+                kWarning() << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting";
                 frame->setCopy(false);
             }
         }

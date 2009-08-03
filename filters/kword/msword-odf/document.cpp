@@ -273,7 +273,7 @@ void Document::processStyles()
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
-            kDebug(30513) << "added style " << actualName << "\n";
+            kDebug(30513) << "added style " << actualName;
         }
         else if(style && style->type()==wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
@@ -292,7 +292,7 @@ void Document::processStyles()
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
-            kDebug(30513) << "added style " << actualName << "\n";
+            kDebug(30513) << "added style " << actualName;
         }
     }
 }

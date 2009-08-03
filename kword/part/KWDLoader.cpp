@@ -478,7 +478,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
         ImageKey imageKey;
         fill(&imageKey, key);
         if (imageKey.filename.isEmpty()) {
-            kWarning() << "could not find image in the store\n";
+            kWarning() << "could not find image in the store";
             return;
         }
 
@@ -649,11 +649,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             formatCursor.setPosition(block.position() + pos);
                             formatCursor.setPosition(block.position() + pos + length, QTextCursor::KeepAnchor);
                         } else {
-                            kWarning("Format has missing or invalid 'len' value, ignoring\n");
+                            kWarning("Format has missing or invalid 'len' value, ignoring");
                             continue;
                         }
                     } else {
-                        kWarning("Format has missing or invalid 'pos' value, ignoring\n");
+                        kWarning("Format has missing or invalid 'pos' value, ignoring");
                         continue;
                     }
                     if (id == "1") {
@@ -662,11 +662,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                         fill(&s2, format);
                         s2.applyStyle(&formatCursor);
                     } else if (id == "2") {
-                        kWarning("File to old, image can not be recovered\n");
+                        kWarning("File to old, image can not be recovered");
                     } else if (id == "4") {
                         KoXmlElement variable = format.namedItem("VARIABLE").toElement();
                         if (variable.isNull()) {
-                            kWarning() << "Missing VARIABLE tag\n";
+                            kWarning() << "Missing VARIABLE tag";
                             continue;
                         }
                         KoXmlElement type = variable.namedItem("TYPE").toElement();
@@ -721,17 +721,17 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                         }
                         }
                     } else if (id == "5") {
-                        kWarning("File to old, footnote can not be recovered\n");
+                        kWarning("File to old, footnote can not be recovered");
                     } else if (id == "6") { // anchor for floating frame.
                         KoXmlElement anchor = format.namedItem("ANCHOR").toElement();
                         if (anchor.isNull()) {
-                            kWarning() << "Missing ANCHOR tag\n";
+                            kWarning() << "Missing ANCHOR tag";
                             continue;
                         }
                         QString type = anchor.attribute("type", "frameset");
                         if (type == "frameset") {
                             if (! anchor.hasAttribute("instance")) {
-                                kWarning() << "ANCHOR is missing its instance attribute\n";
+                                kWarning() << "ANCHOR is missing its instance attribute";
                                 continue;
                             }
                             AnchorData data;
@@ -839,7 +839,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
         case 10: llp.setStyle(KoListStyle::DiscItem); break;
         case 11: llp.setStyle(KoListStyle::BoxItem); break;
         case 7: llp.setStyle(KoListStyle::CustomCharItem);
-            kWarning() << "According to spec COUNTER with type 7 is not supported, ignoring\n";
+            kWarning() << "According to spec COUNTER with type 7 is not supported, ignoring";
             // fall through
         default: {
             lstyle = 0;

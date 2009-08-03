@@ -65,25 +65,25 @@ bool GlyphElement::readMathMLAttributes( const KoXmlElement& element )
     // MathML Section 3.2.9.2
     m_fontFamily = element.attribute( "fontfamily" );
     if ( m_fontFamily.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute fontfamily not found in glyph element\n";
+        kWarning( DEBUGID ) << "Required attribute fontfamily not found in glyph element";
         return false;
     }
     QString indexStr = element.attribute( "index" );
     if ( indexStr.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute index not found in glyph element\n";
+        kWarning( DEBUGID ) << "Required attribute index not found in glyph element";
         return false;
     }
     bool ok;
     ushort index = indexStr.toUShort( &ok );
     if ( ! ok ) {
-        kWarning( DEBUGID ) << "Invalid index value in glyph element\n";
+        kWarning( DEBUGID ) << "Invalid index value in glyph element";
         return false;
     }
     m_char = QChar( index );
 
     m_alt = element.attribute( "alt" );
     if ( m_alt.isNull() ) {
-        kWarning( DEBUGID ) << "Required attribute alt not found in glyph element\n";
+        kWarning( DEBUGID ) << "Required attribute alt not found in glyph element";
         return false;
     }
 

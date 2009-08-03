@@ -283,7 +283,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
         m_view->setCurrentPage(currentPage);
     } else {
         // TODO paint the main-text-flake directly
-        kWarning() << "Non-page painting not implemented yet!\n";
+        kWarning() << "Non-page painting not implemented yet!";
     }
 
     painter.end();
