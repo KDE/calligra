@@ -20,11 +20,10 @@
 // based on the SVG exporter.  Not intended for public release
 // Microsoft WVG renamed to XAML Graphics.  Worry about that later.  
 
-#include <q3cstring.h>
 #include <qdom.h>
 #include <QFile>
 #include <QString>
-#include <q3valuelist.h>
+#include <QList>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -215,7 +214,7 @@ QString createUID()
 }
 
 void
-XAMLExport::getColorStops( const Q3PtrVector<VColorStop> &colorStops )
+XAMLExport::getColorStops( const QVector<VColorStop*> &colorStops )
 {
 	for( unsigned int i = 0; i < colorStops.count() ; i++ )
 	{
@@ -345,7 +344,7 @@ XAMLExport::getStroke( const VStroke& stroke )
 		*m_body << " StrokeDashOffset=\"" << stroke.dashPattern().offset() << "\"";
 		*m_body << " StrokeDashArray=\" ";
 
-		Q3ValueListConstIterator<float> itr;
+		QListConstIterator<float> itr;
 		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
 			*m_body << *itr << " ";

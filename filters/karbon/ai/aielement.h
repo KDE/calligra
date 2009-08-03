@@ -20,8 +20,8 @@
 #ifndef AIELEMENT_H
 #define AIELEMENT_H
 
-// #include <Q3ValueList>
-#include <q3valuevector.h>
+// #include <QList>
+#include <QVector>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3Shared>
@@ -58,7 +58,7 @@ public:
     explicit AIElement( const Q3CString& );
     explicit AIElement( const char* );
 //    AIElement( const QValueList<AIElement>& );
-    explicit AIElement( const Q3ValueVector<AIElement>&, Type type = ElementArray);
+    explicit AIElement( const QVector<AIElement>&, Type type = ElementArray);
     explicit AIElement( int );
     explicit AIElement( uint );
     explicit AIElement( double );
@@ -85,8 +85,8 @@ public:
     uint toUInt( bool * ok=0 ) const;
     double toDouble( bool * ok=0 ) const;
 //    const QValueList<AIElement> toList() const;
-    const Q3ValueVector<AIElement> toElementArray() const;
-    const Q3ValueVector<AIElement> toBlock() const;
+    const QVector<AIElement> toElementArray() const;
+    const QVector<AIElement> toBlock() const;
 
     // Custom types
     const QString toReference() const;
@@ -102,8 +102,8 @@ public:
     uint& asUInt();
     double& asDouble();
 //    QValueList<AIElement>& asList();
-    Q3ValueVector<AIElement>& asElementArray();
-    Q3ValueVector<AIElement>& asBlock();
+    QVector<AIElement>& asElementArray();
+    QVector<AIElement>& asBlock();
 
     // Custom types
     QString& asReference();

@@ -24,8 +24,7 @@
 #include <QPainter>
 #include <QSize>
 #include <QStringList>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -107,11 +106,10 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
   ImageExportDialog dlg;
 
   QStringList pageNames;
-  Q3PtrList<KivioPage> pageList = doc.map()->pageList();
-  Q3PtrListIterator<KivioPage> it(pageList);
-
-  for(; it.current() != 0; ++it) {
-    pageNames.append(it.current()->pageName());
+  QList<KivioPage*> pageList = doc.map()->pageList();
+  
+  foreach(KivioPage* page, pageList) {
+    pageNames.append(page->pageName());
   }
 
   KoZoomHandler zoom;

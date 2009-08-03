@@ -29,13 +29,10 @@
 #include <KoFilterChain.h>
 #include <KoZoomController.h>
 #include <QApplication>
-#include <q3ptrlist.h>
-#include <q3sortedlist.h>
+#include <QList>
 #include <QFile>
 #include <QTextStream>
 #include <QPen>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QByteArray>
 
 // KOffice

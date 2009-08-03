@@ -24,18 +24,16 @@
 #include <QFile>
 #include <QString>
 #include <QStringList>
-#include <q3ptrlist.h>
 
 #include <dbase.h>
 
 DBase::DBase(): m_recordCount( 0 )
 {
-  fields.setAutoDelete( true );
 }
 
 DBase::~DBase()
 {
-  fields.clear();
+  while(!fields.isEmpty()) delete fields.takeFirst();
   close();
 }
 
@@ -116,7 +114,7 @@ bool DBase::load( const QString& filename )
   // unsigned char field_decimals      17       decimals
   // unsigned char reserved[14]        18-31    reserved for internal dBASE-stuff
 
-  fields.clear();
+  while(!fields.isEmpty()) delete fields.takeFirst();
   for( unsigned i = 1; i < m_headerLength/32; ++i )
   {
     DBaseField* field = new DBaseField;

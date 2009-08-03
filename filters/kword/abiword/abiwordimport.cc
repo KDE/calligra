@@ -67,7 +67,6 @@ public:
         m_timepoint(QDateTime::currentDateTime(Qt::UTC)), m_fatalerror(false)
     {
         createDocument();
-        structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
         stackItem->m_frameset=mainFramesetElement; // The default frame set.
@@ -76,7 +75,9 @@ public:
     }
     virtual ~StructureParser()
     {
-        structureStack.clear();
+        while(!structureStack.isEmpty()) {
+            delete structureStack.pop();
+        }
     }
 public:
     virtual bool startDocument(void);
@@ -974,11 +975,11 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
 
     // Now we are a child of a <p> element!
 
-    bool success=StartElementPBR(stackItem,structureStack.current(),mainDocument);
+    bool success=StartElementPBR(stackItem,structureStack.top(),mainDocument);
 
     // Now restore the stack
 
-    StackItem* stackCurrent=structureStack.current();
+    StackItem* stackCurrent=structureStack.top();
     StackItem* item;
     while (auxilaryStack.count()>0)
     {
@@ -1114,7 +1115,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     for ( i=0, it=widthList.constBegin(); i<columns; ++i, ++it )
     {
         kDebug(30506) <<"Column width:" << (*it) <<" cooked" << ValueWithLengthUnit(*it);
-        stackItem->m_doubleArray.at(i+1) = ValueWithLengthUnit(*it) + stackItem->m_doubleArray.at(i);
+        stackItem->m_doubleArray[i+1] = ValueWithLengthUnit(*it) + stackItem->m_doubleArray[i];
     }
     // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
 
@@ -1198,8 +1199,8 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
         // We do not know the right position of this column, so improvise. (### TODO)
         // We play on the fact that QByteArray uses shallow copies by default.
         //  (We do want that the change is known at <table> level)
-        stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1, Q3GArray::SpeedOptim );
-        stackItem->m_doubleArray.at(col+1) = stackItem->m_doubleArray.at(col) + 72; // Try 1 inch
+        stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1 );
+        stackItem->m_doubleArray[col+1] = stackItem->m_doubleArray[col] + 72; // Try 1 inch
     }
 
     const QString frameName(i18nc("Frameset name","Table %3, row %1, column %2",row,col,stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
@@ -1218,8 +1219,8 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut(mainDocument.createElement("FRAME"));
-    frameElementOut.setAttribute( "left", stackItem->m_doubleArray.at(col) );
-    frameElementOut.setAttribute( "right", stackItem->m_doubleArray.at(col+1) );
+    frameElementOut.setAttribute( "left", stackItem->m_doubleArray[col] );
+    frameElementOut.setAttribute( "right", stackItem->m_doubleArray[col+1] );
     frameElementOut.setAttribute("top",0);
     frameElementOut.setAttribute("bottom",0);
     frameElementOut.setAttribute("runaround",1);
@@ -1254,7 +1255,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
 
     // Create a new stack element copying the top of the stack.
-    StackItem *stackItem=new StackItem(*structureStack.current());
+    StackItem *stackItem=new StackItem(*structureStack.top());
 
     if (!stackItem)
     {
@@ -1268,32 +1269,32 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 
     if ((name=="c")||(name=="C"))
     {
-        success=StartElementC(stackItem,structureStack.current(),attributes);
+        success=StartElementC(stackItem,structureStack.top(),attributes);
     }
     else if ((name=="p")||(name=="P"))
     {
-        success=StartElementP(stackItem,structureStack.current(),mainDocument,
+        success=StartElementP(stackItem,structureStack.top(),mainDocument,
             styleDataMap,attributes);
     }
     else if ((name=="section")||(name=="SECTION"))
     {
-        success=StartElementSection(stackItem,structureStack.current(),attributes);
+        success=StartElementSection(stackItem,structureStack.top(),attributes);
     }
     else if (name=="a")
     {
-        success=StartElementA(stackItem,structureStack.current(),attributes);
+        success=StartElementA(stackItem,structureStack.top(),attributes);
     }
     else if (name=="br") // NOTE: Not sure if it only exists in lower case!
     {
         // We have a forced line break
-        StackItem* stackCurrent=structureStack.current();
+        StackItem* stackCurrent=structureStack.top();
         success=StartElementBR(stackItem,stackCurrent,mainDocument);
     }
     else if (name=="cbr") // NOTE: Not sure if it only exists in lower case!
     {
         // We have a forced column break (not supported by KWord)
         stackItem->elementType=ElementTypeEmpty;
-        StackItem* stackCurrent=structureStack.current();
+        StackItem* stackCurrent=structureStack.top();
         if (stackCurrent->elementType==ElementTypeContent)
         {
             kWarning(30506) << "Forced column break found! Transforming to forced page break";
@@ -1315,7 +1316,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         // We have a forced page break
         stackItem->elementType=ElementTypeEmpty;
-        StackItem* stackCurrent=structureStack.current();
+        StackItem* stackCurrent=structureStack.top();
         if (stackCurrent->elementType==ElementTypeContent)
         {
             success=complexForcedPageBreak(stackItem);
@@ -1335,26 +1336,26 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         // Does only exist as lower case tag!
     {
         stackItem->elementType=ElementTypeEmpty;
-        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
+        stackItem->stackElementText=structureStack.top()->stackElementText; // TODO: reason?
         success=StartElementPageSize(m_paperElement,attributes);
     }
     else if ((name=="field") //TODO: upper-case?
         || (name=="f")) // old deprecated name for <field>
     {
-        success=StartElementField(stackItem,structureStack.current(),mainDocument,attributes);
+        success=StartElementField(stackItem,structureStack.top(),mainDocument,attributes);
     }
     else if (name=="s") // Seems only to exist as lower case
     {
-        success=StartElementS(stackItem,structureStack.current(),attributes,styleDataMap);
+        success=StartElementS(stackItem,structureStack.top(),attributes,styleDataMap);
     }
     else if ((name=="image") //TODO: upper-case?
         || (name=="i")) // old deprecated name for <image>
     {
-        success=StartElementImage(stackItem,structureStack.current(),attributes);
+        success=StartElementImage(stackItem,structureStack.top(),attributes);
     }
     else if (name=="d") // TODO: upper-case?
     {
-        success=StartElementD(stackItem,structureStack.current(),attributes);
+        success=StartElementD(stackItem,structureStack.top(),attributes);
     }
     else if (name=="iw") // No upper-case
     {
@@ -1363,24 +1364,24 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if (name=="m") // No upper-case
     {
-        success=StartElementM(stackItem,structureStack.current(),attributes);
+        success=StartElementM(stackItem,structureStack.top(),attributes);
     }
     else if (name=="foot") // No upper-case
     {
-        success=StartElementFoot(stackItem,structureStack.current(),attributes);
+        success=StartElementFoot(stackItem,structureStack.top(),attributes);
     }
     else if (name=="table") // No upper-case
     {
-        success=StartElementTable(stackItem,structureStack.current(), attributes);
+        success=StartElementTable(stackItem,structureStack.top(), attributes);
     }
     else if (name=="cell") // No upper-case
     {
-        success=StartElementCell(stackItem,structureStack.current(),attributes);
+        success=StartElementCell(stackItem,structureStack.top(),attributes);
     }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
-        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
+        stackItem->stackElementText=structureStack.top()->stackElementText; // TODO: reason?
         success=true;
     }
     if (success)
@@ -1410,7 +1411,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     StackItem *stackItem=structureStack.pop();
     if ((name=="c")||(name=="C"))
     {
-        success=EndElementC(stackItem,structureStack.current());
+        success=EndElementC(stackItem,structureStack.top());
     }
     else if ((name=="p")||(name=="P"))
     {
@@ -1421,12 +1422,12 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
         if (stackItem->elementType==ElementTypeContent)
         {
             // Anchor to a bookmark (not supported by KWord))
-            success=EndElementC(stackItem,structureStack.current());
+            success=EndElementC(stackItem,structureStack.top());
         }
         else
         {
             // Normal anchor
-            success=EndElementA(stackItem,structureStack.current(), mainDocument);
+            success=EndElementA(stackItem,structureStack.top(), mainDocument);
         }
     }
     else if (name=="d")
@@ -1435,7 +1436,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     }
     else if (name=="iw") // No upper-case
     {
-        success=EndElementIW(stackItem,structureStack.current(), mainDocument, m_ignoreWordsElement);
+        success=EndElementIW(stackItem,structureStack.top(), mainDocument, m_ignoreWordsElement);
     }
     else if (name=="m") // No upper-case
     {
@@ -1479,7 +1480,7 @@ bool StructureParser :: characters ( const QString & ch )
 
     bool success=false;
 
-    StackItem *stackItem=structureStack.current();
+    StackItem *stackItem=structureStack.top();
 
     if ((stackItem->elementType==ElementTypeContent)
         || (stackItem->elementType==ElementTypeAnchorContent))

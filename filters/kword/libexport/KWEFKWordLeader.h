@@ -23,7 +23,7 @@
 
 #include <QIODevice>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 #include <KoFilterChain.h>
@@ -51,7 +51,7 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
 	bool doVariableSettings (const VariableSettingsData &varSettings);
-        bool doFullDocument (const Q3ValueList<ParaData> &);
+        bool doFullDocument (const QList<ParaData> &);
 	bool doPageInfo (const int headerType, const int footerType);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
@@ -71,9 +71,9 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
-        bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors );
+        bool doDeclareNonInlinedFramesets( QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors );
 
-        Q3ValueList<FootnoteData> footnoteList;
+        QList<FootnoteData> footnoteList;
 
         void setHeaderType(int hType) { m_hType = hType; }
         void setFooterType(int fType) { m_fType = fType; }
@@ -96,10 +96,10 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
         /// Number of paragraph in each frameset (for bookmarks)
         QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
-        Q3ValueList<Bookmark> m_bookmarkList;
+        QList<Bookmark> m_bookmarkList;
         QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG) 
-        Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors 
-        Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables
+        QList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors 
+        QList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;

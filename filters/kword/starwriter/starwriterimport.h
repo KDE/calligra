@@ -24,7 +24,6 @@
 
 #include <KoFilter.h>
 #include <QString>
-#include <q3cstring.h>
 
 class StarWriterImport: public KoFilter
 {

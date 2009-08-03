@@ -22,7 +22,7 @@
 #include "parser.h"
 
 #include <QFileInfo>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
 #include <QRegExp>
 
@@ -150,12 +150,12 @@ KWordFilter::parse (const QString & filename)
   format_pos = 0;
   fmt = flag.asXML();
 
-  for (Q3PtrListIterator < Token > it (tokens); it; ++it)
+  foreach(Token* token, tokens) {
     {
       unsigned int ucode;
       int attr;
       int len;
-      Token *t = it.current ();
+      Token *t = token;
       Token::Type type = t->type ();
 
       switch (type)

@@ -23,9 +23,8 @@
 #include <KoFilter.h>
 #include <qdom.h>
 #include <QMap>
-#include <q3ptrstack.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QStack>
+#include <QByteArray>
 #include <core/KarbonDocument.h>
 #include <core/vgradient.h>
 #include <core/vfill.h>
@@ -84,7 +83,7 @@ protected:
 
 private:
 	KarbonDocument						m_document;
-	Q3PtrStack<XAMLGraphicsContext>	m_gc;
+	QStack<XAMLGraphicsContext*>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
 	QMap<QString, QDomElement>		m_paths;
 	KoRect							m_outerRect;

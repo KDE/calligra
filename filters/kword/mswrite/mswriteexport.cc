@@ -29,13 +29,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <QBuffer>
-#include <q3cstring.h>
 #include <QFile>
 #include <QFont>
 #include <QImage>
 #include <QTextCodec>
-#include <q3valuelist.h>
-#include <q3valuestack.h>
+#include <QList>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -242,8 +240,8 @@ private:
 	QTextCodec *m_codec;
 	QTextEncoder *m_encoder;
 
-	Q3ValueList <HeaderData> m_headerData;
-	Q3ValueList <FooterData> m_footerData;
+	QList <HeaderData> m_headerData;
+	QList <FooterData> m_footerData;
 
 	int m_headerType, m_footerType;
 	bool m_hasHeader, m_isHeaderOnFirstPage;
@@ -463,7 +461,7 @@ public:
 		return true;
 	}
 
-	bool isParaListEmpty (const Q3ValueList <ParaData> &para)
+	bool isParaListEmpty (const QList <ParaData> &para)
 	{
 		if (para.count () == 1)
 		{
@@ -567,7 +565,7 @@ public:
 		bool wroteFooter = false;
 		m_inWhat = Footer;
 
-		for (Q3ValueList <FooterData>::Iterator it = m_footerData.begin ();
+		for (QList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
 				it++)
 		{
@@ -589,7 +587,7 @@ public:
 		bool wroteHeader = false;
 		m_inWhat = Header;
 
-		for (Q3ValueList <HeaderData>::Iterator it = m_headerData.begin ();
+		for (QList <HeaderData>::Iterator it = m_headerData.begin ();
 			it != m_headerData.end ();
 			it++)
 		{
@@ -621,7 +619,7 @@ public:
 
 #if 0
 		// dump remaining header paragraphs at the start of the body
-		for (Q3ValueList <HeaderData>::Iterator it = m_headerData.begin ();
+		for (QList <HeaderData>::Iterator it = m_headerData.begin ();
 				it != m_headerData.end ();
 				it++)
 		{
@@ -631,7 +629,7 @@ public:
 		}
 
 		// dump remaining footer paragraphs too
-		for (Q3ValueList <FooterData>::Iterator it = m_footerData.begin ();
+		for (QList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
 				it++)
 		{
@@ -1288,7 +1286,7 @@ public:
 	bool processTable (const Table &table)
 	{
 		// just dump the table out for now (no layout)
-		for (Q3ValueList <TableCell>::ConstIterator it = table.cellList.begin ();
+		for (QList <TableCell>::ConstIterator it = table.cellList.begin ();
 				it != table.cellList.end ();
 				it++)
 		{
@@ -1403,9 +1401,9 @@ public:
 	#endif
 	}
 
-	bool doFullParagraphList (const Q3ValueList <ParaData> &paraList)
+	bool doFullParagraphList (const QList <ParaData> &paraList)
 	{
-		for (Q3ValueList <ParaData>::ConstIterator it = paraList.begin ();
+		for (QList <ParaData>::ConstIterator it = paraList.begin ();
 				it != paraList.end ();
 				it ++)
 		{

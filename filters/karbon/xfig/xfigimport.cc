@@ -39,7 +39,7 @@ DESCRIPTION
 
 #include <q3tl.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <kdebug.h>
 
 #include <core/KarbonDocument.h>
@@ -715,7 +715,7 @@ void XFIGImport::buildDocument (GDocument *doc) {
   qBubbleSort(objList);
 
   // Now all we need to do is insert them in the document, in that order
-  Q3ValueList<GObjectListItem>::Iterator it=objList.begin();
+  QList<GObjectListItem>::Iterator it=objList.begin();
   for ( ; it != objList.end() ; ++it )
   {
       //kDebug() <<"Inserting object with depth=" << (*it).depth;

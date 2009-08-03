@@ -29,9 +29,9 @@ DESCRIPTION
 #define MSOD_H
 
 class QString;
-class Q3PointArray;
+class QPolygon;
 #include <kwmf.h>
-#include <q3ptrvector.h>
+#include <QVector>
 #include <QPolygon>
 
 class Msod :
@@ -170,7 +170,7 @@ private:
         Image() { data = 0L; }
         ~Image() { delete [] data; }
     };
-    Q3PtrVector<Image> m_images;
+    QVector<Image*> m_images;
 
     // Opcode handling and painter methods.
 
@@ -246,7 +246,7 @@ private:
         quint32 m_geoRight;
         quint32 m_geoBottom;
         quint32 m_shapePath;
-        Q3PointArray *m_pVertices;
+        QPolygon *m_pVertices;
         bool m_fShadowOK;
         bool m_f3DOK;
         bool m_fLineOK;

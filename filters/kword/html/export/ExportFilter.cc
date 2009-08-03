@@ -25,7 +25,7 @@
 #include <QDir>
 #include <q3picture.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 
 #include <klocale.h>
@@ -48,7 +48,7 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "<table>\n";
     *m_streamOut << "<tbody>\n";
 
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
 
     int rowCurrent=0;
     *m_streamOut << "<tr>\n";

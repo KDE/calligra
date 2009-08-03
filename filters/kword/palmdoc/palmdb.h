@@ -20,9 +20,9 @@
 #ifndef __PALMDB_H
 #define __PALMDB_H
 
-#include <q3cstring.h>
+#include <QByteArray>
 #include <QDateTime>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
 
 class PalmDB
@@ -62,7 +62,7 @@ class PalmDB
     int uniqueIDSeed(){ return m_uniqueIDSeed; }
     void setUniqueIDSeed( int i ){ m_uniqueIDSeed= i; }
 
-    Q3PtrList<QByteArray> records;
+    QList<QByteArray*> records;
 
   private:
 

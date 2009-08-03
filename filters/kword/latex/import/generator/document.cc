@@ -19,9 +19,8 @@
 
 #include <qdom.h>
 #include <QTextStream>
-//Added by qt3to4:
 #include <QByteArray>
-#include <Q3PtrList>
+#include <QList>
 
 #include "kdebug.h"
 #include <KoStore.h>
@@ -30,7 +29,7 @@
 #include <param.h>
 #include <command.h>
 
-bool Document::analyze(Q3PtrList<Element>* root)
+bool Document::analyze(QList<Element*>* root)
 {
 	bool error = true;
 	error &= analyzeDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
@@ -43,9 +42,9 @@ bool Document::analyze(Q3PtrList<Element>* root)
 bool Document::analyzeDocumentClass(Command* documentclass)
 {
 	kWarning(documentclass != NULL) << "no documentclass found !";
-	Q3PtrList<Param> params = documentclass->getOptions();
+	QList<Param*> params = documentclass->getOptions();
 	Param* param;
-	for ( param = params.first(); param; param = params.next() )
+        foreach(param, params)
 	{
 		if(param->getKey() == "a4paper")
 		{

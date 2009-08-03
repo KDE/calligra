@@ -24,7 +24,7 @@
 #include <kprkword.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <q3sortedlist.h>
+#include <QList>
 #include <QColor>
 
 typedef KGenericFactory<KprKword> KprKwordFactory;
@@ -176,9 +176,8 @@ void KprKword::convert()
     if ( objects.isNull() )
         return;
 
-    Q3SortedList< KprObject > objList;
-    objList.setAutoDelete( true );
-
+    QList< KprObject > objList;
+    qSort(objList.begin(), list.end());
     QDomNodeList lst = objects.elementsByTagName( "OBJECT" );
     uint lstcount = lst.count();
     for ( uint item = 0 ; item < lstcount ; ++item )
@@ -199,14 +198,13 @@ void KprKword::convert()
 
     int curPage = -1;
     //kDebug() <<"found" << objList.count() <<" objects";
-
-    for ( Q3PtrListIterator<KprObject> it(objList); it.current(); ++it )
+    foreach(KprObject* it, objList) {
     {
-        QDomElement elem = it.current()->elem;
+        QDomElement elem = it->elem;
         // Detect the first object of each page
-        int page = int( it.current()->y / ptPageHeight );
+        int page = int( it->y / ptPageHeight );
         bool isTitle = ( page > curPage );
-        //kDebug() <<"KprKword::convert y=" << it.current()->y <<" ptPageHeight=" << ptPageHeight
+        //kDebug() <<"KprKword::convert y=" << it->y <<" ptPageHeight=" << ptPageHeight
         //          << " isTitle=" << isTitle << endl;
         curPage = page;
 

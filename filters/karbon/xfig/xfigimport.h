@@ -26,7 +26,7 @@ DESCRIPTION
 #define XFIGIMPORT_H
 
 #include <q3intdict.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <iostream.h>
 
 class GDocument;
@@ -88,7 +88,7 @@ private:
           return depth == item.depth;
       }
   };
-  Q3ValueList<GObjectListItem> objList;
+  QList<GObjectListItem> objList;
 };
 
 #endif

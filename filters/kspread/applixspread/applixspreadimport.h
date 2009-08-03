@@ -24,8 +24,7 @@
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QByteArray>
 
 #include <KoFilter.h>
@@ -66,7 +65,7 @@ protected:
     void    writePen           (QString &, int, int, QString);
     QString writeColor         (t_mycolor *);
     void    readTypefaceTable  (QTextStream &, QStringList &);
-    void    readColormap       (QTextStream &, Q3PtrList<t_mycolor> &);
+    void    readColormap       (QTextStream &, QList<t_mycolor*> &);
     void    readView           (QTextStream &, QString, t_rc &);
     void    filterSHFGBG       (QString, int *, int *, int *);
     void    transPenFormat     (QString, int *, int *);

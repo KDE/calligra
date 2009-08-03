@@ -23,8 +23,8 @@ DESCRIPTION
 #include <kdebug.h>
 #include <QDataStream>
 #include <QFile>
-#include <q3ptrlist.h>
-#include <q3pointarray.h>
+#include <List>
+#include <QPolygon>
 #include <QRect>
 #include <QSize>
 #include <msod.h>
@@ -329,7 +329,7 @@ void Msod::drawShape(
             size = normaliseSize(operands);
 
             QRect rect(topLeft, size);
-            Q3PointArray points(4);
+            QPolygon points(4);
 
             points.setPoint(0, topLeft);
             points.setPoint(1, rect.topRight());
@@ -345,7 +345,7 @@ void Msod::drawShape(
 
             lineTo = normalisePoint(operands);
 
-            Q3PointArray points(2);
+            QPolygon points(2);
 
             points.setPoint(0, lineFrom);
             points.setPoint(1, lineTo);
@@ -1145,8 +1145,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
 
     // First process all simple options, and add all complex options to a list.
 
-    Q3PtrList<Header> complexOpts;
-    complexOpts.setAutoDelete(true);
+    QList<Header*> complexOpts;
     bool unsupported;
     while (length + complexLength < (int)bytes)
     {
@@ -1297,8 +1296,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
         qint16 t16;
         unsigned i;
 
-        op = *complexOpts.getFirst();
-        complexOpts.removeFirst();
+        op = *complexOpts.takeFirst();
         unsupported = false;
         switch (op.opcode.fields.pid)
         {
@@ -1312,7 +1310,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
             };
             break;
         case 325:
-            m_pVertices = new Q3PointArray(op.value / 4);
+            m_pVertices = new QPolygon(op.value / 4);
             for (i = 0; i < m_pVertices->count(); i++)
             {
                 m_pVertices->setPoint(i, m_parent.normalisePoint(operands));

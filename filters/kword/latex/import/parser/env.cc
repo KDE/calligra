@@ -19,8 +19,7 @@
 
 #include "env.h"
 #include <iostream.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 Env::Env()
 {
@@ -49,7 +48,7 @@ Env::~Env()
 {
 }
 
-void Env::setChildren(Q3PtrList<Element>* children)
+void Env::setChildren(QList<Element*>* children)
 {
 	if(children != NULL)
 		_children = *children;

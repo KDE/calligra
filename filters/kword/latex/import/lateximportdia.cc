@@ -35,11 +35,9 @@
 #include <kapplication.h>
 #include <lateximportdia.h>
 #include <lateximportdia.moc>
-#include <dcopclient.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-
+#include <QList.h>
+#include <QVBoxLayout>
+#include <QButtonGroup>
 #include "latexparser.h"
 #include "config.h"
 
@@ -65,12 +63,12 @@ void LATEXImportDia::createDialog()
 	resize(size());
 	QWidget *page = new QWidget( this );
 	setMainWidget(page);
-	Q3BoxLayout *mainLayout = new Q3VBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-	styleBox = new Q3VButtonGroup(i18n("Document Style"), page);
+	QVBoxLayout *mainLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
+	styleBox = new QButtonGroup(i18n("Document Style"), page);
 	mainLayout->addWidget(styleBox);
 
 	/* First part */
-	Q3BoxLayout *styleLayout = new Q3VBoxLayout(page);
+	QVBoxLayout *styleLayout = new QVBoxLayout(page);
 
 	latexStyleRBtn = new QRadioButton(i18n("Latex style"), styleBox);
 	styleLayout->addWidget(latexStyleRBtn);
@@ -88,10 +86,10 @@ void LATEXImportDia::createDialog()
 	styleLayout->activate();
 
 	/* Second part */
-	langBox = new Q3VButtonGroup(i18n("Language"), page);
+	langBox = new QButtonGroup(i18n("Language"), page);
 	mainLayout->addWidget(langBox);
 
-	Q3BoxLayout *langLayout = new Q3VBoxLayout(langBox);
+	QVBoxLayout *langLayout = new QVBoxLayout(langBox);
 
 	unicodeRBtn = new QRadioButton(i18n("Unicode"), langBox);
 	langLayout->addWidget(unicodeRBtn);
@@ -110,10 +108,10 @@ void LATEXImportDia::createDialog()
 	langLayout->activate();
 
 	/* Third part */
-	docBox = new Q3VButtonGroup(i18n("Document Type"), page);
+	docBox = new QButtonGroup(i18n("Document Type"), page);
 	mainLayout->addWidget(docBox);
 
-	Q3BoxLayout *docLayout = new Q3VBoxLayout(docBox);
+	QBoxLayout *docLayout = new QVBoxLayout(docBox);
 
 	newDocRBtn = new QRadioButton(i18n("New document"), docBox);
 	docLayout->addWidget(newDocRBtn);
@@ -156,7 +154,7 @@ void LATEXImportDia::slotOk()
 	state();
 	kDebug(30522) <<"LATEX FILTER --> BEGIN";
 	LatexParser parser(_fileIn);
-	Q3PtrList<Element>* root = parser.parse();
+	QList<Element*>* root = parser.parse();
 	kDebug(30522) <<"---------- generate file -------------";
 	kDebug(30522) <<"command:" << root->count();
 	Element* elt;

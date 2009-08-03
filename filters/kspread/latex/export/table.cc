@@ -21,7 +21,6 @@
 
 #include <kdebug.h>		/* for kDebug stream */
 #include <QBitArray>
-//Added by qt3to4:
 #include <QTextStream>
 #include "cell.h"
 #include "column.h"
@@ -132,13 +131,9 @@ void Table::analyzePaper(const QDomNode node)
 
 Cell* Table::searchCell(int col, int row)
 {
-	Q3PtrListIterator<Cell> it(_cells);
-
 	kDebug(30522) <<"search in list of" << _cells.count() <<" cells";
-	Cell *cell = 0;
-	while ( (cell = it.current()) != 0 )
+        foreach(Cell* cell, _cells)
 	{
-		++it;
 		kDebug(30522) <<"cell:" << cell->getRow() <<"-" << cell->getCol();
 		if(cell->getCol() == col && cell->getRow() == row)
 			return cell;
@@ -148,12 +143,8 @@ Cell* Table::searchCell(int col, int row)
 
 Column* Table::searchColumn(int col)
 {
-	Q3PtrListIterator<Column> it(_columns);
-
-	Column *column;
-	while ( (column = it.current()) != 0 )
+        foreach(Column* column, _columns)
 	{
-		++it;
 		if(column->getCol() == col)
 			return column;
 	}
@@ -162,12 +153,9 @@ Column* Table::searchColumn(int col)
 
 Row* Table::searchRow(int rowNumber)
 {
-	Q3PtrListIterator<Row> it(_rows);
 
-	Row *row;
-	while ( (row = it.current()) != 0 )
+        foreach(Row* row, _rows)
 	{
-		++it;
 		if(row->getRow() == rowNumber)
 			return row;
 	}

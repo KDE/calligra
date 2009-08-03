@@ -18,15 +18,14 @@
 
 #include "latex.h"
 #include <element.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 Latex* Latex::_instance = 0;
 
-Element* Latex::getEnv(Q3PtrList<Element>* root, const char* name)
+Element* Latex::getEnv(QList<Element*>* root, const char* name)
 {
 	Element* elt;
-	for ( elt = root->first(); elt; elt = root->next() )
+        foreach(elt, root)
 	{
 		if(elt->getName() == name && elt->getType() == Element::LATEX_ENV)
 			return elt;
@@ -34,10 +33,10 @@ Element* Latex::getEnv(Q3PtrList<Element>* root, const char* name)
 	return 0;
 }
 
-Element* Latex::getCommand(Q3PtrList<Element>* root, const char* name)
+Element* Latex::getCommand(QList<Element*>* root, const char* name)
 {
 	Element* elt;
-	for ( elt = root->first(); elt; elt = root->next() )
+        foreach(elt, root)
 	{
 		if(elt->getName() == name && elt->getType() == Element::LATEX_COMMAND)
 			return elt;

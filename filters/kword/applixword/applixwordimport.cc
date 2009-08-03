@@ -18,7 +18,7 @@
 */
 
 #include <QMessageBox>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QTextStream>
 #include <QByteArray>
 #include <applixwordimport.h>
@@ -120,7 +120,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
     bool ok;
     char stylename[100];
     QString           mystr, textstr;
-    Q3PtrList<t_mycolor>  mcol;
+    QList<t_mycolor*>  mcol;
     QStringList       mcoltxt;
 
     /**************************************************************************

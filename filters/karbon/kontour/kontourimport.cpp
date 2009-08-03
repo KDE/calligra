@@ -33,7 +33,7 @@
 #include <QColor>
 #include <QFile>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3CString>
 
 #define DPI 90
@@ -148,7 +148,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				VColor color( c );
 				stroke.setColor( color );
 				VDashPattern dash;
-				Q3ValueList<float> list;
+				QList<float> list;
 				switch ( strokestyle )
 				{
 					case 2: // dashed line

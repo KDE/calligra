@@ -21,9 +21,8 @@
 
 #include <stdlib.h>		/* for atoi function */
 #include <kdebug.h>		/* for kDebug() stream */
-#include <q3ptrstack.h>		/* for getFormula() */
+#include <QStack>		/* for getFormula() */
 #include <qdom.h>
-//Added by qt3to4:
 #include <QTextStream>
 #include "formula.h"
 #include <kapplication.h>

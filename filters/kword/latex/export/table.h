@@ -24,8 +24,7 @@
 #define __KWORD_TABLE_H__
 
 #include <QString>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
 #include "element.h"		/* Child class */
 #include "layout.h"		/* Cell flow   */
@@ -39,7 +38,7 @@
  * frame, ...). It use a special latex package.
  * The color table of the tables is not yet supported.
  */
-class Table: public Q3PtrList<Element>, public Element
+class Table: public QList<Element*>, public Element
 {
 	/* MARKUP DATA */
 	//QString _name;

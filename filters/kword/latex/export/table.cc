@@ -23,7 +23,7 @@
 #include <QBitArray>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PtrList>
+#include <QList>
 #include "listtable.h"
 #include "textFrame.h"
 
@@ -116,7 +116,7 @@ void Table::append(Element* elt)
 	if(elt->getCol() > getMaxCol())
 		setMaxCol(elt->getCol());
 
-	Q3PtrList<Element>::append(elt);
+	QList<Element*>::append(elt);
 }
 
 /*******************************************/

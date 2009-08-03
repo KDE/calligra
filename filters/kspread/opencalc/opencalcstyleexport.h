@@ -28,7 +28,7 @@
 #include <QFont>
 #include <QPen>
 #include <QString>
-#include <q3ptrlist.h>
+#include <QList>
 
 namespace KSpread
 {
@@ -148,12 +148,12 @@ class OpenCalcStyles
   QString sheetStyle( SheetStyle const & ts );
 
  private:
-  Q3PtrList<CellStyle>   m_cellStyles;
-  Q3PtrList<ColumnStyle> m_columnStyles;
-  Q3PtrList<NumberStyle> m_numberStyles;
-  Q3PtrList<RowStyle>    m_rowStyles;
-  Q3PtrList<SheetStyle>  m_sheetStyles;
-  Q3PtrList<QFont>       m_fontList;
+  QList<CellStyle*>   m_cellStyles;
+  QList<ColumnStyle*> m_columnStyles;
+  QList<NumberStyle*> m_numberStyles;
+  QList<RowStyle*>    m_rowStyles;
+  QList<SheetStyle*>  m_sheetStyles;
+  QList<QFont*>       m_fontList;
 
   QFont                 m_defaultFont;
 

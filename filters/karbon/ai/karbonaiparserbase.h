@@ -21,7 +21,7 @@
 #define KARBONAIPARSERBASE_H
 
 #include <aiparserbase.h>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
 #include <QPair>
 
@@ -36,14 +36,14 @@
 #include <core/vstroke.h>
 #include <qdom.h>
 
-#include <q3ptrstack.h>
+#include <QStack>
 
 /**
   *@author 
   */
 typedef QPair<QString,QString> Parameter;
-typedef Q3PtrList<Parameter> Parameters;
-typedef Q3PtrList<PathElement> PathElements;
+typedef QList<Parameter*> Parameters;
+typedef QList<PathElement*> PathElements;
 
 typedef enum { POT_Filled = 1, POT_Stroked = 2, POT_FilledStroked = 3, POT_Clip = 4, POT_Ignore = 8, POT_Leave = -1, POT_Other = 0 } PathOutputType;
 typedef enum { PTT_Output = 1, PTT_Combine = 2 } PathTransferType;
@@ -138,7 +138,7 @@ private:
   KarbonDocument *m_document;
   VLayer *m_layer;
   VPath *m_combination;
-  Q3PtrStack<VGroup> m_groupStack;
+  QStack<VGroup*> m_groupStack;
 
   FillMode m_fm;
   PathOutputType m_pot;

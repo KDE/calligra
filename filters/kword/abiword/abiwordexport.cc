@@ -35,7 +35,7 @@
 #include <QTextStream>
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 #include <kdebug.h>
@@ -491,7 +491,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "<table>\n";
 #endif
 
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
@@ -646,11 +646,11 @@ void AbiWordWorker::processVariable ( const QString&,
                     // Footnote
                     QString value = (*paraFormatDataIt).variable.getFootnoteValue();
                     bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                    Q3ValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
                     if( paraList )
                     {
                         QString fstr;
-                        Q3ValueList<ParaData>::ConstIterator it;
+                        QList<ParaData>::ConstIterator it;
                         for (it=paraList->begin();it!=paraList->end();it++)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
                         str += "{\\super ";

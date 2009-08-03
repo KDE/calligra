@@ -23,9 +23,7 @@
 #include <QString>
 #include <QDataStream>
 #include <QObject>
-#include <q3ptrlist.h>
-#include <q3cstring.h>
-#include <q3memarray.h>
+#include <QVector>
 #include <qdom.h>
 
 #include <KoFilter.h>

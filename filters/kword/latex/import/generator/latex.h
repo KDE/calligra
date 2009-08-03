@@ -19,7 +19,7 @@
 #ifndef __LATEX_IMPORT_LATEXUTILS__
 #define __LATEX_IMPORT_LATEXUTILS__
 
-#include <q3ptrlist.h>
+#include <QList>
 
 class Element;
 
@@ -34,8 +34,8 @@ class Latex
 			return _instance;
 		}
 
-		Element* getEnv(Q3PtrList<Element>* root, const char* name);
-		Element* getCommand(Q3PtrList<Element>* root, const char* name);
+		Element* getEnv(QList<Element*>* root, const char* name);
+		Element* getCommand(QList<Element*>* root, const char* name);
 
 	private:
 		static Latex* _instance;

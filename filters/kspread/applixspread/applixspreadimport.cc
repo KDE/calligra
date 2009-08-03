@@ -20,7 +20,7 @@
 #include <QMessageBox>
 #include <QStringList>
 #include <QRegExp>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QTextStream>
 #include <QByteArray>
 #include <applixspreadimport.h>
@@ -66,7 +66,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
     }
 
     QString str;
-    Q3PtrList<t_mycolor> mcol;
+    QList<t_mycolor*> mcol;
 
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     str += "<!DOCTYPE spreadsheet>\n";
@@ -87,7 +87,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
     m_instep   = 0;
     m_progress = 0;
     int  pos;
-    char ccol;
     int  irow, icol;
     QString  tabctr ;  // Tab control
     QString  mystr, typestr, cellnostr, tabnostr;
@@ -911,7 +910,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
  *  function:   readColormap                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mcol)
+APPLIXSPREADImport::readColormap (QTextStream &stream,  QList<t_mycolor*> &mcol)
 {
   int contcount, ok, pos;
 
@@ -973,9 +972,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
 
   kDebug()<<"... done"<< mcol.count();
 
-
-   t_mycolor *emp;
-   for (emp=mcol.first(); emp != 0; emp=mcol.next() )
+   foreach(t_mycolor* emp, mcol)
    {
      printf (" c:%3d m:%3d y:%3d k:%3d   r:%3d g:%3d b:%3d\n",
             emp->c, emp->m, emp->y, emp->k, emp->r, emp->g, emp->b);

@@ -30,7 +30,7 @@
 
 #include "KWEFStructures.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 
 TableCell::~TableCell ( void )
@@ -40,14 +40,14 @@ TableCell::~TableCell ( void )
 #endif
 }
 
-void Table::addCell ( int c, int r, int _cols, int _rows, Q3ValueList<ParaData> &p, FrameData &frameData )
+void Table::addCell ( int c, int r, int _cols, int _rows, QList<ParaData> &p, FrameData &frameData )
 {
    if ( c + _cols > cols )
    {
       cols = c + _cols;
    }
 
-   cellList << TableCell ( c, r, _cols, _rows, new Q3ValueList<ParaData> (p), frameData );
+   cellList << TableCell ( c, r, _cols, _rows, new QList<ParaData> (p), frameData );
 }
 
 bool TabulatorData::operator == (const TabulatorData& other) const
@@ -108,7 +108,7 @@ QString VariableData::getFieldValue(void) const
     return propertyMap["field:value"];
 }
 
-void VariableData::setFootnote( const QString& notetype, const QString& automatic,const QString& value, Q3ValueList<ParaData>* para)
+void VariableData::setFootnote( const QString& notetype, const QString& automatic,const QString& value, QList<ParaData>* para)
 {
     propertyMap["footnote:value"] = value;
     propertyMap["footnote:auto"]  = automatic;
@@ -131,7 +131,7 @@ bool VariableData::getFootnoteType( void ) const
     return propertyMap["footnote:notetype"] == "footnote";
 }
  
-Q3ValueList<ParaData>* VariableData::getFootnotePara(void) const
+QList<ParaData>* VariableData::getFootnotePara(void) const
 {
     return footnotePara;
 }

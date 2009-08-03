@@ -38,7 +38,7 @@
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 #include <QByteArray>
 
@@ -88,7 +88,7 @@ public:
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
     virtual bool doOpenBody (void);
-    virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); 
+    virtual bool doDeclareNonInlinedFramesets( QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors ); 
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -169,8 +169,8 @@ private:
     double m_columnspacing; ///< Spacing between columns
     int m_columns; ///< Number of columns
 private: // Variable that would need a link/glue from libexport
-    Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
-    Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
+    QList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
+    QList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
 
 };
 #endif // _EXPORTFILTER_H

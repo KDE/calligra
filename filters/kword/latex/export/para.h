@@ -23,13 +23,10 @@
 #define __KWORD_PARA_H__
 
 #include <QString>
-#include <q3ptrstack.h>		/* historic list */
-#include <q3ptrlist.h>		/* for list of format */
-//Added by qt3to4:
+#include <QStack>		/* historic list */
+#include <QList>		/* for list of format */
 #include <QTextStream>
 
-/*#include "listeformat.h"*/	/* children class contents the zone (italic, footnote,
-				   variable. */
 #include "layout.h"		/* set of information about the paragraph style. */
 #include "element.h"		/* to use the father class. */
 #include "format.h"		/* child class */
@@ -64,14 +61,14 @@ class Para: public Layout
 	QString*       _name;
 	EP_INFO        _info;
 	//EP_HARDBRK     _hardbrk;
-	Q3PtrList<Format>* _lines;
+	QList<Format*>* _lines;
 
 	/* TO MANAGE THE LIST */
 
 	/* USEFUL DATA */
 	TextFrame*             	_element;		/* Father frame */
 	unsigned int          	_currentPos;	/* Beginning of the text to use the good format */
-	static Q3PtrStack<EType> _historicList;	/* opened lists but not closed */
+	static QStack<EType*> _historicList;	/* opened lists but not closed */
 	int                   	_nbLines;		/* Nb of lines in a cell (table) */
 	static int				_tabulation;	/* Size of the para tabulation (for lists). */
 

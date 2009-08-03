@@ -27,10 +27,9 @@
 
 #include "xamlgraphiccontext.h"
 
-#include <q3ptrstack.h>
-//Added by qt3to4:
+#include <QStack>
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 
 class QTextStream;
 class VColor;
@@ -62,7 +61,7 @@ private:
 	//virtual void visitVText( VText& text );
 
 	void getStroke( const VStroke& stroke );
-	void getColorStops( const Q3PtrVector<VColorStop> &colorStops );
+	void getColorStops( const QVector<VColorStop*> &colorStops );
 	void getFill( const VFill& fill  );
 	void getGradient( const VGradient& grad );
 	void getHexColor( QTextStream *, const VColor& color  );
@@ -72,7 +71,7 @@ private:
 	QTextStream* m_defs;
 	QTextStream* m_body;
 
-	Q3PtrStack<XAMLGraphicsContext>	m_gc;
+	QStack<XAMLGraphicsContext*>	m_gc;
 };
 
 #endif

@@ -36,9 +36,7 @@
 #include <core/vlayer.h>
 #include <QColor>
 #include <QFile>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QList>
 #include <kfilterdev.h>
 
 typedef KGenericFactory<XAMLImport> XAMLImportFactory;
@@ -113,7 +111,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
 		kError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	Q3CString cstring = outdoc.toCString(); // utf-8 already
+	QByteArray cstring = outdoc.toLatin1(); // utf-8 already
 	out->write( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
@@ -546,7 +544,7 @@ XAMLImport::parsePA( VObject *obj, XAMLGraphicsContext *gc, const QString &comma
 		gc->stroke.setMiterLimit( params.toFloat() );
 	else if( command == "stroke-dasharray" )
 	{
-		Q3ValueList<float> array;
+		QList<float> array;
 		if(params != "none")
 		{
 			QStringList dashes = QStringList::split( ' ', params );
@@ -806,7 +804,7 @@ VObject* XAMLImport::findObject( const QString &name, VGroup* group )
 
 VObject* XAMLImport::findObject( const QString &name )
 {
-	Q3PtrVector<VLayer> vector;
+	QVector<VLayer*> vector;
 	m_document.layers().toVector( &vector );
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{

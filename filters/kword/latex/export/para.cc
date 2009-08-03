@@ -24,18 +24,17 @@
 #include "para.h"
 #include "textFrame.h"		/* father class.        */
 #include "format.h"		/* children classes.    */
-//#include "picturezone.h"
 #include "fileheader.h"
 #include "textzone.h"
 #include "variablezone.h"
 #include "footnote.h"
 #include "anchor.h"
-//Added by qt3to4:
 #include <QTextStream>
-#include <Q3PtrList>
+#include <QList>
+#include <QStack>
 
 /* static data */
-Q3PtrStack<EType> Para::_historicList;
+QStack<EType*> Para::_historicList;
 int Para::_tabulation = 0;
 
 /*******************************************/
@@ -236,7 +235,7 @@ void Para::analyzeLayoutPara(const QDomNode node)
 				((TextZone*) zone)->setLength(_currentPos - _text.length());
 				((TextZone*) zone)->analyze();
 				if(_lines == 0)
-					_lines = new Q3PtrList<Format>;
+					_lines = new QList<Format*>;
 				/* add the text */
 				_lines->append(zone);
 				_currentPos = _currentPos + ((TextZone*) zone)->getLength();
@@ -294,7 +293,7 @@ void Para::analyzeFormat(const QDomNode node)
 					if(zone->getPos() != _currentPos)
 					{
 						if(_lines == 0)
-							_lines = new Q3PtrList<Format>;
+							_lines = new QList<Format*>;
 							/* Create first a default format */
 						zoneFirst = new TextZone(_text, this);
 						zoneFirst->setPos(_currentPos);
@@ -330,7 +329,7 @@ void Para::analyzeFormat(const QDomNode node)
 	if(zone->getPos() != _currentPos)
 	{
 		if(_lines == 0)
-			_lines = new Q3PtrList<Format>;
+			_lines = new QList<Format*>;
 			/* Create first a default format */
 		zoneFirst = new TextZone(_text, this);
 		zoneFirst->setPos(_currentPos);
@@ -345,7 +344,7 @@ void Para::analyzeFormat(const QDomNode node)
 	if(zone != 0)
 	{
 		if(_lines == 0)
-			_lines = new Q3PtrList<Format>;
+			_lines = new QList<Format*>;
 
 		/* add the text */
 		_lines->append(zone);

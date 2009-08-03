@@ -24,8 +24,7 @@
 #define __KSPREAD_LATEX_TABLE_H__
 
 #include <QString>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
 
 #include "xmlparser.h"
@@ -47,9 +46,9 @@ class Row;
  */
 class Table: public XmlParser, Config
 {
-	Q3PtrList<Row> _rows;
-	Q3PtrList<Column> _columns;
-	Q3PtrList<Cell> _cells;
+	QList<Row*> _rows;
+	QList<Column*> _columns;
+	QList<Cell*> _cells;
 	
 	/* USEFUL DATA */
 	int _maxRow, _maxCol;	/* Size of the table (nb of cell) */

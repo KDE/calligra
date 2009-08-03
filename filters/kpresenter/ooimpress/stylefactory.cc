@@ -26,17 +26,6 @@
 
 StyleFactory::StyleFactory()
 {
-    m_strokeDashStyles.setAutoDelete( true );
-    m_gradientStyles.setAutoDelete( true );
-    m_hatchStyles.setAutoDelete( true );
-    m_markerStyles.setAutoDelete( true );
-    m_fillImageStyles.setAutoDelete( true );
-    m_listStyles.setAutoDelete( true );
-    m_pageStyles.setAutoDelete( true );
-    m_textStyles.setAutoDelete( true );
-    m_graphicStyles.setAutoDelete( true );
-    m_paragraphStyles.setAutoDelete( true );
-    m_pageMasterStyles.setAutoDelete( true );
 
     // create standard graphic style
     GraphicStyle * graphicStyle;
@@ -53,24 +42,57 @@ StyleFactory::StyleFactory()
 
 StyleFactory::~StyleFactory()
 {
+    while(!m_strokeDashStyles.isEmpty()) {
+        delete m_strokeDashStyle.takeFirst();
+    }
+    while(!m_gradientStyles.isEmpty()) {
+        delete m_gradientStyles.takeFirst();
+    }
+    while(!m_hatchStyles.isEmpty()) {
+        delete m_hatchStyles.takeFirst();
+    }
+    while(!m_markerStyles.isEmpty()) {
+        delete m_markerStyles.takeFirst();
+    }
+    while(!m_fillImageStyles.isEmpty()) {
+        delete m_fillImageStyles.takeFirst();
+    }
+    while(!m_listStyles.isEmpty()) {
+        delete m_listStyles.takeFirst();
+    }
+    while(!m_pageStyles.isEmpty()) {
+        delete m_pageStyles.takeFirst();
+    }
+    while(!m_textStyles.isEmpty()) {
+        delete m_textStyles.takeFirst();
+    }
+    while(!m_graphicStyles.isEmpty()) {
+        delete m_graphicStyles.takeFirst();
+    }
+    while(!m_paragraphStyles.isEmpty()) {
+        delete m_paragraphStyles.takeFirst();
+    }
+    while(!m_pageMasterStyles.isEmpty()) {
+        delete m_pageMasterStyles.takeFirst();
+    }
 }
 
 void StyleFactory::addOfficeStyles( QDomDocument & doc, QDomElement & styles )
 {
     StrokeDashStyle * sd;
-    for ( sd = m_strokeDashStyles.first(); sd ; sd = m_strokeDashStyles.next() )
+    foreach ( sd, m_strokeDashStyles )
         sd->toXML( doc, styles );
 
     GradientStyle * g;
-    for ( g = m_gradientStyles.first(); g ; g = m_gradientStyles.next() )
+    foreach ( g, m_gradientStyles )
         g->toXML( doc, styles );
 
     MarkerStyle * m;
-    for ( m = m_markerStyles.first(); m ; m = m_markerStyles.next() )
+    foreach ( m, m_markerStyles )
         m->toXML( doc, styles );
 
     HatchStyle * h;
-    for ( h = m_hatchStyles.first(); h ; h = m_hatchStyles.next() )
+    foreach ( h, m_hatchStyles )
         h->toXML( doc, styles );
 
     GraphicStyle * gr;
@@ -81,7 +103,7 @@ void StyleFactory::addOfficeStyles( QDomDocument & doc, QDomElement & styles )
 void StyleFactory::addOfficeMaster( QDomDocument & doc, QDomElement & master )
 {
     PageMasterStyle * p;
-    for ( p = m_pageMasterStyles.first(); p ; p = m_pageMasterStyles.next() )
+    foreach ( p,  m_pageMasterStyles )
     {
         QDomElement masterPage = doc.createElement( "style:master-page" );
         masterPage.setAttribute( "style:name", p->style() );
@@ -94,7 +116,7 @@ void StyleFactory::addOfficeMaster( QDomDocument & doc, QDomElement & master )
 void StyleFactory::addOfficeAutomatic( QDomDocument & doc, QDomElement & automatic )
 {
     PageMasterStyle * p;
-    for ( p = m_pageMasterStyles.first(); p ; p = m_pageMasterStyles.next() )
+    foreach ( p, m_pageMasterStyles )
     {
         p->toXML( doc, automatic );
     }
@@ -103,24 +125,28 @@ void StyleFactory::addOfficeAutomatic( QDomDocument & doc, QDomElement & automat
 void StyleFactory::addAutomaticStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
     ListStyle * l;
-    for ( l = m_listStyles.first(); l ; l = m_listStyles.next() )
+    for ( l, m_listStyles )
         l->toXML( doc, autoStyles );
 
     PageStyle * p;
-    for ( p = m_pageStyles.first(); p ; p = m_pageStyles.next() )
+    for ( p,  m_pageStyles )
         p->toXML( doc, autoStyles );
 
     TextStyle * t;
-    for ( t = m_textStyles.first(); t ; t = m_textStyles.next() )
+    for ( t,  m_textStyles )
         t->toXML( doc, autoStyles );
 
     GraphicStyle * g;
-    g = m_graphicStyles.first(); // skip the "standard" style
-    for ( g = m_graphicStyles.next(); g ; g = m_graphicStyles.next() )
-        g->toXML( doc, autoStyles );
+    int i = 0;
+    foreach ( g, m_graphicStyles ) {
+        if (i > 1) { // skip the standard style
+            g->toXML( doc, autoStyles );
+        }
+        ++i;
+    }
 
     ParagraphStyle * pg;
-    for ( pg = m_paragraphStyles.first(); pg ; pg = m_paragraphStyles.next() )
+    for ( pg, m_paragraphStyles )
         pg->toXML( doc, autoStyles );
 }
 
@@ -128,7 +154,7 @@ QString StyleFactory::createStrokeDashStyle( int style )
 {
     StrokeDashStyle * newStrokeDashStyle, * sd;
     newStrokeDashStyle = new StrokeDashStyle( style );
-    for ( sd = m_strokeDashStyles.first(); sd ; sd = m_strokeDashStyles.next() )
+    foreach ( sd, m_strokeDashStyles )
     {
         if ( sd->name() == newStrokeDashStyle->name() )
         {
@@ -145,7 +171,7 @@ QString StyleFactory::createGradientStyle( QDomElement & gradient )
 {
     GradientStyle * newGradientStyle, * g;
     newGradientStyle = new GradientStyle( gradient, m_gradientStyles.count() + 1 );
-    for ( g = m_gradientStyles.first(); g ; g = m_gradientStyles.next() )
+    foreach ( g,  m_gradientStyles )
     {
         if ( g->name() == newGradientStyle->name() )
         {
@@ -162,7 +188,7 @@ QString StyleFactory::createMarkerStyle( int style )
 {
     MarkerStyle * newMarkerStyle, * m;
     newMarkerStyle = new MarkerStyle( style );
-    for ( m = m_markerStyles.first(); m ; m = m_markerStyles.next() )
+    foreach ( m,  m_markerStyles )
     {
         if ( m->name() == newMarkerStyle->name() )
         {
@@ -179,7 +205,7 @@ QString StyleFactory::createHatchStyle( int style, QString & color )
 {
     HatchStyle * newHatchStyle, * h;
     newHatchStyle = new HatchStyle( style, color );
-    for ( h = m_hatchStyles.first(); h ; h = m_hatchStyles.next() )
+    foreach ( h, m_hatchStyles )
     {
         if ( h->name() == newHatchStyle->name() )
         {
@@ -196,7 +222,7 @@ QString StyleFactory::createListStyle( QDomElement & e )
 {
     ListStyle * newListStyle, * l;
     newListStyle = new ListStyle( e, m_listStyles.count() + 1 );
-    for ( l = m_listStyles.first(); l ; l = m_listStyles.next() )
+    foreach( l, m_listStyles )
     {
         if ( *l == *newListStyle )
         {
@@ -213,7 +239,7 @@ QString StyleFactory::createPageStyle( QDomElement & e )
 {
     PageStyle * newPageStyle, * p;
     newPageStyle = new PageStyle( this, e, m_pageStyles.count() + 1 );
-    for ( p = m_pageStyles.first(); p ; p = m_pageStyles.next() )
+    foreach ( p, m_pageStyles )
     {
         if ( *p == *newPageStyle )
         {
@@ -230,7 +256,7 @@ QString StyleFactory::createTextStyle( QDomElement & e )
 {
     TextStyle * newTextStyle, * t;
     newTextStyle = new TextStyle( e, m_textStyles.count() + 1 );
-    for ( t = m_textStyles.first(); t ; t = m_textStyles.next() )
+    foreach ( t,  m_textStyles )
     {
         if ( *t == *newTextStyle )
         {
@@ -247,7 +273,7 @@ QString StyleFactory::createGraphicStyle( QDomElement & e )
 {
     GraphicStyle * newGraphicStyle, * g;
     newGraphicStyle = new GraphicStyle( this, e, m_graphicStyles.count() );
-    for ( g = m_graphicStyles.first(); g ; g = m_graphicStyles.next() )
+    foreach ( g,  m_graphicStyles )
     {
         if ( *g == *newGraphicStyle )
         {
@@ -264,7 +290,7 @@ QString StyleFactory::createParagraphStyle( QDomElement & e )
 {
     ParagraphStyle * newParagraphStyle, * p;
     newParagraphStyle = new ParagraphStyle( e, m_paragraphStyles.count() + 1 );
-    for ( p = m_paragraphStyles.first(); p ; p = m_paragraphStyles.next() )
+    foreach ( p, m_paragraphStyles )
     {
         if ( *p == *newParagraphStyle )
         {
@@ -281,7 +307,7 @@ QString StyleFactory::createPageMasterStyle( QDomElement & e )
 {
     PageMasterStyle * newPMStyle, * p;
     newPMStyle = new PageMasterStyle( e, m_pageMasterStyles.count() );
-    for ( p = m_pageMasterStyles.first(); p ; p = m_pageMasterStyles.next() )
+    foreach ( p,  m_pageMasterStyles )
     {
         if ( *p == *newPMStyle )
         {

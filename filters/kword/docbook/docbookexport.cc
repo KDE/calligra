@@ -29,7 +29,7 @@
 #include <QDir>
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 #include <KoFilterChain.h>
@@ -81,7 +81,7 @@ class DocBookWorker : public KWEFBaseWorker
 
         bool doFullDocumentInfo ( const KWEFDocumentInfo & );
 
-        bool doFullDocument ( const Q3ValueList<ParaData> &paraList );
+        bool doFullDocument ( const QList<ParaData> &paraList );
 
     private:
         void ProcessPictureData ( const Picture  &picture );
@@ -212,7 +212,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
 
     int currentRow = -1;
 
-    Q3ValueList<TableCell>::ConstIterator cellIt;
+    QList<TableCell>::ConstIterator cellIt;
 
     for ( cellIt = table.cellList.begin ();
           cellIt != table.cellList.end ();
@@ -271,7 +271,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                                            QString         tag )
 {
 #if !INSERT_TABLE_IN_PARA
-    Q3ValueList<AnchoredInsert> tmpAnchoredInsertList;
+    QList<AnchoredInsert> tmpAnchoredInsertList;
 #endif
 
     outputText += "<" + tag + ">";
@@ -393,7 +393,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
     outputText += "</" + tag + ">\n";
 
 #if !INSERT_TABLE_IN_PARA
-    Q3ValueList<AnchoredInsert>::Iterator anchoredInsert;
+    QList<AnchoredInsert>::Iterator anchoredInsert;
 
     for ( anchoredInsert = tmpAnchoredInsertList.begin ();
           anchoredInsert != tmpAnchoredInsertList.end ();
@@ -508,14 +508,14 @@ void DocBookWorker::OpenArticleUnlessHead1 ( void )
 }
 
 
-bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
+bool DocBookWorker::doFullDocument ( const QList<ParaData> &paraList )
 {
 #if 0
     kError (30507) << "doFullDocument () - Begin" << endl;
 #endif
 
-    Q3ValueList<ParaData>::ConstIterator paraIt;
-	Q3ValueList<ParaData>::ConstIterator end(paraList.end ());
+    QList<ParaData>::ConstIterator paraIt;
+	QList<ParaData>::ConstIterator end(paraList.end ());
     for ( paraIt = paraList.begin (); paraIt != end ; ++paraIt )
     {
         switch ( (*paraIt).layout.counter.numbering )

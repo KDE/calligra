@@ -20,11 +20,11 @@
 #ifndef __LATEXPARSER_GROUP_H__
 #define __LATEXPARSER_GROUP_H__
 
-#include <q3ptrlist.h>
+#include <QList.h>
 
 #include "element.h"
 
-class Group: public Element, public Q3PtrList<Element>
+class Group: public Element, public QList<Element*>
 {
 	public:
 		Group();

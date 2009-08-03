@@ -30,7 +30,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <q3listview.h>
-#include <q3ptrlist.h>
+#include <QList>
 #include <QRadioButton>
 #include <QTextStream>
 #include <QTabWidget>

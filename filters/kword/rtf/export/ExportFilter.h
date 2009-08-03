@@ -22,7 +22,7 @@
 #define EXPORTFILTERFULLPOWER_H
 
 #include <q3valuestack.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <QStringList>
 //Added by qt3to4:
 #include <QTextStream>
@@ -99,8 +99,8 @@ protected:
     QString m_fileName; ///< Name of the output file
     Q3ValueStack<ListInfo> m_listStack; ///< Stack for list information
     QStringList m_fontList;
-    Q3ValueList<QColor> m_colorList;
-    Q3ValueList<LayoutData> m_styleList;
+    QList<QColor> m_colorList;
+    QList<LayoutData> m_styleList;
     bool m_inTable;
     bool m_paperOrientation;
     double m_paperWidth, m_paperHeight;

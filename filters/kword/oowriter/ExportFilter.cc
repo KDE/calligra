@@ -36,9 +36,9 @@
 #include <QTextStream>
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
-#include <Q3MemArray>
+#include <QVector>
 #include <QBuffer>
 
 #include <kdebug.h>
@@ -592,7 +592,7 @@ bool OOWriterWorker::doCloseDocument(void)
 
 bool OOWriterWorker::doOpenBody(void)
 {
-    Q3ValueList<FrameAnchor>::Iterator it;
+    QList<FrameAnchor>::Iterator it;
 
     // We have to process all non-inline pictures
     kDebug(30518) <<"=== Processing non-inlined pictures ===";
@@ -1036,7 +1036,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 
     QMap<QString,QString> mapCellStyleKeys;
 
-    for ( Q3ValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
+    for ( QList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
         if ( rowCurrent != (*itCell).row )
@@ -1107,12 +1107,12 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 }
 
 #ifdef ALLOW_TABLE
-static uint getColumnWidths( const Table& table, Q3MemArray<double>& widthArray, int firstRowNumber )
+static uint getColumnWidths( const Table& table, QVector<double>& widthArray, int firstRowNumber )
 {
     bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
     uint currentColumn = 0;
     int tryingRow = firstRowNumber; // We are trying the first row
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
@@ -1146,9 +1146,9 @@ static uint getColumnWidths( const Table& table, Q3MemArray<double>& widthArray,
         const double width = ( (*itCell).frame.right - (*itCell).frame.left );
 
         if ( currentColumn >= widthArray.size() )
-            widthArray.resize( currentColumn + 4, Q3GArray::SpeedOptim);
+            widthArray.resize( currentColumn + 4);
 
-        widthArray.at( currentColumn ) = width;
+        widthArray[currentColumn] = width;
         ++currentColumn;
     }
 
@@ -1161,12 +1161,12 @@ static uint getColumnWidths( const Table& table, Q3MemArray<double>& widthArray,
 #endif
 
 #ifdef ALLOW_TABLE
-static uint getFirstRowColumnWidths( const Table& table, Q3MemArray<double>& widthArray, int firstRowNumber )
+static uint getFirstRowColumnWidths( const Table& table, QVector<double>& widthArray, int firstRowNumber )
 // Get the column widths only by the first row.
 // This is used when all table rows have horizontally spanned cells.
 {
     uint currentColumn = 0;
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
@@ -1183,11 +1183,11 @@ static uint getFirstRowColumnWidths( const Table& table, Q3MemArray<double>& wid
         const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
 
         if ( currentColumn + cols > widthArray.size() )
-            widthArray.resize( currentColumn + 4, Q3GArray::SpeedOptim);
+            widthArray.resize( currentColumn + 4);
 
         for ( int i = 0; i < cols; ++i )
         {
-            widthArray.at( currentColumn ) = width;
+            widthArray[currentColumn] = width;
             ++currentColumn;
         }
     }
@@ -1208,7 +1208,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     kDebug(30518) <<"Processing table" << anchor.key.toString() <<" =>" << tableName;
 
-    const Q3ValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
+    const QList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
 
     if ( firstCell == anchor.table.cellList.end() )
     {
@@ -1219,7 +1219,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     const int firstRowNumber = (*firstCell).row;
     kDebug(30518) <<"First row:" << firstRowNumber;
 
-    Q3MemArray<double> widthArray(4);
+    QVector<double> widthArray(4);
 
     uint numberColumns = getColumnWidths( anchor.table, widthArray, firstRowNumber );
 
@@ -1243,7 +1243,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     uint i; // We need the loop variable 2 times
     for ( i=0; i < numberColumns; ++i )
     {
-        tableWidth += widthArray.at( i );
+        tableWidth += widthArray[i];
     }
     kDebug(30518) <<"Table width:" << tableWidth;
 
@@ -1299,7 +1299,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
 
     ulong columnNumber = 0L;
 
@@ -1315,7 +1315,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
         m_contentAutomaticStyles += "   <style:properties ";
         // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
         //  and/or the relative variant: style:rel-column-width
-        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( widthArray.at( i ) ) + "pt\" ";
+        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( widthArray[i] ) + "pt\" ";
         m_contentAutomaticStyles += "/>\n";
         m_contentAutomaticStyles += "  </style:style>\n";
 
@@ -1528,7 +1528,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
 void OOWriterWorker::processFootnote( const VariableData& variable )
 {
     // Footnote
-    const Q3ValueList<ParaData> *paraList = variable.getFootnotePara();
+    const QList<ParaData> *paraList = variable.getFootnotePara();
     if( paraList )
     {
         const QString value ( variable.getFootnoteValue() );
@@ -2136,7 +2136,7 @@ bool OOWriterWorker::doVariableSettings(const VariableSettingsData& vs)
     return true;
 }
 
-bool OOWriterWorker::doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors )
+bool OOWriterWorker::doDeclareNonInlinedFramesets( QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors )
 {
     m_nonInlinedPictureAnchors = pictureAnchors;
     m_nonInlinedTableAnchors = tableAnchors;

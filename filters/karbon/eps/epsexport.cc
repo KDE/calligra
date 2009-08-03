@@ -18,13 +18,11 @@
 */
 
 #include <QApplication>
-#include <q3cstring.h>
 #include <QDateTime>	// For creation date/time.
 #include <qdom.h>
 #include <QFile>
 #include <QString>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
 
 #include <kdebug.h>
@@ -303,10 +301,10 @@ EpsExport::getStroke( const VStroke& stroke )
 		// Dash pattern.
 		*m_stream << "[";
 
-		const Q3ValueList<float>&
+		const QList<float>&
 			array( stroke.dashPattern().array() );
 
-		Q3ValueListConstIterator<float> itr = array.begin();
+		QListConstIterator<float> itr = array.begin();
 		for( ; itr != array.end(); ++itr )
 			 *m_stream << *itr << " ";
 
@@ -355,7 +353,7 @@ EpsExport::getFill( const VFill& fill )
 			*m_stream << l1_gsave << " ";
 
 			VGradient grad = fill.gradient();
-			Q3PtrVector<VColorStop> ramp = grad.colorStops();
+			QVector<VColorStop*> ramp = grad.colorStops();
 			if( ramp.size() < 2 )
 			{
 				if( ramp.size() == 1 )

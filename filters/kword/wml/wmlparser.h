@@ -20,7 +20,7 @@
 #ifndef __WMLPARSER_H
 #define __WMLPARSER_H
 
-#include <q3valuelist.h>
+#include <QList>
 #include <QString>
 
 class WMLFormat
@@ -46,7 +46,7 @@ class WMLLayout
     void assign( const WMLLayout& );
 };
 
-typedef Q3ValueList<WMLFormat> WMLFormatList;
+typedef QList<WMLFormat> WMLFormatList;
 
 class WMLParser
 {

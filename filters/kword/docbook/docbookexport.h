@@ -21,7 +21,6 @@
 #define DOCBOOKEXPORT_H
 
 #include <QString>
-#include <q3cstring.h>
 #include <QFile>
 #include <QObject>
 

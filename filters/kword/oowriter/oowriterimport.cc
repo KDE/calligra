@@ -27,7 +27,7 @@
 #include <QImage>
 //Added by qt3to4:
 #include <QByteArray>
-#include <Q3MemArray>
+#include <QVector>
 
 #include "oowriterimport.h"
 #include <ooutils.h>
@@ -2216,7 +2216,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
 
 
     // Left position of the cell/column (similar to RTF's \cellx). The last one defined is the right position of the last cell/column
-    Q3MemArray<double> columnLefts(4);
+    QVector<double> columnLefts(4);
     uint maxColumns=columnLefts.size() - 1;
 
     uint col=0;
@@ -2262,10 +2262,10 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
                 {
                     // We need more columns
                     maxColumns+=4;
-                    columnLefts.resize(maxColumns+1, Q3GArray::SpeedOptim);
+                    columnLefts.resize(maxColumns+1);
                 }
-                columnLefts.at(col) = width + columnLefts.at(col-1);
-                kDebug(30518) <<"Cell column" << col-1 <<" left" << columnLefts.at(col-1) <<" right" << columnLefts.at(col);
+                columnLefts[col] = width + columnLefts[col-1];
+                kDebug(30518) <<"Cell column" << col-1 <<" left" << columnLefts[col-1] <<" right" << columnLefts[col];
             }
         }
     }
@@ -2276,7 +2276,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
 }
 
 void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement,
-    const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column )
+    const QString& tableName, const QVector<double> & columnLefts, uint& row, uint& column )
 {
     kDebug(30518) <<"parseInsideOfTable: columnLefts.size()=" << columnLefts.size();
     QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
@@ -2318,8 +2318,8 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& 
             framesetsPluralElement.appendChild(framesetElement);
 
             QDomElement frameElementOut(doc.createElement("FRAME"));
-            frameElementOut.setAttribute("left",columnLefts.at(column));
-            frameElementOut.setAttribute("right",columnLefts.at(column+1));
+            frameElementOut.setAttribute("left",columnLefts[column]);
+            frameElementOut.setAttribute("right",columnLefts[column+1]);
             frameElementOut.setAttribute("top", 0);
             frameElementOut.setAttribute("bottom", 0);
             frameElementOut.setAttribute("runaround",1);

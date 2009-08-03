@@ -27,7 +27,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <QByteArray>
-#include <Q3MemArray>
+#include <QVector>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <liststylestack.h>
@@ -87,7 +87,7 @@ private:
     void appendBookmark( QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name );
     void parseTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement,
-        const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column );
+        const QString& tableName, const QVector<double> & columnLefts, uint& row, uint& column );
     static QString kWordStyleName(  const QString& ooStyleName );
 
     KoXmlDocument   m_content;

@@ -31,7 +31,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -85,7 +85,7 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
 
-    virtual bool doFullParagraphList(const Q3ValueList<ParaData>& paraList);
+    virtual bool doFullParagraphList(const QList<ParaData>& paraList);
     virtual bool doFullParagraph(const ParaData& para);
     virtual bool doFullParagraph(const QString& paraText,
         const LayoutData& layout,
@@ -192,9 +192,9 @@ bool ASCIIWorker::doCloseDocument(void)
     return true;
 }
 
-bool ASCIIWorker::doFullParagraphList(const Q3ValueList<ParaData>& paraList)
+bool ASCIIWorker::doFullParagraphList(const QList<ParaData>& paraList)
 {
-    for (Q3ValueList<ParaData>::ConstIterator it = paraList.begin();
+    for (QList<ParaData>::ConstIterator it = paraList.begin();
          it != paraList.end();
          it++)
     {
@@ -360,7 +360,7 @@ bool ASCIIWorker::ProcessTable(const Table& table)
     kDebug(30502) <<"processTable CALLED!";
 
     // just dump the table out (no layout for now)
-    for (Q3ValueList<TableCell>::ConstIterator it = table.cellList.begin();
+    for (QList<TableCell>::ConstIterator it = table.cellList.begin();
          it != table.cellList.end();
          it++)
     {
@@ -404,12 +404,12 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                         // Footnote
                         QString value = (*paraFormatDataIt).variable.getFootnoteValue();
                         bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                        Q3ValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                        QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
                         if (paraList)
                         {
                             QString notestr;
-                            Q3ValueList<ParaData>::ConstIterator it;
-                            Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+                            QList<ParaData>::ConstIterator it;
+                            QList<ParaData>::ConstIterator end(paraList->end());
                             for (it=paraList->begin();it!=end;++it)
                                 notestr += (*it).text.trimmed().replace(QChar(10), m_eol, true) + m_eol;
 

@@ -25,9 +25,8 @@
 
 #include <KoFilter.h>
 
-#include <q3dict.h>
+#include <QHash>
 #include <qdom.h>
-//Added by qt3to4:
 #include <QByteArray>
 #include <KoXmlReader.h>
 
@@ -77,9 +76,9 @@ class OpenCalcImport : public KoFilter
   KoXmlDocument   m_meta;
   KoXmlDocument   m_settings;
 
-  Q3Dict<KoXmlElement>   m_styles;
-  Q3Dict<KSpread::Style> m_defaultStyles;
-  Q3Dict<QString>       m_formats;
+  QHash<QString, KoXmlElement*>   m_styles;
+  QHash<QString, KSpread::Style*> m_defaultStyles;
+  QHash<QString, QString*>        m_formats;
   QMap<QString,KoXmlElement> m_validationList;
 
   QStringList          m_namedAreas;

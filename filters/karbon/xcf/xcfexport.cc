@@ -22,7 +22,7 @@
 #include <qdom.h>
 #include <QFile>
 #include <QString>
-#include <q3valuelist.h>
+#include <QList>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>

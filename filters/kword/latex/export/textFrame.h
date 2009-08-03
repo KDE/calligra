@@ -23,11 +23,9 @@
 #ifndef __KWORD_LATEX_FRAMETEXT_H__
 #define __KWORD_LATEX_FRAMETEXT_H__
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
 #include "element.h"
-//#include "border.h"
 #include "para.h"
 
 /***********************************************************************/
@@ -52,7 +50,7 @@ class TextFrame: public Element
 	TSide   _sheetSide;
 
 	/* CHILD MARKUP */
-	Q3PtrList<Para> _parags;
+	QList<Para*> _parags;
 	//QPtrList<Para> _footnotes;
 
 	/* USEFUL DATA */
@@ -94,7 +92,7 @@ class TextFrame: public Element
 		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
 		TSide   getSheetSide  () const { return _sheetSide;         }
 		Para*   getFirstPara  () const { return _parags.getFirst(); }
-		EEnv    getNextEnv    (Q3PtrList<Para>, const int);
+		EEnv    getNextEnv    (QList<Para*>, const int);
 		bool    isBeginEnum   (Para*, Para*);
 		bool    isCloseEnum   (Para*, Para*);
 

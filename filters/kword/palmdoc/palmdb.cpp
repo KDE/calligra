@@ -24,12 +24,12 @@
 
 #include "palmdb.h"
 
-#include <q3cstring.h>
+#include <QByteArray>
 #include <QDataStream>
 #include <QDateTime>
 #include <QFile>
-#include <q3memarray.h>
-#include <q3ptrlist.h>
+#include <QVector>
+#include <QList>
 #include <QString>
 
 PalmDB::PalmDB()
@@ -44,12 +44,11 @@ PalmDB::PalmDB()
   setType( QString() );
   setCreator( QString() );
 
-  // crash if autodelete ?
-  records.setAutoDelete( true );
 }
 
 PalmDB::~PalmDB()
 {
+    while(!records.isEmpty()) delete records.takeFirst();
   records.clear();
 }
 
@@ -146,8 +145,8 @@ bool PalmDB::load( const char* filename )
 
   // read entries in record list
   // find out location and size of each record
-  Q3MemArray<unsigned> recpos( numrec );
-  Q3MemArray<int> recsize( numrec );
+  QVector<unsigned> recpos( numrec );
+  QVector<int> recsize( numrec );
 
   // FIXME any other better way to find record size ?
   for( int r = 0; r < numrec; r++ )

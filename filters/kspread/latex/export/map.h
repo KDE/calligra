@@ -23,9 +23,8 @@
 #define __KSPREAD_LATEX_MAP_H__
 
 #include <QString>
-#include <q3ptrstack.h>		/* historic list */
-#include <q3ptrlist.h>		/* for list of format */
-//Added by qt3to4:
+#include <QStack>		/* historic list */
+#include <QList>		/* for list of format */
 #include <QTextStream>
 
 #include "xmlparser.h"
@@ -43,7 +42,7 @@
  */
 class Map: public XmlParser, Config
 {
-	Q3PtrList<Table> _tables;
+	QList<Table*> _tables;
 
 	public:
 		/**

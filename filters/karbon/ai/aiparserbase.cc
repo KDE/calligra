@@ -376,13 +376,13 @@ void AIParserBase::handleElement (AIElement &element)
   if (m_sink == DS_Array)
   {
     if (m_debug) qDebug ("in mode array");
-    Q3ValueVector<AIElement> &elementArray = m_arrayStack.top();
+    QVector<AIElement> &elementArray = m_arrayStack.top();
     elementArray.push_back(element);
   }
   if (m_sink == DS_Block)
   {
     if (m_debug) qDebug ("in mode block");
-    Q3ValueVector<AIElement> &elementArray = m_blockStack.top();
+    QVector<AIElement> &elementArray = m_blockStack.top();
     elementArray.push_back(element);
   }
   else
@@ -452,7 +452,7 @@ void AIParserBase::gotArrayStart () {
   if (m_ignoring) return;
   if (m_debug) qDebug ("got array start");
 
-  Q3ValueVector<AIElement> array;
+  QVector<AIElement> array;
   m_arrayStack.push (array);
 
   m_sink = DS_Array;
@@ -462,7 +462,7 @@ void AIParserBase::gotBlockStart () {
   if (m_ignoring) return;
   if (m_debug) qDebug ("got block start");
 
-  Q3ValueVector<AIElement> array;
+  QVector<AIElement> array;
   m_blockStack.push (array);
 
   m_sink = DS_Block;
@@ -472,7 +472,7 @@ void AIParserBase::gotArrayEnd () {
   if (m_ignoring) return;
   if (m_debug) qDebug ("got array end");
 
-  Q3ValueVector<AIElement> stackArray = m_arrayStack.pop();
+  QVector<AIElement> stackArray = m_arrayStack.pop();
 
   if (m_arrayStack.empty())
   {
@@ -491,7 +491,7 @@ void AIParserBase::gotArrayEnd () {
   else
   {
     if (m_debug) qDebug ("put elements to nest stack level");
-    Q3ValueVector<AIElement> currentTOS = m_arrayStack.top();
+    QVector<AIElement> currentTOS = m_arrayStack.top();
     currentTOS.push_back (stackArray);
   }
 }
@@ -500,7 +500,7 @@ void AIParserBase::gotBlockEnd () {
   if (m_ignoring) return;
   if (m_debug) qDebug ("got block end");
 
-  Q3ValueVector<AIElement> stackArray = m_blockStack.pop();
+  QVector<AIElement> stackArray = m_blockStack.pop();
 
   if (m_blockStack.empty())
   {
@@ -519,7 +519,7 @@ void AIParserBase::gotBlockEnd () {
   else
   {
     if (m_debug) qDebug ("put elements to nest stack level");
-    Q3ValueVector<AIElement> currentTOS = m_blockStack.top();
+    QVector<AIElement> currentTOS = m_blockStack.top();
     currentTOS.push_back (stackArray);
   }
 }
@@ -1073,13 +1073,13 @@ CommentOperation AIParserBase::getCommentOperation (const char *command) {
   }
 }
 
-void GStateHandlerBase::gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const Q3ValueVector<AIElement>& transformData) {
+void GStateHandlerBase::gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QVector<AIElement>& transformData) {
   qDebug ( "got fill pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
   arraytoa (transformData);
   qDebug ("/got fill pattern");
 }
 
-void GStateHandlerBase::gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const Q3ValueVector<AIElement>& transformData) {
+void GStateHandlerBase::gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QVector<AIElement>& transformData) {
   qDebug ( "got stroke pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
   arraytoa (transformData);
   qDebug ("/got stroke pattern");
@@ -1152,7 +1152,7 @@ void AIParserBase::cleanupArrays()
   if (m_textHandler) m_textHandler->gotFontEncoding (encodingData, oldFont.latin1(), newFont.latin1());
 } */
 
-void TextHandlerBase::gotFontEncoding (const Q3ValueVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName)
+void TextHandlerBase::gotFontEncoding (const QVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName)
 {
   qDebug ("font encoding %s to %s",oldFontName, newFontName);
   arraytoa (encodingData);
@@ -1164,7 +1164,7 @@ void TextHandlerBase::gotFontDefinition (const char*fontName, double size, doubl
   qDebug ("font definition: name %s size %f leading %f kerning %f align %d", fontName, size, leading, kerning, align);
 }
 
-void TextHandlerBase::gotTextBlockBegin (const Q3ValueVector<AIElement>& transData, TextOperation mode)
+void TextHandlerBase::gotTextBlockBegin (const QVector<AIElement>& transData, TextOperation mode)
 {
   qDebug ("text block begin %d",mode);
   arraytoa (transData);
@@ -1213,7 +1213,7 @@ const void elementtoa (const AIElement &/*data*/)
   } */
 }
 
-const void arraytoa (const Q3ValueVector<AIElement> &/*data*/)
+const void arraytoa (const QVector<AIElement> &/*data*/)
 {
 /*  qDebug ("array size is %d ",data.size());
   if (data.size() > 0)
@@ -1241,7 +1241,7 @@ const void stacktoa (const Q3ValueStack<AIElement> &/*data*/)
   qDebug (">>>>>>>>>>>>>>>>>>"); */
 }
 
-const void stacktoa2 (const Q3ValueStack<Q3ValueVector<AIElement> >&/*data*/)
+const void stacktoa2 (const Q3ValueStack<QVector<AIElement> >&/*data*/)
 {
 /*  qDebug ("stack size is %d",data.size());
 

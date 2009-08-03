@@ -20,7 +20,7 @@
 #ifndef __KWORD_LATEX_IMPORT_BODY_H__
 #define __KWORD_LATEX_IMPORT_BODY_H__
 
-#include <q3ptrlist.h>
+#include <QList>
 #include "paragraph.h"
 
 class Element;
@@ -73,7 +73,7 @@ class Body
 		/** Botoom margin in pt. */
 		int _bottomMargin;
 		/** The body of a document is a list of paragraphs. */
-		Q3PtrList<Paragraph> _paragraphs;
+		QList<Paragraph*> _paragraphs;
 };
 
 #endif /* __KWORD_LATEX_IMPORT_BODY_H__ */

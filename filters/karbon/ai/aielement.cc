@@ -47,10 +47,10 @@ AIElement::Private::Private( Private* d )
 	    value.ptr = new QValueList<AIElement>( *((QValueList<AIElement>*)d->value.ptr) );
 	    break; */
 		case AIElement::ElementArray:
-	    value.ptr = new Q3ValueVector<AIElement>( *((Q3ValueVector<AIElement>*)d->value.ptr) );
+	    value.ptr = new QVector<AIElement>( *((QVector<AIElement>*)d->value.ptr) );
 	    break;
 		case AIElement::Block:
-	    value.ptr = new Q3ValueVector<AIElement>( *((Q3ValueVector<AIElement>*)d->value.ptr) );
+	    value.ptr = new QVector<AIElement>( *((QVector<AIElement>*)d->value.ptr) );
 	    break;
 		case AIElement::ByteArray:
 	    value.ptr = new QByteArray( *((QByteArray*)d->value.ptr) );
@@ -95,10 +95,10 @@ void AIElement::Private::clear()
 	    delete (QValueList<AIElement>*)value.ptr;
 	    break; */
 		case AIElement::ElementArray:
-	    delete (Q3ValueVector<AIElement>*)value.ptr;
+	    delete (QVector<AIElement>*)value.ptr;
 	    break;
 		case AIElement::Block:
-	    delete (Q3ValueVector<AIElement>*)value.ptr;
+	    delete (QVector<AIElement>*)value.ptr;
 	    break;
 		case AIElement::ByteArray:
 	    delete (QByteArray*)value.ptr;
@@ -237,11 +237,11 @@ AIElement::AIElement( double val )
   d->value.ptr = new QValueList<AIElement>( val );
 }  */
 
-AIElement::AIElement( const Q3ValueVector<AIElement>& val, Type type )
+AIElement::AIElement( const QVector<AIElement>& val, Type type )
 {
   d = new Private;
   d->typ = type;
-  d->value.ptr = new Q3ValueVector<AIElement>( val );
+  d->value.ptr = new QVector<AIElement>( val );
 }
 
 AIElement::AIElement( const QByteArray& val )
@@ -541,18 +541,18 @@ double AIElement::toDouble( bool * ok ) const
   return QValueList<AIElement>();
 } */
 
-const Q3ValueVector<AIElement> AIElement::toElementArray() const
+const QVector<AIElement> AIElement::toElementArray() const
 {
   if ( d->typ == ElementArray )
-	  return *((Q3ValueVector<AIElement>*)d->value.ptr);
-  return Q3ValueVector<AIElement>();
+	  return *((QVector<AIElement>*)d->value.ptr);
+  return QVector<AIElement>();
 }
 
-const Q3ValueVector<AIElement> AIElement::toBlock() const
+const QVector<AIElement> AIElement::toBlock() const
 {
   if ( d->typ == Block )
-	  return *((Q3ValueVector<AIElement>*)d->value.ptr);
-  return Q3ValueVector<AIElement>();
+	  return *((QVector<AIElement>*)d->value.ptr);
+  return QVector<AIElement>();
 }
 
 
@@ -650,18 +650,18 @@ uchar& AIElement::asByte()
   return *((QValueList<AIElement>*)d->value.ptr);
 }  */
 
-Q3ValueVector<AIElement>& AIElement::asElementArray()
+QVector<AIElement>& AIElement::asElementArray()
 {
   if ( d->typ != ElementArray )
 	  *this = AIElement( toElementArray() );
-  return *((Q3ValueVector<AIElement>*)d->value.ptr);
+  return *((QVector<AIElement>*)d->value.ptr);
 }
 
-Q3ValueVector<AIElement>& AIElement::asBlock()
+QVector<AIElement>& AIElement::asBlock()
 {
   if ( d->typ != Block )
 	  *this = AIElement( toBlock() );
-  return *((Q3ValueVector<AIElement>*)d->value.ptr);
+  return *((QVector<AIElement>*)d->value.ptr);
 }
 
 

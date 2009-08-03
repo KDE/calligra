@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include "TagProcessing.h"
 
@@ -45,7 +45,7 @@
 
 
 void ProcessSubtags ( const QDomNode             &parentNode,
-                      Q3ValueList<TagProcessing>  &tagProcessingList,
+                      QList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
 {
     //kDebug(30508) <<"Starting ProcessSubtags for node:" << parentNode.nodeName();
@@ -58,7 +58,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
         {
             bool found = false;
 
-            Q3ValueList<TagProcessing>::Iterator  tagProcessingIt;
+            QList<TagProcessing>::Iterator  tagProcessingIt;
 
             for ( tagProcessingIt = tagProcessingList.begin ();
                   tagProcessingIt != tagProcessingList.end ();
@@ -97,7 +97,7 @@ void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
 {
 #ifdef DEBUG_KWORD_TAGS
     QString outputText;
-    Q3ValueList<TagProcessing> tagProcessingList;
+    QList<TagProcessing> tagProcessingList;
     ProcessSubtags (myNode, tagProcessingList, leader);
 #else
     @_UNUSED( leader ):
@@ -126,7 +126,7 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
 
 
 void ProcessAttributes ( const QDomNode              &myNode,
-                         Q3ValueList<AttrProcessing>  &attrProcessingList )
+                         QList<AttrProcessing>  &attrProcessingList )
 {
     //kDebug(30508) <<"Starting ProcessAttributes for node:" << myNode.nodeName();
 
@@ -140,7 +140,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
         {
             bool found = false;
 
-            Q3ValueList<AttrProcessing>::Iterator attrProcessingIt;
+            QList<AttrProcessing>::Iterator attrProcessingIt;
 
             for ( attrProcessingIt = attrProcessingList.begin ();
                   attrProcessingIt != attrProcessingList.end ();
@@ -229,7 +229,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
 void AllowNoAttributes ( const QDomNode & myNode )
 {
 #ifdef DEBUG_KWORD_TAGS
-    Q3ValueList<AttrProcessing> attrProcessingList;
+    QList<AttrProcessing> attrProcessingList;
     ProcessAttributes (myNode, attrProcessingList);
 #else
     Q_UNUSED( myNode );

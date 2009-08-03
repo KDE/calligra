@@ -27,7 +27,7 @@
 #include <QPen>
 #include <QtXml>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QByteArray>
 
 #include "opencalcimport.h"
@@ -128,18 +128,15 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
 
 
 OpenCalcImport::OpenCalcImport( QObject* parent, const QStringList & )
-  : KoFilter(parent),
-    m_styles( 17, true ),
-    m_defaultStyles( 17, true ),
-    m_formats( 17, true )
+  : KoFilter(parent)
 {
-  m_styles.setAutoDelete( true );
-  m_defaultStyles.setAutoDelete( true );
-  m_formats.setAutoDelete( true );
 }
 
 OpenCalcImport::~OpenCalcImport()
 {
+    foreach(KoXmlElement* style, m_styles) delete style;
+    foreach(KSpread::Style* style, m_defaultStyles) delete style;
+    foreach(QString* format, m_formats) delete format;
 }
 
 double timeToNum( int h, int m, int s )
@@ -760,7 +757,7 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
     KoXmlElement elementItem( property );
     StyleManager * manager = cell.sheet()->map()->styleManager();
 
-    Q3ValueList<Conditional> cond;
+    QLinkedList<Conditional> cond;
     while ( !elementItem.isNull() )
     {
         kDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName();
@@ -2218,7 +2215,7 @@ void OpenCalcImport::readInStyle( Style * layout, KoXmlElement const & style )
     if ( style.hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
       Style * cp
-        = m_defaultStyles.find( style.attributeNS( ooNS::style, "parent-style-name", QString() ) );
+        = m_defaultStyles.value( style.attributeNS( ooNS::style, "parent-style-name", QString() ) );
       kDebug(30518) <<"Copying layout from" << style.attributeNS( ooNS::style,"parent-style-name", QString() );
 
       if ( cp != 0 )
@@ -2227,7 +2224,7 @@ void OpenCalcImport::readInStyle( Style * layout, KoXmlElement const & style )
     else if ( style.hasAttributeNS( ooNS::style, "family") )
     {
       QString name = style.attribute( "style-family" ) + "default";
-      Style * cp = m_defaultStyles.find( name );
+      Style * cp = m_defaultStyles.value( name );
 
       kDebug(30518) <<"Copying layout from" << name <<"," << !cp;
 

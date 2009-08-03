@@ -23,7 +23,7 @@
 #include "element.h"
 
 #include <QString>
-#include <q3ptrlist.h>
+#include <QList>
 
 class LatexParser
 {
@@ -38,7 +38,7 @@ class LatexParser
 
 		void setInputFile(QString filename) { _filename = filename; }
 
-		Q3PtrList<Element>* parse();
+		QList<Element*>* parse();
 		void convert();
 			
 	private:

@@ -20,10 +20,9 @@
 #include "paragraph.h"
 #include <element.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
-bool Paragraph::analyze(Q3PtrList<Element>* body)
+bool Paragraph::analyze(QList<Element*>* body)
 {
 }
 

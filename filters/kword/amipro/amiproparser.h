@@ -22,7 +22,7 @@
 
 class QString;
 class QStringList;
-#include <q3valuelist.h>
+#include <QList>
 #include <QColor>
 
 class AmiPro
@@ -51,7 +51,7 @@ class AmiProFormat
     void applyStyle( const AmiProStyle& );
 };
 
-typedef Q3ValueList<AmiProFormat> AmiProFormatList;
+typedef QList<AmiProFormat> AmiProFormatList;
 
 
 class AmiProLayout
@@ -93,7 +93,7 @@ class AmiProStyle
     void assign( const AmiProStyle& );
 };
 
-typedef Q3ValueList<AmiProStyle> AmiProStyleList;
+typedef QList<AmiProStyle> AmiProStyleList;
 
 class AmiProListener
 {

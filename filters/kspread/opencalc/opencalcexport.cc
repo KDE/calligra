@@ -28,8 +28,7 @@
 #include <qdom.h>
 #include <QFile>
 #include <QRegExp>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QByteArray>
 
 #include <kdebug.h>

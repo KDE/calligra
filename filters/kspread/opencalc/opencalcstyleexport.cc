@@ -34,17 +34,16 @@ using namespace KSpread;
 
 OpenCalcStyles::OpenCalcStyles()
 {
-  m_cellStyles.setAutoDelete( true );
-  m_columnStyles.setAutoDelete( true );
-  m_numberStyles.setAutoDelete( true );
-  m_rowStyles.setAutoDelete( true );
-  m_sheetStyles.setAutoDelete( true );
-
-  m_fontList.setAutoDelete( true );
 }
 
 OpenCalcStyles::~OpenCalcStyles()
 {
+    while(!m_cellStyles.isEmpty()) delete m_cellStyles.takeFirst();
+    while(!m_columnStyles.isEmpty()) delete m_columnStyles.takeFirst();
+    while(!m_numberStyles.isEmpty()) delete m_numberStyles.takeFirst();
+    while(!m_rowStyles.isEmpty()) delete m_rowStyles.takeFirst();
+    while(!m_sheetStyles.isEmpty()) delete m_sheetStyles.takeFirst();
+    while(!m_fontList.isEmpty()) delete m_fontList.takeFirst();
 }
 
 void OpenCalcStyles::writeStyles( QDomDocument & doc, QDomElement & autoStyles )
@@ -58,8 +57,7 @@ void OpenCalcStyles::writeStyles( QDomDocument & doc, QDomElement & autoStyles )
 
 void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls )
 {
-  QFont * f = m_fontList.first();
-  while ( f )
+  foreach(QFont * f, m_fontList)
   {
     QDomElement fontDecl = doc.createElement( "style:font-decl" );
 
@@ -72,8 +70,6 @@ void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls 
     // style:font-style-name= "Bold/Standard/Regular"
 
     fontDecls.appendChild( fontDecl );
-
-    f = m_fontList.next();
   }
 }
 
@@ -82,28 +78,24 @@ void OpenCalcStyles::addFont( QFont const & font, bool def )
   if ( def )
     m_defaultFont = font;
 
-  QFont * f = m_fontList.first();
-  while ( f )
+  foreach(QFont * f, m_fontList)
   {
     if ( f->family() == font.family() )
       return;
 
-    f = m_fontList.next();
   }
 
-  f = new QFont( font );
+  QFont * f = new QFont( font );
   m_fontList.append( f );
 }
 
 QString OpenCalcStyles::cellStyle( CellStyle const & cs )
 {
-  CellStyle * t = m_cellStyles.first();
-  while ( t )
+  CellStyle * t = 0;
+  foreach(t, m_cellStyles)
   {
     if ( CellStyle::isEqual( t, cs ) )
       return t->name;
-
-    t = m_cellStyles.next();
   }
 
   t = new CellStyle();
@@ -118,13 +110,11 @@ QString OpenCalcStyles::cellStyle( CellStyle const & cs )
 
 QString OpenCalcStyles::columnStyle( ColumnStyle const & cs )
 {
-  ColumnStyle * t = m_columnStyles.first();
-  while ( t )
+  ColumnStyle * t = 0; 
+  foreach(t, m_columnStyles)
   {
     if ( ColumnStyle::isEqual( t, cs ) )
       return t->name;
-
-    t = m_columnStyles.next();
   }
 
   t = new ColumnStyle();
@@ -144,13 +134,11 @@ QString OpenCalcStyles::numberStyle( NumberStyle const & )
 
 QString OpenCalcStyles::rowStyle( RowStyle const & rs )
 {
-  RowStyle * t = m_rowStyles.first();
-  while ( t )
+  RowStyle * t = 0; 
+  foreach(t, m_rowStyles)
   {
     if ( RowStyle::isEqual( t, rs ) )
       return t->name;
-
-    t = m_rowStyles.next();
   }
 
   t = new RowStyle();
@@ -165,13 +153,11 @@ QString OpenCalcStyles::rowStyle( RowStyle const & rs )
 
 QString OpenCalcStyles::sheetStyle( SheetStyle const & ts )
 {
-  SheetStyle * t = m_sheetStyles.first();
-  while ( t )
+  SheetStyle * t = 0;
+  foreach(t, m_sheetStyles)
   {
     if ( SheetStyle::isEqual( t, ts ) )
       return t->name;
-
-    t = m_sheetStyles.next();
   }
 
   t = new SheetStyle();
@@ -195,8 +181,8 @@ QString convertPenToString( QPen const & pen )
 void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
 
-    CellStyle * t = m_cellStyles.first();
-    while ( t )
+    CellStyle * t = 0;
+    foreach(t, m_cellStyles)
     {
         QDomElement ts = doc.createElement( "style:style" );
         ts.setAttribute( "style:name", t->name );
@@ -307,15 +293,13 @@ void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles
 
         ts.appendChild( prop );
         autoStyles.appendChild( ts );
-
-        t = m_cellStyles.next();
     }
 }
 
 void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
-  ColumnStyle * t = m_columnStyles.first();
-  while ( t )
+  ColumnStyle * t = 0;
+  foreach(t, m_columnStyles)
   {
     QDomElement ts = doc.createElement( "style:style" );
     ts.setAttribute( "style:name", t->name );
@@ -328,8 +312,6 @@ void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyl
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
-
-    t = m_columnStyles.next();
   }
 }
 
@@ -339,8 +321,8 @@ void OpenCalcStyles::addNumberStyles( QDomDocument & /*doc*/, QDomElement & /*au
 
 void OpenCalcStyles::addRowStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
-  RowStyle * t = m_rowStyles.first();
-  while ( t )
+  RowStyle * t = 0;
+  foreach(t, m_rowStyles)
   {
     QDomElement ts = doc.createElement( "style:style" );
     ts.setAttribute( "style:name", t->name );
@@ -354,14 +336,13 @@ void OpenCalcStyles::addRowStyles( QDomDocument & doc, QDomElement & autoStyles 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
 
-    t = m_rowStyles.next();
   }
 }
 
 void OpenCalcStyles::addSheetStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
-  SheetStyle * t = m_sheetStyles.first();
-  while ( t )
+  SheetStyle * t = 0;
+  foreach(t, m_sheetStyles)
   {
     QDomElement ts = doc.createElement( "style:style" );
     ts.setAttribute( "style:name", t->name );
@@ -373,8 +354,6 @@ void OpenCalcStyles::addSheetStyles( QDomDocument & doc, QDomElement & autoStyle
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
-
-    t = m_sheetStyles.next();
   }
 }
 

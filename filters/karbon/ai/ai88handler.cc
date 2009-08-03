@@ -326,7 +326,7 @@ void AI88Handler::_handleSetFillPattern()
   AIElement elem (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
 
   double ka = m_delegate->getDoubleValue();
   double k = m_delegate->getDoubleValue();
@@ -350,7 +350,7 @@ void AI88Handler::_handleSetStrokePattern()
   AIElement elem (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
 
   double ka = m_delegate->getDoubleValue();
   double k = m_delegate->getDoubleValue();
@@ -426,7 +426,7 @@ void AI88Handler::_handleSetDash()
   AIElement elem (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
   if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotDash (aval, fval);
 //  qDebug ("dash operation finished");
 }
@@ -436,7 +436,7 @@ void AI88Handler::_handlePatternDefinition()
   AIElement elem (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
 
   double ury = m_delegate->getDoubleValue();
   double urx = m_delegate->getDoubleValue();
@@ -465,7 +465,7 @@ void AI88Handler::_handleGsaveIncludeDocument() {
   AIElement elem (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
 
   if (m_delegate->m_embeddedHandler) m_delegate->m_embeddedHandler->gotGsaveIncludeDocument (aval, llx,lly,urx,ury,name.latin1());
 }
@@ -502,7 +502,7 @@ void AI88Handler::_handleTextBlock (TextOperation to) {
   qDebug ("to element is (%s)",elem.typeName());
   m_delegate->m_stack.pop();
 
-  const Q3ValueVector<AIElement> aval = elem.toElementArray();
+  const QVector<AIElement> aval = elem.toElementArray();
 
   if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotTextBlockBegin (aval, to);
 }
@@ -543,7 +543,7 @@ void AI88Handler::_handleFontEncoding()
 
   AIElement elem3 (m_delegate->m_stack.top());
   m_delegate->m_stack.pop();
-  const Q3ValueVector<AIElement> encodingData = elem3.toElementArray();
+  const QVector<AIElement> encodingData = elem3.toElementArray();
 
   if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotFontEncoding (encodingData, oldFont.latin1(), newFont.latin1());
 }

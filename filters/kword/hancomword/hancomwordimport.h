@@ -23,8 +23,6 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <q3cstring.h>
-
 class HancomWordImport : public KoFilter
 {
 Q_OBJECT

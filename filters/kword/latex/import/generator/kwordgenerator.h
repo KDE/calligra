@@ -22,22 +22,19 @@
 
 #include <KoStore.h>
 
-//#include "document.h"
 #include "element.h"
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 class KwordGenerator
 {
-	Q3PtrList<Element>* _root;
-	//Document _doc;
+	QList<Element*>* _root;
 
 	public:
 		KwordGenerator()
 		{
 		}
 
-		explicit KwordGenerator(Q3PtrList<Element>* root)
+		explicit KwordGenerator(QList<Element*>* root)
 		{
 			_root = root;
 		}

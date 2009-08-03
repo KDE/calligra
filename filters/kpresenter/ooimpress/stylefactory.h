@@ -21,7 +21,7 @@
 #ifndef STYLEFACTORY_H
 #define STYLEFACTORY_H
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QString>
 
 #include <qdom.h>
@@ -266,17 +266,17 @@ public:
     static QString toCM( const QString & point );
 
 private:
-    Q3PtrList<StrokeDashStyle>   m_strokeDashStyles;
-    Q3PtrList<GradientStyle>     m_gradientStyles;
-    Q3PtrList<HatchStyle>        m_hatchStyles;
-    Q3PtrList<MarkerStyle>       m_markerStyles;
-    Q3PtrList<FillImageStyle>    m_fillImageStyles;
-    Q3PtrList<ListStyle>         m_listStyles;
-    Q3PtrList<PageStyle>         m_pageStyles;
-    Q3PtrList<TextStyle>         m_textStyles;
-    Q3PtrList<GraphicStyle>      m_graphicStyles;
-    Q3PtrList<ParagraphStyle>    m_paragraphStyles;
-    Q3PtrList<PageMasterStyle>   m_pageMasterStyles;
+    QList<StrokeDashStyle*>   m_strokeDashStyles;
+    QList<GradientStyle*>     m_gradientStyles;
+    QList<HatchStyle*>        m_hatchStyles;
+    QList<MarkerStyle*>       m_markerStyles;
+    QList<FillImageStyle*>    m_fillImageStyles;
+    QList<ListStyle*>         m_listStyles;
+    QList<PageStyle*>         m_pageStyles;
+    QList<TextStyle*>         m_textStyles;
+    QList<GraphicStyle*>      m_graphicStyles;
+    QList<ParagraphStyle*>    m_paragraphStyles;
+    QList<PageMasterStyle*>   m_pageMasterStyles;
 };
 
 #endif

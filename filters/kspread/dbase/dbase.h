@@ -26,8 +26,7 @@
 #include <QFile>
 #include <QString>
 #include <QStringList>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 class DBaseField
 {
@@ -45,7 +44,7 @@ class DBase
     DBase();
     ~DBase();
 
-    Q3PtrList<DBaseField> fields;
+    QList<DBaseField*> fields;
 
     bool load( const QString& filename );
     QStringList readRecord( unsigned recno );

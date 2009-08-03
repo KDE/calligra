@@ -22,7 +22,7 @@
 #ifndef __KSPREAD_LATEX_SPREADSHEET_H__
 #define __KSPREAD_LATEX_SPREADSHEET_H__
 
-#include <q3ptrlist.h>
+#include <QList>
 #include <QTextStream>
 
 #include "map.h"

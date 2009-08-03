@@ -20,42 +20,41 @@
 #include "command.h"
 #include <iostream.h>
 #include "kdebug.h"
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 Command::Command()
 {
 	setType(Element::LATEX_COMMAND);
-	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);
+/*	_options.setAutoDelete(true);
+	_params.setAutoDelete(true);*/
 }
 
 Command::Command(const char* name)
 {
 	setType(Element::LATEX_COMMAND);
-	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);
+/*	_options.setAutoDelete(true);
+	_params.setAutoDelete(true);*/
 	_name = name;
 	_name = _name.trimmed();
 }
 
-Command::Command(const char* name, Q3PtrList<Q3PtrList<Element> >* groups)
+Command::Command(const char* name, QList<QList<Element*>* >* groups)
 {
 	setType(Element::LATEX_COMMAND);
-	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);
+/*	_options.setAutoDelete(true);
+	_params.setAutoDelete(true);*/
 	_name = name;
 	if(groups != NULL)
 		_elements = *groups;
 	_name = _name.trimmed();
 }
 
-Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params,
-		Q3PtrList<Q3PtrList<Element> >* groups)
+Command::Command(const char* name, QList<List<Param*>* >* params,
+		QList<QList<Element*>* >* groups)
 {
 	setType(Element::LATEX_COMMAND);
-	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);
+/*	_options.setAutoDelete(true);
+	_params.setAutoDelete(true);*/
 	_name = name;
 	if(groups != NULL)
 		_elements = *groups;
@@ -64,12 +63,12 @@ Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params,
 	_name = _name.trimmed();
 }
 
-Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params, Q3PtrList<Param>* options,
-		Q3PtrList<Q3PtrList<Element> >* groups)
+Command::Command(const char* name, QList<QList<Param*>* >* params, QList<Param*>* options,
+		QList<QList<Element*>* >* groups)
 {
 	setType(Element::LATEX_COMMAND);
-	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);
+/*	_options.setAutoDelete(true);
+	_params.setAutoDelete(true);*/
 	_name = name;
 	if(groups != NULL)
 		_elements = *groups;
@@ -104,7 +103,7 @@ void Command::addOption(const char* )
 void Command::print(int tab)
 {
 	cout << _name.latin1();
-	Q3PtrList<Param>* params;
+	QList<Param*>* params;
 	for ( params = _params.first(); params; params = _params.next() )
 	{
 		cout << "[";
@@ -130,7 +129,7 @@ void Command::print(int tab)
 		cout << "]";
 	}
 	
-	Q3PtrList<Element>* group;
+	QList<Element*>* group;
 	for(group = _elements.first(); group; group = _elements.next() )
 	{
 		cout << " {";

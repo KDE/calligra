@@ -25,7 +25,7 @@
 #include <QFileInfo>
 #include <QDir>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3CString>
 
 #include <kzip.h>
@@ -376,7 +376,7 @@ OoDrawImport::appendPen( VObject &obj )
 			stroke.setType( VStroke::solid );
 		else if( m_styleStack.property( ooNS::draw, "stroke" ) == "dash" )
 		{
-			Q3ValueList<float> dashes;
+			QList<float> dashes;
 			stroke.setType( VStroke::solid );
 			QString style = m_styleStack.property( ooNS::draw, "stroke-dash" );
 			if( style == "Ultrafine Dashed" ||

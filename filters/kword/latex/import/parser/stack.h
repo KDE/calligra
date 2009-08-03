@@ -22,8 +22,8 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3ptrstack.h>
+#include <QList>
+#include <QStack>
 
 #define GROUP_STACK_SIZE 10
 
@@ -37,6 +37,6 @@ static int stack_size = GROUP_STACK_SIZE;
 static int stackp = 0;
 static Element * _currentElement = 0;
 static Group* _tree = 0;
-static QPtrStack<Element> _stackElement;*/
+static QStack<Element*> _stackElement;*/
 
 #endif /* __STACK_H__ */

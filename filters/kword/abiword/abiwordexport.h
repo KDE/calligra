@@ -33,7 +33,6 @@
 #define ABIWORDEXPORT_H
 
 #include <QString>
-#include <q3cstring.h>
 
 #include <KoFilter.h>
 

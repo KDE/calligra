@@ -24,17 +24,17 @@
 
 #include <QString>
 #include <q3valuestack.h>
-#include <q3valuevector.h>
-#include <q3valuelist.h>
+#include <QVector>
+#include <QList>
 
 #include "aielement.h"
 #include "aicolor.h"
 
 
-const void arraytoa (const Q3ValueVector<AIElement> &data);
+const void arraytoa (const QVector<AIElement> &data);
 const void elementtoa (const AIElement &data);
 const void stacktoa (const Q3ValueStack<AIElement> &data);
-const void stacktoa2 (const Q3ValueStack<Q3ValueVector<AIElement> >&data);
+const void stacktoa2 (const Q3ValueStack<QVector<AIElement> >&data);
 
 class GStateHandlerBase;
 class StructureHandlerBase;
@@ -235,10 +235,10 @@ protected:
 private:
   bool m_ignoring;
   Q3ValueStack<AIElement> m_stack;
-  Q3ValueStack<Q3ValueVector<AIElement> > m_arrayStack;
-  Q3ValueStack<Q3ValueVector<AIElement> > m_blockStack;
+  Q3ValueStack<QVector<AIElement> > m_arrayStack;
+  Q3ValueStack<QVector<AIElement> > m_blockStack;
   DataSink m_sink;
-  Q3ValueList<QString> m_modules;
+  QList<QString> m_modules;
   ContinuationMode m_continuationMode;
 
   const double getDoubleValue(void);
@@ -342,15 +342,15 @@ class GStateHandlerBase
 
     virtual void gotFillColor (AIColor &) {}
     virtual void gotStrokeColor (AIColor &) {}
-    virtual void gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const Q3ValueVector<AIElement>& transformData);
-    virtual void gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const Q3ValueVector<AIElement>& transformData);
+    virtual void gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QVector<AIElement>& transformData);
+    virtual void gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QVector<AIElement>& transformData);
     virtual void gotFlatness (double) {}
     virtual void gotLineWidth (double) {}
     virtual void gotLineCaps (int) {}
     virtual void gotLineJoin (int) {}
     virtual void gotMiterLimit (double) {}
     virtual void gotWindingOrder (int) {}
-    virtual void gotDash (const Q3ValueVector<AIElement>& /*dashData*/, double /*phase*/) {}
+    virtual void gotDash (const QVector<AIElement>& /*dashData*/, double /*phase*/) {}
 };
 
 class StructureHandlerBase {
@@ -401,7 +401,7 @@ class DocumentHandlerBase {
     virtual void gotTemplate (const char *) {}
     virtual void gotTitle (const char *) {}
     virtual void gotCreator (const char *) {}
-    virtual void gotPatternDefinition (const char * /*name*/, const Q3ValueVector<AIElement>& /*layerData*/, double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
+    virtual void gotPatternDefinition (const char * /*name*/, const QVector<AIElement>& /*layerData*/, double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
     virtual void gotCreationDate (const char * /*val1*/,const char * /*val2*/) {}
     virtual void gotProcessColors (int /*colors*/) {}
 };
@@ -420,7 +420,7 @@ class EmbeddedHandlerBase {
    	 EmbeddedHandlerBase() {}
 	  virtual ~EmbeddedHandlerBase() {}
 
-    virtual void gotGsaveIncludeDocument (const Q3ValueVector<AIElement>& /*transData*/, int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/, const char* /*fileName*/) {}
+    virtual void gotGsaveIncludeDocument (const QVector<AIElement>& /*transData*/, int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/, const char* /*fileName*/) {}
     virtual void gotGrestore () {}
 };
 
@@ -429,9 +429,9 @@ class TextHandlerBase {
    	 TextHandlerBase() {}
  	   virtual ~TextHandlerBase() {}
 
-    virtual void gotFontEncoding (const Q3ValueVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName);
+    virtual void gotFontEncoding (const QVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName);
     virtual void gotFontDefinition (const char*fontName, double size, double leading, double kerning, TextAlign align);
-    virtual void gotTextBlockBegin (const Q3ValueVector<AIElement>& transData, TextOperation mode);
+    virtual void gotTextBlockBegin (const QVector<AIElement>& transData, TextOperation mode);
     virtual void gotTextOutput (const char*text, int length=-1);
     virtual void gotTextBlockEnd ();
 };

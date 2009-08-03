@@ -33,7 +33,7 @@
 #include <QDateTime>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -136,7 +136,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
     const bool oldInTable = m_inTable;
     m_inTable = true;
 
-    Q3ValueList<TableCell>::ConstIterator itCell;
+    QList<TableCell>::ConstIterator itCell;
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
@@ -171,9 +171,9 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
         textCellHeader += WritePositiveKeyword("\\cellx",qRound(PT_TO_TWIP(frame.right) - m_paperMarginRight)); //right border of cell
 
         QString endOfParagraph;
-        Q3ValueList<ParaData> *paraList = (*itCell).paraList;
-        Q3ValueList<ParaData>::ConstIterator it;
-		Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+        QList<ParaData> *paraList = (*itCell).paraList;
+        QList<ParaData>::ConstIterator it;
+		QList<ParaData>::ConstIterator end(paraList->end());
         for (it=paraList->begin();it!=end;++it)
         {
             rowText += endOfParagraph;
@@ -726,12 +726,12 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     // Footnote
                     QString value = (*paraFormatDataIt).variable.getFootnoteValue();
                     bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                    Q3ValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
                     if( paraList )
                     {
                         QString fstr;
-                        Q3ValueList<ParaData>::ConstIterator it;
-                        Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+                        QList<ParaData>::ConstIterator it;
+                        QList<ParaData>::ConstIterator end(paraList->end());
                         const QString prefixSaved = m_prefix;
                         m_prefix.clear();
                         for (it=paraList->begin();it!=end;++it)
@@ -841,8 +841,8 @@ bool RTFWorker::doHeader(const HeaderData& header)
 
     str += " {";
 
-    Q3ValueList<ParaData>::ConstIterator it;
-	Q3ValueList<ParaData>::ConstIterator end(header.para.end());
+    QList<ParaData>::ConstIterator it;
+	QList<ParaData>::ConstIterator end(header.para.end());
     for (it=header.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
@@ -876,8 +876,8 @@ bool RTFWorker::doFooter(const FooterData& footer)
 
     str += " {";
 
-    Q3ValueList<ParaData>::ConstIterator it;
-	Q3ValueList<ParaData>::ConstIterator end(footer.para.end());
+    QList<ParaData>::ConstIterator it;
+	QList<ParaData>::ConstIterator end(footer.para.end());
     for (it=footer.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
@@ -1016,7 +1016,7 @@ void RTFWorker::writeColorData(void)
 {
     *m_streamOut << "{\\colortbl;";
     uint count;
-    Q3ValueList<QColor>::ConstIterator it;
+    QList<QColor>::ConstIterator it;
     for (count=0, it=m_colorList.begin();
         it!=m_colorList.end();
         count++, it++)
@@ -1034,7 +1034,7 @@ void RTFWorker::writeStyleData(void)
     *m_streamOut << "{\\stylesheet" << m_eol;
 
     uint count;
-    Q3ValueList<LayoutData>::ConstIterator it;
+    QList<LayoutData>::ConstIterator it;
     for (count=0, it=m_styleList.begin();
         it!=m_styleList.end();
         count++, it++)
@@ -1048,7 +1048,7 @@ void RTFWorker::writeStyleData(void)
         // \snext must be the last keyword before the style name
         // Find the number of the following style
         uint counter=0;  // counts position in style table starting at 0
-        Q3ValueList < LayoutData > ::ConstIterator it2;
+        QList < LayoutData > ::ConstIterator it2;
         for( it2 =  m_styleList.begin(); it2 != m_styleList.end(); counter++, ++it2 )
         {
             if ( (*it2).styleName == (*it).styleFollowing )
@@ -1674,7 +1674,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
     uint counter=1;  // counts position in color table starting at 1
     QString strColor(markup);  // Holds RTF markup for the color
 
-    Q3ValueList < QColor > ::ConstIterator it;
+    QList < QColor > ::ConstIterator it;
 
     // search color table for this color
     for( it =  m_colorList.begin(); it != m_colorList.end(); counter++, ++it )
@@ -1701,8 +1701,8 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
     uint counter=0;  // counts position in style table starting at 0
     QString strMarkup("\\s");  // Holds RTF markup for the style
 
-    Q3ValueList < LayoutData > ::ConstIterator it;
-	Q3ValueList < LayoutData > ::ConstIterator end(m_styleList.end());
+    QList < LayoutData > ::ConstIterator it;
+	QList < LayoutData > ::ConstIterator end(m_styleList.end());
 
     // search color table for this color
     for( it =  m_styleList.begin(); it != end; counter++, ++it )
