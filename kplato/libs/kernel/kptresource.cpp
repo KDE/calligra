@@ -1048,7 +1048,7 @@ bool ResourceRequest::load(KoXmlElement &element, Project &project) {
     //kDebug();
     m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
-        kWarning()<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
+        kWarning()<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id");
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -1232,7 +1232,7 @@ bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
             if (r->load(e, project))
                 addResourceRequest(r);
             else {
-                kError()<<"Failed to load resource request"<<endl;
+                kError()<<"Failed to load resource request";
                 delete r;
             }
         }

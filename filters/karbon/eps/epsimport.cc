@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory( "kofficefilter
 EpsImport::EpsImport( QObject*parent, const QStringList& )
     : KoFilter(parent)
 {
-    kDebug() << "###   ###   EPS Import Filter" << endl;
+    kDebug() << "###   ###   EPS Import Filter";
 }
 
 EpsImport::~EpsImport()

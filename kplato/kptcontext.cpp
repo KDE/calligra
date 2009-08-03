@@ -58,11 +58,11 @@ bool Context::load( const KoXmlDocument &document ) {
     KoXmlElement elm = m_document.documentElement();
     QString value = elm.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!";
 //        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
 //        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
         return false;
     }
@@ -159,7 +159,7 @@ bool Context::load( const KoXmlDocument &document ) {
                             }
                         }
                     } else {
-                        kError()<<"Unknown tag: "<<e.tagName()<<endl;
+                        kError()<<"Unknown tag: "<<e.tagName();
                     }
                 }
             }*/
@@ -169,7 +169,6 @@ bool Context::load( const KoXmlDocument &document ) {
 }
 
 QDomDocument Context::save( const View *view ) const {
-    kDebug()<<endl;
     QDomDocument document( "kplato.context" );
 
     document.appendChild( document.createProcessingInstruction(

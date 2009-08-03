@@ -164,7 +164,7 @@ bool Account::load(KoXmlElement &element, Project &project) {
                 m_accountList.append(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed"<<endl;
+                kWarning()<<"Loading failed";
                 delete child;
             }
         }
@@ -467,12 +467,12 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
     //kDebug();
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
-        kError()<<"No node id"<<endl;
+        kError()<<"No node id";
         return false;
     }
     m_node = project.findNode(m_nodeId);
     if (m_node == 0) {
-        kError()<<"Cannot not find node with id: "<<m_nodeId<<endl;
+        kError()<<"Cannot not find node with id: "<<m_nodeId;
         return false;
     }
     setRunning(element.attribute("running-cost").toInt());
@@ -614,7 +614,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
                 insert(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<"Loading failed"<<endl;
+                kWarning()<<"Loading failed";
                 delete child;
             }
         }
@@ -622,7 +622,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
     if (element.hasAttribute("default-account")) {
         m_defaultAccount = findAccount(element.attribute("default-account"));
         if (m_defaultAccount == 0) {
-            kWarning()<<"Could not find default account."<<endl;
+            kWarning()<<"Could not find default account.";
         }
     }
     return true;
@@ -694,7 +694,7 @@ bool Accounts::insertId(Account *account) {
         return true;
     }
     //TODO: Create unique id?
-    kWarning()<<"Insert failed, creating unique id"<<endl;
+    kWarning()<<"Insert failed, creating unique id";
     account->setName( uniqueId( account->name() ) ); // setName() calls insertId !!
     return false;
 }

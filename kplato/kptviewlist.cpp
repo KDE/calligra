@@ -380,7 +380,6 @@ ViewListItem *ViewListWidget::category( const KoView *view ) const
 
 QString ViewListWidget::uniqueTag( const QString &seed ) const
 {
-    //kDebug() << endl;
     QString tag = seed;
     for ( int i = 1; findItem( tag ); ++i ) {
         tag = QString("%1-%2").arg( seed ).arg( i );

@@ -611,7 +611,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     KoXmlElement bodyElement = KoXml::namedItemNS( realBody,
                                                    KoXmlNS::office, "chart" );
     if ( bodyElement.isNull() ) {
-        kError(32001) << "No office:chart found!" << endl;
+        kError(32001) << "No office:chart found!";
 
         KoXmlElement  childElem;
         QString       localName;
@@ -669,7 +669,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     KoXmlElement  bodyElem ( KoXml::namedItemNS( content,
 						KoXmlNS::office, "body" ) );
     if ( bodyElem.isNull() ) {
-        kError(32001) << "No office:body found!" << endl;
+        kError(32001) << "No office:body found!";
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return false;
     }
@@ -678,7 +678,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     KoXmlElement officeChartElem = KoXml::namedItemNS( bodyElem,
 						      KoXmlNS::office, "chart" );
     if ( officeChartElem.isNull() ) {
-        kError(32001) << "No office:chart found!" << endl;
+        kError(32001) << "No office:chart found!";
         KoXmlElement  childElem;
         QString      localName;
         forEachElement( childElem, bodyElem ) {
@@ -775,10 +775,10 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
     m_colLabels.clear();
     KoXmlElement tableHeaderRows = KoXml::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
     if ( tableHeaderRows.isNull() )
-        kWarning(35001) << "No table-header-rows element found!" << endl;
+        kWarning(35001) << "No table-header-rows element found!";
     KoXmlElement tableHeaderRow = KoXml::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
     if ( tableHeaderRow.isNull() )
-        kWarning(35001) << "No table-row inside table-header-rows!" << endl;
+        kWarning(35001) << "No table-row inside table-header-rows!";
 
     int cellNum = 0;
     forEachElement( elem, tableHeaderRow ) {
@@ -816,11 +816,11 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 
     kDebug(35001) <<"numberHeaderColumns=" << numberHeaderColumns
 		   << " numberDataColumns=" << numberDataColumns
-                   << " numberDataRows=" << numberDataRows << endl;
+                   << " numberDataRows=" << numberDataRows;
 
     if ( (int)m_rowLabels.count() != numberDataRows)
         kWarning(35001) << "Got " << m_rowLabels.count()
-			 << " row labels, expected " << numberDataRows << endl;
+			 << " row labels, expected " << numberDataRows;
 
     m_currentData.expand( numberDataRows, numberDataColumns );
     m_currentData.setUsedCols( numberDataColumns );
@@ -840,7 +840,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
                     if ( cellNum > numberHeaderColumns ) {
                         QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString() );
                         if ( valueType != "float" )
-                            kWarning(35001) << "Don't know how to handle value-type " << valueType << endl;
+                            kWarning(35001) << "Don't know how to handle value-type " << valueType;
                         else {
                             QString  value = cellElem.attributeNS( KoXmlNS::office, "value", QString() );
                             double   val = value.toDouble();
@@ -1067,13 +1067,13 @@ QDomDocument KChartPart::saveXML()
                 default: {
                     valType = "(unknown)";
                     kDebug(35001) <<"ERROR: cell" << i <<"," << j
-				   << " has unknown type." << endl;
+				   << " has unknown type.";
                 }
             }
 
             e.setAttribute( "valType", valType );
             //kDebug(35001) <<"      cell" << i <<"," << j
-	    //	   << " saved with type '" << valType << "'." << endl;
+	    //	   << " saved with type '" << valType << "'." ;
             switch ( value.type() ) {
                 case QVariant::String:  e.setAttribute( "value", value.toString() );
                               break;
@@ -1085,7 +1085,7 @@ QDomDocument KChartPart::saveXML()
                     e.setAttribute( "value", "" );
                     if( QVariant::Invalid != value.type() )
                         kDebug(35001) <<"ERROR: cell" << i <<"," << j
-				       << " has unknown type." << endl;
+				       << " has unknown type." ;
                 }
             }
         }

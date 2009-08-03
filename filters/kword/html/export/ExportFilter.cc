@@ -205,7 +205,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 if (!picture.save(strImagePath, "svg"))
                 {
                     kError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
-                        << " to " << strImageName << endl;
+                        << " to " << strImageName;
                     return false;
                 }
 */
@@ -234,7 +234,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
             if ( !file.open (QIODevice::WriteOnly) )
             {
-                kError(30503) << "Unable to open image output file!" << endl;
+                kError(30503) << "Unable to open image output file!";
                 return false;
             }
 
@@ -378,7 +378,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 else
                 {
                     kWarning(30503) << "Unknown anchor type: "
-                        << (*paraFormatDataIt).frameAnchor.type << endl;
+                        << (*paraFormatDataIt).frameAnchor.type;
                 }
             }
         }
@@ -491,13 +491,13 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kError(30503) << "No output file! Aborting!" << endl;
+        kError(30503) << "No output file! Aborting!";
         return false;
     }
 
     if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
-        kError(30503) << "Unable to open output file!" << endl;
+        kError(30503) << "Unable to open output file!";
         return false;
     }
 
@@ -505,7 +505,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!getCodec())
     {
-        kError(30503) << "Could not create QTextCodec! Aborting" << endl;
+        kError(30503) << "Could not create QTextCodec! Aborting";
         return false;
     }
 

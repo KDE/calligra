@@ -92,12 +92,12 @@ public slots:
     void setStyle(QObject* style) {
         ParagraphStyle* s = dynamic_cast<ParagraphStyle*>(style);
         if (! s) {
-            kWarning() << "TextList.setStyle Invalid ParagraphStyle object" << endl;
+            kWarning() << "TextList.setStyle Invalid ParagraphStyle object";
             return;
         }
         KoParagraphStyle* ps = s->style();
         if (! ps) {
-            kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
+            kWarning() << "TextList.setStyle Invalid KoParagraphStyle object";
             return;
         }
         const int count = m_list ? m_list->count() : 0;

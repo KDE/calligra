@@ -417,12 +417,12 @@ bool CalendarWeekdays::load( KoXmlElement &element, XMLLoaderObject &status ) {
     bool ok;
     int dayNo = QString(element.attribute("day","-1")).toInt(&ok);
     if (dayNo < 0 || dayNo > 6) {
-        kError()<<"Illegal weekday: "<<dayNo<<endl;
+        kError()<<"Illegal weekday: "<<dayNo;
         return true; // we continue anyway
     }
     CalendarDay *day = m_weekdays.value( dayNo + 1 );
     if ( day == 0 ) {
-        kError()<<"No weekday: "<<dayNo<<endl;
+        kError()<<"No weekday: "<<dayNo;
         return false;
     }
     if (!day->load( element, status ) )
@@ -711,7 +711,7 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
     if ( tz.isValid() ) {
         setTimeZone( tz );
-    } else kWarning()<<"No timezone specified, use default (local)"<<endl;
+    } else kWarning()<<"No timezone specified, use default (local)";
     bool m_default = (bool)element.attribute("default","0").toInt();
     if ( m_default ) {
         status.project().setDefaultCalendar( this );
@@ -731,19 +731,19 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
             if ( day->load( e, status ) ) {
                 if (!day->date().isValid()) {
                     delete day;
-                    kError()<<m_name<<": Failed to load calendarDay - Invalid date"<<endl;
+                    kError()<<m_name<<": Failed to load calendarDay - Invalid date";
                 } else {
                     CalendarDay *d = findDay(day->date());
                     if (d) {
                         // already exists, keep the new
                         delete takeDay(d);
-                        kWarning()<<m_name<<" Load calendarDay - Date already exists"<<endl;
+                        kWarning()<<m_name<<" Load calendarDay - Date already exists";
                     }
                     addDay(day);
                 }
             } else {
                 delete day;
-                kError()<<"Failed to load calendarDay"<<endl;
+                kError()<<"Failed to load calendarDay";
                 return true; //false; don't throw away the whole calendar
             }
         }
@@ -896,7 +896,7 @@ Duration Calendar::effort(const QDate &date, const QTime &start, int length, Sch
         } else if (day->state() == CalendarDay::NonWorking) {
             return Duration::zeroDuration;
         } else {
-            kError()<<"Invalid state: "<<day->state()<<endl;
+            kError()<<"Invalid state: "<<day->state();
             return Duration::zeroDuration;
         }
     }
@@ -920,7 +920,7 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
     Duration eff;
     if (!start.isValid() || !end.isValid() || end < start) {
         if ( sch && sch->resource() ) kDebug()<<sch->resource()->name()<<sch->name()<<"Available:"<<sch->resource()->availableFrom()<<sch->resource()->availableUntil();
-        kError()<<"Illegal datetime: "<<start<<", "<<end<<endl;
+        kError()<<"Illegal datetime: "<<start<<", "<<end;
         return eff;
     }
     if ( start == end ) {
@@ -1045,7 +1045,7 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
             return dti;
         }
     }
-    //kWarning()<<"Didn't find an interval ("<<start<<", "<<end<<")"<<endl;
+    //kWarning()<<"Didn't find an interval ("<<start<<", "<<end<<")";
     return DateTimeInterval(DateTime(), DateTime());
 }
 
@@ -1246,8 +1246,8 @@ bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
         if (e.tagName() == "calendar") {
             // pre 0.6 version stored base calendar in standard worktime
             if ( status.version() >= "0.6" ) {
-                kWarning()<<"Old format, calendar in standard worktime"<<endl;
-                kWarning()<<"Tries to load anyway"<<endl;
+                kWarning()<<"Old format, calendar in standard worktime";
+                kWarning()<<"Tries to load anyway";
             }
             // try to load anyway
             Calendar *calendar = new Calendar;
@@ -1258,7 +1258,7 @@ bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
                 status.setBaseCalendar( calendar );
             } else {
                 delete calendar;
-                kError()<<"Failed to load calendar"<<endl;
+                kError()<<"Failed to load calendar";
             }
         }
     }

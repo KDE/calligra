@@ -31,7 +31,7 @@ namespace KPlato
 
 void WorkPackageModel::setProject( Project *project )
 {
-    kDebug()<<m_project<<"->"<<project<<endl;
+    kDebug()<<m_project<<"->"<<project;
     m_project = project;
     reset();
 }
@@ -198,7 +198,7 @@ QVariant WorkPackageModel::data( const QModelIndex &index, int role ) const
         case 8: result = lastAction( r, role ); break;
 
         default:
-            //kDebug()<<"Invalid column number: "<<index.column()<<endl;;
+            //kDebug()<<"Invalid column number: "<<index.column();;
             break;
     }
     return result;

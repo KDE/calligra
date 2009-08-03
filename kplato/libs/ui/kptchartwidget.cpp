@@ -31,14 +31,14 @@ namespace KPlato
 
 ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    kDebug() << "------------> ChartWidget :: Constructor"<<endl;
+    kDebug() << "------------> ChartWidget :: Constructor";
     is_bcwp_draw=false;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
     clear();
     
-    kDebug() << "ChartWidget :: Constructor Ended"<<endl;
+    kDebug() << "ChartWidget :: Constructor Ended";
 }
 
 void ChartWidget::clear() 

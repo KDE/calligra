@@ -316,7 +316,7 @@ void CalendarDayView::setCurrentCalendar( Calendar *calendar )
 
 void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
 {
-//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at"<<pos;
+//    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )

@@ -356,7 +356,7 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
             if( !m_denominator->readMathML( tmp ) )
                 return false;
         } else {
-            kDebug(39001) << "Too many arguments to mfrac" << endl;
+            kDebug(39001) << "Too many arguments to mfrac";
 	}
     }
     Q_ASSERT( m_numerator );

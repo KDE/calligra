@@ -133,7 +133,7 @@ void Document::analyze(const QDomNode node)
 									_pixmaps.append(elt);
 								break;
 							default:
-									kError(30522) << "Element frame type no supported or type unexpected." << endl;
+									kError(30522) << "Element frame type no supported or type unexpected.";
 						}
 					}
 					break;
@@ -421,7 +421,7 @@ QString Document::extractData(const QString& key)
 	{
 		if(!getStorage()->open(data))
 		{
-			kError(30522) << "Unable to open " << data << endl;
+			kError(30522) << "Unable to open " << data;
 			return QString("");
 		}
 	}
@@ -443,7 +443,7 @@ QString Document::extractData(const QString& key)
 	tempFile.close();
 	if(!getStorage()->close())
 	{
-		kError(30522) << "Unable to close " << data << endl;
+		kError(30522) << "Unable to close " << data;
 		return QString("");
 	}
 	kDebug(30522) <<"temp filename :" << tempFile.fileName();

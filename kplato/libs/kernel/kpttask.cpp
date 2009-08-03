@@ -349,14 +349,14 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             if ( r ) {
                 kWarning()<<"Multiple requests to same group, loading into existing group";
                 if ( ! r->load( e, status.project() ) ) {
-                    kError()<<"Failed to load resource request"<<endl;
+                    kError()<<"Failed to load resource request";
                 }
             } else {
                 r = new ResourceGroupRequest();
                 if (r->load(e, status.project())) {
                     addRequest(r);
                 } else {
-                    kError()<<"Failed to load resource request"<<endl;
+                    kError()<<"Failed to load resource request";
                     delete r;
                 }
             }
@@ -375,7 +375,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                         sch->setNode(this);
                         addSchedule(sch);
                     } else {
-                        kError()<<"Failed to load schedule"<<endl;
+                        kError()<<"Failed to load schedule";
                         delete sch;
                     }
                 }
@@ -1077,9 +1077,9 @@ DateTime Task::calculateEarlyFinish(int use) {
             default:
                 break;
         }
-        //kDebug()<<m_name<<""<<earliestStart.toString()<<endl
+        //kDebug()<<m_name<<""<<earliestStart.toString();
     } else if (type() == Node::Type_Summarytask) {
-        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name;
     } else { // ???
         m_durationForward = Duration::zeroDuration;
     }
@@ -1266,7 +1266,7 @@ DateTime Task::calculateLateStart(int use) {
         }
         //kDebug()<<m_name<<""<<cs->lateFinish;
     } else if (type() == Node::Type_Summarytask) {
-        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name;
     } else { // ???
         m_durationBackward = Duration::zeroDuration;
     }
@@ -1622,7 +1622,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         //shouldn't come here
         cs->endTime = cs->startTime;
         cs->duration = cs->endTime - cs->startTime;
-        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name;
     }
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
@@ -1754,7 +1754,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::ALAP:
         {
             // cs->endTime calculated above
-            //kDebug()<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish<<endl;
+            //kDebug()<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish;
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->endTime = workFinishBefore(cs->endTime);
             }
@@ -1982,7 +1982,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         //shouldn't come here
         cs->startTime = cs->endTime;
         cs->duration = cs->endTime - cs->startTime;
-        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name;
     }
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError( i18n( "Failed to schedule within project target time" ) );
@@ -2063,7 +2063,7 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
         }
         dur = m_requests.duration(time, effort, m_currentSchedule, backward);
         if (dur == Duration::zeroDuration) {
-            kWarning()<<"zero duration: Resource not available"<<endl;
+            kWarning()<<"zero duration: Resource not available";
             m_currentSchedule->resourceNotAvailable = true;
             dur = effort; //???
         }
@@ -2075,7 +2075,7 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     if (m_estimate->type() == Estimate::Type_Length) {
         return length( time, dur, backward );
     }
-    kError()<<"Unsupported estimate type: "<<m_estimate->type()<<endl;
+    kError()<<"Unsupported estimate type: "<<m_estimate->type();
     return dur;
 }
 
@@ -2465,7 +2465,7 @@ bool Task::calcCriticalPath(bool fromEnd)
 
 void Task::calcFreeFloat()
 {
-    //kDebug()<<m_name<<endl;
+    //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         Node::calcFreeFloat();
         return;
@@ -2489,7 +2489,7 @@ void Task::calcFreeFloat()
     }
     if ( t.isValid() && t > cs->endTime ) {
         cs->freeFloat = t - cs->endTime;
-        //kDebug()<<m_name<<": "<<cs->freeFloat.toString()<<endl;
+        //kDebug()<<m_name<<": "<<cs->freeFloat.toString();
     }
 }
 
@@ -3088,7 +3088,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                         date = QDate::fromString( s, Qt::ISODate );
                     }
                     if ( !date.isValid() ) {
-                        kWarning()<<"Invalid date: "<<date<<s<<endl;
+                        kWarning()<<"Invalid date: "<<date<<s;
                         continue;
                     }
                     Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
@@ -3100,7 +3100,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                                 QString id = el.attribute( "id" );
                                 Resource *r = status.project().resource( id );
                                 if ( r == 0 ) {
-                                    kWarning()<<"Cannot find resource, id="<<id<<endl;
+                                    kWarning()<<"Cannot find resource, id="<<id;
                                     continue;
                                 }
                                 UsedEffort *ue = new UsedEffort();

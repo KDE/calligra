@@ -334,7 +334,7 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
                 return false;
         }
         else {
-            kDebug(39001) << "Too many arguments to mroot" << endl;
+            kDebug(39001) << "Too many arguments to mroot";
             return false;
         }
     }

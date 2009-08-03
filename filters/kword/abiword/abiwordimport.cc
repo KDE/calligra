@@ -174,7 +174,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
     else
     {//we are not nested correctly, so consider it a parse error!
         kError(30506) << "parse error <c> tag nested neither in <p> nor in <c> nor in <a> but in "
-            << stackCurrent->itemName << endl;
+            << stackCurrent->itemName;
         return false;
     }
     return true;
@@ -205,7 +205,7 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
     }
     else
     {
-        kError(30506) << "Internal error (in charactersElementC)" << endl;
+        kError(30506) << "Internal error (in charactersElementC)";
     }
 
 	return true;
@@ -224,7 +224,7 @@ bool EndElementC (StackItem* stackItem, StackItem* stackCurrent)
     }
     else
     {
-        kError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)";
         return false;
     }
     return true;
@@ -253,7 +253,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
         if (stackItem->strTemp1[0]=='#')
         {
             kWarning(30506) << "Anchor <a> to bookmark: " << stackItem->strTemp1 << endl
-                << " Processing <a> like <c>" << endl;
+                << " Processing <a> like <c>";
             // We have a reference to a bookmark. Therefore treat it as a normal content <c>
             return StartElementC(stackItem, stackCurrent, attributes);
         }
@@ -261,7 +261,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
     else
     {//we are not nested correctly, so consider it a parse error!
         kError(30506) << "parse error <a> tag not a child of <p> but of "
-            << stackCurrent->itemName << endl;
+            << stackCurrent->itemName;
         return false;
     }
     return true;
@@ -278,7 +278,7 @@ static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocu
 {
     if (stackItem->elementType!=ElementTypeAnchor)
     {
-        kError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)";
         return false;
     }
 
@@ -380,7 +380,7 @@ bool EndElementP (StackItem* stackItem)
 {
     if (stackItem->elementType!=ElementTypeParagraph)
     {
-        kError(30506) << "Wrong element type!! Aborting! (in endElementP)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementP)";
         return false;
     }
     stackItem->stackElementText.normalize();
@@ -447,7 +447,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     else
     {//we are not nested correctly, so consider it a parse error!
         kError(30506) << "parse error <field> tag not nested in <p> but in "
-            << stackCurrent->itemName << endl;
+            << stackCurrent->itemName;
         return false;
     }
     return true;
@@ -480,7 +480,7 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
         kDebug(30506) <<" Style name:" << strStyleName << endl
             << " Based on: " << strBasedOn  << endl
             << " Level: " << level << endl
-            << " Props: " << attributes.value("props") << endl;
+            << " Props: " << attributes.value("props");
     }
 
     return true;
@@ -494,7 +494,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     if ((stackCurrent->elementType!=ElementTypeParagraph) && (stackCurrent->elementType!=ElementTypeContent))
     {//we are not nested correctly, so consider it a parse error!
         kError(30506) << "parse error <image> tag nested neither in <p> nor in <c> but in "
-            << stackCurrent->itemName << endl;
+            << stackCurrent->itemName;
         return false;
     }
     stackItem->elementType=ElementTypeEmpty;
@@ -626,12 +626,12 @@ bool StructureParser::EndElementD (StackItem* stackItem)
 {
     if (stackItem->elementType!=ElementTypeRealData)
     {
-        kError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementD)";
         return false;
     }
     if (!m_chain)
     {
-        kError(30506) << "No filter chain! Aborting! (in endElementD)" << endl;
+        kError(30506) << "No filter chain! Aborting! (in endElementD)";
         return false;
     }
 
@@ -656,7 +656,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     else
     {
         kWarning(30506) << "Unknown or unsupported mime type: "
-            << stackItem->strTemp1 << endl;
+            << stackItem->strTemp1;
         return true;
     }
 
@@ -681,7 +681,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     KoStoreDevice* out=m_chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
     {
-        kError(30506) << "Unable to open output file for: " << stackItem->fontName << " Storage: " << strStoreName << endl;
+        kError(30506) << "Unable to open output file for: " << stackItem->fontName << " Storage: " << strStoreName;
         return false;
     }
 
@@ -741,14 +741,14 @@ bool StructureParser::EndElementM (StackItem* stackItem)
 {
     if (stackItem->elementType!=ElementTypeRealData)
     {
-        kError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementM)";
         return false;
     }
 
     if (stackItem->strTemp1.isEmpty())
     {
         // Probably an internal error!
-        kError(30506) << "Key name was erased! Aborting! (in endElementM)" << endl;
+        kError(30506) << "Key name was erased! Aborting! (in endElementM)";
         return false;
     }
 
@@ -788,7 +788,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     else
     {//we are not nested correctly, so consider it a parse error!
         kError(30506) << "parse error <br> tag not nested in <p> or <c> but in "
-            << stackCurrent->itemName << endl;
+            << stackCurrent->itemName;
         return false;
     }
     return true;
@@ -816,7 +816,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
 
     if (!nodeList.count())
     {
-        kError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)";
         return false;
     }
 
@@ -824,7 +824,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
     if (newNode.isNull())
     {
-        kError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)";
         return false;
     }
     paragraphElementOut.appendChild(newNode);
@@ -833,7 +833,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     QDomElement oldLayoutElement=nodeList.item(0).toElement();
     if (oldLayoutElement.isNull())
     {
-        kError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementPBR)";
         return false;
     }
     // We have now to add a element <PAGEBREAKING>
@@ -901,8 +901,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         QString strUnits = attributes.value("units").trimmed();
 
         kDebug(30506) <<"Explicit page size:"
-         << height << " " << strUnits << " x " << width << " " << strUnits
-         << endl;
+         << height << " " << strUnits << " x " << width << " " << strUnits;
 
         if (strUnits=="cm")
         {
@@ -937,7 +936,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         // At least one of the two values is ridiculous
     {
         kWarning(30506) << "Page width or height is too small: "
-         << kwordHeight << "x" << kwordWidth << endl;
+         << kwordHeight << "x" << kwordWidth;
         // As we have no correct page size, we assume we have A4
         kwordFormat = KoPageFormat::IsoA4Size;
         kwordHeight = CentimetresToPoints(29.7);
@@ -948,7 +947,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 
     if (paperElement.isNull())
     {
-        kError(30506) << "<PAPER> element cannot be accessed! Aborting!" << endl;
+        kError(30506) << "<PAPER> element cannot be accessed! Aborting!";
         return false;
     }
 
@@ -969,7 +968,7 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
 
     if (!clearStackUntilParagraph(auxilaryStack))
     {
-        kError(30506) << "Could not clear stack until a paragraph!" << endl;
+        kError(30506) << "Could not clear stack until a paragraph!";
         return false;
     }
 
@@ -1046,7 +1045,7 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
 {
     if (stackItem->elementType!=ElementTypeIgnoreWord)
     {
-        kError(30506) << "Wrong element type!! Aborting! (in endElementIW)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementIW)";
         return false;
     }
     QDomElement wordElement=mainDocument.createElement("SPELLCHECKIGNOREWORD");
@@ -1172,7 +1171,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 #if 1
     if (stackCurrent->elementType!=ElementTypeTable)
     {
-        kError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)";
         return false;
     }
 
@@ -1183,7 +1182,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 
     if (tableName.isEmpty())
     {
-        kError(30506) << "Table name is empty! Aborting!" << endl;
+        kError(30506) << "Table name is empty! Aborting!";
         return false;
     }
 
@@ -1250,7 +1249,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 
     if (structureStack.isEmpty())
     {
-        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)";
         return false;
     }
 
@@ -1259,7 +1258,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 
     if (!stackItem)
     {
-        kError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
+        kError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)";
         return false;
     }
 
@@ -1308,7 +1307,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         else
         {
             kError(30506) << "Forced column break found out of turn! Aborting! Parent: "
-                << stackCurrent->itemName <<endl;
+                << stackCurrent->itemName;
             success=false;
         }
     }
@@ -1328,7 +1327,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         else
         {
             kError(30506) << "Forced page break found out of turn! Aborting! Parent: "
-                << stackCurrent->itemName <<endl;
+                << stackCurrent->itemName;
             success=false;
         }
     }
@@ -1402,7 +1401,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
 
     if (structureStack.isEmpty())
     {
-        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)";
         return false;
     }
 
@@ -1450,7 +1449,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
         kError(30506) << "Found tag name: " << name
-            << " expected: " << stackItem->itemName << endl;
+            << " expected: " << stackItem->itemName;
     }
     delete stackItem;
     return success;
@@ -1474,7 +1473,7 @@ bool StructureParser :: characters ( const QString & ch )
     // DEBUG end
     if (structureStack.isEmpty())
     {
-        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::characters)";
         return false;
     }
 
@@ -1502,7 +1501,7 @@ bool StructureParser :: characters ( const QString & ch )
         {
             // We have a parsing error, so abort!
             kError(30506) << "Empty element "<< stackItem->itemName
-                <<" is not empty! Aborting! (in StructureParser::characters)" << endl;
+                <<" is not empty! Aborting! (in StructureParser::characters)";
         }
     }
     else if (stackItem->elementType==ElementTypeRealData)
@@ -1612,7 +1611,7 @@ bool StructureParser::endDocument(void)
 bool StructureParser::warning(const QXmlParseException& exception)
 {
     kWarning(30506) << "XML parsing warning: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     return true;
 }
 
@@ -1620,14 +1619,14 @@ bool StructureParser::error(const QXmlParseException& exception)
 {
     // A XML error is recoverable, so it is only a KDE warning
     kWarning(30506) << "XML parsing error: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     return true;
 }
 
 bool StructureParser::fatalError (const QXmlParseException& exception)
 {
     kError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
-        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+        << " col " << exception.columnNumber() << " message: " << exception.message();
     m_fatalerror=true;
     KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3",exception.lineNumber(),exception.columnNumber(), i18n( "QXml", exception.message() ) ),
         i18n("AbiWord Import Filter"),0);
@@ -1736,7 +1735,7 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
             {
                 // Something has gone wrong!
                 kError(30506) << "Cannot clear this element: "
-                    << item->itemName << endl;
+                    << item->itemName;
                 return false;
             }
         }
@@ -1793,13 +1792,13 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
 
     if ( !in )
     {
-        kError(30506) << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError(30506) << "Cannot create device for uncompressing! Aborting!";
         return KoFilter::FileNotFound; // ### TODO: better error?
     }
 
     if (!in->open(QIODevice::ReadOnly))
     {
-        kError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError(30506) << "Cannot open file for uncompressing! Aborting!";
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -1810,7 +1809,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
 
     if (!reader.parse( source ))
     {
-        kError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
+        kError(30506) << "Import: Parsing unsuccessful. Aborting!";
         delete in;
         if (!handler.wasFatalError())
         {
@@ -1829,7 +1828,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
     {
-        kError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
+        kError(30506) << "AbiWord Import unable to open output file! (Documentinfo)";
         KMessageBox::error(NULL, i18n("Unable to save document information."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
@@ -1843,7 +1842,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     out=m_chain->storageFile( "root", KoStore::Write );
     if(!out)
     {
-        kError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
+        kError(30506) << "AbiWord Import unable to open output file! (Root)";
         KMessageBox::error(NULL, i18n("Unable to save main document."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }

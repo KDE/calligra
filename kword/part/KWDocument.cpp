@@ -604,7 +604,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     for (int i = frameSetCount() - 1; i > -1; i--) {
         KWFrameSet *fs = frameSet(i);
         if (!fs) {
-            kWarning() << "frameset " << i << " is NULL!!" << endl;
+            kWarning() << "frameset " << i << " is NULL!!";
             m_lstFrameSet.remove(i);
             continue;
         }
@@ -614,24 +614,24 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             for (int f = fs->frameCount() - 1; f >= 0; f--) {
                 KWFrame *frame = fs->frame(f);
                 if (frame->left() < 0) {
-                    kWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame" << endl;
+                    kWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame";
                     frame->moveBy(0 - frame->left(), 0);
                 }
                 if (frame->right() > m_pageLayout.ptWidth) {
                     kWarning() << fs->name() << " frame " << f << " rightborder outside page ("
-                    << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
+                    << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking";
                     frame->setRight(m_pageLayout.ptWidth);
                 }
                 if (fs->isProtectSize())
                     continue; // don't make frames bigger of a protected frameset.
                 if (frame->height() < s_minFrameHeight) {
                     kWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
-                    << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
+                    << frame->height() << " is: " << s_minFrameHeight << ")";
                     frame->setHeight(s_minFrameHeight);
                 }
                 if (frame->width() < s_minFrameWidth) {
                     kWarning() << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
-                    << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
+                    << frame->width() << " is: " << s_minFrameWidth  << ")";
                     frame->setWidth(s_minFrameWidth);
                 }
             }
@@ -644,7 +644,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
                 fs->addFrame(frame);
             }
         } else if (fs->frameCount() == 0) {
-            kWarning() << "frameset " << i << " " << fs->name() << " has no frames" << endl;
+            kWarning() << "frameset " << i << " " << fs->name() << " has no frames";
             removeFrameSet(fs);
             if (fs->type() == FT_PART)
                 delete static_cast<KWPartFrameSet *>(fs)->getChild();
@@ -822,7 +822,7 @@ void KWDocument::printDebug()
     int i = 0;
     foreach (KWFrameSet *fs, m_frameSets) {
         kDebug(32001) << "Frameset" << i++ << ":" <<
-        fs->name() << '(' << fs << ')' << endl;
+        fs->name() << '(' << fs << ')';
         fs->printDebug();
     }
 
@@ -856,7 +856,7 @@ void KWDocument::printDebug()
                 << layout.bottom << layout.right << layout.pageEdge << layout.bindingSide;
     }
 
-    kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1) << endl;
+    kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1);
 }
 #endif
 

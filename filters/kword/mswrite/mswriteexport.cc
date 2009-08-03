@@ -158,7 +158,7 @@ public:
 			kDebug (30509) <<"Want to seek to" << absloc
 					  				<< " but EOF is at " << m_outfp_eof
 									<< "; so writing " << absloc - m_outfp_eof
-									<< " zeros" << endl;
+									<< " zeros";
 
 			if (fseek (m_outfp, m_outfp_eof, SEEK_SET))
 			{
@@ -275,7 +275,7 @@ public:
 		m_device = new WRIDevice;
 		if (!m_device)
 		{
-			kError (30509) << "Could not allocate memory for Device" << endl;
+			kError (30509) << "Could not allocate memory for Device";
 			return;
 		}
 
@@ -372,7 +372,7 @@ public:
 								<< format << ", "
 								<< width << ", "
 								<< height << ", "
-								<< orientation << ")" << endl;
+								<< orientation << ")";
 
 		// TODO: does "format" or "orientation" matter?
 
@@ -389,7 +389,7 @@ public:
 								<< top << ", "
 								<< left << ", "
 								<< bottom << ", "
-								<< right << ")" << endl;
+								<< right << ")";
 
 		m_topMargin = MSWrite::Word (Point2Twip (top));
 		m_leftMargin = MSWrite::Word (Point2Twip (left));
@@ -404,7 +404,7 @@ public:
 		m_pageNumberStart = MSWrite::Word (varSettings.startingPageNumber);
 
 		kDebug (30509) <<"doVariableSettings pageNumberStart="
-								<< m_pageNumberStart << endl;
+								<< m_pageNumberStart;
 		return true;
 	}
 
@@ -422,7 +422,7 @@ public:
 	{
 		kDebug (30509) <<"doPageInfo (headerType=" << headerType
 								<< ", footerType=" << footerType
-								<< ")" << endl;
+								<< ")";
 
 		m_headerType = headerType;
 		switch (headerType)
@@ -894,11 +894,9 @@ public:
 		// Note: not from LibMSWrite's wmf.cpp
 		kDebug (30509) <<"\t\tBIH: width(pt)=" << width
 								<< " height(pt)=" << height
-								<< " BPP=" << bih.getBitsPerPixel ()
-								<< endl;
+								<< " BPP=" << bih.getBitsPerPixel();
 		kDebug (30509) <<"\t\tBIH: xPixelsPerMeter=" << bih.getXPixelsPerMeter ()
-								<< " yPixelsPerMeter=" << bih.getYPixelsPerMeter ()
-								<< endl;
+								<< " yPixelsPerMeter=" << bih.getYPixelsPerMeter ();
 
 
 		// write WMF Header
@@ -979,7 +977,7 @@ public:
 	static double getDimen72DPI (const int measurement, const int dotsPerMeter)
 	{
 		kDebug (30509) <<"\t\tgetDimen72DPI (measurement=" << measurement
-								<< ",dotsPerMeter=" << dotsPerMeter << ")" << endl;
+								<< ",dotsPerMeter=" << dotsPerMeter << ")";
 
 		// Can't get resolution?
 		// Assume that we are already 72dpi
@@ -1010,7 +1008,7 @@ public:
 								const bool ignoreIndent)
 	{
 		kDebug (30509) <<"--------------------------" << endl
-								<< "processImage()" << endl;
+								<< "processImage()";
 
 
 		// Write supports images in 3 formats:
@@ -1056,7 +1054,7 @@ public:
 					KoWmfPaint wmf;
 					if (!wmf.load (imageData))
 					{
-						kError (30509) << "Could not open WMF - Invalid Format!" << endl;
+						kError (30509) << "Could not open WMF - Invalid Format!";
 						return true;
 					}
 
@@ -1089,7 +1087,7 @@ public:
 					}
 					else if (wmf.isEnhanced ())
 					{
-						kError (30509) << "Enhanced WMF unsupported by QWmf, internal error!" << endl;
+						kError (30509) << "Enhanced WMF unsupported by QWmf, internal error!";
 
 						return true;
 					}
@@ -1106,8 +1104,7 @@ public:
 
 				kDebug (30509) <<"\tNow WMF: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
-										<< " size=" << imageSize
-										<< endl;
+										<< " size=" << imageSize;
 
 				// we're done!
 				break;
@@ -1118,7 +1115,7 @@ public:
 				QImage image (imageData);
 				if (image.isNull ())
 				{
-					kError (30509) << "QImage IsNull: Line=" << __LINE__ << endl;
+					kError (30509) << "QImage IsNull: Line=" << __LINE__;
 					return true;
 				}
 
@@ -1130,8 +1127,7 @@ public:
 
 				kDebug (30509) <<"\tNow BMP: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
-										<< " size=" << imageSize
-										<< endl;
+										<< " size=" << imageSize;
 
 				QByteArray imageWMF;
 					// input device
@@ -1147,7 +1143,7 @@ public:
 					// BMP --> WMF
 					if (!BMP2WMF (inDevice, outDevice))
 					{
-						kError (30509) << "BMP to WMF conversion error" << endl;
+						kError (30509) << "BMP to WMF conversion error";
 						return true;
 					}
 
@@ -1164,7 +1160,7 @@ public:
 					QImage image (imageData);
 					if (image.isNull())
 					{
-						kError (30509) << "QImage isNull: Line=" << __LINE__ << endl;
+						kError (30509) << "QImage isNull: Line=" << __LINE__;
 						return true;
 					}
 
@@ -1174,14 +1170,13 @@ public:
 
 				kDebug (30509) <<"\tForeign format: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
-										<< " size=" << imageSize
-										<< endl;
+										<< " size=" << imageSize;
 
                 // read foreign image
                 QImage inImage;
                 if ( !inImage.loadFromData(imageData) )
                 {
-                    kError (30509) << "Could not read foreign format" << endl;
+                    kError (30509) << "Could not read foreign format";
                     return true;
                 }
 
@@ -1193,7 +1188,7 @@ public:
                 // write BMP
                 if ( !inImage.save( &outBuffer, "BMP" ) )
                 {
-                    kError (30509) << "Could not convert to BMP" << endl;
+                    kError (30509) << "Could not convert to BMP";
                     return true;
                 }
 
@@ -1205,13 +1200,12 @@ public:
 
 
 		kDebug (30509) <<"\tActual dimensions: width=" << imageActualWidth
-								<< " height=" << imageActualHeight << endl;
+								<< " height=" << imageActualHeight;
 
 		kDebug (30509) <<"\tKOffice position: left=" << frameAnchor.frame.left
 								<< " right=" << frameAnchor.frame.right
 								<< " top=" << frameAnchor.frame.top
-								<< " bottom=" << frameAnchor.frame.bottom
-								<< endl;
+								<< " bottom=" << frameAnchor.frame.bottom;
 
 		kDebug (30509) <<"\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin;
 		if (ignoreIndent)
@@ -1221,8 +1215,7 @@ public:
 		double displayedHeight = Point2Twip (frameAnchor.frame.bottom - frameAnchor.frame.top + 1);
 
 		kDebug (30509) <<"\tdisplayedWidth=" << displayedWidth
-								<< " displayedHeight=" << displayedHeight
-								<< endl;
+								<< " displayedHeight=" << displayedHeight;
 
 
 		//
@@ -1277,9 +1270,7 @@ public:
 
 
 		kDebug (30509) <<"processImage() successful!" << endl
-								<< "==========================" << endl
-																			<< endl
-																			<< endl;
+								<< "==========================";
 		return true;
 	}
 
@@ -1467,7 +1458,7 @@ public:
 	#if 0
 		kDebug (30509) <<"Indent:" << Point2Twip (layout.indentFirst) <<""
 												<< Point2Twip (layout.indentLeft) << " "
-												<< Point2Twip (layout.indentRight) << endl;
+												<< Point2Twip (layout.indentRight);
 	#endif
 
 		// Line Spacing
@@ -1810,9 +1801,9 @@ public:
 
 		#ifdef DEBUG_PROCESS_TEXT
 			kDebug (30509) <<"Parent string:  upto=" << upto
-									<< ",length=" << stringUnicode.length () << endl;
+									<< ",length=" << stringUnicode.length ();
 			kDebug (30509) <<"Child string:   length=" << length
-									<< " (specialLoc=" << specialLocation << ")" << endl;
+									<< " (specialLoc=" << specialLocation << ")";
 		#endif
 
 			//
@@ -1905,25 +1896,25 @@ MSWriteExport::~MSWriteExport ()
 KoFilter::ConversionStatus MSWriteExport::convert (const QByteArray &from, const QByteArray &to)
 {
 	kDebug (30509) <<"MSWriteExport $Date$ using LibMSWrite"
-			  				<< MSWrite::Version << endl;
+			  				<< MSWrite::Version;
 
 	if (to != "application/x-mswrite" || from != "application/x-kword")
 	{
-		kError (30509) << "Internal error!  Filter not implemented?" << endl;
+		kError (30509) << "Internal error!  Filter not implemented?";
 		return KoFilter::NotImplemented;
 	}
 
 	KWordMSWriteWorker *worker = new KWordMSWriteWorker;
 	if (!worker)
 	{
-		kError (30509) << "Could not allocate memory for worker" << endl;
+		kError (30509) << "Could not allocate memory for worker";
 		return KoFilter::OutOfMemory;
 	}
 
 	KWEFKWordLeader *leader = new KWEFKWordLeader (worker);
 	if (!leader)
 	{
-		kError (30509) << "Could not allocate memory for leader" << endl;
+		kError (30509) << "Could not allocate memory for leader";
 		delete worker;
 		return KoFilter::OutOfMemory;
 	}

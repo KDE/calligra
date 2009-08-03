@@ -48,7 +48,7 @@ QVector<QDate> Chart::calculateWeeks(const Project & p,const ScheduleManager &sm
 {
     QVector<QDate> lWeeks;
     //Schedule *s = p.findSchedule( sm.id() );
-    //kDebug()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
+    //kDebug()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()));
 
     QDate myDate = acwpPrDay.startDate();
     if ( ! myDate.isValid() || bcwpPrDay.startDate() < myDate ) {

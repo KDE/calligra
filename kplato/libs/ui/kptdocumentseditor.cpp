@@ -286,7 +286,6 @@ void DocumentsEditor::slotDeleteSelection()
 
 bool DocumentsEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 

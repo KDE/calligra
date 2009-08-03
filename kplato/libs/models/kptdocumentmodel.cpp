@@ -136,7 +136,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
         case 2: result = status( doc, role ); break;
         case 3: result = sendAs( doc, role ); break;
         default:
-            //kDebug()<<"Invalid property number: "<<property<<endl;;
+            //kDebug()<<"Invalid property number: "<<property;
             return result;
     }
     return result;
@@ -154,7 +154,7 @@ bool DocumentModel::setData( Document *doc, int property, const QVariant & value
         //case 1: return setType( doc, value, role );
         //case 2: result = status( doc, role ); break;
         default:
-            //kDebug()<<"Invalid property number: "<<property<<endl;;
+            //kDebug()<<"Invalid property number: "<<property;
             break;
     }
     return false;

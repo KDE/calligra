@@ -277,7 +277,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         case KWord::MainTextFrameSet: {
             if (columnsCount < 1) {
-                kWarning() << "Too many columns present on page, ignoring 1" << endl;
+                kWarning() << "Too many columns present on page, ignoring 1";
                 break;
             }
             main[--columnsCount] = static_cast<KWTextFrame *>(frame);

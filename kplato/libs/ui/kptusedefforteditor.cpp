@@ -150,7 +150,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
 
 bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug()<<endl;
+    kDebug();
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 8 ) {
@@ -194,13 +194,13 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
 
 bool UsedEffortItemModel::submit()
 {
-    kDebug()<<endl;
+    kDebug();
     return QAbstractItemModel::submit();
 }
 
 void UsedEffortItemModel::revert()
 {
-    kDebug()<<endl;
+    kDebug();
     QList<const Resource*> lst = m_resourcelist;
     foreach ( const Resource *r, lst ) {
         if ( ! m_completion->usedEffortMap().contains( r ) ) {

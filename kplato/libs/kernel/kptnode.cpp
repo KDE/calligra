@@ -155,7 +155,7 @@ Node *Node::projectNode() {
     if (m_parent)
         return m_parent->projectNode();
 
-    kError()<<"Ooops, no parent and no project found"<<endl;
+    kError()<<"Ooops, no parent and no project found";
     return 0;
 }
 
@@ -166,7 +166,7 @@ const Node *Node::projectNode() const {
     if (m_parent)
         return m_parent->projectNode();
 
-    kError()<<"Ooops, no parent and no project found"<<endl;
+    kError()<<"Ooops, no parent and no project found";
     return 0;
 }
 
@@ -852,7 +852,7 @@ bool Node::isStartNode() const {
 bool Node::setId(const QString& id) {
     //kDebug()<<id;
     if (id.isEmpty()) {
-        kError()<<"id is empty"<<endl;
+        kError()<<"id is empty";
         m_id = id;
         return false;
     }
@@ -863,11 +863,11 @@ bool Node::setId(const QString& id) {
             removeId();
         } else if (n) {
             //Hmmm, shouldn't happen
-            kError()<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+            kError()<<"My id '"<<m_id<<"' already used for different node: "<<n->name();
         }
     }
     if (findNode(id)) {
-        kError()<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
+        kError()<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name();
         m_id = QString(); // hmmm
         return false;
     }
@@ -1046,7 +1046,7 @@ Schedule *Node::findSchedule(const Schedule::Type type) {
 void Node::setScheduleDeleted(long id, bool on) {
     Schedule *ns = findSchedule(id);
     if (ns == 0) {
-        kError()<<m_name<<" Could not find schedule with id="<<id<<endl;
+        kError()<<m_name<<" Could not find schedule with id="<<id;
     } else {
         ns->setDeleted(on);
     }
@@ -1707,11 +1707,11 @@ void Estimate::printDebug(const QByteArray& _indent) {
     kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate<<Duration::unitToString(m_unit);
     
     kDebug()<<indent<<"  Risk:"<<risktypeToString();
-    kDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString()<<endl;
-    kDebug()<<indent<<"  Pert optimistic:    "<<pertOptimistic().toString()<<endl;
-    kDebug()<<indent<<"  Pert pessimistic:   "<<pertPessimistic().toString()<<endl;
-    kDebug()<<indent<<"  Pert variance:      "<<variance()<<endl;
-    kDebug()<<indent<<"  Pert std deviation: "<<deviation()<<endl;
+    kDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString();
+    kDebug()<<indent<<"  Pert optimistic:    "<<pertOptimistic().toString();
+    kDebug()<<indent<<"  Pert pessimistic:   "<<pertPessimistic().toString();
+    kDebug()<<indent<<"  Pert variance:      "<<variance();
+    kDebug()<<indent<<"  Pert std deviation: "<<deviation();
 }
 #endif
 

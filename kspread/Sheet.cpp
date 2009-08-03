@@ -1478,7 +1478,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
       // an error occurred
       kDebug(36005) <<"Sheet::paste(const QByteArray&): an error occurred" << endl
                << "line: " << errorLine << " col: " << errorColumn
-               << ' ' << errorMsg << endl;
+               << ' ' << errorMsg;
       return;
     }
 
@@ -1816,7 +1816,7 @@ bool Sheet::testAreaPasteInsert() const
       // an error occurred
       kDebug() <<"Sheet::testAreaPasteInsert(): an error occurred" << endl
                << "line: " << errorLine << " col: " << errorColumn
-               << ' ' << errorMsg << endl;
+               << ' ' << errorMsg;
       return false;
     }
 
@@ -3480,7 +3480,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         const ColumnFormat* column = columnFormat( i );
 //         kDebug(36003) << "Sheet::saveOdfColRowCell: first col loop:"
 //                       << "i:" << i
-//                       << "column:" << (column ? column->column() : 0) << endl;
+//                       << "column:" << (column ? column->column() : 0);
 
         //style default layout for column
         const Style style = tableContext.columnDefaultStyles.value(i);
@@ -3501,7 +3501,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
 //           kDebug(36003) <<"Sheet::saveOdfColRowCell: second col loop:"
 //                         << "j:" << j
 //                         << "next column:" << (nextColumn ? nextColumn->column() : 0)
-//                         << "next styled column:" << nextStyleColumnIndex << endl;
+//                         << "next styled column:" << nextStyleColumnIndex;
 
           // no next or not the adjacent column?
           if ( ( !nextColumn && !nextStyleColumnIndex ) ||
@@ -3559,7 +3559,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         xmlWriter.endElement();
 
         kDebug(36003) << "Sheet::saveOdfColRowCell: column" << i
-                      << "repeated" << count-1 << "time(s)" << endl;
+                      << "repeated" << count-1 << "time(s)";
 
         i += count;
     }
@@ -3589,7 +3589,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         {
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
-//                           << " row: " << row->row() << endl;
+//                           << " row: " << row->row();
             int j = i + 1;
 
             // search for
@@ -3600,7 +3600,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
               const RowFormat* nextRow = rowFormat( j );
 //               kDebug(36003) <<"Sheet::saveOdfColRowCell: second row loop:"
 //                         << " j: " << j
-//                         << " row: " << nextRow->row() << endl;
+//                         << " row: " << nextRow->row();
 
               // if the reference row has the default row format
               if (row->isDefault() && style.isDefault())
@@ -3652,7 +3652,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.endElement();
 
             kDebug(36003) << "Sheet::saveOdfColRowCell: empty row" << i
-                          << "repeated" << repeated << "time(s)" << endl;
+                          << "repeated" << repeated << "time(s)";
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -3679,7 +3679,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             if ( repeated > 1 )
             {
               kDebug(36003) << "Sheet::saveOdfColRowCell: NON-empty row" << i
-                            << "repeated" << repeated << "times" << endl;
+                            << "repeated" << repeated << "times";
 
               xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }

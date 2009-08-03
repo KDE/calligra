@@ -303,7 +303,6 @@ Relation *SplitterView::currentRelation() const
 
 bool SplitterView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
     KoXmlElement e = context.namedItem( "views" ).toElement();
     if ( e.isNull() ) {
         return true;

@@ -35,7 +35,7 @@ PlotWidget::PlotWidget(QWidget * parent) : KPlotWidget(parent)
 , mKpoBCWS(NULL)
 , mKpoACWP(NULL)
 {
-    kDebug() << "------------> ChartWidget :: Constructor"<<endl;
+    kDebug() << "------------> ChartWidget :: Constructor";
 
     // UI Parameters
     setBackgroundColor(Qt::white);
@@ -53,7 +53,7 @@ PlotWidget::PlotWidget(QWidget * parent) : KPlotWidget(parent)
 //     addPlotObject(mKpoBCWS);
 //     addPlotObject(mKpoACWP);
 
-    kDebug() << "ChartWidget :: Constructor Ended"<<endl;
+    kDebug() << "ChartWidget :: Constructor Ended";
 }
 
 PlotWidget::~PlotWidget()

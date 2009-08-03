@@ -907,7 +907,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Condi
 
 bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
 {
-  kDebug(30518) << endl <<"Reading in rows";
+  kDebug(30518) <<"Reading in rows";
 
   int i   = 1;
   int row = 1;
@@ -989,7 +989,7 @@ bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
 
 bool OpenCalcImport::readColLayouts( KoXmlElement & content, Sheet * table )
 {
-  kDebug(30518) << endl <<"Reading in columns...";
+  kDebug(30518) <<"Reading in columns...";
 
   KoXmlNode colLayout = KoXml::namedItemNS( content, ooNS::table, "table-column" );
   int column = 1;

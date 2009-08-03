@@ -161,7 +161,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
         }
 
         kDebug(30515) <<"Cell:" << debugRowCurrent <<"," << debugCellCurrent
-            << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
+            << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom;
         textCellHeader += writeBorder('t',qRound(PT_TO_TWIP(frame.tWidth)),frame.tColor);
         textCellHeader += writeBorder('l',qRound(PT_TO_TWIP(frame.lWidth)),frame.lColor);
         textCellHeader += writeBorder('b',qRound(PT_TO_TWIP(frame.bWidth)),frame.bColor);
@@ -898,13 +898,13 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kError(30515) << "No output file! Aborting!" << endl;
+        kError(30515) << "No output file! Aborting!";
         return false;
     }
 
     if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
-        kError(30515) << "Unable to open output file!" << endl;
+        kError(30515) << "Unable to open output file!";
         return false;
     }
 
