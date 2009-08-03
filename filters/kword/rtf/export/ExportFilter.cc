@@ -26,12 +26,10 @@
 #include <QFileInfo>
 #include <qfontinfo.h>
 #include <QFontDatabase>
-#include <q3picture.h>
 #include <QImage>
 #include <QRegExp>
 #include <QColor>
 #include <QDateTime>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QList>
 
@@ -173,7 +171,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
         QString endOfParagraph;
         QList<ParaData> *paraList = (*itCell).paraList;
         QList<ParaData>::ConstIterator it;
-		QList<ParaData>::ConstIterator end(paraList->end());
+                QList<ParaData>::ConstIterator end(paraList->end());
         for (it=paraList->begin();it!=end;++it)
         {
             rowText += endOfParagraph;
@@ -453,11 +451,11 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         else
         {
             if (layout.counter.numbering!=0)
-		{
-        	    markup += "\\pnlvl";
-        	    markup += QString::number(layout.counter.depth + 1);
-        	    markup += "\\pnprev1";
-		}
+                {
+                    markup += "\\pnlvl";
+                    markup += QString::number(layout.counter.depth + 1);
+                    markup += "\\pnprev1";
+                }
         else if (layout.counter.style==1)
         {
         markup += "\\pnlvlbody";
@@ -572,7 +570,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
                 content +=formatTextParagraph(partialText, formatRef, *paraFormatDataIt);
-	    }
+            }
             else if (4==(*paraFormatDataIt).id)
             {
                 // ### TODO: put date/time fields into own method.
@@ -758,32 +756,32 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 kDebug(30515) <<"Found an anchor of type:" << (*paraFormatDataIt).frameAnchor.type;
                 // We have an image, a clipart or a table
 
-		if (6==(*paraFormatDataIt).frameAnchor.type)
+                if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
 
 
-		    if (!content.isEmpty())
-		    {
-			str += m_prefix;
-			str += markup;
-			str += " {";
-			str += content;
-			str += '}';
-			str += m_eol;
-			content.clear();
-			if (!m_inTable)
-			{
-			    m_prefix = "\\par";
-			}
-		    }
-		    str += makeTable((*paraFormatDataIt).frameAnchor);
-		}
+                    if (!content.isEmpty())
+                    {
+                        str += m_prefix;
+                        str += markup;
+                        str += " {";
+                        str += content;
+                        str += '}';
+                        str += m_eol;
+                        content.clear();
+                        if (!m_inTable)
+                        {
+                            m_prefix = "\\par";
+                        }
+                    }
+                    str += makeTable((*paraFormatDataIt).frameAnchor);
+                }
                 else if ((2==(*paraFormatDataIt).frameAnchor.type) || (5==(*paraFormatDataIt).frameAnchor.type))
                 {
                     content += makeImage((*paraFormatDataIt).frameAnchor);
 
                 }
-	    }
+            }
         }
     }
 
@@ -793,14 +791,14 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     if (!content.isEmpty())
     {
         str += m_prefix;
-	str += markup;
-	str += " {";
-	str += content;
-	str += '}';
-	str += m_eol;
-	if (m_inTable==false)
-	{
-	   m_prefix = "\\par";
+        str += markup;
+        str += " {";
+        str += content;
+        str += '}';
+        str += m_eol;
+        if (m_inTable==false)
+        {
+           m_prefix = "\\par";
         }
     }
     if (str.isEmpty())
@@ -842,7 +840,7 @@ bool RTFWorker::doHeader(const HeaderData& header)
     str += " {";
 
     QList<ParaData>::ConstIterator it;
-	QList<ParaData>::ConstIterator end(header.para.end());
+        QList<ParaData>::ConstIterator end(header.para.end());
     for (it=header.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
@@ -877,7 +875,7 @@ bool RTFWorker::doFooter(const FooterData& footer)
     str += " {";
 
     QList<ParaData>::ConstIterator it;
-	QList<ParaData>::ConstIterator end(footer.para.end());
+        QList<ParaData>::ConstIterator end(footer.para.end());
     for (it=footer.para.begin();it!=end;++it)
         content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
 
@@ -1702,7 +1700,7 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
     QString strMarkup("\\s");  // Holds RTF markup for the style
 
     QList < LayoutData > ::ConstIterator it;
-	QList < LayoutData > ::ConstIterator end(m_styleList.end());
+        QList < LayoutData > ::ConstIterator end(m_styleList.end());
 
     // search color table for this color
     for( it =  m_styleList.begin(); it != end; counter++, ++it )

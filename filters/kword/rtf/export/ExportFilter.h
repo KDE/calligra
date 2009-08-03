@@ -21,10 +21,8 @@
 #ifndef EXPORTFILTERFULLPOWER_H
 #define EXPORTFILTERFULLPOWER_H
 
-#include <q3valuestack.h>
 #include <QList>
 #include <QStringList>
-//Added by qt3to4:
 #include <QTextStream>
 
 #include <KWEFBaseWorker.h>
@@ -47,14 +45,14 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
+                                 const ValueListFormatData& paraFormatDataList);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doOpenTextFrameSet(void);
     virtual bool doCloseTextFrameSet(void);
     virtual bool doFullPaperFormat(const int format,
-        const double width, const double height, const int orientation);
+                                   const double width, const double height, const int orientation);
     virtual bool doFullPaperBorders (const double top, const double left,
-        const double bottom, const double right);
+                                     const double bottom, const double right);
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doHeader(const HeaderData& header);
     virtual bool doFooter(const FooterData& footer);
@@ -63,7 +61,7 @@ public:
 private:
     QString openSpan(const FormatData& formatOrigin, const FormatData& format);
     QString closeSpan(const FormatData& formatOrigin, const FormatData& format);
-    /** 
+    /**
      * Encodes the @p text into
      * RTF seven bit ASCII. This affects any 8 bit characters.
      * They are encoded either with \\' or with \\u
@@ -71,9 +69,9 @@ private:
      */
     QString escapeRtfText ( const QString& text ) const;
     QString ProcessParagraphData ( const QString &paraText,
-        const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
+                                   const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     QString formatTextParagraph(const QString& strText,
-        const FormatData& formatOrigin, const FormatData& format);
+                                const FormatData& formatOrigin, const FormatData& format);
     QString makeTable(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image);
     QString makeImage(const FrameAnchor& anchor);
@@ -81,9 +79,9 @@ private:
     void writeColorData(void);
     void writeStyleData(void);
     QString textFormatToRtf(const TextFormatting& formatOrigin,
-        const TextFormatting& formatData, const bool force);
+                            const TextFormatting& formatData, const bool force);
     QString layoutToRtf(const LayoutData& layoutOrigin,
-        const LayoutData& layout, const bool force);
+                        const LayoutData& layout, const bool force);
     QString lookupFont(const QString& markup, const QString& fontName);
     QString lookupColor(const QString& markup, const QColor& color);
     QString lookupStyle(const QString& styleName, LayoutData& returnLayout);
@@ -97,7 +95,7 @@ protected:
     QString m_textPage;
     QString m_textBody;
     QString m_fileName; ///< Name of the output file
-    Q3ValueStack<ListInfo> m_listStack; ///< Stack for list information
+
     QStringList m_fontList;
     QList<QColor> m_colorList;
     QList<LayoutData> m_styleList;
