@@ -81,6 +81,7 @@
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -1028,8 +1029,7 @@ void KWView::inlineFrame()
         break; // TODO group before...
     }
     if (targetShape == 0) {
-        // message:  "Please select at least one non locked shape and try again"
-        kDebug() << "Please select at least one non locked shape and try again";
+        KMessageBox::error(this, i18n("Please select at least one non-locked shape and try again"));
         return;
     }
 
