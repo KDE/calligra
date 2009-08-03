@@ -16,24 +16,22 @@
 #define __RTFIMPORT_H__
 
 #include <KoFilter.h>
-#include <q3asciidict.h>
 #include <QColor>
-#include <q3cstring.h>
 #include <QFile>
 #include <QFont>
 #include <QMap>
 #include <QString>
-#include <q3valuelist.h>
-#include <q3valuestack.h>
 #include <QTextCodec>
+#include <QList>
+#include <QVector>
+#include <QStack>
+#include <QHash>
+
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
-#include <q3ptrlist.h>
-
 
 class DomNode;
 class RTFImport;
-
 
 /// RTF property (control word table entry)
 struct RTFProperty
@@ -120,7 +118,7 @@ struct RTFLayout
 {
     enum Alignment { Left, Right, Justified, Centered };
 
-    Q3ValueStack<RTFTab> tablist;
+    QStack<RTFTab> tablist;
     RTFTab tab;
     RTFBorder borders[4];
     RTFBorder *border;
@@ -196,7 +194,7 @@ struct RTFTableCell
 /// Table-formatting properties
 struct RTFTableRow
 {
-    Q3ValueList<RTFTableCell> cells;
+    QVector<RTFTableCell> cells;
     QStringList frameSets;
     RTFLayout::Alignment alignment;
     int height;
@@ -220,9 +218,9 @@ struct RTFTextState
     DomNode cell;
     /// plain text (for paragraph or table cell)
     DomNode text;
-    Q3ValueList<KWFormat> formats;
+    QVector<KWFormat> formats;
     QStringList frameSets;
-    Q3ValueList<RTFTableRow> rows;
+    QVector<RTFTableRow> rows;
     uint table, length;
 };
 
@@ -522,7 +520,7 @@ public:
     DomNode pictures;
     DomNode author, company, title, doccomm;
     RTFTextState bodyText;
-    Q3PtrList<RTFTextState> footnotes; ///< list of footnotes
+    QList<RTFTextState*> footnotes; ///< list of footnotes
     int fnnum; ///< number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
@@ -532,10 +530,10 @@ public:
      */
     RTFTextState m_dummyTextState;
     QMap<int,QString> fontTable;
-    Q3ValueList<RTFStyle> styleSheet;
-    Q3ValueList<QColor> colorTable;
-    Q3ValueStack<RTFGroupState> stateStack;
-    Q3ValueStack<RTFDestination> destinationStack;
+    QVector<RTFStyle> styleSheet;
+    QVector<QColor> colorTable;
+    QStack<RTFGroupState> stateStack;
+    QStack<RTFDestination> destinationStack;
     RTFGroupState state;
     RTFDestination destination;
     RTFTextState *textState;
@@ -544,8 +542,8 @@ public:
     RTFPicture picture;
     RTFTableCell emptyCell;
     KWFormat kwFormat;
-    Q3AsciiDict<RTFProperty> properties;
-    Q3AsciiDict<RTFProperty> destinationProperties;
+    QHash<QByteArray, RTFProperty*> properties;
+    QHash<QByteArray, RTFProperty*> destinationProperties;
     uint table;
     uint pictureNumber; ///< Picture number; increase *before* use!
 
@@ -567,5 +565,7 @@ protected:
     QMap<QString,int> debugUnknownKeywords;
     bool m_batch; ///< Should the filter system be in batch mode (i.e. non-interactive)
 };
+
+
 
 #endif
