@@ -24,10 +24,11 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <qdom.h>
-#include <q3dict.h>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QMap>
 #include <QColor>
-//Added by qt3to4:
+
 #include <KoStyleStack.h>
 #include <liststylestack.h>
 
@@ -101,12 +102,14 @@ private:
 
     int m_numPicture;
     int m_numSound;
-    QDomDocument    m_content;
-    QDomDocument    m_meta;
-    QDomDocument    m_settings;
-    Q3Dict<QDomElement> m_styles, m_draws, m_stylesPresentation;
-    Q3Dict<QDomElement>   m_listStyles;
-    Q3Dict<animationList> m_animations;
+    QDomDocument m_content;
+    QDomDocument m_meta;
+    QDomDocument m_settings;
+    QMap<QString, QDomElement*> m_styles;
+    QMap<QString, QDomElement*> m_draws;
+    QMap<QString, QDomElement*> m_stylesPresentation;
+    QMap<QString, QDomElement*> m_listStyles;
+    QMap<QString, animationList*> m_animations;
 
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered

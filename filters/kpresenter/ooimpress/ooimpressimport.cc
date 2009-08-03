@@ -50,19 +50,26 @@ OoImpressImport::OoImpressImport( QObject*parent, const QStringList & )
     : KoFilter(parent),
       m_numPicture( 1 ),
       m_numSound(1),
-      m_styles( 23, true ),
+      m_styles(),
       m_styleStack( ooNS::style, ooNS::fo )
 {
-    m_styles.setAutoDelete( true );
-    m_listStyles.setAutoDelete( true );
 }
 
 OoImpressImport::~OoImpressImport()
 {
-    Q3DictIterator<animationList> it( m_animations ); // See QDictIterator
-    for( ; it.current(); ++it )
-    {
-        delete it.current()->element;
+    foreach( QDomElement* el, m_styles) {
+        delete el;
+    }
+    m_styles.clear();
+
+    foreach( QDomElement* el, m_listStyles) {
+        delete el;
+    }
+    m_listStyles.clear();
+
+
+    foreach( animationList* animation, m_animations ) {
+        delete animation;
     }
     m_animations.clear();
 }
@@ -72,7 +79,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QByteArray const & from, QB
     kDebug(30518) <<"Entering Ooimpress Import filter:" << from <<" -" << to;
 
     if ( (from != "application/vnd.sun.xml.impress" && from != "application/vnd.sun.xml.impress.template" )
-			    || to != "application/x-kpresenter" )
+                            || to != "application/x-kpresenter" )
     {
         kWarning(30518) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
@@ -250,14 +257,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
     QDomElement attributeElement = doc.createElement( "ATTRIBUTES" );
-    QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString() )];
+    QDomElement *master = m_styles.value(drawPage.attributeNS( ooNS::draw, "master-page-name", QString() ));
 
     appendObject(*master, doc, soundElement,pictureElement,pageNoteElement,objectElement, 0, true);
 
-    QDomElement *style = m_styles[master->attributeNS( ooNS::style, "page-master-name", QString() )];
+    QDomElement *style = m_styles.value(master->attributeNS( ooNS::style, "page-master-name", QString() ));
     QDomElement properties = KoDom::namedItemNS( *style, ooNS::style, "properties" );
     //kDebug(30518)<<" master->attribute( draw:style-name ) :"<<master->attributeNS( ooNS::draw,"style-name", QString() );
-    QDomElement *backgroundStyle = m_stylesPresentation[ master->attributeNS( ooNS::draw, "style-name", QString() ).isEmpty() ? "Standard-background" : master->attributeNS( ooNS::draw, "style-name", QString() ) ];
+    QDomElement *backgroundStyle = m_stylesPresentation.value( master->attributeNS( ooNS::draw, "style-name", QString() ).isEmpty() ? "Standard-background" : master->attributeNS( ooNS::draw, "style-name", QString() ) );
 
     //kDebug(30518)<<" backgroundStyle :"<<backgroundStyle;
     double pageHeight;
@@ -676,13 +683,13 @@ void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &back
         else if ( fill == "gradient" )
         {
             QString style = m_styleStack.property( ooNS::draw, "fill-gradient-name" );
-            QDomElement* draw = m_draws[style];
+            QDomElement* draw = m_draws.value(style);
             appendBackgroundGradient( doc, bgPage, *draw );
         }
         else if ( fill == "bitmap" )
         {
             QString style = m_styleStack.property( ooNS::draw, "fill-image-name" );
-            QDomElement* draw = m_draws[style];
+            QDomElement* draw = m_draws.value(style);
             appendBackgroundImage( doc, bgPage, pictureElement, *draw );
 
             QDomElement backView = doc.createElement( "BACKVIEW" );
@@ -711,9 +718,9 @@ void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &back
         QString str = m_styleStack.property( ooNS::presentation, "duration");
         kDebug(30518)<<"styleStack.hasAttribute(presentation:duration ) :"<<str;
         //convert date duration
-	    int hour( str.mid( 2, 2 ).toInt() );
-	    int minute( str.mid( 5, 2 ).toInt() );
-	    int second( str.mid( 8, 2 ).toInt() );
+            int hour( str.mid( 2, 2 ).toInt() );
+            int minute( str.mid( 5, 2 ).toInt() );
+            int second( str.mid( 8, 2 ).toInt() );
         int pageTimer = second + minute*60 + hour*60*60;
         QDomElement pgEffect = doc.createElement("PGTIMER");
         pgEffect.setAttribute( "timer", pageTimer );
@@ -967,7 +974,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
             QString style = m_styleStack.property( ooNS::draw, "fill-hatch-name" );
-            QDomElement* draw = m_draws[style];
+            QDomElement* draw = m_draws.value(style);
             if ( draw )
                 {
                     if( draw->hasAttributeNS( ooNS::draw, "color" ) )
@@ -1051,7 +1058,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             QDomElement gradient = doc.createElement( "GRADIENT" );
             QString style = m_styleStack.property( ooNS::draw, "fill-gradient-name" );
 
-            QDomElement* draw = m_draws[style];
+            QDomElement* draw = m_draws.value(style);
             if ( draw )
             {
                 gradient.setAttribute( "color1", draw->attributeNS( ooNS::draw, "start-color", QString() ) );
@@ -1590,7 +1597,7 @@ static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
 
 bool OoImpressImport::pushListLevelStyle( const QString& listStyleName, int level )
 {
-    QDomElement* fullListStyle = m_listStyles[listStyleName];
+    QDomElement* fullListStyle = m_listStyles.value(listStyleName);
     if ( !fullListStyle ) {
         kWarning(30518) << "List style " << listStyleName << " not found!";
         return false;
@@ -2012,20 +2019,20 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
     {
         kDebug(30518)<<" presentation:style-name **************************** :"<<object.attributeNS( ooNS::presentation,"style-name", QString() );
         if ( sticky )
-            addStyles( m_stylesPresentation[object.attributeNS( ooNS::presentation, "style-name", QString() )] );
+            addStyles( m_stylesPresentation.value(object.attributeNS( ooNS::presentation, "style-name", QString())));
         else
-            addStyles( m_styles[object.attributeNS( ooNS::presentation, "style-name", QString() )] );
+            addStyles( m_styles.value(object.attributeNS( ooNS::presentation, "style-name", QString() )) );
     }
     if ( object.hasAttributeNS( ooNS::draw, "style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "style-name", QString() )] );
+        addStyles( m_styles.value(object.attributeNS( ooNS::draw, "style-name", QString() )));
 
     if ( object.hasAttributeNS( ooNS::draw, "text-style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "text-style-name", QString() )] );
+        addStyles( m_styles.value(object.attributeNS( ooNS::draw, "text-style-name", QString() )) );
 
     if ( object.hasAttributeNS( ooNS::text, "style-name" ) ) {
         QString styleName = object.attributeNS( ooNS::text, "style-name", QString() );
         //kDebug(30518) <<"adding style" << styleName;
-        addStyles( m_styles[styleName] );
+        addStyles( m_styles.value(styleName));
     }
 }
 
@@ -2035,8 +2042,8 @@ void OoImpressImport::addStyles( const QDomElement* style )
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
-        //kDebug(30518)<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attributeNS( ooNS::style,"parent-style-name", QString() )];
-        addStyles( m_styles[style->attributeNS( ooNS::style, "parent-style-name", QString() )] );
+        //kDebug(30518)<<"m_styles.value(style->attribute( style:parent-style-name )) :"<<m_styles.value(style->attributeNS( ooNS::style,"parent-style-name", QString() ));
+        addStyles( m_styles.value(style->attributeNS( ooNS::style, "parent-style-name", QString() )) );
     }
     //kDebug(30518)<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style;
     m_styleStack.push( *style );
@@ -2337,8 +2344,8 @@ QDomElement OoImpressImport::findAnimationByObjectID(const QString & id,  int & 
     if (m_animations.isEmpty() )
         return QDomElement();
 
-    animationList *animation = m_animations[id];
-    //kDebug(30518)<<"QDomElement *animation = m_animations[id]; :"<<animation;
+    animationList *animation = m_animations.value(id);
+    //kDebug(30518)<<"QDomElement *animation = m_animations.value(id); :"<<animation;
     if ( !animation )
         return QDomElement();
     for (QDomNode node = *( animation->element ); !node.isNull(); node = node.nextSibling())

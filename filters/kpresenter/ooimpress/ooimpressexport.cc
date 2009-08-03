@@ -363,7 +363,7 @@ void OoImpressExport::createDocumentSettings( QDomDocument & docsetting )
         attribute =  docsetting.createElement("config:config-item" );
         attribute.setAttribute( "config:name", "GridFineWidth" );
         attribute.setAttribute( "config:type", "int" );
-        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridX )  )*100 ) ) ) );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMillimeter( ( m_gridX )  )*100 ) ) ) );
         mapItem.appendChild( attribute );
     }
 
@@ -372,7 +372,7 @@ void OoImpressExport::createDocumentSettings( QDomDocument & docsetting )
         attribute =  docsetting.createElement("config:config-item" );
         attribute.setAttribute( "config:name", "GridFineHeight" );
         attribute.setAttribute( "config:type", "int" );
-        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridY )  )*100 ) ) ) );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMillimeter( ( m_gridY )  )*100 ) ) ) );
         mapItem.appendChild( attribute );
     }
 
@@ -446,7 +446,7 @@ void OoImpressExport::createDocumentManifest( QDomDocument & docmanifest )
     for ( it = m_pictureLst.begin(); it != m_pictureLst.end(); ++it )
     {
         entry = docmanifest.createElement( "manifest:file-entry" );
-        entry.setAttribute( "manifest:media-type", it.data() );
+        entry.setAttribute( "manifest:media-type", it.value() );
         entry.setAttribute( "manifest:full-path", it.key() );
         manifest.appendChild( entry );
     }
@@ -545,19 +545,19 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             helplines = helpline.toElement();
             if ( helplines.tagName()=="Vertical" )
             {
-                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                int tmpX = ( int ) ( KoUnit::toMillimeter( helplines.attribute("value").toDouble() )*100 );
                 m_helpLine+='V'+QString::number( tmpX );
             }
             else if ( helplines.tagName()=="Horizontal" )
             {
-                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
+                int tmpY = ( int ) ( KoUnit::toMillimeter( helplines.attribute("value").toDouble() )*100 );
                 m_helpLine+='H'+QString::number( tmpY );
             }
             else if ( helplines.tagName()=="HelpPoint" )
             {
                 QString str( "P%1,%2" );
-                int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("posX").toDouble()  )*100 );
-                int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("posY").toDouble() )*100 );
+                int tmpX = ( int ) ( KoUnit::toMillimeter( helplines.attribute("posX").toDouble()  )*100 );
+                int tmpY = ( int ) ( KoUnit::toMillimeter( helplines.attribute("posY").toDouble() )*100 );
                 m_helpLine+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
             }
         }
@@ -760,7 +760,7 @@ void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDom
     //TODO : add draw:text-box size :
     //<draw:text-box draw:style-name="gr2" draw:text-style-name="P2" draw:layer="layout" svg:width="13.336cm" svg:height="56.288cm" svg:x="-0.54cm" svg:y="-14.846cm">
 
-    QStringList text = QStringList::split( "\n", noteText );
+    QStringList text = noteText.split( "\n");
     for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
         QDomElement tmp = doc.createElement( "text:p" );
         tmp.appendChild( doc.createTextNode( *it ) );
@@ -886,7 +886,7 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
     {
         QString str = pictureKey( key );
         QString returnstr = m_kpresenterPictureLst[str];
-        const int pos=returnstr.findRev('.');
+        const int pos=returnstr.lastIndexOf('.');
         if (pos!=-1)
         {
             const QString extension( returnstr.mid(pos+1) );
@@ -897,7 +897,7 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
         {
             if ( m_storeout->open( pictureName ) )
             {
-                QByteArray data(8*1024);
+                QByteArray data(8*1024, '\0');
                 uint total = 0;
                 for ( int block = 0; ( block = m_storeinp->read(data.data(), data.size()) ) > 0;
                       total += block )
@@ -997,10 +997,10 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
     }
 
     target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
-    target.setAttribute( "svg:x", StyleFactory::toCM( orig.attribute( "x" ) ) );
-    target.setAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCM( y ) ) );
-    target.setAttribute( "svg:width", StyleFactory::toCM( size.attribute( "width" ) ) );
-    target.setAttribute( "svg:height", StyleFactory::toCM( size.attribute( "height" ) ) );
+    target.setAttribute( "svg:x", StyleFactory::toCentimeter( orig.attribute( "x" ) ) );
+    target.setAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
+    target.setAttribute( "svg:width", StyleFactory::toCentimeter( size.attribute( "width" ) ) );
+    target.setAttribute( "svg:height", StyleFactory::toCentimeter( size.attribute( "height" ) ) );
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
         target.setAttribute( "draw:name", nameStr );
@@ -1069,9 +1069,9 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                     int tmpX = 0;
                     int tmpY = 0;
                     if( elemPoint.hasAttribute( "point_x" ) )
-                        tmpX = ( int ) ( KoUnit::toMM( elemPoint.attribute( "point_x" ).toDouble() )*100 );
+                        tmpX = ( int ) ( KoUnit::toMillimeter( elemPoint.attribute( "point_x" ).toDouble() )*100 );
                     if( elemPoint.hasAttribute( "point_y" ) )
-                        tmpY = ( int ) ( KoUnit::toMM(elemPoint.attribute( "point_y" ).toDouble() )*100 );
+                        tmpY = ( int ) ( KoUnit::toMillimeter(elemPoint.attribute( "point_y" ).toDouble() )*100 );
                     if ( !listOfPoint.isEmpty() )
                         listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
                     else
@@ -1124,30 +1124,30 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     y2 += y1;
 
     target.setAttribute( "draw:id",  QString::number( m_objectIndex ) );
-    QString xpos1 = StyleFactory::toCM( orig.attribute( "x" ) );
-    QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCM( x2 ) );
+    QString xpos1 = StyleFactory::toCentimeter( orig.attribute( "x" ) );
+    QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x2 ) );
 
     if ( type == 0 )
     {
-        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
-        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2/2.0 ) ) );
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
     }
     else if ( type == 1 )
     {
-        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
-        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
-        xpos1 = QString( "%1cm" ).arg( KoUnit::toCM( x1/2.0 ) );
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        xpos1 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x1/2.0 ) );
         xpos2 = xpos1;
     }
     else if ( type == 3 ) // from left bottom to right top
     {
-        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
-        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
     }
     else // from left top to right bottom
     {
-        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
-        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
+        target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
     }
     target.setAttribute( "svg:x1", xpos1 );
     target.setAttribute( "svg:x2", xpos2 );

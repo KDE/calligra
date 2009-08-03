@@ -263,7 +263,7 @@ public:
     QString createParagraphStyle( QDomElement & e );
     QString createPageMasterStyle( QDomElement & e );
 
-    static QString toCM( const QString & point );
+    static QString toCentimeter( const QString & point );
 
 private:
     QList<StrokeDashStyle*>   m_strokeDashStyles;

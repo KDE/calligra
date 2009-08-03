@@ -43,7 +43,7 @@ StyleFactory::StyleFactory()
 StyleFactory::~StyleFactory()
 {
     while(!m_strokeDashStyles.isEmpty()) {
-        delete m_strokeDashStyle.takeFirst();
+        delete m_strokeDashStyles.takeFirst();
     }
     while(!m_gradientStyles.isEmpty()) {
         delete m_gradientStyles.takeFirst();
@@ -125,15 +125,15 @@ void StyleFactory::addOfficeAutomatic( QDomDocument & doc, QDomElement & automat
 void StyleFactory::addAutomaticStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
     ListStyle * l;
-    for ( l, m_listStyles )
+    foreach ( l, m_listStyles )
         l->toXML( doc, autoStyles );
 
     PageStyle * p;
-    for ( p,  m_pageStyles )
+    foreach ( p,  m_pageStyles )
         p->toXML( doc, autoStyles );
 
     TextStyle * t;
-    for ( t,  m_textStyles )
+    foreach ( t,  m_textStyles )
         t->toXML( doc, autoStyles );
 
     GraphicStyle * g;
@@ -146,7 +146,7 @@ void StyleFactory::addAutomaticStyles( QDomDocument & doc, QDomElement & autoSty
     }
 
     ParagraphStyle * pg;
-    for ( pg, m_paragraphStyles )
+    foreach ( pg, m_paragraphStyles )
         pg->toXML( doc, autoStyles );
 }
 
@@ -320,10 +320,10 @@ QString StyleFactory::createPageMasterStyle( QDomElement & e )
     return newPMStyle->style();
 }
 
-QString StyleFactory::toCM( const QString & point )
+QString StyleFactory::toCentimeter( const QString & point )
 {
     double pt = point.toFloat();
-    double cm = KoUnit::toCM( pt );
+    double cm = KoUnit::toCentimeter( pt );
     return QString( "%1cm" ).arg ( cm );
 }
 
@@ -643,12 +643,12 @@ PageMasterStyle::PageMasterStyle( QDomElement & e, const uint index )
 
     m_name = QString( "PM%1" ).arg( index );
     m_style = QString( "Default%1" ).arg( index );
-    m_margin_top = StyleFactory::toCM( b.attribute( "ptTop" ) );
-    m_margin_bottom = StyleFactory::toCM( b.attribute( "ptBottom" ) );
-    m_margin_left = StyleFactory::toCM( b.attribute( "ptLeft" ) );
-    m_margin_right = StyleFactory::toCM( b.attribute( "ptRight" ) );
-    m_page_width = StyleFactory::toCM( e.attribute( "ptWidth" ) );
-    m_page_height = StyleFactory::toCM( e.attribute( "ptHeight" ) );
+    m_margin_top = StyleFactory::toCentimeter( b.attribute( "ptTop" ) );
+    m_margin_bottom = StyleFactory::toCentimeter( b.attribute( "ptBottom" ) );
+    m_margin_left = StyleFactory::toCentimeter( b.attribute( "ptLeft" ) );
+    m_margin_right = StyleFactory::toCentimeter( b.attribute( "ptRight" ) );
+    m_page_width = StyleFactory::toCentimeter( e.attribute( "ptWidth" ) );
+    m_page_height = StyleFactory::toCentimeter( e.attribute( "ptHeight" ) );
     m_orientation = "landscape";
 }
 
@@ -1065,7 +1065,7 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
     if ( !pen.isNull() )
     {
         QDomElement p = pen.toElement();
-        m_stroke_width = StyleFactory::toCM( p.attribute( "width" ) );
+        m_stroke_width = StyleFactory::toCentimeter( p.attribute( "width" ) );
         m_stroke_color = p.attribute( "color" );
 
         int style = p.attribute( "style" ).toInt();
@@ -1145,7 +1145,7 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
         m_shadow_color = s.attribute( "color" );
 
         int direction = s.attribute( "direction" ).toInt();
-        QString distance = StyleFactory::toCM( s.attribute( "distance" ) );
+        QString distance = StyleFactory::toCentimeter( s.attribute( "distance" ) );
         switch ( direction )
         {
         case 1:
@@ -1409,16 +1409,16 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
     if ( !indents.isNull() )
     {
         QDomElement i = indents.toElement();
-        m_margin_left = StyleFactory::toCM( i.attribute( "left" ) );
-        m_margin_right = StyleFactory::toCM( i.attribute( "right" ) );
-        m_text_indent = StyleFactory::toCM( i.attribute( "first" ) );
+        m_margin_left = StyleFactory::toCentimeter( i.attribute( "left" ) );
+        m_margin_right = StyleFactory::toCentimeter( i.attribute( "right" ) );
+        m_text_indent = StyleFactory::toCentimeter( i.attribute( "first" ) );
     }
 
     if ( !offsets.isNull() )
     {
         QDomElement o = offsets.toElement();
-        m_margin_top = StyleFactory::toCM( o.attribute( "before" ) );
-        m_margin_bottom = StyleFactory::toCM( o.attribute( "after" ) );
+        m_margin_top = StyleFactory::toCentimeter( o.attribute( "before" ) );
+        m_margin_bottom = StyleFactory::toCentimeter( o.attribute( "after" ) );
     }
 
     if ( !leftBorder.isNull() )
@@ -1444,9 +1444,9 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
         else if ( type == "multiple" )
             m_line_height = QString( "%1%" ).arg( l.attribute( "spacingvalue" ).toInt() * 100 );
         else if ( type == "custom" )
-            m_line_spacing = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
+            m_line_spacing = StyleFactory::toCentimeter( l.attribute( "spacingvalue" ) );
         else if ( type == "atleast" )
-            m_line_height_at_least = StyleFactory::toCM( l.attribute( "spacingvalue" ) );
+            m_line_height_at_least = StyleFactory::toCentimeter( l.attribute( "spacingvalue" ) );
     }
 
     if ( !counter.isNull() )
@@ -1523,7 +1523,7 @@ QString ParagraphStyle::parseBorder( QDomElement e )
     else
         style = "solid";
 
-    QString width = StyleFactory::toCM( e.attribute( "width" ) );
+    QString width = StyleFactory::toCentimeter( e.attribute( "width" ) );
 
     QColor color( e.attribute( "red" ).toInt(),
                   e.attribute( "green" ).toInt(),
