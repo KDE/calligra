@@ -1,7 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/ ${CMAKE_BINARY_DIR}/filters/)
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(libppt_SRCS 
 		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/slide.cpp 
 		${CMAKE_SOURCE_DIR}/filters/kpresenter/powerpoint/libppt/objects.cpp 
