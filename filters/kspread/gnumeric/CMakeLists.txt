@@ -1,37 +1,24 @@
-
-
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
-
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
-########### next target ###############
-
 set(gnumericexport_PART_SRCS gnumericexport.cc )
-
-
 kde4_add_plugin(gnumericexport WITH_PREFIX ${gnumericexport_PART_SRCS})
-
-
-
-target_link_libraries(gnumericexport ${QT_QTXML_LIBRARY}  ${QT_QTGUI_LIBRARY} komain ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(gnumericexport komain kspreadcommon
+                      ${QT_QTXML_LIBRARY}  
+                      ${QT_QTGUI_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+)
 
 install(TARGETS gnumericexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
-########### next target ###############
-
 set(gnumericimport_PART_SRCS gnumericimport.cc )
-
 kde4_add_plugin(gnumericimport WITH_PREFIX ${gnumericimport_PART_SRCS})
-
-
-
-target_link_libraries(gnumericimport ${QT_QTGUI_LIBRARY} komain ${QT_QTXML_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} kspreadcommon )
-
+target_link_libraries(gnumericimport komain kspreadcommon
+                      ${QT_QTGUI_LIBRARY} 
+                      ${QT_QTXML_LIBRARY} 
+                      ${KDE4_KDECORE_LIBS}
+)
 install(TARGETS gnumericimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
 
 install( FILES  kspread_gnumeric_export.desktop kspread_gnumeric_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

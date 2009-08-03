@@ -21,22 +21,21 @@
 /* GNUmeric import filter by Phillip Ezolt 6-2-2001 */
 /*                        phillipezolt@hotmail.com  */
 /* additions: Norbert Andres nandres@web.de         */
+#include "gnumericimport.h"
 
-#include <q3dict.h>
+#include <QMap>
 #include <QFile>
 #include <QStringList>
-//Added by qt3to4:
 #include <QByteArray>
 #include <QPen>
-#include <gnumericimport.h>
+
 #include <kmessagebox.h>
 #include <kfilterdev.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
-
-// KOffice
 #include <KoDocumentInfo.h>
 
 // KSpread
@@ -69,39 +68,39 @@ static int g_dateOrigin = 0;
 
 // copied from gnumeric: src/formats.c:
 static char const * cell_date_format [] = {
-	"m/d/yy",		/* 0 Cell::Format::Date5*/
-	"m/d/yyyy",		/* 1 Cell::Format::Date6*/
-	"d-mmm-yy",		/* 2 Cell::Format::Date1 18-Feb-99 */
-	"d-mmm-yyyy",		/* 3 Cell::Format::Date2 18-Feb-1999 */
-	"d-mmm",		/* 4 Cell::Format::Date3 18-Feb */
-	"d-mm",			/* 5 Cell::Format::Date4 18-05 */
-	"mmm/d",		/* 6 Cell::Format::Date11*/
-	"mm/d",			/* 7 Cell::Format::Date12*/
-	"mm/dd/yy",		/* 8 Cell::Format::Date19*/
-	"mm/dd/yyyy",		/* 9 Cell::Format::Date18*/
-	"mmm/dd/yy",		/* 10 Cell::Format::Date20*/
-	"mmm/dd/yyyy",		/* 11 Cell::Format::Date21*/
-	"mmm/ddd/yy",		/* 12 */
-	"mmm/ddd/yyyy",		/* 13 */
-	"mm/ddd/yy",		/* 14 */
-	"mm/ddd/yyyy",		/* 15 */
-	"mmm-yy",		/* 16 Cell::Format::Date7*/
-	"mmm-yyyy",		/* 17 Cell::Format::Date22*/
-	"mmmm-yy",		/* 18 Cell::Format::Date8*/
-	"mmmm-yyyy",		/* 19 Cell::Format::Date9*/
-	"m/d/yy h:mm",		/* 20 */
-	"m/d/yyyy h:mm",	/* 21 */
-	"yyyy/mm/d",		/* 22 Cell::Format::Date25*/
-	"yyyy/mmm/d",		/* 23 Cell::Format::Date14*/
-	"yyyy/mm/dd",		/* 24 Cell::Format::Date25*/
-	"yyyy/mmm/dd",		/* 25 Cell::Format::Date26*/
-	"yyyy-mm-d",		/* 26 Cell::Format::Date16*/
-	"yyyy-mmm-d",		/* 27 Cell::Format::Date15*/
-	"yyyy-mm-dd",		/* 28 Cell::Format::Date16*/
-	"yyyy-mmm-dd",		/* 29 Cell::Format::Date15*/
-	"yy",			/* 30 Cell::Format::Date24*/
-	"yyyy",			/* 31 Cell::Format::Date23*/
-	NULL
+        "m/d/yy",		/* 0 Cell::Format::Date5*/
+        "m/d/yyyy",		/* 1 Cell::Format::Date6*/
+        "d-mmm-yy",		/* 2 Cell::Format::Date1 18-Feb-99 */
+        "d-mmm-yyyy",		/* 3 Cell::Format::Date2 18-Feb-1999 */
+        "d-mmm",		/* 4 Cell::Format::Date3 18-Feb */
+        "d-mm",			/* 5 Cell::Format::Date4 18-05 */
+        "mmm/d",		/* 6 Cell::Format::Date11*/
+        "mm/d",			/* 7 Cell::Format::Date12*/
+        "mm/dd/yy",		/* 8 Cell::Format::Date19*/
+        "mm/dd/yyyy",		/* 9 Cell::Format::Date18*/
+        "mmm/dd/yy",		/* 10 Cell::Format::Date20*/
+        "mmm/dd/yyyy",		/* 11 Cell::Format::Date21*/
+        "mmm/ddd/yy",		/* 12 */
+        "mmm/ddd/yyyy",		/* 13 */
+        "mm/ddd/yy",		/* 14 */
+        "mm/ddd/yyyy",		/* 15 */
+        "mmm-yy",		/* 16 Cell::Format::Date7*/
+        "mmm-yyyy",		/* 17 Cell::Format::Date22*/
+        "mmmm-yy",		/* 18 Cell::Format::Date8*/
+        "mmmm-yyyy",		/* 19 Cell::Format::Date9*/
+        "m/d/yy h:mm",		/* 20 */
+        "m/d/yyyy h:mm",	/* 21 */
+        "yyyy/mm/d",		/* 22 Cell::Format::Date25*/
+        "yyyy/mmm/d",		/* 23 Cell::Format::Date14*/
+        "yyyy/mm/dd",		/* 24 Cell::Format::Date25*/
+        "yyyy/mmm/dd",		/* 25 Cell::Format::Date26*/
+        "yyyy-mm-d",		/* 26 Cell::Format::Date16*/
+        "yyyy-mmm-d",		/* 27 Cell::Format::Date15*/
+        "yyyy-mm-dd",		/* 28 Cell::Format::Date16*/
+        "yyyy-mmm-dd",		/* 29 Cell::Format::Date15*/
+        "yy",			/* 30 Cell::Format::Date24*/
+        "yyyy",			/* 31 Cell::Format::Date23*/
+        NULL
 };
 
 // copied from gnumeric: src/formats.c:
@@ -1876,10 +1875,10 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 }
 
 /* NOTE: As of now everything is in a single huge function.  This is
-	 very ugly.  It should all be broken up into smaller
-	 functions, probably one for each GNUMeric section.  It kind
-	 of grew out of control.  It could probably be cleaned up in
-	 an hour or so. --PGE
+         very ugly.  It should all be broken up into smaller
+         functions, probably one for each GNUMeric section.  It kind
+         of grew out of control.  It could probably be cleaned up in
+         an hour or so. --PGE
   */
 
 
@@ -1991,7 +1990,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
     // This is a mapping of exprID to expressions.
 
-    Q3Dict<char> exprID_dict( 17, false );
+    QMap<QString, char*> exprID_dict;
     int num = 1;
 
     while (!sheet.isNull())
@@ -2039,21 +2038,21 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         }
 
 
-	setObjectInfo(&sheet, table);
-	setColInfo(&sheet, table);
-	setRowInfo(&sheet, table);
-	setSelectionInfo(&sheet, table);
+        setObjectInfo(&sheet, table);
+        setColInfo(&sheet, table);
+        setRowInfo(&sheet, table);
+        setSelectionInfo(&sheet, table);
 
         /* handling print information */
-	QDomNode printInfo = sheet.namedItem("PrintInformation");
+        QDomNode printInfo = sheet.namedItem("PrintInformation");
         if ( !printInfo.isNull() )
           ParsePrintInfo( printInfo, table );
 
         kDebug(30521) <<"Reading in cells";
 
-	/* CELL handling START */
-	QDomNode cells = sheet.namedItem( "Cells" );
-	QDomNode cell  = cells.namedItem( "Cell" );
+        /* CELL handling START */
+        QDomNode cells = sheet.namedItem( "Cells" );
+        QDomNode cell  = cells.namedItem( "Cell" );
         QDomNode mergedCells = sheet.namedItem( "MergedRegions" );
         QDomNode mergedRegion = mergedCells.namedItem( "Merge" );
         if ( cell.isNull() )
@@ -2061,27 +2060,27 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
           kWarning(30521) << "No cells";
         }
 
-	while ( !cell.isNull() )
+        while ( !cell.isNull() )
         {
-	  value += 2;
-	  emit sigProgress(value);
+          value += 2;
+          emit sigProgress(value);
 
-	  QDomElement e = cell.toElement(); // try to convert the node to an element.
-	  if ( !e.isNull() )
+          QDomElement e = cell.toElement(); // try to convert the node to an element.
+          if ( !e.isNull() )
           { // the node was really an element.
             kDebug(30521) <<"New Cell";
-	    QDomNode content_node = cell.namedItem("Content");
+            QDomNode content_node = cell.namedItem("Content");
 
-	    if (!content_node.isNull())
+            if (!content_node.isNull())
             {
-	      QDomElement content = content_node.toElement();
+              QDomElement content = content_node.toElement();
 
-	      if( !content.isNull() )
+              if( !content.isNull() )
               { // the node was really an element.
-		column = e.attribute( "Col" ).toInt() + 1;
-		row    = e.attribute( "Row" ).toInt() + 1;
+                column = e.attribute( "Col" ).toInt() + 1;
+                row    = e.attribute( "Row" ).toInt() + 1;
 
-		QString cell_content( content.text() );
+                QString cell_content( content.text() );
                 //kDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content;
                 if ( cell_content[0] == '=' )
                   convertFormula( cell_content );
@@ -2092,8 +2091,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                 if (e.hasAttribute("ValueType"))
                 {
                   // TODO: what is this for?
-            	  // <xsd:enumeration value="10"/> <!-- empty     -->
-            	  // <xsd:enumeration value="20"/> <!-- boolean   -->
+                  // <xsd:enumeration value="10"/> <!-- empty     -->
+                  // <xsd:enumeration value="20"/> <!-- boolean   -->
                   // <xsd:enumeration value="30"/> <!-- integer   -->
                   // <xsd:enumeration value="40"/> <!-- float     -->
                   // <xsd:enumeration value="50"/> <!-- error     -->
@@ -2122,34 +2121,34 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                 else
                   setText(table, row, column, cell_content, false);
 
-		if (e.hasAttribute("ExprID"))
+                if (e.hasAttribute("ExprID"))
                 {
-		    // QString encoded_string( Cell( table, column, row ).encodeFormula( row, column ).utf8());
-		    QString encoded_string( Cell( table, column, row ).encodeFormula().toLatin1());
+                    // QString encoded_string( Cell( table, column, row ).encodeFormula( row, column ).utf8());
+                    QString encoded_string( Cell( table, column, row ).encodeFormula().toLatin1());
 
 
-		    char * tmp_string = ( char * ) malloc( strlen( encoded_string.toLatin1() ) );
-		    strcpy( tmp_string, encoded_string.toLatin1() );
+                    char * tmp_string = ( char * ) malloc( strlen( encoded_string.toLatin1() ) );
+                    strcpy( tmp_string, encoded_string.toLatin1() );
 
-		    kDebug(30521) << encoded_string.toLatin1();
+                    kDebug(30521) << encoded_string.toLatin1();
 
-		    exprID_dict.insert(e.attribute("ExprID"), tmp_string);
+                    exprID_dict.insert(e.attribute("ExprID").toLower(), tmp_string);
 
-		    kDebug(30521) << exprID_dict[e.attribute("ExprID")];
-		    kDebug(30521) << exprID_dict[QString("1")];
-		    kDebug(30521) << e.attribute("ExprID");
+                    kDebug(30521) << exprID_dict[e.attribute(QString("ExprID").toLower())];
+                    kDebug(30521) << exprID_dict[QString("1")];
+                    kDebug(30521) << e.attribute("ExprID");
 
-		  }
+                  }
                   kspread_cell.setStyle(style);
-	      }
-	    }
-	    else
+              }
+            }
+            else
             {
 
                 column = e.attribute( "Col" ).toInt() + 1;
-		row    = e.attribute( "Row" ).toInt() + 1;
+                row    = e.attribute( "Row" ).toInt() + 1;
 
-		QString cell_content( e.text() );
+                QString cell_content( e.text() );
                 //kDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content;
                 if ( cell_content[0] == '=' )
                   convertFormula( cell_content );
@@ -2196,24 +2195,24 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
                 if (e.hasAttribute("ExprID"))
                 {
-		    column = e.attribute("Col").toInt() + 1;
-		    row    = e.attribute("Row").toInt() + 1;
-		    char * expr;
-		    expr = exprID_dict[e.attribute("ExprID")];
-		    // expr = exprID_dict[QString("1")];
+                    column = e.attribute("Col").toInt() + 1;
+                    row    = e.attribute("Row").toInt() + 1;
+                    char * expr;
+                    expr = exprID_dict[e.attribute("ExprID").toLower()];
+                    // expr = exprID_dict[QString("1")];
 
-		    kDebug(30521) <<"FOO:" << column << row;
-		    kDebug(30521) <<
+                    kDebug(30521) <<"FOO:" << column << row;
+                    kDebug(30521) <<
                            Cell( table, column, row ).decodeFormula(expr).toLatin1() << endl;
-		    kDebug(30521) << expr;
+                    kDebug(30521) << expr;
 
-		    setText(table, row, column, Cell( table, column, row ).decodeFormula(expr), false);
-		  }
+                    setText(table, row, column, Cell( table, column, row ).decodeFormula(expr), false);
+                  }
                   kspread_cell.setStyle(style);
-	      }
-	  }
-	  cell = cell.nextSibling();
-	}
+              }
+          }
+          cell = cell.nextSibling();
+        }
 
         kDebug(30521) <<"Reading in cells done";
 
@@ -2221,7 +2220,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         {
           kWarning(30521) << "No cells merged !";
         }
-	while ( !mergedRegion.isNull() )
+        while ( !mergedRegion.isNull() )
         {
             QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.
             QString cell_merge_area( e.text() );
@@ -2232,15 +2231,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                              region.firstRange().width() - 1, region.firstRange().height() - 1);
             mergedRegion = mergedRegion.nextSibling();
         }
-	/* There is a memory leak here...
-	 * The strings in the exprID_dict have been allocated, but they have not been freed.
-	 */
+#ifdef __GNUC__
+#warning "The strings in the exprID_dict have been allocated, but they have not been freed: there is a memory leak here"
+#endif
+        /* exprID_dict.statistics(); */
 
-	/* exprID_dict.statistics(); */
+        /* CELL handling STOP */
 
-	/* CELL handling STOP */
-
-	/* STYLE handling START */
+        /* STYLE handling START */
         //Laurent - 2001-12-07  desactivate this code : otherwise we
         //create 65535*255 cells (Styleregion is define for a area and
         //not for cell, so gnumeric define a style as : col start=0 col end=255
@@ -2248,9 +2246,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         //and gnumeric stocke all area and not just modify area
         //=> not good for kspread.
         // Norbert: activated again, only cells with texts get modified, nothing else created
-	setStyleInfo(&sheet, table);
+        setStyleInfo(&sheet, table);
 
-	sheet = sheet.nextSibling();
+        sheet = sheet.nextSibling();
         ++num;
       }
 
