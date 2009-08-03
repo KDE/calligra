@@ -21,12 +21,11 @@
 #define FILTEREFFECTRESOURCE_H
 
 #include "KoResource.h"
-#include "koresource_export.h"
 #include <QtXml/QDomDocument>
 
 class KoFilterEffectStack;
 
-class KORESOURCES_EXPORT FilterEffectResource : public KoResource
+class FilterEffectResource : public KoResource
 {
 public:
     FilterEffectResource(const QString &filename);
