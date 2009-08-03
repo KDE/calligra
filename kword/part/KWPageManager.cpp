@@ -81,7 +81,7 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
     foreach (int id, oldPages.keys()) {
         Page page = oldPages[id];
         if (diff < 0 && page.pageNumber >= from && page.pageNumber < to) {
-            kWarning() << "you requested to change the page number to a number that already exist, all will end soon";
+            kWarning(32001) << "you requested to change the page number to a number that already exist, all will end soon";
             return;
         }
         const int oldPageNumber = page.pageNumber; // debug only

@@ -260,7 +260,7 @@ void KWDocument::removePage(int pageNumber)
 
     KWPage page = m_pageManager.page(pageNumber);
     if (! page.isValid()) {
-        kWarning() << "remove page requested for a non exiting page!";
+        kWarning(32001) << "remove page requested for a non exiting page!";
         return;
     }
     addCommand(new KWPageRemoveCommand(this, page));
