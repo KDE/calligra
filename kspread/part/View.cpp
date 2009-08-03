@@ -53,7 +53,7 @@
 #include <QSqlDatabase>
 #include <QSizePolicy>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 // KDE includes
 #include <kactioncollection.h>

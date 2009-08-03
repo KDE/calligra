@@ -42,7 +42,7 @@
 #include <QFont>
 #include <QTimer>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <QPainter>
 
 #include <kcompletion.h>
