@@ -576,7 +576,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         else if( brushStyle >= 2 && brushStyle <= 8 )
         {
             //in KPR files transparency was used in ODF opacity is used instead calculated as 100-transparency
-            int opacity;
+            int opacity = 100;
             if( brushStyle == 2 )
                 opacity = 6;
             else if( brushStyle == 3 )

@@ -654,7 +654,7 @@ void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& o
 }
 
 void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& objectElement )
-{ 
+{
    //Avoid the creation of so many unneded text:span
     static QString lastStyle;
     static QString textChain;
@@ -695,7 +695,7 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
 
 void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
-    //NOTE: we cannot use set2dGeometry becuse we have to convert the 
+    //NOTE: we cannot use set2dGeometry becuse we have to convert the
     //given size and origen into the real ones before saving them
 
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
@@ -1324,7 +1324,7 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     content->addAttributePt( "svg:width", width );
     content->addAttributePt( "svg:height", height );
 
-    double rotateAngle;
+    double rotateAngle = 0.0;
     QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
     if( fileName.endsWith( "ArrowUp.atf" ) )
     {
