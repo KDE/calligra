@@ -306,6 +306,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * compiled
  * has tests, tests have already been copied to koffice/filters/kword/wordperfect from kofficetests
  * wp files aren't recognized, mime-type not listed
+ * import works
  * import/export
 
 == kspread ==
