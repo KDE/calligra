@@ -110,7 +110,7 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
         } else {
             undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),0,list,false);
         }
-    } else if (m_cursor.insideFixedElement()) {
+/*    } else if (m_cursor.insideFixedElement()) {
         if (m_cursor.hasSelection()) {
             //TODO
             return 0;
@@ -130,7 +130,7 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
             oldchild->setParentElement(tmpRow);
             element->setParentElement(tmpRow);
             undo=new FormulaCommandWrapSingleElement(m_cursor.currentElement(),oldchild,tmpRow, tmpRow);
-        }
+        }*/
     } else if (m_cursor.insideEmptyElement()) {
         undo=new FormulaCommandReplaceSingleElement(m_cursor.currentElement()->parentElement(),m_cursor.currentElement(),element);
     }
@@ -170,7 +170,7 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
                 undo=new FormulaCommandReplaceText(tmptoken,m_cursor.position(),1,"");
             }
         }
-    } else if (m_cursor.insideFixedElement()) {
+/*    } else if (m_cursor.insideFixedElement()) {
         FixedElement* tmpfixed=static_cast<FixedElement*>(m_cursor.currentElement());
         if (m_cursor.hasSelection()) {
             foreach (BasicElement* tmp, tmpfixed->elementsBetween(m_cursor.selection().first,m_cursor.selection().second)) {
@@ -184,7 +184,7 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
             } else if (!elementBeforePosition && (m_cursor.currentElement()->elementAfter(m_cursor.position())!=0)) {
                 undo=new FormulaCommandReplaceSingleElement(tmpfixed,m_cursor.currentElement()->elementAfter(m_cursor.position()),newelement);
             }
-        }
+        }*/
     }
     if (undo) {
         undo->setText("Remove stuff");

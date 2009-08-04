@@ -91,200 +91,46 @@ const QList<BasicElement*> RootElement::childElements() const
 }
 
 
-QList< BasicElement* > RootElement::elementsBetween(int pos1, int pos2) const
-{ 
-    QList<BasicElement*> tmp;
-    if (pos1==0 && pos2 >0) { 
-        tmp.append(m_exponent);
-    }
-    if (pos1<3 && pos2==3) {
-        tmp.append(m_radicand);
-    }
-    return tmp;
-}
+// QList< BasicElement* > RootElement::elementsBetween(int pos1, int pos2) const
+// { 
+//     QList<BasicElement*> tmp;
+//     if (pos1==0 && pos2 >0) { 
+//         tmp.append(m_exponent);
+//     }
+//     if (pos1<3 && pos2==3) {
+//         tmp.append(m_radicand);
+//     }
+//     return tmp;
+// }
 
-
-QLineF RootElement::cursorLine(int position) const
-{
-    QPointF top=absoluteBoundingRect().topLeft();
-    QPointF bottom;
-    switch (position) {
-	case 0:
-	    top+=m_exponent->origin();
-	    break;
-	case 1:
-	    top+=m_exponent->origin()+QPointF(m_exponent->width(),0.0);
-	    break;
-	case 2:
-	    top+=m_radicand->origin();
-	    break;
-	case 3:
-	    top+=m_radicand->origin()+QPointF(m_radicand->width(),0.0);
-	    break;
-    }
-    if (position<=1) {
-	bottom=top+QPointF(0.0,m_exponent->height());
-    }
-    else {
-	bottom=top+QPointF(0.0,m_radicand->height());
-    }
-    return QLineF(top, bottom);
-}
-
-int RootElement::positionOfChild(BasicElement* child) const 
-{
-    if (child==m_exponent) {
-        return 0;
-    } else if (child==m_radicand) {
-        return 2;
-    }
-    return -1;
-}
+// int RootElement::positionOfChild(BasicElement* child) const 
+// {
+//     if (child==m_exponent) {
+//         return 0;
+//     } else if (child==m_radicand) {
+//         return 2;
+//     }
+//     return -1;
+// }
 
 bool RootElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
     if (cursor.isSelecting()) {
-        if (point.x()<(m_exponent->boundingRect().right()+m_radicand->boundingRect().left())/2.) {
-            //the point is left of the radicand
-            if (point.x()<m_exponent->boundingRect().left()) {
-                //the point is left of the exponent
-                cursor.moveTo(this, 0);
-                return true;
-            } else {
-                //the point is on the exponent
-                if (cursor.mark() == 0) {
-                    cursor.moveTo(this, 1);
-                    return true;
-                } else {
-                    cursor.moveTo(this, 0);
-                    return true;
-                }
-            }
-        } else {
-            //the point is right of the exponent
-            if (point.x()>m_radicand->boundingRect().right()) {
-                //the point is right of the radicand
-                cursor.moveTo(this, 3);
-                return true;
-            } else {
-                //the point is on the radicand
-                if (cursor.mark() == 3) {
-                    cursor.moveTo(this, 2);
-                    return true;
-                } else {
-                    cursor.moveTo(this, 3);
-                    return true;
-                }
-            }
-        }
-        //clean up the selectionStart
-        fixSelection(cursor);
+        return false;
+    }
+    if (m_exponent->boundingRect().contains(point)) {
+        return m_exponent->setCursorTo(cursor, point-m_exponent->origin());
     } else {
-        if (m_exponent->boundingRect().contains(point)) {
-            return m_exponent->setCursorTo(cursor, point-m_exponent->origin());
-        } else {
-            return m_radicand->setCursorTo(cursor, point-m_radicand->origin());
-        }
+        return m_radicand->setCursorTo(cursor, point-m_radicand->origin());
     }
 }
 
 bool RootElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
-    switch (newcursor.direction()) {
-    case MoveLeft:
-        switch (newcursor.position()) {
-        case 0:
-            return false;
-        case 1:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,0);
-            } else {
-                newcursor.moveTo(m_exponent, m_exponent->length());
-            }
-            break;
-        case 2:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,0);
-            } else {
-                newcursor.moveTo(this,1);
-            }
-            break;
-        case 3:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,2);
-            } else {
-                newcursor.moveTo(m_radicand,m_radicand->length());
-            }
-            break;
-        }
-        break;
-    case MoveRight:
-        switch (newcursor.position()) {
-        case 3:
-            return false;
-        case 2:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,3);
-            } else {
-                newcursor.moveTo(m_radicand,0);
-            }
-            break;
-        case 1:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,3);
-            } else {
-                newcursor.moveTo(this,2);
-            }
-            break;
-        case 0:
-            if (newcursor.isSelecting()) {
-                newcursor.moveTo(this,1);
-            } else {
-                newcursor.moveTo(m_exponent,0);
-            }
-            break;
-        }
-        break;
-    case MoveUp:
-        if (newcursor.isSelecting()) {
-            return false;
-        }
-        if (newcursor.position()>=2) {
-            newcursor.moveTo(this,1);
-            break;
-        } else {
-            return false;
-        }
-        break;
-    case MoveDown:
-        if (newcursor.isSelecting()) {
-            return false;
-        }
-        if (newcursor.position()<=1) {
-            newcursor.moveTo(this,2);
-            break;
-        } else {
-            return false;
-        }
-        break;
-    }
-    fixSelection(newcursor);
-    return true;
-}
-
-
-void RootElement::fixSelection ( FormulaCursor& cursor )
-{
-    if (cursor.isSelecting()) {
-        if (cursor.position()<2 && cursor.mark()==2) {
-            cursor.setMark(1);
-        } else if (cursor.position()==2 && cursor.mark()<2) {
-            cursor.setPosition(1);
-        } else if (cursor.position()==1 && cursor.mark()>1) {
-            cursor.setPosition(2);
-        } else if (cursor.position()>1 && cursor.mark()==1) {
-            cursor.setMark(2);
-        }
+    if (newcursor.isSelecting()) {
+        return false;
+    } else {
+        return moveHorSituation(newcursor,oldcursor,0,1);
     }
 }
 
@@ -305,11 +151,6 @@ bool RootElement::replaceChild ( BasicElement* oldelement, BasicElement* newelem
         return true;
     }
     return false;
-}
-
-bool RootElement::acceptCursor( const FormulaCursor& cursor )
-{
-    return true;
 }
 
 ElementType RootElement::elementType() const

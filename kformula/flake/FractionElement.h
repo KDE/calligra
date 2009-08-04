@@ -65,10 +65,7 @@ public:
     
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
-    
-    /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor& cursor );
-    
+
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
@@ -79,7 +76,7 @@ public:
     virtual int positionOfChild(BasicElement* child) const;
     
     /// inherited from BasicElement
-    virtual QLineF cursorLine(int position) const;
+//     virtual QLineF cursorLine(int position) const;
     
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
@@ -95,8 +92,6 @@ protected:
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     void writeMathMLContent( KoXmlWriter* writer ) const;   
-    
-    void fixSelection(FormulaCursor& cursor);
 
 private:
     /// Layout the fraction in a bevelled way

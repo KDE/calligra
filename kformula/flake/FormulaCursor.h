@@ -110,6 +110,8 @@ public:
     void moveTo( const FormulaCursor& pos);
 
     void moveTo(BasicElement* element, int position);
+
+    void moveTo(BasicElement* element);
     
     /// Put the cursor in @p element, as close as possible to the point where @p cursor is
     bool moveCloseTo( BasicElement* element, FormulaCursor& cursor);
@@ -147,6 +149,9 @@ public:
     bool performMovement(CursorDirection direction, FormulaCursor& oldcursor);
 
     FormulaCursor& operator+=(int step);
+
+    int offset();
+
 private:
     /// The element that is currently left to the cursor
     BasicElement* m_currentElement;

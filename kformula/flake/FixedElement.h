@@ -38,17 +38,25 @@ public:
 
     /// The standard destructor
     virtual ~FixedElement();
+
+    virtual bool acceptCursor ( const FormulaCursor& cursor );
     
-    BasicElement* elementBefore(int position);
+    BasicElement* elementBefore(int position) const;
     
-    BasicElement* elementAfter(int position);
+    BasicElement* elementAfter(int position) const;
+
+    virtual QLineF cursorLine ( int position ) const;
     
-    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const = 0;
+//     virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const = 0;
     
     virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
-   
+
+    /// inherited from BasicElement
+    virtual int positionOfChild(BasicElement* child) const;
+
 protected:
-    
+    bool moveHorSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
+    bool moveVertSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
 };
 
 #endif // ROWELEMENT_H

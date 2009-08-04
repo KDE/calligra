@@ -430,7 +430,7 @@ void KoFormulaTool::setupActions()
 //     addAction( "insert_tablecol", action );
 
     action = new KAction( i18n( "Insert sub- and superscript" ), this );
-    action->setData( QString( "<msubsup><mrow/><mrow/></msubsup>" ) );
+    action->setData( QString( "<msubsup><mrow/><mrow/><mrow/></msubsup>" ) );
     addAction( "insert_subsupscript", action );
     action->setIcon( KIcon("rsub"));
 }

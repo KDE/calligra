@@ -18,14 +18,16 @@
 */
 
 #include "MultiscriptElement.h"
+#include "EmptyElement.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
+#include "FormulaCursor.h"
 
-MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
+MultiscriptElement::MultiscriptElement( BasicElement* parent ) : FixedElement( parent )
 {
-    m_baseElement = new BasicElement( this );
+    m_baseElement = new EmptyElement( this );
 }
 
 MultiscriptElement::~MultiscriptElement()
@@ -210,7 +212,7 @@ bool MultiscriptElement::acceptCursor( const FormulaCursor* cursor )
     return false;
 }
 
-const QList<BasicElement*> MultiscriptElement::childElements()
+const QList<BasicElement*> MultiscriptElement::childElements() const
 {
     QList<BasicElement*> list;
     list << m_baseElement;
@@ -264,7 +266,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if( !tmpElement->readMathML( tmp ) )
             return false;
-        if( m_baseElement->elementType() == Basic ) {  //Very first element is the base
+        if( m_baseElement->elementType() == Empty ) {  //Very first element is the base
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
@@ -305,3 +307,31 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
     }
 }
 
+int MultiscriptElement::length() const
+{
+        return 2*childElements().length()-1;
+}
+
+bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+{
+    //TODO: Fill this out 
+    int childposition=newcursor.position()/2;
+    if (childposition==0) {
+        if (newcursor.direction()==MoveLeft) {
+            return moveVertSituation(newcursor,oldcursor,0,1);
+        } else if (newcursor.direction()==MoveRight) {
+            return moveVertSituation(newcursor,oldcursor,0,1);
+        }
+    }
+    return false;
+}
+
+bool MultiscriptElement::setCursorTo ( FormulaCursor& cursor, QPointF point )
+{
+    foreach (BasicElement* tmp, childElements()) {
+        if (tmp->boundingRect().contains(point)) {
+            return tmp->setCursorTo(cursor,point-tmp->origin());
+        }
+    }
+    return m_baseElement->setCursorTo(cursor,point-m_baseElement->origin());
+}

@@ -19,17 +19,18 @@
 
 #include "SubSupElement.h"
 #include "FormulaCursor.h"
+#include "EmptyElement.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <kdebug.h>
 
-SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : BasicElement( parent )
+SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
 {
-    m_baseElement = new BasicElement( this );
-    m_subScript = new BasicElement( this );
-    m_superScript = new BasicElement( this );
+    m_baseElement = new EmptyElement( this );
+    m_subScript = new EmptyElement( this );
+    m_superScript = new EmptyElement( this );
     m_elementType = elementType;
 }
 
@@ -68,8 +69,9 @@ void SubSupElement::layout( const AttributeManager* am )
         yOffset = qMax( yOffset, superscriptshift );
     }
     double largestWidth = 0;
-    if(m_subScript)
+    if(m_subScript) {
         largestWidth = m_subScript->width();
+    }
     if(m_superScript) {
         largestWidth = qMax( largestWidth, m_superScript->width());
         m_superScript->setOrigin( QPointF( m_baseElement->width(), 0) );
@@ -87,8 +89,9 @@ void SubSupElement::layout( const AttributeManager* am )
 		          + subscriptshift );
         m_subScript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
 	setHeight( yPos + m_subScript->height() );
-    } else
+    } else {
         setHeight( yOffset + m_baseElement->height() );
+    }
 }
 
 bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
@@ -96,14 +99,12 @@ bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
     return true;
 }
 
-const QList<BasicElement*> SubSupElement::childElements()
+const QList<BasicElement*> SubSupElement::childElements() const
 {
     QList<BasicElement*> tmp;
     tmp << m_baseElement;
-    if(m_elementType != SupScript)
-        tmp << m_subScript;
-    if(m_elementType != SubScript)
-        tmp << m_superScript;
+    tmp << m_superScript;
+    tmp << m_subScript;
     return tmp;
 }
 
@@ -126,8 +127,8 @@ QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 
 ElementType SubSupElement::elementType() const
 {
-     return m_elementType;
-     // Should we decide the type also on whether the user has entered text for the sup and sub parts?
+//      return m_elementType;
+    // Should we decide the type also on whether the user has entered text for the sup and sub parts?
  /*    if( m_subScript->elementType() != Basic &&
         m_superScript->elementType() != Basic )
         return SubSupScript;
@@ -147,15 +148,15 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
         if( !tmpElement->readMathML( tmp ) )
             return false;
 
-        if( m_baseElement->elementType() == Basic ) {
+        if( m_baseElement->elementType() == Empty ) {
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_subScript->elementType() == Basic && m_elementType != SupScript) {
+        else if( m_subScript->elementType() == Empty && m_elementType != SupScript) {
             delete m_subScript;
             m_subScript = tmpElement;
         }
-        else if( m_superScript->elementType() == Basic ) {
+        else if( m_superScript->elementType() == Empty ) {
             delete m_superScript;
             m_superScript = tmpElement;
         }
@@ -170,10 +171,72 @@ void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
     // just save the children in the right order
     m_baseElement->writeMathML( writer );
 
-    if( m_subScript->elementType() != Basic )
+    if( m_subScript->elementType() != Empty )
         m_subScript->writeMathML( writer );
-    
-    if( m_superScript->elementType() != Basic )
+
+    if( m_superScript->elementType() != Empty )
         m_superScript->writeMathML( writer );
 }
 
+
+int SubSupElement::length() const
+{
+    return 5;
+}
+
+
+bool SubSupElement::setCursorTo(FormulaCursor& cursor, QPointF point)
+{
+    if (cursor.isSelecting()) {
+        return false;
+    }
+    if (point.x() <= m_baseElement->boundingRect().right()) {
+        return m_baseElement->setCursorTo(cursor, point-m_baseElement->origin());
+    } else {
+        if (point.y()<=(m_subScript->boundingRect().top()+m_superScript->boundingRect().bottom())/2) {
+            return m_superScript->setCursorTo(cursor, point-m_superScript->origin());
+        } else {
+            return m_subScript->setCursorTo(cursor, point-m_subScript->origin());
+        }
+    }
+}
+
+
+bool SubSupElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+{
+    // 0^1_2
+    int childpos=newcursor.position()/2;
+    kDebug()<<"USBSUSABSDUASD "<<childpos;
+    switch( newcursor.direction()) {
+    case MoveUp:
+    case MoveDown:
+        switch (childpos) {
+        case 1:
+        case 2:
+            return moveVertSituation(newcursor,oldcursor,1,2);
+            break;
+        case 0:
+            if (newcursor.direction()==MoveDown) {
+                return moveHorSituation(newcursor,oldcursor,1,0);
+            } else {
+                return moveHorSituation(newcursor,oldcursor,0,2);
+            }
+            break;
+        }
+        break;
+    case MoveLeft:
+    case MoveRight:
+        switch (childpos) {
+        case 0:
+            return moveHorSituation(newcursor,oldcursor,0,1);
+            break;
+        case 1:
+            return moveHorSituation(newcursor,oldcursor,0,1);
+            break;
+        case 2:
+            return moveHorSituation(newcursor,oldcursor,0,2);
+        }
+        break;
+    }
+    return false;
+}

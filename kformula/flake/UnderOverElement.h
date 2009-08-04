@@ -21,14 +21,14 @@
 #ifndef UNDEROVERELEMENT_H
 #define UNDEROVERELEMENT_H
 
-#include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
  *
  */
-class KOFORMULA_EXPORT UnderOverElement : public BasicElement {
+class KOFORMULA_EXPORT UnderOverElement : public FixedElement {
 public:
     /// The standard constructor
     UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
@@ -40,8 +40,13 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
+    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+
+    virtual int length() const; 
+
+    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -55,15 +60,12 @@ public:
      */
     void layout( const AttributeManager* am );
 
-    ///inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
-
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
 
     /// @return The element's ElementType
     ElementType elementType() const;
-   
+
 protected:
     /// Read all content from the node - reimplemented by child elements
     bool readMathMLContent( const KoXmlElement& element );

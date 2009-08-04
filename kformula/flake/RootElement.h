@@ -46,11 +46,11 @@ public:
      */
     const QList<BasicElement*> childElements() const;
     
-    QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
-    
+//     QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+
     /// inherited from BasicElement
     virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
-    
+
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -64,28 +64,25 @@ public:
     void layout( const AttributeManager* am );
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor& cursor );
-    
-    /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
-    
+
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
-    
-    virtual QLineF cursorLine(int position) const;
-    
+
+//     virtual QLineF cursorLine(int position) const;
+
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
-    
+//     virtual int positionOfChild(BasicElement* child) const;
+
     /// @return The element's ElementType
     ElementType elementType() const;
-    
+
     /// @return The element's length
     virtual int length() const;
 
 protected:
     ///update the selection in cursor so that a proper range is selected
-    void fixSelection (FormulaCursor& cursor);
+//     void fixSelection (FormulaCursor& cursor);
     
     /// Read root contents - reimplemented from BasicElement
     bool readMathMLContent( const KoXmlElement& element );

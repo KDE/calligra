@@ -21,13 +21,13 @@
 #ifndef SUBSUPELEMENT_H
 #define SUBSUPELEMENT_H
 
-#include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 
 /**
  * @short Implementation of the msub, msup, msubsup elements
  */
-class KOFORMULA_EXPORT SubSupElement : public BasicElement {
+class KOFORMULA_EXPORT SubSupElement : public FixedElement {
 public:
     /// The standard constructor
     SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
@@ -39,7 +39,7 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
 
     /**
      * Render the element to the given QPainter
@@ -70,6 +70,11 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
+    virtual int length() const;
+
+    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+
+    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
 protected:
     /// Read all content from the node
     bool readMathMLContent( const KoXmlElement& element );

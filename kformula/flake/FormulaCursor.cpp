@@ -177,6 +177,15 @@ void FormulaCursor::moveTo ( const FormulaCursor& pos )
 }
 
 
+void FormulaCursor::moveTo ( BasicElement* element )
+{
+    moveTo(element,0);
+    if (direction()==MoveLeft) {
+        moveEnd();
+    }
+}
+
+
 void FormulaCursor::moveTo ( BasicElement* element, int position )
 {
     moveTo(FormulaCursor(element,position));
@@ -460,3 +469,14 @@ FormulaCursor& FormulaCursor::operator+= ( int step )
 {
     m_position+=step;
 }
+
+int FormulaCursor::offset ( )
+{
+    if (m_direction==MoveDown || m_direction==MoveRight) {
+        return -1;
+    } else if (m_direction==MoveUp || m_direction==MoveLeft) {
+        return 1;
+    }
+    return 0;
+}
+

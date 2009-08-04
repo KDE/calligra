@@ -137,40 +137,35 @@ const QList<BasicElement*> FractionElement::childElements() const
     return list;
 }
 
-bool FractionElement::acceptCursor( const FormulaCursor& cursor )
-{
-    return true;
-}
-
 int FractionElement::length() const {
     return 3;
 }
 
-QLineF FractionElement::cursorLine(int position) const {
-    QPointF top=absoluteBoundingRect().topLeft();
-    QPointF bottom;
-    switch (position) {
-	case 0:
-	    top+=m_numerator->origin();
-	    break;
-	case 1:
-	    top+=m_numerator->origin()+QPointF(m_numerator->width(),0.0);
-	    break;
-	case 2:
-	    top+=m_denominator->origin();
-	    break;
-	case 3:
-	    top+=m_denominator->origin()+QPointF(m_denominator->width(),0.0);
-	    break;
-    }
-    if (position<=1) {
-	bottom=top+QPointF(0.0,m_numerator->height());
-    }
-    else {
-	bottom=top+QPointF(0.0,m_denominator->height());
-    }
-    return QLineF(top, bottom);
-}
+// QLineF FractionElement::cursorLine(int position) const {
+//     QPointF top=absoluteBoundingRect().topLeft();
+//     QPointF bottom;
+//     switch (position) {
+// 	case 0:
+// 	    top+=m_numerator->origin();
+// 	    break;
+// 	case 1:
+// 	    top+=m_numerator->origin()+QPointF(m_numerator->width(),0.0);
+// 	    break;
+// 	case 2:
+// 	    top+=m_denominator->origin();
+// 	    break;
+// 	case 3:
+// 	    top+=m_denominator->origin()+QPointF(m_denominator->width(),0.0);
+// 	    break;
+//     }
+//     if (position<=1) {
+// 	bottom=top+QPointF(0.0,m_numerator->height());
+//     }
+//     else {
+// 	bottom=top+QPointF(0.0,m_denominator->height());
+//     }
+//     return QLineF(top, bottom);
+// }
 
 
 QList< BasicElement* > FractionElement::elementsBetween ( int pos1, int pos2 ) const
@@ -197,105 +192,23 @@ int FractionElement::positionOfChild(BasicElement* child) const {
 }
 
 bool FractionElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)  {
-    if (((newcursor.position()==0 || newcursor.position()==1) && newcursor.direction()==MoveUp) ||
-        ((newcursor.position()==2 || newcursor.position()==3) && newcursor.direction()==MoveDown) ||
-        ((newcursor.position()==0 || newcursor.position()==2) && newcursor.direction()==MoveLeft) ||
-        ((newcursor.position()==1 || newcursor.position()==3) && newcursor.direction()==MoveRight) ) {
+    if (newcursor.isSelecting()) {
         return false;
-    }
-    switch (newcursor.direction()) {
-    case MoveLeft:
-        if (newcursor.isSelecting()) {
-            newcursor.moveTo(this,newcursor.position()-1);
-        } else {
-            newcursor.setCurrentElement(newcursor.position()==1 ? m_numerator : m_denominator );
-            newcursor.moveEnd();
-        }
-        break;
-    case MoveRight:
-        if (newcursor.isSelecting()) {
-            newcursor.moveTo(this,newcursor.position()+1);
-        } else {
-            newcursor.setCurrentElement(newcursor.position()==0 ? m_numerator : m_denominator );
-            newcursor.moveHome();
-        }
-        break;
-    case MoveUp:
-        if (newcursor.isSelecting() ||
-            (oldcursor.currentElement()==this &&
-             oldcursor.position()==newcursor.position())) {
-            //we started the movement inside the fraction 
-            newcursor.setPosition(newcursor.position()-2);
-            break;
-        }
-        if (newcursor.moveCloseTo(m_numerator,oldcursor)) {
-            return true;
-        } else {
-            newcursor.setPosition(newcursor.position()-2);
-            break;
-        } 
-    case MoveDown:
-        if (newcursor.isSelecting() ||
-            (oldcursor.currentElement()==this &&
-             oldcursor.position()==newcursor.position())) {
-            //we started the movement inside the fraction or we are selecting
-            newcursor.setPosition(newcursor.position()+2);
-            break;
-        }	    
-        if (newcursor.moveCloseTo(m_denominator,oldcursor)) {
-            return true;
-        } else {
-            newcursor.setPosition(newcursor.position()+2);
-            break;
-        }
-    }
-    fixSelection(newcursor);
-    return true;
-}
-
-
-void FractionElement::fixSelection ( FormulaCursor& cursor )
-{
-    if (cursor.isSelecting()) {
-        if (cursor.position()<2 && cursor.mark()==2) {
-            cursor.setMark(1);
-        } else if (cursor.position()==2 && cursor.mark()<2) {
-            cursor.setPosition(1);
-        } else if (cursor.position()==1 && cursor.mark()>1) {
-            cursor.setPosition(2);
-        } else if (cursor.position()>1 && cursor.mark()==1) {
-            cursor.setMark(2);
-        }
+    } else {
+        //TODO: How can I get the attribute of the Attributemanager here?
+        // The movement should be different in the bevelled case
+        //if (bevelled) {
+        // return moveHorSituation(newcursor,oldcursor,0,1 )
+        return moveVertSituation(newcursor,oldcursor,0,1);
     }
 }
-
 
 bool FractionElement::setCursorTo( FormulaCursor& cursor, QPointF point )
 {
     //check if the point is above the fraction line, the origin is in the top left corner
     bool inNumerator=point.y() < (m_numerator->boundingRect().bottom() +  m_denominator->boundingRect().top())/2 ;
     if (cursor.isSelecting()) {
-        if (inNumerator) {
-            //the point is above the fraction line
-            if (point.x()<m_numerator->boundingRect().left()+m_numerator->boundingRect().width()/2.) {
-                //the point is left of the numerator
-                cursor.moveTo(this, 0);
-            } else { //the point is right
-                cursor.moveTo(this, 1);
-            }
-            return true;
-        } else {
-            //the point is below the fraction line
-            if (point.x()<m_denominator->boundingRect().left()+m_denominator->boundingRect().width()/2.) {
-                //the point is left of the denominator
-                cursor.moveTo(this, 2);
-            } else {
-                //the point is right of the denominator
-                cursor.moveTo(this, 3);
-            }
-            return true;
-        }
-        fixSelection(cursor);
+        return false;
     } else {
         if (point.x() > width()) {
             cursor.moveTo(this,inNumerator? 1 : 3);

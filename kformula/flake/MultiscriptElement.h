@@ -21,13 +21,13 @@
 #ifndef MULTISCRIPTELEMENT_H
 #define MULTISCRIPTELEMENT_H
 
-#include "BasicElement.h"
+#include "FixedElement.h"
 #include "kformula_export.h"
 
 /**
  * @short Implementation of the mmultiscript element
  */
-class KOFORMULA_EXPORT MultiscriptElement : public BasicElement {
+class KOFORMULA_EXPORT MultiscriptElement : public FixedElement {
 public:
     /// The standard constructor
     MultiscriptElement( BasicElement* parent = 0 );
@@ -39,8 +39,13 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
+    const QList<BasicElement*> childElements() const;
+    
+    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
 
+    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    
+    virtual int length() const;
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to

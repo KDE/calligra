@@ -19,17 +19,18 @@
 */
 
 #include "UnderOverElement.h"
+#include "EmptyElement.h"
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <kdebug.h>
 #include <QPainter>
 
-UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : BasicElement( parent )
+UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
 {
-    m_baseElement = new BasicElement( this );
-    m_underElement = new BasicElement( this );
-    m_overElement = new BasicElement( this );
+    m_baseElement = new EmptyElement( this );
+    m_underElement = new EmptyElement( this );
+    m_overElement = new EmptyElement( this );
     m_elementType = elementType;
 }
 
@@ -40,14 +41,14 @@ UnderOverElement::~UnderOverElement()
     delete m_overElement;
 }
 
-const QList<BasicElement*> UnderOverElement::childElements()
+const QList<BasicElement*> UnderOverElement::childElements() const
 {
     QList<BasicElement*> tmp;
     tmp << m_baseElement;
-    if(m_elementType != Over)
-        tmp << m_underElement;
-    if(m_elementType != Under)
-        tmp << m_overElement;
+//     if(m_elementType != Over)
+    tmp << m_overElement;
+//     if(m_elementType != Under)
+    tmp << m_underElement;
     return tmp;
 }
 
@@ -105,11 +106,6 @@ void UnderOverElement::layout( const AttributeManager* am )
     setWidth( largestWidth );
 }
 
-bool UnderOverElement::acceptCursor( const FormulaCursor* cursor )
-{
-    return true;
-}
-
 QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
 {
 /*    if( m_overElement->elementType() == Operator )
@@ -126,15 +122,15 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         if( !tmpElement->readMathML( tmp ) )
             return false;
 
-        if( m_baseElement->elementType() == Basic ) {
+        if( m_baseElement->elementType() == Empty ) {
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_elementType != Over && m_underElement->elementType() == Basic ) {
+        else if( m_elementType != Over && m_underElement->elementType() == Empty ) {
             delete m_underElement;
             m_underElement = tmpElement;
         }
-        else if( m_overElement->elementType() == Basic ) {
+        else if( m_overElement->elementType() == Empty ) {
             delete m_overElement;
             m_overElement = tmpElement;
         }
@@ -158,4 +154,44 @@ void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 ElementType UnderOverElement::elementType() const
 {
     return m_elementType;
+}
+
+bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+{
+    int childpos=newcursor.position()/2;
+    switch (childpos) {
+        case 1:
+            return moveVertSituation(newcursor,oldcursor,1,0);
+            break;
+        case 0:
+            if (newcursor.direction()==MoveDown) {
+                return moveVertSituation(newcursor,oldcursor,0,2);
+            } else if (newcursor.direction()==MoveUp) {
+                return moveVertSituation(newcursor,oldcursor,1,0);
+            } else {
+                return moveVertSituation(newcursor,oldcursor,0,1);
+            }
+            break;
+        case 2:
+            return moveVertSituation(newcursor,oldcursor,0,2);
+    }
+}
+
+int UnderOverElement::length() const
+{
+        return 5;
+}
+
+bool UnderOverElement::setCursorTo ( FormulaCursor& cursor, QPointF point )
+{
+    if (cursor.isSelecting()) {
+        return false;
+    }
+    if (m_underElement->boundingRect().contains(point)) {
+        return m_underElement->setCursorTo(cursor, point-m_underElement->origin());
+    } else if (m_overElement->boundingRect().contains(point)) {
+        return m_overElement->setCursorTo(cursor, point-m_overElement->origin());
+    } else {
+        return m_baseElement->setCursorTo(cursor, point-m_baseElement->origin());
+    }
 }
