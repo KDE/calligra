@@ -1182,7 +1182,27 @@ void KWView::insertImage()
 {
     KoShape *shape = KoImageSelectionWidget::selectImageShape(m_document->dataCenterMap(), this);
     if (shape) {
-        // TODO move the shape to a pos in doc that I'm looking at now.
+        if (m_currentPage.isValid()) {
+            QRectF page = m_currentPage.rect();
+            // make the shape be on the current page, and fit inside the current page.
+            if (page.width() < shape->size().width() || page.height() < shape->size().height()) {
+                QSizeF newSize(page.width() * 0.9, page.height() * 0.9);
+                const qreal xRatio = newSize.width() / shape->size().width();
+                const qreal yRatio = newSize.height() / shape->size().height();
+                if (xRatio > yRatio) // then lets make the vertical set the size.
+                    newSize.setWidth(shape->size().width() * yRatio);
+                else
+                    newSize.setHeight(shape->size().height() * xRatio);
+                shape->setSize(newSize);
+            }
+            shape->setPosition(page.topLeft());
+
+            int zIndex = 0;
+            foreach (KoShape *s, m_canvas->shapeManager()->shapesAt(page))
+                zIndex = qMax(s->zIndex(), zIndex);
+            shape->setZIndex(zIndex+1);
+        }
+
         KoShapeCreateCommand *cmd = new KoShapeCreateCommand(m_document, shape);
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
