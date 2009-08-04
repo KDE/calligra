@@ -393,7 +393,7 @@ void KoFormulaTool::setupActions()
     KAction* action;
 
     action = new KAction( i18n( "Insert fence" ), this );
-    action->setData( QString( "<mfenced><mrow/></mfenced>" ) );
+    action->setData( QString( "<mfenced><mrow/><mrow/></mfenced>" ) );
     addAction( "insert_fence", action );
     action->setIcon(KIcon("brackets"));
 

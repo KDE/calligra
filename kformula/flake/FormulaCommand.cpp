@@ -164,7 +164,7 @@ void FormulaCommandReplaceElements::undo()
         foreach (BasicElement *tmp, m_removed) {
             m_newPlaceholder->removeChild(tmp);
         }
-        m_oldPlaceholder->parentElement()->replaceChild(m_oldPlaceholder,m_newPlaceholder);
+        m_newPlaceholder->parentElement()->replaceChild(m_newPlaceholder,m_oldPlaceholder);
     }
     for (int i=0; i<m_length; ++i) {
         m_ownerElement->insertChild(m_position+i,m_removed[i]);
