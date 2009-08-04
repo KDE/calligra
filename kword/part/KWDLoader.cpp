@@ -1070,7 +1070,7 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
     if (tf) {
         if (zIndex <= 0 && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() == KWord::OtherTextFrameSet)
             zIndex = 1; // OtherTextFrameSet types always live on top of the main frames.
-        KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
+        KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
         Q_ASSERT(textShapeData);
         KoInsets margins;
         margins.left = frameElem.attribute("bleftpt", "0.0").toDouble();

@@ -106,7 +106,7 @@ QString KPrViewAdaptor::pageNotes( int page, const QString &format ) const
         if ( 0 != prPage ) {
             KPrNotes *pageNotes = prPage->pageNotes();
             KoShape *textShape = pageNotes->textShape();
-            KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>( textShape->userData() );
+            KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData *>( textShape->userData() );
             Q_ASSERT( 0 != textShapeData );
             if ( 0 != textShapeData ) {
                 if ( format == "plain" ) {

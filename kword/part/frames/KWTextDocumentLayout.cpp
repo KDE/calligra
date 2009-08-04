@@ -239,7 +239,7 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
         m_lastKnownFrameCount(0)
 {
     if (m_frameSet->frameCount()) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(m_frameSet->frames().first()->shape()->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_frameSet->frames().first()->shape()->userData());
         if (data) { // reset layout.
             data->setEndPosition(-1);
             data->foul();
@@ -274,7 +274,7 @@ void KWTextDocumentLayout::relayout()
     bool foundADirtyOne = false;
     KWFrame *firstDirtyFrame = 0;
     foreach (KWFrame *frame, frames) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
         if (!firstDirtyFrame && data && data->isDirty())
             firstDirtyFrame = frame;
         if (! firstDirtyFrame)
@@ -447,7 +447,7 @@ void KWTextDocumentLayout::layout()
                 // set the page for the shape.
                 KWPage page = m_frameSet->pageManager()->page(currentShape);
                 Q_ASSERT(page.isValid());
-                KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(currentShape->userData());
+                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(currentShape->userData());
                 Q_ASSERT(data);
                 data->setPageDirection(page.directionHint());
                 data->setPage(new KWPageTextInfo(page));
@@ -515,7 +515,7 @@ void KWTextDocumentLayout::layout()
                         iter--;
                         lastFrame = dynamic_cast<KWTextFrame*>(*iter);
                     } while (lastFrame == 0);
-                    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(lastFrame->shape()->userData());
+                    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(lastFrame->shape()->userData());
                     Q_ASSERT(data);
                     qreal spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     data->wipe();
@@ -615,7 +615,7 @@ void KWTextDocumentLayout::layout()
                     m_frameSet->requestMoreFrames(0); // new page, please.
                     return;
                 }
-                KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(lastFrame->shape()->userData());
+                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(lastFrame->shape()->userData());
                 Q_ASSERT(data);
 
                 m_dummyShape->setSize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));

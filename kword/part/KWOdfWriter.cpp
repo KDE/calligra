@@ -71,7 +71,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
     context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
 
     Q_ASSERT(!fs->frames().isEmpty());
-    KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
+    KoTextShapeData *shapedata = qobject_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
     Q_ASSERT(shapedata);
 
     writer.startElement(tag);
@@ -356,7 +356,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     if (mainTextFrame) {
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
-            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
+            KoTextShapeData * shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
                 KWPageManager *pm = m_document->pageManager();
                 if (pm->pageCount()) { // make the first page refer to our page master

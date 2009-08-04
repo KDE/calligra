@@ -109,7 +109,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     if (m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setGeometryProtected(true);
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
         return;
@@ -302,7 +302,7 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
 void KWTextFrameSet::printDebug(KWFrame *frame)
 {
     KWFrameSet::printDebug(frame);
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
+    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     if (textShapeData == 0) return;
     kDebug(32001) << " Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
     kDebug(32001) << " Offset in text-document;" << textShapeData->documentOffset();

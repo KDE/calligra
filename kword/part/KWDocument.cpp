@@ -741,7 +741,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     if (fs == mainFrameSet()) {
         KoShape *shape = lastFrame->shape();
         if (shape) {
-            KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
+            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (data) {
                 QTextBlock block = fs->document()->findBlock(data->endPosition() + 1);
                 if (block.isValid()) {

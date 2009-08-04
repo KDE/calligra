@@ -42,7 +42,7 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
     case KoTextAnchor::FurtherFromBinding:
     case KoTextAnchor::Right:
     case KoTextAnchor::Center: {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
         Q_ASSERT(data);
         m_knowledgePoint = data->position();
         break;
@@ -62,7 +62,7 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
         break;
     case KoTextAnchor::TopOfFrame:
     case KoTextAnchor::BottomOfFrame: {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
         Q_ASSERT(data);
         m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
         break;
@@ -140,7 +140,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
     default:
         Q_ASSERT(false); // new enum added?
     }
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     Q_ASSERT(data);
     switch (m_anchor->verticalAlignment()) {
     case KoTextAnchor::TopOfFrame:

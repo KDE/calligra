@@ -113,7 +113,7 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
     Q_ASSERT( prPage );
     KPrNotes *pageNotes = prPage->pageNotes();
     KoShape *textShape = pageNotes->textShape();
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>( textShape->userData() );
+    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData *>( textShape->userData() );
     Q_ASSERT( textShapeData );
     QTextDocument *document = textShapeData->document()->clone( m_notesTextEdit );
     m_notesTextEdit->setDocument( document );
