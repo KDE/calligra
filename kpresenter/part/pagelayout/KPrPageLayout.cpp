@@ -78,7 +78,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
 
     bool retval = true;
     if ( m_placeholders.isEmpty() ) {
-        kWarning(33000) << "no placehoslders for page layout" << m_name << "found";
+        kWarning(33000) << "no placeholder for page layout" << m_name << "found";
         retval = false;
     }
     else {
