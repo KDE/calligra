@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,8 @@
 
 #include <KoShape.h>
 
+class KWPageManager;
+
 /**
  * This shape allows the concept of copy-of-frame by nesting a frame in another.
  * This shape has a position and size, but all the rest of its settings will be
@@ -34,7 +36,7 @@ public:
      * Constructor
      * @param original the original shape this one will look like.
      */
-    explicit KWCopyShape(KoShape *original);
+    explicit KWCopyShape(KoShape *original, const KWPageManager *pageManager = 0);
     ~KWCopyShape();
 
     /// reimplemented from KoShape
@@ -50,6 +52,7 @@ public:
 
 private:
     KoShape *m_original;
+    const KWPageManager *m_pageManager;
 };
 
 #endif

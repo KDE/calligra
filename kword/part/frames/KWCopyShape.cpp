@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,16 +18,21 @@
  */
 
 #include "KWCopyShape.h"
+#include "KWPage.h"
+#include "KWPageTextInfo.h"
+#include "KWPageManager.h"
 
 #include <KoShapeBorderModel.h>
 #include <KoViewConverter.h>
+#include <KoTextShapeData.h>
 
 #include <QPainter>
 #include <QPainterPath>
 // #include <KDebug>
 
-KWCopyShape::KWCopyShape(KoShape *original)
-        : m_original(original)
+KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
+        : m_original(original),
+        m_pageManager(pageManager)
 {
     setSize(m_original->size());
 }
@@ -41,6 +46,15 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
                         .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
                         Qt::IntersectClip);
+    if (m_pageManager) {
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
+        if (data) {
+            KWPage currentPage = m_pageManager->page(this);
+            KWPageTextInfo info(currentPage);
+            data->relayoutFor(info);
+        }
+    }
+
     painter.save();
     m_original->paint(painter, converter);
     painter.restore();

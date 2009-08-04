@@ -1094,7 +1094,7 @@ void KWView::createLinkedFrame()
     foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
-        KWCopyShape *copy = new KWCopyShape(frame->shape());
+        KWCopyShape *copy = new KWCopyShape(frame->shape(), m_document->pageManager());
         copy->setPosition(frame->shape()->position());
         QPointF offset(40, 40);
         kwcanvas()->clipToDocument(copy, offset);
