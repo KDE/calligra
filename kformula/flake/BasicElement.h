@@ -134,7 +134,7 @@ public:
      * @param cursor The FormulaCursor that is moved around
      * @return true, if the element accepts the cursor
      */
-    virtual bool acceptCursor( const FormulaCursor* cursor );
+    virtual bool acceptCursor( const FormulaCursor& cursor );
     
     /**
      * Return the coordinates of the line, where the cursor should be drawn
@@ -153,7 +153,7 @@ public:
      * @param cursor The FormularCursor we move
      * @return true, if we moved the cursor
      */
-    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
     /// @return The element's ElementType
     virtual ElementType elementType() const;
@@ -186,7 +186,7 @@ public:
      * @param point The point in coordinates relative to the elements local coordinate system
      * @return true, iff the cursor could be placed
      **/
-    virtual bool setCursorTo(FormulaCursor *cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
 
     /// @return The bounding rectangle of the children, relative to the element
     const QRectF& childrenBoundingRect() const;

@@ -89,10 +89,10 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    bool acceptCursor( const FormulaCursor* cursor );
+    bool acceptCursor( const FormulaCursor& cursor );
     
     ///inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
     /**
      * Obtain the x position of the cursor inside this token element
@@ -111,7 +111,7 @@ public:
     virtual QLineF cursorLine(int position) const;
     
     ///inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
     
     ///set m_rawString to @p text and empty the glyph list
     void setText(const QString &text);

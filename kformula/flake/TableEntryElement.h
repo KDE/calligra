@@ -46,7 +46,7 @@ public:
     ElementType elementType() const;
     
     
-    virtual bool moveCursor ( FormulaCursor* newcursor, FormulaCursor* oldcursor );
+    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
     
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 

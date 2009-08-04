@@ -34,23 +34,23 @@ class GlyphElement;
 // class RowElement;
 // class FormulaElement;
 // class FormulaCursor;
-// class FormulaCursorPosition;
+// class FormulaCursor;
 
 class FormulaCommand :  public QUndoCommand {
 public:
     FormulaCommand(QUndoCommand* parent=0);
     
-    virtual void changeCursor(FormulaCursor* cursor, bool undo) const; 
+    virtual void changeCursor(FormulaCursor& cursor, bool undo) const;
 
-    void setUndoCursorPosition(const FormulaCursorPosition& position);
-    void setRedoCursorPosition(const FormulaCursorPosition& position);
+    void setUndoCursorPosition(const FormulaCursor& position);
+    void setRedoCursorPosition(const FormulaCursor& position);
 
 protected:
     bool m_done;
 
 private:
-    FormulaCursorPosition m_undoCursorPosition;
-    FormulaCursorPosition m_redoCursorPosition;
+    FormulaCursor m_undoCursorPosition;
+    FormulaCursor m_redoCursorPosition;
 };
 
 Q_DECLARE_METATYPE(FormulaCommand*)

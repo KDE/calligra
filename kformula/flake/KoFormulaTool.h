@@ -24,7 +24,7 @@
 
 class KoFormulaShape;
 class BasicElement;
-class FormulaCursor;
+class FormulaEditor;
 class FormulaCommand;
 
 /**
@@ -65,10 +65,10 @@ public:
     KoFormulaShape* shape();
 
     /// @return The currently active cursor
-    FormulaCursor* formulaCursor();
+    FormulaEditor* formulaEditor();
 
     /// Reset the cursor
-    void resetFormulaCursor();
+    void resetFormulaEditor();
 
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
@@ -102,10 +102,10 @@ private:
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;
 
-    /// The FormulaCursor the tool uses to move around in the formula
-    FormulaCursor* m_formulaCursor;
+    /// The FormulaEditor the tool uses to move around in the formula
+    FormulaEditor* m_formulaEditor;
 
-    QList<FormulaCursor*> m_cursorList;
+    QList<FormulaEditor*> m_cursorList;
 };
 
 #endif

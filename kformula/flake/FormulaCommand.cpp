@@ -32,25 +32,25 @@ FormulaCommand::FormulaCommand(QUndoCommand* parent)
     m_done=false;
 }
 
-void FormulaCommand::changeCursor ( FormulaCursor* cursor, bool undo ) const
+void FormulaCommand::changeCursor ( FormulaCursor& cursor, bool undo ) const
 {
     if (undo) {
-        cursor->moveTo(m_undoCursorPosition);
+        cursor.moveTo(m_undoCursorPosition);
     } else {
-        cursor->moveTo(m_redoCursorPosition);
+        cursor.moveTo(m_redoCursorPosition);
     }
-    if (!cursor->isAccepted()) {
-        cursor->move(MoveRight);
+    if (!cursor.isAccepted()) {
+        cursor.move(MoveRight);
     }
-    cursor->moveToEmpty();
+    cursor.moveToEmpty();
 }
 
-void FormulaCommand::setUndoCursorPosition ( const FormulaCursorPosition& position )
+void FormulaCommand::setUndoCursorPosition ( const FormulaCursor& position )
 {
     m_undoCursorPosition=position;
 }
 
-void FormulaCommand::setRedoCursorPosition ( const FormulaCursorPosition& position )
+void FormulaCommand::setRedoCursorPosition ( const FormulaCursor& position )
 {
     m_redoCursorPosition=position;
 }
@@ -65,8 +65,8 @@ FormulaCommandReplaceText::FormulaCommandReplaceText( TokenElement* owner, int p
     m_removedGlyphs=m_ownerElement->glyphList(position,length);
     m_removed=m_ownerElement->text().mid(position,length);
     setText( i18n( "Add text to formula" ) );
-    setUndoCursorPosition(FormulaCursorPosition(m_ownerElement, m_position+m_removed.length()));
-    setRedoCursorPosition(FormulaCursorPosition(m_ownerElement, m_position+m_added.length()));
+    setUndoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_removed.length()));
+    setRedoCursorPosition(FormulaCursor(m_ownerElement, m_position+m_added.length()));
 }
 
 FormulaCommandReplaceText::~FormulaCommandReplaceText()
@@ -102,7 +102,7 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner
     //we have to remember to which descendant of m_added the elements got moved
     if (m_wrap) {
         foreach (BasicElement* tmp, m_added) {
-            if (m_oldPlaceholder=tmp->emptyDescendant()) {
+            if ( (m_oldPlaceholder=tmp->emptyDescendant()) ) {
                 break;
             }
         }
@@ -113,8 +113,8 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner
         m_oldPlaceholder=0;
         m_newPlaceholder=0;
     }
-    setUndoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_removed.length()));
-    setRedoCursorPosition(FormulaCursorPosition(m_ownerElement,m_position+m_added.length()));
+    setUndoCursorPosition(FormulaCursor(m_ownerElement,m_position+m_removed.length()));
+    setRedoCursorPosition(FormulaCursor(m_ownerElement,m_position+m_added.length()));
 }
 
 FormulaCommandReplaceElements::~FormulaCommandReplaceElements()
@@ -177,8 +177,8 @@ FormulaCommandReplaceSingleElement::FormulaCommandReplaceSingleElement ( BasicEl
     m_ownerElement=owner;
     m_newel=newel;
     m_oldel=oldel;
-    setUndoCursorPosition(FormulaCursorPosition(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
-    setRedoCursorPosition(FormulaCursorPosition(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
+    setUndoCursorPosition(FormulaCursor(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
+    setRedoCursorPosition(FormulaCursor(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
 }
 
 
@@ -212,8 +212,8 @@ FormulaCommandWrapSingleElement::FormulaCommandWrapSingleElement ( BasicElement*
     m_newel=newel;
     m_oldel=oldel;
     m_oldpar=oldpar;
-    setUndoCursorPosition(FormulaCursorPosition(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
-    setRedoCursorPosition(FormulaCursorPosition(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
+    setUndoCursorPosition(FormulaCursor(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
+    setRedoCursorPosition(FormulaCursor(m_ownerElement,m_ownerElement->positionOfChild(m_oldel)));
 }
 
 FormulaCommandWrapSingleElement::~FormulaCommandWrapSingleElement()
@@ -246,8 +246,8 @@ FormulaCommandLoad::FormulaCommandLoad ( FormulaData* data, FormulaElement* newe
     m_data=data;
     m_newel=newelement;
     m_oldel=data->formulaElement();
-    setUndoCursorPosition(FormulaCursorPosition(m_oldel,0));
-    setRedoCursorPosition(FormulaCursorPosition(m_newel,0));
+    setUndoCursorPosition(FormulaCursor(m_oldel,0));
+    setRedoCursorPosition(FormulaCursor(m_newel,0));
 }
 
 FormulaCommandLoad::~FormulaCommandLoad()
@@ -273,7 +273,7 @@ void FormulaCommandLoad::undo()
 //                                                   QHash<QString,QString> attributes )
 //                        : QUndoCommand()
 // {
-//     m_ownerElement = cursor->ownerElement();
+//     m_ownerElement = cursor.ownerElement();
 //     m_attributes = attributes;
 //     m_oldAttributes = m_ownerElement->attributes();
 //     QHashIterator<QString, QString> i( m_oldAttributes );

@@ -68,20 +68,20 @@ public:
      * @param cursor The cursor holding the position where to inser
      * @param child A BasicElement to insert
      */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+    void insertChild( FormulaCursor& cursor, BasicElement* child );
     
     /**
      * Remove a child element
      * @param element The BasicElement to remove
      */ 
-    void removeChild(FormulaCursor* cursor, BasicElement* element );
+    void removeChild(FormulaCursor& cursor, BasicElement* element );
 
     /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    bool acceptCursor( const FormulaCursor* cursor );
+    bool acceptCursor( const FormulaCursor& cursor );
     
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
@@ -90,10 +90,10 @@ public:
     virtual int length() const;
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
     
     /// inherited from BasicElement
     virtual QLineF cursorLine ( int position ) const;

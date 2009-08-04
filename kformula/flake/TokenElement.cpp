@@ -216,12 +216,12 @@ int TokenElement::removeText ( int position, int length )
     return start;
 }
 
-bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
+bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
     int i = 0;
-    kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
-    cursor->setCurrentElement(this);
+//     kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
+    cursor.setCurrentElement(this);
     if (cursorOffset(length())<point.x()) {
-        cursor->setPosition(length());
+        cursor.setPosition(length());
         return true;
     }
     //Find the letter we clicked on
@@ -234,7 +234,7 @@ bool TokenElement::setCursorTo(FormulaCursor* cursor, QPointF point) {
     if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
         --i;
     }
-    cursor->setPosition(i);
+    cursor.setPosition(i);
     return true;
 }
 
@@ -248,25 +248,25 @@ QLineF TokenElement::cursorLine(int position) const
     return QLineF(top,bottom);
 }
 
-bool TokenElement::acceptCursor( const FormulaCursor* cursor )
+bool TokenElement::acceptCursor( const FormulaCursor& cursor )
 {
     Q_UNUSED( cursor )
     return true;
 }
 
-bool TokenElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) {
-    if ((newcursor->direction()==MoveUp) ||
-        (newcursor->direction()==MoveDown) ||
-        (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) {
+    if ((newcursor.direction()==MoveUp) ||
+        (newcursor.direction()==MoveDown) ||
+        (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
+        (newcursor.isEnd() && newcursor.direction()==MoveRight) ) {
         return false;
     }
-    switch( newcursor->direction() ) {
+    switch( newcursor.direction() ) {
     case MoveLeft:
-        newcursor->setPosition(newcursor->position()-1);
+        newcursor+=-1;
         break;
     case MoveRight:
-        newcursor->setPosition(newcursor->position()+1);
+        newcursor+=1;
         break;
     }
     return true;

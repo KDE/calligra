@@ -40,10 +40,10 @@ QString TableEntryElement::attributesDefaultValue( const QString& attribute ) co
 } 
 
 
-bool TableEntryElement::moveCursor ( FormulaCursor* newcursor, FormulaCursor* oldcursor )
+bool TableEntryElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
 {
-    if (newcursor->isSelecting() || 
-        newcursor->direction()==MoveLeft || newcursor->direction()==MoveRight) {
+    if (newcursor.isSelecting() ||
+        newcursor.direction()==MoveLeft || newcursor.direction()==MoveRight) {
         return RowElement::moveCursor(newcursor,oldcursor);
     } else {
         TableRowElement* tr= static_cast<TableRowElement*>(parentElement());
@@ -51,15 +51,15 @@ bool TableEntryElement::moveCursor ( FormulaCursor* newcursor, FormulaCursor* ol
         int rn=te->positionOfChild(tr)/2; //table elements have a cursor 
         int cn=tr->positionOfChild(this);
         //positions before and after each element
-        if (newcursor->direction()==MoveUp) {
+        if (newcursor.direction()==MoveUp) {
             if (rn>1) {
-                return newcursor->moveCloseTo(te->childElements()[rn-1]->childElements()[cn],oldcursor);
+                return newcursor.moveCloseTo(te->childElements()[rn-1]->childElements()[cn],oldcursor);
             } else {
                 return false;
             }
         } else {
             if (rn < te->length()/2) {
-                return newcursor->moveCloseTo(te->childElements()[rn+1]->childElements()[cn],oldcursor);
+                return newcursor.moveCloseTo(te->childElements()[rn+1]->childElements()[cn],oldcursor);
             } else {
                 return false;
             }

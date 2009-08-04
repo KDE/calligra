@@ -84,10 +84,10 @@ void TableRowElement::layout( const AttributeManager* am )
     // inside a table where it does not matter if a table row has a baseline or not
 }
 
-bool TableRowElement::acceptCursor( const FormulaCursor* cursor )
+bool TableRowElement::acceptCursor( const FormulaCursor& cursor )
 {
      //return true;
-     return (cursor->isSelecting());
+     return (cursor.isSelecting());
 }
 
 int TableRowElement::positionOfChild(BasicElement* child) const 
@@ -124,18 +124,18 @@ QLineF TableRowElement::cursorLine ( int position ) const
 }
 
 
-bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
-    if (cursor->isSelecting()) {
+    if (cursor.isSelecting()) {
         if (m_entries.isEmpty() || point.x()<0.0) {
-            cursor->setCurrentElement(this);
-            cursor->setPosition(0);
+            cursor.setCurrentElement(this);
+            cursor.setPosition(0);
             return true;
         }
         //check if the point is behind all child elements
         if (point.x() >= width()) {
-            cursor->setCurrentElement(this);
-            cursor->setPosition(length());
+            cursor.setCurrentElement(this);
+            cursor.setPosition(length());
             return true;
         }
     }
@@ -149,13 +149,13 @@ bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
         break;
     }
     }
-    if (cursor->isSelecting()) {
+    if (cursor.isSelecting()) {
     //we don't need to change current element because we are already in this element
-    if (cursor->mark()<=i) {
-        cursor->setPosition(i+1);
+    if (cursor.mark()<=i) {
+        cursor.setPosition(i+1);
     }
     else {
-        cursor->setPosition(i);
+        cursor.setPosition(i);
     }
     return true;
     } else {
@@ -164,22 +164,22 @@ bool TableRowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
     }
 }
 
-bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
     //TODO: Moving the cursor vertically in the tableelement is a little bit fragile
-    if ( (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+    if ( (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
+        (newcursor.isEnd() && newcursor.direction()==MoveRight) ) {
         return false;
     }
     int rowpos=parentElement()->positionOfChild(this);
-    int colpos=(newcursor->position()!=length() ? newcursor->position() : newcursor->position()-1);
-    if (newcursor->isSelecting()) {
-        switch(newcursor->direction()) {
+    int colpos=(newcursor.position()!=length() ? newcursor.position() : newcursor.position()-1);
+    if (newcursor.isSelecting()) {
+        switch(newcursor.direction()) {
         case MoveLeft:
-            newcursor->moveTo(this,newcursor->position()-1);
+            newcursor.moveTo(this,newcursor.position()-1);
             break;
         case MoveRight:
-            newcursor->moveTo(this,newcursor->position()+1);
+            newcursor.moveTo(this,newcursor.position()+1);
             break;
         case MoveUp:
             return false;
@@ -187,26 +187,26 @@ bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
             return false;
         }
     } else {
-        switch(newcursor->direction()) {
+        switch(newcursor.direction()) {
         case MoveLeft:
-            newcursor->setCurrentElement(m_entries[newcursor->position()-1]);
-            newcursor->moveEnd();
+            newcursor.setCurrentElement(m_entries[newcursor.position()-1]);
+            newcursor.moveEnd();
             break;
         case MoveRight:
-            newcursor->setCurrentElement(m_entries[newcursor->position()]);
-            newcursor->moveHome();
+            newcursor.setCurrentElement(m_entries[newcursor.position()]);
+            newcursor.moveHome();
             break;
         case MoveUp:
             if ( rowpos>1 ) {
                 BasicElement* b=parentElement()->childElements()[rowpos/2-1]->childElements()[colpos];
-                return newcursor->moveCloseTo(b, oldcursor);
+                return newcursor.moveCloseTo(b, oldcursor);
             } else {
                 return false;
             }
         case MoveDown:
             if ( rowpos<length()-1 ) {
                 BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
-                return newcursor->moveCloseTo(b, oldcursor);
+                return newcursor.moveCloseTo(b, oldcursor);
             } else {
                 return false;
             }
@@ -217,11 +217,11 @@ bool TableRowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcur
 }
 
 
-void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+void TableRowElement::insertChild( FormulaCursor& cursor, BasicElement* child )
 {
 }
 
-void TableRowElement::removeChild(FormulaCursor* cursor, BasicElement* element )
+void TableRowElement::removeChild(FormulaCursor& cursor, BasicElement* element )
 {
 }
 

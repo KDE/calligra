@@ -66,13 +66,13 @@ void BasicElement::stretch()
 }
 
 
-bool BasicElement::acceptCursor( const FormulaCursor* cursor )
+bool BasicElement::acceptCursor( const FormulaCursor& cursor )
 {
     Q_UNUSED( cursor )
     return true;
 }
 
-bool BasicElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+bool BasicElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
     //it is not possible to move the cursor inside the element
     return false;
@@ -112,10 +112,10 @@ const QRectF BasicElement::absoluteBoundingRect() const
     return QRectF(neworigin,QSizeF(width(),height()));
 }
 
-bool BasicElement::setCursorTo(FormulaCursor* cursor, QPointF point)
+bool BasicElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
-    cursor->setPosition(0);
-    cursor->setCurrentElement(this);
+    cursor.setPosition(0);
+    cursor.setCurrentElement(this);
     return true;
 }
 

@@ -64,13 +64,13 @@ public:
     void layout( const AttributeManager* am );
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
+    bool acceptCursor( const FormulaCursor& cursor );
     
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
     virtual QLineF cursorLine(int position) const;
     
@@ -85,7 +85,7 @@ public:
 
 protected:
     ///update the selection in cursor so that a proper range is selected
-    void fixSelection (FormulaCursor* cursor);
+    void fixSelection (FormulaCursor& cursor);
     
     /// Read root contents - reimplemented from BasicElement
     bool readMathMLContent( const KoXmlElement& element );

@@ -182,9 +182,9 @@ QLineF TableElement::cursorLine ( int position ) const
     return QLineF(top, bottom);
 }
 
-bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point) 
+bool TableElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
-    if (cursor->isSelecting()) {
+    if (cursor.isSelecting()) {
         return false;
     }
     int i;
@@ -197,19 +197,19 @@ bool TableElement::setCursorTo(FormulaCursor* cursor, QPointF point)
     return m_rows[i]->setCursorTo(cursor, point);
 }
 
-bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+bool TableElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
-    int p=newcursor->position();
-    switch (newcursor->direction()) {
+    int p=newcursor.position();
+    switch (newcursor.direction()) {
     case MoveLeft:
         if (p%2==0) {
             //we are in front of a table row
             return false;
         } else {
-            if (newcursor->isSelecting()) {
-                newcursor->moveTo( this , p-1 );
+            if (newcursor.isSelecting()) {
+                newcursor.moveTo( this , p-1 );
             } else {
-                newcursor->moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
+                newcursor.moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
             }
             break;
         }
@@ -218,10 +218,10 @@ bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
             //we are behind a table row
             return false;
         } else {
-            if (newcursor->isSelecting()) {
-                newcursor->moveTo( this , p+1 );
+            if (newcursor.isSelecting()) {
+                newcursor.moveTo( this , p+1 );
             } else {
-                newcursor->moveTo( m_rows[ p / 2 ] , 0 );
+                newcursor.moveTo( m_rows[ p / 2 ] , 0 );
             }
             break;
         }
@@ -229,12 +229,12 @@ bool TableElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor
         if (p<=1) {
             return false;
         } else {
-            newcursor->moveTo(this,p-2);
+            newcursor.moveTo(this,p-2);
             break;
         }
     case MoveDown:
         if (p<(m_rows.count()-1)*2) {
-            newcursor->moveTo(this,p+2); 
+            newcursor.moveTo(this,p+2);
             break;
         } else {
             return false;
@@ -253,10 +253,10 @@ int TableElement::length() const
 }
 
 
-bool TableElement::acceptCursor( const FormulaCursor* cursor )
+bool TableElement::acceptCursor( const FormulaCursor& cursor )
 {
 //    return false;
-    return cursor->isSelecting();
+    return cursor.isSelecting();
 }
 
 

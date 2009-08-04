@@ -108,38 +108,38 @@ bool RowElement::removeChild( BasicElement* child )
     return tmp;
 }
 
-bool RowElement::acceptCursor( const FormulaCursor* cursor )
+bool RowElement::acceptCursor( const FormulaCursor& cursor )
 {
         return true;
 }
-bool RowElement::moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor) 
+bool RowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
-    if ( (newcursor->direction()==MoveUp) ||
-        (newcursor->direction()==MoveDown) ||
-        (newcursor->isHome() && newcursor->direction()==MoveLeft) ||
-        (newcursor->isEnd() && newcursor->direction()==MoveRight) ) {
+    if ( (newcursor.direction()==MoveUp) ||
+        (newcursor.direction()==MoveDown) ||
+        (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
+        (newcursor.isEnd() && newcursor.direction()==MoveRight) ) {
         //the newcursor can't be moved vertically
         //TODO: check what happens with linebreaks in <mspace> elements
         return false;
     }
-    if (newcursor->isSelecting()) {
-        switch(newcursor->direction()) {
+    if (newcursor.isSelecting()) {
+        switch(newcursor.direction()) {
         case MoveLeft:
-            newcursor->setPosition(newcursor->position()-1);
+            newcursor+=-1;
             break;
         case MoveRight:
-            newcursor->setPosition(newcursor->position()+1);
+            newcursor+=1;
             break;
         }
     } else {
-        switch(newcursor->direction()) {
+        switch(newcursor.direction()) {
         case MoveLeft:
-            newcursor->setCurrentElement(m_childElements[newcursor->position()-1]);
-            newcursor->moveEnd();
+            newcursor.setCurrentElement(m_childElements[newcursor.position()-1]);
+            newcursor.moveEnd();
             break;
         case MoveRight:
-            newcursor->setCurrentElement(m_childElements[newcursor->position()]);
-            newcursor->moveHome();
+            newcursor.setCurrentElement(m_childElements[newcursor.position()]);
+            newcursor.moveHome();
             break;
         }
     }
@@ -162,11 +162,10 @@ QLineF RowElement::cursorLine(int position) const {
     return QLineF(top, bottom);
 }
 
-bool RowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
+bool RowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
     if (m_childElements.isEmpty() || point.x()<m_childElements[0]->origin().x()) {
-        cursor->setCurrentElement(this);
-        cursor->setPosition(0);
+        cursor.moveTo(this,0);
         return true;
     }
     int i;
@@ -178,25 +177,22 @@ bool RowElement::setCursorTo(FormulaCursor* cursor, QPointF point)
     }
     //check if the point is behind all child elements
     if (i==m_childElements.count()) {
-        cursor->setCurrentElement(this);
-        cursor->setPosition(length());
+        cursor.moveTo(this,length());
         return true;
     } else {
-        if (cursor->isSelecting()) {
+        if (cursor.isSelecting()) {
             //we don't need to change current element because we are already in this element
-            if (cursor->mark()<=i) {
-                cursor->setPosition(i+1);
+            if (cursor.mark()<=i) {
+                cursor.setPosition(i+1);
             } else {
-                cursor->setPosition(i);
+                cursor.setPosition(i);
             }
             return true;
         } else {
-            point-=m_childElements[i]->origin();
-            return m_childElements[i]->setCursorTo(cursor,point);
+            return m_childElements[i]->setCursorTo(cursor,point-m_childElements[i]->origin());
         }
     }
 }
-
 
 ElementType RowElement::elementType() const
 {

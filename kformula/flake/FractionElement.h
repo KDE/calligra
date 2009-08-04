@@ -64,13 +64,13 @@ public:
     virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
     
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor* cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
     
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
+    bool acceptCursor( const FormulaCursor& cursor );
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor* newcursor, FormulaCursor* oldcursor);
+    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
     
     /// inherited from BasicElement
     virtual int length() const;
@@ -96,7 +96,7 @@ protected:
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     void writeMathMLContent( KoXmlWriter* writer ) const;   
     
-    void fixSelection(FormulaCursor* cursor);
+    void fixSelection(FormulaCursor& cursor);
 
 private:
     /// Layout the fraction in a bevelled way
