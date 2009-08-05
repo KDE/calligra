@@ -26,6 +26,7 @@
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffectConfigWidgetBase.h"
 #include "KoCanvasBase.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
@@ -124,8 +125,31 @@ KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
 
 void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    if (d->currentShape && d->currentShape->filterEffectStack()) {
+        // apply the zoom transformation
+        KoShape::applyConversion(painter, converter);
+        // apply the shape transformation
+        QMatrix transform = d->currentShape->absoluteTransformation(&converter);
+        painter.setMatrix(transform, true);
+        // get the size rect of the shape
+        QRectF sizeRect(QPointF(), d->currentShape->size());
+        // get the clipping rect of the filter stack
+        KoFilterEffectStack * filterStack = d->currentShape->filterEffectStack();
+        QRectF clipRect = filterStack->clipRectForBoundingRect(sizeRect);
+        // finally paint the clipping rect
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(Qt::blue);
+        painter.drawRect(clipRect);
+    }
+}
+
+void KarbonFilterEffectsTool::repaintDecorations()
+{
+    if (d->currentShape && d->currentShape->filterEffectStack()) {
+        QRectF bb = d->currentShape->boundingRect();
+        int radius = m_canvas->resourceProvider()->handleRadius();
+        m_canvas->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
+    }
 }
 
 void KarbonFilterEffectsTool::activate( bool temporary )

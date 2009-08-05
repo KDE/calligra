@@ -32,6 +32,8 @@ public:
     /// reimplemented from KoTool
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented from KoTool
+    virtual void repaintDecorations();
+    /// reimplemented from KoTool
     virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from KoTool
     virtual void mouseMoveEvent(KoPointerEvent *event);
