@@ -92,6 +92,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     m_defaultSourceSelector->addItem("BackgroundImage");
     m_defaultSourceSelector->addItem("BackgroundAlpha");
     m_defaultSourceSelector->hide();
+    m_defaultSourceSelector->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     connect(m_defaultSourceSelector, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(defaultSourceChanged(int)));
 }
