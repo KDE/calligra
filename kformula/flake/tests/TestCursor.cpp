@@ -30,6 +30,7 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <kdebug.h>
+#include <FormulaEditor.h>
 
 class MockCanvas : public KoCanvasBase
 {
@@ -84,23 +85,22 @@ void TestCursor::moveCursor()
     QCOMPARE(canvas->shapeManager()->selection()->count(),1);
     KoFormulaTool* tool= new KoFormulaTool(canvas);
     tool->activate();
-/*
-    FormulaCursor* cursor=tool->formulaCursor();
-    FormulaElement* root=cursor->formulaData()->formulaElement();
-    canvas->addCommand(new FormulaCommandUpdate(shape,cursor->insertText("ade")));
-    cursor->moveTo(root->childElements()[0],1);
-    //(a|de)
-    canvas->addCommand(new FormulaCommandUpdate(shape,cursor->insertText("bc")));
-    cursor->moveTo(root->childElements()[0],6);
+   FormulaEditor* editor=tool->formulaEditor();
+    FormulaElement* root=editor->formulaData()->formulaElement();
+    canvas->addCommand(new FormulaCommandUpdate(shape,editor->insertText("ade")));
+    editor->cursor().moveTo(root->childElements()[0],1);
+   //(a|de)
+    canvas->addCommand(new FormulaCommandUpdate(shape,editor->insertText("bc")));
+    editor->cursor().moveTo(root->childElements()[0],6);
     //(abcde|)
-    cursor->move(MoveLeft);
+    editor->cursor().move(MoveLeft);
     //(abcd|e)
-    QCOMPARE(cursor->position(),5);
-    cursor->moveTo(root->childElements()[0],0);
-    cursor->move(MoveLeft);
+    QCOMPARE(editor->cursor().position(),5);
+    editor->cursor().moveTo(root->childElements()[0],0);
+    editor->cursor().move(MoveLeft);
     //|(abcde)
-    QCOMPARE(cursor->position(),0);
-    canvas->addCommand(new FormulaCommandUpdate(shape,cursor->insertText("123")));
+    QCOMPARE(editor->cursor().position(),0);
+    canvas->addCommand(new FormulaCommandUpdate(shape,editor->insertText("123")));
     QCOMPARE(root->childElements().count(),2);
     //(12)(abcde)
     canvas->stack->undo();
@@ -109,7 +109,6 @@ void TestCursor::moveCursor()
     //(12)(abcde)
     QCOMPARE(root->childElements().count(),2);
     canvas->stack->clear();
-*/
 }
 
 
