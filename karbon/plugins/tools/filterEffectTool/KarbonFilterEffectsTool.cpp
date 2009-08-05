@@ -47,7 +47,7 @@ public:
     Private()
     : filterSelector(0), configSelector(0)
     , configStack(0)
-    , currentEffect(0), currentPanel(0)
+    , currentEffect(0), currentPanel(0), currentShape(0)
     {
     }
     
@@ -107,11 +107,14 @@ public:
     QStackedWidget * configStack;
     KoFilterEffect * currentEffect;
     KoFilterEffectConfigWidgetBase * currentPanel;
+    KoShape * currentShape;
 };
 
 KarbonFilterEffectsTool::KarbonFilterEffectsTool(KoCanvasBase *canvas)
 : KoTool(canvas), d(new Private())
 {
+    connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(selectionChanged()));
 }
 
 KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
@@ -134,7 +137,8 @@ void KarbonFilterEffectsTool::activate( bool temporary )
         return;
     }
     
-    d->fillConfigSelector(m_canvas->shapeManager()->selection()->firstSelectedShape());
+    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    d->fillConfigSelector(d->currentShape);
 }
 
 void KarbonFilterEffectsTool::mousePressEvent(KoPointerEvent *event)
@@ -154,8 +158,7 @@ void KarbonFilterEffectsTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KarbonFilterEffectsTool::addFilter()
 {
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape )
+    if( ! d->currentShape )
         return;
     
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
@@ -163,40 +166,39 @@ void KarbonFilterEffectsTool::addFilter()
     if( ! factory )
         return;
     
-    QRectF bbox(QPointF(), shape->size());
+    QRectF bbox(QPointF(), d->currentShape->size());
     
     KoFilterEffect * effect = factory->createFilterEffect();
-    KoFilterEffectStack * effectStack = shape->filterEffectStack();
+    KoFilterEffectStack * effectStack = d->currentShape->filterEffectStack();
     if (!effectStack ) {
         effectStack = new KoFilterEffectStack();
-        shape->setFilterEffectStack(effectStack);
+        d->currentShape->setFilterEffectStack(effectStack);
     }
-    shape->update();
+    d->currentShape->update();
     effectStack->appendFilterEffect(effect);
-    shape->update();
+    d->currentShape->update();
     
-    d->fillConfigSelector(shape);
+    d->fillConfigSelector(d->currentShape);
 }
 
 void KarbonFilterEffectsTool::removeFilter()
 {
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape || !shape->filterEffectStack())
+    if( ! d->currentShape || !d->currentShape->filterEffectStack())
         return;
     
-    QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
+    QList<KoFilterEffect*> filterEffects = d->currentShape->filterEffectStack()->filterEffects();
     
     int index = d->configSelector->currentIndex();
     if (index >= 0 && index < filterEffects.count()) {
         KoFilterEffect * effect = filterEffects[index];
         
-        shape->update();
-        shape->filterEffectStack()->removeFilterEffect(index);
-        shape->update();
+        d->currentShape->update();
+        d->currentShape->filterEffectStack()->removeFilterEffect(index);
+        d->currentShape->update();
         
         delete effect;
 
-        d->fillConfigSelector(shape);
+        d->fillConfigSelector(d->currentShape);
     }
 }
 
@@ -214,38 +216,41 @@ void KarbonFilterEffectsTool::editFilter()
     dlg->setCaption(i18n("Filter Effect Editor"));
     dlg->setButtons(KDialog::Close);
 
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     FilterEffectEditWidget * editor = new FilterEffectEditWidget(dlg);
-    editor->editShape(shape, m_canvas);
+    editor->editShape(d->currentShape, m_canvas);
     
     dlg->setMainWidget(editor);
     dlg->exec();
 
-    d->fillConfigSelector(shape);
+    d->fillConfigSelector(d->currentShape);
 }
 
 void KarbonFilterEffectsTool::filterChanged()
 {
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape )
+    if( ! d->currentShape )
         return;
     
-    shape->update();
+    d->currentShape->update();
 }
 
 void KarbonFilterEffectsTool::filterSelected(int index)
 {
-    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    if( ! shape || ! shape->filterEffectStack())
+    if( ! d->currentShape || ! d->currentShape->filterEffectStack())
         return;
     
     KoFilterEffect * effect = 0;
-    QList<KoFilterEffect*> filterEffects = shape->filterEffectStack()->filterEffects();
+    QList<KoFilterEffect*> filterEffects = d->currentShape->filterEffectStack()->filterEffects();
     if (index >= 0 && index < filterEffects.count()) {
         effect = filterEffects[index];
     }
     
     d->addWidgetForEffect(effect, this);
+}
+
+void KarbonFilterEffectsTool::selectionChanged()
+{
+    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    d->fillConfigSelector(d->currentShape);
 }
 
 QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
@@ -313,7 +318,7 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     
     //---------------------------------------------------------------------
     
-    d->fillConfigSelector(m_canvas->shapeManager()->selection()->firstSelectedShape());
+    d->fillConfigSelector(d->currentShape);
     
     return widgets;
 }

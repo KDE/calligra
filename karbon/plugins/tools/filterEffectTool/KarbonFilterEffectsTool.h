@@ -53,7 +53,8 @@ private slots:
     void editFilter();
     void filterChanged();
     void filterSelected(int index);
-    
+    void selectionChanged();
+
 private:
     class Private;
     Private * const d;
