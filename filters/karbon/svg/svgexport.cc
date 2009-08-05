@@ -699,8 +699,7 @@ void SvgExport::saveText( ArtisticTextShape * text )
     printIndentation( m_body, m_indent++ );
     *m_body << "<text" << getID( text );
 
-    getFill( text, m_body );
-    getStroke( text, m_body );
+    getStyle( text, m_body );
 
     QFont font = text->font();
 
