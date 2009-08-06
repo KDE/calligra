@@ -681,7 +681,7 @@
 	    <Text>The WORKDAY() function returns the date which is working days from the start date.</Text>
 	    <Text>Holidays must be one of the following: number = days to add, a single date or an array of dates.</Text>
             <Syntax>WORKDAY(start date; days; holidays)</Syntax>
-	    <Example>WORKDAY(B9;2;D3:E4) B9 is "01/01/2001", D3 is "01/03/2001", D4 is "01/04/2003" workday returns "Fri Jan 5 2001"</Example>
+	    <Example>if B9 is "01/01/2001", D3 is "01/03/2001", D4 is "01/04/2001" then WORKDAY(B9;2;D3:D4) returns "Fri Jan 5 2001"</Example>
 	</Help>
     </Function>
 
