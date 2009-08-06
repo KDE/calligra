@@ -32,6 +32,7 @@
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoPASavingContext.h>
 
 #include "KPrDocument.h"
 #include "KPrPage.h"

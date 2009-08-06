@@ -33,6 +33,7 @@
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
+#include <KoPASavingContext.h>
 #include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>

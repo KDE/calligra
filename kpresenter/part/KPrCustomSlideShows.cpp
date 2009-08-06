@@ -25,6 +25,7 @@
 #include <KoPAPageBase.h>
 #include <KoPAPage.h>
 #include <KoPALoadingContext.h>
+#include <KoPASavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
