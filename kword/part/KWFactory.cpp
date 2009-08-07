@@ -41,7 +41,7 @@ KWFactory::~KWFactory()
     delete s_aboutData;
     s_aboutData = 0;
     delete s_instance;
-    s_instance = 0L;
+    s_instance = 0;
 }
 
 KParts::Part* KWFactory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
