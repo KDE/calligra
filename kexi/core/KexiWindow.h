@@ -21,6 +21,8 @@
 #ifndef KEXIWINDOWBASE_H
 #define KEXIWINDOWBASE_H
 
+//#define KEXI_IMPL_WARNINGS
+
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
 #include "kexi.h"
@@ -152,10 +154,12 @@ public:
     virtual void detachFromGUIClient();
 
     //! \return true if the window is attached within the main window
+#ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__
 #warning TODO isAttached()
 #else
 #pragma WARNING( TODO isAttached() )
+#endif
 #endif
     bool isAttached() const {
         return true;
