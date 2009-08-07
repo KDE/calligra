@@ -65,9 +65,7 @@ public:
                   , records_in_buf(0)
                   , buffering_completed(false)
                   , at_buffer(false)*/
-//#ifdef SQLITE3
 //   , rowDataReadyToFetch(false)
-//#endif
     {
         data_owned = false;
     }
@@ -88,11 +86,7 @@ public:
     QByteArray st;
     //for sqlite:
 //  sqlite_struct *data; //! taken from SQLiteConnection
-#ifdef SQLITE2
-    sqlite_vm *prepared_st_handle; //vm
-#else //SQLITE3
     sqlite3_stmt *prepared_st_handle;
-#endif
 
     char *utail;
 
@@ -123,11 +117,8 @@ public:
 
     uint cols_pointers_mem_size; //! size of record's array of pointers to values
     QVector<const char**> records;//! buffer data
-//#ifdef SQLITE3
 //  bool rowDataReadyToFetch : 1;
-//#endif
 
-#ifdef SQLITE3
     inline QVariant getValue(Field *f, int i) {
         int type = sqlite3_column_type(prepared_st_handle, i);
         if (type == SQLITE_NULL) {
@@ -188,7 +179,6 @@ public:
         }
         return QVariant();
     }
-#endif //SQLITE3
 };
 
 SQLiteCursor::SQLiteCursor(Connection* conn, const QString& statement, uint options)
@@ -226,15 +216,6 @@ bool SQLiteCursor::drv_open()
         return false;
     }
 
-#ifdef SQLITE2
-    d->st = m_sql.toLocal8Bit();
-    d->res = sqlite_compile(
-                 d->data,
-                 d->st.constData(),
-                 (const char**) & d->utail,
-                 &d->prepared_st_handle,
-                 &d->errmsg_p);
-#else //SQLITE3
     d->st = m_sql.toUtf8();
     d->res = sqlite3_prepare(
                  d->data,            /* Database handle */
@@ -243,7 +224,6 @@ bool SQLiteCursor::drv_open()
                  &d->prepared_st_handle,  /* OUT: Statement handle */
                  0/*const char **pzTail*/     /* OUT: Pointer to unused portion of zSql */
              );
-#endif
     if (d->res != SQLITE_OK) {
         d->storeResult();
         return false;
@@ -272,11 +252,7 @@ bool SQLiteCursor::drv_open()
 
 bool SQLiteCursor::drv_close()
 {
-#ifdef SQLITE2
-    d->res = sqlite_finalize(d->prepared_st_handle, &d->errmsg_p);
-#else //SQLITE3
     d->res = sqlite3_finalize(d->prepared_st_handle);
-#endif
     if (d->res != SQLITE_OK) {
         d->storeResult();
         return false;
@@ -286,32 +262,17 @@ bool SQLiteCursor::drv_close()
 
 void SQLiteCursor::drv_getNextRecord()
 {
-#ifdef SQLITE2
-    static int _fieldCount;
-    d->res = sqlite_step(
-                 d->prepared_st_handle,
-                 &_fieldCount,
-                 &d->curr_coldata,
-                 &d->curr_colname);
-#else //SQLITE3
     d->res = sqlite3_step(d->prepared_st_handle);
-#endif
     if (d->res == SQLITE_ROW) {
         m_result = FetchOK;
-#ifdef SQLITE2
-        m_fieldCount = (uint)_fieldCount;
-#else
         m_fieldCount = sqlite3_data_count(d->prepared_st_handle);
-//#else //for SQLITE3 data fetching is delayed. Now we even do not take field count information
+//      //for SQLITE3 data fetching is delayed. Now we even do not take field count information
 //      // -- just set a flag that we've a data not fetched but available
 //  d->rowDataReadyToFetch = true;
-#endif
         m_fieldsToStoreInRow = m_fieldCount;
         //(m_logicalFieldCount introduced) m_fieldCount -= (m_containsROWIDInfo ? 1 : 0);
     } else {
-//#ifdef SQLITE3
 //  d->rowDataReadyToFetch = false;
-//#endif
         if (d->res == SQLITE_DONE)
             m_result = FetchEnd;
         else
@@ -421,19 +382,11 @@ const char ** SQLiteCursor::rowData() const
 
 bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
 {
-#ifdef SQLITE2
-    const char **col = d->curr_coldata;
-#endif
     //const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
 //not needed data.resize(m_fieldCount);
     if (!m_fieldsExpanded) {//simple version: without types
         for (uint i = 0; i < m_fieldCount; i++) {
-#ifdef SQLITE2
-            data[i] = QVariant(*col);
-            col++;
-#else //SQLITE3
             data[i] = QString::fromUtf8((const char*)sqlite3_column_text(d->prepared_st_handle, i));
-#endif
         }
         return true;
     }
@@ -453,52 +406,7 @@ bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
         //(m_logicalFieldCount introduced) Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
         Field *f = (i >= m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
 //  KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0);
-
-#ifdef SQLITE2
-        if (!*col)
-            data[i] = QVariant();
-        else if (f && f->isTextType())
-# ifdef SQLITE_UTF8
-            data[i] = QString::fromUtf8(*col);
-# else
-            data[i] = QVariant(*col);   //only latin1
-# endif
-        else if (f && f->isFPNumericType())
-            data[i] = QVariant(QByteArray(*col).toDouble());
-        else {
-            switch (f ? f->type() : Field::Integer/*ROWINFO*/) {
-//todo: use short, etc.
-            case Field::Byte:
-            case Field::ShortInteger:
-            case Field::Integer:
-                data[i] = QVariant(QByteArray(*col).toInt());
-            case Field::BigInteger:
-                data[i] = QVariant(QByteArray(*col).toLongLong());
-            case Field::Boolean:
-                data[i] = sqliteStringToBool(QString::fromLatin1(*col));
-                break;
-            case Field::Date:
-                data[i] = QDate::fromString(QString::fromLatin1(*col), Qt::ISODate);
-                break;
-            case Field::Time:
-                //QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-                data[i] = KexiUtils::stringToHackedQTime(QString::fromLatin1(*col));
-                break;
-            case Field::DateTime: {
-                QString tmp(QString::fromLatin1(*col));
-                tmp[10] = 'T';
-                data[i] = QDateTime::fromString(tmp, Qt::ISODate);
-                break;
-            }
-            default:
-                data[i] = QVariant(*col);
-            }
-        }
-
-        col++;
-#else //SQLITE3
         data[i] = d->getValue(f, i); //, !f /*!f means ROWID*/);
-#endif
     }
     return true;
 }
@@ -512,20 +420,7 @@ QVariant SQLiteCursor::value(uint i)
 // const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
     KexiDB::Field *f = (m_fieldsExpanded && i < (uint)m_fieldsExpanded->count())
                        ? m_fieldsExpanded->at(i)->field : 0;
-#ifdef SQLITE2
-    //from most to least frequently used types:
-//(m_logicalFieldCount introduced)  if (i==m_fieldCount || f && f->isIntegerType())
-    if (!f || f->isIntegerType())
-        return QVariant(QByteArray(d->curr_coldata[i]).toInt());
-    else if (!f || f->isTextType())
-        return QVariant(d->curr_coldata[i]);
-    else if (f->isFPNumericType())
-        return QVariant(QByteArray(d->curr_coldata[i]).toDouble());
-
-    return QVariant(d->curr_coldata[i]);   //default
-#else
     return d->getValue(f, i); //, i==m_logicalFieldCount/*ROWID*/);
-#endif
 }
 
 /*! Stores string value taken from field number \a i to \a str.
@@ -545,11 +440,7 @@ int SQLiteCursor::serverResult()
 
 QString SQLiteCursor::serverResultName()
 {
-#ifdef SQLITE2
-    return QString::fromLatin1(sqlite_error_string(d->res));
-#else //SQLITE3
     return QString::fromLatin1(d->result_name);
-#endif
 }
 
 QString SQLiteCursor::serverErrorMsg()

@@ -18,7 +18,6 @@
 */
 
 #ifndef KEXIDB_SQLITEPREPAREDSTATEMENT_H
-//&& !defined SQLITE2
 #define KEXIDB_SQLITEPREPAREDSTATEMENT_H
 
 #include <kexidb/preparedstatement.h>
@@ -38,12 +37,8 @@ public:
 
     virtual bool execute();
 
-#ifdef SQLITE2
-    sqlite_vm *prepared_st_handle;
-#else //SQLITE3
     sqlite3_stmt *prepared_st_handle;
-#endif
-bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 };
 
 }

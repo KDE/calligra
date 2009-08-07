@@ -36,11 +36,7 @@ typedef sqlite3 sqlite_struct;
 # define sqlite_libversion sqlite3_libversion
 # define sqlite_libencoding sqlite3_libencoding
 #else
-# ifndef SQLITE2
-#  define SQLITE2
-# endif
-typedef struct sqlite sqlite_struct;
-# define sqlite_free sqlite_freemem
+# error Invalid sqlite version
 #endif
 
 namespace KexiDB
@@ -63,9 +59,7 @@ public:
     int res; //<! result code of last operation on server
 
     QByteArray temp_st;
-#ifdef SQLITE3
     const char *result_name;
-#endif
 };
 
 }

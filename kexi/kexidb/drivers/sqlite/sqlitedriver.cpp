@@ -32,11 +32,7 @@
 
 using namespace KexiDB;
 
-#ifdef SQLITE2
-KEXIDB_DRIVER_INFO(SQLiteDriver, sqlite2)
-#else
 KEXIDB_DRIVER_INFO(SQLiteDriver, sqlite3)
-#endif
 
 //! driver specific private data
 //! @internal
@@ -55,10 +51,7 @@ SQLiteDriver::SQLiteDriver(QObject *parent, const QStringList &args)
     d->isFileDriver = true;
     d->isDBOpenedAfterCreate = true;
     d->features = SingleTransactions | CursorForward
-#ifndef SQLITE2
                   | CompactingDatabaseSupported;
-#endif
-    ;
 
     //special method for autoincrement definition
     beh->SPECIAL_AUTO_INCREMENT_DEF = true;
@@ -74,12 +67,7 @@ SQLiteDriver::SQLiteDriver(QObject *parent, const QStringList &args)
 
     //predefined properties
     d->properties["client_library_version"] = sqlite_libversion();
-    d->properties["default_server_encoding"] =
-#ifdef SQLITE2
-        sqlite_libencoding();
-#else //SQLITE3
-        "UTF8"; //OK?
-#endif
+    d->properties["default_server_encoding"] = "UTF8"; //OK?
 
     d->typeNames[Field::Byte] = "Byte";
     d->typeNames[Field::ShortInteger] = "ShortInteger";
@@ -148,11 +136,7 @@ QByteArray SQLiteDriver::drv_escapeIdentifier(const QByteArray& str) const
 
 AdminTools* SQLiteDriver::drv_createAdminTools() const
 {
-#ifdef SQLITE2
-    return new AdminTools(); //empty impl.
-#else
     return new SQLiteAdminTools();
-#endif
 }
 
 #include "sqlitedriver.moc"

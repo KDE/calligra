@@ -23,9 +23,7 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver_p.h>
 
-#ifndef SQLITE2
-# include "sqlitevacuum.h"
-#endif
+#include "sqlitevacuum.h"
 
 SQLiteAdminTools::SQLiteAdminTools()
         : KexiDB::AdminTools()
@@ -39,11 +37,6 @@ SQLiteAdminTools::~SQLiteAdminTools()
 bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString& databaseName)
 {
     clearError();
-#ifdef SQLITE2
-    Q_UNUSED(data);
-    Q_UNUSED(databaseName);
-    return false;
-#else
     KexiDB::DriverManager manager;
     KexiDB::Driver *drv = manager.driver(data.driverName);
     QString title(i18n("Could not compact database \"%1\".", QDir::convertSeparators(databaseName)));
@@ -58,6 +51,5 @@ bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString&
         return false;
     } else //success or cancelled
         return true;
-#endif
 }
 
