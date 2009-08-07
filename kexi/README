@@ -23,21 +23,22 @@ Contacts:
 
 Developers: http://kexi-project.org/contact.html
 
-User mailing list: mailto:kexi@kde.org
+Kexi (users and developers) mailing list: kexi@kde.org
    (subscribe at https://mail.kde.org/mailman/listinfo/kexi)
 
-Developer and advanced user mailing list: mailto:kexi-devel@kde.org
-   (subscribe at https://mail.kde.org/mailman/listinfo/kexi-devel)
+DISABLED: Developer and advanced user mailing list: kexi-devel@kde.org
+DISABLED:   (subscribe at https://mail.kde.org/mailman/listinfo/kexi)
 
 If you have questions about this README file or about KOffice in general,
-please mail to the KOffice mailing list: mailto:koffice@kde.org
+please mail to the KOffice users mailing list: koffice@kde.org
+   (subscribe at https://mail.kde.org/mailman/listinfo/koffice)
 
 
 Links:
 ======
-Kexi at Koffice.org: http://koffice.org/kexi/
+Kexi at KOffice.org: http://koffice.org/kexi/
 Kexi Project Home Page: http://kexi-project.org/
 
 --
 Have fun,
-Kexi Team
+The Kexi Team
