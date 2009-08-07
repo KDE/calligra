@@ -21,11 +21,13 @@
 #ifndef KCHART_AXIS_H
 #define KCHART_AXIS_H
 
+
 // Qt
 #include <QObject>
 
-// Local
+// KChart
 #include "ChartShape.h"
+
 
 namespace KChart {
 
@@ -117,7 +119,6 @@ public slots:
     void setPieExplodeFactor( DataSet *dataSet, int percent );
     
 private:
-    
     class Private;
     Private *const d;
 };

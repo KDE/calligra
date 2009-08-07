@@ -20,13 +20,11 @@
 
 // Local
 #include "Axis.h"
-#include "PlotArea.h"
-#include "KDChartModel.h"
-#include "DataSet.h"
-#include "Legend.h"
-#include "KDChartConvertions.h"
-#include "ProxyModel.h"
-#include "TextLabelDummy.h"
+
+// Qt
+#include <QList>
+#include <QString>
+#include <QTextDocument>
 
 // KOffice
 #include <KoShapeLoadingContext.h>
@@ -62,10 +60,15 @@
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
 
-// Qt
-#include <QList>
-#include <QString>
-#include <QTextDocument>
+// KChart
+#include "PlotArea.h"
+#include "KDChartModel.h"
+#include "DataSet.h"
+#include "Legend.h"
+#include "KDChartConvertions.h"
+#include "ProxyModel.h"
+#include "TextLabelDummy.h"
+
 
 using namespace KChart;
 
@@ -93,10 +96,12 @@ public:
     
     PlotArea *plotArea;
     
-    AxisPosition position;
+    AxisPosition  position;
     AxisDimension dimension;
+
     KoShape *title;
     TextLabelData *titleData;
+
     QString id;
     QList<DataSet*> dataSets;
     double majorInterval;
@@ -113,17 +118,17 @@ public:
     
     QFont font;
     
-    KDChart::CartesianAxis *kdAxis;
+    KDChart::CartesianAxis            *kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
-    KDChart::PolarCoordinatePlane *kdPolarPlane;
+    KDChart::PolarCoordinatePlane     *kdPolarPlane;
     KDChart::CartesianCoordinatePlane *kdParentPlane;
     
-    KDChart::BarDiagram *kdBarDiagram;
-    KDChart::LineDiagram *kdLineDiagram;
-    KDChart::LineDiagram *kdAreaDiagram;
-    KDChart::PieDiagram *kdCircleDiagram;
+    KDChart::BarDiagram   *kdBarDiagram;
+    KDChart::LineDiagram  *kdLineDiagram;
+    KDChart::LineDiagram  *kdAreaDiagram;
+    KDChart::PieDiagram   *kdCircleDiagram;
     KDChart::PolarDiagram *kdRadarDiagram;
-    KDChart::Plotter *kdScatterDiagram;
+    KDChart::Plotter      *kdScatterDiagram;
 
     KDChartModel *kdBarDiagramModel;
     KDChartModel *kdLineDiagramModel;
@@ -157,18 +162,18 @@ Axis::Private::Private()
     majorInterval = 2;
     minorIntervalDivisor = 1;
     
-    kdBarDiagram = 0;
-    kdLineDiagram = 0;
-    kdAreaDiagram = 0;
-    kdCircleDiagram = 0;
-    kdRadarDiagram = 0;
+    kdBarDiagram     = 0;
+    kdLineDiagram    = 0;
+    kdAreaDiagram    = 0;
+    kdCircleDiagram  = 0;
+    kdRadarDiagram   = 0;
     kdScatterDiagram = 0;
 
-    kdBarDiagramModel = 0;
-    kdLineDiagramModel = 0;
-    kdAreaDiagramModel = 0;
-    kdCircleDiagramModel = 0;
-    kdRadarDiagramModel = 0;
+    kdBarDiagramModel     = 0;
+    kdLineDiagramModel    = 0;
+    kdAreaDiagramModel    = 0;
+    kdCircleDiagramModel  = 0;
+    kdRadarDiagramModel   = 0;
     kdScatterDiagramModel = 0;
 }
 
@@ -176,43 +181,41 @@ Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
     
-    if ( kdPlane )
-    {
+    if ( kdPlane ) {
         plotArea->kdChart()->takeCoordinatePlane( kdPlane );
         delete kdPlane;
     }
-    if ( kdPolarPlane )
-    {
+
+    if ( kdPolarPlane ) {
         plotArea->kdChart()->takeCoordinatePlane( kdPolarPlane );
         delete kdPolarPlane;
     }
     
-    if ( kdBarDiagram )
-    {
+    if ( kdBarDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBarDiagram );
         delete kdBarDiagram;
         delete kdBarDiagramModel;
     }
-    if ( kdAreaDiagram )
-    {
+
+    if ( kdAreaDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdAreaDiagram );
         delete kdAreaDiagram;
         delete kdAreaDiagramModel;
     }
-    if ( kdCircleDiagram )
-    {
+
+    if ( kdCircleDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdCircleDiagram );
         delete kdCircleDiagram;
         delete kdCircleDiagramModel;
     }
-    if ( kdRadarDiagram )
-    {
+
+    if ( kdRadarDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRadarDiagram );
         delete kdRadarDiagram;
         delete kdRadarDiagramModel;
     }
-    if ( kdScatterDiagram )
-    {
+
+    if ( kdScatterDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdScatterDiagram );
         delete kdScatterDiagramModel;
     }
@@ -257,13 +260,13 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
     case BarChartType:
         if ( !kdBarDiagram )
             createBarDiagram();
-        model = kdBarDiagramModel;
+        model   = kdBarDiagramModel;
         diagram = kdBarDiagram;
         break;
     case LineChartType:
         if ( !kdLineDiagram )
             createLineDiagram();
-        model = kdLineDiagramModel;
+        model   = kdLineDiagramModel;
         diagram = kdLineDiagram;
         break;
     case AreaChartType:
@@ -382,13 +385,12 @@ void Axis::Private::deleteDiagram( ChartType chartType )
 
 void Axis::Private::createBarDiagram()
 {
-    if ( kdBarDiagramModel == 0 )
-    {
+    if ( kdBarDiagramModel == 0 ) {
         kdBarDiagramModel = new KDChartModel;
         registerKDChartModel( kdBarDiagramModel );
     }
-    if ( kdBarDiagram == 0 )
-    {
+
+    if ( kdBarDiagram == 0 ) {
         kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
         kdBarDiagram->setModel( kdBarDiagramModel );
         kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
@@ -417,13 +419,12 @@ void Axis::Private::createBarDiagram()
 
 void Axis::Private::createLineDiagram()
 {
-    if ( kdLineDiagramModel == 0 )
-    {
+    if ( kdLineDiagramModel == 0 ) {
         kdLineDiagramModel = new KDChartModel;
         registerKDChartModel( kdLineDiagramModel );
     }
-    if ( kdLineDiagram == 0 )
-    {
+
+    if ( kdLineDiagram == 0 ) {
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
         kdLineDiagram->setModel( kdLineDiagramModel );
 
@@ -451,13 +452,12 @@ void Axis::Private::createLineDiagram()
 
 void Axis::Private::createAreaDiagram()
 {
-    if ( kdAreaDiagramModel == 0 )
-    {
+    if ( kdAreaDiagramModel == 0 ) {
         kdAreaDiagramModel = new KDChartModel;
         registerKDChartModel( kdAreaDiagramModel );
     }
-    if ( kdAreaDiagram == 0 )
-    {
+
+    if ( kdAreaDiagram == 0 ) {
         kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
         KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
         // Draw the area under the lines. This makes this diagram an area chart.
@@ -478,8 +478,7 @@ void Axis::Private::createAreaDiagram()
             plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() )
-        {
+        foreach ( Axis *axis, plotArea->axes() ) {
             if ( axis->dimension() == XAxisDimension )
                 kdAreaDiagram->addAxis( axis->kdAxis() );
         }
@@ -490,14 +489,13 @@ void Axis::Private::createAreaDiagram()
 
 void Axis::Private::createCircleDiagram()
 {
-    if ( kdCircleDiagramModel == 0 )
-    {
+    if ( kdCircleDiagramModel == 0 ) {
         kdCircleDiagramModel = new KDChartModel;
         kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
         registerKDChartModel( kdCircleDiagramModel );
     }
-    if ( kdCircleDiagram == 0 )
-    {
+
+    if ( kdCircleDiagram == 0 ) {
         kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
         kdCircleDiagram->setModel( kdCircleDiagramModel );
 
@@ -511,13 +509,12 @@ void Axis::Private::createCircleDiagram()
 
 void Axis::Private::createRadarDiagram()
 {
-    if ( kdRadarDiagramModel == 0 )
-    {
+    if ( kdRadarDiagramModel == 0 ) {
         kdRadarDiagramModel = new KDChartModel;
         registerKDChartModel( kdRadarDiagramModel );
     }
-    if ( kdRadarDiagram == 0 )
-    {
+
+    if ( kdRadarDiagram == 0 ) {
         kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
         kdRadarDiagram->setModel( kdRadarDiagramModel );
 
@@ -531,14 +528,13 @@ void Axis::Private::createRadarDiagram()
 
 void Axis::Private::createScatterDiagram()
 {
-    if ( kdScatterDiagramModel == 0 )
-    {
+    if ( kdScatterDiagramModel == 0 ) {
         kdScatterDiagramModel = new KDChartModel;
         registerKDChartModel( kdScatterDiagramModel );
         kdScatterDiagramModel->setDataDimensions( 2 );
     }
-    if ( kdScatterDiagram == 0 )
-    {
+
+    if ( kdScatterDiagram == 0 ) {
         kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
         kdScatterDiagram->setModel( kdScatterDiagramModel );
         
@@ -549,8 +545,7 @@ void Axis::Private::createScatterDiagram()
             plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
-        foreach ( Axis *axis, plotArea->axes() )
-        {
+        foreach ( Axis *axis, plotArea->axes() ) {
             if ( axis->dimension() == XAxisDimension )
                 kdScatterDiagram->addAxis( axis->kdAxis() );
         }
@@ -573,6 +568,10 @@ void Axis::Private::adjustAllDiagrams()
     if ( kdAreaDiagram )
         kdAreaDiagram->setCenterDataPoints( centerDataPoints );
 }
+
+
+// ================================================================
+
 
 Axis::Axis( PlotArea *parent )
     : d( new Private )
@@ -610,20 +609,18 @@ Axis::Axis( PlotArea *parent )
     // TODO check if it is ok to pass an empty map. The text shape might not work correctly
     QMap<QString, KoDataCenter *> dataCenterMap;
     d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
-    if ( d->title )
-    {
+    if ( d->title ) {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );
-        if ( d->titleData == 0 )
-        {
+        if ( d->titleData == 0 ) {
             d->titleData = new TextLabelData;
             d->title->setUserData( d->titleData );
         }
+
         QFont font = d->titleData->document()->defaultFont();
         font.setPointSizeF( 9 );
         d->titleData->document()->setDefaultFont( font );
     }
-    else
-    {
+    else {
         d->title = new TextLabelDummy;
         d->titleData = new TextLabelData;
         d->title->setUserData( d->titleData );
@@ -798,6 +795,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                         d->plotArea->kdChart()->takeCoordinatePlane( plane );
                     }
                 }
+
                 if ( d->plotArea->parent()->legend()->kdLegend() ) {
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
                 }
