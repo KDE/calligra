@@ -96,8 +96,8 @@ public:
     
     ChartType chartType;
     ChartSubtype chartSubtype;
-    bool threeD;
     
+    bool threeD;
     ThreeDScene *threeDScene;
     
     int gapBetweenBars;
@@ -176,7 +176,7 @@ void PlotArea::init()
     d->kdChart->setFrameAttributes( attr );
     
     d->wall = new Surface( this );
-    d->floor = new Surface( this );
+    //d->floor = new Surface( this );
     
     // There need to be at least these two axes. Do not delete, but hide them instead.
     Axis *xAxis = new Axis( this );
@@ -482,14 +482,13 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     }
 
     // Remove all axes before loading new ones
-    KoXmlElement e;
     while( !d->axes.isEmpty() ) {
         Axis *axis = d->axes.takeLast();
         Q_ASSERT( axis );
         delete axis;
     }
     
-    // A data set is always attached to an axis, so load them first
+    // A data set is always attached to an axis, so load them first.
     KoXmlElement n;
     forEachElement ( n, plotAreaElement ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
@@ -512,6 +511,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             d->wall->loadOdf( n, context );
         }
         else if ( n.localName() == "floor" ) {
+            // The floor is not always present, so allocate it if needed.
+            if ( !d->floor )
+                d->floor = new Surface( this );
             d->floor->loadOdf( n, context );
         }
         else if ( n.localName() != "axis" && n.localName() != "series" ) {
@@ -579,8 +581,10 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     // Save data series
     d->shape->proxyModel()->saveOdf( context );
 
-    d->floor->saveOdf( context, "chart:floor" );
+    // Save the floor and wall of the plotarea.
     d->wall->saveOdf( context, "chart:wall" );
+    if ( d->floor )
+        d->floor->saveOdf( context, "chart:floor" );
 
     // TODO chart:series
     // TODO chart:grid
