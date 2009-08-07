@@ -85,10 +85,11 @@ void yyerror(const char *str)
 
     const bool otherError = (qstrnicmp(str, "other error", 11) == 0);
 
-    if (parser->error().type().isEmpty()
+    if ((parser->error().type().isEmpty()
             && (str == 0 || strlen(str) == 0
-                || qstrnicmp(str, "syntax error", 12) == 0 || qstrnicmp(str, "parse error", 11) == 0)
-            || otherError) {
+                || qstrnicmp(str, "syntax error", 12) == 0 || qstrnicmp(str, "parse error", 11) == 0))
+            || otherError)
+    {
         KexiDBDbg << parser->statement();
         QString ptrline = "";
         for (int i = 0; i < current; i++)
