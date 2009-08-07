@@ -18,11 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 // Local
 #include "TableModel.h"
-#include "CellRegion.h"
 
+// C
 #include <cmath>
+
+// Qt
+#include <QDomNode>
+#include <QDomDocument>
 
 // KDE
 #include <KDebug>
@@ -35,9 +40,9 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
-// Qt
-#include <QDomNode>
-#include <QDomDocument>
+// KChart
+#include "CellRegion.h"
+
 
 namespace KChart {
 
@@ -58,17 +63,19 @@ QHash<QString, QVector<QRect> > TableModel::cellRegion() const
 bool TableModel::setCellRegion( const QString& regionName )
 {
     int result = 0;
+
     const int size = regionName.size();
-    for ( int i = 0; i < size; i++ )
-    {
+    for ( int i = 0; i < size; i++ ) {
         result += CellRegion::rangeCharToInt( regionName[i].toAscii() ) * std::pow( 10.0, ( size - i - 1 ) );
     }
+
     return result;
 }
 
 bool TableModel::isCellRegionValid( const QString& regionName ) const
 {
     Q_UNUSED( regionName );
+
     return true;
 }
 
@@ -88,27 +95,28 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     stream << node;
     
     KoXmlElement n;
-    forEachElement ( n, tableElement )
-    {
+    forEachElement ( n, tableElement ) {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
-        if ( n.localName() == "table-rows" || n.localName() == "table-header-rows" )
+
+        if ( n.localName() == "table-rows" 
+             || n.localName() == "table-header-rows" )
         {
             const bool isHeader = n.localName() == "table-header-rows";
             int           row = 0;
+
             KoXmlElement  _n;
-            forEachElement ( _n, n )
-            {
+            forEachElement ( _n, n ) {
                 if ( _n.namespaceURI() != KoXmlNS::table )
                     continue;
-                if ( _n.localName() == "table-row" )
-                {
+
+                if ( _n.localName() == "table-row" ) {
                     int column = 0;
                     if ( !isHeader )
                         setRowCount( rowCount() + 1 );
+
                     KoXmlElement __n;
-                    forEachElement ( __n, _n )
-                    {
+                    forEachElement ( __n, _n ) {
 			if ( __n.namespaceURI() != KoXmlNS::table )
 			    continue;
 
@@ -133,6 +141,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
 				column++;
                                 continue;
                             }
+
                             QVariant value;
                             valueString = valueElement.text();
                             if ( valueType == "float" )

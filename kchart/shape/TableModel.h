@@ -18,20 +18,24 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #ifndef KCHART_TABLEMODEL_H
 #define KCHART_TABLEMODEL_H
 
-// Interface
-#include <interfaces/KoChartModel.h>
-#include <QStandardItemModel>
 
 // Qt
 #include <QVector>
+#include <QStandardItemModel>
 
-// Local
+// Interface
+#include <interfaces/KoChartModel.h>
+
+// KChart
 #include "ChartShape.h"
 
+
 class QString;
+
 
 namespace KChart {
 
@@ -42,6 +46,7 @@ class CHARTSHAPELIB_EXPORT TableModel : public QStandardItemModel, public KoChar
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
+
 public:
     TableModel( QObject *parent = 0 );
     ~TableModel();
