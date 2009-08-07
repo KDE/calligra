@@ -61,8 +61,8 @@ public:
     // map of property: group
     QMap<Property*, QByteArray> groupForProperty;
 
-bool ownProperty : 1;
-bool readOnly : 1;
+    bool ownProperty : 1;
+    bool readOnly : 1;
 // static Property nonConstNull;
     QByteArray prevSelection;
     QString typeName;

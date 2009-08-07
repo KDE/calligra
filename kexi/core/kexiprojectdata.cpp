@@ -48,8 +48,8 @@ public:
 
     KexiDB::ConnectionData connData;
     QDateTime lastOpened;
-bool userMode : 1;
-bool readOnly : 1;
+    bool userMode : 1;
+    bool readOnly : 1;
 };
 
 //---------------------------------------

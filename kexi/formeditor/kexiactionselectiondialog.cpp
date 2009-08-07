@@ -70,7 +70,7 @@ public:
         return fifoSorting ? m_sortKey : ActionSelectorDialogListItemBase::key(column, ascending);
     }
 
-bool fifoSorting : 1;
+    bool fifoSorting : 1;
 
 protected:
     QString m_sortKey;

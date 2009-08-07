@@ -93,7 +93,7 @@ public:
 
 protected:
     QPointer<QWidget> m_messageHandlerParentWidget;
-bool m_enableMessages : 1;
+    bool m_enableMessages : 1;
 };
 
 }

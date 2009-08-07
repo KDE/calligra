@@ -56,8 +56,8 @@ public:
     KexiStartupFileWidget::Mode mode;
     QSet<QString> additionalMimeTypes, excludedMimeTypes;
     QString defaultExtension;
-bool confirmOverwrites : 1;
-bool filtersUpdated : 1;
+    bool confirmOverwrites : 1;
+    bool filtersUpdated : 1;
     KUrl highlightedUrl;
 };
 

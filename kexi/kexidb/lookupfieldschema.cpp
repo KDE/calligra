@@ -58,8 +58,8 @@ public:
     QList<int> columnWidths;
     uint maximumListRows;
     DisplayWidget displayWidget;
-bool columnHeadersVisible : 1;
-bool limitToList : 1;
+    bool columnHeadersVisible : 1;
+    bool limitToList : 1;
 };
 }
 

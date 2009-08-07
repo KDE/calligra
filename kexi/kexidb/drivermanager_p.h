@@ -85,7 +85,7 @@ protected:
 
     QStringList possibleProblems;
 
-bool lookupDriversNeeded : 1;
+    bool lookupDriversNeeded : 1;
 
     friend class DriverManager;
 };

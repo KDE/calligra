@@ -105,7 +105,7 @@ protected:
     QString m_name;
     QString m_caption;
     QString m_desc;
-bool m_native : 1;
+    bool m_native : 1;
 
     friend class Connection;
 };

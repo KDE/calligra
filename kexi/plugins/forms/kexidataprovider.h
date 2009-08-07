@@ -92,7 +92,7 @@ protected:
     QList<KexiFormDataItemInterface*> m_dataItems;
     QStringList m_usedDataSources;
     KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
-bool m_disableFillDuplicatedDataItems : 1;
+    bool m_disableFillDuplicatedDataItems : 1;
 };
 
 #endif

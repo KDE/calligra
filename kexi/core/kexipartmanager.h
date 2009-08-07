@@ -133,8 +133,8 @@ private:
     MissingList m_missing;
 #endif
 //    int m_nextTempProjectPartID;
-bool m_lookupDone : 1;
-bool m_lookupResult : 1;
+    bool m_lookupDone : 1;
+    bool m_lookupResult : 1;
 
     friend class StaticPart;
 };

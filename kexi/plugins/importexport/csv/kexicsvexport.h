@@ -45,7 +45,7 @@ public:
     QString delimiter;
     QString forceDelimiter; //!< Used for "clipboard" mode
     QString textQuote;
-bool addColumnNames : 1;
+    bool addColumnNames : 1;
 };
 
 /*! Exports data. \return false on failure.

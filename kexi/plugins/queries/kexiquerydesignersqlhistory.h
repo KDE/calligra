@@ -61,8 +61,8 @@ private:
     KexiQueryDesignerSQLHistory *m_parent;
 
     int m_y;
-bool m_succeeded : 1;
-bool m_selected : 1;
+    bool m_succeeded : 1;
+    bool m_selected : 1;
 };
 
 typedef QList<HistoryEntry*> History;

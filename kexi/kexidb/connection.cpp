@@ -251,11 +251,11 @@ public:
 
     //! true if rollbackTransaction() and commitTransaction() shouldn't remove
     //! the transaction object from 'transactions' list; used by closeDatabase()
-bool dont_remove_transactions : 1;
+    bool dont_remove_transactions : 1;
 
     //! used to avoid endless recursion between useDatabase() and databaseExists()
     //! when useTemporaryDatabaseIfNeeded() works
-bool skip_databaseExists_check_in_useDatabase : 1;
+    bool skip_databaseExists_check_in_useDatabase : 1;
 
     /*! Used when single transactions are only supported (Driver::SingleTransactions).
      True value means default transaction has been started inside connection object
@@ -265,14 +265,14 @@ bool skip_databaseExists_check_in_useDatabase : 1;
      transaction if default_trans_started_inside is false. Such behaviour allows user to
      execute a sequence of actions like CREATE TABLE...; INSERT DATA...; within a single transaction
      and commit it or rollback by hand. */
-bool default_trans_started_inside : 1;
+    bool default_trans_started_inside : 1;
 
-bool isConnected : 1;
+    bool isConnected : 1;
 
-bool autoCommit : 1;
+    bool autoCommit : 1;
 
     /*! True for read only connection. Used especially for file-based drivers. */
-bool readOnly : 1;
+    bool readOnly : 1;
 private:
     //! Table schemas retrieved on demand with tableSchema()
     QHash<int, TableSchema*> tables;
@@ -282,7 +282,7 @@ private:
     //! Query schemas retrieved on demand with querySchema()
     QHash<int, QuerySchema*> queries;
     QHash<QString, QuerySchema*> queries_byname;
-bool takeTableEnabled : 1; //!< used by takeTable() needed because otherwise 'tables' hash will
+    bool takeTableEnabled : 1; //!< used by takeTable() needed because otherwise 'tables' hash will
     //!< be touched by takeTable() what's not allowed during qDeleteAll()
 };
 

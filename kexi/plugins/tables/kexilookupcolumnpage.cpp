@@ -104,9 +104,9 @@ public:
     //! Used only in assignPropertySet() to check whether we already have the set assigned
     int currentFieldUid;
 
-bool insideClearRowSourceSelection : 1;
+    bool insideClearRowSourceSelection : 1;
     //! True is changeProperty() works. Used to block updating properties when within assignPropertySet().
-bool propertySetEnabled : 1;
+    bool propertySetEnabled : 1;
 
 private:
     //! A property set that is displayed on the page.

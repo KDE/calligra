@@ -188,7 +188,7 @@ public:
     WaitCursorRemover();
     ~WaitCursorRemover();
 private:
-bool m_reactivateCursor : 1;
+    bool m_reactivateCursor : 1;
 };
 
 /*! \return filter string in QFileDialog format for a mime type pointed by \a mime
@@ -372,7 +372,7 @@ public:
         if (m_autoDelete) qDeleteAll(*this);
     }
 private:
-bool m_autoDelete : 1;
+    bool m_autoDelete : 1;
 };
 
 //! @short Autodeleted list
@@ -458,7 +458,7 @@ public:
     }
 
 private:
-bool m_autoDelete : 1;
+    bool m_autoDelete : 1;
 };
 
 //! @short Case insensitive hash container supporting QString or QByteArray keys.
@@ -518,7 +518,7 @@ public:
         m_autoDelete = set;
     }
 private:
-bool m_autoDelete : 1;
+    bool m_autoDelete : 1;
 };
 
 //! A set created from static (0-terminated) array of raw null-terminated strings.

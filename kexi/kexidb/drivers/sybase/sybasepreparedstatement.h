@@ -37,7 +37,7 @@ public:
 
     QByteArray m_tempStatementString;
 
-bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 
 private:
     Connection* m_conn;

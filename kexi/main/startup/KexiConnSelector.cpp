@@ -107,9 +107,9 @@ public:
     QStackedWidget *stack;
     QPointer<KexiDBConnectionSet> conn_set;
     KexiDB::DriverManager manager;
-bool conn_sel_shown : 1;//! helper
-bool file_sel_shown : 1;
-bool confirmOverwrites : 1;
+    bool conn_sel_shown : 1; //!< helper
+    bool file_sel_shown : 1;
+    bool confirmOverwrites : 1;
 };
 
 /*================================================================*/

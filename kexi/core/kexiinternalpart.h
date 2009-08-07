@@ -150,9 +150,9 @@ protected:
     //! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
     QPointer<QWidget> m_uniqueWidget;
 
-bool m_uniqueWindow : 1; //!< true if createWidgetInstance() should return only one window
+    bool m_uniqueWindow : 1; //!< true if createWidgetInstance() should return only one window
 
-bool m_cancelled : 1; //!< Used in cancelled()
+    bool m_cancelled : 1; //!< Used in cancelled()
 };
 
 #endif

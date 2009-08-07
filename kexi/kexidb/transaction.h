@@ -45,7 +45,7 @@ public:
     static int globalCount();
 
     Connection *m_conn;
-bool m_active : 1;
+    bool m_active : 1;
     uint refcount;
 };
 
@@ -154,7 +154,7 @@ public:
 
 protected:
     Transaction m_trans;
-bool m_doNothing : 1;
+    bool m_doNothing : 1;
 };
 
 } //namespace KexiDB

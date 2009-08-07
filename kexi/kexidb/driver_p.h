@@ -71,11 +71,11 @@ public:
      e.g. like "INTEGER PRIMARY KEY" for SQLite.
      Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
      False by default. */
-bool SPECIAL_AUTO_INCREMENT_DEF : 1;
+    bool SPECIAL_AUTO_INCREMENT_DEF : 1;
 
     /*! True if autoincrement requires field to be declared as primary key.
      This is true for SQLite. False by default. */
-bool AUTO_INCREMENT_REQUIRES_PK : 1;
+    bool AUTO_INCREMENT_REQUIRES_PK : 1;
 
     /*! Name of a field (or built-in function) with autoincremented unique value,
      typically returned by Connection::drv_lastInsertRowID().
@@ -102,7 +102,7 @@ bool AUTO_INCREMENT_REQUIRES_PK : 1;
      just a synonym for the primary key, this engine needs to have primary keys always
      defined if we want to use interactive editing features like row updating and deleting.
     */
-bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
+    bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
 
     /*! Name of any (e.g. first found) database for this connection that
      typically always exists. This can be not set if we want to do some magic checking
@@ -125,16 +125,16 @@ bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
      This flag is unused for file-based db drivers,
      by default set to true and used for all other db drivers.
     */
-bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
+    bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
 
     /*! True if before we know whether the fetched result of executed query
      is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
      The flag is used in Cursor::open(). By default this flag is false. */
-bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
+    bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
 
     /*! True if "SELECT 1 from (subquery)" is supported. False by default.
      Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
-bool SELECT_1_SUBQUERY_SUPPORTED : 1;
+    bool SELECT_1_SUBQUERY_SUPPORTED : 1;
 };
 
 /*! Private driver's data members. Available for implementation. */
@@ -160,12 +160,12 @@ public:
     KService *service;
 
     /*! Internal constant flag: Set this in subclass if driver is a file driver */
-bool isFileDriver : 1;
+    bool isFileDriver : 1;
 
     /*! Internal constant flag: Set this in subclass if after successful
      drv_createDatabased() database is in opened state (as after useDatabase()).
      For most engines this is not true. */
-bool isDBOpenedAfterCreate : 1;
+    bool isDBOpenedAfterCreate : 1;
 
     /*! List of system objects names, eg. build-in system tables that
      cannot be used by user, and in most cases user even shouldn't see these.

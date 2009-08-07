@@ -51,7 +51,7 @@ public:
     Connection *db;
     QString statement;
     ParserError error;
-bool initialized : 1;
+    bool initialized : 1;
 };
 
 

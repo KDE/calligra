@@ -154,31 +154,31 @@ public:
     //! internal
     int maxTypeNameTextWidth;
     //! Set to true in beforeSwitchTo() to avoid asking again in storeData()
-bool dontAskOnStoreData : 1;
+    bool dontAskOnStoreData : 1;
 
-bool slotTogglePrimaryKeyCalled : 1;
+    bool slotTogglePrimaryKeyCalled : 1;
 
-bool primaryKeyExists : 1;
+    bool primaryKeyExists : 1;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-bool slotPropertyChanged_primaryKey_enabled : 1;
+    bool slotPropertyChanged_primaryKey_enabled : 1;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-bool slotPropertyChanged_subType_enabled : 1;
+    bool slotPropertyChanged_subType_enabled : 1;
     //! used in slotPropertyChanged() to disable addHistoryCommand()
-bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
+    bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
     //! used in slotRowUpdated() to disable addHistoryCommand()
-bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
+    bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
     //! used in slotAboutToDeleteRow() to disable addHistoryCommand()
-bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
+    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
     //! used in slotRowInserted() to disable addHistoryCommand()
-bool addHistoryCommand_in_slotRowInserted_enabled : 1;
+    bool addHistoryCommand_in_slotRowInserted_enabled : 1;
 
     //! used to disable slotBeforeCellChanged()
-bool slotBeforeCellChanged_enabled : 1;
+    bool slotBeforeCellChanged_enabled : 1;
 
-//! @tood temp; remove this:
+//! @todo temp; remove this:
     //! Temporary flag, used for testingu the Alter Table machinery. Affects storeData()
     //! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
-bool tempStoreDataUsingRealAlterTable : 1;
+    bool tempStoreDataUsingRealAlterTable : 1;
 
     /*! Set to a recent result of calling \ref tristate KexiTableDesignerView::storeData(bool dontAsk).
      Then, it is used in \ref void KexiTableDesignerView::executeRealAlterTable()

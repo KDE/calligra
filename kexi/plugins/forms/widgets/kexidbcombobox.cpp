@@ -59,11 +59,11 @@ public:
     KexiDB::QueryColumnInfo* visibleColumnInfo;
     //! used for collecting subwidgets and their childrens (if isEditable is false)
     QList<QWidget*> subWidgetsWithDisabledEvents;
-bool isEditable : 1; //!< true is the combo box is editable
-bool buttonPressed : 1;
-bool mouseOver : 1;
-bool dataEnteredByHand : 1;
-bool designMode : 1;
+    bool isEditable : 1; //!< true is the combo box is editable
+    bool buttonPressed : 1;
+    bool mouseOver : 1;
+    bool dataEnteredByHand : 1;
+    bool designMode : 1;
 };
 
 //-------------------------------------

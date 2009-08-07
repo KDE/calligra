@@ -60,7 +60,7 @@ public slots:
     void setReplaceMode(bool set);
 
 protected:
-bool m_replaceMode : 1;
+    bool m_replaceMode : 1;
 };
 
 #endif

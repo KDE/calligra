@@ -94,13 +94,13 @@ public:
     //! needed to remember height for both modes, between switching
     int heightForStatusMode, heightForHistoryMode;
     //! helper for slotUpdateMode()
-bool action_toggle_history_was_checked : 1;
+    bool action_toggle_history_was_checked : 1;
     //! helper for eventFilter()
 //  bool eventFilterForSplitterEnabled : 1;
     //! helper for beforeSwitchTo()
-bool justSwitchedFromNoViewMode : 1;
+    bool justSwitchedFromNoViewMode : 1;
     //! helper for slotTextChanged()
-bool slotTextChangedEnabled : 1;
+    bool slotTextChangedEnabled : 1;
 };
 
 //===================

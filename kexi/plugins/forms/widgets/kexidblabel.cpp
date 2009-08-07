@@ -398,9 +398,9 @@ public:
     KexiDBInternalLabel* internalLabel;
     QTimer* timer;
     QColor frameColor;
-bool pixmapDirty : 1;
-bool shadowEnabled : 1;
-bool resizeEvent : 1;
+    bool pixmapDirty : 1;
+    bool shadowEnabled : 1;
+    bool resizeEvent : 1;
 };
 
 //=========================================================

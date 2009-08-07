@@ -110,8 +110,8 @@ protected:
     KexiDB::TableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
     int m_rowCount; //!< Cached row count for a table/query.
-bool m_rowCountDetermined : 1;
-bool m_cancelled : 1;
+    bool m_rowCountDetermined : 1;
+    bool m_cancelled : 1;
 };
 
 #endif

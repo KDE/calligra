@@ -97,7 +97,7 @@ public:
     QString debugString() const;
 
     //! true if this column is visible to the user (and its data is fetched by the engine)
-bool visible : 1;
+    bool visible : 1;
 
 private:
     /*! Index of column with visible lookup value within the 'fields expanded' vector.
@@ -170,7 +170,7 @@ protected:
     Field* m_field; //!< Used only in case when the second contructor is used.
 
     //! true if ascending sorting should be performed (the default).
-bool m_ascending : 1;
+    bool m_ascending : 1;
 };
 
 //! A base for KexiDB::OrderByColumnList

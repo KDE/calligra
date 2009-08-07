@@ -87,9 +87,9 @@ protected:
 
 private:
     QDateTimeEditor* m_dte_time;
-bool m_invalidState : 1;
-bool m_cleared : 1;
-bool m_readOnly : 1;
+    bool m_invalidState : 1;
+    bool m_cleared : 1;
+    bool m_readOnly : 1;
 };
 
 #endif

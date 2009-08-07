@@ -72,7 +72,7 @@ private:
 // pqxx::nontransaction* m_tran;
     pqxx::connection* my_conn;
     QVariant pValue(uint pos)const;
-bool m_implicityStarted : 1;
+    bool m_implicityStarted : 1;
     //QByteArray processBinaryData(pqxx::binarystring*) const;
     friend class pqxxSqlConnection;
 };

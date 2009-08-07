@@ -44,7 +44,7 @@ public:
 
     After switching to TextView, this flag is cleared.
     */
-bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
+    bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
 };
 
 #endif

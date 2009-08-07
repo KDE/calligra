@@ -97,19 +97,19 @@ public:
     EditorItem::Dict itemDict;
 
     int baseRowHeight;
-bool sync : 1;
-bool insideSlotValueChanged : 1;
+    bool sync : 1;
+    bool insideSlotValueChanged : 1;
 
     //! Helpers for changeSetLater()
     QTimer changeSetLaterTimer;
-bool setListLater_set : 1;
-bool preservePrevSelection_preservePrevSelection : 1;
+    bool setListLater_set : 1;
+    bool preservePrevSelection_preservePrevSelection : 1;
     QByteArray preservePrevSelection_propertyToSelect;
     //bool doNotSetFocusOnSelection : 1;
     //! Used in setFocus() to prevent scrolling to previously selected item on mouse click
-bool justClickedItem : 1;
+    bool justClickedItem : 1;
     //! Helper for slotWidgetValueChanged()
-bool slotPropertyChanged_enabled : 1;
+    bool slotPropertyChanged_enabled : 1;
     //! Helper for changeSet()
     Set* setListLater_list;
     //! used by selectItemLater()

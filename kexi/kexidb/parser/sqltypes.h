@@ -59,7 +59,7 @@ struct OrderByColumnInternal {
     QString aliasOrName; //!< Can include a "tablename." prefix
     int columnNumber; //!< Optional, used instead of aliasOrName to refer to column
     //!< by its number rather than name.
-bool ascending : 1;
+    bool ascending : 1;
 };
 
 //! @internal

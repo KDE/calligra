@@ -46,8 +46,8 @@ public:
 
     QString encoding;
     DateFormat dateFormat;
-bool defaultEncodingExplicitySet : 1;
-bool trimmedInTextValuesChecked : 1;
+    bool defaultEncodingExplicitySet : 1;
+    bool trimmedInTextValuesChecked : 1;
 };
 
 //! @short CSV Options dialog

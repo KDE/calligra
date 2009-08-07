@@ -319,7 +319,7 @@ private:
     class Private;
     Private * d;
 
-bool m_destroying : 1; //!< true after entering to the dctor
+    bool m_destroying : 1; //!< true after entering to the dctor
 
     friend class KexiMainWindow;
     friend class KexiPart::Part;

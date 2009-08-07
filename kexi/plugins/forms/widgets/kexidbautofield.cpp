@@ -64,9 +64,9 @@ public:
     QString fieldCaptionInternal;
     QBrush baseBrush; //!< needed because for unbound mode editor==0
     QBrush textBrush; //!< needed because for unbound mode editor==0
-bool autoCaption : 1;
-bool focusPolicyChanged : 1;
-bool designMode : 1;
+    bool autoCaption : 1;
+    bool focusPolicyChanged : 1;
+    bool designMode : 1;
 };
 
 //-------------------------------------

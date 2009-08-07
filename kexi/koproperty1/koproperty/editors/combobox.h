@@ -51,7 +51,7 @@ protected:
     void fillBox();
 
     KComboBox *m_edit;
-bool m_setValueEnabled : 1;
+    bool m_setValueEnabled : 1;
     bool m_extraValueAllowed;
 };
 

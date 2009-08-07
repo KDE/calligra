@@ -98,9 +98,9 @@ public:
     int registeredPartID;
 #endif
 
-bool newObjectsAreDirty : 1;
+    bool newObjectsAreDirty : 1;
 
-bool instanceActionsInitialized : 1;
+    bool instanceActionsInitialized : 1;
 };
 }
 

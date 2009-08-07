@@ -198,7 +198,7 @@ private:
     //! Used by some ctors.
     void init(const TableSchema& ts, bool copyId);
 
-bool m_isKexiDBSystem : 1;
+    bool m_isKexiDBSystem : 1;
 
     friend class Connection;
 };

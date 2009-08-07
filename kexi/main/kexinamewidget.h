@@ -153,9 +153,9 @@ protected:
     KexiUtils::MultiValidator *m_validator;
     QString m_nameWarning, m_captionWarning;
 
-bool m_le_name_txtchanged_disable : 1;
-bool m_le_name_autofill : 1;
-bool m_caption_required : 1;
+    bool m_le_name_txtchanged_disable : 1;
+    bool m_le_name_autofill : 1;
+    bool m_caption_required : 1;
 
     friend class KexiNameDialog;
 };

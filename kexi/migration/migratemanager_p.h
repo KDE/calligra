@@ -75,7 +75,7 @@ protected:
     //! result names for KParts::ComponentFactory::ComponentLoadingError
     QMap<int, QString> m_componentLoadingErrors;
 
-bool lookupDriversNeeded : 1;
+    bool lookupDriversNeeded : 1;
 
     QStringList possibleProblems;
 

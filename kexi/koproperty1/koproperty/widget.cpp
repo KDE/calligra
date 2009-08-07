@@ -49,10 +49,10 @@ public:
 
     Property *property;
     QWidget *editor;
-bool leaveTheSpaceForRevertButton : 1;
-bool hasBorders : 1;
-bool readOnly : 1;
-bool visibleFlag : 1;
+    bool leaveTheSpaceForRevertButton : 1;
+    bool hasBorders : 1;
+    bool readOnly : 1;
+    bool visibleFlag : 1;
 };
 }
 

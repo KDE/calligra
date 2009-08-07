@@ -368,13 +368,13 @@ protected:
     QuerySchema *m_query;
 //  CursorData *m_data;
     QString m_rawStatement;
-bool m_opened : 1;
+    bool m_opened : 1;
 //js (m_at==0 is enough)  bool m_beforeFirst : 1;
-bool m_atLast : 1;
-bool m_afterLast : 1;
+    bool m_atLast : 1;
+    bool m_afterLast : 1;
 //  bool m_atLast;
-bool m_validRecord : 1; //!< true if valid record is currently retrieved @ current position
-bool m_containsROWIDInfo : 1;
+    bool m_validRecord : 1; //!< true if valid record is currently retrieved @ current position
+    bool m_containsROWIDInfo : 1;
     qint64 m_at;
     uint m_fieldCount; //!< cached field count information
     uint m_fieldsToStoreInRow; //!< Used by storeCurrentRow(), reimplement if needed
@@ -386,7 +386,7 @@ bool m_containsROWIDInfo : 1;
 
     //<members related to buffering>
     int m_records_in_buf;          //!< number of records currently stored in the buffer
-bool m_buffering_completed : 1;   //!< true if we already have all records stored in the buffer
+    bool m_buffering_completed : 1;   //!< true if we already have all records stored in the buffer
     //</members related to buffering>
 
     //! Useful e.g. for value(int) method when we need access to schema def.
@@ -399,10 +399,10 @@ bool m_buffering_completed : 1;   //!< true if we already have all records store
 
 private:
 
-bool m_readAhead : 1;
+    bool m_readAhead : 1;
 
     //<members related to buffering>
-bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
+    bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
     //</members related to buffering>
 
 

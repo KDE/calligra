@@ -41,7 +41,9 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
-2009-05-13
+2009-08-07
+KexiDB
+*SQLITE 2.8 support removed from the code
 
 2009-05-11..13
 Forms

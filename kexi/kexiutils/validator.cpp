@@ -29,7 +29,7 @@ public:
     Private()
             : acceptsEmptyValue(false) {
     }
-bool acceptsEmptyValue : 1;
+    bool acceptsEmptyValue : 1;
 };
 }
 

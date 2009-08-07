@@ -126,7 +126,7 @@ public:
 
     QString droppedNewTable, droppedNewField;
 
-bool slotTableAdded_enabled : 1;
+    bool slotTableAdded_enabled : 1;
 };
 
 static bool isAsterisk(const QString& tableName, const QString& fieldName)

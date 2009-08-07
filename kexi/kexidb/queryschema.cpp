@@ -363,7 +363,7 @@ public:
 
     /*! Set by insertField(): true, if aliases for expression columns should
      be generated on next columnAlias() call. */
-bool regenerateExprAliases : 1;
+    bool regenerateExprAliases : 1;
 };
 }
 

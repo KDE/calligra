@@ -100,8 +100,8 @@ public:
 
     KexiGUIMessageHandler* msgHandler;
 
-bool le_dbname_txtchanged_disable : 1;
-bool le_dbname_autofill : 1;
+    bool le_dbname_txtchanged_disable : 1;
+    bool le_dbname_autofill : 1;
 };
 
 KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,

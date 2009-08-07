@@ -1010,11 +1010,11 @@ public:
     //! Set to true only in destructor, used by closeWindow() to know if
     //! user can cancel window closing. If true user even doesn't see any messages
     //! before closing a window. This is for extremely sanity... and shouldn't be even needed.
-bool forceWindowClosing : 1;
+    bool forceWindowClosing : 1;
 
     //! Indicates that we're inside closeWindow() method - to avoid inf. recursion
     //! on window removing
-bool insideCloseWindow : 1;
+    bool insideCloseWindow : 1;
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     //! Used in executeActionWhenPendingJobsAreFinished().
@@ -1053,27 +1053,27 @@ bool insideCloseWindow : 1;
 
     //! Used in several places to show info dialog at startup (only once per session)
     //! before displaying other stuff
-bool showImportantInfoOnStartup : 1;
+    bool showImportantInfoOnStartup : 1;
 
 //  //! Used sometimes to block showErrorMessage()
 //  bool disableErrorMessages : 1;
 
     //! Indicates if project is started in User Mode
-bool userMode : 1;
+    bool userMode : 1;
 
     //! Indicates if project navigator should be visible
-bool isProjectNavigatorVisible : 1;
+    bool isProjectNavigatorVisible : 1;
 
     //! Used on opening 1st child window
-bool maximizeFirstOpenedChildFrm : 1;
+    bool maximizeFirstOpenedChildFrm : 1;
 
     //! Set in restoreSettings() and used in initNavigator()
     //! to customize navigator visibility on startup
-bool forceShowProjectNavigatorOnCreation : 1;
-bool forceHideProjectNavigatorOnCreation : 1;
+    bool forceShowProjectNavigatorOnCreation : 1;
+    bool forceHideProjectNavigatorOnCreation : 1;
 
-bool navWasVisibleBeforeProjectClosing : 1;
-bool saveSettingsForShowProjectNavigator : 1;
+    bool navWasVisibleBeforeProjectClosing : 1;
+    bool saveSettingsForShowProjectNavigator : 1;
 #ifdef HAVE_KNEWSTUFF
     KexiNewStuff  *newStuff;
 #endif

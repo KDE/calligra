@@ -82,7 +82,7 @@ public:
     QPointer<KAction> replaceAction;
     QPointer<KAction> replaceallAction;
     QList<QShortcut*> shortcuts;
-bool replaceMode : 1;
+    bool replaceMode : 1;
 };
 
 //------------------------------------------

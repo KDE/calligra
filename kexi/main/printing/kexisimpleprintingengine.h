@@ -48,9 +48,9 @@ public:
     KoPageLayout pageLayout;
     KoUnit unit;
     QFont pageTitleFont;
-bool addPageNumbers : 1;
-bool addDateAndTime : 1;
-bool addTableBorders : 1;
+    bool addPageNumbers : 1;
+    bool addDateAndTime : 1;
+    bool addTableBorders : 1;
 };
 
 //! @short An engine painting data on pages using QPainter.

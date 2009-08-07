@@ -124,8 +124,8 @@ public:
         msg.clear();
         desc.clear();
     }
-bool success : 1; //!< result of the operation, true by default
-bool allowToDiscardChanges : 1; //!< True if changes can be discarded, false by default
+    bool success : 1; //!< result of the operation, true by default
+    bool allowToDiscardChanges : 1; //!< True if changes can be discarded, false by default
     //!< If true, additional "Discard changes" messagebox
     //!< button can be displayed.
     QString msg, desc; //!< error message and detailed description, both empty by default

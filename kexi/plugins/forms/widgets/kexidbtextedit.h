@@ -116,7 +116,7 @@ protected:
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
     //! Used to disable slotTextChanged()
-bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

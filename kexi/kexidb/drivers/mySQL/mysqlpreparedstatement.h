@@ -46,7 +46,7 @@ public:
     MYSQL_STMT *m_statement;
     MYSQL_BIND *m_mysqlBind;
 #endif
-bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 
 protected:
     bool init();

@@ -151,8 +151,8 @@ protected:
 
     Field::PairList m_pairs;
 
-bool m_masterIndexOwned : 1;
-bool m_detailsIndexOwned : 1;
+    bool m_masterIndexOwned : 1;
+    bool m_detailsIndexOwned : 1;
 
     friend class Connection;
     friend class TableSchema;

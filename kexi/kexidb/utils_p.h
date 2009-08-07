@@ -53,7 +53,7 @@ protected:
     uint m_elapsedTime;
     KexiDB::Object *m_errorObj;
     QWaitCondition m_wait;
-bool m_stopWaiting : 1;
+    bool m_stopWaiting : 1;
 };
 
 #endif
