@@ -24,6 +24,8 @@
 
 using namespace KoProperty;
 
+static const char *SIZEEDIT_MASK = "%1x%2";
+
 QString SizeDelegate::displayText( const QVariant& value ) const
 {
     const QSize s(value.toSize());

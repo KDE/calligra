@@ -143,10 +143,10 @@ private:
         << i18nc("Mouse Cursor Shape", "Closed hand"); //18
         return strings;
     }
-    static char ** m_xpms[];
+    static const char ** m_xpms[];
 };
 
-char ** CursorListData::m_xpms[] =
+const char ** CursorListData::m_xpms[] =
 {
     blank_cursor_xpm,
     arrow_cursor_xpm,
@@ -225,6 +225,9 @@ CursorDelegate::CursorDelegate()
 QWidget * CursorDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return new CursorEdit(parent);
 }
 

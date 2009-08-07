@@ -387,7 +387,7 @@ bool FactoryManager::canConvertValueToText( const Property* property ) const
 QString FactoryManager::convertValueToText( const Property* property ) const
 {
     const ValueDisplayInterface *display = d->valueDisplays.value( property->type() );
-    return display ? display->displayText( property ) : property->value().toString();
+    return display ? display->displayTextForProperty( property ) : property->value().toString();
 }
 
 ComposedPropertyInterface* FactoryManager::createComposedProperty(Property *parent)

@@ -24,6 +24,8 @@
 
 using namespace KoProperty;
 
+static const char *RECTEDIT_MASK = "%1, %2, %3x%4";
+
 QString RectDelegate::displayText( const QVariant& value ) const
 {
     const QRect r(value.toRect());

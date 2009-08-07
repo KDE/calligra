@@ -39,6 +39,8 @@ public:
     public:
         class IconProviderInterface {
         public:
+            IconProviderInterface() {}
+            virtual ~IconProviderInterface() {}
             virtual QIcon icon(int index) const = 0;
             virtual IconProviderInterface* clone() const = 0;
         };
@@ -92,7 +94,7 @@ class KOPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface,
 public:
     ComboBoxDelegate();
     
-    virtual QString displayText( const Property* property ) const;
+    virtual QString displayTextForProperty( const Property* property ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;

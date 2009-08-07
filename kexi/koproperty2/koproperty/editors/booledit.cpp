@@ -148,6 +148,7 @@ void BoolEdit::setValue(bool value)
 void
 BoolEdit::slotValueChanged(bool state)
 {
+    Q_UNUSED(state);
 //    setState(state);
 ////    emit valueChanged(this);
 }

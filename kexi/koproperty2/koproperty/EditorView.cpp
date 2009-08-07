@@ -351,12 +351,14 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         //store prev. selection for this prop set
         QModelIndex index = currentIndex();
         if (index.isValid()) {
+#if 0 //todo
             Property *property = d->model->propertyForItem(index);
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
             //    kDebug() << "WTF? a NULL property?";
             //else        
-                //d->set->setPreviousSelection(property->name()); 
+                //d->set->setPreviousSelection(property->name());
+#endif
         }
         else {
             d->set->setPreviousSelection(QByteArray());
@@ -583,6 +585,7 @@ static QModelIndex findChildItem(const Property& property, const QModelIndex &pa
 
 void EditorView::slotPropertyChanged(Set& set, Property& property)
 {
+    Q_UNUSED(set);
     Property *realProperty = &property;
     while (realProperty->parent()) { // find top-level property
         realProperty = realProperty->parent();

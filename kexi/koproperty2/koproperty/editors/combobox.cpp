@@ -261,7 +261,7 @@ ComboBoxDelegate::ComboBoxDelegate()
     options.removeBorders = false;
 }
 
-QString ComboBoxDelegate::displayText( const Property* property ) const
+QString ComboBoxDelegate::displayTextForProperty( const Property* property ) const
 {
     Property::ListData *listData = property->listData();
     if (!listData)
@@ -279,6 +279,8 @@ QString ComboBoxDelegate::displayText( const Property* property ) const
 QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    Q_UNUSED(type);
+    Q_UNUSED(option);
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *property = editorModel->propertyForItem(index);

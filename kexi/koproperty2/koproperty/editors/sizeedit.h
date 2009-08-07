@@ -27,8 +27,6 @@
 namespace KoProperty
 {
 
-static const char *SIZEEDIT_MASK = "%1x%2";
-
 class KOPROPERTY_EXPORT SizeComposedProperty : public ComposedPropertyInterface
 {
 public:

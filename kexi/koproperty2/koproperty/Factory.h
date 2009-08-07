@@ -139,7 +139,7 @@ class KOPROPERTY_EXPORT ValueDisplayInterface
 public:
     ValueDisplayInterface();
     virtual ~ValueDisplayInterface();
-    virtual QString displayText( const Property* property ) const
+    virtual QString displayTextForProperty( const Property* property ) const
         { return displayText(property->value()); }
     virtual QString displayText( const QVariant& value ) const
         { return value.toString(); }
@@ -181,6 +181,9 @@ public:
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
+        Q_UNUSED(type);
+        Q_UNUSED(option);
+        Q_UNUSED(index);
         return new Widget(parent, this);
     }
 

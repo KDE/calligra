@@ -27,8 +27,6 @@
 namespace KoProperty
 {
 
-static const char *POINTEDIT_MASK = "%1, %2";
-
 class KOPROPERTY_EXPORT PointComposedProperty : public ComposedPropertyInterface
 {
 public:

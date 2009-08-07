@@ -147,7 +147,7 @@ class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface,
 public:
     IntSpinBoxDelegate();
     
-    virtual QString displayText( const Property* prop ) const;
+    virtual QString displayTextForProperty( const Property* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
@@ -159,7 +159,7 @@ class KOPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface,
 public:
     DoubleSpinBoxDelegate();
     
-    virtual QString displayText( const Property* prop ) const;
+    virtual QString displayTextForProperty( const Property* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;

@@ -474,7 +474,7 @@ IntSpinBoxDelegate::IntSpinBoxDelegate()
 {
 }
 
-QString IntSpinBoxDelegate::displayText( const Property* prop ) const
+QString IntSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
 {
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
@@ -504,7 +504,7 @@ DoubleSpinBoxDelegate::DoubleSpinBoxDelegate()
 {
 }
 
-QString DoubleSpinBoxDelegate::displayText( const Property* prop ) const
+QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) const
 {
     QString valueText;
     if (prop->hasOptions()) {

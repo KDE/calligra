@@ -44,8 +44,9 @@ public:
     SetPrivate(KoProperty::Set *set) :
             q(set),
             readOnly(false),
-            m_visiblePropertiesCount(0),
-            informAboutClearing(0) {}
+            informAboutClearing(0),
+            m_visiblePropertiesCount(0)
+    {}
     ~SetPrivate() {}
 
     Set *q;
