@@ -49,6 +49,7 @@
 #include <qapplication.h>
 #include <qlayout.h>
 
+//! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION
 
 #ifdef KEXI_SQLITE_MIGRATION
@@ -843,7 +844,6 @@ tristate KexiStartupHandler::detectActionForFile(
 //hardcoded for convenience:
     const QString newFileFormat = "SQLite3";
 
-//! @todo enable this when we need sqlite3-to-someting-newer migration
 #ifdef KEXI_SQLITE_MIGRATION
     if (!(options & DontConvert || options & SkipMessages)
             && detectedDriverName.toLower() == "sqlite2" && detectedDriverName.toLower() != suggestedDriverName.toLower()

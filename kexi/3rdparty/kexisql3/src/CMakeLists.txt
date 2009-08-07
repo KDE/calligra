@@ -70,11 +70,6 @@ install(TARGETS ksqlite  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(PROGRAMS ksqlite2to3  DESTINATION ${BIN_INSTALL_DIR})
-
-
-
-
 
 #original Makefile.am contents follow:
 
