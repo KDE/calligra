@@ -463,11 +463,13 @@ bool FormulaCursor::performMovement ( CursorDirection direction, FormulaCursor& 
             }
         }
     }
+    return false;
 }
 
 FormulaCursor& FormulaCursor::operator+= ( int step )
 {
     m_position+=step;
+    return *this;
 }
 
 int FormulaCursor::offset ( )

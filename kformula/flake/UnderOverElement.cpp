@@ -174,6 +174,8 @@ bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& old
             break;
         case 2:
             return moveVertSituation(newcursor,oldcursor,0,2);
+        default:
+            return false;
     }
 }
 
