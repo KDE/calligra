@@ -55,6 +55,9 @@
             <Action name="page_first"/>
             <Action name="page_last"/>
         </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="configure" group="settings_configure"/>
+        </Menu>
     </MenuBar>
 
     <Menu name="default_canvas_popup">

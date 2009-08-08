@@ -20,6 +20,8 @@
 #include "KivioView.h"
 
 #include <klocale.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
 
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -55,6 +57,7 @@ void KivioView::initializeGUI()
 
 void KivioView::initializeActions()
 {
+    actionCollection()->action("configure")->setText(i18n("Configure Kivio..."));
 }
 
 void KivioView::updateGui()
