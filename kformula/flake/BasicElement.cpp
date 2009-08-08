@@ -39,7 +39,6 @@ BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
     m_boundingRect.setHeight( 10.0 );
     m_displayStyle = true;
     setBaseLine( 10.0 );
-
 }
 
 BasicElement::~BasicElement()
@@ -53,6 +52,10 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
     painter.setBrush( QBrush( Qt::blue ) );
     painter.drawRect( QRectF(0.0, 0.0, width(), height()) );
     painter.restore();
+}
+
+void BasicElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
+{
 }
 
 void BasicElement::layout( const AttributeManager* )
@@ -211,14 +214,20 @@ bool BasicElement::readMathMLContent( const KoXmlElement& parent )
 
 void BasicElement::writeMathML( KoXmlWriter* writer ) const
 {
-    if( elementType() == Basic )
+    if (elementType() == Basic) {
         return;
-
-    const QByteArray name = ElementFactory::elementName( elementType() ).toLatin1();
-    writer->startElement( name );
-    writeMathMLAttributes( writer );
-    writeMathMLContent( writer );
-    writer->endElement();
+    }
+    if ((elementType() == Row) && (childElements().count()==1)) {
+        foreach( BasicElement* tmp, childElements() ) {
+            tmp->writeMathML( writer );
+        }
+    } else {
+        const QByteArray name = ElementFactory::elementName( elementType() ).toLatin1();
+        writer->startElement( name );
+        writeMathMLAttributes( writer );
+        writeMathMLContent( writer );
+        writer->endElement();
+    }
 }
 
 void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
@@ -414,5 +423,27 @@ void BasicElement::writeElementTree(int indent)
     kDebug()<<s<<ElementFactory::elementName(elementType());
     foreach (BasicElement* tmp, childElements()) {
         tmp->writeElementTree(indent+1);
+    }
+}
+
+bool BasicElement::isInferredRow() const
+{
+    return false;
+}
+
+void BasicElement::cleanElementTree ( BasicElement* element )
+{
+    foreach (BasicElement* tmp,element->childElements()) {
+        cleanElementTree(tmp);
+    }
+    if (element->elementType()==Row && element->parentElement() && element->parentElement()->isInferredRow()) {
+        if ( element->childElements().count()==1) {
+            int pos=element->parentElement()->positionOfChild(element);
+            BasicElement* parent=element->parentElement();
+            parent->replaceChild(element,element->childElements()[0]);
+        } else if ( element->isEmpty()) {
+            RowElement* parent=static_cast<RowElement*>(element->parentElement());
+            parent->removeChild(element);
+        }
     }
 }

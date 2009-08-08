@@ -68,6 +68,11 @@ FormulaData* KoFormulaShape::formulaData() const
     return  m_formulaData;
 }
 
+FormulaRenderer* KoFormulaShape::formulaRenderer() const
+{
+    return m_formulaRenderer;
+}
+
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
     Q_UNUSED( context )

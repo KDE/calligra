@@ -110,29 +110,8 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
         } else {
             undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),0,list,false);
         }
-/*    } else if (m_cursor.insideFixedElement()) {
-        if (m_cursor.hasSelection()) {
-            //TODO
-            return 0;
-        } else {
-            BasicElement* tmpRow = new RowElement(m_cursor.currentElement());
-            BasicElement* oldchild;
-            BasicElement* oldpar;
-            if (m_cursor.currentElement()->elementAfter(m_cursor.position())!=0) {
-                oldchild=m_cursor.currentElement()->elementAfter(m_cursor.position());
-                tmpRow->insertChild(0,element);
-                tmpRow->insertChild(1,oldchild);
-            } else {
-                oldchild=m_cursor.currentElement()->elementBefore(m_cursor.position());
-                tmpRow->insertChild(0,oldchild);
-                tmpRow->insertChild(1,element);
-            }
-            oldchild->setParentElement(tmpRow);
-            element->setParentElement(tmpRow);
-            undo=new FormulaCommandWrapSingleElement(m_cursor.currentElement(),oldchild,tmpRow, tmpRow);
-        }*/
-    } else if (m_cursor.insideEmptyElement()) {
-        undo=new FormulaCommandReplaceSingleElement(m_cursor.currentElement()->parentElement(),m_cursor.currentElement(),element);
+    } else if (m_cursor.insideToken() && element->elementType()==Glyph) {
+        //TODO: implement the insertion of glyphs
     }
     if (undo) {
         undo->setText("Insert Element");

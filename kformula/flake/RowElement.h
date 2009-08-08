@@ -61,8 +61,10 @@ public:
      * @param am AttributeManager containing style info
      */
     virtual void paint( QPainter& painter, AttributeManager* am );
-
-
+    
+    /// inherited from BasicElement
+    virtual void paintEditingHints ( QPainter& painter, AttributeManager* am );
+    
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
@@ -124,8 +126,11 @@ public:
     /// inherited from BasicElement
     virtual bool isEmpty() const;
 
+    /// inherited from Basic
+    virtual bool isInferredRow() const;
+
 protected:
-    /// Read contents of the token element. Content should be unicode text strings or mglyphs
+    /// Read contents of the row element
     bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements

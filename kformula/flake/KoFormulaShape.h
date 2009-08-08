@@ -61,9 +61,12 @@ public:
     /// @return Get the bounding box of the shape.
 //     QRectF boundingRect() const;
 
-    /// @return The data shown by the shape
+    /// @return the data shown by the shape
     FormulaData* formulaData() const;
 
+    /// @return the formularenderer used to paint this shape
+    FormulaRenderer* formulaRenderer() const;
+    
     /**
      * Load a shape from odf - reimplemented from KoShape
      * @param context the KoShapeLoadingContext used for loading

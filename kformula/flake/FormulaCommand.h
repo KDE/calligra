@@ -106,9 +106,13 @@ private:
     /// The position inside m_ownerElement
     int m_position;
 
+    int m_oldPlaceholderPosition;
+    
     int m_length;
 
     bool m_wrap;
+
+    bool m_addedRow;
 
     RowElement* m_newPlaceholder;
 
@@ -120,7 +124,7 @@ private:
     /// The list of removed elements
     QList<BasicElement*> m_removed;
 };
-
+/*
 class FormulaCommandReplaceSingleElement : public FormulaCommand {
 public:
     FormulaCommandReplaceSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel, QUndoCommand *parent=0);
@@ -137,8 +141,8 @@ private:
     BasicElement* m_ownerElement;
     BasicElement* m_newel;
     BasicElement* m_oldel;
-};
-
+};*/
+/*
 class FormulaCommandWrapSingleElement : public FormulaCommand {
 public:
     FormulaCommandWrapSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel,BasicElement* oldpar, QUndoCommand *parent=0);
@@ -156,7 +160,7 @@ private:
     BasicElement* m_newel;
     BasicElement* m_oldel;
     BasicElement* m_oldpar;
-};
+};*/
 
 
 class FormulaCommandLoad : public FormulaCommand {

@@ -64,7 +64,7 @@ void SquareRootElement::layout( const AttributeManager* am )
         element->setOrigin( element->origin() + childOffset );
 
     QRectF rect = childrenBoundingRect();
-    rect.setTopLeft(childOffset);
+    rect.translate(childOffset);
     setChildrenBoundingRect(rect);
 
     // Draw the sqrt symbol into a QPainterPath as buffer

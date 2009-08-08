@@ -45,6 +45,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include "FormulaRenderer.h"
 
 
 
@@ -147,9 +148,7 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
     // has to come last
     painter.setMatrix( m_formulaShape->absoluteTransformation( &converter ) * painter.matrix());
     KoShape::applyConversion(painter,converter);
-    //TODO: find out, how to adjust the painter, so that that this also works in 
-    // rotated mode
-    
+    m_formulaShape->formulaRenderer()->paintElement(painter,m_formulaShape->formulaData()->formulaElement(),true);
     m_formulaEditor->paint( painter );
     painter.restore();
 }

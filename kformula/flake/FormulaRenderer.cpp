@@ -33,20 +33,27 @@ FormulaRenderer::~FormulaRenderer()
     delete m_attributeManager;
 }
 
-void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
-{   
+void FormulaRenderer::paintElement( QPainter& p, BasicElement* element, bool hints )
+{
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
     p.translate( element->origin() );          // setup painter
-    element->paint( p, m_attributeManager );   // let element paint itself
+    if (!hints) {
+        element->paint( p, m_attributeManager );   // let element paint itself
+    } else {
+        element->paintEditingHints( p, m_attributeManager );
+    }
 
     // eventually paint all its children
-    if( !element->childElements().isEmpty() && element->elementType() != Phantom )
-        foreach( BasicElement* tmpElement, element->childElements() )
-            paintElement( p, tmpElement );
+    if( !element->childElements().isEmpty() && element->elementType() != Phantom ) {
+        foreach( BasicElement* tmpElement, element->childElements() ) {
+            paintElement( p, tmpElement, hints );
+        }
+    }
 
     p.restore();
 }
+
 
 void FormulaRenderer::layoutElement( BasicElement* element )
 {

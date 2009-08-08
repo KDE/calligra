@@ -109,6 +109,14 @@ public:
     virtual void paint( QPainter& painter, AttributeManager* am );
 
     /**
+     * Render the editing hints of the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    virtual void paintEditingHints( QPainter& painter, AttributeManager* am );
+
+    
+    /**
      * Calculate the minimum size of the element and the positions of its children
      *
      * Laying out the items is done in two parts.
@@ -277,6 +285,8 @@ public:
     /// @return true, when the element is empty
     virtual bool isEmpty() const;
 
+    virtual bool isInferredRow() const;
+
     /// @return the formula element
     BasicElement* formulaElement();
 
@@ -296,6 +306,8 @@ protected:
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
+    static void cleanElementTree(BasicElement* element);
+    
 private:
     /// The element's parent element - might not be null except of FormulaElement
     BasicElement* m_parentElement;

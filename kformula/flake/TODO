@@ -1,6 +1,5 @@
 - implement the new tool widget
-- change removeChild( BasicElement* element ) to removeChild( FormulaCursor* cursor, BasicElement* child ) 
-- implement insertText completly
+- implement insertText completly -> some stuff is still missing for glyph elements
 
 - make load and save working for every element
   -> update test suite
@@ -8,9 +7,6 @@
 - add defaultAttributevalues to mstyle
 - correct mathspace parsing in operator element.
 - implement rendering in all token elements
-- make FormulaCursor class able to insert elements
-- add functionality to FormulaToolOptions so that user can insert elements
-- implement cursor movement with acceptCursor() method
 
 mid term ( potential prerelease ) goals:
 - create template files - decide what kind of templates should be in place
@@ -18,6 +14,5 @@ mid term ( potential prerelease ) goals:
   does not need a AttributeManager
 
 long term goals:
-- add selecting to FormulaCursor class
 - iron the loading process out so that it won't crash on errors and report them
 

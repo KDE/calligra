@@ -38,17 +38,37 @@ RowElement::~RowElement()
 void RowElement::paint( QPainter& painter, AttributeManager* )
 { /* RowElement has no visual representance so paint nothing */ }
 
+void RowElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
+{
+    if (childElements().count()==0) {
+        painter.save();
+        QBrush brush (Qt::NoBrush);
+        brush.setColor( Qt::transparent);
+        painter.setBrush(brush);
+        painter.setPen( Qt::blue);
+        painter.drawRect( childrenBoundingRect() );
+        painter.restore();
+    }
+}
+
 void RowElement::layout( const AttributeManager* am )
 {
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
-    if( m_childElements.isEmpty() )  // do not do anything if there are no children
+    if( m_childElements.isEmpty() ) {
+        //set standart values for empty formulas
+        setOrigin( QPointF( 0.0, 0.0 ) );
+        setWidth( 7.0 );       // standard values
+        setHeight( 10.0 );
+        setBaseLine( 10.0 );
+        setChildrenBoundingRect(QRectF(0,0, width(), height()));
         return;
+    }
 
     QPointF origin;
     double width = 0.0;
     double topToBaseline = 0.0;
-    double baselineToBottom = 0.0;
+    double baselineToBottom = 0.0;    
     foreach( BasicElement* child, m_childElements ) // iterate through the children and
         topToBaseline = qMax( topToBaseline, child->baseLine() );  // find max baseline
 
@@ -210,7 +230,7 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
         if( !tmpElement->readMathML( tmp ) ) {
             return false;
         }
-        if (tmpElement->elementType() == Row) {
+        /*if (tmpElement->elementType() == Row) {
             if (tmpElement->childElements().count()==0) {
                 //we don't load in this case, empty elements in rows are not needed
             } else if (tmpElement->childElements().count()==1) {
@@ -224,9 +244,9 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
             } else {
                 m_childElements << tmpElement;
             }
-        } else {
+        } else {*/
             m_childElements << tmpElement;
-        }
+//         }
     }
     return true;
 }
@@ -240,7 +260,6 @@ void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
     foreach( BasicElement* tmp, m_childElements )
         tmp->writeMathML( writer );
 }
-
 
 BasicElement* RowElement::elementAfter ( int position ) const
 {
@@ -284,9 +303,8 @@ bool RowElement::isEmpty() const
 }
 
 
-
-
-
-
-
+bool RowElement::isInferredRow() const
+{
+    return true;
+}
 

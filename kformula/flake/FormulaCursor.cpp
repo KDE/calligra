@@ -128,8 +128,8 @@ void FormulaCursor::paint( QPainter& painter ) const
         int p1=position()<mark()? position() : mark();
         int p2=position()<mark()? mark() : position() ;
         painter.drawPath(m_currentElement->selectionRegion(p1,p2));
-        painter.restore();
     }
+    painter.restore();
 }
 
 void FormulaCursor::selectElement(BasicElement* element)

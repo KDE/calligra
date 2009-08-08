@@ -59,7 +59,7 @@ public:
      * @param p The QPainter that should be used to paint the element
      * @param element The element to be painted
      */
-    void paintElement( QPainter& p, BasicElement* element );
+    void paintElement( QPainter& p, BasicElement* element, bool hints=false );
 
     /**
      * Layout an element and all its children

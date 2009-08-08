@@ -115,7 +115,7 @@ bool FixedElement::moveVertSituation(FormulaCursor& newcursor, FormulaCursor& ol
 
 bool FixedElement::acceptCursor ( const FormulaCursor& cursor )
 {
-        return true;
+        return false;
 }
 
 QLineF FixedElement::cursorLine ( int position ) const
