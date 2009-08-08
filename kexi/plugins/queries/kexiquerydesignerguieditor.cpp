@@ -20,16 +20,15 @@
 
 #include "kexiquerydesignerguieditor.h"
 
-#include <qlayout.h>
-#include <qpainter.h>
+#include <QLayout>
+#include <QPainter>
 #include <qdom.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <QSplitter>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
+#include <QSet>
 #include <QVBoxLayout>
-#include <q3tl.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -83,7 +82,7 @@ class KexiQueryDesignerGuiEditor::Private
 {
 public:
     Private()
-            : fieldColumnIdentifiers(101, false/*case insens.*/) {
+    {
         droppedNewRecord = 0;
         slotTableAdded_enabled = true;
     }
@@ -119,7 +118,7 @@ public:
      This information is cached and entirely refreshed on updateColumnsData().
      The dict is filled with (char*)1 values (doesn't matter what it is);
     */
-    Q3Dict<char> fieldColumnIdentifiers;
+    QSet<QString> fieldColumnIdentifiers;
 
     KexiDataAwarePropertySet* sets;
     KexiDB::RecordData *droppedNewRecord;
@@ -173,7 +172,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     initTableColumns();
     initTableRows();
 
-    Q3ValueList<int> c;
+    QList<int> c;
     c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
     if (d->dataTable->tableView()/*sanity*/) {
         d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_VISIBLE);
@@ -207,7 +206,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     d->relations->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->head->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     updateGeometry();
-    d->spl->setSizes(Q3ValueList<int>() << 800 << 400);
+    d->spl->setSizes(QList<int>() << 800 << 400);
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
@@ -322,7 +321,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     (*record)[COLUMN_ID_COLUMN] = "*";
     (*record)[COLUMN_ID_TABLE] = "*";
     d->fieldColumnData->append(record);
-    d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+    d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
 
 // tempData()->clearQuery();
     tempData()->unregisterForTablesSchemaChanges();
@@ -340,14 +339,14 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         (*record)[COLUMN_ID_COLUMN] = table->name() + ".*";
         (*record)[COLUMN_ID_TABLE] = (*record)[COLUMN_ID_COLUMN];
         d->fieldColumnData->append(record);
-        d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+        d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
 //  for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
         foreach(KexiDB::Field *field, *table->fields()) {
             record = d->fieldColumnData->createItem();
             (*record)[COLUMN_ID_COLUMN] = table->name() + "." + field->name();
             (*record)[COLUMN_ID_TABLE] = QString("  ") + field->name();
             d->fieldColumnData->append(record);
-            d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+            d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
         }
     }
 //TODO
@@ -1411,7 +1410,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
             QString tableName; //empty for expressions
             QByteArray alias;
             QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
-            const bool isExpression = !d->fieldColumnIdentifiers[fieldId];
+            const bool isExpression = !d->fieldColumnIdentifiers.contains(fieldId);
             if (isExpression) {
                 //this value is entered by hand and doesn't match
                 //any value in the combo box -- we're assuming this is an expression
