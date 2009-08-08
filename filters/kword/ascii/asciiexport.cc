@@ -409,8 +409,8 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                         {
                             QString notestr;
                             QList<ParaData>::ConstIterator it;
-                            QList<ParaData>::ConstIterator end(paraList->end());
-                            for (it=paraList->begin();it!=end;++it)
+                            QList<ParaData>::ConstIterator end(paraList->constEnd());
+                            for (it=paraList->contBegin();it!=end;++it)
                                 notestr += (*it).text.trimmed().replace(QChar(10), m_eol, true) + m_eol;
 
                             *m_streamOut << "[";
