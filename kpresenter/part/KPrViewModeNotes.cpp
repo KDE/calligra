@@ -168,7 +168,7 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
 
     KoPageLayout &layout = notes->pageLayout();
     QSize size(layout.width, layout.height);
-    
+
     m_view->horizontalRuler()->setRulerLength(layout.width);
     m_view->verticalRuler()->setRulerLength(layout.height);
     m_view->horizontalRuler()->setActiveRange(layout.left, layout.width - layout.right);
@@ -181,6 +181,8 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
 
     m_canvas->shapeManager()->setShapes( layer->childShapes() );
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());
+
+    m_view->updatePageNavigationActions();
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
     selection->select(notes->textShape());
