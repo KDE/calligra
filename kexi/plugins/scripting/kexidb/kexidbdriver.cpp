@@ -22,8 +22,6 @@
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-//#include <q3valuelist.h>
-//#include <q3ptrlist.h>
 #include <kdebug.h>
 
 #include <kexidb/connection.h>

@@ -23,7 +23,6 @@
 #define KEXISCRIPTPART_H
 
 #include <qdom.h>
-#include <q3cstring.h>
 
 #include <kexi.h>
 #include <kexipart.h>

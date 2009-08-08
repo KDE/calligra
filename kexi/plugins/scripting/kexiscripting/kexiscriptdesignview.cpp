@@ -34,8 +34,6 @@
 #include <qdatetime.h>
 #include <qdom.h>
 #include <q3stylesheet.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
 #include <kmenu.h>

@@ -42,8 +42,7 @@
 #include <kdebug.h>
 
 #include <QMetaObject>
-#include <Q3PopupMenu>
-#include <Q3CString>
+#include <QMenu>
 
 /// \internal
 class KexiScriptPart::Private
