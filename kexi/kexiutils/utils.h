@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -549,6 +549,9 @@ protected:
 /*! Sets KDialog::marginHint() margins and KDialog::spacingHint() spacing 
  for the layout @a layout. */
 KEXIUTILS_EXPORT void setStandardMarginsAndSpacing(QLayout *layout);
+
+/*! Sets the same @a value for layout @a layout margins. */
+KEXIUTILS_EXPORT void setMargins(QLayout *layout, int value);
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.

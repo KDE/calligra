@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -694,11 +694,17 @@ void KTextEditorFrame::changeEvent(QEvent *event)
     }
 }
 
+//---------------------
+
 void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
 {
-    layout->setContentsMargins(
-        KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint());
+    setMargins(QLayout *layout, KDialog::marginHint());
     layout->setSpacing( KDialog::spacingHint() );
+}
+
+void KexiUtils::setMargins(QLayout *layout, int value);
+{
+    layout->setContentsMargins(value, value, value, value);
 }
 
 QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
