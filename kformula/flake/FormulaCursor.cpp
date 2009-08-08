@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
+                 2009 Jeremias Epperlein <jeeree@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,7 +73,7 @@ FormulaCursor::FormulaCursor (const FormulaCursor& other )
 void FormulaCursor::paint( QPainter& painter ) const
 {
     kDebug() << "Drawing cursor with selecting: "<< isSelecting() << " from "
-    << mark()<<" to " << position();
+    << mark()<<" to " << position() << " in "<<ElementFactory::elementName(m_currentElement->elementType());
     if( !m_currentElement )
         return;
     painter.save();
@@ -271,13 +272,7 @@ bool FormulaCursor::insideToken() const
 
 bool FormulaCursor::insideInferredRow() const
 {
-    if( m_currentElement->elementType() == Row ||
-        m_currentElement->elementType() == SquareRoot ||
-        m_currentElement->elementType() == Formula ||
-        m_currentElement->elementType() == Fenced ) {
-        return true;
-    }
-    return false;
+    return m_currentElement->isInferredRow();
 }
 
 bool FormulaCursor::insideFixedElement() const

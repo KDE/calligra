@@ -87,15 +87,16 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
 FormulaCommand* FormulaEditor::insertData( const QString& data )
 {
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext odfContext( stylesReader, 0 );
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( QString(data), false, 0, 0, 0 );
     BasicElement* element=ElementFactory::createElement(tmpDocument.documentElement().tagName(),0);
     element->readMathML( tmpDocument.documentElement() );     // and load the new formula
-    return insertElement( element );
-    //FIXME: we leak memory of the insert fails
+    FormulaCommand* command=insertElement( element );
+    if (command==0) {
+        delete element;
+    }
+    return command;
 }
 
 FormulaCommand* FormulaEditor::insertElement( BasicElement* element )

@@ -45,7 +45,6 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
     
-    
     virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
     
     /// @return The default value of the attribute for this element

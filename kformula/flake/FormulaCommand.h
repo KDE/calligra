@@ -124,44 +124,6 @@ private:
     /// The list of removed elements
     QList<BasicElement*> m_removed;
 };
-/*
-class FormulaCommandReplaceSingleElement : public FormulaCommand {
-public:
-    FormulaCommandReplaceSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel, QUndoCommand *parent=0);
-
-    ~FormulaCommandReplaceSingleElement ();
-    /// Execute the command
-    void redo();
-
-    /// Revert the actions done in redo()
-    void undo();
-
-private:
-    /// The BasicElement that owns the newly added Text
-    BasicElement* m_ownerElement;
-    BasicElement* m_newel;
-    BasicElement* m_oldel;
-};*/
-/*
-class FormulaCommandWrapSingleElement : public FormulaCommand {
-public:
-    FormulaCommandWrapSingleElement( BasicElement* owner, BasicElement* oldel, BasicElement* newel,BasicElement* oldpar, QUndoCommand *parent=0);
-
-    ~FormulaCommandWrapSingleElement ();
-    /// Execute the command
-    void redo();
-
-    /// Revert the actions done in redo()
-    void undo();
-
-private:
-    /// The BasicElement that owns the newly added Text
-    BasicElement* m_ownerElement;
-    BasicElement* m_newel;
-    BasicElement* m_oldel;
-    BasicElement* m_oldpar;
-};*/
-
 
 class FormulaCommandLoad : public FormulaCommand {
 public:
