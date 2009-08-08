@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -103,7 +104,8 @@ void TableElement::determineDimensions()
     AttributeManager am;
     bool equalRows = am.boolOf( "equalrows", this );
     bool equalColumns = am.boolOf( "equalcolumns", this );
-
+    m_rowHeights.clear();
+    m_colWidths.clear();
     // determine the dimensions of each row and col based on the biggest element in it
     BasicElement* entry;
     double maxWidth = 0.0;
@@ -332,3 +334,35 @@ void TableElement::writeMathMLContent( KoXmlWriter* writer ) const
     tmpRow->writeMathML( writer );
 }
 
+
+bool TableElement::insertChild ( int position, BasicElement* child )
+{
+    if (child->elementType()==TableRow &&
+        !child->childElements().isEmpty() &&
+        child->childElements()[0]->elementType()==TableEntry) {
+        TableRowElement* tmp=static_cast<TableRowElement*>(child);
+        m_rows.insert(position,tmp);
+        tmp->setParentElement(this);
+        //TODO: there must be a more efficient way for this
+        determineDimensions();
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool TableElement::removeChild ( BasicElement* child )
+{
+    if (child->elementType()!=TableRow) {
+        return false;
+    }
+    TableRowElement* tmp=static_cast<TableRowElement*>(child);
+    if (m_rows.indexOf(tmp)==-1) {
+        return false;
+    } else {
+        m_rows.removeAll(tmp);
+        tmp->setParentElement(0);
+    }
+    return true;
+}

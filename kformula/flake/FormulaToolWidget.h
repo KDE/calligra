@@ -69,6 +69,8 @@ private:
     QMenu m_miscMenu;
     QMenu m_relationMenu;
     QMenu m_operatorMenu;
+    QMenu m_alterTableMenu;
+    QMenu m_rowMenu;
 };
 
 #endif // FORMULATOOLWIDGET_H

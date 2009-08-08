@@ -24,6 +24,9 @@
 #include <klocale.h> 
 #include "TokenElement.h"
 #include "BasicElement.h"
+#include "TableElement.h"
+#include "TableRowElement.h"
+#include "TableEntryElement.h"
 #include <kdebug.h>
 
 FormulaCommand::FormulaCommand(QUndoCommand* parent)
@@ -215,6 +218,89 @@ void FormulaCommandLoad::undo()
     m_done=false;
     m_data->setFormulaElement(m_oldel);
 }
+
+FormulaCommandReplaceRow::FormulaCommandReplaceRow ( FormulaData* data, FormulaCursor oldposition, TableElement* table, int number, int oldlength, int newlength)
+{
+    m_data=data;
+    m_table=table;
+    m_number=number;
+    m_empty=0;
+    int columnnumber=m_table->childElements()[0]->childElements().count();
+    TableRowElement* tmpRow;
+    for (int i=0; i<newlength;i++) {
+        tmpRow = new TableRowElement();
+        for (int j=0; j<columnnumber; j++) {
+            tmpRow->insertChild(i,new TableEntryElement());
+        }
+        m_newRows<<tmpRow;
+    }
+    m_oldRows=table->childElements().mid(number, oldlength);
+    setText( i18n( "Add text to formula" ) );
+    if (newlength==0 && oldlength>=table->childElements().count()) {
+        m_empty=new TableRowElement();
+        m_empty->insertChild(0, new TableEntryElement());
+    }
+    setUndoCursorPosition(oldposition);
+
+    if (newlength>0) {
+        setRedoCursorPosition(FormulaCursor(m_newRows[0]->childElements()[0],0));
+    } else {
+        if (m_empty) {
+            setRedoCursorPosition(FormulaCursor(m_empty->childElements()[0],0));
+        } else {
+            int count=m_table->childElements().count();
+            if (number+oldlength < count) {
+                //we can place the cursor after the removed elements
+                setRedoCursorPosition(FormulaCursor(table->childElements()[number+oldlength]->childElements()[0],0));
+            } else {
+                //we have to place the cursor before the removed rows
+                setRedoCursorPosition(FormulaCursor(table->childElements()[number==0 ? 0: number-1]->childElements()[0],0));
+            }
+        }
+    }
+}
+
+FormulaCommandReplaceRow::~FormulaCommandReplaceRow()
+{
+    if (m_done) {
+        qDeleteAll(m_oldRows);
+    } else {
+        if (m_empty) {
+            delete m_empty;
+        } else {
+            qDeleteAll(m_newRows);
+        }
+    }
+}
+
+void FormulaCommandReplaceRow::redo()
+{
+    for (int i=0; i<m_oldRows.count(); i++) {
+        m_table->removeChild(m_oldRows[i]);
+    }
+    if (m_empty) {
+        m_table->insertChild(0,m_empty);
+    } else {
+        for (int i=0; i<m_newRows.count(); i++) {
+            m_table->insertChild(i+m_number,m_newRows[i]);
+        }
+    }
+}
+
+void FormulaCommandReplaceRow::undo()
+{
+    if (m_empty) {
+        m_table->removeChild(m_empty);
+    } else {
+        for (int i=0; i<m_newRows.count(); i++) {
+            m_table->removeChild(m_newRows[i]);
+        }
+    }
+    for (int i=0; i<m_oldRows.count(); i++) {
+        m_table->insertChild(i+m_number,m_oldRows[i]);
+    }
+}
+
 
 // FormulaCommandAttribute::FormulaCommandAttribute( FormulaCursor* cursor,
 //                                                   QHash<QString,QString> attributes )

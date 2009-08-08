@@ -86,7 +86,7 @@ void TableRowElement::layout( const AttributeManager* am )
 
 bool TableRowElement::acceptCursor( const FormulaCursor& cursor )
 {
-     //return true;
+    //return true;
      return (cursor.isSelecting());
 }
 
@@ -103,7 +103,6 @@ int TableRowElement::positionOfChild(BasicElement* child) const
 int TableRowElement::length() const {
     return m_entries.count();
 }
-
 
 QLineF TableRowElement::cursorLine ( int position ) const
 {
@@ -122,7 +121,6 @@ QLineF TableRowElement::cursorLine ( int position ) const
     QPointF bottom = top + QPointF( 0.0, height() );
     return QLineF(top, bottom);
 }
-
 
 bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
@@ -143,24 +141,24 @@ bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
     double x=0.0;
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     for (; i<m_entries.count()-1; ++i) {
-    //Find the child element the point is in
-    x+=parentTable->columnWidth( i );
-    if (x>=point.x()) {
-        break;
-    }
+        //Find the child element the point is in
+        x+=parentTable->columnWidth( i );
+        if (x>=point.x()) {
+            break;
+        }
     }
     if (cursor.isSelecting()) {
-    //we don't need to change current element because we are already in this element
-    if (cursor.mark()<=i) {
-        cursor.setPosition(i+1);
-    }
-    else {
-        cursor.setPosition(i);
-    }
-    return true;
-    } else {
-    point-=m_entries[i]->origin();
-    return m_entries[i]->setCursorTo(cursor,point);
+        //we don't need to change current element because we are already in this element
+        if (cursor.mark()<=i) {
+            cursor.setPosition(i+1);
+        }
+        else {
+            cursor.setPosition(i);
+        }
+        return true;
+        } else {
+        point-=m_entries[i]->origin();
+        return m_entries[i]->setCursorTo(cursor,point);
     }
 }
 
@@ -214,15 +212,6 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
     }
     
     return true;	
-}
-
-
-void TableRowElement::insertChild( FormulaCursor& cursor, BasicElement* child )
-{
-}
-
-void TableRowElement::removeChild(FormulaCursor& cursor, BasicElement* element )
-{
 }
 
 const QList<BasicElement*> TableRowElement::childElements() const
@@ -282,5 +271,32 @@ void TableRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 ElementType TableRowElement::elementType() const
 {
     return TableRow;
+}
+
+bool TableRowElement::insertChild ( int position, BasicElement* child )
+{
+    if (child->elementType()==TableEntry) {
+        TableEntryElement* tmp=static_cast<TableEntryElement*>(child);
+        m_entries.insert(position,tmp);
+        tmp->setParentElement(this);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool TableRowElement::removeChild ( BasicElement* child )
+{
+    if (child->elementType()!=TableEntry) {
+        return false;
+    }
+    TableEntryElement* tmp=static_cast<TableEntryElement*>(child);
+    if (m_entries.indexOf(tmp)==-1) {
+        return false;
+    } else {
+        m_entries.removeAll(tmp);
+        tmp->setParentElement(0);
+    }
+    return true;
 }
 

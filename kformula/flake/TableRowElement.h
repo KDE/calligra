@@ -68,13 +68,13 @@ public:
      * @param cursor The cursor holding the position where to inser
      * @param child A BasicElement to insert
      */
-    void insertChild( FormulaCursor& cursor, BasicElement* child );
+    bool insertChild( int position, BasicElement* child );
     
     /**
      * Remove a child element
      * @param element The BasicElement to remove
      */ 
-    void removeChild(FormulaCursor& cursor, BasicElement* element );
+    bool removeChild( BasicElement* child );
 
     /**
      * Implement the cursor behaviour for the element

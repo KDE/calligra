@@ -25,6 +25,9 @@
 #include "FixedElement.h"
 #include "EmptyElement.h"
 #include "NumberElement.h"
+#include "TableElement.h"
+#include "TableEntryElement.h"
+#include "TableRowElement.h"
 #include "ElementFactory.h"
 #include "OperatorElement.h"
 #include "IdentifierElement.h"
@@ -33,8 +36,10 @@
 #include <QPainter>
 #include <QPen>
 #include <algorithm>
+#include <QObject>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <QUndoCommand>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -99,6 +104,36 @@ FormulaCommand* FormulaEditor::insertData( const QString& data )
     return command;
 }
 
+FormulaCommand* FormulaEditor::changeColumns ( bool insert )
+{
+    return 0;
+}
+
+FormulaCommand* FormulaEditor::changeRows ( bool insert )
+{
+    FormulaCommand* undo;
+    TableEntryElement* entry=m_cursor.currentElement()->parentTableEntry();
+    if (entry) {
+        TableElement* table=static_cast<TableElement*>(entry->parentElement()->parentElement());
+        int pos=table->childElements().indexOf(entry->parentElement());
+        kDebug()<<"At Row number "<<pos;
+        if (insert) {
+            undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,pos,0,1);
+            if (undo) {
+                undo->setText("Insert Row");
+            }
+        } else {
+            undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,pos,1,0);
+            if (undo) {
+                undo->setText("Remove Row");
+            }
+        }
+    } else {
+        return 0;
+    }
+    return undo;
+}
+
 FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
 {
     FormulaCommand *undo = 0;
@@ -150,21 +185,6 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
                 undo=new FormulaCommandReplaceText(tmptoken,m_cursor.position(),1,"");
             }
         }
-/*    } else if (m_cursor.insideFixedElement()) {
-        FixedElement* tmpfixed=static_cast<FixedElement*>(m_cursor.currentElement());
-        if (m_cursor.hasSelection()) {
-            foreach (BasicElement* tmp, tmpfixed->elementsBetween(m_cursor.selection().first,m_cursor.selection().second)) {
-                BasicElement* newelement=new EmptyElement(m_cursor.currentElement());
-                undo=new FormulaCommandReplaceSingleElement(tmpfixed,tmp,newelement);
-            }
-        } else {
-            BasicElement* newelement=new EmptyElement(m_cursor.currentElement());
-            if (elementBeforePosition && (m_cursor.currentElement()->elementBefore(m_cursor.position())!=0)) {
-                undo=new FormulaCommandReplaceSingleElement(tmpfixed,m_cursor.currentElement()->elementBefore(m_cursor.position()),newelement);
-            } else if (!elementBeforePosition && (m_cursor.currentElement()->elementAfter(m_cursor.position())!=0)) {
-                undo=new FormulaCommandReplaceSingleElement(tmpfixed,m_cursor.currentElement()->elementAfter(m_cursor.position()),newelement);
-            }
-        }*/
     }
     if (undo) {
         undo->setText("Remove stuff");

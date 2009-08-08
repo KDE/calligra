@@ -38,7 +38,7 @@ class KoXmlWriter;
 class AttributeManager;
 class FormulaCursor;
 class QPainterPath;
-
+class TableEntryElement;
 #define DEBUGID 40000
 
 /**
@@ -291,7 +291,9 @@ public:
     BasicElement* formulaElement();
 
     /// writes the element to kDebug(), only for debugging purpose
-    void writeElementTree(int indent=0);
+    void writeElementTree(int indent=0, bool wrong=false);
+
+    TableEntryElement* parentTableEntry();
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 

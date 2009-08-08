@@ -77,6 +77,10 @@ public:
 
     FormulaCommand* insertData( const QString& data );
 
+    FormulaCommand* changeRows(bool insert);
+    
+    FormulaCommand* changeColumns(bool insert);
+    
     /**
      * Remove an element from the formula
      * @param elementBeforePosition Indicates removal of element before or after cursor

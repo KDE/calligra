@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
+                 2009 Jeremias Epperlein <jeeree@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,10 +32,8 @@
 class TokenElement;
 class FormulaData;
 class GlyphElement;
-// class RowElement;
-// class FormulaElement;
-// class FormulaCursor;
-// class FormulaCursor;
+class TableElement;
+class TableRowElement;
 
 class FormulaCommand :  public QUndoCommand {
 public:
@@ -142,6 +141,29 @@ private:
     FormulaElement* m_oldel;
     FormulaElement* m_newel;
 };
+
+class FormulaCommandReplaceRow : public FormulaCommand {
+public:
+    FormulaCommandReplaceRow ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
+
+    ~FormulaCommandReplaceRow ();
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+private:
+    FormulaData* m_data;
+    TableElement* m_table;
+    TableRowElement* m_empty;
+    int m_number;
+    QList<BasicElement*> m_newRows;
+    QList<BasicElement*> m_oldRows;
+};
+
+
 
 // /**
 //  * @short The command for changes of an element's attributes

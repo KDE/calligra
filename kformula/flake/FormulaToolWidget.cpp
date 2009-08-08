@@ -49,6 +49,11 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     m_scriptsMenu.addAction( m_tool->action( "insert_subscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_supscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_subsupscript" ) );
+    m_alterTableMenu.addAction( m_tool->action( "insert_row") );
+    m_alterTableMenu.addAction( m_tool->action( "insert_column") );
+    m_alterTableMenu.addAction( m_tool->action( "remove_row") );
+    m_alterTableMenu.addAction( m_tool->action( "remove_column") );
+
 
     // assign menus to toolbuttons
     buttonFence->setMenu( &m_fenceMenu );
@@ -62,6 +67,8 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     buttonScript->setMenu( &m_scriptsMenu );
     buttonScript->setDefaultAction(m_tool->action( "insert_subsupscript"));
 
+    buttonAlterTable->setMenu(&m_alterTableMenu);
+    buttonAlterTable->setDefaultAction(m_tool->action("insert_row"));
     // setup the buttons for symbol insertion
     buttonArrows->setText(QChar(0x2190));
     setupButton(buttonArrows,m_arrowMenu,i18n("Arrows"), symbolsInRange(0x2190,0x21FF));
@@ -90,6 +97,7 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
              m_tool, SLOT( insert( QAction* ) ) );
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
+    connect( buttonAlterTable, SIGNAL( triggered( QAction* ) ), m_tool, SLOT( changeTable(QAction*)));
 }
 
 FormulaToolWidget::~FormulaToolWidget()

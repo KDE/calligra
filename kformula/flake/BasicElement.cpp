@@ -29,6 +29,7 @@
 
 #include <kdebug.h>
 #include "FormulaCursor.h"
+#include "TableEntryElement.h"
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
@@ -414,15 +415,23 @@ void BasicElement::setScaleFactor ( double scaleFactor )
     m_scaleFactor=scaleFactor;
 }
 
-void BasicElement::writeElementTree(int indent)
+void BasicElement::writeElementTree(int indent, bool wrong)
 {
     QString s;
     for (int i=0; i<indent; ++i) {
         s+="   ";
     }
+    s+=ElementFactory::elementName(elementType());
+    if (wrong) {
+        s+=" -> wrong parent !!!";
+    }
     kDebug()<<s<<ElementFactory::elementName(elementType());
     foreach (BasicElement* tmp, childElements()) {
-        tmp->writeElementTree(indent+1);
+        if (tmp->parentElement()!=this) {
+            tmp->writeElementTree(indent+1,true);
+        } else {
+            tmp->writeElementTree(indent+1,false);
+        }
     }
 }
 
@@ -445,5 +454,16 @@ void BasicElement::cleanElementTree ( BasicElement* element )
             RowElement* parent=static_cast<RowElement*>(element->parentElement());
             parent->removeChild(element);
         }
+    }
+}
+
+TableEntryElement* BasicElement::parentTableEntry()
+{
+    if (elementType()==TableEntry) {
+        return static_cast<TableEntryElement*>(this);
+    } else if (parentElement()) {
+        return parentElement()->parentTableEntry();
+    } else {
+        return 0;
     }
 }

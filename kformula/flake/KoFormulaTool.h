@@ -80,6 +80,8 @@ public slots:
     /// Insert the element tied to the given @p action
     void insert( QAction* action );
 
+    void changeTable( QAction* action);
+    
     void insertSymbol( const QString& symbol);
 
     /// Reposition the cursor according to the data change

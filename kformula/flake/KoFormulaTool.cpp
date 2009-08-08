@@ -303,6 +303,21 @@ void KoFormulaTool::insert( QAction* action )
     }
 }
 
+void KoFormulaTool::changeTable ( QAction* action )
+{
+    FormulaCommand *command;
+    m_formulaShape->update();
+    bool row=action->data().toList()[0].toBool();
+    bool insert=action->data().toList()[1].toBool();
+    if (row) {
+        command=m_formulaEditor->changeRows(insert);
+    } else {
+        command=m_formulaEditor->changeColumns(insert);
+    }
+    if (command!=0) {
+        m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
+    }
+}
 
 void KoFormulaTool::insertSymbol ( const QString& symbol )
 {
@@ -438,5 +453,35 @@ void KoFormulaTool::setupActions()
     //only for debugging
     action = new KAction( "Debug - writeElementTree" , this );
     addAction( "write_elementTree", action );
+    
+    QList<QVariant> list;
+    action = new KAction( i18n( "Insert row" ), this );
+    list<<true<<true;
+    action->setData( list);
+    list.clear();
+    addAction( "insert_row", action );
+    action->setIcon( KIcon("insrow"));
+
+    action = new KAction( i18n( "Insert column" ), this );
+    list<<false<<true;
+    action->setData( list);
+    list.clear();
+    addAction( "insert_column", action );
+    action->setIcon( KIcon("inscol"));
+
+    action = new KAction( i18n( "Remove row" ), this );
+    list<<true<<false;
+    action->setData( list);
+    list.clear();
+    addAction( "remove_row", action );
+    action->setIcon( KIcon("remrow"));
+    
+    action = new KAction( i18n( "Remove column" ), this );
+    list<<false<<false;
+    action->setData( list);
+    list.clear();
+    addAction( "remove_column", action );
+    action->setIcon( KIcon("remcol"));
+
 }
 
