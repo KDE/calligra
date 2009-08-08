@@ -157,10 +157,10 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 
     // 0. Cache information
     const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
-    const Q3CString delimiter(options.delimiter.left(1).toLatin1());
+    const QByteArray delimiter(options.delimiter.left(1).toLatin1());
     const bool hasTextQuote = !options.textQuote.isEmpty();
     const QString textQuote(options.textQuote.left(1));
-    const Q3CString escapedTextQuote((textQuote + textQuote).toLatin1());   //ok?
+    const QByteArray escapedTextQuote((textQuote + textQuote).toLatin1());   //ok?
     //cache for faster checks
     bool *isText = new bool[fieldsCount];
     bool *isDateTime = new bool[fieldsCount];
