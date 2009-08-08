@@ -723,14 +723,14 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
         kwFormat.len = 0;
 
         // Process all styles in the style sheet
-        const QVector<RTFStyle>::ConstIterator endStyleSheet=styleSheet.end();
-        for (QVector<RTFStyle>::ConstIterator it=styleSheet.begin();it!=endStyleSheet;++it)
+        const QVector<RTFStyle>::ConstIterator endStyleSheet=styleSheet.constEnd();
+        for (QVector<RTFStyle>::ConstIterator it=styleSheet.constBegin();it!=endStyleSheet;++it)
         {
             mainDoc.addNode( "STYLE" );
             kwFormat.fmt = (*it).format;
 
             // Search for 'following' style
-            for (QVector<RTFStyle>::ConstIterator it2=styleSheet.begin();it2!=endStyleSheet;++it2)
+            for (QVector<RTFStyle>::ConstIterator it2=styleSheet.constBegin();it2!=endStyleSheet;++it2)
             {
                 if ((*it2).layout.style == (*it).next)
                 {
