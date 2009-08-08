@@ -126,11 +126,12 @@ KarbonFilterEffectsTool::~KarbonFilterEffectsTool()
 void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (d->currentShape && d->currentShape->filterEffectStack()) {
-        // apply the zoom transformation
-        KoShape::applyConversion(painter, converter);
+        painter.save();
         // apply the shape transformation
         QMatrix transform = d->currentShape->absoluteTransformation(&converter);
         painter.setMatrix(transform, true);
+        // apply the zoom transformation
+        KoShape::applyConversion(painter, converter);
         // get the size rect of the shape
         QRectF sizeRect(QPointF(), d->currentShape->size());
         // get the clipping rect of the filter stack
@@ -140,6 +141,7 @@ void KarbonFilterEffectsTool::paint(QPainter &painter, const KoViewConverter &co
         painter.setBrush(Qt::NoBrush);
         painter.setPen(Qt::blue);
         painter.drawRect(clipRect);
+        painter.restore();
     }
 }
 
