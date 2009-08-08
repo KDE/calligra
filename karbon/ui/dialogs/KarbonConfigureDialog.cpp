@@ -26,9 +26,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoAspectButton.h>
+#include <KoConfigGridPage.h>
+#include <KoConfigDocumentPage.h>
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
@@ -64,14 +64,14 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     item->setHeader( i18n( "Misc" ) );
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
 
-    m_gridPage = new ConfigGridPage( parent );
+    m_gridPage = new KoConfigGridPage( parent->part() );
     item = addPage( m_gridPage, i18n( "Grid" ) );
     item->setHeader( i18n( "Grid" ) );
     item->setIcon(KIcon(BarIcon("grid", KIconLoader::SizeMedium)));
 
     connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
-    m_defaultDocPage = new ConfigDefaultPage( parent );
+    m_defaultDocPage = new KoConfigDocumentPage( parent->part() );
     item = addPage( m_defaultDocPage, i18nc( "@title:tab Document settings page", "Document" ) );
     item->setHeader( i18n( "Document Settings" ) );
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
@@ -317,202 +317,6 @@ void ConfigMiscPage::apply()
 void ConfigMiscPage::slotDefault()
 {
     m_unit->setCurrentIndex( 0 );
-}
-
-ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
-{
-    setObjectName(name);
-
-    m_config = KarbonFactory::componentData().config();
-
-    m_view = view;
-    KoUnit unit = view->part()->document().unit();
-    KoGridData &gd = view->part()->gridData();
-    QSizeF pageSize = view->part()->document().pageSize();
-
-    QGroupBox* generalGrp = new QGroupBox( i18n("Grid"), this );
-    QGridLayout *layoutGeneral = new QGridLayout( generalGrp );
-    QLabel * showGridLabel = new QLabel( i18n( "Show grid:" ), generalGrp );
-    m_gridChBox = new QCheckBox( "", generalGrp );
-    m_gridChBox->setChecked( gd.showGrid() );
-    QLabel * snapGridLabel = new QLabel( i18n( "Snap to grid:" ), generalGrp );
-    m_snapChBox = new QCheckBox( "", generalGrp );
-    m_snapChBox->setChecked( gd.snapToGrid() );
-    QLabel* gridColorLbl = new QLabel( i18n( "Grid color:" ), generalGrp);
-    m_gridColorBtn = new KColorButton( gd.gridColor(), generalGrp );
-    gridColorLbl->setBuddy( m_gridColorBtn );
-    layoutGeneral->addWidget( showGridLabel, 0, 0 );
-    layoutGeneral->addWidget( m_gridChBox, 0, 1 );
-    layoutGeneral->addWidget( snapGridLabel, 1, 0 );
-    layoutGeneral->addWidget( m_snapChBox, 1, 1 );
-    layoutGeneral->addWidget( gridColorLbl, 2, 0 );
-    layoutGeneral->addWidget( m_gridColorBtn, 2, 1 );
-
-    QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
-    QHBoxLayout *hboxLayout = new QHBoxLayout( spacingGrp );
-    QGridLayout* layoutSpacingGrp = new QGridLayout( );
-    QLabel* spaceHorizLbl = new QLabel( i18nc( "Horizontal grid spacing", "&Horizontal:" ) );
-    m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp );
-    m_spaceHorizUSpin->setMinMaxStep( 0.0, pageSize.width(), 0.1 );
-    m_spaceHorizUSpin->setUnit( unit );
-    m_spaceHorizUSpin->changeValue( gd.gridX() );
-    spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
-    QLabel* spaceVertLbl = new QLabel( i18nc( "Vertical grid spacing", "&Vertical:" ) );
-    m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp );
-    m_spaceVertUSpin->setMinMaxStep( 0.0, pageSize.height(), 0.1 );
-    m_spaceVertUSpin->setUnit( unit );
-    m_spaceVertUSpin->changeValue( gd.gridY() );
-    spaceVertLbl->setBuddy( m_spaceVertUSpin );
-    layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
-    layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
-    layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
-    layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
-    hboxLayout->addLayout( layoutSpacingGrp );
-    m_bnLinkSpacing = new KoAspectButton(spacingGrp);
-    m_bnLinkSpacing->setKeepAspectRatio( gd.gridX() == gd.gridY() );
-    hboxLayout->addWidget(m_bnLinkSpacing);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout( this );
-
-    QGridLayout* gl = new QGridLayout();
-    gl->setSpacing( KDialog::spacingHint() );
-    gl->setMargin(KDialog::marginHint());
-    gl->addWidget( generalGrp, 0, 0, 1, 2 );
-    gl->addItem( new QSpacerItem( 0, 0 ), 1, 1 );
-    gl->addWidget( spacingGrp, 2, 0, 1, 2 );
-    gl->addItem( new QSpacerItem( 0, 0 ), 4, 0, 1, 2 );
-    mainLayout->addLayout( gl );
-    mainLayout->addStretch();
-
-    setValuesFromGrid( view->part()->gridData() );
-
-    connect(m_spaceHorizUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxHSpacingChanged(qreal)));
-    connect(m_spaceVertUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxVSpacingChanged(qreal)));
-}
-
-void ConfigGridPage::slotUnitChanged( int u )
-{
-    KoUnit unit = KoUnit((KoUnit::Unit) u );
-    m_spaceHorizUSpin->blockSignals( true );
-    m_spaceVertUSpin->blockSignals( true );
-    m_spaceHorizUSpin->setUnit( unit );
-    m_spaceVertUSpin->setUnit( unit );
-    m_spaceHorizUSpin->blockSignals( false );
-    m_spaceVertUSpin->blockSignals( false );
-}
-
-void ConfigGridPage::apply()
-{
-    KoGridData &gd = m_view->part()->gridData();
-    gd.setGrid( m_spaceHorizUSpin->value(), m_spaceVertUSpin->value() );
-    gd.setShowGrid( m_gridChBox->isChecked() );
-    gd.setSnapToGrid( m_snapChBox->isChecked() );
-    gd.setGridColor( m_gridColorBtn->color() );
-
-    KConfigGroup gridGroup = m_config->group( "Grid" );
-    gridGroup.writeEntry( "SpacingX", gd.gridX() );
-    gridGroup.writeEntry( "SpacingY", gd.gridY() );
-    gridGroup.writeEntry( "Color", gd.gridColor() );
-}
-
-void ConfigGridPage::slotDefault()
-{
-    KoGridData defGrid;
-    setValuesFromGrid( defGrid );
-}
-
-void ConfigGridPage::setValuesFromGrid( const KoGridData &grid )
-{
-    QSizeF pageSize = m_view->part()->document().pageSize();
-
-    m_spaceHorizUSpin->setMaximum( pageSize.width() );
-    m_spaceHorizUSpin->changeValue( grid.gridX() );
-
-    m_spaceVertUSpin->setMaximum( pageSize.height() );
-    m_spaceVertUSpin->changeValue( grid.gridY() );
-
-    m_gridChBox->setChecked( grid.showGrid() );
-    m_snapChBox->setChecked( grid.snapToGrid() );
-    m_gridColorBtn->setColor( grid.gridColor() );
-}
-
-void ConfigGridPage::spinBoxHSpacingChanged( qreal v )
-{
-    if ( m_bnLinkSpacing->keepAspectRatio() )
-        m_spaceVertUSpin->changeValue(v);
-}
-
-void ConfigGridPage::spinBoxVSpacingChanged( qreal v )
-{
-    if ( m_bnLinkSpacing->keepAspectRatio() )
-        m_spaceHorizUSpin->changeValue(v);
-}
-
-ConfigDefaultPage::ConfigDefaultPage( KarbonView* view, char* name )
-{
-    setObjectName(name);
-
-    m_view = view;
-
-    m_config = KarbonFactory::componentData().config();
-
-    QGroupBox* gbDocumentSettings = new QGroupBox( i18n( "Document Settings" ), this );
-    QVBoxLayout *layout = new QVBoxLayout( gbDocumentSettings );
-    layout->setSpacing(KDialog::spacingHint());
-    layout->setMargin(KDialog::marginHint());
-
-    m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;
-
-    m_oldBackupFile = true;
-
-    if( m_config->hasGroup( "Interface" ) )
-    {
-        KConfigGroup interfaceGroup = m_config->group( "Interface" );
-        m_oldAutoSave = interfaceGroup.readEntry( "AutoSave", m_oldAutoSave );
-        m_oldBackupFile = interfaceGroup.readEntry( "BackupFile", m_oldBackupFile );
-    }
-
-    m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
-    m_autoSave->setRange( 0, 60, 1 );
-    m_autoSave->setLabel( i18n( "Auto save (min):" ) );
-    m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
-    m_autoSave->setSuffix( i18n( "min" ) );
-    layout->addWidget( m_autoSave );
-
-    m_createBackupFile = new QCheckBox( i18n( "Create backup file" ), gbDocumentSettings );
-    m_createBackupFile->setChecked( m_oldBackupFile );
-    layout->addWidget( m_createBackupFile );
-
-    layout->addStretch();
-}
-
-void ConfigDefaultPage::apply()
-{
-    KConfigGroup interfaceGroup = m_config->group( "Interface" );
-
-    int autoSave = m_autoSave->value();
-
-    if( autoSave != m_oldAutoSave )
-    {
-        interfaceGroup.writeEntry( "AutoSave", autoSave );
-        m_view->part()->setAutoSave( autoSave * 60 );
-        m_oldAutoSave = autoSave;
-    }
-
-    bool state = m_createBackupFile->isChecked();
-
-    if( state != m_oldBackupFile )
-    {
-        interfaceGroup.writeEntry( "BackupFile", state );
-        m_view->part()->setBackupFile( state );
-        m_oldBackupFile = state;
-    }
-}
-
-void ConfigDefaultPage::slotDefault()
-{
-    m_autoSave->setValue( m_view->part()->defaultAutoSave() / 60 );
-    m_createBackupFile->setChecked( true );
 }
 
 #include "KarbonConfigureDialog.moc"

@@ -27,14 +27,12 @@
 #include <kvbox.h>
 #include <ksharedconfig.h>
 
+
 class KarbonView;
 class ConfigInterfacePage;
 class ConfigMiscPage;
-class ConfigGridPage;
-class ConfigDefaultPage;
-class KoUnitDoubleSpinBox;
-class KoGridData;
-class KoAspectButton;
+class KoConfigGridPage;
+class KoConfigDocumentPage;
 class KIntNumInput;
 class KColorButton;
 class QCheckBox;
@@ -54,8 +52,8 @@ public slots:
 private:
     ConfigInterfacePage* m_interfacePage;
     ConfigMiscPage* m_miscPage;
-    ConfigGridPage* m_gridPage;
-    ConfigDefaultPage* m_defaultDocPage;
+    KoConfigGridPage* m_gridPage;
+    KoConfigDocumentPage* m_defaultDocPage;
 };
 
 class ConfigInterfacePage : public KVBox
@@ -115,56 +113,6 @@ private:
     uint m_oldHandleRadius;
     KIntNumInput * m_grabSensitivity;
     uint m_oldGrabSensitivity;
-};
-
-class ConfigDefaultPage : public KVBox
-{
-    Q_OBJECT
-
-public:
-    explicit ConfigDefaultPage( KarbonView* view, char* name = 0L );
-
-    void apply();
-
-public slots:
-    void slotDefault();
-
-private:
-    KarbonView* m_view;
-    KSharedConfigPtr m_config;
-
-    KIntNumInput* m_autoSave;
-    int m_oldAutoSave;
-    QCheckBox *m_createBackupFile;
-    bool m_oldBackupFile;
-};
-
-class ConfigGridPage : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit ConfigGridPage( KarbonView* view, char* name = 0L );
-
-    void apply();
-
-public slots:
-    void slotDefault();
-    void slotUnitChanged( int );
-    void spinBoxHSpacingChanged( qreal );
-    void spinBoxVSpacingChanged( qreal );
-
-private:
-    void setValuesFromGrid( const KoGridData &grid );
-
-    KarbonView* m_view;
-    KoUnitDoubleSpinBox* m_spaceHorizUSpin;
-    KoUnitDoubleSpinBox* m_spaceVertUSpin;
-    QCheckBox* m_gridChBox;
-    QCheckBox* m_snapChBox;
-    KColorButton* m_gridColorBtn;
-    KSharedConfigPtr m_config;
-    KoAspectButton * m_bnLinkSpacing;
 };
 
 #endif // KARBONCONFIGUREDIALOG_H
