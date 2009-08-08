@@ -147,7 +147,7 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
     const int paraCount = m_paraCountMap[ m_currentFramesetName ];
 
     QList<Bookmark>::ConstIterator it;
-    for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
+    for (it = m_bookmarkList.constBegin(); it != m_bookmarkList.constEnd(); ++it )
     {
         if ( (*(it)).m_frameset != m_currentFramesetName )
         {
