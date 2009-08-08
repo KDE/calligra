@@ -19,13 +19,11 @@
 
 #include "kexicsvwidgets.h"
 
-#include <qdir.h>
-#include <qlabel.h>
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QDir>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QVector>
 
 #include <klocale.h>
@@ -58,10 +56,10 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
         : QWidget(parent)
         , d(new Private())
 {
-    Q3BoxLayout *lyr =
-        lineEditOnBottom ?
-        (Q3BoxLayout *)new Q3VBoxLayout(this, 0, KDialog::spacingHint())
-        : (Q3BoxLayout *)new Q3HBoxLayout(this, 0, KDialog::spacingHint());
+    QBoxLayout *lyr = lineEditOnBottom ?
+        (QBoxLayout *)new QVBoxLayout(this) : (QBoxLayout *)new QHBoxLayout(this);
+    KexiUtils::setMargins(lyr, 0);
+    lyr->setSpacing(KDialog::spacingHint());
 
     d->combo = new KComboBox(this);
     d->combo->setObjectName("KexiCSVDelimiterComboBox");
@@ -184,8 +182,10 @@ void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
         : QWidget(parent)
 {
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(this, 0, KDialog::spacingHint());
-    Q3HBoxLayout *hbox = new Q3HBoxLayout(this);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
+    KexiUtils::setMargins(vbox, 0);
+    vbox->setSpacing(KDialog::spacingHint());
+    QHBoxLayout *hbox = new QHBoxLayout(this);
     vbox->addLayout(hbox);
     m_leftLabel = new QLabel(labelText, this);
     m_leftLabel->setMinimumWidth(130);
@@ -203,7 +203,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     m_fnameLbl->setTextFormat(Qt::PlainText);
     m_fnameLbl->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding, 1, 0));
     m_fnameLbl->setLineWidth(1);
-    m_fnameLbl->setFrameStyle(Q3Frame::Box);
+    m_fnameLbl->setFrameStyle(QFrame::Box);
     m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_fnameLbl->setWordWrap(true);
     hbox->addSpacing(5);
@@ -234,9 +234,9 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
 #endif
                    );
 
-    m_separator = new Q3Frame(this);
-    m_separator->setFrameShape(Q3Frame::HLine);
-    m_separator->setFrameShadow(Q3Frame::Sunken);
+    m_separator = new QFrame(this);
+    m_separator->setFrameShape(QFrame::HLine);
+    m_separator->setFrameShadow(QFrame::Sunken);
     vbox->addWidget(m_separator);
 }
 

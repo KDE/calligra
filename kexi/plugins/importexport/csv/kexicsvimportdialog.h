@@ -28,19 +28,13 @@
 #ifndef KEXI_CSVDIALOG_H
 #define KEXI_CSVDIALOG_H
 
-#include <q3valuevector.h>
+#include <qvector.h>
 #include <qlist.h>
-#include <q3ptrvector.h>
 #include <qregexp.h>
 #include <qbitarray.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QTextStream>
-#include <Q3GridLayout>
 #include <QEvent>
-#include <QLabel>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include <kdialog.h>
 
@@ -49,9 +43,9 @@
 
 #include "kexicsvimportoptionsdlg.h"
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
-class Q3GridLayout;
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
 class QCheckBox;
 class QLabel;
 class Q3Table;
@@ -99,8 +93,8 @@ protected:
     virtual void accept();
 
 private:
-    Q3GridLayout* MyDialogLayout;
-    Q3HBoxLayout* Layout1;
+    QGridLayout* MyDialogLayout;
+    QHBoxLayout* Layout1;
     Q3Table* m_table;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
@@ -183,14 +177,14 @@ private:
 
     //! vector of detected types, 0==text (the default), 1==number, 2==date
 //! @todo more types
-    Q3ValueVector<int> m_detectedTypes;
+    QVector<int> m_detectedTypes;
 
     //! m_detectedUniqueColumns[i]==true means that i-th column has unique values
     //! (only for numeric type)
     QVector< QList<int>* > m_uniquenessTest;
 
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    Q3ValueVector<QString> m_typeNames, m_columnNames;
+    QVector<QString> m_typeNames, m_columnNames;
     QBitArray m_changedColumnNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
     bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row

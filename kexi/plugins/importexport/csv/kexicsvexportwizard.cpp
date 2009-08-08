@@ -31,7 +31,7 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include <qcheckbox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qclipboard.h>
 #include <QTextStream>
 #include <QGridLayout>
@@ -144,12 +144,12 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // -<options section>
-    m_exportOptionsSection = new Q3GroupBox(1, Qt::Vertical, i18n("Options"), m_exportOptionsPage);
+    m_exportOptionsSection = new QGroupBox(i18n("Options"), m_exportOptionsPage);
     m_exportOptionsSection->setObjectName("m_exportOptionsSection");
+    m_exportOptionsSection->setAlignment(Qt::Vertical);
     m_exportOptionsSection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     exportOptionsLyr->addWidget(m_exportOptionsSection, 3, 3, 0, 1);
-    QWidget *exportOptionsSectionWidget
-    = new QWidget(m_exportOptionsSection);
+    QWidget *exportOptionsSectionWidget = new QWidget(m_exportOptionsSection);
     exportOptionsSectionWidget->setObjectName("exportOptionsSectionWidget");
     QGridLayout *exportOptionsSectionLyr = new QGridLayout(exportOptionsSectionWidget);
     exportOptionsLyr->setObjectName("exportOptionsLyr");

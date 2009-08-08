@@ -25,11 +25,9 @@
 
 #include "kexicsvexport.h"
 
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-
 class QCheckBox;
-class Q3GroupBox;
+class QGroupBox;
+class QHBoxLayout;
 class KPushButton;
 class KexiStartupFileWidget;
 class KexiCSVDelimiterWidget;
@@ -101,7 +99,7 @@ protected:
     QWidget* m_exportOptionsPage;
     KPushButton *m_showOptionsButton;
     KPushButton *m_defaultsBtn;
-    Q3GroupBox* m_exportOptionsSection;
+    QGroupBox* m_exportOptionsSection;
     KexiCSVInfoLabel *m_infoLblFrom, *m_infoLblTo;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     KexiCSVTextQuoteComboBox* m_textQuote;

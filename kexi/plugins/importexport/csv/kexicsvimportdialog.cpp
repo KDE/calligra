@@ -25,7 +25,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3buttongroup.h>
+#include "kexicsvimportdialog.h"
+
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qlabel.h>
@@ -34,7 +36,7 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <q3table.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qpainter.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
@@ -73,7 +75,6 @@
 #include <kexidb/transaction.h>
 #include <widget/kexicharencodingcombobox.h>
 
-#include "kexicsvimportdialog.h"
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
 
