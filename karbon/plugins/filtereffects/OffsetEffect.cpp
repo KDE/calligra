@@ -18,6 +18,7 @@
  */
 
 #include "OffsetEffect.h"
+#include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include <KLocale>
@@ -41,22 +42,25 @@ void OffsetEffect::setOffset(const QPointF &offset)
     m_offset = offset;
 }
 
-QImage OffsetEffect::processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
+QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
     if (m_offset.x() == 0.0 && m_offset.y() == 0.0)
         return image;
     
-    QPointF offset = converter.documentToView(m_offset);
+    // transform from bounding box coordinates
+    QPointF offset = context.coordinateTransformation().map(m_offset);
+    // transform to view coordinates
+    offset = context.viewConverter()->documentToView(offset);
 
     QImage result(image.size(), image.format());
     result.fill(qRgba(0,0,0,0));
     
     QPainter p(&result);
-    p.drawImage(filterRegion.topLeft()+offset, image, filterRegion);
+    p.drawImage(context.filterRegion().topLeft()+offset, image, context.filterRegion());
     return result;
 }
 
-bool OffsetEffect::load(const QDomElement &element)
+bool OffsetEffect::load(const QDomElement &element, const QMatrix &matrix)
 {
     if (element.tagName() != id())
         return false;
@@ -65,6 +69,8 @@ bool OffsetEffect::load(const QDomElement &element)
         m_offset.rx() = element.attribute("dx").toDouble();
     if (element.hasAttribute("dy"))
         m_offset.ry() = element.attribute("dy").toDouble();
+    
+    m_offset = matrix.map(m_offset);
     
     return true;
 }

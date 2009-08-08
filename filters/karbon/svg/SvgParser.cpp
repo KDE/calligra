@@ -1516,6 +1516,11 @@ void SvgParser::applyFilter( KoShape * shape )
     objectFilterRegion.setTopLeft(SvgUtil::userSpaceToObject(filterRegion.topLeft(), bound));
     objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
 
+    // matrix to transform from use space units
+    QMatrix matrix;
+    if (filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse)
+        matrix = QMatrix().scale(1.0/bound.width(), 1.0/bound.height());
+    
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
 
     KoFilterEffectStack * filterStack = 0;
@@ -1524,7 +1529,7 @@ void SvgParser::applyFilter( KoShape * shape )
     for( QDomNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement primitive = n.toElement();
-        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive);
+        KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, matrix);
         if (!filterEffect) {
             kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
             continue;
@@ -1542,8 +1547,8 @@ void SvgParser::applyFilter( KoShape * shape )
                 subRegion.setWidth( parseUnitX( primitive.attribute( "width" ) ) );
             if( primitive.hasAttribute( "height" ) )
                 subRegion.setHeight( parseUnitY( primitive.attribute( "height" ) ) );
-            subRegion.setTopLeft(SvgUtil::userSpaceToObject(subRegion.topLeft(), filterRegion));
-            subRegion.setSize(SvgUtil::userSpaceToObject(subRegion.size(), filterRegion));
+            subRegion.setTopLeft(SvgUtil::userSpaceToObject(subRegion.topLeft(), bound));
+            subRegion.setSize(SvgUtil::userSpaceToObject(subRegion.size(), bound));
         }
         else
         {

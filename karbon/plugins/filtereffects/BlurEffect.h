@@ -35,9 +35,9 @@ public:
     void setDeviation(const QPointF &deviation);
     
     /// reimplemented from KoFilterEffect
-    virtual QImage processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const;
+    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
     /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element);
+    virtual bool load(const QDomElement &element, const QMatrix &matrix);
     /// reimplemented from KoFilterEffect
     virtual void save(KoXmlWriter &writer);
     

@@ -18,6 +18,7 @@
  */
 
 #include "BlurEffect.h"
+#include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include <KLocale>
@@ -287,14 +288,17 @@ void BlurEffect::setDeviation(const QPointF &deviation)
     m_deviation.setY(qMax(0.0, deviation.y()));
 }
 
-QImage BlurEffect::processImage(const QImage &image, const QRect &filterRegion, const KoViewConverter &converter) const
+QImage BlurEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
     if (m_deviation.x() == 0.0 || m_deviation.y() == 0.0)
         return image;
     
     // TODO: take filter region into account
     // TODO: blur with different kernels in x and y
-    QPointF dev = converter.documentToView(m_deviation);
+    // convert from bounding box coordinates
+    QPointF dev = context.coordinateTransformation().map(m_deviation);
+    // transform to view coordinates
+    dev = context.viewConverter()->documentToView(dev);
     
     QImage result = image;
     fastbluralpha(result, dev.x());
@@ -302,7 +306,7 @@ QImage BlurEffect::processImage(const QImage &image, const QRect &filterRegion, 
     return result;
 }
 
-bool BlurEffect::load(const QDomElement &element)
+bool BlurEffect::load(const QDomElement &element, const QMatrix &matrix)
 {
     if (element.tagName() != id())
         return false;
@@ -322,7 +326,9 @@ bool BlurEffect::load(const QDomElement &element)
     default:
         return false;
     }
-        
+      
+    m_deviation = matrix.map(m_deviation);
+    
     return true;
 }
 
