@@ -48,6 +48,10 @@ public:
     
 signals:
     void dataChanged(FormulaCommand* element, bool undo);
+
+public slots:
+    ///only for debugging
+    void writeElementTree();
     
 private:
     FormulaElement* m_element;

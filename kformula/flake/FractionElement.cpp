@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -30,8 +31,8 @@
 
 FractionElement::FractionElement( BasicElement* parent ) : FixedElement( parent )
 {
-    m_numerator = new EmptyElement( this );
-    m_denominator = new EmptyElement( this );
+    m_numerator = new RowElement( this );
+    m_denominator = new RowElement( this );
     m_lineThickness = 1.0;
 }
 
@@ -257,24 +258,21 @@ QString FractionElement::attributesDefaultValue( const QString& attribute ) cons
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement tmp;
+    BasicElement* element;
+    int counter=0;
     forEachElement( tmp, parent ) {
-        if( m_numerator->elementType() == Empty ) {
-            delete m_numerator;
-            m_numerator = ElementFactory::createElement( tmp.tagName(), this );
-            if( !m_numerator->readMathML( tmp ) )
-                return false;
-        } else if( m_denominator->elementType() == Empty ) {
-            delete m_denominator;
-            m_denominator = ElementFactory::createElement( tmp.tagName(), this );
-            if( !m_denominator->readMathML( tmp ) )
-                return false;
+        if (counter==0) {
+            loadElement(tmp,&m_numerator);
+        } else if (counter==1) {
+            loadElement(tmp,&m_denominator);
         } else {
             kDebug(39001) << "Too many arguments to mfrac";
-	}
+        }
+        counter++;
     }
-    Q_ASSERT( m_numerator );
-    Q_ASSERT( m_denominator );
-
+    if (counter<2) {
+        kDebug(39001) << "Not enough arguments to mfrac";
+    }
     return true;
 }
 

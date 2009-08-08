@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2009 Jeremias Epperlein <jeeree@web.de>
 
@@ -50,6 +51,11 @@ void FormulaData::setFormulaElement ( FormulaElement* element )
 FormulaElement* FormulaData::formulaElement() const
 {
     return m_element;
+}
+
+void FormulaData::writeElementTree()
+{
+    m_element->writeElementTree();
 }
 
 

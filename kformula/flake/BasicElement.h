@@ -223,10 +223,10 @@ public:
     virtual int positionOfChild(BasicElement* child) const;
         
     /// @return the element right before the cursor position @p position and 0 if there is none
-    virtual BasicElement* elementBefore(int position);
+    virtual BasicElement* elementBefore(int position) const;
     
     /// @return the element right after the cursor position @p position and 0 if there is none
-    virtual BasicElement* elementAfter(int position);
+    virtual BasicElement* elementAfter(int position) const;
     
     /// Set the element's m_scaleFactor to @p scaleFactor
     void setScaleFactor( double scaleFactor );
@@ -274,8 +274,14 @@ public:
     /// @return first empty element, that is a descendant of this element, if there is one
     BasicElement* emptyDescendant();
 
+    /// @return true, when the element is empty
+    virtual bool isEmpty() const;
+
     /// @return the formula element
     BasicElement* formulaElement();
+
+    /// writes the element to kDebug(), only for debugging purpose
+    void writeElementTree(int indent=0);
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 

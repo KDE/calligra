@@ -106,6 +106,8 @@ void KoFormulaTool::activate( bool temporary )
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
+    //Only for debugging:
+    connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
 
 void KoFormulaTool::deactivate()
@@ -433,5 +435,9 @@ void KoFormulaTool::setupActions()
     action->setData( QString( "<msubsup><mrow/><mrow/><mrow/></msubsup>" ) );
     addAction( "insert_subsupscript", action );
     action->setIcon( KIcon("rsub"));
+
+    //only for debugging
+    action = new KAction( "Debug - writeElementTree" , this );
+    addAction( "write_elementTree", action );
 }
 

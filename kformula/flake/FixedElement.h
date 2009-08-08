@@ -22,10 +22,11 @@
 
 #include "BasicElement.h"
 #include "kformula_export.h"
+#include <KoXmlReader.h>
+
 
 class FormulaCursor;
 class QPainterPath;
-
 /**
  * @short Abstract Base Class for MathML elements with fixed number of childs
  *
@@ -40,15 +41,15 @@ public:
     virtual ~FixedElement();
 
     virtual bool acceptCursor ( const FormulaCursor& cursor );
-    
+
     BasicElement* elementBefore(int position) const;
-    
+
     BasicElement* elementAfter(int position) const;
 
     virtual QLineF cursorLine ( int position ) const;
-    
-//     virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const = 0;
-    
+
+    bool loadElement(KoXmlElement& tmp, BasicElement** child);
+
     virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
 
     /// inherited from BasicElement

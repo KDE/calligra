@@ -328,12 +328,12 @@ void BasicElement::setScaleLevel( int scaleLevel )
     while(level-- > 0)  //raise multiplier to the power of level
         m_scaleFactor *= 0.71;
 }
-BasicElement* BasicElement::elementBefore ( int position )
+BasicElement* BasicElement::elementBefore ( int position ) const
 {
     return 0;
 }
 
-BasicElement* BasicElement::elementAfter ( int position )
+BasicElement* BasicElement::elementAfter ( int position ) const
 {
     return 0;
 }
@@ -384,7 +384,6 @@ BasicElement* BasicElement::emptyDescendant()
     return 0;
 }
 
-
 //TODO: This should be cached
 BasicElement* BasicElement::formulaElement() 
 {
@@ -395,4 +394,25 @@ BasicElement* BasicElement::formulaElement()
     }
 }
 
+bool BasicElement::isEmpty() const
+{
+    return false;
+}
 
+
+void BasicElement::setScaleFactor ( double scaleFactor )
+{
+    m_scaleFactor=scaleFactor;
+}
+
+void BasicElement::writeElementTree(int indent)
+{
+    QString s;
+    for (int i=0; i<indent; ++i) {
+        s+="   ";
+    }
+    kDebug()<<s<<ElementFactory::elementName(elementType());
+    foreach (BasicElement* tmp, childElements()) {
+        tmp->writeElementTree(indent+1);
+    }
+}

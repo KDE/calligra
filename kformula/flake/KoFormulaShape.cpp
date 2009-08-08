@@ -49,11 +49,9 @@ void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter 
 }
 
 void KoFormulaShape::updateLayout() {
-    kDebug() << "before:" << KoShape::size()<<"," <<size();
     m_formulaRenderer->layoutElement( m_formulaData->formulaElement() );
 
      KoShape::setSize(m_formulaData->formulaElement()->boundingRect().size());
-     kDebug() << "after:" << KoShape::size()<<"," <<size();
 }
 
 

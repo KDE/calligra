@@ -94,10 +94,10 @@ void SubSupElement::layout( const AttributeManager* am )
     }
 }
 
-bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
-{
-    return true;
-}
+// bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
+// {
+//     return true;
+// }
 
 const QList<BasicElement*> SubSupElement::childElements() const
 {
@@ -108,17 +108,17 @@ const QList<BasicElement*> SubSupElement::childElements() const
     return tmp;
 }
 
-void SubSupElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{
-    if( cursor->currentElement() == m_baseElement )
-        m_baseElement = child;
-    else if( cursor->currentElement() == m_subScript )
-        m_subScript = child;
-    else if( cursor->currentElement() == m_superScript )
-        m_superScript = child;
-//    else
-//    TODO add some error
-}
+// void SubSupElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+// {
+//     if( cursor->currentElement() == m_baseElement )
+//         m_baseElement = child;
+//     else if( cursor->currentElement() == m_subScript )
+//         m_subScript = child;
+//     else if( cursor->currentElement() == m_superScript )
+//         m_superScript = child;
+// //    else
+// //    TODO add some error
+// }
 
 QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 {

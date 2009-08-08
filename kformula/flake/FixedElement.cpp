@@ -56,9 +56,8 @@ BasicElement* FixedElement::elementBefore ( int position ) const
 QPainterPath FixedElement::selectionRegion(const int pos1, const int pos2) const 
 {
     QPainterPath temp;
-//     foreach (BasicElement *child, elementsBetween(pos1, pos2)) {
-//         temp.addRect(child->absoluteBoundingRect());
-//     }
+    Q_UNUSED(pos1);
+    Q_UNUSED(pos2);
     return temp;
 }
 
@@ -139,5 +138,19 @@ int FixedElement::positionOfChild ( BasicElement* child ) const
     } else {
         return 2*tmp;
     }
-        
+}
+
+bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
+{
+    BasicElement *element;
+    element = ElementFactory::createElement( tmp.tagName(), this );
+    if( !element->readMathML( tmp ) ) {
+        return false;
+    }
+    if (element->elementType()==Row && element->childElements().count()<=1) {
+        delete (*child);
+        (*child)=element;
+    } else {
+        (*child)->insertChild(0,element);
+    }
 }

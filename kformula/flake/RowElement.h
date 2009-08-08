@@ -71,32 +71,32 @@ public:
 
     /// inherited from BasicElement
     virtual QList< BasicElement* > elementsBetween ( int pos1, int pos2 ) const;
-    
+
     /// inherited from BasicElement
     virtual bool insertChild( int position, BasicElement* child );
-    
+
     /**
      * Remove a child element
      * @param element The BasicElement to remove
      */
     bool removeChild( BasicElement* child);
-    
+
     ///inherited form BasicElement
     virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
-    
+
     /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     bool acceptCursor( const FormulaCursor& cursor );
-    
+
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
-    
+
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
-    
+
     /// @return The element's ElementType
     ElementType elementType() const;
 
@@ -105,22 +105,25 @@ public:
      *  This stretches the children inside, then readjusts their vertical offsets
      */
     virtual void stretch();
-    
+
     /// inherited from BasicElement
     virtual int length() const;
-    
+
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
-    
+
     /// inherited from BasicElement
     virtual QLineF cursorLine(int position) const;
-    
+
     /// inherited from BasicElement
-    virtual BasicElement* elementAfter ( int position );
-    
+    virtual BasicElement* elementAfter ( int position ) const;
+
     /// inherited from BasicElement
-    virtual BasicElement* elementBefore ( int position );
-    
+    virtual BasicElement* elementBefore ( int position ) const;
+
+    /// inherited from BasicElement
+    virtual bool isEmpty() const;
+
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );

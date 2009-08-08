@@ -207,9 +207,26 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         Q_ASSERT( tmpElement );
-        m_childElements << tmpElement;
-        if( !tmpElement->readMathML( tmp ) )
+        if( !tmpElement->readMathML( tmp ) ) {
             return false;
+        }
+        if (tmpElement->elementType() == Row) {
+            if (tmpElement->childElements().count()==0) {
+                //we don't load in this case, empty elements in rows are not needed
+            } else if (tmpElement->childElements().count()==1) {
+                //mrows with one element are equivalent to mrows with one child are equivalent to the child
+                //TODO: inverstigate, if we should load them nevertheless
+                RowElement* tmprow = static_cast<RowElement*>(tmpElement);
+                BasicElement* child = tmprow->childElements()[0];
+                tmprow->removeChild(child);
+                delete tmprow;
+                insertChild(childElements().count(),child);
+            } else {
+                m_childElements << tmpElement;
+            }
+        } else {
+            m_childElements << tmpElement;
+        }
     }
     return true;
 }
@@ -225,7 +242,7 @@ void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
 }
 
 
-BasicElement* RowElement::elementAfter ( int position )
+BasicElement* RowElement::elementAfter ( int position ) const
 {
     if (position<length()) {
         return m_childElements[position];
@@ -234,7 +251,7 @@ BasicElement* RowElement::elementAfter ( int position )
     }
 }
 
-BasicElement* RowElement::elementBefore ( int position )
+BasicElement* RowElement::elementBefore ( int position ) const
 {
     if (position>1) {
         return m_childElements[position-1];
@@ -259,6 +276,11 @@ bool RowElement::replaceChild ( BasicElement* oldelement, BasicElement* neweleme
     oldelement->setParentElement(0);
     newelement->setParentElement(this);
     return true;
+}
+
+bool RowElement::isEmpty() const
+{
+    return (elementType()==Row && m_childElements.count()==0);
 }
 
 

@@ -55,14 +55,14 @@ public:
     void layout( const AttributeManager* am );
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
+//     bool acceptCursor( const FormulaCursor* cursor );
 
     /**
      * Insert a new child at the cursor position
      * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
+//     void insertChild( FormulaCursor* cursor, BasicElement* child );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
