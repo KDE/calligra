@@ -80,7 +80,9 @@ public:
     void insertGlyphs( int position, QList<GlyphElement*> glyphs);
     
     QList<GlyphElement*> glyphList(int position, int length);
-    ///remove the letter after @p position and return a pointer to the glyph if it was one.
+    
+    ///remove the letter after @p position and return the starting position
+    /// of the removed glyphs in the glyphlist
     virtual int removeText(int position, int length = 1);
     
 

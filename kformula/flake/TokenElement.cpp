@@ -218,18 +218,18 @@ int TokenElement::removeText ( int position, int length )
 
 bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
     int i = 0;
-//     kDebug()<<"point: "<<point<<"-"<<boundingRect().width();
     cursor.setCurrentElement(this);
     if (cursorOffset(length())<point.x()) {
         cursor.setPosition(length());
         return true;
     }
     //Find the letter we clicked on
-    for( i = 1; i <= m_rawString.length(); i++ ) {
+    for( i = 1; i < length(); i++ ) {
         if (point.x() < cursorOffset(i)) {
             break;
         }
     }
+    
     //Find out, if we should place the cursor before or after the character
     if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
         --i;
