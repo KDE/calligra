@@ -22,9 +22,7 @@
 #ifndef __REPORTSECTION_H__
 #define __REPORTSECTION_H__
 
-#include <q3canvas.h>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMouseEvent>

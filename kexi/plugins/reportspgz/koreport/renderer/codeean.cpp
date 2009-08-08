@@ -26,7 +26,7 @@
  */
 
 #include <QString>
-#include <Q3ValueVector>
+#include <QVector>
 #include <QRect>
 #include <QPainter>
 #include <QPen>

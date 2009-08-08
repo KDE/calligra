@@ -25,7 +25,7 @@
  */
 
 #include <QString>
-#include <Q3ValueVector>
+#include <QVector>
 #include <QRect>
 #include <QPainter>
 #include <QPen>
@@ -188,7 +188,7 @@ int code128Index(QChar code, int set)
 
 void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int align)
 {
-    Q3ValueVector<int> str;
+    QVector<int> str;
     int i = 0;
 
     // create the list.. if the list is empty then just set a start code and move on
