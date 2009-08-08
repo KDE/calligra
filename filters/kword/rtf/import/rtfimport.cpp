@@ -2423,8 +2423,8 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     const RTFFormat* format = &state.format;
     const int styleNum = state.layout.style;
 
-    const QVector<RTFStyle>::ConstIterator endStyleSheet = styleSheet.end();
-    for ( QVector<RTFStyle>::ConstIterator it=styleSheet.begin(); it!=endStyleSheet; ++it )
+    const QVector<RTFStyle>::ConstIterator endStyleSheet = styleSheet.constEnd();
+    for ( QVector<RTFStyle>::ConstIterator it=styleSheet.constBegin(); it!=endStyleSheet; ++it )
     {
         if ( (*it).layout.style == styleNum )
         {
@@ -2450,7 +2450,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     // Insert character formatting
     bool hasFormats = false;
 
-    for ( QVector<KWFormat>::ConstIterator it = textState->formats.begin(); it != textState->formats.end(); ++it )
+    for ( QVector<KWFormat>::ConstIterator it = textState->formats.constBegin(); it != textState->formats.constEnd(); ++it )
     {
         if ( (*it).id != 1 || (*it).fmt != *format )
         {
