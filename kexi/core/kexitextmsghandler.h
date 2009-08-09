@@ -29,6 +29,9 @@ class KEXICORE_EXPORT KexiTextMessageHandler : public KexiGUIMessageHandler
 public:
     KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
     virtual ~KexiTextMessageHandler();
+
+    using KexiGUIMessageHandler::showMessage;
+
     virtual void showMessage(MessageType type, const QString &title, const QString &details);
 
     QString *m_messageTarget, *m_detailsTarget;
