@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
 
@@ -57,6 +58,8 @@ public:
     \return true if \a filePath file does not exists or user has agreed on overwriting,
     false in user do not want to overwrite. */
     static bool askForOverwriting(const QString& filePath, QWidget *parent = 0);
+
+    using KFileWidget::setMode;
 
     void setMode(Mode mode);
 
