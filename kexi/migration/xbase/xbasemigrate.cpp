@@ -155,7 +155,7 @@ bool xBaseMigrate::drv_readTableSchema(
 
   xbLong numFlds = tableDbf->FieldCount();
 
-  for( xbShort i = 0; i < numFlds; i = i + 1 ) {
+  for( xbShort i = 0; i < numFlds; i++ ) {
     QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
     QString fldID( KexiUtils::string2Identifier( fldName.toLower() ) );
 
@@ -211,13 +211,13 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
   const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
   // records are indexed from 1
-  for ( xbULong i = 1; i <= numRecords ; i = i + 1 ) {
+  for ( xbULong i = 1; i <= (xbULong)numRecords ; i++ ) {
     tableDbf->GetRecord( i );
     QList<QVariant> vals;
 
     xbLong numFlds = tableDbf->FieldCount();
     // fields are indexed from 0
-    for( xbShort j = 0; j < numFlds; j = j + 1 ) {
+    for( xbShort j = 0; j < numFlds; j++ ) {
       char data[1024];
       tableDbf->GetField(j, data);
       QVariant val;

@@ -66,7 +66,7 @@ bool TxtMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableS
 {
   if (drv_readFromTable(originalName))
   {
-    for (unsigned int i = 0; i < m_FieldNames.count(); ++i)
+    for (uint i = 0; i < (uint)m_FieldNames.count(); ++i)
     {
       tableSchema.addField( new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text) );
     }
