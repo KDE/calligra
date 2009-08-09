@@ -28,7 +28,7 @@
 #include <QVariant>
 #include <QPainter>
 #include <QHBoxLayout>
-
+#include <kcolorscheme.h>
 #include <KDebug>
 
 #include "Property.h"
@@ -90,6 +90,19 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
         w->setStyleSheet(QString());
     }*/
     //QComboBoxPrivateContainer
+    
+    
+    //Set the stylesheet to a plain style
+    QString styleSheet;
+    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+
+    styleSheet = QString("QComboBox { \
+    border: 1px solid %1; \
+    border-radius: 0px; \
+    padding: 0px 18px; }").arg(focus.name());
+   
+    setStyleSheet(styleSheet);
 }
 
 ComboBox::~ComboBox()
@@ -271,8 +284,12 @@ QString ComboBoxDelegate::displayTextForProperty( const Property* property ) con
     //kDebug() << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
     //kDebug() << "idx==" << idx;
-    if (idx == -1)
+    if (idx == -1) {
+      if (!property->option("extraValueAllowed").toBool())
         return QString();
+      else
+	return property->value().toString();
+    }
     return property->listData()->names[ idx ];
 }
 
