@@ -120,6 +120,11 @@ public:
     */
     QSet<QString> fieldColumnIdentifiers;
 
+    void addFieldColumnIdentifier(const QString& id)
+    {
+        fieldColumnIdentifiers.insert(id.toLower());
+    }
+
     KexiDataAwarePropertySet* sets;
     KexiDB::RecordData *droppedNewRecord;
 
@@ -321,7 +326,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     (*record)[COLUMN_ID_COLUMN] = "*";
     (*record)[COLUMN_ID_TABLE] = "*";
     d->fieldColumnData->append(record);
-    d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
+    d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
 
 // tempData()->clearQuery();
     tempData()->unregisterForTablesSchemaChanges();
@@ -339,14 +344,14 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         (*record)[COLUMN_ID_COLUMN] = table->name() + ".*";
         (*record)[COLUMN_ID_TABLE] = (*record)[COLUMN_ID_COLUMN];
         d->fieldColumnData->append(record);
-        d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
+        d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
 //  for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
         foreach(KexiDB::Field *field, *table->fields()) {
             record = d->fieldColumnData->createItem();
             (*record)[COLUMN_ID_COLUMN] = table->name() + "." + field->name();
             (*record)[COLUMN_ID_TABLE] = QString("  ") + field->name();
             d->fieldColumnData->append(record);
-            d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString()); //cache
+            d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
         }
     }
 //TODO
@@ -1410,7 +1415,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
             QString tableName; //empty for expressions
             QByteArray alias;
             QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
-            const bool isExpression = !d->fieldColumnIdentifiers.contains(fieldId);
+            const bool isExpression = !d->fieldColumnIdentifiers.contains(fieldId.toLower());
             if (isExpression) {
                 //this value is entered by hand and doesn't match
                 //any value in the combo box -- we're assuming this is an expression
