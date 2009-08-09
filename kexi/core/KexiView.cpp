@@ -510,7 +510,7 @@ void KexiView::setFocus()
     KexiMainWindowIface::global()->invalidateSharedActions(this);
 }
 
-QAction* KexiView::sharedAction(const char *action_name)
+QAction* KexiView::sharedAction(const QString& action_name)
 {
     if (part()) {
         KActionCollection *ac;
@@ -523,7 +523,7 @@ QAction* KexiView::sharedAction(const char *action_name)
     return KexiActionProxy::sharedAction(action_name);
 }
 
-void KexiView::setAvailable(const char* action_name, bool set)
+void KexiView::setAvailable(const QString& action_name, bool set)
 {
     if (part()) {
         KActionCollection *ac;

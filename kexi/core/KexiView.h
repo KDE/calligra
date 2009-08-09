@@ -118,11 +118,11 @@ public:
      \return shared action with name \a action_name for this view.
      If there's no such action declared in Kexi Part (part()),
      global shared action is returned (if exists). */
-    virtual QAction* sharedAction(const char *action_name);
+    virtual QAction* sharedAction(const QString& action_name);
 
     /*! Enables or disables shared action declared in Kexi Part (part()).
      If there's no such action, global shared action is enabled or disabled (if exists). */
-    virtual void setAvailable(const char* action_name, bool set);
+    virtual void setAvailable(const QString& action_name, bool set);
 
 public slots:
     virtual void setFocus();
