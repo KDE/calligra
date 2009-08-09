@@ -698,11 +698,11 @@ void KTextEditorFrame::changeEvent(QEvent *event)
 
 void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
 {
-    setMargins(QLayout *layout, KDialog::marginHint());
+    setMargins(layout, KDialog::marginHint());
     layout->setSpacing( KDialog::spacingHint() );
 }
 
-void KexiUtils::setMargins(QLayout *layout, int value);
+void KexiUtils::setMargins(QLayout *layout, int value)
 {
     layout->setContentsMargins(value, value, value, value);
 }
