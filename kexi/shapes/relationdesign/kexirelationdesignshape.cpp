@@ -53,7 +53,7 @@ void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& 
     linearGrad.setColorAt(1, QColor(240,240,240));
 
     painter.save();
-    
+    painter.setClipRect(QRectF(QPointF(0,0), viewSize));
     painter.setBrush(linearGrad);
     
     painter.setPen(Qt::black);
