@@ -305,7 +305,7 @@ protected:
     
     //Extended API
     //! Position the source dataset at the start of a table
-    virtual bool drv_readFromTable(const QString & tableName){ return false; }
+    virtual bool drv_readFromTable(const QString & tableName) { Q_UNUSED(tableName); return false; }
     
     //! Move to the next row
     virtual bool drv_moveNext() { return false; }
@@ -320,7 +320,7 @@ protected:
     virtual bool drv_moveLast() { return false; }
     
     //! Read the data at the given row/field
-    virtual QVariant drv_value(uint i){ return QVariant(); };
+    virtual QVariant drv_value(uint i) { Q_UNUSED(i); return QVariant(); };
     
 private:
 

@@ -52,12 +52,10 @@ MigrateManager __manager;
 MigrateManagerInternal::MigrateManagerInternal() /* protected */
         : QObject(0)
         , Object()
-        , m_drivers(17, false)
         , m_refCount(0)
         , lookupDriversNeeded(true)
 {
     setObjectName("KexiMigrate::MigrateManagerInternal");
-    m_drivers.setAutoDelete(true);
     m_serverResultNum = 0;
 
 }
@@ -65,6 +63,7 @@ MigrateManagerInternal::MigrateManagerInternal() /* protected */
 MigrateManagerInternal::~MigrateManagerInternal()
 {
     KexiDBDbg << "MigrateManagerInternal::~MigrateManagerInternal()";
+    qDeleteAll(m_drivers);
     m_drivers.clear();
     if (s_self == this)
         s_self = 0;
@@ -77,6 +76,7 @@ void MigrateManagerInternal::slotAppQuits()
         return; //what a hack! - we give up when app is still there
     KexiDBDbg << "MigrateManagerInternal::slotAppQuits(): let's clear drivers...";
     m_drivers.clear();
+    qDeleteAll(m_drivers);
 }
 
 MigrateManagerInternal *MigrateManagerInternal::self()
@@ -181,7 +181,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     clearError();
     KexiDBDbg << "MigrationrManagerInternal::migrationDriver(): loading " << name;
 
-    KexiMigrate *drv = name.isEmpty() ? 0 : m_drivers.find(name.toLatin1());
+    KexiMigrate *drv = name.isEmpty() ? 0 : m_drivers.value(name.toLatin1().toLower());
     if (drv)
         return drv; //cached
 
@@ -225,7 +225,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     }
 
     drv->setObjectName(srv_name);
-    m_drivers.insert(name.toLatin1(), drv); //cache it
+    m_drivers.insert(name.toLatin1().toLower(), drv); //cache it
     return drv;
 }
 

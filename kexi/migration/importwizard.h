@@ -33,6 +33,7 @@
 
 class QLabel;
 class QCheckBox;
+class QRadioButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
@@ -123,6 +124,8 @@ private:
     *m_dstTypePage, *m_dstPage, *m_importTypePage, *m_importingPage, *m_finishPage;
 
     QGroupBox *m_importTypeGroupBox;
+    QRadioButton *m_importTypeStructureAndDataCheckBox;
+    QRadioButton *m_importTypeStructureOnlyCheckBox;
     KexiDBTitlePage* m_dstTitlePage;
 
     KComboBox *m_srcTypeCombo;
@@ -135,8 +138,9 @@ private:
 
     QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
     QCheckBox *m_openImportedProjectCheckBox;
-    bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded,
-    m_importExecuted; //!< used in import()
+    bool m_fileBasedDstWasPresented : 1;
+    bool m_setupFileBasedSrcNeeded : 1;
+    bool m_importExecuted  :1; //!< used in import()
     KexiProjectSet* m_prjSet;
     QProgressBar *m_progressBar;
     KPushButton* m_importOptionsButton;

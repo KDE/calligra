@@ -29,7 +29,7 @@
 #include <qcheckbox.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QVButtonGroup>
+#include <QButtonGroup>
 #include <QDir>
 
 #include <kcombobox.h>
@@ -254,7 +254,8 @@ void ImportWizard::setupDstType()
     QVBoxLayout *vbox = new QVBoxLayout(m_dstTypePage);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    QHBoxLayout *hbox = new QHBoxLayout(vbox);
+    QHBoxLayout *hbox = new QHBoxLayout;
+    vbox->addLayout(hbox);
     KexiUtils::setStandardMarginsAndSpacing(hbox);
     QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ " "*/, m_dstTypePage);
     lbl->setAlignment(Qt::AlignAuto | Qt::AlignTop);
@@ -265,8 +266,8 @@ void ImportWizard::setupDstType()
     m_dstPrjTypeSelector->option_file->setText(i18n("Database project stored in a file"));
     m_dstPrjTypeSelector->option_server->setText(i18n("Database project stored on a server"));
 
-    QVBoxLayout *frame_server_vbox = new QVBoxLayout(
-        m_dstPrjTypeSelector->frame_server, KDialog::spacingHint());
+    QVBoxLayout *frame_server_vbox = new QVBoxLayout(m_dstPrjTypeSelector->frame_server);
+    KexiUtils::setStandardMarginsAndSpacing(frame_server_vbox);
     m_dstServerTypeCombo = new KexiDBDriverComboBox(m_dstPrjTypeSelector->frame_server, drvs,
             KexiDBDriverComboBox::ShowServerDrivers);
     frame_server_vbox->addWidget(m_dstServerTypeCombo);
@@ -333,16 +334,19 @@ void ImportWizard::setupImportType()
     QVBoxLayout *vbox = new QVBoxLayout(m_importTypePage);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
     m_importTypeGroupBox = new QGroupBox(m_importTypePage);
-    m_importTypeGroupBox->setLineWidth(0);
+//2.0    m_importTypeGroupBox->setLineWidth(0);
     vbox->addWidget(m_importTypeGroupBox);
+    QVBoxLayout *importTypeGroupBoxLyr = new QVBoxLayout;
 
-    QRadioButton *rb;
-    m_importTypeGroupBox->addWidget(
-        rb = new QRadioButton(i18n("Structure and data"), m_importTypeGroupBox));
-    rb->setChecked(true);
+    importTypeGroupBoxLyr->addWidget(
+        m_importTypeStructureAndDataCheckBox = new QRadioButton(i18n("Structure and data"), m_importTypeGroupBox));
+    m_importTypeStructureAndDataCheckBox->setChecked(true);
 
-    m_importTypeGroupBox->addWidget(
-        new QRadioButton(i18n("Structure only"), m_importTypeGroupBox));
+    importTypeGroupBoxLyr->addWidget(
+        m_importTypeStructureOnlyCheckBox = new QRadioButton(i18n("Structure only"), m_importTypeGroupBox));
+
+    importTypeGroupBoxLyr->addStretch(1);
+    m_importTypeGroupBox->setLayout(importTypeGroupBoxLyr);
 
 //    m_importTypeGroupBox->setExclusive(true);
     addPage(m_importTypePage, i18n("Select Type of Import"));
@@ -752,10 +756,10 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         }
 
         bool keepData;
-        if (m_importTypeGroupBox->selectedId() == 0) {
+        if (m_importTypeStructureAndDataCheckBox->isChecked()) {
             kDebug() << "Structure and data selected";
             keepData = true;
-        } else if (m_importTypeGroupBox->selectedId() == 1) {
+        } else if (m_importTypeStructureOnlyCheckBox->isChecked()) {
             kDebug() << "structure only selected";
             keepData = false;
         } else {

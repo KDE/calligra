@@ -66,7 +66,7 @@ protected:
     MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
     MigrateManager::ServicesMap m_services_by_mimetype;
 
-    QMap<QByteArray, *KexiMigrate> m_drivers;
+    QMap<QByteArray, KexiMigrate*> m_drivers;
     ulong m_refCount;
 
     QString m_serverErrMsg;
