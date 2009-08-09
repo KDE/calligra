@@ -1535,20 +1535,24 @@ void SvgParser::applyFilter( KoShape * shape )
             continue;
         }
 
-        QRectF subRegion = filterRegion;
+        QRectF subRegion;
         // parse subregion
         if( filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse )
         {
+            qreal x = filterRegion.x();
             if( primitive.hasAttribute( "x" ) )
-                subRegion.setX( parseUnitX( primitive.attribute( "x" ) ) ); 
+                x = parseUnitX( primitive.attribute( "x" ) ); 
+            qreal y = filterRegion.y();
             if( primitive.hasAttribute( "y" ) )
-                subRegion.setY( parseUnitY( primitive.attribute( "y" ) ) );
+                y = parseUnitY( primitive.attribute( "y" ) );
+            qreal w = filterRegion.width();
             if( primitive.hasAttribute( "width" ) )
-                subRegion.setWidth( parseUnitX( primitive.attribute( "width" ) ) );
+                w = parseUnitX( primitive.attribute( "width" ) );
+            qreal h = filterRegion.height();
             if( primitive.hasAttribute( "height" ) )
-                subRegion.setHeight( parseUnitY( primitive.attribute( "height" ) ) );
-            subRegion.setTopLeft(SvgUtil::userSpaceToObject(subRegion.topLeft(), bound));
-            subRegion.setSize(SvgUtil::userSpaceToObject(subRegion.size(), bound));
+                h = parseUnitY( primitive.attribute( "height" ) );
+            subRegion.setTopLeft(SvgUtil::userSpaceToObject(QPointF(x,y), bound));
+            subRegion.setSize(SvgUtil::userSpaceToObject(QSizeF(w,h), bound));
         }
         else
         {
