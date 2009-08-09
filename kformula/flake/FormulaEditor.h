@@ -75,11 +75,11 @@ public:
      */
     FormulaCommand* insertElement( BasicElement* element );
 
-    FormulaCommand* insertData( const QString& data );
+    /// Insert the elements encoded in MathML in data
+    FormulaCommand* insertMathML( const QString& data );
 
-    FormulaCommand* changeRows(bool insert);
-    
-    FormulaCommand* changeColumns(bool insert);
+    /// Manipulate the rows/columns of a table
+    FormulaCommand* changeTable(bool insert, bool rows);
     
     /**
      * Remove an element from the formula

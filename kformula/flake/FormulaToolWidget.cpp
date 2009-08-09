@@ -54,7 +54,6 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     m_alterTableMenu.addAction( m_tool->action( "remove_row") );
     m_alterTableMenu.addAction( m_tool->action( "remove_column") );
 
-
     // assign menus to toolbuttons
     buttonFence->setMenu( &m_fenceMenu );
     buttonFence->setDefaultAction( m_tool->action( "insert_fence" ) );

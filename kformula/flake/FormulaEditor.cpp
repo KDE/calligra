@@ -89,7 +89,7 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
     return undo;
 }
 
-FormulaCommand* FormulaEditor::insertData( const QString& data )
+FormulaCommand* FormulaEditor::insertMathML( const QString& data )
 {
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     // setup a DOM structure and start the actual loading process
@@ -104,28 +104,39 @@ FormulaCommand* FormulaEditor::insertData( const QString& data )
     return command;
 }
 
-FormulaCommand* FormulaEditor::changeColumns ( bool insert )
-{
-    return 0;
-}
-
-FormulaCommand* FormulaEditor::changeRows ( bool insert )
+FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
 {
     FormulaCommand* undo;
     TableEntryElement* entry=m_cursor.currentElement()->parentTableEntry();
     if (entry) {
         TableElement* table=static_cast<TableElement*>(entry->parentElement()->parentElement());
-        int pos=table->childElements().indexOf(entry->parentElement());
-        kDebug()<<"At Row number "<<pos;
-        if (insert) {
-            undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,pos,0,1);
-            if (undo) {
-                undo->setText("Insert Row");
+        int rowNumber=table->childElements().indexOf(entry->parentElement());
+        int columnNumber=entry->parentElement()->childElements().indexOf(entry);
+        if (rows) {
+            //Changing rows
+            if (insert) {
+                undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,0,1);
+                if (undo) {
+                    undo->setText(i18n("Insert row"));
+                }
+            } else {
+                undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,rowNumber,1,0);
+                if (undo) {
+                    undo->setText(i18n("Remove row"));
+                }
             }
         } else {
-            undo=new FormulaCommandReplaceRow(formulaData(),cursor(),table,pos,1,0);
-            if (undo) {
-                undo->setText("Remove Row");
+            //Changing columns
+            if (insert) {
+                undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,0,1);
+                if (undo) {
+                    undo->setText(i18n("Insert column"));
+                }
+            } else {
+                undo=new FormulaCommandReplaceColumn(formulaData(),cursor(),table,columnNumber,1,0);
+                if (undo) {
+                    undo->setText(i18n("Remove column"));
+                }
             }
         }
     } else {

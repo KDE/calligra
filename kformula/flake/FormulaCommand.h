@@ -163,6 +163,40 @@ private:
     QList<BasicElement*> m_oldRows;
 };
 
+class FormulaCommandReplaceColumn : public FormulaCommand {
+public:
+    FormulaCommandReplaceColumn ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
+
+    ~FormulaCommandReplaceColumn ();
+
+    /// Execute the command
+    void redo();
+
+    /// Revert the actions done in redo()
+    void undo();
+
+private:
+    FormulaData* m_data;
+
+    ///the table we are manipulating
+    TableElement* m_table;
+
+    ///used to hold the new empty row, if we remove the whole table
+    TableRowElement* m_empty;
+
+    ///used to store the old rows, if we remove the whole table
+    QList<BasicElement*> m_oldRows;
+
+    ///the position where we start to insert / remove rows
+    int m_position;
+
+    ///used to store the old columns
+    QList< QList<BasicElement*> > m_newColumns;
+
+    ///used to store the new columns
+    QList< QList<BasicElement*> > m_oldColumns;
+};
+
 
 
 // /**

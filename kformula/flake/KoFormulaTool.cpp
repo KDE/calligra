@@ -297,7 +297,8 @@ void KoFormulaTool::insert( QAction* action )
 {
     FormulaCommand *command;
     m_formulaShape->update();
-    command=m_formulaEditor->insertData( action->data().toString() );
+    command=m_formulaEditor->insertMathML
+( action->data().toString() );
     if (command!=0) {
         m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
@@ -309,11 +310,7 @@ void KoFormulaTool::changeTable ( QAction* action )
     m_formulaShape->update();
     bool row=action->data().toList()[0].toBool();
     bool insert=action->data().toList()[1].toBool();
-    if (row) {
-        command=m_formulaEditor->changeRows(insert);
-    } else {
-        command=m_formulaEditor->changeColumns(insert);
-    }
+    command=m_formulaEditor->changeTable(insert,row);
     if (command!=0) {
         m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
