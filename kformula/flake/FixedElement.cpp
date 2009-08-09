@@ -147,7 +147,7 @@ bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
     if( !element->readMathML( tmp ) ) {
         return false;
     }
-    if (element->elementType()==Row && element->childElements().count()<=1) {
+    if (element->elementType()==Row) {
         delete (*child);
         (*child)=element;
     } else {
