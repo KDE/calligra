@@ -240,6 +240,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 //! @todo move to form plugin
     tbar = d->createToolBar("form", i18n("Form Design"));
 
+//! @todo move to report plugin
+    tbar = d->createToolBar("report", i18n("Report Design"));
+    
 // tbar = new KToolBar(this);
 // addTab( tbar, i18n("Settings") );
 //moved up addAction(tbar, "options_configure_keybinding");
