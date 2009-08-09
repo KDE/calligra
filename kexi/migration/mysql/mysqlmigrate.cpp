@@ -25,7 +25,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qvariant.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <kdebug.h>
 
 #include <mysql_version.h>

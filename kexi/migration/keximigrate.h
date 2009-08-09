@@ -28,10 +28,9 @@
 #include "keximigratedata.h"
 
 #include <kgenericfactory.h>
-#include <qstringlist.h>
-#include <Q3CString>
+#include <QStringList>
+#include <QByteArray>
 #include <QPointer>
-#include <QList>
 
 class KexiProject;
 namespace Kexi
@@ -126,19 +125,19 @@ public:
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return property value for \a propeName available for this driver.
     //! If there's no such property defined for driver, Null QVariant value is returned.
-    virtual QVariant propertyValue(const Q3CString& propName);
+    virtual QVariant propertyValue(const QByteArray& propName);
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
-    void setPropertyValue(const Q3CString& propName, const QVariant& value);
+    void setPropertyValue(const QByteArray& propName, const QVariant& value);
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return translated property caption for \a propeName.
     //! If there's no such property defined for driver, empty string value is returned.
-    QString propertyCaption(const Q3CString& propName) const;
+    QString propertyCaption(const QByteArray& propName) const;
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return a list of property names available for this driver.
-    QList<Q3CString> propertyNames() const;
+    QList<QByteArray> propertyNames() const;
 
     /*! \return true is driver is valid. Checks if KexiMigrate::versionMajor()
      and KexiMigrate::versionMinor() are matching.
@@ -294,12 +293,12 @@ protected:
     /*! Driver properties dictionary (indexed by name),
      useful for presenting properties to the user.
      Set available properties here in driver implementation. */
-    QMap<Q3CString, QVariant> m_properties;
+    QMap<QByteArray, QVariant> m_properties;
 
     /*! i18n'd captions for properties. You do not need
      to set predefined properties' caption in driver implementation
      -it's done automatically. */
-    QMap<Q3CString, QString> m_propertyCaptions;
+    QMap<QByteArray, QString> m_propertyCaptions;
 
     //! KexiDB driver. For instance, it is used for escaping identifiers
     QPointer<KexiDB::Driver> m_kexiDBDriver;

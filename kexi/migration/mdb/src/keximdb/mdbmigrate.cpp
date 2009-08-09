@@ -25,7 +25,7 @@
 #include <qfile.h>
 #include <qvariant.h>
 #include <qdatetime.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <kdebug.h>
 
 #include <kexiutils/identifier.h>
@@ -34,8 +34,8 @@ using namespace KexiMigration;
 /* This is the implementation for the MDB file import routines. */
 KEXIMIGRATE_DRIVER_INFO(MDBMigrate, mdb);
 
-static Q3CString isNonUnicodePropId("source_database_has_nonunicode_encoding");
-static Q3CString nonUnicodePropId("source_database_nonunicode_encoding");
+static QByteArray isNonUnicodePropId("source_database_has_nonunicode_encoding");
+static QByteArray nonUnicodePropId("source_database_nonunicode_encoding");
 
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ void MDBMigrate::releaseBackend()
     mdb_exit();
 }
 
-QVariant MDBMigrate::propertyValue(const Q3CString& propName)
+QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 {
     if (propName == isNonUnicodePropId) {
-        m_properties[ isNonUnicodePropId ] = QVariant(false);
+        m_properties[ isNonUnicodePropId ] = false;
 
         // Costly, but we need this to get this property from file...
         drv_connect();

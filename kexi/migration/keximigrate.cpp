@@ -495,24 +495,24 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
     return KexiDB::intToFieldType(int(KexiDB::Field::FirstType) + typeNames.indexOf(res));
 }
 
-QVariant KexiMigrate::propertyValue(const Q3CString& propName)
+QVariant KexiMigrate::propertyValue(const QByteArray& propName)
 {
     return m_properties[propName.toLower()];
 }
 
-QString KexiMigrate::propertyCaption(const Q3CString& propName) const
+QString KexiMigrate::propertyCaption(const QByteArray& propName) const
 {
     return m_propertyCaptions[propName.toLower()];
 }
 
-void KexiMigrate::setPropertyValue(const Q3CString& propName, const QVariant& value)
+void KexiMigrate::setPropertyValue(const QByteArray& propName, const QVariant& value)
 {
     m_properties[propName.toLower()] = value;
 }
 
-QList<Q3CString> KexiMigrate::propertyNames() const
+QList<QByteArray> KexiMigrate::propertyNames() const
 {
-    QList<Q3CString> names = m_properties.keys();
+    QList<QByteArray> names = m_properties.keys();
     qSort(names);
     return names;
 }

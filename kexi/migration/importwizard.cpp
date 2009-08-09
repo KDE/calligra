@@ -27,9 +27,9 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3VButtonGroup>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QVButtonGroup>
 #include <QDir>
 
 #include <kcombobox.h>
@@ -148,7 +148,8 @@ void ImportWizard::parseArguments()
 void ImportWizard::setupIntro()
 {
     m_introPage = new QWidget(this);
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_introPage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_introPage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     QLabel *lblIntro = new QLabel(m_introPage);
     lblIntro->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -209,7 +210,8 @@ void ImportWizard::setupSrcType()
 void ImportWizard::setupSrcConn()
 {
     m_srcConnPage = new QWidget(this);
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_srcConnPage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     m_srcConn = new KexiConnSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationSourceDir",
@@ -249,10 +251,12 @@ void ImportWizard::setupDstType()
     KexiDB::DriverManager manager;
     KexiDB::Driver::InfoHash drvs = manager.driversInfo();
 
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_dstTypePage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_dstTypePage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    Q3HBoxLayout *hbox = new Q3HBoxLayout(vbox);
-    QLabel *lbl = new QLabel(i18n("Destination database type:") + " ", m_dstTypePage);
+    QHBoxLayout *hbox = new QHBoxLayout(vbox);
+    KexiUtils::setStandardMarginsAndSpacing(hbox);
+    QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ " "*/, m_dstTypePage);
     lbl->setAlignment(Qt::AlignAuto | Qt::AlignTop);
     hbox->addWidget(lbl);
 
@@ -291,7 +295,8 @@ void ImportWizard::setupDstTitle()
 void ImportWizard::setupDst()
 {
     m_dstPage = new QWidget(this);
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_dstPage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_dstPage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     m_dstConn = new KexiConnSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationDestinationDir",
@@ -325,16 +330,21 @@ void ImportWizard::setupDst()
 void ImportWizard::setupImportType()
 {
     m_importTypePage = new QWidget(this);
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_importTypePage, KDialog::marginHint());
-    m_importTypeButtonGroup = new Q3VButtonGroup(m_importTypePage);
-    m_importTypeButtonGroup->setLineWidth(0);
-    vbox->addWidget(m_importTypeButtonGroup);
+    QVBoxLayout *vbox = new QVBoxLayout(m_importTypePage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
+    m_importTypeGroupBox = new QGroupBox(m_importTypePage);
+    m_importTypeGroupBox->setLineWidth(0);
+    vbox->addWidget(m_importTypeGroupBox);
 
-    (void)new QRadioButton(i18n("Structure and data"), m_importTypeButtonGroup);
-    (void)new QRadioButton(i18n("Structure only"), m_importTypeButtonGroup);
+    QRadioButton *rb;
+    m_importTypeGroupBox->addWidget(
+        rb = new QRadioButton(i18n("Structure and data"), m_importTypeGroupBox));
+    rb->setChecked(true);
 
-    m_importTypeButtonGroup->setExclusive(true);
-    m_importTypeButtonGroup->setButton(0);
+    m_importTypeGroupBox->addWidget(
+        new QRadioButton(i18n("Structure only"), m_importTypeGroupBox));
+
+//    m_importTypeGroupBox->setExclusive(true);
     addPage(m_importTypePage, i18n("Select Type of Import"));
 }
 
@@ -344,7 +354,8 @@ void ImportWizard::setupImporting()
 {
     m_importingPage = new QWidget(this);
     m_importingPage->hide();
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_importingPage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_importingPage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
     m_lblImportingTxt = new QLabel(m_importingPage);
     m_lblImportingTxt->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_lblImportingTxt->setWordWrap(true);
@@ -385,7 +396,8 @@ void ImportWizard::setupFinish()
 {
     m_finishPage = new QWidget(this);
     m_finishPage->hide();
-    Q3VBoxLayout *vbox = new Q3VBoxLayout(m_finishPage, KDialog::marginHint());
+    QVBoxLayout *vbox = new QVBoxLayout(m_finishPage);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
     m_finishLbl = new QLabel(m_finishPage);
     m_finishLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_finishLbl->setWordWrap(true);
@@ -477,7 +489,8 @@ void ImportWizard::arriveSrcDBPage()
         KexiDB::ConnectionData* condata = m_srcConn->selectedConnectionData();
         if (condata) {
             m_prjSet = new KexiProjectSet(*condata);
-            Q3VBoxLayout *vbox = new Q3VBoxLayout(m_srcDBPage, KDialog::marginHint());
+            QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPage);
+            KexiUtils::setStandardMarginsAndSpacing(vbox);
             m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPage, m_prjSet);
             vbox->addWidget(m_srcDBName);
             m_srcDBName->label()->setText(i18n("Select source database you wish to import:"));
@@ -739,10 +752,10 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         }
 
         bool keepData;
-        if (m_importTypeButtonGroup->selectedId() == 0) {
+        if (m_importTypeGroupBox->selectedId() == 0) {
             kDebug() << "Structure and data selected";
             keepData = true;
-        } else if (m_importTypeButtonGroup->selectedId() == 1) {
+        } else if (m_importTypeGroupBox->selectedId() == 1) {
             kDebug() << "structure only selected";
             keepData = false;
         } else {

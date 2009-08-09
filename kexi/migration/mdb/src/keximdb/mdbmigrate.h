@@ -26,7 +26,7 @@
 #include <kexidb/keximigrate.h>
 #include <kexidb/field.h>
 #include <kexidb/connection.h>
-#include <Q3CString>
+#include <QByteArray>
 
 namespace KexiMigration
 {
@@ -58,7 +58,7 @@ public:
 
     //! Reimplemented to add support for "sourceDatabaseHasNonUnicodeEncoding" property
     //! @todo this should be in Connection class but Migration framework has no such yet!
-    virtual QVariant propertyValue(const Q3CString& propName);
+    virtual QVariant propertyValue(const QByteArray& propName);
 
 protected:
     //! Driver specific function to return table names

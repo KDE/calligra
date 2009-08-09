@@ -23,7 +23,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qvariant.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <qdir.h>
 #include <kdebug.h>
 
