@@ -52,11 +52,11 @@
 #include <QtGui/QDesktopWidget>
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
-: KoPAView( document, parent )
-, m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
-, m_normalMode( m_viewMode )
-, m_notesMode( new KPrViewModeNotes(this, m_canvas))
-, m_dbus( new KPrViewAdaptor( this ) )
+  : KoPAView( document, parent )
+  , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
+  , m_normalMode( viewMode() )
+  , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
+  , m_dbus( new KPrViewAdaptor( this ) )
 {
     initGUI();
     initActions();
@@ -96,7 +96,7 @@ KoViewConverter * KPrView::viewConverter( KoPACanvas * canvas )
 
 KPrDocument * KPrView::kprDocument() const
 {
-    return static_cast<KPrDocument *>( m_doc );
+    return static_cast<KPrDocument *>( kopaDocument() );
 }
 
 KPrViewAdaptor * KPrView::dbusObject() const
@@ -133,7 +133,7 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
-    if ( !m_doc->isReadWrite() )
+    if ( !kopaDocument()->isReadWrite() )
        setXMLFile( "kpresenter_readonly.rc" );
     else
        setXMLFile( "kpresenter.rc" );
@@ -189,7 +189,7 @@ void KPrView::startPresentation()
 
 void KPrView::startPresentationFromBeginning()
 {
-    KPrDocument * doc = dynamic_cast<KPrDocument *>( m_doc );
+    KPrDocument * doc = dynamic_cast<KPrDocument *>( kopaDocument() );
     QList<KoPAPageBase*> slideshow = doc->slideShow();
     if ( !slideshow.isEmpty() ) {
         setActivePage( slideshow.first() );
@@ -207,14 +207,14 @@ void KPrView::stopPresentation()
 void KPrView::createAnimation()
 {
     static int animationcount = 0;
-    KoSelection * selection = m_canvas->shapeManager()->selection();
+    KoSelection * selection = kopaCanvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     foreach( KoShape * shape, selectedShapes )
     {
         KPrShapeAnimation * animation = new KPrAnimationMoveAppear( shape, animationcount );
-        KPrDocument * doc = static_cast<KPrDocument *>( m_doc );
+        KPrDocument * doc = static_cast<KPrDocument *>( kopaDocument() );
         KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( doc, animation );
-        m_canvas->addCommand( command );
+        kopaCanvas()->addCommand( command );
     }
     animationcount = ( animationcount + 1 ) % 3;
 }
@@ -228,7 +228,7 @@ void KPrView::showNotes()
 {
     // Make sure that we are not in master mode
     // since notes master is not supported yet
-    if ( m_viewMode->masterMode() ) {
+    if ( viewMode()->masterMode() ) {
         actionCollection()->action( "view_masterpages" )->setChecked( false );
         setMasterMode( false );
     }
@@ -237,12 +237,12 @@ void KPrView::showNotes()
 
 void KPrView::dialogCustomSlideShows()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
+    KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
     KPrCustomSlideShows *finalSlideShows;
     KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
-        m_canvas->addCommand( new KPrSetCustomSlideShowsCommand( doc, finalSlideShows ) );
+        kopaCanvas()->addCommand( new KPrSetCustomSlideShowsCommand( doc, finalSlideShows ) );
     }
     else {
         delete finalSlideShows;
@@ -251,7 +251,7 @@ void KPrView::dialogCustomSlideShows()
 
 void KPrView::configureSlideShow()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
+    KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
     KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );
 
     if ( dialog->exec() == QDialog::Accepted ) {
@@ -262,7 +262,7 @@ void KPrView::configureSlideShow()
 
 void KPrView::configurePresenterView()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
+    KPrDocument *doc = static_cast<KPrDocument *>( kopaDocument() );
     KPrConfigurePresenterViewDialog *dialog = new KPrConfigurePresenterViewDialog( doc, this );
 
     if ( dialog->exec() == QDialog::Accepted ) {
