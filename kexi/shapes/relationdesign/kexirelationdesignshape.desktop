@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Kexi Relation Design Shape
+ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=kexirelationdesignshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
