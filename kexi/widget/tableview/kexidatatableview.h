@@ -54,6 +54,8 @@ public:
 
 //  virtual void initActions(KActionCollection *col);
 
+    using KexiTableView::setData;
+
     /*! Fills table view with data using \a cursor. \return true on success.
      Cursor \a cursor will not be owned by this object. */
     bool setData(KexiDB::Cursor *cursor);
@@ -68,7 +70,7 @@ public:
      * @returns the number of records in the data set, (if data set is present)
      * @note not all of the records have to be processed
      */
-    int recordCount() {
+    int recordCount() const {
         return m_data->count();
     }
 
