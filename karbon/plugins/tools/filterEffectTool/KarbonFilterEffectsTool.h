@@ -22,6 +22,8 @@
 
 #include "KoTool.h"
 
+class KoResource;
+
 class KarbonFilterEffectsTool : public KoTool
 {
     Q_OBJECT
@@ -48,15 +50,12 @@ protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private slots:
-    void addFilter();
-    void removeFilter();
-    void raiseFilter();
-    void lowerFilter();
     void editFilter();
     void filterChanged();
     void filterSelected(int index);
     void selectionChanged();
-
+    void presetSelected(KoResource *resource);
+    
 private:
     class Private;
     Private * const d;
