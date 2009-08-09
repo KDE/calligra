@@ -509,7 +509,7 @@ void KexiCSVImportDialog::fillTable()
             m_table->clearCell(row, column);
 
     m_detectedTypes.clear();
-    m_detectedTypes.resize(1024, _NO_TYPE_YET);//_TEXT_TYPE);
+    m_detectedTypes.fill(_NO_TYPE_YET, 1024);//_TEXT_TYPE);
     qDeleteAll(m_uniquenessTest);
     m_uniquenessTest.clear();
     m_uniquenessTest.resize(1024);

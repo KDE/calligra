@@ -192,8 +192,10 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
-            if (i > 0)
+            if (i > 0) {
                 APPEND(delimiter);
+            }
+
             if (hasTextQuote) {
                 APPEND(textQuote + fields[i]->captionOrAliasOrName().replace(textQuote, escapedTextQuote) + textQuote);
             } else {
@@ -213,10 +215,14 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
         for (uint i = 0; i < realFieldCount; i++) {
             const uint real_i = visibleFieldIndex[i];
-            if (i > 0)
+            if (i > 0) {
                 APPEND(delimiter);
-            if (cursor->value(real_i).isNull())
+            }
+
+            if (cursor->value(real_i).isNull()) {
                 continue;
+            }
+
             if (isText[real_i]) {
                 if (hasTextQuote)
                     APPEND(textQuote + QString(cursor->value(real_i).toString()).replace(textQuote, escapedTextQuote) + textQuote);

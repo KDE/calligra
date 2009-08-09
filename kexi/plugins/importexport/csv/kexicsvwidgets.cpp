@@ -34,6 +34,7 @@
 #include <kio/global.h>
 
 #include <kexi_global.h>
+#include <kexiutils/utils.h>
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
