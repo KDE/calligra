@@ -175,7 +175,7 @@ int Object::askQuestion(const QString& message,
                         const KGuiItem &buttonYes,
                         const KGuiItem &buttonNo,
                         const QString &dontShowAskAgainName,
-                        int options,
+                        KMessageBox::Options options,
                         MessageHandler* msgHandler)
 {
     if (msgHandler)

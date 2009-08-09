@@ -161,7 +161,7 @@ protected:
                             const KGuiItem &buttonYes = KStandardGuiItem::yes(),
                             const KGuiItem &buttonNo = KStandardGuiItem::no(),
                             const QString &dontShowAskAgainName = QString(),
-                            int options = KMessageBox::Notify,
+                            KMessageBox::Options options = KMessageBox::Notify,
                             MessageHandler* msgHandler = 0);
 
     /*! Clears number of last server operation's result stored

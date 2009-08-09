@@ -50,7 +50,7 @@ int MessageHandler::askQuestion(const QString& message,
                                 const KGuiItem &buttonYes,
                                 const KGuiItem &buttonNo,
                                 const QString &dontShowAskAgainName,
-                                int options)
+                                KMessageBox::Options options)
 {
     Q_UNUSED(message);
     Q_UNUSED(dlgType);

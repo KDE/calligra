@@ -89,7 +89,7 @@ public:
                             const KGuiItem &buttonYes = KStandardGuiItem::yes(),
                             const KGuiItem &buttonNo = KStandardGuiItem::no(),
                             const QString &dontShowAskAgainName = QString(),
-                            int options = KMessageBox::Notify);
+                            KMessageBox::Options options = KMessageBox::Notify);
 
 protected:
     QPointer<QWidget> m_messageHandlerParentWidget;
