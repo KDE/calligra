@@ -295,7 +295,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     foreach(KexiRelationsTableContainer* cont, *d->relations->tables()) {
         sortedTableNames += cont->schema()->name();
     }
-    qHeapSort(sortedTableNames);
+    qSort(sortedTableNames);
 
     //several tables can be hidden now, so remove rows for these tables
     QList<int> rowsToDelete;
@@ -1354,7 +1354,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 //  kexipluginsdbg << res;
         valueExpr = new KexiDB::ConstExpr(DATETIME_CONST,
                                           QDateTime::fromString(res, Qt::ISODate));
-    } else if (str[0] >= '0' && str[0] <= '9' || str[0] == '-' || str[0] == '+') {
+    } else if ((str[0] >= '0' && str[0] <= '9') || str[0] == '-' || str[0] == '+') {
         //number
         QString decimalSym = KGlobal::locale()->decimalSymbol();
         bool ok;
