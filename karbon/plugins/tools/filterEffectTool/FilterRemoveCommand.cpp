@@ -17,48 +17,51 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "FilterAddCommand.h"
+#include "FilterRemoveCommand.h"
 #include "KoShape.h"
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 
 #include <KLocale>
 
-FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, QUndoCommand *parent)
-: QUndoCommand(parent), m_filterEffect(filterEffect), m_shape(shape), m_isAdded(false)
+FilterRemoveCommand::FilterRemoveCommand(int filterEffectIndex, KoFilterEffectStack * filterStack, KoShape * shape, QUndoCommand *parent)
+: QUndoCommand(parent), m_filterEffect(0), m_filterStack(filterStack), m_shape(shape)
+, m_isRemoved(false), m_filterEffectIndex(filterEffectIndex)
 {
-    Q_ASSERT(m_shape);
-    setText(i18n("Add filter effect"));
+    Q_ASSERT(filterStack);
+    setText(i18n("Remove filter effect"));
 }
 
-FilterAddCommand::~FilterAddCommand()
+FilterRemoveCommand::~FilterRemoveCommand()
 {
-    if (!m_isAdded)
+    if (m_isRemoved)
         delete m_filterEffect;
 }
 
-void FilterAddCommand::redo()
+void FilterRemoveCommand::redo()
 {
     QUndoCommand::redo();
     
-    if (m_shape->filterEffectStack()) {
+    if (m_shape)
         m_shape->update();
-        m_shape->filterEffectStack()->appendFilterEffect(m_filterEffect);
+    
+    m_filterEffect = m_filterStack->takeFilterEffect(m_filterEffectIndex);
+    m_isRemoved = true;
+    
+    if (m_shape)
         m_shape->update();
-        m_isAdded = true;
-    }
 }
 
-void FilterAddCommand::undo()
+void FilterRemoveCommand::undo()
 {
-    if (m_shape->filterEffectStack()) {
-        int index = m_shape->filterEffectStack()->filterEffects().indexOf(m_filterEffect);
-        if (index >= 0) {
-            m_shape->update();
-            m_shape->filterEffectStack()->takeFilterEffect(index);
-            m_shape->update();
-        }
-        m_isAdded = false;
-    }
+    if (m_shape)
+        m_shape->update();
+    
+    m_filterStack->insertFilterEffect(m_filterEffectIndex, m_filterEffect);
+    m_isRemoved = false;
+    
+    if (m_shape)
+        m_shape->update();
+    
     QUndoCommand::undo();
 }

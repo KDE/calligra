@@ -22,6 +22,7 @@
 #include "FilterResourceServerProvider.h"
 #include "FilterInputChangeCommand.h"
 #include "FilterAddCommand.h"
+#include "FilterRemoveCommand.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
@@ -179,55 +180,55 @@ void FilterEffectEditWidget::removeSelectedItem()
     
     QList<InputChangeData> changeData;
     QList<KoFilterEffect*> filterEffects = m_effects->filterEffects();
+    int effectIndexToDelete = -1;
     
-    foreach(const ConnectionSource &item, selectedItems) {
-        KoFilterEffect * effect = item.effect();
-        if (item.type() == ConnectionSource::Effect) {
-            int effectIndex = filterEffects.indexOf(effect);
-            // adjust inputs of all following effects in the stack
-            for (int i = effectIndex+1; i < filterEffects.count(); ++i) {
-                KoFilterEffect * nextEffect = filterEffects[i];
-                QList<QString> inputs = nextEffect->inputs();
-                int inputIndex = 0;
-                foreach(const QString &input, inputs) {
-                    if(input == effect->output()) {
-                        InputChangeData data(nextEffect, inputIndex, input, "");
-                        changeData.append(data);
-                    }
-                }
-                // if one of the next effects has the same output name we stop
-                if (nextEffect->output() == effect->output())
-                    break;
-            }
-            // remove the effect from the stack
-            if (m_shape)
-                m_shape->update();
-            
-            m_effects->removeFilterEffect(effectIndex);
-            
-            if (m_shape)
-                m_shape->update();
-        } else {
-            QString outputName = ConnectionSource::typeToString(item.type());
-            QList<QString> inputs = effect->inputs();
+    const ConnectionSource &item  = selectedItems.first();
+    KoFilterEffect * effect = item.effect();
+    if (item.type() == ConnectionSource::Effect) {
+        int effectIndex = filterEffects.indexOf(effect);
+        // adjust inputs of all following effects in the stack
+        for (int i = effectIndex+1; i < filterEffects.count(); ++i) {
+            KoFilterEffect * nextEffect = filterEffects[i];
+            QList<QString> inputs = nextEffect->inputs();
             int inputIndex = 0;
             foreach(const QString &input, inputs) {
-                if (input == outputName) {
-                    InputChangeData data(effect, inputIndex, input, "");
+                if(input == effect->output()) {
+                    InputChangeData data(nextEffect, inputIndex, input, "");
                     changeData.append(data);
                 }
-                inputIndex++;
             }
+            // if one of the next effects has the same output name we stop
+            if (nextEffect->output() == effect->output())
+                break;
+        }
+        effectIndexToDelete = effectIndex;
+    } else {
+        QString outputName = ConnectionSource::typeToString(item.type());
+        QList<QString> inputs = effect->inputs();
+        int inputIndex = 0;
+        foreach(const QString &input, inputs) {
+            if (input == outputName) {
+                InputChangeData data(effect, inputIndex, input, "");
+                changeData.append(data);
+            }
+            inputIndex++;
         }
     }
+
+    QUndoCommand * cmd = new QUndoCommand();
     if (changeData.count()) {
-        QUndoCommand * cmd = new FilterInputChangeCommand(changeData, m_shape);
-        if (m_canvas) {
-            m_canvas->addCommand(cmd);
-        } else {
-            cmd->redo();
-            delete cmd;
-        }
+        QUndoCommand * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
+        cmd->setText(subCmd->text());
+    }
+    if (effectIndexToDelete >= 0) {
+        QUndoCommand * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
+        cmd->setText(subCmd->text());
+    }
+    if (m_canvas && m_shape) {
+        m_canvas->addCommand(cmd);
+    } else {
+        cmd->redo();
+        delete cmd;
     }
     m_scene->initialize(m_effects);
     fitScene();
