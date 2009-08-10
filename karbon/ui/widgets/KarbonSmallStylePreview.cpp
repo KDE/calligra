@@ -112,7 +112,7 @@ protected:
             painter.setFont( KGlobalSettings::smallestReadableFont() );
             painter.setBrush( Qt::black );
             painter.setPen( Qt::black );
-            painter.drawText( rect(), Qt::AlignCenter, i18nc( "The style as no fill", "None" ) );
+            painter.drawText( rect(), Qt::AlignCenter, i18nc( "The style has no fill", "None" ) );
         }
 
         painter.end();
