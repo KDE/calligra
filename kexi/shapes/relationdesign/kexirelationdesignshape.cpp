@@ -142,15 +142,15 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
 
         m_fieldData.clear();
         m_relationSchema = 0;
-        
-        if ( m_connection->tableSchema ( m_relation ) ) {
-            kDebug() << m_relation <<  " is a table..";
-            m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->tableSchema ( m_relation ) );
-        } else if ( m_connection->querySchema ( m_relation ) ) {
-            kDebug() << m_relation <<  " is a query..";
-            m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->querySchema ( m_relation ) );
+        if (m_connection && m_connection->isConnected()) {
+            if ( m_connection->tableSchema ( m_relation ) ) {
+                kDebug() << m_relation <<  " is a table..";
+                m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->tableSchema ( m_relation ) );
+            } else if ( m_connection->querySchema ( m_relation ) ) {
+                kDebug() << m_relation <<  " is a query..";
+                m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->querySchema ( m_relation ) );
+            }
         }
-  
         if (m_relationSchema) { //We have the schema, so lets lets paint it
             KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
             uint i = 0;
