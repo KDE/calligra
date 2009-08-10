@@ -225,7 +225,8 @@ void KarbonFilterEffectsTool::editFilter()
     
     dlg->setMainWidget(editor);
     dlg->exec();
-
+    delete dlg;
+    
     d->fillConfigSelector(d->currentShape);
 }
 
