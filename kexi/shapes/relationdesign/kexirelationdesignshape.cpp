@@ -67,20 +67,18 @@ void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& 
     painter.setFont(f);
     
     if (m_connection) {
-        kDebug() << m_connection->currentDatabase();
-        painter.drawText(converter.documentToView(QPointF(5.0, 11.0)), m_connection->currentDatabase() + " : " + m_relation);
+        painter.drawText(converter.documentToView(QPointF(5.0, 11.0)), m_database + " : " + m_relation);
 
-        if (m_relationSchema) { //We have the schema, so lets lets paint it
-            KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
-            uint i = 0;
-            foreach(KexiDB::QueryColumnInfo *column, columns) {
-                ++i;
-                painter.drawText(converter.documentToView(QPointF(15.0, (13.0 * i) + 20)), column->aliasOrName() + " - " + column->field->typeName());
-                
+        uint i = 0;
+        uint offset;
+        foreach (SimpleField *column, m_fieldData) {
+            ++i;
+            offset = (13.0*i) + 20;
+            painter.drawText(converter.documentToView(QPointF(15.0, offset)), column->name + " - " + column->type);
+            if (column->pkey) {
+                painter.drawEllipse(converter.documentToView(QPointF(8.0, offset - 4)), converter.documentToViewX(4.0), converter.documentToViewY(4.0));
             }
-            
         }
-        
     }
 
     painter.restore();
@@ -111,7 +109,9 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
 
         if (m_connection) {
             if (m_connection->connect()) {
-                m_connection->useDatabase(m_connectionData->dbFileName());
+                if(m_connection->useDatabase(m_connectionData->dbFileName())){
+                    m_database = m_connection->currentDatabase();
+                }
             }
             else {
                 kDebug() << "Unable to connect";
@@ -136,9 +136,13 @@ KexiDB::Connection* KexiRelationDesignShape::connection(){
 }
 
 void KexiRelationDesignShape::setRelation(const QString& rel){
+    kDebug() << rel;
     if (m_relation != rel) {
         m_relation = rel;
 
+        m_fieldData.clear();
+        m_relationSchema = 0;
+        
         if ( m_connection->tableSchema ( m_relation ) ) {
             kDebug() << m_relation <<  " is a table..";
             m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->tableSchema ( m_relation ) );
@@ -146,6 +150,16 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
             kDebug() << m_relation <<  " is a query..";
             m_relationSchema = new KexiDB::TableOrQuerySchema ( m_connection->querySchema ( m_relation ) );
         }
+  
+        if (m_relationSchema) { //We have the schema, so lets lets paint it
+            KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
+            uint i = 0;
+            foreach(KexiDB::QueryColumnInfo *column, columns) {
+                m_fieldData.append(new SimpleField(column));
+            }
+            
+        }
+        
         update();
     }
 }

@@ -137,6 +137,7 @@ void KexiRelationDesignTool::changeUrlPressed()
 
 void KexiRelationDesignTool::updateCombo()
 {
+    m_relationCombo->clear();
     m_relationCombo->addItems(queryList());
 }
 

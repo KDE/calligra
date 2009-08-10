@@ -7,6 +7,7 @@ kexirelationdesignfactory.cpp
 kexirelationdesignshapeplugin.cpp
 kexirelationdesigntool.cpp
 kexirelationdesigntoolfactory.cpp
+simplefield.cpp
 )
 
 kde4_add_plugin(kexirelationdesignshape ${kexirelationdesignshape_PART_SRCS})

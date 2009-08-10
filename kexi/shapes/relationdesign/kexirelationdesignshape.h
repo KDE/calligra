@@ -19,6 +19,7 @@
 
 #include <KoShape.h>
 #include <KUrl>
+#include "simplefield.h"
 
 namespace KexiDB {
 class Connection;
@@ -45,10 +46,16 @@ class KexiRelationDesignShape : public KoShape {
         KexiDB::Connection* connection();
         
     private:
+        //Data for display
+        QString m_relation;
+        QString m_database;
+        QVector<SimpleField*> m_fieldData;
+        
+        //Other data
         KexiDB::ConnectionData *m_connectionData;
         KexiDB::Connection *m_connection;
-        QString m_relation;
         KexiDB::TableOrQuerySchema* m_relationSchema;
+        
 };
 
 #endif // KEXIRELATIONDESIGNSHAPE_H
