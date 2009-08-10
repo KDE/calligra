@@ -80,6 +80,8 @@ add_subdirectory( migration )
 add_subdirectory( plugins )
 add_subdirectory( tests )
 
+add_subdirectory(shapes)
+
 ########### next target ###############
 
 set(kexi_SRCS main.cpp )
