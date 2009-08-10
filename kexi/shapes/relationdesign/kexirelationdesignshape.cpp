@@ -22,6 +22,8 @@
 #include <kexidb/utils.h>
 #include <kdebug.h>
 #include <kexidb/queryschema.h>
+#include <KoXmlWriter.h>
+#include <KoShapeSavingContext.h>
 
 KexiRelationDesignShape::KexiRelationDesignShape() {
     m_connection = 0;
@@ -38,6 +40,52 @@ KexiRelationDesignShape::~KexiRelationDesignShape() {
 }
 
 void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
+    KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    
+    writer.startElement("kexirelation:shape");
+    writer.addAttribute("xmlns:kexirelation", "http://www.koffice.org/kexi");
+    writer.startElement("relation");
+    writer.addAttribute("database", m_database);
+    writer.addAttribute("relation", m_relation);
+    foreach(SimpleField* column, m_fieldData) {
+        writer.startElement("relation:column");
+        writer.addAttribute("name", column->name);
+        writer.addAttribute("type", column->type);
+        writer.addAttribute("primarykey", column->pkey);
+        writer.addAttribute("notnull", column->notnull);
+        writer.endElement();
+    }
+    writer.endElement(); //relation
+    writer.endElement(); //kexirelation:shape
+
+#if 0
+    // Save a preview image
+    qreal previewDPI = 150;
+    QSizeF imgSize = size(); // in points
+    imgSize *= previewDPI / 72;
+    QImage img(imgSize.toSize(), QImage::Format_ARGB32);
+    QPainter painter(&img);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    KoZoomHandler converter;
+    converter.setZoomAndResolution(100, previewDPI, previewDPI);
+    constPaint(painter, converter);
+    writer.startElement("draw:image");
+    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+    QString name = context.imageHref(img);
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("xlink:href", name);
+    writer.endElement(); // draw:image
+    
+    // TODO: Save a preview svg
+
+#endif
+    saveOdfCommonChildElements(context);
+    writer.endElement(); // draw:frame
 
 }
 
