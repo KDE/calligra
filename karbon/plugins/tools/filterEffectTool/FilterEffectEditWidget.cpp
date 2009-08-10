@@ -21,6 +21,7 @@
 #include "FilterEffectResource.h"
 #include "FilterResourceServerProvider.h"
 #include "FilterInputChangeCommand.h"
+#include "FilterAddCommand.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
@@ -156,16 +157,15 @@ void FilterEffectEditWidget::addSelectedEffect()
     if (!effect)
         return;
     
-    if (m_shape)
-        m_shape->update();
-    
-    m_effects->appendFilterEffect(effect);
-    
-    if (m_shape && ! m_shape->filterEffectStack())
-        m_shape->setFilterEffectStack(m_effects);
-
-    if (m_shape)
-        m_shape->update();
+    if (m_shape) {
+        if (! m_shape->filterEffectStack()) {
+            m_shape->update();
+            m_shape->setFilterEffectStack(m_effects);
+        }
+        m_canvas->addCommand(new FilterAddCommand(effect, m_shape));
+    } else {
+        m_effects->appendFilterEffect(effect);
+    }
     
     m_scene->initialize(m_effects);
     fitScene();
