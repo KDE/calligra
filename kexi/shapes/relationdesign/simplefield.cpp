@@ -17,9 +17,24 @@
 #include "simplefield.h"
 
 
+SimpleField::SimpleField() {
+    pkey = false;
+    notnull = false;
+}
+
 SimpleField::SimpleField ( KexiDB::QueryColumnInfo* col) {
 name = col->aliasOrName();
 type = col->field->typeName();
 pkey = col->field->isPrimaryKey();
 notnull = col->field->isNotNull();
+}
+
+void SimpleField::save(KoXmlWriter &writer)
+{
+    writer.startElement("relation:column");
+    writer.addAttribute("name", name);
+    writer.addAttribute("type", type);
+    writer.addAttribute("primarykey", pkey);
+    writer.addAttribute("notnull", notnull);
+    writer.endElement();
 }

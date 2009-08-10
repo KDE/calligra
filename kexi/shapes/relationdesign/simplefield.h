@@ -19,11 +19,14 @@
 
 #include <QString>
 #include <kexidb/queryschema.h>
+#include <KoXmlWriter.h>
 
 class SimpleField {
     public:
+        SimpleField();
         SimpleField(KexiDB::QueryColumnInfo*);
-
+        void save(KoXmlWriter& writer);
+        
         QString name;
         QString type;
         bool pkey;

@@ -50,12 +50,7 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
     foreach(SimpleField* column, m_fieldData) {
-        writer.startElement("relation:column");
-        writer.addAttribute("name", column->name);
-        writer.addAttribute("type", column->type);
-        writer.addAttribute("primarykey", column->pkey);
-        writer.addAttribute("notnull", column->notnull);
-        writer.endElement();
+        column->save(writer);
     }
     writer.endElement(); //relation
     writer.endElement(); //kexirelation:shape
