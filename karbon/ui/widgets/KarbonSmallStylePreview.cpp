@@ -112,7 +112,7 @@ protected:
             painter.setFont( KGlobalSettings::smallestReadableFont() );
             painter.setBrush( Qt::black );
             painter.setPen( Qt::black );
-            painter.drawText( rect(), Qt::AlignCenter, i18n( "None" ) );
+            painter.drawText( rect(), Qt::AlignCenter, i18nc( "The style as no fill", "None" ) );
         }
 
         painter.end();
@@ -190,7 +190,7 @@ protected:
                 painter.setFont( KGlobalSettings::smallestReadableFont() );
                 painter.setBrush( Qt::black );
                 painter.setPen( Qt::black );
-                painter.drawText( rect(), Qt::AlignCenter, i18n( "Custom" ) );
+                painter.drawText( rect(), Qt::AlignCenter, i18nc( "The style has a custom stroking", "Custom" ) );
             }
         }
         else
@@ -198,7 +198,7 @@ protected:
             painter.setFont( KGlobalSettings::smallestReadableFont() );
             painter.setBrush( Qt::black );
             painter.setPen( Qt::black );
-            painter.drawText( rect(), Qt::AlignCenter, i18n( "None" ) );
+            painter.drawText( rect(), Qt::AlignCenter, i18nc( "The style has no stroking", "None" ) );
         }
 
         painter.end();
