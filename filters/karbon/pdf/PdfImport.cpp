@@ -35,7 +35,6 @@
 
 #include <poppler/PDFDoc.h>
 #include <poppler/GlobalParams.h>
-#include <poppler/ArthurOutputDev.h>
 
 typedef KGenericFactory<PdfImport> PdfImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonpdfimport, PdfImportFactory( "kofficefilters" ) )
@@ -87,20 +86,6 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
 
     kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
 
-    /*
-    QSvgGenerator svg;
-    svg.setFileName( m_chain->outputFile() );
-    QPainter painter( &svg );
-    ArthurOutputDev * dev = new ArthurOutputDev( &painter );
-    if( dev )
-    {
-        int rotate = 0;
-        GBool useMediaBox = gTrue;
-        GBool crop = gFalse;
-        GBool printing = gFalse;
-        pdfDoc->displayPages( dev, firstPage, lastPage, hDPI, vDPI, rotate, useMediaBox, crop, printing );
-    }
-    */
     SvgOutputDev * dev = new SvgOutputDev( m_chain->outputFile() );
     if( dev->isOk() )
     {
