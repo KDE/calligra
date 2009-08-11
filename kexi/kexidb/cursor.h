@@ -45,12 +45,15 @@ class RowEditBuffer;
 
   You can move cursor to next record with moveNext() and move back with movePrev().
   The cursor is always positioned on record, not between records, with exception that
-  ofter open() it is positioned before first record (if any) -- then bof() equals true,
-  and can be positioned after the last record (if any) with moveNext() -- then eof() equals true,
-  For example, if you have four records 1, 2, 3, 4, then after calling moveNext(),
+  after open() it is positioned before the first record (if any) -- then bof() equals true.
+  The cursor can also be positioned after the last record (if any) with moveNext() -- then eof() equals true.
+  For example, if you have four records, 1, 2, 3, 4, then after calling open(), moveNext(),
   moveNext(), moveNext(), movePrev() you are going through records: 1, 2, 3, 2.
 
-  Cursor can be buffered or unbuferred.
+  Cursor can be buffered or unbuffered.
+  
+  @warning Buffered cursors are not implemented!
+
   Buffering in this class is not related to any SQL engine capatibilities for server-side cursors
   (eg. like 'DECLARE CURSOR' statement) - buffered data is at client (application) side.
   Any record retrieved in buffered cursor will be stored inside an internal buffer
