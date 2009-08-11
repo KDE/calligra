@@ -198,7 +198,7 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
         }
     }
     if (undo) {
-        undo->setText(18n("Remove stuff"));
+        undo->setText(i18n("Remove stuff"));
     }
     return undo;
 }
