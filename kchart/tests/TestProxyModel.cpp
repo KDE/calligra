@@ -22,7 +22,7 @@
 #include "TestProxyModel.h"
 
 // KChart
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "DataSet.h"
 #include "TableModel.h"
 #include "CellRegion.h"
@@ -108,7 +108,7 @@ void TestProxyModel::initTestCase()
     QRect selection( QPoint( 1, 1 ),
                      QSize( m_sourceModel->columnCount(), m_sourceModel->rowCount() ) );
     
-    m_proxyModel = new ProxyModel;
+    m_proxyModel = new ChartProxyModel;
     m_proxyModel->setSourceModel( m_sourceModel, QVector<QRect>( 1, selection ) );
 }
 

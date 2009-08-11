@@ -24,7 +24,7 @@
 #include <QtTest/QtTest>
 
 namespace KChart {
-    class ProxyModel;
+    class ChartProxyModel;
     class TableModel;
 }
 
@@ -47,7 +47,7 @@ private slots:
     
 private:
     TableModel *m_sourceModel;
-    ProxyModel *m_proxyModel;
+    ChartProxyModel *m_proxyModel;
 };
     
 #endif // KCHART_TESTPROXYMODEL_H
