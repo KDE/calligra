@@ -36,7 +36,7 @@ public:
     ~KPrDocument();
 
     /// reimplemented
-    virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
+    virtual KoPAPage *newPage(KoPAMasterPage *masterPage);
     /// reimplemented
     virtual KoPAMasterPage * newMasterPage();
 

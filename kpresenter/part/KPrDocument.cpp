@@ -156,6 +156,7 @@ bool KPrDocument::loadOdfDocumentStyles( KoPALoadingContext & context )
 
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 {
+    Q_ASSERT(masterPage);
     return new KPrPage( masterPage, this );
 }
 
