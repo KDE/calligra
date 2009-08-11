@@ -22,19 +22,45 @@
 
 // Local
 #include "ChartShape.h"
-#include "KDChartConvertions.h"
-#include "Axis.h"
-#include "DataSet.h"
-#include "Legend.h"
-#include "PlotArea.h"
-#include "Surface.h"
-#include "ProxyModel.h"
-#include "TextLabelDummy.h"
-#include "ChartDocument.h"
-#include "TableModel.h"
 
 // Posix
 #include <float.h> // For basic data types characteristics.
+
+// Qt
+#include <QPointF>
+#include <QPainter>
+#include <QSizeF>
+#include <QTextDocument>
+#include <QStandardItemModel>
+
+// KDE
+#include <KDebug>
+#include <KApplication>
+#include <KMessageBox>
+#include <KMimeType>
+#include <KUrl>
+
+// KDChart
+#include <KDChartChart>
+#include <KDChartAbstractDiagram>
+#include <KDChartCartesianAxis>
+#include <KDChartCartesianCoordinatePlane>
+#include <KDChartPolarCoordinatePlane>
+#include "KDChartConvertions.h"
+// Attribute Classes
+#include <KDChartDataValueAttributes>
+#include <KDChartGridAttributes>
+#include <KDChartTextAttributes>
+#include <KDChartMarkerAttributes>
+#include <KDChartThreeDPieAttributes>
+#include <KDChartThreeDBarAttributes>
+#include <KDChartThreeDLineAttributes>
+// Diagram Classes
+#include <KDChartBarDiagram>
+#include <KDChartPieDiagram>
+#include <KDChartLineDiagram>
+#include <KDChartRingDiagram>
+#include <KDChartPolarDiagram>
 
 // KOffice
 #include <KoShapeLoadingContext.h>
@@ -63,40 +89,16 @@
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
 
-// KDChart
-#include <KDChartChart>
-#include <KDChartAbstractDiagram>
-#include <KDChartCartesianAxis>
-#include <KDChartCartesianCoordinatePlane>
-#include <KDChartPolarCoordinatePlane>
-// Attribute Classes
-#include <KDChartDataValueAttributes>
-#include <KDChartGridAttributes>
-#include <KDChartTextAttributes>
-#include <KDChartMarkerAttributes>
-#include <KDChartThreeDPieAttributes>
-#include <KDChartThreeDBarAttributes>
-#include <KDChartThreeDLineAttributes>
-// Diagram Classes
-#include <KDChartBarDiagram>
-#include <KDChartPieDiagram>
-#include <KDChartLineDiagram>
-#include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
-
-// Qt
-#include <QPointF>
-#include <QPainter>
-#include <QSizeF>
-#include <QTextDocument>
-#include <QStandardItemModel>
-
-// KDE
-#include <KDebug>
-#include <KApplication>
-#include <KMessageBox>
-#include <KMimeType>
-#include <KUrl>
+// KChart
+#include "Axis.h"
+#include "DataSet.h"
+#include "Legend.h"
+#include "PlotArea.h"
+#include "Surface.h"
+#include "ProxyModel.h"
+#include "TextLabelDummy.h"
+#include "ChartDocument.h"
+#include "TableModel.h"
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -188,7 +190,7 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
     // TODO: Read optional attributes
     // 1. Table range
     KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
-                                            KoXmlNS::text, "p" );
+                                                 KoXmlNS::text, "p" );
 
     labelData->document()->setPlainText( pElement.text() );
 
@@ -199,9 +201,11 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
 
 void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, OdfLabelType odfLabelType )
 {
-    // Don't save hidden labels, as that's the way of removing them from a chart.
+    // Don't save hidden labels, as that's the way of removing them
+    // from a chart.
     if ( !label->isVisible() )
         return;
+
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
         return;
@@ -212,10 +216,12 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
         bodyWriter.startElement( "chart:subtitle" );
     else // if ( odfLabelType == Title )
         bodyWriter.startElement( "chart:title" );
+
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
     bodyWriter.addAttributePt( "svg:y", label->position().y() );
     // TODO: Save text label color
     bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, labelData->document()->defaultFont(), QColor() ) );
+
     bodyWriter.startElement( "text:p" );
     bodyWriter.addTextNode( labelData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
@@ -247,6 +253,11 @@ QColor defaultDataSetColor( int dataSetNum )
     return QColor( defaultDataSetColors[ dataSetNum ] );
 }
 
+
+// ================================================================
+//                     The Private class
+
+
 class ChartShape::Private
 {
 public:
@@ -274,16 +285,19 @@ public:
 
 ChartShape::Private::Private( ChartShape *shape )
 {
+    // Register the owner.
     this->shape = shape;
 
-    internalModel = 0;
-
+    // Components
     title    = 0;
     subTitle = 0;
     footer   = 0;
     legend   = 0;
     plotArea = 0;
-    model    = 0;
+
+    // Data
+    internalModel = 0;
+    model         = 0;
 
     document = 0;
 }
@@ -356,12 +370,14 @@ ChartShape::ChartShape()
 {
     setShapeId( ChartShapeId );
 
-    // Instanciate all children first
-    d->model = new ProxyModel();
+    // Instantiated all children first
+    d->model    = new ProxyModel();
+
     d->plotArea = new PlotArea( this );
     d->document = new ChartDocument( this );
-    d->legend = new Legend( this );
+    d->legend   = new Legend( this );
 
+    // Configure the plotarea.
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer.
     addChild( d->plotArea );
@@ -369,12 +385,12 @@ ChartShape::ChartShape()
     d->plotArea->setZIndex( 0 );
     setClipping( d->plotArea, true );
 
-
-    // Create the legend.
+    // Configure the legend.
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
     setClipping( d->legend, true );
 
+    // A few simple defaults (chart type and subtype in this case)
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
 
@@ -453,6 +469,7 @@ ChartShape::ChartShape()
     KoLineBorder *border = new KoLineBorder( 0, Qt::black );
     setBorder( border );
 
+    // Default size of the chart.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 
     requestRepaint();
@@ -463,12 +480,21 @@ ChartShape::~ChartShape()
     delete d->title;
     delete d->subTitle;
     delete d->footer;
+
+    delete d->internalModel;    // Ok to call even when 0.
+    delete d->model;
+
+    delete d->plotArea;
+    delete d->legend;
+
     delete d->document;
 }
 
 
 QAbstractItemModel *ChartShape::model() const
 {
+    // Can't return d->internalModel because the data may come from
+    // the outside, e.g. a spreadsheet.
     return d->model->sourceModel();
 }
 
@@ -513,8 +539,7 @@ TextLabelData *ChartShape::footerData() const
 
 Legend *ChartShape::legend() const
 {
-    // There has to be a valid legend
-    // even, if it's hidden
+    // There has to be a valid legend even, if it's hidden.
     Q_ASSERT( d->legend );
     return d->legend;
 }
@@ -545,6 +570,7 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model );
+
     if ( takeOwnershipOfModel )
         d->internalModel = model;
     else
@@ -558,6 +584,7 @@ void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &sele
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model, selection );
+
     if ( d->internalModel ) {
         delete d->internalModel;
         d->internalModel = 0;
@@ -675,7 +702,8 @@ void ChartShape::setSize( const QSizeF &newSize )
 
 
     const QSizeF plotAreaSize = d->plotArea->size();
-    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(), plotAreaSize.height() + newSize.height() - size().height() ) );
+    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(), 
+                                  plotAreaSize.height() + newSize.height() - size().height() ) );
 
     KoShape::setSize( newSize );
 }
@@ -688,7 +716,7 @@ void ChartShape::updateChildrenPositions()
         KoShape  *title = axis->title();
         QPointF   titlePosition;
 
-        // FIXME: titlePosition is uniitialized here!
+        // FIXME: titlePosition is uninitialized here!
         title->setPosition( titlePosition );
     }
 
@@ -849,7 +877,9 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
 
     bool res = true;
     bool internalURL = false;
-    if ( tmpURL.startsWith( STORE_PROTOCOL ) || tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeUrl( tmpURL ) )
+    if ( tmpURL.startsWith( STORE_PROTOCOL )
+         || tmpURL.startsWith( INTERNAL_PROTOCOL )
+         || KUrl::isRelativeUrl( tmpURL ) )
     {
         if ( oasis ) {
             store->pushDirectory();
@@ -1015,7 +1045,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
 
     // 6. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
-                         KoXmlNS::table, "table" );
+                                                 KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
         if ( !loadOdfData( dataElem, context ) )
             return false;
@@ -1023,7 +1053,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
 
     // 7. Load the plot area (this is where the real action is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
-                             KoXmlNS::chart, "plot-area" );
+                                                     KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;
@@ -1071,6 +1101,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
         bodyWriter.endElement(); // draw:frame
         return;
     }
+
     KoGenStyles&  mainStyles( context.mainStyles() );
 
     bodyWriter.startElement( "chart:chart" );
@@ -1109,6 +1140,7 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 {
     Q_UNUSED( mainStyles );
 
+    // Only save the data if we actually have some.
     if ( !d->internalModel )
         return;
 

@@ -24,17 +24,18 @@
 #define KCHART_SHAPE_H
 
 
-// Local
-#include "kchart_export.h"
-#include "kchart_global.h"
-#include "KoChartInterface.h"
+// Qt
+#include <Qt>
 
 // KOffice
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 
-// Qt
-#include <Qt>
+// KChart
+#include "kchart_export.h"
+#include "kchart_global.h"
+#include "KoChartInterface.h"
+
 
 class QAbstractItemModel;
 
@@ -91,7 +92,11 @@ extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QC
 extern QColor defaultDataSetColor( int dataSetNum );
 
 
-class CHARTSHAPELIB_EXPORT ChartShape : public QObject, public KoChart::ChartInterface, public KoFrameShape, public KoShapeContainer
+class CHARTSHAPELIB_EXPORT ChartShape
+    : public QObject
+    , public KoChart::ChartInterface // The public interface
+    , public KoFrameShape            // For saving as a frame
+    , public KoShapeContainer        // The chart shape embeds other shapes.
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartInterface)
@@ -104,14 +109,14 @@ public:
     ProxyModel         *proxyModel() const;
     
     // Parts of the chart
-    KoShape *title() const;
-    TextLabelData *titleData() const;
-    KoShape *subTitle() const;
-    TextLabelData *subTitleData() const;
-    KoShape *footer() const;
-    TextLabelData *footerData() const;
-    Legend   *legend() const;
-    PlotArea *plotArea() const;
+    KoShape        *title() const;
+    TextLabelData  *titleData() const;
+    KoShape        *subTitle() const;
+    TextLabelData  *subTitleData() const;
+    KoShape        *footer() const;
+    TextLabelData  *footerData() const;
+    Legend         *legend() const;
+    PlotArea       *plotArea() const;
 
     void showTitle();
     void showSubTitle();
