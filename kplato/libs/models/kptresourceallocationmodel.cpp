@@ -227,7 +227,7 @@ QVariant ResourceAllocationModel::maximum( const Resource *res, int role ) const
             return res->units();
         case Qt::ToolTipRole:
             // xgettext: no-c-format
-            return i18n( "Maximum units avalable: %1%", res->units() );
+            return i18n( "Maximum units available: %1%", res->units() );
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
