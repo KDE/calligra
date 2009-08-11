@@ -203,7 +203,9 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 
     // Check if the data point is valid
     const bool validDataPoint = isValidDataPoint( dataPoint );
-    Q_ASSERT( validDataPoint );
+    // Remove, since it makes kspread crash when inserting a chart for
+    // a 1x1 cell region.
+    //Q_ASSERT( validDataPoint );
     if ( !validDataPoint )
         return QVariant();    
 
