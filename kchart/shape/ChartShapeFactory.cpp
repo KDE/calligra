@@ -34,6 +34,11 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
+// KDChart
+#include <KDChartChart>
+#include <KDChartAbstractCartesianDiagram>
+#include <KDChartLegend>
+
 // Chart shape
 #include "ChartToolFactory.h"
 #include "ChartConfigWidget.h"
@@ -41,11 +46,6 @@
 #include "PlotArea.h"
 #include "Axis.h"
 #include "Legend.h"
-
-// KDChart
-#include <KDChartChart>
-#include <KDChartAbstractCartesianDiagram>
-#include <KDChartLegend>
 
 
 using namespace KChart;
@@ -81,15 +81,15 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 
 bool ChartShapeFactory::supports( const KoXmlElement &element ) const
 {
-    return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" &&
-           element.tagName() == "object";
+    return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+        && element.tagName() == "object";
 }
 
 KoShape* ChartShapeFactory::createDefaultShape() const
 {
     ChartShape* shape = new ChartShape();
 
-    // Fill cells with data if there is none.
+    // Fill cells with data.
     QStandardItemModel  *m_chartData = new QStandardItemModel();
     m_chartData->setRowCount( 4 );
     m_chartData->setColumnCount( 5 );
@@ -126,38 +126,35 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     const QSizeF shapeSize = shape->size();
 
     // We want the chart shape to take over and handle this model itself
+    shape->setModel( m_chartData, true );
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
-    shape->setModel( m_chartData, true );
     
-    QPointF plotAreaPos( 0.0, 0.0 );
-    QSizeF plotAreaSize( shapeSize );
-    QPointF legendPos( 0.0, 0.0 );
+    QPointF  plotAreaPos( 0.0, 0.0 );
+    QSizeF   plotAreaSize( shapeSize );
+    QPointF  legendPos( 0.0, 0.0 );
     shape->legend()->kdLegend()->forceRebuild();
     shape->legend()->update();
     QSizeF legendSize = shape->legend()->size();
 
     Legend *legend = shape->legend();
-    if ( legend )
-    {
+    if ( legend ) {
         legendPos.ry() = shapeSize.height() / 2.0 - legendSize.height() / 2.0;
         plotAreaSize.rwidth() -= legendSize.width();
     }
 
     Axis *xAxis = shape->plotArea()->xAxis();
     KoShape *xAxisTitle = shape->plotArea()->xAxis()->title();
-    if ( xAxis )
-    {
+    if ( xAxis ) {
         xAxis->setTitleText( i18n( "Month" ) );
         xAxisTitle->setPosition( QPointF( shapeSize.width() / 2.0 - xAxisTitle->size().width() / 2.0,
                                           shapeSize.height() - xAxisTitle->size().height() ) );
         plotAreaSize.rheight() -= xAxisTitle->size().height();
     }
     
-    Axis *yAxis = shape->plotArea()->yAxis();
+    Axis    *yAxis      = shape->plotArea()->yAxis();
     KoShape *yAxisTitle = shape->plotArea()->yAxis()->title();
-    if ( yAxis )
-    {
+    if ( yAxis ) {
         yAxis->setTitleText( i18n( "Growth in %") );
         yAxisTitle->setPosition( QPointF( -yAxisTitle->size().width() / 2.0 + yAxisTitle->size().height() / 2.0,
                                           shapeSize.height() / 2.0 - yAxisTitle->size().height() / 2.0 ) );
@@ -166,8 +163,7 @@ KoShape* ChartShapeFactory::createDefaultShape() const
         plotAreaSize.rwidth() -= yAxisTitle->size().height();
     }
     
-    if ( legend )
-    {
+    if ( legend ) {
         legendPos.rx() += plotAreaSize.width();
         legend->setPosition( legendPos );
     }
