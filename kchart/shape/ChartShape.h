@@ -72,7 +72,7 @@ typedef KoTextShapeData TextLabelData;
 namespace KChart {
 
 class DataSet;
-class ProxyModel;
+class ChartProxyModel;
 class Legend;
 class PlotArea;
 class Surface;
@@ -105,8 +105,8 @@ public:
     ~ChartShape();
     
     // Getter methods
-    QAbstractItemModel *model()      const;
-    ProxyModel         *proxyModel() const;
+    QAbstractItemModel  *model()      const;
+    ChartProxyModel     *proxyModel() const;
     
     // Parts of the chart
     KoShape        *title() const;

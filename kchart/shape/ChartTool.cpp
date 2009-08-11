@@ -19,7 +19,7 @@
 
 // Local
 #include "ChartTool.h"
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "Surface.h"
 #include "PlotArea.h"
 #include "Axis.h"

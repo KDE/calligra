@@ -24,7 +24,7 @@
 #include "DataSet.h"
 #include "Surface.h"
 #include "ThreeDScene.h"
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "Legend.h"
 
 // KOffice
@@ -201,7 +201,7 @@ void PlotArea::dataSetCountChanged()
     }
 }
 
-ProxyModel *PlotArea::proxyModel() const
+ChartProxyModel *PlotArea::proxyModel() const
 {
     return d->shape->proxyModel();
 }

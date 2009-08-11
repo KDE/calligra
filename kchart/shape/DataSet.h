@@ -46,7 +46,7 @@ namespace KChart {
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
-    DataSet( ProxyModel *model );
+    DataSet( ChartProxyModel *model );
     ~DataSet();
 
     // Getter methods
@@ -57,7 +57,7 @@ public:
     ChartSubtype  globalChartSubType() const;
     Axis         *attachedAxis() const;
 
-    ProxyModel   *model() const;
+    ChartProxyModel   *model() const;
 
     bool showValues() const;
     bool showLabels() const;

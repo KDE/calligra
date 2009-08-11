@@ -19,7 +19,7 @@
 */
 
 #include "TableEditorDialog.h"
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "ChartTableView.h"
 
 #include <QDebug>
@@ -41,7 +41,7 @@ TableEditorDialog::~TableEditorDialog()
     delete tableView;
 }
 
-void TableEditorDialog::setProxyModel( ProxyModel* proxyModel )
+void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 {
     if ( this->proxyModel == proxyModel )
         return;

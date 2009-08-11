@@ -35,15 +35,16 @@ namespace KoChart
 // Qt
 #include <QAbstractProxyModel>
 
+
 namespace KChart {
 
-class CHARTSHAPELIB_EXPORT ProxyModel : public QAbstractProxyModel
+class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 
 public:
-    ProxyModel();
-    ~ProxyModel();
+    ChartProxyModel();
+    ~ChartProxyModel();
 
 public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );

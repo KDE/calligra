@@ -95,7 +95,7 @@
 #include "Legend.h"
 #include "PlotArea.h"
 #include "Surface.h"
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "ChartDocument.h"
 #include "TableModel.h"
@@ -275,7 +275,7 @@ public:
 
     // Data
     QAbstractItemModel  *internalModel; // The actual data
-    ProxyModel          *model;		// What's presented to KDChart
+    ChartProxyModel     *proxyModel;	// What's presented to KDChart
 
     ChartDocument *document;
 
@@ -297,7 +297,7 @@ ChartShape::Private::Private( ChartShape *shape )
 
     // Data
     internalModel = 0;
-    model         = 0;
+    proxyModel    = 0;
 
     document = 0;
 }
@@ -371,7 +371,7 @@ ChartShape::ChartShape()
     setShapeId( ChartShapeId );
 
     // Instantiated all children first
-    d->model    = new ProxyModel();
+    d->proxyModel = new ChartProxyModel();
 
     d->plotArea = new PlotArea( this );
     d->document = new ChartDocument( this );
@@ -482,7 +482,7 @@ ChartShape::~ChartShape()
     delete d->footer;
 
     delete d->internalModel;    // Ok to call even when 0.
-    delete d->model;
+    delete d->proxyModel;
 
     delete d->plotArea;
     delete d->legend;
@@ -495,12 +495,12 @@ QAbstractItemModel *ChartShape::model() const
 {
     // Can't return d->internalModel because the data may come from
     // the outside, e.g. a spreadsheet.
-    return d->model->sourceModel();
+    return d->proxyModel->sourceModel();
 }
 
-ProxyModel *ChartShape::proxyModel() const
+ChartProxyModel *ChartShape::proxyModel() const
 {
-    return d->model;
+    return d->proxyModel;
 }
 
 KoShape *ChartShape::title() const
@@ -569,7 +569,7 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
 {
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
-    d->model->setSourceModel( model );
+    d->proxyModel->setSourceModel( model );
 
     if ( takeOwnershipOfModel )
         d->internalModel = model;
@@ -583,7 +583,7 @@ void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &sele
 {
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
-    d->model->setSourceModel( model, selection );
+    d->proxyModel->setSourceModel( model, selection );
 
     if ( d->internalModel ) {
         delete d->internalModel;
@@ -745,22 +745,22 @@ bool ChartShape::isThreeD() const
 
 void ChartShape::setFirstRowIsLabel( bool isLabel )
 {
-    d->model->setFirstRowIsLabel( isLabel );
+    d->proxyModel->setFirstRowIsLabel( isLabel );
 
     requestRepaint();
 }
 
 void ChartShape::setFirstColumnIsLabel( bool isLabel )
 {
-    d->model->setFirstColumnIsLabel( isLabel );
+    d->proxyModel->setFirstColumnIsLabel( isLabel );
 
     requestRepaint();
 }
 
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
-    Q_ASSERT( d->model );
-    d->model->setDataDirection( orientation );
+    Q_ASSERT( d->proxyModel );
+    d->proxyModel->setDataDirection( orientation );
 }
 
 void ChartShape::setChartType( ChartType type )

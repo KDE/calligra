@@ -20,7 +20,7 @@
 */
 
 // Local
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "Axis.h"
 #include "DataSet.h"
 #include <interfaces/KoChartModel.h>
@@ -47,10 +47,10 @@ using namespace KChart;
 
 
 // ================================================================
-//                     Class ProxyModel::Private
+//                     Class ChartProxyModel::Private
 
 
-class ProxyModel::Private {
+class ChartProxyModel::Private {
 public:
     Private();
     ~Private();
@@ -68,7 +68,7 @@ public:
 };
 
 
-ProxyModel::Private::Private()
+ChartProxyModel::Private::Private()
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -79,21 +79,21 @@ ProxyModel::Private::Private()
 
 
 // ================================================================
-//                         Class ProxyModel
+//                          Class ChartProxyModel
 
 
-ProxyModel::ProxyModel()
+ChartProxyModel::ChartProxyModel()
     : QAbstractProxyModel( 0 ),
       d( new Private )
 {
 }
 
-ProxyModel::~ProxyModel()
+ChartProxyModel::~ChartProxyModel()
 {
 }
 
 
-void ProxyModel::rebuildDataMap()
+void ChartProxyModel::rebuildDataMap()
 {
     QVector<QRect> dataRegions;
 
@@ -295,7 +295,7 @@ void ProxyModel::rebuildDataMap()
 }
 
 
-void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
+void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 {
     if ( this->sourceModel() == sourceModel )
         return;
@@ -334,7 +334,7 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     reset();
 }
 
-void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
+void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
 {
     // FIXME: What if we already have a source model?  Don't we have
     //        to disconnect that one before connecting the new one?
@@ -352,13 +352,13 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<
     reset();
 }
 
-void ProxyModel::setSelection( const QVector<QRect> &selection )
+void ChartProxyModel::setSelection( const QVector<QRect> &selection )
 {
     d->selection = selection;
     //needReset();
 }
 
-void ProxyModel::saveOdf( KoShapeSavingContext &context ) const
+void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
     KoGenStyles &mainStyles = context.mainStyles();
@@ -388,7 +388,7 @@ void ProxyModel::saveOdf( KoShapeSavingContext &context ) const
     }
 }
 
-bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
+bool ChartProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
@@ -458,7 +458,7 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
                 // FIXME: Load data points
             }
         } else {
-            qWarning() << "ProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
+            qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }
     }
 
@@ -470,16 +470,16 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
 }
 
 
-QVariant ProxyModel::data( const QModelIndex &index,
-                           int role /* = Qt::DisplayRole */ ) const
+QVariant ChartProxyModel::data( const QModelIndex &index,
+                                int role /* = Qt::DisplayRole */ ) const
 {
     if ( sourceModel() == 0 )
         return QVariant();
     
     QModelIndex sourceIndex = mapToSource( index );
     if ( sourceIndex == QModelIndex() ) {
-        qWarning() << "ProxyModel::data(): Attempting to request data for invalid source index";
-        qWarning() << "ProxyModel::data(): Mapping resulted in:";
+        qWarning() << "ChartProxyModel::data(): Attempting to request data for invalid source index";
+        qWarning() << "ChartProxyModel::data(): Mapping resulted in:";
         qWarning() << index << "-->" << sourceIndex;
         return QVariant();
     }
@@ -488,7 +488,7 @@ QVariant ProxyModel::data( const QModelIndex &index,
     return value;
 }
 
-void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
+void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
     QPoint topLeftPoint( topLeft.column() + 1, topLeft.row() + 1 );
 
@@ -521,9 +521,9 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
     emit dataChanged();
 }
 
-QVariant ProxyModel::headerData( int section,
-                                 Qt::Orientation orientation,
-                                 int role /* = Qt::DisplayRole */ ) const
+QVariant ChartProxyModel::headerData( int section,
+                                      Qt::Orientation orientation,
+                                      int role /* = Qt::DisplayRole */ ) const
 {
     if ( sourceModel() == 0 )
         return QVariant();
@@ -563,14 +563,14 @@ QVariant ProxyModel::headerData( int section,
 
     // Check for overflow in rows.
     if ( row >= sourceModel()->rowCount() ) {
-        qWarning() << "ProxyModel::headerData(): Attempting to request header data for row >= rowCount";
+        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for row >= rowCount";
 
         return QVariant();
     }
 
     // Check for overflow in columns.
     if ( column >= sourceModel()->columnCount() ) {
-        qWarning() << "ProxyModel::headerData(): Attempting to request header data for column >= columnCount";
+        qWarning() << "ChartProxyModel::headerData(): Attempting to request header data for column >= columnCount";
 
         return QVariant();
     }
@@ -579,13 +579,13 @@ QVariant ProxyModel::headerData( int section,
 }
 
 
-QMap<int, QVariant> ProxyModel::itemData( const QModelIndex &index ) const
+QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
 {
     return sourceModel()->itemData( mapToSource( index ) );
 }
 
 
-QModelIndex ProxyModel::index( int row,
+QModelIndex ChartProxyModel::index( int row,
                                int column,
                                const QModelIndex &parent /* = QModelIndex() */ ) const
 {
@@ -595,14 +595,14 @@ QModelIndex ProxyModel::index( int row,
 }
 
 
-QModelIndex ProxyModel::parent( const QModelIndex &index ) const
+QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
 {
     Q_UNUSED( index );
 
     return QModelIndex();
 }
 
-QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
+QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 {
     int  row;
     int  column;
@@ -647,7 +647,7 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
     return sourceModel()->index( row, column );
 }
 
-QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
+QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
     int  row;
     int  column;
@@ -670,7 +670,7 @@ QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 }
 
 
-Qt::Orientation ProxyModel::mapFromSource( Qt::Orientation orientation ) const
+Qt::Orientation ChartProxyModel::mapFromSource( Qt::Orientation orientation ) const
 {
     // In fact, this method does exactly the same thing as
     // mapToSource( Qt::Orientation ), but replacing the code with a
@@ -688,7 +688,7 @@ Qt::Orientation ProxyModel::mapFromSource( Qt::Orientation orientation ) const
 }
 
 
-Qt::Orientation ProxyModel::mapToSource( Qt::Orientation orientation ) const
+Qt::Orientation ChartProxyModel::mapToSource( Qt::Orientation orientation ) const
 {
     if ( d->dataDirection == Qt::Horizontal )
         return orientation;
@@ -701,7 +701,7 @@ Qt::Orientation ProxyModel::mapToSource( Qt::Orientation orientation ) const
     return Qt::Vertical;
 }
 
-int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
+int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     if ( sourceModel() == 0 )
         return 0;
@@ -732,7 +732,7 @@ int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) cons
 }
 
 
-int ProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
+int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     if ( sourceModel() == 0 )
         return 0;
@@ -756,7 +756,7 @@ int ProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) c
     return columnCount;
 }
 
-void ProxyModel::setFirstRowIsLabel( bool b )
+void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
     if ( b == d->firstRowIsLabel )
         return;
@@ -795,7 +795,7 @@ void ProxyModel::setFirstRowIsLabel( bool b )
 }
  
 
-void ProxyModel::setFirstColumnIsLabel( bool b )
+void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
     // FIXME: Why is this disabled when it's not for setFirstRowIsLabel? /iw
     /*if ( b == d->firstColumnIsLabel )
@@ -834,12 +834,12 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
     }*/
 }
 
-Qt::Orientation ProxyModel::dataDirection()
+Qt::Orientation ChartProxyModel::dataDirection()
 {
     return d->dataDirection;
 }
 
-void ProxyModel::setDataDirection( Qt::Orientation orientation )
+void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     // FIXME: Shouldn't we test if the orientation actually changes? /iw
     d->dataDirection = orientation;
@@ -848,7 +848,7 @@ void ProxyModel::setDataDirection( Qt::Orientation orientation )
     reset();
 }
 
-void ProxyModel::setDataDimensions( int dimensions )
+void ChartProxyModel::setDataDimensions( int dimensions )
 {
     // FIXME: Shouldn't we test if the dimenstions actually change? /iw
     d->dataDimensions = dimensions;
@@ -857,50 +857,50 @@ void ProxyModel::setDataDimensions( int dimensions )
     reset();
 }
 
-bool ProxyModel::firstRowIsLabel() const
+bool ChartProxyModel::firstRowIsLabel() const
 {
     return d->firstRowIsLabel;
 }
 
-bool ProxyModel::firstColumnIsLabel() const
+bool ChartProxyModel::firstColumnIsLabel() const
 {
     return d->firstColumnIsLabel;
 }
 
-QList<DataSet*> ProxyModel::dataSets() const
+QList<DataSet*> ChartProxyModel::dataSets() const
 {
     return d->dataSets;
 }
 
-void ProxyModel::slotRowsInserted( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotRowsInserted( const QModelIndex &parent, int start, int end )
 {
     rebuildDataMap();
     reset();
 }
 
-void ProxyModel::slotColumnsInserted( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent, int start, int end )
 {
     rebuildDataMap();
     reset();
 }
 
-void ProxyModel::slotRowsRemoved( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent, int start, int end )
 {
     rebuildDataMap();
     reset();
 }
 
-void ProxyModel::slotColumnsRemoved( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent, int start, int end )
 {
     rebuildDataMap();
     reset();
 }
 
-void ProxyModel::reset()
+void ChartProxyModel::reset()
 {
     QAbstractProxyModel::reset();
     emit modelResetComplete();
 }
 
 
-#include "ProxyModel.moc"
+#include "ChartProxyModel.moc"

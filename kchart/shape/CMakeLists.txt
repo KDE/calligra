@@ -17,7 +17,7 @@ SET (chartshape_LIB_SRCS
     Legend.cpp
     TextLabelDummy.cpp
     PlotArea.cpp
-    ProxyModel.cpp
+    ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
     ThreeDScene.cpp

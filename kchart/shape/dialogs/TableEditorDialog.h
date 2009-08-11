@@ -32,7 +32,7 @@ class QAction;
 namespace KChart {
 
 class ChartTableView;
-class ProxyModel;
+class ChartProxyModel;
 
 class TableEditorDialog : public QDialog, public Ui::ChartTableEditor
 {
@@ -43,7 +43,7 @@ public:
     ~TableEditorDialog();
 
     void init();
-    void setProxyModel( ProxyModel *proxyModel );
+    void setProxyModel( ChartProxyModel *proxyModel );
     void update();
 
 protected slots:
@@ -56,7 +56,7 @@ protected slots:
     void slotDataSetsInRowsToggled( bool enabled );
 
 private:
-    ProxyModel* proxyModel;
+    ChartProxyModel *proxyModel;
     ChartTableView *const tableView;
     QAction *deleteRowsAction;
     QAction *deleteColumnsAction;

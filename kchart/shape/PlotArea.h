@@ -42,7 +42,7 @@ namespace KChart {
  * 
  * This class also plays a central role when loading from or saving to
  * ODF. Though it does not handle anything in particular itself, it
- * utilizes the DataSet, TableModel, Axis, Surface, and ProxyModel
+ * utilizes the DataSet, TableModel, Axis, Surface, and ChartProxyModel
  * classes to handle ODF data and properties embedded in the
  * <chart:plotarea> element.
  */
@@ -57,7 +57,7 @@ public:
     
     void init();
     
-    ProxyModel *proxyModel() const;
+    ChartProxyModel *proxyModel() const;
 
     QList<Axis*> axes() const;
     QList<DataSet*> dataSets() const;

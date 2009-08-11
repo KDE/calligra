@@ -66,7 +66,7 @@
 #include "DataSet.h"
 #include "Legend.h"
 #include "KDChartConvertions.h"
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 
 

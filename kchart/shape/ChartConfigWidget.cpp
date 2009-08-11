@@ -44,7 +44,7 @@
 #include <KDChartDataValueAttributes>
 
 // KChart
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "PlotArea.h"
 #include "Legend.h"
 #include "DataSet.h"

@@ -36,12 +36,12 @@
 #include <KDChartTextAttributes>
 #include <KDChartAbstractDiagram>
 #include <KDChartMeasure>
+#include "KDChartModel.h"
 
 // KChart
-#include "ProxyModel.h"
+#include "ChartProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
-#include "KDChartModel.h"
 
 
 using namespace KChart;
@@ -88,7 +88,7 @@ public:
     CellRegion labelDataRegion;
     CellRegion categoryDataRegion;
     
-    ProxyModel *model;
+    ChartProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
     int kdDataSetNumber;
     
@@ -225,7 +225,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     return data;
 }
 
-DataSet::DataSet( ProxyModel *proxyModel )
+DataSet::DataSet( ChartProxyModel *proxyModel )
     : d( new Private( this ) )
 {
     d->model = proxyModel;
@@ -263,7 +263,8 @@ Axis *DataSet::attachedAxis() const
     return d->attachedAxis;
 }
 
-ProxyModel *DataSet::model() const
+// FIXME: Should this method also be called proxyModel?
+ChartProxyModel *DataSet::model() const
 {
     return d->model;
 }
