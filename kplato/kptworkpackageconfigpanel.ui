@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KPlato::WorkPackageConfigPanel</class>
+ <widget class="QWidget" name="KPlato::WorkPackageConfigPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>373</width>
+    <height>196</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="kcfg_CheckForWorkPackages">
+     <property name="title">
+      <string>Check for work packages</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Retreive url:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KUrlRequester" name="kcfg_RetreiveUrl"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QRadioButton" name="kcfg_DeleteFile">
+        <property name="text">
+         <string>Delete file after read</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QRadioButton" name="kcfg_SaveFile">
+        <property name="text">
+         <string>Save file after read</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Save url:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KUrlRequester" name="kcfg_SaveUrl"/>
+      </item>
+      <item row="4" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>kcfg_SaveFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_SaveUrl</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

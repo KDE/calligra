@@ -20,6 +20,7 @@
 #include "kptworkpackagecontrolpanel.h"
 #include "kptworkpackageview.h"
 #include "kptworkpackagemodel.h"
+#include "kpttaskeditor.h"
 
 #include "kptproject.h"
 #include "kpttask.h"
@@ -28,6 +29,8 @@
 #include <kdebug.h>
 
 #include <QPushButton>
+#include <QLineEdit>
+#include <QList>
 
 namespace KPlato
 {
@@ -75,6 +78,39 @@ void WorkPackageControlPanel::slotMailToClicked()
 {
 }
 
+//-----------------------------------
+WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *p )
+    : QWidget(p)
+{
+    setupUi( this );
+
+    foreach ( Node *n, tasks ) {
+        Task *t = qobject_cast<Task*>( n );
+        if ( t == 0 ) {
+            continue;
+        }
+        foreach ( Resource *r, t->workPackage().fetchResources() ) {
+            m_resMap[ r ] << n;
+        }
+    }
+    QMap<Resource*, QList<Node*> >::const_iterator it;
+    for ( it = m_resMap.constBegin(); it != m_resMap.constEnd(); ++it ) {
+        QPushButton *pb = new QPushButton( KIcon( "mail-send" ), i18n( "Send To..." ), scrollArea );
+        QLineEdit *le = new QLineEdit( it.key()->name(), scrollArea );
+        le->setReadOnly( true );
+        formLayout->addRow( pb, le );
+
+        connect( pb, SIGNAL( clicked(bool) ), SLOT( slotSendClicked() ) );
+        m_pbMap[ pb ] = it.key();
+    }
+
+}
+
+void WorkPackageSendPanel::slotSendClicked()
+{
+    Resource *r = m_pbMap[ qobject_cast<QPushButton*>( sender() ) ];
+    emit sendWorkpackages( m_resMap[ r ], r );
+}
 
 
 }  //KPlato namespace

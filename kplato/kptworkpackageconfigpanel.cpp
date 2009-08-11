@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,38 +14,35 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTCONFIG_H
-#define KPTCONFIG_H
+#include "kptworkpackageconfigpanel.h"
 
-#include "kptconfigbase.h"
+#include "kptduration.h"
+#include "kptmycombobox_p.h"
+#include "kplatosettings.h"
 
-class KPlatoSettings;
+#include <kabc/addressee.h>
+#include <kabc/addresseedialog.h>
+
+#include <QDateTime>
+#include <QDateTimeEdit>
+#include <QComboBox>
+
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-class Config : public ConfigBase
+WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p )
+    : QWidget(p)
 {
-public:    
-    Config();
-    ~Config();
 
-    void readConfig();
-    void saveSettings();
+    setupUi(this);
 
-    virtual void setDefaultValues( Task &task );
-
-    virtual bool checkForWorkPackages() const;
-    virtual KUrl retreiveUrl() const;
-
-    virtual int minimumDurationUnit() const;
-    virtual int maximumDurationUnit() const;
-
-};
+}
 
 }  //KPlato namespace
 
-#endif // CONFIG_H
+#include "kptworkpackageconfigpanel.moc"

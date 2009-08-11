@@ -348,7 +348,6 @@ public:
     QMap<Resource*, ResourceStatus> &resourceStatus();
     const QMap<Resource*, ResourceStatus> &resourceStatus() const;
 
-protected:
     /// Return a list of resources fetched from the appointements or requests
     /// merged with resources added to completion
     QList<Resource*> fetchResources();

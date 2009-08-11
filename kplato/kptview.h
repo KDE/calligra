@@ -119,6 +119,7 @@ public:
     ViewBase *createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createTaskView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
@@ -210,6 +211,10 @@ protected slots:
     void removeProgressBarItems();
 
     void slotInsertFile();
+
+    void slotWorkPackageLoaded();
+    void slotMailWorkpackage( Node *node, Resource *resource = 0 );
+    void slotMailWorkpackages( QList<Node*> &nodes, Resource *resource = 0 );
 
 #ifndef NDEBUG
     void slotPrintDebug();
@@ -315,6 +320,8 @@ private:
     KAction *actionEditResource;
     KAction *actionEditRelation;
     KAction *actionDeleteRelation;
+
+    KAction *actionMailWorkpackage;
 
     //Test
     KAction *actNoInformation;

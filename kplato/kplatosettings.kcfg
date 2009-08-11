@@ -79,6 +79,24 @@
     </entry>
   </group>
 
+  <group name="Work Package">
+    <entry name="CheckForWorkPackages" type="Bool">
+      <label>Automatically check for new work packages</label>
+    </entry>
+    <entry name="RetreiveUrl" type="Url">
+      <label>Directory where kplato retreives work packages from project members</label>
+    </entry>
+    <entry name="DeleteFile" type="Bool">
+      <label>If set, kplato will delete the file after it has been read</label>
+    </entry>
+    <entry name="SaveFile" type="Bool">
+      <label>If set, kplato will save the file after it has been read</label>
+    </entry>
+    <entry name="SaveUrl" type="Url">
+      <label>Directory where kplato saves work packages when the package has been read</label>
+    </entry>
+  </group>
+
   <group name="Miscellaneous">
     <entry name="MinimumDurationUnit" type="Int">
       <label>The smallest duration unit allowed</label>
@@ -89,4 +107,5 @@
       <default>1</default>
     </entry>
   </group>
+
 </kcfg>

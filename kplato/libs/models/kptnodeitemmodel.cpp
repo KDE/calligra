@@ -2925,6 +2925,266 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
     return QModelIndex();
 }
 
+
+//----------------------------
+class GeneralNodeItemModel::Object
+{
+public:
+    enum Type { Type_Node, Type_WorkPackage };
+    Object( Node *n, Type typ = Type_Node )
+    : node( n ), type( typ )
+    {}
+
+    bool isNode() const { return type == Type_Node; }
+    bool isWorkPackage() const { return type == Type_WorkPackage; }
+
+    Node *node;
+    int type;
+};
+
+//----------------------------
+GeneralNodeItemModel::GeneralNodeItemModel( QObject *parent )
+    : NodeItemModel( parent ),
+    m_modus( 0 )
+{
+}
+
+GeneralNodeItemModel::~GeneralNodeItemModel()
+{
+}
+
+void GeneralNodeItemModel::setModus( int modus )
+{
+    qDeleteAll( m_objects );
+    m_objects.clear();
+    m_modus = modus;
+    if ( m_project == 0 ) {
+        return;
+    }
+    foreach ( Node *n, m_project->allNodes() ) {
+        m_objects << new Object( n );
+    }
+    if ( m_modus & WorkPackage ) {
+        //TODO
+    }
+}
+
+void GeneralNodeItemModel::setProject( Project *project )
+{
+    NodeItemModel::setProject( project );
+    setModus( m_modus );
+}
+
+void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotNodeToBeInserted( parent, row );
+    }
+    beginInsertRows( index( parent ), m_objects.count(), m_objects.count() );
+}
+
+void GeneralNodeItemModel::slotNodeInserted( Node *node )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotNodeInserted( node );
+    }
+    m_objects << new Object( node );
+    endInsertRows();
+}
+
+void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotNodeToBeRemoved( node );
+    }
+    Object *obj = findNodeObject( node );
+    int row = m_objects.indexOf( obj );
+    if ( row >= 0 ) {
+        beginRemoveRows( parent( index( node ) ), row, row );
+        endRemoveRows();
+    }
+}
+
+void GeneralNodeItemModel::slotNodeRemoved( Node *node )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotNodeRemoved( node );
+    }
+    // Do nothing!!
+}
+
+void GeneralNodeItemModel::slotWbsDefinitionChanged()
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotWbsDefinitionChanged();
+    }
+    //TODO
+}
+
+Qt::ItemFlags GeneralNodeItemModel::flags( const QModelIndex &index ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::flags( index );
+    }
+    return QAbstractItemModel::flags( index ); //TODO
+}
+
+    
+QModelIndex GeneralNodeItemModel::parent( const QModelIndex &index ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::parent( index );
+    }
+    Object *obj = static_cast<Object*>( index.internalPointer() );
+    if ( obj == 0 ) {
+        return QModelIndex();
+    }
+    if ( obj->isWorkPackage() ) {
+        return this->index( obj->node );
+    }
+    if ( m_modus & WBS ) {
+        if ( obj->isNode() ) {
+            return this->index( obj->node->parentNode() );
+        }
+    }
+    return QModelIndex();
+}
+
+QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::index( row, column, parent );
+    }
+    Object *obj = static_cast<Object*>( parent.internalPointer() );
+    if ( m_modus & WBS ) {
+        if ( ! parent.isValid() ) {
+            return createIndex( row, column, findNodeObject( m_project->childNode( row ) ) );
+        }
+        if ( obj && obj->isNode() ) {
+            return createIndex( row, column, findNodeObject( obj->node->childNode( row ) ) );
+        }
+        return QModelIndex();
+    }
+    if ( m_modus & Flat  ) {
+        if ( ! parent.isValid() ) {
+            return createIndex( row, column, m_objects.value( row ) );
+        }
+        if ( obj && obj->isNode() ) {
+            return QModelIndex(); //TODO
+        }
+        return QModelIndex();
+    }
+    return QModelIndex();
+}
+
+QModelIndex GeneralNodeItemModel::index( const Node *node ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::index( node );
+    }
+    Object *obj = findNodeObject( node );
+    if ( obj ) {
+        return createIndex( m_objects.indexOf( obj ), 0, obj );
+    }
+    return QModelIndex();
+}
+
+QVariant GeneralNodeItemModel::data( const QModelIndex &index, int role ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::data( index, role );
+    }
+    QVariant result;
+    Object *obj = static_cast<Object*>( index.internalPointer() );
+    if ( obj && obj->isNode() ) {
+        return m_nodemodel.data( obj->node, index.column(), role );
+    }
+    if ( obj && obj->isWorkPackage() ) {
+        //TODO return;
+    }
+    return result; //TODO
+}
+
+bool GeneralNodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::setData( index, value, role );
+    }
+    return false;
+}
+
+QAbstractItemDelegate *GeneralNodeItemModel::createDelegate( int column, QWidget *parent ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::createDelegate( column, parent );
+    }
+    return 0; //TODO
+}
+
+int GeneralNodeItemModel::rowCount( const QModelIndex &parent ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::rowCount( parent );
+    }
+    Object *par = static_cast<Object*>( parent.internalPointer() );
+    if ( m_modus & WBS ) {
+        if ( ! parent.isValid() ) {
+            return m_project->numChildren();
+        }
+        if ( par && par->isNode() && par->node->type() == Node::Type_Summarytask ) {
+            return par->node->numChildren();
+        }
+        if ( m_modus & Object::Type_WorkPackage ) {
+            return 0; // TODO
+        }
+        return 0;
+    }
+    if ( m_modus & Flat ) {
+        if ( ! parent.isValid() ) {
+            return m_objects.count();
+        }
+        if ( m_modus & Object::Type_WorkPackage ) {
+            return 0; // TODO
+        }
+        return 0;
+    }
+    return 0;
+}
+
+Node *GeneralNodeItemModel::node( const QModelIndex &index ) const
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::node( index );
+    }
+    Object *obj = static_cast<Object*>( index.internalPointer() );
+    if ( obj && obj->isNode() ) {
+        return obj->node;
+    }
+    return 0;
+}
+
+void GeneralNodeItemModel::slotNodeChanged( Node *node )
+{
+    if ( m_modus == 0 ) {
+        return NodeItemModel::slotNodeChanged( node );
+    }
+    Object *obj = findNodeObject( node );
+    if ( obj && obj->isNode() ) {
+        QModelIndex i = index( node );
+        emit dataChanged( i, createIndex( i.row(), columnCount(), obj ) );
+    }
+}
+
+GeneralNodeItemModel::Object *GeneralNodeItemModel::findNodeObject( const Node *node ) const
+{
+    foreach ( Object *o, m_objects ) {
+        if ( o->node == node && o->isNode() ) {
+            return o;
+        }
+    }
+    return 0;
+}
+
 //------------------------------------------------
 GanttItemModel::GanttItemModel( QObject *parent )
     : NodeItemModel( parent ),

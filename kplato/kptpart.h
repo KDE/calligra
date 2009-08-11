@@ -32,6 +32,8 @@
 
 #include "KoDocument.h"
 
+#include <qfileinfo.h>
+
 class KoView;
 
 /// The main namespace.
@@ -72,8 +74,8 @@ public:
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
-    /// Save a workpackage file containing @p node with schedule identity @p id
-    QDomDocument saveWorkPackageXML( const Node *node, long id = -1 );
+    /// Save a workpackage file containing @p node with schedule identity @p id, owned by @p resource
+    QDomDocument saveWorkPackageXML( const Node *node, long id, Resource *resource = 0 );
     
     bool saveOdf( SavingContext &documentContext ) { return false; }
     bool loadOdf( KoOdfReadStore & odfStore );
@@ -88,20 +90,25 @@ public:
     void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
     
-    bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id );
-    bool saveWorkPackageFormat( const QString &file, const Node *node, long id  );
-    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  );
+    bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
+    bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
+    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
+    void mergeWorkPackages();
+    void mergeWorkPackage( const Project &proj );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
-    bool loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
-    
+    Project *loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
+    QMap<Project*, KUrl> workPackages() const { return m_workpackages; }
+
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
 
+
 signals:
     void changed();
-    
+    void workPackageLoaded();
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
      
@@ -110,10 +117,15 @@ protected:
     /// Save kplato specific files
     virtual bool completeSaving( KoStore* store );
 
+    void mergeWorkPackage( Task *to, const Task *from );
+
 protected slots:
     void slotViewDestroyed();
     virtual void openTemplate( const KUrl& url );
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
+
+    void checkForWorkPackages();
+    void checkForWorkPackage();
 
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
@@ -131,6 +143,8 @@ private:
     bool m_loadingTemplate;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
+    QMap<Project*, KUrl> m_workpackages;
+    QFileInfoList m_infoList;
 };
 
 

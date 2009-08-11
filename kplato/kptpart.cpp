@@ -42,7 +42,8 @@
 
 #include <QApplication>
 #include <qpainter.h>
-#include <qfileinfo.h>
+#include <QDir>
+#include <QMutableMapIterator>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -85,6 +86,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 Part::~Part()
 {
     delete m_project;
+    qDeleteAll( m_workpackages.keys() );
 }
 
 void Part::loadSchedulerPlugins()
@@ -120,6 +122,7 @@ void Part::setProject( Project *project )
         connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 //        m_project->setConfig( config() );
         m_project->setSchedulerPlugins( m_schedulerPlugins );
+        QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
     }
     emit changed();
 }
@@ -243,7 +246,7 @@ QDomDocument Part::saveXML()
     return document;
 }
 
-QDomDocument Part::saveWorkPackageXML( const Node *node, long id )
+QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *resource )
 {
     kDebug();
     QDomDocument document( "kplato" );
@@ -258,15 +261,23 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id )
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 
+    // Work package info
+    QDomElement wp = document.createElement( "workpackage" );
+    if ( resource ) {
+        wp.setAttribute( "owner", resource->name() );
+        wp.setAttribute( "owner-id", resource->id() );
+    }
+    doc.appendChild( wp );
+
     // Save the project
     m_project->saveWorkPackageXML( doc, node, id );
     
     return document;
 }
 
-bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
+bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource )
 {
-    QDomDocument doc = saveWorkPackageXML( node, id );
+    QDomDocument doc = saveWorkPackageXML( node, id, resource );
     // Save to buffer
     QByteArray s = doc.toByteArray(); // utf8 already
     dev->open( QIODevice::WriteOnly );
@@ -277,7 +288,7 @@ bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
     return nwritten == (int)s.size();
 }
 
-bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id  )
+bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource  )
 {
     kDebug() <<"Saving to store";
 
@@ -310,7 +321,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
         return false;
     }
     KoStoreDevice dev( store );
-    if ( !saveWorkPackageToStream( &dev, node, id ) || !store->close() ) {
+    if ( !saveWorkPackageToStream( &dev, node, id, resource ) || !store->close() ) {
         kDebug() <<"saveToStream failed";
         delete store;
         return false;
@@ -328,13 +339,13 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     return true;
 }
 
-bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  )
+bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource )
 {
     //kDebug()<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
     emit statusBarMessage( i18n("Saving...") );
     bool ret = false;
-    ret = saveWorkPackageFormat( _url.path(), node, id ); // kzip don't handle file://
+    ret = saveWorkPackageFormat( _url.path(), node, id, resource ); // kzip don't handle file://
     QApplication::restoreOverrideCursor();
     emit clearStatusBarMessage();
     return ret;
@@ -372,7 +383,12 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
                 << " Error message: " << errorMsg;
         //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
     } else {
-        ok = loadWorkPackageXML( project, store->device(), doc );
+        Project *p = loadWorkPackageXML( project, store->device(), doc );
+        if ( p ) {
+            m_workpackages.insert( p, url );
+        } else {
+            ok = false;
+        }
     }
     store->close();
     delete store;
@@ -383,7 +399,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document )
+Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document )
 {
     kDebug();
     QTime dt;
@@ -438,7 +454,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 
     bool ok = true;
     m_xmlLoader.startLoad();
-    Project proj;
+    Project *proj = new Project();
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -446,8 +462,8 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            m_xmlLoader.setProject( &proj );
-            ok = proj.load( e, m_xmlLoader );
+            m_xmlLoader.setProject( proj );
+            ok = proj->load( e, m_xmlLoader );
             if ( ! ok ) {
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 //TODO add some ui here
@@ -459,76 +475,137 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
-    if ( ok ) {
-        const Task *from = qobject_cast<const Task*>( proj.childNode( 0 ) );
-        Task *to = qobject_cast<Task*>( project.findNode( from->id() ) );
-        if ( to && from ) {
-            MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
-            Completion &org = to->completion();
-            const Completion &curr = from->completion();
-            if ( org.entrymode() != curr.entrymode() ) {
-                cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
-            }
-            if ( org.isStarted() != curr.isStarted() ) {
-                cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
-            }
-            if ( org.isFinished() != curr.isFinished() ) {
-                cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
-            }
-            if ( org.startTime() != curr.startTime() ) {
-                cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
-            }
-            if ( org.finishTime() != curr.finishTime() ) {
-                cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
-            }
-            QList<QDate> orgdates = org.entries().keys();
-            QList<QDate> currdates = curr.entries().keys();
-            foreach ( QDate d, orgdates ) {
-                if ( currdates.contains( d ) ) {
-                    if ( curr.entry( d ) == org.entry( d ) ) {
-                        continue;
-                    }
-                    kDebug()<<"modify entry "<<d;
-                    Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
-                    cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
-                } else {
-                    kDebug()<<"remove entry "<<d;
-                    cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
-                }
-            }
-            foreach ( QDate d, currdates ) {
-                if ( ! orgdates.contains( d ) ) {
-                    Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-                    kDebug()<<"add entry "<<d<<e;
-                    cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
-                }
-            }
-            const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
-            foreach ( const Resource *res, map.keys() ) {
-                Resource *r = project.findResource( res->id() );
-                if ( r == 0 ) {
-                    kWarning()<<"Can't find resource:"<<res->id()<<res->name();
-                    continue;
-                }
-                Completion::UsedEffort *ue = map[ r ];
-                if ( ue == 0 ) {
-                    continue;
-                }
-                if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
-                    cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
-                }
-            }
-            if ( cmd->isEmpty() ) {
-                delete cmd;
-            } else {
-                addCommand( cmd );
-            }
-        }
+    if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
+        ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
     }
     emit sigProgress( -1 );
-    return ok;
+    if ( ! ok ) {
+        delete proj;
+        return 0;
+    }
+    return proj;
 }
 
+void Part::checkForWorkPackages()
+{
+    if ( ! m_config.checkForWorkPackages() || m_config.retreiveUrl().isEmpty() || m_project->numChildren() == 0 ) {
+        QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
+        return;
+    }
+    QDir dir( m_config.retreiveUrl().path(), "*.kplatowork" );
+    m_infoList = dir.entryInfoList( QDir::Files | QDir::Readable, QDir::Time );
+    checkForWorkPackage();
+
+    QMutableMapIterator<Project*, KUrl> it( m_workpackages );
+    while ( it.hasNext() ) {
+        it.next();
+        if ( it.key()->id() != m_project->id() ) {
+            delete it.key();
+            it.remove();
+        }
+    }
+    if ( ! m_workpackages.isEmpty() ) {
+        emit workPackageLoaded();
+        qDeleteAll( m_workpackages.keys() );
+        m_workpackages.clear();
+    }
+}
+
+void Part::checkForWorkPackage()
+{
+    if ( m_infoList.isEmpty() ) {
+        QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
+        return;
+    }
+    loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
+    QTimer::singleShot ( 0, this, SLOT( checkForWorkPackage() ) );
+}
+
+void Part::mergeWorkPackages()
+{
+    foreach ( const Project *p, m_workpackages.keys() ) {
+        mergeWorkPackage( *p );
+    }
+}
+
+void Part::mergeWorkPackage( const Project &proj )
+{
+    if ( proj.id() == m_project->id() && proj.childNode( 0 ) ) {
+        const Task *from = qobject_cast<const Task*>( proj.childNode( 0 ) );
+        Task *to = qobject_cast<Task*>( m_project->findNode( from->id() ) );
+        if ( to && from ) {
+            mergeWorkPackage( to, from );
+        }
+        QFile file( m_workpackages[ &const_cast<Project&>(proj) ].path() );
+        if ( file.exists() ) {
+            file.remove();
+        }
+    }
+}
+
+void Part::mergeWorkPackage( Task *to, const Task *from )
+{
+    MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
+    Completion &org = to->completion();
+    const Completion &curr = from->completion();
+    if ( org.entrymode() != curr.entrymode() ) {
+        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
+    }
+    if ( org.isStarted() != curr.isStarted() ) {
+        cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
+    }
+    if ( org.isFinished() != curr.isFinished() ) {
+        cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+    }
+    if ( org.startTime() != curr.startTime() ) {
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+    }
+    if ( org.finishTime() != curr.finishTime() ) {
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+    }
+    QList<QDate> orgdates = org.entries().keys();
+    QList<QDate> currdates = curr.entries().keys();
+    foreach ( QDate d, orgdates ) {
+        if ( currdates.contains( d ) ) {
+            if ( curr.entry( d ) == org.entry( d ) ) {
+                continue;
+            }
+            kDebug()<<"modify entry "<<d;
+            Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
+        } else {
+            kDebug()<<"remove entry "<<d;
+            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
+        }
+    }
+    foreach ( QDate d, currdates ) {
+        if ( ! orgdates.contains( d ) ) {
+            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
+            kDebug()<<"add entry "<<d<<e;
+            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+        }
+    }
+    const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
+    foreach ( const Resource *res, map.keys() ) {
+        Resource *r = m_project->findResource( res->id() );
+        if ( r == 0 ) {
+            kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+            continue;
+        }
+        Completion::UsedEffort *ue = map[ r ];
+        if ( ue == 0 ) {
+            continue;
+        }
+        if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
+            cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
+        }
+    }
+    if ( cmd->isEmpty() ) {
+        delete cmd;
+    } else {
+        addCommand( cmd );
+    }
+}
 
 void Part::paintContent( QPainter &, const QRect &)
 {

@@ -26,7 +26,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
-
 #include <klocale.h>
 
 #include "KoView.h"
@@ -43,6 +42,7 @@ namespace KPlato
 class Project;
 class Node;
 class NodeItemModel;
+class GeneralNodeItemModel;
 
 class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
@@ -205,6 +205,89 @@ private slots:
 
 private:
     NodeTreeView *m_view;
+
+};
+
+//-----------------------------------
+class GeneralNodeTreeView : public DoubleTreeViewBase
+{
+    Q_OBJECT
+public:
+    GeneralNodeTreeView( QWidget *parent );
+    
+    //void setSelectionModel( QItemSelectionModel *selectionModel );
+
+    GeneralNodeItemModel *baseModel() const;
+    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+
+    Project *project() const { return baseModel()->project(); }
+    void setProject( Project *project ) { baseModel()->setProject( project ); }
+    void setModus( int mode );
+
+signals:
+    void currentColumnChanged( QModelIndex, QModelIndex );
+    
+protected slots:
+    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+};
+
+
+class KPLATOUI_EXPORT TaskWorkPackageView : public ViewBase
+{
+    Q_OBJECT
+public:
+    TaskWorkPackageView( KoDocument *part, QWidget *parent );
+
+    void setupGui();
+    Project *project() const;
+    void setProject( Project *project );
+
+    NodeSortFilterProxyModel *proxyModel() const;
+
+    virtual Node *currentNode() const;
+    QList<Node*> selectedNodes() const ;
+    Node *selectedNode() const;
+
+    virtual void updateReadWrite( bool readwrite );
+
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
+    KoPrintJob *createPrintJob();
+    
+signals:
+    void mailWorkpackage( Node *n, Resource *r = 0 );
+    void mailWorkpackages( QList<Node*> &nodes, Resource *r );
+
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+    void setScheduleManager( ScheduleManager *sm );
+
+protected:
+    void updateActionsEnabled( bool on );
+    int selectedNodeCount() const;
+
+protected slots:
+    virtual void slotOptions();
+    void slotMailWorkpackage();
+
+private slots:
+    void slotSelectionChanged( const QModelIndexList );
+    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+
+    void slotEnableActions();
+
+    void slotSplitView();
+
+private:
+    GeneralNodeTreeView *m_view;
+
+    KAction *actionMailWorkpackage;
 
 };
 

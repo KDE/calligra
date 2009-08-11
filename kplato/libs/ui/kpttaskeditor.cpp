@@ -24,6 +24,8 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptitemviewsettup.h"
+#include "kptworkpackagecontroldialog.h"
+#include "kptworkpackagecontrolpanel.h"
 
 #include <KoDocument.h>
 
@@ -753,6 +755,313 @@ void TaskView::saveContext( QDomElement &context ) const
 }
 
 KoPrintJob *TaskView::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
+//---------------------------------
+GeneralNodeTreeView::GeneralNodeTreeView( QWidget *parent )
+    : DoubleTreeViewBase( parent )
+{
+    GeneralNodeItemModel *m = new GeneralNodeItemModel( this );
+    setModel( m );
+    //setSelectionBehavior( QAbstractItemView::SelectItems );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+    createItemDelegates( m );
+
+    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
+}
+
+void GeneralNodeTreeView::setModus( int mode )
+{
+    baseModel()->setModus( mode );
+}
+
+GeneralNodeItemModel *GeneralNodeTreeView::baseModel() const
+{
+    NodeSortFilterProxyModel *pr = proxyModel();
+    if ( pr ) {
+        return static_cast<GeneralNodeItemModel*>( pr->sourceModel() );
+    }
+    return static_cast<GeneralNodeItemModel*>( model() );
+}
+    
+void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
+{
+    QModelIndex idx = index;
+    NodeSortFilterProxyModel *pr = proxyModel();
+    if ( pr ) {
+        idx = pr->mapToSource( index );
+    }
+    if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
+        event->accept();
+    }
+}
+
+//--------------------------------
+TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent )
+{
+    QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    m_view = new GeneralNodeTreeView( this );
+    m_view->setModus( GeneralNodeItemModel::Flat );
+    NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view, false );
+    m_view->setModel( p );
+    
+    m_view->setSortingEnabled( true );
+    m_view->sortByColumn( NodeModel::NodeWBSCode, Qt::AscendingOrder );
+
+    p->setFilterRegExp( QRegExp( QString::number( Node::Type_Task ) ) );
+    p->setFilterRole( Qt::EditRole );
+    p->setFilterKeyColumn( NodeModel::NodeType );
+
+    l->addWidget( m_view );
+    setupGui();
+
+    //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view->setDragDropMode( QAbstractItemView::InternalMove );
+    m_view->setDropIndicatorShown( false );
+    m_view->setDragEnabled ( true );
+    m_view->setAcceptDrops( false );
+    m_view->setAcceptDropsOnView( false );
+
+    QList<int> readonly; 
+    readonly << NodeModel::NodeName
+            << NodeModel::NodeResponsible
+            << NodeModel::NodeAllocation
+            << NodeModel::NodeEstimateType
+            << NodeModel::NodeEstimateCalendar
+            << NodeModel::NodeEstimate
+            << NodeModel::NodeOptimisticRatio
+            << NodeModel::NodePessimisticRatio
+            << NodeModel::NodeRisk
+            << NodeModel::NodeConstraint 
+            << NodeModel::NodeConstraintStart 
+            << NodeModel::NodeConstraintEnd 
+            << NodeModel::NodeRunningAccount 
+            << NodeModel::NodeStartupAccount 
+            << NodeModel::NodeStartupCost 
+            << NodeModel::NodeShutdownAccount 
+            << NodeModel::NodeShutdownCost 
+            << NodeModel::NodeDescription;
+    foreach ( int c, readonly ) {
+        m_view->baseModel()->setReadOnly( c, true );
+    }
+
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> show; 
+    show << NodeModel::NodeStatus
+            << NodeModel::NodeCompleted
+            << NodeModel::NodeResponsible
+            << NodeModel::NodeAssigments
+            << NodeModel::NodeDescription;
+    
+    for ( int s = 0; s < show.count(); ++s ) {
+        m_view->slaveView()->mapToSection( show[s], s );
+    }
+    QList<int> lst2; 
+    for ( int i = 0; i < m_view->model()->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
+    }
+    m_view->hideColumns( lst1, lst2 );
+    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    m_view->slaveView()->setDefaultColumns( show );
+    
+    connect( m_view->baseModel(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+
+    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    
+    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+Project *TaskWorkPackageView::project() const
+{
+    return m_view->project();
+}
+
+void TaskWorkPackageView::setProject( Project *project )
+{
+    m_view->setProject( project );
+}
+
+NodeSortFilterProxyModel *TaskWorkPackageView::proxyModel() const
+{
+    return m_view->proxyModel();
+}
+
+void TaskWorkPackageView::updateReadWrite( bool rw )
+{
+    m_view->setReadWrite( rw );
+}
+
+void TaskWorkPackageView::setGuiActive( bool activate )
+{
+    kDebug()<<activate;
+    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    }
+}
+
+void TaskWorkPackageView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
+{
+    kDebug()<<curr.row()<<","<<curr.column();
+    slotEnableActions();
+}
+
+void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList list)
+{
+    kDebug()<<list.count();
+    slotEnableActions();
+}
+
+int TaskWorkPackageView::selectedNodeCount() const
+{
+    QItemSelectionModel* sm = m_view->selectionModel();
+    return sm->selectedRows().count();
+}
+
+QList<Node*> TaskWorkPackageView::selectedNodes() const {
+    QList<Node*> lst;
+    QItemSelectionModel* sm = m_view->selectionModel();
+    if ( sm == 0 ) {
+        return lst;
+    }
+    foreach ( QModelIndex i, sm->selectedRows() ) {
+        Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( i ) );
+        if ( n != 0 && n->type() != Node::Type_Project ) {
+            lst.append( n );
+        }
+    }
+    return lst;
+}
+
+Node *TaskWorkPackageView::selectedNode() const
+{
+    QList<Node*> lst = selectedNodes();
+    if ( lst.count() != 1 ) {
+        return 0;
+    }
+    return lst.first();
+}
+
+Node *TaskWorkPackageView::currentNode() const {
+    Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( m_view->selectionModel()->currentIndex() ) );
+    if ( n == 0 || n->type() == Node::Type_Project ) {
+        return 0;
+    }
+    return n;
+}
+
+void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
+{
+    QString name;
+    Node *node = m_view->baseModel()->node( proxyModel()->mapToSource( index ) );
+    if ( node ) {
+        switch ( node->type() ) {
+            case Node::Type_Task:
+                name = "workpackage_popup";
+                break;
+            case Node::Type_Milestone:
+                name = "taskview_milestone_popup";
+                break;
+            case Node::Type_Summarytask:
+                name = "taskview_summary_popup";
+                break;
+            default:
+                break;
+        }
+    } else kDebug()<<"No node: "<<index;
+    if ( name.isEmpty() ) {
+        kDebug()<<"No menu";
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    emit requestPopupMenu( name, pos );
+}
+
+void TaskWorkPackageView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<endl;
+    m_view->baseModel()->setManager( sm );
+}
+
+void TaskWorkPackageView::slotEnableActions()
+{
+    updateActionsEnabled( true );
+}
+
+void TaskWorkPackageView::updateActionsEnabled( bool on )
+{
+    bool o = ! selectedNodes().isEmpty();
+    actionMailWorkpackage->setEnabled( o && on );
+}
+
+void TaskWorkPackageView::setupGui()
+{
+    KActionCollection *coll = actionCollection();
+    
+    QString name = "workpackage_list";
+    actionMailWorkpackage  = new KAction(KIcon( "mail-send" ), i18n("Send..."), this);
+    actionMailWorkpackage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_M ) );
+    actionCollection()->addAction("send_workpackage", actionMailWorkpackage );
+    connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );
+    addAction( name, actionMailWorkpackage );
+
+    // Add the context menu actions for the view options
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( m_view->actionSplitView() );
+    
+    createOptionAction();
+}
+
+void TaskWorkPackageView::slotMailWorkpackage()
+{
+    QList<Node*> lst = selectedNodes();
+    if ( ! lst.isEmpty() ) {
+        WorkPackageSendDialog *dlg = new WorkPackageSendDialog( lst, this );
+        connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ) );
+        dlg->exec();
+        delete dlg;
+    }
+}
+
+void TaskWorkPackageView::slotSplitView()
+{
+    kDebug();
+    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+}
+
+void TaskWorkPackageView::slotOptions()
+{
+    kDebug();
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    dlg->exec();
+    delete dlg;
+}
+
+bool TaskWorkPackageView::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    return m_view->loadContext( m_view->baseModel()->columnMap(), context );
+}
+
+void TaskWorkPackageView::saveContext( QDomElement &context ) const
+{
+    m_view->saveContext( m_view->baseModel()->columnMap(), context );
+}
+
+KoPrintJob *TaskWorkPackageView::createPrintJob()
 {
     return m_view->createPrintJob( this );
 }

@@ -100,4 +100,14 @@ int Config::maximumDurationUnit() const
     return KPlatoSettings::maximumDurationUnit();
 }
 
+bool Config::checkForWorkPackages() const
+{
+    return KPlatoSettings::checkForWorkPackages();
+}
+
+KUrl Config::retreiveUrl() const
+{
+    return KPlatoSettings::retreiveUrl();
+}
+
 }  //KPlato namespace

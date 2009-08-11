@@ -283,12 +283,12 @@ signals:
     void nodeInserted( Node *node );
     
 protected slots:
-    void slotWbsDefinitionChanged();
-    void slotNodeChanged( Node* );
-    void slotNodeToBeInserted( Node *node, int row );
-    void slotNodeInserted( Node *node );
-    void slotNodeToBeRemoved( Node *node );
-    void slotNodeRemoved( Node *node );
+    virtual void slotWbsDefinitionChanged();
+    virtual void slotNodeChanged( Node* );
+    virtual void slotNodeToBeInserted( Node *node, int row );
+    virtual void slotNodeInserted( Node *node );
+    virtual void slotNodeToBeRemoved( Node *node );
+    virtual void slotNodeRemoved( Node *node );
 
     void slotLayoutChanged();
     
@@ -319,10 +319,56 @@ protected:
     bool setStartedTime( Node *node, const QVariant &value, int role );
     bool setFinishedTime( Node *node, const QVariant &value, int role );
 
-private:
+protected:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
 };
+
+//--------------------------------------
+class KPLATOMODELS_EXPORT GeneralNodeItemModel : public NodeItemModel
+{
+    Q_OBJECT
+public:
+    class Object;
+
+    enum Mode { WBS = 1, Flat = 2, WorkPackage = 4 };
+
+    explicit GeneralNodeItemModel( QObject *parent = 0 );
+    ~GeneralNodeItemModel();
+    
+    void setProject( Project *project );
+    void setModus( int modus );
+
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    
+    virtual QModelIndex parent( const QModelIndex & index ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex index( const Node *node ) const;
+    
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+    
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
+    Node *node( const QModelIndex &index ) const;
+    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
+
+protected slots:
+    virtual void slotWbsDefinitionChanged();
+    virtual void slotNodeChanged( Node* );
+    virtual void slotNodeToBeInserted( Node *node, int row );
+    virtual void slotNodeInserted( Node *node );
+    virtual void slotNodeToBeRemoved( Node *node );
+    virtual void slotNodeRemoved( Node *node );
+
+protected:
+    Object *findNodeObject( const Node *node ) const;
+
+private:
+    int m_modus; // WBS | Flat | WorkPackage (0 == NodeItemModel)
+    QList<Object*> m_objects;
+};
+
 
 //--------------------------------------
 class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel

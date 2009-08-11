@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,47 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTWORKPACKAGECONTROLDIALOG_H
-#define KPTWORKPACKAGECONTROLDIALOG_H
+#ifndef KPTWORKPACKAGECONFIGPANEL_H
+#define KPTWORKPACKAGECONFIGPANEL_H
 
-#include "kplatoui_export.h"
-
-#include <kpagedialog.h>
+#include "ui_kptworkpackageconfigpanel.h"
 
 
 namespace KPlato
 {
 
-class DocumentsPanel;
-class WorkPackageControlPanel;
-class WorkPackageSendPanel;
-class Project;
-class Task;
-class Node;
-
-class KPLATOUI_EXPORT WorkPackageControlDialog : public KPageDialog
+class WorkPackageConfigPanel : public QWidget, public Ui_WorkPackageConfigPanel
 {
     Q_OBJECT
 public:
-    explicit WorkPackageControlDialog( Project &project, Task &task, QWidget *parent=0);
+    WorkPackageConfigPanel( QWidget *parent = 0 );
 
-private:
-    WorkPackageControlPanel *m_wp;
-    DocumentsPanel *m_docs;
-};
-
-class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
-{
-    Q_OBJECT
-public:
-    explicit WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *parent=0);
-
-    WorkPackageSendPanel *panel() const { return m_wp; }
-
-private:
-    WorkPackageSendPanel *m_wp;
 };
 
 } //KPlato namespace
 
-#endif // KPTWORKPACKAGECONTROLDIALOG_H
+#endif // KPTWORKPACKAGECONFIGPANEL_H

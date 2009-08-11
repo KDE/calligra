@@ -77,6 +77,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Schedule Handler" )
             << i18n( "Task Status" )
             << i18n( "Task View" )
+            << i18n( "Work Package View" )
             << i18n( "Gantt View" )
             << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
@@ -173,32 +174,35 @@ bool AddViewPanel::ok()
         case 8: { // Task status
             v = m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 9: { // Gantt View
+        case 9: { // Task work package
+            v = m_view->createTaskWorkPackageView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            break; }
+        case 10: { // Gantt View
             v = m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 10: { // Milestone Gantt View
+        case 11: { // Milestone Gantt View
             v = m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 11: { // Resource Assignments
+        case 12: { // Resource Assignments
             v = m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 12: { // Resource Assignments (Gantt)
+        case 13: { // Resource Assignments (Gantt)
             v = m_view->createResourceAppointmentsGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 13: { // Cost Breakdown
+        case 14: { // Cost Breakdown
             v = m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 14: { // Project Performance Chart
+        case 15: { // Project Performance Chart
             v = m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-        case 15: { // Task Performance Chart
+        case 16: { // Task Performance Chart
             v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
 /* Deactivate for koffice 2.0 release
-        case 16: { // Performance Status
+        case 17: { // Performance Status
             v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break; }
-        case 17: { // Tasks by Resources
+        case 18: { // Tasks by Resources
             v = m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break; }
 */

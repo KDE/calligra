@@ -87,6 +87,8 @@
         <ActionList name="calendareditor_calendar_list"/>
         <Separator/>
         <ActionList name="calendareditor_day_list"/>
+        <Separator/>
+        <ActionList name="workpackage_list"/>
     </ToolBar>
     <Menu name="task_edit_popup">
         <Action name="node_properties"/>
@@ -121,7 +123,10 @@
         <Action name="task_description"/>
         <!--<Action name="task_workpackagecontrol"/> -->
     </Menu>
-    <Menu name="resourceappointment_popup">
+     <Menu name="workpackage_popup">
+        <Action name="task_workpackagecontrol"/>
+    </Menu>
+   <Menu name="resourceappointment_popup">
         <Action name="task_description"/>
         <Action name="task_progress"/>
     </Menu>

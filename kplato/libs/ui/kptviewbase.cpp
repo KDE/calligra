@@ -1408,7 +1408,26 @@ void DoubleTreeViewBase::init()
 
     m_actionSplitView = new KAction(KIcon("view-split-left-right"), "", this);
     setViewSplitMode( true );
+
+    connect( m_leftview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotLeftSortIndicatorChanged( int, Qt::SortOrder ) ) );
+    
+    connect( m_rightview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotRightSortIndicatorChanged( int, Qt::SortOrder ) ) );
 }
+
+void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder order )
+{
+    m_leftview->header()->setSortIndicatorShown( true );
+    // sorting controlled by left treeview, turn right off
+    m_rightview->header()->setSortIndicatorShown( false );
+}
+
+void DoubleTreeViewBase::slotRightSortIndicatorChanged( int logicalIndex, Qt::SortOrder order )
+{
+    m_rightview->header()->setSortIndicatorShown( true );
+    // sorting controlled by right treeview, turn left off
+    m_leftview->header()->setSortIndicatorShown( false );
+}
+
 
 QList<int> DoubleTreeViewBase::expandColumnList( const QList<int> lst ) const
 {

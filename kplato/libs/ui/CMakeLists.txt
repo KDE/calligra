@@ -89,6 +89,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptganttprintingoptions.ui
     
     kptworkpackagecontrolpanel.ui
+    kptworkpackagesendpanel.ui
     
     kptdocumentspanel.ui
     

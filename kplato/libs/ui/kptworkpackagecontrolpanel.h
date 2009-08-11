@@ -23,15 +23,19 @@
 #include "kplatoui_export.h"
 
 #include "ui_kptworkpackagecontrolpanel.h"
+#include "ui_kptworkpackagesendpanel.h"
 
 #include <QWidget>
+#include <QMap>
 
+class QPushButton;
 
 namespace KPlato
 {
 
 class Project;
 class Task;
+class TaskWorkPackageView;
 
 class KPLATOUI_EXPORT WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
 {
@@ -49,6 +53,23 @@ protected slots:
 protected:
     Project &m_project;
     Task &m_task;
+};
+
+class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPackageSendPanel
+{
+    Q_OBJECT
+public:
+    explicit WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *parent=0 );
+
+signals:
+    void sendWorkpackages( QList<Node*>&, Resource* );
+
+protected slots:
+    void slotSendClicked();
+
+protected:
+    QMap<Resource*, QList<Node*> > m_resMap;
+    QMap<QPushButton*, Resource*> m_pbMap;
 };
 
 } //KPlato namespace

@@ -63,6 +63,7 @@
 #include <kparts/partmanager.h>
 #include <KConfigDialog>
 #include <kpimutils/kfileio.h>
+#include <KToolInvocation>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -104,6 +105,7 @@
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
+#include "kptworkpackageconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 
@@ -245,6 +247,10 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("task_workpackagecontrol", actionTaskWorkpackage );
     connect( actionTaskWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotTaskWorkpackage() ) );
 
+    actionMailWorkpackage  = new KAction(KIcon( "send-mail" ), i18n("Send Work Package..."), this);
+    actionCollection()->addAction("task_mailworkpackage", actionMailWorkpackage );
+    connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );
+
     actionEditResource  = new KAction(KIcon( "document-properties" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
@@ -302,6 +308,7 @@ View::View( Part* part, QWidget* parent )
 
     loadContext();
 
+    connect( getPart(), SIGNAL( workPackageLoaded() ), SLOT( slotWorkPackageLoaded() ) );
     //kDebug()<<" end";
 }
 
@@ -397,6 +404,8 @@ void View::createViews()
                         v = createTaskStatusView( cat, tag, name, tip );
                     } else if ( type == "TaskView" ) {
                         v = createTaskView( cat, tag, name, tip );
+                    } else if ( type == "TaskWorkPackageView" ) {
+                        v = createTaskWorkPackageView( cat, tag, name, tip );
                     } else if ( type == "GanttView" ) {
                         v = createGanttView( cat, tag, name, tip );
                     } else if ( type == "MilestoneGanttView" ) {
@@ -459,6 +468,8 @@ void View::createViews()
         createTaskStatusView( cat, "TaskStatusView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createTaskView( cat, "TaskView", QString(), TIP_USE_DEFAULT_TEXT );
+
+        createTaskWorkPackageView( cat, "TaskWorkPackageView", QString(), TIP_USE_DEFAULT_TEXT );
 
         createGanttView( cat, "GanttView", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -939,6 +950,38 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    v->updateReadWrite( m_readWrite );
+    return v;
+}
+
+ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+{
+    TaskWorkPackageView *v = new TaskWorkPackageView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "workpackage_view", index );
+    if ( name.isEmpty() ) {
+        i->setText( 0, i18n( "Work Package View" ) );
+    }
+    if ( tip == TIP_USE_DEFAULT_TEXT ) {
+        i->setToolTip( 0, i18n( "View task work package information" ) );
+    } else {
+        i->setToolTip( 0, tip );
+    }
+
+
+    v->setProject( &getProject() );
+    v->setScheduleManager( currentScheduleManager() );
+
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect( v, SIGNAL( mailWorkpackage( Node*, Resource* ) ), SLOT( slotMailWorkpackage( Node*, Resource* ) ) );
+    connect( v, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ), SLOT( slotMailWorkpackages( QList<Node*>&, Resource* ) ) );
+
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -1462,6 +1505,7 @@ void View::slotConfigure()
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "task_defaults" );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "workpackage" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();
@@ -2319,6 +2363,80 @@ void View::setLabel( ScheduleManager *sm )
         return;
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );
+}
+
+void View::slotWorkPackageLoaded()
+{
+    qDebug()<<"View::slotWorkPackageLoaded:"<<getPart()->workPackages();
+}
+
+void View::slotMailWorkpackage( Node *node, Resource *resource )
+{
+    kDebug();
+    KTemporaryFile tmpfile;
+    tmpfile.setAutoRemove( false );
+    tmpfile.setSuffix( ".kplatowork" );
+    if ( ! tmpfile.open() ) {
+        kDebug()<<"Failed to open file";
+        KMessageBox::error(0, i18n("Failed to open temporary file" ) );
+        return;
+    }
+    KUrl url;
+    url.setPath( tmpfile.fileName() );
+    if ( ! getPart()->saveWorkPackageUrl( url, node, activeScheduleId(), resource ) ) {
+        kDebug()<<"Failed to save to file";
+        KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
+        return;
+    }
+    QStringList attachURLs;
+    attachURLs << url.url();
+    QString to = resource == 0 ? node->leader() : ( resource->name() + " <" + resource->email() + '>' );
+    QString cc;
+    QString bcc;
+    QString subject = i18n( "Work Package: %1", node->name() );
+    QString body = i18nc( "1=project name, 2=task name", "%1\n%2", getProject().name(), node->name() );
+    QString messageFile;
+
+    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
+}
+
+void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
+{
+    kDebug();
+    if ( resource == 0 ) {
+        kWarning()<<"No resource, we don't handle node->leader() yet";
+        return;
+    }
+    QString to = resource->name() + " <" + resource->email() + '>';
+    QString subject = i18n( "Work Package for project: %1", getProject().name() );
+    QString body;
+    QStringList attachURLs;
+
+    foreach ( Node *n, nodes ) {
+        KTemporaryFile tmpfile;
+        tmpfile.setAutoRemove( false );
+        tmpfile.setSuffix( ".kplatowork" );
+        if ( ! tmpfile.open() ) {
+            kDebug()<<"Failed to open file";
+            KMessageBox::error(0, i18n("Failed to open temporary file" ) );
+            return;
+        }
+        KUrl url;
+        url.setPath( tmpfile.fileName() );
+        if ( ! getPart()->saveWorkPackageUrl( url, n, activeScheduleId(), resource ) ) {
+            kDebug()<<"Failed to save to file";
+            KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
+            return;
+        }
+        attachURLs << url.url();
+        body += n->name() + '\n';
+    }
+
+    QString cc;
+    QString bcc;
+    QString messageFile;
+
+    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
 }
 
 #ifndef NDEBUG

@@ -46,6 +46,18 @@ WorkPackageControlDialog::WorkPackageControlDialog( Project &project, Task &task
 
 }
 
+WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *p)
+    : KDialog(p)
+{
+    setCaption( i18n("Send Work Packages") );
+    setButtons( Close );
+    setDefaultButton( Close );
+    showButtonSeparator( true );
+
+    m_wp = new WorkPackageSendPanel( tasks, this);
+    setMainWidget( m_wp );
+}
+
 
 }  //KPlato namespace
 

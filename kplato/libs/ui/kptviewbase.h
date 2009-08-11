@@ -495,6 +495,20 @@ public:
 
     void setParentsExpanded( const QModelIndex &idx, bool expanded );
 
+    void setSortingEnabled( bool on ) {
+        m_leftview->setSortingEnabled( on );
+        m_rightview->setSortingEnabled( on );
+    }
+    void sortByColumn( int col, Qt::SortOrder order = Qt::AscendingOrder ) {
+        if ( ! m_leftview->isColumnHidden( col ) || 
+             ! m_rightview->isVisible() ||
+             m_rightview->isColumnHidden( col ) )
+        {
+            m_leftview->sortByColumn( col, order );
+        } else {
+            m_rightview->sortByColumn( col, order );
+        }
+    }
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );
@@ -522,6 +536,9 @@ protected slots:
 
     void slotRightHeaderContextMenuRequested( const QPoint &pos );
     void slotLeftHeaderContextMenuRequested( const QPoint &pos );
+
+    void slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder order );
+    void slotRightSortIndicatorChanged( int logicalIndex, Qt::SortOrder order );
 
 protected:
     void init();

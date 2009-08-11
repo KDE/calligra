@@ -44,6 +44,7 @@ set(kplatoprivate_LIB_SRCS
     
     kptconfig.cpp
     kpttaskdefaultpanel.cpp
+    kptworkpackageconfigpanel.cpp
 
     kptwpcontroldialog.cpp
     kptwpcontrolpanel.cpp
@@ -68,6 +69,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptviewlisteditcategory.ui
 
     kptconfigtaskpanelbase.ui
+    kptworkpackageconfigpanel.ui
 
     kptinsertfilepanel.ui
 )
