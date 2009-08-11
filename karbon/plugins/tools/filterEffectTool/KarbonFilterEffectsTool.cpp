@@ -32,6 +32,7 @@
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectResource.h"
 #include "FilterResourceServerProvider.h"
+#include "FilterStackSetCommand.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
 
@@ -208,9 +209,7 @@ void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
     if (!filterStack)
         return;
     
-    d->currentShape->update();
-    d->currentShape->setFilterEffectStack(filterStack);
-    d->currentShape->update();
+    m_canvas->addCommand(new FilterStackSetCommand(filterStack, d->currentShape));
     d->fillConfigSelector(d->currentShape);
 }
 

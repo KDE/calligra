@@ -23,6 +23,7 @@
 #include "FilterInputChangeCommand.h"
 #include "FilterAddCommand.h"
 #include "FilterRemoveCommand.h"
+#include "FilterStackSetCommand.h"
 #include "KoGenericRegistryModel.h"
 #include "KoFilterEffectRegistry.h"
 #include "KoFilterEffect.h"
@@ -160,10 +161,11 @@ void FilterEffectEditWidget::addSelectedEffect()
     
     if (m_shape) {
         if (! m_shape->filterEffectStack()) {
-            m_shape->update();
-            m_shape->setFilterEffectStack(m_effects);
+            m_effects->appendFilterEffect(effect);
+            m_canvas->addCommand(new FilterStackSetCommand(m_effects, m_shape));
+        } else {
+            m_canvas->addCommand(new FilterAddCommand(effect, m_shape));
         }
-        m_canvas->addCommand(new FilterAddCommand(effect, m_shape));
     } else {
         m_effects->appendFilterEffect(effect);
     }
@@ -377,18 +379,18 @@ void FilterEffectEditWidget::presetSelected(KoResource *resource)
         return;
     
     if (m_shape) {
-        m_shape->update();
-        m_shape->setFilterEffectStack(0);
+        QUndoCommand * cmd = new FilterStackSetCommand(filterStack, m_shape);
+        if (m_canvas) {
+            m_canvas->addCommand(cmd);
+        } else {
+            cmd->redo();
+            delete cmd;
+        }
+    } else {
+        delete m_effects;
     }
-    
-    delete m_effects;
     m_effects = filterStack;
     
-    if (m_shape) {
-        m_shape->setFilterEffectStack(m_effects);
-        m_shape->update();
-    }
-
     m_scene->initialize(m_effects);
     fitScene();
 }
