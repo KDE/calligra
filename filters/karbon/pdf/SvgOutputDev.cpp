@@ -130,7 +130,7 @@ void SvgOutputDev::dumpContent()
     stream << "<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
 
     stream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
-    stream << "width=\"" << d->pageSize.width() << "pt\" height=\"" << d->pageSize.height() << "pt\">" << endl;
+    stream << "width=\"" << d->pageSize.width() << "px\" height=\"" << d->pageSize.height() << "px\">" << endl;
 
     stream << "<defs>" << endl;
     stream << d->defsData;
@@ -460,18 +460,19 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     if( str.length() == 1 && str.at( 0 ) == QChar('&') )
         str = "&amp;";
 
-    double x = state->getLineX(), y = state->getLineY();
+    double x = state->getLineX();
+    double y = state->getLineY();
 
     state->textTransform( x, y, &x, &y );
     state->transform( x, y, &x, &y );
-
+    
     *d->body << "<text";
-    *d->body << " x=\"" << x << "pt\"";
-    *d->body << " y=\"" << y << "pt\"";
+    *d->body << " x=\"" << x << "px\"";
+    *d->body << " y=\"" << y << "px\"";
 
     if( font && font->getFamily() )
         *d->body << " font-family=\"" << QString::fromAscii( font->getFamily()->getCString() ) << "\"";
-    *d->body << " font-size=\"" << state->getFontSize() << "pt\"";
+    *d->body << " font-size=\"" << state->getFontSize() << "px\"";
 
     // fill
     if( ! (render & 1) )
