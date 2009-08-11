@@ -149,8 +149,6 @@ QImage SvgPatternHelper::generateImage( const QRectF &objectBound, const QList<K
     // paint the content into the tile image
     KoShapePainter shapePainter;
     shapePainter.setShapes( content );
-    foreach (KoShape *shape, content)
-        shape->waitUntilReady(zoomHandler);
     shapePainter.paintShapes( tilePainter, zoomHandler );
 
     return tile;
