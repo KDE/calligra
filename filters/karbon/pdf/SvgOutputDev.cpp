@@ -437,7 +437,6 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
 
     QString str;
 
-    int wMode = font->getWMode();
     char * p = s->getCString();
     int len = s->getLength();
     CharCode code;
@@ -486,19 +485,12 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     *d->body << "</text>" << endl;
 }
 
-void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
                 int width, int height, GfxImageColorMap *colorMap,
-                int *maskColors, GBool inlineImg)
+                int *maskColors, GBool /*inlineImg*/)
 {
-    /* TODO: Do we want to cache these? */
     ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
-
-    /* ICCBased color space doesn't do any color correction
-    * so check its underlying color space as well */
-    int is_identity_transform = colorMap->getColorSpace()->getMode() == csDeviceRGB ||
-            colorMap->getColorSpace()->getMode() == csICCBased && 
-            ((GfxICCBasedColorSpace*)colorMap->getColorSpace())->getAlt()->getMode() == csDeviceRGB;
 
     unsigned int *dest = 0;
     unsigned char * buffer = new unsigned char[width * height * 4];
