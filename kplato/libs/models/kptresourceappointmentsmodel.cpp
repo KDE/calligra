@@ -1104,7 +1104,7 @@ bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::Dro
         QByteArray vcard = data->data( "text/x-vcard" );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
-        foreach( KABC::Addressee a, lst ) {
+        foreach( const KABC::Addressee &a, lst ) {
             if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %1 resources from addressbook", lst.count() ) );
             Resource *r = new Resource();
             r->setName( a.formattedName() );

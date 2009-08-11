@@ -337,7 +337,7 @@ class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
 
 };
 
@@ -345,7 +345,7 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
 
 };
 

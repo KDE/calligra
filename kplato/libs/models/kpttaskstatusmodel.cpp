@@ -644,7 +644,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QList<int> rows;
-    foreach (QModelIndex index, indexes) {
+    foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
             //kDebug()<<index.row();
             Node *n = node( index );

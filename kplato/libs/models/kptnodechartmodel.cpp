@@ -207,7 +207,7 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                 if ( axisType == X_Axis ) {
                     //kDebug()<<"X-axis"<<idx<<axis;
                     QDate s = startDate();
-                    foreach ( QDate d, m_bcwp.days().keys() ) {
+                    foreach ( const QDate &d, m_bcwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
                 } else if ( axisType == Y_Axis ) {
@@ -236,7 +236,7 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                 if ( axisType == X_Axis ) {
                     //kDebug()<<"X-axis"<<idx<<axis;
                     QDate s = startDate();
-                    foreach ( QDate d, m_bcwp.days().keys() ) {
+                    foreach ( const QDate &d, m_bcwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
                 } else if ( axisType == Y_Axis ) {
@@ -262,7 +262,7 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                 if ( axisType == X_Axis ) {
                     //kDebug()<<"X-axis"<<idx;
                     QDate s = startDate();
-                    foreach ( QDate d, m_acwp.days().keys() ) {
+                    foreach ( const QDate &d, m_acwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
                 } else if ( axisType == Y_Axis ) {

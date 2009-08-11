@@ -22,6 +22,7 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
+#include <KComboBox>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -47,7 +48,7 @@ ComboBoxDelegate::ComboBoxDelegate(QStringList &list, QObject *parent)
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
     kDebug();
-    QComboBox *editor = new QComboBox(parent);
+    QComboBox *editor = new KComboBox(parent);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
     return editor;
 }

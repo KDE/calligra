@@ -1262,7 +1262,7 @@ QString MainSchedule::logSeverity( int severity )
 QStringList MainSchedule::logMessages() const
 {
     QStringList lst;
-    foreach ( Schedule::Log l, m_log ) {
+    foreach ( const Schedule::Log &l, m_log ) {
         lst << l.formatMsg();
     }
     return lst;

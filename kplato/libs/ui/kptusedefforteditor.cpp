@@ -91,7 +91,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
                 // Total
                 //kDebug()<<index.row()<<","<<index.column()<<" total"<<endl;
                 double res = 0.0;
-                foreach ( QDate d, m_dates ) {
+                foreach ( const QDate &d, m_dates ) {
                     Completion::UsedEffort::ActualEffort *e = ue->effort( d );
                     if ( e ) {
                         res += e->normalEffort().toDouble( Duration::Unit_h );

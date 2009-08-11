@@ -294,7 +294,7 @@ QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
             return i18n( a->timeZone().name().toUtf8() );
         case Role::EnumList: {
             QStringList lst;
-            foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+            foreach ( const QString &s, KSystemTimeZones::timeZones()->zones().keys() ) {
                 lst << i18n( s.toUtf8() );
             }
             lst.sort();
@@ -321,7 +321,7 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
             QString name = lst.value( value.toInt() );
             KTimeZone tz;
-            foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
+            foreach ( const QString &s, KSystemTimeZones::timeZones()->zones().keys() ) {
                 if ( name == i18n( s.toUtf8() ) ) {
                     tz = KSystemTimeZones::zone( s );
                     break;
@@ -441,7 +441,7 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QList<int> rows;
-    foreach (QModelIndex index, indexes) {
+    foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
             kDebug()<<index.row();
             Calendar *c = calendar( index );

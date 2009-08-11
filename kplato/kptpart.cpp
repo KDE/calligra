@@ -565,7 +565,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from )
     }
     QList<QDate> orgdates = org.entries().keys();
     QList<QDate> currdates = curr.entries().keys();
-    foreach ( QDate d, orgdates ) {
+    foreach ( const QDate &d, orgdates ) {
         if ( currdates.contains( d ) ) {
             if ( curr.entry( d ) == org.entry( d ) ) {
                 continue;
@@ -578,7 +578,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from )
             cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
         }
     }
-    foreach ( QDate d, currdates ) {
+    foreach ( const QDate &d, currdates ) {
         if ( ! orgdates.contains( d ) ) {
             Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
             kDebug()<<"add entry "<<d<<e;

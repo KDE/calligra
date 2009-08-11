@@ -88,7 +88,7 @@ void DocumentTreeView::slotSelectionChanged( const QItemSelection &selected )
 QList<Document*> DocumentTreeView::selectedDocuments() const
 {
     QList<Document*> lst;
-    foreach (QModelIndex i, selectionModel()->selectedRows() ) {
+    foreach ( const QModelIndex &i, selectionModel()->selectedRows() ) {
         Document *doc = model()->document( i );
         if ( doc ) {
             lst << doc;

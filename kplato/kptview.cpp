@@ -2130,12 +2130,12 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
     qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
-    foreach( QString name, view->actionListNames() ) {
+    foreach( const QString &name, view->actionListNames() ) {
         //qDebug()<<"View::slotGuiActivated:"<<"deactivate"<<name;
         unplugActionList( name );
     }
     if ( activate ) {
-        foreach( QString name, view->actionListNames() ) {
+        foreach( const QString &name, view->actionListNames() ) {
             //qDebug()<<"View::slotGuiActivated:"<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
         }

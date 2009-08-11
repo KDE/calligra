@@ -68,7 +68,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
     //kDebug()<<sel.indexes().count();
-    foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
+    foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) {
         //kDebug()<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );
@@ -392,7 +392,7 @@ void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 void ScheduleLogTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
     //kDebug()<<sel.indexes().count();
-    foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
+    foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) {
         //kDebug()<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );

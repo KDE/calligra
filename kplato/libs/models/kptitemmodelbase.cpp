@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QToolTip>
 
+#include <KComboBox>
 #include <klineedit.h>
 #include <kdebug.h>
 
@@ -209,7 +210,7 @@ QWidget *SelectorDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 {
     switch ( index.model()->data( index, Role::EditorType ).toInt() ) {
         case Delegate::EnumEditor: {
-            QComboBox *editor = new QComboBox(parent);
+            QComboBox *editor = new KComboBox(parent);
             editor->installEventFilter(const_cast<SelectorDelegate*>(this));
             return editor;
         }
@@ -274,7 +275,7 @@ EnumDelegate::EnumDelegate( QObject *parent )
 
 QWidget *EnumDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
-    QComboBox *editor = new QComboBox(parent);
+    QComboBox *editor = new KComboBox(parent);
     editor->installEventFilter(const_cast<EnumDelegate*>(this));
     return editor;
 }
@@ -524,7 +525,7 @@ void ItemModelBase::slotLayoutToBeChanged()
 bool ItemModelBase::dropAllowed( const QModelIndex &index, int, const QMimeData *data )
 {
     if ( flags( index ) & Qt::ItemIsDropEnabled ) {
-        foreach ( QString s, data->formats() ) {
+        foreach ( const QString &s, data->formats() ) {
             if ( mimeTypes().contains( s ) ) {
                 return true;
             }

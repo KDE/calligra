@@ -74,7 +74,7 @@ public:
      * @param task the task to show
      * @param parent parent widget
      */
-    TaskDescriptionDialog( Task &task, QWidget *parent=0 );
+    explicit TaskDescriptionDialog( Task &task, QWidget *parent=0 );
 
     MacroCommand *buildCommand();
 

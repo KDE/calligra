@@ -2108,12 +2108,12 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             QStringList res = m_project->resourceNameList();
             QStringList req = node->requestNameList();
             QStringList alloc;
-            foreach ( QString s, value.toString().split( QRegExp(" *, *"), QString::SkipEmptyParts ) ) {
+            foreach ( const QString &s, value.toString().split( QRegExp(" *, *"), QString::SkipEmptyParts ) ) {
                 alloc << s.trimmed();
             }
             // first add all new resources (to "default" group)
             ResourceGroup *pargr = m_project->groupByName( i18n( "Resources" ) );
-            foreach ( QString s, alloc ) {
+            foreach ( const QString &s, alloc ) {
                 Resource *r = m_project->resourceByName( s.trimmed() );
                 if ( r != 0 ) {
                     continue;
@@ -2135,7 +2135,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             
             QString c = i18n( "Modify Resource Allocations" );
             // Handle deleted requests
-            foreach ( QString s, req ) {
+            foreach ( const QString &s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user
                 if ( alloc.indexOf( s ) == -1 ) {
                     // remove removed resource request
@@ -2149,7 +2149,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
             }
             // Handle new requests
             QMap<ResourceGroup*, ResourceGroupRequest*> groupmap;
-            foreach ( QString s, alloc ) {
+            foreach ( const QString &s, alloc ) {
                 // if an allocation is not in req, it must be added
                 if ( req.indexOf( s ) == -1 ) {
                     ResourceGroup *pargr = 0;
@@ -2720,7 +2720,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QList<int> rows;
-    foreach (QModelIndex index, indexes) {
+    foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
             //kDebug()<<index.row();
             Node *n = node( index );
@@ -3830,7 +3830,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QList<int> rows;
-    foreach (QModelIndex index, indexes) {
+    foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
             //kDebug()<<index.row();
             Node *n = node( index );

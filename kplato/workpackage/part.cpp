@@ -386,7 +386,7 @@ bool Part::loadWorkPackages()
     KStandardDirs *sd = componentData().dirs();
     QStringList lst = sd->findAllResources( "projects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //qDebug()<<"Part::loadWorkPackages:"<<lst;
-    foreach ( QString file, lst ) {
+    foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
             KMessageBox::information( 0, i18n( "Failed to load:\n%1" , file ) );
         }

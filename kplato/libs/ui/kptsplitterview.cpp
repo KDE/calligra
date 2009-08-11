@@ -21,6 +21,8 @@
 
 #include "KoDocument.h"
 
+#include <KTabWidget>
+
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTabWidget>
@@ -43,7 +45,7 @@ SplitterView::SplitterView(KoDocument *doc, QWidget *parent)
     
 QTabWidget *SplitterView::addTabWidget(  )
 {
-    QTabWidget *w = new QTabWidget( m_splitter );
+    KTabWidget *w = new KTabWidget( m_splitter );
     m_splitter->addWidget( w );
     return w;
 }
@@ -308,7 +310,7 @@ bool SplitterView::loadContext( const KoXmlElement &context )
         return true;
     }
 #ifndef KOXML_USE_QDOM
-    foreach ( QString s, e.attributeNames() ) {
+    foreach ( const QString &s, e.attributeNames() ) {
         ViewBase *v = findChildren<ViewBase*>( s ).first();
         if ( v == 0 ) {
             continue;

@@ -87,7 +87,7 @@ QObject *ResourceTreeView::currentObject() const
 QList<QObject*> ResourceTreeView::selectedObjects() const
 {
     QList<QObject*> lst;
-    foreach (QModelIndex i, selectionModel()->selectedRows() ) {
+    foreach (const QModelIndex &i, selectionModel()->selectedRows() ) {
         lst << static_cast<QObject*>( i.internalPointer() );
     }
     return lst;

@@ -1413,7 +1413,7 @@ ResourceGroup *Project::group( const QString& id )
 
 ResourceGroup *Project::groupByName( const QString& name ) const
 {
-    foreach ( QString k, resourceGroupIdDict.keys() ) {
+    foreach ( const QString &k, resourceGroupIdDict.keys() ) {
         ResourceGroup *g = resourceGroupIdDict[ k ];
         if ( g->name() == name ) {
             Q_ASSERT( k == g->id() );
@@ -1471,7 +1471,7 @@ Resource *Project::resource( const QString& id )
 
 Resource *Project::resourceByName( const QString& name ) const
 {
-    foreach ( QString k, resourceIdDict.keys() ) {
+    foreach ( const QString &k, resourceIdDict.keys() ) {
         Resource *r = resourceIdDict[ k ];
         if ( r->name() == name ) {
             Q_ASSERT( k == r->id() );

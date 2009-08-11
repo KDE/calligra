@@ -595,7 +595,7 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *group, co
         case Qt::EditRole:
             return m_resourceCache[ res->id() ];
         case Qt::ToolTipRole: {
-            return i18np( "Not allocated", "Allocated units: %1", m_resourceCache[ res->id() ], allocation( group, res, Qt::DisplayRole ).toString() );
+            return i18np( "Not allocated", "Allocated units: %2", m_resourceCache[ res->id() ], allocation( group, res, Qt::DisplayRole ).toString() );
         }
         case Qt::CheckStateRole:
             return m_resourceCache[ res->id() ] == 0 ? Qt::Unchecked : Qt::Checked;

@@ -501,7 +501,7 @@ void Resource::save(QDomElement &element) const {
     if ( ! m_externalAppointments.isEmpty() ) {
         QDomElement e = me.ownerDocument().createElement("external-appointments");
         me.appendChild(e);
-        foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
+        foreach ( const QString &id, m_externalAppointments.uniqueKeys() ) {
             QDomElement el = e.ownerDocument().createElement("project");
             e.appendChild( el );
             el.setAttribute( "id", id );
@@ -945,7 +945,7 @@ void Resource::addExternalAppointment( const QString &id, const QString &name, c
 
 void Resource::clearExternalAppointments()
 {
-    foreach ( QString id, m_externalAppointments.keys() ) {
+    foreach ( const QString &id, m_externalAppointments.keys() ) {
         clearExternalAppointments( id );
     }
 }

@@ -1075,7 +1075,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         QByteArray vcard = data->data( f );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
-        foreach( KABC::Addressee a, lst ) {
+        foreach( const KABC::Addressee &a, lst ) {
             if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %1 resources from addressbook", lst.count() ) );
             Resource *r = new Resource();
             QString uid = a.uid();
@@ -1115,7 +1115,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
     QList<int> rows;
-    foreach (QModelIndex index, indexes) {
+    foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
             //kDebug()<<index.row();
             Resource *r = ::qobject_cast<Resource*>( object( index ) );

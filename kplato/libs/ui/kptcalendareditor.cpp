@@ -104,7 +104,7 @@ void CalendarTreeView::focusOutEvent ( QFocusEvent * event )
 void CalendarTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
     //kDebug()<<sel.indexes().count();
-    //foreach( QModelIndex i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
+    //foreach( const QModelIndex &i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
     TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
@@ -134,7 +134,7 @@ Calendar *CalendarTreeView::selectedCalendar() const
 QList<Calendar*> CalendarTreeView::selectedCalendars() const
 {
     QList<Calendar *> lst;
-    foreach ( QModelIndex i, selectionModel()->selectedRows() ) {
+    foreach ( const QModelIndex &i, selectionModel()->selectedRows() ) {
         Calendar *a = model()->calendar( i );
         if ( a ) {
             lst << a;

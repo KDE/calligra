@@ -2635,7 +2635,7 @@ void Completion::copy( const Completion &p )
     m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
     m_entrymode = p.entrymode();
-    foreach ( QDate d, p.entries().keys() ) {
+    foreach ( const QDate &d, p.entries().keys() ) {
         addEntry( d, new Entry( *(p.entries()[ d ]) ) );
     }
     foreach ( const Resource *r, p.usedEffortMap().keys() ) {
@@ -2746,7 +2746,7 @@ int Completion::percentFinished() const
 int Completion::percentFinished( const QDate &date ) const
 {
     int x = 0;
-    foreach ( QDate d, m_entries.keys() ) {
+    foreach ( const QDate &d, m_entries.keys() ) {
         if ( d <= date ) {
             x = m_entries[ d ]->percentFinished;
         }
@@ -2765,7 +2765,7 @@ Duration Completion::remainingEffort() const
 Duration Completion::remainingEffort( const QDate &date ) const
 {
     Duration x;
-    foreach ( QDate d, m_entries.keys() ) {
+    foreach ( const QDate &d, m_entries.keys() ) {
         if ( d <= date ) {
             x = m_entries[ d ]->remainingEffort;
         }
@@ -2782,7 +2782,7 @@ Duration Completion::actualEffort() const
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
         foreach( UsedEffort *ue, m_usedEffort ) {
-            foreach ( QDate d, ue->actualEffortMap().keys() ) {
+            foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
                 eff += ue->actualEffortMap()[ d ]->effort();
             }
         }
@@ -2847,7 +2847,7 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
             QDate st = start.isValid() ? start : m_startTime.date();
             QDate et = end.isValid() ? end : m_finishTime.date();
             Duration last;
-            foreach ( QDate d, m_entries.uniqueKeys() ) {
+            foreach ( const QDate &d, m_entries.uniqueKeys() ) {
                 if ( d < st ) {
                     continue;
                 }
@@ -2985,7 +2985,7 @@ EffortCostMap Completion::actualEffortCost() const
         QDate st = start.isValid() ? start : m_startTime.date();
         QDate et = end.isValid() ? end : m_finishTime.date();
         Duration last;
-        foreach ( QDate d, m_entries.uniqueKeys() ) {
+        foreach ( const QDate &d, m_entries.uniqueKeys() ) {
             if ( d < st ) {
                 continue;
             }
@@ -3123,7 +3123,7 @@ void Completion::saveXML(QDomElement &element )  const
     el.setAttribute("startTime", m_startTime.toString( KDateTime::ISODate ));
     el.setAttribute("finishTime", m_finishTime.toString( KDateTime::ISODate ));
     el.setAttribute("entrymode", entryModeToString());
-    foreach( QDate date, m_entries.uniqueKeys() ) {
+    foreach( const QDate &date, m_entries.uniqueKeys() ) {
         QDomElement elm = el.ownerDocument().createElement("completion-entry");
         el.appendChild(elm);
         Entry *e = m_entries[ date ];
@@ -3166,7 +3166,7 @@ Completion::UsedEffort::~UsedEffort()
 
 void Completion::UsedEffort::mergeEffort( const Completion::UsedEffort &value )
 {
-    foreach ( QDate d, value.actualEffortMap().keys() ) {
+    foreach ( const QDate &d, value.actualEffortMap().keys() ) {
         setEffort( d, new ActualEffort( *( value.actualEffortMap()[ d ] ) ) );
     }
 }
@@ -3179,7 +3179,7 @@ void Completion::UsedEffort::setEffort( const QDate &date, ActualEffort *value )
 Duration Completion::UsedEffort::effortTo( const QDate &date ) const
 {
     Duration eff;
-    foreach ( QDate d, m_actual.keys() ) {
+    foreach ( const QDate &d, m_actual.keys() ) {
         if ( d > date ) {
             break;
         }
@@ -3529,7 +3529,7 @@ void Completion::printDebug(const QByteArray& _indent) const {
     kDebug()<<indent<<"Started:"<<m_started<<""<<m_startTime.toString();
     kDebug()<<indent<<"Finished:"<<m_finished<<""<<m_finishTime.toString();
     indent += "  ";
-    foreach( QDate d, m_entries.keys() ) {
+    foreach( const QDate &d, m_entries.keys() ) {
         Entry *e = m_entries[ d ];
         kDebug()<<indent<<"Date:"<<d;
         kDebug()<<(indent+" !")<<"% Finished:"<<e->percentFinished;
