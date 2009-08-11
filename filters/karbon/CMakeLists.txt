@@ -37,7 +37,7 @@ if (POPPLER_FOUND)
 endif (POPPLER_FOUND)
 
 # enable again when these filters are ported
-message(STATUS "Karbon: still need to port: applixgraphics, pdf, ai, kontour, xcf, xaml, xfig, msod and oodraw filters")
+message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, xfig, msod and oodraw filters")
 
 if(FALSE)
 add_subdirectory( ai )
