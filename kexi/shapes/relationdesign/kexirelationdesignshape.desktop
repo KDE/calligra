@@ -1,6 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Kexi Relation Design Shape
+Name[pt]=Forma de Desenho de Relações do Kexi
+Name[pt_BR]=Forma de Desenho de Relações do Kexi
+Name[uk]=Форма реляційного компонування Kexi
+Name[x-test]=xxKexi Relation Design Shapexx
+Name[zh_TW]=Kexi 關係設計元件
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=kexirelationdesignshape
