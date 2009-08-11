@@ -1090,7 +1090,18 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // chart document.  ChartShape::saveOdf() will then be called
     // again later, when the current document saves the embedded
     // documents.
-    if ( QString( bodyWriter.tagHierarchy().last() ) != "office:chart" ) {
+    //
+    // FIXME: The check isEmpty() fixes a crash that happened when a
+    //        chart shape was saved from KWord.  There are two
+    //        problems with this fix:
+    //        1. Checking the tag hierarchy is hardly the right way to do this
+    //        2. The position doesn't seem to be saved yet.
+    //        3. I have to check with the other apps, e.g. kspread, if it works there too. 
+    //
+    QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
+    if ( tagHierarchy.isEmpty() 
+         || QString( tagHierarchy.last() ) != "office:chart" )
+    {
         bodyWriter.startElement( "draw:frame" );
         saveOdfAttributes( context, OdfTransformation | OdfSize );
 
