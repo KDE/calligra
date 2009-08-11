@@ -76,7 +76,7 @@ private:
     void setCurrentCanvas(KWCanvas *view);
 
     KStatusBar *m_statusbar;
-    KWView *m_currentView;
+    QPointer<KWView> m_currentView;
     QMap<KWView*, QWidget*> m_zoomWidgets;
     KWDocument *const m_document;
     QPointer<KoCanvasController> m_controller;

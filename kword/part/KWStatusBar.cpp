@@ -44,7 +44,6 @@ const KLocalizedString i18nPage = ki18n("Page: %1/%2");
 KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     : QObject(view),
     m_statusbar(statusBar),
-    m_currentView(0),
     m_document(view->kwdocument()),
     m_controller(0),
     m_currentPageNumber(0)
