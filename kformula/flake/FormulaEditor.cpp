@@ -84,7 +84,7 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
         }
     }
     if (undo) {
-        undo->setText("Add text");
+        undo->setText(i18n("Add text"));
     }
     return undo;
 }
@@ -161,7 +161,7 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
         //TODO: implement the insertion of glyphs
     }
     if (undo) {
-        undo->setText("Insert Element");
+        undo->setText(i18n("Insert Element"));
     }
     return undo;
 }
@@ -198,7 +198,7 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
         }
     }
     if (undo) {
-        undo->setText("Remove stuff");
+        undo->setText(18n("Remove stuff"));
     }
     return undo;
 }
