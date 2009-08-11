@@ -473,9 +473,6 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
     if (!filterEffect)
         return;
     
-    if (m_shape)
-        m_shape->update();
-    
     QString oldInput = ConnectionSource::typeToString(m_currentItem.type());
     QString newInput = m_defaultSourceSelector->itemText(index);
     
@@ -498,9 +495,6 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
         cmd->redo();
         delete cmd;
     }
-    
-    if (m_shape)
-        m_shape->update();
     
     m_scene->initialize(m_effects);
     fitScene();
