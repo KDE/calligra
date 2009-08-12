@@ -102,7 +102,16 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
 
 KWTextFrameSet::~KWTextFrameSet()
 {
-    delete m_document;
+    // first remove the doc from all our frames so they won't try to use it after we delete it.
+    if (m_frames.isEmpty()) {
+        delete m_document;
+    } else {
+        // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
+        KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames.last()->shape()->userData());
+        Q_ASSERT(tsd);
+        tsd->setDocument(m_document);
+        m_document = 0;
+    }
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame)
