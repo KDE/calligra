@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koconverter.h"
+#include "filtertester.h"
 
 #include <kaboutdata.h>
 #include <kimageio.h>
@@ -156,4 +156,4 @@ int main( int argc, char **argv )
     return 3;
 }
 
-#include "koconverter.moc"
+#include "filtertester.moc"

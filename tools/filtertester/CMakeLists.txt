@@ -1,10 +1,10 @@
 include_directories( ${KOMAIN_INCLUDES})
 
-set(koconverter_SRCS koconverter.cpp )
+set(filtertester_SRCS filtertester.cpp )
 
-kde4_add_executable(koconverter ${koconverter_SRCS})
+kde4_add_executable(filtertester ${filtertester_SRCS})
 
-target_link_libraries(koconverter komain ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(filtertester komain ${KDE4_KIO_LIBS})
 
-install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS filtertester  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
