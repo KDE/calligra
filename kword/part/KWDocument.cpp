@@ -892,6 +892,7 @@ void KWDocument::saveConfig()
 
 // ************* PageProcessingQueue ************
 PageProcessingQueue::PageProcessingQueue(KWDocument *parent)
+    : QObject(parent)
 {
     m_document = parent;
     m_triggered = false;
