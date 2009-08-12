@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -425,7 +426,7 @@ void BasicElement::writeElementTree(int indent, bool wrong)
     if (wrong) {
         s+=" -> wrong parent !!!";
     }
-    kDebug()<<s<<ElementFactory::elementName(elementType());
+    kDebug()<<s;
     foreach (BasicElement* tmp, childElements()) {
         if (tmp->parentElement()!=this) {
             tmp->writeElementTree(indent+1,true);

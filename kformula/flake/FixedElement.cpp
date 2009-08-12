@@ -37,7 +37,7 @@ FixedElement::~FixedElement()
 BasicElement* FixedElement::elementAfter ( int position ) const
 {
     if (position % 2 == 0) {
-        return childElements()[position/2];
+        return elementNext(position);
     } else {
         return 0;
     }
@@ -46,10 +46,15 @@ BasicElement* FixedElement::elementAfter ( int position ) const
 BasicElement* FixedElement::elementBefore ( int position ) const
 {
     if (position % 2 == 1) {
-        return childElements()[position/2];
+        return elementNext(position);
     } else {
         return 0;
     }
+}
+
+BasicElement* FixedElement::elementNext ( int position ) const
+{
+        return childElements()[position/2];
 }
 
 
@@ -113,9 +118,32 @@ bool FixedElement::moveVertSituation(FormulaCursor& newcursor, FormulaCursor& ol
     return true;
 }
 
+
+bool FixedElement::moveSingleSituation ( FormulaCursor& newcursor, FormulaCursor& oldcursor, int pos )
+{
+    switch (newcursor.direction()) {
+    case MoveLeft:
+        if (newcursor.position()%2==1) {
+            newcursor.moveTo(newcursor.currentElement()->childElements()[pos]);
+            break;
+        }
+        return false;
+    case MoveRight:
+        if (newcursor.position()%2==0) {
+            newcursor.moveTo(newcursor.currentElement()->childElements()[pos]);
+            break;
+        }
+    case MoveUp:
+    case MoveDown:
+        return false;
+    }
+    return true;
+}
+
+
 bool FixedElement::acceptCursor ( const FormulaCursor& cursor )
 {
-        return false;
+    return false;
 }
 
 QLineF FixedElement::cursorLine ( int position ) const
@@ -153,4 +181,10 @@ bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
     } else {
         (*child)->insertChild(0,element);
     }
+}
+
+
+int FixedElement::length() const
+{
+    return childElements().length()*2-1;
 }

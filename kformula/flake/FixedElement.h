@@ -46,6 +46,8 @@ public:
 
     BasicElement* elementAfter(int position) const;
 
+    virtual BasicElement* elementNext(int position) const;
+
     virtual QLineF cursorLine ( int position ) const;
 
     bool loadElement(KoXmlElement& tmp, BasicElement** child);
@@ -55,9 +57,12 @@ public:
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
 
+    virtual int length() const;
+
 protected:
     bool moveHorSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
     bool moveVertSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);
+    bool moveSingleSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos);
 };
 
 #endif // ROWELEMENT_H

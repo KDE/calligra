@@ -291,7 +291,7 @@ public:
     BasicElement* formulaElement();
 
     /// writes the element to kDebug(), only for debugging purpose
-    void writeElementTree(int indent=0, bool wrong=false);
+    virtual void writeElementTree(int indent=0, bool wrong=false);
 
     TableEntryElement* parentTableEntry();
 

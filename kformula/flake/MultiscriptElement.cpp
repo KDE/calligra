@@ -24,6 +24,7 @@
 #include <KoXmlReader.h>
 #include <QPainter>
 #include "FormulaCursor.h"
+#include "kdebug.h"
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : FixedElement( parent )
 {
@@ -207,7 +208,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
-bool MultiscriptElement::acceptCursor( const FormulaCursor* cursor )
+bool MultiscriptElement::acceptCursor( const FormulaCursor& cursor )
 {
     return false;
 }
@@ -215,18 +216,17 @@ bool MultiscriptElement::acceptCursor( const FormulaCursor* cursor )
 const QList<BasicElement*> MultiscriptElement::childElements() const
 {
     QList<BasicElement*> list;
+    for (int i=m_preScripts.count()-2;i>=0; i-=2 ) {
+        if(m_preScripts[i]) list << m_preScripts[i];
+        if(m_preScripts[i+1]) list << m_preScripts[i+1];
+    }
     list << m_baseElement;
-    
     foreach( BasicElement* tmp, m_postScripts ) {
         if(tmp)
             list << tmp;
     }
 
-    foreach( BasicElement* tmp, m_preScripts ) {
-        if(tmp)
-            list << tmp;
-    }
-    
+
     return list;
 }
 
@@ -307,20 +307,188 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
     }
 }
 
-int MultiscriptElement::length() const
-{
-        return 2*childElements().length()-1;
-}
+// int MultiscriptElement::length() const
+// {
+//     if (!m_postScripts.isEmpty() && m_postScripts.last()==0) {
+//         //the last element is empty, so there are no cursor positions around it
+//         return 2*(m_preScripts.count()+m_postScripts.count())-1;
+//     } else {
+//         return 2*(m_preScripts.count()+m_postScripts.count()+1)-1;
+//     }
+// }
 
 bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
 {
-    //TODO: Fill this out 
+    // grouppositions:  1 3   1 3
+    //                  0 2 2 0 2
+    //                  |     | |
+    // pairs:           0 1   0 1
+    //TODO: Fill this out
+
     int childposition=newcursor.position()/2;
-    if (childposition==0) {
+    //this should be cached
+    int prescriptCount=0;
+    foreach (BasicElement* tmp, m_preScripts) {
+        if (tmp) {
+            prescriptCount++;
+        }
+    }
+    int numberofprescriptpairs=m_preScripts.count()/2;
+    int basePosition=m_preScripts.count();
+
+    if (childposition==prescriptCount) {
+        //we are in BasePosition
+        if (newcursor.direction()==MoveUp || newcursor.direction()==MoveDown) {
+            return false;
+        }
+        if (m_postScripts.isEmpty() && m_preScripts.isEmpty()) {
+            //this should not happen
+            return moveSingleSituation(newcursor,oldcursor,
+                                        childElements().indexOf(m_baseElement));
+        }
         if (newcursor.direction()==MoveLeft) {
-            return moveVertSituation(newcursor,oldcursor,0,1);
+            if (!m_preScripts.isEmpty()) {
+                // we search for the first non NULL element to the left
+                int i;
+                for (i=0; i<m_preScripts.count(); i++) {
+                    if (m_preScripts[i]) {
+                        break;
+                    }
+                }
+                if ((i<m_preScripts.count()) && m_preScripts[i]) {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_preScripts[i]),
+                                             childElements().indexOf(m_baseElement));
+                }
+            }
+            return moveSingleSituation(newcursor,oldcursor,0);
         } else if (newcursor.direction()==MoveRight) {
-            return moveVertSituation(newcursor,oldcursor,0,1);
+            if (!m_postScripts.isEmpty()) {
+                // we search for the first non NULL element to the left
+                int i;
+                for (i=0; i<m_postScripts.count(); i++) {
+                    if (m_postScripts[i]) {
+                        break;
+                    }
+                }
+                if (m_postScripts[i]) {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_baseElement),
+                                             childElements().indexOf(m_postScripts[i]));
+                }
+            }
+            return moveSingleSituation(newcursor,oldcursor,
+                                        childElements().indexOf(m_baseElement));
+        }
+    } else {
+        int groupposition;
+        bool prescript=true;
+        if (childposition<prescriptCount) {
+                //determine the position in the pre-/postscripts we are in
+                groupposition=m_preScripts.indexOf(childElements()[childposition]);
+        } else {
+                groupposition=m_postScripts.indexOf(childElements()[childposition]);
+                prescript=false;
+        }
+        int pair=groupposition/2;
+        if (newcursor.direction()==MoveUp || newcursor.direction()==MoveDown) {
+//             kDebug()<<groupposition<<" - "<<prescriptCount<< "-" <<pair;
+            if (prescript) {
+                if (m_preScripts[pair*2] && m_preScripts[pair*2+1]) {
+                    return moveVertSituation(newcursor,oldcursor,
+                                              childElements().indexOf(m_preScripts[pair*2+1]),
+                                              childElements().indexOf(m_preScripts[pair*2]));
+                } else {
+                    return false;
+                }
+            } else {
+                if (m_postScripts[pair*2] && m_postScripts[pair*2+1]) {
+                    return moveVertSituation(newcursor,oldcursor,
+                                              childElements().indexOf(m_postScripts[pair*2+1]),
+                                              childElements().indexOf(m_postScripts[pair*2]));
+                } else {
+                    return false;
+                }
+            }
+        } else if (newcursor.direction()==MoveLeft) {
+            if (prescript) {
+                //we are in the prescripts
+                int i=groupposition+2;
+                if (!((i<m_preScripts.count()) && m_preScripts[i])) {
+                    for (i=groupposition+1; i<m_preScripts.count(); i++) {
+                        if (m_preScripts[i]) {
+                            break;
+                        }
+                    }
+                }
+                if ((i<m_preScripts.count()) && m_preScripts[i]) {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_preScripts[i]),
+                                             childElements().indexOf(m_preScripts[groupposition]));
+                } else {
+                    return moveSingleSituation(newcursor,oldcursor,
+                                                childElements().indexOf(m_preScripts[groupposition]));
+                }
+            } else {
+                //we are in the postscripts
+                int i=groupposition-1;
+                if (!(i>=0) && m_postScripts[i]) {
+                    for (i=groupposition-2; i>=0; i--) {
+                        if (m_postScripts[i]) {
+                            break;
+                        }
+                    }
+                }
+                if ((i>=0) && m_postScripts[i]) {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_postScripts[i]),
+                                             childElements().indexOf(m_postScripts[groupposition]));
+                } else {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_baseElement),
+                                             childElements().indexOf(elementNext(newcursor.position())));
+                }
+            }
+        } else if (newcursor.direction()==MoveRight) {
+            if (prescript) {
+                //we are in the prescripts
+                int i=groupposition-2;
+                if (!((i>=0) && m_preScripts[i])) {
+                    for (i=groupposition-1; i>=0; i--) {
+                        if (m_preScripts[i]) {
+                            break;
+                        }
+                    }
+                }
+                if ((i>=0) && m_preScripts[i]) {
+//                    kDebug()<<"Going from "<< groupposition <<" to " <<i;
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_preScripts[groupposition]),
+                                             childElements().indexOf(m_preScripts[i]));
+                } else {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(elementNext(newcursor.position())),
+                                             childElements().indexOf(m_baseElement));
+                }
+            } else {
+                //we are in the postscripts
+                int i=groupposition+2;
+                if (!((i<m_postScripts.count()) && m_postScripts[i])) {
+                    for (i=groupposition+1; i<m_postScripts.count(); i++) {
+                        if (m_postScripts[i]) {
+                            break;
+                        }
+                    }
+                }
+                if ((i<m_postScripts.count()) && m_postScripts[i]) {
+                    return moveHorSituation(newcursor,oldcursor,
+                                             childElements().indexOf(m_postScripts[groupposition]),
+                                             childElements().indexOf(m_postScripts[i]));
+                } else {
+                    return moveSingleSituation(newcursor,oldcursor,
+                                                childElements().indexOf(m_preScripts[groupposition]));
+                }
+            }
         }
     }
     return false;
@@ -328,6 +496,9 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
 
 bool MultiscriptElement::setCursorTo ( FormulaCursor& cursor, QPointF point )
 {
+    if (cursor.isSelecting()) {
+        return false;
+    }
     foreach (BasicElement* tmp, childElements()) {
         if (tmp->boundingRect().contains(point)) {
             return tmp->setCursorTo(cursor,point-tmp->origin());

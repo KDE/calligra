@@ -131,6 +131,8 @@ protected:
     /// @return The font to use
     QFont font() const;
 
+    virtual void writeElementTree ( int indent = 0, bool wrong = false );
+
     /// Whether the element should be stretched horizontally (e.g. arrows)
     bool m_stretchHorizontally;
     /// Whether the element should be stretched vertically (e.g. brackets)

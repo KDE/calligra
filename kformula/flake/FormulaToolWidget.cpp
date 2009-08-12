@@ -111,7 +111,6 @@ void FormulaToolWidget::setFormulaTool( KoFormulaTool* tool )
 
 void FormulaToolWidget::insertSymbol ( QTableWidgetItem* item )
 {
-    kDebug()<<"Hihi";
     m_tool->insertSymbol(item->text());
 }
 

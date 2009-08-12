@@ -75,6 +75,7 @@ FormulaRenderer* KoFormulaShape::formulaRenderer() const
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
+    kDebug()<<"Loading ODF";
     Q_UNUSED( context )
     update();
     // delete the old formula
@@ -87,6 +88,7 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
+    kDebug()<<"Saving ODF";
     if( m_formulaData->formulaElement()->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
 

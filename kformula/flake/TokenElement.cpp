@@ -348,3 +348,24 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
         }
     }
 }
+
+void TokenElement::writeElementTree ( int indent, bool wrong )
+{
+        QString s;
+    for (int i=0; i<indent; ++i) {
+        s+="   ";
+    }
+    s+=ElementFactory::elementName(elementType());
+    if (wrong) {
+        s+=" -> wrong parent !!!";
+    }
+    s+=ElementFactory::elementName(elementType())+" '"+m_rawString+"'";
+    kDebug()<<s;
+    foreach (BasicElement* tmp, childElements()) {
+        if (tmp->parentElement()!=this) {
+            tmp->writeElementTree(indent+1,true);
+        } else {
+            tmp->writeElementTree(indent+1,false);
+        }
+    }
+}

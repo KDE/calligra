@@ -45,7 +45,7 @@ public:
 
     virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
     
-    virtual int length() const;
+//     virtual int length() const;
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -64,7 +64,7 @@ public:
      * @param cursor The FormulaCursor that is moved around
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    bool acceptCursor( const FormulaCursor* cursor );
+    virtual bool acceptCursor ( const FormulaCursor& cursor );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
@@ -72,6 +72,10 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
+
+//     virtual BasicElement* elementNext ( int position ) const;
+
+//     virtual int positionOfChild ( BasicElement* child ) const;
 protected:
     /// Read all content from the node
     bool readMathMLContent( const KoXmlElement& element );
@@ -101,5 +105,6 @@ private:
     /// further away
     QList<BasicElement*> m_postScripts;
 };
+
 
 #endif // MULTISCRIPTELEMENT_H
