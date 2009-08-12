@@ -22,7 +22,7 @@
 #include <KoToolRegistry.h>
 
 K_EXPORT_COMPONENT_FACTORY ( kexirelationdesignshape,
-                             KGenericFactory<KexiRelationDesignShapePlugin> ( "KexiRelationDesignShapePlugin" ) );
+                             KGenericFactory<KexiRelationDesignShapePlugin> ( "KexiRelationDesignShapePlugin" ) )
 
 KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin ( QObject *parent, const QStringList& )
         : QObject ( parent ) {
