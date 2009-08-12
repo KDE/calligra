@@ -103,15 +103,23 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
 KWTextFrameSet::~KWTextFrameSet()
 {
     // first remove the doc from all our frames so they won't try to use it after we delete it.
-    if (m_frames.isEmpty()) {
-        delete m_document;
-    } else {
+    if (!m_frames.isEmpty()) {
         // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
-        KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames.last()->shape()->userData());
-        Q_ASSERT(tsd);
-        tsd->setDocument(m_document);
-        m_document = 0;
+        QList<KWFrame*>::Iterator iter = m_frames.end();
+        --iter;
+        do {
+            // try to find a frame that already has layout data to take ownership of the doc.
+            KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames.last()->shape()->userData());
+            if (tsd) {
+                tsd->setDocument(m_document);
+                m_document = 0;
+                break;
+            }
+            --iter;
+        } while (iter != m_frames.begin());
+        // if no frames have a KoTextShapeData, its save to delete m_document.
     }
+    delete m_document;
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame)
