@@ -25,7 +25,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-const qreal OffsetLimit = 1000.0;
+const qreal OffsetLimit = 100.0;
 
 OffsetEffectConfigWidget::OffsetEffectConfigWidget(QWidget *parent)
     : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -55,8 +55,8 @@ bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
     
     m_offsetX->blockSignals(true);
     m_offsetY->blockSignals(true);
-    m_offsetX->setValue(m_effect->offset().x());
-    m_offsetY->setValue(m_effect->offset().y());
+    m_offsetX->setValue(m_effect->offset().x()*100.0);
+    m_offsetY->setValue(m_effect->offset().y()*100.0);
     m_offsetX->blockSignals(false);
     m_offsetY->blockSignals(false);
     
@@ -68,7 +68,7 @@ void OffsetEffectConfigWidget::offsetChanged(double /*offset*/)
     if( !m_effect)
         return;
     
-    m_effect->setOffset(QPointF(m_offsetX->value(), m_offsetY->value()));
+    m_effect->setOffset(0.01*QPointF(m_offsetX->value(), m_offsetY->value()));
     emit filterChanged();
 }
 
