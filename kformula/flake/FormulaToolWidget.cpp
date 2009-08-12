@@ -135,11 +135,11 @@ void FormulaToolWidget::setupButton ( QToolButton* button, QMenu& menu, const QS
     table->setFixedSize(table->horizontalHeader()->length(), table->verticalHeader()->length());
     button->setToolTip(text);
     //TODO: that is a little bit hackish
+//     connect( table,SIGNAL( itemActivated(QTableWidgetItem*)),
+//              table, SIGNAL( itemClicked(QTableWidgetItem*)));
     connect( table,SIGNAL( itemClicked(QTableWidgetItem*)),
-             table, SIGNAL( itemActivated(QTableWidgetItem*)));
-    connect( table,SIGNAL( itemActivated(QTableWidgetItem*)),
              this, SLOT( insertSymbol(QTableWidgetItem*)));
-    connect( table,SIGNAL( itemActivated(QTableWidgetItem*)),
+    connect( table,SIGNAL( itemClicked(QTableWidgetItem*)),
              &menu, SLOT(hide()));
     button->setPopupMode(QToolButton::InstantPopup);
     button->setMenu(&menu);
