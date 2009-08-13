@@ -19,11 +19,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+
+// Own
 #include "ChartProxyModel.h"
-#include "Axis.h"
-#include "DataSet.h"
-#include <interfaces/KoChartModel.h>
 
 // Qt
 #include <QRegion>
@@ -41,7 +39,11 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
+#include <interfaces/KoChartModel.h>
 
+// KChart
+#include "Axis.h"
+#include "DataSet.h"
 
 using namespace KChart;
 
@@ -74,7 +76,7 @@ ChartProxyModel::Private::Private()
     firstColumnIsLabel = false;
     dataDimensions     = 1;
 
-    dataDirection      = Qt::Horizontal;
+    dataDirection      = Qt::Vertical; // Apparently, the default is columns.
 }
 
 
