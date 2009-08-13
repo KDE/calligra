@@ -583,6 +583,8 @@ void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &sele
 {
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
+    kDebug(35001) << "Selection:" << selection;
+
     d->proxyModel->setSourceModel( model, selection );
 
     if ( d->internalModel ) {
@@ -950,22 +952,29 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     return res;
 }
 
-bool ChartShape::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
+bool ChartShape::loadOdf( const KoXmlElement &element,
+                          KoShapeLoadingContext &context )
 {
     loadOdfAttributes( element, context, OdfTransformation | OdfGeometry );
     return loadOdfFrame( element, context );
 }
 
-bool ChartShape::loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context )
+// Used to load the actual contents from the ODF frame that surrounds
+// the chart in the ODF file.
+bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
+                                      KoShapeLoadingContext &context )
 {
     if ( element.tagName() == "object" )
-        return loadEmbeddedDocument( context.odfLoadingContext().store(), element, context.odfLoadingContext().manifestDocument() );
+        return loadEmbeddedDocument( context.odfLoadingContext().store(),
+                                     element,
+                                     context.odfLoadingContext().manifestDocument() );
 
     qWarning() << "Unknown frame element <" << element.tagName() << ">";
     return false;
 }
 
-bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
+                                  KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
@@ -1051,7 +1060,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
             return false;
     }
 
-    // 7. Load the plot area (this is where the real action is!).
+    // 7. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
@@ -1066,12 +1075,14 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     return true;
 }
 
-bool ChartShape::loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context )
+bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
+                              KoShapeLoadingContext &context )
 {
     // There is no table element to load
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
 
+    // FIXME: Make model->loadOdf() return a bool, and use it here.
     TableModel *model = new TableModel;
     model->loadOdf( tableElement, context );
 
@@ -1096,7 +1107,9 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     //        problems with this fix:
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.
-    //        3. I have to check with the other apps, e.g. kspread, if it works there too. 
+    //
+    //        Also, I have to check with the other apps, e.g. kspread,
+    //        if it works there too.
     //
     QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
     if ( tagHierarchy.isEmpty() 

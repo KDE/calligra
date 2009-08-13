@@ -19,7 +19,7 @@
 */
 
 
-// Local
+// Own
 #include "TableModel.h"
 
 // C
@@ -94,7 +94,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     QTextStream stream(stdout);
     stream << node;
     
-    KoXmlElement n;
+    int           row = 0;
+    KoXmlElement  n;
     forEachElement ( n, tableElement ) {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
@@ -103,7 +104,6 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
              || n.localName() == "table-header-rows" )
         {
             const bool isHeader = n.localName() == "table-header-rows";
-            int           row = 0;
 
             KoXmlElement  _n;
             forEachElement ( _n, n ) {
@@ -112,8 +112,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
 
                 if ( _n.localName() == "table-row" ) {
                     int column = 0;
-                    if ( !isHeader )
-                        setRowCount( rowCount() + 1 );
+
+                    setRowCount( rowCount() + 1 );
 
                     KoXmlElement __n;
                     forEachElement ( __n, _n ) {
@@ -142,6 +142,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                                 continue;
                             }
 
+                            // Read the actual value in the cell.
                             QVariant value;
                             valueString = valueElement.text();
                             if ( valueType == "float" )
@@ -153,12 +154,13 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
 
                             if ( isHeader )
                                 setHeaderData( column, Qt::Horizontal, value );
-                            else
-                                setData( index( row, column ), value );
+                            setData( index( row, column ), value );
+
                             column++;
                         }
                     }
                 }
+
                 row++;
             }
         }
