@@ -124,8 +124,13 @@ QImage SvgPatternHelper::generateImage( const QRectF &objectBound, const QList<K
     KoZoomHandler zoomHandler;
     
     QSizeF patternSize = size( objectBound );
+    if (patternSize.isEmpty())
+        return QImage();
+    
     QSizeF tileSize = zoomHandler.documentToView( patternSize );
-
+    if (tileSize.isEmpty())
+        return QImage();
+    
     QMatrix viewMatrix;
 
     if( ! m_patternContentViewbox.isNull() )

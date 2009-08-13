@@ -68,7 +68,8 @@ protected:
     /// Parses gradient color stops
     void parseColorStops( QGradient *, const QDomElement & );
     /// Parses a pattern element
-    bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    //bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    void parsePattern( SvgPatternHelper &pattern, const QDomElement & );
     /// Parses a filter element
     bool parseFilter( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses a length attribute
@@ -109,7 +110,7 @@ protected:
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
     /// find pattern with given id in pattern map
-    SvgPatternHelper* findPattern( const QString &id, const QString &href = 0 );
+    SvgPatternHelper* findPattern( const QString &id );
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter( const QString &id, const QString &href = 0 );
 

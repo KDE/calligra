@@ -340,7 +340,7 @@ SvgGradientHelper* SvgParser::findGradient( const QString &id, const QString &hr
         return 0L;
 }
 
-SvgPatternHelper* SvgParser::findPattern( const QString &id, const QString &href )
+SvgPatternHelper* SvgParser::findPattern( const QString &id )
 {
     // check if pattern was already parsed, and return it
     if( m_patterns.contains( id ) )
@@ -348,36 +348,26 @@ SvgPatternHelper* SvgParser::findPattern( const QString &id, const QString &href
 
     // check if pattern was stored for later parsing
     if( !m_defs.contains( id ) )
-        return 0L;
+        return 0;
 
-    QDomElement e = m_defs[ id ];
-    if(e.childNodes().count() == 0)
-    {
+    SvgPatternHelper pattern;
+    
+    const QDomElement &e = m_defs[ id ];
+    // are we referencing another pattern ?
+    if (e.hasAttribute("xlink:href")) {
         QString mhref = e.attribute("xlink:href").mid(1);
-
-        if(m_defs.contains(mhref))
-            return findPattern(mhref, id);
-        else
-            return 0L;
-    }
-    else
-    {
-        // ok parse pattern now
-        if( ! parsePattern( m_defs[ id ], m_defs[ href ] ) )
-            return 0L;
+        SvgPatternHelper * refPattern = findPattern(mhref);
+        // inherit attributes of referenced pattern
+        if (refPattern)
+            pattern = *refPattern;
     }
 
-    // return successfully parsed pattern or NULL
-    QString n;
-    if(href.isEmpty())
-        n = id;
-    else
-        n = href;
-
-    if( m_patterns.contains( n ) )
-        return &m_patterns[ n ];
-    else
-        return 0L;
+    // ok parse pattern now
+    parsePattern(pattern, m_defs[ id ]);
+    // add to parsed pattern list
+    m_patterns.insert( id, pattern );
+    
+    return &m_patterns[ id ];
 }
 
 SvgFilterHelper* SvgParser::findFilter( const QString &id, const QString &href )
@@ -846,69 +836,51 @@ bool SvgParser::parseGradient( const QDomElement &e, const QDomElement &referenc
     return true;
 }
 
-bool SvgParser::parsePattern( const QDomElement &e, const QDomElement &referencedBy )
+void SvgParser::parsePattern( SvgPatternHelper &pattern, const QDomElement &e )
 {
-    SvgGraphicsContext *gc = m_gc.top();
-    if( !gc )
-        return false;
-
-    SvgPatternHelper pattern;
-
-    // Use the pattern that is referencing, or if there isn't one, the original pattern
-    QDomElement b;
-    if( !referencedBy.isNull() )
-        b = referencedBy;
-    else
-        b = e;
-
-    // check if we are referencing another pattern
-    if( e.hasAttribute("xlink:href")  )
-    {
-        QString href = e.attribute("xlink:href").mid(1);
-        if( ! href.isEmpty() )
-        {
-            // copy the referenced pattern if found
-            SvgPatternHelper * refPattern = findPattern( href );
-            if( refPattern )
-                pattern = *refPattern;
-        }
+    if (e.hasAttribute("patternUnits")) {
+        if( e.attribute("patternUnits") == "userSpaceOnUse" )
+            pattern.setPatternUnits( SvgPatternHelper::UserSpaceOnUse );
     }
-    else
-    {
-        pattern.setContent( b );
+    if (e.hasAttribute("patternContentUnits")) {
+        if( e.attribute( "patternContentUnits" ) == "objectBoundingBox" )
+            pattern.setPatternContentUnits( SvgPatternHelper::ObjectBoundingBox );
     }
-
-    if( b.attribute( "patternUnits" ) == "userSpaceOnUse" )
-        pattern.setPatternUnits( SvgPatternHelper::UserSpaceOnUse );
-    if( b.attribute( "patternContentUnits" ) == "objectBoundingBox" )
-        pattern.setPatternContentUnits( SvgPatternHelper::ObjectBoundingBox );
-    if( b.hasAttribute( "viewBox" ) )
-        pattern.setPatternContentViewbox( parseViewBox( b.attribute( "viewBox" ) ) );
-    if( b.hasAttribute( "patternTransform" ) )
-        pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
-
-
+    if( e.hasAttribute( "viewBox" ) )
+        pattern.setPatternContentViewbox( parseViewBox( e.attribute( "viewBox" ) ) );
+    if( e.hasAttribute( "patternTransform" ) )
+        pattern.setTransform( parseTransform( e.attribute( "patternTransform" ) ) );
+    
+    
     // parse tile reference rectangle
     if( pattern.patternUnits() == SvgPatternHelper::UserSpaceOnUse )
     {
-        pattern.setPosition( QPointF( parseUnitX( b.attribute( "x" ) ),
-                                      parseUnitY( b.attribute( "y" ) ) ) );
-        pattern.setSize( QSizeF( parseUnitX( b.attribute( "width" ) ),
-                                 parseUnitY( b.attribute( "height" ) ) ) );
+        if (e.hasAttribute("x") && e.hasAttribute("y")) {
+            pattern.setPosition( QPointF( parseUnitX( e.attribute( "x" ) ),
+                                          parseUnitY( e.attribute( "y" ) ) ) );
+        }
+        if (e.hasAttribute("width") && e.hasAttribute("height")) {
+            pattern.setSize( QSizeF( parseUnitX( e.attribute( "width" ) ),
+                                     parseUnitY( e.attribute( "height" ) ) ) );
+        }
     }
     else
     {
         // x, y, width, height are in percentages of the object referencing the pattern
         // so we just parse the percentages
-        pattern.setPosition( QPointF( SvgUtil::fromPercentage( b.attribute( "x" ) ), 
-                                      SvgUtil::fromPercentage( b.attribute( "y" ) ) ) );
-        pattern.setSize( QSizeF( SvgUtil::fromPercentage( b.attribute( "width" ) ),
-                                 SvgUtil::fromPercentage( b.attribute( "height" ) ) ) );
+        if (e.hasAttribute("x") && e.hasAttribute("y")) {
+            pattern.setPosition( QPointF( SvgUtil::fromPercentage( e.attribute( "x" ) ), 
+                                          SvgUtil::fromPercentage( e.attribute( "y" ) ) ) );
+        }
+        if (e.hasAttribute("width") && e.hasAttribute("height")) {
+            pattern.setSize( QSizeF( SvgUtil::fromPercentage( e.attribute( "width" ) ),
+                                     SvgUtil::fromPercentage( e.attribute( "height" ) ) ) );
+        }
     }
-
-    m_patterns.insert( b.attribute( "id" ), pattern );
-
-    return true;
+    
+    if (e.hasChildNodes()) {
+        pattern.setContent( e );
+    }
 }
 
 bool SvgParser::parseFilter( const QDomElement &e, const QDomElement &referencedBy )
@@ -1380,40 +1352,42 @@ void SvgParser::applyFillStyle( KoShape * shape )
                 // delete the shapes created from the pattern content 
                 qDeleteAll( patternContent );
 
-                KoPatternBackground * bg = new KoPatternBackground( imageCollection );
-                bg->setPattern( image );
+                if (!image.isNull()) {
+                    KoPatternBackground * bg = new KoPatternBackground( imageCollection );
+                    bg->setPattern( image );
 
-                QPointF refPoint = shape->documentToShape( pattern->position( objectBound ) );
-                QSizeF tileSize = pattern->size( objectBound );
+                    QPointF refPoint = shape->documentToShape( pattern->position( objectBound ) );
+                    QSizeF tileSize = pattern->size( objectBound );
 
-                bg->setPatternDisplaySize( tileSize );
-                if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
-                {
-                    if( tileSize == objectBound.size() )
-                        bg->setRepeat( KoPatternBackground::Stretched );
+                    bg->setPatternDisplaySize( tileSize );
+                    if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
+                    {
+                        if( tileSize == objectBound.size() )
+                            bg->setRepeat( KoPatternBackground::Stretched );
+                    }
+                    
+                    // calculate pattern reference point offset in percent of tileSize
+                    // and relative to the topleft corner of the shape
+                    qreal fx = refPoint.x() / tileSize.width();
+                    qreal fy = refPoint.y() / tileSize.height();
+                    if( fx < 0.0 )
+                        fx = floor(fx);
+                    else if( fx > 1.0 )
+                        fx = ceil(fx);
+                    else
+                        fx = 0.0;
+                    if( fy < 0.0 )
+                        fy = floor(fy);
+                    else if( fx > 1.0 )
+                        fy = ceil(fy);
+                    else
+                        fy = 0.0;
+                    qreal offsetX = 100.0 * (refPoint.x()-fx*tileSize.width()) / tileSize.width();
+                    qreal offsetY = 100.0 * (refPoint.y()-fy*tileSize.height()) / tileSize.height();
+                    bg->setReferencePointOffset( QPointF(offsetX, offsetY) );
+                    
+                    shape->setBackground( bg );
                 }
-                
-                // calculate pattern reference point offset in percent of tileSize
-                // and relative to the topleft corner of the shape
-                qreal fx = refPoint.x() / tileSize.width();
-                qreal fy = refPoint.y() / tileSize.height();
-                if( fx < 0.0 )
-                    fx = floor(fx);
-                else if( fx > 1.0 )
-                    fx = ceil(fx);
-                else
-                    fx = 0.0;
-                if( fy < 0.0 )
-                    fy = floor(fy);
-                else if( fx > 1.0 )
-                    fy = ceil(fy);
-                else
-                    fy = 0.0;
-                qreal offsetX = 100.0 * (refPoint.x()-fx*tileSize.width()) / tileSize.width();
-                qreal offsetY = 100.0 * (refPoint.y()-fy*tileSize.height()) / tileSize.height();
-                bg->setReferencePointOffset( QPointF(offsetX, offsetY) );
-                
-                shape->setBackground( bg );
             }
         }
         break;
@@ -1825,7 +1799,9 @@ QList<KoShape*> SvgParser::parseContainer( const QDomElement &e )
         }
         else if( b.tagName() == "pattern" )
         {
-            parsePattern( b );
+            QString id = b.attribute("id");
+            if( !id.isEmpty() && !m_defs.contains( id ) )
+                m_defs.insert( id, b );
         }
         else if( b.tagName() == "filter" )
         {
