@@ -53,6 +53,7 @@
 #include <KDChartChart>
 #include <KDChartCartesianAxis>
 #include <KDChartAbstractDiagram>
+
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartAbstractCoordinatePlane>
 #include <KDChartBarAttributes>
@@ -479,6 +480,21 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         // No info about if first row / column contains labels.
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
+    }
+
+    // Data direction
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
+                                         "series-source" ) ) {
+        const QString  seriesSource
+            = plotAreaElement.attributeNS( KoXmlNS::chart, "series-source" );
+
+        if ( seriesSource == "rows" )
+            proxyModel()->setDataDirection( Qt::Horizontal );
+        else if ( seriesSource == "columns" )
+            proxyModel()->setDataDirection( Qt::Vertical );
+        else
+            // Use the default value for wrong values (not "rows" or "columns")
+            proxyModel()->setDataDirection( Qt::Vertical );
     }
 
     // Remove all axes before loading new ones
