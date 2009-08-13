@@ -24,8 +24,9 @@
 #include <kexidb/queryschema.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlReader.h>
 
-KexiRelationDesignShape::KexiRelationDesignShape() {
+KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.koffice.org/kexirelationdesign", "shape"){
     m_connection = 0;
     m_connectionData = 0;
     m_relationSchema = 0;
@@ -44,9 +45,9 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     
-    writer.startElement("kexirelation:shape");
-    writer.addAttribute("xmlns:kexirelation", "http://www.koffice.org/kexi");
-    writer.startElement("relation");
+    writer.startElement("kexirelationdesign:shape");
+    writer.addAttribute("xmlns:kexirelationdesign", "http://www.koffice.org/kexirelationdesign");
+    writer.startElement("kexirelationdesign:relation");
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
     foreach(SimpleField* column, m_fieldData) {
@@ -85,22 +86,51 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
 }
 
 bool KexiRelationDesignShape::loadOdf ( const KoXmlElement& element, KoShapeLoadingContext& context ) {
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
+}
 
+bool KexiRelationDesignShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+
+KoXmlElement relation = KoXml::namedItemNS(element, "http://www.koffice.org/kexirelationdesign", "relation");
+if (relation.isNull()) {
+    kWarning() << "no relation element as first child";
+    return false;
+}
+
+kDebug() << relation.attributeNames();
+
+m_database = relation.attribute("database");
+m_relation = relation.attribute("relation");
+
+KoXmlElement e;
+m_fieldData.clear();
+
+forEachElement(e, relation) {
+    SimpleField *sf = new SimpleField();
+    sf->name = e.attribute("name");
+    sf->type = e.attribute("type");
+    sf->pkey = e.attribute("primarykey").toInt();
+    sf->notnull = e.attribute("notnull").toInt();
+    m_fieldData.append(sf);
+}
+return true;
 }
 
 void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
-
     QSizeF viewSize = converter.documentToView(size());
     QLinearGradient linearGrad(QPointF(0, 0), QPointF(viewSize.width(), viewSize.height()));
     linearGrad.setColorAt(0, Qt::white);
     linearGrad.setColorAt(1, QColor(240,240,240));
 
     painter.save();
-    painter.setClipRect(QRectF(QPointF(0,0), viewSize));
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setClipRect(QRectF(QPointF(-0.5,-0.5), viewSize + QSizeF(1,1)));
     painter.setBrush(linearGrad);
     
-    painter.setPen(Qt::black);
-    painter.drawRoundedRect(QRectF(QPointF(0,0), viewSize), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
+    painter.setPen(QPen(Qt::black, 1.0));
+    painter.drawRoundedRect(QRectF(QPointF(0.5,0.5), (viewSize - QSizeF(1.0, 1.0))), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
     painter.drawLine(0, converter.documentToViewY(15), viewSize.width(), converter.documentToViewY(15));
 
     QFont f;
@@ -109,20 +139,19 @@ void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& 
     
     painter.setFont(f);
     
-    if (m_connection) {
-        painter.drawText(converter.documentToView(QPointF(5.0, 11.0)), m_database + " : " + m_relation);
+    painter.drawText(converter.documentToView(QPointF(5.0, 11.0)), m_database + " : " + m_relation);
 
-        uint i = 0;
-        uint offset;
-        foreach (SimpleField *column, m_fieldData) {
-            ++i;
-            offset = (13.0*i) + 20;
-            painter.drawText(converter.documentToView(QPointF(15.0, offset)), column->name + " - " + column->type);
-            if (column->pkey) {
-                painter.drawEllipse(converter.documentToView(QPointF(8.0, offset - 4)), converter.documentToViewX(4.0), converter.documentToViewY(4.0));
-            }
+    uint i = 0;
+    uint offset;
+    foreach (SimpleField *column, m_fieldData) {
+        ++i;
+        offset = (13.0*i) + 20;
+        painter.drawText(converter.documentToView(QPointF(15.0, offset)), column->name + " - " + column->type);
+        if (column->pkey) {
+            painter.drawEllipse(converter.documentToView(QPointF(8.0, offset - 4)), converter.documentToViewX(4.0), converter.documentToViewY(4.0));
         }
     }
+    
 
     painter.restore();
 }

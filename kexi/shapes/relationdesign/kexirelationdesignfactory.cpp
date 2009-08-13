@@ -17,15 +17,19 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesignshape.h"
 #include <klocale.h>
+#include <kdebug.h>
 
 KexiRelationDesignFactory::KexiRelationDesignFactory ( QObject* parent )
         : KoShapeFactory ( parent, "KexiRelationDesignShape",
                            i18n ( "Kexi Relation Design" ) ) {
     setToolTip ( i18n ( "A kexi relation design shape" ) );
     setIcon( "kexi" );
+    setOdfElementNames("http://www.koffice.org/kexirelationdesign", QStringList("shape") );
+    setLoadingPriority( 1 );
 }
 
 KoShape* KexiRelationDesignFactory::createDefaultShape() const {
+    kDebug();
     KexiRelationDesignShape* fooShape = new KexiRelationDesignShape();
     // set defaults
     return fooShape;
@@ -33,7 +37,14 @@ KoShape* KexiRelationDesignFactory::createDefaultShape() const {
 
 KoShape* KexiRelationDesignFactory::createShape (
     const KoProperties* params ) const {
+        kDebug();
         KexiRelationDesignShape* fooShape = new KexiRelationDesignShape();
     // use the params
     return fooShape;
+}
+
+bool KexiRelationDesignFactory::supports(const KoXmlElement & e) const
+{
+    kDebug();
+    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/kexirelationdesign" );
 }

@@ -31,7 +31,7 @@ notnull = col->field->isNotNull();
 
 void SimpleField::save(KoXmlWriter &writer)
 {
-    writer.startElement("relation:column");
+    writer.startElement("kexirelationdesign:column");
     writer.addAttribute("name", name);
     writer.addAttribute("type", type);
     writer.addAttribute("primarykey", pkey);

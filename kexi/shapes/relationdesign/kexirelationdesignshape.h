@@ -18,6 +18,7 @@
 #define KEXIRELATIONDESIGNSHAPE_H
 
 #include <KoShape.h>
+#include <KoFrameShape.h>
 #include <KUrl>
 #include "simplefield.h"
 
@@ -29,7 +30,7 @@ class TableOrQuerySchema;
 
 #define KEXIRELATIONDEISGNSHAPEID "KexiRelationDesignShape"
 
-class KexiRelationDesignShape : public KoShape {
+class KexiRelationDesignShape : public KoShape, public KoFrameShape{
     public:
         KexiRelationDesignShape();
         ~KexiRelationDesignShape();
@@ -44,6 +45,10 @@ class KexiRelationDesignShape : public KoShape {
         void setRelation(const QString&);
         
         KexiDB::Connection* connection();
+
+    protected:
+        // reimplemented
+        virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
         
     private:
         //Data for display

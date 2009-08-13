@@ -23,9 +23,9 @@
 class KexiRelationDesignFactory : public KoShapeFactory {
     public:
         KexiRelationDesignFactory( QObject *parent );
-    protected:
         virtual KoShape* createShape ( const KoProperties* params ) const;
         virtual KoShape* createDefaultShape() const;
+        virtual bool supports(const KoXmlElement & e) const;
 };
 
 #endif // KEXIRELATIONDESIGNFACTORY_H
