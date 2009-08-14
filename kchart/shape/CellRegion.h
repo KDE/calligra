@@ -39,13 +39,18 @@ namespace KChart {
 /**
  * @brief A CellRegion represents a selection of cells in a table.
  *
+ * Seen from the outside, each CellRegion is one-dimensional, i.e. a
+ * cell in it can be addressed by a single index.  However, the actual
+ * cells in it can be broken up into several one-dimensional
+ * rectangles with either width=1 or height=1.
+ *
  * Every data set on the chart has five independent cell regions
  * that indicate where the data in a series comes from:
  * 1) a region for y values
  * 2) one for x values (only for scatter and bubble charts)
  * 3) another one for a label to represent the data set
  * 4) for the category data (one label for every x value/column on
- *    the x axis; the region is the same among all data sets)
+ *    the x axis; this region is the same among all data sets)
  * 5) for bubble widths (only for bubble charts)
  *
  * A CellRegion can also represent a region in a spreadsheet that

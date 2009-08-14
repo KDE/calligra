@@ -19,7 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Local
+
+// Own
 #include "CellRegion.h"
 
 // C
@@ -46,7 +47,10 @@ public:
     Private();
     ~Private();
     
+    // These are actually one-dimensional, but can have different
+    // orientations (hor / vert).
     QVector<QRect> rects;
+
     QRect          boundingRect;
     // NOTE: Don't forget to extend operator=() if you add new members
 };
@@ -355,10 +359,10 @@ static int rangeStringToInt( const QString &string )
     int result = 0;
     const int size = string.size();
     for ( int i = 0; i < size; i++ ) {
-        kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) ) );
+        //kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) ) );
         result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
     }
-    kDebug(350001) << "+++++ result=" << result;
+    //kDebug(350001) << "+++++ result=" << result;
     return result;
 }
 
@@ -369,7 +373,7 @@ static QString rangeIntToString( int i )
         tmp[j] = 'A' + tmp[j].toAscii() - '1';
     }
 
-    kDebug(350001) << "tmp=" << tmp;
+    //kDebug(350001) << "tmp=" << tmp;
     return tmp;
 }
 
@@ -380,7 +384,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
         return QVector<QRect>();
     
     const bool isPoint = !string.contains( ':' );
-    kDebug(350001) << "CellRegion::stringToRegion():" << string;
+    //kDebug(350001) << "CellRegion::stringToRegion():" << string;
     QString s = string;
     QStringList regionStrings = isPoint ? s.split( '.' ) : s.remove( ':' ).split( '.' );
     QPoint topLeftPoint;
@@ -398,7 +402,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     const QString topLeft = regionStrings[1];
     QStringList l = topLeft.split( '$' );
     if ( l.size() < 3 ) {
-        kDebug(350001) << topLeft;
+        //kDebug(350001) << topLeft;
         qWarning() << "2) CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
         return QVector<QRect>();
     }
@@ -408,7 +412,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     topLeftPoint = QPoint( column, row );
 
     if ( isPoint ) {
-        kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
+        //kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
         return QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
     }
 
@@ -422,7 +426,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     row = l[2].toInt() - 1;
     bottomRightPoint = QPoint( column, row );
 
-    kDebug(350001) << "///" << QRect( topLeftPoint, bottomRightPoint );
+    //kDebug(350001) << "///" << QRect( topLeftPoint, bottomRightPoint );
 
     return QVector<QRect>( 1, QRect( topLeftPoint, bottomRightPoint ) );
 }
@@ -500,4 +504,3 @@ QString CellRegion::regionToString( const QVector<QRect> &region )
     }
     return result;
 }
-
