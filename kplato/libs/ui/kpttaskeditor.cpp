@@ -802,19 +802,21 @@ void GeneralNodeTreeView::slotDropAllowed( const QModelIndex &index, int dropInd
 
 //--------------------------------
 TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+    : ViewBase( part, parent ),
+    m_cmd( 0 )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new GeneralNodeTreeView( this );
-    m_view->setModus( GeneralNodeItemModel::Flat );
+    m_view->setModus( GeneralNodeItemModel::Flat | GeneralNodeItemModel::WorkPackage );
     NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view, false );
     m_view->setModel( p );
     
     m_view->setSortingEnabled( true );
     m_view->sortByColumn( NodeModel::NodeWBSCode, Qt::AscendingOrder );
 
-    p->setFilterRegExp( QRegExp( QString::number( Node::Type_Task ) ) );
+    // match empty string or Type_Task
+    p->setFilterRegExp( QRegExp( QString( "^$|%1").arg( Node::Type_Task ) ) );
     p->setFilterRole( Qt::EditRole );
     p->setFilterKeyColumn( NodeModel::NodeType );
 
@@ -1029,10 +1031,33 @@ void TaskWorkPackageView::slotMailWorkpackage()
 {
     QList<Node*> lst = selectedNodes();
     if ( ! lst.isEmpty() ) {
+        // TODO find a better way to log to avoid undo/redo
+        m_cmd = new MacroCommand( "Log Send Workpackages" );
         WorkPackageSendDialog *dlg = new WorkPackageSendDialog( lst, this );
         connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ) );
+        
+        connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SLOT( slotWorkPackageSent( QList<Node*>&, Resource* ) ) );
         dlg->exec();
         delete dlg;
+        if ( ! m_cmd->isEmpty() ) {
+            part()->addCommand( m_cmd );
+            m_cmd = 0;
+        }
+        delete m_cmd;
+        m_cmd = 0;
+    }
+}
+
+void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *resource )
+{
+    qDebug()<<"slotWorkPackageSent:"<<nodes<<resource->name();
+    foreach ( Node *n, nodes ) {
+        WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );
+        wp->setOwnerName( resource->name() );
+        wp->setOwnerId( resource->id() );
+        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+        wp->setTransmitionStatus( WorkPackage::TS_Send );
+        m_cmd->addCommand( new WorkPackageAddCmd( static_cast<Project*>( n->projectNode() ), n, wp ) );
     }
 }
 

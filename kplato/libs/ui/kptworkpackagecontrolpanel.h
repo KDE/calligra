@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include "ui_kptworkpackagecontrolpanel.h"
+//#include "ui_kptworkpackagecontrolpanel.h"
 #include "ui_kptworkpackagesendpanel.h"
 
 #include <QWidget>
@@ -33,27 +33,27 @@ class QPushButton;
 namespace KPlato
 {
 
-class Project;
-class Task;
+class Resource;
+class Node;
 class TaskWorkPackageView;
 
-class KPLATOUI_EXPORT WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
-{
-    Q_OBJECT
-public:
-    explicit WorkPackageControlPanel( Project &project, Task &task, QWidget *parent=0 );
-
-protected slots:
-    void slotSelectionChanged();
-    virtual void slotTransferWPClicked();
-    virtual void slotLoadWPClicked();
-    virtual void slotViewWPClicked();
-    virtual void slotMailToClicked();
-
-protected:
-    Project &m_project;
-    Task &m_task;
-};
+// class KPLATOUI_EXPORT WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
+// {
+//     Q_OBJECT
+// public:
+//     explicit WorkPackageControlPanel( Project &project, Task &task, QWidget *parent=0 );
+// 
+// protected slots:
+//     void slotSelectionChanged();
+//     virtual void slotTransferWPClicked();
+//     virtual void slotLoadWPClicked();
+//     virtual void slotViewWPClicked();
+//     virtual void slotMailToClicked();
+// 
+// protected:
+//     Project &m_project;
+//     Task &m_task;
+// };
 
 class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPackageSendPanel
 {

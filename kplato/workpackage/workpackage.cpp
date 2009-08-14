@@ -308,6 +308,14 @@ QDomDocument WorkPackage::saveXML()
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 
+    // Work package info
+    Task *t = qobject_cast<Task*>( node() );
+    if ( t ) {
+        QDomElement wp = document.createElement( "workpackage" );
+        wp.setAttribute( "owner", t->workPackage().ownerName() );
+        wp.setAttribute( "owner-id", t->workPackage().ownerId() );
+        doc.appendChild( wp );
+    }
     m_project->save( doc );
     return document;
 }
@@ -339,6 +347,14 @@ void WorkPackage::merge( Part *part, const Project *project )
     if ( from->type() == Node::Type_Task && from->type() == Node::Type_Task ) {
         if ( static_cast<Task*>( to )->completion().entrymode() != static_cast<const Task*>( from )->completion().entrymode() ) {
             m->addCommand( new ModifyCompletionEntrymodeCmd( static_cast<Task*>( to )->completion(), static_cast<const Task*>( from )->completion().entrymode() ) );
+        }
+        if ( static_cast<Task*>( to )->workPackage().ownerId() != static_cast<const Task*>( from )->workPackage().ownerId() ) {
+            qDebug()<<"merge:"<<"different owners"<<static_cast<const Task*>( from )->workPackage().ownerName()<<static_cast<Task*>( to )->workPackage().ownerName();
+            if ( static_cast<Task*>( to )->workPackage().ownerId().isEmpty() ) {
+                //TODO cmd
+                static_cast<Task*>( to )->workPackage().setOwnerId( static_cast<const Task*>( from )->workPackage().ownerId() );
+                static_cast<Task*>( to )->workPackage().setOwnerName( static_cast<const Task*>( from )->workPackage().ownerName() );
+            }
         }
     }
     if ( m->isEmpty() ) {

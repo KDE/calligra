@@ -24,7 +24,7 @@ set(kplatoui_LIB_SRCS
 
     kptworkpackagecontrolpanel.cpp
     kptworkpackagecontroldialog.cpp
-    kptworkpackageview.cpp
+#     kptworkpackageview.cpp
     
     kptdocumentseditor.cpp
     kptdocumentspanel.cpp
@@ -88,7 +88,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptprintingheaderfooter.ui
     kptganttprintingoptions.ui
     
-    kptworkpackagecontrolpanel.ui
+#     kptworkpackagecontrolpanel.ui
     kptworkpackagesendpanel.ui
     
     kptdocumentspanel.ui

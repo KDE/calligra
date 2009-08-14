@@ -22,6 +22,7 @@
 
 #include "kptitemmodelbase.h"
 #include "kptschedule.h"
+#include "kptworkpackagemodel.h"
 
 #include <QDate>
 #include <QMetaEnum>
@@ -36,7 +37,6 @@ namespace KPlato
 class Project;
 class Node;
 class Estimate;
-
 
 class KPLATOMODELS_EXPORT NodeModel : public QObject
 {
@@ -125,7 +125,12 @@ public:
         NodePerformanceIndex,
         //
         NodeCritical,
-        NodeCriticalPath
+        NodeCriticalPath,
+
+        // Info from latest work package transmition
+        WPOwnerName,
+        WPTransmitionStatus,
+        WPTransmitionTime
     };
     const QMetaEnum columnMap() const;
     
@@ -224,6 +229,10 @@ public:
 
     QVariant nodeIsCritical( const Node *node, int role ) const;
     QVariant nodeInCriticalPath( const Node *node, int role ) const;
+
+    QVariant wpOwnerName( const Node *node, int role ) const;
+    QVariant wpTransmitionStatus( const Node *node, int role ) const;
+    QVariant wpTransmitionTime( const Node *node, int role ) const;
 
 private:
     Project *m_project;
@@ -361,10 +370,17 @@ protected slots:
     virtual void slotNodeToBeRemoved( Node *node );
     virtual void slotNodeRemoved( Node *node );
 
+    void slotWorkPackageToBeAdded( Node *node, int row );
+    void slotWorkPackageAdded( Node *node );
+
 protected:
     Object *findNodeObject( const Node *node ) const;
+    Object *findWPObject( int row, Object *par ) const;
+    QList<Object*> nodeObjects() const;
+    QList<int> workPackagePositions( Object *parent ) const;
 
 private:
+    WorkPackageModel m_wpmodel;
     int m_modus; // WBS | Flat | WorkPackage (0 == NodeItemModel)
     QList<Object*> m_objects;
 };

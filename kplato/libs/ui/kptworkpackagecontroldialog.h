@@ -29,22 +29,21 @@ namespace KPlato
 {
 
 class DocumentsPanel;
-class WorkPackageControlPanel;
 class WorkPackageSendPanel;
 class Project;
 class Task;
 class Node;
 
-class KPLATOUI_EXPORT WorkPackageControlDialog : public KPageDialog
-{
-    Q_OBJECT
-public:
-    explicit WorkPackageControlDialog( Project &project, Task &task, QWidget *parent=0);
-
-private:
-    WorkPackageControlPanel *m_wp;
-    DocumentsPanel *m_docs;
-};
+// class KPLATOUI_EXPORT WorkPackageControlDialog : public KPageDialog
+// {
+//     Q_OBJECT
+// public:
+//     explicit WorkPackageControlDialog( Project &project, Task &task, QWidget *parent=0);
+// 
+// private:
+//     WorkPackageControlPanel *m_wp;
+//     DocumentsPanel *m_docs;
+// };
 
 class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
 {

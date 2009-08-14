@@ -1677,6 +1677,20 @@ private:
 
 };
 
+class KPLATOKERNEL_EXPORT WorkPackageAddCmd : public NamedCommand
+{
+public:
+    WorkPackageAddCmd( Project *project, Node *node, WorkPackage *wp, const QString& name = QString() );
+    ~WorkPackageAddCmd();
+    void execute();
+    void unexecute();
+private:
+    Project *m_project;
+    Node *m_node;
+    WorkPackage *m_wp;
+    bool m_mine;
+
+};
 
 }  //KPlato namespace
 

@@ -256,7 +256,7 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
     "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplatowork" ); //??
-    doc.setAttribute( "editor", "KPlatoWork" );
+    doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
@@ -353,7 +353,7 @@ bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Res
 
 bool Part::loadWorkPackage( Project &project, const KUrl &url )
 {
-    kDebug()<<url;
+    //qDebug()<<"loadWorkPackage:"<<url;
     if ( ! url.isLocalFile() ) {
         kDebug()<<"TODO: download if url not local";
         return false;
@@ -401,7 +401,6 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
 
 Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document )
 {
-    kDebug();
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -412,11 +411,11 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     // Check if this is the right app
     value = plan.attribute( "mime", QString() );
     if ( value.isEmpty() ) {
-        kError() << "No mime type specified!";
+        qDebug() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kError() << "Unknown mime type " << value;
+        qDebug() << "Unknown mime type " << value;
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
@@ -505,7 +504,7 @@ void Part::checkForWorkPackages()
         }
     }
     if ( ! m_workpackages.isEmpty() ) {
-        emit workPackageLoaded();
+        mergeWorkPackages();
         qDeleteAll( m_workpackages.keys() );
         m_workpackages.clear();
     }
@@ -600,6 +599,14 @@ void Part::mergeWorkPackage( Task *to, const Task *from )
             cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
         }
     }
+    WorkPackage *wp = new WorkPackage( from->workPackage() );
+    wp->setParentTask( to );
+    if ( ! wp->transmitionTime().isValid() ) {
+        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+    }
+    wp->setTransmitionStatus( WorkPackage::TS_Receive );
+    cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );
+    qDebug()<<"mergeWorkPackage:"<<from->name()<<to->name()<<cmd->isEmpty();
     if ( cmd->isEmpty() ) {
         delete cmd;
     } else {

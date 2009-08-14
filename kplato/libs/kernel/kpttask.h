@@ -244,72 +244,35 @@ class KPLATOKERNEL_EXPORT WorkPackage
 {
 public:
 
-    /// @enum WPControlStatus describes who is in control of the package data
-    enum WPControlStatus {
-        CS_None,           /// This application is not in control
-        CS_KPlato,         /// KPlato (usually the project manager) has control of the information
-        CS_Work            /// KPlatoWork (usually a resource) has control of the information
-    };
-    /// @enum WPSendStatus describes the reason for sending the workpackage to a resource
-    enum WPSendStatus { 
-        SS_None,                /// No particular reason
-        SS_ForInformation,      /// To keep the receiver informed
-        SS_ForEstimation,       /// The task has not been estimated
-        SS_TentativeSchedule,   /// The schedule is not yet confirmed
-        SS_Scheduled,           /// The task is scheduled but not ready to be executed
-        SS_Execute,             /// The task is ready to be executed
-        SS_Cancel               /// Cancel current operation
-    };
-    /// @enum WPResponseStatus describes the resources reason for responding
-    enum WPResponseStatus { 
-        RS_None,            /// No particular reason
-        RS_Accepted,        /// Last message accepted
-        RS_Tentative,       /// Last message tentativly accepted
-        RS_Refused,         /// Last message refused
-        RS_Update           /// The workpackage includes updated data
-    };
-    /// @enum WPResponseType describes whether a response is required
-    enum WPResponseType { 
-        RT_None,        /// No response is required
-        RT_Required     /// Response is required
-    };
-    /// @enum WPLastAction describes actions for this workpackage
-    enum WPActionType { 
-        AT_None,        /// No action performed yet
-        AT_Send,        /// The package has been sent (we've had no response after that)
-        AT_Receive,     /// The package has been received (but not loaded)
-        AT_Load         /// The package data has been loaded
+    /// @enum WPTransmitionStatus describes if this package was sent or received
+    enum WPTransmitionStatus {
+        TS_None,        /// Not sent nor received
+        TS_Send,        /// Package was sent to resource
+        TS_Receive      /// Package was received from resource
     };
 
-    explicit WorkPackage( Task &task );
+    explicit WorkPackage( Task *task = 0 );
+    explicit WorkPackage( const WorkPackage &wp );
     virtual ~WorkPackage();
 
-    /// Return the type of application that is in control of this package data
-    virtual WPControlStatus controlStatus() const;
-    WPControlStatus controlStatus( const Resource *r ) const;
-    WPControlStatus controlStatus( Resource *r );
-    static QString controlStatusToString( WPControlStatus sts, bool trans = false );
-    
-    WPSendStatus sendStatus( const Resource *r ) const;
-    WPSendStatus sendStatus( Resource *r );
-    static QString sendStatusToString( WPSendStatus sts, bool trans = false );
-    
-    WPResponseStatus responseStatus( const Resource *r ) const;
-    WPResponseStatus responseStatus( Resource *r );
-    static QString responseStatusToString( WPResponseStatus sts, bool trans = false );
+    Task *parentTask() const { return m_task; }
+    void setParentTask( Task *task ) { m_task = task; }
 
-    WPResponseType responseType( const Resource *r ) const;
-    WPResponseType responseType( Resource *r );
-    static QString responseTypeToString( WPResponseType rsp, bool trans = false );
-    
-    WPActionType actionType( const Resource *r ) const;
-    WPActionType actionType( Resource *r );
-    static QString actionTypeToString( WPActionType type, bool trans = false );
+    /// Returns the transmition status of this package
+    WPTransmitionStatus transmitionStatus() const { return m_transmitionStatus; }
+    void setTransmitionStatus( WPTransmitionStatus sts ) { m_transmitionStatus = sts; }
+    static QString transmitionStatusToString( WPTransmitionStatus sts, bool trans = false );
+    static WPTransmitionStatus transmitionStatusFromString( const QString &sts );
     
     /// Load from document
     virtual bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
     /// Save the full workpackage
     virtual void saveXML(QDomElement &element) const;
+
+    /// Load from document
+    virtual bool loadLoggedXML(KoXmlElement &element, XMLLoaderObject &status );
+    /// Save the full workpackage
+    virtual void saveLoggedXML(QDomElement &element) const;
 
     /// Set schedule manager
     void setScheduleManager( ScheduleManager *sm );
@@ -325,46 +288,32 @@ public:
     const QMap<DateTime, QString> &log() const;
     QStringList log();
 
-    class ResourceStatus
-    {
-    public:
-        ResourceStatus() 
-            : controlStatus( CS_None ),
-                sendStatus( SS_None ),
-                responseStatus( RS_None ),
-                responseType( RT_None ),
-                actionType( AT_None )
-            {}
-        DateTime sendTime;
-        DateTime responseTime;
-        DateTime requiredTime;
-        WPControlStatus controlStatus;
-        WPSendStatus sendStatus;
-        WPResponseStatus responseStatus;
-        WPResponseType responseType;
-        WPActionType actionType;
-    };
-    QList<Resource*> resources() const { return m_resourceStatus.keys(); }
-    QMap<Resource*, ResourceStatus> &resourceStatus();
-    const QMap<Resource*, ResourceStatus> &resourceStatus() const;
-
     /// Return a list of resources fetched from the appointements or requests
     /// merged with resources added to completion
     QList<Resource*> fetchResources();
 
-private:
-    WPControlStatus p_controlStatus( Resource *r );
-    WPSendStatus p_sendStatus( Resource *r );
-    WPResponseStatus p_responseStatus( Resource *r );
-    WPResponseType p_responseType( Resource *r );
-    WPActionType p_actionType( Resource *r );
+    /// Returns id of the resource that owns this package. If empty, task leader owns it.
+    QString ownerId() const { return m_ownerId; }
+    /// Set the resource that owns this package to @p owner. If empty, task leader owns it.
+    void setOwnerId( const QString &id ) { m_ownerId = id; }
+
+    /// Returns the name of the resource that owns this package.
+    QString ownerName() const { return m_ownerName; }
+    /// Set the name of the resource that owns this package.
+    void setOwnerName( const QString &name ) { m_ownerName = name; }
+
+    DateTime transmitionTime() const { return m_transmitionTime; }
+    void setTransmitionTime( const DateTime &dt ) { m_transmitionTime = dt; }
 
 private:
-    Task &m_task;
+    Task *m_task;
     ScheduleManager *m_manager;
     Completion m_completion;
+    QString m_ownerName;
+    QString m_ownerId;
+    WPTransmitionStatus m_transmitionStatus;
+    DateTime m_transmitionTime;
 
-    QMap<Resource*, ResourceStatus> m_resourceStatus;
     QMap<DateTime, QString> m_log;
 };
 
@@ -558,6 +507,16 @@ public:
     WorkPackage &workPackage() { return m_workPackage; }
     const WorkPackage &workPackage() const { return m_workPackage; }
 
+    int workPackageLogCount() const { return m_packageLog.count(); }
+    QList<WorkPackage*> workPackageLog() const { return m_packageLog; }
+    void addWorkPackage( WorkPackage *wp );
+    void removeWorkPackage( WorkPackage *wp );
+    WorkPackage *workPackageAt( int index ) const;
+
+    QString wpOwnerName() const;
+    WorkPackage::WPTransmitionStatus wpTransmitionStatus() const;
+    DateTime wpTransmitionTime() const;
+
     /**
      * Returns the state of the task
      * @param id The identity of the schedule used when calculating the state
@@ -566,6 +525,12 @@ public:
 
     QList<Relation*> parentProxyRelations() const { return  m_parentProxyRelations; }
     QList<Relation*> childProxyRelations() const { return  m_childProxyRelations; }
+
+signals:
+    void workPackageToBeAdded( Node *node, int row );
+    void workPackageAdded( Node *node );
+    void workPackageToBeRemoved( Node *node, int row );
+    void workPackageRemoved( Node *node );
 
 protected:
     /// Copy info from parent schedule
@@ -743,7 +708,8 @@ private:
     int m_activityFreeMargin;
 
     WorkPackage m_workPackage;
-    
+    QList<WorkPackage*> m_packageLog;
+
 #ifndef NDEBUG
 public:
     void printDebug(bool children, const QByteArray& indent);

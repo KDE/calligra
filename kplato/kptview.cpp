@@ -99,7 +99,7 @@
 #include "kptresource.h"
 #include "kptstandardworktimedialog.h"
 #include "kptwbsdefinitiondialog.h"
-#include "kptwpcontroldialog.h"
+//#include "kptwpcontroldialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
@@ -1814,14 +1814,14 @@ void View::slotDeleteTask()
 void View::slotTaskWorkpackage()
 {
     //kDebug();
-    Node *node = currentTask();
+/*    Node *node = currentTask();
     if ( node == 0 || node->type() != Node::Type_Task ) {
         return;
     }
     Task *task = static_cast<Task*>( node );
     WPControlDialog *dlg = new WPControlDialog( this, *task, this );
     dlg->exec();
-    delete dlg;
+    delete dlg;*/
 //    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, activeScheduleId() );
 }
 

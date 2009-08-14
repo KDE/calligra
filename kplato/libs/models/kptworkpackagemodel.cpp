@@ -20,147 +20,25 @@
 #include "kptworkpackagemodel.h"
 
 #include "kptglobal.h"
-#include "kptresource.h"
-#include "kptproject.h"
-#include "kpttask.h"
 
 #include <QModelIndex>
 
 namespace KPlato
 {
 
-void WorkPackageModel::setProject( Project *project )
+const QMetaEnum WorkPackageModel::columnMap() const
 {
-    kDebug()<<m_project<<"->"<<project;
-    m_project = project;
-    reset();
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
 }
 
-void WorkPackageModel::setTask( Task *task )
-{
-    m_task = task;
-    reset();
-}
-
-QVariant WorkPackageModel::name( const Resource *r, int role ) const
+QVariant WorkPackageModel::nodeName( const WorkPackage *wp, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
-            return r->name();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::email( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
+            return wp->parentTask() ? wp->parentTask()->name() : "";
         case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return r->email();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::sendStatus( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return WorkPackage::sendStatusToString( workPackage().sendStatus( r ), true );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::sendTime( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).sendTime.dateTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::responseType( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return WorkPackage::responseTypeToString( workPackage().responseType( r ), true );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::requiredTime( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).requiredTime.dateTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::responseStatus( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return WorkPackage::responseStatusToString( workPackage().responseStatus( r ), true );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::responseTime( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).responseTime.dateTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant WorkPackageModel::lastAction( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return WorkPackage::actionTypeToString( workPackage().actionType( r ) );
+            return wp->parentTask() ? wp->parentTask()->name() : "";
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -169,93 +47,121 @@ QVariant WorkPackageModel::lastAction( const Resource *r, int role ) const
 }
 
 
-int WorkPackageModel::rowCount( const QModelIndex &parent ) const
+QVariant WorkPackageModel::ownerName( const WorkPackage *wp, int role ) const
 {
-    if ( m_task == 0 || parent.isValid() ) {
-        return 0;
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            return wp->ownerName();
+        case Qt::EditRole:
+            return wp->ownerName();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
     }
-    return workPackage().resources().count();
+    return QVariant();
 }
 
-int WorkPackageModel::columnCount( const QModelIndex & ) const
+QVariant WorkPackageModel::transmitionStatus( const WorkPackage *wp, int role ) const
 {
-    return 9;
-}
-
-QVariant WorkPackageModel::data( const QModelIndex &index, int role ) const
-{
-    QVariant result;
-    Resource *r = resourceForIndex( index );
-    switch ( index.column() ) {
-        case 0: result = name( r, role ); break;
-        case 1: result = email( r, role ); break;
-        case 2: result = sendStatus( r, role ); break;
-        case 3: result = sendTime( r, role ); break;
-        case 4: result = responseType( r, role ); break;
-        case 5: result = requiredTime( r, role ); break;
-        case 6: result = responseStatus( r, role ); break;
-        case 7: result = responseTime( r, role ); break;
-        case 8: result = lastAction( r, role ); break;
-
-        default:
-            //kDebug()<<"Invalid column number: "<<index.column();;
-            break;
-    }
-    return result;
-}
-
-QVariant WorkPackageModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    if ( orientation == Qt::Vertical ) {
-        return section;
-    }
-    if ( role == Qt::DisplayRole ) {
-        switch ( section ) {
-            case 0: return i18n( "Name" );
-            case 1: return i18n( "E-mail" );
-            case 2: return i18n( "Send Reason" );
-            case 3: return i18n( "Send Time" );
-            case 4: return i18n( "Response Type" );
-            case 5: return i18n( "Response Due" );
-            case 6: return i18n( "Response Reason" );
-            case 7: return i18n( "Response Time" );
-            case 8: return i18n( "Last Action" );
-            
-            default: return QVariant();
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return wp->transmitionStatusToString( wp->transmitionStatus(), true );
+        case Qt::EditRole:
+            return wp->transmitionStatus();
+        case Qt::ToolTipRole: {
+            int sts = wp->transmitionStatus();
+            if ( sts == WorkPackage::TS_Send ) {
+                return i18n( "Sent to %1 at %2", wp->ownerName(), transmitionTime( wp, Qt::DisplayRole ).toString() );
+            }
+            if ( sts == WorkPackage::TS_Receive ) {
+                return i18n( "Received from %1 at %2", wp->ownerName(), transmitionTime( wp, Qt::DisplayRole ).toString() );
+            }
+            return i18n( "Not available" );
         }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
     }
     return QVariant();
 }
 
-QModelIndex WorkPackageModel::parent( const QModelIndex & ) const
+QVariant WorkPackageModel::transmitionTime( const WorkPackage *wp, int role ) const
 {
-    return QModelIndex();
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return KGlobal::locale()->formatDateTime( wp->transmitionTime() );
+        case Qt::EditRole:
+            return wp->transmitionTime().dateTime();
+        case Qt::ToolTipRole: {
+            int sts = wp->transmitionStatus();
+            QString t = KGlobal::locale()->formatDateTime( wp->transmitionTime(), KLocale::LongDate, KLocale::TimeZone );
+            if ( sts == WorkPackage::TS_Send ) {
+                return i18n( "Work package sent at: %1", t );
+            }
+            if ( sts == WorkPackage::TS_Receive ) {
+                return i18n( "Work package transmition received at: %1", t );
+            }
+            return i18n( "Not available" );
+        }
+
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
 }
 
-QModelIndex WorkPackageModel::index( int row, int column, const QModelIndex &parent ) const
+QVariant WorkPackageModel::completion( const WorkPackage *wp, int role ) const
 {
-    if ( m_task == 0 || parent.isValid() ) {
-        return QModelIndex();
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( wp->transmitionStatus() == WorkPackage::TS_Receive ) {
+                return wp->completion().percentFinished();
+            }
+            break;
+        case Qt::EditRole:
+            if ( wp->transmitionStatus() == WorkPackage::TS_Receive ) {
+                return wp->completion().percentFinished();
+            }
+            break;
+        case Qt::ToolTipRole:
+            if ( wp->transmitionStatus() == WorkPackage::TS_Receive ) {
+                return i18n( "Task reported %1% completed", wp->completion().percentFinished() );
+            }
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
     }
-    Resource *r = m_task->workPackage().resources().value( row );
-    if ( r == 0 ) {
-        return QModelIndex();
-    }
-    return createIndex( row, column );
+    return QVariant();
 }
 
-WorkPackage &WorkPackageModel::workPackage() const
+QVariant WorkPackageModel::data( const WorkPackage *wp, int column, int role ) const
 {
-    return m_task->workPackage();
+    switch ( column ) {
+        case WPNodeName: return nodeName( wp, role );
+        case WPOwnerName: return ownerName( wp, role );
+        case WPTransmitionStatus: return transmitionStatus( wp, role );
+        case WPTransmitionTime: return transmitionTime( wp, role );
+
+        case WPNodeCompleted: return completion( wp, role );
+        case WPNodePlannedEffort:
+        case WPNodeActualEffort:
+        case WPNodeRemainingEffort:
+        case WPNodePlannedCost:
+        case WPNodeActualCost:
+        case WPNodeActualStart:
+        case WPNodeStarted:
+        case WPNodeActualFinish:
+        case WPNodeFinished:
+        case WPNodeStatusNote:
+
+        default: break;
+    }
+    return QVariant();
 }
 
-Resource *WorkPackageModel::resourceForIndex( const QModelIndex &index ) const
-{
-    if ( m_task == 0 || ! index.isValid() ) {
-        return 0;
-    }
-    return m_task->workPackage().resources().value( index.row() );
-}
 
 } //namespace KPlato
 

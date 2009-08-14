@@ -43,6 +43,7 @@ class Project;
 class Node;
 class NodeItemModel;
 class GeneralNodeItemModel;
+class MacroCommand;
 
 class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
@@ -274,6 +275,7 @@ protected:
 protected slots:
     virtual void slotOptions();
     void slotMailWorkpackage();
+    void slotWorkPackageSent( QList<Node*> &nodes, Resource *resource );
 
 private slots:
     void slotSelectionChanged( const QModelIndexList );
@@ -286,6 +288,7 @@ private slots:
 
 private:
     GeneralNodeTreeView *m_view;
+    MacroCommand *m_cmd;
 
     KAction *actionMailWorkpackage;
 

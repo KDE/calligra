@@ -19,7 +19,7 @@
 
 #include "kptworkpackagecontrolpanel.h"
 #include "kptworkpackageview.h"
-#include "kptworkpackagemodel.h"
+//#include "kptworkpackagemodel.h"
 #include "kpttaskeditor.h"
 
 #include "kptproject.h"
@@ -36,7 +36,7 @@ namespace KPlato
 {
 
 
-WorkPackageControlPanel::WorkPackageControlPanel( Project &project, Task &task, QWidget *p )
+/*WorkPackageControlPanel::WorkPackageControlPanel( Project &project, Task &task, QWidget *p )
     : QWidget(p),
     m_project( project ),
     m_task( task )
@@ -77,7 +77,7 @@ void WorkPackageControlPanel::slotViewWPClicked()
 void WorkPackageControlPanel::slotMailToClicked()
 {
 }
-
+*/
 //-----------------------------------
 WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *p )
     : QWidget(p)

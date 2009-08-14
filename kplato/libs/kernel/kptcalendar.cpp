@@ -475,7 +475,7 @@ void CalendarWeekdays::setState(int weekday, int state) {
     day->setState(state);
 }
 
-const QList<TimeInterval*> &CalendarWeekdays::intervals(int weekday) const { 
+QList<TimeInterval*> CalendarWeekdays::intervals(int weekday) const { 
     CalendarDay *day = m_weekdays.value( weekday );
     Q_ASSERT(day);
     return day->workingIntervals();

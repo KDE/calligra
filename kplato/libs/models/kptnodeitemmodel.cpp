@@ -1494,6 +1494,76 @@ QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::wpOwnerName( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( static_cast<const Task*>( node )->wpTransmitionStatus() == WorkPackage::TS_None ) {
+                return i18nc( "Not available", "NA" );
+            }
+            return static_cast<const Task*>( node )->wpOwnerName();
+        case Qt::ToolTipRole: {
+            int sts = wpTransmitionStatus( node, Qt::EditRole ).toInt();
+            QString t = wpTransmitionTime( node, Qt::DisplayRole ).toString();
+            if ( sts == WorkPackage::TS_Send ) {
+                return i18n( "Latest work package sent to %1 at %2", static_cast<const Task*>( node )->wpOwnerName(), t );
+            }
+            if ( sts == WorkPackage::TS_Receive ) {
+                return i18n( "Latest work package received from %1 at %2", static_cast<const Task*>( node )->wpOwnerName(), t );
+            }
+            return i18n( "Not available" );
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::wpTransmitionStatus( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( static_cast<const Task*>( node )->wpTransmitionStatus() == WorkPackage::TS_None ) {
+                return i18nc( "Not available", "NA" );
+            }
+            return WorkPackage::transmitionStatusToString( static_cast<const Task*>( node )->wpTransmitionStatus(), true );
+        case Qt::EditRole:
+            return static_cast<const Task*>( node )->wpTransmitionStatus();
+        case Qt::ToolTipRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::wpTransmitionTime( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( static_cast<const Task*>( node )->wpTransmitionStatus() == WorkPackage::TS_None ) {
+                return i18nc( "Not available", "NA" );
+            }
+            return KGlobal::locale()->formatDateTime( static_cast<const Task*>( node )->wpTransmitionTime() );
+        case Qt::ToolTipRole: {
+            int sts = wpTransmitionStatus( node, Qt::EditRole ).toInt();
+            QString t = wpTransmitionTime( node, Qt::DisplayRole ).toString();
+            if ( sts == WorkPackage::TS_Send ) {
+                return i18n( "Latest work package sent: %1", t );
+            }
+            if ( sts == WorkPackage::TS_Receive ) {
+                return i18n( "Latest work package received: %1", t );
+            }
+            return i18n( "Not available" );
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::data( const Node *n, int property, int role ) const
 {
     QVariant result;
@@ -1577,6 +1647,10 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodePerformanceIndex: result = nodePerformanceIndex( n, role ); break;
         case NodeCritical: result = nodeIsCritical( n, role ); break;
         case NodeCriticalPath: result = nodeInCriticalPath( n, role ); break;
+
+        case WPOwnerName: result = wpOwnerName( n, role ); break;
+        case WPTransmitionStatus: result = wpTransmitionStatus( n, role ); break;
+        case WPTransmitionTime: result = wpTransmitionTime( n, role ); break;
 
         default:
             //kDebug()<<"Invalid property number: "<<property;;
@@ -1679,6 +1753,11 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeCritical: return i18n( "Critical" );
             case NodeCriticalPath: return i18n( "Critical Path" );
             
+            // Work package handling
+            case WPOwnerName: return i18n( "Owner" );
+            case WPTransmitionStatus: return i18n( "Status" );
+            case WPTransmitionTime: return i18n( "Time" );
+
             default: return QVariant();
         }
     }
@@ -1761,6 +1840,11 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeACWP: return ToolTip::nodeACWP();
             case NodePerformanceIndex: return ToolTip::nodePerformanceIndex();
             
+            // Work package handling FIXME
+            case WPOwnerName: return i18n( "Work package owner" );
+            case WPTransmitionStatus: return i18n( "Work package status" );
+            case WPTransmitionTime: return i18n( "Work package send/receive time" );
+
             default: return QVariant();
         }
     }
@@ -2931,8 +3015,8 @@ class GeneralNodeItemModel::Object
 {
 public:
     enum Type { Type_Node, Type_WorkPackage };
-    Object( Node *n, Type typ = Type_Node )
-    : node( n ), type( typ )
+    Object( Node *n, Type typ = Type_Node, int r = -1 )
+    : node( n ), type( typ ), row( r )
     {}
 
     bool isNode() const { return type == Type_Node; }
@@ -2940,6 +3024,7 @@ public:
 
     Node *node;
     int type;
+    int row; // if isWorkPackage()
 };
 
 //----------------------------
@@ -2955,6 +3040,12 @@ GeneralNodeItemModel::~GeneralNodeItemModel()
 
 void GeneralNodeItemModel::setModus( int modus )
 {
+    if ( m_modus & WorkPackage ) {
+        foreach ( Object *o, nodeObjects() ) {
+            disconnect( o->node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+            disconnect( o->node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
+        }
+    }
     qDeleteAll( m_objects );
     m_objects.clear();
     m_modus = modus;
@@ -2963,9 +3054,13 @@ void GeneralNodeItemModel::setModus( int modus )
     }
     foreach ( Node *n, m_project->allNodes() ) {
         m_objects << new Object( n );
-    }
-    if ( m_modus & WorkPackage ) {
-        //TODO
+        if ( m_modus & WorkPackage ) {
+            connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+            connect( n, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
+            for ( int i = 0; i < static_cast<Task*>( n )->workPackageLogCount(); ++i ) {
+                m_objects << new Object( n, Object::Type_WorkPackage, i );
+            }
+        }
     }
 }
 
@@ -2973,6 +3068,7 @@ void GeneralNodeItemModel::setProject( Project *project )
 {
     NodeItemModel::setProject( project );
     setModus( m_modus );
+    reset();
 }
 
 void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
@@ -2980,7 +3076,12 @@ void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
     if ( m_modus == 0 ) {
         return NodeItemModel::slotNodeToBeInserted( parent, row );
     }
-    beginInsertRows( index( parent ), m_objects.count(), m_objects.count() );
+    if ( m_modus & Flat ) {
+        int pos = nodeObjects().count();
+        beginInsertRows( index( parent ), pos, pos );
+        return;
+    }
+    beginInsertRows( index( parent ), row, row );
 }
 
 void GeneralNodeItemModel::slotNodeInserted( Node *node )
@@ -2989,6 +3090,9 @@ void GeneralNodeItemModel::slotNodeInserted( Node *node )
         return NodeItemModel::slotNodeInserted( node );
     }
     m_objects << new Object( node );
+    connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+    connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
+
     endInsertRows();
 }
 
@@ -3000,9 +3104,36 @@ void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
     Object *obj = findNodeObject( node );
     int row = m_objects.indexOf( obj );
     if ( row >= 0 ) {
-        beginRemoveRows( parent( index( node ) ), row, row );
+        if ( m_modus & WorkPackage ) {
+            disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
+            disconnect( node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
+        }
+        QModelIndex idx = index( node );
+        beginRemoveRows( parent( idx ), idx.row(), idx.row() );
+        m_objects.removeAt( row );
+        QList<int> rows = workPackagePositions( obj );
+        while ( ! rows.isEmpty() ) {
+            delete m_objects.takeAt( rows.takeLast() );
+        }
+        delete obj;
         endRemoveRows();
     }
+}
+
+void GeneralNodeItemModel::slotWorkPackageToBeAdded( Node *node, int row )
+{
+    qDebug()<<"slotWorkPackageToBeAdded:"<<index( node )<<node->name()<<row;
+    beginInsertRows( index( node ), row, row );
+    m_objects << new Object( node, Object::Type_WorkPackage, row );
+}
+
+void GeneralNodeItemModel::slotWorkPackageAdded( Node *node )
+{
+    qDebug()<<"slotWorkPackageAdded:"<<node->name();
+    endInsertRows();
+    //HACK to get both views updated
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
 }
 
 void GeneralNodeItemModel::slotNodeRemoved( Node *node )
@@ -3055,22 +3186,25 @@ QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex 
     if ( m_modus == 0 ) {
         return NodeItemModel::index( row, column, parent );
     }
-    Object *obj = static_cast<Object*>( parent.internalPointer() );
+    Object *par = static_cast<Object*>( parent.internalPointer() );
     if ( m_modus & WBS ) {
         if ( ! parent.isValid() ) {
             return createIndex( row, column, findNodeObject( m_project->childNode( row ) ) );
         }
-        if ( obj && obj->isNode() ) {
-            return createIndex( row, column, findNodeObject( obj->node->childNode( row ) ) );
+        if ( par && par->isNode() ) {
+            if ( par->node->type() == Node::Type_Summarytask ) {
+                return createIndex( row, column, findNodeObject( par->node->childNode( row ) ) );
+            }
+            return createIndex( row, column, findWPObject( row, par ) );
         }
         return QModelIndex();
     }
     if ( m_modus & Flat  ) {
         if ( ! parent.isValid() ) {
-            return createIndex( row, column, m_objects.value( row ) );
+            return createIndex( row, column, nodeObjects().value( row ) );
         }
-        if ( obj && obj->isNode() ) {
-            return QModelIndex(); //TODO
+        if ( par && par->isNode() ) {
+            return createIndex( row, column, findWPObject( row, par ) );
         }
         return QModelIndex();
     }
@@ -3084,7 +3218,7 @@ QModelIndex GeneralNodeItemModel::index( const Node *node ) const
     }
     Object *obj = findNodeObject( node );
     if ( obj ) {
-        return createIndex( m_objects.indexOf( obj ), 0, obj );
+        return createIndex( nodeObjects().indexOf( obj ), 0, obj );
     }
     return QModelIndex();
 }
@@ -3100,9 +3234,25 @@ QVariant GeneralNodeItemModel::data( const QModelIndex &index, int role ) const
         return m_nodemodel.data( obj->node, index.column(), role );
     }
     if ( obj && obj->isWorkPackage() ) {
-        //TODO return;
+        int col = -1;
+        // map NodeModel columns to WorkPackageModel columns
+        switch ( index.column() ) {
+            case NodeModel::NodeName:
+            case NodeModel::WPOwnerName:
+                col = WorkPackageModel::WPOwnerName; break;
+            case NodeModel::NodeStatus:
+            case NodeModel::WPTransmitionStatus:
+                col = WorkPackageModel::WPTransmitionStatus; break;
+                col = WorkPackageModel::WPTransmitionStatus; break;
+            case NodeModel::WPTransmitionTime:
+                col = WorkPackageModel:: WPTransmitionTime; break;
+            default: break;
+        }
+        if ( col >= 0 ) {
+            return m_wpmodel.data( static_cast<const Task*>( obj->node )->workPackageAt( index.row() ), col, role );
+        }
     }
-    return result; //TODO
+    return result;
 }
 
 bool GeneralNodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
@@ -3134,19 +3284,15 @@ int GeneralNodeItemModel::rowCount( const QModelIndex &parent ) const
         if ( par && par->isNode() && par->node->type() == Node::Type_Summarytask ) {
             return par->node->numChildren();
         }
-        if ( m_modus & Object::Type_WorkPackage ) {
-            return 0; // TODO
-        }
-        return 0;
     }
     if ( m_modus & Flat ) {
         if ( ! parent.isValid() ) {
-            return m_objects.count();
+            return nodeObjects().count();
         }
-        if ( m_modus & Object::Type_WorkPackage ) {
-            return 0; // TODO
-        }
-        return 0;
+    }
+    if ( ( m_modus & WorkPackage ) && par && par->isNode() ) {
+        //qDebug()<<"rowCount:"<<par->node->name()<<static_cast<const Task*>( par->node )->workPackageLogCount();
+        return static_cast<const Task*>( par->node )->workPackageLogCount();
     }
     return 0;
 }
@@ -3171,7 +3317,7 @@ void GeneralNodeItemModel::slotNodeChanged( Node *node )
     Object *obj = findNodeObject( node );
     if ( obj && obj->isNode() ) {
         QModelIndex i = index( node );
-        emit dataChanged( i, createIndex( i.row(), columnCount(), obj ) );
+        emit dataChanged( i, createIndex( i.row(), columnCount()-1, obj ) );
     }
 }
 
@@ -3183,6 +3329,39 @@ GeneralNodeItemModel::Object *GeneralNodeItemModel::findNodeObject( const Node *
         }
     }
     return 0;
+}
+
+GeneralNodeItemModel::Object *GeneralNodeItemModel::findWPObject( int row, GeneralNodeItemModel::Object *parent ) const
+{
+    foreach ( Object *o, m_objects ) {
+        if ( o->isWorkPackage() && o->node == parent->node && o->row == row ) {
+            return o;
+        }
+    }
+    return 0;
+}
+
+QList<GeneralNodeItemModel::Object*> GeneralNodeItemModel::nodeObjects() const
+{
+    QList<Object*> lst;
+    foreach ( Object *o, m_objects ) {
+        if ( o->isNode() ) {
+            lst << o;
+        }
+    }
+    return lst;
+}
+
+QList<int> GeneralNodeItemModel::workPackagePositions( GeneralNodeItemModel::Object *parent ) const
+{
+    QList<int> rows;
+    for ( int i = 0; i < m_objects.count(); ++i ) {
+        Object *o = m_objects.at( i );
+        if ( o->node == parent->node && o->isWorkPackage() ) {
+            rows << i;
+        }
+    }
+    return rows;
 }
 
 //------------------------------------------------

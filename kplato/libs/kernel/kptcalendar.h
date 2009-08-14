@@ -267,7 +267,7 @@ public:
     int state(int weekday) const;
     void setState(int weekday, int state);
     
-    const QList<TimeInterval*> &intervals(int weekday) const;
+    QList<TimeInterval*> intervals(int weekday) const;
     void setIntervals(int weekday, QList<TimeInterval*>intervals);
     void clearIntervals(int weekday);
     

@@ -45,7 +45,7 @@ namespace KPlato
 Task::Task(Node *parent) 
     : Node(parent),
       m_resource(),
-      m_workPackage( *this )
+      m_workPackage( this )
 {
     //kDebug()<<"("<<this<<')';
     m_requests.setTask( this );
@@ -62,7 +62,7 @@ Task::Task(Node *parent)
 Task::Task(const Task &task, Node *parent) 
     : Node(task, parent), 
       m_resource(),
-      m_workPackage( *this )
+      m_workPackage( this )
 {
     //kDebug()<<"("<<this<<')';
     m_requests.setTask( this );
@@ -360,6 +360,8 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                     delete r;
                 }
             }
+        } else if (e.tagName() == "workpackage") {
+            m_workPackage.loadXML( e, status );
         } else if (e.tagName() == "progress") {
             completion().loadXML( e, status );
         } else if (e.tagName() == "schedules") {
@@ -382,6 +384,23 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             }
         } else if (e.tagName() == "documents") {
             m_documents.load( e, status );
+        } else if (e.tagName() == "workpackage-log") {
+            KoXmlNode n = e.firstChild();
+            for ( ; ! n.isNull(); n = n.nextSibling() ) {
+                if ( ! n.isElement() ) {
+                    continue;
+                }
+                KoXmlElement el = n.toElement();
+                if (el.tagName() == "workpackage") {
+                    WorkPackage *wp = new WorkPackage( this );
+                    if ( wp->loadLoggedXML( el, status ) ) {
+                        m_packageLog << wp;
+                    } else {
+                        kError()<<"Failed to load logged workpackage";
+                        delete wp;
+                    }
+                }
+            }
         }
     }
     //kDebug()<<m_name<<" loaded";
@@ -407,7 +426,7 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("wbs", wbsCode()); //NOTE: included for information
     
     m_estimate->save(me);
-
+    m_workPackage.saveXML(me);
     completion().saveXML( me );
     
     if (!m_schedules.isEmpty()) {
@@ -425,6 +444,15 @@ void Task::save(QDomElement &element)  const {
     
     m_documents.save( me );
     
+    // The workpackage log
+    if (!m_packageLog.isEmpty()) {
+        QDomElement log = me.ownerDocument().createElement("workpackage-log");
+        me.appendChild(log);
+        foreach (WorkPackage *wp, m_packageLog) {
+            wp->saveLoggedXML( log );
+        }
+    }
+
     for (int i=0; i<numChildren(); i++) {
         childNode(i)->save(me);
     }
@@ -2608,6 +2636,55 @@ void Task::setActivityFreeMargin(int value)
     m_activityFreeMargin=value;
 }
 
+void Task::addWorkPackage( WorkPackage *wp )
+{
+    qDebug()<<"addWorkPackage:"<<m_name<<wp->ownerName();
+    emit workPackageToBeAdded( this, m_packageLog.count() );
+    m_packageLog.append( wp );
+    emit workPackageAdded( this );
+}
+
+void Task::removeWorkPackage( WorkPackage *wp )
+{
+    qDebug()<<"removeWorkPackage:"<<m_name<<wp->ownerName();
+    int index = m_packageLog.indexOf( wp );
+    if ( index < 0 ) {
+        return;
+    }
+    emit workPackageToBeRemoved( this, index );
+    m_packageLog.removeAt( index );
+    emit workPackageRemoved( this );
+}
+
+WorkPackage *Task::workPackageAt( int index ) const
+{
+    Q_ASSERT ( index >= 0 && index < m_packageLog.count() );
+    return m_packageLog.at( index );
+}
+
+QString Task::wpOwnerName() const
+{
+    if ( m_packageLog.isEmpty() ) {
+        return m_workPackage.ownerName();
+    }
+    return m_packageLog.last()->ownerName();
+}
+
+WorkPackage::WPTransmitionStatus Task::wpTransmitionStatus() const
+{
+    if ( m_packageLog.isEmpty() ) {
+        return m_workPackage.transmitionStatus();
+    }
+    return m_packageLog.last()->transmitionStatus();
+}
+
+DateTime Task::wpTransmitionTime() const
+{
+    if ( m_packageLog.isEmpty() ) {
+        return m_workPackage.transmitionTime();
+    }
+    return m_packageLog.last()->transmitionTime();
+}
 
 //------------------------------------------
 
@@ -3239,11 +3316,23 @@ void Completion::UsedEffort::saveXML(QDomElement &element ) const
 }
 
 //----------------------------------
-WorkPackage::WorkPackage( Task &task )
+WorkPackage::WorkPackage( Task *task )
     : m_task( task ),
-    m_manager( 0 )
+    m_manager( 0 ),
+    m_transmitionStatus( TS_None )
 {
-    m_completion.setNode( &task );
+    m_completion.setNode( task );
+}
+
+WorkPackage::WorkPackage( const WorkPackage &wp )
+    : m_task( 0 ),
+    m_manager( 0 ),
+    m_completion( wp.m_completion ),
+    m_ownerName( wp.m_ownerName ),
+    m_ownerId( wp.m_ownerId ),
+    m_transmitionStatus( wp.m_transmitionStatus ),
+    m_transmitionTime( wp.m_transmitionTime )
+{
 }
 
 WorkPackage::~WorkPackage()
@@ -3252,11 +3341,37 @@ WorkPackage::~WorkPackage()
 
 bool WorkPackage::loadXML(KoXmlElement &element, XMLLoaderObject &status )
 {
+    m_ownerName = element.attribute( "owner" );
+    m_ownerId = element.attribute( "owner-id" );
     return true;
 }
 
 void WorkPackage::saveXML(QDomElement &element) const
 {
+    QDomElement el = element.ownerDocument().createElement("workpackage");
+    element.appendChild(el);
+    el.setAttribute( "owner", m_ownerName );
+    el.setAttribute( "owner-id", m_ownerId );
+}
+
+bool WorkPackage::loadLoggedXML(KoXmlElement &element, XMLLoaderObject &status )
+{
+    m_ownerName = element.attribute( "owner" );
+    m_ownerId = element.attribute( "owner-id" );
+    m_transmitionStatus = transmitionStatusFromString( element.attribute( "status" ) );
+    m_transmitionTime = DateTime( KDateTime::fromString( element.attribute( "time" ) ) );
+    return m_completion.loadXML( element, status );
+}
+
+void WorkPackage::saveLoggedXML(QDomElement &element) const
+{
+    QDomElement el = element.ownerDocument().createElement("workpackage");
+    element.appendChild(el);
+    el.setAttribute( "owner", m_ownerName );
+    el.setAttribute( "owner-id", m_ownerId );
+    el.setAttribute( "status", transmitionStatusToString( m_transmitionStatus ) );
+    el.setAttribute( "time", m_transmitionTime.toString( KDateTime::ISODate ) );
+    m_completion.saveXML( el );
 }
 
 QList<Resource*> WorkPackage::fetchResources()
@@ -3265,9 +3380,9 @@ QList<Resource*> WorkPackage::fetchResources()
     QList<Resource*> lst;
     if ( id() == NOTSCHEDULED ) {
         kDebug()<<"No schedule";
-        lst << m_task.requestedResources();
+        if ( m_task ) lst << m_task->requestedResources();
     } else {
-        lst = m_task.assignedResources( id() );
+        if ( m_task ) lst = m_task->assignedResources( id() );
         foreach ( const Resource *r, m_completion.resources() ) {
             if ( ! lst.contains( const_cast<Resource*>( r ) ) ) {
                 lst << const_cast<Resource*>( r );
@@ -3288,225 +3403,37 @@ const Completion &WorkPackage::completion() const
     return m_completion;
 }
 
-QMap<Resource*, WorkPackage::ResourceStatus> &WorkPackage::resourceStatus()
-{
-    foreach ( Resource *r, fetchResources() ) {
-        if ( ! m_resourceStatus.contains( r ) ) {
-            m_resourceStatus.insert( r, ResourceStatus() );
-        }
-    }
-    return m_resourceStatus;
-}
-
-const QMap<Resource*, WorkPackage::ResourceStatus> &WorkPackage::resourceStatus() const
-{
-    return m_resourceStatus;
-}
 
 void WorkPackage::setScheduleManager( ScheduleManager *sm )
 {
     m_manager = sm;
-    resourceStatus();
 }
 
-WorkPackage::WPControlStatus WorkPackage::controlStatus() const
-{
-    foreach ( Resource *r, m_resourceStatus.keys() ) {
-        if ( const_cast<WorkPackage*>( this )->p_controlStatus( r ) == CS_Work ) {
-            return CS_Work;
-        }
-    }
-    return CS_KPlato;
-}
 
-WorkPackage::WPControlStatus WorkPackage::controlStatus( const Resource *r ) const
-{
-    return const_cast<WorkPackage*>( this )->p_controlStatus( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPControlStatus WorkPackage::controlStatus( Resource *r )
-{
-    return p_controlStatus( r );
-}
-
-WorkPackage::WPControlStatus WorkPackage::p_controlStatus( Resource *r )
-{
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return CS_None;
-    }
-    return m_resourceStatus[ r ].controlStatus;
-}
-
-QString WorkPackage::controlStatusToString( WorkPackage::WPControlStatus sts, bool trans )
+QString WorkPackage::transmitionStatusToString( WorkPackage::WPTransmitionStatus sts, bool trans )
 {
     QString s = trans ? i18n( "None" ) : "None";
     switch ( sts ) {
-        case CS_KPlato: 
-            s = trans ? i18n( "KPlato" ) : "KPlato";
-            break;
-        case CS_Work:
-            s = trans ? i18n( "Work" ) : "Work";
-            break;
-        default:
-            break;
-    }
-    return s;
-}
-
-WorkPackage::WPSendStatus WorkPackage::sendStatus( const Resource *r ) const
-{
-    return const_cast<WorkPackage*>( this )->p_sendStatus( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPSendStatus WorkPackage::sendStatus( Resource *r )
-{
-    return p_sendStatus( r );
-}
-
-WorkPackage::WPSendStatus WorkPackage::p_sendStatus( Resource *r )
-{
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return SS_None;
-    }
-    return m_resourceStatus[ r ].sendStatus;
-}
-
-QString WorkPackage::sendStatusToString( WorkPackage::WPSendStatus sts, bool trans )
-{
-    QString s = trans ? i18n( "None" ) : "None";
-    switch ( sts ) {
-        case SS_ForInformation: 
-            s = trans ? i18n( "ForInformation" ) : "ForInformation";
-            break;
-        case SS_ForEstimation:
-            s = trans ? i18n( "ForEstimation" ) : "ForEstimation";
-            break;
-        case SS_TentativeSchedule:
-            s = trans ? i18n( "TentativeSchedule" ) : "TentativeSchedule";
-            break;
-        case SS_Scheduled:
-            s = trans ? i18n( "Scheduled" ) : "Scheduled";
-            break;
-        case SS_Execute:
-            s = trans ? i18n( "Execute" ) : "Execute";
-            break;
-        case SS_Cancel:
-            s = trans ? i18n( "Cancel" ) : "Cancel";
-            break;
-        default:
-            break;
-    }
-    return s;
-}
-
-WorkPackage::WPResponseStatus WorkPackage::responseStatus( const Resource *r ) const
-{
-    return const_cast<WorkPackage*>( this )->p_responseStatus( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPResponseStatus WorkPackage::responseStatus( Resource *r )
-{
-    return p_responseStatus( r );
-}
-
-WorkPackage::WPResponseStatus WorkPackage::p_responseStatus( Resource *r )
-{
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return RS_None;
-    }
-    return m_resourceStatus[ r ].responseStatus;
-}
-
-QString WorkPackage::responseStatusToString( WorkPackage::WPResponseStatus sts, bool trans )
-{
-    QString s = trans ? i18n( "None" ) : "None";
-    switch ( sts ) {
-        case RS_Accepted: 
-            s = trans ? i18n( "Accepted" ) : "Accepted";
-            break;
-        case RS_Tentative:
-            s = trans ? i18n( "Tentative" ) : "Tentative";
-            break;
-        case RS_Refused:
-            s = trans ? i18n( "Refused" ) : "Refused";
-            break;
-        case RS_Update:
-            s = trans ? i18n( "Update" ) : "Update";
-            break;
-        default:
-            break;
-    }
-    return s;
-}
-
-WorkPackage::WPResponseType WorkPackage::responseType(  const Resource *r ) const
-{
-    return const_cast<WorkPackage*>( this )->p_responseType( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPResponseType WorkPackage::responseType(  Resource *r )
-{
-    return p_responseType( r );
-}
-
-WorkPackage::WPResponseType WorkPackage::p_responseType(  Resource *r )
-{
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return RT_None;
-    }
-    return m_resourceStatus[ r ].responseType;
-}
-
-QString WorkPackage::responseTypeToString( WorkPackage::WPResponseType rsp, bool trans )
-{
-    QString s = trans ? i18n( "None" ) : "None";
-    switch ( rsp ) {
-        case RT_Required: 
-            s = trans ? i18n( "Required" ) : "Required";
-            break;
-        default:
-            break;
-    }
-    return s;
-}
-    
-WorkPackage::WPActionType WorkPackage::actionType(  const Resource *r ) const
-{
-    return const_cast<WorkPackage*>( this )->p_actionType( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPActionType WorkPackage::actionType(  Resource *r )
-{
-    return p_actionType( r );
-}
-
-WorkPackage::WPActionType WorkPackage::p_actionType(  Resource *r )
-{
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return AT_None;
-    }
-    return m_resourceStatus[ r ].actionType;
-}
-
-QString WorkPackage::actionTypeToString( WorkPackage::WPActionType type, bool trans )
-{
-    QString s = trans ? i18n( "None" ) : "None";
-    switch ( type ) {
-        case AT_Send: 
+        case TS_Send: 
             s = trans ? i18n( "Send" ) : "Send";
             break;
-        case AT_Receive: 
+        case TS_Receive:
             s = trans ? i18n( "Receive" ) : "Receive";
-            break;
-        case AT_Load: 
-            s = trans ? i18n( "Load" ) : "Load";
             break;
         default:
             break;
     }
     return s;
 }
-    
+
+WorkPackage::WPTransmitionStatus WorkPackage::transmitionStatusFromString( const QString &sts )
+{
+    QStringList lst;
+    lst << "None" << "Send" << "Receive";
+    int s = lst.indexOf( sts );
+    return s < 0 ? TS_None : static_cast<WPTransmitionStatus>( s );
+}
+
 //----------------------------------
 #ifndef NDEBUG
 void Task::printDebug(bool children, const QByteArray& _indent) {

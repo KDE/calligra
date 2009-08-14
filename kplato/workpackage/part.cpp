@@ -45,6 +45,7 @@
 #include <QDir>
 #include <QTimer>
 #include <QUndoStack>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -478,10 +479,6 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
 bool Part::loadXML( const KoXmlDocument &document, KoStore* )
 {
     kDebug();
-    QTime dt;
-    dt.start();
-//    emit ( 0 );
-
     QString value;
     KoXmlElement plan = document.documentElement();
 
@@ -492,7 +489,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
         return false;
     } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value;
         KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
@@ -507,23 +504,9 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
             return false;
         }
     }
-//    emit sigProgress( 5 );
-
-#ifdef KOXML_USE_QDOM
-    int numNodes = plan.childNodes().count();
-#else
-    int numNodes = plan.childNodesCount();
-#endif
-    if ( numNodes > 2 ) {
-        //TODO: Make a proper bitching about this
-        kDebug() <<"*** Error ***";
-        kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
-        return false;
-    }
-//    emit sigProgress( 100 ); // the rest is only processing, not loading
-
-    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
-
+    Project* newProject = 0;
+    QString resourceId;
+    QString resourceName;
     m_xmlLoader.startLoad();
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -531,35 +514,40 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
             continue;
         }
         KoXmlElement e = n.toElement();
-        kDebug()<<"loadXML:"<<e.tagName();
-        if ( e.tagName() == "project" ) {
-            Project * newProject = new Project();
+        qDebug()<<"loadXML:"<<e.tagName();
+        if ( e.tagName() == "workpackage" ) {
+            resourceId = e.attribute( "owner-id" );
+            resourceName = e.attribute( "owner" );
+        } else if ( e.tagName() == "project" ) {
+            newProject = new Project();
             m_xmlLoader.setProject( newProject );
-            if ( newProject->load( e, m_xmlLoader ) ) {
-                // The load went fine. Throw out the old project
-                if ( ! setWorkPackage( newProject ) ) {
-                    delete newProject;
-                    m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Setting of work package failed" );
-                    KMessageBox::error( 0, i18n( "Failed to set workpackage, project: %1" , newProject->name() ) );
-                }
-            } else {
+            qDebug()<<"loadXML:"<<"loading project:"<<newProject<<newProject->name();
+            if ( ! newProject->load( e, m_xmlLoader ) ) {
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 KMessageBox::error( 0, i18n( "Failed to load project: %1" , newProject->name() ) );
                 delete newProject;
+                newProject = 0;
             }
-        } else if ( e.tagName() == "objects" ) {
-            kDebug()<<"loadObjects";
-            //loadObjects( e );
         }
     }
     m_xmlLoader.stopLoad();
-//     emit sigProgress( 100 ); // the rest is only processing, not loading
-
-    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
-
-    // do some sanity checking on document.
-//     emit sigProgress( -1 );
-
+    if ( newProject ) {
+        if ( ! resourceId.isEmpty() ) {
+            Resource *r = newProject->findResource( resourceId );
+            if ( r == 0 ) {
+                qDebug()<<"loadXML:"<<"Cannot find resource id!!"<<resourceId<<resourceName;
+            }
+            qDebug()<<"loadXML:"<<"is this me?"<<resourceName;
+            Task *t = static_cast<Task*>( newProject->childNode( 0 ) );
+            t->workPackage().setOwnerName( resourceName );
+            t->workPackage().setOwnerId( resourceId );
+        }
+        if ( ! setWorkPackage( newProject ) ) {
+            KMessageBox::error( 0, i18n( "Failed to set workpackage, project: %1" , newProject->name() ) );
+            delete newProject;
+            newProject = 0;
+        }
+    }
     setModified( false );
     emit changed();
     return true;

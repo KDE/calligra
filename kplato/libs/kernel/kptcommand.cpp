@@ -3361,4 +3361,31 @@ void InsertProjectCmd::addChildNodes( Node *node ) {
     }
 }
 
+WorkPackageAddCmd::WorkPackageAddCmd( Project *project, Node *node, WorkPackage *value, const QString& name )
+    : NamedCommand( name ),
+    m_project( project ),
+    m_node( node ),
+    m_wp( value ),
+    m_mine( true )
+{
+}
+WorkPackageAddCmd::~WorkPackageAddCmd()
+{
+    if ( m_mine ) {
+        delete m_wp;
+    }
+}
+void WorkPackageAddCmd::execute()
+{
+    // FIXME use project
+    //m_project->addWorkPackage( m_node, m_wp );
+    static_cast<Task*>( m_node )->addWorkPackage( m_wp );
+}
+void WorkPackageAddCmd::unexecute()
+{
+    // FIXME use project
+    //m_project->removeWorkPackage( m_node, m_wp );
+    static_cast<Task*>( m_node )->removeWorkPackage( m_wp );
+}
+
 }  //KPlato namespace

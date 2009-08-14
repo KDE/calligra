@@ -29,22 +29,22 @@
 namespace KPlato
 {
 
-WorkPackageControlDialog::WorkPackageControlDialog( Project &project, Task &task, QWidget *p)
-    : KPageDialog(p)
-{
-    setFaceType( Tabbed );
-    setCaption( i18n("Work Package Control") );
-    setButtons( Close );
-    setDefaultButton( Close );
-    showButtonSeparator( true );
-
-    m_wp = new WorkPackageControlPanel( project, task, this);
-    addPage( m_wp, i18n( "General" ) );
-
-    m_docs = new DocumentsPanel( task, this );
-    addPage( m_docs, i18n( "Documents" ) );
-
-}
+// WorkPackageControlDialog::WorkPackageControlDialog( Project &project, Task &task, QWidget *p)
+//     : KPageDialog(p)
+// {
+//     setFaceType( Tabbed );
+//     setCaption( i18n("Work Package Control") );
+//     setButtons( Close );
+//     setDefaultButton( Close );
+//     showButtonSeparator( true );
+// 
+//     m_wp = new WorkPackageControlPanel( project, task, this);
+//     addPage( m_wp, i18n( "General" ) );
+// 
+//     m_docs = new DocumentsPanel( task, this );
+//     addPage( m_docs, i18n( "Documents" ) );
+// 
+// }
 
 WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *p)
     : KDialog(p)
