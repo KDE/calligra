@@ -370,38 +370,32 @@ bool PlotArea::removeAxis( Axis *axis )
 
 void PlotArea::setChartType( ChartType type )
 {
-    if ( !isPolar( d->chartType ) && isPolar( type ) )
-    {
-        foreach ( Axis *axis, d->axes )
-        {
+    if ( !isPolar( d->chartType ) && isPolar( type ) ) {
+        foreach ( Axis *axis, d->axes ) {
             if ( !axis->title()->isVisible() )
                 continue;
+
             axis->title()->setVisible( false );
             d->automaticallyHiddenAxisTitles.append( axis->title() );
         }
     }
-    else if ( isPolar( d->chartType ) && !isPolar( type ) )
-    {
-        foreach ( KoShape *title, d->automaticallyHiddenAxisTitles )
-        {
+    else if ( isPolar( d->chartType ) && !isPolar( type ) ) {
+        foreach ( KoShape *title, d->automaticallyHiddenAxisTitles ) {
             title->setVisible( true );
         }
         d->automaticallyHiddenAxisTitles.clear();
     }
     
-    if ( d->chartType != ScatterChartType && type == ScatterChartType )
-    {
+    if ( d->chartType != ScatterChartType && type == ScatterChartType ) {
         d->shape->proxyModel()->setDataDimensions( 2 );
     }
-    else if ( d->chartType == ScatterChartType && type != ScatterChartType )
-    {
+    else if ( d->chartType == ScatterChartType && type != ScatterChartType ) {
         d->shape->proxyModel()->setDataDimensions( 1 );
     }
     
     d->chartType = type;
     
-    foreach ( Axis *axis, d->axes )
-    {
+    foreach ( Axis *axis, d->axes ) {
         axis->plotAreaChartTypeChanged( type );
     }
     
