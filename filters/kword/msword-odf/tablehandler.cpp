@@ -59,10 +59,31 @@ void KWordTableHandler::tableStart(KWord::Table* table)
 
     //start table in content
     m_bodyWriter->startElement("table:table");
-    m_bodyWriter->startElement("table:table-column");
-    kDebug(30513) << "max columns in this table: " << table->m_cellEdges.size()-1;
-    m_bodyWriter->addAttribute("table:number-columns-repeated", table->m_cellEdges.size()-1);
-    m_bodyWriter->endElement();
+
+    // Start a table style
+    KoGenStyle tableStyle(KoGenStyle::StyleAutoTable, "table");
+    tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
+    tableStyle.addProperty("style:border-model", "collapsing");
+    QString tableStyleName = m_mainStyles->lookup(tableStyle, QString("Table"),KoGenStyles::AllowDuplicates);
+
+    m_bodyWriter->addAttribute("table:style-name", tableStyleName);
+    
+    for (int r = 0; r < table->m_cellEdges.size()-1; r++) {
+        KoGenStyle tableColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
+        tableColumnStyle.addPropertyPt("style:column-width", (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
+       QString tableColumnStyleName;
+        if(r>=26)
+            tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + ".A" + QChar('A'+r-26), KoGenStyles::DontForceNumbering);
+        else
+            tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + '.' + QChar('A'+r), KoGenStyles::DontForceNumbering);
+
+        m_bodyWriter->startElement("table:table-column");
+        m_bodyWriter->addAttribute("table:style-name", tableColumnStyleName);
+        m_bodyWriter->endElement();
+    }
+
+
+
 }
 
 void KWordTableHandler::tableEnd()
@@ -91,10 +112,10 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
     QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
 
-    // The 6 BRC objects are for left, right, top, bottom, diagonal \ and diagonal / (not sure of the order)
+    // The 6 BRC objects are for top, left, bottom, right, insidehorizontal, insidevertical (default values)
     for(int i = 0; i < 6; i++) {
         const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
-        kDebug(30513) << brc.toString().c_str();
+        kDebug(30513) << "default border" << brc.brcType << (brc.dptLineWidth / 8.0);
         m_borderStyle[i] = Conversion::setBorderAttributes(brc);
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
@@ -113,6 +134,10 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
     m_bodyWriter->addAttribute("table:style-name", rowStyleName.toUtf8());
+    
+    const wvWare::Word97::TC& tc = m_tap->rgtc[m_tap->itcMac];
+    
+    kDebug(30513) <<"Extra cell=" << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
 }
 
 void KWordTableHandler::tableRowEnd()
@@ -121,6 +146,18 @@ void KWordTableHandler::tableRowEnd()
     m_currentY += rowHeight();
     //end table row in content
     m_bodyWriter->endElement();//table:table-row
+}
+
+static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, const wvWare::Word97::BRC& brc2)
+{
+    if(brc1.brcType == 0 || brc1.brcType >= 64)
+        return brc2;
+    else if(brc2.brcType == 0 || brc2.brcType >= 64)
+        return brc1;
+    else if (brc1.dptLineWidth >= brc2.dptLineWidth)
+        return brc1;
+    else
+        return brc2;
 }
 
 void KWordTableHandler::tableCellStart()
@@ -198,7 +235,7 @@ void KWordTableHandler::tableCellStart()
     if ( tc.fVertMerge && !tc.fVertRestart ) {
         m_bodyWriter->startElement("table:covered-table-cell");
         m_cellOpen = true;
-        return;
+    return;
     }
 
     // Check how many cells that mean, according to our cell edge array
@@ -230,70 +267,65 @@ void KWordTableHandler::tableCellStart()
     kDebug(30513) <<" tableCellStart row=" << m_row <<" WordColumn=" << m_column <<" colSpan=" << colSpan <<" (from" << leftCellNumber <<" to" << rightCellNumber <<" for KWord) rowSpan=" << rowSpan <<" cellRect=" << cellRect;
 
     // Sort out the borders.
-    // It seems we get this on the cells that are adjacent
-    // to one has a border, as if it means "whatever the adjacent cell on this border
-    // specifies". (cf table-22.doc)
-    // We need to set the adjacent cell's border instead, in that case.
-    // ### No idea how to do it properly for top/bottom though. The cell above might not have the same size...
-    const wvWare::Word97::BRC& brcTop = tc.brcTop;
-    const wvWare::Word97::BRC& brcBottom = tc.brcBottom;
-    const wvWare::Word97::BRC& brcLeft =
-     ( tc.brcLeft.ico == 255 && tc.brcLeft.dptLineWidth == 255 && m_column > 0 ) ?
-        m_tap->rgtc[ m_column - 1 ].brcRight
-        : tc.brcLeft;
-    const wvWare::Word97::BRC& brcRight =
-      ( tc.brcRight.ico == 255 && tc.brcRight.dptLineWidth == 255 && m_column < nbCells - 1 ) ?
-        m_tap->rgtc[ m_column + 1 ].brcLeft
-        : tc.brcRight;
+    // From experimenting with Word the following can be said about horizontal borders:
+    // They always use the collapsing border model (.doc additionally has the notion of table wide borders)
+    // The default borders are merged into the odt output by "winning" over the cell borders due to wider lines
+    // Word also defines table-wide borders (even between cell minimum values)
+    // If the default is thicker or same width then it wins. At the top or bottom of table the cell always wins
+
+    // The following can be said about vertical borders: The cell to the left of the border always defines the value.
+    // Well then a winner with the table wide definitions is also found
+    kDebug(30513) <<"CellBorders=" << m_row << m_column << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
+    const wvWare::Word97::BRC brcNone;
+    const wvWare::Word97::BRC& brcTop = (m_row > 0) ?
+                        brcWinner(tc.brcTop, m_tap->rgbrcTable[4]) :
+                        ((tc.brcTop.brcType > 0 && tc.brcTop.brcType < 64) ?tc.brcTop : m_tap->rgbrcTable[0]);
+    const wvWare::Word97::BRC& brcBottom =  (m_row < m_currentTable->rows.size()-1) ?
+                        brcWinner(tc.brcBottom, m_tap->rgbrcTable[4]) :
+                        brcWinner(tc.brcBottom, m_tap->rgbrcTable[2]);
+    const wvWare::Word97::BRC& brcLeft = (m_column > 0) ?
+                        brcWinner(tc.brcLeft, m_tap->rgbrcTable[5]) :
+                        brcWinner(tc.brcLeft, m_tap->rgbrcTable[1]);
+    const wvWare::Word97::BRC& brcRight = (m_column < nbCells - 1) ?
+                        brcWinner(tc.brcRight, m_tap->rgbrcTable[5]) :
+                        brcWinner(tc.brcRight, m_tap->rgbrcTable[3]);
 
     KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
     //set borders for the four edges of the cell
-    //m_borderStyle is the row border style, set in tableRowStart
-    if(brcTop.brcType == 0) {
-        cellStyle.addProperty("fo:border-top", m_borderStyle[0]);
-    }
-    //no border
-    else if(brcTop.brcType == 255) {
-        cellStyle.addProperty("fo:border-top", "thin none #000000");
-    }
-    //we have a border style defined here
-    else {
+    if(brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
+        QString dba = Conversion::setDoubleBorderAttributes(brcTop);
+        if(!dba.isEmpty())
+            cellStyle.addProperty("style:border-line-width-top", dba);
     }
-    //bottom
-    if(brcBottom.brcType == 0) {
-        cellStyle.addProperty("fo:border-bottom", m_borderStyle[1]);
-    }
-    else if(brcBottom.brcType == 255) {
-        cellStyle.addProperty("fo:border-bottom", "thin none #000000");
-    }
-    else {
-        cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
-    }
+
     //left
-    if(brcLeft.brcType == 0) {
-        cellStyle.addProperty("fo:border-left", m_borderStyle[2]);
-    }
-    else if(brcLeft.brcType == 255) {
-        cellStyle.addProperty("fo:border-left", "thin none #000000");
-    }
-    else {
+    if(brcLeft.brcType > 0 && brcLeft.brcType < 64) {
         cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
+        QString dba = Conversion::setDoubleBorderAttributes(brcLeft);
+        if(!dba.isEmpty())
+            cellStyle.addProperty("style:border-line-width-left", dba);
     }
+
+    //bottom
+    if(brcBottom.brcType != 0 && brcBottom.brcType < 64) {
+        cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
+        QString dba = Conversion::setDoubleBorderAttributes(brcBottom);
+        if(!dba.isEmpty())
+            cellStyle.addProperty("style:border-line-width-bottom", dba);
+    }
+
     //right
-    if(brcRight.brcType == 0) {
-        cellStyle.addProperty("fo:border-right", m_borderStyle[3]);
-    }
-    else if(brcRight.brcType == 255) {
-        cellStyle.addProperty("fo:border-right", "thin none #000000");
-    }
-    else {
+    if(brcRight.brcType > 0 && brcRight.brcType < 64) {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
+        QString dba = Conversion::setDoubleBorderAttributes(brcRight);
+        if(!dba.isEmpty())
+            cellStyle.addProperty("style:border-line-width-right", dba);
     }
 
     kDebug(30513) <<" shading " << shd.ipat;
-    if(shd.ipat == 0 && shd.icoBack != 0)
-        cellStyle.addProperty("fo:background-color", Conversion::color(shd.icoBack, -1));
+    if(shd.ipat == 0 && shd.cvBack != 0)
+        cellStyle.addProperty("fo:background-color", '#' + QString::number(shd.cvBack|0xff000000, 16).right(6).toUpper());
 
     //text direction
     //if(tc.fVertical) {

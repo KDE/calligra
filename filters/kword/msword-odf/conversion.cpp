@@ -285,6 +285,56 @@ void Conversion::setColorAttributes( QDomElement& element, int ico, const QStrin
     element.setAttribute( prefix.isNull() ? "green" : prefix+"Green", color.green() );
 }
 
+//get a correct fo:border-line-width value "innerwidth space outerwidth"
+//innerwidth = metric
+//space = metric
+//outerwidth = metric
+QString Conversion::setDoubleBorderAttributes( const wvWare::Word97::BRC& brc )
+{
+    qreal w =  brc.dptLineWidth / 8.0;
+        
+    switch ( brc.brcType ) {
+        case 0: // none
+        case 1: // single
+        case 2: // thick
+        case 5: // hairline
+        case 6: // dot
+        case 7: // dash large gap
+        case 8: // dot dash
+        case 9: // dot dot dash
+        case 20: // wave
+        case 22: // dash small gap
+        case 23: // dash dot stroked
+        case 24: // emboss 3D
+        case 25: // engrave 3D
+        default:
+            return QString(); // single lines so just return blank
+        
+        case 10: // triple
+            return QString::number(w) + "pt " + QString::number(w*3) + "pt " + QString::number(w) + "pt";
+        case 13: // thin-thick-thin small gap
+        case 16: // thin-thick-thin medium gap
+        case 19: // thin-thick-thin large gap
+
+        case 3: // double
+            return QString::number(w) + "pt " + QString::number(w) + "pt " + QString::number(w) + "pt";
+        case 11: // thin-thick small gap
+            return QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w) + "pt";
+        case 12: // thick-thin small gap
+            return QString::number(w) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt";
+        case 14: // thin-thick medium gap
+            return QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w) + "pt";
+        case 15: // thick-thin medium gap
+            return QString::number(w) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt";
+        case 17: // thin-thick large gap
+            return QString::number(w*0.25) + "pt " + QString::number(w) + "pt " + QString::number(w*0.5) + "pt";
+        case 18: //  thick-thin large gap
+            return QString::number(w*0.5) + "pt " + QString::number(w) + "pt " + QString::number(w*0.25) + "pt";
+        case 21: // double wave
+            return QString::number(w*2.5) + "pt " + QString::number(w*1.25) + "pt " + QString::number(w*2.5) + "pt";
+    }
+}
+
 //get a correct fo:border value "width style color"
 //width = thick, thin, or length specification
 //style = none, solid, or double
@@ -294,57 +344,84 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
     kDebug(30153) << "brc.brcType = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
 
-    QString width( "thin" ); //reasonable default
-    QString style( "solid" ); //reasonable default
-    QString color( "#000000" ); //reasonable default
 
     //set the border width
-    width =  QString::number(brc.dptLineWidth / 8.0) + "pt";
+    qreal w;
+    if (brc.brcType < 0x40) // this is according to http://msdn.microsoft.com/en-us/library/dd907496.aspx
+        w =  brc.dptLineWidth / 8.0;
+    else
+        w = brc.dptLineWidth;
+    
+    QString style( "solid" ); //reasonable default
+    QString color = '#' + QString::number(brc.cv|0xff000000, 16).right(6).toUpper();
 
-    //QString style = "0"; // KWord: solid
     switch ( brc.brcType ) {
-    case 0: // none
-        //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
-        style = "none";
-        break;
-    case 1: // single
-        //defaults should be good, so do nothing
-        break;
-    case 2: //thick
-        width = "thick";
-        break;
-    case 3: // double
-        style = "double";
-        break;
-    //doesn't seem to be a 4 in the standard?
-    case 5: //"hairline"
-        width = "0.0008in"; //this is the smallest width in OOo, so why not?
-        break;
+        case 0: // none
+            //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
+            style = "none";
+            break;
+        case 11: // thin-thick small gap
+        case 12: // thick-thin small gap
+            style = "double";
+            w *=1.5;
+            break;
+        case 17: // thin-thick large gap
+        case 18: //  thick-thin large gap
+            style = "double";
+            w *=1.75;
+            break;
+        case 14: // thin-thick medium gap
+        case 15: // thick-thin medium gap
+            style = "double";
+            w *=2.0;
+            break;
+        case 3: // double
+            style = "double";
+            w *=3;
+            break;
+        case 5: //"hairline"
+            w = 0.01;
+            break;
 
-    //ODF doesn't support dotted, dashed, or wavy borders???
+        //ODF doesn't support dot dashed or wavy borders??? 
 
-    //case 7: // dash large gap
-    //case 22: // dash small gap
-    //    style = "1"; // KWord: dashes
-    //    break;
-    //case 6: // dot
-    //    style = "2";
-    //    break;
-    //case 8: // dot dash
-    //    style = "3";
-    //    break;
-    //case 9: // dot dot dash
-    //    style = "4";
-    //    break;
-    default:
-        //if a fancy unsupported border is specified -> better a normal border than none
-        //so just leave values as defaults
-        break;
+        case 7: // dash large gap
+        case 22: // dash small gap
+            style = "dashed"; // KWord: dashes //FIXME
+            break;
+        case 6: // dot
+            style = "dotted";
+            break;
+        case 8: // dot dash
+            style = "dashed"; //FIXME
+            break;
+        case 9: // dot dot dash
+            style = "dashed"; //FIXME
+            break;
+            
+        case 20: // wave
+            w *= 4; // Note: we can't make a wave but at least we can make it just as wide
+            break;
+        case 21: // double wave
+            w *= 6.25;
+            style = "double"; // Note: we can't make a wave but at least we can make it just as wide
+            break;
+ 
+        case 10: // triple
+            w *= 5;
+            style = "double"; //Note: odf only support double so that will have to do
+            break;
+
+        case 13: // thin-thick-thin small gap
+        case 16: // thin-thick-thin medium gap
+        case 19: // thin-thick-thin large gap
+        default:
+            //if a fancy unsupported border is specified -> better a normal border than none
+            //so just leave values as defaults
+            break;
     }
 
-    //set up color
-    color = Conversion::color(brc.ico, -1);
-    kDebug(30153) << "brc.ico = " << brc.ico <<" converted to " << color;
+    QString width =  QString::number(w) + "pt";
 
     QString value( width );
     value.append( " " );

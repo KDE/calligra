@@ -79,6 +79,9 @@ namespace Conversion
     // if not empty, they will be xRed/xBlue/xGreen
     void setColorAttributes( QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false );
 
+    // Return an ODF attribute for border linewidths from a BRC structure
+    QString setDoubleBorderAttributes( const wvWare::Word97::BRC& brc );
+
     // Return an ODF attribute for border characteristics from a BRC structure
     QString setBorderAttributes( const wvWare::Word97::BRC& brc );
 
