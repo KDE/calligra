@@ -1158,6 +1158,7 @@ void KarbonView::configure()
     dialog->exec();
     delete dialog;
     d->part->reorganizeGUI();
+    d->canvas->update();
 }
 
 void KarbonView::pageLayout()
