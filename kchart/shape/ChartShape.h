@@ -78,7 +78,6 @@ class PlotArea;
 class Surface;
 class Axis;
 class ThreeDScene;
-class KDChartModel;
 class CellRegion;
 class TableModel;
 
@@ -94,7 +93,7 @@ extern QColor defaultDataSetColor( int dataSetNum );
 
 class CHARTSHAPELIB_EXPORT ChartShape
     : public QObject
-    , public KoChart::ChartInterface // The public interface
+    , public KoChart::ChartInterface // The public interface within KOffice
     , public KoFrameShape            // For saving as a frame
     , public KoShapeContainer        // The chart shape embeds other shapes.
 {

@@ -33,6 +33,9 @@
 
 namespace KChart {
 
+class KDChartModel;
+
+
 /**
  * @brief The DataSet class stores properties of a single data series.
  * 
