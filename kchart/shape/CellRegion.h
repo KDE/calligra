@@ -46,12 +46,12 @@ namespace KChart {
  *
  * Every data set on the chart has five independent cell regions
  * that indicate where the data in a series comes from:
- * 1) a region for y values
- * 2) one for x values (only for scatter and bubble charts)
- * 3) another one for a label to represent the data set
- * 4) for the category data (one label for every x value/column on
+ * 1) a label to represent the data set (size 1x1)
+ * 2) a region for y values
+ * 3) one for x values (only for scatter and bubble charts)
+ * 4) for bubble widths (only for bubble charts)
+ * 5) for the category data (one label for every x value/column on
  *    the x axis; this region is the same among all data sets)
- * 5) for bubble widths (only for bubble charts)
  *
  * A CellRegion can also represent a region in a spreadsheet that
  * is relevant for the data of a chart. That way, the initial chart

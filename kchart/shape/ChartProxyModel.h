@@ -30,6 +30,7 @@ namespace KoChart
     class ChartModel;
 }
 
+// FIXME: This needs not be included here, since it's not used in this file.
 #include <KoChartModel.h>
 
 // Qt
@@ -48,7 +49,8 @@ public:
 
 public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );
-    virtual void setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection );
+    virtual void setSourceModel( QAbstractItemModel *sourceModel,
+                                 const QVector<QRect> &selection );
 
     void setSelection( const QVector<QRect> &selection );
 
@@ -98,8 +100,9 @@ public slots:
 
 signals:
     void dataChanged();
-    // Emitted after modelReset(), to signalize that all the internal data has been
-    // updated properly, and that we can now do a repaint
+
+    // Emitted after modelReset(), to signalize that all the internal
+    // data has been updated properly, and that we can now do a repaint.
     void modelResetComplete();
 
 private:

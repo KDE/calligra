@@ -20,7 +20,8 @@
 #ifndef KCHART_CHART_SHAPE_FACTORY
 #define KCHART_CHART_SHAPE_FACTORY
 
-// Local
+
+// Own
 #include "ChartShape.h"
 
 // Qt
@@ -29,8 +30,10 @@
 // KOffice
 #include <KoShapeFactory.h>
 
+
 class KoShape;
 class KoShapeConfigWidgetBase;
+
 
 class ChartShapePlugin : public QObject
 {
@@ -40,6 +43,7 @@ public:
     ChartShapePlugin( QObject * parent,  const QStringList & );
     ~ChartShapePlugin() {}
 };
+
 
 class ChartShapeFactory : public KoShapeFactory
 {
@@ -55,5 +59,6 @@ public:
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
+
 
 #endif // KCHART_CHART_SHAPE_FACTORY

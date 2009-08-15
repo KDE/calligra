@@ -31,4 +31,3 @@ CellRegionDialog::CellRegionDialog( QWidget *parent )
 CellRegionDialog::~CellRegionDialog()
 {
 }
-

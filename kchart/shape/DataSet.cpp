@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+
 // Local
 #include "DataSet.h"
 
@@ -81,12 +82,13 @@ public:
     QPen pen;
     QBrush brush;
     int num;
-    
-    CellRegion xDataRegion;
-    CellRegion yDataRegion;
-    CellRegion customDataRegion;
-    CellRegion labelDataRegion;
-    CellRegion categoryDataRegion;
+
+    // The different CellRegions for a chart
+    CellRegion labelDataRegion; // one cell that holds the label
+    CellRegion yDataRegion;     // normal y values
+    CellRegion xDataRegion;     // x values -- only for scatter & bubble charts
+    CellRegion customDataRegion;// used for bubble width in bubble charts
+    CellRegion categoryDataRegion; // x labels -- same for all datasets
     
     ChartProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
@@ -136,7 +138,8 @@ void DataSet::Private::updateSize()
     newSize = qMax( newSize, categoryDataRegion.cellCount() );
     
     size = newSize;
-    
+    // FIXME: The first test below can *never* fail because of the
+    //        assignment just above.
     if ( newSize != size && !blockSignals && kdChartModel ) {
         kdChartModel->dataSetSizeChanged( parent, size );
     }
@@ -158,6 +161,7 @@ ChartType DataSet::Private::effectiveChartType() const
 void DataSet::Private::updateDiagram() const
 {
     if ( kdDiagram && kdDataSetNumber >= 0 && size > 0 ) {
+
 	// FIXME: This should be done in a more proper way.
 	// The problem here is that line diagrams don't use the brush
 	// to paint their lines, but the pen. We on the other hand set
@@ -198,11 +202,13 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     // source model.
     QPoint dataPoint = region.pointAtIndex( index );
 
+    // FIXME: Why not use this immediately if true?
     const bool verticalHeaderData   = dataPoint.x() == 0;
     const bool horizontalHeaderData = dataPoint.y() == 0;
 
     // Check if the data point is valid
     const bool validDataPoint = isValidDataPoint( dataPoint );
+
     // Remove, since it makes kspread crash when inserting a chart for
     // a 1x1 cell region.
     //Q_ASSERT( validDataPoint );
@@ -383,7 +389,9 @@ void DataSet::setShowValues( bool showValues )
     
     KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
     attributes.setVisible( showValues );
-    // FIXME: This should be a dynamic property that can be changed by the user (for 2.1)
+
+    // FIXME: This should be a dynamic property that can be changed by
+    //        the user (for 2.1)
     KDChart::TextAttributes textAttributes = attributes.textAttributes();
     textAttributes.setFontSize( KDChart::Measure( 6, KDChartEnums::MeasureCalculationModeAbsolute ) );
     attributes.setTextAttributes( textAttributes );
@@ -773,7 +781,7 @@ int DataSet::dimension() const
 	return 0;
     }
 	
-    // Avoid warnings from compiler
+    // Avoid warnings from the compiler.
     return 0;
 }
 

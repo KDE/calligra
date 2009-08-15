@@ -1195,6 +1195,7 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.startElement( "table:table-cell" );
     bodyWriter.addAttribute( "office:value-type", "string" );
     bodyWriter.startElement( "text:p" );
+    // FIXME: Shouldn't we actually save the headers here?
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // table:table-cell
 
