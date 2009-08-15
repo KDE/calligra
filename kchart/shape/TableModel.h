@@ -36,6 +36,7 @@
 
 class QString;
 
+// FIXME: Rename to ChartTableModel.
 
 namespace KChart {
 
@@ -56,7 +57,9 @@ public:
     virtual bool setCellRegion(const QString& regionName);
     virtual bool isCellRegionValid(const QString& regionName) const;
 
-    void loadOdf( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
+    // Load and save the contained data in an ODF DOM tree.
+    void loadOdf( const KoXmlElement &tableElement, 
+                  KoShapeLoadingContext &context );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
 };
 

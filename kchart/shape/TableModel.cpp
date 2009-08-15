@@ -55,8 +55,10 @@ TableModel::~TableModel()
 {
 }
 
+
 QHash<QString, QVector<QRect> > TableModel::cellRegion() const
 {
+    // FIXME: Unimplemented?
     return QHash<QString, QVector<QRect> >();
 }
 
@@ -66,7 +68,8 @@ bool TableModel::setCellRegion( const QString& regionName )
 
     const int size = regionName.size();
     for ( int i = 0; i < size; i++ ) {
-        result += CellRegion::rangeCharToInt( regionName[i].toAscii() ) * std::pow( 10.0, ( size - i - 1 ) );
+        result += ( CellRegion::rangeCharToInt( regionName[i].toAscii() ) 
+                    * std::pow( 10.0, ( size - i - 1 ) ) );
     }
 
     return result;
@@ -82,14 +85,12 @@ bool TableModel::isCellRegionValid( const QString& regionName ) const
 void TableModel::loadOdf( const KoXmlElement &tableElement,
 			  KoShapeLoadingContext &context )
 {
+    Q_UNUSED( context );
+
     setRowCount( 0 );
     setColumnCount( 0 );
     
-#ifndef KOXML_USE_QDOM
     const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
-#else
-    const QDomNode node; // XXX!!!
-#endif
 
     QTextStream stream(stdout);
     stream << node;
@@ -107,62 +108,65 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
 
             KoXmlElement  _n;
             forEachElement ( _n, n ) {
-                if ( _n.namespaceURI() != KoXmlNS::table )
+
+                // Must be a table:table-row, else go to next element.
+                if ( _n.namespaceURI() != KoXmlNS::table 
+                     || _n.localName() != "table-row" )
                     continue;
 
-                if ( _n.localName() == "table-row" ) {
-                    int column = 0;
+                // Add a row to the internal representation.
+                setRowCount( rowCount() + 1 );
 
-                    setRowCount( rowCount() + 1 );
+                // Loop through all cells in a table row.
+                int           column = 0;
+                KoXmlElement  __n;
+                forEachElement ( __n, _n ) {
 
-                    KoXmlElement __n;
-                    forEachElement ( __n, _n ) {
-			if ( __n.namespaceURI() != KoXmlNS::table )
-			    continue;
+                    // Must be a table:table-cell, otherwise go to
+                    // next element.
+                    if ( __n.namespaceURI() != KoXmlNS::table
+                         || __n.localName() != "table-cell" ) 
+                        continue;
 
-                        if ( __n.localName() == "table-cell" ) {
-                            if ( column >= columnCount() )
-                                setColumnCount( columnCount() + 1 );
-#ifndef KOXML_USE_QDOM
-                            const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
-#else
-                            const QString valueType; // XXX!!!
-#endif
+                    // If this row is wider than any previous one,
+                    // then add another column.  
+                    // Is this efficient enough?
+                    if ( column >= columnCount() )
+                        setColumnCount( columnCount() + 1 );
 
-                            QString valueString;
-#ifndef KOXML_USE_QDOM
-                            const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
-#else
-                            const KoXmlElement valueElement; // XXX!!!
-#endif
-                            if ( valueElement.isNull() || !valueElement.isElement() ) {
-                                qWarning() << "TableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
-				// Even if it doesn't contain any value, it's still a cell.
-				column++;
-                                continue;
-                            }
+                    const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
 
-                            // Read the actual value in the cell.
-                            QVariant value;
-                            valueString = valueElement.text();
-                            if ( valueType == "float" )
-                                value = valueString.toDouble();
-                            else if ( valueType == "boolean" )
-                                value = (bool)valueString.toInt();
-                            else // if ( valueType == "string" )
-                                value = valueString;
-
-                            if ( isHeader )
-                                setHeaderData( column, Qt::Horizontal, value );
-                            setData( index( row, column ), value );
-
-                            column++;
-                        }
+                    QString valueString;
+                    const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
+                    if ( valueElement.isNull() || !valueElement.isElement() ) {
+                        qWarning() << "TableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
+                        // Even if it doesn't contain any value, it's still a cell.
+                        column++;
+                        continue;
                     }
-                }
+
+                    // Read the actual value in the cell.
+                    QVariant value;
+                    valueString = valueElement.text();
+                    if ( valueType == "float" )
+                        value = valueString.toDouble();
+                    else if ( valueType == "boolean" )
+                        value = (bool)valueString.toInt();
+                    else // if ( valueType == "string" )
+                        value = valueString;
+
+                    // FIXME: Check how to handle this.
+                    if ( isHeader )
+                        setHeaderData( column, Qt::Horizontal, value );
+                    setData( index( row, column ), value );
+
+                    column++;
+
+                } // foreach table:table-cell
 
                 row++;
-            }
+
+            } // foreach table:table-row
         }
     }
 }
