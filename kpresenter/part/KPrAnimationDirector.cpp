@@ -346,7 +346,14 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
     m_view->activePage()->paintBackground( painter, m_zoomHandler );
 
     if ( m_view->activePage()->displayMasterShapes() ) {
+        foreach ( KoShape *shape, m_canvas->masterShapeManager()->shapes() ) {
+            shape->waitUntilReady( m_zoomHandler, false );
+        }
+
         m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, false );
+    }
+    foreach ( KoShape *shape, m_canvas->shapeManager()->shapes() ) {
+        shape->waitUntilReady( m_zoomHandler, false );
     }
     m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
 }

@@ -160,11 +160,12 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setFocus();                             // it shown full screen
     // move and resize now as otherwise it is not set when we call activate on the tool.
     m_canvas->move( presentationRect.topLeft() );
-    m_canvas->resize( presentationRect.size() );
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
     m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
+
+    m_canvas->resize( presentationRect.size() );
 
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
