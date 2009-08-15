@@ -34,10 +34,10 @@
 #include "KoResourceModel.h"
 #include "KoResourceServerAdapter.h"
 
+#include <KInputDialog>
 #include <KDebug>
 
 #include <QtGui/QGraphicsItem>
-#include <QtGui/QInputDialog>
 #include <QtCore/QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
@@ -333,12 +333,11 @@ void FilterEffectEditWidget::addToPresets()
         return;
 
     bool ok = false;
-    QString effectName = QInputDialog::getText(this,
-                                               i18n("Effect name"), 
+    QString effectName = KInputDialog::getText(i18n("Effect name"), 
                                                i18n("Please enter a name for the filter effect"),
-                                               QLineEdit::Normal,
-                                               QString::null,
-                                               &ok);
+                                               QString(),
+                                               &ok,
+                                               this);
     if (!ok)
         return;
     
