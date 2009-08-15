@@ -1271,14 +1271,14 @@ KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
     return d->kdPlane;
 }
 
-void Axis::plotAreaChartTypeChanged( ChartType chartType )
+void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 {
     // Return if there's nothing to do
-    if ( chartType == d->plotAreaChartType )
+    if ( newChartType == d->plotAreaChartType )
         return;
 
     if ( d->dataSets.isEmpty() ) {
-        d->plotAreaChartType = chartType;
+        d->plotAreaChartType = newChartType;
         return;
     }
     
@@ -1287,6 +1287,7 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     KDChart::AbstractDiagram **oldDiagram = 0;
     KDChart::AbstractDiagram *newDiagram = 0;
     
+    // Get pointers to the old model and diagram.
     switch ( d->plotAreaChartType ) {
     case BarChartType:
         oldModel = &d->kdBarDiagramModel;
@@ -1300,32 +1301,54 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         oldModel = &d->kdAreaDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
         break;
+
     case CircleChartType:
         oldModel = &d->kdCircleDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
+        break;
+    case RingChartType:
+        // FIXME Ringchart
+        break;
+
+    case ScatterChartType:
+        oldModel = &d->kdScatterDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
         break;
     case RadarChartType:
         oldModel = &d->kdRadarDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
         break;
-    case ScatterChartType:
-        oldModel = &d->kdScatterDiagramModel;
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
+    case StockChartType:
+        // FIXME Stockchart
         break;
+    case BubbleChartType:
+        // FIXME Bubblechart
+        break;
+    case SurfaceChartType:
+        // FIXME Surfacechart
+        break;
+    case GanttChartType:
+        // FIXME Ganttchart
+        break;
+
     default:;
-        // FIXME: Implement more chart types
+        // FIXME: What should happen here?
     }
     
-    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) ) {
+    // We need to have a coordinate plane that matches the chart type.
+    // Choices are cartesian or polar.
+    if ( isCartesian( d->plotAreaChartType ) && isPolar( newChartType ) ) {
         if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPlane ) )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
     }
-    else if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) ) {
+    else if ( isPolar( d->plotAreaChartType ) && isCartesian( newChartType ) ) {
         if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
     }
     
-    switch ( chartType ) {
+    // Get pointers to the new model and diagrams.  Create the new
+    // diagram if necessary.
+    switch ( newChartType ) {
     case BarChartType:
         if ( !d->kdBarDiagram )
            d->createBarDiagram();
@@ -1344,11 +1367,22 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel = d->kdAreaDiagramModel;
         newDiagram = d->kdAreaDiagram;
         break;
+
     case CircleChartType:
         if ( !d->kdCircleDiagram )
            d->createCircleDiagram();
         newModel = d->kdCircleDiagramModel;
         newDiagram = d->kdCircleDiagram;
+        break;
+    case RingChartType:
+        // FIXME Ringchart
+        break;
+
+    case ScatterChartType:
+        if ( !d->kdScatterDiagram )
+           d->createScatterDiagram();
+        newModel = d->kdScatterDiagramModel;
+        newDiagram = d->kdScatterDiagram;
         break;
     case RadarChartType:
         if ( !d->kdRadarDiagram )
@@ -1356,20 +1390,30 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel = d->kdRadarDiagramModel;
         newDiagram = d->kdRadarDiagram;
         break;
-    case ScatterChartType:
-        if ( !d->kdScatterDiagram )
-           d->createScatterDiagram();
-        newModel = d->kdScatterDiagramModel;
-        newDiagram = d->kdScatterDiagram;
+
+    case StockChartType:
+        // FIXME Stockchart
+        break;
+    case BubbleChartType:
+        // FIXME Bubblechart
+        break;
+    case SurfaceChartType:
+        // FIXME Surfacechart
+        break;
+    case GanttChartType:
+        // FIXME Ganttchart
         break;
     default:;
         // FIXME: Implement more chart types
     }
     
+    // FIXME: This causes a crash on unimplemented types. We should
+    //        handle that in some other way.
     Q_ASSERT( newModel );
     
-    if (    ( isPolar( chartType ) && !isPolar( d->plotAreaChartType ) )
-         || ( !isPolar( chartType ) && isPolar( d->plotAreaChartType ) ) )
+    
+    if (    ( isPolar( newChartType ) && !isPolar( d->plotAreaChartType ) )
+         || ( !isPolar( newChartType ) && isPolar( d->plotAreaChartType ) ) )
     {
         foreach ( DataSet *dataSet, d->dataSets ) {
             if ( dataSet->chartType() != LastChartType ) {
@@ -1382,6 +1426,7 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     foreach ( DataSet *dataSet, d->dataSets ) {
         if ( dataSet->chartType() != LastChartType )
             continue;
+
         dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );
         if ( oldModel && *oldModel ) {
@@ -1397,6 +1442,7 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
                         d->plotArea->kdChart()->takeCoordinatePlane( plane );
                     }
                 }
+
                 if ( d->plotArea->parent()->legend()->kdLegend() )
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
                 if ( *oldDiagram )
@@ -1408,10 +1454,10 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
             else
             (*oldModel)->removeDataSet( dataSet );
         }
-        dataSet->setGlobalChartType( chartType );
+        dataSet->setGlobalChartType( newChartType );
     }
     
-    d->plotAreaChartType = chartType;
+    d->plotAreaChartType = newChartType;
     
     d->kdPlane->layoutPlanes();
     
