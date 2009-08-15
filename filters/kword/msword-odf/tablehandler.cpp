@@ -134,10 +134,6 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
     m_bodyWriter->addAttribute("table:style-name", rowStyleName.toUtf8());
-    
-    const wvWare::Word97::TC& tc = m_tap->rgtc[m_tap->itcMac];
-    
-    kDebug(30513) <<"Extra cell=" << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
 }
 
 void KWordTableHandler::tableRowEnd()
