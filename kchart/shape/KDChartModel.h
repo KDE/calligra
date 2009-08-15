@@ -21,11 +21,13 @@
 #ifndef KCHART_KDCHARTMODEL_H
 #define KCHART_KDCHARTMODEL_H
 
-// Local
-#include "ChartShape.h"
 
 // Qt
 #include <QAbstractItemModel>
+
+// KChart
+#include "ChartShape.h"
+
 
 namespace KChart {
 
