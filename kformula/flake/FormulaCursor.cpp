@@ -24,7 +24,6 @@
 #include "BasicElement.h"
 #include "RowElement.h"
 #include "FixedElement.h"
-#include "EmptyElement.h"
 #include "NumberElement.h"
 #include "ElementFactory.h"
 #include "OperatorElement.h"
@@ -147,8 +146,6 @@ void FormulaCursor::move( CursorDirection direction )
     m_direction = direction;
     if (performMovement(direction,oldcursor)==false) {
         (*this)=oldcursor;
-    } else {
-        moveToEmpty();
     }
     m_direction=NoDirection;
 }
@@ -156,7 +153,6 @@ void FormulaCursor::move( CursorDirection direction )
 bool FormulaCursor::moveCloseTo(BasicElement* element, FormulaCursor& cursor)
 {
     if (element->setCursorTo(*this,cursor.getCursorPosition()-element->absoluteBoundingRect().topLeft())) {
-        moveToEmpty();
         return true;
     } else {
         return false;
@@ -232,7 +228,6 @@ void FormulaCursor::setCursorTo( const QPointF& point )
         }
         formulaElement->setCursorTo(*this,point);
     }
-    moveToEmpty();
 }
 
 int FormulaCursor::mark() const 
@@ -288,11 +283,6 @@ bool FormulaCursor::insideFixedElement() const
     return false;
 }
  
-
-bool FormulaCursor::insideEmptyElement() const
-{
-    return (m_currentElement->elementType() == Empty);
-}
 
 
 BasicElement* FormulaCursor::currentElement() const
@@ -363,42 +353,7 @@ bool FormulaCursor::isAccepted() const
         position()<0 || position()>m_currentElement->length()) {
         return false;
     }
-    if ((m_direction==MoveLeft || m_direction==MoveRight) && !m_selecting) {
-        return (m_currentElement->acceptCursor(*this) && !nextToEmpty());
-    } else {
-        return (m_currentElement->acceptCursor(*this));
-    }
-}
-
-BasicElement* FormulaCursor::nextToEmpty() const
-{
-    BasicElement* before=m_currentElement->elementBefore(m_position);
-    BasicElement* after=m_currentElement->elementAfter(m_position);
-    
-    if (before!=0 ) {
-        if (before->elementType()==Empty) {
-            return before;
-        }
-    } else if (after != 0) {
-        if (after->elementType()==Empty) {
-            return after;
-        }
-    }
-    return 0;
-}
-
-
-bool FormulaCursor::moveToEmpty() 
-{
-    BasicElement* tmp=nextToEmpty();
-    if (tmp!=0) {
-        moveTo(FormulaCursor(tmp,0));
-        if (isSelecting()) {
-            m_mark=0;
-        }
-        return true;
-    }
-    return false;
+    return m_currentElement->acceptCursor(*this);
 }
 
 bool FormulaCursor::performMovement ( CursorDirection direction, FormulaCursor& oldcursor )

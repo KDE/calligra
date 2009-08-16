@@ -45,7 +45,6 @@ void FormulaCommand::changeCursor ( FormulaCursor& cursor, bool undo ) const
     if (!cursor.isAccepted()) {
         cursor.move(MoveRight);
     }
-    cursor.moveToEmpty();
 }
 
 void FormulaCommand::setUndoCursorPosition ( const FormulaCursor& position )

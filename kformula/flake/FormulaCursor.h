@@ -122,9 +122,6 @@ public:
     /// Move the cursor to the last position in the current element
     void moveEnd();
 
-    /// @return if the element is next to an empty element, it is placed there
-    bool moveToEmpty();
-
     /// @return the midpoint of the current cursorLine in global coordinates
     QPointF getCursorPosition();
     
@@ -139,12 +136,6 @@ public:
 
     /// @return true if the cursor is inside a element with fixed number of children
     bool insideFixedElement() const;
-
-    /// @return true if the cursor is inside an empty element
-    bool insideEmptyElement() const;
-
-    /// @return if the element next to the cursor is an empty element it is returned, otherwise 0
-    BasicElement* nextToEmpty() const;
 
     bool performMovement(CursorDirection direction, FormulaCursor& oldcursor);
 
