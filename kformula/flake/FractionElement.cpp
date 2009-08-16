@@ -256,7 +256,6 @@ QString FractionElement::attributesDefaultValue( const QString& attribute ) cons
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement tmp;
-    BasicElement* element;
     int counter=0;
     forEachElement( tmp, parent ) {
         if (counter==0) {

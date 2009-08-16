@@ -43,6 +43,7 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( am )
     QPen pen;
     pen.setWidth( m_lineThickness );
     painter.setPen( pen );

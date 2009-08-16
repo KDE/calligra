@@ -265,6 +265,7 @@ double AttributeManager::lengthToPixels( Length length, const BasicElement* elem
 Length AttributeManager::parseUnit( const QString& value,
                                     const BasicElement* element ) const
 {
+    Q_UNUSED(element)
     Length length;
 
     if (value.isEmpty())

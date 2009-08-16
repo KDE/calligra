@@ -60,9 +60,9 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 
 void UnderOverElement::layout( const AttributeManager* am )
 {
-    double thinSpace   = am->layoutSpacing( this );
-    double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
-    double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
+//     double thinSpace   = am->layoutSpacing( this );
+//     double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
+//     double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
 
     // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
     bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
@@ -107,6 +107,7 @@ void UnderOverElement::layout( const AttributeManager* am )
 
 QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
 {
+    Q_UNUSED( attribute )
 /*    if( m_overElement->elementType() == Operator )
     else if( m_underElement->elementType() == Operator )*/
     return "false";  // the default for accent and

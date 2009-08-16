@@ -35,11 +35,16 @@ RowElement::~RowElement()
     qDeleteAll( m_childElements );
 }
 
-void RowElement::paint( QPainter& painter, AttributeManager* )
-{ /* RowElement has no visual representance so paint nothing */ }
+void RowElement::paint( QPainter& painter, AttributeManager* am)
+{
+    /* RowElement has no visual representance so paint nothing */
+    Q_UNUSED( painter )
+    Q_UNUSED( am )
+}
 
 void RowElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( am )
     if (childElements().count()==0) {
         painter.save();
         QBrush brush (Qt::NoBrush);
@@ -130,11 +135,14 @@ bool RowElement::removeChild( BasicElement* child )
 
 bool RowElement::acceptCursor( const FormulaCursor& cursor )
 {
-        return true;
+    Q_UNUSED( cursor )
+    return true;
 }
+
 bool RowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
-    if ( (newcursor.direction()==MoveUp) ||
+    Q_UNUSED (oldcursor)
+    if ((newcursor.direction()==MoveUp) ||
         (newcursor.direction()==MoveDown) ||
         (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
         (newcursor.isEnd() && newcursor.direction()==MoveRight) ) {
@@ -150,6 +158,8 @@ bool RowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
         case MoveRight:
             newcursor+=1;
             break;
+        default:
+            break;
         }
     } else {
         switch(newcursor.direction()) {
@@ -160,6 +170,8 @@ bool RowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
         case MoveRight:
             newcursor.setCurrentElement(m_childElements[newcursor.position()]);
             newcursor.moveHome();
+            break;
+        default:
             break;
         }
     }

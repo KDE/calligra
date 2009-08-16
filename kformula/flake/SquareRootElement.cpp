@@ -33,6 +33,7 @@ SquareRootElement::~SquareRootElement()
 
 void SquareRootElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( am )
 //     BasicElement::paint(painter, am);
     QPen pen;
     pen.setWidth( m_lineThickness );

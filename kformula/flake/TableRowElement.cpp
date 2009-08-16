@@ -45,6 +45,7 @@ void TableRowElement::paint( QPainter& painter, AttributeManager* am )
 
 void TableRowElement::layout( const AttributeManager* am )
 {
+    Q_UNUSED( am )
     // Get the parent table to query width/ height values
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     setHeight( parentTable->rowHeight( this ) );
@@ -180,9 +181,10 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
             newcursor.moveTo(this,newcursor.position()+1);
             break;
         case MoveUp:
-            return false;
         case MoveDown:
             return false;
+        default:
+            break;
         }
     } else {
         switch(newcursor.direction()) {
@@ -208,6 +210,8 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
             } else {
                 return false;
             }
+        default:
+            break;
         }
     }
     

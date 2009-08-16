@@ -24,6 +24,7 @@ PaddedElement::PaddedElement( BasicElement* parent ) : RowElement( parent )
 
 void PaddedElement::layout( const AttributeManager* am )
 {
+    Q_UNUSED( am )
 }
 
 ElementType PaddedElement::elementType() const

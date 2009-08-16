@@ -28,6 +28,8 @@ OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent 
 
 QPainterPath OperatorElement::renderForFence( const QString& raw, Form form )
 {
+    Q_UNUSED( raw )
+    Q_UNUSED( form )
     return QPainterPath();
 }
 

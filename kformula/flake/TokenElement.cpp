@@ -120,7 +120,7 @@ void TokenElement::layout( const AttributeManager* am )
             boundingrect.setRight( boundingrect.right() + newbox.right());
             boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
             boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-            double glyphoffset = m_offsets.last();
+//             double glyphoffset = m_offsets.last();
             for (int j = 0; j < chunk.length(); ++j) {
                 m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
             }
@@ -139,6 +139,8 @@ void TokenElement::layout( const AttributeManager* am )
 
 bool TokenElement::insertChild( int position, BasicElement* child )
 {
+    Q_UNUSED( position)
+    Q_UNUSED( child )
     //if( child && child->elementType() == Glyph ) {
     //m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
     //    m_glyphs.insert();
@@ -255,6 +257,7 @@ bool TokenElement::acceptCursor( const FormulaCursor& cursor )
 }
 
 bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) {
+    Q_UNUSED( oldcursor )
     if ((newcursor.direction()==MoveUp) ||
         (newcursor.direction()==MoveDown) ||
         (newcursor.isHome() && newcursor.direction()==MoveLeft) ||
@@ -267,6 +270,8 @@ bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
         break;
     case MoveRight:
         newcursor+=1;
+        break;
+    default:
         break;
     }
     return true;

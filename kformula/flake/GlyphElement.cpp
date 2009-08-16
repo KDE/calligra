@@ -33,6 +33,8 @@ GlyphElement::GlyphElement( BasicElement* parent ) : TokenElement( parent )
 
 QRectF GlyphElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
+    Q_UNUSED( raw )
+    Q_UNUSED( path )
     // try to lookup the char in the font database
     AttributeManager am;
     QString fontFamily = am.stringOf( "fontfamily", this );
@@ -100,4 +102,5 @@ void GlyphElement::writeMathMLAttributes( KoXmlWriter* writer ) const
 
 void GlyphElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
+    Q_UNUSED( writer )
 }

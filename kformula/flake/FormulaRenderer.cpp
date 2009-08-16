@@ -97,6 +97,7 @@ void FormulaRenderer::updateElementLayout( BasicElement* element )
 
 double FormulaRenderer::elementScaleFactor( BasicElement* element ) const
 {
+    Q_UNUSED(element)
     AttributeManager am;
     return -1;  // FIXME!
 }

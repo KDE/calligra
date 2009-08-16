@@ -21,13 +21,17 @@
 #include <QPainter>
 
 ErrorElement::ErrorElement( BasicElement* parent ) : RowElement( parent )
-{}
+{
+}
 
 void ErrorElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( am )
     // just paint a red rectangle
+    painter.save();
     QRectF tmp( 0.0, 0.0, width(), height() );
     painter.fillRect( tmp, QColor( "red" ) );
+    painter.restore();
 }
 
 ElementType ErrorElement::elementType() const

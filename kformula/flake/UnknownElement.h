@@ -48,15 +48,8 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements();
-
-    /**
-     * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    void insertChild( FormulaCursor* cursor, BasicElement* child );
-   
+    virtual const QList< BasicElement* > childElements() const;
+    
     /**
      * Remove a child element
      * @param element The BasicElement to remove
@@ -76,8 +69,8 @@ public:
     void layout( const AttributeManager* am );
 
     /// inherited from BasicElement
-    bool acceptCursor( const FormulaCursor* cursor );
-
+    virtual bool acceptCursor ( const FormulaCursor& cursor );
+    
     /// @return The element's ElementType
     ElementType elementType() const;
 

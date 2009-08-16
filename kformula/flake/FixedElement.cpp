@@ -91,6 +91,8 @@ bool FixedElement::moveHorSituation(FormulaCursor& newcursor, FormulaCursor& old
     case MoveUp:
     case MoveDown:
         return newcursor.moveCloseTo(childElements()[newcursor.direction()==MoveUp ? pos1 : pos2],oldcursor);
+    case NoDirection:
+        break;
     }
     return true;
 }
@@ -114,13 +116,15 @@ bool FixedElement::moveVertSituation(FormulaCursor& newcursor, FormulaCursor& ol
     case MoveUp:
     case MoveDown:
         return newcursor.moveCloseTo(childElements()[newcursor.direction()==MoveUp ? pos1 : pos2],oldcursor);
+    case NoDirection:
+        break;
     }
     return true;
 }
 
-
 bool FixedElement::moveSingleSituation ( FormulaCursor& newcursor, FormulaCursor& oldcursor, int pos )
 {
+    Q_UNUSED( oldcursor )
     switch (newcursor.direction()) {
     case MoveLeft:
         if (newcursor.position()%2==1) {
@@ -136,6 +140,8 @@ bool FixedElement::moveSingleSituation ( FormulaCursor& newcursor, FormulaCursor
     case MoveUp:
     case MoveDown:
         return false;
+    case NoDirection:
+        break;
     }
     return true;
 }
@@ -143,6 +149,7 @@ bool FixedElement::moveSingleSituation ( FormulaCursor& newcursor, FormulaCursor
 
 bool FixedElement::acceptCursor ( const FormulaCursor& cursor )
 {
+    Q_UNUSED (cursor)
     return false;
 }
 
@@ -181,6 +188,7 @@ bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
     } else {
         (*child)->insertChild(0,element);
     }
+    return true;
 }
 
 

@@ -77,7 +77,7 @@ void FormulaCursor::paint( QPainter& painter ) const
         return;
     painter.save();
     QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
-    double baseline=m_currentElement->baseLine();
+//     double baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
     pen.setColor(Qt::black);
@@ -144,7 +144,7 @@ void FormulaCursor::move( CursorDirection direction )
 {
     FormulaCursor oldcursor(*this);
     m_direction = direction;
-    if (performMovement(direction,oldcursor)==false) {
+    if (performMovement(oldcursor)==false) {
         (*this)=oldcursor;
     }
     m_direction=NoDirection;
@@ -356,7 +356,7 @@ bool FormulaCursor::isAccepted() const
     return m_currentElement->acceptCursor(*this);
 }
 
-bool FormulaCursor::performMovement ( CursorDirection direction, FormulaCursor& oldcursor )
+bool FormulaCursor::performMovement ( FormulaCursor& oldcursor )
 {
     //handle selecting and not selecting case seperately, which makes more clear
     if (isSelecting()) {

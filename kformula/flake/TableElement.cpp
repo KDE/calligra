@@ -201,6 +201,7 @@ bool TableElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 
 bool TableElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
+    Q_UNUSED( oldcursor )
     int p=newcursor.position();
     switch (newcursor.direction()) {
     case MoveLeft:
@@ -241,6 +242,8 @@ bool TableElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
         } else {
             return false;
         }
+    default:
+        break;
     }
     return true;
 }

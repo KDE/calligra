@@ -45,19 +45,13 @@ void UnknownElement::layout( const AttributeManager* am )
     Q_UNUSED( am )
 }
 
-const QList<BasicElement*> UnknownElement::childElements()
+const QList< BasicElement* > UnknownElement::childElements() const
 {
     QList<BasicElement*> tmp;
     return tmp;
 }
 
-void UnknownElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{
-    Q_UNUSED( cursor )
-    Q_UNUSED( child )
-}
-
-bool UnknownElement::acceptCursor( const FormulaCursor* cursor )
+bool UnknownElement::acceptCursor( const FormulaCursor& cursor )
 {
     Q_UNUSED( cursor )
     return false;
@@ -71,11 +65,13 @@ ElementType UnknownElement::elementType() const
 bool UnknownElement::readMathMLContent( const KoXmlElement& element )
 {
 //TODO - save the mathml content in a string
+    Q_UNUSED( element )
     return true;
 }
 
 void UnknownElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
+    Q_UNUSED( writer )
     //TODO - write the save mathml content back into writer
 }
 

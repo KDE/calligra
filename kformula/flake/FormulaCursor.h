@@ -137,7 +137,7 @@ public:
     /// @return true if the cursor is inside a element with fixed number of children
     bool insideFixedElement() const;
 
-    bool performMovement(CursorDirection direction, FormulaCursor& oldcursor);
+    bool performMovement( FormulaCursor& oldcursor );
 
     FormulaCursor& operator+=(int step);
 

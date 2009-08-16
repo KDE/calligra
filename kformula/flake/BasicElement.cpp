@@ -58,6 +58,8 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 
 void BasicElement::paintEditingHints ( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( painter )
+    Q_UNUSED( am )
 }
 
 void BasicElement::layout( const AttributeManager* )
@@ -74,17 +76,19 @@ void BasicElement::stretch()
 bool BasicElement::acceptCursor( const FormulaCursor& cursor )
 {
     Q_UNUSED( cursor )
-    return true;
+    return false;
 }
 
 bool BasicElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 {
-    //it is not possible to move the cursor inside the element
+    Q_UNUSED( newcursor )
+    Q_UNUSED( oldcursor )
     return false;
 }
 
 QLineF BasicElement::cursorLine(int position) const
 {
+    Q_UNUSED( position )
     QPointF top = absoluteBoundingRect().topLeft();
     QPointF bottom = top + QPointF( 0.0, height() );
     return QLineF(top,bottom);   
@@ -119,6 +123,7 @@ const QRectF BasicElement::absoluteBoundingRect() const
 
 bool BasicElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
+    Q_UNUSED( point )
     cursor.setPosition(0);
     cursor.setCurrentElement(this);
     return true;
@@ -127,12 +132,15 @@ bool BasicElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 
 bool BasicElement::insertChild( int position, BasicElement* element )
 {
-    // call the parentElement to notify it that there is something to be inserted
+    Q_UNUSED( position )
+    Q_UNUSED( element )
     return false;
 }
 
 bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelement)
 {
+    Q_UNUSED( oldelement )
+    Q_UNUSED( newelement )
     return false;
 }
 
@@ -316,11 +324,14 @@ void BasicElement::setBaseLine( double baseLine )
     m_baseLine = baseLine;
 }
 
-int BasicElement::length() const {
+int BasicElement::length() const
+{
     return 0;
 }
 
-int BasicElement::positionOfChild(BasicElement* child) const {
+int BasicElement::positionOfChild(BasicElement* child) const
+{
+    Q_UNUSED( child )
     return -1;
 }
 
@@ -331,26 +342,32 @@ void BasicElement::setParentElement( BasicElement* parent )
 
 void BasicElement::setScaleLevel( int scaleLevel )
 {
-    if(scaleLevel == m_scaleLevel) return;
-
+    if(scaleLevel == m_scaleLevel) {
+        return;
+    }
     m_scaleLevel =  qMax(scaleLevel, 0);
     int level = scaleLevel;
     m_scaleFactor = 1.9;
-    while(level-- > 0)  //raise multiplier to the power of level
+    while(level-- > 0)  { //raise multiplier to the power of level
         m_scaleFactor *= 0.71;
+    }
 }
 BasicElement* BasicElement::elementBefore ( int position ) const
 {
+    Q_UNUSED( position )
     return 0;
 }
 
 BasicElement* BasicElement::elementAfter ( int position ) const
 {
+    Q_UNUSED( position )
     return 0;
 }
 
 QList< BasicElement* > BasicElement::elementsBetween ( int pos1, int pos2 ) const
 {
+    Q_UNUSED( pos1 )
+    Q_UNUSED( pos2 )
     QList<BasicElement*> tmp;
     return tmp;
 }
@@ -383,12 +400,11 @@ bool BasicElement::hasDescendant ( BasicElement* other ) const
 BasicElement* BasicElement::emptyDescendant()
 {
     BasicElement* tmp;
-    //FIXME: When conversion of EmptyElements to RowElements is done, we can drop one of the cases
-    if ((elementType()==Row && length()<=1) || elementType()==Empty) {
+    if (isEmpty()) {
         return this;
     }
     foreach (BasicElement* child, childElements()) {
-        if (tmp=child->emptyDescendant()) {
+        if ( (tmp=child->emptyDescendant()) ) {
             return tmp;
         }
     }
@@ -448,7 +464,6 @@ void BasicElement::cleanElementTree ( BasicElement* element )
     }
     if (element->elementType()==Row && element->parentElement() && element->parentElement()->isInferredRow()) {
         if ( element->childElements().count()==1) {
-            int pos=element->parentElement()->positionOfChild(element);
             BasicElement* parent=element->parentElement();
             parent->replaceChild(element,element->childElements()[0]);
         } else if ( element->isEmpty()) {

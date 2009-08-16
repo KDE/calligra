@@ -209,6 +209,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
 
 bool MultiscriptElement::acceptCursor( const FormulaCursor& cursor )
 {
+    Q_UNUSED( cursor )
     return false;
 }
 
@@ -231,6 +232,7 @@ const QList<BasicElement*> MultiscriptElement::childElements() const
 
 QString MultiscriptElement::attributesDefaultValue( const QString& attribute ) const
 {
+    Q_UNUSED( attribute )
     return QString();
 }
 
@@ -334,9 +336,6 @@ bool MultiscriptElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& o
             prescriptCount++;
         }
     }
-    int numberofprescriptpairs=m_preScripts.count()/2;
-    int basePosition=m_preScripts.count();
-
     if (childposition==prescriptCount) {
         //we are in BasePosition
         if (newcursor.direction()==MoveUp || newcursor.direction()==MoveDown) {

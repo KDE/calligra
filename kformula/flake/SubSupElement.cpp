@@ -121,6 +121,7 @@ const QList<BasicElement*> SubSupElement::childElements() const
 
 QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 {
+    Q_UNUSED( attribute )
     return QString();
 }
 
@@ -136,7 +137,7 @@ ElementType SubSupElement::elementType() const
     else if( m_superScript->elementType() != Basic )
         return SupScript;
         return Unknown;*/
-    return Unknown;
+    return SubSupScript;
 }
 
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
@@ -242,6 +243,8 @@ bool SubSupElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcur
         case 2:
             return moveHorSituation(newcursor,oldcursor,0,2);
         }
+        break;
+    default:
         break;
     }
     return false;

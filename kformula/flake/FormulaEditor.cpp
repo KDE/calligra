@@ -90,7 +90,6 @@ FormulaCommand* FormulaEditor::insertText( const QString& text )
 
 FormulaCommand* FormulaEditor::insertMathML( const QString& data )
 {
-    FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( QString(data), false, 0, 0, 0 );
