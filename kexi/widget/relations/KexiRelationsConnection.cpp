@@ -22,7 +22,7 @@
 #include <QPixmap>
 #include <QColor>
 #include <QApplication>
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include <KDebug>
 
@@ -114,13 +114,14 @@ KexiRelationsConnection::drawConnection(QPainter *p)
     if (d->masterTable->x() < d->detailsTable->x()) {
         //det. side
         p->drawLine(rx - sideNCharWidth, ry, rx - 2, ry);
-        Q3PointArray pa(3);
-        pa.setPoint(0, rx - 4, ry - 3);
-        pa.setPoint(1, rx - 4, ry + 3);
-        pa.setPoint(2, rx - 1, ry);
         pen.setWidthF(0.5);
         p->setPen(pen);
-        p->drawPolygon(pa, true);
+        QPolygon polygon;
+        polygon
+            << QPoint(rx - 4, ry - 3)
+            << QPoint(rx - 4, ry + 3)
+            << QPoint(rx - 1, ry);
+        p->drawPolygon(polygon);
         pen.setWidth(1);
         p->setPen(pen);
 
@@ -149,13 +150,15 @@ KexiRelationsConnection::drawConnection(QPainter *p)
 
         //det. side
         p->drawLine(lx + 2, ry, lx + sideNCharWidth, ry);
-        Q3PointArray pa(3);
-        pa.setPoint(0, lx + 3, ry - 3);
-        pa.setPoint(1, lx + 3, ry + 3);
-        pa.setPoint(2, lx, ry);
+
         pen.setWidthF(0.5);
         p->setPen(pen);
-        p->drawPolygon(pa, true);
+        QPolygon polygon;
+        polygon
+            << QPoint(lx + 3, ry - 3)
+            << QPoint(lx + 3, ry + 3)
+            << QPoint(lx, ry);
+        p->drawPolygon(polygon);
         pen.setWidth(1);
         p->setPen(pen);
 
