@@ -40,6 +40,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoShapeLoadingContext.h>
 
 // KChart
 #include "CellRegion.h"
