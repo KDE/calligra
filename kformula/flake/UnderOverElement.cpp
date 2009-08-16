@@ -19,7 +19,6 @@
 */
 
 #include "UnderOverElement.h"
-#include "EmptyElement.h"
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
@@ -28,9 +27,9 @@
 
 UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
 {
-    m_baseElement = new EmptyElement( this );
-    m_underElement = new EmptyElement( this );
-    m_overElement = new EmptyElement( this );
+    m_baseElement = new RowElement( this );
+    m_underElement = new RowElement( this );
+    m_overElement = new RowElement( this );
     m_elementType = elementType;
 }
 
@@ -64,7 +63,7 @@ void UnderOverElement::layout( const AttributeManager* am )
     double thinSpace   = am->layoutSpacing( this );
     double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
     double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
-    
+
     // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
     bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
     bool overStretchy  = m_elementType == Under || am->boolOf( "stretchy", m_overElement );
@@ -117,28 +116,31 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
+    bool baseElement = true;
+    bool underElement = true;
+    bool overElement = true;
     forEachElement( tmp, parent ) { 
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        if( !tmpElement->readMathML( tmp ) )
+        if( !tmpElement->readMathML( tmp ) ) {
             return false;
+        }
 
-        if( m_baseElement->elementType() == Empty ) {
+        if( baseElement ) {
             delete m_baseElement; 
             m_baseElement = tmpElement;
-        }
-        else if( m_elementType != Over && m_underElement->elementType() == Empty ) {
+            baseElement = false;
+        } else if( underElement && m_elementType != Over ) {
             delete m_underElement;
             m_underElement = tmpElement;
-        }
-        else if( m_overElement->elementType() == Empty ) {
+            underElement = false;
+        } else if( overElement ) {
             delete m_overElement;
             m_overElement = tmpElement;
-        }
-        else
+            overElement = false;
+        } else {
             return false;
+        }
     }
-    Q_ASSERT( m_baseElement );  // We should have at least a BasicElement for the base
-    Q_ASSERT( m_underElement || m_overElement );
     return true;
 } 
 
@@ -181,7 +183,7 @@ bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& old
 
 int UnderOverElement::length() const
 {
-        return 5;
+    return 5;
 }
 
 bool UnderOverElement::setCursorTo ( FormulaCursor& cursor, QPointF point )

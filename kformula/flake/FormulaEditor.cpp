@@ -23,7 +23,6 @@
 #include "BasicElement.h"
 #include "RowElement.h"
 #include "FixedElement.h"
-#include "EmptyElement.h"
 #include "NumberElement.h"
 #include "TableElement.h"
 #include "TableEntryElement.h"
@@ -179,11 +178,6 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
             } else if (!elementBeforePosition && !m_cursor.isEnd()) {
                 undo=new FormulaCommandReplaceElements(tmprow,m_cursor.position(),1,QList<BasicElement*>());
             }
-        }
-        if (tmprow->length()==0) {
-            //TODO: this is not right I think...
-            BasicElement* empty=new EmptyElement(tmprow);
-            tmprow->insertChild(0,empty);
         }
     } else if (m_cursor.insideToken()) {
         TokenElement* tmptoken=static_cast<TokenElement*>(m_cursor.currentElement());

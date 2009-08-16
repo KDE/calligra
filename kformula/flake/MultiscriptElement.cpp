@@ -18,7 +18,6 @@
 */
 
 #include "MultiscriptElement.h"
-#include "EmptyElement.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -28,7 +27,7 @@
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : FixedElement( parent )
 {
-    m_baseElement = new EmptyElement( this );
+    m_baseElement = new RowElement( this );
 }
 
 MultiscriptElement::~MultiscriptElement()
@@ -246,6 +245,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     bool prescript = false; //When we see a mprescripts tag, we enable this
+    bool baseElement = true;
     forEachElement( tmp, parent ) { 
         if(tmp.tagName() == "none") {
             //In mathml, we read subscript, then superscript, etc.  To skip one,
@@ -266,9 +266,10 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if( !tmpElement->readMathML( tmp ) )
             return false;
-        if( m_baseElement->elementType() == Empty ) {  //Very first element is the base
+        if( baseElement ) {  //Very first element is the base
             delete m_baseElement; 
             m_baseElement = tmpElement;
+            baseElement = true;
         }
         else if( prescript)
             m_preScripts.append( tmpElement );

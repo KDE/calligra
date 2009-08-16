@@ -13,7 +13,6 @@ set( kformulalib_PART_SRCS
    ElementFactory.cpp 
    BasicElement.cpp
    FixedElement.cpp
-   EmptyElement.cpp
    RowElement.cpp
    FormulaElement.cpp 
    TextElement.cpp

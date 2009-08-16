@@ -28,7 +28,6 @@
 #include "FractionElement.h"
 #include "GlyphElement.h"
 #include "IdentifierElement.h"
-#include "EmptyElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
 #include "TableEntryElement.h"

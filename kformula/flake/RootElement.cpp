@@ -31,8 +31,8 @@
 
 RootElement::RootElement( BasicElement* parent ) : FixedElement( parent )
 {
-    m_radicand = new BasicElement( this );
-    m_exponent = new BasicElement( this );
+    m_radicand = new RowElement( this );
+    m_exponent = new RowElement( this );
 }
 
 RootElement::~RootElement()
@@ -160,27 +160,29 @@ ElementType RootElement::elementType() const
 
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
+    BasicElement* tmpElement = 0;
     KoXmlElement tmp;
+    bool radicand = true;
+    bool exponent = true;
+
     forEachElement( tmp, element ) {
-        if( m_radicand->elementType() == Basic ) {
-            delete m_radicand;
-            m_radicand = ElementFactory::createElement( tmp.tagName(), this );
-            if( !m_radicand->readMathML( tmp ) )
-                return false;
-	}
-        else if( m_exponent->elementType() == Basic ) {
-            delete m_exponent;
-            m_exponent = ElementFactory::createElement( tmp.tagName(), this );
-            if( !m_exponent->readMathML( tmp ) )
-                return false;
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        if( !tmpElement->readMathML( tmp ) ) {
+            return false;
         }
-        else {
+        if( radicand ) {
+            delete m_radicand;
+            m_radicand = tmpElement;
+            radicand = false;
+        } else if( exponent ) {
+            delete m_exponent;
+            m_exponent = tmpElement;
+            exponent= false;
+        } else {
             kDebug(39001) << "Too many arguments to mroot";
             return false;
         }
     }
-    Q_ASSERT( m_radicand );
-    Q_ASSERT( m_exponent );
     return true;
 }
 

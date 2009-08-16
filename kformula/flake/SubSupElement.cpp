@@ -19,7 +19,6 @@
 
 #include "SubSupElement.h"
 #include "FormulaCursor.h"
-#include "EmptyElement.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -28,9 +27,9 @@
 
 SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
 {
-    m_baseElement = new EmptyElement( this );
-    m_subScript = new EmptyElement( this );
-    m_superScript = new EmptyElement( this );
+    m_baseElement = new RowElement( this );
+    m_subScript = new RowElement( this );
+    m_superScript = new RowElement( this );
     m_elementType = elementType;
 }
 
@@ -144,22 +143,28 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
+    bool baseElement=true;
+    bool subScript=true;
+    bool superScript=true;
+    
     forEachElement( tmp, parent ) { 
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        if( !tmpElement->readMathML( tmp ) )
+        if( !tmpElement->readMathML( tmp ) ) {
             return false;
+        }
 
-        if( m_baseElement->elementType() == Empty ) {
+        if( baseElement ) {
             delete m_baseElement; 
             m_baseElement = tmpElement;
-        }
-        else if( m_subScript->elementType() == Empty && m_elementType != SupScript) {
+            baseElement=false;
+        } else if( subScript && m_elementType != SupScript) {
             delete m_subScript;
             m_subScript = tmpElement;
-        }
-        else if( m_superScript->elementType() == Empty ) {
+            subScript = false;
+        } else if( superScript ) {
             delete m_superScript;
             m_superScript = tmpElement;
+            superScript = false;
         }
         else
             return false;

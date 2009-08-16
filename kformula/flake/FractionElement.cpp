@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -21,7 +20,6 @@
 */
 
 #include "FractionElement.h"
-#include "EmptyElement.h"
 #include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
