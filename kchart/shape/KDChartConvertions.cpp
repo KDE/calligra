@@ -18,19 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Local
+
+// Own
 #include "KDChartConvertions.h"
 
 // KDChart
 #include <KDChartEnums>
 #include <KDChartCartesianAxis>
 
+
 namespace KChart {
 
 KDChart::CartesianAxis::Position AxisPositionToKDChartAxisPosition( AxisPosition position )
 {
-    switch ( position )
-    {
+    switch ( position ) {
     case BottomAxisPosition:
         return KDChart::CartesianAxis::Bottom;
     case TopAxisPosition:
@@ -47,8 +48,7 @@ KDChart::CartesianAxis::Position AxisPositionToKDChartAxisPosition( AxisPosition
 
 AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position position )
 {
-    switch ( position )
-    {
+    switch ( position ) {
     case KDChart::CartesianAxis::Bottom:
         return BottomAxisPosition;
     case KDChart::CartesianAxis::Top:
@@ -65,8 +65,7 @@ AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position
 
 QString LegendPositionToString( LegendPosition position )
 {
-    switch ( position )
-    {
+    switch ( position ) {
     case StartLegendPosition:
         return QString( "start" );
     case TopLegendPosition:
@@ -93,8 +92,7 @@ QString LegendPositionToString( LegendPosition position )
 
 KDChartEnums::PositionValue LegendPositionToKDChartPositionValue( LegendPosition position )
 {
-    switch ( position )
-    {
+    switch ( position ) {
     case StartLegendPosition:
         return KDChartEnums::PositionWest;
     case TopLegendPosition:
@@ -121,8 +119,7 @@ KDChartEnums::PositionValue LegendPositionToKDChartPositionValue( LegendPosition
 
 LegendPosition KDChartPositionValueToLegendPosition( KDChartEnums::PositionValue position )
 {
-    switch ( position )
-    {
+    switch ( position ) {
     case KDChartEnums::PositionNorthWest:
         return TopStartLegendPosition;
     case KDChartEnums::PositionNorth:
@@ -154,8 +151,7 @@ LegendPosition KDChartPositionValueToLegendPosition( KDChartEnums::PositionValue
 
 Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion )
 {
-    switch ( expansion )
-    {
+    switch ( expansion ) {
     case WideLegendExpansion:
         return Qt::Horizontal;
     case HighLegendExpansion:
@@ -172,8 +168,7 @@ Qt::Orientation LegendExpansionToQtOrientation( LegendExpansion expansion )
 
 LegendExpansion QtOrientationToLegendExpansion( Qt::Orientation orientation )
 {
-    switch ( orientation )
-    {
+    switch ( orientation ) {
     case Qt::Horizontal:
         return WideLegendExpansion;
     case Qt::Vertical:
