@@ -594,7 +594,9 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
                 //create lbl+list view with a vlayout
                 d->kactionPageWidget = new QWidget();
                 d->kactionPageWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-                QVBoxLayout *vlyr = new QVBoxLayout(d->kactionPageWidget, 0, KDialog::spacingHint());
+                QVBoxLayout *vlyr = new QVBoxLayout(d->kactionPageWidget);
+                KexiUtils::setMargins(vlyr, 0);
+                vlyr->setSpacing(KDialog::spacingHint());
                 d->kactionListView = new KActionsListView(d->kactionPageWidget);
                 d->kactionListView->init();
                 QLabel *lbl = new QLabel(
@@ -620,8 +622,9 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
                 d->currentFormActionsPageWidget = new QWidget();
                 d->currentFormActionsPageWidget->setSizePolicy(
                     QSizePolicy::Minimum, QSizePolicy::Minimum);
-                QVBoxLayout *vlyr = new QVBoxLayout(
-                    d->currentFormActionsPageWidget, 0, KDialog::spacingHint());
+                QVBoxLayout *vlyr = new QVBoxLayout(d->currentFormActionsPageWidget);
+                KexiUtils::setMargins(vlyr, 0);
+                vlyr->setSpacing(KDialog::spacingHint());
                 d->currentFormActionsListView = new CurrentFormActionsListView(
                     d->currentFormActionsPageWidget);
                 d->currentFormActionsListView->init();

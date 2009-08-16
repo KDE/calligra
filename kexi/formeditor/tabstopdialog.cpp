@@ -79,7 +79,8 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
     vbox->addStretch();
 
-    m_check = new QCheckBox(i18n("Handle tab order automatically"), frame, "tabstops_check");
+    m_check = new QCheckBox(i18n("Handle tab order automatically"), frame);
+    m_check->setObjectName("tabstops_check");
     connect(m_check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
     l->addWidget(m_check, 1, 0, 1, 2);
 
