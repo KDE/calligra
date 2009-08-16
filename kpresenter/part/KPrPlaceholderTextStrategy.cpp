@@ -26,11 +26,14 @@
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 #include <KoParagraphStyle.h>
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
@@ -41,12 +44,14 @@
 KPrPlaceholderTextStrategy::KPrPlaceholderTextStrategy( const QString & presentationClass )
 : KPrPlaceholderStrategy( presentationClass )
 , m_textShape( 0 )
+, m_paragraphStyle( 0 )
 {
 }
 
 KPrPlaceholderTextStrategy::~KPrPlaceholderTextStrategy()
 {
     delete m_textShape;
+    delete m_paragraphStyle;
 }
 
 KoShape * KPrPlaceholderTextStrategy::createShape( const QMap<QString, KoDataCenter *> & dataCenterMap )
@@ -101,6 +106,14 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
 
 void KPrPlaceholderTextStrategy::saveOdf( KoShapeSavingContext & context )
 {
+    if ( m_paragraphStyle ) {
+        KoGenStyle style( KoGenStyle::StyleUser, "presentation" );
+        m_paragraphStyle->saveOdf( style, context.mainStyles() );
+        QString displayName = m_paragraphStyle->name();
+        QString internalName = QString( QUrl::toPercentEncoding( displayName, "", " " ) ).replace( '%', '_' );
+        QString styleName = context.mainStyles().lookup( style, internalName, KoGenStyles::DontForceNumbering );
+        context.xmlWriter().addAttribute( "presentation:style-name", styleName );
+    }
     KPrPlaceholderStrategy::saveOdf( context );
 }
 
@@ -135,6 +148,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         paragraphStyle.applyStyle( block, false );
         cursor.insertText( text() );
         shapeData->foul();
+        m_paragraphStyle = paragraphStyle.clone();
     }
 
     styleStack.restore();
