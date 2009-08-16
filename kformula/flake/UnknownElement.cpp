@@ -22,6 +22,8 @@
 
 #include "UnknownElement.h"
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
+
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <kdebug.h>
