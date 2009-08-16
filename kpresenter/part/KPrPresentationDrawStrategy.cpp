@@ -40,10 +40,10 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
     str.clear();
     str.append("pen.png");
     QPixmap pix(kicon.loadIcon(str, kicon.Small));
-    float factor = 1.2;
+    double factor = 1.2;
     pix = pix.scaledToHeight(pix.height()*factor);
     pix = pix.scaledToWidth(pix.width()*factor);
-    QCursor cur = QCursor(pix);
+    QCursor cur(pix);
     QApplication::setOverrideCursor(cur);
 
     setToolWidgetParent( m_drawWidget );
