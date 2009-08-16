@@ -175,7 +175,7 @@ int FixedElement::positionOfChild ( BasicElement* child ) const
     }
 }
 
-bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
+bool FixedElement::loadElement ( KoXmlElement& tmp, RowElement** child )
 {
     BasicElement *element;
     element = ElementFactory::createElement( tmp.tagName(), this );
@@ -184,7 +184,7 @@ bool FixedElement::loadElement ( KoXmlElement& tmp, BasicElement** child )
     }
     if (element->elementType()==Row) {
         delete (*child);
-        (*child)=element;
+        (*child)=static_cast<RowElement*>(element);
     } else {
         (*child)->insertChild(0,element);
     }

@@ -62,7 +62,7 @@ public:
 
     /// inherited from BasicElement
     virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
-    
+
     /// inherited from BasicElement
     virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
 
@@ -98,10 +98,10 @@ private:
     void layoutBevelledFraction( const AttributeManager* am );
 
     /// The element representing the fraction's numerator
-    BasicElement* m_numerator;
+    RowElement* m_numerator;
 
     /// The element representing the fraction's denominator 
-    BasicElement* m_denominator;
+    RowElement* m_denominator;
 
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;

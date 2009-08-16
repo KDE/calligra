@@ -27,6 +27,7 @@
 
 class FormulaCursor;
 class QPainterPath;
+class RowElement;
 /**
  * @short Abstract Base Class for MathML elements with fixed number of childs
  *
@@ -50,7 +51,7 @@ public:
 
     virtual QLineF cursorLine ( int position ) const;
 
-    bool loadElement(KoXmlElement& tmp, BasicElement** child);
+    bool loadElement(KoXmlElement& tmp, RowElement** child);
 
     virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
 

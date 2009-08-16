@@ -4,6 +4,7 @@
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
                  2009 Jeremias Epperlein <jeeree@web.de>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -58,10 +59,11 @@ class TableEntryElement;
  * The BasicElement knows its size and position in the formula. This data is normally
  * only used for drawing and stored in the m_boundingRect attribute.
  * To adapt both variables, size and coordinates, to fit in the formula each and every
- * BasicElement derived class has to implement layoutElement() and calculateSize()
- * methods. The former adaptes the position, means the coordinates, when the formula
- * changes and the latter calculates the size of the element. After a formula change
- * first calculateSize is called for all elements then layoutElement().
+ * BasicElement derived class has to implement layoutElement().
+ *
+ * For cursor movement, an element has to implement elementBefore, elementAfter,
+ * lastCursorPosition and positionOfChild as well as
+ * moveCursor (keyboard navigation) and setCursorTo (cursor placement by clicking).
  */
 class KOFORMULA_EXPORT BasicElement {
 public:
@@ -88,14 +90,7 @@ public:
     virtual const QList<BasicElement*> childElements() const;
 
     /**
-     * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to insert
-     * @param child A BasicElement to insert
-     */
-    virtual bool insertChild( int position, BasicElement* child );
-   
-    /**
-     * Remove a child element
+     * Replace a child element
      * @param oldelement the child to replace
      * @param newelement the child @p oldelement is replaced with
      */ 
@@ -139,16 +134,16 @@ public:
 
     /**
      * Implement the cursor behaviour for the element
-     * @param cursor The FormulaCursor that is moved around
+     * @param cursor the cursor we test
      * @return true, if the element accepts the cursor
      */
     virtual bool acceptCursor( const FormulaCursor& cursor );
     
     /**
      * Return the coordinates of the line, where the cursor should be drawn
-     * in coordinates relative to the flake shape
+     * in coordinates relative to the formula element (or the flake shape)
      * @param cursor The FormulaCursor specifing the position
-     * @return The cursor line
+     * @return the cursor line
      */
     virtual QLineF cursorLine(int position) const;
     
@@ -158,7 +153,8 @@ public:
     
     /**
      * Move the cursor in the direction specified in cursor
-     * @param cursor The FormularCursor we move
+     * @param newcursor the cursor we move around
+     * @param oldcursor the former cursor position
      * @return true, if we moved the cursor
      */
     virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
@@ -180,10 +176,10 @@ public:
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
-    
+
     /// @return The absoulte bounding rectangle of the element
     const QRectF absoluteBoundingRect() const;
-    
+
     /**
      * place the cursor at the the given point
      * the point should be placed a the position in the element 
@@ -220,7 +216,6 @@ public:
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
 
-    
     /// @return The last cusor position (number of available cursor positions - 1)
     virtual int length() const;
     
@@ -285,14 +280,20 @@ public:
     /// @return true, when the element is empty
     virtual bool isEmpty() const;
 
+    /// @return true, if the element is an inferred mrow
     virtual bool isInferredRow() const;
 
-    /// @return the formula element
+    /// @return the formula element that is a descendant of this element
     BasicElement* formulaElement();
 
-    /// writes the element to kDebug(), only for debugging purpose
+    /** writes the child element tree to kDebug()
+     *  only for debugging purpose
+     *  @param wrong indicates, if the parent is set wrong
+     *  @param indent indention level
+     */
     virtual void writeElementTree(int indent=0, bool wrong=false);
 
+    /// @return the first TableEntryElement among the elements ancestors or 0 if there is none
     TableEntryElement* parentTableEntry();
 
 protected:
@@ -319,6 +320,7 @@ private:
 
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
+    
     /** The boundingRect storing the childrens element's width, height, x and y
      *  The bottomRight hand corner will always be small that then size of
      *  m_boundingRect

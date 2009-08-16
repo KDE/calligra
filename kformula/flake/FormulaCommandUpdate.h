@@ -25,6 +25,14 @@ class FormulaCommand;
 class KoFormulaShape;
 class FormulaData;
 
+/**
+ *
+ * This class is used to wrap FormulaCommands, which are part of KFormulaLib
+ * and therefore can't notify the tool and shape of changes (as they don't know
+ * about them). This notification it done by this classes undo / redo methods
+ * after calling the respective methods from the wrapped class
+ *
+ **/
 
 class FormulaCommandUpdate : public QUndoCommand {
 public:

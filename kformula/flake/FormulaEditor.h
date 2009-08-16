@@ -37,16 +37,13 @@ class QRectF;
 class QUndoCommand;
 
 /**
- * @short The cursor being moved through a formula
+ * @short The Class responsible for manipulating a formula
  *
- * The FormulaTool instanciates FormulaCursor to move around in the formula and edit
- * it. Each element can implement special cursor behaviour for its children. 
- * The cursor has a current element, a position in this element and (if it it is selecting)
- * a start position of this selection, called mark. Every element has a number
- * of possible cursor positions, it can influence the cursor movement 
- * by implementing moveCursor, acceptCursor and setCursorTo. 
- * A cursor also implements insertion and deletion of elements according to
- * its current element, position and selection.
+ * Every manipulation of a formula is done by the tool through this class. It holds
+ * the current selection and provides methods to change the content of the formula
+ * according to this selection. The m_data is used to notify the shape and tool of
+ * changes in the formula.
+ *
  */
 
 class KOFORMULA_EXPORT FormulaEditor {
@@ -59,6 +56,7 @@ public:
 
     /**
      * Draw the cursor to the given QPainter
+     * only for convenience
      * @param painter The QPainter the cursor draws itsself to
      */
     void paint( QPainter &painter ) const;

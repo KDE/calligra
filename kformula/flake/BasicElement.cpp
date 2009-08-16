@@ -129,14 +129,6 @@ bool BasicElement::setCursorTo(FormulaCursor& cursor, QPointF point)
     return true;
 }
 
-
-bool BasicElement::insertChild( int position, BasicElement* element )
-{
-    Q_UNUSED( position )
-    Q_UNUSED( element )
-    return false;
-}
-
 bool BasicElement::replaceChild( BasicElement* oldelement, BasicElement* newelement)
 {
     Q_UNUSED( oldelement )

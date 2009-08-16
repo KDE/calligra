@@ -43,6 +43,16 @@ enum CursorDirection {
     NoDirection
 };
 
+
+/**
+ * @short The cursor being moved through a formula
+ *
+ * The FormulaCursor is used to store a cursor position (or selection) in a formula as well
+ * as to manipulate it. It therefore has a selection state, a starting position
+ * and (if it is selecting) a selection end position, called mark.
+ *
+ */
+
 class KOFORMULA_EXPORT FormulaCursor {
 public:
     FormulaCursor(BasicElement* element, bool selecting, int position, int mark);

@@ -229,15 +229,18 @@ bool FractionElement::setCursorTo( FormulaCursor& cursor, QPointF point )
     }
 }
 
-
 bool FractionElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
 {
-    if( oldelement == m_numerator ) {
-        m_numerator = newelement;
-        return true;
-    } else if( oldelement == m_denominator ) {
-        m_denominator = newelement;
-        return true;
+    //TODO: investigate, if we really need this
+    if (newelement->elementType()==Row) {
+        RowElement* newrow=static_cast<RowElement*>(newelement);
+        if( oldelement == m_numerator ) {
+            m_numerator = newrow;
+            return true;
+        } else if( oldelement == m_denominator ) {
+            m_denominator = newrow;
+            return true;
+        }
     }
     return false;
 }
