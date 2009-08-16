@@ -59,26 +59,26 @@ public:
     
     ChartProxyModel *proxyModel() const;
 
-    QList<Axis*> axes() const;
+    ChartType    chartType() const;
+    ChartSubtype chartSubType() const;
+    void         setChartType( ChartType type );
+    void         setChartSubType( ChartSubtype subType );
+    
+    QList<Axis*>    axes() const;
     QList<DataSet*> dataSets() const;
-    int dataSetCount() const;
-    Surface *wall() const;
-    Surface *floor() const;
+    int             dataSetCount() const;
+    bool            addAxis( Axis *axis );
+    bool            removeAxis( Axis *axis );
+
     ThreeDScene *threeDScene() const;
     Axis *xAxis() const;
     Axis *yAxis() const;
     Axis *secondaryXAxis() const;
     Axis *secondaryYAxis() const;
     bool isThreeD() const;
-    ChartType chartType() const;
-    ChartSubtype chartSubType() const;
-    
     int gapBetweenBars() const;
     int gapBetweenSets() const;
 
-    bool addAxis( Axis *axis );
-    bool removeAxis( Axis *axis );
-    
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     void setPieExplodeFactor( DataSet *dataSet, int percent );
@@ -89,8 +89,6 @@ public:
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfSubType( KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle ) const;
     
-    void setChartType( ChartType type );
-    void setChartSubType( ChartSubtype subType );
     
     void setThreeD( bool threeD );
     
@@ -98,6 +96,7 @@ public:
 
     void paint( QPainter &painter, const KoViewConverter &converter );
     
+    // FIXME: Internal representation -- should be private
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     KDChart::Chart *kdChart() const;
     

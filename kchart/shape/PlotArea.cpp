@@ -18,14 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "PlotArea.h"
-#include "Axis.h"
-#include "DataSet.h"
-#include "Surface.h"
-#include "ThreeDScene.h"
-#include "ChartProxyModel.h"
-#include "Legend.h"
+
+// Qt
+#include <QPointF>
+#include <QSizeF>
+#include <QList>
+#include <QImage>
+#include <QPainter>
 
 // KOffice
 #include <KoXmlReader.h>
@@ -41,13 +42,6 @@
 #include <KoViewConverter.h>
 #include <KoShapeBackground.h>
 #include <KoOdfGraphicStyles.h>
-
-// Qt
-#include <QPointF>
-#include <QSizeF>
-#include <QList>
-#include <QImage>
-#include <QPainter>
 
 // KDChart
 #include <KDChartChart>
@@ -71,6 +65,15 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 
+// KChart
+#include "Legend.h"
+#include "Surface.h"
+#include "Axis.h"
+#include "DataSet.h"
+#include "ThreeDScene.h"
+#include "ChartProxyModel.h"
+
+
 using namespace KChart;
 
 const int MAX_PIXMAP_SIZE = 1000;
@@ -78,35 +81,43 @@ const int MAX_PIXMAP_SIZE = 1000;
 class PlotArea::Private
 {
 public:
-    Private();
+    Private( ChartShape *parent );
     ~Private();
 
     // The parent chart shape
     ChartShape *shape;
 
-    // The list of axes
-    QList<Axis*> axes;
+    // ----------------------------------------------------------------
+    // Parts and properties of the chart
+
+    ChartType     chartType;
+    ChartSubtype  chartSubtype;
     
-    QList<KDChart::AbstractDiagram*> kdDiagrams;
+    Surface       *wall;
+    Surface       *floor;       // Only used in 3D charts
     
-    KDChart::Chart *kdChart;
-    KDChart::AbstractCoordinatePlane *kdPlane;
+    // The axes
+    QList<Axis*>     axes;
+    QList<KoShape*>  automaticallyHiddenAxisTitles;
     
-    Surface *wall;
-    Surface *floor;
+    // 3D properties
+    bool          threeD;
+    ThreeDScene  *threeDScene;
     
-    ChartType chartType;
-    ChartSubtype chartSubtype;
-    
-    bool threeD;
-    ThreeDScene *threeDScene;
-    
+    // FIXME: Move to a barchart specific struct?
+    //        At the same time: create similar structs for all types.
     int gapBetweenBars;
     int gapBetweenSets;
     
-    QList<KoShape*> automaticallyHiddenAxisTitles;
+    // ----------------------------------------------------------------
+    // The embedded KD Chart
 
-    // We can rerender faster if we cache KDChart's output
+    // The KD Chart parts
+    KDChart::Chart                    *kdChart;
+    KDChart::AbstractCoordinatePlane  *kdPlane;
+    QList<KDChart::AbstractDiagram*>   kdDiagrams;
+    
+    // Caching: We can rerender faster if we cache KDChart's output
     QImage   image;
     bool     paintPixmap;
     QPointF  lastZoomLevel;
@@ -114,57 +125,69 @@ public:
     mutable bool pixmapRepaintRequested;
 };
 
-PlotArea::Private::Private()
+PlotArea::Private::Private( ChartShape *parent )
 {
-    shape = 0;
-    kdChart = new KDChart::Chart();
-    kdPlane = new KDChart::CartesianCoordinatePlane( kdChart );
-    wall = 0;
-    floor = 0;
-    chartType = BarChartType;
+    shape = parent;
+
+    // Default type: normal bar chart
+    chartType    = BarChartType;
     chartSubtype = NormalChartSubtype;
-    threeD = false;
+
+    wall  = 0;
+    floor = 0;
+
+    threeD      = false;
     threeDScene = 0;
+
     gapBetweenBars = 0;
     gapBetweenSets = 100;
+
+    // KD Chart stuff
+    kdChart = new KDChart::Chart();
+    kdPlane = new KDChart::CartesianCoordinatePlane( kdChart );
+
+    // Cache
     pixmapRepaintRequested = true;
-    paintPixmap = true;
+    paintPixmap            = true;
 }
 
 PlotArea::Private::~Private()
 {
+    delete kdPlane;
+    delete kdChart;
 }
 
 
 PlotArea::PlotArea( ChartShape *parent )
-    : KoShape()
-    , d( new Private )
+    : QObject()
+    , KoShape()
+    , d( new Private( parent ) )
 {
-    Q_ASSERT( parent );
-    
     setShapeId( ChartShapeId );
-    d->shape = parent;
     
+    Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->proxyModel() );
     
     connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
-             this, SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( modelResetComplete() ),
-             this, SLOT( update() ) );
+             this,                   SLOT( update() ) );
+    // FIXME: The following signatures don't match.  Bug?
     connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
-             this, SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
-             this, SLOT( dataSetCountChanged() ) );
+             this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsInserted( const QModelIndex, int, int ) ),
-             this, SLOT( update() ) );
+             this,                   SLOT( update() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsRemoved( const QModelIndex, int, int ) ),
-             this, SLOT( update() ) );
+             this,                   SLOT( update() ) );
     connect( d->shape->proxyModel(), SIGNAL( dataChanged() ),
-             this, SLOT( update() ) );
+             this,                   SLOT( update() ) );
 }
 
 PlotArea::~PlotArea()
 {
+    delete d;
 }
 
 
@@ -172,6 +195,7 @@ void PlotArea::init()
 {
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
+
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible( false );
     d->kdChart->setFrameAttributes( attr );
@@ -193,10 +217,9 @@ void PlotArea::dataSetCountChanged()
 {
     if ( !yAxis() )
         return;
-    foreach( DataSet *dataSet, proxyModel()->dataSets() )
-    {
-        if ( !dataSet->attachedAxis() )
-        {
+
+    foreach( DataSet *dataSet, proxyModel()->dataSets() ) {
+        if ( !dataSet->attachedAxis() ) {
             yAxis()->attachDataSet( dataSet );
         }
     }
@@ -223,41 +246,31 @@ int PlotArea::dataSetCount() const
     return proxyModel()->dataSets().size();
 }
 
-Surface *PlotArea::wall() const
-{
-    return d->wall;
-}
-
-Surface *PlotArea::floor() const
-{
-    return d->floor;
-}
-
 Axis *PlotArea::xAxis() const
 {
-    foreach( Axis *axis, d->axes )
-    {
+    foreach( Axis *axis, d->axes ) {
         if ( axis->orientation() == Qt::Horizontal )
             return axis;
     }
+
     return 0;
 }
 
 Axis *PlotArea::yAxis() const
 {
-    foreach( Axis *axis, d->axes )
-    {
+    foreach( Axis *axis, d->axes ) {
         if ( axis->orientation() == Qt::Vertical )
             return axis;
     }
+
     return 0;
 }
 
 Axis *PlotArea::secondaryXAxis() const
 {
     bool firstXAxisFound = false;
-    foreach( Axis *axis, d->axes )
-    {
+
+    foreach( Axis *axis, d->axes ) {
         if ( axis->orientation() == Qt::Horizontal ) {
             if ( firstXAxisFound )
                 return axis;
@@ -265,14 +278,15 @@ Axis *PlotArea::secondaryXAxis() const
                 firstXAxisFound = true;
         }
     }
+
     return 0;
 }
 
 Axis *PlotArea::secondaryYAxis() const
 {
     bool firstYAxisFound = false;
-    foreach( Axis *axis, d->axes )
-    {
+
+    foreach( Axis *axis, d->axes ) {
         if ( axis->orientation() == Qt::Vertical ) {
             if ( firstYAxisFound )
                 return axis;
@@ -280,6 +294,7 @@ Axis *PlotArea::secondaryYAxis() const
                 firstYAxisFound = true;
         }
     }
+
     return 0;
 }
 
@@ -315,20 +330,18 @@ int PlotArea::gapBetweenSets() const
 
 bool PlotArea::addAxis( Axis *axis )
 {
-    if ( d->axes.contains( axis ) )
-    {
-    	qWarning() << "PlotArea::addAxis(): This axis has already been added.";
+    if ( d->axes.contains( axis ) ) {
+    	qWarning() << "PlotArea::addAxis(): Trying to add already been added axis.";
     	return false;
     }
-    if ( !axis )
-    {
+
+    if ( !axis ) {
     	qWarning() << "PlotArea::addAxis(): Pointer to axis is NULL!";
     	return false;
     }
     d->axes.append( axis );
     
-    if ( axis->dimension() == XAxisDimension )
-    {
+    if ( axis->dimension() == XAxisDimension ) {
         foreach ( Axis *_axis, d->axes )
             _axis->registerKdXAxis( axis->kdAxis() );
     }
@@ -340,20 +353,18 @@ bool PlotArea::addAxis( Axis *axis )
 
 bool PlotArea::removeAxis( Axis *axis )
 {
-    if ( !d->axes.contains( axis ) )
-    {
-    	qWarning() << "PlotArea::removeAxis(): This axis has not been added previously.";
+    if ( !d->axes.contains( axis ) ) {
+    	qWarning() << "PlotArea::removeAxis(): Trying to remove non-added axis.";
     	return false;
     }
-    if ( !axis )
-    {
+
+    if ( !axis ) {
     	qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
     	return false;
     }
     d->axes.removeAll( axis );
     
-    if ( axis->dimension() == XAxisDimension )
-    {
+    if ( axis->dimension() == XAxisDimension ) {
         foreach ( Axis *_axis, d->axes )
             _axis->deregisterKdXAxis( axis->kdAxis() );
     }
@@ -370,6 +381,8 @@ bool PlotArea::removeAxis( Axis *axis )
 
 void PlotArea::setChartType( ChartType type )
 {
+    // Lots of things to do if the old and new types of coordinate
+    // systems don't match.
     if ( !isPolar( d->chartType ) && isPolar( type ) ) {
         foreach ( Axis *axis, d->axes ) {
             if ( !axis->title()->isVisible() )
@@ -385,10 +398,13 @@ void PlotArea::setChartType( ChartType type )
         }
         d->automaticallyHiddenAxisTitles.clear();
     }
-    
+
+    // FIXME NOW: Make this a switch (see comment below)
+    // Set the dimensionality of the data points.
     if ( d->chartType != ScatterChartType && type == ScatterChartType ) {
         d->shape->proxyModel()->setDataDimensions( 2 );
     }
+    // FIXME: This is not really true.  Could also be 3 (bubble charts)
     else if ( d->chartType == ScatterChartType && type != ScatterChartType ) {
         d->shape->proxyModel()->setDataDimensions( 1 );
     }
@@ -406,8 +422,7 @@ void PlotArea::setChartSubType( ChartSubtype subType )
 {
     d->chartSubtype = subType;
     
-    foreach ( Axis *axis, d->axes )
-    {
+    foreach ( Axis *axis, d->axes ) {
         axis->plotAreaChartSubTypeChanged( subType );
     }
     
@@ -431,6 +446,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     styleStack.save();
 
     styleStack.clear();
+
+    // Find out about chart subtype.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
@@ -438,17 +455,22 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
         styleStack.setTypeProperties( "chart" );
 
-        if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" ) && styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
+        if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" )
+             && styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
+        {
             setChartSubType( PercentChartSubtype );
-        else if ( styleStack.hasProperty( KoXmlNS::chart, "stacked" ) && styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
+        }
+        else if ( styleStack.hasProperty( KoXmlNS::chart, "stacked" )
+                  && styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
+        {
             setChartSubType( StackedChartSubtype );
+        }
     }
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     
-    KoXmlElement dataHasLabelsElem = KoXml::namedItemNS( plotAreaElement, 
-                                                         KoXmlNS::chart, "data-source-has-labels" );
+    // Find out if the data table contains labels as first row and/or column.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
                                          "data-source-has-labels" ) ) {
 
@@ -510,9 +532,16 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             addAxis( axis );
         }
     }
-    // Load data sets
+
+    // Now, after the axes, load the datasets.
+    // Note that this only contains properties of the datasets, the
+    // actual data is not stored here.
+    //
+    // FIXME: Isn't the proxy model a strange place to store this data?
     d->shape->proxyModel()->loadOdf( plotAreaElement, context );
 
+    // Now load the surfaces (wall and possibly floor)
+    // FIXME: Use named tags instead of looping?
     forEachElement ( n, plotAreaElement ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
@@ -556,11 +585,12 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     // Save chart subtype
     saveOdfSubType( bodyWriter, plotAreaStyle );
     
-    bodyWriter.addAttribute( "chart:style-name", saveStyle( plotAreaStyle, context ) );
+    bodyWriter.addAttribute( "chart:style-name",
+                             saveStyle( plotAreaStyle, context ) );
     
     const QSizeF s( size() );
     const QPointF p( position() );
-    bodyWriter.addAttributePt( "svg:width", s.width() );
+    bodyWriter.addAttributePt( "svg:width",  s.width() );
     bodyWriter.addAttributePt( "svg:height", s.height() );
     bodyWriter.addAttributePt( "svg:x", p.x() );
     bodyWriter.addAttributePt( "svg:y", p.y() );
@@ -580,8 +610,9 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
             dataSourceHasLabels = "none";
     // Note: this is saved in the plotarea attributes and not the style.
     bodyWriter.addAttribute( "chart:data-source-has-labels",
-                            dataSourceHasLabels );
+                             dataSourceHasLabels );
 
+    // Save the axes.
     if ( isCartesian( d->chartType ) ) {
         foreach( Axis *axis, d->axes ) {
             axis->saveOdf( context );
@@ -602,7 +633,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     bodyWriter.endElement(); // chart:plot-area
 }
 
-void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle ) const
+void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
+                               KoGenStyle& plotAreaStyle ) const
 {
     switch ( d->chartType ) {
     case BarChartType:
@@ -707,6 +739,7 @@ void PlotArea::setGapBetweenSets( int percent )
 
 void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
+    // FIXME: Actually store this factor somewhere? :-P
     emit pieExplodeFactorChanged( dataSet, percent );
 }
 
@@ -801,8 +834,7 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipRect( paintRect );
     
     // Paint the background
-    if( background() )
-    {
+    if ( background() ) {
         QPainterPath p;
         p.addRect( paintRect );
         background()->paint( painter, p );
@@ -812,18 +844,24 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     QPointF zoomLevel;
     converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
 
-    // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
+    // Only repaint the pixmap if it is scheduled, the zoom level
+    // changed or the shape was resized.
     /*if (    d->pixmapRepaintRequested
          || d->lastZoomLevel != zoomLevel
          || d->lastSize      != size()
          || !d->paintPixmap ) {
-        // TODO: What if two zoom levels are constantly being requested?
-        // At the moment, this *is* the case, due to the fact
-        // that the shape is also rendered in the page overview
-        // in KPresenter
-        // Every time the window is hidden and shown again, a repaint is
-        // requested --> laggy performance, especially when quickly
-        // switching through windows
+        // TODO (js): What if two zoom levels are constantly being
+        //            requested?  At the moment, this *is* the case,
+        //            due to the fact that the shape is also rendered
+        //            in the page overview in KPresenter Every time
+        //            the window is hidden and shown again, a repaint
+        //            is requested --> laggy performance, especially
+        //            when quickly switching through windows.
+        //
+        // ANSWER (iw): what about having a small mapping between size
+        //              in pixels and pixmaps?  The size could be 2 or
+        //              at most 3.  We could manage the replacing
+        //              using LRU.
         paintPixmap( painter, converter );
         d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
