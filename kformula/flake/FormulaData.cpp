@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
    Copyright (C) 2009 Jeremias Epperlein <jeeree@web.de>
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
