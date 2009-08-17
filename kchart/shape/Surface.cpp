@@ -19,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "Surface.h"
 
 // Qt
@@ -59,13 +59,13 @@ public:
 
     PlotArea *plotArea;
     
-    KDChart::AbstractCoordinatePlane *kdPlane;
-
     QPointF  position;
     int      width;
 
     QBrush   brush;
     QPen     framePen;
+
+    KDChart::AbstractCoordinatePlane *kdPlane;
 };
 
 Surface::Private::Private()
@@ -85,7 +85,9 @@ Surface::Surface( PlotArea *parent )
 {
     Q_ASSERT( parent );
     
+    // FIXME: init in private's constructor
     d->plotArea = parent;
+
     d->kdPlane = d->plotArea->kdPlane();
     Q_ASSERT( d->kdPlane );
 }
@@ -209,7 +211,7 @@ void Surface::saveOdf( KoShapeSavingContext &context,
     bodyWriter.startElement( elementName );
 
     QBrush  backgroundBrush = d->kdPlane->backgroundAttributes().brush();
-    QPen    framePen = d->kdPlane->frameAttributes().pen();
+    QPen    framePen        = d->kdPlane->frameAttributes().pen();
 
     KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
     KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );

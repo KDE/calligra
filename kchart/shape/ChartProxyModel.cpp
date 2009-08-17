@@ -390,6 +390,8 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
     }
 }
 
+// This loads the properties of the datasets (chart:series).
+// FIXME: This is a strange place to store them (the proxy model)
 bool ChartProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -401,13 +403,14 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContex
     forEachElement ( n, element ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
+
         if ( n.localName() == "series" ) {
             DataSet *dataSet = new DataSet( this );
             dataSet->setNumber( d->dataSets.size() );
             d->dataSets.append( dataSet );
 
             if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-                qDebug() << "HAS style-name:" << n.attributeNS( KoXmlNS::chart, "style-name" );
+                //qDebug() << "HAS style-name:" << n.attributeNS( KoXmlNS::chart, "style-name" );
                 styleStack.clear();
                 context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
@@ -429,7 +432,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContex
                 }
 
                 if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
-                    qDebug() << "HAS fill";
+                    //qDebug() << "HAS fill";
                     QString fill = styleStack.property( KoXmlNS::draw, "fill" );
                     QBrush brush;
                     if ( fill == "solid" || fill == "hatch" ) {

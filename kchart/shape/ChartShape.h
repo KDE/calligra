@@ -99,6 +99,7 @@ class CHARTSHAPELIB_EXPORT ChartShape
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartInterface)
+
 public:
     ChartShape();
     ~ChartShape();

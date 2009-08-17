@@ -97,6 +97,7 @@ public:
     QAction  *percentAreaChartAction;
 
     QAction  *circleChartAction;
+    QAction  *ringChartAction;
     
     QAction  *radarChartAction;
     
@@ -116,6 +117,7 @@ public:
     QAction  *dataSetPercentAreaChartAction;
     
     QAction *dataSetCircleChartAction;
+    QAction *dataSetRingChartAction;
     QAction *dataSetScatterChartAction;
     QAction *dataSetRadarChartAction;
 
@@ -173,6 +175,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     dataSetStackedAreaChartAction = 0;
     dataSetPercentAreaChartAction = 0;
     dataSetCircleChartAction = 0;
+    dataSetRingChartAction = 0;
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
 }
@@ -209,13 +212,17 @@ ChartConfigWidget::ChartConfigWidget()
     
     chartTypeMenu->addSeparator();
     
-    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
     d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
+    d->ringChartAction = chartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
     
     chartTypeMenu->addSeparator();
     
     d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
     
+    chartTypeMenu->addSeparator();
+
+    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
     connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
@@ -242,9 +249,12 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
     
-    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
+    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
+
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
+
+    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
     
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
     
@@ -466,6 +476,10 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type = CircleChartType;
         subtype = NoChartSubtype;
     }
+    else if ( action == d->ringChartAction ) {
+        type = RingChartType;
+        subtype = NoChartSubtype;
+    }
     
     else if ( action == d->scatterChartAction ) {
         type = ScatterChartType;
@@ -586,6 +600,8 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type = RadarChartType;
     else if ( action == d->dataSetCircleChartAction )
         type = CircleChartType;
+    else if ( action == d->dataSetRingChartAction )
+        type = RingChartType;
     else if ( action == d->dataSetScatterChartAction )
         type = ScatterChartType;
     
@@ -777,6 +793,10 @@ void ChartConfigWidget::update()
             d->ui.pieProperties->hide();
             needSeparator = true;
         } else if ( d->shape->chartType() == CircleChartType ) {
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->show();
+            needSeparator = true;
+        } else if ( d->shape->chartType() == RingChartType ) {
             d->ui.barProperties->hide();
             d->ui.pieProperties->show();
             needSeparator = true;

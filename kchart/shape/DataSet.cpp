@@ -20,7 +20,7 @@
 */
 
 
-// Local
+// Own
 #include "DataSet.h"
 
 // Qt
@@ -83,7 +83,8 @@ public:
     QBrush brush;
     int num;
 
-    // The different CellRegions for a chart
+    // The different CellRegions for a dataset
+    // Note: These are all 1-dimensional, i.e. vectors.
     CellRegion labelDataRegion; // one cell that holds the label
     CellRegion yDataRegion;     // normal y values
     CellRegion xDataRegion;     // x values -- only for scatter & bubble charts
@@ -139,7 +140,7 @@ void DataSet::Private::updateSize()
     
     size = newSize;
     // FIXME: The first test below can *never* fail because of the
-    //        assignment just above.
+    //        assignment just above. (iw)
     if ( newSize != size && !blockSignals && kdChartModel ) {
         kdChartModel->dataSetSizeChanged( parent, size );
     }
@@ -764,9 +765,9 @@ int DataSet::dimension() const
     case SurfaceChartType:
 	return 1;
 
+    case RingChartType:
     case ScatterChartType:
     case GanttChartType:
-    case RingChartType:
 	return 2;
 
     case BubbleChartType:

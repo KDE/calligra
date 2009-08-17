@@ -203,7 +203,8 @@ void PlotArea::init()
     d->wall = new Surface( this );
     //d->floor = new Surface( this );
     
-    // There need to be at least these two axes. Do not delete, but hide them instead.
+    // There need to be at least these two axes. Do not delete, but
+    // hide them instead.
     Axis *xAxis = new Axis( this );
     xAxis->setPosition( BottomAxisPosition );
     Axis *yAxis = new Axis( this );
@@ -682,25 +683,30 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
         case NoChartSubtype:
         case NormalChartSubtype:
         break;
-    case StackedChartSubtype:
+        case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
         case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
+
         //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
     if ( d->threeD ) {
         plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
         // FIXME: Save all 3D attributes too.
     }
 
+    break;
+
     case CircleChartType:
         // FIXME
         break;
-    break;
 
     case RingChartType:
+        // FIXME
+        break;
+
     case ScatterChartType:
     case RadarChartType:
     case StockChartType:

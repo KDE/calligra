@@ -91,6 +91,7 @@ public:
     void createLineDiagram();
     void createAreaDiagram();
     void createCircleDiagram();
+    void createRingDiagram();
     void createRadarDiagram();
     void createScatterDiagram();
     
@@ -127,6 +128,7 @@ public:
     KDChart::LineDiagram  *kdLineDiagram;
     KDChart::LineDiagram  *kdAreaDiagram;
     KDChart::PieDiagram   *kdCircleDiagram;
+    KDChart::RingDiagram   *kdRingDiagram;
     KDChart::PolarDiagram *kdRadarDiagram;
     KDChart::Plotter      *kdScatterDiagram;
 
@@ -134,6 +136,7 @@ public:
     KDChartModel *kdLineDiagramModel;
     KDChartModel *kdAreaDiagramModel;
     KDChartModel *kdCircleDiagramModel;
+    KDChartModel *kdRingDiagramModel;
     KDChartModel *kdRadarDiagramModel;
     KDChartModel *kdScatterDiagramModel;
     
@@ -166,6 +169,7 @@ Axis::Private::Private()
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;
     kdCircleDiagram  = 0;
+    kdRingDiagram  = 0;
     kdRadarDiagram   = 0;
     kdScatterDiagram = 0;
 
@@ -173,6 +177,7 @@ Axis::Private::Private()
     kdLineDiagramModel    = 0;
     kdAreaDiagramModel    = 0;
     kdCircleDiagramModel  = 0;
+    kdRingDiagramModel    = 0;
     kdRadarDiagramModel   = 0;
     kdScatterDiagramModel = 0;
 }
@@ -207,6 +212,12 @@ Axis::Private::~Private()
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdCircleDiagram );
         delete kdCircleDiagram;
         delete kdCircleDiagramModel;
+    }
+
+    if ( kdRingDiagram ) {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRingDiagram );
+        delete kdRingDiagram;
+        delete kdRingDiagramModel;
     }
 
     if ( kdRadarDiagram ) {
@@ -281,6 +292,12 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         model = kdCircleDiagramModel;
         diagram = kdCircleDiagram;
         break;
+    case RingChartType:
+        if ( !kdRingDiagram )
+            createRingDiagram();
+        model = kdRingDiagramModel;
+        diagram = kdRingDiagram;
+        break;
     case RadarChartType:
         if ( !kdRadarDiagram )
             createRadarDiagram();
@@ -323,6 +340,9 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
         case CircleChartType:
             diagram = (KDChart::AbstractDiagram*)kdCircleDiagram;
             break;
+        case RingChartType:
+            diagram = (KDChart::AbstractDiagram*)kdRingDiagram;
+            break;
         case RadarChartType:
             diagram = (KDChart::AbstractDiagram*)kdRadarDiagram;
             break;
@@ -357,6 +377,10 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     case CircleChartType:
         diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
         model = &kdCircleDiagramModel;
+        break;
+    case RingChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdRingDiagram;
+        model = &kdRingDiagramModel;
         break;
     case RadarChartType:
         diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
@@ -491,7 +515,7 @@ void Axis::Private::createCircleDiagram()
 {
     if ( kdCircleDiagramModel == 0 ) {
         kdCircleDiagramModel = new KDChartModel;
-        kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
+        kdCircleDiagramModel->setDataDirection( Qt::Vertical );
         registerKDChartModel( kdCircleDiagramModel );
     }
 
@@ -501,6 +525,26 @@ void Axis::Private::createCircleDiagram()
 
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
         kdPolarPlane->addDiagram( kdCircleDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+    }
+}
+
+void Axis::Private::createRingDiagram()
+{
+    if ( kdRingDiagramModel == 0 ) {
+        kdRingDiagramModel = new KDChartModel;
+        kdRingDiagramModel->setDataDirection( Qt::Vertical );
+        registerKDChartModel( kdRingDiagramModel );
+    }
+
+    if ( kdRingDiagram == 0 ) {
+        kdRingDiagram = new KDChart::RingDiagram( plotArea->kdChart(), kdPolarPlane );
+        kdRingDiagram->setModel( kdRingDiagramModel );
+
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
+        kdPolarPlane->addDiagram( kdRingDiagram );
         
         if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
             plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
@@ -1307,7 +1351,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
         break;
     case RingChartType:
-        // FIXME Ringchart
+        oldModel = &d->kdRingDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdRingDiagram;
         break;
 
     case ScatterChartType:
@@ -1375,7 +1420,10 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         newDiagram = d->kdCircleDiagram;
         break;
     case RingChartType:
-        // FIXME Ringchart
+        if ( !d->kdRingDiagram )
+           d->createRingDiagram();
+        newModel = d->kdRingDiagramModel;
+        newDiagram = d->kdRingDiagram;
         break;
 
     case ScatterChartType:
@@ -1572,6 +1620,13 @@ void Axis::setThreeD( bool threeD )
         d->kdCircleDiagram->setThreeDPieAttributes( attributes );
     }
     
+    if ( d->kdRingDiagram ) {
+        KDChart::ThreeDPieAttributes attributes( d->kdRingDiagram->threeDPieAttributes() );
+        attributes.setEnabled( threeD );
+        attributes.setDepth( 15.0 );
+        d->kdRingDiagram->setThreeDPieAttributes( attributes );
+    }
+    
     requestRepaint();
 }
 
@@ -1619,6 +1674,14 @@ void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
 					      attributes );
     }
     
+#if 0  // Check this code before enabling /iw
+    if ( d->kdRingDiagram ) {
+        KDChart::PieAttributes attributes = d->kdRingDiagram->pieAttributes();
+        attributes.setExplodeFactor( (float)percent / 100.0 );
+        d->kdRingDiagram->setPieAttributes( dataSet->kdDataSetNumber(),
+                                            attributes );
+    }
+#endif
     requestRepaint();
 }
 
