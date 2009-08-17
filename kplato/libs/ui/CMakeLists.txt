@@ -24,7 +24,7 @@ set(kplatoui_LIB_SRCS
 
     kptworkpackagecontrolpanel.cpp
     kptworkpackagecontroldialog.cpp
-#     kptworkpackageview.cpp
+    kptworkpackageview.cpp
     
     kptdocumentseditor.cpp
     kptdocumentspanel.cpp
