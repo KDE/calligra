@@ -18,7 +18,7 @@
 */
 
 #include "kptworkpackagecontrolpanel.h"
-#include "kptworkpackageview.h"
+//#include "kptworkpackageview.h"
 //#include "kptworkpackagemodel.h"
 #include "kpttaskeditor.h"
 
