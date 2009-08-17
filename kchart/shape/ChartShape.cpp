@@ -488,6 +488,8 @@ ChartShape::~ChartShape()
     delete d->legend;
 
     delete d->document;
+
+    delete d;
 }
 
 
@@ -568,13 +570,15 @@ void ChartShape::showFooter()
 void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
-    kDebug(35001) << "Setting" << model << "as chart model.";
-    d->proxyModel->setSourceModel( model );
+    //kDebug(35001) << "Setting" << model << "as chart model.";
 
     if ( takeOwnershipOfModel )
+        // FIXME: Delete old internalModel if there is one.
         d->internalModel = model;
     else
         d->internalModel = 0;
+
+    d->proxyModel->setSourceModel( model );
 
     requestRepaint();
 }
