@@ -55,7 +55,7 @@ class TaskDescriptionPanel : public TaskDescriptionPanelImpl
 {
     Q_OBJECT
 public:
-    explicit TaskDescriptionPanel( Task &task, QWidget *parent=0 );
+    explicit TaskDescriptionPanel( Task &task, QWidget *parent = 0, bool readOnly = false );
 
     MacroCommand *buildCommand();
 
@@ -74,7 +74,7 @@ public:
      * @param task the task to show
      * @param parent parent widget
      */
-    explicit TaskDescriptionDialog( Task &task, QWidget *parent=0 );
+    explicit TaskDescriptionDialog( Task &task, QWidget *parent = 0, bool readOnly = false  );
 
     MacroCommand *buildCommand();
 

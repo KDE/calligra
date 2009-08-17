@@ -1,6 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
 <kpartgui name="KPlatoWork" version="0">
     <MenuBar>
+        <Menu name="edit"><text>&amp;Edit</text>
+           <Action name="package_remove_selected"/>
+        </Menu>
 <!--        <Menu name="settings"><text>&amp;Settings</text>
            <Action name="configure" group="settings_configure"/>
         </Menu>-->
@@ -8,6 +11,8 @@
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
         <Action name="edit_sendpackage"/>
+        <Action name="task_description"/>
+        <Action name="package_remove_current"/>
     </Menu>
     <Menu name="editdocument_popup">
         <Action name="view_document"/>

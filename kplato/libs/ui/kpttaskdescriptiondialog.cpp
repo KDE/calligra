@@ -29,10 +29,12 @@
 namespace KPlato
 {
 
-TaskDescriptionPanel::TaskDescriptionPanel(Task &task, QWidget *p )
+TaskDescriptionPanel::TaskDescriptionPanel(Task &task, QWidget *p, bool readOnly )
     : TaskDescriptionPanelImpl( task, p )
 {
     setStartValues( task );
+    descriptionfield->setReadOnly( readOnly );
+
     descriptionfield->setFocus();
 }
 
@@ -79,15 +81,19 @@ void TaskDescriptionPanelImpl::slotChanged()
 }
 
 //-----------------------------
-TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p )
+TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p, bool readOnly )
     : KDialog(p)
 {
     setCaption( i18n( "Task Description" ) );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    if ( readOnly ) {
+        setButtons( Close );
+    } else {
+        setButtons( Ok|Cancel );
+        setDefaultButton( Ok );
+    }
     showButtonSeparator( true );
 
-    m_descriptionTab = new TaskDescriptionPanel( task, this );
+    m_descriptionTab = new TaskDescriptionPanel( task, this, readOnly );
     setMainWidget(m_descriptionTab);
 
     enableButtonOk(false);

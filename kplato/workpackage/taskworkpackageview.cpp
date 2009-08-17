@@ -109,6 +109,18 @@ Project *TaskWorkPackageTreeView::project() const
     return model()->project();
 }
 
+QList<Node*> TaskWorkPackageTreeView::selectedNodes() const
+{
+    QList<Node*> lst;
+    foreach( const QModelIndex &idx, selectionModel()->selectedIndexes() ) {
+        Node *n = model()->nodeForIndex( idx );
+        if ( n && ! lst.contains( n ) ) {
+            lst << n;
+        }
+    }
+    return lst;
+}
+
 void TaskWorkPackageTreeView::setProject( Project *project )
 {
     model()->setProject( project );
@@ -188,9 +200,12 @@ void TaskWorkPackageView::updateReadWrite( bool rw )
 
 void TaskWorkPackageView::slotSelectionChanged( const QModelIndexList lst )
 {
-/*    if ( lst.isEmpty() || lst.count() > 1 ) {
-        return;
-    }*/
+    emit selectionChanged();
+}
+
+QList<Node*> TaskWorkPackageView::selectedNodes() const
+{
+    return m_view->selectedNodes();
 }
 
 Node *TaskWorkPackageView::currentNode() const 

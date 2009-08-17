@@ -21,6 +21,7 @@
 #define KPLATOWORK_WORKPACKAGE_H
 
 #include "kptxmlloaderobject.h"
+#include "kptcommand.h"
 
 #include <KoDocument.h>
 
@@ -97,6 +98,8 @@ public:
 
     /// Construct file path to projects store 
     QString fileName( const Part *part ) const;
+    /// Remove work package file
+    void removeFile();
 
     /// Merge data from @p project
     void merge( Part *part, const Project *project );
@@ -106,6 +109,8 @@ public:
     int queryClose( Part *part );
 
     KUrl extractFile( const Document *doc );
+
+    QString id() const;
 
 signals:
     void modified( bool );
@@ -130,6 +135,21 @@ protected:
     QList<DocumentChild*> m_childdocs;
 
     bool m_modified;
+};
+
+//-----------------------------
+class PackageRemoveCmd : public NamedCommand
+{
+public:
+    PackageRemoveCmd( Part *part, WorkPackage *value, const QString& name = QString() );
+    ~PackageRemoveCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Part *m_part;
+    WorkPackage *m_value;
+    bool m_mine;
 };
 
 

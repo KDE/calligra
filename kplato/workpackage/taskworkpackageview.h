@@ -66,6 +66,8 @@ public:
     Project *project() const;
     void setProject( Project *project );
     
+    QList<Node*> selectedNodes() const;
+
 protected slots:
     void slotActivated( const QModelIndex index );
     
@@ -87,6 +89,7 @@ public:
     virtual void updateReadWrite( bool readwrite );
     Node *currentNode() const;
     Document *currentDocument() const;
+    QList<Node*> selectedNodes() const;
     
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );
@@ -97,6 +100,7 @@ public:
     
 signals:
     void requestPopupMenu( const QString& name, const QPoint &pos );
+    void selectionChanged();
 
 public slots:
     void slotHeaderContextMenuRequested( const QPoint& );

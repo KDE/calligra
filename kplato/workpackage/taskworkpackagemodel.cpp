@@ -45,6 +45,7 @@ TaskWorkPackageModel::TaskWorkPackageModel( Part *part, QObject *parent )
     m_part( part )
 {
     connect( part, SIGNAL( workPackageAdded( WorkPackage*, int ) ), this, SLOT( addWorkPackage( WorkPackage*, int ) ) );
+    connect( part, SIGNAL( workPackageRemoved( WorkPackage*, int ) ), this, SLOT( removeWorkPackage( WorkPackage*, int ) ) );
 }
 
 Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
@@ -139,6 +140,22 @@ void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
     }
 }
 
+void TaskWorkPackageModel::removeWorkPackage( WorkPackage *package, int row )
+{
+    beginRemoveRows( QModelIndex(), row, row );
+    Project *project = package->project();
+    kDebug()<<package->project();
+    if ( project ) {
+        disconnect( project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+
+        disconnect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+    }
+    endRemoveRows();
+}
+
 QVariant TaskWorkPackageModel::name( const Resource *r, int role ) const
 {
     switch ( role ) {
@@ -167,13 +184,15 @@ QVariant TaskWorkPackageModel::email( const Resource *r, int role ) const
     return QVariant();
 }
 
-QVariant TaskWorkPackageModel::sendStatus( const Resource *r, int role ) const
+QVariant TaskWorkPackageModel::projectName( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
-//            return WorkPackage::sendStatusToString( workPackage().sendStatus( r ), true );
+        case Qt::ToolTipRole: {
+            const Node *proj = node->projectNode();
+            return proj == 0 ? QVariant() : proj->name();
+        }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -181,90 +200,21 @@ QVariant TaskWorkPackageModel::sendStatus( const Resource *r, int role ) const
     return QVariant();
 }
 
-QVariant TaskWorkPackageModel::sendTime( const Resource *r, int role ) const
+QVariant TaskWorkPackageModel::projectManager( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
-//            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).sendTime.dateTime();
+        case Qt::ToolTipRole: {
+            const Node *proj = node->projectNode();
+            return proj == 0 ? QVariant() : proj->leader();
+        }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
     }
     return QVariant();
 }
-
-QVariant TaskWorkPackageModel::responseType( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-//            return WorkPackage::responseTypeToString( workPackage().responseType( r ), true );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskWorkPackageModel::requiredTime( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-//            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).requiredTime.dateTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskWorkPackageModel::responseStatus( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-//            return WorkPackage::responseStatusToString( workPackage().responseStatus( r ), true );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskWorkPackageModel::responseTime( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-//             return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).responseTime.dateTime();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskWorkPackageModel::lastAction( const Resource *r, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-//             return WorkPackage::actionTypeToString( workPackage().actionType( r ) );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 
 int TaskWorkPackageModel::rowCount( const QModelIndex &parent ) const
 {
@@ -326,19 +276,9 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
         case NodeFinished: return m_nodemodel.data( n, NodeModel::NodeFinished, role );
         case NodeStatusNote: return m_nodemodel.data( n, NodeModel::NodeStatusNote, role );
 
-        case NodeWBSCode: return m_nodemodel.data( n, NodeModel::NodeWBSCode, role );
-        case NodeLevel: return m_nodemodel.data( n, NodeModel::NodeLevel, role );
+        case ProjectName: return projectName( n, role );
+        case ProjectManager: return projectManager( n, role );
 
-//         ResourceName,
-//         ResourceEmail,
-
-/*        PackageSendReason,
-        PackageSendTime,
-        PackageResponseType,*/
-        case PackageResponseDue: return "Response due";
-//         PackageResponseReason,
-//         PackageResponseTime,
-//         PackageLastAction
         default:
             //kDebug()<<"Invalid column number: "<<index.column()<<endl;;
             break;
@@ -545,19 +485,9 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
         case NodeFinished: return "Finished";
         case NodeStatusNote: return "Note";
 
-        case NodeWBSCode: return "WBS Code";
-        case NodeLevel: return "Level";
+        case ProjectName: return i18n( "Project Name" );
+        case ProjectManager: return i18n( "Project Manager" );
 
-//         ResourceName,
-//         ResourceEmail,
-
-/*        PackageSendReason,
-        PackageSendTime,
-        PackageResponseType,*/
-        case PackageResponseDue: return "Response Due";
-//         PackageResponseReason,
-//         PackageResponseTime,
-//         PackageLastAction
         default:
             //kDebug()<<"Invalid column number: "<<index.column()<<endl;;
             break;

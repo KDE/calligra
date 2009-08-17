@@ -381,6 +381,55 @@ bool Part::setWorkPackage( Project *project )
     return true;
 }
 
+void Part::removeWorkPackage( Node *node, MacroCommand *m )
+{
+    //qDebug()<<"Part::removeWorkPackage:"<<node->name();
+    WorkPackage *wp = findWorkPackage( node );
+    if ( wp == 0 ) {
+        KMessageBox::error( 0, i18n("Cannot find package") );
+        return;
+    }
+    PackageRemoveCmd *cmd = new PackageRemoveCmd( this, wp, i18n( "Remove work package" ) );
+    if ( m ) {
+        m->addCommand( cmd );
+    } else {
+        addCommand( cmd );
+    }
+}
+
+void Part::removeWorkPackages( const QList<Node*> &nodes )
+{
+    //qDebug()<<"Part::removeWorkPackage:"<<node->name();
+    MacroCommand *m = new MacroCommand( i18np( "Remove work package", "Remove work packages", nodes.count() ) );
+    foreach ( Node *n, nodes ) {
+        removeWorkPackage( n, m );
+    }
+    if ( m->isEmpty() ) {
+        delete m;
+    } else {
+        addCommand( m );
+    }
+}
+
+void Part::removeWorkPackage( WorkPackage *wp )
+{
+    //qDebug()<<"Part::removeWorkPackage:";
+    int row = indexOf( wp );
+    if ( row >= 0 ) {
+        m_packageMap.remove( m_packageMap.keys().at( row ) );
+        emit workPackageRemoved( wp, row );
+    }
+}
+
+void Part::addWorkPackage( WorkPackage *wp )
+{
+    //qDebug()<<"Part::addWorkPackage:";
+    QString id = wp->id();
+    Q_ASSERT( ! m_packageMap.contains( id ) );
+    m_packageMap[ id ] = wp;
+    emit workPackageAdded( wp, indexOf( wp ) );
+}
+
 bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
@@ -751,6 +800,7 @@ bool Part::saveAs( const KUrl &url )
 
 bool Part::saveWorkPackages( bool silent )
 {
+    qDebug()<<"saveWorkPackages:"<<silent;
     foreach ( WorkPackage *wp, m_packageMap ) {
         wp->saveToProjects( this );
     }
@@ -771,6 +821,7 @@ QDomDocument Part::saveXML()
 
 bool Part::queryClose()
 {
+    qDebug()<<"queryClose:";
     m_currentWorkPackage = 0;
     QList<WorkPackage*> modifiedList;
     foreach ( WorkPackage *wp, m_packageMap ) {

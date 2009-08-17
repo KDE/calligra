@@ -246,6 +246,16 @@ QString WorkPackage::fileName( const Part *part ) const
     return path + wpName;
 }
 
+void WorkPackage::removeFile()
+{
+    QFile file( m_filePath );
+    if ( ! file.exists() ) {
+        kWarning()<<"No project in this package";
+        return;
+    }
+    file.remove();
+}
+
 void WorkPackage::saveToProjects( Part *part )
 {
     kDebug();
@@ -441,6 +451,42 @@ KUrl WorkPackage::extractFile( const Document *doc )
     delete store;
     return url;
 }
+
+QString WorkPackage::id() const
+{
+    QString id;
+    if ( node() ) {
+        id = m_project->id() + node()->id();
+    }
+    return id;
+}
+
+//--------------------------------
+PackageRemoveCmd::PackageRemoveCmd( Part *part, WorkPackage *value, const QString& name )
+    : NamedCommand( name ),
+    m_part( part ),
+    m_value( value ),
+    m_mine( false )
+{
+}
+PackageRemoveCmd::~PackageRemoveCmd()
+{
+    if ( m_mine ) {
+        m_value->removeFile();
+        delete m_value;
+    }
+}
+void PackageRemoveCmd::execute()
+{
+    m_part->removeWorkPackage( m_value );
+    m_mine = true;
+}
+void PackageRemoveCmd::unexecute()
+{
+    m_part->addWorkPackage( m_value );
+    m_mine = false;
+}
+
 
 }  //KPlatoWork namespace
 

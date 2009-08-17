@@ -50,6 +50,7 @@ namespace KPlato
 {
     class Project;
     class Document;
+    class MacroCommand;
 }
 
 using namespace KPlato;
@@ -182,6 +183,10 @@ public:
         return m_packageMap.value( node->projectNode()->id() + node->id() );
     }
     int indexOf( WorkPackage *package ) const { return m_packageMap.values().indexOf( package ); }
+    void addWorkPackage( WorkPackage *wp );
+    void removeWorkPackage( WorkPackage *wp );
+    void removeWorkPackage( Node *node, MacroCommand *m = 0 );
+    void removeWorkPackages( const QList<Node*> &nodes );
 
     /// Find the work package that handles document @p doc
     WorkPackage *findWorkPackage( const Document *doc ) const;
@@ -218,6 +223,7 @@ public slots:
 signals:
     void changed();
     void workPackageAdded( WorkPackage *package, int index );
+    void workPackageRemoved( WorkPackage *wp, int index );
     void captionChanged( const QString&, bool );
 
 protected:
@@ -234,6 +240,7 @@ private:
     //Config m_config;
     
     QMap<QString, WorkPackage*> m_packageMap;
+    QList<WorkPackage*> m_deletedPackages;
     WorkPackage *m_currentWorkPackage;
 
     bool m_modified;

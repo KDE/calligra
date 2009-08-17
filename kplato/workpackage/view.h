@@ -138,6 +138,10 @@ protected slots:
     void slotViewDocument();
     
     void slotSendPackage();
+    void slotTaskDescription();
+    void slotRemoveCurrentPackage();
+    void slotRemoveSelectedPackages();
+    void slotSelectionChanged();
 
 protected:
     virtual void updateReadWrite( bool readwrite );
@@ -162,6 +166,7 @@ private:
     QAction *actionCut;
     QAction *actionCopy;
     QAction *actionPaste;
+    KAction *actionRemoveSelectedPackages;
 
     // ------ Settings
     KAction *actionConfigure;
@@ -171,7 +176,8 @@ private:
 
     KAction *actionSendPackage;
     KAction *actionTaskProgress;
-
+    KAction *actionViewDescription;
+    KAction *actionRemoveCurrentPackage;
 };
 
 } //KplatoWork namespace

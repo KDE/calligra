@@ -24,6 +24,7 @@
 #include "workpackage.h"
 
 #include "kpttaskeditor.h"
+#include "kpttaskdescriptiondialog.h"
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
@@ -117,7 +118,16 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     actionCopy = collection->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
     actionPaste = collection->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
-    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
+    actionRemoveSelectedPackages  = new KAction(KIcon( "edit-delete" ), i18n("Remove Packages"), this);
+    collection->addAction("package_remove_selected", actionRemoveSelectedPackages );
+    connect( actionRemoveSelectedPackages, SIGNAL( triggered( bool ) ), SLOT( slotRemoveSelectedPackages() ) );
+
+    actionRemoveCurrentPackage  = new KAction(KIcon( "edit-delete" ), i18n("Remove Package"), this);
+    collection->addAction("package_remove_current", actionRemoveCurrentPackage );
+    connect( actionRemoveCurrentPackage, SIGNAL( triggered( bool ) ), SLOT( slotRemoveCurrentPackage() ) );
+
+
+    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
     collection->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
@@ -126,29 +136,36 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
-    actionEditDocument  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
+    actionEditDocument  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
 
-    actionViewDocument  = new KAction(KIcon( "document-properties" ), i18nc( "@verb", "View..."), this);
+    actionViewDocument  = new KAction(KIcon( "document-edit" ), i18nc( "@verb", "View..."), this);
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
 
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
 
-    actionSendPackage  = new KAction(KIcon( "file_send_file" ), i18n("Send Package..."), this);
+    actionSendPackage  = new KAction(KIcon( "mail-send" ), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
 
-    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
+    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
     collection->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+
+    actionViewDescription  = new KAction(/*KIcon( "document_view" ),*/ i18n("View Description..."), this);
+    collection->addAction("task_description", actionViewDescription );
+    connect( actionViewDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
+
 
     updateReadWrite( m_readWrite );
     //kDebug()<<" end";
 
 //    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
+
+    slotSelectionChanged();
 }
 
 View::~View()
@@ -169,82 +186,10 @@ TaskWorkPackageView *View::createTaskWorkPackageView()
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
+    connect( v, SIGNAL( selectionChanged() ), SLOT( slotSelectionChanged() ) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
-
-// ViewBase *View::createTaskView()
-// {
-//     TaskView *v = new TaskView( part(), this );
-//     layout()->addWidget( v );
-// //    m_tab->addWidget( v );
-// 
-// //     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, part(), "task_view", index );
-// //     i->setToolTip( 0, tip );
-// 
-//     v->draw( getProject() );
-//     v->setScheduleManager( currentScheduleManager() );
-// 
-//     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-// 
-//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-// 
-//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-//     v->updateReadWrite( m_readWrite );
-//     return v;
-// }
-
-// ViewBase *View::createTaskInfoView()
-// {
-//     kDebug();
-//     WorkPackageInfoView *v = new WorkPackageInfoView( part(), m_tab );
-//     m_tab->addTab( v, i18n( "Information" ) );
-// 
-//     Project &p = getProject();
-//     v->setProject( &p );
-//     Task *t = 0;
-//     if ( p.numChildren() > 0 ) { // should be 1
-//         t = dynamic_cast<Task*>( p.childNode( 0 ) );
-//     }
-//     v->setTask( t );
-// 
-//     kDebug()<<p.allScheduleManagers();
-//     v->setScheduleManager( p.allScheduleManagers().value( 0 ) );
-// 
-//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-// 
-//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-// 
-//     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-// 
-//     v->updateReadWrite( m_readWrite );
-//     return v;
-// }
-
-// ViewBase *View::createDocumentsView()
-// {
-//     kDebug();
-//     DocumentsEditor *v = new DocumentsEditor( part(), m_tab );
-//     m_tab->addTab( v, i18n( "Documents" ) );
-// 
-//     Project &p = getProject();
-//     if ( p.numChildren() > 0 ) { // should be 1
-//         Node *n = p.childNode( 0 );
-//         kDebug()<<"Node: "<<n->name();
-//         v->draw( n->documents() );
-//     }
-//     connect( v, SIGNAL( editDocument( Document* ) ), SLOT( slotEditDocument( Document* ) ) );
-//     connect( v, SIGNAL( viewDocument( Document* ) ), SLOT( slotViewDocument( Document* ) ) );
-// 
-//     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-// 
-//     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-// 
-//     connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
-// 
-//     v->updateReadWrite( m_readWrite );
-//     return v;
-// }
 
 void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
@@ -253,6 +198,11 @@ void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 
 void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
+}
+
+void View::slotSelectionChanged()
+{
+    actionRemoveSelectedPackages->setEnabled( ! currentView()->selectedNodes().isEmpty() );
 }
 
 void View::slotEditCut()
@@ -395,6 +345,17 @@ void View::slotSendPackage()
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
 }
 
+void View::slotTaskDescription()
+{
+    Task *node = qobject_cast<Task*>( currentNode() );
+    if ( node == 0 ) {
+        return;
+    }
+    TaskDescriptionDialog *dlg = new TaskDescriptionDialog( *node, this, true );
+    dlg->exec();
+    delete dlg;
+}
+
 TaskWorkPackageView *View::currentView() const
 {
     QList<TaskWorkPackageView *> lst = findChildren<TaskWorkPackageView*>();
@@ -439,6 +400,27 @@ void View::slotTaskProgress()
         }
     }
 }
+
+void View::slotRemoveSelectedPackages()
+{
+    qDebug()<<"View::slotRemoveSelectedPackages:";
+    QList<Node*> lst = currentView()->selectedNodes();
+    if ( lst.isEmpty() ) {
+        return;
+    }
+    m_part->removeWorkPackages( lst );
+}
+
+void View::slotRemoveCurrentPackage()
+{
+    qDebug()<<"View::slotRemoveCurrentPackage:";
+    Node *n = currentNode();
+    if ( n == 0 ) {
+        return;
+    }
+    m_part->removeWorkPackage( n );
+}
+
 
 }  //KPlatoWork namespace
 

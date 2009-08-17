@@ -89,20 +89,8 @@ public:
         NodeFinished,
         NodeStatusNote,
 
-        NodeWBSCode,
-        NodeLevel,
-
-//         ResourceName,
-//         ResourceEmail,
-
-/*        PackageSendReason,
-        PackageSendTime,
-        PackageResponseType,*/
-        PackageResponseDue
-//         PackageResponseReason,
-//         PackageResponseTime,
-//         PackageLastAction
-
+        ProjectName,
+        ProjectManager
     };
     const QMetaEnum columnMap() const
     {
@@ -137,6 +125,7 @@ public:
 
 public slots:
     void addWorkPackage( WorkPackage *package, int row );
+    void removeWorkPackage( WorkPackage *package, int row );
 
 protected slots:
     void slotNodeChanged( Node* );
@@ -158,6 +147,8 @@ protected:
     QVariant responseStatus( const Resource *r, int role ) const;
     QVariant responseTime( const Resource *r, int role ) const;
     QVariant lastAction( const Resource *r, int role ) const;
+    QVariant projectName( const Node *n, int role ) const;
+    QVariant projectManager( const Node *n, int role ) const;
     
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setRemainingEffort( Node *node, const QVariant &value, int role );
