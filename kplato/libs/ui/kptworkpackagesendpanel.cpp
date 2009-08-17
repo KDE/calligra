@@ -17,9 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptworkpackagecontrolpanel.h"
-//#include "kptworkpackageview.h"
-//#include "kptworkpackagemodel.h"
+#include "kptworkpackagesendpanel.h"
 #include "kpttaskeditor.h"
 
 #include "kptproject.h"
@@ -36,49 +34,6 @@ namespace KPlato
 {
 
 
-/*WorkPackageControlPanel::WorkPackageControlPanel( Project &project, Task &task, QWidget *p )
-    : QWidget(p),
-    m_project( project ),
-    m_task( task )
-{
-    setupUi( this );
-    
-    responsible->setText( m_task.leader() );
-    task.workPackage().setScheduleManager( 0 );
-    
-    resourceTable->itemModel()->setProject( &project );
-    resourceTable->itemModel()->setTask( &task );
-    
-    
-    connect( transferWP, SIGNAL( clicked(bool) ), SLOT( slotTransferWPClicked() ) );
-    connect( loadWP, SIGNAL( clicked(bool) ), SLOT( slotLoadWPClicked() ) );
-    connect( viewWP, SIGNAL( clicked(bool) ), SLOT( slotViewWPClicked() ) );
-    connect( mailTo, SIGNAL( clicked(bool) ), SLOT( slotMailToClicked() ) );
-
-}
-
-void WorkPackageControlPanel::slotSelectionChanged()
-{
-}
-
-void WorkPackageControlPanel::slotTransferWPClicked()
-{
-    kDebug();
-}
-
-void WorkPackageControlPanel::slotLoadWPClicked()
-{
-}
-
-void WorkPackageControlPanel::slotViewWPClicked()
-{
-}
-
-void WorkPackageControlPanel::slotMailToClicked()
-{
-}
-*/
-//-----------------------------------
 WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *p )
     : QWidget(p)
 {
@@ -115,4 +70,4 @@ void WorkPackageSendPanel::slotSendClicked()
 
 }  //KPlato namespace
 
-#include "kptworkpackagecontrolpanel.moc"
+#include "kptworkpackagesendpanel.moc"

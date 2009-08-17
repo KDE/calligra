@@ -75,7 +75,6 @@
 
 #include "kptviewbase.h"
 #include "kptdocumentseditor.h"
-#include "kptworkpackageview.h"
 
 #include "kptnode.h"
 #include "kptproject.h"

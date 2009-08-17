@@ -24,8 +24,8 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptitemviewsettup.h"
-#include "kptworkpackagecontroldialog.h"
-#include "kptworkpackagecontrolpanel.h"
+#include "kptworkpackagesenddialog.h"
+#include "kptworkpackagesendpanel.h"
 
 #include <KoDocument.h>
 

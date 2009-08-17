@@ -46,9 +46,6 @@ set(kplatoprivate_LIB_SRCS
     kpttaskdefaultpanel.cpp
     kptworkpackageconfigpanel.cpp
 
-#     kptwpcontroldialog.cpp
-#     kptwpcontrolpanel.cpp
-    
     kptcontext.cpp
 
     kptfactory.cpp

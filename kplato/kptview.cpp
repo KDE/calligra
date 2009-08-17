@@ -99,7 +99,6 @@
 #include "kptresource.h"
 #include "kptstandardworktimedialog.h"
 #include "kptwbsdefinitiondialog.h"
-//#include "kptwpcontroldialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
@@ -242,10 +241,6 @@ View::View( Part* part, QWidget* parent )
     actionMoveTaskDown = new KAction(KIcon( "edit-down" ), i18n("Move Task Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
-
-    actionTaskWorkpackage  = new KAction(KIcon( "document-properties" ), i18n("Work Package Control..."), this);
-    actionCollection()->addAction("task_workpackagecontrol", actionTaskWorkpackage );
-    connect( actionTaskWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotTaskWorkpackage() ) );
 
     actionMailWorkpackage  = new KAction(KIcon( "send-mail" ), i18n("Send Work Package..."), this);
     actionCollection()->addAction("task_mailworkpackage", actionMailWorkpackage );
@@ -1809,20 +1804,6 @@ void View::slotDeleteTask()
 {
     //kDebug();
     return slotDeleteTask( currentTask() );
-}
-
-void View::slotTaskWorkpackage()
-{
-    //kDebug();
-/*    Node *node = currentTask();
-    if ( node == 0 || node->type() != Node::Type_Task ) {
-        return;
-    }
-    Task *task = static_cast<Task*>( node );
-    WPControlDialog *dlg = new WPControlDialog( this, *task, this );
-    dlg->exec();
-    delete dlg;*/
-//    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, activeScheduleId() );
 }
 
 void View::slotIndentTask()

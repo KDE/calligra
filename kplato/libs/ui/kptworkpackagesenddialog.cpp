@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptworkpackagecontroldialog.h"
-#include "kptworkpackagecontrolpanel.h"
+#include "kptworkpackagesenddialog.h"
+#include "kptworkpackagesendpanel.h"
 #include "kptdocumentspanel.h"
 #include "kpttask.h"
 
@@ -28,23 +28,6 @@
 
 namespace KPlato
 {
-
-// WorkPackageControlDialog::WorkPackageControlDialog( Project &project, Task &task, QWidget *p)
-//     : KPageDialog(p)
-// {
-//     setFaceType( Tabbed );
-//     setCaption( i18n("Work Package Control") );
-//     setButtons( Close );
-//     setDefaultButton( Close );
-//     showButtonSeparator( true );
-// 
-//     m_wp = new WorkPackageControlPanel( project, task, this);
-//     addPage( m_wp, i18n( "General" ) );
-// 
-//     m_docs = new DocumentsPanel( task, this );
-//     addPage( m_docs, i18n( "Documents" ) );
-// 
-// }
 
 WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *p)
     : KDialog(p)
@@ -61,4 +44,4 @@ WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks, QWidget
 
 }  //KPlato namespace
 
-#include "kptworkpackagecontroldialog.moc"
+#include "kptworkpackagesenddialog.moc"

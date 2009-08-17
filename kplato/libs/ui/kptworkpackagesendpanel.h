@@ -17,46 +17,42 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTWORKPACKAGECONTROLDIALOG_H
-#define KPTWORKPACKAGECONTROLDIALOG_H
+#ifndef KPTWORKPACKAGESENDPANEL_H
+#define KPTWORKPACKAGESENDPANEL_H
 
 #include "kplatoui_export.h"
 
-#include <kpagedialog.h>
+#include "ui_kptworkpackagesendpanel.h"
 
+#include <QWidget>
+#include <QMap>
+
+class QPushButton;
 
 namespace KPlato
 {
 
-class DocumentsPanel;
-class WorkPackageSendPanel;
-class Project;
-class Task;
+class Resource;
 class Node;
+class TaskWorkPackageView;
 
-// class KPLATOUI_EXPORT WorkPackageControlDialog : public KPageDialog
-// {
-//     Q_OBJECT
-// public:
-//     explicit WorkPackageControlDialog( Project &project, Task &task, QWidget *parent=0);
-// 
-// private:
-//     WorkPackageControlPanel *m_wp;
-//     DocumentsPanel *m_docs;
-// };
-
-class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
+class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPackageSendPanel
 {
     Q_OBJECT
 public:
-    explicit WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *parent=0);
+    explicit WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *parent=0 );
 
-    WorkPackageSendPanel *panel() const { return m_wp; }
+signals:
+    void sendWorkpackages( QList<Node*>&, Resource* );
 
-private:
-    WorkPackageSendPanel *m_wp;
+protected slots:
+    void slotSendClicked();
+
+protected:
+    QMap<Resource*, QList<Node*> > m_resMap;
+    QMap<QPushButton*, Resource*> m_pbMap;
 };
 
 } //KPlato namespace
 
-#endif // KPTWORKPACKAGECONTROLDIALOG_H
+#endif // KPTWORKPACKAGESENDPANEL_H

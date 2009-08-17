@@ -198,7 +198,6 @@ protected slots:
     void slotUnindentTask();
     void slotMoveTaskUp();
     void slotMoveTaskDown();
-    void slotTaskWorkpackage();
 
     void slotConnectNode();
 
@@ -311,7 +310,6 @@ private:
     KAction *actionTaskProgress;
     KAction *actionTaskDescription;
     KAction *actionDeleteTask;
-    KAction *actionTaskWorkpackage;
     KAction *actionIndentTask;
     KAction *actionUnindentTask;
     KAction *actionMoveTaskUp;
