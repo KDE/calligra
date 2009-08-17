@@ -40,7 +40,7 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
     str.clear();
     str.append("pen.png");
     QPixmap pix(kicon.loadIcon(str, kicon.Small));
-    double factor = 1.2;
+    const qreal factor = 1.2;
     pix = pix.scaledToHeight(pix.height()*factor);
     pix = pix.scaledToWidth(pix.width()*factor);
     QCursor cur(pix);
