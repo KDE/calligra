@@ -59,7 +59,7 @@ public:
         WPNodeStarted,
         WPNodeActualFinish,
         WPNodeFinished,
-        WPNodeStatusNote,
+        WPNodeStatusNote
     };
     const QMetaEnum columnMap() const;
     
