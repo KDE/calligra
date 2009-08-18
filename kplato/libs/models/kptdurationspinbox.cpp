@@ -28,6 +28,7 @@
 #include <qvalidator.h>
 
 #include <kdebug.h>
+#include <KDoubleValidator>
 
 #include <math.h>
 #include <limits.h>
@@ -190,7 +191,7 @@ double DurationSpinBox::valueFromText( const QString & text ) const
 QString DurationSpinBox::textFromValue ( double value ) const
 {
     //kDebug()<<1<<value;
-    QString s = QDoubleSpinBox::textFromValue( value );
+    QString s = KGlobal::locale()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
     s += Duration::unitToString( m_unit, true );
     //kDebug()<<2<<value<<s;
     return s;
@@ -199,16 +200,17 @@ QString DurationSpinBox::textFromValue ( double value ) const
 QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
 {
     //kDebug()<<input;
+    KDoubleValidator validator( minimum(), maximum(), decimals(), 0 );
     if ( input.isEmpty() ) {
-        return QDoubleSpinBox::validate ( input, pos );
+        return validator.validate ( input, pos );
     }
     QString s = extractUnit( input );
     if ( s.isEmpty() ) {
-        return QDoubleSpinBox::validate ( input, pos );
+        return validator.validate ( input, pos );
     }
     if ( Duration::unitList( true ).contains( s ) ) {
         s = extractValue( input );
-        return QDoubleSpinBox::validate( s, pos );
+        return validator.validate ( input, pos );
     }
     return QValidator::Invalid;
 }
