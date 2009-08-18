@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009      Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,15 +70,20 @@ public:
     Private( QWidget *parent );
     ~Private();
 
-    // Basic properties of the chart.
+    // The owner of this struct.
     ChartShape            *shape;
-    ChartType           type;
-    ChartSubtype        subtype;
+
+    // Basic properties of the chart.
+    // FIXME: why are they needed here?
+    ChartType              type;
+    ChartSubtype           subtype;
     bool                   threeDMode;
+
+    // Layouts and widgets.
     QVBoxLayout           *leftLayout;
     QVBoxLayout           *rightLayout;
     Ui::ChartConfigWidget  ui;
-    bool sourceIsSpreadSheet;
+    bool                   sourceIsSpreadSheet;
     
     QMenu *dataSetBarChartMenu;
     QMenu *dataSetLineChartMenu;
@@ -102,7 +108,12 @@ public:
     QAction  *radarChartAction;
     
     QAction  *scatterChartAction;
-    
+    QAction  *bubbleChartAction;
+
+    QAction  *stockChartAction;
+    QAction  *surfaceChartAction;
+    QAction  *ganttChartAction;
+
     // chart type selection actions
     QAction  *dataSetNormalBarChartAction;
     QAction  *dataSetStackedBarChartAction;
@@ -116,10 +127,14 @@ public:
     QAction  *dataSetStackedAreaChartAction;
     QAction  *dataSetPercentAreaChartAction;
     
-    QAction *dataSetCircleChartAction;
-    QAction *dataSetRingChartAction;
-    QAction *dataSetScatterChartAction;
-    QAction *dataSetRadarChartAction;
+    QAction  *dataSetCircleChartAction;
+    QAction  *dataSetRingChartAction;
+    QAction  *dataSetScatterChartAction;
+    QAction  *dataSetRadarChartAction;
+    QAction  *dataSetStockChartAction;
+    QAction  *dataSetBubbleChartAction;
+    QAction  *dataSetSurfaceChartAction;
+    QAction  *dataSetGanttChartAction;
 
     // Table Editor
     TableEditorDialog    *tableEditorDialog;
@@ -178,6 +193,10 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     dataSetRingChartAction = 0;
     dataSetScatterChartAction = 0;
     dataSetRadarChartAction = 0;
+    dataSetStockChartAction = 0;
+    dataSetBubbleChartAction = 0;
+    dataSetSurfaceChartAction = 0;
+    dataSetGanttChartAction = 0;
 }
 
 ChartConfigWidget::Private::~Private()
@@ -191,38 +210,50 @@ ChartConfigWidget::ChartConfigWidget()
     setObjectName("Chart Type");
     d->ui.setupUi( this );
     
-    // Chart type button
+    // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu( this );
     chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
     
+    // Bar charts
     QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar_beside" ), i18n( "Bar Chart" ) );
     d->normalBarChartAction  = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
     d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
     d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
     
+    // Line charts
     QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line_normal" ), i18n( "Line Chart" ) );
     d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
     d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
     d->percentLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
-    
+
+    // Area charts
     QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "chart_area_normal" ), i18n( "Area Chart" ) );
     d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
     d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
     
     chartTypeMenu->addSeparator();
-    
+
+    // Circular charts: pie and ring
     d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
     d->ringChartAction = chartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
     
     chartTypeMenu->addSeparator();
-    
+
+    // X/Y charts: scatter and bubble
     d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
-    
+    d->bubbleChartAction = chartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
+
     chartTypeMenu->addSeparator();
 
     d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
 
+    chartTypeMenu->addSeparator();
+
+    d->stockChartAction = chartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
+    d->surfaceChartAction = chartTypeMenu->addAction( KIcon( "chart_surface_normal" ), i18n("Surface Chart") );
+    d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Bubble Chart") );
+    
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
     connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
