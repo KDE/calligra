@@ -515,7 +515,7 @@ void Axis::Private::createCircleDiagram()
 {
     if ( kdCircleDiagramModel == 0 ) {
         kdCircleDiagramModel = new KDChartModel;
-        kdCircleDiagramModel->setDataDirection( Qt::Vertical );
+        kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
         registerKDChartModel( kdCircleDiagramModel );
     }
 
@@ -535,7 +535,7 @@ void Axis::Private::createRingDiagram()
 {
     if ( kdRingDiagramModel == 0 ) {
         kdRingDiagramModel = new KDChartModel;
-        kdRingDiagramModel->setDataDirection( Qt::Vertical );
+        kdRingDiagramModel->setDataDirection( Qt::Horizontal );
         registerKDChartModel( kdRingDiagramModel );
     }
 
