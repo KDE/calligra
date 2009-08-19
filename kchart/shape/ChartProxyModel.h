@@ -21,17 +21,20 @@
 #ifndef KCHART_PROXYMODEL_H
 #define KCHART_PROXYMODEL_H
 
-// Local
+
+// KChart
 #include "ChartShape.h"
 #include "CellRegion.h"
+
 
 namespace KoChart
 {
     class ChartModel;
 }
 
+
 // FIXME: This needs not be included here, since it's not used in this file.
-#include <KoChartModel.h>
+//#include <KoChartModel.h>
 
 // Qt
 #include <QAbstractProxyModel>

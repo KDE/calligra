@@ -76,7 +76,11 @@ ChartProxyModel::Private::Private()
     firstColumnIsLabel = false;
     dataDimensions     = 1;
 
-    dataDirection      = Qt::Vertical; // Apparently, the default is columns.
+    dataDirection      = Qt::Vertical; // Apparently the default is columns.
+}
+
+ChartProxyModel::Private::~Private()
+{
 }
 
 
@@ -92,6 +96,7 @@ ChartProxyModel::ChartProxyModel()
 
 ChartProxyModel::~ChartProxyModel()
 {
+    delete d;
 }
 
 
@@ -100,7 +105,9 @@ void ChartProxyModel::rebuildDataMap()
     QVector<QRect> dataRegions;
 
     if ( d->selection.isEmpty() ) {
-        const QRect dataBoundingRect( QPoint( 1, 1 ), QSize( sourceModel()->columnCount(), sourceModel()->rowCount() ) );
+        const QRect dataBoundingRect( QPoint( 1, 1 ),
+                                      QSize( sourceModel()->columnCount(),
+                                             sourceModel()->rowCount() ) );
         dataRegions.append( dataBoundingRect );
     }
     else
@@ -195,7 +202,7 @@ void ChartProxyModel::rebuildDataMap()
         }
     }
     else {
-        // d->dataDirection == Qt::Vertical here
+        // Data direction == Qt::Vertical here.
 
         QMap<int, QVector<QRect> >  columns;
         QMap<int, QVector<QRect> >  sortedColumns;
@@ -204,8 +211,7 @@ void ChartProxyModel::rebuildDataMap()
         // that are sorted from top to bottom
         foreach ( const QRect &rect, dataRegions ) {
             int y = rect.topLeft().y();
-            for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
-            {
+            for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ ) {
                 QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
                 if ( !columns.contains( x ) )
                     columns.insert( x, QVector<QRect>() );
@@ -336,7 +342,8 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     reset();
 }
 
-void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
+void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel, 
+                                      const QVector<QRect> &selection )
 {
     // FIXME: What if we already have a source model?  Don't we have
     //        to disconnect that one before connecting the new one?
@@ -391,8 +398,9 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 }
 
 // This loads the properties of the datasets (chart:series).
-// FIXME: This is a strange place to store them (the proxy model)
-bool ChartProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
+// FIXME: This is a strange place to load them (the proxy model)
+bool ChartProxyModel::loadOdf( const KoXmlElement &element,
+                               KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
@@ -591,8 +599,8 @@ QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
 
 
 QModelIndex ChartProxyModel::index( int row,
-                               int column,
-                               const QModelIndex &parent /* = QModelIndex() */ ) const
+                                    int column,
+                                    const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     Q_UNUSED( parent );
 
@@ -766,18 +774,6 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     if ( b == d->firstRowIsLabel )
         return;
     
-    /*if ( b ) {
-        if ( d->dataDirection == Qt::Horizontal )
-            beginRemoveColumns( QModelIndex(), 0, 0 );
-        else
-            beginRemoveRows( QModelIndex(), 0, 0 );
-    } else {
-        if ( d->dataDirection == Qt::Horizontal )
-            beginInsertColumns( QModelIndex(), 0, 0 );
-        else
-            beginInsertRows( QModelIndex(), 0, 0 );
-    }*/
-    
     d->firstRowIsLabel = b;
     
     if ( !sourceModel() )
@@ -785,38 +781,13 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     
     rebuildDataMap();
     reset();
-    
-    /*if ( b ) {
-        if ( d->dataDirection == Qt::Horizontal )
-            endRemoveColumns();
-        else
-            endRemoveRows();
-    } else {
-        if ( d->dataDirection == Qt::Horizontal )
-            endInsertColumns();
-        else
-            endInsertRows();
-    }*/
 }
  
 
 void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
-    // FIXME: Why is this disabled when it's not for setFirstRowIsLabel? /iw
-    /*if ( b == d->firstColumnIsLabel )
+    if ( b == d->firstColumnIsLabel )
         return;
-    
-    if ( b ) {
-        if ( d->dataDirection == Qt::Vertical )
-            beginRemoveColumns( QModelIndex(), 0, 0 );
-        else
-            beginRemoveRows( QModelIndex(), 0, 0 );
-    } else {
-        if ( d->dataDirection == Qt::Vertical )
-            beginInsertColumns( QModelIndex(), 0, 0 );
-        else
-            beginInsertRows( QModelIndex(), 0, 0 );
-    }*/
     
     d->firstColumnIsLabel = b;
 
@@ -825,18 +796,6 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
     
     rebuildDataMap();
     reset();
-    
-    /*if ( b ) {
-        if ( d->dataDirection == Qt::Vertical )
-            endRemoveColumns();
-        else
-            endRemoveRows();
-    } else {
-        if ( d->dataDirection == Qt::Vertical )
-            endInsertColumns();
-        else
-            endInsertRows();
-    }*/
 }
 
 Qt::Orientation ChartProxyModel::dataDirection()
@@ -846,16 +805,23 @@ Qt::Orientation ChartProxyModel::dataDirection()
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
-    // FIXME: Shouldn't we test if the orientation actually changes? /iw
+    if ( d->dataDirection == orientation )
+        return;
+
     d->dataDirection = orientation;
 
+    if ( !sourceModel() )
+        return;
+    
     rebuildDataMap();
     reset();
 }
 
 void ChartProxyModel::setDataDimensions( int dimensions )
 {
-    // FIXME: Shouldn't we test if the dimenstions actually change? /iw
+    if ( d->dataDimensions == dimensions )
+        return;
+
     d->dataDimensions = dimensions;
 
     rebuildDataMap();
@@ -877,26 +843,46 @@ QList<DataSet*> ChartProxyModel::dataSets() const
     return d->dataSets;
 }
 
-void ChartProxyModel::slotRowsInserted( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotRowsInserted( const QModelIndex &parent, 
+                                        int start, int end )
 {
+    Q_UNUSED( parent );
+    Q_UNUSED( start );
+    Q_UNUSED( end );
+
     rebuildDataMap();
     reset();
 }
 
-void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotColumnsInserted( const QModelIndex &parent,
+                                           int start, int end )
 {
+    Q_UNUSED( parent );
+    Q_UNUSED( start );
+    Q_UNUSED( end );
+
     rebuildDataMap();
     reset();
 }
 
-void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotRowsRemoved( const QModelIndex &parent,
+                                       int start, int end )
 {
+    Q_UNUSED( parent );
+    Q_UNUSED( start );
+    Q_UNUSED( end );
+
     rebuildDataMap();
     reset();
 }
 
-void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent, int start, int end )
+void ChartProxyModel::slotColumnsRemoved( const QModelIndex &parent,
+                                          int start, int end )
 {
+    Q_UNUSED( parent );
+    Q_UNUSED( start );
+    Q_UNUSED( end );
+
     rebuildDataMap();
     reset();
 }
