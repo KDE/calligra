@@ -33,13 +33,14 @@ namespace KPlato
 
 class TaskDescriptionPanel;
 class Task;
+class Node;
 class MacroCommand;
         
 class TaskDescriptionPanelImpl : public QWidget, public Ui_TaskDescriptionPanelBase
 {
     Q_OBJECT
 public:
-    TaskDescriptionPanelImpl( Task &task, QWidget *parent );
+    TaskDescriptionPanelImpl( Node &node, QWidget *parent );
         
 public slots:
     virtual void slotChanged();
@@ -48,21 +49,23 @@ signals:
     void textChanged( bool );
 
 protected:
-    Task &m_task;
+    Node &m_node;
 };
 
 class TaskDescriptionPanel : public TaskDescriptionPanelImpl
 {
     Q_OBJECT
 public:
-    explicit TaskDescriptionPanel( Task &task, QWidget *parent = 0, bool readOnly = false );
+    explicit TaskDescriptionPanel( Node &node, QWidget *parent = 0, bool readOnly = false );
 
     MacroCommand *buildCommand();
 
     bool ok();
 
-    void setStartValues( Task &task );
+    void setStartValues( Node &node );
 
+protected:
+    void initDescription( bool readOnly );
 };
 
 class KPLATOUI_EXPORT TaskDescriptionDialog : public KDialog
@@ -70,8 +73,8 @@ class KPLATOUI_EXPORT TaskDescriptionDialog : public KDialog
     Q_OBJECT
 public:
     /**
-     * The constructor for the task settings dialog.
-     * @param task the task to show
+     * The constructor for the task description dialog.
+     * @param node the node to show
      * @param parent parent widget
      */
     explicit TaskDescriptionDialog( Task &task, QWidget *parent = 0, bool readOnly = false  );

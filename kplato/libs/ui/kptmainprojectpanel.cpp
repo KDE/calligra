@@ -35,21 +35,28 @@
 #include "kptproject.h"
 #include "kptcommand.h"
 #include "kptschedule.h"
+#include "kpttaskdescriptiondialog.h"
 
 namespace KPlato
 {
 
-MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name)
-    : MainProjectPanelImpl(parent, name),
+MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
+    : QWidget(parent),
       project(p)
 {
+    setupUi(this);
+
     QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
     wbslabel->setWhatsThis( s );
     wbs->setWhatsThis( s );
 
     namefield->setText(project.name());
     leaderfield->setText(project.leader());
-    descriptionfield->setText(project.description());
+    m_description = new TaskDescriptionPanel( p, this );
+    m_description->namefield->hide();
+    m_description->namelabel->hide();
+    layout()->addWidget( m_description );
+
     wbs->setText(project.wbsCode());
     if ( wbs->text().isEmpty() ) {
         wbslabel->hide();
@@ -64,6 +71,16 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     endTime->setTime(et.time());
     enableDateTime();
     namefield->setFocus();
+
+    // signals and slots connections
+    connect( m_description, SIGNAL( textChanged(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
 }
 
 
@@ -82,10 +99,6 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyLeaderCmd(project, leaderfield->text()));
     }
-    if (project.description() != descriptionfield->text()) {
-        if (!m) m = new MacroCommand(c);
-        m->addCommand(new NodeModifyDescriptionCmd(project, descriptionfield->text()));
-    }
     if (startDateTime() != project.constraintStartTime().dateTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(project, startDateTime()));
@@ -94,34 +107,22 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }
+    MacroCommand *cmd = m_description->buildCommand();
+    if ( cmd ) {
+        if (!m) m = new MacroCommand(c);
+        m->addCommand( cmd );
+    }
     return m;
 }
 
-//-------------------------------------------------------------------
-MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
-    :  QWidget(parent) {
-
-    setObjectName(name);
-    setupUi(this);
-    // signals and slots connections
-    connect( descriptionfield, SIGNAL( textChanged() ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
-}
-
-void MainProjectPanelImpl::slotCheckAllFieldsFilled()
+void MainProjectPanel::slotCheckAllFieldsFilled()
 {
     emit changed();
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !leaderfield->text().isEmpty());
 }
 
 
-void MainProjectPanelImpl::slotChooseLeader()
+void MainProjectPanel::slotChooseLeader()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
     if (!a.isEmpty())
@@ -131,20 +132,20 @@ void MainProjectPanelImpl::slotChooseLeader()
 }
 
 
-void MainProjectPanelImpl::slotStartDateClicked()
+void MainProjectPanel::slotStartDateClicked()
 {
     enableDateTime();
 }
 
 
-void MainProjectPanelImpl::slotEndDateClicked()
+void MainProjectPanel::slotEndDateClicked()
 {
     enableDateTime();
 }
 
 
 
-void MainProjectPanelImpl::enableDateTime()
+void MainProjectPanel::enableDateTime()
 {
     kDebug();
     startTime->setEnabled(true);
@@ -154,13 +155,13 @@ void MainProjectPanelImpl::enableDateTime()
 }
 
 
-QDateTime MainProjectPanelImpl::startDateTime()
+QDateTime MainProjectPanel::startDateTime()
 {
     return QDateTime(startDate->date(), startTime->time());
 }
 
 
-QDateTime MainProjectPanelImpl::endDateTime()
+QDateTime MainProjectPanel::endDateTime()
 {
     return QDateTime(endDate->date(), endTime->time());
 }

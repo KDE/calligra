@@ -34,6 +34,7 @@ class TaskGeneralPanel;
 class RequestResourcesPanel;
 class DocumentsPanel;
 class TaskCostPanel;
+class TaskDescriptionPanel;
 class Task;
 class StandardWorktime;
 class MacroCommand;
@@ -63,6 +64,7 @@ protected:
     RequestResourcesPanel *m_resourcesTab;
     DocumentsPanel *m_documentsTab;
     TaskCostPanel *m_costTab;
+    TaskDescriptionPanel *m_descriptionTab;
 };
 
 class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog {

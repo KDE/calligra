@@ -41,6 +41,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
+#include <KRichTextWidget>
 
 #include <kdganttglobal.h>
 #include <QtGui>
@@ -123,7 +124,9 @@ QVariant NodeModel::description( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole: {
-            QString s = node->description();
+            KRichTextWidget w( node->description(), 0 );
+            w.switchToPlainText();
+            QString s = w.textOrHtml();
             int i = s.indexOf( '\n' );
             s = s.left( i );
             if ( i > 0 ) {
@@ -132,7 +135,9 @@ QVariant NodeModel::description( const Node *node, int role ) const
             return s;
         }
         case Qt::ToolTipRole: {
-            QString s = node->description();
+            KRichTextWidget w( node->description(), 0 );
+            w.switchToPlainText();
+            QString s = w.textOrHtml();
             if ( s.length() > 300 ) {
                 s = s.left( 300 ) + "...";
             }

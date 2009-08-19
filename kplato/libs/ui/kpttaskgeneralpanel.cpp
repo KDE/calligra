@@ -58,13 +58,13 @@ TaskGeneralPanel::TaskGeneralPanel(Task &task, QWidget *p, const char *n)
     QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
     wbslabel->setWhatsThis( s );
     wbsfield->setWhatsThis( s );
+
 }
 
 void TaskGeneralPanel::setStartValues( Task &task ) {
     m_estimate = m_duration = task.estimate()->expectedValue();
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
-    descriptionfield->setText(task.description());
     wbsfield->setText(task.wbsCode());
 
     int cal = 0;
@@ -119,11 +119,6 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
     }
     if (!leaderfield->isHidden() && m_task.leader() != leaderfield->text()) {
         cmd->addCommand(new NodeModifyLeaderCmd(m_task, leaderfield->text()));
-        modified = true;
-    }
-    if (!descriptionfield->isHidden() &&
-        m_task.description() != descriptionfield->text()) {
-        cmd->addCommand(new NodeModifyDescriptionCmd(m_task, descriptionfield->text()));
         modified = true;
     }
     Node::ConstraintType c = (Node::ConstraintType)schedulingType();
@@ -237,7 +232,6 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     connect(estimate, SIGNAL(valueChanged(double)), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
-    connect(descriptionfield, SIGNAL(textChanged()), SLOT(checkAllFieldsFilled()));
     connect(risk, SIGNAL(activated(int)), SLOT(checkAllFieldsFilled()));
     connect(calendarCombo, SIGNAL(activated(int)), SLOT(calendarChanged(int)));
 

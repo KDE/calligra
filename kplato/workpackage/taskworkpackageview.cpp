@@ -86,7 +86,8 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
             << TaskWorkPackageModel::NodePlannedEffort
             << TaskWorkPackageModel::NodeActualStart
             << TaskWorkPackageModel::NodeActualFinish
-            << TaskWorkPackageModel::NodeStatusNote;
+            << TaskWorkPackageModel::ProjectName
+            << TaskWorkPackageModel::ProjectManager;
 
     QList<int> lst2; 
     for ( int i = 0; i < m->columnCount(); ++i ) {

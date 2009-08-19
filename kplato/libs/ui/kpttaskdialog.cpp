@@ -23,6 +23,7 @@
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
 #include "kptdocumentspanel.h"
+#include "kpttaskdescriptiondialog.h"
 #include "kptcommand.h"
 
 #include <klocale.h>
@@ -60,12 +61,20 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
     addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
 
+    page =  new KVBox();
+    addPage(page, i18n("D&escription"));
+    m_descriptionTab = new TaskDescriptionPanel(task, page);
+    m_descriptionTab->namefield->hide();
+    m_descriptionTab->namelabel->hide();
+
     enableButtonOk(false);
 
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_documentsTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    connect(m_descriptionTab, SIGNAL( textChanged(bool) ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+
 }
 
 MacroCommand *TaskDialog::buildCommand() {
@@ -91,6 +100,11 @@ MacroCommand *TaskDialog::buildCommand() {
         m->addCommand(cmd);
         modified = true;
     }
+    cmd = m_descriptionTab->buildCommand();
+    if (cmd) {
+        m->addCommand(cmd);
+        modified = true;
+    }
     if (!modified) {
         delete m;
         return 0;
@@ -103,6 +117,8 @@ void TaskDialog::slotButtonClicked(int button) {
         if (!m_generalTab->ok())
             return;
         if (!m_resourcesTab->ok())
+            return;
+        if (!m_descriptionTab->ok())
             return;
         accept();
     } else {

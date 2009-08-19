@@ -34,14 +34,19 @@ namespace KPlato
 
 class Project;
 class MacroCommand;
+class TaskDescriptionPanel;
 
-class MainProjectPanelImpl : public QWidget, public Ui_MainProjectPanelBase {
+class MainProjectPanel : public QWidget, public Ui_MainProjectPanelBase {
     Q_OBJECT
 public:
-    explicit MainProjectPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit MainProjectPanel(Project &project, QWidget *parent=0);
 
     virtual QDateTime startDateTime();
     virtual QDateTime endDateTime();
+
+    MacroCommand *buildCommand();
+    
+    bool ok();
 
 public slots:
     virtual void slotCheckAllFieldsFilled();
@@ -54,20 +59,11 @@ signals:
     void obligatedFieldsFilled(bool);
     void changed();
 
-};
-
-class MainProjectPanel : public MainProjectPanelImpl {
-    Q_OBJECT
-public:
-    explicit MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
-
-    MacroCommand *buildCommand();
-    
-    bool ok();
-
 private:
+    TaskDescriptionPanel *m_description;
     Project &project;
 };
+
 
 }  //KPlato namespace
 

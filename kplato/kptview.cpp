@@ -188,11 +188,11 @@ View::View( Part* part, QWidget* parent )
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject  = new KAction(KIcon( "document-properties" ), i18n("Edit Main Project..."), this);
+    actionEditMainProject  = new KAction(KIcon( "document-edit" ), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
-    actionEditStandardWorktime  = new KAction(KIcon( "document-properties" ), i18n("Edit Standard Worktime..."), this);
+    actionEditStandardWorktime  = new KAction(KIcon( "document-edit" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
 
@@ -202,7 +202,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
 
-    actionInsertFile  = new KAction(KIcon( "document-import" ), i18n("Insert Project..."), this);
+    actionInsertFile  = new KAction(KIcon( "document-import" ), i18n("Insert Project File..."), this);
     actionCollection()->addAction("insert_file", actionInsertFile );
     connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
@@ -217,16 +217,16 @@ View::View( Part* part, QWidget* parent )
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup
-    actionOpenNode  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
+    actionOpenNode  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
     connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
-    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
+    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
-    actionTaskDescription  = new KAction(KIcon( "document-properties" ), i18n("Description..."), this);
+    actionTaskDescription  = new KAction(KIcon( "document-edit" ), i18n("Description..."), this);
     actionCollection()->addAction("task_description", actionTaskDescription );
     connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
     actionIndentTask = new KAction(KIcon( "edit-indent" ), i18n("Indent Task"), this);
@@ -246,11 +246,11 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("task_mailworkpackage", actionMailWorkpackage );
     connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );
 
-    actionEditResource  = new KAction(KIcon( "document-properties" ), i18n("Edit Resource..."), this);
+    actionEditResource  = new KAction(KIcon( "document-edit" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
-    actionEditRelation  = new KAction(KIcon( "document-properties" ), i18n("Edit Dependency..."), this);
+    actionEditRelation  = new KAction(KIcon( "document-edit" ), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
     connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
     actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency"), this);
@@ -528,7 +528,7 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
     ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "resource_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resource Assignments (Gantt)" ) );
     }
@@ -557,7 +557,7 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     ResourceAppointmentsView *v = new ResourceAppointmentsView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "resource_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resource Assignments" ) );
     }
@@ -586,7 +586,7 @@ ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const
     m_tab->addWidget( resourceeditor );
     resourceeditor->draw( getProject() );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "resource_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resources" ) );
     }
@@ -612,7 +612,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     TaskEditor *taskeditor = new TaskEditor( getPart(), m_tab );
     m_tab->addWidget( taskeditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "task_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Tasks" ) );
     }
@@ -651,7 +651,7 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
     AccountsEditor *ae = new AccountsEditor( getPart(), m_tab );
     m_tab->addWidget( ae );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "accounts_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Cost Breakdown Structure" ) );
     }
@@ -674,7 +674,7 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
     CalendarEditor *calendareditor = new CalendarEditor( getPart(), m_tab );
     m_tab->addWidget( calendareditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "calendar_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Work & Vacation" ) );
     }
@@ -699,7 +699,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
     ScheduleHandlerView *handler = new ScheduleHandlerView( getPart(), m_tab );
     m_tab->addWidget( handler );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "schedule_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Schedules" ) );
     }
@@ -748,7 +748,7 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
     ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "schedule_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resource Assignments" ) );
     }
@@ -781,7 +781,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     DependencyEditor *editor = new DependencyEditor( getPart(), m_tab );
     m_tab->addWidget( editor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "task_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Dependencies (Graphic)" ) );
     }
@@ -819,7 +819,7 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
     PertEditor *perteditor = new PertEditor( getPart(), m_tab );
     m_tab->addWidget( perteditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "task_editor", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Dependencies (List)" ) );
     }
@@ -843,7 +843,7 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
     ProjectStatusView *v = new ProjectStatusView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Project Performance Chart" ) );
     }
@@ -869,7 +869,7 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
     PerformanceStatusView *v = new PerformanceStatusView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Tasks Performance Chart" ) );
     }
@@ -898,7 +898,7 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "status_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Task Status" ) );
     }
@@ -926,7 +926,7 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     TaskView *v = new TaskView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "task_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Task Execution" ) );
     }
@@ -954,7 +954,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     TaskWorkPackageView *v = new TaskWorkPackageView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "workpackage_view", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Work Package View" ) );
     }
@@ -986,7 +986,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Gantt" ) );
     }
@@ -1019,7 +1019,7 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
     MilestoneGanttView *ganttview = new MilestoneGanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Milestone Gantt" ) );
     }
@@ -1047,7 +1047,7 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
     AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
     m_tab->addWidget( accountsview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "accounts", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Cost Breakdown" ) );
     }
@@ -1072,7 +1072,7 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     m_tab->addWidget( resourceAssignmentView );
     m_updateResourceAssignmentView = true;
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceAssignmentView, getPart(), "resource_assignment", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceAssignmentView, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resource Assignments" ) );
     }
@@ -1097,7 +1097,7 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
     ChartView *v = new ChartView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "chart", index );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
     if ( name.isEmpty() ) {
         i->setText( 0, i18n( "Resource Assignments" ) );
     }

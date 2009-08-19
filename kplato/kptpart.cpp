@@ -401,10 +401,6 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
 
 Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document )
 {
-    QTime dt;
-    dt.start();
-    emit sigProgress( 0 );
-
     QString value;
     KoXmlElement plan = document.documentElement();
 
@@ -431,25 +427,12 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
             return false;
         }
     }
-    emit sigProgress( 5 );
 
 #ifdef KOXML_USE_QDOM
     int numNodes = plan.childNodes().count();
 #else
     int numNodes = plan.childNodesCount();
 #endif
-#if 0 
-This test does not work any longer. KoXml adds a couple of elements not present in the file!!
-    if ( numNodes > 2 ) {
-        //TODO: Make a proper bitching about this
-        kDebug() <<"*** Error ***";
-        kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
-        return false;
-    }
-#endif
-    emit sigProgress( 100 ); // the rest is only processing, not loading
-
-    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
     bool ok = true;
     m_xmlLoader.startLoad();
@@ -470,14 +453,10 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
     }
     m_xmlLoader.stopLoad();
-    emit sigProgress( 100 ); // the rest is only processing, not loading
-
-    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
     if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
         ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
     }
-    emit sigProgress( -1 );
     if ( ! ok ) {
         delete proj;
         return 0;

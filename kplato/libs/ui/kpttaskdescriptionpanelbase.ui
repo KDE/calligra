@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>450</width>
     <height>300</height>
    </rect>
   </property>
@@ -47,7 +47,17 @@
       </layout>
      </item>
      <item>
-      <widget class="KTextEdit" name="descriptionfield"/>
+      <widget class="KToolBar" name="toolbar" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>11</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KRichTextWidget" name="descriptionfield"/>
      </item>
     </layout>
    </item>
@@ -62,10 +72,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
+   <class>KToolBar</class>
+   <extends>QWidget</extends>
+   <header location="global">KToolBar</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KRichTextWidget</class>
+   <extends>QTextEdit</extends>
+   <header location="global">KRichTextWidget</header>
   </customwidget>
  </customwidgets>
  <resources/>

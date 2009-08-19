@@ -28,6 +28,7 @@ namespace KPlato
 {
 
 class SummaryTaskGeneralPanel;
+class TaskDescriptionPanel;
 class Task;
 class MacroCommand;
 
@@ -51,7 +52,7 @@ public slots:
     
 private:
     Task &m_task;
-    
+    TaskDescriptionPanel *m_description;
 };
 
 } //KPlato namespace

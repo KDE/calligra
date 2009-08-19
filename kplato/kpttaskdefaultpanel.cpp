@@ -30,6 +30,8 @@
 #include <QDateTimeEdit>
 #include <QComboBox>
 
+#include <KActionCollection>
+#include <KTextEdit>
 #include <kdebug.h>
 
 namespace KPlato
@@ -49,6 +51,8 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     kcfg_ExpectedEstimate->setMinimumUnit( (Duration::Unit)KPlatoSettings::self()->minimumDurationUnit() );
     kcfg_ExpectedEstimate->setMaximumUnit( (Duration::Unit)KPlatoSettings::self()->maximumDurationUnit() );
 
+    initDescription();
+
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     
     connect( kcfg_ConstraintStartTime, SIGNAL( dateTimeChanged ( const QDateTime& ) ), SLOT( startDateTimeChanged( const QDateTime& ) ) );
@@ -60,6 +64,46 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     connect( kcfg_ExpectedEstimate, SIGNAL( unitChanged( int ) ), SLOT( unitChanged( int ) ) );
     kcfg_Unit->hide();
     connect( kcfg_Unit, SIGNAL( currentIndexChanged( int ) ), SLOT( currentUnitChanged( int ) ) );
+}
+
+void ConfigTaskPanelImpl::initDescription()
+{
+    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+
+    KActionCollection *collection = new KActionCollection( this ); //krazy:exclude=tipsandthis
+    kcfg_Description->setRichTextSupport( KRichTextWidget::SupportBold |
+                                            KRichTextWidget::SupportItalic |
+                                            KRichTextWidget::SupportUnderline |
+                                            KRichTextWidget::SupportStrikeOut |
+                                            KRichTextWidget::SupportChangeListStyle |
+                                            KRichTextWidget::SupportAlignment |
+                                            KRichTextWidget::SupportFormatPainting );
+
+    kcfg_Description->createActions( collection );
+
+    toolbar->addAction( collection->action( "format_text_bold" ) );
+    toolbar->addAction( collection->action( "format_text_italic" ) );
+    toolbar->addAction( collection->action( "format_text_underline" ) );
+    toolbar->addAction( collection->action( "format_text_strikeout" ) );
+    toolbar->addSeparator();
+
+    toolbar->addAction( collection->action( "format_list_style" ) );
+    toolbar->addSeparator();
+
+    toolbar->addAction( collection->action( "format_align_left" ) );
+    toolbar->addAction( collection->action( "format_align_center" ) );
+    toolbar->addAction( collection->action( "format_align_right" ) );
+    toolbar->addAction( collection->action( "format_align_justify" ) );
+    toolbar->addSeparator();
+
+//    toolbar->addAction( collection->action( "format_painter" ) );
+
+    kcfg_Description->append( "" );
+    kcfg_Description->setReadOnly( false );
+    kcfg_Description->setOverwriteMode( false );
+    kcfg_Description->setLineWrapMode( KTextEdit::WidgetWidth );
+    kcfg_Description->setTabChangesFocus( true );
+
 }
 
 

@@ -40,6 +40,8 @@ class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 public:
     ConfigTaskPanelImpl( QWidget *parent );
     
+    void initDescription();
+
 public slots:
     virtual void changeLeader();
     void startDateTimeChanged( const QDateTime& );
