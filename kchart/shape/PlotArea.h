@@ -55,6 +55,7 @@ public:
     PlotArea( ChartShape *parent );
     ~PlotArea();
     
+    // FIXME: hides the normal KoShape::init()
     void init();
     
     ChartProxyModel *proxyModel() const;

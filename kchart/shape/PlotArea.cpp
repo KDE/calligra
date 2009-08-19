@@ -469,7 +469,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     }
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
-    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+    //KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     
     // Find out if the data table contains labels as first row and/or column.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
@@ -571,7 +571,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
-    KoGenStyles &mainStyles = context.mainStyles();
+    //KoGenStyles &mainStyles = context.mainStyles();
     
     bodyWriter.startElement( "chart:plot-area" );
     
@@ -637,6 +637,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
                                KoGenStyle& plotAreaStyle ) const
 {
+    Q_UNUSED( xmlWriter );
+
     switch ( d->chartType ) {
     case BarChartType:
         switch( d->chartSubtype ) {

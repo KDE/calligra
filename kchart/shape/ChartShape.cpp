@@ -701,6 +701,12 @@ void ChartShape::setSize( const QSizeF &newSize )
     case EndLegendPosition:
         d->legend->setAbsolutePosition( scalePointCenterRight( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
         break;
+    case TopStartLegendPosition:
+    case BottomStartLegendPosition:
+    case TopEndLegendPosition:
+    case BottomEndLegendPosition:
+        // FIXME: These are not handled.
+        break;
     }
     d->title->setAbsolutePosition( scalePointCenterTop( d->title->absolutePosition(), factorX, factorY, d->title->boundingRect().size() ) );
     d->subTitle->setAbsolutePosition( scalePointCenterTop( d->subTitle->absolutePosition(), factorX, factorY, d->subTitle->boundingRect().size() ) );

@@ -167,12 +167,16 @@ void ChartTool::shapeSelectionChanged()
 
 void ChartTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( converter );
 }
 
 void ChartTool::mousePressEvent( KoPointerEvent *event )
 {
+#if 1  // disabled
+    Q_UNUSED( event );
     return;
-    /*
+#else
     // Select dataset
     if (    !d->shape || !d->shape->kdChart() || ! d->shape->kdChart()->coordinatePlane()
          || !d->shape->kdChart()->coordinatePlane()->diagram() )
@@ -203,7 +207,7 @@ void ChartTool::mousePressEvent( KoPointerEvent *event )
     ((ChartConfigWidget*)optionWidget())->selectDataset( dataset );
         
     d->shape->update();
-    */
+#endif
 }
 
 void ChartTool::mouseMoveEvent( KoPointerEvent *event )
