@@ -104,7 +104,6 @@ public:
 
     QAction  *circleChartAction;
     QAction  *ringChartAction;
-    
     QAction  *radarChartAction;
     
     QAction  *scatterChartAction;
@@ -129,10 +128,10 @@ public:
     
     QAction  *dataSetCircleChartAction;
     QAction  *dataSetRingChartAction;
-    QAction  *dataSetScatterChartAction;
     QAction  *dataSetRadarChartAction;
-    QAction  *dataSetStockChartAction;
+    QAction  *dataSetScatterChartAction;
     QAction  *dataSetBubbleChartAction;
+    QAction  *dataSetStockChartAction;
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
 
@@ -237,23 +236,28 @@ ChartConfigWidget::ChartConfigWidget()
     // Circular charts: pie and ring
     d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
     d->ringChartAction = chartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
-    
+
+    chartTypeMenu->addSeparator();
+
+    // Polar charts: radar
+    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+
     chartTypeMenu->addSeparator();
 
     // X/Y charts: scatter and bubble
     d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
     d->bubbleChartAction = chartTypeMenu->addAction( KIcon( "chart_bubble_normal" ), i18n("Bubble Chart") );
-
-    chartTypeMenu->addSeparator();
-
-    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->bubbleChartAction->setEnabled( false );
 
     chartTypeMenu->addSeparator();
 
     d->stockChartAction = chartTypeMenu->addAction( KIcon( "chart_stock_normal" ), i18n("Stock Chart") );
+    d->stockChartAction->setEnabled( false );
     d->surfaceChartAction = chartTypeMenu->addAction( KIcon( "chart_surface_normal" ), i18n("Surface Chart") );
-    d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Bubble Chart") );
-    
+    d->surfaceChartAction->setEnabled( false );
+    d->ganttChartAction = chartTypeMenu->addAction( KIcon( "chart_gantt_normal" ), i18n("Gantt Chart") );
+    d->ganttChartAction->setEnabled( false );
+
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
     connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
@@ -261,6 +265,7 @@ ChartConfigWidget::ChartConfigWidget()
     
     // Data set chart type button
     QMenu *dataSetChartTypeMenu = new QMenu( this );
+
     // Default chart type is a bar chart
     dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );       
 
@@ -282,10 +287,9 @@ ChartConfigWidget::ChartConfigWidget()
     
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
     d->dataSetRingChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_ring_normal" ), i18n("Ring Chart") );
+    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
 
     d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
-
-    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
     
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
     
@@ -542,6 +546,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
 void ChartConfigWidget::setPolarChartTypesEnabled( bool enabled )
 {
     d->dataSetCircleChartAction->setEnabled( enabled );
+    d->dataSetRingChartAction->setEnabled( enabled );
     d->dataSetRadarChartAction->setEnabled( enabled );
 }
 
