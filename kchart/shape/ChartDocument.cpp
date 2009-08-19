@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "ChartDocument.h"
 
 // Qt
@@ -84,7 +84,6 @@ ChartDocument::~ChartDocument()
 
 bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
 {
-#ifndef KOXML_USE_QDOM
     KoXmlDocument doc = odfStore.contentDoc();
     KoXmlNode bodyNode = doc.documentElement().namedItemNS( KoXmlNS::office, "body" );
     if ( bodyNode.isNull() ) {
@@ -107,9 +106,6 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
     KoShapeLoadingContext context( odfLoadingContext, dataCenterMap );
 
     return d->parent->loadOdfEmbedded( chartElement, context );
-#else
-    return false; //XXX!!!
-#endif
 }
 
 bool ChartDocument::loadXML( const KoXmlDocument &doc, KoStore *)
@@ -125,7 +121,7 @@ bool ChartDocument::saveOdf( SavingContext &context )
     KoOdfWriteStore &odfStore = context.odfStore;
     KoStore *store = odfStore.store();
     KoXmlWriter *manifestWriter = odfStore.manifestWriter();
-    KoXmlWriter *contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter  = odfStore.contentWriter();
     if ( !contentWriter )
         return false;
     
@@ -149,9 +145,8 @@ bool ChartDocument::saveOdf( SavingContext &context )
     mainStyles.saveOdfAutomaticStyles( contentWriter, false );
     odfStore.closeContentWriter();
 
-    // add manifest line for content.xml
+    // Add manifest line for content.xml and styles.xml
     manifestWriter->addManifestEntry( url().path() + "/content.xml", "text/xml" );
-    // add manifest line for styles.xml
     manifestWriter->addManifestEntry( url().path() + "/styles.xml", "text/xml" );
 
     // save the styles.xml
@@ -167,11 +162,15 @@ bool ChartDocument::saveOdf( SavingContext &context )
 
 KoView *ChartDocument::createViewInstance( QWidget *parent )
 {
+    Q_UNUSED( parent );
+
     return 0;
 }
 
 void ChartDocument::paintContent( QPainter &painter, const QRect &rect )
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( rect );
 }
 
 } // namespace KChart
