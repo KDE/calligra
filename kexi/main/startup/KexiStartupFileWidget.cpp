@@ -118,7 +118,7 @@ void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
 
 QString KexiStartupFileWidget::highlightedFile() const
 {
-    return d->highlightedUrl.path();
+    return d->highlightedUrl.toLocalFile();
 }
 
 void KexiStartupFileWidget::setMode(Mode mode)
