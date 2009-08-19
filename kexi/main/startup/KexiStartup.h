@@ -20,10 +20,6 @@
 #ifndef KEXI_STARTUPHANDLER_H
 #define KEXI_STARTUPHANDLER_H
 
-#include <qstring.h>
-#include <qwidget.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <kpassworddialog.h>
 
 #include <core/kexistartupdata.h>

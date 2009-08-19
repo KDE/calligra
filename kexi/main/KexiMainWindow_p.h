@@ -30,7 +30,6 @@
 #include <KToolBar>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <Q3PopupMenu>
 
 #include <kexiutils/SmallToolButton.h>
 
@@ -559,7 +558,7 @@ public:
         actionToExecuteWhenPendingJobsAreFinished = NoAction;
 #endif
 //  callSlotLastChildViewClosedAfterCloseDialog=false;
-        createMenu = 0;
+//        createMenu = 0;
         showImportantInfoOnStartup = true;
 //  disableErrorMessages=false;
 //  last_checked_mode=0;
@@ -936,8 +935,8 @@ public:
 //  QSignalMapper *actionMapper;
 
 //! @todo move menu handling outside
-//  Q3AsciiDict<Q3PopupMenu> popups; //list of menu popups
-    Q3PopupMenu *createMenu;
+//  Q3AsciiDict<QPopupMenu> popups; //list of menu popups
+//    QMenu *createMenu;
 
 //  QString origAppCaption; //<! original application's caption (without project name)
     QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
