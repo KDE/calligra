@@ -21,11 +21,13 @@
 #ifndef KCHART_LEGEND_H
 #define KCHART_LEGEND_H
 
-// Local
-#include "ChartShape.h"
 
 // KOffice
 #include <KoShape.h>
+
+// KChart
+#include "ChartShape.h"
+
 
 namespace KChart {
 

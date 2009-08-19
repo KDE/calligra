@@ -18,10 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "Legend.h"
-#include "PlotArea.h"
-#include "KDChartConvertions.h"
 
 // Qt
 #include <QString>
@@ -31,14 +29,6 @@
 #include <QBrush>
 #include <QFont>
 #include <QImage>
-
-// KDChart
-#include <KDChartChart>
-#include <KDChartBarDiagram>
-#include <KDChartAbstractDiagram>
-#include <KDChartFrameAttributes>
-#include <KDChartBackgroundAttributes>
-#include <KDChartLegend>
 
 // KOffice
 #include <KoXmlReader.h>
@@ -53,6 +43,18 @@
 #include <KoColorBackground.h>
 #include <KoLineBorder.h>
 
+// KDChart
+#include <KDChartChart>
+#include <KDChartBarDiagram>
+#include <KDChartAbstractDiagram>
+#include <KDChartFrameAttributes>
+#include <KDChartBackgroundAttributes>
+#include <KDChartLegend>
+#include "KDChartConvertions.h"
+
+// Kchart
+#include "PlotArea.h"
+
 using namespace KChart;
 
 class Legend::Private {
@@ -61,6 +63,8 @@ public:
     ~Private();
     
     ChartShape *shape;
+
+    // Properties of the Legend
     QString title;
     bool showFrame;
     QPen framePen;
@@ -71,7 +75,9 @@ public:
     QFont titleFont;
     QColor fontColor;
     Qt::Alignment alignment;
-    
+    KoLineBorder *lineBorder;
+
+    // The connection to KDChart
     KDChart::Legend *kdLegend;
     
     QImage image;
@@ -79,9 +85,8 @@ public:
     bool pixmapRepaintRequested;
     QSizeF lastSize;
     QPointF lastZoomLevel;
-    
-    KoLineBorder *lineBorder;
 };
+
 
 Legend::Private::Private()
 {
@@ -97,6 +102,7 @@ Legend::Private::Private()
 
 Legend::Private::~Private()
 {
+    delete lineBorder;
 }
 
 
@@ -108,7 +114,9 @@ Legend::Legend( ChartShape *parent )
     setShapeId( ChartShapeId );
     
     d->shape = parent;
-    
+
+    // FIXME: Shall we delete this in the destructor or does KDChart
+    //        do that itself?
     d->kdLegend = new KDChart::Legend();
     
     setTitleFontSize( 10 );
@@ -122,6 +130,7 @@ Legend::Legend( ChartShape *parent )
 
 Legend::~Legend()
 {
+    delete d;
 }
 
 
@@ -161,6 +170,7 @@ void Legend::setFramePen( const QPen &pen )
     KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setPen( pen  );
     d->kdLegend->setFrameAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -180,6 +190,7 @@ void Legend::setFrameColor( const QColor &color )
     pen.setColor( color );
     attributes.setPen( pen );
     d->kdLegend->setFrameAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -197,6 +208,7 @@ void Legend::setBackgroundBrush( const QBrush &brush )
     attributes.setVisible( true );
     attributes.setBrush( brush );
     d->kdLegend->setBackgroundAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -216,6 +228,7 @@ void Legend::setBackgroundColor( const QColor &color )
     brush.setColor( color );
     attributes.setBrush( brush );
     d->kdLegend->setBackgroundAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -232,6 +245,7 @@ void Legend::setFont( const QFont &font )
     KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
     attributes.setFont( font );
     d->kdLegend->setTextAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -250,6 +264,7 @@ void Legend::setFontSize( double size )
     m.setValue( size );
     attributes.setFontSize( m );
     d->kdLegend->setTextAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -266,6 +281,7 @@ void Legend::setTitleFont( const QFont &font )
     KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
     attributes.setFont( font );
     d->kdLegend->setTitleTextAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -282,6 +298,7 @@ void Legend::setTitleFontSize( double size )
     KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
     attributes.setFontSize( KDChart::Measure( size, KDChartEnums::MeasureCalculationModeAbsolute ) );
     d->kdLegend->setTitleTextAttributes( attributes );
+
     d->pixmapRepaintRequested = true;
 }
 
@@ -337,7 +354,7 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
     pixmapPainter.setRenderHints( painter.renderHints() );
     pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
-    // scale the painter's coordinate system to fit the current zoom level
+    // Scale the painter's coordinate system to fit the current zoom level.
     applyConversion( pixmapPainter, converter );
     d->kdLegend->paint( &pixmapPainter );
 }
@@ -392,15 +409,15 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 }
 
 
-// Only reimplemneted because pure virtual in KoShape, but not needed
-bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context )
+// Only reimplemented because pure virtual in KoShape, but not needed
+bool Legend::loadOdf( const KoXmlElement &legendElement, 
+                      KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
     styleStack.clear();
-    if( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-    {
+    if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
@@ -478,8 +495,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
             
             styleStack.setTypeProperties( "text" );
             
-            if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
-            {
+            if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
                 setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
             }
         }
@@ -529,8 +545,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
         saveStyle( *style, context );
     
     QString  lexpansion;
-    switch ( expansion() )
-    {
+    switch ( expansion() ) {
     case WideLegendExpansion:
         lexpansion = "wide";
         break;
