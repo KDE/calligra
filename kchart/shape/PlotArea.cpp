@@ -572,11 +572,11 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 {
     KoXmlWriter &bodyWriter = context.xmlWriter();
     //KoGenStyles &mainStyles = context.mainStyles();
-    
     bodyWriter.startElement( "chart:plot-area" );
     
-    KoGenStyle plotAreaStyle;
-    plotAreaStyle = KoGenStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+    // FIXME: Somehow this style gets the name gr2 instead of ch2.
+    //        Fix that as well.
+    KoGenStyle plotAreaStyle( KoGenStyle::StyleChartAuto, "chart" );
     
     // Data direction
     const Qt::Orientation direction = proxyModel()->dataDirection();
