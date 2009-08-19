@@ -33,16 +33,11 @@
 #include <qmutex.h>
 #include <qwaitcondition.h>
 #include <qfiledialog.h>
-//#include <qdockwindow.h>
-//#include <qdockarea.h>
-//Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 #include <QFocusEvent>
 #include <QTextStream>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3ValueList>
 #include <QHash>
 #include <QDockWidget>
 #include <QMenuBar>
@@ -4444,7 +4439,7 @@ void KexiMainWindow::importantInfo(bool /*onStartup*/)
         if (f.open(QIODevice::ReadOnly)) {
             QTextStream ts(&f);
             ts.setCodec(KGlobal::locale()->codecForEncoding());
-            Q3TextBrowser *tb = KexiUtils::findFirstChild<KTextBrowser>(&tipDialog, "KTextBrowser");
+            QTextBrowser *tb = KexiUtils::findFirstChild<KTextBrowser>(&tipDialog, "KTextBrowser");
             if (tb) {
                 tb->setText(QString("<qt>%1</qt>").arg(ts.read()));
             }
