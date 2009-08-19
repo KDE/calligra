@@ -106,6 +106,7 @@ public:
     {
         KToolBar *tbar = new KToolBar(q);
         toolbarsForName.insert(name, tbar);
+        tbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         tbar->setObjectName(name);
         q->addTab(tbar, caption);
         return tbar;
