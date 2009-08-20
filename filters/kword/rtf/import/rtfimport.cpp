@@ -1267,7 +1267,7 @@ void RTFImport::insertHexSymbol( RTFProperty * )
         return;
     }
 
-    char tmpch[2] = {token.value, '\0'};
+    char tmpch[2] = {char(token.value), '\0'};
 
     char *tk = token.text;
     token.type = RTFTokenizer::PlainText;
