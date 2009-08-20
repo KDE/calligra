@@ -674,8 +674,7 @@ public:
     /// Type defines the types of estimates
     enum Type {
         Type_Effort,        /// Changing amount of resources changes the task duration
-        Type_FixedDuration, /// Changing amount of resources will not change the tasks duration
-        Type_Length         /// Duration in work time defined by m_calendar
+        Type_Duration       /// Changing amount of resources will not change the tasks duration
     };
     /// Return the node that owns this Estimate
     Node *parentNode() const { return m_parent; }
@@ -834,7 +833,7 @@ private:
     Type m_type;
     Risktype m_risktype;
     
-    /// Calendar used when Type is Type_Length
+    /// Calendar may be used when Type is Type_Duration
     Calendar *m_calendar;
     
 #ifndef NDEBUG

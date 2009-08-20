@@ -1404,8 +1404,7 @@ QString Estimate::typeToString( bool trans ) const {
 QStringList Estimate::typeToStringList( bool trans ) {
     return QStringList() 
             << (trans ? i18n("Effort") : QString("Effort"))
-            << (trans ? i18n("FixedDuration") : QString("FixedDuration"))
-            << (trans ? i18n("Length") : QString("Length"));
+            << (trans ? i18n("Duration") : QString("Duration"));
 }
 
 void Estimate::setType(Type type)
@@ -1420,12 +1419,12 @@ void Estimate::setType(Type type)
 void Estimate::setType(const QString& type) {
     if (type == "Effort")
         setType(Type_Effort);
-    else if (type == "FixedDuration")
-        setType(Type_FixedDuration);
-    else if (type == "Length")
-        setType(Type_Length);
+    else if (type == "Duration" || /*old format*/ type == "FixedDuration")
+        setType(Type_Duration);
+    else if (/*old format*/type == "Length")
+        setType(Type_Duration);
     else if (type == "Type_FixedDuration") // Typo, keep old xml files working
-        setType(Type_FixedDuration);
+        setType(Type_Duration);
     else
         setType(Type_Effort); // default
 }
@@ -1635,7 +1634,7 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
 QList<double> Estimate::scales() const
 {
     QList<double> s;
-    if ( m_type == Type_FixedDuration ) {
+    if ( m_type == Type_Duration && m_calendar == 0 ) {
         return s; // Use default scaling ( 24h a day...)
     }
     if ( m_parent == 0 ) {

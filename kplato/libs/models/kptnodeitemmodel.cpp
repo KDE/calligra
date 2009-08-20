@@ -2005,9 +2005,9 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case NodeModel::NodeEstimateCalendar: // Hmmm, check for Type_Length?
+            case NodeModel::NodeEstimateCalendar:
             {
-                if ( n->type() == Node::Type_Task && n->estimate()->type() == Estimate::Type_Length )
+                if ( n->type() == Node::Type_Task && n->estimate()->type() == Estimate::Type_Duration )
                 {
                     flags |= Qt::ItemIsEditable;
                 }
