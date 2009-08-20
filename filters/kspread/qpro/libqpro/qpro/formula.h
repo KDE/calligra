@@ -53,7 +53,7 @@ protected:
 
 struct QpFormulaConv
 {
-   QP_INT8       cOperand;
+   QP_UINT8       cOperand;
    void        (*cFunc)(QpFormula& pThis, const char* pArg);
    const char*   cArg;
 };

@@ -352,7 +352,7 @@ QpFormula::argSeparator(const char* pArg)
 char*
 QpFormula::formula()
 {
-   QP_INT8 lOperand;
+   QP_UINT8 lOperand;
 
    cStack.push(cFormulaStart);
 
