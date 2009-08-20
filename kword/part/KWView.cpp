@@ -58,7 +58,7 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
-#include <KoTextSelectionHandler.h>
+#include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoTextAnchor.h>
@@ -124,7 +124,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     if (statusBar())
         KWStatusBar::addViewControls(statusBar(), this);
 
-    // the zoom controller needs to be initialized after the status bar gets initialized as 
+    // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
     m_zoomController->setPageSize(m_currentPage.rect().size());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
@@ -838,7 +838,7 @@ KoPrintJob * KWView::createPrintJob()
 void KWView::insertFrameBreak()
 {
     // TODO should this be removed??
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     if (handler)
         handler->insertFrameBreak();
 }
@@ -859,7 +859,7 @@ void KWView::addBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
 
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
@@ -932,7 +932,7 @@ void KWView::deleteBookmark(const QString &name)
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
 
     KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
@@ -1061,7 +1061,7 @@ void KWView::inlineFrame()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
     KoTextAnchor *anchor = new KoTextAnchor(targetShape);
     anchor->setOffset(QPointF(0, -targetShape->size().height()));

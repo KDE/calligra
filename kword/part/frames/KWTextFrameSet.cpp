@@ -30,6 +30,8 @@
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
+#include <KoUndoStack.h>
 
 #include <changetracker/KoChangeTracker.h>
 
@@ -56,6 +58,9 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
         Q_ASSERT(changeTracker);
         doc.setChangeTracker(changeTracker);
+        KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(m_kwordDocument->dataCenterMap()["UndoStack"]);
+        Q_ASSERT(undoStack);
+        doc.setUndoStack(undoStack);
     }
     m_document->setUseDesignMetrics(true);
 }
@@ -78,6 +83,9 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
         Q_ASSERT(changeTracker);
         doc.setChangeTracker(changeTracker);
+        KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(m_kwordDocument->dataCenterMap()["UndoStack"]);
+        Q_ASSERT(undoStack);
+        doc.setUndoStack(undoStack);
     }
     m_document->setUseDesignMetrics(true);
     switch (m_textFrameSetType) {
@@ -144,6 +152,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             Q_ASSERT(changeTracker);
             doc.setChangeTracker(changeTracker);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+            KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(m_kwordDocument->dataCenterMap()["UndoStack"]);
+            Q_ASSERT(undoStack);
+            doc.setUndoStack(undoStack);
         }
         data->setDocument(m_document, false);
     } else {
@@ -153,6 +164,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         updateTextLayout();
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
+    KoTextDocument(m_document).setFrameSetUp(true);
 }
 
 void KWTextFrameSet::updateTextLayout()

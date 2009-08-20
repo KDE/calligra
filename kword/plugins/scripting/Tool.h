@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoTextSelectionHandler.h>
+#include <KoTextEditor.h>
 #include <KWView.h>
 #include <KWCanvas.h>
 
@@ -80,8 +80,8 @@ public:
     KoToolSelection* toolSelection() const {
         return m_toolproxy ? m_toolproxy->selection() : 0;
     }
-    KoTextSelectionHandler* textSelection() const {
-        return dynamic_cast< KoTextSelectionHandler* >(toolSelection());
+    KoTextEditor* textSelection() const {
+        return dynamic_cast< KoTextEditor* >(toolSelection());
     }
     QHash<QString, KAction*> actions() const {
         return m_toolproxy ? m_toolproxy->actions() : QHash<QString, KAction*>();
@@ -101,18 +101,18 @@ public slots:
 
     /** Return the selected text. */
     QString selectedText() const {
-        KoTextSelectionHandler* h = textSelection();
+        KoTextEditor* h = textSelection();
         return h ? h->selectedText() : QString();
     }
-
+//TODO return the textEditor
     /** Return the active/current \a TextCursor object. */
-    QObject* cursor() {
-        KoTextSelectionHandler* h = textSelection();
+/*    QObject* cursor() {
+        KoTextEditor* h = textSelection();
         return h ? new TextCursor(this, h->caret()) : 0;
     }
-
+*/
     /** Set the active/current \a TextCursor object. */
-    bool setCursor(QObject* cursor) {
+/*    bool setCursor(QObject* cursor) {
         kDebug(32010) << "Scripting::Selection::setCursor";
         TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
         if (! textcursor) return false;
@@ -122,12 +122,13 @@ public slots:
         if (! r) return false;
         QVariant variant;
         variant.setValue((QObject*) &textcursor->cursor());
+//TODO store TextEditor?
 // the above can't work;  storing a pointer to a value based object (QTextCursor).
 // I don't even think its possible to store a QTextCursor in any form in a QVarient. (TZ)
         //r->setResource(KWord::CurrentTextCursor, variant);
         return true;
     }
-
+*/
     /** Return a list of the action names. */
     QStringList actionNames() {
         return QStringList(actions().keys());
