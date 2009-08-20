@@ -149,7 +149,7 @@ void ProjectTester::schedule()
     m_project->addTask( t, m_project );
     t->estimate()->setUnit( Duration::Unit_d );
     t->estimate()->setExpectedEstimate( 1.0 );
-    t->estimate()->setType( Estimate::Type_FixedDuration );
+    t->estimate()->setType( Estimate::Type_Duration );
     
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
