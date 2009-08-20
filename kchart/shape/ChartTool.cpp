@@ -35,6 +35,7 @@
 #include <QTabWidget>
 #include <QPen>
 #include <QBrush>
+#include <QPainter>
 
 // KDE
 #include <KLocale>
@@ -47,6 +48,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoTextShapeData.h>
+#include <KoViewConverter.h>
 
 // ChartShape
 #include "ChartConfigWidget.h"
