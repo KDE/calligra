@@ -20,7 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
+
+// Own
 #include "ChartShape.h"
 
 // Posix
@@ -100,6 +101,7 @@
 #include "ChartDocument.h"
 #include "TableModel.h"
 
+
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
 // so let's simply make it "tar" !
@@ -129,7 +131,7 @@ const ChartSubtype  defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype,         // Circle
     NoChartSubtype,         // Ring
     NoChartSubtype,         // Scatter
-    NoChartSubtype,         // radar
+    NoChartSubtype,         // Radar
     NoChartSubtype,         // Stock
     NoChartSubtype,         // Bubble
     NoChartSubtype,         // Surface
@@ -143,6 +145,7 @@ bool isPolar( ChartType type )
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
+        // FIXME: What?  A bubble or surface chart is not polar, is it?
     case BubbleChartType:
     case SurfaceChartType:
         return true;
@@ -157,11 +160,13 @@ bool isCartesian( ChartType type )
     return !isPolar( type );
 }
 
+// FIXME: Rename Title to TitleLabelType and so on
 enum OdfLabelType {
     Title,
     SubTitle,
     Footer
 };
+
 
 QString saveOdfFont( KoGenStyles& mainStyles,
                                  const QFont& font,
@@ -199,7 +204,8 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
     return true;
 }
 
-void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, OdfLabelType odfLabelType )
+void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
+                   KoGenStyles &mainStyles, OdfLabelType odfLabelType )
 {
     // Don't save hidden labels, as that's the way of removing them
     // from a chart.
@@ -342,9 +348,13 @@ void ChartShape::Private::showLabel( KoShape *label )
             if ( axis->position() != BottomAxisPosition )
                 continue;
 
-            double _spaceToExpand = label->size().height() - ( shape->size().height() - axis->title()->position().y() - axis->title()->size().height() );
+            double _spaceToExpand = ( label->size().height()
+                                      - ( shape->size().height()
+                                          - axis->title()->position().y()
+                                          - axis->title()->size().height() ) );
             if ( _spaceToExpand > 0.0 ) {
-                axis->title()->setPosition( axis->title()->position() - QPointF( 0.0, _spaceToExpand ) );
+                axis->title()->setPosition( axis->title()->position()
+                                            - QPointF( 0.0, _spaceToExpand ) );
                 spaceToExpand += _spaceToExpand;
             }
         }
@@ -567,7 +577,8 @@ void ChartShape::showFooter()
     d->showLabel( d->footer );
 }
 
-void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
+void ChartShape::setModel( QAbstractItemModel *model,
+                           bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
     //kDebug(35001) << "Setting" << model << "as chart model.";
@@ -583,7 +594,8 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
     requestRepaint();
 }
 
-void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &selection )
+void ChartShape::setModel( QAbstractItemModel *model,
+                           const QVector<QRect> &selection )
 {
     Q_ASSERT( model );
     kDebug(35001) << "Setting" << model << "as chart model.";
@@ -728,7 +740,7 @@ void ChartShape::updateChildrenPositions()
         KoShape  *title = axis->title();
         QPointF   titlePosition;
 
-        // FIXME: titlePosition is uninitialized here!
+        // FIXME BUG: titlePosition is uninitialized here!
         title->setPosition( titlePosition );
     }
 
@@ -793,7 +805,8 @@ void ChartShape::setThreeD( bool threeD )
     d->plotArea->setThreeD( threeD );
 }
 
-void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
+void ChartShape::paintComponent( QPainter &painter,
+                                 const KoViewConverter &converter )
 {
     // Paint the background
     if ( background() ) {
@@ -810,7 +823,9 @@ void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &conve
     }
 }
 
-void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas )
+void ChartShape::paintDecorations( QPainter &painter,
+                                   const KoViewConverter &converter,
+                                   const KoCanvasBase *canvas )
 {
     // This only is a helper decoration, do nothing if we're already
     // painting handles anyway.
@@ -828,7 +843,9 @@ void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &con
     painter.drawRect( border );
 }
 
-bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument )
+bool ChartShape::loadEmbeddedDocument( KoStore *store, 
+                                       const KoXmlElement &objectElement, 
+                                       const KoXmlDocument &manifestDocument )
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
         kError() << "Object element has no valid xlink:href attribute";
@@ -874,8 +891,8 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
         return false;
     }
 
-    const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
-    if ( !oasis ) {
+    const bool isOdf = mimeType.startsWith( "application/vnd.oasis.opendocument" );
+    if ( !isOdf ) {
         tmpURL += "/maindoc.xml";
         //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
     }
@@ -893,7 +910,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
          || tmpURL.startsWith( INTERNAL_PROTOCOL )
          || KUrl::isRelativeUrl( tmpURL ) )
     {
-        if ( oasis ) {
+        if ( isOdf ) {
             store->pushDirectory();
             Q_ASSERT( tmpURL.startsWith( INTERNAL_PROTOCOL ) );
             QString relPath = KUrl( tmpURL ).path().mid( 1 );
@@ -944,8 +961,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
 
     // see KoDocument::insertChild for an explanation what's going on
     // now :-)
-    /*if ( parentDocument() )
-    {
+    /*if ( parentDocument() ) {
         KoDocument *parent = parentDocument();
 
         KParts::PartManager* manager = parent->manager();
@@ -1013,7 +1029,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     bool  knownType = false;
     for ( int type = 0; type < (int)LastChartType; ++type ) {
         if ( chartClass == ODF_CHARTTYPES[ (ChartType)type ] ) {
-            kDebug(35001) <<"found chart of type" << chartClass;
+            //kDebug(35001) <<"found chart of type" << chartClass;
 
             d->plotArea->setChartType( (ChartType)type );
             knownType = true;

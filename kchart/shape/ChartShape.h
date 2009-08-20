@@ -146,7 +146,8 @@ public:
     
     /// reimplemented
     void paintComponent( QPainter &painter, const KoViewConverter &converter );
-    void paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas );
+    void paintDecorations( QPainter &painter, const KoViewConverter &converter,
+                           const KoCanvasBase *canvas );
     
     /// reimplemented
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
