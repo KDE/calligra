@@ -332,11 +332,6 @@ This is not limited to persons available in a resource group but can be anyone. 
        <string>Duration</string>
       </property>
      </item>
-     <item>
-      <property name="text">
-       <string>Length</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="9" column="0">

@@ -692,9 +692,9 @@ public:
     /// Return a stringlist of all estimate types. Translated if @p trans = true.
     static QStringList typeToStringList( bool trans=false );
     
-    /// Return the calendar used when Type is Length
+    /// Return the calendar used when Type is Duration
     Calendar *calendar() const { return m_calendar; }
-    /// Set the calendar to be used when Type is Length
+    /// Set the calendar to be used when Type is Duration
     void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };

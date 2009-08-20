@@ -191,9 +191,8 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
                 estimate->setEnabled(false);
             } else {
                 estimate->setEnabled(true);
+                calendarCombo->setEnabled(true);
             }
-        } else if ( type == 2 /*Length*/ ) {
-            calendarCombo->setEnabled(true);
         }
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);

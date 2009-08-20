@@ -1683,7 +1683,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResponsible: return i18n( "Responsible" );
             case NodeAllocation: return i18n( "Allocation" );
             case NodeEstimateType: return i18n( "Estimate Type" );
-            case NodeEstimateCalendar: return i18n( "Estimate Calendar" );
+            case NodeEstimateCalendar: return i18n( "Calendar" );
             case NodeEstimate: return i18n( "Estimate" );
             case NodeOptimisticRatio: return i18n( "Optimistic" ); // Ratio
             case NodePessimisticRatio: return i18n( "Pessimistic" ); // Ratio
