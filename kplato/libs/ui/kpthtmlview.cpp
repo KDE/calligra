@@ -43,7 +43,6 @@
 namespace KPlato
 {
 
-
 //-----------------------------------
 HtmlView::HtmlView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
@@ -54,6 +53,18 @@ HtmlView::HtmlView( KoDocument *part, QWidget *parent )
     m_htmlPart.show();
 
     setupGui();
+
+    KParts::BrowserExtension *ext = m_htmlPart.browserExtension();
+    if ( ext ) {
+        connect( ext, SIGNAL( openUrlRequest (const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ), SLOT( slotOpenUrlRequest(const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ) );
+    }
+}
+
+
+void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments, const KParts::BrowserArguments &browserArguments)
+{
+    qDebug()<<"slotOpenUrlRequest:"<<url<<url.protocol()<<url.path()<<url.fileName();
+    emit openUrlRequest( this, url );
 }
 
 bool HtmlView::openHtml( const KUrl &url )

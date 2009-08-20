@@ -35,6 +35,7 @@ class QPoint;
 namespace KPlato
 {
 
+
 class KPLATOUI_EXPORT HtmlView : public ViewBase
 {
     Q_OBJECT
@@ -52,9 +53,14 @@ public:
     KHTMLPart &htmlPart() { return m_htmlPart; }
     const KHTMLPart &htmlPart() const { return m_htmlPart; }
 
+signals:
+    void openUrlRequest( HtmlView*, const KUrl& );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+
+    void slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
 
 protected:
     void updateActionsEnabled(  bool on = true );

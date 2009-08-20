@@ -107,6 +107,7 @@
 #include "kptworkpackageconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
+#include "about/aboutpage.h"
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -485,6 +486,15 @@ void View::createViews()
     }
 }
 
+void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
+{
+    qDebug()<<"View::slotOpenUrlRequest:"<<url<<url.protocol()<<url.fileName();
+    if ( url.url().startsWith("about:kplato") ) {
+        KPlatoAboutPage::generatePage( v->htmlPart(), url );
+        return;
+    }
+}
+
 ViewBase *View::createWelcomeView()
 {
     HtmlView *v = new HtmlView( getPart(), m_tab );
@@ -493,31 +503,9 @@ ViewBase *View::createWelcomeView()
     v->htmlPart().setMetaRefreshEnabled(false);
     v->htmlPart().setPluginsEnabled(false);
 
-    QString location = componentData().dirs()->findResource( "kplato_about", "main.html" );
-    QString content = KPIMUtils::kFileToByteArray( location );
-    content = content.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
-    if ( QApplication::isRightToLeft() ) {
-        content = content.arg( "@import \"" + KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) +  "\";");
-    } else {
-        content = content.arg( "" );
-    }
-    v->htmlPart().begin(KUrl::fromPath( location ));
+    slotOpenUrlRequest( v, KUrl( "about:kplato/main" ) );
 
-    QString fontSize = QString::number( 14 );
-    QString appTitle = i18n( "KPlato" );
-    QString catchPhrase = "";
-    QString quickDescription = i18n( "The KPlato Project Manager is part of the KOffice suite of office applications." );
-    QString info = i18n( 
-    "<p><b>Introduction</b></p>"
-    "KPlato is a project management application. It is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, KPlato offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
-    "<p><b>Tips</b></p>"
-    "You can edit attributes in the various editors by selecting the item you want to edit (doubleclick or press F2), or open a dialog using the context menu."
-    "<p>TODO</p>"
-    );
-    v->htmlPart().write( content.arg( fontSize ).arg( appTitle ).arg( catchPhrase ).arg(  quickDescription ).arg( info ) );
-
-    v->htmlPart().end();
-
+    connect( v, SIGNAL( openUrlRequest( HtmlView*, const KUrl& ) ), SLOT( slotOpenUrlRequest( HtmlView*, const KUrl& ) ) );
 
     m_tab->addWidget( v );
     return v;

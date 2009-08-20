@@ -71,7 +71,7 @@ class ResourceGroup;
 class Relation;
 class Context;
 class ViewAdaptor;
-
+class HtmlView;
 
 //-------------
 class KPLATO_EXPORT View : public KoView
@@ -214,6 +214,8 @@ protected slots:
     void slotWorkPackageLoaded();
     void slotMailWorkpackage( Node *node, Resource *resource = 0 );
     void slotMailWorkpackages( QList<Node*> &nodes, Resource *resource = 0 );
+
+    void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
 
 #ifndef NDEBUG
     void slotPrintDebug();

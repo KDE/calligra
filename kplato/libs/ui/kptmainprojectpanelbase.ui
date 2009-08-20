@@ -87,7 +87,7 @@
         <string>The project leader.</string>
        </property>
        <property name="text">
-        <string>&amp;Leader:</string>
+        <string>Manager:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignVCenter</set>

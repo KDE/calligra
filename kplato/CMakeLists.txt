@@ -58,6 +58,8 @@ set(kplatoprivate_LIB_SRCS
     kptconfigskeleton.cpp
 
     kptinsertfiledlg.cpp
+
+    about/aboutpage.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
