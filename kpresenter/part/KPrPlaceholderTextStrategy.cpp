@@ -86,7 +86,7 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
         // this code is needed to make sure the text of the textshape is layouted before it is painted
         KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>( m_textShape->userData() );
         QTextDocument * document = shapeData->document();
-        KoTextDocumentLayout * lay = dynamic_cast<KoTextDocumentLayout*>( document->documentLayout() );
+        KoTextDocumentLayout * lay = qobject_cast<KoTextDocumentLayout*>( document->documentLayout() );
         if ( lay ) {
             lay->layout();
         }

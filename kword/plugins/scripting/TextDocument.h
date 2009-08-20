@@ -50,7 +50,7 @@ public:
     virtual ~TextDocument() {}
 
     KoInlineTextObjectManager* inlineTextObjectManager() {
-        KoTextDocumentLayout* layout = dynamic_cast< KoTextDocumentLayout* >(m_doc->documentLayout());
+        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(m_doc->documentLayout());
         return layout ? layout->inlineTextObjectManager() : 0;
     }
 
@@ -145,7 +145,7 @@ public slots:
     new variable at the position of the \a cursor . If the variables was
     successful added true is returned else false is returned. */
     bool addVariable(QObject* cursor, const QString& variablename) {
-        TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
+        TextCursor *textcursor = qobject_cast<TextCursor*>(cursor);
         if (! textcursor) {
             kDebug(32010) << "No cursor";
             return false;

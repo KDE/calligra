@@ -678,7 +678,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             note->setLabel(footnote.attribute("value"));
                             note->setAutoNumbering( footnote.attribute("numberingtype", "auto") == "auto" );
                             note->setText(i18n("Unable to locate footnote text"));
-                            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
+                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
                             Q_ASSERT(layout->inlineTextObjectManager());
@@ -698,7 +698,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             note->setLabel(footEndNote.attribute("value"));
                             note->setAutoNumbering( footEndNote.attribute("numberingtype", "auto") == "auto" );
                             note->setText(i18n("Unable to locate note-text"));
-                            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
+                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
                             Q_ASSERT(layout->inlineTextObjectManager());
@@ -1174,7 +1174,7 @@ void KWDLoader::insertAnchors()
         QTextCursor cursor(anchor.document);
         cursor.setPosition(anchor.cursorPosition);
         cursor.setPosition(anchor.cursorPosition + 1, QTextCursor::KeepAnchor);
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
         Q_ASSERT(layout);
         Q_ASSERT(layout->inlineTextObjectManager());
         layout->inlineTextObjectManager()->insertInlineObject(cursor, textAnchor);

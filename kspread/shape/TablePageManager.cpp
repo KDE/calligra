@@ -90,7 +90,7 @@ void TablePageManager::preparePage(int page)
     Q_CHECK_PTR(data);
     QTextDocument* const document = data->document();
     Q_CHECK_PTR(document);
-    KoTextDocumentLayout* const layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+    KoTextDocumentLayout* const layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_CHECK_PTR(layout);
     const QList<KoShape*> textShapes = layout->shapes();
     const int masterIndex = textShapes.indexOf(d->master);
