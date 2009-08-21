@@ -164,7 +164,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         updateTextLayout();
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
-    KoTextDocument(m_document).textEditor()->setupFinished(true);
 }
 
 void KWTextFrameSet::updateTextLayout()
