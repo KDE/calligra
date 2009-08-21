@@ -79,6 +79,7 @@ ChartDocument::ChartDocument( ChartShape *parent )
 
 ChartDocument::~ChartDocument()
 {
+    delete d;
 }
 
 

@@ -244,6 +244,8 @@ DataSet::~DataSet()
 {
     if ( d->attachedAxis )
         d->attachedAxis->detachDataSet( this, true );
+
+    delete d;
 }
 
 

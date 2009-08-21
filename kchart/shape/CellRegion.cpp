@@ -107,6 +107,7 @@ CellRegion::CellRegion( const QVector<QRect> &rects )
 
 CellRegion::~CellRegion()
 {
+    delete d;
 }
 
 

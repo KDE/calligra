@@ -94,6 +94,7 @@ Surface::Surface( PlotArea *parent )
 
 Surface::~Surface()
 {
+    delete d;
 }
 
 

@@ -99,6 +99,7 @@ KDChartModel::KDChartModel( QObject *parent /* = 0 */ )
 
 KDChartModel::~KDChartModel()
 {
+    delete d;
 }
 
 
