@@ -24,21 +24,33 @@ class KHTMLPart;
 class KUrl;
 class QString;
 
+namespace KPlato {
+    class Project;
+}
+
+using namespace KPlato;
+
 class KPlatoAboutPage
 {
 public:
     KPlatoAboutPage();
     ~KPlatoAboutPage();
 
-    static void generatePage( KHTMLPart &part, const KUrl &url );
+    void generatePage( KHTMLPart &part, const KUrl &url );
+
+    void setProject( Project *project ) { m_project = project; }
 
 protected:
-    static QString loadFile( const QString& file );
-    static QString intro();
-    static QString tips();
-    static QString tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext );
-    static QString tutorial1();
-    static QString tutorial2();
+    QString loadFile( const QString& file );
+    QString main();
+    QString intro();
+    QString tips();
+    QString tutorial( const QString &header, const QString &text, const QString &nextpage, const QString &nexttext );
+    QString tutorial1();
+    QString tutorial2();
+
+private:
+    Project *m_project;
 };
 
 #endif

@@ -124,6 +124,7 @@ void Part::setProject( Project *project )
         m_project->setSchedulerPlugins( m_schedulerPlugins );
         QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
     }
+    m_aboutPage.setProject( project );
     emit changed();
 }
 

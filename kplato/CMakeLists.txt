@@ -27,7 +27,6 @@ add_subdirectory( templates )
 add_subdirectory( pics )
 add_subdirectory( toolbar )
 add_subdirectory( plugins )
-add_subdirectory( about )
 #add_subdirectory( tests )
 
 add_subdirectory( workpackage )
@@ -122,4 +121,14 @@ install( FILES  kplato.rc kplato_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpl
 install( FILES  kplato.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kplatorc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+
+install(FILES
+    about/top-left-kplato.png
+    about/main.html
+    about/intro.html
+    about/tips.html
+    about/tutorial.html
+    about/kplato.css
+    DESTINATION ${DATA_INSTALL_DIR}/kplato/about
+)
 

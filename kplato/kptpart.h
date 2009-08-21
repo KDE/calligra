@@ -29,6 +29,7 @@
 #include "kptconfig.h"
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
+#include "about/aboutpage.h"
 
 #include "KoDocument.h"
 
@@ -104,6 +105,7 @@ public:
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
 
+    KPlatoAboutPage &aboutPage() { return m_aboutPage; }
 
 signals:
     void changed();
@@ -145,6 +147,8 @@ private:
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
     QMap<Project*, KUrl> m_workpackages;
     QFileInfoList m_infoList;
+
+    KPlatoAboutPage m_aboutPage;
 };
 
 

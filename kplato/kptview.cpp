@@ -64,6 +64,7 @@
 #include <KConfigDialog>
 #include <kpimutils/kfileio.h>
 #include <KToolInvocation>
+#include <KRun>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -490,9 +491,15 @@ void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
 {
     qDebug()<<"View::slotOpenUrlRequest:"<<url<<url.protocol()<<url.fileName();
     if ( url.url().startsWith("about:kplato") ) {
-        KPlatoAboutPage::generatePage( v->htmlPart(), url );
+        getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
     }
+    if ( url.protocol() == "help" ) {
+        KToolInvocation::invokeHelp( "", url.fileName() );
+        return;
+    }
+    // try to open the url
+    new KRun( url, mainWindow() );
 }
 
 ViewBase *View::createWelcomeView()

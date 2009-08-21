@@ -47,6 +47,9 @@ namespace KPlato
 HtmlView::HtmlView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
+    m_htmlPart.view()->setFrameStyle( QFrame::StyledPanel );
+    m_htmlPart.view()->setFrameShadow( QFrame::Sunken );
+
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     l->addWidget( m_htmlPart.view() );

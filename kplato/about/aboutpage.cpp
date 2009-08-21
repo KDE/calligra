@@ -32,6 +32,7 @@
 #include <KHTMLPart>
 
 KPlatoAboutPage::KPlatoAboutPage()
+    : m_project( 0 )
 {
 }
 
@@ -39,10 +40,46 @@ KPlatoAboutPage::~KPlatoAboutPage()
 {
 }
 
-QString KPlatoAboutPage::intro()
+QString KPlatoAboutPage::main()
 {
     KIconLoader *iconloader = KIconLoader::global();
     QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/main.html" ));
+    if ( res.isEmpty() ) {
+        qDebug()<<"KPlatoAboutPage::intro: main.html result empty";
+        return res;
+    }
+    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+
+    QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
+
+    res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
+    if ( qApp->layoutDirection() == Qt::RightToLeft )
+    res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
+    else
+    res = res.arg( "" );
+
+    res = res.arg( i18n( "KPlato" ) )
+    .arg( i18nc("KDE 4 tag line, see http://kde.org/img/kde40.png", "Be free.") )
+    .arg( i18n("KPlato is a Project Planning and Management application.") )
+    .arg( i18n( 
+        "<b>Welcome to KPlato.</b>"
+        "<br>These introductory pages should give you an idea of how to use KPlato and what you can use it for."
+        ) )
+    .arg( icon_path ).arg( i18n( "A short introduction." ) )
+    .arg( icon_path ).arg( i18n( "Tips on how to manipulate and inspect data." ) )
+    .arg( icon_path ).arg( i18n( "A small tutorial to get you started." ) )
+    .arg( i18n(
+        "<em>Note:</em> To view these pages when you are in other parts of KPlato, choose the menu option <em>Help -> KPlato Introduction</em>."
+        ) )
+    ;
+
+    return res;
+}
+
+QString KPlatoAboutPage::intro()
+{
+    KIconLoader *iconloader = KIconLoader::global();
+    QString res = loadFile( KStandardDirs::locate( "data", "kplato/about/intro.html" ));
     if ( res.isEmpty() ) {
         qDebug()<<"KPlatoAboutPage::intro: main.html result empty";
         return res;
@@ -53,16 +90,16 @@ QString KPlatoAboutPage::intro()
     if ( qApp->layoutDirection() == Qt::RightToLeft )
 	res = res.arg( "@import \"%1\";" ).arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage_rtl.css" ) );
     else
-	res = res.arg( "" );
+        res = res.arg( "" );
 
-    res = res.arg( i18n( "KPlato" ) )
-    .arg( i18nc("KDE 4 tag line, see http://kde.org/img/kde40.png", "Be free.") )
-    .arg( i18n("KPlato is a Project Planning and Management application.") )
+    res = res.arg( i18n("KPlato is a Project Planning and Management application.") )
     .arg( i18n( 
         "KPlato is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, KPlato offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
+        "<p>You can find more information in the <a href=\"help:kplato\">documentation</a> "
+        "or online at <a href=\"http://www.koffice.org/kplato\">http://www.koffice.org/kplato</a></p>"
         ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
-    .arg( i18n( "Next: tips" ) )
+    .arg( i18n( "Next: Tips" ) )
     ;
 
     return res;
@@ -99,10 +136,7 @@ QString KPlatoAboutPage::tips()
     else
         res = res.arg( "" );
 
-    res = res.arg( i18n( "KPlato" ) )
-	.arg( i18nc("KDE 4 tag line, see http://kde.org/img/kde40.png", "Be free.") )
-	.arg( i18n("Editing tips.") )
-
+    res = res.arg( i18n("Editing tips.") )
     .arg( i18n( 
         "<br><b>To</b> edit project data, different views and editors can be selected in the View Selector docker."
         "<br><b>The</b> views are generally used to inspect data after the project has been scheduled. No data will appear in the views if the project has not been scheduled. Scheduling is done in the Schedules editor."
@@ -132,9 +166,7 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
     else
         res = res.arg( "" );
 
-    res = res.arg( i18n( "KPlato" ) )
-    .arg( i18nc("KDE 4 tag line, see http://kde.org/img/kde40.png", "Be free.") )
-    .arg( header )
+    res = res.arg( header )
     .arg( text )
     .arg( "about:kplato/" + nextpage )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( next_icon_path )
@@ -172,6 +204,8 @@ void KPlatoAboutPage::generatePage( KHTMLPart &part, const KUrl &url)
 {
     QString html;
     if (url.url() == "about:kplato/main")
+        html = main();
+    else if (url.url() == "about:kplato/intro")
         html = intro();
     else if (url.url() == "about:kplato/tips")
         html = tips();
@@ -180,7 +214,7 @@ void KPlatoAboutPage::generatePage( KHTMLPart &part, const KUrl &url)
     else if (url.url() == "about:kplato/tutorial2")
         html = tutorial2();
     else
-        html = intro();
+        html = main();
 
     part.begin();
     part.write( html );
