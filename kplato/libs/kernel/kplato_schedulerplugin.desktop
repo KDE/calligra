@@ -16,6 +16,7 @@ Name[zh_TW]=KPlato 排程器外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KPlato/SchedulerPlugin
 Comment=A plugin that calculates a project schedule
+Comment[de]=Ein Modul, das einen Projektzeitplan berechnet
 Comment[es]=Un complemento que calcula la planificación de un proyecto
 Comment[et]=Projekti ajakava arvutav plugin
 Comment[gl]=Unha extensión que calcula a axenda do proxecto
