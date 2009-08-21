@@ -208,6 +208,8 @@ public:
 
     /// Sets the data centers to be used by this document
     void useExternalDataCenterMap( QMap<QString, KoDataCenter*> dataCenters );
+
+    void addToDataCenterMap(const QString &key, KoDataCenter* dataCenter);
 private:
 
     class Private;
