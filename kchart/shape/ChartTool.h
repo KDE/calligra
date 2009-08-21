@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2007      Inge Wallin  <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,11 +22,11 @@
 #ifndef KCHART_CHARTTOOL_H
 #define KCHART_CHARTTOOL_H
 
-// Local
-#include "ChartShape.h"
-
 // KOffice
 #include <KoTool.h>
+
+// KChart
+#include "ChartShape.h"
 
 
 class QAction;

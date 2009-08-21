@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,15 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// Local
+// Own
 #include "ChartTool.h"
-#include "ChartProxyModel.h"
-#include "Surface.h"
-#include "PlotArea.h"
-#include "Axis.h"
-#include "DataSet.h"
-#include "Legend.h"
-#include "KDChartConvertions.h"
 
 // Qt
 #include <QAction>
@@ -50,9 +44,6 @@
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
 
-// ChartShape
-#include "ChartConfigWidget.h"
-
 // KDChart
 #include <KDChartChart>
 #include <KDChartCartesianAxis>
@@ -60,6 +51,17 @@
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartCartesianCoordinatePlane>
 #include <KDChartPosition>
+
+// KChart
+#include "Surface.h"
+#include "PlotArea.h"
+#include "Axis.h"
+#include "DataSet.h"
+#include "Legend.h"
+#include "ChartProxyModel.h"
+#include "ChartConfigWidget.h"
+#include "KDChartConvertions.h"
+
 
 using namespace KChart;
 
@@ -352,6 +354,7 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
     d->shape->setChartSubType( subtype );
     d->shape->update();
 }
@@ -359,43 +362,49 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
 
 void ChartTool::setDataSetXDataRegion( DataSet *dataSet, const QString &region )
 {
-	if ( !dataSet )
-	    return;
-	dataSet->setXDataRegionString( region );
+    if ( !dataSet )
+        return;
+
+    dataSet->setXDataRegionString( region );
 }
 
 void ChartTool::setDataSetYDataRegion( DataSet *dataSet, const QString &region )
 {
-	if ( !dataSet )
-	    return;
-	dataSet->setYDataRegionString( region );
+    if ( !dataSet )
+        return;
+
+    dataSet->setYDataRegionString( region );
 }
 
 void ChartTool::setDataSetCustomDataRegion( DataSet *dataSet, const QString &region )
 {
-	if ( !dataSet )
-	    return;
-	dataSet->setCustomDataRegionString( region );
+    if ( !dataSet )
+        return;
+
+    dataSet->setCustomDataRegionString( region );
 }
 
 void ChartTool::setDataSetLabelDataRegion( DataSet *dataSet, const QString &region )
 {
-	if ( !dataSet )
-	    return;
-	dataSet->setLabelDataRegionString( region );
+    if ( !dataSet )
+        return;
+
+    dataSet->setLabelDataRegionString( region );
 }
 
 void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region )
 {
-	if ( !dataSet )
-	    return;
-	dataSet->setCategoryDataRegionString( region );
+    if ( !dataSet )
+        return;
+
+    dataSet->setCategoryDataRegionString( region );
 }
 
 
 void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
 {
     Q_ASSERT( dataSet );
+
     if ( dataSet )
         dataSet->setChartType( type );
     d->shape->update();
@@ -415,6 +424,7 @@ void ChartTool::setDataSetColor( DataSet *dataSet, const QColor& color )
 {
     if ( !dataSet )
         return;
+
     dataSet->setColor( color );
     d->shape->update();
 }
@@ -423,6 +433,7 @@ void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
 {
     if ( !dataSet || !axis )
         return;
+
     dataSet->attachedAxis()->detachDataSet( dataSet );
     axis->attachDataSet( dataSet );
     d->shape->update();
@@ -432,6 +443,7 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
 {
     if ( !dataSet )
         return;
+
     dataSet->setShowValues( b );
     d->shape->update();
 }
@@ -440,6 +452,7 @@ void ChartTool::setDataSetShowLabels( DataSet *dataSet, bool b )
 {
     if ( !dataSet )
         return;
+
     dataSet->setShowLabels( b );
     d->shape->update();
 }
@@ -450,6 +463,7 @@ void ChartTool::setThreeDMode( bool threeD )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
     d->shape->setThreeD( threeD );
     d->shape->update();
 }
@@ -459,6 +473,11 @@ void ChartTool::setShowTitle( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
+    // FIXME: Is this the reason why the plotarea doesn't grow again
+    //        if the title checkbox is unchecked?  I think it is.
+    //        Solve this by making showTitle take a bool.
+    //        Similar for the subtitle and footer below.
     if ( show )
         d->shape->showTitle();
     else
@@ -471,6 +490,7 @@ void ChartTool::setShowSubTitle( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
     if ( show )
         d->shape->showSubTitle();
     else
@@ -483,6 +503,7 @@ void ChartTool::setShowFooter( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
     if ( show )
         d->shape->showFooter();
     else
@@ -495,6 +516,7 @@ void ChartTool::setDataDirection( Qt::Orientation direction )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
+
     d->shape->proxyModel()->setDataDirection( direction );
     d->shape->relayout();
 }
@@ -512,6 +534,7 @@ void ChartTool::setFirstColumnIsLabel( bool b )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->proxyModel()->setFirstColumnIsLabel( b );
+
     d->shape->relayout();
 }
 
@@ -520,6 +543,7 @@ void ChartTool::setLegendTitle( const QString &title )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setTitle( title );
     d->shape->legend()->update();
 }
@@ -528,14 +552,17 @@ void ChartTool::setLegendFont( const QFont &font )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     // There only is a general font, for the legend items and the legend title
     d->shape->legend()->setFont( font );
     d->shape->legend()->update();
 }
+
 void ChartTool::setLegendFontSize( int size )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setFontSize( size );
     d->shape->legend()->update();
 }
@@ -544,6 +571,7 @@ void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setExpansion( QtOrientationToLegendExpansion( orientation ) );
     d->shape->legend()->update();
 }
@@ -552,6 +580,7 @@ void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setAlignment( alignment );
     d->shape->legend()->update();
 }
@@ -560,6 +589,7 @@ void ChartTool::setLegendFixedPosition( LegendPosition position )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setLegendPosition( position );
 
     foreach (QWidget *w, optionWidgets()) {
@@ -573,6 +603,7 @@ void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setBackgroundColor( color );
     d->shape->legend()->update();
 }
@@ -581,6 +612,7 @@ void ChartTool::setLegendFrameColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setFrameColor( color );
     d->shape->legend()->update();
 }
@@ -589,6 +621,7 @@ void ChartTool::setLegendShowFrame( bool show )
 {
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->legend() );
+
     d->shape->legend()->setShowFrame( show );
     d->shape->legend()->update();
 }
@@ -610,19 +643,21 @@ void ChartTool::addAxis( AxisPosition position, const QString& title )
 void ChartTool::removeAxis( Axis *axis )
 {
     Q_ASSERT( d->shape );
+
     d->shape->plotArea()->removeAxis( axis );
     d->shape->update();
 }
 
 void ChartTool::setAxisTitle( Axis *axis, const QString& title )
 {
-	axis->setTitleText( title );
+    axis->setTitleText( title );
     d->shape->update();
 }
 
 void ChartTool::setAxisShowTitle( Axis *axis, bool show )
 {
     Q_ASSERT( d->shape );
+
     axis->title()->setVisible( show );
     d->shape->update();
 }
@@ -668,6 +703,7 @@ void ChartTool::setAxisUseAutomaticSubStepWidth( Axis *axis, bool automatic )
 void ChartTool::setGapBetweenBars( int percent )
 {
     Q_ASSERT( d->shape );
+
     d->shape->plotArea()->setGapBetweenBars( percent );
     d->shape->update();
 }
@@ -675,6 +711,7 @@ void ChartTool::setGapBetweenBars( int percent )
 void ChartTool::setGapBetweenSets( int percent )
 {
     Q_ASSERT( d->shape );
+
     d->shape->plotArea()->setGapBetweenSets( percent );
     d->shape->update();
 }
@@ -682,6 +719,7 @@ void ChartTool::setGapBetweenSets( int percent )
 void ChartTool::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
     Q_ASSERT( d->shape );
+
     d->shape->plotArea()->setPieExplodeFactor( dataSet, percent );
     d->shape->update();
 }
@@ -689,6 +727,7 @@ void ChartTool::setPieExplodeFactor( DataSet *dataSet, int percent )
 void ChartTool::setShowLegend( bool b )
 {
     Q_ASSERT( d->shape );
+
     d->shape->legend()->setVisible( b );
     d->shape->legend()->update();
 }

@@ -318,7 +318,9 @@ ChartShape::Private::~Private()
 //
 // If there is too little room, then make space by shrinking the Plotarea.
 //
-
+// FIXME: Make it take a bool parameter to show / hide the label in
+//        question and then also grow the Plotarea again if the label
+//        is hidden.
 void ChartShape::Private::showLabel( KoShape *label )
 {
     Q_ASSERT( label );
