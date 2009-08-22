@@ -258,7 +258,7 @@ void KexiComboBoxTableEdit::slotButtonClicked()
         d->button->setChecked(false);
         return;
     }
-    kDebug() << "KexiComboBoxTableEdit::slotButtonClicked()";
+    kDebug();
     if (!popup() || !popup()->isVisible()) {
         kDebug() << "SHOW POPUP";
         showPopup();

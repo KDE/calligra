@@ -165,12 +165,12 @@ void
 KexiInputTableEdit::setRestrictedCompletion()
 {
 #if 0 //js TODO
-    kDebug() << "KexiInputTableEdit::setRestrictedCompletion()";
+    kDebug();
 // KLineEdit *content = static_cast<KLineEdit*>(m_view);
     if (m_cview->text().isEmpty())
         return;
 
-    kDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do";
+    kDebug() << "something to do";
 
     m_cview->useGlobalKeyBindings();
 
@@ -187,7 +187,7 @@ KexiInputTableEdit::setRestrictedCompletion()
 void
 KexiInputTableEdit::completed(const QString &s)
 {
-// kDebug() << "KexiInputTableEdit::completed(): " << s;
+// kDebug() << s;
     m_lineedit->setText(s);
 }
 

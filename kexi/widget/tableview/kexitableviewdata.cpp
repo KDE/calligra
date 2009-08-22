@@ -524,8 +524,7 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
     if (!d->result.success)
         return false;
 
-    kDebug() << "KexiTableViewData::updateRowEditBufferRef() column #"
-    << colnum << " = " << newval.toString();
+    kDebug() << "column #" << colnum << " = " << newval.toString();
     if (!col) {
         kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #"
         << colnum << " not found! col==0";
@@ -548,13 +547,13 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
         return true;
     }
     if (!(col->field())) {
-        kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum << " not found!";
+        kDebug() << "column #" << colnum << "not found!";
         return false;
     }
     //not db-aware:
     const QString colname = col->field()->name();
     if (colname.isEmpty()) {
-        kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum << " not found!";
+        kDebug() << "column #" << colnum << "not found!";
         return false;
     }
     d->pRowEditBuffer->insert(colname, newval);
@@ -662,7 +661,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
 
 bool KexiTableViewData::saveRowChanges(KexiDB::RecordData& record, bool repaint)
 {
-    kDebug() << "KexiTableViewData::saveRowChanges()...";
+    kDebug() << "...";
     d->result.clear();
     emit aboutToUpdateRow(&record, d->pRowEditBuffer, &d->result);
     if (!d->result.success)
@@ -677,7 +676,7 @@ bool KexiTableViewData::saveRowChanges(KexiDB::RecordData& record, bool repaint)
 
 bool KexiTableViewData::saveNewRow(KexiDB::RecordData& record, bool repaint)
 {
-    kDebug() << "KexiTableViewData::saveNewRow()...";
+    kDebug() << "...";
     d->result.clear();
     emit aboutToInsertRow(&record, &d->result, repaint);
     if (!d->result.success)

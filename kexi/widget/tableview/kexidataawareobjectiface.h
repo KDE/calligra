@@ -953,9 +953,9 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
     KexiDB::RecordData *record = m_data->at(pos);
     if (!record)
-        kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!";
+        kDebug() << "pos:" << pos << "- NO ITEM!!";
     else {
-        /*  kDebug() << "KexiTableView::itemAt(" << row << "):";
+        /*  kDebug() << "row:" << row;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
               kDebug() << i<<": " << (*it).toString();*/

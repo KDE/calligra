@@ -134,7 +134,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     if (m_data)
         m_itemIterator = m_data->constBegin();
 
-    kDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data";
+    kDebug(44021) << "using shared data";
     //add columns
 //OK?
     clearColumnsInternal(false);
@@ -929,7 +929,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         } else if (m_editor->valueIsNull()) {//null value entered
 //   if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!";
+                kDebug() << "NULL NOT ALLOWED!";
                 res = Validator::Error;
 //    msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                 msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -940,7 +940,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 //   removeEditor();
                 //   return true;
             } else {
-                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET";
+                kDebug() << "NULL VALUE WILL BE SET";
                 //ok, just leave newval as NULL
                 setNull = true;
             }
@@ -949,7 +949,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             if (m_editor->field()->hasEmptyProperty()) {
 //    if (m_editor->columnInfo()->field->isNotEmpty() && !autoIncColumnCanBeOmitted) {
                 if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!";
+                    kDebug() << "EMPTY NOT ALLOWED!";
                     res = Validator::Error;
 //     msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -960,12 +960,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     //    removeEditor();
                     //    return true;
                 } else {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY VALUE WILL BE SET";
+                    kDebug() << "EMPTY VALUE WILL BE SET";
                 }
             } else {
 //    if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
                 if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
+                    kDebug() << "NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
                     res = Validator::Error;
 //     msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -976,7 +976,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     //    removeEditor();
                     //    return true;
                 } else {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
+                    kDebug() << "NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
                     //ok, just leave newval as NULL
                     setNull = true;
                 }
@@ -997,7 +997,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     if (res == Validator::Ok) {
         if ((!setNull && !valueChanged)
                 || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull())) {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED.";
+            kDebug() << "VALUE NOT CHANGED.";
             removeEditor();
             if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
                 acceptRowEdit();
@@ -1010,7 +1010,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //! @todo validation rules for this value?
             /*
                   if (!ok) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): INVALID VALUE - NOT CHANGED.";
+                    kDebug() << "INVALID VALUE - NOT CHANGED.";
                     res = KexiValidator::Error;
             //js: TODO get detailed info on why m_editor->value() failed
                     msg = i18n("Entered value is invalid.")
@@ -1062,10 +1062,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         //should be also added to the buffer
         if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
                                            newval, /*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0)) {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:";
+            kDebug() << "------ EDIT BUFFER CHANGED TO:";
             m_data->rowEditBuffer()->debug();
         } else {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ CHANGE FAILED in KexiDataAwareObjectInterface::updateRowEditBuffer()";
+            kDebug() << "------ CHANGE FAILED in KexiDataAwareObjectInterface::updateRowEditBuffer()";
             res = Validator::Error;
 
             //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
@@ -1116,7 +1116,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 {
-    kDebug() << "** KexiDataAwareObjectInterface::startEditCurrentCell(" << setText << ")";
+    kDebug() << "setText:" << setText;
 // if (columnType(d->curCol) == KexiDB::Field::Boolean)
 //  return;
     if (isReadOnly() || !columnEditable(m_curCol))
