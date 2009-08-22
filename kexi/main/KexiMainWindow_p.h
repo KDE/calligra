@@ -96,7 +96,7 @@ class KexiTabbedToolBar::Private
 {
 public:
     Private(KexiTabbedToolBar *t)
-            : q(t), createId(-1), createWidgetToolBar(0), tabToRaise(-1)
+            : q(t), createWidgetToolBar(0), tabToRaise(-1)
     {
         tabRaiseTimer.setSingleShot(true);
         tabRaiseTimer.setInterval(300);
@@ -188,8 +188,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addSeparatorAndAction(tbar, "project_close");
 
     if (!userMode) {
-        d->createWidgetToolBar = new KToolBar(this);
-        d->createId = addTab(d->createWidgetToolBar, i18n("Create"));
+        d->createWidgetToolBar = d->createToolBar("create", i18n("Create"));
     }
 
     tbar = d->createToolBar("data", i18n("Data"));
@@ -308,7 +307,7 @@ void KexiTabbedToolBar::leaveEvent(QEvent* event)
 
 void KexiTabbedToolBar::slotCurrentChanged(int index)
 {
-    if (index == d->createId && d->createId != -1) {
+    if (index == indexOf(d->createWidgetToolBar) && index != -1) {
         if (d->createWidgetToolBar->actions().isEmpty()) {
             QTimer::singleShot(10, this, SLOT(setupCreateWidgetToolbar()));
         }
