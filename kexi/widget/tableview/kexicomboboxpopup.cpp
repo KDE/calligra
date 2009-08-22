@@ -304,9 +304,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
-    kexidbg << "KexiComboBoxPopup::updateSize(): size=" << size();
+    kexidbg << "size=" << size();
     resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
-    kexidbg << "KexiComboBoxPopup::updateSize(): size after=" << size();
+    kexidbg << "size after=" << size();
 
     //stretch the last column
     d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);

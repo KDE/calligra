@@ -443,7 +443,7 @@ void KexiComboBoxBase::acceptPopupSelection()
 
 void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
 {
-    kexidbg << "KexiComboBoxBase::slotItemSelected(): m_visibleValue = " << m_visibleValue;
+    kexidbg << "m_visibleValue=" << m_visibleValue;
 
     QVariant valueToSet;
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
@@ -573,11 +573,11 @@ void KexiComboBoxBase::undoChanges()
 {
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (lookupFieldSchema) {
-//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue BEFORE = " << m_visibleValue;
+//  kexidbg << "m_visibleValue BEFORE=" << m_visibleValue;
         if (popup())
             popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
         m_visibleValue = visibleValueForLookupField();
-//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue AFTER = " << m_visibleValue;
+//  kexidbg << "m_visibleValue AFTER=" << m_visibleValue;
         setValueOrTextInInternalEditor(m_visibleValue);
     }
 }

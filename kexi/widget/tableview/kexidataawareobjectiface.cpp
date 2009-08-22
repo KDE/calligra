@@ -124,7 +124,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
 {
     const bool theSameData = m_data && m_data == data;
     if (m_owner && m_data && m_data != data/*don't destroy if it's the same*/) {
-        kexidbg << "KexiDataAwareObjectInterface::setData(): destroying old data (owned)";
+        kexidbg << "destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
         m_itemIterator = KexiTableViewData::Iterator();
@@ -538,8 +538,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 // kDebug(44021) << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
 
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
-        kexidbg << "setCursorPosition(): " << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
-        .arg(m_curRow).arg(newcol).arg(newrow);
+        kexidbg << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
+            .arg(m_curRow).arg(newcol).arg(newrow);
 
         // cursor moved: get rid of editor
         if (m_editor) {
@@ -680,7 +680,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         /* only needed for forms */
         selectCellInternal();
     } else {
-        kexidbg << "setCursorPosition(): NO CHANGE";
+        kexidbg << "NO CHANGE";
     }
 
     if (m_initDataContentsOnShow) {
