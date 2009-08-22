@@ -269,7 +269,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);
-    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotTopHeaderSizeChange(int, int, int)));
+    connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)),
+        this, SLOT(slotTopHeaderSizeChange(int, int, int)));
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
@@ -751,7 +752,8 @@ bool KexiTableView::isDefaultValueDisplayed(KexiDB::RecordData *record, int col,
     if (cursorAtInsertRowOrEditingNewRow
             && (tvcol = m_data->column(col))
             && hasDefaultValueAt(*tvcol)
-            && !tvcol->field()->isAutoIncrement()) {
+            && !tvcol->field()->isAutoIncrement())
+    {
         if (value)
             *value = tvcol->field()->defaultValue();
         return true;
@@ -833,37 +835,44 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
 
     const bool columnReadOnly = tvcol->isReadOnly();
     const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
-    = d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections
-      && m_curRow /*d->highlightedRow*/ >= 0 && row != m_curRow; //d->highlightedRow;
+        =    d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections
+          && m_curRow /*d->highlightedRow*/ >= 0 && row != m_curRow; //d->highlightedRow;
 
     // setup default pen
     QPen defaultPen;
     const bool usesSelectedTextColor = edit && edit->usesSelectedTextColor();
-    if (defaultValueDisplayed) {
+    if (defaultValueDisplayed){
         if (col == m_curCol && row == m_curRow && usesSelectedTextColor)
             defaultPen = d->defaultValueDisplayParameters.selectedTextColor;
         else
             defaultPen = d->defaultValueDisplayParameters.textColor;
     } else if (d->appearance.fullRowSelection
                && (row == d->highlightedRow || (row == m_curRow && d->highlightedRow == -1))
-               && usesSelectedTextColor) {
+               && usesSelectedTextColor)
+    {
         defaultPen = d->appearance.rowHighlightingTextColor; //special case: highlighted row
-    } else if (d->appearance.fullRowSelection && row == m_curRow && usesSelectedTextColor) {
+    }
+    else if (d->appearance.fullRowSelection && row == m_curRow && usesSelectedTextColor) {
         defaultPen = d->appearance.textColor; //special case for full row selection
-    } else if (m_currentItem == record && col == m_curCol && !columnReadOnly
-               && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
-               && usesSelectedTextColor) {
+    }
+    else if (   m_currentItem == record && col == m_curCol && !columnReadOnly
+             && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
+             && usesSelectedTextColor)
+    {
         defaultPen = colorGroup().highlightedText(); //selected text
-    } else if (d->appearance.rowHighlightingEnabled && row == m_curRow
+    } else if (   d->appearance.rowHighlightingEnabled && row == m_curRow
                && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
-               && usesSelectedTextColor) {
+               && usesSelectedTextColor)
+    {
         defaultPen = d->appearance.rowHighlightingTextColor;
-    } else if (d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow
+    } else if (   d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow
                && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
-               && usesSelectedTextColor) {
+               && usesSelectedTextColor)
+    {
         defaultPen = d->appearance.rowMouseOverHighlightingTextColor;
-    } else
+    } else {
         defaultPen = d->appearance.textColor;
+    }
 
     if (edit) {
         if (defaultValueDisplayed)
@@ -883,10 +892,14 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
 //  p->fillRect(x, y_offset, x+w-1, y_offset+h-1, red);
     }
     if (m_currentItem == record && (col == m_curCol || d->appearance.fullRowSelection)) {
-        if (edit && ((d->appearance.rowHighlightingEnabled && !d->appearance.fullRowSelection) || (row == m_curRow && d->highlightedRow == -1 && d->appearance.fullRowSelection))) //!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+        if (edit && (   (d->appearance.rowHighlightingEnabled && !d->appearance.fullRowSelection)
+                     || (row == m_curRow && d->highlightedRow == -1 && d->appearance.fullRowSelection))
+           )
+        {
             edit->paintSelectionBackground(p, isEnabled(), txt, align, x, y_offset, w, h,
                                            isEnabled() ? colorGroup().highlight() : QColor(200, 200, 200),//d->grayColor,
                                            p->fontMetrics(), columnReadOnly, d->appearance.fullRowSelection);
+        }
     }
 
     if (!edit) {
@@ -894,10 +907,10 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
     }
 
 // If we are in the focus cell, draw indication
-    if (m_currentItem == record && col == m_curCol //js: && !d->recordIndicator)
-            && !d->appearance.fullRowSelection) {
+    if (   m_currentItem == record && col == m_curCol //js: && !d->recordIndicator)
+        && !d->appearance.fullRowSelection)
+    {
 //  kDebug() << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus;
-//  if (has_focus) {
         if (isEnabled()) {
             p->setPen(d->appearance.textColor);
         } else {
@@ -911,18 +924,14 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
             p->drawRect(0, 0, x2, y2);
     }
 
-/// bool autonumber = false;
-    if ((!m_newRowEditing && record == m_insertItem)
-            || (m_newRowEditing && record == m_currentItem && cellValue.isNull())) {
+    if (   (!m_newRowEditing && record == m_insertItem)
+        || (m_newRowEditing && record == m_currentItem && cellValue.isNull()))
+    {
         //we're in "insert row"
-        if (tvcol->field()->isAutoIncrement()) {
-            //"autonumber" column
-//   txt = i18n("(autonumber)");
-//   autonumber = true;
-//  if (autonumber) {
+        if (tvcol->field()->isAutoIncrement()) { // "autonumber" column
             KexiDisplayUtils::paintAutonumberSign(d->autonumberSignDisplayParameters, p,
-                                                  x, y_offset, w - x - x - ((align & Qt::AlignLeft) ? 2 : 0), h, (Qt::Alignment)align);
-//  }
+                                                  x, y_offset, w - x - x - ((align & Qt::AlignLeft) ? 2 : 0),
+                                                  h, (Qt::Alignment)align);
         }
     }
 
@@ -931,7 +940,8 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
         if (defaultValueDisplayed)
             p->setFont(d->defaultValueDisplayParameters.font);
         p->setPen(defaultPen);
-        p->drawText(x, y_offset, w - (x + x) - ((align & Qt::AlignLeft) ? 2 : 0)/*right space*/, h,
+        p->drawText(x, y_offset,
+                    w - (x + x) - ((align & Qt::AlignLeft) ? 2 : 0)/*right space*/, h,
                     align, txt);
     }
     p->restore();
@@ -1061,7 +1071,10 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
             int s = qMax(d->rowHeight - 5, 12);
             s = qMin(d->rowHeight - 3, s);
             s = qMin(columnWidth(m_curCol) - 3, s); //avoid too large box
-            const QRect r(columnPos(m_curCol) + qMax(columnWidth(m_curCol) / 2 - s / 2, 0), rowPos(m_curRow) + d->rowHeight / 2 - s / 2 /*- 1*/, s, s);
+            const QRect r(
+                columnPos(m_curCol) + qMax(columnWidth(m_curCol) / 2 - s / 2, 0),
+                rowPos(m_curRow) + d->rowHeight / 2 - s / 2 /*- 1*/,
+                s, s);
             //kDebug() << r;
             if (r.contains(e->pos())) {
 //    kDebug() << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) <<
@@ -1247,7 +1260,8 @@ bool KexiTableView::shortCutPressed(QKeyEvent *e, const QString &action_name)
 #pragma WARNING( OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() ) )
 #endif
         if (action->shortcut().primary() == QKeySequence(e->key() | e->modifiers())
-                || (action->shortcut().alternate() == QKeySequence(e->key() | e->modifiers()))) {
+                || (action->shortcut().alternate() == QKeySequence(e->key() | e->modifiers())))
+        {
             //special cases when we need to override editor's shortcut
             if (overrideEditorShortcutNeeded(e)) {
                 return true;
@@ -1370,7 +1384,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 // bool _return;
     if (k == Qt::Key_Shift || k == Qt::Key_Alt || k == Qt::Key_Control || k == Qt::Key_Meta) {
         e->ignore();
-    } else if (KexiDataAwareObjectInterface::handleKeyPress(e, curRow, curCol, d->appearance.fullRowSelection)) {
+    } else if (KexiDataAwareObjectInterface::handleKeyPress(
+                   e, curRow, curCol, d->appearance.fullRowSelection))
+    {
         if (e->isAccepted())
             return;
     } else if (k == Qt::Key_Backspace && nobtn) {
@@ -2419,13 +2435,16 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
             if (edit && edit->handleKeyPress(ke, m_editor == edit)) {
                 ke->accept();
                 return true;
-            } else if (m_editor && (o == dynamic_cast<QObject*>(m_editor) || o == m_editor->widget())) {
+            }
+            else if (m_editor && (o == dynamic_cast<QObject*>(m_editor) || o == m_editor->widget()))
+            {
                 if ((k == Qt::Key_Tab && (mods == Qt::NoModifier || mods == Qt::ShiftModifier))
                         || (overrideEditorShortcutNeeded(ke))
                         || (k == Qt::Key_Enter || k == Qt::Key_Return || k == Qt::Key_Up || k == Qt::Key_Down)
                         || (k == Qt::Key_Left && m_editor->cursorAtStart())
                         || (k == Qt::Key_Right && m_editor->cursorAtEnd())
-                   ) {
+                   )
+                {
                     //try to steal the key press from editor or it's internal widget...
                     keyPressEvent(ke);
                     if (ke->isAccepted())
@@ -2447,7 +2466,8 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
         }
     } else if (o == horizontalScrollBar()) {
         if ((e->type() == QEvent::Show && !horizontalScrollBar()->isVisible())
-                || (e->type() == QEvent::Hide && horizontalScrollBar()->isVisible())) {
+                || (e->type() == QEvent::Hide && horizontalScrollBar()->isVisible()))
+        {
             updateWidgetContentsSize();
         }
     } else if (e->type() == QEvent::Leave) {
@@ -2458,11 +2478,12 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
                 d->highlightedRow = -1;
                 updateRow(oldRow);
                 const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
-                = d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections;
+                    = d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections;
                 if (oldRow != m_curRow && m_curRow >= 0) {
-                    if (!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+                    if (!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted) {
                         //no highlight for now: show selection again
                         updateRow(m_curRow);
+                    }
                     m_verticalHeader->setHighlightedRow(-1);
                 }
             }
