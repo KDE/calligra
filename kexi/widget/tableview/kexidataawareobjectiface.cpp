@@ -641,15 +641,14 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             if (isInsertingEnabled() && m_curRow == rows()) {
                 kDebug(44021) << "NOW insert item is current";
                 m_currentItem = m_insertItem;
+                m_itemIterator = KexiTableViewData::Iterator();
             } else {
                 kDebug(44021) << QString("NOW item at %1 (%2) is current")
-                .arg(m_curRow).arg((ulong)itemAt(m_curRow));
-                //NOT EFFECTIVE!!!!!!!!!!!
-                //set item iterator
+                    .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 if (!newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows() - 1)) {
-                    //moving from 'insert item' to last item
+                    //moving from the 'insert item' to the last item
+                    m_itemIterator = m_data->constBegin();
                     m_itemIterator += (m_data->count() - 1);
-
                 } else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow)
                     m_itemIterator = m_data->constBegin();
                 else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow >= 0 && (oldRow + 1) == m_curRow) //just move next
