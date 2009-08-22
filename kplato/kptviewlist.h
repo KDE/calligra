@@ -22,12 +22,16 @@
 
 #include "kplato_export.h"
 
+#include "kptschedulemodel.h"
+
 #include <QTreeWidget>
 
 class QDomElement;
 
 class KoDocument;
 class KoView;
+
+class QComboBox;
 
 namespace KPlato
 {
@@ -39,6 +43,7 @@ class ViewListWidget;
 
 class Part;
 class Context;
+class ScheduleManager;
 
 #define TIP_USE_DEFAULT_TEXT "TIP_USE_DEFAULT_TEXT"
 
@@ -140,11 +145,19 @@ public:
 
     ViewListItem *previousViewItem() const { return m_prev; }
 
+    ScheduleManager *selectedSchedule() const;
+
 signals:
     void activated( ViewListItem*, ViewListItem* );
     void createView();
     void viewListItemRemoved( ViewListItem *item );
     void viewListItemInserted( ViewListItem *item );
+
+    void selectionChanged( ScheduleManager* );
+
+public slots:
+    void setProject( Project *project );
+    void setSelectedSchedule( ScheduleManager *sm );
 
 protected slots:
     void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
@@ -157,6 +170,9 @@ protected slots:
     void slotEditDocumentTitle();
     void slotConfigureItem();
 
+    void slotCurrentScheduleChanged( int );
+    void timingHack();
+
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
 
@@ -166,12 +182,17 @@ private:
 private:
     Part *m_part;
     ViewListTreeWidget *m_viewlist;
+    QComboBox *m_currentSchedule;
+    ScheduleSortFilterModel m_sfModel;
+    ScheduleItemModel m_model;
 
     ViewListItem *m_contextitem;
     QList<QAction*> m_categoryactions;
     QList<QAction*> m_viewactions;
 
     ViewListItem *m_prev;
+
+    ScheduleManager *m_tmp; //timimg hack
 };
 
 } //Kplato namespace

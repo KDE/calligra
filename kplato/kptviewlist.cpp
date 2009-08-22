@@ -28,9 +28,11 @@
 #include <QHeaderView>
 #include <QBrush>
 #include <QContextMenuEvent>
+#include <QTimer>
 
 #include <kmenu.h>
 #include <KMessageBox>
+#include <KComboBox>
 
 #include "KoDocument.h"
 
@@ -38,6 +40,7 @@
 #include "kptpart.h"
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
+#include "kptschedulemodel.h"
 
 #include <assert.h>
 
@@ -296,16 +299,30 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
 {
     setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
+    m_viewlist->setEditTriggers( QAbstractItemView::NoEditTriggers );
+
+    m_currentSchedule = new KComboBox( this );
+    m_model.setFlat( true );
+    m_model.setProject( &(part->getProject()) );
+    m_sfModel.setFilterKeyColumn ( ScheduleModel::ScheduleScheduled );
+    m_sfModel.setFilterRole( Qt::EditRole );
+    m_sfModel.setFilterFixedString( "true" );
+    m_sfModel.setDynamicSortFilter ( true );
+    m_sfModel.setSourceModel( &m_model );
+    m_currentSchedule->setModel( &m_sfModel );
+    
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     l->addWidget( m_viewlist );
-    m_viewlist->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    l->addWidget( m_currentSchedule );
 
     connect( m_viewlist, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), SLOT( slotActivated( QTreeWidgetItem*, QTreeWidgetItem* ) ) );
 
     connect( m_viewlist, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), SLOT( slotItemChanged( QTreeWidgetItem*, int ) ) );
 
     setupContextMenus();
+
+    connect( m_currentSchedule, SIGNAL( activated( int ) ), SLOT( slotCurrentScheduleChanged( int ) ) );
 }
 
 ViewListWidget::~ViewListWidget()
@@ -683,6 +700,45 @@ void ViewListWidget::save( QDomElement &element ) const
 {
     m_viewlist->save( element );
 }
+
+void ViewListWidget::setProject( Project *project )
+{
+    kDebug()<<project;
+    m_model.setProject( project );
+}
+
+void ViewListWidget::slotCurrentScheduleChanged( int idx )
+{
+    kDebug()<<idx<<selectedSchedule();
+    emit selectionChanged( selectedSchedule() );
+}
+
+ScheduleManager *ViewListWidget::selectedSchedule() const
+{
+    QModelIndex idx = m_sfModel.index( m_currentSchedule->currentIndex(), m_currentSchedule->modelColumn() );
+    kDebug()<<idx;
+    return m_sfModel.manager( idx );
+}
+
+void ViewListWidget::setSelectedSchedule( ScheduleManager *sm )
+{
+    kDebug()<<sm<<m_model.index( sm );
+    QModelIndex idx = m_sfModel.mapFromSource( m_model.index( sm ) );
+    if ( ! idx.isValid() ) {
+        m_tmp = sm;
+        QTimer::singleShot( 1000, this, SLOT( timingHack() ) );
+        return;
+    }
+    m_currentSchedule->setCurrentIndex( idx.row() );
+    kDebug()<<sm<<idx;
+    m_tmp = 0;
+}
+
+void ViewListWidget::timingHack()
+{
+    if ( m_tmp ) setSelectedSchedule( m_tmp );
+}
+
 
 }  //KPlato namespace
 

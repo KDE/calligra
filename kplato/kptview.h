@@ -178,6 +178,7 @@ protected slots:
     void slotScheduleChanged( MainSchedule* );
     void slotScheduleAdded( const MainSchedule * );
     void slotScheduleRemoved( const MainSchedule * );
+    void slotSelectionChanged( ScheduleManager *sm );
 
     void slotAddScheduleManager( Project *project );
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );

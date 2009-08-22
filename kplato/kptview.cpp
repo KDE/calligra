@@ -113,6 +113,7 @@
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
 #include "kptviewlist.h"
+#include "kptschedulesdocker.h"
 
 #include "kplatosettings.h"
 
@@ -151,10 +152,22 @@ View::View( Part* part, QWidget* parent )
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
+#if 0
+        SchedulesDockerFactory sdf;
+        SchedulesDocker *sd = dynamic_cast<SchedulesDocker*>( createDockWidget( &sdf ) );
+        Q_ASSERT( sd );
+        connect( sd, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+
+        sd->setProject( &getProject() );
+#endif
         ViewListDockerFactory vl(this);
         ViewListDocker *docker = dynamic_cast<ViewListDocker *>(createDockWidget(&vl));
         if (docker->view() != this) docker->setView(this);
         m_viewlist = docker->viewList();
+        connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+
     }
     m_tab = new QStackedWidget( m_sp );
 
@@ -1180,6 +1193,21 @@ void View::slotProjectWorktime()
         }
     }
     delete dia;
+}
+
+void View::slotSelectionChanged( ScheduleManager *sm ) {
+    kDebug();
+    if ( sm == 0 ) {
+        return;
+    }
+    int idx = m_scheduleActions.values().indexOf( sm->expected() );
+    if ( idx < 0 ) {
+        return;
+    }
+    QAction *a = m_scheduleActions.keys().at( idx );
+    Q_ASSERT( a );
+    a->setChecked( true ); // this doesn't trigger QActionGroup
+    slotViewSchedule( a );
 }
 
 QList<QAction*> View::sortedActionList()
