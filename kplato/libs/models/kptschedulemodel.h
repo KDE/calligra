@@ -25,6 +25,7 @@
 #include <kptitemmodelbase.h>
 
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 
 namespace KPlato
 {
@@ -52,7 +53,8 @@ public:
         ScheduleCalculate,
         SchedulePlannedStart,
         SchedulePlannedFinish,
-        ScheduleScheduler
+        ScheduleScheduler,
+        ScheduleScheduled
     };
     const QMetaEnum columnMap() const;
     
@@ -93,6 +95,8 @@ public:
 
     ScheduleManager *manager( const QModelIndex &index ) const;
     
+    void setFlat( bool flat );
+
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );
@@ -136,11 +140,27 @@ protected:
     QVariant scheduler( const QModelIndex &index, int role ) const;
     bool setScheduler( const QModelIndex &index, const QVariant &value, int role );
 
+    QVariant isScheduled( const QModelIndex &index, int role ) const;
+
 private:
     ScheduleManager *m_manager; // for sanety check
-    
+    bool m_flat;
     ScheduleModel m_model;
+
+    QList<ScheduleManager*> m_managerlist;
     
+};
+
+//----------------------------------------
+class KPLATOMODELS_EXPORT ScheduleSortFilterModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    explicit ScheduleSortFilterModel( QObject *parent = 0 );
+    ~ScheduleSortFilterModel();
+
+    ScheduleManager *manager( const QModelIndex &index ) const;
+
 };
 
 //----------------------------------------

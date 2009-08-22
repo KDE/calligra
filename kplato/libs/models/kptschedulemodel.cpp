@@ -67,7 +67,8 @@ int ScheduleModel::propertyCount() const
 
 ScheduleItemModel::ScheduleItemModel( QObject *parent )
     : ItemModelBase( parent ),
-    m_manager( 0 )
+    m_manager( 0 ),
+    m_flat( false )
 {
 }
 
@@ -78,6 +79,10 @@ ScheduleItemModel::~ScheduleItemModel()
 void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *parent, int row )
 {
     kDebug()<<parent;
+    if ( m_flat ) {
+        beginInsertRows( QModelIndex(), m_managerlist.count(), m_managerlist.count() );
+        return;
+    }
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(parent);
     beginInsertRows( index( parent ), row, row );
@@ -85,7 +90,11 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
-    kDebug()<<manager->name();
+    if ( m_flat ) {
+        m_managerlist << const_cast<ScheduleManager*>( manager );
+        endInsertRows();
+        return;
+    }
     Q_ASSERT( manager->parentManager() == m_manager );
     endInsertRows();
     m_manager = 0;
@@ -94,6 +103,13 @@ void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *mana
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
 {
     kDebug()<<manager->name();
+    if ( m_flat ) {
+        int row = m_managerlist.indexOf( const_cast<ScheduleManager*>( manager ) );
+        beginRemoveRows( QModelIndex(), row, row );
+        m_managerlist.removeAt( row );
+        return;
+    }
+
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(manager);
     QModelIndex i = index( manager );
@@ -104,6 +120,10 @@ void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *m
 void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
     kDebug()<<manager->name();
+    if ( m_flat ) {
+        endRemoveRows();
+        return;
+    }
     Q_ASSERT( manager == m_manager );
     endRemoveRows();
     m_manager = 0;
@@ -170,12 +190,19 @@ void ScheduleItemModel::setProject( Project *project )
         
         connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
+    setFlat( m_flat ); // update m_managerlist
     reset();
 }
 
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 {
-    int r = m_project->indexOf( sch );
+    if ( m_flat ) {
+        int row = m_managerlist.indexOf( sch );
+        emit dataChanged( createIndex( row, 0, sch ), createIndex( row, columnCount(), sch ) );
+        return;
+    }
+
+    int r = sch->parentManager() ? sch->parentManager()->indexOf( sch ) : m_project->indexOf( sch );
     //kDebug()<<sch<<":"<<r;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
@@ -216,7 +243,7 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
 
 QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
 {
-    if ( !inx.isValid() || m_project == 0 ) {
+    if ( !inx.isValid() || m_project == 0 || m_flat ) {
         return QModelIndex();
     }
     //kDebug()<<inx.internalPointer()<<":"<<inx.row()<<","<<inx.column();
@@ -234,6 +261,10 @@ QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &pa
         //kDebug()<<row<<","<<column<<" out of bounce";
         return QModelIndex();
     }
+    if ( m_flat ) {
+        return createIndex( row, column, m_managerlist[ row ] );
+    }
+
     if ( parent.isValid() ) {
         return createIndex( row, column, manager( parent )->children().value( row ) );
     }
@@ -245,6 +276,10 @@ QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
     if ( m_project == 0 || manager == 0 ) {
         return QModelIndex();
     }
+    if ( m_flat ) {
+        return createIndex( m_managerlist.indexOf( const_cast<ScheduleManager*>( manager ) ), 0, const_cast<ScheduleManager*>(manager) );
+    }
+
     if ( manager->parentManager() == 0 ) {
         return createIndex( m_project->indexOf( manager ), 0, const_cast<ScheduleManager*>(manager) );
     }
@@ -260,6 +295,9 @@ int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( m_project == 0 ) {
         return 0;
+    }
+    if ( m_flat ) {
+        return m_managerlist.count();
     }
     if ( !parent.isValid() ) {
         return m_project->numScheduleManagers();
@@ -585,6 +623,28 @@ bool ScheduleItemModel::setScheduler( const QModelIndex &index, const QVariant &
     return false;
 }
 
+QVariant ScheduleItemModel::isScheduled( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+            return sm->isScheduled();
+        case Qt::DisplayRole:
+            return sm->isScheduled() ? i18n( "Scheduled" ) : i18n( "Not scheduled" );
+        case Qt::ToolTipRole:
+            break;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug()<<index.row()<<","<<index.column();
@@ -599,6 +659,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case ScheduleModel::SchedulePlannedStart: result = projectStart(  index, role ); break;
         case ScheduleModel::SchedulePlannedFinish: result = projectEnd( index, role ); break;
         case ScheduleModel::ScheduleScheduler: result = scheduler( index, role ); break;
+        case ScheduleModel::ScheduleScheduled: result = isScheduled( index, role ); break;
         default:
             kDebug()<<"data: invalid display value column"<<index.column();;
             return QVariant();
@@ -631,6 +692,7 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         case ScheduleModel::SchedulePlannedStart: return false;
         case ScheduleModel::SchedulePlannedFinish: return false;
         case ScheduleModel::ScheduleScheduler: return setScheduler( index, value, role ); break;
+        case ScheduleModel::ScheduleScheduled: break;
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -652,6 +714,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
                 case ScheduleModel::SchedulePlannedStart: return i18n( "Planned Start" );
                 case ScheduleModel::SchedulePlannedFinish: return i18n( "Planned Finish" );
                 case ScheduleModel::ScheduleScheduler: return i18n( "Scheduler" );
+                case ScheduleModel::ScheduleScheduled: return i18n( "Scheduled" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -671,6 +734,7 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             case ScheduleModel::SchedulePlannedStart: return ToolTip::scheduleStart();
             case ScheduleModel::SchedulePlannedFinish: return ToolTip::scheduleFinish();
             case ScheduleModel::ScheduleScheduler: return ToolTip::scheduleScheduler();
+            case ScheduleModel::ScheduleScheduled: return QVariant();
             default: return QVariant();
         }
     }
@@ -713,8 +777,49 @@ ScheduleManager *ScheduleItemModel::manager( const QModelIndex &index ) const
     return o;
 }
 
-//--------------------------------------
+void ScheduleItemModel::setFlat( bool flat )
+{
+    m_flat = flat;
+    m_managerlist.clear();
+    if ( ! flat || m_project == 0 ) {
+        return;
+    }
+    foreach ( ScheduleManager *sm, m_project->scheduleManagers() ) {
+        m_managerlist << sm;
+    }
+    bool stop = false;
+    while( ! stop ) {
+        stop = true;
+        for( int i = m_managerlist.count() - 1; i >= 0; --i ) {
+            ScheduleManager *sm = m_managerlist.at( i );
+            if ( ! m_managerlist.contains( sm ) ) {
+                m_managerlist << sm;
+                if ( sm->childCount() > 0 ) {
+                    stop = false;
+                }
+            }
+        }
+    }
+}
 
+//--------------------------------------
+ScheduleSortFilterModel::ScheduleSortFilterModel( QObject *parent )
+    : QSortFilterProxyModel( parent )
+{
+}
+
+ScheduleSortFilterModel::~ScheduleSortFilterModel()
+{
+}
+
+ScheduleManager *ScheduleSortFilterModel::manager( const QModelIndex &index ) const
+{
+    QModelIndex i = mapToSource( index );
+    const ScheduleItemModel *m = qobject_cast<const ScheduleItemModel*>( i.model() );
+    return m == 0 ? 0 : m->manager( i );
+}
+
+//--------------------------------------
 ScheduleLogItemModel::ScheduleLogItemModel( QObject *parent )
     : QStandardItemModel( parent ),
     m_project( 0 ),
