@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -645,16 +645,26 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             } else {
                 kDebug(44021) << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
-                if (!newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows() - 1)) {
+                if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
+                    && m_curRow == (rows() - 1))
+                {
                     //moving from the 'insert item' to the last item
                     m_itemIterator = m_data->constBegin();
                     m_itemIterator += (m_data->count() - 1);
-                } else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow)
+                }
+                else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow) {
                     m_itemIterator = m_data->constBegin();
-                else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow >= 0 && (oldRow + 1) == m_curRow) //just move next
-                    ++m_itemIterator;
-                else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow >= 0 && (oldRow - 1) == m_curRow) //just move back
-                    --m_itemIterator;
+                }
+                else if (   !newRowInserted && !forceSet && m_currentItem != m_insertItem
+                         && oldRow >= 0 && (oldRow + 1) == m_curRow)
+                {
+                    ++m_itemIterator; // just move next
+                }
+                else if (   !newRowInserted && !forceSet && m_currentItem != m_insertItem
+                         && oldRow >= 0 && (oldRow - 1) == m_curRow)
+                {
+                    --m_itemIterator; // just move back
+                }
                 else { //move at:
                     m_itemIterator = m_data->constBegin();
                     m_itemIterator += m_curRow;
@@ -664,7 +674,6 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
                     m_itemIterator += m_curRow;
                 }
                 m_currentItem = *m_itemIterator;
-                //itemAt(m_curRow);
             }
         }
 
@@ -994,8 +1003,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
     //try to get the value entered:
     if (res == Validator::Ok) {
-        if ((!setNull && !valueChanged)
-                || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull())) {
+        if (   (!setNull && !valueChanged)
+            || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull()))
+        {
             kDebug() << "VALUE NOT CHANGED.";
             removeEditor();
             if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
@@ -1054,13 +1064,16 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //  if (allow) {
         //send changes to the backend
         QVariant visibleValue;
-        if (!newval.isNull()/* visible value should be null if value is null */
-                && currentTVColumn->visibleLookupColumnInfo()) {
+        if (   !newval.isNull()/* visible value should be null if value is null */
+            && currentTVColumn->visibleLookupColumnInfo())
+        {
             visibleValue = m_editor->visibleValue(); //visible value for lookup field
         }
         //should be also added to the buffer
         if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
-                                           newval, /*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0)) {
+                                           newval, /*allowSignals*/true, 
+                                           currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
+        {
             kDebug() << "------ EDIT BUFFER CHANGED TO:";
             m_data->rowEditBuffer()->debug();
         } else {
@@ -1168,8 +1181,9 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
     if (!acceptRowEdit())
         return;
 
-    if (!isDeleteEnabled() || !m_currentItem || m_currentItem == m_insertItem)
+    if (!isDeleteEnabled() || !m_currentItem || m_currentItem == m_insertItem) {
         return;
+    }
     switch (m_deletionPolicy) {
     case NoDelete:
         return;
@@ -1182,8 +1196,9 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
                     KGuiItem(i18n("&Delete Row"), "edit-delete"), KStandardGuiItem::cancel(),
                     "dontAskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
+        {
             return;
-        break;
+        }
     case SignalDelete:
         /*emit*/ itemDeleteRequest(m_currentItem, m_curRow, m_curCol);
         /*emit*/ currentItemDeleteRequest();
@@ -1299,7 +1314,9 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this),
                 i18n("Do you want to clear the contents of table %1?", tableName),
                 0, KGuiItem(i18n("&Clear Contents"))))
+        {
             return cancelled;
+        }
     }
 
     cancelRowEdit();
@@ -1496,9 +1513,10 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
 
     QString msg, desc;
 // bool current = (record == d->pCurrentItem);
-    const bool lastRowDeleted = m_spreadSheetMode && m_data->last() == record; //we need to know this so we
+    //we need to know this so we
     //can return to the last row
     //after reinserting it
+    const bool lastRowDeleted = m_spreadSheetMode && m_data->last() == record; 
     if (!m_data->deleteRow(*record, true /*repaint*/)) {
         /*const int button =*/
         showErrorMessageForResult(m_data->result());
@@ -1633,12 +1651,15 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
     const bool nobtn = e->modifiers() == Qt::NoModifier;
     const int k = e->key();
 
-    if ((k == Qt::Key_Up && nobtn)
-            || (k == Qt::Key_PageUp && e->modifiers() == Qt::ControlModifier)) {
+    if (   (k == Qt::Key_Up && nobtn)
+        || (k == Qt::Key_PageUp && e->modifiers() == Qt::ControlModifier))
+    {
         selectPrevRow();
         e->accept();
-    } else if ((k == Qt::Key_Down && nobtn)
-               || (k == Qt::Key_PageDown && e->modifiers() == Qt::ControlModifier)) {
+    }
+    else if (   (k == Qt::Key_Down && nobtn)
+               || (k == Qt::Key_PageDown && e->modifiers() == Qt::ControlModifier))
+    {
         selectNextRow();
         e->accept();
     } else if (k == Qt::Key_PageUp && nobtn) {
@@ -1681,18 +1702,22 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
             *moveToLastField = true;
         //do not accept yet
         e->ignore();
-    } else if (isInsertingEnabled()
-               && ((e->modifiers() == Qt::ControlModifier && k == Qt::Key_Equal)
+    }
+    else if (isInsertingEnabled()
+               && (   (e->modifiers() == Qt::ControlModifier && k == Qt::Key_Equal)
                    || (e->modifiers() == (Qt::ControlButton | Qt::ShiftButton) && k == Qt::Key_Equal)
-                  )) {
+                  )
+            )
+    {
         curRow = m_data->count(); //to the new row
         curCol = 0;//to first col
         if (moveToFirstField)
             *moveToFirstField = true;
         //do not accept yet
         e->ignore();
-    } else
+    } else {
         return false;
+    }
 
     return true;
 }
@@ -1885,8 +1910,9 @@ static inline bool findInString(const QString& stringValue, int stringLength,
                     pos = where.indexOf(stringValue, pos, caseSensitivity);
                     if (pos == -1)
                         break;
-                    if ((pos > 0 && where.at(pos - 1).isLetterOrNumber())
-                            || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber())) {
+                    if (   (pos > 0 && where.at(pos - 1).isLetterOrNumber())
+                        || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber()))
+                    {
                         pos++; // invalid match because before or after the string there is non-white space
                     } else
                         break;
@@ -1908,8 +1934,9 @@ static inline bool findInString(const QString& stringValue, int stringLength,
                     pos = where.lastIndexOf(stringValue, pos, caseSensitivity);
                     if (pos == -1)
                         break;
-                    if ((pos > 0 && where.at(pos - 1).isLetterOrNumber())
-                            || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber())) {
+                    if (   (pos > 0 && where.at(pos - 1).isLetterOrNumber())
+                        || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber()))
+                    {
                         // invalid match because before or after the string there is non-white space
                         pos--;
                         if (pos < 0) // it can make pos < 0
@@ -1961,7 +1988,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
                          ? !next : next; //direction can be reversed
 
     if ((!prevSearchedValue.isNull() && prevSearchedValue != valueToFind)
-            || (prevSearchDirection != options.searchDirection && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)) {
+            || (prevSearchDirection != options.searchDirection && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows))
+    {
         // restart searching when value has been changed or new direction is SearchAllRows
         m_positionOfRecentlyFoundValue.exists = false;
     }
@@ -1969,7 +1997,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     const bool startFrom1stRowAndCol = !m_positionOfRecentlyFoundValue.exists && next
                                        && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows;
     const bool startFromLastRowAndCol =
-        (!m_positionOfRecentlyFoundValue.exists && !next && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
+           (   !m_positionOfRecentlyFoundValue.exists && !next
+            && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
         || (m_curRow >= rows() && !forward); //we're at "insert" row, and searching backwards: move to the last cell
 
     if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rows()) {
@@ -2007,11 +2036,11 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 
     //sache some flags for efficiency
     const bool matchAnyPartOfField
-    = options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchAnyPartOfField;
+        = options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchAnyPartOfField;
     const bool matchWholeField
-    = options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchWholeField;
+        = options.textMatching == KexiSearchAndReplaceViewInterface::Options::MatchWholeField;
     const Qt::CaseSensitivity caseSensitivity
-    = options.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+        = options.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
     const bool wholeWordsOnly = options.wholeWordsOnly;
 //unused const bool promptOnReplace = options.promptOnReplace;
     int columnNumber = (options.columnNumber == KexiSearchAndReplaceViewInterface::Options::CurrentColumn)
@@ -2041,7 +2070,9 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
                 col = forward ? (col + 1) : (col - 1)) {
             const QVariant cell(record->at(m_indicesForVisibleValues[ col ]));
             if (findInString(stringValue, stringLength, cell.toString(), firstCharacter,
-                             matchAnyPartOfField, matchWholeField, caseSensitivity, wholeWordsOnly, forward)) {
+                             matchAnyPartOfField, matchWholeField, caseSensitivity, 
+                             wholeWordsOnly, forward))
+            {
                 //*m_itemIterator = it;
                 //m_currentItem = *it;
                 //m_curRow = row;
