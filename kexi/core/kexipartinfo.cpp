@@ -21,8 +21,6 @@
 #include "kexipartinfo_p.h"
 
 #include <kexidb/global.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiPart;
 
