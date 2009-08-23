@@ -557,7 +557,7 @@ KEXIUTILS_EXPORT void setMargins(QLayout *layout, int value);
 //! a widget that must be instantiated by hand.
 //! This macro inserts a widget \a what into a frame \a where.
 #define GLUE_WIDGET(what, where) \
-    { Q3VBoxLayout *lyr = new Q3VBoxLayout(where); \
+    { QVBoxLayout *lyr = new QVBoxLayout(where); \
         lyr->addWidget(what); }
 
 } //namespace KexiUtils
