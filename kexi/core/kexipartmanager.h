@@ -22,11 +22,6 @@
 #define KEXIPARTMANAGER_H
 
 #include <qobject.h>
-#include <q3dict.h>
-#include <q3asciidict.h>
-#include <q3intdict.h>
-#include <q3valuelist.h>
-#include <q3ptrlist.h>
 
 #include <kservice.h>
 

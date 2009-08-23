@@ -24,15 +24,11 @@
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 
-#include <q3asciidict.h>
 #include <qdialog.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <klibloader.h>
 #include <klocale.h>
-//#include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kexidb/msghandler.h>
 #include <kexi_global.h>

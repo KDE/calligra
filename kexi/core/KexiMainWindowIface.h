@@ -24,7 +24,6 @@
 //#define KEXI_IMPL_WARNINGS
 
 #include <QMap>
-#include <Q3CString>
 
 #include <kexi_global.h>
 #include <kmainwindow.h>
@@ -135,7 +134,7 @@ public:
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
 
-//2.0 disabled  virtual Q3PopupMenu* findPopupMenu(const char *popupName) = 0;
+//2.0 disabled  virtual QMenu* findPopupMenu(const char *popupName) = 0;
 
     /*! Generates ID for private "document" like Relations window.
      Private IDs are negative numbers (while ID regular part instance's IDs are >0)
