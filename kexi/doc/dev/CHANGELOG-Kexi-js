@@ -21,12 +21,11 @@ TODO Form editor:
  - port KFDPixmapEdit, PropertyFactory
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
- - move from K3CommandHistory to the QUndo framework
  - remove m_widget and m_container from WidgetLibrary, otherwise multiple form views won't work in parallel
 TODO: setting "enabled" property to false does not work
 TODO: fix the rectangle and repainting when inserting widgets with specified size
 TODO: inserting tab widget does not work
-TODO: no properties visible for Line widget
+TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -40,12 +39,42 @@ TODO:
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
+- forms: setting alignment property (e.g. for text box) does not work because it is numeric now
+
+2009-08-22
+Main
+* Fix delayed show of actions on the "create" toolbar
+Table View
+* fixed moving cursor to and from the 'insert item' (also fixes this in forms)
+* fixed painting the 'intert row' when the mouse pointer leaves the area to the south or west
+
+2009-08-19
+Startup
+* Fix opening local file from file dialog (windows)
 
 2009-08-07
 KexiDB
-*SQLITE 2.8 support removed from the code
+* SQLITE 2.8 support removed from the code
 
-2009-05-11..13
+2009-06-17
+Forms
+* image box: fix painting semitransparent icon for unbound widgets
+
+2009-06-07
+Forms
+* std & container factories: fix setting object names; this fixes widgets that are not reimplemented by kexidbfactory
+KoProperty
+* only change parent properties of composed properties (e.g. "geometry" for width); e.g. in case of forms child properties are read-only
+Core
+* BLOB buffer: fixed loading pixmaps (checking mime type)
+
+2009-05-13
+Forms
+* [API] "Data Source" tab: rename some memebers for clarity
+Widgets
+* moved KexiPropertyPaneViewBase and KexiObjectInfoLabel to separate files
+
+2009-05-11..12
 Forms
 * On loading properties, treat "name" property as "objectName" (1.x compatibility)
 * Set invisible properties in the property editor, but still add them to the set (needed e.g. for "dataSource" property)
