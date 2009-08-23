@@ -38,7 +38,7 @@
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
 #include <kexiutils/SmallToolButton.h>
-#include <kexi_global.h>
+#include <kexiutils/utils.h>
 
 //! @internal
 class KexiRecordNavigator::Private
@@ -64,7 +64,6 @@ public:
     QIntValidator *navRecordNumberValidator;
     QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
-//  uint m_recordCount;
     Q3ScrollView *view;
 
     QLabel *editingIndicatorLabel;
@@ -89,11 +88,13 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
         : QWidget(parent)
         , d(new Private)
 {
+    setPaletteBackgroundColor(Qt::red);
     setAutoFillBackground(true);
     if (parentView)
         setParentView(parentView);
     d->lyr = new QHBoxLayout(this);
-    d->lyr->setContentsMargins(0, 0, 0, 0);
+    const bool winStyle = style()->objectName().toLower() == "windows"; // used to fix appearance of the number field
+    d->lyr->setContentsMargins(0, winStyle ? 1 : 0, 0, 0);
     d->lyr->setSpacing(2);
 
     d->textLabel = new QLabel(this);
@@ -112,8 +113,15 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
 
     d->lyr->addSpacing(2);
 
-    d->lyr->addWidget(d->navRecordNumber = new KLineEdit(this));
-    d->navRecordNumber->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    d->navRecordNumber = new KLineEdit(this);
+    d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignTop);
+    KexiUtils::WidgetMargins margins;
+    margins.top = winStyle ? 1 : 0;
+    margins.bottom = winStyle ? 1 : 0;
+    margins.copyToWidget(d->navRecordNumber);
+    d->navRecordNumber->setFrame(false);
+    d->navRecordNumber->setFixedHeight(fm.height() + 2);
+    d->navRecordNumber->setAlignment(Qt::AlignRight | (winStyle ? Qt::AlignBottom : Qt::AlignVCenter));
     d->navRecordNumber->setFocusPolicy(Qt::ClickFocus);
     d->navRecordNumber->installEventFilter(this);
     d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
@@ -121,16 +129,16 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     d->navRecordNumber->installEventFilter(this);
     d->navRecordNumber->setToolTip(i18n("Current row number"));
 
-    QLabel *lbl_of = new QLabel(" " + i18n("of") + " ", this);
+    QLabel *lbl_of = new QLabel(i18nc("\"of\" in row number information: N of M", "of"), this);
     lbl_of->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    lbl_of->setMaximumWidth(fm.width(lbl_of->text()) + 8);
+    lbl_of->setFixedWidth(fm.width(lbl_of->text()) + d->nav1DigitWidth);
     lbl_of->setAlignment(Qt::AlignCenter);
     d->lyr->addWidget(lbl_of);
 
     d->lyr->addWidget(d->navRecordCount = new QLabel(this));
     d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
     d->navRecordCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     d->navRecordCount->setToolTip(i18n("Number of rows"));
 
     lbl_of->setFont(f);
@@ -277,7 +285,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
         setCurrentRecordNumber(1);
     }
     if (d->navRecordCount->text().length() != n.length()) {//resize
-        d->navRecordCount->setFixedWidth(d->nav1DigitWidth*n.length() + 2);
+        d->navRecordCount->setFixedWidth(d->nav1DigitWidth * (n.length() + 1));
 
         if (d->view && d->view->horizontalScrollBar()->isVisible()) {
             //+width of the delta
