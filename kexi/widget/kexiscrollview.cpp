@@ -116,7 +116,7 @@ KexiScrollView::setRecordNavigatorVisible(bool visible)
             m_scrollViewNavPanel->hide();
     } else if (visible)  {
         if (m_scrollViewNavPanel)
-            m_scrollViewNavPanel->hide();
+            m_scrollViewNavPanel->show();
         updateNavPanelGeometry();
     }
 }
