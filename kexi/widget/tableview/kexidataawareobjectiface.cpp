@@ -124,7 +124,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
 {
     const bool theSameData = m_data && m_data == data;
     if (m_owner && m_data && m_data != data/*don't destroy if it's the same*/) {
-        kexidbg << "destroying old data (owned)";
+        kDebug() << "destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
         m_itemIterator = KexiTableViewData::Iterator();
@@ -134,7 +134,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     if (m_data)
         m_itemIterator = m_data->constBegin();
 
-    kDebug(44021) << "using shared data";
+    kDebug() << "using shared data";
     //add columns
 //OK?
     clearColumnsInternal(false);
@@ -535,10 +535,10 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
     newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
 // d->pCurrentItem = itemAt(d->curRow);
-// kDebug(44021) << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
+// kDebug() << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
 
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
-        kexidbg << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
+        kDebug() << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
             .arg(m_curRow).arg(newcol).arg(newrow);
 
         // cursor moved: get rid of editor
@@ -588,7 +588,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //  int rh = rowHeight();
 //  ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
 //  center(columnPos(d->curCol) + cw / 2, rowPos(d->curRow) + rh / 2, cw / 2, rh / 2);
-// kDebug(44021) << " contentsY() = "<< contentsY();
+// kDebug() << " contentsY() = "<< contentsY();
 
 //js  if (oldRow > d->curRow)
 //js   ensureVisible(columnPos(d->curCol), rowPos(d->curRow) + rh, columnWidth(d->curCol), rh);
@@ -639,11 +639,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         //update row
         if (forceSet || m_curRow != oldRow) {
             if (isInsertingEnabled() && m_curRow == rows()) {
-                kDebug(44021) << "NOW insert item is current";
+                kDebug() << "NOW insert item is current";
                 m_currentItem = m_insertItem;
                 m_itemIterator = KexiTableViewData::Iterator();
             } else {
-                kDebug(44021) << QString("NOW item at %1 (%2) is current")
+                kDebug() << QString("NOW item at %1 (%2) is current")
                     .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
                     && m_curRow == (rows() - 1))
@@ -688,7 +688,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         /* only needed for forms */
         selectCellInternal();
     } else {
-        kexidbg << "NO CHANGE";
+        kDebug() << "NO CHANGE";
     }
 
     if (m_initDataContentsOnShow) {
@@ -851,7 +851,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
     updateAfterCancelRowEdit();
 
 //! \todo (js): cancel changes for this row!
-    kexidbg << "EDIT ROW CANCELLED.";
+    kDebug() << "EDIT ROW CANCELLED.";
 
     /*emit*/ rowEditTerminated(m_curRow);
     return true;
@@ -1774,7 +1774,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
             + QPoint(- m_scrollBarTip->width() - 5,
                      r.height() / 2 - m_scrollBarTip->height() / 2));
         if (verticalScrollBar()->isSliderDown()) {
-            kDebug(44021) << "  isSliderDown()  ";
+            kDebug() << "  isSliderDown()  ";
             m_scrollBarTipTimer.stop();
             //m_scrollBarTip->show();
             //m_scrollBarTip->raise();
@@ -1815,7 +1815,7 @@ void KexiDataAwareObjectInterface::setScrollbarToolTipsEnabled(bool set)
 #if 0
 void KexiDataAwareObjectInterface::vScrollBarSliderReleased()
 {
-    kDebug(44021) << "vScrollBarSliderReleased()";
+    kDebug() << "vScrollBarSliderReleased()";
 /*replaced by QToolTip    m_scrollBarTip->hide();*/
 }
 #endif
@@ -1824,7 +1824,7 @@ void KexiDataAwareObjectInterface::vScrollBarSliderReleased()
 void KexiDataAwareObjectInterface::scrollBarTipTimeout()
 {
     if (m_scrollBarTip->isVisible()) {
-//  kDebug(44021) << "TIMEOUT! - hide";
+//  kDebug() << "TIMEOUT! - hide";
         if (m_scrollBarTipTimerCnt > 0) {
             m_scrollBarTipTimerCnt = 0;
             m_scrollBarTipTimer.start(500);

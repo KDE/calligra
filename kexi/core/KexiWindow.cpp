@@ -593,7 +593,7 @@ tristate KexiWindow::switchToViewMode(
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kexiwarn << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
+        kWarning() << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
         return false;
     }
 
@@ -631,7 +631,7 @@ tristate KexiWindow::switchToViewMode(
         KexiUtils::removeWaitCursor();
         if (!newView) {
             //js TODO error?
-            kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
+            kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
             << d->currentViewMode << " restored.";
             return false;
         }
@@ -650,7 +650,7 @@ tristate KexiWindow::switchToViewMode(
     if (!res) {
         removeView(newViewMode);
         delete newView;
-        kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
+        kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
         << d->currentViewMode << " restored.";
         return false;
     }
@@ -666,7 +666,7 @@ tristate KexiWindow::switchToViewMode(
     if (!res) {
         removeView(newViewMode);
         delete newView;
-        kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
+        kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
         << prevViewMode << " restored.";
         const Kexi::ObjectStatus status(*this);
         setStatus(KexiMainWindowIface::global()->project()->dbConnection(),

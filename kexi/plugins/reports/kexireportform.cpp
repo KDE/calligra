@@ -33,14 +33,14 @@ KexiReportForm::KexiReportForm(QWidget *parent, const char *name/*, KexiDB::Conn
         : QWidget(parent, name)
 {
     //m_conn = conn;
-    kexipluginsdbg << "KexiReportForm::KexiReportForm(): ";
+    kDebug() << "KexiReportForm::KexiReportForm(): ";
     setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
     setBackgroundColor(Qt::white);
 }
 
 KexiReportForm::~KexiReportForm()
 {
-    kexipluginsdbg << "KexiReportForm::~KexiReportForm(): close";
+    kDebug() << "KexiReportForm::~KexiReportForm(): close";
 }
 
 //repaint all children widgets

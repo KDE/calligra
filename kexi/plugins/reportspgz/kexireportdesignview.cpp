@@ -75,7 +75,7 @@ void KexiReportDesignView::slotDesignerPropertySetChanged() {
 
 KexiDB::SchemaData* KexiReportDesignView::storeNewData ( const KexiDB::SchemaData& sdata, bool &cancel ) {
     KexiDB::SchemaData *s = KexiView::storeNewData ( sdata, cancel );
-    kexipluginsdbg << "new id:" << s->id();
+    kDebug() << "new id:" << s->id();
 
     if ( !s || cancel ) {
         delete s;

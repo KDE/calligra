@@ -110,7 +110,7 @@ KexiStartupFileWidget::~KexiStartupFileWidget()
 
 void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
 {
-    kexidbg << fileName;
+    kDebug() << fileName;
     d->highlightedUrl = KUrl(fileName);
     //updateDialogOKButton(0);
     emit fileHighlighted();
@@ -382,10 +382,10 @@ bool KexiStartupFileWidget::askForOverwriting(const QString& filePath, QWidget *
 
 void KexiStartupFileWidget::accept()
 {
-    kexidbg << "KexiStartupFileWidget::accept()...";
+    kDebug() << "KexiStartupFileWidget::accept()...";
 
     KFileWidget::accept();
-// kexidbg << selectedFile();
+// kDebug() << selectedFile();
 
 // locationEdit->setFocus();
 // QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, '\n', 0);

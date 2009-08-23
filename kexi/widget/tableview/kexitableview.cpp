@@ -683,12 +683,12 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
         if (rowfirst == -1) {
             if (rowAt(cy - d->rowHeight) != -1) {
                 //paintOnlyInsertRow = true;
-//    kDebug(44021) << "-- paintOnlyInsertRow --";
+//    kDebug() << "-- paintOnlyInsertRow --";
             }
         }
     }
-// kDebug(44021) << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rows()="<<rows();
-// kDebug(44021)<<" plus1row=" << plus1row;
+// kDebug() << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rows()="<<rows();
+// kDebug()<<" plus1row=" << plus1row;
 
     if (collast == -1)
         collast = columns() - 1;
@@ -723,7 +723,7 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 
 // int maxwc = qMin(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
     int maxwc = columnPos(columns() - 1) + columnWidth(columns() - 1);
-// kDebug(44021) << "maxwc:" << maxwc;
+// kDebug() << "maxwc:" << maxwc;
 
     p->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
 
@@ -989,9 +989,9 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
     QSize ts(tableSize());
 // ts.setWidth( qMin( ts.width(), visibleWidth() ) );
 // ts.setHeight( qMin( ts.height() - (m_navPanel ? m_navPanel->height() : 0), visibleHeight()) );
-    /* kDebug(44021) << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
+    /* kDebug() << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
           .arg(cx).arg(cy).arg(cw).arg(ch);
-      kDebug(44021) << QString(" (w:%3 h:%4)")
+      kDebug() << QString(" (w:%3 h:%4)")
           .arg(ts.width()).arg(ts.height());*/
 
     // Region of the rect we should draw, calculated in viewport
@@ -1021,7 +1021,7 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
     const QVector<QRect> rects(reg.rects());
     foreach(const QRect& rect, rects) {
         QRect realRect(viewportToContents2(rect.topLeft()), rect.size());
-        /*  kDebug(44021) << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
+        /*  kDebug() << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
               .arg(rect.x()).arg(rect.y())
               .arg(rect.width()).arg(rect.height());*/
         p->fillRect(realRect, d->appearance.emptyAreaColor);
@@ -1030,7 +1030,7 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
 
 void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
-// kDebug(44021);
+// kDebug();
     m_contentsMousePressEvent_dblClick = true;
     contentsMousePressEvent(e);
     m_contentsMousePressEvent_dblClick = false;
@@ -1052,7 +1052,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
 {
-// kDebug(44021) << "??";
+// kDebug() << "??";
     setFocus();
     if (m_data->count() == 0 && !isInsertingEnabled()) {
         Q3ScrollView::contentsMousePressEvent(e);
@@ -1077,7 +1077,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
             return;
     }
 
-// kDebug(44021)<< "by now the current items should be set, if not -> error + crash";
+// kDebug()<< "by now the current items should be set, if not -> error + crash";
     if (e->button() == Qt::RightButton) {
         showContextMenu(e->globalPos());
     } else if (e->button() == Qt::LeftButton) {
@@ -1108,7 +1108,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
 
 void KexiTableView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-// kDebug(44021) << "??";
+// kDebug() << "??";
     if (m_data->count() == 0 && !isInsertingEnabled())
         return;
 
@@ -1131,7 +1131,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
     // remember old focus cell
     int oldRow = m_curRow;
     int oldCol = m_curCol;
-    kDebug(44021) << "oldRow=" << oldRow << " oldCol=" << oldCol;
+    kDebug() << "oldRow=" << oldRow << " oldCol=" << oldCol;
     bool onInsertItem = false;
 
     int newrow, newcol;
@@ -1147,7 +1147,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
                 return false;
             }
             newrow++;
-            kDebug(44021) << "Clicked just on 'insert' row.";
+            kDebug() << "Clicked just on 'insert' row.";
             onInsertItem = true;
         } else {
             // get new focus cell
@@ -1461,7 +1461,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
             } else {
                 kDebug() << "default";
                 if (e->text().isEmpty() || !e->text()[0].isPrint()) {
-                    kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
+                    kDebug() << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
                     //    e->ignore();
                     Q3ScrollView::keyPressEvent(e);
                     return;
@@ -1474,12 +1474,12 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     if (printable && !ro) {
         KexiTableViewColumn *tvcol = m_data->column(curCol);
         if (tvcol->acceptsFirstChar(e->text()[0])) {
-            kDebug(44021) << "ev pressed: acceptsFirstChar()==true";
+            kDebug() << "ev pressed: acceptsFirstChar()==true";
             //   if (e->text()[0].isPrint())
             createEditor(curRow, curCol, e->text(), true);
         } else {
 //TODO show message "key not allowed eg. on a statusbar"
-            kDebug(44021) << "ev pressed: acceptsFirstChar()==false";
+            kDebug() << "ev pressed: acceptsFirstChar()==false";
         }
     }
 
@@ -1572,14 +1572,14 @@ void KexiTableView::reloadData()
 
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
 {
-    kDebug(44021) << "addText:" << addText << "removeOld:" << removeOld;
+    kDebug() << "addText:" << addText << "removeOld:" << removeOld;
     if (isReadOnly()) {
-        kDebug(44021) << "DATA IS READ ONLY!";
+        kDebug() << "DATA IS READ ONLY!";
         return;
     }
 
     if (m_data->column(col)->isReadOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
-        kDebug(44021) << "COL IS READ ONLY!";
+        kDebug() << "COL IS READ ONLY!";
         return;
     }
 
@@ -2085,7 +2085,7 @@ void KexiTableView::slotRowRepaintRequested(KexiDB::RecordData& record)
 //(js) unused
 void KexiTableView::slotAutoScroll()
 {
-    kDebug(44021);
+    kDebug();
     if (!d->needAutoScroll)
         return;
 
@@ -2117,7 +2117,7 @@ KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
     int topMargin = printer.margins().height() + 2;
 // int bottomMargin = topMargin + ( printer.realPageSize()->height() * printer.resolution() + 36 ) / 72;
     int bottomMargin = 0;
-    kDebug(44021) << "bottom:" << bottomMargin;
+    kDebug() << "bottom:" << bottomMargin;
 
     QPainter p(&printer);
 
@@ -2136,10 +2136,10 @@ KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
     int right = 0;
     for (i = m_data->first(); i; i = m_data->next()) {
         if (!i->isInsertItem()) {
-            kDebug(44021) << "row=" << row << "y=" << yOffset;
+            kDebug() << "row=" << row << "y=" << yOffset;
             int xOffset = leftMargin;
             for (int col = 0; col < columns(); col++) {
-                kDebug(44021) << "col=" << col << "x=" << xOffset;
+                kDebug() << "col=" << col << "x=" << xOffset;
                 p.saveWorldMatrix();
                 p.translate(xOffset, yOffset);
                 paintCell(&p, i, col, QRect(0, 0, columnWidth(col) + 1, d->rowHeight), true);
@@ -2333,7 +2333,7 @@ void KexiTableView::setHorizontalHeaderVisible(bool set)
 
 void KexiTableView::triggerUpdate()
 {
-// kDebug(44021);
+// kDebug();
 // if (!d->pUpdateTimer->isActive())
     d->pUpdateTimer->start(20);
 //  d->pUpdateTimer->start(200, true);
@@ -2342,7 +2342,7 @@ void KexiTableView::triggerUpdate()
 void KexiTableView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 {
     /*todo*/
-    kDebug(44021);
+    kDebug();
     if (d->appearance.navigatorEnabled) {
         m_navPanel->setHBarGeometry(hbar, x, y, w, h);
     } else {

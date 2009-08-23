@@ -129,7 +129,7 @@ void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
     if (a)
         a->allObjectTypesAreSupported = set;
     else
-        kexiwarn << "no such action:" << name;
+        kWarning() << "no such action:" << name;
 }
 
 int ActionCategories::actionCategories(const char* name) const

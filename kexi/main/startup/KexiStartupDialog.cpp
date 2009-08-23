@@ -573,13 +573,13 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
                  || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting;
 #endif
     } else if (pageWidgetItem == d->pageOpenExisting) {
-        kexidbg << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
+        kDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
         enable =
             (d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased)
 //kde4   ? !d->openExistingFileWidget->selectedFile().isEmpty()
             ? !d->openExistingFileWidget->highlightedFile().isEmpty()
             : (bool)d->openExistingConnWidget->selectedConnectionData();
-//kexidbg << d->openExistingFileWidget->selectedFile() << "--------------";
+//kDebug() << d->openExistingFileWidget->selectedFile() << "--------------";
     } else if (pageWidgetItem == d->pageOpenRecent) {
         enable = (d->prj_selector->selectedProjectData() != 0);
     }
@@ -603,7 +603,7 @@ void KexiStartupDialog::setupPageOpenExisting()
     QString recentDirClass;
     KFileWidget::getStartUrl(KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
                              recentDirClass);
-    kexidbg << recentDirClass;
+    kDebug() << recentDirClass;
 
     d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet,
             "kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
@@ -697,7 +697,7 @@ KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
 
 void KexiStartupDialog::existingFileHighlighted()
 {
-    kexidbg << "KexiStartupDialog::existingFileHighlighted(): ";
+    kDebug() << "KexiStartupDialog::existingFileHighlighted(): ";
     //d->existingUrlToOpen = KUrl(fileName);
     updateDialogOKButton(0);
 }

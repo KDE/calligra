@@ -158,15 +158,6 @@ enum ObjectType {
 
 }
 
-
-#if 0 //Qt4: remove
-/*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
-#define foreach_list(_class, _variable, _list) \
-    for (_class _variable(_list); _variable.current(); ++_variable)
-
-#define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
-#endif
-
 #ifndef futureI18n
 # define futureI18n QString
 # define futureI18n2(a,b) QString(b)

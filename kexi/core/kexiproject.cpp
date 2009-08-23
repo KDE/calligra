@@ -689,7 +689,7 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
 {
     KexiPart::ItemDict *dict = itemsForClass(partClass);
     if (!dict) {
-        kexiwarn << "no part class=" << partClass;
+        kWarning() << "no part class=" << partClass;
         return 0;
     }
     const QString nameToLower(name.toLower());
@@ -697,7 +697,7 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
         if (item->name().toLower() == nameToLower)
             return item;
     }
-    kexiwarn << "no name=" << name;
+    kWarning() << "no name=" << name;
     return 0;
 }
 
@@ -773,7 +773,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
     KexiDB::MessageTitle et(this);
     KexiPart::Part *part = Kexi::partManager().partForClass(item.partClass());
     if (!part) {
-        kexiwarn << "!part: " << item.partClass();
+        kWarning() << "!part: " << item.partClass();
         setError(&Kexi::partManager());
     }
     return part;

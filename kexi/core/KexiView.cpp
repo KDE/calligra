@@ -74,7 +74,7 @@ KexiToggleViewModeAction::KexiToggleViewModeAction(
         setToolTip(i18n("Switch to text view"));
         setWhatsThis(i18n("Switches to text view."));
     } else {
-        kexiwarn << "KexiToggleViewModeAction: invalid mode " << mode;
+        kWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
     }
 }
 

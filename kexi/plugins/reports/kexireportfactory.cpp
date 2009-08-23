@@ -101,7 +101,7 @@ KexiReportFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
                                 KFormDesigner::Container *container, int options)
 {
     Q_UNUSED(options);
-    kexipluginsdbg << "KexiReportFactory::create() " << this;
+    kDebug() << "KexiReportFactory::create() " << this;
 
     QString text(container->form()->library()->textForWidgetName(n, c));
 

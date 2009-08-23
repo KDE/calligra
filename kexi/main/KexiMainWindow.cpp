@@ -4724,7 +4724,7 @@ tristate KexiMainWindow::executeCustomActionForObject(KexiPart::Item* item,
     else if (actionName == "copyToClipboardAsCSV")
         return copyItemToClipboardAsDataTable(item);
 
-    kexiwarn << "KexiMainWindow::executeCustomActionForObject(): no such action: "
+    kWarning() << "KexiMainWindow::executeCustomActionForObject(): no such action: "
     << actionName;
     return false;
 }

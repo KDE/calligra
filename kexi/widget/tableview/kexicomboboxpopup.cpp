@@ -155,7 +155,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     if (column && !field)
         field = column->field();
     if (!field) {
-        kexiwarn << "KexiComboBoxPopup::setData(): !field";
+        kWarning() << "KexiComboBoxPopup::setData(): !field";
         return;
     }
 
@@ -304,9 +304,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
-    kexidbg << "size=" << size();
+    kDebug() << "size=" << size();
     resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
-    kexidbg << "size after=" << size();
+    kDebug() << "size after=" << size();
 
     //stretch the last column
     d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);

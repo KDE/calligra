@@ -508,7 +508,7 @@ void KexiBrowser::installEventFilter(QObject * filterObj)
 bool KexiBrowser::eventFilter(QObject *o, QEvent * e)
 {
     /* if (o==m_list && e->type()==QEvent::Resize) {
-        kexidbg << "resize!";
+        kDebug() << "resize!";
       }*/
     if (o == m_list->renameLineEdit()) {
         if (e->type() == QEvent::Hide)
@@ -703,7 +703,7 @@ void KexiBrowser::clearSelection()
 /*(new action removed)
 void KexiBrowser::slotNewObjectMenuAboutToShow()
 {
-// kexidbg << "KexiBrowser::slotNewObjectMenuAboutToShow()";
+// kDebug() << "KexiBrowser::slotNewObjectMenuAboutToShow()";
   if ((m_features & Toolbar) && m_newObjectMenu && m_newObjectMenu->isEmpty()) {
     //preload items
     KexiPart::PartInfoList *plist

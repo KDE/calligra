@@ -23,23 +23,6 @@
 #include <kexi_export.h>
 #include <config-kexi.h>
 
-#define kexidbg  kDebug(44010)   //! General debug area for Kexi
-#define kexicoredbg  kDebug(44020)   //! Debug area for Kexi Core
-#define kexipluginsdbg kDebug(44021) //! Debug area for Kexi Plugins
-#define kexiwarn  kWarning(44010)
-#define kexicorewarn kWarning(44020)
-#define kexipluginswarn kWarning(44021)
-
-/*! nonconst version of foreach iterator */
-#define foreach_nonconst(_class, _variable, _list) \
-    for (_class _variable = (_list).begin(); _variable!=(_list).end(); ++_variable)
-
-/*! a shortcut for iterating over QPtrList and QPtrDict */
-#define foreach_list(_class, _variable, _list) \
-    for (_class _variable(_list); _variable.current(); ++_variable)
-
-#define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
-
 #ifndef futureI18n
 # ifdef USE_FUTURE_I18N
 #  define futureI18n(a) QObject::tr(a)

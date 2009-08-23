@@ -391,7 +391,7 @@ void
 KexiScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 {
     /*todo*/
-// kDebug(44021)<<"KexiScrollView::setHBarGeometry";
+// kDebug()<<"KexiScrollView::setHBarGeometry";
     if (m_scrollViewNavPanel && m_scrollViewNavPanel->isVisible()) {
         m_scrollViewNavPanel->setHBarGeometry(hbar, x, y, w, h);
     } else {

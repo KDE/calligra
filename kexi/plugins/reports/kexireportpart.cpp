@@ -48,7 +48,7 @@ KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
         : KexiPart::Part((int)KexiPart::ReportObjectType, parent, l)
 {
-    kexipluginsdbg << "KexiReportPart::KexiReportPart()";
+    kDebug() << "KexiReportPart::KexiReportPart()";
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                                    "Use '_' character instead of spaces. First character should be a..z character. "
@@ -106,7 +106,7 @@ KexiView*
 KexiReportPart::createView(QWidget *parent, KexiWindow* window,
                            KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString, QVariant>*)
 {
-    kexipluginsdbg << "KexiReportPart::createView()";
+    kDebug() << "KexiReportPart::createView()";
     KexiMainWindow *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;

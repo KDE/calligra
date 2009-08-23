@@ -221,7 +221,7 @@ KexiReportView::loadForm()
 
 //@todo also load m_resizeMode !
 
-    kexipluginsdbg << "KexiReportForm::loadForm() Loading the form with id : " << parentWindow()->id();
+    kDebug() << "KexiReportForm::loadForm() Loading the form with id : " << parentWindow()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
         KFormDesigner::FormIO::loadFormFromString(form(), m_reportform, tempData()->tempForm);
@@ -304,7 +304,7 @@ KexiDB::SchemaData*
 KexiReportView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
-    kexipluginsdbg << "KexiReportForm::storeNewData(): new id:" << s->id();
+    kDebug() << "KexiReportForm::storeNewData(): new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -323,7 +323,7 @@ tristate
 KexiReportView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk)
-    kexipluginsdbg << "KexiReportForm::storeData(): " << parentWindow()->partItem()->name()
+    kDebug() << "KexiReportForm::storeData(): " << parentWindow()->partItem()->name()
     << " [" << parentWindow()->id() << "]";
     QString data;
     KFormDesigner::FormIO::saveFormToString(tempData()->form, data);

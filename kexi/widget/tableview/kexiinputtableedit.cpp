@@ -303,7 +303,7 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
     internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);
-    kexidbg << rect << " " << internalRect << " " << fm.width(text);
+    kDebug() << rect << " " << internalRect << " " << fm.width(text);
     return fm.width(text) > internalRect.width();
 }
 

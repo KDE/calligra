@@ -402,7 +402,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
         if (!(**it)[COLUMN_ID_TABLE].isNull()
                 && (**it)[COLUMN_ID_COLUMN].isNull()) {
             //show message about missing field name, and set focus to that cell
-            kexipluginsdbg << "no field provided!";
+            kDebug() << "no field provided!";
             d->dataTable->dataAwareObject()->setCursorPosition(i, 0);
             if (errMsg)
                 *errMsg = i18n("Select column for table \"%1\"",
@@ -474,18 +474,18 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                         fieldsFound = true;
                 } else {
                     if (!t) {
-                        kexipluginswarn << "query designer: NO TABLE '"
+                        kWarning() << "query designer: NO TABLE '"
                         << (*set)["table"].value().toString() << "'";
                         continue;
                     }
                     currentField = t->field(fieldName);
                     if (!currentField) {
-                        kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'";
+                        kWarning() << "query designer: NO FIELD '" << fieldName << "'";
                         continue;
                     }
                     if (!fieldVisible && criteriaStr.isEmpty() && set->contains("isExpression")
                             && (*set)["sorting"].value().toString() != "nosorting") {
-                        kexipluginsdbg << "invisible field with sorting: do not add it to the fields list";
+                        kDebug() << "invisible field with sorting: do not add it to the fields list";
                         continue;
                     }
                     temp->query()->addField(currentField, fieldVisible);
@@ -498,7 +498,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                 }
             }
         } else {//!set
-            kexipluginsdbg << (**it)[COLUMN_ID_TABLE].toString();
+            kDebug() << (**it)[COLUMN_ID_TABLE].toString();
         }
     }
     if (!fieldsFound) {
@@ -507,7 +507,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
         return false;
     }
     if (whereExpr)
-        kexipluginsdbg << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: "
+        kDebug() << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: "
         << whereExpr->debugString();
 
     //set always, because if whereExpr==NULL,
@@ -548,9 +548,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             // Try to find a field (not mentioned after SELECT):
             currentField = temp->query()->findTableField((*set)["field"].value().toString());
             if (!currentField) {
-                kexipluginswarn << "KexiQueryDesignerGuiEditor::buildSchema(): NO FIELD '"
-                << (*set)["field"].value().toString()
-                << " available for sorting";
+                kWarning() << "KexiQueryDesignerGuiEditor::buildSchema(): NO FIELD"
+                    << (*set)["field"].value().toString()
+                    << "available for sorting";
                 continue;
             }
             orderByColumns.appendField(*currentField, sortingString == "ascending");
@@ -583,7 +583,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 tristate
 KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    kexipluginsdbg << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode;
+    kDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode;
 
     if (!d->dataTable->dataAwareObject()->acceptRowEdit())
         return cancelled;
@@ -838,7 +838,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         if (!eItem)
             continue;
 
-        kexidbg << eItem->toString();
+        kDebug() << eItem->toString();
         KexiDB::BinaryExpr* binary = eItem->toBinary();
         if (binary && eItem->exprClass() == KexiDBExpr_Relational) {
             KexiDB::Field *leftField = 0, *rightField = 0;
@@ -965,7 +965,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     const int columnPosition = columnsOrder.value(column);
                     record = d->data->at(columnPosition);
                     rowPropertySet = d->sets->at(columnPosition);
-                    kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
+                    kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
                     "Setting \"" << orderByColumn->debugString() << "\" sorting for row #"
                     << columnPosition;
                 }
@@ -978,7 +978,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             d->dataTable->dataAwareObject()->insertItem(record, row_num);
             rowPropertySet = createPropertySet(row_num, tableName, field->name(), true /*newOne*/);
             propertySetSwitched();
-            kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
+            kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
             "Setting \"" << orderByColumn->debugString() << "\" sorting for invisible field "
             << field->name() << ", table " << tableName << " -row #" << row_num;
             row_num++;
@@ -1005,16 +1005,14 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         //unused: append a new row
         KexiDB::BinaryExpr *criteriaExpr = criteriaArgument->parent()->toBinary();
         if (!criteriaExpr) {
-            kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
-            "criteriaExpr is not a binary expr";
+            kWarning() << "criteriaExpr is not a binary expr";
             continue;
         }
         KexiDB::VariableExpr *columnNameArgument = criteriaExpr->left()->toVariable(); //left or right
         if (!columnNameArgument) {
             columnNameArgument = criteriaExpr->right()->toVariable();
             if (!columnNameArgument) {
-                kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
-                "columnNameArgument is not a variable (table or table.field) expr";
+                kWarning() << "columnNameArgument is not a variable (table or table.field) expr";
                 continue;
             }
         }
@@ -1027,8 +1025,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         }
 
         if (!field) {
-            kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
-            "no columnInfo found in the query for name \"" << columnNameArgument->name;
+            kWarning() << "no columnInfo found in the query for name" << columnNameArgument->name;
             continue;
         }
         QString tableName, fieldName, columnAlias, criteriaString;
@@ -1343,7 +1340,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
                || (re = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch(str)) {
         QString res = re.cap(1).rightJustified(2, '0') + ":" + re.cap(2).rightJustified(2, '0')
                       + ":" + re.cap(3).rightJustified(2, '0');
-//  kexipluginsdbg << res;
+//  kDebug() << res;
         valueExpr = new KexiDB::ConstExpr(TIME_CONST, QTime::fromString(res, Qt::ISODate));
     } else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})")).exactMatch(str)
                || (re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch(str)) {
@@ -1351,7 +1348,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
                       + "-" + re.cap(3).rightJustified(2, '0')
                       + "T" + re.cap(4).rightJustified(2, '0') + ":" + re.cap(5).rightJustified(2, '0')
                       + ":" + re.cap(6).rightJustified(2, '0');
-//  kexipluginsdbg << res;
+//  kDebug() << res;
         valueExpr = new KexiDB::ConstExpr(DATETIME_CONST,
                                           QDateTime::fromString(res, Qt::ISODate));
     } else if ((str[0] >= '0' && str[0] <= '9') || str[0] == '-' || str[0] == '+') {
@@ -1453,10 +1450,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
                 //this value is properly selected from combo box list
                 if (fieldId == "*") {
                     tableName = "*";
-                } else {
+                }
+                else {
                     if (!KexiDB::splitToTableAndFieldParts(
-                                fieldId, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName)) {
-                        kexipluginswarn << "KexiQueryDesignerGuiEditor::slotBeforeCellChanged(): no 'field' or 'table.field'";
+                                fieldId, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName))
+                    {
+                        kWarning() << "no 'field' or 'table.field'";
                         return;
                     }
                 }
@@ -1554,7 +1553,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
         if (newValue.toInt() == 0 || sortingAllowed(field, table)) {
             KoProperty::Property &property = set->property("sorting");
             QString key(property.listData()->keysAsStringList()[ newValue.toInt()]);
-            kexipluginsdbg << "new key=" << key;
+            kDebug() << "new key=" << key;
             property.setValue(key, true);
         } else { //show msg: sorting is not available
             result->success = false;
