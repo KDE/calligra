@@ -147,13 +147,14 @@ KexiBLOBBuffer::Item::~Item()
 
 QPixmap KexiBLOBBuffer::Item::pixmap() const
 {
+//TODO...
     if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
-#if 0 //sebsauer 20061123
-        QString type(KImageIO::typeForMime(mimeType));
-#else
-        QString type(KImageIO::typeForMime(mimeType).at(0));
-#endif
-        if (!KImageIO::isSupported(type, KImageIO::Reading) || !m_pixmap->loadFromData(*m_data, type.toLatin1())) {
+        const QStringList types(KImageIO::typeForMime(mimeType));
+        if (   types.isEmpty()
+            || !KImageIO::isSupported(mimeType, KImageIO::Reading)
+            || !m_pixmap->loadFromData(*m_data, types.first().toLatin1())
+           )
+        {
             //! @todo inform about error?
         }
         *m_pixmapLoaded = true;
@@ -213,11 +214,11 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
         //! @todo err msg
         return KexiBLOBBuffer::Handle();
     }
-#if 0 //sebsauer 20061122
-    QString mimeType(KImageIO::mimeType(fileName));
+/*#if 0 //sebsauer 20061122
+    QString mimeType(KImageIO::mimeType());
 #else
     QString mimeType(KImageIO::typeForMime(fileName).at(0));
-#endif
+#endif*/
     QByteArray data(f.readAll());
     if (f.error() != QFile::NoError) {
         //! @todo err msg
@@ -225,8 +226,9 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     }
     QFileInfo fi(url.fileName());
     QString caption(fi.baseName().replace('_', " ").simplified());
+    const KMimeType::Ptr mimeType(KMimeType::findByNameAndContent(fileName, data));
 
-    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType);
+    item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType->name());
     insertItem(item);
 
     //cache
