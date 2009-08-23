@@ -88,7 +88,9 @@ protected:
     void updateSourceFieldWidgetsAvailability();
 
     KexiFieldComboBox *m_widgetDataSourceCombo;
+    QWidget *m_widgetDataSourceComboSpacer;
     KexiDataSourceComboBox* m_formDataSourceCombo;
+    QWidget *m_formDataSourceComboSpacer;
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,
     *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;

@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <kexi_export.h>
 
+class QVBoxLayout;
+
 namespace KoProperty
 {
     class EditorView;
@@ -33,7 +35,7 @@ class KexiObjectInfoLabel;
 
 //! @short A base class for propety pane's tabs.
 /*! Defines vertical layout and offers info label on the top. 
- Use layout() to access the QVBoxLayout object.
+ Use mainLayout() to access the QVBoxLayout object.
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyPaneViewBase : public QWidget
 {
@@ -54,6 +56,18 @@ public:
     void updateInfoLabelForPropertySet(
         KoProperty::Set* set, const QString& textToDisplayForNullSet = QString());
 protected:
+    //! @return main vertical layout of the pane
+    QVBoxLayout* mainLayout() const;
+
+    //! @return default spacing for the pane, 2/3 of the font height
+    int spacing() const;
+
+    //! Adds spacing to the main layout. The size of spacing is taken from spacing().
+    void addSpacing();
+
+    //! Adds widget-based spacing to the main layout. The size of spacing is taken from spacing().
+    QWidget* addWidgetSpacer();
+
     class Private;
     Private * const d;
 };

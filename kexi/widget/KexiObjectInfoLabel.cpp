@@ -45,7 +45,7 @@ KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
     hlyr->setSpacing(2);
     d->objectIconLabel = new QLabel(this);
     d->objectIconLabel->setMargin(2);
-    setFixedHeight(IconSize(KIconLoader::Small) + 2 + 2);
+    setMinimumHeight(IconSize(KIconLoader::Small) + 2 + 2);
     hlyr->addWidget(d->objectIconLabel);
     d->objectNameLabel = new QLabel(this);
     d->objectNameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);

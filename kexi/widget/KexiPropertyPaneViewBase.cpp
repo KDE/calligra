@@ -48,7 +48,7 @@ KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
     lyr->setContentsMargins(2, 2, 2, 2);
-    lyr->setSpacing(2);
+    lyr->setSpacing(0);
 
     //add object class info
     d->infoLabel = new KexiObjectInfoLabel(this);
@@ -101,6 +101,31 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
     d->infoLabel->setObjectClassIcon(iconName);
     d->infoLabel->setObjectClassName(className);
     d->infoLabel->setObjectName(objectName);
+}
+
+QVBoxLayout* KexiPropertyPaneViewBase::mainLayout() const
+{
+    return qobject_cast<QVBoxLayout*>(layout());
+}
+
+int KexiPropertyPaneViewBase::spacing() const
+{
+    return fontMetrics().height() * 2 / 3;
+}
+
+void KexiPropertyPaneViewBase::addSpacing()
+{
+    return mainLayout()->addSpacing( spacing() );
+}
+
+QWidget* KexiPropertyPaneViewBase::addWidgetSpacer()
+{
+    QWidget *sp = new QWidget(this);
+    sp->setFixedHeight(spacing());
+    sp->setContentsMargins(0, 0, 0, 0);
+    mainLayout()->addWidget(sp);
+
+    return sp;
 }
 
 #include "KexiPropertyPaneViewBase.moc"

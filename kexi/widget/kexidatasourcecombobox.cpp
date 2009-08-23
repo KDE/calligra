@@ -120,8 +120,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
     if (!conn)
         return;
 
-    //special item: empty
-    addItem(QString());
+    addItem(""); //special item: empty but not null
 #ifdef ADD_DEFINEQUERY_ROW
     //special item: define query
     addItem(i18n("Define Query..."));

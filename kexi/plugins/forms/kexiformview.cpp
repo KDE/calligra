@@ -1159,10 +1159,9 @@ void
 KexiFormView::updateDataSourcePage()
 {
     if (viewMode() == Kexi::DesignViewMode) {
-        QString dataSourcePartClass, dataSource;
         KoProperty::Set &set = form()->propertySet();
-        dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
-        dataSource = set.propertyValue("dataSource").toString();
+        const QString dataSourcePartClass = set.propertyValue("dataSourcePartClass").toString();
+        const QString dataSource = set.propertyValue("dataSource").toString();
         formPart()->dataSourcePage()->setFormDataSource(dataSourcePartClass, dataSource);
     }
 }

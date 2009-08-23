@@ -19,7 +19,6 @@
 
 #include "kexifieldcombobox.h"
 
-#include <q3header.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -28,10 +27,7 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qstyle.h>
-#include <q3listbox.h>
-//Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -112,7 +108,7 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
     d->table = table;
     clear();
     d->captions.clear();
-    addItem(QString());
+    addItem(""); // "", not null
 // delete d->schema;
     if (d->tableOrQueryName.isEmpty() || !d->prj)
         return;

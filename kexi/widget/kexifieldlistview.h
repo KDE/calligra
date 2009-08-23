@@ -20,7 +20,6 @@
 #ifndef KEXIFIELDLISTVIEW_H
 #define KEXIFIELDLISTVIEW_H
 
-#include <q3frame.h>
 #include <qpixmap.h>
 #include <k3listview.h>
 #include <kexi_export.h>
