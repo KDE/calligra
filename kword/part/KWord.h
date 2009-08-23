@@ -21,7 +21,6 @@
 #define KWORD_H
 
 #define TextShape_SHAPEID "TextShapeID"
-#define TableShape_SHAPEID "TableShapeID"
 
 #include <KoCanvasResourceProvider.h>
 
