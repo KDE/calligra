@@ -284,8 +284,8 @@ QPointF BlurEffect::deviation() const
 
 void BlurEffect::setDeviation(const QPointF &deviation)
 {
-    m_deviation.setX(qMax(0.0, deviation.x()));
-    m_deviation.setY(qMax(0.0, deviation.y()));
+    m_deviation.setX(qMax(qreal(0.0), deviation.x()));
+    m_deviation.setY(qMax(qreal(0.0), deviation.y()));
 }
 
 QImage BlurEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
