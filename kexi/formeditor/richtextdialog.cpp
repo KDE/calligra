@@ -21,7 +21,7 @@
 
 #include <QLayout>
 #include <QAction>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <ktoolbar.h>
 #include <kfontrequester.h>
@@ -47,10 +47,10 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 
     QFrame *frame = new QFrame(this);
     setMainWidget(frame);
-    Q3VBoxLayout *l = new Q3VBoxLayout(frame);
-    l->setAutoAdd(true);
+    QVBoxLayout *lyr = new QVBoxLayout(frame);
 
     m_toolbar = new KToolBar(frame);
+    lyr->addWidget(m_toolbar);
 
     m_fontCombo = new KFontRequester(m_toolbar);
     m_fontComboAction = m_toolbar->addWidget(/*js: TBFont, 40,*/ m_fontCombo);
@@ -95,6 +95,7 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
             this, SLOT(slotActionTriggered(QAction*)));
 
     m_edit = new KTextEdit(text, frame);
+    lyr->addWidget(m_edit);
     m_edit->setAcceptRichText(true);
 
     /* not needed, slotCurrentCharFormatChanged() handles this
