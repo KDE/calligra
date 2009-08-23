@@ -582,6 +582,10 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 {
     if (!record)
         return;
+    
+    kDebug() << "r" << r << "rowp" << rowp << "cx" << cx << "cy" << cy
+        << "colfirst" << colfirst << "collast" << collast << "maxwc" << maxwc;
+
     // Go through the columns in the row r
     // if we know from where to where, go through [colfirst, collast],
     // else go through all of them
@@ -654,24 +658,31 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
     if (d->disableDrawContents)
         return;
-    //kDebug() << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+    bool paintOnlyInsertRow = false;
+    bool inserting = isInsertingEnabled();
+    bool plus1row = false; //true if we should show 'inserting' row at the end
     int colfirst = columnAt(cx);
     int rowfirst = rowAt(cy);
     int collast = columnAt(cx + cw - 1);
     int rowlast = rowAt(cy + ch - 1);
-    bool inserting = isInsertingEnabled();
-    bool plus1row = false; //true if we should show 'inserting' row at the end
-    bool paintOnlyInsertRow = false;
-
-    /* kDebug(44021) << QString("cx:%1 cy:%2 cw:%3 ch:%4")
-          .arg(cx).arg(cy).arg(cw).arg(ch);*/
+    if (rowfirst == -1 && (cy / d->rowHeight) == (int)rows()) {
+        // make the insert row paint too when requested
+        kDebug() << "rowfirst == -1 && (cy / d->rowHeight) == (int)rows()";
+        rowfirst = m_data->count();
+        rowlast = rowfirst;
+        paintOnlyInsertRow = true;
+        plus1row = inserting;
+    }
+/*    kDebug() << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch
+        << "colfirst" << colfirst << "rowfirst" << rowfirst
+        << "collast" << collast << "rowlast" << rowlast;*/
 
     if (rowlast == -1) {
         rowlast = rows() - 1;
         plus1row = inserting;
         if (rowfirst == -1) {
             if (rowAt(cy - d->rowHeight) != -1) {
-                paintOnlyInsertRow = true;
+                //paintOnlyInsertRow = true;
 //    kDebug(44021) << "-- paintOnlyInsertRow --";
             }
         }
@@ -800,6 +811,10 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
 
     int align = Qt::TextSingleLine | Qt::AlignVCenter;
     QString txt; //text to draw
+
+    if (record == m_insertItem) {
+        kDebug() << "we're at INSERT row...";
+    }
 
     KexiTableViewColumn *tvcol = m_data->column(col);
 
