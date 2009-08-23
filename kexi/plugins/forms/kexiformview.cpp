@@ -533,7 +533,9 @@ KexiFormView::slotPropertySetSwitched()
 //        propertySetSwitched();
     propertySetReloaded();
 /*    }*/
-    formPart()->dataSourcePage()->assignPropertySet(&form()->propertySet());
+    if (viewMode() == Kexi::DesignViewMode) {
+        formPart()->dataSourcePage()->assignPropertySet(&form()->propertySet());
+    }
 }
 
 tristate
