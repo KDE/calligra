@@ -88,7 +88,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
         : QWidget(parent)
         , d(new Private)
 {
-    setPaletteBackgroundColor(Qt::red);
     setAutoFillBackground(true);
     if (parentView)
         setParentView(parentView);
