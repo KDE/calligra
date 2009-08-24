@@ -35,6 +35,7 @@
 #include <kdebug.h>
 
 #include <QFile>
+#include <QSignalMapper>
 #include <KFileDialog>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
@@ -53,7 +54,8 @@
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaEditor( 0 )
-{ 
+{
+    m_signalMapper = new QSignalMapper(this);
     setupActions();
 }
 
@@ -108,6 +110,7 @@ void KoFormulaTool::activate( bool temporary )
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
+    connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(insert(const QString&)));
     //Only for debugging:
     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
@@ -115,6 +118,7 @@ void KoFormulaTool::activate( bool temporary )
 void KoFormulaTool::deactivate()
 {
     disconnect(m_formulaShape->formulaData(),0,this,0);
+    disconnect(m_signalMapper,0,this,0);
     if (m_canvas) {
         m_cursorList.append(m_formulaEditor);
         kDebug()<<"Appending cursor";
@@ -294,11 +298,11 @@ void KoFormulaTool::remove( bool backSpace )
     m_formulaShape->update();
 }
 
-void KoFormulaTool::insert( QAction* action )
+void KoFormulaTool::insert( const QString& action )
 {
     FormulaCommand *command;
     m_formulaShape->update();
-    command=m_formulaEditor->insertMathML( action->data().toString() );
+    command=m_formulaEditor->insertMathML( action );
     if (command!=0) {
         m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }
@@ -401,53 +405,38 @@ void KoFormulaTool::saveFormula()
 
 void KoFormulaTool::setupActions()
 {
-    KAction* action;
-
-    action = new KAction( i18n( "Insert fence" ), this );
-    action->setData( QString( "<mfenced><mrow/><mrow/></mfenced>" ) );
-    addAction( "insert_fence", action );
-    action->setIcon(KIcon("brackets"));
-
-    action = new KAction( i18n( "Insert root" ), this );
-    action->setData( QString( "<mroot><mrow/><mrow/></mroot>" ) );
-    addAction( "insert_root", action );
-    action->setIcon(KIcon("sqrt"));
-
-    action = new KAction( i18n( "Insert square root" ), this );
-    action->setData( QString( "<msqrt><mrow/></msqrt>" ) );
-    addAction( "insert_sqrt", action );
-    action->setIcon(KIcon("sqrt"));
-
-    action = new KAction( i18n( "Insert fraction" ), this );
-    action->setData( QString( "<mfrac><mrow/><mrow/></mfrac>" ));
-    addAction( "insert_fraction", action );
-    action->setIcon(KIcon("frac"));
-
-    action = new KAction( i18n( "Insert 3x3 table" ), this );
-    action->setData( QString( "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
-                                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
-                                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>") );
-    addAction( "insert_33table", action );
-    action->setIcon(KIcon("matrix"));
+    addTemplateAction(i18n("Insert fenced element"),"insert_fence","<mfenced><mrow/></mfenced>", "brackets");
+    addTemplateAction(i18n("Insert enclosed element"),"insert_enclosed","<menclosed><mrow/></menclosed>","enclosed");
     
-    action = new KAction( i18n( "Insert 2 dimensional vector" ), this );
-    action->setData( QString( "<mtable><mtr><mtd></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ) );
-    addAction( "insert_21table", action );
+    addTemplateAction(i18n("Insert root"),"insert_root","<mroot><mrow/><mrow/></mroot>","root");
+    addTemplateAction(i18n("Insert square root"),"insert_sqrt","<msqrt><mrow/></mroot>","sqrt");
 
-//     action = new KAction( i18n( "Insert table row" ), this );
-//     action->setData( QString( "mtr" ) ); 
-//     addAction( "insert_tablerow", action );
-// 
-//     action = new KAction( i18n( "Insert table column" ), this );
-//     action->setData( QString( "mtd" ) ); 
-//     addAction( "insert_tablecol", action );
-
-    action = new KAction( i18n( "Insert sub- and superscript" ), this );
-    action->setData( QString( "<msubsup><mrow/><mrow/><mrow/></msubsup>" ) );
-    addAction( "insert_subsupscript", action );
-    action->setIcon( KIcon("rsub"));
-
+    addTemplateAction(i18n("Insert fraction"),"insert_fraction","<mfrac><mrow/><mrow/></mfrac>","frac");
+    addTemplateAction(i18n("Insert bevelled fraction"),"insert_bevelled_fraction","<mfrac bevelled=\"true\"><mrow/><mrow/></mfrac>","bevelled");
+    
+    addTemplateAction(i18n("Insert 3x3 table"),"insert_33table",
+                      "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>","matrix");
+    addTemplateAction(i18n("Insert 2 dimensional vector"),"insert_21table",
+                      "<mtable><mtr><mtd></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ,"vector");
+                      
+    addTemplateAction(i18n("Insert subscript"),"insert_subscript",
+                      "<msub><mrow/><mrow/></msubsup>","rsub");
+    addTemplateAction(i18n("Insert superscript"),"insert_supscript",
+                      "<msup><mrow/><mrow/></msup>","rsup");
+    addTemplateAction(i18n("Insert sub- and superscript"),"insert_subsupscript",
+                      "<msubsup><mrow/><mrow/><mrow/></msubsup>","rsubup");
+    addTemplateAction(i18n("Insert overscript"),"insert_overscript",
+                      "<mover><mrow/><mrow/></mover>","gsup");
+    addTemplateAction(i18n("Insert underscript"),"insert_underscript",
+                      "<munder><mrow/><mrow/></munder>","gsub");
+    addTemplateAction(i18n("Insert under- and overscript"),"insert_underoverscript",
+                      "<munderover><mrow/><mrow/><mrow/></munderover>","gsubup");
+                      
+                                                          
     //only for debugging
+    KAction* action;
     action = new KAction( "Debug - writeElementTree" , this );
     addAction( "write_elementTree", action );
     
@@ -482,3 +471,13 @@ void KoFormulaTool::setupActions()
 
 }
 
+
+void KoFormulaTool::addTemplateAction(const QString& caption, const QString& name, const QString& data, const QString& iconName)
+{
+    KAction* action;
+    action = new KAction( caption, this );
+    m_signalMapper->setMapping(action, data);
+    addAction( name , action );
+    action->setIcon(KIcon(iconName));
+    connect( action, SIGNAL (triggered()), m_signalMapper, SLOT (map()));
+}

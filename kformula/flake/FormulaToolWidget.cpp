@@ -40,16 +40,27 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     setupUi( this );
     // setup the element insert menus
     m_fractionMenu.addAction( m_tool->action( "insert_fraction" ) );
+    m_fractionMenu.addAction( m_tool->action( "insert_bevelled_fraction" ) );
+    
+    
     m_fenceMenu.addAction( m_tool->action( "insert_fence" ) );
+    m_fenceMenu.addAction( m_tool->action( "insert_enclosed" ) );
+    
+
     m_tableMenu.addAction( m_tool->action( "insert_33table" ) );
-    m_tableMenu.addAction( m_tool->action( "insert_22table" ) );
-    m_tableMenu.addAction( m_tool->action( "insert_tablerow" ) );
-    m_tableMenu.addAction( m_tool->action( "insert_tablecol" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_21table" ) );
+
     m_rootMenu.addAction( m_tool->action( "insert_root" ) );
     m_rootMenu.addAction( m_tool->action( "insert_sqrt" ) );
+
     m_scriptsMenu.addAction( m_tool->action( "insert_subscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_supscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_subsupscript" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_underscript" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_overscript" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_underoverscript" ) );
+    
+
     m_alterTableMenu.addAction( m_tool->action( "insert_row") );
     m_alterTableMenu.addAction( m_tool->action( "insert_column") );
     m_alterTableMenu.addAction( m_tool->action( "remove_row") );
@@ -59,13 +70,13 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     buttonFence->setMenu( &m_fenceMenu );
     buttonFence->setDefaultAction( m_tool->action( "insert_fence" ) );
     buttonRoot->setMenu( &m_rootMenu );
-    buttonRoot->setDefaultAction( m_tool->action( "insert_root" ) );
+    buttonRoot->setDefaultAction( m_tool->action( "insert_sqrt" ) );
     buttonFraction->setMenu( &m_fractionMenu );
     buttonFraction->setDefaultAction(m_tool->action("insert_fraction"));
     buttonTable->setMenu( &m_tableMenu );
     buttonTable->setDefaultAction(m_tool->action( "insert_33table"));
     buttonScript->setMenu( &m_scriptsMenu );
-    buttonScript->setDefaultAction(m_tool->action( "insert_subsupscript"));
+    buttonScript->setDefaultAction(m_tool->action( "insert_subscript"));
 
     buttonAlterTable->setMenu(&m_alterTableMenu);
     buttonAlterTable->setDefaultAction(m_tool->action("insert_row"));
@@ -86,17 +97,8 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     buttonMisc->setText(QChar(0x211A));
     setupButton(buttonMisc,m_miscMenu,i18n("Miscellaneous"), symbolsInRange(0x2200,0x2205)
                                                                    <<symbolsInRange(0x221F,0x2222));
-    // connect signals to the slots
-    connect( buttonFraction, SIGNAL( triggered( QAction* ) ),
-             m_tool, SLOT( insert( QAction* ) ) );
-    connect( buttonFence, SIGNAL( triggered( QAction* ) ),
-             m_tool, SLOT( insert( QAction* ) ) );
-    connect( buttonTable, SIGNAL( triggered( QAction* ) ),
-             m_tool, SLOT( insert( QAction* ) ) );
-    connect( buttonRoot, SIGNAL( triggered( QAction* ) ),
-             m_tool, SLOT( insert( QAction* ) ) );
-    connect( buttonScript, SIGNAL( triggered( QAction* ) ),
-            m_tool, SLOT( insert( QAction* ) ) );
+
+    buttonRow->hide();
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
     connect( buttonAlterTable, SIGNAL( triggered( QAction* ) ), m_tool, SLOT( changeTable(QAction*)));

@@ -27,6 +27,7 @@ class KoFormulaShape;
 class BasicElement;
 class FormulaEditor;
 class FormulaCommand;
+class QSignalMapper;
 
 /**
  * @short The flake tool for a formula
@@ -79,7 +80,7 @@ public slots:
     void deactivate();
 
     /// Insert the element tied to the given @p action
-    void insert( QAction* action );
+    void insert( const QString& action );
 
     void changeTable( QAction* action);
     
@@ -102,6 +103,8 @@ private:
     /// Creates all the actions provided by the tool
     void setupActions();
 
+    void addTemplateAction(const QString& caption, const QString& name, const QString& data, const QString& iconName);
+    
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;
 
@@ -109,6 +112,8 @@ private:
     FormulaEditor* m_formulaEditor;
 
     QList<FormulaEditor*> m_cursorList;
+
+    QSignalMapper* m_signalMapper;
 };
 
 #endif
