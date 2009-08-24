@@ -196,7 +196,7 @@ bool UnderOverElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& old
     return false;
 }
 
-int UnderOverElement::length() const
+int UnderOverElement::endPosition() const
 {
     return m_elementType==UnderOver ? 5 : 3;
 }

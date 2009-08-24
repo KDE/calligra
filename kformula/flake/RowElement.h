@@ -110,7 +110,7 @@ public:
     virtual void stretch();
 
     /// inherited from BasicElement
-    virtual int length() const;
+    virtual int endPosition() const;
 
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;

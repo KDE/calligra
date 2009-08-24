@@ -137,7 +137,7 @@ void FormulaCursor::selectElement(BasicElement* element)
     m_selecting=true;
     m_currentElement=element;
     m_mark=0;
-    m_position=m_currentElement->length();
+    m_position=m_currentElement->endPosition();
 }
 
 void FormulaCursor::move( CursorDirection direction )
@@ -242,7 +242,7 @@ void FormulaCursor::moveHome()
 
 void FormulaCursor::moveEnd()
 {
-    m_position=m_currentElement->length();
+    m_position=m_currentElement->endPosition();
 }
 
 bool FormulaCursor::isHome() const
@@ -252,7 +252,7 @@ bool FormulaCursor::isHome() const
 
 bool FormulaCursor::isEnd() const
 {
-    return m_position == m_currentElement->length();
+    return m_position == m_currentElement->endPosition();
 }
 
 bool FormulaCursor::insideToken() const
@@ -349,8 +349,8 @@ bool FormulaCursor::hasSelection() const
 
 bool FormulaCursor::isAccepted() const
 {
-    if (mark()<0 || mark()>m_currentElement->length() ||
-        position()<0 || position()>m_currentElement->length()) {
+    if (mark()<0 || mark()>m_currentElement->endPosition() ||
+        position()<0 || position()>m_currentElement->endPosition()) {
         return false;
     }
     return m_currentElement->acceptCursor(*this);

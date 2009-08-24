@@ -217,7 +217,7 @@ public:
     BasicElement* parentElement() const;
 
     /// @return The last cusor position (number of available cursor positions - 1)
-    virtual int length() const;
+    virtual int endPosition() const;
     
     /** 
      * @return the cursor position before the child in this element and -1 if it isn't a child

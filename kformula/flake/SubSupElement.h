@@ -66,7 +66,7 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-    virtual int length() const;
+    virtual int endPosition() const;
 
     virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
 

@@ -161,7 +161,7 @@ void FormulaCommandReplaceElements::redo()
                 m_newPlaceholder->removeChild(m_oldPlaceholder);
             }
             foreach (BasicElement *tmp, m_removed) {
-                m_newPlaceholder->insertChild(m_newPlaceholder->length(),tmp);
+                m_newPlaceholder->insertChild(m_newPlaceholder->endPosition(),tmp);
             }
     }
     for (int i=0; i<m_added.length(); ++i) {

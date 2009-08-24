@@ -59,7 +59,7 @@ bool TableEntryElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& ol
                 return false;
             }
         } else {
-            if (rn < te->length()/2) {
+            if (rn < te->endPosition()/2) {
                 return newcursor.moveCloseTo(te->childElements()[rn+1]->childElements()[cn],oldcursor);
             } else {
                 return false;

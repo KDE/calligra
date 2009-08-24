@@ -316,7 +316,7 @@ void BasicElement::setBaseLine( double baseLine )
     m_baseLine = baseLine;
 }
 
-int BasicElement::length() const
+int BasicElement::endPosition() const
 {
     return 0;
 }

@@ -45,7 +45,7 @@ public:
 
     virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
 
-    virtual int length() const; 
+    virtual int endPosition() const; 
 
     virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
     /**

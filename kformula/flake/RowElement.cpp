@@ -104,7 +104,7 @@ void RowElement::stretch()
     }
 }
 
-int RowElement::length() const
+int RowElement::endPosition() const
 {
     return m_childElements.count();
 }
@@ -116,7 +116,7 @@ const QList<BasicElement*> RowElement::childElements() const
 
 bool RowElement::insertChild( int position, BasicElement* child )
 {
-    if (0<=position && position<=length()) {
+    if (0<=position && position<=endPosition()) {
         m_childElements.insert( position, child );
         child->setParentElement(this);
         return true;
@@ -185,7 +185,7 @@ QLineF RowElement::cursorLine(int position) const {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
     } else { 
-        if ( position==length()) {
+        if ( position==endPosition()) {
             top += QPointF(width(),0.0);
         } else {
             top += QPointF( childElements()[ position ]->boundingRect().left(), 0.0 );
@@ -210,7 +210,7 @@ bool RowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
     }
     //check if the point is behind all child elements
     if (i==m_childElements.count()) {
-        cursor.moveTo(this,length());
+        cursor.moveTo(this,endPosition());
         return true;
     } else {
         if (cursor.isSelecting()) {
@@ -276,7 +276,7 @@ void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
 
 BasicElement* RowElement::elementAfter ( int position ) const
 {
-    if (position<length()) {
+    if (position<endPosition()) {
         return m_childElements[position];
     } else {
         return 0;

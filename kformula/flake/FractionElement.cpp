@@ -137,7 +137,7 @@ const QList<BasicElement*> FractionElement::childElements() const
     return list;
 }
 
-int FractionElement::length() const {
+int FractionElement::endPosition() const {
     return 3;
 }
 

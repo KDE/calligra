@@ -108,7 +108,7 @@ public:
     virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) const = 0;
     
     ///inherited from BasicElement
-    virtual int length() const;
+    virtual int endPosition() const;
     
     ///inherited from BasicElement
     virtual QLineF cursorLine(int position) const;

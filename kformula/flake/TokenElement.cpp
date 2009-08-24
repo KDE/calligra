@@ -64,7 +64,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.drawPath( m_contentPath );
 }
 
-int TokenElement::length() const
+int TokenElement::endPosition() const
 {
     return m_rawString.length();
 }
@@ -222,12 +222,12 @@ int TokenElement::removeText ( int position, int length )
 bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
     int i = 0;
     cursor.setCurrentElement(this);
-    if (cursorOffset(length())<point.x()) {
-        cursor.setPosition(length());
+    if (cursorOffset(endPosition())<point.x()) {
+        cursor.setPosition(endPosition());
         return true;
     }
     //Find the letter we clicked on
-    for( i = 1; i < length(); i++ ) {
+    for( i = 1; i < endPosition(); i++ ) {
         if (point.x() < cursorOffset(i)) {
             break;
         }

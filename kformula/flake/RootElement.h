@@ -79,7 +79,7 @@ public:
     ElementType elementType() const;
 
     /// @return The element's length
-    virtual int length() const;
+    virtual int endPosition() const;
 
 protected:
     ///update the selection in cursor so that a proper range is selected

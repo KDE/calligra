@@ -212,7 +212,7 @@ bool TableElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
             if (newcursor.isSelecting()) {
                 newcursor.moveTo( this , p-1 );
             } else {
-                newcursor.moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->length() );
+                newcursor.moveTo( m_rows[ p / 2 ] , m_rows[ p / 2 ]->endPosition() );
             }
             break;
         }
@@ -248,7 +248,7 @@ bool TableElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
     return true;
 }
 
-int TableElement::length() const 
+int TableElement::endPosition() const 
 {
     if (m_rows.count()>0) {
         return 2*m_rows.count()-1;

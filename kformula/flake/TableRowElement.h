@@ -88,7 +88,7 @@ public:
     virtual int positionOfChild(BasicElement* child) const;
     
     /// inherited from BasicElement
-    virtual int length() const;
+    virtual int endPosition() const;
     
     /// inherited from BasicElement
     virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);

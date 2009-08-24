@@ -58,7 +58,7 @@ public:
     /// inherited from BasicElement
     virtual int positionOfChild(BasicElement* child) const;
 
-    virtual int length() const;
+    virtual int endPosition() const;
 
 protected:
     bool moveHorSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);

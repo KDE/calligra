@@ -192,7 +192,7 @@ bool FixedElement::loadElement ( KoXmlElement& tmp, RowElement** child )
 }
 
 
-int FixedElement::length() const
+int FixedElement::endPosition() const
 {
     return childElements().length()*2-1;
 }

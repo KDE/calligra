@@ -137,7 +137,7 @@ bool RootElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor)
 }
 
 
-int RootElement::length() const
+int RootElement::endPosition() const
 {
     return 3;
 }

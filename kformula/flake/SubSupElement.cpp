@@ -165,7 +165,7 @@ void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
 }
 
 
-int SubSupElement::length() const
+int SubSupElement::endPosition() const
 {
     return (m_elementType==SubSupScript ? 5 : 3);
 }

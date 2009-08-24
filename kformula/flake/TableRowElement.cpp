@@ -88,7 +88,6 @@ void TableRowElement::layout( const AttributeManager* am )
 
 bool TableRowElement::acceptCursor( const FormulaCursor& cursor )
 {
-    //return true;
      return (cursor.isSelecting());
 }
 
@@ -102,7 +101,7 @@ int TableRowElement::positionOfChild(BasicElement* child) const
     }
 }
 
-int TableRowElement::length() const {
+int TableRowElement::endPosition() const {
     return m_entries.count();
 }
 
@@ -135,7 +134,7 @@ bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
         //check if the point is behind all child elements
         if (point.x() >= width()) {
             cursor.setCurrentElement(this);
-            cursor.setPosition(length());
+            cursor.setPosition(endPosition());
             return true;
         }
     }
@@ -172,7 +171,7 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
         return false;
     }
     int rowpos=parentElement()->positionOfChild(this);
-    int colpos=(newcursor.position()!=length() ? newcursor.position() : newcursor.position()-1);
+    int colpos=(newcursor.position()!=endPosition() ? newcursor.position() : newcursor.position()-1);
     if (newcursor.isSelecting()) {
         switch(newcursor.direction()) {
         case MoveLeft:
@@ -205,7 +204,7 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
                 return false;
             }
         case MoveDown:
-            if ( rowpos<length()-1 ) {
+            if ( rowpos<endPosition()-1 ) {
                 BasicElement* b=parentElement()->childElements()[rowpos/2+1]->childElements()[colpos];
                 return newcursor.moveCloseTo(b, oldcursor);
             } else {
