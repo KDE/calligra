@@ -115,6 +115,7 @@ forEachElement(e, relation) {
     sf->notnull = e.attribute("notnull").toInt();
     m_fieldData.append(sf);
 }
+addConnectionPoints();
 return true;
 }
 
@@ -194,8 +195,6 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
         }
         update();
         
-        //Connect to the new database
-        //m_connection = new KexiDB::Connection();
     }
 }
 
@@ -231,7 +230,27 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
             }
             
         }
-        
+        addConnectionPoints();
         update();
+    }
+}
+
+void KexiRelationDesignShape::addConnectionPoints()
+{
+    uint i = 0;
+    int offset = 0;
+
+    int point_count = connectionPoints().count();
+
+    for (int j = 0; j < point_count; ++j) {
+        removeConnectionPoint(0);
+    }
+    
+    foreach (SimpleField *column, m_fieldData) {
+        ++i;
+        offset = (13.0*i) + 15;
+        addConnectionPoint(QPointF(0,offset));
+        addConnectionPoint(QPointF(boundingRect().width(), offset));
+
     }
 }

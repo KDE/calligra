@@ -51,6 +51,8 @@ class KexiRelationDesignShape : public KoShape, public KoFrameShape{
         virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
         
     private:
+        void addConnectionPoints();
+        
         //Data for display
         QString m_relation;
         QString m_database;
