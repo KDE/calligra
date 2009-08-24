@@ -102,46 +102,42 @@ FormulaCommandReplaceElements::FormulaCommandReplaceElements ( RowElement* owner
     m_length=length;
     m_wrap=wrap;
     m_removed=m_ownerElement->childElements().mid(m_position,m_length);
-    m_addedRow=false; //we don't have to delete a row later
-    m_oldPlaceholderPosition=0;
+    m_placeholderPosition=0;
+    
     //we have to remember to which descendant of m_added the elements got moved
-    if (m_wrap) {
-        foreach (BasicElement* tmp, m_added) {
-            if ( (m_oldPlaceholder=tmp->emptyDescendant()) ) {
-                break;
-            }
+    BasicElement* placeholder=0;
+    foreach (BasicElement* tmp, m_added) {
+        if ( (placeholder=tmp->emptyDescendant()) ) {
+            break;
         }
-        if (m_oldPlaceholder) { //we are actually wrapping stuff
-            if (m_oldPlaceholder->parentElement()->isInferredRow()) {
-                m_newPlaceholder=static_cast<RowElement*>(m_oldPlaceholder->parentElement());
-                m_oldPlaceholderPosition=m_newPlaceholder->positionOfChild(m_oldPlaceholder);
-            } else {
-                m_newPlaceholder=new RowElement(m_oldPlaceholder->parentElement());
-                m_addedRow=true; //we have to delete a row later
-            }
+    }
+    if (placeholder) { //we are actually wrapping stuff
+        //empty descandant only returns a element hows parent is an inferred mrow
+        m_placeholderParent=static_cast<RowElement*>(placeholder->parentElement());
+        m_placeholderPosition=m_placeholderParent->positionOfChild(placeholder);
+        m_placeholderParent->removeChild(placeholder);
+        delete placeholder;
+        if (m_wrap) {
+            setRedoCursorPosition(FormulaCursor(m_placeholderParent,m_placeholderPosition+m_removed.count()));
+        } else {
+            setRedoCursorPosition(FormulaCursor(m_placeholderParent,m_placeholderPosition));
         }
     } else {
-        m_oldPlaceholder=0;
-        m_newPlaceholder=0;
+        m_placeholderParent=0;
+        setRedoCursorPosition(FormulaCursor(m_ownerElement,m_position+m_added.length()));
     }
     setUndoCursorPosition(FormulaCursor(m_ownerElement,m_position+m_removed.length()));
-    setRedoCursorPosition(FormulaCursor(m_ownerElement,m_position+m_added.length()));
 }
 
 FormulaCommandReplaceElements::~FormulaCommandReplaceElements()
 {
     if (m_done) {
-        if (m_oldPlaceholder!=0) {
-            delete m_oldPlaceholder;
-        } else {
+        if (!(m_wrap && m_placeholderParent)) {
             foreach (BasicElement* tmp, m_removed) {
                 delete tmp;
             }
         }
     } else {
-        if (m_oldPlaceholder!=0 && m_addedRow) {
-            delete m_newPlaceholder;
-        }
         foreach (BasicElement* tmp, m_added) {
             delete tmp;
         }
@@ -154,15 +150,12 @@ void FormulaCommandReplaceElements::redo()
     for (int i=0; i<m_length; ++i) {
         m_ownerElement->removeChild(m_removed[i]);
     }
-    if (m_oldPlaceholder!=0) {
-            if (m_addedRow) {
-                m_oldPlaceholder->parentElement()->replaceChild(m_oldPlaceholder,m_newPlaceholder);
-            } else {
-                m_newPlaceholder->removeChild(m_oldPlaceholder);
-            }
-            foreach (BasicElement *tmp, m_removed) {
-                m_newPlaceholder->insertChild(m_newPlaceholder->endPosition(),tmp);
-            }
+    if (m_wrap &&  m_placeholderParent!=0) {
+        int counter=0;
+        foreach (BasicElement *tmp, m_removed) {
+            m_placeholderParent->insertChild(m_placeholderPosition+counter,tmp);
+            counter++;
+        }
     }
     for (int i=0; i<m_added.length(); ++i) {
         m_ownerElement->insertChild(m_position+i,m_added[i]);
@@ -175,14 +168,9 @@ void FormulaCommandReplaceElements::undo()
     for (int i=0; i<m_added.length(); ++i) {
         m_ownerElement->removeChild(m_added[i]);
     }
-    if (m_oldPlaceholder!=0) {
+    if (m_wrap &&  m_placeholderParent!=0) {
         foreach (BasicElement *tmp, m_removed) {
-            m_newPlaceholder->removeChild(tmp);
-        }
-        if (m_addedRow) {
-            m_newPlaceholder->parentElement()->replaceChild(m_newPlaceholder,m_oldPlaceholder);
-        } else {
-            m_newPlaceholder->insertChild(m_oldPlaceholderPosition,m_oldPlaceholder);
+            m_placeholderParent->removeChild(tmp);
         }
     }
     for (int i=0; i<m_length; ++i) {

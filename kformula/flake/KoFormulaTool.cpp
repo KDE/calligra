@@ -405,36 +405,37 @@ void KoFormulaTool::saveFormula()
 
 void KoFormulaTool::setupActions()
 {
+    //notice that only empty mrows hows parent is a inferred mrow are treated as placeholders
+    //this causes the <mrow><mrow/></mrow> constructs
     addTemplateAction(i18n("Insert fenced element"),"insert_fence","<mfenced><mrow/></mfenced>", "brackets");
     addTemplateAction(i18n("Insert enclosed element"),"insert_enclosed","<menclosed><mrow/></menclosed>","enclosed");
     
-    addTemplateAction(i18n("Insert root"),"insert_root","<mroot><mrow/><mrow/></mroot>","root");
-    addTemplateAction(i18n("Insert square root"),"insert_sqrt","<msqrt><mrow/></mroot>","sqrt");
+    addTemplateAction(i18n("Insert root"),"insert_root","<mroot><mrow><mrow/></mrow></mroot>","root");
+    addTemplateAction(i18n("Insert square root"),"insert_sqrt","<msqrt><mrow/></msqrt>","sqrt");
 
-    addTemplateAction(i18n("Insert fraction"),"insert_fraction","<mfrac><mrow/><mrow/></mfrac>","frac");
-    addTemplateAction(i18n("Insert bevelled fraction"),"insert_bevelled_fraction","<mfrac bevelled=\"true\"><mrow/><mrow/></mfrac>","bevelled");
+    addTemplateAction(i18n("Insert fraction"),"insert_fraction","<mfrac><mrow><mrow/></mrow><mrow/></mfrac>","frac");
+    addTemplateAction(i18n("Insert bevelled fraction"),"insert_bevelled_fraction","<mfrac bevelled=\"true\"><mrow><mrow/></mrow><mrow/></mfrac>","bevelled");
     
     addTemplateAction(i18n("Insert 3x3 table"),"insert_33table",
                       "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
                       "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
                       "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>","matrix");
     addTemplateAction(i18n("Insert 2 dimensional vector"),"insert_21table",
-                      "<mtable><mtr><mtd></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ,"vector");
+                      "<mtable><mtr><mtd><mrow/></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ,"vector");
                       
     addTemplateAction(i18n("Insert subscript"),"insert_subscript",
-                      "<msub><mrow/><mrow/></msubsup>","rsub");
+                      "<msub><mrow><mrow/></mrow><mrow/></msubsup>","rsub");
     addTemplateAction(i18n("Insert superscript"),"insert_supscript",
-                      "<msup><mrow/><mrow/></msup>","rsup");
+                      "<msup><mrow><mrow/></mrow><mrow/></msup>","rsup");
     addTemplateAction(i18n("Insert sub- and superscript"),"insert_subsupscript",
-                      "<msubsup><mrow/><mrow/><mrow/></msubsup>","rsubup");
+                      "<msubsup><mrow><mrow/></mrow><mrow/><mrow/></msubsup>","rsubup");
     addTemplateAction(i18n("Insert overscript"),"insert_overscript",
-                      "<mover><mrow/><mrow/></mover>","gsup");
+                      "<mover><mrow><mrow/></mrow><mrow/></mover>","gsup");
     addTemplateAction(i18n("Insert underscript"),"insert_underscript",
-                      "<munder><mrow/><mrow/></munder>","gsub");
+                      "<munder><mrow><mrow/></mrow><mrow/></munder>","gsub");
     addTemplateAction(i18n("Insert under- and overscript"),"insert_underoverscript",
-                      "<munderover><mrow/><mrow/><mrow/></munderover>","gsubup");
-                      
-                                                          
+                      "<munderover><mrow><mrow/></mrow><mrow/><mrow/></munderover>","gsubup");
+
     //only for debugging
     KAction* action;
     action = new KAction( "Debug - writeElementTree" , this );

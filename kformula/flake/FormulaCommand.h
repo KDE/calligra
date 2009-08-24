@@ -114,17 +114,15 @@ private:
     /// The position inside m_ownerElement
     int m_position;
 
-    int m_oldPlaceholderPosition;
+    int m_placeholderPosition;
     
     int m_length;
 
     bool m_wrap;
 
-    bool m_addedRow;
+    RowElement* m_placeholderParent;
 
-    RowElement* m_newPlaceholder;
-
-    BasicElement* m_oldPlaceholder;
+//     BasicElement* m_placeholder;
 
     /// The list of added elements
     QList<BasicElement*> m_added;

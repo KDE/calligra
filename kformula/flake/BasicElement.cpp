@@ -392,7 +392,7 @@ bool BasicElement::hasDescendant ( BasicElement* other ) const
 BasicElement* BasicElement::emptyDescendant()
 {
     BasicElement* tmp;
-    if (isEmpty()) {
+    if (isEmpty() && parentElement() && parentElement()->isInferredRow()) {
         return this;
     }
     foreach (BasicElement* child, childElements()) {

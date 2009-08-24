@@ -162,7 +162,7 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
     }
     if (undo) {
         undo->setText(i18n("Insert formula elements."));
-        undo->setRedoCursorPosition(cursor());
+        undo->setUndoCursorPosition(cursor());
     }
     return undo;
 }
