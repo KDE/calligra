@@ -171,7 +171,6 @@ protected slots:
     void slotConfigureItem();
 
     void slotCurrentScheduleChanged( int );
-    void timingHack();
 
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
@@ -191,8 +190,6 @@ private:
     QList<QAction*> m_viewactions;
 
     ViewListItem *m_prev;
-
-    ScheduleManager *m_tmp; //timimg hack
 };
 
 } //Kplato namespace

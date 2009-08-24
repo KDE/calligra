@@ -218,6 +218,8 @@ protected slots:
 
     void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
 
+    void slotProjectCalculated( ScheduleManager *sm );
+
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintSelectedDebug();

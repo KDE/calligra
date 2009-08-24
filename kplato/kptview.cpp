@@ -152,23 +152,26 @@ View::View( Part* part, QWidget* parent )
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
-#if 0
-        SchedulesDockerFactory sdf;
-        SchedulesDocker *sd = dynamic_cast<SchedulesDocker*>( createDockWidget( &sdf ) );
-        Q_ASSERT( sd );
-        connect( sd, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
-
-        sd->setProject( &getProject() );
-#endif
         ViewListDockerFactory vl(this);
         ViewListDocker *docker = dynamic_cast<ViewListDocker *>(createDockWidget(&vl));
         if (docker->view() != this) docker->setView(this);
         m_viewlist = docker->viewList();
-        connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
 
+#if 0        //SchedulesDocker
+        SchedulesDockerFactory sdf;
+        SchedulesDocker *sd = dynamic_cast<SchedulesDocker*>( createDockWidget( &sdf ) );
+        Q_ASSERT( sd );
+
+        sd->setProject( &getProject() );
+        connect( sd, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+#endif
     }
+
+    m_viewlist->setProject( &( getProject() ) );
+    connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+
     m_tab = new QStackedWidget( m_sp );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1350,6 +1353,15 @@ void View::slotProgressChanged( int )
 {
 }
 
+void View::slotProjectCalculated( ScheduleManager *sm )
+{
+    // we only get here if current schedule was calculated
+    qDebug()<<"slotProjectCalculated:"<<sm->name()<<sm->isScheduled()<<sm;
+    if ( sm->isScheduled() ) {
+        slotSelectionChanged( sm );
+    }
+}
+
 void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
 {
     if ( project == 0 || sm == 0 ) {
@@ -1359,6 +1371,13 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
         m_progressBarTimer.stop();
         removeProgressBarItems();
     }
+    removeStatusBarItem( m_estlabel );
+    bool conn = false;
+    if ( sm == currentScheduleManager() ) {
+        conn = connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    }
+    qDebug()<<"slotCalculateSchedule:"<<sm->name()<<conn;
+
     m_text = new QLabel( i18n( "%1: Calculating...", sm->name() ) );
     addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
@@ -1375,6 +1394,10 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
     disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
     m_progressBarTimer.start( 2000 );
+
+    if ( conn ) {
+        disconnect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    }
 }
 
 void View::removeProgressBarItems()

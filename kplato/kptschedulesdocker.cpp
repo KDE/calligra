@@ -39,7 +39,6 @@ namespace KPlato
 {
 
 SchedulesDocker::SchedulesDocker()
-    : m_tmp( 0 )
 {
     setWindowTitle(i18n("Schedule Selector"));
     m_view = new QTreeView( this );
@@ -92,21 +91,14 @@ void SchedulesDocker::setSelectedSchedule( ScheduleManager *sm )
 {
     qDebug()<<"setSelectedSchedule:"<<sm<<m_model.index( sm );
     QModelIndex idx = m_sfModel.mapFromSource( m_model.index( sm ) );
-    if ( ! idx.isValid() ) {
-        m_tmp = sm;
-        QTimer::singleShot( 1000, this, SLOT( timingHack() ) );
-        return;
+    if ( sm ) {
+        Q_ASSERT( idx.isValid() );
     }
     m_view->selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect );
     qDebug()<<"setSelectedSchedule:"<<sm<<idx;
-    m_tmp = 0;
 }
 
-void SchedulesDocker::timingHack()
-{
-    if ( m_tmp ) setSelectedSchedule( m_tmp );
-}
-
+//--------------------
 SchedulesDockerFactory::SchedulesDockerFactory()
 {
 }

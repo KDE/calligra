@@ -303,7 +303,7 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
 
     m_currentSchedule = new KComboBox( this );
     m_model.setFlat( true );
-    m_model.setProject( &(part->getProject()) );
+
     m_sfModel.setFilterKeyColumn ( ScheduleModel::ScheduleScheduled );
     m_sfModel.setFilterRole( Qt::EditRole );
     m_sfModel.setFilterFixedString( "true" );
@@ -724,19 +724,11 @@ void ViewListWidget::setSelectedSchedule( ScheduleManager *sm )
 {
     kDebug()<<sm<<m_model.index( sm );
     QModelIndex idx = m_sfModel.mapFromSource( m_model.index( sm ) );
-    if ( ! idx.isValid() ) {
-        m_tmp = sm;
-        QTimer::singleShot( 1000, this, SLOT( timingHack() ) );
-        return;
+    if ( sm ) {
+        Q_ASSERT( idx.isValid() );
     }
     m_currentSchedule->setCurrentIndex( idx.row() );
     kDebug()<<sm<<idx;
-    m_tmp = 0;
-}
-
-void ViewListWidget::timingHack()
-{
-    if ( m_tmp ) setSelectedSchedule( m_tmp );
 }
 
 

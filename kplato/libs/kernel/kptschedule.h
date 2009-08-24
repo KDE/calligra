@@ -537,9 +537,13 @@ public:
     bool isParentOf( const ScheduleManager *sm ) const;
     ScheduleManager *findManager( const QString &name ) const;
     
+    /// This sub-schedule will be re-calculated based on the parents completion data
     bool recalculate() const { return m_recalculate; }
+    /// Set re-calculate to @p on.
     void setRecalculate( bool on ) { m_recalculate = on; }
+    /// The datetime this schedule will be calculated from
     DateTime recalculateFrom() const { return m_recalculateFrom; }
+    /// Set the datetime this schedule will be calculated from to @p dt
     void setRecalculateFrom( const DateTime &dt ) { m_recalculateFrom = dt; }
     long parentScheduleId() const { return m_parent == 0 ? NOTSCHEDULED : m_parent->id(); }
     void createSchedules();

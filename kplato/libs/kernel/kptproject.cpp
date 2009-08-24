@@ -238,8 +238,8 @@ void Project::calculate( ScheduleManager &sm )
         setCurrentSchedule( sm.expected()->id() );
     }
     emit sigProgress( maxprogress );
-    emit projectCalculated( &sm );
     emit scheduleManagerChanged( &sm );
+    emit projectCalculated( &sm );
     emit changed();
 }
 

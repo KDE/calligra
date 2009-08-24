@@ -54,13 +54,11 @@ public slots:
 
 protected slots:
     void slotSelectionChanged();
-    void timingHack();
 
 private:
     QTreeView *m_view;
     QSortFilterProxyModel m_sfModel;
     ScheduleItemModel m_model;
-    ScheduleManager *m_tmp;
 };
 
 class SchedulesDockerFactory : public KoDockFactory
