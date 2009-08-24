@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -94,7 +95,11 @@ public:
     void createRingDiagram();
     void createRadarDiagram();
     void createScatterDiagram();
-    
+    void createStockDiagram();
+    void createBubbleDiagram();
+    void createSurfaceDiagram();
+    void createGanttDiagram();
+
     PlotArea *plotArea;
     
     AxisPosition  position;
@@ -128,9 +133,23 @@ public:
     KDChart::LineDiagram  *kdLineDiagram;
     KDChart::LineDiagram  *kdAreaDiagram;
     KDChart::PieDiagram   *kdCircleDiagram;
-    KDChart::RingDiagram   *kdRingDiagram;
+    KDChart::RingDiagram  *kdRingDiagram;
     KDChart::PolarDiagram *kdRadarDiagram;
     KDChart::Plotter      *kdScatterDiagram;
+    // FIXME BUG: Somehow we need to visualize something for these
+    //            missing chart types.  We have some alternatives:
+    //            1. Show an emtpy area
+    //            2. Show a text "unsupported chart type"
+    //            3. Exchange for something else, e.g. a bar chart.
+    //            ... More?
+    //
+    // NOTE: Whatever we do, we should always store the data so that
+    //       it can be saved back into the file for a perfect
+    //       roundtrip.
+    KDChart::BarDiagram   *kdStockDiagram;
+    KDChart::BarDiagram   *kdBubbleDiagram;
+    KDChart::BarDiagram   *kdSurfaceDiagram;
+    KDChart::BarDiagram   *kdGanttDiagram;
 
     KDChartModel *kdBarDiagramModel;
     KDChartModel *kdLineDiagramModel;
@@ -139,9 +158,13 @@ public:
     KDChartModel *kdRingDiagramModel;
     KDChartModel *kdRadarDiagramModel;
     KDChartModel *kdScatterDiagramModel;
+    KDChartModel *kdStockDiagramModel;
+    KDChartModel *kdBubbleDiagramModel;
+    KDChartModel *kdSurfaceDiagramModel;
+    KDChartModel *kdGanttDiagramModel;
     
-    ChartType plotAreaChartType;
-    ChartSubtype plotAreaChartSubType;
+    ChartType     plotAreaChartType;
+    ChartSubtype  plotAreaChartSubType;
     
     QString categoryDataRegionString;
 
@@ -169,9 +192,13 @@ Axis::Private::Private()
     kdLineDiagram    = 0;
     kdAreaDiagram    = 0;
     kdCircleDiagram  = 0;
-    kdRingDiagram  = 0;
+    kdRingDiagram    = 0;
     kdRadarDiagram   = 0;
     kdScatterDiagram = 0;
+    kdStockDiagram   = 0;
+    kdBubbleDiagram  = 0;
+    kdSurfaceDiagram = 0;
+    kdGanttDiagram   = 0;
 
     kdBarDiagramModel     = 0;
     kdLineDiagramModel    = 0;
@@ -180,6 +207,10 @@ Axis::Private::Private()
     kdRingDiagramModel    = 0;
     kdRadarDiagramModel   = 0;
     kdScatterDiagramModel = 0;
+    kdStockDiagramModel   = 0;
+    kdBubbleDiagramModel  = 0;
+    kdSurfaceDiagramModel = 0;
+    kdGanttDiagramModel   = 0;
 }
 
 Axis::Private::~Private()
@@ -228,7 +259,32 @@ Axis::Private::~Private()
 
     if ( kdScatterDiagram ) {
         plotArea->parent()->legend()->kdLegend()->removeDiagram( kdScatterDiagram );
+        delete kdScatterDiagram;
         delete kdScatterDiagramModel;
+    }
+
+    if ( kdStockDiagram ) {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdStockDiagram );
+        delete kdStockDiagram;
+        delete kdStockDiagramModel;
+    }
+
+    if ( kdBubbleDiagram ) {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBubbleDiagram );
+        delete kdBubbleDiagram;
+        delete kdBubbleDiagramModel;
+    }
+
+    if ( kdSurfaceDiagram ) {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdSurfaceDiagram );
+        delete kdSurfaceDiagram;
+        delete kdSurfaceDiagramModel;
+    }
+
+    if ( kdGanttDiagram ) {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdGanttDiagram );
+        delete kdGanttDiagram;
+        delete kdGanttDiagramModel;
     }
 }
 
@@ -310,8 +366,32 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         model = kdScatterDiagramModel;
         diagram = kdScatterDiagram;
         break;
-    default:;
-        // FIXME: Implement more chart types
+    case StockChartType:
+        if ( !kdStockDiagram )
+            createStockDiagram();
+        model = kdStockDiagramModel;
+        diagram = kdStockDiagram;
+        break;
+    case BubbleChartType:
+        if ( !kdBubbleDiagram )
+            createBubbleDiagram();
+        model = kdBubbleDiagramModel;
+        diagram = kdBubbleDiagram;
+        break;
+    case SurfaceChartType:
+        if ( !kdSurfaceDiagram )
+            createSurfaceDiagram();
+        model = kdSurfaceDiagramModel;
+        diagram = kdSurfaceDiagram;
+        break;
+    case GanttChartType:
+        if ( !kdGanttDiagram )
+            createGanttDiagram();
+        model = kdGanttDiagramModel;
+        diagram = kdGanttDiagram;
+        break;
+    default:
+        ;
     }
 
     diagram->setModel( model );
@@ -349,8 +429,19 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
         case ScatterChartType:
             diagram = (KDChart::AbstractDiagram*)kdScatterDiagram;
             break;
+        case StockChartType:
+            diagram = (KDChart::AbstractDiagram*)kdStockDiagram;
+            break;
+        case BubbleChartType:
+            diagram = (KDChart::AbstractDiagram*)kdBubbleDiagram;
+            break;
+        case SurfaceChartType:
+            diagram = (KDChart::AbstractDiagram*)kdSurfaceDiagram;
+            break;
+        case GanttChartType:
+            diagram = (KDChart::AbstractDiagram*)kdGanttDiagram;
+            break;
         default:;
-            // FIXME: Implement more chart types
         }
     return diagram;
 }
@@ -390,8 +481,24 @@ void Axis::Private::deleteDiagram( ChartType chartType )
         diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
         model = &kdScatterDiagramModel;
         break;
+    case StockChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdStockDiagram;
+        model = &kdStockDiagramModel;
+        break;
+    case BubbleChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdBubbleDiagram;
+        model = &kdBubbleDiagramModel;
+        break;
+    case SurfaceChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdSurfaceDiagram;
+        model = &kdSurfaceDiagramModel;
+        break;
+    case GanttChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdGanttDiagram;
+        model = &kdGanttDiagramModel;
+        break;
     default:;
-        // FIXME: Implement more chart types
+        // FIXME: Error handling?
     }
 
     // Also delete the model, as we don't need it anymore
@@ -598,6 +705,91 @@ void Axis::Private::createScatterDiagram()
     }
 }
 
+void Axis::Private::createStockDiagram()
+{
+    // This is a so far unsupported chart type.  So we implement the
+    // model, but cannot implement the diagram since it's not yet
+    // supported by KDChart.
+
+    // The model.
+    if ( kdStockDiagramModel == 0 ) {
+        kdStockDiagramModel = new KDChartModel;
+        registerKDChartModel( kdStockDiagramModel );
+        kdStockDiagramModel->setDataDimensions( 2 );
+    }
+
+    // No KDChart::Diagram since KDChart doesn't support this type
+#if 0
+    if ( kdStockDiagram == 0 ) {
+        ...
+    }
+#endif
+}
+
+void Axis::Private::createBubbleDiagram()
+{
+    // This is a so far unsupported chart type.  So we implement the
+    // model, but cannot implement the diagram since it's not yet
+    // supported by KDChart.
+
+    // The model.
+    if ( kdBubbleDiagramModel == 0 ) {
+        kdBubbleDiagramModel = new KDChartModel;
+        registerKDChartModel( kdBubbleDiagramModel );
+        //kdBubbleDiagramModel->setDataDimensions( 2 );
+    }
+
+    // No KDChart::Diagram since KDChart doesn't support this type
+#if 0
+    if ( kdBubbleDiagram == 0 ) {
+        ...
+    }
+#endif
+}
+
+void Axis::Private::createSurfaceDiagram()
+{
+    // This is a so far unsupported chart type.  So we implement the
+    // model, but cannot implement the diagram since it's not yet
+    // supported by KDChart.
+
+    // The model.
+    if ( kdSurfaceDiagramModel == 0 ) {
+        kdSurfaceDiagramModel = new KDChartModel;
+        registerKDChartModel( kdSurfaceDiagramModel );
+        //kdSurfaceDiagramModel->setDataDimensions( 2 );
+    }
+
+    // No KDChart::Diagram since KDChart doesn't support this type
+#if 0
+    if ( kdSurfaceDiagram == 0 ) {
+        ...
+    }
+#endif
+}
+
+void Axis::Private::createGanttDiagram()
+{
+    // This is a so far unsupported chart type.  So we implement the
+    // model, but cannot implement the diagram since it's not yet
+    // supported by KDChart.
+
+    // The model.
+    if ( kdGanttDiagramModel == 0 ) {
+        kdGanttDiagramModel = new KDChartModel;
+        registerKDChartModel( kdGanttDiagramModel );
+        //kdGanttDiagramModel->setDataDimensions( 2 );
+    }
+
+    // No KDChart::Diagram since KDChart doesn't support this type
+#if 0
+    if ( kdGanttDiagram == 0 ) {
+        ...
+    }
+#endif
+}
+
+
 /**
  * Automatically adjusts the diagram so that all currently displayed
  * diagram types fit together.
@@ -623,11 +815,11 @@ Axis::Axis( PlotArea *parent )
     Q_ASSERT( parent );
     
     d->plotArea = parent;
-    d->kdAxis = new KDChart::CartesianAxis();
-    d->kdPlane = new KDChart::CartesianCoordinatePlane();
+    d->kdAxis       = new KDChart::CartesianAxis();
+    d->kdPlane      = new KDChart::CartesianCoordinatePlane();
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
     
-    d->plotAreaChartType = d->plotArea->chartType();
+    d->plotAreaChartType    = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
     
     KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
@@ -1363,17 +1555,22 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         oldModel = &d->kdRadarDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
         break;
+
     case StockChartType:
-        // FIXME Stockchart
+        oldModel = &d->kdStockDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdStockDiagram;
         break;
     case BubbleChartType:
-        // FIXME Bubblechart
+        oldModel = &d->kdBubbleDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdBubbleDiagram;
         break;
     case SurfaceChartType:
-        // FIXME Surfacechart
+        oldModel = &d->kdSurfaceDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdSurfaceDiagram;
         break;
     case GanttChartType:
-        // FIXME Ganttchart
+        oldModel = &d->kdGanttDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdGanttDiagram;
         break;
 
     default:;
@@ -1440,16 +1637,32 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         break;
 
     case StockChartType:
-        // FIXME Stockchart
+        if ( !d->kdStockDiagram )
+           d->createStockDiagram();
+        newModel = d->kdStockDiagramModel;
+        //newDiagram = d->kdStockDiagram;
+        newDiagram = 0;
         break;
     case BubbleChartType:
-        // FIXME Bubblechart
+        if ( !d->kdBubbleDiagram )
+           d->createBubbleDiagram();
+        newModel = d->kdBubbleDiagramModel;
+        //newDiagram = d->kdBubbleDiagram;
+        newDiagram = 0;
         break;
     case SurfaceChartType:
-        // FIXME Surfacechart
+        if ( !d->kdSurfaceDiagram )
+           d->createSurfaceDiagram();
+        newModel = d->kdSurfaceDiagramModel;
+        //newDiagram = d->kdSurfaceDiagram;
+        newDiagram = 0;
         break;
     case GanttChartType:
-        // FIXME Ganttchart
+        if ( !d->kdGanttDiagram )
+           d->createGanttDiagram();
+        newModel = d->kdGanttDiagramModel;
+        //newDiagram = d->kdGanttDiagram;
+        newDiagram = 0;
         break;
     default:;
         // FIXME: Implement more chart types
@@ -1481,26 +1694,29 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
                                      ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
             if ( dataSetCount == (*oldModel)->dataDimensions() ) {
-                Q_ASSERT( oldDiagram );
-                Q_ASSERT( *oldDiagram );
-                KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
-                if ( plane ) {
-                    plane->takeDiagram( (*oldDiagram) );
-                    if ( plane->diagrams().size() == 0 ) {
-                        d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                // This if() is only necessary because we have some
+                // unsupported chart types that create a NULL
+                // oldDiagram;
+                if ( oldDiagram ) {
+                    KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
+                    if ( plane ) {
+                        plane->takeDiagram( (*oldDiagram) );
+                        if ( plane->diagrams().size() == 0 ) {
+                            d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                        }
                     }
-                }
 
-                if ( d->plotArea->parent()->legend()->kdLegend() )
-                    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
-                if ( *oldDiagram )
-                    delete *oldDiagram;
+                    if ( d->plotArea->parent()->legend()->kdLegend() )
+                        d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+                    if ( *oldDiagram )
+                        delete *oldDiagram;
+                }
                 delete *oldModel;
                 *oldModel = 0;
                 *oldDiagram = 0;
             }
             else
-            (*oldModel)->removeDataSet( dataSet );
+                (*oldModel)->removeDataSet( dataSet );
         }
         dataSet->setGlobalChartType( newChartType );
     }
@@ -1626,7 +1842,10 @@ void Axis::setThreeD( bool threeD )
         attributes.setDepth( 15.0 );
         d->kdRingDiagram->setThreeDPieAttributes( attributes );
     }
-    
+
+    // The following types don't support 3D, at least not in KDChart:
+    // scatter, radar, stock, bubble, surface, gantt
+
     requestRepaint();
 }
 

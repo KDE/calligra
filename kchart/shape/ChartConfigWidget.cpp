@@ -520,6 +520,27 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type = ScatterChartType;
         subtype = NoChartSubtype;
     }
+
+    else if ( action == d->stockChartAction ) {
+        type = StockChartType;
+        subtype = NoChartSubtype;
+    }
+
+    else if ( action == d->bubbleChartAction ) {
+        type = BubbleChartType;
+        subtype = NoChartSubtype;
+    }
+
+    else if ( action == d->surfaceChartAction ) {
+        type = SurfaceChartType;
+        subtype = NoChartSubtype;
+    }
+
+    else if ( action == d->ganttChartAction ) {
+        type = GanttChartType;
+        subtype = NoChartSubtype;
+    }
+
     
     // o Make sure polar and cartesian plots can't conflict and
     // don't allow the user to mix these two types
@@ -559,6 +580,13 @@ void ChartConfigWidget::setCartesianChartTypesEnabled( bool enabled )
     d->dataSetLineChartMenu->setEnabled( enabled );
     d->dataSetAreaChartMenu->setEnabled( enabled );
     d->dataSetScatterChartAction->setEnabled( enabled );
+    // FIXME: Enable for:
+    // pie, ring?
+    //NYI: 
+    //stock
+    //bubble
+    //surface
+    //gantt
 }
 
 void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged( int percent )
@@ -641,6 +669,12 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     else if ( action == d->dataSetScatterChartAction )
         type = ScatterChartType;
     
+    // Not supported by KChart yet:
+    //stock
+    //bubble
+    //surface
+    //gantt
+
     DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
     Q_ASSERT( dataSet );
     if ( !dataSet )

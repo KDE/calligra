@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
-   Copyright      2008 Inge Wallin     <inge@lysator.liu.se>
+   Copyright 2008-2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -758,6 +758,7 @@ int DataSet::dimension() const
     const ChartType chartType = ( d->chartType != LastChartType
 				  ? d->chartType
 				  : d->globalChartType );
+    // FIXME BUG: Ring, Surface
     switch ( chartType ) {
     case BarChartType:
     case AreaChartType:

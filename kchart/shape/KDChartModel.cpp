@@ -141,7 +141,11 @@ QVariant KDChartModel::data( const QModelIndex &index,
         else
             return dataSet->yData( row );
     }
-    // TODO (Johannes): Support for third data dimension
+    else if ( d->dataDimensions == 3 ) {
+        // TODO (Johannes): Support for third data dimension
+        // We need to implement zData in Dataset first.
+        return dataSet->xData( row );
+    }
     
     // Should never happen
     return QVariant();
