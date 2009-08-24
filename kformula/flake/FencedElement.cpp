@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
