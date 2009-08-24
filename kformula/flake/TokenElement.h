@@ -121,7 +121,9 @@ public:
 
     /// @return the raw string
     const QString& text();
-    
+
+    virtual const QString writeElementContent() const;
+
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );
@@ -131,8 +133,6 @@ protected:
 
     /// @return The font to use
     QFont font() const;
-
-    virtual void writeElementTree ( int indent = 0, bool wrong = false );
 
     /// Whether the element should be stretched horizontally (e.g. arrows)
     bool m_stretchHorizontally;

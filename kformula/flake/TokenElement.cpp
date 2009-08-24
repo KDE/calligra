@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
                  2009 Jeremias Epperlein <jeeree@web.de>
@@ -354,23 +355,7 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
     }
 }
 
-void TokenElement::writeElementTree ( int indent, bool wrong )
+const QString TokenElement::writeElementContent() const
 {
-        QString s;
-    for (int i=0; i<indent; ++i) {
-        s+="   ";
-    }
-    s+=ElementFactory::elementName(elementType());
-    if (wrong) {
-        s+=" -> wrong parent !!!";
-    }
-    s+=ElementFactory::elementName(elementType())+" '"+m_rawString+"'";
-    kDebug()<<s;
-    foreach (BasicElement* tmp, childElements()) {
-        if (tmp->parentElement()!=this) {
-            tmp->writeElementTree(indent+1,true);
-        } else {
-            tmp->writeElementTree(indent+1,false);
-        }
-    }
+    return m_rawString;
 }

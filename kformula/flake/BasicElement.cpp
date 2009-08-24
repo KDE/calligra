@@ -424,13 +424,16 @@ void BasicElement::setScaleFactor ( double scaleFactor )
     m_scaleFactor=scaleFactor;
 }
 
-void BasicElement::writeElementTree(int indent, bool wrong)
+void BasicElement::writeElementTree(int indent, bool wrong) const
 {
     QString s;
     for (int i=0; i<indent; ++i) {
         s+="   ";
     }
     s+=ElementFactory::elementName(elementType());
+    s+=writeElementContent();
+    s+="        [scale level ";
+    s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";
     if (wrong) {
         s+=" -> wrong parent !!!";
     }
@@ -443,6 +446,13 @@ void BasicElement::writeElementTree(int indent, bool wrong)
         }
     }
 }
+
+
+const QString BasicElement::writeElementContent() const
+{
+    return "";
+}
+
 
 bool BasicElement::isInferredRow() const
 {

@@ -291,8 +291,11 @@ public:
      *  @param wrong indicates, if the parent is set wrong
      *  @param indent indention level
      */
-    virtual void writeElementTree(int indent=0, bool wrong=false);
+    virtual void writeElementTree(int indent=0, bool wrong=false) const;
 
+    /// return the content of the element to kDebug(), only for debugging
+    virtual const QString writeElementContent() const;
+    
     /// @return the first TableEntryElement among the elements ancestors or 0 if there is none
     TableEntryElement* parentTableEntry();
 
