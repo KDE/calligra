@@ -45,8 +45,12 @@ SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : 
 SubSupElement::~SubSupElement()
 {
     delete m_baseElement;
-    delete m_subScript;
-    delete m_superScript;
+    if (m_subScript) {
+        delete m_subScript;
+    }
+    if (m_superScript) {
+        delete m_superScript;
+    }
 }
 
 void SubSupElement::paint( QPainter& painter, AttributeManager* am )
@@ -101,11 +105,6 @@ void SubSupElement::layout( const AttributeManager* am )
         setHeight( yOffset + m_baseElement->height() );
     }
 }
-
-// bool SubSupElement::acceptCursor( const FormulaCursor* cursor )
-// {
-//     return true;
-// }
 
 const QList<BasicElement*> SubSupElement::childElements() const
 {

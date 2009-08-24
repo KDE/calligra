@@ -76,13 +76,13 @@ protected:
  
 private:
     /// The element used as basis for the under and the over element
-    BasicElement* m_baseElement;
+    RowElement* m_baseElement;
 
     /// The element that is layouted under the base element
-    BasicElement* m_underElement;
+    RowElement* m_underElement;
 
     /// The element that is layouted over the base element
-    BasicElement* m_overElement;
+    RowElement* m_overElement;
 
     /// The type - one of Under, Over, UnderOver
     ElementType m_elementType;
