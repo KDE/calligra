@@ -298,8 +298,7 @@ void KoFormulaTool::insert( QAction* action )
 {
     FormulaCommand *command;
     m_formulaShape->update();
-    command=m_formulaEditor->insertMathML
-( action->data().toString() );
+    command=m_formulaEditor->insertMathML( action->data().toString() );
     if (command!=0) {
         m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape, command));
     }

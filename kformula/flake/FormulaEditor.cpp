@@ -97,6 +97,7 @@ FormulaCommand* FormulaEditor::insertMathML( const QString& data )
     BasicElement* element=ElementFactory::createElement(tmpDocument.documentElement().tagName(),0);
     element->readMathML( tmpDocument.documentElement() );     // and load the new formula
     FormulaCommand* command=insertElement( element );
+    kDebug()<<"Inserting "<< tmpDocument.documentElement().tagName();
     if (command==0) {
         delete element;
     }

@@ -54,15 +54,11 @@ public:
      */
     void layout( const AttributeManager* am );
 
-    /// inherited from BasicElement
-//     bool acceptCursor( const FormulaCursor* cursor );
-
     /**
      * Insert a new child at the cursor position
      * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
-//     void insertChild( FormulaCursor* cursor, BasicElement* child );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
@@ -84,13 +80,13 @@ protected:
 
 private:
     /// The base element 
-    BasicElement* m_baseElement;
+    RowElement* m_baseElement;
 
     /// The subscript right to the m_baseElement
-    BasicElement* m_subScript;
+    RowElement* m_subScript;
 
     /// The superscript right to the m_baseElement
-    BasicElement* m_superScript;
+    RowElement* m_superScript;
 
     /// Whether this is a SubScript, SupScript or SubSupScript
     ElementType m_elementType;

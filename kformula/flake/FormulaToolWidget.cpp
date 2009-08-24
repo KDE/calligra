@@ -95,6 +95,8 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
              m_tool, SLOT( insert( QAction* ) ) );
     connect( buttonRoot, SIGNAL( triggered( QAction* ) ),
              m_tool, SLOT( insert( QAction* ) ) );
+    connect( buttonScript, SIGNAL( triggered( QAction* ) ),
+            m_tool, SLOT( insert( QAction* ) ) );
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
     connect( buttonAlterTable, SIGNAL( triggered( QAction* ) ), m_tool, SLOT( changeTable(QAction*)));
