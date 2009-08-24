@@ -85,7 +85,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     : KDialog(parent),
       project(p)
 {
-    setCaption( i18n("Standard Worktime") );
+    setCaption( i18n("Estimate Conversions") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
@@ -103,7 +103,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 
 MacroCommand *StandardWorktimeDialog::buildCommand() {
     //kDebug();
-    QString n = i18n("Modify Standard Worktime");
+    QString n = i18n("Modify Estimate Conversions");
     MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
         if (cmd == 0) cmd = new MacroCommand(n);

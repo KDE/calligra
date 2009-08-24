@@ -210,7 +210,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
-    actionEditStandardWorktime  = new KAction(KIcon( "document-edit" ), i18n("Edit Standard Worktime..."), this);
+    actionEditStandardWorktime  = new KAction(KIcon( "configure" ), i18n("Define Estimate Conversions..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
 
