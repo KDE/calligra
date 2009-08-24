@@ -161,7 +161,8 @@ FormulaCommand* FormulaEditor::insertElement( BasicElement* element )
         //TODO: implement the insertion of glyphs
     }
     if (undo) {
-        undo->setText(i18n("Insert Element"));
+        undo->setText(i18n("Insert formula elements."));
+        undo->setRedoCursorPosition(cursor());
     }
     return undo;
 }
@@ -193,7 +194,8 @@ FormulaCommand* FormulaEditor::remove( bool elementBeforePosition )
         }
     }
     if (undo) {
-        undo->setText(i18n("Remove stuff"));
+        undo->setText(i18n("Remove formula elements"));
+        undo->setUndoCursorPosition(cursor());
     }
     return undo;
 }
