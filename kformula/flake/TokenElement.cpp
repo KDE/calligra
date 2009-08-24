@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
                  2009 Jeremias Epperlein <jeeree@web.de>
@@ -46,7 +45,7 @@ const QList<BasicElement*> TokenElement::childElements() const
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
     // set the painter to background color and paint it
-     painter.setPen( am->colorOf( "mathbackground", this ) );
+    painter.setPen( am->colorOf( "mathbackground", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 
@@ -126,7 +125,11 @@ void TokenElement::layout( const AttributeManager* am )
                 m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
             }
         }
-    } 
+    }
+    //FIXME: This is only a temporary solution
+    boundingrect=m_contentPath.boundingRect();
+    m_offsets.removeLast();
+    m_offsets.append(m_contentPath.boundingRect().right());
     //The left side may be negative, because of italised letters etc. we need to adjust for this when painting
     //The qMax is just incase.  The bounding box left should never be >0
     m_xoffset = qMax(-boundingrect.left(), (qreal)0.0);
