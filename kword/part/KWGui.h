@@ -26,7 +26,6 @@
 class KWView;
 class KWCanvas;
 class KoCanvasController;
-class KoToolDocker;
 class KoRuler;
 
 /**

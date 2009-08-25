@@ -72,7 +72,6 @@
 #include <KoRuler.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoToolDocker.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>

@@ -30,7 +30,6 @@
 #include <KoShape.h>
 #include <KoFlake.h>
 #include <KoSelection.h>
-#include <KoToolDocker.h>
 #include <KoDockerManager.h>
 #include <KoRuler.h>
 #include <KoToolBoxFactory.h>
