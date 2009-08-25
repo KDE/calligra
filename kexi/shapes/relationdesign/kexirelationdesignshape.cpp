@@ -25,6 +25,7 @@
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
+#include <KoShapeBackground.h>
 
 KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.koffice.org/kexirelationdesign", "shape"){
     m_connection = 0;
@@ -121,17 +122,21 @@ return true;
 
 void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
     QSizeF viewSize = converter.documentToView(size());
-    QLinearGradient linearGrad(QPointF(0, 0), QPointF(viewSize.width(), viewSize.height()));
-    linearGrad.setColorAt(0, Qt::white);
-    linearGrad.setColorAt(1, QColor(240,240,240));
 
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setClipRect(QRectF(QPointF(-0.5,-0.5), viewSize + QSizeF(1,1)));
-    painter.setBrush(linearGrad);
     
     painter.setPen(QPen(Qt::black, 1.0));
     painter.drawRoundedRect(QRectF(QPointF(0.5,0.5), (viewSize - QSizeF(1.0, 1.0))), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
+
+    //Draw user specified background
+    QPainterPath pp;
+    pp.addRoundedRect(QRectF(QPointF(0.5,0.5), (viewSize - QSizeF(1.0, 1.0))), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
+    if (background()) {
+        background()->paint(painter, pp);
+    }
+
     painter.drawLine(0, converter.documentToViewY(15), viewSize.width(), converter.documentToViewY(15));
 
     QFont f;
@@ -253,4 +258,10 @@ void KexiRelationDesignShape::addConnectionPoints()
         addConnectionPoint(QPointF(boundingRect().width(), offset));
 
     }
+}
+
+void KexiRelationDesignShape::setSize(const QSizeF &size)
+{
+    addConnectionPoints();
+    KoShape::setSize(size);
 }
