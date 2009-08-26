@@ -145,9 +145,6 @@ bool isPolar( ChartType type )
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
-        // FIXME: What?  A bubble or surface chart is not polar, is it?
-    case BubbleChartType:
-    case SurfaceChartType:
         return true;
     default:
         return false;
