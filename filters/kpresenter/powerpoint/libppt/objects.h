@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -67,14 +67,14 @@ public:
 
   bool isBackground() const;
   void setBackground( bool bg );
-  
+
 
   bool hasProperty( std::string name );
 
   void setProperty( std::string name, int value );
   void setProperty( std::string name, double value );
   void setProperty( std::string name, std::string value );
-  void setProperty( std::string name, bool value );  
+  void setProperty( std::string name, bool value );
   void setProperty( std::string name, Color value );
   void setProperty( std::string name, const char* value )
     { setProperty( name, std::string(value) ); }
@@ -83,13 +83,13 @@ public:
   double getDoubleProperty( std::string name );
   bool getBoolProperty( std::string name );
   std::string getStrProperty( std::string name );
-  Color getColorProperty(std::string name); 
+  Color getColorProperty(std::string name);
 
 private:
   // no copy or assign
   Object( const Object& );
   Object& operator=( const Object& );
-  
+
   class Private;
   Private* d;
 };
@@ -98,10 +98,10 @@ class TextObject: public Object
 {
 public:
 
-  enum { 
-    Title       = 0, 
-    Body        = 1, 
-    Notes       = 2, 
+  enum {
+    Title       = 0,
+    Body        = 1,
+    Notes       = 2,
     NotUsed     = 3,
     Other       = 4,  // text in a shape
     CenterBody  = 5,  // subtitle in title slide
@@ -127,7 +127,7 @@ private:
   // no copy or assign
   TextObject( const TextObject& );
   TextObject& operator=( const TextObject& );
-  
+
   class Private;
   Private* d;
 };
@@ -147,7 +147,7 @@ private:
   // no copy or assign
   GroupObject( const GroupObject& );
   GroupObject& operator=( const GroupObject& );
-  
+
   class Private;
   Private* d;
 
@@ -167,7 +167,7 @@ public:
     RightArrow,
     LeftArrow,
     UpArrow,
-    DownArrow, 
+    DownArrow,
     IsoscelesTriangle,
     RightTriangle,
     Parallelogram,
@@ -177,26 +177,27 @@ public:
     Line,
     Smiley,
     Heart,
-    FreeLine
+    FreeLine,
+    PictureFrame
   };
 
   DrawObject();
   virtual ~DrawObject();
   virtual bool isDrawing() const { return true; }
-   
+
   unsigned shape() const;
   void setShape( unsigned s );
 
   bool isVerFlip() const;
   void setVerFlip( bool vFlip );
   bool isHorFlip() const;
-  void setHorFlip( bool hFlip );  
+  void setHorFlip( bool hFlip );
 
 private:
   // no copy or assign
   DrawObject( const DrawObject& );
   DrawObject& operator=( const DrawObject& );
-  
+
   class Private;
   Private* d;
 };

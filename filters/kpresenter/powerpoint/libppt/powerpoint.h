@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -36,35 +36,35 @@ public:
   /**
     Static ID of the record. Subclasses should override this value
     with the id of the record they handle.
-  */  
+  */
   static const unsigned int id;
-  
+
   virtual unsigned int rtti(){
 	  return this->id;
   }
-  
+
   /**
     Creates a new generic record.
-  */  
+  */
   Record();
-  
+
   /**
     Destroys the record.
   */
   virtual ~Record();
-  
+
   /**
    * Record factory, create a new record of specified type.
    */
   static Record* create( unsigned type );
-  
+
   /**
    * Returns true if this is a Container.
    */
   virtual bool isContainer() const { return false; }
-  
+
   void setParent( Record* parent );
-  
+
   const Record* parent() const;
 
   /**
@@ -77,15 +77,15 @@ public:
     Sets the position of the record in the OLE stream.
    */
   void setPosition( unsigned pos );
-  
+
   /**
-    Gets the position of this record in the OLE stream. 
+    Gets the position of this record in the OLE stream.
    */
   unsigned position() const;
 
   void setInstance( unsigned inst );
   unsigned instance() const;
-  
+
   /**
     Returns the name of the record. For debugging only.
    */
@@ -102,13 +102,13 @@ protected:
    unsigned stream_position;
 
    unsigned record_instance;
-   
+
    Record* record_parent;
 
 private:
    // no copy or assign
    Record( const Record& );
-   Record& operator=( const Record& );   
+   Record& operator=( const Record& );
 };
 
 // Container is a special record, it is for holding another records
@@ -122,7 +122,7 @@ public:
 private:
    // no copy or assign
    Container( const Container& );
-   Container& operator=( const Container& );   
+   Container& operator=( const Container& );
 };
 
 
@@ -136,7 +136,7 @@ public:
 private:
   // no copy or assign
   BookmarkCollectionContainer( const BookmarkCollectionContainer& );
-  BookmarkCollectionContainer& operator=( const BookmarkCollectionContainer& );   
+  BookmarkCollectionContainer& operator=( const BookmarkCollectionContainer& );
 };
 
 class DocumentContainer: public Container
@@ -149,7 +149,7 @@ public:
 private:
   // no copy or assign
   DocumentContainer( const DocumentContainer& );
-  DocumentContainer& operator=( const DocumentContainer& );   
+  DocumentContainer& operator=( const DocumentContainer& );
 };
 
 class EnvironmentContainer: public Container
@@ -162,7 +162,7 @@ public:
 private:
   // no copy or assign
   EnvironmentContainer( const EnvironmentContainer& );
-  EnvironmentContainer& operator=( const EnvironmentContainer& );   
+  EnvironmentContainer& operator=( const EnvironmentContainer& );
 };
 
 class ExObjListContainer: public Container
@@ -175,7 +175,7 @@ public:
 private:
   // no copy or assign
   ExObjListContainer( const ExObjListContainer& );
-  ExObjListContainer& operator=( const ExObjListContainer& );   
+  ExObjListContainer& operator=( const ExObjListContainer& );
 };
 
 class ExHyperlinkContainer : public Container
@@ -188,7 +188,7 @@ public:
 private:
   // no copy or assign
   ExHyperlinkContainer ( const ExHyperlinkContainer & );
-  ExHyperlinkContainer & operator=( const ExHyperlinkContainer & );   
+  ExHyperlinkContainer & operator=( const ExHyperlinkContainer & );
 };
 
 class ExEmbedContainer : public Container
@@ -201,7 +201,7 @@ public:
 private:
   // no copy or assign
   ExEmbedContainer ( const ExEmbedContainer & );
-  ExEmbedContainer & operator=( const ExEmbedContainer & );   
+  ExEmbedContainer & operator=( const ExEmbedContainer & );
 };
 
 class ExLinkContainer : public Container
@@ -214,7 +214,7 @@ public:
 private:
   // no copy or assign
   ExLinkContainer ( const ExLinkContainer & );
-  ExLinkContainer & operator=( const ExLinkContainer & );   
+  ExLinkContainer & operator=( const ExLinkContainer & );
 };
 
 class RunArrayContainer: public Container
@@ -222,13 +222,13 @@ class RunArrayContainer: public Container
 public:
   static const unsigned int id;
   RunArrayContainer();
-  
+
   const char* name(){ return "RunArrayContainer"; }
 
 private:
   // no copy or assign
   RunArrayContainer( const RunArrayContainer& );
-  RunArrayContainer& operator=( const RunArrayContainer& );   
+  RunArrayContainer& operator=( const RunArrayContainer& );
 };
 
 class ExOleObjStgContainer: public Container
@@ -241,7 +241,7 @@ public:
 private:
   // no copy or assign
   ExOleObjStgContainer( const ExOleObjStgContainer& );
-  ExOleObjStgContainer& operator=( const ExOleObjStgContainer& );   
+  ExOleObjStgContainer& operator=( const ExOleObjStgContainer& );
 };
 
 class FontCollectionContainer: public Container
@@ -254,7 +254,7 @@ public:
 private:
   // no copy or assign
   FontCollectionContainer( const FontCollectionContainer& );
-  FontCollectionContainer& operator=( const FontCollectionContainer& );   
+  FontCollectionContainer& operator=( const FontCollectionContainer& );
 };
 
 class HandoutContainer: public Container
@@ -267,7 +267,7 @@ public:
 private:
   // no copy or assign
   HandoutContainer( const HandoutContainer& );
-  HandoutContainer& operator=( const HandoutContainer& );   
+  HandoutContainer& operator=( const HandoutContainer& );
 };
 
 class HeadersFootersContainer: public Container
@@ -280,7 +280,7 @@ public:
 private:
   // no copy or assign
   HeadersFootersContainer( const DocumentContainer& );
-  HeadersFootersContainer& operator=( const DocumentContainer& );   
+  HeadersFootersContainer& operator=( const DocumentContainer& );
 };
 
 class ListContainer: public Container
@@ -293,7 +293,7 @@ public:
 private:
   // no copy or assign
   ListContainer( const ListContainer& );
-  ListContainer& operator=( const ListContainer& );   
+  ListContainer& operator=( const ListContainer& );
 };
 
 class MainMasterContainer: public Container
@@ -306,7 +306,7 @@ public:
 private:
   // no copy or assign
   MainMasterContainer( const MainMasterContainer& );
-  MainMasterContainer& operator=( const MainMasterContainer& );   
+  MainMasterContainer& operator=( const MainMasterContainer& );
 };
 
 class NotesContainer: public Container
@@ -319,7 +319,7 @@ public:
 private:
   // no copy or assign
   NotesContainer( const NotesContainer& );
-  NotesContainer& operator=( const NotesContainer& );   
+  NotesContainer& operator=( const NotesContainer& );
 };
 
 class OutlineViewInfoContainer : public Container
@@ -332,7 +332,7 @@ public:
 private:
   // no copy or assign
   OutlineViewInfoContainer ( const OutlineViewInfoContainer & );
-  OutlineViewInfoContainer & operator=( const OutlineViewInfoContainer & );   
+  OutlineViewInfoContainer & operator=( const OutlineViewInfoContainer & );
 };
 
 class PPDrawingContainer : public Container
@@ -345,7 +345,7 @@ public:
 private:
   // no copy or assign
   PPDrawingContainer ( const PPDrawingContainer & );
-  PPDrawingContainer & operator=( const PPDrawingContainer & );   
+  PPDrawingContainer & operator=( const PPDrawingContainer & );
 };
 
 class PPDrawingGroupContainer : public Container
@@ -358,7 +358,7 @@ public:
 private:
   // no copy or assign
   PPDrawingGroupContainer ( const PPDrawingGroupContainer & );
-  PPDrawingGroupContainer & operator=( const PPDrawingGroupContainer & );   
+  PPDrawingGroupContainer & operator=( const PPDrawingGroupContainer & );
 };
 
 class ProgBinaryTagContainer: public Container
@@ -371,7 +371,7 @@ public:
 private:
   // no copy or assign
   ProgBinaryTagContainer( const ProgBinaryTagContainer& );
-  ProgBinaryTagContainer& operator=( const ProgBinaryTagContainer& );   
+  ProgBinaryTagContainer& operator=( const ProgBinaryTagContainer& );
 };
 
 class ProgStringTagContainer: public Container
@@ -384,7 +384,7 @@ public:
 private:
   // no copy or assign
   ProgStringTagContainer( const ProgStringTagContainer& );
-  ProgStringTagContainer& operator=( const ProgStringTagContainer& );   
+  ProgStringTagContainer& operator=( const ProgStringTagContainer& );
 };
 
 class ProgTagsContainer : public Container
@@ -397,7 +397,7 @@ public:
 private:
   // no copy or assign
   ProgTagsContainer ( const ProgTagsContainer & );
-  ProgTagsContainer & operator=( const ProgTagsContainer & );   
+  ProgTagsContainer & operator=( const ProgTagsContainer & );
 };
 
 class SlideContainer: public Container
@@ -410,7 +410,7 @@ public:
 private:
   // no copy or assign
   SlideContainer( const SlideContainer& );
-  SlideContainer& operator=( const SlideContainer& );   
+  SlideContainer& operator=( const SlideContainer& );
 };
 
 class SlideBaseContainer: public Container
@@ -423,7 +423,7 @@ public:
 private:
   // no copy or assign
   SlideBaseContainer( const SlideBaseContainer& );
-  SlideBaseContainer& operator=( const SlideBaseContainer& );   
+  SlideBaseContainer& operator=( const SlideBaseContainer& );
 };
 
 class SlideListWithTextContainer: public Container
@@ -436,9 +436,9 @@ public:
 private:
   // no copy or assign
   SlideListWithTextContainer( const SlideListWithTextContainer& );
-  SlideListWithTextContainer& operator=( const SlideListWithTextContainer& );   
+  SlideListWithTextContainer& operator=( const SlideListWithTextContainer& );
 };
- 
+
 class SlideViewInfoContainer: public Container
 {
 public:
@@ -449,7 +449,7 @@ public:
 private:
   // no copy or assign
   SlideViewInfoContainer( const SlideViewInfoContainer& );
-  SlideViewInfoContainer& operator=( const SlideViewInfoContainer& );   
+  SlideViewInfoContainer& operator=( const SlideViewInfoContainer& );
 };
 
 class SorterViewInfoContainer : public Container
@@ -462,7 +462,7 @@ public:
 private:
   // no copy or assign
   SorterViewInfoContainer ( const SorterViewInfoContainer & );
-  SorterViewInfoContainer & operator=( const SorterViewInfoContainer & );   
+  SorterViewInfoContainer & operator=( const SorterViewInfoContainer & );
 };
 
 class SummaryContainer : public Container
@@ -475,7 +475,7 @@ public:
 private:
   // no copy or assign
   SummaryContainer ( const SummaryContainer & );
-  SummaryContainer & operator=( const SummaryContainer & );   
+  SummaryContainer & operator=( const SummaryContainer & );
 };
 
 class SrKinsokuContainer: public Container
@@ -488,7 +488,7 @@ public:
 private:
   // no copy or assign
   SrKinsokuContainer( const SrKinsokuContainer& );
-  SrKinsokuContainer& operator=( const SrKinsokuContainer& );   
+  SrKinsokuContainer& operator=( const SrKinsokuContainer& );
 };
 
 class VBAInfoContainer: public Container
@@ -501,7 +501,7 @@ public:
 private:
   // no copy or assign
   VBAInfoContainer( const VBAInfoContainer& );
-  VBAInfoContainer& operator=( const VBAInfoContainer& );   
+  VBAInfoContainer& operator=( const VBAInfoContainer& );
 };
 
 class ViewInfoContainer: public Container
@@ -514,7 +514,7 @@ public:
 private:
   // no copy or assign
   ViewInfoContainer( const ViewInfoContainer& );
-  ViewInfoContainer& operator=( const ViewInfoContainer& );   
+  ViewInfoContainer& operator=( const ViewInfoContainer& );
 };
 
 class msofbtDgContainer: public Container
@@ -527,7 +527,7 @@ public:
 private:
   // no copy or assign
   msofbtDgContainer( const msofbtDgContainer& );
-  msofbtDgContainer& operator=( const msofbtDgContainer& );   
+  msofbtDgContainer& operator=( const msofbtDgContainer& );
 };
 
 class msofbtSpContainer: public Container
@@ -540,7 +540,7 @@ public:
 private:
   // no copy or assign
   msofbtSpContainer( const msofbtSpContainer& );
-  msofbtSpContainer& operator=( const msofbtSpContainer& );   
+  msofbtSpContainer& operator=( const msofbtSpContainer& );
 };
 
 class msofbtSpgrContainer: public Container
@@ -553,7 +553,7 @@ public:
 private:
   // no copy or assign
   msofbtSpgrContainer( const msofbtSpgrContainer& );
-  msofbtSpgrContainer& operator=( const msofbtSpgrContainer& );   
+  msofbtSpgrContainer& operator=( const msofbtSpgrContainer& );
 };
 
 class msofbtDggContainer: public Container
@@ -566,7 +566,7 @@ public:
 private:
   // no copy or assign
   msofbtDggContainer( const msofbtDggContainer& );
-  msofbtDggContainer& operator=( const msofbtDggContainer& );   
+  msofbtDggContainer& operator=( const msofbtDggContainer& );
 };
 
 class msofbtBstoreContainer: public Container
@@ -579,7 +579,7 @@ public:
 private:
   // no copy or assign
   msofbtBstoreContainer( const msofbtBstoreContainer& );
-  msofbtBstoreContainer& operator=( const msofbtBstoreContainer& );   
+  msofbtBstoreContainer& operator=( const msofbtBstoreContainer& );
 };
 
 class msofbtSolverContainer: public Container
@@ -592,7 +592,7 @@ public:
 private:
   // no copy or assign
   msofbtSolverContainer( const msofbtSolverContainer& );
-  msofbtSolverContainer& operator=( const msofbtSolverContainer& );   
+  msofbtSolverContainer& operator=( const msofbtSolverContainer& );
 };
 
 class BookmarkEntityAtom : public Record
@@ -601,23 +601,23 @@ public:
   static const unsigned int id;
   BookmarkEntityAtom ();
   ~BookmarkEntityAtom ();
-  
+
   int bookmarkID() const;
   void setBookmarkID( int bookmarkID );
   int bookmarkName() const;
   void setBookmarkName( int bookmarkName );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "BookmarkEntityAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   BookmarkEntityAtom ( const BookmarkEntityAtom & );
-  BookmarkEntityAtom & operator=( const BookmarkEntityAtom & );   
-  
+  BookmarkEntityAtom & operator=( const BookmarkEntityAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class CStringAtom: public Record
@@ -626,21 +626,21 @@ public:
   static const unsigned int id;
   CStringAtom();
   ~CStringAtom();
-  
+
   UString ustring() const;
   void setUString( const UString& ustr );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "CStringAtom"; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   CStringAtom( const CStringAtom& );
-  CStringAtom& operator=( const CStringAtom& );   
-  
+  CStringAtom& operator=( const CStringAtom& );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class ColorSchemeAtom : public Record
@@ -668,15 +668,15 @@ public:
   void setAccentAndFollowedHyperlink( int accentAndFollowedHyperlink );
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ColorSchemeAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ColorSchemeAtom ( const ColorSchemeAtom & );
-  ColorSchemeAtom & operator=( const ColorSchemeAtom & );   
-  
+  ColorSchemeAtom & operator=( const ColorSchemeAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class CurrentUserAtom : public Record
@@ -702,15 +702,15 @@ public:
   void setMinorVersion ( int minorVersion );
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ColorSchemeAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   CurrentUserAtom ( const CurrentUserAtom & );
-  CurrentUserAtom & operator=( const CurrentUserAtom & );   
-  
+  CurrentUserAtom & operator=( const CurrentUserAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class DocumentAtom : public Record
@@ -719,7 +719,7 @@ public:
   static const unsigned int id;
   DocumentAtom();
   ~DocumentAtom();
-  
+
   int slideWidth() const;
   void setSlideWidth( int w );
   int slideHeight() const;
@@ -732,42 +732,42 @@ public:
   void setZoomNumer( int numer );
   int zoomDenom() const;
   void setZoomDenom( int denom );
-  
-  int notesMasterPersist() const; 
+
+  int notesMasterPersist() const;
   void setNotesMasterPersist( int notesMasterPersist );
-  
-  int handoutMasterPersist() const; 
-  void setHandoutMasterPersist(int handoutMasterPersist);    
-  
-  int firstSlideNum() const; 
-  void setFirstSlideNum( int firstSlideNum ); 
-  
-  int slideSizeType() const; 
-  void setSlideSizeType( int slideSizeType ); 
-  
-  int saveWithFonts() const; 
-  void setSaveWithFonts( int saveWithFonts ); 
-  
-  int omitTitlePlace() const; 
-  void setOmitTitlePlace( int omitTitlePlace ); 
-  
-  int rightToLeft() const; 
-  void setRightToLeft( int rightToLeft ); 
-  
-  int showComments() const; 
-  void setShowComments( int showComments); 
-  
+
+  int handoutMasterPersist() const;
+  void setHandoutMasterPersist(int handoutMasterPersist);
+
+  int firstSlideNum() const;
+  void setFirstSlideNum( int firstSlideNum );
+
+  int slideSizeType() const;
+  void setSlideSizeType( int slideSizeType );
+
+  int saveWithFonts() const;
+  void setSaveWithFonts( int saveWithFonts );
+
+  int omitTitlePlace() const;
+  void setOmitTitlePlace( int omitTitlePlace );
+
+  int rightToLeft() const;
+  void setRightToLeft( int rightToLeft );
+
+  int showComments() const;
+  void setShowComments( int showComments);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "DocumentAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   DocumentAtom ( const DocumentAtom & );
-  DocumentAtom & operator=( const DocumentAtom & );   
-  
+  DocumentAtom & operator=( const DocumentAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class EndDocumentAtom: public Record
@@ -776,12 +776,12 @@ public:
   static const unsigned int id;
   EndDocumentAtom();
   const char* name(){ return "EndDocumentAtom"; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
+
 private:
   // no copy or assign
   EndDocumentAtom( const EndDocumentAtom& );
-  EndDocumentAtom& operator=( const EndDocumentAtom& );   
+  EndDocumentAtom& operator=( const EndDocumentAtom& );
 };
 
 class ExObjListAtom : public Record
@@ -790,21 +790,21 @@ public:
   static const unsigned int id;
   ExObjListAtom();
   ~ExObjListAtom();
-  
+
   int objectIdSeed() const;
   void setObjectIdSeed( int objectIdSeed );
-   
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ExObjListAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ExObjListAtom ( const ExObjListAtom & );
-  ExObjListAtom & operator=( const ExObjListAtom & );   
-  
+  ExObjListAtom & operator=( const ExObjListAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class ExHyperlinkAtom : public Record
@@ -812,22 +812,22 @@ class ExHyperlinkAtom : public Record
 public:
   static const unsigned int id;
   ExHyperlinkAtom ();
-  ~ExHyperlinkAtom (); 
-    
-  int objID() const; 
-  void setObjID (int objID); 
+  ~ExHyperlinkAtom ();
+
+  int objID() const;
+  void setObjID (int objID);
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ExHyperlinkAtom   "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ExHyperlinkAtom   ( const ExHyperlinkAtom   & );
-  ExHyperlinkAtom   & operator=( const ExHyperlinkAtom   & );   
-  
+  ExHyperlinkAtom   & operator=( const ExHyperlinkAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class ExLinkAtom : public Record
@@ -837,24 +837,24 @@ public:
   ExLinkAtom();
   ~ExLinkAtom();
 
-  int exObjId() const; 
-  void setExObjId( int exObjId); 
-  int flags() const; 
-  void setFlags( int flags); 
-  int unavailable() const; 
-  void setUnavailable( int unavailable); 
-  
+  int exObjId() const;
+  void setExObjId( int exObjId);
+  int flags() const;
+  void setFlags( int flags);
+  int unavailable() const;
+  void setUnavailable( int unavailable);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ExLinkAtom"; }
-  void dump( std::ostream& out ) const; 
-private:  
+  void dump( std::ostream& out ) const;
+private:
    // no copy or assign
   ExLinkAtom  ( const ExLinkAtom  & );
-  ExLinkAtom  & operator=( const ExLinkAtom  & );   
-  
+  ExLinkAtom  & operator=( const ExLinkAtom  & );
+
   class Private;
-  Private *d;  
-}; 
+  Private *d;
+};
 
 class ExOleObjAtom  : public Record
 {
@@ -862,31 +862,31 @@ public:
   static const unsigned int id;
   ExOleObjAtom ();
   ~ExOleObjAtom ();
-  
-  int drawAspect() const; 
-  void setDrawAspect(int drawAspect); 
+
+  int drawAspect() const;
+  void setDrawAspect(int drawAspect);
   int type() const;
-  void setType(int type); 
-  int objID() const; 
-  void setObjID(int objID); 
+  void setType(int type);
+  int objID() const;
+  void setObjID(int objID);
   int subType() const;
   void setSubType(int subType);
-  int objStgDataRef() const; 
-  void setObjStgDataRef(int objStgDataRef); 
+  int objStgDataRef() const;
+  void setObjStgDataRef(int objStgDataRef);
   int isBlank() const;
-  void setIsBlank(int isBlank); 
-  
+  void setIsBlank(int isBlank);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ExOleObjAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ExOleObjAtom  ( const ExOleObjAtom  & );
-  ExOleObjAtom  & operator=( const ExOleObjAtom  & );   
-  
+  ExOleObjAtom  & operator=( const ExOleObjAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class ExEmbedAtom  : public Record
@@ -895,27 +895,27 @@ public:
   static const unsigned int id;
   ExEmbedAtom ();
   ~ExEmbedAtom ();
-  
-  int followColorScheme() const; 
-  void setFollowColorScheme(int followColorScheme); 
+
+  int followColorScheme() const;
+  void setFollowColorScheme(int followColorScheme);
   int cantLockServerB() const;
-  void setCantLockServerB(int cantLockServerB); 
-  int noSizeToServerB() const; 
-  void setNoSizeToServerB(int noSizeToServerB); 
+  void setCantLockServerB(int cantLockServerB);
+  int noSizeToServerB() const;
+  void setNoSizeToServerB(int noSizeToServerB);
   int isTable() const;
   void setIsTable(int isTable);
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ExEmbedAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ExEmbedAtom  ( const ExEmbedAtom  & );
-  ExEmbedAtom  & operator=( const ExEmbedAtom  & );   
-  
+  ExEmbedAtom  & operator=( const ExEmbedAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class FontEntityAtom : public Record
@@ -924,29 +924,29 @@ public:
   static const unsigned int id;
   FontEntityAtom();
   ~FontEntityAtom();
-  
+
   UString ustring() const;
   void setUString( const UString& ustr );
-  int charset() const; 
-  void setCharset( int charset ) ; 
-  int clipPrecision() const; 
+  int charset() const;
+  void setCharset( int charset ) ;
+  int clipPrecision() const;
   void setClipPrecision( int clipPrecision);
-  int quality() const; 
+  int quality() const;
   void setQuality( int quality );
   int pitchAndFamily() const;
-  void setPitchAndFamily( int pitchAndFamily ); 
+  void setPitchAndFamily( int pitchAndFamily );
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "FontEntityAtom"; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   FontEntityAtom ( const FontEntityAtom & );
-  FontEntityAtom & operator=( const FontEntityAtom & );   
-  
+  FontEntityAtom & operator=( const FontEntityAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class GuideAtom  : public Record
@@ -955,23 +955,23 @@ public:
   static const unsigned int id;
   GuideAtom ();
   ~GuideAtom ();
-  
-  int type() const; 
-  void setType(int type); 
+
+  int type() const;
+  void setType(int type);
   int pos() const;
-  void setPos(int pos);  
-  
+  void setPos(int pos);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "GuideAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   GuideAtom  ( const GuideAtom  & );
-  GuideAtom  & operator=( const GuideAtom  & );   
-  
+  GuideAtom  & operator=( const GuideAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class HeadersFootersAtom  : public Record
@@ -980,23 +980,23 @@ public:
   static const unsigned int id;
   HeadersFootersAtom ();
   ~HeadersFootersAtom ();
-  
+
   int formatId() const;
   void setFormatId( int slideId );
   int flags() const;
   void setFlags( int flags );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "HeadersFootersAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   HeadersFootersAtom  ( const HeadersFootersAtom  & );
-  HeadersFootersAtom  & operator=( const HeadersFootersAtom  & );   
-  
+  HeadersFootersAtom  & operator=( const HeadersFootersAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class NotesAtom : public Record
@@ -1005,23 +1005,23 @@ public:
   static const unsigned int id;
   NotesAtom();
   ~NotesAtom();
-  
+
   int slideId() const;
   void setSlideId( int slideId );
   int flags() const;
   void setFlags( int flags );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "NotesAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   NotesAtom ( const NotesAtom & );
-  NotesAtom & operator=( const NotesAtom & );   
-  
+  NotesAtom & operator=( const NotesAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class PersistIncrementalBlockAtom : public Record
@@ -1029,7 +1029,7 @@ class PersistIncrementalBlockAtom : public Record
 public:
   static const unsigned int id;
   PersistIncrementalBlockAtom();
-  ~PersistIncrementalBlockAtom(); 
+  ~PersistIncrementalBlockAtom();
 
   unsigned entryCount() const;
   unsigned long reference( unsigned index ) const;
@@ -1037,15 +1037,15 @@ public:
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "PersistIncrementalBlockAtom "; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
+
 private:
   // no copy or assign
   PersistIncrementalBlockAtom ( const PersistIncrementalBlockAtom & );
-  PersistIncrementalBlockAtom & operator=( const PersistIncrementalBlockAtom & );   
-  
+  PersistIncrementalBlockAtom & operator=( const PersistIncrementalBlockAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class Record1043 : public Record
@@ -1053,18 +1053,18 @@ class Record1043 : public Record
 public:
   static const unsigned int id;
   Record1043 ();
-    
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "Record1043 "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   Record1043 ( const Record1043 & );
-  Record1043 & operator=( const Record1043 & );   
-  
+  Record1043 & operator=( const Record1043 & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class Record1044 : public Record
@@ -1072,18 +1072,18 @@ class Record1044 : public Record
 public:
   static const unsigned int id;
   Record1044 ();
-    
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "Record1044 "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   Record1044 ( const Record1044 & );
-  Record1044 & operator=( const Record1044 & );   
-  
+  Record1044 & operator=( const Record1044 & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class SSlideLayoutAtom  : public Record
@@ -1093,23 +1093,23 @@ public:
   SSlideLayoutAtom ();
   ~SSlideLayoutAtom ();
 
-  int geom() const; 
-  void setGeom( int geom); 
-  int placeholderId() const; 
-  void setPlaceholderId( int placeholderId); 
-   
+  int geom() const;
+  void setGeom( int geom);
+  int placeholderId() const;
+  void setPlaceholderId( int placeholderId);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SSlideLayoutAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   SSlideLayoutAtom  ( const SSlideLayoutAtom  & );
-  SSlideLayoutAtom  & operator=( const SSlideLayoutAtom  & );   
-  
+  SSlideLayoutAtom  & operator=( const SSlideLayoutAtom  & );
+
   class Private;
-  Private *d;  
-};  
+  Private *d;
+};
 
 class SlideViewInfoAtom  : public Record
 {
@@ -1118,32 +1118,32 @@ public:
   SlideViewInfoAtom ();
   ~SlideViewInfoAtom ();
 
-  int showGuides() const; 
-  void setShowGuides( int showGuides); 
-  int snapToGrid() const; 
-  void setSnapToGrid( int snapToGrid); 
-  int snapToShape() const; 
-  void setSnapToShape( int snapToShape); 
+  int showGuides() const;
+  void setShowGuides( int showGuides);
+  int snapToGrid() const;
+  void setSnapToGrid( int snapToGrid);
+  int snapToShape() const;
+  void setSnapToShape( int snapToShape);
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SlideViewInfoAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   SlideViewInfoAtom  ( const SlideViewInfoAtom  & );
-  SlideViewInfoAtom  & operator=( const SlideViewInfoAtom  & );   
-  
+  SlideViewInfoAtom  & operator=( const SlideViewInfoAtom  & );
+
   class Private;
-  Private *d;  
-};  
-  
+  Private *d;
+};
+
 class SlidePersistAtom   : public Record
 {
 public:
   static const unsigned int id;
   SlidePersistAtom   ();
   virtual ~SlidePersistAtom   ();
-  
+
   int psrReference() const;
   void setPsrReference( int psrReference );
   int flags() const;
@@ -1152,20 +1152,20 @@ public:
   void setNumberTexts( int numberTexts );
   int slideId() const;
   void setSlideId( int slideId );
-  int reserved() const; 
+  int reserved() const;
   void setReserved(int reserved);
-     
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SlidePersistAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   SlidePersistAtom  ( const SlidePersistAtom  & );
-  SlidePersistAtom  & operator=( const SlidePersistAtom  & );   
-  
+  SlidePersistAtom  & operator=( const SlidePersistAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class SSDocInfoAtom : public Record
@@ -1174,7 +1174,7 @@ public:
   static const unsigned int id;
   SSDocInfoAtom   ();
   ~SSDocInfoAtom   ();
-  
+
   int penColorRed() const;
   void setPenColorRed( int penColorRed );
   int penColorGreen() const;
@@ -1189,22 +1189,22 @@ public:
   void setStartSlide( int startSlide );
   int endSlide() const;
   void setEndSlide( int endSlide );
-  int namedShow() const; 
+  int namedShow() const;
   void setNamedShow(int namedShow);
-  int flags() const; 
+  int flags() const;
   void setFlags(int flags);
-         
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SSDocInfoAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   SSDocInfoAtom  ( const SSDocInfoAtom  & );
   SSDocInfoAtom  & operator=( const SSDocInfoAtom  & );
 
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class StyleTextPropAtom   : public Record
@@ -1212,9 +1212,9 @@ class StyleTextPropAtom   : public Record
 public:
   static const unsigned int id;
   StyleTextPropAtom ();
-  ~StyleTextPropAtom (); 
-  
-  // paragraph properties 
+  ~StyleTextPropAtom ();
+
+  // paragraph properties
   int charCount( unsigned index ) const;
   int depth( unsigned index ) const;
   int bulletOn ( unsigned index ) const;
@@ -1222,37 +1222,37 @@ public:
   int bulletHardColor( unsigned index ) const;
   int bulletChar ( unsigned index ) const;
   int bulletFont( unsigned index ) const;
-  int bulletHeight( unsigned index ) const; 
+  int bulletHeight( unsigned index ) const;
   int bulletColor( unsigned index ) const;
   int align( unsigned index ) const;
-  int lineFeed( unsigned index ) const; 
-  int upperDist( unsigned index ) const; 
-  int lowerDist( unsigned index ) const; 
-  int asianLB1( unsigned index ) const; 
-  int asianLB2( unsigned index ) const; 
-  int asianLB3( unsigned index ) const; 
+  int lineFeed( unsigned index ) const;
+  int upperDist( unsigned index ) const;
+  int lowerDist( unsigned index ) const;
+  int asianLB1( unsigned index ) const;
+  int asianLB2( unsigned index ) const;
+  int asianLB3( unsigned index ) const;
   int biDi( unsigned index ) const;
 
 // character properties
-  int charMask() const; 
+  int charMask() const;
   int charFlags() const;
 
   unsigned listSize() const;
 
-  void setData( unsigned size, const unsigned char* data, unsigned lastSize );  
+  void setData( unsigned size, const unsigned char* data, unsigned lastSize );
   const char* name(){ return "StyleTextPropAtom   "; }
-  void dump( std::ostream& out ) const; 
-private:  
+  void dump( std::ostream& out ) const;
+private:
   // character properties
   void setCharMask ( int charMask );
   void setCharFlags( int charFlags );
 
   // no copy or assign
   StyleTextPropAtom   ( const StyleTextPropAtom   & );
-  StyleTextPropAtom   & operator=( const StyleTextPropAtom   & );   
-  
+  StyleTextPropAtom   & operator=( const StyleTextPropAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class SlideAtom: public Record
@@ -1262,30 +1262,30 @@ public:
   SlideAtom();
   ~SlideAtom();
 
-  int layoutGeom() const; 
+  int layoutGeom() const;
   void setLayoutGeom( int layoutGeom );
- // see OEPlaceHolderAtom 
-  int layoutPlaceholderId() const; 
+ // see OEPlaceHolderAtom
+  int layoutPlaceholderId() const;
  // void setLayoutPlaceholderId(int layoutPlaceholderId);
-  void setLayoutPlaceholderId(int layoutPlaceholderId1, int layoutPlaceholderId2,int layoutPlaceholderId3,int layoutPlaceholderId4,int layoutPlaceholderId5,int layoutPlaceholderId6,int layoutPlaceholderId7,int layoutPlaceholderId8); 
-  int masterId() const; 
+  void setLayoutPlaceholderId(int layoutPlaceholderId1, int layoutPlaceholderId2,int layoutPlaceholderId3,int layoutPlaceholderId4,int layoutPlaceholderId5,int layoutPlaceholderId6,int layoutPlaceholderId7,int layoutPlaceholderId8);
+  int masterId() const;
   void setMasterId( int masterId );
-  int notesId() const; 
+  int notesId() const;
   void setNotesId( int notesId );
-  int flags() const; 
+  int flags() const;
   void setFlags( int flags );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SlideAtom"; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
+
 private:
-  // no copy or assign 
+  // no copy or assign
   SlideAtom( const SlideAtom& );
-  SlideAtom& operator=( const SlideAtom& );   
-  
+  SlideAtom& operator=( const SlideAtom& );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class SSSlideInfoAtom: public Record
@@ -1294,18 +1294,18 @@ public:
   static const unsigned int id;
   SSSlideInfoAtom();
   ~SSSlideInfoAtom();
-  
-  int transType() const; 
+
+  int transType() const;
   void settransType( int transType );
-  int speed() const; 
+  int speed() const;
   void setspeed(int speed);
-  int direction() const; 
+  int direction() const;
   void setdirection( int direction );
-  int slideTime() const; 
+  int slideTime() const;
   void setslideTime( int slideTime );
-  int buildFlags() const; 
+  int buildFlags() const;
   void setbuildFlags( int buildFlags );
-  int soundRef() const; 
+  int soundRef() const;
   void setsoundRef( int soundRef );
 
   void setData( unsigned size, const unsigned char* data );
@@ -1327,18 +1327,18 @@ public:
   static const unsigned int id;
   SrKinsokuAtom ();
   ~SrKinsokuAtom ();
-    
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "SrKinsokuAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   SrKinsokuAtom ( const SrKinsokuAtom & );
-  SrKinsokuAtom & operator=( const SrKinsokuAtom & );   
-  
+  SrKinsokuAtom & operator=( const SrKinsokuAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TxMasterStyleAtom  : public Record
@@ -1346,18 +1346,18 @@ class TxMasterStyleAtom  : public Record
 public:
   static const unsigned int id;
   TxMasterStyleAtom();
-  ~TxMasterStyleAtom(); 
-    
+  ~TxMasterStyleAtom();
+
   const char* name(){ return "TxMasterStyleAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TxMasterStyleAtom  ( const TxMasterStyleAtom  & );
-  TxMasterStyleAtom  & operator=( const TxMasterStyleAtom  & );   
-  
+  TxMasterStyleAtom  & operator=( const TxMasterStyleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TxCFStyleAtom   : public Record
@@ -1365,32 +1365,32 @@ class TxCFStyleAtom   : public Record
 public:
   static const unsigned int id;
   TxCFStyleAtom ();
-  ~TxCFStyleAtom (); 
-    
-  int flags1() const; 
-  void setFlags1( int flags1 ); 
+  ~TxCFStyleAtom ();
+
+  int flags1() const;
+  void setFlags1( int flags1 );
   int flags2() const;
-  void setFlags2( int flags2 ); 
+  void setFlags2( int flags2 );
   int flags3() const;
-  void setFlags3( int flags3 ); 
+  void setFlags3( int flags3 );
   int n1() const;
-  void setN1( int n1 ); 
+  void setN1( int n1 );
   int fontHeight() const;
-  void setFontHeight( int fontHeight ); 
-  int fontColor() const; 
-  void setFontColor( int fontColor ); 
+  void setFontHeight( int fontHeight );
+  int fontColor() const;
+  void setFontColor( int fontColor );
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TxCFStyleAtom   "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TxCFStyleAtom   ( const TxCFStyleAtom   & );
-  TxCFStyleAtom   & operator=( const TxCFStyleAtom   & );   
-  
+  TxCFStyleAtom   & operator=( const TxCFStyleAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 
@@ -1399,23 +1399,23 @@ class TextCharsAtom   : public Record
 public:
   static const unsigned int id;
   TextCharsAtom ();
-  ~TextCharsAtom (); 
-  
+  ~TextCharsAtom ();
+
   unsigned listSize() const;
   UString strValue( unsigned index ) const;
   void setText( UString ustring );
-   
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextCharsAtom   "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TextCharsAtom   ( const TextCharsAtom   & );
-  TextCharsAtom   & operator=( const TextCharsAtom   & );   
-  
+  TextCharsAtom   & operator=( const TextCharsAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TxPFStyleAtom   : public Record
@@ -1423,18 +1423,18 @@ class TxPFStyleAtom   : public Record
 public:
   static const unsigned int id;
   TxPFStyleAtom ();
-  ~TxPFStyleAtom (); 
-    
+  ~TxPFStyleAtom ();
+
   const char* name(){ return "TxPFStyleAtom   "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TxPFStyleAtom   ( const TxPFStyleAtom  & );
-  TxPFStyleAtom   & operator=( const TxPFStyleAtom  & );   
-  
+  TxPFStyleAtom   & operator=( const TxPFStyleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TxSIStyleAtom    : public Record
@@ -1442,18 +1442,18 @@ class TxSIStyleAtom    : public Record
 public:
   static const unsigned int id;
   TxSIStyleAtom  ();
-  ~TxSIStyleAtom  (); 
-    
+  ~TxSIStyleAtom  ();
+
   const char* name(){ return "TxSIStyleAtom    "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TxSIStyleAtom    ( const TxSIStyleAtom   & );
-  TxSIStyleAtom    & operator=( const TxSIStyleAtom   & );   
-  
+  TxSIStyleAtom    & operator=( const TxSIStyleAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TextHeaderAtom : public Record
@@ -1462,21 +1462,21 @@ public:
   static const unsigned int id;
   TextHeaderAtom ();
   ~TextHeaderAtom ();
-  
+
   int textType() const;
   void setTextType( int type );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextHeaderAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TextHeaderAtom ( const TextHeaderAtom & );
-  TextHeaderAtom & operator=( const TextHeaderAtom & );   
-  
+  TextHeaderAtom & operator=( const TextHeaderAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TextSpecInfoAtom  : public Record
@@ -1485,24 +1485,24 @@ public:
   static const unsigned int id;
   TextSpecInfoAtom  ();
   ~TextSpecInfoAtom  ();
-  
+
   int charCount() const;
   void setCharCount( int txSpecInfo );
   int flags() const;
   void setFlags( int flags );
 
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextSpecInfoAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TextSpecInfoAtom ( const TextSpecInfoAtom & );
-  TextSpecInfoAtom & operator=( const TextSpecInfoAtom & );   
-  
+  TextSpecInfoAtom & operator=( const TextSpecInfoAtom & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TextBookmarkAtom: public Record
@@ -1511,25 +1511,25 @@ public:
   static const unsigned int id;
   TextBookmarkAtom();
   ~TextBookmarkAtom();
-  
+
   int begin() const;
   void setBegin( int begin );
-  int end() const; 
+  int end() const;
   void setEnd( int end );
-  int bookmarkID() const; 
+  int bookmarkID() const;
   void setBookmarkID( int bookmarkID );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextBookmarkAtom"; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
+
 private:
   // no copy or assign
   TextBookmarkAtom( const TextBookmarkAtom& );
-  TextBookmarkAtom& operator=( const TextBookmarkAtom& );   
-  
+  TextBookmarkAtom& operator=( const TextBookmarkAtom& );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class TextBytesAtom : public Record
@@ -1537,26 +1537,26 @@ class TextBytesAtom : public Record
 public:
   static const unsigned int id;
   TextBytesAtom ();
-  ~TextBytesAtom (); 
-  
+  ~TextBytesAtom ();
+
   unsigned listSize() const;
   unsigned stringLength() const;
   void setStringLength( unsigned stringLength );
 
   UString strValue( unsigned index ) const;
   void setText( UString ustring );
-   
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextBytesAtom   "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   TextBytesAtom   ( const TextBytesAtom   & );
-  TextBytesAtom   & operator=( const TextBytesAtom   & );   
-  
+  TextBytesAtom   & operator=( const TextBytesAtom   & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class UserEditAtom: public Record
@@ -1565,32 +1565,32 @@ public:
   static const unsigned int id;
   UserEditAtom();
   ~UserEditAtom();
-  
+
   int lastSlideId() const;
   void setLastSlideId( int id );
-  int majorVersion() const; 
+  int majorVersion() const;
   void setMajorVersion( int majorVersion );
-  int minorVersion() const; 
+  int minorVersion() const;
   void setMinorVersion( int minorVersion );
 
   unsigned long offsetLastEdit() const;
   void setOffsetLastEdit( unsigned long ofs );
   unsigned long offsetPersistDir() const;
   void setOffsetPersistDir( unsigned long ofs ) const;
-  unsigned long documentRef() const; 
-  void setDocumentRef( unsigned long ref ) const; 
+  unsigned long documentRef() const;
+  void setDocumentRef( unsigned long ref ) const;
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "UserEditAtom"; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
+
 private:
   // no copy or assign
   UserEditAtom( const UserEditAtom& );
-  UserEditAtom& operator=( const UserEditAtom& );   
-  
+  UserEditAtom& operator=( const UserEditAtom& );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class ViewInfoAtom : public Record
@@ -1600,49 +1600,49 @@ public:
   ViewInfoAtom  ();
   ~ViewInfoAtom  ();
 
-  int curScaleXNum() const; 
-  void setCurScaleXNum( int curScaleXNum); 
-  int curScaleXDen() const; 
-  void setCurScaleXDen( int curScaleXDen); 
-  int curScaleYNum() const; 
-  void setCurScaleYNum( int curScaleYNum); 
-  int curScaleYDen() const; 
-  void setCurScaleYDen( int curScaleYDen); 
-  int prevScaleXNum() const; 
-  void setPrevScaleXNum( int prevScaleXNum); 
-  int prevScaleXDen() const; 
-  void setPrevScaleXDen( int prevScaleXDen); 
-  int prevScaleYNum() const; 
-  void setPrevScaleYNum( int prevScaleYNum); 
-  int prevScaleYDen() const; 
-  void setPrevScaleYDen( int prevScaleYDen); 
-  int viewSizeX() const; 
-  void setViewSizeX( int viewSizeX); 
-  int viewSizeY() const; 
-  void setViewSizeY( int viewSizeY); 
-  int originX() const; 
-  void setOriginX( int originX); 
-  int originY() const; 
-  void setOriginY( int originY); 
-  int varScale() const; 
-  void setVarScale( int varScale); 
-  int draftMode() const; 
-  void setDraftMode( int draftMode); 
-  int padding() const; 
-  void setPadding( int padding); 
-  
+  int curScaleXNum() const;
+  void setCurScaleXNum( int curScaleXNum);
+  int curScaleXDen() const;
+  void setCurScaleXDen( int curScaleXDen);
+  int curScaleYNum() const;
+  void setCurScaleYNum( int curScaleYNum);
+  int curScaleYDen() const;
+  void setCurScaleYDen( int curScaleYDen);
+  int prevScaleXNum() const;
+  void setPrevScaleXNum( int prevScaleXNum);
+  int prevScaleXDen() const;
+  void setPrevScaleXDen( int prevScaleXDen);
+  int prevScaleYNum() const;
+  void setPrevScaleYNum( int prevScaleYNum);
+  int prevScaleYDen() const;
+  void setPrevScaleYDen( int prevScaleYDen);
+  int viewSizeX() const;
+  void setViewSizeX( int viewSizeX);
+  int viewSizeY() const;
+  void setViewSizeY( int viewSizeY);
+  int originX() const;
+  void setOriginX( int originX);
+  int originY() const;
+  void setOriginY( int originY);
+  int varScale() const;
+  void setVarScale( int varScale);
+  int draftMode() const;
+  void setDraftMode( int draftMode);
+  int padding() const;
+  void setPadding( int padding);
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "ViewInfoAtom  "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   ViewInfoAtom   ( const ViewInfoAtom   & );
-  ViewInfoAtom   & operator=( const ViewInfoAtom   & );   
-  
+  ViewInfoAtom   & operator=( const ViewInfoAtom   & );
+
   class Private;
-  Private *d;  
-};    
+  Private *d;
+};
 
 class msofbtDgAtom : public Record
 {
@@ -1650,18 +1650,18 @@ public:
   static const unsigned int id;
   msofbtDgAtom ();
   ~msofbtDgAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtDgAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtDgAtom ( const msofbtDgAtom  & );
-  msofbtDgAtom & operator=( const msofbtDgAtom  & );   
-  
+  msofbtDgAtom & operator=( const msofbtDgAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtSpgrAtom : public Record
@@ -1670,18 +1670,18 @@ public:
   static const unsigned int id;
   msofbtSpgrAtom ();
   ~msofbtSpgrAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtSpgrAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtSpgrAtom ( const msofbtSpgrAtom  & );
-  msofbtSpgrAtom & operator=( const msofbtSpgrAtom  & );   
-  
+  msofbtSpgrAtom & operator=( const msofbtSpgrAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtSpAtom : public Record
@@ -1895,7 +1895,7 @@ public:
    msosptTextBox = 202,
    msosptMax,
    msosptNil = 0x0FFF
- } ; 
+ } ;
 
   static const unsigned int id;
   msofbtSpAtom ();
@@ -1909,29 +1909,30 @@ public:
 
   bool isBackground() const;
   void setBackground( bool bg );
-  bool isVerFlip() const; 
-  void setVerFlip( bool vFlip ); 
-  bool isHorFlip() const; 
-  void setHorFlip( bool hFlip ); 
+  bool isVerFlip() const;
+  void setVerFlip( bool vFlip );
+  bool isHorFlip() const;
+  void setHorFlip( bool hFlip );
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtSpAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtSpAtom ( const msofbtSpAtom  & );
-  msofbtSpAtom & operator=( const msofbtSpAtom  & );   
-  
+  msofbtSpAtom & operator=( const msofbtSpAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtOPTAtom : public Record
 {
 public:
-  enum {               // PID 
+  enum {               // PID
     Rotation = 4,
+    Pib = 260,
     FillType = 384,
     FillColor = 385,
     LineColor = 448,
@@ -1962,22 +1963,22 @@ public:
    FillShadeCenter,       // Shade from bounding rectangle to end point
    FillShadeShape,        // Shade from shape outline to end point
    FillShadeScale,        // Similar to msofillShade, but the fillAngle
-   FillShadeTitle,        // special type - shade to title ---  for PP 
+   FillShadeTitle,        // special type - shade to title ---  for PP
    FillBackground         // Use the background fill color/pattern
   }; // MSOFILLTYPE
 
-  enum {   
+  enum {
    LineSolid,              // Solid (continuous) pen           0
    LineDashSys,            // PS_DASH system   dash style      1
    LineDotSys,             // PS_DOT system   dash style       2
    LineDashDotSys,         // PS_DASHDOT system dash style      3
    LineDashDotDotSys,      // PS_DASHDOTDOT system dash style   4
-   LineDotGEL,             // square dot style                  5                      
+   LineDotGEL,             // square dot style                  5
    LineDashGEL,            // dash style                       6
-   LineLongDashGEL,        // long dash style                       7  
+   LineLongDashGEL,        // long dash style                       7
    LineDashDotGEL,         // dash short dash                 8
    LineLongDashDotGEL,     // long dash short dash             9
-   LineLongDashDotDotGEL   // long dash short dash short dash        10   
+   LineLongDashDotDotGEL   // long dash short dash short dash        10
   }; // MSOLINEDASHING
 
 
@@ -2011,18 +2012,18 @@ public:
   unsigned propertyId( unsigned index ) const;
   unsigned long propertyValue( unsigned index ) const;
   void setProperty( unsigned id, unsigned long value );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtOPTAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtOPTAtom ( const msofbtOPTAtom  & );
-  msofbtOPTAtom & operator=( const msofbtOPTAtom  & );   
-  
+  msofbtOPTAtom & operator=( const msofbtOPTAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtChildAnchorAtom : public Record
@@ -2031,12 +2032,12 @@ public:
   static const unsigned int id;
   msofbtChildAnchorAtom ();
   ~msofbtChildAnchorAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtChildAnchorAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtChildAnchorAtom ( const msofbtChildAnchorAtom  & );
   msofbtChildAnchorAtom & operator=( const msofbtChildAnchorAtom  & );
@@ -2060,18 +2061,18 @@ public:
   void setRight( int right );
   int bottom() const;
   void setBottom( int bottom );
-  
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtClientAnchorAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtClientAnchorAtom ( const msofbtClientAnchorAtom  & );
-  msofbtClientAnchorAtom & operator=( const msofbtClientAnchorAtom  & );   
-  
+  msofbtClientAnchorAtom & operator=( const msofbtClientAnchorAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtClientDataAtom : public Record
@@ -2159,7 +2160,7 @@ public:
   ~msofbtOleObjectAtom ();
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtOleObjectAtom "; }
-  void dump( std::ostream& out ) const; 
+  void dump( std::ostream& out ) const;
 private:
   // no copy or assign
   msofbtOleObjectAtom ( const msofbtOleObjectAtom  & );
@@ -2201,7 +2202,7 @@ private:
   // no copy or assign
   msofbtDggAtom ( const msofbtDggAtom  & );
   msofbtDggAtom & operator=( const msofbtDggAtom  & );
-  
+
   class Private;
   Private *d;
 };
@@ -2214,15 +2215,15 @@ public:
   ~msofbtColorMRUAtom ();
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtColorMRUAtom "; }
-  void dump( std::ostream& out ) const; 
+  void dump( std::ostream& out ) const;
 
-private:  
+private:
   // no copy or assign
   msofbtColorMRUAtom ( const msofbtColorMRUAtom  & );
-  msofbtColorMRUAtom & operator=( const msofbtColorMRUAtom  & );  
-  
+  msofbtColorMRUAtom & operator=( const msofbtColorMRUAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtSplitMenuColorsAtom : public Record
@@ -2231,7 +2232,7 @@ public:
   static const unsigned int id;
   msofbtSplitMenuColorsAtom ();
   ~msofbtSplitMenuColorsAtom ();
-  
+
   unsigned fillColor() const;
   void setFillColor( unsigned fillColor );
   unsigned lineColor() const;
@@ -2243,15 +2244,15 @@ public:
 
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtSplitMenuColorsAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtSplitMenuColorsAtom ( const msofbtSplitMenuColorsAtom  & );
-  msofbtSplitMenuColorsAtom & operator=( const msofbtSplitMenuColorsAtom  & );  
-  
+  msofbtSplitMenuColorsAtom & operator=( const msofbtSplitMenuColorsAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtBSEAtom : public Record
@@ -2260,18 +2261,18 @@ public:
   static const unsigned int id;
   msofbtBSEAtom ();
   ~msofbtBSEAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtBSEAtom "; }
-  void dump( std::ostream& out ) const; 
+  void dump( std::ostream& out ) const;
 
-private:  
+private:
   // no copy or assign
   msofbtBSEAtom ( const msofbtBSEAtom  & );
-  msofbtBSEAtom & operator=( const msofbtBSEAtom  & );  
-  
+  msofbtBSEAtom & operator=( const msofbtBSEAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtCLSIDAtom : public Record
@@ -2280,19 +2281,19 @@ public:
   static const unsigned int id;
   msofbtCLSIDAtom ();
   ~msofbtCLSIDAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtCLSIDAtom "; }
-  void dump( std::ostream& out ) const; 
-  
+  void dump( std::ostream& out ) const;
 
-private:  
+
+private:
   // no copy or assign
   msofbtCLSIDAtom ( const msofbtCLSIDAtom  & );
-  msofbtCLSIDAtom & operator=( const msofbtCLSIDAtom  & );  
-  
+  msofbtCLSIDAtom & operator=( const msofbtCLSIDAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtRegroupItemsAtom : public Record
@@ -2301,18 +2302,18 @@ public:
   static const unsigned int id;
   msofbtRegroupItemsAtom ();
   ~msofbtRegroupItemsAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtRegroupItemsAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtRegroupItemsAtom ( const msofbtRegroupItemsAtom  & );
-  msofbtRegroupItemsAtom & operator=( const msofbtRegroupItemsAtom  & );  
-  
+  msofbtRegroupItemsAtom & operator=( const msofbtRegroupItemsAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtColorSchemeAtom : public Record
@@ -2321,18 +2322,18 @@ public:
   static const unsigned int id;
   msofbtColorSchemeAtom ();
   ~msofbtColorSchemeAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtColorSchemeAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtColorSchemeAtom ( const msofbtColorSchemeAtom  & );
-  msofbtColorSchemeAtom & operator=( const msofbtColorSchemeAtom  & );  
-  
+  msofbtColorSchemeAtom & operator=( const msofbtColorSchemeAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtAnchorAtom : public Record
@@ -2341,18 +2342,18 @@ public:
   static const unsigned int id;
   msofbtAnchorAtom ();
   ~msofbtAnchorAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtAnchorAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtAnchorAtom ( const msofbtAnchorAtom  & );
-  msofbtAnchorAtom & operator=( const msofbtAnchorAtom  & );  
-  
+  msofbtAnchorAtom & operator=( const msofbtAnchorAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtConnectorRuleAtom : public Record
@@ -2361,18 +2362,18 @@ public:
   static const unsigned int id;
   msofbtConnectorRuleAtom ();
   ~msofbtConnectorRuleAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtConnectorRuleAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtConnectorRuleAtom ( const msofbtConnectorRuleAtom  & );
-  msofbtConnectorRuleAtom & operator=( const msofbtConnectorRuleAtom  & );  
-  
+  msofbtConnectorRuleAtom & operator=( const msofbtConnectorRuleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtAlignRuleAtom : public Record
@@ -2381,25 +2382,25 @@ public:
   static const unsigned int id;
   msofbtAlignRuleAtom ();
   ~msofbtAlignRuleAtom ();
-  
+
   int ruid() const; // rule ID
   void setRuid( int ruid );
   int align() const;
   void setAlign( int align );// alignment
   int cProxies() const;
   void setCProxies( int cProxies );// number of shapes governed by rule
-    
+
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtAlignRuleAtom "; }
-  void dump( std::ostream& out ) const; 
+  void dump( std::ostream& out ) const;
 
-private:  
+private:
   // no copy or assign
   msofbtAlignRuleAtom ( const msofbtAlignRuleAtom  & );
   msofbtAlignRuleAtom & operator=( const msofbtAlignRuleAtom  & );
 
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtArcRuleAtom : public Record
@@ -2408,18 +2409,18 @@ public:
   static const unsigned int id;
   msofbtArcRuleAtom ();
   ~msofbtArcRuleAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtArcRuleAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtArcRuleAtom ( const msofbtArcRuleAtom  & );
-  msofbtArcRuleAtom & operator=( const msofbtArcRuleAtom  & );  
-  
+  msofbtArcRuleAtom & operator=( const msofbtArcRuleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtClientRuleAtom : public Record
@@ -2428,18 +2429,18 @@ public:
   static const unsigned int id;
   msofbtClientRuleAtom ();
   ~msofbtClientRuleAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtClientRuleAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtClientRuleAtom ( const msofbtClientRuleAtom  & );
-  msofbtClientRuleAtom & operator=( const msofbtClientRuleAtom  & );  
-  
+  msofbtClientRuleAtom & operator=( const msofbtClientRuleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtCalloutRuleAtom : public Record
@@ -2448,18 +2449,18 @@ public:
   static const unsigned int id;
   msofbtCalloutRuleAtom ();
   ~msofbtCalloutRuleAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtCalloutRuleAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtCalloutRuleAtom ( const msofbtCalloutRuleAtom  & );
-  msofbtCalloutRuleAtom & operator=( const msofbtCalloutRuleAtom  & );  
-  
+  msofbtCalloutRuleAtom & operator=( const msofbtCalloutRuleAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class msofbtSelectionAtom : public Record
@@ -2468,18 +2469,18 @@ public:
   static const unsigned int id;
   msofbtSelectionAtom ();
   ~msofbtSelectionAtom ();
-  
+
  // void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtSelectionAtom "; }
-  void dump( std::ostream& out ) const; 
-  
-private:  
+  void dump( std::ostream& out ) const;
+
+private:
   // no copy or assign
   msofbtSelectionAtom ( const msofbtSelectionAtom  & );
-  msofbtSelectionAtom & operator=( const msofbtSelectionAtom  & );  
-  
+  msofbtSelectionAtom & operator=( const msofbtSelectionAtom  & );
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class PPTReader
@@ -2488,8 +2489,8 @@ public:
   PPTReader();
   virtual ~PPTReader();
   bool load( Presentation* pr, const char* filename );
-  
-protected:  
+
+protected:
 
   void loadUserEdit();
   void loadMaster();
@@ -2505,13 +2506,13 @@ protected:
   void handleSlidePersistAtom( SlidePersistAtom* r );
   void handleTextHeaderAtom( TextHeaderAtom* r );
   void handleTextCharsAtom( TextCharsAtom* r );
-  void handleTextBytesAtom( TextBytesAtom* r ); 
+  void handleTextBytesAtom( TextBytesAtom* r );
   void handleStyleTextPropAtom ( StyleTextPropAtom* r );
   void handleColorSchemeAtom( ColorSchemeAtom* r );
 
-  void handleDrawingContainer( msofbtDgContainer* r, unsigned size ); 
-  void handleEscherGroupContainer( msofbtSpgrContainer* r, unsigned size ); 
-  void handleSPContainer( msofbtSpContainer* r, unsigned size ); 
+  void handleDrawingContainer( msofbtDgContainer* r, unsigned size );
+  void handleEscherGroupContainer( msofbtSpgrContainer* r, unsigned size );
+  void handleSPContainer( msofbtSpContainer* r, unsigned size );
   void handleEscherGroupAtom( msofbtSpgrAtom* r );
   void handleEscherSpAtom( msofbtSpAtom* r );
   void handleEscherPropertiesAtom( msofbtOPTAtom* atom );
@@ -2519,11 +2520,11 @@ protected:
   void handleEscherClientAnchorAtom( msofbtClientAnchorAtom* r );
   void handleEscherTextBoxAtom( msofbtClientTextboxAtom* r);
 
-private:  
+private:
   // no copy or assign
   PPTReader( const PPTReader& );
   PPTReader& operator=( const PPTReader& );
-  
+
   class Private;
   Private* d;
 };

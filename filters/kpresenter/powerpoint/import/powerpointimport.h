@@ -29,14 +29,14 @@ using namespace Libppt;
 
 class KoXmlWriter;
 
-class PowerPointImport : public KoFilter 
+class PowerPointImport : public KoFilter
 {
 Q_OBJECT
 
 public:
   PowerPointImport ( QObject *parent, const QStringList& );
   virtual ~PowerPointImport();
-  virtual KoFilter::ConversionStatus convert( const QByteArray& from, 
+  virtual KoFilter::ConversionStatus convert( const QByteArray& from,
         const QByteArray& to );
 
 private:
@@ -62,20 +62,21 @@ private:
   void processDrawingObjectForStyle( DrawObject* drawObject, KoXmlWriter* xmlWriter );
   void processTextObjectForStyle( TextObject* textObject, KoXmlWriter* xmlWriter );
 
-  void processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processRoundRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processDiamond(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processTriangle(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processTrapezoid(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processParallelogram(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processHexagon(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processOctagon(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processArrow(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processLine(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processSmiley(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processHeart(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
-  void processFreeLine(DrawObject* drawObject, KoXmlWriter* xmlWriter); 
+  void processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processRoundRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processDiamond(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processTriangle(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processTrapezoid(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processParallelogram(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processHexagon(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processOctagon(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processArrow(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processLine(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processSmiley(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processHeart(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processFreeLine(DrawObject* drawObject, KoXmlWriter* xmlWriter);
+  void processPictureFrame(DrawObject* drawObject, KoXmlWriter* xmlWriter);
 };
 
 #endif // POWERPOINTIMPORT_H

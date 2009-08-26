@@ -35,6 +35,7 @@
 #include "libppt.h"
 #include <iostream>
 #include <math.h>
+#include "pictures.h"
 
 using namespace Libppt;
 
@@ -56,6 +57,7 @@ class PowerPointImport::Private
 public:
   QString inputFile;
   QString outputFile;
+  QList<QString> pictureNames;
 
   Presentation *presentation;
 };
@@ -70,6 +72,23 @@ PowerPointImport::PowerPointImport ( QObject*parent, const QStringList& )
 PowerPointImport::~PowerPointImport()
 {
   delete d;
+}
+
+QStringList
+createPictures(const char* filename, KoStore* store) {
+    POLE::Storage storage(filename);
+    QStringList fileNames;
+    if (!storage.open()) return fileNames;
+    POLE::Stream* stream = new POLE::Stream(&storage, "/Pictures");
+    while (!stream->eof() && !stream->fail()
+            && stream->tell() < stream->size()) {
+        std::string name = savePicture(*stream, fileNames.size(), store);
+        if (name.length() == 0) break;
+        fileNames.append(name.c_str());
+    }
+    storage.close();
+    delete stream;
+    return fileNames;
 }
 
 KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, const QByteArray& to )
@@ -103,6 +122,12 @@ KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, co
     return KoFilter::FileNotFound;
   }
 
+  // store the images from the 'Pictures' stream
+  storeout->disallowNameExpansion();
+  storeout->enterDirectory( "Pictures" );
+  d->pictureNames = createPictures(d->inputFile.toLocal8Bit(), storeout);
+  storeout->leaveDirectory();
+
   // store document content
   if ( !storeout->open( "content.xml" ) )
   {
@@ -130,7 +155,6 @@ KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, co
   }
   storeout->write( createManifest() );
   storeout->close();
-
 
   // we are done!
   delete d->presentation;
@@ -268,6 +292,7 @@ QByteArray PowerPointImport::createContent()
   contentWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
   contentWriter->addAttribute( "xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" );
   contentWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
+  contentWriter->addAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
   contentWriter->addAttribute( "office:version","1.0" );
 
   // office:automatic-styles
@@ -1221,6 +1246,41 @@ void PowerPointImport::processFreeLine (DrawObject* drawObject, KoXmlWriter* xml
     xmlWriter->endElement(); // path
 }
 
+void PowerPointImport::processPictureFrame (DrawObject* drawObject, KoXmlWriter* xmlWriter)
+{
+  if( !drawObject ||!xmlWriter ) return;
+
+  uint picturePosition = drawObject->getIntProperty("pib") - 1;
+  QString url;
+  if (picturePosition < d->pictureNames.size()) {
+    url = "Pictures/" + d->pictureNames[picturePosition];
+  } else {
+    url = "Error:" + QString::number(d->pictureNames.size())
+        + " != " + QString::number(picturePosition);
+    kWarning() << "Picture index is out of range.";
+  }
+  QString widthStr = QString("%1mm").arg( drawObject->width() );
+  QString heightStr = QString("%1mm").arg( drawObject->height() );
+  QString xStr = QString("%1mm").arg( drawObject->left() );
+  QString yStr = QString("%1mm").arg( drawObject->top() );
+  QString styleName = QString("gr%1").arg( drawingObjectCounter );
+
+    xmlWriter->startElement( "draw:frame" );
+    xmlWriter->addAttribute( "draw:style-name", styleName );
+    xmlWriter->addAttribute( "svg:width", widthStr );
+    xmlWriter->addAttribute( "svg:height", heightStr );
+    xmlWriter->addAttribute( "svg:x", xStr );
+    xmlWriter->addAttribute( "svg:y", yStr );
+    xmlWriter->addAttribute( "draw:layer", "layout" );
+    xmlWriter->startElement( "draw:image" );
+    xmlWriter->addAttribute( "xlink:href", url );
+    xmlWriter->addAttribute( "xlink:type", "simple" );
+    xmlWriter->addAttribute( "xlink:show", "embed" );
+    xmlWriter->addAttribute( "xlink:actuate", "onLoad" );
+    xmlWriter->endElement(); // image
+    xmlWriter->endElement(); // frame
+}
+
 void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXmlWriter* xmlWriter )
 {
 
@@ -1288,6 +1348,10 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
   else if (drawObject->shape() == DrawObject::FreeLine)
   {
     processFreeLine (drawObject, xmlWriter );
+  }
+  else if (drawObject->shape() == DrawObject::PictureFrame)
+  {
+    processPictureFrame (drawObject, xmlWriter );
   }
 }
 

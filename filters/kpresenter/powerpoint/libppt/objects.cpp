@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -33,7 +33,7 @@ public:
   enum { InvalidType,  IntType, DoubleType, StringType, BoolType, ColorType } type;
   bool b;
   int i;
-  double d; 
+  double d;
   std::string s;
   Color c;
 
@@ -43,8 +43,8 @@ public:
     b = false;
     i = 0;
     d = 0.0;
-     
-    
+
+
   }
 };
 
@@ -224,7 +224,7 @@ std::string Object::getStrProperty( std::string name )
   if( pv.type == PropertyValue::StringType )
     return pv.s;
   else
-    return "NoString";  
+    return "NoString";
 }
 
 Color Object::getColorProperty(std::string name)
@@ -233,18 +233,18 @@ Color Object::getColorProperty(std::string name)
   pv = d->properties[ name ];
   if( pv.type == PropertyValue::ColorType )
     return pv.c;
-  else 
+  else
     return Color(153,204,255); // #99ccff
- 
-} 
+
+}
 
 class TextObject::Private
 {
 public:
   unsigned type;
-  std::vector<UString> text;  
-  unsigned listSize; 
-  std::vector<bool> bulletFlag; 
+  std::vector<UString> text;
+  unsigned listSize;
+  std::vector<bool> bulletFlag;
 };
 
 TextObject::TextObject(): Object()
@@ -367,7 +367,7 @@ void GroupObject::takeObject( Object* object )
   for( unsigned i=0; i<d->objects.size(); i++ )
   {
     Object* obj = d->objects[i];
-    if( obj != object ) 
+    if( obj != object )
       result.push_back( obj );
   }
 
@@ -380,7 +380,7 @@ class DrawObject::Private
 {
 public:
   unsigned shape;
-  bool isVerFlip; 
+  bool isVerFlip;
   bool isHorFlip;
 };
 
