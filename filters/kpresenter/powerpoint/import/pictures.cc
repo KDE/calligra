@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "pictures.h"
+#include <stdio.h>
 
 // Use anonymous namespace to cover following functions
 namespace{
