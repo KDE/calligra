@@ -1304,7 +1304,7 @@ bool KexiTableView::shortCutPressed(QKeyEvent *e, const QString &action_name)
 void KexiTableView::contextMenuEvent(QContextMenuEvent* e)
 {
     const bool nobtn = e->modifiers() == Qt::NoModifier;
-    if (nobtn) {
+    if (nobtn && e->reason() == QContextMenuEvent::Keyboard) {
         showContextMenu();
     }
 }
