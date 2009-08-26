@@ -18,8 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-// KChart
+
+// Own
 #include "ChartTableView.h"
+
 
 using namespace KChart;
 
@@ -35,7 +37,10 @@ ChartTableView::~ChartTableView()
 /**
  * \reimpl
  */
-void ChartTableView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
+void ChartTableView::currentChanged( const QModelIndex &current, 
+                                     const QModelIndex &previous )
 {
+    Q_UNUSED( previous );
+
     emit currentIndexChanged( current );
 }
