@@ -148,6 +148,8 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         shapeFactory->setOptionPanels(panels);
         shapeFactory->populateDataCenterMap(m_dataCenterMap);
     }
+
+    //Populate the document undoStack in the dataCenterMap. This can be used later by shapes for their undo/redo mechanism.
     m_dataCenterMap["UndoStack"] = undoStack();
 
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
