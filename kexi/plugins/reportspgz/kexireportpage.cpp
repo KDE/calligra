@@ -38,20 +38,23 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
     kDebug() << "CREATED PAGE";
     m_reportDocument = r;
     m_page = 1;
-
-    QString pageSize = r->pageOptions().getPageSize();
     int pageWidth = 0;
     int pageHeight = 0;
-    if (pageSize == "Custom") {
-        // if this is custom sized sheet of paper we will just use those values
-        pageWidth = (int)(r->pageOptions().getCustomWidth());
-        pageHeight = (int)(r->pageOptions().getCustomHeight());
-    } else {
-        // lookup the correct size information for the specified size paper
-        pageWidth = r->pageOptions().widthPx();
-        pageHeight = r->pageOptions().heightPx();
-    }
+    
+    if (m_reportDocument) {
+        QString pageSize = r->pageOptions().getPageSize();
 
+
+        if (pageSize == "Custom") {
+            // if this is custom sized sheet of paper we will just use those values
+            pageWidth = (int)(r->pageOptions().getCustomWidth());
+            pageHeight = (int)(r->pageOptions().getCustomHeight());
+        } else {
+            // lookup the correct size information for the specified size paper
+            pageWidth = r->pageOptions().widthPx();
+            pageHeight = r->pageOptions().heightPx();
+        }
+    }
 
     setFixedSize(pageWidth, pageHeight);
 
@@ -74,9 +77,11 @@ void KexiReportPage::renderPage(int p)
     m_page = p;
     m_pixmap->fill();
     QPainter qp(m_pixmap);
-    KRScreenRender sr;
-    sr.setPainter(&qp);
-    sr.render(m_reportDocument, p - 1);
+    if (m_reportDocument) {
+        KRScreenRender sr;
+        sr.setPainter(&qp);
+        sr.render(m_reportDocument, p - 1);
+    }
     m_repaint = true;
     repaint();
 }

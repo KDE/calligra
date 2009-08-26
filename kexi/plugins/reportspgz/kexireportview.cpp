@@ -228,7 +228,9 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         QDomElement conn = root.firstChildElement( "connection" );
         
         m_preRenderer = new ORPreRender(tempData()->document);
-        m_preRenderer->setSourceData(sourceData(conn));
+        if (!conn.isNull())  {
+            m_preRenderer->setSourceData(sourceData(conn));
+        }
         m_preRenderer->setName( tempData()->name );
         m_currentPage = 1;
 
@@ -237,9 +239,11 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         m_preRenderer->registerScriptObject(m_kexi, "Kexi" );
         
         m_reportDocument = m_preRenderer->generate();
-        m_pageCount = m_reportDocument->pages();
-        m_pageSelector->setRecordCount(m_pageCount);
-
+        if (m_reportDocument) {
+            m_pageCount = m_reportDocument->pages();
+            m_pageSelector->setRecordCount(m_pageCount);
+        }
+        
         m_reportWidget = new KexiReportPage(this, m_reportDocument);
         m_reportWidget->setObjectName("KexiReportPage");
         m_scrollArea->setWidget(m_reportWidget);
