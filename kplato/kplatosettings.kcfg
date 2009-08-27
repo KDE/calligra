@@ -92,6 +92,9 @@
     <entry name="SaveFile" type="Bool">
       <label>If set, kplato will save the file after it has been read</label>
     </entry>
+    <entry name="LeaveFile" type="Bool">
+      <label>If set, kplato will leave where it is the file after it has been read</label>
+    </entry>
     <entry name="SaveUrl" type="Url">
       <label>Directory where kplato saves work packages when the package has been read</label>
     </entry>
