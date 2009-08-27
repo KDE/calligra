@@ -337,7 +337,7 @@ void EditViewPanel::fillAfter( ViewListItem *cat )
 ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
     : KDialog(parent)
 {
-    setCaption( i18n("Configure View") );
+    setCaption( i18n("Configure Category") );
     setButtons( KDialog::Ok | KDialog::Cancel );
     setDefaultButton( Ok );
 
