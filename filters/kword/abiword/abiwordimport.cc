@@ -1443,7 +1443,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     }
     else
     {
-        success=true; // No problem, so authorisation to continue parsing
+        success=true; // No problem, so authorization to continue parsing
     }
     if (!success)
     {

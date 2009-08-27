@@ -58,7 +58,7 @@ public:
 
     /**
      * Returns the query to be run to fetch the last inserted oid
-     * Temporary. I've kept this till I find a better solution. Till then atleast mysql will work :)
+     * Temporary. I've kept this till I find a better solution. Till then at least mysql will work :)
      */
     QString getQueryForOID();
 
@@ -91,8 +91,8 @@ private:
     bool populateGeneralInfo(ODBCConnection* connection);
 
     /**
-     * Populates the name of the psuedo column (ROWID) that exists for each table
-     * \param connection the ODBC connection from which the psuedo column info needs to be populated
+     * Populates the name of the pseudo column (ROWID) that exists for each table
+     * \param connection the ODBC connection from which the pseudo column info needs to be populated
      * \return true if the pseudo column information could be loaded successfully, else false
      */
     bool populateROWID(ODBCConnection* connection );

@@ -308,7 +308,7 @@ protected:
      */
     Driver(QObject *parent, const QStringList &args = QStringList());
 
-    /*! For reimplemenation: creates and returns connection object
+    /*! For reimplementation: creates and returns connection object
      with additional structures specific for a given driver.
      Connection object should inherit Connection and have a destructor
      that descructs all allocated driver-dependent connection structures. */

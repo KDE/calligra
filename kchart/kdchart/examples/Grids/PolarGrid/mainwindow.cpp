@@ -78,7 +78,7 @@ void MainWindow::wireUpKDChartClasses()
 
 void MainWindow::setItemModelData()
 {
-    // For a change we do not read data from a ressource file here,
+    // For a change we do not read data from a resource file here,
     // but we just fill in the cells manually
     int value = 0;
     for ( int column = 0; column < m_model.columnCount(); ++column ) {

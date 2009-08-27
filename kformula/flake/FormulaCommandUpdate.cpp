@@ -49,3 +49,4 @@ void FormulaCommandUpdate::undo()
     m_shape->update();
     m_shape->formulaData()->notifyDataChange(m_command,true);
 }
+

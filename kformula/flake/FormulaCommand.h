@@ -39,7 +39,7 @@ class TableRowElement;
  *
  * All FormulaCommands are used to manipulate the formula in various ways.
  * They all provide a redo and undo method as well as changeCursor method
- * which sets the cursor after the current action. A extra method for this is neccesary,
+ * which sets the cursor after the current action. A extra method for this is necessary,
  * as there might be no cursor when a undo/redo is done, because the tool was deactivated
  *
  **/

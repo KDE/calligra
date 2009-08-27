@@ -55,7 +55,7 @@ class KEXI_DB_EXPORT MessageHandler
 public:
     enum MessageType { Error, Sorry, Warning };
 
-    /*! Constructs mesage handler, \a parent is a widget that will be a parent
+    /*! Constructs message handler, \a parent is a widget that will be a parent
      for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */
     MessageHandler(QWidget *parent = 0);
     virtual ~MessageHandler();

@@ -38,3 +38,4 @@ void SimpleField::save(KoXmlWriter &writer)
     writer.addAttribute("notnull", notnull);
     writer.endElement();
 }
+

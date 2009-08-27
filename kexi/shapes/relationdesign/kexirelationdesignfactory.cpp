@@ -48,3 +48,4 @@ bool KexiRelationDesignFactory::supports(const KoXmlElement & e) const
     kDebug();
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/kexirelationdesign" );
 }
+

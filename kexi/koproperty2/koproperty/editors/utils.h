@@ -39,3 +39,4 @@ KOPROPERTY_EXPORT void setupDotDotDotButton(QPushButton *button,
 }
 
 #endif
+

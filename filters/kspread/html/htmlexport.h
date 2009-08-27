@@ -66,10 +66,10 @@ public:
     QString fileName(  const QString &base, const QString &, bool );
 
     /**
-      Detects which rows and columsn of the given @par sheet are used and
+      Detects which rows and columns of the given @par sheet are used and
       writes the number of them to @par row and @par column.
      */
-    void detectFilledCells( KSpread::Sheet *sheet, int &rows, int &colums );
+    void detectFilledCells( KSpread::Sheet *sheet, int &rows, int &columns );
   private:
     ExportDialog *m_dialog;
 

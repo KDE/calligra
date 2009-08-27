@@ -1228,7 +1228,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 #endif
 //! @todo 2.0?    KFormDesigner::FormManager::self()->blockPropertyEditorUpdating(this);
 
-//! todo unnamed query colums are not supported
+//! todo unnamed query columns are not supported
 
 //  KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
     QWidgetList widgetsToSelect;

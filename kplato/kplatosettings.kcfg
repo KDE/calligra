@@ -84,7 +84,7 @@
       <label>Automatically check for new work packages</label>
     </entry>
     <entry name="RetreiveUrl" type="Url">
-      <label>Directory where kplato retreives work packages from project members</label>
+      <label>Directory where kplato retrieves work packages from project members</label>
     </entry>
     <entry name="DeleteFile" type="Bool">
       <label>If set, kplato will delete the file after it has been read</label>

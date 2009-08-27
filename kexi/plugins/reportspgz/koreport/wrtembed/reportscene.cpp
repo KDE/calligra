@@ -139,7 +139,7 @@ void ReportScene::mousePressEvent(QGraphicsSceneMouseEvent * e)
        )
         clearSelection();
 
-    //This will be caught by the section to display its properties, if an item is under the cursor then they will diplay their properties
+    //This will be caught by the section to display its properties, if an item is under the cursor then they will display their properties
     emit(clicked());
 
     QGraphicsScene::mousePressEvent(e);

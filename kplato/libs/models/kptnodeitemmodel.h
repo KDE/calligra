@@ -127,7 +127,7 @@ public:
         NodeCritical,
         NodeCriticalPath,
 
-        // Info from latest work package transmition
+        // Info from latest work package transmission
         WPOwnerName,
         WPTransmitionStatus,
         WPTransmitionTime

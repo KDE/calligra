@@ -420,7 +420,7 @@ bool ODBCDriver::populateGeneralInfo(ODBCConnection* connection)
     foreach( const QString& keyword, keywordList ) {
         QByteArray ba = keyword.toAscii();
         // we want ownership as the bytearray is going to be destroyed.
-        // we dont want ownership as the KexiUtils::StaticSetOfStrings, is not going to delete thiss
+        // we don't want ownership as the KexiUtils::StaticSetOfStrings, is not going to delete thiss
         // TODO: find a solution :)
         keywords[i] = new char[keyword.length() + 1];
         strcpy( keywords[i], ba.constData() );

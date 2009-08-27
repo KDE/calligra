@@ -789,7 +789,7 @@ public:
     tristate closeAllTableSchemaChangeListeners(TableSchema& tableSchema);
 
 //! @todo move this somewhere to low level class (MIGRATION?)
-    /*! LOW LEVEL METHOD. For reimplemenation: returns true if table
+    /*! LOW LEVEL METHOD. For reimplementation: returns true if table
      with name \a tableName exists in the database.
      \return false if it does not exist or error occurred.
      The lookup is case insensitive. */
@@ -873,12 +873,12 @@ protected:
      the original table schema (even if it is no longer points to any real data). */
     tristate dropTable(KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 
-    /*! For reimplemenation: connects to database. \a version should be set to real
+    /*! For reimplementation: connects to database. \a version should be set to real
      server's version.
       \return true on success. */
     virtual bool drv_connect(KexiDB::ServerVersionInfo& version) = 0;
 
-    /*! For reimplemenation: disconnects database
+    /*! For reimplementation: disconnects database
       \return true on success. */
     virtual bool drv_disconnect() = 0;
 
@@ -887,7 +887,7 @@ protected:
      Only use this method if you really need. */
     virtual bool drv_executeSQL(const QString& statement) = 0;
 
-    /*! For reimplemenation: loads list of databases' names available for this connection
+    /*! For reimplementation: loads list of databases' names available for this connection
      and adds these names to \a list. If your server is not able to offer such a list,
      consider reimplementing drv_databaseExists() instead.
      The method should return true only if there was no error on getting database names
@@ -896,13 +896,13 @@ protected:
     virtual bool drv_getDatabasesList(QStringList &list);
 
 //! @todo move this somewhere to low level class (MIGRATION?)
-    /*! LOW LEVEL METHOD. For reimplemenation: loads low-level list of table names
+    /*! LOW LEVEL METHOD. For reimplementation: loads low-level list of table names
      available for this connection. The names are in lower case.
      The method should return true only if there was no error on getting database names
      list from the server. */
     virtual bool drv_getTablesList(QStringList &list) = 0;
 
-    /*! For optional reimplemenation: asks server if database \a dbName exists.
+    /*! For optional reimplementation: asks server if database \a dbName exists.
      This method is used internally in databaseExists(). The default  implementation
      calls databaseNames and checks if that list contains \a dbName. If you need to
      ask the server specifically if a database exists, eg. if you can't retrieve a list
@@ -916,15 +916,15 @@ protected:
      in this situation no changes should be made in current database selection. */
     virtual bool drv_databaseExists(const QString &dbName, bool ignoreErrors = true);
 
-    /*! For reimplemenation: creates new database using connection */
+    /*! For reimplementation: creates new database using connection */
     virtual bool drv_createDatabase(const QString &dbName = QString()) = 0;
 
-    /*! For reimplemenation: opens existing database using connection
+    /*! For reimplementation: opens existing database using connection
      \return true on success, false on failure and cancelled if user has cancelled this action. */
     virtual bool drv_useDatabase(const QString &dbName = QString(), bool *cancelled = 0,
                                  MessageHandler* msgHandler = 0) = 0;
 
-    /*! For reimplemenation: closes previously opened database
+    /*! For reimplementation: closes previously opened database
       using connection. */
     virtual bool drv_closeDatabase() = 0;
 
@@ -945,7 +945,7 @@ protected:
         return true;
     }
 
-    /*! For reimplemenation: drops database from the server
+    /*! For reimplementation: drops database from the server
       using connection. After drop, database shouldn't be accessible
       anymore. */
     virtual bool drv_dropDatabase(const QString &dbName = QString()) = 0;

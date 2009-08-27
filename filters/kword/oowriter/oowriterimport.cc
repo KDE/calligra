@@ -349,7 +349,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& 
             currentFramesetElement.appendChild( e );
         m_styleStack.restore(); // remove the styles added by the paragraph or list
     }
-    m_currentFrameset = oldCurrentFrameset; // in case of recursive invokations
+    m_currentFrameset = oldCurrentFrameset; // in case of recursive invocations
 }
 
 void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )

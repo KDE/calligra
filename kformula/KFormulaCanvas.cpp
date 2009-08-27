@@ -61,7 +61,7 @@ void KFormulaCanvas::paintEvent( QPaintEvent* e )
 
     p.begin( this );
     QRect tmp = e->rect();
-    // if the shown area is smaller than the canvas centralise it    
+    // if the shown area is smaller than the canvas centralize it    
     if( width() > m_paintBuffer.width() || height() > m_paintBuffer.height() )
         tmp.translate( width()/2 - m_paintBuffer.width()/2,
 		       height()/2 - m_paintBuffer.height()/2 )

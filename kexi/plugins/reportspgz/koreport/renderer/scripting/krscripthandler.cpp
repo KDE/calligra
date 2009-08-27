@@ -300,3 +300,4 @@ void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
     if (m_action)
         m_action->addObject(obj, name);
 }
+

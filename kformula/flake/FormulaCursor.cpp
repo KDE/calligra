@@ -358,7 +358,7 @@ bool FormulaCursor::isAccepted() const
 
 bool FormulaCursor::performMovement ( FormulaCursor& oldcursor )
 {
-    //handle selecting and not selecting case seperately, which makes more clear
+    //handle selecting and not selecting case separately, which makes more clear
     if (isSelecting()) {
         while ( m_currentElement ) {
             if ( m_currentElement->moveCursor( *this, oldcursor ) ) {

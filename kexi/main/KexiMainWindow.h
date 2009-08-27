@@ -605,7 +605,7 @@ protected slots:
     void slotToolsProjectMigration();
     void slotToolsCompactDatabase();
 
-    /// TMP: Display a dialog to download db examples from internet
+    /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
 
     void slotTipOfTheDay();

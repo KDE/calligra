@@ -289,7 +289,7 @@ bool pqxxSqlConnection::drv_executeSQL(const QString& statement)
 }
 
 //==================================================================================
-//Return true if currently connected to a database, ignoring the m_is_connected falg.
+//Return true if currently connected to a database, ignoring the m_is_connected flag.
 bool pqxxSqlConnection::drv_isDatabaseUsed() const
 {
     if (d->pqxxsql->is_open()) {

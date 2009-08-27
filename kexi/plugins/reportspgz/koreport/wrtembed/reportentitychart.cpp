@@ -290,3 +290,4 @@ QStringList ReportEntityChart::queryList(KexiDB::Connection* conn)
     
     return qs;
 }
+

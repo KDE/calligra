@@ -70,7 +70,7 @@ public:
     
     /** The type of script
      *  executable = regular script that can be executed by the user
-     *  module = a script which doesnt contain a 'main', only
+     *  module = a script which doesn't contain a 'main', only
      *           functions that can be used by other scripts
      *  object = a script which contains code to be loaded into another
                  object such as a report or form

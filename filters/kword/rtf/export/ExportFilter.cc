@@ -818,7 +818,7 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
     kDebug(30515) <<"Entering RTFWorker::doFullParagraph" << endl << paraText;
     QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
     m_textBody += par;
-    kDebug(30515) <<"Quiting RTFWorker::doFullParagraph";
+    kDebug(30515) <<"Quitting RTFWorker::doFullParagraph";
     return true;
 }
 

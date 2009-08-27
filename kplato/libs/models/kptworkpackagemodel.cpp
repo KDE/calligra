@@ -100,7 +100,7 @@ QVariant WorkPackageModel::transmitionTime( const WorkPackage *wp, int role ) co
                 return i18n( "Work package sent at: %1", t );
             }
             if ( sts == WorkPackage::TS_Receive ) {
-                return i18n( "Work package transmition received at: %1", t );
+                return i18n( "Work package transmission received at: %1", t );
             }
             return i18n( "Not available" );
         }

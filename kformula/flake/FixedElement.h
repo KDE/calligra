@@ -29,7 +29,7 @@ class FormulaCursor;
 class QPainterPath;
 class RowElement;
 /**
- * @short Abstract Base Class for MathML elements with fixed number of childs
+ * @short Abstract Base Class for MathML elements with fixed number of children
  *
  */
 

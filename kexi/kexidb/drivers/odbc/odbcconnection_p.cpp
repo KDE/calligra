@@ -63,7 +63,7 @@ bool ODBCConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
     SQLRETURN returnStatus;
     returnStatus = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &envHandle);
     if ( !SQL_SUCCEEDED(returnStatus) ) {
-        KexiDBDrvDbg <<"Couldn't allocate envirnoment handle";
+        KexiDBDrvDbg <<"Couldn't allocate environment handle";
         return false;
     }
 

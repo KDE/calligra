@@ -82,7 +82,7 @@ private:
 };
 
 /**
- The ResourceAllocationItemModel facilitates viewing and modifing
+ The ResourceAllocationItemModel facilitates viewing and modifying
  resource allocations for a task.
 */
 

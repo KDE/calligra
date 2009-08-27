@@ -745,7 +745,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     }
     else
     {
-        success = true; // No problem, so authorisation to continue parsing
+        success = true; // No problem, so authorization to continue parsing
     }
     
     if (!success)

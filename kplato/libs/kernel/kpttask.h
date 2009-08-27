@@ -258,7 +258,7 @@ public:
     Task *parentTask() const { return m_task; }
     void setParentTask( Task *task ) { m_task = task; }
 
-    /// Returns the transmition status of this package
+    /// Returns the transmission status of this package
     WPTransmitionStatus transmitionStatus() const { return m_transmitionStatus; }
     void setTransmitionStatus( WPTransmitionStatus sts ) { m_transmitionStatus = sts; }
     static QString transmitionStatusToString( WPTransmitionStatus sts, bool trans = false );
@@ -575,7 +575,7 @@ protected:
     /**
      * Calculates ref m_durationForward from ref earliestStart and
      * returns the resulting end time (early finish),
-     * which will be used as the succesors ref earliestStart.
+     * which will be used as the successors ref earliestStart.
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */

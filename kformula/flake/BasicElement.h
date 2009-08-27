@@ -142,7 +142,7 @@ public:
     /**
      * Return the coordinates of the line, where the cursor should be drawn
      * in coordinates relative to the formula element (or the flake shape)
-     * @param cursor The FormulaCursor specifing the position
+     * @param cursor The FormulaCursor specifying the position
      * @return the cursor line
      */
     virtual QLineF cursorLine(int position) const;

@@ -1059,7 +1059,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
         return;
     }
 
-    if (columnAt(e->pos().x()) == -1) { //outside a colums
+    if (columnAt(e->pos().x()) == -1) { //outside a column
         Q3ScrollView::contentsMousePressEvent(e);
         return;
     }
