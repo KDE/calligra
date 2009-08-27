@@ -105,9 +105,9 @@ bool Config::checkForWorkPackages() const
     return KPlatoSettings::checkForWorkPackages();
 }
 
-KUrl Config::retreiveUrl() const
+KUrl Config::retrieveUrl() const
 {
-    return KPlatoSettings::retreiveUrl();
+    return KPlatoSettings::retrieveUrl();
 }
 
 }  //KPlato namespace

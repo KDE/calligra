@@ -83,7 +83,7 @@
     <entry name="CheckForWorkPackages" type="Bool">
       <label>Automatically check for new work packages</label>
     </entry>
-    <entry name="RetreiveUrl" type="Url">
+    <entry name="RetrieveUrl" type="Url">
       <label>Directory where kplato retrieves work packages from project members</label>
     </entry>
     <entry name="DeleteFile" type="Bool">

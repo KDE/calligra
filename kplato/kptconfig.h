@@ -39,7 +39,7 @@ public:
     virtual void setDefaultValues( Task &task );
 
     virtual bool checkForWorkPackages() const;
-    virtual KUrl retreiveUrl() const;
+    virtual KUrl retrieveUrl() const;
 
     virtual int minimumDurationUnit() const;
     virtual int maximumDurationUnit() const;

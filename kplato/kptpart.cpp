@@ -521,12 +521,12 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
 void Part::checkForWorkPackages()
 {
     qDebug()<<"checkForWorkPackages:";
-    if ( ! m_config.checkForWorkPackages() || m_config.retreiveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
+    if ( ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         qDebug()<<"checkForWorkPackages: idle";
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;
     }
-    QDir dir( m_config.retreiveUrl().path(), "*.kplatowork" );
+    QDir dir( m_config.retrieveUrl().path(), "*.kplatowork" );
     m_infoList = dir.entryInfoList( QDir::Files | QDir::Readable, QDir::Time );
     checkForWorkPackage();
     return;
