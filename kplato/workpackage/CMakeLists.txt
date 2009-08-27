@@ -5,7 +5,7 @@ add_subdirectory( pics )
 #add_subdirectory( toolbar )
 #add_subdirectory( tests )
 
-include_directories(${KPLATO_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(${KPLATO_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/)
 
 
 ########### KPlatoWork private library ###############
@@ -19,6 +19,14 @@ set(kplatoworkfactory_LIB_SRCS
 
     taskworkpackagemodel.cpp
     taskworkpackageview.cpp
+
+    packagesettings.cpp
+    taskcompletiondialog.cpp
+)
+
+kde4_add_ui_files(kplatoworkfactory_LIB_SRCS
+    packagesettings.ui
+    taskcompletionpanel.ui
 )
 
 kde4_add_library(kplatoworkfactory SHARED ${kplatoworkfactory_LIB_SRCS})

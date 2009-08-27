@@ -3391,6 +3391,49 @@ WorkPackage::WPTransmitionStatus WorkPackage::transmitionStatusFromString( const
     return s < 0 ? TS_None : static_cast<WPTransmitionStatus>( s );
 }
 
+//--------------------------------
+WorkPackageSettings::WorkPackageSettings()
+    : usedEffort( true ),
+    progress( false ),
+    remainingEffort( false ),
+    documents( true )
+{
+}
+
+void WorkPackageSettings::saveXML( QDomElement &element ) const
+{
+    QDomElement el = element.ownerDocument().createElement("settings");
+    element.appendChild( el );
+    el.setAttribute( "used-effort", usedEffort );
+    el.setAttribute( "progress", progress );
+    el.setAttribute( "remaining-effort", remainingEffort );
+    el.setAttribute( "documents", documents );
+}
+
+bool WorkPackageSettings::loadXML( const KoXmlElement &element )
+{
+    qDebug()<<"WorkPackageSettings::loadXML:";
+    usedEffort = (bool)element.attribute( "used-effort" ).toInt();
+    progress = (bool)element.attribute( "progress" ).toInt();
+    remainingEffort = (bool)element.attribute( "remaining-effort" ).toInt();
+    documents = (bool)element.attribute( "documents" ).toInt();
+    return true;
+}
+
+bool WorkPackageSettings::operator==( const WorkPackageSettings &s ) const
+{
+    return usedEffort == s.usedEffort &&
+            progress == s.progress &&
+            remainingEffort == s.remainingEffort &&
+            documents == s.documents;
+}
+
+bool WorkPackageSettings::operator!=( const WorkPackageSettings &s ) const
+{
+    return ! operator==( s );
+}
+
+
 //----------------------------------
 #ifndef NDEBUG
 void Task::printDebug(bool children, const QByteArray& _indent) {

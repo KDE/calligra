@@ -22,6 +22,8 @@
 #include "mainwindow.h"
 #include "taskworkpackageview.h"
 #include "workpackage.h"
+#include "packagesettings.h"
+#include "taskcompletiondialog.h"
 
 #include "kpttaskeditor.h"
 #include "kpttaskdescriptiondialog.h"
@@ -62,6 +64,7 @@
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
 #include <KActionCollection>
+#include <KTemporaryFile>
 
 #include <kmessagebox.h>
 #include <krun.h>
@@ -126,9 +129,9 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     connect( actionRemoveCurrentPackage, SIGNAL( triggered( bool ) ), SLOT( slotRemoveCurrentPackage() ) );
 
 
-    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
-    collection->addAction("task_progress", actionTaskProgress );
-    connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+//     actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
+//     collection->addAction("task_progress", actionTaskProgress );
+//     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
     //------ Settings
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlatoWork..."), this);
@@ -150,9 +153,17 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
 
-    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
-    collection->addAction("task_progress", actionTaskProgress );
-    connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+    actionPackageSettings  = new KAction(KIcon( "document-properties" ), i18n("Package Settings..."), this);
+    collection->addAction("edit_packagesettings", actionPackageSettings );
+    connect( actionPackageSettings, SIGNAL( triggered( bool ) ), SLOT( slotPackageSettings() ) );
+
+//     actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
+//     collection->addAction("task_progress", actionTaskProgress );
+//     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+
+    actionTaskCompletion  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
+    collection->addAction("task_progress", actionTaskCompletion );
+    connect( actionTaskCompletion, SIGNAL( triggered( bool ) ), SLOT( slotTaskCompletion() ) );
 
     actionViewDescription  = new KAction(/*KIcon( "document_view" ),*/ i18n("View Description..."), this);
     collection->addAction("task_description", actionViewDescription );
@@ -310,6 +321,23 @@ void View::slotViewDocument()
     emit viewDocument( currentDocument() );
 }
 
+void View::slotPackageSettings()
+{
+    WorkPackage *wp = part()->findWorkPackage( currentNode() );
+    if ( wp == 0 ) {
+        return;
+    }
+    PackageSettingsDialog *dia = new PackageSettingsDialog( *wp, this );
+    if ( dia->exec() == QDialog::Accepted ) {
+        QUndoCommand *cmd = dia->buildCommand();
+        if ( cmd ) {
+            qDebug()<<"slotPackageSettings:";
+            part()->addCommand( cmd );
+        }
+    }
+    delete dia;
+}
+
 void View::slotSendPackage()
 {
     Node *node = currentNode();
@@ -323,16 +351,27 @@ void View::slotSendPackage()
         KMessageBox::error(0, i18n("Cannot find work package" ) );
         return;
     }
-    if ( wp->isModified() ) {
+/*    if ( wp->isModified() ) {
         int r = KMessageBox::questionYesNoCancel( 0, i18n("This work package has been modified.\nDo you want to save it before sending?" ), node->name() );
         switch ( r ) {
             case KMessageBox::Cancel: return;
             case KMessageBox::Yes: wp->saveToProjects( part() ); break;
             default: break;
         }
+    }*/
+    KTemporaryFile temp;
+    temp.setSuffix( ".kplatowork" );
+    temp.setAutoRemove( false );
+    if ( ! temp.open() ) {
+        KMessageBox::error( 0, i18n("Could not open temporary file. Sending is aborted." ) );
+        return;
     }
+    bool wasmodified = wp->isModified();
+    wp->saveNativeFormat( part(), temp.fileName() );
+    wp->setModified( wasmodified );
+
     QStringList attachURLs;
-    attachURLs << wp->filePath();
+    attachURLs << temp.fileName();
 
     QString to = node->projectNode()->leader();
     QString cc;
@@ -398,6 +437,24 @@ void View::slotTaskProgress()
             cmd->redo(); //FIXME m_part->addCommand( cmd );
         }
     }
+}
+
+void View::slotTaskCompletion()
+{
+    qDebug()<<"View::slotTaskCompletion:";
+    WorkPackage *wp = m_part->findWorkPackage( currentNode() );
+    if ( wp == 0 ) {
+        return;
+    }
+    TaskCompletionDialog *dlg = new TaskCompletionDialog( *wp, currentScheduleManager(), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
+        qDebug()<<"View::slotTaskCompletion:";
+        QUndoCommand *cmd = dlg->buildCommand();
+        if ( cmd ) {
+            m_part->addCommand( cmd );
+        }
+    }
+    delete dlg;
 }
 
 void View::slotRemoveSelectedPackages()

@@ -317,6 +317,20 @@ private:
     QMap<DateTime, QString> m_log;
 };
 
+class KPLATOKERNEL_EXPORT WorkPackageSettings
+{
+public:
+    WorkPackageSettings();
+    bool loadXML( const KoXmlElement &element );
+    void saveXML( QDomElement &element) const;
+    bool operator==( const WorkPackageSettings &settings ) const;
+    bool operator!=( const WorkPackageSettings &settings ) const;
+    bool usedEffort;
+    bool progress;
+    bool remainingEffort;
+    bool documents;
+};
+
 /**
   * A task in the scheduling software is represented by this class. A task
   * can be anything from 'build house' to 'drill hole' It will always mean

@@ -129,6 +129,7 @@ public slots:
     void slotPopupMenu( const QString& menuname, const QPoint &pos );
 
     void slotTaskProgress();
+    void slotTaskCompletion();
 
 protected slots:
     void slotProgressChanged( int value );
@@ -138,6 +139,7 @@ protected slots:
     void slotViewDocument();
     
     void slotSendPackage();
+    void slotPackageSettings();
     void slotTaskDescription();
     void slotRemoveCurrentPackage();
     void slotRemoveSelectedPackages();
@@ -175,7 +177,8 @@ private:
     KAction *actionEditDocument;
 
     KAction *actionSendPackage;
-    KAction *actionTaskProgress;
+    KAction *actionPackageSettings;
+    KAction *actionTaskCompletion;
     KAction *actionViewDescription;
     KAction *actionRemoveCurrentPackage;
 };

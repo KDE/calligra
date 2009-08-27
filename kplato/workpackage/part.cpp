@@ -304,7 +304,6 @@ bool DocumentChild::saveToStore( KoStore *store )
 Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*/ )
     : KParts::ReadWritePart( parent ),
     m_xmlLoader(),
-    m_currentWorkPackage( 0 ),
     m_modified( false ),
     m_loadingFromProjectStore( false ),
     m_undostack( new QUndoStack( this ) )
@@ -345,40 +344,28 @@ void Part::addCommand( QUndoCommand *cmd )
     }
 }
 
-bool Part::setWorkPackage( Project *project )
+bool Part::setWorkPackage( WorkPackage *wp )
 {
-    //qDebug()<<"Part::setWorkPackage:"<<project->name()<<project->childNode( 0 )->name();
-    m_currentWorkPackage = 0;
-    if ( project->childNodeIterator().isEmpty() ) {
-        KMessageBox::error( 0, i18n("Invalid work package.<br>The package does not contain a task.") );
-        return false;
-    }
-    QString id;
-    Node *n = project->childNode( 0 );
-    id = project->id() + n->id(); // unique id (may have nodes from same project)
+    //qDebug()<<"Part::setWorkPackage:";
+    QString id = wp->id();
     if ( m_packageMap.contains( id ) ) {
         if ( KMessageBox::warningYesNo( 0, i18n("<p>The work package already exists in the projects store.</p>"
                 "<p>Project: %1<br>Task: %2</p>"
-                "<p>Do you want to merge the new package with the existing one?</p>",
-                project->name(), n->name()) ) == KMessageBox::No ) {
-            delete project;
-            return true;
+                "<p>Do you want to update the existing package with data from the new?</p>",
+                wp->project()->name(), wp->node()->name()) ) == KMessageBox::No ) {
+            delete wp;
+            return false;
         }
-        if ( ! project->scheduleManagers().isEmpty() ) {
-            // should be only one manager
-            project->setCurrentSchedule( project->scheduleManagers().first()->id() );
-        }
-        m_packageMap[ id ]->merge( this, project );
-        delete project;
+        m_packageMap[ id ]->merge( this, wp );
+        delete wp;
         return true;
     }
-    WorkPackage *wp = new WorkPackage( project, m_loadingFromProjectStore );
     wp->setFilePath( m_loadingFromProjectStore ? wp->fileName( this ) : localFilePath() );
     m_packageMap[ id ] = wp;
     if ( ! m_loadingFromProjectStore ) {
         wp->saveToProjects( this );
     }
-
+    connect( wp->project(), SIGNAL( changed() ), wp, SLOT( projectChanged() ) );
     connect ( wp, SIGNAL( modified( bool ) ), this, SLOT( setModified( bool ) ) );
     emit workPackageAdded( wp, indexOf( wp ) );
     return true;
@@ -556,52 +543,14 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
             return false;
         }
     }
-    Project* newProject = 0;
-    QString resourceId;
-    QString resourceName;
     m_xmlLoader.startLoad();
-    KoXmlNode n = plan.firstChild();
-    for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        if ( ! n.isElement() ) {
-            continue;
-        }
-        KoXmlElement e = n.toElement();
-        qDebug()<<"loadXML:"<<e.tagName();
-        if ( e.tagName() == "workpackage" ) {
-            resourceId = e.attribute( "owner-id" );
-            resourceName = e.attribute( "owner" );
-        } else if ( e.tagName() == "project" ) {
-            newProject = new Project();
-            m_xmlLoader.setProject( newProject );
-            qDebug()<<"loadXML:"<<"loading new project";
-            if ( ! newProject->load( e, m_xmlLoader ) ) {
-                m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
-                KMessageBox::error( 0, i18n( "Failed to load project: %1" , newProject->name() ) );
-                delete newProject;
-                newProject = 0;
-            }
-        }
-    }
+    WorkPackage *wp = new WorkPackage( m_loadingFromProjectStore );
+    wp->loadXML( plan, m_xmlLoader );
     m_xmlLoader.stopLoad();
-    if ( newProject ) {
-        //qDebug()<<"loadXML:"<<newProject->name()<<newProject->childNode(0)->name();
-        if ( ! resourceId.isEmpty() ) {
-            Resource *r = newProject->findResource( resourceId );
-            if ( r == 0 ) {
-                qDebug()<<"loadXML:"<<"Cannot find resource id!!"<<resourceId<<resourceName;
-            }
-            qDebug()<<"loadXML:"<<"is this me?"<<resourceName;
-            Task *t = static_cast<Task*>( newProject->childNode( 0 ) );
-            t->workPackage().setOwnerName( resourceName );
-            t->workPackage().setOwnerId( resourceId );
-        }
-        if ( ! setWorkPackage( newProject ) ) {
-            kDebug()<<"Failed to set workpackage, project:"<<newProject->name();
-            delete newProject;
-            newProject = 0;
-        }
+    if ( ! setWorkPackage( wp ) ) {
+        // rejected, so nothing changed...
+        return true;
     }
-    setModified( false );
     emit changed();
     return true;
 }
@@ -756,14 +705,13 @@ bool Part::completeSaving( KoStore *store )
 
 QDomDocument Part::saveXML()
 {
-    qDebug()<<"Part::saveXML:"<<m_currentWorkPackage;
+    qDebug()<<"Part::saveXML:";
     return QDomDocument();
 }
 
 bool Part::queryClose()
 {
     qDebug()<<"queryClose:";
-    m_currentWorkPackage = 0;
     QList<WorkPackage*> modifiedList;
     foreach ( WorkPackage *wp, m_packageMap ) {
         switch ( wp->queryClose( this ) ) {

@@ -47,6 +47,8 @@ class Context;
 class GanttView;
 class SchedulerPlugin;
 
+class Package;
+
 class KPLATO_EXPORT Part : public KoDocument
 {
     Q_OBJECT
@@ -95,12 +97,12 @@ public:
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
     void mergeWorkPackages();
-    void mergeWorkPackage( const Project &proj );
+    void mergeWorkPackage( const Package *package );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
-    Project *loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
-    QMap<Project*, KUrl> workPackages() const { return m_workpackages; }
+    Project *loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url );
+    QMap<Package*, KUrl> workPackages() const { return m_workpackages; }
 
     void insertFile( const QString &filename, Node *parent, Node *after = 0 );
     bool insertProject( Project &project, Node *parent, Node *after );
@@ -119,7 +121,7 @@ protected:
     /// Save kplato specific files
     virtual bool completeSaving( KoStore* store );
 
-    void mergeWorkPackage( Task *to, const Task *from );
+    void mergeWorkPackage( Task *to, const Task *from, const Package *package );
 
 protected slots:
     void slotViewDestroyed();
@@ -145,8 +147,9 @@ private:
     bool m_loadingTemplate;
 
     QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
-    QMap<Project*, KUrl> m_workpackages;
+    QMap<Package*, KUrl> m_workpackages;
     QFileInfoList m_infoList;
+    QMap<QString, Project*> m_mergedPackages;
 
     KPlatoAboutPage m_aboutPage;
 };

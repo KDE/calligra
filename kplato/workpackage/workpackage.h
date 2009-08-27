@@ -22,6 +22,7 @@
 
 #include "kptxmlloaderobject.h"
 #include "kptcommand.h"
+#include "kpttask.h"
 
 #include <KoDocument.h>
 
@@ -42,6 +43,7 @@ namespace KPlato
 {
     class Project;
     class Document;
+    class XMLLoaderObject;
 }
 
 using namespace KPlato;
@@ -63,6 +65,7 @@ class WorkPackage : public QObject
 {
     Q_OBJECT
 public:
+    WorkPackage( bool fromProjectStore );
     WorkPackage( Project *project, bool fromProjectStore );
     ~WorkPackage();
 
@@ -83,12 +86,15 @@ public:
 
     QString nodeId() const;
 
+    bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
+
     QDomDocument saveXML();
     bool saveNativeFormat( Part *part, const QString &path );
     bool saveDocumentsToStore( KoStore *store );
     bool completeSaving( KoStore *store );
 
     Node *node() const;
+    Task *task() const;
     Project *project() const { return m_project; }
 
     /// Set the file path to this package
@@ -101,8 +107,8 @@ public:
     /// Remove work package file
     void removeFile();
 
-    /// Merge data from @p project
-    void merge( Part *part, const Project *project );
+    /// Merge data from work package @p wp
+    void merge( Part *part, const WorkPackage *wp );
 
     bool isModified() const;
 
@@ -111,6 +117,11 @@ public:
     KUrl extractFile( const Document *doc );
 
     QString id() const;
+
+    bool isValid() const { return m_project && node(); }
+
+    WorkPackageSettings &settings() { return m_settings; }
+    void setSettings( const WorkPackageSettings &settings );
 
 signals:
     void modified( bool );
@@ -135,6 +146,8 @@ protected:
     QList<DocumentChild*> m_childdocs;
 
     bool m_modified;
+
+    WorkPackageSettings m_settings;
 };
 
 //-----------------------------
@@ -152,6 +165,19 @@ private:
     bool m_mine;
 };
 
+//-----------------------------
+class ModifyPackageSettingsCmd : public NamedCommand
+{
+public:
+    ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const QString& name = QString() );
+
+    void execute();
+    void unexecute();
+
+private:
+    WorkPackage *m_wp;
+    WorkPackageSettings m_value, m_oldvalue;
+};
 
 }  //KPlatoWork namespace
 

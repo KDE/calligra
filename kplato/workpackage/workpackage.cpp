@@ -20,13 +20,12 @@
 #include "workpackage.h"
 
 #include "part.h"
-
 #include "kptglobal.h"
 #include "kptnode.h"
 #include "kptproject.h"
-#include "kpttask.h"
 #include "kptdocuments.h"
 #include "kptcommand.h"
+#include "kptxmlloaderobject.h"
 
 #include <KoStore.h>
 #include <KoXmlReader.h>
@@ -44,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kmimetype.h>
+#include <KDateTime>
 
 #include <QDomDocument>
 
@@ -53,6 +53,13 @@ using namespace KPlato;
 
 namespace KPlatoWork
 {
+
+WorkPackage::WorkPackage( bool fromProjectStore )
+    : m_project( new Project() ),
+    m_fromProjectStore( fromProjectStore ),
+    m_modified( false)
+{
+}
 
 WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
     : m_project( project ),
@@ -72,6 +79,14 @@ WorkPackage::~WorkPackage()
 {
     delete m_project;
     qDeleteAll( m_childdocs );
+}
+
+void WorkPackage::setSettings( const WorkPackageSettings &settings )
+{
+    if ( m_settings != settings ) {
+        m_settings = settings;
+        setModified( true );
+    }
 }
 
 //TODO find a way to know when changes are undone
@@ -141,6 +156,64 @@ DocumentChild *WorkPackage::findChild( const Document *doc ) const
         }
     }
     return 0;
+}
+
+bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status )
+{
+    bool ok = false;
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        qDebug()<<"loadXML:"<<e.tagName();
+        if ( e.tagName() == "project" ) {
+            status.setProject( m_project );
+            qDebug()<<"loadXML:"<<"loading new project";
+            if ( ! ( ok = m_project->load( e, status ) ) ) {
+                status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
+                KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
+            }
+        }
+    }
+    if ( ok ) {
+        KoXmlNode n = element.firstChild();
+        for ( ; ! n.isNull(); n = n.nextSibling() ) {
+            if ( ! n.isElement() ) {
+                continue;
+            }
+            KoXmlElement e = n.toElement();
+            qDebug()<<"loadXML:"<<e.tagName();
+            if ( e.tagName() == "workpackage" ) {
+                Task *t = static_cast<Task*>( m_project->childNode( 0 ) );
+                t->workPackage().setOwnerName( e.attribute( "owner" ) );
+                t->workPackage().setOwnerId( e.attribute( "owner-id" ) );
+
+                Resource *r = m_project->findResource( t->workPackage().ownerId() );
+                if ( r == 0 ) {
+                    qDebug()<<"loadXML:"<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
+                }
+                qDebug()<<"loadXML:"<<"is this me?"<<t->workPackage().ownerName();
+                KoXmlNode ch = e.firstChild();
+                for ( ; ! ch.isNull(); ch = ch.nextSibling() ) {
+                    if ( ! ch.isElement() ) {
+                        continue;
+                    }
+                    KoXmlElement el = ch.toElement();
+                    qDebug()<<"loadXML:"<<el.tagName();
+                    if ( el.tagName() == "settings" ) {
+                        m_settings.loadXML( el );
+                    }
+                }
+            }
+        }
+    }
+    if ( ! m_project->scheduleManagers().isEmpty() ) {
+        // should be only one manager
+        m_project->setCurrentSchedule( m_project->scheduleManagers().first()->id() );
+    }
+    return ok;
 }
 
 bool WorkPackage::saveToStream( QIODevice * dev )
@@ -288,6 +361,13 @@ Node *WorkPackage::node() const
     return m_project == 0 ? 0 : m_project->childNode( 0 );
 }
 
+Task *WorkPackage::task() const
+{
+    Task *task = qobject_cast<Task*>( node() );
+    Q_ASSERT( task );
+    return task;
+}
+
 bool WorkPackage::copyFile( KoStore *from, KoStore *to, const QString &filename )
 {
     QByteArray data;
@@ -319,22 +399,23 @@ QDomDocument WorkPackage::saveXML()
     document.appendChild( doc );
 
     // Work package info
+    QDomElement wp = document.createElement( "workpackage" );
+    wp.setAttribute( "time-tag", KDateTime::currentLocalDateTime().toString( KDateTime::ISODate ) );
+    m_settings.saveXML( wp );
     Task *t = qobject_cast<Task*>( node() );
     if ( t ) {
-        QDomElement wp = document.createElement( "workpackage" );
         wp.setAttribute( "owner", t->workPackage().ownerName() );
         wp.setAttribute( "owner-id", t->workPackage().ownerId() );
-        doc.appendChild( wp );
     }
+    doc.appendChild( wp );
     m_project->save( doc );
     return document;
 }
 
-void WorkPackage::merge( Part *part, const Project *project )
+void WorkPackage::merge( Part *part, const WorkPackage *wp )
 {
     kDebug();
-
-    const Node *from = project->childNode( 0 );
+    const Node *from = wp->node();
     Node *to = node();
 
     MacroCommand *m = new MacroCommand( "Merge data" );
@@ -485,6 +566,23 @@ void PackageRemoveCmd::unexecute()
 {
     m_part->addWorkPackage( m_value );
     m_mine = false;
+}
+
+//---------------------
+ModifyPackageSettingsCmd::ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const QString& name )
+    : NamedCommand( name ),
+    m_wp( wp ),
+    m_value( value ),
+    m_oldvalue( wp->settings() )
+{
+}
+void ModifyPackageSettingsCmd::execute()
+{
+    m_wp->setSettings( m_value );
+}
+void ModifyPackageSettingsCmd::unexecute()
+{
+    m_wp->setSettings( m_oldvalue );
 }
 
 

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KPlatoWork::PackageSettings</class>
+ <widget class="QWidget" name="KPlatoWork::PackageSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>306</width>
+    <height>217</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="text">
+      <string>Package data:
+These settings indicates to the receiver of the package which information is relevant.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ui_usedEffort">
+     <property name="toolTip">
+      <string>The effort you have used on this task.</string>
+     </property>
+     <property name="text">
+      <string>Used effort</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ui_progress">
+     <property name="toolTip">
+      <string>Progress includes started / start time, finished / finish time and completion</string>
+     </property>
+     <property name="text">
+      <string>Progress</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ui_remainingEffort">
+     <property name="toolTip">
+      <string>Estimate of the remaining effort</string>
+     </property>
+     <property name="text">
+      <string>Remaining effort</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ui_documents">
+     <property name="toolTip">
+      <string>The documents attached to this task</string>
+     </property>
+     <property name="text">
+      <string>Documents</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

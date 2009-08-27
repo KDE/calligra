@@ -20,6 +20,8 @@
 #ifndef TASKUSEDEFFORTEDITOR_H
 #define TASKUSEDEFFORTEDITOR_H
 
+#include "kplatoui_export.h"
+
 #include <QWidget>
 #include <QTableView>
 
@@ -33,7 +35,7 @@ class Completion;
 class Resource;
 class Project;
 
-class UsedEffortItemModel : public QAbstractItemModel
+class KPLATOUI_EXPORT UsedEffortItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
@@ -75,7 +77,7 @@ private:
     QMap<QString, const Resource*> m_editlist;
 };
 
-class UsedEffortEditor : public QTableView
+class KPLATOUI_EXPORT UsedEffortEditor : public QTableView
 {
     Q_OBJECT
 public:
@@ -96,7 +98,7 @@ private:
 };
 
 //--------------------------------------------
-class CompletionEntryItemModel : public QAbstractItemModel
+class KPLATOUI_EXPORT CompletionEntryItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
@@ -158,7 +160,7 @@ private:
     Qt::ItemFlags m_flags[5];
 };
 
-class CompletionEntryEditor : public QTableView
+class KPLATOUI_EXPORT CompletionEntryEditor : public QTableView
 {
     Q_OBJECT
 public:

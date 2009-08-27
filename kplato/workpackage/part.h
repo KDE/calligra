@@ -144,8 +144,6 @@ public:
 
     int docType( const Document *doc ) const;
     
-    bool setWorkPackage( Project *project );
-
     bool loadWorkPackages();
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
@@ -227,6 +225,9 @@ signals:
     void captionChanged( const QString&, bool );
 
 protected:
+    /// Adds work packe @p wp to the list of workpackages.
+    /// If it already exists, the user is asked if it shall be merged with the existing one.
+    bool setWorkPackage( WorkPackage *wp );
     bool completeLoading( KoStore *store );
 
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
@@ -240,8 +241,6 @@ private:
     //Config m_config;
     
     QMap<QString, WorkPackage*> m_packageMap;
-    QList<WorkPackage*> m_deletedPackages;
-    WorkPackage *m_currentWorkPackage;
 
     bool m_modified;
     bool m_loadingFromProjectStore;

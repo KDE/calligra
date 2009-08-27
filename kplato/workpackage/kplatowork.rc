@@ -10,8 +10,9 @@
     </MenuBar>
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
-        <Action name="edit_sendpackage"/>
         <Action name="task_description"/>
+        <Action name="edit_sendpackage"/>
+        <Action name="edit_packagesettings"/>
         <Action name="package_remove_current"/>
     </Menu>
     <Menu name="editdocument_popup">
