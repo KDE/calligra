@@ -93,11 +93,13 @@ void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *mana
     if ( m_flat ) {
         m_managerlist << const_cast<ScheduleManager*>( manager );
         endInsertRows();
+        emit scheduleManagerAdded( const_cast<ScheduleManager*>( manager ) );
         return;
     }
     Q_ASSERT( manager->parentManager() == m_manager );
     endInsertRows();
     m_manager = 0;
+    emit scheduleManagerAdded( const_cast<ScheduleManager*>( manager ) );
 }
 
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )

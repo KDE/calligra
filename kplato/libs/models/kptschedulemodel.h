@@ -97,6 +97,9 @@ public:
     
     void setFlat( bool flat );
 
+signals:
+    void scheduleManagerAdded( ScheduleManager* );
+
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
     void slotScheduleChanged( MainSchedule *sch );

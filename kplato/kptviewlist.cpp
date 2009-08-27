@@ -295,7 +295,8 @@ ViewListItem *ViewListTreeWidget::category( const KoView *view ) const
 ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXmlGuiWindow *parent )
     : QWidget( parent ),
     m_part( part ),
-    m_prev( 0 )
+    m_prev( 0 ),
+    m_temp( 0 )
 {
     setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
@@ -323,6 +324,8 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
     setupContextMenus();
 
     connect( m_currentSchedule, SIGNAL( activated( int ) ), SLOT( slotCurrentScheduleChanged( int ) ) );
+
+    connect( &m_model, SIGNAL( scheduleManagerAdded( ScheduleManager* ) ), SLOT( slotScheduleManagerAdded( ScheduleManager* ) ) );
 }
 
 ViewListWidget::~ViewListWidget()
@@ -724,13 +727,22 @@ void ViewListWidget::setSelectedSchedule( ScheduleManager *sm )
 {
     kDebug()<<sm<<m_model.index( sm );
     QModelIndex idx = m_sfModel.mapFromSource( m_model.index( sm ) );
-    if ( sm ) {
-        Q_ASSERT( idx.isValid() );
+    if ( sm && ! idx.isValid()) {
+        m_temp = sm;
+        return;
     }
     m_currentSchedule->setCurrentIndex( idx.row() );
     kDebug()<<sm<<idx;
+    m_temp = 0;
 }
 
+void ViewListWidget::slotScheduleManagerAdded( ScheduleManager *sm )
+{
+    if ( m_temp && m_temp == sm ) {
+        setSelectedSchedule( sm );
+        m_temp = 0;
+    }
+}
 
 }  //KPlato namespace
 

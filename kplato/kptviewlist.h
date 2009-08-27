@@ -171,6 +171,7 @@ protected slots:
     void slotConfigureItem();
 
     void slotCurrentScheduleChanged( int );
+    void slotScheduleManagerAdded( ScheduleManager* );
 
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
@@ -190,6 +191,8 @@ private:
     QList<QAction*> m_viewactions;
 
     ViewListItem *m_prev;
+
+    ScheduleManager *m_temp;
 };
 
 } //Kplato namespace

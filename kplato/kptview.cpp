@@ -1546,7 +1546,7 @@ void View::slotConfigure()
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "task_defaults" );
-    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "workpackage" );
+    dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();

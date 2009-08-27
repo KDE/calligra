@@ -18,6 +18,8 @@
 */
 #include "aboutpage.h"
 
+#include "kptproject.h"
+
 #include <QtCore/QTextCodec>
 #include <QApplication>
 #include <QtCore/QDir>
@@ -181,8 +183,21 @@ QString KPlatoAboutPage::tutorial1()
     return tutorial(
         i18n("Create the simplest project ever."),
         i18n( 
-            "Create a task in the task editor <em>Editors->Tasks</em>"
-        ),
+            "Select the task editor <em>Editors->Tasks</em>:"
+            "<ul>"
+            "<li>Create a task by selecting <em>Add Task</em> in the toolbar.</li>"
+            "<li>Set <em>Estimate Type</em> to <em>Duration</em>.</li>"
+            "<li>Set <em>Estimate</em> to <em>8 hours</em>.</li>"
+            "<li>Set <em>Constraint</em> to <em>As Soon As Possible</em>.</li>"
+            "</ul>"
+
+            "Select the schedules editor <em>Editors->Schedules</em>:"
+            "<ul>"
+            "<li>Create a schedule by selecting <em>Add Schedule</em> in the toolbar.</li>"
+            "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
+            "</ul>"
+            "You should now have task scheduled to start at %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>"
+        , KGlobal::locale()->formatDateTime( m_project->startTime() ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
     );
