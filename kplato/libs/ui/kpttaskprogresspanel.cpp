@@ -241,14 +241,9 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
     removeEntryBtn->setEnabled( false );
 
-    QButtonGroup *bg = new QButtonGroup( this );
-    bg->addButton( optionCompleted, Completion::EnterCompleted );
-    bg->addButton( optionEffort, Completion::EnterEffortPerTask );
-    bg->addButton( optionResource, Completion::EnterEffortPerResource );
-    
-    bg->button( m_completion.entrymode() )->toggle();
-    connect( bg, SIGNAL( buttonClicked( int ) ), SLOT( optionChanged( int ) ) );
-    connect( bg, SIGNAL( buttonClicked( int ) ), SLOT( slotChanged() ) );
+    editmode->setCurrentIndex( m_original.entrymode() - 1 );
+    connect( editmode, SIGNAL( currentIndexChanged( int ) ), SLOT( slotEditmodeChanged( int ) ) );
+    connect( editmode, SIGNAL( activated( int ) ), SLOT( slotChanged() ) );
     
     connect(resourceTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
     connect(resourceTable, SIGNAL(resourceAdded() ), SLOT( slotChanged() ) );
@@ -276,9 +271,9 @@ void TaskProgressPanelImpl::slotChanged() {
     emit changed();
 }
 
-void TaskProgressPanelImpl::optionChanged( int id )
+void TaskProgressPanelImpl::slotEditmodeChanged( int idx )
 {
-    m_completion.setEntrymode( static_cast<Completion::Entrymode>( id ) );
+    m_completion.setEntrymode( static_cast<Completion::Entrymode>( idx + 1 ) );
     entryTable->model()->slotDataChanged();
     enableWidgets();
 }

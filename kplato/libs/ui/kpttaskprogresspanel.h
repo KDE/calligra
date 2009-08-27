@@ -51,7 +51,7 @@ signals:
     
 public slots:
     void slotChanged();
-    void optionChanged( int id );
+    void slotEditmodeChanged( int idx );
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
