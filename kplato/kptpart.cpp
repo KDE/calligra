@@ -31,6 +31,7 @@
 #include "kptbuiltinschedulerplugin.h"
 #include "kptcommand.h"
 #include "kplatosettings.h"
+#include "kpttask.h"
 
 //#include "KDGanttViewTaskLink.h"
 
