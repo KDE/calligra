@@ -46,7 +46,7 @@
 
 #include <KoPageLayout.h>
 #include <KoFilterChain.h>
-#include <KoPictureKey.h>
+#include <kopicture/KoPictureKey.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>

@@ -46,8 +46,8 @@
 #include <kzip.h>
 
 #include <KoPageLayout.h>
-#include <KoPictureKey.h>
-#include <KoPicture.h>
+#include <kopicture/KoPictureKey.h>
+#include <kopicture/KoPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>

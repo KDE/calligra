@@ -44,7 +44,7 @@
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include <KoPicture.h>
+#include <kopicture/KoPicture.h>
 #include "conversion.h"
 
 typedef KGenericFactory<OoWriterImport> OoWriterImportFactory;
