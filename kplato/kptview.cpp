@@ -2220,8 +2220,8 @@ void View::slotViewListItemRemoved( ViewListItem *item )
 {
     m_tab->removeWidget( item->view() );
     if ( item->type() == ViewListItem::ItemType_SubView ) {
+        qDebug()<<"slotViewListItemRemoved:"<<item<<item->text(0);
         delete item->view();
-        delete item;
     }
 }
 
@@ -2277,12 +2277,7 @@ void View::slotCurrentChanged( int )
 {
     qDebug()<<"slotCurrentChanged:"<<m_tab->currentIndex();
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
-    if ( item == 0 ) {
-        m_viewlist->setSelected( 0 );
-        return;
-    }
-    kDebug()<<item->text(0);
-    item->setSelected( true );
+    m_viewlist->setCurrentItem( item );
 }
 
 void View::updateView( QWidget * )

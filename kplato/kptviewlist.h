@@ -125,6 +125,7 @@ public:
 
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *currentItem() const;
+    void setCurrentItem( QTreeWidgetItem *item );
     ViewListItem *currentCategory() const;
     KoView *findView( const QString &tag ) const;
     ViewListItem *findItem( const QString &tag ) const;
@@ -189,6 +190,7 @@ private:
     ViewListItem *m_contextitem;
     QList<QAction*> m_categoryactions;
     QList<QAction*> m_viewactions;
+    QList<QAction*> m_listactions;
 
     ViewListItem *m_prev;
 

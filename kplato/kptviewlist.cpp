@@ -348,7 +348,7 @@ void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
-    qDebug()<<"slotActivated:"<<item<<prev;
+    qDebug()<<"slotActivated:"<<item<<prev<<m_prev;
     if ( m_prev ) {
         m_prev->setData( 0, Qt::BackgroundRole, QVariant() );
     }
@@ -430,6 +430,13 @@ void ViewListWidget::setSelected( QTreeWidgetItem *item )
             m_prev->setData( 0, Qt::BackgroundRole, QVariant() );
         }
     }
+    m_viewlist->setCurrentItem( item );
+    //kDebug()<<item<<","<<m_viewlist->currentItem();
+}
+
+void ViewListWidget::setCurrentItem( QTreeWidgetItem *item )
+{
+    qDebug()<<"setCurrentItem:"<<item<<","<<m_viewlist->currentItem();
     m_viewlist->setCurrentItem( item );
     //kDebug()<<item<<","<<m_viewlist->currentItem();
 }
@@ -520,7 +527,10 @@ void ViewListWidget::slotAddView()
 
 void ViewListWidget::slotRemoveCategory()
 {
-    if ( m_contextitem && m_contextitem->type() != ViewListItem::ItemType_Category ) {
+    if ( m_contextitem == 0 ) {
+        return;
+    }
+    if ( m_contextitem->type() != ViewListItem::ItemType_Category ) {
         return;
     }
     kDebug()<<m_contextitem<<":"<<m_contextitem->type();
@@ -537,8 +547,8 @@ void ViewListWidget::slotRemoveCategory()
 void ViewListWidget::slotRemoveView()
 {
     if ( m_contextitem ) {
-        kDebug()<<m_contextitem<<":"<<m_contextitem->type();
         takeViewListItem( m_contextitem );
+        delete m_contextitem;
     }
 }
 
@@ -612,9 +622,19 @@ void ViewListWidget::addViewListItem( ViewListItem *item, QTreeWidgetItem *paren
 
 int ViewListWidget::takeViewListItem( ViewListItem *item )
 {
+    while ( item->childCount() > 0 ) {
+        takeViewListItem( static_cast<ViewListItem*>( item->child( 0 ) ) );
+    }
+    //qDebug()<<"takeViewListItem:"<<item<<m_prev;
     int pos = removeViewListItem( item );
     if ( pos != -1 ) {
         emit viewListItemRemoved( item );
+        if ( item == m_prev ) {
+            m_prev = 0;
+        }
+        if ( m_prev ) {
+            setCurrentItem( m_prev );
+        }
     }
     return pos;
 }
@@ -651,6 +671,10 @@ void ViewListWidget::setupContextMenus()
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
     m_categoryactions.append( action );
 
+    action = new QAction( KIcon( "list-add" ), i18nc( "@action Insert View", "Insert..." ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
+    m_categoryactions.append( action );
+
     action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_categoryactions.append( action );
@@ -658,6 +682,11 @@ void ViewListWidget::setupContextMenus()
     action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
     m_categoryactions.append( action );
+
+    // list actions
+    action = new QAction( KIcon( "list-add" ), i18nc( "@action Insert View", "Insert..." ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
+    m_listactions.append( action );
 }
 
 void ViewListWidget::renameCategory()
@@ -676,8 +705,9 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
     KMenu menu;
     QList<QAction*> lst;
     m_contextitem = static_cast<ViewListItem*>(m_viewlist->itemAt( event->pos() ) );
-    // first edit stuff
-    if ( m_contextitem != 0 ) {
+    if ( m_contextitem == 0 ) {
+        lst += m_listactions;
+    } else {
         if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
             lst += m_categoryactions;
         } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
@@ -687,11 +717,11 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
                 lst += v->viewlistActionList();
             }
         }
-        if ( ! lst.isEmpty() ) {
-            //menu.addTitle( i18n( "Edit" ) );
-            foreach ( QAction *a, lst ) {
-                menu.addAction( a );
-            }
+    }
+    if ( ! lst.isEmpty() ) {
+        //menu.addTitle( i18n( "Edit" ) );
+        foreach ( QAction *a, lst ) {
+            menu.addAction( a );
         }
     }
     if ( ! menu.actions().isEmpty() ) {

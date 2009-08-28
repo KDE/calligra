@@ -520,9 +520,9 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
 
 void Part::checkForWorkPackages()
 {
-    qDebug()<<"checkForWorkPackages:";
+    //qDebug()<<"checkForWorkPackages:";
     if ( ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
-        qDebug()<<"checkForWorkPackages: idle";
+        //qDebug()<<"checkForWorkPackages: idle";
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;
     }
