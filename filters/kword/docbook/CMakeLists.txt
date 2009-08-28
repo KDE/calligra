@@ -13,13 +13,7 @@ kde4_add_plugin(docbookexport WITH_PREFIX ${docbookexport_PART_SRCS})
 
 
 
-target_link_libraries(
-    docbookexport
-    kwordexportfilters
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(docbookexport kwordexportfilters)
 
 install(TARGETS docbookexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

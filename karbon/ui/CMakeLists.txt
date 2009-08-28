@@ -39,12 +39,8 @@ kde4_add_ui_files(karbonui_SRCS
 
 kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
-target_link_libraries( karbonui ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY}
-                                karboncommon kostore pigmentcms
-                                komain koresources kocolorwidgets
-                                
-                                kotext
-                                flake )
+target_link_libraries(karbonui karboncommon kocolorwidgets koinput kopagelayout kozoomaction kodocumentsectionbox)
+target_link_libraries(karbonui LINK_INTERFACE_LIBRARIES karboncommon)
 
 set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

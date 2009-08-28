@@ -6,7 +6,7 @@ kde4_add_plugin(kodp2odt WITH_PREFIX ${kodp2odt_PART_SRCS})
 
 
 
-target_link_libraries(kodp2odt  ${KDE4_KDECORE_LIBS} komain)
+target_link_libraries(kodp2odt komain)
 
 install(TARGETS kodp2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 

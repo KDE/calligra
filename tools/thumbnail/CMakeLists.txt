@@ -8,7 +8,7 @@ kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
 
-target_link_libraries(clipartthumbnail ${KDE4_KIO_LIBS} komain )
+target_link_libraries(clipartthumbnail kopicture)
 
 install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -21,7 +21,7 @@ kde4_add_plugin(kofficethumbnail ${kofficethumbnail_SRCS})
 
 
 
-target_link_libraries(kofficethumbnail ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain )
+target_link_libraries(kofficethumbnail komain)
 
 install(TARGETS kofficethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 

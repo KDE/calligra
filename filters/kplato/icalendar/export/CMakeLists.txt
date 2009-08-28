@@ -10,18 +10,7 @@ set(icalendarexport_PART_SRCS
 
 kde4_add_plugin(icalendarexport WITH_PREFIX ${icalendarexport_PART_SRCS})
 
-target_link_libraries(
-    icalendarexport
-    kplatoprivate
-    kplatokernel
-    kostore
-    komain
-    ${LIBKCAL_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-)
+target_link_libraries(icalendarexport kplatoprivate kplatokernel komain ${LIBKCAL_LIBRARY})
 
 install(TARGETS icalendarexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

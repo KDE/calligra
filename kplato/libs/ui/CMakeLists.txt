@@ -121,7 +121,7 @@ add_definitions(-DKDGANTT_STATICLIB)
 
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 
-target_link_libraries(kplatoui ${KDE4_KABC_LIBS} komain kostore kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kplatoui ${KDE4_KABC_LIBS} komain kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

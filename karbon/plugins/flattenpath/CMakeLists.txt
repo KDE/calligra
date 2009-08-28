@@ -12,7 +12,7 @@ kde4_add_plugin(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
 
 
 
-target_link_libraries(karbon_flattenpathplugin flake  ${KDE4_KPARTS_LIBS}  karboncommon )
+target_link_libraries(karbon_flattenpathplugin karboncommon)
 
 install(TARGETS karbon_flattenpathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

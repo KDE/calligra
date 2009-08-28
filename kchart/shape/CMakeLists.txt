@@ -44,33 +44,13 @@ kde4_add_ui_files(chartshape_LIB_SRCS
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(
-    chartshapelib
-    kdchart
-    flake
-    komain
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(chartshapelib kdchart komain)
 set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_plugin(chartshape ChartShapeFactory.cpp )
-target_link_libraries(
-    chartshape
-    chartshapelib
-    kdchart
-    flake
-    kostore
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
+target_link_libraries(chartshape chartshapelib kdchart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

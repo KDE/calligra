@@ -101,15 +101,7 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(
-    kpresenterprivate
-    kopageapp
-    kotext
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_PHONON_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(kpresenterprivate kopageapp kopagelayout ${KDE4_PHONON_LIBRARY})
 target_link_libraries(kpresenterprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
@@ -122,7 +114,7 @@ kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kpresenterprivate )
+target_link_libraries(kpresenterpart kpresenterprivate )
 
 install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -139,7 +131,7 @@ if (Q_WS_MAC)
    set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPresenter 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
+target_link_libraries(kdeinit_kpresenter komain )
 
 install(TARGETS kdeinit_kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
 

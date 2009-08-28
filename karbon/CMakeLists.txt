@@ -43,7 +43,7 @@ set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
 kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
 
-target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} karboncommon karbonui )
+target_link_libraries(karbonpart karbonui)
 
 install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -60,11 +60,11 @@ if (Q_WS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_karbon komain ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} karboncommon karbonui )
+target_link_libraries(kdeinit_karbon karbonui)
 
 install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( karbon kdeinit_karbon )
+target_link_libraries(karbon kdeinit_karbon)
 install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ENDIF(SHOULD_BUILD_KARBON)

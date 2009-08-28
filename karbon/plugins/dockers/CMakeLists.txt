@@ -13,7 +13,7 @@ set(karbondockers_SRCS
 
 kde4_add_plugin(karbondockersplugin ${karbondockers_SRCS})
 
-target_link_libraries(karbondockersplugin karboncommon flake koresources kocolorwidgets koresourcewidget karbonui ${KDE4_KDEUI_LIBS} )
+target_link_libraries(karbondockersplugin karboncommon kocolorwidgets koresourcewidget karbonui )
 
 install(TARGETS karbondockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 

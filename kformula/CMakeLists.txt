@@ -23,13 +23,7 @@ set(kformulaprivate_LIB_SRCS
 	
 kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
-target_link_libraries(
-    kformulaprivate
-    kformulalib
-    komain
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    )
+target_link_libraries(kformulaprivate kformulalib)
 
 set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -43,7 +37,7 @@ set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
-target_link_libraries(kformulapart  ${KDE4_KPARTS_LIBS} kformulaprivate)
+target_link_libraries(kformulapart ${KDE4_KPARTS_LIBS} kformulaprivate)
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -55,7 +49,7 @@ kde4_add_app_icon(kformula_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-ap
 
 kde4_add_kdeinit_executable( kformula_bin ${kformula_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kformula_bin  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kformula_bin komain )
 
 install(TARGETS kdeinit_kformula_bin  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

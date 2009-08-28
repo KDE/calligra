@@ -12,15 +12,7 @@ kde4_add_plugin(rtfimport WITH_PREFIX ${rtfimport_PART_SRCS})
 
 
 
-target_link_libraries(
-    rtfimport
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(rtfimport komain)
 
 install(TARGETS rtfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

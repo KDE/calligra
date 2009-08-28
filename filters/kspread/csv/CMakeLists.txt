@@ -8,7 +8,7 @@ set(csvimport_PART_SRCS csvimport.cc)
 
 kde4_add_plugin(csvimport WITH_PREFIX ${csvimport_PART_SRCS})
 
-target_link_libraries(csvimport  ${KDE4_KDEUI_LIBS} kspreadcommon komain ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(csvimport kspreadcommon kocvsimport)
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -20,7 +20,7 @@ kde4_add_ui_files(csvexport_PART_SRCS exportdialogui.ui )
 
 kde4_add_plugin(csvexport WITH_PREFIX ${csvexport_PART_SRCS})
 
-target_link_libraries(csvexport  kspreadcommon komain ${KDE4_KDEUI_LIBS} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(csvexport kspreadcommon)
 
 install(TARGETS csvexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

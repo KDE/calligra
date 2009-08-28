@@ -6,7 +6,7 @@ set(htmlimport_PART_SRCS htmlimport.cpp khtmlreader.cpp kwdwriter.cpp )
 
 kde4_add_plugin(htmlimport WITH_PREFIX ${htmlimport_PART_SRCS})
 
-target_link_libraries(htmlimport  kotext ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS}  ${QT_QT3SUPPORT_LIBRARY} kostore kotext komain)
+target_link_libraries(htmlimport ${KDE4_KHTML_LIBS} komain)
 
 install(TARGETS htmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

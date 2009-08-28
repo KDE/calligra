@@ -13,8 +13,6 @@ target_link_libraries(
     kplatokernel
     kostore
     ${LIBRCPS_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTCORE_LIBRARY}
     )
 
 install( TARGETS kplatorcpsscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )

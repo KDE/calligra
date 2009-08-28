@@ -12,7 +12,7 @@ kde4_add_plugin(karbonmsodimport WITH_PREFIX ${karbonmsodimport_PART_SRCS})
 
 
 
-target_link_libraries(karbonmsodimport  ${KDE4_KDECORE_LIBS} kwmf komain)
+target_link_libraries(karbonmsodimport kwmf komain)
 
 install(TARGETS karbonmsodimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

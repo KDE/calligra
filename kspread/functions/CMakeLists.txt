@@ -52,7 +52,7 @@ install(FILES financial.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
 ########### next target ###############
 
 kde4_add_plugin(kspreadinformationmodule information.cpp)
-target_link_libraries(kspreadinformationmodule kspreadcommon ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kspreadinformationmodule kspreadcommon)
 install(TARGETS kspreadinformationmodule DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kspreadinformationmodule.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES information.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
@@ -76,7 +76,7 @@ install(FILES math.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
 ########### next target ###############
 
 kde4_add_plugin(kspreadreferencemodule reference.cpp)
-target_link_libraries(kspreadreferencemodule kspreadcommon ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kspreadreferencemodule kspreadcommon)
 install(TARGETS kspreadreferencemodule DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kspreadreferencemodule.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES reference.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
@@ -92,7 +92,7 @@ install(FILES statistical.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
 ########### next target ###############
 
 kde4_add_plugin(kspreadtextmodule text.cpp)
-target_link_libraries(kspreadtextmodule kspreadcommon ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kspreadtextmodule kspreadcommon)
 install(TARGETS kspreadtextmodule DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kspreadtextmodule.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES text.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
@@ -100,7 +100,7 @@ install(FILES text.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
 ########### next target ###############
 
 kde4_add_plugin(kspreadtrigonometrymodule trig.cpp)
-target_link_libraries(kspreadtrigonometrymodule kspreadcommon ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kspreadtrigonometrymodule kspreadcommon)
 install(TARGETS kspreadtrigonometrymodule DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kspreadtrigonometrymodule.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES trig.xml DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)

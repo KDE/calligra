@@ -39,11 +39,6 @@ target_link_libraries(
     kplatoprivate
 
     komain
-    kostore
-    koodf
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
@@ -76,10 +71,6 @@ target_link_libraries(
     kplatoworkfactory
     kplatokernel
     komain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${QT_QTCORE_LIBRARY} 
     ${QT_QT3SUPPORT_LIBRARY}   
     )
 

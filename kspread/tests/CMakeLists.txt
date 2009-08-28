@@ -137,7 +137,7 @@ target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
 kde4_add_executable(BenchmarkPointStorage TEST ${BenchmarkPointStorage_SRCS})
-target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

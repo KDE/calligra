@@ -10,7 +10,7 @@ kde4_add_plugin(opencalcimport WITH_PREFIX ${opencalcimport_PART_SRCS})
 
 
 
-target_link_libraries(opencalcimport  ${KDE4_KIO_LIBS}  ${KDE4_KDEUI_LIBS} kspreadcommon komain ${QT_QTGUI_LIBRARY} kostore koodf ${QT_QT3SUPPORT_LIBRARY}  )
+target_link_libraries(opencalcimport kspreadcommon kopagelayout)
 
 install(TARGETS opencalcimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -23,7 +23,7 @@ kde4_add_plugin(opencalcexport WITH_PREFIX ${opencalcexport_PART_SRCS})
 
 
 
-target_link_libraries(opencalcexport ${KDE4_KIO_LIBS} komain ${QT_QTGUI_LIBRARY} kostore koodf ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} kspreadcommon  )
+target_link_libraries(opencalcexport kspreadcommon)
 
 install(TARGETS opencalcexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

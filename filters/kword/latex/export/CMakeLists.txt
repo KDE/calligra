@@ -37,7 +37,7 @@ kde4_add_plugin(kwordlatexexport WITH_PREFIX ${kwordlatexexport_PART_SRCS})
 
 
 
-target_link_libraries(kwordlatexexport  ${KDE4_KIO_LIBS} komain kformulalib ${IMAGEMAGICK_LIBRARIES} )
+target_link_libraries(kwordlatexexport komain kformulalib ${IMAGEMAGICK_LIBRARIES} )
 
 install(TARGETS kwordlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

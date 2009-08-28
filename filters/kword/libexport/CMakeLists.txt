@@ -16,16 +16,8 @@ set(kwordexportfilters_LIB_SRCS
 
 kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 
-target_link_libraries(
-    kwordexportfilters
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY} 
-    )
+target_link_libraries(kwordexportfilters komain)
+target_link_libraries(kwordexportfilters LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kwordexportfilters PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kwordexportfilters  ${INSTALL_TARGETS_DEFAULT_ARGS})

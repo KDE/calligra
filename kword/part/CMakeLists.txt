@@ -77,8 +77,14 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} komain)
-target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES komain ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kwordprivate komain
+    kopagelayout
+    koinput
+    kozoomaction
+    koaspectbutton
+    koaction
+)
+target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kwordprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

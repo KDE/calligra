@@ -12,14 +12,7 @@ kde4_add_plugin(wpexport WITH_PREFIX ${wpexport_PART_SRCS})
 
 
 
-target_link_libraries(
-    wpexport
-    kwordexportfilters
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(wpexport kwordexportfilters)
 
 install(TARGETS wpexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

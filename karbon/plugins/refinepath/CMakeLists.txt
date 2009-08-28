@@ -7,7 +7,7 @@ set(karbon_refinepathplugin_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineComma
 
 kde4_add_plugin(karbon_refinepathplugin ${karbon_refinepathplugin_PART_SRCS})
 
-target_link_libraries(karbon_refinepathplugin flake ${KDE4_KPARTS_LIBS} karboncommon )
+target_link_libraries(karbon_refinepathplugin karboncommon)
 
 install(TARGETS karbon_refinepathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

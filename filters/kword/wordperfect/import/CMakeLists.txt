@@ -12,13 +12,7 @@ kde4_add_plugin(wpimport WITH_PREFIX ${wpimport_PART_SRCS})
 
 
 
-target_link_libraries(
-    wpimport
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
-    ${WPD_LIBRARIES}
-    )
+target_link_libraries(wpimport komain ${WPD_LIBRARIES})
 
 install(TARGETS wpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

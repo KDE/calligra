@@ -16,7 +16,7 @@ kde4_add_plugin(qproimport WITH_PREFIX ${qproimport_PART_SRCS})
 
 
 
-target_link_libraries(qproimport komain ${QT_QT3SUPPORT_LIBRARY}  ${KDE4_KDEUI_LIBS} kspreadcommon )
+target_link_libraries(qproimport kspreadcommon)
 
 install(TARGETS qproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

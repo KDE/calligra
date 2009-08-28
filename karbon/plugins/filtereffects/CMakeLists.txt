@@ -15,16 +15,7 @@ set(karbonfiltereffects_PART_SRCS
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
 
-target_link_libraries(
-    karbonfiltereffects
-    flake
-    komain
-    kostore
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    )
+target_link_libraries(karbonfiltereffects flake)
 
 install(TARGETS karbonfiltereffects  DESTINATION ${PLUGIN_INSTALL_DIR})
 

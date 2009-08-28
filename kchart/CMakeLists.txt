@@ -41,13 +41,13 @@ kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
 target_link_libraries(kchartcommon
-	kochart
-	kdchart
-	chartshapelib
+    kochart
+    kdchart
+    chartshapelib
     komain
-    kostore
-    flake
-    ${KDE4_KPARTS_LIBS}
+    kozoomaction
+    kocvsimport
+    koopenpane
     )
 
 set_target_properties(kchartcommon

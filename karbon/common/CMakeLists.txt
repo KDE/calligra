@@ -11,7 +11,8 @@ set(karboncommon_LIB_SRCS
 
 kde4_add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
 
-target_link_libraries( karboncommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTXML_LIBRARY} ${KDE4_KDECORE_LIBS} flake kostore komain kotext )
+target_link_libraries(karboncommon komain kopagelayout)
+target_link_libraries(karboncommon LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

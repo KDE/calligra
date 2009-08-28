@@ -78,7 +78,7 @@ kde4_add_kcfg_files(kplatosettings_SRCS kplatosettings.kcfgc)
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} ${kplatosettings_SRCS} )
 
-target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui  ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} komain )
+target_link_libraries(kplatoprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui koopenpane ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -109,11 +109,11 @@ if (Q_WS_MAC)
    set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kplato komain  ${KDE4_KDEUI_LIBS})
+target_link_libraries(kdeinit_kplato komain)
 
 install(TARGETS kdeinit_kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( kplato kdeinit_kplato ${KDE4_KDEUI_LIBS} komain kostore )
+target_link_libraries(kplato kdeinit_kplato komain)
 install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

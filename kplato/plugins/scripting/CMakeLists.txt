@@ -37,7 +37,6 @@ target_link_libraries(
     kplatokernel
     kplatomodels
     komain
-    ${KDE4_KPARTS_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
     )
 install(TARGETS krossmodulekplato DESTINATION ${PLUGIN_INSTALL_DIR})

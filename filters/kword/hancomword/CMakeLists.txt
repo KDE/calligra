@@ -13,13 +13,7 @@ kde4_add_plugin(hancomwordimport WITH_PREFIX ${hancomwordimport_PART_SRCS})
 
 
 
-target_link_libraries(
-    hancomwordimport
-    kostore
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(hancomwordimport komain)
 
 install(TARGETS hancomwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -218,11 +218,13 @@ SET (kspreadcommon_LIB_SRCS
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
-	${QT_QTSQL_LIBRARY}
-	${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KPARTS_LIBS}
-    komain	
-	kutils 
-	${KDE4_KDE3SUPPORT_LIBS} )
+    komain koinput kocvsimport kopagelayout kozoomaction kocharacterselectiondialog
+    koopenpane
+    ${QT_QTSQL_LIBRARY}
+    ${KDE4_KNOTIFYCONFIG_LIBS}
+    kutils
+    ${KDE4_KDE3SUPPORT_LIBS}
+)
 
 target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES komain ${QT_QT3SUPPORT_LIBRARY} )
 
@@ -240,7 +242,7 @@ kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
 
 
-target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kspreadcommon )
+target_link_libraries(kspreadpart kspreadcommon )
 
 install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -259,7 +261,7 @@ if (Q_WS_MAC)
    set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KSpread 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kspread komain )
 
 install(TARGETS kdeinit_kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

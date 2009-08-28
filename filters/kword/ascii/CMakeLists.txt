@@ -13,7 +13,7 @@ kde4_add_ui3_files(asciiimport_PART_SRCS ImportDialogUI.ui )
 
 kde4_add_plugin(asciiimport WITH_PREFIX ${asciiimport_PART_SRCS})
 
-target_link_libraries(asciiimport ${QT_QT3SUPPORT_LIBRARY}  ${KDE4_KDEUI_LIBS} kotext komain kwordexportfilters)
+target_link_libraries(asciiimport ${QT_QT3SUPPORT_LIBRARY}  kwordexportfilters)
 
 install(TARGETS asciiimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(asciiexport WITH_PREFIX ${asciiexport_PART_SRCS})
 
 
 
-target_link_libraries(asciiexport  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} kotext komain kwordexportfilters)
+target_link_libraries(asciiexport ${QT_QT3SUPPORT_LIBRARY} kwordexportfilters)
 
 install(TARGETS asciiexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

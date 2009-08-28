@@ -19,16 +19,7 @@ kde4_add_plugin(kchartsvgexport WITH_PREFIX ${kchartsvgexport_PART_SRCS})
 
 
 
-target_link_libraries(
-    kchartsvgexport
-    kchartcommon
-    kostore
-    komain
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+target_link_libraries(kchartsvgexport kchartcommon komain ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS kchartsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

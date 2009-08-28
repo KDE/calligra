@@ -11,7 +11,7 @@ set(kivioprivate_LIB_SRCS
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
-target_link_libraries(kivioprivate ${QT_QT3SUPPORT_LIBRARY} kopageapp ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kivioprivate kopageapp)
 target_link_libraries(kivioprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kivioprivate PROPERTIES
@@ -24,7 +24,7 @@ set(kiviopart_PART_SRCS KivioFactoryInit.cpp )
 
 kde4_add_plugin(kiviopart WITH_PREFIX ${kiviopart_PART_SRCS})
 
-target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kivioprivate ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kiviopart kivioprivate)
 
 install(TARGETS kiviopart DESTINATION ${PLUGIN_INSTALL_DIR})
 

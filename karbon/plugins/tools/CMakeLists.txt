@@ -46,7 +46,7 @@ kde4_add_ui_files(karbon_tools_PART_SRCS
 
 kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
 
-target_link_libraries(karbontools koresources pigmentcms flake koresourcewidget ${KDE4_KPARTS_LIBS}  karboncommon karbonui )
+target_link_libraries(karbontools koresources karboncommon karbonui koresourcewidget)
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
