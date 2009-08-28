@@ -41,6 +41,20 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
 
+2009-08-28
+Table View
+* record navigator: (hopefully) improved and simplified the geometry 
+* record navigator: use standard icons
+
+2009-08-26
+Table View
+* if context menu event has no position defined, only handle it if the type is keyboard
+** (this fixes a problem with popups showing when right clicking on any outer area of the table view)
+
+2009-08-23
+Widgets
+* fix appearance of the number field of the record navigator
+
 2009-08-22
 Main
 * Fix delayed show of actions on the "create" toolbar
