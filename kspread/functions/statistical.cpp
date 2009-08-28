@@ -1474,7 +1474,7 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
        }
   }
 
-  uint cols_X, cols_Y; // coloumns in X and Y-Matrix 
+  uint cols_X, cols_Y; // columns in X and Y-Matrix 
   uint rows_X, rows_Y; // rows     in X and Y-Matrix
   int M, N;
 

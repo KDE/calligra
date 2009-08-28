@@ -37,7 +37,7 @@ class KWORD_TEST_EXPORT KWPageInsertCommand : public QUndoCommand
 {
 public:
     /**
-     * The constuctor for a command to insert a new page.
+     * The constructor for a command to insert a new page.
      * @param document the document that gets a new page.
      * @param afterPageNum we will insert a new page after the page indicated with pagenumber afterPageNum
      * @param parent the parent for command macros

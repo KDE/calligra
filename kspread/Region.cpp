@@ -1111,7 +1111,7 @@ Region::Point::Point(const QString& string)
     //search for the first character != text
     int result = string.indexOf( QRegExp("[^A-Za-z]+"), p );
 
-    //get the colomn number for the character between actual position and the first non text charakter
+    //get the column number for the character between actual position and the first non text charakter
     if ( result != -1 )
         x = Util::decodeColumnLabelText( string.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return

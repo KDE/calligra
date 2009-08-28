@@ -289,7 +289,7 @@ long double numToDouble (Number n) { return n.asFloat (); }
 Number operator+ (long double n1, const Number &n2) { return n2 + n1; }
 Number operator- (long double n1, const Number &n2) { return (n2 - n1).neg(); }
 Number operator* (long double n1, const Number &n2) { return n2 * n1; }
-Number operator/ (long double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimise perhaps */ }
+Number operator/ (long double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimize perhaps */ }
 bool operator<= (long double n1, const Number &n2) { return (n2 >= n1); }
 bool operator< (long double n1, const Number &n2) { return (n2 > n1); }
 bool operator== (long double n1, const Number &n2) { return (n2 == n1); }

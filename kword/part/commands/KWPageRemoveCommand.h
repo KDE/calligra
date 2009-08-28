@@ -34,7 +34,7 @@ class KWORD_TEST_EXPORT KWPageRemoveCommand : public QUndoCommand
 {
 public:
     /**
-     * The constuctor for a command to insert a new page.
+     * The constructor for a command to insert a new page.
      * @param document the document that gets a new page.
      * @param page the page to remove.
      * @param parent the parent for command macros

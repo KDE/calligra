@@ -68,7 +68,7 @@ class KSPREAD_EXPORT Token
     {
       InvalidOp = 0,  ///< invalid operator
       Plus,           ///<  + (addition)
-      Minus,          ///<  - (substraction, negation)
+      Minus,          ///<  - (subtraction, negation)
       Asterisk,       ///<  * (multiplication)
       Slash,          ///<  / (division)
       Caret,          ///<  ^ (power)

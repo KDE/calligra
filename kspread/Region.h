@@ -260,7 +260,7 @@ public:
 
   /**
    * Substracts the region @p region from this region.
-   * @param region the region to substract
+   * @param region the region to subtract
    */
   void sub(const Region& region);
 

@@ -59,7 +59,7 @@ public:
     /**
      * copy constructor
      *
-     * \p ps the orignal that will be copied
+     * \p ps the original that will be copied
      */
     KWPageStyle(const KWPageStyle &ps);
     KWPageStyle &operator=(const KWPageStyle &ps);

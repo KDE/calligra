@@ -2539,7 +2539,7 @@ void UndoCellPaste::undo()
     QRect rect = m_region.boundingRect();
     if (m_iInsertTo == -1 && numCols == 0 && numRows == 0)
     {
-        // substract already removed columns
+        // subtract already removed columns
         rect.setWidth(rect.width());
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( sheet );
@@ -2551,7 +2551,7 @@ void UndoCellPaste::undo()
     }
     else if (m_iInsertTo == 1 && numCols == 0 && numRows == 0)
     {
-        // substract already removed rows
+        // subtract already removed rows
         rect.setHeight(rect.height());
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( sheet );

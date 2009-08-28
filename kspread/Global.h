@@ -123,7 +123,7 @@ namespace Paste
     OverWrite /** Overwrite */,
     Add /** Add */,
     Mul /** Multiply */,
-    Sub /** Substract */,
+    Sub /** Subtract */,
     Div /** Divide */
   };
 } // namespace Paste
