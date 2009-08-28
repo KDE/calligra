@@ -31,7 +31,7 @@
 #include <QFontInfo>
 #include <QTextStream>
 
-#include <KoPicture.h>
+#include <kopicture/KoPicture.h>
 #include <KoFilterManager.h>
 
 
