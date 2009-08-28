@@ -288,7 +288,7 @@ public:
     void setProject( Project *p ) { m_project = p; }
     
     QList<QGraphicsItem*> itemList( int type ) const;
-    void clear();
+    void clearScene();
     
     qreal horizontalGap() const { return 40.0; }
     qreal verticalGap() const { return 6.0; }

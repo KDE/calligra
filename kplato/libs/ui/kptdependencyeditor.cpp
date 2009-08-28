@@ -887,6 +887,7 @@ DependencyScene::DependencyScene( QWidget *parent )
 DependencyScene::~DependencyScene()
 {
     //kDebug()<<" DELETED";
+    clearScene();
 }
 
 void DependencyScene::setFromItem( DependencyConnectorItem *item )
@@ -992,11 +993,11 @@ QList<QGraphicsItem*> DependencyScene::itemList( int type ) const
     return lst;
 }
 
-void DependencyScene::clear()
+void DependencyScene::clearScene()
 {
     QList<QGraphicsItem*> its, deps;
     foreach ( QGraphicsItem *i, items() ) {
-        if ( i->type() == DependencyNodeItem::Type ) {
+        if ( i->type() == DependencyNodeItem::Type && i->parentItem() == 0 ) {
             its << i;
         } else if ( i->type() == DependencyLinkItem::Type ) {
             deps << i;
@@ -1688,7 +1689,7 @@ void DependencyView::setItemExpanded( int , bool )
 
 void DependencyView::createItems()
 {
-    itemScene()->clear();
+    itemScene()->clearScene();
     if ( m_project == 0 ) {
         return;
     }
