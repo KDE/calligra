@@ -1497,7 +1497,7 @@ DependencyView::DependencyView( QWidget *parent )
     : QGraphicsView( parent ),
     m_project( 0 )
 {
-    setItemScene( new DependencyScene() );
+    setItemScene( new DependencyScene( this ) );
     setAlignment( Qt::AlignLeft | Qt::AlignTop );
     
     connect( scene(), SIGNAL( selectionChanged() ), this, SLOT( slotSelectionChanged() ) );

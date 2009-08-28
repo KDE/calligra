@@ -399,7 +399,7 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     m_datePicker->dateTable()->setWeekNumbersEnabled( true );
     m_datePicker->dateTable()->setGridEnabled( true );
     m_datePicker->dateTable()->setSelectionMode( KDateTable::ExtendedSelection );
-    m_datePicker->dateTable()->setDateDelegate( new DateTableDateDelegate() );
+    m_datePicker->dateTable()->setDateDelegate( new DateTableDateDelegate( m_datePicker->dateTable() ) );
     m_datePicker->dateTable()->setModel( m_model );
     m_datePicker->dateTable()->setPopupMenuEnabled( true );
 

@@ -221,7 +221,7 @@ class KPLATOMODELS_EXPORT DateTableDateDelegate : public KDateTableDateDelegate
 {
     Q_OBJECT
 public:
-    DateTableDateDelegate();
+    DateTableDateDelegate( QObject *parent = 0 );
     ~DateTableDateDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );

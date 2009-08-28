@@ -109,7 +109,8 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
         << ScheduleModel::ScheduleDistribution
         << ScheduleModel::SchedulePlannedStart
         << ScheduleModel::SchedulePlannedFinish
-        << ScheduleModel::ScheduleScheduler;
+        //<< ScheduleModel::ScheduleScheduler
+        ;
 
     QList<int> lst;
     for ( int c = 0; c < model()->columnCount(); ++c ) {

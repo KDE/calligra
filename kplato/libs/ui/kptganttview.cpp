@@ -329,7 +329,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
         }
     }
 
-    setConstraintModel( new KDGantt::ConstraintModel() );
+    setConstraintModel( new KDGantt::ConstraintModel( this ) );
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
 
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format

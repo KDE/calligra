@@ -70,7 +70,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    TaskStatusItemModel *m = new TaskStatusItemModel();
+    TaskStatusItemModel *m = new TaskStatusItemModel( this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );

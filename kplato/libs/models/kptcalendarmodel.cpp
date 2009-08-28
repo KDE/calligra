@@ -991,8 +991,8 @@ QVariant DateTableDataModel::weekNumberData( int week, int role ) const
 }
 
 //-------------
-DateTableDateDelegate::DateTableDateDelegate()
-    : KDateTableDateDelegate()
+DateTableDateDelegate::DateTableDateDelegate( QObject *parent )
+    : KDateTableDateDelegate( parent )
 {
 }
 

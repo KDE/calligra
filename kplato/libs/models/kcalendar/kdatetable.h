@@ -347,7 +347,7 @@ class KPLATOMODELS_EXPORT KDateTableDateDelegate : public QObject
 {
     Q_OBJECT
 public:
-    KDateTableDateDelegate();
+    KDateTableDateDelegate( QObject *parent = 0 );
     ~KDateTableDateDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
@@ -359,7 +359,7 @@ class KPLATOMODELS_EXPORT KDateTableCustomDateDelegate : public KDateTableDateDe
 {
     Q_OBJECT
 public:
-    KDateTableCustomDateDelegate();
+    KDateTableCustomDateDelegate(  QObject *parent = 0 );
     ~KDateTableCustomDateDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
@@ -376,7 +376,7 @@ class KPLATOMODELS_EXPORT KDateTableWeekDayDelegate : public QObject
 {
     Q_OBJECT
 public:
-    KDateTableWeekDayDelegate();
+    KDateTableWeekDayDelegate( QObject *parent = 0 );
     ~KDateTableWeekDayDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionHeader &option, int weekday,  KDateTableDataModel *model );
@@ -388,7 +388,7 @@ class KPLATOMODELS_EXPORT KDateTableWeekNumberDelegate : public QObject
 {
     Q_OBJECT
 public:
-    KDateTableWeekNumberDelegate();
+    KDateTableWeekNumberDelegate( QObject *parent = 0 );
     ~KDateTableWeekNumberDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionHeader &option, int week,  KDateTableDataModel *model );

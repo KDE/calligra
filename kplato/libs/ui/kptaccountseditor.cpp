@@ -53,7 +53,7 @@ AccountTreeView::AccountTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new AccountItemModel() );
+    setModel( new AccountItemModel( this ) );
     setSelectionModel( new QItemSelectionModel( model() ) );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );

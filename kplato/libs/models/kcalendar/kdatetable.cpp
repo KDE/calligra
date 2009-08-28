@@ -346,9 +346,9 @@ KDateTable::~KDateTable()
 
 void KDateTable::init()
 {
-    d->m_dateDelegate = new KDateTableDateDelegate();
-    d->m_weekDayDelegate = new KDateTableWeekDayDelegate();
-    d->m_weekNumberDelegate = new KDateTableWeekNumberDelegate();
+    d->m_dateDelegate = new KDateTableDateDelegate( this );
+    d->m_weekDayDelegate = new KDateTableWeekDayDelegate( this );
+    d->m_weekNumberDelegate = new KDateTableWeekNumberDelegate( this );
     
     d->m_styleOptionDate.initFrom( this );
     d->m_styleOptionDate.displayAlignment = Qt::AlignCenter;
@@ -1274,7 +1274,8 @@ QVariant KDateTableDataModel::weekNumberData( int week, int role ) const
 }
 
 //-------------
-KDateTableDateDelegate::KDateTableDateDelegate()
+KDateTableDateDelegate::KDateTableDateDelegate( QObject *parent )
+    : QObject( parent )
 {
 }
 
@@ -1368,8 +1369,8 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
 
 //---------
 
-KDateTableCustomDateDelegate::KDateTableCustomDateDelegate()
-    : KDateTableDateDelegate()
+KDateTableCustomDateDelegate::KDateTableCustomDateDelegate( QObject *parent )
+    : KDateTableDateDelegate( parent )
 {
 }
 
@@ -1461,7 +1462,8 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
 }
 
 //---------
-KDateTableWeekDayDelegate::KDateTableWeekDayDelegate()
+KDateTableWeekDayDelegate::KDateTableWeekDayDelegate( QObject *parent )
+    : QObject( parent )
 {
 }
 
@@ -1517,7 +1519,8 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
 }
 
 //---------
-KDateTableWeekNumberDelegate::KDateTableWeekNumberDelegate()
+KDateTableWeekNumberDelegate::KDateTableWeekNumberDelegate( QObject *parent )
+    : QObject( parent )
 {
 }
 

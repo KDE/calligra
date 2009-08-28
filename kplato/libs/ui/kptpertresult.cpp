@@ -92,7 +92,7 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------";
     widget.setupUi(this);
-    PertResultItemModel *m = new PertResultItemModel();
+    PertResultItemModel *m = new PertResultItemModel( widget.treeWidgetTaskResult );
     widget.treeWidgetTaskResult->setModel( m );
     widget.treeWidgetTaskResult->setStretchLastSection( false );
     widget.treeWidgetTaskResult->setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -308,7 +308,7 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     widget.probabilityFrame->setVisible( false );
 
     widget.cpmTable->setStretchLastSection ( false );
-    CriticalPathItemModel *m = new CriticalPathItemModel();
+    CriticalPathItemModel *m = new CriticalPathItemModel( widget.cpmTable );
     widget.cpmTable->setModel( m );
     
     setupGui();
