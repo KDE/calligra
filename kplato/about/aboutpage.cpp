@@ -182,7 +182,7 @@ QString KPlatoAboutPage::tutorial1()
 {
     return tutorial(
         i18n("Create the simplest project ever."),
-        i18n( 
+        i18nc( "1=datetime",
             "Select the task editor <em>Editors->Tasks</em>:"
             "<ul>"
             "<li>Create a task by selecting <em>Add Task</em> in the toolbar.</li>"
@@ -196,8 +196,8 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Create a schedule by selecting <em>Add Schedule</em> in the toolbar.</li>"
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
-            "You should now have task scheduled to start at %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>"
-        , KGlobal::locale()->formatDateTime( m_project->startTime() ) ),
+            "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>."
+        , KGlobal::locale()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
     );
@@ -205,11 +205,23 @@ QString KPlatoAboutPage::tutorial1()
 
 QString KPlatoAboutPage::tutorial2()
 {
+    KDateTime dt = m_project->startTime();
+    if ( m_project->defaultCalendar() ) {
+        dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->endTime() );
+    }
     return tutorial(
         i18n("Allocate a resource to the task."),
-        i18n( 
-            "Create a resource in the resource editor <em>Editors->Resources</em>"
-        ),
+        i18nc( "1=datetime",
+            "Select the task editor <em>Editors->Tasks</em>:"
+            "<ul>"
+            "<li>Enter a name (e.g. 'John') in the <em>Allocation</em> column."
+            " (KPlato will automatically create a resource with name 'John' under resource group 'Resources'.</li>"
+            "<li>Set <em>Estimate Type</em> to <em>Effort</em>.</li>"
+            "</ul>"
+            "Now you need to schedule the project again with the new allocation:"
+            "<br>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
+            "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>.<p>"
+        , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",
         i18n( "Next: Introduction" )
     );
