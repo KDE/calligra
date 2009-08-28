@@ -8,7 +8,7 @@ kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
 
-target_link_libraries(clipartthumbnail kopicture)
+target_link_libraries(clipartthumbnail koodf)
 
 install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 

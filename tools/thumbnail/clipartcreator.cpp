@@ -25,7 +25,8 @@
 #include <QPainter>
 #include <QPixmap>
 
-#include <KoPicture.h>
+// using deprecated class that lives in koodf
+#include <kopicture/KoPicture.h>
 
 extern "C"
 {
