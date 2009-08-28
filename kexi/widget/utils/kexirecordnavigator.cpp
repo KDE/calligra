@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@
 #include <KIconLoader>
 #include <KLineEdit>
 #include <KGuiItem>
-#include <KDialog>
+#include <KDebug>
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
@@ -62,7 +62,8 @@ public:
     QToolButton *navBtnNew;
     KLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
-    QLabel *navRecordCount; //!< readonly counter
+    KLineEdit *navRecordCount; //!< readonly counter
+//    QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
     Q3ScrollView *view;
 
@@ -92,18 +93,16 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     if (parentView)
         setParentView(parentView);
     d->lyr = new QHBoxLayout(this);
-    const bool winStyle = style()->objectName().toLower() == "windows"; // used to fix appearance of the number field
-    d->lyr->setContentsMargins(0, winStyle ? 1 : 0, 0, 0);
+//    const bool winStyle = style()->objectName().toLower() == "windows"; // used to fix appearance of the number field
+    d->lyr->setContentsMargins(0, /*winStyle ? 1 :*/ 0, 0, 0);
     d->lyr->setSpacing(2);
 
     d->textLabel = new QLabel(this);
     d->lyr->addWidget(d->textLabel);
     setLabelText(i18n("Row:"));
 
-    int bw = 6 + SmallIcon("navigator_first").width(); //qMin( horizontalScrollBar()->height(), 20);
-    QFont f = font();
-    f.setPixelSize((bw > 12) ? 12 : bw);
-    QFontMetrics fm(f);
+    setFont( KexiUtils::smallFont() );
+    QFontMetrics fm(font());
     d->nav1DigitWidth = fm.width("8");
 
     d->navBtnFirst = createAction(KexiRecordNavigator::Actions::moveToFirstRecord());
@@ -113,16 +112,16 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     d->lyr->addSpacing(2);
 
     d->navRecordNumber = new KLineEdit(this);
-    d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignTop);
+    d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignVCenter);
     KexiUtils::WidgetMargins margins;
-    margins.top = winStyle ? 1 : 0;
-    margins.bottom = winStyle ? 1 : 0;
+//    margins.top = winStyle ? 1 : 0;
+//    margins.bottom = winStyle ? 1 : 0;
     margins.copyToWidget(d->navRecordNumber);
-    d->navRecordNumber->setFrame(false);
-    d->navRecordNumber->setFixedHeight(fm.height() + 2);
-    d->navRecordNumber->setAlignment(Qt::AlignRight | (winStyle ? Qt::AlignBottom : Qt::AlignVCenter));
+    d->navRecordNumber->setFrame(false); 
+    kDebug() << parentView->horizontalScrollBar()->height();
+    d->navRecordNumber->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
+    d->navRecordNumber->setAlignment(Qt::AlignRight | (/*winStyle ? Qt::AlignBottom :*/ Qt::AlignVCenter));
     d->navRecordNumber->setFocusPolicy(Qt::ClickFocus);
-    d->navRecordNumber->installEventFilter(this);
     d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
     d->navRecordNumber->setValidator(d->navRecordNumberValidator);
     d->navRecordNumber->installEventFilter(this);
@@ -132,18 +131,22 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
     lbl_of->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     lbl_of->setFixedWidth(fm.width(lbl_of->text()) + d->nav1DigitWidth);
     lbl_of->setAlignment(Qt::AlignCenter);
-    d->lyr->addWidget(lbl_of);
+    d->lyr->addWidget(lbl_of, 0, Qt::AlignVCenter);
 
-    d->lyr->addWidget(d->navRecordCount = new QLabel(this));
-    d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    d->navRecordCount = new KLineEdit(this);
+    d->lyr->addWidget(d->navRecordCount, 0, Qt::AlignVCenter);
+//    d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    d->navRecordCount->setFrame(false);
+    d->navRecordCount->setReadOnly(true);
+    QPalette navRecordCountPalette(d->navRecordCount->palette());
+//    navRecordCountPalette.setBrush( QPalette::Base, navRecordCountPalette.brush(QPalette::Window) );
+    navRecordCountPalette.setBrush( QPalette::Base, QBrush(Qt::transparent) );
+    d->navRecordCount->setPalette(navRecordCountPalette);
+    d->navRecordCount->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
     d->navRecordCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    d->navRecordCount->setFocusPolicy(Qt::NoFocus);
     d->navRecordCount->setToolTip(i18n("Number of rows"));
-
-    lbl_of->setFont(f);
-    d->navRecordNumber->setFont(f);
-    d->navRecordCount->setFont(f);
-    setFont(f);
 
     d->navBtnNext = createAction(KexiRecordNavigator::Actions::moveToNextRecord());
     d->navBtnNext->setAutoRepeat(true);
@@ -177,7 +180,7 @@ KexiRecordNavigator::~KexiRecordNavigator()
 QToolButton* KexiRecordNavigator::createAction(const KGuiItem& item)
 {
     QToolButton *toolButton;
-    d->lyr->addWidget(toolButton = new KexiSmallToolButton(item.icon(), QString(), this));
+    d->lyr->addWidget(toolButton = new KexiSmallToolButton(item.icon(), QString(), this), 0, Qt::AlignVCenter);
     toolButton->setFocusPolicy(Qt::NoFocus);
     toolButton->setToolTip(item.toolTip());
     toolButton->setWhatsThis(item.whatsThis());
@@ -229,7 +232,9 @@ bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
             if (static_cast<QFocusEvent*>(e)->reason() != Qt::TabFocusReason
                     && static_cast<QFocusEvent*>(e)->reason() != Qt::BacktabFocusReason
                     && static_cast<QFocusEvent*>(e)->reason() != Qt::OtherFocusReason)
+            {
                 recordEntered = true;
+            }
             ret = false;
         }
 
@@ -501,11 +506,11 @@ class KexiRecordNavigatorActionsInternal
 {
 public:
     KexiRecordNavigatorActionsInternal()
-            : moveToFirstRecord(i18n("First row"), "navigator_first", i18n("Go to first row"))
-            , moveToPreviousRecord(i18n("Previous row"), "navigator_prev", i18n("Go to previous row"))
-            , moveToNextRecord(i18n("Next row"), "navigator_next", i18n("Go to next row"))
-            , moveToLastRecord(i18n("Last row"), "navigator_last", i18n("Go to last row"))
-            , moveToNewRecord(i18n("New row"), "navigator_new", i18n("Go to new row")) {
+            : moveToFirstRecord(i18n("First row"), "go-first-view", i18n("Go to first row"))
+            , moveToPreviousRecord(i18n("Previous row"), "go-previous-view", i18n("Go to previous row"))
+            , moveToNextRecord(i18n("Next row"), "go-next-view", i18n("Go to next row"))
+            , moveToLastRecord(i18n("Last row"), "go-last-view", i18n("Go to last row"))
+            , moveToNewRecord(i18n("New row"), "list-add", i18n("Go to new row")) {
         moveToFirstRecord.setWhatsThis(i18n("Moves cursor to first row."));
         moveToPreviousRecord.setWhatsThis(i18n("Moves cursor to previous row."));
         moveToNextRecord.setWhatsThis(i18n("Moves cursor to next row."));
