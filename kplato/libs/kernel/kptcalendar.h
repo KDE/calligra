@@ -454,7 +454,7 @@ public:
     KTimeZone timeZone() const { return m_spec.timeZone(); }
     void setTimeZone( const KTimeZone &tz );
     
-    void setDefault( bool on ) { m_default = on; }
+    void setDefault( bool on );
     bool isDefault() const { return m_default; }
     
 signals:

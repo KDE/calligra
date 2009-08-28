@@ -677,6 +677,14 @@ void Calendar::setTimeZone( const KTimeZone &tz )
     }
 }
 
+void Calendar::setDefault( bool on )
+{
+    m_default = on;
+    if ( m_project ) {
+        m_project->changed( this );
+    }
+}
+
 // Note: only project should do this
 void Calendar::setId(const QString& id) {
     //kDebug()<<id;

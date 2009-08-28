@@ -162,6 +162,9 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
     flags |= Qt::ItemIsDragEnabled;
     if ( calendar ( index ) ) {
         switch ( index.column() ) {
+            case 0:/*Name*/
+                flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
+                break;
             case 1: 
                 if ( parent( index ).isValid() ) {
                     flags &= ~Qt::ItemIsEditable;
@@ -262,12 +265,17 @@ QVariant CalendarItemModel::name( const Calendar *a, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
             return a->name();
-            break;
+        case Qt::ToolTipRole:
+            if ( a->isDefault() ) {
+                return i18nc( "1=calendar name", "%1 (Default calendar)", a->name() );
+            }
+            return a->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::CheckStateRole:
+            return a->isDefault() ? Qt::Checked : Qt::Unchecked;
     }
     return QVariant();
 }
@@ -278,8 +286,27 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
                 emit executeCommand( new CalendarModifyNameCmd( a, value.toString(), i18n( "Modify Calendar Name" ) ) );
+                return true;
             }
-            return true;
+            break;
+        case Qt::CheckStateRole: {
+            switch ( value.toInt() ) {
+                case Qt::Unchecked:
+                    if ( a->isDefault() ) {
+                        emit executeCommand( new ProjectModifyDefaultCalendarCmd( m_project, 0, i18n( "De-select as default calendar" ) ) );
+                        return true;
+                    }
+                    break;
+                case Qt::Checked:
+                    if ( ! a->isDefault() ) {
+                        emit executeCommand( new ProjectModifyDefaultCalendarCmd( m_project, a, i18n( "Select as default calendar" ) ) );
+                        return true;
+                    }
+                    break;
+                default: break;
+            }
+        }
+        default: break;
     }
     return false;
 }
@@ -368,7 +395,8 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags( index ) &( Qt::ItemIsEditable | Qt::CheckStateRole ) ) == 0 ) {
+        Q_ASSERT( true );
         return false;
     }
     Calendar *a = calendar( index );
