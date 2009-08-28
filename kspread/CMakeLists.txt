@@ -159,6 +159,7 @@ SET (ui_DIR_SRCS
 	ui/PasteStrategy.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
+	ui/CharSelectDia.cpp
 	)
 
 SET (kspreadcommon_LIB_SRCS
@@ -218,7 +219,7 @@ SET (kspreadcommon_LIB_SRCS
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
-    komain koinput kocvsimport kopagelayout kozoomaction kocharacterselectiondialog
+    komain koinput kocvsimport kopagelayout kozoomaction
     koopenpane
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}

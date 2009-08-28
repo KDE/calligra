@@ -2613,7 +2613,7 @@ void CellToolBase::insertSpecialChar()
     QChar c = ' ';
 
     if (d->specialCharDialog == 0) {
-        d->specialCharDialog = new KoCharSelectDia(m_canvas->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
+        d->specialCharDialog = new CharSelectDia(m_canvas->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
         connect(d->specialCharDialog, SIGNAL(insertChar(QChar, const QString&)),
                 this, SLOT(specialChar(QChar, const QString&)));
         connect(d->specialCharDialog, SIGNAL(finished()),

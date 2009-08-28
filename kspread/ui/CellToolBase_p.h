@@ -32,12 +32,10 @@
 // KSpread
 #include "CellToolBase.h"
 #include "Editors.h"
+#include "CharSelectDia.h"
 
 // dialogs
 #include "dialogs/FindDialog.h"
-
-// KOffice
-#include <KoCharSelectDia.h>
 
 // KDE
 
@@ -63,7 +61,7 @@ public:
     // Inline editor
     CellEditor* cellEditor;
     // Insert special character dialog
-    KoCharSelectDia* specialCharDialog;
+    CharSelectDia* specialCharDialog;
     // Option widget elements
     QGridLayout *widgetLayout;
     ExternalEditor *userInput;
