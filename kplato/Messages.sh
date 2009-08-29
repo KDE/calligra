@@ -1,3 +1,3 @@
 #! /bin/sh
-$XGETTEXT *.cpp kptaboutdata.h -o $podir/kplato.pot
+$XGETTEXT *.cpp about/*.cpp kptaboutdata.h -o $podir/kplato.pot
 
