@@ -47,7 +47,6 @@ target_link_libraries(kchartcommon
     komain
     kozoomaction
     kocvsimport
-    koopenpane
     )
 
 set_target_properties(kchartcommon

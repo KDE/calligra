@@ -220,7 +220,6 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
     komain koinput kocvsimport kopagelayout kozoomaction
-    koopenpane
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     kutils
