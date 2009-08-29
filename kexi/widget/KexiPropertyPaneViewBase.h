@@ -41,7 +41,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyPaneViewBase : public QWidget
 {
     Q_OBJECT
 public:
-    KexiPropertyPaneViewBase(QWidget* parent);
+    KexiPropertyPaneViewBase(QWidget* parent = 0);
     virtual ~KexiPropertyPaneViewBase();
 
     KexiObjectInfoLabel *infoLabel() const;

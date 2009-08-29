@@ -41,10 +41,16 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
 
+2009-08-29
+Main Window
+* improved saving/restoring of sizes and areas for project navigator and property editor
+
 2009-08-28
 Table View
 * record navigator: (hopefully) improved and simplified the geometry 
 * record navigator: use standard icons
+Main Window
+* remove hardcoded minimum width of the project navigator and re-add saving of the main window state
 
 2009-08-26
 Table View

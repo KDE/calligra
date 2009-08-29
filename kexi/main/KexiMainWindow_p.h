@@ -918,6 +918,7 @@ public:
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;
     KexiDockWidget *propEditorDockWidget;
+    KexiDockableWidget* propEditorDockableWidget;
     //! poits to kexi part which has been previously used to setup proppanel's tabs using
     //! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
     QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;

@@ -98,6 +98,7 @@
 #include <widget/kexibrowser.h>
 #include <widget/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
+#include <widget/utils/KexiDockableWidget.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -289,6 +290,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 
     win->show();
     app->processEvents();//allow refresh our app
+    win->restoreSettings();
 
 //#ifdef KEXI_DEBUG_GUI
 // delete debugWindow;
@@ -367,7 +369,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 // d->topDockWidget = new KexiTopDockWidget(this);
 // addDockWidget(Qt::TopDockWidgetArea, d->topDockWidget, Qt::Horizontal);
 
-    restoreSettings();
+//moved    restoreSettings();
     (void)KexiUtils::smallFont(this/*init*/);
 
     if (!d->userMode) {
@@ -443,7 +445,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 # include "KexiMainWindow_ctor.h"
 #endif
 
-// setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/true);
+//    d->mainWidget->setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/false);
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -1476,23 +1478,30 @@ void KexiMainWindow::invalidateViewModeActions()
 
 tristate KexiMainWindow::startup()
 {
+    tristate result = true;
     switch (Kexi::startupHandler().action()) {
     case KexiStartupHandler::CreateBlankProject:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
-        return createBlankProject();
+        result = createBlankProject();
+        break;
     case KexiStartupHandler::CreateFromTemplate:
-        return createProjectFromTemplate(*Kexi::startupHandler().projectData());
+        result = createProjectFromTemplate(*Kexi::startupHandler().projectData());
+        break;
     case KexiStartupHandler::OpenProject:
-        return openProject(*Kexi::startupHandler().projectData());
+        result = openProject(*Kexi::startupHandler().projectData());
+        break;
     case KexiStartupHandler::ImportProject:
-        return showProjectMigrationWizard(
+        result = showProjectMigrationWizard(
                    Kexi::startupHandler().importActionData().mimeType,
                    Kexi::startupHandler().importActionData().fileName
                );
-    default:;
+        break;
+    default:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
     }
-    return true;
+    
+    //    d->mainWidget->setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/false);
+    return result;
 }
 
 static QString internalReason(KexiDB::Object *obj)
@@ -1943,6 +1952,36 @@ void KexiMainWindow::setupMainWidget()
     vlyr->addWidget(d->statusBar);
 }
 
+static Qt::DockWidgetArea loadDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea defaultArea)
+{
+        const QString areaName = group.readEntry(configEntry).toLower();
+        if (areaName == "left")
+            return Qt::LeftDockWidgetArea;
+        else if (areaName == "right")
+            return Qt::RightDockWidgetArea;
+        else if (areaName == "top")
+            return Qt::TopDockWidgetArea;
+        else if (areaName == "bottom")
+            return Qt::BottomDockWidgetArea;
+        return defaultArea;
+}
+
+static void saveDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea area)
+{
+    QString areaName;
+    switch (area) {
+    case Qt::LeftDockWidgetArea: areaName = "left"; break;
+    case Qt::RightDockWidgetArea: areaName = "right"; break;
+    case Qt::TopDockWidgetArea: areaName = "top"; break;
+    case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
+    default: areaName = "left"; break;
+    }
+    if (areaName.isEmpty())
+        group.deleteEntry(configEntry);
+    else
+        group.writeEntry(configEntry, areaName);
+}
+
 void KexiMainWindow::setupProjectNavigator()
 {
     if (!d->isProjectNavigatorVisible)
@@ -1951,26 +1990,28 @@ void KexiMainWindow::setupProjectNavigator()
     if (!d->nav) {
         d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
         d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
-        d->navDockWidget->setMinimumWidth(300);
+//        d->navDockWidget->setMinimumWidth(300);
         KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
-        Qt::DockWidgetArea area = Qt::LeftDockWidgetArea;
-        const QString areaName = mainWindowGroup.readEntry("PropertyEditorArea").toLower();
-        if (areaName == "right")
-            area = Qt::RightDockWidgetArea;
-        else if (areaName == "top")
-            area = Qt::TopDockWidgetArea;
-        else if (areaName == "bottom")
-            area = Qt::BottomDockWidgetArea;
-
         d->mainWidget->addDockWidget(
-            area, d->navDockWidget,
-            static_cast<Qt::Orientation>(mainWindowGroup.readEntry("PropertyEditorOrientation", (int)Qt::Vertical))
+            loadDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", Qt::LeftDockWidgetArea),
+            d->navDockWidget
+//            static_cast<Qt::Orientation>(mainWindowGroup.readEntry("PropertyEditorOrientation", (int)Qt::Vertical))
         );
 
-        d->nav = new KexiBrowser(d->navDockWidget);
+        KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
+        d->nav = new KexiBrowser(navDockableWidget);
+        navDockableWidget->setWidget(d->nav);
 //TODO REMOVE?  d->nav->installEventFilter(this);
         d->navDockWidget->setWindowTitle(d->nav->windowTitle());
-        d->navDockWidget->setWidget(d->nav);
+        d->navDockWidget->setWidget(navDockableWidget);
+
+    const bool showProjectNavigator = mainWindowGroup.readEntry("ShowProjectNavigator", true);
+    if (d->nav) {
+        const QSize projectNavigatorSize = mainWindowGroup.readEntry<QSize>("ProjectNavigatorSize", QSize());
+        if (!projectNavigatorSize.isNull()) {
+            navDockableWidget->setSizeHint(projectNavigatorSize);
+        }
+    }
 
 #ifdef __GNUC__
 #warning TODO d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
@@ -2055,15 +2096,27 @@ void KexiMainWindow::slotLastActions()
 void KexiMainWindow::setupPropertyEditor()
 {
     if (!d->propEditor) {
+        KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
 //TODO: FIX LAYOUT PROBLEMS
         d->propEditorDockWidget = new KexiDockWidget(i18n("Property Editor"), d->mainWidget);
         d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
-        d->mainWidget->addDockWidget(Qt::RightDockWidgetArea, d->propEditorDockWidget, Qt::Vertical);
-        QWidget *propEditorDockWidgetContents = new QWidget(d->propEditorDockWidget);
-        d->propEditorDockWidget->setWidget(propEditorDockWidgetContents);
+        d->mainWidget->addDockWidget(
+            loadDockAreaSetting(mainWindowGroup, "PropertyEditorArea", Qt::RightDockWidgetArea),
+            d->propEditorDockWidget,
+            Qt::Vertical
+        );
+
+        d->propEditorDockableWidget = new KexiDockableWidget(d->propEditorDockWidget);
+        d->propEditorDockWidget->setWidget(d->propEditorDockableWidget);
+        const QSize propertyEditorSize = mainWindowGroup.readEntry<QSize>("PropertyEditorSize", QSize());
+        if (!propertyEditorSize.isNull()) {
+            d->propEditorDockableWidget->setSizeHint(propertyEditorSize);
+        }
+
+        QWidget *propEditorDockWidgetContents = new QWidget(d->propEditorDockableWidget);
+        d->propEditorDockableWidget->setWidget(propEditorDockWidgetContents);
         QVBoxLayout *propEditorDockWidgetContentsLyr = new QVBoxLayout(propEditorDockWidgetContents);
-        propEditorDockWidgetContentsLyr->setContentsMargins(KDialog::marginHint() / 2, KDialog::marginHint() / 2,
-                KDialog::marginHint() / 2, KDialog::marginHint() / 2);
+        KexiUtils::setMargins(propEditorDockWidgetContentsLyr, KDialog::marginHint() / 2);
 
         d->propEditorTabWidget = new KTabWidget(propEditorDockWidgetContents);
         propEditorDockWidgetContentsLyr->addWidget(d->propEditorTabWidget);
@@ -2267,7 +2320,7 @@ KexiMainWindow::restoreSettings()
         setGeometry(geometry);
     else if (maximize)
         setWindowState(windowState() | Qt::WindowMaximized);
-    return;
+//    return;
 
     // Saved settings
 #ifdef __GNUC__
@@ -2289,39 +2342,12 @@ KexiMainWindow::restoreSettings()
     }
 #endif
 
-//2.0: int mdimode = d->config->readEntry("MDIMode", -1);
-
-    const bool showProjectNavigator = mainWindowGroup.readEntry("ShowProjectNavigator", true);
-
-    /*2.0 switch(mdimode)
-      {
-        case KMdi::ChildframeMode:
-          switchToChildframeMode(false);
-          m_pTaskBar->switchOn(true);
-
-          // restore a possible maximized Childframe mode,
-          // will be used in KexiMainWindow::addWindow()
-          d->maximizeFirstOpenedChildFrm = d->config->readBoolEntry("maximized childframes", true);
-          setEnableMaximizedChildFrmMode(d->maximizeFirstOpenedChildFrm);
-
-          if (!showProjectNavigator) {
-            //it's visible by default but we want to hide it on navigator creation
-            d->forceHideProjectNavigatorOnCreation = true;
-          }
-
-          break;
-
-    #define DEFAULT_MDI_MODE KMdi::IDEAlMode
-
-        case DEFAULT_MDI_MODE:
-        default:*/
-//2.0: unused   switchToIDEAlMode(false);
+#if 0
     if (showProjectNavigator) {
         //it's invisible by default but we want to show it on navigator creation
         d->forceShowProjectNavigatorOnCreation = true;
     }
-//2.0:   break;
-//2.0: }
+#endif
 }
 
 void
@@ -2339,22 +2365,16 @@ KexiMainWindow::storeSettings()
         mainWindowGroup.writeEntry("Geometry", geometry());
     }
 
-    QString areaName;
-    switch (d->mainWidget->dockWidgetArea(d->navDockWidget)) {
-    case Qt::RightDockWidgetArea: areaName = "right"; break;
-    case Qt::TopDockWidgetArea: areaName = "top"; break;
-    case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
-    default: areaName = "left"; break;
-        //left is the default: case Qt::LeftDockWidgetArea: areaName = "left"; break;
-    }
-    if (areaName.isEmpty())
-        mainWindowGroup.deleteEntry("PropertyEditorArea");
-    else
-        mainWindowGroup.writeEntry("PropertyEditorArea", areaName);
+    saveDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", d->mainWidget->dockWidgetArea(d->navDockWidget));
+    saveDockAreaSetting(mainWindowGroup, "PropertyEditorArea", d->mainWidget->dockWidgetArea(d->propEditorDockWidget));
 
 // mainWindowGroup.writeEntry("PropertyEditor", mb->isHidden() ? "Disabled" : "Enabled");
 // d->mainWidget->saveMainWindowSettings( mainWindowGroup );
 // d->mainWidget->saveState();
+
+    mainWindowGroup.writeEntry("ProjectNavigatorSize", d->nav->parentWidget()->size());
+    mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
+
     KGlobal::config()->sync();
     return;
 

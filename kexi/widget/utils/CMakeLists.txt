@@ -14,6 +14,7 @@ set(kexiguiutils_LIB_SRCS
    kexidropdownbutton.cpp
    kexicomboboxdropdownbutton.cpp
    kexidatetimeformatter.cpp
+   KexiDockableWidget.cpp
 )
 
 # todo: use new Qt4's painting engine: kexigradientwidget.cpp 
