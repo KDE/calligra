@@ -28,6 +28,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
 #include <widget/KexiPropertyPaneViewBase.h>
 #include <widget/kexidatasourcecombobox.h>
@@ -99,8 +100,9 @@ public:
 //moved to KexiPropertyPaneViewBase 
 //  KexiObjectInfoLabel *objectInfoLabel;
     QLabel *rowSourceLabel, *boundColumnLabel, *visibleColumnLabel;
-    QToolButton *clearRowSourceButton, *gotoRowSourceButton, *clearBoundColumnButton,
-    *clearVisibleColumnButton;
+//    QToolButton *clearRowSourceButton, *gotoRowSourceButton, *clearBoundColumnButton,
+//    *clearVisibleColumnButton;
+    QToolButton *gotoRowSourceButton;
     //! Used only in assignPropertySet() to check whether we already have the set assigned
     int currentFieldUid;
 
@@ -132,94 +134,97 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 //todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
     //-Row Source
-    QWidget *contents = new QWidget(this);
+/*    QWidget *contents = new QWidget(this);
     layout()->addWidget(contents);
     QVBoxLayout *contentsVlyr = new QVBoxLayout(contents);
     contentsVlyr->setContentsMargins(0,0,0,0);
-    contentsVlyr->setSpacing(2);
+    contentsVlyr->setSpacing(2);*/
 
     QHBoxLayout *hlyr = new QHBoxLayout();
-    hlyr->addStretch();
-    contentsVlyr->addLayout(hlyr);
-    d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
+    mainLayout()->addLayout(hlyr);
+    d->rowSourceLabel = new QLabel(i18n("Row source:"));
     d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 //    d->rowSourceLabel->setMargin(2);
     d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->rowSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(d->rowSourceLabel);
+    hlyr->addStretch();
 
-    d->gotoRowSourceButton = new KexiSmallToolButton(
-        KIcon("go-jump"), QString(), contents);
+    d->gotoRowSourceButton = new KexiSmallToolButton(KIcon("go-jump"), QString());
     d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
     d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
     d->gotoRowSourceButton->setToolTip(i18n("Go to selected row source"));
     hlyr->addWidget(d->gotoRowSourceButton);
     connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
-    d->clearRowSourceButton = new KexiSmallToolButton(
+/*2.0    d->clearRowSourceButton = new KexiSmallToolButton(
         KIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearRowSourceButton->setObjectName("clearRowSourceButton");
     d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
     d->clearRowSourceButton->setToolTip(i18n("Clear row source"));
     hlyr->addWidget(d->clearRowSourceButton);
     connect(d->clearRowSourceButton, SIGNAL(clicked()), this, SLOT(clearRowSourceSelection()));
-
-    d->rowSourceCombo = new KexiDataSourceComboBox(contents);
+*/
+    d->rowSourceCombo = new KexiDataSourceComboBox;
     d->rowSourceCombo->setObjectName("rowSourceCombo");
     d->rowSourceLabel->setBuddy(d->rowSourceCombo);
-    contentsVlyr->addWidget(d->rowSourceCombo);
+    connect(d->rowSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
+        this, SLOT(clearRowSourceSelection()));
+    mainLayout()->addWidget(d->rowSourceCombo);
 
-    contentsVlyr->addSpacing(4);
+    addWidgetSpacer();
+//2.0    contentsVlyr->addSpacing(4);
 
     //- Bound Column
-    hlyr = new QHBoxLayout();
-    contentsVlyr->addLayout(hlyr);
-    d->boundColumnLabel = new QLabel(i18n("Bound column:"), contents);
+    d->boundColumnLabel = new QLabel(i18n("Bound column:"));
     d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 //    d->boundColumnLabel->setMargin(2);
     d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->boundColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-    hlyr->addWidget(d->boundColumnLabel);
+    mainLayout()->addWidget(d->boundColumnLabel);
 
-    d->clearBoundColumnButton = new KexiSmallToolButton(
+/*2.0    d->clearBoundColumnButton = new KexiSmallToolButton(
         KIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearBoundColumnButton->setObjectName("clearBoundColumnButton");
     d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
     d->clearBoundColumnButton->setToolTip(i18n("Clear bound column"));
     hlyr->addWidget(d->clearBoundColumnButton);
     connect(d->clearBoundColumnButton, SIGNAL(clicked()), this, SLOT(clearBoundColumnSelection()));
-
-    d->boundColumnCombo = new KexiFieldComboBox(contents);
+*/
+    d->boundColumnCombo = new KexiFieldComboBox();
     d->boundColumnCombo->setObjectName("boundColumnCombo");
     d->boundColumnLabel->setBuddy(d->boundColumnCombo);
-    contentsVlyr->addWidget(d->boundColumnCombo);
+    connect(d->boundColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
+        this, SLOT(clearBoundColumnSelection()));
+    mainLayout()->addWidget(d->boundColumnCombo);
 
-    contentsVlyr->addSpacing(4);
+    addWidgetSpacer();
+//2.0    contentsVlyr->addSpacing(4);
 
     //- Visible Column
-    hlyr = new QHBoxLayout();
-    contentsVlyr->addLayout(hlyr);
-    d->visibleColumnLabel = new QLabel(i18n("Visible column:"), contents);
+    d->visibleColumnLabel = new QLabel(i18n("Visible column:"));
     d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 //    d->visibleColumnLabel->setMargin(2);
     d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->visibleColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-    hlyr->addWidget(d->visibleColumnLabel);
+    mainLayout()->addWidget(d->visibleColumnLabel);
 
-    d->clearVisibleColumnButton = new KexiSmallToolButton(
+/*2.0    d->clearVisibleColumnButton = new KexiSmallToolButton(
         KIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearVisibleColumnButton->setObjectName("clearVisibleColumnButton");
     d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
     d->clearVisibleColumnButton->setToolTip(i18n("Clear visible column"));
     hlyr->addWidget(d->clearVisibleColumnButton);
     connect(d->clearVisibleColumnButton, SIGNAL(clicked()), this, SLOT(clearVisibleColumnSelection()));
-
-    d->visibleColumnCombo = new KexiFieldComboBox(contents);
+*/
+    d->visibleColumnCombo = new KexiFieldComboBox;
     d->visibleColumnCombo->setObjectName("visibleColumnCombo");
     d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
-    contentsVlyr->addWidget(d->visibleColumnCombo);
+    connect(d->visibleColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
+        this, SLOT(clearVisibleColumnSelection()));
+    mainLayout()->addWidget(d->visibleColumnCombo);
 
-    static_cast<QBoxLayout*>(layout())->addStretch(1);
+    mainLayout()->addStretch(1);
 
     connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotRowSourceTextChanged(const QString &)));
@@ -267,8 +272,8 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
     d->rowSourceCombo->setDataSource(rowSourceType, rowSource);
     d->rowSourceLabel->setEnabled(d->hasPropertySet());
     d->rowSourceCombo->setEnabled(d->hasPropertySet());
-    if (!d->hasPropertySet())
-        d->clearRowSourceButton->setEnabled(false);
+/*2.0    if (!d->hasPropertySet())
+        d->clearRowSourceButton->setEnabled(false);*/
 
     int boundColumn = -1, visibleColumn = -1;
     if (d->rowSourceCombo->isSelectionValid()) {
@@ -286,7 +291,7 @@ void KexiLookupColumnPage::clearBoundColumnSelection()
     d->boundColumnCombo->setEditText("");
     d->boundColumnCombo->setFieldOrExpression(QString());
     slotBoundColumnSelected();
-    d->clearBoundColumnButton->setEnabled(false);
+//2.0    d->clearBoundColumnButton->setEnabled(false);
 }
 
 void KexiLookupColumnPage::slotBoundColumnSelected()
@@ -297,7 +302,7 @@ void KexiLookupColumnPage::slotBoundColumnSelected()
       if (field)
         dataType = field->type();
     */
-    d->clearBoundColumnButton->setEnabled(!d->boundColumnCombo->fieldOrExpression().isEmpty());
+//2.0    d->clearBoundColumnButton->setEnabled(!d->boundColumnCombo->fieldOrExpression().isEmpty());
     if (!d->boundColumnCombo->fieldOrExpression().isEmpty()) {
         kDebug();
     }
@@ -319,14 +324,14 @@ void KexiLookupColumnPage::clearVisibleColumnSelection()
     d->visibleColumnCombo->setEditText("");
     d->visibleColumnCombo->setFieldOrExpression(QString());
     slotVisibleColumnSelected();
-    d->clearVisibleColumnButton->setEnabled(false);
+//2.0    d->clearVisibleColumnButton->setEnabled(false);
 }
 
 void KexiLookupColumnPage::slotVisibleColumnSelected()
 {
 // KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
 //! @todo this should also work for expressions
-    d->clearVisibleColumnButton->setEnabled(!d->visibleColumnCombo->fieldOrExpression().isEmpty());
+//2.0    d->clearVisibleColumnButton->setEnabled(!d->visibleColumnCombo->fieldOrExpression().isEmpty());
 
     // update property set
     if (d->hasPropertySet()) {
@@ -362,7 +367,7 @@ void KexiLookupColumnPage::slotRowSourceChanged()
     }
     clearBoundColumnSelection();
     clearVisibleColumnSelection();
-    d->clearRowSourceButton->setEnabled(rowSourceFound);
+//2.0    d->clearRowSourceButton->setEnabled(rowSourceFound);
     d->gotoRowSourceButton->setEnabled(rowSourceFound);
     /* disabled
       if (dataSourceFound) {
@@ -398,9 +403,9 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
     if (d->insideClearRowSourceSelection)
         return;
     d->insideClearRowSourceSelection = true;
-    if (alsoClearComboBox && !d->rowSourceCombo->selectedName().isEmpty())
+    if (alsoClearComboBox) // && !d->rowSourceCombo->selectedName().isEmpty())
         d->rowSourceCombo->setDataSource("", "");
-    d->clearRowSourceButton->setEnabled(false);
+//2.0    d->clearRowSourceButton->setEnabled(false);
     d->gotoRowSourceButton->setEnabled(false);
     d->insideClearRowSourceSelection = false;
 }
@@ -419,10 +424,10 @@ void KexiLookupColumnPage::updateBoundColumnWidgetsAvailability()
     const bool hasRowSource = d->rowSourceCombo->isSelectionValid();
     d->boundColumnCombo->setEnabled(hasRowSource);
     d->boundColumnLabel->setEnabled(hasRowSource);
-    d->clearBoundColumnButton->setEnabled(hasRowSource && !d->boundColumnCombo->fieldOrExpression().isEmpty());
+//2.0    d->clearBoundColumnButton->setEnabled(hasRowSource && !d->boundColumnCombo->fieldOrExpression().isEmpty());
     d->visibleColumnCombo->setEnabled(hasRowSource);
     d->visibleColumnLabel->setEnabled(hasRowSource);
-    d->clearVisibleColumnButton->setEnabled(hasRowSource && !d->visibleColumnCombo->fieldOrExpression().isEmpty());
+//2.0    d->clearVisibleColumnButton->setEnabled(hasRowSource && !d->visibleColumnCombo->fieldOrExpression().isEmpty());
 }
 
 #include "kexilookupcolumnpage.moc"
