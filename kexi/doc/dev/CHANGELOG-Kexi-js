@@ -44,6 +44,8 @@ http://rafb.net/p/R4QIBR13.html
 2009-08-30
 Forms
 * removed possible crashes in the auto-tab-order routine
+Table Designer
+* replace three extra "clear" buttons with the clear icon available within the KLineEdit objects
 
 2009-08-29
 Main Window
