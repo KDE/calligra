@@ -41,6 +41,10 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
 
+2009-08-30
+Forms
+* removed possible crashes in the auto-tab-order routine
+
 2009-08-29
 Main Window
 * improved saving/restoring of sizes and areas for project navigator and property editor

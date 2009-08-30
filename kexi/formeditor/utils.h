@@ -73,6 +73,8 @@ class CustomSortableWidgetList : public QWidgetList
 {
 public:
     CustomSortableWidgetList() : QWidgetList() {}
+    //! Copy constructor needed required by foreach()
+    CustomSortableWidgetList(const CustomSortableWidgetList&) : QWidgetList() {}
     virtual ~CustomSortableWidgetList() {}
     virtual void sort() {}
 };
@@ -82,6 +84,8 @@ class HorizontalWidgetList : public CustomSortableWidgetList
 {
 public:
     HorizontalWidgetList(QWidget *topLevelWidget);
+    //! Copy constructor needed required by foreach()
+    HorizontalWidgetList(const HorizontalWidgetList& list);
     virtual ~HorizontalWidgetList();
     virtual void sort();
 protected:
@@ -94,6 +98,8 @@ class VerticalWidgetList : public CustomSortableWidgetList
 {
 public:
     VerticalWidgetList(QWidget *topLevelWidget);
+    //! Copy constructor needed required by foreach()
+    VerticalWidgetList(const VerticalWidgetList& list);
     virtual ~VerticalWidgetList();
     virtual void sort();
 protected:

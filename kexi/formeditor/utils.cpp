@@ -140,6 +140,13 @@ HorizontalWidgetList::HorizontalWidgetList(QWidget *topLevelWidget)
 {
 }
 
+HorizontalWidgetList::HorizontalWidgetList(const HorizontalWidgetList& list)
+    : CustomSortableWidgetList(list)
+    , m_lessThan(new LessThan(list.m_lessThan->m_topLevelWidget))
+{
+}
+
+
 HorizontalWidgetList::~HorizontalWidgetList()
 {
     delete m_lessThan;
@@ -197,6 +204,12 @@ public:
 VerticalWidgetList::VerticalWidgetList(QWidget *topLevelWidget)
         : CustomSortableWidgetList()
         , m_lessThan(new LessThan(topLevelWidget))
+{
+}
+
+VerticalWidgetList::VerticalWidgetList(const VerticalWidgetList& list)
+    : CustomSortableWidgetList(list)
+    , m_lessThan(new LessThan(list.m_lessThan->m_topLevelWidget))
 {
 }
 
