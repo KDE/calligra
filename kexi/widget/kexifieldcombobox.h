@@ -37,7 +37,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
     Q_OBJECT
 
 public:
-    KexiFieldComboBox(QWidget *parent);
+    KexiFieldComboBox(QWidget *parent = 0);
     virtual ~KexiFieldComboBox();
 
 //  /*! Sets table or query schema \a schema.

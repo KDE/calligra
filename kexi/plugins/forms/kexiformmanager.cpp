@@ -463,7 +463,7 @@ void KexiFormManager::showFormUICode()
         d->uiCodeDialog->setObjectName("ui_dialog");
         d->uiCodeDialog->setFaceType(KPageDialog::Tabbed);
         d->uiCodeDialog->setModal(true);
-        d->uiCodeDialog->setCaption(i18n("Form's UI Code"));
+        d->uiCodeDialog->setWindowTitle(i18n("Form's UI Code"));
         d->uiCodeDialog->setButtons(KDialog::Close);
         d->uiCodeDialog->resize(700, 600);
 

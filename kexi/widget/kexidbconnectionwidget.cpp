@@ -370,7 +370,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
         : KDialog(parent)
 {
-    setCaption(i18n("Open Database"));
+    setWindowTitle(i18n("Open Database"));
     m_tabWidget = new KexiDBConnectionTabWidget(this);
     m_tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);
@@ -381,7 +381,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
         : KDialog(parent)
 {
-    setCaption(i18n("Connect to a Database Server"));
+    setWindowTitle(i18n("Connect to a Database Server"));
     m_tabWidget = new KexiDBConnectionTabWidget(this);
     m_tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);

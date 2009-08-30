@@ -31,7 +31,7 @@ class KComboBox;
 class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
 {
 public:
-    KexiComboBoxDropDownButton(QWidget *parent);
+    KexiComboBoxDropDownButton(QWidget *parent = 0);
     virtual ~KexiComboBoxDropDownButton();
 
 protected:

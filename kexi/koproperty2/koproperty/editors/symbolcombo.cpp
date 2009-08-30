@@ -92,7 +92,7 @@ void
 SymbolCombo::selectChar()
 {
     KDialog dialog(this->topLevelWidget());
-    dialog.setCaption(i18n("Select Char"));
+    dialog.setWindowTitle(i18n("Select Char"));
     dialog.setObjectName("charselect_dialog");
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);

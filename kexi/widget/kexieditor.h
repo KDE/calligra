@@ -45,7 +45,7 @@ public:
     *        will handle that for us.
     * \param name The name this KexiEditor has. Used only for debugging.
     */
-    KexiEditor(QWidget *parent);
+    KexiEditor(QWidget *parent = 0);
 
     /**
     * Destructor.

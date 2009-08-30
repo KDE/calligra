@@ -1622,7 +1622,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         if (!specialDir)
             dlg.setSelection(fname);   // may also be a filename
         dlg.setOperationMode(KFileDialog::Saving);
-        dlg.setCaption(caption);
+        dlg.setWindowTitle(caption);
         dlg.exec();
         fname = dlg.selectedFile();
         if (!fname.isEmpty())
@@ -3477,7 +3477,7 @@ tristate KexiMainWindow::getNewObjectInfo(
     }
     d->nameDialog->widget()->setCaptionText(partItem->caption());
     d->nameDialog->widget()->setNameText(partItem->name());
-    d->nameDialog->setCaption(i18n("Save Object As"));
+    d->nameDialog->setWindowTitle(i18n("Save Object As"));
     d->nameDialog->setDialogIcon(DesktopIcon(info->itemIcon(), KIconLoader::SizeMedium));
     allowOverwriting = false;
     bool found;
@@ -4450,7 +4450,7 @@ void KexiMainWindow::importantInfo(bool /*onStartup*/)
         if (fname.isEmpty())//back to default
             fname = locate("data", "kexi/readme_en");
         KTipDialog tipDialog(new KTipDatabase(QString()), 0);
-        tipDialog.setCaption(i18n("Important Information"));
+        tipDialog.setWindowTitle(i18n("Important Information"));
         QObjectList *l = tipDialog.queryList("KPushButton");  //hack: hide <- -> buttons
         int i = 0;
         for (QObjectListIt it(*l); it.current() && i < 2; ++it, i++)
@@ -4564,7 +4564,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
         return false;
     }
 
-    QWidget::setCaption("MyApp");//TODO
+    QWidget::setWindowTitle("MyApp");//TODO
 #endif
     return true;
 }

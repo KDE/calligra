@@ -45,7 +45,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 {
     setObjectName("tabstop_dialog");
     setModal(true);
-    setCaption(i18n("Edit Tab Order"));
+    setWindowTitle(i18n("Edit Tab Order"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 

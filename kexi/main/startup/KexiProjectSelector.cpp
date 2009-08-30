@@ -228,7 +228,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
 {
-    setCaption(i18n("Open Recent Project"));
+    setWindowTitle(i18n("Open Recent Project"));
     init(prj_set, showProjectNameColumn, showConnectionColumns);
 }
 
@@ -237,7 +237,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
 {
-    setCaption(i18n("Open Project"));
+    setWindowTitle(i18n("Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);

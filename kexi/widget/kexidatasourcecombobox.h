@@ -38,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
     Q_OBJECT
 
 public:
-    KexiDataSourceComboBox(QWidget *parent);
+    KexiDataSourceComboBox(QWidget *parent = 0);
     virtual ~KexiDataSourceComboBox();
 
     //! \return global project that is used to retrieve schema informationm for this combo box.

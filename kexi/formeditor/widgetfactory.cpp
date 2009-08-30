@@ -201,7 +201,7 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     KDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setCaption(i18n("Edit List of Items"));
+    dialog.setWindowTitle(i18n("Edit List of Items"));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
     KEditListBox *edit = new KEditListBox(

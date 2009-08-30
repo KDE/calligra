@@ -45,7 +45,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView,
     Q_OBJECT
 
 public:
-    KexiDataAwareView(QWidget *parent);
+    KexiDataAwareView(QWidget *parent = 0);
 
     virtual ~KexiDataAwareView();
 

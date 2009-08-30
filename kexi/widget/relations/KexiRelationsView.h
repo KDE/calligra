@@ -46,7 +46,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsView : public KexiView
     Q_OBJECT
 
 public:
-    KexiRelationsView(QWidget *parent);
+    KexiRelationsView(QWidget *parent = 0);
     virtual ~KexiRelationsView();
 
     //! \return a hash of added tables

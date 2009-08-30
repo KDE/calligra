@@ -41,7 +41,7 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 {
     setObjectName("richtext_dialog");
     setModal(true);
-    setCaption(i18n("Edit Rich Text"));
+    setWindowTitle(i18n("Edit Rich Text"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 

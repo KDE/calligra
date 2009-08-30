@@ -164,7 +164,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
         , m_pageNumber(-1)
         , m_pagesCount(-1)
 {
-    setCaption(i18n("%1 - Print Preview - %2", previewName, KEXI_APP_NAME));
+    setWindowTitle(i18n("%1 - Print Preview - %2", previewName, KEXI_APP_NAME));
     setIcon(DesktopIcon("document-print-preview"));
     Q3VBoxLayout *lyr = new Q3VBoxLayout(this, 6);
 

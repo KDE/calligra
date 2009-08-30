@@ -42,7 +42,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
-    setCaption(i18n("Advanced Import Options"));
+    setWindowTitle(i18n("Advanced Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setWindowIcon(KIcon("configure"));

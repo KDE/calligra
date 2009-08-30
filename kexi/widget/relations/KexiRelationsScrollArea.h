@@ -70,7 +70,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     Q_OBJECT
 
 public:
-    KexiRelationsScrollArea(QWidget *parent);
+    KexiRelationsScrollArea(QWidget *parent = 0);
     virtual ~KexiRelationsScrollArea();
 
     //! \return a hash of added tables

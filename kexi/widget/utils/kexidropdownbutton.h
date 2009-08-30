@@ -32,7 +32,7 @@ class KEXIGUIUTILS_EXPORT KexiDropDownButton : public QToolButton
     Q_OBJECT
 
 public:
-    KexiDropDownButton(QWidget *parent);
+    KexiDropDownButton(QWidget *parent = 0);
     virtual ~KexiDropDownButton();
 
     virtual QSize sizeHint() const;

@@ -37,7 +37,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
     kDebug() << "KexiRelationMainDlg()";
 // setIcon(SmallIcon("relation"));
     m_defaultIconName = "relation";
-    setCaption(i18n("Relationships"));
+    setWindowTitle(i18n("Relationships"));
 // setDocID( win->generatePrivateDocID() );
 
     m_rel = new KexiRelationsView(this);

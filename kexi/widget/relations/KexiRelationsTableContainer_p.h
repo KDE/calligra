@@ -47,7 +47,7 @@ class KexiRelationsTableFieldList : public KexiFieldListView
 
 public:
     KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema* tableOrQuerySchema,
-                                KexiRelationsScrollArea *scrollArea, QWidget *parent);
+                                KexiRelationsScrollArea *scrollArea, QWidget *parent = 0);
     virtual ~KexiRelationsTableFieldList();
 
     int globalY(const QString &item);
@@ -76,7 +76,7 @@ class KexiRelationViewTableContainerHeader : public QLabel
 {
     Q_OBJECT
 public:
-    KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent);
+    KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
     virtual ~KexiRelationViewTableContainerHeader();
 
     virtual void setFocus();

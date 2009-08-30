@@ -52,7 +52,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     Q_OBJECT
 
 public:
-    KexiImageContextMenu(QWidget *parent);
+    KexiImageContextMenu(QWidget *parent = 0);
     virtual ~KexiImageContextMenu();
 
     KActionCollection* actionCollection() const;

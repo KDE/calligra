@@ -169,7 +169,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_stringI18nFalse(i18n("false"))
 {
     setWindowFlags(windowFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
-    setCaption(i18n("Import CSV Data File"));
+    setWindowTitle(i18n("Import CSV Data File"));
     setWindowIcon(_IMPORT_ICON);
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
     setButtons((mode == File ? User1 : (ButtonCode)0) | Ok | Cancel);

@@ -96,7 +96,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     const KexiCSVImportOptions& options, QWidget* parent)
         : KDialog(parent)
 {
-    setCaption(i18n("CSV Import Options"));
+    setWindowTitle(i18n("CSV Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName("KexiCSVImportOptionsDialog");
