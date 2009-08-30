@@ -4,6 +4,7 @@ Type=Service
 X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
+Name[de]=RCPS-Planer
 Name[es]=Planificador RCPS
 Name[et]=RCPS ajakava
 Name[gl]=Axenda RCPS
