@@ -313,6 +313,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "kplatolibs" );
+        locale->insertCatalog( "kabc" );
     }
     if ( isReadWrite() ) {
         setXMLFile( "kplatowork.rc" );

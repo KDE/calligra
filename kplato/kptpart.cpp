@@ -87,6 +87,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     if ( locale ) {
         locale->insertCatalog( "kplatolibs" );
         locale->insertCatalog( "kdgantt" );
+        locale->insertCatalog( "kabc" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
 
