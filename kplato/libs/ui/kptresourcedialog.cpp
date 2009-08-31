@@ -145,8 +145,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     dia->units->setValue(resource->units());
     dia->availableFrom->setDateTime(resource->availableFrom().dateTime());
     dia->availableUntil->setDateTime(resource->availableUntil().dateTime());
-    dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource->normalRate()));
-    dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource->overtimeRate()));
+    dia->rateEdit->setText(project.locale()->formatMoney(resource->normalRate()));
+    dia->overtimeEdit->setText(project.locale()->formatMoney(resource->overtimeRate()));
 
     int cal = 0;
     dia->calendarList->addItem(i18n("None"));

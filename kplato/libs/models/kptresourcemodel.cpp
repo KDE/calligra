@@ -274,13 +274,13 @@ QVariant ResourceModel::normalRate( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( res->normalRate() );
+            return m_project->locale()->formatMoney( res->normalRate() );
         case Qt::EditRole:
             return res->normalRate();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return i18n( "Cost per hour, normal time: %1", KGlobal::locale()->formatMoney( res->normalRate() ) );
+            return i18n( "Cost per hour, normal time: %1", m_project->locale()->formatMoney( res->normalRate() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -292,13 +292,13 @@ QVariant ResourceModel::overtimeRate( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( res->overtimeRate() );
+            return m_project->locale()->formatMoney( res->overtimeRate() );
         case Qt::EditRole:
             return res->overtimeRate();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return i18n( "Cost per hour, overtime: %1", KGlobal::locale()->formatMoney( res->overtimeRate() ) );
+            return i18n( "Cost per hour, overtime: %1", m_project->locale()->formatMoney( res->overtimeRate() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

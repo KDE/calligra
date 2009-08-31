@@ -532,7 +532,10 @@ void PerformanceStatusBase::draw()
 
 void PerformanceStatusBase::drawValues()
 {
-    KLocale *locale = KGlobal::locale();
+    if ( m_project == 0 ) {
+        return;
+    }
+    KLocale *locale = m_project->locale();
     const EffortCostMap &budget = m_model.bcwp();
     const EffortCostMap &actual = m_model.acwp();
     bcwsCost->setText( locale->formatMoney( budget.totalCost() ) );

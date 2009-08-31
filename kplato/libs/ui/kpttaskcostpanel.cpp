@@ -21,6 +21,7 @@
 #include "kptaccount.h"
 #include "kpttask.h"
 #include "kptcommand.h"
+#include "kptproject.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -43,20 +44,28 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
 }
 
 void TaskCostPanel::setStartValues(Task &task) {
+    const KLocale *locale = 0;
+    const Project *project = qobject_cast<const Project*>( task.projectNode() );
+    if ( project ) {
+        locale = project->locale();
+    }
+    if ( locale == 0 ) {
+        locale = KGlobal::locale();
+    }
     runningAccount->addItems(m_accountList);
     m_oldrunning = m_accounts.findRunningAccount(task);
     if (m_oldrunning) {
         setCurrentItem(runningAccount, m_oldrunning->name());
     }
     
-    startupCost->setText(KGlobal::locale()->formatMoney(task.startupCost()));
+    startupCost->setText(locale->formatMoney(task.startupCost()));
     startupAccount->addItems(m_accountList);
     m_oldstartup = m_accounts.findStartupAccount(task);
     if (m_oldstartup) {
         setCurrentItem(startupAccount, m_oldstartup->name());
     }
     
-    shutdownCost->setText(KGlobal::locale()->formatMoney(task.shutdownCost()));
+    shutdownCost->setText(locale->formatMoney(task.shutdownCost()));
     shutdownAccount->addItems(m_accountList);
     m_oldshutdown = m_accounts.findShutdownAccount(task);
     if (m_oldshutdown) {

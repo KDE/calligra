@@ -518,11 +518,11 @@ QVariant NodeModel::startupCost( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) {
-                return KGlobal::locale()->formatMoney( node->startupCost() );
+                return m_project->locale()->formatMoney( node->startupCost() );
             }
             break;
         case Qt::EditRole:
-            return KGlobal::locale()->formatMoney( node->startupCost() );
+            return m_project->locale()->formatMoney( node->startupCost() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -569,11 +569,11 @@ QVariant NodeModel::shutdownCost( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) {
-                return KGlobal::locale()->formatMoney( node->shutdownCost() );
+                return m_project->locale()->formatMoney( node->shutdownCost() );
             }
             break;
         case Qt::EditRole:
-            return KGlobal::locale()->formatMoney( node->shutdownCost() );
+            return m_project->locale()->formatMoney( node->shutdownCost() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1253,7 +1253,7 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
 
 QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
 {
-    KLocale *l = KGlobal::locale();
+    KLocale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
             return l->formatMoney( node->plannedCostTo( m_now ) );
@@ -1270,7 +1270,7 @@ QVariant NodeModel::plannedCostTo( const Node *node, int role ) const
 
 QVariant NodeModel::actualCostTo( const Node *node, int role ) const
 {
-    KLocale *l = KGlobal::locale();
+    KLocale *l = m_project->locale();
     switch ( role ) {
         case Qt::DisplayRole:
             return l->formatMoney( node->actualCostTo( m_now ).cost() );
@@ -1421,9 +1421,9 @@ QVariant NodeModel::nodeBCWS( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 );
+            return m_project->locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 );
         case Qt::ToolTipRole:
-            return i18n( "Budgeted Cost of Work Scheduled at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 ) );
+            return i18n( "Budgeted Cost of Work Scheduled at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1435,9 +1435,9 @@ QVariant NodeModel::nodeBCWP( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( node->bcwp( id() ), QString(), 0 );
+            return m_project->locale()->formatMoney( node->bcwp( id() ), QString(), 0 );
         case Qt::ToolTipRole:
-            return i18n( "Budgeted Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->bcwp( id() ), QString(), 0 ) );
+            return i18n( "Budgeted Cost of Work Performed at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->bcwp( id() ), QString(), 0 ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1449,9 +1449,9 @@ QVariant NodeModel::nodeACWP( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( node->acwp( m_now, id() ).cost(), QString(), 0 );
+            return m_project->locale()->formatMoney( node->acwp( m_now, id() ).cost(), QString(), 0 );
         case Qt::ToolTipRole:
-            return i18n( "Actual Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->acwp( m_now, id() ).cost() ) );
+            return i18n( "Actual Cost of Work Performed at %1: %2", m_now.toString(), m_project->locale()->formatMoney( node->acwp( m_now, id() ).cost() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

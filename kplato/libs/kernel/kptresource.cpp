@@ -495,8 +495,8 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("units", m_units);
     me.setAttribute("available-from", m_availableFrom.toString( KDateTime::ISODate ));
     me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
-    me.setAttribute("normal-rate", KGlobal::locale()->formatMoney(cost.normalRate));
-    me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
+    me.setAttribute("normal-rate", m_project->locale()->formatMoney(cost.normalRate));
+    me.setAttribute("overtime-rate", m_project->locale()->formatMoney(cost.overtimeRate));
     
     if ( ! m_externalAppointments.isEmpty() ) {
         QDomElement e = me.ownerDocument().createElement("external-appointments");

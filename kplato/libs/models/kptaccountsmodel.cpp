@@ -714,16 +714,16 @@ int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
 QString CostBreakdownItemModel::formatMoney( double cost1, double cost2 ) const
 {
     if ( m_showmode == ShowMode_Planned ) {
-        return KGlobal::locale()->formatMoney( cost1, "", 0 );
+        return m_project->locale()->formatMoney( cost1, "", 0 );
     }
     if ( m_showmode == ShowMode_Actual ) {
-        return KGlobal::locale()->formatMoney( cost2, "", 0 );
+        return m_project->locale()->formatMoney( cost2, "", 0 );
     }
     if ( m_showmode == ShowMode_Both ) {
-        return QString(m_format).arg( KGlobal::locale()->formatMoney( cost2, "", 0 ) ).arg( KGlobal::locale()->formatMoney( cost1, "", 0 ) );
+        return QString(m_format).arg( m_project->locale()->formatMoney( cost2, "", 0 ) ).arg( m_project->locale()->formatMoney( cost1, "", 0 ) );
     }
     if ( m_showmode == ShowMode_Deviation ) {
-        return KGlobal::locale()->formatMoney( cost1 - cost2, "", 0 );
+        return m_project->locale()->formatMoney( cost1 - cost2, "", 0 );
     }
     return "";
 }
@@ -817,7 +817,7 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
             case 2: {
                 double act = m_actualCostMap.value( a ).totalCost();
                 double pl = m_plannedCostMap.value( a ).totalCost();
-                return i18n( "Actual total cost: %1, planned total cost: %2", KGlobal::locale()->formatMoney( act, "", 0 ), KGlobal::locale()->formatMoney( pl, "", 0 ) );
+                return i18n( "Actual total cost: %1, planned total cost: %2", m_project->locale()->formatMoney( act, "", 0 ), m_project->locale()->formatMoney( pl, "", 0 ) );
             }
             default: break;
         }
