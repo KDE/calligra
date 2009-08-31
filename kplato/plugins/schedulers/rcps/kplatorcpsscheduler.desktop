@@ -18,6 +18,7 @@ Name[uk]=Засіб планування RCPS
 Name[x-test]=xxRCPS Schedulerxx
 Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Conflict Project Scheduler
+Comment[de]=Genetisch basierte ressourcenbeschränkte Projektplanung
 Comment[es]=Planificador de proyectos con conflicto de recursos basado en algoritmos genéticos
 Comment[et]=Ressursipiirangutega projektide ajakava
 Comment[gl]=Planificador de Proxectos con Conflictos de Recursos Baseado en Algorítmos Xenéticos
