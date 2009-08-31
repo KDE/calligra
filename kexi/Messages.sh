@@ -5,7 +5,7 @@ LIST="data/*.rc `find . \( \( $EXCLUDE \) -prune -o -name \*.ui \) -type f | gre
 if test -n "$LIST"; then
 	$EXTRACTRC $LIST >> rc.cpp
 fi
-LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.h -o -name \*.cpp \) -type f | grep -v -e '/\.' -e kexidswelcome.cpp`
+LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.h -o -name \*.cpp \) -type f | grep -v -e '/\.' -e kexidswelcome.cpp | grep -v './shapes/'`
 if test -n "$LIST"; then \
 	$XGETTEXT $LIST -o $podir/kexi.pot
 fi
