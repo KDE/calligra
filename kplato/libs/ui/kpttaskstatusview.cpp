@@ -413,6 +413,7 @@ ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
     l->setMargin( 0 );
     m_view = new PerformanceStatusBase( this );
     l->addWidget( m_view );
+
     setupGui();
     
     connect( m_view, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -480,6 +481,14 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m_manager( 0 )
 {
     setupUi( this );
+
+    labelBCWS->setToolTip( ToolTip::nodeBCWS() );
+    labelBCWP->setToolTip( ToolTip::nodeBCWP() );
+    labelACWP->setToolTip( ToolTip::nodeACWP() );
+    labelPI->setToolTip( ToolTip::nodePerformanceIndex() );
+    labelCPI->setToolTip( i18nc( "@info:tooltip", "Costbased performance index" ) );
+    labelSPI->setToolTip( i18nc( "@info:tooltip", "Effortbased performance index" ) );
+
     plotwidget->setAntialiasing(false);
     connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
     
