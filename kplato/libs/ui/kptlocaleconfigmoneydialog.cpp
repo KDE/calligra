@@ -17,47 +17,51 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kptconfigbase.h"
+#include "kptlocaleconfigmoneydialog.h"
+#include "locale/localemon.h"
 
-#include <KLocale>
+#include "kptcommand.h"
+
+#include <klocale.h>
+
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-ConfigBase::ConfigBase()
-    : m_taskDefaults( new Task() ),
-    m_locale( 0 )
+LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
+    : KDialog( p)
 {
-    m_readWrite = true;
-    // set some reasonable defaults
-    m_taskDefaults->estimate()->setType( Estimate::Type_Effort );
-    m_taskDefaults->estimate()->setUnit( Duration::Unit_h );
-    m_taskDefaults->estimate()->setExpectedEstimate( 1.0 );
-    m_taskDefaults->estimate()->setPessimisticRatio( 0 );
-    m_taskDefaults->estimate()->setOptimisticRatio( 0 );
+    setCaption( i18n("Currency Settings") );
+    setButtons( Ok|Cancel );
+    showButtonSeparator( true );
+    m_panel = new LocaleConfigMoney( locale, this);
+
+    setMainWidget(m_panel);
+
+    enableButtonOk(false);
+
+    connect(m_panel, SIGNAL( localeChanged() ), SLOT(slotChanged()));
 }
 
-ConfigBase::~ConfigBase()
-{
-    delete m_taskDefaults;
-    delete m_locale;
+void LocaleConfigMoneyDialog::slotChanged() {
+    enableButtonOk(true);
 }
 
-void ConfigBase::setTaskDefaults( Task *task )
-{
-    if ( m_taskDefaults != task ) {
-        delete m_taskDefaults;
-        m_taskDefaults = task;
+QUndoCommand *LocaleConfigMoneyDialog::buildCommand( Part *part ) {
+    MacroCommand *m = new MacroCommand(i18n("Modify currency settings"));
+    MacroCommand *cmd = m_panel->buildCommand( part );
+    if (cmd) {
+        m->addCommand(cmd);
     }
+    if ( m->isEmpty() ) {
+        delete m;
+        return 0;
+    }
+    return m;
 }
 
-void ConfigBase::setLocale( KLocale *locale )
-{
-    if ( locale != m_locale ) {
-        delete m_locale;
-        m_locale = locale;
-    }
-}
 
 }  //KPlato namespace
+
+#include "kptlocaleconfigmoneydialog.moc"

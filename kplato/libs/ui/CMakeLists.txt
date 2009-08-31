@@ -79,6 +79,9 @@ set(kplatoui_LIB_SRCS
     kptrecalculatedialog.cpp
 
     kpthtmlview.cpp
+
+    locale/localemon.cpp
+    kptlocaleconfigmoneydialog.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
     kptresourceappointmentsdisplayoptions.ui
@@ -116,6 +119,8 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptperformancestatusviewsettingspanel.ui
 
     kptrecalculatedialog.ui
+
+    locale/localemon.ui
 )
 add_definitions(-DKDGANTT_STATICLIB)
 

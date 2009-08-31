@@ -152,6 +152,7 @@ public slots:
     void slotAddMilestone();
     void slotProjectEdit();
     void slotDefineWBS();
+    void slotCurrencyConfig();
 
     void slotCreateView();
 
@@ -298,11 +299,12 @@ private:
     // ------ Insert
     // ------ Project
     KAction *actionEditMainProject;
-    KAction *actionEditStandardWorktime;
 
     // ------ Tools
+    KAction *actionEditStandardWorktime;
     KAction *actionDefineWBS;
     KAction *actionInsertFile;
+    KAction *actionCurrencyConfig;
 
     // ------ Settings
     KAction *actionConfigure;

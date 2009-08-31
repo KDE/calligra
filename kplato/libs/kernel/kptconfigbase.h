@@ -22,6 +22,8 @@
 
 #include "kpttask.h"
 
+class KLocale;
+
 namespace KPlato
 {
 
@@ -40,11 +42,18 @@ public:
     virtual int minimumDurationUnit() const { return Duration::Unit_h; }
     virtual int maximumDurationUnit() const { return Duration::Unit_Y; }
 
+    
+    void setLocale( KLocale *locale );
+    const KLocale *locale() const { return m_locale; }
+    KLocale *locale() { return m_locale; }
+
 protected:
     bool m_readWrite;
 
 private:
     Task *m_taskDefaults;
+
+    KLocale *m_locale;
 
 };
 

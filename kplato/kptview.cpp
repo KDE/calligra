@@ -109,6 +109,7 @@
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 #include "about/aboutpage.h"
+#include "kptlocaleconfigmoneydialog.h"
 
 #include "kptviewlistdialog.h"
 #include "kptviewlistdocker.h"
@@ -228,6 +229,10 @@ View::View( Part* part, QWidget* parent )
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
+
+    actionCurrencyConfig  = new KAction(KIcon( "configure" ), i18n("Define Currency..."), this);
+    actionCollection()->addAction( "config_currency", actionCurrencyConfig );
+    connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
     // ------ Help
     actionIntroduction  = new KAction( i18n("KPlato Introduction"), this);
@@ -2459,6 +2464,15 @@ void View::slotMailWorkpackages( QList<Node*> &nodes, Resource *resource )
     QString messageFile;
 
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
+}
+
+void View::slotCurrencyConfig()
+{
+    LocaleConfigMoneyDialog *dlg = new LocaleConfigMoneyDialog( getProject().locale(), this );
+    if ( dlg->exec() == QDialog::Accepted ) {
+        
+    }
+    delete dlg;
 }
 
 #ifndef NDEBUG

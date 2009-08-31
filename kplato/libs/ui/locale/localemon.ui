@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KPlato::LocaleConfigMoney</class>
+ <widget class="QWidget" name="KPlato::LocaleConfigMoney">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>567</width>
+    <height>208</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_labMonCurSym">
+       <property name="text">
+        <string>Currency symbol:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="m_edMonCurSym"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="m_labMonFraDig">
+       <property name="text">
+        <string>Fractional digits:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KIntNumInput" name="m_inMonFraDig"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QGroupBox" name="m_positiveGB">
+       <property name="title">
+        <string>Positive</string>
+       </property>
+       <layout class="QVBoxLayout" name="_2">
+        <item>
+         <widget class="QCheckBox" name="m_chMonPosPreCurSym">
+          <property name="text">
+           <string>Prefix currency symbol</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_3">
+          <item>
+           <widget class="QLabel" name="m_labMonPosMonSignPos">
+            <property name="text">
+             <string>Sign position:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="m_cmbMonPosMonSignPos">
+            <item>
+             <property name="text">
+              <string>Parentheses Around</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Before Quantity Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>After Quantity Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Before Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>After Money</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="m_negativeGB">
+       <property name="title">
+        <string>Negative</string>
+       </property>
+       <layout class="QVBoxLayout" name="_4">
+        <item>
+         <widget class="QCheckBox" name="m_chMonNegPreCurSym">
+          <property name="text">
+           <string>Prefix currency symbol</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_5">
+          <item>
+           <widget class="QLabel" name="m_labMonNegMonSignPos">
+            <property name="text">
+             <string>Sign position:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="m_cmbMonNegMonSignPos">
+            <item>
+             <property name="text">
+              <string>Parentheses Around</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Before Quantity Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>After Quantity Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Before Money</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>After Money</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

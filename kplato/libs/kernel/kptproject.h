@@ -493,6 +493,12 @@ public:
     /// Set configuration data
     void setConfig( const ConfigBase &config ) { m_config = config; }
 
+    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
+    KLocale *locale() { return m_config.locale(); }
+    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
+    const KLocale *locale() const { return m_config.locale(); }
+
+    
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();

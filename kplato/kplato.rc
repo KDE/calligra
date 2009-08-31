@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="16">
+<kpartgui name="KPlato" version="17">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -46,9 +46,10 @@
             <Action name="project_resources"/>
         </Menu>-->
         <Menu name="tools"><text>&amp;Tools</text>
+            <Action name="insert_file"/>
             <Action name="project_worktime"/>
             <Action name="tools_define_wbs"/>
-            <Action name="insert_file"/>
+            <Action name="config_currency"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
             <Action name="configure" group="settings_configure"/>

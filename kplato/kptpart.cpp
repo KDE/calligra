@@ -90,6 +90,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kabc" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
+    m_config.setLocale( new KLocale( *locale ) );
 
     loadSchedulerPlugins();
 
