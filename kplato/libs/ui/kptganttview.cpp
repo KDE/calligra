@@ -26,7 +26,6 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
-#include "kpttaskappointmentsview.h"
 #include "kptrelation.h"
 #include "kptschedule.h"
 #include "kptviewbase.h"
@@ -451,7 +450,6 @@ void MyKDGanttView::createDependencies()
 GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
     : ViewBase( part, parent ),
     m_readWrite( readWrite ),
-    m_taskView( 0 ),
     m_project( 0 )
 {
     kDebug() <<" ---------------- KPlato: Creating GanttView ----------------";
@@ -466,9 +464,6 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
 
     setupGui();
     
-    m_taskView = new TaskAppointmentsView( m_splitter );
-    m_taskView->hide();
-
     updateReadWrite( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
     kDebug() <<m_gantt->constraintModel();
@@ -487,7 +482,6 @@ void GanttView::setZoom( double )
 {
     //kDebug() <<"setting gantt zoom:" << zoom;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
-    //m_taskView->setZoom( zoom );
 }
 
 void GanttView::setupGui()
@@ -508,7 +502,6 @@ void GanttView::slotOptions()
 void GanttView::clear()
 {
 //    m_gantt->clear();
-    m_taskView->clear();
 }
 
 void GanttView::setShowResources( bool on )

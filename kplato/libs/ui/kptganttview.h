@@ -49,8 +49,6 @@ class KoPrintJob;
 namespace KPlato
 {
 
-class TaskAppointmentsView;
-
 class Node;
 class MilestoneItemModel;
 class GanttItemModel;
@@ -243,7 +241,6 @@ private:
     int m_defaultFontSize;
     QSplitter *m_splitter;
     MyKDGanttView *m_gantt;
-    TaskAppointmentsView *m_taskView;
     Project *m_project;
 };
 
