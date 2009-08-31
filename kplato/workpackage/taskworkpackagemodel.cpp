@@ -464,26 +464,26 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
     }
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
-        case NodeName: return "Name";
-        case NodeType: return "Type";
-        case NodeResponsible: return "Responsible";
-        case NodeDescription: return "Description";
+        case NodeName: return i18n( "Name" );
+        case NodeType: return i18n( "Type" );
+        case NodeResponsible: return i18n( "Responsible" );
+        case NodeDescription: return i18n( "Description" );
 
         // After scheduling
-        case NodeStartTime: return "Planned Start";
-        case NodeEndTime: return "Planned Finish";
-        case NodeAssigments: return "Resource Assignments";
+        case NodeStartTime: return i18n( "Planned Start" );
+        case NodeEndTime: return i18n( "Planned Finish" );
+        case NodeAssigments: return i18n( "Resource Assignments" );
 
         // Completion
-        case NodeCompleted: return "Completion";
-        case NodePlannedEffort: return "Planned Effort";
-        case NodeActualEffort: return "Actual Effort";
-        case NodeRemainingEffort: return "Remaining Effort";
-        case NodeActualStart: return "Actual Start";
-        case NodeStarted: return "Started";
-        case NodeActualFinish: return "Actual Finish";
-        case NodeFinished: return "Finished";
-        case NodeStatusNote: return "Note";
+        case NodeCompleted: return i18n( "Completion" );
+        case NodePlannedEffort: return i18n( "Planned Effort" );
+        case NodeActualEffort: return i18n( "Actual Effort" );
+        case NodeRemainingEffort: return i18n( "Remaining Effort" );
+        case NodeActualStart: return i18n( "Actual Start" );
+        case NodeStarted: return i18n( "Started" );
+        case NodeActualFinish: return i18n( "Actual Finish" );
+        case NodeFinished: return i18n( "Finished" );
+        case NodeStatusNote: return i18n( "Note" );
 
         case ProjectName: return i18n( "Project Name" );
         case ProjectManager: return i18n( "Project Manager" );
