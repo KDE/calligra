@@ -428,7 +428,7 @@ bool TaskStatusItemModel::setRemainingEffort( Node *node, const QVariant &value,
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remainig Effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remaining Effort" ) ) );
         return true;
     }
     return false;

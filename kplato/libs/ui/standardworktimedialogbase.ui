@@ -13,7 +13,7 @@
   </property>
   <property name="whatsThis">
    <string>These values are used if your estimate is not in hours.
-Let us say Hours per day is 8. If you estimate that a task needs 3 days effort to complete, this is converted to 24 hours when the task is scheduled. The actual time it will take to complete is of course dependent on the availaiblity of the person (or persons) that is assigned to the task.</string>
+Let us say Hours per day is 8. If you estimate that a task needs 3 days effort to complete, this is converted to 24 hours when the task is scheduled. The actual time it will take to complete is of course dependent on the availability of the person (or persons) that is assigned to the task.</string>
   </property>
   <layout class="QGridLayout">
    <property name="margin">

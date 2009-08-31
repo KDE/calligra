@@ -1716,7 +1716,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeNegativeFloat: return i18n( "Negative Float" );
             case NodeStartFloat: return i18n( "Start Float" );
             case NodeFinishFloat: return i18n( "Finish Float" );
-            case NodeAssigments: return i18n( "Assigments" );
+            case NodeAssigments: return i18n( "Assignments" );
             
             // Based on scheduled values
             case NodeDuration: return i18n( "Duration" );
@@ -1741,7 +1741,7 @@ QVariant NodeModel::headerData( int section, int role )
             
             // Scheduling errors
             case NodeNotScheduled: return i18n( "Not Scheduled" );
-            case NodeAssigmentMissing: return i18n( "Assigment Missing" );
+            case NodeAssigmentMissing: return i18n( "Assignment Missing" );
             case NodeResourceOverbooked: return i18n( "Resource Overbooked" );
             case NodeResourceUnavailable: return i18n( "Resource Unavailable" );
             case NodeConstraintsError: return i18n( "Constraints Error" );
@@ -2595,7 +2595,7 @@ bool NodeItemModel::setRemainingEffort( Node *node, const QVariant &value, int r
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remainig Effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remaining Effort" ) ) );
         return true;
     }
     return false;

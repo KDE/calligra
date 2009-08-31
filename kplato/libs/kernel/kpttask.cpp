@@ -3460,7 +3460,7 @@ void Completion::printDebug(const QByteArray& _indent) const {
         Entry *e = m_entries[ d ];
         kDebug()<<indent<<"Date:"<<d;
         kDebug()<<(indent+" !")<<"% Finished:"<<e->percentFinished;
-        kDebug()<<(indent+" !")<<"Remainig:"<<e->remainingEffort.toString();
+        kDebug()<<(indent+" !")<<"Remaining:"<<e->remainingEffort.toString();
         kDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
     }
 }
