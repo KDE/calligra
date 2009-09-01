@@ -88,6 +88,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kplatolibs" );
         locale->insertCatalog( "kdgantt" );
         locale->insertCatalog( "kabc" );
+        locale->insertCatalog( "timezones4" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.setLocale( new KLocale( *locale ) );
