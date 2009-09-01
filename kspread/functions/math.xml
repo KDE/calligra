@@ -1221,7 +1221,7 @@
         <Type range="true">Float</Type>
       </Parameter>
       <Help>
-        <Text>Function MMULT multiplies two matrices. Number of columns of the first matrix nust be the same as row count of the second one. The result is a matrix.</Text>
+        <Text>Function MMULT multiplies two matrices. Number of columns of the first matrix must be the same as row count of the second one. The result is a matrix.</Text>
         <Syntax>MMULT(matrix1;matrix2)</Syntax>
         <Example>MMULT(A1:C3)</Example>
         <Related>MDETERM</Related>
