@@ -43,6 +43,7 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoTextDocument.h>
 #include <KoShapeCreateCommand.h>
 #include <KoImageSelectionWidget.h>
 #include <KoCanvasResourceProvider.h>
@@ -1010,7 +1011,12 @@ void KWView::formatPage()
     if (! m_currentPage.isValid())
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
-    dia->showTextDirection(kwcanvas()->resourceProvider()->boolResource(KoText::BidiDocument));
+    if (m_document->mainFrameSet()) {
+        KoTextDocument doc(m_document->mainFrameSet()->document());
+        KoTextEditor *editor = doc.textEditor();
+        if (editor)
+            dia->showTextDirection(editor->isBidiDocument());
+    }
     dia->show();
 }
 
