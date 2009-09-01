@@ -393,7 +393,12 @@ void KWTextDocumentLayout::layout()
             QRectF limit(const QRectF &rect) {
                 QRectF answer = rect;
                 foreach (Outline *outline, *m_outlines)
-                answer = outline->limit(answer);
+                    answer = outline->limit(answer);
+
+                if (rect.x() < answer.x()) {
+                    const qreal indent = m_state->x();
+                    answer.setX(answer.x() + indent);
+                }
                 return answer;
             }
             KoTextDocumentLayout::LayoutState *m_state;
