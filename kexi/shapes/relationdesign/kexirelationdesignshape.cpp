@@ -121,44 +121,43 @@ return true;
 }
 
 void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
-    QSizeF viewSize = converter.documentToView(size());
-
-    painter.save();
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setClipRect(QRectF(QPointF(-0.5,-0.5), viewSize + QSizeF(1,1)));
+    applyConversion(painter, converter);
     
+    painter.save();
+    //painter.setRenderHint(QPainter::Antialiasing, true);
+    QPainterPath pp;
+    pp.addRoundedRect(QRectF(QPointF(0.0,0.0), size()), 3.0, 3.0);
+
+    painter.setClipPath(pp);
     painter.setPen(QPen(Qt::black, 1.0));
-    painter.drawRoundedRect(QRectF(QPointF(0.5,0.5), (viewSize - QSizeF(1.0, 1.0))), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
 
     //Draw user specified background
-    QPainterPath pp;
-    pp.addRoundedRect(QRectF(QPointF(0.5,0.5), (viewSize - QSizeF(1.0, 1.0))), converter.documentToViewX(3.0), converter.documentToViewY(3.0));
     if (background()) {
         background()->paint(painter, pp);
     }
-
-    painter.drawLine(0, converter.documentToViewY(15), viewSize.width(), converter.documentToViewY(15));
+    painter.setClipping(false);
+    painter.drawRoundedRect(QRectF(QPointF(0.0,0.0), (size())), 3.0, 3.0);
+    painter.drawLine(0, 15, size().width(), 15);
 
     QFont f;
     f.setFamily("sans-serif");
-    f.setPixelSize(converter.documentToViewX(10));
+    f.setPixelSize(10);
     
     painter.setFont(f);
     
-    painter.drawText(converter.documentToView(QPointF(5.0, 11.0)), m_database + " : " + m_relation);
+    painter.drawText(QPointF(5.0, 11.0), m_database + " : " + m_relation);
 
     uint i = 0;
     uint offset;
     foreach (SimpleField *column, m_fieldData) {
         ++i;
         offset = (13.0*i) + 20;
-        painter.drawText(converter.documentToView(QPointF(15.0, offset)), column->name + " - " + column->type);
+        painter.drawText(QPointF(15.0, offset), column->name + " - " + column->type);
         if (column->pkey) {
-            painter.drawEllipse(converter.documentToView(QPointF(8.0, offset - 4)), converter.documentToViewX(4.0), converter.documentToViewY(4.0));
+            painter.drawEllipse(QPointF(8.0, offset - 4), 4,4);
         }
     }
     
-
     painter.restore();
 }
 
