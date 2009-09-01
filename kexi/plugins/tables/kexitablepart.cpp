@@ -39,7 +39,6 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <KexiWindow.h>
-#include <Q3CString>
 
 //! @internal
 class KexiTablePart::Private

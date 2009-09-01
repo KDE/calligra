@@ -23,7 +23,7 @@
 #include "kexitabledesignerview.h"
 #include <QList>
 #include <K3Command>
-#include <Q3CString>
+#include <QByteArray>
 
 class KexiDataAwarePropertySet;
 
@@ -101,14 +101,14 @@ public:
 
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
-    void setPropertyValueIfNeeded(const KoProperty::Set& set, const Q3CString& propertyName,
+    void setPropertyValueIfNeeded(const KoProperty::Set& set, const QByteArray& propertyName,
                                   const QVariant& newValue, CommandGroup* commandGroup,
                                   bool forceAddCommand = false, bool rememberOldValue = true,
                                   QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
     void setPropertyValueIfNeeded(
-        const KoProperty::Set& set, const Q3CString& propertyName,
+        const KoProperty::Set& set, const QByteArray& propertyName,
         const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup,
         bool forceAddCommand = false, bool rememberOldValue = true,
         QStringList* const slist = 0, QStringList* const nlist = 0);

@@ -23,8 +23,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qsplitter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -133,7 +131,7 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const Q3CString& propertyName,
+    const KoProperty::Set& set, const QByteArray& propertyName,
     const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
@@ -172,7 +170,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const Q3CString& propertyName,
+    const KoProperty::Set& set, const QByteArray& propertyName,
     const QVariant& newValue, CommandGroup* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)

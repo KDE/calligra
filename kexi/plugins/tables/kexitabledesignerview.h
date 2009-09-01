@@ -26,8 +26,6 @@
 
 #include <kexidatatable.h>
 #include "kexitablepart.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KexiDB
 {
@@ -103,19 +101,19 @@ public:
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int row,
-                                           const Q3CString& propertyName, const QVariant& newValue,
+                                           const QByteArray& propertyName, const QVariant& newValue,
                                            KoProperty::Property::ListData* const listData, bool addCommand);
 
     /*! Changes property \a propertyName to \a newValue.
      Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
      Used by ChangeFieldPropertyCommand to change field's property. */
-    void changeFieldProperty(int fieldUID, const Q3CString& propertyName,
+    void changeFieldProperty(int fieldUID, const QByteArray& propertyName,
                              const QVariant& newValue, KoProperty::Property::ListData* const listData = 0,
                              bool addCommand = false);
 
     /*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
      Used by ChangePropertyVisibilityCommand. */
-    void changePropertyVisibility(int fieldUID, const Q3CString& propertyName, bool visible);
+    void changePropertyVisibility(int fieldUID, const QByteArray& propertyName, bool visible);
 
     /*! Builds table field's schema by looking at the \a set. */
     KexiDB::Field * buildField(const KoProperty::Set &set) const;

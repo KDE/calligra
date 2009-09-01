@@ -19,9 +19,8 @@
 
 #include "kexilookupcolumnpage.h"
 
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <q3header.h>
+#include <QLabel>
+#include <QToolTip>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 

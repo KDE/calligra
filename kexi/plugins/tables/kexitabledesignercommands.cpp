@@ -22,8 +22,6 @@
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qmetaobject.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -51,7 +49,7 @@ Command::~Command()
 
 ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
     KexiTableDesignerView* view,
-    const KoProperty::Set& set, const Q3CString& propertyName,
+    const KoProperty::Set& set, const QByteArray& propertyName,
     const QVariant& oldValue, const QVariant& newValue,
     KoProperty::Property::ListData* const oldListData,
     KoProperty::Property::ListData* const newListData)
@@ -219,7 +217,7 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
 //--------------------------------------------------------
 
 ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(KexiTableDesignerView* view,
-        const KoProperty::Set& set, const Q3CString& propertyName, bool visible)
+        const KoProperty::Set& set, const QByteArray& propertyName, bool visible)
         : Command(view)
         , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
 // , m_fieldUID(set["uid"].value().toInt())

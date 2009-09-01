@@ -25,7 +25,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qsplitter.h>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -935,7 +935,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 {
 // if (!d->slotPropertyChanged_enabled)
 //  return;
-    const Q3CString pname(property.name());
+    const QByteArray pname(property.name());
     kDebug() << pname << " = " << property.value()
     << " (oldvalue = " << property.oldValue() << ")";
 
@@ -1559,7 +1559,7 @@ void KexiTableDesignerView::slotSimulateAlterTableExecution()
 
 tristate KexiTableDesignerView::executeRealAlterTable()
 {
-//ported Q3Signal signal;
+//ported QSignal signal;
 //ported signal.connect( KexiMainWindowIface::global()->thisWidget(), SLOT(slotProjectSave()) );
     d->tempStoreDataUsingRealAlterTable = true;
     d->recentResultOfStoreData = false;
@@ -1805,7 +1805,7 @@ void KexiTableDesignerView::deleteRow(int row, bool addCommand)
 }
 
 void KexiTableDesignerView::changeFieldPropertyForRow(int row,
-        const Q3CString& propertyName, const QVariant& newValue,
+        const QByteArray& propertyName, const QVariant& newValue,
         KoProperty::Property::ListData* const listData, bool addCommand)
 {
 #ifdef KEXI_DEBUG_GUI
@@ -1877,7 +1877,7 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
 }
 
 void KexiTableDesignerView::changeFieldProperty(int fieldUID,
-        const Q3CString& propertyName, const QVariant& newValue,
+        const QByteArray& propertyName, const QVariant& newValue,
         KoProperty::Property::ListData* const listData, bool addCommand)
 {
     //find a property by UID
@@ -1890,7 +1890,7 @@ void KexiTableDesignerView::changeFieldProperty(int fieldUID,
 }
 
 void KexiTableDesignerView::changePropertyVisibility(
-    int fieldUID, const Q3CString& propertyName, bool visible)
+    int fieldUID, const QByteArray& propertyName, bool visible)
 {
 #ifdef KEXI_DEBUG_GUI
     KexiUtils::addAlterTableActionDebug(QString("** changePropertyVisibility: \"")
