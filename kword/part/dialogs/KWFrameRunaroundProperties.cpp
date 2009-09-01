@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -100,12 +100,27 @@ void KWFrameRunaroundProperties::save()
         m_frames.append(frame);
     }
     foreach (KWFrame *frame, m_frames) {
-        if (m_runAround->checkedId() != -1)
-            frame->setTextRunAround(static_cast<KWord::TextRunAround>(m_runAround->checkedId()));
-        if (m_runAroundSide->checkedId() != -1)
-            frame->setRunAroundSide(static_cast<KWord::RunAroundSide>(m_runAroundSide->checkedId()));
-        frame->setRunAroundDistance(widget.distance->value());
+        bool needRelayout = false;
+        if (m_runAround->checkedId() != -1) {
+            KWord::TextRunAround rra = static_cast<KWord::TextRunAround>(m_runAround->checkedId());
+            if (frame->textRunAround() != rra) {
+                frame->setTextRunAround(rra);
+                needRelayout = true;
+            }
+        }
+        if (m_runAroundSide->checkedId() != -1) {
+            KWord::RunAroundSide rrs = static_cast<KWord::RunAroundSide>(m_runAroundSide->checkedId());
+            if (frame->runAroundSide() != rrs) {
+                frame->setRunAroundSide(rrs);
+                needRelayout = true;
+            }
+        }
+        if (frame->runAroundDistance() != widget.distance->value()) {
+            frame->setRunAroundDistance(widget.distance->value());
+            needRelayout = true;
+        }
+        if (needRelayout)
+            frame->shape()->notifyChanged();
     }
     m_state->removeUser();
 }
-
