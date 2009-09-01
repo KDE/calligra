@@ -25,6 +25,7 @@
 #include <QPainter>
 
 #include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
 #include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -159,12 +160,9 @@ void KPrPlaceholderTextStrategy::init( const QMap<QString, KoDataCenter *> & dat
 {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
-    m_textShape = factory->createDefaultShapeAndInit( dataCenterMap );
-
-    KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
-    QTextDocument * document = shapeData->document();
-    QTextCursor cursor( document );
-    cursor.insertText( text() );
+    KoProperties props;
+    props.setProperty("text", text());
+    m_textShape = factory->createShapeAndInit(&props, dataCenterMap);
 }
 
 KoShapeUserData * KPrPlaceholderTextStrategy::userData() const
