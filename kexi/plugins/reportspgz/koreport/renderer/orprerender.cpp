@@ -1051,15 +1051,6 @@ void ORPreRender::setSourceData(KoReportData *data)
     }
 }
 
-/*
-KexiDB::Connection* ORPreRender::database() const
-{
-    if (d != 0)
-        return d->_conn;
-    return 0;
-}
-*/
-
 bool ORPreRender::setDom(const QString & docReport)
 {
     kDebug() << docReport;
