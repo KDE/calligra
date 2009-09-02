@@ -801,7 +801,7 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
         } else {
             if (!field.table()) {
                 KexiDBWarn << QString(
-                    "KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assinged for field!")
+                    "KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assigned for field!")
                 .arg(QString(propertyName));
             } else {
                 LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);

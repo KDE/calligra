@@ -127,7 +127,7 @@ public:
     /*! Constructor #2: Uses already started transaction. */
     TransactionGuard(const Transaction& trans);
 
-    /*! Constructor #3: Creates TransactionGuard without transaction assinged.
+    /*! Constructor #3: Creates TransactionGuard without transaction assigned.
      setTransaction() can be used later to do so. */
     TransactionGuard();
 
