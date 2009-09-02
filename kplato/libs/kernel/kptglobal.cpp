@@ -87,7 +87,7 @@ namespace KPlato
     QString ToolTip::riskType() { return i18n( "Type of risk" ); }
 
     QString ToolTip::nodeNotScheduled() { return i18n( "The node has not been scheduled" ); }
-    QString ToolTip::nodeAssigmentMissing() { return i18n( "An effort has been estimated, but no resource has been assigned" ); }
+    QString ToolTip::nodeAssignmentMissing() { return i18n( "An effort has been estimated, but no resource has been assigned" ); }
     QString ToolTip::nodeResourceOverbooked() { return i18n( "A resource assigned to this task is overbooked" ); }
     QString ToolTip::nodeResourceUnavailable() { return i18n( "A resource assigned to this task is not available" ); }
     QString ToolTip::nodeConstraintsError() { return i18n( "A timing constraint could not be met" ); }

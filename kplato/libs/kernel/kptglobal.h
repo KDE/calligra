@@ -115,7 +115,7 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString riskType();
 
     static QString nodeNotScheduled();
-    static QString nodeAssigmentMissing();
+    static QString nodeAssignmentMissing();
     static QString nodeResourceOverbooked();
     static QString nodeResourceUnavailable();
     static QString nodeConstraintsError();

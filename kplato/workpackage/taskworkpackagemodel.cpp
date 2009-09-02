@@ -263,7 +263,7 @@ QVariant TaskWorkPackageModel::nodeData( Node *n, int column, int role ) const
         // After scheduling
         case NodeStartTime: return m_nodemodel.data( n, NodeModel::NodeStartTime, role );
         case NodeEndTime: return m_nodemodel.data( n, NodeModel::NodeEndTime, role );
-        case NodeAssigments: return m_nodemodel.data( n, NodeModel::NodeAssigments, role );
+        case NodeAssignments: return m_nodemodel.data( n, NodeModel::NodeAssignments, role );
 
         // Completion
         case NodeCompleted: return m_nodemodel.data( n, NodeModel::NodeCompleted, role );
@@ -472,7 +472,7 @@ QVariant TaskWorkPackageModel::headerData( int section, Qt::Orientation orientat
         // After scheduling
         case NodeStartTime: return i18n( "Planned Start" );
         case NodeEndTime: return i18n( "Planned Finish" );
-        case NodeAssigments: return i18n( "Resource Assignments" );
+        case NodeAssignments: return i18n( "Resource Assignments" );
 
         // Completion
         case NodeCompleted: return i18n( "Completion" );

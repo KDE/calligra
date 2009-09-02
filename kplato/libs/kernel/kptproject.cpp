@@ -52,7 +52,7 @@ Project::Project( Node *parent )
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
         emptyConfig( new ConfigBase() ),
-        m_config( *emptyConfig ),
+        m_config( emptyConfig ),
         m_schedulerPlugins()
 {
     //kDebug()<<"("<<this<<")";
@@ -64,7 +64,7 @@ Project::Project( ConfigBase &config, Node *parent )
         m_accounts( *this ),
         m_defaultCalendar( 0 ),
         emptyConfig( 0 ),
-        m_config( config ),
+        m_config( &config ),
         m_schedulerPlugins()
 {
     //kDebug()<<"("<<this<<")";
@@ -99,6 +99,7 @@ Project::~Project()
     while ( !m_managers.isEmpty() )
         delete m_managers.takeFirst();
     
+    m_config = 0; //not mine, don't delete
     delete emptyConfig;
 }
 

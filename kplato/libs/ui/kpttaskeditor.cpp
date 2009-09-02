@@ -570,7 +570,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     show << NodeModel::NodeStatus
             << NodeModel::NodeCompleted
             << NodeModel::NodeResponsible
-            << NodeModel::NodeAssigments
+            << NodeModel::NodeAssignments
             << NodeModel::NodePerformanceIndex
             << NodeModel::NodeBCWS
             << NodeModel::NodeBCWP
@@ -858,7 +858,7 @@ TaskWorkPackageView::TaskWorkPackageView( KoDocument *part, QWidget *parent )
     show << NodeModel::NodeStatus
             << NodeModel::NodeCompleted
             << NodeModel::NodeResponsible
-            << NodeModel::NodeAssigments
+            << NodeModel::NodeAssignments
             << NodeModel::NodeDescription;
     
     for ( int s = 0; s < show.count(); ++s ) {

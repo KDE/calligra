@@ -85,7 +85,7 @@ public:
         NodeNegativeFloat,
         NodeStartFloat,
         NodeFinishFloat,
-        NodeAssigments,
+        NodeAssignments,
 
         // Based on scheduled values
         NodeDuration,
@@ -109,7 +109,7 @@ public:
             
         // Scheduling errors
         NodeNotScheduled,
-        NodeAssigmentMissing,
+        NodeAssignmentMissing,
         NodeResourceOverbooked,
         NodeResourceUnavailable,
         NodeConstraintsError,

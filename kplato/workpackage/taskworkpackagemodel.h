@@ -76,7 +76,7 @@ public:
         // After scheduling
         NodeStartTime,
         NodeEndTime,
-        NodeAssigments,
+        NodeAssignments,
 
         // Completion
         NodeCompleted,

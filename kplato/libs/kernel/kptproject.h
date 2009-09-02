@@ -479,9 +479,17 @@ public:
     void generateUniqueNodeIds();
     void generateUniqueIds();
     
-    const ConfigBase &config() const { return m_config; }
-    const Task &taskDefaults() const { return m_config.taskDefaults(); }
-    
+    const ConfigBase &config() const { return *m_config; }
+    /// Set configuration data
+    void setConfig( ConfigBase *config ) { m_config = config; }
+
+    const Task &taskDefaults() const { return m_config->taskDefaults(); }
+
+    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
+    KLocale *locale() { return m_config->locale(); }
+    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
+    const KLocale *locale() const { return m_config->locale(); }
+
     void incProgress();
 
     void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
@@ -489,15 +497,6 @@ public:
 
     void initiateCalculation( MainSchedule &sch );
     void initiateCalculationLists( MainSchedule &sch );
-
-    /// Set configuration data
-    void setConfig( const ConfigBase &config ) { m_config = config; }
-
-    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    KLocale *locale() { return m_config.locale(); }
-    /// Return locale. (Used for currency, everything else is from KGlobal::locale)
-    const KLocale *locale() const { return m_config.locale(); }
-
     
 signals:
     /// Emitted when anything in the project is changed (use with care)
@@ -632,7 +631,7 @@ private:
     int m_projectSlack;
 
     ConfigBase *emptyConfig;
-    ConfigBase &m_config;
+    ConfigBase *m_config; // this one is not owned by me, don't delete
 
     int m_progress;
 

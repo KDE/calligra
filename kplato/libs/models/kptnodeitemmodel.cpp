@@ -1612,7 +1612,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeNegativeFloat: result = negativeFloat( n, role ); break;
         case NodeStartFloat: result = startFloat( n, role ); break;
         case NodeFinishFloat: result = finishFloat( n, role ); break;
-        case NodeAssigments: result = assignedResources( n, role ); break;
+        case NodeAssignments: result = assignedResources( n, role ); break;
 
         // Based on scheduled values
         case NodeDuration: result = duration( n, role ); break;
@@ -1636,7 +1636,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         
         // Scheduling errors
         case NodeNotScheduled: result = nodeIsNotScheduled( n, role ); break;
-        case NodeAssigmentMissing: result = resourceIsMissing( n, role ); break;
+        case NodeAssignmentMissing: result = resourceIsMissing( n, role ); break;
         case NodeResourceOverbooked: result = resourceIsOverbooked( n, role ); break;
         case NodeResourceUnavailable: result = resourceIsNotAvailable( n, role ); break;
         case NodeConstraintsError: result = schedulingConstraintsError( n, role ); break;
@@ -1716,7 +1716,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeNegativeFloat: return i18n( "Negative Float" );
             case NodeStartFloat: return i18n( "Start Float" );
             case NodeFinishFloat: return i18n( "Finish Float" );
-            case NodeAssigments: return i18n( "Assignments" );
+            case NodeAssignments: return i18n( "Assignments" );
             
             // Based on scheduled values
             case NodeDuration: return i18n( "Duration" );
@@ -1741,7 +1741,7 @@ QVariant NodeModel::headerData( int section, int role )
             
             // Scheduling errors
             case NodeNotScheduled: return i18n( "Not Scheduled" );
-            case NodeAssigmentMissing: return i18n( "Assignment Missing" );
+            case NodeAssignmentMissing: return i18n( "Assignment Missing" );
             case NodeResourceOverbooked: return i18n( "Resource Overbooked" );
             case NodeResourceUnavailable: return i18n( "Resource Unavailable" );
             case NodeConstraintsError: return i18n( "Constraints Error" );
@@ -1806,7 +1806,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeNegativeFloat: return ToolTip::nodeNegativeFloat();
             case NodeStartFloat: return ToolTip::nodeStartFloat();
             case NodeFinishFloat: return ToolTip::nodeFinishFloat();
-            case NodeAssigments: return ToolTip::nodeAssignment();
+            case NodeAssignments: return ToolTip::nodeAssignment();
 
             // Based on scheduled values
             case NodeDuration: return ToolTip::nodeDuration();
@@ -1830,7 +1830,7 @@ QVariant NodeModel::headerData( int section, int role )
     
             // Scheduling errors
             case NodeNotScheduled: return ToolTip::nodeNotScheduled();
-            case NodeAssigmentMissing: return ToolTip::nodeAssigmentMissing();
+            case NodeAssignmentMissing: return ToolTip::nodeAssignmentMissing();
             case NodeResourceOverbooked: return ToolTip::nodeResourceOverbooked();
             case NodeResourceUnavailable: return ToolTip::nodeResourceUnavailable();
             case NodeConstraintsError: return ToolTip::nodeConstraintsError();

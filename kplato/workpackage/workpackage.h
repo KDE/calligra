@@ -148,6 +148,9 @@ protected:
     bool m_modified;
 
     WorkPackageSettings m_settings;
+
+    ConfigBase m_config;
+
 };
 
 //-----------------------------

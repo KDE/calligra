@@ -78,7 +78,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
         if ( ! txt.isEmpty() ) {
             txt += ' ';
         }
-        txt += '(' + data( idx, NodeModel::NodeAssigments, Qt::DisplayRole ).toString() + ')';
+        txt += '(' + data( idx, NodeModel::NodeAssignments, Qt::DisplayRole ).toString() + ')';
     }
     //kDebug()<<txt;
     return txt;

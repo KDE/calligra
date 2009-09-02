@@ -26,6 +26,7 @@
 #include "kptdocuments.h"
 #include "kptcommand.h"
 #include "kptxmlloaderobject.h"
+#include "kptconfigbase.h"
 
 #include <KoStore.h>
 #include <KoXmlReader.h>
@@ -59,6 +60,8 @@ WorkPackage::WorkPackage( bool fromProjectStore )
     m_fromProjectStore( fromProjectStore ),
     m_modified( false)
 {
+    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );;
+    m_project->setConfig( &m_config );
 }
 
 WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
@@ -68,6 +71,10 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
 {
     Q_ASSERT( project );
     Q_ASSERT ( project->childNode( 0 ) );
+
+    m_config.setLocale( new KLocale( *( KGlobal::locale() ) ) );
+    m_project->setConfig( &m_config );
+
     if ( ! project->scheduleManagers().isEmpty() ) {
         // should be only one manager
         project->setCurrentSchedule( m_project->scheduleManagers().first()->id() );
