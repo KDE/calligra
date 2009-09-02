@@ -39,7 +39,7 @@
       <item row="3" column="0" colspan="2">
        <widget class="QRadioButton" name="kcfg_DeleteFile">
         <property name="text">
-         <string>Delete file after  it has been retrieved</string>
+         <string>Delete file after it has been retrieved</string>
         </property>
        </widget>
       </item>

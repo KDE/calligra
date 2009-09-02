@@ -537,7 +537,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     m_xmlLoader.setVersion( m_syntaxVersion );
     if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n( "This document is a newer version than supported by KPlatoWork  (syntax version: %1)<br>"
+                      0, i18n( "This document is a newer version than supported by KPlatoWork (syntax version: %1)<br>"
                                "Opening it in this version of KPlatoWork will lose some information.", m_syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {

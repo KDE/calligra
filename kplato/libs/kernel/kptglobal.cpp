@@ -46,7 +46,7 @@ namespace KPlato
     QString ToolTip::nodeStartTime() { return i18n( "Planned start time" ); }
     QString ToolTip::nodeEndTime() { return i18n( "Planned finish time" ); }
     QString ToolTip::nodeEarlyStart() { return i18n( "Earliest start time allowed by dependencies" ); }
-    QString ToolTip::nodeEarlyFinish() { return i18n( "Earliest finish  time allowed by dependencies" ); }
+    QString ToolTip::nodeEarlyFinish() { return i18n( "Earliest finish time allowed by dependencies" ); }
     QString ToolTip::nodeLateStart() { return i18n( "Latest start time allowed by dependencies" ); }
     QString ToolTip::nodeLateFinish() { return i18n( "Latest finish time allowed by dependencies" ); }
     
@@ -55,7 +55,7 @@ namespace KPlato
     QString ToolTip::nodeOptimisticDuration() { return i18n( "The optimistic duration" ); }
     QString ToolTip::nodePessimisticDuration() { return i18n( "The pessimistic duration" ); }
 
-    QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed  without affecting the project completion time" ); }
+    QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed without affecting the project completion time" ); }
     QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint" ); }
     QString ToolTip::nodeFreeFloat() { return i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" ); }
     QString ToolTip::nodeStartFloat() { return i18n( "The duration from Early Start to Late Start" ); }

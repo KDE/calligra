@@ -802,7 +802,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
         i->setText( 0, i18n( "Dependencies (Graphic)" ) );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit task dependenies" ) );
+        i->setToolTip( 0, i18n( "Edit task dependencies" ) );
     } else {
         i->setToolTip( 0, tip );
     }
