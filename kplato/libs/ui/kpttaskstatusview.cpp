@@ -49,6 +49,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
@@ -348,7 +349,7 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
     
     QStringList lst;
     for ( int i = 1; i <= 7; ++i ) {
-        lst << QDate::longDayName( i );
+        lst << KGlobal::locale()->calendar()->weekDayName( i );
     }
     weekdays->addItems( lst );
     period->setValue( view->period() );
