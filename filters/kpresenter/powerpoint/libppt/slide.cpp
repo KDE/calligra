@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -35,7 +35,7 @@ public:
   UString title;
   GroupObject* rootObject;
 
-  double pageWidth; 
+  double pageWidth;
   double pageHeight;
 };
 
@@ -44,10 +44,10 @@ Slide::Slide( Presentation* pr )
   d = new Private;
   d->presentation = pr;
   d->rootObject = new GroupObject;
-  d->pageWidth = 0.0; 
+  d->pageWidth = 0.0;
   d->pageHeight = 0.0;
 }
-  
+
 Slide::~Slide()
 {
   delete d->rootObject;
@@ -118,21 +118,21 @@ TextObject* Slide::textObject( unsigned placeId )
 }
 
 double Slide::pageWidth() const
-{ 
-  return d->pageWidth; 
+{
+  return d->pageWidth;
 }
 
-void Slide::setPageWidth( double pageWidth ) 
-{  
-  d->pageWidth = pageWidth; 
+void Slide::setPageWidth( double pageWidth )
+{
+  d->pageWidth = pageWidth;
 }
 
 double Slide::pageHeight() const
 {
-  return d->pageHeight; 
+  return d->pageHeight;
 }
 
-void Slide::setPageHeight( double pageHeight ) 
+void Slide::setPageHeight( double pageHeight )
 {
-  d->pageHeight = pageHeight; 
+  d->pageHeight = pageHeight;
 }

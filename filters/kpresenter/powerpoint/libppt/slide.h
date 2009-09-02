@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -42,16 +42,16 @@ public:
   void setRootObject( GroupObject *);
   TextObject* textObject( unsigned placeId );
 
-  double pageWidth() const; 
-  void setPageWidth( double pageWidth ) ; 
+  double pageWidth() const;
+  void setPageWidth( double pageWidth ) ;
   double pageHeight() const;
-  void setPageHeight( double pageHeight ) ; 
+  void setPageHeight( double pageHeight ) ;
 
 private:
   // no copy or assign
   Slide( const Slide& );
   Slide& operator=( const Slide& );
-  
+
   class Private;
   Private* d;
 };

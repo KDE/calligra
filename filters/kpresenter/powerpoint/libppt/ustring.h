@@ -390,6 +390,6 @@ namespace Libppt {
       const UString& string() const { return *this; }
   };
 
-} 
+}
 
 #endif /* LIBPPT_USTRING_H_ */

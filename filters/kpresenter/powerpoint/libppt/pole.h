@@ -1,28 +1,28 @@
-/* POLE - Portable C++ library to access OLE Storage 
+/* POLE - Portable C++ library to access OLE Storage
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
-   Redistribution and use in source and binary forms, with or without 
-   modification, are permitted provided that the following conditions 
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
    are met:
-   * Redistributions of source code must retain the above copyright notice, 
+   * Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-     this list of conditions and the following disclaimer in the documentation 
+   * Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
-   * Neither the name of the authors nor the names of its contributors may be 
-     used to endorse or promote products derived from this software without 
+   * Neither the name of the authors nor the names of its contributors may be
+     used to endorse or promote products derived from this software without
      specific prior written permission.
 
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
    THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -48,7 +48,7 @@ public:
 
   // for Storage::result()
   enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
-  
+
   /**
    * Constructs a storage with name filename.
    **/
@@ -58,7 +58,7 @@ public:
    * Destroys the storage.
    **/
   ~Storage();
-  
+
   /**
    * Opens the storage. Returns true if no error occurs.
    **/
@@ -68,7 +68,7 @@ public:
    * Closes the storage.
    **/
   void close();
-  
+
   /**
    * Returns the error code of last operation.
    **/
@@ -78,11 +78,11 @@ public:
    * Finds all stream and directories in given path.
    **/
   std::list<std::string> entries( const std::string& path = "/" );
-  
+
   /**
    * Returns true if specified entry name is a directory.
    */
-  bool isDirectory( const std::string& name ); 
+  bool isDirectory( const std::string& name );
 
   /**
    * Finds and returns a stream with the specified name.
@@ -96,10 +96,10 @@ public:
    **/
   Stream* stream( const std::string& name, bool reuse = true );
   //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
-  
+
 private:
   StorageIO* io;
-  
+
   // no copy or assign
   Storage( const Storage& );
   Storage& operator=( const Storage& );
@@ -110,7 +110,7 @@ class Stream
 {
   friend class Storage;
   friend class StorageIO;
-  
+
 public:
 
   /**
@@ -127,8 +127,8 @@ public:
   /**
    * Returns the full stream name.
    */
-  std::string fullName(); 
-  
+  std::string fullName();
+
   /**
    * Returns the stream size.
    **/
@@ -142,7 +142,7 @@ public:
   /**
    * Sets the read/write position.
    **/
-  void seek( unsigned long pos ); 
+  void seek( unsigned long pos );
 
   /**
    * Reads a byte.
@@ -153,12 +153,12 @@ public:
    * Reads a block of data.
    **/
   unsigned long read( unsigned char* data, unsigned long maxlen );
-  
+
   /**
    * Returns true if the read/write position is past the file.
    **/
   bool eof();
-  
+
   /**
    * Returns true whenever error occurs.
    **/
@@ -169,7 +169,7 @@ private:
 
   // no copy or assign
   Stream( const Stream& );
-  Stream& operator=( const Stream& );    
+  Stream& operator=( const Stream& );
 };
 
 }

@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -37,7 +37,7 @@ Presentation::Presentation()
   d = new Private;
   d->masterSlide = 0;
 }
-  
+
 Presentation::~Presentation()
 {
   clear();
@@ -53,13 +53,13 @@ void Presentation::clear()
   delete d->masterSlide;
   d->masterSlide = 0;
 }
-  
+
 bool Presentation::load( const char* filename )
 {
   PPTReader* reader = new PPTReader;
   bool result = reader->load( this, filename );
   delete reader;
-  return result;  
+  return result;
 }
 
 void Presentation::appendSlide( Slide* slide )
