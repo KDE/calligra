@@ -40,6 +40,11 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
+- general: port from Q3Wizard to KAssistantDialog
+
+2009-08-31
+Forms
+* remove kdevelop plugin and test (kformdesigner); this code is no longer compatible with the current API; maybe one day...
 
 2009-08-30
 Forms
