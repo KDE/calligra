@@ -1449,6 +1449,15 @@ void Estimate::setRisktype(const QString& type) {
         setRisktype(Risk_None); // default
 }
 
+void Estimate::setCalendar( Calendar *calendar )
+{
+    m_calendar = calendar;
+    m_expectedCached = false;
+    m_optimisticCached = false;
+    m_pessimisticCached = false;
+    changed();
+}
+
 void Estimate::setExpectedEstimate( double value)
 {
     m_expectedEstimate = value;

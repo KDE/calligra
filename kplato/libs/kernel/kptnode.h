@@ -695,7 +695,7 @@ public:
     /// Return the calendar used when Type is Duration
     Calendar *calendar() const { return m_calendar; }
     /// Set the calendar to be used when Type is Duration
-    void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
+    void setCalendar( Calendar *calendar );
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }

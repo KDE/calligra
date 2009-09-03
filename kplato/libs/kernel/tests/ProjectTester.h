@@ -61,6 +61,7 @@ private:
     void printSchedulingLog( const ScheduleManager &sm ) const;
 
     Project *m_project;
+    Calendar *m_calendar;
     Task *m_task;
 };
 

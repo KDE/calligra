@@ -72,6 +72,21 @@ void ProjectTester::printSchedulingLog( const ScheduleManager &sm ) const
 void ProjectTester::initTestCase()
 {
     m_project = new Project();
+    // standard worktime defines 8 hour day as default
+    QVERIFY( m_project->standardWorktime() );
+    QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
+    m_calendar = new Calendar();
+    m_calendar->setDefault( true );
+    QTime t1( 9, 0, 0 );
+    QTime t2 ( 17, 0, 0 );
+    int length = t1.msecsTo( t2 );
+    for ( int i=1; i <= 7; ++i ) {
+        CalendarDay *d = m_calendar->weekday( i );
+        d->setState( CalendarDay::Working );
+        d->addInterval( t1, length );
+    }
+    m_project->addCalendar( m_calendar );
+
     m_task = 0;
 }
 
@@ -150,7 +165,7 @@ void ProjectTester::schedule()
     t->estimate()->setUnit( Duration::Unit_d );
     t->estimate()->setExpectedEstimate( 1.0 );
     t->estimate()->setType( Estimate::Type_Duration );
-    
+
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
@@ -158,21 +173,17 @@ void ProjectTester::schedule()
     QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 1 )) );
     
-    // standard worktime defines 8 hour day as default
-    Calendar *c = new Calendar();
-    c->setDefault( true );
-    for ( int i=1; i <= 7; ++i ) {
-        CalendarDay *d = c->weekday( i );
-        d->setState( CalendarDay::Working );
-        d->addInterval( t1, length );
-    }
-    m_project->addCalendar( c );
-    
+    t->estimate()->setCalendar( m_calendar );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
+    QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );
+
     ResourceGroup *g = new ResourceGroup();
     m_project->addResourceGroup( g );
     Resource *r = new Resource();
     r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
-    r->setCalendar( c );
+    r->setCalendar( m_calendar );
     m_project->addResource( g, r );
 
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
