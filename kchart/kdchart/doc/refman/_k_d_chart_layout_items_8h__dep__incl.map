@@ -1,8 +1,0 @@
-base referer
-rect $_k_d_chart_abstract_area_base_8h.html 229,91 440,117
-rect $_k_d_chart_abstract_area_8h.html 488,91 667,117
-rect $_k_d_chart_layout_items_8cpp.html 716,141 905,168
-rect $_k_d_chart_text_area_8h.html 503,141 652,168
-rect $_k_d_chart_cartesian_axis_8cpp.html 235,243 435,269
-rect $_k_d_chart_chart_8cpp.html 263,293 407,320
-rect $_k_d_chart_legend_8cpp.html 257,344 412,371

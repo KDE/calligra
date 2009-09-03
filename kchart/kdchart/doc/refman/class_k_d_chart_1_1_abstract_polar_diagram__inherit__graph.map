@@ -1,7 +1,0 @@
-base referer
-rect $class_k_d_chart_1_1_abstract_pie_diagram.html 75,229 296,256
-rect $class_k_d_chart_1_1_polar_diagram.html 320,229 499,256
-rect $class_k_d_chart_1_1_abstract_diagram.html 197,80 397,107
-rect $class_q_abstract_item_view.html 221,5 373,32
-rect $class_k_d_chart_1_1_pie_diagram.html 5,304 171,331
-rect $class_k_d_chart_1_1_ring_diagram.html 195,304 371,331

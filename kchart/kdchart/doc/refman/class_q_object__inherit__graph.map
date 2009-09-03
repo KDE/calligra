@@ -1,7 +1,0 @@
-base referer
-rect $class_k_d_chart_1_1_abstract_area.html 150,6 323,32
-rect $class_k_d_chart_1_1_diagram_observer.html 134,56 339,83
-rect $class_k_d_chart_1_1_palette.html 170,107 303,134
-rect $class_k_d_chart_1_1_signal_compressor.html 132,158 340,184
-rect $class_k_d_chart_1_1_text_area.html 164,208 308,235
-rect $class_k_d_chart_enums.html 175,259 298,286

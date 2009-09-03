@@ -1,8 +1,0 @@
-base referer
-rect $_k_d_chart_line_diagram_8h.html 284,340 460,367
-rect $_k_d_chart_bar_diagram_8h.html 287,391 458,417
-rect $_k_d_chart_palette_8h.html 304,441 440,468
-rect $_k_d_chart_position_8h.html 300,492 444,519
-rect $_k_d_chart_text_attributes_8h.html 280,543 464,569
-rect $_k_d_chart_attributes_model_8h.html 274,593 471,620
-rect $_k_d_chart_data_value_attributes_8h.html 259,695 486,721

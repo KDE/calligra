@@ -1,8 +1,0 @@
-digraph G
-{
-  edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
-  node [fontname="Helvetica",fontsize=10,shape=record];
-  Node623 [label="KDChart::ZoomParameters",height=0.2,width=0.4,color="white", fillcolor="black", style="filled" fontcolor="white"];
-  Node624 -> Node623 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="xFactor\nyFactor\nxCenter\nyCenter",fontname="Helvetica"];
-  Node624 [label="double",height=0.2,width=0.4,color="grey75"];
-}

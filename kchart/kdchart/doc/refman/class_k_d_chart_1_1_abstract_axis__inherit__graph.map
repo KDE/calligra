@@ -1,8 +1,0 @@
-base referer
-rect $class_k_d_chart_1_1_cartesian_axis.html 21,304 200,331
-rect $class_k_d_chart_1_1_ternary_axis.html 224,304 389,331
-rect $class_k_d_chart_1_1_abstract_area.html 121,155 295,181
-rect $class_q_object.html 5,80 80,107
-rect $class_k_d_chart_1_1_abstract_area_base.html 104,80 312,107
-rect $class_k_d_chart_1_1_abstract_layout_item.html 336,80 555,107
-rect $class_q_layout_item.html 391,5 500,32

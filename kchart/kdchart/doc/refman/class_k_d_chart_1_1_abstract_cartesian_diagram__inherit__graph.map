@@ -1,6 +1,0 @@
-base referer
-rect $class_k_d_chart_1_1_bar_diagram.html 6,229 174,256
-rect $class_k_d_chart_1_1_line_diagram.html 198,229 371,256
-rect $class_k_d_chart_1_1_plotter.html 395,229 526,256
-rect $class_k_d_chart_1_1_abstract_diagram.html 184,80 384,107
-rect $class_q_abstract_item_view.html 208,5 360,32

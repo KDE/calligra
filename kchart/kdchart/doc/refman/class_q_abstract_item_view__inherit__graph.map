@@ -1,5 +1,0 @@
-base referer
-rect $class_k_d_chart_1_1_abstract_diagram.html 311,80 511,107
-rect $class_k_d_chart_1_1_abstract_cartesian_diagram.html 5,155 269,182
-rect $class_k_d_chart_1_1_abstract_polar_diagram.html 293,155 528,182
-rect $class_k_d_chart_1_1_abstract_ternary_diagram.html 552,155 803,182
