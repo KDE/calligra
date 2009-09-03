@@ -536,6 +536,30 @@ private:
     Private * const d;
 };
 
+//! Helper that sets given variable to specified value on destruction
+//! Object of type Setter are supposed to be created on the stack.
+template <typename T>
+class KEXIUTILS_EXPORT Setter
+{
+public:
+    //! Creates a new setter object for variable @a var,
+    //! which will be set to value @a val on setter's destruction.
+    Setter(T* var, const T& val)
+        : m_var(var), m_value(val)
+    {
+    }
+    ~Setter() {
+        if (m_var)
+            *m_var = m_value;
+    }
+    //! Clears the assignment, so the setter
+    //! will not alter the variable on destruction
+    void clear() { m_var = 0; }
+private:
+    T* m_var;
+    const T m_value;
+};
+
 /*! A modified QFrame which sets up sunken styled panel frame style depending
  on the current widget style. The widget also reacts on style changes. */
 class KEXIUTILS_EXPORT KTextEditorFrame : public QFrame
