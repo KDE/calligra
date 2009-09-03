@@ -811,7 +811,11 @@ protected:
 
     /*! Used in acceptEditor() to avoid infinite recursion,
      eg. when we're calling acceptRowEdit() during cell accepting phase. */
-    bool m_inside_acceptEditor : 1;
+    bool m_inside_acceptEditor; // no bit field allowed
+
+    /*! Used in acceptRowEdit() to avoid infinite recursion,
+     eg. when we're calling acceptRowEdit() during cell accepting phase. */
+    bool m_inside_acceptRowEdit; // no bit field allowed
 
     /*! @internal if true, this object automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit

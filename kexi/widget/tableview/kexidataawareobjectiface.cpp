@@ -57,6 +57,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_isFilteringEnabled = true;
     m_deletionPolicy = AskDelete;
     m_inside_acceptEditor = false;
+    m_inside_acceptRowEdit = false;
     m_acceptsRowEditAfterCellAccepting = false;
     m_internal_acceptsRowEditAfterCellAccepting = false;
     m_contentsMousePressEvent_dblClick = false;
@@ -698,17 +699,21 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-    if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer())
+    if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit)
         return true;
     if (m_inside_acceptEditor) {
         m_internal_acceptsRowEditAfterCellAccepting = true;
         return true;
     }
+    m_inside_acceptRowEdit = true; // avoid recursion
+    KexiUtils::Setter<bool> acceptRowEditSetter(&m_inside_acceptRowEdit, false);
+
     m_internal_acceptsRowEditAfterCellAccepting = false;
 
     const int columnEditedBeforeAccepting = m_editor ? currentColumn() : -1;
-    if (!acceptEditor())
+    if (!acceptEditor()) {
         return false;
+    }
     kDebug() << "EDIT ROW ACCEPTING...";
 
     bool success = true;
@@ -759,8 +764,9 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         //editing is finished:
         if (m_newRowEditing) {
             //update current-item-iterator
-            m_itemIterator += (m_data->count() - 1);
-            m_currentItem = *m_itemIterator;
+            setCursorPosition(-1, -1, true /*forceSet*/);
+//2.0            m_itemIterator += (m_data->count() - 1);
+//2.0            m_currentItem = *m_itemIterator;
         }
         m_rowEditing = false;
         m_newRowEditing = false;
@@ -809,7 +815,6 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
             }
         }
     }
-
     return success;
 }
 
@@ -896,7 +901,8 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     if (!m_editor || m_inside_acceptEditor)
         return true;
 
-    m_inside_acceptEditor = true;//avoid recursion
+    m_inside_acceptEditor = true; // avoid recursion
+    KexiUtils::Setter<bool> acceptRowEditSetter(&m_inside_acceptEditor, false);
 
     QVariant newval;
     Validator::Result res = Validator::Ok;
@@ -995,7 +1001,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     const int realFieldNumber = fieldNumberForColumn(m_curCol);
     if (realFieldNumber < 0) {
         kWarning() << "KexiDataAwareObjectInterface::acceptEditor(): fieldNumberForColumn(m_curCol) < 0";
-        m_inside_acceptEditor = false;
         return false;
     }
 
@@ -1010,7 +1015,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             removeEditor();
             if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
                 acceptRowEdit();
-            m_inside_acceptEditor = false;
             return true;
         }
         if (!setNull) {//get the new value
@@ -1094,7 +1098,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     cancelEditor();
                     if (m_acceptsRowEditAfterCellAccepting)
                         cancelRowEdit();
-                    m_inside_acceptEditor = false;
                     return false;
                 }
             }
@@ -1107,7 +1110,6 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                              m_currentItem->at(realFieldNumber));
         /*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol);
     }
-    m_inside_acceptEditor = false;
     if (res == Validator::Ok) {
         if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
             acceptRowEdit();
