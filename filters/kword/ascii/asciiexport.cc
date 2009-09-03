@@ -24,13 +24,11 @@
 
 #include <limits.h>
 
-#include <q3cstring.h>
 #include <QFile>
 #include <QIODevice>
 #include <QString>
 #include <QTextCodec>
 #include <QTextStream>
-//Added by qt3to4:
 #include <QList>
 
 #include <kdebug.h>
