@@ -202,7 +202,9 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     m_fnameLbl->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
     m_fnameLbl->setFocusPolicy(Qt::NoFocus);
     m_fnameLbl->setTextFormat(Qt::PlainText);
-    m_fnameLbl->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding, 1, 0));
+    QSizePolicy fnameLblSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    fnameLblSizePolicy.setHorizontalStretch(1);
+    m_fnameLbl->setSizePolicy(fnameLblSizePolicy);
     m_fnameLbl->setLineWidth(1);
     m_fnameLbl->setFrameStyle(QFrame::Box);
     m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
