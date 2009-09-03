@@ -241,7 +241,7 @@ QVariant SummaryHandlingProxyModel::data( const QModelIndex& proxyIndex, int rol
             }
         } else {
             d->insertInCache( this, sidx );
-            return data( proxyIndex, role ); /* TODO: Optimize */
+            return data( proxyIndex, role ); /* TODO: Optimise */
         }
     }
     return model->data( sidx, role );

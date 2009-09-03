@@ -53,7 +53,7 @@ AbstractRowController::~AbstractRowController()
  * \returns true if the row containing index \a idx is visible
  * in the view.
  *
- * Implement this to allow KDGantt to optimize how items on
+ * Implement this to allow KDGantt to optimise how items on
  * screen are created. It is not harmful to always return true here,
  * but the View will not perform optimally.
  */

@@ -166,10 +166,10 @@ bool ProxyModel::setData( const QModelIndex& proxyIdx, const QVariant& value, in
 {
     int srole = role;
     int scol  = proxyIdx.column();
-    QHash<int, int>::const_iterator it = d->roleMap.constFind( role );
-    if ( it != d->roleMap.constEnd() ) srole = *it;
-    it = d->columnMap.constFind( role );
-    if ( it != d->columnMap.constEnd() ) scol = *it;
+    QHash<int, int>::const_iterator it = d->roleMap.find( role );
+    if ( it != d->roleMap.end() ) srole = *it;
+    it = d->columnMap.find( role );
+    if ( it != d->columnMap.end() ) scol = *it;
 
     QAbstractItemModel* model = sourceModel();
     return model->setData( model->index( proxyIdx.row(), scol, mapToSource( proxyIdx.parent() ) ), value, srole );
