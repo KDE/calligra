@@ -127,7 +127,7 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::ObjectTreeView *tr
     //connect actions provided by widget factories
 //moved from KexiFormPart
         connect(col->action("widget_assign_action"), SIGNAL(activated()),
-                this, SLOT(assignAction()));
+                this, SLOT(slotAssignAction()));
     }
 
     d->treeView = treeView;
