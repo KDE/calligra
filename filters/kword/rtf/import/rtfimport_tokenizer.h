@@ -12,7 +12,6 @@
 #ifndef __RTFIMPORT_TOKENIZER_H__
 #define __RTFIMPORT_TOKENIZER_H__
 
-#include <q3cstring.h>
 #include <QFile>
 
 
