@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <klocale.h>
+#include <KLocale>
 
 #include "kexitextformatter.h"
 #include <widget/utils/kexidatetimeformatter.h>
@@ -132,7 +132,7 @@ QVariant KexiTextFormatter::textToValue(const QString& text) const
         return text.toLongLong();
     case KexiDB::Field::Boolean:
 //! @todo temporary solution for booleans!
-        return text == "1" ? QVariant(true, 1) : QVariant(false, 0);
+        return text == "1";
     case KexiDB::Field::Date:
         return d->dateFormatter->stringToVariant(text);
     case KexiDB::Field::Time:
