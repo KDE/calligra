@@ -62,11 +62,33 @@ void ViewListDialog::slotOk() {
 AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent )
     : QWidget( parent ),
       m_view( view ),
-      m_viewlist( viewlist )
+      m_viewlist( viewlist ),
+      m_viewnameChanged( false ),
+      m_viewtipChanged( false )
 {
     widget.setupUi( this );
     
-    // NOTE: must match switch in ok()
+    // NOTE: these lists must match switch in ok() FIXME: refactor
+    m_viewtypes << "ResourceEditor"
+            << "TaskEditor"
+            << "CalendarEditor"
+            << "AccountsEditor"
+            << "DependencyEditor"
+            << "PertEditor"
+            << "ScheduleHandlerView"
+            << "TaskStatusView"
+            << "TaskView"
+            << "TaskWorkPackageView"
+            << "GanttView"
+            << "MilestoneGanttView"
+            << "ResourceAppointmentsView"
+            << "ResourceAppointmentsGanttView"
+            << "AccountsView"
+            << "ProjectStatusView"
+            << "PerformanceStatusView";
+    /* Deactivate for koffice 2.0
+            << "Tasks by Resources";
+    */
     QStringList lst;
     lst << i18n( "Resource Editor" )
             << i18n( "Task Editor" )
@@ -86,7 +108,6 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Project Performance Chart" )
             << i18n( "Tasks Performance Chart" );
     /* Deactivate for koffice 2.0
-            << i18n( "Performance Status" )
             << i18n( "Tasks by Resources" );
     */
     widget.viewtype->addItems( lst );
@@ -101,10 +122,47 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
     }
     fillAfter( m_categories.value( widget.category->currentText() ) );
 
+    viewtypeChanged( widget.viewtype->currentIndex() );
+
     connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
+    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( viewnameChanged( const QString& ) ) );
+    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( viewtipChanged( const QString& ) ) );
     connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
+    connect( widget.viewtype, SIGNAL( currentIndexChanged( int ) ), SLOT( viewtypeChanged( int ) ) );
     connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
+}
+
+void AddViewPanel::viewnameChanged( const QString &text )
+{
+    m_viewnameChanged = ! text.isEmpty();
+    qDebug()<<"viewnameChanged:"<<m_viewnameChanged;
+}
+
+void AddViewPanel::viewtipChanged( const QString &text )
+{
+    m_viewtipChanged = ! text.isEmpty();
+    qDebug()<<"viewtipChanged:"<<m_viewtipChanged;
+}
+
+void AddViewPanel::viewtypeChanged( int idx )
+{
+    ViewInfo vi = m_view->defaultViewInfo( m_viewtypes.value( idx ) );
+    qDebug()<<"viewtypeChanged:"<<idx<<m_viewtypes.value( idx )<<vi.name<<vi.tip;
+    if ( widget.viewname->text().isEmpty() ) {
+        m_viewnameChanged = false;
+    }
+    if ( ! m_viewnameChanged ) {
+        widget.viewname->setText( vi.name );
+        m_viewnameChanged = false;
+    }
+    if ( widget.tooltip->text().isEmpty() ) {
+        m_viewtipChanged = false;
+    }
+    if ( ! m_viewtipChanged ) {
+        widget.tooltip->setText( vi.tip );
+        m_viewtipChanged = false;
+    }
 }
 
 void AddViewPanel::categoryChanged()
@@ -146,74 +204,62 @@ bool AddViewPanel::ok()
     }
     ViewBase *v = 0;
     int index = widget.insertAfter->currentIndex();
-    switch ( widget.viewtype->currentIndex() ) {
+    int viewtype = widget.viewtype->currentIndex();
+    switch ( viewtype ) {
         case 0: { // Resource editor
-            v = m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createResourceEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 1: { // Task editor
-            v = m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createTaskEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 2: { // Work & Vacation Editor
-            v = m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createCalendarEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 3: { // Accounts Editor
-            v = m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createAccountsEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 4: { // Dependency Editor (Graphic)
-            v = m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createDependencyEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 5: { // Dependency Editor (List)
-            v = m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createPertEditor( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 6: { // Schedules Handler
-            v = m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createScheduleHandler( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 7: { // Task status
-            v = m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createTaskStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 8: { // Task status
-            v = m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createTaskView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 9: { // Task work package
-            v = m_view->createTaskWorkPackageView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createTaskWorkPackageView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 10: { // Gantt View
-            v = m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createGanttView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 11: { // Milestone Gantt View
-            v = m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createMilestoneGanttView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 12: { // Resource Assignments
-            v = m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createResourceAppointmentsView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 13: { // Resource Assignments (Gantt)
-            v = m_view->createResourceAppointmentsGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createResourceAppointmentsGanttView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 14: { // Cost Breakdown
-            v = m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createAccountsView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 15: { // Project Performance Chart
-            v = m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createProjectStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
         case 16: { // Task Performance Chart
-            v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
+            v = m_view->createPerformanceStatusView( cat, m_viewtypes.value( viewtype ), widget.viewname->text(), widget.tooltip->text(), index );
             break; }
-/* Deactivate for koffice 2.0 release
-        case 17: { // Performance Status
-            v = m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
-            break; }
-        case 18: { // Tasks by Resources
-            v = m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
-            break; }
-*/
         default:
             kError()<<"Unknown view type!";
             break;
-    }
-    ViewListItem *item = m_viewlist.findItem( v, cat );
-    if ( item ) {
-        item->setNameModified( true );
-        item->setTipModified( true );
     }
     return true;
 }
@@ -287,11 +333,9 @@ bool EditViewPanel::ok()
     }
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
         m_item->setText( 0, widget.viewname->text() );
-        m_item->setNameModified( true );
     }
     if ( widget.tooltip->text() != m_item->toolTip( 0 ) ) {
         m_item->setToolTip( 0, widget.tooltip->text() );
-        m_item->setTipModified( true );
     }
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
@@ -379,11 +423,9 @@ bool EditCategoryPanel::ok()
 {
     if ( widget.viewname->text() != m_item->text( 0 ) ) {
         m_item->setText( 0, widget.viewname->text() );
-        m_item->setNameModified( true );
     }
     if ( widget.tooltip->text() == m_item->toolTip( 0 ) ) {
         m_item->setToolTip( 0, widget.tooltip->text() );
-        m_item->setTipModified( true );
     }
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();

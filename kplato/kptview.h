@@ -48,6 +48,7 @@ class View;
 class ViewBase;
 class ViewListItem;
 class ViewListWidget;
+class ViewInfo;
 class AccountsView;
 class GanttView;
 class PertEditor;
@@ -106,8 +107,11 @@ public:
     long activeScheduleId() const;
     void setActiveSchedule( long id ) const;
 
+    /// Returns the default view information like standard name and tooltip for view type @p type
+    ViewInfo defaultViewInfo( const QString type ) const;
+
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
-    ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
+    ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
@@ -220,6 +224,8 @@ protected slots:
     void slotOpenUrlRequest( HtmlView *v, const KUrl &url );
 
     void slotProjectCalculated( ScheduleManager *sm );
+
+    void slotUpdateViewInfo( ViewListItem *itm );
 
 #ifndef NDEBUG
     void slotPrintDebug();

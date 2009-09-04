@@ -47,6 +47,14 @@ class ScheduleManager;
 
 #define TIP_USE_DEFAULT_TEXT "TIP_USE_DEFAULT_TEXT"
 
+//--------------
+struct ViewInfo
+{
+    QString name;
+    QString tip;
+};
+
+//--------------
 class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
 {
     public:
@@ -62,18 +70,16 @@ class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
         void setDocument( KoDocument *doc );
         KoDocument *document() const;
 
+        void setViewInfo( const ViewInfo &vi ) { m_viewinfo = vi; }
+        QString viewType() const;
         QString tag() const { return m_tag; }
         void save( QDomElement &element ) const;
 
         void setReadWrite( bool rw );
 
-        void setNameModified( bool on ) { m_namemodified = on; }
-        void setTipModified( bool on ) { m_tipmodified = on; }
-
     private:
         QString m_tag;
-        bool m_namemodified;
-        bool m_tipmodified;
+        ViewInfo m_viewinfo;
 };
 
 class KPLATO_EXPORT ViewListTreeWidget : public QTreeWidget
@@ -94,6 +100,7 @@ protected:
 
 signals:
     void activated( QTreeWidgetItem* );
+    void updateViewInfo( ViewListItem *itm );
 
 private slots:
     void handleMousePress( QTreeWidgetItem *item );
@@ -155,6 +162,8 @@ signals:
     void viewListItemInserted( ViewListItem *item );
 
     void selectionChanged( ScheduleManager* );
+
+    void updateViewInfo( ViewListItem *itm );
 
 public slots:
     void setProject( Project *project );

@@ -172,6 +172,7 @@ View::View( Part* part, QWidget* parent )
     m_viewlist->setProject( &( getProject() ) );
     connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+    connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
 
     m_tab = new QStackedWidget( m_sp );
 
@@ -405,7 +406,7 @@ void View::createViews()
                     } else if ( type == "AccountsEditor" ) {
                         v = createAccountsEditor( cat, tag, name, tip );
                     } else if ( type == "ResourceEditor" ) {
-                        v = createResourcEditor( cat, tag, name, tip );
+                        v = createResourceEditor( cat, tag, name, tip );
                     } else if ( type == "TaskEditor" ) {
                         v = createTaskEditor( cat, tag, name, tip );
                     } else if ( type == "DependencyEditor" ) {
@@ -434,12 +435,6 @@ void View::createViews()
                         v = createResourceAppointmentsGanttView( cat, tag, name, tip );
                     } else if ( type == "AccountsView" ) {
                         v = createAccountsView( cat, tag, name, tip );
-                    } else if ( type == "ResourceAssignmentView" ) {
-                        // Deactivate for koffice 2.0 release
-                        //v = createResourceAssignmentView( cat, tag, name, tip );
-                    } else if ( type == "ChartView" ) {
-                        // Deactivate for koffice 2.0 release
-                        //v = createChartView( cat, tag, name, tip );
                     } else if ( type == "PerformanceStatusView" ) {
                         v = createPerformanceStatusView( cat, tag, name, tip );
                     } else  {
@@ -466,9 +461,9 @@ void View::createViews()
 
         createCalendarEditor( cat, "CalendarEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
-        createAccountsEditor( cat, "AccountEditor", QString(), TIP_USE_DEFAULT_TEXT );
+        createAccountsEditor( cat, "AccountsEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
-        createResourcEditor( cat, "ResourceEditor", QString(), TIP_USE_DEFAULT_TEXT );
+        createResourceEditor( cat, "ResourceEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
         createTaskEditor( cat, "TaskEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
@@ -476,7 +471,7 @@ void View::createViews()
 
         createPertEditor( cat, "PertEditor", QString(), TIP_USE_DEFAULT_TEXT );
 
-        createScheduleHandler( cat, "ScheduleHandler", QString(), TIP_USE_DEFAULT_TEXT );
+        createScheduleHandler( cat, "ScheduleHandlerView", QString(), TIP_USE_DEFAULT_TEXT );
 
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
         createProjectStatusView( cat, "ProjectStatusView", QString(), TIP_USE_DEFAULT_TEXT );
@@ -499,13 +494,86 @@ void View::createViews()
 
         createAccountsView( cat, "AccountsView", QString(), TIP_USE_DEFAULT_TEXT );
 
-        // Deactivate for koffice 2.0 release
-        //createResourceAssignmentView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), i18n( "View task status per resource" ) );
-
-        // Deactivate for koffice 2.0 release
-        //createChartView( cat, "PerformanceChart", i18n( "Performance Chart" ), i18n( "Cost and schedule monitoring" ) );
-
     }
+}
+
+void View::slotUpdateViewInfo( ViewListItem *itm )
+{
+    if ( itm->type() == ViewListItem::ItemType_SubView ) {
+        itm->setViewInfo( defaultViewInfo( itm->viewType() ) );
+    } else if ( itm->type() == ViewListItem::ItemType_Category ) {
+        ViewInfo vi;
+        if ( itm->tag() == "Editors" ) {
+            vi.name = i18n( "Editors" );
+        } else if ( itm->tag() == "Views" ) {
+            vi.name = i18n( "Views" );
+        }
+        itm->setViewInfo( vi );
+    }
+}
+
+ViewInfo View::defaultViewInfo( const QString type ) const
+{
+    ViewInfo vi;
+    if ( type == "CalendarEditor" ) {
+        vi.name = i18n( "Work & Vacation" );
+        vi.tip = i18n( "Edit working- and vacation days for resources" );
+    } else if ( type == "AccountsEditor" ) {
+        vi.name = i18n( "Cost Breakdown Structure" );
+        vi.tip = i18n( "Edit cost breakdown structure." );
+    } else if ( type == "ResourceEditor" ) {
+        vi.name = i18n( "Resources" );
+        vi.tip = i18n( "Edit resource breakdown structure" );
+    } else if ( type == "TaskEditor" ) {
+        vi.name = i18n( "Tasks" );
+        vi.tip = i18n( "Edit work breakdown structure" );
+    } else if ( type == "DependencyEditor" ) {
+        vi.name = i18n( "Dependencies (Graphic)" );
+        vi.tip = i18n( "Edit task dependencies" );
+    } else if ( type == "PertEditor" ) {
+        vi.name = i18n( "Dependencies (List)" );
+        vi.tip = i18n( "Edit task dependencies" );
+    } else if ( type == "ScheduleEditor" ) {
+        // This view is not used stand-alone atm
+        vi.name = i18n( "Schedules" );
+        vi.tip = "";
+    } else if ( type == "ScheduleHandlerView" ) {
+        vi.name = i18n( "Schedules" );
+        vi.tip = i18n( "Calculate and analyze project schedules" );
+    } else if ( type == "ProjectStatusView" ) {
+        vi.name = i18n( "Project Performance Chart" );
+        vi.tip = i18n( "View project status information" );
+    } else if ( type == "TaskStatusView" ) {
+        vi.name = i18n( "Task Status" );
+        vi.tip = i18n( "View task progress information" );
+    } else if ( type == "TaskView" ) {
+        vi.name = i18n( "Task Execution" );
+        vi.tip = i18n( "View task execution information" );
+    } else if ( type == "TaskWorkPackageView" ) {
+        vi.name = i18n( "Work Package View" );
+        vi.tip = i18n( "View task work package information" );
+    } else if ( type == "GanttView" ) {
+        vi.name = i18n( "Gantt" );
+        vi.tip = i18n( "View gantt chart" );
+    } else if ( type == "MilestoneGanttView" ) {
+        vi.name = i18n( "Milestone Gantt" );
+        vi.tip = i18n( "View milestone gantt chart" );
+    } else if ( type == "ResourceAppointmentsView" ) {
+        vi.name = i18n( "Resource Assignments" );
+        vi.tip = i18n( "View resource assignments" );
+    } else if ( type == "ResourceAppointmentsGanttView" ) {
+        vi.name = i18n( "Resource Assignments (Gantt)" );
+        vi.tip = i18n( "View resource assignments in gantt chart" );
+    } else if ( type == "AccountsView" ) {
+        vi.name = i18n( "Cost Breakdown" );
+        vi.tip = i18n( "View planned and actual cost" );
+    } else if ( type == "PerformanceStatusView" ) {
+        vi.name = i18n( "Tasks Performance Chart" );
+        vi.tip = i18n( "View tasks performance status information" );
+    } else  {
+        kWarning()<<"Unknown viewtype: "<<type;
+    }
+    return vi;
 }
 
 void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
@@ -545,11 +613,12 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ResourceAppointmentsGanttView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resource Assignments (Gantt)" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View resource assignments in gantt chart" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
@@ -574,15 +643,15 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ResourceAppointmentsView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resource Assignments" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View resource assignments" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -596,22 +665,22 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     return v;
 }
 
-ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
+ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
     resourceeditor->draw( getProject() );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ResourceEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resources" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit resource breakdown structure" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -629,15 +698,15 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     m_tab->addWidget( taskeditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "TaskEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Tasks" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit work breakdown structure" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     taskeditor->draw( getProject() );
     taskeditor->setScheduleManager( currentScheduleManager() );
@@ -668,15 +737,15 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
     m_tab->addWidget( ae );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "AccountsEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Cost Breakdown Structure" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit cost breakdown structure." ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     ae->draw( getProject() );
 
@@ -691,15 +760,15 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
     m_tab->addWidget( calendareditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "CalendarEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Work & Vacation" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit working- and vacation days for resources" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     calendareditor->draw( getProject() );
 
@@ -716,11 +785,12 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
     m_tab->addWidget( handler );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ScheduleHandlerView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Schedules" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Calculate and analyze project schedules" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
@@ -765,15 +835,15 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
     m_tab->addWidget( scheduleeditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ScheduleEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resource Assignments" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View resource assignments" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     scheduleeditor->setProject( &( getProject() ) );
 
@@ -798,15 +868,15 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     m_tab->addWidget( editor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "DependencyEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Dependencies (Graphic)" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit task dependencies" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     editor->draw( getProject() );
 
@@ -836,15 +906,15 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
     m_tab->addWidget( perteditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "PertEditor" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Dependencies (List)" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "Edit task dependencies" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     perteditor->draw( getProject() );
 
@@ -860,15 +930,15 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ProjectStatusView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Project Performance Chart" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View project status information" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -886,15 +956,15 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "PerformanceStatusView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Tasks Performance Chart" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View tasks performance status information" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -915,15 +985,15 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     m_tab->addWidget( taskstatusview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "TaskStatusView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Task Status" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View task progress information" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -943,15 +1013,15 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "TaskView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Task Execution" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View task execution information" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     v->draw( getProject() );
     v->setScheduleManager( currentScheduleManager() );
@@ -971,15 +1041,15 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "TaskWorkPackageView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Work Package View" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View task work package information" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     v->setProject( &getProject() );
     v->setScheduleManager( currentScheduleManager() );
@@ -1003,11 +1073,12 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "GanttView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Gantt" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View gantt chart" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
@@ -1036,11 +1107,12 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "MilestoneGanttView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Milestone Gantt" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View milestone gantt chart" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
@@ -1064,11 +1136,12 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
     m_tab->addWidget( accountsview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "AccountsView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Cost Breakdown" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View planned and actual cost" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
@@ -1089,15 +1162,15 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     m_updateResourceAssignmentView = true;
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceAssignmentView, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ResourceAssignmentView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resource Assignments" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View resource assignments" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }
-
 
     resourceAssignmentView->draw( getProject() );
 
@@ -1114,11 +1187,12 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
+    ViewInfo vi = defaultViewInfo( "ChartView" );
     if ( name.isEmpty() ) {
-        i->setText( 0, i18n( "Resource Assignments" ) );
+        i->setText( 0, vi.name );
     }
     if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, i18n( "View resource assignments" ) );
+        i->setToolTip( 0, vi.tip );
     } else {
         i->setToolTip( 0, tip );
     }

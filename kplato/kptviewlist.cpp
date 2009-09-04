@@ -115,25 +115,19 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 
 ViewListItem::ViewListItem( const QString &tag, const QStringList &strings, int type )
     : QTreeWidgetItem( strings, type ),
-    m_tag( tag ),
-    m_namemodified( false ),
-    m_tipmodified( false )
+    m_tag( tag )
 {
 }
 
 ViewListItem::ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type )
     : QTreeWidgetItem( parent, strings, type ),
-    m_tag( tag ),
-    m_namemodified( false ),
-    m_tipmodified( false )
+    m_tag( tag )
 {
 }
 
 ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type )
     : QTreeWidgetItem( parent, strings, type ),
-    m_tag( tag ),
-    m_namemodified( false ),
-    m_tipmodified( false )
+    m_tag( tag )
 {
 }
 
@@ -170,19 +164,27 @@ KoDocument *ViewListItem::document() const
     return 0;
 }
 
+QString ViewListItem::viewType() const
+{
+    if ( type() != ItemType_SubView ) {
+        return QString();
+    }
+    QString name = view()->metaObject()->className();
+    if ( name.contains( ':' ) ) {
+        name = name.remove( 0, name.lastIndexOf( ':' ) + 1 );
+    }
+    return name;
+}
+
 void ViewListItem::save( QDomElement &element ) const
 {
     element.setAttribute( "itemtype", type() );
     element.setAttribute( "tag", tag() );
-    element.setAttribute( "name", m_namemodified ? text( 0 ) : "" );
-    element.setAttribute( "tooltip", m_tipmodified ? toolTip( 0 ) : TIP_USE_DEFAULT_TEXT );
+    element.setAttribute( "name", m_viewinfo.name == text( 0 ) ? "" : text( 0 ) );
+    element.setAttribute( "tooltip", m_viewinfo.tip == toolTip( 0 ) ? TIP_USE_DEFAULT_TEXT : toolTip( 0 ) );
+
     if ( type() == ItemType_SubView ) {
-        QString name = view()->metaObject()->className();
-        if ( name.contains( ':' ) ) {
-            name = name.remove( 0, name.lastIndexOf( ':' ) + 1 );
-        }
-        kDebug()<<view()->metaObject()->className()<<" -> "<<name;
-        element.setAttribute( "viewtype", name );
+        element.setAttribute( "viewtype", viewType() );
     }
 }
 
@@ -245,6 +247,7 @@ void ViewListTreeWidget::save( QDomElement &element ) const
         }
         QDomElement c = cs.ownerDocument().createElement( "category" );
         cs.appendChild( c );
+        emit const_cast<ViewListTreeWidget*>( this )->updateViewInfo( itm );
         itm->save( c );
         for ( int j = 0; j < itm->childCount(); ++j ) {
             ViewListItem *vi = static_cast<ViewListItem*>( itm->child( j ) );
@@ -253,6 +256,7 @@ void ViewListTreeWidget::save( QDomElement &element ) const
             }
             QDomElement el = c.ownerDocument().createElement( "view" );
             c.appendChild( el );
+            emit const_cast<ViewListTreeWidget*>( this )->updateViewInfo( vi );
             vi->save( el );
             QDomElement elm = el.ownerDocument().createElement( "settings" );
             el.appendChild( elm );
@@ -326,6 +330,8 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
     connect( m_currentSchedule, SIGNAL( activated( int ) ), SLOT( slotCurrentScheduleChanged( int ) ) );
 
     connect( &m_model, SIGNAL( scheduleManagerAdded( ScheduleManager* ) ), SLOT( slotScheduleManagerAdded( ScheduleManager* ) ) );
+
+    connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SIGNAL( updateViewInfo( ViewListItem* ) ) );
 }
 
 ViewListWidget::~ViewListWidget()
@@ -559,9 +565,6 @@ void ViewListWidget::slotEditViewTitle()
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem );
-        if ( title != m_contextitem->text( 0 ) ) {
-            m_contextitem->setNameModified( true );
-        }
     }
 }
 
@@ -589,9 +592,6 @@ void ViewListWidget::slotEditDocumentTitle()
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem );
-        if ( title != m_contextitem->text( 0 ) ) {
-            m_contextitem->setNameModified( true );
-        }
     }
 }
 
@@ -654,10 +654,6 @@ void ViewListWidget::setupContextMenus()
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditViewTitle() ) );
     m_viewactions.append( action );
 
-    action = new QAction( KIcon( "list-add" ), i18nc( "@action Insert View", "Insert..." ), this );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
-    m_viewactions.append( action );
-
     action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_viewactions.append( action );
@@ -666,13 +662,13 @@ void ViewListWidget::setupContextMenus()
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_viewactions.append( action );
 
+    action = new QAction( this );
+    action->setSeparator( true );
+    m_viewactions.append( action );
+
     // Category actions
     action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
-    m_categoryactions.append( action );
-
-    action = new QAction( KIcon( "list-add" ), i18nc( "@action Insert View", "Insert..." ), this );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
     m_categoryactions.append( action );
 
     action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
@@ -681,6 +677,10 @@ void ViewListWidget::setupContextMenus()
 
     action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
+    m_categoryactions.append( action );
+
+    action = new QAction( this );
+    action->setSeparator( true );
     m_categoryactions.append( action );
 
     // list actions
@@ -694,9 +694,6 @@ void ViewListWidget::renameCategory()
     if ( m_contextitem ) {
         QString title = m_contextitem->text( 0 );
         m_viewlist->editItem( m_contextitem, 0 );
-        if ( title != m_contextitem->text( 0 ) ) {
-            m_contextitem->setNameModified( true );
-        }
     }
 }
 
@@ -717,6 +714,7 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
                 lst += v->viewlistActionList();
             }
         }
+        lst += m_listactions;
     }
     if ( ! lst.isEmpty() ) {
         //menu.addTitle( i18n( "Edit" ) );
