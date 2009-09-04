@@ -10,7 +10,7 @@ kde4_add_plugin(opencalcimport WITH_PREFIX ${opencalcimport_PART_SRCS})
 
 
 
-target_link_libraries(opencalcimport kspreadcommon kopagelayout)
+target_link_libraries(opencalcimport kspreadcommon kowidgets)
 
 install(TARGETS opencalcimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

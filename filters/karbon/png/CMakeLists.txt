@@ -11,7 +11,7 @@ kde4_add_ui_files( karbonpngexport_PART_SRCS PngExportOptionsWidget.ui )
 
 kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
-target_link_libraries(karbonpngexport karbonui koinput komain koaspectbutton)
+target_link_libraries(karbonpngexport karbonui komain)
 
 install(TARGETS karbonpngexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

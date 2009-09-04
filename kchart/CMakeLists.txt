@@ -45,8 +45,6 @@ target_link_libraries(kchartcommon
     kdchart
     chartshapelib
     komain
-    kozoomaction
-    kocvsimport
     )
 
 set_target_properties(kchartcommon

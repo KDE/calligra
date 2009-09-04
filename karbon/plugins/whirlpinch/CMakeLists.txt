@@ -7,7 +7,7 @@ set(karbon_whirlpinchplugin_PART_SRCS WhirlPinchPlugin.cpp KarbonWhirlPinchComma
 
 kde4_add_plugin(karbon_whirlpinchplugin ${karbon_whirlpinchplugin_PART_SRCS})
 
-target_link_libraries(karbon_whirlpinchplugin karboncommon koinput)
+target_link_libraries(karbon_whirlpinchplugin karboncommon)
 
 install(TARGETS karbon_whirlpinchplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
