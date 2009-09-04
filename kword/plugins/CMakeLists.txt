@@ -1,3 +1,3 @@
-if (NOT TINY)
+if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory(scripting)
-endif (NOT TINY)
+endif (SHOULD_BUILD_SCRIPTING)

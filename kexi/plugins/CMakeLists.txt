@@ -9,7 +9,9 @@ add_subdirectory( importexport )
 add_subdirectory( reportspgz )
 
 #if(DEFINED DKEXI_SCRIPTS_SUPPORT)
+if(SHOULD_BUILD_SCRIPTING)
     add_subdirectory(scripting)
+endif(SHOULD_BUILD_SCRIPTING)
 #endif(DEFINED DKEXI_SCRIPTS_SUPPORT)
 
 #add_subdirectory(macros)
