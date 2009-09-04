@@ -67,7 +67,7 @@ void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &con
     m_original->paintDecorations(painter, converter, canvas);
 }
 
-const QPainterPath KWCopyShape::outline() const
+QPainterPath KWCopyShape::outline() const
 {
     return m_original->outline();
 }
