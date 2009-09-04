@@ -75,9 +75,9 @@ void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
 
 QVariant KexiDBCheckBox::value()
 {
-    if (state() == NoChange)
+    if (checkState() == Qt::PartiallyChecked)
         return QVariant();
-    return QVariant(state() == On, 1);
+    return checkState() == Qt::Checked;
 }
 
 void KexiDBCheckBox::slotStateChanged(int)
@@ -87,7 +87,7 @@ void KexiDBCheckBox::slotStateChanged(int)
 
 bool KexiDBCheckBox::valueIsNull()
 {
-    return state() == NoChange;
+    return checkState() == Qt::PartiallyChecked;
 }
 
 bool KexiDBCheckBox::valueIsEmpty()

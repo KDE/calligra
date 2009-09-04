@@ -111,9 +111,9 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 KexiTableViewColumn::KexiTableViewColumn(
     const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,
     KexiDB::QueryColumnInfo* aVisibleLookupColumnInfo)
-        : m_columnInfo(&aColumnInfo)
+        : m_field(aColumnInfo.field)
+        , m_columnInfo(&aColumnInfo)
         , m_visibleLookupColumnInfo(aVisibleLookupColumnInfo)
-        , m_field(aColumnInfo.field)
         , d(new Private)
 {
     m_isDBAware = true;
@@ -148,9 +148,9 @@ KexiTableViewColumn::KexiTableViewColumn(
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
-        : m_columnInfo(0)
+        : m_field(0)
+        , m_columnInfo(0)
         , m_visibleLookupColumnInfo(0)
-        , m_field(0)
         , d(new Private)
 {
     m_isDBAware = false;

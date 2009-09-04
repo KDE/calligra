@@ -1432,8 +1432,10 @@ void KexiMainWindow::invalidateProjectWideActions()
     //TOOLS MENU
     // "compact db" supported if there's no db or the current db supports compacting and is opened r/w:
     d->action_tools_compact_database->setEnabled(
-        !d->prj || !readOnly && d->prj && d->prj->dbConnection()
-        && (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported));
+        !d->prj
+        || (!readOnly && d->prj && d->prj->dbConnection()
+            && (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported))
+    );
 
     //WINDOW MENU
     if (d->action_window_next) {
@@ -2590,16 +2592,20 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
     if (!d->propEditorTabWidget)
         return;
 
-    if (!curWindowPart
-            || (/*prevWindowPart &&*/ curWindowPart
-                                      && (prevWindowPart != curWindowPart || prevViewMode != curViewMode)
-               )) {
+    if (   !curWindowPart
+        || (/*prevWindowPart &&*/ curWindowPart
+             && (prevWindowPart != curWindowPart || prevViewMode != curViewMode)
+           )
+       )
+    {
         if (d->partForPreviouslySetupPropertyPanelTabs) {
             //remember current page number for this part
-            if (prevViewMode == Kexi::DesignViewMode &&
-                    ((KexiPart::Part*)d->partForPreviouslySetupPropertyPanelTabs != curWindowPart) //part changed
-                    || curViewMode != Kexi::DesignViewMode) { //..or switching to other view mode
-                d->recentlySelectedPropertyPanelPages.insert(d->partForPreviouslySetupPropertyPanelTabs,
+            if ((   prevViewMode == Kexi::DesignViewMode
+                 && static_cast<KexiPart::Part*>(d->partForPreviouslySetupPropertyPanelTabs) != curWindowPart) //part changed
+                || curViewMode != Kexi::DesignViewMode)
+            { //..or switching to other view mode
+                d->recentlySelectedPropertyPanelPages.insert(
+                        d->partForPreviouslySetupPropertyPanelTabs,
                         d->propEditorTabWidget->currentIndex());
             }
         }
@@ -2613,7 +2619,8 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
     //don't change anything if part is not switched nor view mode changed
     if ((!prevWindowPart && !curWindowPart)
             || (prevWindowPart == curWindowPart && prevViewMode == curViewMode)
-            || (curWindowPart && curViewMode != Kexi::DesignViewMode)) {
+            || (curWindowPart && curViewMode != Kexi::DesignViewMode))
+    {
         //new part for 'previously setup tabs'
         d->partForPreviouslySetupPropertyPanelTabs = curWindowPart;
         return;
@@ -2637,7 +2644,7 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
 
 void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWindow)
 {
-    kDebug() << "KexiMainWindow::activeWindowChanged() to = " << (window ? window->windowTitle() : "<none>");
+    kDebug() << "to=" << (window ? window->windowTitle() : "<none>");
 
 //! @todo gui clients?
 #if 0

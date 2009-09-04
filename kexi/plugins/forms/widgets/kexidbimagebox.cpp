@@ -471,12 +471,14 @@ void KexiDBImageBox::handleShowPropertiesAction()
 void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
 {
     valueIsNull = !(
-                      (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
+                         (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
                       || (!dataSource().isEmpty() && !this->valueIsNull())  /*db-aware pixmap available*/
                   );
     // read-only if static pixmap or db-aware pixmap for read-only widget:
-    valueIsReadOnly = !m_designMode && dataSource().isEmpty() || !dataSource().isEmpty() && isReadOnly()
-                      || m_designMode && !dataSource().isEmpty();
+    valueIsReadOnly =
+           (!m_designMode && dataSource().isEmpty())
+        || (!dataSource().isEmpty() && isReadOnly())
+        || (m_designMode && !dataSource().isEmpty());
 }
 
 /*

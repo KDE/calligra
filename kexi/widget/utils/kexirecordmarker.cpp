@@ -152,7 +152,7 @@ int KexiRecordMarker::rows() const
         return d->rows;
 }
 
-void KexiRecordMarker::paintEvent(QPaintEvent *e)
+void KexiRecordMarker::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     QRect r(rect());

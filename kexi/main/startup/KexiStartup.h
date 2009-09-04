@@ -66,6 +66,7 @@ public:
     KexiStartupHandler();
     virtual ~KexiStartupHandler();
 
+    virtual bool init() { return KexiStartupData::init(); }
     virtual tristate init(int argc, char **argv);
 
 #if 0

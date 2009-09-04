@@ -737,12 +737,23 @@ void KexiStartupDialog::recentProjectItemExecuted(KexiProjectData *data)
 bool KexiStartupDialog::eventFilter(QObject *o, QEvent *e)
 {
     if (o == d->templatesWidget_IconListView && d->templatesWidget_IconListView) {
-        if (e->type() == QEvent::KeyPress
-                && (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Enter || static_cast<QKeyEvent*>(e)->key() == Qt::Key_Return)
-                || e->type() == QEvent::MouseButtonDblClick) {
-            KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
-            if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
-                    || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting) {
+        bool tryAcept = false;
+        if (   e->type() == QEvent::KeyPress
+            && (   static_cast<QKeyEvent*>(e)->key() == Qt::Key_Enter
+                || static_cast<QKeyEvent*>(e)->key() == Qt::Key_Return)
+           )
+        {
+            tryAcept = true;
+        }
+        else if (e->type() == QEvent::MouseButtonDblClick) {
+            tryAcept = true;
+        }
+
+        if (tryAcept) {
+            KPageWidgetItem *currentTemplatesPageWidgetItem = d->templatesWidget->currentPage();
+            if (   currentTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
+                || currentTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting)
+            {
                 accept();
             }
         }

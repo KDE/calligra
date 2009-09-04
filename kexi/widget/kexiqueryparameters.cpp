@@ -63,7 +63,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                                        caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
             if (!ok || result.isEmpty())
                 return QList<QVariant>(); //cancelled
-            values.append(QVariant(result == list.first(), 1));
+            values.append(result == list.first());
             break;
         }
         case KexiDB::Field::Date: {

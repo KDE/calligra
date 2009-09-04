@@ -1263,7 +1263,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
             item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
         }
     } else if (container->layout())
-        container->layout()->add(w);
+        container->layout()->addWidget(w);
 
     readChildNodes(item, container, el, w);
 

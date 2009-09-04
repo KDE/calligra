@@ -437,7 +437,7 @@ void RemoveTabAction::slotTriggered()
     QWidgetList list;
     list.append(w);
     KFormDesigner::Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
-    tab->removePage(w);
+    tab->removeTab(tab->indexOf(w));
     m_container->form()->addCommand(com);
 }
 
@@ -476,7 +476,7 @@ void RenameTabAction::slotTriggered()
                                          i18n("Enter a new title for the current page:"),
                                          tab->tabText(tab->indexOf(w)), &ok, w->topLevelWidget());
     if (ok)
-        tab->changeTab(w, name);
+        tab->setTabText(tab->indexOf(w), name);
 }
 
 //! Action of adding page to a stacked widget

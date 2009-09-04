@@ -47,10 +47,11 @@ public:
     Private()
             : handler(0)
             , view(0)
-            , isInsertingEnabled(true)
             , editingIndicatorLabel(0)
             , editingIndicatorEnabled(false)
-            , editingIndicatorVisible(false) {
+            , editingIndicatorVisible(false)
+            , isInsertingEnabled(true)
+    {
     }
     KexiRecordNavigatorHandler *handler;
     QHBoxLayout *lyr;

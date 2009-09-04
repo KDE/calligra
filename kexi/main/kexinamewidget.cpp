@@ -63,28 +63,35 @@ void KexiNameWidget::init(
     lyr = new QGridLayout(this);
     lyr->setObjectName("lyr");
 
-    lbl_message = new QLabel(this, "message");
+    lbl_message = new QLabel(this);
+    lbl_message->setObjectName("message");
     setMessageText(message);
     lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     lbl_message->setAlignment(Qt::AlignTop | Qt::TextWordWrap);
     lyr->addWidget(lbl_message, 0, 0, 1, 2);
 
     lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
-                             this, "lbl_caption");
+                             this);
+    lbl_caption->setObjectName("lbl_caption");
     lyr->addWidget(lbl_caption, 1, 0);
 
     lbl_name = new QLabel(nameLabel.isEmpty() ? i18n("Name:") : nameLabel,
-                          this, "lbl_name");
+                          this);
+    lbl_name->setObjectName("lbl_name");
     lyr->addWidget(lbl_name, 2, 0);
 
     le_caption = new KLineEdit(nameText, this);
     le_caption->setObjectName("le_caption");
-    le_caption->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0));
+    QSizePolicy le_captionSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    le_captionSizePolicy.setHorizontalStretch(1);
+    le_caption->setSizePolicy(le_captionSizePolicy);
     lyr->addWidget(le_caption, 1, 1);
 
     le_name = new KLineEdit(nameText, this);
     le_name->setObjectName("le_name");
-    le_name->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0));
+    QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    le_captionSizePolicy.setHorizontalStretch(1);
+    le_name->setSizePolicy(le_captionSizePolicy);
     Validator *idValidator = new IdentifierValidator(0);
     le_name->setValidator(m_validator = new MultiValidator(idValidator, this));
     lyr->addWidget(le_name, 2, 1);

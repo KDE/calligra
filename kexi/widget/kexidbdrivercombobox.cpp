@@ -58,7 +58,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
 
     // Build the names list after sorting
     for (int i = 0; i < count(); i++)
-        m_driverNames += m_drivers[ text(i)];
+        m_driverNames += m_drivers[ itemText(i) ];
 }
 
 KexiDBDriverComboBox::~KexiDBDriverComboBox()

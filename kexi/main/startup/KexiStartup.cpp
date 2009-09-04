@@ -703,7 +703,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 //ok, now we will try to show projects for this connection to the user
                 bool cancelled;
                 m_projectData = selectProject(cdata, cancelled);
-                if (!m_projectData && !cancelled || cancelled) {
+                if ((!m_projectData && !cancelled) || cancelled) {
                     //try again
                     return init(0, 0);
                 }

@@ -176,7 +176,7 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
             }
         }
     } else if (e->type() == QEvent::ToolTip) {
-        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 #ifdef __GNUC__
 #warning TODO
 #else

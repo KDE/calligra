@@ -243,7 +243,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 
 //! @todo add lookup field icon
     tab->addTab(d->lookupColumnPage, KIcon("combo"), "");
-    tab->setTabToolTip(d->lookupColumnPage, i18n("Lookup column"));
+    tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), i18n("Lookup column"));
 }
 
 KexiLookupColumnPage* KexiTablePart::lookupColumnPage() const

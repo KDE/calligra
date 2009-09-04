@@ -131,8 +131,9 @@ private:
 public:
     LessThanFunctor()
             : m_ascendingOrder(true)
+            , m_sortedColumn(-1)
             , m_lessThanFunction(0)
-            , m_sortedColumn(-1) {
+    {
     }
 
     void setColumnType(const KexiDB::Field& field) {
