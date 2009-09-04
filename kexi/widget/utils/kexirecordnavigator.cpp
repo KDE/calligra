@@ -118,9 +118,11 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
 //    margins.top = winStyle ? 1 : 0;
 //    margins.bottom = winStyle ? 1 : 0;
     margins.copyToWidget(d->navRecordNumber);
-    d->navRecordNumber->setFrame(false); 
-    kDebug() << parentView->horizontalScrollBar()->height();
-    d->navRecordNumber->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
+    d->navRecordNumber->setFrame(false);
+    if (parentView) {
+        kDebug() << parentView->horizontalScrollBar()->height();
+        d->navRecordNumber->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
+    }
     d->navRecordNumber->setAlignment(Qt::AlignRight | (/*winStyle ? Qt::AlignBottom :*/ Qt::AlignVCenter));
     d->navRecordNumber->setFocusPolicy(Qt::ClickFocus);
     d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
@@ -143,7 +145,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
 //    navRecordCountPalette.setBrush( QPalette::Base, navRecordCountPalette.brush(QPalette::Window) );
     navRecordCountPalette.setBrush( QPalette::Base, QBrush(Qt::transparent) );
     d->navRecordCount->setPalette(navRecordCountPalette);
-    d->navRecordCount->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
+    if (parentView) {
+        d->navRecordCount->setFixedHeight( qMax(parentView->bottomMargin(), fm.height() + 2) );
+    }
     d->navRecordCount->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->navRecordCount->setFocusPolicy(Qt::NoFocus);
