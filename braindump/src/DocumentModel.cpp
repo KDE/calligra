@@ -237,7 +237,7 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
       if(row < 0) {
         row = group->sections().count();
       }
-      m_document->addCommand(section, new InsertSectionCommand(new Section(*section), group, this, row));
+      m_document->addCommand(section, new InsertSectionCommand( m_document->sectionsIO(), new Section(*section), group, this, row));
     } else {
       int idx =group->indexOf(section);
       if( 0 <= idx and idx < row ) {

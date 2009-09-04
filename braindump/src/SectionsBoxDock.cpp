@@ -171,7 +171,7 @@ void SectionsBoxDock::slotDuplicateClicked()
 {
   Section* section = new Section(*m_view->activeSection());
   m_view->rootSection()->addCommand( section,
-          new InsertSectionCommand(section, m_view->activeSection()->sectionParent(), m_model,
+          new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection()->sectionParent(), m_model,
                           m_view->activeSection()->sectionParent()->nextSection(m_view->activeSection())) );
 }
 
@@ -180,7 +180,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
   Q_ASSERT(m_view->activeSection());
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
-  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, m_view->activeSection(), m_model, 0));
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection(), m_model, 0));
 }
 
 void SectionsBoxDock::slotNewSectionAboveCurrent()
@@ -188,7 +188,7 @@ void SectionsBoxDock::slotNewSectionAboveCurrent()
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
-  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, parentSection, m_model, m_view->activeSection()));
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, m_view->activeSection()));
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
@@ -197,7 +197,7 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
   Section* above = parentSection->nextSection( m_view->activeSection() );
   Section* section = new Section();
   section->setName(SectionGroup::nextName());
-  m_view->rootSection()->addCommand(section, new InsertSectionCommand(section, parentSection, m_model, above));
+  m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, above));
 }
 
 void SectionsBoxDock::selectSection(Section* section)
