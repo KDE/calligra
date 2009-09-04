@@ -62,11 +62,18 @@ SectionsIO::~SectionsIO()
 {
 }
 
-void SectionsIO::push(Section* _section)
+void SectionsIO::push(Section* _section, PushMode _pushMode )
 {
   if(not m_sectionsToSave.contains(_section))
   {
     m_sectionsToSave.push_back(_section);
+  }
+  if( _pushMode == RecursivePush )
+  {
+    foreach(Section* sec, _section->sections())
+    {
+      push(sec, RecursivePush);
+    }
   }
 }
 

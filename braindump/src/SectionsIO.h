@@ -36,10 +36,14 @@ class SectionsIO : public QObject {
     SectionsIO(RootSection* rootSection);
     ~SectionsIO();
   public:
+    enum PushMode {
+      SinglePush,
+      RecursivePush
+    };
     /**
      * push a section to save
      */
-    void push(Section* _section);
+    void push(Section* _section, PushMode _pushMode = SinglePush);
   public slots:
     void save();
   private:
