@@ -8,7 +8,7 @@ set(csvimport_PART_SRCS csvimport.cc)
 
 kde4_add_plugin(csvimport WITH_PREFIX ${csvimport_PART_SRCS})
 
-target_link_libraries(csvimport kspreadcommon kocvsimport)
+target_link_libraries(csvimport kspreadcommon kowidgets)
 
 install(TARGETS csvimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
