@@ -205,7 +205,8 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
     KEditListBox *edit = new KEditListBox(
-        i18n("Contents of %1", w->objectName()), &dialog, "editlist");
+        i18n("Contents of %1", w->objectName()), &dialog);
+    edit->setObjectName("editlist");
     dialog.setMainWidget(edit);
     edit->insertStringList(list);
 

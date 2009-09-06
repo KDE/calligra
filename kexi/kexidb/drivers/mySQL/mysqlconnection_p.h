@@ -23,7 +23,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kexidb/connection_p.h>
 
 #ifdef Q_WS_WIN
-#include <my_global.h>
+# undef _WIN32_WINNT // avoid redef.
+# include <my_global.h>
 #endif
 #include <mysql_version.h>
 #include <mysql.h>

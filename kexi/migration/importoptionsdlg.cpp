@@ -61,7 +61,8 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
              "if the database was created on a computer with a different character set.</p>",
              QDir::convertSeparators(databaseFile)),
         plainPage);
-    lbl->setAlignment(Qt::AlignLeft | Qt::TextWordWrap);
+    lbl->setAlignment(Qt::AlignLeft);
+    lbl->setWordWrap(true);
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     lyr->addWidget(lbl, 0, 0, 1, 3);
 

@@ -67,7 +67,8 @@ void KexiNameWidget::init(
     lbl_message->setObjectName("message");
     setMessageText(message);
     lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    lbl_message->setAlignment(Qt::AlignTop | Qt::TextWordWrap);
+    lbl_message->setAlignment(Qt::AlignTop|Qt::Left);
+    lbl_message->setWordWrap(true);
     lyr->addWidget(lbl_message, 0, 0, 1, 2);
 
     lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,

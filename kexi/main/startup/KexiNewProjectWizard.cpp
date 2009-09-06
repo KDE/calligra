@@ -51,8 +51,6 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <q3header.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 KexiNewPrjTypeSelector::KexiNewPrjTypeSelector(QWidget* parent)
         : QWidget(parent)
@@ -161,9 +159,8 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
     //page: connection selector
     m_conn_sel_widget = new QWidget(this);
-    Q3VBoxLayout* conn_sel_lyr = new Q3VBoxLayout(m_conn_sel_widget);
-    QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"),
-                                        m_conn_sel_widget);
+    QVBoxLayout* conn_sel_lyr = new QVBoxLayout(m_conn_sel_widget);
+    QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"));
     conn_sel_label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     conn_sel_label->setWordWrap(true);
     conn_sel_lyr->addWidget(conn_sel_label);
@@ -204,7 +201,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
     m_server_db_name = new KexiServerDBNamePage(this);
     m_server_db_name->setObjectName("KexiServerDBNamePage");
     d->server_db_name_dblist_lbl_txt
-    = I18N_NOOP("Existing project databases on <b>%1</b> database server:");
+        = I18N_NOOP("Existing project databases on <b>%1</b> database server:");
     connect(m_server_db_name->le_caption, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotServerDBCaptionTxtChanged(const QString&)));
     connect(m_server_db_name->le_dbname, SIGNAL(textChanged(const QString&)),

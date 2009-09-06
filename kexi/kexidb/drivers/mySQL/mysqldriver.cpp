@@ -30,6 +30,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 
 #ifdef Q_WS_WIN
+# undef _WIN32_WINNT // avoid redef.
 # include <config-win.h>
 #endif
 #include <mysql_version.h>

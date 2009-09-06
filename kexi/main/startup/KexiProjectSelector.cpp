@@ -34,8 +34,6 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <q3listview.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 #include <QPixmap>
 
 #include <assert.h>

@@ -55,7 +55,7 @@ void KexiDBTextWidgetInterface::paint(
             if (w->hasFocus()) {
                 p->setPen(
                     KexiUtils::blendedColors(
-                        m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
+                        m_autonumberDisplayParameters->textColor, w->palette().color(QPalette::Base), 1, 3));
             }
             KexiUtils::WidgetMargins margins(w);
             KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, p,

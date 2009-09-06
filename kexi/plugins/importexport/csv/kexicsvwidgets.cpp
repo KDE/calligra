@@ -211,13 +211,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     m_fnameLbl->setWordWrap(true);
     hbox->addSpacing(5);
     hbox->addWidget(m_iconLbl);
-    hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft
-#ifdef __GNUC__
-#warning TODO | Qt::TextWordWrap
-#else
-#pragma WARNING( TODO | Qt::TextWordWrap )
-#endif
-                   );
+    hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft);
     hbox->addSpacing(10);
     m_commentLbl = new QLabel(this);
     m_commentLbl->setOpenExternalLinks(true);
@@ -229,13 +223,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     m_commentLbl->setFrameStyle(QFrame::Box);
     m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_commentLbl->setWordWrap(true);
-    hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight
-#ifdef __GNUC__
-#warning TODO | Qt::TextWordWrap
-#else
-#pragma WARNING( TODO | Qt::TextWordWrap )
-#endif
-                   );
+    hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight);
 
     m_separator = new QFrame(this);
     m_separator->setFrameShape(QFrame::HLine);

@@ -48,7 +48,7 @@ public:
     MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
 protected:
     virtual void drawFrame(QPainter * p) {
-        p->setPen(QPen(colorGroup().text()));
+        p->setPen(palette().text());
         QRect r = rect();
         p->drawLine(r.topLeft(), r.topRight());
         p->drawLine(r.topRight(), r.bottomRight());
@@ -157,7 +157,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
 {
     QPainter p(this);
-    p.setPen(QPen(colorGroup().text()));
+    p.setPen(palette().text());
     p.drawRect(rect());
 }
 
