@@ -1592,10 +1592,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *recor
                     KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
                     tokenStr = be.tokenToString() + " ";
                 }
-                (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
+                if (set) {
+                    (*set)["criteria"] = tokenStr + e->toString(); //print it prettier
+                }
                 //this is just checking: destroy expr. object
                 delete e;
-            } else if (str.isEmpty()) {
+            } else if (set && str.isEmpty()) {
                 (*set)["criteria"] = QVariant(); //clear it
             }
             setDirty(true);
