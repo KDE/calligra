@@ -497,7 +497,7 @@ void KWTextDocumentLayout::layout()
             if (firstParagraph) {
                 // start counting after the resumed paragraph
                 firstParagraph = false;
-                endPos = posY + m_state->shape->size().height() * 2;
+                endPos = posY + m_state->shape->size().height() * 2.2;
             }
             bool moreText = m_state->nextParag();
             if (m_state->shape && m_state->y() > posY)
