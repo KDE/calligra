@@ -3,8 +3,8 @@ add_subdirectory( test )
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}/kexi/koproperty2
-  ${CMAKE_SOURCE_DIR}/kexi/koproperty2/koproperty/editors
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty/editors
   ${CMAKE_SOURCE_DIR}/libs/odf
 #  ${CMAKE_SOURCE_DIR}/libs/guiutils
 #  ${KOMAIN_INCLUDES}
@@ -49,16 +49,16 @@ set(koproperty_LIB_SRCS
 )
 
 
-kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
+kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty2
+target_link_libraries(koproperty
   
   ${KDE4_KDE3SUPPORT_LIBS}
   kobase
 )
 
-set_target_properties(koproperty2 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+install(TARGETS koproperty  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
@@ -73,7 +73,7 @@ install( FILES
   Utils.h
   Factory.h
   EditorView.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel
 )
 
 install( FILES
@@ -99,4 +99,4 @@ editors/stringlistedit.h
 editors/symbolcombo.h
 editors/timeedit.h
 editors/urledit.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2/editors COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
