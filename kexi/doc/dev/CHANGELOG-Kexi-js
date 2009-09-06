@@ -42,6 +42,10 @@ http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
 - general: port from Q3Wizard to KAssistantDialog
 
+2009-09-06
+KoProperty2
+* KoProperty1 eventually obsoleted and removed from svn; KoProperty2 renamed to KoProperty
+
 2009-09-03
 Utils
 * Added Setter helper that sets given variable to specified value on destruction. Object of type Setter are supposed to be created on the stack.
