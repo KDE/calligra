@@ -24,7 +24,6 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   ${KOMAIN_INCLUDES}
-  koproperty2
   ${KDE4_INCLUDES}
   ${QT_INCLUDES}
   ${CMAKE_SOURCE_DIR}/libs
@@ -32,12 +31,8 @@ include_directories(
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
-#SET(KOPROPERTY_LIBS koproperty)
-#add_subdirectory( koproperty1/koproperty ) #todo: remove
-#include_directories( koproperty1 )
-SET(KOPROPERTY_LIBS koproperty2)
-add_subdirectory( koproperty2/koproperty )
-include_directories( koproperty2 )
+SET(KOPROPERTY_LIBS koproperty)
+add_subdirectory( koproperty )
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
