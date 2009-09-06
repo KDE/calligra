@@ -328,6 +328,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->interfaceOptions.m_cursorMovement->addItem(i18n("Right"), Right);
     d->interfaceOptions.m_cursorMovement->addItem(i18n("Left"), Left);
     d->interfaceOptions.m_cursorMovement->addItem(i18n("Down, First Column"), BottomFirst);
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("None"), NoMovement);
 
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("Sum"), SumOfNumber);
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("Min"), Min);

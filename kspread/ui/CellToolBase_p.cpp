@@ -934,6 +934,9 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
 
         destination = QPoint(1, qMin(cursor.y() + offset, q->maxRow()));
         break;
+    case NoMovement:
+        destination = cursor;
+        break;
     }
 
     if (extendSelection) {

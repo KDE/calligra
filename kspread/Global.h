@@ -129,7 +129,7 @@ namespace Paste
 } // namespace Paste
 
 // necessary due to QDock* enums (Werner)
-enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
+enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
 enum ModifyType {
