@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 1999-2007  Kalle Dalheimer <kalle@kde.org>
-   Copyright 2005-2007  Inge Wallin <inge@lysator.liu.se>
+   Copyright 2005-2009  Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,9 +20,8 @@
 */
 
 
-// Local
+// Own
 #include "KChartView.h"
-#include "KChartPrintJob.h"
 
 // Qt
 #include <QFile>
@@ -71,12 +70,14 @@
 #include "KChartViewAdaptor.h"
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
+#include "KChartPrintJob.h"
 #include "ChartShape.h"
 #include "KChartCanvas.h"
 
 #include "prefs.h"
 
 #include "commands/ChartTypeCommand.h"
+
 
 using namespace std;
 
@@ -171,8 +172,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 	
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.
-    if ( !part->canChangeValue() )
-    {
+    if ( !part->canChangeValue() ) {
         m_edit->setEnabled( false );
         m_importData->setEnabled( false );
     }
@@ -186,7 +186,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
 KChartView::~KChartView()
 {
-//     delete m_dcop;
+    delete m_dbus;
+
+    // FIXME: More deletions here?  There are lots of new's in the constructor.
 }
 
 

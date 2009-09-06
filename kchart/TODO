@@ -33,7 +33,7 @@ josi    Johannes Simon has taken this subtask
 !!      This purpose or the up-to-dateness of this subtask needs to be discussed
 
 
-Before release of KOffice 2.0.0
+Before release of KOffice 2.1.0
 ===============================
 
 Item                                                                   Status
@@ -57,20 +57,20 @@ Item                                                                   Status
      - line                                                             done
      - area                                                             done
      - (bars+lines)                                                     --
-     - circle (pie)                                                     --
+     - circle (pie)                                                     done
      - ring                                                             --
      - radar                                                            --
      - scatter                                                          josi
-     - stock                                                            --
-     - bubble                                                           josi
-     - gantt                                                            --
+     - stock                                                            N/A
+     - bubble                                                           N/A
+     - gantt                                                            N/A
   + Commands so that undo/redo will work                                ----
   + Make legend entries always update correctly                         ----
   + repaint outside of chart when legend orientation changes back       ----
   + show grid lines for x axis                                          ----
   + show warning text for unsupported chart types                       ----
   + remove "position and alignment" button in legend tab                ----
-  + Data Editor: Insert/Remove Row/Column                               ----
+  + Data Editor: Insert/Remove Row/Column                               done
   + fix (or remove?) "show frame" checkbox in legend tab                ----
 
 * OpenDocument 1.0 Support
@@ -79,6 +79,18 @@ Item                                                                   Status
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
      - Handle subtypes                                          --      done
+  + Handle special data unique to some types                    ----    ----
+    - Barchart                                                  --      --
+      bars / columns
+    - Line chart                                                --      --
+    - Area chart                                                --      --
+    - Scatter chart                                             --      --
+    - Circle chart                                              --      --
+    - Ring chart                                                --      --
+    - Radar chart                                               --      --
+    - Stock                                                     --      --
+    - Bubble                                                    --      --
+    - Gantt                                                     --      --
   + General (Title, subtitle, footer)				DONE	DONE
   + Plot area                                                   ----    ----
     - Data in rows / columns                                    --      done
@@ -100,21 +112,22 @@ Item                                                                   Status
      - Line chart                                                       done
      - Area chart                                                       done
      - Scatter chart                                                    done
-     - Pie chart (Circle)                                               done
+     - Circle chart                                                    done
      - Ring chart                                                       ----
      - Radar chart                                                      done
+       Subtype
   + General (Title, Subtitle, Footer) 					DONE
   + Plot area                                                           DONE
   + Datasets                                                            DONE
      - Color                                                            done
-  + Legend                                                              JOSI
+  + Legend                                                              ----
      - Title                                                            done
-     - Frame                                                            josi
+     - Frame                                                            --
      - Orientation                                                      done
      - Position                                                         done
      - "Bind to chart" Option                                           ----
-  + Data Editor                                                         INGE
-     - Insert/delete row/column                                         --
+  + Data Editor                                                         ----
+     - Insert/delete row/column                                         done
      - Close button                                                     --
 
 * External programs and embedding
@@ -129,17 +142,20 @@ Item                                                                   Status
   + KPresenter 								----
 
 * KDChart
-  + Lying bars                                                          DONE
-  + Ring chart                                                          JOSI
+  + Lying bars                                                          ----
+  + Ring chart                                                          ----
 
 
-Before release of KOffice 2.0.1
+Before release of KOffice 2.1.1
 -------------------------------
 
 
 
-Before release of KOffice 2.1.0
+Before release of KOffice 2.2.0
 ===============================
+
+Later
+=====
 
 * The KChart application
   + Make tools work                                                     DONE
