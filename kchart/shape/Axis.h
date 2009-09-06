@@ -100,7 +100,8 @@ public:
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     void saveOdf( KoShapeSavingContext &context );
     void saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass );
-    
+
+    // KDChart stuff
     KDChart::CartesianAxis *kdAxis() const;
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     

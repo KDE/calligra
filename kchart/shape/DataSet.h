@@ -65,6 +65,7 @@ public:
     bool showValues() const;
     bool showLabels() const;
 
+    // Graphics properties for the visualization of this dataset.
     QPen   pen() const;
     QBrush brush() const;
     QColor color() const;
