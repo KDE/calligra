@@ -139,7 +139,7 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
     kDebug(30513);
 
     //set up paragraph style
-//    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle);
+    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle);
 
     //open paragraph or heading tag
     if ( m_isHeading )
