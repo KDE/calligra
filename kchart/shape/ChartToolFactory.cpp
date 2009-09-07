@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,11 +18,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
+// Own
 #include "ChartToolFactory.h"
+
+// KDE
+#include <KLocale>
+
+// KChart
 #include "ChartTool.h"
 #include "ChartShape.h"
-
-#include <KLocale>
 
 
 using namespace KChart;

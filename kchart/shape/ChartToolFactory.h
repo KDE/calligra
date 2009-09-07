@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,9 +22,8 @@
 #define CHARTTOOLFACTORY_H
 
 #include "kchart_export.h"
-#include <KoToolFactory.h>
 
-#include <QStringList>
+#include <KoToolFactory.h>
 
 namespace KChart
 {
