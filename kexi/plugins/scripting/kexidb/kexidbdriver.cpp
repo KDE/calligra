@@ -43,6 +43,8 @@ bool KexiDBDriver::isValid()
 {
     return m_driver->isValid();
 }
+
+/*2.0
 int KexiDBDriver::versionMajor()
 {
     return m_driver->version().major;
@@ -50,7 +52,8 @@ int KexiDBDriver::versionMajor()
 int KexiDBDriver::versionMinor()
 {
     return m_driver->version().minor;
-}
+}*/
+
 QString KexiDBDriver::escapeString(const QString& s)
 {
     return m_driver->escapeString(s);

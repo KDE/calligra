@@ -66,9 +66,9 @@ public slots:
     /** Returns true if this driver is valid else false is returned. */
     bool isValid();
     /** The drivers major versionnumber. */
-    int versionMajor();
+//2.0    int versionMajor();
     /** The drivers minor versionnumber. */
-    int versionMinor();
+//2.0    int versionMinor();
     /** Driver-specific SQL string escaping. For example the " or ' char may
     need to be escaped for values used within SQL-statements. */
     QString escapeString(const QString& s);
