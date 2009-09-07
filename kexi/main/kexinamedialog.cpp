@@ -86,9 +86,11 @@ void KexiNameDialog::updateSize()
 void KexiNameDialog::slotTextChanged()
 {
     bool enable = true;
-    if (m_widget->isNameRequired() && m_widget->nameText().isEmpty()
-            || m_widget->isCaptionRequired() && m_widget->captionText().isEmpty())
+    if (   (m_widget->isNameRequired() && m_widget->nameText().isEmpty())
+        || (m_widget->isCaptionRequired() && m_widget->captionText().isEmpty()) )
+    {
         enable = false;
+    }
     enableButtonOk(enable);
 }
 
