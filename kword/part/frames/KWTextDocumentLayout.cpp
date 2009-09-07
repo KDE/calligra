@@ -358,7 +358,10 @@ void KWTextDocumentLayout::layout()
                 return line.isValid();
             }
             void tryFit() {
-                QRectF rect(m_state->x(), m_state->y(), m_state->width(), 1.);
+                const qreal leftIndent = m_state->x();
+                const qreal width = m_state->width();
+                const qreal rightIndent = m_state->shape->size().width() - width - leftIndent;
+                QRectF rect(leftIndent, m_state->y(), width, 1.);
                 line.setLineWidth(rect.width());
                 if (rect.width() <= 0. || line.textLength() == 0) { // margin so small that the text can't fit.
                     line.setNumColumns(1);
@@ -370,19 +373,30 @@ void KWTextDocumentLayout::layout()
                 while (true) {
                     if (m_state->numColumns() > 0)
                         line.setNumColumns(m_state->numColumns());
-                    else
-                        line.setLineWidth(rect.width());
+                    else {
+                        qreal x = rect.x();
+                        qreal effectiveLineWidth = rect.width();
+                        if (leftIndent < x) { // limit moved the left edge, keep the indent.
+                            x += leftIndent;
+                            effectiveLineWidth -= leftIndent;
+                        }
+                        if (leftIndent + width > rect.right()) // limit moved the right edge, keep the indent.
+                            effectiveLineWidth = rect.width() - rightIndent;
+
+                        line.setLineWidth(effectiveLineWidth);
+                        line.setPosition(QPointF(x, rect.y()));
+                    }
                     rect.setHeight(line.height());
+
                     QRectF newLine = limit(rect);
                     if (newLine.width() <= 0.)
                         // TODO be more intelligent than just moving down 10 pt
-                        rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
+                        rect = QRectF(leftIndent, rect.top() + 10, width, rect.height());
                     else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
                         break;
                     else
                         rect = newLine;
                 }
-                line.setPosition(QPointF(rect.x(), rect.y()));
             }
             void setOutlines(const QList<Outline*> &outlines) {
                 m_outlines = &outlines;
@@ -395,14 +409,11 @@ void KWTextDocumentLayout::layout()
                 foreach (Outline *outline, *m_outlines)
                     answer = outline->limit(answer);
 
-                if (rect.x() < answer.x()) {
-                    const qreal indent = m_state->x();
-                    answer.setX(answer.x() + indent);
-                }
                 return answer;
             }
             KoTextDocumentLayout::LayoutState *m_state;
             const QList<Outline*> *m_outlines;
+            qreal m_initialIndent;
         };
 
         if (m_state->shape != currentShape) { // next shape
