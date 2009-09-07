@@ -682,6 +682,12 @@ void Axis::Private::createRadarDiagram()
         kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
         kdRadarDiagram->setModel( kdRadarDiagramModel );
 
+#if 0  // Stacked and Percent not supported by KDChart.
+        if ( plotAreaChartSubType == StackedChartSubtype )
+            kdBarDiagram->setType( KDChart::PolarDiagram::Stacked );
+        else if ( plotAreaChartSubType == PercentChartSubtype )
+            kdBarDiagram->setType( KDChart::PolarDiagram::Percent );
+#endif        
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
         kdPolarPlane->addDiagram( kdRadarDiagram );
         
@@ -1786,6 +1792,22 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             }
             d->kdAreaDiagram->setType( type );
         }
+        break;
+    case RadarChartType:
+#if 0 // FIXME: Stacked and Percent not supported by KDChart
+        if ( d->kdRadarDiagram ) {
+            KDChart::PolarDiagram::PolarType type;
+            switch ( subType ) {
+            case StackedChartSubtype:
+                type = KDChart::PolarDiagram::Stacked; break;
+            case PercentChartSubtype:
+                type = KDChart::PolarDiagram::Percent; break;
+            default:
+                type = KDChart::PolarDiagram::Normal;
+            }
+            d->kdRadarDiagram->setType( type );
+        }
+#endif
         break;
     default:;
         // FIXME: Implement more chart types

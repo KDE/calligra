@@ -131,7 +131,7 @@ const ChartSubtype  defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype,         // Circle
     NoChartSubtype,         // Ring
     NoChartSubtype,         // Scatter
-    NoChartSubtype,         // Radar
+    NormalChartSubtype,     // Radar
     NoChartSubtype,         // Stock
     NoChartSubtype,         // Bubble
     NoChartSubtype,         // Surface

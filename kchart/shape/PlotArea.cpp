@@ -104,10 +104,13 @@ public:
     bool          threeD;
     ThreeDScene  *threeDScene;
     
-    // FIXME: Move to a barchart specific struct?
-    //        At the same time: create similar structs for all types.
-    int gapBetweenBars;
-    int gapBetweenSets;
+    // ----------------------------------------------------------------
+    // Data specific to each types
+
+    // 1. Bar charts
+    bool  vertical;
+    int   gapBetweenBars;
+    int   gapBetweenSets;
     
     // ----------------------------------------------------------------
     // The embedded KD Chart
@@ -139,6 +142,8 @@ PlotArea::Private::Private( ChartShape *parent )
     threeD      = false;
     threeDScene = 0;
 
+    // Data specific for bar charts
+    vertical       = false;
     gapBetweenBars = 0;
     gapBetweenSets = 100;
 
@@ -456,6 +461,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
         styleStack.setTypeProperties( "chart" );
 
+        // Set subtypes stacked or percent.
+        // These are valid for Bar, Line, Area and Radar types.
         if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" )
              && styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
         {
@@ -466,6 +473,15 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         {
             setChartSubType( StackedChartSubtype );
         }
+
+        // Data specific to bar charts
+        if ( styleStack.hasProperty( KoXmlNS::chart, "vertical" )
+             && styleStack.property( KoXmlNS::chart, "vertical" ) == "true" )
+        {
+            d->vertical = true;
+        }
+
+
     }
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
@@ -652,12 +668,15 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
-    if ( d->threeD ) {
-        plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-        // FIXME: Save all 3D attributes too.
-    }
-        plotAreaStyle.addProperty( "chart:vertical", "false" ); // FIXME
-        plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
+        if ( d->threeD ) {
+            plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+            // FIXME: Save all 3D attributes too.
+        }
+        // Data specific to bar charts
+        if ( d->vertical )
+            plotAreaStyle.addProperty( "chart:vertical", "true" );
+        // Don't save this if zero, because that's the default.
+        //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
         break;
 
     case LineChartType:
@@ -672,10 +691,10 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
-    if ( d->threeD ) {
-        plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-        // FIXME: Save all 3D attributes too.
-    }
+        if ( d->threeD ) {
+            plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+            // FIXME: Save all 3D attributes too.
+        }
         // FIXME: What does this mean?
         plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
         break;
@@ -693,11 +712,10 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
             break;
         }
 
-        //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
-    if ( d->threeD ) {
-        plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-        // FIXME: Save all 3D attributes too.
-    }
+        if ( d->threeD ) {
+            plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+            // FIXME: Save all 3D attributes too.
+        }
 
     break;
 
@@ -710,7 +728,23 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
         break;
 
     case ScatterChartType:
+        // FIXME
+        break;
     case RadarChartType:
+        // Save subtype of the Radar chart.
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
+            break;
+        case StackedChartSubtype:
+            plotAreaStyle.addProperty( "chart:stacked", "true" );
+            break;
+        case PercentChartSubtype:
+            plotAreaStyle.addProperty( "chart:percentage", "true" );
+            break;
+        }
+        break;
+
     case StockChartType:
     case BubbleChartType:
     case SurfaceChartType:
