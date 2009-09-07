@@ -29,11 +29,11 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO(pqxxSqlDriver, pqxxsql)
+K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, "pqxxsql")
 
 //==================================================================================
 //
-pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QStringList &args)
+pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
         : Driver(parent, args)
 {
     d->isFileDriver = false;

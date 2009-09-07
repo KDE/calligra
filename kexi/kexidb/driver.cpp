@@ -79,12 +79,13 @@ Driver::Info::Info()
 
 //---------------------------------------------
 
-Driver::Driver(QObject *parent, const QStringList &)
+Driver::Driver(QObject *parent, const QVariantList &args)
         : QObject(parent)
         , Object()
         , beh(new DriverBehaviour())
         , d(new DriverPrivate())
 {
+    Q_UNUSED(args)
     d->typeNames.resize(Field::LastType + 1);
 }
 
@@ -104,6 +105,7 @@ Driver::~Driver()
 bool Driver::isValid()
 {
     clearError();
+/* moved to DriverManagerInternal::driver():
     if (KexiDB::version().major != version().major
             || KexiDB::version().minor != version().minor) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
@@ -113,7 +115,7 @@ bool Driver::isValid()
                      QString("%1.%2").arg(version().major).arg(version().minor),
                      QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
         return false;
-    }
+    }*/
 
     QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n", name());
     KLocalizedString not_init = ki18n("Value of \"%1\" is not initialized for the driver.");

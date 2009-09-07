@@ -139,6 +139,7 @@ void xBaseCursor::drv_bufferMovePointerPrev() {
 
 
 void xBaseCursor::drv_bufferMovePointerTo(qint64 to) {
+  Q_UNUSED(to);
 }
 
 const char** xBaseCursor::rowData() const {

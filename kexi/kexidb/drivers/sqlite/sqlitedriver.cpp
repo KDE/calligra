@@ -32,7 +32,7 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO(SQLiteDriver, sqlite3)
+K_EXPORT_KEXIDB_DRIVER(SQLiteDriver, "sqlite3")
 
 //! driver specific private data
 //! @internal
@@ -44,7 +44,7 @@ public:
 };
 
 //PgSqlDB::PgSqlDB(QObject *parent, const char *name, const QStringList &)
-SQLiteDriver::SQLiteDriver(QObject *parent, const QStringList &args)
+SQLiteDriver::SQLiteDriver(QObject *parent, const QVariantList &args)
         : Driver(parent, args)
         , dp(new SQLiteDriverPrivate())
 {

@@ -19,6 +19,7 @@
 */
 
 #include <KDebug>
+#include <KLocale>
 #include "driver_p.h"
 
 using namespace KexiDB;

@@ -41,6 +41,12 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 - forms: setting alignment property (e.g. for text box) does not work because it is numeric now
 - general: port from Q3Wizard to KAssistantDialog
+- general: use KPluginInfo for any kind of plugins, what would allow for creating main window 
+           (esp. the project navigator) without loading any plugins in advance
+
+2009-09-07
+KexiDB
+* Use KPluginLoader for drivers
 
 2009-09-06
 KoProperty2

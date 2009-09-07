@@ -21,8 +21,7 @@
 #include <QFile>
 #include <QRegExp>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 #include "xbasedriver.h"
 #include "xbasecursor.h"
@@ -46,6 +45,7 @@ xBaseConnection::~xBaseConnection() {
 
 bool xBaseConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 {
+  Q_UNUSED(version);
   const bool ok = d->db_connect(*data());
   if (!ok)
     return false;
@@ -108,6 +108,7 @@ bool xBaseConnection::drv_closeDatabase() {
 }
 
 bool xBaseConnection::drv_dropDatabase( const QString &dbName) {
+  Q_UNUSED(dbName);
 //TODO is here escaping needed
   // Delete the directory ?
   return true;

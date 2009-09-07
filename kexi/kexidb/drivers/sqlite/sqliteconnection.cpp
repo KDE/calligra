@@ -35,8 +35,8 @@
 #include <qdir.h>
 #include <qregexp.h>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
+#include <KLocale>
 
 //remove debug
 #undef KexiDBDrvDbg

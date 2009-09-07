@@ -37,12 +37,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <mysql.h>
 #define BOOL bool
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO(MySqlDriver, mysql)
+K_EXPORT_KEXIDB_DRIVER(MySqlDriver, "mysql")
 
 /* TODO: Implement buffered/unbuffered, rather than buffer everything.
    Each MYSQL connection can only handle at most one unbuffered cursor,
@@ -55,7 +54,7 @@ KEXIDB_DRIVER_INFO(MySqlDriver, mysql)
  *
  * See: http://dev.mysql.com/doc/mysql/en/Column_types.html
  */
-MySqlDriver::MySqlDriver(QObject *parent, const QStringList &args) :
+MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args) :
         Driver(parent, args)
 {
 // KexiDBDrvDbg << "MySqlDriver::MySqlDriver()";

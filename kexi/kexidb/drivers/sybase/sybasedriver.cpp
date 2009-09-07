@@ -20,8 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QVariant>
 #include <QFile>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 #include "sybasedriver.h"
 #include "sybaseconnection.h"
@@ -31,19 +30,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO(SybaseDriver, sybase)
+K_EXPORT_KEXIDB_DRIVER(SybaseDriver, "sybase")
 
-/*!
- * Constructor sets database features and
- * maps the types in KexiDB::Field::Type to the Sybase types.
- *
- */
-SybaseDriver::SybaseDriver(QObject *parent, const QStringList &args) :
+SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
         Driver(parent, args)
 {
-
-// KexiDBDrvDbg << "SybaseDriver::SybaseDriver()";
-
     d->isFileDriver = false ;
 
     // Sybase supports Nested Transactions. Ignore for now

@@ -1,6 +1,7 @@
 
-remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
+# drivers will be moved out of this dir in Predicate, and then area will be redefined
+#remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
+#add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
 
 add_subdirectory( sqlite )
 #ancient add_subdirectory( sqlite2 )

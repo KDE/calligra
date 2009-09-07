@@ -32,7 +32,7 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( xBaseDriver , xbase )
+K_EXPORT_KEXIDB_DRIVER(xBaseDriver, "xbase")
 
 class KexiDB::xBaseDriverPrivate {
 
@@ -46,7 +46,7 @@ public:
 
 };
 
-xBaseDriver::xBaseDriver( QObject *parent, const QStringList &args )
+xBaseDriver::xBaseDriver( QObject *parent, const QVariantList &args )
   : Driver( parent, args )
   ,dp( new xBaseDriverPrivate() )
 {

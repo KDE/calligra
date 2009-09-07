@@ -33,7 +33,7 @@ class xBaseDriver : public Driver
   KEXIDB_DRIVER
 
   public:
-    xBaseDriver( QObject *parent, const QStringList &args = QStringList() );
+    xBaseDriver( QObject *parent, const QVariantList &args = QVariantList() );
     virtual ~xBaseDriver();
 
     /*! \return true if \a n is a system object name; 

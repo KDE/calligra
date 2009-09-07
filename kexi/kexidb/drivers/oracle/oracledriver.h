@@ -32,7 +32,7 @@ class OracleDriver : public KexiDB::Driver{
 	KEXIDB_DRIVER
 
 	public:
-		OracleDriver( QObject *parent, const QStringList &args = QStringList() );
+		OracleDriver( QObject *parent, const QVariantList &args = QVariantList() );
 		virtual ~OracleDriver();
 
 

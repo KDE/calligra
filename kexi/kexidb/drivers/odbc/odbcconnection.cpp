@@ -27,8 +27,7 @@
 #include <qdir.h>
 
 //KDE Includes
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 //Kexi Includes
 #include <kexidb/driver.h>

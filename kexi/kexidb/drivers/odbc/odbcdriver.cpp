@@ -34,8 +34,7 @@
 #include <sql.h>
 #include <sqltypes.h>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 using namespace KexiDB;
 
@@ -480,9 +479,10 @@ QString ODBCDriver::getQueryForOID()
 }
 
 
+#if 0 // replaced by KPluginLoader::pluginVersion()
 // to make the compiler shut up :).
 DatabaseVersionInfo ODBCDriver::version() const { return KEXIDB_VERSION; }
-
+#endif
 
 #include "odbcdriver.moc"
 

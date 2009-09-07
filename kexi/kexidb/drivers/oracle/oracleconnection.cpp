@@ -21,8 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oracleconnection.h"
 #include "oracledriver.h"
 #include "oraclepreparedstatement.h"
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 #include <string>
 
 using namespace KexiDB;

@@ -30,12 +30,11 @@
 #include <sql.h>
 #include <sqltypes.h>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO(KODBCDriver , odbc)
+K_EXPORT_KEXIDB_DRIVER(KODBCDriver, "odbc")
 
 class KODBCDriver::KODBCDriverPrivate {
 public:
@@ -48,7 +47,7 @@ public:
  * maps the types in KexiDB::Field::Type to the ODBC types.
  *
  */
-KODBCDriver::KODBCDriver(QObject *parent, const QStringList &args) :
+KODBCDriver::KODBCDriver(QObject *parent, const QVariantList &args) :
         Driver(parent, args), k_d( new KODBCDriverPrivate )
 {
 // KexiDBDrvDbg << "KODBCDriver::KODBCDriver()";

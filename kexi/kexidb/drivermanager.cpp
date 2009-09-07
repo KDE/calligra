@@ -43,6 +43,10 @@ using namespace KexiDB;
 
 DriverManagerInternal* DriverManagerInternal::s_self = 0L;
 
+static bool versionMatches(uint major_ver,  uint minor_ver, const DatabaseVersionInfo& kexiDbVersion)
+{
+    return major_ver == kexiDbVersion.major && minor_ver == kexiDbVersion.minor;
+}
 
 DriverManagerInternal::DriverManagerInternal() /* protected */
         : QObject(0)
@@ -133,7 +137,8 @@ bool DriverManagerInternal::lookupDrivers()
             << srv_name << "' driver's version -- skipping it!";
             continue;
         }
-        if (major_ver != KexiDB::version().major || minor_ver != KexiDB::version().minor) {
+
+        if (!versionMatches(major_ver, minor_ver, KexiDB::version())) {
             KexiDBWarn << QString("DriverManagerInternal::lookupDrivers(): '%1' driver"
                                   " has version '%2' but required KexiDB driver version is '%3.%4'\n"
                                   " -- skipping this driver!").arg(srv_name).arg(srv_ver_str)
@@ -170,7 +175,7 @@ bool DriverManagerInternal::lookupDrivers()
         m_services.insert(srv_name, ptr);
         m_services_lcase.insert(srv_name,  ptr);
         KexiDBDbg << "KexiDB::DriverManager::lookupDrivers(): registered driver: "
-        << ptr->name() << "(" << ptr->library() << ")";
+            << ptr->name() << "(" << ptr->library() << ")";
     }
 
     if (tlist.isEmpty()) {
@@ -211,10 +216,27 @@ Driver* DriverManagerInternal::driver(const QString& name)
     QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
     KexiDBDbg << "KexiDBInterfaceManager::driver(): library: " << ptr->library();
-    drv = KService::createInstance<KexiDB::Driver>(ptr,
+
+/*  drv = KService::createInstance<KexiDB::Driver>(ptr,
             this,
             QStringList(),
-            &m_serverResultNum);
+            &m_serverResultNum);*/
+    KPluginLoader loader(ptr->library());
+    const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
+    const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
+    if (!versionMatches(foundMajor, foundMinor, KexiDB::version())) {
+        setError(ERR_INCOMPAT_DRIVER_VERSION,
+                 i18n(
+                     "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
+                     name,
+                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
+                     QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
+        return 0;
+    }
+
+    KPluginFactory *factory = loader.factory();
+    if (factory)
+        drv = factory->create<Driver>(this);
 
     if (!drv) {
         setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".", name));

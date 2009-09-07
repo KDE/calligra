@@ -38,7 +38,7 @@ class KODBCDriver : public Driver
     KEXIDB_DRIVER
 
 public:
-    KODBCDriver(QObject *parent, const QStringList &args = QStringList());
+    KODBCDriver(QObject *parent, const QVariantList &args = QVariantList());
     ~KODBCDriver();
 
     virtual bool isSystemDatabaseName(const QString& name) const;

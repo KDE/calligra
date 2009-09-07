@@ -21,8 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 #include <QRegExp>
 
-#include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 
 #include "sybasedriver.h"
 #include "sybaseconnection.h"

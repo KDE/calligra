@@ -32,7 +32,12 @@ class SybaseDriver : public Driver
     KEXIDB_DRIVER
 
 public:
-    SybaseDriver(QObject *parent, const QStringList &args = QStringList());
+    /*!
+     * Constructor sets database features and
+     * maps the types in KexiDB::Field::Type to the Sybase types.
+     *
+     */
+    SybaseDriver(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~SybaseDriver();
 
     virtual bool isSystemDatabaseName(const QString &n) const;

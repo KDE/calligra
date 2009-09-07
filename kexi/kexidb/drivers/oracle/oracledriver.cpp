@@ -25,13 +25,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kdebug.h>
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( OracleDriver, oracle )
+K_EXPORT_KEXIDB_DRIVER(OracleDriver, "oracle")
 
 /**
  * Constructor sets database features and maps
  * types to Oracle datatypes.
  */
-OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
+OracleDriver::OracleDriver( QObject *parent, const QVariantList &args)
 	: Driver(parent,args)
 {
 	//KexiDBDrvDbg << "OracleDriver::Constructor: ";

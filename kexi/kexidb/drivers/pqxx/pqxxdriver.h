@@ -34,7 +34,7 @@ class pqxxSqlDriver : public Driver
     KEXIDB_DRIVER
 
 public:
-    pqxxSqlDriver(QObject *parent, const QStringList &args = QStringList());
+    pqxxSqlDriver(QObject *parent, const QVariantList &args = QVariantList());
     ~pqxxSqlDriver();
 
     virtual bool isSystemObjectName(const QString& n)const;
