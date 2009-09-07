@@ -24,22 +24,22 @@
 // Qt
 #include <QValidator>
 
-// Local
+// Interface
 #include <interfaces/KoChartModel.h>
 
 namespace KChart {
 
 class CellRegionStringValidator : public QValidator
 {
-public:
-	CellRegionStringValidator( KoChart::ChartModel *model );
-	~CellRegionStringValidator();
+ public:
+    CellRegionStringValidator( KoChart::ChartModel *model );
+    ~CellRegionStringValidator();
 	
-	State validate( QString &string, int & pos ) const;
+    State validate( QString &string, int & pos ) const;
 	
-private:
-	class Private;
-	Private *const d;
+ private:
+    class Private;
+    Private *const d;
 };
 
 }

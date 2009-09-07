@@ -18,20 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Local
+// Own
 #include "CellRegionStringValidator.h"
-#include "CellRegion.h"
 
 // Qt
 #include <QDebug>
+
+// KChart
+#include "CellRegion.h"
 
 using namespace KChart;
 
 class CellRegionStringValidator::Private
 {
 public:
-	Private();
-	~Private();
+    Private();
+    ~Private();
 
     KoChart::ChartModel* model;
 };
