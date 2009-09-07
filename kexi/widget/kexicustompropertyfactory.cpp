@@ -89,6 +89,9 @@ public:
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
+        Q_UNUSED(type);
+        Q_UNUSED(option);
+        Q_UNUSED(index);
         return new KexiIdentifierPropertyEdit(parent);
     }
 };

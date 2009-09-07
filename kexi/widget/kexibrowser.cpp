@@ -934,6 +934,7 @@ KexiGroupMenu::~KexiGroupMenu()
 //#if 0 //unused
 void KexiGroupMenu::update(KexiPart::Info* partInfo)
 {
+    Q_UNUSED(partInfo);
     clear();
 //not needed    addTitle(KIcon(partInfo->itemIcon()), partInfo->groupName());
     addAction("new_object");
