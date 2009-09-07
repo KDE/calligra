@@ -47,7 +47,7 @@ const int NUM_CHARTTYPES = int ( LastChartType );
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
 enum ChartSubtype {
     NoChartSubtype,             // for charts with no subtypes
-    NormalChartSubtype,         // For bar, line and area charts
+    NormalChartSubtype,         // For bar, line, area and radar charts
     StackedChartSubtype,
     PercentChartSubtype
 };
