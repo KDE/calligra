@@ -304,6 +304,8 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
         else if (pap.jc == 3 ) //3 = left & right justify
             style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
+        else if (pap.jc == 4 ) //4 = destributed .. fake it as justify
+            style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
         else //0 = left justify
             style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
     }
