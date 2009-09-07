@@ -66,7 +66,8 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     lyr->addWidget(lbl, 0, 0, 1, 3);
 
-    QLabel* lbl2 = new QLabel(m_encodingComboBox, i18n("Text encoding:"), plainPage);
+    QLabel* lbl2 = new QLabel(i18n("Text encoding:"), plainPage);
+    lbl2->setBuddy(m_encodingComboBox);
     lyr->addWidget(lbl2, 1, 0);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
