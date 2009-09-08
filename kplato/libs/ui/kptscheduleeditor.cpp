@@ -198,6 +198,7 @@ void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
     bool on = isReadWrite() && sm != 0;
     actionAddSubSchedule->setEnabled( on );
     
+    actionBaselineSchedule->setIcon( KIcon( ( sm && sm->isBaselined() ? "project-baseline-remove" : "project-baseline-add" ) ) );
     if ( on && ( sm->isBaselined() || sm->isChildBaselined() ) ) {
         actionBaselineSchedule->setEnabled( sm->isBaselined() );
         actionCalculateSchedule->setEnabled( false );
@@ -237,7 +238,7 @@ void ScheduleEditor::setupGui()
     connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
     addAction( name, actionCalculateSchedule );
     
-    actionBaselineSchedule  = new KAction(KIcon( "" ), i18n("Baseline"), this);
+    actionBaselineSchedule  = new KAction(KIcon( "project-baseline-add" ), i18n("Baseline"), this);
 //    actionBaselineSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_B ) );
     actionCollection()->addAction("schedule_baseline", actionBaselineSchedule );
     connect( actionBaselineSchedule, SIGNAL( triggered( bool ) ), SLOT( slotBaselineSchedule() ) );

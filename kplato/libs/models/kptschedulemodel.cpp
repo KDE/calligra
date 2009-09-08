@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-
+#include <KIcon>
 #include <kdebug.h>
 
 namespace KPlato
@@ -326,6 +326,13 @@ QVariant ScheduleItemModel::name( const QModelIndex &index, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::DecorationRole:
+            if ( sm->isBaselined() ) {
+                return KIcon( "project-baselined" );
+            }
+            return QVariant();
+        default:
+            break;
     }
     return QVariant();
 }
