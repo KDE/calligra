@@ -40,7 +40,11 @@ IF(XBASE_FOUND)
   macro_optional_add_subdirectory( xbase )
 ENDIF(XBASE_FOUND)
 
-#todo add_subdirectory( mdb )
+macro_optional_find_package(GLIB2)
+
+if (GLIB2_FOUND)
+    macro_optional_add_subdirectory( mdb )
+ENDIF(GLIB2_FOUND)
 
 ########### next target ###############
 

@@ -649,7 +649,7 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 #endif
 		mdb_unicode2ascii(mdb, (char*)buf + row_start, len, text, MDB_BIND_SIZE);
 		return text;
-	} else if ((memo_len & 0xff000000) == 0) { // assume all flags in MSB
+	} else if ((memo_len & 0xff000000) == 0) { /* assume all flags in MSB */
 		/* multi-page memo field */
 		guint32 tmpoff = 0;
 		char *tmp;

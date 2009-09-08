@@ -32,7 +32,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <glib.h>
-#include <config.h>
+
 
 #ifdef HAVE_ICONV
 #include <iconv.h>
@@ -47,6 +47,9 @@
 #define MDB_CATALOG_PG 18
 #define MDB_MEMO_OVERHEAD 12
 #define MDB_BIND_SIZE 16384
+
+#define MDB_NO_BACKENDS 1
+#define MDB_NO_STATS 1
 
 enum {
 	MDB_PAGE_DB = 0,

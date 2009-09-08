@@ -488,7 +488,7 @@ mdb_update_index(MdbTableDef *table, MdbIndex *idx, unsigned int num_fields, Mdb
 
 	for (i = 0; i < idx->num_keys; i++) {
 		for (j = 0; j < num_fields; j++) {
-			// key_col_num is 1 based, can't remember why though
+			/* key_col_num is 1 based, can't remember why though */
 			if (fields[j].colnum == idx->key_col_num[i]-1) {
 				idx_xref[i] = j;
 				idx_fields[i] = fields[j];
