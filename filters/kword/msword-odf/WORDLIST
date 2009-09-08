@@ -1,0 +1,21 @@
+This file contains a small wordlist for people who, like me, are not
+that familiar with the terminology of MS Word.
+
+Major features
+--------------
+
+PAP - PAragraph Properties
+CHP - CHaracter Properties
+TAP - TAble Properties(?)
+
+Minor features
+--------------
+
+BRC - BoRder Code (found inside a PAP)
+      Used to describe paragraph borders.
+JC  - Justification Code (found inside a PAP)
+      Used for paragraph alignment.
+LSPD - Line SPacing Descriptor (found inside a PAP)
+TBD - TaB Descriptor (found inside a PAP)
+      Used for tab stops.
+
