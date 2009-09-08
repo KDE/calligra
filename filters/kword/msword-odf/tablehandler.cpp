@@ -33,6 +33,8 @@
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
+    // This strange value (-2), is used to create a check that e.g.  a
+    // table row is not written before a table:table is started.
     m_row = -2;
     m_column = -2;
 
@@ -49,7 +51,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_currentTable = table;
     m_cellOpen = false;
 
-#if 1
+#if 0
     for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++)
         kDebug(30513) << table->m_cellEdges[i];
 #endif
@@ -60,20 +62,23 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     //start table in content
     m_bodyWriter->startElement("table:table");
 
-    // Start a table style
+    // Start a table style.
     KoGenStyle tableStyle(KoGenStyle::StyleAutoTable, "table");
     tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
     tableStyle.addProperty("style:border-model", "collapsing");
     QString tableStyleName = m_mainStyles->lookup(tableStyle, QString("Table"),KoGenStyles::AllowDuplicates);
 
     m_bodyWriter->addAttribute("table:style-name", tableStyleName);
-    
+
+    // Write the table:table-column descriptions.
     for (int r = 0; r < table->m_cellEdges.size()-1; r++) {
         KoGenStyle tableColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
-        tableColumnStyle.addPropertyPt("style:column-width", (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
+        tableColumnStyle.addPropertyPt("style:column-width",
+                                       (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
+
        QString tableColumnStyleName;
-        if(r>=26)
-            tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + ".A" + QChar('A'+r-26), KoGenStyles::DontForceNumbering);
+       if (r >= 26)
+           tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + ".A" + QChar('A'+r-26), KoGenStyles::DontForceNumbering);
         else
             tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + '.' + QChar('A'+r), KoGenStyles::DontForceNumbering);
 
@@ -81,9 +86,6 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         m_bodyWriter->addAttribute("table:style-name", tableColumnStyleName);
         m_bodyWriter->endElement();
     }
-
-
-
 }
 
 void KWordTableHandler::tableEnd()
@@ -107,15 +109,17 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     m_row++;
     m_column = -1;
     m_tap = tap;
-    kDebug(30513) << "tableRowStart row=" << m_row << ", number of cells: " << tap->itcMac;
+    //kDebug(30513) << "tableRowStart row=" << m_row
+    //            << ", number of cells: " << tap->itcMac;
 
     KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
     QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
 
-    // The 6 BRC objects are for top, left, bottom, right, insidehorizontal, insidevertical (default values)
-    for(int i = 0; i < 6; i++) {
+    // The 6 BRC objects are for top, left, bottom, right,
+    // insidehorizontal, insidevertical (default values).
+    for (int i = 0; i < 6; i++) {
         const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
-        kDebug(30513) << "default border" << brc.brcType << (brc.dptLineWidth / 8.0);
+        //kDebug(30513) << "default border" << brc.brcType << (brc.dptLineWidth / 8.0);
         m_borderStyle[i] = Conversion::setBorderAttributes(brc);
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
@@ -162,6 +166,7 @@ void KWordTableHandler::tableCellStart()
     Q_ASSERT( m_tap );
     if ( !m_tap )
         return;
+
     //increment the column number so we know where we are
     m_column++;
     //get the number of cells in this row
@@ -224,18 +229,22 @@ void KWordTableHandler::tableCellStart()
             else
                 break;
         }
-        kDebug(30513) <<"rowSpan=" << rowSpan;
+        //kDebug(30513) <<"rowSpan=" << rowSpan;
     }
-    // Put a filler in for cells that are part of a merged cell
-    // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
+
+    // Put a filler in for cells that are part of a merged cell.
+    //
+    // The MSWord spec says they must be empty anyway (and we'll get a
+    // warning if not).
     if ( tc.fVertMerge && !tc.fVertRestart ) {
         m_bodyWriter->startElement("table:covered-table-cell");
         m_cellOpen = true;
-    return;
+
+        return;
     }
 
-    // Check how many cells that mean, according to our cell edge array
-    int leftCellNumber = m_currentTable->columnNumber( left );
+    // Check how many cells that means, according to our cell edge array.
+    int leftCellNumber  = m_currentTable->columnNumber( left );
     int rightCellNumber = m_currentTable->columnNumber( right );
 
     // In cases where not all columns are present, ensure that the last
@@ -247,10 +256,12 @@ void KWordTableHandler::tableCellStart()
         right = m_currentTable->m_cellEdges[ rightCellNumber ];
     }
 
+#if 0
     kDebug(30513) << "left edge = " << left << ", right edge = " << right;
 
-    kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = "
-        << rightCellNumber;
+    kDebug(30513) << "leftCellNumber = " << leftCellNumber
+                  << ", rightCellNumber = " << rightCellNumber;
+#endif
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
 
@@ -258,20 +269,41 @@ void KWordTableHandler::tableCellStart()
                      m_currentY, // top
                      ( right - left ) / 20.0, // width
                      rowHeight() ); // height
-    //I can pass these sizes to ODF now...
-
-    kDebug(30513) <<" tableCellStart row=" << m_row <<" WordColumn=" << m_column <<" colSpan=" << colSpan <<" (from" << leftCellNumber <<" to" << rightCellNumber <<" for KWord) rowSpan=" << rowSpan <<" cellRect=" << cellRect;
+    // I can pass these sizes to ODF now...
+#if 0
+    kDebug(30513) <<" tableCellStart row=" << m_row <<" WordColumn=" 
+                  << m_column <<" colSpan="
+                  << colSpan <<" (from" << leftCellNumber
+                  <<" to" << rightCellNumber <<" for KWord) rowSpan="
+                  << rowSpan <<" cellRect=" << cellRect;
+#endif
 
     // Sort out the borders.
-    // From experimenting with Word the following can be said about horizontal borders:
-    // They always use the collapsing border model (.doc additionally has the notion of table wide borders)
-    // The default borders are merged into the odt output by "winning" over the cell borders due to wider lines
-    // Word also defines table-wide borders (even between cell minimum values)
-    // If the default is thicker or same width then it wins. At the top or bottom of table the cell always wins
+    //
+    // From experimenting with Word the following can be said about
+    // horizontal borders:
+    //
+    //  - They always use the collapsing border model (.doc
+    //    additionally has the notion of table wide borders)
+    //  - The default borders are merged into the odt output by
+    //   "winning" over the cell borders due to wider lines
+    //  - Word also defines table-wide borders (even between cell
+    //    minimum values)
+    //  - If the default is thicker or same width then it wins. At the
+    //    top or bottom of table the cell always wins
+    //
+    // The following can be said about vertical borders: 
+    //  - The cell to the left of the border always defines the value.
+    //  - Well then a winner with the table wide definitions is also found.
+    //
+#if 0
+    kDebug(30513) <<"CellBorders=" << m_row << m_column
+                  << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth
+                  << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth
+                  << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth
+                  << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
+#endif
 
-    // The following can be said about vertical borders: The cell to the left of the border always defines the value.
-    // Well then a winner with the table wide definitions is also found
-    kDebug(30513) <<"CellBorders=" << m_row << m_column << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
     const wvWare::Word97::BRC brcNone;
     const wvWare::Word97::BRC& brcTop = (m_row > 0) ?
                         brcWinner(tc.brcTop, m_tap->rgbrcTable[4]) :
@@ -319,7 +351,7 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("style:border-line-width-right", dba);
     }
 
-    kDebug(30513) <<" shading " << shd.ipat;
+    //kDebug(30513) <<" shading " << shd.ipat;
     if(shd.ipat == 0 && shd.cvBack != 0)
         cellStyle.addProperty("fo:background-color", '#' + QString::number(shd.cvBack|0xff000000, 16).right(6).toUpper());
 
@@ -342,19 +374,22 @@ void KWordTableHandler::tableCellStart()
     QString cellStyleName = m_mainStyles->lookup(cellStyle, QString("cell"));
 
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
-    //start table cell in content
+
+    // Start a table cell in the content.
     m_bodyWriter->startElement("table:table-cell");
     m_cellOpen = true;
     m_bodyWriter->addAttribute("table:style-name", cellStyleName.toUtf8());
-    if(rowSpan > 1) {
+
+    if (rowSpan > 1) {
         m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
     }
-    if(colSpan > 1) {
+    if (colSpan > 1) {
         m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
         m_colSpan = colSpan;
     }
     else {
-        //if we don't set it to colSpan, we still need to (re)set it to a known value
+        // If we don't set it to colSpan, we still need to (re)set it
+        // to a known value.
         m_colSpan = 1;
     }
 }
@@ -362,14 +397,24 @@ void KWordTableHandler::tableCellStart()
 void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
-    //end table cell in content
-    // but only if we actually opened a cell
-    if(m_cellOpen) {
+
+    // End table cell in content, but only if we actually opened a cell.
+    if (m_cellOpen) {
+        QList<const char*> openTags = m_bodyWriter->tagHierarchy();
+        for (int i = 0; i < openTags.size(); ++i)
+            kDebug(30513) << openTags[i];
+
         m_bodyWriter->endElement();//table:table-cell
         m_cellOpen = false;
     }
-    if(m_colSpan > 1) {
-        for(int i = 1; i < m_colSpan; i++) {
+    else
+        kDebug(30513) << "Didn't close the cell because !m_cellOpen!!";
+
+    // If this cell covers other cells (i.e. is merged), then create
+    // as many table:covered-table-cell tags as there are covered
+    // columns.
+    if (m_colSpan > 1) {
+        for (int i = 1; i < m_colSpan; i++) {
             m_bodyWriter->startElement("table:covered-table-cell");
             m_bodyWriter->endElement();
         }
