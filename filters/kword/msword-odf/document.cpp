@@ -239,7 +239,8 @@ void Document::processStyles()
         Q_ASSERT( style );
         QString displayName = Conversion::string(style->name());
         QString name = Conversion::styleNameString(style->name());
-        //process paragraph styles
+
+        // Process paragraph styles.
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
@@ -266,16 +267,19 @@ void Document::processStyles()
                 m_mainStyles->addFontFace( fontName );
                 userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
             }
-            //process the character properties
-            Paragraph::parseCharacterProperties( &style->chp(), &userStyle, parentStyle );
-            //process the paragraph properties
-            Paragraph::parseParagraphProperties( style->paragraphProperties(), &userStyle, parentStyle );
 
-            //add style to main collection, using the name that it had in the .doc
+            // Process the character and paragraph properties.
+            Paragraph::applyCharacterProperties( &style->chp(),
+                                                 &userStyle, parentStyle );
+            Paragraph::applyParagraphProperties( style->paragraphProperties(),
+                                                 &userStyle, parentStyle );
+
+            // Add style to main collection, using the name that it
+            // had in the .doc.
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
             kDebug(30513) << "added style " << actualName;
         }
-        else if(style && style->type()==wvWare::Style::sgcChp) {
+        else if (style && style->type()==wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::StyleUser, "text");

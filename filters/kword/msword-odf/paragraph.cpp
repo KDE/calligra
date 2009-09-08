@@ -1,4 +1,5 @@
 /* This file is part of the KOffice project
+
    Copyright (C) 2009 Benjamin Cail <cricketc@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -32,8 +33,8 @@ Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadi
     m_mainStyles(0),
     m_paragraphStyle(0),
     m_paragraphStyle2(0),
-    m_inStylesDotXml(false),
-    m_isHeading(false),
+    m_inStylesDotXml(inStylesDotXml),
+    m_isHeading(isHeading),
     m_outlineLevel(0)
 {
     kDebug(30513);
@@ -46,19 +47,13 @@ Paragraph::Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadi
         //if we're writing to styles.xml, the style should go there, too
         m_odfParagraphStyle->setAutoStyleInStylesDotXml(true);
     }
-    else
-    {
-        m_inStylesDotXml = false;
-    }
-    if ( isHeading )
-    {
+
+    if ( isHeading )     {
         kDebug(30513) << "this paragraph is a heading";
-        m_isHeading = true;
         m_outlineLevel = ( outlineLevel > 0 ? outlineLevel : 1 );
     }
     else
     {
-        m_isHeading = false;
         m_outlineLevel = -1;
     }
 }
@@ -71,25 +66,28 @@ Paragraph::~Paragraph()
 
 void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles)
 {
-    //check for column break in this text string
+    // Check for column break in this text string
     int colBreak = text.indexOf(QChar(0xE));
+
     //I think this break always comes at the beginning of the text string
     if ( colBreak == 0 )
     {
         kDebug(30513) << "colBreak = " << colBreak;
-        //add needed attribute to paragraph style
-        //Note: this logic breaks down if this isn't the first string in the paragraph, or there
-        // are other strings with another colBreak later in the same paragraph
+
+        // Add needed attribute to paragraph style.
+        //
+        // Note: This logic breaks down if this isn't the first string
+        //       in the paragraph, or there are other strings with
+        //       another colBreak later in the same paragraph.
         m_odfParagraphStyle->addProperty( "fo:break-before", "column", KoGenStyle::ParagraphType );
-        //remove character that signaled a column break
+        // Remove character that signaled a column break
         text.remove(QChar(0xE));
     }
 
-    //add text string to list
+    // Add text string to list.
     m_textStrings.push_back(QString(text));
 
-    // Now find out what style to assoiciate with the string
-
+    // Now find out what style to associate with the string.
 
     if (chp == 0 ) {
         // if inner paragraph - just add a null style & return from function
@@ -109,10 +107,11 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         kWarning() << "Couldn't retrieve style for modification!";
     }
 
-    // modify the character style if we detect any diif between the chp of the paragraph and the summed chp
+    // Modify the character style if we detect any diff between the
+    // chp of the paragraph and the summed chp.
     const wvWare::Style* parentStyle = styles.styleByIndex( msTextStyle->m_std->istdBase );
     if (parentStyle) {
-        parseCharacterProperties( chp, textStyle, m_paragraphStyle );
+        applyCharacterProperties( chp, textStyle, m_paragraphStyle );
         //if we have a new font, process that
         const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
@@ -127,7 +126,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
-        parseCharacterProperties( chp, textStyle, m_paragraphStyle );
+        applyCharacterProperties( chp, textStyle, m_paragraphStyle );
     }
 
     //add text style to list
@@ -138,10 +137,10 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
 {
     kDebug(30513);
 
-    //set up paragraph style
-    parseParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle);
+    // Set up the paragraph style.
+    applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle);
 
-    //open paragraph or heading tag
+    // Open paragraph or heading tag.
     if ( m_isHeading )
     {
         writer->startElement( "text:h", false );
@@ -277,7 +276,7 @@ void Paragraph::setParagraphProperties( wvWare::SharedPtr<const wvWare::Paragrap
     m_paragraphProperties = properties;
 }
 
-void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& properties,
+void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                 KoGenStyle* style, const wvWare::Style* parentStyle)
 {
     kDebug(30513);
@@ -304,7 +303,7 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType );
         else if (pap.jc == 3 ) //3 = left & right justify
             style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
-        else if (pap.jc == 4 ) //4 = destributed .. fake it as justify
+        else if (pap.jc == 4 ) //4 = distributed .. fake it as justify
             style->addProperty( "fo:text-align", "justify", KoGenStyle::ParagraphType );
         else //0 = left justify
             style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
@@ -341,18 +340,24 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
     //lspd = line spacing descriptor
     //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double"
     //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
-    if (!refPap || refPap->lspd.fMultLinespace != pap.lspd.fMultLinespace || refPap->lspd.dyaLine != pap.lspd.dyaLine) {
-        if ( pap.lspd.fMultLinespace == 1 ) { //Word will reserve for each line the
-                                        //(maximal height of the line*lspd.dyaLine)/240
-            //get the proportion & turn it into a percentage for the attribute
+    if (!refPap || refPap->lspd.fMultLinespace != pap.lspd.fMultLinespace
+        || refPap->lspd.dyaLine != pap.lspd.dyaLine)
+    {
+
+        if ( pap.lspd.fMultLinespace == 1 ) {
+            // Word will reserve for each line the (maximal height of
+            // the line*lspd.dyaLine)/240
+            //
+            // Get the proportion & turn it into a percentage for the
+            // attribute.
             QString proportionalLineSpacing( QString::number( ((double)pap.lspd.dyaLine/240.0)*100.0 ) );
             style->addProperty( "fo:line-height", proportionalLineSpacing.append( "%" ), KoGenStyle::ParagraphType );
         }
         else if ( pap.lspd.fMultLinespace == 0 ) {
-            //magnitude of lspd.dyaLine specifies the amount of space
-            //that will be provided for lines in the paragraph in twips
-
-            // see sprmPDyaLine in generator_wword8.htm
+            // Magnitude of lspd.dyaLine specifies the amount of space
+            // that will be provided for lines in the paragraph in twips.
+            //
+            // See sprmPDyaLine in generator_wword8.htm
             double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if ( pap.lspd.dyaLine > 0 )
@@ -361,21 +366,22 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
                 style->addPropertyPt( "fo:line-height", value, KoGenStyle::ParagraphType);
         }
         else
-                kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
+            kWarning(30513) << "Unhandled LSPD::fMultLinespace value: "
+                            << pap.lspd.fMultLinespace;
     }
-    //end linespacing
+    // end linespacing
 
     //fKeep = keep entire paragraph on one page if possible
     //fKeepFollow = keep paragraph on same page with next paragraph if possible
     //fPageBreakBefore = start this paragraph on new page
     if (!refPap || refPap->fKeep != pap.fKeep) {
-        if(pap.fKeep)
+        if (pap.fKeep)
             style->addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
         else
             style->addProperty("fo:keep-together", "auto", KoGenStyle::ParagraphType);
     }
     if (!refPap || refPap->fKeepFollow != pap.fKeepFollow) {
-        if(pap.fKeepFollow)
+        if (pap.fKeepFollow)
             style->addProperty( "fo:keep-with-next", "always", KoGenStyle::ParagraphType );
         else
             style->addProperty( "fo:keep-with-next", "auto", KoGenStyle::ParagraphType );
@@ -392,8 +398,12 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
     //brcBottom = specification for border below paragraph
     //brcLeft = specification for border to the left of paragraph
     //brcRight = specification for border to the right of paragraph
-    //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot, 7=dash large gap,
-    //  8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
+    //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot,
+    //  7=dash large gap, 8=dot dash, 9=dot dot dash, 10=triple,
+    //  11=thin-thick small gap, ...
+    //
+    // TODO: Check if we can use fo:border instead of all the
+    //       fo:border-{top,bottom,left,right}
     if ( !refPap || refPap->brcTop.brcType != pap.brcTop.brcType )
     {
         style->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
@@ -467,9 +477,9 @@ void Paragraph::parseParagraphProperties(const wvWare::ParagraphProperties& prop
         //now write the tab info to the paragraph style
         style->addChildElement("style:tab-stops", contents);
     }
-} //end parseParagraphProperties
+} //end applyParagraphProperties
 
-void Paragraph::parseCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
