@@ -109,22 +109,6 @@ bool KWFrame::isCopy() const
     return dynamic_cast<KWCopyShape*>(shape());
 }
 
-void KWFrame::makeCopyFrame()
-{
-    if (isCopy())
-        return;
-    KWFrame *prev = 0;
-    foreach (KWFrame* frame, m_frameSet->frames()) {
-        if (frame == this)
-            break;
-        prev = frame;
-    }
-    if (prev == 0)
-        return;
-    KWCopyShape *copyShape = new KWCopyShape(prev->shape());
-    setShape(copyShape);
-}
-
 void KWFrame::setOutlineShape(KWOutlineShape *outline)
 {
     m_outline = outline;

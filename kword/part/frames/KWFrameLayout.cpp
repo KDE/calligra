@@ -180,7 +180,9 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                 f = new KWTextFrame(createTextShape(page), tfs);
             } else {
                 Q_ASSERT(frame->newFrameBehavior() == KWord::CopyNewFrame);
-                f = new KWFrame(new KWCopyShape(frame->shape(), m_pageManager), frame->frameSet());
+                Q_ASSERT(frame->frameSet());
+                Q_ASSERT(frame->frameSet()->frameCount() > 0);
+                f = new KWFrame(new KWCopyShape(frame->frameSet()->frames().first()->shape(), m_pageManager), frame->frameSet());
             }
             const qreal y = frame->shape()->position().y();
             qreal offsetFromPage = y - pageRect.top();
@@ -667,11 +669,18 @@ KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 
         return frame;
     }
-    KWFrame *lastFrame = fs->frames().last();
-    KWCopyShape *shape = new KWCopyShape(lastFrame->shape(), m_pageManager);
+
+    KoShape *orig = 0;
+    foreach (KWFrame *candidate, fs->frames()) {
+        if (candidate->isCopy())
+            break;
+        orig = candidate->shape();
+    }
+    Q_ASSERT(orig); // can't have a frameset with only copy frames.
+
+    KWCopyShape *shape = new KWCopyShape(orig, m_pageManager);
     shape->setPosition(QPointF(0, page.offsetInDocument()));
     KWFrame *frame = new KWFrame(shape, fs);
-    frame->makeCopyFrame();
     return frame;
 }
 

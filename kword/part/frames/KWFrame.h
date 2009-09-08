@@ -182,12 +182,6 @@ public:
     bool isCopy() const;
 
     /**
-     * Sets if this frame is a copy of the previous one.
-     * After this call this frame is drawn with the same content as the previous frame in the owning frameset.
-     */
-    void makeCopyFrame();
-
-    /**
      * Copy all the settings from the parameter frame and apply them to this frame.
      * @param frame the frame to use as original
      */
