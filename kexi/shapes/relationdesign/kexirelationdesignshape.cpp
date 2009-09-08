@@ -26,6 +26,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoShapeBackground.h>
+#include <KoZoomHandler.h>
 
 KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.koffice.org/kexirelationdesign", "shape"){
     m_connection = 0;
@@ -57,15 +58,19 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     writer.endElement(); //relation
     writer.endElement(); //kexirelation:shape
 
-#if 0
+
     // Save a preview image
-    qreal previewDPI = 150;
+    qreal previewDPI = 200;
     QSizeF imgSize = size(); // in points
     imgSize *= previewDPI / 72;
     QImage img(imgSize.toSize(), QImage::Format_ARGB32);
     QPainter painter(&img);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
+
+    //Fill to white
+    painter.fillRect(QRectF(QPointF(0,0), imgSize), Qt::white);
+    
     KoZoomHandler converter;
     converter.setZoomAndResolution(100, previewDPI, previewDPI);
     constPaint(painter, converter);
@@ -77,10 +82,7 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:image
-    
-    // TODO: Save a preview svg
 
-#endif
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 
@@ -121,6 +123,10 @@ return true;
 }
 
 void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& converter ) {
+    constPaint(painter, converter);
+}
+
+void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConverter& converter ) const {
     applyConversion(painter, converter);
     
     painter.save();
@@ -130,7 +136,7 @@ void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& 
 
     painter.setClipPath(pp);
     painter.setPen(QPen(Qt::black, 1.0));
-
+    
     //Draw user specified background
     if (background()) {
         background()->paint(painter, pp);

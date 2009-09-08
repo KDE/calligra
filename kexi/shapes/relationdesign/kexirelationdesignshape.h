@@ -37,7 +37,10 @@ class KexiRelationDesignShape : public KoShape, public KoFrameShape{
         
         virtual void saveOdf ( KoShapeSavingContext& context ) const;
         virtual bool loadOdf ( const KoXmlElement& element, KoShapeLoadingContext& context );
+
         virtual void paint ( QPainter& painter, const KoViewConverter& converter );
+        void constPaint( QPainter& painter, const KoViewConverter& converter ) const;
+        
         virtual void setSize(const QSizeF &size);
         
         void setConnectionData(KexiDB::ConnectionData*);
