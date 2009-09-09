@@ -26,7 +26,7 @@
 #include <qlist.h>
 #include <kdebug.h>
 
-#include "migration/keximigratedata.h"
+#include <migration/keximigratedata.h>
 #include <kexidb/cursor.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>

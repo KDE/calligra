@@ -21,11 +21,11 @@ TODO Form editor:
  - port KFDPixmapEdit, PropertyFactory
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
- - remove m_widget and m_container from WidgetLibrary, otherwise multiple form views won't work in parallel
 TODO: setting "enabled" property to false does not work
 TODO: fix the rectangle and repainting when inserting widgets with specified size
 TODO: inserting tab widget does not work
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
+ - setting alignment property (e.g. for text box) does not work because it is numeric now
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -39,9 +39,7 @@ TODO:
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
-- forms: setting alignment property (e.g. for text box) does not work because it is numeric now
-- general: port from Q3Wizard to KAssistantDialog
-- general: use KPluginInfo for any kind of plugins, what would allow for creating main window 
+- general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
 
 2009-09-07
