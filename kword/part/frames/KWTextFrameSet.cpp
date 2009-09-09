@@ -184,7 +184,7 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 
     if (lastFrame && KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
-        frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight);
+        frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
         emit decorationFrameResize(this);
     } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
@@ -198,9 +198,9 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         }
         QSizeF size = shape->size();
         QPointF orig = shape->absolutePosition(KoFlake::TopLeftCorner);
-        shape->setSize(QSizeF(size.width(), size.height() + textHeight));
+        shape->setSize(QSizeF(size.width(), size.height() + textHeight + 1E-6));
         shape->setAbsolutePosition(orig, KoFlake::TopLeftCorner);
-        shape->update(QRectF(0.0, size.height(), size.width(), textHeight));
+        shape->update(QRectF(0.0, size.height(), size.width(), textHeight + 1E-6));
         lastFrame->allowToGrow();
     }
 }
