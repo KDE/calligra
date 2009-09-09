@@ -1402,6 +1402,8 @@ public:
   ~TextCharsAtom ();
 
   unsigned listSize() const;
+  unsigned stringLength() const;
+  void setStringLength( unsigned stringLength );
   UString strValue( unsigned index ) const;
   void setText( UString ustring );
 

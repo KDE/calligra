@@ -1139,11 +1139,13 @@ class TextCharsAtom::Private
 public:
   std::vector<unsigned> index;
   std::vector<UString> ustring;
+  unsigned stringLength;
 };
 
 TextCharsAtom::TextCharsAtom()
 {
   d = new Private;
+  d->stringLength = 0;
 }
 
 TextCharsAtom::~TextCharsAtom()
@@ -1154,6 +1156,16 @@ TextCharsAtom::~TextCharsAtom()
 unsigned TextCharsAtom::listSize() const
 {
   return d->ustring.size();
+}
+
+unsigned TextCharsAtom::stringLength() const
+{
+  return d->stringLength;
+}
+
+void TextCharsAtom::setStringLength( unsigned stringLength )
+{
+  d->stringLength = stringLength;
 }
 
 UString TextCharsAtom::strValue( unsigned index ) const
@@ -1191,6 +1203,7 @@ void TextCharsAtom::setData( unsigned size, const unsigned char* data )
   {
     setText(tempStr);
   }
+  setStringLength(size/2);
 }
 
 void TextCharsAtom::dump( std::ostream& out ) const
@@ -2900,7 +2913,6 @@ const unsigned int StyleTextPropAtom ::id = 4001;
 class StyleTextPropAtom::Private
 {
 public:
-  unsigned stringLength;
   struct PropAtomData
   {
       PropAtomData()
@@ -3070,159 +3082,106 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
 {
   d->charFlags = charFlags;
 }
-void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned lastSize )
+void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned neededCharacters )
 {
+  std::cout << size << "\t" << neededCharacters << std::endl;
   unsigned charRead = 0;
-  unsigned charCount = 0;
-  unsigned stringLength = unsigned( (0.5*lastSize) + 1 );
+  const unsigned char* end = data + size;
 
-  bool isTextPropAtom = true;
-  unsigned k=0;
-
-  while ( charRead < stringLength )
+  while ( charRead < neededCharacters && data + 10 < end )
   {
-    if ( isTextPropAtom == true )
+    Private::PropAtomData atomData;
+    atomData.charCount = readU32(data); data += 4;
+    charRead += atomData.charCount;
+    std::cout << " " << atomData.charCount << "\t" << charRead << std::endl;
+    atomData.depth = readU16(data); data += 2;
+
+    unsigned mask = readU32(data); data += 4;
+    if ( mask & 0x000F && data + 2 < end ) // A|B|C|D
     {
-      Private::PropAtomData atomData;
-      charCount = readU32(data+k) - 1;
-      k += 4;
-      atomData.charCount = charCount;
-      atomData.depth = readU16(data+k);
-      k += 2;
-      unsigned mask = readU32(data+6);
-      k += 4;
-
-      if ( mask & 0xF )
-      {
-        int bulletFlag = readU16(data+k);
-        k += 2;
-        atomData.bulletOn = ( bulletFlag & 1 ) ? 1 : 0;
-        atomData.bulletHardFont = ( bulletFlag & 2 ) ? 1 : 0;
-        atomData.bulletHardColor = ( bulletFlag & 4 ) ? 1 : 0;
-      }
-
-      if ( mask & 0x0080 )
-      {
-        atomData.bulletChar = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x0010 )
-      {
-        atomData.bulletFont = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x0040 )
-      {
-        atomData.bulletHeight = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x0020 )
-      {
-        atomData.bulletColor = readU32(data+k);
-        k += 4;
-      }
-
-      if ( mask & 0x0F00 )
-      {
-        if ( mask & 0x800 )
-        {
-          unsigned dummy = readU16(data+k);
-          atomData.align = ( dummy & 3 );
-          k += 2;
-        }
-        if ( mask & 0x400 )
-        {
-          /*unsigned dummy =*/ readU16(data+k);
-          k += 2;
-        }
-        if ( mask & 0x200 )
-        {
-          /*unsigned dummy =*/ readU16(data+k);
-          k += 2;
-        }
-        if ( mask & 0x100 )
-        {
-          /*unsigned dummy =*/ readU16(data+k);
-          k += 2;
-        }
-      }
-
-      if ( mask & 0x1000 )
-      {
-        atomData.lineFeed = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x2000 )
-      {
-        atomData.upperDist = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x4000 )
-      {
-        atomData.lowerDist = readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x8000 )
-      {
-        /*unsigned dummy =*/ readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0x10000 )
-      {
-        /*unsigned dummy =*/ readU16(data+k);
-        k += 2;
-      }
-
-      if ( mask & 0xe0000 )
-      {
-        unsigned dummy = readU16(data+k);
-        if ( mask & 0x20000 )
-          atomData.asianLB1 = dummy & 1;
-        if ( mask & 0x40000 )
-          atomData.asianLB2 = (dummy >> 1) & 1;
-        if ( mask & 0x80000 )
-          atomData.asianLB3 = (dummy >> 2) & 1;
-
-        k += 2;
-      }
-
-      if ( mask & 0x200000 )
-      {
-        atomData.biDi = readU16(data+k);
-        k += 2;
-      }
-      d->atomData.push_back( atomData );
+      int bulletFlag = readU16(data); data += 2;
+      atomData.bulletOn = ( bulletFlag & 1 ) ? 1 : 0;
+      atomData.bulletHardFont = ( bulletFlag & 2 ) ? 1 : 0;
+      atomData.bulletHardColor = ( bulletFlag & 4 ) ? 1 : 0;
     }
-    else
+    if ( mask & 0x0080 && data + 2 < end ) // H bulletChar
     {
-      std::cout << "isTextPropAtom == false " << std::endl;
-      charCount = stringLength;
-      Private::PropAtomData atomData;
-      atomData.charCount = charCount;
-      d->atomData.push_back( atomData );
+      atomData.bulletChar = readU16(data); data += 2; // 
     }
-
-    if ( ( charCount > stringLength ) || ( stringLength - ( charRead + charCount ) < 0 ) )
+    if ( mask & 0x0010 && data + 2 < end ) // E bulletFont
     {
-      isTextPropAtom = false;
-      charCount = stringLength - charRead;
-      Private::PropAtomData atomData;
-      atomData.charCount = charCount;
-      d->atomData.push_back( atomData );
+      atomData.bulletFont = readU16(data); data += 2;
     }
-
-    charRead += charCount + 1;
-
-    // std::cout << "k = " << k << std::endl;
+    if ( mask & 0x0040 && data + 2 < end ) // G bulletSize
+    {
+      atomData.bulletHeight = readU16(data); data += 2;
+    }
+    if ( mask & 0x0020 && data + 4 < end ) // F bulletColor
+    {
+      atomData.bulletColor = readU32(data); data += 4;
+    }
+    if ( mask & 0x0800  && data + 2 < end ) // L align
+    {
+        unsigned dummy = readU16(data); data += 2;
+        atomData.align = ( dummy & 3 );
+    }
+    if ( mask & 0x1000 && data + 2 < end ) // M lineSpacing
+    {
+      atomData.lineFeed = readU16(data); data += 2;
+    }
+    if ( mask & 0x2000 && data + 2 < end ) // N spaceBefore
+    {
+      atomData.upperDist = readU16(data); data += 2;
+    }
+    if ( mask & 0x4000 && data + 2 < end ) // O spaceAfter
+    {
+      atomData.lowerDist = readU16(data); data += 2;
+    }
+    if ( mask & 0x0100 && data + 2 < end ) // I leftMargin
+    {
+      /*unsigned dummy =*/ readU16(data); data += 2;
+    }
+    if ( mask & 0x0400 && data + 2 < end ) // K indent
+    {
+      /*unsigned dummy =*/ readU16(data); data += 2;
+    }
+    if ( mask & 0x8000 && data + 2 < end ) // P defaultTabSize
+    {
+      readU16(data); data += 2;
+    }
+    if ( mask & 0x100000 && data + 2 < end ) // U tabStops
+    {
+      unsigned count = readU16(data); data += 2;
+      while ( count && data + 4 > end)
+      {
+          readU32(data); data += 4;
+      }
+    }
+    if ( mask & 0x10000 && data + 2 < end ) // Q fontAlign
+    {
+      readU16(data); data += 2;
+    }
+    if ( mask & 0xe0000 && data + 2 < end) // R|S|T
+    {
+      unsigned dummy = readU16(data); data += 2;
+      if ( mask & 0x20000 )
+        atomData.asianLB1 = dummy & 1;
+      if ( mask & 0x40000 )
+        atomData.asianLB2 = (dummy >> 1) & 1;
+      if ( mask & 0x80000 )
+        atomData.asianLB3 = (dummy >> 2) & 1;
+    }
+    if ( mask & 0x200000 && data + 2 < end ) // V textDirection
+    {
+      atomData.biDi = readU16(data); data += 2;
+    }
+    d->atomData.push_back( atomData );
   }
 
+  charRead = 0;
+  // TODO: parse character properties
+
+    // std::cout << "k = " << k << std::endl;
 
   /* charRead = 0;
   while ( charRead < stringLength )
@@ -4980,7 +4939,7 @@ public:
   Libppt::Slide* currentSlide;
   unsigned currentTextType;
   unsigned currentTextId;
-  unsigned lastTextSize;
+  unsigned lastNumChars;
 
   GroupObject* currentGroup;
   Object* currentObject;
@@ -5001,7 +4960,7 @@ PPTReader::PPTReader()
   d->currentSlide = 0;
   d->currentTextType = 0;
   d->currentTextId = 0;
-  d->lastTextSize = 0;
+  d->lastNumChars = 0;
   d->isShapeGroup = false;
 }
 
@@ -5481,12 +5440,14 @@ void PPTReader::loadRecord( Record* parent )
       d->docStream->read( buffer, size );
       // special treatment for StyleTextPropAtom
       if ( type == StyleTextPropAtom::id )
-        record->setData(size, buffer, d->lastTextSize);
+        record->setData(size, buffer, d->lastNumChars);
       else
         record->setData( size, buffer );
       handleRecord( record, type );
       if ( type == TextBytesAtom::id )
-        d->lastTextSize = static_cast<TextBytesAtom*>( record )->stringLength();
+        d->lastNumChars = static_cast<TextBytesAtom*>( record )->stringLength();
+      else if ( type == TextCharsAtom::id )
+        d->lastNumChars = static_cast<TextCharsAtom*>( record )->stringLength();
     }
     else
       handleContainer( static_cast<Container*>( record ), type, size );
