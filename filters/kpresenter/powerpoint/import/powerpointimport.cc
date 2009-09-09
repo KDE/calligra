@@ -172,8 +172,9 @@ QByteArray PowerPointImport::createStyles()
   QByteArray stylesData;
   QBuffer stylesBuffer( &stylesData );
 
-  QString pageWidth = QString("%1pt").arg( d->presentation->masterSlide()->pageWidth() );
-  QString pageHeight = QString("%1pt").arg( d->presentation->masterSlide()->pageHeight() );
+  Slide* master = d->presentation->masterSlide();
+  QString pageWidth = QString("%1pt").arg( (master) ?master->pageWidth() :0 );
+  QString pageHeight = QString("%1pt").arg( (master) ?master->pageHeight() :0 );
 
   stylesBuffer.open( QIODevice::WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
