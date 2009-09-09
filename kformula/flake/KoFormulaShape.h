@@ -22,6 +22,7 @@
 
 #include <KoShape.h>
 #define KoFormulaShapeId "FormulaShapeID"
+#include <KoFrameShape.h>
 
 class BasicElement;
 class FormulaRenderer;
@@ -39,7 +40,7 @@ class FormulaData;
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KoFormulaShape : public KoShape {
+class KoFormulaShape : public KoShape, public KoFrameShape {
 public:
     /// The basic constructor
     KoFormulaShape();
@@ -75,6 +76,8 @@ public:
      */ 
     bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
 
+    virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
+    
     /**
      * @brief store the shape data as ODF XML. - reimplemented from KoShape
      * This is the method that will be called when saving a shape as a described in

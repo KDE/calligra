@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QUndoCommand>
 #include "KoFormulaShape.h"
+#include "KoShapeSavingContext.h"
 
 class FormulaCommand;
 
@@ -48,10 +49,12 @@ public:
     
 signals:
     void dataChanged(FormulaCommand* element, bool undo);
-
+    
 public slots:
     ///only for debugging
     void writeElementTree();
+
+    void saveMathML( KoShapeSavingContext& context);
     
 private:
     FormulaElement* m_element;

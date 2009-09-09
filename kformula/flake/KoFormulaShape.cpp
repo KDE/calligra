@@ -25,9 +25,11 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <kdebug.h>
 
-KoFormulaShape::KoFormulaShape()
+
+KoFormulaShape::KoFormulaShape() : KoFrameShape("http://www.w3.org/1998/Math/MathML","math")
 {
     FormulaElement* element= new FormulaElement();
     m_formulaData = new FormulaData(element);
@@ -76,10 +78,19 @@ FormulaRenderer* KoFormulaShape::formulaRenderer() const
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
-    kDebug()<<"Loading ODF";
-    Q_UNUSED( context )
-    update();
-    // delete the old formula
+    kDebug() <<"Loading ODF in Formula";
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
+}
+
+bool KoFormulaShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext &/*context*/ )
+{
+    KoXmlElement topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
+    if (topLevelElement.isNull()) {
+        kWarning() << "no math element as first child";
+        return false;
+    }
+    delete m_formulaData->formulaElement();
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
     formulaElement->readMathML( element );     // and load the new formula
     m_formulaData->setFormulaElement(formulaElement);
@@ -89,25 +100,14 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
 
 void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
-    kDebug()<<"Saving ODF";
-    if( m_formulaData->formulaElement()->childElements().isEmpty() )  // if the formula is empty
-	return;                                        // do not save it
-
-    bool odfFormat = true;
-    if( context.xmlWriter().tagHierarchy().isEmpty() ) // hack to determine if saving is
-        odfFormat = false;                             // for odf or not
-
-    if( odfFormat )
-        context.xmlWriter().startElement( "math:semantics" );
-        // TODO add some namespace magic to avoid adding "math:" namespace everywhere
-    else
-        context.xmlWriter().startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
-
-    m_formulaData->formulaElement()->writeMathML( &context.xmlWriter() );
-
-    if( odfFormat )
-        context.xmlWriter().endElement();
-    else
-        context.xmlWriter().endDocument();       
+    kDebug() <<"Saving ODF in Formula";
+    KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    writer.startElement( "draw:object" );
+    // TODO add some namespace magic to avoid adding "math:" namespace everywhere
+    formulaData()->formulaElement()->writeMathML( &context.xmlWriter() );
+    writer.endElement(); // draw:object
+    writer.endElement(); // draw:frame
 }
 

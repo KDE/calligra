@@ -34,3 +34,8 @@ ElementType FormulaElement::elementType() const
 {
     return Formula;
 }
+
+void FormulaElement::writeMathMLAttributes(KoXmlWriter* writer) const
+{
+    writer->addAttribute("xmlns","http://www.w3.org/1998/Math/MathML");
+}

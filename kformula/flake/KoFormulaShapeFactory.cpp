@@ -21,13 +21,15 @@
 
 #include <KoShapeFactory.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
     : KoShapeFactory( parent, KoFormulaShapeId, i18n( "Formula" ) )
 {
     setToolTip(i18n( "A formula"));
     setIcon( "x-shape-formula" );
-
+    setOdfElementNames( "http://www.w3.org/1998/Math/MathML", QStringList("math") );
+    setLoadingPriority( 1 );
 /*    KoShapeTemplate t;
     t.id = KoFormulaShapeId;
     t.name = i18n("Formula");
@@ -59,5 +61,13 @@ KoShape* KoFormulaShapeFactory::createShape( const KoProperties* params ) const
     formula->setShapeId( KoFormulaShapeId );
     return formula;
 }
+
+
+bool KoFormulaShapeFactory::supports(const KoXmlElement& e) const
+{
+    kDebug() << e.nodeName() << " - "<< e.namespaceURI();
+    return ( e.nodeName() == "math" ) && ( e.namespaceURI() == "http://www.w3.org/1998/Math/MathML" );
+}
+
 
 #include "KoFormulaShapeFactory.moc"

@@ -41,6 +41,8 @@ public:
 
     /// @return The element's ElementType
     virtual ElementType elementType() const;
+
+    virtual void writeMathMLAttributes(KoXmlWriter* writer) const;
 };
 
 #endif // FORMULAELEMENT_H

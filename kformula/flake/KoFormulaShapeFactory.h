@@ -47,6 +47,8 @@ public:
 
     /// reimplemented
     KoShape* createShape( const KoProperties* params ) const;
+    
+    virtual bool supports(const KoXmlElement& e) const;
 };
 
 #endif // KOFORMULASHAPEFACTORY_H

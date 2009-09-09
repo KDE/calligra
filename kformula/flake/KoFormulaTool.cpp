@@ -399,8 +399,7 @@ void KoFormulaTool::saveFormula()
     KoEmbeddedDocumentSaver embeddedSaver;
     KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
 
-    // TODO this should not use saveOdf
-    shape()->saveOdf( shapeSavingContext );
+    m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
 }
 
 void KoFormulaTool::setupActions()
