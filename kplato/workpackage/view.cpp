@@ -142,7 +142,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
 
-    actionViewDocument  = new KAction(KIcon( "document-edit" ), i18nc( "@verb", "View..."), this);
+    actionViewDocument  = new KAction(/*KIcon( "document-edit" ),*/ i18nc( "@verb", "View..."), this);
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
