@@ -20,8 +20,8 @@
 #ifndef SYBASEMIGRATE_H
 #define SYBASEMIGRATE_H
 
-#include "migration/keximigrate.h"
-#include "kexidb/drivers/sybase/sybaseconnection_p.h"
+#include <migration/keximigrate.h>
+#include <kexidb/drivers/sybase/sybaseconnection_p.h>
 
 namespace KexiMigration
 {

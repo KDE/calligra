@@ -23,8 +23,8 @@
 #define KEXI_MIGRATE_H
 
 
-#include "kexidb/tableschema.h"
-#include "kexidb/connection.h"
+#include <kexidb/tableschema.h>
+#include <kexidb/connection.h>
 #include "keximigratedata.h"
 
 #include <kgenericfactory.h>

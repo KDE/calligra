@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "../../kexidb/drivers/mySQL/mysqldriver_global.h"
+#include <kexidb/drivers/mySQL/mysqldriver_global.h>
 #include "mysqlmigrate.h"
 
 #include <qstring.h>
@@ -31,7 +31,7 @@
 #include <mysql_version.h>
 #include <mysql.h>
 
-#include "migration/keximigratedata.h"
+#include <migration/keximigratedata.h>
 #include <kexidb/cursor.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>

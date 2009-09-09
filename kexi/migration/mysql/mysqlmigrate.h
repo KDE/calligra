@@ -21,8 +21,8 @@
 #ifndef MYSQLMIGRATE_H
 #define MYSQLMIGRATE_H
 
-#include "migration/keximigrate.h"
-#include "kexidb/drivers/mySQL/mysqlconnection_p.h"
+#include <migration/keximigrate.h>
+#include <kexidb/drivers/mySQL/mysqlconnection_p.h>
 
 namespace KexiMigration
 {

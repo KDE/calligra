@@ -22,7 +22,7 @@
 
 #include <QHash>
 
-#include "migration/keximigrate.h"
+#include <migration/keximigrate.h>
 #include "xbase.h"
 
 namespace KexiMigration
