@@ -53,17 +53,20 @@ MSWordOdfImport::~MSWordOdfImport()
 {
 }
 
+
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
-    if (to != "application/vnd.oasis.opendocument.text" || from != "application/msword")
+    if (to != "application/vnd.oasis.opendocument.text"
+        || from != "application/msword")
         return KoFilter::NotImplemented;
 
     kDebug(30513) <<"######################## MSWordOdfImport::convert ########################";
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
-    //create output files
+
+    // Create output files
     KoStore *storeout;
     struct Finalizer {
       public:
