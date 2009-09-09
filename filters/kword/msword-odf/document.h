@@ -63,6 +63,8 @@ public:
             KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter);
     virtual ~Document();
 
+    KWordTextHandler *textHandler() const { return m_textHandler; }
+
     bool hasParser() const { return m_parser != 0L; }
     bool bodyFound() const { return m_bodyFound; }
 
@@ -125,10 +127,12 @@ private:
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
     void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
 
+    // Handlers for different data types in the document.
+    KWordTextHandler*        m_textHandler;
+    KWordTableHandler*       m_tableHandler;
     KWordReplacementHandler* m_replacementHandler;
-    KWordTableHandler* m_tableHandler;
-    KWordPictureHandler* m_pictureHandler;
-    KWordTextHandler* m_textHandler;
+    KWordPictureHandler*     m_pictureHandler;
+
     KoFilterChain* m_chain;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
@@ -140,12 +144,15 @@ private:
     bool m_oddOpen; //we're processing an odd header or footer
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
-    KoXmlWriter* m_bodyWriter; //for writing to the body of content.xml
-    KoGenStyles* m_mainStyles; //for collecting styles
-    KoXmlWriter* m_metaWriter; //for writing to meta.xml
-    KoGenStyle* m_masterStyle; //for header/footer stuff, at least
-    KoGenStyle* m_pageLayoutStyle; //page layout style
-    KoXmlWriter* m_writer; //for header/footer tags
+
+    // Helpers to generate the various parts of an ODF file.
+    KoXmlWriter* m_bodyWriter;      //for writing to the body of content.xml
+    KoGenStyles* m_mainStyles;      //for collecting styles
+    KoXmlWriter* m_metaWriter;      //for writing to meta.xml
+    KoGenStyle*  m_masterStyle;     //for header/footer stuff, at least
+    KoGenStyle*  m_pageLayoutStyle; //page layout style
+    KoXmlWriter* m_writer;          //for header/footer tags
+
     bool m_hasHeader;
     bool m_hasFooter;
     QBuffer* m_buffer; //for header/footer tags

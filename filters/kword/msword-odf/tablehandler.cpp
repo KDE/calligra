@@ -31,6 +31,10 @@
 
 #include <KoGenStyle.h>
 
+#include "document.h"
+#include "texthandler.h"
+
+
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
     // This strange value (-2), is used to create a check that e.g.  a
@@ -397,6 +401,11 @@ void KWordTableHandler::tableCellStart()
 void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
+
+    // Text lists aren't closed explicitly so we have to close them
+    // when something happens like a new paragraph or, in this case,
+    // the table cell ends.
+    document()->textHandler()->closeList();
 
     // End table cell in content, but only if we actually opened a cell.
     if (m_cellOpen) {

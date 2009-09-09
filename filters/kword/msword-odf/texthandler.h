@@ -41,6 +41,8 @@
 #include <vector>
 #include <stack>
 
+class Document;
+
 namespace wvWare {
     class Style;
     class Parser;
@@ -88,6 +90,9 @@ public:
 #endif // IMAGE_IMPORT
     ///////// Our own interface, also used by processStyles
 
+    Document* document() const { return m_document; }
+    void setDocument( Document * document ) { m_document = document; }
+
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
     //void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
@@ -124,6 +129,9 @@ protected:
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
 
 private:
+    // The document owning this text handler.
+    Document*     m_document;
+
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QDomElement m_framesetElement;

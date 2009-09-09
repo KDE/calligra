@@ -34,6 +34,8 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
+class Document;
+
 namespace wvWare {
     namespace Word97 {
         class TC;
@@ -92,6 +94,9 @@ public:
     virtual void tableCellEnd();
 
     ///////// Our own interface
+    Document* document() const { return m_document; }
+    void setDocument( Document * document ) { m_document = document; }
+
     void tableStart( KWord::Table* table);
     void tableEnd();
 
@@ -99,15 +104,21 @@ protected:
     double rowHeight() const;
 
 private:
-    KoXmlWriter* m_bodyWriter;
-    KoGenStyles* m_mainStyles;
+    // The document owning this table handler.
+    Document*     m_document;
+
     KWord::Table* m_currentTable;
+
+    KoXmlWriter*  m_bodyWriter;
+    KoGenStyles*  m_mainStyles;
+
     int m_row;
     int m_column;
     double m_currentY;
     wvWare::SharedPtr<const wvWare::Word97::TAP> m_tap;
     bool m_cellOpen;
     int m_colSpan;
+
     QString m_borderStyle[6];
     QString m_margin[6];
 };

@@ -47,29 +47,31 @@
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
         KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
-    : m_replacementHandler(new KWordReplacementHandler),
-    m_tableHandler(0),
-    m_pictureHandler(new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
-    m_textHandler(0),
-    m_chain(chain),
-    m_parser(wvWare::ParserFactory::createParser(fileName)),
-    m_headerFooters(0),
-    m_bodyFound(false),
-    m_evenOpen(false),
-    m_oddOpen(false),
-    m_footNoteNumber(0),
-    m_endNoteNumber(0),
-    m_bodyWriter(0),
-    m_mainStyles(0),
-    m_metaWriter(0),
-    m_masterStyle(0),
-    m_pageLayoutStyle(0),
-    m_writer(0),
-    m_hasHeader(false),
-    m_hasFooter(false),
-    m_buffer(0),
-    m_bufferEven(0),
-    m_headerCount(0)
+    : m_textHandler(0)
+    , m_tableHandler(0)
+    , m_replacementHandler(new KWordReplacementHandler)
+    , m_pictureHandler(new KWordPictureHandler(this, bodyWriter,
+                                               manifestWriter, store,
+                                               mainStyles))
+    , m_chain(chain)
+    , m_parser(wvWare::ParserFactory::createParser(fileName))
+    , m_headerFooters(0)
+    , m_bodyFound(false)
+    , m_evenOpen(false)
+    , m_oddOpen(false)
+    , m_footNoteNumber(0)
+    , m_endNoteNumber(0)
+    , m_bodyWriter(0)
+    , m_mainStyles(0)
+    , m_metaWriter(0)
+    , m_masterStyle(0)
+    , m_pageLayoutStyle(0)
+    , m_writer(0)
+    , m_hasHeader(false)
+    , m_hasFooter(false)
+    , m_buffer(0)
+    , m_bufferEven(0)
+    , m_headerCount(0)
 {
     kDebug(30513);
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
@@ -80,8 +82,11 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
         m_writer = 0;
-        m_textHandler = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
-        m_tableHandler= new KWordTableHandler(bodyWriter, mainStyles),
+
+        m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
+        m_textHandler->setDocument(this);
+        m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
+        m_tableHandler->setDocument(this);
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
@@ -92,6 +97,7 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
                  this, SLOT( slotTableFound(KWord::Table*)));
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ),
                  this, SLOT( slotPictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ) );
+
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
@@ -99,6 +105,7 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
         m_parser->setPictureHandler( m_pictureHandler );
 #endif
         m_parser->setInlineReplacementHandler( m_replacementHandler );
+
         processStyles();
         processAssociatedStrings();
         //connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
@@ -139,13 +146,14 @@ void Document::finishDocument()
         m_textHandler->m_writingHeader = false;
     }
 
+/*
     const wvWare::Word97::DOP& dop = m_parser->dop();
     //"tabStopValue", (double)dop.dxaTab / 20.0
     //dop.nFtn = initial footnote number for document, starts at 1
     //Conversion::numberFormatCode(dop.nfcFtnRef2)
     //dop.nEdn = initial endnote number for document, starts at 1
     //Conversion::numberFormatCode(dop.nfcEdnRef2)
-/*
+
     QDomElement elementDoc = m_mainDocument.documentElement();
 
     QDomElement element;

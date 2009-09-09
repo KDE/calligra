@@ -57,26 +57,27 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles )
-    : m_writingHeader(false),
-    m_writeMasterStyleName(false),
-    m_currentListDepth(-1),
-    m_currentListID(0),
-    m_headerWriter(0),
-    m_mainStyles(0),
-    m_sectionNumber(0),
-    m_parser(parser),
-    m_footNoteNumber(0),
-    m_endNoteNumber(0),
-    m_index(0),
-    m_currentTable(0),
-    m_paragraph(0),
-    m_insideField(false),
-    m_fieldAfterSeparator(false),
-    m_fieldType(0),
-    m_insideFootnote(false),
-    m_footnoteWriter(0),
-    m_footnoteBuffer(0),
-    m_maxColumns(0)
+    : m_writingHeader(false)
+    , m_writeMasterStyleName(false)
+    , m_headerWriter(0)
+    , m_mainStyles(0)
+    , m_sectionNumber(0)
+    , m_document(0)
+    , m_parser(parser)
+    , m_footNoteNumber(0)
+    , m_endNoteNumber(0)
+    , m_index(0)
+    , m_currentTable(0)
+    , m_paragraph(0)
+    , m_insideField(false)
+    , m_fieldAfterSeparator(false)
+    , m_fieldType(0)
+    , m_insideFootnote(false)
+    , m_footnoteWriter(0)
+    , m_footnoteBuffer(0)
+    , m_maxColumns(0)
+    , m_currentListDepth(-1)
+    , m_currentListID(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -428,7 +429,21 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
 
     // ilfo = when non-zero, (1-based) index into the pllfo
     // identifying the list to which the paragraph belongs.
-    if ( paragraphProperties != 0 && paragraphProperties->pap().ilfo > 0 ) {
+    if ( !paragraphProperties ) {
+        // TODO: What to do here?
+    }
+    else if ( paragraphProperties->pap().ilfo == 0 ) {
+
+        // Not in a list at all in the word document, so check if we
+        // need to close one in the odt.
+
+        //kDebug(30513) << "Not in a list, so we may need to close a list.";
+        if ( listIsOpen() ) {
+            //kDebug(30513) << "closing list " << m_currentListID;
+            closeList();
+        }
+    }
+    else if ( paragraphProperties->pap().ilfo > 0 ) {
 
         // We're in a list in the word document
         kDebug(30513) << "we're in a list or heading";
@@ -443,7 +458,7 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
             isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         }
-        else if(listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
+        else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
             // Looks like a heading, so that'll be processed in Paragraph.
             kDebug(30513) << "found heading, pap().ilvl=" 
                           << paragraphProperties->pap().ilvl;
@@ -451,23 +466,17 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         }
         else {
-            // list processing
-            kDebug(30513) << "processing list";
+            // List processing
+            // This takes car of all the cases:
+            //  - A new list
+            //  - A list with higher level than before
+            //  - A list with lower level than before
             writeListInfo(writer, paragraphProperties->pap(), listInfo);
         }
     } //end pap.ilfo > 0 (ie. we're in a list or heading)
-    else {
-        // Not in a list at all in the word document, so check if we
-        // need to close one in the odt.
 
-        //kDebug(30513) << "Not in a list, so we may need to close a list.";
-        if ( listIsOpen() ) 
-        {
-            //kDebug(30513) << "closing list " << m_currentListID;
-            closeList();
-        }
-    }
-
+    // Now that the bookkeeping is taken care of for old paragraphs, 
+    // then actually create the new one.
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph( m_mainStyles, inStylesDotXml, isHeading, outlineLevel );
 
