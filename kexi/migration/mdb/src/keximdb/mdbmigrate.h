@@ -23,7 +23,7 @@
 
 #include <mdbtools.h>
 
-#include <kexidb/keximigrate.h>
+#include <migration/keximigrate.h>
 #include <kexidb/field.h>
 #include <kexidb/connection.h>
 #include <QByteArray>
