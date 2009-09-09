@@ -860,8 +860,7 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
         const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
         const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
 
-        //FIXME find out why cannot select previous column
-        selection()->initialize(QRect( selection()->anchor(), QPoint( col, row ) ), selection()->activeSheet());
+        selection()->update( QPoint( col, row ) );
         return;
     }
 
