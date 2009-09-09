@@ -369,11 +369,12 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             }
             kDebug() << "Copying data for table: " << tname;
             QString originalTableName;
-            if (kexiDBTables.contains(tname))
+            
+            //if (kexiDBTables.contains(tname))
                 //caption is equal to the original name
                 originalTableName = ts->caption().isEmpty() ? tname : ts->caption();
-            else
-                originalTableName = tname;
+            //else
+            //    originalTableName = tname;
             ok = drv_copyTable(originalTableName, destConn, ts);
             if (!ok) {
                 kDebug() << "Failed to copy table " << tname;
