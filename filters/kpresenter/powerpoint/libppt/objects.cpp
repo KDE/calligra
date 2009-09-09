@@ -288,7 +288,7 @@ const char* TextObject::typeAsString() const
 
 bool TextObject::bulletFlag( unsigned index ) const
 {
-  return d->bulletFlag[index];
+  return (index < d->bulletFlag.size()) ?d->bulletFlag[index] :false;
 }
 
 void TextObject::setBulletFlag( bool flag )
