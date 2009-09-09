@@ -120,13 +120,13 @@ mdb_read_indices(MdbTableDef *table)
 		if (IS_JET4(mdb)) cur_pos += 4;
 		do {
 			pidx = g_ptr_array_index (table->indices, idx_num++);
-		} while (pidx && pidx!=(MdbIndex*)0xbaadf00d /*(js) temp? hack*/&& pidx->index_type==2);
+        } while (idx_num < table->num_real_idxs && pidx /*&& pidx != 0x736e6f6300616d65 && pidx!=(MdbIndex*)0xbaadf00d*/ /*(js) temp? hack*/&& pidx->index_type==2);
 
 		/* if there are more real indexes than index entries left after
 		   removing type 2's decrement real indexes and continue.  Happens
 		   on Northwind Orders table.
 		*/
-		if (!pidx || pidx==(MdbIndex*)0xbaadf00d /*(js) temp? hack*/) {
+		if (idx_num == table->num_real_idxs || !pidx /*|| pidx==(MdbIndex*)0xbaadf00d*/ /*(js) temp? hack*/ /*|| pidx != 0x736e6f6300616d65*/) {
 			table->num_real_idxs--;
 			continue;
 		}
