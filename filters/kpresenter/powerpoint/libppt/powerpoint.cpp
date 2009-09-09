@@ -3084,7 +3084,7 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
 }
 void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned neededCharacters )
 {
-  std::cout << size << "\t" << neededCharacters << std::endl;
+//  std::cout << size << "\t" << neededCharacters << std::endl;
   unsigned charRead = 0;
   const unsigned char* end = data + size;
 
@@ -3093,7 +3093,7 @@ void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsig
     Private::PropAtomData atomData;
     atomData.charCount = readU32(data); data += 4;
     charRead += atomData.charCount;
-    std::cout << " " << atomData.charCount << "\t" << charRead << std::endl;
+//    std::cout << " " << atomData.charCount << "\t" << charRead << std::endl;
     atomData.depth = readU16(data); data += 2;
 
     unsigned mask = readU32(data); data += 4;
@@ -4459,7 +4459,8 @@ const char* msofbtClientDataAtom::placeholderIdAsString() const
 
 void msofbtClientDataAtom::setData( unsigned size, const unsigned char* data )
 {
-  if( size < 12 ) return;
+  // TODO: this is largely unimplemented
+  if( size < 16 ) return;
   setPlacementId( readU16( data+8 ) );
   setPlaceholderId( data[12]-1 );
 }
