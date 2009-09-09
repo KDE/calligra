@@ -48,6 +48,7 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "FormulaRenderer.h"
+#include <qclipboard.h>
 
 
 
@@ -480,4 +481,38 @@ void KoFormulaTool::addTemplateAction(const QString& caption, const QString& nam
     addAction( name , action );
     action->setIcon(KIcon(iconName));
     connect( action, SIGNAL (triggered()), m_signalMapper, SLOT (map()));
+}
+
+
+void KoFormulaTool::copy() const
+{
+    QApplication::clipboard()->setText("test");
+}
+
+void KoFormulaTool::deleteSelection()
+{
+    KoTool::deleteSelection();
+}
+
+bool KoFormulaTool::paste()
+{
+    const QMimeData* data=QApplication::clipboard()->mimeData();
+    if (data->hasFormat("text/plain")) {
+        kDebug()<< data->text();
+        FormulaCommand* command=m_formulaEditor->insertText(data->text());
+        if (command!=0) {
+            m_canvas->addCommand(new FormulaCommandUpdate(m_formulaShape,command));
+        }
+        repaintCursor();
+        return true;
+    }
+    return false;
+}
+
+QStringList KoFormulaTool::supportedPasteMimeTypes() const
+{
+    QStringList tmp;
+    tmp << "text/plain";
+    tmp << "application/xml";
+    return tmp;
 }

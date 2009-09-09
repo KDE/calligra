@@ -92,10 +92,20 @@ public slots:
     void saveFormula();
 
     void loadFormula();
+
+    
 protected:
     /// Create default option widget
     QWidget* createOptionWidget();
-	
+
+    virtual void copy() const;
+
+    virtual void deleteSelection();
+
+    virtual bool paste();
+
+    virtual QStringList supportedPasteMimeTypes() const;
+    
 private:
     /// Repaint the cursor and selection
     void repaintCursor();

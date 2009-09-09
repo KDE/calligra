@@ -77,7 +77,7 @@ void FormulaCursor::paint( QPainter& painter ) const
         return;
     painter.save();
     QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
-//     double baseline=m_currentElement->baseLine();
+    double baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
     pen.setColor(Qt::black);
@@ -87,8 +87,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     pen.setColor(Qt::blue);
     pen.setStyle(Qt::DashLine);
     painter.setPen( pen );
-//    painter.drawLine( origin+QPointF(0.0,baseline),
-//        origin+QPointF(m_currentElement->width(), baseline) );
+    painter.drawLine( origin+QPointF(0.0,baseline),origin+QPointF(m_currentElement->width(), baseline) );
     pen.setStyle(Qt::DotLine);
     //Only here for debug purpose for now
     switch(m_currentElement->elementType()) {

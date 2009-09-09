@@ -431,9 +431,12 @@ void BasicElement::writeElementTree(int indent, bool wrong) const
         s+="   ";
     }
     s+=ElementFactory::elementName(elementType());
+    s+=" ";
     s+=writeElementContent();
-    s+="        [scale level ";
-    s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";
+/*    s+="        [scale level ";
+    s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";*/
+    s+=QString(" [")+QString::number(baseLine())+" ; " + QString::number(height())+"]";
+    s+=QString(" [")+ QString::number(origin().y())+"]";
     if (wrong) {
         s+=" -> wrong parent !!!";
     }

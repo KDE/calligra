@@ -95,13 +95,13 @@ void RowElement::stretch()
 {
     //The elements can grow vertically, so make sure we reposition their vertical 
     //origin appropriately
-    foreach( BasicElement* tmpElement, childElements() ) {
+/*    foreach( BasicElement* tmpElement, childElements() ) {
         tmpElement->stretch();
         //Set the origin.  Note that we ignore the baseline and center the object
         //vertically
         //I think we need to FIXME for symmetric situations or something?
         tmpElement->setOrigin( QPointF(tmpElement->origin().x(), childrenBoundingRect().y() + (childrenBoundingRect().height() - tmpElement->height())/2 ));
-    }
+    }*/
 }
 
 int RowElement::endPosition() const
