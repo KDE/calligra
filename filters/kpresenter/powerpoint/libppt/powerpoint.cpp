@@ -1169,15 +1169,13 @@ void TextCharsAtom::setText( UString ustring )
 void TextCharsAtom::setData( unsigned size, const unsigned char* data )
 {
   UString tempStr;
-  int index = 0;
 
-  for( unsigned k=0; k<((0.5*size) + 1); k++ )
+  for( unsigned k=0; k<size; k+=2 )
   {
-    unsigned uchar = readU16( data + k*2 );
-    if ( (uchar == 0x0b) | (uchar == 0x0d) | (k == 0.5*size) )
+    unsigned uchar = readU16( data + k );
+    if ( (uchar == 0x0b) | (uchar == 0x0d) )
     {
      setText(tempStr);
-     index++;
      tempStr = "";
     }
     else
@@ -1188,6 +1186,10 @@ void TextCharsAtom::setData( unsigned size, const unsigned char* data )
      std::cout << "got a symbol at " << k << "th character" << std::endl;
    }
 
+  }
+  if( tempStr.length() > 0 )
+  {
+    setText(tempStr);
   }
 }
 
