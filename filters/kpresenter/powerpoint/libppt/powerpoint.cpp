@@ -3070,8 +3070,7 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
 {
   d->charFlags = charFlags;
 }
-
-void StyleTextPropAtom::setData( unsigned /*size*/, const unsigned char* data, unsigned lastSize )
+void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned lastSize )
 {
   unsigned charRead = 0;
   unsigned charCount = 0;
@@ -3872,15 +3871,12 @@ void TextBytesAtom::setText( UString ustring )
 void TextBytesAtom::setData( unsigned size, const unsigned char* data )
 {
   UString tempStr;
-  int index = 0;
-  unsigned length = 0;
-  for( unsigned k=0; k<(size + 1); k++ )
+  for( unsigned k=0; k<size; ++k )
   {
     unsigned uchar =  data[k];
-    if ( (uchar == 0x0b) | (uchar == 0x0d) | (k == size) )
+    if ( (uchar == 0x0b) | (uchar == 0x0d) )
     {
      setText(tempStr);
-     index++;
      tempStr = "";
     }
     else
@@ -3890,10 +3886,11 @@ void TextBytesAtom::setData( unsigned size, const unsigned char* data )
     { // handle later
       std::cout << "got a symbol at " << k << "th character" << std::endl;
     }
-    length++;
   }
+  if( tempStr.length() )
+    setText(tempStr);
 
-  setStringLength(length);
+  setStringLength(size);
 }
 
 void TextBytesAtom::dump( std::ostream& out ) const
@@ -4983,6 +4980,7 @@ public:
   Libppt::Slide* currentSlide;
   unsigned currentTextType;
   unsigned currentTextId;
+  unsigned lastTextSize;
 
   GroupObject* currentGroup;
   Object* currentObject;
@@ -5003,6 +5001,7 @@ PPTReader::PPTReader()
   d->currentSlide = 0;
   d->currentTextType = 0;
   d->currentTextId = 0;
+  d->lastTextSize = 0;
   d->isShapeGroup = false;
 }
 
@@ -5469,10 +5468,6 @@ void PPTReader::loadRecord( Record* parent )
   unsigned long type = readU16( buffer + 2 );
   unsigned long size = readU32( buffer + 4 );
   unsigned long nextpos = d->docStream->tell() + size;
-#ifdef __GNUC__
-#warning what use does this constant have?
-#endif
-  unsigned lastSize = 0;
   // create the record using the factory
   Record* record = Record::create( type );
   if( record )
@@ -5486,17 +5481,18 @@ void PPTReader::loadRecord( Record* parent )
       d->docStream->read( buffer, size );
       // special treatment for StyleTextPropAtom
       if ( type == StyleTextPropAtom::id )
-        record->setData(size, buffer, lastSize);
+        record->setData(size, buffer, d->lastTextSize);
       else
         record->setData( size, buffer );
       handleRecord( record, type );
+      if ( type == TextBytesAtom::id )
+        d->lastTextSize = static_cast<TextBytesAtom*>( record )->stringLength();
     }
     else
       handleContainer( static_cast<Container*>( record ), type, size );
 
     delete record;
   }
-  lastSize = size;
   d->docStream->seek( nextpos );
 }
 
