@@ -253,16 +253,16 @@ View::View( Part* part, QWidget* parent )
     actionTaskDescription  = new KAction(KIcon( "document-edit" ), i18n("Description..."), this);
     actionCollection()->addAction("task_description", actionTaskDescription );
     connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
-    actionIndentTask = new KAction(KIcon( "edit-indent" ), i18n("Indent Task"), this);
+    actionIndentTask = new KAction(KIcon( "format-indent-more" ), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
-    actionUnindentTask= new KAction(KIcon( "edit-unindent" ), i18n("Unindent Task"), this);
+    actionUnindentTask= new KAction(KIcon( "format-indent-less" ), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
-    actionMoveTaskUp = new KAction(KIcon( "edit-up" ), i18n("Move Task Up"), this);
+    actionMoveTaskUp = new KAction(KIcon( "arrow-up" ), i18n("Move Task Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
-    actionMoveTaskDown = new KAction(KIcon( "edit-down" ), i18n("Move Task Down"), this);
+    actionMoveTaskDown = new KAction(KIcon( "arrow-down" ), i18n("Move Task Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
 
@@ -2233,7 +2233,7 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
-    qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
+    //qDebug()<<"View::slotGuiActivated:"<<view<<activate<<view->actionListNames();
     //FIXME: Avoid unplug if possible, it flashes the gui
     // always unplug, in case they already are plugged
     foreach( const QString &name, view->actionListNames() ) {
