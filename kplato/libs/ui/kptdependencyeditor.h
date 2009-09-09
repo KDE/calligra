@@ -33,6 +33,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QTimer>
 
 #include <klocale.h>
 
@@ -270,11 +271,14 @@ protected:
     void hoverLeaveEvent ( QGraphicsSceneHoverEvent *event );
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     
 private:
     DependencyNodeItem::ConnectorType m_ctype;
+
+    QPointF m_mousePressPos;
 };
 
 //-----------------------
@@ -335,7 +339,7 @@ public:
     void multiConnectorClicked( DependencyConnectorItem *item );
     bool connectionIsValid( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void clearConnection();
-    
+
     /// Used when a node has been moved
     void moveItem( DependencyNodeItem *item, const QList<Node*> &lst );
     QList<DependencyNodeItem*> removeChildItems( DependencyNodeItem *item );
@@ -409,6 +413,7 @@ public slots:
     
 protected:
     void keyPressEvent(QKeyEvent *event);    
+    void mouseMoveEvent( QMouseEvent *mouseEvent );
 
 protected slots:
     void slotSelectionChanged();
@@ -423,8 +428,14 @@ protected slots:
     void slotDependencyContextMenuRequested( DependencyLinkItem *item, DependencyConnectorItem *connector );
     void slotFocusItemChanged( QGraphicsItem* );
 
+private slots:
+    void slotAutoScroll();
+
 private:
     Project *m_project;
+
+    QPoint m_cursorPos;
+    QTimer m_autoScrollTimer;
 };
 
 //------------------------------

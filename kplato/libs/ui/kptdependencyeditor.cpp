@@ -402,14 +402,13 @@ void DependencyCreatorItem::createPath( const QPointF &ep )
 
 QPointF DependencyCreatorItem::startPoint() const
 {
-    return predConnector->connectorPoint();
+    return predConnector == 0 ? QPointF() : predConnector->connectorPoint();
 }
 
 QPointF DependencyCreatorItem::endPoint() const
 {
-    return succConnector->connectorPoint();
+    return succConnector == 0 ? QPointF() : succConnector->connectorPoint();
 }
-
 
 //--------------------
 DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorType type, DependencyNodeItem *parent )
@@ -446,18 +445,21 @@ QPointF DependencyConnectorItem::connectorPoint() const
 
 void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
+    //qDebug()<<"DependencyConnectorItem::hoverEnterEvent:"<<node()->name();
     itemScene()->connectorEntered( this, true );
 }
 
 void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
+    //qDebug()<<"DependencyConnectorItem::hoverLeaveEvent:"<<node()->name();
     itemScene()->connectorEntered( this, false );
 }
 
 void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    //qDebug()<<"DependencyConnectorItem::mousePressEvent:"<<node()->name();
     if (event->button() == Qt::LeftButton ) {
-
+        m_mousePressPos = event->pos();
     } else {
         event->ignore();
     }
@@ -465,13 +467,57 @@ void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //kDebug()<<rect()<<event->scenePos();
-    if (event->button() == Qt::LeftButton && rect().contains( event->scenePos() ) ) {
+    //qDebug()<<"DependencyConnectorItem::mouseReleaseEvent:"<<node()->name()<<m_mousePressPos;
+    m_mousePressPos = QPointF();
+    if (event->button() != Qt::LeftButton ) { 
+        event->ignore();
+        return;
+    }
+    if ( rect().contains( event->scenePos() ) ) {
+        // user clicked on this item
+        //qDebug()<<"DependencyConnectorItem::mouseReleaseEvent:"<<node()->name()<<"click";
         bool multiSelect = (event->modifiers() & Qt::ControlModifier) != 0;
         if (multiSelect) {
             itemScene()->multiConnectorClicked( this );
         } else {
             itemScene()->singleConnectorClicked( this );
+        }
+        return;
+    }
+    QGraphicsItem *item = 0;
+    foreach ( QGraphicsItem *i, itemScene()->items( event->scenePos() ) ) {
+        if ( i->type() == DependencyConnectorItem::Type ) {
+            item = i;
+            break;
+        }
+    }
+    if ( item == 0 || item == itemScene()->fromItem() ) {
+        itemScene()->setFromItem( 0 );
+        return;
+    }
+    itemScene()->singleConnectorClicked( static_cast<DependencyConnectorItem*>( item ) );
+}
+
+void DependencyConnectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->buttons() == Qt::LeftButton ) {
+        //qDebug()<<"DependencyConnectorItem::mouseMoveEvent:"<<node()->name()<<event->pos();
+        if ( ! m_mousePressPos.isNull() ) {
+            itemScene()->setFromItem( this );
+            m_mousePressPos = QPointF();
+        }
+        QGraphicsItem *item = 0;
+        foreach ( QGraphicsItem *i, itemScene()->items( event->scenePos() ) ) {
+            if ( i->type() == DependencyConnectorItem::Type ) {
+                item = i;
+                break;
+            }
+        }
+        if ( item != this ) {
+            itemScene()->connectorEntered( this, false );
+        }
+        if ( item != 0 ) {
+            itemScene()->connectorEntered( static_cast<DependencyConnectorItem*>( item ), true );
         }
     } else {
         event->ignore();
@@ -1223,7 +1269,9 @@ void DependencyScene::createLink( DependencyNodeItem *parent, Relation *rel )
 void DependencyScene::mouseMoveEvent( QGraphicsSceneMouseEvent *mouseEvent )
 {
     if ( m_connectionitem->isVisible() ) {
-        m_connectionitem->createPath( mouseEvent->scenePos() );
+        int x = qMin( qMax( sceneRect().left() + 2, mouseEvent->scenePos().x() ), sceneRect().right() - 4 );
+        int y = qMin( qMax( sceneRect().top() + 2, mouseEvent->scenePos().y() ), sceneRect().bottom() - 4 );
+        m_connectionitem->createPath( QPoint( x, y ) );
     }
     QGraphicsScene::mouseMoveEvent( mouseEvent );
     //kDebug()<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
@@ -1511,6 +1559,9 @@ DependencyView::DependencyView( QWidget *parent )
     connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
 
     connect( itemScene(), SIGNAL( focusItemChanged( QGraphicsItem* ) ), this, SLOT( slotFocusItemChanged( QGraphicsItem* ) ) );
+
+    m_autoScrollTimer.start( 100 );
+    connect( &m_autoScrollTimer, SIGNAL( timeout() ), SLOT( slotAutoScroll() ) );
 }
 
 void DependencyView::slotContextMenuRequested( QGraphicsItem *item )
@@ -1736,6 +1787,40 @@ void DependencyView::keyPressEvent(QKeyEvent *event)
         }
     }
     QGraphicsView::keyPressEvent(event);
+}
+
+void DependencyView::mouseMoveEvent( QMouseEvent *mouseEvent )
+{
+    //qDebug()<<"DependencyView::mouseMoveEvent:"<<viewport()->cursor().shape();
+    m_cursorPos = mouseEvent->pos();
+    if ( itemScene()->connectionMode() && itemScene()->mouseGrabberItem() ) {
+        QPointF spos = mapToScene( m_cursorPos );
+        Qt::CursorShape c = Qt::ArrowCursor;
+        foreach ( QGraphicsItem *i, itemScene()->items( spos ) ) {
+            if ( i->type() == DependencyConnectorItem::Type ) {
+                if ( i == itemScene()->fromItem() ) {
+                    c = Qt::UpArrowCursor;
+                } else {
+                    if ( itemScene()->connectionIsValid( itemScene()->fromItem(), static_cast<DependencyConnectorItem*>( i ) ) ) {
+                        c = Qt::UpArrowCursor;
+                    } else {
+                        c = Qt::ForbiddenCursor;
+                    }
+                }
+            }
+        }
+        viewport()->setCursor( c );
+    }
+    QGraphicsView::mouseMoveEvent( mouseEvent );
+    //kDebug()<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
+    
+}
+
+void DependencyView::slotAutoScroll()
+{
+    if ( itemScene()->connectionMode() ) {
+        ensureVisible( QRectF( mapToScene( m_cursorPos ), QSizeF( 1, 1 ) ), 2, 2 );
+    }
 }
 
 //-----------------------------------
