@@ -5678,6 +5678,7 @@ void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
 
   int placeId = d->currentTextId-1;
   TextObject* text = d->currentSlide->textObject( placeId );
+  if ( text == 0 ) return;
 
   for (uint i=0; i<atom->listSize(); i++)
   {
