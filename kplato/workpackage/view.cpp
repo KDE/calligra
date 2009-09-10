@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2009 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -142,7 +142,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
 
-    actionViewDocument  = new KAction(/*KIcon( "document-edit" ),*/ i18nc( "@verb", "View..."), this);
+    actionViewDocument  = new KAction(KIcon( "document-preview" ), i18nc( "@verb", "View..."), this);
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
