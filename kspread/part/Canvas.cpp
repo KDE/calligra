@@ -867,7 +867,8 @@ void Canvas::dropEvent( QDropEvent * _ev )
           = new UndoDragDrop(sheet, *selection(),
                              Region(QRect(col, row,
                                    selection()->boundingRect().width(),
-                                   selection()->boundingRect().height())));
+                                   selection()->boundingRect().height())),
+                             selection());
         d->view->doc()->addCommand( undo );
         makeUndo = false;
 
@@ -881,6 +882,11 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
     b = mimeData->data( "application/x-kspread-snippet" );
     sheet->paste( b, QRect( col, row, 1, 1 ), makeUndo );
+
+    //Select the pasted cells
+    selection()->initialize( QRect( col, row,  
+                                    selection()->boundingRect().width(),
+                                    selection()->boundingRect().height() ), sheet);
 
     _ev->setAccepted(true);
   }

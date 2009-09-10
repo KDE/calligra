@@ -30,6 +30,7 @@
 // #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "Selection.h"
 
 // commands
 #include "commands/DataManipulators.h"
@@ -1519,10 +1520,12 @@ void UndoDelete::redo()
 
 UndoDragDrop::UndoDragDrop( Sheet * _sheet,
                             const Region& _source,
-                            const Region& _target )
+                            const Region& _target,
+                            Selection* _currentSelection )
   : UndoAction(),
     m_selectionSource( _source ),
-    m_selectionTarget( _target )
+    m_selectionTarget( _target ),
+    m_currentSelection( _currentSelection )
 {
     setText(i18n("Drag & Drop"));
 
@@ -1565,6 +1568,8 @@ void UndoDragDrop::undo()
     sheet->deleteCells( m_selectionSource );
     sheet->paste( m_dataSource, m_selectionSource.boundingRect(), false /* no undo */ );
 
+    m_currentSelection->initialize( m_selectionSource, sheet);
+
     sheet->updateView();
 }
 
@@ -1587,6 +1592,8 @@ void UndoDragDrop::redo()
     sheet->paste( m_dataRedoTarget, m_selectionTarget.boundingRect(), false /* no undo */ );
     sheet->deleteCells( m_selectionSource );
     sheet->paste( m_dataRedoSource, m_selectionSource.boundingRect(), false /* no undo */ );
+
+    m_currentSelection->initialize( m_selectionTarget, sheet);
 
     sheet->updateView();
 }

@@ -43,6 +43,7 @@ class Sheet;
 class Style;
 class Undo;
 class UndoResizeColRow;
+class Selection;
 
 struct rowSize {
 int rowNumber;
@@ -377,7 +378,7 @@ protected:
 class UndoDragDrop : public UndoAction
 {
 public:
-    UndoDragDrop(Sheet * _sheet, const Region& _source, const Region& _target );
+    UndoDragDrop(Sheet * _sheet, const Region& _source, const Region& _target, Selection* _currentSelection );
     virtual ~UndoDragDrop();
 
     virtual void undo();
@@ -391,6 +392,7 @@ protected:
     QByteArray m_dataRedoSource;
     QByteArray m_dataRedoTarget;
     Sheet*  m_sheet;
+    Selection* m_currentSelection; //used to update the selected cells properly
 
     void saveCellRect( QByteArray & cells, Sheet * sheet,
                        const Region& region );
