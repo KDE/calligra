@@ -113,7 +113,7 @@ public:
         else {
             if (frame->runAroundSide() == KWord::LeftRunAroundSide)
                 m_side = Right;
-            else if (frame->runAroundSide() == KWord::RightRunAroundSide)
+            else /*if (frame->runAroundSide() == KWord::RightRunAroundSide) */
                 m_side = Left;
         }
     }
@@ -207,7 +207,7 @@ public:
     }
 
 private:
-    enum Side { None, Left, Right, Empty };
+    enum Side { None, Left, Right, Empty }; // TODO support Auto and Both
     Side m_side;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
