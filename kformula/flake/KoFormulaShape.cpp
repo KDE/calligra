@@ -26,10 +26,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoXmlNS.h>
 #include <kdebug.h>
 
 
-KoFormulaShape::KoFormulaShape() : KoFrameShape("http://www.w3.org/1998/Math/MathML","math")
+KoFormulaShape::KoFormulaShape()
+: KoFrameShape( KoXmlNS::draw, "object" )
 {
     FormulaElement* element= new FormulaElement();
     m_formulaData = new FormulaData(element);
@@ -86,6 +88,7 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
 bool KoFormulaShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext &/*context*/ )
 {
     KoXmlElement topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
+    // This is only true when loading as embedded in the main doc
     if (topLevelElement.isNull()) {
         kWarning() << "no math element as first child";
         return false;
