@@ -394,8 +394,10 @@ void KWTextDocumentLayout::layout()
                         rect = QRectF(leftIndent, rect.top() + 10, width, rect.height());
                     else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
                         break;
-                    else
+                    else if (newLine.isValid())
                         rect = newLine;
+                    else
+                        break;
                 }
             }
             void setOutlines(const QList<Outline*> &outlines) {
