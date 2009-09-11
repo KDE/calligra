@@ -104,6 +104,7 @@
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
+#include <KoToolProxy.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -234,6 +235,9 @@ public:
     QAction * renameSheet;
     QAction * hideSheet;
     QAction * showSheet;
+
+    //Shape manipulation
+    KAction * deleteShape;
 
     // page layout
     QAction * paperLayout;
@@ -505,6 +509,13 @@ void View::Private::initActions()
              view, SLOT( menuCalc( bool ) ) );
     actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
     actions->calcCountA->setActionGroup( groupCalc );
+
+    //Shape actions
+    actions->deleteShape = new KAction( KIcon("edit-delete"), i18n("Delete"), view );
+    actions->deleteShape->setShortcut(QKeySequence("Del"));
+    connect(actions->deleteShape, SIGNAL(triggered()), view, SLOT(editDeleteSelection()));
+    connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), actions->deleteShape, SLOT(setEnabled(bool)));
+    ac->addAction("edit_delete", actions->deleteShape );
 
     // -- special action, only for developers --
     //
@@ -1087,6 +1098,12 @@ void View::shapeSelectionChanged()
             break;
         }
     }
+}
+
+
+void View::editDeleteSelection()
+{
+    d->canvas->toolProxy()->deleteSelection();
 }
 
 void View::initialPosition()

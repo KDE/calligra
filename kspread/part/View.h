@@ -349,6 +349,7 @@ public slots:
     void slotSheetShown( Sheet*_sheet );
     void slotSheetRemoved( Sheet*_sheet );
     void shapeSelectionChanged();
+    void editDeleteSelection();
 
 public:
     virtual int leftBorder() const;
