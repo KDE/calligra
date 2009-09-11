@@ -1,6 +1,5 @@
 project(karbon)
 
-IF(SHOULD_BUILD_KARBON)
 
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -67,4 +66,3 @@ install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries(karbon kdeinit_karbon)
 install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-ENDIF(SHOULD_BUILD_KARBON)
