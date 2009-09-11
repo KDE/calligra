@@ -35,12 +35,13 @@ namespace KPlato
 class Resource;
 class Node;
 class TaskWorkPackageView;
+class ScheduleManager;
 
 class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPackageSendPanel
 {
     Q_OBJECT
 public:
-    explicit WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *parent=0 );
+    explicit WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *parent=0 );
 
 signals:
     void sendWorkpackages( QList<Node*>&, Resource* );

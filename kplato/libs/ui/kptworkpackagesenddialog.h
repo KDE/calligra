@@ -32,12 +32,13 @@ class WorkPackageSendPanel;
 class Project;
 class Task;
 class Node;
+class ScheduleManager;
 
 class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit WorkPackageSendDialog( const QList<Node*> &tasks, QWidget *parent=0);
+    explicit WorkPackageSendDialog( const QList<Node*> &tasks, ScheduleManager *sm, QWidget *parent=0);
 
     WorkPackageSendPanel *panel() const { return m_wp; }
 

@@ -1033,7 +1033,7 @@ void TaskWorkPackageView::slotMailWorkpackage()
     if ( ! lst.isEmpty() ) {
         // TODO find a better way to log to avoid undo/redo
         m_cmd = new MacroCommand( "Log Send Workpackages" );
-        WorkPackageSendDialog *dlg = new WorkPackageSendDialog( lst, this );
+        WorkPackageSendDialog *dlg = new WorkPackageSendDialog( lst, scheduleManager(), this );
         connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SIGNAL( mailWorkpackages( QList<Node*>&, Resource* ) ) );
         
         connect ( dlg->panel(), SIGNAL( sendWorkpackages( QList<Node*>&, Resource* ) ), this, SLOT( slotWorkPackageSent( QList<Node*>&, Resource* ) ) );

@@ -3333,20 +3333,25 @@ void WorkPackage::saveLoggedXML(QDomElement &element) const
 
 QList<Resource*> WorkPackage::fetchResources()
 {
+    return fetchResources( id() );
+}
+
+QList<Resource*> WorkPackage::fetchResources( long id )
+{
     //kDebug()<<m_task.name();
     QList<Resource*> lst;
-    if ( id() == NOTSCHEDULED ) {
-        kDebug()<<"No schedule";
+    if ( id == NOTSCHEDULED ) {
+        qDebug()<<"WorkPackage::fetchResources:"<<"No schedule";
         if ( m_task ) lst << m_task->requestedResources();
     } else {
-        if ( m_task ) lst = m_task->assignedResources( id() );
+        if ( m_task ) lst = m_task->assignedResources( id );
         foreach ( const Resource *r, m_completion.resources() ) {
             if ( ! lst.contains( const_cast<Resource*>( r ) ) ) {
                 lst << const_cast<Resource*>( r );
             }
         }
     }
-    //kDebug()<<lst;
+    qDebug()<<"WorkPackage::fetchResources:"<<lst;
     return lst;
 }
 

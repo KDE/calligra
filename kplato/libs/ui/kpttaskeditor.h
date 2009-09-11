@@ -225,6 +225,8 @@ public:
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     void setModus( int mode );
 
+    ScheduleManager *scheduleManager() const { return baseModel()->manager(); }
+
 signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
     
@@ -242,6 +244,7 @@ public:
     void setupGui();
     Project *project() const;
     void setProject( Project *project );
+    ScheduleManager *scheduleManager() const { return m_view->scheduleManager(); }
 
     NodeSortFilterProxyModel *proxyModel() const;
 

@@ -22,6 +22,7 @@
 
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptschedule.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,17 +35,17 @@ namespace KPlato
 {
 
 
-WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks, QWidget *p )
+WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *p )
     : QWidget(p)
 {
     setupUi( this );
-
+    long id = sm ? sm->id() : NOTSCHEDULED;
     foreach ( Node *n, tasks ) {
         Task *t = qobject_cast<Task*>( n );
         if ( t == 0 ) {
             continue;
         }
-        foreach ( Resource *r, t->workPackage().fetchResources() ) {
+        foreach ( Resource *r, t->workPackage().fetchResources( id ) ) {
             m_resMap[ r ] << n;
         }
     }

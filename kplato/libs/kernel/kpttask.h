@@ -292,6 +292,10 @@ public:
     /// merged with resources added to completion
     QList<Resource*> fetchResources();
 
+    /// Return a list of resources fetched from the appointements or requests
+    /// merged with resources added to completion
+    QList<Resource*> fetchResources( long id );
+
     /// Returns id of the resource that owns this package. If empty, task leader owns it.
     QString ownerId() const { return m_ownerId; }
     /// Set the resource that owns this package to @p owner. If empty, task leader owns it.
