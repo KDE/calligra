@@ -817,10 +817,6 @@ void Part::insertFile( const QString &filename, Node *parent, Node *after )
 bool Part::insertProject( Project &project, Node *parent, Node *after )
 {
     qDebug()<<"Part::insertProject:";
-    if ( project.numChildren() == 0 ) {
-        qDebug()<<"Part::insertProject: nothing to insert";
-        return false;
-    }
     // make sure node ids in new project is unique also in old project
     QList<QString> existingIds = m_project->nodeDict().keys();
     foreach ( Node *n, project.allNodes() ) {
@@ -831,7 +827,12 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
         Q_ASSERT( res );
     }
     qDebug()<<"Part::insertProject:"<<project.childNodeIterator();
-    addCommand( new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) ) );
+    MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18n( "Insert project nodes" ) );
+    if ( m->isEmpty() ) {
+        delete m;
+    } else {
+        addCommand( m );
+    }
     return true;
 }
 
