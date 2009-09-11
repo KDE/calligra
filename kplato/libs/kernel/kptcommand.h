@@ -1666,6 +1666,9 @@ class KPLATOKERNEL_EXPORT InsertProjectCmd : public MacroCommand
 public:
     InsertProjectCmd( Project &project, Node *parent, Node *after, const QString& name = QString() );
 
+    void execute();
+    void unexecute();
+
 protected:
     void addCalendars( Calendar *calendar, Calendar *parent, QMap<Calendar*, Calendar*> &map );
     void addChildNodes( Node *node );

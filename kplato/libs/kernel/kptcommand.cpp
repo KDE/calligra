@@ -32,6 +32,7 @@
 
 #include <QHash>
 #include <QMap>
+#include <QApplication>
 
 namespace KPlato
 {
@@ -3359,6 +3360,19 @@ void InsertProjectCmd::addChildNodes( Node *node ) {
         //qDebug()<<"addChildNodes: remove"<<node->name()<<"->"<<ch->name();
         node->takeChildNode( ch );
     }
+}
+
+void InsertProjectCmd::execute()
+{
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    MacroCommand::execute();
+    QApplication::restoreOverrideCursor();
+}
+void InsertProjectCmd::unexecute()
+{
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    MacroCommand::unexecute();
+    QApplication::restoreOverrideCursor();
 }
 
 WorkPackageAddCmd::WorkPackageAddCmd( Project *project, Node *node, WorkPackage *value, const QString& name )
