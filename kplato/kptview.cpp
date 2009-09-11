@@ -2215,7 +2215,6 @@ void View::slotConnectNode()
 QMenu * View::popupMenu( const QString& name )
 {
     //kDebug();
-    Q_ASSERT( factory() );
     if ( factory() )
         return ( ( QMenu* ) factory() ->container( name, this ) );
     return 0L;
@@ -2261,38 +2260,6 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
     if ( v ) {
         v->setGuiActive( ev->activated() );
     }
-}
-
-KoDocument *View::hitTest( const QPoint &pos )
-{
-    //TODO: test this with embedded koffice parts
-    //kDebug()<<pos;
-    // pos is in m_tab->currentWidget() coordinates
-    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
-    kDebug()<<pos<<gl;
-    if ( m_tab->currentWidget()->frameGeometry().contains( m_tab->currentWidget()->mapFromGlobal( gl ) ) ) {
-        // Check if own subview
-        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-        if ( v ) {
-            kDebug()<<"Hit on:"<<v;
-            v = v->hitView( gl );
-            v->setGuiActive( true );
-            return koDocument();
-        }
-        SplitterView *sp = dynamic_cast<SplitterView*>( m_tab->currentWidget() );
-        if ( sp ) {
-            // Check which subview has actually been hit (can aslo be the splitter)
-            v = sp->findView( pos );
-            if ( v ) {
-                kDebug()<<"Hit on:"<<sp<<" -> "<<v;
-                v->hitView( gl );
-                v->setGuiActive( true );
-                return koDocument();
-            }
-        }
-    }
-    // check child documents
-    return qobject_cast<KoDocument*>( koDocument()->hitTest( this, pos ));
 }
 
 void View::slotViewListItemRemoved( ViewListItem *item )

@@ -59,6 +59,7 @@ public:
           bool singleViewMode = false );
     ~Part();
 
+    void setReadWrite( bool rw );
     void configChanged();
     
     virtual void paintContent( QPainter& painter, const QRect& rect);

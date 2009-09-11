@@ -296,6 +296,14 @@ ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
 {
 }
     
+ViewBase::~ViewBase()
+{
+    if ( koDocument() ) {
+        //HACK to avoid ~View to access koDocument()
+        setDocumentDeleted();
+    }
+}
+
 KoDocument *ViewBase::part() const
 {
      return koDocument();

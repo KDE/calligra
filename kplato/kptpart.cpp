@@ -82,6 +82,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 {
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
+    m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -89,16 +90,16 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kdgantt" );
         locale->insertCatalog( "kabc" );
         locale->insertCatalog( "timezones4" );
+
+        m_config.setLocale( new KLocale( *locale ) );
     }
-    m_config.setReadWrite( isReadWrite() || !isEmbedded() );
-    m_config.setLocale( new KLocale( *locale ) );
 
     loadSchedulerPlugins();
 
     setProject( new Project( m_config ) ); // after config & plugins are loaded
     m_project->setId( m_project->uniqueNodeId() );
 
-    qDebug()<<"setProject: initial start";
+    qDebug()<<"setProject: initial start"<<isReadWrite()<<isEmbedded()<<singleViewMode;
     QTimer::singleShot ( 5000, this, SLOT( checkForWorkPackages() ) );
 
 }
@@ -108,6 +109,12 @@ Part::~Part()
 {
     delete m_project;
     qDeleteAll( m_mergedPackages );
+}
+
+void Part::setReadWrite( bool rw )
+{
+    m_config.setReadWrite( rw || !isEmbedded() ); // embedded in koffice doc
+    KoDocument::setReadWrite( rw );
 }
 
 void Part::loadSchedulerPlugins()
@@ -525,7 +532,7 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
 void Part::checkForWorkPackages()
 {
     //qDebug()<<"checkForWorkPackages:";
-    if ( ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
+    if ( ! isReadWrite() || ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         //qDebug()<<"checkForWorkPackages: idle";
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;

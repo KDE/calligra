@@ -184,7 +184,7 @@ public:
     /// Contructor
     ViewBase(KoDocument *doc, QWidget *parent);
     /// Destructor
-    virtual ~ViewBase() {}
+    virtual ~ViewBase();
     /// Return the part (document) this view handles
     KoDocument *part() const;
     

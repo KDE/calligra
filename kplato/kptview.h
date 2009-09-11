@@ -99,10 +99,6 @@ public:
 
     QWidget *canvas() const;
 
-    //virtual QDockWidget *createToolBox();
-
-    KoDocument *hitTest( const QPoint &viewPos );
-
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
     void setActiveSchedule( long id ) const;
