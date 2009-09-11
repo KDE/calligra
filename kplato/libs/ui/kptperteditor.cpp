@@ -51,7 +51,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
     connect( m_requiredList->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
-    updateReadWrite( part->isReadWrite() );
+    updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
     
     widget.addBtn->setIcon( KIcon( "arrow-right" ) );
     widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
@@ -99,6 +99,9 @@ void PertEditor::slotRequiredChanged( const QModelIndex &item )
 
 void PertEditor::slotAddClicked()
 {
+    if ( ! isReadWrite() ) {
+        return;
+    }
     QTreeWidgetItem *item = m_availableList->currentItem();
     //kDebug()<<item;
     addTaskInRequiredList( item );
@@ -133,6 +136,9 @@ void PertEditor::addTaskInRequiredList(QTreeWidgetItem * currentItem)
 
 void PertEditor::slotRemoveClicked()
 {
+    if ( ! isReadWrite() ) {
+        return;
+    }
     Node *n = 0;
     Relation *r = m_requiredList->currentRelation();
     if ( r ) {
@@ -291,7 +297,9 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
 
 void PertEditor::updateReadWrite( bool rw )
 {
+    qDebug()<<"PertEditor::updateReadWrite:"<<rw;
     m_requiredList->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 QTreeWidgetItem *PertEditor::findNodeItem( Node *node, QTreeWidgetItem *item ) {

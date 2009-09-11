@@ -99,6 +99,9 @@ public:
     
     QSize sizeHint() const;
     
+    void setReadWrite( bool on ) { m_readwrite = on; }
+    bool isReadWrite() const { return m_readwrite; }
+
 signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );
@@ -133,6 +136,7 @@ private:
     KAction *actionSetVacation;
     KAction *actionSetWork;
 
+    bool m_readwrite;
 };
 
 class KPLATOUI_EXPORT CalendarEditor : public ViewBase

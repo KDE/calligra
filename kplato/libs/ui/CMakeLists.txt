@@ -45,7 +45,6 @@ set(kplatoui_LIB_SRCS
     kptsummarytaskdialog.cpp
     kptsummarytaskgeneralpanel.cpp
     kptresourceappointmentsview.cpp
-    kptdoublelistviewbase.cpp
     kptaccountsviewconfigdialog.cpp
     kptaccountsview.cpp
     kpttaskcostpanel.cpp

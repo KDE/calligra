@@ -23,7 +23,6 @@
 #include "kptaccountsmodel.h"
 
 #include <QCheckBox>
-#include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <QString>
 

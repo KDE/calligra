@@ -31,10 +31,8 @@
 
 #include <ktabwidget.h>
 
-#include <q3ptrlist.h>
 #include <QMap>
 #include <qtoolbutton.h>
-#include <q3valuelist.h>
 #include <QLabel>
 
 #include <kmimetype.h>
@@ -59,8 +57,6 @@ namespace KPlato {
 
 class KComponentData;
 class KVBox;
-class Q3IconView;
-class Q3IconViewItem;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;

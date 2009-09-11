@@ -27,16 +27,10 @@
 
 #include <QCursor>
 #include <QSplitter>
-#include <q3iconview.h>
 #include <QLabel>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 #include <assert.h>
 #include <kicon.h>
-//#include "koshellsettings.h"
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>

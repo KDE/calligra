@@ -29,9 +29,6 @@
 
 #include <kdebug.h>
 
-#include <q3listview.h>
-#include <q3popupmenu.h>
-
 #include <QWidget>
 #include <QSplitter>
 #include <QStringList>

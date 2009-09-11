@@ -100,6 +100,7 @@ void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
 
 DependencyLinkItemBase::DependencyLinkItemBase( QGraphicsItem *parent )
     : QGraphicsPathItem( parent ),
+    m_editable( false ),
     predItem( 0 ),
     succItem( 0 ),
     relation( 0 ),
@@ -109,6 +110,7 @@ DependencyLinkItemBase::DependencyLinkItemBase( QGraphicsItem *parent )
 
 DependencyLinkItemBase::DependencyLinkItemBase( DependencyNodeItem *predecessor, DependencyNodeItem *successor, Relation *rel, QGraphicsItem *parent )
     : QGraphicsPathItem( parent ),
+    m_editable( false ),
     predItem( predecessor ),
     succItem( successor ),
     relation( rel ),
@@ -322,7 +324,7 @@ void DependencyLinkItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //kDebug();
     QGraphicsItem::GraphicsItemFlags f = flags();
-    if ( itemScene()->connectionMode() ) {
+    if ( isEditable() && itemScene()->connectionMode() ) {
         itemScene()->clearConnection();
         setFlags( f & ~QGraphicsItem::ItemIsSelectable );
     }
@@ -336,7 +338,8 @@ void DependencyLinkItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 DependencyCreatorItem::DependencyCreatorItem( QGraphicsItem *parent )
     : DependencyLinkItemBase( parent ),
     predConnector( 0 ),
-    succConnector( 0 )
+    succConnector( 0 ),
+    m_editable( false )
 {
     setZValue( 1000.0 );
     clear();
@@ -413,7 +416,8 @@ QPointF DependencyCreatorItem::endPoint() const
 //--------------------
 DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorType type, DependencyNodeItem *parent )
     : QGraphicsRectItem( parent ),
-    m_ctype( type )
+    m_ctype( type ),
+    m_editable( false )
 {
     setCursor( Qt::UpArrowCursor );
     setAcceptsHoverEvents( true );
@@ -458,6 +462,10 @@ void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*even
 void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug()<<"DependencyConnectorItem::mousePressEvent:"<<node()->name();
+    if ( ! isEditable() ) {
+        event->ignore();
+        return;
+    }
     if (event->button() == Qt::LeftButton ) {
         m_mousePressPos = event->pos();
     } else {
@@ -590,7 +598,8 @@ QList<DependencyLinkItem*> DependencyConnectorItem::successorItems() const
 DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     : QGraphicsRectItem( parent ),
     m_node( node ),
-    m_parent( 0 )
+    m_parent( 0 ),
+    m_editable( false )
 {
     setAcceptsHoverEvents( true );
     setZValue( 400.0 );
@@ -1540,6 +1549,17 @@ void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
     emit contextMenuRequested( focusItem() );
 }
 
+void DependencyScene::setReadWrite( bool on )
+{
+    foreach ( QGraphicsItem *i, items() ) {
+        if ( i->type() == DependencyConnectorItem::Type ) {
+            static_cast<DependencyConnectorItem*>( i )->setEditable( on );
+        } else if ( i->type() == DependencyLinkItem::Type ) {
+            static_cast<DependencyLinkItem*>( i )->setEditable( on );
+        }
+    }
+}
+
 //--------------------
 
 DependencyView::DependencyView( QWidget *parent )
@@ -1845,9 +1865,18 @@ DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
 
 }
 
+void DependencyEditor::updateReadWrite( bool on )
+{
+    m_view->itemScene()->setReadWrite( on );
+    ViewBase::updateReadWrite( on );
+}
+
 void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
 {
     //kDebug();
+    if ( ! isReadWrite() ) {
+        return;
+    }
     if ( item && item->type() == DependencyLinkItem::Type ) {
         emit modifyRelation( static_cast<DependencyLinkItem*>( item )->relation );
         return;
@@ -1865,6 +1894,9 @@ void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
 void DependencyEditor::slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ )
 {
     //kDebug();
+    if ( ! isReadWrite() ) {
+        return;
+    }
     Node *par = pred->node();
     Node *ch = succ->node();
     Relation::Type type = Relation::FinishStart;
@@ -1969,6 +2001,9 @@ void DependencyEditor::setScheduleManager( ScheduleManager *sm )
 void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoint& pos )
 {
     //kDebug()<<item<<","<<pos;
+    if ( ! isReadWrite() ) {
+        return;
+    }
     QString name;
     if ( item && item->type() == DependencyNodeSymbolItem::Type ) {
         item = item->parentItem();

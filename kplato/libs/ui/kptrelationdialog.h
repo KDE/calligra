@@ -27,8 +27,6 @@
 #include <QWidget>
 #include <kdialog.h>
 
-class Q3ButtonGroup;
-
 namespace KPlato
 {
 
@@ -67,7 +65,6 @@ protected slots:
 protected:
     Project &m_project;
     RelationPanel *m_panel;
-    Q3ButtonGroup *relationType;
     Relation *m_relation;
 };
 

@@ -24,7 +24,6 @@
 
 #include "kptviewbase.h"
 
-#include <q3ptrlist.h>
 #include <QTreeWidget>
 
 #include <QList>

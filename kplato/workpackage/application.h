@@ -31,16 +31,11 @@
 
 #include <ktabwidget.h>
 #include <kuniqueapplication.h>
-
-#include <q3ptrlist.h>
-#include <QMap>
-#include <qtoolbutton.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QLabel>
 #include <kvbox.h>
 
-//#include "iconsidepane.h"
+#include <QMap>
+#include <qtoolbutton.h>
+#include <QLabel>
 
 class KPlatoWork_MainWindow;
 
@@ -56,8 +51,6 @@ namespace KPlato {
 
 class KComponentData;
 class KVBox;
-class Q3IconView;
-class Q3IconViewItem;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;

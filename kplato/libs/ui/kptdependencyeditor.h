@@ -85,7 +85,11 @@ public:
     virtual QPointF startPoint() const { return QPointF(); }
     virtual QPointF endPoint() const { return QPointF(); }
 
+    bool isEditable() const { return m_editable; }
+    void setEditable( bool on ) { m_editable = on; }
+
 public:
+    bool m_editable;
     DependencyNodeItem *predItem;
     DependencyNodeItem *succItem;
     Relation *relation;
@@ -145,9 +149,13 @@ public:
     void setPredConnector( DependencyConnectorItem *item );
     void setSuccConnector( DependencyConnectorItem *item );
 
+    bool isEditable() const { return m_editable; }
+    void setEditable( bool on ) { m_editable = on; }
+
 public:
     DependencyConnectorItem *predConnector;
     DependencyConnectorItem *succConnector;
+    bool m_editable;
 };
 
 //-----------------------
@@ -208,6 +216,9 @@ public:
     QList<DependencyLinkItem*> predecessorItems( ConnectorType ctype ) const;
     QList<DependencyLinkItem*> successorItems( ConnectorType ctype ) const;
 
+    bool isEditable() const { return m_editable; }
+    void setEditable( bool on ) { m_editable = on; }
+
 protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
@@ -230,6 +241,8 @@ private:
     
     QList<DependencyLinkItem*> m_parentrelations;
     QList<DependencyLinkItem*> m_childrelations;
+
+    bool m_editable;
 };
 
 //-----------------------
@@ -237,14 +250,18 @@ class KPLATOUI_EXPORT DependencyNodeSymbolItem : public QGraphicsPathItem
 {
 public:
     explicit DependencyNodeSymbolItem( DependencyNodeItem *parent = 0 )
-        : QGraphicsPathItem( parent )
+        : QGraphicsPathItem( parent ),
+        m_editable( false )
     {}
     enum  { Type = QGraphicsItem::UserType + 3 };
     int type() const { return Type; }
     
     void setSymbol( int type, const QRectF &rect );
+    bool isEditable() const { return m_editable; }
+    void setEditable( bool on ) { m_editable = on; }
 private:
     GanttItemDelegate m_delegate;
+    bool m_editable;
 };
 
 //-----------------------
@@ -266,6 +283,9 @@ public:
     QList<DependencyLinkItem*> predecessorItems() const;
     QList<DependencyLinkItem*> successorItems() const;
 
+    bool isEditable() const { return m_editable; }
+    void setEditable( bool on ) { m_editable = on; }
+
 protected:
     void hoverEnterEvent ( QGraphicsSceneHoverEvent *event );
     void hoverLeaveEvent ( QGraphicsSceneHoverEvent *event );
@@ -279,6 +299,8 @@ private:
     DependencyNodeItem::ConnectorType m_ctype;
 
     QPointF m_mousePressPos;
+
+    bool m_editable;
 };
 
 //-----------------------
@@ -346,6 +368,8 @@ public:
     
     DependencyNodeItem *nodeItem( int row ) const;
     const QList<DependencyNodeItem*> &nodeItems() const { return m_allItems; }
+
+    void setReadWrite( bool on );
 
 signals:
     void connectorClicked( DependencyConnectorItem *item );
@@ -456,7 +480,7 @@ public:
     
     virtual Relation *currentRelation() const;
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {}
+    virtual void updateReadWrite( bool readwrite );
 
     virtual KoPrintJob *createPrintJob();
     

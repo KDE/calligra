@@ -188,7 +188,8 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
 
 //--------------------
 CalendarDayView::CalendarDayView( QWidget *parent )
-    : QTableView( parent )
+    : QTableView( parent ),
+    m_readwrite( false )
 {
     setTabKeyNavigation( false );
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -322,6 +323,9 @@ void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 {
     //kDebug();
+    if ( ! isReadWrite() ) {
+        return;
+    }
     KMenu menu;
     menu.addAction( actionSetWork );
     menu.addAction( actionSetVacation );
@@ -473,6 +477,9 @@ void CalendarEditor::setGuiActive( bool activate )
 void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates )
 {
     kDebug()<<menu<<dates;
+    if ( ! isReadWrite() ) {
+        return;
+    }
     if ( dates.isEmpty() ) {
         m_currentMenuDateList << m_datePicker->date();
     } else {
@@ -486,7 +493,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QList<QDate> &dates
 void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
 {
     kDebug()<<menu<<date;
-    if ( ! date.isValid() ) {
+    if ( ! isReadWrite() || ! date.isValid() ) {
         return;
     }
     m_currentMenuDateList << date;
@@ -497,6 +504,9 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
 
 void CalendarEditor::slotContextMenuCalendar( QModelIndex index, const QPoint& pos )
 {
+    if ( ! isReadWrite() ) {
+        return;
+    }
     //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
 /*    if ( index.isValid() ) {
@@ -514,6 +524,9 @@ void CalendarEditor::slotContextMenuCalendar( QModelIndex index, const QPoint& p
 
 void CalendarEditor::slotContextMenuDay( QModelIndex index, const QPoint& pos )
 {
+    if ( ! isReadWrite() ) {
+        return;
+    }
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
 /*    QString name;
     if ( index.isValid() ) {
@@ -610,7 +623,7 @@ void CalendarEditor::setupGui()
 void CalendarEditor::updateReadWrite( bool readwrite )
 {
     m_calendarview->setReadWrite( readwrite );
-//    m_dayview->setReadWrite( readwrite );
+    m_dayview->setReadWrite( readwrite );
 }
 
 void CalendarEditor::slotAddCalendar ()

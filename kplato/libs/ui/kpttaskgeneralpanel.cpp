@@ -39,8 +39,6 @@
 #include <kdatewidget.h>
 
 #include <qdatetime.h>
-#include <q3datetimeedit.h>
-#include <q3groupbox.h>
 #include <QPushButton>
 
 #include <kdebug.h>

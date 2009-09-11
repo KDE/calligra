@@ -31,7 +31,6 @@
 
 #include "kptaccount.h"
 #include "kpteffortcostmap.h"
-#include "kptdoublelistviewbase.h"
 
 class QPushButton;
 class QTreeWidgetItem;

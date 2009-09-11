@@ -28,13 +28,11 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <k3command.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <qdatetime.h> 
-#include <q3buttongroup.h> 
 #include <QCheckBox> 
 
 namespace KPlato
