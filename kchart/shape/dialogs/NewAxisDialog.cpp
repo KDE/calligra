@@ -18,6 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+
 #include "NewAxisDialog.h"
 
 using namespace KChart;

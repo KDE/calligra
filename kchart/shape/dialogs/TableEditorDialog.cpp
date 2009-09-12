@@ -18,11 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Own
 #include "TableEditorDialog.h"
+
+// Qt
+#include <QDebug>
+
+// KChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
 
-#include <QDebug>
 
 using namespace KChart;
 
@@ -46,6 +51,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
     if ( this->proxyModel == proxyModel )
         return;
 
+    // Disconnect the old proxy model.
     if ( this->proxyModel ) {
         disconnect( this->proxyModel,   SIGNAL( modelReset() ), this, SLOT( update() ) );
         disconnect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
@@ -56,6 +62,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 
     this->proxyModel = proxyModel;
 
+    // Connect the new proxy model.
     if ( proxyModel ) {
         tableView->setModel( proxyModel->sourceModel() );
 
@@ -75,19 +82,24 @@ void TableEditorDialog::init()
 
     KIcon insertRowIcon = KIcon( "insert_table_row" );
     KIcon deleteRowIcon = KIcon( "delete_table_row" );
-    KIcon insertColumnIcon = KIcon( "insert_table_col" );
-    KIcon deleteColumnIcon = KIcon( "delete_table_col" );
+    KIcon insertColIcon = KIcon( "insert_table_col" );
+    KIcon deleteColIcon = KIcon( "delete_table_col" );
+
+    // Create actions.
     insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), tableView );
     deleteRowsAction    = new QAction( deleteRowIcon, i18n( "Delete Rows" ), tableView );
-    insertColumnsAction = new QAction( insertColumnIcon, i18n( "Insert Columns" ), tableView );
-    deleteColumnsAction = new QAction( deleteColumnIcon, i18n( "Delete Columns" ), tableView );
+    insertColumnsAction = new QAction( insertColIcon, i18n( "Insert Columns" ), tableView );
+    deleteColumnsAction = new QAction( deleteColIcon, i18n( "Delete Columns" ), tableView );
 
+    // Set icons on buttons(?).
     insertRow->setIcon( insertRowIcon );
     deleteRow->setIcon( deleteRowIcon );
-    insertColumn->setIcon( insertColumnIcon );
-    deleteColumn->setIcon( deleteColumnIcon );
-    // Initially, no index is selected. Deletion only works with legal selections.
-    // They will automatically be enabled when an index is selected.
+    insertColumn->setIcon( insertColIcon );
+    deleteColumn->setIcon( deleteColIcon );
+
+    // Initially, no index is selected. Deletion only works with legal
+    // selections.  They will automatically be enabled when an index
+    // is selected.
     deleteRow->setEnabled( false );
     deleteColumn->setEnabled( false );
 
@@ -96,6 +108,7 @@ void TableEditorDialog::init()
     connect( insertColumn, SIGNAL( pressed() ), this, SLOT( slotInsertColumnPressed() ) );
     connect( deleteRow,    SIGNAL( pressed() ), this, SLOT( slotDeleteRowPressed() ) );
     connect( deleteColumn, SIGNAL( pressed() ), this, SLOT( slotDeleteColumnPressed() ) );
+
     // Context Menu Actions
     connect( insertRowsAction,    SIGNAL( triggered() ), this, SLOT( slotInsertRowPressed() ) );
     connect( insertColumnsAction, SIGNAL( triggered() ), this, SLOT( slotInsertColumnPressed() ) );
@@ -111,6 +124,7 @@ void TableEditorDialog::init()
     QAction *separator = new QAction( tableView );
     separator->setSeparator( true );
 
+    // Add all the actions to the view.
     tableView->addAction( deleteRowsAction );
     tableView->addAction( insertRowsAction );
     tableView->addAction( separator );

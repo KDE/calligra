@@ -21,13 +21,13 @@
 #ifndef KCHART_TABLE_EDITOR_DIALOG_H
 #define KCHART_TABLE_EDITOR_DIALOG_H
 
-#include "ui_ChartTableEditor.h"
-
 #include <QDialog>
 
-class QModelIndex;
+#include "ui_ChartTableEditor.h"
 
+class QModelIndex;
 class QAction;
+
 
 namespace KChart {
 
