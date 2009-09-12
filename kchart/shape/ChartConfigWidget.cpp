@@ -19,6 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Own
 #include "ChartConfigWidget.h"
 
 // Qt
@@ -34,6 +35,9 @@
 #include <KIconLoader>
 #include <KDebug>
 #include <KMessageBox>
+
+// KOffice
+#include <interfaces/KoChartModel.h>
 
 // KDChart
 #include <KDChartChart>
@@ -58,7 +62,6 @@
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
-#include <interfaces/KoChartModel.h>
 #include "TableModel.h"
 
 using namespace KChart;
@@ -83,8 +86,9 @@ public:
     QVBoxLayout           *leftLayout;
     QVBoxLayout           *rightLayout;
     Ui::ChartConfigWidget  ui;
-    bool                   sourceIsSpreadSheet;
+    bool                   sourceIsSpreadSheet; // FIXME: Rename to isExternalDataSource?
     
+    // Menus
     QMenu *dataSetBarChartMenu;
     QMenu *dataSetLineChartMenu;
     QMenu *dataSetAreaChartMenu;
@@ -113,7 +117,7 @@ public:
     QAction  *surfaceChartAction;
     QAction  *ganttChartAction;
 
-    // chart type selection actions
+    // chart type selection actions for datasets
     QAction  *dataSetNormalBarChartAction;
     QAction  *dataSetStackedBarChartAction;
     QAction  *dataSetPercentBarChartAction;
@@ -135,7 +139,7 @@ public:
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
 
-    // Table Editor
+    // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
 
     // Legend
@@ -147,9 +151,10 @@ public:
     
     int                   selectedDataSet;
     int                   selectedDataSet_CellRegionDialog;
-    
-    QList<Axis*> dataSetAxes;
-    QList<Axis*> axes;
+
+    // Axes
+    QList<Axis*>    dataSetAxes;
+    QList<Axis*>    axes;
     QList<DataSet*> dataSets;
 
     // Dialogs
@@ -159,6 +164,7 @@ public:
     
     CellRegionStringValidator *cellRegionStringValidator;
 };
+
 
 ChartConfigWidget::Private::Private( QWidget *parent )
     : newAxisDialog( parent ),
@@ -201,6 +207,10 @@ ChartConfigWidget::Private::Private( QWidget *parent )
 ChartConfigWidget::Private::~Private()
 {
 }
+
+
+// ================================================================
+//                     class ChartConfigWidget
 
 
 ChartConfigWidget::ChartConfigWidget()
@@ -379,6 +389,10 @@ void ChartConfigWidget::open( KoShape* shape )
     if ( ! shape ) {
         return;
     }
+ 
+    // There are 3 shapes that we can select: the full chart shape,
+    // the plotarea and the legend.
+    //
     // Find the selected shape and adapt the tool option window to
     // which of the subshapes of the chart widget that was actually
     // selected.  Then select the tab depending on which one it was.
@@ -502,48 +516,48 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
 
     // also known as polar chart.
     else if ( action == d->radarChartAction ) {
-        type = RadarChartType;
+        type    = RadarChartType;
         subtype = NoChartSubtype;
     }
 
     // also known as pie chart
     else if ( action == d->circleChartAction ) {
-        type = CircleChartType;
+        type    = CircleChartType;
         subtype = NoChartSubtype;
     }
     else if ( action == d->ringChartAction ) {
-        type = RingChartType;
+        type    = RingChartType;
         subtype = NoChartSubtype;
     }
     
     else if ( action == d->scatterChartAction ) {
-        type = ScatterChartType;
+        type    = ScatterChartType;
         subtype = NoChartSubtype;
     }
 
     else if ( action == d->stockChartAction ) {
-        type = StockChartType;
+        type    = StockChartType;
         subtype = NoChartSubtype;
     }
 
     else if ( action == d->bubbleChartAction ) {
-        type = BubbleChartType;
+        type    = BubbleChartType;
         subtype = NoChartSubtype;
     }
 
     else if ( action == d->surfaceChartAction ) {
-        type = SurfaceChartType;
+        type    = SurfaceChartType;
         subtype = NoChartSubtype;
     }
 
     else if ( action == d->ganttChartAction ) {
-        type = GanttChartType;
+        type    = GanttChartType;
         subtype = NoChartSubtype;
     }
 
     
     // o Make sure polar and cartesian plots can't conflict and
-    // don't allow the user to mix these two types
+    //   don't allow the user to mix these two types
     // o Hide axis configuration options for polar plots
     if ( isPolar( type ) ) {
         setPolarChartTypesEnabled( true );
@@ -624,7 +638,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     if ( d->selectedDataSet < 0 )
         return;
     
-    ChartType     type = LastChartType;
+    ChartType     type    = LastChartType;
     ChartSubtype  subtype = NoChartSubtype;
     
     if ( action == d->dataSetNormalBarChartAction ) {
@@ -669,7 +683,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     else if ( action == d->dataSetScatterChartAction )
         type = ScatterChartType;
     
-    // Not supported by KChart yet:
+    // FIXME: Not supported by KChart yet:
     //stock
     //bubble
     //surface
@@ -857,6 +871,7 @@ void ChartConfigWidget::update()
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubType() )
     {
+        // Update the chart type specific settings in the "Data Sets" tab
         bool needSeparator = false;
         if ( d->shape->chartType() == BarChartType ) {
             d->ui.barProperties->show();
@@ -875,6 +890,8 @@ void ChartConfigWidget::update()
             d->ui.pieProperties->hide();
         }
         d->ui.propertiesSeparator->setVisible( needSeparator );
+
+        // Set the chart type icon in the chart type button.
         switch ( d->shape->chartSubType() ) {
         case NormalChartSubtype:
             switch ( d->shape->chartType() ) {
@@ -964,11 +981,13 @@ void ChartConfigWidget::update()
             setPolarChartTypesEnabled( false );
             setCartesianChartTypesEnabled( true );
         }
-        
+
+        // ...and finally save the new chart type and subtype.
         d->type    = d->shape->chartType();
         d->subtype = d->shape->chartSubType();
     }
     
+    // If the datasets have changed, set up the new ones.
     if ( d->shape->plotArea()->dataSets() != d->dataSets ) {
         d->dataSets = d->shape->plotArea()->dataSets();
         d->ui.dataSets->clear();
@@ -980,11 +999,13 @@ void ChartConfigWidget::update()
             d->ui.dataSets->addItem( title );
             d->cellRegionDialog.dataSets->addItem( title );
         }
+
         // Select the first data set
         ui_dataSetSelectionChanged( 0 );
         ui_dataSetSelectionChanged_CellRegionDialog( 0 );
     }
-    
+
+    // If the "3D" checkbox is checked, then adapt the chart to that.
     d->ui.threeDLook->setChecked( d->shape->isThreeD() );
     if ( d->shape->legend() ) {
         d->ui.legendTitle->blockSignals( true );

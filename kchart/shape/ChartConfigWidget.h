@@ -23,12 +23,14 @@
 #ifndef KCHART_CHART_CONFIG_WIDGET
 #define KCHART_CHART_CONFIG_WIDGET
 
-// Local
-#include "ChartShape.h"
-#include "ui_ChartConfigWidget.h"
 
 // KOffice
 #include <KoShapeConfigWidgetBase.h>
+
+// KChart
+#include "ChartShape.h"
+#include "ui_ChartConfigWidget.h"
+
 
 class KoShape;
 
@@ -172,5 +174,6 @@ private:
 };
 
 }  // namespace KChart
+
 
 #endif // KCHART_CHART_TYPE_CONFIG_WIDGET
