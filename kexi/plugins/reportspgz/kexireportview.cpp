@@ -228,25 +228,32 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         QDomElement conn = root.firstChildElement( "connection" );
         
         m_preRenderer = new ORPreRender(tempData()->document);
-        if (!conn.isNull())  {
-            m_preRenderer->setSourceData(sourceData(conn));
-        }
-        m_preRenderer->setName( tempData()->name );
-        m_currentPage = 1;
+        if (m_preRenderer->isValid()) {
+            if (!conn.isNull())  {
+                m_preRenderer->setSourceData(sourceData(conn));
+            }
+            m_preRenderer->setName( tempData()->name );
+            m_currentPage = 1;
 
-        //Add a kexi object to provide kexidb and extra functionality
-        m_kexi = new KexiScriptAdaptor();
-        m_preRenderer->registerScriptObject(m_kexi, "Kexi" );
-        
-        m_reportDocument = m_preRenderer->generate();
-        if (m_reportDocument) {
-            m_pageCount = m_reportDocument->pages();
-            m_pageSelector->setRecordCount(m_pageCount);
+            //Add a kexi object to provide kexidb and extra functionality
+            m_kexi = new KexiScriptAdaptor();
+            m_preRenderer->registerScriptObject(m_kexi, "Kexi" );
+
+            m_reportDocument = m_preRenderer->generate();
+            if (m_reportDocument) {
+                m_pageCount = m_reportDocument->pages();
+                m_pageSelector->setRecordCount(m_pageCount);
+            }
+
+            m_reportWidget = new KexiReportPage(this, m_reportDocument);
+            m_reportWidget->setObjectName("KexiReportPage");
+            m_scrollArea->setWidget(m_reportWidget);
+
         }
-        
-        m_reportWidget = new KexiReportPage(this, m_reportDocument);
-        m_reportWidget->setObjectName("KexiReportPage");
-        m_scrollArea->setWidget(m_reportWidget);
+        else {
+            KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
+        }
+
 
         tempData()->reportSchemaChangedInPreviousView = false;
     }
