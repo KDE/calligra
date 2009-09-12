@@ -1,0 +1,13 @@
+                          README for KSpread
+
+
+This is the source tree for KSpread, the KOffice spreadsheet program.
+
+If you are a developer, you will find more information in the doc/
+directory.  Beware that at the current point of time (2.1 beta2), not
+all information there may be up to date.  The main task list can be
+found in ./TODO.  Note that this file may also contain some out of
+date information.
+
+If you are a user, you will find more user-oriented information in
+doc/kspread in the top directory of KOffice.
