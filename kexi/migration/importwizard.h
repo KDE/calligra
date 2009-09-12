@@ -22,7 +22,7 @@
 #ifndef KEXIMIGRATIONIMPORTWIZARD_H
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
-#include <k3wizard.h>
+#include <kassistantdialog.h>
 #include <kapplication.h>
 
 #include <kexiutils/tristate.h>
@@ -46,6 +46,7 @@ class KexiProjectSet;
 class KexiDBTitlePage;
 class KexiDBDriverComboBox;
 class KexiPrjTypeSelector;
+class KPageWidgetItem;
 
 namespace Kexi
 {
@@ -63,7 +64,7 @@ namespace KexiMigration
 class KexiMigrate;
 
 //! GUI for importing external databases (file-based and server-based)
-class KEXIMIGR_EXPORT ImportWizard : public K3Wizard
+class KEXIMIGR_EXPORT ImportWizard : public KAssistantDialog
 {
     Q_OBJECT
 public:
@@ -80,7 +81,7 @@ public slots:
 protected slots:
     virtual void next();
     virtual void back();
-    void pageSelected(const QString &);
+    void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
     virtual void accept();
     virtual void reject();
     void helpClicked();
@@ -88,8 +89,8 @@ protected slots:
 
 private:
     void parseArguments();
+    
     void setupIntro();
-// void setupSrcType();
     void setupSrcConn();
     void setupSrcDB();
     void setupDstType();
@@ -110,8 +111,6 @@ private:
     bool fileBasedSrcSelected() const;
     bool fileBasedDstSelected() const;
     QString driverNameForSelectedSource();
-// void checkIfSrcTypeFileBased(const QString& srcType);
-// void checkIfDstTypeFileBased(const QString& dstType);
 
     void arriveSrcConnPage();
     void arriveSrcDBPage();
@@ -120,13 +119,18 @@ private:
     void arriveFinishPage();
     void arriveImportingPage();
 
-    QWidget *m_introPage, /* *m_srcTypePage,*/ *m_srcConnPage, *m_srcDBPage,
-    *m_dstTypePage, *m_dstPage, *m_importTypePage, *m_importingPage, *m_finishPage;
+    QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget,
+    *m_dstTypePageWidget, *m_dstPageWidget, *m_importTypePageWidget, *m_importingPageWidget, *m_finishPageWidget;
 
+    KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_dstTypePageItem,
+        *m_dstPageItem, *m_importTypePageItem, *m_importingPageItem, *m_finishPageItem;
+
+        
     QGroupBox *m_importTypeGroupBox;
     QRadioButton *m_importTypeStructureAndDataCheckBox;
     QRadioButton *m_importTypeStructureOnlyCheckBox;
-    KexiDBTitlePage* m_dstTitlePage;
+    KexiDBTitlePage* m_dstTitlePageWidget;
+    KPageWidgetItem *m_dstTitlePageItem;
 
     KComboBox *m_srcTypeCombo;
     KexiDBDriverComboBox *m_dstServerTypeCombo;

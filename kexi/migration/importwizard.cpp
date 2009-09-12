@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004-2009 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
@@ -62,7 +62,7 @@ using namespace KexiMigration;
 //===========================================================
 //
 ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
-        : K3Wizard(parent)
+        : KAssistantDialog(parent)
         , m_args(args)
 {
     setModal(true);
@@ -76,8 +76,8 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 
     setMinimumSize(400, 400);
     parseArguments();
+
     setupIntro();
-// setupSrcType();
     setupSrcConn();
     setupSrcDB();
     setupDstType();
@@ -87,14 +87,14 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
     setupImporting();
     setupFinish();
 
-    connect(this, SIGNAL(selected(const QString &)), this, SLOT(pageSelected(const QString &)));
+    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
     connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 
     if (m_predefinedConnectionData) {
         // setup wizard for predefined server source
         m_srcConn->showAdvancedConn();
-        setAppropriate(m_srcConnPage, false);
-        setAppropriate(m_srcDBPage, false);
+        setAppropriate(m_srcConnPageItem, false);
+        setAppropriate(m_srcDBPageItem, false);
     } else if (!m_predefinedDatabaseName.isEmpty()) {
         // setup wizard for predefined source
         // (used when external project type was opened in Kexi, e.g. mdb file)
@@ -106,11 +106,13 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
         m_srcConn->showSimpleConn();
         m_srcConn->setSelectedFileName(m_predefinedDatabaseName);
 
+        #if 0
         //disable all prev pages except "welcome" page
         for (int i = 0; i < indexOf(m_dstTypePage); i++) {
             if (page(i) != m_introPage)
                 setAppropriate(page(i), false);
         }
+        #endif
     }
 
     m_sourceDBEncoding = QString::fromLatin1(KGlobal::locale()->encoding()); //default
@@ -147,11 +149,14 @@ void ImportWizard::parseArguments()
 //
 void ImportWizard::setupIntro()
 {
-    m_introPage = new QWidget(this);
-    QVBoxLayout *vbox = new QVBoxLayout(m_introPage);
+    m_introPageWidget = new QWidget(this);
+    QVBoxLayout *vbox = new QVBoxLayout();
+
+    m_introPageWidget->setLayout(vbox);
+    
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    QLabel *lblIntro = new QLabel(m_introPage);
+    QLabel *lblIntro = new QLabel(m_introPageWidget);
     lblIntro->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lblIntro->setWordWrap(true);
     QString msg;
@@ -175,47 +180,22 @@ void ImportWizard::setupIntro()
     lblIntro->setText(msg + "\n\n"
                       + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
     vbox->addWidget(lblIntro);
-    addPage(m_introPage, i18n("Welcome to the Database Importing Wizard"));
+
+    m_introPageItem = new KPageWidgetItem(m_introPageWidget, i18n("Welcome to the Database Importing Wizard"));
+    addPage(m_introPageItem);
 }
 
-//===========================================================
-//
-/*
-void ImportWizard::setupSrcType()
-{
-  m_srcTypePage = new QWidget(this);
-
-//! @todo Would be good if KexiDBDriverComboBox worked for migration drivers
-  QVBoxLayout *vbox = new QVBoxLayout(m_srcTypePage, KDialog::marginHint());
-
-  QHBoxLayout *hbox = new QHBoxLayout(vbox);
-  QLabel *lbl = new QLabel(i18n("Source database type:")+" ", m_srcTypePage);
-  hbox->addWidget(lbl);
-
-  m_srcTypeCombo = new KComboBox(m_srcTypePage);
-  hbox->addWidget(m_srcTypeCombo);
-  hbox->addStretch(1);
-  vbox->addStretch(1);
-  lbl->setBuddy(m_srcTypeCombo);
-
-  MigrateManager manager;
-  QStringList names = manager.driverNames();
-
-  m_srcTypeCombo->insertStringList(names);
-  addPage(m_srcTypePage, i18n("Select Source Database Type"));
-}
-*/
 //===========================================================
 //
 void ImportWizard::setupSrcConn()
 {
-    m_srcConnPage = new QWidget(this);
-    QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPage);
+    m_srcConnPageWidget = new QWidget(this);
+    QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     m_srcConn = new KexiConnSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationSourceDir",
-                                           KAbstractFileWidget::Opening, m_srcConnPage);
+                                           KAbstractFileWidget::Opening, m_srcConnPageWidget);
 
     m_srcConn->hideConnectonIcon();
     m_srcConn->showSimpleConn();
@@ -229,7 +209,9 @@ void ImportWizard::setupSrcConn()
 
 // m_srcConn->hideHelpers();
     vbox->addWidget(m_srcConn);
-    addPage(m_srcConnPage, i18n("Select Location for Source Database"));
+
+    m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
+    addPage(m_srcConnPageItem);
 }
 
 //===========================================================
@@ -237,31 +219,33 @@ void ImportWizard::setupSrcConn()
 void ImportWizard::setupSrcDB()
 {
 // arrivesrcdbPage creates widgets on that page
-    m_srcDBPage = new QWidget(this);
+    m_srcDBPageWidget = new QWidget(this);
     m_srcDBName = NULL;
-    addPage(m_srcDBPage, i18n("Select Source Database"));
+
+    m_srcDBPageItem = new KPageWidgetItem(m_srcDBPageWidget, i18n("Select Source Database"));
+    addPage(m_srcDBPageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupDstType()
 {
-    m_dstTypePage = new QWidget(this);
+    m_dstTypePageWidget = new QWidget(this);
 
     KexiDB::DriverManager manager;
     KexiDB::Driver::InfoHash drvs = manager.driversInfo();
 
-    QVBoxLayout *vbox = new QVBoxLayout(m_dstTypePage);
+    QVBoxLayout *vbox = new QVBoxLayout(m_dstTypePageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     QHBoxLayout *hbox = new QHBoxLayout;
     vbox->addLayout(hbox);
     KexiUtils::setStandardMarginsAndSpacing(hbox);
-    QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ " "*/, m_dstTypePage);
+    QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ " "*/, m_dstTypePageWidget);
     lbl->setAlignment(Qt::AlignAuto | Qt::AlignTop);
     hbox->addWidget(lbl);
 
-    m_dstPrjTypeSelector = new KexiPrjTypeSelector(m_dstTypePage);
+    m_dstPrjTypeSelector = new KexiPrjTypeSelector(m_dstTypePageWidget);
     hbox->addWidget(m_dstPrjTypeSelector);
     m_dstPrjTypeSelector->option_file->setText(i18n("Database project stored in a file"));
     m_dstPrjTypeSelector->option_server->setText(i18n("Database project stored on a server"));
@@ -277,34 +261,36 @@ void ImportWizard::setupDstType()
 
 //! @todo hardcoded: find a way to preselect default engine item
     //m_dstTypeCombo->setCurrentText("SQLite3");
-    addPage(m_dstTypePage, i18n("Select Destination Database Type"));
+
+    m_dstTypePageItem = new KPageWidgetItem(m_dstTypePageWidget, i18n("Select Destination Database Type"));
+    addPage(m_dstTypePageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupDstTitle()
 {
-    m_dstTitlePage = new KexiDBTitlePage(i18n("Destination project's caption:"), this);
-    m_dstTitlePage->layout()->setMargin(KDialog::marginHint());
-    m_dstTitlePage->updateGeometry();
-    m_dstNewDBNameLineEdit = m_dstTitlePage->le_caption;
-    addPage(m_dstTitlePage, i18n("Select Destination Database Project's Caption"));
+    m_dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's caption:"), this);
+    m_dstTitlePageWidget->layout()->setMargin(KDialog::marginHint());
+    m_dstTitlePageWidget->updateGeometry();
+    m_dstNewDBNameLineEdit = m_dstTitlePageWidget->le_caption;
+
+    m_dstTitlePageItem = new KPageWidgetItem(m_dstTitlePageWidget, i18n("Select Destination Database Project's Caption"));
+    addPage(m_dstTitlePageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupDst()
 {
-    m_dstPage = new QWidget(this);
-    QVBoxLayout *vbox = new QVBoxLayout(m_dstPage);
+    m_dstPageWidget = new QWidget(this);
+    QVBoxLayout *vbox = new QVBoxLayout(m_dstPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     m_dstConn = new KexiConnSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationDestinationDir",
-                                           KAbstractFileWidget::Saving, m_dstPage);
+                                           KAbstractFileWidget::Saving, m_dstPageWidget);
     m_dstConn->hideHelpers();
-    //me: Can't connect m_dstConn->m_fileDlg here, it doesn't exist yet
-    //connect(this, SLOT(next()), m_dstConn->m_fileDlg, SIGNAL(accepted()));
 
     vbox->addWidget(m_dstConn);
     connect(m_dstConn, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
@@ -323,18 +309,20 @@ void ImportWizard::setupDst()
 
     //js dstNewDBName = new KLineEdit(dstControls);
     //   dstNewDBName->setText(i18n("Enter new database name here"));
-    addPage(m_dstPage, i18n("Select Location for Destination Database"));
+
+    m_dstPageItem = new KPageWidgetItem(m_dstPageWidget, i18n("Select Location for Destination Database"));
+    addPage(m_dstPageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupImportType()
 {
-    m_importTypePage = new QWidget(this);
-    QVBoxLayout *vbox = new QVBoxLayout(m_importTypePage);
+    m_importTypePageWidget = new QWidget(this);
+    QVBoxLayout *vbox = new QVBoxLayout(m_importTypePageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
-    m_importTypeGroupBox = new QGroupBox(m_importTypePage);
-//2.0    m_importTypeGroupBox->setLineWidth(0);
+    m_importTypeGroupBox = new QGroupBox(m_importTypePageWidget);
+
     vbox->addWidget(m_importTypeGroupBox);
     QVBoxLayout *importTypeGroupBoxLyr = new QVBoxLayout;
 
@@ -348,27 +336,27 @@ void ImportWizard::setupImportType()
     importTypeGroupBoxLyr->addStretch(1);
     m_importTypeGroupBox->setLayout(importTypeGroupBoxLyr);
 
-//    m_importTypeGroupBox->setExclusive(true);
-    addPage(m_importTypePage, i18n("Select Type of Import"));
+    m_importTypePageItem = new KPageWidgetItem(m_importTypePageWidget, i18n("Select Type of Import"));
+    addPage(m_importTypePageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupImporting()
 {
-    m_importingPage = new QWidget(this);
-    m_importingPage->hide();
-    QVBoxLayout *vbox = new QVBoxLayout(m_importingPage);
+    m_importingPageWidget = new QWidget(this);
+    m_importingPageWidget->hide();
+    QVBoxLayout *vbox = new QVBoxLayout(m_importingPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
-    m_lblImportingTxt = new QLabel(m_importingPage);
+    m_lblImportingTxt = new QLabel(m_importingPageWidget);
     m_lblImportingTxt->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_lblImportingTxt->setWordWrap(true);
 
-    m_lblImportingErrTxt = new QLabel(m_importingPage);
+    m_lblImportingErrTxt = new QLabel(m_importingPageWidget);
     m_lblImportingErrTxt->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_lblImportingErrTxt->setWordWrap(true);
 
-    m_progressBar = new QProgressBar(m_importingPage);
+    m_progressBar = new QProgressBar(m_importingPageWidget);
     m_progressBar->setRange(0, 100);
     m_progressBar->hide();
 
@@ -376,7 +364,7 @@ void ImportWizard::setupImporting()
     vbox->addWidget(m_lblImportingErrTxt);
     vbox->addStretch(1);
 
-    QWidget *options_widget = new QWidget(m_importingPage);
+    QWidget *options_widget = new QWidget(m_importingPageWidget);
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
     options_vbox->setSpacing(KDialog::spacingHint());
@@ -389,32 +377,34 @@ void ImportWizard::setupImporting()
 
     vbox->addWidget(m_progressBar);
     vbox->addStretch(2);
-    m_importingPage->show();
+    m_importingPageWidget->show();
 
-    addPage(m_importingPage, i18n("Importing"));
+    m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, i18n("Importing"));
+    addPage(m_importingPageItem);
 }
 
 //===========================================================
 //
 void ImportWizard::setupFinish()
 {
-    m_finishPage = new QWidget(this);
-    m_finishPage->hide();
-    QVBoxLayout *vbox = new QVBoxLayout(m_finishPage);
+    m_finishPageWidget = new QWidget(this);
+    m_finishPageWidget->hide();
+    QVBoxLayout *vbox = new QVBoxLayout(m_finishPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
-    m_finishLbl = new QLabel(m_finishPage);
+    m_finishLbl = new QLabel(m_finishPageWidget);
     m_finishLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_finishLbl->setWordWrap(true);
 
     vbox->addWidget(m_finishLbl);
     m_openImportedProjectCheckBox = new QCheckBox(i18n("Open imported project"),
-            m_finishPage);
+            m_finishPageWidget);
     m_openImportedProjectCheckBox->setChecked(true);
     vbox->addSpacing(KDialog::spacingHint());
     vbox->addWidget(m_openImportedProjectCheckBox);
     vbox->addStretch(1);
 
-    addPage(m_finishPage, i18n("Success"));
+    m_finishPageItem = new KPageWidgetItem(m_finishPageWidget, i18n("Success"));
+    addPage(m_finishPageItem);
 }
 
 //===========================================================
@@ -445,7 +435,7 @@ bool ImportWizard::checkUserInput()
 
 void ImportWizard::arriveSrcConnPage()
 {
-    m_srcConnPage->hide();
+    m_srcConnPageWidget->hide();
 
 // checkIfSrcTypeFileBased(m_srcTypeCombo->currentText());
 // if (fileBasedSrcSelected()) {
@@ -462,23 +452,11 @@ void ImportWizard::arriveSrcConnPage()
             }*/
         m_srcConn->fileWidget->setMode(KexiStartupFileWidget::Opening);
         m_srcConn->fileWidget->setAdditionalFilters(additionalMimeTypes);
-        /*moved   if (m_srcTypeCombo->currentText().contains("Access")) {
-          //! @todo tmp: hardcoded!
-          #ifdef Q_WS_WIN
-                m_srcConn->m_fileDlg->setSelectedFilter("*.mdb");
-          #else
-                m_srcConn->m_fileDlg->setFilter("*.mdb");
-          #endif
-              }*/
-        //m_srcConn->m_file->label->hide();
-        //m_srcConn->m_file->btn_advanced->hide();
-        //m_srcConn->m_file->label->parentWidget()->hide();
+
     }
-// } else {
-//  m_srcConn->showAdvancedConn();
-// }
+
     /*! @todo Support different file extensions based on MigrationDriver */
-    m_srcConnPage->show();
+    m_srcConnPageWidget->show();
 }
 
 void ImportWizard::arriveSrcDBPage()
@@ -487,19 +465,19 @@ void ImportWizard::arriveSrcDBPage()
         //! @todo Back button doesn't work after selecting a file to import
         //moved showPage(m_dstTypePage);
     } else if (!m_srcDBName) {
-        m_srcDBPage->hide();
+        m_srcDBPageWidget->hide();
         kDebug() << "Looks like we need a project selector widget!";
 
         KexiDB::ConnectionData* condata = m_srcConn->selectedConnectionData();
         if (condata) {
             m_prjSet = new KexiProjectSet(*condata);
-            QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPage);
+            QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPageWidget);
             KexiUtils::setStandardMarginsAndSpacing(vbox);
-            m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPage, m_prjSet);
+            m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPageWidget, m_prjSet);
             vbox->addWidget(m_srcDBName);
             m_srcDBName->label()->setText(i18n("Select source database you wish to import:"));
         }
-        m_srcDBPage->show();
+        m_srcDBPageWidget->show();
     }
 }
 
@@ -527,7 +505,7 @@ void ImportWizard::arriveDstTitlePage()
 
 void ImportWizard::arriveDstPage()
 {
-    m_dstPage->hide();
+    m_dstPageWidget->hide();
 
 // checkIfDstTypeFileBased(m_dstTypeCombo->currentText());
     if (fileBasedDstSelected()) {
@@ -541,16 +519,18 @@ void ImportWizard::arriveDstPage()
     } else {
         m_dstConn->showAdvancedConn();
     }
-    m_dstPage->show();
+    m_dstPageWidget->show();
 }
 
 void ImportWizard::arriveImportingPage()
 {
-    m_importingPage->hide();
+    m_importingPageWidget->hide();
     if (checkUserInput()) {
-        setNextEnabled(m_importingPage, true);
+        //setNextEnabled(m_importingPageWidget, true);
+        enableButton(KDialog::User2, true);
     } else {
-        setNextEnabled(m_importingPage, false);
+        //setNextEnabled(m_importingPageWidget, false);
+        enableButton(KDialog::User2, false);
     }
 
     m_lblImportingTxt->setText(i18n(
@@ -584,7 +564,7 @@ void ImportWizard::arriveImportingPage()
     else
         m_importOptionsButton->hide();
 
-    m_importingPage->show();
+    m_importingPageWidget->show();
 }
 
 void ImportWizard::arriveFinishPage()
@@ -605,15 +585,9 @@ bool ImportWizard::fileBasedSrcSelected() const
 
 bool ImportWizard::fileBasedDstSelected() const
 {
-// QString dstType(m_dstServerTypeCombo->currentText());
 
     return m_dstPrjTypeSelector->buttonGroup->selectedId() == 1;
 
-    /* if ((dstType == "PostgreSQL") || (dstType == "MySQL")) {
-        return false;
-      } else {
-        return true;
-      }*/
 }
 
 void ImportWizard::progressUpdated(int percent)
@@ -650,15 +624,6 @@ QString ImportWizard::driverNameForSelectedSource()
 //
 void ImportWizard::accept()
 {
-    /*moved
-    backButton()->setEnabled(false);
-    finishButton()->setEnabled(false);
-    // cancelButton()->setEnabled(false);
-    acceptImport();
-    backButton()->setEnabled(true);
-    finishButton()->setEnabled(true);
-    // cancelButton()->setEnabled(true);
-    */
     if (m_args) {
         if ((!fileBasedDstSelected() && !m_args->contains("destinationConnectionShortcut"))
                 || !m_openImportedProjectCheckBox->isChecked()) {
@@ -667,7 +632,7 @@ void ImportWizard::accept()
             m_args->remove("destinationDatabaseName");
         }
     }
-    K3Wizard::accept();
+    KAssistantDialog::accept();
 }
 
 KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
@@ -848,7 +813,7 @@ tristate ImportWizard::import()
                 m_args->insert("destinationConnectionShortcut", destinationConnectionShortcut);
             }
         }
-        setTitle(m_finishPage, i18n("Success"));
+        m_finishPageItem->setHeader(i18n("Success"));
         return true;
     }
 
@@ -861,7 +826,8 @@ tristate ImportWizard::import()
         handler.showErrorMessage(&result);
 
         kDebug() << msg << "\n" << details;
-        setTitle(m_finishPage, i18n("Failure"));
+
+        m_finishPageItem->setHeader(i18n("Failure"));
         m_finishLbl->setText(
             i18n(
                 "<p>Import failed.</p>%1<p>%2</p><p>You can click \"Back\" button and try again.</p>",
@@ -874,14 +840,14 @@ tristate ImportWizard::import()
 
 void ImportWizard::reject()
 {
-    K3Wizard::reject();
+    KAssistantDialog::reject();
 }
 
 //===========================================================
 //
 void ImportWizard::next()
 {
-    if (currentPage() == m_srcConnPage) {
+    if (currentPage() == m_srcConnPageItem) {
         if (fileBasedSrcSelected()
                 && /*! @todo use KUrl? */!QFileInfo(m_srcConn->selectedFileName()).isFile()) {
 
@@ -908,35 +874,37 @@ void ImportWizard::next()
                                : i18n("Could not import database \"%1\". This type is not supported.", dbname));
             return;
         }
-    } else if (currentPage() == m_dstPage) {
+    } else if (currentPage() == m_dstPageItem) {
         if (m_fileBasedDstWasPresented) {
             if (fileBasedDstSelected() && !m_dstConn->fileWidget->checkSelectedFile())
                 return;
         }
-    } else if (currentPage() == m_importingPage) {
+    } else if (currentPage() == m_importingPageItem) {
         if (!m_importExecuted) {
             m_importOptionsButton->hide();
-            nextButton()->setEnabled(false);
-            finishButton()->setEnabled(false);
-            backButton()->setEnabled(false);
+            enableButton(KDialog::User2, false);
+            enableButton(KDialog::User1, false);
+            enableButton(KDialog::User3, false);
             m_lblImportingTxt->setText(i18n("Importing in progress..."));
             tristate res = import();
             if (true == res) {
                 m_finishLbl->setText(
                     i18n("Database has been imported into Kexi database project \"%1\".",
                          m_dstNewDBNameLineEdit->text()));
-                cancelButton()->setEnabled(false);
-                setBackEnabled(m_finishPage, false);
-                setFinishEnabled(m_finishPage, true);
+                enableButtonCancel(false);
+                enableButton(KDialog::User3, false);
+                enableButton(KDialog::User1, true);
                 m_openImportedProjectCheckBox->show();
                 next();
                 return;
             }
 
             m_progressBar->hide();
-            cancelButton()->setEnabled(true);
-            setBackEnabled(m_finishPage, true);
-            setFinishEnabled(m_finishPage, false);
+
+            enableButtonCancel(true);
+            enableButton(KDialog::User3, true);
+            enableButton(KDialog::User1, false);
+            
             m_openImportedProjectCheckBox->hide();
             if (!res)
                 next();
@@ -949,56 +917,54 @@ void ImportWizard::next()
         }
     }
 
-    setAppropriate(m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData);   //skip m_srcDBPage
-    K3Wizard::next();
+    setAppropriate(m_srcDBPageItem, !fileBasedSrcSelected() && !m_predefinedConnectionData);   //skip m_srcDBPage
+    KAssistantDialog::next();
 }
 
 void ImportWizard::back()
 {
-    setAppropriate(m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData);   //skip m_srcDBPage
-    K3Wizard::back();
+    setAppropriate(m_srcDBPageItem, !fileBasedSrcSelected() && !m_predefinedConnectionData);   //skip m_srcDBPage
+    KAssistantDialog::back();
 }
 
-void ImportWizard::pageSelected(const QString &)
+void ImportWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWidgetItem* prevPage)
 {
-    if (currentPage() == m_introPage) {
+    if (curPage == m_introPageItem) {
     }
-// else if (currentPage() == m_srcTypePage) {
-// }
-    else if (currentPage() == m_srcConnPage) {
+    else if (curPage == m_srcConnPageItem) {
         arriveSrcConnPage();
-    } else if (currentPage() == m_srcDBPage) {
+    } else if (curPage == m_srcDBPageItem) {
         arriveSrcDBPage();
-    } else if (currentPage() == m_dstTypePage) {
-    } else if (currentPage() == m_dstTitlePage) {
+    } else if (curPage == m_dstTypePageItem) {
+    } else if (curPage == m_dstTitlePageItem) {
         arriveDstTitlePage();
-    } else if (currentPage() == m_dstPage) {
+    } else if (curPage == m_dstPageItem) {
         arriveDstPage();
-    } else if (currentPage() == m_importingPage) {
+    } else if (curPage == m_importingPageItem) {
         arriveImportingPage();
-    } else if (currentPage() == m_finishPage) {
+    } else if (curPage == m_finishPageItem) {
         arriveFinishPage();
     }
 }
 
 void ImportWizard::helpClicked()
 {
-    if (currentPage() == m_introPage) {
+    if (currentPage() == m_introPageItem) {
         KMessageBox::information(this, i18n("No help is available for this page."), i18n("Help"));
     }
     /* else if (currentPage() == m_srcTypePage)
       {
         KMessageBox::information(this, i18n("Here you can choose the type of data to import data from."), i18n("Help"));
       }*/
-    else if (currentPage() == m_srcConnPage) {
+    else if (currentPage() == m_srcConnPageItem) {
         KMessageBox::information(this, i18n("Here you can choose the location to import data from."), i18n("Help"));
-    } else if (currentPage() == m_srcDBPage) {
+    } else if (currentPage() == m_srcDBPageItem) {
         KMessageBox::information(this, i18n("Here you can choose the actual database to import data from."), i18n("Help"));
-    } else if (currentPage() == m_dstTypePage) {
+    } else if (currentPage() == m_dstTypePageItem) {
         KMessageBox::information(this, i18n("Here you can choose the location to save the data."), i18n("Help"));
-    } else if (currentPage() == m_dstPage) {
+    } else if (currentPage() == m_dstPageItem) {
         KMessageBox::information(this, i18n("Here you can choose the location to save the data in and the new database name."), i18n("Help"));
-    } else if (currentPage() == m_finishPage || currentPage() == m_importingPage) {
+    } else if (currentPage() == m_finishPageItem || currentPage() == m_importingPageItem) {
         KMessageBox::information(this, i18n("No help is available for this page."), i18n("Help"));
     }
 }
