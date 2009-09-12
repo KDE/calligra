@@ -242,6 +242,9 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
         case BottomFirst:
             direction = BottomFirst;
             break;
+        case NoMovement:
+            direction = NoMovement;
+            break;
         }
     }
 
