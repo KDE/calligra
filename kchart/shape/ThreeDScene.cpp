@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,17 +20,39 @@
 */
 
 
-// Local
+// Own
 #include "ThreeDScene.h"
 
 
 using namespace KChart;
 
+class ThreeDScene::Private
+{
+public:
+    Private();
+    ~Private();
+
+    int foo;
+};
+
+ThreeDScene::Private::Private()
+{
+}
+
+ThreeDScene::Private::~Private()
+{
+}
+
+
+using namespace KChart;
+
 ThreeDScene::ThreeDScene()
+    : d( new Private )
 {
 }
 
 ThreeDScene::~ThreeDScene()
 {
+    delete d;
 }
 

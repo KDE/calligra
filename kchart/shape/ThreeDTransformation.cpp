@@ -19,7 +19,7 @@
 */
 
 
-// Local
+// Own
 #include "ThreeDTransformation.h"
 
 
