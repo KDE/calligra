@@ -78,10 +78,11 @@ Item                                                                   Status
   Item                                                          Load    Save
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
-     - Handle subtypes                                          --      done
+     - Handle subtypes                                          done    done
   + Handle special data unique to some types                    ----    ----
     - Barchart                                                  --      --
       bars / columns
+      vertical
     - Line chart                                                --      --
     - Area chart                                                --      --
     - Scatter chart                                             --      --
@@ -112,7 +113,7 @@ Item                                                                   Status
      - Line chart                                                       done
      - Area chart                                                       done
      - Scatter chart                                                    done
-     - Circle chart                                                    done
+     - Circle chart                                                     done
      - Ring chart                                                       ----
      - Radar chart                                                      done
        Subtype
