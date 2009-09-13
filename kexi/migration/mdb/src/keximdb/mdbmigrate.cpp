@@ -66,7 +66,7 @@ void MDBMigrate::initBackend()
     // (where T is a literal).  The following is equivalent to %FT%T, but
     // backards compatible with old/Windows C libraries.
     // See strftime documentation for more info.
-    mdb_set_date_fmt("%Y-%m-%dT%H:%M%:%S");
+    mdb_set_date_fmt("%Y-%m-%dT%H:%M:%S");
 }
 
 void MDBMigrate::releaseBackend()
