@@ -250,9 +250,9 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
             case 4: // lowercase letter
             {
                 while (noteNumber / 25 > 0) {
-                        noteNumberString += QString::number(noteNumber/25);
-                        noteNumber = noteNumber % 25;
-                        noteNumberString += QChar(letter - 1 + noteNumber/25);
+                    noteNumberString += QString::number(noteNumber/25);
+                    noteNumber = noteNumber % 25;
+                    noteNumberString += QChar(letter - 1 + noteNumber/25);
                 }
                 noteNumberString += QChar(letter - 1 + noteNumber);
                 break;
