@@ -161,6 +161,7 @@ read_pg_if_8(MdbHandle *mdb, int *cur_pos)
 void * 
 read_pg_if_n(MdbHandle *mdb, void *buf, int *cur_pos, size_t len)
 {
+	char *buf_char = (char *)buf;
 	/* Advance to page which contains the first byte */
 	while (*cur_pos >= mdb->fmt->pg_size) {
 		mdb_read_pg(mdb, mdb_get_int32(mdb->pg_buf,4));
@@ -169,20 +170,20 @@ read_pg_if_n(MdbHandle *mdb, void *buf, int *cur_pos, size_t len)
 	/* Copy pages into buffer */
 	while (*cur_pos + len >= mdb->fmt->pg_size) {
 		int piece_len = mdb->fmt->pg_size - *cur_pos;
-		if (buf) {
-			memcpy(buf, mdb->pg_buf + *cur_pos, piece_len);
-			buf += piece_len;
+		if (buf_char) {
+			memcpy(buf_char, mdb->pg_buf + *cur_pos, piece_len);
+			buf_char += piece_len;
 		}
 		len -= piece_len;
 		mdb_read_pg(mdb, mdb_get_int32(mdb->pg_buf,4));
 		*cur_pos = 8;
 	}
 	/* Copy into buffer from final page */
-	if (len && buf) {
-		memcpy(buf, mdb->pg_buf + *cur_pos, len);
+	if (len && buf_char) {
+		memcpy(buf_char, mdb->pg_buf + *cur_pos, len);
 	}
 	*cur_pos += len;
-	return buf;
+	return buf_char;
 }
 
 
