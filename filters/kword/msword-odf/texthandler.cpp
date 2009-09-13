@@ -123,7 +123,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //check for change in number of columns, too
     //if sep->bkc isn't 0, just check to see if we have
     // more than the usual one column
-    if(numColumns > 1 || sep->bkc == 0) {
+   if(numColumns > 1 || sep->bkc == 0) {
         QString sectionStyleName = "Sect";
         sectionStyleName.append(QString::number(m_sectionNumber));
         KoGenStyle sectionStyle(KoGenStyle::StyleSectionAuto, "section");
@@ -156,6 +156,12 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         writer.endElement();//style:columns
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         sectionStyle.addChildElement("style:columns", contents);
+/*
+        QString footconfig("<text:notes-configuration ");
+        footconfig.append("style:num-format=\"a\"");
+        footconfig.append("/>");
+        sectionStyle.addChildElement("text:notes-configuration", footconfig);
+*/
         //add style to the collection
         sectionStyleName = m_mainStyles->lookup(sectionStyle, sectionStyleName,
                 KoGenStyles::DontForceNumbering);
@@ -213,8 +219,50 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
     if(character.unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
-        //TODO convert m_endNoteNumber to roman numeral, b/c that's the default in MS Word
-        m_footnoteWriter->addTextNode(QString::number(type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber));
+        //Note: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
+
+        int noteNumber = (type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
+        QString noteNumberString;
+        char letter = 'a';
+        
+        switch (m_parser->dop().nfcFtnRef2) {
+            case 0:
+                noteNumberString = QString::number(noteNumber);
+                break;
+            case 1: // uppercase roman
+            case 2: // lowercase roman
+            {
+                QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
+                QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+                QString *numDigits = (m_parser->dop().nfcFtnRef2== 1 ? numDigitsUpper : numDigitsLower);
+                int numValues[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+
+                for (int i = 0; i < 13; ++i) {
+                    while (noteNumber >= numValues[i]) {
+                        noteNumber -= numValues[i];
+                        noteNumberString += numDigits[i];
+                    }
+                }
+                break;
+            }
+            case 3: // uppercase letter
+                letter = 'A';
+            case 4: // lowercase letter
+            {
+                while (noteNumber / 25 > 0) {
+                        noteNumberString += QString::number(noteNumber/25);
+                        noteNumber = noteNumber % 25;
+                        noteNumberString += QChar(letter - 1 + noteNumber/25);
+                }
+                noteNumberString += QChar(letter - 1 + noteNumber);
+                break;
+            }
+            default:
+                noteNumberString = QString::number(noteNumber);
+                break;
+        }
+
+        m_footnoteWriter->addTextNode(noteNumberString);
     }
     else {
         m_footnoteWriter->addTextNode(QString(QChar(character.unicode())));
