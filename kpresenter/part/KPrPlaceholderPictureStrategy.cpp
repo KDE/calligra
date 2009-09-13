@@ -47,7 +47,7 @@ KoShape * KPrPlaceholderPictureStrategy::createShape( const QMap<QString, KoData
         // TODO make work for remote urls too
 //         QFile file(url.toLocalFile());
         QImage image;
-        //if (!image.load( url.toLocalFile() ) ) // TODO find out why it doesn't work
+        //if (!image.load(&file, 0)) // TODO find out why it doesn't work
         if (!image.load( url.toLocalFile() ) )
             return 0;
         KoImageData *data = collection->createImageData(image);
