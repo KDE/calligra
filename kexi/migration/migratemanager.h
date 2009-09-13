@@ -69,6 +69,9 @@ public:
      Currently it contains a list of incompatible migration drivers. */
     QString possibleProblemsInfoMsg() const;
 
+    //!Return the list of mime types that are supported by the drivers
+    QList<QString> supportedMimeTypes() const;
+
 protected:
     virtual void drv_clearServerResult();
 

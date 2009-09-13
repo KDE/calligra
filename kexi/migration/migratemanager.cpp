@@ -369,6 +369,14 @@ QString MigrateManager::possibleProblemsInfoMsg() const
     return str;
 }
 
+QList<QString> MigrateManager::supportedMimeTypes() const {
+    if (!d_int->lookupDrivers()) {
+        kDebug() << "lookupDrivers failed";
+        return QStringList();
+    }
+    return d_int->m_services_by_mimetype.keys();
+}
+
 //------------------------
 
 int KexiMigration::versionMajor()
