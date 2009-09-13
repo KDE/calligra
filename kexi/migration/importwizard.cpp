@@ -484,12 +484,18 @@ void ImportWizard::arriveSrcDBPage()
 void ImportWizard::arriveDstTitlePage()
 {
     if (fileBasedSrcSelected()) {
-        QString suggestedDBName(QFileInfo(m_srcConn->selectedFileName()).fileName());
+        QString fname;
+        if (m_predefinedDatabaseName.isEmpty())
+            fname = m_srcConn->selectedFileName();
+        else
+            fname = m_predefinedDatabaseName;
+        QString suggestedDBName(QFileInfo(fname).fileName());
         const QFileInfo fi(suggestedDBName);
         suggestedDBName = suggestedDBName.left(suggestedDBName.length()
                                                - (fi.completeSuffix().isEmpty() ? 0 : (fi.completeSuffix().length() + 1)));
         m_dstNewDBNameLineEdit->setText(suggestedDBName);
-    } else {
+    }
+    else {
         if (m_predefinedConnectionData) {
             // server source db is predefined
             m_dstNewDBNameLineEdit->setText(m_predefinedDatabaseName);
