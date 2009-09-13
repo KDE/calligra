@@ -97,17 +97,16 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     // config file
     QMenu menu( this );
 
-    QMenu *color = new QMenu( QString( "Color of the pen"), this );
-    QMenu *size = new QMenu( QString( "Size of the pen"), this );
+    QMenu *color = new QMenu( i18n("Pen Color"), &menu );
+    QMenu *size = new QMenu( i18n("Pen Size"), &menu );
 
-    color->addAction( buildActionColor( Qt::black, "&Black" ) );
-    color->addAction( buildActionColor( Qt::white, "&White" ) );
-    color->addAction( buildActionColor( Qt::green, "&Green" ) );
-    color->addAction( buildActionColor( Qt::red, "&Red" ) );
-    color->addAction( buildActionColor( Qt::blue, "&Blue" ) );
-    color->addAction( buildActionColor( Qt::yellow, "&Yellow" ) );
+    color->addAction( buildActionColor(Qt::black, i18n("Black")));
+    color->addAction( buildActionColor(Qt::white, i18n("White")));
+    color->addAction( buildActionColor(Qt::green, i18n("Green")));
+    color->addAction( buildActionColor(Qt::red, i18n("Red")));
+    color->addAction( buildActionColor(Qt::blue, i18n("Blue")));
+    color->addAction( buildActionColor(Qt::yellow, i18n("Yellow")));
     connect( color, SIGNAL( triggered( QAction* ) ), this, SLOT( updateColor( QAction* ) ) );
-
 
     size->addAction( buildActionSize ( 9 ) );
     size->addAction( buildActionSize ( 10 ) );
