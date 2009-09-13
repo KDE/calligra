@@ -45,14 +45,15 @@ KoShape * KPrPlaceholderPictureStrategy::createShape( const QMap<QString, KoData
 
         KoImageCollection * collection = dynamic_cast<KoImageCollection *>( dataCenterMap.value( "ImageCollection" ) );
         // TODO make work for remote urls too
-        QFile file(url.toLocalFile());
+//         QFile file(url.toLocalFile());
         QImage image;
-        if (!image.load(&file, 0))
+        //if (!image.load( url.toLocalFile() ) ) // TODO find out why it doesn't work
+        if (!image.load( url.toLocalFile() ) )
             return 0;
         KoImageData *data = collection->createImageData(image);
         if (data->isValid()) {
             shape->setUserData( data );
-            // TODO th pic should be fit into the space provided
+            // TODO the pic should be fit into the space provided
             shape->setSize( data->imageSize() );
         }
     }
