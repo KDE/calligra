@@ -25,6 +25,8 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoShape.h>
+#include <kio/netaccess.h>
+#include <kdebug.h>
 
 KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()
 : KPrPlaceholderStrategy( "graphic" )
@@ -44,17 +46,19 @@ KoShape * KPrPlaceholderPictureStrategy::createShape( const QMap<QString, KoData
         shape = KPrPlaceholderStrategy::createShape( dataCenterMap );
 
         KoImageCollection * collection = dynamic_cast<KoImageCollection *>( dataCenterMap.value( "ImageCollection" ) );
-        // TODO make work for remote urls too
-//         QFile file(url.toLocalFile());
-        QImage image;
-        //if (!image.load(&file, 0)) // TODO find out why it doesn't work
-        if (!image.load( url.toLocalFile() ) )
-            return 0;
-        KoImageData *data = collection->createImageData(image);
-        if (data->isValid()) {
-            shape->setUserData( data );
-            // TODO the pic should be fit into the space provided
-            shape->setSize( data->imageSize() );
+
+        QString tmpFile;
+        if (KIO::NetAccess::download(url, tmpFile, 0)) {
+            QImage image(tmpFile);
+            //setSuffix(url.prettyUrl());
+            KoImageData *data = collection->createImageData(image);
+            if (data->isValid()) {
+                shape->setUserData( data );
+                // TODO the pic should be fit into the space provided
+                shape->setSize( data->imageSize() );
+            }
+        } else {
+            kWarning() << "open image " << url.prettyUrl() << "failed";
         }
     }
     return shape;
