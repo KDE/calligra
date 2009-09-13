@@ -156,7 +156,13 @@ class KarbonView::Private
 {
 public:
     Private( KarbonPart * p)
-        : part(p), canvas( 0 )
+        : part(p), canvas( 0 ), canvasController(0), horizRuler(0), vertRuler(0)
+        , groupObjects(0), ungroupObjects(0), closePath(0), combinePath(0)
+        , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
+        , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
+        , deleteSelectionAction(0), viewAction(0), showRulerAction(0)
+        , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
+        , status(0), cursorCoords(0)
     {}
 
     KarbonPart * part;
