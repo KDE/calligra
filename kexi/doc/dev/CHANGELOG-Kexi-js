@@ -42,6 +42,10 @@ http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
 
+2009-09-13
+Migration
+* use the imported db file name provided at startup after opening external format, e.g. from command line "kexi mydb.mdb"
+
 2009-09-07
 KexiDB
 * Use KPluginLoader for drivers
