@@ -3083,7 +3083,7 @@ void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
     }
     if ( m_modus & Flat ) {
         int pos = nodeObjects().count();
-        beginInsertRows( index( parent ), pos, pos );
+        beginInsertRows( QModelIndex(), pos, pos );
         return;
     }
     beginInsertRows( index( parent ), row, row );
