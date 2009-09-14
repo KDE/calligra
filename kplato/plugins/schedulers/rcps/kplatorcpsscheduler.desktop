@@ -4,6 +4,7 @@ Type=Service
 X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
+Name[ca]=Planificador RCPS
 Name[de]=RCPS-Planer
 Name[es]=Planificador RCPS
 Name[et]=RCPS ajakava
@@ -18,6 +19,7 @@ Name[uk]=Засіб планування RCPS
 Name[x-test]=xxRCPS Schedulerxx
 Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Conflict Project Scheduler
+Comment[ca]=Recurs de conflictes de planificador de projectes basat en la genètica
 Comment[de]=Genetisch basierte ressourcenbeschränkte Projektplanung
 Comment[es]=Planificador de proyectos con conflicto de recursos basado en algoritmos genéticos
 Comment[et]=Ressursipiirangutega projektide ajakava

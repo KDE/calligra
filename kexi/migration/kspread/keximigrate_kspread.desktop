@@ -9,6 +9,7 @@ Name[ta]=கேஸ்பிரெட்
 Name[x-test]=xxKSpreadxx
 Name[zh_TW]=工作表_KSpread
 Comment=KSpread Migration Driver for Kexi
+Comment[ca]=Controlador de migració del KSpread per al Kexi
 Comment[de]=KSpread-Migrationstreiber für Kexi
 Comment[es]=Controlador de migración de KSpread de Kexi
 Comment[et]=Kexi KSpreadi migreerimisdraiver

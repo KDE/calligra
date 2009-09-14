@@ -11,6 +11,7 @@ Name[uk]=Текст
 Name[x-test]=xxTextxx
 Name[zh_TW]=文字
 Comment=Text Migration Driver for Kexi
+Comment[ca]=Controlador de migració de text per al Kexi
 Comment[de]=Text-Migrationstreiber für Kexi
 Comment[es]=Controlador de migración de texto de Kexi
 Comment[et]=Kexi teksti migreerimisdraiver
