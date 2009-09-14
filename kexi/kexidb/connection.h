@@ -986,7 +986,7 @@ protected:
      Typically this is just primary key value.
      This identifier could be reused when we want to reference
      just inserted row.
-     Note for driver developers: contact js (at) iidea.pl
+     Note for driver developers: contact staniek (at) kde.org
      if your engine do not offers this information. */
     virtual quint64 drv_lastInsertRowID() = 0;
 

@@ -14,13 +14,10 @@ HTML view of the Manual:
 
 The chapter numbers in section headings here refer to
 the Chapters in the HTML manual at
-  http://iidea.pl/~js/kexi/manual/en/
+    http://kexi.pl/doc/en/
 
 The original Polish version can be found here:
-http://iidea.pl/~js/kexi/manual/pl/html/contents.html
-
-Icons and polish screenshots can be found here:
-http://www.iidea.pl/~js/kexi/manual/en/kexi-docs-03.zip
+    http://kexi.pl/doc/pl/
 
 Chapter numbers in each descriptions refers to docbook version.
 

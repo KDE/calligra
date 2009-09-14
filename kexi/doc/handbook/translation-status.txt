@@ -19,7 +19,7 @@ Kexi Handbook: README
 
 3. Translation status:
 Note: the numbering is taken from original Polish HTML version:
-      http://iidea.pl/~js/kexi/manual/pl/html/contents.html
+    http://www.kexi.pl/doc/pl/
 
 DONE 1. Introduction to databases
 DONE  1.1. What is a database?
