@@ -1168,7 +1168,11 @@ DependencyNodeItem *DependencyScene::createItem( Node *node )
         addItem( item );
     }
     //kDebug()<<item->text()<<item;
-    item->setRectangle( QRectF( itemX( item->nodeLevel() ), itemY(), itemWidth(), itemHeight() ) );
+    int col = item->nodeLevel();
+    if ( parent ) {
+        col += parent->column();
+    }
+    item->setRectangle( QRectF( itemX( col ), itemY(), itemWidth(), itemHeight() ) );
     m_allItems.insert( i+1, item );
     setItemVisible( item, true );
     return item;
