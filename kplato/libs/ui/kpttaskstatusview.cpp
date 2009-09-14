@@ -468,11 +468,12 @@ void ProjectStatusView::slotOptions()
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return true;
+    return m_view->loadContext( context );
 }
 
 void ProjectStatusView::saveContext( QDomElement &context ) const
 {
+    m_view->saveContext( context );
 }
 
 //-----------------------------------

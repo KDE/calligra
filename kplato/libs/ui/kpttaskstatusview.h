@@ -184,9 +184,9 @@ public:
     }
     
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext( QDomElement &context ) const;
     
 protected:
     void contextMenuEvent( QContextMenuEvent *event );
