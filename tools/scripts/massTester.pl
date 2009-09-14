@@ -10,14 +10,15 @@ use strict;
 
 # Examples:
 # find -name '*.odt' | \
-#     massTester.pl --timeout 3 kword --export-pdf --export-filename dummy.pdf
+#     massTester.pl --withgui --timeout 3 kword --export-pdf --export-filename dummy.pdf
 #
 # find -name '*.odt' | \
-#     massTester.pl --timeout 3 koconverter --batch FILE out.odt
+#     massTester.pl --withgui --timeout 3 koconverter --batch FILE out.odt
 
 # Author: Jos van den Oever
 
 my $timeout = 3; # seconds
+my $withgui = 0;
 my $DISPLAY = ":2";
 my $outputfile = "results.txt";
 
@@ -79,7 +80,9 @@ sub readArgumentValue {
 while ($ARGV[0] && $ARGV[0] =~ m/^--/) {
 	if ($ARGV[0] eq "--timeout") {
 		$timeout = readArgumentValue \@ARGV;
-		} else {
+	} elsif ($ARGV[0] eq "--withgui") {
+		$withgui = 1;
+	} else {
 		die "Unknown argument $ARGV[0].\n";
 	}
 	shift;
@@ -90,9 +93,11 @@ my @command = @ARGV;
 
 # start Xephyr
 my $xephyrpid;
-if (!($xephyrpid = fork)) {
-	exec "Xephyr", "-noreset", $DISPLAY;
-	exit;
+if ($withgui == 1) {
+	if (!($xephyrpid = fork)) {
+		exec "Xephyr", "-noreset", $DISPLAY;
+		exit;
+	}
 }
 $ENV{'DISPLAY'} = $DISPLAY;
 $ENV{'KDE_DEBUG'} = "0";
@@ -113,5 +118,7 @@ foreach (keys %result) {
 close FH;
 
 # close Xephyr
-kill 15, $xephyrpid;
-waitpid $xephyrpid, 0;
+if ($withgui == 1) {
+	kill 15, $xephyrpid;
+	waitpid $xephyrpid, 0;
+}
