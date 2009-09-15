@@ -236,7 +236,7 @@ private:
         friend class KexiBLOBBuffer;
     };
     class Private;
-    Private *d;
+    Private * const d;
     friend class Handle;
 };
 

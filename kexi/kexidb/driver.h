@@ -369,7 +369,7 @@ protected:
     friend class DriverManagerInternal;
 
     DriverBehaviour *beh;
-    DriverPrivate *d;
+    DriverPrivate * const d;
 };
 
 /*! \return true if the \a word is an reserved KexiSQL's keyword

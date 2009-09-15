@@ -809,7 +809,7 @@ private:
     void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
     WidgetLibrary *m_lib;
-    FormPrivate *d;
+    FormPrivate * const d;
 
 //unused    friend class FormManager;
     friend class FormWidget;

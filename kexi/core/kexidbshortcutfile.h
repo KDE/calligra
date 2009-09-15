@@ -66,7 +66,7 @@ public:
 
 protected:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 /*! Loads and saves information for a "shortcut" file containing

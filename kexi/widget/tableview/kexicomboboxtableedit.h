@@ -177,7 +177,7 @@ protected:
     virtual void setPopup(KexiComboBoxPopup *popup);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiComboBoxEditorFactoryItem)

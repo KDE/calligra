@@ -676,7 +676,7 @@ protected:
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();
 
-    KexiTableViewPrivate *d;
+    KexiTableViewPrivate * const d;
 
     class WhatsThis;
 //Qt 4 friend class KexiTableItem;

@@ -199,11 +199,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
         , KexiRecordNavigatorHandler()
         , KexiSharedActionClient()
         , KexiDataAwareObjectInterface()
+        , d( new KexiTableViewPrivate(this) )
 {
     setAttribute(Qt::WA_StaticContents, true);
 //not needed KexiTableView::initCellEditorFactories();
-
-    d = new KexiTableViewPrivate(this);
 
     m_data = new KexiTableViewData(); //to prevent crash because m_data==0
     m_owner = true;                   //-this will be deleted if needed

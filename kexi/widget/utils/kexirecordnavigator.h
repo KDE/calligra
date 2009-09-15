@@ -186,7 +186,7 @@ protected:
     void updateButtons(uint recCnt);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

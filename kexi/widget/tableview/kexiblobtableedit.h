@@ -109,7 +109,7 @@ protected:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     class Private;
-    Private *d;
+    Private * const d;
 //todo  KTemporaryFile* m_tempFile;
 //todo  KProcess* m_proc;
 //todo  QTextEdit *m_content;
@@ -164,7 +164,7 @@ protected:
     //QVariant m_currentValue;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiKIconTableEditorFactoryItem)

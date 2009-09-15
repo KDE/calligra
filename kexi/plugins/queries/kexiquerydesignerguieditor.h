@@ -159,7 +159,7 @@ protected slots:
 
 private:
     class Private;
-    Private *d;
+    Private * const d;
 
     friend class KexiQueryView; // for storeNewData() and storeData() only
 };

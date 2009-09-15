@@ -149,7 +149,7 @@ protected:
     KexiFormDataItemInterface *editedItem;
 
     class Private;
-    Private *d;
+    Private * const d;
 
     friend class KexiFormScrollView;
 };

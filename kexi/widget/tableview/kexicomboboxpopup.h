@@ -85,7 +85,7 @@ protected:
     //! used by setData()
     void setDataInternal(KexiTableViewData *data, bool owner = true);   //!< helper
 
-    KexiComboBoxPopupPrivate *d;
+    KexiComboBoxPopupPrivate * const d;
 
     friend class KexiComboBoxTableEdit;
 };

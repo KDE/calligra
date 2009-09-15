@@ -60,6 +60,7 @@ TableSchema::TableSchema(const QString& name)
         : FieldList(true)
         , SchemaData(KexiDB::TableObjectType)
         , m_query(0)
+        , d( new Private )
         , m_isKexiDBSystem(false)
 {
     m_name = name.toLower();
@@ -70,6 +71,7 @@ TableSchema::TableSchema(const SchemaData& sdata)
         : FieldList(true)
         , SchemaData(sdata)
         , m_query(0)
+        , d( new Private )
         , m_isKexiDBSystem(false)
 {
     init();
@@ -79,6 +81,7 @@ TableSchema::TableSchema()
         : FieldList(true)
         , SchemaData(KexiDB::TableObjectType)
         , m_query(0)
+        , d( new Private )
         , m_isKexiDBSystem(false)
 {
     init();
@@ -87,6 +90,7 @@ TableSchema::TableSchema()
 TableSchema::TableSchema(const TableSchema& ts, bool copyId)
         : FieldList(static_cast<const FieldList&>(ts))
         , SchemaData(static_cast<const SchemaData&>(ts))
+        , d( new Private )
 {
     init(ts, copyId);
 }
@@ -94,6 +98,7 @@ TableSchema::TableSchema(const TableSchema& ts, bool copyId)
 TableSchema::TableSchema(const TableSchema& ts, int setId)
         : FieldList(static_cast<const FieldList&>(ts))
         , SchemaData(static_cast<const SchemaData&>(ts))
+        , d( new Private )
 {
     init(ts, false);
     m_id = setId;
@@ -105,15 +110,12 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
         , SchemaData(KexiDB::TableObjectType)
         , m_conn(conn)
         , m_query(0)
+        , d( new Private )
         , m_isKexiDBSystem(false)
 {
-//moved d = new Private();
     assert(conn);
     m_name = name;
     init();
-//Qt 4 m_indices.setAutoDelete( true );
-//moved m_pkey = new IndexSchema(this);
-//moved m_indices.append(m_pkey);
 }
 
 TableSchema::~TableSchema()
@@ -127,7 +129,6 @@ TableSchema::~TableSchema()
 
 void TableSchema::init()
 {
-    d = new Private();
 //Qt 4 m_indices.setAutoDelete( true );
     m_pkey = new IndexSchema(this);
     m_indices.append(m_pkey);
@@ -138,7 +139,6 @@ void TableSchema::init(const TableSchema& ts, bool copyId)
     m_conn = ts.m_conn;
     m_query = 0; //not cached
     m_isKexiDBSystem = false;
-    d = new Private();
     m_name = ts.m_name;
 //Qt 4 m_indices.setAutoDelete( true );
     m_pkey = 0; //will be copied

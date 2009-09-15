@@ -147,7 +147,7 @@ protected:
     void updatePixmapLater();
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

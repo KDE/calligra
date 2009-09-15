@@ -189,7 +189,7 @@ protected:
     QuerySchema *m_query; //!< cached query schema that is defined by "select * from <this_table_name>"
 
     class Private;
-    Private *d;
+    Private * const d;
 
 private:
     //! Used by some ctors.

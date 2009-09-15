@@ -107,7 +107,7 @@ signals:
 
 protected:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

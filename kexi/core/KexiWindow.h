@@ -321,7 +321,7 @@ private:
 //moved to KexiView  void initViewActions(KexiView* view, Kexi::ViewMode mode);
 
     class Private;
-    Private * d;
+    Private *d;
 
     bool m_destroying : 1; //!< true after entering to the dctor
 

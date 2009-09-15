@@ -68,7 +68,7 @@ protected:
     */
     virtual bool drv_isSystemFieldName(const QString& n) const;
 
-    SQLiteDriverPrivate *dp;
+    SQLiteDriverPrivate * const dp;
 
 private:
     static const char *keywords[];

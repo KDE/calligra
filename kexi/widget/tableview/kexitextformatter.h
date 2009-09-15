@@ -59,7 +59,7 @@ public:
     QString inputMask() const;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif

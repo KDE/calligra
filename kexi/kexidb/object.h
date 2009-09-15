@@ -191,7 +191,7 @@ private:
     MessageHandler *m_msgHandler;
 
     class Private;
-    Private *d; //!< for future extensions
+    Private * const d; //!< for future extensions
 
     friend class MessageTitle;
 };

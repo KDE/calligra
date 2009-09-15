@@ -49,7 +49,7 @@ public:
 
 protected:
     class Private;
-    Private *d;
+    Private * const d;
 };
 }
 

@@ -499,7 +499,7 @@ protected:
 //   QString* debugString = 0);
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 }
 

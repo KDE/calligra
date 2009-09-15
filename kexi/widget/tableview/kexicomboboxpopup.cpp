@@ -107,6 +107,7 @@ const int KexiComboBoxPopup::defaultMaxRows = 8;
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
         : QFrame(parent, Qt::Popup)
+        , d( new KexiComboBoxPopupPrivate )
 {
     init();
     //setup tv data
@@ -115,6 +116,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &colum
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
         : QFrame(parent, Qt::WType_Popup)
+        , d( new KexiComboBoxPopupPrivate )
 {
     init();
     //setup tv data
@@ -129,7 +131,6 @@ KexiComboBoxPopup::~KexiComboBoxPopup()
 void KexiComboBoxPopup::init()
 {
     setObjectName("KexiComboBoxPopup");
-    d = new KexiComboBoxPopupPrivate();
 //    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));

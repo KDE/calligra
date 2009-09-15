@@ -71,7 +71,7 @@ private:
     void addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename);
     void removeConnectionDataInternal(KexiDB::ConnectionData *data);
 
-    KexiDBConnectionSetPrivate *d;
+    KexiDBConnectionSetPrivate * const d;
 };
 
 #endif // KEXIDBCONNSET_H

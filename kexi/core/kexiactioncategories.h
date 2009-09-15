@@ -101,7 +101,7 @@ public:
     bool actionSupportsObjectType(const char* name, KexiPart::ObjectType objectType) const;
 protected:
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 //! \return ActionCategories singleton object

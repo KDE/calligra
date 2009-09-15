@@ -376,7 +376,7 @@ private:
     bool checkProject(const QString& singlePartClass = QString());
 
     class Private;
-    Private *d;
+    Private * const d;
 
     friend class KexiMainWindow;
     friend class KexiWindow;

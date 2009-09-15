@@ -407,10 +407,6 @@ private:
     //<members related to buffering>
     bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
     //</members related to buffering>
-
-
-    class Private;
-    Private *d;
 };
 
 } //namespace KexiDB

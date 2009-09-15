@@ -208,7 +208,7 @@ protected:
      */
     void loadFactories();
 
-    WidgetLibraryPrivate *d;
+    WidgetLibraryPrivate * const d;
 };
 
 }

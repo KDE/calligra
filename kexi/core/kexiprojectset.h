@@ -61,7 +61,7 @@ public:
     KexiProjectData* findProject(const QString &dbName) const;
 
 private:
-    KexiProjectSetPrivate *d;
+    KexiProjectSetPrivate * const d;
 };
 
 #endif // KEXINEWDBCONNDIALOG_H

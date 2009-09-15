@@ -516,12 +516,14 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
 
 Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group)
         : QObject(library)
+        , d( new FormPrivate(this) )
 {
     init(library, mode, col, group);
 }
 
 Form::Form(Form *parent)
         : QObject(parent->library())
+        , d( new FormPrivate(this) )
 {
     init(parent->library(), parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
 }
@@ -530,13 +532,12 @@ Form::~Form()
 {
     emit destroying();
     delete d;
-    d = 0;
+//    d = 0;
 }
 
 void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
 {
     m_lib = library;
-    d = new FormPrivate(this);
 // d->manager = manager;
     d->mode = mode;
     d->features = 0;
@@ -1489,8 +1490,8 @@ void Form::setOriginalFormatVersion(uint ver)
 
 void Form::setFormWidget(FormWidget* w)
 {
-    if (!d)
-        return;
+//    if (!d)
+//        return;
     d->formWidget = w;
     if (!d->formWidget)
         return;

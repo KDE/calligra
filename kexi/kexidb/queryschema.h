@@ -810,7 +810,7 @@ protected:
 
     void computeFieldsExpanded();
 
-    QuerySchemaPrivate *d;
+    QuerySchemaPrivate * const d;
 
     friend class Connection;
     friend class QuerySchemaPrivate;
