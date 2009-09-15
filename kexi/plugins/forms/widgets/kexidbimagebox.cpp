@@ -709,7 +709,8 @@ void KexiDBImageBox::updatePixmap()
 
     if (!KexiDBImageBox_static->pixmap) {
         const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
-        QPixmap pm(fname, "PNG");
+        QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
+            "image-x-generic", KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {
             KIconEffect::semiTransparent(pm);
         }
