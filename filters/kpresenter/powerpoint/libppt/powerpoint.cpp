@@ -5900,8 +5900,8 @@ void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
 
   d->currentObject->setLeft( atom->left()*25.4/576  );
   d->currentObject->setTop( atom->top()*25.4/576  );
-  d->currentObject->setWidth( (atom->right()-atom->left())*25.4/576  );
-  d->currentObject->setHeight( (atom->bottom()-atom->top())*25.4/576  );
+  d->currentObject->setWidth( (atom->right()-atom->left()-1)*25.4/576  );
+  d->currentObject->setHeight( (atom->bottom()-atom->top()-1)*25.4/576  );
 }
 
 void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
