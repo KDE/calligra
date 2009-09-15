@@ -179,6 +179,7 @@ void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QLis
                 if( ! group->name().isEmpty() )
                     layer->setName( group->name() );
             }
+            layer->setVisible(group->isVisible());
             m_document->insertLayer( layer );
             delete group;
         }

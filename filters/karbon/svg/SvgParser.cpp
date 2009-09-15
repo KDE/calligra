@@ -163,6 +163,7 @@ void SvgParser::addGraphicContext()
         *gc = *( m_gc.top() );
 
     gc->filterId = QString(); // filters are not inherited
+    gc->display = true; // display is not inherited
 
     m_gc.push( gc );
 }
@@ -1267,8 +1268,10 @@ void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
     if(!obj)
         return;
 
-    applyFillStyle( obj );
-    applyStrokeStyle( obj );
+    if (!dynamic_cast<KoShapeGroup*>(obj)) {
+        applyFillStyle( obj );
+        applyStrokeStyle( obj );
+    }
     applyFilter( obj );
 
     if( ! gc->display )
@@ -1765,7 +1768,7 @@ QList<KoShape*> SvgParser::parseContainer( const QDomElement &e )
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex( nextZIndex() );
 
-            parseStyle( 0, b );
+            parseStyle( group, b );
             parseFont( b );
 
             QList<KoShape*> childShapes = parseContainer( b );
