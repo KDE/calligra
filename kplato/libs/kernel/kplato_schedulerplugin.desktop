@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KPlato Scheduler Plugin
 Name[ca]=Endollable de planificador del KPlato
+Name[da]=KPlato skemalægnings-plugin
 Name[de]=KPlato-Planermodul
 Name[es]=Complemento de planificación de KPlato
 Name[et]=KPlato ajakavaplugin
@@ -19,6 +20,7 @@ Type=ServiceType
 X-KDE-ServiceType=KPlato/SchedulerPlugin
 Comment=A plugin that calculates a project schedule
 Comment[ca]=Un connector que calcula un planificador de projectes
+Comment[da]=Et plugin som udregner et projektskema
 Comment[de]=Ein Modul, das einen Projektzeitplan berechnet
 Comment[es]=Un complemento que calcula la planificación de un proyecto
 Comment[et]=Projekti ajakava arvutav plugin
