@@ -448,6 +448,8 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
         int n = font->getNextChar(p, len, &code, &u, &uLen, &dx, &dy, &originX, &originY);
         p += n;
         len -= n;
+        if (!u)
+            break;
         str += QChar( *u );
     }
 
@@ -456,8 +458,11 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     str = str.simplified();
     if( str.isEmpty() )
         return;
-    if( str.length() == 1 && str.at( 0 ) == QChar('&') )
-        str = "&amp;";
+    
+    // escape special characters
+    str.replace('&', "&amp;");
+    str.replace('<', "&lt;");
+    str.replace('>', "&gt;");
 
     double x = state->getLineX();
     double y = state->getLineY();
@@ -471,7 +476,7 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
 
     if( font && font->getFamily() )
         *d->body << " font-family=\"" << QString::fromAscii( font->getFamily()->getCString() ) << "\"";
-    *d->body << " font-size=\"" << state->getFontSize() << "px\"";
+    *d->body << " font-size=\"" << state->getTransformedFontSize() << "px\"";
 
     // fill
     if( ! (render & 1) )
