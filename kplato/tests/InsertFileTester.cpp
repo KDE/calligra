@@ -26,92 +26,46 @@
 #include "kptresource.h"
 #include "kpttask.h"
 
+#include <KUrl>
+
+#include <QFileInfo>
+
 namespace KPlato
 {
 
-void InsertFileTester::init()
-{
 
-}
-
-void InsertFileTester::addCalendar( Part &part )
-{
-    Project &p = part.getProject();
-    QUndoCommand *c = new CalendarAddCmd( &p, new Calendar(), 0 );
-    part.addCommand( c );
-}
-
-void InsertFileTester::testCalendar()
+void InsertFileTester::testVersion_0_6()
 {
     Part part;
-    addCalendar( part );
-    Project &p = part.getProject();
-    QVERIFY( p.calendarCount() == 1 );
+    QFileInfo file( "version-0-6.kplato" );
+    QVERIFY( file.exists() );
 
-    Part part2;
-    part2.insertProject( part.getProject(), 0, 0 );
-    QVERIFY( part2.getProject().calendarCount() == 1 );
+    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    QVERIFY( res );
+
+    Project &p = part.getProject();
+
+    QCOMPARE( p.numChildren(), 2 );
 }
 
-void InsertFileTester::addResourceGroup( Part &part )
-{
-    Project &p = part.getProject();
-    QUndoCommand *c = new AddResourceGroupCmd( &p, new ResourceGroup() );
-    part.addCommand( c );
-}
-
-void InsertFileTester::testResourceGroup()
+void InsertFileTester::testProject_stats1()
 {
     Part part;
-    addResourceGroup( part );
-    Project &p = part.getProject();
-    QVERIFY( p.resourceGroupCount() == 1 );
+    QFileInfo file( "project_stats1.kplato" );
+    QVERIFY( file.exists() );
 
-    Part part2;
-    part2.insertProject( p, 0, 0 );
-    QVERIFY( part2.getProject().resourceGroupCount() == 1 );
+    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    QVERIFY( res );
 }
 
-void InsertFileTester::addResource( Part &part )
-{
-    Project &p = part.getProject();
-    QVERIFY( p.resourceGroupAt( 0 ) );
-    QUndoCommand *c = new AddResourceCmd( p.resourceGroupAt( 0 ), new Resource() );
-    part.addCommand( c );
-}
-
-void InsertFileTester::testResource()
+void InsertFileTester::testPert1()
 {
     Part part;
-    addResourceGroup( part );
-    addResource( part );
-    Project &p = part.getProject();
-    QVERIFY( p.resourceGroupAt( 0 )->numResources() == 1 );
+    QFileInfo file( "pert1.kplato" );
+    QVERIFY( file.exists() );
 
-    Part part2;
-    part2.insertProject( p, 0, 0 );
-    QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
-}
-
-void InsertFileTester::addTask( Part &part )
-{
-    Project &p = part.getProject();
-    Task *t = new Task();
-    t->setId( p.uniqueNodeId() );
-    QUndoCommand *c = new TaskAddCmd( &p, t, 0 );
-    part.addCommand( c );
-}
-
-void InsertFileTester::testTask()
-{
-    Part part;
-    addTask( part );
-    Project &p = part.getProject();
-    QVERIFY( p.numChildren() == 1 );
-
-    Part part2;
-    part2.insertProject( p, 0, 0 );
-    QVERIFY( part2.getProject().numChildren() == 1 );
+    bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
+    QVERIFY( res );
 }
 
 } //namespace KPlato

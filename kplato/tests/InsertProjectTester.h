@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPlato_InsertFileTester_h
-#define KPlato_InsertFileTester_h
+#ifndef KPlato_InsertProjectTester_h
+#define KPlato_InsertProjectTester_h
 
 #include <QtTest/QtTest>
 
@@ -27,13 +27,25 @@ namespace KPlato
 
 class Part;
 
-class InsertFileTester : public QObject
+class InsertProjectTester : public QObject
 {
     Q_OBJECT
 private slots:
-    void testVersion_0_6();
-    void testProject_stats1();
-    void testPert1();
+    void init();
+    void testCalendar();
+    void testResourceGroup();
+    void testResource();
+    void testTask();
+    void testGroupRequest();
+    void testResourceRequest();
+
+private:
+    void addCalendar( Part &part );
+    void addResourceGroup( Part &part );
+    void addResource( Part &part );
+    void addTask( Part &part );
+    void addGroupRequest( Part &part );
+    void addResourceRequest( Part &part );
 
 };
 
