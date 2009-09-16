@@ -1265,45 +1265,16 @@ QString Sheet::guessRowTitle(QRect& area, int row)
   return cellValue.asString();
 }
 
-static QString cellAsText( const Cell& cell, unsigned int max )
+static QString cellAsText( const Cell& cell, bool addTab )
 {
-  QString result;
-  if( !cell.isDefault() )
-  {
-    int l = max - cell.displayText().length();
-    const Style::HAlign alignX = (Style::HAlign)cell.effectiveAlignX();
-    if ( alignX == Style::Right )
-    {
-        for ( int i = 0; i < l; ++i )
-          result += ' ';
+    QString result;
+    if( !cell.isDefault() ) {
         result += cell.displayText();
     }
-    else if ( alignX == Style::Left )
-      {
-          result += ' ';
-          result += cell.displayText();
-          // start with '1' because we already set one space
-          for ( int i = 1; i < l; ++i )
-            result += ' ';
-       }
-         else // centered
-         {
-           int i;
-           int s = (int) l / 2;
-           for ( i = 0; i < s; ++i )
-             result += ' ';
-           result += cell.displayText();
-           for ( i = s; i < l; ++i )
-             result += ' ';
-          }
-  }
-  else
-  {
-    for ( unsigned int i = 0; i < max; ++i )
-      result += ' ';
-  }
-
-  return result;
+    if( addTab ) {
+        result += '\t';
+    }
+    return result;
 }
 
 QString Sheet::copyAsText( Selection* selection )
@@ -1323,32 +1294,13 @@ QString Sheet::copyAsText( Selection* selection )
     int left = lastRange.right();
     int right = lastRange.left();
 
-    int max = 1;
-    CellStorage subStorage = d->cellStorage->subStorage( Region( lastRange ) );
-    for ( int row = lastRange.top(); row <= lastRange.bottom(); ++row )
-    {
-        Cell cell = subStorage.firstInRow( row );
-        for ( ; !cell.isNull(); cell = subStorage.nextInRow( cell.column(), cell.row() ) )
-        {
-            top = qMin( top, cell.row() );
-            left = qMin( left, cell.column() );
-            bottom = qMax( bottom, cell.row() );
-            right = qMax( right, cell.column() );
-
-            if ( cell.displayText().length() > max )
-                max = cell.displayText().length();
-        }
-    }
-
-    ++max;
-
     QString result;
     for ( int y = top; y <= bottom; ++y)
     {
         for ( int x = left; x <= right; ++x)
         {
             Cell cell( this, x, y );
-            result += cellAsText( cell, max );
+            result += cellAsText( cell, x != right );
         }
         result += '\n';
     }
