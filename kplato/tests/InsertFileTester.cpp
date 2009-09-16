@@ -25,6 +25,7 @@
 #include "kptcalendar.h"
 #include "kptresource.h"
 #include "kpttask.h"
+#include "kptnode.h"
 
 #include <KUrl>
 
@@ -45,7 +46,22 @@ void InsertFileTester::testVersion_0_6()
 
     Project &p = part.getProject();
 
+    QCOMPARE( p.name(), QString( "P1" ) );
+    QCOMPARE( p.leader(), QString( "pp" ) );
+
     QCOMPARE( p.numChildren(), 2 );
+    QCOMPARE( p.numResourceGroups(), 1 );
+    QCOMPARE( p.resourceList().count(), 1 );
+    QCOMPARE( p.allCalendars().count(), 2 );
+
+    Node *n = p.childNode( 0 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "T1" ) );
+
+    n = p.childNode( 1 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "T2" ) );
+
 }
 
 void InsertFileTester::testProject_stats1()
@@ -56,6 +72,21 @@ void InsertFileTester::testProject_stats1()
 
     bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
     QVERIFY( res );
+
+    Project &p = part.getProject();
+
+    QCOMPARE( p.name(), QString( "P1" ) );
+    QCOMPARE( p.leader(), QString( "Robin" ) );
+
+    QCOMPARE( p.numChildren(), 1 );
+    QCOMPARE( p.numResourceGroups(), 1 );
+    QCOMPARE( p.resourceList().count(), 1 );
+    QCOMPARE( p.allCalendars().count(), 1 );
+
+    Node *n = p.childNode( 0 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "T1" ) );
+
 }
 
 void InsertFileTester::testPert1()
@@ -66,6 +97,44 @@ void InsertFileTester::testPert1()
 
     bool res = part.openUrl( KUrl( file.absoluteFilePath() ) );
     QVERIFY( res );
+
+    Project &p = part.getProject();
+
+    QCOMPARE( p.name(), QString( "PERT 1" ) );
+    QCOMPARE( p.leader(), QString( "PM" ) );
+
+    QCOMPARE( p.numChildren(), 7 );
+    QCOMPARE( p.numResourceGroups(), 0 );
+    QCOMPARE( p.resourceList().count(), 0 );
+    QCOMPARE( p.allCalendars().count(), 1 );
+
+    Node *n = p.childNode( 0 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "a" ) );
+
+    n = p.childNode( 1 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "b" ) );
+
+    n = p.childNode( 2 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "c" ) );
+
+    n = p.childNode( 3 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "d" ) );
+
+    n = p.childNode( 4 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "e" ) );
+
+    n = p.childNode( 5 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "f" ) );
+
+    n = p.childNode( 6 );
+    QCOMPARE( n->type(), (int)Node::Type_Task );
+    QCOMPARE( n->name(), QString( "g" ) );
 }
 
 } //namespace KPlato
