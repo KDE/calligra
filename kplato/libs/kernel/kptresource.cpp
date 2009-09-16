@@ -337,6 +337,7 @@ void Resource::removeRequests() {
         r->setResource(0); // avoid the request to mess with my list
         r->parent()->deleteResourceRequest(r);
     }
+    m_requests.clear();
 }
 
 void Resource::setId(const QString& id) {
