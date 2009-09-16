@@ -1182,6 +1182,16 @@ QDebug operator<<( QDebug dbg, const ResourceAppointmentsRowModel::Private* s )
 
 #endif
 
+ResourceAppointmentsRowModel::Private *ResourceAppointmentsRowModel::find( void *ptr ) const
+{
+    foreach ( Private *p, m_datamap ) {
+        if ( p->ptr == ptr ) {
+            return p;
+        }
+    }
+    return 0;
+}
+
 ResourceAppointmentsRowModel::ResourceAppointmentsRowModel( QObject *parent )
     : ItemModelBase( parent ),
     m_manager( 0 )
@@ -1620,31 +1630,34 @@ void ResourceAppointmentsRowModel::slotResourceToBeRemoved( const Resource *r )
     disconnect( r, SIGNAL( externalAppointmentRemoved() ), this, SLOT( slotAppointmentRemoved() ) );
     disconnect( r, SIGNAL( externalAppointmentChanged( Resource* , Appointment* ) ), this, SLOT( slotAppointmentChanged( Resource* , Appointment* ) ) );
 
+    foreach ( Appointment *a, r->appointments( id() ) ) {
+        QList<AppointmentInterval*> lst;
+        foreach ( Private *p, m_datamap ) {
+            if ( p->parent == a ) {
+                Q_ASSERT( p->type == Private::Interval );
+                lst << static_cast<AppointmentInterval*>( p->ptr );
+            }
+        }
+        // remove intervals
+        while ( ! lst.isEmpty() ) {
+            m_datamap.remove( lst.first() );
+            delete lst.takeFirst();
+        }
+        // remove appointment
+        if ( m_datamap.contains( a ) ) {
+            delete m_datamap[ a ];
+            m_datamap.remove( a );
+        }
+    }
+    if ( m_datamap.contains( const_cast<Resource*>( r ) ) ) {
+        delete m_datamap[ const_cast<Resource*>( r ) ];
+        m_datamap.remove( const_cast<Resource*>( r ) );
+    }
 }
 
 void ResourceAppointmentsRowModel::slotResourceRemoved( const Resource *resource )
 {
     //kDebug()<<resource->name();
-    if ( m_datamap.contains( const_cast<Resource*>( resource ) ) ) {
-        delete m_datamap[ const_cast<Resource*>( resource ) ];
-        m_datamap.remove( const_cast<Resource*>( resource ) );
-        foreach ( Appointment *a, resource->appointments( id() ) ) {
-            QList<Private*> lst;
-            foreach ( Private *i, m_datamap ) {
-                if ( i->parent == a ) {
-                    lst << i;
-                }
-            }
-            while ( ! lst.isEmpty() ) {
-                m_datamap.remove( lst.first() );
-                delete lst.takeFirst();
-            }
-            if ( m_datamap.contains( a ) ) {
-                delete m_datamap[ a ];
-                m_datamap.remove( a );
-            }
-        }
-    }
     endRemoveRows();
 }
 
@@ -1663,15 +1676,16 @@ void ResourceAppointmentsRowModel::slotResourceGroupToBeRemoved( const ResourceG
     //kDebug()<<group->name()<<endl;
     int row = m_project->indexOf( const_cast<ResourceGroup*>( group ) );
     beginRemoveRows( QModelIndex(), row, row );
-}
 
-void ResourceAppointmentsRowModel::slotResourceGroupRemoved( const ResourceGroup *group )
-{
-    //kDebug()<<group->name()<<endl;
     if ( m_datamap.contains( const_cast<ResourceGroup*>( group ) ) ) {
         delete m_datamap[ const_cast<ResourceGroup*>( group ) ];
         m_datamap.remove( const_cast<ResourceGroup*>( group ) );
     }
+}
+
+void ResourceAppointmentsRowModel::slotResourceGroupRemoved( const ResourceGroup *group )
+{
+    //kDebug()<<group->name();
     endRemoveRows();
 }
 
