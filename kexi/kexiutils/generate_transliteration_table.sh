@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
+#   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
 #
 #   Based on the original script by Michal Svec <rebel@atrey.karlin.mff.cuni.cz>
 #

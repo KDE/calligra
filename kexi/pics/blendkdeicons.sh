@@ -2,7 +2,7 @@
 #
 # Generates series of blended icons
 #
-# Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+# Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
 #
 
 usage() {

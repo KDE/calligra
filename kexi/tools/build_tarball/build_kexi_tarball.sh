@@ -3,9 +3,9 @@
 # This script prepares & uploads tarballs
 # Usage within KDE svn tree.
 # Based on cvs2pack
-# Copyright 2002 Nikolas Zimmermann <wildfox@kde.org>
-# Copyright 2004-2006 Jaroslaw Staniek <js@iidea.pl>
-# Copyright 2005 Martin Ellis <martin.ellis@kdemail.net>
+# Copyright (C) 2002 Nikolas Zimmermann <wildfox@kde.org>
+# Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+# Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 # License: GPL (http://www.gnu.org/)
 
 DIRNAME=`pwd`/`dirname $0`

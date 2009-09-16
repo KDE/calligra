@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
+#   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
 #
 #   This program is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU General Public

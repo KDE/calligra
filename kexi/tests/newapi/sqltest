@@ -2,7 +2,7 @@
 
 # sqltest - fast parser testing using sqlite database.
 # Type sqltest --help for usage info.
-# Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
+# Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
 
 [ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> <sql-statement> [-v] [other_options]" && \
  echo " -v    Verbose mode" && exit 1
