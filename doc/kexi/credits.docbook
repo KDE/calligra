@@ -11,7 +11,10 @@
   <itemizedlist>
     <title>&kexi; Developers:</title>
     <listitem>
-      <para>Jaroslaw Staniek / OpenOffice Polska <email>js@iidea.pl</email></para>
+      <para>Jaroslaw Staniek <email>staniek@kde.org</email></para>
+    </listitem>
+    <listitem>
+      <para>OpenOffice Polska, LLC <email>info@openoffice.com.pl</email></para>
     </listitem>
     <listitem>
       <para>Lucijan Busch <email>lucijan@kde.org</email></para>
@@ -51,7 +54,7 @@
 
 <para>
   Documentation by Martin A. Ellis <email>martin.ellis@kdemail.net</email>, 
-  Jaroslaw Staniek <email>js@iidea.pl</email> 
+  Jaroslaw Staniek <email>staniek@kde.org</email> 
   with contributions from Anne-Marie Mahfouf, Raphael Langerhorst, Michal Kubicki and Aron Stansvik.
 </para>
 
