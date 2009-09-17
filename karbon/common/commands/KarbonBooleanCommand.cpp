@@ -94,6 +94,7 @@ void KarbonBooleanCommand::redo()
                 break;
             case Union:
                 pr = pa.united( pb );
+                break;
         }
 
         QMatrix transformation = d->pathA->transformation();
@@ -103,6 +104,9 @@ void KarbonBooleanCommand::redo()
         d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );
         d->resultingPath->setTransformation( transformation );
+        d->resultingPath->setName( d->pathA->name() );
+        d->resultingPath->setZIndex( d->pathA->zIndex() );
+        d->resultingPath->setFillRule( d->pathA->fillRule() );
         
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( d->pathA->parent() );
         if( group )
