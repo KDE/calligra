@@ -3,3 +3,6 @@ State=AAAA/wAAAAD9AAAAAgAAAAAAAAA6AAADdPwCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAASw
 
 [KoShapeCollection]
 QuickShapes=KoRectangleShape,KoEllipseShape,KoStarShape_star,ArtisticText,PictureShape
+
+[Undo]
+UndoLimit=0
