@@ -196,7 +196,7 @@ layers with this icon.</para></listitem>
 
 <sect2>
 <title>The Align Tool</title>
-<para>The <guilabel>Align</guilabel> tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
+<para>The <guilabel>Align</guilabel> tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you have the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
 </sect2>
 
 <sect2>
