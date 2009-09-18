@@ -36,6 +36,7 @@ if (!defined $mimetypes{$type}) {
 my $mimetype = $mimetypes{$type};
 
 my $ua = LWP::UserAgent->new;
+$ua->timeout(10); # seconds
 my $agentstring = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)';
 $ua->agent($agentstring);
 my @pages;
@@ -58,12 +59,13 @@ sub startJob {
 	if (!fork()) {
 		my $localuri = $uri;
 		my $localua = LWP::UserAgent->new;
+		$localua->timeout(10); # seconds
 		$localua->agent($agentstring);
 		my $res = $localua->request(HTTP::Request->new(HEAD => $localuri));
 		if ($res->content_type() eq $mimetype) {
 			my $filename = uri_unescape($localuri);
 			$filename =~ s#^http://##;
-			$filename = uri_escape($filename, '/:\!&*$?;:= ');
+			$filename = uri_escape($filename, '/:\!&*$?;:= \'"');
 			print $localuri."\n";
 			$ua->get($localuri, ':content_file'  => $filename);
 		}
