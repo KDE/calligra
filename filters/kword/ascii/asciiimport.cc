@@ -20,6 +20,7 @@
 */
 
 #include <QObject>
+#include <QApplication>
 #include <QString>
 // #include <QRegExp> // Currently not needed (due to disabled code)
 #include <QTextCodec>
@@ -199,7 +200,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
     AsciiImportDialog* dialog = 0;
     if (!m_chain->manager()->getBatchMode())
     {
-    	dialog = new AsciiImportDialog();
+    	dialog = new AsciiImportDialog(QApplication::activeWindow());
 	if (!dialog)
 	{
 	  kError(30502) << "Dialog has not been created! Aborting!" << endl;
