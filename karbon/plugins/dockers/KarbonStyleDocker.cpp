@@ -73,9 +73,11 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     m_layout->addWidget( m_preview, 0, 0, 2, 1 );
 
     m_buttons = new KarbonStyleButtonBox( mainWidget );
+    m_buttons->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_layout->addWidget( m_buttons, 0, 1);
 
     m_stack = new QStackedWidget( mainWidget );
+    m_stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_layout->addWidget( m_stack, 1, 1 );
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -91,12 +93,12 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
 
     KoResourceServerProvider * serverProvider = KoResourceServerProvider::instance();
     KoAbstractResourceServerAdapter * gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
-    KoResourceSelector * gradientSelector = new KoResourceSelector( gradientResourceAdapter, this );
+    KoResourceSelector * gradientSelector = new KoResourceSelector( gradientResourceAdapter, m_stack );
     gradientSelector->setColumnCount( 1 );
     gradientSelector->setRowHeight( 20 );
 
     KoAbstractResourceServerAdapter * patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
-    KoResourceSelector * patternSelector = new KoResourceSelector( patternResourceAdapter, this );
+    KoResourceSelector * patternSelector = new KoResourceSelector( patternResourceAdapter, m_stack );
     patternSelector->setColumnCount( 5 );
     patternSelector->setRowHeight( 30 );
     
