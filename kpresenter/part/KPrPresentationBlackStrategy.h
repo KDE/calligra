@@ -19,11 +19,11 @@
 #ifndef KPRPRESENTATIONBLACKSTRATEGY_H
 #define KPRPRESENTATIONBLACKSTRATEGY_H
 
-#include "KPrPresentationStrategyInterface.h"
+#include "KPrPresentationStrategyBase.h"
 
 class KPrPresentationBlackWidget;
 
-class KPrPresentationBlackStrategy : public KPrPresentationStrategyInterface
+class KPrPresentationBlackStrategy : public KPrPresentationStrategyBase
 {
 public:
     KPrPresentationBlackStrategy( KPrPresentationTool * tool );

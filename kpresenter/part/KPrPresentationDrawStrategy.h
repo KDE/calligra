@@ -22,11 +22,11 @@
 #ifndef KPRPRESENTATIONDRAWSTRATEGY_H
 #define KPRPRESENTATIONDRAWSTRATEGY_H
 
-#include "KPrPresentationStrategyInterface.h"
+#include "KPrPresentationStrategyBase.h"
 
 class KPrPresentationDrawWidget;
 
-class KPrPresentationDrawStrategy : public KPrPresentationStrategyInterface
+class KPrPresentationDrawStrategy : public KPrPresentationStrategyBase
 {
 public:
     KPrPresentationDrawStrategy( KPrPresentationTool * tool );

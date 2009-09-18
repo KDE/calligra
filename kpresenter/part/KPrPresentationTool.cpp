@@ -201,7 +201,7 @@ void KPrPresentationTool::finishEventActions()
     }
 }
 
-void KPrPresentationTool::switchStrategy( KPrPresentationStrategyInterface * strategy )
+void KPrPresentationTool::switchStrategy( KPrPresentationStrategyBase * strategy )
 {
     Q_ASSERT( strategy );
     Q_ASSERT( m_strategy != strategy );
@@ -212,7 +212,7 @@ void KPrPresentationTool::switchStrategy( KPrPresentationStrategyInterface * str
 // SLOTS
 void KPrPresentationTool::highLightPresentation()
 {
-    KPrPresentationStrategyInterface * strategy;
+    KPrPresentationStrategyBase * strategy;
     if ( dynamic_cast<KPrPresentationHighlightStrategy *>( m_strategy ) ) {
         strategy = new KPrPresentationStrategy( this );
     }
@@ -224,7 +224,7 @@ void KPrPresentationTool::highLightPresentation()
 
 void KPrPresentationTool::drawOnPresentation()
 {
-    KPrPresentationStrategyInterface * strategy;
+    KPrPresentationStrategyBase * strategy;
     if ( dynamic_cast<KPrPresentationDrawStrategy*>( m_strategy ) ) {
         strategy = new KPrPresentationStrategy( this );
     }
@@ -236,7 +236,7 @@ void KPrPresentationTool::drawOnPresentation()
 
 void KPrPresentationTool::blackPresentation()
 {
-    KPrPresentationStrategyInterface * strategy;
+    KPrPresentationStrategyBase * strategy;
     if ( dynamic_cast<KPrPresentationBlackStrategy*>( m_strategy ) ) {
         strategy = new KPrPresentationStrategy( this );
     }

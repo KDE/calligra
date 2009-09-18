@@ -18,19 +18,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KPRPRESENTATIONSTRATEGYINTERFACE_H
-#define KPRPRESENTATIONSTRATEGYINTERFACE_H
+#ifndef KPRPRESENTATIONSTRATEGYBASE_H
+#define KPRPRESENTATIONSTRATEGYBASE_H
 
 class QWidget;
 class QKeyEvent;
 class KoPACanvas;
 class KPrPresentationTool;
 
-class KPrPresentationStrategyInterface
+class KPrPresentationStrategyBase
 {
 public:
-    KPrPresentationStrategyInterface( KPrPresentationTool * tool );
-    virtual ~KPrPresentationStrategyInterface();
+    KPrPresentationStrategyBase( KPrPresentationTool * tool );
+    virtual ~KPrPresentationStrategyBase();
 
     /**
      * If the event is handled or should be ignored by the tool return true. Otherwise 
@@ -46,5 +46,5 @@ protected:
     KPrPresentationTool * m_tool;
 };
 
-#endif /* KPRPRESENTATIONSTRATEGYINTERFACE_H */
+#endif /* KPRPRESENTATIONSTRATEGYBASE_H */
 

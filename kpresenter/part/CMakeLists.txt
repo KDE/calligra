@@ -52,7 +52,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrPresentationStrategy.cpp
      KPrPresentationHighlightStrategy.cpp
      KPrPresentationBlackStrategy.cpp
-     KPrPresentationStrategyInterface.cpp
+     KPrPresentationStrategyBase.cpp
      KPrPresentationDrawStrategy.cpp
 
      commands/KPrAnimationCreateCommand.cpp

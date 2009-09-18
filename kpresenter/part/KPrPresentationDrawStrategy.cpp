@@ -31,7 +31,7 @@
 #include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyInterface( tool )
+: KPrPresentationStrategyBase( tool )
 , m_drawWidget( new KPrPresentationDrawWidget( canvas() ) )
 {
     // TODO

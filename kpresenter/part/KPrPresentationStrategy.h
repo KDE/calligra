@@ -21,9 +21,9 @@
 #ifndef KPRPRESENTATIONSTRATEGY_H
 #define KPRPRESENTATIONSTRATEGY_H
 
-#include "KPrPresentationStrategyInterface.h"
+#include "KPrPresentationStrategyBase.h"
 
-class KPrPresentationStrategy : public KPrPresentationStrategyInterface
+class KPrPresentationStrategy : public KPrPresentationStrategyBase
 {
 public:
     KPrPresentationStrategy( KPrPresentationTool * tool );

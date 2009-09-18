@@ -29,7 +29,7 @@
 #include "KPrPresentationBlackWidget.h"
 
 KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyInterface( tool )
+: KPrPresentationStrategyBase( tool )
 , m_blackWidget( new KPrPresentationBlackWidget( canvas() ) )
 {
     // TODO

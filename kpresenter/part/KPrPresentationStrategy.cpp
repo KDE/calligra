@@ -22,7 +22,7 @@
 #include "KPrPresentationStrategy.h"
 
 KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyInterface( tool )
+: KPrPresentationStrategyBase( tool )
 {
 }
 

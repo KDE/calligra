@@ -21,11 +21,11 @@
 #ifndef KPRPRESENTATIONHIGHLIGHTSTRATEGY_H
 #define KPRPRESENTATIONHIGHLIGHTSTRATEGY_H
 
-#include "KPrPresentationStrategyInterface.h"
+#include "KPrPresentationStrategyBase.h"
 
 class KPrPresentationHighlightWidget;
 
-class KPrPresentationHighlightStrategy : public KPrPresentationStrategyInterface
+class KPrPresentationHighlightStrategy : public KPrPresentationStrategyBase
 {
 public :
     KPrPresentationHighlightStrategy( KPrPresentationTool * tool );

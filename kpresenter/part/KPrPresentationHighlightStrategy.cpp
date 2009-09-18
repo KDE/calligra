@@ -29,7 +29,7 @@
 #include "KPrPresentationTool.h"
 
 KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyInterface( tool )
+: KPrPresentationStrategyBase( tool )
 , m_highlightWidget( new KPrPresentationHighlightWidget( canvas() ) )
 {
     setToolWidgetParent( m_highlightWidget );

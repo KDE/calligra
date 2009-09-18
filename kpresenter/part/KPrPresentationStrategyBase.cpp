@@ -17,33 +17,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KPrPresentationStrategyInterface.h"
+#include "KPrPresentationStrategyBase.h"
 
 #include "KPrPresentationTool.h"
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
 
-KPrPresentationStrategyInterface::KPrPresentationStrategyInterface( KPrPresentationTool * tool )
+KPrPresentationStrategyBase::KPrPresentationStrategyBase( KPrPresentationTool * tool )
 : m_tool( tool )
 {
 }
 
-KPrPresentationStrategyInterface::~KPrPresentationStrategyInterface()
+KPrPresentationStrategyBase::~KPrPresentationStrategyBase()
 {
 }
 
-void KPrPresentationStrategyInterface::setToolWidgetParent( QWidget * widget )
+void KPrPresentationStrategyBase::setToolWidgetParent( QWidget * widget )
 {
     return m_tool->m_presentationToolWidget->setParent( widget );
 }
 
-KoPACanvas * KPrPresentationStrategyInterface::canvas()
+KoPACanvas * KPrPresentationStrategyBase::canvas()
 {
     return m_tool->m_viewMode.canvas();
 }
 
-void KPrPresentationStrategyInterface::activateDefaultStrategy()
+void KPrPresentationStrategyBase::activateDefaultStrategy()
 {
     m_tool->switchStrategy( new KPrPresentationStrategy( m_tool ) );
 }

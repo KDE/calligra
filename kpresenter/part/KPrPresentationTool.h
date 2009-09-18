@@ -32,7 +32,7 @@ class QFrame;
 class KoEventAction;
 class KPrViewModePresentation;
 class KPrPresentationToolWidget;
-class KPrPresentationStrategyInterface;
+class KPrPresentationStrategyBase;
 
 /// The tool used for presentations
 class KPrPresentationTool : public KoTool
@@ -63,7 +63,7 @@ public slots:
 
 private:
     void finishEventActions();
-    void switchStrategy( KPrPresentationStrategyInterface * strategy );
+    void switchStrategy( KPrPresentationStrategyBase * strategy );
     bool eventFilter( QObject * obj, QEvent * event );
 
     KPrViewModePresentation & m_viewMode;
@@ -71,8 +71,8 @@ private:
 
     KPrPresentationToolWidget * m_presentationToolWidget;
     QFrame * m_frame;
-    KPrPresentationStrategyInterface * m_strategy;
-    friend class KPrPresentationStrategyInterface;
+    KPrPresentationStrategyBase * m_strategy;
+    friend class KPrPresentationStrategyBase;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */
