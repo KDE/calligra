@@ -22,14 +22,13 @@
 #define KOCHARSELECTDIA_H
 
 #include <kdialog.h>
-#include "kowidgets_export.h"
 
 class QWidget;
 
 /**
  * A dialog for selecting a character.
  */
-class KOWIDGETS_EXPORT CharSelectDia : public KDialog
+class CharSelectDia : public KDialog
 {
     Q_OBJECT
 
