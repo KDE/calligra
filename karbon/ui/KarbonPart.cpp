@@ -210,7 +210,6 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().isElement();
     KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
-    kDebug(38000) <<"Start loading OASIS document..." << body.text();
     if( body.isNull() )
     {
         kDebug(38000) <<"No office:body found!";
