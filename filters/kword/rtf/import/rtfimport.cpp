@@ -2093,8 +2093,9 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
         if (!baseFormat || format.fmt.color != baseFormat->color)
         {
             node.addNode( "COLOR" );
-            node.addColor( (format.fmt.color >= colorTable.count())
-                           ? QColor(Qt::black) : colorTable[format.fmt.color] );
+            node.addColor((format.fmt.color < colorTable.count() && format.fmt.color >= 0)
+                           ? colorTable.value(format.fmt.color) : QColor(Qt::black));
+
             node.closeNode( "COLOR" );
         }
         if (format.fmt.bgcolor < colorTable.count() &&
@@ -2585,8 +2586,7 @@ void RTFImport::finishTable()
             }
 
             // Frame background color
-            if (row.cells[k].bgcolor < colorTable.count())
-            {
+            if (row.cells[k].bgcolor < colorTable.count() && row.cells[k].bgcolor >= 0) {
                 QColor &color = colorTable[row.cells[k].bgcolor];
                 frameSets.setAttribute( "bkRed", color.red() );
                 frameSets.setAttribute( "bkGreen", color.green() );
