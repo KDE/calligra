@@ -2,6 +2,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
+   Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
      
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -935,7 +936,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             if ( depthFound ) {
                 // Word6 models "1." as nfc=5
                 if ( nfc == 5 && suffix.isEmpty() )
-                    suffix = ".";
+                    suffix = '.';
                 kDebug(30513) <<" prefix=" << prefix <<" suffix=" << suffix;
                 //counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
                 listStyleWriter.addAttribute( "style:num-format", Conversion::numberFormatCode( nfc ) );

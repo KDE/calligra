@@ -2,6 +2,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
+   Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -37,7 +38,7 @@ QString Conversion::styleNameString( const wvWare::UString& str )
 {
     QString string = QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
     //first replace all spaces with _20_
-    string.replace( " ", "_20_" );
+    string.replace( ' ', "_20_" );
     //now remove random characters
     for ( int i = 0; i < string.size(); i++ )
     {
@@ -438,27 +439,27 @@ QString Conversion::numberFormatCode( int nfc )
     switch ( nfc )
     {
     case 1: // upper case roman
-        value = "I";
+        value = 'I';
         break;
     case 2: // lower case roman
-        value = "i";
+        value = 'i';
         break;
     case 3: // upper case letter
-        value = "A";
+        value = 'A';
         break;
     case 4: // lower case letter
-        value = "a";
+        value = 'a';
         break;
     case 5: // arabic with a trailing dot (added by writeCounter)
     case 6: // numbered (one, two, three) - not supported by KWord
     case 7: // ordinal (first, second, third) - not supported by KWord
     case 22: // leading zero (01-09, 10-99, 100-...) - not supported by KWord
     case 0: // arabic
-        value = "1";
+        value = '1';
         break;
     default:
         kWarning(30513) << "Unknown NFC: " << nfc;
-        value = "1";
+        value = '1';
     }
     return value;
 }

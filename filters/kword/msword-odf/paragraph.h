@@ -40,7 +40,7 @@
 class Paragraph
 {
     public:
-        Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0 );
+         explicit Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0 );
         ~Paragraph();
 
         void writeToFile( KoXmlWriter* writer );

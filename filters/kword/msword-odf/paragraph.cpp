@@ -181,15 +181,15 @@ void Paragraph::writeToFile( KoXmlWriter* writer )
             //add text style to collection
             //put style into m_mainStyles & get its name
             //kDebug(30513) << m_textStyles[i]->type();
-            styleName = "T";
+            styleName = 'T';
             styleName = m_mainStyles->lookup(*m_textStyles[i], styleName);
 
-            if(oldStyleName != styleName) {
+            if (oldStyleName != styleName) {
                 if (startedSpan) {
                     writer->endElement(); //text:span
                     startedSpan = false;
                 }
-                if(styleName != "DefaultParagraphFont") {
+                if (styleName != "DefaultParagraphFont") {
                     writer->startElement( "text:span" );
                     writer->addAttribute( "text:style-name", styleName.toUtf8() );
                     startedSpan = true;
