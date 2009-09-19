@@ -56,14 +56,15 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     const QString s = i18nPage.subs("999").subs("999").toString();
     m_pageLabel->setMinimumWidth(QFontMetrics(m_pageLabel->font()).width(s));
     m_statusbar->addWidget(m_pageLabel);
+    m_pageLabel->setVisible(m_document->config().statusBarShowPage());
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageCount()));
 
     KAction *action = new KAction(i18n("Page: current/total"), this);
     action->setObjectName("pages_current_total");
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(m_document->config().statusBarShowPage());
     m_statusbar->addAction(action);
-    connect(action, SIGNAL(toggled(bool)), m_pageLabel, SLOT(setVisible(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showPage(bool)));
 
     m_modifiedLabel = new QLabel(m_statusbar);
     m_modifiedLabel->setFrameShape(QFrame::Panel);
@@ -72,28 +73,29 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     m_modifiedLabel->setMinimumWidth(qMax(fm.width(i18nModified), fm.width(i18nSaved)));
     m_statusbar->addWidget(m_modifiedLabel);
     setModified(m_document->isModified());
+    m_modifiedLabel->setVisible(m_document->config().statusBarShowModified());
     connect(m_document, SIGNAL(modified(bool)), this, SLOT(setModified(bool)));
 
     action = new KAction(i18n("State: saved/modified"), this);
     action->setObjectName("doc_save_state");
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(m_document->config().statusBarShowModified());
     m_statusbar->addAction(action);
-    connect(action, SIGNAL(toggled(bool)), m_modifiedLabel, SLOT(setVisible(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showModified(bool)));
 
     m_mousePosLabel = new QLabel(m_statusbar);
     m_mousePosLabel->setFrameShape(QFrame::Panel);
     m_mousePosLabel->setFrameShadow(QFrame::Sunken);
     m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).width("9999:9999"));
-    m_mousePosLabel->setVisible(false);
     m_statusbar->addWidget(m_mousePosLabel);
+    m_mousePosLabel->setVisible(m_document->config().statusBarShowMouse());
 
     action = new KAction(i18n("Mouseposition: X:Y"), this);
     action->setObjectName("mousecursor_pos");
     action->setCheckable(true);
-    action->setChecked(false);
+    action->setChecked(m_document->config().statusBarShowMouse());
     m_statusbar->addAction(action);
-    connect(action, SIGNAL(toggled(bool)), m_mousePosLabel, SLOT(setVisible(bool)));
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showMouse(bool)));
 
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
     m_statusbar->addWidget(m_statusLabel, 1);
@@ -102,7 +104,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     m_zoomAction = new KAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
     m_zoomAction->setCheckable(true);
-    m_zoomAction->setChecked(true);
+    m_zoomAction->setChecked(m_document->config().statusBarShowZoom());
     m_statusbar->addAction(m_zoomAction);
 
     updateCurrentTool(0);
@@ -188,7 +190,7 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
         QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
         if (zoomWidget) {
             m_statusbar->removeWidget(zoomWidget);
-            disconnect(m_zoomAction, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
+            disconnect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
         }
     }
 
@@ -198,8 +200,8 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
     if (zoomWidget) {
         m_statusbar->addWidget(zoomWidget);
-        connect(m_zoomAction, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
-        zoomWidget->setVisible(m_zoomAction->isChecked());
+        connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
+        zoomWidget->setVisible(m_document->config().statusBarShowZoom());
     } else {
         // do it delayed to avoid a race condition where this code
         // is ran from the constructor of KWView before the zoomController is created.
@@ -221,10 +223,35 @@ void KWStatusBar::createZoomWidget()
             QWidget *zoomWidget = zoomController->zoomAction()->createWidget(m_statusbar);
             m_zoomWidgets.insert(m_currentView, zoomWidget);
             m_statusbar->addWidget(zoomWidget);
-            connect(m_zoomAction, SIGNAL(toggled(bool)), zoomWidget, SLOT(setVisible(bool)));
-            zoomWidget->setVisible(m_zoomAction->isChecked());
+            connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
+            zoomWidget->setVisible(m_document->config().statusBarShowZoom());
         }
     }
+}
+
+void KWStatusBar::showPage(bool visible )
+{
+    m_document->config().setStatusBarShowPage(visible);
+    m_pageLabel->setVisible(visible);
+}
+
+void KWStatusBar::showModified(bool visible )
+{
+    m_document->config().setStatusBarShowModified(visible);
+    m_modifiedLabel->setVisible(visible);
+}
+
+void KWStatusBar::showMouse(bool visible)
+{
+    m_document->config().setStatusBarShowMouse(visible);
+    m_mousePosLabel->setVisible(visible);
+}
+
+void KWStatusBar::showZoom(bool visible )
+{
+    QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
+    m_document->config().setStatusBarShowZoom(visible);
+    zoomWidget->setVisible(visible);
 }
 
 void KWStatusBar::updateMousePosition(const QPoint &pos)

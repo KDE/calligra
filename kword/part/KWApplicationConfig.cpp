@@ -66,9 +66,14 @@ void KWApplicationConfig::load(KWDocument *document)
     m_zoom = interface.readEntry("Zoom", m_zoom);
     m_zoomMode = static_cast<KoZoomMode::Mode>(interface.readEntry("ZoomMode", (int) m_zoomMode));
 
+    m_statusBarShowPage = interface.readEntry("StatusBarShowPage", m_statusBarShowPage);
+    m_statusBarShowModified = interface.readEntry("StatusBarShowModified", m_statusBarShowModified);
+    m_statusBarShowMouse = interface.readEntry("StatusBarShowMouse", m_statusBarShowMouse);
+    m_statusBarShowZoom = interface.readEntry("StatusBarShowZoom", m_statusBarShowZoom);
+
 //    m_bShowDocStruct = interface.readEntry( "showDocStruct", true );
 //    m_viewModeType = interface.readEntry( "viewmode", "ModeNormal" );
-//    setShowStatusBar( interface.readEntry( "ShowStatusBar" , true ) );
+//    setShowStatusBarShow( interface.readEntry( "ShowStatusBarShow" , true ) );
 //    setAllowAutoFormat( interface.readEntry( "AllowAutoFormat" , true ) );
 //    setShowScrollBar( interface.readEntry( "ShowScrollBar", true ) );
 //    if ( isEmbedded() )
@@ -133,5 +138,9 @@ void KWApplicationConfig::save()
 //    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
 //    interface.writeEntry( "ShowGrid" , m_bShowGrid );
 //    interface.writeEntry( "SnapToGrid" , m_bSnapToGrid );
+    interface.writeEntry("StatusBarShowPage", m_statusBarShowPage);
+    interface.writeEntry("StatusBarShowModified", m_statusBarShowModified);
+    interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);
+    interface.writeEntry("StatusBarShowZoom", m_statusBarShowZoom);
     interface.sync();
 }

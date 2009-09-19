@@ -51,6 +51,38 @@ public:
         return m_viewRulers;
     }
 
+    void setStatusBarShowPage(bool on) {
+        m_statusBarShowPage = on;
+    }
+
+    bool statusBarShowPage() {
+        return m_statusBarShowPage;
+    }
+
+    void setStatusBarShowModified(bool on) {
+        m_statusBarShowModified = on;
+    }
+
+    bool statusBarShowModified() {
+        return m_statusBarShowModified;
+    }
+
+    void setStatusBarShowMouse(bool on) {
+        m_statusBarShowMouse = on;
+    }
+
+    bool statusBarShowMouse() {
+        return m_statusBarShowMouse;
+    }
+
+    void setStatusBarShowZoom(bool on) {
+        m_statusBarShowZoom = on;
+    }
+
+    bool statusBarShowZoom() {
+        return m_statusBarShowZoom;
+    }
+
     /**
      * Set the zoom level for new views and for next startups of kword.
      * Documents shown at 100% will show the page on screen at the same amount of
@@ -94,6 +126,8 @@ private:
     bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
     bool m_viewFormattingEndParag, m_viewFormattingTabs;
     bool m_createBackupFile;
+    bool m_statusBarShowPage, m_statusBarShowModified;
+    bool m_statusBarShowMouse, m_statusBarShowZoom;
 
     int m_zoom; /// < zoom level in percent
     KoZoomMode::Mode m_zoomMode;

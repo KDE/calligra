@@ -61,6 +61,10 @@ private slots:
     void resourceChanged(int, const QVariant&);
     void updateCurrentTool(KoCanvasController*);
     void createZoomWidget();
+    void showPage(bool visible);
+    void showModified(bool visible);
+    void showMouse(bool visible);
+    void showZoom(bool visible);
 
 private:
     /**
