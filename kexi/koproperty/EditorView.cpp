@@ -37,9 +37,10 @@
 #include <KIconEffect>
 #include <KDebug>
 
-#include <kexiutils/styleproxy.h>
-
 using namespace KoProperty;
+
+#if 0 // not sure if we should use it, better to fix Oxygen?
+#include <kexiutils/styleproxy.h>
 
 //! Used to alter the widget's style at design time
 class EditorViewStyle : public KexiUtils::StyleProxy
@@ -66,6 +67,7 @@ public:
             painter, widget);
     }
 };
+#endif
 
 static bool computeAutoSync(Property *property, bool defaultAutoSync)
 {
