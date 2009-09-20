@@ -142,14 +142,14 @@ enum PropertyType {
   It can hold a property of any type supported by QVariant. You can also create you own property
   types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
   use \ref ComposedPropertyInterface instead. \n
-  Each property stores old value to allow undo. It has a name (a QCString), a caption (i18n'ed name
+  Each property stores old value to allow undo. It has a name (a QByteArray), a caption (i18n'ed name
   shown in Editor) and a description (also i18n'ed). \n
   It also supports setting arbitrary number of options (of type option=value).
   See Editor for a list of options, and their meaning.
 
   \code
   // To create a property
-  property = Property(name, value, caption, description); // name is a QCString,
+  property = Property(name, value, caption, description); // name is a QByteArray,
   // value is whatever type QVariant supports
 
   // To create a valueFromList property (matching strings with strings)

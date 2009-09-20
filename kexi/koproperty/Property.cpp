@@ -352,8 +352,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
     if (t != newt && !currentValue.isNull() && !value.isNull()
             && !((t == QVariant::Int && newt == QVariant::UInt)
                  || (t == QVariant::UInt && newt == QVariant::Int)
-                 || (t == QVariant::CString && newt == QVariant::String)
-                 || (t == QVariant::String && newt == QVariant::CString)
+                 || (t == QVariant::ByteArray && newt == QVariant::String)
+                 || (t == QVariant::String && newt == QVariant::ByteArray)
                  || (t == QVariant::ULongLong && newt == QVariant::LongLong)
                  || (t == QVariant::LongLong && newt == QVariant::ULongLong)
                 )) {
@@ -368,7 +368,7 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
         //for date and datetime types: compare with strings, because there
         //can be miliseconds difference
         ch = (currentValue.toString() != value.toString());
-    } else if (t == QVariant::String || t == QVariant::CString) {
+    } else if (t == QVariant::String || t == QVariant::ByteArray) {
         //property is changed for string type,
         //if one of value is empty and other isn't..
         ch = ((currentValue.toString().isEmpty() != value.toString().isEmpty())
