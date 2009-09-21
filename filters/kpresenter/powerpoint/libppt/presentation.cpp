@@ -20,7 +20,7 @@
 #include "presentation.h"
 #include "slide.h"
 #include "powerpoint.h"
-
+#include "objects.h"
 #include <vector>
 
 using namespace Libppt;
@@ -30,6 +30,12 @@ class Presentation::Private
 public:
   Slide* masterSlide;
   std::vector<Slide*> slides;
+
+  /**
+  * @brief Collection of fonts shared by slides
+  *
+  */
+  TextFontCollection fonts;
 };
 
 Presentation::Presentation()
@@ -88,4 +94,14 @@ void Presentation::setMasterSlide( Slide* masterSlide )
 {
   delete d->masterSlide;
   d->masterSlide = masterSlide;
+}
+
+const TextFont Presentation::getFont(unsigned index)
+{
+    return d->fonts.getFont(index);
+}
+
+void Presentation::addTextFont(const TextFont &font)
+{
+    d->fonts.addFont(font);
 }

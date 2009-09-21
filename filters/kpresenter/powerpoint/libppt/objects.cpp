@@ -24,6 +24,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <QColor>
 
 using namespace Libppt;
 
@@ -242,14 +243,103 @@ class TextObject::Private
 {
 public:
   unsigned type;
+
+  /**
+  * @brief Vector of lines
+  *
+  */
   std::vector<UString> text;
-  unsigned listSize;
-  std::vector<bool> bulletFlag;
+
+  /**
+  * @brief Vector of style names for the text lines
+  *
+  */
+  std::vector<QString> styleNames;
+  /**
+  * @brief Simple class holding bullet properties
+  *
+  */
+  class BulletProperties {
+
+      public:
+      BulletProperties() :
+        bullet(false),
+        bulletChar(0),
+        bulletFont(0),
+        bulletSize(0)
+       { }
+
+      /**
+      * @brief Should there be a bullet
+      *
+      */
+      bool bullet;
+
+      /**
+      * @brief Character to be displayed for a bullet
+      *
+      */
+      QChar bulletChar;
+
+      /**
+      * @brief Font for the bullet character
+      *
+      */
+      unsigned int bulletFont;
+
+      /**
+      * @brief Bullet's color
+      *
+      */
+      QColor bulletColor;
+
+      /**
+      * @brief Bullet's size
+      *
+      * Size is in percents
+      */
+      unsigned int bulletSize;
+
+    /**
+      * @brief Position in text this style applies from
+      *
+      * If all lines in text were concatenated to one long text, the position
+      * applies only to that text, not to a specific line.
+      */
+      unsigned int start;
+
+      /**
+      * @brief For how many characters should this flag be applied to
+      */
+      unsigned int length;
+  };
+
+  /**
+  * @brief Vector containing all the text properties that should be applied
+  * to texts
+  */
+  std::vector<BulletProperties> bulletProperties;
+
+  /**
+  * @brief Positions where lines start
+  *
+  * This is added here to make it a bit faster to count where bullet flags
+  * are applied
+  */
+  std::vector<unsigned int> lineStartPositions;
+
+  /**
+  * @brief To what position should the next text property be applied to
+  * if all the lines were concatenated into one big string.
+  */
+  unsigned int nextFlagPosition;
 };
+
 
 TextObject::TextObject(): Object()
 {
   d = new Private;
+  d->nextFlagPosition = 0;
 }
 
 TextObject::~TextObject()
@@ -257,12 +347,12 @@ TextObject::~TextObject()
   delete d;
 }
 
-unsigned TextObject::type() const
+unsigned int TextObject::type() const
 {
   return d->type;
 }
 
-unsigned TextObject::listSize() const
+unsigned int TextObject::listSize() const
 {
   return d->text.size();
 }
@@ -286,31 +376,178 @@ const char* TextObject::typeAsString() const
   return "Unknown";
 }
 
-bool TextObject::bulletFlag( unsigned index ) const
+
+QChar TextObject::bulletChar ( unsigned int index ) const
 {
-  return (index < d->bulletFlag.size()) ?d->bulletFlag[index] :false;
+  int pos = findTextPropery(index);
+  if (pos >= 0) {
+      return d->bulletProperties[pos].bulletChar;
+  }
+  return QChar();
 }
 
-void TextObject::setBulletFlag( bool flag )
+unsigned int TextObject::bulletFont( unsigned int index ) const
 {
-  d->bulletFlag.push_back( flag );
+  int pos = findTextPropery(index);
+  if (pos >= 0) {
+      return d->bulletProperties[pos].bulletFont;
+  }
+  return 0;
+}
+
+unsigned int TextObject::bulletSize( unsigned int index ) const
+{
+  int pos = findTextPropery(index);
+  if (pos >= 0) {
+      return d->bulletProperties[pos].bulletSize;
+  }
+  return 0;
+}
+
+QString TextObject::bulletColor( unsigned int index ) const
+{
+  int pos = findTextPropery(index);
+  if (pos < 0) {
+      return "";
+  }
+
+  return d->bulletProperties[pos].bulletColor.name();
+}
+
+void TextObject::setBulletChar ( unsigned int index, int value )
+{
+  if (index < d->bulletProperties.size()) {
+    d->bulletProperties[index].bulletChar = QChar(((value>>0) & 0xff),((value >>8) & 0xff));
+  }
+}
+
+void TextObject::setBulletFont( unsigned int index, int value )
+{
+  if (index < d->bulletProperties.size()) {
+    d->bulletProperties[index].bulletFont = value;
+  }
+}
+
+void TextObject::setBulletColor( unsigned int index, int value )
+{
+  if (index < d->bulletProperties.size()) {
+    d->bulletProperties[index].bulletColor = QColor(((value>>0) & 0xff),((value >>8) & 0xff),((value >>16) & 0xff));
+  }
+}
+
+void TextObject::setBulletSize( unsigned int index, int value )
+{
+  if (index < d->bulletProperties.size()) {
+    d->bulletProperties[index].bulletSize = value;
+  }
+}
+
+int TextObject::findTextPropery( unsigned int index ) const
+{
+  //Check if we have enough lines
+  if (index >= d->lineStartPositions.size()) {
+      return -1;
+  }
+
+  //Then find the right text property that has a starting point that matches
+  //With line's starting point
+  for(unsigned int i=0;i<d->bulletProperties.size();i++) {
+    if (d->lineStartPositions[index] >= d->bulletProperties[i].start &&
+      d->lineStartPositions[index] < d->bulletProperties[i].start + d->bulletProperties[i].length) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+unsigned int TextObject::addBulletProperty( int length )
+{
+    TextObject::Private::BulletProperties newFlag;
+
+    //If length of the bullet is -1 then it corresponds to the total
+    //length of rest of the unflagged text (starting from d->nextFlagPosition)
+    if (length == -1) {
+      int totalLength = 0;
+      for(unsigned int i=0;i<d->text.size();i++) {
+          totalLength += d->text[i].length();
+      }
+
+      newFlag.length = totalLength - d->nextFlagPosition;
+    }
+    else {
+      newFlag.length = length;
+    }
+
+    //Use the next flag position for our starting point
+    newFlag.start = d->nextFlagPosition;
+
+    //and set the position for the next flag
+    d->nextFlagPosition += newFlag.length;
+    d->bulletProperties.push_back( newFlag );
+    return d->bulletProperties.size()-1;
+}
+
+bool TextObject::bulletFlag( unsigned int index ) const
+{
+  int pos = findTextPropery(index);
+
+  if (pos >= 0) {
+      return d->bulletProperties[pos].bullet;
+  }
+  return false;
+}
+
+void TextObject::setBulletFlag( unsigned int index, bool value )
+{
+  if (index < d->bulletProperties.size()) {
+    d->bulletProperties[index].bullet = value;
+  }
 }
 
 
-void TextObject::setType( unsigned type )
+void TextObject::setType( unsigned int type )
 {
   d->type = type;
 }
 
-UString TextObject::text( unsigned index) const
+UString TextObject::text( unsigned int index ) const
 {
-  return d->text[index];
+    if (index >= d->text.size()) {
+        return UString();
+    }
+    return d->text[index];
+}
+
+void TextObject::setLineStyleName( unsigned int index, QString name )
+{
+    if (index < d->styleNames.size()) {
+        d->styleNames[index] = name;
+    }
+}
+
+QString TextObject::lineStyleName( unsigned int index )
+{
+    if (index < d->styleNames.size()) {
+        return d->styleNames[index];
+    }
+
+    return QString();
 }
 
 void TextObject::setText( const UString& text )
 {
-  d->text.push_back( text );
+    if (d->text.size() > 0) {
+        //New start position is the end position of previous line
+        //We'll also compensate +1 since we have removed the line breaks
+        d->lineStartPositions.push_back(d->lineStartPositions.back() + d->text.back().length() + 1);
+    } else {
+        d->lineStartPositions.push_back(0);
+    }
+
+    d->text.push_back(text);
+    d->styleNames.push_back(QString(""));
 }
+
 
 void TextObject::convertFrom( Object* object )
 {
@@ -382,6 +619,13 @@ public:
   unsigned shape;
   bool isVerFlip;
   bool isHorFlip;
+
+  /**
+  * @brief Name of the style corresponding this object
+  *
+  * This is usually generated by KoGenStyles
+  */
+  QString styleName;
 };
 
 DrawObject::DrawObject()
@@ -410,6 +654,11 @@ bool DrawObject::isVerFlip() const
   return d->isVerFlip;
 }
 
+QString DrawObject::styleName() const
+{
+  return d->styleName;
+}
+
 void DrawObject::setVerFlip( bool isVerFlip )
 {
   d->isVerFlip = isVerFlip;
@@ -424,3 +673,154 @@ void DrawObject::setHorFlip( bool isHorFlip )
 {
   d->isHorFlip = isHorFlip;
 }
+
+void DrawObject::setStyleName( const QString &name )
+{
+  d->styleName = name;
+}
+
+class TextFont::Private
+{
+public:
+
+  /**
+  * @brief Font's name
+  */
+  UString fontName;
+
+  /**
+  * @brief Font's charset
+  *
+  * See http://msdn.microsoft.com/en-us/library/dd145037(VS.85).aspx
+  * for more information
+  */
+  int charset;
+
+  /**
+  * @brief Font's clip precision
+  *
+  * See http://msdn.microsoft.com/en-us/library/dd145037(VS.85).aspx
+  * for more information
+  */
+  int clipPrecision;
+
+  /**
+  * @brief Font's quality
+  *
+  * See http://msdn.microsoft.com/en-us/library/dd145037(VS.85).aspx
+  * for more information
+  */
+  int quality;
+
+  /**
+  * @brief Font's pitch and family
+  *
+  * See http://msdn.microsoft.com/en-us/library/dd145037(VS.85).aspx
+  * for more information
+  */
+  int pitchAndFamily;
+};
+
+TextFont::TextFont()
+{
+  d = new Private;
+  d->fontName = "";
+  d->charset = 0;
+  d->clipPrecision = 0;
+  d->quality = 0;
+  d->pitchAndFamily = 0;
+}
+
+TextFont::TextFont(const UString &fontName,
+                   int charset,
+                   int clipPrecision,
+                   int quality,
+                   int pitchAndFamily)
+{
+  d = new Private;
+  d->fontName = fontName;
+  d->charset = charset;
+  d->clipPrecision = clipPrecision;
+  d->quality = quality;
+  d->pitchAndFamily = pitchAndFamily;
+}
+
+TextFont::TextFont(const TextFont &source)
+{
+    d = new Private;
+    d->fontName = source.name();
+    d->charset = source.charset();
+    d->clipPrecision = source.clipPrecision();
+    d->quality = source.quality();
+    d->pitchAndFamily = source.pitchAndFamily();
+}
+
+
+TextFont::~TextFont()
+{
+  delete d;
+  d = 0;
+}
+
+UString TextFont::name() const
+{
+  return d->fontName;
+}
+
+int TextFont::charset() const
+{
+  return d->charset;
+}
+
+int TextFont::clipPrecision() const
+{
+  return d->clipPrecision;
+}
+
+int TextFont::quality() const
+{
+  return d->quality;
+}
+
+int TextFont::pitchAndFamily() const
+{
+  return d->pitchAndFamily;
+}
+
+
+
+class TextFontCollection::Private
+{
+public:
+  std::vector<TextFont> fonts;
+};
+
+TextFontCollection::TextFontCollection()
+{
+  d = new Private;
+}
+
+TextFontCollection::~TextFontCollection()
+{
+  delete d;
+}
+
+unsigned TextFontCollection::listSize() const
+{
+  return d->fonts.size();
+}
+
+void TextFontCollection::addFont(const TextFont &font)
+{
+  return d->fonts.push_back(font);
+}
+
+const TextFont TextFontCollection::getFont(unsigned index) const
+{
+  if (index < listSize()) {
+      return d->fonts[index];
+  }
+
+  return TextFont();
+}
+

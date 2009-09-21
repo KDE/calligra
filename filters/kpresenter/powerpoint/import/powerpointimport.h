@@ -22,6 +22,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <KoGenStyles.h>
 
 #include "libppt.h"
 
@@ -47,8 +48,6 @@ private:
   QByteArray createStyles();
   QByteArray createContent();
 
-  int drawingObjectCounter;
-
   void processSlideForBody( unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter );
   void processObjectForBody( Object* object, KoXmlWriter* xmlWriter );
   void processGroupObjectForBody( GroupObject* groupObject, KoXmlWriter* xmlWriter );
@@ -56,11 +55,11 @@ private:
   void processTextObjectForBody( TextObject* textObject, KoXmlWriter* xmlWriter );
 
 
-  void processSlideForStyle( unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter );
-  void processObjectForStyle( Object* object, KoXmlWriter* xmlWriter );
-  void processGroupObjectForStyle( GroupObject* groupObject, KoXmlWriter* xmlWriter );
-  void processDrawingObjectForStyle( DrawObject* drawObject, KoXmlWriter* xmlWriter );
-  void processTextObjectForStyle( TextObject* textObject, KoXmlWriter* xmlWriter );
+  void processSlideForStyle( unsigned slideNo, Slide* slide, KoGenStyles &styles );
+  void processObjectForStyle( Object* object, KoGenStyles &styles );
+  void processGroupObjectForStyle( GroupObject* groupObject, KoGenStyles &styles );
+  void processDrawingObjectForStyle( DrawObject* drawObject, KoGenStyles &styles );
+  void processTextObjectForStyle( TextObject* textObject, KoGenStyles &styles );
 
   void processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter);
   void processRectangle(DrawObject* drawObject, KoXmlWriter* xmlWriter);

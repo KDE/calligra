@@ -2522,6 +2522,13 @@ protected:
   void handleEscherClientAnchorAtom( msofbtClientAnchorAtom* r );
   void handleEscherTextBoxAtom( msofbtClientTextboxAtom* r);
 
+  /**
+  * @brief Handle font entity by creating a TextFont and storing it to
+  * this presentation's font collection.
+  * @param r FontEntityAtom to create font from
+  */
+  void handleFontEntityAtom( FontEntityAtom* r );
+
 private:
   // no copy or assign
   PPTReader( const PPTReader& );

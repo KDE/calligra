@@ -3093,7 +3093,6 @@ void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsig
     Private::PropAtomData atomData;
     atomData.charCount = readU32(data); data += 4;
     charRead += atomData.charCount;
-//    std::cout << " " << atomData.charCount << "\t" << charRead << std::endl;
     atomData.depth = readU16(data); data += 2;
 
     unsigned mask = readU32(data); data += 4;
@@ -3106,7 +3105,7 @@ void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsig
     }
     if ( mask & 0x0080 && data + 2 < end ) // H bulletChar
     {
-      atomData.bulletChar = readU16(data); data += 2; // 
+      atomData.bulletChar = readU16(data); data += 2; //
     }
     if ( mask & 0x0010 && data + 2 < end ) // E bulletFont
     {
@@ -4131,7 +4130,7 @@ const char* msofbtSpAtom::shapeTypeAsString() const
     case 29:  return "msosptTextRing";
     case 30:  return "msosptTextOnCurve";
     case 31:  return "msosptTextOnRing";
-    case 32:  return "msosptStraightConnector1"; 	
+    case 32:  return "msosptStraightConnector1";
     case 74:  return "msosptHeart";
     case 75:  return "msosptPictureFrame";
     case 96:  return "msosptSmileyFace";
@@ -5491,7 +5490,8 @@ void PPTReader::handleRecord( Record* record, int type )
       handleEscherClientAnchorAtom( static_cast<msofbtClientAnchorAtom*>(record) ); break;
     case msofbtClientTextboxAtom::id:
       handleEscherTextBoxAtom( static_cast<msofbtClientTextboxAtom*>(record) ); break;
-
+    case FontEntityAtom::id:
+      handleFontEntityAtom( static_cast<FontEntityAtom*>(record) ); break;
     default: break;
   }
 }
@@ -5644,12 +5644,12 @@ void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
 
   for (uint i=0; i<atom->listSize(); i++)
   {
-    if (atom->bulletOn(i) == 1)
-      text->setBulletFlag(true);
-    else /* if (atom->bulletOn(i) == 0) */
-      text->setBulletFlag(false);
+    unsigned index = text->addBulletProperty(atom->charCount(i));
+    text->setBulletFlag(index, atom->bulletOn(i));
+    text->setBulletChar(index, atom->bulletChar(i));
+    text->setBulletFont(index, atom->bulletFont(i));
+    text->setBulletColor(index, atom->bulletColor(i));
   }
-
 }
 
 void PPTReader::handleColorSchemeAtom( ColorSchemeAtom* atom )
@@ -5924,7 +5924,8 @@ void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
 
   textObject->setType( TextObject::Other );
   textObject->setText( atom->ustring() );
-  textObject->setBulletFlag( false );
+  unsigned index = textObject->addBulletProperty(-1);
+  textObject->setBulletFlag( index, false );
 }
 
 Color convertFromLong( unsigned long i )
@@ -6166,3 +6167,12 @@ void PPTReader::handleEscherPropertiesAtom( msofbtOPTAtom* atom )
   } // for
 
 }  // handleEscherPropertiesAtom
+
+void PPTReader::handleFontEntityAtom( FontEntityAtom* r )
+{
+    if (!r) return;
+
+    TextFont font(r->ustring(),r->charset(),r->clipPrecision(),r->quality(),r->pitchAndFamily());
+    d->presentation->addTextFont(font);
+}
+

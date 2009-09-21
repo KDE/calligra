@@ -25,6 +25,8 @@ namespace Libppt
 {
 
 class Slide;
+class TextFontCollection;
+class TextFont;
 
 class Presentation
 {
@@ -71,6 +73,18 @@ public:
   Slide* masterSlide();
   void setMasterSlide( Slide* master );
 
+  /**
+  * @brief Get specific font
+  * @param index Index of the font to get
+  * @return Specified font
+  */
+  const TextFont getFont(unsigned int index);
+
+  /**
+  * @brief Add a new font to collection
+  * @param font Font to add
+  */
+  void addTextFont(const TextFont &font);
 private:
   // no copy or assign
   Presentation( const Presentation& );
