@@ -603,6 +603,7 @@ protected slots:
     void slotConfigureKeys();
     void slotConfigureToolbars();
     void slotToolsProjectMigration();
+    void slotToolsImportTables();
     void slotToolsCompactDatabase();
 
     /// TMP: Display a dialog to download db examples from Internet

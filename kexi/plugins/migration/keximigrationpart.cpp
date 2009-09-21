@@ -20,6 +20,9 @@
 #include "keximigrationpart.h"
 
 #include <migration/importwizard.h>
+#include <migration/importtablewizard.h>
+#include <core/KexiMainWindowIface.h>
+#include <core/kexiproject.h>
 
 #include <kgenericfactory.h>
 
@@ -32,10 +35,17 @@ KexiMigrationPart::~KexiMigrationPart()
 {
 }
 
-QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/,
+QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
         QWidget *parent, const char *objName, QMap<QString, QString>* args)
 {
-    KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
+    QWidget *w;
+
+    if (QString(widgetClass) == "migration") {
+        w = new KexiMigration::ImportWizard(parent, args);
+    }
+    else if (QString(widgetClass) == "importtable") {
+        w = new KexiMigration::ImportTableWizard(KexiMainWindowIface::global()->project()->dbConnection(), parent);
+    }
     w->setObjectName(objName);
     return w;
 }

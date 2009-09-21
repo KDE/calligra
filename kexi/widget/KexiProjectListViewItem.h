@@ -33,20 +33,20 @@ class Info;
 
 //! @short List view item for the navigator widget (KexiBrowser)
 //! Used for creating group items as well as object items
-class KEXIEXTWIDGETS_EXPORT KexiBrowserItem : public K3ListViewItem
+class KEXIEXTWIDGETS_EXPORT KexiProjectListViewItem : public K3ListViewItem
 {
 public:
     //! Creates group item for part \a i
-    KexiBrowserItem(K3ListView *parent, KexiPart::Info *i);
+    KexiProjectListViewItem(K3ListView *parent, KexiPart::Info *i);
 
     //! Creates item for object \a item defined by part \a i for \a parent
-    KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
+    KexiProjectListViewItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 
     //! Creates item for object \a item defined by part \a i, without parent
     //! (used in a case when KexiBrowser::itemsPartClass() is not empty)
-    KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item);
+    KexiProjectListViewItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item);
 
-    virtual ~KexiBrowserItem();
+    virtual ~KexiProjectListViewItem();
 
     void clearChildren();
 

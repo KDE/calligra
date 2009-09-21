@@ -34,7 +34,7 @@ class KActionMenu;
 class KActionCollection;
 class K3ListView;
 class KToolBar;
-class KexiBrowserItem;
+class KexiProjectListViewItem;
 class KexiSmallToolButton;
 class KexiBrowserListView;
 
@@ -49,7 +49,7 @@ class KexiItemMenu;
 class KexiGroupMenu;
 
 //! @short The Main Kexi navigator widget
-class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiProjectListView : public QWidget
 {
     Q_OBJECT
 
@@ -65,8 +65,8 @@ public:
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
-    KexiBrowser(QWidget* parent, Features features = DefaultFeatures);
-    virtual ~KexiBrowser();
+    KexiProjectListView(QWidget* parent, Features features = DefaultFeatures);
+    virtual ~KexiProjectListView();
 
     /*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
      it will be set to error message if there's a problem with loading any KexiPart.
@@ -90,8 +90,8 @@ public:
     bool actionEnabled(const QString& actionName) const;
 
 public slots:
-    KexiBrowserItem* addGroup(KexiPart::Info& info);
-    KexiBrowserItem* addItem(KexiPart::Item& item);
+    KexiProjectListViewItem* addGroup(KexiPart::Info& info);
+    KexiProjectListViewItem* addItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
     virtual void setFocus();
     void updateItemName(KexiPart::Item& item, bool dirty);
@@ -153,16 +153,16 @@ protected slots:
 
 protected:
     void itemRenameDone();
-    KexiBrowserItem* addItem(KexiPart::Item& item,
-                             KexiBrowserItem *parent, KexiPart::Info* info);
+    KexiProjectListViewItem* addItem(KexiPart::Item& item,
+                             KexiProjectListViewItem *parent, KexiPart::Info* info);
     KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     Features m_features;
     KexiBrowserListView *m_list;
     KActionCollection *m_actions;
-    QHash<QString, KexiBrowserItem*> m_baseItems;
-    QHash<int, KexiBrowserItem*> m_normalItems;
+    QHash<QString, KexiProjectListViewItem*> m_baseItems;
+    QHash<int, KexiProjectListViewItem*> m_normalItems;
     KexiItemMenu *m_itemMenu;
     KexiGroupMenu *m_partMenu;
     KAction *m_deleteAction, *m_renameAction,
@@ -184,6 +184,6 @@ protected:
     bool m_readOnly : 1;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KexiBrowser::Features)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectListView::Features)
 
 #endif

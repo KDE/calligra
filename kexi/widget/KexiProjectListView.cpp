@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexibrowser.h"
-#include "kexibrowser_p.h"
-#include "kexibrowseritem.h"
+#include "KexiProjectListView.h"
+#include "KexiProjectListView_p.h"
+#include "KexiProjectListViewItem.h"
 
 #include <q3header.h>
 #include <qpoint.h>
@@ -72,7 +72,7 @@ KexiBrowserView::KexiBrowserView(KexiMainWindow *mainWin)
   setFocusProxy(m_browser);
 }*/
 
-KexiBrowser::KexiBrowser(QWidget* parent, Features features)
+KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
         : QWidget(parent)
         , m_features(features)
         , m_actions(new KActionCollection(this))
@@ -234,11 +234,11 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
     }
 }
 
-KexiBrowser::~KexiBrowser()
+KexiProjectListView::~KexiProjectListView()
 {
 }
 
-void KexiBrowser::setProject(KexiProject* prj, const QString& itemsPartClass,
+void KexiProjectListView::setProject(KexiProject* prj, const QString& itemsPartClass,
                              QString* partManagerErrorMessages)
 {
     clear();
@@ -266,7 +266,7 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsPartClass,
         kDebug() << info->partClass() << info->objectName();
         KexiPart::Part *p = Kexi::partManager().part(info);
         if (p) {
-            KexiBrowserItem *groupItem = 0;
+            KexiProjectListViewItem *groupItem = 0;
             if (m_itemsPartClass.isEmpty()) {
                 groupItem = addGroup(*info);
                 if (!groupItem)
@@ -301,7 +301,7 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsPartClass,
         partManagerErrorMessages->append("</ul></p>");
 }
 
-KAction* KexiBrowser::addAction(const QString& name, const KIcon& icon, const QString& text,
+KAction* KexiProjectListView::addAction(const QString& name, const KIcon& icon, const QString& text,
                                 const QString& toolTip, const QString& whatsThis, const char* slot)
 {
     KAction *action = new KAction(icon, text, this);
@@ -312,52 +312,52 @@ KAction* KexiBrowser::addAction(const QString& name, const KIcon& icon, const QS
     return action;
 }
 
-QString KexiBrowser::itemsPartClass() const
+QString KexiProjectListView::itemsPartClass() const
 {
     return m_itemsPartClass;
 }
 
-KexiBrowserItem *KexiBrowser::addGroup(KexiPart::Info& info)
+KexiProjectListViewItem *KexiProjectListView::addGroup(KexiPart::Info& info)
 {
     if (!info.isVisibleInNavigator())
         return 0;
 
-    KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
+    KexiProjectListViewItem *item = new KexiProjectListViewItem(m_list, &info);
     m_baseItems.insert(info.partClass().toLower(), item);
     return item;
 // kDebug() << "KexiBrowser::addGroup()";
 }
 
-KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item)
+KexiProjectListViewItem* KexiProjectListView::addItem(KexiPart::Item& item)
 {
     //part object for this item
-    KexiBrowserItem *parent = item.partClass().isEmpty()
+    KexiProjectListViewItem *parent = item.partClass().isEmpty()
                               ? 0 : m_baseItems.value(item.partClass().toLower());
     return addItem(item, parent, parent->partInfo());
 }
 
-KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info)
+KexiProjectListViewItem* KexiProjectListView::addItem(KexiPart::Item& item, KexiProjectListViewItem *parent, KexiPart::Info* info)
 {
 // if (!parent) //TODO: add "Other" part group for that
     // return 0;
 // kDebug() << "KexiBrowser::addItem() found parent:" << parent;
-    KexiBrowserItem *bitem;
+    KexiProjectListViewItem *bitem;
     if (parent)
-        bitem = new KexiBrowserItem(parent, info, &item);
+        bitem = new KexiProjectListViewItem(parent, info, &item);
     else
-        bitem = new KexiBrowserItem(m_list, info, &item);
+        bitem = new KexiProjectListViewItem(m_list, info, &item);
     m_normalItems.insert(item.identifier(), bitem);
     return bitem;
 }
 
 void
-KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
+KexiProjectListView::slotRemoveItem(const KexiPart::Item &item)
 {
-    KexiBrowserItem *to_remove = m_normalItems.take(item.identifier());
+    KexiProjectListViewItem *to_remove = m_normalItems.take(item.identifier());
     if (!to_remove)
         return;
 
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
 
     Q3ListViewItem *new_item_to_select = 0;
     if (it == to_remove) {//compute item to select if current one will be removed
@@ -373,15 +373,15 @@ KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 }
 
 void
-KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const QPoint &pos)
+KexiProjectListView::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const QPoint &pos)
 {
     if (!item || !(m_features & ContextMenus))
         return;
-    KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
+    KexiProjectListViewItem *bit = static_cast<KexiProjectListViewItem*>(item);
     KMenu *pm = 0;
     if (bit->partItem()) {
         pm = m_itemMenu;
-        KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
+        KexiProjectListViewItem *par_it = static_cast<KexiProjectListViewItem*>(bit->parent());
         m_itemMenu->update(par_it->partInfo(), bit->partItem());
     } else if (m_partMenu) {
         pm = m_partMenu;
@@ -395,10 +395,10 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
 }
 
 void
-KexiBrowser::slotExecuteItem(Q3ListViewItem *vitem)
+KexiProjectListView::slotExecuteItem(Q3ListViewItem *vitem)
 {
 // kDebug() << "KexiBrowser::slotExecuteItem()";
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(vitem);
     if (!it)
         return;
     if (!it->partItem() && !m_singleClick /*annoying when in single click mode*/) {
@@ -412,14 +412,14 @@ KexiBrowser::slotExecuteItem(Q3ListViewItem *vitem)
 }
 
 void
-KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
+KexiProjectListView::slotSelectionChanged(Q3ListViewItem* i)
 {
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(i);
     if (!it)
         return;
     KexiPart::Part* part = Kexi::partManager().part(it->partInfo());
     if (!part) {
-        it = static_cast<KexiBrowserItem*>(it->parent());
+        it = static_cast<KexiProjectListViewItem*>(it->parent());
         if (it) {
             part = Kexi::partManager().part(it->partInfo());
         }
@@ -497,7 +497,7 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
     emit selectionChanged(it ? it->partItem() : 0);
 }
 
-void KexiBrowser::installEventFilter(QObject * filterObj)
+void KexiProjectListView::installEventFilter(QObject * filterObj)
 {
     if (!filterObj)
         return;
@@ -505,7 +505,7 @@ void KexiBrowser::installEventFilter(QObject * filterObj)
     QWidget::installEventFilter(filterObj);
 }
 
-bool KexiBrowser::eventFilter(QObject *o, QEvent * e)
+bool KexiProjectListView::eventFilter(QObject *o, QEvent * e)
 {
     /* if (o==m_list && e->type()==QEvent::Resize) {
         kDebug() << "resize!";
@@ -554,55 +554,55 @@ bool KexiBrowser::eventFilter(QObject *o, QEvent * e)
     return false;
 }
 
-void KexiBrowser::slotRemove()
+void KexiProjectListView::slotRemove()
 {
     if (!m_deleteAction || !m_deleteAction->isEnabled() || !(m_features & Writable))
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it || !it->partItem())
         return;
     emit removeItem(it->partItem());
 }
 
-void KexiBrowser::slotNewObject()
+void KexiProjectListView::slotNewObject()
 {
     if (!m_newObjectAction || !(m_features & Writable))
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it || !it->partInfo())
         return;
     emit newItem(it->partInfo());
 }
 
-void KexiBrowser::slotOpenObject()
+void KexiProjectListView::slotOpenObject()
 {
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it || !it->partItem())
         return;
     emit openItem(it->partItem(), Kexi::DataViewMode);
 }
 
-void KexiBrowser::slotDesignObject()
+void KexiProjectListView::slotDesignObject()
 {
     if (!m_designAction)
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it || !it->partItem())
         return;
     emit openItem(it->partItem(), Kexi::DesignViewMode);
 }
 
-void KexiBrowser::slotEditTextObject()
+void KexiProjectListView::slotEditTextObject()
 {
     if (!m_editTextAction)
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it || !it->partItem())
         return;
     emit openItem(it->partItem(), Kexi::TextViewMode);
 }
 
-void KexiBrowser::slotCut()
+void KexiProjectListView::slotCut()
 {
     if (!(m_features & Writable))
         return;
@@ -610,13 +610,13 @@ void KexiBrowser::slotCut()
     //TODO
 }
 
-void KexiBrowser::slotCopy()
+void KexiProjectListView::slotCopy()
 {
 // KEXI_UNFINISHED_SHARED_ACTION("edit_copy");
     //TODO
 }
 
-void KexiBrowser::slotPaste()
+void KexiProjectListView::slotPaste()
 {
     if (!(m_features & Writable))
         return;
@@ -624,20 +624,20 @@ void KexiBrowser::slotPaste()
     //TODO
 }
 
-void KexiBrowser::slotRename()
+void KexiProjectListView::slotRename()
 {
     if (!m_renameAction || !(m_features & Writable))
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (it)
         m_list->rename(it, 0);
 }
 
-void KexiBrowser::itemRenameDone()
+void KexiProjectListView::itemRenameDone()
 {
     if (!(m_features & Writable))
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     if (!it)
         return;
     QString txt = it->text(0).trimmed();
@@ -659,31 +659,31 @@ void KexiBrowser::itemRenameDone()
     setFocus();
 }
 
-void KexiBrowser::setFocus()
+void KexiProjectListView::setFocus()
 {
     if (!m_list->selectedItem() && m_list->firstChild())//select first
         m_list->setSelected(m_list->firstChild(), true);
     m_list->setFocus();
 }
 
-void KexiBrowser::updateItemName(KexiPart::Item& item, bool dirty)
+void KexiProjectListView::updateItemName(KexiPart::Item& item, bool dirty)
 {
     if (!(m_features & Writable))
         return;
-    KexiBrowserItem *bitem = m_normalItems.value(item.identifier());
+    KexiProjectListViewItem *bitem = m_normalItems.value(item.identifier());
     if (!bitem)
         return;
     bitem->setText(0, item.name() + (dirty ? "*" : ""));
 }
 
-void KexiBrowser::slotSettingsChanged(int)
+void KexiProjectListView::slotSettingsChanged(int)
 {
     m_singleClick = KGlobalSettings::singleClick();
 }
 
-void KexiBrowser::selectItem(KexiPart::Item& item)
+void KexiProjectListView::selectItem(KexiPart::Item& item)
 {
-    KexiBrowserItem *bitem = m_normalItems.value(item.identifier());
+    KexiProjectListViewItem *bitem = m_normalItems.value(item.identifier());
     if (!bitem)
         return;
     m_list->setSelected(bitem, true);
@@ -691,7 +691,7 @@ void KexiBrowser::selectItem(KexiPart::Item& item)
     m_list->setCurrentItem(bitem);
 }
 
-void KexiBrowser::clearSelection()
+void KexiProjectListView::clearSelection()
 {
     m_list->clearSelection();
     Q3ListViewItem *item = m_list->firstChild();
@@ -722,7 +722,7 @@ void KexiBrowser::slotNewObjectMenuAboutToShow()
   }
 }*/
 
-void KexiBrowser::slotExecuteObject()
+void KexiProjectListView::slotExecuteObject()
 {
     if (!m_executeAction)
         return;
@@ -731,7 +731,7 @@ void KexiBrowser::slotExecuteObject()
         emit executeItem(item);
 }
 
-void KexiBrowser::slotExportAsDataTable()
+void KexiProjectListView::slotExportAsDataTable()
 {
     if (!m_dataExportAction)
         return;
@@ -740,13 +740,13 @@ void KexiBrowser::slotExportAsDataTable()
         emit exportItemAsDataTable(item);
 }
 
-KexiPart::Item* KexiBrowser::selectedPartItem() const
+KexiPart::Item* KexiProjectListView::selectedPartItem() const
 {
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(m_list->selectedItem());
     return it ? it->partItem() : 0;
 }
 
-bool KexiBrowser::actionEnabled(const QString& actionName) const
+bool KexiProjectListView::actionEnabled(const QString& actionName) const
 {
     if (actionName == "project_export_data_table" && (m_features & ContextMenus))
         return m_exportActionMenu->isVisible();
@@ -754,7 +754,7 @@ bool KexiBrowser::actionEnabled(const QString& actionName) const
     return false;
 }
 
-void KexiBrowser::slotPrintObject()
+void KexiProjectListView::slotPrintObject()
 {
     if (!m_printAction)
         return;
@@ -763,7 +763,7 @@ void KexiBrowser::slotPrintObject()
         emit printItem(item);
 }
 
-void KexiBrowser::slotPageSetupForObject()
+void KexiProjectListView::slotPageSetupForObject()
 {
     if (!m_pageSetupAction)
         return;
@@ -773,7 +773,7 @@ void KexiBrowser::slotPageSetupForObject()
 }
 
 
-void KexiBrowser::setReadOnly(bool set)
+void KexiProjectListView::setReadOnly(bool set)
 {
     m_readOnly = set;
     if (m_deleteAction)
@@ -789,12 +789,12 @@ void KexiBrowser::setReadOnly(bool set)
       }
 }
 
-bool KexiBrowser::isReadOnly() const
+bool KexiProjectListView::isReadOnly() const
 {
     return m_readOnly;
 }
 
-void KexiBrowser::clear()
+void KexiProjectListView::clear()
 {
     m_list->clear();
 }
@@ -817,7 +817,7 @@ void KexiBrowserListView::rename(Q3ListViewItem *item, int c)
 {
     if (renameLineEdit()->isVisible())
         return;
-    KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+    KexiProjectListViewItem *it = static_cast<KexiProjectListViewItem*>(item);
     if (it->partItem() && c == 0) {
         //only edit 1st column for items, not item groups
 //TODO: also check it this item is not read-only
@@ -944,5 +944,5 @@ void KexiGroupMenu::update(KexiPart::Info* partInfo)
 #endif
 }
 
-#include "kexibrowser.moc"
-#include "kexibrowser_p.moc"
+#include "KexiProjectListView.moc"
+#include "KexiProjectListView_p.moc"

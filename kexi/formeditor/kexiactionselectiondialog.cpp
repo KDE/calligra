@@ -44,8 +44,8 @@
 #include <QStackedWidget>
 
 #include <widget/utils/klistviewitemtemplate.h>
-#include <widget/kexibrowser.h>
-#include <widget/kexibrowseritem.h>
+#include <widget/KexiProjectListView.h>
+#include <widget/KexiProjectListViewItem.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
@@ -200,7 +200,7 @@ public:
             KexiPart::Part *part = Kexi::partManager().part(info);
             if (!info->isVisibleInNavigator() || !part)
                 continue;
-            item = new KexiBrowserItem(this, info);
+            item = new KexiProjectListViewItem(this, info);
             item->setText(0, part->instanceCaption());
         }
         Q3ListViewItem *formItem = itemForAction("form");
@@ -226,7 +226,7 @@ public:
                     return it.current();
                 continue;
             }
-            KexiBrowserItem* bitem = dynamic_cast<KexiBrowserItem*>(it.current());
+            KexiProjectListViewItem* bitem = dynamic_cast<KexiProjectListViewItem*>(it.current());
             if (bitem) {
                 if (bitem->partInfo()->objectName() == actionName)
                     return it.current();
@@ -371,7 +371,7 @@ public:
     ActionCategoriesListView* actionCategoriesListView; //!< for column #1
     QWidget *kactionPageWidget;
     KActionsListView* kactionListView;  //!< for column #2
-    KexiBrowser* objectsListView; //!< for column #2
+    KexiProjectListView* objectsListView; //!< for column #2
     QWidget *currentFormActionsPageWidget; //!< for column #2
     CurrentFormActionsListView* currentFormActionsListView; //!< for column #2
     QWidget *emptyWidget;
@@ -457,7 +457,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
     // 2nd column: list of actions/objects
-    d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, KexiBrowser::NoFeatures);
+    d->objectsListView = new KexiProjectListView(d->secondAnd3rdColumnMainWidget, KexiProjectListView::NoFeatures);
     d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
     connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
             this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
@@ -657,7 +657,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
         return;
     }
     // other case
-    KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(item);
+    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(item);
     if (browserItem) {
         d->updateSelectActionToBeExecutedMessage(browserItem->partInfo()->objectName());
         if (d->objectsListView->itemsPartClass() != browserItem->partInfo()->partClass()) {
@@ -699,7 +699,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
             }
         }
     }
-    KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(d->actionCategoriesListView->selectedItem());
+    KexiProjectListViewItem* browserItem = dynamic_cast<KexiProjectListViewItem*>(d->actionCategoriesListView->selectedItem());
     if (browserItem) {
         ActionSelectorDialogListItem *actionToExecute = dynamic_cast<ActionSelectorDialogListItem*>(
                     d->actionToExecuteListView->selectedItem());

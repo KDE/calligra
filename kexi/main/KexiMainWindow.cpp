@@ -95,7 +95,7 @@
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
 
-#include <widget/kexibrowser.h>
+#include <widget/KexiProjectListView.h>
 #include <widget/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
@@ -727,6 +727,13 @@ void KexiMainWindow::setupActions()
     connect(d->action_tools_data_migration, SIGNAL(triggered()),
             this, SLOT(slotToolsProjectMigration()));
 
+
+    d->action_tools_data_import = new KAction(KIcon("document-import"), i18n("Import Tables"), this);
+    d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this database"));
+    d->action_tools_data_import->setWhatsThis(i18n("Import data from an external source into this database"));
+    ac->addAction("tools_import_tables", d->action_tools_data_import);
+    connect(d->action_tools_data_import, SIGNAL(triggered()), this, SLOT(slotToolsImportTables()));
+
     ac->addAction("tools_compact_database",
                   d->action_tools_compact_database = new KAction(
 //! @todo icon
@@ -1269,6 +1276,8 @@ void KexiMainWindow::setupActions()
 
     acat->addAction("tools_import_project", Kexi::GlobalActionCategory);
 
+    acat->addAction("tools_import_tables", Kexi::GlobalActionCategory);
+    
     acat->addAction("view_data_mode", Kexi::GlobalActionCategory);
 
     acat->addAction("view_design_mode", Kexi::GlobalActionCategory);
@@ -2001,7 +2010,7 @@ void KexiMainWindow::setupProjectNavigator()
         );
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
-        d->nav = new KexiBrowser(navDockableWidget);
+        d->nav = new KexiProjectListView(navDockableWidget);
         navDockableWidget->setWidget(d->nav);
 //TODO REMOVE?  d->nav->installEventFilter(this);
         d->navDockWidget->setWindowTitle(d->nav->windowTitle());
@@ -4601,6 +4610,21 @@ KexiMainWindow::setupUserActions()
 void KexiMainWindow::slotToolsProjectMigration()
 {
     showProjectMigrationWizard(QString(), QString());
+}
+
+void KexiMainWindow::slotToolsImportTables()
+{
+    if (project()) {
+        QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", "importtable", this, 0);
+        if (!dlg)
+            return; //error msg has been shown by KexiInternalPart
+            
+            const int result = dlg->exec();
+        delete dlg;
+        //raise();
+        if (result != QDialog::Accepted)
+            return;
+    }
 }
 
 void KexiMainWindow::slotToolsCompactDatabase()

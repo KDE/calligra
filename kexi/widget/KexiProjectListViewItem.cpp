@@ -18,14 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexibrowseritem.h"
+#include "KexiProjectListViewItem.h"
 
 #include <core/kexipartinfo.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
 
-KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i)
+KexiProjectListViewItem::KexiProjectListViewItem(K3ListView *parent, KexiPart::Info *i)
         : K3ListViewItem(parent, i->groupName())
         , m_info(i)
         , m_item(0)
@@ -37,7 +37,7 @@ KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i)
     m_fifoSorting = 1; //because this is top level item
 }
 
-KexiBrowserItem::KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
+KexiProjectListViewItem::KexiProjectListViewItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
         : K3ListViewItem(parent, item->name())
         , m_info(i)
         , m_item(item)
@@ -46,7 +46,7 @@ KexiBrowserItem::KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, Kexi
     initItem();
 }
 
-KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item)
+KexiProjectListViewItem::KexiProjectListViewItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item)
         : K3ListViewItem(parent, item->name())
         , m_info(i)
         , m_item(item)
@@ -55,11 +55,11 @@ KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart
     initItem();
 }
 
-KexiBrowserItem::~KexiBrowserItem()
+KexiProjectListViewItem::~KexiProjectListViewItem()
 {
 }
 
-void KexiBrowserItem::initItem()
+void KexiProjectListViewItem::initItem()
 {
     m_fifoSorting = 0;
     int sortKey = 0;
@@ -74,16 +74,16 @@ void KexiBrowserItem::initItem()
 }
 
 void
-KexiBrowserItem::clearChildren()
+KexiProjectListViewItem::clearChildren()
 {
-    KexiBrowserItem* child;
+    KexiProjectListViewItem* child;
 
-    while ((child = static_cast<KexiBrowserItem*>(firstChild()))) {
+    while ((child = static_cast<KexiProjectListViewItem*>(firstChild()))) {
         delete child;
     }
 }
 
-QString KexiBrowserItem::key(int column, bool ascending) const
+QString KexiProjectListViewItem::key(int column, bool ascending) const
 {
 // kDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending));
     return m_fifoSorting ? m_sortKey : K3ListViewItem::key(column, ascending);

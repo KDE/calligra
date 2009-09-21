@@ -30,8 +30,8 @@ set(kexiextendedwidgets_LIB_SRCS
    kexicustompropertyfactory_p.cpp 
    kexicharencodingcombobox.cpp
    kexiprjtypeselector.cpp
-   kexibrowser.cpp 
-   kexibrowseritem.cpp 
+   KexiProjectListView.cpp 
+   KexiProjectListViewItem.cpp 
 )
 
 

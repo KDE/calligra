@@ -234,6 +234,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     tbar = d->createToolBar("tools", i18n("Tools"));
     addAction(tbar, "tools_import_project");
+    addAction(tbar, "tools_import_tables");
     addAction(tbar, "tools_compact_database");
 
 //! @todo move to form plugin
@@ -913,7 +914,7 @@ public:
 #ifndef KEXI_NO_CTXT_HELP
     KexiContextHelp *ctxHelp;
 #endif
-    KexiBrowser *nav;
+    KexiProjectListView *nav;
     KexiTabbedToolBar *tabbedToolBar;
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;
@@ -990,7 +991,7 @@ public:
     KAction *action_format_font;
 
     //! tools menu
-    KAction *action_tools_data_migration, *action_tools_compact_database;
+    KAction *action_tools_data_migration, *action_tools_compact_database, *action_tools_data_import;
     KActionMenu *action_tools_scripts;
 
     //! window menu
