@@ -97,7 +97,7 @@ for (my $start=0; $start < $maxresults; $start = $start + 10) {
 	my $res = $ua->request(HTTP::Request->new(GET => $url), sub {$p->parse($_[0])});
 	foreach (@pages) {
 		my $uri = $_;
-		if ($uri =~ m/^http/) {
+		if ($uri =~ m/^http/ && $uri !~ m/\.google\./) {
 			addJob($uri);
 		}
 	}
