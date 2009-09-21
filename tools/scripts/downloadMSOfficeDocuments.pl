@@ -74,8 +74,13 @@ sub startJob {
 }
 
 my @jobs;
+my %done;
 sub addJob {
 	my $uri = shift;
+	if (exists $done{$uri}) {
+		return;
+	}
+	$done{$uri} = 1;
         push @jobs, $uri;
         while (@jobs && $runningjobs < $maxjobs) {
 		startJob(pop @jobs);
