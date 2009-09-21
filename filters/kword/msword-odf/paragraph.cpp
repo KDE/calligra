@@ -309,6 +309,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType );
     }
 
+    //
+    if (!refPap || refPap->fBiDi != pap.fBiDi) {
+        if ( pap.fBiDi == 1 ) //1 = right to left
+            style->addProperty( "style:writing-mode", "rl-tb", KoGenStyle::ParagraphType );
+        else //0 = normal
+            style->addProperty( "style:writing-mode", "lr-tb", KoGenStyle::ParagraphType );
+    }
+    
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
     //dxaLeft = indent from left margin (signed)
     //dxaRight = indent from right margin (signed)

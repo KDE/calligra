@@ -225,14 +225,13 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
         int noteNumber = (type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
         char letter = 'a';
-        
+
         switch (m_parser->dop().nfcFtnRef2) {
             case 0:
                 noteNumberString = QString::number(noteNumber);
                 break;
             case 1: // uppercase roman
-            case 2: // lowercase roman
-            {
+            case 2:  { // lowercase roman
                 QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
                 QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
                 QString *numDigits = (m_parser->dop().nfcFtnRef2== 1 ? numDigitsUpper : numDigitsLower);
@@ -248,8 +247,7 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
             }
             case 3: // uppercase letter
                 letter = 'A';
-            case 4: // lowercase letter
-            {
+            case 4: { // lowercase letter
                 while (noteNumber / 25 > 0) {
                     noteNumberString += QString::number(noteNumber/25);
                     noteNumber = noteNumber % 25;
