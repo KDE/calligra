@@ -9,10 +9,8 @@
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
-TODO: rename KexiTabBrowser to KexiProjectWindow
 TODO: rename KexiBrowser to KexiProjectListView
 TODO: rename KexiBrowserItem to KexiProjectListViewItem
-TODO: rename KexiDialogBase to KexiWindowBase
 
 TODO: Kexi can use database as only medium for storing _all_ project's data
 	and then can treat .kexi files as:
