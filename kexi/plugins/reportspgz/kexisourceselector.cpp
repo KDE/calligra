@@ -21,6 +21,7 @@
 
 #include <QLabel>
 #include <KLocale>
+#include <KDebug>
 #include <QDomElement>
 
 KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *conn ) : QWidget(parent) {

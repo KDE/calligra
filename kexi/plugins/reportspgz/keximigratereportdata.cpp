@@ -84,8 +84,7 @@ QStringList KexiMigrateReportData::fieldNames() {
 }
 
 void* KexiMigrateReportData::schema() const {
-    if ( m_schema )
-        return m_schema;
+    return m_schema;
 }
 
 QVariant KexiMigrateReportData::value ( unsigned int i ) {
