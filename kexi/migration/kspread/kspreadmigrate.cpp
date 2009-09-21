@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 namespace KexiMigration
 {
 
-KEXIMIGRATE_DRIVER_INFO(KSpreadMigrate, kspread)
+K_EXPORT_KEXIMIGRATE_DRIVER(KSpreadMigrate, "kspread")
 
-KSpreadMigrate::KSpreadMigrate(QObject *parent, const QStringList &args)
+KSpreadMigrate::KSpreadMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
   m_CurSheet = 0;

@@ -34,7 +34,7 @@
 using namespace KexiDB;
 using namespace KexiMigration;
 
-KexiMigrate::KexiMigrate(QObject *parent, const QStringList&)
+KexiMigrate::KexiMigrate(QObject *parent, const QVariantList&)
         : QObject(parent)
         , m_migrateData(0)
         , m_destPrj(0)
@@ -518,6 +518,7 @@ QList<QByteArray> KexiMigrate::propertyNames() const
     return names;
 }
 
+/* moved to MigrateManagerInternal::driver():
 bool KexiMigrate::isValid()
 {
     if (KexiMigration::versionMajor() != versionMajor()
@@ -533,6 +534,7 @@ bool KexiMigrate::isValid()
     }
     return true;
 }
+*/
 
 bool KexiMigrate::drv_queryMaxNumber(const QString& tableName,
                                      const QString& columnName, int& result)
@@ -612,6 +614,13 @@ bool KexiMigrate::moveLast()
 QVariant KexiMigrate::value(uint i)
 { 
   return drv_value(i); 
+}
+
+//------------------------
+
+DatabaseVersionInfo KexiMigration::version()
+{
+    return KEXI_MIGRATION_VERSION;
 }
 
 #include "keximigrate.moc"

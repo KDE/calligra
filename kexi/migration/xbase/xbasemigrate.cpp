@@ -38,10 +38,10 @@ using namespace KexiMigration;
 
 /* This is the implementation for the xBase specific import routines. */
 
-KEXIMIGRATE_DRIVER_INFO( xBaseMigrate, xbase )
+K_EXPORT_KEXIMIGRATE_DRIVER(xBaseMigrate, "xbase")
 
 //! Constructor (needed for trading interface)
-xBaseMigrate::xBaseMigrate(QObject *parent, const QStringList &args) :
+xBaseMigrate::xBaseMigrate(QObject *parent, const QVariantList& args) :
   KexiMigrate(parent, args)
 {
   KexiDB::DriverManager manager;

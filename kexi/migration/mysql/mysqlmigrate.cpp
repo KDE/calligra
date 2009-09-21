@@ -18,8 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/drivers/mySQL/mysqldriver_global.h>
+#include <qglobal.h>
+#ifdef Q_WS_WIN
+# define KDEWIN_FCNTL_H // avoid redef.
+# define KDEWIN_SYS_STAT_H // avoid redef.
+# define KDEWIN_MATH_H // avoid redef.
+# define KDEWIN_STDIO_H // avoid redef.
+# include <../include/stdio.h>
+# include <../include/math.h>
+#endif
+
 #include "mysqlmigrate.h"
+#include <kexidb/drivers/mySQL/mysqldriver_global.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -28,8 +38,12 @@
 #include <qlist.h>
 #include <kdebug.h>
 
+#ifdef Q_WS_WIN
+# undef _WIN32_WINNT // avoid redef.
+#endif
 #include <mysql_version.h>
 #include <mysql.h>
+#define BOOL bool
 
 #include <migration/keximigratedata.h>
 #include <kexidb/cursor.h>
@@ -43,7 +57,7 @@ using namespace KexiMigration;
 
 /* This is the implementation for the MySQL specific import routines. */
 
-KEXIMIGRATE_DRIVER_INFO(MySQLMigrate, mysql)
+K_EXPORT_KEXIMIGRATE_DRIVER(MySQLMigrate, "mysql")
 
 /* ************************************************************************** */
 //! Constructor
@@ -53,7 +67,7 @@ KEXIMIGRATE_DRIVER_INFO(MySQLMigrate, mysql)
 }*/
 
 //! Constructor (needed for trading interface)
-MySQLMigrate::MySQLMigrate(QObject *parent, const QStringList &args) :
+MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         KexiMigrate(parent, args)
         , d(new MySqlConnectionInternal(0))
         , m_mysqlres(0)

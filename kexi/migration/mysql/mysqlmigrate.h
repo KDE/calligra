@@ -22,6 +22,7 @@
 #define MYSQLMIGRATE_H
 
 #include <migration/keximigrate.h>
+#include <migration/keximigrate_p.h>
 #include <kexidb/drivers/mySQL/mysqlconnection_p.h>
 
 namespace KexiMigration
@@ -33,7 +34,7 @@ class MySQLMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    MySQLMigrate(QObject *parent, const QStringList& args = QStringList());
+    MySQLMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~MySQLMigrate();
 
     KexiDB::Field::Type type(const QString& table, const MYSQL_FIELD* t);

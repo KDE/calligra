@@ -22,13 +22,12 @@
 #ifndef KEXI_MIGRATE_H
 #define KEXI_MIGRATE_H
 
+#include "keximigratedata.h"
 
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
-#include "keximigratedata.h"
 
-#include <kgenericfactory.h>
-#include <QStringList>
+#include <QVariantList>
 #include <QByteArray>
 #include <QPointer>
 
@@ -43,10 +42,13 @@ class ObjectStatus;
  - major number is increased after every major Kexi release,
  - minor is increased after adding binary-incompatible change.
  In external code: do not use this to get library version information:
- use KexiMigration::versionMajor() and KexiMigration::versionMinor() instead to get real version.
+ use KexiMigration::version() instead to get real version.
 */
 #define KEXI_MIGRATION_VERSION_MAJOR 1
 #define KEXI_MIGRATION_VERSION_MINOR 1
+
+/*! KexiMigration implementation version. @see KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR */
+#define KEXI_MIGRATION_VERSION KexiDB::DatabaseVersionInfo(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR)
 
 /*!
  * \namespace KexiMigration
@@ -55,12 +57,16 @@ class ObjectStatus;
 namespace KexiMigration
 {
 
+#if 0 // replaced by KPluginLoader::pluginVersion()
 //! \return KexiMigration version info (most significant part)
 KEXIMIGR_EXPORT int versionMajor();
 
 //! \return KexiMigration version info (least significant part)
 KEXIMIGR_EXPORT int versionMinor();
+#endif
 
+//! \return KexiMigration version info
+KEXIMIGR_EXPORT KexiDB::DatabaseVersionInfo version();
 
 //! @short Imports non-native databases into Kexi projects.
 /*! A generic API for importing schema and data from an existing
@@ -119,8 +125,10 @@ public:
         return drv_progressSupported();
     }
 
+#if 0 // replaced by KPluginLoader::pluginVersion()
     virtual int versionMajor() const = 0;
     virtual int versionMinor() const = 0;
+#endif
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return property value for \a propeName available for this driver.
@@ -139,10 +147,11 @@ public:
     //! \return a list of property names available for this driver.
     QList<QByteArray> propertyNames() const;
 
-    /*! \return true is driver is valid. Checks if KexiMigrate::versionMajor()
-     and KexiMigrate::versionMinor() are matching.
-     You can reimplement this but always call KexiMigrate::isValid() implementation. */
-    virtual bool isValid();
+// moved to MigrateManagerInternal::driver():
+//    /*! \return true is driver is valid. Checks if KexiMigrate::versionMajor()
+//     and KexiMigrate::versionMinor() are matching.
+//     You can reimplement this but always call KexiMigrate::isValid() implementation. */
+//    virtual bool isValid();
     
     //Extension of existing api to provide generic row access to external data.
     //!Connect to the source data
@@ -177,7 +186,7 @@ signals:
 
 protected:
     //! Used by MigrateManager.
-    KexiMigrate(QObject *parent, const QStringList &args = QStringList());
+    KexiMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     //! Connect to source database (driver specific)
     virtual bool drv_connect() = 0;
@@ -354,20 +363,4 @@ private:
 
 } //namespace KexiMigration
 
-//! Driver's static version information (implementation),
-//! with KLibFactory symbol declaration.
-#define KEXIMIGRATE_DRIVER_INFO( class_name, internal_name ) \
-    int class_name::versionMajor() const { return KEXI_MIGRATION_VERSION_MAJOR; } \
-    int class_name::versionMinor() const { return KEXI_MIGRATION_VERSION_MINOR; } \
-    K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name, \
-                               KGenericFactory<KexiMigration::class_name>( "keximigrate_" #internal_name ))
-
-/*! Driver's static version information, automatically implemented for KexiDB drivers.
- Put this into migration driver class declaration just like Q_OBJECT macro. */
-#define KEXIMIGRATION_DRIVER \
-    public: \
-    virtual int versionMajor() const; \
-    virtual int versionMinor() const;
-
 #endif
-

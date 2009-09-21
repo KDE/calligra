@@ -23,6 +23,7 @@
 #include <QHash>
 
 #include <migration/keximigrate.h>
+#include <migration/keximigrate_p.h>
 #include "xbase.h"
 
 namespace KexiMigration
@@ -34,7 +35,7 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
   KEXIMIGRATION_DRIVER
 
   public:
-    xBaseMigrate(QObject *parent, const QStringList& args = QStringList());
+    xBaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~xBaseMigrate();
     
   protected:

@@ -22,6 +22,7 @@
 #define PQXXIMPORT_H
 
 #include <migration/keximigrate.h>
+#include <migration/keximigrate_p.h>
 
 //Kexi Includes
 #include <kexidb/field.h>
@@ -38,7 +39,7 @@ class PqxxMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    PqxxMigrate(QObject *parent, const QStringList &args = QStringList());
+    PqxxMigrate(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~PqxxMigrate();
 
 protected:

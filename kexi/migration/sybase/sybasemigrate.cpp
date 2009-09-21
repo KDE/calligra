@@ -38,7 +38,7 @@ using namespace KexiMigration;
 
 /* This is the implementation for the Sybase specific import routines. */
 
-KEXIMIGRATE_DRIVER_INFO(SybaseMigrate, sybase)
+K_EXPORT_KEXIMIGRATE_DRIVER(SybaseMigrate, "sybase")
 
 /* ************************************************************************** */
 //! Constructor
@@ -48,7 +48,7 @@ KEXIMIGRATE_DRIVER_INFO(SybaseMigrate, sybase)
 }*/
 
 //! Constructor (needed for trading interface)
-SybaseMigrate::SybaseMigrate(QObject *parent, const QStringList &args) :
+SybaseMigrate::SybaseMigrate(QObject *parent, const QVariantList&args) :
         KexiMigrate(parent, args)
         , d(new SybaseConnectionInternal(0))
         //,m_mysqlres(0)

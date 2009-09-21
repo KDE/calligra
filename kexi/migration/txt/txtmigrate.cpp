@@ -18,16 +18,16 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
 #include "txtmigrate.h"
+#include <KDebug>
 #include <QDir>
 
 namespace KexiMigration
 {
 
-KEXIMIGRATE_DRIVER_INFO(TxtMigrate, txt)
+K_EXPORT_KEXIMIGRATE_DRIVER(TxtMigrate, "txt")
 
 
-
-TxtMigrate::TxtMigrate(QObject *parent, const QStringList &args)
+TxtMigrate::TxtMigrate(QObject *parent, const QVariantList& args)
         : KexiMigrate(parent, args)
 {
   m_DataFile = 0;

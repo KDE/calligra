@@ -32,14 +32,14 @@
 using namespace KexiMigration;
 
 /* This is the implementation for the MDB file import routines. */
-KEXIMIGRATE_DRIVER_INFO(MDBMigrate, mdb)
+K_EXPORT_KEXIMIGRATE_DRIVER(MDBMigrate, "mdb")
 
 static QByteArray isNonUnicodePropId("source_database_has_nonunicode_encoding");
 static QByteArray nonUnicodePropId("source_database_nonunicode_encoding");
 
 /* ************************************************************************** */
 
-MDBMigrate::MDBMigrate(QObject *parent, const QStringList &args)
+MDBMigrate::MDBMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
     /*! @todo invert the sense of values, then remove "Non-" from these strings */

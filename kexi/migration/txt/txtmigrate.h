@@ -21,6 +21,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KEXIMIGRATIONTXTMIGRATE_H
 
 #include <migration/keximigrate.h>
+#include <migration/keximigrate_p.h>
+
 #include <QFile>
 
 namespace KexiMigration
@@ -34,7 +36,7 @@ class TxtMigrate : public KexiMigrate
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    TxtMigrate(QObject *parent, const QStringList &args = QStringList());
+    TxtMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~TxtMigrate();
 

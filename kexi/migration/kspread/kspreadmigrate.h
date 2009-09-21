@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KEXIMIGRATIONTXTMIGRATE_H
 
 #include <migration/keximigrate.h>
-#include <QFile>
+#include <migration/keximigrate_p.h>
 #include <kspread/part/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
@@ -41,7 +41,7 @@ class KSpreadMigrate : public KexiMigrate
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    KSpreadMigrate(QObject *parent, const QStringList &args = QStringList());
+    KSpreadMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~KSpreadMigrate();
 

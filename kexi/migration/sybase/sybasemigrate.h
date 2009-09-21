@@ -21,6 +21,7 @@
 #define SYBASEMIGRATE_H
 
 #include <migration/keximigrate.h>
+#include <migration/keximigrate_p.h>
 #include <kexidb/drivers/sybase/sybaseconnection_p.h>
 
 namespace KexiMigration
@@ -32,7 +33,7 @@ class SybaseMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    SybaseMigrate(QObject *parent, const QStringList& args = QStringList());
+    SybaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~SybaseMigrate();
 
 protected:
