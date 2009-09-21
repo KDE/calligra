@@ -110,6 +110,8 @@ public:
     DatabaseVersionInfo();
     DatabaseVersionInfo(uint majorVersion, uint minorVersion);
 
+    bool matches(uint _major, uint _minor) const { return _major == major && _minor == minor; }
+
     //! Major version number, e.g. 1 for 1.8
     uint major;
 

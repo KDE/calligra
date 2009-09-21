@@ -43,11 +43,6 @@ using namespace KexiDB;
 
 DriverManagerInternal* DriverManagerInternal::s_self = 0L;
 
-static bool versionMatches(uint major_ver,  uint minor_ver, const DatabaseVersionInfo& kexiDbVersion)
-{
-    return major_ver == kexiDbVersion.major && minor_ver == kexiDbVersion.minor;
-}
-
 DriverManagerInternal::DriverManagerInternal() /* protected */
         : QObject(0)
         , Object()
@@ -138,7 +133,7 @@ bool DriverManagerInternal::lookupDrivers()
             continue;
         }
 
-        if (!versionMatches(major_ver, minor_ver, KexiDB::version())) {
+        if (!KexiDB::version().matches(major_ver, minor_ver)) {
             KexiDBWarn << QString("DriverManagerInternal::lookupDrivers(): '%1' driver"
                                   " has version '%2' but required KexiDB driver version is '%3.%4'\n"
                                   " -- skipping this driver!").arg(srv_name).arg(srv_ver_str)
@@ -224,7 +219,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
     KPluginLoader loader(ptr->library());
     const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
     const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
-    if (!versionMatches(foundMajor, foundMinor, KexiDB::version())) {
+    if (!KexiDB::version().matches(foundMajor, foundMinor)) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
                  i18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
