@@ -34,4 +34,10 @@ set(TestPageTextInfo_test_SRCS TestPageTextInfo.cpp)
 kde4_add_unit_test(TestPageTextInfo TESTNAME kword-part-TestPageTextInfo  ${TestPageTextInfo_test_SRCS})
 target_link_libraries(TestPageTextInfo kwordprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestKWDocument_test_SRCS TestKWDocument.cpp)
+kde4_add_unit_test(TestKWDocument TESTNAME kword-part-TestKWDocument  ${TestKWDocument_test_SRCS})
+target_link_libraries(TestKWDocument kwordprivate ${QT_QTTEST_LIBRARY})
+
 ########### end ###############
