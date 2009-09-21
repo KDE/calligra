@@ -26,6 +26,7 @@
 #include <QProgressBar>
 
 #include <KPushButton>
+#include <KDebug>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
