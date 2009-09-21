@@ -1,0 +1,6 @@
+21-Sep-2009
+Import table dialog works (barely)
+TODO:
+Move the import function into KexiMigrate
+Steal dialog from csv import to allow change column types
+Add 'with data' bool option

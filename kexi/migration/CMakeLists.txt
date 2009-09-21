@@ -52,7 +52,8 @@ set(keximigrate_LIB_SRCS
    keximigrate.cpp 
    keximigratedata.cpp 
    migratemanager.cpp 
-   importwizard.cpp 
+   importwizard.cpp
+   importtablewizard.cpp
    importoptionsdlg.cpp )
 
 kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})

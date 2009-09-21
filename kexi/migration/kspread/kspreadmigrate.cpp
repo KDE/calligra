@@ -81,6 +81,10 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
   QString fieldname;
   
   KSpread::Cell *cell;
+  KexiDB::Field *fld;
+  tableSchema.setName(QString(originalName).replace(" ", "_").toLower());
+  tableSchema.setCaption(originalName);
+  
   do
   {
       cell = new KSpread::Cell(sheet, col, row);
@@ -89,8 +93,10 @@ bool KSpreadMigrate::drv_readTableSchema(const QString& originalName, KexiDB::Ta
       col++;
       if (!cell->isEmpty())
       {
-	tableSchema.addField( new KexiDB::Field(fieldname, KexiDB::Field::Text) );
-	kDebug() << fieldname;
+          fld = new KexiDB::Field(fieldname.replace(" ", "_"), KexiDB::Field::Text);
+          fld->setCaption(fieldname);
+          tableSchema.addField( fld );
+          kDebug() << fieldname;
       }
   }while(!cell->isEmpty());
   

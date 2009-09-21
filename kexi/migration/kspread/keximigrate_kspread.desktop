@@ -79,4 +79,5 @@ Type=Service
 InitialPreference=8
 X-Kexi-MigrationDriverName=KSpread
 X-Kexi-MigrationDriverType=File
+X-Kexi-FileDBDriverMime=application/vnd.oasis.opendocument.spreadsheet
 X-Kexi-KexiMigrationVersion=1.1
