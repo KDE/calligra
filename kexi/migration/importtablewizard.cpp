@@ -413,7 +413,7 @@ QString ImportTableWizard::driverNameForSelectedSource()
     return ptr ? m_migrateManager->driverForMimeType(ptr.data()->name()) : QString();
     }
 
-return m_srcConnSel->selectedConnectionData() ? m_srcConnSel->selectedConnectionData()->driverName : QString();
+    return m_srcConnSel->selectedConnectionData() ? m_srcConnSel->selectedConnectionData()->driverName : QString();
 }
 
 bool ImportTableWizard::doImport()
@@ -424,11 +424,12 @@ bool ImportTableWizard::doImport()
     foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
         tableName = table->text();
         if (m_migrateDriver->readTableSchema(tableName, ts)) {
-            m_currentDatabase->createTable(&ts, true);
+            if (!m_currentDatabase->createTable(&ts, true))
+                return false;
         }
 
     }
 
     m_importComplete = true;
-    
+    return true;
 }
