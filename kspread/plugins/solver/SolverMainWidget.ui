@@ -27,9 +27,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <height>159</height>
    </rect>
   </property>
-  <property name="windowIcon" >
-   <iconset/>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>
