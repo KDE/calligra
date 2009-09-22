@@ -5411,8 +5411,8 @@ int PPTReader::indexPersistence( unsigned long ofs )
 
 void PPTReader::loadRecord( Record* parent )
 {
-  // FIXME
-  unsigned char buffer[65536];
+  const unsigned bufferSize = 65536;
+  unsigned char buffer[bufferSize];
 
   // get record type and data size
   unsigned long pos = d->docStream->tell();
@@ -5431,8 +5431,14 @@ void PPTReader::loadRecord( Record* parent )
     record->setPosition( pos );
     record->setInstance( instance );
 
-    if( !record->isContainer() )
+    if( record->isContainer() )
+      handleContainer( static_cast<Container*>( record ), type, size );
+    else if(size <= bufferSize) // TODO: use a varialesized buffer
     {
+      if (size >= bufferSize) // record is too large
+      {
+
+      }
       d->docStream->read( buffer, size );
       // special treatment for StyleTextPropAtom
       if ( type == StyleTextPropAtom::id )
@@ -5445,8 +5451,6 @@ void PPTReader::loadRecord( Record* parent )
       else if ( type == TextCharsAtom::id )
         d->lastNumChars = static_cast<TextCharsAtom*>( record )->stringLength();
     }
-    else
-      handleContainer( static_cast<Container*>( record ), type, size );
 
     delete record;
   }
