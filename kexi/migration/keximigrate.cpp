@@ -618,7 +618,7 @@ QVariant KexiMigrate::value(uint i)
 
 //------------------------
 
-KEXIMIGR_EXPORT DatabaseVersionInfo KexiMigration::version()
+DatabaseVersionInfo KexiMigration::version()
 {
     return KEXI_MIGRATION_VERSION;
 }
