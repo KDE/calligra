@@ -262,16 +262,6 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->endElement();  // office:document-styles
   stylesWriter->endDocument();
   delete stylesWriter;
-#ifdef __GNUC__
-#warning "kde4 port it"
-#endif
-#if 0
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<stylesData.size(); i++ )
-    dbg.append( stylesData[i] );
-  qDebug("\nstyles.xml:\n%s\n", dbg.latin1() );
-#endif
   return stylesData;
 }
 
@@ -325,16 +315,6 @@ QByteArray PowerPointImport::createContent()
   contentWriter->endElement();  // office:document-content
   contentWriter->endDocument();
   delete contentWriter;
-#ifdef __GNUC__
-#warning "kde4 port it"
-#endif
-#if 0
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<contentData.size(); i++ )
-    dbg.append( contentData[i] );
-  qDebug("\ncontent.xml:\n%s\n", dbg.latin1() );
-#endif
   return contentData;
 }
 
@@ -359,16 +339,6 @@ QByteArray PowerPointImport::createManifest()
   manifestWriter->endElement();
   manifestWriter->endDocument();
   delete manifestWriter;
-#ifdef __GNUC__
-#warning "kde4: port it"
-#endif
-#if 0
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<manifestData.size(); i++ )
-    dbg.append( manifestData[i] );
-  qDebug("\nmanifest.xml:\n%s\n", dbg.latin1() );
-#endif
   return manifestData;
 }
 
@@ -1057,7 +1027,7 @@ void PowerPointImport::processArrow (DrawObject* drawObject, KoXmlWriter* xmlWri
     xmlWriter->addAttribute( "draw:name","f7");
                 xmlWriter->endElement(); // draw:equation
     xmlWriter->startElement( "draw:handle" );
-                if ( drawObject->shape() == DrawObject::RightArrow | drawObject->shape() == DrawObject::LeftArrow )
+                if ( drawObject->shape() == DrawObject::RightArrow || drawObject->shape() == DrawObject::LeftArrow )
                 {
       xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);
       xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
@@ -1065,7 +1035,7 @@ void PowerPointImport::processArrow (DrawObject* drawObject, KoXmlWriter* xmlWri
       xmlWriter->addAttribute("draw:handle-range-y-maximum",10800);
       xmlWriter->addAttribute("draw:handle-range-y-minimum",0);
     }
-    else if ( drawObject->shape() == DrawObject::UpArrow | drawObject->shape() == DrawObject::DownArrow )
+    else if ( drawObject->shape() == DrawObject::UpArrow || drawObject->shape() == DrawObject::DownArrow )
                 {
                   xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);
       xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
@@ -1235,7 +1205,7 @@ void PowerPointImport::processPictureFrame (DrawObject* drawObject, KoXmlWriter*
 {
   if( !drawObject ||!xmlWriter ) return;
 
-  uint picturePosition = drawObject->getIntProperty("pib") - 1;
+  int picturePosition = drawObject->getIntProperty("pib") - 1;
   QString url;
   if (picturePosition < d->pictureNames.size()) {
     url = "Pictures/" + d->pictureNames[picturePosition];
@@ -1286,7 +1256,7 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
   {
     processDiamond (drawObject, xmlWriter );
   }
-  else  if (drawObject->shape() == DrawObject::IsoscelesTriangle |
+  else  if (drawObject->shape() == DrawObject::IsoscelesTriangle ||
             drawObject->shape() == DrawObject::RightTriangle)
   {
     processTriangle (drawObject, xmlWriter );
@@ -1307,9 +1277,9 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
   {
     processOctagon ( drawObject, xmlWriter );
   }
-  else if (drawObject->shape() == DrawObject::RightArrow |
-     drawObject->shape() == DrawObject::LeftArrow |
-     drawObject->shape() == DrawObject::UpArrow |
+  else if (drawObject->shape() == DrawObject::RightArrow ||
+     drawObject->shape() == DrawObject::LeftArrow ||
+     drawObject->shape() == DrawObject::UpArrow ||
      drawObject->shape() == DrawObject::DownArrow )
   {
     processArrow ( drawObject, xmlWriter );

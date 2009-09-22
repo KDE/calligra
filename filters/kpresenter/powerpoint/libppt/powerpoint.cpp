@@ -428,10 +428,6 @@ void Record::setData( unsigned, const unsigned char* )
 {
 }
 
-void Record::setData( unsigned, const unsigned char*, unsigned )
-{
-}
-
 void Record::dump( std::ostream& ) const
 {
   // nothing to dump
@@ -3082,7 +3078,7 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
 {
   d->charFlags = charFlags;
 }
-void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned neededCharacters )
+void StyleTextPropAtom::setDataWithSize( unsigned size, const unsigned char* data, unsigned neededCharacters )
 {
 //  std::cout << size << "\t" << neededCharacters << std::endl;
   unsigned charRead = 0;
@@ -4934,7 +4930,7 @@ public:
   POLE::Stream* userStream;     // "/Current User"
   POLE::Stream* docStream;      // "/PowerPoint Document"
 
-  std::vector<long> persistenceList;
+  std::vector<unsigned long> persistenceList;
   std::map<int,Libppt::Slide*> slideMap;
   Libppt::Slide* currentSlide;
   unsigned currentTextType;
@@ -5440,7 +5436,7 @@ void PPTReader::loadRecord( Record* parent )
       d->docStream->read( buffer, size );
       // special treatment for StyleTextPropAtom
       if ( type == StyleTextPropAtom::id )
-        record->setData(size, buffer, d->lastNumChars);
+        static_cast<StyleTextPropAtom*>(record)->setDataWithSize(size, buffer, d->lastNumChars);
       else
         record->setData( size, buffer );
       handleRecord( record, type );

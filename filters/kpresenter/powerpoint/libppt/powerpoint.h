@@ -71,7 +71,6 @@ public:
     Sets the data for this record.
    */
   virtual void setData( unsigned size, const unsigned char* data );
-  virtual void setData( unsigned size, const unsigned char* data, unsigned lastSize );
 
   /**
     Sets the position of the record in the OLE stream.
@@ -1239,7 +1238,7 @@ public:
 
   unsigned listSize() const;
 
-  void setData( unsigned size, const unsigned char* data, unsigned lastSize );
+  void setDataWithSize( unsigned size, const unsigned char* data, unsigned lastSize );
   const char* name(){ return "StyleTextPropAtom   "; }
   void dump( std::ostream& out ) const;
 private:
@@ -2132,7 +2131,7 @@ private:
   Private *d;
 };
 
-class msofbtClientTextboxAtom : public Record
+class msofbtClientTextboxAtom : public Container
 {
 public:
   static const unsigned int id;
