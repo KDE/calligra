@@ -2131,23 +2131,17 @@ private:
   Private *d;
 };
 
-class msofbtClientTextboxAtom : public Container
+class msofbtClientTextBox : public Container
 {
 public:
   static const unsigned int id;
-  msofbtClientTextboxAtom ();
-  ~msofbtClientTextboxAtom ();
-
-  UString ustring() const;
-  void setUString( const UString& ustr );
-  void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtClientTextboxAtom "; }
-  void dump( std::ostream& out ) const;
+  msofbtClientTextBox ();
+  ~msofbtClientTextBox ();
 
 private:
   // no copy or assign
-  msofbtClientTextboxAtom ( const msofbtClientTextboxAtom  & );
-  msofbtClientTextboxAtom & operator=( const msofbtClientTextboxAtom  & );
+  msofbtClientTextBox ( const msofbtClientTextBox  & );
+  msofbtClientTextBox & operator=( const msofbtClientTextBox  & );
 
   class Private;
   Private *d;
@@ -2514,12 +2508,12 @@ protected:
   void handleDrawingContainer( msofbtDgContainer* r, unsigned size );
   void handleEscherGroupContainer( msofbtSpgrContainer* r, unsigned size );
   void handleSPContainer( msofbtSpContainer* r, unsigned size );
+  void handleEscherTextBox( msofbtClientTextBox* r, unsigned size);
   void handleEscherGroupAtom( msofbtSpgrAtom* r );
   void handleEscherSpAtom( msofbtSpAtom* r );
   void handleEscherPropertiesAtom( msofbtOPTAtom* atom );
   void handleEscherClientDataAtom( msofbtClientDataAtom* r );
   void handleEscherClientAnchorAtom( msofbtClientAnchorAtom* r );
-  void handleEscherTextBoxAtom( msofbtClientTextboxAtom* r);
 
   /**
   * @brief Handle font entity by creating a TextFont and storing it to

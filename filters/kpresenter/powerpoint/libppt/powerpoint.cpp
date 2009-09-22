@@ -337,8 +337,8 @@ Record* Record::create( unsigned type )
   else if( type == msofbtClientDataAtom::id )
     record = new msofbtClientDataAtom() ;
 
-  else if( type == msofbtClientTextboxAtom::id )
-    record = new msofbtClientTextboxAtom() ;
+  else if( type == msofbtClientTextBox::id )
+    record = new msofbtClientTextBox() ;
 
   else if( type == msofbtDggAtom::id )
     record = new msofbtDggAtom() ;
@@ -361,8 +361,8 @@ Record* Record::create( unsigned type )
   else if( type == msofbtColorSchemeAtom::id )
     record = new msofbtColorSchemeAtom() ;
 
-  else if( type == msofbtClientTextboxAtom::id )
-    record = new msofbtClientTextboxAtom() ;
+  else if( type == msofbtClientTextBox::id )
+    record = new msofbtClientTextBox() ;
 
   else if( type == msofbtAnchorAtom::id )
     record = new msofbtAnchorAtom() ;
@@ -4482,67 +4482,25 @@ void msofbtDggAtom ::dump( std::ostream& out ) const
   out << "msofbtDggAtom " << std::endl;
 }
 
-// ========== msofbtClientTextboxAtom  ==========
+// ========== msofbtClientTextBox  ==========
 
-const unsigned int msofbtClientTextboxAtom::id = 61453; /* F00D */
+const unsigned int msofbtClientTextBox::id = 61453; /* F00D */
 
-class msofbtClientTextboxAtom::Private
+class msofbtClientTextBox::Private
 {
 public:
   UString ustring;
 };
 
-msofbtClientTextboxAtom::msofbtClientTextboxAtom()
+msofbtClientTextBox::msofbtClientTextBox()
 {
   d = new Private;
 }
 
-msofbtClientTextboxAtom::~msofbtClientTextboxAtom()
+msofbtClientTextBox::~msofbtClientTextBox()
 {
   delete d;
 }
-
-UString msofbtClientTextboxAtom::ustring() const
-{
-  return d->ustring;
-}
-
-void msofbtClientTextboxAtom::setUString( const UString& ustr )
-{
-  d->ustring = ustr;
-}
-
-void msofbtClientTextboxAtom::setData( unsigned size, const unsigned char* data )
-{
-  UString str;
-  for( unsigned k=0; k<size/2; k++ )
-  {
-    unsigned uchar = readU16( data + k*2 );
-    str.append( UString(uchar) );
-  }
-  setUString( str );
-}
-
-void msofbtClientTextboxAtom::dump( std::ostream& out ) const
-{
-  out << "msofbtClientTextboxAtom" << std::endl;
-  out << "String : [" << ustring() << "]" << std::endl;
-}
-
-/*
-msofbtClientTextboxAtom ::msofbtClientTextboxAtom ()
-{
-}
-
-msofbtClientTextboxAtom ::~msofbtClientTextboxAtom ()
-{
-}
-
-void msofbtClientTextboxAtom ::dump( std::ostream& out ) const
-{
-  out << "msofbtClientTextboxAtom " << std::endl;
-}
-*/
 
 // ========== msofbtDeletedPsplAtom  ==========
 
@@ -5488,8 +5446,6 @@ void PPTReader::handleRecord( Record* record, int type )
       handleEscherClientDataAtom( static_cast<msofbtClientDataAtom*>(record) ); break;
     case msofbtClientAnchorAtom::id:
       handleEscherClientAnchorAtom( static_cast<msofbtClientAnchorAtom*>(record) ); break;
-    case msofbtClientTextboxAtom::id:
-      handleEscherTextBoxAtom( static_cast<msofbtClientTextboxAtom*>(record) ); break;
     case FontEntityAtom::id:
       handleFontEntityAtom( static_cast<FontEntityAtom*>(record) ); break;
     default: break;
@@ -5510,6 +5466,8 @@ void PPTReader::handleContainer( Container* container, int type, unsigned size )
       handleEscherGroupContainer( static_cast<msofbtSpgrContainer*>(container), size ); break;
     case msofbtSpContainer::id:
       handleSPContainer( static_cast<msofbtSpContainer*>(container), size ); break;
+    case msofbtClientTextBox::id:
+      handleEscherTextBox( static_cast<msofbtClientTextBox*>(container), size ); break;
     default:
       while( d->docStream->tell() < nextpos )
         loadRecord( container );
@@ -5904,9 +5862,9 @@ void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
   d->currentObject->setHeight( (atom->bottom()-atom->top()-1)*25.4/576  );
 }
 
-void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
+void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned size )
 {
-  if( !atom ) return;
+  if( !container ) return;
   if( !d->presentation ) return;
   if( !d->currentGroup ) return;
   if( !d->currentObject ) return;
@@ -5923,7 +5881,6 @@ void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
     textObject = static_cast<TextObject*>( d->currentObject );
 
   textObject->setType( TextObject::Other );
-  textObject->setText( atom->ustring() );
   unsigned index = textObject->addBulletProperty(-1);
   textObject->setBulletFlag( index, false );
 }
