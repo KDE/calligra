@@ -17,7 +17,7 @@ set(InsertFileTester_SRCS InsertFileTester.cpp)
  
 kde4_add_unit_test(InsertFileTester TESTNAME KPlato-InsertFileTester  ${InsertFileTester_SRCS})
  
-target_link_libraries(InsertFileTester  kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(InsertFileTester  kplatoprivate ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
  
 
 ########## next target ###############
@@ -26,6 +26,6 @@ set(InsertProjectTester_SRCS InsertProjectTester.cpp)
  
 kde4_add_unit_test(InsertProjectTester TESTNAME KPlato-InsertProjectTester  ${InsertProjectTester_SRCS})
 
-target_link_libraries(InsertProjectTester  kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(InsertProjectTester  kplatoprivate ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########## next target ###############
