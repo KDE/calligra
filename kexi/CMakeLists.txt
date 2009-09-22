@@ -31,7 +31,9 @@ include_directories(
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
-SET(KOPROPERTY_LIBS koproperty)
+SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_VERSION ${GENERIC_KOFFICE_LIB_VERSION})      # TODO remove when we move to independent place
+SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove when we move to independent place
 add_subdirectory( koproperty )
 
 add_subdirectory( 3rdparty )

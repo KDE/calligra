@@ -1,10 +1,13 @@
-add_subdirectory( test )
+# the following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION 
+# see koffice/kexi/CMakeLists.txt for example
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
+SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})
+
 include_directories(
-  ${CMAKE_SOURCE_DIR}/kexi/koproperty
-  ${CMAKE_SOURCE_DIR}/kexi/koproperty/editors
+#  ${CMAKE_SOURCE_DIR}/kexi/koproperty
+#  ${CMAKE_SOURCE_DIR}/kexi/koproperty/editors
   ${CMAKE_SOURCE_DIR}/libs/odf
 #  ${CMAKE_SOURCE_DIR}/libs/guiutils
 #  ${KOMAIN_INCLUDES}
@@ -49,54 +52,58 @@ set(koproperty_LIB_SRCS
 )
 
 
-kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
+kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty
-  
+target_link_libraries(${KOPROPERTY_TARGETNAME}
   ${KDE4_KDE3SUPPORT_LIBS}
   kobase
 )
 
-set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koproperty  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(${KOPROPERTY_TARGETNAME} PROPERTIES VERSION ${KOPROPERTY_LIB_VERSION} SOVERSION ${KOPROPERTY_LIB_SOVERSION} )
+install(TARGETS ${KOPROPERTY_TARGETNAME} ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
-install( FILES
-  Factory.h
-  koproperty_global.h
-  koproperty_export.h
-  Property.h
-  Set.h
-  Utils.h
-  Factory.h
-  EditorView.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel
-)
+add_definitions(-DKOPROPERTY_APP_DIR="\\"${KOPROPERTY_TARGETNAME}\\"") # for KIconLoader::global()->addAppDir();
+                                                               # TODO remove when we move to independent place
+kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
 
-install( FILES
-editors/utils.h
-editors/booledit.h
-editors/coloredit.h
-editors/combobox.h
-editors/cursoredit.h
-editors/dateedit.h
-editors/datetimeedit.h
-editors/dummywidget.h
-editors/fontedit.h
-editors/linestyleedit.h
-editors/pixmapedit.h
-editors/pointedit.h
-editors/rectedit.h
-editors/sizeedit.h
-editors/sizepolicyedit.h
-editors/spinbox.h
-editors/spinbox.h
-editors/stringedit.h
-editors/stringlistedit.h
-editors/symbolcombo.h
-editors/timeedit.h
-editors/urledit.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
+if(FALSE) # TODO: install when we move to independent place
+  install( FILES
+    Factory.h
+    koproperty_global.h
+    koproperty_export.h
+    Property.h
+    Set.h
+    Utils.h
+    Factory.h
+    EditorView.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty COMPONENT Devel
+  )
+
+  install( FILES
+    editors/utils.h
+    editors/booledit.h
+    editors/coloredit.h
+    editors/combobox.h
+    editors/cursoredit.h
+    editors/dateedit.h
+    editors/datetimeedit.h
+    editors/dummywidget.h
+    editors/fontedit.h
+    editors/linestyleedit.h
+    editors/pixmapedit.h
+    editors/pointedit.h
+    editors/rectedit.h
+    editors/sizeedit.h
+    editors/sizepolicyedit.h
+    editors/spinbox.h
+    editors/spinbox.h
+    editors/stringedit.h
+    editors/stringlistedit.h
+    editors/symbolcombo.h
+    editors/timeedit.h
+    editors/urledit.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty/editors COMPONENT Devel)
+endif(FALSE)

@@ -21,24 +21,24 @@
 #include "Property.h"
 /*
 #include "customproperty.h"*/
-#include "booledit.h"
-#include "combobox.h"
+#include "editors/booledit.h"
+#include "editors/combobox.h"
 /*
-#include "coloredit.h"*/
-#include "cursoredit.h"
-/*#include "dateedit.h"
-#include "datetimeedit.h"
-#include "dummywidget.h"
-//TODO #include "linestyleedit.h"*/
-#include "pixmapedit.h"
-#include "pointedit.h"
-#include "fontedit.h"
-#include "rectedit.h"
-#include "sizeedit.h"
-#include "sizepolicyedit.h"
-#include "spinbox.h"
+#include "editors/coloredit.h"*/
+#include "editors/cursoredit.h"
+/*#include "editors/dateedit.h"
+#include "editors/datetimeedit.h"
+#include "editors/dummywidget.h"
+//TODO #include "editors/linestyleedit.h"*/
+#include "editors/pixmapedit.h"
+#include "editors/pointedit.h"
+#include "editors/fontedit.h"
+#include "editors/rectedit.h"
+#include "editors/sizeedit.h"
+#include "editors/sizepolicyedit.h"
+#include "editors/spinbox.h"
 /*#include "stringlistedit.h"*/
-#include "stringedit.h"
+#include "editors/stringedit.h"
 /*#include "symbolcombo.h"
 #include "timeedit.h"
 #include "urledit.h"

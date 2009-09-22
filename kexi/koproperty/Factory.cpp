@@ -45,8 +45,8 @@
 #include "timeedit.h"
 #include "urledit.h"
 */
-#include <kdebug.h>
-#include <kglobal.h>
+#include <KDebug>
+#include <KIconLoader>
 
 namespace KoProperty
 {
@@ -131,6 +131,7 @@ using namespace KoProperty;
 Factory::Factory()
     : d( new Private )
 {
+    KIconLoader::global()->addAppDir(KOPROPERTY_APP_DIR);
 }
 
 Factory::~Factory()
