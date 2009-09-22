@@ -35,8 +35,12 @@ TestCursor.cpp
    ../KoFormulaShapeFactory.cpp
    ../KoFormulaTool.cpp
    ../FormulaCommand.cpp
-   ../FormulaCursor.cpp
 )
+if(NOT WIN32)
+set(TestCursor_SRCS
+    ${TestCursor_SRCS}
+    ../FormulaCursor.cpp)
+endif(NOT WIN32)
 
 kde4_add_ui_files( TestCursor_SRCS
     ../FormulaToolWidget.ui
