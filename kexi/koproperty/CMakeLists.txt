@@ -1,11 +1,10 @@
-# The following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION.
+# The following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIBS, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION.
 # Set KOPROPERTY_USE_KOLIBS to TRUE if extra features that use KOffice libraries should be compiled-in.
 # See koffice/kexi/CMakeLists.txt for example.
 # TODO remove when we move to independent place
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
-SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})
 if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
   add_definitions(-DKOPROPERTY_USE_KOLIBS)
 endif(KOPROPERTY_USE_KOLIBS)
