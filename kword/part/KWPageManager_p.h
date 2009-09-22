@@ -34,7 +34,7 @@ public:
             : pageSide(KWPage::Right),
             pageNumber(1),
             orientation(KoPageFormat::Portrait),
-            textDirection(KoText::AutoDirection)
+            textDirection(KoText::InheritDirection)
         {
         }
         KWPageStyle style;

@@ -20,6 +20,7 @@
 #define KWPAGESTYLE_P_H
 
 #include <QSharedData>
+#include <KoText.h>
 
 class KWPageStylePrivate : public QSharedData
 {
@@ -41,6 +42,7 @@ public:
     KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
 
     // See parag 16.2 for all the ODF features.
+    KoText::Direction direction;
 };
 
 #endif

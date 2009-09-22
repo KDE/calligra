@@ -238,5 +238,9 @@ KoText::Direction KWPage::directionHint() const
 {
     if (! isValid())
         return KoText::AutoDirection;
-    return priv->pages[n].textDirection;
+    KWPageManagerPrivate::Page page = priv->pages[n];
+    KoText::Direction dir = page.textDirection;
+    if (dir != KoText::InheritDirection)
+        return dir;
+    return page.style.direction();
 }

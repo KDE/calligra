@@ -25,6 +25,7 @@
 #include "kword_export.h"
 
 #include <KoPageLayout.h>
+#include <KoText.h>
 
 #include <QSharedDataPointer>
 
@@ -163,6 +164,9 @@ public:
 
     /// get the master page name for this page style.
     QString name() const;
+
+    KoText::Direction direction() const;
+    void setDirection(KoText::Direction direction);
 
     /**
      * Save this page style to ODF.

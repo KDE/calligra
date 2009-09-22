@@ -46,6 +46,7 @@ void KWPageStylePrivate::clear()
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
     pageLayout = KoPageLayout::standardLayout();
+    direction = KoText::AutoDirection;
 }
 
 ///////////
@@ -285,6 +286,9 @@ void KWPageStyle::loadOdf(const KoXmlElement &style)
     KoXmlElement props = KoXml::namedItemNS(style, KoXmlNS::style, "page-layout-properties");
     if (props.isNull())
         return;
+    QString direction = props.attributeNS(KoXmlNS::style, "writing-mode", "lr-tb");
+    d->direction = KoText::directionFromString(direction);
+
     KoXmlElement columns = KoXml::namedItemNS(props, KoXmlNS::style, "columns");
     if (!columns.isNull()) {
         d->columns.columns = columns.attributeNS(KoXmlNS::fo, "column-count", "15").toInt();
@@ -313,6 +317,16 @@ void KWPageStyle::loadOdf(const KoXmlElement &style)
     }
 }
 
+KoText::Direction KWPageStyle::direction() const
+{
+    return d->direction;
+}
+
+void KWPageStyle::setDirection(KoText::Direction direction)
+{
+    d->direction = direction;
+}
+
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
     return d == other.d;
@@ -332,3 +346,4 @@ uint qHash(const KWPageStyle &style)
 {
     return style.hash();
 }
+
