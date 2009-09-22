@@ -45,6 +45,7 @@ http://rafb.net/p/R4QIBR13.html
 2009-09-22
 KoProperty
 * add option for out-of-kexi builds with altered lib name and version
+* make dependency on kolibs optional
 
 2009-09-19
 Migration

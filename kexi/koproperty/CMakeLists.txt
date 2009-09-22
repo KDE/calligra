@@ -1,9 +1,14 @@
-# the following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION 
-# see koffice/kexi/CMakeLists.txt for example
+# The following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION.
+# Set KOPROPERTY_USE_KOLIBS to TRUE if extra features that use KOffice libraries should be compiled-in.
+# See koffice/kexi/CMakeLists.txt for example.
+# TODO remove when we move to independent place
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})
+if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
+  add_definitions(-DKOPROPERTY_USE_KOLIBS)
+endif(KOPROPERTY_USE_KOLIBS)
 
 include_directories(
 #  ${CMAKE_SOURCE_DIR}/kexi/koproperty
@@ -66,7 +71,7 @@ install(TARGETS ${KOPROPERTY_TARGETNAME} ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 add_definitions(-DKOPROPERTY_APP_DIR="\\"${KOPROPERTY_TARGETNAME}\\"") # for KIconLoader::global()->addAppDir();
-                                                               # TODO remove when we move to independent place
+                                                                       # TODO remove when we move to independent place
 kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
 
 if(FALSE) # TODO: install when we move to independent place
