@@ -7,7 +7,7 @@ import Kross, KPlato
 T = Kross.module("kdetranslation")
 def i18n(text, args = []):
     if T is not None:
-        return T.i18n(text, args)
+        return T.i18n(text, args).decode('utf-8')
     # No translation module, return the untranslated string
     for a in range( len(args) ):
         text = text.replace( ("%" + "%d" % ( a + 1 )), str(args[a]) )
