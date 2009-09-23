@@ -1,5 +1,5 @@
 #! /usr/bin/env perl
-use warnings
+use warnings;
 use strict;
 use File::Path;
 use LWP::UserAgent;
