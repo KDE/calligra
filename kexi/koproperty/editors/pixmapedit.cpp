@@ -81,7 +81,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     Utils::setupDotDotDotButton(m_button, i18n("Insert image from file"),
         i18n("Inserts image from file"));
 
-    m_popup = new QLabel(0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WX11BypassWM | Qt::WStyle_StaysOnTop);
+    m_popup = new QLabel(0, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     m_popup->setBackgroundRole(QPalette::Base);
     m_popup->setFrameStyle(QFrame::Plain | QFrame::Box);
     m_popup->setMargin(2);

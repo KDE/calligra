@@ -92,7 +92,6 @@ enum PropertyType {
     Pen = QVariant::Pen,
     Pixmap = QVariant::Pixmap,
     Point = QVariant::Point,
-    PointArray = QVariant::PointArray,
     PointF = QVariant::PointF,
     Polygon = QVariant::Polygon,
     Rect = QVariant::Rect,
