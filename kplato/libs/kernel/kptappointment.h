@@ -129,7 +129,8 @@ public:
     ~Appointment();
 
     bool isEmpty() const { return m_intervals.isEmpty(); }
-    
+    void clear();
+
     // get/set member values.
     Schedule *node() const { return m_node; }
     void setNode(Schedule *n) { m_node = n; }

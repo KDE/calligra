@@ -36,6 +36,23 @@
 namespace KPlato
 {
 
+enum ObjectType {
+    OT_None = 0,
+    OT_Project,
+    OT_Task,
+    OT_Summarytask,
+    OT_ResourceGroup,
+    OT_Resource,
+    OT_Appointment,
+    OT_External,
+    OT_Interval,
+    OT_ScheduleManager,
+    OT_Schedule,
+    OT_Calendar,
+    OT_CalendarWeek,
+    OT_CalendarDay
+};
+
 namespace Role
 {
     enum Roles {
@@ -48,7 +65,10 @@ namespace Role
         Maximum,
         Minimum,
         EditorType,
-        ReadWrite
+        ReadWrite,
+        ObjectType,
+        InternalAppointments,
+        ExternalAppointments
     };
 } //namespace Role
 

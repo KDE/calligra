@@ -579,8 +579,26 @@ Schedule *Resource::schedule( long id ) const
 
 Schedule *Resource::findSchedule( long id ) const
 {
-    if ( m_schedules.contains( id ) )
+    if ( m_schedules.contains( id ) ) {
         return m_schedules[ id ];
+    }
+    if ( id == CURRENTSCHEDULE ) {
+        return m_currentSchedule;
+    }
+    if ( id == BASELINESCHEDULE || id == ANYSCHEDULED ) {
+        foreach ( Schedule *s, m_schedules ) {
+            if ( s->isBaselined() ) {
+                return s;
+            }
+        }
+    }
+    if ( id == ANYSCHEDULED ) {
+        foreach ( Schedule *s, m_schedules ) {
+            if ( s->isScheduled() ) {
+                return s;
+            }
+        }
+    }
     return 0;
 }
 

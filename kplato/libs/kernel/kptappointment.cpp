@@ -361,6 +361,11 @@ Appointment::~Appointment() {
     detach();
 }
 
+void Appointment::clear()
+{
+    m_intervals.clear();
+}
+
 AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
 {
     //kDebug()<<start<<end;
