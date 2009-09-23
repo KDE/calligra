@@ -163,7 +163,17 @@ private:
 class KPLATOMODELS_EXPORT ResourceAppointmentsRowModel : public ItemModelBase
 {
     Q_OBJECT
+    Q_ENUMS( Properties )
 public:
+    enum Properties {
+        Name = 0,
+        Type,
+        StartTime,
+        EndTime,
+        Load
+    };
+    const QMetaEnum columnMap() const;
+
     explicit ResourceAppointmentsRowModel( QObject *parent = 0 );
     ~ResourceAppointmentsRowModel();
 
@@ -218,11 +228,6 @@ protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
 
 protected:
-    virtual QVariant data( const ResourceGroup *g, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const Resource *r, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const Appointment *a, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const AppointmentInterval *a, int column, int role = Qt::DisplayRole ) const; 
-
     QModelIndex createGroupIndex( int row, int column, Project *project );
     QModelIndex createResourceIndex( int row, int column, ResourceGroup *g );
     QModelIndex createAppointmentIndex( int row, int column, Resource *r );
@@ -230,7 +235,7 @@ protected:
 
     Private *find( void *ptr ) const;
 
-private:
+protected:
     ScheduleManager *m_manager;
     QMap<void*, Private*> m_datamap;
 };
@@ -245,12 +250,13 @@ public:
     explicit ResourceAppointmentsGanttModel( QObject *parent = 0 );
     ~ResourceAppointmentsGanttModel();
 
-    using ResourceAppointmentsRowModel::data;
+    virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
+
 protected:
-    virtual QVariant data( const ResourceGroup *g, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const Resource *r, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const Appointment *a, int column, int role = Qt::DisplayRole ) const; 
-    virtual QVariant data( const AppointmentInterval *a, int column, int role = Qt::DisplayRole ) const; 
+    QVariant data( const ResourceGroup *g, int column, int role = Qt::DisplayRole ) const; 
+    QVariant data( const Resource *r, int column, int role = Qt::DisplayRole ) const; 
+    QVariant data( const Appointment *a, int column, int role = Qt::DisplayRole ) const; 
+    QVariant data( const AppointmentInterval *a, int column, int role = Qt::DisplayRole ) const;
 };
 
 }  //KPlato namespace

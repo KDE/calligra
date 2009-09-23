@@ -84,6 +84,26 @@ private:
 
 };
 
+class KPLATOUI_EXPORT ResourceGanttItemDelegate : public KDGantt::ItemDelegate
+{
+    Q_OBJECT
+public:
+    ResourceGanttItemDelegate( QObject *parent = 0 );
+
+    QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
+
+    virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+
+protected:
+    void paintResourceItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+
+private:
+    Q_DISABLE_COPY(ResourceGanttItemDelegate)
+    QBrush m_overloadBrush;
+    QBrush m_underloadBrush;
+
+};
+
 } // namespace KPlato
 
 #endif

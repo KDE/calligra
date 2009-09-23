@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2008 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2008 - 2009 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 
 #include "kptnodeitemmodel.h"
 #include "kptnode.h"
-
+#include "kptresourceappointmentsmodel.h"
 #include <kdebug.h>
 
 #include <QModelIndex>
@@ -608,6 +608,197 @@ void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOpt
         // FIXME How to make sure it's not obscured by other constraints?
     }
     KDGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, c );
+}
+
+//------------------------
+ResourceGanttItemDelegate::ResourceGanttItemDelegate( QObject *parent )
+    : KDGantt::ItemDelegate( parent )
+{
+    QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
+    b.setColorAt( 0., Qt::red );
+    b.setColorAt( 1., Qt::darkRed );
+    m_overloadBrush = QBrush( b );
+
+    b.setColorAt( 0., QColor( Qt::yellow ).lighter( 175 ) );
+    b.setColorAt( 1., QColor( Qt::yellow ).darker( 125 ) );
+    m_underloadBrush = QBrush( b );
+}
+
+QVariant ResourceGanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
+{
+    QModelIndex i = idx.model()->index( idx.row(), column, idx.parent() );
+    return i.data( role );
+}
+
+
+/*! Paints the gantt item \a idx using \a painter and \a opt
+ */
+void ResourceGanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+{
+    if ( !idx.isValid() ) return;
+    const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
+    const QString& txt = opt.text;
+    QRectF itemRect = opt.itemRect;
+    QRectF boundingRect = opt.boundingRect;
+    boundingRect.setY( itemRect.y() );
+    boundingRect.setHeight( itemRect.height() );
+    //qDebug() << "itemRect="<<itemRect<<", boundingRect="<<boundingRect;
+
+    painter->save();
+
+    QPen pen = defaultPen( typ );
+    if ( opt.state & QStyle::State_Selected ) pen.setWidth( 2*pen.width() );
+    painter->setPen( pen );
+    painter->setBrush( defaultBrush( typ ) );
+
+    qreal pw = painter->pen().width()/2.;
+    switch( typ ) {
+    case KDGantt::TypeTask:
+        if ( itemRect.isValid() ) {
+            qreal pw = painter->pen().width()/2.;
+            pw-=1;
+            QRectF r = itemRect;
+            r.translate( 0., r.height()/12. );
+            r.setHeight( 5.*r.height()/6. );
+            painter->setBrushOrigin( itemRect.topLeft() );
+
+            painter->save();
+            if ( idx.data( Role::ObjectType ).toInt() == OT_External ) {
+                painter->setBrush( Qt::blue );
+            }
+            painter->translate( 0.5, 0.5 );
+            painter->drawRect( r );
+            bool ok;
+            QModelIndex ix = idx.model()->index( idx.row(), ResourceAppointmentsRowModel::Load, idx.parent() );
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta, txt );
+        }
+        break;
+    case KDGantt::TypeSummary:
+        if ( idx.data( Role::ObjectType ).toInt() == OT_Resource ) {
+            paintResourceItem( painter, opt, idx );
+        } else if ( itemRect.isValid() ) {
+            pw-=1;
+            const QRectF r = QRectF( opt.itemRect ).adjusted( -pw, -pw, pw, pw );
+            QPainterPath path;
+            const qreal deltaY = r.height()/2.;
+            const qreal deltaX = qMin( r.width()/qreal(2), deltaY );
+            path.moveTo( r.topLeft() );
+            path.lineTo( r.topRight() );
+            path.lineTo( QPointF( r.right(), r.top() + 2.*deltaY ) );
+            //path.lineTo( QPointF( r.right()-3./2.*delta, r.top() + delta ) );
+            path.quadTo( QPointF( r.right()-.5*deltaX, r.top() + deltaY ), QPointF( r.right()-2.*deltaX, r.top() + deltaY ) );
+            //path.lineTo( QPointF( r.left()+3./2.*delta, r.top() + delta ) );
+            path.lineTo( QPointF( r.left() + 2.*deltaX, r.top() + deltaY ) );
+            path.quadTo( QPointF( r.left()+.5*deltaX, r.top() + deltaY ), QPointF( r.left(), r.top() + 2.*deltaY ) );
+            path.closeSubpath();
+            painter->setBrushOrigin( itemRect.topLeft() );
+            painter->save();
+            painter->translate( 0.5, 0.5 );
+            painter->drawPath( path );
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
+        }
+        break;
+    case KDGantt::TypeEvent: /* TODO */
+        //qDebug() << opt.boundingRect << opt.itemRect;
+        if ( opt.boundingRect.isValid() ) {
+            const qreal pw = painter->pen().width() / 2. - 1;
+            const QRectF r = QRectF( opt.rect ).adjusted( -pw, -pw, pw, pw );
+            QPainterPath path;
+            const qreal delta = static_cast< int >( r.height() / 2 );
+            path.moveTo( delta, 0. );
+            path.lineTo( 2.*delta, delta );
+            path.lineTo( delta, 2.*delta );
+            path.lineTo( 0., delta );
+            path.closeSubpath();
+            painter->save();
+            painter->translate( r.topLeft() );
+            painter->translate( 0.5, 0.5 );
+            painter->drawPath( path );
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
+        }
+        break;
+    default:
+        break;
+    }
+    painter->restore();
+}
+
+void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+{
+    if ( ! opt.itemRect.isValid() ) {
+        return;
+    }
+    qreal pw = painter->pen().width()/2.;
+    pw-=1;
+    QRectF r = opt.itemRect;
+    QRectF boundingRect = opt.boundingRect;
+    boundingRect.setY( r.y() );
+    boundingRect.setHeight( r.height() );
+    r.translate( 0., r.height()/12. );
+    r.setHeight( 5.*r.height()/6. );
+    painter->setBrushOrigin( opt.itemRect.topLeft() );
+
+    qreal x0 = opt.grid->mapToChart( idx.data( KDGantt::StartTimeRole ).toDateTime() );
+
+    Appointment *external = static_cast<Appointment*>( idx.data( Role::ExternalAppointments ).value<void*>() );
+    Appointment *internal = static_cast<Appointment*>( idx.data( Role::InternalAppointments ).value<void*>() );
+    int rl = idx.data( Role::Maximum ).toInt(); //TODO check calendar
+    Appointment tot = *external + *internal;
+    painter->save();
+    // TODO check load vs units properly, it's not as simple as below!
+    foreach ( const AppointmentInterval &i, tot.intervals() ) {
+        int il = i.load();
+        QString txt = KGlobal::locale()->formatNumber( (double)il / (double)rl, 1 ); 
+        QPen pen = painter->pen();
+        if ( il > rl ) {
+            painter->setBrush( m_overloadBrush );
+            pen.setColor( Qt::white );
+        } else if ( il < rl ) {
+            painter->setBrush( m_underloadBrush );
+        } else {
+            painter->setBrush( defaultBrush( KDGantt::TypeTask ) );
+        }
+        qreal v1 = opt.grid->mapToChart( i.startTime().dateTime() );
+        qreal v2 = opt.grid->mapToChart( i.endTime().dateTime() );
+        QRectF rr( v1 - x0, r.y(), v2 - v1, r.height() );
+        painter->drawRect( rr );
+        if ( painter->boundingRect( rr, Qt::AlignCenter, txt ).width() < rr.width() ) {
+            QPen pn = painter->pen();
+            painter->setPen( pen );
+            painter->drawText( rr, Qt::AlignCenter, txt );
+            painter->setPen( pn );
+        }
+    }
+
+    painter->restore();
+    Qt::Alignment ta;
+    switch( opt.displayPosition ) {
+    case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+    case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+    case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+    }
+    painter->drawText( boundingRect, ta, opt.text );
 }
 
 } // namespace KPlato

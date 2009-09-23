@@ -9,6 +9,8 @@ include_directories(
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
+add_subdirectory( tests )
+
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS

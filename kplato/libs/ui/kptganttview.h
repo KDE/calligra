@@ -339,6 +339,8 @@ public:
 
     KoPrintJob *createPrintJob();
 
+    GanttTreeView *treeView() const { return static_cast<GanttTreeView*>( m_gantt->leftView() ); }
+
 signals:
     void itemDoubleClicked();
 

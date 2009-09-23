@@ -864,6 +864,17 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
     kDebug() <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
 
     m_gantt = new KDGantt::View( this );
+    m_gantt->graphicsView()->setItemDelegate( new ResourceGanttItemDelegate( m_gantt ) );
+
+    GanttTreeView *tv = new GanttTreeView( m_gantt );
+    tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    tv->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tv->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // needed since qt 4.2
+    m_gantt->setLeftView( tv );
+    m_gantt->setRowController( new KDGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() ) );
+    tv->header()->setStretchLastSection( true );
+    
+
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
@@ -921,17 +932,21 @@ void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, c
 void ResourceAppointmentsGanttView::slotOptions()
 {
     kDebug();
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( treeView(), true, this );
+    dlg->exec();
+    delete dlg;
 }
 
 bool ResourceAppointmentsGanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
-    return false;
+    return treeView()->loadContext( m_model->columnMap(), settings );;
 }
 
 void ResourceAppointmentsGanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
+    treeView()->saveContext( m_model->columnMap(), settings );
 }
 
 void ResourceAppointmentsGanttView::updateReadWrite( bool on )
