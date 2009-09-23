@@ -102,10 +102,11 @@ void SvgOutputDev::startPage(int pageNum, GfxState *state)
     kDebug(30516) << "starting page" << pageNum;
     d->pageSize = QSizeF( state->getPageWidth(), state->getPageHeight() );
     kDebug(30516) << "page size =" << d->pageSize;
-    if( pageNum == 1 )
-        *d->body << "<g>" << endl;
-    else
-        *d->body << "<g display=\"none\">" << endl;
+    
+    *d->body << "<g id=\"" << QString("%1").arg(pageNum, (int)3, (int)10, QLatin1Char('0')) << "\"" << endl;
+    if( pageNum != 1 )
+        *d->body << " display=\"none\"";
+    *d->body << ">" << endl;
 }
 
 void SvgOutputDev::endPage()
@@ -474,8 +475,13 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     *d->body << " x=\"" << x << "px\"";
     *d->body << " y=\"" << y << "px\"";
 
-    if( font && font->getFamily() )
+    if( font && font->getFamily() ) {
         *d->body << " font-family=\"" << QString::fromAscii( font->getFamily()->getCString() ) << "\"";
+        kDebug(30516) << "font family:" << QString::fromAscii( font->getFamily()->getCString() );
+    } else if( font && font->getName() ) {
+        *d->body << " font-family=\"" << QString::fromAscii( font->getName()->getCString() ) << "\"";
+        kDebug(30516) << "font name:" << QString::fromAscii( font->getName()->getCString() );
+    }
     *d->body << " font-size=\"" << state->getTransformedFontSize() << "px\"";
 
     // fill
