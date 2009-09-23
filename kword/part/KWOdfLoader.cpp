@@ -102,6 +102,11 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
             hasMainText = true;
             break;
         }
+        if (childElem.namespaceURI() == KoXmlNS::table
+                && childElem.localName() == "table") {
+            hasMainText = true;
+            break;
+        }
     }
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
