@@ -2034,7 +2034,16 @@ public:
   msofbtChildAnchorAtom ();
   ~msofbtChildAnchorAtom ();
 
- // void setData( unsigned size, const unsigned char* data );
+  int left() const;
+  void setLeft( int left );
+  int top() const;
+  void setTop( int top );
+  int right() const;
+  void setRight( int right );
+  int bottom() const;
+  void setBottom( int bottom );
+
+  void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtChildAnchorAtom "; }
   void dump( std::ostream& out ) const;
 
@@ -2514,6 +2523,7 @@ protected:
   void handleEscherPropertiesAtom( msofbtOPTAtom* atom );
   void handleEscherClientDataAtom( msofbtClientDataAtom* r );
   void handleEscherClientAnchorAtom( msofbtClientAnchorAtom* r );
+  void handleEscherChildAnchorAtom( msofbtChildAnchorAtom* r );
 
   /**
   * @brief Handle font entity by creating a TextFont and storing it to

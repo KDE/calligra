@@ -4267,12 +4267,77 @@ void msofbtOPTAtom ::dump( std::ostream& out ) const
 
 const unsigned int msofbtChildAnchorAtom::id = 61455; /* F00F */
 
+class msofbtChildAnchorAtom::Private
+{
+public:
+        int left;
+        int top;
+        int right;
+        int bottom;
+};
+
 msofbtChildAnchorAtom ::msofbtChildAnchorAtom ()
 {
+  d = new Private;
+  d->left = 0;
+  d->top = 0;
+  d->right=0;
+  d->bottom=0;
 }
 
 msofbtChildAnchorAtom ::~msofbtChildAnchorAtom ()
 {
+  delete d;
+}
+
+int msofbtChildAnchorAtom ::left() const
+{
+  return d->left;
+}
+
+void msofbtChildAnchorAtom ::setLeft( int left )
+{
+  d->left = left;
+}
+
+int msofbtChildAnchorAtom ::top() const
+{
+  return d->top;
+}
+
+void msofbtChildAnchorAtom ::setTop( int top )
+{
+  d->top = top;
+}
+
+int msofbtChildAnchorAtom ::right() const
+{
+  return d->right;
+}
+
+void msofbtChildAnchorAtom ::setRight( int right )
+{
+  d->right = right;
+}
+
+int msofbtChildAnchorAtom ::bottom() const
+{
+  return d->bottom;
+}
+
+void msofbtChildAnchorAtom ::setBottom( int bottom )
+{
+  d->bottom = bottom;
+}
+
+void
+msofbtChildAnchorAtom ::setData( unsigned size, const unsigned char* data ) {
+  if (size == 16 ){
+    setLeft( readU32( data + 0 ) );
+    setTop( readU32( data + 4 ) );
+    setRight( readU32( data + 8 ) );
+    setBottom( readU32( data + 12 ) );
+  }
 }
 
 void msofbtChildAnchorAtom ::dump( std::ostream& out ) const
@@ -4347,12 +4412,20 @@ void msofbtClientAnchorAtom ::setBottom( int bottom )
   d->bottom = bottom;
 }
 
-void msofbtClientAnchorAtom ::setData( unsigned , const unsigned char* data )
+void msofbtClientAnchorAtom ::setData( unsigned size, const unsigned char* data )
 {
-  setTop( readU16( data + 0 ) );
-  setLeft( readU16( data + 2 ) );
-  setRight( readU16( data + 4 ) );
-  setBottom( readU16( data + 6 ) );
+  if (size == 8)
+  {
+    setTop( readU16( data + 0 ) );
+    setLeft( readU16( data + 2 ) );
+    setRight( readU16( data + 4 ) );
+    setBottom( readU16( data + 6 ) );
+  } else if (size == 16 ){
+    setTop( readU32( data + 0 ) );
+    setLeft( readU32( data + 4 ) );
+    setRight( readU32( data + 8 ) );
+    setBottom( readU32( data + 12 ) );
+  }
 }
 
 void msofbtClientAnchorAtom ::dump( std::ostream& out ) const
@@ -5446,6 +5519,8 @@ void PPTReader::handleRecord( Record* record, int type )
       handleEscherClientDataAtom( static_cast<msofbtClientDataAtom*>(record) ); break;
     case msofbtClientAnchorAtom::id:
       handleEscherClientAnchorAtom( static_cast<msofbtClientAnchorAtom*>(record) ); break;
+    case msofbtChildAnchorAtom::id:
+      handleEscherChildAnchorAtom( static_cast<msofbtChildAnchorAtom*>(record) ); break;
     case FontEntityAtom::id:
       handleFontEntityAtom( static_cast<FontEntityAtom*>(record) ); break;
     default: break;
@@ -5849,6 +5924,20 @@ void PPTReader::handleEscherClientDataAtom( msofbtClientDataAtom* atom )
 }
 
 void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide ) return;
+  if( !d->currentGroup ) return;
+  if( !d->currentObject ) return;
+
+  d->currentObject->setLeft( atom->left()*25.4/576  );
+  d->currentObject->setTop( atom->top()*25.4/576  );
+  d->currentObject->setWidth( (atom->right()-atom->left()-1)*25.4/576  );
+  d->currentObject->setHeight( (atom->bottom()-atom->top()-1)*25.4/576  );
+}
+
+void PPTReader::handleEscherChildAnchorAtom( msofbtChildAnchorAtom* atom )
 {
   if( !atom ) return;
   if( !d->presentation ) return;
