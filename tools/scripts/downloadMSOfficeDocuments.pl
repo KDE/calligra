@@ -88,12 +88,12 @@ sub addJob {
 	}
 }
 
-for (my $start=0; $start < $maxresults; $start = $start + 10) {
+for (my $start=0; $start < $maxresults; $start = $start + 100) {
 	if ($start > 0) {
 		sleep 3; # do not query search engine too often
 	}
 	@pages = ();
-	my $url = "http://www.google.com/search?q=$term+filetype:$type&start=$start";
+	my $url = "http://www.google.com/search?q=$term+filetype:$type&start=$start&num=100";
 	my $res = $ua->request(HTTP::Request->new(GET => $url), sub {$p->parse($_[0])});
 	foreach (@pages) {
 		my $uri = $_;
