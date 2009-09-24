@@ -183,14 +183,18 @@ void DurationSpinBox::editorTextChanged( const QString &text ) {
 
 double DurationSpinBox::valueFromText( const QString & text ) const
 {
-    QString s = extractValue( text );
-    double v = QDoubleSpinBox::valueFromText( s );
+    //HACK to get around different QLocale/KLocale. Prob. needs to rewrite class to not use QDoubleSpinBox
+    QString s = extractValue( text ).remove( KGlobal::locale()->thousandsSeparator() );
+    bool ok = false;
+    double v = s.toDouble( &ok );
+    if ( ! ok ) {
+        v = QDoubleSpinBox::valueFromText( s );
+    }
     return v;
 }
 
 QString DurationSpinBox::textFromValue ( double value ) const
 {
-    //kDebug()<<1<<value;
     QString s = KGlobal::locale()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
     s += Duration::unitToString( m_unit, true );
     //kDebug()<<2<<value<<s;
@@ -210,7 +214,8 @@ QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
     }
     if ( Duration::unitList( true ).contains( s ) ) {
         s = extractValue( input );
-        return validator.validate ( input, pos );
+        int p = 0;
+        return validator.validate ( s, p ); // pos doesn't matter
     }
     return QValidator::Invalid;
 }
