@@ -22,6 +22,7 @@ Table Of Contents
 3. Scripting support
 4. Microsoft Access Import (optional, recommended)
 5. Quick command-line tests of Kexi installation
+6. Debug information
 
 
 
@@ -193,3 +194,10 @@ This will:
 - create a new empty database file "testdb",
 - open it,
 - create a new empty form
+
+6. Debug information
+--------------------
+
+For alpha and beta packages, please build with debug output enabled, but for
+production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended.
+A significant performance increase will be the result.
