@@ -241,25 +241,23 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
     QList<KWFrame*>::Iterator iter = --myFrames.end();
     KWPage page;
     do {
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
-        if (tf) {
-            KWPage pageForFrame = m_pageManager->page(tf->shape());
-            if (!page.isValid()) // first loop
-                page = pageForFrame;
-            else if (page != pageForFrame) { // all frames on the page (of this FS) are empty.
-                deleteFrom = iter;
-                ++deleteFrom;
-            }
+        KWPage pageForFrame = m_pageManager->page((*iter)->shape());
+        if (!page.isValid()) // first loop
+            page = pageForFrame;
+        else if (page != pageForFrame) { // all frames on the page (of this FS) are empty.
+            deleteFrom = iter;
+            ++deleteFrom;
+            page = pageForFrame;
         }
         if (--emptyFrames < 0)
             break;
     } while (iter-- != myFrames.begin());
 
-    while (deleteFrom != myFrames.end()) { // remove all frames till end.
-        removeFrame(*deleteFrom);
-        delete(*deleteFrom)->shape();
-        ++deleteFrom;
-    }
+    iter = --myFrames.end();
+    do { // remove all frames from end till last empty page
+        removeFrame(*iter);
+        delete(*iter)->shape();
+    } while (iter-- != deleteFrom);
 }
 
 void KWTextFrameSet::setAllowLayout(bool allow)
