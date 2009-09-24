@@ -592,12 +592,12 @@ void CalendarEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
     
-    actionAddCalendar   = new KAction(KIcon( "document-new" ), i18n("Add Calendar"), this);
+    actionAddCalendar   = new KAction(KIcon( "resource-calendar-insert" ), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
     
-    actionAddSubCalendar   = new KAction(KIcon( "document-new" ), i18n("Add Subcalendar"), this);
+    actionAddSubCalendar   = new KAction(KIcon( "resource-calendar-child-insert" ), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
