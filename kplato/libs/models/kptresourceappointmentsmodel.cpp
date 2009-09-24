@@ -1489,7 +1489,7 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
             case Type: return i18n( "Type" );
             case StartTime: return i18n( "Start" );
             case EndTime: return i18n( "Finish" );
-            case Load: return i18n( "Load" );
+            case Load: return i18nc( "@title:column noun", "Load" );
         }
     }
     return QVariant();
