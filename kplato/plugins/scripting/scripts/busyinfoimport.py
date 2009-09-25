@@ -34,25 +34,25 @@ class BusyinfoImporter:
         if self.dialog.exec_loop():
             try:
                 self.doImport( self.proj )
-            except Exception, inst:
-                self.forms.showMessageBox("Sorry", i18n("Error"), "%s" % inst)
             except:
                 self.forms.showMessageBox("Error", i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doImport( self, project ):
         filename = self.openwidget.selectedFile()
         if not os.path.isfile(filename):
-            raise Exception, i18n("No file selected")
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No file selected") )
+            return
 
         file = open(filename,'r')
         try:
             # load project id and -name
             data = pickle.load( file )
             #print data
-            if project.id() == data[0]:
-                raise Exception, i18n("Cannot load data from project with the same identity")
             pid = data[0]
-            pname = data[1]
+            if project.id() == pid:
+                self.forms.showMessageBox("Error", i18n("Error"), i18n("Cannot load data from project with the same identity") )
+                raise Exception
+            pname = data[1].decode( "UTF-8" )
             # clear existing, so we don't get double up
             project.clearExternalAppointments( pid )
             # load the intervals
@@ -60,9 +60,6 @@ class BusyinfoImporter:
                 data = pickle.load( file )
                 self.loadAppointment( project, pid, pname, data )
 
-        except Exception, inst:
-            self.forms.showMessageBox("Error", i18n("Error"), "%s" % inst)
-            file.close()
         except:
             file.close()
 

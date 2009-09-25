@@ -38,19 +38,19 @@ class BusyinfoExporter:
         if self.dialog.exec_loop():
             try:
                 self.doExport( self.proj )
-            except Exception, inst:
-                self.forms.showMessageBox("Sorry", i18n("Error"), "%s" % inst)
             except:
                 self.forms.showMessageBox("Error", i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doExport( self, project ):
         filename = self.savewidget.selectedFile()
         if not filename:
-            raise Exception, i18n("No file selected")
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No file selected"))
+            return
         schId = self.scheduleview.currentSchedule()
         if schId == -1:
-            raise Exception, i18n("No schedule selected")
-        file = open( filename, 'w' )
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No schedule selected"))
+            return
+        file = open( filename, 'wb' )
         p = []
         p.append( project.id() )
         p.append( KPlato.data( project, 'NodeName' ) )

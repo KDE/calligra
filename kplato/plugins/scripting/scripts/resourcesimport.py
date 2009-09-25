@@ -35,8 +35,6 @@ class ResourcesImporter:
         if self.dialog.exec_loop():
             try:
                 self.doImport( self.proj )
-            except Exception, inst:
-                self.forms.showMessageBox("Sorry", i18n("Error"), "%s" % inst)
             except:
                 self.forms.showMessageBox("Error", i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
@@ -47,12 +45,15 @@ class ResourcesImporter:
 
         Other = KPlato.openDocument("Other", filename)
         if Other is None:
-            raise Exception, i18n("Could not open document: %1", [filename])
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Could not open document: %1", [filename]))
+            return
         otherproj = Other.project()
         if otherproj is None:
-            raise Exception, i18n("No project to import from")
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No project to import from"))
+            return
         if project.id() == otherproj.id():
-            raise Exception, i18n("Project identities are identical")
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Project identities are identical"))
+            return
 
         for ci in range( otherproj.calendarCount() ):
             self.doImportCalendar( project, otherproj.calendarAt( ci ) )
@@ -64,11 +65,13 @@ class ResourcesImporter:
             if gr is None:
                 gr = project.createResourceGroup( othergroup )
                 if gr is None:
-                    raise Exception, i18n("Unable to create copy of resource group: %1", [othergroup.name()])
+                    self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of resource group: %1", [othergroup.name()]))
+                    return
             for ri in range( othergroup.resourceCount() ):
                 otherresource = othergroup.resourceAt( ri )
                 if otherresource is None:
-                    raise Exception, i18n("No resource to copy from")
+                    self.forms.showMessageBox("Sorry", i18n("Error"), i18n("No resource to copy from"))
+                    return
                 self.doImportResource( project, gr, otherresource )
 
     def doImportResource( self, project, group, resource ):
@@ -76,7 +79,8 @@ class ResourcesImporter:
         if r is None:
             r = project.createResource( group, resource )
             if r is None:
-                raise Exception, i18n("Unable to create copy of resource: %1", [resource.name()])
+                self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of resource: %1", [resource.name()]))
+                return
         else:
             #TODO update?
             print "Resource already exists: %s %s" % ( r.id(), KPlato.data( r, 'ResourceName' ) )
@@ -85,14 +89,16 @@ class ResourcesImporter:
         cal = project.findCalendar( calendar.id() )
         if cal is not None:
             #TODO let user decide
-            raise Exception, i18n("Calendar already exists: %1", [cal.name()])
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Calendar already exists: %1", [cal.name()]))
+            return
         # python doesn't seem to give a 0 pointer for a None object
         if parent is None:
             cal = project.createCalendar( calendar )
         else:
             cal = project.createCalendar( calendar, parent )
         if cal is None:
-            raise Exception, i18n("Unable to create copy of calendar: %1", [calendar.name()])
+            self.forms.showMessageBox("Sorry", i18n("Error"), i18n("Unable to create copy of calendar: %1", [calendar.name()]))
+            return
         for ci in range( calendar.childCount() ):
             self.doImportCalendar( project, calendar.childAt( ci ), cal )
 
