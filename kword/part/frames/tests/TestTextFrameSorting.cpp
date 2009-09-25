@@ -26,6 +26,21 @@ void TestTextFrameSorting::testSimpleSorting()
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame3);
     QCOMPARE(tfs.m_frames[2], frame2);
+
+    KWPageManager pm;
+    tfs.setPageManager(&pm);
+    pm.appendPage();
+    pm.appendPage();
+    KWFrame *frame4 = createFrame(QPointF(10, 1000), tfs); // page 2
+    KWFrame *frame5 = createFrame(QPointF(120, 1000), tfs);
+
+    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+
+    QCOMPARE(tfs.m_frames[0], frame1);
+    QCOMPARE(tfs.m_frames[1], frame3);
+    QCOMPARE(tfs.m_frames[2], frame2);
+    QCOMPARE(tfs.m_frames[3], frame4);
+    QCOMPARE(tfs.m_frames[4], frame5);
 }
 
 void TestTextFrameSorting::testSortingOnPagespread()

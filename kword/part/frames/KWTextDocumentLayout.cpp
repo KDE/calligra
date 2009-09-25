@@ -268,7 +268,6 @@ void KWTextDocumentLayout::relayout()
 {
     if (! m_frameSet->allowLayout())
         return;
-
     const QList<KWFrame*> frames = m_frameSet->frames();
     QList<KWFrame*> dirtyFrames = frames;
     bool foundADirtyOne = false;
@@ -281,9 +280,8 @@ void KWTextDocumentLayout::relayout()
             dirtyFrames.removeAll(frame);
     }
 
-    if (m_frameSet->textFrameSetType() == KWord::OtherTextFrameSet)
-        qSort(m_frameSet->m_frames.begin(), m_frameSet->m_frames.end(), KWTextFrameSet::sortTextFrames); // make sure the ordering is proper
-
+    // make sure the ordering is proper
+    m_frameSet->sortFrames();
     if (foundADirtyOne) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
         // mark dirty any frame that were previously later in the flow, but are now before it.

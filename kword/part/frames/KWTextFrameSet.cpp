@@ -44,6 +44,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         : m_document(new QTextDocument()),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
+        m_frameOrderDirty(true),
         m_textFrameSetType(KWord::OtherTextFrameSet),
         m_pageManager(0),
         m_kwordDocument(doc)
@@ -69,6 +70,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         : m_document(new QTextDocument()),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
+        m_frameOrderDirty(true),
         m_textFrameSetType(type),
         m_pageManager(0),
         m_kwordDocument(doc)
@@ -158,6 +160,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         }
         data->setDocument(m_document, false);
     } else {
+        m_frameOrderDirty = true;
         data->setDocument(m_document, false);
         data->setEndPosition(-1);
         data->foul();
@@ -292,6 +295,13 @@ void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 KWPageStyle KWTextFrameSet::pageStyle() const
 {
     return m_pageStyle;
+}
+
+void KWTextFrameSet::sortFrames()
+{
+    if (m_frameOrderDirty)
+        qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
+    m_frameOrderDirty = false;
 }
 
 // static

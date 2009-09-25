@@ -134,12 +134,14 @@ protected:
      */
     void scheduleLayout();
 
+    void sortFrames();
+
 private slots:
     void updateTextLayout();
 
 private:
     QTextDocument *m_document;
-    bool m_layoutTriggered, m_allowLayoutRequests;
+    bool m_layoutTriggered, m_allowLayoutRequests, m_frameOrderDirty;
     KWord::TextFrameSetType m_textFrameSetType;
     const KWPageManager *m_pageManager;
     const KWDocument *m_kwordDocument;
