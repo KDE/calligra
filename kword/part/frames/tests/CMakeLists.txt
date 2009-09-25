@@ -28,5 +28,10 @@ kde4_add_unit_test(TestTextFrameSorting TESTNAME kword-part-frame-TestTextFrameS
 target_link_libraries(TestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+set(TestTextFrameManagement_test_SRCS TestTextFrameManagement.cpp)
+kde4_add_unit_test(TestTextFrameManagement TESTNAME kword-part-frame-TestTextFrameManagement  ${TestTextFrameManagement_test_SRCS})
+target_link_libraries(TestTextFrameManagement kwordprivate ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
 
 endif(KDE4_BUILD_TESTS)

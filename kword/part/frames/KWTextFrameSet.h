@@ -112,7 +112,10 @@ signals:
 
 protected:
     friend class KWTextDocumentLayout;
+#ifndef NDEBUG
     friend class TestTextFrameSorting;
+    friend class TestTextFrameManagement;
+#endif
     void setupFrame(KWFrame *frame);
     /**
      * Call this to make it known that the text we want to layout needs more space to be shown fully.
