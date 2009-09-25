@@ -41,6 +41,9 @@
 #define SMALLTICKSIZE 4
 #define TICKOFFSET 0
 
+#define EXTRALABELSPACE 4
+#define MINIMUMLABELSPACE 10
+
 namespace KPlato
 {
 
@@ -103,6 +106,16 @@ public:
     // Grid of bools to mask "used" regions of the plot
     float plotMask[100][100];
     double px[100], py[100];
+
+    int bottomTickLabelHeight;
+    int bottomLabelHeight;
+    int topTickLabelHeight;
+    int topLabelHeight;
+    int leftTickLabelWidth;
+    int leftLabelWidth;
+    int rightTickLabelWidth;
+    int rightLabelWidth;
+
 };
 
 KPlotWidget::KPlotWidget( QWidget * parent )
@@ -380,7 +393,7 @@ bool KPlotWidget::event( QEvent* e ) {
         if ( d->showObjectToolTip )
         {
             QHelpEvent *he = static_cast<QHelpEvent*>( e );
-            const QList<KPlotPoint*> pts = pointsUnderPoint( he->pos() - QPoint( leftPadding(), topPadding() ) - contentsRect().topLeft() );
+            const QList<KPlotPoint*> pts = pointsUnderPoint( he->pos() - QPoint( contentsFrame() + leftPadding(), contentsFrame() + topPadding() ) - contentsRect().topLeft() );
             if ( pts.count() > 0 ) {
                 QToolTip::showText( he->globalPos(), pts.front()->label(), this );
             }
@@ -396,15 +409,81 @@ void KPlotWidget::resizeEvent( QResizeEvent* e ) {
     QFrame::resizeEvent( e );
 }
 
-void KPlotWidget::setPixRect() {
-    int newWidth = contentsRect().width() - leftPadding() - rightPadding();
-    int newHeight = contentsRect().height() - topPadding() - bottomPadding();
+void KPlotWidget::setPixRect( QPainter *p ) {
+    p->save();
+    //set small font for tick labels
+    QFont f = p->font();
+    int s = f.pointSize();
+    f.setPointSize( s - 2 );
+    p->setFont( f );
+
+    d->bottomTickLabelHeight = 0;
+    d->bottomLabelHeight = 0;
+    d->topTickLabelHeight = 0;
+    d->topLabelHeight = 0;
+    d->leftTickLabelWidth = 0;
+    d->leftLabelWidth = 0;
+    d->rightTickLabelWidth = 0;
+    d->rightLabelWidth = 0;
+    KPlotAxis *a = axis(BottomAxis);
+    if ( a && a->areTickLabelsShown() ) {
+        foreach( double xx, a->majorTickMarks() ) {
+            int h = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->tickLabel( xx ) ).height();
+            d->bottomTickLabelHeight = qMax( h + EXTRALABELSPACE, d->bottomTickLabelHeight );
+        }
+        if ( ! a->label().isEmpty() ) {
+            int h = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->label() ).height();
+            d->bottomLabelHeight = h + EXTRALABELSPACE;
+        }
+    }
+    a = axis(TopAxis);
+    if ( a && a->areTickLabelsShown() ) {
+        foreach( double xx, a->majorTickMarks() ) {
+            int h = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->tickLabel( xx ) ).height();
+            d->topTickLabelHeight = qMax( h + EXTRALABELSPACE, d->topTickLabelHeight );
+        }
+        if ( ! a->label().isEmpty() ) {
+            int h = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->label() ).height();
+            d->topLabelHeight = h + EXTRALABELSPACE;
+        }
+    }
+    a = axis(LeftAxis);
+    if ( a && a->areTickLabelsShown() ) {
+        foreach( double xx, a->majorTickMarks() ) {
+            int w = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->tickLabel( xx ) ).width();
+            d->leftTickLabelWidth = qMax( w + EXTRALABELSPACE, d->leftTickLabelWidth );
+        }
+        if ( ! a->label().isEmpty() ) {
+            p->rotate( -90.0 );
+            int w = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->label() ).height();
+            d->leftLabelWidth = w + EXTRALABELSPACE;
+            p->rotate( 90.0 );
+        }
+    }
+    a = axis(RightAxis);
+    if ( a && a->areTickLabelsShown() ) {
+        foreach( double xx, a->majorTickMarks() ) {
+            int w = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->tickLabel( xx ) ).width();
+            d->rightTickLabelWidth = qMax( w + EXTRALABELSPACE, d->rightTickLabelWidth );
+        }
+        if ( ! a->label().isEmpty() ) {
+            p->rotate( -90.0 );
+            int w = p->boundingRect( QRect(0,0,0,0), Qt::AlignLeft | Qt::TextDontClip, a->label() ).height();
+            d->rightLabelWidth = w + EXTRALABELSPACE;
+            p->rotate( 90.0 );
+        }
+    }
+    int padWidth = leftPadding() + rightPadding();
+    int padHeight = bottomPadding() + topPadding();
+    int newWidth = paintRect().width() - padWidth;
+    int newHeight = paintRect().height() - padHeight;
     // PixRect starts at (0,0) because we will translate by leftPadding(), topPadding()
     d->pixRect = QRect( 0, 0, newWidth, newHeight );
     for ( int i=0; i<100; ++i ) {
         d->px[i] = double(i*d->pixRect.width())/100.0 + double(d->pixRect.x());
         d->py[i] = double(i*d->pixRect.height())/100.0 + double(d->pixRect.y());
     }
+    p->restore();
 }
 
 QPointF KPlotWidget::mapToWidget( const QPointF& p ) const
@@ -551,9 +630,11 @@ void KPlotWidget::paintEvent( QPaintEvent *e ) {
     p.begin( this );
     p.setRenderHint( QPainter::Antialiasing, d->useAntialias );
     p.fillRect( rect(), backgroundColor() );
+    p.translate( contentsFrame(), contentsFrame() );
+    setPixRect( &p );
+
     p.translate( leftPadding() + 0.5, topPadding() + 0.5 );
 
-    setPixRect();
     p.setClipRect( d->pixRect );
     p.setClipping( true );
 
@@ -625,7 +706,7 @@ void KPlotWidget::drawAxes( QPainter *p ) {
 
                 //Draw ticklabel
                 if ( a->areTickLabelsShown() ) {
-                    QRect r( int(px) - BIGTICKSIZE, d->pixRect.height()+BIGTICKSIZE, 2*BIGTICKSIZE, BIGTICKSIZE );
+                    QRect r( int(px) - BIGTICKSIZE, d->pixRect.height(), d->bottomTickLabelHeight, d->bottomTickLabelHeight );
                     p->drawText( r, Qt::AlignCenter | Qt::TextDontClip, a->tickLabel( xx ) );
                 }
             }
@@ -642,7 +723,8 @@ void KPlotWidget::drawAxes( QPainter *p ) {
 
         // Draw BottomAxis Label
         if ( ! a->label().isEmpty() ) {
-            QRect r( 0, d->pixRect.height() + 2*YPADDING, d->pixRect.width(), YPADDING );
+            int y = d->pixRect.height() + d->bottomTickLabelHeight;
+            QRect r( d->pixRect.x(), y, d->pixRect.width(), d->bottomLabelHeight );
             p->drawText( r, Qt::AlignCenter, a->label() );
         }
     }  //End of BottomAxis
@@ -661,7 +743,7 @@ void KPlotWidget::drawAxes( QPainter *p ) {
 
                 //Draw ticklabel
                 if ( a->areTickLabelsShown() ) {
-                    QRect r( -2*BIGTICKSIZE-SMALLTICKSIZE, int(py)-SMALLTICKSIZE, 2*BIGTICKSIZE, 2*SMALLTICKSIZE );
+                    QRect r( -d->leftTickLabelWidth-2, int(py)-SMALLTICKSIZE, d->leftTickLabelWidth, 2*SMALLTICKSIZE );
                     p->drawText( r, Qt::AlignRight | Qt::AlignVCenter | Qt::TextDontClip, a->tickLabel( yy ) );
                 }
             }
@@ -681,10 +763,10 @@ void KPlotWidget::drawAxes( QPainter *p ) {
             p->save();
     
             //translate coord sys to left corner of axis label rectangle, then rotate 90 degrees.
-            p->translate( -3*XPADDING, d->pixRect.height() );
+            p->translate( -leftPadding(), d->pixRect.height() );
             p->rotate( -90.0 );
     
-            QRect r( 0, 0, d->pixRect.height(), XPADDING );
+            QRect r( 0, 0, d->pixRect.height(), d->leftLabelWidth );
             p->drawText( r, Qt::AlignCenter, a->label() ); //draw the label, now that we are sideways
     
             p->restore();  //restore translation/rotation state
@@ -706,7 +788,6 @@ void KPlotWidget::drawAxes( QPainter *p ) {
     /*** TopAxis ***/
     a = axis(TopAxis);
     if (a->isVisible()) {
-        kDebug()<<"Draw top axis line";
         p->drawLine( 0, 0, d->pixRect.width(), 0 );
 
         // Draw major tickmarks
@@ -733,7 +814,7 @@ void KPlotWidget::drawAxes( QPainter *p ) {
 
         // Draw TopAxis Label
         if ( ! a->label().isEmpty() ) {
-            QRect r( 0, 0 - 3*YPADDING, d->pixRect.width(), YPADDING );
+            QRect r( 0, 0 - topPadding(), d->pixRect.width(), d->topLabelHeight );
             p->drawText( r, Qt::AlignCenter, a->label() );
         }
     }  //End of TopAxis
@@ -741,7 +822,6 @@ void KPlotWidget::drawAxes( QPainter *p ) {
     /*** RightAxis ***/
     a = axis(RightAxis);
     if (a->isVisible()) {
-	kDebug()<<"Draw right axis line";
         p->drawLine( d->pixRect.width(), 0, d->pixRect.width(), d->pixRect.height() );
 
         // Draw major tickmarks
@@ -753,7 +833,6 @@ void KPlotWidget::drawAxes( QPainter *p ) {
 
                 //Draw ticklabel
                 if ( a->areTickLabelsShown() ) {
-kDebug()<<"Draw tick labels";
                     QRect r( d->pixRect.width() + SMALLTICKSIZE, int(py)-SMALLTICKSIZE, 2*BIGTICKSIZE, 2*SMALLTICKSIZE );
                     p->drawText( r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip, a->tickLabel( yy ) );
                 }
@@ -771,15 +850,14 @@ kDebug()<<"Draw tick labels";
 
         //Draw RightAxis Label.  We need to draw the text sideways.
         if ( ! a->label().isEmpty() ) {
-	  kDebug()<<"Draw right axis label";
             //store current painter translation/rotation state
             p->save();
     
             //translate coord sys to left corner of axis label rectangle, then rotate 90 degrees.
-            p->translate( d->pixRect.width() + 2*XPADDING, d->pixRect.height() );
+            p->translate( d->pixRect.width() + rightPadding() - d->rightLabelWidth, d->pixRect.height() );
             p->rotate( -90.0 );
     
-            QRect r( 0, 0, d->pixRect.height(), XPADDING );
+            QRect r( 0, 0, d->pixRect.height(), d->rightLabelWidth );
             p->drawText( r, Qt::AlignCenter, a->label() ); //draw the label, now that we are sideways
     
             p->restore();  //restore translation/rotation state
@@ -789,50 +867,54 @@ kDebug()<<"Draw tick labels";
 
 int KPlotWidget::leftPadding() const
 {
-    if ( d->leftPadding >= 0 )
+    return d->leftLabelWidth + d->leftTickLabelWidth;
+/*    if ( d->leftPadding >= 0 )
         return d->leftPadding;
     const KPlotAxis *a = axis( LeftAxis );
     if ( a && a->isVisible() && a->areTickLabelsShown() )
     {
         return !a->label().isEmpty() ? 3 * XPADDING : 2 * XPADDING;
     }
-    return XPADDING;
+    return XPADDING;*/
 }
 
 int KPlotWidget::rightPadding() const
 {
-    if ( d->rightPadding >= 0 )
+    return qMax( d->rightLabelWidth + d->rightTickLabelWidth, MINIMUMLABELSPACE ) ;
+/*    if ( d->rightPadding >= 0 )
         return d->rightPadding;
     const KPlotAxis *a = axis( RightAxis );
     if ( a && a->isVisible() && a->areTickLabelsShown() )
     {
         return !a->label().isEmpty() ? 3 * XPADDING : 2 * XPADDING;
     }
-    return XPADDING;
+    return XPADDING;*/
 }
 
 int KPlotWidget::topPadding() const
 {
-    if ( d->topPadding >= 0 )
+    return qMax( d->topLabelHeight + d->topTickLabelHeight, MINIMUMLABELSPACE );
+/*    if ( d->topPadding >= 0 )
         return d->topPadding;
     const KPlotAxis *a = axis( TopAxis );
     if ( a && a->isVisible() && a->areTickLabelsShown() )
     {
         return !a->label().isEmpty() ? 3 * YPADDING : 2 * YPADDING;
     }
-    return YPADDING;
+    return YPADDING;*/
 }
 
 int KPlotWidget::bottomPadding() const
 {
-    if ( d->bottomPadding >= 0 )
+    return d->bottomLabelHeight + d->bottomTickLabelHeight;
+/*    if ( d->bottomPadding >= 0 )
         return d->bottomPadding;
     const KPlotAxis *a = axis( BottomAxis );
     if ( a && a->isVisible() && a->areTickLabelsShown() )
     {
         return !a->label().isEmpty() ? 3 * YPADDING : 2 * YPADDING;
     }
-    return YPADDING;
+    return YPADDING;*/
 }
 
 void KPlotWidget::setLeftPadding( int padding )
@@ -861,6 +943,16 @@ void KPlotWidget::setDefaultPaddings()
    d->rightPadding = -1;
    d->topPadding = -1;
    d->bottomPadding = -1;
+}
+
+int KPlotWidget::contentsFrame() const
+{
+    return 2;
+}
+
+QRect KPlotWidget::paintRect() const
+{
+    return contentsRect().adjusted( 0, 0, -2*contentsFrame(), -2*contentsFrame() );
 }
 
 } //namespace KPlato

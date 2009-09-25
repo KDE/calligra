@@ -427,7 +427,7 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
         }
         if ( index.userData == X_Axis ) {
             if ( parent( index ).number() == 0 ) {
-                return "Time"; // left y-axis
+                return i18n( "Time" ); // left y-axis
             }
             if ( parent( index ).number() == 1 ) {
                 // Top axis label
@@ -438,11 +438,11 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
             //kDebug()<<"Y axis:"<<index;
             if ( m_dataShown.showCost && parent( index ).number() == 0 ) {
                 //kDebug()<<"Y-axis Cost";
-                return "Cost"; // left y-axis
+                return i18n( "Cost" ); // left y-axis
             }
             if ( m_dataShown.showEffort && parent( index ).number() == ( m_dataShown.showCost ? 1 : 0 ) ) {
                 //kDebug()<<"Y-axis Hours";
-                return "Hours"; // right y-axis
+                return i18n( "Hours" ); // right y-axis
             }
         }
         //kDebug()<<index<<"No data";

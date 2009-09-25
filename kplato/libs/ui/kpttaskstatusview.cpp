@@ -492,6 +492,7 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     labelSPI->setToolTip( i18nc( "@info:tooltip", "Effortbased performance index" ) );
 
     plotwidget->setAntialiasing(false);
+    plotwidget->setShowGrid(false);
     connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
     
     setContextMenuPolicy ( Qt::DefaultContextMenu );

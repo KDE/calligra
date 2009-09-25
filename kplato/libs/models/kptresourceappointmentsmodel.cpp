@@ -1667,7 +1667,7 @@ QModelIndex ResourceAppointmentsRowModel::createAppointmentIndex( int row, int c
         Q_ASSERT( pr );
         p = new Private( pr, a, type );
         m_datamap.insert( a, p );
-        qDebug()<<"createAppointmentIndex: new"<<p;
+        //qDebug()<<"createAppointmentIndex: new"<<p;
     }
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );
@@ -1691,7 +1691,7 @@ QModelIndex ResourceAppointmentsRowModel::createIntervalIndex( int row, int colu
         Q_ASSERT( pa );
         p = new Private( pa, new AppointmentInterval( i ), OT_Interval );
         m_datamap.insert( p->ptr, p );
-        qDebug()<<"createIntervalIndex: new"<<p;
+        //qDebug()<<"createIntervalIndex: new"<<p;
     }
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );

@@ -456,17 +456,21 @@ protected:
     virtual void drawAxes( QPainter *p );
 
     /**
-     * Synchronize the PixRect with the current widget size and 
-     * padding settings.
-     */
-    void setPixRect();
-
-    /**
      * @return a list of points in the plot which are within 4 pixels
      * of the screen position given as an argument.
      * @param p The screen position from which to check for plot points.
      */
     QList<KPlotPoint*> pointsUnderPoint( const QPoint& p ) const;
+
+protected:
+    /**
+     * Synchronize the PixRect with the current widget size and 
+     * padding settings.
+     */
+    void setPixRect( QPainter *painter );
+
+    int contentsFrame() const;
+    QRect paintRect() const;
 
 private:
     class Private;
