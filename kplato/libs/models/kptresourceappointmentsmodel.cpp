@@ -1241,7 +1241,7 @@ QVariant ResourceAppointmentsRowModel::Private::externalData( int column, int ro
     if ( role == Qt::DisplayRole ) {
         switch ( column ) {
             case ResourceAppointmentsRowModel::Name: return a->auxcilliaryInfo();
-            case ResourceAppointmentsRowModel::Type: return "External";
+            case ResourceAppointmentsRowModel::Type: return i18n( "Project" );
             case ResourceAppointmentsRowModel::StartTime: return KGlobal::locale()->formatDateTime( a->startTime() );
             case ResourceAppointmentsRowModel::EndTime: return KGlobal::locale()->formatDateTime( a->endTime() );
             case ResourceAppointmentsRowModel::Load: return " ";
@@ -1487,8 +1487,8 @@ QVariant ResourceAppointmentsRowModel::headerData( int section, Qt::Orientation 
         switch ( section ) {
             case Name: return i18n( "Name" );
             case Type: return i18n( "Type" );
-            case StartTime: return i18n( "Start" );
-            case EndTime: return i18n( "Finish" );
+            case StartTime: return i18n( "Start Time" );
+            case EndTime: return i18n( "End Time" );
             case Load: return i18nc( "@title:column noun", "Load" );
         }
     }
