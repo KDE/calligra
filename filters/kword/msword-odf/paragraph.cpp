@@ -609,8 +609,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             QString color = Conversion::color( chp->icoHighlight, -1 );
             style->addProperty( "fo:background-color", color, KoGenStyle::TextType );
         } else {
-            //TODO this should really be the surrounding background color
-            style->addProperty( "fo:background-color", QString("#FFFFFF"), KoGenStyle::TextType);
+            style->addProperty( "fo:background-color", "transparent", KoGenStyle::TextType);
         }
     }
 
