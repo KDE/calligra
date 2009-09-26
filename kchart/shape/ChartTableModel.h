@@ -20,8 +20,8 @@
 */
 
 
-#ifndef KCHART_TABLEMODEL_H
-#define KCHART_TABLEMODEL_H
+#ifndef KCHART_CHARTTABLEMODEL_H
+#define KCHART_CHARTTABLEMODEL_H
 
 
 // Qt
@@ -37,22 +37,21 @@
 
 class QString;
 
-// FIXME: Rename to ChartTableModel.
 // FIXME: Should it inherit QAbstractTableModel instead?
 
 namespace KChart {
 
 /**
- * @brief The TableModel class is used to store a data table inside a chart document.
+ * @brief The ChartTableModel class is used to store a data table inside a chart document.  It's main difference to a normal table model is that it can load and store to ODF.
  */
-class CHARTSHAPELIB_EXPORT TableModel : public QStandardItemModel, public KoChart::ChartModel
+class CHARTSHAPELIB_EXPORT ChartTableModel : public QStandardItemModel, public KoChart::ChartModel
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
 
 public:
-    TableModel( QObject *parent = 0 );
-    ~TableModel();
+    ChartTableModel( QObject *parent = 0 );
+    ~ChartTableModel();
 
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;

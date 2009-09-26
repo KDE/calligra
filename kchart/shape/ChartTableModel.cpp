@@ -21,7 +21,7 @@
 
 
 // Own
-#include "TableModel.h"
+#include "ChartTableModel.h"
 
 // C
 #include <cmath>
@@ -48,23 +48,23 @@
 
 namespace KChart {
 
-TableModel::TableModel( QObject *parent /* = 0 */)
+ChartTableModel::ChartTableModel( QObject *parent /* = 0 */)
     : QStandardItemModel(parent)
 {
 }
 
-TableModel::~TableModel()
+ChartTableModel::~ChartTableModel()
 {
 }
 
 
-QHash<QString, QVector<QRect> > TableModel::cellRegion() const
+QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
 {
     // FIXME: Unimplemented?
     return QHash<QString, QVector<QRect> >();
 }
 
-bool TableModel::setCellRegion( const QString& regionName )
+bool ChartTableModel::setCellRegion( const QString& regionName )
 {
     int result = 0;
 
@@ -77,14 +77,14 @@ bool TableModel::setCellRegion( const QString& regionName )
     return result;
 }
 
-bool TableModel::isCellRegionValid( const QString& regionName ) const
+bool ChartTableModel::isCellRegionValid( const QString& regionName ) const
 {
     Q_UNUSED( regionName );
 
     return true;
 }
 
-void TableModel::loadOdf( const KoXmlElement &tableElement,
+void ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 			  KoShapeLoadingContext &context )
 {
     Q_UNUSED( context );
@@ -141,7 +141,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                     QString valueString;
                     const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
                     if ( valueElement.isNull() || !valueElement.isElement() ) {
-                        qWarning() << "TableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
+                        qWarning() << "ChartTableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
                         // Even if it doesn't contain any value, it's still a cell.
                         column++;
                         continue;
@@ -173,7 +173,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     }
 }
 
-bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
+bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 {
     return true;
 }

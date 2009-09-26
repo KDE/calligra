@@ -79,7 +79,7 @@ class Surface;
 class Axis;
 class ThreeDScene;
 class CellRegion;
-class TableModel;
+class ChartTableModel;
 
 extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
 

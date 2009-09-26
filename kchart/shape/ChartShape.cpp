@@ -99,7 +99,7 @@
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
 #include "ChartDocument.h"
-#include "TableModel.h"
+#include "ChartTableModel.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -1122,7 +1122,7 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
         return true;
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
-    TableModel *model = new TableModel;
+    ChartTableModel *model = new ChartTableModel;
     model->loadOdf( tableElement, context );
 
     setModel( model, true );

@@ -42,9 +42,9 @@ namespace KChart {
  * 
  * This class also plays a central role when loading from or saving to
  * ODF. Though it does not handle anything in particular itself, it
- * utilizes the DataSet, TableModel, Axis, Surface, and ChartProxyModel
- * classes to handle ODF data and properties embedded in the
- * <chart:plotarea> element.
+ * utilizes the DataSet, ChartTableModel, Axis, Surface, and
+ * ChartProxyModel classes to handle ODF data and properties embedded
+ * in the <chart:plotarea> element.
  */
 
 class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape

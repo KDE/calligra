@@ -62,7 +62,7 @@
 #include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
-#include "TableModel.h"
+#include "ChartTableModel.h"
 
 using namespace KChart;
 
@@ -417,7 +417,7 @@ void ChartConfigWidget::open( KoShape* shape )
     }
 
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
-    TableModel *tableModel = qobject_cast<TableModel*>( d->shape->model() );
+    ChartTableModel *tableModel = qobject_cast<ChartTableModel*>( d->shape->model() );
     d->sourceIsSpreadSheet = ( spreadSheetModel != 0 && tableModel == 0 );
     
     // Update the axis titles
