@@ -33,9 +33,6 @@ namespace KoChart
 }
 
 
-// FIXME: This needs not be included here, since it's not used in this file.
-//#include <KoChartModel.h>
-
 // Qt
 #include <QAbstractProxyModel>
 

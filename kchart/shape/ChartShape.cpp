@@ -674,13 +674,10 @@ void ChartShape::setSize( const QSizeF &newSize )
 {
     Q_ASSERT( d->plotArea );
 
-    // Usually, this is done by signals from the QWidget that we resize.
-    // But since a KoShape is not a QWidget, we need to do this manually.
-    //d->plotArea->kdChart()->resize( newSize.toSize() );
-
     const double factorX = newSize.width() / size().width();
     const double factorY = newSize.height() / size().height();
 
+    // Reposition the Axes within the shape.
     foreach( Axis *axis, d->plotArea->axes() ) {
         KoShape *title = axis->title();
         switch( axis->position() ) {
@@ -699,6 +696,7 @@ void ChartShape::setSize( const QSizeF &newSize )
         }
     }
 
+    // Reposition the Legend within the shape.
     switch ( d->legend->legendPosition() ) {
     case TopLegendPosition:
         d->legend->setAbsolutePosition( scalePointCenterTop( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
@@ -719,15 +717,18 @@ void ChartShape::setSize( const QSizeF &newSize )
         // FIXME: These are not handled.
         break;
     }
+
+    // Reposition the Title, Subtitle and Footer within the shape.
     d->title->setAbsolutePosition( scalePointCenterTop( d->title->absolutePosition(), factorX, factorY, d->title->boundingRect().size() ) );
     d->subTitle->setAbsolutePosition( scalePointCenterTop( d->subTitle->absolutePosition(), factorX, factorY, d->subTitle->boundingRect().size() ) );
     d->footer->setAbsolutePosition( scalePointCenterBottom( d->footer->absolutePosition(), factorX, factorY, d->footer->boundingRect().size() ) );
 
-
+    // Finally, resize the plotarea.
     const QSizeF plotAreaSize = d->plotArea->size();
     d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(), 
                                   plotAreaSize.height() + newSize.height() - size().height() ) );
 
+    // Oh yeah, the whole shape needs resizing too.
     KoShape::setSize( newSize );
 }
 
@@ -747,6 +748,11 @@ void ChartShape::updateChildrenPositions()
     d->legend->setPosition( QPointF( size().width() + legendXOffset,
                                      size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }
+
+
+// ----------------------------------------------------------------
+//                         getters and setters
+
 
 ChartType ChartShape::chartType() const
 {
@@ -804,6 +810,10 @@ void ChartShape::setThreeD( bool threeD )
     d->plotArea->setThreeD( threeD );
 }
 
+
+// ----------------------------------------------------------------
+
+
 void ChartShape::paintComponent( QPainter &painter,
                                  const KoViewConverter &converter )
 {
@@ -813,7 +823,6 @@ void ChartShape::paintComponent( QPainter &painter,
 
         // Calculate the clipping rect
         QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-        //clipRect.intersect( paintRect );
         painter.setClipRect( paintRect );
 
         QPainterPath p;
@@ -842,6 +851,11 @@ void ChartShape::paintDecorations( QPainter &painter,
     painter.drawRect( border );
 }
 
+
+// ----------------------------------------------------------------
+//                         Loading and Saving
+
+
 bool ChartShape::loadEmbeddedDocument( KoStore *store, 
                                        const KoXmlElement &objectElement, 
                                        const KoXmlDocument &manifestDocument )
@@ -863,7 +877,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
     if ( url[0] == '#' )
         url = url.mid( 1 );
 
-    if(KUrl::isRelativeUrl( url )) {
+    if (KUrl::isRelativeUrl( url )) {
         if ( url.startsWith( "./" ) )
             tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
         else
