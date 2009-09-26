@@ -501,10 +501,9 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //ico = color of text
-    if ( !refChp || refChp->ico != chp->ico )
+    if ( !refChp || refChp->cv != chp->cv )
     {
-        QString color = Conversion::color( chp->ico, -1 );
-        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
+        style->addProperty(QString("fo:color"), '#' + QString::number(chp->cv|0xff000000, 16).right(6).toUpper());
     }
 
     //hps = font size in half points
