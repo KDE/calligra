@@ -25,7 +25,7 @@
 
 namespace KChart {
     class ChartProxyModel;
-    class TableModel;
+    class ChartTableModel;
 }
 
 using namespace KChart;
@@ -46,7 +46,7 @@ private slots:
     void testFirstRowAndColumnAsLabels();
     
 private:
-    TableModel *m_sourceModel;
+    ChartTableModel *m_sourceModel;
     ChartProxyModel *m_proxyModel;
 };
     

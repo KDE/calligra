@@ -24,7 +24,7 @@
 // KChart
 #include "ChartProxyModel.h"
 #include "DataSet.h"
-#include "TableModel.h"
+#include "ChartTableModel.h"
 #include "CellRegion.h"
 
 // Qt
@@ -72,7 +72,7 @@ TestProxyModel::TestProxyModel()
 
 void TestProxyModel::initTestCase()
 {
-    m_sourceModel = new TableModel;
+    m_sourceModel = new ChartTableModel;
     m_sourceModel->setRowCount( 4 );
     m_sourceModel->setColumnCount( 5 );
     
