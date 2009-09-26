@@ -87,6 +87,9 @@ public:
         return m_currentBlock.position();
     }
     void registerInlineObject(const QTextInlineObject &) {}
+    QTextTableCell hitTestTable(QTextTable *, const QPointF &) {
+        return QTextTableCell();
+    }
 
     QTextDocument *m_doc;
     QTextBlock m_currentBlock;
