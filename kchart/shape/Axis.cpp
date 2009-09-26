@@ -127,7 +127,6 @@ public:
     KDChart::CartesianAxis            *kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
     KDChart::PolarCoordinatePlane     *kdPolarPlane;
-    KDChart::CartesianCoordinatePlane *kdParentPlane;
     
     KDChart::BarDiagram   *kdBarDiagram;
     KDChart::LineDiagram  *kdLineDiagram;
