@@ -357,7 +357,7 @@ void KWordTableHandler::tableCellStart()
     }
 
     //kDebug(30513) <<" shading " << shd.ipat;
-    if(shd.ipat == 0 && shd.cvBack != 0)
+    if(shd.ipat == 0 && shd.cvBack != 0xff000000)
         cellStyle.addProperty("fo:background-color", '#' + QString::number(shd.cvBack|0xff000000, 16).right(6).toUpper());
 
     //text direction
