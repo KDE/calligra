@@ -316,7 +316,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         else //0 = normal
             style->addProperty( "style:writing-mode", "lr-tb", KoGenStyle::ParagraphType );
     }
-    
+
+    if (!refPap || refPap->shd.cvBack != pap.shd.cvBack) {
+        if (pap.shd.cvBack != 0xff000000)
+            style->addProperty(QString("fo:background-color"), '#' + QString::number(pap.shd.cvBack|0xff000000, 16).right(6).toUpper());
+        else
+            style->addProperty( "fo:background-color", "transparent", KoGenStyle::ParagraphType);
+    }
+
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
     //dxaLeft = indent from left margin (signed)
     //dxaRight = indent from right margin (signed)
@@ -610,6 +617,13 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         } else {
             style->addProperty( "fo:background-color", "transparent", KoGenStyle::TextType);
         }
+    }
+
+    if (!refChp || refChp->shd.cvBack != chp->shd.cvBack) {
+        if (chp->shd.cvBack != 0xff000000)
+            style->addProperty(QString("fo:background-color"), '#' + QString::number(chp->shd.cvBack|0xff000000, 16).right(6).toUpper());
+        else
+            style->addProperty( "fo:background-color", "transparent", KoGenStyle::TextType);
     }
 
     //fShadow = text has shadow if 1
