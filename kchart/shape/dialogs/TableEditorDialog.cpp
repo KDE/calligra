@@ -142,32 +142,40 @@ void TableEditorDialog::slotInsertRowPressed()
 {
     Q_ASSERT( m_tableView->model() );
 
-    QModelIndex currIndex = m_tableView->currentIndex();
-    int selectedRow = -1;
-    if ( !currIndex.isValid() )
-        selectedRow = m_tableView->model()->rowCount() - 1;
-    else
+    QAbstractItemModel *model = m_tableView->model();
+    QModelIndex         currIndex = m_tableView->currentIndex();
+
+    int selectedRow;
+    if ( model->rowCount() == 0 )
+        // +1 is added below.
+        selectedRow = -1;
+    else if ( currIndex.isValid() )
         selectedRow = currIndex.row();
-    Q_ASSERT( selectedRow >= 0 );
+    else
+        selectedRow = m_tableView->model()->rowCount() - 1;
+
     // Insert the row *after* the selection, thus +1
-    m_tableView->model()->insertRow( selectedRow + 1 );
+    model->insertRow( selectedRow + 1 );
 }
 
 void TableEditorDialog::slotInsertColumnPressed()
 {
     Q_ASSERT( m_tableView->model() );
     
-    QModelIndex currIndex = m_tableView->currentIndex();
-    int selectedColumn = -1;
-    if ( !currIndex.isValid() )
-        selectedColumn = m_tableView->model()->columnCount() - 1;
-    else
-        selectedColumn = currIndex.column();
+    QAbstractItemModel *model = m_tableView->model();
+    QModelIndex         currIndex = m_tableView->currentIndex();
 
-    Q_ASSERT( selectedColumn >= 0 );
+    int selectedColumn;
+    if ( model->columnCount() == 0 )
+        // +1 is added below.
+        selectedColumn = -1;
+    if ( currIndex.isValid() )
+        selectedColumn = currIndex.column();
+    else
+        selectedColumn = m_tableView->model()->columnCount() - 1;
 
     // Insert the column *after* the selection, thus +1
-    m_tableView->model()->insertColumn( selectedColumn + 1 );
+    model->insertColumn( selectedColumn + 1 );
 }
 
 void TableEditorDialog::slotDeleteRowPressed()
