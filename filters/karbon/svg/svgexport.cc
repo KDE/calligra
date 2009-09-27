@@ -362,8 +362,7 @@ void SvgExport::getColorStops( const QGradientStops & colorStops )
     foreach( const QGradientStop &stop, colorStops )
     {
         printIndentation( m_defs, m_indent2 );
-        *m_defs << "<stop stop-color=\"";
-        getHexColor( m_defs, stop.second );
+        *m_defs << "<stop stop-color=\"" << stop.second.name();
         *m_defs << "\" offset=\"" << QString().setNum( stop.first );
         *m_defs << "\" stop-opacity=\"" << stop.second.alphaF() << "\"" << " />" << endl;
     }
@@ -571,9 +570,7 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
     KoColorBackground * cbg = dynamic_cast<KoColorBackground*>( shape->background() );
     if( cbg )
     {
-        *stream << " fill=\"";
-        getHexColor( stream, cbg->color() );
-        *stream << "\"";
+        *stream << " fill=\"" << cbg->color().name() << "\"";
         *stream << " fill-opacity=\"" << cbg->color().alphaF() << "\"";
     }
     KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
@@ -613,7 +610,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     else if( line->lineBrush().gradient() )
         getGradient( line->lineBrush().gradient(), line->lineBrush().matrix() );
     else
-        getHexColor( stream, line->color() );
+        *stream << line->color().name();
     *stream << "\"";
 
     *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
@@ -682,16 +679,6 @@ void SvgExport::getEffects( KoShape *shape, QTextStream *stream )
     *m_defs << endl;
 
     *stream << " filter=\"url(#" << uid << ")\"";
-}
-
-void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
-{
-    // Convert the various color-spaces to hex
-    QString Output;
-
-    Output.sprintf( "#%02x%02x%02x", color.red(), color.green(), color.blue() );
-
-    *stream << Output;
 }
 
 void SvgExport::saveText( ArtisticTextShape * text )

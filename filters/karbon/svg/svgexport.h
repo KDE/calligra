@@ -77,7 +77,6 @@ private:
     void getColorStops( const QGradientStops & colorStops );
     void getGradient( const QGradient * gradient, const QMatrix &gradientTransform );
     void getPattern( KoPatternBackground * pattern, KoShape * shape );
-    void getHexColor( QTextStream *, const QColor & color  );
     QString getTransform( const QMatrix &matrix, const QString &attributeName );
 
     QString getID( const KoShape *obj );

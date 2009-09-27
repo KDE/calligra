@@ -81,7 +81,6 @@ private:
     QString convertMatrix( double * matrix );
     QString printFill();
     QString printStroke();
-    QString printHexColor( const QColor & color );
 
     class Private;
     Private * const d;

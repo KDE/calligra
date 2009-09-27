@@ -343,7 +343,7 @@ QString SvgOutputDev::printFill()
             fill += "none";
             break;
         case Qt::SolidPattern:
-            fill += printHexColor( d->brush.color() );
+            fill += d->brush.color().name();
             break;
         default:
             return QString();
@@ -363,7 +363,7 @@ QString SvgOutputDev::printStroke()
     if( d->pen.style() == Qt::NoPen )
         stroke += "none";
     else
-        stroke += printHexColor( d->pen.color() );
+        stroke += d->pen.color().name();
     stroke += "\"";
 
     stroke += QString( " stroke-opacity=\"%1\"").arg( d->pen.color().alphaF() );
@@ -400,14 +400,6 @@ QString SvgOutputDev::printStroke()
     }
 
     return stroke;
-}
-
-QString SvgOutputDev::printHexColor( const QColor & color )
-{
-    return QString( "#%1%2%3" )
-            .arg( color.red(), 2, 16, QChar('0') )
-            .arg( color.green(), 2, 16, QChar('0') )
-            .arg( color.blue(), 2, 16, QChar('0') );
 }
 
 void SvgOutputDev::updateTextMat( GfxState * state )
