@@ -149,7 +149,6 @@ private:
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, QDomElement>     m_defs;
     QHash<QByteArray, QColor>      m_rgbcolors;
-    QDomDocument                   m_inpdoc;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
     QMap<QString, KoDataCenter*> m_dataCenters;
