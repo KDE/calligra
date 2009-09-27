@@ -82,8 +82,6 @@ protected:
     double parseUnitXY( const QString &unit );
     /// Parses a color attribute
     void parseColor( QColor &, const QString & );
-    /// Converts given string into a color
-    QColor stringToColor( const QString & );
     /// Parses a transform attribute
     QMatrix parseTransform( const QString &transform );
     /// Parse a image
@@ -148,7 +146,6 @@ private:
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
     QMap<QString, QDomElement>     m_defs;
-    QHash<QByteArray, QColor>      m_rgbcolors;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
     QMap<QString, KoDataCenter*> m_dataCenters;

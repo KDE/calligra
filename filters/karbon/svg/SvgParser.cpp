@@ -24,7 +24,6 @@
  */
 
 #include "SvgParser.h"
-#include "color.h"
 #include "SvgUtil.h"
 
 #include <KarbonGlobal.h>
@@ -64,7 +63,6 @@
 SvgParser::SvgParser( const QMap<QString, KoDataCenter*> & dataCenters )
 : m_dataCenters( dataCenters )
 {
-    SETRGBCOLORS();
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
     // the order of the style attributes is important, don't change without reason !!!
     m_styleAttributes << "color" << "opacity" << "display";
@@ -591,11 +589,6 @@ double SvgParser::parseUnitXY( const QString &unit )
     }
 }
 
-QColor SvgParser::stringToColor( const QString &rgbColor )
-{
-    return m_rgbcolors[ rgbColor.toLatin1() ];
-}
-
 void SvgParser::parseColor( QColor &color, const QString &s )
 {
     if( s.startsWith( "rgb(" ) )
@@ -633,11 +626,8 @@ void SvgParser::parseColor( QColor &color, const QString &s )
     }
     else
     {
-        QString rgbColor = s.trimmed();
-        if( rgbColor.startsWith( '#' ) )
-            color.setNamedColor( rgbColor );
-        else
-            color = stringToColor( rgbColor );
+        // QColor understands #RRGGBB and svg color names
+        color.setNamedColor( s.trimmed() );
     }
 }
 
