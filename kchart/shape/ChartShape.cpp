@@ -505,7 +505,8 @@ ChartShape::~ChartShape()
 QAbstractItemModel *ChartShape::model() const
 {
     // Can't return d->internalModel because the data may come from
-    // the outside, e.g. a spreadsheet.
+    // the outside, e.g. a spreadsheet.  We only use d->internalModel
+    // for a model that we own ourselves.
     return d->proxyModel->sourceModel();
 }
 
@@ -582,11 +583,16 @@ void ChartShape::setModel( QAbstractItemModel *model,
     Q_ASSERT( model );
     //kDebug(35001) << "Setting" << model << "as chart model.";
 
-    if ( takeOwnershipOfModel )
-        // FIXME: Delete old internalModel if there is one.
-        d->internalModel = model;
-    else
-        d->internalModel = 0;
+    // Only do something if we are not already using the new model.
+    if ( model = d->internalModel )
+        return;
+
+    // If we already have an old internal model, delete it first.
+    if ( d->internalModel ) {
+        delete d->internalModel;
+    }
+
+    d->internalModel = ( takeOwnershipOfModel ? model : 0 );
 
     d->proxyModel->setSourceModel( model );
 
