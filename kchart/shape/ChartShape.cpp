@@ -584,7 +584,7 @@ void ChartShape::setModel( QAbstractItemModel *model,
     //kDebug(35001) << "Setting" << model << "as chart model.";
 
     // Only do something if we are not already using the new model.
-    if ( model = d->internalModel )
+    if ( model == d->internalModel )
         return;
 
     // If we already have an old internal model, delete it first.
