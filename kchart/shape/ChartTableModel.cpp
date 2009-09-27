@@ -84,8 +84,8 @@ bool ChartTableModel::isCellRegionValid( const QString& regionName ) const
     return true;
 }
 
-void ChartTableModel::loadOdf( const KoXmlElement &tableElement,
-			  KoShapeLoadingContext &context )
+bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
+                               KoShapeLoadingContext &context )
 {
     Q_UNUSED( context );
 
@@ -94,11 +94,15 @@ void ChartTableModel::loadOdf( const KoXmlElement &tableElement,
     
     const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
 
-    QTextStream stream(stdout);
-    stream << node;
+    //QTextStream stream(stdout);
+    //stream << node;
     
+    // FIXME: Rewrite this without the for loop.  I think there can
+    //        only be one table-rows and one table-header-rows element
+    //        in each table.
     int           row = 0;
     KoXmlElement  n;
+    int           found = false;
     forEachElement ( n, tableElement ) {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
@@ -107,6 +111,8 @@ void ChartTableModel::loadOdf( const KoXmlElement &tableElement,
              || n.localName() == "table-header-rows" )
         {
             const bool isHeader = n.localName() == "table-header-rows";
+
+            found = true;
 
             KoXmlElement  _n;
             forEachElement ( _n, n ) {
@@ -171,6 +177,8 @@ void ChartTableModel::loadOdf( const KoXmlElement &tableElement,
             } // foreach table:table-row
         }
     }
+
+    return found;
 }
 
 bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
