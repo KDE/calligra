@@ -63,8 +63,8 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
     if( ! globalParams )
         return KoFilter::NotImplemented;
 
-    GooString fname( QFile::encodeName( m_chain->inputFile() ).data() );
-    PDFDoc * pdfDoc = new PDFDoc( &fname, 0, 0, 0 );
+    GooString * fname = new GooString( QFile::encodeName( m_chain->inputFile() ).data() );
+    PDFDoc * pdfDoc = new PDFDoc( fname, 0, 0, 0 );
     if( ! pdfDoc )
     {
         delete globalParams;
@@ -100,8 +100,9 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
     kDebug(30516) << "wrote file to" << m_chain->outputFile();
 
     delete dev;
-    //delete pdfDoc;
+    delete pdfDoc;
     delete globalParams;
+    globalParams = 0;
 
     // check for memory leaks
     Object::memCheck(stderr);
