@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,44 +34,46 @@ using namespace KChart;
 
 TableEditorDialog::TableEditorDialog()
     : QDialog( 0 )
-    , tableView( new ChartTableView )
+    , m_tableView( new ChartTableView )
 {
     setupUi( this );
 
-    proxyModel = 0;
+    m_proxyModel = 0;
     init();
 }
 
 TableEditorDialog::~TableEditorDialog()
 {
-    delete tableView;
+    delete m_tableView;
 }
 
 void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 {
-    if ( this->proxyModel == proxyModel )
+    if ( m_proxyModel == proxyModel )
         return;
 
     // Disconnect the old proxy model.
-    if ( this->proxyModel ) {
-        disconnect( this->proxyModel,   SIGNAL( modelReset() ), this, SLOT( update() ) );
-        disconnect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
-                    this->proxyModel,   SLOT( setFirstRowIsLabel( bool ) ) );
+    if ( m_proxyModel ) {
+        disconnect( m_proxyModel,    SIGNAL( modelReset() ),
+                    this,            SLOT( update() ) );
+        disconnect( firstRowIsLabel, SIGNAL( clicked( bool ) ),
+                    m_proxyModel,    SLOT( setFirstRowIsLabel( bool ) ) );
         disconnect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                    this->proxyModel,   SLOT( setFirstColumnIsLabel( bool ) ) );
+                    m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
     }
 
-    this->proxyModel = proxyModel;
+    m_proxyModel = proxyModel;
 
     // Connect the new proxy model.
-    if ( proxyModel ) {
-        tableView->setModel( proxyModel->sourceModel() );
+    if ( m_proxyModel ) {
+        m_tableView->setModel( m_proxyModel->sourceModel() );
 
-        connect( proxyModel,         SIGNAL( modelReset() ), this, SLOT( update() ) );
+        connect( m_proxyModel,       SIGNAL( modelReset() ), 
+                 this,               SLOT( update() ) );
         connect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
-                 proxyModel,         SLOT( setFirstRowIsLabel( bool ) ) );
+                 m_proxyModel,       SLOT( setFirstRowIsLabel( bool ) ) );
         connect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                 proxyModel,         SLOT( setFirstColumnIsLabel( bool ) ) );
+                 m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
     }
 
     update();
@@ -78,7 +81,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 
 void TableEditorDialog::init()
 {
-    tableViewContainer->addWidget( tableView );
+    tableViewContainer->addWidget( m_tableView );
 
     KIcon insertRowIcon = KIcon( "insert_table_row" );
     KIcon deleteRowIcon = KIcon( "delete_table_row" );
@@ -86,10 +89,10 @@ void TableEditorDialog::init()
     KIcon deleteColIcon = KIcon( "delete_table_col" );
 
     // Create actions.
-    insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), tableView );
-    deleteRowsAction    = new QAction( deleteRowIcon, i18n( "Delete Rows" ), tableView );
-    insertColumnsAction = new QAction( insertColIcon, i18n( "Insert Columns" ), tableView );
-    deleteColumnsAction = new QAction( deleteColIcon, i18n( "Delete Columns" ), tableView );
+    m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );
+    m_deleteRowsAction    = new QAction( deleteRowIcon, i18n( "Delete Rows" ), m_tableView );
+    m_insertColumnsAction = new QAction( insertColIcon, i18n( "Insert Columns" ), m_tableView );
+    m_deleteColumnsAction = new QAction( deleteColIcon, i18n( "Delete Columns" ), m_tableView );
 
     // Set icons on buttons(?).
     insertRow->setIcon( insertRowIcon );
@@ -110,58 +113,61 @@ void TableEditorDialog::init()
     connect( deleteColumn, SIGNAL( pressed() ), this, SLOT( slotDeleteColumnPressed() ) );
 
     // Context Menu Actions
-    connect( insertRowsAction,    SIGNAL( triggered() ), this, SLOT( slotInsertRowPressed() ) );
-    connect( insertColumnsAction, SIGNAL( triggered() ), this, SLOT( slotInsertColumnPressed() ) );
-    connect( deleteRowsAction,    SIGNAL( triggered() ), this, SLOT( slotDeleteRowPressed() ) );
-    connect( deleteColumnsAction, SIGNAL( triggered() ), this, SLOT( slotDeleteColumnPressed() ) );
-    connect( tableView,    SIGNAL( currentIndexChanged( const QModelIndex& ) ),
+    connect( m_insertRowsAction,    SIGNAL( triggered() ), this, SLOT( slotInsertRowPressed() ) );
+    connect( m_insertColumnsAction, SIGNAL( triggered() ), this, SLOT( slotInsertColumnPressed() ) );
+    connect( m_deleteRowsAction,    SIGNAL( triggered() ), this, SLOT( slotDeleteRowPressed() ) );
+    connect( m_deleteColumnsAction, SIGNAL( triggered() ), this, SLOT( slotDeleteColumnPressed() ) );
+    connect( m_tableView,  SIGNAL( currentIndexChanged( const QModelIndex& ) ),
              this,         SLOT( slotCurrentIndexChanged( const QModelIndex& ) ) );
     // We only need to connect one of the data direction buttons, since
     // they are mutually exclusive.
     connect( dataSetsInRows, SIGNAL( toggled( bool ) ),
              this,           SLOT( slotDataSetsInRowsToggled( bool ) ) );
 
-    QAction *separator = new QAction( tableView );
+    // FIXME: QAction to create a separator??
+    QAction *separator = new QAction( m_tableView );
     separator->setSeparator( true );
 
     // Add all the actions to the view.
-    tableView->addAction( deleteRowsAction );
-    tableView->addAction( insertRowsAction );
-    tableView->addAction( separator );
-    tableView->addAction( deleteColumnsAction );
-    tableView->addAction( insertColumnsAction );
+    m_tableView->addAction( m_deleteRowsAction );
+    m_tableView->addAction( m_insertRowsAction );
+    m_tableView->addAction( separator );
+    m_tableView->addAction( m_deleteColumnsAction );
+    m_tableView->addAction( m_insertColumnsAction );
 
-    tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
 }
 
 void TableEditorDialog::slotInsertRowPressed()
 {
-    Q_ASSERT( tableView->model() );
+    Q_ASSERT( m_tableView->model() );
 
-    QModelIndex currIndex = tableView->currentIndex();
+    QModelIndex currIndex = m_tableView->currentIndex();
     int selectedRow = -1;
     if ( !currIndex.isValid() )
-        selectedRow = tableView->model()->rowCount() - 1;
+        selectedRow = m_tableView->model()->rowCount() - 1;
     else
         selectedRow = currIndex.row();
     Q_ASSERT( selectedRow >= 0 );
     // Insert the row *after* the selection, thus +1
-    tableView->model()->insertRow( selectedRow + 1 );
+    m_tableView->model()->insertRow( selectedRow + 1 );
 }
 
 void TableEditorDialog::slotInsertColumnPressed()
 {
-    Q_ASSERT( tableView->model() );
-
-    QModelIndex currIndex = tableView->currentIndex();
+    Q_ASSERT( m_tableView->model() );
+    
+    QModelIndex currIndex = m_tableView->currentIndex();
     int selectedColumn = -1;
     if ( !currIndex.isValid() )
-        selectedColumn = tableView->model()->columnCount() - 1;
+        selectedColumn = m_tableView->model()->columnCount() - 1;
     else
         selectedColumn = currIndex.column();
+
     Q_ASSERT( selectedColumn >= 0 );
+
     // Insert the column *after* the selection, thus +1
-    tableView->model()->insertColumn( selectedColumn + 1 );
+    m_tableView->model()->insertColumn( selectedColumn + 1 );
 }
 
 void TableEditorDialog::slotDeleteRowPressed()
@@ -178,9 +184,9 @@ void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation
 {
     // Note: In the following, both rows and columns will be referred to
     // as "row", for ease of reading this code.
-    Q_ASSERT( tableView->model() );
+    Q_ASSERT( m_tableView->model() );
 
-    const QModelIndexList selectedIndexes = tableView->selectionModel()->selectedIndexes();
+    const QModelIndexList selectedIndexes = m_tableView->selectionModel()->selectedIndexes();
     if ( selectedIndexes.isEmpty() )
         return;
 
@@ -200,35 +206,37 @@ void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation
     foreach( int row, rowsToBeRemoved ) {
         Q_ASSERT( row >= 0 );
         if ( orientation == Qt::Horizontal )
-            tableView->model()->removeRow( row );
+            m_tableView->model()->removeRow( row );
         else
-            tableView->model()->removeColumn( row );
+            m_tableView->model()->removeColumn( row );
     }
     // Deselect the deleted rows
-    tableView->setCurrentIndex( QModelIndex() );
+    m_tableView->setCurrentIndex( QModelIndex() );
 }
 
 void TableEditorDialog::slotCurrentIndexChanged( const QModelIndex &index )
 {
     const bool isValid = index.isValid();
-    deleteRowsAction->setEnabled( isValid );
-    deleteColumnsAction->setEnabled( isValid );
+
+    m_deleteRowsAction->setEnabled( isValid );
     deleteRow->setEnabled( isValid );
+
+    m_deleteColumnsAction->setEnabled( isValid );
     deleteColumn->setEnabled( isValid );
 }
 
 void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
 {
-    Q_ASSERT( proxyModel );
-    proxyModel->setDataDirection( enabled ? Qt::Horizontal : Qt::Vertical );
+    Q_ASSERT( m_proxyModel );
+    m_proxyModel->setDataDirection( enabled ? Qt::Horizontal : Qt::Vertical );
 }
 
 void TableEditorDialog::update()
 {
-    if ( !proxyModel )
+    if ( !m_proxyModel )
         return;
 
-    firstRowIsLabel->setChecked( proxyModel->firstRowIsLabel() );
-    firstColumnIsLabel->setChecked( proxyModel->firstColumnIsLabel() );
-    dataSetsInRows->setChecked( proxyModel->dataDirection() == Qt::Horizontal );
+    firstRowIsLabel->setChecked( m_proxyModel->firstRowIsLabel() );
+    firstColumnIsLabel->setChecked( m_proxyModel->firstColumnIsLabel() );
+    dataSetsInRows->setChecked( m_proxyModel->dataDirection() == Qt::Horizontal );
 }

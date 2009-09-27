@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2009 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,17 +52,19 @@ protected slots:
     void slotDeleteRowPressed();
     void slotInsertColumnPressed();
     void slotDeleteColumnPressed();
+
     void deleteSelectedRowsOrColumns( Qt::Orientation orientation );
     void slotCurrentIndexChanged( const QModelIndex &index );
     void slotDataSetsInRowsToggled( bool enabled );
 
 private:
-    ChartProxyModel *proxyModel;
-    ChartTableView *const tableView;
-    QAction *deleteRowsAction;
-    QAction *deleteColumnsAction;
-    QAction *insertRowsAction;
-    QAction *insertColumnsAction;
+    ChartProxyModel *m_proxyModel;
+    ChartTableView  *const m_tableView;
+
+    QAction         *m_deleteRowsAction;
+    QAction         *m_deleteColumnsAction;
+    QAction         *m_insertRowsAction;
+    QAction         *m_insertColumnsAction;
 };
 
 } // Namespace KChart
