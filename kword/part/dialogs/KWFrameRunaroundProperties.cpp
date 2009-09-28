@@ -73,7 +73,7 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
             raDistance = GuiHelper::TriState;
     }
 
-    if (layout != GuiHelper::TriState)
+    if (layout != GuiHelper::TriState && side <= KWord::RightRunAroundSide)
         m_runAroundSide->button(side)->setChecked(true);
     if (runaround != GuiHelper::TriState)
         m_runAround->button(ra)->setChecked(true);
