@@ -1268,6 +1268,7 @@ void KWView::selectionChanged()
 
 void KWView::setCurrentPage(const KWPage &currentPage)
 {
+    Q_ASSERT(currentPage.isValid());
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceProvider()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
@@ -1288,4 +1289,36 @@ void KWView::updateStatusBarAction()
     KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
     if (action && statusBar())
         action->setChecked(! statusBar()->isHidden());
+}
+
+void KWView::offsetInDocumentMoved(int yOffset)
+{
+    const qreal offset = -m_zoomHandler.viewToDocumentY(yOffset);
+    const qreal height = m_zoomHandler.viewToDocumentY(m_gui->viewportSize().height());
+    if (m_currentPage.isValid()) { // most of the time the current will not change.
+        const qreal pageTop = m_currentPage.offsetInDocument();
+        const qreal pageBottom = pageTop + m_currentPage.height();
+        const qreal visibleArea = qMin(offset + height, pageBottom) - qMax(pageTop, offset);
+        if (visibleArea / height >= 0.45) // current page is just fine if > 45% is shown
+            return;
+
+        // using 'next'/'prev' is much cheaper than using a documentOffset, so try that first.
+        if (pageTop > offset && pageTop < offset + height) { // check if the page above is a candidate.
+            KWPage page = m_currentPage.previous();
+            if (page.isValid() && pageTop - offset > visibleArea) {
+                setCurrentPage(page);
+                return;
+            }
+        }
+        if (pageBottom > offset && pageBottom < offset + height) { // check if the page above is a candidate.
+            KWPage page = m_currentPage.next();
+            if (page.isValid() && m_currentPage.height() - height > visibleArea) {
+                setCurrentPage(page);
+                return;
+            }
+        }
+    }
+    KWPage page = m_document->pageManager()->page(offset + height / 2.0);
+    if (page.isValid())
+        setCurrentPage(page);
 }

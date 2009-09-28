@@ -249,7 +249,6 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
     painter.translate(-m_documentOffset);
 
     if (m_viewMode->hasPages()) {
-        KWPage currentPage;
         int pageContentArea = 0;
         QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
         foreach (KWViewMode::ViewMap vm, map) {
@@ -275,12 +274,9 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             painter.restore();
 
             int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
-            if (contentArea > pageContentArea) {
+            if (contentArea > pageContentArea)
                 pageContentArea = contentArea;
-                currentPage = vm.page;
-            }
         }
-        m_view->setCurrentPage(currentPage);
     } else {
         // TODO paint the main-text-flake directly
         kWarning(32003) << "Non-page painting not implemented yet!";

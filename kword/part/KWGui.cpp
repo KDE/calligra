@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,6 +89,7 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
 
     connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)), m_horizontalRuler, SLOT(setOffset(int)));
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)), m_verticalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)), parent, SLOT(offsetInDocumentMoved(int)));
     connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(updateMousePos(const QPoint&)));
 

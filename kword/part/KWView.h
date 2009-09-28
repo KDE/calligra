@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -96,6 +96,9 @@ public:
     void setCurrentPage(const KWPage &page);
 
     virtual KoZoomController *zoomController() const { return m_zoomController; }
+
+public slots:
+    void offsetInDocumentMoved(int yOffset);
 
 protected:
     /// reimplemented method from superclass
