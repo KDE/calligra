@@ -85,6 +85,7 @@
 
 // KOffice includes
 #include <KoGlobal.h>
+#include <KoDpi.h>
 #include <KoCanvasController.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
@@ -1799,7 +1800,7 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   kDebug(36005) <<"---------SetZoom:" << zoom;
 
   // Set the zoom in KoView (for embedded views)
-  zoomHandler()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
+  zoomHandler()->setZoomAndResolution( zoom, KoDpi::dpiX(), KoDpi::dpiY());
   //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   doc()->refreshInterface();

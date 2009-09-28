@@ -19,7 +19,6 @@
  */
 #ifndef KRPOS_H
 #define KRPOS_H
-#include <KoGlobal.h>
 #include <KoUnit.h>
 #include <QPointF>
 #include <koproperty/Property.h>

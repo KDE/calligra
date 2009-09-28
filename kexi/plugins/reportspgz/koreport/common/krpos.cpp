@@ -19,6 +19,7 @@
  */
 #include "krpos.h"
 #include <kdebug.h>
+#include <KoDpi.h>
 
 KRPos::KRPos(const KoUnit& unit)
 {
@@ -41,8 +42,8 @@ void KRPos::setScenePos(const QPointF& pos, bool update)
 {
     qreal x, y;
 
-    x = INCH_TO_POINT(pos.x() / KoGlobal::dpiX());
-    y = INCH_TO_POINT(pos.y() / KoGlobal::dpiY());
+    x = INCH_TO_POINT(pos.x() / KoDpi::dpiX());
+    y = INCH_TO_POINT(pos.y() / KoDpi::dpiY());
 
     m_pointPos.setX(x);
     m_pointPos.setY(y);
@@ -89,8 +90,8 @@ QPointF KRPos::toPoint()
 QPointF KRPos::toScene()
 {
     qreal x, y;
-    x = POINT_TO_INCH(m_pointPos.x()) * KoGlobal::dpiX();
-    y = POINT_TO_INCH(m_pointPos.y()) * KoGlobal::dpiY();
+    x = POINT_TO_INCH(m_pointPos.x()) * KoDpi::dpiX();
+    y = POINT_TO_INCH(m_pointPos.y()) * KoDpi::dpiY();
 
     return QPointF(x, y);
 }

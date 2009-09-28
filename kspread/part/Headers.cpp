@@ -61,9 +61,9 @@
 
 // KOffice
 #include <KoCanvasController.h>
-#include <KoGlobal.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
+#include <KoDpi.h>
 
 // KSpread
 #include "Canvas.h"
@@ -640,8 +640,8 @@ void RowHeader::drawText( QPainter& painter, const QFont& font,
     if ( !sheet )
         return;
 
-    const double scaleX = POINT_TO_INCH(double(KoGlobal::dpiX()));
-    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+    const double scaleX = POINT_TO_INCH(double(KoDpi::dpiX()));
+    const double scaleY = POINT_TO_INCH(double(KoDpi::dpiY()));
 
     // Qt scales the font already with the logical resolution. Do not do it twice!
     painter.save();
@@ -1459,8 +1459,8 @@ void ColumnHeader::drawText( QPainter& painter, const QFont& font,
     if ( !sheet )
         return;
 
-    const double scaleX = POINT_TO_INCH(double(KoGlobal::dpiX()));
-    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+    const double scaleX = POINT_TO_INCH(double(KoDpi::dpiX()));
+    const double scaleY = POINT_TO_INCH(double(KoDpi::dpiY()));
 
     // Qt scales the font already with the logical resolution. Do not do it twice!
     painter.save();

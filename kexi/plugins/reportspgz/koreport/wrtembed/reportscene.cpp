@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include "reportdesigner.h"
 
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <kdebug.h>
 
 #include <KoPageFormat.h>
@@ -47,16 +47,16 @@ ReportScene::ReportScene(qreal w, qreal h, ReportDesigner *rd)
     if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
         m_unit = m_rd->pageUnit();
         if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
-            m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiX();
-            m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiY();
+            m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
+            m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
     }
     else if (KoUnit::unitName(m_unit) == "pt") {
-        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiX();
-        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiY();
+        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
+        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
     }
     else {
-        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiX();
-        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiY();
+        m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
+        m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
     }
     }
 }
@@ -75,16 +75,16 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
             m_unit = m_rd->pageUnit();
             if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
             }
             else if (KoUnit::unitName(m_unit) == "pt") {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
             }
             else {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
             }
 
         }
@@ -95,7 +95,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         QPen pen = painter->pen();
         painter->setPen(QColor(212, 212, 212));
 
-        //kDebug() << "dpix" << KoGlobal::dpiX() << "dpiy" << KoGlobal::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
+        //kDebug() << "dpix" << KoDpi::dpiX() << "dpiy" << KoDpi::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
         
         QVector<QLine> lines;
         QVector<QPoint> points;
@@ -162,16 +162,16 @@ QPointF ReportScene::gridPoint(const QPointF& p)
         if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
             m_unit = m_rd->pageUnit();
             if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
             }
             else if (KoUnit::unitName(m_unit) == "pt") {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
             }
             else {
-                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiX();
-                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoGlobal::dpiY();
+                m_majorX = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiX();
+                m_majorY = POINT_TO_INCH(m_unit.fromUserValue(1)) * KoDpi::dpiY();
             }
             
         }

@@ -22,7 +22,7 @@
 #include "reportpageoptions.h"
 #include <KoPageFormat.h>
 #include <KoUnit.h>
-#include <KoGlobal.h>
+#include <KoDpi.h>
 
 ReportPageOptions::ReportPageOptions()
         : QObject(), m_pageSize("Letter")
@@ -212,7 +212,7 @@ qreal ReportPageOptions::widthPx()
     }
 
     KoUnit pageUnit(KoUnit::Millimeter);
-    pageWidth = KoUnit::toInch(pageUnit.fromUserValue(pageWidth)) * KoGlobal::dpiX();
+    pageWidth = KoUnit::toInch(pageUnit.fromUserValue(pageWidth)) * KoDpi::dpiX();
 
     return pageWidth;
 }
@@ -228,7 +228,7 @@ qreal ReportPageOptions::heightPx()
     }
 
     KoUnit pageUnit(KoUnit::Millimeter);
-    pageHeight = KoUnit::toInch(pageUnit.fromUserValue(pageHeight)) * KoGlobal::dpiY();
+    pageHeight = KoUnit::toInch(pageUnit.fromUserValue(pageHeight)) * KoDpi::dpiY();
 
     return pageHeight;
 }

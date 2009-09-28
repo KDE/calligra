@@ -22,7 +22,6 @@
 #include "krscreenrender.h"
 #include "renderobjects.h"
 #include <KoPageFormat.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <KoUnit.h>
 
@@ -44,9 +43,6 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
 {
     if (pDocument == 0)
         return false;
-
-    qreal xDpi = KoGlobal::dpiX();
-    qreal yDpi = KoGlobal::dpiY();
 
     OROPage * p = pDocument->page(page);
 

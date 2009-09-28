@@ -34,6 +34,7 @@
 #include <kcodecs.h>
 #include <KoPageFormat.h>
 #include <kdebug.h>
+#include <KoDpi.h>
 
 #include <krobjectdata.h>
 #include <krtextdata.h>
@@ -374,7 +375,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
 qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
 {
-    qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoGlobal::dpiY();
+    qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
 
     if (sectionData.objects().count() == 0)
         return intHeight;
@@ -449,7 +450,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
 
 qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 {
-    qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoGlobal::dpiY();
+    qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoDpi::dpiY();
     kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count();
 
     //_handler->populateEngineParameters(_query->getQuery());
@@ -911,8 +912,8 @@ ORODocument* ORPreRender::generate()
             d->_maxHeight = KoPageFormat::height(KoPageFormat::formatFromString(d->_reportData->page.getPageSize()), KoPageFormat::Portrait);
 
             KoUnit pageUnit(KoUnit::Millimeter);
-            d->_maxWidth = KoUnit::toInch(pageUnit.fromUserValue(d->_maxWidth)) * KoGlobal::dpiX();
-            d->_maxHeight = KoUnit::toInch(pageUnit.fromUserValue(d->_maxHeight)) * KoGlobal::dpiY();
+            d->_maxWidth = KoUnit::toInch(pageUnit.fromUserValue(d->_maxWidth)) * KoDpi::dpiX();
+            d->_maxHeight = KoUnit::toInch(pageUnit.fromUserValue(d->_maxHeight)) * KoDpi::dpiY();
         }
     }
 

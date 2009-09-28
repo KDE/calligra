@@ -20,7 +20,7 @@
 #include "PngExportOptionsWidget.h"
 
 #include <KoUnit.h> // for POINT_TO_INCH
-#include <KoGlobal.h>
+#include <KoDpi.h>
 
 PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * parent )
     : QWidget( parent ), m_pointSize( pointSize )
@@ -38,7 +38,7 @@ PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * pare
     widget.unitWidth->setMinMaxStep( 0, 10000, 1 );
     widget.unitHeight->setMinMaxStep( 0, 10000, 1 );
     widget.dpi->setRange( 1, 10000 );
-    widget.dpi->setValue( KoGlobal::dpiX() );
+    widget.dpi->setValue(KoDpi::dpiX());
     widget.dpi->setAlignment( Qt::AlignRight );
     widget.dpi->setSuffix( " DPI" );
     widget.pxAspect->setKeepAspectRatio( true );

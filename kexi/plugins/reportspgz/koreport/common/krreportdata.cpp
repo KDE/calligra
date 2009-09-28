@@ -20,7 +20,7 @@
 #include "krreportdata.h"
 #include <kdebug.h>
 #include <KoUnit.h>
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include "krdetailsectiondata.h"
 #include "krobjectdata.h"
 #include "parsexmlutils.h"
@@ -95,28 +95,28 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                 //TODO qDebug("Error converting topmargin value: %s",(const char*)elemThis.text());
                 d = 50.0;
             }
-            page.setMarginTop(POINT_TO_INCH(d) * KoGlobal::dpiY());
+            page.setMarginTop(POINT_TO_INCH(d) * KoDpi::dpiY());
         } else if (elemThis.tagName() == "bottommargin") {
             d = elemThis.text().toDouble(&valid);
             if (!valid || d < 0.0) {
                 //TODO qDebug("Error converting bottommargin value: %s",(const char*)elemThis.text());
                 d = 50.0;
             }
-            page.setMarginBottom(POINT_TO_INCH(d) * KoGlobal::dpiY());
+            page.setMarginBottom(POINT_TO_INCH(d) * KoDpi::dpiY());
         } else if (elemThis.tagName() == "leftmargin") {
             d = elemThis.text().toDouble(&valid);
             if (!valid || d < 0.0) {
                 //TODO qDebug("Error converting leftmargin value: %s",(const char*)elemThis.text());
                 d = 50.0;
             }
-            page.setMarginLeft(POINT_TO_INCH(d) * KoGlobal::dpiX());
+            page.setMarginLeft(POINT_TO_INCH(d) * KoDpi::dpiX());
         } else if (elemThis.tagName() == "rightmargin") {
             d = elemThis.text().toDouble(&valid);
             if (!valid || d < 0.0) {
                 //TODO qDebug("Error converting rightmargin value: %s",(const char*)elemThis.text());
                 d = 50.0;
             }
-            page.setMarginRight(POINT_TO_INCH(d) * KoGlobal::dpiX());
+            page.setMarginRight(POINT_TO_INCH(d) * KoDpi::dpiX());
         } else if (elemThis.tagName() == "rpthead") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {

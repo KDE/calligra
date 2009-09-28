@@ -26,7 +26,7 @@
 #include <koproperty/EditorView.h>
 #include <QGraphicsSceneMouseEvent>
 #include "reportdesigner.h"
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <kdebug.h>
 #include <krpos.h>
 #include <krsize.h>
@@ -34,8 +34,8 @@
 ReportRectEntity::ReportRectEntity(ReportDesigner *r)
         : QGraphicsRectItem(), ReportEntity(r)
 {
-    m_dpiX = KoGlobal::dpiX();
-    m_dpiY = KoGlobal::dpiY();
+    m_dpiX = KoDpi::dpiX();
+    m_dpiY = KoDpi::dpiY();
 
     m_ppos = 0;
     m_psize = 0;

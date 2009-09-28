@@ -72,7 +72,7 @@
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <KoPageFormat.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -988,14 +988,14 @@ int ReportDesigner::pageWidthPx() const
 
     KoPageFormat::Format pf = KoPageFormat::formatFromString(m_set->property("PageSize").value().toString());
 
-    cw = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::width(pf, KoPageFormat::Portrait))) * KoGlobal::dpiX();
+    cw = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::width(pf, KoPageFormat::Portrait))) * KoDpi::dpiX();
 
-    ch = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::height(pf, KoPageFormat::Portrait))) * KoGlobal::dpiY();
+    ch = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::height(pf, KoPageFormat::Portrait))) * KoDpi::dpiY();
 
     width = (m_set->property("Orientation").value().toString() == "Portrait" ? cw : ch);
 
-    width = width - POINT_TO_INCH(m_set->property("LeftMargin").value().toDouble()) * KoGlobal::dpiX();
-    width = width - POINT_TO_INCH(m_set->property("RightMargin").value().toDouble()) * KoGlobal::dpiX();
+    width = width - POINT_TO_INCH(m_set->property("LeftMargin").value().toDouble()) * KoDpi::dpiX();
+    width = width - POINT_TO_INCH(m_set->property("RightMargin").value().toDouble()) * KoDpi::dpiX();
 
     return width;
 }

@@ -21,6 +21,7 @@
 
 #include "krsize.h"
 #include <kdebug.h>
+#include <KoDpi.h>
 
 KRSize::KRSize(const KoUnit& unit)
 {
@@ -38,8 +39,8 @@ void KRSize::setSceneSize(const QSizeF& s)
 {
     qreal w, h;
 
-    w = INCH_TO_POINT(s.width() / KoGlobal::dpiX());
-    h = INCH_TO_POINT(s.height() / KoGlobal::dpiY());
+    w = INCH_TO_POINT(s.width() / KoDpi::dpiX());
+    h = INCH_TO_POINT(s.height() / KoDpi::dpiY());
     m_pointSize.setWidth(w);
     m_pointSize.setHeight(h);
     m_property->setValue(toUnit().toSize());
@@ -77,8 +78,8 @@ QSizeF KRSize::toPoint()
 QSizeF KRSize::toScene()
 {
     qreal w, h;
-    w = POINT_TO_INCH(m_pointSize.width()) * KoGlobal::dpiX();
-    h = POINT_TO_INCH(m_pointSize.height()) * KoGlobal::dpiY();
+    w = POINT_TO_INCH(m_pointSize.width()) * KoDpi::dpiX();
+    h = POINT_TO_INCH(m_pointSize.height()) * KoDpi::dpiY();
     return QSizeF(w, h);
 }
 

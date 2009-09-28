@@ -21,7 +21,6 @@
 #define KRSIZE_H
 #include <KoUnit.h>
 #include <QSizeF>
-#include <KoGlobal.h>
 #include <koproperty/Property.h>
 
 /**

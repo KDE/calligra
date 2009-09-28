@@ -32,7 +32,7 @@
 #include "Style.h"
 
 // KOffice
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <KoViewConverter.h>
 
 // KDE
@@ -845,7 +845,7 @@ void CellEditor::copy()
 
 void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter)
 {
-    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+    const qreal scaleY = POINT_TO_INCH(static_cast<qreal>((KoDpi::dpiY())));
     d->textEdit->setFont(QFont(font.family(), viewConverter->documentToViewY(font.pointSizeF()) / scaleY));
 
     if (updateSize) {

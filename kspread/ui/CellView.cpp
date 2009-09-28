@@ -50,7 +50,7 @@
 #include <QTextLayout>
 
 // KOffice
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 
@@ -2239,8 +2239,8 @@ void CellView::drawText( QPainter& painter, const QPointF& location, const QStri
 {
     Q_UNUSED( cell )
 
-    const qreal scaleX = POINT_TO_INCH(qreal(KoGlobal::dpiX()));
-    const qreal scaleY = POINT_TO_INCH(qreal(KoGlobal::dpiY()));
+    const qreal scaleX = POINT_TO_INCH(qreal(KoDpi::dpiX()));
+    const qreal scaleY = POINT_TO_INCH(qreal(KoDpi::dpiY()));
 
     // Qt scales the font already with the logical resolution. Do not do it twice!
     painter.save();

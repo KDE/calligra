@@ -43,7 +43,7 @@
 #include <QGridLayout>
 #include <QMouseEvent>
 
-#include <KoGlobal.h>
+#include <KoDpi.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
@@ -60,7 +60,7 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
 {
     m_sectionData = new KRSectionData();
     QObject::connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
-    int dpiY = KoGlobal::dpiY();
+    int dpiY = KoDpi::dpiY();
 
     m_reportDesigner = rptdes;
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -137,7 +137,7 @@ void ReportSection::slotResizeBarDragged(int delta)
 
 void ReportSection::buildXML(QDomDocument & doc, QDomElement & section)
 {
-    int dpiY = KoGlobal::dpiY();
+    int dpiY = KoDpi::dpiY();
     qreal f = INCH_TO_POINT(m_scene->height() / dpiY);
     //f = ( ( f - ( int ) f ) > .5 ? f : f + 1 );
     QDomElement height = doc.createElement("height");
@@ -169,7 +169,7 @@ void ReportSection::initFromXML(QDomNode & section)
         n = node.nodeName();
         if (n == "height") {
             qreal h = node.firstChild().nodeValue().toDouble();
-            h  = POINT_TO_INCH(h) * KoGlobal::dpiY();
+            h  = POINT_TO_INCH(h) * KoDpi::dpiY();
             kDebug() << "Section Height: " << h;
             m_scene->setSceneRect(0, 0, m_scene->width(), h);
             slotResizeBarDragged(0);
