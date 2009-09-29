@@ -39,6 +39,7 @@ namespace KexiMigration {
 
 class MigrateManager;
 class KexiMigrate;
+class AlterSchemaWidget;
 
 class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog {
 Q_OBJECT
@@ -62,7 +63,10 @@ Q_OBJECT
         KexiMigration::MigrateManager *m_migrateManager;
         KexiMigration::KexiMigrate *m_migrateDriver;
         QListWidget *m_tableListWidget;
+        AlterSchemaWidget *m_alterSchemaWidget;
 
+        QString m_importTableName;
+        
         bool fileBasedSrcSelected() const;
         QString driverNameForSelectedSource();
         KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
@@ -74,21 +78,23 @@ Q_OBJECT
         bool doImport();
         
         //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_tablesPageItem, *m_importingPageItem, *m_finishPageItem;
+        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
         
         //Page Widgets
-        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_tablesPageWidget, *m_importingPageWidget, *m_finishPageWidget;
+        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_tablesPageWidget, *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
 
         //Page Setup
         void setupIntroPage();
         void setupSrcConn();
         void setupTableSelectPage();
+        void setupAlterTablePage();
         void setupImportingPage();
         void setupFinishPage();
         
         //Page Arrival
         void arriveSrcConnPage();
         void arriveTableSelectPage();
+        void arriveAlterTablePage();
         void arriveImportingPage();
         void arriveFinishPage();
 };

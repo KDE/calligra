@@ -20,6 +20,7 @@
 #include "migratemanager.h"
 #include "keximigrate.h"
 #include "keximigratedata.h"
+#include "AlterSchemaWidget.h"
 
 #include <QSet>
 #include <QVBoxLayout>
@@ -58,6 +59,7 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupIntroPage();
     setupSrcConn();
     setupTableSelectPage();
+    setupAlterTablePage();
     setupImportingPage();
     setupFinishPage();
     
@@ -159,11 +161,11 @@ void ImportTableWizard::setupTableSelectPage() {
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
     m_tableListWidget = new QListWidget(this);
-    m_tableListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_tableListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     
     vbox->addWidget(m_tableListWidget);
     
-    m_tablesPageItem = new KPageWidgetItem(m_tablesPageWidget, i18n("Select the Tables to Import"));
+    m_tablesPageItem = new KPageWidgetItem(m_tablesPageWidget, i18n("Select the Table to Import"));
     addPage(m_tablesPageItem);
 }
 
@@ -191,6 +193,7 @@ void ImportTableWizard::setupImportingPage()
     vbox->addWidget(m_lblImportingErrTxt);
     vbox->addStretch(1);
 
+
     QWidget *options_widget = new QWidget(m_importingPageWidget);
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
@@ -206,6 +209,22 @@ void ImportTableWizard::setupImportingPage()
 
     m_importingPageItem = new KPageWidgetItem(m_importingPageWidget, i18n("Importing"));
     addPage(m_importingPageItem);
+}
+
+void ImportTableWizard::setupAlterTablePage()
+{
+    m_alterTablePageWidget = new QWidget(this);
+    m_alterTablePageWidget->hide();
+
+    QVBoxLayout *vbox = new QVBoxLayout(m_alterTablePageWidget);
+    KexiUtils::setStandardMarginsAndSpacing(vbox);
+
+    m_alterSchemaWidget = new KexiMigration::AlterSchemaWidget(this);
+    vbox->addWidget(m_alterSchemaWidget);
+    m_alterTablePageWidget->show();
+    
+    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Design"));
+    addPage(m_alterTablePageItem);
 }
 
 void ImportTableWizard::setupFinishPage()
@@ -233,6 +252,8 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
         arriveSrcConnPage();
     } else if (curPage == m_tablesPageItem) {
         arriveTableSelectPage();
+    } else if (curPage == m_alterTablePageItem) {
+        arriveAlterTablePage();
     } else if (curPage == m_importingPageItem) {
         arriveImportingPage();
     } else if (curPage == m_finishPageItem) {
@@ -242,7 +263,23 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
 
 void ImportTableWizard::arriveSrcConnPage()
 {
+    kDebug();
+}
 
+void ImportTableWizard::arriveAlterTablePage()
+{
+    KexiDB::TableSchema ts;
+
+    foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
+        m_importTableName = table->text();
+    }
+    
+    kDebug();
+
+    if (m_migrateDriver->readTableSchema(m_importTableName, ts)) {
+        m_alterSchemaWidget->setTableSchema(&ts);
+    }
+    
 }
 
 void ImportTableWizard::arriveTableSelectPage()
@@ -286,11 +323,9 @@ void ImportTableWizard::arriveImportingPage()
     txt = i18n("All required information has now "
     "been gathered. Click \"Next\" button to start importing.\n\n"
     "Depending on size of the tables this may take some time.\n\n"
-    "You have chosen to import the following tables:\n");
+    "You have chosen to import the following table:\n\n");
 
-    foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
-        txt += "\t" + table->text() + "\n";
-    }
+    txt += m_importTableName;
     
     m_lblImportingTxt->setText(txt);
     
@@ -429,9 +464,8 @@ bool ImportTableWizard::doImport()
             if (!m_currentDatabase->createTable(&ts, true))
                 return false;
         }
-
     }
-
+    
     m_importComplete = true;
     return true;
 }
