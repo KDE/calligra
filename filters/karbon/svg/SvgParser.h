@@ -53,6 +53,8 @@ public:
 
 protected:
 
+    typedef QMap<QString, QString> SvgStyles;
+    
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer( const QDomElement & );
     /// Parses a use element, returning a list of child shapes
@@ -61,6 +63,7 @@ protected:
     void parseDefs( const QDomElement & );
     /// Parses style attributes, applying them to the given shape
     void parseStyle( KoShape *, const QDomElement & );
+    void parseStyle( KoShape *, const SvgStyles & );
     /// Parses a single style attribute
     void parsePA( SvgGraphicsContext *, const QString &, const QString & );
     /// Parses a gradient element
@@ -95,7 +98,7 @@ protected:
     void removeGraphicContext();
 
     /// Creates an object from the given xml element
-    KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
+    KoShape * createObject( const QDomElement &, const SvgStyles &style = SvgStyles() );
     /// Create text object from the given xml element
     KoShape * createText( const QDomElement &, const QList<KoShape*> & shapes );
     void parseFont( const QDomElement & );
@@ -112,8 +115,10 @@ protected:
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter( const QString &id, const QString &href = 0 );
 
+    /// Creates style map from given xml element
+    SvgStyles collectStyles( const QDomElement & );
     /// Merges two style elements, returning the merged style
-    QDomElement mergeStyles( const QDomElement &, const QDomElement & );
+    SvgStyles mergeStyles( const SvgStyles &, const SvgStyles & );
 
     /// Adds list of shapes to the given group shape
     void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );

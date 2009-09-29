@@ -409,79 +409,19 @@ SvgFilterHelper* SvgParser::findFilter( const QString &id, const QString &href )
         return 0L;
 }
 
-QDomElement SvgParser::mergeStyles( const QDomElement &referencedBy, const QDomElement &referencedElement )
+SvgParser::SvgStyles SvgParser::mergeStyles( const SvgStyles &referencedBy, const SvgStyles &referencedStyles )
 {
-    // First use all the style attributes of the element being referenced.
-    QDomElement e = referencedElement;
-
-    // Now go through the style attributes of the element that is referencing and substitute the original ones.
-    if( !referencedBy.attribute( "color" ).isEmpty() )
-        e.setAttribute( "color", referencedBy.attribute( "color" ) );
-    if( !referencedBy.attribute( "fill" ).isEmpty() )
-        e.setAttribute( "fill", referencedBy.attribute( "fill" ) );
-    if( !referencedBy.attribute( "fill-rule" ).isEmpty() )
-        e.setAttribute( "fill-rule", referencedBy.attribute( "fill-rule" ) );
-    if( !referencedBy.attribute( "stroke" ).isEmpty() )
-        e.setAttribute( "stroke", referencedBy.attribute( "stroke" ) );
-    if( !referencedBy.attribute( "stroke-width" ).isEmpty() )
-        e.setAttribute( "stroke-width", referencedBy.attribute( "stroke-width" ) );
-    if( !referencedBy.attribute( "stroke-linejoin" ).isEmpty() )
-        e.setAttribute( "stroke-linejoin", referencedBy.attribute( "stroke-linejoin" ) );
-    if( !referencedBy.attribute( "stroke-linecap" ).isEmpty() )
-        e.setAttribute( "stroke-linecap", referencedBy.attribute( "stroke-linecap" ) );
-    if( !referencedBy.attribute( "stroke-dasharray" ).isEmpty() )
-        e.setAttribute( "stroke-dasharray", referencedBy.attribute( "stroke-dasharray" ) );
-    if( !referencedBy.attribute( "stroke-dashoffset" ).isEmpty() )
-        e.setAttribute( "stroke-dashoffset", referencedBy.attribute( "stroke-dashoffset" ) );
-    if( !referencedBy.attribute( "stroke-opacity" ).isEmpty() )
-        e.setAttribute( "stroke-opacity", referencedBy.attribute( "stroke-opacity" ) );
-    if( !referencedBy.attribute( "stroke-miterlimit" ).isEmpty() )
-        e.setAttribute( "stroke-miterlimit", referencedBy.attribute( "stroke-miterlimit" ) );
-    if( !referencedBy.attribute( "fill-opacity" ).isEmpty() )
-        e.setAttribute( "fill-opacity", referencedBy.attribute( "fill-opacity" ) );
-    if( !referencedBy.attribute( "opacity" ).isEmpty() )
-        e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
-    if( !referencedBy.attribute( "filter" ).isEmpty() )
-        e.setAttribute( "filter", referencedBy.attribute( "filter" ) );
-
-    // build map of style attributes from the element being referenced (original)
-    QString origStyle = e.attribute( "style" ).simplified();
-    QStringList origSubstyles = origStyle.split( ';', QString::SkipEmptyParts );
-    QMap<QString, QString> mergesStyles;
-    for( QStringList::Iterator it = origSubstyles.begin(); it != origSubstyles.end(); ++it )
-    {
-        QStringList origSubstyle = it->split( ':' );
-        QString command = origSubstyle[0].trimmed();
-        QString params  = origSubstyle[1].trimmed();
-        mergesStyles[command] = params;
+    // 1. use all styles of the referencing styles
+    SvgStyles mergedStyles = referencedBy;
+    // 2. use all styles of the referenced style which are not in the referencing styles
+    SvgStyles::const_iterator it = referencedStyles.constBegin();
+    for( ; it != referencedStyles.constEnd(); ++it ) {
+        if( !referencedBy.contains(it.key())) {
+            mergedStyles.insert(it.key(), it.value());
+        }
     }
-
-    // build map of style attributes from the referencing element and substitue the original style
-    QString refStyle = referencedBy.attribute( "style" ).simplified();
-    QStringList refSubstyles = refStyle.split( ';', QString::SkipEmptyParts );
-    for( QStringList::Iterator it = refSubstyles.begin(); it != refSubstyles.end(); ++it )
-    {
-        QStringList refSubstyle = it->split( ':' );
-        QString command = refSubstyle[0].trimmed();
-        // do not parse font attributes here, this is done in parseFont
-        if( m_fontAttributes.contains( command ) )
-            continue;
-
-        QString params  = refSubstyle[1].trimmed();
-        mergesStyles[command] = params;
-    }
-
-    // rebuild the style attribute from the merged styleElement
-    QString newStyleAttribute;
-    QMap<QString, QString>::const_iterator it = mergesStyles.constBegin();
-    for( ; it != mergesStyles.constEnd(); ++it )
-        newStyleAttribute += it.key() + ':' + it.value() + ';';
-
-    e.setAttribute( "style", newStyleAttribute );
-
-    return e;
+    return mergedStyles;
 }
-
 
 // Parsing functions
 // ---------------------------------------------------------------------------------------
@@ -1219,20 +1159,17 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     gc->stroke.setColor( strokecolor );
 }
 
-void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
+SvgParser::SvgStyles SvgParser::collectStyles( const QDomElement &e )
 {
-    SvgGraphicsContext *gc = m_gc.top();
-    if( !gc ) return;
-
-    QMap<QString, QString> styleMap;
-
+    SvgStyles styleMap;
+    
     // first collect individual style attributes
     foreach( const QString & command, m_styleAttributes )
     {
         if( e.hasAttribute( command ) )
             styleMap[command] = e.attribute( command );
     }
-
+    
     // now parse style attribute
     QString style = e.attribute( "style" ).simplified();
     QStringList substyles = style.split( ';', QString::SkipEmptyParts );
@@ -1245,25 +1182,39 @@ void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
         if( m_styleAttributes.contains( command ) )
             styleMap[command] = params;
     }
+    
+    return styleMap;
+}
 
+void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
+{
+    parseStyle(obj, collectStyles(e));
+}
+
+void SvgParser::parseStyle( KoShape *obj, const SvgStyles &styles )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( !gc )
+        return;
+    
     // make sure we parse the style attributes in the right order
     foreach( const QString & command, m_styleAttributes )
     {
-        QString params = styleMap.value( command );
+        const QString &params = styles.value( command );
         if( params.isEmpty() )
             continue;
         parsePA( gc, command, params );
     }
-
+    
     if(!obj)
         return;
-
+    
     if (!dynamic_cast<KoShapeGroup*>(obj)) {
         applyFillStyle( obj );
         applyStrokeStyle( obj );
     }
     applyFilter( obj );
-
+    
     if( ! gc->display )
         obj->setVisible( false );
 }
@@ -1597,7 +1548,8 @@ QList<KoShape*> SvgParser::parseUse( const QDomElement &e )
         
         if(m_defs.contains(key))
         {
-            QDomElement a = mergeStyles( e, m_defs[key] );
+            const QDomElement &a = m_defs[key];
+            SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
             if(a.tagName() == "g" || a.tagName() == "a")
             {
                 addGraphicContext();
@@ -1607,7 +1559,7 @@ QList<KoShape*> SvgParser::parseUse( const QDomElement &e )
                 KoShapeGroup * group = new KoShapeGroup();
                 group->setZIndex( nextZIndex() );
 
-                parseStyle( 0, a );
+                parseStyle( 0, styles );
                 parseFont( a );
 
                 QList<KoShape*> childShapes = parseContainer( a );
@@ -1627,7 +1579,7 @@ QList<KoShape*> SvgParser::parseUse( const QDomElement &e )
                 // Create the object with the merged styles.
                 // The object inherits all style attributes from the use tag, but keeps it's own attributes.
                 // So, not just use the style attributes of the use tag, but merge them first.
-                KoShape * shape = createObject( a, mergeStyles(e, a) );
+                KoShape * shape = createObject( a, styles );
                 if( shape )
                     shapes.append( shape );
             }
@@ -2067,7 +2019,7 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
     return text;
 }
 
-KoShape * SvgParser::createObject( const QDomElement &b, const QDomElement &style )
+KoShape * SvgParser::createObject( const QDomElement &b, const SvgStyles &style )
 {
     KoShape *obj = 0L;
 
@@ -2248,10 +2200,10 @@ KoShape * SvgParser::createObject( const QDomElement &b, const QDomElement &styl
 
     obj->applyAbsoluteTransformation( m_gc.top()->matrix );
 
-    if( !style.isNull() )
+    if( !style.isEmpty() )
         parseStyle( obj, style );
     else
-        parseStyle( obj, b );
+        parseStyle( obj, collectStyles(b) );
 
     // handle id
     if( !b.attribute("id").isEmpty() )
