@@ -36,17 +36,13 @@ public:
     explicit FrameConfigSharedState(KWDocument *document);
     ~FrameConfigSharedState();
 
-    void addUser() {
-        m_refcount++;
-    }
+    void addUser();
     void removeUser();
 
     KWFrame *frame() const {
         return m_frame;
     }
-    void setFrame(KWFrame *frame) {
-        m_deleteFrame = true; m_frame = frame;
-    }
+    void setFrame(KWFrame *frame);
     KWFrame *createFrame(KoShape *shape);
     void markFrameUsed() {
         m_deleteFrame = false;

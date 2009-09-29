@@ -125,6 +125,11 @@ void FrameConfigSharedState::removeUser()
     }
 }
 
+void FrameConfigSharedState::addUser()
+{
+    ++m_refcount;
+}
+
 KWFrame *FrameConfigSharedState::createFrame(KoShape *shape)
 {
     if (m_frame == 0) {
@@ -142,6 +147,12 @@ void FrameConfigSharedState::setKeepAspectRatio(bool on)
         return;
     m_protectAspectRatio = on;
     emit keepAspectRatioChanged(on);
+}
+
+void FrameConfigSharedState::setFrame(KWFrame *frame)
+{
+    m_deleteFrame = true;
+    m_frame = frame;
 }
 
 #include "KWShapeConfigFactory.moc"
