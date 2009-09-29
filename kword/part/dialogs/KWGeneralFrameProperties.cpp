@@ -43,6 +43,7 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
 
 void KWGeneralFrameProperties::open(KoShape *shape)
 {
+    m_state->addUser();
     m_shape = shape;
     // set default values
     widget.isCopyOfPrevious->setEnabled(false);

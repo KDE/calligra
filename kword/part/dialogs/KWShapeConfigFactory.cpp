@@ -118,6 +118,7 @@ FrameConfigSharedState::~FrameConfigSharedState()
 void FrameConfigSharedState::removeUser()
 {
     m_refcount--;
+    Q_ASSERT(m_refcount >= 0);
     if (m_refcount == 0 && m_frame) {
         if (m_deleteFrame)
             delete m_frame;
