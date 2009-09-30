@@ -17,9 +17,10 @@ TestTextFrameSorting::TestTextFrameSorting()
 void TestTextFrameSorting::testSimpleSorting()
 {
     KWTextFrameSet tfs(0);
-    KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
-    KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
-    KWFrame * frame3 = createFrame(QPointF(10, 110), tfs);
+    KWFrame *frame1 = createFrame(QPointF(10, 10), tfs);
+    KWFrame *frame2 = createFrame(QPointF(120, 10), tfs);
+    frame2->shape()->setSize(QSizeF(100, 100));
+    KWFrame *frame3 = createFrame(QPointF(10, 110), tfs);
 
     qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
@@ -41,6 +42,42 @@ void TestTextFrameSorting::testSimpleSorting()
     QCOMPARE(tfs.m_frames[2], frame2);
     QCOMPARE(tfs.m_frames[3], frame4);
     QCOMPARE(tfs.m_frames[4], frame5);
+}
+
+void TestTextFrameSorting::testSimpleSorting2() // cascading usecase
+{
+    KWTextFrameSet tfs(0);
+    KWFrame *frame4 = createFrame(QPointF(120, 300), tfs); // note that each frame is 50 x 50 per default.
+    KWFrame *frame2 = createFrame(QPointF(120, 120), tfs);
+    KWFrame *frame3 = createFrame(QPointF(10, 240), tfs);
+    KWFrame *frame1 = createFrame(QPointF(10, 10), tfs);
+
+    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+
+    QCOMPARE(tfs.m_frames[0], frame1);
+    QCOMPARE(tfs.m_frames[1], frame2);
+    QCOMPARE(tfs.m_frames[2], frame3);
+    QCOMPARE(tfs.m_frames[3], frame4);
+
+    KWPageManager pm;
+    tfs.setPageManager(&pm);
+    pm.appendPage();
+    pm.appendPage();
+    KWFrame *frame21 = createFrame(QPointF(120, 1000), tfs);
+    KWFrame *frame20 = createFrame(QPointF(10, 1000), tfs);
+    KWFrame *frame23 = createFrame(QPointF(120, 1200), tfs);
+    KWFrame *frame22 = createFrame(QPointF(10, 1110), tfs);
+
+    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+
+    QCOMPARE(tfs.m_frames[0], frame1);
+    QCOMPARE(tfs.m_frames[1], frame2);
+    QCOMPARE(tfs.m_frames[2], frame3);
+    QCOMPARE(tfs.m_frames[3], frame4);
+    QCOMPARE(tfs.m_frames[4], frame20);
+    QCOMPARE(tfs.m_frames[5], frame21);
+    QCOMPARE(tfs.m_frames[6], frame22);
+    QCOMPARE(tfs.m_frames[7], frame23);
 }
 
 void TestTextFrameSorting::testSortingOnPagespread()

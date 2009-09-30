@@ -304,7 +304,7 @@ void KWTextFrameSet::sortFrames()
     m_frameOrderDirty = false;
 }
 
-// static
+// static   returns true if frame1 comes before frame2
 bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2)
 {
     const KWTextFrame *f1 = dynamic_cast<const KWTextFrame*>(frame1);
@@ -313,8 +313,6 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     if (f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
         return f1->sortingId() < f2->sortingId();
     }
-    QPointF pos = frame1->shape()->absolutePosition();
-    QRectF bounds = frame2->shape()->boundingRect();
 
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
     bool rtl = false; // right-to-left
@@ -328,16 +326,30 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
         if (page1.isValid())
             rtl = page1.directionHint() == KoText::RightLeftTopBottom;
     }
+    QRectF boundsF1 = frame1->shape()->boundingRect();
+    QRectF boundsF2 = frame2->shape()->boundingRect();
 
-    if (pos.x() > bounds.right()) return rtl;
-    if (pos.x() < bounds.left()) return !rtl;
+    // support frame stacking.
+    if (boundsF1.bottom() < boundsF2.top() && boundsF1.left() > boundsF2.right())
+        return true;
+    if (boundsF1.top() > boundsF2.bottom() && boundsF1.right() < boundsF2.left())
+        return false;
+
+    QPointF posF1 = frame1->shape()->absolutePosition();
+    if (posF1.x() > boundsF2.right())
+        return rtl;
+    if (posF1.x() < boundsF2.left())
+        return !rtl;
 
     // check the Y position. Y is greater only when it is below the second frame.
-    if (pos.y() > bounds.bottom()) return false;
-    if (pos.y() < bounds.top()) return true;
+    if (posF1.y() > boundsF2.bottom())
+        return false;
+    if (posF1.y() < boundsF2.top())
+        return true;
 
     // my center lies inside frame2. Lets check the topleft pos.
-    if (frame1->shape()->boundingRect().top() > bounds.top()) return false;
+    if (frame1->shape()->boundingRect().top() > boundsF2.top())
+        return false;
     return true;
 }
 

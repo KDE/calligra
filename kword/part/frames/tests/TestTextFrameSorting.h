@@ -17,6 +17,7 @@ public:
 private slots:
     // tests
     void testSimpleSorting();
+    void testSimpleSorting2();
     void testSortingOnPagespread();
     void testRtlSorting();
     void testSortingById();
