@@ -53,6 +53,8 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     kDebug(30513);
     Q_ASSERT( table );
     Q_ASSERT( !table->name.isEmpty() );
+
+    KoXmlWriter*  writer = currentWriter();
     m_currentTable = table;
     m_cellOpen = false;
 
@@ -65,7 +67,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_currentY = 0;
 
     //start table in content
-    m_bodyWriter->startElement("table:table");
+    writer->startElement("table:table");
 
     // Start a table style.
     KoGenStyle tableStyle(KoGenStyle::StyleAutoTable, "table");
@@ -73,7 +75,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     tableStyle.addProperty("style:border-model", "collapsing");
     QString tableStyleName = m_mainStyles->lookup(tableStyle, QString("Table"),KoGenStyles::AllowDuplicates);
 
-    m_bodyWriter->addAttribute("table:style-name", tableStyleName);
+    writer->addAttribute("table:style-name", tableStyleName);
 
     // Write the table:table-column descriptions.
     for (int r = 0; r < table->m_cellEdges.size()-1; r++) {
@@ -87,9 +89,9 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         else
             tableColumnStyleName = m_mainStyles->lookup(tableColumnStyle, tableStyleName + '.' + QChar('A'+r), KoGenStyles::DontForceNumbering);
 
-        m_bodyWriter->startElement("table:table-column");
-        m_bodyWriter->addAttribute("table:style-name", tableColumnStyleName);
-        m_bodyWriter->endElement();
+        writer->startElement("table:table-column");
+        writer->addAttribute("table:style-name", tableColumnStyleName);
+        writer->endElement();
     }
 }
 
@@ -97,8 +99,9 @@ void KWordTableHandler::tableEnd()
 {
     kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, Document does
+    KoXmlWriter*  writer = currentWriter();
     //end table in content
-    m_bodyWriter->endElement();//table:table
+    writer->endElement();//table:table
 }
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
@@ -114,6 +117,7 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     m_row++;
     m_column = -1;
     m_tap = tap;
+    KoXmlWriter*  writer = currentWriter();
     //kDebug(30513) << "tableRowStart row=" << m_row
     //            << ", number of cells: " << tap->itcMac;
 
@@ -141,16 +145,25 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     }
 
     //start table row in content
-    m_bodyWriter->startElement("table:table-row");
-    m_bodyWriter->addAttribute("table:style-name", rowStyleName.toUtf8());
+    writer->startElement("table:table-row");
+    writer->addAttribute("table:style-name", rowStyleName.toUtf8());
 }
 
 void KWordTableHandler::tableRowEnd()
 {
     kDebug(30513);
     m_currentY += rowHeight();
+    KoXmlWriter*  writer = currentWriter();
     //end table row in content
-    m_bodyWriter->endElement();//table:table-row
+    writer->endElement();//table:table-row
+}
+
+KoXmlWriter * KWordTableHandler::currentWriter()
+{
+    if(document()->textHandler()->m_writingHeader && document()->textHandler()->m_headerWriter != NULL)
+        return document()->textHandler()->m_headerWriter;
+    else
+        return m_bodyWriter;
 }
 
 static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, const wvWare::Word97::BRC& brc2)
@@ -171,6 +184,7 @@ void KWordTableHandler::tableCellStart()
     Q_ASSERT( m_tap );
     if ( !m_tap )
         return;
+    KoXmlWriter*  writer = currentWriter();
 
     //increment the column number so we know where we are
     m_column++;
@@ -242,7 +256,7 @@ void KWordTableHandler::tableCellStart()
     // The MSWord spec says they must be empty anyway (and we'll get a
     // warning if not).
     if ( tc.fVertMerge && !tc.fVertRestart ) {
-        m_bodyWriter->startElement("table:covered-table-cell");
+        writer->startElement("table:covered-table-cell");
         m_cellOpen = true;
 
         return;
@@ -381,15 +395,15 @@ void KWordTableHandler::tableCellStart()
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
 
     // Start a table cell in the content.
-    m_bodyWriter->startElement("table:table-cell");
+    writer->startElement("table:table-cell");
     m_cellOpen = true;
-    m_bodyWriter->addAttribute("table:style-name", cellStyleName.toUtf8());
+    writer->addAttribute("table:style-name", cellStyleName.toUtf8());
 
     if (rowSpan > 1) {
-        m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
+        writer->addAttribute("table:number-rows-spanned", rowSpan);
     }
     if (colSpan > 1) {
-        m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
+        writer->addAttribute("table:number-columns-spanned", colSpan);
         m_colSpan = colSpan;
     }
     else {
@@ -407,14 +421,15 @@ void KWordTableHandler::tableCellEnd()
     // when something happens like a new paragraph or, in this case,
     // the table cell ends.
     document()->textHandler()->closeList();
+    KoXmlWriter*  writer = currentWriter();
 
     // End table cell in content, but only if we actually opened a cell.
     if (m_cellOpen) {
-        QList<const char*> openTags = m_bodyWriter->tagHierarchy();
+        QList<const char*> openTags = writer->tagHierarchy();
         for (int i = 0; i < openTags.size(); ++i)
             kDebug(30513) << openTags[i];
 
-        m_bodyWriter->endElement();//table:table-cell
+        writer->endElement();//table:table-cell
         m_cellOpen = false;
     }
     else
@@ -425,8 +440,8 @@ void KWordTableHandler::tableCellEnd()
     // columns.
     if (m_colSpan > 1) {
         for (int i = 1; i < m_colSpan; i++) {
-            m_bodyWriter->startElement("table:covered-table-cell");
-            m_bodyWriter->endElement();
+            writer->startElement("table:covered-table-cell");
+            writer->endElement();
         }
     }
     m_colSpan = 1;

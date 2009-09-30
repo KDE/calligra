@@ -105,6 +105,9 @@ protected:
     double rowHeight() const;
 
 private:
+    //We can have table in headers too. selecting correct writer
+    KoXmlWriter * currentWriter();
+
     // The document owning this table handler.
     Document*     m_document;
 
