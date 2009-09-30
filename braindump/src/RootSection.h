@@ -43,8 +43,8 @@ class RootSection : public QObject, public SectionGroup {
     /// This signal is emited when a command is executed in the undo stack
     void commandExecuted();
   private:
-    ViewManager* m_viewManager;
     KoUndoStack* m_undoStack;
+    ViewManager* m_viewManager;
     SectionsIO* m_sectionsSaver;
 };
 

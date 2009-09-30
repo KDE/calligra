@@ -20,6 +20,7 @@
 #include "SectionGroup.h"
 #include "Section.h"
 #include <klocalizedstring.h>
+#include "RootSection.h"
 
 int SectionGroup::s_count = 0;
 
@@ -69,7 +70,9 @@ QList<Section*> SectionGroup::sections( ) const
 
 Section* SectionGroup::newSection( Section* before )
 {
-  Section* section = new Section;
+  SectionGroup* root = this;
+  while(root->sectionParent()) root = root->sectionParent();
+  Section* section = new Section( dynamic_cast<RootSection*>(root)->undoStack()) ;
   insertSection(section, before);
   section->setName(nextName());
   return section;

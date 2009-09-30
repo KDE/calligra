@@ -29,12 +29,11 @@ class KoUndoStack;
 
 class SectionContainer {
   public:
-    SectionContainer(Section* );
+    SectionContainer(Section* , KoUndoStack* _stack );
     SectionContainer(const SectionContainer& _rhs, Section* );
   private:
-    void initContainer(Section* );
+    void initContainer(Section* , KoUndoStack* _stack );
   public:
-    void setUndoStack(KoUndoStack* );
     Section* section();
     KoShapeLayer* layer();
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);

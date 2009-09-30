@@ -178,7 +178,7 @@ void SectionsBoxDock::slotDuplicateClicked()
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
   Q_ASSERT(m_view->activeSection());
-  Section* section = new Section();
+  Section* section = new Section(m_view->rootSection()->undoStack());
   section->setName(SectionGroup::nextName());
   m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection(), m_model, 0));
 }
@@ -186,7 +186,7 @@ void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 void SectionsBoxDock::slotNewSectionAboveCurrent()
 {
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
-  Section* section = new Section();
+  Section* section = new Section(m_view->rootSection()->undoStack());
   section->setName(SectionGroup::nextName());
   m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, m_view->activeSection()));
 }
@@ -195,7 +195,7 @@ void SectionsBoxDock::slotNewSectionBellowCurrent()
 {
   SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
   Section* above = parentSection->nextSection( m_view->activeSection() );
-  Section* section = new Section();
+  Section* section = new Section(m_view->rootSection()->undoStack());
   section->setName(SectionGroup::nextName());
   m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, above));
 }

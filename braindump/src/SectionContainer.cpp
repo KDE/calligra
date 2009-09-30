@@ -39,9 +39,9 @@
 #include "Utils.h"
 #include "Layout.h"
 
-SectionContainer::SectionContainer(Section* section) : m_section(0), m_layer(0)
+SectionContainer::SectionContainer(Section* section, KoUndoStack* _stack) : m_section(0), m_layer(0)
 {
-  initContainer(section);
+  initContainer(section, _stack);
 }
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs)
@@ -71,7 +71,7 @@ class SectionContainerShapePaste : public KoOdfPaste
 };
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
-  initContainer(_section);
+  initContainer(_section, dynamic_cast<KoUndoStack*>(_rhs.m_dataCenterMap["UndoStack"]));
   KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->childShapes());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
@@ -86,19 +86,15 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
   delete mimeData;
 }
 
-void SectionContainer::initContainer(Section* _section) {
+void SectionContainer::initContainer(Section* _section, KoUndoStack* _stack) {
   m_section = _section;
   m_sectionModel = new SectionShapeContainerModel(m_section);
   m_layer = new KoShapeLayer(m_sectionModel);
+  m_dataCenterMap["UndoStack"] = _stack;
   foreach (QString id, KoShapeRegistry::instance()->keys()) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
     shapeFactory->populateDataCenterMap(m_dataCenterMap);
   }
-}
-
-void SectionContainer::setUndoStack(KoUndoStack* stack)
-{
-  m_dataCenterMap["UndoStack"] = stack;
 }
 
 Section* SectionContainer::section()

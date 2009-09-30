@@ -26,9 +26,10 @@
 
 #include "ViewManager.h"
 
-RootSection::RootSection() : SectionGroup(0), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this))
+#include <KDebug>
+
+RootSection::RootSection() : SectionGroup(0), m_undoStack(new KoUndoStack(0)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this))
 {
-  m_undoStack = new KoUndoStack(0);
   connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
 }
 
