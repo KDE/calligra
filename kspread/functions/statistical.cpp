@@ -1594,7 +1594,7 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
   }
 
   Value newX( Value::Array );
-  int cols_newX, rows_newX;
+  uint cols_newX, rows_newX;
   int count_newX;
 
   if (args.count() < 3)
@@ -2063,18 +2063,14 @@ Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *)
     if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
       return Value::errorVALUE();
   }
-  else
-  {
-    // non-cumulative
-    
-    // check constraints
-    if ( calc->lower( x, Value(0.0)) )
-      return Value(0.0);
+  // non-cumulative
+  // check constraints
+  if ( calc->lower( x, Value(0.0)) )
+    return Value(0.0);
 
-    // (ln(x) - mue) / sigma
-    Value Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
-    return calc->add (calc->gauss (Y), 0.5);
-  }
+  // (ln(x) - mue) / sigma
+  Value Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
+  return calc->add (calc->gauss (Y), 0.5);
 }
 
 //
