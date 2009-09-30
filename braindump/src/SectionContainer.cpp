@@ -21,6 +21,7 @@
 
 #include <QMimeData>
 
+
 #include <KoDrag.h>
 #include <KoOdf.h>
 #include <KoOdfPaste.h>
@@ -32,6 +33,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoShapeLoadingContext.h>
+#include <KoUndoStack.h>
 
 #include "SectionShapeContainerModel.h"
 #include "Utils.h"
@@ -92,6 +94,11 @@ void SectionContainer::initContainer(Section* _section) {
     KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
     shapeFactory->populateDataCenterMap(m_dataCenterMap);
   }
+}
+
+void SectionContainer::setUndoStack(KoUndoStack* stack)
+{
+  m_dataCenterMap["UndoStack"] = stack;
 }
 
 Section* SectionContainer::section()

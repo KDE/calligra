@@ -24,7 +24,7 @@
 #include "SectionGroup.h"
 
 class KActionCollection;
-class KUndoStack;
+class KoUndoStack;
 class QUndoCommand;
 class ViewManager;
 class SectionsIO;
@@ -38,12 +38,13 @@ class RootSection : public QObject, public SectionGroup {
     SectionsIO* sectionsIO();
     void addCommand(Section* , QUndoCommand* command);
     void createActions(KActionCollection* );
+    KoUndoStack* undoStack();
   signals:
     /// This signal is emited when a command is executed in the undo stack
     void commandExecuted();
   private:
     ViewManager* m_viewManager;
-    KUndoStack* m_undoStack;
+    KoUndoStack* m_undoStack;
     SectionsIO* m_sectionsSaver;
 };
 

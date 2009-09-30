@@ -292,7 +292,7 @@ void View::setActiveSection( Section* page )
 
   if(m_activeSection)
   {
-    
+    m_activeSection->sectionContainer()->setUndoStack(rootSection()->undoStack());
     QList<KoShape*> shapes;
     shapes.push_back(page->sectionContainer()->layer());
     shapeManager()->setShapes( shapes, KoShapeManager::AddWithoutRepaint );

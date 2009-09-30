@@ -20,7 +20,8 @@
 #ifndef DOCKER_MANAGER_H
 #define DOCKER_MANAGER_H
 
-#include <KoView.h>
+#include <QObject>
+#include <QMap>
 
 class MainWindow;
 

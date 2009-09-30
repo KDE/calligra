@@ -25,6 +25,7 @@
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
+class KoUndoStack;
 
 class SectionContainer {
   public:
@@ -33,6 +34,7 @@ class SectionContainer {
   private:
     void initContainer(Section* );
   public:
+    void setUndoStack(KoUndoStack* );
     Section* section();
     KoShapeLayer* layer();
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);

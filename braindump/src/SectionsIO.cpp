@@ -258,7 +258,12 @@ void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGr
 
 void SectionsIO::save()
 {
-  if(m_sectionsToSave.isEmpty()) return;
+  kDebug() << "Start saving";
+  if(m_sectionsToSave.isEmpty())
+  {
+    kDebug() << "No section to save";
+    return;
+  }
   QList<SaveContext*> contextToRemove = m_contextes.values();
   // First: save the structure
   QDomDocument doc;
