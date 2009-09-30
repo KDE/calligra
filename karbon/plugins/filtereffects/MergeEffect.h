@@ -36,7 +36,7 @@ public:
     /// reimplemented from KoFilterEffect
     virtual QImage processImages(const QList<QImage> &images, const KoFilterEffectRenderContext &context) const;
     /// reimplemented from KoFilterEffect
-    virtual bool load(const QDomElement &element, const QMatrix &matrix);
+    virtual bool load(const KoXmlElement &element, const QMatrix &matrix);
     /// reimplemented from KoFilterEffect
     virtual void save(KoXmlWriter &writer);
 };

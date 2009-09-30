@@ -21,7 +21,7 @@
 #define FILTEREFFECTRESOURCE_H
 
 #include "KoResource.h"
-#include <QtXml/QDomDocument>
+#include <KoXmlReader.h>
 
 class KoFilterEffectStack;
 

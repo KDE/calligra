@@ -111,7 +111,10 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     if (!filterStack)
         return 0;
     
-    QDomElement e = m_data.documentElement();
+    QByteArray data = m_data.toByteArray();
+    KoXmlDocument doc;
+    doc.setContent(data);
+    KoXmlElement e = doc.documentElement();
     
     // only allow obect bounding box units
     if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox")
@@ -131,9 +134,9 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     KoFilterEffectRegistry * registry = KoFilterEffectRegistry::instance();
     
     // create the filter effects and add them to the shape
-    for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement primitive = n.toElement();
+        KoXmlElement primitive = n.toElement();
         KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive);
         if (!filterEffect) {
             kWarning(38000) << "filter effect" << primitive.tagName() << "is not implemented yet";

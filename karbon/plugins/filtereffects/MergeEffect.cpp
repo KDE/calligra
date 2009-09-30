@@ -20,9 +20,9 @@
 #include "MergeEffect.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
+#include "KoXmlReader.h"
 #include <KLocale>
 #include <QtCore/QRect>
-#include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 #include <limits.h>
 
@@ -59,15 +59,15 @@ QImage MergeEffect::processImages(const QList<QImage> &images, const KoFilterEff
     return result;
 }
 
-bool MergeEffect::load(const QDomElement &element, const QMatrix &)
+bool MergeEffect::load(const KoXmlElement &element, const QMatrix &)
 {
     if (element.tagName() != id())
         return false;
 
     int inputCount = inputs().count();
     int inputIndex = 0;
-    for (QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        QDomElement node = n.toElement();
+    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement node = n.toElement();
         if (node.tagName() == "feMergeNode") {
             if( node.hasAttribute("in")) {
                 if (inputIndex < inputCount)

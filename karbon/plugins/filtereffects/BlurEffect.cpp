@@ -21,9 +21,9 @@
 #include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
+#include "KoXmlReader.h"
 #include <KLocale>
 #include <QtCore/QRect>
-#include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 
 // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
@@ -306,7 +306,7 @@ QImage BlurEffect::processImage(const QImage &image, const KoFilterEffectRenderC
     return result;
 }
 
-bool BlurEffect::load(const QDomElement &element, const QMatrix &matrix)
+bool BlurEffect::load(const KoXmlElement &element, const QMatrix &matrix)
 {
     if (element.tagName() != id())
         return false;

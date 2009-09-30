@@ -20,9 +20,9 @@
 #ifndef SVGPATTERNHELPER_H
 #define SVGPATTERNHELPER_H
 
+#include <KoXmlReader.h>
 #include <QtGui/QImage>
 #include <QtGui/QMatrix>
-#include <QtXml/QDomElement>
 
 class KoShape;
 
@@ -60,9 +60,9 @@ public:
     QSizeF size( const QRectF & objectBound ) const;
 
     /// Sets the dom element containing the pattern content
-    void setContent( const QDomElement &content );
+    void setContent( const KoXmlElement &content );
     /// Return the pattern content element
-    QDomElement content() const;
+    KoXmlElement content() const;
 
     /// copies the content from the given pattern helper
     void copyContent( const SvgPatternHelper &other );
@@ -80,7 +80,7 @@ private:
     QMatrix m_transform;
     QPointF m_position;
     QSizeF m_size;
-    QDomElement m_patternContent;
+    KoXmlElement m_patternContent;
     QRectF m_patternContentViewbox;
 };
 

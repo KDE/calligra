@@ -20,8 +20,8 @@
 #ifndef SVGFILTERHELPER_H
 #define SVGFILTERHELPER_H
 
+#include <KoXmlReader.h>
 #include <QtCore/QRectF>
-#include <QtXml/QDomElement>
 
 class SvgFilterHelper
 {
@@ -52,9 +52,9 @@ public:
     QSizeF size( const QRectF & objectBound ) const;
 
     /// Sets the dom element containing the filter
-    void setContent( const QDomElement &content );
+    void setContent( const KoXmlElement &content );
     /// Return the filer element
-    QDomElement content() const;
+    KoXmlElement content() const;
 
     static QPointF toUserSpace( const QPointF &position, const QRectF &objectBound );
     static QSizeF toUserSpace( const QSizeF &size, const QRectF &objectBound );
@@ -63,7 +63,7 @@ private:
     Units m_primitiveUnits;
     QPointF m_position;
     QSizeF m_size;
-    QDomElement m_filterContent;
+    KoXmlElement m_filterContent;
 };
 
 #endif // SVGFILTERHELPER_H

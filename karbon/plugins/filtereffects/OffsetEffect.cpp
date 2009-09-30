@@ -21,9 +21,9 @@
 #include "KoFilterEffectRenderContext.h"
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
+#include "KoXmlReader.h"
 #include <KLocale>
 #include <QtCore/QRect>
-#include <QtXml/QDomElement>
 #include <QtGui/QPainter>
 
 OffsetEffect::OffsetEffect()
@@ -60,7 +60,7 @@ QImage OffsetEffect::processImage(const QImage &image, const KoFilterEffectRende
     return result;
 }
 
-bool OffsetEffect::load(const QDomElement &element, const QMatrix &matrix)
+bool OffsetEffect::load(const KoXmlElement &element, const QMatrix &matrix)
 {
     if (element.tagName() != id())
         return false;

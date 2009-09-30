@@ -171,14 +171,14 @@ void SvgParser::removeGraphicContext()
     delete( m_gc.pop() );
 }
 
-void SvgParser::updateContext( const QDomElement &e )
+void SvgParser::updateContext( const KoXmlElement &e )
 {
     SvgGraphicsContext *gc = m_gc.top();
     if( e.hasAttribute( "xml:base" ) )
         gc->xmlBaseDir = e.attribute( "xml:base" );
 }
 
-void SvgParser::setupTransform( const QDomElement &e )
+void SvgParser::setupTransform( const KoXmlElement &e )
 {
     SvgGraphicsContext *gc = m_gc.top();
 
@@ -309,8 +309,8 @@ SvgGradientHelper* SvgParser::findGradient( const QString &id, const QString &hr
     if( !m_defs.contains( id ) )
         return 0L;
 
-    QDomElement e = m_defs[ id ];
-    if(e.childNodes().count() == 0)
+    KoXmlElement e = m_defs[ id ];
+    if(e.childNodesCount() == 0)
     {
         QString mhref = e.attribute("xlink:href").mid(1);
 
@@ -351,7 +351,7 @@ SvgPatternHelper* SvgParser::findPattern( const QString &id )
 
     SvgPatternHelper pattern;
     
-    const QDomElement &e = m_defs[ id ];
+    const KoXmlElement &e = m_defs[ id ];
     // are we referencing another pattern ?
     if (e.hasAttribute("xlink:href")) {
         QString mhref = e.attribute("xlink:href").mid(1);
@@ -379,8 +379,8 @@ SvgFilterHelper* SvgParser::findFilter( const QString &id, const QString &href )
     if( !m_defs.contains( id ) )
         return 0L;
 
-    QDomElement e = m_defs[ id ];
-    if(e.childNodes().count() == 0)
+    KoXmlElement e = m_defs[ id ];
+    if(e.childNodesCount() == 0)
     {
         QString mhref = e.attribute("xlink:href").mid(1);
 
@@ -571,13 +571,13 @@ void SvgParser::parseColor( QColor &color, const QString &s )
     }
 }
 
-void SvgParser::parseColorStops( QGradient *gradient, const QDomElement &e )
+void SvgParser::parseColorStops( QGradient *gradient, const KoXmlElement &e )
 {
     QGradientStops stops;
     QColor c;
-    for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement stop = n.toElement();
+        KoXmlElement stop = n.toElement();
         if( stop.tagName() == "stop" )
         {
             float offset;
@@ -618,7 +618,7 @@ void SvgParser::parseColorStops( QGradient *gradient, const QDomElement &e )
         gradient->setStops( stops );
 }
 
-bool SvgParser::parseGradient( const QDomElement &e, const QDomElement &referencedBy)
+bool SvgParser::parseGradient( const KoXmlElement &e, const KoXmlElement &referencedBy)
 {
     // IMPROVEMENTS:
     // - Store the parsed colorstops in some sort of a cache so they don't need to be parsed again.
@@ -650,7 +650,7 @@ bool SvgParser::parseGradient( const QDomElement &e, const QDomElement &referenc
     }
 
     // Use the gradient that is referencing, or if there isn't one, the original gradient.
-    QDomElement b;
+    KoXmlElement b;
     if( !referencedBy.isNull() )
         b = referencedBy;
     else
@@ -767,7 +767,7 @@ bool SvgParser::parseGradient( const QDomElement &e, const QDomElement &referenc
     return true;
 }
 
-void SvgParser::parsePattern( SvgPatternHelper &pattern, const QDomElement &e )
+void SvgParser::parsePattern( SvgPatternHelper &pattern, const KoXmlElement &e )
 {
     if (e.hasAttribute("patternUnits")) {
         if( e.attribute("patternUnits") == "userSpaceOnUse" )
@@ -814,12 +814,12 @@ void SvgParser::parsePattern( SvgPatternHelper &pattern, const QDomElement &e )
     }
 }
 
-bool SvgParser::parseFilter( const QDomElement &e, const QDomElement &referencedBy )
+bool SvgParser::parseFilter( const KoXmlElement &e, const KoXmlElement &referencedBy )
 {
     SvgFilterHelper filter;
 
     // Use the filter that is referencing, or if there isn't one, the original filter
-    QDomElement b;
+    KoXmlElement b;
     if( !referencedBy.isNull() )
         b = referencedBy;
     else
@@ -1159,7 +1159,7 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     gc->stroke.setColor( strokecolor );
 }
 
-SvgParser::SvgStyles SvgParser::collectStyles( const QDomElement &e )
+SvgParser::SvgStyles SvgParser::collectStyles( const KoXmlElement &e )
 {
     SvgStyles styleMap;
     
@@ -1186,7 +1186,7 @@ SvgParser::SvgStyles SvgParser::collectStyles( const QDomElement &e )
     return styleMap;
 }
 
-void SvgParser::parseStyle( KoShape *obj, const QDomElement &e )
+void SvgParser::parseStyle( KoShape *obj, const KoXmlElement &e )
 {
     parseStyle(obj, collectStyles(e));
 }
@@ -1423,7 +1423,7 @@ void SvgParser::applyFilter( KoShape * shape )
     if( ! filter )
         return;
 
-    QDomElement content = filter->content();
+    KoXmlElement content = filter->content();
 
     // parse filter region
     QRectF bound( QPoint(), shape->size() );
@@ -1444,9 +1444,9 @@ void SvgParser::applyFilter( KoShape * shape )
     KoFilterEffectStack * filterStack = 0;
 
     // create the filter effects and add them to the shape
-    for( QDomNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( KoXmlNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement primitive = n.toElement();
+        KoXmlElement primitive = n.toElement();
         KoFilterEffect * filterEffect = registry->createFilterEffectFromXml(primitive, matrix);
         if (!filterEffect) {
             kWarning(30514) << "filter effect" << primitive.tagName() << "is not implemented yet";
@@ -1500,7 +1500,7 @@ void SvgParser::applyFilter( KoShape * shape )
     }
 }
 
-void SvgParser::parseFont( const QDomElement &e )
+void SvgParser::parseFont( const KoXmlElement &e )
 {
     SvgGraphicsContext * gc = m_gc.top();
     if( !gc ) return;
@@ -1525,7 +1525,7 @@ void SvgParser::parseFont( const QDomElement &e )
     }
 }
 
-QList<KoShape*> SvgParser::parseUse( const QDomElement &e )
+QList<KoShape*> SvgParser::parseUse( const KoXmlElement &e )
 {
     QList<KoShape*> shapes;
 
@@ -1548,7 +1548,7 @@ QList<KoShape*> SvgParser::parseUse( const QDomElement &e )
         
         if(m_defs.contains(key))
         {
-            const QDomElement &a = m_defs[key];
+            const KoXmlElement &a = m_defs[key];
             SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
             if(a.tagName() == "g" || a.tagName() == "a")
             {
@@ -1601,7 +1601,7 @@ void SvgParser::addToGroup( QList<KoShape*> shapes, KoShapeGroup * group )
     cmd.redo();
 }
 
-QList<KoShape*> SvgParser::parseSvg( const QDomElement &e, QSizeF * fragmentSize )
+QList<KoShape*> SvgParser::parseSvg( const KoXmlElement &e, QSizeF * fragmentSize )
 {
     // check if we are the root svg element
     bool isRootSvg = m_gc.isEmpty();
@@ -1661,16 +1661,16 @@ QList<KoShape*> SvgParser::parseSvg( const QDomElement &e, QSizeF * fragmentSize
     return shapes;
 }
 
-QList<KoShape*> SvgParser::parseContainer( const QDomElement &e )
+QList<KoShape*> SvgParser::parseContainer( const KoXmlElement &e )
 {
     QList<KoShape*> shapes;
 
     // are we parsing a switch container
     bool isSwitch = e.tagName() == "switch";
 
-    for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement b = n.toElement();
+        KoXmlElement b = n.toElement();
         if( b.isNull() )
             continue;
 
@@ -1788,11 +1788,11 @@ QList<KoShape*> SvgParser::parseContainer( const QDomElement &e )
     return shapes;
 }
 
-void SvgParser::parseDefs( const QDomElement &e )
+void SvgParser::parseDefs( const KoXmlElement &e )
 {
-    for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
+    for( KoXmlNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement b = n.toElement();
+        KoXmlElement b = n.toElement();
         if( b.isNull() ) continue;
 
         QString definition = b.attribute( "id" );
@@ -1823,7 +1823,7 @@ QRectF SvgParser::parseViewBox( QString viewbox )
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
-KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & shapes )
+KoShape * SvgParser::createText( const KoXmlElement &b, const QList<KoShape*> & shapes )
 {
     QString content;
     QString anchor;
@@ -1840,7 +1840,7 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
         anchor = b.attribute( "text-anchor" );
 
     parseFont( b );
-    QDomElement styleElement = b;
+    KoXmlElement styleElement = b;
 
     if( b.hasChildNodes() )
     {
@@ -1859,12 +1859,12 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
         KoPathShape * path = 0;
         bool pathInDocument = false;
 
-        for( QDomNode n = b.firstChild(); !n.isNull(); n = n.nextSibling() )
+        for( KoXmlNode n = b.firstChild(); !n.isNull(); n = n.nextSibling() )
         {
-            QDomElement e = n.toElement();
+            KoXmlElement e = n.toElement();
             if( e.isNull() )
             {
-                content += n.toCharacterData().data();
+                content += n.toText().data();
             }
             else if( e.tagName() == "textPath" )
             {
@@ -1886,7 +1886,7 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
                 }
                 else
                 {
-                    QDomElement p = m_defs[key];
+                    KoXmlElement p = m_defs[key];
                     path = dynamic_cast<KoPathShape*>( createObject( p ) );
                     pathInDocument = false;
                     path->applyAbsoluteTransformation( m_gc.top()->matrix.inverted() );
@@ -1947,7 +1947,7 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
                 }
                 else
                 {
-                    QDomElement p = m_defs[key];
+                    KoXmlElement p = m_defs[key];
                     content += p.text();
                 }
             }
@@ -2019,7 +2019,7 @@ KoShape * SvgParser::createText( const QDomElement &b, const QList<KoShape*> & s
     return text;
 }
 
-KoShape * SvgParser::createObject( const QDomElement &b, const SvgStyles &style )
+KoShape * SvgParser::createObject( const KoXmlElement &b, const SvgStyles &style )
 {
     KoShape *obj = 0L;
 

@@ -23,6 +23,7 @@
 #define SVGIMPORT_H
 
 #include <KoFilter.h>
+#include <KoXmlReaderForward.h>
 #include <QtCore/QVariant>
 
 class KoShape;
@@ -42,7 +43,7 @@ public:
 protected:
 
     /// The main entry point for the conversion
-    void convert( const QDomElement &rootElement );
+    void convert( const KoXmlElement &rootElement );
 
     /// Builds the document from the given shapes list
     void buildDocument( const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes );

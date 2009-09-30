@@ -34,6 +34,7 @@
 #include <KoShapeGroup.h>
 #include <KoFilterChain.h>
 #include <commands/KoShapeUngroupCommand.h>
+#include <KoXmlReader.h>
 
 #include <kgenericfactory.h>
 #include <KDebug>
@@ -92,7 +93,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     int line, col;
     QString errormessage;
 
-    QDomDocument inputDoc;
+    KoXmlDocument inputDoc;
 
     const bool parsed = inputDoc.setContent( in, &errormessage, &line, &col );
 
@@ -120,7 +121,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-void SvgImport::convert( const QDomElement &rootElement )
+void SvgImport::convert( const KoXmlElement &rootElement )
 {
     if( ! m_document )
         return;
@@ -180,6 +181,7 @@ void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QLis
             if( ! group->name().isEmpty() )
                 layer->setName( group->name() );
             layer->setVisible(group->isVisible());
+            layer->setZIndex(group->zIndex());
             m_document->insertLayer( layer );
             delete group;
         }
