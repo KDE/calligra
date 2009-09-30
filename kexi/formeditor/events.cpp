@@ -136,7 +136,7 @@ ConnectionBuffer::removeAllConnectionsForWidget(const QString &widget)
         }
     }
     foreach (Connection *c, toRemove) {
-        remove(c);
+        removeAll(c);
     }
     qDeleteAll(toRemove);
 }
