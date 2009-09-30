@@ -39,6 +39,9 @@
 //#include <KoXmlWriter.h>
 
 #include <document.h>
+#include <wv2/word95_generated.h>
+#include <wv2/olestorage.h>
+#include <wv2/olestream.h>
 
 typedef KGenericFactory<MSWordOdfImport> MSWordOdfImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libmswordodf_import, MSWordOdfImportFactory( "kofficefilters" ) )
@@ -54,6 +57,29 @@ MSWordOdfImport::~MSWordOdfImport()
 }
 
 
+bool MSWordOdfImport::isEncrypted(const QString &inputfile)
+{
+    wvWare::OLEStorage storage(std::string(inputfile.toAscii().data()));
+    storage.open(wvWare::OLEStorage::ReadOnly);
+    wvWare::OLEStreamReader *document = storage.createStreamReader("WordDocument");
+
+    if (!document) {
+        return false;
+    }
+
+    if (!document->isValid()) {
+        kDebug(30513) << "document is invalid";
+        delete document;
+        return false;
+    }
+
+    wvWare::Word95::FIB fib(document, true);
+
+    delete document;
+    return fib.fEncrypted;
+}
+
+
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
@@ -65,6 +91,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
+
+    // check if file is encrypted
+    if (isEncrypted(inputFile))
+        return KoFilter::PasswordProtected;
 
     // Create output files
     KoStore *storeout;

@@ -36,6 +36,10 @@ public:
     virtual ~MSWordOdfImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+
+private:
+    // checks from FIB if document is encrypted
+    bool isEncrypted(const QString &inputfile);
 };
 
 #endif // MSWORDODFIMPORT_H
