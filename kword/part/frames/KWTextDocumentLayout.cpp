@@ -110,12 +110,10 @@ public:
         init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
         if (frame->textRunAround() == KWord::NoRunAround)
             m_side = Empty;
-        else {
-            if (frame->runAroundSide() == KWord::LeftRunAroundSide)
-                m_side = Right;
-            else /*if (frame->runAroundSide() == KWord::RightRunAroundSide) */
-                m_side = Left;
-        }
+        else if (frame->runAroundSide() == KWord::LeftRunAroundSide)
+            m_side = Right;
+        else if (frame->runAroundSide() == KWord::RightRunAroundSide)
+            m_side = Left;
     }
 
     Outline(KoShape *shape, const QMatrix &matrix) : m_side(None) {
