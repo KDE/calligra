@@ -28,6 +28,7 @@
 
 // Local
 #include "View.h"
+#include "TabBar.h"
 
 // standard C/C++ includes
 #include <assert.h>
@@ -95,7 +96,6 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoStore.h>
-#include <KoTabBar.h>
 #include <KoToolBoxFactory.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
@@ -189,7 +189,7 @@ public:
     SelectAllButton* selectAllButton;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
-    KoTabBar *tabBar;
+    TabBar *tabBar;
     QLabel* calcLabel;
     QGridLayout* viewLayout;
     QGridLayout* tabScrollBarLayout;
@@ -796,7 +796,7 @@ void View::initView()
     d->tabScrollBarLayout = new QGridLayout( bottomPart );
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
-    d->tabBar = new KoTabBar( 0 );
+    d->tabBar = new TabBar( 0 );
     d->tabScrollBarLayout->addWidget( d->tabBar, 0, 0 );
     d->horzScrollBar = new QScrollBar( 0 );
     d->canvasController->setHorizontalScrollBar( d->horzScrollBar );
@@ -885,7 +885,7 @@ QScrollBar* View::vertScrollBar()const
     return d->vertScrollBar;
 }
 
-KoTabBar* View::tabBar() const
+TabBar* View::tabBar() const
 {
     return d->tabBar;
 }

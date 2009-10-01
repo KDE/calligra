@@ -129,6 +129,7 @@ SET (part_DIR_SRCS
 	part/PrintJob.cpp
 	part/PrintManager.cpp
 	part/ToolRegistry.cpp
+	part/TabBar.cpp
 	part/View.cpp
 	part/commands/DefinePrintRangeCommand.cpp
 	part/commands/PageLayoutCommand.cpp
@@ -204,7 +205,6 @@ SET (kspreadcommon_LIB_SRCS
 	ValueConverter.cpp
 	ValueFormatter.cpp
 	ValueParser.cpp
-    KoTabBar.cpp
 	tests/inspector.cpp
 	${chart_DIR_SRCS}
 	${commands_DIR_SRCS}

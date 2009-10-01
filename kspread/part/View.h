@@ -47,7 +47,6 @@ class QScrollBar;
 
 class KoCanvasController;
 class KoDocumentEntry;
-class KoTabBar;
 class KoZoomHandler;
 
 namespace KSpread
@@ -63,7 +62,7 @@ class Selection;
 class SheetView;
 class RowHeader;
 class View;
-
+class TabBar;
 
 /** @class View
  *
@@ -116,7 +115,7 @@ public:
     QScrollBar* vertScrollBar() const;
 
     /** Returns the tab bar */
-    KoTabBar* tabBar() const;
+    TabBar* tabBar() const;
 
     /** \return the zoom handler */
     KoZoomHandler* zoomHandler() const;

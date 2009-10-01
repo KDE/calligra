@@ -49,8 +49,6 @@
 #include <KStandardDirs>
 #include <sonnet/configwidget.h>
 
-#include <KoTabBar.h>
-
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "part/Doc.h"
