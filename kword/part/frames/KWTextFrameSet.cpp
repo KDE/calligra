@@ -299,8 +299,14 @@ KWPageStyle KWTextFrameSet::pageStyle() const
 
 void KWTextFrameSet::sortFrames()
 {
-    if (m_frameOrderDirty)
+     // optimize to not sort more than needed
+    if (!m_frames.isEmpty() && (m_frameOrderDirty || m_textFrameSetType == KWord::OtherTextFrameSet)) {
+        KWFrame *first = m_frames.first();
         qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
+        if (m_frames[0] != first) { // that means it needs to be re-layouted
+            qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData())->foul();
+        }
+    }
     m_frameOrderDirty = false;
 }
 
