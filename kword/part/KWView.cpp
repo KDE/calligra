@@ -1318,7 +1318,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
             }
         }
     }
-    KWPage page = m_document->pageManager()->page(offset + height / 2.0);
+    KWPage page = m_document->pageManager()->page(qreal(offset + height / 2.0));
     if (page.isValid())
         setCurrentPage(page);
 }
