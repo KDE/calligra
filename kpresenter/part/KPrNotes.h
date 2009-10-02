@@ -76,6 +76,7 @@ private:
     KoShape *m_thumbnailShape;
     KoPageLayout m_pageLayout;
     KPrPage *m_page;
+    KPrDocument *m_doc;
     KoImageCollection * m_imageCollection;
 };
 

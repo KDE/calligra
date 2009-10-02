@@ -59,6 +59,7 @@ public:
 KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
 : KoPAPageBase()
 , m_page( page )
+, m_doc( document )
 , m_imageCollection( new KoImageCollection() )
 {
     // add default layer
@@ -68,7 +69,7 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     // All sizes and positions are hardcoded for now
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("TextShapeID");
     Q_ASSERT(factory);
-    m_textShape = factory->createDefaultShapeAndInit( document->dataCenterMap() );
+    m_textShape = factory->createDefaultShapeAndInit( m_doc->dataCenterMap() );
     m_textShape->setGeometryProtected(true);
     m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
     m_pageLayout = KoPageLayout::standardLayout();
@@ -77,7 +78,7 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
 
     factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(factory);
-    m_thumbnailShape = factory->createDefaultShapeAndInit( document->dataCenterMap() );
+    m_thumbnailShape = factory->createDefaultShapeAndInit( m_doc->dataCenterMap() );
     m_thumbnailShape->setGeometryProtected(true);
     m_thumbnailShape->setAdditionalAttribute( "presentation:class", "page" );
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
@@ -202,7 +203,7 @@ QPixmap KPrNotes::generateThumbnail( const QSize& )
 void KPrNotes::updatePageThumbnail()
 {
     // set image at least to 150 dpi we might need more when printing
-    KoImageData *imageData = m_imageCollection->createImageData(m_page->thumbnail( ( m_thumbnailShape->size() * 150 / 72. ).toSize() ).toImage());
+    KoImageData *imageData = m_imageCollection->createImageData(m_doc->pageThumbnail(m_page, (m_thumbnailShape->size() * 150 / 72.).toSize()).toImage());
     m_thumbnailShape->setUserData( imageData );
 }
 
