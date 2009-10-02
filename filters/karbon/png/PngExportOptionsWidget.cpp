@@ -53,8 +53,8 @@ PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * pare
     widget.unitHeight->changeValue( pointSize.height() );
     updateFromPointSize( pointSize );
 
-    connect( widget.unitWidth, SIGNAL(valueChangedPt(double)), this, SLOT(unitWidthChanged(double)));
-    connect( widget.unitHeight, SIGNAL(valueChangedPt(double)), this, SLOT(unitHeightChanged(double)));
+    connect( widget.unitWidth, SIGNAL(valueChangedPt(qreal)), this, SLOT(unitWidthChanged(qreal)));
+    connect( widget.unitHeight, SIGNAL(valueChangedPt(qreal)), this, SLOT(unitHeightChanged(qreal)));
     connect( widget.pxWidth, SIGNAL(valueChanged(int)), this, SLOT(pxWidthChanged(int)));
     connect( widget.pxHeight, SIGNAL(valueChanged(int)), this, SLOT(pxHeightChanged(int)));
     connect( widget.dpi, SIGNAL(valueChanged(int)), this, SLOT(dpiChanged(int)));
@@ -126,7 +126,7 @@ void PngExportOptionsWidget::blockChildSignals( bool block )
     widget.opacity->blockSignals( block );
 }
 
-void PngExportOptionsWidget::unitWidthChanged( double newWidth )
+void PngExportOptionsWidget::unitWidthChanged( qreal newWidth )
 {
     blockChildSignals( true );
 
@@ -141,7 +141,7 @@ void PngExportOptionsWidget::unitWidthChanged( double newWidth )
     blockChildSignals( false );
 }
 
-void PngExportOptionsWidget::unitHeightChanged( double newHeight )
+void PngExportOptionsWidget::unitHeightChanged( qreal newHeight )
 {
     blockChildSignals( true );
 

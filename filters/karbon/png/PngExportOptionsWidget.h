@@ -47,8 +47,8 @@ public:
     QColor backgroundColor() const;
 
 private slots:
-    void unitWidthChanged( double );
-    void unitHeightChanged( double );
+    void unitWidthChanged( qreal );
+    void unitHeightChanged( qreal );
     void pxWidthChanged( int );
     void pxHeightChanged( int );
     void dpiChanged( int );
