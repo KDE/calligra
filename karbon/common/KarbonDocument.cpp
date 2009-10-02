@@ -112,7 +112,14 @@ KarbonDocument::~KarbonDocument()
 
 void KarbonDocument::insertLayer( KoShapeLayer* layer )
 {
-    d->layers.append( layer );
+    if (!d->layers.contains(layer)) {
+        if (d->layers.count()) {
+            layer->setZIndex(d->layers.last()->zIndex()+1);
+        } else {
+            layer->setZIndex(d->layers.count());
+        }
+        d->layers.append( layer );
+    }
 }
 
 void KarbonDocument::removeLayer( KoShapeLayer* layer )
@@ -137,15 +144,27 @@ bool KarbonDocument::canLowerLayer( KoShapeLayer* layer )
 void KarbonDocument::raiseLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
-    if( pos != int( d->layers.count() ) - 1 && pos >= 0 )
+    if( pos != int( d->layers.count() ) - 1 && pos >= 0 ) {
+        KoShapeLayer * layerAbove = d->layers.at(pos+1);
+        int lowerZIndex = layer->zIndex();
+        int upperZIndex = layerAbove->zIndex();
+        layer->setZIndex(upperZIndex);
+        layerAbove->setZIndex(lowerZIndex);
         d->layers.move( pos, pos + 1 );
+    }
 }
 
 void KarbonDocument::lowerLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
-    if ( pos > 0 )
+    if ( pos > 0 ) {
+        KoShapeLayer * layerBelow = d->layers.at(pos-1);
+        int upperZIndex = layer->zIndex();
+        int lowerZIndex = layerBelow->zIndex();
+        layer->setZIndex(lowerZIndex);
+        layerBelow->setZIndex(upperZIndex);
         d->layers.move( pos, pos - 1 );
+    }
 }
 
 int KarbonDocument::layerPos( KoShapeLayer* layer )

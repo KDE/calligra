@@ -286,12 +286,6 @@ void KarbonLayerDocker::addLayer()
     {
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName( name );
-        QList<KoShapeLayer*> layers( m_part->document().layers() );
-        if ( !layers.isEmpty() ) {
-            qSort( layers.begin(), layers.end(), KoShape::compareShapeZIndex );
-            layer->setZIndex( layers.last()->zIndex() + 1 );
-        }
-
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
         QUndoCommand *cmd = new KoShapeCreateCommand( m_part, layer, 0 );
         cmd->setText( i18n( "Create Layer") );
