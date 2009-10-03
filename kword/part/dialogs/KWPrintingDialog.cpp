@@ -53,6 +53,7 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
             QTextDocument *doc = tfs->document();
+            // TODO check if I can group changes into one undo-command and then redo it after printing.
             QTextBlock block = doc->begin();
             while (block.isValid()) {
                 QTextLayout *layout = block.layout();
