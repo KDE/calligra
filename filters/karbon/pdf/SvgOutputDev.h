@@ -55,7 +55,6 @@ public:
 
     // text
     virtual void drawString( GfxState * state, GooString * s );
-    virtual void updateTextMat( GfxState * state );
 
     // images
     virtual void drawImage(GfxState *state, Object *ref, Stream *str,
