@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with KOffice libraries.
@@ -59,7 +59,6 @@
 #include <kiconloader.h>
 #include <kcharsets.h>
 #include <knuminput.h>
-#include <kactivelabel.h>
 #include <KProgressDialog>
 
 #include <kexiutils/identifier.h>
@@ -121,7 +120,9 @@ public:
         f = font();
         f.setBold(true);
     }
-    virtual void paintCell(QPainter * p, int row, int col, const QRect & cr, bool selected, const QColorGroup & cg) {
+    virtual void paintCell(QPainter * p, int row, int col, const QRect & cr, 
+                           bool selected, const QColorGroup & cg)
+    {
         if (row == 0)
             p->setFont(f);
         else
@@ -169,7 +170,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_stringI18nFalse(i18n("false"))
 {
     setWindowFlags(windowFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
-    setWindowTitle(i18n("Import CSV Data File"));
+    setWindowTitle( mode == File
+        ? i18n("Import CSV Data From File"): i18n("Paste CSV Data From Clipboard") );
     setWindowIcon(_IMPORT_ICON);
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
     setButtons((mode == File ? User1 : (ButtonCode)0) | Ok | Cancel);
@@ -187,7 +189,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
                                   "MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
     m_maximumBytesForPreview = importExportGroup.readEntry(
                                    "MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
-    m_minimumYearFor100YearSlidingWindow = importExportGroup.readEntry("MinimumYearFor100YearSlidingWindow", MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW);
+    m_minimumYearFor100YearSlidingWindow = importExportGroup.readEntry(
+        "MinimumYearFor100YearSlidingWindow", MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW);
 
     m_pkIcon = SmallIcon("key");
 
@@ -711,11 +714,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     const QChar delimiter(m_delimiterWidget->delimiter()[0]);
     m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
     int progressStep = 0;
-    if (m_importingProgressDlg)
+    if (m_importingProgressDlg) {
         progressStep = qMax(
-                           1,
-                           (m_importingProgressDlg->progressBar()->maximum() - m_importingProgressDlg->progressBar()->minimum() + 1) / 200
-                       );
+            1,
+            (m_importingProgressDlg->progressBar()->maximum() - m_importingProgressDlg->progressBar()->minimum() + 1) / 200
+        );
+    }
     int offset = 0;
     for (;!m_inputStream->atEnd(); offset++) {
 //disabled: this breaks wide spreadsheets
@@ -940,7 +944,7 @@ void KexiCSVImportDialog::updateColumnText(int col)
         detectedType = _TEXT_TYPE;
     }
     m_table->horizontalHeader()->setLabel(col,
-                                          i18n("Column %1", col + 1) + "  \n(" + m_typeNames[ detectedType ] + ")  ");
+        i18n("Column %1", col + 1) + "  \n(" + m_typeNames[ detectedType ] + ")  ");
     m_table->setText(0, col, colName);
     m_table->horizontalHeader()->adjustHeaderSize();
 
@@ -1340,6 +1344,27 @@ void KexiCSVImportDialog::cellValueChanged(int row, int col)
     }
 }
 
+//! Used in emergency by accept()
+void KexiCSVImportDialog::dropDestinationTable(KexiProject* project, KexiPart::Item* partItemForSavedTable)
+{
+    if (m_importingProgressDlg) {
+        m_importingProgressDlg->hide();
+    }
+    project->deleteUnstoredItem(partItemForSavedTable);
+    m_conn->dropTable(m_destinationTableSchema); /*alsoRemoveSchema*/
+    m_destinationTableSchema = 0;
+    m_conn = 0;
+}
+
+//! Used in emergency by accept()
+void KexiCSVImportDialog::raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable)
+{
+    project->deleteUnstoredItem(partItemForSavedTable);
+    delete m_destinationTableSchema;
+    m_destinationTableSchema = 0;
+    m_conn = 0;
+}
+
 void KexiCSVImportDialog::accept()
 {
 //! @todo MOVE MOST OF THIS TO CORE/ (KexiProject?) after KexiWindow code is moved to non-gui place
@@ -1391,21 +1416,15 @@ void KexiCSVImportDialog::accept()
         return;
     }
 
-#define _ERR \
-    { project->deleteUnstoredItem(partItemForSavedTable); \
-        m_conn = 0; \
-        delete m_destinationTableSchema; \
-        m_destinationTableSchema = 0; \
-        return; }
-
     //-ask for table name/title
     // (THIS IS FROM KexiMainWindow::saveObject())
     bool allowOverwriting = true;
     tristate res = KexiMainWindowIface::global()->getNewObjectInfo(
                        partItemForSavedTable, part, allowOverwriting);
     if (~res || !res) {
-        //! @todo: err
-        _ERR;
+//! @todo error
+        raiseErrorInAccept(project, partItemForSavedTable);
+        return;
     }
     //(allowOverwriting is now set to true, if user accepts overwriting,
     // and overwriting will be needed)
@@ -1423,15 +1442,19 @@ void KexiCSVImportDialog::accept()
     m_implicitPrimaryKeyAdded = false;
     //add PK if user wanted it
     int msgboxResult;
-    if (m_primaryKeyColumn == -1
-            && KMessageBox::No != (msgboxResult = KMessageBox::questionYesNoCancel(this,
-                                                  i18n("No Primary Key (autonumber) has been defined.\n"
-                                                       "Should it be automatically defined on import (recommended)?\n\n"
-                                                       "Note: An imported table without a Primary Key may not be editable (depending on database type)."),
-                                                  QString(), KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
-                                                  KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do Not Add"))))) {
-        if (msgboxResult == KMessageBox::Cancel)
-            _ERR; //cancel accepting
+    if (   m_primaryKeyColumn == -1
+        && KMessageBox::No != (msgboxResult = KMessageBox::questionYesNoCancel(this,
+                i18n("No Primary Key (autonumber) has been defined.\n"
+                     "Should it be automatically defined on import (recommended)?\n\n"
+                     "Note: An imported table without a Primary Key may not be editable (depending on database type)."),
+                QString(),
+                KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
+                KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
+    {
+        if (msgboxResult == KMessageBox::Cancel) {
+            raiseErrorInAccept(project, partItemForSavedTable);
+            return; //cancel accepting
+        }
 
         //add implicit PK field
 //! @todo make this field hidden (what about e.g. pgsql?)
@@ -1519,32 +1542,24 @@ void KexiCSVImportDialog::accept()
     KexiDB::Transaction transaction = m_conn->beginTransaction();
     if (transaction.isNull()) {
         msg.showErrorMessage(m_conn);
-        _ERR;
+        raiseErrorInAccept(project, partItemForSavedTable);
+        return;
     }
     KexiDB::TransactionGuard tg(transaction);
 
     //-create physical table
     if (!m_conn->createTable(m_destinationTableSchema, allowOverwriting)) {
         msg.showErrorMessage(m_conn);
-        _ERR;
-    }
-
-#define _DROP_DEST_TABLE_AND_RETURN \
-    { \
-        if (m_importingProgressDlg) \
-            m_importingProgressDlg->hide(); \
-        project->deleteUnstoredItem(partItemForSavedTable); \
-        m_conn->dropTable(m_destinationTableSchema); /*alsoRemoveSchema*/ \
-        m_destinationTableSchema = 0; \
-        m_conn = 0; \
-        return; \
+        raiseErrorInAccept(project, partItemForSavedTable);
+        return;
     }
 
     m_importingStatement = m_conn->prepareStatement(
                                KexiDB::PreparedStatement::InsertStatement, *m_destinationTableSchema);
     if (!m_importingStatement) {
         msg.showErrorMessage(m_conn);
-        _DROP_DEST_TABLE_AND_RETURN;
+        dropDestinationTable(project, partItemForSavedTable);
+        return;
     }
 
     if (m_file) {
@@ -1571,9 +1586,11 @@ void KexiCSVImportDialog::accept()
     m_importingProgressDlg = 0;
     if (true != res) {
         //importing cancelled or failed
-        if (!res) //do not display err msg when res == cancelled
+        if (!res) { //do not display err msg when res == cancelled
             msg.showErrorMessage(m_conn);
-        _DROP_DEST_TABLE_AND_RETURN;
+        }
+        dropDestinationTable(project, partItemForSavedTable);
+        return;
     }
 
     // file with only one line without '\n'
@@ -1585,7 +1602,8 @@ void KexiCSVImportDialog::accept()
         }
         if (!saveRow(false /*!gui*/)) {
             msg.showErrorMessage(m_conn);
-            _DROP_DEST_TABLE_AND_RETURN;
+            dropDestinationTable(project, partItemForSavedTable);
+            return;
         }
         ++row;
         field.clear();
@@ -1593,7 +1611,8 @@ void KexiCSVImportDialog::accept()
 
     if (!tg.commit()) {
         msg.showErrorMessage(m_conn);
-        _DROP_DEST_TABLE_AND_RETURN;
+        dropDestinationTable(project, partItemForSavedTable);
+        return;
     }
 
     //-now we can store the item

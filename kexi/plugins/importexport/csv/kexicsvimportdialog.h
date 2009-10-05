@@ -57,6 +57,10 @@ class KProgressDialog;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
+class KexiProject;
+namespace KexiPart {
+class Item;
+}
 
 /**
  * @short Kexi CSV import dialog
@@ -93,6 +97,12 @@ protected:
     virtual void accept();
 
 private:
+    //! Used in emergency by accept()
+    void dropDestinationTable(KexiProject* project, KexiPart::Item* partItemForSavedTable);
+
+    //! Used in emergency by accept()
+    void raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable);
+
     QGridLayout* MyDialogLayout;
     QHBoxLayout* Layout1;
     Q3Table* m_table;

@@ -38,6 +38,10 @@
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
+#ifdef Q_CC_MSVC
+Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
+#endif
+
 class KexiCSVDelimiterWidget::Private
 {
 public:
@@ -205,8 +209,8 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     QSizePolicy fnameLblSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     fnameLblSizePolicy.setHorizontalStretch(1);
     m_fnameLbl->setSizePolicy(fnameLblSizePolicy);
-    m_fnameLbl->setLineWidth(1);
-    m_fnameLbl->setFrameStyle(QFrame::Box);
+//    m_fnameLbl->setLineWidth(1);
+//    m_fnameLbl->setFrameStyle(QFrame::Box);
     m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_fnameLbl->setWordWrap(true);
     hbox->addSpacing(5);
@@ -219,8 +223,8 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent)
     m_commentLbl->setFocusPolicy(Qt::NoFocus);
     m_commentLbl->setTextFormat(Qt::PlainText);
     m_commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    m_commentLbl->setLineWidth(1);
-    m_commentLbl->setFrameStyle(QFrame::Box);
+//    m_commentLbl->setLineWidth(1);
+//    m_commentLbl->setFrameStyle(QFrame::Box);
     m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_commentLbl->setWordWrap(true);
     hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight);

@@ -36,7 +36,6 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kactivelabel.h>
 #include <kpushbutton.h>
 #include <kapplication.h>
 #include <kdebug.h>
