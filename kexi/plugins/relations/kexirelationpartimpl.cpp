@@ -24,11 +24,11 @@
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <kgenericfactory.h>
-#include <kiconloader.h>
-#include <kdebug.h>
+#include <KPluginFactory>
+#include <KIconLoader>
+#include <KDebug>
 
-KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QStringList &args)
+KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
     kDebug() << "KexiRelationPartImpl()";
@@ -79,7 +79,6 @@ KexiRelationPartImpl::createView(QWidget *parent, const char *)
 }
 
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_relation,
-                           KGenericFactory<KexiRelationPartImpl>("kexihandler_relation"))
+K_EXPORT_KEXI_PLUGIN( KexiRelationPartImpl, relation )
 
 #include "kexirelationpartimpl.moc"

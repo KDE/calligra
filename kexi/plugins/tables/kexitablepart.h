@@ -36,7 +36,7 @@ class KexiTablePart : public KexiPart::Part
     Q_OBJECT
 
 public:
-    KexiTablePart(QObject *parent, const QStringList &);
+    KexiTablePart(QObject *parent, const QVariantList &);
     virtual ~KexiTablePart();
 
     virtual bool remove(KexiPart::Item &item);

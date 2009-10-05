@@ -32,7 +32,6 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 
-#include <kgenericfactory.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <kxmlguiclient.h>
@@ -40,6 +39,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <KPluginFactory>
 
 #include <QMetaObject>
 #include <QMenu>
@@ -73,7 +73,7 @@ public:
     }
 };
 
-KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
+KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
         : KexiPart::Part(parent, l)
         , d(new Private(this))
 {
@@ -282,6 +282,6 @@ KLocalizedString KexiScriptPart::i18nMessage(
     return Part::i18nMessage(englishMessage, window);
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_script, KGenericFactory<KexiScriptPart>("kexihandler_script"))
+K_EXPORT_KEXI_PLUGIN( KexiScriptPart, script )
 
 #include "kexiscriptpart.moc"

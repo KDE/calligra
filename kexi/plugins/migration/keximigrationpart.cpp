@@ -23,10 +23,11 @@
 #include <migration/importtablewizard.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
+#include <core/kexipart.h>
 
-#include <kgenericfactory.h>
+#include <KPluginFactory>
 
-KexiMigrationPart::KexiMigrationPart(QObject *parent, const QStringList &args)
+KexiMigrationPart::KexiMigrationPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
 }
@@ -50,5 +51,4 @@ QWidget *KexiMigrationPart::createWidget(const char* widgetClass,
     return w;
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_migration,
-                           KGenericFactory<KexiMigrationPart>("kexihandler_migration"))
+K_EXPORT_KEXI_PLUGIN( KexiMigrationPart, migration )

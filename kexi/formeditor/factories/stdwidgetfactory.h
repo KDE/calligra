@@ -71,7 +71,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
     Q_OBJECT
 
 public:
-    StdWidgetFactory(QObject *parent, const QStringList &args);
+    StdWidgetFactory(QObject *parent, const QVariantList &args);
     ~StdWidgetFactory();
 
     virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,

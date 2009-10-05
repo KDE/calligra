@@ -248,7 +248,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
     Q_OBJECT
 
 public:
-    ContainerFactory(QObject *parent, const QStringList &args);
+    ContainerFactory(QObject *parent, const QVariantList &args);
     virtual ~ContainerFactory();
 
     virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,

@@ -52,7 +52,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
     Q_OBJECT
 
 public:
-    KexiInternalPart(QObject *parent, const QStringList &);
+    KexiInternalPart(QObject *parent, const QVariantList &);
     virtual ~KexiInternalPart();
 
 //  KexiWindow *instance();

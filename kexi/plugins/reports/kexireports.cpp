@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kgenericfactory.h>
-
 #include "kexireportpart.h"
 
 K_EXPORT_COMPONENT_FACTORY(kexihandler_report, KGenericFactory<KexiReportPart>("kexihandler_report"))

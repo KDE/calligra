@@ -30,7 +30,7 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KTextEdit>
 #include <KLineEdit>
 #include <KLocale>
@@ -636,7 +636,7 @@ void GoToStackPageAction::slotTriggered()
 
 /////   The factory /////////////////////////
 
-ContainerFactory::ContainerFactory(QObject *parent, const QStringList &)
+ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "containers")
 {
 #if 0 // not needed?
@@ -1224,6 +1224,6 @@ void ContainerFactory::prevStackPage()
 }
 #endif
 
-KFORMDESIGNER_WIDGET_FACTORY(ContainerFactory, containers)
+K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(ContainerFactory, containers)
 
 #include "containerfactory.moc"

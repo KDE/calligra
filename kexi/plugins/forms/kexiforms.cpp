@@ -17,9 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kgenericfactory.h>
+#include <KPluginFactory>
 
 #include "kexiformpart.h"
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_form, KGenericFactory<KexiFormPart>("kexihandler_form"))
-
+K_EXPORT_KEXI_PLUGIN( KexiFormPart, form )

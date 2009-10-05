@@ -85,7 +85,7 @@ class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalProper
     Q_OBJECT
 
 public:
-    Part(QObject *parent, const QStringList &);
+    Part(QObject *parent, const QVariantList &);
 
     virtual ~Part();
 
@@ -357,5 +357,11 @@ private:
 KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part);
 
 }
+
+//! Implementation of plugin's entry point
+#define K_EXPORT_KEXI_PLUGIN( class_name, internal_name ) \
+    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
+    K_EXPORT_PLUGIN(factory("kexihandler_" # internal_name)) \
+    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_PART_VERSION, 0, 0))
 
 #endif

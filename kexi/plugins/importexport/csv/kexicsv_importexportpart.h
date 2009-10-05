@@ -27,7 +27,7 @@
 class KexiCSVImportExportPart : public KexiInternalPart
 {
 public:
-    KexiCSVImportExportPart(QObject *parent, const QStringList &args);
+    KexiCSVImportExportPart(QObject *parent, const QVariantList &args);
     virtual ~KexiCSVImportExportPart();
 
     /*! Reimplemented to return wizard object. */

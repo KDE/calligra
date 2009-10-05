@@ -24,12 +24,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klibloader.h>
-#include <kparts/componentfactory.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
+#include <KXMLGUIClient>
 
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
@@ -200,17 +200,16 @@ WidgetLibrary::lookupFactories()
     foreach (KService::Ptr ptr, tlist) {
         KService::Ptr existingService = d->services.value(ptr->library().toLower().toLatin1());
         if (!existingService.isNull()) {
-            kWarning() << "factory '" << ptr->name()
-                << "' already found (library=" << existingService->library()
+            kWarning() << "factory" << ptr->name() << "already found (library=" << existingService->library()
                 << ")! skipping this one: library=" << ptr->library();
             continue;
         }
-        kDebug() << "found factory: " << ptr->name();
+        kDebug() << "found factory:" << ptr->name();
 
         QByteArray groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
         if (!groupName.isEmpty() && !d->supportedFactoryGroups.contains(groupName.toLower())) {
-            kDebug() << "factory group '" << groupName
-            << "' is unsupported by this application (library=" << ptr->library() << ")";
+            kDebug() << "factory group '" << groupName << "is unsupported by this application (library=" 
+                << ptr->library() << ")";
             continue;
         }
         const uint factoryVersion = ptr->property("X-KFormDesigner-WidgetFactoryVersion").toUInt();
@@ -218,7 +217,7 @@ WidgetLibrary::lookupFactories()
             kWarning() << QString("factory '%1'"
                                   " has version '%2' but required Widget Factory version is '%3'\n"
                                   " -- skipping this factory!").arg(ptr->library()).arg(factoryVersion)
-            .arg(KFormDesigner::version());
+                                  .arg(KFormDesigner::version());
             continue;
         }
         d->services.insert(ptr->library().toLower().toLatin1(), ptr);
@@ -232,10 +231,29 @@ WidgetLibrary::loadFactories()
         return;
     d->factoriesLoaded = true;
     foreach (KService::Ptr ptr, d->services) {
-        WidgetFactory *f = KService::createInstance<WidgetFactory>(
-                               ptr, this, QStringList());
+//2.0        WidgetFactory *f = KService::createInstance<WidgetFactory>(
+//2.0                               ptr, this, QStringList());
+        KPluginLoader loader(ptr->library());
+        const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
+        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
+        if (KFormDesigner::version() != foundMajor) {
+//! @todo show this error to the user?
+            kWarning() << 
+                 i18n(
+                     "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
+                     ptr->library(),
+                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
+                     QString("%1.%2").arg(KFormDesigner::version()).arg(0));
+            continue;
+        }
+        KPluginFactory *factory = loader.factory();
+        WidgetFactory *f = 0;
+        if (factory) {
+            f = factory->create<WidgetFactory>(this);
+        }
         if (!f) {
-            kWarning() << "creating factory failed! " << ptr->library();
+//! @todo show this error to the user?
+            kWarning() << "Creating factory failed!" << ptr->library();
             continue;
         }
         f->setObjectName(ptr->library());

@@ -49,7 +49,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
     Q_OBJECT
 
 public:
-    KexiFormPart(QObject *parent, const QStringList &);
+    KexiFormPart(QObject *parent, const QVariantList &);
     virtual ~KexiFormPart();
 
     KexiDataSourcePage* dataSourcePage() const;

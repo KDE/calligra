@@ -19,7 +19,6 @@
 */
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
 
 #include <KexiView.h>
 #include <KexiMainWindowIface.h>

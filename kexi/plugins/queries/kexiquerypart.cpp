@@ -21,8 +21,8 @@
 #include "kexiquerypart.h"
 
 #include <KDebug>
-#include <KGenericFactory>
 #include <KToggleAction>
+#include <KPluginFactory>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -38,7 +38,7 @@
 
 //------------------------------------------------
 
-KexiQueryPart::KexiQueryPart(QObject *parent, const QStringList &l)
+KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
         : KexiPart::Part(parent, l)
 {
     setInternalPropertyValue("instanceName",
@@ -304,6 +304,6 @@ KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
 
 //----------------
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_query, KGenericFactory<KexiQueryPart>("kexihandler_query"))
+K_EXPORT_KEXI_PLUGIN( KexiQueryPart, query )
 
 #include "kexiquerypart.moc"

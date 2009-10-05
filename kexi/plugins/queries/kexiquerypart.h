@@ -42,7 +42,7 @@ class KexiQueryPart : public KexiPart::Part
     Q_OBJECT
 
 public:
-    KexiQueryPart(QObject *parent, const QStringList &);
+    KexiQueryPart(QObject *parent, const QVariantList &);
     virtual ~KexiQueryPart();
 
     virtual bool remove(KexiPart::Item &item);

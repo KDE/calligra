@@ -26,7 +26,7 @@
 class KexiMigrationPart : public KexiInternalPart
 {
 public:
-    KexiMigrationPart(QObject *parent, const QStringList &args);
+    KexiMigrationPart(QObject *parent, const QVariantList &args);
     virtual ~KexiMigrationPart();
 
     /*! Reimplement this if your internal part has to return widgets

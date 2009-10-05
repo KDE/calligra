@@ -39,7 +39,7 @@ class KexiReportPart : public KexiPart::Part {
         /**
          * Default Constructor
          */
-        KexiReportPart ( QObject *parent, const QStringList &l );
+        KexiReportPart ( QObject *parent, const QVariantList &l );
 
         /**
          * Default Destructor

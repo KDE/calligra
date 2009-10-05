@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,32 +24,50 @@
 #include "KexiView.h"
 #include "KexiMainWindowIface.h"
 
-#include <qdialog.h>
-
-#include <kdebug.h>
-#include <klibloader.h>
-#include <klocale.h>
-#include <kparts/componentfactory.h>
+#include <KDebug>
+#include <KLibLoader>
+#include <KLocale>
 #include <kexidb/msghandler.h>
 #include <kexi_global.h>
 
 //! @internal
-class KexiInternalPartManager
+class KexiInternalPartManager : public QObject
 {
 public:
-    KexiInternalPartManager() {
+    KexiInternalPartManager()
+     : QObject()
+    {
     }
 
-    KexiInternalPart* findPart(KexiDB::MessageHandler *msgHdr, const char* partName) {
+    KexiInternalPart* findPart(KexiDB::MessageHandler *msgHdr, const char* partName)
+    {
         KexiInternalPart *part = m_parts[partName];
         if (!part) {
             QByteArray fullname("kexihandler_");
             fullname += QByteArray(partName).toLower();
-            part = KLibLoader::createInstance<KexiInternalPart>(fullname);
+            KPluginLoader loader(fullname);
+            const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
+            if (foundMajor != KEXI_PART_VERSION) {
+                if (msgHdr) {
+                    msgHdr->showErrorMessage(
+                        i18n("Incompatible plugin \"%1\" version: found version %2, expected version %3.",
+                            partName,
+                            QString::number(foundMajor),
+                            QString::number(KEXI_PART_VERSION)));
+                }
+                return 0;
+            }
+            
+//2.0            part = KLibLoader::createInstance<KexiInternalPart>(fullname);
+            KPluginFactory *factory = loader.factory();
+            if (factory)
+                part = factory->create<KexiInternalPart>(this);
+
             if (!part) {
                 if (msgHdr)
                     msgHdr->showErrorMessage(i18n("Could not load \"%1\" plugin.", partName));
-            } else {
+            }
+            else {
                 part->setObjectName(partName);
                 m_parts.insert(partName, part);
             }
@@ -66,7 +84,7 @@ KexiInternalPartManager internalPartManager;
 
 //----------------------------------------------
 
-KexiInternalPart::KexiInternalPart(QObject *parent, const QStringList &)
+KexiInternalPart::KexiInternalPart(QObject *parent, const QVariantList &)
         : QObject(parent)
         , m_uniqueWindow(true)
         , m_cancelled(false)

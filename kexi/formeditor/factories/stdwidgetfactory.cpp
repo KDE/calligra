@@ -37,10 +37,10 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
+#include <KPluginFactory>
 #include <KPushButton>
 #include <KNumInput>
 #include <KComboBox>
-#include <KGenericFactory>
 #include <KTextEdit>
 #include <KLineEdit>
 #include <KLocale>
@@ -175,7 +175,7 @@ void EditRichTextAction::slotTriggered()
 
 // The factory itself
 
-StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
+StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "stdwidgets")
 {
     KFormDesigner::WidgetInfo *wFormWidget = new KFormDesigner::WidgetInfo(this);
@@ -1064,7 +1064,7 @@ StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::
     }
 }
 
-KFORMDESIGNER_WIDGET_FACTORY(StdWidgetFactory, stdwidgets)
+K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(StdWidgetFactory, stdwidgets)
 
 #include "stdwidgetfactory.moc"
 

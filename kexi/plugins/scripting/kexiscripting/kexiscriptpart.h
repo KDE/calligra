@@ -44,7 +44,7 @@ public:
      * \param name The name this part has.
      * \param args Optional list of arguments passed to this part.
      */
-    KexiScriptPart(QObject *parent, const QStringList& args);
+    KexiScriptPart(QObject *parent, const QVariantList& args);
 
     /**
      * Destructor.

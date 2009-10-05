@@ -27,7 +27,7 @@ class KexiRelationPartImpl : public KexiInternalPart
     Q_OBJECT
 
 public:
-    KexiRelationPartImpl(QObject *parent, const QStringList &args);
+    KexiRelationPartImpl(QObject *parent, const QVariantList &args);
     virtual ~KexiRelationPartImpl();
 
 protected:

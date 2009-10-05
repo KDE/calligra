@@ -42,6 +42,12 @@ http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
 
+2009-10-05
+Forms
+* Use KPluginLoader for widget factory plugins
+Plugins
+* Use KPluginLoader for Kexi plugins
+
 2009-09-22
 KoProperty
 * add option for out-of-kexi builds with altered lib name and version

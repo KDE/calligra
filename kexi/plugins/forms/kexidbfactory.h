@@ -36,7 +36,7 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
     Q_OBJECT
 
 public:
-    KexiDBFactory(QObject *parent, const QStringList &args);
+    KexiDBFactory(QObject *parent, const QVariantList &);
     virtual ~KexiDBFactory();
 
     virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,

@@ -23,12 +23,12 @@
 #include <qpainter.h>
 #include <qstyle.h>
 
-#include <kgenericfactory.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kiconloader.h>
-#include <kactioncollection.h>
-#include <kstandardaction.h>
+#include <KLocale>
+#include <KDebug>
+#include <KIconLoader>
+#include <KActionCollection>
+#include <KStandardAction>
+#include <KPluginFactory>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>
@@ -67,8 +67,8 @@
 
 //////////////////////////////////////////
 
-KexiDBFactory::KexiDBFactory(QObject *parent, const QStringList &)
-        : KFormDesigner::WidgetFactory(parent)
+KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
+        : KFormDesigner::WidgetFactory(parent, "kexidb")
 {
     KFormDesigner::WidgetInfo *wi;
     wi = new KexiDataAwareWidgetInfo(this);
@@ -716,6 +716,6 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
     }
 }
 
-KFORMDESIGNER_WIDGET_FACTORY(KexiDBFactory, kexidbwidgets)
+K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(KexiDBFactory, kexidbwidgets)
 
 #include "kexidbfactory.moc"

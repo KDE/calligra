@@ -24,7 +24,6 @@
 #include "keximigrate.h"
 
 #include <klibloader.h>
-#include <kparts/componentfactory.h>
 #include <ktrader.h>
 #include <kdebug.h>
 #include <klocale.h>

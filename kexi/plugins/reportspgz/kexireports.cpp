@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include <kgenericfactory.h>
-
 #include "kexireportpart.h"
 
-K_EXPORT_COMPONENT_FACTORY(pgzkexireportpart2, KGenericFactory<KexiReportPart>("pgzkexireportpart2"))
+#include <KPluginFactory>
+
+K_EXPORT_KEXI_PLUGIN( KexiReportPart, pgzkexireportpart2 )

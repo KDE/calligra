@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,12 +19,11 @@
 */
 
 #include <KLibLoader>
-#include <KServiceType>
-#include <KMimeTypeTrader>
-#include <kdebug.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kparts/componentfactory.h>
+#include <KServiceTypeTrader>
+#include <KDebug>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocale>
 
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -136,11 +135,26 @@ Part* Manager::part(Info *i)
 
     Part *p = m_parts.value(i->partClass());
     if (!p) {
-        int error = 0;
-        p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
+//2.0        int error = 0;
+/*2.0        p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error); */
+        KPluginLoader loader(i->ptr()->library());
+        const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
+//        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
+        if (foundMajor != KEXI_PART_VERSION) {
+            i->setBroken(true, 
+                i18n("Incompatible plugin \"%1\" version: found version %2, expected version %3.",
+                    i->objectName(),
+                    QString::number(foundMajor),
+                    QString::number(KEXI_PART_VERSION)));
+            setError(i->errorMessage());
+            return 0;
+        }
+        KPluginFactory *factory = loader.factory();
+        if (factory)
+            p = factory->create<Part>(this);
+
         if (!p) {
-            kDebug() << "failed :( (ERROR #" << error << ")";
-            kDebug() << "  " << KLibLoader::self()->lastErrorMessage();
+            kDebug() << "failed";
             i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
             setError(i->errorMessage());
             return 0;
@@ -150,7 +164,7 @@ Part* Manager::part(Info *i)
             i->setProjectPartID(p->registeredPartID());
         }*/
         p->setInfo(i);
-        p->setObjectName(QString("%1 part").arg(i->objectName()));
+        p->setObjectName(QString("%1 plugin").arg(i->objectName()));
         m_parts.insert(i->partClass(), p);
         emit partLoaded(p);
     }

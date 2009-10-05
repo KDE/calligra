@@ -57,7 +57,6 @@
 #include <kedittoolbar.h>
 
 #include <kglobalsettings.h>
-#include <kparts/componentfactory.h>
 #include <ktip.h>
 #include <kstandarddirs.h>
 #include <kpushbutton.h>

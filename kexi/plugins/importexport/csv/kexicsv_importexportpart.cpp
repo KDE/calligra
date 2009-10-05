@@ -22,11 +22,12 @@
 #include "kexicsvexportwizard.h"
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
+#include <core/kexipart.h>
 #include <kexiutils/utils.h>
 
-#include <kgenericfactory.h>
+#include <KPluginFactory>
 
-KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QStringList &args)
+KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)
 {
 }
@@ -84,5 +85,4 @@ bool KexiCSVImportExportPart::executeCommand(const char* commandName,
     return false;
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_csv_importexport,
-                           KGenericFactory<KexiCSVImportExportPart>("kexihandler_csv_importexport"))
+K_EXPORT_KEXI_PLUGIN( KexiCSVImportExportPart, csv_importexport )

@@ -20,7 +20,6 @@
 */
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
 #include <KDialog>
 #include <k3listview.h>
 #include <ktabwidget.h>
@@ -79,7 +78,7 @@ public:
     KexiDataSourceComboBox *dataSourceCombo;
 };
 
-KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
+KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
         : KexiPart::Part(parent, l)
         , d(new Private())
 {

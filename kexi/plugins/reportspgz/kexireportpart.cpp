@@ -45,7 +45,7 @@ public:
     KexiSourceSelector *ksrc;
 };
 
-KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
+KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
         : KexiPart::Part(parent, l)
         , d(new Private())
 {

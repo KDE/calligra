@@ -108,7 +108,7 @@ public:
 
 using namespace KexiPart;
 
-Part::Part(QObject *parent, const QStringList &)
+Part::Part(QObject *parent, const QVariantList &)
         : QObject(parent)
         , d(new Private())
 {

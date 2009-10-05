@@ -21,11 +21,11 @@
 
 #include "kexitablepart.h"
 
-#include <kdebug.h>
-#include <kgenericfactory.h>
-#include <kmessagebox.h>
-#include <ktabwidget.h>
-#include <kiconloader.h>
+#include <KDebug>
+#include <KMessageBox>
+#include <KTabWidget>
+#include <KIconLoader>
+#include <KPluginFactory>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
@@ -52,7 +52,7 @@ public:
     QPointer<KexiLookupColumnPage> lookupColumnPage;
 };
 
-KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
+KexiTablePart::KexiTablePart(QObject *parent, const QVariantList&l)
         : KexiPart::Part(parent, l)
         , d(new Private())
 {
@@ -309,7 +309,6 @@ AboutData( const char *programName,
   K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(libname ## updateAD(#libname)) )
 */
 
-K_EXPORT_COMPONENT_FACTORY(kexihandler_table, KGenericFactory<KexiTablePart>("kexihandler_table"))
+K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )
 
 #include "kexitablepart.moc"
-
