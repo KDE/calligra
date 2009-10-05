@@ -268,7 +268,7 @@ void ImportTableWizard::arriveSrcConnPage()
 
 void ImportTableWizard::arriveAlterTablePage()
 {
-    KexiDB::TableSchema ts;
+    KexiDB::TableSchema *ts = new KexiDB::TableSchema();
 
     foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
         m_importTableName = table->text();
@@ -276,8 +276,24 @@ void ImportTableWizard::arriveAlterTablePage()
     
     kDebug();
 
-    if (m_migrateDriver->readTableSchema(m_importTableName, ts)) {
-        m_alterSchemaWidget->setTableSchema(&ts);
+    if (m_migrateDriver->readTableSchema(m_importTableName, *ts)) {
+        kDebug() << ts->fieldCount();
+        m_alterSchemaWidget->setTableSchema(ts);
+
+        QList<QVariant> r;
+        QList< QList<QVariant> > dat;
+        m_migrateDriver->readFromTable(m_importTableName);
+        m_migrateDriver->moveFirst();
+        for (uint i = 0; i < 3; ++i) {
+            for (uint j = 0; j < ts->fieldCount(); ++j)
+            {
+                r.append(m_migrateDriver->value(j));
+            }
+            dat.append(r);
+            r.clear();
+            m_migrateDriver->moveNext();
+        }
+        m_alterSchemaWidget->setData(dat);
     }
     
 }

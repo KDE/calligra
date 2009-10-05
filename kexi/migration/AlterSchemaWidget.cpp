@@ -34,18 +34,23 @@ m_table = new QTableView(this);
 m_columnType = new QComboBox(this);
 m_columnPKey = new QCheckBox(this);
 
+m_columnNumLabel = new QLabel(this, i18n("Column %1").arg(1));
 m_columnTypeLabel = new QLabel(this, i18n("Column Type"));
 m_columnPKeyLabel = new QLabel(this, i18n("Primary Key"));
 
-m_layout->addWidget(m_columnTypeLabel, 0, 0);
-m_layout->addWidget(m_columnPKeyLabel, 0, 1);
-m_layout->addWidget(m_columnType, 1, 0);
-m_layout->addWidget(m_columnPKey, 1, 1);
-m_layout->addWidget(m_table, 2, 0, 1, 2);
+m_layout->addWidget(m_columnNumLabel, 0, 0, 1, 2);
+m_layout->addWidget(m_columnTypeLabel, 1, 0);
+m_layout->addWidget(m_columnPKeyLabel, 1, 1);
+m_layout->addWidget(m_columnType, 2, 0);
+m_layout->addWidget(m_columnPKey, 2, 1);
+m_layout->addWidget(m_table, 3, 0, 1, 2);
 
 setLayout(m_layout);
 
 connect(m_table, SIGNAL(clicked(const QModelIndex&)), this, SLOT(tableClicked(const QModelIndex&)));
+
+m_model = new AlterSchemaTableModel();
+m_table->setModel(m_model);
 
 }
 
@@ -57,10 +62,17 @@ AlterSchemaWidget::~AlterSchemaWidget()
 void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
 {
     m_originalSchema = ts;
+    m_model->setSchema(m_originalSchema);
+}
+
+void AlterSchemaWidget::setData(QList< QList<QVariant> >dat)
+{
+    m_model->setData(dat);
 }
 
 void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     kDebug();
-    
+    m_selectedColumn = idx.column();
+    m_columnNumLabel->setText(QString("Column %1").arg(m_selectedColumn + 1));
 }

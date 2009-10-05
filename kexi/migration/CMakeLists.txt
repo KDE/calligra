@@ -48,7 +48,7 @@ ENDIF(GLIB2_FOUND)
 
 ########### next target ###############
 
-set(keximigrate_LIB_SRCS 
+set(keximigrate_LIB_SRCS AlterSchemaTableModel.cpp 
    keximigrate.cpp 
    keximigratedata.cpp 
    migratemanager.cpp 

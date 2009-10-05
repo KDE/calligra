@@ -19,6 +19,7 @@
 
 #include <QWidget>
 #include <QTableView>
+#include <AlterSchemaTableModel.h>
 
 class QGridLayout;
 class QTableView;
@@ -39,6 +40,7 @@ Q_OBJECT
         ~AlterSchemaWidget ( );
 
         void setTableSchema(KexiDB::TableSchema *schema);
+        void setData(QList< QList<QVariant> >);
 
     private:
         
@@ -47,6 +49,9 @@ Q_OBJECT
         QComboBox *m_columnType;
         QCheckBox *m_columnPKey;
 
+        AlterSchemaTableModel *m_model;
+
+        QLabel *m_columnNumLabel;
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
 
