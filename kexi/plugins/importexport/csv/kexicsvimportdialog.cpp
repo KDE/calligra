@@ -207,8 +207,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 
     m_infoLbl = new KexiCSVInfoLabel(
         m_mode == File ? i18n("Preview of data from file:")
-        : i18n("Preview of data from clipboard:"),
-        plainPage
+        : i18n("Preview of data from clipboard"),
+        plainPage, m_mode == File /*showFnameLine*/
     );
     lyr->addWidget(m_infoLbl);
 
@@ -283,18 +283,19 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_startAtLineLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     glyr->addWidget(m_startAtLineLabel, 0, 3);
 
-    QSpacerItem* spacer_2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred);
-    glyr->addItem(spacer_2, 0, 4);
-
     m_ignoreDuplicates = new QCheckBox(page);
     m_ignoreDuplicates->setObjectName("m_ignoreDuplicates");
     m_ignoreDuplicates->setText(i18n("Ignore duplicated delimiters"));
-    glyr->addWidget(m_ignoreDuplicates, 2, 2, 1, 3);
+    glyr->addWidget(m_ignoreDuplicates, 2, 2, 1, 2);
 
     m_1stRowForFieldNames = new QCheckBox(page);
     m_1stRowForFieldNames->setObjectName("m_1stRowForFieldNames");
     m_1stRowForFieldNames->setText(i18n("First row contains column names"));
-    glyr->addWidget(m_1stRowForFieldNames, 3, 2, 1, 3);
+    glyr->addWidget(m_1stRowForFieldNames, 3, 2, 1, 2);
+
+    QSpacerItem* spacer_2 = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred);
+    glyr->addItem(spacer_2, 0, 4, 4, 1);
+    glyr->setColumnStretch(4, 2);
 
     m_table = new KexiCSVImportDialogTable(plainPage);
     m_table->setObjectName("m_table");

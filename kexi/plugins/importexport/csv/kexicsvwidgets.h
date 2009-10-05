@@ -49,7 +49,7 @@ public:
 
      \pre [icon] [labeltext] [filename] [comment]
     */
-    KexiCSVInfoLabel(const QString& labelText, QWidget* parent);
+    KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine);
 
     void setFileName(const QString& fileName);
     void setLabelText(const QString& text);

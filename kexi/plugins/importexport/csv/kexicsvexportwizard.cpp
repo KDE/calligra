@@ -120,7 +120,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_exportOptionsPage->setObjectName("m_exportOptionsPage");
     QGridLayout *exportOptionsLyr = new QGridLayout(m_exportOptionsPage);
     exportOptionsLyr->setObjectName("exportOptionsLyr");
-    m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsPage);
+    m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsPage, true/*showFnameLine*/);
     KexiPart::Info *partInfo = Kexi::partManager().infoForClass(
             QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
     if (partInfo)
@@ -130,7 +130,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 
     m_infoLblTo = new KexiCSVInfoLabel(
         (m_options.mode == KexiCSVExport::File) ? i18n("To CSV file:") : i18n("To clipboard:"),
-        m_exportOptionsPage
+        m_exportOptionsPage, true/*showFnameLine*/
     );
     if (m_options.mode == KexiCSVExport::Clipboard)
         m_infoLblTo->setIcon("edit-paste");
