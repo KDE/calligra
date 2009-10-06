@@ -443,8 +443,6 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     double x = state->getCurX();
     double y = state->getCurY();
 
-    state->transform( x, y, &x, &y );
-    
     *d->body << "<text";
     *d->body << " x=\"" << x << "px\"";
     *d->body << " y=\"" << y << "px\"";
@@ -456,8 +454,17 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
         *d->body << " font-family=\"" << QString::fromAscii( font->getName()->getCString() ) << "\"";
         //kDebug(30516) << "font name:" << QString::fromAscii( font->getName()->getCString() );
     }
-    *d->body << " font-size=\"" << state->getTransformedFontSize() << "px\"";
+    *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
+    
+    double * ctm = state->getCTM();
+    QMatrix transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 
+    QMatrix mirror;
+    mirror.translate(x, y);
+    mirror.scale(1.0, -1.0);
+    mirror.translate(-x, -y);
+    *d->body << " transform=\"" << convertMatrix(mirror*transform) << "\"";
+    
     // fill
     if( ! (render & 1) )
         *d->body << printFill();
