@@ -1,3 +1,8 @@
+06-Oct-2009
+Finished most of the features of the widget.
+Can now set column type and pkey state
+Import now uses the new schema, and imports the data.
+
 05-Oct-2009
 Added a widget and model to the import dialog to allow altering column types
 I think the import function is now best left in the dialog, using the functions from keximigrate

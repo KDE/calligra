@@ -1,4 +1,6 @@
-/*
+/* This file is part of the KDE project
+   Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -42,12 +44,16 @@ Q_OBJECT
         void setTableSchema(KexiDB::TableSchema *schema);
         void setData(QList< QList<QVariant> >);
 
+        KexiDB::TableSchema* newSchema();
+
     private:
         
         QGridLayout *m_layout;
         QTableView *m_table;
         QComboBox *m_columnType;
         QCheckBox *m_columnPKey;
+
+        QStringList m_types;
 
         AlterSchemaTableModel *m_model;
 
@@ -62,6 +68,8 @@ Q_OBJECT
 
     private slots:
         void tableClicked(const QModelIndex& idx);
+        void typeActivated(int typ);
+        void pkeyClicked(bool pkey);
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

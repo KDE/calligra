@@ -1,4 +1,6 @@
-/*
+/* This file is part of the KDE project
+   Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -29,29 +31,40 @@ using namespace KexiMigration;
 
 AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 {
-m_layout = new QGridLayout();
-m_table = new QTableView(this);
-m_columnType = new QComboBox(this);
-m_columnPKey = new QCheckBox(this);
+    m_originalSchema = 0;
+    m_newSchema = 0;
+    
+    m_layout = new QGridLayout();
+    m_table = new QTableView(this);
+    m_columnType = new QComboBox(this);
+    m_columnPKey = new QCheckBox(this);
 
-m_columnNumLabel = new QLabel(this, i18n("Column %1").arg(1));
-m_columnTypeLabel = new QLabel(this, i18n("Column Type"));
-m_columnPKeyLabel = new QLabel(this, i18n("Primary Key"));
+    m_columnNumLabel = new QLabel(this, i18n("Column %1").arg(1));
+    m_columnTypeLabel = new QLabel(this, i18n("Type"));
+    m_columnPKeyLabel = new QLabel(this, i18n("Primary Key"));
 
-m_layout->addWidget(m_columnNumLabel, 0, 0, 1, 2);
-m_layout->addWidget(m_columnTypeLabel, 1, 0);
-m_layout->addWidget(m_columnPKeyLabel, 1, 1);
-m_layout->addWidget(m_columnType, 2, 0);
-m_layout->addWidget(m_columnPKey, 2, 1);
-m_layout->addWidget(m_table, 3, 0, 1, 2);
+    m_types = KexiDB::Field::typeNames();
+    m_types.removeFirst(); //Remove InvalidTypes
 
-setLayout(m_layout);
+    for (unsigned int i = KexiDB::Field::FirstType; i <= KexiDB::Field::LastType; ++i) {
+        m_columnType->addItem(KexiDB::Field::typeName(i), i);
+    }
 
-connect(m_table, SIGNAL(clicked(const QModelIndex&)), this, SLOT(tableClicked(const QModelIndex&)));
+    m_layout->addWidget(m_columnNumLabel, 0, 0, 1, 2);
+    m_layout->addWidget(m_columnTypeLabel, 1, 0);
+    m_layout->addWidget(m_columnPKeyLabel, 1, 1);
+    m_layout->addWidget(m_columnType, 2, 0);
+    m_layout->addWidget(m_columnPKey, 2, 1);
+    m_layout->addWidget(m_table, 3, 0, 1, 2);
 
-m_model = new AlterSchemaTableModel();
-m_table->setModel(m_model);
+    setLayout(m_layout);
 
+    connect(m_table, SIGNAL(clicked(const QModelIndex&)), this, SLOT(tableClicked(const QModelIndex&)));
+    connect(m_columnType, SIGNAL(activated(int)), this, SLOT(typeActivated(int)));
+    connect(m_columnPKey, SIGNAL(clicked(bool)), this, SLOT(pkeyClicked(bool)));
+
+    m_model = new AlterSchemaTableModel();
+    m_table->setModel(m_model);
 }
 
 AlterSchemaWidget::~AlterSchemaWidget()
@@ -62,7 +75,10 @@ AlterSchemaWidget::~AlterSchemaWidget()
 void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
 {
     m_originalSchema = ts;
-    m_model->setSchema(m_originalSchema);
+    m_newSchema = new KexiDB::TableSchema(*ts, false);
+    
+    m_model->setSchema(m_newSchema);
+    tableClicked(m_model->index(0,0));
 }
 
 void AlterSchemaWidget::setData(QList< QList<QVariant> >dat)
@@ -72,7 +88,35 @@ void AlterSchemaWidget::setData(QList< QList<QVariant> >dat)
 
 void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
-    kDebug();
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(QString("Column %1").arg(m_selectedColumn + 1));
+    if (m_newSchema) {
+        kDebug() << m_newSchema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName());
+        m_columnType->setCurrentIndex(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName()));
+
+        //Only set the pkey check enabled if the field type is integer
+        m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName())).toInt())));
+        
+        m_columnPKey->setChecked(m_newSchema->field(m_selectedColumn)->isPrimaryKey());
+    }
+}
+
+void AlterSchemaWidget::typeActivated(int typ){
+    m_newSchema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
+
+    //Only set the pkey check enabled if the field type is integer
+    m_columnPKey->setEnabled(KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt())));
+
+    //If the field type is not integer, then the field cannot be a pkey
+    if (!KexiDB::Field::isIntegerType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()))) {
+        m_newSchema->field(m_selectedColumn)->setPrimaryKey(false);
+    }
+}
+
+void AlterSchemaWidget::pkeyClicked(bool pkey){
+    m_newSchema->field(m_selectedColumn)->setPrimaryKey(pkey);
+}
+
+KexiDB::TableSchema* AlterSchemaWidget::newSchema(){
+    return m_newSchema;
 }

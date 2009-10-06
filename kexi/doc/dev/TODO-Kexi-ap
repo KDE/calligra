@@ -1,0 +1,8 @@
+-----------------------------------------------------------------------------
+Kexi Development TODO Document
+From adam pigg's Point of View
+-----------------------------------------------------------------------------
+
+In KexiDB::Field, Field::typeNames() returns an i18n version of field types,
+but there is no correspanding Field:typeForName() which takes the i18n version.
+
