@@ -562,15 +562,26 @@ void KexiCSVImportDialog::fillTable()
 
     const int count = qMax(0, m_table->numRows() - 1 + m_startline);
     m_allRowsLoadedInPreview = count < m_maximumRowsForPreview && !m_stoppedAt_MAX_BYTES_TO_PREVIEW;
-    if (m_allRowsLoadedInPreview) {
-        m_startAtLineSpinBox->setMaximum(count);
-        m_startAtLineSpinBox->setValue(m_startline + 1);
+    if (count > 1) {
+        if (m_allRowsLoadedInPreview) {
+            m_startAtLineSpinBox->setMaximum(count);
+            m_startAtLineSpinBox->setValue(m_startline + 1);
+        }
+        m_startAtLineSpinBox->setEnabled(true);
+        m_startAtLineLabel->setText(
+            m_allRowsLoadedInPreview ?
+            i18n("Start at line (1-%1):", count)
+            : i18n("Start at line:") //we do not know what's real count
+        );
+        m_startAtLineLabel->setEnabled(true);
     }
-    m_startAtLineLabel->setText(
-        m_allRowsLoadedInPreview ?
-        i18n("Start at line (1-%1):", count)
-        : i18n("Start at line:") //we do not know what's real count
-    );
+    else { // no data
+        m_startAtLineSpinBox->setMaximum(1);
+        m_startAtLineSpinBox->setValue(1);
+        m_startAtLineSpinBox->setEnabled(false);
+        m_startAtLineLabel->setText(i18n("Start at line:"));
+        m_startAtLineLabel->setEnabled(false);
+    }
     updateRowCountInfo();
 
     m_blockUserEvents = false;
@@ -908,8 +919,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
         }
 
         if (inGUI && row > (m_maximumRowsForPreview + (m_1stRowForFieldNamesDetected ? 1 : 0))) {
-            kDebug() << "KexiCSVImportDialog::fillTable() loading stopped at row #"
-            << m_maximumRowsForPreview;
+            kDebug() << "loading stopped at row #" << m_maximumRowsForPreview;
             break;
         }
         if (nextRow) {
@@ -928,6 +938,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 void KexiCSVImportDialog::updateColumnText(int col)
 {
     QString colName;
+    updateColumnVectorSize();
     if (col < (int)m_columnNames.count() && (m_1stRowForFieldNames->isChecked() || m_changedColumnNames[col])) {
         colName = m_columnNames[ col ];
     }
@@ -1111,6 +1122,14 @@ bool KexiCSVImportDialog::parseTime(const QString& text, QTime& time)
     return false;
 }
 
+void KexiCSVImportDialog::updateColumnVectorSize()
+{
+    if ((int)m_columnNames.size() < m_table->numCols()) {
+        m_columnNames.resize(m_table->numCols() + 10);
+        m_changedColumnNames.resize(m_table->numCols() + 10);
+    }
+}
+
 void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool inGUI)
 {
     if (!inGUI) {
@@ -1185,10 +1204,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
     //save text to GUI (table view)
     if (m_table->numCols() < col) {
         m_table->setNumCols(col);
-        if ((int)m_columnNames.size() < m_table->numCols()) {
-            m_columnNames.resize(m_table->numCols() + 10);
-            m_changedColumnNames.resize(m_table->numCols() + 10);
-        }
+        updateColumnVectorSize();
     }
 
     if (m_1stRowForFieldNames->isChecked()) {
@@ -1297,7 +1313,7 @@ void KexiCSVImportDialog::textquoteSelected(int)
     else
         m_textquote = tq[0];
 
-    kDebug() << "KexiCSVImportDialog::textquoteSelected(): " << m_textquote;
+    kDebug() << m_textquote;
 
     //delayed, otherwise combobox won't be repainted
     fillTableLater();

@@ -42,13 +42,15 @@ http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
 
-2009-10-05..06
+2009-10-05..07
 Forms
 * Use KPluginLoader for widget factory plugins
 Plugins
 * Use KPluginLoader for Kexi plugins
 CSV Import Dialog
 * Improve layout
+* Fix updating "start row" widget when there is only single row of data or no rows at all
+* Fix crash when importing just single \n character as data
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 13 ~~~~~~~~~~~~~~~~
 
