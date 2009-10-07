@@ -35,6 +35,7 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
@@ -193,6 +194,7 @@ void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
     foreach( KoShapeLayer * layer, d->layers )
         layer->saveOdf( context );
 
+    context.saveLayerSet( context.xmlWriter() );
     context.xmlWriter().endElement(); // draw:page
 }
 
@@ -206,9 +208,11 @@ bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingConte
     qDeleteAll( d->objects );
     d->objects.clear();
 
+    const KoXmlElement & pageLayerSet = KoXml::namedItemNS(  element, KoXmlNS::draw, "layer-set" );
+    const KoXmlElement & usedPageLayerSet = pageLayerSet.isNull() ? context.odfLoadingContext().stylesReader().layerSet(): pageLayerSet;
+
     KoXmlElement layerElement;
-    forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
-    {
+    forEachElement( layerElement, usedPageLayerSet ) {
         KoShapeLayer * l = new KoShapeLayer();
         if( l->loadOdf( layerElement, context ) )
             insertLayer( l );
