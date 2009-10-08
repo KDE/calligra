@@ -21,6 +21,7 @@
 
 #include <QModelIndex>
 #include <QList>
+#include <kexidb/recorddata.h>
 
 namespace KexiDB {
 class TableSchema;
@@ -38,10 +39,10 @@ class AlterSchemaTableModel : public QAbstractTableModel {
         virtual int rowCount ( const QModelIndex& parent = QModelIndex() ) const;
 
         void setSchema(KexiDB::TableSchema*);
-        void setData(QList< QList<QVariant> > dat);
+        void setData(const QList<KexiDB::RecordData>& data);
     private:
         KexiDB::TableSchema *m_schema;
-        QList< QList<QVariant> > m_data; //Small amount of data to display to user
+        QList<KexiDB::RecordData> m_data; //Small amount of data to display to user
 };
 
 #endif // ALTERSCHEMATABLEMODEL_H

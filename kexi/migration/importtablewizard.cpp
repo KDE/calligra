@@ -53,6 +53,8 @@
 
 using namespace KexiMigration;
 
+#define ROWS_FOR_PREVIEW 3
+
 ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, Qt::WFlags flags ) : KAssistantDialog ( parent, flags ) {
     m_currentDatabase = curDB;
     m_migrateDriver = 0;
@@ -138,9 +140,10 @@ void ImportTableWizard::setupSrcConn()
 
     QSet<QString> excludedFilters;
     //! @todo remove when support for kexi files as source prj is added in migration
-    excludedFilters += KexiDB::defaultFileBasedDriverMimeType();
-    excludedFilters += "application/x-kexiproject-shortcut";
-    excludedFilters += "application/x-kexi-connectiondata";
+    excludedFilters
+        << KexiDB::defaultFileBasedDriverMimeType()
+        << "application/x-kexiproject-shortcut"
+        << "application/x-kexi-connectiondata";
     m_srcConnSel->fileWidget->setExcludedFilters(excludedFilters);
 
     kDebug() << m_migrateManager->supportedMimeTypes();
@@ -289,34 +292,44 @@ void ImportTableWizard::arriveTableSelectPage()
 
 void ImportTableWizard::arriveAlterTablePage()
 {
-    KexiDB::TableSchema *ts = new KexiDB::TableSchema();
+//! @todo handle errors
+    if (m_tableListWidget->selectedItems().isEmpty())
+        return;
 
+//! @todo (js) support multiple tables?
+#if 0
     foreach(QListWidgetItem *table, m_tableListWidget->selectedItems()) {
         m_importTableName = table->text();
     }
-    
-    kDebug();
+#else
+    m_importTableName = m_tableListWidget->selectedItems().first()->text();
+#endif
 
-    if (m_migrateDriver->readTableSchema(m_importTableName, *ts)) {
-        kDebug() << ts->fieldCount();
-        m_alterSchemaWidget->setTableSchema(ts);
-
-        QList<QVariant> r;
-        QList< QList<QVariant> > dat;
-        m_migrateDriver->readFromTable(m_importTableName);
-        m_migrateDriver->moveFirst();
-        for (uint i = 0; i < 3; ++i) {
-            for (uint j = 0; j < ts->fieldCount(); ++j)
-            {
-                r.append(m_migrateDriver->value(j));
-            }
-            dat.append(r);
-            r.clear();
-            m_migrateDriver->moveNext();
-        }
-        m_alterSchemaWidget->setData(dat);
+    KexiDB::TableSchema *ts = new KexiDB::TableSchema();
+    if (!m_migrateDriver->readTableSchema(m_importTableName, *ts)) {
+        delete ts;
+        return;
     }
-    
+
+    kDebug() << ts->fieldCount();
+    m_alterSchemaWidget->setTableSchema(ts);
+
+    if (!m_migrateDriver->readFromTable(m_importTableName))
+        return;
+    m_migrateDriver->moveFirst();
+//    if (!m_migrateDriver->moveFirst())
+//        return;
+    QList<KexiDB::RecordData> data;
+    for (uint i = 0; i < ROWS_FOR_PREVIEW; ++i) {
+        KexiDB::RecordData row;
+        row.resize(ts->fieldCount());
+        for (uint j = 0; j < ts->fieldCount(); ++j) {
+            row[j] = m_migrateDriver->value(j);
+        }
+        data.append(row);
+        m_migrateDriver->moveNext();
+    }
+    m_alterSchemaWidget->setData(data);
 }
 
 void ImportTableWizard::arriveImportingPage()

@@ -42,7 +42,7 @@ Q_OBJECT
         ~AlterSchemaWidget ( );
 
         void setTableSchema(KexiDB::TableSchema *schema);
-        void setData(QList< QList<QVariant> >);
+        void setData(const QList<KexiDB::RecordData>& data);
 
         KexiDB::TableSchema* newSchema();
 

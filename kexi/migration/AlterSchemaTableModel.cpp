@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,26 +21,31 @@
 #include <kexidb/tableschema.h>
 #include <kdebug.h>
 
-AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent ) {
+AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )
+{
     kDebug();
     m_schema = 0;
 }
 
 
-AlterSchemaTableModel::~AlterSchemaTableModel() {
+AlterSchemaTableModel::~AlterSchemaTableModel()
+{
     kDebug();
 }
 
-QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) const {
+QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) const
+{
     if (!index.isValid())
         return QVariant();
     
-    if (index.row() >= m_schema->fieldCount())
+    if (index.row() >= (int)m_schema->fieldCount())
         return QVariant();
     
     if (role == Qt::DisplayRole) {
         if (m_data.length() > index.row()) {
-            QList<QVariant> r = m_data[index.row()];
+            const KexiDB::RecordData r( m_data[index.row()] );
+            if (r.size() <= index.column())
+                return QVariant();
             return r[index.column()];
         }
         else {
@@ -50,7 +56,8 @@ QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) cons
         return QVariant();
 }
 
-QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
     if (role != Qt::DisplayRole)
         return QVariant();
 
@@ -60,35 +67,35 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
             if (fld)
                 return m_schema->field(section)->captionOrName();
         }
-        else {
-            return QString("Column %1").arg(section);
-        }
+        return QString("Column %1").arg(section);
     }
-    else
-        return QString("Row %1").arg(section);
+    return QString("Row %1").arg(section);
 }
                                      
 
-int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const {
+int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
+{
     if (m_schema) {
         return m_schema->fieldCount();
     }
     return 0;
 }
 
-int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const {
-return 3;
+int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
+{
+    return 3;
 }
 
-void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts){
+void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
+{
+    m_schema = ts;
+    kDebug() << m_schema->fieldCount();
 
-m_schema = ts;
-kDebug() << m_schema->fieldCount();
-
-beginInsertColumns(QModelIndex(), 0, m_schema->fieldCount() - 1);
-endInsertColumns();
+    beginInsertColumns(QModelIndex(), 0, m_schema->fieldCount() - 1);
+    endInsertColumns();
 }
 
-void AlterSchemaTableModel::setData(QList< QList<QVariant> > dat) {
-m_data = dat;
+void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData>& data)
+{
+    m_data = data;
 }

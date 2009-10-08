@@ -81,9 +81,9 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
     tableClicked(m_model->index(0,0));
 }
 
-void AlterSchemaWidget::setData(QList< QList<QVariant> >dat)
+void AlterSchemaWidget::setData(const QList<KexiDB::RecordData>& data)
 {
-    m_model->setData(dat);
+    m_model->setData(data);
 }
 
 void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
