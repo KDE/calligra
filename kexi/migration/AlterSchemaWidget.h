@@ -35,11 +35,12 @@ class TableSchema;
 
 namespace KexiMigration {
     
-class AlterSchemaWidget : public QWidget {
-Q_OBJECT
+class AlterSchemaWidget : public QWidget
+{
+    Q_OBJECT
     public:
-        AlterSchemaWidget ( QWidget* parent = 0 );
-        ~AlterSchemaWidget ( );
+        AlterSchemaWidget( QWidget* parent = 0 );
+        ~AlterSchemaWidget();
 
         void setTableSchema(KexiDB::TableSchema *schema);
         void setData(const QList<KexiDB::RecordData>& data);
@@ -47,7 +48,7 @@ Q_OBJECT
         KexiDB::TableSchema* newSchema();
 
     private:
-        
+
         QGridLayout *m_layout;
         QTableView *m_table;
         QComboBox *m_columnType;

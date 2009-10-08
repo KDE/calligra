@@ -33,15 +33,15 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 {
     m_originalSchema = 0;
     m_newSchema = 0;
-    
+
     m_layout = new QGridLayout();
     m_table = new QTableView(this);
     m_columnType = new QComboBox(this);
     m_columnPKey = new QCheckBox(this);
 
-    m_columnNumLabel = new QLabel(this, i18n("Column %1").arg(1));
-    m_columnTypeLabel = new QLabel(this, i18n("Type"));
-    m_columnPKeyLabel = new QLabel(this, i18n("Primary Key"));
+    m_columnNumLabel = new QLabel(i18n("Column %1").arg(1), this);
+    m_columnTypeLabel = new QLabel(i18n("Type"), this);
+    m_columnPKeyLabel = new QLabel(i18n("Primary Key"), this);
 
     m_types = KexiDB::Field::typeNames();
     m_types.removeFirst(); //Remove InvalidTypes
@@ -76,7 +76,7 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
 {
     m_originalSchema = ts;
     m_newSchema = new KexiDB::TableSchema(*ts, false);
-    
+
     m_model->setSchema(m_newSchema);
     tableClicked(m_model->index(0,0));
 }
@@ -101,7 +101,8 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
     }
 }
 
-void AlterSchemaWidget::typeActivated(int typ){
+void AlterSchemaWidget::typeActivated(int typ)
+{
     m_newSchema->field(m_selectedColumn)->setType(KexiDB::Field::Type(m_columnType->itemData(typ).toInt()));
 
     //Only set the pkey check enabled if the field type is integer
@@ -117,6 +118,7 @@ void AlterSchemaWidget::pkeyClicked(bool pkey){
     m_newSchema->field(m_selectedColumn)->setPrimaryKey(pkey);
 }
 
-KexiDB::TableSchema* AlterSchemaWidget::newSchema(){
+KexiDB::TableSchema* AlterSchemaWidget::newSchema()
+{
     return m_newSchema;
 }

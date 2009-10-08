@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,10 +71,10 @@ QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientat
     }
     return QString("Row %1").arg(section);
 }
-                                     
 
 int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
 {
+    Q_UNUSED(parent);
     if (m_schema) {
         return m_schema->fieldCount();
     }
@@ -83,6 +83,7 @@ int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
 
 int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
 {
+    Q_UNUSED(parent);
     return 3;
 }
 
