@@ -21,7 +21,7 @@
 
 #include <QModelIndex>
 #include <QList>
-#include <kexidb/recorddata.h>
+#include <kexidb/RecordData.h>
 
 namespace KexiDB {
 class TableSchema;
