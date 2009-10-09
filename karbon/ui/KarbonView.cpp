@@ -162,7 +162,7 @@ public:
         , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
         , deleteSelectionAction(0), viewAction(0), showRulerAction(0)
         , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
-        , status(0), cursorCoords(0)
+        , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
     KarbonPart * part;
@@ -195,6 +195,8 @@ public:
     //Status Bar
     QLabel * status;       ///< ordinary status
     QLabel * cursorCoords; ///< cursor coordinates
+    KarbonSmallStylePreview * smallPreview; ///< small style preview
+    QWidget * zoomActionWidget; ///< zoom action widget
 };
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
@@ -229,13 +231,13 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->canvasController->show();
 
     // set up status bar message
-    d->status = new QLabel( QString(), statusBar() );
+    d->status = new QLabel( QString(), this );
     d->status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->status->setMinimumWidth( 300 );
     addStatusBarItem( d->status, 1 );
     connect( KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
              d->status, SLOT(setText(const QString &)) );
-    d->cursorCoords = new QLabel( QString(), statusBar() );
+    d->cursorCoords = new QLabel( QString(), this );
     d->cursorCoords->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->cursorCoords->setMinimumWidth( 50 );
     addStatusBarItem( d->cursorCoords, 0 );
@@ -244,15 +246,16 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     // set up the zoom controller
     KarbonZoomController * zoomController = new KarbonZoomController( d->canvasController, actionCollection() );
     zoomController->setPageSize( d->part->document().pageSize() );
-    addStatusBarItem( zoomController->zoomAction()->createWidget( statusBar() ), 0 );
+    d->zoomActionWidget = zoomController->zoomAction()->createWidget( this );
+    addStatusBarItem( d->zoomActionWidget, 0 );
     zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
     connect( zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));
     connect( zoomController, SIGNAL(zoomedToAll()), this, SLOT(zoomDrawing()));
 
-    KarbonSmallStylePreview * smallPreview = new KarbonSmallStylePreview( statusBar() );
-    connect( smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
-    connect( smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
-    addStatusBarItem( smallPreview, 0 );
+    d->smallPreview = new KarbonSmallStylePreview( this );
+    connect( d->smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
+    connect( d->smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
+    addStatusBarItem( d->smallPreview, 0 );
 
     // layout:
     QGridLayout *layout = new QGridLayout();
@@ -335,6 +338,11 @@ KarbonView::~KarbonView()
 
     KoToolManager::instance()->removeCanvasController( d->canvasController );
 
+    removeStatusBarItem(d->status);
+    removeStatusBarItem(d->cursorCoords);
+    removeStatusBarItem(d->smallPreview);
+    removeStatusBarItem(d->zoomActionWidget);
+    
     delete d;
 }
 
