@@ -218,11 +218,12 @@ public:
     QString entryModeToString() const;
     QStringList entrymodeList() const;
     
-    EffortCostMap effortCostPrDay(const QDate &start, const QDate &end ) const;
+    EffortCostMap effortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const;
     
 protected:
     void copy( const Completion &copy);
-    
+    double averageCostPrHour( const QDate &date, long id ) const;
+
 private:
     Node *m_node;
     bool m_started, m_finished;

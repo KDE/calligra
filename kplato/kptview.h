@@ -65,6 +65,7 @@ class Calendar;
 class Part;
 class Node;
 class Project;
+class Task;
 class MainSchedule;
 class Schedule;
 class Resource;
@@ -242,7 +243,8 @@ protected:
     QList<QAction*> sortedActionList();
     QAction *addScheduleAction( Schedule *sch );
     void setLabel( ScheduleManager *sm = 0 );
-    Node *currentTask();
+    Task *currentTask() const;
+    Node *currentNode() const;
     Resource *currentResource();
     ResourceGroup *currentResourceGroup();
     Calendar *currentCalendar();

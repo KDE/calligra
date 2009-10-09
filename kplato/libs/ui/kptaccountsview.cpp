@@ -211,9 +211,6 @@ void AccountsView::slotOptions()
     kDebug();
     AccountsviewConfigDialog dlg( m_view, this );
     if ( dlg.exec() == QDialog::Accepted ) {
-        model()->setStartDate();
-        model()->setEndDate();
-
     }
 }
 
@@ -273,7 +270,7 @@ bool AccountsView::loadContext( const KoXmlElement &context )
     m_view->setEndDate( QDate::fromString( context.attribute( "end-date", "" ), Qt::ISODate ) );
     m_view->setEndMode( context.attribute( "end-mode", "0" ).toInt() );
     
-    kDebug()<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
+    //kDebug()<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
     return true;
 }
 

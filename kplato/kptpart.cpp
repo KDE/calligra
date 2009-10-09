@@ -57,8 +57,6 @@
 
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION XML_FILE_SYNTAX_VERSION
-
 namespace KPlato
 {
 
@@ -189,12 +187,12 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
         return false;
     }
-    QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
-    m_xmlLoader.setVersion( m_syntaxVersion );
-    if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
+    QString syntaxVersion = plan.attribute( "version", KPLATO_FILE_SYNTAX_VERSION );
+    m_xmlLoader.setVersion( syntaxVersion );
+    if ( syntaxVersion > KPLATO_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlato (syntax version: %1)\n"
-                               "Opening it in this version of KPlato will lose some information.", m_syntaxVersion ),
+                               "Opening it in this version of KPlato will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             setErrorMessage( "USER_CANCELED" );
@@ -265,7 +263,7 @@ QDomDocument Part::saveXML()
     QDomElement doc = document.createElement( "kplato" );
     doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
-    doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
+    doc.setAttribute( "version", KPLATO_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Save the project
@@ -283,10 +281,11 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
                 "xml",
     "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplatowork" ); //??
+    QDomElement doc = document.createElement( "kplatowork" );
     doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
-    doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
+    doc.setAttribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Work package info
@@ -442,18 +441,19 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
-    QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
-    m_xmlLoader.setVersion( m_syntaxVersion );
-    if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
+    QString syntaxVersion = plan.attribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
+    m_xmlLoader.setWorkVersion( syntaxVersion );
+    if ( syntaxVersion > KPLATOWORK_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                 0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
-                "Opening it in this version of KPlatoWork will lose some information.", m_syntaxVersion ),
+                "Opening it in this version of KPlatoWork will lose some information.", syntaxVersion ),
                 i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             setErrorMessage( "USER_CANCELED" );
             return false;
         }
     }
+    m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION ) );
 
 #ifdef KOXML_USE_QDOM
     int numNodes = plan.childNodes().count();
@@ -533,7 +533,7 @@ void Part::checkForWorkPackages()
 {
     //qDebug()<<"checkForWorkPackages:";
     if ( ! isReadWrite() || ! m_config.checkForWorkPackages() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
-        //qDebug()<<"checkForWorkPackages: idle";
+        //qDebug()<<"checkForWorkPackages: idle:"<<isReadWrite()<<m_config.checkForWorkPackages()<<m_config.retrieveUrl()<<m_project <<(m_project?m_project->numChildren():0);
         QTimer::singleShot ( 10000, this, SLOT( checkForWorkPackages() ) );
         return;
     }
@@ -608,8 +608,39 @@ void Part::mergeWorkPackage( const Package *package )
             qDebug()<<"mergeWorkPackage: remove file"<<file.fileName();
             file.remove();
         } else if ( KPlatoSettings::saveFile() && ! KPlatoSettings::saveUrl(). isEmpty() ) {
-            bool r = file.rename( KPlatoSettings::saveUrl().path() );
-            qDebug()<<"mergeWorkPackage: rename result="<<r;
+            QDir dir( KPlatoSettings::saveUrl().path() );
+            if ( ! dir.exists() ) {
+                if ( ! dir.mkpath( dir.path() ) ) {
+                    //TODO message
+                    qDebug()<<"mergeWorkPackage: could not create directory:"<<dir.path();
+                    return;
+                }
+            }
+            QFileInfo from( file );
+            QString name = KPlatoSettings::saveUrl().path() + '/' + from.fileName();
+            qDebug()<<"mergeWorkPackage: rename file"<<file.fileName();
+            if ( file.rename( name ) ) {
+                qDebug()<<"mergeWorkPackage: Saved"<<file.fileName()<<"to"<<name;
+                return;
+            }
+            name = KPlatoSettings::saveUrl().path() + '/';
+            name += from.completeBaseName() + "-%1";
+            if ( ! from.suffix().isEmpty() ) {
+                name += '.' + from.suffix();
+            }
+            int i = 0;
+            bool ok = false;
+            while ( ! ok && i < 1000 ) {
+                ++i;
+                ok = QFile::rename( file.fileName(), name.arg( i ) );
+                //qDebug()<<"mergeWorkPackage: tried to save"<<file.fileName()<<"to"<<name.arg(i);
+            }
+            if ( ! ok ) {
+                //TODO message
+                qDebug()<<"mergeWorkPackage: Failed to save"<<file.fileName();
+            } else {
+                qDebug()<<"mergeWorkPackage: Saved"<<file.fileName()<<"to"<<name.arg(i);
+            }
         }
     }
 }

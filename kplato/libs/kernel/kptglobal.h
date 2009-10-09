@@ -25,8 +25,11 @@
 
 #include <klocale.h>
 
-// This is used both for *.kplato and *.kplatowork files as the syntax is identical
-#define XML_FILE_SYNTAX_VERSION "0.6.4"
+// The KPlato file syntax is used in parts of the KPlatoWork file, so:
+// * If you change KPLATO_FILE_SYNTAX_VERSION, change KPLATOWORK_FILE_SYNTAX_VERSION too!
+// * You don't need to change KPLATO_FILE_SYNTAX_VERSION when you change KPLATOWORK_FILE_SYNTAX_VERSION
+#define KPLATO_FILE_SYNTAX_VERSION "0.6.4"
+#define KPLATOWORK_FILE_SYNTAX_VERSION "0.6.4"
 
 #define CURRENTSCHEDULE     -1
 #define NOTSCHEDULED        -2

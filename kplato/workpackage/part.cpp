@@ -71,8 +71,6 @@
 #include <KoGlobal.h>
 #include <KoMainWindow.h>
 
-#define CURRENT_SYNTAX_VERSION XML_FILE_SYNTAX_VERSION
-
 using namespace KPlato;
 
 namespace KPlatoWork
@@ -534,17 +532,18 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
         return false;
     }
-    QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
-    m_xmlLoader.setVersion( m_syntaxVersion );
-    if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
+    QString syntaxVersion = plan.attribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
+    m_xmlLoader.setWorkVersion( syntaxVersion );
+    if ( syntaxVersion > KPLATOWORK_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document is a newer version than supported by KPlatoWork (syntax version: %1)<br>"
-                               "Opening it in this version of KPlatoWork will lose some information.", m_syntaxVersion ),
+                               "Opening it in this version of KPlatoWork will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             return false;
         }
     }
+    m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION ) );
     m_xmlLoader.startLoad();
     WorkPackage *wp = new WorkPackage( m_loadingFromProjectStore );
     wp->loadXML( plan, m_xmlLoader );

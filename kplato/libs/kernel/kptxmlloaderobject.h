@@ -51,6 +51,9 @@ public:
     QString version() const { return m_version; }
     void setVersion( const QString ver ) { m_version = ver; }
     
+    QString workVersion() const { return m_workversion; }
+    void setWorkVersion( const QString ver ) { m_workversion = ver; }
+
     const KDateTime::Spec &projectSpec() const { return m_projectSpec; }
     void setProjectSpec( const KDateTime::Spec &spec ) { m_projectSpec = spec; }
     
@@ -113,6 +116,7 @@ protected:
     QTime m_timer;
     int m_elapsed;
     QString m_version;
+    QString m_workversion;
     KDateTime::Spec m_projectSpec;
     
     Calendar *m_baseCalendar; // help to handle version < 0.6

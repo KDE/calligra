@@ -531,7 +531,7 @@ EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, 
         case Completion::FollowPlan:
             return plannedEffortCostPrDay( start, end, id );
         default:
-            return completion().effortCostPrDay( start, end );
+            return completion().effortCostPrDay( start, end, id );
     }
     return EffortCostMap();
 }
@@ -1869,7 +1869,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             //kDebug()<<m_name<<"FixedInterval="<<m_constraintEndTime<<""<<cs->endTime;
             cs->duration = m_constraintEndTime - m_constraintStartTime;
             if ( cs->endTime > m_constraintEndTime ) {
-                cs->endTime == qMax( m_constraintEndTime, cs->earlyFinish );
+                cs->endTime = qMax( m_constraintEndTime, cs->earlyFinish );
             }
             cs->startTime = cs->endTime - cs->duration;
             if (m_constraintEndTime != cs->endTime) {
@@ -2866,7 +2866,35 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     return eff;
 }
 
-EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end ) const
+double Completion::averageCostPrHour( const QDate &date, long id ) const
+{
+    Schedule *s = m_node->schedule( id );
+    if ( s == 0 ) {
+        return 0.0;
+    }
+    double cost = 0.0;
+    double eff = 0.0;
+    QList<double> cl;
+    foreach ( Appointment *a, s->appointments() ) {
+        cl << a->resource()->resource()->normalRate();
+        double e = a->plannedEffort( date ).toDouble( Duration::Unit_h );
+        if (  e > 0.0 ) {
+            eff += e;
+            cost += e * cl.last();
+        }
+    }
+    if ( eff > 0.0 ) {
+        cost /= eff;
+    } else {
+        foreach ( double c, cl ) {
+            cost += c;
+        }
+        cost /= cl.count();
+    }
+    return cost;
+}
+
+EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, long id ) const
 {
     //kDebug()<<m_node->name()<<start<<end;
     EffortCostMap ec;
@@ -2886,9 +2914,9 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
                     continue;
                 }
                 Duration e = m_entries[ d ]->totalPerformed;
-                //kDebug()<<d<<e.toDouble(Duration::Unit_h)<<last.toDouble(Duration::Unit_h);
                 if ( e != Duration::zeroDuration && e != last ) {
-                    ec.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
+                    Duration eff = e - last;
+                    ec.insert( d, eff, eff.toDouble( Duration::Unit_h ) * averageCostPrHour( d, id ) );
                     last = e;
                 }
                 if ( et.isValid() && d > et ) {
@@ -2996,7 +3024,7 @@ EffortCostMap Completion::actualEffortCost() const
         lst.append( &m );
         rate.append( r->normalRate() );
     }
-    //kDebug()<<m_node->name()<<start<<end<<lst;
+    qDebug()<<"actualEffortCost:"<<m_node->name()<<start<<end<<lst;
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
@@ -3013,6 +3041,7 @@ EffortCostMap Completion::actualEffortCost() const
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
+                qDebug()<<"actualEffortCost: added"<<m_node->name()<<d<<c.hours()<<c.cost();
             }
         }
     } else if ( ! m_entries.isEmpty() ) {
@@ -3443,9 +3472,9 @@ bool WorkPackageSettings::operator!=( const WorkPackageSettings &s ) const
 #ifndef NDEBUG
 void Task::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"+ Task node:"<<name()<<" type="<<type();
+    qDebug()<<indent<<"+ Task node:"<<name()<<" type="<<typeToString()<<"("<<type()<<") id="<<id();
     indent += "!  ";
-    kDebug()<<indent<<"Requested resources (work):"<<workUnits()<<"%";
+    qDebug()<<indent<<"Requested resources (work):"<<workUnits()<<"%";
     m_requests.printDebug(indent);
     
     completion().printDebug( indent );
@@ -3456,17 +3485,17 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
 
 void Completion::printDebug(const QByteArray& _indent) const {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"+ Completion: ("<<m_entries.count()<<" entries)";
+    qDebug()<<indent<<"+ Completion: ("<<m_entries.count()<<" entries)";
     indent += "!  ";
-    kDebug()<<indent<<"Started:"<<m_started<<""<<m_startTime.toString();
-    kDebug()<<indent<<"Finished:"<<m_finished<<""<<m_finishTime.toString();
+    qDebug()<<indent<<"Started:"<<m_started<<""<<m_startTime.toString();
+    qDebug()<<indent<<"Finished:"<<m_finished<<""<<m_finishTime.toString();
     indent += "  ";
     foreach( const QDate &d, m_entries.keys() ) {
         Entry *e = m_entries[ d ];
-        kDebug()<<indent<<"Date:"<<d;
-        kDebug()<<(indent+" !")<<"% Finished:"<<e->percentFinished;
-        kDebug()<<(indent+" !")<<"Remaining:"<<e->remainingEffort.toString();
-        kDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
+        qDebug()<<indent<<"Date:"<<d;
+        qDebug()<<(indent+" !")<<"% Finished:"<<e->percentFinished;
+        qDebug()<<(indent+" !")<<"Remaining:"<<e->remainingEffort.toString();
+        qDebug()<<(indent+" !")<<"Performed:"<<e->totalPerformed.toString();
     }
 }
 

@@ -2316,7 +2316,7 @@ void Project::setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugin
 void Project::printDebug( bool children, const QByteArray& _indent )
 {
     QByteArray indent = _indent;
-    kDebug() << indent <<"+ Project node:" << Node::name(); //FIXME: QT3 support
+    qDebug() << indent <<"+ Project node:" << Node::name()<<" id="<<id();
     indent += '!';
     QListIterator<ResourceGroup*> it( resourceGroups() );
     while ( it.hasNext() )
@@ -2327,10 +2327,10 @@ void Project::printDebug( bool children, const QByteArray& _indent )
 void Project::printCalendarDebug( const QByteArray& _indent )
 {
     QByteArray indent = _indent;
-    kDebug() << indent <<"-------- Calendars debug printout --------";
+    qDebug() << indent <<"-------- Calendars debug printout --------";
     foreach ( Calendar *c, calendarIdDict ) {
         c->printDebug( indent + "--" );
-        kDebug();
+        qDebug();
     }
     if ( m_standardWorktime )
         m_standardWorktime->printDebug();

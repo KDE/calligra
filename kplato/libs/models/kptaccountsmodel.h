@@ -145,10 +145,6 @@ public:
     int showMode() const;
     void setShowMode( int show );
 
-    void setStartDate();
-    void setEndDate();
-    void updateDates();
-    
     QString formatMoney( double plannedCost, double actualCost ) const;
     QString format() const { return m_format; }
     void setFormat( const QString &f ) { m_format = f; }
@@ -178,7 +174,9 @@ private:
     QDate m_end;
     int m_showmode;
     QMap<Account*, EffortCostMap> m_plannedCostMap;
+    QDate m_plannedStart, m_plannedEnd;
     QMap<Account*, EffortCostMap> m_actualCostMap;
+    QDate m_actualStart, m_actualEnd;
     QString m_format;
     
 };

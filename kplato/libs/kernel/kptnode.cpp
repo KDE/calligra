@@ -1661,38 +1661,37 @@ QList<double> Estimate::scales() const
 #ifndef NDEBUG
 void Node::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"  Unique node identity="<<m_id;
     if ( m_estimate ) m_estimate->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     if (m_constraint == MustStartOn || m_constraint == StartNotEarlier || m_constraint == FixedInterval)
-        kDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")";
+        qDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")";
     if (m_constraint == MustFinishOn || m_constraint == FinishNotLater || m_constraint == FixedInterval)
-        kDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")";
+        qDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")";
     Schedule *cs = m_currentSchedule; 
     if (cs) {
-        kDebug()<<indent<<"  Current schedule:"<<"id="<<cs->id()<<" '"<<cs->name()<<"' type:"<<cs->type();
+        qDebug()<<indent<<"  Current schedule:"<<"id="<<cs->id()<<" '"<<cs->name()<<"' type:"<<cs->type();
     } else {
-        kDebug()<<indent<<"  Current schedule: None";
+        qDebug()<<indent<<"  Current schedule: None";
     }
     foreach (Schedule *sch, m_schedules) {
         sch->printDebug(indent+"  ");
     }
-    kDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() : QString("None"));
-    kDebug()<<indent<<"  Level:"<<level();
-    kDebug()<<indent<<"  No of predecessors:"<<m_dependParentNodes.count();
+    qDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() : QString("None"));
+    qDebug()<<indent<<"  Level:"<<level();
+    qDebug()<<indent<<"  No of predecessors:"<<m_dependParentNodes.count();
     QListIterator<Relation*> pit(m_dependParentNodes);
-    //kDebug()<<indent<<"  Dependent parents="<<pit.count();
+    //qDebug()<<indent<<"  Dependent parents="<<pit.count();
     while (pit.hasNext()) {
         pit.next()->printDebug(indent);
     }
-    kDebug()<<indent<<"  No of successors:"<<m_dependChildNodes.count();
+    qDebug()<<indent<<"  No of successors:"<<m_dependChildNodes.count();
     QListIterator<Relation*> cit(m_dependChildNodes);
-    //kDebug()<<indent<<"  Dependent children="<<cit.count();
+    //qDebug()<<indent<<"  Dependent children="<<cit.count();
     while (cit.hasNext()) {
         cit.next()->printDebug(indent);
     }
 
-    //kDebug()<<indent;
+    //qDebug()<<indent;
     indent += "  ";
     if (children) {
         QListIterator<Node*> it(m_nodes);
@@ -1708,18 +1707,18 @@ void Node::printDebug(bool children, const QByteArray& _indent) {
 #ifndef NDEBUG
 void Estimate::printDebug(const QByteArray& _indent) {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"  Estimate:";
+    qDebug()<<indent<<"  Estimate:";
     indent += "  ";
-    kDebug()<<indent<<"  Expected:"<<m_expectedEstimate<<Duration::unitToString(m_unit);
-    kDebug()<<indent<<"  Optimistic:"<<m_optimisticEstimate<<Duration::unitToString(m_unit);
-    kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate<<Duration::unitToString(m_unit);
+    qDebug()<<indent<<"  Expected:"<<m_expectedEstimate<<Duration::unitToString(m_unit);
+    qDebug()<<indent<<"  Optimistic:"<<m_optimisticEstimate<<Duration::unitToString(m_unit);
+    qDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate<<Duration::unitToString(m_unit);
     
-    kDebug()<<indent<<"  Risk:"<<risktypeToString();
-    kDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString();
-    kDebug()<<indent<<"  Pert optimistic:    "<<pertOptimistic().toString();
-    kDebug()<<indent<<"  Pert pessimistic:   "<<pertPessimistic().toString();
-    kDebug()<<indent<<"  Pert variance:      "<<variance();
-    kDebug()<<indent<<"  Pert std deviation: "<<deviation();
+    qDebug()<<indent<<"  Risk:"<<risktypeToString();
+    qDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString();
+    qDebug()<<indent<<"  Pert optimistic:    "<<pertOptimistic().toString();
+    qDebug()<<indent<<"  Pert pessimistic:   "<<pertPessimistic().toString();
+    qDebug()<<indent<<"  Pert variance:      "<<variance();
+    qDebug()<<indent<<"  Pert std deviation: "<<deviation();
 }
 #endif
 

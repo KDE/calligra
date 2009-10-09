@@ -48,8 +48,6 @@
 
 #include <QDomDocument>
 
-#define CURRENT_SYNTAX_VERSION XML_FILE_SYNTAX_VERSION
-
 using namespace KPlato;
 
 namespace KPlatoWork
@@ -402,7 +400,8 @@ QDomDocument WorkPackage::saveXML()
     QDomElement doc = document.createElement( "kplatowork" );
     doc.setAttribute( "editor", "KPlatoWork" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
-    doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
+    doc.setAttribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Work package info
