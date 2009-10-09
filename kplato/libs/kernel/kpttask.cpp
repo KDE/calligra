@@ -1648,7 +1648,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     }
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
-        cs->logError("Failed to schedule within project target time" );
+        cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
     foreach ( Appointment *a, cs->appointments() ) {
         cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
@@ -1734,7 +1734,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         cs->endTime = cs->lateFinish;
     }
     KLocale *locale = KGlobal::locale();
-    cs->logInfo("Schedule from end time: " + cs->endTime.toString() );
+    cs->logInfo( i18n( "Schedule from end time: %1", cs->endTime.toString() ) );
     if (type() == Node::Type_Task) {
         cs->duration = m_estimate->value(use, pert);
         switch (m_constraint) {
@@ -2045,7 +2045,7 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     if (m_estimate->type() == Estimate::Type_Effort) {
         if (m_requests.isEmpty()) {
             m_currentSchedule->resourceError = true;
-            m_currentSchedule->logError("No resource has been allocated");
+            m_currentSchedule->logError( i18n( "No resource has been allocated") );
             return effort;
         }
         dur = m_requests.duration(time, effort, m_currentSchedule, backward);
