@@ -41,7 +41,7 @@ WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p )
 
     setupUi(this);
 
-    kcfg_RetreiveUrl->setMode( KFile::Directory );
+    kcfg_RetrieveUrl->setMode( KFile::Directory );
     kcfg_SaveUrl->setMode( KFile::Directory );
 }
 
