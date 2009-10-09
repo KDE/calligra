@@ -23,7 +23,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kexidb/connection_p.h>
 
 #ifdef Q_WS_WIN
-# undef _WIN32_WINNT // avoid redef.
+# ifdef _MSC_VER
+#  undef _WIN32_WINNT // avoid redef.
+# elif defined __MINGW32__
+#  define HAVE_RINT // avoid redef.
+# endif
 # include <my_global.h>
 #endif
 #include <mysql_version.h>
