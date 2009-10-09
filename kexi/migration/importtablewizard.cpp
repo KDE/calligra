@@ -511,13 +511,13 @@ bool ImportTableWizard::doImport()
     //Import the data
     QList<QVariant> row;
     m_migrateDriver->moveFirst();
-    while (m_migrateDriver->moveNext()) {
+    do  {
         for (unsigned int i = 0; i < m_alterSchemaWidget->newSchema()->fieldCount(); ++i) {
             row.append(m_migrateDriver->value(i));
         }
         m_currentDatabase->insertRecord(*(m_alterSchemaWidget->newSchema()), row);
         row.clear();
-    }
+    } while (m_migrateDriver->moveNext());
 
     //Done so save part and update gui
     partItemForSavedTable->setIdentifier(m_alterSchemaWidget->newSchema()->id());
