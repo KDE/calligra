@@ -79,6 +79,7 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
     , m_maxColumns(0)
     , m_currentListDepth(-1)
     , m_currentListID(0)
+    , m_previousListID(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -773,18 +774,28 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         // Open <text:list> in the body
         writer->startElement( "text:list" );
 
-        // We create a style & add it to m_mainStyles, then get a
-        // pointer to it.
-        KoGenStyle listStyle(KoGenStyle::StyleListAuto);
+        //check for a continued list
+        if( m_currentListID == m_previousListID )
+        {
+            writer->addAttribute( "text:continue-numbering", "true" );
+            writer->addAttribute( "text:style-name", m_previousListStyleName );
+            m_listStyleName = m_previousListStyleName;
+        }
+        else
+        {
+            //need to create a style for this list
+            KoGenStyle listStyle(KoGenStyle::StyleListAuto);
 
-        // If we're writing to styles.xml, the list style needs to go
-        // there as well.
-        if (m_writingHeader)
-            listStyle.setAutoStyleInStylesDotXml(true);
+            // If we're writing to styles.xml, the list style needs to go
+            // there as well.
+            if (m_writingHeader)
+                listStyle.setAutoStyleInStylesDotXml(true);
 
-        // Write styleName to the text:list tag.
-        m_listStyleName = m_mainStyles->lookup(listStyle);
-        writer->addAttribute( "text:style-name", m_listStyleName );
+            // Write styleName to the text:list tag.
+            m_listStyleName = m_mainStyles->lookup(listStyle);
+            writer->addAttribute( "text:style-name", m_listStyleName );
+        }
+
         //set flag to true because it's a new list, so we need to write that tag
         newListLevelStyle = true;
         m_currentListDepth = pap.ilvl;
@@ -1010,8 +1021,11 @@ void KWordTextHandler::closeList()
         writer->endElement(); //text:list
     }
 
+    //track this list ID, in case we open it again and need to continue the numbering
+    m_previousListID = m_currentListID;
     m_currentListID = 0;
     m_currentListDepth = -1;
+    m_previousListStyleName = m_listStyleName;
     m_listStyleName = "";
 }
 
@@ -1024,12 +1038,15 @@ void KWordTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push( State( m_currentTable, m_paragraph, m_listStyleName, 
-                             m_currentListDepth, m_currentListID ) );
+                             m_currentListDepth, m_currentListID, m_previousListID,
+                             m_previousListStyleName ) );
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
     m_currentListDepth = -1;
     m_currentListID = 0;
+    m_previousListID = 0;
+    m_previousListStyleName = "";
 }
 
 void KWordTextHandler::restoreState()
@@ -1058,6 +1075,8 @@ void KWordTextHandler::restoreState()
     m_listStyleName = s.listStyleName;
     m_currentListDepth = s.currentListDepth;
     m_currentListID = s.currentListID;
+    m_previousListID = s.previousListID;
+    m_previousListStyleName = s.previousListStyleName;
 }
 
 #include "texthandler.moc"

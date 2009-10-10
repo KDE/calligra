@@ -146,15 +146,18 @@ private:
     struct State
     {
         State( KWord::Table* curTab, Paragraph* para, QString lStyleName,
-               int curListDepth, int curListID ) :
+               int curListDepth, int curListID, int preListID, QString preLStyleName ) :
                currentTable( curTab ), paragraph( para ), listStyleName( lStyleName ),
-               currentListDepth( curListDepth ), currentListID( curListID ) {}
+               currentListDepth( curListDepth ), currentListID( curListID ),
+               previousListID( preListID ), previousListStyleName( preLStyleName ) {}
                                        
         KWord::Table* currentTable;
         Paragraph* paragraph;
         QString listStyleName;
         int currentListDepth; //tells us which list level we're on (-1 if not in a list)
         int currentListID; //tracks the id of the current list - 0 if no list
+        int previousListID;
+        QString previousListStyleName;
     };
           
     std::stack<State> m_oldStates;
@@ -186,6 +189,8 @@ private:
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
     int m_currentListID; //tracks the id of the current list - 0 if no list
+    int m_previousListID; //track previous list, in case we need to continue the numbering
+    QString m_previousListStyleName;
 };
 
 #endif // TEXTHANDLER_H
