@@ -2270,5 +2270,15 @@ KoShape * SvgParser::createShape( const QString &shapeID )
     // reset tranformation that might come from the default shape
     shape->setTransformation( QMatrix() );
 
+    // reset border
+    KoShapeBorderModel * oldBorder = shape->border();
+    shape->setBorder(0);
+    delete oldBorder;
+
+    // reset fill
+    KoShapeBackground * oldFill = shape->background();
+    shape->setBackground(0);
+    delete oldFill;
+    
     return shape;
 }
