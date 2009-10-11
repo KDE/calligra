@@ -109,7 +109,9 @@ const char * parseNumber( const char *ptr, double &number )
 
     // read the sign
     if(*ptr == '+')
+    {
         ptr++;
+    }    
     else if(*ptr == '-')
     {
         ptr++;
@@ -132,7 +134,9 @@ const char * parseNumber( const char *ptr, double &number )
 
         // read the sign of the exponent
         if(*ptr == '+')
+        {
             ptr++;
+        }
         else if(*ptr == '-')
         {
             ptr++;
@@ -430,8 +434,9 @@ double SvgParser::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
 {
     if( unit.isEmpty() )
         return 0.0;
+    QByteArray unitLatin1 = unit.toLatin1();
     // TODO : percentage?
-    const char *start = unit.toLatin1();
+    const char *start = unitLatin1.data();
     if(!start) {
         return 0.0;
     }
@@ -1583,6 +1588,8 @@ QList<KoShape*> SvgParser::parseUse( const KoXmlElement &e )
                 if( shape )
                     shapes.append( shape );
             }
+        } else {
+            // TODO: any named object can be referenced too
         }
         removeGraphicContext();
     }
