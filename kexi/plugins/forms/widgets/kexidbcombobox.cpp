@@ -222,8 +222,9 @@ void KexiDBComboBox::createEditor()
 void KexiDBComboBox::setLabelPosition(LabelPosition position)
 {
     if (m_subwidget) {
-        if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(m_subwidget, "frameShape"))
+        if (-1 != m_subwidget->metaObject()->indexOfProperty("frameShape")) {
             m_subwidget->setProperty("frameShape", QVariant((int)QFrame::NoFrame));
+        }
         m_subwidget->setGeometry(editorGeometry());
     }
 //  KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);

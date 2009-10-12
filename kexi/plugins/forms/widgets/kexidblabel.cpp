@@ -43,6 +43,7 @@
 #define SHADOW_DIAGONAL_FACTOR 1.0
 #define SHADOW_THICKNESS 1
 
+#if 0
 //! @internal
 class KexiDBInternalLabel : public QLabel
 {
@@ -378,6 +379,7 @@ QRect KexiDBInternalLabel::getBounding(const QImage &image, const QRect& startRe
                bottomRight.x() - topLeft.x(),
                bottomRight.y() - topLeft.y());
 }
+#endif
 
 //=========================================================
 
@@ -395,7 +397,7 @@ public:
     ~Private() {}
     QPixmap shadowPixmap;
     QPoint shadowPosition;
-    KexiDBInternalLabel* internalLabel;
+//    KexiDBInternalLabel* internalLabel;
     QTimer* timer;
     QColor frameColor;
     bool pixmapDirty : 1;
@@ -432,13 +434,14 @@ KexiDBLabel::~KexiDBLabel()
 void KexiDBLabel::init()
 {
     m_hasFocusableWidget = false;
-    d->internalLabel = new KexiDBInternalLabel(this);
-    d->internalLabel->hide();
+//2.0    d->internalLabel = new KexiDBInternalLabel(this);
+//2.0    d->internalLabel->hide();
     d->frameColor = palette().color(foregroundRole());
 
-    setAlignment(d->internalLabel->alignment());
+//2.0    setAlignment(d->internalLabel->alignment());
 }
 
+#if 0 //2.0
 void KexiDBLabel::updatePixmapLater()
 {
     if (d->resizeEvent) {
@@ -477,6 +480,7 @@ void KexiDBLabel::updatePixmap()
     d->pixmapDirty = false;
     repaint();
 }
+#endif
 
 void KexiDBLabel::paintEvent(QPaintEvent* e)
 {
@@ -486,9 +490,10 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
         If required, update the pixmap-cache.
         */
         if (d->pixmapDirty) {
-            updatePixmapLater();
+//2.0            updatePixmapLater();
         }
 
+#if 0 //2.0
         /*!
         If the part that should be redrawn intersects with our shadow,
         redraw the shadow where it intersects with e->rect().
@@ -504,6 +509,7 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
                                  qMin(e->rect().height() + d->shadowPosition.y(), d->shadowPixmap.height()));
             p.drawPixmap(d->internalLabel->m_shadowRect.topLeft(), d->shadowPixmap, clipRect);
         }
+#endif
     }
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
     p.end();
@@ -576,8 +582,8 @@ bool KexiDBLabel::setProperty(const char * name, const QVariant & value)
                 || 0 == qstrcmp("frameShadow", name) || 0 == qstrcmp("frameShape", name)
                 || 0 == qstrcmp("frameStyle", name) || 0 == qstrcmp("midLineWidth", name)
                 || 0 == qstrcmp("lineWidth", name)) {
-            d->internalLabel->setProperty(name, value);
-            updatePixmap();
+//2.0            d->internalLabel->setProperty(name, value);
+//2.0            updatePixmap();
         }
     }
     return ret;
@@ -593,8 +599,8 @@ void KexiDBLabel::setShadowEnabled(bool state)
 {
     d->shadowEnabled = state;
     d->pixmapDirty = true;
-    if (state)
-        d->internalLabel->updateFrame();
+//2.0    if (state)
+//2.0        d->internalLabel->updateFrame();
     repaint();
 }
 
@@ -609,7 +615,7 @@ void KexiDBLabel::resizeEvent(QResizeEvent* e)
 void KexiDBLabel::fontChange(const QFont& font)
 {
     d->pixmapDirty = true;
-    d->internalLabel->setFont(font);
+//2.0    d->internalLabel->setFont(font);
     QLabel::fontChange(font);
 }
 
@@ -622,7 +628,7 @@ void KexiDBLabel::styleChange(QStyle& style)
 void KexiDBLabel::enabledChange(bool enabled)
 {
     d->pixmapDirty = true;
-    d->internalLabel->setEnabled(enabled);
+//2.0    d->internalLabel->setEnabled(enabled);
     QLabel::enabledChange(enabled);
 }
 
@@ -630,7 +636,7 @@ void KexiDBLabel::paletteChange(const QPalette& oldPal)
 {
     Q_UNUSED(oldPal);
     d->pixmapDirty = true;
-    d->internalLabel->setPalette(palette());
+//2.0    d->internalLabel->setPalette(palette());
 }
 
 /*const QColor & KexiDBLabel::paletteForegroundColor () const

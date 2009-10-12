@@ -46,9 +46,10 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
             QList<QMetaProperty> properties(
                 KexiUtils::propertiesForMetaObjectWithInherited(metaObject));
             foreach(QMetaProperty property, properties) {
-                if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(
-                            dynamic_cast<QObject*>(this), property.name())
-                        && !addedSubproperies.contains(property.name())) {
+                if (dynamic_cast<QObject*>(this)
+                    && -1 != dynamic_cast<QObject*>(this)->metaObject()->indexOfProperty(property.name())
+                    && !addedSubproperies.contains(property.name()))
+                {
                     m_subproperies.insert(property.name());
                     addedSubproperies.insert(property.name());
                     kDebug() << "added subwidget's property that is not present in the parent: "

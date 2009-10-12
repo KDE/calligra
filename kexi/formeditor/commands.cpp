@@ -217,7 +217,7 @@ void PropertyCommand::execute()
                 QWidget *widget = item->widget();
                 WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
                 QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-                if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subWidget, d->propertyName))
+                if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName))
                   item->widget()->setProperty(d->propertyName, d->value);
             }
         }
@@ -242,7 +242,7 @@ void PropertyCommand::undo()
 
         WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
         QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-        if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subWidget, d->propertyName))
+        if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName))
             subWidget->setProperty(d->propertyName, it.value());
     }
 

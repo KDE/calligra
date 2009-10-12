@@ -121,45 +121,29 @@ QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* c
     return 0;
 }
 
+#if 0
 int KexiUtils::indexOfPropertyWithSuperclasses(const QObject *object, const char* name)
 {
-    const QMetaObject *mobj = object->metaObject();
-    while (true) {
-        const int res = mobj->indexOfProperty(name);
-        if (res != -1 || !mobj->superClass())
-            return res;
-        mobj = mobj->superClass();
-    }
-    return -1;
+    const int index = object->metaObject()->indexOfProperty(name);
 }
+#endif
 
 QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         const char* name)
 {
-    const QMetaObject *mobj = object->metaObject();
-    while (true) {
-        const int res = mobj->indexOfProperty(name);
-        if (res != -1)
-            return mobj->property(res);
-        if (!mobj->superClass())
-            return QMetaProperty();
-        mobj = mobj->superClass();
-    }
-    return QMetaProperty();
+    const int index = object->metaObject()->indexOfProperty(name);
+    if (index == -1)
+        return QMetaProperty();
+    return object->metaObject()->property(index);
 }
 
+#if 0
 QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         int index)
 {
-    const QMetaObject *mobj = object->metaObject();
-    while (true) {
-        QMetaProperty mp = mobj->property(index - mobj->propertyOffset());
-        if (mp.isValid() || !mobj->superClass())
-            return mp;
-        mobj = mobj->superClass();
-    }
-    return QMetaProperty();
+    return object->metaObject()->property(index);
 }
+#endif
 
 bool KexiUtils::objectIsA(QObject* object, const QList<QByteArray>& classNames)
 {

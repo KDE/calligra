@@ -1074,7 +1074,7 @@ void Form::emitWidgetSelected(bool multiple)
     QWidgetList *wlist = selectedWidgets();
     bool fontEnabled = false;
     foreach (QWidget* w, *wlist) {
-        if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(w, "font")) {
+        if (-1 != w->metaObject()->indexOfProperty("font")) {
             fontEnabled = true;
             break;
         }
@@ -2957,17 +2957,18 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
     if (!objectTree())
         return;
 
-    QStringList list;
-    QString value;
     const int alignment = subwidget->property("alignment").toInt();
     const QList<QByteArray> keys(meta.enumerator().valueToKeys(alignment).split('|'));
+    kDebug() << "keys:" << keys;
 
     const QStringList possibleValues(KexiUtils::enumKeysForProperty(meta));
+    kDebug() << "possibleValues:" << possibleValues;
     ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
     const bool isTopLevel = isTopLevelWidget(widget);
 
     if (possibleValues.contains("AlignHCenter"))  {
         // Create the horizontal alignment property
+        QString value;
         if (keys.contains("AlignHCenter") || keys.contains("AlignCenter"))
             value = "AlignHCenter";
         else if (keys.contains("AlignRight"))
@@ -2979,6 +2980,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         else
             value = "AlignAuto";
 
+        QStringList list;
         list << "AlignAuto" << "AlignLeft" << "AlignRight"
             << "AlignHCenter" << "AlignJustify";
         KoProperty::Property *p = new KoProperty::Property(
@@ -2990,11 +2992,11 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
             p->setVisible(false);
         }
         updatePropertyValue(tree, "hAlign");
-        list.clear();
     }
 
     if (possibleValues.contains("AlignTop")) {
         // Create the ver alignment property
+        QString value;
         if (keys.contains("AlignTop"))
             value = "AlignTop";
         else if (keys.contains("AlignBottom"))
@@ -3002,6 +3004,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         else
             value = "AlignVCenter";
 
+        QStringList list;
         list << "AlignTop" << "AlignVCenter" << "AlignBottom";
         KoProperty::Property *p = new KoProperty::Property(
             "vAlign", d->createValueList(0, list), value,
@@ -3013,12 +3016,12 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         }
         updatePropertyValue(tree, "vAlign");
     }
-
-
+    
     if (possibleValues.contains("WordBreak")
 //  && isPropertyVisible("wordbreak", false, subwidget->className())
 //   && !subWidget->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
-       ) {
+       )
+    {
         // Create the wordbreak property
         KoProperty::Property *p = new KoProperty::Property("wordbreak",
                 QVariant((bool)(alignment & Qt::TextWordWrap)), i18n("Word Break"), i18n("Word Break"));
@@ -3045,9 +3048,8 @@ void Form::saveAlignProperty(const QString &property)
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(d->selected.first());
     QWidget *subwidget = (subpropIface && subpropIface->subwidget())
                          ? subpropIface->subwidget() : (QWidget*)d->selected.first();
-    int count = KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "alignment");
-    const QMetaProperty meta(
-        KexiUtils::findPropertyWithSuperclasses(subwidget, count));
+    int count = subwidget->metaObject()->indexOfProperty("alignment");
+    const QMetaProperty meta( subwidget->metaObject()->property(count) );
     const int valueForKeys = meta.enumerator().keysToValue(list.join("|").toLatin1());
     subwidget->setProperty("alignment", valueForKeys);
 
@@ -3240,7 +3242,7 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         else {
             WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
             QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-            if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, it.key())
+            if (subwidget && -1 != subwidget->metaObject()->indexOfProperty(it.key())
                     && subwidget->property(it.key()) != it.value()) {
                 ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
                 if (tree) {
@@ -3366,7 +3368,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         p.setBrush(textedit->foregroundRole(), args.widget->palette().brush(args.widget->foregroundRole()));
         textedit->setPalette(p);
         //textedit->selectAll(false);
-        textedit->moveCursor(QTextEdit::MoveEnd, false);
+        textedit->moveCursor(QTextCursor::End);
         //textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
         textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //ok?
@@ -3411,8 +3413,8 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(args.widget);
     QWidget *subwidget = (subpropIface && subpropIface->subwidget())
                          ? subpropIface->subwidget() : args.widget;
-    if (   -1 != KexiUtils::indexOfPropertyWithSuperclasses(d->inlineEditor, "margin")
-        && -1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "margin"))
+    if (   -1 != d->inlineEditor->metaObject()->indexOfProperty("margin")
+        && -1 != subwidget->metaObject()->indexOfProperty("margin"))
     {
         d->inlineEditor->setProperty("margin", subwidget->property("margin"));
     }
@@ -3562,7 +3564,7 @@ QString Form::inlineEditorText() const
     if (!ed)
         return QString();
     return dynamic_cast<KTextEdit*>(ed)
-           ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+           ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<KLineEdit*>(ed)->text();
 }
 
 //moved from WidgetFactory

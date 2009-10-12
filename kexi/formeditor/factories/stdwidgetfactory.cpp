@@ -591,7 +591,7 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.useFrame = true;
         return true;
     }
-    else if (args.classname == "QLabel") {
+    else if (args.widget->inherits("QLabel")) {
         QLabel *label = static_cast<QLabel*>(args.widget);
         if (label->textFormat() == Qt::RichText) {
             //m_widget = w;

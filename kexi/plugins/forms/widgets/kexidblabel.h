@@ -117,7 +117,7 @@ public slots:
 protected slots:
     //! empty
     virtual void setReadOnly(bool readOnly);
-    void updatePixmap();
+//2.0    void updatePixmap();
 
 protected:
     void init();

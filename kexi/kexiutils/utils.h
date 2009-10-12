@@ -90,20 +90,24 @@ inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 
     return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 }
 
+#if 0 //2.0: use QMetaObject::indexOfProperty()
 //! Finds property name and returns its index; otherwise returns -1.
 //! Like QMetaObject::indexOfProperty() but also looks at superclasses.
 KEXIUTILS_EXPORT int indexOfPropertyWithSuperclasses(
     const QObject *object, const char* name);
+#endif
 
 //! Finds property for name \a name and object \a object returns it index;
 //! otherwise returns a null QMetaProperty.
 KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
         const char* name);
 
+#if 0 //2.0: use QMetaObject::property()
 //! Finds property for index \a index and object \a object returns it index;
 //! otherwise returns a null QMetaProperty.
 KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
         int index);
+#endif
 
 //! \return true is \a object object is of class name \a className
 inline bool objectIsA(QObject* object, const char* className)

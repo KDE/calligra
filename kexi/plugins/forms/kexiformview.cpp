@@ -466,9 +466,9 @@ void KexiFormView::updateValuesForSubproperties()
 static void setUnsavedBLOBIdsForDataViewMode(
     QWidget* widget, const QHash<QByteArray, KexiBLOBBuffer::Id_t>& unsavedLocalBLOBsByName)
 {
-    if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(widget, "pixmapId")) {
+    if (widget && -1 != widget->metaObject()->indexOfProperty("pixmapId")) {
         const KexiBLOBBuffer::Id_t blobID
-        = unsavedLocalBLOBsByName.value(widget->objectName().toLatin1());
+            = unsavedLocalBLOBsByName.value(widget->objectName().toLatin1());
         if (blobID > 0)
             widget->setProperty(
                 "pixmapId",
