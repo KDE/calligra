@@ -5565,7 +5565,7 @@ typedef std::vector<UString> UStringStack;
 void mergeTokens( UStringStack* stack, int count, UString mergeString )
 {
   if( !stack ) return;
-  if( !stack->size() ) return;
+  if( stack->size() < count ) return;
 
   UString s1, s2;
 
