@@ -54,6 +54,12 @@ CSV Import Dialog
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 13 ~~~~~~~~~~~~~~~~
 
+2009-10-12
+Utils
+* fix functions related to property introspections
+Forms
+* fix properties of type 'flags' handling, e.g. alignment is saved and restored properly
+
 2009-09-22
 KoProperty
 * add option for out-of-kexi builds with altered lib name and version
