@@ -569,6 +569,16 @@ class GroupObject::Private
 {
 public:
   std::vector<Object*> objects;
+
+  // in group nesting, coordinate transformations may occur
+  // these values define the transformation
+  double xoffset;
+  double yoffset;
+  double xscale;
+  double yscale;
+
+  Private() :xoffset(0), yoffset(0), xscale(25.4/576), yscale(25.4/576) {
+  }
 };
 
 GroupObject::GroupObject()
@@ -611,6 +621,54 @@ void GroupObject::takeObject( Object* object )
   d->objects.clear();
   for( unsigned j=0; j<result.size(); j++ )
     d->objects.push_back( result[j] );
+}
+
+double
+GroupObject::getXOffset() const
+{
+  return d->xoffset;
+}
+
+void
+GroupObject::setXOffset(double xoffset)
+{
+  d->xoffset = xoffset;
+}
+
+double
+GroupObject::getYOffset() const
+{
+  return d->yoffset;
+}
+
+void
+GroupObject::setYOffset(double yoffset)
+{
+  d->yoffset = yoffset;
+}
+
+double
+GroupObject::getXScale() const
+{
+  return d->xscale;
+}
+
+void
+GroupObject::setXScale(double xscale) const
+{
+  d->xscale = xscale;
+}
+
+double
+GroupObject::getYScale() const
+{
+  return d->yscale;
+}
+
+void
+GroupObject::setYScale(double yscale) const
+{
+  d->yscale = yscale;
 }
 
 class DrawObject::Private

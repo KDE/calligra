@@ -270,6 +270,46 @@ public:
   void addObject( Object* object );
   void takeObject( Object* object );
 
+  /**
+   * @brief Get the x offset in the coordinate system of this group
+   * @return The x offset in the coordinate system of this group
+   */
+  double getXOffset() const;
+  /**
+   * @brief Set the x offset in the coordinate system of this group
+   * @param xoffset The x offset in the coordinate system of this group
+   */
+  void setXOffset(double xoffset);
+  /**
+   * @brief Get the y offset in the coordinate system of this group
+   * @return The y offset in the coordinate system of this group
+   */
+  double getYOffset() const;
+  /**
+   * @brief Set the y offset in the coordinate system of this group
+   * @param yoffset The y offset in the coordinate system of this group
+   */
+  void setYOffset(double yoffset);
+  /**
+   * @brief Get the x scaling factor in the coordinate system of this group
+   * @return The x scaling factor in the coordinate system of this group
+   */
+  double getXScale() const;
+  /**
+   * @brief Set the x scaling factor in the coordinate system of this group
+   * @param xscale The x scaling factor in the coordinate system of this group
+   */
+  void setXScale(double xscale) const;
+  /**
+   * @brief Get the y scaling factor in the coordinate system of this group
+   * @return The y scaling factor in the coordinate system of this group
+   */
+  double getYScale() const;
+  /**
+   * @brief Set the y scaling factor in the coordinate system of this group
+   * @param yscale The y scaling factor in the coordinate system of this group
+   */
+  void setYScale(double yscale) const;
 private:
   // no copy or assign
   GroupObject( const GroupObject& );
