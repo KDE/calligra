@@ -567,3 +567,11 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     delete buffer;
     delete imgStr;
 }
+
+void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+                             int width, int height, GfxImageColorMap *colorMap,
+                             GBool interpolate, int *maskColors, GBool inlineImg)
+{
+    drawImage(state, ref, str, width, height, colorMap, maskColors, inlineImg);
+}
+                             

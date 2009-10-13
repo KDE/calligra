@@ -60,7 +60,10 @@ public:
     virtual void drawImage(GfxState *state, Object *ref, Stream *str,
                 int width, int height, GfxImageColorMap *colorMap,
                 int *maskColors, GBool inlineImg);
-
+    virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+                int width, int height, GfxImageColorMap *colorMap,
+                GBool interpolate, int *maskColors, GBool inlineImg);
+                                             
     // styles
     virtual void updateAll( GfxState *state );
     virtual void updateFillColor( GfxState *state );
