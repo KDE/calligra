@@ -200,13 +200,11 @@ public:
 };
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
-    : KoView( p, parent ), KXMLGUIBuilder( shell() ), d( new Private( p ) )
+    : KoView( p, parent ), d( new Private( p ) )
 {
     debugView("");
 
     setComponentData( KarbonFactory::componentData(), true );
-
-    setClientBuilder( this );
 
     if( !p->isReadWrite() )
         setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );

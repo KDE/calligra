@@ -64,7 +64,7 @@ class KarbonZoomController;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
-class KARBONUI_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
+class KARBONUI_EXPORT KarbonView : public KoView
 {
     Q_OBJECT
 
