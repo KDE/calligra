@@ -58,18 +58,16 @@
             <Action name="view_zoom_selection"/>
             <Action name="view_zoom_drawing"/>
             <Action name="view_mode"/>
-        <Separator/>
-        <Action name="view_tool_options"/>
-        <Action name="view_context_help"/>
-        <Separator/>
-        <Action name="view_show_margins"/>
-        <Action name="view_show_ruler"/>
-        <Action name="view_grid"/>
-        <Action name="view_show_guides"/>
-        <Separator/>
-        <Action name="view_snap_to_grid"/>
-        <Action name="view_snap_to_grid"/>
-
+            <Separator/>
+            <Action name="view_tool_options"/>
+            <Action name="view_context_help"/>
+            <Separator/>
+            <Action name="view_show_margins"/>
+            <Action name="view_show_ruler"/>
+            <Action name="view_grid"/>
+            <Action name="view_show_guides"/>
+            <Separator/>
+            <Action name="view_snap_to_grid"/>
         </Menu>
         <Menu name="object">
             <text>&amp;Object</text>
