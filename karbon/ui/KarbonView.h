@@ -85,11 +85,8 @@ public:
     virtual void setCursor( const QCursor & );
     /// Reimplemented from QWidget
     virtual void dropEvent( QDropEvent *e );
-
-    virtual KoZoomController *zoomController() const {
-        // it seems Karbon has cloned the zoomcontroller sources so we can't return anything here :(
-        return 0;
-    }
+    /// Reimplemented from KoView
+    virtual KoZoomController *zoomController() const;
 
 
 public slots:
