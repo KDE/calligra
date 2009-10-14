@@ -425,7 +425,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["readOnly"] = i18n("Read Only");
     propCaption["styleSheet"] = i18n("Style Sheet");
     propCaption["toolTip"] = i18nc("Widget's Tooltip", "Tooltip");
-    propCaption["whatsThis"] = i18nc("Widget's Whats This", "Whats This");
+    propCaption["whatsThis"] = i18nc("Widget's Whats This", "What's This");
     propCaption["layoutDirection"] = i18n("Layout direction");
     propCaption["iconSize"] = i18n("Icon Size");
     
@@ -436,8 +436,8 @@ void FormPrivate::initPropertiesDescription()
     propCaption["frameShape"] = i18n("Frame Shape");
     propCaption["frameShadow"] = i18n("Frame Shadow");
     //any QScrollbar
-    propCaption["vScrollBarMode"] = i18n("Vertical ScrollBar");
-    propCaption["hScrollBarMode"] = i18n("Horizontal ScrollBar");
+    propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
+    propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
 
     propValCaption["NoBackground"] = i18n("No Background");
     propValCaption["PaletteForeground"] = i18n("Palette Foreground");

@@ -333,7 +333,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wSlider->setName(i18n("Slider"));
     wSlider->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "slider"));
-    wSlider->setDescription(i18n("An horizontal slider"));
+    wSlider->setDescription(i18n("A horizontal slider"));
     addClass(wSlider);
 
     KFormDesigner::WidgetInfo *wProgressBar = new KFormDesigner::WidgetInfo(this);
