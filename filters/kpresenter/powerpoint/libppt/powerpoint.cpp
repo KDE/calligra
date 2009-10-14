@@ -6004,8 +6004,8 @@ void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
 
   d->currentObject->setLeft( xoffset + xscale * atom->left() );
   d->currentObject->setTop( yoffset + yscale * atom->top() );
-  d->currentObject->setWidth( xscale * (atom->right()-atom->left()-1) );
-  d->currentObject->setHeight( yscale * (atom->bottom()-atom->top()-1) );
+  d->currentObject->setWidth( xscale * (atom->right()-atom->left()) );
+  d->currentObject->setHeight( yscale * (atom->bottom()-atom->top()) );
 }
 
 void PPTReader::handleEscherChildAnchorAtom( msofbtChildAnchorAtom* atom )
@@ -6023,8 +6023,8 @@ void PPTReader::handleEscherChildAnchorAtom( msofbtChildAnchorAtom* atom )
 
   d->currentObject->setLeft( xoffset + xscale * atom->left() );
   d->currentObject->setTop( yoffset + yscale * atom->top() );
-  d->currentObject->setWidth( xscale * (atom->right()-atom->left()-1) );
-  d->currentObject->setHeight( yscale * (atom->bottom()-atom->top()-1) );
+  d->currentObject->setWidth( xscale * (atom->right()-atom->left()) );
+  d->currentObject->setHeight( yscale * (atom->bottom()-atom->top()) );
 }
 
 void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned /*size*/ )
