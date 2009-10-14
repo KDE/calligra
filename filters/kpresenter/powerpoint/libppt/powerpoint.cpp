@@ -4038,12 +4038,70 @@ void msofbtDgAtom ::dump( std::ostream& out ) const
 
 const unsigned int msofbtSpgrAtom::id = 61449; /* F009 */
 
-msofbtSpgrAtom ::msofbtSpgrAtom ()
+class msofbtSpgrAtom::Private {
+public:
+  double x;
+  double y;
+  double width;
+  double height;
+};
+
+msofbtSpgrAtom::msofbtSpgrAtom() :d(new Private())
 {
 }
 
-msofbtSpgrAtom ::~msofbtSpgrAtom ()
+msofbtSpgrAtom::~msofbtSpgrAtom()
 {
+    delete d;
+}
+
+double msofbtSpgrAtom::x() const
+{
+  return d->x;
+}
+
+void msofbtSpgrAtom::setX(double x)
+{
+  d->x = x;
+}
+
+double msofbtSpgrAtom::y() const
+{
+  return d->y;
+}
+
+void msofbtSpgrAtom::setY(double y)
+{
+  d->y = y;
+}
+
+double msofbtSpgrAtom::width() const
+{
+  return d->width;
+}
+
+void msofbtSpgrAtom::setWidth(double w)
+{
+  d->width = w;
+}
+
+double msofbtSpgrAtom::height() const
+{
+  return d->height;
+}
+
+void msofbtSpgrAtom::setHeight(double h)
+{
+  d->height = h;
+}
+
+void msofbtSpgrAtom ::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 16 ) return;
+  d->x = readS32( data + 0 );
+  d->y = readS32( data + 4 );
+  d->width = readS32( data + 8 ) - d->x;
+  d->height = readS32( data + 12 ) - d->y;
 }
 
 void msofbtSpgrAtom ::dump( std::ostream& out ) const
@@ -5798,8 +5856,9 @@ void PPTReader::handleSPContainer( msofbtSpContainer* container, unsigned size )
   d->isShapeGroup = false;
 
   unsigned long nextpos = d->docStream->tell() + size - 6;
-  while( d->docStream->tell() < nextpos )
+  while( d->docStream->tell() < nextpos ) {
     loadRecord( container );
+  }
 
   if( d->currentObject )
   if( !d->isShapeGroup )
@@ -5816,7 +5875,9 @@ void PPTReader::handleEscherGroupAtom( msofbtSpgrAtom* atom )
   if( !d->currentSlide ) return;
   if( !d->currentGroup ) return;
 
-  // set rect bound of current group
+  // set viewport dimensions for this group
+  d->currentGroup->setViewportDimensions(atom->x(), atom->y(),
+    atom->width(), atom->height());
 
   // this is shape for the group, no need to
   d->isShapeGroup = true;
@@ -5931,6 +5992,11 @@ void PPTReader::handleEscherClientAnchorAtom( msofbtClientAnchorAtom* atom )
   if( !d->currentGroup ) return;
   if( !d->currentObject ) return;
 
+  // set the dimensions of this group
+  // this information is used for the viewport transformation
+  d->currentGroup->setDimensions(atom->left(), atom->top(),
+    atom->right() - atom->left(), atom->bottom() - atom->top());
+
   double xoffset = d->currentGroup->getXOffset();
   double yoffset = d->currentGroup->getYOffset();
   double xscale = d->currentGroup->getXScale();
@@ -5961,7 +6027,7 @@ void PPTReader::handleEscherChildAnchorAtom( msofbtChildAnchorAtom* atom )
   d->currentObject->setHeight( yscale * (atom->bottom()-atom->top()-1) );
 }
 
-void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned size )
+void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned /*size*/ )
 {
   if( !container ) return;
   if( !d->presentation ) return;

@@ -577,7 +577,13 @@ public:
   double xscale;
   double yscale;
 
-  Private() :xoffset(0), yoffset(0), xscale(25.4/576), yscale(25.4/576) {
+  double vx;
+  double vy;
+  double vwidth;
+  double vheight;
+
+  Private() :xoffset(0), yoffset(0), xscale(25.4/576), yscale(25.4/576),
+      vx(0), vy(0), vwidth(0), vheight(0) {
   }
 };
 
@@ -623,16 +629,32 @@ void GroupObject::takeObject( Object* object )
     d->objects.push_back( result[j] );
 }
 
+void
+GroupObject::setViewportDimensions(double x, double y,
+    double width, double height) {
+  d->vx = x;
+  d->vy = y;
+  d->vwidth = width;
+  d->vheight = height;
+}
+
+void
+GroupObject::setDimensions(double x, double y, double width, double height) {
+  if (width && height && d->vwidth && d->vheight) {
+    // adapt the offset and scaling
+    d->xoffset += d->xscale * x;
+    d->xscale *= width/d->vwidth;
+    d->xoffset -= d->xscale * d->vx;
+    d->yoffset += d->yscale * y;
+    d->yscale *= height/d->vheight;
+    d->yoffset -= d->yscale * d->vy;
+  }
+}
+
 double
 GroupObject::getXOffset() const
 {
   return d->xoffset;
-}
-
-void
-GroupObject::setXOffset(double xoffset)
-{
-  d->xoffset = xoffset;
 }
 
 double
@@ -641,34 +663,16 @@ GroupObject::getYOffset() const
   return d->yoffset;
 }
 
-void
-GroupObject::setYOffset(double yoffset)
-{
-  d->yoffset = yoffset;
-}
-
 double
 GroupObject::getXScale() const
 {
   return d->xscale;
 }
 
-void
-GroupObject::setXScale(double xscale) const
-{
-  d->xscale = xscale;
-}
-
 double
 GroupObject::getYScale() const
 {
   return d->yscale;
-}
-
-void
-GroupObject::setYScale(double yscale) const
-{
-  d->yscale = yscale;
 }
 
 class DrawObject::Private

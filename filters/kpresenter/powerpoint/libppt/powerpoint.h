@@ -1672,7 +1672,16 @@ public:
   msofbtSpgrAtom ();
   ~msofbtSpgrAtom ();
 
- // void setData( unsigned size, const unsigned char* data );
+  double x() const;
+  void setX(double x);
+  double y() const;
+  void setY(double y);
+  double width() const;
+  void setWidth(double w);
+  double height() const;
+  void setHeight(double h);
+
+  void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "msofbtSpgrAtom "; }
   void dump( std::ostream& out ) const;
 
