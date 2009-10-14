@@ -61,6 +61,9 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
 
 KarbonCalligraphyTool::~KarbonCalligraphyTool()
 {
+    if ( m_optionWidget) {
+        delete m_optionWidget.data();
+    }
 }
 
 void KarbonCalligraphyTool::paint( QPainter &painter,
