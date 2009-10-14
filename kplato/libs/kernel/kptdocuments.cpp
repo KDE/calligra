@@ -207,7 +207,7 @@ bool Documents::load( KoXmlElement &element, XMLLoaderObject &status )
                 delete doc;
             } else {
                 addDocument( doc );
-                status.addMsg( i18n( "Document loaded, url=%1",  doc->url().url() ) );
+                status.addMsg( i18n( "Document loaded, URL=%1",  doc->url().url() ) );
             }
         }
     }

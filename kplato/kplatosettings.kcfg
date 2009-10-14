@@ -29,7 +29,7 @@
       </choice>
     </entry>
     <entry name="ConstraintStartTime" type="DateTime">
-      <label>Constraint start datetime</label>
+      <label>Constraint start date and time</label>
     </entry>
     <entry name="EndTimeUsage" type="Enum">
       <label>Defines how end constraint time is used</label>
@@ -40,7 +40,7 @@
       </choice>
     </entry>
     <entry name="ConstraintEndTime" type="DateTime">
-      <label>Constraint end datetime</label>
+      <label>Constraint end date and time</label>
     </entry>
 
     <entry name="EstimateType" type="Int">

@@ -36,7 +36,7 @@ namespace KPlato
     QString ToolTip::nodeDescription() { return i18n( "Task notes" ); }
     QString ToolTip::nodeWBS() { return i18n( "Work Breakdown Structure Code" ); }
     QString ToolTip::nodeLevel() { return i18n( "Node level" ); }
-    QString ToolTip::nodeRisk() { return i18n( "Risk controles the PERT distribution used when calculating the actual estimate for this task" ); }
+    QString ToolTip::nodeRisk() { return i18n( "Risk controls the PERT distribution used when calculating the actual estimate for this task" ); }
     QString ToolTip::nodeRunningAccount() { return i18n( "Account for running costs" ); }
     QString ToolTip::nodeStartupAccount() { return i18n( "Account for cost incurred at startup of the task" ); }
     QString ToolTip::nodeStartupCost() { return i18n( "The cost incurred at startup of the task" ); }
@@ -56,7 +56,7 @@ namespace KPlato
     QString ToolTip::nodePessimisticDuration() { return i18n( "The pessimistic duration" ); }
 
     QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed without affecting the project completion time" ); }
-    QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint" ); }
+    QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fulfil a timing constraint" ); }
     QString ToolTip::nodeFreeFloat() { return i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" ); }
     QString ToolTip::nodeStartFloat() { return i18n( "The duration from Early Start to Late Start" ); }
     QString ToolTip::nodeFinishFloat() { return i18n( "The duration from Early Finish to Late Finish" ); }
