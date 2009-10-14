@@ -184,7 +184,7 @@ bool DocumentChild::setDoc( const Document *doc )
         url = doc->url();
     }
     if ( ! url.isValid() ) {
-        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        KMessageBox::error( 0, i18n( "Invalid url:<br>%1", url.pathOrUrl() ) );
         return false;
     }
     setFileInfo( url );
