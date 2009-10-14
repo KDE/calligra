@@ -739,7 +739,7 @@ static bool CharactersElementM (StackItem* stackItem, const QString & ch)
 
 bool StructureParser::EndElementM (StackItem* stackItem)
 {
-    if (stackItem->elementType!=ElementTypeRealData)
+    if (stackItem->elementType!=ElementTypeRealMetaData)
     {
         kError(30506) << "Wrong element type!! Aborting! (in endElementM)";
         return false;
