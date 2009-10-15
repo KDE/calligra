@@ -21,6 +21,8 @@
 #define KEXIDB_DRIVER_PQXX_H
 
 #include <kexidb/driver.h>
+#include <pqxx/connection>
+#include <pqxx/transaction>
 
 namespace KexiDB
 {
@@ -61,6 +63,9 @@ protected:
 
 private:
     static const char *keywords[];
+    pqxx::connection _internalConn;
+    pqxx::work *_internalWork;
+    
 };
 
 }
