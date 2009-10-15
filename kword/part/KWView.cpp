@@ -88,7 +88,7 @@ static KWFrame *frameForShape(KoShape *shape)
 {
     KoShape *parent = shape;
     while (parent->parent())
-        parent = shape->parent();
+        parent = parent->parent();
     return dynamic_cast<KWFrame*>(parent->applicationData());
 }
 
