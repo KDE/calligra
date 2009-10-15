@@ -107,9 +107,6 @@ public slots:
 
     void fileImportGraphic();
 
-    void groupSelection();
-    void ungroupSelection();
-
     void closePath();
     void combinePath();
     void separatePath();

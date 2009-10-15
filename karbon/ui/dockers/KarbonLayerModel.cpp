@@ -450,7 +450,7 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
             cmd->setText( i18n("Reparent shapes") );
 
             foreach( KoShape * shape, toplevelShapes )
-                new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, cmd );
+                new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
 
             new KoShapeGroupCommand( group, toplevelShapes, cmd );
             KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
@@ -482,7 +482,7 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
                     }
 
                     clipped.append( shape->parent()->childClipped( shape ) );
-                    new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, cmd );
+                    new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd );
                 }
 
                 // shapes are dropped on a container, so add them to the container

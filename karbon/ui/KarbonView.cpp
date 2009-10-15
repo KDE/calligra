@@ -76,7 +76,6 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
-#include <KoShapeUngroupCommand.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
@@ -157,7 +156,7 @@ class KarbonView::Private
 public:
     Private( KarbonPart * p)
         : part(p), canvas( 0 ), canvasController(0), horizRuler(0), vertRuler(0)
-        , groupObjects(0), ungroupObjects(0), closePath(0), combinePath(0)
+        , closePath(0), combinePath(0)
         , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
         , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
         , deleteSelectionAction(0), viewAction(0), showRulerAction(0)
@@ -172,8 +171,6 @@ public:
     KoRuler * vertRuler;
 
     // actions:
-    KAction * groupObjects;
-    KAction * ungroupObjects;
     KAction * closePath;
     KAction * combinePath;
     KAction * separatePath;
@@ -260,6 +257,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     layout->setMargin(0);
     layout->addWidget(d->canvasController, 1, 1);
 
+    if( shell() )
+    {
+        KoToolManager::instance()->addController( d->canvasController );
+        KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
+    }
+
     initActions();
 
     unsigned int max = part()->maxRecentFiles();
@@ -296,8 +299,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     if( shell() )
     {
-        KoToolManager::instance()->addController( d->canvasController );
-        KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
         // set the first layer active
         d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer( part()->document().layers().first() );
 
@@ -609,67 +610,6 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
     d->canvas->addCommand( cmd );
 }
 
-void KarbonView::groupSelection()
-{
-    debugView("");
-
-    KoSelection* selection = d->canvas->shapeManager()->selection();
-    if( ! selection )
-        return;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-    QList<KoShape*> groupedShapes;
-
-    // only group shapes with an unselected parent
-    foreach( KoShape* shape, selectedShapes )
-    {
-        if( selectedShapes.contains( shape->parent() ) )
-            continue;
-        groupedShapes << shape;
-    }
-    KoShapeGroup *group = new KoShapeGroup();
-    if( selection->activeLayer() )
-        selection->activeLayer()->addChild( group );
-    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
-    new KoShapeCreateCommand( d->part, group, cmd );
-    new KoShapeGroupCommand( group, groupedShapes, cmd );
-    d->canvas->addCommand( cmd );
-}
-
-void KarbonView::ungroupSelection()
-{
-    debugView("");
-
-    KoSelection* selection = d->canvas->shapeManager()->selection();
-    if( ! selection )
-        return;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-    QList<KoShape*> containerSet;
-
-    // only ungroup shape containers with an unselected parent
-    foreach( KoShape* shape, selectedShapes )
-    {
-        if( selectedShapes.contains( shape->parent() ) )
-            continue;
-        containerSet << shape;
-    }
-
-    QUndoCommand *cmd = new QUndoCommand( i18n("Ungroup shapes") );
-
-    // add a ungroup command for each found shape container to the macro command
-    foreach( KoShape* shape, containerSet )
-    {
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
-        if( container )
-        {
-            new KoShapeUngroupCommand( container, container->childShapes(), cmd );
-            new KoShapeDeleteCommand( d->part, container, cmd );
-        }
-    }
-    d->canvas->addCommand( cmd );
-}
-
 void KarbonView::closePath()
 {
     debugView("");
@@ -911,7 +851,7 @@ void KarbonView::initActions()
         return;
 
     // edit ----->
-    KAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    QAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
     new KoCutController(d->canvas, action);
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(d->canvas, action);
@@ -991,15 +931,15 @@ void KarbonView::initActions()
     d->snapGridAction->setToolTip(i18n( "Snaps to grid"));
     connect(d->snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
-    d->groupObjects  = new KAction(KIcon("object-group"), i18n("&Group Objects"), this);
-    actionCollection()->addAction("selection_group", d->groupObjects );
-    d->groupObjects->setShortcut(QKeySequence("Ctrl+G"));
-    connect(d->groupObjects, SIGNAL(triggered()), this, SLOT(groupSelection()));
+    action = actionCollection()->action("object_group");
+    if ( action ) {
+        action->setShortcut(QKeySequence("Ctrl+G"));
+    }
+    action = actionCollection()->action("object_ungroup");
+    if ( action ) {
+        action->setShortcut(QKeySequence("Ctrl+Shift+G"));
+    }
 
-    d->ungroupObjects  = new KAction(KIcon("object-ungroup"), i18n("&Ungroup Objects"), this);
-    actionCollection()->addAction("selection_ungroup", d->ungroupObjects );
-    d->ungroupObjects->setShortcut(QKeySequence("Ctrl+Shift+G"));
-    connect(d->ungroupObjects, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
     // object <-----
 
     // path ------->
@@ -1203,8 +1143,6 @@ void KarbonView::selectionChanged()
     KoSelection *selection = d->canvas->shapeManager()->selection();
     int count = selection->selectedShapes( KoFlake::FullSelection ).count();
 
-    d->groupObjects->setEnabled( count > 1 );
-    d->ungroupObjects->setEnabled( false );
     d->closePath->setEnabled( false );
     d->combinePath->setEnabled( false );
     d->excludePath->setEnabled( false );
@@ -1218,7 +1156,6 @@ void KarbonView::selectionChanged()
     if( count > 0 )
     {
         uint selectedPaths = 0;
-        uint selectedGroups = 0;
         uint selectedParametrics = 0;
         // check for different shape types for enabling specific actions
         foreach( KoShape* shape, selection->selectedShapes( KoFlake::FullSelection ) )
@@ -1232,15 +1169,8 @@ void KarbonView::selectionChanged()
                     selectedPaths++;
             }
         }
-        foreach( KoShape* shape, selection->selectedShapes( KoFlake::TopLevelSelection ) )
-        {
-            if( dynamic_cast<KoShapeGroup*>( shape ) )
-                selectedGroups++;
-        }
-        kDebug(38000) << selectedGroups <<" group shapes selected";
         kDebug(38000) << selectedPaths <<" path shapes selected";
         kDebug(38000) << selectedParametrics <<" parameter shapes selected";
-        d->ungroupObjects->setEnabled( selectedGroups > 0 );
         //TODO enable action when the ClosePath command is ported
         //d->closePath->setEnabled( selectedPaths > 0 );
         d->combinePath->setEnabled( selectedPaths > 1 );

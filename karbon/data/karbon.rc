@@ -101,8 +101,8 @@
                 <Action name="object_distribute_vertical_top"/>
                 <Action name="object_distribute_vertical_bottom"/>
             </Menu>
-            <Action name="selection_group"/>
-            <Action name="selection_ungroup"/>
+            <Action name="object_group"/>
+            <Action name="object_ungroup"/>
         </Menu>
         <Menu name="path">
             <text>&amp;Path</text>
