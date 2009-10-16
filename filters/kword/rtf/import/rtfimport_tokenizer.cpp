@@ -211,12 +211,13 @@ void RTFTokenizer::next()
 		ch != '\r')
 	{
 	    *_text++ = ch;
-            if(fileBufferPtr >= fileBufferEnd)
+            if(fileBufferPtr >= fileBufferEnd) {
+                fileBufferPtr++;
                 break;
+            }
 	    ch = *fileBufferPtr++;
 	}
-        if(fileBufferPtr < fileBufferEnd)
-          --fileBufferPtr; // give back the last char
+        --fileBufferPtr; // give back the last char
     }
     *_text++ = 0;
 
