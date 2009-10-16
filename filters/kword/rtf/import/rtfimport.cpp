@@ -2378,8 +2378,8 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
         if (border.style != RTFBorder::None || border.width > 0)
         {
             node.addNode( borderN[i] );
-              node.addColor( (border.color >= colorTable.count())
-                             ? QColor(Qt::black) : colorTable[border.color] );
+              node.addColor( (border.color < colorTable.count() && border.color >= 0)
+                             ? colorTable[border.color] : QColor(Qt::black) );
               node.setAttribute( "style", (int)border.style & 0xf );
               node.setAttribute( "width", (border.width < 20) ? 1 : border.width /20 );
             node.closeNode( borderN[i] );
@@ -2578,8 +2578,8 @@ void RTFImport::finishTable()
                 if (border.style != RTFBorder::None || border.width > 0)
                 {
                     const char *id = "lrtb";
-                    QColor c = (border.color >= colorTable.count())
-                                ? QColor(Qt::black) : colorTable[border.color];
+                    QColor c = (border.color < colorTable.count() && border.color >= 0)
+                                ? QColor(colorTable[border.color]) : QColor(Qt::black);
                     frameSets.addBorder( (int)id[i], c, (int)border.style & 0x0f,
                                          .05*(!border.width ? 10 : border.width) );
                 }
