@@ -27,6 +27,7 @@ namespace Libppt
 class Slide;
 class TextFontCollection;
 class TextFont;
+class MainMasterContainer;
 
 class Presentation
 {
@@ -78,13 +79,27 @@ public:
   * @param index Index of the font to get
   * @return Specified font
   */
-  const TextFont getFont(unsigned int index);
+  TextFont* getFont(unsigned int index);
 
   /**
   * @brief Add a new font to collection
   * @param font Font to add
   */
   void addTextFont(const TextFont &font);
+
+  /**
+  * @brief Set MainMasterContainer for the presentation
+  *
+  * MainMasterContainer is a record that specifies a main master slide.
+  */
+  void setMainMasterContainer(MainMasterContainer *container);
+
+  /**
+  * @brief Get MainMasterContainer for this presentation
+  * @return MainMasterContainer
+  */
+  MainMasterContainer *getMainMasterContainer();
+
 private:
   // no copy or assign
   Presentation( const Presentation& );

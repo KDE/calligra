@@ -20,7 +20,7 @@
 #ifndef LIBPPT_SLIDE
 #define LIBPPT_SLIDE
 
-#include "ustring.h"
+#include <QString>
 
 
 namespace Libppt
@@ -36,8 +36,8 @@ public:
   Slide( Presentation* presentation );
   ~Slide();
   void clear();
-  UString title() const;
-  void setTitle( const UString& title );
+  QString title() const;
+  void setTitle( const QString& title );
   GroupObject* rootObject();
   void setRootObject( GroupObject *);
   TextObject* textObject( unsigned placeId );

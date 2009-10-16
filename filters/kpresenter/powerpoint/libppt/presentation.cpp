@@ -36,12 +36,18 @@ public:
   *
   */
   TextFontCollection fonts;
+
+  /**
+  * A container record that specifies a main master slide.
+  */
+  MainMasterContainer *mainMasterContainer;
 };
 
 Presentation::Presentation()
 {
   d = new Private;
   d->masterSlide = 0;
+  d->mainMasterContainer = 0;
 }
 
 Presentation::~Presentation()
@@ -96,7 +102,7 @@ void Presentation::setMasterSlide( Slide* masterSlide )
   d->masterSlide = masterSlide;
 }
 
-const TextFont Presentation::getFont(unsigned index)
+TextFont* Presentation::getFont(unsigned index)
 {
     return d->fonts.getFont(index);
 }
@@ -104,4 +110,14 @@ const TextFont Presentation::getFont(unsigned index)
 void Presentation::addTextFont(const TextFont &font)
 {
     d->fonts.addFont(font);
+}
+
+void Presentation::setMainMasterContainer(MainMasterContainer *container)
+{
+  d->mainMasterContainer = container;
+}
+
+MainMasterContainer *Presentation::getMainMasterContainer()
+{
+  return d->mainMasterContainer;
 }

@@ -1306,7 +1306,8 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
   }
 }
 
-void PowerPointImport::processGroupObjectForBody( GroupObject* groupObject, KoXmlWriter* xmlWriter )
+void PowerPointImport::processGroupObjectForBody( GroupObject* groupObject,
+                                                  KoXmlWriter* xmlWriter )
 {
   if( !groupObject || !xmlWriter ) return;
   if( !groupObject->objectCount() ) return;
@@ -1323,15 +1324,206 @@ void PowerPointImport::processGroupObjectForBody( GroupObject* groupObject, KoXm
   xmlWriter->endElement(); // draw:g
 }
 
+void PowerPointImport::writeTextObjectIndent( KoXmlWriter* xmlWriter,
+                                              const unsigned int count,
+                                              const QString &style)
+{
+  //[MS-PPT].pdf says the itendation level can be 4 at most
+  for(unsigned int i=0;i<count && i < 4;i++) {
+    xmlWriter->startElement( "text:list" );
+
+
+    if (!style.isEmpty() && i == 0) {
+      xmlWriter->addAttribute( "text:style-name", style);
+    }
+
+    if (i != count-1) { //We only want to have a list at the specified level
+                        //not the list item. So we'll ignore the last item
+      xmlWriter->startElement( "text:list-item" );
+    }
+  }
+}
+
+void PowerPointImport::writeTextObjectDeIndent( KoXmlWriter* xmlWriter,
+                                                const unsigned int count)
+{
+
+  //[MS-PPT].pdf says the itendation level can be 4 at most
+  for(unsigned int i=0;i<count && i < 4;i++) {
+    xmlWriter->endElement(); // list
+    if (i != 0) {
+      //We assume the intendation starts at list level, so we'll
+      //ignore the first list-item
+      xmlWriter->endElement(); // list-item
+    }
+  }
+}
+
+
+
+void PowerPointImport::writeTextCFException(KoXmlWriter* xmlWriter,
+                                            TextCFException *cf,
+                                            TextPFException *pf,
+                                            TextObject *textObject,
+                                            const QString &text,
+                                            bool bullet)
+{
+  if (bullet) {
+    xmlWriter->startElement( "text:span" );
+    xmlWriter->addAttribute( "text:style-name", textObject->textStyleName(cf,pf));
+  }
+
+  xmlWriter->addTextSpan( text );
+
+  if (bullet) {
+    xmlWriter->endElement(); // text:span
+  }
+}
+
+void PowerPointImport::writeTextLine( KoXmlWriter* xmlWriter,
+                                      TextPFException *pf,
+                                      TextObject *textObject,
+                                      const QString &text,
+                                      const unsigned int linePosition,
+                                      bool bullet)
+{
+  StyleTextPropAtom *atom = textObject->styleTextProperty();
+  QString part = "";
+  TextCFRun *cf = atom->findTextCFRun(linePosition);
+
+  if (!cf) {
+    return;
+  }
+
+  if (text.isEmpty()) {
+    writeTextCFException(xmlWriter,cf->textCFException(),pf,textObject,text,bullet);
+    return;
+  }
+
+
+  //Iterate through all the characters in text
+  for(int i=0;i<text.length();i++) {
+    TextCFRun *nextCFRun = atom->findTextCFRun(linePosition+i);
+
+    //While character exception stays the same
+    if (cf == nextCFRun) {
+      //Catenate strings to our substring
+      part += text[i];
+    } else {
+      //When exception changes we write the text to xmlwriter unless the text style
+      //name stays the same, then we'll reuse the same stylename for the next
+      //character exception
+      if (nextCFRun && textObject->textStyleName(cf->textCFException(),pf) != textObject->textStyleName(nextCFRun->textCFException(),pf)) {
+        writeTextCFException(xmlWriter,cf->textCFException(),pf,textObject,part,bullet);
+        part = text[i];
+      } else {
+        part += text[i];
+      }
+
+      cf = nextCFRun;
+    }
+  }
+
+  //If at the end we still have some text left, write it out
+  if (!part.isEmpty()) {
+    writeTextCFException(xmlWriter,cf->textCFException(),pf,textObject,part,bullet);
+  }
+}
+
+void PowerPointImport::writeTextPFException(KoXmlWriter* xmlWriter,
+                                            TextPFRun *pf,
+                                            TextObject *textObject,
+                                            const unsigned int textPos,
+                                            unsigned int &indent,
+                                            QString &listStyle)
+{
+  StyleTextPropAtom *atom = textObject->styleTextProperty();
+  if (!atom || !pf || !textObject) {
+    return;
+  }
+
+  QString text = textObject->text().mid(textPos,pf->count());
+  //Text lines are separated with carriage return
+  //There seems to be an extra carriage return at the end. We'll remove the last
+  // carriage return so we don't end up with a single empty line in the end
+  if (text.endsWith("\r")) {
+    text = text.left(text.length()-1);
+  }
+
+  //Then split the text into lines
+  QStringList lines = text.split("\r");
+  unsigned int linePos = textPos;
+
+
+  //Indentaion level paragraph wants
+  unsigned int paragraphIndent = pf->indentLevel()+1;
+
+  bool bullet = false;
+  if (pf->textPFException()->hasBullet()) {
+    bullet = pf->textPFException()->bullet();
+  } else {
+    TextPFException *masterPF = masterTextPFException(pf->indentLevel()+1,
+                                                      pf->textPFException()->indent());
+    if (masterPF && masterPF->hasBullet()) {
+      bullet = masterPF->bullet();
+    }
+  }
+
+  //Handle all lines
+  for(int i=0;i<lines.size();i++)
+  {
+    if (!bullet && paragraphIndent == 1) {
+      paragraphIndent = 0;
+    }
+    //If list style changes we'll have to get "out" of the list
+    TextCFRun *cf = atom->findTextCFRun(linePos);
+
+    if (!cf) {
+      return;
+    }
+
+    QString currentStyle = textObject->listStyleName(cf->textCFException(),pf->textPFException());
+
+    if (listStyle != currentStyle) {
+      writeTextObjectDeIndent(xmlWriter,indent);
+      writeTextObjectIndent(xmlWriter,paragraphIndent,currentStyle);
+    }
+    else if (indent < paragraphIndent) {
+      writeTextObjectIndent(xmlWriter,paragraphIndent-indent,"");
+    } else if (indent > paragraphIndent) {
+      writeTextObjectDeIndent(xmlWriter,indent-paragraphIndent);
+    }
+
+    indent = paragraphIndent;
+
+    listStyle = currentStyle;
+    if (bullet || paragraphIndent > 0) {
+      xmlWriter->startElement( "text:list-item" );
+    }
+
+    xmlWriter->startElement( "text:p" );
+    xmlWriter->addAttribute( "text:style-name", textObject->paragraphStyleName(cf->textCFException(),pf->textPFException()));
+    writeTextLine(xmlWriter,pf->textPFException(),textObject,lines[i],linePos,bullet);
+
+    //Add +1 to line position to compensate for carriage return that is missing
+    //from line due to the split method
+    linePos += lines[i].size()+1;
+
+    xmlWriter->endElement(); // text:p
+    if (bullet || paragraphIndent > 0) {
+      xmlWriter->endElement(); // text:list-item
+    }
+  }
+}
+
+
 void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWriter* xmlWriter )
 {
-  if( !textObject || !xmlWriter ) return;
+  if( !textObject || !xmlWriter) return;
 
   QString classStr = "subtitle";
   if( textObject->type() == TextObject::Title )
     classStr = "title";
-//  QString pStr = string( textObject->text() ).string();
-  QString pStr;
 
   QString widthStr = QString("%1mm").arg( textObject->width() );
   QString heightStr = QString("%1mm").arg( textObject->height() );
@@ -1349,54 +1541,42 @@ void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWr
   xmlWriter->startElement( "draw:text-box" );
 
 
-  bool previousWasInList = false;
-  for (unsigned i=0; i<textObject->listSize(); i++)
-  {
-    pStr = Libppt::string(textObject->text(i));
+  StyleTextPropAtom *atom = textObject->styleTextProperty();
+  if (atom) {
+    //Paragraph formatting that applies to substring
+    TextPFRun *pf = 0;
 
-    if (textObject->bulletFlag(i) == 1 )
-    {
-      //If previous item was in a list we can reuse that xml element
-      //TODO: Currently I'm checking only the bullets font to see if the previous item
-      //Belongs to the same list as this one. That might not be a valid assumption
-      if (!previousWasInList || (previousWasInList && textObject->bulletFont(i) != textObject->bulletFont(i-1))) {
-        //otherwise we'll create the element
-        xmlWriter->startElement( "text:list" );
+    unsigned int indent = 0;
+    QString listStyleName = "";
+    pf = atom->findTextPFRun(0);
+    unsigned int index = 0;
+    int pos = 0;
 
-        xmlWriter->addAttribute( "text:style-name",textObject->lineStyleName(i));
-
-        //Set that the previous item was in a list
-        previousWasInList = true;
+    while(pos < textObject->text().length()) {
+      if (!pf) {
+        kWarning()<<"Failed to get text paragraph exception!";
+        return;
       }
 
-      xmlWriter->startElement( "text:list-item" );
-      xmlWriter->startElement( "text:p" );
-      xmlWriter->addAttribute( "text:style-name", "P3");
-      xmlWriter->startElement( "text:span" );
-      xmlWriter->addAttribute( "text:style-name", "T2");
-      xmlWriter->addTextSpan( pStr );
-      xmlWriter->endElement(); // text:span
-      xmlWriter->endElement(); // text:p
-      xmlWriter->endElement();  // text:list-item
+      writeTextPFException( xmlWriter,
+                            pf,
+                            textObject,
+                            pos,
+                            indent,
+                            listStyleName);
 
+      pos += pf->count();
+      index++;
+      pf = atom->textPFRun(index);
     }
-    else
-    {
-      //Check if previous item was a list and we need to close that element
-      if (previousWasInList) {
-          xmlWriter->endElement();  // text:list
-          previousWasInList = false;
-      }
-      xmlWriter->startElement( "text:p" );
-      xmlWriter->addAttribute( "text:style-name", "P1" );
-      xmlWriter->addTextSpan( pStr );
-      xmlWriter->endElement(); // text:p
-    }
-  }
 
-  //Check if previous item was a list and we need to close that element
-  if (previousWasInList) {
-    xmlWriter->endElement();  // text:list
+    if (indent > 0) {
+      writeTextObjectDeIndent( xmlWriter, indent );
+    }
+  } else {
+    xmlWriter->startElement( "text:span" );
+    xmlWriter->addTextSpan( textObject->text() );
+    xmlWriter->endElement(); // text:span
   }
 
   xmlWriter->endElement(); // draw:text-box
@@ -1419,7 +1599,7 @@ void PowerPointImport::processSlideForBody( unsigned slideNo, Slide* slide, KoXm
 {
   if( !slide || !xmlWriter ) return;
 
-  QString nameStr = Libppt::string( slide->title() );
+  QString nameStr = slide->title();
   if( nameStr.isEmpty() )
     nameStr = QString("page%1").arg(slideNo+1);
 
@@ -1449,7 +1629,7 @@ void PowerPointImport::processSlideForStyle( unsigned , Slide* slide, KoGenStyle
 
   GroupObject* root = slide->rootObject();
   if( root )
-  for( unsigned i = 0; i < root->objectCount(); i++ )
+  for( unsigned int i = 0; i < root->objectCount(); i++ )
   {
     Object* object = root->object( i );
     if( object )
@@ -1469,60 +1649,430 @@ void PowerPointImport::processObjectForStyle( Object* object, KoGenStyles &style
     processDrawingObjectForStyle( static_cast<DrawObject*>(object), styles );
 }
 
-void PowerPointImport::processTextObjectForStyle( TextObject* textObject, KoGenStyles &styles )
+QString PowerPointImport::paraSpacingToCm(int value) const
 {
-  if( !textObject ) return;
-  for (unsigned i=0; i<textObject->listSize(); i++)
-  {
-    QString styleName;
-    if (textObject->bulletFlag(i) == 1 )
-    {
+  if (value < 0) {
+    unsigned int temp = -value;
+    return pptMasterUnitToCm(temp);
+  }
 
-      KoGenStyle styleList(KoGenStyle::StyleListAuto,"text");
-      QBuffer buffer;
-      buffer.open( QIODevice::WriteOnly );
-      KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-      elementWriter.startElement( "text:list-level-style-bullet" );
-      elementWriter.addAttribute( "text:level","1");
+  return QString("%1%").arg(value);
+}
 
-      if (textObject->bulletChar(i) != 0) {
-        elementWriter.addAttribute( "text:bullet-char",textObject->bulletChar(i));
+QString PowerPointImport::pptMasterUnitToCm( unsigned int value) const
+{
+  qreal result = value;
+  result*=2.54;
+  result/=576;
+  return QString("%1cm").arg(result);
+}
+
+QString PowerPointImport::textAlignmentToString(unsigned int value) const
+{
+  switch(value) {
+    /**
+    Tx_ALIGNLeft            0x0000 For horizontal text, left aligned.
+                               For vertical text, top aligned.
+    */
+    case 0:
+    return "left";
+    /**
+    Tx_ALIGNCenter          0x0001 For horizontal text, centered.
+                               For vertical text, middle aligned.
+    */
+    case 1:
+    return "center";
+    /**
+    Tx_ALIGNRight           0x0002 For horizontal text, right aligned.
+                               For vertical text, bottom aligned.
+    */
+    case 2:
+    return "right";
+
+    /**
+    Tx_ALIGNJustify         0x0003 For horizontal text, flush left and right.
+                               For vertical text, flush top and bottom.
+    */
+    return "justify";
+
+    //TODO these were missing from ODF specification v1.1, but are
+    //in [MS-PPT].pdf
+
+    /**
+    Tx_ALIGNDistributed     0x0004 Distribute space between characters.
+    */
+    case 4:
+
+    /**
+    Tx_ALIGNThaiDistributed 0x0005 Thai distribution justification.
+    */
+    case 5:
+
+    /**
+    Tx_ALIGNJustifyLow      0x0006 Kashida justify low.
+    */
+    case 6:
+    return "";
+
+    //TODO these two are in ODF specification v1.1 but are missing from
+    //[MS-PPT].pdf
+    //return "end";
+    //return "start";
+  }
+
+  return QString();
+}
+
+
+QColor PowerPointImport::colorIndexStructToQColor(const ColorIndexStruct &color)
+{
+  if (color.index() == 0xFE) {
+    return QColor(color.red(),color.green(),color.blue());
+  }
+
+  MainMasterContainer *mainMaster = d->presentation->getMainMasterContainer();
+  if (mainMaster) {
+    return mainMaster->getSlideSchemeColorSchemeAtom()->getColor(color.index());
+  }
+
+  kError()<<"failed to get main master!";
+
+  return QColor();
+}
+
+TextPFException *PowerPointImport::masterTextPFException(unsigned int atom, unsigned int level)
+{
+  MainMasterContainer *mainMaster = d->presentation->getMainMasterContainer();
+  if (!mainMaster) {
+    return 0;
+  }
+
+  TxMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
+  if (!style) {
+    return 0;
+  }
+
+  TextMasterStyleLevel *styleLevel = style->level(level);
+  if (!styleLevel) {
+    return 0;
+  }
+
+  return styleLevel->pf();
+}
+
+TextCFException *PowerPointImport::masterTextCFException(unsigned int atom, unsigned int level)
+{
+  MainMasterContainer *mainMaster = d->presentation->getMainMasterContainer();
+  if (!mainMaster) {
+    return 0;
+  }
+
+  TxMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
+  if (!style) {
+    return 0;
+  }
+
+  TextMasterStyleLevel *styleLevel = style->level(level);
+  if (!styleLevel) {
+    return 0;
+  }
+
+  return styleLevel->cf();
+}
+
+
+void PowerPointImport::processTextExceptionsForStyle( TextCFRun *cf,
+                                                      TextPFRun *pf,
+                                                      KoGenStyles &styles,
+                                                      TextObject* textObject )
+{
+  if (!textObject) {
+    return;
+  }
+
+  //TODO the atom values to fetch masterCF/PF exceptions are hard coded, need to
+  //figure out what values should really be used
+  //TODO need to parse default style and use that as well
+  TextCFException *masterCF = masterTextCFException(1,
+                                                    pf->indentLevel());
+
+  TextPFException *masterPF = masterTextPFException(1,
+                                                    pf->indentLevel());
+
+  if (!masterCF || !masterPF) {
+    kWarning()<<"Failed to get master pf/cf exception!";
+    return;
+  }
+
+  KoGenStyle styleParagraph(KoGenStyle::StyleAuto,"paragraph");
+  if (pf->textPFException()->hasLeftMargin()) {
+    styleParagraph.addProperty( "fo:margin-left",
+                                pptMasterUnitToCm(pf->textPFException()->leftMargin()),
+                                KoGenStyle::ParagraphType);
+  } else {
+    if (masterPF->hasLeftMargin()) {
+      styleParagraph.addProperty( "fo:margin-left",
+                                  pptMasterUnitToCm(masterPF->leftMargin()),
+                                  KoGenStyle::ParagraphType);
+    }
+  }
+
+  if (pf->textPFException()->hasIndent()) {
+    styleParagraph.addProperty( "fo:text-indent",
+                                pptMasterUnitToCm(pf->textPFException()->indent()),
+                                KoGenStyle::ParagraphType);
+  } else {
+    if (masterPF->hasIndent()) {
+      styleParagraph.addProperty( "fo:text-indent",
+                                  pptMasterUnitToCm(masterPF->indent()),
+                                  KoGenStyle::ParagraphType);
+    }
+  }
+
+  if (pf->textPFException()->hasAlign()) {
+    styleParagraph.addProperty( "fo:text-align",
+                                textAlignmentToString(pf->textPFException()->textAlignment()),
+                                KoGenStyle::ParagraphType);
+  } else {
+    if (masterPF->hasAlign()) {
+      styleParagraph.addProperty( "fo:text-align",
+                                  textAlignmentToString(masterPF->textAlignment()),
+                                  KoGenStyle::ParagraphType);
+    }
+  }
+
+  //Text style
+  KoGenStyle styleText(KoGenStyle::StyleTextAuto,"text");
+  if (cf->textCFException()->hasColor()) {
+    styleText.addProperty("fo:color",
+                          colorIndexStructToQColor(cf->textCFException()->color()).name(),
+                          KoGenStyle::TextType);
+  } else {
+
+    //Make sure that character formatting has color aswell
+    if (masterCF->hasColor()) {
+      styleText.addProperty("fo:color",
+                            colorIndexStructToQColor(masterCF->color()).name(),
+                            KoGenStyle::TextType);
+    }
+  }
+
+  if (cf->textCFException()->hasFontSize()) {
+    styleText.addProperty("fo:font-size",
+                          QString("%1pt").arg(cf->textCFException()->fontSize()),
+                          KoGenStyle::TextType);
+  } else {
+    if (masterCF->hasFontSize()) {
+      styleText.addProperty("fo:font-size",
+                            QString("%1pt").arg(masterCF->fontSize()),
+                            KoGenStyle::TextType);
+    }
+  }
+
+  if (cf->textCFException()->hasItalic()) {
+    if (cf->textCFException()->italic()) {
+      styleText.addProperty("fo:font-style",
+                            "italic",
+                            KoGenStyle::TextType);
+    }
+  } else {
+    if (masterCF->hasItalic() && masterCF->italic()) {
+      styleText.addProperty("fo:font-style",
+                            "italic",
+                            KoGenStyle::TextType);
+    }
+  }
+
+  if (cf->textCFException()->hasBold()) {
+    if (cf->textCFException()->bold()) {
+      styleText.addProperty("fo:font-weight",
+                            "bold",
+                            KoGenStyle::TextType);
+    }
+  } else {
+    if (masterCF->hasBold() && masterCF->bold()) {
+      styleText.addProperty("fo:font-weight",
+                            "bold",
+                            KoGenStyle::TextType);
+    }
+  }
+
+
+//  if (cf->textCFException()->hasFont()) {
+//      TextFont font = d->presentation->getFont(cf->textCFException()->fontRef());
+//      styleText.addProperty( "fo:font-family", font.name() );
+//    } else {
+//      if (masterCF->hasFont()) {
+//        TextFont font = d->presentation->getFont(masterCF->fontRef());
+//        styleText.addProperty( "fo:font-family", font.name() );
+//      }
+//    }
+
+
+  if (cf->textCFException()->hasFontSize()) {
+    styleText.addProperty("fo:font-size",
+                          QString("%1pt").arg(cf->textCFException()->fontSize()),
+                          KoGenStyle::TextType);
+
+  } else {
+    if (masterCF->hasFontSize()) {
+      styleText.addProperty("fo:font-size",
+                            QString("%1pt").arg(masterCF->fontSize()),
+                            KoGenStyle::TextType);
+    }
+  }
+
+
+  KoGenStyle styleList(KoGenStyle::StyleListAuto,"text");
+  QBuffer buffer;
+  buffer.open( QIODevice::WriteOnly );
+  KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+
+
+  for(int i=0;i<(int)pf->indentLevel()+1;i++) {
+    TextCFException *levelCF = masterTextCFException(i,
+                                                    pf->textPFException()->indent());
+
+    TextPFException *levelPF = masterTextPFException(i,
+                                                    pf->textPFException()->indent());
+    if (!levelCF || !levelPF) {
+      kWarning()<<"Failed to get master pf/cf exception for level"<<i<<"!";
+      return;
+    }
+
+    elementWriter.startElement( "text:list-level-style-bullet" );
+    elementWriter.addAttribute( "text:level",i+1);
+
+
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletChar()) {
+      elementWriter.addAttribute( "text:bullet-char",QChar(pf->textPFException()->bulletChar()));
+    } else {
+      if (levelPF->hasBulletChar()) {
+        elementWriter.addAttribute( "text:bullet-char",QChar(levelPF->bulletChar()));
       } else {
-          //Omitting default bullet character
+        //Should we omit default bullet character?
         elementWriter.addAttribute( "text:bullet-char","●");
       }
+    }
 
-      elementWriter.startElement( "style:list-level-properties" );
-      elementWriter.endElement(); // style:list-level-properties
+    elementWriter.startElement( "style:list-level-properties" );
 
-      elementWriter.startElement( "style:text-properties" );
-      TextFont font = d->presentation->getFont(textObject->bulletFont(i));
-      elementWriter.addAttribute( "fo:font-family", Libppt::string(font.name()) );
-      elementWriter.addAttribute( "fo:color",textObject->bulletColor(i) );
 
-      if (textObject->bulletSize(i) > 0) {
-        elementWriter.addAttribute( "fo:font-size", QString("%1%").arg((textObject->bulletSize(i)) ) );
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasSpaceAfter()) {
+      elementWriter.addAttribute( "text:space-after",
+                                  pptMasterUnitToCm(pf->textPFException()->spaceAfter()));
+    } else {
+      if (levelPF->hasSpaceAfter()) {
+        elementWriter.addAttribute( "text:space-after",
+                                    pptMasterUnitToCm(levelPF->spaceAfter()));
+      }
+    }
+
+    elementWriter.endElement(); // style:list-level-properties
+
+    elementWriter.startElement( "style:text-properties" );
+    TextFont *font = 0;
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletFont()) {
+      font = d->presentation->getFont(pf->textPFException()->bulletFontRef());
+      elementWriter.addAttribute( "fo:font-family", font->name() );
+    } else {
+      if (levelPF->hasBulletFont()) {
+        font = d->presentation->getFont(levelPF->bulletFontRef());
+      }
+    }
+
+    if (font) {
+      elementWriter.addAttribute( "fo:font-family", font->name() );
+    }
+
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletColor()) {
+      elementWriter.addAttribute( "fo:color",
+                                  colorIndexStructToQColor( pf->textPFException()->bulletColor()).name() );
+    } else {
+      if (levelPF->hasBulletColor()) {
+        elementWriter.addAttribute( "fo:color",
+                                    colorIndexStructToQColor(levelPF->bulletColor()).name() );
+      }
+    }
+
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletSize()) {
+      elementWriter.addAttribute( "fo:font-size",
+                                  QString("%1%").arg(pf->textPFException()->bulletSize()));
+
+    } else {
+      if (levelPF->hasSpaceAfter()) {
+        elementWriter.addAttribute( "fo:font-size",
+                                    QString("%1%").arg(levelPF->bulletSize()));
       } else {
         elementWriter.addAttribute( "fo:font-size", "100%");
       }
-
-      elementWriter.endElement(); // style:text-properties
-      elementWriter.endElement();  // text:list-level-style-bullet
-
-      styleList.addChildElement("text:list-level-style-bullet", QString::fromUtf8( buffer.buffer(), buffer.buffer().size()));
-      styleName = styles.lookup(styleList);
-    }
-    else
-    {
-      KoGenStyle styleParagraph(KoGenStyle::StyleAuto,"paragraph");
-      styleName = styles.lookup(styleParagraph);
     }
 
-    textObject->setLineStyleName(i,styleName);
+    if (i == pf->textPFException()->indent() && pf->textPFException()->hasSpaceBefore()) {
+      elementWriter.addAttribute( "text:space-before",
+                                  paraSpacingToCm(pf->textPFException()->spaceBefore()));
+    } else {
+      if (levelPF->hasSpaceBefore()) {
+        elementWriter.addAttribute( "text:space-before",
+                                    paraSpacingToCm(levelPF->spaceBefore()));
+      }
+    }
+
+    elementWriter.endElement(); // style:text-properties
+    elementWriter.endElement();  // text:list-level-style-bullet
   }
+
+  styleList.addChildElement("text:list-level-style-bullet",
+                              QString::fromUtf8( buffer.buffer(),
+                              buffer.buffer().size()));
+
+  textObject->addStylenames(cf->textCFException(),
+                            pf->textPFException(),
+                            styles.lookup(styleText),
+                            styles.lookup(styleParagraph),
+                            styles.lookup(styleList));
 }
 
-void PowerPointImport::processGroupObjectForStyle( GroupObject* groupObject, KoGenStyles &styles )
+
+void PowerPointImport::processTextObjectForStyle( TextObject* textObject,
+                                                  KoGenStyles &styles )
+{
+  if( !textObject )  {
+    return;
+  }
+  StyleTextPropAtom* atom  = textObject->styleTextProperty();
+  QString text = textObject->text();
+
+  if (!atom) {
+    return;
+  }
+
+  //What paragraph/character exceptions were used last
+  TextPFRun *pf = 0;
+  TextCFRun *cf = 0;
+
+  //TODO this can be easily optimized by calculating proper increments to i
+  //from both exception's character count
+  for(int i=0;i<text.length();i++) {
+    if (cf == atom->findTextCFRun(i) && pf == atom->findTextPFRun(i)) {
+      continue;
+    }
+
+    pf = atom->findTextPFRun(i);
+    cf = atom->findTextCFRun(i);
+
+    if (cf && pf) {
+      processTextExceptionsForStyle(cf,pf,styles,textObject);
+    } else {
+      kWarning()<<"Failed to find pf or cf for text at position!"<<i<<pf<<cf;
+      return;
+    }
+  }
+
+}
+
+void PowerPointImport::processGroupObjectForStyle(GroupObject* groupObject,
+                                                  KoGenStyles &styles )
 {
   if( !groupObject ) return;
   Q_UNUSED(styles);

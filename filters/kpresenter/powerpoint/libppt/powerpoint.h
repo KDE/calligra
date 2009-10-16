@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include "ustring.h"
+#include <QColor>
 
 namespace Libppt
 {
@@ -88,7 +89,7 @@ public:
   /**
     Returns the name of the record. For debugging only.
    */
-  virtual const char* name(){ return "Unknown"; }
+  virtual const char* name() const { return "Unknown"; }
 
   /**
     Dumps record information to output stream. For debugging only.
@@ -116,7 +117,7 @@ class Container: public Record
 public:
   Container();
   virtual bool isContainer() const { return true; }
-  const char* name(){ return "Container"; }
+  const char* name() const { return "Container"; }
 
 private:
    // no copy or assign
@@ -130,7 +131,7 @@ class BookmarkCollectionContainer: public Container
 public:
   static const unsigned int id;
   BookmarkCollectionContainer();
-  const char* name(){ return "BookmarkCollectionContainer"; }
+  const char* name() const { return "BookmarkCollectionContainer"; }
 
 private:
   // no copy or assign
@@ -143,7 +144,7 @@ class DocumentContainer: public Container
 public:
   static const unsigned int id;
   DocumentContainer();
-  const char* name(){ return "DocumentContainer"; }
+  const char* name() const { return "DocumentContainer"; }
 
 private:
   // no copy or assign
@@ -156,7 +157,7 @@ class EnvironmentContainer: public Container
 public:
   static const unsigned int id;
   EnvironmentContainer();
-  const char* name(){ return "EnvironmentContainer"; }
+  const char* name() const { return "EnvironmentContainer"; }
 
 private:
   // no copy or assign
@@ -169,7 +170,7 @@ class ExObjListContainer: public Container
 public:
   static const unsigned int id;
   ExObjListContainer();
-  const char* name(){ return "ExObjListContainer"; }
+  const char* name() const { return "ExObjListContainer"; }
 
 private:
   // no copy or assign
@@ -182,7 +183,7 @@ class ExHyperlinkContainer : public Container
 public:
   static const unsigned int id;
   ExHyperlinkContainer ();
-  const char* name(){ return "ExHyperlinkContainer "; }
+  const char* name() const { return "ExHyperlinkContainer "; }
 
 private:
   // no copy or assign
@@ -195,7 +196,7 @@ class ExEmbedContainer : public Container
 public:
   static const unsigned int id;
   ExEmbedContainer ();
-  const char* name(){ return "ExEmbedContainer "; }
+  const char* name() const { return "ExEmbedContainer "; }
 
 private:
   // no copy or assign
@@ -208,7 +209,7 @@ class ExLinkContainer : public Container
 public:
   static const unsigned int id;
   ExLinkContainer ();
-  const char* name(){ return "ExLinkContainer "; }
+  const char* name() const { return "ExLinkContainer "; }
 
 private:
   // no copy or assign
@@ -222,7 +223,7 @@ public:
   static const unsigned int id;
   RunArrayContainer();
 
-  const char* name(){ return "RunArrayContainer"; }
+  const char* name() const { return "RunArrayContainer"; }
 
 private:
   // no copy or assign
@@ -235,7 +236,7 @@ class ExOleObjStgContainer: public Container
 public:
   static const unsigned int id;
   ExOleObjStgContainer();
-  const char* name(){ return "ExOleObjStgContainer"; }
+  const char* name() const { return "ExOleObjStgContainer"; }
 
 private:
   // no copy or assign
@@ -248,7 +249,7 @@ class FontCollectionContainer: public Container
 public:
   static const unsigned int id;
   FontCollectionContainer();
-  const char* name(){ return "FontCollectionContainer"; }
+  const char* name() const { return "FontCollectionContainer"; }
 
 private:
   // no copy or assign
@@ -261,7 +262,7 @@ class HandoutContainer: public Container
 public:
   static const unsigned int id;
   HandoutContainer();
-  const char* name(){ return "HandoutContainer"; }
+  const char* name() const { return "HandoutContainer"; }
 
 private:
   // no copy or assign
@@ -274,7 +275,7 @@ class HeadersFootersContainer: public Container
 public:
   static const unsigned int id;
   HeadersFootersContainer();
-  const char* name(){ return "HeadersFootersContainer"; }
+  const char* name() const { return "HeadersFootersContainer"; }
 
 private:
   // no copy or assign
@@ -287,7 +288,7 @@ class ListContainer: public Container
 public:
   static const unsigned int id;
   ListContainer();
-  const char* name(){ return "ListContainer"; }
+  const char* name() const { return "ListContainer"; }
 
 private:
   // no copy or assign
@@ -295,353 +296,483 @@ private:
   ListContainer& operator=( const ListContainer& );
 };
 
-class MainMasterContainer: public Container
+
+/**
+* @brief A structure that specifies a color in the sRGB color space as specified
+* in [IEC-RGB].
+*
+*/
+class ColorStruct
 {
 public:
-  static const unsigned int id;
-  MainMasterContainer();
-  const char* name(){ return "MainMasterContainer"; }
+  ColorStruct();
+  ColorStruct(const ColorStruct &other);
+  ~ColorStruct();
 
+  /**
+  * @brief Parse data for this object
+  * @param data Data to parse
+  */
+  void setData(const unsigned char *data);
+
+  /**
+  * @brief Return this ColorStruct as QColor
+  * @return Color as QColor
+  */
+  QColor color();
 private:
-  // no copy or assign
-  MainMasterContainer( const MainMasterContainer& );
-  MainMasterContainer& operator=( const MainMasterContainer& );
+  class Private;
+  Private *d;
 };
 
-class NotesContainer: public Container
+/**
+* A structure that specifies an index in the color scheme, or a color in the
+* sRGB color space as specified in [IEC-RGB]. Color schemes are specified by the
+* SlideSchemeColorSchemeAtom record.
+*/
+class ColorIndexStruct
 {
 public:
-  static const unsigned int id;
-  NotesContainer();
-  const char* name(){ return "NotesContainer"; }
+  ColorIndexStruct();
+  ColorIndexStruct(const ColorIndexStruct &color);
+  ~ColorIndexStruct();
+
+  /**
+  * @brief Parse data for this struct
+  * @param data pointer to data to parse values from, array must be at least 4
+  * bytes long
+  */
+  void setData(const unsigned char *data);
+
+  /**
+  * @brief Get red value
+  *
+  */
+  unsigned int red() const;
+
+  /**
+  * @brief Get green value
+  *
+  */
+  unsigned int green() const;
+
+  /**
+  * @brief Get blue value
+  *
+  */
+  unsigned int blue() const;
+
+  /**
+  * @brief An unsigned integer that specifies the index in the color scheme.
+  * It MUST be a value from the following table:
+  * 0x00 Background color
+  * 0x01 Text color
+  * 0x02 Shadow color
+  * 0x03 Title text color
+  * 0x04 Fill color
+  * 0x05 Accent 1 color
+  * 0x06 Accent 2 color
+  * 0x07 Accent 3 color
+  * 0xFE Color is an sRGB value specified by red, green, and blue fields.
+  * 0xFF Color is undefined.
+  */
+  unsigned int index() const;
 
 private:
-  // no copy or assign
-  NotesContainer( const NotesContainer& );
-  NotesContainer& operator=( const NotesContainer& );
+  class Private;
+  Private* d;
 };
 
-class OutlineViewInfoContainer : public Container
+/**
+* @brief A structure that specifies character-level style and formatting, font
+* information, coloring and positioning.
+*/
+class TextCFException
 {
 public:
-  static const unsigned int id;
-  OutlineViewInfoContainer ();
-  const char* name(){ return "OutlineViewInfoContainer "; }
+  TextCFException(const TextCFException &exception);
+  TextCFException();
+  ~TextCFException();
 
+
+  void dump( std::ostream& out ) const;
+
+  /**
+  * @brief Parse data for this class
+  * @param size size of the data to read
+  * @param data Data to read
+  * @return number of bytes read
+  */
+  unsigned int setData(unsigned int size, const unsigned char *data);
+
+  /**
+  * @brief does this class contain font definition
+  * @return true if this class contains font definition
+  */
+  bool hasFont();
+
+  /**
+  * @brief does this class contain font size definition
+  * @return true if this class contains font size definition
+  */
+  bool hasFontSize();
+
+  /**
+  * @brief does this class contain color definition
+  * @return true if this class contains color definition
+  */
+  bool hasColor();
+
+  /**
+  * @brief does this class contain italic definition
+  * @return true if this class contains italic definition
+  */
+  bool hasItalic();
+
+  /**
+  * @brief does this class contain bold definition
+  * @return true if this class contains bold definition
+  */
+  bool hasBold();
+
+  /**
+  * @brief Is the character italic
+  *
+  * NOTE: only valid if hasItalic() is true
+  * @return true if the character is italic
+  */
+  bool italic();
+
+  /**
+  * @brief Is the character text bold
+  *
+  * NOTE: only valid if hasBold() is true
+  * @return true if the character is bold
+  */
+  bool bold();
+
+  /**
+  * @brief Get font reference for the character
+  *
+  * NOTE: only valid if hasFont() is true
+  * @return font reference for the character
+  */
+  unsigned int fontRef();
+
+  /**
+  * @brief Get font size for the character
+  *
+  * NOTE: only valid if hasFontSize() is true
+  * @return font size for the character
+  */
+  int fontSize();
+
+  /**
+  * @brief Get color for the character
+  *
+  * NOTE: only valid if hasColor is true
+  * @return color for the character
+  */
+  ColorIndexStruct color();
 private:
-  // no copy or assign
-  OutlineViewInfoContainer ( const OutlineViewInfoContainer & );
-  OutlineViewInfoContainer & operator=( const OutlineViewInfoContainer & );
+  class Private;
+  Private *d;
+
 };
 
-class PPDrawingContainer : public Container
+/**
+* @brief A structure that specifies paragraph-level formatting.
+*
+*/
+class TextPFException
 {
+
 public:
-  static const unsigned int id;
-  PPDrawingContainer ();
-  const char* name(){ return "PPDrawingContainer "; }
+  TextPFException();
+  TextPFException(const TextPFException &exception);
 
-private:
-  // no copy or assign
-  PPDrawingContainer ( const PPDrawingContainer & );
-  PPDrawingContainer & operator=( const PPDrawingContainer & );
-};
+  /**
+  * @brief Parse TextPFException from given data
+  * @param size size of data in bytes
+  * @param data Data to parse from
+  * @return number of bytes read
+  */
+  unsigned int setData(unsigned int size, const unsigned char *data);
 
-class PPDrawingGroupContainer : public Container
-{
-public:
-  static const unsigned int id;
-  PPDrawingGroupContainer ();
-  const char* name(){ return "PPDrawingGroupContainer "; }
+  /**
+  * @brief Does this paragraph have a bullet
+  * @return true if this paragraph has a bullet
+  */
+  bool hasBullet();
 
-private:
-  // no copy or assign
-  PPDrawingGroupContainer ( const PPDrawingGroupContainer & );
-  PPDrawingGroupContainer & operator=( const PPDrawingGroupContainer & );
-};
+  /**
+  * @brief Does this exception contain a font definition for the bullet
+  * @return true if this exception contains a font definition for the bullet
+  */
+  bool hasBulletFont();
 
-class ProgBinaryTagContainer: public Container
-{
-public:
-  static const unsigned int id;
-  ProgBinaryTagContainer();
-  const char* name(){ return "ProgBinaryTagContainer"; }
+  /**
+  * @brief Does this exception need a font definition for the bullet
+  * @return true if this exception need a font definition for the bullet
+  */
+  bool needsBulletFont();
 
-private:
-  // no copy or assign
-  ProgBinaryTagContainer( const ProgBinaryTagContainer& );
-  ProgBinaryTagContainer& operator=( const ProgBinaryTagContainer& );
-};
+  /**
+  * @brief Does this exception contain a font definition for bullet color
+  * @return true if this exception contains a font definition for bullet color
+  */
+  bool hasBulletColor();
 
-class ProgStringTagContainer: public Container
-{
-public:
-  static const unsigned int id;
-  ProgStringTagContainer();
-  const char* name(){ return "ProgStringTagContainer"; }
+  /**
+  * @brief Does this exception need a font definition for bullet color
+  * @return true if this exception need a font definition for bullet color
+  */
+  bool needsBulletColor();
 
-private:
-  // no copy or assign
-  ProgStringTagContainer( const ProgStringTagContainer& );
-  ProgStringTagContainer& operator=( const ProgStringTagContainer& );
-};
+  /**
+  * @brief A bit that specifies whether the bulletChar field of the
+  * TextPFException structure that contains this PFMasks exists.
+  * @return true if this exception contains a bullet char definition
+  */
+  bool hasBulletChar();
 
-class ProgTagsContainer : public Container
-{
-public:
-  static const unsigned int id;
-  ProgTagsContainer ();
-  const char* name(){ return "ProgTagsContainer "; }
+  /**
+  * @brief A bit that specifies whether the bulletSize field of the
+  * TextPFException structure that contains this PFMasks exists.
+  * @return true if this exception contains a bullet size definition
+  */
+  bool hasBulletSize();
 
-private:
-  // no copy or assign
-  ProgTagsContainer ( const ProgTagsContainer & );
-  ProgTagsContainer & operator=( const ProgTagsContainer & );
-};
+  /**
+  * @brief A bit that specifies whether the bulletChar field of the
+  * TextPFException structure that contains this PFMasks exists.
+  * @return true if this exception contains a left margin definition
+  */
+  bool hasLeftMargin();
 
-class SlideContainer: public Container
-{
-public:
-  static const unsigned int id;
-  SlideContainer();
-  const char* name(){ return "SlideContainer"; }
+  /**
+  * @brief A bit that specifies whether the spaceBefore field of the
+  * TextPFException that contains this PFMasks exists.
+  * @return true if this exception contains a space before definition
+  */
+  bool hasSpaceBefore();
 
-private:
-  // no copy or assign
-  SlideContainer( const SlideContainer& );
-  SlideContainer& operator=( const SlideContainer& );
-};
+  /**
+  * @brief A bit that specifies whether the spaceAfter field of the
+  * TextPFException structure that contains this PFMasks exists.
+  * @return true if this exception contains a space after definition
+  */
+  bool hasSpaceAfter();
 
-class SlideBaseContainer: public Container
-{
-public:
-  static const unsigned int id;
-  SlideBaseContainer();
-  const char* name(){ return "SlideBaseContainer"; }
+  /**
+  * @brief A bit that specifies whether the indent field of the TextPFException
+  * structure that contains this PFMasks exists.
+  * @return true if this exception contains indentation definition
+  */
+  bool hasIndent();
 
-private:
-  // no copy or assign
-  SlideBaseContainer( const SlideBaseContainer& );
-  SlideBaseContainer& operator=( const SlideBaseContainer& );
-};
+  /**
+  * @brief A bit that specifies whether the textAlignment field of the
+  * TextPFException structure that contains this PFMasks exists.
+  * @return true if this exception contains alignment definition
+  */
+  bool hasAlign();
 
-class SlideListWithTextContainer: public Container
-{
-public:
-  static const unsigned int id;
-  SlideListWithTextContainer();
-  const char* name(){ return "SlideListWithTextContainer"; }
+  /**
+  * An optional FontIndexRef that specifies the font to use for the bullet.
+  * It MUST exist if and only if masks.bulletFont is TRUE. This field is valid
+  * if and only if bulletFlags.fBulletHasFont is TRUE.
+  *
+  */
+  unsigned int bulletFontRef();
 
-private:
-  // no copy or assign
-  SlideListWithTextContainer( const SlideListWithTextContainer& );
-  SlideListWithTextContainer& operator=( const SlideListWithTextContainer& );
-};
+  /**
+  * An optional ColorIndexStruct structure that specifies the color of a bullet.
+  * This field exists if and only if masks.bulletColor is TRUE. This field is
+  * valid if and only if bulletFlags.fBulletHasColor is TRUE.
+  *
+  */
+  ColorIndexStruct bulletColor();
 
-class SlideViewInfoContainer: public Container
-{
-public:
-  static const unsigned int id;
-  SlideViewInfoContainer();
-  const char* name(){ return "SlideViewInfoContainer"; }
+  /**
+  * A bit that specifies whether the bulletFlags field of the TextPFException
+  * structure that contains this PFMasks exists and whether
+  * bulletFlags.fHasBullet is valid.
+  *
+  */
+  bool bullet();
 
-private:
-  // no copy or assign
-  SlideViewInfoContainer( const SlideViewInfoContainer& );
-  SlideViewInfoContainer& operator=( const SlideViewInfoContainer& );
-};
+  /**
+  * An optional BulletSize that specifies the size of the bullet. It MUST exist
+  * if and only if masks.bulletSize is TRUE. This field is valid if and only if
+  * bulletFlags.fBulletHasSize is TRUE.
+  *
+  */
+  int bulletSize();
 
-class SorterViewInfoContainer : public Container
-{
-public:
-  static const unsigned int id;
-  SorterViewInfoContainer ();
-  const char* name(){ return "SorterViewInfoContainer "; }
+  /**
+  * An optional signed integer that specifies a UTF-16 Unicode [RFC2781]
+  * character to display as the bullet. The character MUST NOT be the NUL
+  * character 0x0000. It MUST exist if and only if masks.bulletChar is TRUE.
+  *
+  */
+  int bulletChar();
 
-private:
-  // no copy or assign
-  SorterViewInfoContainer ( const SorterViewInfoContainer & );
-  SorterViewInfoContainer & operator=( const SorterViewInfoContainer & );
-};
+  /**
+  * An optional MarginOrIndent that specifies the left margin of the
+  * paragraph. It MUST exist if and only if masks.leftMargin is TRUE.
+  *
+  */
+  int leftMargin();
 
-class SummaryContainer : public Container
-{
-public:
-  static const unsigned int id;
-  SummaryContainer ();
-  const char* name(){ return "SummaryContainer "; }
+  /**
+  * An optional ParaSpacing that specifies the size of the spacing before
+  * the paragraph. It MUST exist if and only if masks.spaceBefore is TRUE.
+  *
+  */
+  int spaceBefore();
 
-private:
-  // no copy or assign
-  SummaryContainer ( const SummaryContainer & );
-  SummaryContainer & operator=( const SummaryContainer & );
-};
+  /**
+  * An optional ParaSpacing that specifies the size of the spacing after the
+  * paragraph. It MUST exist if and only if masks.spaceAfter is TRUE.
+  *
+  */
+  int spaceAfter();
 
-class SrKinsokuContainer: public Container
-{
-public:
-  static const unsigned int id;
-  SrKinsokuContainer();
-  const char* name(){ return "SrKinsokuContainer"; }
+  /**
+  * An optional MarginOrIndent that specifies the indentation of the paragraph.
+  * It MUST exist if and only if masks.indent is TRUE.
+  *
+  */
+  int indent();
 
-private:
-  // no copy or assign
-  SrKinsokuContainer( const SrKinsokuContainer& );
-  SrKinsokuContainer& operator=( const SrKinsokuContainer& );
-};
+  /**
+  * An optional TextAlignmentEnum enumeration that specifies the
+  * alignment of the paragraph. It MUST exist if and only if masks.align is
+  * TRUE.
+  *
+  */
+  unsigned int textAlignment();
 
-class VBAInfoContainer: public Container
-{
-public:
-  static const unsigned int id;
-  VBAInfoContainer();
-  const char* name(){ return "VBAInfoContainer"; }
 
-private:
-  // no copy or assign
-  VBAInfoContainer( const VBAInfoContainer& );
-  VBAInfoContainer& operator=( const VBAInfoContainer& );
-};
-
-class ViewInfoContainer: public Container
-{
-public:
-  static const unsigned int id;
-  ViewInfoContainer();
-  const char* name(){ return "ViewInfoContainer"; }
-
-private:
-  // no copy or assign
-  ViewInfoContainer( const ViewInfoContainer& );
-  ViewInfoContainer& operator=( const ViewInfoContainer& );
-};
-
-class msofbtDgContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtDgContainer();
-  const char* name(){ return "msofbtDgContainer"; }
-
-private:
-  // no copy or assign
-  msofbtDgContainer( const msofbtDgContainer& );
-  msofbtDgContainer& operator=( const msofbtDgContainer& );
-};
-
-class msofbtSpContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtSpContainer();
-  const char* name(){ return "msofbtSpContainer"; }
-
-private:
-  // no copy or assign
-  msofbtSpContainer( const msofbtSpContainer& );
-  msofbtSpContainer& operator=( const msofbtSpContainer& );
-};
-
-class msofbtSpgrContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtSpgrContainer();
-  const char* name(){ return "msofbtSpgrContainer"; }
-
-private:
-  // no copy or assign
-  msofbtSpgrContainer( const msofbtSpgrContainer& );
-  msofbtSpgrContainer& operator=( const msofbtSpgrContainer& );
-};
-
-class msofbtDggContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtDggContainer();
-  const char* name(){ return "msofbtDggContainer"; }
-
-private:
-  // no copy or assign
-  msofbtDggContainer( const msofbtDggContainer& );
-  msofbtDggContainer& operator=( const msofbtDggContainer& );
-};
-
-class msofbtBstoreContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtBstoreContainer();
-  const char* name(){ return "msofbtBstoreContainer"; }
-
-private:
-  // no copy or assign
-  msofbtBstoreContainer( const msofbtBstoreContainer& );
-  msofbtBstoreContainer& operator=( const msofbtBstoreContainer& );
-};
-
-class msofbtSolverContainer: public Container
-{
-public:
-  static const unsigned int id;
-  msofbtSolverContainer();
-  const char* name(){ return "msofbtSolverContainer"; }
-
-private:
-  // no copy or assign
-  msofbtSolverContainer( const msofbtSolverContainer& );
-  msofbtSolverContainer& operator=( const msofbtSolverContainer& );
-};
-
-class BookmarkEntityAtom : public Record
-{
-public:
-  static const unsigned int id;
-  BookmarkEntityAtom ();
-  ~BookmarkEntityAtom ();
-
-  int bookmarkID() const;
-  void setBookmarkID( int bookmarkID );
-  int bookmarkName() const;
-  void setBookmarkName( int bookmarkName );
-
-  void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "BookmarkEntityAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
+  class Private;
+  Private *d;
+
+};
+
+/**
+* @brief A structure that specifies character-level and paragraph
+* level-formatting for a style level.
+*/
+class TextMasterStyleLevel
+{
+public:
+  TextMasterStyleLevel();
+  TextMasterStyleLevel(const TextMasterStyleLevel &level);
+  ~TextMasterStyleLevel();
+
+  /**
+  * @param parse data for this class
+  * @param size size of the data to parse
+  * @param data Data to parse
+  * @return number of bytes read
+  */
+  unsigned int setData(unsigned int size, const unsigned char *data);
+
+  /**
+  * @brief set level for this
+  */
+  void setLevel(unsigned int value);
+
+  /**
+  * @brief An optional unsigned integer that specifies to what style level this
+  * TextMasterStyleLevel applies.
+  */
+  unsigned int level();
+
+  /**
+  * @brief get text paragraph exception for this level
+  * @return text paragraph exception
+  */
+  TextPFException *pf();
+
+  /**
+  * @brief get text character exception for this level
+  * @return text character exception
+  */
+  TextCFException *cf();
+
+  void dump( std::ostream& out ) const;
+private:
+  class Private;
+  Private *d;
+
+
+};
+
+/**
+* An atom record that specifies the character-level and paragraph-level
+* formatting of a main master slide. If this TextMasterStyleAtom is contained in
+* a MainMasterContainer record, character-level and paragraph-level formatting
+* not specified by this TextMasterStyleAtom record inherit from the
+* TextMasterStyleAtom record contained in the DocumentTextInfoContainer record.
+*
+*/
+class TxMasterStyleAtom  : public Record
+{
+public:
+  static const unsigned int id;
+  TxMasterStyleAtom();
+  ~TxMasterStyleAtom();
+
+
+  const char* name() const { return "TxMasterStyleAtom  "; }
+  void dump( std::ostream& out ) const;
+
+  /**
+  * @brief Parse data for this class
+  * @param size size of the given data
+  * @param data data to parse
+  */
+  void setDataWithInstance( const unsigned int size,
+                const unsigned char* data,
+                unsigned int recInstance );
+
+  /**
+  * @brief get the amount of levels within this atom
+  * @return amount of levels
+  */
+  unsigned int levelCount();
+
+  /**
+  * @brief get specific level within this atom
+  * @param index index of the level
+  * @return specified TextMasterStyleLevel or 0 if none found
+  */
+  TextMasterStyleLevel *level(int index);
+private:
   // no copy or assign
-  BookmarkEntityAtom ( const BookmarkEntityAtom & );
-  BookmarkEntityAtom & operator=( const BookmarkEntityAtom & );
+  TxMasterStyleAtom  & operator=( const TxMasterStyleAtom  & );
+  TxMasterStyleAtom  ( const TxMasterStyleAtom  &other);
 
   class Private;
   Private *d;
 };
 
-class CStringAtom: public Record
-{
-public:
-  static const unsigned int id;
-  CStringAtom();
-  ~CStringAtom();
-
-  UString ustring() const;
-  void setUString( const UString& ustr );
-
-  void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "CStringAtom"; }
-  void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  CStringAtom( const CStringAtom& );
-  CStringAtom& operator=( const CStringAtom& );
-
-  class Private;
-  Private *d;
-};
-
+/**
+* @brief Specifies a SlideSchemeColorSchemeAtom or
+* SchemeListElementColorSchemeAtom.
+*
+* SlideSchemeColorSchemeAtom:
+* A container record that specifies the color scheme used by a slide.
+*
+* SchemeListElementColorSchemeAtom:
+* A container record that specifies a color scheme in a list of available color
+* schemes.
+*/
 class ColorSchemeAtom : public Record
 {
 public:
@@ -666,17 +797,408 @@ public:
   int accentAndFollowedHyperlink() const;
   void setAccentAndFollowedHyperlink( int accentAndFollowedHyperlink );
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ColorSchemeAtom "; }
+  const char* name() const { return "ColorSchemeAtom "; }
   void dump( std::ostream& out ) const;
 
+  /**
+  * @brief Get color as QColor with
+  *
+  */
+  QColor getColor(unsigned int index);
 private:
+  QColor intToQColor(unsigned int value);
   // no copy or assign
-  ColorSchemeAtom ( const ColorSchemeAtom & );
+
   ColorSchemeAtom & operator=( const ColorSchemeAtom & );
+  ColorSchemeAtom ( const ColorSchemeAtom & );
 
   class Private;
   Private *d;
 };
+
+/**
+* @brief A container record that specifies a main master slide.
+*/
+class MainMasterContainer: public Container
+{
+public:
+  static const unsigned int id;
+  MainMasterContainer();
+  ~MainMasterContainer();
+  const char* name() const { return "MainMasterContainer"; }
+  /**
+  * @brief add a new ColorSchemeAtom
+  * @param color new atom to add
+  */
+  void addSchemeListElementColorScheme(ColorSchemeAtom *color);
+
+  /**
+  * @brief add new text master style
+  * @param textMasterStyleAtom text master style to add
+  */
+  void addTextMasterStyle(TxMasterStyleAtom *textMasterStyleAtom);
+
+  /**
+  * @brief Get specified TextMasterStyleAtom
+  * @param index index of the atom to get
+  * @return specified TextMasterStyleAtom or 0 if none found
+  */
+  TxMasterStyleAtom *textMasterStyleAtom(int index);
+
+  /**
+  * @brief Get pointer to slideSchemeColorSchemeAtom
+  * @return pointer to slideSchemeColorSchemeAtom
+  */
+  ColorSchemeAtom *getSlideSchemeColorSchemeAtom();
+
+  /**
+  * @brief Get the amount of text master styles we have
+  *
+  */
+  unsigned int textMasterStyleCount();
+private:
+  class Private;
+  Private* d;
+  // no copy or assign
+  MainMasterContainer( const MainMasterContainer& );
+  MainMasterContainer& operator=( const MainMasterContainer& );
+};
+
+class NotesContainer: public Container
+{
+public:
+  static const unsigned int id;
+  NotesContainer();
+  const char* name() const { return "NotesContainer"; }
+
+private:
+  // no copy or assign
+  NotesContainer( const NotesContainer& );
+  NotesContainer& operator=( const NotesContainer& );
+};
+
+class OutlineViewInfoContainer : public Container
+{
+public:
+  static const unsigned int id;
+  OutlineViewInfoContainer ();
+  const char* name() const { return "OutlineViewInfoContainer "; }
+
+private:
+  // no copy or assign
+  OutlineViewInfoContainer ( const OutlineViewInfoContainer & );
+  OutlineViewInfoContainer & operator=( const OutlineViewInfoContainer & );
+};
+
+class PPDrawingContainer : public Container
+{
+public:
+  static const unsigned int id;
+  PPDrawingContainer ();
+  const char* name() const { return "PPDrawingContainer "; }
+
+private:
+  // no copy or assign
+  PPDrawingContainer ( const PPDrawingContainer & );
+  PPDrawingContainer & operator=( const PPDrawingContainer & );
+};
+
+class PPDrawingGroupContainer : public Container
+{
+public:
+  static const unsigned int id;
+  PPDrawingGroupContainer ();
+  const char* name() const { return "PPDrawingGroupContainer "; }
+
+private:
+  // no copy or assign
+  PPDrawingGroupContainer ( const PPDrawingGroupContainer & );
+  PPDrawingGroupContainer & operator=( const PPDrawingGroupContainer & );
+};
+
+class ProgBinaryTagContainer: public Container
+{
+public:
+  static const unsigned int id;
+  ProgBinaryTagContainer();
+  const char* name() const { return "ProgBinaryTagContainer"; }
+
+private:
+  // no copy or assign
+  ProgBinaryTagContainer( const ProgBinaryTagContainer& );
+  ProgBinaryTagContainer& operator=( const ProgBinaryTagContainer& );
+};
+
+class ProgStringTagContainer: public Container
+{
+public:
+  static const unsigned int id;
+  ProgStringTagContainer();
+  const char* name() const { return "ProgStringTagContainer"; }
+
+private:
+  // no copy or assign
+  ProgStringTagContainer( const ProgStringTagContainer& );
+  ProgStringTagContainer& operator=( const ProgStringTagContainer& );
+};
+
+class ProgTagsContainer : public Container
+{
+public:
+  static const unsigned int id;
+  ProgTagsContainer ();
+  const char* name() const { return "ProgTagsContainer "; }
+
+private:
+  // no copy or assign
+  ProgTagsContainer ( const ProgTagsContainer & );
+  ProgTagsContainer & operator=( const ProgTagsContainer & );
+};
+
+class SlideContainer: public Container
+{
+public:
+  static const unsigned int id;
+  SlideContainer();
+  const char* name() const { return "SlideContainer"; }
+
+private:
+  // no copy or assign
+  SlideContainer( const SlideContainer& );
+  SlideContainer& operator=( const SlideContainer& );
+};
+
+class SlideBaseContainer: public Container
+{
+public:
+  static const unsigned int id;
+  SlideBaseContainer();
+  const char* name() const { return "SlideBaseContainer"; }
+
+private:
+  // no copy or assign
+  SlideBaseContainer( const SlideBaseContainer& );
+  SlideBaseContainer& operator=( const SlideBaseContainer& );
+};
+
+class SlideListWithTextContainer: public Container
+{
+public:
+  static const unsigned int id;
+  SlideListWithTextContainer();
+  const char* name() const { return "SlideListWithTextContainer"; }
+
+private:
+  // no copy or assign
+  SlideListWithTextContainer( const SlideListWithTextContainer& );
+  SlideListWithTextContainer& operator=( const SlideListWithTextContainer& );
+};
+
+class SlideViewInfoContainer: public Container
+{
+public:
+  static const unsigned int id;
+  SlideViewInfoContainer();
+  const char* name() const { return "SlideViewInfoContainer"; }
+
+private:
+  // no copy or assign
+  SlideViewInfoContainer( const SlideViewInfoContainer& );
+  SlideViewInfoContainer& operator=( const SlideViewInfoContainer& );
+};
+
+class SorterViewInfoContainer : public Container
+{
+public:
+  static const unsigned int id;
+  SorterViewInfoContainer ();
+  const char* name() const { return "SorterViewInfoContainer "; }
+
+private:
+  // no copy or assign
+  SorterViewInfoContainer ( const SorterViewInfoContainer & );
+  SorterViewInfoContainer & operator=( const SorterViewInfoContainer & );
+};
+
+class SummaryContainer : public Container
+{
+public:
+  static const unsigned int id;
+  SummaryContainer ();
+  const char* name() const { return "SummaryContainer "; }
+
+private:
+  // no copy or assign
+  SummaryContainer ( const SummaryContainer & );
+  SummaryContainer & operator=( const SummaryContainer & );
+};
+
+class SrKinsokuContainer: public Container
+{
+public:
+  static const unsigned int id;
+  SrKinsokuContainer();
+  const char* name() const { return "SrKinsokuContainer"; }
+
+private:
+  // no copy or assign
+  SrKinsokuContainer( const SrKinsokuContainer& );
+  SrKinsokuContainer& operator=( const SrKinsokuContainer& );
+};
+
+class VBAInfoContainer: public Container
+{
+public:
+  static const unsigned int id;
+  VBAInfoContainer();
+  const char* name() const { return "VBAInfoContainer"; }
+
+private:
+  // no copy or assign
+  VBAInfoContainer( const VBAInfoContainer& );
+  VBAInfoContainer& operator=( const VBAInfoContainer& );
+};
+
+class ViewInfoContainer: public Container
+{
+public:
+  static const unsigned int id;
+  ViewInfoContainer();
+  const char* name() const { return "ViewInfoContainer"; }
+
+private:
+  // no copy or assign
+  ViewInfoContainer( const ViewInfoContainer& );
+  ViewInfoContainer& operator=( const ViewInfoContainer& );
+};
+
+class msofbtDgContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtDgContainer();
+  const char* name() const { return "msofbtDgContainer"; }
+
+private:
+  // no copy or assign
+  msofbtDgContainer( const msofbtDgContainer& );
+  msofbtDgContainer& operator=( const msofbtDgContainer& );
+};
+
+class msofbtSpContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtSpContainer();
+  const char* name() const { return "msofbtSpContainer"; }
+
+private:
+  // no copy or assign
+  msofbtSpContainer( const msofbtSpContainer& );
+  msofbtSpContainer& operator=( const msofbtSpContainer& );
+};
+
+class msofbtSpgrContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtSpgrContainer();
+  const char* name() const { return "msofbtSpgrContainer"; }
+
+private:
+  // no copy or assign
+  msofbtSpgrContainer( const msofbtSpgrContainer& );
+  msofbtSpgrContainer& operator=( const msofbtSpgrContainer& );
+};
+
+class msofbtDggContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtDggContainer();
+  const char* name() const { return "msofbtDggContainer"; }
+
+private:
+  // no copy or assign
+  msofbtDggContainer( const msofbtDggContainer& );
+  msofbtDggContainer& operator=( const msofbtDggContainer& );
+};
+
+class msofbtBstoreContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtBstoreContainer();
+  const char* name() const { return "msofbtBstoreContainer"; }
+
+private:
+  // no copy or assign
+  msofbtBstoreContainer( const msofbtBstoreContainer& );
+  msofbtBstoreContainer& operator=( const msofbtBstoreContainer& );
+};
+
+class msofbtSolverContainer: public Container
+{
+public:
+  static const unsigned int id;
+  msofbtSolverContainer();
+  const char* name() const { return "msofbtSolverContainer"; }
+
+private:
+  // no copy or assign
+  msofbtSolverContainer( const msofbtSolverContainer& );
+  msofbtSolverContainer& operator=( const msofbtSolverContainer& );
+};
+
+class BookmarkEntityAtom : public Record
+{
+public:
+  static const unsigned int id;
+  BookmarkEntityAtom ();
+  ~BookmarkEntityAtom ();
+
+  int bookmarkID() const;
+  void setBookmarkID( int bookmarkID );
+  int bookmarkName() const;
+  void setBookmarkName( int bookmarkName );
+
+  void setData( unsigned size, const unsigned char* data );
+  const char* name() const { return "BookmarkEntityAtom "; }
+  void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  BookmarkEntityAtom ( const BookmarkEntityAtom & );
+  BookmarkEntityAtom & operator=( const BookmarkEntityAtom & );
+
+  class Private;
+  Private *d;
+};
+
+class CStringAtom: public Record
+{
+public:
+  static const unsigned int id;
+  CStringAtom();
+  ~CStringAtom();
+
+  UString ustring() const;
+  void setUString( const UString& ustr );
+
+  void setData( unsigned size, const unsigned char* data );
+  const char* name() const { return "CStringAtom"; }
+  void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  CStringAtom( const CStringAtom& );
+  CStringAtom& operator=( const CStringAtom& );
+
+  class Private;
+  Private *d;
+};
+
+
 
 class CurrentUserAtom : public Record
 {
@@ -700,7 +1222,7 @@ public:
   int minorVersion() const;
   void setMinorVersion ( int minorVersion );
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ColorSchemeAtom "; }
+  const char* name() const { return "ColorSchemeAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -757,7 +1279,7 @@ public:
   void setShowComments( int showComments);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "DocumentAtom "; }
+  const char* name() const { return "DocumentAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -774,7 +1296,7 @@ class EndDocumentAtom: public Record
 public:
   static const unsigned int id;
   EndDocumentAtom();
-  const char* name(){ return "EndDocumentAtom"; }
+  const char* name() const { return "EndDocumentAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -794,7 +1316,7 @@ public:
   void setObjectIdSeed( int objectIdSeed );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ExObjListAtom "; }
+  const char* name() const { return "ExObjListAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -817,7 +1339,7 @@ public:
   void setObjID (int objID);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ExHyperlinkAtom   "; }
+  const char* name() const { return "ExHyperlinkAtom   "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -844,7 +1366,7 @@ public:
   void setUnavailable( int unavailable);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ExLinkAtom"; }
+  const char* name() const { return "ExLinkAtom"; }
   void dump( std::ostream& out ) const;
 private:
    // no copy or assign
@@ -876,7 +1398,7 @@ public:
   void setIsBlank(int isBlank);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ExOleObjAtom "; }
+  const char* name() const { return "ExOleObjAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -905,7 +1427,7 @@ public:
   void setIsTable(int isTable);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ExEmbedAtom "; }
+  const char* name() const { return "ExEmbedAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -936,7 +1458,7 @@ public:
   void setPitchAndFamily( int pitchAndFamily );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "FontEntityAtom"; }
+  const char* name() const { return "FontEntityAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -961,7 +1483,7 @@ public:
   void setPos(int pos);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "GuideAtom "; }
+  const char* name() const { return "GuideAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -986,7 +1508,7 @@ public:
   void setFlags( int flags );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "HeadersFootersAtom  "; }
+  const char* name() const { return "HeadersFootersAtom  "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1011,7 +1533,7 @@ public:
   void setFlags( int flags );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "NotesAtom "; }
+  const char* name() const { return "NotesAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1035,7 +1557,7 @@ public:
   unsigned long offset( unsigned index ) const;
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "PersistIncrementalBlockAtom "; }
+  const char* name() const { return "PersistIncrementalBlockAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1054,7 +1576,7 @@ public:
   Record1043 ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "Record1043 "; }
+  const char* name() const { return "Record1043 "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1073,7 +1595,7 @@ public:
   Record1044 ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "Record1044 "; }
+  const char* name() const { return "Record1044 "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1098,7 +1620,7 @@ public:
   void setPlaceholderId( int placeholderId);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SSlideLayoutAtom "; }
+  const char* name() const { return "SSlideLayoutAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1124,7 +1646,7 @@ public:
   int snapToShape() const;
   void setSnapToShape( int snapToShape);
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SlideViewInfoAtom "; }
+  const char* name() const { return "SlideViewInfoAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1155,7 +1677,7 @@ public:
   void setReserved(int reserved);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SlidePersistAtom  "; }
+  const char* name() const { return "SlidePersistAtom  "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1194,7 +1716,7 @@ public:
   void setFlags(int flags);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SSDocInfoAtom  "; }
+  const char* name() const { return "SSDocInfoAtom  "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1206,48 +1728,175 @@ private:
   Private *d;
 };
 
-class StyleTextPropAtom   : public Record
+
+
+
+
+
+/**
+* @brief A structure that specifies the character-level formatting of a run of
+* text.
+*
+* Let the corresponding text be as specified in the StyleTextPropAtom record
+* that contains this TextCFRun structure.
+*
+*/
+class TextCFRun
+{
+public:
+  TextCFRun();
+  TextCFRun(const TextCFRun &other);
+  ~TextCFRun();
+
+  /**
+  * @brief get the amount of characters this style applies to
+  * @return amount of characters
+  */
+  unsigned int count();
+
+  /**
+  * @brief set the amount of characters this style applies to
+  * @param count character count
+  */
+  void setCount(unsigned int count);
+
+  /**
+  * @brief Get TextException that applies to a run of characters
+  * @return TextException that applies to a run of characters
+  */
+  TextCFException * textCFException();
+private:
+  class Private;
+  Private *d;
+};
+
+/**
+* @brief A structure that specifies the paragraph-level formatting of a run of text.
+*
+* Let the corresponding text be as specified in the StyleTextPropAtom record
+* that contains this TextPFRun structure.
+*
+*/
+class TextPFRun
+{
+public:
+  TextPFRun();
+  TextPFRun(const TextPFRun &other);
+  ~TextPFRun();
+
+  /**
+  * @brief get the amount of characters this style applies to
+  * @return amount of characters
+  */
+  void setCount(unsigned int count);
+
+  /**
+  * @brief Set indentation level for this paragraph
+  *
+  */
+  void setIndentLevel(unsigned int level);
+
+  /**
+  * @brief get the count of characters this style applies to
+  * @return count of characters this style applies to
+  */
+  unsigned int count();
+
+  /**
+  * @brief Get indentation level for this paragraph
+  * @return indentation level for this paragraph
+  *
+  */
+  unsigned int indentLevel();
+
+  /**
+  * @brief Get TextPFException that applies to this paragraph
+  * @return TextPFException that applies to this paragraph
+  */
+  TextPFException *textPFException();
+private:
+  class Private;
+  Private *d;
+
+};
+
+/**
+* @brief An atom record that specifies character-level and paragraph-level
+* formatting.
+*
+* Let the corresponding text be specified by the TextHeaderAtom record that most
+* closely precedes this record. Let the corresponding shape be as specified in
+* the corresponding text. Let the corresponding main master be as specified in
+* the corresponding text. If the corresponding shape is a placeholder shape,
+* character-level and paragraph-level formatting not specified by this
+* StyleTextPropAtom record inherit from the TextMasterStyleAtom records
+* contained in the corresponding main master.
+*
+*/
+class StyleTextPropAtom : public Record
 {
 public:
   static const unsigned int id;
-  StyleTextPropAtom ();
-  ~StyleTextPropAtom ();
+  StyleTextPropAtom();
+  StyleTextPropAtom(const StyleTextPropAtom &atom);
+  ~StyleTextPropAtom();
 
-  // paragraph properties
-  int charCount( unsigned index ) const;
-  int depth( unsigned index ) const;
-  int bulletOn ( unsigned index ) const;
-  int bulletHardFont( unsigned index ) const;
-  int bulletHardColor( unsigned index ) const;
-  int bulletChar ( unsigned index ) const;
-  int bulletFont( unsigned index ) const;
-  int bulletHeight( unsigned index ) const;
-  int bulletColor( unsigned index ) const;
-  int align( unsigned index ) const;
-  int lineFeed( unsigned index ) const;
-  int upperDist( unsigned index ) const;
-  int lowerDist( unsigned index ) const;
-  int asianLB1( unsigned index ) const;
-  int asianLB2( unsigned index ) const;
-  int asianLB3( unsigned index ) const;
-  int biDi( unsigned index ) const;
+  /**
+  * @brief Get the amount of TextCFRuns this atom contains
+  * @return amount of TextCFRuns this atom contains
+  */
+  unsigned int textCFRunCount();
 
-// character properties
-  int charMask() const;
-  int charFlags() const;
+  /**
+  * @brief Get the amount of TextPFRuns this atom contains
+  * @return amount of TextPFRuns this atom contains
+  */
 
-  unsigned listSize() const;
+  unsigned int textPFRunCount();
 
+  /**
+  * @brief Get specific TextCFRun
+  * @param index index of the TextCFRun to get
+  * @return specified TextCFRun or 0 if none found
+  */
+  TextCFRun *textCFRun(unsigned int index);
+
+  /**
+  * @brief Get specific TextPFRun
+  * @param index index of the TextPFRun to get
+  * @return specified TextPFRun or 0 if none found
+  */
+  TextPFRun *textPFRun(unsigned int index);
+
+  /**
+  * @brief Find a TextCFRun that applies to specified position in text
+  * @param position index of the text (character) that we want to find
+  * TextCFRun to
+  * @return TextCFRun or 0 if none applies
+  */
+  TextCFRun *findTextCFRun(unsigned int pos);
+
+  /**
+  * @brief Find a TextPFRun that applies to specified position in text
+  * @param position index of the text (character) that we want to find
+  * TextPFRun to
+  * @return TextPFRun or 0 if none applies
+  */
+  TextPFRun *findTextPFRun(unsigned int pos);
+
+  /**
+  * @brief Parse data for this atom
+  * @param size size of the data to parse
+  * @param data Data to parse
+  * @param lastSize Size of previous textbytes/chars atom that this style applies
+  * to
+  */
   void setDataWithSize( unsigned size, const unsigned char* data, unsigned lastSize );
-  const char* name(){ return "StyleTextPropAtom   "; }
-  void dump( std::ostream& out ) const;
+  const char* name() const { return "StyleTextPropAtom   "; }
 private:
-  // character properties
-  void setCharMask ( int charMask );
-  void setCharFlags( int charFlags );
 
   // no copy or assign
-  StyleTextPropAtom   ( const StyleTextPropAtom   & );
+  //StyleTextPropAtom   ( const StyleTextPropAtom   & );
   StyleTextPropAtom   & operator=( const StyleTextPropAtom   & );
 
   class Private;
@@ -1275,7 +1924,7 @@ public:
   void setFlags( int flags );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SlideAtom"; }
+  const char* name() const { return "SlideAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1308,7 +1957,7 @@ public:
   void setsoundRef( int soundRef );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SSSlideInfoAtom"; }
+  const char* name() const { return "SSSlideInfoAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1328,7 +1977,7 @@ public:
   ~SrKinsokuAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "SrKinsokuAtom "; }
+  const char* name() const { return "SrKinsokuAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1340,24 +1989,7 @@ private:
   Private *d;
 };
 
-class TxMasterStyleAtom  : public Record
-{
-public:
-  static const unsigned int id;
-  TxMasterStyleAtom();
-  ~TxMasterStyleAtom();
 
-  const char* name(){ return "TxMasterStyleAtom  "; }
-  void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  TxMasterStyleAtom  ( const TxMasterStyleAtom  & );
-  TxMasterStyleAtom  & operator=( const TxMasterStyleAtom  & );
-
-  class Private;
-  Private *d;
-};
 
 class TxCFStyleAtom   : public Record
 {
@@ -1380,7 +2012,7 @@ public:
   void setFontColor( int fontColor );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TxCFStyleAtom   "; }
+  const char* name() const { return "TxCFStyleAtom   "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1400,14 +2032,11 @@ public:
   TextCharsAtom ();
   ~TextCharsAtom ();
 
-  unsigned listSize() const;
-  unsigned stringLength() const;
-  void setStringLength( unsigned stringLength );
-  UString strValue( unsigned index ) const;
-  void setText( UString ustring );
+  QString text() const;
+  void setText( QString text );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextCharsAtom   "; }
+  const char* name() const { return "TextCharsAtom   "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1426,7 +2055,7 @@ public:
   TxPFStyleAtom ();
   ~TxPFStyleAtom ();
 
-  const char* name(){ return "TxPFStyleAtom   "; }
+  const char* name() const { return "TxPFStyleAtom   "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1445,7 +2074,7 @@ public:
   TxSIStyleAtom  ();
   ~TxSIStyleAtom  ();
 
-  const char* name(){ return "TxSIStyleAtom    "; }
+  const char* name() const { return "TxSIStyleAtom    "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1468,7 +2097,7 @@ public:
   void setTextType( int type );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextHeaderAtom "; }
+  const char* name() const { return "TextHeaderAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1494,7 +2123,7 @@ public:
 
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextSpecInfoAtom  "; }
+  const char* name() const { return "TextSpecInfoAtom  "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1521,7 +2150,7 @@ public:
   void setBookmarkID( int bookmarkID );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextBookmarkAtom"; }
+  const char* name() const { return "TextBookmarkAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1540,15 +2169,11 @@ public:
   TextBytesAtom ();
   ~TextBytesAtom ();
 
-  unsigned listSize() const;
-  unsigned stringLength() const;
-  void setStringLength( unsigned stringLength );
-
-  UString strValue( unsigned index ) const;
-  void setText( UString ustring );
+  QString text() const;
+  void setText( QString text );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextBytesAtom   "; }
+  const char* name() const { return "TextBytesAtom   "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1582,7 +2207,7 @@ public:
   void setDocumentRef( unsigned long ref ) const;
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "UserEditAtom"; }
+  const char* name() const { return "UserEditAtom"; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1633,7 +2258,7 @@ public:
   void setPadding( int padding);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "ViewInfoAtom  "; }
+  const char* name() const { return "ViewInfoAtom  "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1653,7 +2278,7 @@ public:
   ~msofbtDgAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtDgAtom "; }
+  const char* name() const { return "msofbtDgAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1682,7 +2307,7 @@ public:
   void setHeight(double h);
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtSpgrAtom "; }
+  const char* name() const { return "msofbtSpgrAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -1925,7 +2550,7 @@ public:
   void setHorFlip( bool hFlip );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtSpAtom "; }
+  const char* name() const { return "msofbtSpAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2024,7 +2649,7 @@ public:
   void setProperty( unsigned id, unsigned long value );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtOPTAtom "; }
+  const char* name() const { return "msofbtOPTAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2053,7 +2678,7 @@ public:
   void setBottom( int bottom );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtChildAnchorAtom "; }
+  const char* name() const { return "msofbtChildAnchorAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2082,7 +2707,7 @@ public:
   void setBottom( int bottom );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtClientAnchorAtom "; }
+  const char* name() const { return "msofbtClientAnchorAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2137,7 +2762,7 @@ public:
   const char* placeholderIdAsString() const;
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtClientDataAtom "; }
+  const char* name() const { return "msofbtClientDataAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2172,7 +2797,7 @@ public:
   msofbtOleObjectAtom ();
   ~msofbtOleObjectAtom ();
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtOleObjectAtom "; }
+  const char* name() const { return "msofbtOleObjectAtom "; }
   void dump( std::ostream& out ) const;
 private:
   // no copy or assign
@@ -2189,7 +2814,7 @@ public:
   msofbtDeletedPsplAtom ();
   ~msofbtDeletedPsplAtom ();
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtDeletedPsplAtom "; }
+  const char* name() const { return "msofbtDeletedPsplAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2208,7 +2833,7 @@ public:
   msofbtDggAtom ();
   ~msofbtDggAtom ();
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtDggAtom "; }
+  const char* name() const { return "msofbtDggAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2227,7 +2852,7 @@ public:
   msofbtColorMRUAtom ();
   ~msofbtColorMRUAtom ();
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtColorMRUAtom "; }
+  const char* name() const { return "msofbtColorMRUAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2256,7 +2881,7 @@ public:
   void setThreeDColor( unsigned threeDColor );
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtSplitMenuColorsAtom "; }
+  const char* name() const { return "msofbtSplitMenuColorsAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2276,7 +2901,7 @@ public:
   ~msofbtBSEAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtBSEAtom "; }
+  const char* name() const { return "msofbtBSEAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2296,7 +2921,7 @@ public:
   ~msofbtCLSIDAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtCLSIDAtom "; }
+  const char* name() const { return "msofbtCLSIDAtom "; }
   void dump( std::ostream& out ) const;
 
 
@@ -2317,7 +2942,7 @@ public:
   ~msofbtRegroupItemsAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtRegroupItemsAtom "; }
+  const char* name() const { return "msofbtRegroupItemsAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2337,7 +2962,7 @@ public:
   ~msofbtColorSchemeAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtColorSchemeAtom "; }
+  const char* name() const { return "msofbtColorSchemeAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2357,7 +2982,7 @@ public:
   ~msofbtAnchorAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtAnchorAtom "; }
+  const char* name() const { return "msofbtAnchorAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2377,7 +3002,7 @@ public:
   ~msofbtConnectorRuleAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtConnectorRuleAtom "; }
+  const char* name() const { return "msofbtConnectorRuleAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2404,7 +3029,7 @@ public:
   void setCProxies( int cProxies );// number of shapes governed by rule
 
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtAlignRuleAtom "; }
+  const char* name() const { return "msofbtAlignRuleAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2424,7 +3049,7 @@ public:
   ~msofbtArcRuleAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtArcRuleAtom "; }
+  const char* name() const { return "msofbtArcRuleAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2444,7 +3069,7 @@ public:
   ~msofbtClientRuleAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtClientRuleAtom "; }
+  const char* name() const { return "msofbtClientRuleAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2464,7 +3089,7 @@ public:
   ~msofbtCalloutRuleAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtCalloutRuleAtom "; }
+  const char* name() const { return "msofbtCalloutRuleAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2484,7 +3109,7 @@ public:
   ~msofbtSelectionAtom ();
 
  // void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "msofbtSelectionAtom "; }
+  const char* name() const { return "msofbtSelectionAtom "; }
   void dump( std::ostream& out ) const;
 
 private:
@@ -2534,6 +3159,18 @@ protected:
   void handleEscherClientAnchorAtom( msofbtClientAnchorAtom* r );
   void handleEscherChildAnchorAtom( msofbtChildAnchorAtom* r );
 
+  void loadMainMasterContainer(MainMasterContainer *container);
+
+  /**
+  * @brief Increase record position so that it is at the start of count record
+  * starting from current record
+  *
+  * In other words if we are at record 5 and count is 6, then it sets the
+  * position to the start of record number 11
+  * @param count How many records to skip
+  */
+  void fastForwardRecords(unsigned int count);
+
   /**
   * @brief Handle font entity by creating a TextFont and storing it to
   * this presentation's font collection.
@@ -2541,6 +3178,19 @@ protected:
   */
   void handleFontEntityAtom( FontEntityAtom* r );
 
+  /**
+  * @brief Converts ColorIndexStruct to QColor
+  * @param color ColorIndexStruct to convert
+  * @return color converted to QColor
+  */
+  QColor colorIndexStructToQColor(const ColorIndexStruct &color);
+
+  /**
+  * @brief Convert UString to QString
+  * @param str String to convert
+  * @return str converted to QString
+  */
+  QString toQString( const Libppt::UString& str );
 private:
   // no copy or assign
   PPTReader( const PPTReader& );
@@ -2549,6 +3199,9 @@ private:
   class Private;
   Private* d;
 };
+
+
+
 
 }
 

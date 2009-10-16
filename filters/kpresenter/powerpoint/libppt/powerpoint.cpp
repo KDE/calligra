@@ -27,10 +27,12 @@
 #include <iomanip>
 
 #include <vector>
+#include <QList>
 #include <map>
 
 #include <kdebug.h>
 #include <stdio.h>
+#include <QColor>
 
 // Use anonymous namespace to cover following functions
 namespace{
@@ -75,6 +77,65 @@ std::ostream& operator<<( std::ostream& s, UString ustring )
 
 using namespace Libppt;
 
+// ========== recordHeader ==========
+/**
+* @brief A structure at the beginning of each container record and each atom record in the file.
+*
+* The values in the record header and the context of the record are used to
+* identify and interpret the record data that follows.
+*/
+class RecordHeader {
+  public:
+  RecordHeader();
+
+  /**
+  * @brief Parse data for this class
+  * @param data pointer to data to parse
+  */
+  void setData(unsigned char *data);
+
+  /**
+  * An unsigned integer that specifies the version of the record data that
+  * follows the record header. A value of 0xF specifies that the record is a
+  * container record.
+  */
+  unsigned int recVer;
+
+  /**
+  * An unsigned integer that specifies the record instance data. Interpretation
+  * of the value is dependent on the particular record type.
+  */
+  unsigned int recInstance;
+
+  /**
+  * A RecordType enumeration that specifies the type of the record data that
+  * follows the record header.
+  */
+  unsigned int recType;
+
+  /**
+  * An unsigned integer that specifies the length, in bytes, of the record data
+  * that follows the record header.
+  */
+  unsigned int recLen;
+};
+
+RecordHeader::RecordHeader()
+: recVer(0)
+, recInstance(0)
+, recType(0)
+, recLen(0)
+{
+
+}
+
+void RecordHeader::setData(unsigned char *data)
+{
+  recVer = (readU16(data) & 0xF000) >> 12;
+  recInstance = readU16( data ) >> 4;
+  recType = readU16( data + 2 );
+  recLen = readU32( data + 4 );
+}
 
 // ========== base record ==========
 
@@ -626,12 +687,79 @@ ExHyperlinkContainer::ExHyperlinkContainer()
 }
 
 // ========== MainMasterContainer ==========
+class MainMasterContainer::Private {
+public:
+
+  /**
+  * An array of SchemeListElementColorSchemeAtom record that specifies a list of
+  * color schemes. The array continues while the rh.recType field of each
+  * SchemeListElementColorSchemeAtom item is equal to RT_ColorSchemeAtom.
+  */
+  QList<ColorSchemeAtom *> rgSchemeListElementColorScheme;
+
+  /**
+  * An array of TextMasterStyleAtom record that specifies text formatting for
+  * this main master slide. It MUST contain at least one item with rh.recInstance
+  * equal to 0x000 (title placeholder) and at least one item with rh.recInstance
+  * equal to 0x001 (body placeholder). If this MainMasterContainer record is
+  * referenced by the first MasterPersistAtom record contained within the
+  * MasterListWithTextContainer record, this array MUST also contain at least
+  * one item with rh.recInstance equal to 0x002 (notes placeholder). The array
+  * continues while the rh.recType field of each TextMasterStyleAtom item is
+  * equal to RT_TextMasterStyleAtom.
+  */
+  QList<TxMasterStyleAtom *> rgTextMasterStyle;
+
+  /**
+  * A SlideSchemeColorSchemeAtom record that specifies the color scheme for this
+  * main master slide.
+  *
+  */
+  ColorSchemeAtom slideSchemeColorSchemeAtom;
+};
 
 const unsigned int MainMasterContainer::id = 1016;
 
 MainMasterContainer::MainMasterContainer()
 {
+  d = new Private();
 }
+
+MainMasterContainer::~MainMasterContainer()
+{
+  for(int i=0;i<d->rgSchemeListElementColorScheme.size();i++) {
+    delete d->rgSchemeListElementColorScheme[i];
+  }
+  for(int i=0;i<d->rgTextMasterStyle.size();i++) {
+    delete d->rgTextMasterStyle[i];
+  }
+  delete d;
+}
+void MainMasterContainer::addSchemeListElementColorScheme(ColorSchemeAtom *color)
+{
+  d->rgSchemeListElementColorScheme<<(color);
+}
+
+void MainMasterContainer::addTextMasterStyle(TxMasterStyleAtom *textMasterStyleAtom)
+{
+  d->rgTextMasterStyle<<textMasterStyleAtom;
+}
+
+ColorSchemeAtom *MainMasterContainer::getSlideSchemeColorSchemeAtom()
+{
+  return &d->slideSchemeColorSchemeAtom;
+}
+
+TxMasterStyleAtom *MainMasterContainer::textMasterStyleAtom(int index)
+{
+  return d->rgTextMasterStyle.value(index);
+}
+
+unsigned int MainMasterContainer::textMasterStyleCount()
+{
+  return d->rgTextMasterStyle.size();
+}
+
 
 // ========== EnvironmentContainer ==========
 
@@ -1133,15 +1261,12 @@ const unsigned int TextCharsAtom::id = 4000;
 class TextCharsAtom::Private
 {
 public:
-  std::vector<unsigned> index;
-  std::vector<UString> ustring;
-  unsigned stringLength;
+  QString text;
 };
 
 TextCharsAtom::TextCharsAtom()
 {
   d = new Private;
-  d->stringLength = 0;
 }
 
 TextCharsAtom::~TextCharsAtom()
@@ -1149,69 +1274,38 @@ TextCharsAtom::~TextCharsAtom()
   delete d;
 }
 
-unsigned TextCharsAtom::listSize() const
+QString TextCharsAtom::text() const
 {
-  return d->ustring.size();
+  return d->text;
 }
 
-unsigned TextCharsAtom::stringLength() const
+void TextCharsAtom::setText( QString text )
 {
-  return d->stringLength;
-}
-
-void TextCharsAtom::setStringLength( unsigned stringLength )
-{
-  d->stringLength = stringLength;
-}
-
-UString TextCharsAtom::strValue( unsigned index ) const
-{
-  return d->ustring[index];
-}
-
-void TextCharsAtom::setText( UString ustring )
-{
-  d->ustring.push_back( ustring );
+  d->text = text;
 }
 
 void TextCharsAtom::setData( unsigned size, const unsigned char* data )
 {
-  UString tempStr;
+  QString tempStr;
 
   for( unsigned k=0; k<size; k+=2 )
   {
     unsigned uchar = readU16( data + k );
-    if ( (uchar == 0x0b) | (uchar == 0x0d) )
-    {
-     setText(tempStr);
-     tempStr = "";
-    }
-    else
-     tempStr.append( UString(uchar) );
+    tempStr+=uchar;
 
    if ( ( uchar & 0xff00 ) == 0xf000 )
    { // handle later
      std::cout << "got a symbol at " << k << "th character" << std::endl;
    }
+  }
 
-  }
-  if( tempStr.length() > 0 )
-  {
-    setText(tempStr);
-  }
-  setStringLength(size/2);
+  d->text = tempStr;
 }
 
 void TextCharsAtom::dump( std::ostream& out ) const
 {
   out << "TextCharsAtom" << std::endl;
-  out << "listSize " << listSize() << std::endl;
-
-  for (uint i=0; i<listSize() ; i++)
-  {
-    out << "String " << i << " [" << strValue(i) << "]" << std::endl;
-  }
-
+  out << "String " << d->text.toLatin1().data()<<std::endl;
 }
 
 
@@ -1889,10 +1983,10 @@ public:
 ColorSchemeAtom::ColorSchemeAtom ()
 {
   d = new Private;
-  d->background = 0 ;
+  d->background = 0;
   d->textAndLines = 0;
-  d->shadows = 0 ;
-  d->titleText = 0 ;
+  d->shadows = 0;
+  d->titleText = 0;
   d->fills = 0;
   d->accent = 0;
   d->accentAndHyperlink = 0;
@@ -1985,6 +2079,48 @@ void ColorSchemeAtom::setAccentAndFollowedHyperlink( int accentAndFollowedHyperl
   d->accentAndFollowedHyperlink = accentAndFollowedHyperlink;
 }
 
+QColor ColorSchemeAtom::intToQColor(unsigned int value)
+{
+  QColor result;
+  result.setRed(  (value >> 0   ) & 0xff);
+  result.setGreen((value >> 8   ) & 0xff);
+  result.setBlue( (value >> 16  ) & 0xff);
+  return result;
+}
+
+QColor ColorSchemeAtom::getColor(unsigned int index)
+{
+  unsigned int value = 0;
+  switch(index) {
+    case 0:
+      value = d->background;
+    break;
+    case 1:
+      value = d->textAndLines;
+    break;
+    case 2:
+      value = d->shadows;
+    break;
+    case 3:
+      value = d->titleText;
+    break;
+    case 4:
+      value = d->fills;
+    break;
+    case 5:
+      value = d->accent;
+    break;
+    case 6:
+      value = d->accentAndHyperlink;
+    break;
+    case 7:
+      value = d->accentAndFollowedHyperlink;
+    break;
+  }
+
+  return intToQColor(value);
+}
+
 void ColorSchemeAtom ::setData( unsigned , const unsigned char* data )
 {
   setBackground( readS32( data + 0 ) );
@@ -1995,7 +2131,6 @@ void ColorSchemeAtom ::setData( unsigned , const unsigned char* data )
   setAccent( readU32( data + 20 ) );
   setAccentAndHyperlink( readU32( data + 24 ) );
   setAccentAndFollowedHyperlink( readU32( data + 28 ) );
-
 }
 
 void ColorSchemeAtom ::dump( std::ostream& out ) const
@@ -2577,21 +2712,1815 @@ void SrKinsokuAtom::dump( std::ostream& out ) const
   out << "SrKinsokuAtom - not yet implemented" << std::endl;
 }
 
+class ColorStruct::Private
+{
+  public:
+  QColor color;
+};
+
+ColorStruct::ColorStruct(const ColorStruct &other)
+{
+  d = new Private();
+  d->color = other.d->color;
+}
+ColorStruct::ColorStruct()
+{
+ d = new Private();
+}
+
+ColorStruct::~ColorStruct()
+{
+  delete d;
+}
+
+void ColorStruct::setData(const unsigned char *data)
+{
+  unsigned int temp = readU32(data);
+  d->color.setRed((temp & 0xff));
+  d->color.setGreen((temp>>8 & 0xff));
+  d->color.setBlue((temp>>16 & 0xff));
+}
+
+QColor ColorStruct::color()
+{
+  return d->color;
+}
+
+class ColorIndexStruct::Private
+{
+public:
+  Private()
+  : red(0)
+  , green(0)
+  , blue(0)
+  , index(0)
+  { }
+
+
+  /**
+  * @brief An unsigned integer that specifies the red component of this color.
+  */
+  unsigned int red;
+
+  /**
+  * @brief An unsigned integer that specifies the green component of this color.
+  */
+  unsigned int green;
+
+  /**
+  * @brief An unsigned integer that specifies the blue component of this color.
+  */
+  unsigned int blue;
+
+  /**
+  * @brief An unsigned integer that specifies the index in the color scheme.
+  * It MUST be a value from the following table:
+  * 0x00 Background color
+  * 0x01 Text color
+  * 0x02 Shadow color
+  * 0x03 Title text color
+  * 0x04 Fill color
+  * 0x05 Accent 1 color
+  * 0x06 Accent 2 color
+  * 0x07 Accent 3 color
+  * 0xFE Color is an sRGB value specified by red, green, and blue fields.
+  * 0xFF Color is undefined.
+  */
+  unsigned int index;
+
+};
+
+ColorIndexStruct::ColorIndexStruct()
+{
+  d = new Private();
+}
+
+ColorIndexStruct::ColorIndexStruct(const ColorIndexStruct &color)
+{
+  d = new Private();
+  d->red = color.red();
+  d->green = color.green();
+  d->blue = color.blue();
+  d->index = color.index();
+}
+
+ColorIndexStruct::~ColorIndexStruct()
+{
+  delete d;
+}
+
+unsigned int ColorIndexStruct::red() const
+{
+  return d->red;
+}
+
+unsigned int ColorIndexStruct::green() const
+{
+  return d->green;
+}
+
+unsigned int ColorIndexStruct::blue() const
+{
+  return d->blue;
+}
+
+unsigned int ColorIndexStruct::index() const
+{
+  return d->index;
+}
+
+void ColorIndexStruct::setData(const unsigned char *data)
+{
+  unsigned int temp = readU32(data);
+  d->red =    (temp       & 0xff);
+  d->green =  (temp>>8)   & 0xff;
+  d->blue =   (temp>>16)  & 0xff;
+  d->index =  (temp>>24)  & 0xff;
+}
+
+
+// ========== TextPFException ==========
+
+class TextPFException::Private {
+  public:
+  Private();
+  Private(const Private &other);
+  /**
+  * A PFMasks structure that specifies whether certain fields of this
+  * TextPFException record exist and are valid.
+  */
+  class PFMasks {
+    public:
+    PFMasks()
+    : hasBullet(false)
+    , bulletHasFont(false)
+    ,  bulletHasColor(false)
+    ,  bulletHasSize(false)
+    ,  bulletFont(false)
+    ,  bulletColor(false)
+    ,  bulletSize(false)
+    ,  bulletChar(false)
+    ,  leftMargin(false)
+    //,  unused(false)
+    ,  indent(false)
+    ,  align(false)
+    ,  lineSpacing(false)
+    ,  spaceBefore(false)
+    ,  spaceAfter(false)
+    ,  defaultTabSize(false)
+    ,  fontAlign(false)
+    ,  charWrap(false)
+    ,  wordWrap(false)
+    ,  overflow(false)
+    ,  tabStops(false)
+    ,  textDirection(false)
+    //,  reserved1(false)
+    ,  bulletBlip(false)
+    ,  bulletScheme(false)
+    ,  bulletHasScheme(false)
+    {}
+
+    PFMasks(const PFMasks &other)
+    : hasBullet(other.hasBullet)
+    , bulletHasFont(other.bulletHasFont)
+    ,  bulletHasColor(other.bulletHasColor)
+    ,  bulletHasSize(other.bulletHasSize)
+    ,  bulletFont(other.bulletFont)
+    ,  bulletColor(other.bulletColor)
+    ,  bulletSize(other.bulletSize)
+    ,  bulletChar(other.bulletChar)
+    ,  leftMargin(other.leftMargin)
+    //,  unused(other.unused)
+    ,  indent(other.indent)
+    ,  align(other.align)
+    ,  lineSpacing(other.lineSpacing)
+    ,  spaceBefore(other.spaceBefore)
+    ,  spaceAfter(other.spaceAfter)
+    ,  defaultTabSize(other.defaultTabSize)
+    ,  fontAlign(other.fontAlign)
+    ,  charWrap(other.charWrap)
+    ,  wordWrap(other.wordWrap)
+    ,  overflow(other.overflow)
+    ,  tabStops(other.tabStops)
+    ,  textDirection(other.textDirection)
+    //,  reserved1(other.reserved1)
+    ,  bulletBlip(other.bulletBlip)
+    ,  bulletScheme(other.bulletScheme)
+    ,  bulletHasScheme(other.bulletHasScheme)
+    {}
+
+    /*
+    These are PFMasks from [MS-PPT].pdf page 361
+    */
+    /**
+    * @brief A bit that specifies whether the bulletFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * bulletFlags.fHasBullet is valid.
+    */
+    bool hasBullet;          //A
+
+    /**
+    * @brief A bit that specifies whether the bulletFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * bulletFlags.fBulletHasFont is valid.
+    */
+    bool bulletHasFont;      //B
+
+    /**
+    * @brief A bit that specifies whether the bulletFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * bulletFlags.fBulletHasColor is valid.
+    *
+    */
+    bool bulletHasColor;     //C
+
+    /**
+    * @brief A bit that specifies whether the bulletFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * bulletFlags.fBulletHasSize is valid.
+    *
+    */
+    bool bulletHasSize;      //D
+
+    /**
+    * @brief A bit that specifies whether the bulletFontRef field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletFont;         //E
+
+    /**
+    * @brief A bit that specifies whether the bulletColor field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletColor;        //F
+
+    /**
+    * @brief A bit that specifies whether the bulletSize field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletSize;         //G
+
+    /**
+    * @brief A bit that specifies whether the bulletChar field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletChar;         //H
+
+    /**
+    * @brief A bit that specifies whether the leftMargin field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool leftMargin;         //I
+
+    //bool unused;           //J
+
+    /**
+    * @brief A bit that specifies whether the indent field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool indent;             //K
+
+    /**
+    * @brief A bit that specifies whether the textAlignment field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool align;              //L
+
+    /**
+    * @brief A bit that specifies whether the lineSpacing field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool lineSpacing;        //M
+
+    /**
+    * @brief A bit that specifies whether the spaceBefore field of the
+    * TextPFException that contains this PFMasks exists.
+    *
+    */
+    bool spaceBefore;        //N
+
+    /**
+    * @brief A bit that specifies whether the spaceAfter field of the
+    * TextPFException structure that contains this PFMasks exists
+    *
+    */
+    bool spaceAfter;         //O
+
+    /**
+    * @brief A bit that specifies whether the defaultTabSize field of the
+    * TextPFException structure that contains this PFMasks exists.
+
+    *
+    */
+    bool defaultTabSize;     //P
+
+    /**
+    * @brief A bit that specifies whether the fontAlign field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool fontAlign;          //Q
+
+    /**
+    * @brief A bit that specifies whether the wrapFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * wrapFlags.charWrap is valid.
+    *
+    */
+    bool charWrap;           //R
+
+    /**
+    * @brief A bit that specifies whether the wrapFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * wrapFlags.wordWrap is valid.
+    *
+    */
+    bool wordWrap;           //S
+
+    /**
+    * @brief A bit that specifies whether the wrapFlags field of the
+    * TextPFException structure that contains this PFMasks exists and whether
+    * wrapFlags.overflow is valid.
+    *
+    */
+    bool overflow;           //T
+
+    /**
+    * @brief A bit that specifies whether the tabStops field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool tabStops;           //U
+
+    /**
+    * @brief A bit that specifies whether the textDirection field of the
+    * TextPFException structure that contains this PFMasks exists.
+    *
+    */
+    bool textDirection;      //V
+
+    //bool reserved1;        //W
+
+    /**
+    * @brief A bit that specifies whether the bulletBlipRef field of the
+    * TextPFException9 structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletBlip;         //X
+
+    /**
+    * @brief A bit that specifies whether the bulletAutoNumberScheme field of
+    * the TextPFException9 structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletScheme;       //Y
+
+    /**
+    * @brief A bit that specifies whether the fBulletHasAutoNumber field of
+    * the TextPFException9 structure that contains this PFMasks exists.
+    *
+    */
+    bool bulletHasScheme;    //Z
+  };
+
+  /**
+  * An optional BulletFlags structure that specifies whether certain bullet-
+  * related fields are valid. It MUST exist if and only if any of
+  * masks.hasBullet, masks.bulletHasFont, masks.bulletHasColor, or
+  * masks.bulletHasSize is TRUE.
+  *
+  */
+  class BulletFlags {
+    public:
+    BulletFlags()
+    : fHasBullet(false)
+    , fBulletHasFont(false)
+    , fBulletHasColor(false)
+    , fBulletHasSize(false)
+    {}
+
+    BulletFlags(const BulletFlags &other)
+    : fHasBullet(other.fHasBullet)
+    , fBulletHasFont(other.fBulletHasFont)
+    ,  fBulletHasColor(other.fBulletHasColor)
+    ,  fBulletHasSize(other.fBulletHasColor)
+    {}
+
+    /**
+    * @brief A bit that specifies whether a bullet exists.
+    */
+    bool fHasBullet;
+
+    /**
+    * @brief A bit that specifies whether the bullet has a font.
+    */
+    bool fBulletHasFont;
+
+    /**
+    * @brief A bit that specifies whether the bullet has a color.
+    */
+    bool fBulletHasColor;
+
+    /**
+    * @brief A bit that specifies whether the bullet has a size.
+    */
+    bool fBulletHasSize;
+
+  };
+
+
+  PFMasks masks;
+
+  BulletFlags bulletFlags;
+
+  /**
+  * An optional signed integer that specifies a UTF-16 Unicode [RFC2781]
+  * character to display as the bullet. The character MUST NOT be the NUL
+  * character 0x0000. It MUST exist if and only if masks.bulletChar is TRUE.
+  *
+  */
+  int bulletChar;
+
+  /**
+  * An optional FontIndexRef that specifies the font to use for the bullet.
+  * It MUST exist if and only if masks.bulletFont is TRUE. This field is valid
+  * if and only if bulletFlags.fBulletHasFont is TRUE.
+  */
+  unsigned int bulletFontRef;
+
+  /**
+  * An optional BulletSize that specifies the size of the bullet. It MUST exist
+  * if and only if masks.bulletSize is TRUE. This field is valid if and only if
+  * bulletFlags.fBulletHasSize is TRUE.
+  */
+  int bulletSize;
+
+  /**
+  * An optional ColorIndexStruct structure that specifies the color of a bullet.
+  * This field exists if and only if masks.bulletColor is TRUE. This field is
+  * valid if and only if bulletFlags.fBulletHasColor is TRUE.
+  *
+  */
+  ColorIndexStruct bulletColor;
+
+  /**
+  * An optional TextAlignmentEnum enumeration that specifies the
+  * alignment of the paragraph. It MUST exist if and only if masks.align is TRUE.
+  */
+  unsigned int textAlignment;
+
+  /**
+  * An optional ParaSpacing that specifies the spacing between lines in the
+  * paragraph. It MUST exist if and only if masks.lineSpacing is TRUE.
+  *
+  */
+  int lineSpacing;
+
+  /**
+  * An optional ParaSpacing that specifies the size of the spacing before
+  * the paragraph. It MUST exist if and only if masks.spaceBefore is TRUE.
+  *
+  */
+  int spaceBefore;
+
+  /**
+  * An optional ParaSpacing that specifies the size of the spacing after the
+  * paragraph. It MUST exist if and only if masks.spaceAfter is TRUE.
+  *
+  */
+  int spaceAfter;
+
+  /**
+  * An optional MarginOrIndent that specifies the left margin of the
+  * paragraph. It MUST exist if and only if masks.leftMargin is TRUE.
+  *
+  */
+  int leftMargin;
+
+  /**
+  * An optional MarginOrIndent that specifies the indentation of the paragraph.
+  * It MUST exist if and only if masks.indent is TRUE.
+  *
+  */
+  int indent;
+
+  /**
+  * An optional TabSize that specifies the default tab size of the
+  * paragraph. It MUST exist if and only if masks.defaultTabSize is TRUE.
+  *
+  */
+  int defaultTabSize;
+
+  /**
+  * An optional TabStops structure that specifies the tab stops for the
+  * paragraph. It MUST exist if and only if masks.tabStops is TRUE.
+  *
+  */
+  //unsigned int tabStops;
+
+  /**
+  * An optional TextFontAlignmentEnum enumeration that specifies the font
+  * alignment of the text in the paragraph. It MUST exist if and only if
+  * masks.fontAlign is TRUE.
+  *
+  */
+  unsigned int fontAlign;
+
+  /**
+  * An optional PFWrapFlags structure that specifies text-wrapping options
+  * for the paragraph. It MUST exist if and only if any of masks.charWrap,
+  * masks.wordWrap, or masks.overflow is TRUE.
+  *
+  */
+  unsigned int wrapFlags;
+
+  /**
+  * An optional TextDirectionEnum enumeration that specifies the
+  * direction of the text in this paragraph. It MUST exist if and only if
+  * masks.textDirection is TRUE.
+  *
+  */
+  unsigned int textDirection;
+
+};
+
+TextPFException::Private::Private()
+: bulletChar(0)
+, bulletFontRef(0)
+, bulletSize(0)
+, textAlignment(0)
+, lineSpacing(0)
+, spaceBefore(0)
+, spaceAfter(0)
+, leftMargin(0)
+, indent(0)
+, defaultTabSize(0)
+//, tabStops(0)
+, fontAlign(0)
+, wrapFlags(0)
+, textDirection(0)
+{}
+
+TextPFException::Private::Private(const TextPFException::Private &other)
+  : masks(other.masks)
+  , bulletFlags(other.bulletFlags)
+  , bulletChar(other.bulletChar)
+  , bulletFontRef(other.bulletFontRef)
+  , bulletSize(other.bulletSize)
+  , bulletColor(other.bulletColor)
+  , textAlignment(other.textAlignment)
+  , lineSpacing(other.lineSpacing)
+  , spaceBefore(other.spaceBefore)
+  , spaceAfter(other.spaceAfter)
+  , leftMargin(other.leftMargin)
+  , indent(other.indent)
+  , defaultTabSize(other.defaultTabSize)
+  , fontAlign(other.fontAlign)
+  , textDirection(other.textDirection)
+{
+}
+
+TextPFException::TextPFException()
+: d(new TextPFException::Private())
+{
+
+}
+
+TextPFException::TextPFException(const TextPFException &exception)
+: d(new TextPFException::Private(*exception.d))
+{
+}
+
+bool TextPFException::hasBullet()
+{
+  return d->masks.hasBullet;
+}
+
+bool TextPFException::needsBulletFont()
+{
+  return d->masks.bulletHasFont;
+}
+
+bool TextPFException::hasBulletFont()
+{
+  return d->masks.bulletFont;
+}
+
+bool TextPFException::needsBulletColor()
+{
+  return d->masks.bulletHasColor;
+}
+
+bool TextPFException::hasBulletColor()
+{
+  return d->masks.bulletColor;
+}
+
+bool TextPFException::hasBulletSize()
+{
+  return d->masks.bulletSize;
+}
+
+bool TextPFException::hasBulletChar()
+{
+  return d->masks.bulletChar;
+}
+
+bool TextPFException::hasLeftMargin()
+{
+  return d->masks.leftMargin;
+}
+
+bool TextPFException::hasSpaceBefore()
+{
+  return d->masks.spaceBefore;
+}
+
+bool TextPFException::hasSpaceAfter()
+{
+  return d->masks.spaceAfter;
+}
+
+bool TextPFException::hasIndent()
+{
+  return d->masks.indent;
+}
+
+bool TextPFException::hasAlign()
+{
+  return d->masks.align;
+}
+
+
+bool TextPFException::bullet()
+{
+  return d->bulletFlags.fHasBullet;
+}
+
+
+unsigned int TextPFException::bulletFontRef()
+{
+  return d->bulletFontRef;
+}
+
+ColorIndexStruct TextPFException::bulletColor()
+{
+  return d->bulletColor;
+}
+
+int TextPFException::bulletChar()
+{
+  return d->bulletChar;
+}
+
+int TextPFException::bulletSize()
+{
+  return d->bulletSize;
+}
+
+int TextPFException::leftMargin()
+{
+  return d->leftMargin;
+}
+
+int TextPFException::spaceBefore()
+{
+  return d->spaceBefore;
+}
+
+int TextPFException::spaceAfter()
+{
+  return d->spaceAfter;
+}
+
+int TextPFException::indent()
+{
+  return d->indent;
+}
+
+unsigned int TextPFException::textAlignment()
+{
+  return d->textAlignment;
+}
+
+void TextPFException::dump( std::ostream& out ) const
+{
+  out<<"PFMasks:"<<std::endl;
+  out<<"hasBullet: "<<d->masks.hasBullet<<std::endl;
+  out<<"bulletHasFont: "<<d->masks.bulletHasFont<<std::endl;
+  out<<"bulletHasColor: "<<d->masks.bulletHasColor<<std::endl;
+  out<<"bulletHasSize: "<<d->masks.bulletHasSize<<std::endl;
+  out<<"bulletFont: "<<d->masks.bulletFont<<std::endl;
+  out<<"bulletColor: "<<d->masks.bulletColor<<std::endl;
+  out<<"bulletSize: "<<d->masks.bulletSize<<std::endl;
+  out<<"bulletChar: "<<d->masks.bulletChar<<std::endl;
+  out<<"leftMargin: "<<d->masks.leftMargin<<std::endl;
+  out<<"indent: "<<d->masks.indent<<std::endl;
+  out<<"align: "<<d->masks.align<<std::endl;
+  out<<"lineSpacing: "<<d->masks.lineSpacing<<std::endl;
+  out<<"spaceBefore: "<<d->masks.spaceBefore<<std::endl;
+  out<<"spaceAfter: "<<d->masks.spaceAfter<<std::endl;
+  out<<"defaultTabSize: "<<d->masks.defaultTabSize<<std::endl;
+  out<<"fontAlign: "<<d->masks.fontAlign<<std::endl;
+  out<<"charWrap: "<<d->masks.charWrap<<std::endl;
+  out<<"bulletSize: "<<d->masks.bulletSize<<std::endl;
+  out<<"wordWrap: "<<d->masks.wordWrap<<std::endl;
+  out<<"overflow: "<<d->masks.overflow<<std::endl;
+  out<<"tabStops: "<<d->masks.tabStops<<std::endl;
+  out<<"textDirection: "<<d->masks.textDirection<<std::endl;
+  out<<"bulletBlip: "<<d->masks.bulletBlip<<std::endl;
+  out<<"bulletScheme: "<<d->masks.bulletScheme<<std::endl;
+  out<<"bulletScheme: "<<d->masks.bulletScheme<<std::endl;
+  out<<"bulletHasScheme: "<<d->masks.bulletHasScheme<<std::endl;
+  out<<"bulletFlags.fHasBullet: "<<d->bulletFlags.fHasBullet<<std::endl;
+  out<<"bulletFlags.fBulletHasFont: "<<d->bulletFlags.fBulletHasFont<<std::endl;
+  out<<"bulletFlags.fBulletHasColor: "<<d->bulletFlags.fBulletHasColor<<std::endl;
+  out<<"bulletFlags.fBulletHasSize: "<<d->bulletFlags.fBulletHasSize<<std::endl;
+  out<<"indent: "<<d->indent<<std::endl;
+  out<<"bulletChar: "<<d->bulletChar<<std::endl;
+  out<<"bulletFontRef: "<<d->bulletFontRef<<std::endl;
+  out<<"leftMargin: "<<d->leftMargin<<std::endl;
+  out<<"spaceBefore: "<<d->spaceBefore<<std::endl;
+  out<<"spaceAfter: "<<d->spaceAfter<<std::endl;
+  out<<"textAlignment: "<<d->textAlignment<<std::endl;
+  out<<"lineSpacing: "<<d->lineSpacing<<std::endl;
+  out<<"bulletSize"<<d->bulletSize<<std::endl;
+  out<<"lineSpacing"<<d->lineSpacing<<std::endl;
+  out<<"defaultTabSize"<<d->defaultTabSize<<std::endl;
+  out<<"fontAlign"<<d->fontAlign<<std::endl;
+  out<<"textDirection"<<d->textDirection<<std::endl;
+  out<<"wrapflags"<<d->wrapFlags<<std::endl;
+  QColor temp(d->bulletColor.red(),d->bulletColor.green(),d->bulletColor.blue());
+  out<<"BulletColor:"<<temp.name().toLatin1().data()<<d->bulletColor.red()<<d->bulletColor.green()<<d->bulletColor.blue()<<d->bulletColor.index()<<std::endl;
+}
+
+unsigned int TextPFException::setData(unsigned int size, const unsigned char *data)
+{
+  const unsigned char* end = data + size;
+  unsigned int read = 0;
+  //Read PFMasks and split it to two variables
+  unsigned int mask1 = readU16(data); data += 2; read += 2;
+  unsigned int mask2 = readU16(data); data += 2; read += 2;
+
+  //Flags from mask1
+  d->masks.hasBullet =        (mask1 & 0x00001);    //A
+  d->masks.bulletHasFont =    (mask1 & 0x00002);    //B
+  d->masks.bulletHasColor =   (mask1 & 0x00004);    //C
+  d->masks.bulletHasSize =    (mask1 & 0x00008);    //D
+  d->masks.bulletFont =       (mask1 & 0x00010);    //E
+  d->masks.bulletColor =      (mask1 & 0x00020);    //F
+  d->masks.bulletSize =       (mask1 & 0x00040);    //G
+  d->masks.bulletChar =       (mask1 & 0x00080);    //H
+  d->masks.leftMargin =       (mask1 & 0x00100);    //I
+  //d->masks.unused =         (mask1 & 0x00200);    //J
+  d->masks.indent =           (mask1 & 0x00400);    //K
+  d->masks.align =            (mask1 & 0x00800);    //L
+  d->masks.lineSpacing =      (mask1 & 0x01000);    //M
+  d->masks.spaceBefore =      (mask1 & 0x02000);    //N
+  d->masks.spaceAfter =       (mask1 & 0x04000);    //O
+  d->masks.defaultTabSize =   (mask1 & 0x08000);    //P
+
+  //Flags from mask2
+  d->masks.fontAlign =        (mask2 & 0x00001);    //Q
+  d->masks.charWrap =         (mask2 & 0x00002);    //R
+  d->masks.wordWrap =         (mask2 & 0x00004);    //S
+  d->masks.overflow =         (mask2 & 0x00008);    //T
+  d->masks.tabStops =         (mask2 & 0x00010);    //U
+  d->masks.textDirection =    (mask2 & 0x00020);    //V
+  //d->masks.reserved1 =      (mask2 & 0x00040);    //W
+  d->masks.bulletBlip =       (mask2 & 0x00080);    //X
+  d->masks.bulletScheme =     (mask2 & 0x00100);    //Y
+  d->masks.bulletHasScheme =  (mask2 & 0x00200);    //Z
+
+  //Rest are reserved
+
+  //Then we read all the optional data structures
+
+  //bulletFlags (2 bytes)
+  if ((d->masks.hasBullet ||
+      d->masks.bulletHasFont ||
+      d->masks.bulletHasColor ||
+      d->masks.bulletHasSize) && data + 2 <= end) {
+
+    unsigned int temp = readU16(data); data += 2; read += 2;
+    d->bulletFlags.fHasBullet =       ( temp & 1 ) ? 1 : 0;
+    d->bulletFlags.fBulletHasFont =   ( temp & 2 ) ? 1 : 0;
+    d->bulletFlags.fBulletHasColor =  ( temp & 4 ) ? 1 : 0;
+    d->bulletFlags.fBulletHasSize =   ( temp & 8 ) ? 1 : 0;
+    //Rest 12 bits are reserved and must be ignored
+  }
+
+  //bulletChar (2 bytes)
+  if (d->masks.bulletChar && data + 2 <= end) {
+    d->bulletChar = readS16(data); data+=2; read += 2;
+  }
+
+  //bulletFontRef (2 bytes)
+  if (d->masks.bulletFont && data + 2 <= end) {
+    //NOTE: valid only if bulletFlags.fBulletHasFont is true
+    d->bulletFontRef = readU16(data); data += 2; read += 2;
+  }
+
+  //bulletSize (2 bytes)
+  if (d->masks.bulletSize && data + 2 <= end) {
+    //NOTE: valid only if bulletFlags.fBulletHasSize is true
+    d->bulletSize = readS16(data); data+=2; read += 2;
+  }
+
+  //bulletColor (4 bytes)
+  if (d->masks.bulletColor && data + 4 <= end) {
+    d->bulletColor.setData(data); data += 4; read += 4;
+  }
+
+  //textAlignment (2 bytes)
+  if (d->masks.align && data + 2 <= end) {
+    d->textAlignment = readU16(data); data += 2; read += 2;
+  }
+
+  //lineSpacing (2 bytes)
+  if (d->masks.lineSpacing && data + 2 <= end) {
+    d->lineSpacing = readS16(data); data+=2; read += 2;
+  }
+
+  //spaceBefore (2 bytes)
+  if (d->masks.spaceBefore && data + 2 <= end) {
+    d->spaceBefore = readS16(data); data+=2; read += 2;
+  }
+
+  //spaceAfter (2 bytes)
+  if (d->masks.spaceAfter && data + 2 <= end) {
+    d->spaceAfter = readS16(data); data+=2; read += 2;
+  }
+
+  //leftMargin (2 bytes)
+  if (d->masks.leftMargin && data + 2 <= end) {
+    d->leftMargin = readS16(data); data+=2; read += 2;
+  }
+
+  //indent (2 bytes)
+  if (d->masks.indent && data + 2 <= end) {
+    d->indent = readS16(data); data+=2; read += 2;
+  }
+
+  //defaultTabSize (2 bytes)
+  if (d->masks.defaultTabSize && data + 2 <= end) {
+    d->defaultTabSize = readS16(data); data+=2; read += 2;
+  }
+
+  //tabStops (2 bytes)
+  if (d->masks.tabStops && data + 2 <= end) {
+    unsigned int count = readU16(data); data+=2; read += 2;
+    for(unsigned int i=0;i<count;i++) {
+      //currently ignored
+      //First 2 bytes are position
+      //Second 2 bytes are type
+      data+=4; read += 4;
+    }
+  }
+
+  //fontAlign (2 bytes)
+  if (d->masks.fontAlign && data + 2 <= end) {
+    d->fontAlign = readU16(data); data+=2; read += 2;
+  }
+
+  //wrapFlags (2 bytes)
+  if ((d->masks.charWrap ||
+      d->masks.wordWrap ||
+      d->masks.overflow) && data + 2 <= end) {
+    //currently ignored
+    d->wrapFlags = readU16(data); data+=2; read += 2;
+  }
+
+  //textDirection (2 bytes)
+  if (d->masks.textDirection && data + 2 <= end) {
+    d->textDirection = readU16(data); data+=2; read += 2;
+  }
+
+  return read;
+}
+
+class TextPFRun::Private {
+  public:
+  Private();
+  Private(const Private &other);
+
+  /**
+  * @brief For how many character does this style apply to
+  *
+  */
+  unsigned int count;
+
+  /**
+  * @brief What is the indentation level of this paragraph
+  */
+  unsigned int indentLevel;
+
+  /**
+  * @brief Text paragraph exception that applies to this PFRun
+  *
+  */
+  TextPFException pf;
+};
+
+TextPFRun::Private::Private()
+: count(0)
+, indentLevel(0)
+{
+
+}
+
+TextPFRun::Private::Private(const Private &other)
+: count(other.count)
+, indentLevel(other.indentLevel)
+, pf(other.pf)
+{
+
+}
+
+
+TextPFRun::TextPFRun()
+: d(new Private())
+{
+}
+
+TextPFRun::TextPFRun(const TextPFRun &other)
+: d(new Private(*other.d))
+{
+}
+
+TextPFRun::~TextPFRun()
+{
+  delete d;
+}
+
+
+unsigned int TextPFRun::count()
+{
+  return d->count;
+}
+
+unsigned int TextPFRun::indentLevel()
+{
+  return d->indentLevel;
+}
+
+void TextPFRun::setCount(unsigned int count)
+{
+  d->count = count;
+}
+
+void TextPFRun::setIndentLevel(unsigned int level)
+{
+  d->indentLevel = level;
+}
+
+TextPFException *TextPFRun::textPFException()
+{
+  return &d->pf;
+}
+
+
+
+class TextCFRun::Private {
+  public:
+  Private();
+  Private(const Private &d);
+
+
+  /**
+  * @brief the amount of characters cf applies to
+  *
+  */
+  unsigned int count;
+
+  /**
+  * @brief Text character exception that applies to this TextCFRun
+  *
+  */
+  TextCFException cf;
+};
+
+TextCFRun::Private::Private()
+: count(0)
+{
+
+}
+
+TextCFRun::Private::Private(const Private &d)
+: count(d.count)
+, cf(d.cf)
+{
+
+}
+
+
+TextCFRun::TextCFRun()
+: d(new Private())
+{
+}
+
+TextCFRun::TextCFRun(const TextCFRun &other)
+: d(new Private(*other.d))
+{
+}
+
+TextCFRun::~TextCFRun()
+{
+  delete d;
+}
+
+
+unsigned int TextCFRun::count()
+{
+  return d->count;
+}
+
+void TextCFRun::setCount(unsigned int count)
+{
+  d->count = count;
+}
+
+TextCFException * TextCFRun::textCFException()
+{
+  return &d->cf;
+}
+
+
+// ========== TextCFException ==========
+
+class TextCFException::Private {
+  public:
+  Private();
+  Private(const Private &other);
+
+  /**
+  * @brief A structure that specifies character-level font, text-formatting, and
+  * extensibility options.
+  *
+  */
+  class CFMasks {
+    public:
+    CFMasks()
+    : bold(false)
+    , italic(false)
+    , underline(false)
+    //, unused1(false)
+    , shadow(false)
+    , fehint(false)
+    //bool unused2(false)
+    , kumi(false)
+    //bool unused3(false)
+    , emboss(false)
+    , fHasStyle(false)
+    //, unused4(false)
+    , typeface(false)
+    , size(false)
+    , color(false)
+    , position(false)
+    , pp10ext(false)
+    , oldEATypeface(false)
+    , ansiTypeface(false)
+    , symbolTypeface(false)
+    , newEATypeface(false)
+    , csTypeface(false)
+    , pp1ext(false)
+    {}
+
+    CFMasks(const CFMasks &other)
+    : bold(other.bold)
+    , italic(other.italic)
+    , underline(other.underline)
+    //, unused1(other.unused1)
+    , shadow(other.shadow)
+    , fehint(other.fehint)
+    //, unused2(other.unused2)
+    , kumi(other.kumi)
+    //, unused3(other.unused3)
+    , emboss(other.emboss)
+    , fHasStyle(other.fHasStyle)
+    //, unused4(other.unused4)
+    , typeface(other.typeface)
+    , size(other.size)
+    , color(other.color)
+    , position(other.position)
+    , pp10ext(other.pp10ext)
+    , oldEATypeface(other.oldEATypeface)
+    , ansiTypeface(other.ansiTypeface)
+    , symbolTypeface(other.symbolTypeface)
+    , newEATypeface(other.newEATypeface)
+    , csTypeface(other.csTypeface)
+    , pp1ext(other.pp1ext)
+    {}
+    /*
+    These are CFMasks from [MS-PPT].pdf page 355
+    */
+    /**
+    * @brief A bit that specifies whether the style.bold field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool bold;                //A
+
+    /**
+    * @brief A bit that specifies whether the style.italic field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool italic;              //B
+
+    /**
+    * @brief A bit that specifies whether the style.underline field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool underline;           //C
+
+    //bool unused1;           //D
+
+    /**
+    * @brief A bit that specifies whether the style.shadow field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool shadow;              //E
+
+    /**
+    * @brief A bit that specifies whether the style.fehint field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool fehint;              //F
+
+    //bool unused2;           //G
+
+    /**
+    * @brief A bit that specifies whether the style.kumi field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool kumi;                //H
+
+    //bool unused3;           //I
+
+    /**
+    * @brief A bit that specifies whether the style.emboss field of the
+    * TextCFException structure that contains this CFMasks is valid.
+    *
+    */
+    bool emboss;              //J
+
+    /**
+    * @brief An unsigned integer that specifies whether the fontStyle field of
+    * the TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    unsigned int fHasStyle;   //K
+
+    //bool unused4            //L
+
+    /**
+    * @brief A bit that specifies whether the fontRef field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool typeface;            //M
+
+    /**
+    * @brief A bit that specifies whether the fontSize field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool size;                //N
+
+    /**
+    * @brief A bit that specifies whether the color field of the TextCFException
+    * structure that contains this CFMasks exists.
+    *
+    */
+    bool color;               //O
+
+    /**
+    * @brief A bit that specifies whether the position field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool position;            //P
+
+    /**
+    * @brief A bit that specifies whether the pp10runid and unused fields of the
+    * TextCFException9 structure that contains this CFMasks exist.
+    *
+    */
+    bool pp10ext;             //Q
+
+    /**
+    * @brief A bit that specifies whether the oldEAFontRef field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool oldEATypeface;       //R
+
+    /**
+    * @brief A bit that specifies whether the ansiFontRef field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool ansiTypeface;        //S
+
+    /**
+    * @brief A bit that specifies whether the symbolFontRef field of the
+    * TextCFException structure that contains this CFMasks exists.
+    *
+    */
+    bool symbolTypeface;      //T
+
+    /**
+    * @brief A bit that specifies whether the newEAFontRef field of the
+    * TextCFException10 structure that contains this CFMasks exists.
+    *
+    */
+    bool newEATypeface;       //U
+
+    /**
+    * @brief A bit that specifies whether the csFontRef field of the
+    * TextCFException10 structure that contains this CFMasks exists.
+    *
+    */
+    bool csTypeface;          //V
+
+    /**
+    * @brief A bit that specifies whether the pp11ext field of the
+    * TextCFException10 structure that contains this CFMasks exists.
+    *
+    */
+    bool pp1ext;              //W
+  };
+
+  /**
+  * @brief A structure that specifies character-level text formatting.
+  */
+  class CFStyle {
+    public:
+    CFStyle()
+    : bold(false)
+    , italic(false)
+    , underline(false)
+    , shadow(false)
+    , fehint(false)
+    , kumi(false)
+    , emboss(false)
+    , pp9rt(0)
+    {}
+
+    CFStyle(const CFStyle &other)
+    : bold(other.bold)
+    , italic(other.italic)
+    , underline(other.underline)
+    , shadow(other.shadow)
+    , fehint(other.fehint)
+    , kumi(other.kumi)
+    , emboss(other.emboss)
+    , pp9rt(other.pp9rt)
+    {}
+
+
+    /**
+    * @brief A bit that specifies whether the characters are bold.
+    *
+    */
+    bool bold;          //A
+
+    /**
+    * @brief A bit that specifies whether the characters are italicized.
+    *
+    */
+    bool italic;        //B
+
+    /**
+    * @brief A bit that specifies whether the characters are underlined.
+    *
+    */
+    bool underline;     //C
+
+    //bool unused;      //D
+
+    /**
+    * @brief A bit that specifies whether the characters have a shadow effect.
+    *
+    */
+    bool shadow;        //E
+
+    /**
+    * @brief A bit that specifies whether characters originated from double-byte
+    * input.
+    *
+    */
+    bool fehint;        //F
+
+    //bool unused2;     //G
+
+    /**
+    * @brief A bit that specifies whether Kumimoji are used for vertical text.
+    *
+    */
+    bool kumi;          //H
+
+    //bool unused3;     //I
+
+    /**
+    * @brief A bit that specifies whether the characters are embossed.
+    *
+    */
+    bool emboss;        //J
+
+    /**
+    * @brief An unsigned integer that specifies the run grouping of additional
+    * text properties in StyleTextProp9Atom record.
+    *
+    */
+    unsigned int pp9rt; //pp9rt
+
+    //bool unused4;     //K
+  };
+
+  /**
+  * A CFMasks structure that specifies whether certain fields in this
+  * TextCFException record exist and are valid.
+  */
+  CFMasks masks;
+
+  /**
+  * A CFStyle structure that specifies the character-level style. It MUST exist
+  * if and only if one or more of the following fields are TRUE: masks.bold,
+  * masks.italic, masks.underline, masks.shadow, masks.fehint, masks.kumi,
+  * masks.emboss, or masks.fHasStyle.
+  *
+  */
+  CFStyle fontStyle;
+
+  /**
+  * An optional FontIndexRef that specifies the font. It MUST exist if and only
+  * if masks.typeface is TRUE.
+  *
+  */
+  unsigned int fontRef;
+
+  /**
+  * An optional FontIndexRef that specifies an East Asian font. It MUST
+  * exist if and only if masks.oldEATypeface is TRUE.
+  *
+  */
+  unsigned int oldEAFontRef;
+
+  /**
+  * An optional FontIndexRef that specifies an ANSI font. It MUST exist if
+  * and only if masks.ansiTypeface is TRUE.
+  *
+  */
+  unsigned int ansiFontRef;
+
+  /**
+  * An optional FontIndexRef that specifies a symbol font. It MUST exist
+  * if and only if masks.symbolTypeface is TRUE.
+  *
+  */
+  unsigned int symbolFontRef;
+
+  /**
+  * An optional signed integer that specifies the size, in points, of the font.
+  * It MUST be greater than or equal to 1 and less than or equal to 4000. It
+  * MUST exist if and only if masks.size is TRUE.
+  *
+  */
+  int fontSize;
+
+  /**
+  * An optional ColorIndexStruct structure that specifies the color of the text.
+  * It MUST exist if and only if masks.color is TRUE.
+  *
+  */
+  ColorIndexStruct color;
+
+  /**
+  * An optional signed integer that specifies the baseline position of a text
+  * run relative to the baseline of the text line as a percentage of line
+  * height. It MUST be greater than or equal to -100 and less than or equal to
+  * 100. It MUST exist if and only if masks.position is TRUE.
+  *
+  */
+  int position;
+
+};
+
+TextCFException::Private::Private(const Private &other)
+: masks(other.masks)
+, fontStyle(other.fontStyle)
+, fontRef(other.fontRef)
+, oldEAFontRef(other.oldEAFontRef)
+, ansiFontRef(other.ansiFontRef)
+, symbolFontRef(other.symbolFontRef)
+, fontSize(other.fontSize)
+, color(other.color)
+, position(other.position)
+{
+
+}
+
+TextCFException::Private::Private()
+: fontRef(0)
+, oldEAFontRef(0)
+, ansiFontRef(0)
+, symbolFontRef(0)
+, fontSize(0)
+, position(0)
+{
+
+}
+
+TextCFException::TextCFException(const TextCFException &exception)
+: d(new Private(*exception.d))
+{
+
+}
+
+TextCFException::TextCFException()
+  : d(new Private())
+{
+}
+
+TextCFException::~TextCFException()
+{
+  delete d;
+}
+
+bool TextCFException::hasFont()
+{
+  return d->masks.typeface;
+}
+
+bool TextCFException::hasFontSize()
+{
+  return d->masks.size;
+}
+
+bool TextCFException::hasColor()
+{
+  return d->masks.color;
+}
+
+unsigned int TextCFException::fontRef()
+{
+  return d->fontRef;
+}
+
+bool TextCFException::hasItalic()
+{
+  return d->masks.italic;
+}
+
+bool TextCFException::hasBold()
+{
+  return d->masks.bold;
+}
+
+bool TextCFException::italic()
+{
+  return d->fontStyle.italic;
+}
+
+bool TextCFException::bold()
+{
+  return d->fontStyle.bold;
+}
+
+int TextCFException::fontSize()
+{
+  return d->fontSize;
+}
+
+ColorIndexStruct TextCFException::color()
+{
+  return d->color;
+}
+
+void TextCFException::dump( std::ostream& out ) const
+{
+  out<<"CFMasks:";
+  out<<"bold: "<<d->masks.bold<<std::endl;
+  out<<"italic: "<<d->masks.italic<<std::endl;
+  out<<"underline: "<<d->masks.underline<<std::endl;
+  out<<"shadow: "<<d->masks.shadow<<std::endl;
+  out<<"fehint: "<<d->masks.fehint<<std::endl;
+  out<<"kumi: "<<d->masks.kumi<<std::endl;
+  out<<"emboss: "<<d->masks.emboss<<std::endl;
+  out<<"fHasStyle: "<<d->masks.fHasStyle<<std::endl;
+  out<<"typeface: "<<d->masks.typeface<<std::endl;
+  out<<"size: "<<d->masks.size<<std::endl;
+  out<<"color: "<<d->masks.color<<std::endl;
+  out<<"position: "<<d->masks.position<<std::endl;
+  out<<"pp10ext: "<<d->masks.pp10ext<<std::endl;
+  out<<"oldEATypeface: "<<d->masks.oldEATypeface<<std::endl;
+  out<<"ansiTypeface: "<<d->masks.ansiTypeface<<std::endl;
+  out<<"symbolTypeface: "<<d->masks.symbolTypeface<<std::endl;
+  out<<"newEATypeface: "<<d->masks.newEATypeface<<std::endl;
+  out<<"csTypeface: "<<d->masks.csTypeface<<std::endl;
+  out<<"pp1ext: "<<d->masks.pp1ext<<std::endl;
+  out<<"fontStyle.bold"<<d->fontStyle.bold<<std::endl;
+  out<<"fontStyle.italic"<<d->fontStyle.italic<<std::endl;
+  out<<"fontStyle.underline"<<d->fontStyle.underline<<std::endl;
+  out<<"fontStyle.shadow"<<d->fontStyle.shadow<<std::endl;
+  out<<"fontStyle.fehint"<<d->fontStyle.fehint<<std::endl;
+  out<<"fontStyle.kumi"<<d->fontStyle.kumi<<std::endl;
+  out<<"fontStyle.emboss"<<d->fontStyle.emboss<<std::endl;
+  out<<"fontStyle.pp9rt"<<d->fontStyle.pp9rt<<std::endl;
+  out<<"fontSize: "<<d->fontSize<<std::endl;
+  out<<"position"<<d->position<<std::endl;
+  out<<"oldEAFontRef"<<d->oldEAFontRef<<std::endl;
+  out<<"ansiFontRef"<<d->ansiFontRef<<std::endl;
+  out<<"symbolFontRef"<<d->symbolFontRef<<std::endl;
+  out<<"fontRef"<<d->fontRef<<std::endl;
+  QColor temp(d->color.red(),d->color.green(),d->color.blue());
+  out<<"Color:"<<temp.name().toLatin1().data()<<d->color.red()<<d->color.green()<<d->color.blue()<<d->color.index()<<std::endl;
+}
+
+
+unsigned int TextCFException::setData(unsigned int size, const unsigned char *data)
+{
+  const unsigned char *end = data + size;
+  unsigned int read = 0;
+  unsigned int mask1 = readU16(data); data += 2; read += 2;
+  unsigned int mask2 = readU16(data); data += 2; read += 2;
+
+  d->masks.bold =           (mask1 & 0x00001);      //A
+  d->masks.italic =         (mask1 & 0x00002);      //B
+  d->masks.underline =      (mask1 & 0x00004);      //C
+  //d->masks.unused1 =      (mask1 & 0x00008);      //D
+  d->masks.shadow =         (mask1 & 0x00010);      //E
+  d->masks.fehint =         (mask1 & 0x00020);      //F
+  //d->masks.unused2 =      (mask1 & 0x00040);      //G
+  d->masks.kumi =           (mask1 & 0x00080);      //H
+  //d->masks.unused3 =      (mask1 & 0x00100);      //I
+  d->masks.emboss =         (mask1 & 0x00200);      //J
+  d->masks.fHasStyle =      (mask1 & 0x3C00) >> 10; //K,4 bits
+  //d->masks.unused2 =      (mask1 & 0x00800);      //L,2 bits
+
+  d->masks.typeface =       (mask2 & 0x00001);      //M
+  d->masks.size =           (mask2 & 0x00002);      //N
+  d->masks.color =          (mask2 & 0x00004);      //O
+  d->masks.position =       (mask2 & 0x00008);      //P
+  d->masks.pp10ext =        (mask2 & 0x00010);      //Q
+  d->masks.oldEATypeface =  (mask2 & 0x00020);      //R
+  d->masks.ansiTypeface =   (mask2 & 0x00040);      //S
+  d->masks.symbolTypeface = (mask2 & 0x00080);      //T
+  d->masks.newEATypeface =  (mask2 & 0x00100);      //U
+  d->masks.csTypeface =     (mask2 & 0x00200);      //V
+  d->masks.pp1ext =         (mask2 & 0x00400);      //W
+
+  //fontStyle (2 bytes)
+  if ((d->masks.bold ||
+    d->masks.italic ||
+    d->masks.underline ||
+    d->masks.shadow ||
+    d->masks.kumi ||
+    d->masks.emboss ||
+    d->masks.fHasStyle) && data +2 <= end)
+  {
+    unsigned int temp = readU16(data); data += 2; read += 2;
+    d->fontStyle.bold =        (temp & 0x001);         //A
+    d->fontStyle.italic =      (temp & 0x002);         //B
+    d->fontStyle.underline =   (temp & 0x004);         //C
+    //d->fontStyle.unused1 =   (temp & 0x008);         //D
+    d->fontStyle.shadow =      (temp & 0x010);         //E
+    d->fontStyle.fehint =      (temp & 0x020);         //F
+    //d->fontStyle.unused2 =     (temp & 0x040);       //G
+    d->fontStyle.kumi =        (temp & 0x080);         //H
+    //d->fontStyle.unused3 =     (temp & 0x100);       //I
+    d->fontStyle.emboss =      (temp & 0x200);         //J
+    d->fontStyle.pp9rt =       (mask1 & 0x3C00) >> 10;  //pp9rt
+    //d->fontStyle.unused4 =   (temp & 0x001); //K
+  }
+
+  //fontRef (2 bytes)
+  if (d->masks.typeface && data + 2 <= end) {
+    d->fontRef = readS16(data); data+=2; read += 2;
+  }
+
+  //oldEAFontRef (2 bytes)
+  if (d->masks.oldEATypeface && data + 2 <= end) {
+    d->oldEAFontRef = readS16(data); data+=2; read += 2;
+  }
+
+  //ansiFontRef (2 bytes)
+  if (d->masks.ansiTypeface && data + 2 <= end) {
+    d->ansiFontRef = readS16(data); data+=2; read += 2;
+  }
+
+  //symbolFontRef (2 bytes)
+  if (d->masks.symbolTypeface && data + 2 <= end) {
+    d->symbolFontRef = readS16(data); data+=2; read += 2;
+  }
+
+  //fontSize (2 bytes)
+  if (d->masks.size && data + 2 <= end) {
+    d->fontSize = readS16(data); data+=2; read += 2;
+  }
+
+  //color (4 bytes)
+  if (d->masks.color && data + 4 <= end) {
+    d->color.setData(data); data+=4; read+=4;
+  }
+
+  //position (2 bytes)
+  if (d->masks.position && data + 2 <= end) {
+    d->position = readS16(data); data+=2; read += 2;
+  }
+
+  return read;
+}
+
+
+class TextMasterStyleLevel::Private
+{
+public:
+  Private();
+  Private(const Private &other);
+
+  /**
+  * @brief Optional intendation level associated to this level
+  *
+  */
+  unsigned int level;
+
+  /**
+  * @brief Text paragraph exception for this style level
+  */
+  TextPFException pf;
+
+  /**
+  * @brief Text character exception for this style level
+  */
+  TextCFException cf;
+};
+
+TextMasterStyleLevel::Private::Private(const Private &other)
+: level(other.level)
+, pf(other.pf)
+, cf(other.cf)
+{
+
+}
+
+TextMasterStyleLevel::Private::Private()
+: level(0)
+, pf()
+, cf()
+{
+
+}
+
+void TextMasterStyleLevel::dump( std::ostream& out ) const
+{
+  out<<"Level: "<<d->level;
+  out<<"TextPFException:"<<std::endl;
+  d->pf.dump(out);
+  out<<"TextCFException:"<<std::endl;
+  d->cf.dump(out);
+}
+
+
+unsigned int TextMasterStyleLevel::setData(const unsigned int size, const unsigned char *data)
+{
+  unsigned int read = d->pf.setData(size,data);
+  data += read;
+  read += d->cf.setData(size-read,data);
+  return read;
+}
+
+void TextMasterStyleLevel::setLevel(unsigned int value)
+{
+  d->level = value;
+}
+
+unsigned int TextMasterStyleLevel::level()
+{
+  return d->level;
+}
+
+TextPFException *TextMasterStyleLevel::pf()
+{
+  return &d->pf;
+}
+
+TextCFException *TextMasterStyleLevel::cf()
+{
+  return &d->cf;
+}
+
+TextMasterStyleLevel::TextMasterStyleLevel(const TextMasterStyleLevel &level)
+: d(new Private(*level.d))
+{
+
+}
+
+TextMasterStyleLevel::TextMasterStyleLevel() : d(new Private())
+{
+}
+
+TextMasterStyleLevel::~TextMasterStyleLevel()
+{
+  delete d;
+}
+
 // ========== TxMasterStyleAtom ==========
 
 const unsigned int TxMasterStyleAtom::id = 4003;
 
+class TxMasterStyleAtom::Private
+{
+public:
+  Private() { } ;
+  ~Private() { } ;
+
+  /**
+  * An optional variable sized TextMasterStyleLevel array that specifies the
+  * master formatting for text that has an IndentLevel equal to 0x0000 - 0x0005.
+  * It MUST exist if and only if cLevels is greater than 0x0000.
+  */
+  QList<TextMasterStyleLevel> levels;
+};
+
 TxMasterStyleAtom::TxMasterStyleAtom()
 {
+  d = new Private();
+}
+
+TxMasterStyleAtom::TxMasterStyleAtom( const TxMasterStyleAtom  &other):
+Record()
+{
+  d = new Private();
+  for(int i=0;i<other.d->levels.size();i++) {
+    d->levels<<other.d->levels[i];
+  }
 }
 
 TxMasterStyleAtom::~TxMasterStyleAtom()
 {
+  delete d;
+}
+
+void TxMasterStyleAtom::setDataWithInstance(const unsigned int size,
+                                            const unsigned char* data,
+                                            unsigned int recInstance )
+{
+  unsigned int levels = readU16(data); data += 2;
+  unsigned int tempSize = size - 2;
+
+  for(unsigned int i=0;i<levels && size > 0;i++)
+  {
+    TextMasterStyleLevel level;
+
+    //[MS-PPT].pdf states that TextMasterStyleLevel has optional level
+    //variable if recInstance is greater than or equals 5
+    if (recInstance >= 0x005) {
+      unsigned int currentLevel = readU16(data); data += 2;
+      level.setLevel(currentLevel);
+    }
+
+
+    unsigned int read = level.setData(tempSize,data);
+    data += read;
+    tempSize -= read;
+    d->levels<<level;
+  }
+}
+
+unsigned int TxMasterStyleAtom::levelCount()
+{
+  return d->levels.size();
+}
+
+TextMasterStyleLevel *TxMasterStyleAtom::level(int index)
+{
+  if (index >= 0 && index < d->levels.size()) {
+    return &d->levels[index];
+  }
+
+  return 0;
 }
 
 void TxMasterStyleAtom::dump( std::ostream& out ) const
 {
-  out << "TxMasterStyleAtom - not yet implemented" << std::endl;
+  for(int i=0;i<d->levels.size();i++) {
+    d->levels[i].dump(out);
+  }
 }
 
 // ========== SlideViewInfoAtom  ==========
@@ -2909,59 +4838,60 @@ const unsigned int StyleTextPropAtom ::id = 4001;
 class StyleTextPropAtom::Private
 {
 public:
-  struct PropAtomData
-  {
-      PropAtomData()
-      : charCount(0)
-      , depth(0)
-      , bulletOn(0)
-      , bulletHardFont(0)
-      , bulletHardColor(0)
-      , bulletChar(0)
-      , bulletFont(0)
-      , bulletHeight(0)
-      , bulletColor(0)
-      , align(0)
-      , lineFeed(0)
-      , upperDist(0)
-      , lowerDist(0)
-      , asianLB1(0)
-      , asianLB2(0)
-      , asianLB3(0)
-      , biDi(0)
-      {}
+  Private();
+  Private(const Private &other);
 
-      int charCount;
-      int depth;
-      unsigned bulletOn;
-      unsigned bulletHardFont;
-      unsigned bulletHardColor;
-      unsigned bulletChar;
-      unsigned bulletFont;
-      unsigned bulletHeight;
-      unsigned bulletColor;
-      unsigned align;
-      unsigned lineFeed;
-      int upperDist;
-      int lowerDist;
-      int asianLB1;
-      int asianLB2;
-      int asianLB3;
-      unsigned biDi;
-  };
-  std::vector<PropAtomData> atomData;
+  /**
+  * @brief An array of TextPFRun structures that specifies paragraph-level
+  * formatting for the corresponding text.
+  *
+  * The count field of each TextPFRun item specifies the number of characters to
+  * which the formatting applies, starting with the character at the zero-based
+  * index equal to the sum of the count fields of all previous TextPFRun records
+  * in the array. The sum of the count fields of the TextPFRun items MUST be
+  * equal to the number of characters in the corresponding text.
+  *
+  */
+  QList<TextPFRun> paragraphFormatting;
 
-  int charMask;
-  int charCount2;
-  int charFlags;
+  /**
+  * @brief An array of TextCFRun structures that specifies character-level
+  * formatting for the corresponding text. The count field of each TextCFRun
+  * specifies the number of characters to which the formatting applies, starting
+  * with the character at the zero-based index equal to the sum of the count
+  * fields of all previous TextCFRun records in the array. The sum of the count
+  * fields of the TextCFRun items MUST be equal to the number of characters in
+  * the corresponding text.
+  *
+  */
+  QList<TextCFRun> characterFormatting;
 };
 
-StyleTextPropAtom::StyleTextPropAtom()
+StyleTextPropAtom::Private::Private(const StyleTextPropAtom::Private &other)
 {
-  d = new Private;
-  d->charMask = 0;
-  d->charCount2 = 0;
-  d->charFlags = 0;
+  for(int i=0;i<other.paragraphFormatting.size();i++) {
+    TextPFRun pf(other.paragraphFormatting[i]);
+    paragraphFormatting<<pf;
+  }
+
+  for(int i=0;i<other.characterFormatting.size();i++) {
+    TextCFRun cf(other.characterFormatting[i]);
+    characterFormatting<<cf;
+  }
+}
+
+StyleTextPropAtom::Private::Private()
+{
+}
+
+StyleTextPropAtom::StyleTextPropAtom (const StyleTextPropAtom &atom)
+: Record()
+, d(new Private(*atom.d))
+{
+}
+
+StyleTextPropAtom::StyleTextPropAtom() : d(new Private())
+{
 }
 
 StyleTextPropAtom::~StyleTextPropAtom()
@@ -2969,348 +4899,96 @@ StyleTextPropAtom::~StyleTextPropAtom()
   delete d;
 }
 
-unsigned StyleTextPropAtom::listSize() const
+TextCFRun *StyleTextPropAtom::findTextCFRun(unsigned int pos)
 {
-  return d->atomData.size();
+  unsigned int counter = 0;
+  for(int i=0;i<d->characterFormatting.size();i++) {
+    if (pos >= counter && pos < counter + (unsigned int)d->characterFormatting[i].count()) {
+      return &d->characterFormatting[i];
+    }
+
+    counter += d->characterFormatting[i].count();
+  }
+
+  return 0;
 }
 
-int StyleTextPropAtom::charCount( unsigned index ) const
+TextPFRun *StyleTextPropAtom::findTextPFRun(unsigned int pos)
 {
-  return d->atomData[index].charCount;
+  unsigned int counter = 0;
+  for(int i=0;i<d->paragraphFormatting.size();i++) {
+    if (pos >= counter && pos < counter + (unsigned int)d->paragraphFormatting[i].count()) {
+      return &d->paragraphFormatting[i];
+    }
+
+    counter += d->paragraphFormatting[i].count();
+  }
+
+  return 0;
 }
 
-int StyleTextPropAtom::depth( unsigned index ) const
-{
-  return d->atomData[index].depth;
-}
 
-int StyleTextPropAtom::bulletOn( unsigned index ) const
-{
-  return d->atomData[index].bulletOn;
-}
 
-int StyleTextPropAtom::bulletHardFont( unsigned index ) const
-{
-  return d->atomData[index].bulletHardFont;
-}
-
-int StyleTextPropAtom::bulletHardColor( unsigned index ) const
-{
-  return d->atomData[index].bulletHardColor;
-}
-
-int StyleTextPropAtom::bulletChar( unsigned index ) const
-{
-  return d->atomData[index].bulletChar;
-}
-
-int StyleTextPropAtom::bulletFont( unsigned index ) const
-{
-  return d->atomData[index].bulletFont;
-}
-
-int StyleTextPropAtom::bulletHeight( unsigned index ) const
-{
-  return d->atomData[index].bulletHeight;
-}
-
-int StyleTextPropAtom::bulletColor( unsigned index ) const
-{
-  return d->atomData[index].bulletColor;
-}
-
-int StyleTextPropAtom::lineFeed( unsigned index ) const
-{
-  return d->atomData[index].lineFeed;
-}
-
-int StyleTextPropAtom::upperDist( unsigned index ) const
-{
-  return d->atomData[index].upperDist;
-}
-
-int StyleTextPropAtom::lowerDist( unsigned index ) const
-{
-  return d->atomData[index].lowerDist;
-}
-
-int StyleTextPropAtom::align( unsigned index ) const
-{
-  return d->atomData[index].align;
-}
-
-int StyleTextPropAtom::asianLB1( unsigned index ) const
-{
-  return d->atomData[index].asianLB1;
-}
-
-int StyleTextPropAtom::asianLB2( unsigned index ) const
-{
-  return d->atomData[index].asianLB2;
-}
-
-int StyleTextPropAtom::asianLB3( unsigned index ) const
-{
-  return d->atomData[index].asianLB3;
-}
-
-int StyleTextPropAtom::biDi( unsigned index ) const
-{
-  return d->atomData[index].biDi;
-}
-
-int StyleTextPropAtom::charMask() const
-{
-  return d->charMask;
-}
-
-void StyleTextPropAtom::setCharMask( int charMask )
-{
-  d->charMask = charMask;
-}
-
-int StyleTextPropAtom::charFlags() const
-{
-  return d->charFlags;
-}
-
-void StyleTextPropAtom::setCharFlags( int charFlags )
-{
-  d->charFlags = charFlags;
-}
 void StyleTextPropAtom::setDataWithSize( unsigned size, const unsigned char* data, unsigned neededCharacters )
 {
-//  std::cout << size << "\t" << neededCharacters << std::endl;
   unsigned charRead = 0;
   const unsigned char* end = data + size;
+  unsigned int dataLeft = size;
 
-  while ( charRead < neededCharacters && data + 10 < end )
+  while ( charRead <= neededCharacters && data + 10 <= end )
   {
-    Private::PropAtomData atomData;
-    atomData.charCount = readU32(data); data += 4;
-    charRead += atomData.charCount;
-    atomData.depth = readU16(data); data += 2;
+    TextPFRun pf;
+    pf.setCount(readU32(data)); data += 4; dataLeft -= 2;
+    charRead += pf.count();
+    pf.setIndentLevel(readU16(data)); data += 2; dataLeft -= 2;
+    unsigned int temp = pf.textPFException()->setData(size,data);
+    data += temp;
+    dataLeft -= temp;
 
-    unsigned mask = readU32(data); data += 4;
-    if ( mask & 0x000F && data + 2 < end ) // A|B|C|D
-    {
-      int bulletFlag = readU16(data); data += 2;
-      atomData.bulletOn = ( bulletFlag & 1 ) ? 1 : 0;
-      atomData.bulletHardFont = ( bulletFlag & 2 ) ? 1 : 0;
-      atomData.bulletHardColor = ( bulletFlag & 4 ) ? 1 : 0;
-    }
-    if ( mask & 0x0080 && data + 2 < end ) // H bulletChar
-    {
-      atomData.bulletChar = readU16(data); data += 2; //
-    }
-    if ( mask & 0x0010 && data + 2 < end ) // E bulletFont
-    {
-      atomData.bulletFont = readU16(data); data += 2;
-    }
-    if ( mask & 0x0040 && data + 2 < end ) // G bulletSize
-    {
-      atomData.bulletHeight = readU16(data); data += 2;
-    }
-    if ( mask & 0x0020 && data + 4 < end ) // F bulletColor
-    {
-      atomData.bulletColor = readU32(data); data += 4;
-    }
-    if ( mask & 0x0800  && data + 2 < end ) // L align
-    {
-        unsigned dummy = readU16(data); data += 2;
-        atomData.align = ( dummy & 3 );
-    }
-    if ( mask & 0x1000 && data + 2 < end ) // M lineSpacing
-    {
-      atomData.lineFeed = readU16(data); data += 2;
-    }
-    if ( mask & 0x2000 && data + 2 < end ) // N spaceBefore
-    {
-      atomData.upperDist = readU16(data); data += 2;
-    }
-    if ( mask & 0x4000 && data + 2 < end ) // O spaceAfter
-    {
-      atomData.lowerDist = readU16(data); data += 2;
-    }
-    if ( mask & 0x0100 && data + 2 < end ) // I leftMargin
-    {
-      /*unsigned dummy =*/ readU16(data); data += 2;
-    }
-    if ( mask & 0x0400 && data + 2 < end ) // K indent
-    {
-      /*unsigned dummy =*/ readU16(data); data += 2;
-    }
-    if ( mask & 0x8000 && data + 2 < end ) // P defaultTabSize
-    {
-      readU16(data); data += 2;
-    }
-    if ( mask & 0x100000 && data + 2 < end ) // U tabStops
-    {
-      unsigned count = readU16(data); data += 2;
-      while ( count && data + 4 > end)
-      {
-          readU32(data); data += 4;
-      }
-    }
-    if ( mask & 0x10000 && data + 2 < end ) // Q fontAlign
-    {
-      readU16(data); data += 2;
-    }
-    if ( mask & 0xe0000 && data + 2 < end) // R|S|T
-    {
-      unsigned dummy = readU16(data); data += 2;
-      if ( mask & 0x20000 )
-        atomData.asianLB1 = dummy & 1;
-      if ( mask & 0x40000 )
-        atomData.asianLB2 = (dummy >> 1) & 1;
-      if ( mask & 0x80000 )
-        atomData.asianLB3 = (dummy >> 2) & 1;
-    }
-    if ( mask & 0x200000 && data + 2 < end ) // V textDirection
-    {
-      atomData.biDi = readU16(data); data += 2;
-    }
-    d->atomData.push_back( atomData );
+    d->paragraphFormatting.push_back( pf );
   }
 
   charRead = 0;
-  // TODO: parse character properties
+  while(charRead < neededCharacters && data + 8 <= end) {
+    TextCFRun cf;
+    cf.setCount(readU32(data)); data += 4; dataLeft -= 2;
 
-    // std::cout << "k = " << k << std::endl;
+    charRead += cf.count();
+    unsigned int temp = cf.textCFException()->setData(dataLeft,data);
+    data += temp;
+    dataLeft -= temp;
 
-  /* charRead = 0;
-  while ( charRead < stringLength )
-  {
-    std::cout << "in second while-loop " << std::endl;
-    if ( (isTextPropAtom == false)  &&  (k < size) )
-    {
-      unsigned charCount = readU16(data+k) ;
-      setCharCount (charCount);
-      k += 2;
-      unsigned dummy = readU16(data+k);
-      k += 2;else setAlign( dummy & 3 );
-      int charToRead = size - (charRead + charCount);
-      // std::cout << "charToRead = " << charToRead << std::endl;
-      if (charToRead < 0)
-      {
-        charCount = size - charRead;
-        if ( charToRead < -1 )
-        {
-            isTextPropAtom = false;
-        }
-      }
-      unsigned charMask = readU16(data+k) ;
-      k += 2;
-      setCharMask ( charMask );
-      if ( charMask )
-      {
-        setCharFlags( readU16(data+k) );
-        k += 2;
-      }
-    //  std::cout << "k = " << k << std::endl;
-
-      static unsigned charAttrTable[16] =
-      { 16, 21, 22, 23, 17, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30, 31 };
-
-      for ( int i = 0; i < 16; i++ )
-      {
-        int j = charAttrTable[ i ];
-        if ( charMask & ( 1 << j ) )
-        {
-          switch ( j )
-          {
-            case 23:    //PPT_CharAttr_Symbol
-            { else setAlign( dummy & 3 );
-              unsigned setSymbolFont= (readU16(data+k));
-              std::cout << "setSymbolFont = " << setSymbolFont << std::endl;
-              //setSymbolFont(readU16(data+k));
-            } break;
-            case 16:   //PPT_CharAttr_Font
-            {
-              unsigned setFont= (readU16(data+k));
-              std::cout << "setFont = " << setFont << std::endl;
-              //setFont(readU16(data+k));
-            } break;
-            case 21:   //PPT_CharAttr_AsianOrComplexFont
-            {
-              unsigned setAsianOrComplexFont= (readU16(data+k));
-              std::cout << "setAsianOrComplexFont = " << setAsianOrComplexFont << std::endl;
-             //setAsianOrComplexFont(readU16(data+k));
-            } break;
-            case 22:   // PPT_CharAttr_Unknown2
-            {  unsigned setUnknown= (readU16(data+k));
-               std::cout << "setUnknown = " << setUnknown << std::endl;
-              //setUnknown(readU16(data+k));
-            } break;
-            case 17:    //PPT_CharAttr_Fontvoid Record::setData( unsigned, const unsigned char* )
-            {  unsigned setFonttPropAtomHeight= (readU16(data+k));
-               std::cout << "setFontHeight = " << setFontHeight << std::endl;
-               //setFontHeight(readU16(data+k));
-            } break;
-            case 18:    //PPT_CharAttr_FontColor
-            {  unsigned setFontColor= (readU32(data+k));
-               std::cout << "setFontColor = " << setFontColor << std::endl;
-               //setFontColor(readU32(data+k));
-               k +=2;
-            } break;
-            case 19://PPT_CharAttr_Escapement
-            {  unsigned setEscapement= (readU16(data+k));
-               std::cout << "setEscapement = " << setEscapement << std::endl;
-               //setEscapement(readU32(data+k));
-            } break;
-            default:
-            {  unsigned dummy = readU16(data+k);
-                std::cout << "default " << dummy << std::endl;
-            }
-          }
-          k +=2;
-        }
-      }
-powerpoint.cpp:3370: warning: convert
-      std::cout << "k = " << k << std::endl;
-     }
-    else
-    {
-      charRead = stringLength;
-    }
-  } */
-
-}
-
-
-void StyleTextPropAtom::dump( std::ostream& out ) const
-{
-  out << "StyleTextPropAtom" << std::endl;
-  out << "listSize " << listSize() << std::endl << std::endl;
-  for ( unsigned i = 0; i < listSize(); i++)
-  {
-    out << "charCount " << charCount(i) << std::endl;
-    out << "depth " << depth(i) << std::endl;
-    out << "isBulletOn " << bulletOn(i) << std::endl;
-    out << "isbulletHardFont " << bulletHardFont(i) << std::endl;
-    out << "isbulletHardColor " << bulletHardColor(i) << std::endl;
-    out << "bulletChar " << bulletChar(i) << std::endl;
-    out << "bulletFont " << bulletFont(i) << std::endl;
-    out << "bulletHeight " << bulletHeight(i) << std::endl;
-    out << "bulletColor " <<  std::endl;
-    out << "  R " << ((bulletColor(i) >>0) & 0xff) << std::endl;
-    out << "  G " << ((bulletColor(i) >>8) & 0xff) << std::endl;
-    out << "  B " << ((bulletColor(i) >>16) & 0xff) << std::endl;
-    out << "  I " << ((bulletColor(i) >>24) & 0xff) << std::endl;
-    out << "align " << align(i) << std::endl;
-    out << "lineFeed " << lineFeed(i) << std::endl;
-    out << "upperDist " << upperDist(i) << std::endl;
-    out << "lowerDist " << lowerDist(i) << std::endl;
-    out << "biDi " << biDi(i) << std::endl;
-
-    out << std::endl;
+    d->characterFormatting.push_back(cf);
   }
-//  out << "charMask " << charMask() << std::endl;
-//  out << "charFlags " << charFlags() << std::endl;
-
 }
 
+unsigned int StyleTextPropAtom::textCFRunCount()
+{
+  return (unsigned int)d->characterFormatting.size();
+}
 
+unsigned int StyleTextPropAtom::textPFRunCount()
+{
+  return (unsigned int)d->paragraphFormatting.size();
+}
+
+TextCFRun *StyleTextPropAtom::textCFRun(unsigned int index)
+{
+  if (index < (unsigned int) d->characterFormatting.size()) {
+    return &d->characterFormatting[index];
+  }
+
+  return 0;
+}
+
+TextPFRun *StyleTextPropAtom::textPFRun(unsigned int index)
+{
+  if (index < (unsigned int) d->paragraphFormatting.size()) {
+    return &d->paragraphFormatting[index];
+  }
+
+  return 0;
+}
 
 // ========== TxCFStyleAtom  ==========
 
@@ -3404,7 +5082,7 @@ void TxCFStyleAtom::setFontColor( int fontColor )
   d->fontColor = fontColor;
 }
 
-void TxCFStyleAtom::setData( unsigned , const unsigned char* data )
+void TxCFStyleAtom::setData( unsigned int /*length*/, const unsigned char* data )
 {
   setFlags1(readU16( data + 0));
   setFlags2(readU16( data + 2));
@@ -3782,9 +5460,7 @@ const unsigned int TextBytesAtom::id = 4008;
 class TextBytesAtom::Private
 {
 public:
-  std::vector<unsigned> index;
-  std::vector<UString> ustring;
-  unsigned stringLength;
+  QString text;
 };
 
 TextBytesAtom::TextBytesAtom()
@@ -3797,66 +5473,38 @@ TextBytesAtom::~TextBytesAtom()
   delete d;
 }
 
-unsigned TextBytesAtom::listSize() const
+QString TextBytesAtom::text() const
 {
-  return d->ustring.size();
+  return d->text;
 }
 
-unsigned TextBytesAtom::stringLength() const
+void TextBytesAtom::setText( QString text )
 {
-  return d->stringLength;
-}
-
-void TextBytesAtom::setStringLength( unsigned stringLength )
-{
-  d->stringLength = stringLength;
-}
-
-UString TextBytesAtom::strValue( unsigned index ) const
-{
-  return d->ustring[index];
-}
-
-void TextBytesAtom::setText( UString ustring )
-{
-  d->ustring.push_back( ustring );
+  d->text = text;
 }
 
 void TextBytesAtom::setData( unsigned size, const unsigned char* data )
 {
-  UString tempStr;
+  QString tempStr;
   for( unsigned k=0; k<size; ++k )
   {
     unsigned uchar =  data[k];
-    if ( (uchar == 0x0b) | (uchar == 0x0d) )
-    {
-     setText(tempStr);
-     tempStr = "";
-    }
-    else
-     tempStr.append( UString(uchar) );
 
     if ( ( uchar & 0xff00 ) == 0xf000 )
     { // handle later
       std::cout << "got a symbol at " << k << "th character" << std::endl;
+    } else {
+      tempStr += uchar;
     }
   }
-  if( tempStr.length() )
-    setText(tempStr);
 
-  setStringLength(size);
+  d->text = tempStr;
 }
 
 void TextBytesAtom::dump( std::ostream& out ) const
 {
   out << "TextBytesAtom" << std::endl;
-  out << "stringLength " << stringLength() << std::endl;
-  out << "listSize " << listSize() << std::endl;
-  for (uint i=0; i<listSize() ; i++)
-  {
-    out << "String " << i << " [" << strValue(i) << "]" << std::endl;
-  }
-
+  out << d->text.toLatin1().data() <<std::endl;
 }
 
 
@@ -5373,13 +7021,129 @@ void PPTReader::loadMaster()
       d->presentation->setMasterSlide( master );
       d->currentSlide = master;
       MainMasterContainer* container = new MainMasterContainer;
-      handleContainer( container, type, size );
-      delete container;
+      loadMainMasterContainer(container);
+      d->presentation->setMainMasterContainer(container);
     }
 
     d->docStream->seek( nextpos );
   }
   d->currentSlide = 0;
+}
+
+void PPTReader::fastForwardRecords(unsigned int count)
+{
+  for(unsigned int i=0;i<count;i++) {
+    unsigned char buffer[8];
+    unsigned bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) return;
+    RecordHeader header;
+    header.setData(buffer);
+    d->docStream->seek(d->docStream->tell() + header.recLen);
+  }
+}
+
+
+void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
+{
+  if (container == 0) return;
+
+  //skip over slideAtom (32 bytes)
+  fastForwardRecords(1);
+
+  unsigned char buffer[8];
+  unsigned bytes_read = d->docStream->read( buffer, 8 );
+
+  if( bytes_read != 8 ) {
+    kWarning()<<"Failed to read header!";
+    return;
+  }
+
+
+  RecordHeader header;
+  header.setData(buffer);
+
+  while(header.recType == 0x07F0) {
+    unsigned char data[65535] = {0};
+    bytes_read = d->docStream->read(data, header.recLen);
+
+    if (bytes_read != header.recLen) {
+      kWarning()<<"Failed to read data for ColorSchemeAtom!";
+      return;
+    }
+
+    ColorSchemeAtom *atom = new ColorSchemeAtom();
+    atom->setParent( container );
+    atom->setPosition( d->docStream->tell() );
+    atom->setInstance( header.recInstance );
+    atom->setData(header.recLen,data);
+
+    container->addSchemeListElementColorScheme(atom);
+
+    bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) {
+      kWarning()<<"Failed to read next header for ColorSchemeAtom!";
+      return;
+    }
+
+    header.setData(buffer);
+  }
+
+  while(header.recType == 0x0FA3) {
+    unsigned char data[65535] = {0};
+    bytes_read = d->docStream->read(data, header.recLen);
+    if (bytes_read != header.recLen) {
+      return;
+    }
+
+    TxMasterStyleAtom *atom = new TxMasterStyleAtom();
+    atom->setParent( container );
+    atom->setPosition( d->docStream->tell() );
+    atom->setInstance( header.recInstance );
+    atom->setDataWithInstance(header.recLen,data,header.recInstance);
+
+    container->addTextMasterStyle(atom);
+
+    bytes_read = d->docStream->read( buffer, 8 );
+    if( bytes_read != 8 ) {
+      kWarning()<<"Failed to read next header for TxMasterStyleAtom!";
+      return;
+    }
+    header.setData(buffer);
+  }
+
+  //Rewind to the start of roundTripOArtTextStyles12Atom
+  d->docStream->seek(d->docStream->tell() -8);
+
+  /**
+  Skip to the start of slideSchemeColorSchemeAtom
+  */
+  fastForwardRecords(1);
+
+  bytes_read = d->docStream->read( buffer, 8 );
+  if( bytes_read != 8 ) {
+      kWarning("Failed to read header for getSlideSchemeColorSchemeAtom!");
+      return;
+  }
+
+  header.setData(buffer);
+  if (header.recType == 0x07F0)
+  {
+    unsigned char data[65535] = {0};
+    bytes_read = d->docStream->read(data, header.recLen);
+    if (bytes_read != header.recLen) {
+      kWarning()<<"Failed to read data for getSlideSchemeColorSchemeAtom!";
+      return;
+    }
+
+    ColorSchemeAtom *colorAtom = container->getSlideSchemeColorSchemeAtom();
+
+    if (colorAtom) {
+      colorAtom->setData(header.recLen,data);
+    }
+  } else {
+    kWarning()<<"Failed to read getSlideSchemeColorSchemeAtom. Header was"<<header.recType;
+    return;
+  }
 }
 
 void PPTReader::loadSlides()
@@ -5530,15 +7294,16 @@ void PPTReader::loadRecord( Record* parent )
       }
       d->docStream->read( buffer, size );
       // special treatment for StyleTextPropAtom
-      if ( type == StyleTextPropAtom::id )
+      if ( type == StyleTextPropAtom::id ) {
         static_cast<StyleTextPropAtom*>(record)->setDataWithSize(size, buffer, d->lastNumChars);
+      }
       else
         record->setData( size, buffer );
       handleRecord( record, type );
       if ( type == TextBytesAtom::id )
-        d->lastNumChars = static_cast<TextBytesAtom*>( record )->stringLength();
+        d->lastNumChars = static_cast<TextBytesAtom*>( record )->text().length();
       else if ( type == TextCharsAtom::id )
-        d->lastNumChars = static_cast<TextCharsAtom*>( record )->stringLength();
+        d->lastNumChars = static_cast<TextCharsAtom*>( record )->text().length();
     }
 
     delete record;
@@ -5667,16 +7432,11 @@ void PPTReader::handleTextCharsAtom( TextCharsAtom* atom )
   }
 
   text->setType( d->currentTextType );
+  text->setText(atom->text().replace(QChar(11)," "));
 
-  for (uint i=0; i<atom->listSize(); i++)
-  {
-     text->setText(atom->strValue(i));
-     // qDebug("=====================text list ================");
+  if( (d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle) ) {
+    d->currentSlide->setTitle( atom->text() );
   }
-
-  if( (d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle) )
-    for (unsigned i=0; i<atom->listSize(); i++)
-      d->currentSlide->setTitle( atom->strValue(i) );
 
 
 
@@ -5703,16 +7463,10 @@ void PPTReader::handleTextBytesAtom( TextBytesAtom* atom )
   }
 
   text->setType( d->currentTextType );
-
-  for (uint i=0; i<atom->listSize(); i++)
-  {
-     text->setText(atom->strValue(i));
-     // qDebug("=====================text list ================");
-  }
+  text->setText(atom->text().replace(QChar(11)," "));
 
   if( (d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle) )
-    for (unsigned i=0; i<atom->listSize(); i++)
-      d->currentSlide->setTitle( atom->strValue(i) );
+      d->currentSlide->setTitle( atom->text() );
 
 
 
@@ -5722,25 +7476,21 @@ void PPTReader::handleTextBytesAtom( TextBytesAtom* atom )
 #endif
 }
 
+
+
+
 void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
 {
   if( !atom ) return;
   if( !d->presentation ) return;
-  if( !d->currentSlide )  return;
+  if( !d->currentSlide ) return;
   if( !d->currentTextId ) return;
 
   int placeId = d->currentTextId-1;
   TextObject* text = d->currentSlide->textObject( placeId );
   if ( text == 0 ) return;
 
-  for (uint i=0; i<atom->listSize(); i++)
-  {
-    unsigned index = text->addBulletProperty(atom->charCount(i));
-    text->setBulletFlag(index, atom->bulletOn(i));
-    text->setBulletChar(index, atom->bulletChar(i));
-    text->setBulletFont(index, atom->bulletFont(i));
-    text->setBulletColor(index, atom->bulletColor(i));
-  }
+  text->setStyleTextProperty(atom);
 }
 
 void PPTReader::handleColorSchemeAtom( ColorSchemeAtom* atom )
@@ -5785,7 +7535,7 @@ void dumpGroup( GroupObject* obj, unsigned indent )
 
 void dumpSlide( Slide* slide )
 {
-  std::cout << "Slide: " << slide->title().ascii() << std::endl;
+  std::cout << "Slide: " << slide->title().toLatin1().data() << std::endl;
   GroupObject* root = slide->rootObject();
   dumpGroup( root, 0 );
   std::cout << std::endl;
@@ -6035,6 +7785,7 @@ void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned /*
   if( !d->currentObject ) return;
 
   TextObject* textObject = 0;
+
   if( !d->currentObject->isText() )
   {
     textObject = new TextObject();
@@ -6046,8 +7797,6 @@ void PPTReader::handleEscherTextBox( msofbtClientTextBox* container, unsigned /*
     textObject = static_cast<TextObject*>( d->currentObject );
 
   textObject->setType( TextObject::Other );
-  unsigned index = textObject->addBulletProperty(-1);
-  textObject->setBulletFlag( index, false );
 }
 
 Color convertFromLong( unsigned long i )
@@ -6290,11 +8039,16 @@ void PPTReader::handleEscherPropertiesAtom( msofbtOPTAtom* atom )
 
 }  // handleEscherPropertiesAtom
 
+QString PPTReader::toQString( const Libppt::UString& str )
+{
+   return QString::fromRawData(reinterpret_cast<const QChar*>( str.data() ), str.length() );
+}
+
 void PPTReader::handleFontEntityAtom( FontEntityAtom* r )
 {
     if (!r) return;
 
-    TextFont font(r->ustring(),r->charset(),r->clipPrecision(),r->quality(),r->pitchAndFamily());
+    TextFont font(toQString(r->ustring()),r->charset(),r->clipPrecision(),r->quality(),r->pitchAndFamily());
     d->presentation->addTextFont(font);
 }
 

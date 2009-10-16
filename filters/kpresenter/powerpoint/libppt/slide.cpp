@@ -32,7 +32,7 @@ class Slide::Private
 {
 public:
   Presentation* presentation;
-  UString title;
+  QString title;
   GroupObject* rootObject;
 
   double pageWidth;
@@ -56,18 +56,18 @@ Slide::~Slide()
 
 void Slide::clear()
 {
-  d->title = UString::null;
   setRootObject( 0 );
   d->rootObject = new GroupObject;
 }
 
-UString Slide::title() const
+QString Slide::title() const
 {
   return d->title;
 }
 
-void Slide::setTitle( const UString& t )
+void Slide::setTitle( const QString& title )
 {
+  /*
   UChar* s = new UChar[t.length()];
   int len = 0;
 
@@ -78,6 +78,12 @@ void Slide::setTitle( const UString& t )
 
   d->title = UString( s, len );
   delete [] s;
+  */
+
+  //The old implementation removed vertical tabs for some reason
+  //so we'll remove them as well
+  d->title = title;
+  d->title.remove(QChar(11));
 }
 
 GroupObject *Slide::rootObject()
