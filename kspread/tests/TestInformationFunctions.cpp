@@ -220,8 +220,8 @@ void TestInformationFunctions::testCOLUMN()
 
     Value res( Value::Array );
     res.setElement(0, 0, Value( 2 ) );
-    res.setElement(0, 1, Value( 2 ) );
-    res.setElement(0, 2, Value( 2 ) );
+    res.setElement(1, 0, Value( 3 ) );
+    res.setElement(2, 0, Value( 4 ) );
     CHECK_EVAL( "COLUMN(B2:D2)", res ); // Array with column numbers.
 }
 
@@ -522,8 +522,8 @@ void TestInformationFunctions::testVALUE()
     CHECK_EVAL( "VALUE(\"2:03:05\") -2/24-3/(24*60) -5/(24*60*60)", Value( 0 ) );
     CHECK_EVAL( "VALUE(\"2:03\")-(2/24)-(3/(24*60))", Value( 0 ) );
     // check dates - local dependent
-    CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
-    CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
+    // CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
+    // CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
 }
 
 //

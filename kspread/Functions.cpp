@@ -140,9 +140,10 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
     int rows = 0;
     int cols = 0;
     for (int i = 0; i < args.count(); ++i) {
-      int x = (args[i].type() == Value::Array) ? args[i].rows() : 1;
+      int x = 1;
+      if (extra) x = extra->ranges[i].rows();
       if (x > rows) rows = x;
-      x = (args[i].type() == Value::Array) ? args[i].columns() : 1;
+      if (extra) x = extra->ranges[i].columns();
       if (x > cols) cols = x;
     }
     // allocate the resulting array
@@ -152,15 +153,21 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
       for (int col = 0; col < cols; ++col) {
         // fill in the parameter vector
         valVector vals (args.count());
+        FuncExtra extra2 = *extra;
         for (int i = 0; i < args.count(); ++i) {
-          int r = args[i].rows();
-          int c = args[i].columns();
+          int r = extra->ranges[i].rows();
+          int c = extra->ranges[i].columns();
           vals[i] = args[i].isArray() ?
               args[i].element (col % c, row % r): args[i];
-        }
 
+          // adjust the FuncExtra structure to refer to the correct cells
+          extra2.ranges[i].col1 += col;
+          extra2.ranges[i].row1 += row;
+          extra2.ranges[i].col2 = extra2.ranges[i].col1;
+          extra2.ranges[i].row2 = extra2.ranges[i].row1;
+        }
         // execute the function on each element
-        res.setElement (col, row, exec (vals, calc, extra));
+        res.setElement (col, row, exec (vals, calc, &extra2));
       }
     return res;
   }

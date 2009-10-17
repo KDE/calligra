@@ -1629,9 +1629,7 @@ Value Formula::eval() const
         {
           stackEntry e = stack.pop();
           args.insert (args.begin(), e.val);
-          // TODO: create and fill a FunctionExtra object, if needed
-          // problem: we don't know if we need it, as we don't have the
-          // function name yet ...
+          // fill the FunctionExtra object
           fe.ranges[index - 1].col1 = e.col1;
           fe.ranges[index - 1].row1 = e.row1;
           fe.ranges[index - 1].col2 = e.col2;

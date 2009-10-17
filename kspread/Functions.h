@@ -40,6 +40,8 @@ typedef QVector<Value> valVector;
 
 struct rangeInfo {
   int col1, col2, row1, row2;
+  int columns() { return col2 - col1 + 1; }
+  int rows() { return row2 - row1 + 1; }
 };
 struct FuncExtra {
   // here we'll add all the extras a function may need

@@ -261,7 +261,7 @@ long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, con
     date2=Temp1;
   }
 
-  int days = date0.daysTo(date2) - date0.daysTo(date1);
+  int days = date1.daysTo(date2);
 
 //   kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
@@ -273,54 +273,20 @@ long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, con
   {
     case 1:
     {
-      nYears = date2.year() - date1.year();
-      peryear = date1.daysInYear();
-      
-      if ( nYears && ( date1.month() > date2.month() || ( date1.month() == date2.month() && date1.day() > date2.day() ) ) )
-        nYears--;
-      
-      if ( nYears )
-      {
-//         kDebug(36002)<<" tmp("<<date2.year()<<","<<date1.month()<<","<<date1.day();
-        QDate tmp(date2.year(), date1.month(), 1);
-        tmp.addDays(date1.day()-1);
-//         kDebug(36002)<<" jul1 ="<<date2.toJulianDay()<<"  - jul2 ="<<tmp.toJulianDay();
-        days = date2.toJulianDay() - tmp.toJulianDay();
-//         kDebug(36002)<<" days ="<<date2.daysTo(tmp);      
+      nYears = date2.year() - date1.year() + 1;
+      for (int y = date1.year(); y <= date2.year(); ++y) {
+        peryear += QDate::isLeapYear(y) ? 366 : 365;
       }
-      else
-        days = date2.toJulianDay() - date1.toJulianDay();
-      if ( days < 0 )
-        days += peryear;
-
-//       kDebug(36002) <<"nYears =" << nYears <<"    peryear =" << peryear <<"    days =" << days;
+      // less than one year - even if it does span two consequentive years ...
+      if (QDate(date1.year(), date1.month(), date1.day()) > date2) {
+        nYears = 1;
+        peryear = 365;
+        if (QDate::isLeapYear(date1.year()) && (date1.month() <= 2)) peryear = 366;
+        if (QDate::isLeapYear(date2.year()) && (date2.month() > 2)) peryear = 366;
+      }
+      peryear = peryear / (long double) nYears;
+      nYears = 0;
       break;
-
-      // old code
-//       int leaps=0,years=0;
-//       double k;
-// 
-//       if (days < (365 + QDate::isLeapYear(date1.year()) + 1))
-//       {
-//         // less than 1 year
-//         kDebug(36002) <<"less than 1 year ...";
-// 
-//         // bool 1 = 29.2. is in between dates
-//         k = (QDate::isLeapYear(date1.year()) && date1.month()<3) || (QDate::isLeapYear(date2.year()) && date2.month()*100+date2.day() >= 2*100+29);
-//         years = 1;
-//       }
-//       else
-//       {
-//         // more than 1 year
-//         kDebug(36002) <<"more than 1 year ...";
-//         years = date2.year()-date1.year()+1;
-//         leaps = QDate(date2.year()+1, 1, 1).toJulianDay() - QDate(date1.year(), 1, 1).toJulianDay() - 365*years;
-//         k = (double)leaps/years;
-//       }
-// 
-//       kDebug(36002) <<"leaps =" << leaps <<"    years =" << years <<"    leaps per year =" << (double)leaps/years;
-//       peryear = 365 + k;
-
 
     }
     case 2:
@@ -357,7 +323,7 @@ long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, con
     }
   }
 
-  res = (long double)(nYears) + (long double)days / peryear;
+  res = (long double)(nYears) + (long double)days / (long double) peryear;
 //   kDebug(36002)<<"getYearFrac res="<<res;
   return res;
 }
