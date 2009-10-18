@@ -1574,7 +1574,8 @@ QList<KoShape*> SvgParser::parseUse( const KoXmlElement &e )
                     group->setName( a.attribute("id") );
 
                 addToGroup( childShapes, group );
-
+                parseStyle( group, styles ); // apply style to group after size is set
+                
                 shapes.append( group );
 
                 removeGraphicContext();
@@ -1717,7 +1718,7 @@ QList<KoShape*> SvgParser::parseContainer( const KoXmlElement &e )
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex( nextZIndex() );
 
-            parseStyle( group, b );
+            parseStyle( 0, b ); // parse style for inheritance
             parseFont( b );
 
             QList<KoShape*> childShapes = parseContainer( b );
@@ -1727,7 +1728,8 @@ QList<KoShape*> SvgParser::parseContainer( const KoXmlElement &e )
                 group->setName( b.attribute("id") );
 
             addToGroup( childShapes, group );
-
+            parseStyle( group, b ); // apply style to this group after size is set
+            
             shapes.append( group );
 
             removeGraphicContext();
