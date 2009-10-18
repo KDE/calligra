@@ -29,7 +29,6 @@
 #include <kdebug.h>
 
 #include <KoPointerEvent.h>
-#include <KoCanvasController.h>
 #include <KoPageApp.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
