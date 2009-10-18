@@ -109,11 +109,20 @@ void DependencyManager::regionChanged(const Region& region)
     {
         const QRect range = (*it)->rect();
         const Sheet* sheet = (*it)->sheet();
-        for (int col = range.left(); col <= range.right(); ++col)
+
+        const CellStorage *cells = sheet->cellStorage();
+ 
+        int bottom = range.bottom();
+        if (bottom > cells->rows()) bottom = cells->rows();
+        for (int row = range.top(); row <= bottom; ++row)
         {
-            for (int row = range.top(); row <= range.bottom(); ++row)
-            {
-                const Cell cell( sheet, col, row );
+            int col = range.left() - 1;
+            while (1) {
+                const Cell cell = cells->nextInRow (col, row);
+                if (cell.isNull()) break;
+                col = cell.column();
+                if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+
                 const Formula formula = cell.formula();
 
                 // remove it and all its consumers from the reference depth list
@@ -382,7 +391,11 @@ void DependencyManager::Private::generateDepths(const Region& region)
     {
         const QRect range = (*it)->rect();
         const Sheet* sheet = (*it)->sheet();
-        const int bottom = range.bottom();
+        const CellStorage *cells = sheet->cellStorage();
+ 
+        int bottom = range.bottom();
+        if (bottom > cells->rows()) bottom = cells->rows();
+
         for (int row = range.top(); row <= bottom; ++row)
         {
             int col = 0;
