@@ -279,7 +279,7 @@ CustomStyle * StyleManager::style( QString const & name ) const
     }
     if ( m_styles.contains(name) )
         return m_styles[name];
-    if ( name == "Default" )
+    if ((name == "Default") || (name == m_defaultStyle->name()))
         return m_defaultStyle;
     return 0;
 }
