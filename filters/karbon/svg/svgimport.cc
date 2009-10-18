@@ -197,8 +197,10 @@ void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QLis
         m_document->insertLayer( layer );
     }
 
-    if( oldLayer )
+    if( oldLayer ) {
         m_document->removeLayer( oldLayer );
+        delete oldLayer;
+    }
 }
 
 #include <svgimport.moc>
