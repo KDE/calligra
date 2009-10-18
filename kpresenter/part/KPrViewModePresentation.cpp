@@ -215,7 +215,7 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
-    m_view->updateActivePage( page );
+    m_view->setActivePage( page );
 
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
