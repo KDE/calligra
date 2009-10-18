@@ -278,7 +278,7 @@ long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, con
         peryear += QDate::isLeapYear(y) ? 366 : 365;
       }
       // less than one year - even if it does span two consequentive years ...
-      if (QDate(date1.year(), date1.month(), date1.day()) > date2) {
+      if (QDate(date1.year()+1, date1.month(), date1.day()) >= date2) {
         nYears = 1;
         peryear = 365;
         if (QDate::isLeapYear(date1.year()) && (date1.month() <= 2)) peryear = 366;

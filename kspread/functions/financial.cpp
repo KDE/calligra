@@ -1553,12 +1553,18 @@ Value func_npv( valVector args, ValueCalc* calc, FuncExtra* )
     return result.element( 0, 0 );
 }
 
-
 //
 // ODDLPRICE
 //
 Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  // this implementation is not correct. disabling the function.
+  // specifically, we cannot use yearfrac here
+  // refer to gnumeric sources or something like
+  // http://www.advsystems.com/products/TOOLKIT/finlibdocs/FinLib-05.htm
+  // for correct formulas
+  return Value::errorVALUE();
+
   QDate settlement = calc->conv()->asDate (args[0]).asDate(calc->settings());
   QDate maturity = calc->conv()->asDate (args[1]).asDate(calc->settings());
   QDate last = calc->conv()->asDate (args[2]).asDate(calc->settings());
@@ -1584,7 +1590,7 @@ Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
   double dci  = yearFrac(date0, last, maturity, basis)*freq;
   double dsci = yearFrac(date0, settlement, maturity, basis)*freq;
   double ai = yearFrac(date0, last, settlement, basis)*freq;
- 
+
   double res = redemp + dci * 100.0 * rate / freq;
   res /= dsci * yield / freq + 1.0;
   res -= ai * 100.0 * rate / freq;
@@ -1598,6 +1604,13 @@ Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  // this implementation is not correct. disabling the function.
+  // specifically, we cannot use yearfrac here
+  // refer to gnumeric sources or something like
+  // http://www.advsystems.com/products/TOOLKIT/finlibdocs/FinLib-05.htm
+  // for correct formulas
+  return Value::errorVALUE();
+
   QDate settlement = calc->conv()->asDate (args[0]).asDate(calc->settings());
   QDate maturity = calc->conv()->asDate (args[1]).asDate(calc->settings());
   QDate last = calc->conv()->asDate (args[2]).asDate(calc->settings());
@@ -1711,16 +1724,16 @@ Value func_pricemat (valVector args, ValueCalc *calc, FuncExtra *)
   if( rate < 0.0 || yield < 0.0 || settlement >= maturity )
     return Value::errorVALUE();
 
-  QDate date0 = calc->settings()->referenceDate(); // referenceDate
+  long double y = daysPerYear( settlement, basis );
+  if (!y) return Value::errorVALUE();
+  long double issMat = daysBetweenDates (issue, maturity, basis) / y;
+  long double issSet = daysBetweenDates (issue, settlement, basis) / y;
+  long double setMat = daysBetweenDates (settlement, maturity, basis) / y;
 
-  double issMat = yearFrac(date0, issue, maturity, basis);
-  double issSet = yearFrac(date0, issue, settlement, basis);
-  double setMat = yearFrac(date0, settlement, maturity, basis);
-
-  double res = 1.0 + issMat * rate;
-  res /= 1.0 + setMat * yield;
+  long double res = 1.0l + issMat * rate;
+  res /= 1.0l + setMat * yield;
   res -= issSet * rate;
-  res *= 100.0;
+  res *= 100.0l;
 
   return Value(res);
 }
