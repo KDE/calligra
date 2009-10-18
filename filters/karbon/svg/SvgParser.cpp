@@ -2018,10 +2018,8 @@ KoShape * SvgParser::createText( const KoXmlElement &b, const QList<KoShape*> & 
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
     text->setZIndex( nextZIndex() );
 
-    // apply the style of the text element
-    parseStyle( text, b );
-    // apply the style of the last tspan element
-    parseStyle( text, styleElement );
+    // apply the style merged from the text element and the last tspan element
+    parseStyle( text, mergeStyles( collectStyles(styleElement), collectStyles(b) ) );
 
     removeGraphicContext();
 
