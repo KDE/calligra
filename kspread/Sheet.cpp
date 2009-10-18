@@ -1849,32 +1849,39 @@ void Sheet::updateView(const Region& region)
 
 bool Sheet::testListChoose(Selection* selection)
 {
-   const QPoint marker( selection->marker() );
-   const QString text = Cell( this, marker ).userInput();
+  const QPoint marker( selection->marker() );
+  const QString text = Cell( this, marker ).userInput();
 
-   Region::ConstIterator end( selection->constEnd() );
-   for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
-   {
-     const QRect range = (*it)->rect();
-     for ( int col = range.left(); col <= range.right(); ++col )
-     {
-       for ( int row = range.top(); row <= range.bottom(); ++row )
-       {
-         const Cell cell( this, col, row );
-         if ( !cell.isPartOfMerged() && !( col == marker.x() && row == marker.y() ) )
-         {
-           if ( !cell.isFormula() && !cell.value().isNumber() &&
-                !cell.value().asString().isEmpty() &&
-                !cell.isTime() && !cell.isDate() )
-           {
-             if ( cell.userInput() != text )
-               return true;
-           }
-         }
-       }
-     }
-   }
-   return false;
+  Region::ConstIterator end( selection->constEnd() );
+  for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
+  {
+    const QRect range = (*it)->rect();
+ 
+    int bottom = range.bottom();
+    if (bottom > d->cellStorage->rows()) bottom = d->cellStorage->rows();
+    for (int row = range.top(); row <= bottom; ++row)
+    {
+      int col = range.left() - 1;
+      while (1) {
+        const Cell cell = d->cellStorage->nextInRow (col, row);
+        if (cell.isNull()) break;
+        col = cell.column();
+        if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+
+        if ( !cell.isPartOfMerged() && !( col == marker.x() && row == marker.y() ) )
+        {
+          if ( !cell.isFormula() && !cell.value().isNumber() &&
+               !cell.value().asString().isEmpty() &&
+               !cell.isTime() && !cell.isDate() )
+          {
+            if ( cell.userInput() != text )
+              return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 
