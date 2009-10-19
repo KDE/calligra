@@ -289,13 +289,13 @@ void TaskEditor::updateActionsEnabled( bool on )
 void TaskEditor::setupGui()
 {
     QString name = "taskeditor_add_list";
-    actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
+    actionAddTask  = new KAction(KIcon( "view-task-add" ), i18n("Add Task..."), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     actionCollection()->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
-    actionAddSubtask  = new KAction(KIcon( "add_sub_task" ), i18n("Add Sub-Task..."), this);
+    actionAddSubtask  = new KAction(KIcon( "view-task-child" ), i18n("Add Sub-Task..."), this);
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     actionCollection()->addAction("add_sub_task", actionAddSubtask );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );

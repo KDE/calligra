@@ -253,7 +253,7 @@ void ResourceEditor::updateActionsEnabled(  bool on )
 void ResourceEditor::setupGui()
 {
     QString name = "resourceeditor_edit_list";
-    actionAddGroup  = new KAction(KIcon( "user-group-new" ), i18n("Add Resource Group..."), this);
+    actionAddGroup  = new KAction(KIcon( "resource-group-new" ), i18n("Add Resource Group..."), this);
     actionCollection()->addAction("add_group", actionAddGroup );
     actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );

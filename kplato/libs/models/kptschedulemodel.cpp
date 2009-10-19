@@ -328,7 +328,7 @@ QVariant ScheduleItemModel::name( const QModelIndex &index, int role ) const
             return QVariant();
         case Qt::DecorationRole:
             if ( sm->isBaselined() ) {
-                return KIcon( "project-baselined" );
+                return KIcon( "view-time-schedule-baselined" );
             }
             return QVariant();
         default:
