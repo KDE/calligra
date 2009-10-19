@@ -8,7 +8,7 @@ Many new views has been added to simplify data entry, project execution and anal
 * Task status views for inspecting and modifying task progress.
 * Schedules view to handle scheduling. It supports critical path and PERT analyzes.
 
-Views are listed in a configurable view selector docker. Most views are configurable
+Views are listed in a configurable view selector docker. Most views are also configurable,
 making it possible to tailor the ui to the users particular needs.
 
 Earned value management:
