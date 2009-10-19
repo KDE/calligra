@@ -442,6 +442,7 @@ DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration
 
 bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     //kDebug();
+    const KLocale *locale = status.project().locale();
     QString s;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
@@ -457,8 +458,9 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     if (!s.isEmpty())
         m_availableUntil = DateTime::fromString(s, status.projectSpec());
         
-    cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
-    cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
+    cost.normalRate = locale->readMoney(element.attribute("normal-rate"));
+    qDebug()<<"load cost:"<<locale->currencySymbol()<<locale->decimalSymbol()<<element.attribute("normal-rate")<<cost.normalRate;
+    cost.overtimeRate = locale->readMoney(element.attribute("overtime-rate"));
     
     KoXmlElement parent = element.namedItem( "external-appointments" ).toElement();
     KoXmlElement e;
