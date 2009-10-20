@@ -32,9 +32,9 @@
 //#define DEBUG_PAGES
 
 KWPageManagerPrivate::KWPageManagerPrivate()
-    : lastId(0),
-    preferPageSpread(false),
-    defaultPageStyle("Standard")
+        : lastId(0),
+        preferPageSpread(false),
+        defaultPageStyle("Standard")
 {
     pageStyles.insert(defaultPageStyle.name(), defaultPageStyle);
 }
@@ -48,7 +48,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
     QMap<int, int>::const_iterator iter = pageNumbers.constBegin();
     for (;iter != pageNumbers.constEnd(); ++iter) {
         const KWPageManagerPrivate::Page page = pages.value(iter.value());
-        if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
+        if (page.pageSide == KWPage::PageSpread && iter.key() % 2 == 1)
             continue;
         if (iter.key() == pageNum) {
             if (bottom)
@@ -150,7 +150,7 @@ int KWPageManager::pageNumber(const QPointF &point) const
     QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
     for (;iter != d->pageNumbers.constEnd(); ++iter) {
         const KWPageManagerPrivate::Page page = d->pages[iter.value()];
-        if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
+        if (page.pageSide == KWPage::PageSpread && iter.key() % 2 == 1)
             continue;
         startOfpage += page.style.pageLayout().height + d->padding.top + d->padding.bottom;
         answer = iter.key();
@@ -217,7 +217,7 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
     KWPageManagerPrivate::Page newPage;
     newPage.style = pageStyle;
 
-    KWPage prevPage = page(pageNumber-1);
+    KWPage prevPage = page(pageNumber - 1);
     if (prevPage.isValid()) {
         if (pageNumber % 2 == 1 && prevPage.pageSide() == KWPage::PageSpread)
             pageNumber++; // don't insert in the middle of a pageSpread.
@@ -319,7 +319,7 @@ QPointF KWPageManager::clipToDocument(const QPointF &point) const
     KWPage page;
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
-    while(iter != d->pageNumbers.constEnd()) {
+    while (iter != d->pageNumbers.constEnd()) {
         const KWPageManagerPrivate::Page p = d->pages[iter.value()];
         startOfpage += p.style.pageLayout().height + d->padding.top + d->padding.bottom;
         if (startOfpage >= point.y()) {

@@ -97,7 +97,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
 // TODO rewrite the below to account for rotation etc.
     QRectF boundingRect = m_anchor->shape()->boundingRect();
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
-        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*> (state->shape);
+        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
         if (sc == 0) {
             kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
             return false;

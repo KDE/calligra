@@ -71,7 +71,7 @@ public:
     /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
-    virtual bool loadXML( const KoXmlDocument &doc, KoStore *store);
+    virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
     /// reimplemented from KoDocument
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// reimplemented from KoDocument

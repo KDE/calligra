@@ -229,8 +229,8 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.addAttribute("style:page-usage", "all");
 
     QBuffer buffer;
-    buffer.open( QIODevice::WriteOnly );
-    KoXmlWriter writer( &buffer );
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buffer);
 
     if (d->columns.columns > 1) {
         writer.startElement("style:columns");
@@ -248,7 +248,7 @@ KoGenStyle KWPageStyle::saveOdf() const
     //writer.addAttribute("style:line-style", )
     //writer.endElement();
 
-    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     pageLayout.addChildElement("columnsEnzo", contentElement);
 
 // the header/footer-style should be saved as a child of the style:page-layout; but using the

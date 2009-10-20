@@ -319,7 +319,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(kwcanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
-    actionCollection()->addAction("edit_delete", action );
+    actionCollection()->addAction("edit_delete", action);
 
     action = m_document->gridData().gridToggleAction(m_canvas);
     actionCollection()->addAction("view_grid", action);

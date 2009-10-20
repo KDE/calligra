@@ -249,7 +249,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     qreal textWidth = width - layout.left - layout.right;
 
     KWPageStyle pageStyle = page.pageStyle();
-    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2: 1) : 0;
+    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2 : 1) : 0;
     int columnsCount = columns;
     KWTextFrame **main, *footer = 0, *endnote = 0, *header = 0, *footnote = 0;
     main = new KWTextFrame*[columnsCount];
@@ -293,7 +293,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
     if (minZIndex < INT_MAX) {
         --minZIndex;
-        for (int i=0; i < columns; ++i)
+        for (int i = 0; i < columns; ++i)
             main[i]->shape()->setZIndex(minZIndex);
         if (footer)
             footer->shape()->setZIndex(minZIndex);
@@ -497,8 +497,8 @@ void KWFrameLayout::setup()
             break;
         case KWord::MainTextFrameSet:
             m_maintext = tfs;
-            disconnect (tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
-            connect (tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
+            disconnect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
+            connect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
         default: ;// ignore
         }
         if (tfs->pageStyle().isValid())

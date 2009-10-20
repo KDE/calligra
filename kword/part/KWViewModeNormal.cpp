@@ -42,7 +42,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     const int pageOffset = page.pageNumber();
 
     int begin = 0;
-    int end = m_pageTops.count()-1;
+    int end = m_pageTops.count() - 1;
     int index = 0;
     const qreal value = m_viewConverter->viewToDocument(viewRect.topLeft()).y();
     if (m_pageTops.value(end) <= value) { // check extremes. Only end is needed since begin is zero.
@@ -205,7 +205,7 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
         pageNumber++;
     }
     translated = m_viewConverter->viewToDocument(point);
-    KWPage page = m_pageManager->page(pageNumber -1 + m_pageManager->begin().pageNumber());
+    KWPage page = m_pageManager->page(pageNumber - 1 + m_pageManager->begin().pageNumber());
     qreal xOffset = translated.x();
 
     if (page.isValid() && m_pageSpreadMode && page.pageSide() == KWPage::Right && page != m_pageManager->begin()) {

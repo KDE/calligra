@@ -821,7 +821,7 @@ void KWDocument::printDebug()
     kDebug(32001) << "                 Debug info";
     kDebug(32001) << "Document:" << this;
     /*kDebug(32001) <<"Type of document:" << (m_pageStyle.hasMainTextFrame()?"WP":"DTP"); */
-    kDebug(32001) <<"Units:" << KoUnit::unitName( unit() );
+    kDebug(32001) << "Units:" << KoUnit::unitName(unit());
     kDebug(32001) << "# Framesets:" << frameSetCount();
     int i = 0;
     foreach (KWFrameSet *fs, m_frameSets) {
@@ -832,7 +832,7 @@ void KWDocument::printDebug()
 
     kDebug(32001) << "PageManager holds" << pageCount() << " pages";
     KWPage page = m_pageManager.begin();
-    while(page.isValid()) {
+    while (page.isValid()) {
         int pgnum = page.pageNumber();
         QString side = "[Left] ";
         QString num = QString::number(pgnum);

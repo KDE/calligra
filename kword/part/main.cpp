@@ -23,7 +23,7 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData=newKWordAboutData();
+    KAboutData * aboutData = newKWordAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -37,7 +37,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
         return 1;
     app.exec();
 
-    delete (aboutData);
+    delete(aboutData);
 
     return 0;
 }

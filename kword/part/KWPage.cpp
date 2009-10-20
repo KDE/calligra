@@ -93,7 +93,7 @@ bool KWPage::operator==(const KWPage &other) const
 
 uint KWPage::hash() const
 {
-   return n + qHash(priv);
+    return n + qHash(priv);
 }
 
 qreal KWPage::width() const

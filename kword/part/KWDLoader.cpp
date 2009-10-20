@@ -671,12 +671,12 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                         }
                         KoXmlElement type = variable.namedItem("TYPE").toElement();
                         int typeId = type.attribute("type", "1").toInt();
-                        switch(typeId) {
+                        switch (typeId) {
                         case 11: { // footnote
                             KoXmlElement footnote = variable.namedItem("FOOTNOTE").toElement();
                             KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
                             note->setLabel(footnote.attribute("value"));
-                            note->setAutoNumbering( footnote.attribute("numberingtype", "auto") == "auto" );
+                            note->setAutoNumbering(footnote.attribute("numberingtype", "auto") == "auto");
                             note->setText(i18n("Unable to locate footnote text"));
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
@@ -696,7 +696,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                                         ? KoInlineNote::Footnote : KoInlineNote::Endnote;
                             KoInlineNote *note = new KoInlineNote(type);
                             note->setLabel(footEndNote.attribute("value"));
-                            note->setAutoNumbering( footEndNote.attribute("numberingtype", "auto") == "auto" );
+                            note->setAutoNumbering(footEndNote.attribute("numberingtype", "auto") == "auto");
                             note->setText(i18n("Unable to locate note-text"));
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
@@ -1190,7 +1190,7 @@ void KWDLoader::insertNotes()
             kWarning(32001) << "Frameset data for note not found: '" << note.frameSetName;
             continue;
         }
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs && tfs->document()) {
             note.note->setText(tfs->document()->toPlainText());
 //kDebug(32001) << "setting the text to" << note.note->text();

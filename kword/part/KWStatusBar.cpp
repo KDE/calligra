@@ -229,13 +229,13 @@ void KWStatusBar::createZoomWidget()
     }
 }
 
-void KWStatusBar::showPage(bool visible )
+void KWStatusBar::showPage(bool visible)
 {
     m_document->config().setStatusBarShowPage(visible);
     m_pageLabel->setVisible(visible);
 }
 
-void KWStatusBar::showModified(bool visible )
+void KWStatusBar::showModified(bool visible)
 {
     m_document->config().setStatusBarShowModified(visible);
     m_modifiedLabel->setVisible(visible);
@@ -247,7 +247,7 @@ void KWStatusBar::showMouse(bool visible)
     m_mousePosLabel->setVisible(visible);
 }
 
-void KWStatusBar::showZoom(bool visible )
+void KWStatusBar::showZoom(bool visible)
 {
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
     m_document->config().setStatusBarShowZoom(visible);

@@ -130,7 +130,7 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
         // untested... No app saves this currently..
         foreach (KWFrame *f, frame->frameSet()->frames()) {
             if (f->shape()->name() == copy) {
-                KWCopyShape *shape= new KWCopyShape(f->shape());
+                KWCopyShape *shape = new KWCopyShape(f->shape());
                 new KWFrame(shape, frame->frameSet(), frame->loadingPageNumber());
                 delete frame;
                 return false;
