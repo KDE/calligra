@@ -1207,7 +1207,7 @@ void PowerPointImport::processPictureFrame (DrawObject* drawObject, KoXmlWriter*
 
   int picturePosition = drawObject->getIntProperty("pib") - 1;
   QString url;
-  if (picturePosition < d->pictureNames.size()) {
+  if (picturePosition >= 0 && picturePosition < d->pictureNames.size()) {
     url = "Pictures/" + d->pictureNames[picturePosition];
   } else {
     url = "Error:" + QString::number(d->pictureNames.size())
