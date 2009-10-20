@@ -26,8 +26,9 @@ namespace KFormDesigner
 {
 
 //! Base class for all form widgets.
-/*! Provides "design" flag that can affect rendering of the widget and other behaviour depending 
- on whether the parent form is in design or data mode.
+/*! Provides "design" and "editing" flags that can affect rendering
+ of the widget and other behaviour depending on whether the parent form is in design or data mode
+ and edting mode.
  */
 class KFORMEDITOR_EXPORT FormWidgetInterface
 {
@@ -42,6 +43,12 @@ public:
 
     //! Sets design mode on or off. Sets the arrow mouse cursor for design mode.
     virtual void setDesignMode(bool design);
+
+    //! @return true if this widget is in inline editing mode 
+    virtual bool editingMode() const;
+
+    //! Sets inline editing mode on or off.
+    virtual void setEditingMode(bool editing);
 
 protected:
     class Private;

@@ -58,6 +58,9 @@ CSV Import Dialog
 Forms
 * added FormWidgetInterface: adds common designMode attribute to widgets what enables display customization depending on the mode (e.g. displaying frames)
 * draw frame for frameless widgets like label in design mode
+* use semitransparent background when editing text for labels
+* make grid simpler
+* added editingMode attribute to FormWidgetInterface, and used it to alter paining of the widget while the inline editing is active
 TODO: add option to switch it off
 Main Window
 * fix updating shared actions availability after switching to a new tab

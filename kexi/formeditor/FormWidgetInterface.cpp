@@ -26,8 +26,9 @@ using namespace KFormDesigner;
 class FormWidgetInterface::Private
 {
 public:
-    Private() : design(false) {}
+    Private() : design(false), editing(false) {}
     bool design;
+    bool editing;
 };
 
 FormWidgetInterface::FormWidgetInterface()
@@ -49,4 +50,14 @@ void FormWidgetInterface::setDesignMode(bool design)
 {
     d->design = design;
     dynamic_cast<QWidget*>(this)->setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
+}
+
+bool FormWidgetInterface::editingMode() const
+{
+    return d->editing;
+}
+
+void FormWidgetInterface::setEditingMode(bool editing)
+{
+    d->editing = editing;
 }

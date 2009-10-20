@@ -431,10 +431,13 @@ WidgetLibrary::startInlineEditing(const QByteArray &classname, QWidget *w, Conta
     if (!wclass)
         return false;
 
+    FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(w);
     {
         KFormDesigner::WidgetFactory::InlineEditorCreationArguments args(classname, w, container);
         if (wclass->factory()->startInlineEditing(args)) {
             args.container->form()->createInlineEditor(args);
+            if (fwiface)
+                fwiface->setEditingMode(true);
             return true;
         }
     }
@@ -443,6 +446,8 @@ WidgetLibrary::startInlineEditing(const QByteArray &classname, QWidget *w, Conta
         KFormDesigner::WidgetFactory::InlineEditorCreationArguments args(wclass->className(), w, container);
         if (wclass->inheritedClass()->factory()->startInlineEditing(args)) {
             args.container->form()->createInlineEditor(args);
+            if (fwiface)
+                fwiface->setEditingMode(true);
             return true;
         }
     }

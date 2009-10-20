@@ -514,7 +514,19 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
     }
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
     p.end();
+
+    QPalette origPal;
+    if (editingMode()) {
+        origPal = palette();
+        QPalette pal(palette());
+        pal.setBrush(QPalette::WindowText, Qt::transparent);
+        setPalette(pal);
+    }
     QLabel::paintEvent(e);
+    if (editingMode()) {
+        setPalette(origPal);
+    }
+
     const bool hasFrame = frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
     if (designMode() && !hasFrame) {
         p.begin(this);

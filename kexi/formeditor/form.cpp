@@ -3640,6 +3640,12 @@ void Form::resetInlineEditor()
     QWidget *ed = d->inlineEditor;
     QWidget *widget = selectedWidget();
     if (widget) {
+        FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(widget);
+
+        if (fwiface)
+            fwiface->setEditingMode(false);
+
+
         ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
         if (!tree) {
             kWarning() << "Cannot find tree item for widget" << widget->objectName();
@@ -3649,7 +3655,7 @@ void Form::resetInlineEditor()
         if (widget) {// && !ed)
             setRecursiveCursor(widget, this);
             if (widget->inherits("QLineEdit") || widget->inherits("QTextEdit")) { //fix weird behaviour
-                widget->unsetCursor();
+//                widget->unsetCursor();
                 widget->setCursor(Qt::ArrowCursor);
             }
         }
