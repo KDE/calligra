@@ -1972,17 +1972,16 @@ void PowerPointImport::processTextExceptionsForStyle( TextCFRun *cf,
 
     elementWriter.startElement( "style:text-properties" );
     TextFont *font = 0;
-    if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletFont()) {
+    if (i == pf->textPFException()->indent()
+        && pf->textPFException()->hasBulletFont()) {
       font = d->presentation->getFont(pf->textPFException()->bulletFontRef());
-      elementWriter.addAttribute( "fo:font-family", font->name() );
-    } else {
-      if (levelPF->hasBulletFont()) {
-        font = d->presentation->getFont(levelPF->bulletFontRef());
-      }
+    } else if (levelPF->hasBulletFont()) {
+      font = d->presentation->getFont(levelPF->bulletFontRef());
     }
 
     if (font) {
-      elementWriter.addAttribute( "fo:font-family", font->name() );
+// disabled until the font->name() is checked to contain only utf8 strings
+//      elementWriter.addAttribute( "fo:font-family", font->name() );
     }
 
     if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletColor()) {
