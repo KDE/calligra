@@ -80,8 +80,7 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 {
     kDebug()<<parent;
     if ( m_flat ) {
-        beginInsertRows( QModelIndex(), m_managerlist.count(), m_managerlist.count() );
-        return;
+        return; // handle in *Inserted();
     }
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(parent);
@@ -91,7 +90,10 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
     if ( m_flat ) {
-        m_managerlist << const_cast<ScheduleManager*>( manager );
+        int row = m_project->allScheduleManagers().indexOf( const_cast<ScheduleManager*>( manager ) );
+        Q_ASSERT( row >= 0 );
+        beginInsertRows( QModelIndex(), row, row );
+        m_managerlist.insert( row, const_cast<ScheduleManager*>( manager ) );
         endInsertRows();
         emit scheduleManagerAdded( const_cast<ScheduleManager*>( manager ) );
         return;
@@ -793,22 +795,7 @@ void ScheduleItemModel::setFlat( bool flat )
     if ( ! flat || m_project == 0 ) {
         return;
     }
-    foreach ( ScheduleManager *sm, m_project->scheduleManagers() ) {
-        m_managerlist << sm;
-    }
-    bool stop = false;
-    while( ! stop ) {
-        stop = true;
-        for( int i = m_managerlist.count() - 1; i >= 0; --i ) {
-            ScheduleManager *sm = m_managerlist.at( i );
-            if ( ! m_managerlist.contains( sm ) ) {
-                m_managerlist << sm;
-                if ( sm->childCount() > 0 ) {
-                    stop = false;
-                }
-            }
-        }
-    }
+    m_managerlist = m_project->allScheduleManagers();
 }
 
 //--------------------------------------

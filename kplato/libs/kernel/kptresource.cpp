@@ -459,7 +459,7 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
         m_availableUntil = DateTime::fromString(s, status.projectSpec());
         
     cost.normalRate = locale->readMoney(element.attribute("normal-rate"));
-    qDebug()<<"load cost:"<<locale->currencySymbol()<<locale->decimalSymbol()<<element.attribute("normal-rate")<<cost.normalRate;
+    //qDebug()<<"load cost:"<<locale->currencySymbol()<<locale->decimalSymbol()<<element.attribute("normal-rate")<<cost.normalRate;
     cost.overtimeRate = locale->readMoney(element.attribute("overtime-rate"));
     
     KoXmlElement parent = element.namedItem( "external-appointments" ).toElement();

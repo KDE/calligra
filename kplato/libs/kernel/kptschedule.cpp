@@ -1358,8 +1358,8 @@ ScheduleManager *ScheduleManager::findManager( const QString& name ) const
 QList<ScheduleManager*> ScheduleManager::allChildren() const
 {
     QList<ScheduleManager*> lst;
-    lst << m_children;
     foreach ( ScheduleManager *sm, m_children ) {
+        lst << sm;
         lst << sm->allChildren();
     }
     return lst;

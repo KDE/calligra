@@ -669,7 +669,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             if ( e.hasAttribute( "negative-prefix-currency-symbol" ) ) {
                 l->setNegativePrefixCurrencySymbol( e.attribute( "negative-prefix-currency-symbol" ).toInt() );
             }
-            qDebug()<<"project load:"<<l->currencySymbol();
+            //qDebug()<<"project load:"<<l->currencySymbol();
         }
     }
     QList<Calendar*> cals;
@@ -2077,8 +2077,8 @@ ScheduleManager *Project::findScheduleManager( const QString &name ) const
 QList<ScheduleManager*> Project::allScheduleManagers() const
 {
     QList<ScheduleManager*> lst;
-    lst << m_managers;
     foreach ( ScheduleManager *sm, m_managers ) {
+        lst << sm;
         lst << sm->allChildren();
     }
     return lst;
