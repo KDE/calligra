@@ -689,7 +689,8 @@ tristate KexiWindow::switchToViewMode(
     d->stack->setCurrentWidget(newView);   //d->indexForView(newViewMode) );
     newView->propertySetSwitched();
     KexiMainWindowIface::global()->invalidateSharedActions(newView);
-    QTimer::singleShot(10, newView, SLOT(setFocus())); //newView->setFocus(); //js ok?
+    newView->setFocus();
+//2.0    QTimer::singleShot(10, newView, SLOT(setFocus())); //newView->setFocus(); //js ok?
 // setFocus();
     /*TODO move
       QAction* toggleAction = d->toggleViewModeActions.value(newViewMode);
