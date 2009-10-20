@@ -201,7 +201,7 @@ protected:
 
     /*! Reimplemented after KexiView.
      Updates actions (e.g. availability). */
-// todo  virtual void updateActions(bool activated);
+    virtual void updateActions(bool activated);
 
     KexiDBForm *m_dbform;
     KexiFormScrollView *m_scrollView;

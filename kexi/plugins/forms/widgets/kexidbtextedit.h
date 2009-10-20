@@ -24,14 +24,15 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
+#include <formeditor/FormWidgetInterface.h>
 #include <ktextedit.h>
 #include <QPaintEvent>
 
 //! @short Multiline edit widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
-            public KTextEdit,
-            protected KexiDBTextWidgetInterface,
-            public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBTextEdit :  public KTextEdit,
+                                             protected KexiDBTextWidgetInterface,
+                                             public KexiFormDataItemInterface,
+                                             public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

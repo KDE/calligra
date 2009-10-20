@@ -32,6 +32,7 @@
 #include "kexidbutils.h"
 #include <kexi_global.h>
 #include <widget/tableview/kexitextformatter.h>
+#include <formeditor/FormWidgetInterface.h>
 
 class KexiDBWidgetContextMenuExtender;
 
@@ -43,11 +44,11 @@ void setLighterGrayBackgroundColor(QWidget* widget);
 /*! Handles many data types. User input is validated by using validators
  and/or input masks.
 */
-class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
-            public KLineEdit,
-            protected KexiDBTextWidgetInterface,
-            public KexiFormDataItemInterface,
-            public KexiSubwidgetInterface
+class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
+                                            protected KexiDBTextWidgetInterface,
+                                            public KexiFormDataItemInterface,
+                                            public KexiSubwidgetInterface,
+                                            public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -57,6 +58,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 public:
     KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
+
+//    //! Sets design mode on or off. Reimplemented to alter the cursor.
+//    virtual void setDesignMode(bool design);
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();

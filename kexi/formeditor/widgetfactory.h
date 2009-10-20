@@ -364,10 +364,11 @@ public:
         Container *container;
         QRect geometry;
         Qt::Alignment alignment;
-        Qt::BackgroundMode backgroundMode;
         bool useFrame : 1;
         bool multiLine : 1;
         bool execute : 1;
+        //! true if the inline editor's bakground should be transparent (false by default)
+        bool transparentBackground : 1;
     };
 
     /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 

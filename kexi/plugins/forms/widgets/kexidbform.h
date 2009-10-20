@@ -28,7 +28,8 @@
 
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
-#include "../kexiformdataiteminterface.h"
+#include <formeditor/FormWidgetInterface.h>
+#include "kexiformdataiteminterface.h"
 
 #ifdef KEXI_USE_GRADIENT_WIDGET
 #include <kexigradientwidget.h>
@@ -41,10 +42,10 @@ class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
 
 //! @short A DB-aware form widget, acting as form's toplevel widget
-class KEXIFORMUTILS_EXPORT KexiDBForm :
-            public KexiDBFormBase,
-            public KFormDesigner::FormWidget,
-            public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBForm : public KexiDBFormBase,
+                                        public KFormDesigner::FormWidget,
+                                        public KexiFormDataItemInterface,
+                                        public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

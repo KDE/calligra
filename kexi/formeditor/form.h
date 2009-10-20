@@ -177,9 +177,15 @@ public:
      \see selectedWidgets() */
     QWidget* selectedWidget() const;
 
-    /*! Emits the action signals, and optionaly the undo/redo related signals
-     if \a withUndoAction == true. See \a FormManager for signals description. */
-    void emitActionSignals(bool withUndoAction = true);
+    //! \return true if form widget itself is selected.
+    /*! Used to check whether it is possible to execute copy/cut/delete actions. */
+    bool isFormWidgetSelected() const;
+
+    /*! Emits the action signals. See \a FormManager for signals description. */
+    void emitActionSignals();
+
+    /*! Emits the action signals for the undo/redo related signals. See \a FormManager for signals description. */
+    void emitUndoActionSignals();
 
     /*! Emits again all signal related to selection (ie Form::selectionChanged()).
       Called eg when the user has the focus again. */

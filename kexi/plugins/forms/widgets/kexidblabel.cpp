@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@
 
 #include <kexidb/field.h>
 #include <kexiutils/utils.h>
+#include <formeditor/utils.h>
 
 #define SHADOW_OFFSET_X 3
 #define SHADOW_OFFSET_Y 3
@@ -514,6 +515,12 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
     p.end();
     QLabel::paintEvent(e);
+    const bool hasFrame = !designMode() && frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
+    if (!hasFrame) {
+        p.begin(this);
+        KFormDesigner::paintWidgetFrame(p, rect());
+        p.end();
+    }
 }
 
 void KexiDBLabel::setValueInternal(const QVariant& add, bool removeOld)

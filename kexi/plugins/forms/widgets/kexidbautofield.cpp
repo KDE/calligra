@@ -66,29 +66,29 @@ public:
     QBrush textBrush; //!< needed because for unbound mode editor==0
     bool autoCaption : 1;
     bool focusPolicyChanged : 1;
-    bool designMode : 1;
+//2.0 moved to FormWidgetInterface    bool designMode : 1;
 };
 
 //-------------------------------------
 
 KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos,
-                                 QWidget *parent, bool designMode)
+                                 QWidget *parent)
         : QWidget(parent)
         , KexiFormDataItemInterface()
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-    d->designMode = designMode;
+//2.0 moved to FormWidgetInterface    d->designMode = designMode;
     init(text, type, pos);
 }
 
-KexiDBAutoField::KexiDBAutoField(QWidget *parent, bool designMode, LabelPosition pos)
+KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
         : QWidget(parent)
         , KexiFormDataItemInterface()
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-    d->designMode = designMode;
+//2.0 moved to FormWidgetInterface    d->designMode = designMode;
     init(QString()/*i18n("Auto Field")*/, Auto, pos);
 }
 
@@ -161,11 +161,14 @@ KexiDBAutoField::createEditor()
         newSubwidget = new KexiDBCheckBox(dataSource(), this);
         break;
     case Image:
-        newSubwidget = new KexiDBImageBox(d->designMode, this);
+        newSubwidget = new KexiDBImageBox(designMode(), this);
         break;
-    case ComboBox:
-        newSubwidget = new KexiDBComboBox(this, d->designMode);
+    case ComboBox: {
+        KexiDBComboBox *cbox = new KexiDBComboBox(this);
+        newSubwidget = cbox;
+        cbox->setDesignMode(designMode());
         break;
+    }
     default:
         newSubwidget = 0;
         changeText(d->caption);
@@ -245,7 +248,7 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
         }
         d->label->setAlignment(align);
         if (d->widgetType == Boolean
-                || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !d->designMode)) {
+                || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !designMode())) {
             d->label->hide();
         } else {
             d->label->show();
@@ -290,7 +293,7 @@ void
 KexiDBAutoField::setInvalidState(const QString &text)
 {
     // Widget with an invalid dataSource is just a QLabel
-    if (d->designMode)
+    if (designMode())
         return;
     d->widgetType = Auto;
     createEditor();
@@ -562,8 +565,8 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
     QString realText;
     bool unbound = false;
     if (d->autoCaption && (d->widgetType == Auto || dataSource().isEmpty())) {
-        if (d->designMode)
-            realText = objectName() + " " + i18nc("Unbound Auto Field", "(unbound)");
+        if (designMode())
+            realText = i18nc("Unbound Auto Field", "%1 (unbound)", objectName());
         else
             realText.clear();
         unbound = true;

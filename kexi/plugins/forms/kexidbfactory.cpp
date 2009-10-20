@@ -353,12 +353,14 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KexiDBSubForm(container->form(), p);
     else if (c == "KexiDBLineEdit") {
         w = new KexiDBLineEdit(p);
-        if (designMode)
-            w->setCursor(QCursor(Qt::ArrowCursor));
+//2.0 moved to FormWidgetInterface
+//        if (designMode)
+//            w->setCursor(QCursor(Qt::ArrowCursor));
     } else if (c == "KexiDBTextEdit") {
         w = new KexiDBTextEdit(p);
-        if (designMode)
-            w->setCursor(QCursor(Qt::ArrowCursor));
+//2.0 moved to FormWidgetInterface
+//        if (designMode)
+//            w->setCursor(QCursor(Qt::ArrowCursor));
     } else if (c == "Q3Frame" || c == "QFrame" || c == "KexiFrame") {
         w = new KexiFrame(p);
         createContainer = true;
@@ -372,12 +374,12 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     else if (c == "KexiDBAutoField")
-        w = new KexiDBAutoField(p, designMode);
+        w = new KexiDBAutoField(p);
 #endif
     else if (c == "KexiDBCheckBox")
         w = new KexiDBCheckBox(text, p);
     else if (c == "KexiDBComboBox")
-        w = new KexiDBComboBox(p, designMode);
+        w = new KexiDBComboBox(p);
     /* else if(c == "KexiDBTimeEdit")
         w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
       else if(c == "KexiDBDateEdit")
@@ -556,6 +558,8 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.execute = false;
         return true;
     }
+//    else if (args.classname == "QPushButton" || args.classname == "KPushButton" || args.classname == "KexiPushButton") {
+//    }
     return false;
 }
 

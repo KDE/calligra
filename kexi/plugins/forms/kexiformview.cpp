@@ -1377,23 +1377,24 @@ KexiFormView::setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id)
         tempData()->unsavedLocalBLOBs.insert(widget, id);
 }
 
-/*
-todo
 void KexiFormView::updateActions(bool activated)
 {
   if (viewMode()==Kexi::DesignViewMode) {
+    if (activated)
+        form()->emitActionSignals();
+/* 2.0
     if (form()->selectedWidget()) {
       if (form()->widget() == form()->selectedWidget())
-        KFormDesigner::FormManager::self()->emitFormWidgetSelected( form() );
+        form()->emitFormWidgetSelected();
       else
-        KFormDesigner::FormManager::self()->emitWidgetSelected( form(), false );
+        form()->emitWidgetSelected( false );
     }
     else if (form()->selectedWidgets()) {
-      KFormDesigner::FormManager::self()->emitWidgetSelected( form(), true );
-    }
+      form()->emitWidgetSelected( true );
+    } */
   }
   KexiDataAwareView::updateActions(activated);
-}*/
+}
 
 /*
 void KexiFormView::parentDialogDetached()

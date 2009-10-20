@@ -140,7 +140,6 @@ void KFDTabWidget::dropEvent(QDropEvent *e)
 
 HBox::HBox(QWidget *parent)
         : QFrame(parent)
-        , m_preview(false)
 {
 }
 
@@ -151,7 +150,8 @@ HBox::~HBox()
 void
 HBox::paintEvent(QPaintEvent *)
 {
-    if (m_preview) return;
+    if (!designMode())
+        return;
     QPainter p(this);
     p.setPen(QPen(Qt::red, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -159,7 +159,6 @@ HBox::paintEvent(QPaintEvent *)
 
 VBox::VBox(QWidget *parent)
         : QFrame(parent)
-        , m_preview(false)
 {
 }
 
@@ -170,7 +169,8 @@ VBox::~VBox()
 void
 VBox::paintEvent(QPaintEvent *)
 {
-    if (m_preview) return;
+    if (!designMode())
+        return;
     QPainter p(this);
     p.setPen(QPen(Qt::blue, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -178,7 +178,6 @@ VBox::paintEvent(QPaintEvent *)
 
 Grid::Grid(QWidget *parent)
         : QFrame(parent)
-        , m_preview(false)
 {
 }
 
@@ -189,7 +188,8 @@ Grid::~Grid()
 void
 Grid::paintEvent(QPaintEvent *)
 {
-    if (m_preview) return;
+    if (!designMode())
+        return;
     QPainter p(this);
     p.setPen(QPen(Qt::darkGreen, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -197,7 +197,6 @@ Grid::paintEvent(QPaintEvent *)
 
 HFlow::HFlow(QWidget *parent)
         : QFrame(parent)
-        , m_preview(false)
 {
 }
 
@@ -208,7 +207,8 @@ HFlow::~HFlow()
 void
 HFlow::paintEvent(QPaintEvent *)
 {
-    if (m_preview) return;
+    if (!designMode())
+        return;
     QPainter p(this);
     p.setPen(QPen(Qt::magenta, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -216,7 +216,6 @@ HFlow::paintEvent(QPaintEvent *)
 
 VFlow::VFlow(QWidget *parent)
         : QFrame(parent)
-        , m_preview(false)
 {
 }
 
@@ -227,7 +226,8 @@ VFlow::~VFlow()
 void
 VFlow::paintEvent(QPaintEvent *)
 {
-    if (m_preview) return;
+    if (!designMode())
+        return;
     QPainter p(this);
     p.setPen(QPen(Qt::cyan, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -899,6 +899,7 @@ ContainerFactory::previewWidget(const QByteArray &classname,
         if (!tree->modifiedProperties()->contains("frameShape"))
             stack->setFrameStyle(QFrame::NoFrame);
     }
+/* moved to FormWidgetInterface 
     else if (classname == "HBox")
         dynamic_cast<HBox*>(widget)->setPreviewMode();
     else if (classname == "VBox")
@@ -910,7 +911,7 @@ ContainerFactory::previewWidget(const QByteArray &classname,
     else if (classname == "VFlow")
         dynamic_cast<VFlow*>(widget)->setPreviewMode();
     else
-        return false;
+        return false;*/
     return true;
 }
 

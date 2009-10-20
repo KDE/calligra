@@ -54,6 +54,14 @@ CSV Import Dialog
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 13 ~~~~~~~~~~~~~~~~
 
+2009-10-18..20
+Forms
+* added FormWidgetInterface: adds common designMode attribute to widgets what enables display customization depending on the mode (e.g. displaying frames)
+* draw frame for frameless widgets like label in design mode
+TODO: add option to switch it off
+Main Window
+* fix updating shared actions availability after switching to a new tab
+
 2009-10-12
 Utils
 * fix functions related to property introspections

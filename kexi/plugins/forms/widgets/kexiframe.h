@@ -21,10 +21,12 @@
 #define KexiFrame_H
 
 #include <QFrame>
+#include <formeditor/FormWidgetInterface.h>
 #include <kexi_export.h>
 
 //! @short Frame widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
+class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,
+                                       public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 //todo Q_ENUMS( Shape Shadow )
@@ -77,6 +79,9 @@ signals:
 
 protected:
     virtual void drawFrame(QPainter *);
+
+    //! Adds frame in design mode if there is no frame
+    void paintEvent(QPaintEvent *pe);
 
     class Private;
     Private * const d;

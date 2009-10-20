@@ -31,8 +31,8 @@
  (more can be added in the future).
  A drop-down button is added to mimic native combo box widget's functionality.
 */
-class KEXIFORMUTILS_EXPORT KexiDBComboBox :
-            public KexiDBAutoField, public KexiComboBoxBase
+class KEXIFORMUTILS_EXPORT KexiDBComboBox : public KexiDBAutoField,
+                                            public KexiComboBoxBase
 {
     Q_OBJECT
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
@@ -40,7 +40,7 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 //2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
 
 public:
-    KexiDBComboBox(QWidget *parent, bool designMode = true);
+    KexiDBComboBox(QWidget *parent);
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)

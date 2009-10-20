@@ -27,9 +27,10 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 
-#include "../kexiformdataiteminterface.h"
-#include "../kexidbtextwidgetinterface.h"
+#include "kexiformdataiteminterface.h"
+#include "kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
+#include <formeditor/FormWidgetInterface.h>
 #include <kexi_global.h>
 
 class QPainter;
@@ -39,7 +40,10 @@ class QPainter;
 
  @author Christian Nitschkowski, Jarosław Staniek
 */
-class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
+                                         protected KexiDBTextWidgetInterface,
+                                         public KexiFormDataItemInterface,
+                                         public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

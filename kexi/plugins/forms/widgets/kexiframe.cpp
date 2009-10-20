@@ -22,6 +22,7 @@
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <kexiutils/utils.h>
+#include <formeditor/utils.h>
 
 //! @internal
 class KexiFrame::Private
@@ -67,6 +68,16 @@ void KexiFrame::dropEvent(QDropEvent *e)
 {
     QFrame::dropEvent(e);
     emit handleDropEvent(e);
+}
+
+void KexiFrame::paintEvent(QPaintEvent *pe)
+{
+    QFrame::paintEvent(pe);
+    const bool hasFrame = !designMode() && frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
+    if (!hasFrame) {
+        QPainter p(this);
+        KFormDesigner::paintWidgetFrame(p, rect());
+    }
 }
 
 #define ClassName KexiFrame

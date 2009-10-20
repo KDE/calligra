@@ -35,10 +35,9 @@ class KexiImageContextMenu;
 //! @short A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
-class KEXIFORMUTILS_EXPORT KexiDBImageBox :
-            public KexiFrame,
-            public KexiFormDataItemInterface,
-            public KexiSubwidgetInterface
+class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
+                                            public KexiFormDataItemInterface,
+                                            public KexiSubwidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -98,8 +97,6 @@ public:
     virtual bool isReadOnly() const;
 
     bool hasScaledContents() const;
-
-//  bool designMode() const { return m_designMode; }
 
     Qt::Alignment alignment() const {
         return m_alignment;
@@ -277,7 +274,7 @@ protected:
 //  QTimer m_clickTimer;
     Qt::Alignment m_alignment;
     Qt::FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
-    bool m_designMode : 1;
+//2.0 moved to FormWidgetInterface    bool m_designMode : 1;
     bool m_readOnly : 1;
     bool m_scaledContents : 1;
     bool m_keepAspectRatio : 1;

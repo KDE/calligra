@@ -23,12 +23,15 @@
 
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
+#include <formeditor/FormWidgetInterface.h>
 #include <q3datetimeedit.h>
 
 class QDateTimeEditor;
 
 //! @short A db-aware time editor
-class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit,
+                                            public KexiFormDataItemInterface,
+                                            public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

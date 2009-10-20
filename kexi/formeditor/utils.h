@@ -33,6 +33,7 @@
 
 class QMimeData;
 class QDomDocument;
+class QPainter;
 
 namespace KFormDesigner
 {
@@ -161,6 +162,10 @@ class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
 
 //! @return @a value aligned to the nearest multiple of gridSize
 KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
+
+//! Paint semitransparent widget frame. 
+//! For example it is useful for design mode to show geometry of label that has no visible frames.
+KFORMEDITOR_EXPORT void paintWidgetFrame(QPainter& p, const QRect& geometry);
 
 }
 

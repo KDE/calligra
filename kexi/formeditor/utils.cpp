@@ -25,6 +25,8 @@
 #include <QMimeData>
 #include <QTabWidget>
 #include <QTabBar>
+#include <QPen>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <kexiutils/utils.h>
@@ -263,11 +265,14 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
         ObjectTreeItem *item = form.objectTree()->lookup(w->objectName());
         if (!item)
             return;
+        Container *c = form.parentContainer(item->widget());
+        if (!c)
+            return;
 
         // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
         containers.insert(
             item->name().toLatin1(),
-            form.parentContainer(item->widget())->widget()->objectName().toLatin1().constData()
+            c->widget()->objectName().toLatin1().constData()
         );
         parents.insert(
             item->name().toLatin1(),
@@ -318,6 +323,25 @@ QAction *ActionGroup::action(const QString& name) const
 int KFormDesigner::alignValueToGrid(int value, int gridSize)
 {
     return int((float)value / ((float)gridSize) + 0.5) * gridSize;
+}
+
+//-----------------------------
+
+void KFormDesigner::paintWidgetFrame(QPainter& p, const QRect& geometry)
+{
+    QColor c1(Qt::white);
+    c1.setAlpha(100);
+    QColor c2(Qt::black);
+    c2.setAlpha(100);
+    QRect r(geometry);
+    r.setWidth(r.width()-1);
+    r.setHeight(r.height()-1);
+    QPen pen1(c1, 1, Qt::DashLine);
+    QPen pen2(c2, 1, Qt::DashLine);
+    p.setPen(pen1);
+    p.drawRect(r);
+    p.setPen(pen2);
+    p.drawRect(r);
 }
 
 #include "utils.moc"

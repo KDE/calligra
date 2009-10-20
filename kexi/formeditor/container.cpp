@@ -519,10 +519,12 @@ Container::eventFilter(QObject *s, QEvent *e)
                 const int y = rowcursor * gridY - 1;
                 p.setPen(pen1);
                 p.drawPoint(x, y);
-                p.drawPoint(x, y+1);
+//                p.drawPoint(x, y+1);
                 p.setPen(pen2);
-                p.drawPoint(x+1, y);
-                p.drawPoint(x+1, y+1);
+                p.drawPoint(x, y);
+//                p.drawPoint(x, y+1);
+//                p.drawPoint(x+1, y);
+//                p.drawPoint(x+1, y+1);
 #ifdef DEBUG_PAINTER
     points++;
 #endif

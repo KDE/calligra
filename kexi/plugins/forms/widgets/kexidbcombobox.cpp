@@ -63,20 +63,20 @@ public:
     bool buttonPressed : 1;
     bool mouseOver : 1;
     bool dataEnteredByHand : 1;
-    bool designMode : 1;
+//2.0    bool designMode : 1;
 };
 
 //-------------------------------------
 
-KexiDBComboBox::KexiDBComboBox(QWidget *parent, bool designMode)
-        : KexiDBAutoField(parent, designMode, NoLabel)
+KexiDBComboBox::KexiDBComboBox(QWidget *parent)
+        : KexiDBAutoField(parent, NoLabel)
         , KexiComboBoxBase()
         , d(new Private())
 {
     setMouseTracking(true);
     setFocusPolicy(Qt::WheelFocus);
     installEventFilter(this);
-    d->designMode = designMode;
+//2.0    d->designMode = designMode;
     d->paintedCombo = new KComboBox(this);
     d->paintedCombo->hide();
     d->paintedCombo->move(0, 0);
@@ -259,7 +259,7 @@ QRect KexiDBComboBox::buttonGeometry() const
 
 bool KexiDBComboBox::handleMousePressEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton || d->designMode)
+    if (e->button() != Qt::LeftButton || designMode())
         return true;
     /*todo if ( m_discardNextMousePress ) {
         d->discardNextMousePress = FALSE;

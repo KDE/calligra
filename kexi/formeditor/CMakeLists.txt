@@ -16,6 +16,7 @@ set(kformdesigner_LIB_SRCS
    objecttree.cpp 
    formIO.cpp 
    FormWidget.cpp
+   FormWidgetInterface.cpp
    objecttreeview.cpp 
    spring.cpp 
    commands.cpp 

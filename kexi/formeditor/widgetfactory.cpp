@@ -147,8 +147,7 @@ WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(
     : classname(_classname), widget(_widget), container(_container), 
       geometry(_widget ? _widget->geometry() : QRect()),
       alignment( Qt::AlignLeft ),
-      backgroundMode( Qt::NoBackground ),
-      useFrame( false ), multiLine( false ), execute( true )
+      useFrame( false ), multiLine( false ), execute( true ), transparentBackground( false )
 {
 }
 

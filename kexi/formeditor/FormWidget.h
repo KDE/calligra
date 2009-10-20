@@ -36,10 +36,9 @@ class FormManager;
 class FormPrivate;
 class Form;
 
-//! Base (virtual) class for all form widgets
+//! Base interface for all main form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary
- because you cannot inherit QWidget twice, and we want form widgets to be any widget.
- See FormWidgetBase in test/kfd_part.cpp and just copy functions there. */
+ because you cannot inherit QWidget twice, and we want form widgets to be any widget. */
 class KFORMEDITOR_EXPORT FormWidget
 {
 public:

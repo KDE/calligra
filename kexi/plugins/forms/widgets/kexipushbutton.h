@@ -23,9 +23,11 @@
 
 #include <kpushbutton.h>
 #include <formeditor/kexiformeventhandler.h>
+#include <formeditor/FormWidgetInterface.h>
 
 //! @short Push Button widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
+class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton,
+                                            public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)

@@ -79,6 +79,13 @@ KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
 
+/*
+void FormWidgetInterface::setDesignMode(bool design)
+{
+    FormWidgetInterface::setDesignMode(design);
+    setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
+}*/
+
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
     KLineEdit::setReadOnly(true);

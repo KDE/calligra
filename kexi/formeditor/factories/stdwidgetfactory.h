@@ -30,6 +30,7 @@
 
 #include "widgetfactory.h"
 #include "container.h"
+#include "FormWidgetInterface.h"
 
 class QTreeWidgetItem;
 class QTreeWidget;
@@ -40,7 +41,7 @@ class Set;
 }
 
 //! A picture label widget for use within forms
-class KexiPictureLabel : public QLabel
+class KexiPictureLabel : public QLabel, public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 
@@ -52,7 +53,7 @@ public:
 };
 
 //! A line widget for use within forms
-class Line : public QFrame
+class Line : public QFrame, public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)

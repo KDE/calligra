@@ -22,6 +22,7 @@
 #define KexiDBDateTimeEdit_H
 
 #include "kexiformdataiteminterface.h"
+#include <formeditor/FormWidgetInterface.h>
 #include <q3datetimeedit.h>
 
 class KDatePicker;
@@ -29,7 +30,9 @@ class QDateTimeEditor;
 class KMenu;
 
 //! @short A db-aware datetime editor
-class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget,
+                                                public KexiFormDataItemInterface,
+                                                public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

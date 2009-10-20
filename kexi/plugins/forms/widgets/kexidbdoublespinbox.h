@@ -22,11 +22,12 @@
 #define KexiDBDoubleSpinBox_H
 
 #include "kexiformdataiteminterface.h"
-#include <qwidget.h>
+#include <formeditor/FormWidgetInterface.h>
 #include <knuminput.h>
 
 //! @short A db-aware int spin box
-class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox,
+                                                 public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)

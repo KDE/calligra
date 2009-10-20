@@ -793,12 +793,13 @@ Form::commonParentContainer(const QWidgetList& wlist)
 Container*
 Form::parentContainer(QWidget *w) const
 {
-    ObjectTreeItem *it;
     if (!w)
         return 0;
     // it = d->topTree->lookup(d->selected.last()->name());
     //else
-    it = d->topTree->lookup(w->objectName());
+    ObjectTreeItem *it = d->topTree->lookup(w->objectName());
+    if (!it || !it->parent())
+        return 0;
 
     if (it->parent()->container())
         return it->parent()->container();
@@ -877,7 +878,7 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
     }
     d->selected.append(w);
     emitSelectionChanged(w, flags);
-    emitActionSignals(false);
+    emitActionSignals();
 
     // WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
 //! @todo move special case to a factory?
@@ -967,7 +968,7 @@ void Form::clearSelection()
     qDeleteAll(d->resizeHandles);
     d->resizeHandles.clear();
     emitSelectionChanged(0, DefaultWidgetSelectionFlags);
-    emitActionSignals(false);
+    emitActionSignals();
 }
 
 void Form::setInsertionPoint(const QPoint &p)
@@ -994,19 +995,29 @@ QAction* Form::action(const QString& name)
     return d->collection->action(name);
 }
 
-void Form::emitActionSignals(bool withUndoAction)
+void Form::emitActionSignals()
 {
     // Update menu and toolbar items
+    if (selectedWidget()) {
+      if (widget() == selectedWidget())
+        emitFormWidgetSelected();
+      else
+        emitWidgetSelected( false );
+    }
+    else if (selectedWidgets()) {
+      emitWidgetSelected( true );
+    }
+/* 2.0 replaced by the above
     if (d->selected.count() > 1)
         emitWidgetSelected(true);
     else if (d->selected.first() != widget())
         emitWidgetSelected(false);
     else
-        emitFormWidgetSelected();
+        emitFormWidgetSelected(); */
+}
 
-    if (!withUndoAction)
-        return;
-
+void Form::emitUndoActionSignals()
+{
 #ifdef __GNUC__
 #warning pixmapcollection
 #endif
@@ -1910,9 +1921,8 @@ void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& propert
 
     // We use the old value in modifProp for each widget
     foreach(QWidget* widget, d->selected) {
-        ObjectTreeItem *titem = objectTree()->lookup(
-              widget->objectName());
-        if (titem->modifiedProperties()->contains(property.name()))
+        ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
+        if (titem && titem->modifiedProperties()->contains(property.name()))
             widget->setProperty(
                 property.name(), titem->modifiedProperties()->find(property.name()).value());
     }
@@ -2541,7 +2551,7 @@ void Form::deleteWidget()
 // moved from FormManager
 void Form::copyWidget()
 {
-    if (!objectTree()) {
+    if (!objectTree() || isFormWidgetSelected()) {
         return;
     }
 
@@ -2577,12 +2587,18 @@ void Form::copyWidget()
     KFormDesigner::copyToClipboard(doc.toString());
 // \2.x
     emitActionSignals(); // to update 'Paste' item state
+    emitUndoActionSignals();
+}
+
+bool Form::isFormWidgetSelected() const
+{
+    return selectedWidget() && selectedWidget() == widget();
 }
 
 // moved from FormManager
 void Form::cutWidget()
 {
-    if (!objectTree()) {
+    if (!objectTree() || isFormWidgetSelected()) {
         return;
     }
 
@@ -3353,48 +3369,24 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
             textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(args.widget)->wordWrapMode());
             textedit->setLineWrapMode(dynamic_cast<QTextEdit*>(args.widget)->lineWrapMode());
         }
-        textedit->setPalette(args.widget->palette());
-        textedit->setFont(args.widget->font());
-        //textedit->setResizePolicy(Q3ScrollView::Manual);
-        textedit->setGeometry(args.geometry);
-        textedit->setBackgroundRole(args.widget->backgroundRole());
-        QPalette pal(textedit->palette());
-        pal.setBrush(textedit->backgroundRole(), args.widget->palette().brush(args.widget->backgroundRole()));
-        textedit->setPalette(pal);
-        //for(int i =0; i <= textedit->paragraphs(); i++)
-        // textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
-        //textedit->selectAll(true);
-        QPalette p(textedit->palette());
-        p.setBrush(textedit->foregroundRole(), args.widget->palette().brush(args.widget->foregroundRole()));
-        textedit->setPalette(p);
-        //textedit->selectAll(false);
         textedit->moveCursor(QTextCursor::End);
-        //textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
         textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //ok?
-        textedit->installEventFilter(this);
         textedit->setFrameShape(args.useFrame ? QFrame::StyledPanel : QFrame::NoFrame);
         //textedit->setMargin(2); //to move away from resize handle
         textedit->show();
         textedit->setFocus();
         textedit->selectAll();
         d->inlineEditor = textedit;
-//2.0        setInlineEditor(w, textedit);
 
         connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
         connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
-//#else
     } else {
         KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
         editor->setText(args.text);
         editor->setAlignment(args.alignment);
-        editor->setPalette(args.widget->palette());
-        editor->setFont(args.widget->font());
-        editor->setGeometry(args.geometry);
-        editor->setBackgroundRole(args.widget->backgroundRole());
-        editor->installEventFilter(this);
         editor->setFrame(args.useFrame);
 
         //editor->setContentsMargins(2,2,2,2); //to move away from resize handle
@@ -3406,8 +3398,28 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
 
         d->inlineEditor = editor;
-//2.0        setInlineEditor(w, editor);
     }
+    d->inlineEditor->installEventFilter(this);
+    d->inlineEditor->setFont(args.widget->font());
+    d->inlineEditor->setGeometry(args.geometry);
+    // setup palette
+    d->inlineEditor->setBackgroundRole(args.widget->backgroundRole());
+    QPalette pal(args.widget->palette());
+    QBrush baseBrush;
+    if (args.transparentBackground) {
+        baseBrush = QBrush(Qt::transparent);
+    }
+    else {
+        baseBrush = pal.base();
+        QColor baseColor(baseBrush.color());
+        baseColor.setAlpha(120);
+        baseBrush.setColor(baseColor);
+    }
+    pal.setBrush(QPalette::Base, baseBrush);
+    pal.setBrush(d->inlineEditor->backgroundRole(), pal.brush(args.widget->backgroundRole()));
+    pal.setBrush(d->inlineEditor->foregroundRole(), pal.brush(args.widget->foregroundRole()));
+    d->inlineEditor->setPalette(pal);
+
     //copy properties if available
     WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(args.widget);
@@ -3418,7 +3430,6 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     {
         d->inlineEditor->setProperty("margin", subwidget->property("margin"));
     }
-//#endif
     ResizeHandleSet *handles = resizeHandlesForWidget(args.widget);
     if (handles) {
         handles->setEditingMode(true);
@@ -3430,7 +3441,6 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         return;
     tree->eventEater()->setContainer(this);
 
-//2.0    setWidget(w, container);
     d->inlineEditorContainer = args.container;
     d->editedWidgetClass = args.classname;
     d->originalInlineText = args.text;

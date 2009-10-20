@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QByteArray>
 
-#include <kexi_export.h>
+#include "FormWidgetInterface.h"
 
 class QDomElement;
 class QDomDocument;
@@ -35,7 +35,7 @@ class ObjectTreeItem;
 
 }
 
-class KFORMEDITOR_EXPORT Spring : public QWidget
+class KFORMEDITOR_EXPORT Spring : public QWidget, public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 //    Q_ENUMS(SizeType)
@@ -66,16 +66,11 @@ public:
     void setSizeType(QSizePolicy::Policy policy);
     QSizePolicy::Policy sizeType() const;
 
-    void  setPreviewMode() {
-        m_edit = false;
-    }
-
 private:
     void paintEvent(QPaintEvent *ev);
 
 private:
     Qt::Orientation m_orient;
-    bool m_edit;
 };
 
 #endif

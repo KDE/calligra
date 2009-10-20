@@ -37,6 +37,7 @@
 #include "container.h"
 #include "form.h"
 #include "formIO.h"
+#include "FormWidgetInterface.h"
 
 #include "../kexi_global.h"
 
@@ -391,6 +392,11 @@ WidgetLibrary::createWidget(const QByteArray &classname, QWidget *parent, const 
             return 0;
     }
     widget->setAcceptDrops(true);
+    if (options & WidgetFactory::DesignViewMode) {
+        FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(widget);
+        if (fwiface)
+            fwiface->setDesignMode(true);
+    }
     emit widgetCreated(widget);
     return widget;
 }
@@ -451,6 +457,9 @@ WidgetLibrary::previewWidget(const QByteArray &classname, QWidget *widget, Conta
     if (!wclass)
         return false;
 
+    FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(widget);
+    if (fwiface)
+        fwiface->setDesignMode(false);
     if (wclass->factory()->previewWidget(classname, widget, container))
         return true;
     //try from inherited class
@@ -519,7 +528,7 @@ WidgetLibrary::textForWidgetName(const QByteArray &name, const QByteArray &class
 
     QString newName = name;
     newName.remove(widget->namePrefix());
-    newName = widget->name() + " " + newName;
+    newName = widget->name() + (newName.isEmpty() ? QString() : (QLatin1String(" ") + newName));
     return newName;
 }
 

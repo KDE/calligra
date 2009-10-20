@@ -28,6 +28,7 @@
 #include <kexidb/field.h>
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
+#include <formeditor/FormWidgetInterface.h>
 #include "kexiformdataiteminterface.h"
 
 class QLabel;
@@ -38,7 +39,8 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
             public QWidget,
             public KexiFormDataItemInterface,
             public KFormDesigner::DesignTimeDynamicChildWidgetHandler,
-            public KFormDesigner::WidgetWithSubpropertiesInterface
+            public KFormDesigner::WidgetWithSubpropertiesInterface,
+            public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 //'caption' is uncovered now Q_PROPERTY(QString labelCaption READ caption WRITE setCaption)
@@ -65,9 +67,8 @@ public:
     enum LabelPosition { Left = 300, Top, NoLabel };
 
     KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos,
-                    QWidget *parent = 0, bool designMode = true);
-    KexiDBAutoField(QWidget *parent = 0, bool designMode = true,
-                    LabelPosition pos = Left);
+                    QWidget *parent = 0);
+    KexiDBAutoField(QWidget *parent = 0, LabelPosition pos = Left);
 
     virtual ~KexiDBAutoField();
 

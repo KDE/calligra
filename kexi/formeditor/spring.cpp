@@ -38,7 +38,6 @@
 Spring::Spring(QWidget *parent)
         : QWidget(parent)
 {
-    m_edit = true;
     m_orient = Qt::Horizontal;
     setSizeType(QSizePolicy::Expanding);
 }
@@ -77,7 +76,7 @@ Spring::setSizeType(QSizePolicy::Policy size)
 void
 Spring::paintEvent(QPaintEvent *ev)
 {
-    if (!m_edit)
+    if (!designMode())
         return;
 
     QPainter p(this);

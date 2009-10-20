@@ -75,7 +75,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         : KexiFrame(parent /* Qt 4 not neede: , Qt::WNoAutoErase*/)
         , KexiFormDataItemInterface()
         , m_alignment(Qt::AlignAuto | Qt::AlignTop)
-        , m_designMode(designMode)
+//2.0 moved to FormWidgetInterface      , m_designMode(designMode)
         , m_readOnly(false)
         , m_scaledContents(false)
         , m_keepAspectRatio(true)
@@ -86,6 +86,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         , m_dropDownButtonVisible(true)
         , m_insideSetPalette(false)
 {
+    setDesignMode(designMode);
     installEventFilter(this);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -93,7 +94,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
     m_contextMenu = new KexiImageContextMenu(this);
     m_contextMenu->installEventFilter(this);
 
-    if (m_designMode) {
+    if (designMode) {
         m_chooser = 0;
     } else {
         m_chooser = new KexiDropDownButton(this);
@@ -410,7 +411,7 @@ void KexiDBImageBox::handleCopyAction()
 
 void KexiDBImageBox::handlePasteAction()
 {
-    if (isReadOnly() || (!m_designMode && !hasFocus()))
+    if (isReadOnly() || (!designMode() && !hasFocus()))
         return;
     QPixmap pm(qApp->clipboard()->pixmap(QClipboard::Clipboard));
 // if (!pm.isNull())
@@ -476,9 +477,9 @@ void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, b
                   );
     // read-only if static pixmap or db-aware pixmap for read-only widget:
     valueIsReadOnly =
-           (!m_designMode && dataSource().isEmpty())
+           (!designMode() && dataSource().isEmpty())
         || (!dataSource().isEmpty() && isReadOnly())
-        || (m_designMode && !dataSource().isEmpty());
+        || (designMode() && !dataSource().isEmpty());
 }
 
 /*
@@ -548,7 +549,7 @@ void KexiDBImageBox::updateActionStrings()
 {
     if (!m_contextMenu)
         return;
-    if (m_designMode) {
+    if (designMode()) {
         /*  QString titleString( i18n("Image Box") );
             if (!dataSource().isEmpty())
               titleString.prepend(dataSource() + " : ");
@@ -566,7 +567,7 @@ void KexiDBImageBox::updateActionStrings()
             m_chooser->setToolTip(i18n("Click to show actions for this image box"));
         } else {
             QString beautifiedImageBoxName;
-            if (m_designMode) {
+            if (designMode()) {
                 beautifiedImageBoxName = dataSource();
             } else {
                 beautifiedImageBoxName = columnInfo() ? columnInfo()->captionOrAliasOrName() : QString();
@@ -643,7 +644,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
     margins += KexiUtils::WidgetMargins(_realLineWidth);
 //Qt3 replaced with 'margins': const int m = realLineWidth() + margin();
     QColor bg(palette().color(backgroundRole())); //Qt3 eraseColor());
-    if (m_designMode && pixmap().isNull()) {
+    if (designMode() && pixmap().isNull()) {
         QRect r(QPoint(margins.left, margins.top), size() - QSize(margins.left + margins.right, margins.top + margins.bottom));
         p.fillRect(0, 0, width(), height(), bg);
 
@@ -680,9 +681,11 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
     KexiFrame::drawFrame(&p);
 
     // if the widget is focused, draw focus indicator rect _if_ there is no chooser button
-    if (!m_designMode && !dataSource().isEmpty()
-            && hasFocus()
-            && (!m_chooser || !m_chooser->isVisible())) {
+    if (   !designMode()
+        && !dataSource().isEmpty()
+        && hasFocus()
+        && (!m_chooser || !m_chooser->isVisible()))
+    {
         QStyleOptionFocusRect option;
         option.initFrom(this);
         //option.rect = style().subRect(QStyle::SR_PushButtonContents);
@@ -704,7 +707,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
 
 void KexiDBImageBox::updatePixmap()
 {
-    if (!(m_designMode && pixmap().isNull()))
+    if (!(designMode() && pixmap().isNull()))
         return;
 
     if (!KexiDBImageBox_static->pixmap) {

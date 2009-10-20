@@ -553,11 +553,12 @@ bool
 StdWidgetFactory::previewWidget(const QByteArray &classname, 
                                 QWidget *widget, KFormDesigner::Container *)
 {
+/* moved to FormWidgetInterface
     if (classname == "Spring") {
         dynamic_cast<Spring*>(widget)->setPreviewMode();
         return true;
-    }
-    return false;
+    }*/
+    return true;
 }
 
 bool
@@ -617,7 +618,8 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.geometry = QRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
 //! @todo this is typical alignment, can we get actual from the style?
         args.alignment = Qt::AlignCenter;
-        args.backgroundMode = Qt::PaletteButton;
+//        args.backgroundMode = Qt::PaletteButton;
+        args.transparentBackground = true;
         //r.setX(r.x() + 5);
         //r.setY(r.y() + 5);
         //r.setWidth(r.width()-10);
