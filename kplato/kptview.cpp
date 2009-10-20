@@ -208,7 +208,7 @@ View::View( Part* part, QWidget* parent )
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject  = new KAction(KIcon( "document-edit" ), i18n("Edit Main Project..."), this);
+    actionEditMainProject  = new KAction(KIcon( "view-time-schedule-edit" ), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
@@ -1624,7 +1624,7 @@ void View::slotConfigure()
         return;
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
-    dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "task_defaults" );
+    dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/

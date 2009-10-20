@@ -2095,7 +2095,7 @@ void DependencyEditor::setupGui()
     KActionCollection *coll = actionCollection();
     
     QString name = "taskeditor_add_list";
-    actionAddTask  = new KAction(KIcon( "view-task--add" ), i18n("Add Task..."), this);
+    actionAddTask  = new KAction(KIcon( "view-task-add" ), i18n("Add Task..."), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     coll->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
