@@ -607,7 +607,7 @@ bool PqxxMigrate::drv_readFromTable(const QString & tableName)
     try {
         pqxx::nontransaction T(*m_conn);
         
-        ret = query(QString("SElECT * FROM %1").arg(T.esc(tableName.toLocal8Bit()).c_str()));
+        ret = query(QString("SELECT * FROM %1").arg(T.esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
         }
