@@ -191,6 +191,12 @@ QByteArray PowerPointImport::createStyles()
 
   // office:styles
   stylesWriter->startElement( "office:styles" );
+  stylesWriter->startElement( "draw:marker");
+  stylesWriter->addAttribute( "draw:name","msArrowEnd_20_5" );
+  stylesWriter->addAttribute( "draw:display-name","msArrowEnd 5" );
+  stylesWriter->addAttribute( "svg:viewBox","0 0 210 210" );
+  stylesWriter->addAttribute( "svg:d","m105 0 105 210h-210z" );
+  stylesWriter->endElement();
   stylesWriter->endElement();
 
   // office:automatic-styles
