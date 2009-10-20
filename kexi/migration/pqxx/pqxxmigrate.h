@@ -72,6 +72,25 @@ protected:
     virtual bool drv_copyTable(const QString& srcTable,
                                KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
+    //! Position the source dataset at the start of a table
+    virtual bool drv_readFromTable(const QString & tableName);
+
+    //! Move to the next row
+    virtual bool drv_moveNext();
+
+    //! Move to the previous row
+    virtual bool drv_movePrevious();
+
+    //! Move to the next row
+    virtual bool drv_moveFirst();
+
+    //! Move to the previous row
+    virtual bool drv_moveLast();
+
+    //! Read the data at the given row/field
+    virtual QVariant drv_value(uint i);
+                               
+
 private:
     //lowlevel functions/objects
     //database connection
@@ -115,6 +134,10 @@ private:
 
     //Return whether or not the field is auto incrementing
     bool autoInc(pqxx::oid table, int col) const;
+
+    long m_rows;
+
+    long m_row;
 };
 }
 

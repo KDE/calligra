@@ -63,6 +63,9 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
     m_res = 0;
     m_trans = 0;
     m_conn = 0;
+    m_rows = 0;
+    m_row = 0;
+    
     KexiDB::DriverManager manager;
     m_kexiDBDriver = manager.driver("pqxx");
 }
@@ -596,5 +599,80 @@ bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
     return false;
 }*/
 
+bool PqxxMigrate::drv_readFromTable(const QString & tableName)
+{
+    bool ret;
+    ret = false;
+    
+    try {
+        pqxx::nontransaction T(*m_conn);
+        
+        ret = query(QString("SElECT * FROM %1").arg(T.esc(tableName.toLocal8Bit()).c_str()));
+        if (ret) {
+            m_rows = m_res->size();
+        }
+        
+    }
+    catch (const std::exception &e) {
+        kDebug();
+    }
+
+    return ret;
+}
+
+bool PqxxMigrate::drv_moveNext()
+{
+   if (!m_res)
+       return false;
+
+   if (m_row < m_rows - 1) {
+        m_row ++;
+        return true;
+   }
+   else
+   {
+        return false;
+   }     
+}
+
+bool PqxxMigrate::drv_movePrevious()
+{
+    if (!m_res)
+        return false;
+    
+    if (m_row > 0) {
+        m_row --;
+        return true;
+    }
+    else
+    {
+        return false;
+    }  
+}
+
+bool PqxxMigrate::drv_moveFirst()
+{    
+    if (!m_res)
+        return false;
+    
+    m_row = 0;
+    return true;
+}
+
+bool PqxxMigrate::drv_moveLast()
+{
+    if (!m_res)
+        return false;
+    
+    m_row = m_rows - 1;
+    return true;
+}
+
+QVariant PqxxMigrate::drv_value(uint i)
+{
+    QString str = (*m_res)[m_row][i].c_str();
+
+    return str;
+}
 
 #include "pqxxmigrate.moc"
