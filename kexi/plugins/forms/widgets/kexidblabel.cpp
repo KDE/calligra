@@ -515,8 +515,8 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
     p.end();
     QLabel::paintEvent(e);
-    const bool hasFrame = !designMode() && frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
-    if (!hasFrame) {
+    const bool hasFrame = frameWidth() >= 1 && frameShape() != QFrame::NoFrame;
+    if (designMode() && !hasFrame) {
         p.begin(this);
         KFormDesigner::paintWidgetFrame(p, rect());
         p.end();
