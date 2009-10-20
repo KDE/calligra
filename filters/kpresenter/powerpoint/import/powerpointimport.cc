@@ -2074,7 +2074,10 @@ void PowerPointImport::processGroupObjectForStyle(GroupObject* groupObject,
                                                   KoGenStyles &styles )
 {
   if( !groupObject ) return;
-  Q_UNUSED(styles);
+
+  for (unsigned int i=0; i<groupObject->objectCount(); ++i) {
+    processObjectForStyle(groupObject->object(i), styles);
+  }
 }
 
 QString hexname( const Color &c )
