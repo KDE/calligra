@@ -513,15 +513,17 @@ Container::eventFilter(QObject *s, QEvent *e)
         startCol = qMax(startCol, 1);
         int endCol = r.right() / gridX;
         endCol = qMin(endCol, cols);
+        QVector<QPoint> gridpoints;
         for (int rowcursor = startRow; rowcursor <= endRow; ++rowcursor) {
             for (int colcursor = startCol; colcursor <= endCol; ++colcursor) {
-                const int x = colcursor * gridX - 1;
-                const int y = rowcursor * gridY - 1;
-                p.setPen(pen1);
-                p.drawPoint(x, y);
+//                const int x = colcursor * gridX - 1;
+//                const int y = rowcursor * gridY - 1;
+//                p.setPen(pen1);
+//                p.drawPoint(x, y);
 //                p.drawPoint(x, y+1);
-                p.setPen(pen2);
-                p.drawPoint(x, y);
+//                p.setPen(pen2);
+                  gridpoints << QPoint(colcursor * gridX - 1,rowcursor * gridY - 1);
+//                p.drawPoint(x, y);
 //                p.drawPoint(x, y+1);
 //                p.drawPoint(x+1, y);
 //                p.drawPoint(x+1, y+1);
@@ -530,6 +532,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 #endif
             }
         }
+        p.setRenderHint(QPainter::Antialiasing, false);
+        p.setPen(QColor(10, 10, 10));
+        p.drawPoints(gridpoints);
 #ifdef DEBUG_PAINTER
     kDebug() << "millisecs:" << t.elapsed() << "points:" << points;
 #endif
