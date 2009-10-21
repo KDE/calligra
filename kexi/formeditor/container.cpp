@@ -532,8 +532,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 #endif
             }
         }
-        p.setRenderHint(QPainter::Antialiasing, false);
-        p.setPen(QColor(10, 10, 10));
+
+//! @todo when container's background is not solid color, find better grid color, e.g. buffer the background for pixmaps or gradients
+        p.setPen(KexiUtils::contrastColor(widget()->palette().background().color()));
         p.drawPoints(gridpoints);
 #ifdef DEBUG_PAINTER
     kDebug() << "millisecs:" << t.elapsed() << "points:" << points;
