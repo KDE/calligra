@@ -165,6 +165,8 @@ public:
     
     void updateChildrenPositions();
     
+    using KoShapeContainer::update;
+    /// reimplemented
     void update() const;
     void relayout() const;
     
