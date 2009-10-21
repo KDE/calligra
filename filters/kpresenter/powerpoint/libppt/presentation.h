@@ -33,80 +33,80 @@ class Presentation
 {
 public:
 
-  /*
-   * Constructs a new presentation.
-   */
-  Presentation();
+    /*
+     * Constructs a new presentation.
+     */
+    Presentation();
 
-  /*
-   * Destroys the presentation.
-   */
-  ~Presentation();
+    /*
+     * Destroys the presentation.
+     */
+    ~Presentation();
 
-  /*
-   * Clears the presentation, i.e. makes it as if it is just constructed.
-   */
-  void clear();
+    /*
+     * Clears the presentation, i.e. makes it as if it is just constructed.
+     */
+    void clear();
 
-  /*
-   * Loads the presentation file. Returns false if error occurred.
-   */
-  bool load( const char* filename );
+    /*
+     * Loads the presentation file. Returns false if error occurred.
+     */
+    bool load(const char* filename);
 
-  /*
-   * Appends a new slide.
-   */
-  void appendSlide( Slide* slide );
+    /*
+     * Appends a new slide.
+     */
+    void appendSlide(Slide* slide);
 
-  /*
-   * Returns the number of slides in this presentation. A newly created
-   * presentation has no slide, i.e. slideCount() returns 0.
-   */
-  unsigned slideCount() const;
+    /*
+     * Returns the number of slides in this presentation. A newly created
+     * presentation has no slide, i.e. slideCount() returns 0.
+     */
+    unsigned slideCount() const;
 
-  /*
-   * Returns a slide at given index. If index is invalid (e.g. larger
-   * than total number of slides), this function returns NULL.
-   */
+    /*
+     * Returns a slide at given index. If index is invalid (e.g. larger
+     * than total number of slides), this function returns NULL.
+     */
 
-  Slide* slide( unsigned index );
+    Slide* slide(unsigned index);
 
-  Slide* masterSlide();
-  void setMasterSlide( Slide* master );
+    Slide* masterSlide();
+    void setMasterSlide(Slide* master);
 
-  /**
-  * @brief Get specific font
-  * @param index Index of the font to get
-  * @return Specified font
-  */
-  TextFont* getFont(unsigned int index);
+    /**
+    * @brief Get specific font
+    * @param index Index of the font to get
+    * @return Specified font
+    */
+    TextFont* getFont(unsigned int index);
 
-  /**
-  * @brief Add a new font to collection
-  * @param font Font to add
-  */
-  void addTextFont(const TextFont &font);
+    /**
+    * @brief Add a new font to collection
+    * @param font Font to add
+    */
+    void addTextFont(const TextFont &font);
 
-  /**
-  * @brief Set MainMasterContainer for the presentation
-  *
-  * MainMasterContainer is a record that specifies a main master slide.
-  */
-  void setMainMasterContainer(MainMasterContainer *container);
+    /**
+    * @brief Set MainMasterContainer for the presentation
+    *
+    * MainMasterContainer is a record that specifies a main master slide.
+    */
+    void setMainMasterContainer(MainMasterContainer *container);
 
-  /**
-  * @brief Get MainMasterContainer for this presentation
-  * @return MainMasterContainer
-  */
-  MainMasterContainer *getMainMasterContainer();
+    /**
+    * @brief Get MainMasterContainer for this presentation
+    * @return MainMasterContainer
+    */
+    MainMasterContainer *getMainMasterContainer();
 
 private:
-  // no copy or assign
-  Presentation( const Presentation& );
-  Presentation& operator=( const Presentation& );
+    // no copy or assign
+    Presentation(const Presentation&);
+    Presentation& operator=(const Presentation&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 

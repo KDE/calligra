@@ -21,22 +21,21 @@
 
 #include <iostream>
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
-  if( argc < 2 )
-  {
-    std::cout << "Usage:" << std::endl;
-    std::cout << "  testppt filename" << std::endl;
-    return -1;
-  }
+    if (argc < 2) {
+        std::cout << "Usage:" << std::endl;
+        std::cout << "  testppt filename" << std::endl;
+        return -1;
+    }
 
-  char* filename = argv[1];
+    char* filename = argv[1];
 
 
-  Libppt::Presentation* p;
-  p = new Libppt::Presentation;
-  p->load( filename );
-  delete p;
+    Libppt::Presentation* p;
+    p = new Libppt::Presentation;
+    p->load(filename);
+    delete p;
 
-  return 0;
+    return 0;
 }

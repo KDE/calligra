@@ -31,114 +31,112 @@ using namespace Libppt;
 class Slide::Private
 {
 public:
-  Presentation* presentation;
-  QString title;
-  GroupObject* rootObject;
+    Presentation* presentation;
+    QString title;
+    GroupObject* rootObject;
 
-  double pageWidth;
-  double pageHeight;
+    double pageWidth;
+    double pageHeight;
 };
 
-Slide::Slide( Presentation* pr )
+Slide::Slide(Presentation* pr)
 {
-  d = new Private;
-  d->presentation = pr;
-  d->rootObject = new GroupObject;
-  d->pageWidth = 0.0;
-  d->pageHeight = 0.0;
+    d = new Private;
+    d->presentation = pr;
+    d->rootObject = new GroupObject;
+    d->pageWidth = 0.0;
+    d->pageHeight = 0.0;
 }
 
 Slide::~Slide()
 {
-  delete d->rootObject;
-  delete d;
+    delete d->rootObject;
+    delete d;
 }
 
 void Slide::clear()
 {
-  setRootObject( 0 );
-  d->rootObject = new GroupObject;
+    setRootObject(0);
+    d->rootObject = new GroupObject;
 }
 
 QString Slide::title() const
 {
-  return d->title;
+    return d->title;
 }
 
-void Slide::setTitle( const QString& title )
+void Slide::setTitle(const QString& title)
 {
-  /*
-  UChar* s = new UChar[t.length()];
-  int len = 0;
+    /*
+    UChar* s = new UChar[t.length()];
+    int len = 0;
 
-  // filter crazy characters
-  for( int i=0; i<t.length(); i++ )
-    if( t[i] != UChar(11) )
-      s[len++] = t[i];
+    // filter crazy characters
+    for( int i=0; i<t.length(); i++ )
+      if( t[i] != UChar(11) )
+        s[len++] = t[i];
 
-  d->title = UString( s, len );
-  delete [] s;
-  */
+    d->title = UString( s, len );
+    delete [] s;
+    */
 
-  //The old implementation removed vertical tabs for some reason
-  //so we'll remove them as well
-  d->title = title;
-  d->title.remove(QChar(11));
+    //The old implementation removed vertical tabs for some reason
+    //so we'll remove them as well
+    d->title = title;
+    d->title.remove(QChar(11));
 }
 
 GroupObject *Slide::rootObject()
 {
-  return d->rootObject;
+    return d->rootObject;
 }
 
-void Slide::setRootObject( GroupObject* root )
+void Slide::setRootObject(GroupObject* root)
 {
-  delete d->rootObject;
-  d->rootObject = root;
+    delete d->rootObject;
+    d->rootObject = root;
 }
 
-TextObject* recursiveSearch( GroupObject* group, unsigned placeId )
+TextObject* recursiveSearch(GroupObject* group, unsigned placeId)
 {
-  if( group )
-    for( unsigned i=0; i<group->objectCount(); i++ )
-    {
-      Object* object = group->object(i);
-      if( object->isText() )
-      {
-        TextObject* textObject = static_cast<TextObject*>(object);
-        if( textObject)
-          if( textObject->id() == (int)placeId )
-            return textObject;
-      }
-      if( object->isGroup() )
-        return recursiveSearch( static_cast<GroupObject*>(object), placeId );
-    }
+    if (group)
+        for (unsigned i = 0; i < group->objectCount(); i++) {
+            Object* object = group->object(i);
+            if (object->isText()) {
+                TextObject* textObject = static_cast<TextObject*>(object);
+                if (textObject)
+                    if (textObject->id() == (int)placeId)
+                        return textObject;
+            }
+            if (object->isGroup())
+                return recursiveSearch(static_cast<GroupObject*>(object), placeId);
+        }
 
-  return 0;
+    return 0;
 }
 
 
-TextObject* Slide::textObject( unsigned placeId )
+TextObject* Slide::textObject(unsigned placeId)
 {
-  return recursiveSearch( d->rootObject, placeId );
+    return recursiveSearch(d->rootObject, placeId);
 }
 
 double Slide::pageWidth() const
 {
-  return d->pageWidth;
+    return d->pageWidth;
 }
 
-void Slide::setPageWidth( double pageWidth )
+void Slide::setPageWidth(double pageWidth)
 {
-  d->pageWidth = pageWidth;
+    d->pageWidth = pageWidth;
 }
 
 double Slide::pageHeight() const
 {
-  return d->pageHeight;
+    return d->pageHeight;
 }
 
-void Slide::setPageHeight( double pageHeight )
+void Slide::setPageHeight(double pageHeight)
 {
-  d->pageHeight = pageHeight;
+    d->pageHeight = pageHeight;
 }

@@ -41,135 +41,135 @@ class StreamIO;
 
 class Storage
 {
-  friend class Stream;
-  friend class StreamOut;
+    friend class Stream;
+    friend class StreamOut;
 
 public:
 
-  // for Storage::result()
-  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
+    // for Storage::result()
+    enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
 
-  /**
-   * Constructs a storage with name filename.
-   **/
-  explicit Storage( const char* filename );
+    /**
+     * Constructs a storage with name filename.
+     **/
+    explicit Storage(const char* filename);
 
-  /**
-   * Destroys the storage.
-   **/
-  ~Storage();
+    /**
+     * Destroys the storage.
+     **/
+    ~Storage();
 
-  /**
-   * Opens the storage. Returns true if no error occurs.
-   **/
-  bool open();
+    /**
+     * Opens the storage. Returns true if no error occurs.
+     **/
+    bool open();
 
-  /**
-   * Closes the storage.
-   **/
-  void close();
+    /**
+     * Closes the storage.
+     **/
+    void close();
 
-  /**
-   * Returns the error code of last operation.
-   **/
-  int result();
+    /**
+     * Returns the error code of last operation.
+     **/
+    int result();
 
-  /**
-   * Finds all stream and directories in given path.
-   **/
-  std::list<std::string> entries( const std::string& path = "/" );
+    /**
+     * Finds all stream and directories in given path.
+     **/
+    std::list<std::string> entries(const std::string& path = "/");
 
-  /**
-   * Returns true if specified entry name is a directory.
-   */
-  bool isDirectory( const std::string& name );
+    /**
+     * Returns true if specified entry name is a directory.
+     */
+    bool isDirectory(const std::string& name);
 
-  /**
-   * Finds and returns a stream with the specified name.
-   * If reuse is true, this function returns the already created stream
-   * (if any). Otherwise it will create the stream.
-   *
-   * When errors occur, this function returns NULL.
-   *
-   * You do not need to delete the created stream, it will be handled
-   * automatically.
-   **/
-  Stream* stream( const std::string& name, bool reuse = true );
-  //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
+    /**
+     * Finds and returns a stream with the specified name.
+     * If reuse is true, this function returns the already created stream
+     * (if any). Otherwise it will create the stream.
+     *
+     * When errors occur, this function returns NULL.
+     *
+     * You do not need to delete the created stream, it will be handled
+     * automatically.
+     **/
+    Stream* stream(const std::string& name, bool reuse = true);
+    //Stream* stream( const std::string& name, int mode = Stream::ReadOnly, bool reuse = true );
 
 private:
-  StorageIO* io;
+    StorageIO* io;
 
-  // no copy or assign
-  Storage( const Storage& );
-  Storage& operator=( const Storage& );
+    // no copy or assign
+    Storage(const Storage&);
+    Storage& operator=(const Storage&);
 
 };
 
 class Stream
 {
-  friend class Storage;
-  friend class StorageIO;
+    friend class Storage;
+    friend class StorageIO;
 
 public:
 
-  /**
-   * Creates a new stream.
-   */
-  // name must be absolute, e.g "/Workbook"
-  Stream( Storage* storage, const std::string& name );
+    /**
+     * Creates a new stream.
+     */
+    // name must be absolute, e.g "/Workbook"
+    Stream(Storage* storage, const std::string& name);
 
-  /**
-   * Destroys the stream.
-   */
-  ~Stream();
+    /**
+     * Destroys the stream.
+     */
+    ~Stream();
 
-  /**
-   * Returns the full stream name.
-   */
-  std::string fullName();
+    /**
+     * Returns the full stream name.
+     */
+    std::string fullName();
 
-  /**
-   * Returns the stream size.
-   **/
-  unsigned long size();
+    /**
+     * Returns the stream size.
+     **/
+    unsigned long size();
 
-  /**
-   * Returns the current read/write position.
-   **/
-  unsigned long tell();
+    /**
+     * Returns the current read/write position.
+     **/
+    unsigned long tell();
 
-  /**
-   * Sets the read/write position.
-   **/
-  void seek( unsigned long pos );
+    /**
+     * Sets the read/write position.
+     **/
+    void seek(unsigned long pos);
 
-  /**
-   * Reads a byte.
-   **/
-  int getch();
+    /**
+     * Reads a byte.
+     **/
+    int getch();
 
-  /**
-   * Reads a block of data.
-   **/
-  unsigned long read( unsigned char* data, unsigned long maxlen );
+    /**
+     * Reads a block of data.
+     **/
+    unsigned long read(unsigned char* data, unsigned long maxlen);
 
-  /**
-   * Returns true if the read/write position is past the file.
-   **/
-  bool eof();
+    /**
+     * Returns true if the read/write position is past the file.
+     **/
+    bool eof();
 
-  /**
-   * Returns true whenever error occurs.
-   **/
-  bool fail();
+    /**
+     * Returns true whenever error occurs.
+     **/
+    bool fail();
 
 private:
-  StreamIO* io;
+    StreamIO* io;
 
-  // no copy or assign
-  Stream( const Stream& );
-  Stream& operator=( const Stream& );
+    // no copy or assign
+    Stream(const Stream&);
+    Stream& operator=(const Stream&);
 };
 
 }

@@ -33,27 +33,27 @@ class TextObject;
 class Slide
 {
 public:
-  Slide( Presentation* presentation );
-  ~Slide();
-  void clear();
-  QString title() const;
-  void setTitle( const QString& title );
-  GroupObject* rootObject();
-  void setRootObject( GroupObject *);
-  TextObject* textObject( unsigned placeId );
+    Slide(Presentation* presentation);
+    ~Slide();
+    void clear();
+    QString title() const;
+    void setTitle(const QString& title);
+    GroupObject* rootObject();
+    void setRootObject(GroupObject *);
+    TextObject* textObject(unsigned placeId);
 
-  double pageWidth() const;
-  void setPageWidth( double pageWidth ) ;
-  double pageHeight() const;
-  void setPageHeight( double pageHeight ) ;
+    double pageWidth() const;
+    void setPageWidth(double pageWidth) ;
+    double pageHeight() const;
+    void setPageHeight(double pageHeight) ;
 
 private:
-  // no copy or assign
-  Slide( const Slide& );
-  Slide& operator=( const Slide& );
+    // no copy or assign
+    Slide(const Slide&);
+    Slide& operator=(const Slide&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 }

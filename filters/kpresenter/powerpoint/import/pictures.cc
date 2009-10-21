@@ -20,24 +20,26 @@
 #include <stdio.h>
 
 // Use anonymous namespace to cover following functions
-namespace{
-
-static inline quint16 readU16( const void* p )
+namespace
 {
-  const unsigned char* ptr = (const unsigned char*) p;
-  return ptr[0]+(ptr[1]<<8);
+
+static inline quint16 readU16(const void* p)
+{
+    const unsigned char* ptr = (const unsigned char*) p;
+    return ptr[0] + (ptr[1] << 8);
 }
 
-static inline quint32 readU32( const void* p )
+static inline quint32 readU32(const void* p)
 {
-  const unsigned char* ptr = (const unsigned char*) p;
-  return ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24);
+    const unsigned char* ptr = (const unsigned char*) p;
+    return ptr[0] + (ptr[1] << 8) + (ptr[2] << 16) + (ptr[3] << 24);
 }
 
 }
 
 std::string
-savePicture(POLE::Stream& stream, int position, KoStore* out) {
+savePicture(POLE::Stream& stream, int position, KoStore* out)
+{
     const quint16 bufferSize = 1024;
     unsigned char buffer[bufferSize];
     if (stream.read(buffer, 8) != 8) return "";
@@ -64,15 +66,15 @@ savePicture(POLE::Stream& stream, int position, KoStore* out) {
     quint16 offset;
     const char* nametemplate;
     switch (type) {
-        case 0xF01A: offset = (instance == 0x3D4) ?50 :66; nametemplate = "%06i.emf";  break;
-        case 0xF01B: offset = (instance == 0x216) ?50 :66; nametemplate = "%06i.wmf";  break;
-        case 0xF01C: offset = (instance == 0x542) ?50 :66; nametemplate = "%06i.pict"; break;
-        case 0xF01D: offset = (instance == 0x46A) ?17 :33; nametemplate = "%06i.jpg";  break;
-        case 0xF01E: offset = (instance == 0x6E0) ?17 :33; nametemplate = "%06i.png";  break;
-        case 0xF01F: offset = (instance == 0x7A8) ?17 :33; nametemplate = "%06i.dib";  break;
-        case 0xF029: offset = (instance == 0x6E4) ?17 :33; nametemplate = "%06i.tiff"; break;
-        case 0xF02A: offset = (instance == 0x46A) ?17 :33; nametemplate = "%06i.jpg";  break;
-        default:     offset = 0                          ; nametemplate = "%06i"; break;
+    case 0xF01A: offset = (instance == 0x3D4) ?50 :66; nametemplate = "%06i.emf";  break;
+    case 0xF01B: offset = (instance == 0x216) ?50 :66; nametemplate = "%06i.wmf";  break;
+    case 0xF01C: offset = (instance == 0x542) ?50 :66; nametemplate = "%06i.pict"; break;
+    case 0xF01D: offset = (instance == 0x46A) ?17 :33; nametemplate = "%06i.jpg";  break;
+    case 0xF01E: offset = (instance == 0x6E0) ?17 :33; nametemplate = "%06i.png";  break;
+    case 0xF01F: offset = (instance == 0x7A8) ?17 :33; nametemplate = "%06i.dib";  break;
+    case 0xF029: offset = (instance == 0x6E4) ?17 :33; nametemplate = "%06i.tiff"; break;
+    case 0xF02A: offset = (instance == 0x46A) ?17 :33; nametemplate = "%06i.jpg";  break;
+    default:     offset = 0                          ; nametemplate = "%06i"; break;
     }
 
     // skip offset
@@ -82,15 +84,15 @@ savePicture(POLE::Stream& stream, int position, KoStore* out) {
     int n = sprintf((char*)buffer, nametemplate, position);
     std::string filename((char*)buffer, n);
 
-    if ( !out->open(filename.c_str()) ) {
+    if (!out->open(filename.c_str())) {
         return ""; // empty name reports an error
     }
     unsigned long nread = stream.read(buffer,
-        (bufferSize < size) ?bufferSize :size);
+                                      (bufferSize < size) ? bufferSize : size);
     while (nread > 0) {
         out->write((char*)buffer, nread);
         size -= nread;
-        nread = stream.read(buffer, (bufferSize < size) ?bufferSize :size);
+        nread = stream.read(buffer, (bufferSize < size) ? bufferSize : size);
     }
     out->close();
 
