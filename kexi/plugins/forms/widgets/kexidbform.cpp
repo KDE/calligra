@@ -140,6 +140,7 @@ KexiDataAwareObjectInterface* KexiDBForm::dataAwareObject() const
     return d->dataAwareObject;
 }
 
+#if 0 //2.0
 //repaint all children widgets
 static void repaintAll(QWidget *w)
 {
@@ -148,6 +149,7 @@ static void repaintAll(QWidget *w)
         widget->repaint();
     }
 }
+#endif
 
 void
 KexiDBForm::drawRect(const QRect& r, int type)
