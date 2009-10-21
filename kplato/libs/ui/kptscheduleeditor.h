@@ -150,6 +150,9 @@ public:
     ScheduleManager *scheduleManager() const { return logModel()->manager(); }
     void setScheduleManager( ScheduleManager *manager ) { logModel()->setManager( manager ); }
 
+    void setFilterWildcard( const QString &filter );
+    QRegExp filterRegExp() const;
+
 signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );

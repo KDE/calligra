@@ -33,6 +33,15 @@
 namespace KPlato
 {
 
+void ProjectTester::printDebug( Resource *r, const QString &str, bool full ) const {
+    qDebug()<<"Debug info: Resource"<<r->name()<<str;
+    qDebug()<<"Available:"<<r->availableFrom().toString()<<r->availableUntil().toString();
+    qDebug()<<"External appointments:"<<r->numExternalAppointments();
+    foreach ( Appointment *a, r->externalAppointmentList() ) {
+        qDebug()<<"   appointment:"<<a->startTime().toString()<<a->endTime().toString();
+    }
+}
+
 void ProjectTester::printDebug( Project *p, Task *t, const QString &str, bool full ) const {
     qDebug()<<"Debug info: Project"<<p->name()<<str;
     qDebug()<<"project target start:"<<p->constraintStartTime().toString();
@@ -83,6 +92,7 @@ void ProjectTester::printDebug( Project *p, Task *t, const QString &str, bool fu
 void ProjectTester::printSchedulingLog( const ScheduleManager &sm, const QString &s ) const
 {
     qDebug()<<"Scheduling log"<<s;
+    qDebug()<<"Scheduling:"<<sm.name()<<(sm.recalculate()?QString("recalculate from %1").arg(sm.recalculateFrom().toString()):"");
     foreach ( const QString &s, sm.expected()->logMessages() ) {
         qDebug()<<s;
     }
@@ -945,7 +955,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     r->addExternalAppointment( "Ext-1", "External project 1", targetstart, targetstart.addDays( 1 ), 100 );
     r->addExternalAppointment( "Ext-1", "External project 1", targetend.addDays( -1 ), targetend, 100 );
 
-    Task *t = project.createTask( m_project );
+    Task *t = project.createTask( &project );
     t->setName( "T1" );
     project.addTask( t, &project );
     t->estimate()->setUnit( Duration::Unit_h );
@@ -960,7 +970,10 @@ void ProjectTester::scheduleWithExternalAppointments()
     project.addScheduleManager( sm );
     project.calculate( *sm );
     
-    //printSchedulingLog( *sm );
+    QString s = "Schedule with external appointments ----------";
+//     printDebug( r, s );
+//     printDebug( &project, t, s );
+//     printSchedulingLog( *sm );
 
     QCOMPARE( t->startTime(), targetstart + Duration( 1, 0, 0 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
@@ -1001,6 +1014,119 @@ void ProjectTester::scheduleWithExternalAppointments()
 
 }
 
+void ProjectTester::reschedule()
+{
+    Project project;
+    project.setName( "P1" );
+    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetend = DateTime( targetstart.addDays( 7 ) );
+    project.setConstraintStartTime( targetstart );
+    project.setConstraintEndTime( targetend);
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    project.addCalendar( c );
+    ResourceGroup *g = new ResourceGroup();
+    g->setName( "G1" );
+    project.addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "R1" );
+    r->setCalendar( c );
+    project.addResource( g, r );
+
+    QString s = "Re-schedule; schedule tasks T1, T2, T3 ---------------";
+
+    Task *task1 = project.createTask( &project );
+    task1->setName( "T1" );
+    project.addTask( task1, &project );
+    task1->estimate()->setUnit( Duration::Unit_h );
+    task1->estimate()->setExpectedEstimate( 8.0 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+    
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    gr->addResourceRequest( new ResourceRequest( r ) );
+    task1->addRequest( gr );
+
+    Task *task2 = project.createTask( &project );
+    task2->setName( "T2" );
+    project.addTask( task2, &project );
+    task2->estimate()->setUnit( Duration::Unit_h );
+    task2->estimate()->setExpectedEstimate( 8.0 );
+    task2->estimate()->setType( Estimate::Type_Effort );
+    
+    gr = new ResourceGroupRequest( g );
+    gr->addResourceRequest( new ResourceRequest( r ) );
+    task2->addRequest( gr );
+
+    Task *task3 = project.createTask( &project );
+    task3->setName( "T3" );
+    project.addTask( task3, &project );
+    task3->estimate()->setUnit( Duration::Unit_h );
+    task3->estimate()->setExpectedEstimate( 8.0 );
+    task3->estimate()->setType( Estimate::Type_Effort );
+    
+    gr = new ResourceGroupRequest( g );
+    gr->addResourceRequest( new ResourceRequest( r ) );
+    task3->addRequest( gr );
+
+    Relation *rel = new Relation( task1, task2 );
+    project.addRelation( rel );
+    rel = new Relation( task1, task3 );
+    project.addRelation( rel );
+
+    ScheduleManager *sm = project.createScheduleManager( "Plan" );
+    project.addScheduleManager( sm );
+    project.calculate( *sm );
+    
+//    printDebug( &project, task1, s, true );
+//    printDebug( &project, task2, s, true );
+//    printDebug( &project, task3, s, true );
+//    printSchedulingLog( *sm );
+
+    QCOMPARE( task1->startTime(), c->firstAvailableAfter( targetstart, targetend ) );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
+    
+    QCOMPARE( task2->startTime(), c->firstAvailableAfter( task1->endTime(), targetend ) );
+    QCOMPARE( task2->endTime(), task2->startTime() + Duration( 0, 8, 0 ) );
+
+    QCOMPARE( task3->startTime(), c->firstAvailableAfter( task2->endTime(), targetend ) );
+    QCOMPARE( task3->endTime(), task3->startTime() + Duration( 0, 8, 0 ) );
+
+
+    DateTime restart = task1->endTime();
+    s = QString( "Re-schedule; re-schedule from %1 - tasks T1 (finished), T2, T3 ------" ).arg( restart.toString() );
+
+    task1->completion().setStarted( true );
+    task1->completion().setPercentFinished( task1->endTime().date(), 100 );
+    task1->completion().setFinished( true );
+
+    ScheduleManager *child = project.createScheduleManager( "Plan.1" );
+    project.addScheduleManager( child, sm );
+    child->setRecalculate( true );
+    child->setRecalculateFrom( restart );
+    project.calculate( *child );
+
+//     printDebug( &project, task1, s, true );
+//     printDebug( &project, task2, s, true );
+//     printDebug( &project, task3, s, true );
+//     printSchedulingLog( *child, s );
+
+    QCOMPARE( task1->startTime(), c->firstAvailableAfter( targetstart, targetend ) );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
+    
+    QCOMPARE( task2->startTime(), c->firstAvailableAfter( qMax(task1->endTime(), restart ), targetend ) );
+    QCOMPARE( task2->endTime(), task2->startTime() + Duration( 0, 8, 0 ) );
+
+    QCOMPARE( task3->startTime(), c->firstAvailableAfter( task2->endTime(), targetend ) );
+    QCOMPARE( task3->endTime(), task3->startTime() + Duration( 0, 8, 0 ) );
+}
 
 } //namespace KPlato
 

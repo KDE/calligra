@@ -386,6 +386,16 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
 }
 
+void ScheduleLogTreeView::setFilterWildcard( const QString &filter )
+{
+    m_model->setFilterWildcard( filter );
+}
+
+QRegExp ScheduleLogTreeView::filterRegExp() const
+{
+    return m_model->filterRegExp();
+}
+
 void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
 {
     kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;

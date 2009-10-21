@@ -229,11 +229,13 @@ protected slots:
     void slotPrintSelectedDebug();
     void slotPrintCalendarDebug();
     void slotPrintTestDebug();
+    void slotToggleDebugInfo();
 #else
     static void slotPrintDebug() { };
     static void slotPrintSelectedDebug() { };
     static void slotPrintCalendarDebug() { };
     static void slotPrintTestDebug() { };
+    static void slotToggleDebugInfo() { };
 #endif
 
 protected:

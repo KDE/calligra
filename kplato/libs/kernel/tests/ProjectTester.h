@@ -56,7 +56,10 @@ private slots:
 
     void scheduleWithExternalAppointments();
 
+    void reschedule();
+
 private:
+    void printDebug( Resource *r, const QString &s = QString(), bool full = false ) const;
     void printDebug( Project *p, Task *t, const QString &s = QString(), bool full = false ) const;
     void printSchedulingLog( const ScheduleManager &sm, const QString &s = QString() ) const;
 

@@ -402,6 +402,9 @@ public:
     QModelIndex parent( const QModelIndex &idx ) const;
     virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
 
+    void setShowSpecial( bool on ) { m_showSpecial = on; }
+    bool showSpecial() const { return m_showSpecial; }
+
 private:
     bool m_showSpecial;
     QMap<Node*, void*> parentmap;

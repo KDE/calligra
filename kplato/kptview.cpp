@@ -296,12 +296,11 @@ View::View( Part* part, QWidget* parent )
     action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
     //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
+    action  = new KAction("Toggle Debug Info Mode", this);
+    actionCollection()->addAction("toggle_debug_info", action );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotToggleDebugInfo() ) );
+    action->setShortcut( QKeySequence( Qt::META + Qt::Key_T ) );
 
-#endif
-    // Stupid compilers ;)
-#ifndef NDEBUG
-    /*  Q_UNUSED( actPrintSelectedDebug );
-        Q_UNUSED( actPrintCalendarDebug );*/
 #endif
 
     m_progress = 0;
@@ -2572,6 +2571,20 @@ void View::slotPrintTestDebug()
         kDebug() << *it;
     }
 }
+
+void View::slotToggleDebugInfo()
+{
+    QList<ScheduleLogTreeView*> lst = findChildren<ScheduleLogTreeView*>();
+    foreach ( ScheduleLogTreeView *v, lst ) {
+        QString f = v->filterRegExp().isEmpty() ? "[^0]" : "";
+        v->setFilterWildcard( f );
+    }
+    QList<GanttView*> ls = findChildren<GanttView*>();
+    foreach ( GanttView *v, ls ) {
+        v->setShowSpecialInfo( ! v->showSpecialInfo() );
+    }
+}
+
 #endif
 
 }  //KPlato namespace

@@ -161,7 +161,7 @@ protected:
     NodeItemModel m_defaultModel;
 };
 
-class MyKDGanttView : public GanttViewBase
+class KPLATOUI_EXPORT MyKDGanttView : public GanttViewBase
 {
     Q_OBJECT
 public:
@@ -213,6 +213,9 @@ public:
 
     KoPrintJob *createPrintJob();
     
+    void setShowSpecialInfo( bool on ) { m_gantt->model()->setShowSpecial( on ); }
+    bool showSpecialInfo() const { return m_gantt->model()->showSpecial(); }
+
 signals:
     void modifyRelation( Relation *rel ) ;
     void addRelation( Node *par, Node *child );

@@ -917,7 +917,7 @@ Duration ResourceSchedule::effort( const DateTimeInterval &interval ) const
 
 DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval ) const
 {
-    //kDebug()<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second;
+    //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available id=%1, Mode=%2: interval=%3 - %4" ).arg(m_id).arg(m_calculationMode).arg(interval.first.toString()).arg(interval.second.toString()) );
     if ( allowOverbooking() ) {
         return DateTimeInterval( interval.first, interval.second );
     }
@@ -930,26 +930,41 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
     }
+    if ( interval.first >= a.endTime() || interval.second <= a.startTime() ) {
+        // free
+        return DateTimeInterval( interval.first, interval.second );
+    }
+    DateTimeInterval ci = interval;
     foreach ( const AppointmentInterval &i, a.intervals() ) {
-        if ( i.startTime() < interval.second && i.endTime() > interval.first ) {
+        //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available check interval=%1 - %2" ).arg(i.startTime().toString()).arg(i.endTime().toString()) );
+        if ( i.startTime() < ci.second && i.endTime() > ci.first ) {
+            if ( ci.first >= i.startTime() && ci.second <= i.endTime() ) {
+                //busy
+                return DateTimeInterval( DateTime(), DateTime() );
+            }
             DateTime t = i.startTime();
-            if ( t > interval.first ) {
+            if ( t > ci.first ) {
                 //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<t<<" PART";
-                return DateTimeInterval( interval.first, t );
+                //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available t>first: returns interval=%1 - %2" ).arg(ci.first.toString()).arg(t.toString()) );
+                return DateTimeInterval( ci.first, t );
             }
             t = i.endTime();
-            if ( t < interval.second ) {
-                //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<t<<","<<interval.second<<" PART";
-                return DateTimeInterval( t, interval.second );
+            if ( t < ci.second ) {
+                ci.first = t;
+                continue;
             }
-            if ( i.startTime() <= interval.first && i.endTime() >= interval.second ) {
+            if ( i.startTime() <= ci.first && i.endTime() >= ci.second ) {
                 //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" BUSY";
                 return DateTimeInterval( DateTime(), DateTime() );
+            }
+            ci.first = qMax( ci.first, i.endTime() );
+            if ( ci.first >= ci.second ) {
+                return DateTimeInterval( DateTime(), DateTime() ); //busy
             }
         }
     }
     //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
-    return DateTimeInterval( interval.first, interval.second );
+    return DateTimeInterval( ci.first, ci.second );
 }
 
 void ResourceSchedule::logError( const QString &msg, int phase )
