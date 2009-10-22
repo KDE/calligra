@@ -238,7 +238,7 @@ Color Object::getColorProperty(std::string name)
 
 }
 
-class TextObject::Private
+class TextObject::Private : public QSharedData
 {
 public:
     Private();
@@ -306,9 +306,10 @@ public:
     QList<StyleName> styleNames;
 };
 
-TextObject::Private::Private() :
-        type(0),
-        atom(0)
+
+TextObject::Private::Private()
+        : type(0)
+        , atom(0)
 {
 
 }
@@ -333,7 +334,6 @@ TextObject::TextObject(): Object()
 
 TextObject::~TextObject()
 {
-    delete d;
 }
 
 unsigned int TextObject::type() const
@@ -634,9 +634,11 @@ void DrawObject::setStyleName(const QString &name)
     d->styleName = name;
 }
 
-class TextFont::Private
+class TextFont::Private : public QSharedData
 {
 public:
+    Private();
+    ~Private();
 
     /**
     * @brief Font's name
@@ -676,14 +678,23 @@ public:
     int pitchAndFamily;
 };
 
+TextFont::Private::Private()
+        : charset(0)
+        , clipPrecision(0)
+        , quality(0)
+        , pitchAndFamily(0)
+{
+
+}
+
+TextFont::Private::~Private()
+{
+}
+
+
 TextFont::TextFont()
 {
-    d = new Private;
-    d->fontName = "";
-    d->charset = 0;
-    d->clipPrecision = 0;
-    d->quality = 0;
-    d->pitchAndFamily = 0;
+    d = new Private();
 }
 
 TextFont::TextFont(const QString &fontName,
@@ -692,7 +703,7 @@ TextFont::TextFont(const QString &fontName,
                    int quality,
                    int pitchAndFamily)
 {
-    d = new Private;
+    d = new Private();
     d->fontName = fontName;
     d->charset = charset;
     d->clipPrecision = clipPrecision;
@@ -701,20 +712,13 @@ TextFont::TextFont(const QString &fontName,
 }
 
 TextFont::TextFont(const TextFont &source)
+        : d(source.d)
 {
-    d = new Private;
-    d->fontName = source.name();
-    d->charset = source.charset();
-    d->clipPrecision = source.clipPrecision();
-    d->quality = source.quality();
-    d->pitchAndFamily = source.pitchAndFamily();
 }
 
 
 TextFont::~TextFont()
 {
-    delete d;
-    d = 0;
 }
 
 QString TextFont::name() const

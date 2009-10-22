@@ -28,6 +28,8 @@ class Slide;
 class TextFontCollection;
 class TextFont;
 class MainMasterContainer;
+class TextCFException;
+class TextPFException;
 
 class Presentation
 {
@@ -91,6 +93,8 @@ public:
     * @brief Set MainMasterContainer for the presentation
     *
     * MainMasterContainer is a record that specifies a main master slide.
+    *
+    * This object assumes ownership of the container.
     */
     void setMainMasterContainer(MainMasterContainer *container);
 
@@ -99,6 +103,30 @@ public:
     * @return MainMasterContainer
     */
     MainMasterContainer *getMainMasterContainer();
+
+    /**
+    * @brief Set default character formatting
+    *
+    */
+    void setTextCFDefaultsAtom(TextCFException *cf);
+
+    /**
+    * @brief set default paragraph formatting
+    *
+    */
+    void setTextPFDefaultsAtom(TextPFException *pf);
+
+    /**
+    * @brief Get pointer to default paragraph exception
+    * @return default paragraph exception
+    */
+    TextPFException *defaultTextPFException();
+
+    /**
+    * @brief Get pointer to default character exception
+    * @return default character exception
+    */
+    TextCFException *defaultTextCFException();
 
 private:
     // no copy or assign

@@ -396,7 +396,7 @@ public:
     int pitchAndFamily() const;
 private:
     class Private;
-    Private* d;
+    QSharedDataPointer<Private> d;
 };
 
 /**

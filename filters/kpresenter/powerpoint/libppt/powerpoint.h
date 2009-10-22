@@ -22,7 +22,8 @@
 
 #include <iostream>
 #include "ustring.h"
-#include <QColor>
+#include <QtCore/QSharedDataPointer>
+#include <QtGui/QColor>
 
 namespace Libppt
 {
@@ -164,19 +165,19 @@ private:
     DocumentContainer& operator=(const DocumentContainer&);
 };
 
-class EnvironmentContainer: public Container
+class DocumentTextInfoContainer: public Container
 {
 public:
     static const unsigned int id;
-    EnvironmentContainer();
+    DocumentTextInfoContainer();
     const char* name() const {
-        return "EnvironmentContainer";
+        return "DocumentTextInfoContainer";
     }
 
 private:
     // no copy or assign
-    EnvironmentContainer(const EnvironmentContainer&);
-    EnvironmentContainer& operator=(const EnvironmentContainer&);
+    DocumentTextInfoContainer(const DocumentTextInfoContainer&);
+    DocumentTextInfoContainer& operator=(const DocumentTextInfoContainer&);
 };
 
 class ExObjListContainer: public Container
@@ -356,7 +357,7 @@ public:
     QColor color();
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 /**
@@ -510,7 +511,7 @@ public:
     ColorIndexStruct color();
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 
 };
 
@@ -524,6 +525,7 @@ class TextPFException
 public:
     TextPFException();
     TextPFException(const TextPFException &exception);
+    ~TextPFException();
 
     /**
     * @brief Parse TextPFException from given data
@@ -650,7 +652,7 @@ public:
     * character 0x0000. It MUST exist if and only if masks.bulletChar is TRUE.
     *
     */
-    int bulletChar();
+    QChar bulletChar();
 
     /**
     * An optional MarginOrIndent that specifies the left margin of the
@@ -693,7 +695,7 @@ public:
 
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 
 };
 
@@ -742,7 +744,7 @@ public:
     void dump(std::ostream& out) const;
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 
 
 };
@@ -755,16 +757,17 @@ private:
 * TextMasterStyleAtom record contained in the DocumentTextInfoContainer record.
 *
 */
-class TxMasterStyleAtom  : public Record
+class TextMasterStyleAtom  : public Record
 {
 public:
     static const unsigned int id;
-    TxMasterStyleAtom();
-    ~TxMasterStyleAtom();
+    TextMasterStyleAtom();
+    TextMasterStyleAtom(const TextMasterStyleAtom &other);
+    ~TextMasterStyleAtom();
 
 
     const char* name() const {
-        return "TxMasterStyleAtom  ";
+        return "TextMasterStyleAtom  ";
     }
     void dump(std::ostream& out) const;
 
@@ -791,11 +794,11 @@ public:
     TextMasterStyleLevel *level(int index);
 private:
     // no copy or assign
-    TxMasterStyleAtom  & operator=(const TxMasterStyleAtom  &);
-    TxMasterStyleAtom(const TxMasterStyleAtom  &other);
+    TextMasterStyleAtom  & operator=(const TextMasterStyleAtom  &);
+    //TextMasterStyleAtom(const TextMasterStyleAtom  &other);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 /**
@@ -876,14 +879,14 @@ public:
     * @brief add new text master style
     * @param textMasterStyleAtom text master style to add
     */
-    void addTextMasterStyle(TxMasterStyleAtom *textMasterStyleAtom);
+    void addTextMasterStyle(TextMasterStyleAtom *textMasterStyleAtom);
 
     /**
     * @brief Get specified TextMasterStyleAtom
     * @param index index of the atom to get
     * @return specified TextMasterStyleAtom or 0 if none found
     */
-    TxMasterStyleAtom *textMasterStyleAtom(int index);
+    TextMasterStyleAtom *textMasterStyleAtom(int index);
 
     /**
     * @brief Get pointer to slideSchemeColorSchemeAtom
@@ -1543,15 +1546,23 @@ private:
     Private *d;
 };
 
+/**
+* @brief An atom record that specifies the information needed to define the
+* attributes of a font, such as typeface name, character set, and so forth, and
+* corresponds in part to a Windows Logical Font (LOGFONT) structure
+* [MC-LOGFONT].
+*
+*/
 class FontEntityAtom : public Record
 {
 public:
     static const unsigned int id;
     FontEntityAtom();
+    FontEntityAtom(const FontEntityAtom &other);
     ~FontEntityAtom();
 
-    UString ustring() const;
-    void setUString(const UString& ustr);
+    QString typeface() const;
+    void setTypeface(const QString& typeface);
     int charset() const;
     void setCharset(int charset) ;
     int clipPrecision() const;
@@ -1569,11 +1580,10 @@ public:
 
 private:
     // no copy or assign
-    FontEntityAtom(const FontEntityAtom &);
     FontEntityAtom & operator=(const FontEntityAtom &);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 class GuideAtom  : public Record
@@ -1893,7 +1903,7 @@ public:
     TextCFException * textCFException();
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 /**
@@ -1942,7 +1952,7 @@ public:
     TextPFException *textPFException();
 private:
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 
 };
 
@@ -2028,7 +2038,7 @@ private:
     StyleTextPropAtom   & operator=(const StyleTextPropAtom   &);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 class SlideAtom: public Record
@@ -2125,39 +2135,27 @@ private:
 
 
 
-class TxCFStyleAtom   : public Record
+class TextCFExceptionAtom   : public Record
 {
 public:
     static const unsigned int id;
-    TxCFStyleAtom();
-    ~TxCFStyleAtom();
+    TextCFExceptionAtom();
+    ~TextCFExceptionAtom();
 
-    int flags1() const;
-    void setFlags1(int flags1);
-    int flags2() const;
-    void setFlags2(int flags2);
-    int flags3() const;
-    void setFlags3(int flags3);
-    int n1() const;
-    void setN1(int n1);
-    int fontHeight() const;
-    void setFontHeight(int fontHeight);
-    int fontColor() const;
-    void setFontColor(int fontColor);
-
+    TextCFException *textCFException();
     void setData(unsigned size, const unsigned char* data);
     const char* name() const {
-        return "TxCFStyleAtom   ";
+        return "TextCFExceptionAtom   ";
     }
     void dump(std::ostream& out) const;
 
 private:
     // no copy or assign
-    TxCFStyleAtom(const TxCFStyleAtom   &);
-    TxCFStyleAtom   & operator=(const TxCFStyleAtom   &);
+    TextCFExceptionAtom(const TextCFExceptionAtom   &);
+    TextCFExceptionAtom   & operator=(const TextCFExceptionAtom   &);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 
@@ -2186,25 +2184,27 @@ private:
     Private *d;
 };
 
-class TxPFStyleAtom   : public Record
+class TextPFExceptionAtom : public Record
 {
 public:
     static const unsigned int id;
-    TxPFStyleAtom();
-    ~TxPFStyleAtom();
+    TextPFExceptionAtom();
+    ~TextPFExceptionAtom();
 
+    TextPFException *textPFException();
+    void setData(unsigned size, const unsigned char* data);
     const char* name() const {
-        return "TxPFStyleAtom   ";
+        return "TextPFExceptionAtom   ";
     }
     void dump(std::ostream& out) const;
 
 private:
     // no copy or assign
-    TxPFStyleAtom(const TxPFStyleAtom  &);
-    TxPFStyleAtom   & operator=(const TxPFStyleAtom  &);
+    TextPFExceptionAtom(const TextPFExceptionAtom  &);
+    TextPFExceptionAtom   & operator=(const TextPFExceptionAtom  &);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 class TxSIStyleAtom    : public Record
@@ -3345,6 +3345,8 @@ protected:
     void handleTextBytesAtom(TextBytesAtom* r);
     void handleStyleTextPropAtom(StyleTextPropAtom* r);
     void handleColorSchemeAtom(ColorSchemeAtom* r);
+    void handleTextPFExceptionAtom(TextPFExceptionAtom* r);
+    void handleTextCFExceptionAtom(TextCFExceptionAtom* r);
 
     void handleDrawingContainer(msofbtDgContainer* r, unsigned size);
     void handleEscherGroupContainer(msofbtSpgrContainer* r, unsigned size);
@@ -3360,14 +3362,14 @@ protected:
     void loadMainMasterContainer(MainMasterContainer *container);
 
     /**
-    * @brief Increase record position so that it is at the start of count record
-    * starting from current record
+    * @brief Increase position in documentstream until specified record is found
     *
-    * In other words if we are at record 5 and count is 6, then it sets the
-    * position to the start of record number 11
-    * @param count How many records to skip
+    * Position is always set to the start of the record header
+    * @param wantedType What is the record type that we are looking for
+    * @param max how many records can we go through to find this one
+    * @param count of records skipped or -1 if failed
     */
-    void fastForwardRecords(unsigned int count);
+    int fastForwardRecords(unsigned int wantedType, unsigned int max);
 
     /**
     * @brief Handle font entity by creating a TextFont and storing it to
@@ -3382,13 +3384,6 @@ protected:
     * @return color converted to QColor
     */
     QColor colorIndexStructToQColor(const ColorIndexStruct &color);
-
-    /**
-    * @brief Convert UString to QString
-    * @param str String to convert
-    * @return str converted to QString
-    */
-    QString toQString(const Libppt::UString& str);
 private:
     // no copy or assign
     PPTReader(const PPTReader&);

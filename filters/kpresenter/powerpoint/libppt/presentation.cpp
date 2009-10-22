@@ -38,9 +38,21 @@ public:
     TextFontCollection fonts;
 
     /**
-    * A container record that specifies a main master slide.
+    * @brief A container record that specifies a main master slide.
     */
     MainMasterContainer *mainMasterContainer;
+
+    /**
+    * @brief An optional TextCFExceptionAtom record that specifies default
+    * settings for character-level style and formatting.
+    */
+    TextCFException *textCFDefaultsAtom;
+
+    /**
+    * @brief An optional TextPFExceptionAtom record that specifies default
+    * settings for paragraph-level style and formatting.
+    */
+    TextPFException *textPFDefaultsAtom;
 };
 
 Presentation::Presentation()
@@ -48,6 +60,8 @@ Presentation::Presentation()
     d = new Private;
     d->masterSlide = 0;
     d->mainMasterContainer = 0;
+    d->textCFDefaultsAtom = 0;
+    d->textPFDefaultsAtom = 0;
 }
 
 Presentation::~Presentation()
@@ -63,6 +77,13 @@ void Presentation::clear()
         delete slide(i);
     d->slides.clear();
     delete d->masterSlide;
+    delete d->mainMasterContainer;
+    delete d->textCFDefaultsAtom;
+    delete d->textPFDefaultsAtom;
+
+    d->mainMasterContainer = 0;
+    d->textCFDefaultsAtom = 0;
+    d->textPFDefaultsAtom = 0;
     d->masterSlide = 0;
 }
 
@@ -121,3 +142,40 @@ MainMasterContainer *Presentation::getMainMasterContainer()
 {
     return d->mainMasterContainer;
 }
+
+void Presentation::setTextCFDefaultsAtom(TextCFException *cf)
+{
+    if (!cf) {
+        return;
+    }
+
+    if (d->textCFDefaultsAtom) {
+        delete d->textCFDefaultsAtom;
+    }
+
+    d->textCFDefaultsAtom = new TextCFException(*cf);
+}
+
+void Presentation::setTextPFDefaultsAtom(TextPFException *pf)
+{
+    if (!pf) {
+        return;
+    }
+
+    if (d->textPFDefaultsAtom) {
+        delete d->textPFDefaultsAtom;
+    }
+
+    d->textPFDefaultsAtom = new TextPFException(*pf);
+}
+
+TextPFException *Presentation::defaultTextPFException()
+{
+    return d->textPFDefaultsAtom;
+}
+
+TextCFException *Presentation::defaultTextCFException()
+{
+    return d->textCFDefaultsAtom;
+}
+

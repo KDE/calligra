@@ -27,13 +27,14 @@
 #include <iomanip>
 
 #include <vector>
-#include <QList>
+#include <QtCore/QList>
 #include <map>
 
 #include <kdebug.h>
 #include <stdio.h>
-#include <QColor>
-
+#include <QtGui/QColor>
+#include <QtCore/QSharedData>
+#include <QtCore/QTextCodec>
 // Use anonymous namespace to cover following functions
 namespace
 {
@@ -164,8 +165,8 @@ Record* Record::create(unsigned type)
     else if (type == DocumentContainer::id)
         record = new DocumentContainer();
 
-    else if (type == EnvironmentContainer::id)
-        record = new EnvironmentContainer();
+    else if (type == DocumentTextInfoContainer::id)
+        record = new DocumentTextInfoContainer();
 
     else if (type == ExObjListContainer::id)
         record = new ExObjListContainer();
@@ -361,14 +362,14 @@ Record* Record::create(unsigned type)
     else if (type == TextSpecInfoAtom  ::id)
         record = new TextSpecInfoAtom();
 
-    else if (type == TxCFStyleAtom  ::id)
-        record = new TxCFStyleAtom();
+    else if (type == TextCFExceptionAtom::id)
+        record = new TextCFExceptionAtom();
 
-    else if (type == TxMasterStyleAtom  ::id)
-        record = new TxMasterStyleAtom();
+    else if (type == TextMasterStyleAtom  ::id)
+        record = new TextMasterStyleAtom();
 
-    else if (type == TxPFStyleAtom  ::id)
-        record = new TxPFStyleAtom();
+    else if (type == TextPFExceptionAtom::id)
+        record = new TextPFExceptionAtom();
 
     else if (type == TxSIStyleAtom  ::id)
         record = new TxSIStyleAtom();
@@ -711,7 +712,7 @@ public:
     * continues while the rh.recType field of each TextMasterStyleAtom item is
     * equal to RT_TextMasterStyleAtom.
     */
-    QList<TxMasterStyleAtom *> rgTextMasterStyle;
+    QList<TextMasterStyleAtom *> rgTextMasterStyle;
 
     /**
     * A SlideSchemeColorSchemeAtom record that specifies the color scheme for this
@@ -743,7 +744,7 @@ void MainMasterContainer::addSchemeListElementColorScheme(ColorSchemeAtom *color
     d->rgSchemeListElementColorScheme << (color);
 }
 
-void MainMasterContainer::addTextMasterStyle(TxMasterStyleAtom *textMasterStyleAtom)
+void MainMasterContainer::addTextMasterStyle(TextMasterStyleAtom *textMasterStyleAtom)
 {
     d->rgTextMasterStyle << textMasterStyleAtom;
 }
@@ -753,7 +754,7 @@ ColorSchemeAtom *MainMasterContainer::getSlideSchemeColorSchemeAtom()
     return &d->slideSchemeColorSchemeAtom;
 }
 
-TxMasterStyleAtom *MainMasterContainer::textMasterStyleAtom(int index)
+TextMasterStyleAtom *MainMasterContainer::textMasterStyleAtom(int index)
 {
     return d->rgTextMasterStyle.value(index);
 }
@@ -764,11 +765,11 @@ unsigned int MainMasterContainer::textMasterStyleCount()
 }
 
 
-// ========== EnvironmentContainer ==========
+// ========== DocumentTextInfoContainer ==========
 
-const unsigned int EnvironmentContainer::id = 1010;
+const unsigned int DocumentTextInfoContainer::id = 1010;
 
-EnvironmentContainer::EnvironmentContainer()
+DocumentTextInfoContainer::DocumentTextInfoContainer()
 {
 }
 
@@ -1153,10 +1154,18 @@ void EndDocumentAtom::dump(std::ostream& out) const
 
 const unsigned int FontEntityAtom::id = 4023;
 
-class FontEntityAtom::Private
+class FontEntityAtom::Private : public QSharedData
 {
 public:
-    UString ustring;
+    Private();
+    ~Private();
+
+    /**
+    * @brief String that specifies the typeface name of the font. It corresponds
+    * to the lfFaceName field of the LOGFONT structure.
+    */
+    QString typeface;
+
     int charset;
     int clipPrecision;
     int quality;
@@ -1164,28 +1173,45 @@ public:
 
 };
 
-FontEntityAtom::FontEntityAtom()
+
+FontEntityAtom::Private::Private()
+        : charset(0)
+        , clipPrecision(0)
+        , quality(0)
+        , pitchAndFamily(0)
 {
-    d = new Private;
-    d->charset = 0;
-    d->clipPrecision = 0;
-    d->quality = 0;
-    d->pitchAndFamily = 0;
+
+}
+
+FontEntityAtom::Private::~Private()
+{
+
+}
+
+FontEntityAtom::FontEntityAtom()
+        : d(new FontEntityAtom::Private())
+{
+}
+
+FontEntityAtom::FontEntityAtom(const FontEntityAtom &other)
+        : Record()
+        , d(other.d)
+{
+
 }
 
 FontEntityAtom::~FontEntityAtom()
 {
-    delete d;
 }
 
-UString FontEntityAtom::ustring() const
+QString FontEntityAtom::typeface() const
 {
-    return d->ustring;
+    return d->typeface;
 }
 
-void FontEntityAtom::setUString(const UString& ustring)
+void FontEntityAtom::setTypeface(const QString& typeface)
 {
-    d->ustring = ustring;
+    d->typeface = typeface;
 }
 
 int FontEntityAtom::charset() const
@@ -1230,13 +1256,19 @@ void FontEntityAtom::setPitchAndFamily(int pitchAndFamily)
 
 void FontEntityAtom::setData(unsigned , const unsigned char* data)
 {
+    QString name;
+    for (int i = 0;i < 32;i++) {
+        quint16 readData = readU16(data + i * 2);
 
-    UString str;
-    for (unsigned k = 0; k < 32; k++) {
-        unsigned uchar = readU16(data + k * 2);
-        str.append(UString(uchar));
+        //End reading when we receive null termination
+        if (readData == 0) {
+            break;
+        }
+
+        name.append(QChar(readData));
     }
-    setUString(str);
+
+    setTypeface(name);
     setCharset(data[64]);
     setClipPrecision(data[65]);
     setQuality(data[66]);
@@ -1246,7 +1278,7 @@ void FontEntityAtom::setData(unsigned , const unsigned char* data)
 void FontEntityAtom::dump(std::ostream& out) const
 {
     out << "FontEntityAtom" << std::endl;
-    out << "String : [" << ustring() << "]" << std::endl;
+    out << "String : [" << typeface().toLatin1().data() << "]" << std::endl;
     out << "Charset " << charset() << std::endl;
     out << "ClipPrecision " << clipPrecision() << std::endl;
     out << "Quality " << quality() << std::endl;
@@ -1286,18 +1318,12 @@ void TextCharsAtom::setText(QString text)
 
 void TextCharsAtom::setData(unsigned size, const unsigned char* data)
 {
-    QString tempStr;
-
-    for (unsigned k = 0; k < size; k += 2) {
-        unsigned uchar = readU16(data + k);
-        tempStr += uchar;
-
-        if ((uchar & 0xff00) == 0xf000) { // handle later
-            std::cout << "got a symbol at " << k << "th character" << std::endl;
-        }
+    QTextCodec *codec = QTextCodec::codecForName("utf-16");
+    QByteArray array;
+    for (unsigned int i = 0;i < size;i++) {
+        array.append(data[i]);
     }
-
-    d->text = tempStr;
+    d->text = codec->toUnicode(array);
 }
 
 void TextCharsAtom::dump(std::ostream& out) const
@@ -2708,17 +2734,12 @@ void SrKinsokuAtom::dump(std::ostream& out) const
     out << "SrKinsokuAtom - not yet implemented" << std::endl;
 }
 
-class ColorStruct::Private
+class ColorStruct::Private : public QSharedData
 {
 public:
     QColor color;
 };
 
-ColorStruct::ColorStruct(const ColorStruct &other)
-{
-    d = new Private();
-    d->color = other.d->color;
-}
 ColorStruct::ColorStruct()
 {
     d = new Private();
@@ -2726,7 +2747,6 @@ ColorStruct::ColorStruct()
 
 ColorStruct::~ColorStruct()
 {
-    delete d;
 }
 
 void ColorStruct::setData(const unsigned char *data)
@@ -2742,7 +2762,7 @@ QColor ColorStruct::color()
     return d->color;
 }
 
-class ColorIndexStruct::Private
+class ColorIndexStruct::Private : public QSharedData
 {
 public:
     Private()
@@ -2790,18 +2810,13 @@ ColorIndexStruct::ColorIndexStruct()
     d = new Private();
 }
 
-ColorIndexStruct::ColorIndexStruct(const ColorIndexStruct &color)
+ColorIndexStruct::ColorIndexStruct(const ColorIndexStruct &other)
+        : d(other.d)
 {
-    d = new Private();
-    d->red = color.red();
-    d->green = color.green();
-    d->blue = color.blue();
-    d->index = color.index();
 }
 
 ColorIndexStruct::~ColorIndexStruct()
 {
-    delete d;
 }
 
 unsigned int ColorIndexStruct::red() const
@@ -2836,11 +2851,11 @@ void ColorIndexStruct::setData(const unsigned char *data)
 
 // ========== TextPFException ==========
 
-class TextPFException::Private
+class TextPFException::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &other);
+    ~Private();
     /**
     * A PFMasks structure that specifies whether certain fields of this
     * TextPFException record exist and are valid.
@@ -3141,7 +3156,7 @@ public:
     * character 0x0000. It MUST exist if and only if masks.bulletChar is TRUE.
     *
     */
-    int bulletChar;
+    QChar bulletChar;
 
     /**
     * An optional FontIndexRef that specifies the font to use for the bullet.
@@ -3263,22 +3278,8 @@ TextPFException::Private::Private()
         , textDirection(0)
 {}
 
-TextPFException::Private::Private(const TextPFException::Private &other)
-        : masks(other.masks)
-        , bulletFlags(other.bulletFlags)
-        , bulletChar(other.bulletChar)
-        , bulletFontRef(other.bulletFontRef)
-        , bulletSize(other.bulletSize)
-        , bulletColor(other.bulletColor)
-        , textAlignment(other.textAlignment)
-        , lineSpacing(other.lineSpacing)
-        , spaceBefore(other.spaceBefore)
-        , spaceAfter(other.spaceAfter)
-        , leftMargin(other.leftMargin)
-        , indent(other.indent)
-        , defaultTabSize(other.defaultTabSize)
-        , fontAlign(other.fontAlign)
-        , textDirection(other.textDirection)
+
+TextPFException::Private::~Private()
 {
 }
 
@@ -3288,8 +3289,13 @@ TextPFException::TextPFException()
 
 }
 
+TextPFException::~TextPFException()
+{
+
+}
+
 TextPFException::TextPFException(const TextPFException &exception)
-        : d(new TextPFException::Private(*exception.d))
+        : d(exception.d)
 {
 }
 
@@ -3370,7 +3376,7 @@ ColorIndexStruct TextPFException::bulletColor()
     return d->bulletColor;
 }
 
-int TextPFException::bulletChar()
+QChar TextPFException::bulletChar()
 {
     return d->bulletChar;
 }
@@ -3439,7 +3445,7 @@ void TextPFException::dump(std::ostream& out) const
     out << "bulletFlags.fBulletHasColor: " << d->bulletFlags.fBulletHasColor << std::endl;
     out << "bulletFlags.fBulletHasSize: " << d->bulletFlags.fBulletHasSize << std::endl;
     out << "indent: " << d->indent << std::endl;
-    out << "bulletChar: " << d->bulletChar << std::endl;
+    out << "bulletChar: " << d->bulletChar.toLatin1() << std::endl;
     out << "bulletFontRef: " << d->bulletFontRef << std::endl;
     out << "leftMargin: " << d->leftMargin << std::endl;
     out << "spaceBefore: " << d->spaceBefore << std::endl;
@@ -3514,7 +3520,9 @@ unsigned int TextPFException::setData(unsigned int size, const unsigned char *da
 
     //bulletChar (2 bytes)
     if (d->masks.bulletChar && data + 2 <= end) {
-        d->bulletChar = readS16(data); data += 2; read += 2;
+        ushort readChar = readS16(data); data += 2; read += 2;;
+        QString temp = QString::fromUtf16(&readChar, 1);
+        d->bulletChar = temp.at(0);
     }
 
     //bulletFontRef (2 bytes)
@@ -3601,11 +3609,11 @@ unsigned int TextPFException::setData(unsigned int size, const unsigned char *da
     return read;
 }
 
-class TextPFRun::Private
+class TextPFRun::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &other);
+    ~Private();
 
     /**
     * @brief For how many character does this style apply to
@@ -3632,14 +3640,10 @@ TextPFRun::Private::Private()
 
 }
 
-TextPFRun::Private::Private(const Private &other)
-        : count(other.count)
-        , indentLevel(other.indentLevel)
-        , pf(other.pf)
+TextPFRun::Private::~Private()
 {
 
 }
-
 
 TextPFRun::TextPFRun()
         : d(new Private())
@@ -3647,13 +3651,12 @@ TextPFRun::TextPFRun()
 }
 
 TextPFRun::TextPFRun(const TextPFRun &other)
-        : d(new Private(*other.d))
+        : d(other.d)
 {
 }
 
 TextPFRun::~TextPFRun()
 {
-    delete d;
 }
 
 
@@ -3684,12 +3687,11 @@ TextPFException *TextPFRun::textPFException()
 
 
 
-class TextCFRun::Private
+class TextCFRun::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &d);
-
+    ~Private();
 
     /**
     * @brief the amount of characters cf applies to
@@ -3710,13 +3712,9 @@ TextCFRun::Private::Private()
 
 }
 
-TextCFRun::Private::Private(const Private &d)
-        : count(d.count)
-        , cf(d.cf)
+TextCFRun::Private::~Private()
 {
-
 }
-
 
 TextCFRun::TextCFRun()
         : d(new Private())
@@ -3724,13 +3722,13 @@ TextCFRun::TextCFRun()
 }
 
 TextCFRun::TextCFRun(const TextCFRun &other)
-        : d(new Private(*other.d))
+        : d(other.d)
 {
+
 }
 
 TextCFRun::~TextCFRun()
 {
-    delete d;
 }
 
 
@@ -3752,11 +3750,11 @@ TextCFException * TextCFRun::textCFException()
 
 // ========== TextCFException ==========
 
-class TextCFException::Private
+class TextCFException::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &other);
+    ~Private();
 
     /**
     * @brief A structure that specifies character-level font, text-formatting, and
@@ -4115,20 +4113,6 @@ public:
 
 };
 
-TextCFException::Private::Private(const Private &other)
-        : masks(other.masks)
-        , fontStyle(other.fontStyle)
-        , fontRef(other.fontRef)
-        , oldEAFontRef(other.oldEAFontRef)
-        , ansiFontRef(other.ansiFontRef)
-        , symbolFontRef(other.symbolFontRef)
-        , fontSize(other.fontSize)
-        , color(other.color)
-        , position(other.position)
-{
-
-}
-
 TextCFException::Private::Private()
         : fontRef(0)
         , oldEAFontRef(0)
@@ -4140,8 +4124,12 @@ TextCFException::Private::Private()
 
 }
 
+TextCFException::Private::~Private()
+{
+}
+
 TextCFException::TextCFException(const TextCFException &exception)
-        : d(new Private(*exception.d))
+        : d(exception.d)
 {
 
 }
@@ -4153,7 +4141,6 @@ TextCFException::TextCFException()
 
 TextCFException::~TextCFException()
 {
-    delete d;
 }
 
 bool TextCFException::hasFont()
@@ -4341,11 +4328,12 @@ unsigned int TextCFException::setData(unsigned int size, const unsigned char *da
 }
 
 
-class TextMasterStyleLevel::Private
+class TextMasterStyleLevel::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &other);
+    ~Private();
+
 
     /**
     * @brief Optional intendation level associated to this level
@@ -4364,13 +4352,6 @@ public:
     TextCFException cf;
 };
 
-TextMasterStyleLevel::Private::Private(const Private &other)
-        : level(other.level)
-        , pf(other.pf)
-        , cf(other.cf)
-{
-
-}
 
 TextMasterStyleLevel::Private::Private()
         : level(0)
@@ -4378,6 +4359,10 @@ TextMasterStyleLevel::Private::Private()
         , cf()
 {
 
+}
+
+TextMasterStyleLevel::Private::~Private()
+{
 }
 
 void TextMasterStyleLevel::dump(std::ostream& out) const
@@ -4418,26 +4403,26 @@ TextCFException *TextMasterStyleLevel::cf()
     return &d->cf;
 }
 
-TextMasterStyleLevel::TextMasterStyleLevel(const TextMasterStyleLevel &level)
-        : d(new Private(*level.d))
+TextMasterStyleLevel::TextMasterStyleLevel()
+        : d(new Private())
 {
-
 }
 
-TextMasterStyleLevel::TextMasterStyleLevel() : d(new Private())
+TextMasterStyleLevel::TextMasterStyleLevel(const TextMasterStyleLevel &level)
+        : d(level.d)
 {
+
 }
 
 TextMasterStyleLevel::~TextMasterStyleLevel()
 {
-    delete d;
 }
 
-// ========== TxMasterStyleAtom ==========
+// ========== TextMasterStyleAtom ==========
 
-const unsigned int TxMasterStyleAtom::id = 4003;
+const unsigned int TextMasterStyleAtom::id = 4003;
 
-class TxMasterStyleAtom::Private
+class TextMasterStyleAtom::Private : public QSharedData
 {
 public:
     Private() { } ;
@@ -4451,26 +4436,16 @@ public:
     QList<TextMasterStyleLevel> levels;
 };
 
-TxMasterStyleAtom::TxMasterStyleAtom()
+TextMasterStyleAtom::TextMasterStyleAtom()
 {
     d = new Private();
 }
 
-TxMasterStyleAtom::TxMasterStyleAtom(const TxMasterStyleAtom  &other):
-        Record()
+TextMasterStyleAtom::~TextMasterStyleAtom()
 {
-    d = new Private();
-    for (int i = 0;i < other.d->levels.size();i++) {
-        d->levels << other.d->levels[i];
-    }
 }
 
-TxMasterStyleAtom::~TxMasterStyleAtom()
-{
-    delete d;
-}
-
-void TxMasterStyleAtom::setDataWithInstance(const unsigned int size,
+void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
         const unsigned char* data,
         unsigned int recInstance)
 {
@@ -4495,12 +4470,12 @@ void TxMasterStyleAtom::setDataWithInstance(const unsigned int size,
     }
 }
 
-unsigned int TxMasterStyleAtom::levelCount()
+unsigned int TextMasterStyleAtom::levelCount()
 {
     return d->levels.size();
 }
 
-TextMasterStyleLevel *TxMasterStyleAtom::level(int index)
+TextMasterStyleLevel *TextMasterStyleAtom::level(int index)
 {
     if (index >= 0 && index < d->levels.size()) {
         return &d->levels[index];
@@ -4509,7 +4484,7 @@ TextMasterStyleLevel *TxMasterStyleAtom::level(int index)
     return 0;
 }
 
-void TxMasterStyleAtom::dump(std::ostream& out) const
+void TextMasterStyleAtom::dump(std::ostream& out) const
 {
     for (int i = 0;i < d->levels.size();i++) {
         d->levels[i].dump(out);
@@ -4828,11 +4803,11 @@ void ViewInfoAtom ::dump(std::ostream& out) const
 
 const unsigned int StyleTextPropAtom ::id = 4001;
 
-class StyleTextPropAtom::Private
+class StyleTextPropAtom::Private : public QSharedData
 {
 public:
     Private();
-    Private(const Private &other);
+    ~Private();
 
     /**
     * @brief An array of TextPFRun structures that specifies paragraph-level
@@ -4860,26 +4835,17 @@ public:
     QList<TextCFRun> characterFormatting;
 };
 
-StyleTextPropAtom::Private::Private(const StyleTextPropAtom::Private &other)
+StyleTextPropAtom::Private::Private()
 {
-    for (int i = 0;i < other.paragraphFormatting.size();i++) {
-        TextPFRun pf(other.paragraphFormatting[i]);
-        paragraphFormatting << pf;
-    }
-
-    for (int i = 0;i < other.characterFormatting.size();i++) {
-        TextCFRun cf(other.characterFormatting[i]);
-        characterFormatting << cf;
-    }
 }
 
-StyleTextPropAtom::Private::Private()
+StyleTextPropAtom::Private::~Private()
 {
 }
 
 StyleTextPropAtom::StyleTextPropAtom(const StyleTextPropAtom &atom)
         : Record()
-        , d(new Private(*atom.d))
+        , d(atom.d)
 {
 }
 
@@ -4889,7 +4855,6 @@ StyleTextPropAtom::StyleTextPropAtom() : d(new Private())
 
 StyleTextPropAtom::~StyleTextPropAtom()
 {
-    delete d;
 }
 
 TextCFRun *StyleTextPropAtom::findTextCFRun(unsigned int pos)
@@ -4982,134 +4947,101 @@ TextPFRun *StyleTextPropAtom::textPFRun(unsigned int index)
     return 0;
 }
 
-// ========== TxCFStyleAtom  ==========
+// ========== TextCFExceptionAtom  ==========
 
-const unsigned int TxCFStyleAtom ::id = 4004;
+const unsigned int TextCFExceptionAtom::id = 4004;
 
-
-class TxCFStyleAtom ::Private
+class TextCFExceptionAtom::Private : public QSharedData
 {
 public:
-    int flags1;
-    int flags2;
-    int flags3;
-    int n1;
-    int fontHeight;
-    int fontColor;
+    Private();
+    ~Private();
+    TextCFException cf;
 };
 
-TxCFStyleAtom ::TxCFStyleAtom()
-{
-    d = new Private;
-    d->flags1 = 0;
-    d->flags2 = 0;
-    d->flags3 = 0;
-    d->n1 = 0;
-    d->fontHeight = 0;
-    d->fontColor = 0;
-}
-
-TxCFStyleAtom ::~TxCFStyleAtom()
-{
-    delete d;
-}
-
-int TxCFStyleAtom::flags1() const
-{
-    return d->flags1;
-}
-
-void TxCFStyleAtom::setFlags1(int flags1)
-{
-    d->flags1 = flags1;
-}
-
-int TxCFStyleAtom::flags2() const
-{
-    return d->flags2;
-}
-
-void TxCFStyleAtom::setFlags2(int flags2)
-{
-    d->flags2 = flags2;
-}
-
-int TxCFStyleAtom::flags3() const
-{
-    return d->flags3;
-}
-
-void TxCFStyleAtom::setFlags3(int flags3)
-{
-    d->flags3 = flags3;
-}
-
-int TxCFStyleAtom::n1() const
-{
-    return d->n1;
-}
-
-void TxCFStyleAtom::setN1(int n1)
-{
-    d->n1 = n1;
-}
-
-int TxCFStyleAtom::fontHeight() const
-{
-    return d->fontHeight;
-}
-
-void TxCFStyleAtom::setFontHeight(int fontHeight)
-{
-    d->fontHeight = fontHeight;
-}
-
-int TxCFStyleAtom::fontColor() const
-{
-    return d->fontColor;
-}
-
-void TxCFStyleAtom::setFontColor(int fontColor)
-{
-    d->fontColor = fontColor;
-}
-
-void TxCFStyleAtom::setData(unsigned int /*length*/, const unsigned char* data)
-{
-    setFlags1(readU16(data + 0));
-    setFlags2(readU16(data + 2));
-    setFlags3(readU16(data + 4));
-    setN1(readU32(data + 6));
-    setFontHeight(readU16(data + 10));
-    setFontColor(readU32(data + 12));
-}
-
-void TxCFStyleAtom ::dump(std::ostream& out) const
-{
-    out << "TxCFStyleAtom " << std::endl;
-    out << "flags1 " << flags1() << std::endl;
-    out << "flags2 " << flags2() << std::endl;
-    out << "flags3 " << flags3() << std::endl;
-    out << "n1 " << n1() << std::endl;
-    out << "font height " << fontHeight() << std::endl;
-    out << "font color " << fontColor() << std::endl;
-}
-
-// ========== TxPFStyleAtom ==========
-
-const unsigned int TxPFStyleAtom::id = 4005;
-
-TxPFStyleAtom::TxPFStyleAtom()
+TextCFExceptionAtom::Private::Private()
+        : cf()
 {
 }
 
-TxPFStyleAtom::~TxPFStyleAtom()
+TextCFExceptionAtom::Private::~Private()
 {
 }
 
-void TxPFStyleAtom::dump(std::ostream& out) const
+TextCFExceptionAtom::TextCFExceptionAtom() :
+        d(new TextCFExceptionAtom::Private())
 {
-    out << "TxPFStyleAtom - need special parse code" << std::endl;
+}
+
+TextCFExceptionAtom::~TextCFExceptionAtom()
+{
+}
+
+TextCFException *TextCFExceptionAtom::textCFException()
+{
+    return &d->cf;
+}
+
+void TextCFExceptionAtom::setData(unsigned int length,
+                                  const unsigned char* data)
+{
+    d->cf.setData(length, data);
+}
+
+void TextCFExceptionAtom ::dump(std::ostream& out) const
+{
+    d->cf.dump(out);
+}
+
+// ========== TextPFExceptionAtom ==========
+
+const unsigned int TextPFExceptionAtom::id = 4005;
+
+class TextPFExceptionAtom::Private : public QSharedData
+{
+
+public:
+    Private();
+    ~Private();
+    TextPFException pf;
+};
+
+TextPFExceptionAtom::Private::Private()
+        : pf()
+{
+
+}
+
+TextPFExceptionAtom::Private::~Private()
+{
+
+}
+
+TextPFExceptionAtom::TextPFExceptionAtom() :
+        d(new TextPFExceptionAtom::Private())
+{
+}
+
+
+TextPFExceptionAtom::~TextPFExceptionAtom()
+{
+}
+
+TextPFException *TextPFExceptionAtom::textPFException()
+{
+    return &d->pf;
+}
+
+void TextPFExceptionAtom::setData(unsigned int length,
+                                  const unsigned char* data)
+{
+    d->pf.setData(length, data);
+}
+
+
+void TextPFExceptionAtom ::dump(std::ostream& out) const
+{
+    d->pf.dump(out);
 }
 
 // ========== TxSIStyleAtom  ==========
@@ -5477,18 +5409,7 @@ void TextBytesAtom::setText(QString text)
 
 void TextBytesAtom::setData(unsigned size, const unsigned char* data)
 {
-    QString tempStr;
-    for (unsigned k = 0; k < size; ++k) {
-        unsigned uchar =  data[k];
-
-        if ((uchar & 0xff00) == 0xf000) { // handle later
-            std::cout << "got a symbol at " << k << "th character" << std::endl;
-        } else {
-            tempStr += uchar;
-        }
-    }
-
-    d->text = tempStr;
+    d->text = QString::fromUtf8((const char *)data, size);
 }
 
 void TextBytesAtom::dump(std::ostream& out) const
@@ -6977,35 +6898,48 @@ void PPTReader::loadMaster()
         unsigned long nextpos = d->docStream->tell() + size;
 
         // we only care for MainMasterContainer....
-        if (type == MainMasterContainer::id)
-            if (indexPersistence(pos)) {
+        if (type == MainMasterContainer::id && indexPersistence(pos)) {
 #ifdef LIBPPT_DEBUG
-                std::cout << "Found at pos " << pos << " size is " << size << std::endl;
-                std::cout << std::endl;
+            std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+            std::cout << std::endl;
 #endif
-                Slide* master = new Slide(d->presentation);
-                d->presentation->setMasterSlide(master);
-                d->currentSlide = master;
-                MainMasterContainer* container = new MainMasterContainer;
-                loadMainMasterContainer(container);
-                d->presentation->setMainMasterContainer(container);
-            }
+            Slide* master = new Slide(d->presentation);
+            d->presentation->setMasterSlide(master);
+            d->currentSlide = master;
+            MainMasterContainer* container = new MainMasterContainer;
+            loadMainMasterContainer(container);
+            d->presentation->setMainMasterContainer(container);
+        }
 
         d->docStream->seek(nextpos);
     }
     d->currentSlide = 0;
 }
 
-void PPTReader::fastForwardRecords(unsigned int count)
+int PPTReader::fastForwardRecords(unsigned int wantedType, unsigned int max)
 {
-    for (unsigned int i = 0;i < count;i++) {
+    for (unsigned int i = 0;i < max;i++) {
         unsigned char buffer[8];
         unsigned bytes_read = d->docStream->read(buffer, 8);
-        if (bytes_read != 8) return;
+
+        if (bytes_read != 8) {
+            break;
+        }
         RecordHeader header;
         header.setData(buffer);
+
+        if (header.recType == wantedType) {
+            //Rewind to the beginning of this record header
+            d->docStream->seek(d->docStream->tell() - 8);
+            return i;
+        }
+
         d->docStream->seek(d->docStream->tell() + header.recLen);
     }
+
+    d->docStream->seek(d->docStream->tell() - 8);
+
+    return -1;
 }
 
 
@@ -7014,13 +6948,16 @@ void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
     if (container == 0) return;
 
     //skip over slideAtom (32 bytes)
-    fastForwardRecords(1);
+    if (fastForwardRecords(0x07F0, 2) == -1) {
+        kWarning() << "Failed to find rgSchemeListElementColorScheme in MainMasterContainer!";
+        return;
+    }
 
     unsigned char buffer[8];
     unsigned bytes_read = d->docStream->read(buffer, 8);
 
     if (bytes_read != 8) {
-        kWarning() << "Failed to read header!";
+        kWarning() << "Failed to read header for rgSchemeListElementColorScheme in MainMasterContainer!";
         return;
     }
 
@@ -7061,7 +6998,7 @@ void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
             return;
         }
 
-        TxMasterStyleAtom *atom = new TxMasterStyleAtom();
+        TextMasterStyleAtom *atom = new TextMasterStyleAtom();
         atom->setParent(container);
         atom->setPosition(d->docStream->tell());
         atom->setInstance(header.recInstance);
@@ -7083,11 +7020,14 @@ void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
     /**
     Skip to the start of slideSchemeColorSchemeAtom
     */
-    fastForwardRecords(1);
+    if (fastForwardRecords(0x07F0, 4) == -1) {
+        kWarning("Failed to find header of slideSchemeColorSchemeAtom!");
+        return;
+    }
 
     bytes_read = d->docStream->read(buffer, 8);
     if (bytes_read != 8) {
-        kWarning("Failed to read header for getSlideSchemeColorSchemeAtom!");
+        kWarning("Failed to read header for slideSchemeColorSchemeAtom!");
         return;
     }
 
@@ -7136,30 +7076,29 @@ void PPTReader::loadSlides()
         unsigned k = 0;
 
         // we only care for SlideContainer....
-        if (type == SlideContainer::id)
-            if ((k = indexPersistence(pos))) {
-                // create a new slide, make it current
-                Slide* s = new Slide(d->presentation);
-                d->slideMap[ k ] = s;
-                d->presentation->appendSlide(s);
-                d->currentSlide = s;
-                d->currentTextId = 0;
-                d->currentTextType = TextObject::Body;
+        if (type == SlideContainer::id && (k = indexPersistence(pos))) {
+            // create a new slide, make it current
+            Slide* s = new Slide(d->presentation);
+            d->slideMap[ k ] = s;
+            d->presentation->appendSlide(s);
+            d->currentSlide = s;
+            d->currentTextId = 0;
+            d->currentTextType = TextObject::Body;
 
 #ifdef LIBPPT_DEBUG
-                std::cout << "SLIDE #" << totalSlides + 1 << std::endl;
-                std::cout << "Found at pos " << pos << " size is " << size << std::endl;
-                std::cout << "Reference #" << k << std::endl;
-                std::cout << std::endl;
+
+            std::cout << "SLIDE #" << totalSlides + 1 << std::endl;
+            std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+            std::cout << "Reference #" << k << std::endl;
+            std::cout << std::endl;
 #endif
 
-                // process all atoms inside
-                SlideContainer* container = new SlideContainer;
-                handleContainer(container, type, size);
-                delete container;
-
-                totalSlides++;
-            }
+            // process all atoms inside
+            SlideContainer* container = new SlideContainer;
+            handleContainer(container, type, size);
+            delete container;
+            totalSlides++;
+        }
 
         d->docStream->seek(nextpos);
     }
@@ -7186,9 +7125,11 @@ void PPTReader::loadDocument()
 
     d->docStream->seek(0);
     unsigned long stream_size = d->docStream->size();
+    unsigned long lastDocumentContainerPos = 0;
+    unsigned long lastDocumentContainerSize = 0;
     while (d->docStream->tell() < stream_size) {
         unsigned char buffer[8];
-        unsigned long pos = d->docStream->tell();
+        //unsigned long pos = d->docStream->tell();
         unsigned bytes_read = d->docStream->read(buffer, 8);
         if (bytes_read != 8) break;
 
@@ -7197,19 +7138,30 @@ void PPTReader::loadDocument()
         unsigned long nextpos = d->docStream->tell() + size;
 
         // we only care for DocumentContainer....
-        if (type == DocumentContainer::id)
-            if (indexPersistence(pos)) {
+        if (type == DocumentContainer::id) {
+            lastDocumentContainerPos = d->docStream->tell();
+            lastDocumentContainerSize = size;
 #ifdef LIBPPT_DEBUG
-                std::cout << "Found at pos " << pos << " size is " << size << std::endl;
-                std::cout << std::endl;
+            std::cout << "Found at pos " << pos << " size is " << size << std::endl;
+            std::cout << std::endl;
 #endif
-                DocumentContainer* container = new DocumentContainer;
-                container->setPosition(pos);
-                handleContainer(container, type, size);
-                delete container;
-            }
+        }
 
         d->docStream->seek(nextpos);
+    }
+
+    /**
+    * [MS-PPT].pdf states that powerpoint files contain version history and that
+    * newer versions are appended to the end of the document. Hence we'll get
+    * the current version of DocumentContainer by searching for the last
+    * occurrence of it.
+    */
+    if (lastDocumentContainerPos > 0 && lastDocumentContainerSize > 0) {
+        d->docStream->seek(lastDocumentContainerPos);
+        DocumentContainer* container = new DocumentContainer;
+        container->setPosition(lastDocumentContainerPos);
+        handleContainer(container, DocumentContainer::id, lastDocumentContainerSize);
+        delete container;
     }
 
 }
@@ -7287,6 +7239,10 @@ void PPTReader::handleRecord(Record* record, int type)
         handleStyleTextPropAtom(static_cast<StyleTextPropAtom*>(record)); break;
     case ColorSchemeAtom::id:
         handleColorSchemeAtom(static_cast<ColorSchemeAtom*>(record)); break;
+    case TextPFExceptionAtom::id:
+        handleTextPFExceptionAtom(static_cast<TextPFExceptionAtom*>(record)); break;
+    case TextCFExceptionAtom::id:
+        handleTextCFExceptionAtom(static_cast<TextCFExceptionAtom*>(record)); break;
 
     case msofbtSpgrAtom::id:
         handleEscherGroupAtom(static_cast<msofbtSpgrAtom*>(record)); break;
@@ -7357,7 +7313,7 @@ void PPTReader::handleSlidePersistAtom(SlidePersistAtom* atom)
     d->currentTextType = TextObject::Body;
 
 #ifdef LIBPPT_DEBUG
-    std::cout << std::endl << "Slide id = " << id << std::endl;
+//  std::cout << std::endl<< "Slide id = " << id << std::endl;
 #endif
 }
 
@@ -7386,7 +7342,7 @@ void PPTReader::handleTextCharsAtom(TextCharsAtom* atom)
     }
 
     text->setType(d->currentTextType);
-    text->setText(atom->text().replace(QChar(11), " "));
+    text->setText(atom->text());
 
     if ((d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle)) {
         d->currentSlide->setTitle(atom->text());
@@ -7395,7 +7351,7 @@ void PPTReader::handleTextCharsAtom(TextCharsAtom* atom)
 
 
 #ifdef LIBPPT_DEBUG
-    std::cout << "  Text Object " << atom->ustring().ascii();
+    std::cout << "  Text Object " << atom->text().toLatin1().data();
     std::cout << " placed at " << placeId << std::endl;
 #endif
 
@@ -7424,13 +7380,29 @@ void PPTReader::handleTextBytesAtom(TextBytesAtom* atom)
 
 
 #ifdef LIBPPT_DEBUG
-    std::cout << "  Text Object " << atom->ustring().ascii();
+    std::cout << "  Text Object " << atom->text().toLatin1().data();
     std::cout << " placed at " << placeId << std::endl;
 #endif
 }
 
 
+void PPTReader::handleTextPFExceptionAtom(TextPFExceptionAtom* atom)
+{
+    if (!atom || !d->presentation) {
+        return;
+    }
 
+    d->presentation->setTextPFDefaultsAtom(atom->textPFException());
+}
+
+void PPTReader::handleTextCFExceptionAtom(TextCFExceptionAtom* atom)
+{
+    if (!atom || !d->presentation) {
+        return;
+    }
+
+    d->presentation->setTextCFDefaultsAtom(atom->textCFException());
+}
 
 void PPTReader::handleStyleTextPropAtom(StyleTextPropAtom* atom)
 {
@@ -7985,16 +7957,12 @@ void PPTReader::handleEscherPropertiesAtom(msofbtOPTAtom* atom)
 
 }  // handleEscherPropertiesAtom
 
-QString PPTReader::toQString(const Libppt::UString& str)
-{
-    return QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
-}
 
 void PPTReader::handleFontEntityAtom(FontEntityAtom* r)
 {
     if (!r) return;
 
-    TextFont font(toQString(r->ustring()), r->charset(), r->clipPrecision(), r->quality(), r->pitchAndFamily());
+    TextFont font(r->typeface(), r->charset(), r->clipPrecision(), r->quality(), r->pitchAndFamily());
     d->presentation->addTextFont(font);
 }
 

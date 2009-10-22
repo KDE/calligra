@@ -1326,7 +1326,9 @@ void PowerPointImport::writeTextCFException(KoXmlWriter* xmlWriter,
         xmlWriter->addAttribute("text:style-name", textObject->textStyleName(cf, pf));
     }
 
-    xmlWriter->addTextSpan(text);
+    QString copy = text;
+    copy.remove(QChar(11)); //Remove vertical tabs which appear in some ppt files
+    xmlWriter->addTextSpan(copy);
 
     if (bullet) {
         xmlWriter->endElement(); // text:span
@@ -1698,7 +1700,7 @@ TextPFException *PowerPointImport::masterTextPFException(unsigned int atom, unsi
         return 0;
     }
 
-    TxMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
+    TextMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
     if (!style) {
         return 0;
     }
@@ -1718,7 +1720,7 @@ TextCFException *PowerPointImport::masterTextCFException(unsigned int atom, unsi
         return 0;
     }
 
-    TxMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
+    TextMasterStyleAtom *style = mainMaster->textMasterStyleAtom(atom);
     if (!style) {
         return 0;
     }
@@ -1848,16 +1850,19 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         }
     }
 
+    TextFont *font = 0;
+    if (cf->textCFException()->hasFont()) {
+        font = d->presentation->getFont(cf->textCFException()->fontRef());
+    } else {
+        if (masterCF->hasFont()) {
+            font = d->presentation->getFont(masterCF->fontRef());
+        }
+    }
 
-//  if (cf->textCFException()->hasFont()) {
-//      TextFont font = d->presentation->getFont(cf->textCFException()->fontRef());
-//      styleText.addProperty( "fo:font-family", font.name() );
-//    } else {
-//      if (masterCF->hasFont()) {
-//        TextFont font = d->presentation->getFont(masterCF->fontRef());
-//        styleText.addProperty( "fo:font-family", font.name() );
-//      }
-//    }
+    if (font) {
+        styleText.addProperty("fo:font-family", font->name());
+        font = 0;
+    }
 
 
     if (cf->textCFException()->hasFontSize()) {
@@ -1896,13 +1901,10 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
 
 
         if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletChar()) {
-            elementWriter.addAttribute("text:bullet-char", QChar(pf->textPFException()->bulletChar()));
+            elementWriter.addAttribute("text:bullet-char", pf->textPFException()->bulletChar());
         } else {
             if (levelPF->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char", QChar(levelPF->bulletChar()));
-            } else {
-                //Should we omit default bullet character?
-                elementWriter.addAttribute("text:bullet-char", "●");
+                elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
             }
         }
 
@@ -1921,7 +1923,6 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         elementWriter.endElement(); // style:list-level-properties
 
         elementWriter.startElement("style:text-properties");
-        TextFont *font = 0;
         if (i == pf->textPFException()->indent()
                 && pf->textPFException()->hasBulletFont()) {
             font = d->presentation->getFont(pf->textPFException()->bulletFontRef());
@@ -1930,8 +1931,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
         }
 
         if (font) {
-// disabled until the font->name() is checked to contain only utf8 strings
-//      elementWriter.addAttribute( "fo:font-family", font->name() );
+            elementWriter.addAttribute("fo:font-family", font->name());
         }
 
         if (i == pf->textPFException()->indent() && pf->textPFException()->hasBulletColor()) {
@@ -1949,7 +1949,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
                                        QString("%1%").arg(pf->textPFException()->bulletSize()));
 
         } else {
-            if (levelPF->hasSpaceAfter()) {
+            if (levelPF->hasBulletSize()) {
                 elementWriter.addAttribute("fo:font-size",
                                            QString("%1%").arg(levelPF->bulletSize()));
             } else {
