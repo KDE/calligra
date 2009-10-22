@@ -245,7 +245,7 @@ QByteArray PowerPointImport::createStyles()
     stylesWriter->addAttribute("text:bullet-char", "●");
     stylesWriter->startElement("style:text-properties");
     stylesWriter->addAttribute("fo:font-family", "StarSymbol");
-    stylesWriter->addAttribute("font-pitch", "variable");
+    stylesWriter->addAttribute("style:font-pitch", "variable");
     stylesWriter->addAttribute("fo:color", "#000000");
     stylesWriter->addAttribute("fo:font-size", "45%");
     stylesWriter->endElement(); // style:text-properties
