@@ -1607,7 +1607,7 @@ QString PowerPointImport::paraSpacingToCm(int value) const
         return pptMasterUnitToCm(temp);
     }
 
-    return QString("%1%").arg(value);
+    return pptMasterUnitToCm(value);
 }
 
 QString PowerPointImport::pptMasterUnitToCm(unsigned int value) const
@@ -1908,14 +1908,13 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
 
         elementWriter.startElement("style:list-level-properties");
 
-
-        if (i == pf->textPFException()->indent() && pf->textPFException()->hasSpaceAfter()) {
-            elementWriter.addAttribute("text:space-after",
-                                       pptMasterUnitToCm(pf->textPFException()->spaceAfter()));
+        if (i == pf->textPFException()->indent() && pf->textPFException()->hasSpaceBefore()) {
+            elementWriter.addAttribute("text:space-before",
+                                       paraSpacingToCm(pf->textPFException()->spaceBefore()));
         } else {
-            if (levelPF->hasSpaceAfter()) {
-                elementWriter.addAttribute("text:space-after",
-                                           pptMasterUnitToCm(levelPF->spaceAfter()));
+            if (levelPF->hasSpaceBefore()) {
+                elementWriter.addAttribute("text:space-before",
+                                           paraSpacingToCm(levelPF->spaceBefore()));
             }
         }
 
@@ -1955,16 +1954,6 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
                                            QString("%1%").arg(levelPF->bulletSize()));
             } else {
                 elementWriter.addAttribute("fo:font-size", "100%");
-            }
-        }
-
-        if (i == pf->textPFException()->indent() && pf->textPFException()->hasSpaceBefore()) {
-            elementWriter.addAttribute("text:space-before",
-                                       paraSpacingToCm(pf->textPFException()->spaceBefore()));
-        } else {
-            if (levelPF->hasSpaceBefore()) {
-                elementWriter.addAttribute("text:space-before",
-                                           paraSpacingToCm(levelPF->spaceBefore()));
             }
         }
 
