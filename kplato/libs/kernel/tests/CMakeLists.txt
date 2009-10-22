@@ -51,6 +51,16 @@ target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
 
 ########### next target ###############
 
+set(ScheduleTester_SRCS ScheduleTester.cpp )
+ 
+ 
+kde4_add_unit_test(ScheduleTester TESTNAME KPlato-ScheduleTester  ${ScheduleTester_SRCS})
+ 
+target_link_libraries(ScheduleTester  ${KDE4_KDECORE_LIBS} kplatokernel ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+ 
+
+########### next target ###############
+
 set(ProjectTester_SRCS ProjectTester.cpp )
  
  
