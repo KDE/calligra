@@ -1874,7 +1874,7 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     }
 
 
-    KoGenStyle styleList(KoGenStyle::StyleListAuto, "text");
+    KoGenStyle styleList(KoGenStyle::StyleListAuto, 0);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
