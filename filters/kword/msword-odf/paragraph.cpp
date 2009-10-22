@@ -116,8 +116,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
         {
-            if ( !fontName.isEmpty() )
-            {
+            if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
         }
@@ -125,6 +124,9 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         textStyle = new KoGenStyle(KoGenStyle::StyleTextAuto, "text");
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
+        }
+        if (!fontName.isEmpty()) {
+            textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
         }
         applyCharacterProperties( chp, textStyle, m_paragraphStyle );
     }
@@ -507,7 +509,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         refChp = 0;
     }
 
-    //ico = color of text
+    //ico = color of text, but this has been replaced by cv
     if ( !refChp || refChp->cv != chp->cv )
     {
         style->addProperty(QString("fo:color"), '#' + QString::number(chp->cv|0xff000000, 16).right(6).toUpper());
