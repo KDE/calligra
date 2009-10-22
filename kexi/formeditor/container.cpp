@@ -142,8 +142,8 @@ public:
             qMin(insertBegin.x(), end.x()),
             qMin(insertBegin.y(), end.y()) ) );
         insertRect.setBottomRight( QPoint(
-            qMax(insertBegin.x(), end.x()),
-            qMax(insertBegin.y(), end.y()) ) );
+            qMax(insertBegin.x(), end.x()) - 1,
+            qMax(insertBegin.y(), end.y()) - 1) ); // minus 1 to make the size correct
         QRegion region(oldInsertRect);
         region.unite(insertRect);
         QRect toUpdate( oldInsertRect.united(insertRect) );
@@ -550,10 +550,14 @@ Container::eventFilter(QObject *s, QEvent *e)
             QVector<qreal> dashes;
             dashes << 2 << 2;
             selPen2.setDashPattern(dashes);
+            QRect selectionOrInsertingRectangle(d->selectionOrInsertingRectangle());
+            selectionOrInsertingRectangle.setSize(
+                selectionOrInsertingRectangle.size() - QSize(1,1)); // -(1,1) because the rect is painted
+                                                                    // up to the next pixel in Qt
             p.setPen(selPen1);
-            p.drawRect(d->selectionOrInsertingRectangle());
+            p.drawRect(selectionOrInsertingRectangle);
             p.setPen(selPen2);
-            p.drawRect(d->selectionOrInsertingRectangle());
+            p.drawRect(selectionOrInsertingRectangle);
         }
         return false;
     }
