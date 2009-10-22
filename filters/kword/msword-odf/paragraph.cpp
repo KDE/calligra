@@ -512,7 +512,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //ico = color of text, but this has been replaced by cv
     if ( !refChp || refChp->cv != chp->cv )
     {
-        style->addProperty(QString("fo:color"), '#' + QString::number(chp->cv|0xff000000, 16).right(6).toUpper());
+        style->addProperty(QString("fo:color"), '#' + QString::number(chp->cv|0xff000000, 16).right(6).toUpper(), KoGenStyle::TextType);
     }
 
     //hps = font size in half points
@@ -623,7 +623,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
 
     if (!refChp || refChp->shd.cvBack != chp->shd.cvBack) {
         if (chp->shd.cvBack != 0xff000000)
-            style->addProperty(QString("fo:background-color"), '#' + QString::number(chp->shd.cvBack|0xff000000, 16).right(6).toUpper());
+            style->addProperty(QString("fo:background-color"), '#' + QString::number(chp->shd.cvBack|0xff000000, 16).right(6).toUpper(), KoGenStyle::TextType);
         else
             style->addProperty( "fo:background-color", "transparent", KoGenStyle::TextType);
     }
