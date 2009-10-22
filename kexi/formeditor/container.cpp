@@ -509,9 +509,9 @@ Container::eventFilter(QObject *s, QEvent *e)
         startRow = qMax(startRow, 1);
         int endRow = (r.bottom()+1) / gridY;
         endRow = qMin(endRow, rows);
-        int startCol = r.left() / gridX;
+        int startCol = (r.left()-1) / gridX;
         startCol = qMax(startCol, 1);
-        int endCol = r.right() / gridX;
+        int endCol = (r.right()+1) / gridX;
         endCol = qMin(endCol, cols);
         QVector<QPoint> gridpoints;
         for (int rowcursor = startRow; rowcursor <= endRow; ++rowcursor) {
