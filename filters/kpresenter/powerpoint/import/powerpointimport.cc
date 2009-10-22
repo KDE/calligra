@@ -1525,9 +1525,11 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
             writeTextObjectDeIndent(xmlWriter, indent);
         }
     } else {
+        xmlWriter->startElement("text:p");
         xmlWriter->startElement("text:span");
         xmlWriter->addTextSpan(textObject->text());
         xmlWriter->endElement(); // text:span
+        xmlWriter->endElement(); // text:p
     }
 
     xmlWriter->endElement(); // draw:text-box
