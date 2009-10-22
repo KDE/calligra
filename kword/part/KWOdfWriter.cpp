@@ -371,17 +371,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         }
     }
 
-    bodyWriter->startElement("text:page-sequence");
-    foreach (KWPage page, m_document->pageManager()->pages()) {
-        Q_ASSERT(m_masterPages.contains(page.pageStyle()));
-        bodyWriter->startElement("text:page");
-        bodyWriter->addAttribute("text:master-page-name", m_masterPages.value(page.pageStyle()));
-        bodyWriter->endElement(); // text:page
-    }
-    bodyWriter->endElement(); // text:page-sequence
-
-
-
+    //we save the changes before starting the page sequence element because odf validator insist on having <tracked-changes> right after the <office:text> tag
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     changes.saveOdfChanges(changeWriter);
@@ -391,6 +381,15 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     tmpChangeFile.close();
     bodyWriter->addCompleteElement(&tmpChangeFile);
+
+    bodyWriter->startElement("text:page-sequence");
+    foreach (KWPage page, m_document->pageManager()->pages()) {
+        Q_ASSERT(m_masterPages.contains(page.pageStyle()));
+        bodyWriter->startElement("text:page");
+        bodyWriter->addAttribute("text:master-page-name", m_masterPages.value(page.pageStyle()));
+        bodyWriter->endElement(); // text:page
+    }
+    bodyWriter->endElement(); // text:page-sequence
 
     delete tmpBodyWriter;
     tmpBodyWriter = 0;
