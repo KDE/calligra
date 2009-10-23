@@ -252,12 +252,12 @@ void FunctionRepository::remove(const QString& groupName)
     }
     d->groups.removeAll(groupName);
     QStringList functionNames;
-    foreach (FunctionDescription* description, d->descriptions) {
+    foreach (const FunctionDescription* description, d->descriptions) {
         if (description->group() == groupName) {
             functionNames.append(description->name());
         }
     }
-    foreach (QString functionName, functionNames) {
+    foreach (const QString &functionName, functionNames) {
         d->functions.remove(functionName);
         d->descriptions.remove(functionName);
     }

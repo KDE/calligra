@@ -1352,7 +1352,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
         QStringList prefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
-        foreach (QString prefix, prefixes) {
+        foreach (const QString &prefix, prefixes) {
             if (oasisFormula.startsWith( prefix )) {
                 oasisFormula = oasisFormula.mid( prefix.length() );
                 break;
