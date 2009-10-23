@@ -54,6 +54,13 @@ CSV Import Dialog
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 13 ~~~~~~~~~~~~~~~~
 
+2009-10-22..23
+Forms
+* fix painting selection rectangle: before it sometimes cleared the grid vertically
+* fix painting insertion rectangle
+* fix setting/unsetting cursor
+* improve align-to-grid (now it is aligning to the closest grid); this especially fixes setting default widget sizes
+
 2009-10-18..20
 Forms
 * added FormWidgetInterface: adds common designMode attribute to widgets what enables display customization depending on the mode (e.g. displaying frames)
