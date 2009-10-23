@@ -246,7 +246,7 @@ void DependencyManager::updateFormula( const Cell& cell, const Region::Element* 
     if (!tokens.valid())
         return;
 
-    QString expression = "=";
+    QString expression( '=' );
     Sheet* sheet = cell.sheet();
     for( int i = 0; i < tokens.count(); ++i )
     {

@@ -787,7 +787,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
                  // for compatibility with oocalc (and the openformula spec), don't parse single-quoted
                  // text as an identifier, instead add an Unknown token and remember we had an error
                  parseError = true;
-                 tokens.append( Token( Token::Unknown, "'" + tokenText + "'", tokenStart ) );
+                 tokens.append( Token( Token::Unknown, '\'' + tokenText + '\'', tokenStart ) );
              }
              tokenStart = i;
              tokenText.clear();

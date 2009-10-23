@@ -1068,7 +1068,7 @@ void Cell::saveOdfAnnotation( KoXmlWriter &xmlwriter )
     {
         //<office:annotation draw:style-name="gr1" draw:text-style-name="P1" svg:width="2.899cm" svg:height="2.691cm" svg:x="2.858cm" svg:y="0.001cm" draw:caption-point-x="-2.858cm" draw:caption-point-y="-0.001cm">
         xmlwriter.startElement( "office:annotation" );
-        const QStringList text = comment.split( "\n", QString::SkipEmptyParts );
+        const QStringList text = comment.split( '\n', QString::SkipEmptyParts );
         for ( QStringList::ConstIterator it = text.begin(); it != text.end(); ++it ) {
             xmlwriter.startElement( "text:p" );
             xmlwriter.addTextNode( *it );
