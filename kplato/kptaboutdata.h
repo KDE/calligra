@@ -30,7 +30,7 @@ namespace KPlato
 {
 
 static const char* KPLATO_DESCRIPTION=I18N_NOOP("KPlato - KDE Planning Tool");
-static const char* KPLATO_VERSION="0.7.83";
+static const char* KPLATO_VERSION="0.7.91";
 
 KAboutData * newAboutData()
 {
