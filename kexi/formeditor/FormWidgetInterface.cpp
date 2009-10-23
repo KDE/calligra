@@ -49,7 +49,10 @@ bool FormWidgetInterface::designMode() const
 void FormWidgetInterface::setDesignMode(bool design)
 {
     d->design = design;
-    dynamic_cast<QWidget*>(this)->setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
+    if (design)
+        dynamic_cast<QWidget*>(this)->setCursor(QCursor(Qt::ArrowCursor));
+    else
+        dynamic_cast<QWidget*>(this)->unsetCursor();
 }
 
 bool FormWidgetInterface::editingMode() const

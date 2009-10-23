@@ -1517,28 +1517,13 @@ void Form::enterWidgetInsertingState(const QByteArray &classname)
     }
     d->state = WidgetInserting;
 
-/* prev 
-    foreach (Form *form, m_forms) {
-        if (toplevelContainer()) {
-            widget()->setCursor(QCursor(Qt::CrossCursor));
-        }
-        const QList<QWidget*> list(widget()->findChildren<QWidget*>());
-        foreach (QWidget *w, list) {
-            if (w->testAttribute(Qt::WA_SetCursor)) {
-                d->cursors.insert(w, w->cursor());
-                w->setCursor(QCursor(Qt::CrossCursor));
-            }
-        }
-    }*/
     if (toplevelContainer()) {
         widget()->setCursor(QCursor(Qt::CrossCursor));
     }
     const QList<QWidget*> list(widget()->findChildren<QWidget*>());
     foreach (QWidget *w, list) {
-        if (w->testAttribute(Qt::WA_SetCursor)) {
-            d->cursors.insert(w, w->cursor());
-            w->setCursor(QCursor(Qt::CrossCursor));
-        }
+        d->cursors.insert(w, w->cursor());
+        w->setCursor(QCursor(Qt::CrossCursor));
     }
 
     d->selectedClass = classname;
@@ -1561,20 +1546,10 @@ void Form::abortWidgetInserting()
         return;
 
     widget()->unsetCursor();
-#ifdef __GNUC__
-#warning "Port this.."
-#else
-#pragma WARNING( Port this.. )
-#endif
-#if 0
-    foreach (Form *form, m_forms) {
-        widget()->unsetCursor();
-        const QList<QWidget*> list(widget()->findChildren<QWidget*>());
-        foreach (QWidget *w, list) {
-            w->unsetCursor();
-        }
+    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    foreach (QWidget *w, list) {
+        w->unsetCursor();
     }
-#endif
     d->state = WidgetSelecting;
     QAction *pointer_action = d->widgetActionGroup->action(QLatin1String("edit_pointer"));
 //    Q_ASSERT(pointer_action);
@@ -1608,28 +1583,19 @@ void Form::enterConnectingState()
         return;
     enterWidgetSelectingState();
 
-#ifdef __GNUC__
-#warning "Port this.."
-#else
-#pragma WARNING( Port this.. )
-#endif
     // We set a Pointing hand cursor while drawing the connection
-    foreach (Form *form, m_forms) {
-        d->mouseTrackers = new QStringList();
-        if (toplevelContainer()) {
-            widget()->setCursor(QCursor(Qt::PointingHandCursor));
-            widget()->setMouseTracking(true);
-        }
-        const QList<QWidget*> list(widget()->findChildren<QWidget*>());
-        foreach(QWidget *w, list) {
-            if (w->testAttribute(Qt::WA_SetCursor)) {
-                d->cursors.insert(w, w->cursor());
-                w->setCursor(QCursor(Qt::PointingHandCursor));
-            }
-            if (w->hasMouseTracking())
-                d->mouseTrackers->append(w->objectName());
-            w->setMouseTracking(true);
-        }
+    d->mouseTrackers = new QStringList();
+    if (toplevelContainer()) {
+        widget()->setCursor(QCursor(Qt::PointingHandCursor));
+        widget()->setMouseTracking(true);
+    }
+    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    foreach(QWidget *w, list) {
+        d->cursors.insert(w, w->cursor());
+        w->setCursor(QCursor(Qt::PointingHandCursor));
+        if (w->hasMouseTracking())
+            d->mouseTrackers->append(w->objectName());
+        w->setMouseTracking(true);
     }
     delete m_connection;
     m_connection = new Connection();
@@ -1669,26 +1635,17 @@ void Form::abortCreatingConnection()
         formWidget()->clearForm();
     }
 
-#ifdef __GNUC__
-#warning "Port this.."
-#else
-#pragma WARNING( Port this.. )
-#endif
-    foreach (Form *form, m_forms) {
-        widget()->unsetCursor();
-        widget()->setMouseTracking(false);
-        const QList<QWidget*> list(widget()->findChildren<QWidget*>());
-        foreach (QWidget *w, list) {
-            if (w->testAttribute(Qt::WA_SetCursor)) {
-                QHash<QObject*, QCursor>::ConstIterator curIt(d->cursors.find(w));
-                if (curIt != d->cursors.constEnd())
-                    w->setCursor(*curIt);
-            }
-            w->setMouseTracking(d->mouseTrackers->contains(w->objectName()));
-        }
-        delete d->mouseTrackers;
-        d->mouseTrackers = 0;
+    widget()->unsetCursor();
+    widget()->setMouseTracking(false);
+    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    foreach (QWidget *w, list) {
+        QHash<QObject*, QCursor>::ConstIterator curIt(d->cursors.find(w));
+        if (curIt != d->cursors.constEnd())
+            w->setCursor(*curIt);
+        w->setMouseTracking(d->mouseTrackers->contains(w->objectName()));
     }
+    delete d->mouseTrackers;
+    d->mouseTrackers = 0;
 
     if (m_connection->slot().isNull())
         emit connectionAborted(this);

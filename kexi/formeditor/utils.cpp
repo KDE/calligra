@@ -63,11 +63,11 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
     if (!object || !container || !object->isWidgetType())
         return;
 
-    kDebug() << "Installing event filter on widget:" << object 
-        << "directed to" << container->objectName();
+//    kDebug() << "Installing event filter on widget:" << object 
+//        << "directed to" << container->objectName();
     object->installEventFilter(container);
-    if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
-        ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
+//2.0    if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
+    ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
     const QObjectList list(object->children());
     foreach(QObject *obj, list) {
@@ -97,8 +97,8 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
        ) //fix weird behaviour
         return; // if the user has set a cursor for this widget or this is a container, don't change it
 
-    if (w->testAttribute(Qt::WA_SetCursor))
-        w->setCursor(Qt::ArrowCursor);
+//2.0    if (w->testAttribute(Qt::WA_SetCursor))
+    w->setCursor(Qt::ArrowCursor);
 
     const QList<QWidget*> list(w->findChildren<QWidget*>());
     foreach(QWidget *widget, list) {
