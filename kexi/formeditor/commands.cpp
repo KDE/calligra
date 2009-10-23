@@ -992,8 +992,14 @@ void InsertWidgetCommand::execute()
     // fix widget size is align-to-grid is enabled
     if (d->form->isSnapWidgetsToGridEnabled()) {
         const int grid = d->form->gridSize();
-        d->insertRect.setWidth( alignValueToGrid(d->insertRect.width(), grid) );
-        d->insertRect.setHeight( alignValueToGrid(d->insertRect.height(), grid) );
+        int v = alignValueToGrid(d->insertRect.width(), grid);
+        if (v < d->insertRect.width()) // do not allow to make the widget smaller
+            v += grid;
+        d->insertRect.setWidth( v );
+        v = alignValueToGrid(d->insertRect.height(), grid);
+        if (v < d->insertRect.height()) // do not allow to make the widget smaller
+            v += grid;
+        d->insertRect.setHeight( v );
     }
 
     w->move(d->insertRect.x(), d->insertRect.y());

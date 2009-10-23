@@ -322,7 +322,9 @@ QAction *ActionGroup::action(const QString& name) const
 
 int KFormDesigner::alignValueToGrid(int value, int gridSize)
 {
-    return value / gridSize * gridSize;
+    if ((value % gridSize * 2) < gridSize)
+        return value / gridSize * gridSize;
+    return (value / gridSize + 1) * gridSize;
 }
 
 //-----------------------------
