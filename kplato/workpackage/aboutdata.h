@@ -28,7 +28,7 @@ namespace KPlatoWork
 {
 
 static const char* KPLATOWORK_DESCRIPTION=I18N_NOOP("KPlatoWork - Work Package handler for the KPlato Project Planning Tool");
-static const char* KPLATOWORK_VERSION="0.7.82";
+static const char* KPLATOWORK_VERSION="0.7.91";
 
 KAboutData * newAboutData()
 {
