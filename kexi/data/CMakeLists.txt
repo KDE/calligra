@@ -1,3 +1,0 @@
-
-install( FILES  kexihandler.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
-install( FILES  kexirc  DESTINATION ${CONFIG_INSTALL_DIR})
