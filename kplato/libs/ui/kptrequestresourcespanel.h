@@ -30,6 +30,7 @@ namespace KPlato
 {
 
 class Task;
+class Project;
 class ResourceGroup;
 class Resource;
 class ResourceGroupRequest;
@@ -41,7 +42,7 @@ class RequestResourcesPanel : public QWidget
 {
     Q_OBJECT
 public:
-    RequestResourcesPanel(QWidget *parent, Task &task, bool baseline=false);
+    RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool baseline=false);
 
     MacroCommand *buildCommand();
     

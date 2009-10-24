@@ -391,6 +391,7 @@ protected:
 private:
     Project *m_project;
     NodeItemModel *m_model;
+    bool m_readwrite;
     QList<DependencyNodeItem*> m_allItems;
     QMap<int, DependencyNodeItem*> m_visibleItems;
     QMap<int, DependencyNodeItem*> m_hiddenItems;

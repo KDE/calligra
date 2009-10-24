@@ -34,7 +34,7 @@
 namespace KPlato
 {
 
-TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
+TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidget *p)
     : KPageDialog(p)
 {
     setCaption( i18n("Task Settings") );
@@ -47,11 +47,11 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
     // Create all the tabs.
     page =  new KVBox();
     addPage(page, i18n("&General"));
-    m_generalTab = new TaskGeneralPanel(task, page);
+    m_generalTab = new TaskGeneralPanel(project, task, page);
 
     page =  new KVBox();
     addPage(page, i18n("&Resources"));
-    m_resourcesTab = new RequestResourcesPanel(page, task);
+    m_resourcesTab = new RequestResourcesPanel(page, project, task);
     
     page =  new KVBox();
     addPage(page, i18n("&Documents"));
@@ -127,8 +127,8 @@ void TaskDialog::slotButtonClicked(int button) {
 }
 
 //---------------------------
-TaskAddDialog::TaskAddDialog(Task &task, Accounts &accounts, QWidget *p)
-    : TaskDialog(task, accounts, p)
+TaskAddDialog::TaskAddDialog(Project &project, Task &task, Accounts &accounts, QWidget *p)
+    : TaskDialog(project, task, accounts, p)
 {
     // do not know wbs code yet
     m_generalTab->hideWbs();

@@ -36,6 +36,7 @@ class DocumentsPanel;
 class TaskCostPanel;
 class TaskDescriptionPanel;
 class Task;
+class Project;
 class StandardWorktime;
 class MacroCommand;
 class RequestResourcesPanel;
@@ -52,7 +53,7 @@ public:
      * @param accounts all defined accounts
      * @param parent parent widget
      */
-    TaskDialog(Task &task, Accounts &accounts, QWidget *parent=0);
+    TaskDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent=0);
 
     MacroCommand *buildCommand();
 
@@ -70,7 +71,7 @@ protected:
 class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog {
     Q_OBJECT
 public:
-    TaskAddDialog(Task &task, Accounts &accounts, QWidget *parent=0);
+    TaskAddDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent=0);
 };
 
 } //KPlato namespace

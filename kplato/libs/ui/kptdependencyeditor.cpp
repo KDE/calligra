@@ -461,7 +461,7 @@ void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*even
 
 void DependencyConnectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug()<<"DependencyConnectorItem::mousePressEvent:"<<node()->name();
+    //qDebug()<<"DependencyConnectorItem::mousePressEvent:"<<node()->name()<<isEditable();
     if ( ! isEditable() ) {
         event->ignore();
         return;
@@ -799,7 +799,7 @@ DependencyLinkItem *DependencyNodeItem::takeChildRelation( DependencyLinkItem *r
 
 void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //kDebug();
+    kDebug();
     QGraphicsItem::GraphicsItemFlags f = flags();
     if ( itemScene()->connectionMode() ) {
         itemScene()->clearConnection();
@@ -931,7 +931,8 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 //--------------------
 DependencyScene::DependencyScene( QWidget *parent )
     : QGraphicsScene( parent ),
-    m_model( 0 )
+    m_model( 0 ),
+    m_readwrite( false )
 {
     m_connectionitem = new DependencyCreatorItem();
     addItem( m_connectionitem );
@@ -1167,6 +1168,9 @@ DependencyNodeItem *DependencyScene::createItem( Node *node )
     if ( item->scene() != this ) {
         addItem( item );
     }
+    item->setEditable( m_readwrite );
+    item->startConnector()->setEditable( m_readwrite );
+    item->finishConnector()->setEditable( m_readwrite );
     //kDebug()<<item->text()<<item;
     int col = item->nodeLevel();
     if ( parent ) {
@@ -1274,6 +1278,7 @@ void DependencyScene::createLink( DependencyNodeItem *parent, Relation *rel )
         return;
     }
     DependencyLinkItem *dep = new DependencyLinkItem( parent, child, rel );
+    dep->setEditable( m_readwrite );
     addItem( dep );
     //kDebug();
     dep->createPath();
@@ -1555,6 +1560,7 @@ void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
 
 void DependencyScene::setReadWrite( bool on )
 {
+    m_readwrite = on;
     foreach ( QGraphicsItem *i, items() ) {
         if ( i->type() == DependencyConnectorItem::Type ) {
             static_cast<DependencyConnectorItem*>( i )->setEditable( on );
@@ -1871,6 +1877,7 @@ DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
 
 void DependencyEditor::updateReadWrite( bool on )
 {
+    qDebug()<<"DependencyEditor::updateReadWrite:"<<on;
     m_view->itemScene()->setReadWrite( on );
     ViewBase::updateReadWrite( on );
 }

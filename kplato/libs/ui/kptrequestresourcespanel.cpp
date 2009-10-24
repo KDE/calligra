@@ -34,7 +34,7 @@
 namespace KPlato
 {
 
-RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
+RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool)
     : QWidget(parent)
 {
     QVBoxLayout *l = new QVBoxLayout( this );
@@ -43,7 +43,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
     m_view->masterView()->header()->moveSection( ResourceAllocationModel::RequestType, m_view->masterView()->header()->count() - 1 );
     m_view->setReadWrite( true );
     l->addWidget( m_view );
-    m_view->setProject( static_cast<Project*>( task.projectNode() ) );
+    m_view->setProject( &project );
     m_view->setTask( &task );
     m_view->masterView()->header()->resizeSections( QHeaderView::ResizeToContents );
 

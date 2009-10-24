@@ -46,10 +46,10 @@
 namespace KPlato
 {
 
-TaskGeneralPanel::TaskGeneralPanel(Task &task, QWidget *p, const char *n)
+TaskGeneralPanel::TaskGeneralPanel(Project &project, Task &task, QWidget *p, const char *n)
     : TaskGeneralPanelImpl(p, n),
       m_task(task),
-      m_project( static_cast<Project&>( *(task.projectNode()) ) )
+      m_project( project )
 {
     useTime = true;
     setStartValues( task );
