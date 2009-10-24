@@ -87,7 +87,7 @@ bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext
 
 bool KoFormulaShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext &/*context*/ )
 {
-    KoXmlElement topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
+    const KoXmlElement &topLevelElement = KoXml::namedItemNS(element, "http://www.w3.org/1998/Math/MathML", "math");
     // This is only true when loading as embedded in the main doc
     if (topLevelElement.isNull()) {
         kWarning() << "no math element as first child";
@@ -95,7 +95,7 @@ bool KoFormulaShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeL
     }
     delete m_formulaData->formulaElement();
     FormulaElement* formulaElement = new FormulaElement();     // create a new root element
-    formulaElement->readMathML( element );     // and load the new formula
+    formulaElement->readMathML( topLevelElement );     // and load the new formula
     m_formulaData->setFormulaElement(formulaElement);
     m_formulaData->notifyDataChange(0,false);
     return true;
