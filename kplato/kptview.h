@@ -48,7 +48,7 @@ class View;
 class ViewBase;
 class ViewListItem;
 class ViewListWidget;
-class ViewInfo;
+struct ViewInfo;
 class AccountsView;
 class GanttView;
 class PertEditor;
