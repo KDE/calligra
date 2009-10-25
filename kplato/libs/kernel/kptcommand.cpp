@@ -3197,7 +3197,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> > rreqs;
     foreach ( Node *n, project.allNodes() ) {
         QList<ResourceRequest*> resReq;
-        if ( ! n->type() == Node::Type_Task || n->requests().isEmpty() ) {
+        if ( n->type() != (int)Node::Type_Task || n->requests().isEmpty() ) {
             continue;
         }
         while ( ResourceGroupRequest *gr = n->requests().requests().value( 0 ) ) {
