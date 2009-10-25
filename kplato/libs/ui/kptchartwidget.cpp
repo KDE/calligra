@@ -29,8 +29,9 @@ namespace KPlato
 {
 
 
-ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
+ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent)
 {
+    setObjectName(name);
     kDebug() << "------------> ChartWidget :: Constructor";
     is_bcwp_draw=false;
     is_bcws_draw=true;
