@@ -358,6 +358,7 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     m_masterStyle->addAttribute("style:display-name", masterStyleName.append(QString::number(m_textHandler->m_sectionNumber)));
     m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
     delete m_masterStyle; //delete the object since we've added it to the collection
+
     //set master style name in m_textHandler because that's where we'll write it
     m_textHandler->m_masterStyleName = m_masterStyleName;
     //get a pointer to the object in the collection
@@ -379,11 +380,15 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     bool landscape = (sep->dmOrientPage == 2);
     m_pageLayoutStyle->addProperty("style:print-orientation", landscape? "landscape" : "portrait");
     m_pageLayoutStyle->addProperty("style:num-format", "1");
+
+    // Set default left/right margins for the case when there is no
+    // border.  This will be changed below if there are borders defined.
     m_pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     m_pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
-    QString header("<style:header-style>");
+
     //set the minimum height of header/footer to the full margin minus margin above header
     //TODO the margin between header/footer and text is just hard-coded for now
+    QString header("<style:header-style>");
     header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
     header.append(QString::number((sep->dyaTop - sep->dyaHdrTop)/20.0));
     header.append("pt\"/>");
@@ -395,12 +400,62 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     footer.append("</style:footer-style>");
     m_pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
     m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
+
     m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
     pageLayoutStyleName = m_mainStyles->lookup(*m_pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontForceNumbering);
     m_masterStyle->addAttribute("style:page-layout-name", pageLayoutStyleName);
 
-    // TODO apply brcTop/brcLeft etc. to the main FRAME
+    // Page borders
+    // FIXME: check if we can use fo:border instead of fo:border-left, etc.
+    if (sep->brcLeft.brcType != 0 ) {
+        m_pageLayoutStyle->addProperty( "fo:border-left",
+                                        Conversion::setBorderAttributes( sep->brcLeft ) );
+        
+    }
+    if (sep->brcTop.brcType != 0 ) {
+        m_pageLayoutStyle->addProperty( "fo:border-top",
+                                        Conversion::setBorderAttributes( sep->brcTop ) );
+    }
+    if (sep->brcRight.brcType != 0 ) {
+        m_pageLayoutStyle->addProperty( "fo:border-right",
+                                        Conversion::setBorderAttributes( sep->brcRight ) );
+    }
+    if (sep->brcBottom.brcType != 0 ) {
+        m_pageLayoutStyle->addProperty( "fo:border-bottom",
+                                        Conversion::setBorderAttributes( sep->brcBottom ) );
+    }
+
+    // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
+    if (sep->pgbOffsetFrom == 0) {
+        // page border offset is from the text
+        m_pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
+        // FIXME: How should fo:margin be created in this case?
+    }
+    else {
+        // page border offset is from the edge of the page
+
+        // Add margin. This value is fetched directly from the BRC's.
+        m_pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:margin-right",  sep->brcRight.dptSpace);
+        m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", sep->brcBottom.dptSpace);
+
+        // The *20 and /20 below is the conversion between twips (1/20th of a point) and points.
+        m_pageLayoutStyle->addPropertyPt("fo:padding-left",
+                                         (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-top",
+                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-right",
+                                         (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
+        m_pageLayoutStyle->addPropertyPt("fo:padding-bottom",
+                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+    }
+
+
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
@@ -412,14 +467,14 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
         kDebug(30513) << "setting margin for header...";
         m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
     }
-    else {
-        kDebug(30513) << "setting margin for no header...";
+    else if (sep->brcTop.brcType == 0 ) {
+        kDebug(30513) << "setting margin for no header and no top border...";
         m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
     }
     if(m_hasFooter) {
         m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
     }
-    else {
+    else if (sep->brcBottom.brcType == 0 ) {
         m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
     }
     //insert the page-layout style into the collection,

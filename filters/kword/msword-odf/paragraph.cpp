@@ -421,6 +421,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     //
     // TODO: Check if we can use fo:border instead of all the
     //       fo:border-{top,bottom,left,right}
+    // TODO: Check if borderStyle is "double" and add attributes for that.
     if ( !refPap || refPap->brcTop.brcType != pap.brcTop.brcType )
     {
         style->addProperty( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ), KoGenStyle::ParagraphType );
