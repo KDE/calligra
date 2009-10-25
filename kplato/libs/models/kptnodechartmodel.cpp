@@ -360,7 +360,7 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
                 if ( type & 4 ) return createDataIndex( number, idx, ACWP );
         }
     }
-    if ( m_dataShown.showEffort && idx.number() == m_dataShown.showCost ? 1 : 0 ) {
+    if ( m_dataShown.showEffort && idx.number() == (m_dataShown.showCost ? 1 : 0) ) {
         switch ( number ) {
             case 0:
                 if ( type & 8 ) return createDataIndex( number, idx, BCWS );
