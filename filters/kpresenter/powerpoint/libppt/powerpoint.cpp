@@ -7332,12 +7332,12 @@ void PPTReader::handleTextCharsAtom(TextCharsAtom* atom)
     if (!d->presentation) return;
     if (!d->currentSlide)  return;
     if (!d->currentTextId) return;
-    if (!d->currentObject) return;
 
     int placeId = d->currentTextId - 1;
     TextObject* text = d->currentSlide->textObject(placeId);
-    if (!text && d->currentObject->isText()) {
+    if (!text && d->currentObject && d->currentObject->isText()) {
         text = static_cast<TextObject*>(d->currentObject);
+        text->setType(TextObject::Other);
     }
     if (!text) {
         std::cerr << "No place for text object! " << placeId << std::endl;
@@ -7366,12 +7366,12 @@ void PPTReader::handleTextBytesAtom(TextBytesAtom* atom)
     if (!d->presentation) return;
     if (!d->currentSlide)  return;
     if (!d->currentTextId) return;
-    if (!d->currentObject) return;
 
     int placeId = d->currentTextId - 1;
     TextObject* text = d->currentSlide->textObject(placeId);
-    if (!text && d->currentObject->isText()) {
+    if (!text && d->currentObject && d->currentObject->isText()) {
         text = static_cast<TextObject*>(d->currentObject);
+        text->setType(TextObject::Other);
     }
     if (!text) {
         std::cerr << "No place for text object! " << placeId << std::endl;
