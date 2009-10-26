@@ -1307,9 +1307,9 @@ bool Form::addCommand(Command *command, AddCommandOption option)
     }
     const int count = d->undoStack.count();
     d->undoStack.push(command);
-    if ((count + 1) == d->undoStack.count()) {
+/*    if ((count + 1) == d->undoStack.count()) {
         return false;
-    }
+    }*/
     kDebug() << "ADDED:" << command;
 /*    if (option == DontExecuteCommand) { // simulate command to activate 'undo' menu
         slotCommandExecuted(command);
