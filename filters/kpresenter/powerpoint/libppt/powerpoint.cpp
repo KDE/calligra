@@ -7322,7 +7322,6 @@ void PPTReader::handleTextHeaderAtom(TextHeaderAtom* atom)
     if (!atom) return;
     if (!d->presentation) return;
     if (!d->currentSlide)  return;
-
     d->currentTextId++;
     d->currentTextType = atom->textType();
 }
@@ -7333,9 +7332,13 @@ void PPTReader::handleTextCharsAtom(TextCharsAtom* atom)
     if (!d->presentation) return;
     if (!d->currentSlide)  return;
     if (!d->currentTextId) return;
+    if (!d->currentObject) return;
 
     int placeId = d->currentTextId - 1;
     TextObject* text = d->currentSlide->textObject(placeId);
+    if (!text && d->currentObject->isText()) {
+        text = static_cast<TextObject*>(d->currentObject);
+    }
     if (!text) {
         std::cerr << "No place for text object! " << placeId << std::endl;
         return;
@@ -7363,9 +7366,13 @@ void PPTReader::handleTextBytesAtom(TextBytesAtom* atom)
     if (!d->presentation) return;
     if (!d->currentSlide)  return;
     if (!d->currentTextId) return;
+    if (!d->currentObject) return;
 
     int placeId = d->currentTextId - 1;
     TextObject* text = d->currentSlide->textObject(placeId);
+    if (!text && d->currentObject->isText()) {
+        text = static_cast<TextObject*>(d->currentObject);
+    }
     if (!text) {
         std::cerr << "No place for text object! " << placeId << std::endl;
         return;
@@ -7694,7 +7701,7 @@ void PPTReader::handleEscherChildAnchorAtom(msofbtChildAnchorAtom* atom)
     d->currentObject->setHeight(yscale * (atom->bottom() - atom->top()));
 }
 
-void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned /*size*/)
+void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned size)
 {
     if (!container) return;
     if (!d->presentation) return;
@@ -7708,10 +7715,14 @@ void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned /*s
         textObject->convertFrom(d->currentObject);
         delete d->currentObject;
         d->currentObject = textObject;
-    } else
+    } else {
         textObject = static_cast<TextObject*>(d->currentObject);
+    }
 
     textObject->setType(TextObject::Other);
+    unsigned long nextpos = d->docStream->tell() + size - 6;
+    while (d->docStream->tell() < nextpos)
+      loadRecord(container);
 }
 
 Color convertFromLong(unsigned long i)
