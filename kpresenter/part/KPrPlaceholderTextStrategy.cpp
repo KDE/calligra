@@ -37,6 +37,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoXmlReader.h>
@@ -143,6 +144,8 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         m_textShape = factory->createDefaultShapeAndInit( context.dataCenterMap() );
 
         KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
+        KoTextDocument( shapeData->document() ).textEditor()->beginEditBlock();
+
         QTextDocument * document = shapeData->document();
         QTextCursor cursor( document );
         QTextBlock block = cursor.block();
@@ -150,6 +153,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         cursor.insertText( text() );
         shapeData->foul();
         m_paragraphStyle = paragraphStyle.clone();
+        KoTextDocument( shapeData->document() ).textEditor()->endEditBlock();
     }
 
     styleStack.restore();
