@@ -7420,6 +7420,9 @@ void PPTReader::handleStyleTextPropAtom(StyleTextPropAtom* atom)
 
     int placeId = d->currentTextId - 1;
     TextObject* text = d->currentSlide->textObject(placeId);
+    if (text == 0 && d->currentObject && d->currentObject->isText()) {
+        text = static_cast<TextObject*>(d->currentObject);
+    }
     if (text == 0) return;
 
     text->setStyleTextProperty(atom);
