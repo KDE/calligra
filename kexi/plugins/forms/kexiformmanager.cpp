@@ -451,6 +451,8 @@ void KexiFormManager::showFormUICode()
     KexiFormView* formView = activeFormViewWidget();
     if (!formView)
         return;
+    formView->form()->resetInlineEditor();
+
     QString uiCode;
     const int indent = 2;
     if (!KFormDesigner::FormIO::saveFormToString(formView->form(), uiCode, indent)) {
