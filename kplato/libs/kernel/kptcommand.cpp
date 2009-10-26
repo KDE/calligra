@@ -3277,7 +3277,8 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         qDebug()<<"InsertProjectCmd groupRequest:"<<n->requests().requests().count();
     }
     // Add nodes ( ids are unique, no need to check )
-    for ( int i = project.numChildren() - 1; i >= 0; --i ) {
+    Node *node_after = after;
+    for ( int i = 0; i < project.numChildren(); ++i ) {
         Node *n = project.childNode( i );
         Q_ASSERT( n );
         //qDebug()<<"InsertProjectCmd: node sch"<<n->schedules();
@@ -3287,16 +3288,21 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         }
         n->setParentNode( 0 );
         //qDebug()<<"InsertProjectCmd: add"<<project.name()<<"->"<<n->name();
-        if ( after ) {
-            addCommand( new TaskAddCmd( m_project, n, after, "Task" ) );
+        if ( node_after ) {
+            addCommand( new TaskAddCmd( m_project, n, node_after, "Task" ) );
+            node_after = n;
         } else {
             qDebug()<<"InsertProjectCmd: add subtask"<<parent->name()<<"->"<<n->name();
             addCommand( new SubtaskAddCmd( m_project, n, parent, "Subtask" ) );
         }
         addChildNodes( n );
     }
-    // Dependencies: not needed, only internal ones
-
+    // Dependencies:
+    foreach ( Node *n, project.allNodes() ) {
+        foreach ( Relation *r, n->dependChildNodes() ) {
+            addCommand( new AddRelationCmd( *m_project, new Relation( r ) ) );
+        }
+    }
     // Remove nodes from project so they are not deleted
     while ( Node *ch = project.childNode( 0 ) ) {
         //qDebug()<<"InsertProjectCmd: remove"<<project.name()<<"->"<<ch->name();
