@@ -341,7 +341,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
     
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
     
     connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
@@ -661,7 +661,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
-    static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
+    //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
 }
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
