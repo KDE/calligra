@@ -59,8 +59,8 @@ MacroCommand *TaskDescriptionPanel::buildCommand()
     MacroCommand *cmd = new MacroCommand(s);
     bool modified = false;
 
-    if ( m_node.description() != descriptionfield->text() ) {
-        cmd->addCommand(new NodeModifyDescriptionCmd(m_node, descriptionfield->text()));
+    if ( m_node.description() != descriptionfield->toPlainText() ) {
+        cmd->addCommand(new NodeModifyDescriptionCmd(m_node, descriptionfield->toPlainText()));
         modified = true;
     }
     if (!modified) {

@@ -99,7 +99,7 @@ void ResourceDialogImpl::slotChooseResource()
     if (!a.isEmpty()) {
         nameEdit->setText(a.assembledName());
         emailEdit->setText(a.preferredEmail());
-        QStringList l = QStringList::split(' ', a.assembledName());
+        QStringList l = a.assembledName().split(' ');
         QString in;
         QStringList::Iterator it = l.begin();
         for (/*int i = 0*/; it != l.end(); ++it) {

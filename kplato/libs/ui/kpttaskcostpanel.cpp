@@ -76,7 +76,7 @@ void TaskCostPanel::setStartValues(Task &task) {
 void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     box->setCurrentIndex(0);
     for (int i = 0; i < box->count(); ++i) {
-        if (name == box->text(i)) {
+        if (name == box->itemText(i)) {
             box->setCurrentIndex(i);
             break;
         }
@@ -87,17 +87,17 @@ MacroCommand *TaskCostPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     
-    if ((m_oldrunning == 0 && runningAccount->currentItem() != 0) ||
+    if ((m_oldrunning == 0 && runningAccount->currentIndex() != 0) ||
         (m_oldrunning && m_oldrunning->name() != runningAccount->currentText())) {
         cmd->addCommand(new NodeModifyRunningAccountCmd(m_task, m_oldrunning, m_accounts.findAccount(runningAccount->currentText())));
         modified = true;
     }
-    if ((m_oldstartup == 0 && startupAccount->currentItem() != 0) ||
+    if ((m_oldstartup == 0 && startupAccount->currentIndex() != 0) ||
         (m_oldstartup && m_oldstartup->name() != startupAccount->currentText())) {
         cmd->addCommand(new NodeModifyStartupAccountCmd(m_task, m_oldstartup,  m_accounts.findAccount(startupAccount->currentText())));
         modified = true;
     }
-    if ((m_oldshutdown == 0 && shutdownAccount->currentItem() != 0) ||
+    if ((m_oldshutdown == 0 && shutdownAccount->currentIndex() != 0) ||
         (m_oldshutdown && m_oldshutdown->name() != shutdownAccount->currentText())) {
         cmd->addCommand(new NodeModifyShutdownAccountCmd(m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
@@ -120,17 +120,17 @@ MacroCommand *TaskCostPanel::buildCommand() {
 }
 
 bool TaskCostPanel::ok() {
-    if (runningAccount->currentItem() == 0 ||
+    if (runningAccount->currentIndex() == 0 ||
         m_accounts.findAccount(runningAccount->currentText()) == 0) {
         //message
         return false;
     }
-    if (startupAccount->currentItem() == 0 ||
+    if (startupAccount->currentIndex() == 0 ||
         m_accounts.findAccount(startupAccount->currentText()) == 0) {
         //message
         return false;
     }
-    if (shutdownAccount->currentItem() == 0 ||
+    if (shutdownAccount->currentIndex() == 0 ||
         m_accounts.findAccount(shutdownAccount->currentText()) == 0) {
         //message
         return false;
