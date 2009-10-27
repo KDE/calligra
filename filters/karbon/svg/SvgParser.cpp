@@ -1448,6 +1448,11 @@ void SvgParser::applyFilter( KoShape * shape )
 
     KoFilterEffectStack * filterStack = 0;
 
+    QSet<QString> stdInputs;
+    stdInputs << "SourceGraphic" << "SourceAlpha";
+    stdInputs << "BackgroundImage" << "BackgroundAlpha";
+    stdInputs << "FillPaint" << "StrokePaint";
+    
     // create the filter effects and add them to the shape
     for( KoXmlNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -1458,24 +1463,49 @@ void SvgParser::applyFilter( KoShape * shape )
             continue;
         }
 
+        if (primitive.hasAttribute("in"))
+            filterEffect->setInput(0, primitive.attribute("in"));
+        if (primitive.hasAttribute("result"))
+            filterEffect->setOutput(primitive.attribute("result"));
+
         QRectF subRegion;
         // parse subregion
         if( filter->primitiveUnits() == SvgFilterHelper::UserSpaceOnUse )
         {
-            qreal x = filterRegion.x();
-            if( primitive.hasAttribute( "x" ) )
-                x = parseUnitX( primitive.attribute( "x" ) ); 
-            qreal y = filterRegion.y();
-            if( primitive.hasAttribute( "y" ) )
-                y = parseUnitY( primitive.attribute( "y" ) );
-            qreal w = filterRegion.width();
-            if( primitive.hasAttribute( "width" ) )
-                w = parseUnitX( primitive.attribute( "width" ) );
-            qreal h = filterRegion.height();
-            if( primitive.hasAttribute( "height" ) )
-                h = parseUnitY( primitive.attribute( "height" ) );
-            subRegion.setTopLeft(SvgUtil::userSpaceToObject(QPointF(x,y), bound));
-            subRegion.setSize(SvgUtil::userSpaceToObject(QSizeF(w,h), bound));
+            if( ! primitive.hasAttribute("x") || ! primitive.hasAttribute("y") ||
+                ! primitive.hasAttribute("width") || ! primitive.hasAttribute("height"))
+            {
+                bool hasStdInput = false;
+                // check if one of the inputs is a standard input
+                foreach( const QString &input, filterEffect->inputs())
+                {
+                    if( stdInputs.contains(input) )
+                    {
+                        hasStdInput = true;
+                        break;
+                    }
+                }
+                if( hasStdInput )
+                {
+                    // default to 0%, 0%, 100%, 100%
+                    subRegion.setTopLeft(QPointF(0,0));
+                    subRegion.setSize(QSizeF(1,1));
+                }
+                else 
+                {
+                    // defaults to bounding rect of all referenced nodes
+                    // TODO
+                }
+            }
+            else
+            {
+                qreal x = parseUnitX( primitive.attribute( "x" ) ); 
+                qreal y = parseUnitY( primitive.attribute( "y" ) );
+                qreal w = parseUnitX( primitive.attribute( "width" ) );
+                qreal h = parseUnitY( primitive.attribute( "height" ) );
+                subRegion.setTopLeft(SvgUtil::userSpaceToObject(QPointF(x,y), bound));
+                subRegion.setSize(SvgUtil::userSpaceToObject(QSizeF(w,h), bound));
+            }
         }
         else
         {
@@ -1487,10 +1517,6 @@ void SvgParser::applyFilter( KoShape * shape )
             qreal h = SvgUtil::fromPercentage( primitive.attribute( "height", "1" ) );
             subRegion = QRectF(QPointF(x, y), QSizeF(w, h));
         }
-        if (primitive.hasAttribute("in"))
-            filterEffect->setInput(0, primitive.attribute("in"));
-        if (primitive.hasAttribute("result"))
-            filterEffect->setOutput(primitive.attribute("result"));
 
         filterEffect->setFilterRect(subRegion);
         
