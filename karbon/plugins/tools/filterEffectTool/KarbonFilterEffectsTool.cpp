@@ -100,7 +100,9 @@ public:
             if( ! currentPanel )
                 return;
             
+            currentPanel->layout()->setContentsMargins(0,0,0,0);
             configStack->insertWidget( 0, currentPanel );
+            configStack->layout()->setContentsMargins(0,0,0,0);
             connect( currentPanel, SIGNAL(filterChanged()), tool, SLOT(filterChanged()));
         }
         
@@ -276,7 +278,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     d->filterSelector->setResourceAdapter(adapter);
     d->filterSelector->setDisplayMode(KoResourceSelector::TextMode);
     d->filterSelector->setColumnCount(1);
-    addFilterLayout->addWidget(d->filterSelector, 0, 0);
+    addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);
+    addFilterLayout->addWidget(d->filterSelector, 0, 1);
     connect(d->filterSelector, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(presetSelected(KoResource*)));
             
@@ -286,7 +289,7 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     QToolButton * editButton = new QToolButton(addFilterWidget);
     editButton->setIcon(KIcon("view-filter"));
     editButton->setToolTip(i18n("View and edit filter"));
-    addFilterLayout->addWidget(editButton, 0, 1);
+    addFilterLayout->addWidget(editButton, 0, 2);
     connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
     
     widgets.insert(i18n("Add Filter"), addFilterWidget);
@@ -303,6 +306,7 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     
     d->configStack = new QStackedWidget(configFilterWidget);
     configFilterLayout->addWidget(d->configStack, 1, 0);
+    configFilterLayout->setContentsMargins(0,0,0,0);
     
     widgets.insert(i18n("Effect Properties"), configFilterWidget);
     
