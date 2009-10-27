@@ -614,12 +614,24 @@ void RowHeader::paintEvent( QPaintEvent* event )
       painter.setFont( boldFont );
 
     double len = painter.fontMetrics().width( rowText );
-    if (!rowFormat->isHiddenOrFiltered())
+    if (!rowFormat->isHiddenOrFiltered()) {
+#if 0
+        switch  (y % 3) {
+        case 0: rowText = QString::number( height ) + 'h'; break;
+        case 1: rowText = QString::number( painter.fontMetrics().ascent() ) + 'a'; break;
+        case 2: rowText = QString::number( painter.fontMetrics().descent() ) + 'd'; break;
+        }
+        //kDebug() << "font height: " << painter.fontMetrics().ascent();
+        painter.drawLine(1, yPos, 4, yPos + 3);
+#endif
         drawText( painter,
                   normalFont,
                   QPointF( ( width - len ) / 2,
-                           yPos + ( height - painter.fontMetrics().ascent() ) / 2 ),
+                            yPos + ( height - painter.fontMetrics().ascent() ) / 2 ),
+//                            yPos + ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+
                   rowText );
+    }
 
     yPos += rowFormat->height();
     y++;
@@ -1319,7 +1331,8 @@ void ColumnHeader::paintEvent( QPaintEvent* event )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  double height = painter.fontMetrics().height();
+  //double height = painter.fontMetrics().height();
+  double height = XBORDER_HEIGHT;
 
   if ( sheet->layoutDirection() == Qt::RightToLeft )
   {
@@ -1346,7 +1359,7 @@ void ColumnHeader::paintEvent( QPaintEvent* event )
           ++x;
           continue;
       }
-      double width = xPos + columnFormat->width() - xPos;
+      double width = columnFormat->width();
 
       if ( selected || highlighted )
       {
@@ -1430,13 +1443,21 @@ void ColumnHeader::paintEvent( QPaintEvent* event )
 
         QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
-        if (!columnFormat->isHiddenOrFiltered())
+        if (!columnFormat->isHiddenOrFiltered()) {
+#if 0
+            switch  (x % 3) {
+            case 0: colText = QString::number( height ) + 'h'; break;
+            case 1: colText = QString::number( painter.fontMetrics().ascent() ) + 'a'; break;
+            case 2: colText = QString::number( painter.fontMetrics().descent() ) + 'd'; break;
+            }
+#endif
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
                              ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
                     colText,
                     width );
+        }
 
       xPos += columnFormat->width();
       ++x;

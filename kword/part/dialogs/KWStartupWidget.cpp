@@ -35,10 +35,10 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     m_columns = columns;
     m_layout = KoPageLayout::standardLayout();
-    m_layout.left = MM_TO_POINT(30);
-    m_layout.right = MM_TO_POINT(30);
-    m_layout.top = MM_TO_POINT(25);
-    m_layout.bottom = MM_TO_POINT(25);
+    m_layout.leftMargin   = MM_TO_POINT(30);
+    m_layout.rightMargin  = MM_TO_POINT(30);
+    m_layout.topMargin    = MM_TO_POINT(25);
+    m_layout.bottomMargin = MM_TO_POINT(25);
     m_doc = doc;
 
     setFocusProxy(widget.createButton);
@@ -93,7 +93,7 @@ void KWStartupWidget::buttonClicked()
 {
     m_doc->initEmpty();
 
-    if (m_layout.left < 0) {
+    if (m_layout.leftMargin < 0) {
         m_layout.width /= 2.0;
         m_doc->pageManager()->setPreferPageSpread(true);
     }

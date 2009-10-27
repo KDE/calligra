@@ -48,7 +48,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
     QList<QPointF> newPositions;
 
     QRectF rect = page.rect();
-    QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.left < 0 ? 2 : 1), m_newLayout.height);
+    QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.leftMargin < 0 ? 2 : 1), m_newLayout.height);
     const qreal bottom = rect.bottom();
     const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
     foreach(KWFrameSet *fs, document->frameSets()) {
@@ -57,7 +57,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
         foreach(KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if (remove && shape->boundingRect().intersects(page.rect())) {
-                if (m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
+                if (m_oldLayout.leftMargin < 0 && m_newLayout.leftMargin >= 0 &&
                         shape->position().x() >= rect.center().x()) // before it was a pageSpread.
                     new KWFrameDeleteCommand(document, frame, this);
             } else if (shape->position().y() > bottom) { // shape should be moved down
@@ -78,7 +78,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
     if (shapes.count() > 0)
         new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
 
-    if (page.pageNumber() % 2 == 1 && newLayout.left < 0)
+    if (page.pageNumber() % 2 == 1 && newLayout.leftMargin < 0)
         new KWPageInsertCommand(m_document, page.pageNumber() - 1, QString(), this);
 }
 

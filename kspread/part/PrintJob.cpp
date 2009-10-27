@@ -136,7 +136,8 @@ PrintJob::PrintJob(View *view)
         printer().setOrientation( QPrinter::Landscape );
     else
         printer().setOrientation( QPrinter::Portrait );
-    printer().setPageMargins(pageLayout.left, pageLayout.top, pageLayout.right, pageLayout.bottom,
+    printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin,
+                             pageLayout.rightMargin, pageLayout.bottomMargin,
                              QPrinter::Point);
     printer().setFullPage( true );
 
@@ -206,7 +207,7 @@ QRectF PrintJob::preparePage(int pageNumber)
     // Move the painter offset according to the page layout.
     const double scale = POINT_TO_INCH(printer().resolution());
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
-    painter().translate(pageLayout.left * scale, pageLayout.top * scale);
+    painter().translate(pageLayout.leftMargin * scale, pageLayout.topMargin * scale);
 
     // Apply the print zoom factor,
     const double zoom = d->printManager(sheet)->zoom();

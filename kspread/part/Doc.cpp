@@ -679,10 +679,10 @@ void Doc::loadPaper( KoXmlElement const & paper )
     KoXmlElement borders = paper.namedItem( "borders" ).toElement();
     if ( !borders.isNull() )
     {
-        pageLayout.left   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
-        pageLayout.right  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
-        pageLayout.top    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
-        pageLayout.bottom = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
+        pageLayout.leftMargin   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
+        pageLayout.rightMargin  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
+        pageLayout.topMargin    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
+        pageLayout.bottomMargin = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
     }
 
     //apply to all sheet

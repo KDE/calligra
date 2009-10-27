@@ -82,39 +82,39 @@ public slots:
     }
 
     /** Return left margin in pt */
-    qreal left() {
-        return m_pagelayout.left;
+    qreal leftMargin() {
+        return m_pagelayout.leftMargin;
     }
     /** Set left margin in pt */
-    void setLeft(qreal left) {
-        m_pagelayout.left = left;
+    void setLeftMargin(qreal leftMargin) {
+        m_pagelayout.leftMargin = leftMargin;
     }
 
     /** Return right margin in pt */
-    qreal right() {
-        return m_pagelayout.right;
+    qreal rightMargin() {
+        return m_pagelayout.rightMargin;
     }
     /** Set right margin in pt */
-    void setRight(qreal right) {
-        m_pagelayout.right = right;
+    void setRightMargin(qreal rightMargin) {
+        m_pagelayout.rightMargin = rightMargin;
     }
 
     /** Return top margin in pt */
-    qreal top() {
-        return m_pagelayout.top;
+    qreal topMargin() {
+        return m_pagelayout.topMargin;
     }
     /** Set top margin in pt */
-    void setTop(qreal top) {
-        m_pagelayout.top = top;
+    void setTopMargin(qreal topMargin) {
+        m_pagelayout.topMargin = topMargin;
     }
 
     /** Return bottom margin in pt */
-    qreal bottom() {
-        return m_pagelayout.bottom;
+    qreal bottomMargin() {
+        return m_pagelayout.bottomMargin;
     }
     /** Set bottom margin in pt */
-    void setBottom(qreal bottom) {
-        m_pagelayout.bottom = bottom;
+    void setBottomMargin(qreal bottomMargin) {
+        m_pagelayout.bottomMargin = bottomMargin;
     }
 
     /** Return margin on page edge in pt */

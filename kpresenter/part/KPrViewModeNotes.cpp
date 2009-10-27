@@ -171,8 +171,8 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
 
     m_view->horizontalRuler()->setRulerLength(layout.width);
     m_view->verticalRuler()->setRulerLength(layout.height);
-    m_view->horizontalRuler()->setActiveRange(layout.left, layout.width - layout.right);
-    m_view->verticalRuler()->setActiveRange(layout.top, layout.height - layout.bottom);
+    m_view->horizontalRuler()->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
+    m_view->verticalRuler()->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
 
     m_canvas->setDocumentOrigin( QPointF( 0, 0 ) );
     m_view->zoomController()->setPageSize(size);

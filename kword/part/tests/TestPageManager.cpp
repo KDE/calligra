@@ -277,21 +277,21 @@ void TestPageManager::pageInfo()
     QCOMPARE(pageManager->bottomOfPage(4), 1000.0);
 
     layout = pageManager->defaultPageStyle().pageLayout();
-    layout.top = 5;
-    layout.left = 6;
-    layout.bottom = 7;
-    layout.right = 8;
+    layout.topMargin = 5;
+    layout.leftMargin = 6;
+    layout.bottomMargin = 7;
+    layout.rightMargin = 8;
     pageManager->defaultPageStyle().setPageLayout(layout);
 
     layout = pageStylePage2.pageLayout();
-    layout.top = 9;
-    layout.left = 10;
-    layout.bottom = 11;
-    layout.right = 12;
+    layout.topMargin = 9;
+    layout.leftMargin = 10;
+    layout.bottomMargin = 11;
+    layout.rightMargin = 12;
     pageStylePage2.setPageLayout(layout);
 
     layout = page1l.pageStyle().pageLayout(); //layout is valid for page1l and page1r
-    layout.right = 14.0;
+    layout.rightMargin = 14.0;
     page1l.pageStyle().setPageLayout(layout);
     QCOMPARE(page1l.rightMargin(), 14.0);
     QCOMPARE(page1r.rightMargin(), 14.0);
@@ -329,8 +329,8 @@ void TestPageManager::pageInfo()
     QCOMPARE(page2.rightMargin(), 16.0);
     QCOMPARE(page2.leftMargin(), 17.0);
 
-    layout.left = 18;
-    layout.right = 19;
+    layout.leftMargin = 18;
+    layout.rightMargin = 19;
     pageStylePage2.setPageLayout(layout);
     QCOMPARE(page2.rightMargin(), 16.0);
     QCOMPARE(page2.leftMargin(), 17.0);

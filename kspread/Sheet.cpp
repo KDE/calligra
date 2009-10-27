@@ -2052,10 +2052,10 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
 
     QDomElement borders = dd.createElement( "borders" );
     KoPageLayout pageLayout = print()->settings()->pageLayout();
-    borders.setAttribute( "left", pageLayout.left );
-    borders.setAttribute( "top", pageLayout.top );
-    borders.setAttribute( "right", pageLayout.right );
-    borders.setAttribute( "bottom", pageLayout.bottom );
+    borders.setAttribute( "left", pageLayout.leftMargin );
+    borders.setAttribute( "top", pageLayout.topMargin );
+    borders.setAttribute( "right", pageLayout.rightMargin );
+    borders.setAttribute( "bottom", pageLayout.bottomMargin );
     paper.appendChild( borders );
 
     QDomElement head = dd.createElement( "head" );
@@ -2578,19 +2578,19 @@ void Sheet::loadOdfMasterLayoutPage( KoStyleStack &styleStack )
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
     {
-        pageLayout.top = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-top"));
+        pageLayout.topMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-top"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
     {
-        pageLayout.bottom = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-bottom"));
+        pageLayout.bottomMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
     {
-        pageLayout.left = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"));
+        pageLayout.leftMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-right" ) )
     {
-        pageLayout.right = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-right"));
+        pageLayout.rightMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-right"));
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) )
     {
@@ -3900,10 +3900,10 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         KoXmlElement borders = paper.namedItem( "borders" ).toElement();
         if ( !borders.isNull() )
         {
-            pageLayout.left   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
-            pageLayout.right  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
-            pageLayout.top    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
-            pageLayout.bottom = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
+            pageLayout.leftMargin   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
+            pageLayout.rightMargin  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
+            pageLayout.topMargin    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
+            pageLayout.bottomMargin = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
         }
         print()->settings()->setPageLayout(pageLayout);
 

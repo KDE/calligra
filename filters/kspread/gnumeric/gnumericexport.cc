@@ -1008,7 +1008,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize, cellComment, objects, repeatColumns, repeatRows;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, topMargin, leftMargin, bottomMargin, rightMargin, orientation, paper, header, footer, customSize, cellComment, objects, repeatColumns, repeatRows;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
 
@@ -1172,25 +1172,25 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         tmp = gnumeric_doc.createElement( "gmr:PrintInformation" );
         margins = gnumeric_doc.createElement( "gmr:Margins" );
 
-        top = gnumeric_doc.createElement( "gmr:top" );
-        top.setAttribute("Points", table->print()->settings()->pageLayout().top);
-        top.setAttribute("PrefUnit", "mm");
-        margins.appendChild( top );
+        topMargin = gnumeric_doc.createElement( "gmr:top" );
+        topMargin.setAttribute("Points", table->print()->settings()->pageLayout().topMargin);
+        topMargin.setAttribute("PrefUnit", "mm");
+        margins.appendChild( topMargin );
 
-        bottom = gnumeric_doc.createElement( "gmr:bottom" );
-        bottom.setAttribute("Points", table->print()->settings()->pageLayout().bottom);
-        bottom.setAttribute("PrefUnit", "mm");
-        margins.appendChild( bottom );
+        bottomMargin = gnumeric_doc.createElement( "gmr:bottom" );
+        bottomMargin.setAttribute("Points", table->print()->settings()->pageLayout().bottomMargin);
+        bottomMargin.setAttribute("PrefUnit", "mm");
+        margins.appendChild( bottomMargin );
 
-        left = gnumeric_doc.createElement( "gmr:left" );
-        left.setAttribute("Points", table->print()->settings()->pageLayout().left);
-        left.setAttribute("PrefUnit", "mm");
-        margins.appendChild( left );
+        leftMargin = gnumeric_doc.createElement( "gmr:left" );
+        leftMargin.setAttribute("Points", table->print()->settings()->pageLayout().leftMargin);
+        leftMargin.setAttribute("PrefUnit", "mm");
+        margins.appendChild( leftMargin );
 
-        right = gnumeric_doc.createElement( "gmr:right" );
-        right.setAttribute("Points", table->print()->settings()->pageLayout().right);
-        right.setAttribute("PrefUnit", "mm");
-        margins.appendChild( right );
+        rightMargin = gnumeric_doc.createElement( "gmr:right" );
+        rightMargin.setAttribute("Points", table->print()->settings()->pageLayout().rightMargin);
+        rightMargin.setAttribute("PrefUnit", "mm");
+        margins.appendChild( rightMargin );
 
         tmp.appendChild( margins );
         sheet.appendChild(tmp);

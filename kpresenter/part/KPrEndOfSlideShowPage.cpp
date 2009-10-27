@@ -41,10 +41,10 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     pageLayout.height = 510;
 
     pageLayout.width = 510 * ratio;
-    pageLayout.left = 0;
-    pageLayout.right = 0;
-    pageLayout.top = 0;
-    pageLayout.bottom = 0;
+    pageLayout.leftMargin = 0;
+    pageLayout.rightMargin = 0;
+    pageLayout.topMargin = 0;
+    pageLayout.bottomMargin = 0;
     pageLayout.orientation = screenRect.width() > screenRect.height() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
     pageLayout.bindingSide = 0;
     pageLayout.pageEdge = 0;

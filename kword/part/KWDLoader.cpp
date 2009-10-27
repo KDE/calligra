@@ -183,20 +183,20 @@ bool KWDLoader::load(KoXmlElement &root)
         // <PAPERBORDERS>
         KoXmlElement paperborders = paper.namedItem("PAPERBORDERS").toElement();
         if (!paperborders.isNull()) {
-            pgLayout.left = paperborders.attribute("left").toDouble();
-            pgLayout.top = paperborders.attribute("top").toDouble();
-            pgLayout.right = paperborders.attribute("right").toDouble();
-            pgLayout.bottom = paperborders.attribute("bottom").toDouble();
+            pgLayout.leftMargin   = paperborders.attribute("left").toDouble();
+            pgLayout.topMargin    = paperborders.attribute("top").toDouble();
+            pgLayout.rightMargin  = paperborders.attribute("right").toDouble();
+            pgLayout.bottomMargin = paperborders.attribute("bottom").toDouble();
 
             // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
-            if (pgLayout.left == 0.0)
-                pgLayout.left = paperborders.attribute("left").toDouble();
-            if (pgLayout.top == 0.0)
-                pgLayout.top = paperborders.attribute("top").toDouble();
-            if (pgLayout.right == 0.0)
-                pgLayout.right = paperborders.attribute("right").toDouble();
-            if (pgLayout.bottom == 0.0)
-                pgLayout.bottom = paperborders.attribute("bottom").toDouble();
+            if (pgLayout.leftMargin == 0.0)
+                pgLayout.leftMargin = paperborders.attribute("left").toDouble();
+            if (pgLayout.topMargin == 0.0)
+                pgLayout.topMargin = paperborders.attribute("top").toDouble();
+            if (pgLayout.rightMargin == 0.0)
+                pgLayout.rightMargin = paperborders.attribute("right").toDouble();
+            if (pgLayout.bottomMargin == 0.0)
+                pgLayout.bottomMargin = paperborders.attribute("bottom").toDouble();
         } else
             kWarning(32001) << "No <PAPERBORDERS> tag!";
     } else

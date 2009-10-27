@@ -140,12 +140,12 @@ void PrintSettings::setPageOrientation(KoPageFormat::Orientation orientation)
 
 double PrintSettings::printWidth() const
 {
-     return d->pageLayout.width - d->pageLayout.left - d->pageLayout.right;
+     return d->pageLayout.width - d->pageLayout.leftMargin - d->pageLayout.rightMargin;
 }
 
 double PrintSettings::printHeight() const
 {
-    return d->pageLayout.height - d->pageLayout.top - d->pageLayout.bottom;
+    return d->pageLayout.height - d->pageLayout.topMargin - d->pageLayout.bottomMargin;
 }
 
 PrintSettings::PageOrder PrintSettings::pageOrder() const

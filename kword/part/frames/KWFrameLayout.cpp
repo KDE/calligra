@@ -234,19 +234,19 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     minimumHeight[10] = page.bottomMargin();
 
     KoPageLayout layout = page.pageStyle().pageLayout();
-    layout.left = page.leftMargin();
-    layout.right = page.rightMargin();
+    layout.leftMargin = page.leftMargin();
+    layout.rightMargin = page.rightMargin();
     qreal left = 0, width = page.width();
     if (page.pageSide() == KWPage::PageSpread) {
         width /= 2;
         if (page.pageNumber() != pageNumber) { // doing the 'right' one
             left = width;
-            qreal x = layout.left; // swap margins
-            layout.left = layout.right;
-            layout.right = x;
+            qreal x = layout.leftMargin; // swap margins
+            layout.leftMargin = layout.rightMargin;
+            layout.rightMargin = x;
         }
     }
-    qreal textWidth = width - layout.left - layout.right;
+    qreal textWidth = width - layout.leftMargin - layout.rightMargin;
 
     KWPageStyle pageStyle = page.pageStyle();
     const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2 : 1) : 0;
@@ -343,7 +343,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         const qreal columnWidth = textWidth / columns;
         QPointF *points = new QPointF[columns];
         for (int i = columns - 1; i >= 0; i--)
-            points[i] = QPointF(left + layout.left + columnWidth * i, resultingPositions[3]);
+            points[i] = QPointF(left + layout.leftMargin + columnWidth * i, resultingPositions[3]);
         for (int i = 0; i < columns; i++) {
             for (int f = 0; f < columns; f++) {
                 if (f == i) continue;
@@ -372,22 +372,22 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 #endif
     if (footnote) {
         footnote->shape()->setPosition(
-            QPointF(left + layout.left, resultingPositions[7]));
+            QPointF(left + layout.leftMargin, resultingPositions[7]));
         footnote->shape()->setSize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
     }
     if (endnote) {
         endnote->shape()->setPosition(
-            QPointF(left + layout.left, resultingPositions[5]));
+            QPointF(left + layout.leftMargin, resultingPositions[5]));
         endnote->shape()->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if (header) {
         header->shape()->setPosition(
-            QPointF(left + layout.left, resultingPositions[1]));
+            QPointF(left + layout.leftMargin, resultingPositions[1]));
         header->shape()->setSize(QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
     }
     if (footer) {
         footer->shape()->setPosition(
-            QPointF(left + layout.left, resultingPositions[9]));
+            QPointF(left + layout.leftMargin, resultingPositions[9]));
         footer->shape()->setSize(QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
     }
     delete [] main;

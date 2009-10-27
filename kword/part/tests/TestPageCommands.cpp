@@ -215,10 +215,10 @@ void TestPageCommands::testInsertPageCommand3() // restore all properties
     KoPageLayout layout;
     layout.width = 400;
     layout.height = 300;
-    layout.left = 4;
-    layout.right = 6;
-    layout.top = 7;
-    layout.bottom = 5;
+    layout.leftMargin = 4;
+    layout.rightMargin = 6;
+    layout.topMargin = 7;
+    layout.bottomMargin = 5;
     style.setPageLayout(layout);
     page.setPageStyle(style);
 
@@ -361,10 +361,10 @@ void TestPageCommands::testRemovePageCommand3() // test restore all properties
     KoPageLayout layout;
     layout.width = 400;
     layout.height = 300;
-    layout.left = 4;
-    layout.right = 6;
-    layout.top = 7;
-    layout.bottom = 5;
+    layout.leftMargin = 4;
+    layout.rightMargin = 6;
+    layout.topMargin = 7;
+    layout.bottomMargin = 5;
     style.setPageLayout(layout);
     page.setPageStyle(style);
 
@@ -441,8 +441,8 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     oldLayout.format = KoPageFormat::IsoA4Size;
     oldLayout.width = 101;
     oldLayout.height = 102;
-    oldLayout.left = -1;
-    oldLayout.right = -1;
+    oldLayout.leftMargin = -1;
+    oldLayout.rightMargin = -1;
     oldLayout.pageEdge = 7;
     oldLayout.bindingSide = 13;
     style.setPageLayout(oldLayout);
@@ -467,8 +467,8 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     KoPageLayout newLayout = KoPageLayout::standardLayout();
     newLayout.width = 401;
     newLayout.height = 405;
-    newLayout.left = 11;
-    newLayout.right = 18;
+    newLayout.leftMargin = 11;
+    newLayout.rightMargin = 18;
     newLayout.pageEdge = -1;
     newLayout.bindingSide = -1;
     KoColumns newColumns;

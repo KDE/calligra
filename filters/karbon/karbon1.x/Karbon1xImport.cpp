@@ -218,13 +218,13 @@ bool KarbonImport::convert( const KoXmlDocument &document )
     if( !borders.isNull() )
     {
         if( borders.hasAttribute( "left" ) )
-            pageLayout.left = borders.attribute( "left" ).toDouble();
+            pageLayout.leftMargin = borders.attribute( "left" ).toDouble();
         if( borders.hasAttribute( "top" ) )
-            pageLayout.top = borders.attribute( "top" ).toDouble();
+            pageLayout.topMargin = borders.attribute( "top" ).toDouble();
         if( borders.hasAttribute( "right" ) )
-            pageLayout.right = borders.attribute( "right" ).toDouble();
+            pageLayout.rightMargin = borders.attribute( "right" ).toDouble();
         if( borders.hasAttribute( "bottom" ) )
-            pageLayout.bottom = borders.attribute( "bottom" ).toDouble();
+            pageLayout.bottomMargin = borders.attribute( "bottom" ).toDouble();
     }
 
     // TODO set page layout to the output document

@@ -289,7 +289,7 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
         QLinkedList<QRectF>::Iterator fit = page_frame_list.begin();
         QLinkedList<QPointF>::Iterator fito = page_frame_list_offset.begin();
 
-        painter.translate(paperLayout().left, paperLayout().top);
+        painter.translate(paperLayout().leftMargin, paperLayout().topMargin);
         painter.scale( m_zoomHandler->zoomedResolutionX(), m_zoomHandler->zoomedResolutionY() );
         painter.setClipRect(0, 0, (int)paperLayout().width, (int)paperLayout().height);
 
@@ -420,8 +420,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     m_pSheetView->paintCells( painter.device(), painter, paintRect, topLeft );
 
     //Don't let obscuring cells and children overpaint this area
-    clipRegion -= QRegion((int)(paperLayout().left + topLeft.x()),
-                          (int)(paperLayout().top + topLeft.y()),
+    clipRegion -= QRegion((int)(paperLayout().leftMargin + topLeft.x()),
+                          (int)(paperLayout().topMargin + topLeft.y()),
                           (int)xpos,
                           (int)ypos);
 //     painter.setClipRegion( clipRegion );
@@ -440,37 +440,37 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print head line left
     w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)paperLayout().left, (int)headFootDistance,
+        painter.drawText((int)paperLayout().leftMargin, (int)headFootDistance,
                          headLeft(pageNo, m_pSheet->sheetName()));
     // print head line middle
     w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + ( m_settings->printWidth() - w ) / 2.0),
+        painter.drawText((int)(paperLayout().leftMargin + ( m_settings->printWidth() - w ) / 2.0),
                          (int)headFootDistance,
                          headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
     w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + m_settings->printWidth() - w),
+        painter.drawText((int)(paperLayout().leftMargin + m_settings->printWidth() - w),
                          (int)headFootDistance,
                          headRight( pageNo, m_pSheet->sheetName() ) );
 
     // print foot line left
     w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)paperLayout().left,
+        painter.drawText((int)paperLayout().leftMargin,
                          (int)(paperLayout().height - headFootDistance),
                          footLeft( pageNo, m_pSheet->sheetName() ) );
     // print foot line middle
     w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + (m_settings->printWidth() - w) / 2.0),
+        painter.drawText((int)(paperLayout().leftMargin + (m_settings->printWidth() - w) / 2.0),
                          (int)(paperLayout().height - headFootDistance),
                          footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
     w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + m_settings->printWidth() - w),
+        painter.drawText((int)(paperLayout().leftMargin + m_settings->printWidth() - w),
                          (int)(paperLayout().height - headFootDistance),
                          footRight( pageNo, m_pSheet->sheetName() ) );
 }

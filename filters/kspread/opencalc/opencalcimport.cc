@@ -1265,10 +1265,10 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
 
 void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styleStack )
 {
-    float left = 0.0;
-    float right = 0.0;
-    float top = 0.0;
-    float bottom = 0.0;
+    float leftMargin = 0.0;
+    float rightMargin = 0.0;
+    float topMargin = 0.0;
+    float bottomMargin = 0.0;
     float width = 0.0;
     float height = 0.0;
     QString orientation = "Portrait";
@@ -1284,19 +1284,19 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-top" ) )
     {
-        top = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) );
+        topMargin = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-top" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) );
+        bottomMargin = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-bottom" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-left" ) )
     {
-        left = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) );
+        leftMargin = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-left" ) );
     }
     if ( styleStack.hasProperty( ooNS::fo, "margin-right" ) )
     {
-        right = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) );
+        rightMargin = KoUnit::parseValue( styleStack.property( ooNS::fo, "margin-right" ) );
     }
     if ( styleStack.hasProperty( ooNS::style, "writing-mode" ) )
     {
@@ -1384,13 +1384,14 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     pageLayout.format = KoPageFormat::formatFromString(format);
     pageLayout.orientation = (orientation == "Portrait")
                            ? KoPageFormat::Portrait : KoPageFormat::Landscape;
-    pageLayout.left   = left;
-    pageLayout.right  = right;
-    pageLayout.top    = top;
-    pageLayout.bottom = bottom;
+    pageLayout.leftMargin   = leftMargin;
+    pageLayout.rightMargin  = rightMargin;
+    pageLayout.topMargin    = topMargin;
+    pageLayout.bottomMargin = bottomMargin;
     table->print()->settings()->setPageLayout(pageLayout);
 
-    kDebug(30518)<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom;
+    kDebug(30518)<<" left margin :"<<leftMargin<<" right :"<<rightMargin
+                 <<" top :"<<topMargin<<" bottom :"<<bottomMargin;
 //<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
 //          QString format = paper.attribute( "format" );
 //      QString orientation = paper.attribute( "orientation" );

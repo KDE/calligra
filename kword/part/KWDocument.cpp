@@ -856,8 +856,10 @@ void KWDocument::printDebug()
             kDebug(32001) << " +-- Columns:" << columns.columns << columns.columnSpacing << "pt spacing";
         KoPageLayout layout = style.pageLayout();
         kDebug(32001) << "     PageSize: " << layout.width << "x" << layout.height;
-        kDebug(32001) << "     Indents: (tlbr, edge, binding)" << layout.top << layout.left
-                << layout.bottom << layout.right << layout.pageEdge << layout.bindingSide;
+        kDebug(32001) << "     Indents: (tlbr, edge, binding)" 
+                      << layout.topMargin << layout.leftMargin
+                      << layout.bottomMargin << layout.rightMargin
+                      << layout.pageEdge << layout.bindingSide;
     }
 
     kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1);
