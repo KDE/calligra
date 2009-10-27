@@ -24,6 +24,7 @@
 #define _KEXI_VERSION_
 
 #include "kexi_export.h"
+#include <kofficeversion.h>
 
 #ifdef CUSTOM_VERSION /* user-friendly version info */
 # include "custom_global.h"
@@ -32,19 +33,21 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING "2.0 alpha-13"
+# define KEXI_VERSION_STRING KOFFICE_VERSION_STRING
 #endif
 
-#define KEXI_VERSION_MAJOR 1
-#define KEXI_VERSION_MINOR 9
-#define KEXI_VERSION_RELEASE 103
+#define KEXI_VERSION_MAJOR KOFFICE_VERSION_MAJOR
+#define KEXI_VERSION_MINOR KOFFICE_VERSION_MINOR
+#define KEXI_VERSION_RELEASE KOFFICE_VERSION_RELEASE
 
-#define KEXI_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
+#ifdef KOFFICE_ALPHA
+#define KEXI_ALPHA KOFFICE_ALPHA
+#endif
 
 #define KEXI_VERSION \
-    KEXI_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
+    KOFFICE_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
 
-#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= KEXI_MAKE_VERSION(a,b,c) )
+#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= KOFFICE_MAKE_VERSION(a,b,c) )
 
 /**
  * Namespace for general Kexi functions.
