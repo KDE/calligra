@@ -44,7 +44,7 @@ class Container;
 class ObjectTreeItem;
 class WidgetLibraryPrivate;
 class ActionGroup;
-//removed class WidgetPropertySet;
+class WidgetInfo;
 
 typedef QList<KAction*> ActionList;
 
@@ -78,7 +78,7 @@ public:
 //prev    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
 //prev                                   QObject *receiver, const char *slot);
 
-    void addCustomWidgetActions(KActionCollection *col);
+//2.0    void addCustomWidgetActions(KActionCollection *col);
 
 //old  /**
 //old   * creates the XML for widget actions

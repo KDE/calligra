@@ -22,13 +22,8 @@
 #ifndef KFORMDESIGNERWIDGETFACTORY_H
 #define KFORMDESIGNERWIDGETFACTORY_H
 
-#include <QObject>
-#include <QPointer>
 #include <QPixmap>
-#include <QHash>
-
-#include <kexi_export.h>
-#include <kexiutils/tristate.h>
+#include "WidgetInfo.h"
 
 //! Disable list widget because we need to replace it with QTreeWidget 
 //! which uses very different API compared to Q3ListView.
@@ -41,7 +36,7 @@ class QDomElement;
 class QDomDocument;
 class QVariant;
 class KActionCollection;
-class KXMLGUIClient;
+//2.0 class KXMLGUIClient;
 
 namespace KoProperty
 {
@@ -51,170 +46,10 @@ class Set;
 namespace KFormDesigner
 {
 
-class WidgetFactory;
-class WidgetLibrary;
 class Container;
-class ResizeHandleSet;
 class ObjectTreeItem;
 class Form;
-
-/**
- * This class holds properties of widget classes provided by a factory.
- */
-class KFORMEDITOR_EXPORT WidgetInfo
-{
-public:
-    typedef QList<WidgetInfo*> List;
-    typedef QHash<QByteArray, WidgetInfo*> Hash;
-
-    WidgetInfo(WidgetFactory *f);
-
-    WidgetInfo(WidgetFactory *f, const char* parentFactoryName, const char* inheritedClassName = 0);
-
-    virtual ~WidgetInfo();
-
-    //! \return a pixmap associated with the widget
-    QString pixmap() const {
-        return m_pixmap;
-    }
-
-    //! \return the class name of a widget e.g. 'QLineEdit'
-    QByteArray className() const {
-        return m_class;
-    }
-
-    /*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
-      nor non-latin1 characters) */
-    QString namePrefix() const {
-        return m_prefixName;
-    }
-
-    //! \return the real name e.g. 'Line Edit', showed eg in ObjectTreeView
-    QString name() const {
-        return m_name;
-    }
-
-    QString description() const {
-        return m_desc;
-    }
-    QString includeFileName() const {
-        return m_include;
-    }
-    QList<QByteArray> alternateClassNames() const {
-        return m_alternateNames;
-    }
-    QString savingName() const {
-        return m_saveName;
-    }
-    WidgetFactory *factory() const {
-        return m_factory;
-    }
-
-    void setPixmap(const QString &p) {
-        m_pixmap = p;
-    }
-    void setClassName(const QByteArray &s) {
-        m_class = s;
-    }
-    void setName(const QString &n) {
-        m_name = n;
-    }
-    void setNamePrefix(const QString &n) {
-        m_prefixName = n;
-    }
-    void setDescription(const QString &desc) {
-        m_desc = desc;
-    }
-
-    /*! Sets the C++ include file corresponding to this class,
-     that uic will need to add when creating the file. You don't have to set this for Qt std widgets.*/
-    void setIncludeFileName(const QString &name) {
-        m_include = name;
-    }
-
-    /*! Sets alternate names for this class.
-     If this name is found when loading a .ui file, the className() will be used instead.
-     It allows to support both KDE and Qt versions of widget, without duplicating code.
-     As a rule, className() should always return a class name which is inherited from
-     alternate class. For example KLineEdit class has alternate QLineEdit class.
-
-     \a override parameter overrides class name of a widget,
-     even if it was implemented in other factory.
-     By default it's set to false, what means that no other class is overridden
-     by this widget class if there is already a class implementing it
-     (no matter in which factory).
-     By forced overriding existing class with other - custom, user
-     will be able to see more or less properties and experience different behaviour.
-     For example, in Kexi application, KLineEdit class contains additional
-     "datasource" property for binding to database sources.
-    */
-    void addAlternateClassName(const QByteArray& alternateName, bool override = false);
-
-    /*! \return true is a class \a alternateName is defined as alternate name with
-     'override' flag set to true, using addAlternateClassName().
-     If this flag is set to false (the default) or there's no such alternate class
-     name defined. */
-    bool isOverriddenClassName(const QByteArray& alternateName) const;
-
-    /*! Sets the name that will be written in the .ui file when saving.
-     This name must be one of alternate names (or loading will be impossible).
-
-     On form data saving to XML .ui format, saveName is used instead,
-     so .ui format is not broken and still usable with other software as Qt Designer.
-     Custom properties are saved as well with 'stdset' attribute set to 0. */
-    void setSavingName(const QString &saveName) {
-        m_saveName = saveName;
-    }
-
-    /*! Sets autoSync flag for property \a propertyName.
-     This allows to override autoSync flag for certain widget's property, because
-     e.g. KoProperty::EditorView can have autoSync flag set to false or true, but
-     not all properties have to comply with that.
-     \a flag equal to cancelled value means there is no overriding (the default). */
-    void setAutoSyncForProperty(const char *propertyName, tristate flag);
-
-    /*! \return autoSync override value (true or false) for \a propertyName.
-     If cancelled value is returned, there is no overriding (the default). */
-    tristate autoSyncForProperty(const char *propertyName) const;
-
-    QByteArray parentFactoryName() const {
-        return m_parentFactoryName;
-    }
-
-    WidgetInfo* inheritedClass() const {
-        return m_inheritedClass;
-    }
-
-    /*! Sets custom type \a type for property \a propertyName.
-     This allows to override default type, especially when custom property
-     and custom property editor item has to be used. */
-    void setCustomTypeForProperty(const char *propertyName, int type);
-
-    /*! \return custom type for property \a propertyName. If no specific custom type has been assigned,
-     KoProperty::Auto is returned.
-     @see setCustomTypeForProperty() */
-    int customTypeForProperty(const char *propertyName) const;
-
-protected:
-    QByteArray m_parentFactoryName, m_inheritedClassName; //!< Used for inheriting widgets between factories
-    WidgetInfo* m_inheritedClass;
-
-private:
-    QString m_pixmap;
-    QByteArray m_class;
-    QString m_name;
-    QString m_prefixName;
-    QString m_desc;
-    QString m_include;
-    QList<QByteArray> m_alternateNames;
-    QSet<QByteArray> *m_overriddenAlternateNames;
-    QString m_saveName;
-    QPointer<WidgetFactory> m_factory;
-    QHash<QByteArray, tristate> *m_propertiesWithDisabledAutoSync;
-    QHash<QByteArray, int> *m_customTypesForProperty;
-
-    friend class WidgetLibrary;
-};
+class WidgetLibrary;
 
 //! The base class for all widget Factories
 /*! This is the class you need to inherit to create a new Factory. There are few
@@ -318,9 +153,7 @@ public:
     /**
      * \return all classes which are provided by this factory
      */
-    const WidgetInfo::Hash& classes() const {
-        return m_classesByName;
-    }
+    const WidgetInfoHash& classes() const;
 
     /**
      * Creates a widget (and if needed a KFormDesigner::Container)
@@ -555,8 +388,8 @@ protected:
 //    QPointer<ResizeHandleSet> m_handles;
 //2.0: moved to Form::Private::inlineEditorContainer
 //    QPointer<Container> m_container;
-//  WidgetInfo::List m_classes;
-    WidgetInfo::Hash m_classesByName;
+//  WidgetInfoList m_classes;
+    WidgetInfoHash m_classesByName;
     QSet<QByteArray>* m_hiddenClasses;
 
     //! i18n stuff
@@ -569,13 +402,13 @@ protected:
      It's value is inherited from WidgetLibrary. */
     bool m_showAdvancedProperties;
 
-    /*! Contains name of an XMLGUI file providing toolbar buttons
-     (and menu items in the future?) for the factory.
-     Can be empty, e.g. for the main factory which has XMLGUI defined in the shell window itself
-     (e.g. kexiformpartinstui.rc for Kexi Forms). This name is set in WidgetLibrary::loadFactories() */
-    QString m_xmlGUIFileName;
+//2.0    /*! Contains name of an XMLGUI file providing toolbar buttons
+//2.0     (and menu items in the future?) for the factory.
+//2.0     Can be empty, e.g. for the main factory which has XMLGUI defined in the shell window itself
+//2.0     (e.g. kexiformpartinstui.rc for Kexi Forms). This name is set in WidgetLibrary::loadFactories() */
+//2.0    QString m_xmlGUIFileName;
 
-    KXMLGUIClient *m_guiClient;
+//2.0    KXMLGUIClient *m_guiClient;
 
 //2.0    QPointer<QWidget> m_widget;
 // moved to Form as Private::inlineEditor

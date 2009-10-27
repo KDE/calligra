@@ -925,6 +925,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 {
     if (!item)
         return;
+    kDebug() << item->className() << item->widget()->objectName();
     bool savedAlignment = false;
     // we let Spring class handle saving itself
     if (item->className() == "Spring") {

@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 #include <kacceleratormanager.h>
 
+#include "WidgetInfo.h"
 #include "formIO.h"
 #include "container.h"
 #include "objecttree.h"

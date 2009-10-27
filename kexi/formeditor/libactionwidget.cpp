@@ -22,6 +22,7 @@
 #include <KIcon>
 #include <KActionCollection>
 
+#include "WidgetInfo.h"
 #include "libactionwidget.h"
 #include "widgetfactory.h"
 //unused #include "formmanager.h"

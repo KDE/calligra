@@ -21,6 +21,7 @@
 #define KEXIDATAAWAREWIDGETINFO_H
 
 #include <formeditor/widgetfactory.h>
+#include <formeditor/WidgetInfo.h>
 
 //! A widget info for data-aware widgets
 /*! Used within factories just like KFormDesigner::WidgetInfo,
@@ -32,12 +33,12 @@ class KEXIFORMUTILS_EXPORT KexiDataAwareWidgetInfo : public KFormDesigner::Widge
 public:
     KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f);
 
-    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
-                            const char* parentFactoryName, const char* inheritedClassName = 0);
+//2.0    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
+//2.0                            const char* parentFactoryName, const char* inheritedClassName = 0);
 
     virtual ~KexiDataAwareWidgetInfo();
 
-protected:
+private:
     void init();
 };
 

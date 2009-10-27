@@ -38,6 +38,7 @@
 #include <KTextEdit>
 #include <KLineEdit>
 
+#include "WidgetInfo.h"
 #include "FormWidget.h"
 #include "resizehandle.h"
 #include "container.h"

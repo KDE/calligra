@@ -7,24 +7,25 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 ########### next target ###############
 
 set(kformdesigner_LIB_SRCS 
-   container.cpp 
-   resizehandle.cpp 
-   widgetfactory.cpp 
-   widgetlibrary.cpp 
-   libactionwidget.cpp 
-   form.cpp 
-   objecttree.cpp 
-   formIO.cpp 
+   container.cpp
+   resizehandle.cpp
+   widgetfactory.cpp
+   widgetlibrary.cpp
+   WidgetInfo.cpp
+   libactionwidget.cpp
+   form.cpp
+   objecttree.cpp
+   formIO.cpp
    FormWidget.cpp
    FormWidgetInterface.cpp
-   objecttreeview.cpp 
-   spring.cpp 
-   commands.cpp 
-   events.cpp 
-   richtextdialog.cpp 
-   tabstopdialog.cpp 
-   editlistviewdialog.cpp 
-   utils.cpp 
+   objecttreeview.cpp
+   spring.cpp
+   commands.cpp
+   events.cpp
+   richtextdialog.cpp
+   tabstopdialog.cpp
+   editlistviewdialog.cpp
+   utils.cpp
 #todo   kfdpixmapedit.cpp
    widgetwithsubpropertiesinterface.cpp
    kexiformeventhandler.cpp # from libkexiformutils
@@ -61,4 +62,19 @@ install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  widgetfactory.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES
+  FormWidget.h
+  FormWidgetInterface.h
+  objecttree.h
+  objecttreeview.h
+  widgetfactory.h
+  WidgetInfo.h
+  widgetlibrary.h
+  widgetwithsubpropertiesinterface.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/kexi/forms COMPONENT Devel
+)
+
+install( FILES
+  widgetfactory.desktop
+  DESTINATION ${SERVICETYPES_INSTALL_DIR}
+)

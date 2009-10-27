@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "widgetlibrary.h"
+
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -29,10 +31,10 @@
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-#include <KXMLGUIClient>
+//2.0 #include <KXMLGUIClient>
 
+#include "WidgetInfo.h"
 #include "widgetfactory.h"
-#include "widgetlibrary.h"
 #include "libactionwidget.h"
 #include "container.h"
 #include "form.h"
@@ -44,6 +46,7 @@
 namespace KFormDesigner
 {
 
+#if 0 // 2.0
 //! @internal
 class XMLGUIClient : public QObject, public KXMLGUIClient
 {
@@ -53,6 +56,7 @@ public:
         setXMLFile(xmlFileName, true /*merge*/);
     }
 };
+#endif
 
 //! @internal
 class WidgetLibraryPrivate
@@ -98,7 +102,7 @@ public:
 #endif
     }
     // dict which associates a class name with a Widget class
-    WidgetInfo::Hash widgets;//, alternateWidgets;
+    WidgetInfoHash widgets;//, alternateWidgets;
     QHash<QByteArray, KService::Ptr> services;
     QSet<QByteArray> supportedFactoryGroups;
     QHash<QByteArray, WidgetFactory*> factories;
@@ -131,30 +135,29 @@ WidgetLibrary::~WidgetLibrary()
 void
 WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 {
-    const WidgetInfo::Hash widgets( f->classes() );
+    const WidgetInfoHash widgets( f->classes() );
     foreach (WidgetInfo *w, widgets) {
         if (d->hiddenClasses.contains( w->className() ))
             continue; //this class is hidden
         // check if we want to inherit a widget from a different factory
-        if (!w->m_parentFactoryName.isEmpty() && !w->m_inheritedClassName.isEmpty()) {
-            WidgetFactory *parentFactory = d->factories.value(w->m_parentFactoryName.toLower());
+        if (!w->parentFactoryName().isEmpty() && !w->inheritedClassName().isEmpty()) {
+            WidgetFactory *parentFactory = d->factories.value(w->parentFactoryName().toLower());
             if (!parentFactory) {
-                kWarning() << "class '" << w->className()
-                    << "' - no such parent factory '" << w->m_parentFactoryName << "'";
+                kWarning() << "class" << w->className() << ": no such parent factory" << w->parentFactoryName();
                 continue;
             }
-            WidgetInfo* inheritedClass = parentFactory->m_classesByName.value( w->m_inheritedClassName );
+            WidgetInfo* inheritedClass = parentFactory->m_classesByName.value( w->inheritedClassName() );
             if (!inheritedClass) {
-                kWarning() << "class '" << w->m_inheritedClassName
-                    << "' - no such class to inherit in factory '" << w->m_parentFactoryName << "'";
+                kWarning() << "class" << w->inheritedClassName() << " - no such class to inherit in factory"
+                    << w->parentFactoryName();
                 continue;
             }
             //ok: inherit properties:
-            w->m_inheritedClass = inheritedClass;
+            w->setInheritedClass( inheritedClass );
             if (w->pixmap().isEmpty())
                 w->setPixmap(inheritedClass->pixmap());
             //ok?
-            foreach(const QByteArray& alternateName, inheritedClass->m_alternateNames) {
+            foreach(const QByteArray& alternateName, inheritedClass->alternateClassNames()) {
                 w->addAlternateClassName(
                     alternateName, inheritedClass->isOverriddenClassName(alternateName));
             }
@@ -260,7 +263,7 @@ WidgetLibrary::loadFactories()
         f->setObjectName(ptr->library());
         f->m_library = this;
         f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
-        f->m_xmlGUIFileName = ptr->property("X-KFormDesigner-XMLGUIFileName").toString();
+//2.0        f->m_xmlGUIFileName = ptr->property("X-KFormDesigner-XMLGUIFileName").toString();
         d->factories.insert(f->objectName().toLower().toLatin1(), f);
 
         //collect information about classes to be hidden
@@ -361,6 +364,7 @@ void WidgetLibrary::createWidgetActions(ActionGroup *group)
 //2.0    return actions;
 }
 
+/* 2.0
 void
 WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
 {
@@ -371,7 +375,7 @@ WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
             factory->m_guiClient
             ? factory->m_guiClient->actionCollection() : col);
     }
-}
+}*/
 
 QWidget*
 WidgetLibrary::createWidget(const QByteArray &classname, QWidget *parent, const char *name, Container *c,
@@ -687,11 +691,11 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QByteArray& 
     QString desc(winfo->factory()->propertyDescForName(propertyName));
     if (!desc.isEmpty())
         return desc;
-    if (winfo->m_parentFactoryName.isEmpty())
+    if (winfo->parentFactoryName().isEmpty())
         return QString();
 
     //try in parent factory, if exists
-    WidgetFactory *parentFactory = d->factories.value(winfo->m_parentFactoryName);
+    WidgetFactory *parentFactory = d->factories.value(winfo->parentFactoryName());
     if (!parentFactory)
         return QString();
 
@@ -705,11 +709,11 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QByteArray&
     QString desc(winfo->factory()->propertyDescForValue(name));
     if (!desc.isEmpty())
         return desc;
-    if (winfo->m_parentFactoryName.isEmpty())
+    if (winfo->parentFactoryName().isEmpty())
         return QString();
 
     //try in parent factory, if exists
-    WidgetFactory *parentFactory = d->factories.value(winfo->m_parentFactoryName);
+    WidgetFactory *parentFactory = d->factories.value(winfo->parentFactoryName());
     if (!parentFactory)
         return QString();
 
@@ -721,9 +725,9 @@ void WidgetLibrary::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& w
     if (!winfo.factory())
         return;
     winfo.factory()->setPropertyOptions(set, winfo, w);
-    if (winfo.m_parentFactoryName.isEmpty())
+    if (winfo.parentFactoryName().isEmpty())
         return;
-    WidgetFactory *parentFactory = d->factories.value(winfo.m_parentFactoryName);
+    WidgetFactory *parentFactory = d->factories.value(winfo.parentFactoryName());
     if (!parentFactory)
         return;
     parentFactory->setPropertyOptions(set, winfo, w);

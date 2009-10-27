@@ -25,12 +25,13 @@ KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f
     init();
 }
 
+/* 2.0
 KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
         const char* parentFactoryName, const char* inheritedClassName)
         : KFormDesigner::WidgetInfo(f, parentFactoryName, inheritedClassName)
 {
     init();
-}
+}*/
 
 KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
 {
