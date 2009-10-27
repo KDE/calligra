@@ -11,6 +11,9 @@ set(karbonfiltereffects_PART_SRCS
     MergeEffect.cpp
     MergeEffectFactory.cpp
     MergeEffectConfigWidget.cpp
+    ColorMatrixEffect.cpp
+    ColorMatrixEffectFactory.cpp
+    ColorMatrixEffectConfigWidget.cpp
 )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
