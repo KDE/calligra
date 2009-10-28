@@ -22,6 +22,7 @@
 #include "OffsetEffectFactory.h"
 #include "MergeEffectFactory.h"
 #include "ColorMatrixEffectFactory.h"
+#include "FloodEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
@@ -38,6 +39,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QSt
     KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new MergeEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ColorMatrixEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new FloodEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"
