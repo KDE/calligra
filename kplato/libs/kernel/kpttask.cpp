@@ -2810,7 +2810,6 @@ Duration Completion::remainingEffort( const QDate &date ) const
     return x;
 }
 
-
 Duration Completion::actualEffort() const
 {
     Duration eff;
@@ -2824,6 +2823,19 @@ Duration Completion::actualEffort() const
         eff = m_entries.values().last()->totalPerformed;
     }
     return eff;
+}
+
+Duration Completion::actualEffort( const Resource *resource, const QDate &date ) const
+{
+    UsedEffort *ue = usedEffort( resource );
+    if ( ue == 0 ) {
+        return Duration::zeroDuration;
+    }
+    UsedEffort::ActualEffort *ae = ue->effort( date );
+    if ( ae == 0 ) {
+        return Duration::zeroDuration;
+    }
+    return ae->effort();
 }
 
 Duration Completion::actualEffort( const QDate &date ) const

@@ -89,7 +89,8 @@ public:
             bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
             /// Save to document
             void saveXML(QDomElement &element) const;
-        
+            bool contains( const QDate &date ) const { return m_actual.contains( date ); }
+
         private:
             QMap<QDate, ActualEffort*> m_actual;
     };
@@ -179,10 +180,12 @@ public:
     Duration remainingEffort( const QDate &date ) const;
     /// Returns the total actual effort
     Duration actualEffort() const;
-    /// Returns the total actual effort on @ date
+    /// Returns the total actual effort on @p date
     Duration actualEffort( const QDate &date ) const;
     /// Returns the total actual effort upto and including @p date
     Duration actualEffortTo( const QDate &date ) const;
+    /// Returns the actual effort for @p resource on @p date
+    Duration actualEffort( const Resource *resource, const QDate &date ) const;
     /// TODO
     QString note() const;
     /// TODO
