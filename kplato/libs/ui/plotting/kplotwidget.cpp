@@ -700,7 +700,7 @@ void KPlotWidget::drawAxes( QPainter *p ) {
         // Draw major tickmarks
         foreach( double xx, a->majorTickMarks() ) {
             double px = d->pixRect.width() * (xx - d->dataRect.x()) / d->dataRect.width();
-            if ( px > 0 && px < d->pixRect.width() ) {
+            if ( px >= 0 && px < d->pixRect.width() ) {
                 p->drawLine( QPointF( px, double(d->pixRect.height() - TICKOFFSET)), 
                         QPointF( px, double(d->pixRect.height() - BIGTICKSIZE - TICKOFFSET)) );
 

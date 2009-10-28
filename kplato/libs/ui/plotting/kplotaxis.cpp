@@ -23,6 +23,8 @@
 #include <math.h> //for log10(), pow(), modf()
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <kcalendarsystem.h>
 
 #include <QDate>
 
@@ -123,34 +125,41 @@ void KPlotAxis::setDateTickMarks( double x0, double length ) {
     d->m_MinorTickMarks.clear();
 
     kDebug()<<x0<<length;
+    const KCalendarSystem *cal = KGlobal::locale()->calendar();
 
-    double Tick0 = x0 + d->m_startDate.dayOfWeek() - Qt::Monday;
+    int offset = ( ( cal->weekStartDay() + 6 ) % 7 )  - cal->dayOfWeek( d->m_startDate );
+    double Tick0 = x0 + ( offset < 0 ? offset + 7 : offset );
+
     int NumMajorTicks = (int)(length / 7.0);
     int x=1.0;
     while ( (NumMajorTicks / x) > 12.0 ) {
         x += 1.0;
     }
     NumMajorTicks /= x;
-    for ( int i=0; i<NumMajorTicks+1; i++ ) {
+    // draw minor tickmarks before first major (i=-1) and after last (i<=NumMajorTicks+1)
+    for ( int i=-1; i<NumMajorTicks+1; i++ ) {
         double xmaj = Tick0 + i*x*7.0;
         if ( xmaj >= x0 && xmaj <= x0 + length ) {
             d->m_MajorTickMarks.append( xmaj );
-            for ( int j=1; j<7; j++ ) {
-                double xmin = xmaj + j*x;
-                if ( xmin <= x0 + length ) {
-                    d->m_MinorTickMarks.append( xmin );
-                }
+        }
+        for ( int j=1; j<7; j++ ) {
+            double xmin = xmaj + j*x;
+            if ( xmin <= x0 + length ) {
+                d->m_MinorTickMarks.append( xmin );
             }
         }
     }
-    kDebug()<<NumMajorTicks<<x<<d->m_MajorTickMarks;
 }
 
 void KPlotAxis::setWeekTickMarks( double x0, double length ) {
     d->m_MajorTickMarks.clear();
     d->m_MinorTickMarks.clear();
 
-    double Tick0 = x0 + d->m_startDate.dayOfWeek() - Qt::Monday;
+    const KCalendarSystem *cal = KGlobal::locale()->calendar();
+
+    int offset = ( ( cal->weekStartDay() + 6 ) % 7 )  - cal->dayOfWeek( d->m_startDate );
+    double Tick0 = x0 + ( offset < 0 ? offset + 7 : offset );
+
     int NumMajorTicks = (int)(length / 7.0);
     int x = 1;
     while ( (NumMajorTicks / x) > 12 ) {
@@ -268,12 +277,12 @@ QString KPlotAxis::tickLabel( double val ) const {
     if ( d->m_labelFmt == 'd' ) {
         // val is number of days since m_startDate
         QDate date = d->m_startDate.addDays( (int)val );
-        return date.toString( "MM.dd" );
+        return date.toString( "MM.dd" ); //FIXME; i18n
     }
     if ( d->m_labelFmt == 'w' ) {
         // val is number of days since m_startDate
         QDate date = d->m_startDate.addDays( (int)val );
-        return QString::number( date.weekNumber() );
+        return QString::number( KGlobal::locale()->calendar()->weekNumber( date ) );
     }
     return QString( "%1" ).arg( val, d->m_labelFieldWidth, d->m_labelFmt, d->m_labelPrec );
 }
