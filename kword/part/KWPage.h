@@ -66,6 +66,14 @@ public:
     qreal leftMargin() const;
     /// return the width of the margin at right (in pt);
     qreal rightMargin() const;
+    /// return the height of the padding at top (in pt);
+    qreal topPadding() const;
+    /// return the height of the padding at bottom (in pt);
+    qreal bottomPadding() const;
+    /// return the width of the padding at left (in pt);
+    qreal leftPadding() const;
+    /// return the width of the padding at right (in pt);
+    qreal rightPadding() const;
     /// return width of the margin that is the closest to the page edge, i.e. left for even pages
     qreal pageEdgeMargin() const;
     /// return width of the margin that is the closest to the binding, i.e. right for even pages
