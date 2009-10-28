@@ -624,6 +624,7 @@ void CalendarEditor::updateReadWrite( bool readwrite )
 {
     m_calendarview->setReadWrite( readwrite );
     m_dayview->setReadWrite( readwrite );
+    ViewBase::updateReadWrite( readwrite );
 }
 
 void CalendarEditor::slotAddCalendar ()
