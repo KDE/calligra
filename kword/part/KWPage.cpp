@@ -171,12 +171,6 @@ qreal KWPage::leftPadding() const
     if (! isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
-#warning What to do about padding for a pagespread?
-#if 0
-    qreal answer = page.pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
-    if (answer != -1)
-        return answer;
-#endif
     return page.style.pageLayout().leftPadding;
 }
 
@@ -185,12 +179,6 @@ qreal KWPage::rightPadding() const
     if (! isValid())
         return 0;
     const KWPageManagerPrivate::Page &page = priv->pages[n];
-#warning What to do about padding for a pagespread?
-#if 0
-    qreal answer = page.pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
-    if (answer != -1)
-        return answer;
-#endif
     return page.style.pageLayout().rightPadding;
 }
 
