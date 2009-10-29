@@ -144,7 +144,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         m_textShape = factory->createDefaultShapeAndInit( context.dataCenterMap() );
 
         KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
-        KoTextDocument( shapeData->document() ).textEditor()->beginEditBlock();
+        shapeData->document()->setUndoRedoEnabled(false);
 
         QTextDocument * document = shapeData->document();
         QTextCursor cursor( document );
@@ -153,7 +153,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         cursor.insertText( text() );
         shapeData->foul();
         m_paragraphStyle = paragraphStyle.clone();
-        KoTextDocument( shapeData->document() ).textEditor()->endEditBlock();
+        shapeData->document()->setUndoRedoEnabled(true);
     }
 
     styleStack.restore();
