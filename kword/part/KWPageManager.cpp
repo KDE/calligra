@@ -256,8 +256,9 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     }
     page.pageSide = page.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
 
-    page.style = pageStyle;
-    if (! page.style.isValid())
+    if (pageStyle.isValid())
+        page.style = pageStyle;
+    if (!page.style.isValid())
         page.style = defaultPageStyle();
 
     d->pages.insert(++d->lastId, page);
