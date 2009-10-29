@@ -22,10 +22,11 @@
 
 #include "KoFilterEffectConfigWidgetBase.h"
 
-class KoFilterEffect;
 class ColorMatrixEffect;
+class KoFilterEffect;
 class KDoubleNumInput;
 class KComboBox;
+class QStackedWidget;
 
 class ColorMatrixEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
@@ -37,14 +38,15 @@ public:
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);
     
 private slots:
-    void matrixChanged(double);
+    void matrixChanged();
     void saturateChanged(double saturate);
     void hueRotateChanged(double angle);
-    
+    void typeChanged(int index);
 private:
     KComboBox * m_type;
     ColorMatrixEffect * m_effect;
-    KDoubleNumInput * m_matrix[20];
+    QList<KDoubleNumInput*> m_matrix;
+    QStackedWidget * m_stack;
     KDoubleNumInput * m_saturate;
     KDoubleNumInput * m_hueRotate;
 };

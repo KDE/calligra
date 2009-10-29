@@ -41,24 +41,25 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     m_type->addItem(i18n("Luminance to alpha"));
     g->addWidget(m_type, 0, 0);
     
-    QStackedWidget * stack = new QStackedWidget(this);
-    stack->setContentsMargins(0,0,0,0);
-    g->addWidget(stack, 1, 0);
+    m_stack = new QStackedWidget(this);
+    m_stack->setContentsMargins(0,0,0,0);
+    g->addWidget(m_stack, 1, 0);
     
-    QWidget * matrixWidget = new QWidget(stack);
+    QWidget * matrixWidget = new QWidget(m_stack);
     QGridLayout * matrixLayout = new QGridLayout(matrixWidget);
-    for (int i = 0; i < 20; ++i) {
-        m_matrix[i] = new KDoubleNumInput(matrixWidget);
+    for (int i = 0; i < ColorMatrixElements; ++i) {
+        m_matrix.append(new KDoubleNumInput(matrixWidget));
         m_matrix[i]->setMinimumWidth(40);
+        m_matrix[i]->setValue( i/5 == i%5 ? 1.0 : 0.0 );
         matrixLayout->addWidget(m_matrix[i], i/5, i%5);
-        connect(m_matrix[i], SIGNAL(valueChanged(double)), this, SLOT(matrixChanged(double)));
+        connect(m_matrix[i], SIGNAL(valueChanged(double)), this, SLOT(matrixChanged()));
     }
     matrixWidget->setLayout(matrixLayout);
     matrixLayout->setSpacing(2);
     matrixLayout->setContentsMargins(0,0,0,0);
-    stack->addWidget(matrixWidget);
+    m_stack->addWidget(matrixWidget);
     
-    QWidget * saturateWidget = new QWidget(stack);
+    QWidget * saturateWidget = new QWidget(m_stack);
     QGridLayout * saturateLayout = new QGridLayout(saturateWidget);
     saturateLayout->addWidget(new QLabel(i18n("Saturate value"), saturateWidget), 0, 0);
     m_saturate = new KDoubleNumInput(saturateWidget);
@@ -66,9 +67,9 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     saturateLayout->addWidget(m_saturate, 0, 1);
     saturateLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0);
     saturateWidget->setLayout(saturateLayout);
-    stack->addWidget(saturateWidget);
+    m_stack->addWidget(saturateWidget);
     
-    QWidget * hueRotateWidget = new QWidget(stack);
+    QWidget * hueRotateWidget = new QWidget(m_stack);
     QGridLayout * hueRotateLayout = new QGridLayout(hueRotateWidget);
     hueRotateLayout->addWidget(new QLabel(i18n("Angle"), hueRotateWidget), 0, 0);
     m_hueRotate = new KDoubleNumInput(hueRotateWidget);
@@ -76,14 +77,15 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     hueRotateLayout->addWidget(m_hueRotate, 0, 1);
     hueRotateLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 1, 0);    
     hueRotateWidget->setLayout(hueRotateLayout);
-    stack->addWidget(hueRotateWidget);
+    m_stack->addWidget(hueRotateWidget);
     
-    QWidget * luminanceWidget = new QWidget(stack);
-    stack->addWidget(luminanceWidget);
+    QWidget * luminanceWidget = new QWidget(m_stack);
+    m_stack->addWidget(luminanceWidget);
     
     setLayout(g);
 
-    connect(m_type, SIGNAL(currentIndexChanged(int)), stack, SLOT(setCurrentIndex(int)));
+    connect(m_type, SIGNAL(currentIndexChanged(int)), m_stack, SLOT(setCurrentIndex(int)));
+    connect(m_type, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
     connect(m_saturate, SIGNAL(valueChanged(double)), this, SLOT(saturateChanged(double)));
     connect(m_hueRotate, SIGNAL(valueChanged(double)), this, SLOT(hueRotateChanged(double)));
 }
@@ -94,11 +96,13 @@ bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffe
     if (!m_effect)
         return false;
     
+    m_type->blockSignals(true);
+    
     switch(m_effect->type())
     {
         case ColorMatrixEffect::Matrix:
             m_type->setCurrentIndex(0);
-            for (int i = 0; i < 20; ++i) {
+            for (int i = 0; i < ColorMatrixElements; ++i) {
                 m_matrix[i]->blockSignals(true);
                 m_matrix[i]->setValue(m_effect->colorMatrix()[i]);
                 m_matrix[i]->blockSignals(false);
@@ -120,18 +124,22 @@ bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffe
             m_type->setCurrentIndex(3);
             break;
     }
+
+    m_type->blockSignals(false);
+    m_stack->setCurrentIndex(m_type->currentIndex());
+    
     return true;
 }
 
-void ColorMatrixEffectConfigWidget::matrixChanged(double)
+void ColorMatrixEffectConfigWidget::matrixChanged()
 {
     if( !m_effect)
         return;
     
-    qreal m[25];
-    memcpy(m, m_effect->colorMatrix(), 25*sizeof(qreal));
+    qreal m[ColorMatrixElements];
+    memcpy(m, m_effect->colorMatrix(), ColorMatrixElements*sizeof(qreal));
     
-    for(int i = 0; i < 20; ++i) {
+    for(int i = 0; i < ColorMatrixElements; ++i) {
         m[i] = m_matrix[i]->value();
     }
     m_effect->setColorMatrix(m);
@@ -153,6 +161,27 @@ void ColorMatrixEffectConfigWidget::hueRotateChanged(double angle)
         return;
     
     m_effect->setHueRotate(angle);
+    emit filterChanged();
+}
+
+void ColorMatrixEffectConfigWidget::typeChanged(int index)
+{
+    if( !m_effect)
+        return;
+    
+    if (index == ColorMatrixEffect::Matrix) {
+        qreal m[ColorMatrixElements];
+        for(int i = 0; i < ColorMatrixElements; ++i) {
+            m[i] = m_matrix[i]->value();
+        }
+        m_effect->setColorMatrix(m);
+    } else if( index == ColorMatrixEffect::Saturate) {
+        m_effect->setSaturate(m_saturate->value());
+    } else if( index == ColorMatrixEffect::HueRotate) {
+        m_effect->setHueRotate(m_hueRotate->value());
+    } else {
+        m_effect->setLuminanceAlpha();
+    }
     emit filterChanged();
 }
 

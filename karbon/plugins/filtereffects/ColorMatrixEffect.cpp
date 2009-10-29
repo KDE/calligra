@@ -25,6 +25,9 @@
 #include <QtCore/QRect>
 #include <math.h>
 
+const int MatrixRows  = 4;
+const int MatrixCols  = 5;
+
 ColorMatrixEffect::ColorMatrixEffect()
 : KoFilterEffect(ColorMatrixEffectId, i18n( "Color Matrix" ))
 , m_type(Matrix)
@@ -35,9 +38,9 @@ ColorMatrixEffect::ColorMatrixEffect()
 void ColorMatrixEffect::setIdentity()
 {
     // set identity matrix
-    for(int r = 0; r < 5; ++r) {
-        for(int c = 0; c < 5; ++c) {
-            m_matrix[r*5+c] = r == c ? 1.0 : 0.0;
+    for(int r = 0; r < MatrixRows; ++r) {
+        for(int c = 0; c < MatrixCols; ++c) {
+            m_matrix[r*MatrixCols+c] = r == c ? 1.0 : 0.0;
         }
     }
 }
@@ -54,7 +57,7 @@ const qreal * ColorMatrixEffect::colorMatrix() const
 
 void ColorMatrixEffect::setColorMatrix(qreal *colorMatrix)
 {
-    memcpy(m_matrix, colorMatrix, 25*sizeof(qreal));
+    memcpy(m_matrix, colorMatrix, ColorMatrixElements*sizeof(qreal));
     m_type = Matrix;
 }
 
@@ -122,7 +125,7 @@ void ColorMatrixEffect::setLuminanceAlpha()
 {
     m_type = LuminanceAlpha;
 
-    setIdentity();
+    memset(m_matrix, 0, ColorMatrixElements*sizeof(qreal));
     
     m_matrix[15] = 0.2125;
     m_matrix[16] = 0.7154;
@@ -142,26 +145,24 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
     const qreal * m = m_matrix;
     qreal sa, sr, sg, sb;
     qreal da, dr, dg, db;
-    qreal alpha;
     
     QRect roi = context.filterRegion().toRect();
     for( int row = roi.top(); row < roi.bottom(); ++row) {
         for(int col = roi.left(); col < roi.right(); ++col) {
             const QRgb &s = src[row*w+col];
-            sa = qAlpha(s);
-            sr = qRed(s);
-            sb = qBlue(s);
-            sg = qGreen(s);
+            sa = qAlpha(s)/255.0;
+            sr = qRed(s)/255.0;
+            sb = qBlue(s)/255.0;
+            sg = qGreen(s)/255.0;
             // the matrix is applied to non-premultiplied color values
             // so we have to convert colors by dividing by alpha value
             if (sa == 0.0) {
-                // alpha is zero (fully tranparent)
-                sr = sb = sg = 0.0;
-            } else if (sa != 255.0) {
-                alpha = sa/255.0;
-                sr /= alpha;
-                sb /= alpha;
-                sg /= alpha;
+                // alpha is zero (fully transparent)
+                //sr = sb = sg = 0.0;
+            } else if (sa != 1.0) {
+                sr /= sa;
+                sb /= sa;
+                sg /= sa;
             }
             
             // apply matrix to color values
@@ -171,12 +172,12 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
             da = m[15]*sr + m[16]*sg + m[17]*sb + m[18]*sa + m[19];
             
             // the new alpha value
-            alpha = da/255.0;
+            da *= 255.0;
             
             // set pre-multiplied color values on destination image
-            dst[row*w+col] = qRgba(static_cast<quint8>(qBound(0.0, dr*alpha, 255.0)),
-                                   static_cast<quint8>(qBound(0.0, dg*alpha, 255.0)),
-                                   static_cast<quint8>(qBound(0.0, db*alpha, 255.0)),
+            dst[row*w+col] = qRgba(static_cast<quint8>(qBound(0.0, dr*da, 255.0)),
+                                   static_cast<quint8>(qBound(0.0, dg*da, 255.0)),
+                                   static_cast<quint8>(qBound(0.0, db*da, 255.0)),
                                    static_cast<quint8>(qBound(0.0, da, 255.0)));
         }
     }
@@ -203,8 +204,8 @@ bool ColorMatrixEffect::load(const KoXmlElement &element, const QMatrix &matrix)
     if (typeStr == "matrix") {
         // values are separated by whitespace and/or comma
         QStringList values = valueStr.trimmed().split( QRegExp("(\\s+|,)"), QString::SkipEmptyParts );
-        if (values.count() == 20) {
-            for (int i = 0; i < 20; ++i) {
+        if (values.count() == ColorMatrixElements) {
+            for (int i = 0; i < ColorMatrixElements; ++i) {
                 m_matrix[i] = values[i].toDouble();
             }
         }
@@ -236,9 +237,9 @@ void ColorMatrixEffect::save(KoXmlWriter &writer)
         {
             writer.addAttribute("type", "matrix");
             QString matrix;
-            for (int r = 0; r < 4; ++r) {
-                for (int c = 0; c < 5; ++c) {
-                    matrix += QString("%1 ").arg(m_matrix[r*5+c]);
+            for (int r = 0; r < MatrixRows; ++r) {
+                for (int c = 0; c < MatrixCols; ++c) {
+                    matrix += QString("%1 ").arg(m_matrix[r*MatrixCols+c]);
                 }
             }
             writer.addAttribute("values", matrix);
