@@ -131,7 +131,6 @@ void ColorMatrixEffect::setLuminanceAlpha()
     m_matrix[16] = 0.7154;
     m_matrix[17] = 0.0721;
     m_matrix[18] = 0.0;
-    m_matrix[24] = 1.0;
 }
 
 QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
