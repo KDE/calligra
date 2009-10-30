@@ -521,6 +521,7 @@ void ResourceItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
     m_model.setProject( m_project );
+    reset();
 }
 
 Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
