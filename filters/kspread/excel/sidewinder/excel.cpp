@@ -5274,6 +5274,14 @@ void ExcelReader::handleMergedCells( MergedCellsRecord* record )
       cell->setColumnSpan( lastColumn - firstColumn + 1 );
       cell->setRowSpan( lastRow - firstRow + 1 );
     }
+    for( unsigned row = firstRow; row <= lastRow; row++ )
+      for( unsigned col = firstColumn; col <= lastColumn; col++ )
+      {
+        if( row != firstRow || col != firstColumn )
+        {
+          d->activeSheet->cell( col, row, true )->setCovered( true );
+        }
+      }
   }
 }
 

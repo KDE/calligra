@@ -593,9 +593,18 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   if( !cell ) return;
   if( !xmlWriter ) return;
 
-  xmlWriter->startElement( "table:table-cell" );
+  if( cell->isCovered() )
+    xmlWriter->startElement( "table:covered-table-cell" );
+  else
+    xmlWriter->startElement( "table:table-cell" );
+
   xmlWriter->addAttribute( "table:style-name", cellStyles[cellFormatIndex] );
   cellFormatIndex++;
+
+  if( cell->columnSpan() > 1 )
+    xmlWriter->addAttribute( "table:number-columns-spanned", cell->columnSpan() );
+  if( cell->rowSpan() > 1 )
+    xmlWriter->addAttribute( "table:number-rows-spanned", cell->rowSpan() );
 
   QString formula = string( cell->formula() );
   if( !formula.isEmpty() )
@@ -656,7 +665,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
 
   // TODO: handle formula
 
-  xmlWriter->endElement(); //  table:table-cell
+  xmlWriter->endElement(); //  table:[covered-]table-cell
 }
 
 void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter )

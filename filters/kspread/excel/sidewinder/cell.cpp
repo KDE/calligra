@@ -1,11 +1,11 @@
-/* Swinder - Portable library for spreadsheet 
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -32,13 +32,14 @@ class Cell::Private
 {
 public:
   Sheet* sheet;
-  unsigned row;     
-  unsigned column;  
+  unsigned row;
+  unsigned column;
   Value value;
   UString formula;
   Format format;
   unsigned columnSpan;
   unsigned rowSpan;
+  bool covered;
 };
 
 }
@@ -54,6 +55,7 @@ Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
   d->value      = Value::empty();
   d->columnSpan = 1;
   d->rowSpan    = 1;
+  d->covered    = false;
 }
 
 Cell::~Cell()
@@ -78,12 +80,12 @@ unsigned Cell::row() const
 
 UString Cell::name() const
 {
-  return name( column(), row() ); 
+  return name( column(), row() );
 }
 
 UString Cell::name( unsigned column, unsigned row )
 {
-  return columnLabel( column ) + UString::from( row );  
+  return columnLabel( column ) + UString::from( row );
 }
 
 UString Cell::columnLabel() const
@@ -97,13 +99,13 @@ UString Cell::columnLabel( unsigned column )
   UString str;
   unsigned digits = 1;
   unsigned offset = 0;
-  
+
   for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
     offset += limit;
-      
+
   for( unsigned c = column - offset; digits; --digits, c/=26 )
     str = UString( UChar( 'A' + (c%26) ) ) + str;
-    
+
   return str;
 }
 
@@ -157,4 +159,14 @@ void Cell::setRowSpan( unsigned span )
 {
   if( span < 1 ) return;
   d->rowSpan = span;
+}
+
+bool Cell::isCovered() const
+{
+  return d->covered;
+}
+
+void Cell::setCovered( bool covered )
+{
+  d->covered = covered;
 }
