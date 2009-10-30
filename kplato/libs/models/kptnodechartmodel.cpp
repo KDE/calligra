@@ -162,17 +162,7 @@ int NodeChartModel::dataSetCount( const ChartAxisIndex &index ) const
         return 0;
     }
     if ( index.isValid() && index.userData == AxisSet ) {
-        int count = 0;
-        if ( m_dataShown.showCost && index.number() == 0 ) {
-            if ( m_dataShown.showBCWSCost ) ++count;
-            if ( m_dataShown.showBCWPCost ) ++count;
-            if ( m_dataShown.showACWPCost ) ++count;
-        } else { // always effort
-            if ( m_dataShown.showBCWSEffort ) ++count;
-            if ( m_dataShown.showBCWPEffort ) ++count;
-            if ( m_dataShown.showACWPEffort ) ++count;
-        }
-        return count;
+        return 3;
     }
     return 0;
 }
@@ -361,36 +351,27 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
     if ( m_dataShown.showCost && idx.number() == 0 ) {
         switch ( number ) {
             case 0:
-                if ( type & 1 ) return createDataIndex( 0, idx, BCWS );
-                if ( type & 2 ) return createDataIndex( 1, idx, BCWP );
-                if ( type & 4 ) return createDataIndex( 2, idx, ACWP );
-                break;
-           case 1: {
-                if ( (type & 1) && (type & 2) ) return createDataIndex( 1, idx, BCWP );
-                if ( type & 4 ) return createDataIndex( 2, idx, ACWP );
-                break; }
-           case 2:
+                if ( type & 1 ) return createDataIndex( number, idx, BCWS );
+                //fall trough
+            case 1:
+                if ( type & 2 ) return createDataIndex( number, idx, BCWP );
+                //fall trough
+            case 2:
                 if ( type & 4 ) return createDataIndex( number, idx, ACWP );
-                if ( type & 4 ) return createDataIndex( 2, idx, ACWP );
-                break;
         }
     }
-     if ( m_dataShown.showEffort && idx.number() == (m_dataShown.showCost ? 1 : 0) ) {
-         switch ( number ) {
-             case 0:
-                if ( type & 8 ) return createDataIndex( 0, idx, BCWS );
-                if ( type & 16 ) return createDataIndex( 1, idx, BCWP );
-                if ( type & 32 ) return createDataIndex( 2, idx, ACWP );
-                break;
-             case 1:
-                if ( (type & 8) && (type & 16) ) return createDataIndex( 1, idx, BCWP );
-                if ( type & 32 ) return createDataIndex( 2, idx, ACWP );
-                break;
-             case 2:
-                if ( type & 32 ) return createDataIndex( 2, idx, ACWP );
-                break;
-         }
-     }
+    if ( m_dataShown.showEffort && idx.number() == m_dataShown.showCost ? 1 : 0 ) {
+        switch ( number ) {
+            case 0:
+                if ( type & 8 ) return createDataIndex( number, idx, BCWS );
+                //fall trough
+            case 1:
+                if ( type & 16 ) return createDataIndex( number, idx, BCWP );
+                //fall trough
+            case 2:
+                if ( type & 32 ) return createDataIndex( number, idx, ACWP );
+        }
+    }
     return ChartDataIndex();
 }
     
