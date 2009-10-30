@@ -815,7 +815,7 @@ EffortCostMap Task::acwp( long id ) const
         case Completion::EnterCompleted:
             //hmmm
         default:
-            return completion().actualEffortCost();
+            return completion().actualEffortCost( id );
     }
     return EffortCostMap();
 }
@@ -3011,7 +3011,7 @@ double Completion::actualCost( const Resource *resource ) const
     return c;
 }
 
-EffortCostMap Completion::actualEffortCost() const
+EffortCostMap Completion::actualEffortCost( long id ) const
 {
     //kDebug();
     EffortCostMap map;
@@ -3067,7 +3067,8 @@ EffortCostMap Completion::actualEffortCost() const
             Duration e = m_entries[ d ]->totalPerformed;
             if ( e != Duration::zeroDuration && e != last ) {
                 //kDebug()<<m_node->name()<<d<<(e - last).toDouble(Duration::Unit_h);
-                map.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
+                double eff = ( e - last ).toDouble( Duration::Unit_h );
+                map.insert( d, e - last, eff * averageCostPrHour( d, id ) ); // try to guess cost
                 last = e;
             }
             if ( et.isValid() && d > et ) {

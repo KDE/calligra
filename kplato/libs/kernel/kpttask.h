@@ -203,7 +203,7 @@ public:
     /**
      * Returns a map of all actual effort and cost entered
      */
-    virtual EffortCostMap actualEffortCost() const;
+    virtual EffortCostMap actualEffortCost( long id ) const;
 
     void addUsedEffort( const Resource *resource, UsedEffort *value = 0 );
     UsedEffort *takeUsedEffort( const Resource *r ) { return m_usedEffort.take( const_cast<Resource*>( r ) ); changed(); }
