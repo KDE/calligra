@@ -1119,7 +1119,7 @@ unsigned FormulaToken::nameIndex() const
 }
 
 
-UString FormulaToken::area( unsigned /*row*/, unsigned /*col*/ ) const
+UString FormulaToken::area( unsigned row, unsigned col, bool relative ) const
 {
   // FIXME check data size !
   unsigned char buf[2];
@@ -1152,6 +1152,14 @@ UString FormulaToken::area( unsigned /*row*/, unsigned /*col*/ ) const
     row2Relative = col2Ref & 0x8000;
     col2Relative = col2Ref & 0x4000;
     col2Ref &= 0x3fff;
+
+    if( relative )
+    {
+      if( row1Ref & 0x8000 ) row1Ref -= 0x10000;
+      if( row2Ref & 0x8000 ) row2Ref -= 0x10000;
+      if( col1Ref & 0x80 ) col1Ref -= 0x100;
+      if( col2Ref & 0x80 ) col2Ref -= 0x100;
+    }
   }
   else
   {
@@ -1178,6 +1186,22 @@ UString FormulaToken::area( unsigned /*row*/, unsigned /*col*/ ) const
     row2Relative = row2Ref & 0x8000;
     col2Relative = row2Ref & 0x4000;
     row2Ref &= 0x3fff;
+
+    if( relative )
+    {
+      if( row1Ref & 0x2000 ) row1Ref -= 0x4000;
+      if( row2Ref & 0x2000 ) row2Ref -= 0x4000;
+      if( col1Ref & 0x80 ) col1Ref -= 0x100;
+      if( col2Ref & 0x80 ) col2Ref -= 0x100;
+    }
+  }
+
+  if( relative )
+  {
+    row1Ref += row;
+    row2Ref += row;
+    col1Ref += col;
+    col2Ref += col;
   }
 
   UString result;
@@ -6288,6 +6312,10 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( token.area( row, col ) );
         break;
 
+      case FormulaToken::AreaN:
+        stack.push_back( token.area( row, col, true ) );
+        break;
+
       case FormulaToken::Area3d:
         stack.push_back( token.area3d( d->externSheetTable, row, col ) );
         break;
@@ -6383,7 +6411,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::MemFunc:
       case FormulaToken::RefErr:
       case FormulaToken::AreaErr:
-      case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
       case FormulaToken::RefErr3d:
