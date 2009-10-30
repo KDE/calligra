@@ -149,6 +149,9 @@ void KPlotAxis::setDateTickMarks( double x0, double length ) {
             }
         }
     }
+    if ( d->m_startDate.isValid() && d->m_MajorTickMarks.isEmpty() ) {
+        d->m_MajorTickMarks.append( x0 );
+    }
 }
 
 void KPlotAxis::setWeekTickMarks( double x0, double length ) {
