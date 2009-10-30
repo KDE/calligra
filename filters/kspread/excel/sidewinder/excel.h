@@ -177,6 +177,8 @@ public:
 
   // only when id is Area
   UString area( unsigned row, unsigned col ) const;
+  // only when id is Area3d
+  UString area3d( const std::vector<UString>& externSheets, unsigned row, unsigned col ) const;
 
   // only when id is Attr
   unsigned attr() const;

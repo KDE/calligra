@@ -1202,6 +1202,73 @@ UString FormulaToken::area( unsigned /*row*/, unsigned /*col*/ ) const
   return result;
 }
 
+UString FormulaToken::area3d( const std::vector<UString>& externSheets, unsigned /*row*/, unsigned /*col*/ ) const
+{
+  if( version() != Excel97 )
+  {
+    return UString("Unknown");
+  }
+
+  int sheetRef = readU16( &d->data[0] );
+
+  // FIXME check data size !
+  unsigned char buf[2];
+  int row1Ref, row2Ref, col1Ref, col2Ref;
+  bool row1Relative, col1Relative;
+  bool row2Relative, col2Relative;
+
+  buf[0] = d->data[2];
+  buf[1] = d->data[3];
+  row1Ref = readU16( buf );
+
+  buf[0] = d->data[4];
+  buf[1] = d->data[5];
+  row2Ref = readU16( buf );
+
+  buf[0] = d->data[6];
+  buf[1] = d->data[7];
+  col1Ref = readU16( buf );
+
+  buf[0] = d->data[8];
+  buf[1] = d->data[9];
+  col2Ref = readU16( buf );
+
+  row1Relative = col1Ref & 0x8000;
+  col1Relative = col1Ref & 0x4000;
+  col1Ref &= 0x3fff;
+
+  row2Relative = col2Ref & 0x8000;
+  col2Relative = col2Ref & 0x4000;
+  col2Ref &= 0x3fff;
+
+  UString result;
+  result.append( UString("[") );  // OpenDocument format
+
+  if( sheetRef >= externSheets.size() )
+    result.append( UString("Error") );
+  else
+    result.append( externSheets[sheetRef] );
+  result.append( UString(".") );
+
+  if( !col1Relative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( col1Ref ) );
+  if( !row1Relative )
+    result.append( UString("$") );
+  result.append( UString::from( row1Ref+1 ) );
+  result.append( UString(":") );
+  if( !col2Relative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( col2Ref ) );
+  if( !row2Relative )
+    result.append( UString("$") );
+  result.append( UString::from( row2Ref+1 ) );
+
+  result.append( UString("]") );// OpenDocument format
+
+  return result;
+}
+
 UString FormulaToken::ref( unsigned /*row*/, unsigned /*col*/ ) const
 {
   // FIXME check data size !
@@ -1316,7 +1383,7 @@ UString FormulaToken::refn( unsigned row, unsigned col ) const
   return result;
 }
 
-UString FormulaToken::ref3d( const std::vector<UString>& externSheets, unsigned row, unsigned col ) const
+UString FormulaToken::ref3d( const std::vector<UString>& externSheets, unsigned /*row*/, unsigned /*col*/ ) const
 {
   if( version() != Excel97 )
   {
@@ -6221,6 +6288,10 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( token.area( row, col ) );
         break;
 
+      case FormulaToken::Area3d:
+        stack.push_back( token.area3d( d->externSheetTable, row, col ) );
+        break;
+
       case FormulaToken::Function:
         {
           mergeTokens( &stack, token.functionParams(), UString(";") );
@@ -6315,7 +6386,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
       case FormulaToken::AreaErr3d:
       default:
