@@ -44,9 +44,8 @@ private:
     class Private;
     Private* d;
 
-    QByteArray createManifest();
-    QByteArray createStyles();
-    QByteArray createContent();
+    void createMainStyles(KoGenStyles& styles);
+    QByteArray createContent(KoGenStyles& styles);
 
     void processSlideForBody(unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter);
     void processObjectForBody(Object* object, KoXmlWriter* xmlWriter);

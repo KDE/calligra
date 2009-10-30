@@ -28,9 +28,12 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
+#include <KoOdf.h>
+#include <KoOdfWriteStore.h>
 #include <kgenericfactory.h>
 
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 #include "libppt.h"
 #include <iostream>
@@ -76,7 +79,7 @@ PowerPointImport::~PowerPointImport()
 }
 
 QStringList
-createPictures(const char* filename, KoStore* store)
+createPictures(const char* filename, KoStore* store, KoXmlWriter* manifest)
 {
     POLE::Storage storage(filename);
     QStringList fileNames;
@@ -84,7 +87,10 @@ createPictures(const char* filename, KoStore* store)
     POLE::Stream* stream = new POLE::Stream(&storage, "/Pictures");
     while (!stream->eof() && !stream->fail()
             && stream->tell() < stream->size()) {
-        std::string name = savePicture(*stream, fileNames.size(), store);
+        QString mimetype;
+        std::string name = savePicture(*stream, fileNames.size(), store,
+            mimetype);
+        manifest->addManifestEntry(name.c_str(), mimetype);
         if (name.length() == 0) break;
         fileNames.append(name.c_str());
     }
@@ -98,7 +104,7 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     if (from != "application/vnd.ms-powerpoint")
         return KoFilter::NotImplemented;
 
-    if (to != "application/vnd.oasis.opendocument.presentation")
+    if (to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
     d->inputFile = m_chain->inputFile();
@@ -113,48 +119,43 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     }
 
     // create output store
-    KoStore* storeout;
-    storeout = KoStore::createStore(d->outputFile, KoStore::Write,
-                                    "application/vnd.oasis.opendocument.presentation",   KoStore::Zip);
-
+    KoStore* storeout = KoStore::createStore(d->outputFile, KoStore::Write,
+            KoOdf::mimeType(KoOdf::Presentation), KoStore::Zip);
     if (!storeout) {
         kWarning() << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
+    KoOdfWriteStore odfWriter(storeout); 
+    KoXmlWriter* manifest = odfWriter.manifestWriter(
+        KoOdf::mimeType(KoOdf::Presentation));
 
     // store the images from the 'Pictures' stream
     storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
-    d->pictureNames = createPictures(d->inputFile.toLocal8Bit(), storeout);
+    d->pictureNames = createPictures(d->inputFile.toLocal8Bit(),
+            storeout, manifest);
     storeout->leaveDirectory();
+
+    KoGenStyles styles;
+    createMainStyles(styles);
 
     // store document content
     if (!storeout->open("content.xml")) {
         kWarning() << "Couldn't open the file 'content.xml'.";
         return KoFilter::CreationError;
     }
-    storeout->write(createContent());
+    storeout->write(createContent(styles));
     storeout->close();
+    manifest->addManifestEntry( "content.xml", "text/xml" );
 
     // store document styles
-    if (!storeout->open("styles.xml")) {
-        kWarning() << "Couldn't open the file 'styles.xml'.";
-        return KoFilter::CreationError;
-    }
-    storeout->write(createStyles());
-    storeout->close();
-
-    // store document manifest
-    storeout->enterDirectory("META-INF");
-    if (!storeout->open("manifest.xml")) {
-        kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
-        return KoFilter::CreationError;
-    }
-    storeout->write(createManifest());
-    storeout->close();
+    styles.saveOdfStylesDotXml(storeout, manifest);
 
     // we are done!
     delete d->presentation;
+
+    odfWriter.closeManifestWriter();
+
     delete storeout;
     d->inputFile.clear();
     d->outputFile.clear();
@@ -163,114 +164,96 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     return KoFilter::OK;
 }
 
-QByteArray PowerPointImport::createStyles()
-{
-    KoXmlWriter* stylesWriter;
-    QByteArray stylesData;
-    QBuffer stylesBuffer(&stylesData);
+void
+addElement(KoGenStyle& style, const char* name,
+        const QMap<const char*, QString>& m,
+        const QMap<const char*, QString>& mtext) {
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter elementWriter( &buffer );
+    elementWriter.startElement( name );
+    QMapIterator<const char*, QString> i(m);
+    while (i.hasNext()) {
+        i.next();
+        elementWriter.addAttribute(i.key(), i.value());
+    }
+    if (mtext.size()) {
+        elementWriter.startElement("style:text-properties");
+        QMapIterator<const char*, QString> j(mtext);
+        while (j.hasNext()) {
+            j.next();
+            elementWriter.addAttribute(j.key(), j.value());
+        }
+	elementWriter.endElement();
+    }
+    elementWriter.endElement();
+    style.addChildElement(name,
+        QString::fromUtf8( buffer.buffer(), buffer.buffer().size() ) );
+}
 
+void
+PowerPointImport::createMainStyles(KoGenStyles& styles)
+{
     Slide* master = d->presentation->masterSlide();
     QString pageWidth = QString("%1pt").arg((master) ? master->pageWidth() : 0);
     QString pageHeight = QString("%1pt").arg((master) ? master->pageHeight() : 0);
 
-    stylesBuffer.open(QIODevice::WriteOnly);
-    stylesWriter = new KoXmlWriter(&stylesBuffer);
+    KoGenStyle marker(KoGenStyle::StyleMarker);
+    marker.addAttribute("draw:display-name", "msArrowEnd 5");
+    marker.addAttribute("svg:viewBox", "0 0 210 210");
+    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
+    styles.lookup(marker, "msArrowEnd_20_5");
 
-    stylesWriter->startDocument("office:document-styles");
-    stylesWriter->startElement("office:document-styles");
-    stylesWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-    stylesWriter->addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-    stylesWriter->addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
-    stylesWriter->addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-    stylesWriter->addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
-    stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-    stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-    stylesWriter->addAttribute("office:version", "1.0");
+    KoGenStyle pl(KoGenStyle::StylePageLayout);
+    pl.setAutoStyleInStylesDotXml(true);
+    pl.addAttribute("style:page-usage", "all");
+    pl.addProperty("fo:margin-bottom", "0pt");
+    pl.addProperty("fo:margin-left", "0pt");
+    pl.addProperty("fo:margin-right", "0pt");
+    pl.addProperty("fo:margin-top", "0pt");
+    pl.addProperty("fo:page-height", pageHeight);
+    pl.addProperty("fo:page-width", pageWidth);
+    pl.addProperty("style:print-orientation", "landscape");
+    styles.lookup(pl, "pm");
 
-    // office:styles
-    stylesWriter->startElement("office:styles");
-    stylesWriter->startElement("draw:marker");
-    stylesWriter->addAttribute("draw:name", "msArrowEnd_20_5");
-    stylesWriter->addAttribute("draw:display-name", "msArrowEnd 5");
-    stylesWriter->addAttribute("svg:viewBox", "0 0 210 210");
-    stylesWriter->addAttribute("svg:d", "m105 0 105 210h-210z");
-    stylesWriter->endElement();
-    stylesWriter->endElement();
+    KoGenStyle dp(KoGenStyle::StyleDrawingPage, "drawing-page");
+    dp.setAutoStyleInStylesDotXml(true);
+    dp.addProperty("draw:background-size", "border");
+    dp.addProperty("draw:fill", "solid");
+    dp.addProperty("draw:fill-color", "#ffffff");
+    styles.lookup(dp, "dp");
 
-    // office:automatic-styles
-    stylesWriter->startElement("office:automatic-styles");
-    stylesWriter->startElement("style:page-layout");
-    stylesWriter->addAttribute("style:name", "pm1");
-    stylesWriter->addAttribute("style:page-usage", "all");
-    stylesWriter->startElement("style:page-layout-properties");
-    stylesWriter->addAttribute("fo:margin-bottom", "0pt");
-    stylesWriter->addAttribute("fo:margin-left", "0pt");
-    stylesWriter->addAttribute("fo:margin-right", "0pt");
-    stylesWriter->addAttribute("fo:margin-top", "0pt");
-    stylesWriter->addAttribute("fo:page-height", pageHeight);
-    stylesWriter->addAttribute("fo:page-width", pageWidth);
-    stylesWriter->addAttribute("style:print-orientation", "landscape");
-    stylesWriter->endElement(); // style:page-layout-properties
-    stylesWriter->endElement(); // style:page-layout
+    KoGenStyle p(KoGenStyle::StyleAuto, "paragraph");
+    p.setAutoStyleInStylesDotXml(true);
+    p.addProperty("fo:margin-left", "0cm");
+    p.addProperty("fo:margin-right", "0cm");
+    p.addProperty("fo:text-indent", "0cm");
+    p.addProperty("fo:font-size", "14pt", KoGenStyle::TextType);
+    p.addProperty("style:font-size-asian", "14pt", KoGenStyle::TextType);
+    p.addProperty("style:font-size-complex", "14pt", KoGenStyle::TextType);
+    styles.lookup(p, "P");
 
-    stylesWriter->startElement("style:style");
-    stylesWriter->addAttribute("style:name", "dp1");
-    stylesWriter->addAttribute("style:family", "drawing-page");
-    stylesWriter->startElement("style:drawing-page-properties");
-    stylesWriter->addAttribute("draw:background-size", "border");
-    stylesWriter->addAttribute("draw:fill", "solid");
-    stylesWriter->addAttribute("draw:fill-color", "#ffffff");
-    stylesWriter->endElement(); // style:drawing-page-properties
-    stylesWriter->endElement(); // style:style
+    KoGenStyle l(KoGenStyle::StyleListAuto);
+    l.setAutoStyleInStylesDotXml(true);
+    QMap<const char*, QString> lmap;
+    lmap["text:level"] = "1";
+    const char bullet[4] = {0xe2,0x97,0x8f,0};
+    lmap["text:bullet-char"] = QString::fromUtf8(bullet);//  "●";
+    QMap<const char*, QString> ltextmap;
+    ltextmap["fo:font-family"] = "StarSymbol";
+    ltextmap["style:font-pitch"] = "variable";
+    ltextmap["fo:color"] = "#000000";
+    ltextmap["fo:font-size"] = "45%";
+    addElement(l, "text:list-level-style-bullet", lmap, ltextmap);
+    styles.lookup(l, "L");
 
-    stylesWriter->startElement("style:style");
-    stylesWriter->addAttribute("style:name", "P1");
-    stylesWriter->addAttribute("style:family", "paragraph");
-    stylesWriter->startElement("style:paragraph-properties");
-    stylesWriter->addAttribute("fo:margin-left", "0cm");
-    stylesWriter->addAttribute("fo:margin-right", "0cm");
-    stylesWriter->addAttribute("fo:text-indent", "0cm");
-    stylesWriter->endElement(); // style:paragraph-properties
-    stylesWriter->startElement("style:text-properties");
-    stylesWriter->addAttribute("fo:font-size", "14pt");
-    stylesWriter->addAttribute("style:font-size-asian", "14pt");
-    stylesWriter->addAttribute("style:font-size-complex", "14pt");
-    stylesWriter->endElement(); // style:text-properties
-    stylesWriter->endElement(); // style:style
-
-    stylesWriter->startElement("text:list-style");
-    stylesWriter->addAttribute("style:name", "L2");
-    stylesWriter->startElement("text:list-level-style-bullet");
-    stylesWriter->addAttribute("text:level", "1");
-    stylesWriter->addAttribute("text:bullet-char", "●");
-    stylesWriter->startElement("style:text-properties");
-    stylesWriter->addAttribute("fo:font-family", "StarSymbol");
-    stylesWriter->addAttribute("style:font-pitch", "variable");
-    stylesWriter->addAttribute("fo:color", "#000000");
-    stylesWriter->addAttribute("fo:font-size", "45%");
-    stylesWriter->endElement(); // style:text-properties
-    stylesWriter->endElement(); // text:list-level-style-bullet
-    stylesWriter->endElement(); // text:list-style
-
-    stylesWriter->endElement(); // office:automatic-styles
-
-    // office:master-stylesborder
-    stylesWriter->startElement("office:master-styles");
-    stylesWriter->startElement("style:master-page");
-    stylesWriter->addAttribute("style:name", "Standard");
-    stylesWriter->addAttribute("style:page-layout-name", "pm1");
-    stylesWriter->addAttribute("draw:style-name", "dp1");
-    stylesWriter->endElement();
-    stylesWriter->endElement();
-
-    stylesWriter->endElement();  // office:document-styles
-    stylesWriter->endDocument();
-    delete stylesWriter;
-    return stylesData;
+    KoGenStyle s(KoGenStyle::StyleMaster);
+    s.addAttribute("style:page-layout-name", styles.lookup(pl));
+    s.addAttribute("draw:style-name", styles.lookup(dp));
+    styles.lookup(s, "Standard", KoGenStyles::DontForceNumbering);
 }
 
-
-QByteArray PowerPointImport::createContent()
+QByteArray PowerPointImport::createContent(KoGenStyles& styles)
 {
     KoXmlWriter* contentWriter;
     QByteArray contentData;
@@ -293,8 +276,6 @@ QByteArray PowerPointImport::createContent()
 
     // office:automatic-styles
 
-
-    KoGenStyles styles;
     for (unsigned c = 0; c < d->presentation->slideCount(); c++) {
         Slide* slide = d->presentation->slide(c);
         processSlideForStyle(c, slide, styles);
@@ -318,30 +299,6 @@ QByteArray PowerPointImport::createContent()
     contentWriter->endDocument();
     delete contentWriter;
     return contentData;
-}
-
-QByteArray PowerPointImport::createManifest()
-{
-    KoXmlWriter* manifestWriter;
-    QByteArray manifestData;
-    QBuffer manifestBuffer(&manifestData);
-
-    manifestBuffer.open(QIODevice::WriteOnly);
-    manifestWriter = new KoXmlWriter(&manifestBuffer);
-
-    manifestWriter->startDocument("manifest:manifest");
-    manifestWriter->startElement("manifest:manifest");
-    manifestWriter->addAttribute("xmlns:manifest",
-                                 "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0");
-
-    manifestWriter->addManifestEntry("/", "application/vnd.oasis.opendocument.presentation");
-    manifestWriter->addManifestEntry("styles.xml", "text/xml");
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-
-    manifestWriter->endElement();
-    manifestWriter->endDocument();
-    delete manifestWriter;
-    return manifestData;
 }
 
 void PowerPointImport::processEllipse(DrawObject* drawObject, KoXmlWriter* xmlWriter)

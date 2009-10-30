@@ -31,6 +31,6 @@
  * @return The name under which the image is saved or an empty string when
  *         an error occurred.
  **/
-std::string savePicture(POLE::Stream& stream, int position, KoStore* store);
+std::string savePicture(POLE::Stream& stream, int position, KoStore* store, QString& mimetype);
 
 #endif
