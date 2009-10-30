@@ -23,6 +23,7 @@
 #include "MergeEffectFactory.h"
 #include "ColorMatrixEffectFactory.h"
 #include "FloodEffectFactory.h"
+#include "CompositeEffectFactory.h"
 
 #include "KoFilterEffectRegistry.h"
 
@@ -40,6 +41,7 @@ KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin( QObject *parent, const QSt
     KoFilterEffectRegistry::instance()->add(new MergeEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new ColorMatrixEffectFactory(parent));
     KoFilterEffectRegistry::instance()->add(new FloodEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new CompositeEffectFactory(parent));
 }
 
 #include "KarbonFilterEffectsPlugin.moc"

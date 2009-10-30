@@ -17,6 +17,9 @@ set(karbonfiltereffects_PART_SRCS
     FloodEffect.cpp
     FloodEffectFactory.cpp
     FloodEffectConfigWidget.cpp
+    CompositeEffect.cpp
+    CompositeEffectFactory.cpp
+    CompositeEffectConfigWidget.cpp
 )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
