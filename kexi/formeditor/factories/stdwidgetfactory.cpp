@@ -203,6 +203,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLabel->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
     wLabel->setDescription(i18n("A widget to display text"));
+    wLabel->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wLabel);
 
     KFormDesigner::WidgetInfo *wPixLabel = new KFormDesigner::WidgetInfo(this);
@@ -215,6 +216,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wPixLabel->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "picture"));
     wPixLabel->setDescription(i18n("A widget to display pictures"));
+    wPixLabel->setAutoSaveProperties(QList<QByteArray>() << "pixmap");
     addClass(wPixLabel);
 
     KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
@@ -235,6 +237,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wSpring->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spring"));
     wSpring->setDescription(i18n("A spring to place between widgets"));
+    wSpring->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     addClass(wSpring);
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
@@ -246,6 +249,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wPushButton->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "button"));
     wPushButton->setDescription(i18n("A simple push button to execute actions"));
+    wPushButton->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wPushButton);
 
     KFormDesigner::WidgetInfo *wRadioButton = new KFormDesigner::WidgetInfo(this);
@@ -286,6 +290,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wComboBox->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
     wComboBox->setDescription(i18n("A combo box widget"));
+    wComboBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
     addClass(wComboBox);
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
@@ -299,7 +304,21 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wListBox->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
     wListBox->setDescription(i18n("A simple list widget"));
+    wListBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
     addClass(wListBox);
+
+    KFormDesigner::WidgetInfo *wTreeWidget = new KFormDesigner::WidgetInfo(this);
+    wTreeWidget->setPixmap("listwidget");
+    wTreeWidget->setClassName("QTreetWidget");
+//?    wTreeWidget->addAlternateClassName("QListView");
+//?    wTreeWidget->addAlternateClassName("KListView");
+    wTreeWidget->setIncludeFileName("qtreewidget.h");
+    wTreeWidget->setName(i18n("List Widget"));
+    wTreeWidget->setNamePrefix(
+        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
+    wTreeWidget->setDescription(i18n("A list (or tree) widget"));
+    wTreeWidget->setAutoSaveProperties(QList<QByteArray>() << "list_contents");
+    addClass(wTreeWidget);
 #endif
 
     KFormDesigner::WidgetInfo *wTextEdit = new KFormDesigner::WidgetInfo(this);
@@ -311,21 +330,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wTextEdit->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
     wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
+    wTextEdit->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wTextEdit);
-
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
-    KFormDesigner::WidgetInfo *wTreeWidget = new KFormDesigner::WidgetInfo(this);
-    wTreeWidget->setPixmap("listwidget");
-    wTreeWidget->setClassName("QTreetWidget");
-//?    wTreeWidget->addAlternateClassName("QListView");
-//?    wTreeWidget->addAlternateClassName("KListView");
-    wTreeWidget->setIncludeFileName("qtreewidget.h");
-    wTreeWidget->setName(i18n("List Widget"));
-    wTreeWidget->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
-    wTreeWidget->setDescription(i18n("A list (or tree) widget"));
-    addClass(wTreeWidget);
-#endif
 
     KFormDesigner::WidgetInfo *wSlider = new KFormDesigner::WidgetInfo(this);
     wSlider->setPixmap("slider");
@@ -352,6 +358,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLine->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
     wLine->setDescription(i18n("A line to be used as a separator"));
+    wLine->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     addClass(wLine);
 
     KFormDesigner::WidgetInfo *wDate = new KFormDesigner::WidgetInfo(this);
@@ -363,6 +370,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDate->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
     wDate->setDescription(i18n("A widget to input and display a date"));
+    wDate->setAutoSaveProperties(QList<QByteArray>() << "date");
     addClass(wDate);
 
     KFormDesigner::WidgetInfo *wTime = new KFormDesigner::WidgetInfo(this);
@@ -374,6 +382,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wTime->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
     wTime->setDescription(i18n("A widget to input and display a time"));
+    wTime->setAutoSaveProperties(QList<QByteArray>() << "time");
     addClass(wTime);
 
     KFormDesigner::WidgetInfo *wDateTime = new KFormDesigner::WidgetInfo(this);
@@ -385,6 +394,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDateTime->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
     wDateTime->setDescription(i18n("A widget to input and display a time and a date"));
+    wDateTime->setAutoSaveProperties(QList<QByteArray>() << "dateTime");
     addClass(wDateTime);
 
     m_propDesc["toggleButton"] = i18n("Toggle");
@@ -983,41 +993,6 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
         ok = m_showAdvancedProperties || (property != "autoDefault" && property != "default");
     }
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
-}
-
-QList<QByteArray>
-StdWidgetFactory::autoSaveProperties(const QByteArray &classname)
-{
-    QList<QByteArray> l;
-
-    if (classname == "QLabel")
-        l << "text";
-    if (classname == "KPushButton")
-        l << "text";
-    else if (classname == "KexiPictureLabel")
-        l << "pixmap";
-    else if (classname == "KComboBox")
-        l << "list_items";
-#ifndef KEXI_FORMS_NO_LIST_WIDGET
-    else if (classname == "QListBox" || classname == "KListBox")
-        l << "list_items";
-    else if (classname == "QTreeWidget")
-        l << "list_contents";
-#endif
-    else if (classname == "Line")
-        l << "orientation";
-    else if (classname == "KTimeWidget")
-        l << "time";
-    else if (classname == "KDateWidget")
-        l << "date";
-    else if (classname == "KDateTimeWidget")
-        l << "dateTime";
-    else if (classname == "Spring")
-        l << "sizeType" << "orientation";
-    else if (classname == "KTextEdit")
-        l << "textFormat" << "text";
-
-    return l;
 }
 
 #if 0 // moved to EditRichTextAction

@@ -1153,7 +1153,6 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         }
     }
 
-    QWidget *w;
     QByteArray classname, alternate;
     // We translate some name (for compatibility)
     if (el.tagName() == "spacer")
@@ -1183,13 +1182,13 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
                     classname = "Grid";
             }
         }
-    } else
-        // We check if this classname is an alternate one, and replace it if necessary
-    {
+    }
+    else { // check if this classname is an alternate one, and replace it if necessary
         classname = el.attribute("class").toLatin1();
         alternate = container->form()->library()->classNameForAlternate(classname);
     }
 
+    QWidget *w;
     if (alternate == "CustomWidget") {
         w = new CustomWidget(classname, container->widget());
         w->setObjectName(wname);
@@ -1270,12 +1269,13 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     if (item->container() && item->container()->layout())
         item->container()->layout()->activate();
 
-    // We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-    const QList<QByteArray> list(container->form()->library()->autoSaveProperties(w->metaObject()->className()));
+    // add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
+    const QList<QByteArray> autoSaveProperties(
+        container->form()->library()->autoSaveProperties(w->metaObject()->className()) );
     KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
     QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
-    foreach (const QByteArray &propName, list) {
+    foreach (const QByteArray &propName, autoSaveProperties) {
         if (subwidget && -1 != subwidget->metaObject()->indexOfProperty(propName)) {
             item->addModifiedProperty(propName, subwidget->property(propName));
         }

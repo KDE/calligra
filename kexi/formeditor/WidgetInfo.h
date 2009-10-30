@@ -145,6 +145,16 @@ public:
      @see setCustomTypeForProperty() */
     int customTypeForProperty(const char *propertyName) const;
 
+    /*! @return list of the properties that should automatically be saved
+    for a widget of @a classname class.
+    Examples are: custom properties "text" for label or button, "contents" for combobox... 
+    If there is inherited class (see @ref inheritedClass()), autosave properties 
+    from that class are prepended to the list. */
+    QList<QByteArray> autoSaveProperties() const;
+
+    /*! Sets list of the properties that should automatically be saved for a widget of @a classname class. */
+    void setAutoSaveProperties(const QList<QByteArray>& properties);
+
 protected:
     void setInheritedClass(WidgetInfo *inheritedClass);
 

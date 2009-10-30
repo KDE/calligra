@@ -91,7 +91,6 @@ public:
                                      QDomElement &parentNode, QDomDocument &parent);
     virtual bool readSpecialProperty(const QByteArray &classname, QDomElement &node,
                                      QWidget *w, KFormDesigner::ObjectTreeItem *item);
-    virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
     virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
 

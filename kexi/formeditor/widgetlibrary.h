@@ -130,6 +130,9 @@ public:
     bool isPropertyVisible(const QByteArray &classname, QWidget *w,
                            const QByteArray &property, bool multiple = false, bool isTopLevel = false);
 
+    /*! @return list of the properties that should automatically be saved
+    for a widget of @a classname class.
+    Examples are: custom properties "text" for label or button, "contents" for combobox... */
     QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
     WidgetInfo* widgetInfoForClassName(const char* classname);

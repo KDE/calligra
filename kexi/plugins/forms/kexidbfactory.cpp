@@ -591,19 +591,6 @@ KexiDBFactory::clearWidgetContent(const QByteArray & /*classname*/, QWidget *w)
     return true;
 }
 
-QList<QByteArray>
-KexiDBFactory::autoSaveProperties(const QByteArray& /*classname*/)
-{
-    QList<QByteArray> lst;
-// if(classname == "KexiDBSubForm")
-    //lst << "formName";
-// if(classname == "KexiDBLineEdit")
-// lst += "dataSource";
-// if(classname == "KexiDBAutoField")
-//  lst << "labelCaption";
-    return lst;
-}
-
 bool
 KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,
         const QByteArray& property, bool isTopLevel)

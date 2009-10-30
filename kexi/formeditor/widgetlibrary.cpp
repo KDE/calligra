@@ -655,19 +655,13 @@ WidgetLibrary::isPropertyVisible(const QByteArray &classname, QWidget *w,
     return true;
 }
 
-QList<QByteArray>
-WidgetLibrary::autoSaveProperties(const QByteArray &classname)
+QList<QByteArray> WidgetLibrary::autoSaveProperties(const QByteArray &classname)
 {
     loadFactories();
     WidgetInfo *wi = d->widgets.value(classname);
     if (!wi)
         return QList<QByteArray>();
-    QList<QByteArray> lst;
-    //prepend from inherited class
-    if (wi->inheritedClass())
-        lst = wi->inheritedClass()->factory()->autoSaveProperties(wi->className());
-    lst += wi->factory()->autoSaveProperties(classname);
-    return lst;
+    return wi->autoSaveProperties();
 }
 
 WidgetInfo*

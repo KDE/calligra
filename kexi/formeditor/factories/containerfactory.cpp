@@ -738,6 +738,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wSplitter->setNamePrefix(
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
     wSplitter->setDescription(i18n("A container that enables user to resize its children"));
+    wSplitter->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     addClass(wSplitter);
 
     KFormDesigner::WidgetInfo *wHFlow = new KFormDesigner::WidgetInfo(this);
@@ -1028,15 +1029,6 @@ ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWi
     }
 
     return false;
-}
-
-QList<QByteArray>
-ContainerFactory::autoSaveProperties(const QByteArray &c)
-{
-    QList<QByteArray> lst;
-    if (c == "QSplitter")
-        lst << "orientation";
-    return lst;
 }
 
 bool

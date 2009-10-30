@@ -39,8 +39,7 @@ public:
     {
     }
 
-    ~Private()
-    {
+    ~Private() {
         delete overriddenAlternateNames;
         delete propertiesWithDisabledAutoSync;
         delete customTypesForProperty;
@@ -53,7 +52,8 @@ public:
     QString desc;
     QString include;
     QList<QByteArray> alternateNames;
-    QSet<QByteArray> *overriddenAlternateNames;
+    QList<QByteArray> *overriddenAlternateNames;
+    QList<QByteArray> autoSaveProperties;
     QByteArray saveName;
     QPointer<WidgetFactory> factory;
     QHash<QByteArray, tristate> *propertiesWithDisabledAutoSync;
@@ -210,11 +210,11 @@ void WidgetInfo::addAlternateClassName(const QByteArray& alternateName, bool ove
     d->alternateNames += alternateName;
     if (override) {
         if (!d->overriddenAlternateNames)
-            d->overriddenAlternateNames = new QSet<QByteArray>;
-        d->overriddenAlternateNames->insert(alternateName);
+            d->overriddenAlternateNames = new QList<QByteArray>;
+        d->overriddenAlternateNames->append(alternateName);
     } else {
         if (d->overriddenAlternateNames)
-            d->overriddenAlternateNames->remove(alternateName);
+            d->overriddenAlternateNames->removeAll(alternateName);
     }
 }
 
@@ -244,6 +244,18 @@ tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
         return cancelled;
     tristate flag = d->propertiesWithDisabledAutoSync->value(propertyName);
     return flag;
+}
+
+void WidgetInfo::setAutoSaveProperties(const QList<QByteArray>& properties)
+{
+    d->autoSaveProperties = properties;
+}
+
+QList<QByteArray> WidgetInfo::autoSaveProperties() const
+{
+    if (!d->inheritedClass)
+        return d->autoSaveProperties;
+    return d->inheritedClass->autoSaveProperties() + d->autoSaveProperties;
 }
 
 void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)

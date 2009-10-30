@@ -1031,7 +1031,8 @@ void InsertWidgetCommand::execute()
            w->metaObject()->className())
     );
     foreach (const QByteArray& name, list) {
-        item->addModifiedProperty(name, w->property(name));
+        if (-1 != w->metaObject()->indexOfProperty(name))
+            item->addModifiedProperty(name, w->property(name));
     }
 
     container->reloadLayout(); // reload the layout to take the new wigdet into account

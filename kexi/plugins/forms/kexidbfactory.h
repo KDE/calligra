@@ -50,11 +50,6 @@ public:
     virtual bool previewWidget(const QByteArray &, QWidget *, KFormDesigner::Container *);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
-    //virtual void  saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
-    //QDomElement &parentNode, QDomDocument &parent) {}
-    //virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
-    virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname);
-
 protected slots:
     void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
 

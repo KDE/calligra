@@ -242,11 +242,6 @@ public:
     bool isPropertyVisible(const QByteArray &classname, QWidget *w,
                            const QByteArray &property, bool multiple, bool isTopLevel);
 
-    /*! You need to return here a list of the properties that should automatically be saved
-    for a widget belonging to \a classname, and your custom properties (eg "text"
-    for label or button, "contents" for combobox...). */
-    virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname) = 0;
-
     /*! \return The i18n'ed name of the property whose name is \a name,
      that will be displayed in PropertyEditor. */
     inline QString propertyDescForName(const QByteArray &name) {
