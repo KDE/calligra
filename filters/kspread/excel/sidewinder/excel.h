@@ -172,6 +172,8 @@ public:
   UString ref( unsigned row, unsigned col ) const;
   // only when id is RefN
   UString refn( unsigned row, unsigned col ) const;
+  // only when id is Ref3d
+  UString ref3d( const std::vector<UString>& externSheets, unsigned row, unsigned col ) const;
 
   // only when id is Area
   UString area( unsigned row, unsigned col ) const;
@@ -1105,6 +1107,44 @@ private:
    Private *d;
 };
 
+/**
+  \brief External book record
+ */
+class ExternBookRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  ExternBookRecord();
+
+  ~ExternBookRecord();
+
+  unsigned sheetCount() const;
+
+  UString bookName() const;
+
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+
+
+
+  virtual const char* name(){ return "EXTERNBOOK"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   ExternBookRecord( const ExternBookRecord& );
+   ExternBookRecord& operator=( const ExternBookRecord& );
+
+   class Private;
+   Private *d;
+};
+
 class ExternNameRecord : public Record
 {
 public:
@@ -1146,6 +1186,48 @@ private:
    Private *d;
 };
 
+/**
+  \brief External sheet record
+
+  For now only excel97 and newer are supported for this record.
+ */
+class ExternSheetRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  ExternSheetRecord();
+
+  ~ExternSheetRecord();
+
+  // number of refs in table
+  unsigned refCount() const;
+
+  unsigned bookRef( unsigned refIndex ) const;
+  unsigned firstSheetRef( unsigned refIndex ) const;
+  unsigned lastSheetRef( unsigned refIndex ) const;
+
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+
+
+
+  virtual const char* name(){ return "EXTERNSHEET"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   ExternSheetRecord( const ExternSheetRecord& );
+   ExternSheetRecord& operator=( const ExternSheetRecord& );
+
+   class Private;
+   Private *d;
+};
 
 /**
   \brief End of record set.
@@ -3140,7 +3222,9 @@ private:
   void handleColInfo( ColInfoRecord* record );
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
+  void handleExternBook( ExternBookRecord* record );
   void handleExternName( ExternNameRecord* record );
+  void handleExternSheet( ExternSheetRecord* record );
   void handleFilepass( FilepassRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFormula( FormulaRecord* record );

@@ -1316,6 +1316,56 @@ UString FormulaToken::refn( unsigned row, unsigned col ) const
   return result;
 }
 
+UString FormulaToken::ref3d( const std::vector<UString>& externSheets, unsigned row, unsigned col ) const
+{
+  if( version() != Excel97 )
+  {
+    return UString("Unknown");
+  }
+
+  int sheetRef = readU16( &d->data[0] );
+
+  // FIXME check data size !
+  // FIXME handle shared formula
+  unsigned char buf[2];
+  int rowRef, colRef;
+  bool rowRelative, colRelative;
+
+  buf[0] = d->data[2];
+  buf[1] = d->data[3];
+  rowRef = readU16( buf );
+
+  buf[0] = d->data[4];
+  buf[1] = d->data[5];
+  colRef = readU16( buf );
+
+  rowRelative = colRef & 0x8000;
+  colRelative = colRef & 0x4000;
+  colRef &= 0x3fff;
+
+  UString result;
+
+  result.append( UString("[") );  // OpenDocument format
+
+  if( sheetRef >= externSheets.size() )
+    result.append( UString("Error") );
+  else
+    result.append( externSheets[sheetRef] );
+  result.append( UString(".") );
+
+  if( !colRelative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( colRef ) );
+  if( !rowRelative )
+    result.append( UString("$") );
+  result.append( UString::from( rowRef+1 ) );
+
+  result.append( UString("]") );// OpenDocument format
+
+
+  return result;
+}
+
 std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
 {
   if( version() == Excel97 )
@@ -1506,8 +1556,14 @@ Record* Record::create( unsigned type )
   else if( type ==DimensionRecord::id)
     return new DimensionRecord();
 
+  else if( type ==ExternBookRecord::id)
+    return new ExternBookRecord();
+
   else if( type ==ExternNameRecord::id)
     return new ExternNameRecord();
+
+  else if( type ==ExternSheetRecord::id)
+    return new ExternSheetRecord();
 
   else if( type ==FilepassRecord::id)
     return new FilepassRecord();
@@ -2337,6 +2393,60 @@ void EOFRecord::dump( std::ostream& out ) const
   out << "EOF" << std::endl;
 }
 
+// ========== EXTERNBOOK ==========
+
+const unsigned int ExternBookRecord::id = 0x01ae;
+
+class ExternBookRecord::Private
+{
+public:
+  unsigned sheetCount;
+  UString name;
+};
+
+
+ExternBookRecord::ExternBookRecord()
+{
+  d = new Private;
+  d->sheetCount = 0;
+}
+
+ExternBookRecord::~ExternBookRecord()
+{
+  delete d;
+}
+
+UString ExternBookRecord::bookName() const
+{
+  return d->name;
+}
+
+void ExternBookRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+{
+  if( size < 4 ) return;
+
+  d->sheetCount = readU16( data );
+  if( data[2] == 0x01 && data[3] == 0x04 )
+  {
+    d->name = UString("\004");
+  }
+  else if( data[2] == 0x01 && data[3] == ':' )
+  {
+    d->name = UString(":");
+  }
+  else
+  {
+    d->name = EString::fromUnicodeString( data+2, true, size-2 ).str();
+  }
+}
+
+void ExternBookRecord::dump( std::ostream& out ) const
+{
+  out << "EXTERNBOOK" << std::endl;
+  out << "        Sheet count : " << d->sheetCount << std::endl;
+  out << "               Name : " << d->name << std::endl;
+}
+
 // ========== EXTERNNAME ==========
 
 const unsigned int ExternNameRecord::id = 0x0023;
@@ -2403,6 +2513,77 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data, const 
 
 void ExternNameRecord::dump( std::ostream& /*out*/ ) const
 {
+}
+
+// ========== EXTERNSHEET ==========
+
+const unsigned int ExternSheetRecord::id = 0x0017;
+
+class ExternSheetRecord::Private
+{
+public:
+  unsigned refCount;
+  std::vector<unsigned> books;
+  std::vector<std::pair<unsigned, unsigned> > sheets;
+};
+
+
+ExternSheetRecord::ExternSheetRecord()
+{
+  d = new Private;
+  d->refCount = 0;
+}
+
+ExternSheetRecord::~ExternSheetRecord()
+{
+  delete d;
+}
+
+unsigned ExternSheetRecord::refCount() const
+{
+  return d->refCount;
+}
+
+unsigned ExternSheetRecord::bookRef( unsigned refIndex ) const
+{
+  return d->books[ refIndex ];
+}
+
+unsigned ExternSheetRecord::firstSheetRef( unsigned refIndex ) const
+{
+  return d->sheets[ refIndex ].first;
+}
+
+unsigned ExternSheetRecord::lastSheetRef( unsigned refIndex ) const
+{
+  return d->sheets[ refIndex ].second;
+}
+
+void ExternSheetRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+{
+  if( size < 2 ) return;
+  if( version() != Excel97 ) return;
+
+  d->refCount = std::max(0, std::min<int>( (int(size)-2) / 6, readU16( data ) ) );
+  d->books.resize(d->refCount);
+  d->sheets.resize(d->refCount);
+
+  for( unsigned i = 0; i < d->refCount; i++ )
+  {
+    d->books[i]           = readU16( data + 2 + 6*i + 0 );
+    d->sheets[i].first    = readU16( data + 2 + 6*i + 2 );
+    d->sheets[i].second   = readU16( data + 2 + 6*i + 4 );
+  }
+}
+
+void ExternSheetRecord::dump( std::ostream& out ) const
+{
+  out << "EXTERNSHEET" << std::endl;
+  out << "          Ref count : " << d->refCount << std::endl;
+  for( unsigned i = 0; i < d->refCount; i++ )
+  {
+    out << "            Ref #" << std::setw(2) << i << " : Book #" << d->books[i] << ", Sheets #" << d->sheets[i].first << " - #" << d->sheets[i].second << std::endl;
+  }
 }
 
 // ========== FILEPASS ==========
@@ -4630,6 +4811,10 @@ public:
 
   // for FORMULA+SHAREDFMLA record pair
   Cell* lastFormulaCell;
+
+  // for EXTERNBOOK and EXTERNSHEET
+  std::vector<UString> externBookTable;
+  std::vector<UString> externSheetTable;
 };
 
 ExcelReader::ExcelReader()
@@ -4860,8 +5045,12 @@ void ExcelReader::handleRecord( Record* record )
       handleCalcMode( static_cast<CalcModeRecord*>( record ) ); break;
     case ColInfoRecord::id:
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
+    case ExternBookRecord::id:
+      handleExternBook( static_cast<ExternBookRecord*>( record ) ); break;
     case ExternNameRecord::id:
       handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
+    case ExternSheetRecord::id:
+      handleExternSheet( static_cast<ExternSheetRecord*>( record ) ); break;
     case FilepassRecord::id:
       handleFilepass( static_cast<FilepassRecord*>( record ) ); break;
     case FormatRecord::id:
@@ -5109,11 +5298,72 @@ void ExcelReader::handleFormula( FormulaRecord* record )
   }
 }
 
+void ExcelReader::handleExternBook( ExternBookRecord* record )
+{
+  if( !record ) return;
+
+  d->externBookTable.push_back( record->bookName() );
+}
+
 void ExcelReader::handleExternName( ExternNameRecord* record )
 {
   if( !record ) return;
 
   d->nameTable.push_back( record->externName() );
+}
+
+void ExcelReader::handleExternSheet( ExternSheetRecord* record )
+{
+  if( !record ) return;
+
+  d->externSheetTable.resize( record->refCount() );
+
+  for( unsigned i = 0; i < record->refCount(); i++ )
+  {
+    unsigned bookRef = record->bookRef( i );
+
+    UString result;
+    if( bookRef >= d->externBookTable.size() )
+    {
+      result = UString("Error");
+    }
+    else
+    {
+      UString book = d->externBookTable[bookRef];
+      if( book == "\004" )
+      {
+        unsigned sheetRef = record->firstSheetRef( i );
+        if( sheetRef > d->workbook->sheetCount() )
+        {
+          result = UString("Error");
+        }
+        else
+        {
+          result = d->workbook->sheet( sheetRef )->name();
+        }
+      }
+      else
+      {
+        result = UString("Unknown");
+      }
+    }
+
+    if( result.find(UString(" ")) != -1 || result.find(UString("'")) != -1 )
+    {
+      // escape string
+      UString outp("'");
+      for( int idx = 0; idx < result.length(); idx++ )
+      {
+        if( result[idx] == '\'' )
+          outp.append(UString("''"));
+        else
+          outp.append(UString(result[idx]));
+      }
+      result = outp + UString("'");
+    }
+
+    d->externSheetTable[i] = result;
+  }
 }
 
 void ExcelReader::handleFilepass( FilepassRecord* record )
@@ -5963,6 +6213,10 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( token.refn( row, col ) );
         break;
 
+      case FormulaToken::Ref3d:
+        stack.push_back( token.ref3d( d->externSheetTable, row, col ) );
+        break;
+
       case FormulaToken::Area:
         stack.push_back( token.area( row, col ) );
         break;
@@ -6061,7 +6315,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::Ref3d:
       case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
       case FormulaToken::AreaErr3d:
