@@ -586,7 +586,7 @@ unsigned FormulaToken::size() const
 
     case Ref3d:
     case RefErr3d:
-      s = (d->ver == Excel97) ? 6 : 27;
+      s = (d->ver == Excel97) ? 6 : 17;
       break;
 
     case Float:
