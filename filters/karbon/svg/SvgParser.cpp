@@ -1453,6 +1453,8 @@ void SvgParser::applyFilter( KoShape * shape )
     stdInputs << "BackgroundImage" << "BackgroundAlpha";
     stdInputs << "FillPaint" << "StrokePaint";
     
+    QMap<QString, KoFilterEffect*> inputs;
+    
     // create the filter effects and add them to the shape
     for( KoXmlNode n = content.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -1494,7 +1496,15 @@ void SvgParser::applyFilter( KoShape * shape )
                 else 
                 {
                     // defaults to bounding rect of all referenced nodes
-                    // TODO
+                    foreach( const QString &input, filterEffect->inputs())
+                    {
+                        if( !inputs.contains(input) )
+                            continue;
+                        
+                        KoFilterEffect * inputFilter = inputs[input];
+                        if( inputFilter )
+                            subRegion |= inputFilter->filterRect();
+                    }
                 }
             }
             else
@@ -1524,6 +1534,7 @@ void SvgParser::applyFilter( KoShape * shape )
             filterStack = new KoFilterEffectStack();
 
         filterStack->appendFilterEffect(filterEffect);
+        inputs[filterEffect->output()] = filterEffect;
     }
     if (filterStack) {
         filterStack->setClipRect(objectFilterRegion);
