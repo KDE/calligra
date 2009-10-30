@@ -20,6 +20,9 @@ set(karbonfiltereffects_PART_SRCS
     CompositeEffect.cpp
     CompositeEffectFactory.cpp
     CompositeEffectConfigWidget.cpp
+    BlendEffect.cpp
+    BlendEffectFactory.cpp
+    BlendEffectConfigWidget.cpp
 )
 
 kde4_add_plugin(karbonfiltereffects ${karbonfiltereffects_PART_SRCS})
