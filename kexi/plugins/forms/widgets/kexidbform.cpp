@@ -127,6 +127,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
     setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
     setAcceptDrops(true);
     setAutoFillBackground(true);
+    setFocusPolicy(Qt::NoFocus);
 }
 
 KexiDBForm::~KexiDBForm()
@@ -492,6 +493,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 
                     if (widgetToFocus) {
                         widgetToFocus->setFocus();
+                        if (dynamic_cast<KexiFormDataItemInterface*>(widgetToFocus))
+                            dynamic_cast<KexiFormDataItemInterface*>(widgetToFocus)->selectAllOnFocusIfNeeded();
                     }
                     else {
                         kWarning() << "widgetToFocus not found!";
@@ -556,7 +559,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     } else {//backtab
                         if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
                             d->orderedFocusWidgetsIterator
-                            = d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count() - 1);
+                                = d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count() - 1);
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {
                             --d->orderedFocusWidgetsIterator; //prev
                         } else {
@@ -573,8 +576,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             "KFormDesigner::TabWidget",
                             pageFor_widgetToFocus
                         );
-                    if (tabWidgetFor_widgetToFocus
-                            && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus)
+                    if (   tabWidgetFor_widgetToFocus
+                        && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus)
                     {
                         realWidget = widgetToFocus;
                         continue; // the new widget to focus is placed on invisible tab page:
@@ -582,6 +585,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     }
                     break;
                 }//while
+
+                QWidget *widgetToSelectAll = widgetToFocus;
 
                 //set focus, but don't use just setFocus() because certain widgets
                 //behaves differently (e.g. QLineEdit calls selectAll()) when
@@ -605,6 +610,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         kDebug() << "focusing "
                             << (*d->orderedFocusWidgetsIterator)->objectName();
                     }
+                    if (dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll))
+                        dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll)->selectAllOnFocusIfNeeded();
                 }
                 return true;
             }

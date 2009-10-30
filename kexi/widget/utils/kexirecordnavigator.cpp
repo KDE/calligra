@@ -91,6 +91,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
         , d(new Private)
 {
     setAutoFillBackground(true);
+    setFocusPolicy(Qt::NoFocus);
     if (parentView)
         setParentView(parentView);
     d->lyr = new QHBoxLayout(this);

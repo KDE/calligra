@@ -103,6 +103,16 @@ void KexiFormScrollView::selectCellInternal()
         if (m_currentItem != m_previousRecord) {
             fillDataItems(*m_currentItem, cursorAtNewRow());
             m_previousRecord = m_currentItem;
+            QWidget *w = dbFormWidget()->orderedDataAwareWidgets()->at(m_curCol);
+            if (w) {
+                w->setFocus(); // re-focus, as we could have lost focus, e.g. when navigator button was clicked
+                // select all
+                KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(w);
+//! @todo add option for not selecting the field
+                if (iface) {
+                    iface->selectAllOnFocusIfNeeded();
+                }
+            }
         }
     } else {
         m_previousRecord = 0;

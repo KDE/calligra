@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -154,6 +154,11 @@ public:
     virtual bool keyPressed(QKeyEvent *ke) {
         Q_UNUSED(ke); return false;
     }
+
+    //! Selects contents of the widget if there is such behaviour set (it is by default).
+//! @todo add option for not selecting the field
+
+    void selectAllOnFocusIfNeeded();
 
 protected:
     QString m_dataSource;
