@@ -40,6 +40,25 @@ static inline unsigned long readU16( const void* p )
   return ptr[0]+(ptr[1]<<8);
 }
 
+static inline long readS16( const void* p )
+{
+  long val = readU16( p );
+  if (val & 0x8000) {
+    val = val - 0x10000;
+  }
+  return val;
+}
+
+static inline long readS8( const void* p )
+{
+  const unsigned char* ptr = (const unsigned char*) p;
+  long val = *ptr;
+  if (val & 0x80) {
+    val = val - 0x100;
+  }
+  return val;
+}
+
 static inline unsigned long readU32( const void* p )
 {
   const unsigned char* ptr = (const unsigned char*) p;
@@ -270,12 +289,12 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
     asianPhoneticsSize = readU32( data + offset );
     offset += 4;
   }
-  
+
   // find out total bytes used in this string
   unsigned size = offset;
   if( richText ) size += (formatRuns*4);
   if( asianPhonetics ) size += asianPhoneticsSize;
-  
+
   str = UString();
   for( unsigned k=0; k<len; k++ )
   {
@@ -1236,6 +1255,79 @@ UString FormulaToken::ref( unsigned /*row*/, unsigned /*col*/ ) const
   return result;
 }
 
+UString FormulaToken::refn( unsigned row, unsigned col ) const
+{
+  // FIXME check data size !
+  // FIXME handle shared formula
+  unsigned char buf[2];
+  int rowRef, colRef;
+  bool rowRelative, colRelative;
+
+  if( version() == Excel97 )
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    rowRef = readS16( buf );
+
+    buf[0] = d->data[2];
+    buf[1] = d->data[3];
+    colRef = readU16( buf );
+
+    rowRelative = colRef & 0x8000;
+    colRelative = colRef & 0x4000;
+    colRef &= 0xff;
+    if( colRef & 0x80 ) {
+      colRef = colRef - 0x100;
+    }
+  }
+  else
+  {
+    buf[0] = d->data[0];
+    buf[1] = d->data[1];
+    rowRef = readU16( buf );
+
+    buf[0] = d->data[2];
+    colRef = readS8( buf );
+
+    rowRelative = rowRef & 0x8000;
+    colRelative = rowRef & 0x4000;
+    rowRef &= 0x3fff;
+    if( rowRef & 0x2000 ) {
+      rowRef = rowRef - 0x4000;
+    }
+  }
+
+  colRef += col;
+  rowRef += row;
+
+  UString result;
+
+  result.append( UString("[") );  // OpenDocument format
+
+  if( !colRelative )
+    result.append( UString("$") );
+  result.append( Cell::columnLabel( colRef ) );
+  if( !rowRelative )
+    result.append( UString("$") );
+  result.append( UString::from( rowRef+1 ) );
+
+  result.append( UString("]") );// OpenDocument format
+
+  return result;
+}
+
+std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
+{
+  if( version() == Excel97 )
+  {
+    return std::make_pair(readU16(&d->data[0]), readU16(&d->data[2]));
+  }
+  else
+  {
+    return std::make_pair(readU16(&d->data[0]), (unsigned)d->data[2]);
+  }
+}
+
 std::ostream& Swinder::operator<<( std::ostream& s,  Swinder::FormulaToken token )
 {
   s << std::setw(2) << std::hex << token.id() << std::dec;
@@ -1474,6 +1566,9 @@ Record* Record::create( unsigned type )
   else if( type ==RStringRecord::id)
     return new RStringRecord();
 
+  else if( type ==SharedFormulaRecord::id)
+    return new SharedFormulaRecord();
+
   else if( type ==SSTRecord::id)
     return new SSTRecord();
 
@@ -1485,7 +1580,7 @@ Record* Record::create( unsigned type )
 
   else if( type ==TopMarginRecord::id)
     return new TopMarginRecord();
-  
+
   return 0;
 }
 
@@ -2777,6 +2872,89 @@ void FormulaRecord::dump( std::ostream& out ) const
   out << "             Column : " << column() << std::endl;
   out << "           XF Index : " << xfIndex() << std::endl;
   out << "             Result : " << result() << std::endl;
+
+  FormulaTokens ts = tokens();
+  out << "             Tokens : " << ts.size() << std::endl;
+  for( unsigned i = 0; i < ts.size(); i++ )
+    out << "                       " << ts[i]  << std::endl;
+
+}
+
+
+// SHAREDFMLA
+
+const unsigned int SharedFormulaRecord::id = 0x04BC;
+
+class SharedFormulaRecord::Private
+{
+public:
+  // range
+  int numCells;
+  FormulaTokens tokens;
+};
+
+SharedFormulaRecord::SharedFormulaRecord():
+  Record()
+{
+  d = new SharedFormulaRecord::Private();
+}
+
+SharedFormulaRecord::~SharedFormulaRecord()
+{
+  delete d;
+}
+
+FormulaTokens SharedFormulaRecord::tokens() const
+{
+  return d->tokens;
+}
+
+void SharedFormulaRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+{
+  if( size < 8 ) return;
+
+  // maybe read range
+  d->numCells = data[7];
+
+  unsigned formula_len = readU16( data+8 );
+
+  // reconstruct all tokens
+  d->tokens.clear();
+  for( unsigned j = 10; j < size; )
+  {
+    unsigned ptg = data[j++];
+    ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+    FormulaToken token( ptg );
+    token.setVersion( version() );
+
+    if( token.id() == FormulaToken::String )
+    {
+      // find bytes taken to represent the string
+      EString estr = (version()==Excel97) ?
+        EString::fromUnicodeString( data+j, false, formula_len ) :
+        EString::fromByteString( data+j, false, formula_len );
+      token.setData( estr.size(), data+j );
+      j += estr.size();
+    }
+    else
+    {
+      // normal, fixed-size token
+      if( token.size() > 1 )
+      {
+        token.setData( token.size(), data+j );
+        j += token.size();
+      }
+    }
+
+    d->tokens.push_back( token );
+  }
+}
+
+void SharedFormulaRecord::dump( std::ostream& out ) const
+{
+  out << "SHAREDFMLA" << std::endl;
+  // range
+  out << "          Num cells : " << d->numCells << std::endl;
 
   FormulaTokens ts = tokens();
   out << "             Tokens : " << ts.size() << std::endl;
@@ -4446,6 +4624,12 @@ public:
 
   // for NAME and EXTERNNAME
   std::vector<UString> nameTable;
+
+  // mapping from cell position to shared formulas
+  std::map<std::pair<unsigned, unsigned>, FormulaTokens> sharedFormulas;
+
+  // for FORMULA+SHAREDFMLA record pair
+  Cell* lastFormulaCell;
 };
 
 ExcelReader::ExcelReader()
@@ -4455,6 +4639,7 @@ ExcelReader::ExcelReader()
   d->workbook    = 0;
   d->activeSheet = 0;
   d->formulaCell = 0;
+  d->lastFormulaCell = 0;
 
   d->passwordProtected = false;
 
@@ -4513,7 +4698,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   unsigned char small_buffer[128];	// small, fixed size buffer
   unsigned int continuePositionsSize = 128; // size of array for continue positions
   unsigned int *continuePositions = (unsigned int *) malloc(continuePositionsSize * sizeof(int));
-  
+
   workbook->clear();
   d->workbook = workbook;
 
@@ -4715,6 +4900,8 @@ void ExcelReader::handleRecord( Record* record )
       handleRow( static_cast<RowRecord*>( record ) ); break;
     case RStringRecord::id:
       handleRString( static_cast<RStringRecord*>( record ) ); break;
+    case SharedFormulaRecord::id:
+      handleSharedFormula( static_cast<SharedFormulaRecord*>( record ) ); break;
     case SSTRecord::id:
       handleSST( static_cast<SSTRecord*>( record ) ); break;
     case StringRecord::id:
@@ -4918,6 +5105,7 @@ void ExcelReader::handleFormula( FormulaRecord* record )
     // if value is string, real value is in subsequent String record
     if( value.isString() )
       d->formulaCell = cell;
+    d->lastFormulaCell = cell;
   }
 }
 
@@ -5243,6 +5431,22 @@ void ExcelReader::handleRString( RStringRecord* record )
     cell->setValue( Value( label ) );
     cell->setFormat( convertFormat( xfIndex) );
   }
+}
+
+void ExcelReader::handleSharedFormula( SharedFormulaRecord* record )
+{
+  if( !record ) return;
+  if( !d->lastFormulaCell ) return;
+
+  unsigned row = d->lastFormulaCell->row();
+  unsigned column = d->lastFormulaCell->column();
+
+  d->sharedFormulas[std::make_pair(row, column)] = record->tokens();
+
+  UString formula = decodeFormula( row, column, record->tokens() );
+  d->lastFormulaCell->setFormula( formula );
+
+  d->lastFormulaCell = 0;
 }
 
 void ExcelReader::handleSST( SSTRecord* record )
@@ -5747,6 +5951,10 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         stack.push_back( token.ref( row, col ) );
         break;
 
+      case FormulaToken::RefN:
+        stack.push_back( token.refn( row, col ) );
+        break;
+
       case FormulaToken::Area:
         stack.push_back( token.area( row, col ) );
         break;
@@ -5816,6 +6024,21 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
           stack.push_back( d->nameTable[ token.nameIndex()-1 ] );
         break;
 
+      case FormulaToken::Matrix: {
+        std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
+
+        std::map<std::pair<unsigned, unsigned>, FormulaTokens>::iterator sharedFormula = d->sharedFormulas.find(formulaCellPos);
+        if( sharedFormula != d->sharedFormulas.end() )
+        {
+          stack.push_back(decodeFormula(row, col, sharedFormula->second));
+        }
+        else
+        {
+          stack.push_back(UString("Error"));
+        }
+        break;
+      }
+
       case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
       case FormulaToken::EndSheet:
@@ -5827,7 +6050,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::MemFunc:
       case FormulaToken::RefErr:
       case FormulaToken::AreaErr:
-      case FormulaToken::RefN:
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:

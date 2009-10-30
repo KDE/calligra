@@ -170,6 +170,8 @@ public:
 
   // only when id is Ref
   UString ref( unsigned row, unsigned col ) const;
+  // only when id is RefN
+  UString refn( unsigned row, unsigned col ) const;
 
   // only when id is Area
   UString area( unsigned row, unsigned col ) const;
@@ -179,6 +181,9 @@ public:
 
   // only when id is NameX
   unsigned nameIndex() const;
+
+  // only when id is Matrix (tExp)
+  std::pair<unsigned, unsigned> baseFormulaRecord() const;
 
 private:
   class Private;
@@ -1581,6 +1586,48 @@ private:
   // no copy or assign
   FormulaRecord( const FormulaRecord& );
   FormulaRecord& operator=( const FormulaRecord& );
+
+  class Private;
+  Private* d;
+};
+
+
+/**
+  \brief Shared Formula.
+
+  Information about a shared formula, the formula itself and its range.
+ */
+class SharedFormulaRecord : public Record
+{
+public:
+  static const unsigned int id;
+
+  unsigned int rtti(){
+      return this->id;
+  }
+
+  /**
+   * Creates a new shared formula record.
+   */
+  SharedFormulaRecord();
+
+  /**
+   * Destroy the record.
+   */
+  ~SharedFormulaRecord();
+
+  FormulaTokens tokens() const;
+
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+
+  virtual const char* name(){ return "SHAREDFMLA"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  SharedFormulaRecord( const SharedFormulaRecord& );
+  SharedFormulaRecord& operator=( const SharedFormulaRecord& );
 
   class Private;
   Private* d;
@@ -3113,6 +3160,7 @@ private:
   void handleRString( RStringRecord* record );
   void handleRK( RKRecord* record );
   void handleRow( RowRecord* record );
+  void handleSharedFormula( SharedFormulaRecord* sharedFormulaRecord );
   void handleSST( SSTRecord* record );
   void handleString( StringRecord* record );
   void handleTopMargin( TopMarginRecord* record );
