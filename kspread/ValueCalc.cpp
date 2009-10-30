@@ -1257,7 +1257,7 @@ Value ValueCalc::GetGamma ( Value value )
   bool reflect;
 
   double gamma = GammaHelp( val, reflect);
-  
+
   gamma = ::pow(val+5.5, val+0.5) * gamma/::exp(val+5.5);
 
   if (reflect)
@@ -1284,13 +1284,13 @@ Value ValueCalc::GetLogGamma (Value _x)
 //   double x = numToDouble (converter->toFloat (_x));
 //   double alpha = numToDouble (converter->toFloat (_alpha));
 //   double beta = numToDouble (converter->toFloat (_beta));
-// 
+//
 //   if (x == 0.0)
 //     return Value (0.0);
-// 
+//
 //   x /= beta;
 //   double gamma = alpha;
-// 
+//
 //   double c = 0.918938533204672741;
 //   double d[10] = {
 //     0.833333333333333333E-1,
@@ -1304,18 +1304,18 @@ Value ValueCalc::GetLogGamma (Value _x)
 //     0.179644372368830573,
 //     -0.139243221690590111E1
 //   };
-// 
+//
 //   double dx = x;
 //   double dgamma = gamma;
 //   int maxit = 10000;
-// 
+//
 //   double z = dgamma;
 //   double den = 1.0;
 //   while ( z < 10.0 ) {
 //     den *= z;
 //     z += 1.0;
 //   }
-// 
+//
 //   double z2 = z*z;
 //   double z3 = z*z2;
 //   double z4 = z2*z2;
@@ -1324,12 +1324,12 @@ Value ValueCalc::GetLogGamma (Value _x)
 //   double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
 //     d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
 //   // double g = exp(a+b) / den;
-// 
+//
 //   double sum = 1.0 / dgamma;
 //   double term = 1.0 / dgamma;
 //   double cut1 = dx - dgamma;
 //   double cut2 = dx * 10000000000.0;
-// 
+//
 //   for ( int i=1; i<=maxit; i++ ) {
 //     double ai = i;
 //     term = dx * term / ( dgamma + ai );
@@ -1341,14 +1341,14 @@ Value ValueCalc::GetLogGamma (Value _x)
 //       return Value (::exp( dgamma * ::log(dx) - dx - a - b ) * t * den);
 //     }
 //   }
-// 
+//
 //   return Value (1.0);             // should not happen ...
 // }
 
 Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 {
   // Algorithm adopted from StatLib (http://lib.stat.cmu.edu/apstat/239):
-  // Algorithm AS 239: Chi-Squared and Incomplete Gamma Integral 
+  // Algorithm AS 239: Chi-Squared and Incomplete Gamma Integral
   // B. L. Shea
   // Applied Statistics, Vol. 37, No. 3 (1988), pp. 466-473
 
@@ -1363,7 +1363,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 
   int lower_tail=1; //
   int pearson;      // flag is set if pearson was used
-  
+
   const static double xlarge = 1.0e+37;
 
   double res; // result
@@ -1377,7 +1377,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
   if (x <= 0.0)
     return Value(0.0);
 
-  if (x <= 1.0 || x < alpha) 
+  if (x <= 1.0 || x < alpha)
   {
     //
     // Result = e^log(alpha * log(x) - x - log( gamma( alpha+1 ) ) )
@@ -1393,15 +1393,15 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
     c   = 1.0;
     sum = 1.0;
     a = alpha;
-    do 
+    do
     {
       a += 1.0;
       c *= x / a;
       sum += c;
     } while (c > DBL_EPSILON * sum);
   }
-  else 
-  { 
+  else
+  {
     // x >= max( 1, alpha)
     pearson = 0; // clear flag -> use a continued fraction expansion
 
@@ -1411,7 +1411,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 //     kDebug()<<"Continued fraction expression res="<<res;
 
     //
-    //  
+    //
     //
 
     a = 1.0 - alpha;
@@ -1421,7 +1421,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
     pn3 = x + 1.0;
     pn4 = x * b;
     sum = pn3 / pn4;
-    for (n = 1; ; n++) 
+    for (n = 1; ; n++)
     {
 //       kDebug()<<"n="<<n<<" sum="<< sum;
       a += 1.0; // =   n+1 -alpha
@@ -1430,7 +1430,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
       pn5 = b * pn3 - an * pn1;
       pn6 = b * pn4 - an * pn2;
 //       kDebug()<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
-      if (fabs(pn6) > 0.0) 
+      if (fabs(pn6) > 0.0)
       {
         osum = sum;
         sum = pn5 / pn6;
@@ -1442,7 +1442,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
       pn2 = pn4;
       pn3 = pn5;
       pn4 = pn6;
-      if (fabs(pn5) >= xlarge) 
+      if (fabs(pn5) >= xlarge)
       {
         // re-scale the terms in continued fraction if they are large
         kDebug()<<"the terms are to large -> rescaleling by "<<xlarge;
@@ -1688,7 +1688,7 @@ static double ccmath_nbes(double v,double x)
 template <typename func_ptr>
 Value CalcBessel(
   func_ptr       *func,
-  ValueConverter *converter, 
+  ValueConverter *converter,
   Value v, Value x)
 {
   double vv = numToDouble (converter->toFloat (v));
@@ -1828,14 +1828,14 @@ void ValueCalc::registerAwFunc (const QString &name, arrayWalkFunc func)
 
 Value ValueCalc::sum (const Value &range, bool full)
 {
-  Value res;
+  Value res(0);
   arrayWalk (range, res, awFunc (full ? "suma" : "sum"), Value(0));
   return res;
 }
 
 Value ValueCalc::sum (QVector<Value> range, bool full)
 {
-  Value res;
+  Value res(0);
   arrayWalk (range, res, awFunc (full ? "suma" : "sum"), Value(0));
   return res;
 }
@@ -1843,7 +1843,7 @@ Value ValueCalc::sum (QVector<Value> range, bool full)
 // sum of squares
 Value ValueCalc::sumsq (const Value &range, bool full)
 {
-  Value res;
+  Value res(0);
   arrayWalk (range, res, awFunc (full ? "sumsqa" : "sumsq"), Value(0));
   return res;
 }
@@ -1862,7 +1862,7 @@ Value ValueCalc::sumIf (const Value &range,
   }
 
   //if we are here, we have an array
-  Value res;
+  Value res(0);
   Value tmp;
 
   unsigned int rows = range.rows ();
