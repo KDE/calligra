@@ -54,6 +54,16 @@ CSV Import Dialog
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2009-10-28..30
+Forms
+*API: WidgetInfo
+**moved to a separate file, public headers are now installed to kexi/forms/ (but it's not yet really public)
+**add setAutoSaveProperties() to WidgetInfo and remove WidgetFactory::autoSaveProperties(); this works better for class inheritance, e.g. fixes missing autosaveproperty for kexidblabel widgets
+*restore focus to the recently focused widget after clicking on the record navigator
+*select widget contents (usually text) after moving to other record or moving to other field using tab/backtab
+*set focus policy to "no" for forms themselves and the record navigator widget
+
+
 2009-10-27
 General
 *versioning in par with koffice again
@@ -63,7 +73,6 @@ General
 2009-10-26
 Forms
 *Before executing "Show Form UI Code" action, accept widget inserting/editing
-*API: WidgetInfo moved to a separate file, public headers are now installed to kexi/forms/ (but it's not yet really public)
 
 2009-10-22..23
 Forms
