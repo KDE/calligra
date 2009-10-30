@@ -3126,7 +3126,7 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data, const uns
     else
     {
       // normal, fixed-size token
-      if( token.size() > 1 )
+      if( token.size() > 0 )
       {
         token.setData( token.size(), data+j );
         j += token.size();
