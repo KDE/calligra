@@ -124,7 +124,7 @@ namespace Odf
      * \note Use Region::loadOdf() for plain cell references.
      */
     // TODO check visibility
-    KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
+    KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
 
     /**
      * \ingroup OpenDocument

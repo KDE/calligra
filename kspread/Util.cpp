@@ -336,7 +336,7 @@ bool KSpread::Util::localReferenceAnchor( const QString &_ref )
 }
 
 
-QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* locale)
+QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* locale, QString namespacePrefix )
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -510,6 +510,9 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
                     // replace it
                     result.append( "LEGACYNORMSINV" );
                     i+=15; // number of characters in "LEGACY.NORMSINV"
+                } else if ( namespacePrefix == "oooc:" && expression.mid(i).startsWith("TABLE") && !isIdentifier(expression[i+5]) ) {
+                    result.append( "MULTIPLE.OPERATIONS" );
+                    i += 5;
                 }
 
 
