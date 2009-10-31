@@ -63,7 +63,7 @@
         <item>
          <widget class="QPushButton" name="chooseBtn" >
           <property name="toolTip" >
-           <string>Choose resource from addressbook</string>
+           <string>Choose resource from address book</string>
           </property>
           <property name="text" >
            <string>Choose...</string>

@@ -174,7 +174,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
      <item>
       <property name="text">
-       <string>Current datetime</string>
+       <string>Current date and time</string>
       </property>
      </item>
      <item>
@@ -184,7 +184,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </item>
      <item>
       <property name="text">
-       <string>Specified datetime</string>
+       <string>Specified date and time</string>
       </property>
      </item>
     </widget>
@@ -244,7 +244,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </property>
      <item>
       <property name="text">
-       <string>Current datetime</string>
+       <string>Current date and time</string>
       </property>
      </item>
      <item>
@@ -254,7 +254,7 @@ This is not limited to persons available in a resource group but can be anyone. 
      </item>
      <item>
       <property name="text">
-       <string>Specified datetime</string>
+       <string>Specified date and time</string>
       </property>
      </item>
     </widget>
