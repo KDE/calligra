@@ -54,7 +54,8 @@ protected slots:
     void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
 
 protected:
-    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget, const QString &text);
+    virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
+        const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
     virtual bool isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,

@@ -680,17 +680,18 @@ KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& 
     return false;
 }
 
-bool
-KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget, const QString &text)
+bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
+    const QString &text, QString &oldText)
 {
 //2.0    if (!form)
 //2.0        return false;
 //2.0    if (!form->selectedWidget())
 //2.0        return false;
 //2.0    QByteArray n(form->selectedWidget()->metaObject()->className());
-    const QString n(widget->metaObject()->className());
+    const QByteArray n(widget->metaObject()->className());
 // QWidget *w = WidgetFactory::widget();
     if (n == "KexiDBAutoField") {
+        oldText = widget->property("caption").toString();
         changeProperty(form, widget, "caption", text);
         return true;
     }
