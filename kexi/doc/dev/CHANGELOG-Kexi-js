@@ -62,7 +62,7 @@ Forms
 *restore focus to the recently focused widget after clicking on the record navigator
 *select widget contents (usually text) after moving to other record or moving to other field using tab/backtab
 *set focus policy to "no" for forms themselves and the record navigator widget
-
+*fix cursor handling in data and design modes
 
 2009-10-27
 General
