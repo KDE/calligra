@@ -27,12 +27,17 @@
 
 #include <KoCanvasBase.h>
 
+#include "KWViewMode.h"
+
 #include <QWidget>
+
+class QRect;
+class QPainter;
 
 class KWGui;
 class KWView;
-class KWViewMode;
 class KoToolProxy;
+
 
 /**
  * Class: KWCanvas
@@ -153,6 +158,10 @@ private slots:
     void pageSetupChanged();
 
 private:
+    void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
+    void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
+    void getPenData(const KoBorder::BorderData &borderData, QPen &pen) const;
+
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoToolProxy * m_toolProxy;
