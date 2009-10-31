@@ -1306,7 +1306,7 @@ bool Form::addCommand(Command *command, AddCommandOption option)
     if (option == DontExecuteCommand) {
         command->blockRedoOnce();
     }
-    const int count = d->undoStack.count();
+    //const int count = d->undoStack.count();
     d->undoStack.push(command);
 /*    if ((count + 1) == d->undoStack.count()) {
         return false;
@@ -2307,7 +2307,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     const bool enableLayout = multiple || w == container->widget();
 
 //unused...    m_menuWidget = w;
-    QString n = container->form()->library()->displayName(w->metaObject()->className());
+    QString n( container->form()->library()->displayName(w->metaObject()->className()) );
 
     //set title
     QIcon icon;
@@ -3467,7 +3467,7 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
              && d->inlineEditor && d->inlineEditorContainer)
     {
         // click outside editor --> cancel editing
-        Container *cont = d->inlineEditorContainer;
+        //Container *cont = d->inlineEditorContainer;
         resetInlineEditor();
         return d->inlineEditorContainer->eventFilter(obj, ev);
     }

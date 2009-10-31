@@ -147,7 +147,7 @@ EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container,
 
 void EditRichTextAction::slotTriggered()
 {
-    const QString classname( m_receiver->metaObject()->className() );
+    const QByteArray classname( m_receiver->metaObject()->className() );
     QString text;
     if (classname == "KTextEdit") {
         KTextEdit* te = dynamic_cast<KTextEdit*>(m_receiver);
@@ -483,7 +483,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 {
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));
-    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
+//2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
     if (c == "QLabel")
         w = new QLabel(text, p);
@@ -563,6 +563,8 @@ bool
 StdWidgetFactory::previewWidget(const QByteArray &classname, 
                                 QWidget *widget, KFormDesigner::Container *)
 {
+    Q_UNUSED(classname);
+    Q_UNUSED(widget);
 /* moved to FormWidgetInterface
     if (classname == "Spring") {
         dynamic_cast<Spring*>(widget)->setPreviewMode();
@@ -708,7 +710,7 @@ StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
                                    const QString &text, QString &oldText)
 {
 //2.0    QByteArray n = WidgetFactory::widget()->metaObject()->className();
-    const QString n(widget->metaObject()->className());
+    const QByteArray n(widget->metaObject()->className());
 //2.0    QWidget *w = WidgetFactory::widget();
     if (n == "KIntSpinBox") {
         oldText = QString::number(dynamic_cast<KIntSpinBox*>(widget)->value());

@@ -66,7 +66,7 @@ class KEXIDATATABLE_EXPORT KexiCellEditorFactoryItem
 public:
     KexiCellEditorFactoryItem();
     virtual ~KexiCellEditorFactoryItem();
-    QString className() {
+    QString className() const {
         return m_className;
     }
 
