@@ -19,6 +19,7 @@
 
 #include "kexicsvimportoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
+#include <kexiutils/utils.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -108,7 +109,10 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 
     QGroupBox* textEncodingGroupBox = new QGroupBox(i18n("Text encoding"), plainPage);
     lyr->addWidget(textEncodingGroupBox, 0, 0, 1, 2);
-    QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout(textEncodingGroupBox, KDialog::spacingHint(), KDialog::spacingHint());
+    QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout;
+    KexiUtils::setStandardMarginsAndSpacing(textEncodingGroupBoxLyr);
+    textEncodingGroupBox->setLayout(textEncodingGroupBoxLyr);
+
     textEncodingGroupBoxLyr->addItem(new QSpacerItem(20, 15, QSizePolicy::Fixed, QSizePolicy::Fixed));
 
     m_encodingComboBox = new KexiCharacterEncodingComboBox(textEncodingGroupBox, options.encoding);
