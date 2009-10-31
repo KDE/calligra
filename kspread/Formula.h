@@ -25,8 +25,10 @@
 #include <QString>
 #include <QTextStream>
 #include <QVector>
+#include <QPoint>
 
 #include "kspread_export.h"
+#include "Cell.h"
 
 #define KSPREAD_INLINE_ARRAYS
 
@@ -34,9 +36,9 @@ class KLocale;
 
 namespace KSpread
 {
-class Cell;
 class Sheet;
 class Value;
+typedef QHash<Cell, Cell> CellIndirection;
 
 /**
  * Token
@@ -327,8 +329,12 @@ class KSPREAD_EXPORT Formula
 
     /**
      * Evaluates the formula and returns the result.
+     * The optional cellIndirections parameter can be used to replace all
+     * occurences of a references to certain cells with references to
+     * different cells. If this mapping is non-empty this does mean
+     * that intermediate results can't be cached.
      */
-    Value eval() const;
+    Value eval( CellIndirection cellIndirections = CellIndirection() ) const;
 
     /**
      * Given an expression, this function separates it into tokens.
@@ -355,6 +361,12 @@ class KSPREAD_EXPORT Formula
      * helper function: return true for valid named area
      */
     bool isNamedArea( const QString& expr ) const;
+
+    /**
+     * helper function for recursive evaluations; makes sure one cell
+     * is not evaluated more than once resulting in infinite loops
+     */
+    Value evalRecursive( CellIndirection cellIndirections, QHash<Cell, Value>& values ) const;
 
   private:
     class Private;

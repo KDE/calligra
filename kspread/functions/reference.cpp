@@ -26,6 +26,8 @@
 #include "Util.h"
 #include "Value.h"
 
+#include "CellStorage.h"
+#include "Formula.h"
 #include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "ReferenceModule.h"
@@ -47,6 +49,7 @@ Value func_hlookup (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_index (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_multiple_operations (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *);
@@ -110,6 +113,10 @@ void ReferenceModule::registerFunctions()
   f = new Function ("LOOKUP",   func_lookup);
   f->setParamCount (3);
   f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("MULTIPLE.OPERATIONS", func_multiple_operations);
+  f->setParamCount (3, 5);
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("ROW",      func_row);
   f->setParamCount (0, 1);
@@ -397,6 +404,36 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
   return res;
 }
 
+//
+// Function: MULTIPLE.OPERATIONS
+//
+Value func_multiple_operations (valVector args, ValueCalc *, FuncExtra *e)
+{
+  if (args.count() != 3 && args.count() != 5)
+    return Value::errorVALUE(); // invalid number of parameters
+
+  for (int i = 0; i < args.count(); i++) {
+    if (e->ranges[i].col1 == -1 || e->ranges[i].row1 == -1)
+      return Value::errorVALUE();
+  }
+
+  CellStorage *s = e->sheet->cellStorage();
+
+  // get formula to evaluate
+  int formulaCol = e->ranges[0].col1;
+  int formulaRow = e->ranges[0].row1;
+  Formula formula = s->formula( formulaCol, formulaRow );
+  if (!formula.isValid())
+    return Value::errorVALUE();
+
+  CellIndirection cellIndirections;
+  cellIndirections.insert(Cell(e->sheet, e->ranges[1].col1, e->ranges[1].row1), Cell(e->sheet, e->ranges[2].col1, e->ranges[2].row1));
+  if (args.count() > 3) {
+    cellIndirections.insert(Cell(e->sheet, e->ranges[3].col1, e->ranges[3].row1), Cell(e->sheet, e->ranges[4].col1, e->ranges[4].row1));
+  }
+
+  return formula.eval(cellIndirections);
+}
 
 //
 // Function: ROW

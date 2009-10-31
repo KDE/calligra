@@ -1388,7 +1388,13 @@ struct stackEntry {
   int row1, col1, row2, col2;
 };
 
-Value Formula::eval() const
+Value Formula::eval( CellIndirection cellIndirections ) const
+{
+  QHash<Cell, Value> values;
+  return evalRecursive( cellIndirections, values );
+}
+
+Value Formula::evalRecursive( CellIndirection cellIndirections, QHash<Cell, Value>& values ) const
 {
   QStack<stackEntry> stack;
   stackEntry entry;
@@ -1576,7 +1582,24 @@ Value Formula::eval() const
           if (region.isValid() && region.isSingular())
           {
             const QPoint position = region.firstRange().topLeft();
-            val1 = Cell(region.firstSheet(), position).value();
+            if (cellIndirections.isEmpty())
+              val1 = Cell(region.firstSheet(), position).value();
+            else
+            {
+              Cell cell(region.firstSheet(), position);
+              cell = cellIndirections.value(cell, cell);
+              if (values.contains(cell))
+                val1 = values.value(cell);
+              else
+              {
+                values[cell] = Value::errorCIRCLE();
+                if (cell.isFormula())
+                  val1 = cell.formula().evalRecursive( cellIndirections, values );
+                else
+                  val1 = cell.value();
+                values[cell] = val1;
+              }
+            }
             // store the reference, so we can use it within functions
             entry.col1 = entry.col2 = position.x();
             entry.row1 = entry.row2 = position.y();

@@ -144,7 +144,7 @@
 	<Text>Returns the content of the cell specified by the reference text. The second parameter is optional.</Text>
 	<Syntax>INDIRECT(referenceText, a1 style)</Syntax>
 	<Example>INDIRECT(A1), A1 contains "B1", and B1 1 => returns 1</Example>
-	<Example>INDIRECT("A1"), returns content of A1</Example>        
+	<Example>INDIRECT("A1"), returns content of A1</Example>
       </Help>
     </Function>
 
@@ -251,6 +251,36 @@
        <Text>Look for a matching value in the first column of the given table, and return the value of the indicated column.</Text>
        <Text>Looks up the 'lookup value' in the first column of the 'data source'. If a value matches, the value in the 'column' and the row, the value was found in, is returned. If 'sorted' is true (default), the first column is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
        <Syntax>VLOOKUP(Lookup value; data source; Column; Sorted)</Syntax>
+     </Help>
+   </Function>
+
+   <Function>
+     <Name>MULTIPLE.OPERATIONS</Name>
+     <Type>String/Numeric</Type>
+     <Parameter>
+       <Comment>Formula cell</Comment>
+       <Type>Reference</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Row cell</Comment>
+       <Type>Reference</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Row replacement</Comment>
+       <Type>Reference</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Column cell (optional)</Comment>
+       <Type>Reference</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Column replacement (optional)</Comment>
+       <Type>Reference</Type>
+     </Parameter>
+     <Help>
+     </Help>
+       <Text>MULTIPLE.OPERATIONS executes the formula expression pointed to by FormulaCell and all formula expressions it depends on while replacing all references to RowCell with references to RowReplacement respectively all references to ColumnCell with references to ColumnReplacement. The function may be used to easily create tables of expressions that depend on two input parameters.</Text>
+       <Syntax>MULTIPLE.OPERATIONS(Formula cell; Row cell; Row replacement; Column cell; Column replacement)</Syntax>
      </Help>
    </Function>
 
