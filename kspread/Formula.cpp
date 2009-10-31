@@ -415,7 +415,7 @@ void TokenStack::ensureSpace()
 // helper function: return true for valid identifier character
 bool KSpread::isIdentifier( QChar ch )
 {
-  return ( ch.unicode() == '_' ) || (ch.unicode() == '$' ) || ( ch.isLetter() );
+  return ( ch.unicode() == '_' ) || (ch.unicode() == '$' ) || (ch.unicode() == '.') || ( ch.isLetter() );
 }
 
 
@@ -592,6 +592,13 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
          state = InString;
        }
 
+       // decimal dot ?
+       else if ( ch == decimal[0] )
+       {
+         tokenText.append( ex[i++] );
+         state = InDecimal;
+       }
+
        // beginning with alphanumeric ?
        // could be identifier, cell, range, or function...
        else if( isIdentifier( ch ) )
@@ -604,13 +611,6 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
          i++;
          state = InSheetOrAreaName;
-       }
-
-       // decimal dot ?
-       else if ( ch == decimal[0] )
-       {
-         tokenText.append( ex[i++] );
-         state = InDecimal;
        }
 
        // error value?

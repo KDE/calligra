@@ -372,6 +372,10 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
                     result.append( expression[i++] );
                 }
 
+                // decimal dot ?
+                else if ( expression[i] == '.' )
+                    state = InNumber;
+
                 // beginning with alphanumeric ?
                 // could be identifier, cell, range, or function...
                 else if ( isIdentifier( expression[i] ) )
@@ -385,10 +389,6 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
                     // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
                     if ( expression[i] == '$' ) ++i;
                 }
-
-                // decimal dot ?
-                else if ( expression[i] == '.' )
-                    state = InNumber;
 
                 // look for operator match
                 else
