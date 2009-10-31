@@ -1641,6 +1641,9 @@ Record* Record::create( unsigned type )
   else if( type ==ColInfoRecord::id)
     return new ColInfoRecord();
 
+  else if( type ==DataTableRecord::id)
+    return new DataTableRecord();
+
   else if( type ==DateModeRecord::id)
     return new DateModeRecord();
 
@@ -2325,6 +2328,126 @@ void ColInfoRecord::dump( std::ostream& out ) const
   out << "             Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
   out << "          Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
   out << "      Outline Level : " << outlineLevel() << std::endl;
+}
+
+// ========== DATATABLE ==========
+
+const unsigned int DataTableRecord::id = 0x0236;
+
+class DataTableRecord::Private
+{
+public:
+  unsigned firstRow;
+  unsigned lastRow;
+  unsigned firstColumn;
+  unsigned lastColumn;
+  Direction direction;
+
+  unsigned inputRow1, inputCol1;
+  unsigned inputRow2, inputCol2;
+};
+
+DataTableRecord::DataTableRecord():
+  Record()
+{
+  d = new DataTableRecord::Private();
+  d->firstRow = d->lastRow = d->firstColumn = d->lastColumn = 0;
+  d->inputRow1 = d->inputRow2 = d->inputCol1 = d->inputCol2 = 0;
+  d->direction = Input2D;
+}
+
+DataTableRecord::~DataTableRecord()
+{
+  delete d;
+}
+
+DataTableRecord::DataTableRecord( const DataTableRecord& record )
+ : Record()
+{
+  d = new DataTableRecord::Private();
+  *this = record;
+}
+
+DataTableRecord& DataTableRecord::operator=( const DataTableRecord& record )
+{
+  *d = *record.d;
+  return *this;
+}
+
+unsigned DataTableRecord::firstRow() const
+{
+  return d->firstRow;
+}
+
+unsigned DataTableRecord::firstColumn() const
+{
+  return d->firstColumn;
+}
+
+DataTableRecord::Direction DataTableRecord::direction() const
+{
+  return d->direction;
+}
+
+unsigned DataTableRecord::inputRow1() const
+{
+  return d->inputRow1;
+}
+
+unsigned DataTableRecord::inputRow2() const
+{
+  return d->inputRow2;
+}
+
+unsigned DataTableRecord::inputColumn1() const
+{
+  return d->inputCol1;
+}
+
+unsigned DataTableRecord::inputColumn2() const
+{
+  return d->inputCol2;
+}
+
+void DataTableRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+{
+  if( size < 12 ) return;
+  if( version() != Excel97 ) return;
+
+  d->firstRow = readU16( data );
+  d->lastRow = readU16( data+2 );
+  d->firstColumn = data[4];
+  d->lastColumn = data[5];
+
+  d->inputRow1 = readU16( data + 8 );
+  d->inputCol1 = readU16( data + 10 );
+  if( size >= 16 )
+  {
+    d->inputRow2 = readU16( data + 12 );
+    d->inputCol2 = readU16( data + 14 );
+  }
+
+  unsigned options = readU16( data+6 );
+  if( options & 0x0008 )
+    d->direction = Input2D;
+  else if( options & 0x0004 )
+    d->direction = InputRow;
+  else
+    d->direction = InputColumn;
+}
+
+void DataTableRecord::dump( std::ostream& out ) const
+{
+  out << "DATATABLE" << std::endl;
+  out << "       First Column : " << d->firstColumn << std::endl;
+  out << "        Last Column : " << d->lastColumn << std::endl;
+  out << "          First Row : " << d->firstRow << std::endl;
+  out << "           Last Row : " << d->lastRow << std::endl;
+  out << "          Direction : " << ( d->direction == Input2D ? "2D" : d->direction == InputColumn ? "Column" : "Row" ) << std::endl;
+  out << "        Input row 1 : " << d->inputRow1 << std::endl;
+  out << "     Input column 1 : " << d->inputCol1 << std::endl;
+  out << "        Input row 2 : " << d->inputRow2 << std::endl;
+  out << "     Input column 2 : " << d->inputCol2 << std::endl;
 }
 
 // ========== DATEMODE ==========
@@ -4906,6 +5029,9 @@ public:
   // for EXTERNBOOK and EXTERNSHEET
   std::vector<UString> externBookTable;
   std::vector<UString> externSheetTable;
+
+  // mapping from cell position to data tables
+  std::map<std::pair<unsigned, unsigned>, DataTableRecord> dataTables;
 };
 
 ExcelReader::ExcelReader()
@@ -5136,6 +5262,8 @@ void ExcelReader::handleRecord( Record* record )
       handleCalcMode( static_cast<CalcModeRecord*>( record ) ); break;
     case ColInfoRecord::id:
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
+    case DataTableRecord::id:
+      handleDataTable( static_cast<DataTableRecord*>( record ) ); break;
     case ExternBookRecord::id:
       handleExternBook( static_cast<ExternBookRecord*>( record ) ); break;
     case ExternNameRecord::id:
@@ -5305,6 +5433,22 @@ void ExcelReader::handleColInfo( ColInfoRecord* record )
       column->setVisible( !hidden );
     }
   }
+}
+
+void ExcelReader::handleDataTable( DataTableRecord* record )
+{
+  if( !record ) return;
+  if( !d->lastFormulaCell ) return;
+
+  unsigned row = d->lastFormulaCell->row();
+  unsigned column = d->lastFormulaCell->column();
+
+  d->dataTables[std::make_pair(row, column)] = *record;
+
+  UString formula = dataTableFormula( row, column, record );
+  d->lastFormulaCell->setFormula( formula );
+
+  d->lastFormulaCell = 0;
 }
 
 void ExcelReader::handleDateMode( DateModeRecord* record )
@@ -6400,6 +6544,20 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
       }
 
+      case FormulaToken::Table: {
+        std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
+        std::map<std::pair<unsigned, unsigned>, DataTableRecord>::iterator datatable = d->dataTables.find(formulaCellPos);
+        if( datatable != d->dataTables.end() )
+        {
+          stack.push_back(dataTableFormula(row, col, &datatable->second));
+        }
+        else
+        {
+          stack.push_back(UString("Error"));
+        }
+        break;
+      }
+
       case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
       case FormulaToken::EndSheet:
@@ -6437,6 +6595,81 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
   return result;
 }
 
+UString ExcelReader::dataTableFormula( unsigned row, unsigned col, const DataTableRecord* record )
+{
+  UString result("MULTIPLE.OPERATIONS(");
+
+  unsigned formulaRow = 0, formulaCol = 0;
+  switch( record->direction() )
+  {
+    case DataTableRecord::InputRow:
+      formulaRow = row;
+      formulaCol = record->firstColumn() - 1;
+      break;
+    case DataTableRecord::InputColumn:
+      formulaRow = record->firstRow() - 1;
+      formulaCol = col;
+      break;
+    case DataTableRecord::Input2D:
+      formulaRow = record->firstRow() - 1;
+      formulaCol = record->firstColumn() - 1;
+      break;
+  }
+
+  result.append( UString("[.$") );
+  result.append( Cell::columnLabel( formulaCol ) );
+  result.append( UString("$") );
+  result.append( UString::from( formulaRow+1 ) );
+  result.append( UString("]") );
+
+  if( record->direction() == DataTableRecord::Input2D )
+  {
+    result.append( UString(";[.$") );
+    result.append( Cell::columnLabel( record->inputColumn2() ) );
+    result.append( UString("$") );
+    result.append( UString::from( record->inputRow2()+1 ) );
+    result.append( UString("]") );
+  } else {
+    result.append( UString(";[.$") );
+    result.append( Cell::columnLabel( record->inputColumn1() ) );
+    result.append( UString("$") );
+    result.append( UString::from( record->inputRow1()+1 ) );
+    result.append( UString("]") );
+  }
+
+  if( record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputColumn )
+  {
+    result.append( UString(";[.$") );
+    result.append( Cell::columnLabel( record->firstColumn()-1 ) );
+    result.append( UString::from( row+1 ) );
+    result.append( UString("]") );
+  }
+
+  if( record->direction() == DataTableRecord::Input2D )
+  {
+    result.append( UString(";[.$") );
+    result.append( Cell::columnLabel( record->inputColumn1() ) );
+    result.append( UString("$") );
+    result.append( UString::from( record->inputRow1()+1 ) );
+    result.append( UString("]") );
+  }
+
+  if( record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputRow )
+  {
+    result.append( UString(";[.") );
+    result.append( Cell::columnLabel( col ) );
+    result.append( UString("$") );
+    result.append( UString::from( record->firstRow()-1+1 ) );
+    result.append( UString("]") );
+  }
+
+  result.append( UString(")") );
+
+#ifdef SWINDER_XLS2RAW
+  std::cout << "DATATABLE Result: " << result << std::endl;
+#endif
+  return result;
+}
 
 #ifdef SWINDER_XLS2RAW
 

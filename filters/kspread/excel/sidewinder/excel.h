@@ -951,6 +951,48 @@ private:
    Private *d;
 };
 
+class DataTableRecord : public Record
+{
+public:
+  enum Direction {
+    InputRow,
+    InputColumn,
+    Input2D
+  };
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+      return this->id;
+  }
+
+  DataTableRecord();
+  virtual ~DataTableRecord();
+  DataTableRecord( const DataTableRecord& );
+  DataTableRecord& operator=( const DataTableRecord& );
+
+  unsigned firstRow() const;
+  unsigned firstColumn() const;
+  Direction direction() const;
+
+  unsigned inputRow1() const;
+  unsigned inputColumn1() const;
+  unsigned inputRow2() const;
+  unsigned inputColumn2() const;
+
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+
+  virtual const char* name(){ return "DATATABLE"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   class Private;
+   Private *d;
+};
+
+
+
 /**
   \brief Date reference.
 
@@ -3222,6 +3264,7 @@ private:
   void handleBlank( BlankRecord* record );
   void handleCalcMode( CalcModeRecord* record );
   void handleColInfo( ColInfoRecord* record );
+  void handleDataTable( DataTableRecord* record );
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
   void handleExternBook( ExternBookRecord* record );
@@ -3256,6 +3299,7 @@ private:
   FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
   UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
+  UString dataTableFormula( unsigned row, unsigned col, const DataTableRecord* record );
 
   // no copy or assign
   ExcelReader( const ExcelReader& );
