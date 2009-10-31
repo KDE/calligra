@@ -60,7 +60,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 {
     setObjectName("kexiscrollview");
     setAttribute(Qt::WA_StaticContents, true);
-    setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
     QPalette pal(viewport()->palette());
     pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
     viewport()->setPalette(pal);
@@ -104,6 +104,8 @@ KexiScrollView::~KexiScrollView()
 void
 KexiScrollView::setWidget(QWidget *w)
 {
+    if (!w)
+        return;
     addChild(w);
     m_widget = w;
 }
