@@ -491,8 +491,8 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KexiPictureLabel(DesktopIcon("image-x-generic"), p);
     else if (c == "KLineEdit") {
         w = new KLineEdit(p);
-        if (designMode)
-            w->setCursor(QCursor(Qt::ArrowCursor));
+//2.0        if (designMode)
+//2.0            w->setCursor(QCursor(Qt::ArrowCursor));
     } else if (c == "KPushButton")
         w = new KPushButton(/*i18n("Button")*/text, p);
 

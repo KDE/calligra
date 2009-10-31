@@ -103,7 +103,7 @@ public:
 
     bool preview() const;
 
-    virtual void setCursor(const QCursor & cursor);
+//    virtual void setCursor(const QCursor & cursor);
 
 public slots:
     void setAutoTabStops(bool set);

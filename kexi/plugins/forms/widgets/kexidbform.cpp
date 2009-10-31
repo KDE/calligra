@@ -735,7 +735,7 @@ void KexiDBForm::dropEvent(QDropEvent *e)
     emit handleDropEvent(e);
 }
 
-void KexiDBForm::setCursor(const QCursor & cursor)
+/*void KexiDBForm::setCursor(const QCursor & cursor)
 {
     //js: empty, to avoid fscking problems with random cursors!
     //! @todo?
@@ -743,7 +743,7 @@ void KexiDBForm::setCursor(const QCursor & cursor)
     if (form() && form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
         KexiDBFormBase::setCursor(cursor);
     }
-}
+}*/
 
 //! @todo: Qt4? XORed resize rectangles instead of black widgets
 /*

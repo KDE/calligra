@@ -257,6 +257,7 @@ void KexiFormView::initForm()
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
     m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
                                // from m_scrollView->viewport()
+
 // m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
 // m_dbform->resize(QSize(400, 300));
     m_scrollView->setWidget(m_dbform);
@@ -384,6 +385,14 @@ void KexiFormView::initForm()
     if (!newForm && viewMode() == Kexi::DesignViewMode) {
         form()->clearUndoStack();
     }
+
+/*    QList<QWidget*> wlist(m_dbform->findChildren<QWidget*>());
+    wlist.prepend(m_dbform);
+    foreach(QWidget* w, wlist) {
+        KFormDesigner::FormWidgetInterface* fwiface = dynamic_cast<KFormDesigner::FormWidgetInterface*>(w);
+        if (fwiface)
+            fwiface->setDesignMode(viewMode() == Kexi::DesignViewMode);
+    }*/
 }
 
 void KexiFormView::updateAutoFieldsDataSource()

@@ -67,7 +67,7 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 //        << "directed to" << container->objectName();
     object->installEventFilter(container);
 //2.0    if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
-    ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
+//2.0    ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
     const QObjectList list(object->children());
     foreach(QObject *obj, list) {

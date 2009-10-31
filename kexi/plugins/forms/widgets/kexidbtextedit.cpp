@@ -40,7 +40,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-    installEventFilter(this);
+//    installEventFilter(this);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()

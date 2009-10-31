@@ -3610,13 +3610,13 @@ void Form::resetInlineEditor()
             return;
         }
         tree->eventEater()->setContainer(d->inlineEditorContainer);
-        if (widget) {// && !ed)
+/*2.0        if (widget) {// && !ed)
             setRecursiveCursor(widget, this);
             if (widget->inherits("QLineEdit") || widget->inherits("QTextEdit")) { //fix weird behaviour
 //                widget->unsetCursor();
                 widget->setCursor(Qt::ArrowCursor);
             }
-        }
+        }*/
 
         // disable again the widget if needed
         if (!ed && !tree->isEnabled()) {
