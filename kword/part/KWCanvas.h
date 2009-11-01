@@ -160,6 +160,10 @@ private slots:
 private:
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
     void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
+    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData, QPen &pen,
+                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
+                         int inwardsX, int inwardsY) const;
+
     void getPenData(const KoBorder::BorderData &borderData, QPen &pen) const;
 
     KWDocument *m_document;

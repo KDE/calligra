@@ -337,155 +337,65 @@ void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRec
     qreal zoomY;
     viewConverter()->zoom( &zoomX, &zoomY );
 
-    // Paint the left border.
-    if (border.leftBorderStyle() != KoBorder::BorderNone) {
-        painter.save();
+    KoBorder::BorderData borderSide = border.leftBorderData();
+    paintBorderSide(painter, borderSide, pen, borderRect.topLeft(), borderRect.bottomLeft(), 
+                    zoomX, 1, 0);
+    borderSide = border.topBorderData();
+    paintBorderSide(painter, borderSide, pen, borderRect.topLeft(), borderRect.topRight(), 
+                    zoomY, 0, 1);
 
-        KoBorder::BorderData leftBorder = border.leftBorderData();
+    borderSide = border.rightBorderData();
+    paintBorderSide(painter, borderSide, pen, borderRect.topRight(), borderRect.bottomRight(), 
+                    zoomX, -1, 0);
 
-        // Set up the painter and inner and outer pens.
-        getPenData(leftBorder, pen);
+    borderSide = border.bottomBorderData();
+    paintBorderSide(painter, borderSide, pen, borderRect.bottomLeft(), borderRect.bottomRight(), 
+                    zoomY, 0, -1);
+}
 
-        if (leftBorder.style == KoBorder::BorderDouble ) {
-            // outerWidth is the width of the outer line.  The offsets
-            // are the distances from the center line of the whole
-            // border to the centerlines of the outer and inner
-            // borders respectively.
-            qreal outerWidth = leftBorder.width - leftBorder.innerWidth - leftBorder.spacing;
-            QPoint outerOffset(- leftBorder.width / 2.0 + outerWidth / 2.0, 0);
-            QPoint innerOffset(  leftBorder.width / 2.0 - leftBorder.innerWidth / 2.0, 0);
 
-            // Draw the outer line.
-            pen.setWidthF(zoomX * outerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft()    + outerOffset, 
-                             borderRect.bottomLeft() + outerOffset);
+void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData, QPen &pen,
+                               const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
+                               int inwardsX, int inwardsY) const
+{
+    // Return if nothing to paint
+    if (borderData.style == KoBorder::BorderNone)
+        return;
 
-            // Draw the inner line
-            pen.setWidthF(zoomX * leftBorder.innerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft()    + innerOffset, 
-                             borderRect.bottomLeft() + innerOffset);
-        }
-        else {
-            pen.setWidthF(zoomX * leftBorder.width);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft(), borderRect.bottomLeft());
-        }
+    painter.save();
+
+    // Set up the painter and inner and outer pens.
+    getPenData(borderData, pen);
+
+    if (borderData.style == KoBorder::BorderDouble ) {
+        // outerWidth is the width of the outer line.  The offsets
+        // are the distances from the center line of the whole
+        // border to the centerlines of the outer and inner
+        // borders respectively.
+        qreal outerWidth = borderData.width - borderData.innerWidth - borderData.spacing;
+        qreal outerOffset = borderData.width / 2.0 + outerWidth / 2.0;
+        qreal innerOffset = borderData.width / 2.0 - borderData.innerWidth / 2.0;
+
+        QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
+        QPointF innerOffset2D( inwardsX * innerOffset,  inwardsY * innerOffset );
+
+        // Draw the outer line.
+        pen.setWidthF(zoom * outerWidth);
+        painter.setPen(pen);
+        painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
+
+        // Draw the inner line
+        pen.setWidthF(zoom * borderData.innerWidth);
+        painter.setPen(pen);
+        painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
+    }
+    else {
+        pen.setWidthF(zoom * borderData.width);
+        painter.setPen(pen);
+        painter.drawLine(lineStart, lineEnd);
     }
 
-    // Paint the top border.
-    if (border.topBorderStyle() != KoBorder::BorderNone) {
-        painter.save();
-
-        KoBorder::BorderData topBorder = border.topBorderData();
-
-        // Set up the painter and inner and outer pens.
-        getPenData(topBorder, pen);
-
-        if (topBorder.style == KoBorder::BorderDouble ) {
-            // outerWidth is the width of the outer line.  The offsets
-            // are the distances from the center line of the whole
-            // border to the centerlines of the outer and inner
-            // borders respectively.
-            qreal outerWidth = topBorder.width - topBorder.innerWidth - topBorder.spacing;
-            QPoint outerOffset(0, - topBorder.width / 2.0 + outerWidth / 2.0);
-            QPoint innerOffset(0,   topBorder.width / 2.0 - topBorder.innerWidth / 2.0);
-
-            // Draw the outer line.
-            pen.setWidthF(zoomX * outerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft()  + outerOffset, 
-                             borderRect.topRight() + outerOffset);
-
-            // Draw the inner line
-            pen.setWidthF(zoomX * topBorder.innerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft()  + innerOffset, 
-                             borderRect.topRight() + innerOffset);
-        }
-        else {
-            pen.setWidthF(zoomX * topBorder.width);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topLeft(), borderRect.topRight());
-        }
-    }
-
-    // Paint the right border.
-    if (border.rightBorderStyle() != KoBorder::BorderNone) {
-        painter.save();
-
-        KoBorder::BorderData rightBorder = border.rightBorderData();
-
-        // Set up the painter and inner and outer pens.
-        getPenData(rightBorder, pen);
-
-        if (rightBorder.style == KoBorder::BorderDouble ) {
-            // outerWidth is the width of the outer line.  The offsets
-            // are the distances from the center line of the whole
-            // border to the centerlines of the outer and inner
-            // borders respectively.
-            qreal outerWidth = rightBorder.width - rightBorder.innerWidth - rightBorder.spacing;
-            QPoint outerOffset(  rightBorder.width / 2.0 + outerWidth / 2.0, 0);
-            QPoint innerOffset(- rightBorder.width / 2.0 - rightBorder.innerWidth / 2.0, 0);
-
-            // Draw the outer line.
-            pen.setWidthF(zoomX * outerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topRight()    + outerOffset, 
-                             borderRect.bottomRight() + outerOffset);
-
-            // Draw the inner line
-            pen.setWidthF(zoomX * rightBorder.innerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topRight()    + innerOffset, 
-                             borderRect.bottomRight() + innerOffset);
-        }
-        else {
-            pen.setWidthF(zoomX * rightBorder.width);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.topRight(), borderRect.bottomRight());
-        }
-    }
-
-    // Paint the bottom border.
-    if (border.bottomBorderStyle() != KoBorder::BorderNone) {
-        painter.save();
-
-        KoBorder::BorderData bottomBorder = border.bottomBorderData();
-
-        // Set up the painter and inner and outer pens.
-        getPenData(bottomBorder, pen);
-
-        if (bottomBorder.style == KoBorder::BorderDouble ) {
-            // outerWidth is the width of the outer line.  The offsets
-            // are the distances from the center line of the whole
-            // border to the centerlines of the outer and inner
-            // borders respectively.
-            qreal outerWidth = bottomBorder.width - bottomBorder.innerWidth - bottomBorder.spacing;
-            QPoint outerOffset(0,   bottomBorder.width / 2.0 + outerWidth / 2.0);
-            QPoint innerOffset(0, - bottomBorder.width / 2.0 - bottomBorder.innerWidth / 2.0);
-
-            // Draw the outer line.
-            pen.setWidthF(zoomX * outerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.bottomLeft()  + outerOffset, 
-                             borderRect.bottomRight() + outerOffset);
-
-            // Draw the inner line
-            pen.setWidthF(zoomX * bottomBorder.innerWidth);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.bottomLeft()  + innerOffset, 
-                             borderRect.bottomRight() + innerOffset);
-        }
-        else {
-            pen.setWidthF(zoomX * bottomBorder.width);
-            painter.setPen(pen);
-            painter.drawLine(borderRect.bottomLeft(), borderRect.bottomRight());
-        }
-
-        painter.restore();
-    }
+    painter.restore();
 }
 
 void KWCanvas::getPenData(const KoBorder::BorderData &borderData, QPen &pen) const
