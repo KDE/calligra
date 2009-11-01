@@ -3,7 +3,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_BINARY_DI
 
 ########### next target ###############
 
-set(sidewinder_SRCS 
+set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/cell.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/excel.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/format.cpp
@@ -12,6 +12,10 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/ustring.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/value.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/workbook.cpp
+
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
+
 )
 
 set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})

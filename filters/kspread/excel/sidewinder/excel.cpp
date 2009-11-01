@@ -30,6 +30,7 @@
 
 #include "pole.h"
 #include "swinder.h"
+#include "globalssubstreamhandler.h"
 
 // Use anonymous namespace to cover following functions
 namespace{
@@ -4985,9 +4986,7 @@ public:
   // the workbook
   Workbook* workbook;
 
-  // password protection flag
-  // TODO: password hash for record decryption
-  bool passwordProtected;
+  GlobalsSubStreamHandler* globals;
 
   // active sheet, all cell records will be stored here
   Sheet* activeSheet;
@@ -4995,40 +4994,14 @@ public:
   // for FORMULA+STRING record pair
   Cell* formulaCell;
 
-  // mapping from BOF pos to actual Sheet
-  std::map<unsigned,Sheet*> bofMap;
-
-  // shared-string table
-  std::vector<UString> stringTable;
-
-  // table of format
-  std::map<unsigned,FormatRecord> formatTable;
-  std::map<unsigned,UString> formatsTable;
-
-  // table of font
-  std::vector<FontRecord> fontTable;
-
-  // table of Xformat
-  std::vector<XFRecord> xfTable;
-
-  // color table (from Palette record)
-  std::vector<Color> colorTable;
-
   // mapping from font index to Swinder::FormatFont
   std::map<unsigned,FormatFont> fontCache;
-
-  // for NAME and EXTERNNAME
-  std::vector<UString> nameTable;
 
   // mapping from cell position to shared formulas
   std::map<std::pair<unsigned, unsigned>, FormulaTokens> sharedFormulas;
 
   // for FORMULA+SHAREDFMLA record pair
   Cell* lastFormulaCell;
-
-  // for EXTERNBOOK and EXTERNSHEET
-  std::vector<UString> externBookTable;
-  std::vector<UString> externSheetTable;
 
   // mapping from cell position to data tables
   std::map<std::pair<unsigned, unsigned>, DataTableRecord> dataTables;
@@ -5042,24 +5015,7 @@ ExcelReader::ExcelReader()
   d->activeSheet = 0;
   d->formulaCell = 0;
   d->lastFormulaCell = 0;
-
-  d->passwordProtected = false;
-
-  // initialize palette
-  static const char *const default_palette[64-8] =	// default palette for all but the first 8 colors
-  {
-	  "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
-	  "#00ffff", "#800000", "#008000", "#000080", "#808000", "#800080", "#008080",
-	  "#c0c0c0", "#808080", "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066",
-	  "#ff8080", "#0066cc", "#ccccff", "#000080", "#ff00ff", "#ffff00", "#00ffff",
-	  "#800080", "#800000", "#008080", "#0000ff", "#00ccff", "#ccffff", "#ccffcc",
-	  "#ffff99", "#99ccff", "#ff99cc", "#cc99ff", "#ffcc99", "#3366ff", "#33cccc",
-	  "#99cc00", "#ffcc00", "#ff9900", "#ff6600", "#666699", "#969696", "#003366",
-	  "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
-  };
-  for( int i = 0; i < 64-8; i++ ) {
-    d->colorTable.push_back(Color(default_palette[i]));
-  }
+  d->globals = 0;
 }
 
 ExcelReader::~ExcelReader()
@@ -5076,14 +5032,22 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     return false;
   }
 
-  unsigned version = Swinder::Excel97;
+#ifdef SWINDER_XLS2RAW
+  std::list<std::string> entries = storage.entries();
+  std::cout << "Streams:" << std::endl;
+  for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
+    std::cout << "    /" << *it << std::endl;
+  }
+#endif
+
+  unsigned streamVersion = Swinder::Excel97;
   POLE::Stream* stream;
   stream = new POLE::Stream( &storage, "/Workbook" );
   if( stream->fail() )
   {
     delete stream;
     stream = new POLE::Stream( &storage, "/Book" );
-    version = Swinder::Excel95;
+    streamVersion = Swinder::Excel95;
   }
 
   if( stream->fail() )
@@ -5103,10 +5067,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
   workbook->clear();
   d->workbook = workbook;
-
-  d->passwordProtected = false;
-
-  // assume
+  d->globals = new GlobalsSubStreamHandler( workbook, streamVersion );
 
   while( stream->tell() < stream_size )
   {
@@ -5114,7 +5075,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     // this is set by FILEPASS record
     // subsequent records will need to be decrypted
     // since we do not support it yet, we have to bail out
-    if(d->passwordProtected)
+    if(d->globals->passwordProtected())
     {
       d->workbook->setPasswordProtected( true );
       break;
@@ -5193,25 +5154,19 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     if( record )
     {
       // setup the record and invoke handler
-      record->setVersion( version );
+      record->setVersion( d->globals->version() );
       record->setData( size, buffer, continuePositions );
       record->setPosition( pos );
 
+      d->globals->handleRecord( record );
       handleRecord( record );
-
-      // special handling to find Excel version
-      if ( record->rtti() == BOFRecord::id )
-      {
-        BOFRecord* bof = static_cast<BOFRecord*>(record);
-        if( bof ) if( bof->type() == BOFRecord::Workbook )
-        version = bof->version();
-      }
 
 #ifdef SWINDER_XLS2RAW
       std::cout << "Record 0x";
       std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
-      std::cout << " ";
+      std::cout << " (";
       std::cout << std::dec;
+      std::cout << record->rtti() << ") ";
       record->dump( std::cout );
       std::cout << std::endl;
 #endif
@@ -5225,6 +5180,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       std::cout << "Record 0x";
       std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
       std::cout << std::dec;
+      std::cout << " (" << type << ")";
       std::cout << std::endl;
       std::cout << std::endl;
     }
@@ -5250,8 +5206,6 @@ void ExcelReader::handleRecord( Record* record )
   {
     case BottomMarginRecord::id:
       handleBottomMargin( static_cast<BottomMarginRecord*>( record ) ); break;
-    case BoundSheetRecord::id:
-      handleBoundSheet( static_cast<BoundSheetRecord*>( record ) ); break;
     case BOFRecord::id:
       handleBOF( static_cast<BOFRecord*>( record ) ); break;
     case BoolErrRecord::id:
@@ -5264,20 +5218,8 @@ void ExcelReader::handleRecord( Record* record )
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
     case DataTableRecord::id:
       handleDataTable( static_cast<DataTableRecord*>( record ) ); break;
-    case ExternBookRecord::id:
-      handleExternBook( static_cast<ExternBookRecord*>( record ) ); break;
-    case ExternNameRecord::id:
-      handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
-    case ExternSheetRecord::id:
-      handleExternSheet( static_cast<ExternSheetRecord*>( record ) ); break;
-    case FilepassRecord::id:
-      handleFilepass( static_cast<FilepassRecord*>( record ) ); break;
-    case FormatRecord::id:
-      handleFormat( static_cast<FormatRecord*>( record ) ); break;
     case FormulaRecord::id:
       handleFormula( static_cast<FormulaRecord*>( record ) ); break;
-    case FontRecord::id:
-      handleFont( static_cast<FontRecord*>( record ) ); break;
     case FooterRecord::id:
       handleFooter( static_cast<FooterRecord*>( record ) ); break;
     case HeaderRecord::id:
@@ -5294,12 +5236,8 @@ void ExcelReader::handleRecord( Record* record )
       handleMulBlank( static_cast<MulBlankRecord*>( record ) ); break;
     case MulRKRecord::id:
       handleMulRK( static_cast<MulRKRecord*>( record ) ); break;
-    case NameRecord::id:
-      handleName( static_cast<NameRecord*>( record ) ); break;
     case NumberRecord::id:
       handleNumber( static_cast<NumberRecord*>( record ) ); break;
-    case PaletteRecord::id:
-      handlePalette( static_cast<PaletteRecord*>( record ) ); break;
     case RightMarginRecord::id:
       handleRightMargin( static_cast<RightMarginRecord*>( record ) ); break;
     case RKRecord::id:
@@ -5310,14 +5248,10 @@ void ExcelReader::handleRecord( Record* record )
       handleRString( static_cast<RStringRecord*>( record ) ); break;
     case SharedFormulaRecord::id:
       handleSharedFormula( static_cast<SharedFormulaRecord*>( record ) ); break;
-    case SSTRecord::id:
-      handleSST( static_cast<SSTRecord*>( record ) ); break;
     case StringRecord::id:
       handleString( static_cast<StringRecord*>( record ) ); break;
     case TopMarginRecord::id:
       handleTopMargin( static_cast<TopMarginRecord*>( record ) ); break;
-    case XFRecord::id:
-      handleXF( static_cast<XFRecord*>( record ) ); break;
     default:
       break;
   }
@@ -5334,28 +5268,6 @@ void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
   d->activeSheet->setBottomMargin( margin );
 }
 
-// FIXME does the order of sheet follow BOUNDSHEET of BOF(Worksheet) ?
-// for now, assume BOUNDSHEET, hence we should create the sheet here
-void ExcelReader::handleBoundSheet( BoundSheetRecord* record )
-{
-  if( !record ) return;
-
-  // only care for Worksheet, forget everything else
-  if( record->type() == BoundSheetRecord::Worksheet )
-  {
-    // create a new sheet
-    Sheet* sheet = new Sheet( d->workbook );
-    sheet->setName( record->sheetName() );
-    sheet->setVisible( record->visible() );
-
-    d->workbook->appendSheet( sheet );
-
-    // update bof position map
-    unsigned bofPos = record->bofPosition();
-    d->bofMap[ bofPos ] = sheet;
-  }
-}
-
 void ExcelReader::handleBOF( BOFRecord* record )
 {
   if( !record ) return;
@@ -5364,7 +5276,7 @@ void ExcelReader::handleBOF( BOFRecord* record )
   {
     // find the sheet and make it active
     // which sheet ? look from from previous BoundSheet
-    Sheet* sheet = d->bofMap[ record->position() ];
+    Sheet* sheet = d->globals->sheetFromPosition( record->position() );
     if( sheet ) d->activeSheet = sheet;
   }
 }
@@ -5451,14 +5363,6 @@ void ExcelReader::handleDataTable( DataTableRecord* record )
   d->lastFormulaCell = 0;
 }
 
-void ExcelReader::handleDateMode( DateModeRecord* record )
-{
-  if( !record ) return;
-
-  // FIXME FIXME what to do ??
-  std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
-}
-
 void ExcelReader::handleDimension( DimensionRecord* record )
 {
   if( !record ) return;
@@ -5497,14 +5401,6 @@ void ExcelReader::handleLeftMargin( LeftMarginRecord* record )
   d->activeSheet->setLeftMargin( margin );
 }
 
-void ExcelReader::handleFormat( FormatRecord* record )
-{
-  if( !record ) return;
-
-  d->formatTable[ record->index() ] = *record;
-  d->formatsTable[ record->index() ] = record->formatString();
-}
-
 void ExcelReader::handleFormula( FormulaRecord* record )
 {
   if( !record ) return;
@@ -5531,92 +5427,6 @@ void ExcelReader::handleFormula( FormulaRecord* record )
       d->formulaCell = cell;
     d->lastFormulaCell = cell;
   }
-}
-
-void ExcelReader::handleExternBook( ExternBookRecord* record )
-{
-  if( !record ) return;
-
-  d->externBookTable.push_back( record->bookName() );
-}
-
-void ExcelReader::handleExternName( ExternNameRecord* record )
-{
-  if( !record ) return;
-
-  d->nameTable.push_back( record->externName() );
-}
-
-void ExcelReader::handleExternSheet( ExternSheetRecord* record )
-{
-  if( !record ) return;
-
-  d->externSheetTable.resize( record->refCount() );
-
-  for( unsigned i = 0; i < record->refCount(); i++ )
-  {
-    unsigned bookRef = record->bookRef( i );
-
-    UString result;
-    if( bookRef >= d->externBookTable.size() )
-    {
-      result = UString("Error");
-    }
-    else
-    {
-      UString book = d->externBookTable[bookRef];
-      if( book == "\004" )
-      {
-        unsigned sheetRef = record->firstSheetRef( i );
-        if( sheetRef > d->workbook->sheetCount() )
-        {
-          result = UString("Error");
-        }
-        else
-        {
-          result = d->workbook->sheet( sheetRef )->name();
-        }
-      }
-      else
-      {
-        result = UString("Unknown");
-      }
-    }
-
-    if( result.find(UString(" ")) != -1 || result.find(UString("'")) != -1 )
-    {
-      // escape string
-      UString outp("'");
-      for( int idx = 0; idx < result.length(); idx++ )
-      {
-        if( result[idx] == '\'' )
-          outp.append(UString("''"));
-        else
-          outp.append(UString(result[idx]));
-      }
-      result = outp + UString("'");
-    }
-
-    d->externSheetTable[i] = result;
-  }
-}
-
-void ExcelReader::handleFilepass( FilepassRecord* record )
-{
-  if( !record ) return;
-
-  d->passwordProtected = true;
-}
-
-void ExcelReader::handleFont( FontRecord* record )
-{
-  if( !record ) return;
-
-  d->fontTable.push_back( *record );
-
-  // font #4 is never used, so add a dummy one
-  if( d->fontTable.size() == 4 )
-    d->fontTable.push_back( FontRecord() );
 }
 
 void ExcelReader::handleFooter( FooterRecord* record )
@@ -5728,9 +5538,7 @@ void ExcelReader::handleLabelSST( LabelSSTRecord* record )
   unsigned index = record->sstIndex();
   unsigned xfIndex = record->xfIndex();
 
-  UString str;
-  if( index < d->stringTable.size() )
-    str = d->stringTable[ index ];
+  UString str = d->globals->stringFromSST( index );
 
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
@@ -5817,13 +5625,6 @@ void ExcelReader::handleMulRK( MulRKRecord* record )
   }
 }
 
-void ExcelReader::handleName( NameRecord* record )
-{
-  if( !record ) return;
-
-  d->nameTable.push_back( record->definedName() );
-}
-
 void ExcelReader::handleNumber( NumberRecord* record )
 {
   if( !record ) return;
@@ -5841,15 +5642,6 @@ void ExcelReader::handleNumber( NumberRecord* record )
     cell->setValue( Value( number ) );
     cell->setFormat( convertFormat( xfIndex) );
   }
-}
-
-void ExcelReader::handlePalette( PaletteRecord* record )
-{
-  if( !record ) return;
-
-  d->colorTable.clear();
-  for( unsigned i = 0; i < record->count(); i++ )
-    d->colorTable.push_back( record->color( i ) );
 }
 
 void ExcelReader::handleRightMargin( RightMarginRecord* record )
@@ -5942,18 +5734,6 @@ void ExcelReader::handleSharedFormula( SharedFormulaRecord* record )
   d->lastFormulaCell = 0;
 }
 
-void ExcelReader::handleSST( SSTRecord* record )
-{
-  if( !record ) return;
-
-  d->stringTable.clear();
-  for( unsigned i = 0; i < record->count();i++ )
-  {
-    UString str = record->stringAt( i );
-    d->stringTable.push_back( str );
-  }
-}
-
 void ExcelReader::handleString( StringRecord* record )
 {
   if( !record ) return;
@@ -5982,9 +5762,9 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
 {
   // speed-up trick: check in the cache first
   FormatFont font = d->fontCache[ fontIndex ];
-  if( font.isNull() && ( fontIndex < d->fontTable.size() ))
+  if( font.isNull() && ( fontIndex < d->globals->fontCount() ))
   {
-    FontRecord fr = d->fontTable[ fontIndex ];
+    FontRecord fr = d->globals->font( fontIndex );
     font.setFontSize( fr.height() / 20.0 );
     font.setFontFamily( fr.fontName() );
     font.setColor( convertColor( fr.colorIndex() ) );
@@ -6005,8 +5785,7 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
 Color ExcelReader::convertColor( unsigned colorIndex )
 {
   if( ( colorIndex >= 8 ) && ( colorIndex < 0x40 ) )
-    if( colorIndex-8 < d->colorTable.size() )
-      return d->colorTable[ colorIndex-8 ];
+    return d->globals->color( colorIndex-8 );
 
   // FIXME the following colors depend on system color settings
   // 0x0040  system window text color for border lines
@@ -6144,11 +5923,11 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
 {
   Format format;
 
-  if( xfIndex >= d->xfTable.size() ) return format;
+  if( xfIndex >= d->globals->xformatCount() ) return format;
 
-  XFRecord xf = d->xfTable[ xfIndex ];
+  XFRecord xf = d->globals->xformat( xfIndex );
 
-  UString valueFormat = d->formatsTable[xf.formatIndex()];
+  UString valueFormat = d->globals->format( xf.formatIndex() );
   if( valueFormat.isEmpty() )
     switch( xf.formatIndex() )
     {
@@ -6248,13 +6027,6 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   format.setBackground( background );
 
   return format;
-}
-
-void ExcelReader::handleXF( XFRecord* record )
-{
-  if( !record ) return;
-
-  d->xfTable.push_back( *record );
 }
 
 typedef std::vector<UString> UStringStack;
@@ -6449,7 +6221,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
 
       case FormulaToken::Ref3d:
-        stack.push_back( token.ref3d( d->externSheetTable, row, col ) );
+        stack.push_back( token.ref3d( d->globals->externSheets(), row, col ) );
         break;
 
       case FormulaToken::Area:
@@ -6461,7 +6233,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
 
       case FormulaToken::Area3d:
-        stack.push_back( token.area3d( d->externSheetTable, row, col ) );
+        stack.push_back( token.area3d( d->globals->externSheets(), row, col ) );
         break;
 
       case FormulaToken::Function:
@@ -6524,9 +6296,8 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
 
       case FormulaToken::NameX:
-        if( token.nameIndex() > 0 )
-        if( token.nameIndex() <= d->nameTable.size() )
-          stack.push_back( d->nameTable[ token.nameIndex()-1 ] );
+        // FIXME this handling of names is completely broken
+        stack.push_back( d->globals->nameFromIndex( token.nameIndex()-1 ) );
         break;
 
       case FormulaToken::Matrix: {

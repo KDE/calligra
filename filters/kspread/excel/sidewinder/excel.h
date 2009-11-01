@@ -3257,7 +3257,6 @@ protected:
   virtual void handleRecord( Record* record );
 
 private:
-  void handleBoundSheet( BoundSheetRecord* record );
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
   void handleBottomMargin( BottomMarginRecord* record );
@@ -3265,15 +3264,8 @@ private:
   void handleCalcMode( CalcModeRecord* record );
   void handleColInfo( ColInfoRecord* record );
   void handleDataTable( DataTableRecord* record );
-  void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
-  void handleExternBook( ExternBookRecord* record );
-  void handleExternName( ExternNameRecord* record );
-  void handleExternSheet( ExternSheetRecord* record );
-  void handleFilepass( FilepassRecord* record );
-  void handleFormat( FormatRecord* record );
   void handleFormula( FormulaRecord* record );
-  void handleFont( FontRecord* record );
   void handleFooter( FooterRecord* record );
   void handleHeader( HeaderRecord* record );
   void handleLabel( LabelRecord* record );
@@ -3284,16 +3276,13 @@ private:
   void handleMulRK( MulRKRecord* record );
   void handleName( NameRecord* record );
   void handleNumber( NumberRecord* record );
-  void handlePalette( PaletteRecord* record );
   void handleRightMargin( RightMarginRecord* record );
   void handleRString( RStringRecord* record );
   void handleRK( RKRecord* record );
   void handleRow( RowRecord* record );
   void handleSharedFormula( SharedFormulaRecord* sharedFormulaRecord );
-  void handleSST( SSTRecord* record );
   void handleString( StringRecord* record );
   void handleTopMargin( TopMarginRecord* record );
-  void handleXF( XFRecord* record );
 
   Color convertColor( unsigned colorIndex );
   FormatFont convertFont( unsigned fontIndex );
