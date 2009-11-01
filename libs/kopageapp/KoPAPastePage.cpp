@@ -42,6 +42,12 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 
 bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        m_doc->beginMacro( i18n( "Paste Slides" ) );
+    }
+    else {
+        m_doc->beginMacro( i18n( "Paste Pages" ) );
+    }
     KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
     KoPALoadingContext paContext( loadingContext, m_doc->dataCenterMap() );
 
@@ -147,6 +153,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
     }
 
     m_doc->addCommand( cmd );
+    m_doc->endMacro();
 
     return true;
 }
