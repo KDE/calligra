@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -45,8 +45,8 @@ public:
   /*
    * Clears the sheet, i.e. makes it as if it is just constructed.
    */
-  void clear(); 
-  
+  void clear();
+
   void setName( const UString& name );
 
   UString name() const;
@@ -65,6 +65,16 @@ public:
 
   bool protect() const;
   void setProtect( bool p );
+
+  /*
+   * Returns true if automatic calculation is enabled.
+   */
+  bool autoCalc() const;
+
+  /*
+   * Sets the automatic calculation.
+   */
+  void setAutoCalc( bool a );
 
   /*
    *   &P  current page number
@@ -113,7 +123,7 @@ public:
   // top margin, in points (pt)
   double topMargin() const;
   void setTopMargin( double m );
-  
+
   // bottom margin, in points (pt)
   double bottomMargin() const;
   void setBottomMargin( double m );
@@ -125,9 +135,9 @@ private:
   // no copy or assign
   Sheet( const Sheet& );
   Sheet& operator=( const Sheet& );
-  
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class Column
@@ -135,34 +145,34 @@ class Column
 public:
 
   Column( Sheet* sheet, unsigned index );
-  
+
   virtual ~Column();
-  
+
   Sheet* sheet() const;
-  
+
   unsigned index() const;
-  
+
   // width of column, in pt
   double width() const;
-  
+
   // set the width of column, in pt
   void setWidth( double w );
-  
+
   const Format& format() const;
-  
+
   void setFormat( const Format& f );
-  
+
   bool visible() const;
-  
+
   void setVisible( bool v );
 
 private:
   // no copy or assign
   Column( const Column& );
   Column& operator=( const Column& );
-  
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 class Row
@@ -170,34 +180,34 @@ class Row
 public:
 
   Row( Sheet* sheet, unsigned index );
-  
+
   virtual ~Row();
-  
+
   Sheet* sheet() const;
-  
+
   unsigned index() const;
-  
+
   // height of row, in pt
   double height() const;
-  
+
   // set the height of row, in pt
   void setHeight( double w );
-  
+
   const Format& format() const;
-  
+
   void setFormat( const Format& f );
-  
+
   bool visible() const;
-  
+
   void setVisible( bool v );
 
 private:
   // no copy or assign
   Row( const Row& );
   Row& operator=( const Row& );
-  
+
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 

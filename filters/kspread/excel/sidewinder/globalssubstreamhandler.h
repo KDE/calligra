@@ -59,15 +59,20 @@ public:
     Sheet* sheetFromPosition( unsigned position ) const;
     UString stringFromSST( unsigned index ) const;
 
-    unsigned fontCount() const;
-    FontRecord font( unsigned index ) const;
+    unsigned fontCount() const;//
+    FontRecord fontRecord( unsigned index ) const;//
 
-    Color color( unsigned index ) const;
+    FormatFont convertedFont( unsigned index ) const;
 
-    unsigned xformatCount() const;
-    XFRecord xformat( unsigned index ) const;
+    Color customColor( unsigned index ) const;//
+    Color convertedColor( unsigned index ) const;
 
-    UString format( unsigned index ) const;
+    unsigned xformatCount() const;//
+    XFRecord xformat( unsigned index ) const;//
+
+    Format convertedFormat( unsigned index ) const;
+
+    UString valueFormat( unsigned index ) const;//
 
     const std::vector<UString>& externSheets() const;
 

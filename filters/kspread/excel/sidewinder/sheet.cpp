@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -33,16 +33,17 @@ class Sheet::Private
 public:
   Workbook* workbook;
   UString name;
-    
+
   // hash to store cell, FIXME replace with quad-tree
   std::map<unsigned,Cell*> cells;
   unsigned maxRow;
   unsigned maxColumn;
   std::map<unsigned,Column*> columns;
   std::map<unsigned,Row*> rows;
-  
+
   bool visible;
   bool protect;
+  bool autoCalc;
 
   UString leftHeader;
   UString centerHeader;
@@ -74,6 +75,7 @@ Sheet::Sheet( Workbook* wb )
   d->rightMargin  = 54;  // 0.75 inch
   d->topMargin    = 72;  // 1 inch
   d->bottomMargin = 72;  // 1 inch
+  d->autoCalc = true;
 }
 
 Sheet::~Sheet()
@@ -87,18 +89,28 @@ Workbook* Sheet::workbook()
   return d->workbook;
 }
 
+bool Sheet::autoCalc() const
+{
+  return d->autoCalc;
+}
+
+void Sheet::setAutoCalc( bool a )
+{
+  d->autoCalc = a;
+}
+
 void Sheet::clear()
 {
   // delete all cells
   std::map<unsigned,Cell*>::iterator cell_it;
   for( cell_it = d->cells.begin(); cell_it != d->cells.end(); ++cell_it )
     delete cell_it->second;
-  
+
   // delete all columns
   std::map<unsigned,Column*>::iterator col_it;
   for( col_it = d->columns.begin(); col_it != d->columns.end(); ++col_it )
     delete col_it->second;
-  
+
   // delete all rows
   std::map<unsigned,Row*>::iterator row_it;
   for( row_it = d->rows.begin(); row_it != d->rows.end(); ++row_it )
@@ -119,7 +131,7 @@ Cell* Sheet::cell( unsigned columnIndex, unsigned rowIndex, bool autoCreate )
 {
   unsigned hashed = (rowIndex+1)*1024 + columnIndex + 1;
   Cell* c = d->cells[ hashed ];
-  
+
   // create cell if necessary
   if( !c && autoCreate )
   {
@@ -129,18 +141,18 @@ Cell* Sheet::cell( unsigned columnIndex, unsigned rowIndex, bool autoCreate )
     // force creating the column and row
     this->column( columnIndex, true );
     this->row( rowIndex, true );
-    
+
     if( rowIndex > d->maxRow ) d->maxRow = rowIndex;
     if( columnIndex > d->maxColumn ) d->maxColumn = columnIndex;
   }
-  
+
   return c;
 }
 
 Column* Sheet::column( unsigned index, bool autoCreate )
 {
   Column* c = d->columns[ index ];
-  
+
   // create column if necessary
   if( !c && autoCreate )
   {
@@ -148,14 +160,14 @@ Column* Sheet::column( unsigned index, bool autoCreate )
     d->columns[ index ] = c;
     if( index > d->maxColumn ) d->maxColumn = index;
   }
-  
+
   return c;
 }
 
 Row* Sheet::row( unsigned index, bool autoCreate )
 {
   Row* r = d->rows[ index ];
-  
+
   // create row if necessary
   if( !r && autoCreate )
   {
@@ -163,7 +175,7 @@ Row* Sheet::row( unsigned index, bool autoCreate )
     d->rows[ index ] = r;
     if( index > d->maxRow ) d->maxRow = index;
   }
-  
+
   return r;
 }
 
@@ -272,7 +284,7 @@ double Sheet::rightMargin() const
   return d->rightMargin;
 }
 
-void Sheet::setRightMargin( double m ) 
+void Sheet::setRightMargin( double m )
 {
   d->rightMargin = m;
 }
@@ -282,7 +294,7 @@ double Sheet::topMargin() const
   return d->topMargin;
 }
 
-void Sheet::setTopMargin( double m ) 
+void Sheet::setTopMargin( double m )
 {
   d->topMargin = m;
 }
@@ -292,7 +304,7 @@ double Sheet::bottomMargin() const
   return d->bottomMargin;
 }
 
-void Sheet::setBottomMargin( double m ) 
+void Sheet::setBottomMargin( double m )
 {
   d->bottomMargin = m;
 }

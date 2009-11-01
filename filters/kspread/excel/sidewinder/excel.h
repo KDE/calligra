@@ -3258,37 +3258,7 @@ protected:
 
 private:
   void handleBOF( BOFRecord* record );
-  void handleBoolErr( BoolErrRecord* record );
-  void handleBottomMargin( BottomMarginRecord* record );
-  void handleBlank( BlankRecord* record );
-  void handleCalcMode( CalcModeRecord* record );
-  void handleColInfo( ColInfoRecord* record );
-  void handleDataTable( DataTableRecord* record );
-  void handleDimension( DimensionRecord* record );
-  void handleFormula( FormulaRecord* record );
-  void handleFooter( FooterRecord* record );
-  void handleHeader( HeaderRecord* record );
-  void handleLabel( LabelRecord* record );
-  void handleLabelSST( LabelSSTRecord* record );
-  void handleLeftMargin( LeftMarginRecord* record );
-  void handleMergedCells( MergedCellsRecord* record );
-  void handleMulBlank( MulBlankRecord* record );
-  void handleMulRK( MulRKRecord* record );
-  void handleName( NameRecord* record );
-  void handleNumber( NumberRecord* record );
-  void handleRightMargin( RightMarginRecord* record );
-  void handleRString( RStringRecord* record );
-  void handleRK( RKRecord* record );
-  void handleRow( RowRecord* record );
-  void handleSharedFormula( SharedFormulaRecord* sharedFormulaRecord );
-  void handleString( StringRecord* record );
-  void handleTopMargin( TopMarginRecord* record );
-
-  Color convertColor( unsigned colorIndex );
-  FormatFont convertFont( unsigned fontIndex );
-  Format convertFormat( unsigned xfIndex );
-  UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
-  UString dataTableFormula( unsigned row, unsigned col, const DataTableRecord* record );
+  void handleEOF( EOFRecord* record );
 
   // no copy or assign
   ExcelReader( const ExcelReader& );

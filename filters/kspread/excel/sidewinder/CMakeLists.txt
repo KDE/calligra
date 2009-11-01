@@ -12,6 +12,7 @@ set(sidewinder_SRCS
 
   substreamhandler.cpp
   globalssubstreamhandler.cpp
+  worksheetsubstreamhandler.cpp
 )
 
 add_definitions(-DSWINDER_XLS2RAW)

@@ -53,6 +53,9 @@ public:
     // table of font
     std::vector<FontRecord> fontTable;
 
+    // mapping from font index to Swinder::FormatFont
+    std::map<unsigned,FormatFont> fontCache;
+
     // table of format
     std::map<unsigned,UString> formatsTable;
 
@@ -126,7 +129,7 @@ unsigned GlobalsSubStreamHandler::fontCount() const
     return d->fontTable.size();
 }
 
-FontRecord GlobalsSubStreamHandler::font( unsigned index ) const
+FontRecord GlobalsSubStreamHandler::fontRecord( unsigned index ) const
 {
     if (index < d->fontTable.size())
         return d->fontTable[index];
@@ -134,7 +137,7 @@ FontRecord GlobalsSubStreamHandler::font( unsigned index ) const
         return FontRecord();
 }
 
-Color GlobalsSubStreamHandler::color( unsigned index ) const
+Color GlobalsSubStreamHandler::customColor( unsigned index ) const
 {
     if (index < d->colorTable.size())
         return d->colorTable[index];
@@ -155,7 +158,7 @@ XFRecord GlobalsSubStreamHandler::xformat( unsigned index ) const
         return XFRecord();
 }
 
-UString GlobalsSubStreamHandler::format( unsigned index ) const
+UString GlobalsSubStreamHandler::valueFormat( unsigned index ) const
 {
     if (index < d->formatsTable.size())
         return d->formatsTable[index];
@@ -174,6 +177,273 @@ UString GlobalsSubStreamHandler::nameFromIndex( unsigned index ) const
         return d->nameTable[index];
     else
         return UString();
+}
+
+FormatFont GlobalsSubStreamHandler::convertedFont( unsigned index ) const
+{
+    // speed-up trick: check in the cache first
+    FormatFont font = d->fontCache[index];
+    if (font.isNull() && index < fontCount()) {
+        FontRecord fr = fontRecord(index);
+        font.setFontSize(fr.height() / 20.0);
+        font.setFontFamily(fr.fontName());
+        font.setColor(convertedColor(fr.colorIndex()));
+        font.setBold(fr.boldness() > 500);
+        font.setItalic(fr.italic());
+        font.setStrikeout(fr.strikeout());
+        font.setSubscript(fr.escapement() == FontRecord::Subscript);
+        font.setSuperscript(fr.escapement() == FontRecord::Superscript);
+        font.setUnderline(fr.underline() != FontRecord::None);
+
+        // put in the cache for further use
+        d->fontCache[index] = font;
+    }
+
+    return font;
+}
+
+Color GlobalsSubStreamHandler::convertedColor( unsigned index ) const
+{
+    if (( index >= 8) && (index < 0x40))
+        return customColor(index-8);
+
+    // FIXME the following colors depend on system color settings
+    // 0x0040  system window text color for border lines
+    // 0x0041  system window background color for pattern background
+    // 0x7fff  system window text color for fonts
+    if (index == 0x40) return Color(0, 0, 0);
+    if (index == 0x41) return Color(255, 255, 255);
+    if (index == 0x7fff) return Color(0, 0, 0);
+
+    // fallback: just "black"
+    Color color;
+
+    // standard colors: black, white, red, green, blue,
+    // yellow, magenta, cyan
+    switch (index) {
+        case 0:   color = Color( 0, 0, 0 ); break;
+        case 1:   color = Color( 255, 255, 255 ); break;
+        case 2:   color = Color( 255, 0, 0 ); break;
+        case 3:   color = Color( 0, 255, 0 ); break;
+        case 4:   color = Color( 0, 0, 255 ); break;
+        case 5:   color = Color( 255, 255, 0 ); break;
+        case 6:   color = Color( 255, 0, 255 ); break;
+        case 7:   color = Color( 0, 255, 255 ); break;
+        default:  break;
+    }
+
+    return color;
+}
+
+// convert border style, e.g MediumDashed to a Pen
+static Pen convertBorderStyle( unsigned style )
+{
+    Pen pen;
+    switch (style) {
+        case XFRecord::NoLine:
+            pen.width = 0;
+            pen.style = Pen::NoLine;
+            break;
+        case XFRecord::Thin:
+            pen.width = 0.5;
+            pen.style = Pen::SolidLine;
+            break;
+        case XFRecord::Medium:
+            pen.width = 1;
+            pen.style = Pen::SolidLine;
+            break;
+        case XFRecord::Dashed:
+            pen.width = 0.5;
+            pen.style = Pen::DashLine;
+            break;
+        case XFRecord::Dotted:
+            pen.width = 0.5;
+            pen.style = Pen::DotLine;
+            break;
+        case XFRecord::Thick:
+            pen.width = 2;
+            pen.style = Pen::SolidLine;
+            break;
+        case XFRecord::Double:
+            // FIXME no equivalent ?
+            pen.width = 2;
+            pen.style = Pen::SolidLine;
+            break;
+        case XFRecord::Hair:
+            // FIXME no equivalent ?
+            pen.width = 0.1;
+            pen.style = Pen::SolidLine;
+            break;
+        case XFRecord::MediumDashed:
+            pen.width = 1;
+            pen.style = Pen::DashLine;
+            break;
+        case XFRecord::ThinDashDotted:
+            pen.width = 0.5;
+            pen.style = Pen::DashDotLine;
+            break;
+        case XFRecord::MediumDashDotted:
+            pen.width = 1;
+            pen.style = Pen::DashDotLine;
+            break;
+        case XFRecord::ThinDashDotDotted:
+            pen.width = 0.5;
+            pen.style = Pen::DashDotDotLine;
+            break;
+        case XFRecord::MediumDashDotDotted:
+            pen.width = 1;
+            pen.style = Pen::DashDotDotLine;
+            break;
+        case XFRecord::SlantedMediumDashDotted:
+            // FIXME no equivalent ?
+            pen.width = 1;
+            pen.style = Pen::DashDotLine;
+            break;
+        default:
+            // fallback, simple solid line
+            pen.width = 0.5;
+            pen.style = Pen::SolidLine;
+            break;
+    }
+
+    return pen;
+}
+
+static unsigned convertPatternStyle( unsigned pattern )
+{
+    switch (pattern) {
+        case 0x00: return FormatBackground::EmptyPattern;
+        case 0x01: return FormatBackground::SolidPattern;
+        case 0x02: return FormatBackground::Dense4Pattern;
+        case 0x03: return FormatBackground::Dense3Pattern;
+        case 0x04: return FormatBackground::Dense5Pattern;
+        case 0x05: return FormatBackground::HorPattern;
+        case 0x06: return FormatBackground::VerPattern;
+        case 0x07: return FormatBackground::FDiagPattern;
+        case 0x08: return FormatBackground::BDiagPattern;
+        case 0x09: return FormatBackground::Dense1Pattern;
+        case 0x0A: return FormatBackground::Dense2Pattern;
+        case 0x0B: return FormatBackground::HorPattern;
+        case 0x0C: return FormatBackground::VerPattern;
+        case 0x0D: return FormatBackground::FDiagPattern;
+        case 0x0E: return FormatBackground::BDiagPattern;
+        case 0x0F: return FormatBackground::CrossPattern;
+        case 0x10: return FormatBackground::DiagCrossPattern;
+        case 0x11: return FormatBackground::Dense6Pattern;
+        case 0x12: return FormatBackground::Dense7Pattern;
+        default: return FormatBackground::SolidPattern; // fallback
+    }
+}
+
+// big task: convert Excel XFormat into Swinder::Format
+Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
+{
+    Format format;
+
+    if (index >= xformatCount()) return format;
+
+    XFRecord xf = xformat(index);
+
+    UString valueFormat = this->valueFormat(xf.formatIndex());
+    if (valueFormat.isEmpty())
+        switch(xf.formatIndex()) {
+            case  0:  valueFormat = "General"; break;
+            case  1:  valueFormat = "0"; break;
+            case  2:  valueFormat = "0.00"; break;
+            case  3:  valueFormat = "#,##0"; break;
+            case  4:  valueFormat = "#,##0.00"; break;
+            case  5:  valueFormat = "\"$\"#,##0_);(\"S\"#,##0)"; break;
+            case  6:  valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)"; break;
+            case  7:  valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)"; break;
+            case  8:  valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)"; break;
+            case  9:  valueFormat = "0%"; break;
+            case 10:  valueFormat = "0.00%"; break;
+            case 11:  valueFormat = "0.00E+00"; break;
+            case 12:  valueFormat = "#?/?"; break;
+            case 13:  valueFormat = "#\?\?/\?\?"; break;
+            case 14:  valueFormat = "M/D/YY"; break;
+            case 15:  valueFormat = "D-MMM-YY"; break;
+            case 16:  valueFormat = "D-MMM"; break;
+            case 17:  valueFormat = "MMM-YY"; break;
+            case 18:  valueFormat = "h:mm AM/PM"; break;
+            case 19:  valueFormat = "h:mm:ss AM/PM"; break;
+            case 20:  valueFormat = "h:mm"; break;
+            case 21:  valueFormat = "h:mm:ss"; break;
+            case 22:  valueFormat = "M/D/YY h:mm"; break;
+            case 37:  valueFormat = "_(#,##0_);(#,##0)"; break;
+            case 38:  valueFormat = "_(#,##0_);[Red](#,##0)"; break;
+            case 39:  valueFormat = "_(#,##0.00_);(#,##0)"; break;
+            case 40:  valueFormat = "_(#,##0.00_);[Red](#,##0)"; break;
+            case 41:  valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)"; break;
+            case 42:  valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)"; break;
+            case 43:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+            case 44:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+            case 45:  valueFormat = "mm:ss"; break;
+            case 46:  valueFormat = "[h]:mm:ss"; break;
+            case 47:  valueFormat = "mm:ss.0"; break;
+            case 48:  valueFormat = "##0.0E+0"; break;
+            case 49:  valueFormat = "@"; break;
+            default: valueFormat = "General"; break;
+    }
+
+    format.setValueFormat(valueFormat);
+
+    format.setFont(convertedFont(xf.fontIndex()));
+
+    FormatAlignment alignment;
+    switch(xf.horizontalAlignment()) {
+        case XFRecord::Left:
+            alignment.setAlignX(Format::Left); break;
+        case XFRecord::Right:
+            alignment.setAlignX(Format::Right); break;
+        case XFRecord::Centered:
+            alignment.setAlignX(Format::Center); break;
+        default: break;
+            // FIXME still unsupported: Repeat, Justified, Filled, Distributed
+    }
+
+    switch(xf.verticalAlignment()) {
+        case XFRecord::Top:
+            alignment.setAlignY(Format::Top); break;
+        case XFRecord::VCentered:
+            alignment.setAlignY(Format::Middle); break;
+        case XFRecord::Bottom:
+            alignment.setAlignY(Format::Bottom); break;
+        default: break;
+            // FIXME still unsupported: Justified, Distributed
+    }
+
+    alignment.setWrap(xf.textWrap());
+    format.setAlignment(alignment);
+
+    FormatBorders borders;
+
+    Pen pen;
+    pen = convertBorderStyle(xf.leftBorderStyle());
+    pen.color = convertedColor(xf.leftBorderColor());
+    borders.setLeftBorder(pen);
+
+    pen = convertBorderStyle(xf.rightBorderStyle());
+    pen.color = convertedColor(xf.rightBorderColor());
+    borders.setRightBorder(pen);
+
+    pen = convertBorderStyle(xf.topBorderStyle());
+    pen.color = convertedColor(xf.topBorderColor());
+    borders.setTopBorder(pen);
+
+    pen = convertBorderStyle(xf.bottomBorderStyle());
+    pen.color = convertedColor(xf.bottomBorderColor());
+    borders.setBottomBorder(pen);
+
+    format.setBorders(borders);
+
+    FormatBackground background;
+    background.setForegroundColor(convertedColor(xf.patternForeColor()));
+    background.setBackgroundColor(convertedColor(xf.patternBackColor()));
+    background.setPattern(convertPatternStyle(xf.fillPattern()));
+    format.setBackground(background);
+
+    return format;
 }
 
 void GlobalsSubStreamHandler::handleRecord( Record* record )
