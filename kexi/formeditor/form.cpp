@@ -1815,15 +1815,16 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
         return;
 
-    const bool alterLastCommand = d->lastCommand && d->lastCommand->propertyName() == property;
+//    const bool alterLastCommand = d->lastCommand && d->lastCommand->propertyName() == property;
 
     if (d->selected.count() == 1) { // one widget selected
         // If the last command is the same, we just change its value
-        if (alterLastCommand && !d->isRedoing) {
+//! @todo add to merge in PropertyCommand if needed
+/*        if (alterLastCommand && !d->isRedoing) {
             d->lastCommand->setValue(value);
             emit modified();
         }
-        else  {
+        else  {*/
             if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
                 addPropertyCommand(d->selected.first()->objectName().toLatin1(),
                     d->selected.first()->property(property), value, property, DontExecuteCommand);
@@ -1834,7 +1835,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
             if (tree && p.isModified()) {
                 tree->addModifiedProperty(property, d->selected.first()->property(property));
             }
-        }
+        /*}*/
 
         if (property == "objectName") {
             emit widgetNameChanged(d->selected.first()->objectName().toLatin1(), p.value().toByteArray());
@@ -1843,10 +1844,11 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         handleWidgetPropertyChanged(d->selected.first(), property, value);
     }
     else {
-        if (alterLastCommand && !d->isRedoing) {
+//! @todo add to merge in PropertyCommand if needed
+/*        if (alterLastCommand && !d->isRedoing) {
             d->lastCommand->setValue(value);
         }
-        else {
+        else {*/
             if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
                 // We store old values for each widget
                 QHash<QByteArray, QVariant> oldValues;
@@ -1855,14 +1857,14 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
                 }
                 addPropertyCommand(oldValues, value, property, DontExecuteCommand);
             }
-        }
+/*        }*/
 
         foreach(QWidget* widget, d->selected) {
-            if (!alterLastCommand) {
+//            if (!alterLastCommand) {
                 ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
                 if (titem && p.isModified())
                     titem->addModifiedProperty(property, widget->property(property));
-            }
+//            }
             widget->setProperty(property, value);
             handleWidgetPropertyChanged(widget, property, value);
         }
