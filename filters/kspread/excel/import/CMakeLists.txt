@@ -12,7 +12,8 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/ustring.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/value.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/workbook.cpp
-
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/formulas.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/utils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp

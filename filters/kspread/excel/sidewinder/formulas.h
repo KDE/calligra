@@ -1,0 +1,149 @@
+/* Swinder - Portable library for spreadsheet
+   Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006,2009 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA
+ */
+#ifndef SWINDER_FORMULAS_H
+#define SWINDER_FORMULAS_H
+
+#include "value.h"
+#include "ustring.h"
+
+#include <vector>
+
+namespace Swinder
+{
+
+class FormulaToken
+{
+public:
+
+    enum {
+        // should match Excel's PTG
+        Unused      = 0x00,
+        Matrix      = 0x01,
+        Table       = 0x02,
+        Add         = 0x03,
+        Sub         = 0x04,
+        Mul         = 0x05,
+        Div         = 0x06,
+        Power       = 0x07,
+        Concat      = 0x08,
+        LT          = 0x09,
+        LE          = 0x0a,
+        EQ          = 0x0b,
+        GE          = 0x0c,
+        GT          = 0x0d,
+        NE          = 0x0e,
+        Intersect   = 0x0f,
+        List        = 0x10,
+        Range       = 0x11,
+        UPlus       = 0x12,
+        UMinus      = 0x13,
+        Percent     = 0x14,
+        Paren       = 0x15,
+        MissArg     = 0x16,
+        String      = 0x17,
+        NatFormula  = 0x18,
+        Attr        = 0x19,
+        Sheet       = 0x1a,
+        EndSheet    = 0x1b,
+        ErrorCode   = 0x1c,
+        Bool        = 0x1d,
+        Integer     = 0x1e,
+        Float       = 0x1f,
+        Array       = 0x20,
+        Function    = 0x21,
+        FunctionVar = 0x22,
+        Name        = 0x23,
+        Ref         = 0x24,
+        Area        = 0x25,
+        MemArea     = 0x26,
+        MemErr      = 0x27,
+        MemNoMem    = 0x28,
+        MemFunc     = 0x29,
+        RefErr      = 0x2a,
+        AreaErr     = 0x2b,
+        RefN        = 0x2c,
+        AreaN       = 0x2d,
+        MemAreaN    = 0x2e,
+        MemNoMemN   = 0x2f,
+        NameX       = 0x39,
+        Ref3d       = 0x3a,
+        Area3d      = 0x3b,
+        RefErr3d    = 0x3c,
+        AreaErr3d   = 0x3d
+    };
+
+    FormulaToken();
+    FormulaToken(unsigned id);
+    FormulaToken(const FormulaToken&);
+    ~FormulaToken();
+
+    // token id, excluding token class
+    unsigned id() const;
+    const char* idAsString() const;
+
+    // Excel version
+    unsigned version() const;
+    void setVersion(unsigned version);    // Excel version
+
+    // size of data, EXCLUDING the byte for token id
+    unsigned size() const;
+    void setData(unsigned size, const unsigned char* data);
+
+    // only when id returns ErrorCode, Bool, Integer, Float, or String
+    Value value() const;
+
+    // only when id is Function or FunctionVar
+    unsigned functionIndex() const;
+    const char* functionName() const;  // for non external function
+    unsigned functionParams() const;
+
+    // only when id is Ref
+    UString ref(unsigned row, unsigned col) const;
+    // only when id is RefN
+    UString refn(unsigned row, unsigned col) const;
+    // only when id is Ref3d
+    UString ref3d(const std::vector<UString>& externSheets, unsigned row, unsigned col) const;
+
+    // only when id is Area or AreaN
+    UString area(unsigned row, unsigned col, bool relative = false) const;
+    // only when id is Area3d
+    UString area3d(const std::vector<UString>& externSheets, unsigned row, unsigned col) const;
+
+    // only when id is Attr
+    unsigned attr() const;
+
+    // only when id is NameX
+    unsigned nameIndex() const;
+
+    // only when id is Matrix (tExp)
+    std::pair<unsigned, unsigned> baseFormulaRecord() const;
+
+private:
+    class Private;
+    Private *d;
+};
+
+typedef std::vector<FormulaToken> FormulaTokens;
+
+std::ostream& operator<<(std::ostream& s, FormulaToken token);
+
+} // namespace Swinder
+
+#endif // SWINDER_FORMULAS_H

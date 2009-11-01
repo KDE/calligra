@@ -9,7 +9,8 @@ set(sidewinder_SRCS
   ustring.cpp
   value.cpp
   workbook.cpp
-
+  formulas.cpp
+  utils.cpp
   substreamhandler.cpp
   globalssubstreamhandler.cpp
   worksheetsubstreamhandler.cpp
