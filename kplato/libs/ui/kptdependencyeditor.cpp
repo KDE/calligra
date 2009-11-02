@@ -2108,13 +2108,13 @@ void DependencyEditor::setupGui()
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
-    actionAddSubtask  = new KAction(KIcon( "view-task-child" ), i18n("Add Sub-Task..."), this);
+    actionAddSubtask  = new KAction(KIcon( "view-task-child-add" ), i18n("Add Sub-Task..."), this);
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     coll->addAction("add_sub_task", actionAddSubtask );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, actionAddSubtask );
     
-    actionAddMilestone  = new KAction(KIcon( "add_milestone" ), i18n("Add Milestone..."), this);
+    actionAddMilestone  = new KAction(KIcon( "view-milestone-add" ), i18n("Add Milestone..."), this);
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     coll->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
