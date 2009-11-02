@@ -1478,10 +1478,11 @@ void SvgParser::applyFilter( KoShape * shape )
                 ! primitive.hasAttribute("width") || ! primitive.hasAttribute("height"))
             {
                 bool hasStdInput = false;
+                bool isFirstEffect = filterStack == 0;
                 // check if one of the inputs is a standard input
                 foreach( const QString &input, filterEffect->inputs())
                 {
-                    if( stdInputs.contains(input) )
+                    if( (isFirstEffect && input.isEmpty()) || stdInputs.contains(input) )
                     {
                         hasStdInput = true;
                         break;
