@@ -301,7 +301,7 @@ void TaskEditor::setupGui()
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, actionAddSubtask );
     
-    actionAddMilestone  = new KAction(KIcon( "add_milestone" ), i18n("Add Milestone..."), this);
+    actionAddMilestone  = new KAction(KIcon( "view-milestone-add" ), i18n("Add Milestone..."), this);
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     actionCollection()->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
