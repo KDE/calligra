@@ -263,8 +263,8 @@ void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefault
 {
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
-    KexiDisplayUtils::DisplayParameters * const params
-    = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+    KexiDisplayUtils::DisplayParameters * const params = displayDefaultValue
+        ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     setFont(params->font);
     QPalette pal(palette());
     pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
