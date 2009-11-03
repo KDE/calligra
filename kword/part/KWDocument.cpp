@@ -190,10 +190,6 @@ void KWDocument::addShape(KoShape *shape)
 
 void KWDocument::removeShape(KoShape *shape)
 {
-    foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->shapeManager()->remove(shape);
-    }
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
@@ -202,6 +198,11 @@ void KWDocument::removeShape(KoShape *shape)
             removeFrameSet(fs); // frame and frameset will be deleted when the shape is deleted
         else
             fs->removeFrame(frame);
+    } else { // not a frame, but we still have to remove it from views.
+        foreach (KoView *view, views()) {
+            KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+            canvas->shapeManager()->remove(shape);
+        }
     }
 }
 
