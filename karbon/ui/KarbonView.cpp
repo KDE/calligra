@@ -103,6 +103,10 @@
 #include <KoPasteController.h>
 #include <KoSnapGuide.h>
 #include <KoSnapStrategy.h>
+#include <KoShapeFactory.h>
+#include <KoShapeRegistry.h>
+#include <KoImageCollection.h>
+#include <KoImageData.h>
 
 // kde header
 #include <kaction.h>
@@ -134,7 +138,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
 #include <QtGui/QPrinter>
-
+#include <QtGui/QImageReader>
 
 #include <unistd.h>
 
@@ -423,18 +427,25 @@ void KarbonView::fileImportGraphic()
 
     QStringList filter;
     filter << part()->nativeFormatMimeType();
-    filter << "application/x-karbon";
     filter << "image/svg+xml";
+    filter << "application/x-karbon";
     filter << "application/x-wpg";
     filter << "image/x-wmf";
     filter << "image/x-eps";
     filter << "application/postscript";
     
+    QStringList imageFilter;
+    // add filters for all formats supported by QImage
+    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+        imageFilter << "image/" + format;
+    }
+    filter.append(imageFilter);
+    
     QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
     dialog->setCaption(i18n("Choose Graphic to Add"));
     dialog->setModal(true);
     dialog->setMimeFilter( filter );
-    if(dialog->exec()!=QDialog::Accepted) {
+    if (dialog->exec()!=QDialog::Accepted) {
         delete dialog;
         return;
     }
@@ -442,10 +453,11 @@ void KarbonView::fileImportGraphic()
     QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
     delete dialog;
     
+    QMap<QString,KoDataCenter*> dataCenters = part()->document().dataCenterMap();
     
     KarbonPart importPart;
     // use data centers of this document for importing
-    importPart.document().useExternalDataCenterMap( part()->document().dataCenterMap() );
+    importPart.document().useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
@@ -454,9 +466,60 @@ void KarbonView::fileImportGraphic()
     if (currentMimeFilter.isEmpty()) {
         // get mime type from file
         KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
-        if (mimeType && mimeType->is(importPart.nativeFormatMimeType()))
-            currentMimeFilter = importPart.nativeFormatMimeType();
+        if (mimeType) {
+            if (mimeType->is(importPart.nativeFormatMimeType())) {
+                currentMimeFilter = importPart.nativeFormatMimeType();
+            } else {
+                foreach(const QString &filter, imageFilter) {
+                    if (mimeType->is(filter)) {
+                        currentMimeFilter = filter;
+                        break;
+                    }
+                }
+            }
+        }
     }
+    
+    // check if we are loading an image format
+    if (imageFilter.contains(currentMimeFilter)) {
+        QImage image;
+        if (!image.load(fname)) {
+            KMessageBox::error(0, i18n("Could not load image."), i18n("Import graphic"), 0);
+            return;
+        }
+        KoShapeFactory * factory = KoShapeRegistry::instance()->get( "PictureShape" );
+        if (!factory) {
+            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
+            return;
+        }
+        
+        KoShape * picture = factory->createDefaultShapeAndInit(dataCenters);
+        KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenters["ImageCollection"] );
+        if (!picture || !imageCollection) {
+            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
+            return;
+        }
+        
+        // calculate shape size in point from image resolution
+        qreal pxWidth = static_cast<qreal>(image.width());
+        qreal pxHeight = static_cast<qreal>(image.height());
+        qreal width = DM_TO_POINT(pxWidth / static_cast<qreal>(image.dotsPerMeterX()) * 10.0);
+        qreal height = DM_TO_POINT(pxHeight / static_cast<qreal>(image.dotsPerMeterY()) * 10.0);
+        
+        // set shape data
+        picture->setUserData(imageCollection->createImageData(image));
+        picture->setSize(QSizeF(width,height));
+        picture->setPosition(QPointF());
+        picture->setKeepAspectRatio(true);
+        
+        QUndoCommand * cmd = d->canvas->shapeController()->addShapeDirect(picture);
+        cmd->setText(i18n("Insert graphics"));
+        d->canvas->addCommand(cmd);
+        d->canvas->shapeManager()->selection()->select(picture);
+        return;
+    }
+    
+    // check if we are loading our native format
     if (importPart.nativeFormatMimeType() == currentMimeFilter) {
         // directly load the native format
         success = importPart.loadNativeFormat( fname );
