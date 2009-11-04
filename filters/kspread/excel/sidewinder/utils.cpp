@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA
  */
 #include "utils.h"
-#include "misc.h"
 
 namespace Swinder {
 

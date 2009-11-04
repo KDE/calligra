@@ -26,7 +26,6 @@
 
 #include "swinder.h"
 #include "formulas.h"
-#include "misc.h"
 #include "records.h"
 
 namespace Swinder

@@ -547,7 +547,7 @@ int main(int argc, char** argv)
     hOut << "// This file was automatically generated from records.xml\n"
          << "#ifndef SWINDER_RECORDS_H\n"
          << "#define SWINDER_RECORDS_H\n\n"
-         << "#include \"misc.h\"\n\n"
+         << "#include \"utils.h\"\n\n"
          << "namespace Swinder {\n\n"
          << "void registerRecordClasses();\n\n";
 

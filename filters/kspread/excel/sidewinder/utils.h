@@ -21,6 +21,7 @@
 #define SWINDER_UTILS_H
 
 #include "value.h"
+#include <map>
 
 namespace Swinder {
 
@@ -104,6 +105,107 @@ static inline double readFloat64( const void*p )
 
     return num;
 }
+
+/**
+ * Supported Excel document version.
+ */
+enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
+
+
+UString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
+UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
+
+std::ostream& operator<<( std::ostream& s, Swinder::UString ustring );
+
+/**
+  Class Record represents a base class for all other type record,
+  hence do not use this class in real life.
+
+ */
+class Record
+{
+public:
+
+  /**
+    Static ID of the record. Subclasses should override this value
+    with the id of the record they handle.
+  */
+  static const unsigned int id;
+
+  virtual unsigned int rtti() const {
+      return this->id;
+  }
+
+  /**
+    Creates a new generic record.
+  */
+  Record();
+
+  /**
+    Destroys the record.
+  */
+  virtual ~Record();
+
+  /**
+   * Record factory, create a new record of specified type.
+   */
+  static Record* create( unsigned type );
+
+  void setVersion( unsigned v ){ ver = v; }
+
+  unsigned version() const { return ver; }
+
+  /**
+    Sets the data for this record.
+   */
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions );
+
+  /**
+    Sets the position of the record in the OLE stream. Somehow this is
+    required to process BoundSheet and BOF(Worksheet) properly.
+   */
+  void setPosition( unsigned pos );
+
+  /**
+    Gets the position of this record in the OLE stream.
+   */
+  unsigned position() const;
+
+  /**
+    Returns the name of the record. For debugging only.
+   */
+  virtual const char* name() const { return "Unknown"; }
+
+  /**
+    Dumps record information to output stream. For debugging only.
+   */
+  virtual void dump( std::ostream& out ) const;
+
+    bool isValid() const;
+protected:
+    void setIsValid(bool isValid);
+
+   // position of this record in the OLE stream
+   unsigned stream_position;
+
+   // in which version does this record denote ?
+   unsigned ver;
+
+   bool valid;
+};
+
+
+typedef Record* (*RecordFactory)();
+class RecordRegistry {
+public:
+  static void registerRecordClass(unsigned id, RecordFactory factory);
+  static Record* createRecord(unsigned id);
+private:
+  RecordRegistry() {};
+  static RecordRegistry* instance();
+
+  std::map<unsigned, RecordFactory> records;
+};
 
 } // namespace Swinder
 
