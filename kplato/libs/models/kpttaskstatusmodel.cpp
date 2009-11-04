@@ -110,6 +110,7 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -123,6 +124,7 @@ void TaskStatusItemModel::setProject( Project *project )
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -712,6 +714,12 @@ void TaskStatusItemModel::slotWbsDefinitionChanged()
     }
 }
 
+void TaskStatusItemModel::slotLayoutChanged()
+{
+    //kDebug()<<node->name();
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
+}
 
 } // namespace KPlato
 

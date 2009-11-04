@@ -199,7 +199,8 @@ protected:
 
 protected slots:
     void slotReset();
-    
+    void slotUpdate();
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;

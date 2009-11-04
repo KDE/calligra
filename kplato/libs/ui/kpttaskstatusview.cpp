@@ -511,6 +511,12 @@ void PerformanceStatusBase::slotReset()
     draw();
 }
 
+void PerformanceStatusBase::slotUpdate()
+{
+    //kDebug();
+    drawValues();
+}
+
 void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug();
@@ -520,8 +526,14 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 
 void PerformanceStatusBase::setProject( Project *project )
 {
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotUpdate() ) );
+    }
     m_project = project;
     m_model.setProject( project );
+    if ( m_project ) {
+        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotUpdate() ) );
+    }
 }
 
 void PerformanceStatusBase::draw()

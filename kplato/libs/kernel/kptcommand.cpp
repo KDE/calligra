@@ -3408,4 +3408,116 @@ void WorkPackageAddCmd::unexecute()
     static_cast<Task*>( m_node )->removeWorkPackage( m_wp );
 }
 
+ModifyProjectLocaleCmd::ModifyProjectLocaleCmd(  Project &project, const QString& name )
+    : MacroCommand( name ),
+    m_project( project )
+{
+};
+void ModifyProjectLocaleCmd::execute()
+{
+    MacroCommand::execute();
+    m_project.emitLocaleChanged();
+}
+void ModifyProjectLocaleCmd::unexecute()
+{
+    MacroCommand::unexecute();
+    m_project.emitLocaleChanged();
+}
+
+ModifyCurrencySymolCmd::ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->currencySymbol() )
+{
+};
+void ModifyCurrencySymolCmd::execute()
+{
+    m_locale->setCurrencySymbol( m_newvalue );
+}
+void ModifyCurrencySymolCmd::unexecute()
+{
+    m_locale->setCurrencySymbol( m_oldvalue );
+}
+
+ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->fracDigits() )
+{
+};
+void ModifyCurrencyFractionalDigitsCmd::execute()
+{
+    m_locale->setFracDigits( m_newvalue );
+}
+void ModifyCurrencyFractionalDigitsCmd::unexecute()
+{
+    m_locale->setFracDigits( m_oldvalue );
+}
+
+ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->positivePrefixCurrencySymbol() )
+{
+};
+void ModifyPositivePrefixCurrencySymolCmd::execute()
+{
+    m_locale->setPositivePrefixCurrencySymbol( m_newvalue );
+}
+void ModifyPositivePrefixCurrencySymolCmd::unexecute()
+{
+    m_locale->setPositivePrefixCurrencySymbol( m_oldvalue );
+}
+
+ModifyNegativePrefixCurrencySymolCmd::ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->negativePrefixCurrencySymbol() )
+{
+};
+void ModifyNegativePrefixCurrencySymolCmd::execute()
+{
+    m_locale->setNegativePrefixCurrencySymbol( m_newvalue );
+}
+void ModifyNegativePrefixCurrencySymolCmd::unexecute()
+{
+    m_locale->setNegativePrefixCurrencySymbol( m_oldvalue );
+}
+
+ModifyPositiveMonetarySignPositionCmd ::ModifyPositiveMonetarySignPositionCmd (  KLocale *locale, int value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->positiveMonetarySignPosition() )
+{
+};
+void ModifyPositiveMonetarySignPositionCmd ::execute()
+{
+    m_locale->setPositiveMonetarySignPosition( (KLocale::SignPosition)m_newvalue );
+}
+void ModifyPositiveMonetarySignPositionCmd ::unexecute()
+{
+    m_locale->setPositiveMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
+}
+
+ModifyNegativeMonetarySignPositionCmd ::ModifyNegativeMonetarySignPositionCmd (  KLocale *locale, int value, const QString& name )
+    : NamedCommand( name ),
+    m_locale( locale ),
+    m_newvalue( value ),
+    m_oldvalue( locale->negativeMonetarySignPosition() )
+{
+};
+void ModifyNegativeMonetarySignPositionCmd ::execute()
+{
+    m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_newvalue );
+}
+void ModifyNegativeMonetarySignPositionCmd ::unexecute()
+{
+    m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
+}
+
 }  //KPlato namespace

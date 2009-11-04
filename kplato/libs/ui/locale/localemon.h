@@ -47,7 +47,7 @@ public:
 
   void save();
 
-  MacroCommand *buildCommand( Part *part );
+  MacroCommand *buildCommand();
 
 public Q_SLOTS:
   /**

@@ -105,7 +105,8 @@ protected slots:
     void slotNodeRemoved( Node *node );
 
     void slotWbsDefinitionChanged();
-    
+    void slotLayoutChanged();
+
 protected:
     QVariant alignment( int column ) const;
     

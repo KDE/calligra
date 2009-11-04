@@ -31,14 +31,14 @@ namespace KPlato
 {
 
 class LocaleConfigMoney;
-class Part;
+class Project;
 
 class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
     Q_OBJECT
 public:
     LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
 
-    QUndoCommand *buildCommand( Part *part );
+    QUndoCommand *buildCommand( Project &project );
 
 protected slots:
     void slotChanged();

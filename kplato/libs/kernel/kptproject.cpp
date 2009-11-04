@@ -2352,6 +2352,11 @@ void Project::setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugin
     kDebug()<<m_schedulerPlugins;
 }
 
+void Project::emitLocaleChanged()
+{
+    emit localeChanged();
+}
+
 #ifndef NDEBUG
 void Project::printDebug( bool children, const QByteArray& _indent )
 {
