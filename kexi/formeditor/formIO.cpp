@@ -1218,7 +1218,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         KAcceleratorManager::setNoAccel(w);
     }
 //2.0???    w->setStyle(container->widget()->style());
-//2.0???    w->show();
+    w->show();
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
     ObjectTreeItem *item = container->form()->objectTree()->lookup(wname);
