@@ -50,7 +50,7 @@ public:
 
     void setPixmap(const QString &p);
 
-    //! @return the class name of a widget e.g. "QLineEdit"
+    //! @return the class name of a widget e.g. "LineEdit"
     QByteArray className() const;
 
     void setClassName(const QByteArray& className);
@@ -154,6 +154,16 @@ public:
 
     /*! Sets list of the properties that should automatically be saved for a widget of @a classname class. */
     void setAutoSaveProperties(const QList<QByteArray>& properties);
+
+    /*! @return internal property @a property.
+     Internal properties are not stored within objects, but can be just provided
+     to describe class' details. */
+    QVariant internalProperty(const QByteArray& property) const;
+
+    /*! Assigns @a value for internal property @a property.
+     Internal properties are not stored within objects, but can be provided
+     to describe class' details. */
+    void setInternalProperty(const QByteArray& property, const QVariant& value);
 
 protected:
     void setInheritedClass(WidgetInfo *inheritedClass);

@@ -930,7 +930,7 @@ void InsertWidgetCommand::execute()
         return; //better this than a crash
     Container *container = titem->container();
     WidgetFactory::CreateWidgetOptions options = WidgetFactory::DesignViewMode | WidgetFactory::AnyOrientation;
-    if (d->form->library()->internalProperty(d->_class, "orientationSelectionPopup") == "1") {
+    if (d->form->library()->internalProperty(d->_class, "orientationSelectionPopup").toBool()) {
         if (d->insertRect.isValid()) {
             if (d->insertRect.width() < d->insertRect.height()) {
                 options |= WidgetFactory::VerticalOrientation;
@@ -1006,7 +1006,7 @@ void InsertWidgetCommand::execute()
     w->move(d->insertRect.x(), d->insertRect.y());
 //    w->resize(d->insertRect.width() - 1, d->insertRect.height() - 1); // -1 is not to hide dots
     w->resize(d->insertRect.size());
-    w->setStyle(container->widget()->style());
+//2.0??    w->setStyle(container->widget()->style());
 //2.0 not needed    w->setBackgroundOrigin(QWidget::ParentOrigin);
     w->show();
 
@@ -1038,8 +1038,9 @@ void InsertWidgetCommand::execute()
     container->reloadLayout(); // reload the layout to take the new wigdet into account
 
     container->selectWidget(w);
-    if (d->form->library()->internalProperty(w->metaObject()->className(),
-            "dontStartEditingOnInserting").isEmpty()) {
+    if (!d->form->library()->internalProperty(w->metaObject()->className(),
+            "dontStartEditingOnInserting").toBool())
+    {
         d->form->library()->startInlineEditing(
             w->metaObject()->className(), w, item->container() ? item->container() : container); // we edit the widget on creation
     }

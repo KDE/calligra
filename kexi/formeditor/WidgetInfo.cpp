@@ -275,3 +275,14 @@ int WidgetInfo::customTypeForProperty(const char *propertyName) const
         return KoProperty::Auto;
     return d->customTypesForProperty->value(propertyName);
 }
+
+QVariant WidgetInfo::internalProperty(const QByteArray& property) const
+{
+    return d->factory->internalProperty(d->className, property);
+}
+
+void WidgetInfo::setInternalProperty(const QByteArray& property, const QVariant& value)
+{
+    InternalPropertyHandlerInterface *iface = static_cast<InternalPropertyHandlerInterface*>(d->factory);
+    iface->setInternalProperty(d->className, property, value);
+}

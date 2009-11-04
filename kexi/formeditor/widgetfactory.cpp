@@ -324,12 +324,6 @@ QWidget *WidgetFactory::widget() const
 }
 #endif
 
-void WidgetFactory::setInternalProperty(const QByteArray& classname, const QByteArray& property,
-                                        const QString& value)
-{
-    m_internalProp.insert(classname+":"+property, value);
-}
-
 void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(set)

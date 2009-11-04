@@ -238,6 +238,11 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spring"));
     wSpring->setDescription(i18n("A spring to place between widgets"));
     wSpring->setAutoSaveProperties(QList<QByteArray>() << "orientation");
+    wSpring->setInternalProperty("orientationSelectionPopup", true);
+    wSpring->setInternalProperty("orientationSelectionPopup:horizontalIcon", "spring");
+    wSpring->setInternalProperty("orientationSelectionPopup:verticalIcon", "spring_vertical");
+    wSpring->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Spring"));
+    wSpring->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Spring"));
     addClass(wSpring);
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
@@ -359,6 +364,11 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
     wLine->setDescription(i18n("A line to be used as a separator"));
     wLine->setAutoSaveProperties(QList<QByteArray>() << "orientation");
+    wLine->setInternalProperty("orientationSelectionPopup", true);
+    wLine->setInternalProperty("orientationSelectionPopup:horizontalIcon", "line_horizontal");
+    wLine->setInternalProperty("orientationSelectionPopup:verticalIcon", "line_vertical");
+    wLine->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Line"));
+    wLine->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Line"));
     addClass(wLine);
 
     KFormDesigner::WidgetInfo *wDate = new KFormDesigner::WidgetInfo(this);
@@ -458,18 +468,6 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     m_propValDesc["ScrollBarAlwaysOn"] = i18nc("Scroll Bar Always On", "Always On");
     m_propDesc["acceptRichText"] = i18nc("Property: Text Edit accepts rich text", "Rich Text");
     m_propDesc["HTML"] = i18nc("Property: HTML value of text edit", "HTML");
-
-    //internal props
-    setInternalProperty("Line", "orientationSelectionPopup", "1");
-    setInternalProperty("Line", "orientationSelectionPopup:horizontalIcon", "line_horizontal");
-    setInternalProperty("Line", "orientationSelectionPopup:verticalIcon", "line_vertical");
-    setInternalProperty("Line", "orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Line"));
-    setInternalProperty("Line", "orientationSelectionPopup:verticalText", i18n("Insert &Vertical Line"));
-    setInternalProperty("Spring", "orientationSelectionPopup", "1");
-    setInternalProperty("Spring", "orientationSelectionPopup:horizontalIcon", "spring");
-    setInternalProperty("Spring", "orientationSelectionPopup:verticalIcon", "spring_vertical");
-    setInternalProperty("Spring", "orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Spring"));
-    setInternalProperty("Spring", "orientationSelectionPopup:verticalText", i18n("Insert &Vertical Spring"));
 }
 
 StdWidgetFactory::~StdWidgetFactory()

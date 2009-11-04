@@ -573,7 +573,6 @@ Container::eventFilter(QObject *s, QEvent *e)
         QKeyEvent *kev = static_cast<QKeyEvent*>(e);
 
         if (kev->key() == Qt::Key_F2) { // pressing F2 == double-clicking
-            d->state = Private::InlineEditing;
             QWidget *w;
 
             // try to find the widget which was clicked last and should be edited
@@ -583,7 +582,9 @@ Container::eventFilter(QObject *s, QEvent *e)
                 w = m_moving;
             else
                 w = d->form->selectedWidgets()->last();
-            d->form->library()->startInlineEditing(w->metaObject()->className(), w, this);
+            if (d->form->library()->startInlineEditing(w->metaObject()->className(), w, this)) {
+                d->state = Private::InlineEditing;
+            }
         }
         else if (kev->key() == Qt::Key_Escape) {
             if (false) {
@@ -680,13 +681,14 @@ Container::eventFilter(QObject *s, QEvent *e)
     }
 
     case QEvent::MouseButtonDblClick: { // editing
-        kDebug() << "Mouse dbl click for widget " << s->objectName();
+        kDebug() << "Mouse dbl click for widget" << s->objectName();
         QWidget *w = static_cast<QWidget*>(s);
         if (!w)
             return false;
 
-        d->state = Private::InlineEditing;
-        d->form->library()->startInlineEditing(w->metaObject()->className(), w, this);
+        if (d->form->library()->startInlineEditing(w->metaObject()->className(), w, this)) {
+            d->state = Private::InlineEditing;
+        }
         return true;
     }
 

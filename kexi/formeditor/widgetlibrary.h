@@ -105,7 +105,7 @@ public:
     WidgetFactory::CreateWidgetOption showOrientationSelectionPopup(
         const QByteArray &classname, QWidget* parent, const QPoint& pos);
 
-    QString internalProperty(const QByteArray& classname, const QByteArray& property);
+    QVariant internalProperty(const QByteArray& classname, const QByteArray& property);
 
     QString displayName(const QByteArray &classname);
     QString namePrefix(const QByteArray &classname);

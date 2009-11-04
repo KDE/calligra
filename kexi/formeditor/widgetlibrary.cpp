@@ -639,8 +639,8 @@ WidgetLibrary::isPropertyVisible(const QByteArray &classname, QWidget *w,
         return false;
     if (!d->showAdvancedProperties && d->advancedProperties.contains( property )) {
         //this is advanced property, should we hide it?
-        if (wi->factory()->internalProperty(classname, "forceShowAdvancedProperty:" + property).isEmpty()
-                && (!wi->inheritedClass() || wi->inheritedClass()->factory()->internalProperty(classname, "forceShowAdvancedProperty:" + property).isEmpty())) {
+        if (!wi->internalProperty("forceShowAdvancedProperty:" + property).toBool()
+                && (!wi->inheritedClass() || !wi->inheritedClass()->internalProperty("forceShowAdvancedProperty:" + property).toBool())) {
             return false; //hide it
         }
     }
@@ -732,15 +732,15 @@ WidgetFactory* WidgetLibrary::factory(const char* factoryName) const
     return d->factories.value(factoryName);
 }
 
-QString WidgetLibrary::internalProperty(const QByteArray& classname, const QByteArray& property)
+QVariant WidgetLibrary::internalProperty(const QByteArray& classname, const QByteArray& property)
 {
     loadFactories();
     WidgetInfo *wclass = d->widgets.value(classname);
     if (!wclass)
         return QString();
-    QString value(wclass->factory()->internalProperty(classname, property));
-    if (value.isEmpty() && wclass->inheritedClass())
-        return wclass->inheritedClass()->factory()->internalProperty(classname, property);
+    QVariant value(wclass->internalProperty(property));
+    if (value.isNull() && wclass->inheritedClass())
+        return wclass->inheritedClass()->internalProperty(property);
     return value;
 }
 
@@ -754,27 +754,27 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
 
     //get custom icons and strings
     QPixmap iconHorizontal, iconVertical;
-    QString iconName(wclass->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalIcon"));
+    QString iconName(wclass->internalProperty("orientationSelectionPopup:horizontalIcon").toString());
     if (iconName.isEmpty() && wclass->inheritedClass())
-        iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalIcon");
+        iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalIcon").toString();
     if (!iconName.isEmpty())
         iconHorizontal = SmallIcon(iconName);
 
-    iconName = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:verticalIcon");
+    iconName = wclass->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (iconName.isEmpty() && wclass->inheritedClass())
-        iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalIcon");
+        iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (!iconName.isEmpty())
         iconVertical = SmallIcon(iconName);
 
-    QString textHorizontal = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalText");
+    QString textHorizontal = wclass->internalProperty("orientationSelectionPopup:horizontalText").toString();
     if (textHorizontal.isEmpty() && wclass->inheritedClass())
-        iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalText");
+        iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalText").toString();
     if (textHorizontal.isEmpty()) //default
         textHorizontal = i18nc("Insert Horizontal Widget", "Insert Horizontal");
 
-    QString textVertical = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
+    QString textVertical = wclass->internalProperty("orientationSelectionPopup:verticalText").toString();
     if (textVertical.isEmpty() && wclass->inheritedClass())
-        iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
+        iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:verticalText").toString();
     if (textVertical.isEmpty()) //default
         textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
 

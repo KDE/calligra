@@ -23,6 +23,7 @@
 #define KFORMDESIGNERWIDGETFACTORY_H
 
 #include <QPixmap>
+#include <QVariant>
 #include "WidgetInfo.h"
 
 //! Disable list widget because we need to replace it with QTreeWidget 
@@ -50,6 +51,18 @@ class Container;
 class ObjectTreeItem;
 class Form;
 class WidgetLibrary;
+
+//! Used by WidgetFactory
+class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
+{
+protected:
+    /*! Assigns \a value for internal property \a property for a class \a classname.
+     Internal properties are not stored within objects, but can be provided
+     to describe class' details. */
+    virtual void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value) = 0;
+
+    friend class WidgetInfo;
+};
 
 //! The base class for all widget Factories
 /*! This is the class you need to inherit to create a new Factory. There are few
@@ -92,13 +105,17 @@ class WidgetLibrary;
   readSpecialProperty()). \n \n
 
   <b>Special internal properties</b>\n
-  Use void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QString& value);
+  Use void WidgetInfo::setInternalProperty(const QByteArray& property, const QVariant& value)
   to set values of special internal properties.
   Currently these properties are used for customizing popup menu items used for orientation selection.
   Customization for class ClassName should look like:
-  <code> void setInternalProperty("ClassName", "orientationSelectionPopup", "myicon"); </code>
+  <code>
+   WidgetInfo *wi = ...
+   wi->setInternalProperty("orientationSelectionPopup", true);
+   wi->setInternalProperty("orientationSelectionPopup:horizontalIcon", "myicon");
+  </code>
   Available internal properties:
-  * "orientationSelectionPopup" - set it to "1" if you want a given class to offer orientation selection,
+  * "orientationSelectionPopup" - set it to true if you want a given class to offer orientation selection,
      so orientation selection popup will be displayed when needed.
   * "orientationSelectionPopup:horizontalIcon" - sets a name of icon for "Horizontal" item
     for objects of class 'ClassName'. Set this property only for classes supporting orientations.
@@ -109,21 +126,21 @@ class WidgetLibrary;
     Set this property only for classes supporting orientations.
   * "orientationSelectionPopup:verticalText" - the same for "Vertical" item,
     e.g. i18n("Insert Vertical Line"). Set this property only for classes supporting orientations.
-  * "dontStartEditingOnInserting" - if not empty, WidgetFactory::startInlineEditing() will not be executed upon
+  * "dontStartEditingOnInserting" - if true, WidgetFactory::startInlineEditing() will not be executed upon
     widget inseting by a user.
-  * "forceShowAdvancedProperty:{propertyname}" - set it to "1" for "{propertyname}" advanced property
+  * "forceShowAdvancedProperty:{propertyname}" - set it to true for "{propertyname}" advanced property
     if you want to force it to be visible even if WidgetLibrary::setAdvancedPropertiesVisible(false)
-    has been called. For example, setting "forceShowAdvancedProperty:pixmap" to "1"
+    has been called. For example, setting "forceShowAdvancedProperty:pixmap" to true
     unhides "pixmap" property for a given class.
 
-  See StdWidgetFactory::StdWidgetFactory() for properties like
-  "Line:orientationSelectionPopup:horizontalIcon".
+  See StdWidgetFactory::StdWidgetFactory() for properties like "Line:orientationSelectionPopup:horizontalIcon".
 
   \n\n
   See the standard factories in formeditor/factories for an example of factories,
   and how to deal with complex widgets (eg tabwidget).
   */
-class KFORMEDITOR_EXPORT WidgetFactory : public QObject
+class KFORMEDITOR_EXPORT WidgetFactory : public QObject,
+                                         protected InternalPropertyHandlerInterface
 {
     Q_OBJECT
 public:
@@ -261,9 +278,9 @@ public:
 
     /*! \return internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be just provided
-     to describe classes' details. */
-    inline QString internalProperty(const QByteArray& classname, const QByteArray& property) const {
-        return m_internalProp[classname+":"+property];
+     to describe class' details. */
+    inline QVariant internalProperty(const QByteArray& classname, const QByteArray& property) const {
+        return m_internalProp.value(classname + ":" + property);
     }
 
     /*! This function is called when the widget is resized,
@@ -371,8 +388,10 @@ protected:
 #endif
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
-     to describe classes' details. */
-    void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QString& value);
+     to describe class' details. */
+    inline void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value) {
+        m_internalProp.insert(classname + ":" + property, value);
+    }
 
     WidgetLibrary *m_library;
 // moved to Form
@@ -391,7 +410,7 @@ protected:
     QHash<QByteArray, QString> m_propDesc;
     QHash<QByteArray, QString> m_propValDesc;
     //! internal properties
-    QHash<QByteArray, QString> m_internalProp;
+    QHash<QByteArray, QVariant> m_internalProp;
 
     /*! flag useful to decide whether to hide some properties.
      It's value is inherited from WidgetLibrary. */
