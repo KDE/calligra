@@ -20,6 +20,7 @@
 #include "ComponentTransferEffectConfigWidget.h"
 #include "KoFilterEffect.h"
 
+#include <kdeversion.h>
 #include <KNumInput>
 #include <KComboBox>
 #include <KLineEdit>
@@ -96,11 +97,15 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QGridLayout * linearLayout = new QGridLayout(linearWidget);
     linearLayout->addWidget(new QLabel(i18n("Slope"), linearWidget), 0, 0);
     m_slope = new KDoubleNumInput(linearWidget);
+#if KDE_IS_VERSION( 4,3,0 )
     m_slope->setSingleStep(ValueStep);
+#endif
     linearLayout->addWidget(m_slope, 0, 1);
     linearLayout->addWidget(new QLabel(i18n("Intercept")), 1, 0);
     m_intercept = new KDoubleNumInput(linearWidget);
+#if KDE_IS_VERSION( 4,3,0 )
     m_intercept->setSingleStep(ValueStep);
+#endif
     linearLayout->addWidget(m_intercept, 1, 1);
     linearLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 2, 0);
     linearLayout->setContentsMargins(0,0,0,0);
@@ -111,15 +116,21 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
     QGridLayout * gammaLayout = new QGridLayout(gammaWidget);
     gammaLayout->addWidget(new QLabel(i18n("Amplitude"), gammaWidget), 0, 0);
     m_amplitude = new KDoubleNumInput(gammaWidget);
+#if KDE_IS_VERSION( 4,3,0 )
     m_amplitude->setSingleStep(ValueStep);
+#endif
     gammaLayout->addWidget(m_amplitude, 0, 1);
     gammaLayout->addWidget(new QLabel(i18n("Exponent"), gammaWidget), 1, 0);
     m_exponent = new KDoubleNumInput(gammaWidget);
+#if KDE_IS_VERSION( 4,3,0 )
     m_exponent->setSingleStep(ValueStep);
+#endif
     gammaLayout->addWidget(m_exponent, 1, 1);
     gammaLayout->addWidget(new QLabel(i18n("Offset"), gammaWidget), 2, 0);
     m_offset = new KDoubleNumInput(gammaWidget);
+#if KDE_IS_VERSION( 4,3,0 )
     m_offset->setSingleStep(ValueStep);
+#endif
     gammaLayout->addWidget(m_offset, 2, 1);
     gammaLayout->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 3, 0);    
     gammaLayout->setContentsMargins(0,0,0,0);
