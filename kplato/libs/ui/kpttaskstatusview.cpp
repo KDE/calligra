@@ -487,9 +487,9 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     labelBCWS->setToolTip( ToolTip::nodeBCWS() );
     labelBCWP->setToolTip( ToolTip::nodeBCWP() );
     labelACWP->setToolTip( ToolTip::nodeACWP() );
-    labelPI->setToolTip( ToolTip::nodePerformanceIndex() );
-    labelCPI->setToolTip( i18nc( "@info:tooltip", "Costbased performance index" ) );
-    labelSPI->setToolTip( i18nc( "@info:tooltip", "Effortbased performance index" ) );
+    labelPI->setToolTip(  i18nc( "@info:tooltip", "Performance indexes" ) );
+    labelCPI->setToolTip( i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ) );
+    labelSPI->setToolTip( ToolTip::nodePerformanceIndex() );
 
     plotwidget->setAntialiasing(false);
     plotwidget->setShowGrid(false);
