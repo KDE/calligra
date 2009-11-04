@@ -91,22 +91,6 @@ public:
 
 //-----
 
-//! For KexiDBLineEdit's singleton
-struct KexiDBLineEditData
-{
-    void init(QWidget *w) {
-        QFontMetrics fm(w->font());
-        int size = KIconLoader::global()->currentSize(KIconLoader::Small);
-        if (size < KIconLoader::SizeSmallMedium && fm.height() >= KIconLoader::SizeSmallMedium)
-            size = KIconLoader::SizeSmallMedium;
-        dataSourceTagIcon = KIconLoader::global()->loadIcon(QLatin1String("data-source-tag"), KIconLoader::Small, size);
-        KIconEffect::semiTransparent(dataSourceTagIcon);
-    }
-    QPixmap dataSourceTagIcon;
-};
-
-K_GLOBAL_STATIC(KexiDBLineEditData, g_lineEditData)
-
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         : KLineEdit(parent)
         , KexiDBTextWidgetInterface()
@@ -118,7 +102,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
 #ifdef USE_KLineEdit_setReadOnly
 //! @todo reenable as an app aption
     QPalette p(widget->palette());
-    p.setColor(lighterGrayBackgroundColor(palette()));
+    p.setColor(KexiFormUtils::lighterGrayBackgroundColor(palette()));
     widget->setPalette(p);
 #endif
 
@@ -127,10 +111,9 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 
-    g_lineEditData->init(this);
     KexiDBLineEditStyle *ks = new KexiDBLineEditStyle(style());
     ks->setParent(this);
-    ks->setIndent(g_lineEditData->dataSourceTagIcon.width());
+    ks->setIndent(KexiFormUtils::dataSourceTagIcon().width());
     setStyle( ks );
 }
 
@@ -298,9 +281,10 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
             r.setY(r.y() + topMargin);
             r.setRight(r.right() - rightMargin);
             r.setBottom(r.bottom() - bottomMargin);
-            p.drawPixmap( r.left() - g_lineEditData->dataSourceTagIcon.width() + 2,
-                r.top() + (r.height() - g_lineEditData->dataSourceTagIcon.height()) / 2,
-                g_lineEditData->dataSourceTagIcon
+            const QPixmap dataSourceTagIcon(KexiFormUtils::dataSourceTagIcon());
+            p.drawPixmap( r.left() - dataSourceTagIcon.width() + 2,
+                r.top() + (r.height() - dataSourceTagIcon.height()) / 2,
+                dataSourceTagIcon
             );
         }
     }

@@ -683,11 +683,25 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         QFont f(qApp->font());
         p.setFont(f);
 //        p.setPen(KexiUtils::contrastColor(bg));
-        p.setPen(palette().brush(QPalette::WindowText));
-        p.drawText(r, Qt::AlignCenter,
-                 dataSource().isEmpty()
-                 ? objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)")
-                 : dataSource());
+        QString text;
+        if (dataSource().isEmpty()) {
+            text = objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)");
+        }
+        else {
+            text = dataSource();
+            const QFontMetrics fm(fontMetrics());
+            const QPixmap dataSourceTagIcon(KexiFormUtils::dataSourceTagIcon());
+            if (width() >= (dataSourceTagIcon.width() + 2 + fm.boundingRect(r, Qt::AlignCenter, text).width())) {
+                r.setLeft( r.left() + dataSourceTagIcon.width() + 2 );
+                QRect bounding = fm.boundingRect(r, Qt::AlignCenter, text);
+                // make some room for the [>] icon
+                p.drawPixmap(
+                    bounding.left() - dataSourceTagIcon.width() - 2,
+                    bounding.top() + bounding.height() / 2 - dataSourceTagIcon.height() / 2,
+                    dataSourceTagIcon);
+            }
+        }
+        p.drawText(r, Qt::AlignCenter, text);
     }
     else {
         QSize internalSize(size());

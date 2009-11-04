@@ -109,7 +109,7 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
-             ? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
     setPaper(c);
     p.setColor(QColorGroup::Base, c);
     p.setColor(QColorGroup::Background, c);
