@@ -82,7 +82,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
         , m_keepAspectRatio(true)
         , m_insideSetData(false)
         , m_setFocusOnButtonAfterClosingPopup(false)
-        , m_lineWidthChanged(false)
+//        , m_lineWidthChanged(false)
         , m_paintEventEnabled(true)
         , m_dropDownButtonVisible(true)
         , m_insideSetPalette(false)
@@ -141,6 +141,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 //  connect(m_chooser, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 // }
 
+    KexiFrame::setLineWidth(0);
     setDataSource(QString());   //to initialize popup menu and actions availability
 }
 
@@ -609,11 +610,11 @@ void KexiDBImageBox::setDataSource(const QString &ds)
         }
     }
 
-    // update some properties s not changed by user
-//! @todo get default line width from global style settings
-    if (!m_lineWidthChanged) {
-        KexiFrame::setLineWidth(ds.isEmpty() ? 0 : 1);
-    }
+    // update some properties not changed by user
+// //! @todo get default line width from global style settings
+//    if (!m_lineWidthChanged) {
+//        KexiFrame::setLineWidth(ds.isEmpty() ? 0 : 1);
+//    }
     if (!m_paletteBackgroundColorChanged && parentWidget()) {
         KexiFrame::setPaletteBackgroundColor(
             dataSource().isEmpty() ? parentWidget()->paletteBackgroundColor() : palette().active().base());
@@ -825,7 +826,7 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 
 void KexiDBImageBox::setLineWidth(int width)
 {
-    m_lineWidthChanged = true;
+//    m_lineWidthChanged = true;
     KexiFrame::setLineWidth(width);
 }
 

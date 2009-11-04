@@ -280,7 +280,7 @@ protected:
     bool m_keepAspectRatio : 1;
     bool m_insideSetData : 1;
     bool m_setFocusOnButtonAfterClosingPopup : 1;
-    bool m_lineWidthChanged : 1;
+//    bool m_lineWidthChanged : 1;
     bool m_paletteBackgroundColorChanged : 1;
     bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
     bool m_dropDownButtonVisible : 1;
