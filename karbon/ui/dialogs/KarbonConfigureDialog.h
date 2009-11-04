@@ -30,7 +30,7 @@
 
 class KarbonView;
 class ConfigInterfacePage;
-class ConfigMiscPage;
+class KoConfigMiscPage;
 class KoConfigGridPage;
 class KoConfigDocumentPage;
 class KIntNumInput;
@@ -51,7 +51,7 @@ public slots:
 
 private:
     ConfigInterfacePage* m_interfacePage;
-    ConfigMiscPage* m_miscPage;
+    KoConfigMiscPage* m_miscPage;
     KoConfigGridPage* m_gridPage;
     KoConfigDocumentPage* m_defaultDocPage;
 };
@@ -87,33 +87,6 @@ private:
     QColor m_oldCanvasColor;
 };
 
-
-class ConfigMiscPage : public KVBox
-{
-    Q_OBJECT
-
-public:
-    explicit ConfigMiscPage( KarbonView* view, char* name = 0L );
-
-    void apply();
-
-signals:
-    void unitChanged( int );
-
-public slots:
-    void slotDefault();
-
-private:
-    KarbonView* m_view;
-    KSharedConfigPtr m_config;
-
-    KoUnit m_oldUnit;
-    QComboBox *m_unit;
-    KIntNumInput * m_handleRadius;
-    uint m_oldHandleRadius;
-    KIntNumInput * m_grabSensitivity;
-    uint m_oldGrabSensitivity;
-};
 
 #endif // KARBONCONFIGUREDIALOG_H
 

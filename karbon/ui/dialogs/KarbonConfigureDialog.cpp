@@ -28,6 +28,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoUnitDoubleSpinBox.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
+#include <KoConfigMiscPage.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -59,7 +60,7 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     item->setHeader( i18n( "Interface" ) );
     item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
 
-    m_miscPage = new ConfigMiscPage( parent );
+    m_miscPage = new KoConfigMiscPage( parent->part() );
     item = addPage( m_miscPage, i18n( "Misc" ) );
     item->setHeader( i18n( "Misc" ) );
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
@@ -226,98 +227,4 @@ void ConfigInterfacePage::slotDefault()
 }
 
 
-ConfigMiscPage::ConfigMiscPage( KarbonView* view, char* name )
-{
-    setObjectName(name);
-
-    m_view = view;
-    m_config = KarbonFactory::componentData().config();
-
-    m_oldGrabSensitivity = 3;
-    m_oldHandleRadius = 3;
-    
-    if( m_config->hasGroup( "Misc" ) )
-    {
-        KConfigGroup miscGroup = m_config->group( "Misc" );
-        
-        m_oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", m_oldGrabSensitivity);
-        m_oldHandleRadius = miscGroup.readEntry("HandleRadius", m_oldHandleRadius);
-    }
-    
-    KoUnit unit = view->part()->unit();
-
-    QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), this );
-
-    QGridLayout* grid = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
-    grid->setMargin(KDialog::marginHint());
-
-    QString unitType = KoUnit::unitName( unit );
-    //#################"laurent
-    //don't load unitType from config file because unit is
-    //depend from kword file => unit can be different from config file
-
-    grid->addWidget( new QLabel( i18n( "Units:" ), tmpQGroupBox ), 0, 0 );
-
-    m_unit = new KComboBox( tmpQGroupBox );
-    m_unit->addItems( KoUnit::listOfUnitName() );
-    grid->addWidget( m_unit, 0, 1 );
-    m_oldUnit = KoUnit::unit( unitType );
-    m_unit->setCurrentIndex( m_oldUnit.indexInList() );
-
-    grid->addWidget( new QLabel( i18n( "Handle radius:" ), tmpQGroupBox ), 1, 0 );
-    
-    m_handleRadius = new KIntNumInput( tmpQGroupBox );
-    m_handleRadius->setRange( 3, 20, 1 );
-    m_handleRadius->setSuffix( " px" );
-    m_handleRadius->setValue( m_oldHandleRadius );
-    grid->addWidget( m_handleRadius, 1, 1 );
-
-    grid->addWidget( new QLabel( i18n( "Grab sensitivity:" ), tmpQGroupBox ), 2, 0 );
-    
-    m_grabSensitivity = new KIntNumInput( tmpQGroupBox );
-    m_grabSensitivity->setRange( 3, 20, 1 );
-    m_grabSensitivity->setSuffix( " px" );
-    m_grabSensitivity->setValue( m_oldGrabSensitivity );
-    grid->addWidget( m_grabSensitivity, 2, 1 );
-    
-    grid->setRowStretch( 3, 1 );
-
-    tmpQGroupBox->setLayout(grid);
-
-    connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
-}
-
-void ConfigMiscPage::apply()
-{
-    KarbonPart * part = m_view->part();
-
-    KConfigGroup miscGroup = m_config->group( "Misc" );
-
-    int currentUnit = m_unit->currentIndex();
-    if( currentUnit >= 0 && m_oldUnit.indexInList() != static_cast<uint>( currentUnit ) )
-    {
-        m_oldUnit = KoUnit((KoUnit::Unit)currentUnit);
-        part->document().setUnit( m_oldUnit );
-        part->setUnit( m_oldUnit );
-        miscGroup.writeEntry( "Units", KoUnit::unitName( part->unit() ) );
-    }
-    
-    uint currentHandleRadius = m_handleRadius->value();
-    if( currentHandleRadius != m_oldHandleRadius ) {
-        miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
-    }
-    
-    uint currentGrabSensitivity = m_grabSensitivity->value();
-    if( currentGrabSensitivity != m_oldGrabSensitivity ) {
-        miscGroup.writeEntry( "GrabSensitivity", currentGrabSensitivity );
-    }
-}
-
-void ConfigMiscPage::slotDefault()
-{
-    m_unit->setCurrentIndex( 0 );
-}
-
 #include "KarbonConfigureDialog.moc"
-

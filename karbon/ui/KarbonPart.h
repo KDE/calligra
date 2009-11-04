@@ -114,12 +114,13 @@ protected:
     /// Reads settings from config file
     void initConfig();
 
-    /// change the unit
-    void changeUnit( const KoUnit &unit );
-    
 protected slots:
     /// reimplemented from KoDocument
     virtual void openTemplate(const KUrl& url);
+
+    /// change the unit
+    void updateUnit( const KoUnit &unit );
+
 private:
     class Private;
     Private * const d;
