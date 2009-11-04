@@ -52,6 +52,8 @@ TODO: make label display data source name
 TODO: make data-aware widgets display a small icon indicating there is data source set
 TODO: use data-source-pkey-tag icon for fields with pkey [>k]
 TODO: use data-source-index-tag icon for fields with index [>/]
+TODO: image box widgets: add smooth scaling
+TODO: image box widgets: support transparency in clipboard (Windows)
 
 2009-11-03..04
 Forms
@@ -62,6 +64,12 @@ Forms
 *API improvements:
 **setInternalProperty()/internalProperty() added to WidgetInfo
 **internal property values are now QVariants
+*image box widget:
+**displaying images ported to Qt 4
+**display frame for frameless boxes in design mode (like for the label)
+**fix missing icons for the context menu
+**make frame always null by default
+**display data source tag icon for bound widgets
 
 2009-10-28..30
 Forms
