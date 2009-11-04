@@ -70,7 +70,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 
     d->actionCollection.addAction("insert",
                                   d->insertFromFileAction = new KAction(
-        KIcon("fileopen"), i18n("Insert From &File..."), this));
+        KIcon("document-open"), i18n("Insert From &File..."), this));
     connect(d->insertFromFileAction, SIGNAL(triggered()),
             this, SLOT(insertFromFile()));
     addAction(d->insertFromFileAction);
@@ -86,7 +86,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     addAction(d->pasteAction);
     d->actionCollection.addAction("delete",
                                   d->deleteAction = new KAction(
-        KIcon("editdelete"), i18n("&Clear"), this));
+        KIcon("edit-clear"), i18n("&Clear"), this));
     connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(clear()));
     addAction(d->deleteAction);
