@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -330,31 +331,37 @@ void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &view
 
 void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const
 {
-    QPen  pen;
-
     // Get the zoom.
     qreal zoomX;
     qreal zoomY;
     viewConverter()->zoom( &zoomX, &zoomY );
 
     KoBorder::BorderData borderSide = border.leftBorderData();
-    paintBorderSide(painter, borderSide, pen, borderRect.topLeft(), borderRect.bottomLeft(), 
+    painter.save();
+    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
                     zoomX, 1, 0);
     borderSide = border.topBorderData();
-    paintBorderSide(painter, borderSide, pen, borderRect.topLeft(), borderRect.topRight(), 
+    painter.restore();
+    painter.save();
+    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
                     zoomY, 0, 1);
 
     borderSide = border.rightBorderData();
-    paintBorderSide(painter, borderSide, pen, borderRect.topRight(), borderRect.bottomRight(), 
+    painter.restore();
+    painter.save();
+    paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
                     zoomX, -1, 0);
 
     borderSide = border.bottomBorderData();
-    paintBorderSide(painter, borderSide, pen, borderRect.bottomLeft(), borderRect.bottomRight(), 
+    painter.restore();
+    painter.save();
+    paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
                     zoomY, 0, -1);
+    painter.restore();
 }
 
 
-void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData, QPen &pen,
+void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
                                const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                                int inwardsX, int inwardsY) const
 {
@@ -362,10 +369,26 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
     if (borderData.style == KoBorder::BorderNone)
         return;
 
-    painter.save();
-
     // Set up the painter and inner and outer pens.
-    getPenData(borderData, pen);
+    QPen pen = painter.pen();
+    // Line color
+    pen.setColor(borderData.color);
+
+    // Line style
+    switch (borderData.style) {
+    case KoBorder::BorderNone: break; // No line
+    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
+    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
+    case KoBorder::BorderSolid: pen.setStyle(Qt::SolidLine); break;
+    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
+    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
+    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
+
+    case KoBorder::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine ); break;
+    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine ); break;
+    }
 
     if (borderData.style == KoBorder::BorderDouble ) {
         // outerWidth is the width of the outer line.  The offsets
@@ -377,7 +400,7 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
         qreal innerOffset = borderData.width / 2.0 - borderData.innerWidth / 2.0;
 
         QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
-        QPointF innerOffset2D( inwardsX * innerOffset,  inwardsY * innerOffset );
+        QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
 
         // Draw the outer line.
         pen.setWidthF(zoom * outerWidth);
@@ -393,29 +416,5 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
         pen.setWidthF(zoom * borderData.width);
         painter.setPen(pen);
         painter.drawLine(lineStart, lineEnd);
-    }
-
-    painter.restore();
-}
-
-void KWCanvas::getPenData(const KoBorder::BorderData &borderData, QPen &pen) const
-{
-    // Line color
-    pen.setColor(borderData.color);
-
-    // Line style
-    switch (borderData.style) {
-    case KoBorder::BorderNone: break; // No line
-    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
-    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderSolid:  pen.setStyle(Qt::SolidLine); break;
-    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
-    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderRidge:  pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderInset:  pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
-
-    case KoBorder::BorderDashDotPattern:    pen.setStyle(Qt::DashDotLine ); break;
-    case KoBorder::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine ); break;
     }
 }

@@ -160,11 +160,16 @@ private slots:
 private:
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
     void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
-    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData, QPen &pen,
+    /**
+     * paint one border along one of the 4 sides.
+     * @param inwardsX is the horizontal vector (with value -1, 0 or 1) for the vector
+     * pointing inwards for the border part nearest the center of the page.
+     * @param inwardsY is the vertical vector (with value -1, 0 or 1) for the vector
+     * pointing inwards for the border part nearest the center of the page.
+     */
+    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
                          const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                          int inwardsX, int inwardsY) const;
-
-    void getPenData(const KoBorder::BorderData &borderData, QPen &pen) const;
 
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
