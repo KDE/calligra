@@ -49,7 +49,7 @@ using std::sqrt;
 
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-    : KoTool(canvas), m_optionWidget(0), m_shape(0), m_angle(0),
+    : KoTool(canvas), m_shape(0), m_angle(0),
       m_selectedPath(0), m_isDrawing(false), m_speed(0, 0), m_lastShape(0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
@@ -61,9 +61,6 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
 
 KarbonCalligraphyTool::~KarbonCalligraphyTool()
 {
-    if ( m_optionWidget) {
-        delete m_optionWidget.data();
-    }
 }
 
 void KarbonCalligraphyTool::paint( QPainter &painter,
@@ -371,9 +368,6 @@ void KarbonCalligraphyTool::deactivate()
 
 QWidget *KarbonCalligraphyTool::createOptionWidget()
 {
-    if ( m_optionWidget )
-        return m_optionWidget;
-
     // if the widget don't exists yet create it
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect( widget, SIGNAL(usePathChanged(bool)),
@@ -433,7 +427,6 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     // sync all parameters with the loaded profile
     widget->emitAll();
 
-    m_optionWidget = widget;
     return widget;
 }
 

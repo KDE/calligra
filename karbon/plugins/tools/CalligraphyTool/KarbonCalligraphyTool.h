@@ -74,8 +74,6 @@ private:
     qreal calculateWidth( qreal pressure );
     qreal calculateAngle( const QPointF &oldSpeed, const QPointF &newSpeed);
 
-    QPointer<KarbonCalligraphyOptionWidget> m_optionWidget;
-
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
 
