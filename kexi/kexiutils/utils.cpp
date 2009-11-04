@@ -397,16 +397,16 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
     const int h = rect.height() - margins.top - margins.bottom;
 //! @todo we can optimize painting by drawing rescaled pixmap here
 //! and performing detailed painting later (using QTimer)
-    QPixmap pixmapBuffer;
-    QPainter p2;
+//    QPixmap pixmapBuffer;
+//    QPainter p2;
     QPainter *target;
-    if (fast) {
+//    if (fast) {
         target = &p;
-    } else {
+//    } else {
 //moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
 //moved  p2.begin(&pm, p.device());
-        target = &p2;
-    }
+//        target = &p2;
+//    }
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
@@ -429,23 +429,25 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
                 else if (alignment & Qt::AlignVCenter)
                     pos.setY(pos.y() + h / 2 - img.height() / 2);
             }
-            pixmapBuffer.fromImage(img);
+//            pixmapBuffer.fromImage(img);
             if (!fast) {
-                p2.begin(&pixmapBuffer);
+//                p2.begin(&pixmapBuffer);
 //                p2.initFrom(p.device());
             }
             else {
-                target->drawPixmap(pos, pixmapBuffer);
+//                target->drawPixmap(pos, pixmapBuffer);
             }
+            p.drawImage(pos, img);
         } else {
             if (!fast) {
-                pixmapBuffer = QPixmap(rect.size() - QSize(margins.right, margins.bottom));
-                p2.begin(&pixmapBuffer);
+//                pixmapBuffer = QPixmap(rect.size() - QSize(margins.right, margins.bottom));
+//                p2.begin(&pixmapBuffer);
                 //, p.device());
-                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+//                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+                p.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
             }
             else {
-                target->drawPixmap(QRect(rect.x() + margins.left, rect.y() + margins.top, w, h), pixmap);
+//                target->drawPixmap(QRect(rect.x() + margins.left, rect.y() + margins.top, w, h), pixmap);
             }
         }
     }
@@ -469,14 +471,14 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
 //   p2.begin(&pixmapBuffer, p.device());
         p.drawPixmap(margins.left + pos.x(), margins.top + pos.y(), pixmap);
     }
-    if (scaledContents && !fast && p.isActive()) {
+/*    if (scaledContents && !fast && p.isActive()) {
         p2.end();
         p.drawPixmap(
            (int)p.worldMatrix().dx() + rect.x() + margins.left + pos.x(),
            (int)p.worldMatrix().dy() + rect.y() + margins.top + pos.y(),
             pixmapBuffer,
             rect.x(), rect.y(), w, h);
-    }
+    }*/
 }
 
 QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
