@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,20 +21,23 @@
 #include "kexidblineedit.h"
 #include "kexidbautofield.h"
 
-#include <kdebug.h>
-#include <knumvalidator.h>
-#include <kdatetable.h>
+#include <KDebug>
+#include <KNumInput>
+#include <KDateTable>
+#include <KIconEffect>
 
-#include <qmenu.h>
-#include <qpainter.h>
+#include <QMenu>
+#include <QPainter>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QStyle>
+#include <QStyleOption>
 
 #include <kexiutils/utils.h>
+#include <kexiutils/styleproxy.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/fieldvalidator.h>
 #include <kexiutils/utils.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <QPaintEvent>
 
 //! @todo reenable as an app aption
 //#define USE_KLineEdit_setReadOnly
@@ -53,6 +56,56 @@ public:
 };
 
 //-----
+
+//! A style proxy overriding KexiDBLineEdit style
+class KexiDBLineEditStyle : public KexiUtils::StyleProxy
+{
+public:
+    KexiDBLineEditStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle), indent(0)
+    {
+    }
+
+    void setIndent(int indent) {
+        this->indent = indent;
+    }
+
+    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const
+    {
+        const KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<const KFormDesigner::FormWidgetInterface*>(widget);
+        if (formWidget->designMode()) {
+            const KexiFormDataItemInterface *dataItemIface = dynamic_cast<const KexiFormDataItemInterface*>(widget);
+            if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
+                if (element == SE_LineEditContents) {
+                    QRect rect = KexiUtils::StyleProxy::subElementRect(SE_LineEditContents, option, widget);
+                    if (option->direction == Qt::LeftToRight)
+                        return rect.adjusted(indent, 0, 0, 0);
+                    else
+                        return rect.adjusted(0, 0, -indent, 0);
+                }
+            }
+        }
+        return KexiUtils::StyleProxy::subElementRect(element, option, widget);
+    }
+    int indent;
+};
+
+//-----
+
+//! For KexiDBLineEdit's singleton
+struct KexiDBLineEditData
+{
+    void init(QWidget *w) {
+        QFontMetrics fm(w->font());
+        int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+        if (size < KIconLoader::SizeSmallMedium && fm.height() >= KIconLoader::SizeSmallMedium)
+            size = KIconLoader::SizeSmallMedium;
+        dataSourceTagIcon = KIconLoader::global()->loadIcon(QLatin1String("data-source-tag"), KIconLoader::Small, size);
+        KIconEffect::semiTransparent(dataSourceTagIcon);
+    }
+    QPixmap dataSourceTagIcon;
+};
+
+K_GLOBAL_STATIC(KexiDBLineEditData, g_lineEditData)
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         : KLineEdit(parent)
@@ -73,6 +126,12 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+
+    g_lineEditData->init(this);
+    KexiDBLineEditStyle *ks = new KexiDBLineEditStyle(style());
+    ks->setParent(this);
+    ks->setIndent(g_lineEditData->dataSourceTagIcon.width());
+    setStyle( ks );
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
@@ -195,7 +254,6 @@ void KexiDBLineEdit::clear()
         KLineEdit::clear();
 }
 
-
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
@@ -223,8 +281,29 @@ void KexiDBLineEdit::paint( QPainter *p )
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
     KLineEdit::paintEvent(pe);
-    QPainter p(this);
-    KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), hasFocus());
+    KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<KFormDesigner::FormWidgetInterface*>(this);
+    if (formWidget->designMode()) {
+        KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(this);
+        if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
+            // draw "data source tag" icon
+            QPainter p(this);
+//! @todo RTL...
+            QStyleOptionFrameV2 option;
+            initStyleOption(&option);
+            
+            int leftMargin, topMargin, rightMargin, bottomMargin;
+            getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
+            QRect r( style()->subElementRect(QStyle::SE_LineEditContents, &option, this) );
+            r.setX(r.x() + leftMargin);
+            r.setY(r.y() + topMargin);
+            r.setRight(r.right() - rightMargin);
+            r.setBottom(r.bottom() - bottomMargin);
+            p.drawPixmap( r.left() - g_lineEditData->dataSourceTagIcon.width() + 2,
+                r.top() + (r.height() - g_lineEditData->dataSourceTagIcon.height()) / 2,
+                g_lineEditData->dataSourceTagIcon
+            );
+        }
+    }
 }
 
 bool KexiDBLineEdit::event(QEvent * e)
@@ -295,6 +374,25 @@ bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)
 {
     Q_UNUSED(ke);
     return false;
+}
+
+void KexiDBLineEdit::updateTextForDataSource()
+{
+    if (!designMode())
+        return;
+    setText(dataSource());
+}
+
+void KexiDBLineEdit::setDataSource(const QString &ds)
+{
+    KexiFormDataItemInterface::setDataSource(ds);
+    updateTextForDataSource();
+}
+
+void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
+{
+    KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    updateTextForDataSource();
 }
 
 #include "kexidblineedit.moc"

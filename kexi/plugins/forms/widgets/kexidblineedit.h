@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -111,12 +111,10 @@ public:
     virtual bool keyPressed(QKeyEvent *ke);
 
 public slots:
-    inline void setDataSource(const QString &ds) {
-        KexiFormDataItemInterface::setDataSource(ds);
-    }
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
-    }
+    void setDataSource(const QString &ds);
+
+    void setDataSourcePartClass(const QString &partClass);
+
     virtual void setReadOnly(bool readOnly);
 
     //! Reimplemented, so "undo" means the same as "cancelEditor" action
@@ -146,6 +144,8 @@ protected:
 
     //! Implemented for KexiSubwidgetInterface
     virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
+
+    void updateTextForDataSource();
 
     //! Used to format text
     KexiTextFormatter m_textFormatter;

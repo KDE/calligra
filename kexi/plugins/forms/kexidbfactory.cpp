@@ -35,13 +35,16 @@
 #include <formeditor/formIO.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
+#include <formeditor/widgetlibrary.h>
+#include <core/kexi.h>
+#include <core/kexipart.h>
+#include <core/KexiMainWindowIface.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
-#include <kexipart.h>
-#include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include <widget/kexicustompropertyfactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
+#include <kexi_global.h>
 
 #include "kexiformview.h"
 #include "widgets/kexidbautofield.h"
@@ -60,9 +63,7 @@
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
-#include <core/kexi.h>
-#include <kexi_global.h>
-#include <KexiMainWindowIface.h>
+#include "kexiformdataiteminterface.h"
 
 
 //////////////////////////////////////////
@@ -109,6 +110,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         i18nc("Widget name. This string will be used to name widgets of this class. "
               "It must _not_ contain white spaces and non latin1 characters.", "textBox"));
     wi->setDescription(i18n("A widget for entering and displaying text"));
+    wi->setInternalProperty("dontStartEditingOnInserting", true); // because we are most probably assign data source to this widget
     addClass(wi);
 
     // inherited
@@ -170,10 +172,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     wi->setDescription(i18n("A widget for displaying images"));
 // wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
     wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
+    wi->setInternalProperty("dontStartEditingOnInserting", true);
     addClass(wi);
 
-    setInternalProperty("KexiDBImageBox", "dontStartEditingOnInserting", "1");
-// setInternalProperty("KexiDBImageBox", "forceShowAdvancedProperty:pixmap", "1");
 #endif
 
 #ifdef KEXI_DB_COMBOBOX_WIDGET
@@ -455,11 +456,20 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
     if (args.classname == "KexiDBLineEdit") {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::startInlineEditing() should be called
+
         KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
-        args.text = lineedit->text();
-        args.alignment = lineedit->alignment();
-        args.useFrame = true;
-        return true;
+        KexiFormDataItemInterface* iface = dynamic_cast<KexiFormDataItemInterface*>(lineedit);
+        if (iface && !iface->dataSource().isEmpty()) {
+//! @todo reimplement inline editing for KexiDBLineEdit using combobox with data sources
+            return false;
+        }
+        else {
+            KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+            args.text = lineedit->text();
+            args.alignment = lineedit->alignment();
+            args.useFrame = true;
+            return true;
+        }
     }
     else if (args.classname == "KexiDBTextEdit") {
 //! @todo this code should not be copied here but
