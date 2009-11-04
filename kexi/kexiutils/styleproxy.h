@@ -41,7 +41,10 @@ namespace KexiUtils
    //reimplement method(s) here...
   };
   QWidget *w = .....
-  w->setStyle( new MyStyle(&w->style(), w) ); //this will alter w's style a bit
+  MyStyle *s = new MyStyle( w->style() );
+  s->setParent( w ); // the style will be owned by w
+  w->setStyle( s ); // this will alter w's style a bit
+
  \endcode
 
  More info at http://doc.trolltech.com/qq/qq09-q-and-a.html#style
@@ -49,18 +52,21 @@ namespace KexiUtils
 class KEXIUTILS_EXPORT StyleProxy : public QStyle
 {
 public:
-    /*! Creates a new style proxy object. \a parentStyle pointer will not be kept
-     (because it's most likely owned by the application: a new QStyle instance
-     for this name will be created internally. */
+    /*! Creates a new style proxy object. 
+     No owner is set for this object, so use QObject::setParent(QObject*) 
+     to control the ownership. */
     StyleProxy(QStyle* parentStyle);
+
     virtual ~StyleProxy();
 
     QStyle* parentStyle() const;
+
     void setParentStyle(QStyle* style);
 
     virtual void polish(QWidget *w) {
         parentStyle()->polish(w);
     }
+
     virtual void unpolish(QWidget *w) {
         parentStyle()->unpolish(w);
     }
@@ -68,6 +74,7 @@ public:
     virtual void polish(QApplication *a) {
         parentStyle()->polish(a);
     }
+
     virtual void unpolish(QApplication *a) {
         parentStyle()->unpolish(a);
     }

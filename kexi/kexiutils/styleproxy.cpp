@@ -38,6 +38,8 @@ StyleProxy::~StyleProxy()
 void StyleProxy::setParentStyle(QStyle* style)
 {
     m_style = QStyleFactory::create(style->objectName());
+    if (!m_style)
+        m_style = style;
 }
 
 QStyle* StyleProxy::parentStyle() const
