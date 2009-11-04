@@ -32,6 +32,12 @@ static inline unsigned long readU16( const void* p )
     return ptr[0]+(ptr[1]<<8);
 }
 
+static inline unsigned readU8( const void* p )
+{
+    const unsigned char* ptr = (const unsigned char*) p;
+    return ptr[0];
+}
+
 static inline long readS16( const void* p )
 {
     long val = readU16( p );

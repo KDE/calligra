@@ -28,13 +28,6 @@
 
 namespace Swinder {
 
-static inline std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )
-{
-    char* str = ustring.ascii();
-    s << str;
-    return s;
-}
-
 class WorksheetSubStreamHandler::Private
 {
 public:
@@ -147,7 +140,7 @@ void WorksheetSubStreamHandler::handleBoolErr( BoolErrRecord* record )
 
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
-        cell->setValue(record->value());
+        cell->setValue(record->asValue());
         cell->setFormat(d->globals->convertedFormat(xfIndex));
     }
 }
@@ -167,7 +160,7 @@ void WorksheetSubStreamHandler::handleCalcMode( CalcModeRecord* record )
     if (!record) return;
     if (!d->sheet) return;
 
-    d->sheet->setAutoCalc(record->autoCalc());
+    d->sheet->setAutoCalc(record->calcMode() != CalcModeRecord::Manual);
 }
 
 void WorksheetSubStreamHandler::handleColInfo( ColInfoRecord* record )
@@ -179,7 +172,7 @@ void WorksheetSubStreamHandler::handleColInfo( ColInfoRecord* record )
     unsigned lastColumn = record->lastColumn();
     unsigned xfIndex = record->xfIndex();
     unsigned width = record->width();
-    bool hidden = record->hidden();
+    bool hidden = record->isHidden();
 
     for (unsigned i = firstColumn; i <= lastColumn; i++) {
         Column* column = d->sheet->column(i, true);
@@ -497,7 +490,7 @@ void WorksheetSubStreamHandler::handleRow( RowRecord* record )
     unsigned index = record->row();
     unsigned xfIndex = record->xfIndex();
     unsigned height = record->height();
-    bool hidden = record->hidden();
+    bool hidden = record->isHidden();
 
     Row* row = d->sheet->row(index, true);
     if (row) {

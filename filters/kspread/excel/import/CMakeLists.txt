@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_BINARY_DIR}/filters/ ${KOMAIN_INCLUDES})
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_CURRENT_BINARY_DIR}/../sidewinder ${CMAKE_BINARY_DIR}/filters/ ${KOMAIN_INCLUDES})
 
 
 ########### next target ###############
@@ -17,7 +17,7 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
-
+  ${CMAKE_CURRENT_BINARY_DIR}/../sidewinder/records.cpp
 )
 
 set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})

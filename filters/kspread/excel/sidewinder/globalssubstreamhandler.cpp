@@ -188,9 +188,9 @@ FormatFont GlobalsSubStreamHandler::convertedFont( unsigned index ) const
         font.setFontSize(fr.height() / 20.0);
         font.setFontFamily(fr.fontName());
         font.setColor(convertedColor(fr.colorIndex()));
-        font.setBold(fr.boldness() > 500);
-        font.setItalic(fr.italic());
-        font.setStrikeout(fr.strikeout());
+        font.setBold(fr.fontWeight() > 500);
+        font.setItalic(fr.isItalic());
+        font.setStrikeout(fr.isStrikeout());
         font.setSubscript(fr.escapement() == FontRecord::Subscript);
         font.setSuperscript(fr.escapement() == FontRecord::Superscript);
         font.setUnderline(fr.underline() != FontRecord::None);
@@ -491,11 +491,11 @@ void GlobalsSubStreamHandler::handleBoundSheet( BoundSheetRecord* record )
     if (!record) return;
 
     // only care for Worksheet, forget everything else
-    if (record->type() == BoundSheetRecord::Worksheet) {
+    if (record->sheetType() == BoundSheetRecord::Worksheet) {
         // create a new sheet
         Sheet* sheet = new Sheet( d->workbook );
         sheet->setName( record->sheetName() );
-        sheet->setVisible( record->visible() );
+        sheet->setVisible( record->sheetState() == BoundSheetRecord::Visible );
 
         d->workbook->appendSheet( sheet );
 
@@ -510,7 +510,7 @@ void GlobalsSubStreamHandler::handleDateMode( DateModeRecord* record )
     if (!record) return;
 
     // FIXME FIXME what to do ??
-    if (record->base1904())
+    if (record->isBase1904())
         std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
 }
 
@@ -608,7 +608,7 @@ void GlobalsSubStreamHandler::handlePalette( PaletteRecord* record )
 
     d->colorTable.clear();
     for (unsigned i = 0; i < record->count(); i++)
-        d->colorTable.push_back(record->color( i ));
+        d->colorTable.push_back(Color(record->red(i), record->green(i), record->blue(i)));
 }
 
 void GlobalsSubStreamHandler::handleSST( SSTRecord* record )

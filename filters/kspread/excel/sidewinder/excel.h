@@ -26,17 +26,11 @@
 
 #include "swinder.h"
 #include "formulas.h"
+#include "misc.h"
+#include "records.h"
 
 namespace Swinder
 {
-
-/**
-    Supported Excel document version.
-*/
-enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
-
-class Record;
-
 // rich-text, unicode, far-east support Excel string
 
 class EString
@@ -80,85 +74,6 @@ public:
 private:
   class Private;
   Private* d;
-};
-
-/**
-  Class Record represents a base class for all other type record,
-  hence do not use this class in real life.
-
- */
-class Record
-{
-public:
-
-  /**
-    Static ID of the record. Subclasses should override this value
-    with the id of the record they handle.
-  */
-  static const unsigned int id;
-
-  virtual unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-    Creates a new generic record.
-  */
-  Record();
-
-  /**
-    Destroys the record.
-  */
-  virtual ~Record();
-
-  /**
-   * Record factory, create a new record of specified type.
-   */
-  static Record* create( unsigned type );
-
-  void setVersion( unsigned v ){ ver = v; }
-
-  unsigned version(){ return ver; }
-
-  /**
-    Sets the data for this record.
-   */
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions );
-
-  /**
-    Sets the position of the record in the OLE stream. Somehow this is
-    required to process BoundSheet and BOF(Worksheet) properly.
-   */
-  void setPosition( unsigned pos );
-
-  /**
-    Gets the position of this record in the OLE stream.
-   */
-  unsigned position() const;
-
-  /**
-    Returns the name of the record. For debugging only.
-   */
-  virtual const char* name(){ return "Unknown"; }
-
-  /**
-    Dumps record information to output stream. For debugging only.
-   */
-  virtual void dump( std::ostream& out ) const;
-
-protected:
-
-   // position of this record in the OLE stream
-   unsigned stream_position;
-
-   // in which version does this record denote ?
-   unsigned ver;
-
-private:
-   // no copy or assign
-   Record( const Record& );
-   Record& operator=( const Record& );
-
 };
 
 /**
@@ -296,61 +211,6 @@ private:
 };
 
 /**
-  \brief Backup upon save.
-
-  Class BackupRecord represents Backup record, which determines whether
-  Microsoft Excel makes a backup of the file while saving.
- */
-class BackupRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  /**
-   * Creates a new Backup record.
-   */
-  BackupRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~BackupRecord();
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-  /**
-   * Returns true if a backup is made when saving the file.
-   *
-   * \sa setBackup
-   */
-  bool backup() const;
-
-  /**
-   * If r is true, a backup will be made when saving the file.
-   *
-   * \sa backup
-   */
-  void setBackup( bool r );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "BACKUP"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  BackupRecord( const BackupRecord& );
-  BackupRecord& operator=( const BackupRecord& );
-
-  class Private;
-  Private* d;
-};
-
-
-/**
   \brief Beginning of file/set of records.
 
   Class BOFRecord represents BOF (Beginning of File) record, which
@@ -372,7 +232,7 @@ public:
   */
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -416,7 +276,7 @@ public:
   */
   const char* typeAsString() const;
 
-  virtual const char* name(){ return "BOF"; }
+  virtual const char* name() const { return "BOF"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -424,612 +284,6 @@ private:
    // no copy or assign
    BOFRecord( const BOFRecord& );
    BOFRecord& operator=( const BOFRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  \brief Blank cell.
-
-  Class BlankRecord represents a blank cell. It contains information
-  about cell address and formatting.
- */
-class BlankRecord : public Record, public CellInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Blank record.
-   */
-  BlankRecord();
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "BLANK"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   BlankRecord( const BlankRecord& );
-   BlankRecord& operator=( const BlankRecord& );
-};
-
-/**
-  \brief Boolean value or error code.
-
-  Class BOFRecord represents BoolErr record, which
-  is used to store boolean value or error code of a cell.
- */
-class BoolErrRecord : public Record, public CellInfo
-{
-public:
-
-  /**
-    Static ID of the BoolErr record.
-  */
-  static const unsigned int id;
-
-  unsigned int rtti(){ return this->id; }
-
-  /**
-   * Creates a new BoolErr record.
-   */
-  BoolErrRecord();
-
-  /**
-   * Destroys the BoolErr record.
-   */
-  virtual ~BoolErrRecord();
-
-  /**
-   * Returns value of the cell, could be either boolean or error.
-   */
-  Value value() const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "BOOLERR"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  BoolErrRecord( const BoolErrRecord& );
-  BoolErrRecord& operator=( const BoolErrRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Bottom margin.
-
-  Class BottomMarginRecord holds information about bottom margin
-  (in inches).
- */
-class BottomMarginRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-  /**
-   * Creates a new BottomMargin record.
-   */
-  BottomMarginRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~BottomMarginRecord();
-
-  /**
-   * Gets the bottom margin (in inches).
-   */
-  double bottomMargin() const;
-
-  /**
-   * Sets the new bottom margin (in inches).
-   */
-  void setBottomMargin( double m );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "BOTTOMMARGIN"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  BottomMarginRecord( const BottomMarginRecord& );
-  BottomMarginRecord& operator=( const BottomMarginRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Sheet information.
-
-  Class BoundSheetRecord represents BoundSheet record, which defines a sheet
-  within the workbook. There must be exactly one BoundSheet record for
-  each sheet.
-
-  BoundSheet record stores information about sheet type, sheet name, and
-  the corresponding BOF record.
-
-  \sa BOFRecord
- */
-
-// TODO support for strong visible
-
-class BoundSheetRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new BoundSheet record.
-   */
-  BoundSheetRecord();
-
-  /**
-   * Destroys the BoundSheet record.
-   */
-  virtual ~BoundSheetRecord();
-
-  /**
-   * Type of the sheet.
-   */
-  enum { Worksheet=0, Chart=2, VBModule=6 };
-
-  /**
-   * Sets the type of the BoundSheet. Possible values are
-   * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
-   */
-  void setType( unsigned type );
-
-  /**
-   * Returns the type of the BoundSheet. Possible values are
-   * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
-   */
-  unsigned type() const;
-
-  /**
-   * Returns the type of the BoundSheet as string. For example, if
-   * type of BoundSheet is BoundSheet::Chart, then this function returns
-   * "Chart".
-   */
-  const char* typeAsString() const;
-
-  /**
-   * Sets the visibility of the sheet.
-   */
-  void setVisible( bool visible );
-
-  /**
-   * Returns true if the sheet is visible.
-   */
-  bool visible() const;
-
-  /**
-   * Sets the name of the sheet.
-   */
-  void setSheetName( const UString& name );
-
-  /**
-   * Returns the name of the sheet.
-   */
-  UString sheetName() const;
-
-  /**
-   * Sets the position of the BOF record associated with this BoundSheet.
-   */
-  void setBofPosition( unsigned pos );
-
-  /**
-   * Returns the position of the BOF record associated with this BoundSheet.
-   */
-  unsigned bofPosition() const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "BOUNDSHEET"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  BoundSheetRecord( const BoundSheetRecord& );
-  BoundSheetRecord& operator=( const BoundSheetRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Automatic recalculation mode.
-
-  Class CalcModeRecord represents CalcMode record, which specifies whether
-  to (re)calculate formulas manually or automatically.
- */
-class CalcModeRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new CalcMode record.
-   */
-  CalcModeRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~CalcModeRecord();
-
-  /**
-   * Returns true if formulas calculation is performed automatically.
-   *
-   * \sa setAutoCalc
-   */
-  bool autoCalc() const;
-
-  /**
-   * If r is true, formulas calculation will be performed automatically.
-   *
-   * \sa autoCalc
-   */
-  void setAutoCalc( bool r );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "CALCMODE"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  CalcModeRecord( const CalcModeRecord& );
-  CalcModeRecord& operator=( const CalcModeRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Columns width and format.
-
-  Class ColInfoRecord represents ColInfo record, which provides information
-  (such as column width and formatting) for a span of columns.
- */
-class ColInfoRecord : public Record, public ColumnSpanInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new ColInfo record.
-   */
-  ColInfoRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~ColInfoRecord();
-
-  /**
-   * Returns the XF index for the formatting of the column(s).
-   *
-   * \sa setXfIndex
-   */
-  unsigned xfIndex() const;
-
-  /**
-   * Sets the XF index for the formatting of the column(s).
-   *
-   * \sa xfIndex
-   */
-  void setXfIndex( unsigned i );
-
-  /**
-   * Returns the width of the column(s), specified in 1/256 of
-   * a character width. The exact width (in pt or inch) could only be
-   * calculated given the base character width for the column format.
-   *
-   * \sa setWidth
-   */
-  unsigned width() const;
-
-  /**
-   * Sets the width of the column(s), specified in 1/256 of
-   * a character width. The exact width (in pt or inch) could only be
-   * calculated given the base character width for the column format.
-   *
-   * \sa width
-   */
-  void setWidth( unsigned w );
-
-  /**
-   * Returns true if the columns should be hidden, i.e not visible.
-   *
-   * \sa setHidden
-   */
-  bool hidden() const;
-
-  /**
-   * Sets whether columns should be hidden or visible.
-   *
-   * \sa hidden
-   */
-  void setHidden( bool h );
-
-  /**
-   * Returns true if the columns should be collapsed.
-   *
-   * \sa setCollapsed
-   */
-  bool collapsed() const;
-
-  /**
-   * Sets whether columns should be collapsed or not.
-   *
-   * \sa collapsed
-   */
-  void setCollapsed( bool c );
-
-  /**
-   * Returns the outline level of the columns. If it is 0, then
-   * the columns are not outlined.
-   *
-   * \sa setOutlineLevel
-   */
-  unsigned outlineLevel() const;
-
-  /**
-   * Sets the outline level of the columns. If it is 0, then
-   * the columns are not outlined.
-   *
-   * \sa outlineLevel
-   */
-  void setOutlineLevel( unsigned l );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "COLINFO"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   ColInfoRecord( const ColInfoRecord& );
-   ColInfoRecord& operator=( const ColInfoRecord& );
-
-   class Private;
-   Private *d;
-};
-
-class DataTableRecord : public Record
-{
-public:
-  enum Direction {
-    InputRow,
-    InputColumn,
-    Input2D
-  };
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-      return this->id;
-  }
-
-  DataTableRecord();
-  virtual ~DataTableRecord();
-  DataTableRecord( const DataTableRecord& );
-  DataTableRecord& operator=( const DataTableRecord& );
-
-  unsigned firstRow() const;
-  unsigned firstColumn() const;
-  Direction direction() const;
-
-  unsigned inputRow1() const;
-  unsigned inputColumn1() const;
-  unsigned inputRow2() const;
-  unsigned inputColumn2() const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "DATATABLE"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   class Private;
-   Private *d;
-};
-
-
-
-/**
-  \brief Date reference.
-
-  Class DateModeRecord represents DateMode record, which specifies
-  reference date for displaying date value of given serial number.
-  If base1904 is true, the reference date is 1st of January, 1904 (in which
-  serial number 1 means 2nd of January, 1904). Otherwise, the reference
-  date is 31st of December, 1899 (in which serial number 1 means
-  1st of January, 1900).
- */
-class DateModeRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new DateMode record.
-   */
-  DateModeRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~DateModeRecord();
-
-  /**
-   * Returns true if the reference date is 1st of January, 1904 or false
-   * if the reference date is 31st of December, 1899.
-   *
-   * \sa setBase1904
-   */
-  bool base1904() const;
-
-  /**
-   * If r is true, sets the reference date to 1st of January, 1904. Else,
-   * sets the reference date to 31st of December, 1899.
-   *
-   * \sa base1904
-   */
-  void setBase1904( bool r );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "DATEMODE"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  DateModeRecord( const DateModeRecord& );
-  DateModeRecord& operator=( const DateModeRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Range of used area.
-
-  Class DimensionRecord represents Dimension record, which contains the
-  range address of the used area in the current sheet.
- */
-class DimensionRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Dimension record.
-   */
-  DimensionRecord();
-
-  /**
-   * Destroys the record.
-   */
-  ~DimensionRecord();
-
-  /**
-   * Returns index to the first used row.
-   *
-   * \sa setFirstRow, lastRow
-   */
-  unsigned firstRow() const;
-
-  /**
-   * Sets index to the first used row.
-   *
-   * \sa firstRow, setLastRow
-   */
-  void setFirstRow( unsigned r );
-
-  /**
-   * Returns index to the last used row.
-   *
-   * \sa setLastRow, firstRow
-   */
-  unsigned lastRow() const;
-
-  /**
-   * Sets index to the last used row.
-   *
-   * \sa lastRow, setFirstRow
-   */
-  void setLastRow( unsigned r );
-
-  /**
-   * Returns index to the first used column.
-   *
-   * \sa setFirstColumn, lastColumn
-   */
-  unsigned firstColumn() const;
-
-  /**
-   * Sets index to the first used column.
-   *
-   * \sa firstColumn, setLastColumn
-   */
-  void setFirstColumn( unsigned r );
-
-  /**
-   * Returns index to the last used column.
-   *
-   * \sa setLastColumn, firstColumn
-   */
-  unsigned lastColumn() const;
-
-  /**
-   * Sets index to the last used column.
-   *
-   * \sa lastColumn, setFirstColumn
-   */
-  void setLastColumn( unsigned r );
-
-  virtual const char* name(){ return "DIMENSION"; }
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   DimensionRecord( const DimensionRecord& );
-   DimensionRecord& operator=( const DimensionRecord& );
 
    class Private;
    Private *d;
@@ -1044,7 +298,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const{
     return this->id;
   }
 
@@ -1060,7 +314,7 @@ public:
 
 
 
-  virtual const char* name(){ return "EXTERNBOOK"; }
+  virtual const char* name() const { return "EXTERNBOOK"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1079,7 +333,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
     return this->id;
   }
 
@@ -1101,7 +355,7 @@ public:
 
 
 
-  virtual const char* name(){ return "EXTERNNAME"; }
+  virtual const char* name() const { return "EXTERNNAME"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1114,97 +368,13 @@ private:
    Private *d;
 };
 
-/**
-  \brief External sheet record
-
-  For now only excel97 and newer are supported for this record.
- */
-class ExternSheetRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-    return this->id;
-  }
-
-  ExternSheetRecord();
-
-  ~ExternSheetRecord();
-
-  // number of refs in table
-  unsigned refCount() const;
-
-  unsigned bookRef( unsigned refIndex ) const;
-  unsigned firstSheetRef( unsigned refIndex ) const;
-  unsigned lastSheetRef( unsigned refIndex ) const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-
-
-  virtual const char* name(){ return "EXTERNSHEET"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   ExternSheetRecord( const ExternSheetRecord& );
-   ExternSheetRecord& operator=( const ExternSheetRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  \brief End of record set.
-
-  Class EOFRecord represents EOF record, which marks the end of records
-  for a specific object. EOF record should be always in pair with BOF Record.
-
-  \sa BOFRecord
-
- */
-class EOFRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new EOF record.
-   */
-  EOFRecord();
-
-  /**
-   * Destroy the record.
-   */
-  virtual ~EOFRecord();
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "EOF"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   EOFRecord( const EOFRecord& );
-   EOFRecord& operator=( const EOFRecord& );
-};
-
 class FilepassRecord : public Record
 {
 public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
     return this->id;
   }
 
@@ -1220,7 +390,7 @@ public:
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
-  virtual const char* name(){ return "FILEPASS"; }
+  virtual const char* name() const { return "FILEPASS"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1228,324 +398,6 @@ private:
    // no copy or assign
    FilepassRecord( const FilepassRecord& );
    FilepassRecord& operator=( const FilepassRecord& );
-};
-
-/**
-  \brief Font information.
-
-  Class FontRecord represents Font record, which has the information
-  about specific font used in the document. Several Font records creates
-  a font table, whose index will be referred in XFormat records.
-
-  A note about weirdness: font index #4 is never used. Hence, the first Font
-  record will be index #0, the second is #1, the third is #2, the fourth is
-  #3, but the fourth will be index #5.
-
-  \sa XFRecord
-
- */
-class FontRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Font record.
-   */
-  FontRecord();
-
-  /**
-   * Creates a copy of another Font record.
-   */
-  FontRecord( const FontRecord& fr );
-
-  /**
-   * Assigns from another Font record.
-   */
-  FontRecord& operator=( const FontRecord& fr );
-
-  /**
-   * Destroy the record.
-   */
-  virtual ~FontRecord();
-
-  enum {
-    Normal = 0,
-    Superscript = 1,
-    Subscript = 2 };
-
-  enum {
-    None = 0,
-    Single = 1,
-    Double = 2,
-    SingleAccounting = 0x21,
-    DoubleAccounting = 0x22 };
-
-  unsigned height() const;
-  void setHeight( unsigned h );
-
-  /**
-   * Returns the name of font, e.g "Arial".
-   *
-   * \sa setFontName
-   */
-  UString fontName() const;
-
-  /**
-   * Sets the name of the font.
-   *
-   * \sa fontName
-   */
-  void setFontName( const UString& fn );
-
-  // FIXME what is this font family ? index ?
-  unsigned fontFamily() const;
-  void setFontFamily( unsigned f );
-
-  // FIXME and character set index ?
-  unsigned characterSet() const;
-  void setCharacterSet( unsigned s );
-
-  /**
-   * Returns index of the color of the font.
-   *
-   * \sa setColorIndex
-   */
-  unsigned colorIndex() const;
-
-  /**
-   * Sets the index of the color of the font.
-   *
-   * \sa colorIndex
-   */
-  void setColorIndex( unsigned c );
-
-  /**
-   * Returns the boldness of the font. Standard values are 400 for normal
-   * and 700 for bold.
-   *
-   * \sa setBoldness
-   */
-  unsigned boldness() const;
-
-  /**
-   * Sets the boldness of the font. Standard values are 400 for normal
-   * and 700 for bold.
-   *
-   * \sa boldness
-   */
-  void setBoldness( unsigned b );
-
-  /**
-   * Returns true if italic has been set.
-   *
-   * \sa setItalic
-   */
-  bool italic() const;
-
-  /**
-   * If i is true, italic is set on; otherwise italic is set off.
-   *
-   * \sa italic
-   */
-  void setItalic( bool i );
-
-  /**
-   * Returns true if strikeout has been set.
-   *
-   * \sa setStrikeout
-   */
-  bool strikeout() const;
-
-  /**
-   * If s is true, strikeout is set on; otherwise strikeout is set off.
-   *
-   * \sa strikeout
-   */
-  void setStrikeout( bool s );
-
-  /**
-   * Returns Font::Superscript if superscript is set, or Font::Subscript
-   * if subscript is set, or Font::Normal in other case.
-   *
-   * \sa setEscapement
-   */
-  unsigned escapement() const;
-
-  /**
-   * Sets the superscript or subscript. If s is Font::Superscript, then
-   * superscript is set. If s is Font::Subscript, then subscript is set.
-   *
-   * \sa escapement
-   */
-  void setEscapement( unsigned s );
-
-  /**
-   * Returns the underline style of the font. Possible values are
-   * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
-   * Font::DoubleAccounting.
-   *
-   * \sa setUnderline
-   */
-  unsigned underline() const;
-
-  /**
-   * Sets the underline style of the font. Possible values are
-   * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
-   * Font::DoubleAccounting.
-   *
-   * \sa underline
-   */
-  void setUnderline( unsigned u );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "FONT"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   class Private;
-   Private *d;
-};
-
-/**
-  \brief Sheet footer.
-
-  Class FooterRecord holds information about sheet footer.
-
- */
-class FooterRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Footer record.
-   */
-  FooterRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~FooterRecord();
-
-  /**
-   * Gets the footer.
-   */
-  UString footer() const;
-
-  /**
-   * Sets the footer.
-   */
-  void setFooter( const UString& f );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "FOOTER"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  FooterRecord( const FooterRecord& );
-  FooterRecord& operator=( const FooterRecord& );
-
-  class Private;
-  Private* d;
-};
-
-/**
-  \brief Number formatting string.
-
-  Class FormatRecord contains information about a number format.
-  All Format records occur together in a sequential list.
-  An XFRecord might refer to the specific Format record using
-  an index to that list.
-
-  \sa XFRecord
-
- */
-class FormatRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Format record.
-   */
-  FormatRecord();
-
-  /**
-   * Destroys the Format record.
-   */
-  ~FormatRecord();
-
-  /**
-   * Creates a copy of Format record.
-   */
-  FormatRecord( const FormatRecord& fr );
-
-  /**
-   * Assigns from another Format record.
-   */
-  FormatRecord& operator=( const FormatRecord& fr );
-
-  /**
-   * Returns the index of the format. Each format specified by Format record
-   * has unique index which will be referred by XF Record.
-   *
-   * \sa setIndex
-   */
-  unsigned index() const;
-
-  /**
-   * Sets the index of the format. Each format specified by Format record
-   * has unique index which will be referred by XF Record.
-   *
-   * \sa index
-   */
-  void setIndex( unsigned i );
-
-  /**
-   * Returns the formatting string of the format, e.g "0.00" for 2 decimal
-   * places number formatting.
-   *
-   * \sa setFormatString
-   */
-  UString formatString() const;
-
-  /**
-   * Sets the formatting string of the format.
-   *
-   * \sa formatString
-   */
-  void setFormatString( const UString& fs );
-
-  virtual const char* name(){ return "FORMAT"; }
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   class Private;
-   Private *d;
 };
 
 /**
@@ -1560,7 +412,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -1588,7 +440,7 @@ public:
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
-  virtual const char* name(){ return "FORMULA"; }
+  virtual const char* name() const { return "FORMULA"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1612,7 +464,7 @@ class SharedFormulaRecord : public Record
 public:
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
       return this->id;
   }
 
@@ -1630,7 +482,7 @@ public:
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
-  virtual const char* name(){ return "SHAREDFMLA"; }
+  virtual const char* name() const { return "SHAREDFMLA"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1641,331 +493,6 @@ private:
 
   class Private;
   Private* d;
-};
-
-/**
-  \brief Sheet header.
-
-  Class HeaderRecord holds information about sheet header.
- */
-
-class HeaderRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Header record.
-   */
-  HeaderRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~HeaderRecord();
-
-  /**
-   * Gets the header.
-   */
-  UString header() const;
-
-  /**
-   * Sets the header.
-   */
-  void setHeader( const UString& h );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "HEADER"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  HeaderRecord( const HeaderRecord& );
-  HeaderRecord& operator=( const HeaderRecord& );
-
-  class Private;
-  Private* d;
-};
-
-
-/**
-  Class LabelRecord represents a cell that contains a string.
-
-  In Excel 97 and later version, it is replaced by LabelSSTRecord. However,
-  Excel 97 can still load LabelRecord.
-
-  \sa LabelSSTRecord
-
- */
-class LabelRecord : public Record, public CellInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Label record.
-   */
-  LabelRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~LabelRecord();
-
-  /**
-   * Returns the label string.
-   */
-  UString label() const;
-
-  /**
-   * Sets the label string.
-   */
-  void setLabel( const UString& l );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "LABEL"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   LabelRecord( const LabelRecord& );
-   LabelRecord& operator=( const LabelRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  Class LabelSSTRecord represents a cell that contains a string. The actual
-  string is store in a global SST (Shared String Table), see SSTRecord for
-  details. This record only provide an index, which should be used to get
-  the string in the corresponding SST.
-
-  \sa SSTRecord
-
- */
-class LabelSSTRecord : public Record, public CellInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new LabelSST record.
-   */
-  LabelSSTRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~LabelSSTRecord();
-
-  /**
-   * Returns the SST index. This is the index to the global SST which hold
-   * every label strings used in SST record.
-   */
-  unsigned sstIndex() const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "LABELSST"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   LabelSSTRecord( const LabelSSTRecord& );
-   LabelSSTRecord& operator=( const LabelSSTRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  Class LeftMarginRecord holds information about left margin.
-
- */
-class LeftMarginRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new LeftMargin record.
-   */
-  LeftMarginRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~LeftMarginRecord();
-
-  /**
-   * Gets the left margin (in inches).
-   */
-  double leftMargin() const;
-
-  /**
-   * Sets the new left margin (in inches).
-   */
-  void setLeftMargin( double m );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "LEFTMARGIN"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  LeftMarginRecord( const LeftMarginRecord& );
-  LeftMarginRecord& operator=( const LeftMarginRecord& );
-
-  class Private;
-  Private* d;
-};
-
-
-/**
-  Class MergedCellsRecord represents MergedCells record, which contains
-  a list of all merged cells in the current sheets. Each entry in this list
-  define the range of cells that should be merged, namely firstRow, lastRow,
-  firstColumn and lastColumn.
- */
-
-class MergedCellsRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new MergedCells record.
-   */
-  MergedCellsRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~MergedCellsRecord();
-
-  /**
-   * Returns the total number of merged cells in the list.
-   */
-  unsigned count() const;
-
-  /**
-   * Returns the index to first row in the i-th position in the list.
-   */
-  unsigned firstRow( unsigned i ) const;
-
-  /**
-   * Returns the index to last row in the i-th position in the list.
-   */
-  unsigned lastRow( unsigned i ) const;
-
-  /**
-   * Returns the index to first column in the i-th position in the list.
-   */
-  unsigned firstColumn( unsigned i ) const;
-
-  /**
-   * Returns the index to last column in the i-th position in the list.
-   */
-  unsigned lastColumn( unsigned i ) const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "MERGEDCELLS"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   MergedCellsRecord( const MergedCellsRecord& );
-   MergedCellsRecord& operator=( const MergedCellsRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  Class MulBlankRecord represents a cell range containing blank cells.
-  All cells are located in the same row.
-
-  \sa BlankRecord
- */
-
-class MulBlankRecord : public Record, public CellInfo, public ColumnSpanInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new MulBlank record.
-   */
-  MulBlankRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~MulBlankRecord();
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  /**
-   * Returns XF index of ith column.
-   */
-  unsigned xfIndex( unsigned i ) const;
-
-  virtual const char* name(){ return "MULBLANK"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   MulBlankRecord( const MulBlankRecord& );
-   MulBlankRecord& operator=( const MulBlankRecord& );
-
-   class Private;
-   Private *d;
-
-   // from CellInfo, we don't need it
-   // mark as private so nobody can call them
-   virtual unsigned column() const { return CellInfo::column(); }
-   virtual unsigned xfIndex() const { return CellInfo::xfIndex(); }
 };
 
 /**
@@ -1981,7 +508,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -2027,7 +554,7 @@ public:
 
   unsigned encodedRK( unsigned i ) const;
 
-  virtual const char* name(){ return "MULRK"; }
+  virtual const char* name() const { return "MULRK"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -2052,7 +579,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
     return this->id;
   }
 
@@ -2066,7 +593,7 @@ public:
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
-  virtual const char* name(){ return "NAME"; }
+  virtual const char* name() const { return "NAME"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -2079,162 +606,6 @@ private:
    Private *d;
 };
 
-
-/**
-  Class NumberRecord represents a cell that contains a floating point value.
-
- */
-class NumberRecord : public Record, public CellInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Number record.
-   */
-  NumberRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~NumberRecord();
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  /**
-   * Returns the floating-point value specified by the record.
-   *
-   * \sa setNumber
-   */
-  double number() const;
-
-  /**
-   * Sets the floating-point value specified by the record.
-   *
-   * \sa number
-   */
-  void setNumber( double f );
-
-  virtual const char* name(){ return "NUMBER"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   NumberRecord( const NumberRecord& );
-   NumberRecord& operator=( const NumberRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  Class PaletteRecord lists colors.
-
- */
-class PaletteRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Palette record.
-   */
-  PaletteRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~PaletteRecord();
-
-  /**
-   * Gets the n-th color.
-   */
-  Color color( unsigned i ) const;
-
-  /**
-   * Returns the number of colors in the palette.
-   */
-  unsigned count() const;
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "PALETTE"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  PaletteRecord( const PaletteRecord& );
-  PaletteRecord& operator=( const PaletteRecord& );
-
-  class Private;
-  Private* d;
-};
-
-
-
-/**
-  Class RightMarginRecord holds information about right margin.
-
- */
-class RightMarginRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new RightMargin record.
-   */
-  RightMarginRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~RightMarginRecord();
-
-  /**
-   * Gets the right margin (in inches).
-   */
-  double rightMargin() const;
-
-  /**
-   * Sets the new right margin (in inches).
-   */
-  void setRightMargin( double m );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "RIGHTMARGIN"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  RightMarginRecord( const RightMarginRecord& );
-  RightMarginRecord& operator=( const RightMarginRecord& );
-
-  class Private;
-  Private* d;
-};
-
-
-
 /**
   Class RKRecord represents a cell that contains an RK value,
   i.e encoded integer or floating-point value.
@@ -2246,7 +617,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -2308,7 +679,7 @@ public:
 
   unsigned encodedRK() const;
 
-  virtual const char* name(){ return "RK"; }
+  virtual const char* name() const { return "RK"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -2320,102 +691,6 @@ private:
    class Private;
    Private *d;
 };
-
-/**
-  Class RowRecord represents Row record, which provides information
-  (such as row height and formatting) for a span of columns.
- */
-class RowRecord : public Record, public ColumnSpanInfo
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new Row record.
-   */
-  RowRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~RowRecord();
-
-  /**
-   * Returns the index of the row.
-   *
-   * \sa setRow
-   */
-  unsigned row() const;
-
-  /**
-   * Sets the index of the row.
-   *
-   * \sa row
-   */
-  void setRow( unsigned r );
-
-  /**
-   * Returns the XF index for the formatting of the cells.
-   *
-   * \sa setXfIndex
-   */
-  unsigned xfIndex() const;
-
-  /**
-   * Sets the XF index for the formatting of the cells.
-   *
-   * \sa xfIndex
-   */
-  void setXfIndex( unsigned i );
-
-  /**
-   * Returns the height of the row, specified in twips (1/20 pt).
-   *
-   * \sa setHeight
-   */
-  unsigned height() const;
-
-  /**
-   * Sets the height of the row, specified in twips (1/20 pt).
-   *
-   * \sa height
-   */
-  void setHeight( unsigned h );
-
-  /**
-   * Returns true if the row should be hidden, i.e not visible.
-   *
-   * \sa setHidden
-   */
-  bool hidden() const;
-
-  /**
-   * Sets whether row should be hidden or visible.
-   *
-   * \sa hidden
-   */
-  void setHidden( bool h );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "ROW"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   RowRecord( const RowRecord& );
-   RowRecord& operator=( const RowRecord& );
-
-   class Private;
-   Private *d;
-};
-
 
 /**
   Class RStringRecord represents a cell that contains rich-text string.
@@ -2433,7 +708,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -2463,7 +738,7 @@ public:
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
-  virtual const char* name(){ return "RSTRING"; }
+  virtual const char* name() const { return "RSTRING"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -2490,7 +765,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -2518,7 +793,7 @@ public:
    */
   UString stringAt( unsigned index ) const;
 
-  virtual const char* name(){ return "SST"; }
+  virtual const char* name() const { return "SST"; }
 
   virtual void dump( std::ostream& out ) const;
 
@@ -2529,107 +804,6 @@ private:
 
    class Private;
    Private *d;
-};
-
-
-/**
-  Class String represents a string record, which holds the value of
-  calculation if a formula returns a string. This record must appear
-  right after the associated formula record.
-
-  \sa FormulaRecord
-
- */
-class StringRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){ return this->id; }
-
-  /**
-   * Creates a new string record.
-   */
-  StringRecord();
-
-  /**
-   * Destroys the record.
-   */
-  virtual ~StringRecord();
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  /**
-    Returns the string (in Unicode).
-   */
-  UString ustring() const;
-
-  /**
-    Returns the string as a value.
-   */
-  Value value() const;
-
-  virtual const char* name(){ return "STRING"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-   // no copy or assign
-   StringRecord( const SSTRecord& );
-   StringRecord& operator=( const SSTRecord& );
-
-   class Private;
-   Private *d;
-};
-
-/**
-  Class TopMarginRecord holds information about top margin.
-
- */
-class TopMarginRecord : public Record
-{
-public:
-
-  static const unsigned int id;
-
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  /**
-   * Creates a new TopMargin record.
-   */
-  TopMarginRecord();
-
-  /**
-   * Destroy the record.
-   */
-  ~TopMarginRecord();
-
-  /**
-   * Gets the top margin (in inches).
-   */
-  double topMargin() const;
-
-  /**
-   * Sets the new top margin (in inches).
-   */
-  void setTopMargin( double m );
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual const char* name(){ return "TOPMARGIN"; }
-
-  virtual void dump( std::ostream& out ) const;
-
-private:
-  // no copy or assign
-  TopMarginRecord( const TopMarginRecord& );
-  TopMarginRecord& operator=( const TopMarginRecord& );
-
-  class Private;
-  Private* d;
 };
 
 /**
@@ -2644,7 +818,7 @@ public:
 
   static const unsigned int id;
 
-  unsigned int rtti(){
+  unsigned int rtti() const {
 	  return this->id;
   }
 
@@ -3118,7 +1292,7 @@ public:
    */
   void setPatternBackColor( unsigned color );
 
-  virtual const char* name(){ return "XF"; }
+  virtual const char* name() const { return "XF"; }
 
   virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 

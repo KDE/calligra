@@ -18,8 +18,114 @@
    Boston, MA 02110-1301, USA
  */
 #include "utils.h"
+#include "misc.h"
 
 namespace Swinder {
+
+UString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
+{
+    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+
+    if (size) *size = length;
+    if (length > maxSize) {
+        if (*error) *error = true;
+        return UString::null;
+    }
+
+    char* buffer = new char[length+1];
+    memcpy(buffer, data, length);
+    buffer[length] = 0;
+    UString str(buffer);
+    delete[] buffer;
+
+    return str;
+}
+
+UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+{
+    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+
+    if (maxSize < 1) {
+        if (*error) *error = true;
+        return UString::null;
+    }
+
+    unsigned char flags = data[0];
+    unsigned offset = 1;
+
+    bool unicode = flags & 0x01;
+    bool asianPhonetics = flags & 0x04;
+    bool richText = flags & 0x08;
+    unsigned formatRuns = 0;
+    unsigned asianPhoneticsSize = 0;
+
+    if (richText) {
+        if (offset + 2 > maxSize) {
+            if (*error) *error = true;
+            return UString::null;
+        }
+        formatRuns = readU16(data + offset);
+        offset += 2;
+    }
+
+    if (asianPhonetics) {
+        if (offset + 4 > maxSize) {
+            if (*error) *error = true;
+            return UString::null;
+        }
+        asianPhoneticsSize = readU32(data + offset);
+        offset += 4;
+    }
+
+    // find out total bytes used in this string
+    unsigned size = offset;
+    if (richText) size += (formatRuns*4);
+    if (asianPhonetics) size += asianPhoneticsSize;
+    if (size > maxSize) {
+        if (*error) *error = true;
+        return UString::null;
+    }
+    UString str;
+    for (unsigned k=0; k<length; k++) {
+        unsigned uchar;
+        if (unicode) {
+            if (size+2 > maxSize) {
+                if (*error) *error = true;
+                return UString::null;
+            }
+            uchar = readU16( data + offset );
+            offset += 2;
+            size += 2;
+        } else {
+            if (size+1 > maxSize) {
+                if (*error) *error = true;
+                return UString::null;
+            }
+            uchar = data[offset++];
+            size++;
+        }
+        str.append( UString(UChar(uchar)) );
+        if (offset == continuePosition && k < length-1) {
+            if (size+1 > maxSize) {
+                if (*error) *error = true;
+                return UString::null;
+            }
+            unicode = data[offset] & 1;
+            size++;
+            offset++;
+        }
+    }
+
+    if (pSize) *pSize = size;
+    return str;
+}
+
+std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )
+{
+    char* str = ustring.ascii();
+    s << str;
+    return s;
+}
 
 Value errorAsValue( int errorCode )
 {
@@ -37,6 +143,78 @@ Value errorAsValue( int errorCode )
     }
 
     return result;
+}
+
+// ========== base record ==========
+
+const unsigned int Record::id = 0; // invalid of-course
+
+Record::Record()
+{
+  stream_position = 0;
+  ver = Excel97;
+  valid = true;
+}
+
+Record::~Record()
+{
+}
+
+Record* Record::create( unsigned type )
+{
+    return RecordRegistry::createRecord(type);
+}
+
+void Record::setPosition( unsigned pos )
+{
+  stream_position = pos;
+}
+
+unsigned Record::position() const
+{
+  return stream_position;
+}
+
+void Record::setData( unsigned, const unsigned char*, const unsigned int* )
+{
+}
+
+void Record::dump( std::ostream& ) const
+{
+  // nothing to dump
+}
+
+bool Record::isValid() const
+{
+    return valid;
+}
+
+void Record::setIsValid(bool isValid)
+{
+    valid = isValid;
+}
+
+void RecordRegistry::registerRecordClass(unsigned id, RecordFactory factory)
+{
+    instance()->records[id] = factory;
+}
+
+Record* RecordRegistry::createRecord(unsigned id)
+{
+    RecordRegistry* q = instance();
+    std::map<unsigned, RecordFactory>::iterator it = q->records.find(id);
+    if (it != q->records.end()) {
+        return it->second();
+    } else {
+        return 0;
+    }
+}
+
+RecordRegistry* RecordRegistry::instance()
+{
+    static RecordRegistry* sinstance = 0;
+    if (!sinstance) sinstance = new RecordRegistry();
+    return sinstance;
 }
 
 } // namespace Swinder

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<records>
+
+<record name="Backup" id="0x0040">
+  <field name="backupEnabled" type="bool" size="16" />
+</record>
+
+<!-- TODO: BOF -->
+<record name="EOF" id="0x000A" />
+
+<record name="Blank" id="0x0201">
+  <field name="row"     type="unsigned" size="16" />
+  <field name="column"  type="unsigned" size="16" />
+  <field name="xfIndex" type="unsigned" size="16" />
+</record>
+
+<record name="BoolErr" id="0x0205">
+  <field name="row"     type="unsigned" size="16" />
+  <field name="column"  type="unsigned" size="16" />
+  <field name="xfIndex" type="unsigned" size="16" />
+  <field name="value"   type="unsigned" size="8" />
+  <field name="error"   type="bool"     size="8" />
+
+  <computedField name="asValue" ctype="Value" value="isError() ? errorAsValue(value()) : Value(value() ? true : false)" />
+</record>
+
+
+<record name="LeftMargin" id="0x0026">
+  <field name="leftMargin" type="float" size="64" />
+</record>
+
+<record name="RightMargin" id="0x0027">
+  <field name="rightMargin" type="float" size="64" />
+</record>
+
+<record name="TopMargin" id="0x0028">
+  <field name="topMargin" type="float" size="64" />
+</record>
+
+<record name="BottomMargin" id="0x0029">
+  <field name="bottomMargin" type="float" size="64" />
+</record>
+
+
+<record name="BoundSheet" id="0x0085">
+  <field name="bofPosition"     type="unsigned" size="32" />
+  <field name="sheetState"      type="unsigned" size="8">
+    <enum name="Visible"      value="0" />
+    <enum name="Hidden"       value="1" />
+    <enum name="StrongHidden" value="2" />
+  </field>
+  <field name="sheetType"       type="unsigned" size="8">
+    <enum name="Worksheet" value="0x00" />
+    <enum name="Chart"     value="0x02" />
+    <enum name="VBModule"  value="0x06" />
+  </field>
+  <field name="sheetNameLength" type="unsigned" size="8" />
+  <if predicate="version() &lt; Excel97">
+    <field name="sheetName"     type="bytestring" length="sheetNameLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="sheetName"     type="unicodestring" length="sheetNameLength" />
+  </if>
+  <!-- TODO: isVisible() method -->
+</record>
+
+<record name="CalcMode" id="0x000D">
+  <field name="calcMode" type="signed" size="16">
+    <enum name="Manual"        value="0" />
+    <enum name="Automatic"     value="1" />
+    <enum name="SemiAutomatic" value="-1" />
+  </field>
+  <!-- TODO: bool autoCalc() method -->
+</record>
+
+<record name="ColInfo" id="0x007D">
+  <field name="firstColumn"  type="unsigned" size="16" />
+  <field name="lastColumn"   type="unsigned" size="16" />
+  <field name="width"        type="unsigned" size="16" />
+  <field name="xfIndex"      type="unsigned" size="16" />
+
+  <field name="hidden"       type="bool"     size="1" />
+  <field name="reserved0"                    size="7" />
+  <field name="outlineLevel" type="unsigned" size="3" />
+  <field name="reserved1"                    size="1" />
+  <field name="collapsed"    type="bool"     size="1" />
+  <field name="reserved2"                    size="3" />
+
+  <field name="reserved3"                    size="16" />
+</record>
+
+<record name="DataTable" id="0x0236">
+  <field name="firstRow"     type="unsigned" size="16" />
+  <field name="lastRow"      type="unsigned" size="16" />
+  <field name="firstColumn"  type="unsigned" size="8" />
+  <field name="lastColumn"   type="unsigned" size="8" />
+
+  <field name="alwaysCalc"   type="bool"     size="1" />
+  <field name="reserved0"                    size="1" />
+  <field name="rowInput"     type="bool"     size="1" />
+  <field name="rowColTable"  type="bool"     size="1" />
+  <field name="reserved1"                    size="12" />
+
+  <field name="inputRow1"    type="unsigned" size="16" />
+  <field name="inputColumn1" type="unsigned" size="16" />
+  <field name="inputRow2"    type="unsigned" size="16" />
+  <field name="inputColumn2" type="unsigned" size="16" />
+
+  <computedField name="direction" value="isRowColTable() ? Input2D : isRowInput() ? InputRow : InputColumn">
+    <enum name="InputRow" />
+    <enum name="InputColumn" />
+    <enum name="Input2D" />
+  </computedField>
+</record>
+
+<record name="DateMode" id="0x0022">
+  <field name="base1904" type="bool" size="16" />
+</record>
+
+<record name="Dimension" id="0x0200">
+  <if predicate="version() &lt; Excel97">
+    <field name="firstRow"        type="unsigned" size="16" />
+    <field name="lastRowPlus1"    type="unsigned" size="16" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="firstRow"        type="unsigned" size="32" />
+    <field name="lastRowPlus1"    type="unsigned" size="32" />
+  </if>
+  <field name="firstColumn"       type="unsigned" size="16" />
+  <field name="lastColumnPlus1"   type="unsigned" size="16" />
+  <field name="reserved"                          size="16" />
+
+  <!-- TODO: accessors for lastRow() lastColumn() -->
+</record>
+
+<!-- TODO: ExternBook -->
+<!-- TODO: ExternName -->
+
+<record name="ExternSheet" id="0x0017">
+  <if predicate="version() >= Excel97">
+    <field name="refCount"        type="unsigned" size="16" />
+    <array length="refCount">
+      <field name="bookRef"       type="unsigned" size="16" />
+      <field name="firstSheetRef" type="unsigned" size="16" />
+      <field name="lastSheetRef"  type="unsigned" size="16" />
+    </array>
+  </if>
+</record>
+
+<!-- TODO: Filepass -->
+
+<record name="Font" id="0x0031">
+  <field name="height"      type="unsigned" size="16" />
+
+  <field name="reserved0"                 size="1" />
+  <field name="italic"      type="bool"     size="1" />
+  <field name="reserved1"                 size="1" />
+  <field name="strikeout"   type="bool"     size="1" />
+  <field name="outline"     type="bool"     size="1" />
+  <field name="shadow"      type="bool"     size="1" />
+  <field name="condensed"   type="bool"     size="1" />
+  <field name="extended"    type="bool"     size="1" />
+
+  <field name="colorIndex"  type="unsigned" size="16" />
+  <field name="fontWeight"  type="unsigned" size="16" />
+  <field name="escapement"  type="unsigned" size="16">
+    <enum name="Normal"      value="0" />
+    <enum name="Superscript" value="1" />
+    <enum name="Subscript"   value="2" />
+  </field>
+  <field name="underline"   type="unsigned" size="8">
+    <enum name="None"              value="0" />
+    <enum name="Single"            value="1" />
+    <enum name="Double"            value="2" />
+    <enum name="SingleAccounting"  value="0x21" />
+    <enum name="DoubleAccounting"  value="0x22" />
+  </field>
+  <field name="fontFamily"  type="unsigned" size="8">
+    <enum name="Unknown"     value="0" />
+    <enum name="Roman"       value="1" />
+    <enum name="Swiss"       value="2" />
+    <enum name="Modern"      value="3" />
+    <enum name="Script"      value="4" />
+    <enum name="Decorative"  value="5" />
+  </field>
+  <field name="characterSet" type="unsigned" size="8" />
+  <field name="reserved2"                    size="8" />
+  <field name="fontNameLength" type="unsigned" size="8" />
+  <if predicate="version() &lt; Excel97">
+    <field name="fontName"     type="bytestring" length="fontNameLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="fontName"     type="unicodestring" length="fontNameLength" />
+  </if>
+</record>
+
+<record name="Header" id="0x0014">
+  <if predicate="version() &lt; Excel97">
+    <field name="headerLength" type="unsigned" size="8" />
+    <field name="header"       type="bytestring" length="headerLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="headerLength" type="unsigned" size="16" />
+    <field name="header"       type="unicodestring" length="headerLength" />
+  </if>
+</record>
+
+<record name="Footer" id="0x0015">
+  <if predicate="version() &lt; Excel97">
+    <field name="footerLength" type="unsigned" size="8" />
+    <field name="footer"       type="bytestring" length="footerLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="footerLength" type="unsigned" size="16" />
+    <field name="footer"       type="unicodestring" length="footerLength" />
+  </if>
+</record>
+
+<record name="Format" id="0x041E">
+  <field name="index"      type="unsigned" size="16" />
+  <if predicate="version() &lt; Excel97">
+    <field name="formatStringLength" type="unsigned" size="8" />
+    <field name="formatString"       type="bytestring" length="formatStringLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="formatStringLength" type="unsigned" size="16" />
+    <field name="formatString"       type="unicodestring" length="formatStringLength" />
+  </if>
+</record>
+
+<!-- TODO: Formula -->
+<!-- TODO: SharedFormula -->
+
+<record name="Label" id="0x0204">
+  <field name="row"     type="unsigned" size="16" />
+  <field name="column"  type="unsigned" size="16" />
+  <field name="xfIndex" type="unsigned" size="16" />
+  <field name="labelLength" type="unsigned" size="16" />
+  <if predicate="version() &lt; Excel97">
+    <field name="label" type="bytestring" length="labelLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="label" type="unicodestring" length="labelLength" />
+  </if>
+</record>
+
+<record name="LabelSST" id="0x00FD">
+  <field name="row"      type="unsigned" size="16" />
+  <field name="column"   type="unsigned" size="16" />
+  <field name="xfIndex"  type="unsigned" size="16" />
+  <field name="sstIndex" type="unsigned" size="32" />
+</record>
+
+<record name="MergedCells" id="0x00E5">
+  <field name="count" type="unsigned" size="16" />
+  <array length="count">
+    <field name="firstRow"    type="unsigned" size="16" />
+    <field name="lastRow"     type="unsigned" size="16" />
+    <field name="firstColumn" type="unsigned" size="16" />
+    <field name="lastColumn"  type="unsigned" size="16" />
+  </array>
+</record>
+
+<record name="MulBlank" id="0x00BE">
+  <field name="row"         type="unsigned" size="16" />
+  <field name="firstColumn" type="unsigned" size="16" />
+  <array length="(size-6)/2">
+    <field name="xfIndex"   type="unsigned" size="16" />
+  </array>
+  <field name="lastColumn"  type="unsigned" size="16" />
+</record>
+
+<!-- TODO: MulRK -->
+<!-- TODO: Name/DefinedName -->
+
+<record name="Number" id="0x0203">
+  <field name="row"     type="unsigned" size="16" />
+  <field name="column"  type="unsigned" size="16" />
+  <field name="xfIndex" type="unsigned" size="16" />
+  <field name="number"  type="float"    size="64" />
+</record>
+
+<record name="Palette" id="0x0092">
+  <field name="count"  type="unsigned" size="16" />
+  <array length="count">
+    <field name="red"   type="unsigned" size="8" />
+    <field name="green" type="unsigned" size="8" />
+    <field name="blue"  type="unsigned" size="8" />
+    <field name="reserved"              size="8" />
+  </array>
+</record>
+
+<record name="Row" id="0x0208">
+  <field name="row"             type="unsigned" size="16" />
+  <field name="firstColumn"     type="unsigned" size="16" />
+  <field name="lastColumnPlus1" type="unsigned" size="16" />
+  <field name="height"          type="unsigned" size="16" />
+  <field name="reserved0"                       size="16" />
+  <field name="reserved1"                       size="16" />
+  <field name="outlineLevel"    type="unsigned" size="3" />
+  <field name="reserved2"                       size="1" />
+  <field name="collapsed"       type="bool"     size="1" />
+  <field name="hidden"          type="bool"     size="1" />
+  <field name="reserved3"                       size="2" />
+  <field name="reserved4"                       size="8" />
+  <field name="xfIndex"         type="unsigned" size="12" />
+  <field name="reserved5"                       size="4" />
+</record>
+
+<!-- TODO: RString -->
+<!-- TODO: SST -->
+
+<record name="String" id="0x0207">
+  <field name="stringLength" type="unsigned" size="16" />
+  <if predicate="version() &lt; Excel97">
+    <field name="ustring" type="bytestring" length="stringLength" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="ustring" type="unicodestring" length="stringLength" />
+  </if>
+
+  <computedField name="value" ctype="Value" value="Value(ustring())" />
+</record>
+
+<!-- TODO: XF -->
+
+</records>
