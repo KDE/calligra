@@ -1924,6 +1924,7 @@ void NodeItemModel::slotWbsDefinitionChanged()
 void NodeItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -1940,6 +1941,7 @@ void NodeItemModel::setProject( Project *project )
     kDebug()<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -3583,6 +3585,7 @@ void MilestoneItemModel::slotLayoutChanged()
 void MilestoneItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT(  slotNodeToBeInserted( Node *, int ) ) );
@@ -3598,6 +3601,7 @@ void MilestoneItemModel::setProject( Project *project )
     //kDebug()<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted( Node *, int ) ) );

@@ -192,7 +192,7 @@ void LocaleConfigMoney::slotLocaleChanged()
 
 void LocaleConfigMoney::slotMonCurSymChanged(const QString &t)
 {
-  m_locale->setCurrencySymbol(t);
+  //m_locale->setCurrencySymbol(t);
   emit localeChanged();
 }
 
@@ -210,31 +210,31 @@ void LocaleConfigMoney::slotMonCurSymChanged(const QString &t)
 
 void LocaleConfigMoney::slotMonFraDigChanged(int value)
 {
-  m_locale->setFracDigits(value);
+  //m_locale->setFracDigits(value);
   emit localeChanged();
 }
 
 void LocaleConfigMoney::slotMonPosPreCurSymChanged()
 {
-  m_locale->setPositivePrefixCurrencySymbol(m_chMonPosPreCurSym->isChecked());
+  //m_locale->setPositivePrefixCurrencySymbol(m_chMonPosPreCurSym->isChecked());
   emit localeChanged();
 }
 
 void LocaleConfigMoney::slotMonNegPreCurSymChanged()
 {
-  m_locale->setNegativePrefixCurrencySymbol(m_chMonNegPreCurSym->isChecked());
+  //m_locale->setNegativePrefixCurrencySymbol(m_chMonNegPreCurSym->isChecked());
   emit localeChanged();
 }
 
 void LocaleConfigMoney::slotMonPosMonSignPosChanged(int i)
 {
-  m_locale->setPositiveMonetarySignPosition((KLocale::SignPosition)i);
+  //m_locale->setPositiveMonetarySignPosition((KLocale::SignPosition)i);
   emit localeChanged();
 }
 
 void LocaleConfigMoney::slotMonNegMonSignPosChanged(int i)
 {
-  m_locale->setNegativeMonetarySignPosition((KLocale::SignPosition)i);
+  //m_locale->setNegativeMonetarySignPosition((KLocale::SignPosition)i);
   emit localeChanged();
 }
 
@@ -334,8 +334,33 @@ void LocaleConfigMoney::slotTranslate()
 
 }
 
-MacroCommand *LocaleConfigMoney::buildCommand( Part *part ) {
-    return 0;
+MacroCommand *LocaleConfigMoney::buildCommand()
+{
+    MacroCommand *m = new MacroCommand();
+    if ( m_locale->currencySymbol() != m_edMonCurSym->text() ) {
+        m->addCommand( new ModifyCurrencySymolCmd( m_locale, m_edMonCurSym->text() ) );
+    }
+    if ( m_locale->fracDigits() != m_inMonFraDig->value() ) {
+        m->addCommand( new ModifyCurrencyFractionalDigitsCmd( m_locale, m_inMonFraDig->value() ) );
+    }
+    if ( m_locale->positivePrefixCurrencySymbol() != m_chMonPosPreCurSym->isChecked() ) {
+        m->addCommand( new ModifyPositivePrefixCurrencySymolCmd( m_locale, m_chMonPosPreCurSym->isChecked() ) );
+    }
+    if ( m_locale->negativePrefixCurrencySymbol() != m_chMonNegPreCurSym->isChecked() ) {
+        m->addCommand( new ModifyNegativePrefixCurrencySymolCmd( m_locale, m_chMonNegPreCurSym->isChecked() ) );
+    }
+    if ( m_locale->positiveMonetarySignPosition() != m_cmbMonPosMonSignPos->currentIndex() ) {
+        m->addCommand( new ModifyPositiveMonetarySignPositionCmd( m_locale, m_cmbMonPosMonSignPos->currentIndex() ) );
+    }
+    if ( m_locale->negativeMonetarySignPosition() != m_cmbMonNegMonSignPos->currentIndex() ) {
+        m->addCommand( new ModifyNegativeMonetarySignPositionCmd( m_locale, m_cmbMonNegMonSignPos->currentIndex() ) );
+    }
+    qDebug()<<"buildCommand:"<<m->isEmpty();
+    if ( m->isEmpty() ) {
+        delete m;
+        return 0;
+    }
+    return m;
 }
 
 } // namespace KPlato

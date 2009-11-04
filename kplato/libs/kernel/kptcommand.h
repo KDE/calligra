@@ -1695,6 +1695,94 @@ private:
 
 };
 
+class KPLATOKERNEL_EXPORT ModifyProjectLocaleCmd : public MacroCommand
+{
+public:
+    ModifyProjectLocaleCmd( Project &project, const QString &name );
+    void execute();
+    void unexecute();
+private:
+    Project &m_project;
+};
+
+class KPLATOKERNEL_EXPORT ModifyCurrencySymolCmd : public NamedCommand
+{
+public:
+    ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+
+class  KPLATOKERNEL_EXPORT ModifyCurrencyFractionalDigitsCmd : public NamedCommand
+{
+public:
+    ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
+class  KPLATOKERNEL_EXPORT ModifyPositivePrefixCurrencySymolCmd : public NamedCommand
+{
+public:
+    ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    bool m_newvalue;
+    bool m_oldvalue;
+};
+
+class  KPLATOKERNEL_EXPORT ModifyNegativePrefixCurrencySymolCmd : public NamedCommand
+{
+public:
+    ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    bool m_newvalue;
+    bool m_oldvalue;
+};
+
+class  KPLATOKERNEL_EXPORT ModifyPositiveMonetarySignPositionCmd : public NamedCommand
+{
+public:
+    ModifyPositiveMonetarySignPositionCmd( KLocale *locale, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
+class  KPLATOKERNEL_EXPORT ModifyNegativeMonetarySignPositionCmd : public NamedCommand
+{
+public:
+    ModifyNegativeMonetarySignPositionCmd( KLocale *locale, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    KLocale *m_locale;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
 }  //KPlato namespace
 
 #endif //COMMAND_H

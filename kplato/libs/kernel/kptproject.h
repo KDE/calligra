@@ -489,7 +489,9 @@ public:
     KLocale *locale() { return m_config->locale(); }
     /// Return locale. (Used for currency, everything else is from KGlobal::locale)
     const KLocale *locale() const { return m_config->locale(); }
-
+    /// Signal that locale data has changed
+    void emitLocaleChanged();
+    
     void incProgress();
 
     void setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins );
@@ -577,7 +579,10 @@ signals:
     void relationRemoved( Relation *rel );
     /// Emitted when the relation @p rel has been modified.
     void relationModified( Relation *rel );
-    
+
+    /// Emitted when locale data has changed
+    void localeChanged();
+
 protected:
     /// Calculate the schedule.
     void calculate( Schedule *scedule );

@@ -2523,7 +2523,11 @@ void View::slotCurrencyConfig()
 {
     LocaleConfigMoneyDialog *dlg = new LocaleConfigMoneyDialog( getProject().locale(), this );
     if ( dlg->exec() == QDialog::Accepted ) {
-        
+        QUndoCommand *c = dlg->buildCommand( getProject() );
+        if ( c ) {
+            getPart()->addCommand( c );
+        }
+        qDebug()<<"slotCurrencyConfig:"<<c;
     }
     delete dlg;
 }
