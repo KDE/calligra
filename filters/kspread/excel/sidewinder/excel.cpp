@@ -47,7 +47,17 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
   {
     // FIXME check that int is 32 bits ?
     isInteger = true;
-    i = (int)(factor * (*((int*) &rkvalue) >> 2) );
+    i = *((int*) &rkvalue) >> 2;
+    if (rkvalue & 0x01)
+    {
+      if (i%100 == 0)
+      {
+        i /= 100;
+      } else {
+        isInteger = false;
+        f = i * 0.01;
+      }
+    }
   }
   else
   {
