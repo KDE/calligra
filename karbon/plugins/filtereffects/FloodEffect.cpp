@@ -53,6 +53,8 @@ QImage FloodEffect::processImage(const QImage &image, const KoFilterEffectRender
 
 bool FloodEffect::load(const KoXmlElement &element, const QMatrix &matrix)
 {
+    Q_UNUSED(matrix);
+    
     if (element.tagName() != id())
         return false;
 
@@ -60,8 +62,8 @@ bool FloodEffect::load(const KoXmlElement &element, const QMatrix &matrix)
     
     if (element.hasAttribute("flood-color")) {
         QString colorStr = element.attribute("flood-color").trimmed();
-        if (colorStr.startsWith("rgb(")) {
-            QStringList channels = colorStr.mid(4, colorStr.length()-5).split(",");
+        if (colorStr.startsWith(QLatin1String("rgb("))) {
+            QStringList channels = colorStr.mid(4, colorStr.length()-5).split(',');
             float r = channels[0].toDouble();
             if (channels[0].contains('%'))
                 r /= 100.0;
