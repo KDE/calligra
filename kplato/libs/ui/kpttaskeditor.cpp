@@ -38,6 +38,7 @@
 
 #include <kicon.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
@@ -271,6 +272,7 @@ void TaskEditor::updateActionsEnabled( bool on )
     Project *p = m_view->project();
     
     bool o = ( on && p && selectedNodeCount() <= 1 );
+    menuAddTask->setEnabled( o );
     actionAddTask->setEnabled( o );
     actionAddMilestone->setEnabled( o );
     
@@ -279,7 +281,9 @@ void TaskEditor::updateActionsEnabled( bool on )
     o = ( on && p && selectedNodeCount() == 1 );
     Node *n = selectedNode();
     
+    menuAddSubTask->setEnabled( o );
     actionAddSubtask->setEnabled( o );
+    actionAddSubMilestone->setEnabled( o );
     actionMoveTaskUp->setEnabled( o && p->canMoveTaskUp( n ) );
     actionMoveTaskDown->setEnabled( o && p->canMoveTaskDown( n ) );
     actionIndentTask->setEnabled( o && p->canIndentTask( n ) );
@@ -289,24 +293,38 @@ void TaskEditor::updateActionsEnabled( bool on )
 void TaskEditor::setupGui()
 {
     QString name = "taskeditor_add_list";
-    actionAddTask  = new KAction(KIcon( "view-task-add" ), i18n("Add Task..."), this);
+
+    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), "Add Task...", this );
+    actionCollection()->addAction("add_task", menuAddTask );
+    connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
+    addAction( name, menuAddTask );
+
+    actionAddTask  = new KAction( i18n("Add Task..."), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
-    actionCollection()->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
-    addAction( name, actionAddTask );
-    
-    actionAddSubtask  = new KAction(KIcon( "view-task-child-add" ), i18n("Add Sub-Task..."), this);
-    actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
-    actionCollection()->addAction("add_sub_task", actionAddSubtask );
-    connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
-    addAction( name, actionAddSubtask );
-    
-    actionAddMilestone  = new KAction(KIcon( "view-milestone-add" ), i18n("Add Milestone..."), this);
+    menuAddTask->addAction( actionAddTask );
+
+    actionAddMilestone  = new KAction( i18n("Add Milestone..."), this );
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
-    actionCollection()->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
-    addAction( name, actionAddMilestone );
+    menuAddTask->addAction( actionAddMilestone );
     
+
+    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), "Add Sub-Task...", this );
+    actionCollection()->addAction("add_subtask", menuAddTask );
+    connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
+    addAction( name, menuAddSubTask );
+
+    actionAddSubtask  = new KAction( i18n("Add Sub-Task..."), this );
+    actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
+    menuAddSubTask->addAction( actionAddSubtask );
+
+    actionAddSubMilestone = new KAction( i18n("Add Sub-Milestone..."), this );
+    actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
+    connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
+    menuAddSubTask->addAction( actionAddSubMilestone );
+
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("delete_task", actionDeleteTask );
@@ -398,6 +416,21 @@ void TaskEditor::slotAddMilestone()
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
+    edit( idx );
+}
+
+void TaskEditor::slotAddSubMilestone()
+{
+    kDebug();
+    Node *parent = selectedNode();
+    if ( parent == 0 ) {
+        return;
+    }
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
+    t->estimate()->clear();
+    QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
+    Q_ASSERT( idx.isValid() );
+    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 

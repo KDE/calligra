@@ -151,6 +151,7 @@ public slots:
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();
+    void slotAddSubMilestone();
     void slotProjectEdit();
     void slotDefineWBS();
     void slotCurrencyConfig();

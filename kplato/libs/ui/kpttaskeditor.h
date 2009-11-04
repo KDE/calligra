@@ -35,6 +35,7 @@ class KoDocument;
 class QModelIndex;
 
 class KAction;
+class KActionMenu;
 
 namespace KPlato
 {
@@ -128,6 +129,7 @@ private slots:
     void slotAddTask();
     void slotAddSubtask();
     void slotAddMilestone();
+    void slotAddSubMilestone();
     void slotDeleteTask();
     void slotIndentTask();
     void slotUnindentTask();
@@ -142,9 +144,12 @@ private:
 private:
     NodeTreeView *m_view;
 
+    KActionMenu *menuAddTask;
+    KActionMenu *menuAddSubTask;
     KAction *actionAddTask;
     KAction *actionAddMilestone;
     KAction *actionAddSubtask;
+    KAction *actionAddSubMilestone;
     KAction *actionDeleteTask;
     KAction *actionMoveTaskUp;
     KAction *actionMoveTaskDown;

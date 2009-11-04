@@ -494,6 +494,7 @@ signals:
     void addTask();
     void addMilestone();
     void addSubtask();
+    void addSubMilestone();
     void deleteTaskList( QList<Node*> );
 
     void addRelation( Node*, Node*, int );
@@ -521,6 +522,7 @@ private slots:
     void slotAddTask();
     void slotAddSubtask();
     void slotAddMilestone();
+    void slotAddSubMilestone();
     void slotDeleteTask();
 
 private:
@@ -532,9 +534,12 @@ private:
     Relation *m_currentrelation;
     ScheduleManager *m_manager;
 
+    KActionMenu *menuAddTask;
+    KActionMenu *menuAddSubTask;
     KAction *actionAddTask;
     KAction *actionAddMilestone;
     KAction *actionAddSubtask;
+    KAction *actionAddSubMilestone;
     KAction *actionDeleteTask;
 };
 

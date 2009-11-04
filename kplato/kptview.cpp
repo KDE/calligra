@@ -717,6 +717,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     connect( taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
     connect( taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
     connect( taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
+    connect( taskeditor, SIGNAL( addSubMilestone() ), SLOT( slotAddSubMilestone() ) );
     connect( taskeditor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
     connect( taskeditor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
     connect( taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
@@ -888,6 +889,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     connect( editor, SIGNAL( editNode( Node * ) ), SLOT( slotOpenNode( Node * ) ) );
     connect( editor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
     connect( editor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
+    connect( editor, SIGNAL( addSubMilestone() ), SLOT( slotAddSubMilestone() ) );
     connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
     connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
 
@@ -1588,6 +1590,29 @@ void View::slotAddMilestone()
             m->redo(); // do changes to task
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Milestone" ) );
+            getPart() ->addCommand( cmd ); // add task to project
+            delete dia;
+            return ;
+        } else
+            kDebug() <<"Cannot insert new milestone. Hmm, no current node!?";
+    }
+    delete node;
+    delete dia;
+}
+
+void View::slotAddSubMilestone()
+{
+    Task * node = getProject().createTask( currentTask() );
+    node->estimate() ->clear();
+
+    TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, getProject().accounts(), this );
+    if ( dia->exec() == QDialog::Accepted ) {
+        Node * currNode = currentNode();
+        if ( currNode ) {
+            QUndoCommand * m = dia->buildCommand();
+            m->redo(); // do changes to task
+            delete m;
+            SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Sub-milestone" ) );
             getPart() ->addCommand( cmd ); // add task to project
             delete dia;
             return ;
