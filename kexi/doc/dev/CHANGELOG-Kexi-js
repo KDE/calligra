@@ -42,11 +42,7 @@ http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
 
-~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
-
-2009-10-31
-Forms
-*fix setting data source: use QUndo's merging rather than extra code
+Forms TODO
 TODO: clearing widget's dataSource property sets datasource to "" in XML instead of clrearing it completely; the same for form's dataSource and dataSourcePartClass properties
 TODO: make label display data source name
 TODO: make data-aware widgets display a small icon indicating there is data source set
@@ -54,6 +50,16 @@ TODO: use data-source-pkey-tag icon for fields with pkey [>k]
 TODO: use data-source-index-tag icon for fields with index [>/]
 TODO: image box widgets: add smooth scaling
 TODO: image box widgets: support transparency in clipboard (Windows)
+TODO: image box widgets: changing aspect or scale properties should repaint the widget immediately
+TODO: replace KexiDataItemChangesListener::handleAction(const QString& actionName) with signal/slot connections
+TODO: wrap passwordMode property for line edit widget in design mode, otherwise data source is displayed using *
+
+~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2009-11-05
+Forms
+*line edit widget:
+**display "data source tag" properly for RTL mode
 
 2009-11-03..04
 Forms
@@ -71,8 +77,9 @@ Forms
 **make frame always null by default
 **display data source tag icon for bound widgets
 
-2009-10-28..30
+2009-10-28..31
 Forms
+*fix setting data source: use QUndo's merging rather than extra code
 *API: WidgetInfo
 **moved to a separate file, public headers are now installed to kexi/forms/ (but it's not yet really public)
 **add setAutoSaveProperties() to WidgetInfo and remove WidgetFactory::autoSaveProperties(); this works better for class inheritance, e.g. fixes missing autosaveproperty for kexidblabel widgets

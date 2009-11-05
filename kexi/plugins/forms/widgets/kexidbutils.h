@@ -32,6 +32,9 @@ public:
 
     //! @return pre-loaded data-source-tag icon pixmap of appropriate size
     static QPixmap dataSourceTagIcon();
+
+    //! @return pre-loaded data-source-tag icon pixmap of appropriate size (RTL version)
+    static QPixmap dataSourceRTLTagIcon();
 };
 
 //! @short Used for extending editor widgets' context menu.

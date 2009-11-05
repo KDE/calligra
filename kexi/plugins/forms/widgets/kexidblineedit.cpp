@@ -281,9 +281,18 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
             r.setY(r.y() + topMargin);
             r.setRight(r.right() - rightMargin);
             r.setBottom(r.bottom() - bottomMargin);
-            const QPixmap dataSourceTagIcon(KexiFormUtils::dataSourceTagIcon());
-            p.drawPixmap( r.left() - dataSourceTagIcon.width() + 2,
-                r.top() + (r.height() - dataSourceTagIcon.height()) / 2,
+            QPixmap dataSourceTagIcon;
+            int x;
+            if (layoutDirection() == Qt::LeftToRight) {
+                dataSourceTagIcon = KexiFormUtils::dataSourceTagIcon();
+                x = r.left() - dataSourceTagIcon.width() + 2;
+            }
+            else {
+                dataSourceTagIcon = KexiFormUtils::dataSourceRTLTagIcon();
+                x = r.right() - 2;
+            }
+            p.drawPixmap(
+                x, r.top() + (r.height() - dataSourceTagIcon.height()) / 2,
                 dataSourceTagIcon
             );
         }

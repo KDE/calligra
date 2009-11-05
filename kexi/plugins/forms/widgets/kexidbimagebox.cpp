@@ -692,9 +692,8 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
             const QFontMetrics fm(fontMetrics());
             const QPixmap dataSourceTagIcon(KexiFormUtils::dataSourceTagIcon());
             if (width() >= (dataSourceTagIcon.width() + 2 + fm.boundingRect(r, Qt::AlignCenter, text).width())) {
-                r.setLeft( r.left() + dataSourceTagIcon.width() + 2 );
+                r.setLeft( r.left() + dataSourceTagIcon.width() + 2 ); // make some room for the [>] icon
                 QRect bounding = fm.boundingRect(r, Qt::AlignCenter, text);
-                // make some room for the [>] icon
                 p.drawPixmap(
                     bounding.left() - dataSourceTagIcon.width() - 2,
                     bounding.top() + bounding.height() / 2 - dataSourceTagIcon.height() / 2,

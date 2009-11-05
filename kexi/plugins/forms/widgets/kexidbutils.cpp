@@ -38,18 +38,29 @@
 struct KexiFormStatics
 {
     QPixmap dataSourceTagIcon() {
+        initDataSourceTagIcon();
+        return m_dataSourceTagIcon;
+    }
+
+    QPixmap dataSourceRTLTagIcon() {
+        initDataSourceTagIcon();
+        return m_dataSourceRTLTagIcon;
+    }
+
+    void initDataSourceTagIcon() {
         if (!m_dataSourceTagIcon.isNull())
-            return m_dataSourceTagIcon;
+            return;
         QFontMetrics fm(QApplication::fontMetrics());
         int size = KIconLoader::global()->currentSize(KIconLoader::Small);
         if (size < KIconLoader::SizeSmallMedium && fm.height() >= KIconLoader::SizeSmallMedium)
             size = KIconLoader::SizeSmallMedium;
         m_dataSourceTagIcon = KIconLoader::global()->loadIcon(QLatin1String("data-source-tag"), KIconLoader::Small, size);
         KIconEffect::semiTransparent(m_dataSourceTagIcon);
-        return m_dataSourceTagIcon;
+        m_dataSourceRTLTagIcon = QPixmap::fromImage(m_dataSourceTagIcon.toImage().mirrored(true /*h*/, false /*v*/));
     }
 private:
     QPixmap m_dataSourceTagIcon;
+    QPixmap m_dataSourceRTLTagIcon;
 };
 
 K_GLOBAL_STATIC(KexiFormStatics, g_KexiFormStatics)
@@ -64,6 +75,11 @@ QColor KexiFormUtils::lighterGrayBackgroundColor(const QPalette& palette)
 QPixmap KexiFormUtils::dataSourceTagIcon()
 {
     return g_KexiFormStatics->dataSourceTagIcon();
+}
+
+QPixmap KexiFormUtils::dataSourceRTLTagIcon()
+{
+    return g_KexiFormStatics->dataSourceRTLTagIcon();
 }
 
 //-------
