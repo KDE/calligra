@@ -17,13 +17,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestValue.h"
 
 #include "TestKspreadCommon.h"
 
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
-
-#include "TestValue.h"
 
 
 void TestValue::testEmpty()

@@ -17,10 +17,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestEngineeringFunctions.h"
 
 #include "TestKspreadCommon.h"
-
-#include "TestEngineeringFunctions.h"
 
 #include "functions/EngineeringModule.h"
 #include "functions/MathModule.h"

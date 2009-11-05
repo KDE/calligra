@@ -126,7 +126,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
   databaseFrameLayout->addWidget( TextLabel5, 5, 0 );
 
   m_databaseStatus = new QLabel( databaseFrame );
-  m_databaseStatus->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)5 ) );
+  m_databaseStatus->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
   m_databaseStatus->setMaximumSize( QSize( 32767, 30 ) );
   m_databaseStatus->setText( " " );
   databaseFrameLayout->addWidget( m_databaseStatus, 6, 0, 1, 2 );

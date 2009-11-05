@@ -75,7 +75,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
         </widget>
        </item>
        <item row="5" column="0" >
-        <widget class="Q3ListView" name="m_columnList" >
+        <widget class="QListWidget" name="m_columnList" >
          <column>
           <property name="text" >
            <string>Columns</string>
@@ -164,11 +164,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <customwidgets>
-  <customwidget>
-   <class>Q3ListView</class>
-   <extends>QFrame</extends>
-   <header>q3listview.h</header>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

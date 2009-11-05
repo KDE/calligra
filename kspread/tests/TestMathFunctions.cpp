@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestMathFunctions.h"
 
 #include "TestKspreadCommon.h"
 
@@ -25,8 +26,6 @@
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
-
-#include "TestMathFunctions.h"
 
 #include "functions/EngineeringModule.h"
 #include "functions/LogicModule.h"
@@ -63,7 +62,7 @@ Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int
     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();*/
   if (res)
     return v2;
-  else 
+  else
     return result;
 }
 
@@ -163,7 +162,7 @@ void TestMathFunctions::testACOSH()
 {
   // ODF-tests
   CHECK_EVAL( "ACOSH(1)", Value( 0           ) ); //
-  CHECK_EVAL( "ACOSH(2)", Value( 1.316957897 ) ); // 
+  CHECK_EVAL( "ACOSH(2)", Value( 1.316957897 ) ); //
 }
 
 void TestMathFunctions::testACOT()
@@ -190,7 +189,7 @@ void TestMathFunctions::testASIN()
 void TestMathFunctions::testASINH()
 {
   // ODF-tests
-  CHECK_EVAL( "ASINH(0)", Value( 0           ) ); // 
+  CHECK_EVAL( "ASINH(0)", Value( 0           ) ); //
   CHECK_EVAL( "ASINH(1)", Value( 0.881373587 ) ); //
 }
 
@@ -198,7 +197,7 @@ void TestMathFunctions::testATAN()
 {
   // ODF-tests
   CHECK_EVAL( "ATAN(1)*4/PI()", Value(  1        ) );       // arc tangent of 1 is PI()/4 radians.
-  CHECK_EVAL_SHORT( "ATAN(-1.0e16)",  Value( -1.570796 ) ); // TODO expand / Check if ATAN gives reasonably accurate results, 
+  CHECK_EVAL_SHORT( "ATAN(-1.0e16)",  Value( -1.570796 ) ); // TODO expand / Check if ATAN gives reasonably accurate results,
                                                             // and that slightly negative values as input produce numbers near -PI/2.
 }
 
@@ -365,7 +364,7 @@ void TestMathFunctions::testCONVERT()
                                                                               // or "weight ton", is 2240 lbm.
 //   CHECK_EVAL( "CONVERT(   1; \"psi\";    \"Pa\")",   Value( 6894.76 ) );     // Pounds per square inch to Pascals.
   CHECK_EVAL( "CONVERT(  60; \"mph\";    \"km/h\")", Value( 96.56064 ) );     // Miles per hour to kilometers per hour.
-  CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")",    Value( 86400 ) );        // Day to seconds.  Note: This test uses the 
+  CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")",    Value( 86400 ) );        // Day to seconds.  Note: This test uses the
                                                                               // international standard abbreviation for second (s),
                                                                               // not the abbreviation traditionally used in spreadsheets
                                                                               // (sec); both "s" and "sec" must be supported.
@@ -384,7 +383,7 @@ void TestMathFunctions::testCOT()
 void TestMathFunctions::testCOTH()
 {
   // ODF-tests
-  CHECK_EVAL( "COTH(1)",      Value( 1.3130352855 ) ); // 
+  CHECK_EVAL( "COTH(1)",      Value( 1.3130352855 ) ); //
   CHECK_EVAL( "COTH(EXP(1))", Value( 1.0087469296 ) ); //
 }
 
@@ -688,13 +687,13 @@ void TestMathFunctions::testPRODUCT()
 
 void TestMathFunctions::testQUOTIENT()
 {
-    CHECK_EVAL( "QUOTIENT(10;5)",     Value(  2 ) ); // 
-    CHECK_EVAL( "QUOTIENT(14;5)" ,    Value(  2 ) ); // 
+    CHECK_EVAL( "QUOTIENT(10;5)",     Value(  2 ) ); //
+    CHECK_EVAL( "QUOTIENT(14;5)" ,    Value(  2 ) ); //
     CHECK_EVAL( "QUOTIENT(-204;-23)", Value(  8 ) ); //
-    CHECK_EVAL( "QUOTIENT(-45;8)",    Value( -5 ) ); // 
-    CHECK_EVAL( "QUOTIENT(24;-5)" ,   Value( -4 ) ); // 
+    CHECK_EVAL( "QUOTIENT(-45;8)",    Value( -5 ) ); //
+    CHECK_EVAL( "QUOTIENT(24;-5)" ,   Value( -4 ) ); //
     CHECK_EVAL( "QUOTIENT(21;-5)",    Value( -4 ) ); //
-    CHECK_EVAL( "QUOTIENT(-14;5)",    Value( -2 ) ); // 
+    CHECK_EVAL( "QUOTIENT(-14;5)",    Value( -2 ) ); //
     CHECK_EVAL( "QUOTIENT(5;0)" ,     Value::errorDIV0() ); //
 }
 
@@ -763,12 +762,12 @@ void TestMathFunctions::testROUNDUP()
 
 void TestMathFunctions::testSERIESSUM()
 {
-    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2})",           Value(        9 ) ); // 
-    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4})",       Value(      313 ) ); // 
-    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4;5;6;7})", Value(    36409 ) ); // 
-    CHECK_EVAL( "SERIESSUM(2;2;2;{1;6;5;4;3;2;7})", Value(   127396 ) ); // 
-    CHECK_EVAL( "SERIESSUM(3;0;2;{1;2;3;4})",       Value(     3178 ) ); // 
-    CHECK_EVAL( "SERIESSUM(\"error\";0;2;{1;2})",   Value::errorNUM() ); // Text is not allowed   
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2})",           Value(        9 ) ); //
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4})",       Value(      313 ) ); //
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4;5;6;7})", Value(    36409 ) ); //
+    CHECK_EVAL( "SERIESSUM(2;2;2;{1;6;5;4;3;2;7})", Value(   127396 ) ); //
+    CHECK_EVAL( "SERIESSUM(3;0;2;{1;2;3;4})",       Value(     3178 ) ); //
+    CHECK_EVAL( "SERIESSUM(\"error\";0;2;{1;2})",   Value::errorNUM() ); // Text is not allowed
 }
 
 void TestMathFunctions::testSIGN()

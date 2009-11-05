@@ -1,7 +1,5 @@
 project(kspread)
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 add_subdirectory( data )
 add_subdirectory( shape )
 add_subdirectory( tests )

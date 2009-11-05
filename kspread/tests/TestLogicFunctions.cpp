@@ -16,10 +16,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestLogicFunctions.h"
 
 #include "TestKspreadCommon.h"
-
-#include "TestLogicFunctions.h"
 
 #include "functions/LogicModule.h"
 #include "functions/InformationModule.h"

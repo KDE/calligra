@@ -17,10 +17,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestFinancialFunctions.h"
 
 #include "TestKspreadCommon.h"
-
-#include "TestFinancialFunctions.h"
 
 #include "functions/DateTimeModule.h"
 #include "functions/FinancialModule.h"
@@ -61,7 +60,7 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 //     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
   if (res)
     return v2;
-  else 
+  else
     return result;
 }
 
@@ -69,7 +68,7 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 void TestFinancialFunctions::testACCRINT()
 {
   // odf test
-  CHECK_EVAL( "ACCRINT( \"1992-12-01\"; \"1993-06-01\"; \"1993-07-01\";  0.055; 100 ; 2; 0 ) ", Value( 3.2083333333 ) ); 
+  CHECK_EVAL( "ACCRINT( \"1992-12-01\"; \"1993-06-01\"; \"1993-07-01\";  0.055; 100 ; 2; 0 ) ", Value( 3.2083333333 ) );
   CHECK_EVAL( "ACCRINT( \"2001-02-28\"; \"2001-08-31\";\"2001-05-01\";  0.1  ; 1000; 2; 0 )",
               Value( 16.9444444444 ) ); // A security is issued on 2.28.2001.
                                         // First interest is set for 8.31.2001. The settlement date is 5.1.2001.
@@ -88,7 +87,7 @@ void TestFinancialFunctions::testACCRINT()
 void TestFinancialFunctions::testACCRINTM()
 {
   // kspread
-  CHECK_EVAL_SHORT( "ACCRINTM( \"2001-04-01\"; \"2001-06-15\"; 0.1; 1000; 3 )", Value( 20.5479454 ) ); 
+  CHECK_EVAL_SHORT( "ACCRINTM( \"2001-04-01\"; \"2001-06-15\"; 0.1; 1000; 3 )", Value( 20.5479454 ) );
   CHECK_EVAL_SHORT( "ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 0 )", Value( 24.722222  ) ); // leap year, US (NASD) 30/360
   CHECK_EVAL_SHORT( "ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 1 )", Value( 24.590164  ) ); // leap year, actual/actual
   CHECK_EVAL_SHORT( "ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 2 )", Value( 25.0       ) ); // leap year, actual/360
@@ -100,13 +99,13 @@ void TestFinancialFunctions::testACCRINTM()
 void TestFinancialFunctions::testAMORDEGRC()
 {
   // Excel Formen und Funktionen
-  CHECK_EVAL( "AMORDEGRC( 2400; 34199; 34334; 300; 1; 0.15; 1 )" , Value( 775 ) ); 
+  CHECK_EVAL( "AMORDEGRC( 2400; 34199; 34334; 300; 1; 0.15; 1 )" , Value( 775 ) );
 
   // bettersolution.com
-  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 1; 0.15; 1 )" , Value( 11738 ) ); // 
-  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )" , Value(  7336 ) ); // 
-  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )" , Value(  4585 ) ); // 
-  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )" , Value(  2866 ) ); // 
+  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 1; 0.15; 1 )" , Value( 11738 ) ); //
+  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )" , Value(  7336 ) ); //
+  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )" , Value(  4585 ) ); //
+  CHECK_EVAL( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )" , Value(  2866 ) ); //
 //   CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 5; 0.15; 1 )" , Value(  2388 ) ); // TODO check KSpread -> 1791
 
   // odf tests
@@ -133,14 +132,14 @@ void TestFinancialFunctions::testAMORLINC()
 void TestFinancialFunctions::testCOMPOUND()
 {
   // kspread
-  CHECK_EVAL_SHORT( "COMPOUND(5000;0.12;4;5)", Value( 9030.556173 ) ); 
+  CHECK_EVAL_SHORT( "COMPOUND(5000;0.12;4;5)", Value( 9030.556173 ) );
 }
 
 // CONTINUOUS
 void TestFinancialFunctions::testCONTINUOUS()
 {
   // kspread
-  CHECK_EVAL_SHORT( "CONTINUOUS(1000;0.1;1)", Value( 1105.17091808 ) ); 
+  CHECK_EVAL_SHORT( "CONTINUOUS(1000;0.1;1)", Value( 1105.17091808 ) );
 }
 
 // COUPNUM
@@ -282,8 +281,8 @@ void TestFinancialFunctions::testDISC()
   //   3   |  Actual/365
   //   4   |  European 30/360
 
-  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) ); 
-  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010332) 
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) );
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010332)
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 2)", Value (  0.010181 ) );
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 3)", Value (  0.010322 ) );
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 4)", Value (  0.010333 ) );
@@ -295,26 +294,26 @@ void TestFinancialFunctions::testDISC()
 void TestFinancialFunctions::testDOLLARDE()
 {
   // http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/index.jsp?topic=/com.businessobjects.integration.eclipse.designer.doc/designer/Functions68.html
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 8)" , Value ( 1.125     ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   2.13;16)" , Value ( 2.8125    ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   2.45;16)" , Value ( 4.8125    ) ); //  
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.16; 8)" , Value ( 1.2       ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 8)" , Value ( 1.125     ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   2.13;16)" , Value ( 2.8125    ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   2.45;16)" , Value ( 4.8125    ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.16; 8)" , Value ( 1.2       ) ); //
 
   // http://www.bettersolutions.com/excel/EDH113/LR849116511.htm
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 2)" , Value ( 1.5       ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.25; 5)" , Value ( 1.5       ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   5.08; 4)" , Value ( 5.2       ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   5.24; 4)" , Value ( 5.6       ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 100.24; 4)" , Value ( 100.6     ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARFR(DOLLARDE( 101.2; 4);4)", Value ( 101.2 ) ); // for- and backward 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 2)" , Value ( 1.5       ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.25; 5)" , Value ( 1.5       ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   5.08; 4)" , Value ( 5.2       ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   5.24; 4)" , Value ( 5.6       ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE( 100.24; 4)" , Value ( 100.6     ) ); //
+  CHECK_EVAL_SHORT( "DOLLARFR(DOLLARDE( 101.2; 4);4)", Value ( 101.2 ) ); // for- and backward
 
-  // ODF 
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 4)"  , Value ( 1.25      ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 3)"  , Value ( 1.333333  ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE(  -1.1;10)"  , Value (-1.1       ) ); // 
+  // ODF
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 4)"  , Value ( 1.25      ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 3)"  , Value ( 1.333333  ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(  -1.1;10)"  , Value (-1.1       ) ); //
   CHECK_EVAL_SHORT( "DOLLARDE(   1.0; 5)"  , Value ( 1         ) ); //
   CHECK_EVAL_SHORT( "DOLLARDE(   1.1;10)"  , Value ( 1.1       ) ); //
-  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 0)"  , Value::errorVALUE() ); //   
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 0)"  , Value::errorVALUE() ); //
 }
 
 // DOLLARFR
@@ -324,26 +323,26 @@ void TestFinancialFunctions::testDOLLARFR()
   CHECK_EVAL_SHORT( "DOLLARFR(    1.1 ;  9)" , Value ( 1.09     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.1 ; 11)" , Value ( 1.011    ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.1 ; 10)" , Value ( 1.1      ) ); //
- 
+
   // http://www.bettersolutions.com/excel/EDH113/QR810212321.htm
   CHECK_EVAL_SHORT( "DOLLARFR(    1.125 ; 8)" , Value ( 1.1     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 2)" , Value ( 1.1     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 8)" , Value ( 1.4     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 5)" , Value ( 1.25    ) ); //
-  
-  // ODF 
+
+  // ODF
   CHECK_EVAL_SHORT( "DOLLARFR(    1.1 ;10)" , Value ( 1.1       ) ); //
-  CHECK_EVAL_SHORT( "DOLLARFR(    1.25; 4)" , Value ( 1.1       ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARFR(    1.25; 4)" , Value ( 1.1       ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(-1.33333; 3)" , Value ( -1.099999 ) ); // ODF specs error (1.1) must be -1.1
   CHECK_EVAL_SHORT( "DOLLARFR(     1.0; 5)" , Value ( 1         ) ); //
-  CHECK_EVAL_SHORT( "DOLLARFR(     1.1; 0)" , Value::errorVALUE() ); // 
+  CHECK_EVAL_SHORT( "DOLLARFR(     1.1; 0)" , Value::errorVALUE() ); //
 }
 
 // DURATION
 void TestFinancialFunctions::testDURATION()
 {
   // kspread
-  CHECK_EVAL( "DURATION( 0.1; 1000; 2000 )" , Value( 7.2725408973 ) ); // 
+  CHECK_EVAL( "DURATION( 0.1; 1000; 2000 )" , Value( 7.2725408973 ) ); //
 }
 
 // DURATION_ADD
@@ -356,7 +355,7 @@ void TestFinancialFunctions::testDURATION_ADD()
 void TestFinancialFunctions::testEFFECT()
 {
   // kspread
-  CHECK_EVAL_SHORT( "EFFECT(0.08;12)", Value( 0.083 ) ); 
+  CHECK_EVAL_SHORT( "EFFECT(0.08;12)", Value( 0.083 ) );
 }
 
 // Euro conversion
@@ -640,7 +639,7 @@ void TestFinancialFunctions::testIPMT()
   CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000;0;1)", Value( -410.3751278993 ) ); // Payments at the beginning of each period.
 
   // The total payment is the principle plus the interest.
-  CHECK_EVAL_SHORT( "PPMT(5%/12;10;360;100000)+IPMT(5%/12;10;360;100000)-PMT(5%/12;360;100000)", Value( 0 ) ); 
+  CHECK_EVAL_SHORT( "PPMT(5%/12;10;360;100000)+IPMT(5%/12;10;360;100000)-PMT(5%/12;360;100000)", Value( 0 ) );
 }
 
 // ISPMT
@@ -652,7 +651,7 @@ void TestFinancialFunctions::testISPMT()
 
   // ODF
   CHECK_EVAL( "ISPMT(5%/12;12;360;100000)",  Value(    -402.7777777778 ) ); // A trivial example of ISPMT.  A 100000 unit investment with an
-                                                                            // annual interest rate of 5% and a 30 year term has an interest payment 
+                                                                            // annual interest rate of 5% and a 30 year term has an interest payment
                                                                             // of 402.78 units in month 12.
 }
 
@@ -672,7 +671,7 @@ void TestFinancialFunctions::testMDURATION()
 {
   CHECK_EVAL( "MDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)" , Value( 0.3189792663 ) ); // These tests go over a leap year day,
                                                                                                        // and intentionally end on May 31, which
-                                                                                                       // illustrates the differences between 
+                                                                                                       // illustrates the differences between
                                                                                                        // many bases
 }
 
@@ -680,7 +679,7 @@ void TestFinancialFunctions::testMDURATION()
 void TestFinancialFunctions::testMIRR()
 {
   // ODF
-  CHECK_EVAL( "MIRR({100;200;-50;300;-200}; 5%; 6%)",     Value( 0.342823387842     ) ); 
+  CHECK_EVAL( "MIRR({100;200;-50;300;-200}; 5%; 6%)",     Value( 0.342823387842     ) );
 
   // bettersolutions.com
   CHECK_EVAL( "MIRR({-10;30;20;10;20};0.1;0.12)",         Value( 0.7712844619       ) );
@@ -739,7 +738,7 @@ void TestFinancialFunctions::testODDLPRICE()
 {
   // ODF tests. All results are taken from OOo-2.2.1 instead of results from ODF-specs
   // TODO it seems that frequency are not considered
-  // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value( 90.9975570033  ) ); // 
+  // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value( 90.9975570033  ) ); //
   // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value( 90.9975570033  ) ); // f=1, b=0
   // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value( 90.9975570033  ) ); // f=2, b=0
   // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value( 90.9975570033  ) ); // f=4, b=0
@@ -853,7 +852,7 @@ void TestFinancialFunctions::testPV()
 void TestFinancialFunctions::testPV_ANNUITY()
 {
   // kspread
-  CHECK_EVAL_SHORT( "PV_ANNUITY(1000;0.05;5)", Value( 4329.47667063 ) ); 
+  CHECK_EVAL_SHORT( "PV_ANNUITY(1000;0.05;5)", Value( 4329.47667063 ) );
 }
 
 // RECEIVED
@@ -913,7 +912,7 @@ void TestFinancialFunctions::testTBILLEQ()
   // TODO check function, check OOo-2.2.1
 
   // ODF
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;02;01);5%)", Value( 0.0509136560        ) ); // 
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;02;01);5%)", Value( 0.0509136560        ) ); //
   CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;02;01);5%)", Value( 0.0509207589        ) ); // specs 0.050920759
   CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;07;01);5%)", Value( 0.0520091194        ) ); // specs 0.052016531
   CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;12;31);5%)", Value( Value::errorVALUE() ) ); // specs 0.053409423 OOo-2.2.1 Error(#VALUE!) 361 days
@@ -930,7 +929,7 @@ void TestFinancialFunctions::testTBILLPRICE()
   // ODF
   CHECK_EVAL( "TBILLPRICE(DATE(1996;01;01);DATE(1996;02;01);5%)", Value( 99.5694444444 ) ); //
   CHECK_EVAL( "TBILLPRICE(DATE(1995;12;31);DATE(1996;02;01);5%)", Value( 99.5555555555 ) ); //
-  CHECK_EVAL( "TBILLPRICE(DATE(1995;12;31);DATE(1996;07;01);5%)", Value( 97.4722222222 ) ); // ODF specs 97.45833333 OOo-2.2.1 97.47222222 
+  CHECK_EVAL( "TBILLPRICE(DATE(1995;12;31);DATE(1996;07;01);5%)", Value( 97.4722222222 ) ); // ODF specs 97.45833333 OOo-2.2.1 97.47222222
   CHECK_EVAL( "TBILLPRICE(DATE(1995;12;31);DATE(1996;12;31);5%)", Value( 94.9861111111 ) ); // ODF specs 94.91666667 OOo-2.2.1 94.98611111
   CHECK_EVAL( "TBILLPRICE(DATE(1996;01;01);DATE(1996;06;30);5%)", Value( 97.5000000000 ) ); // ODF specs 97.48611111 OOo-2.2.1 97.50000000
   CHECK_EVAL( "TBILLPRICE(DATE(1996;01;01);DATE(1996;07;01);5%)", Value( 97.4861111111 ) ); // ODF specs 97.47222222 OOo-2.2.1 97.48611111
@@ -944,13 +943,13 @@ void TestFinancialFunctions::testTBILLYIELD()
 {
   // ODF tests. All results are taken from OOo-2.2.1 instead of results from ODF-specs
 
-  // new implementation uses day360(US) to get daydiff. TODO check if we should test against 361 days instead 360 in function to get Error away 
-  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;02;01);99.57)", Value( 0.0501511337        ) ); // 
-  CHECK_EVAL( "TBILLYIELD(DATE(1995;12;31);DATE(1996;02;01);99.56)", Value( 0.0497187626        ) ); // 
-  CHECK_EVAL( "TBILLYIELD(DATE(1995;12;31);DATE(1996;07;01);97.46)", Value( 0.0515511576        ) ); // specs 0.0512695 
+  // new implementation uses day360(US) to get daydiff. TODO check if we should test against 361 days instead 360 in function to get Error away
+  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;02;01);99.57)", Value( 0.0501511337        ) ); //
+  CHECK_EVAL( "TBILLYIELD(DATE(1995;12;31);DATE(1996;02;01);99.56)", Value( 0.0497187626        ) ); //
+  CHECK_EVAL( "TBILLYIELD(DATE(1995;12;31);DATE(1996;07;01);97.46)", Value( 0.0515511576        ) ); // specs 0.0512695
   CHECK_EVAL( "TBILLYIELD(DATE(1995;12;31);DATE(1996;12;31);94.92)", Value( Value::errorVALUE() ) ); // specs 0.0526414 OOo-2.2.1 Error(#VALUE!)
-  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;06;30);97.49)", Value( 0.0514924608        ) ); // specs 0.0512080 
-  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;07;01);97.47)", Value( 0.0516265948        ) ); // specs 0.0513429 
+  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;06;30);97.49)", Value( 0.0514924608        ) ); // specs 0.0512080
+  CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;07;01);97.47)", Value( 0.0516265948        ) ); // specs 0.0513429
   CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;12;31);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
   CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1997;01;01);94.92)", Value( Value::errorVALUE() ) ); // specs 0.0526414 OOo-2.2.1 Error(#VALUE!)
   CHECK_EVAL( "TBILLYIELD(DATE(1996;07;01);DATE(1997;07;01);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
@@ -987,14 +986,14 @@ void TestFinancialFunctions::testXNPV()
 {
   // bettersolution.com
   CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})" , Value(   3984.3581140636   ) ); //
-  
+
   // with dates {date(2005;01;01); date(2005;03;01); date(2005;10;30); date(2006;02;15)}
   CHECK_EVAL( "XNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value(   -380.3891178530   ) ); //
   CHECK_EVAL( "XNPV(30;   {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value(  -8104.7862519770   ) ); //
   CHECK_EVAL( "XNPV(-30;  {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value( Value::errorNUM()   ) ); //
   CHECK_EVAL( "XNPV(0.09; {-10000;2750};           {date(2005;01;01); date(2005;01;10); date(2005;01;15)})",  Value( Value::errorNUM()   ) ); //
   CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",          Value( Value::errorVALUE() ) ); //
-  
+
   // ODF
 
 }
@@ -1005,8 +1004,8 @@ void TestFinancialFunctions::testYIELDDISC()
   // ODF
   CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.66667;1000   )", Value( 0.1061946838 ) ); // Without Basis parameter
   CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.64384;1000; 1)", Value( 0.1061972566 ) ); // With Basis=1 specs 0.106238821 OOo-2.2.1 0.1061972566
-  CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);940.83333;1000; 2)", Value( 0.1062887575 ) ); // With Basis=2 specs 0.107807168 OOo-2.2.1 0.1062887575 
-  CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.64384;1000; 3)", Value( 0.1061972566 ) ); // With Basis=3 specs 0.106238821 OOo-2.2.1 0.1061972566 
+  CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);940.83333;1000; 2)", Value( 0.1062887575 ) ); // With Basis=2 specs 0.107807168 OOo-2.2.1 0.1062887575
+  CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.64384;1000; 3)", Value( 0.1061972566 ) ); // With Basis=3 specs 0.106238821 OOo-2.2.1 0.1061972566
   CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;12;31);941.94444;1000; 4)", Value( 0.1061633823 ) ); // With Basis=4 specs 0.105657842 OOo-2.2.1 0.1061633823
   CHECK_EVAL( "YIELDDISC(DATE(1990;01;01);DATE(1990;12;31);97.08219;100;   1)", Value( 0.0301376180 ) ); // specs 0.051522942 OOo-2.2.1 0.0301376180
   CHECK_EVAL( "YIELDDISC(DATE(1990;06;01);DATE(1990;06;30);99.75833;100;   4)", Value( 0.0300730914 ) ); //

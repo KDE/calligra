@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <QtTest/QtTest>
+#include <Value.h>
 
 namespace KSpread
 {

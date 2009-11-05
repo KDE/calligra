@@ -24,7 +24,7 @@
 
 // Qt
 #include <QCheckBox>
-#include <q3listview.h>
+#include <QListWidget>
 #include <QVector>
 
 // KDE
@@ -74,19 +74,18 @@ void SubtotalDialog::slotOk()
   int numOfCols = m_range.width();
   QVector<int> columns( numOfCols );
 
-  int n = 0;
   bool empty = true;
   int left = m_range.left();
-  for ( Q3ListViewItem * item = m_columnList->firstChild(); item; item = item->nextSibling() )
+  for ( int i = 0; i < m_columnList->count(); ++i )
   {
-    if ( ((Q3CheckListItem * ) item)->isOn() )
+    QListWidgetItem* item = m_columnList->item( i );
+    if ( item->checkState() == Qt::Checked )
     {
-      columns[n] = left + n;
+      columns[i] = left + i;
       empty = false;
     }
     else
-      columns[n] = -1;
-    ++n;
+      columns[i] = -1;
   }
 
   if ( empty )
@@ -247,7 +246,7 @@ void SubtotalDialog::fillColumnBoxes()
   int row = m_range.top();
 
   Cell cell;
-  Q3CheckListItem * item;
+  QListWidgetItem * item;
 
   QString text;
 
@@ -264,11 +263,10 @@ void SubtotalDialog::fillColumnBoxes()
 
     m_columnBox->insertItem( index++, text );
 
-    item = new Q3CheckListItem( m_columnList,
-                               text,
-                               Q3CheckListItem::CheckBox );
-    item->setOn(false);
-    m_columnList->insertItem( item );
+    item = new QListWidgetItem( text );
+    item->setFlags( Qt::ItemIsUserCheckable );
+    item->setCheckState( Qt::Unchecked );
+    m_columnList->addItem( item );
   }
 }
 

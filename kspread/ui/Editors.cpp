@@ -57,6 +57,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QResizeEvent>
+#include <QTextLayout>
 #include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
@@ -329,7 +330,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
   d->editor = editor;
   d->hintLabel = 0;
 
-  d->completionPopup = new QFrame( editor->topLevelWidget(), Qt::WType_Popup );
+  d->completionPopup = new QFrame( editor->topLevelWidget(), Qt::Popup );
   d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
   d->completionPopup->setLineWidth( 1 );
   d->completionPopup->installEventFilter( this );
@@ -354,8 +355,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
   connect( d->completionListBox, SIGNAL(activated(QModelIndex)), SLOT(doneCompletion()) );
   layout->addWidget( d->completionListBox );
 
-  d->hintLabel = new QLabel( 0, (Qt::WFlags)
-    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
+  d->hintLabel = new QLabel( 0, Qt::FramelessWindowHint | Qt::Tool |  Qt::X11BypassWindowManagerHint );
   d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
   d->hintLabel->setPalette( QToolTip::palette() );
   d->hintLabel->setWordWrap( true );
@@ -940,7 +940,7 @@ void CellEditor::slotTextChanged()
       return;
     }
   }
-  
+
   if (hasFocus())  // update the external editor, but only if we have focus
     emit textChanged(d->textEdit->toPlainText());
   // selection()->view()->editWidget()->textCursor().setPosition( d->textEdit->cursorPosition() );

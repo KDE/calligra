@@ -16,10 +16,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestDatetimeFunctions.h"
 
 #include "TestKspreadCommon.h"
-
-#include "TestDatetimeFunctions.h"
 
 #include "functions/DateTimeModule.h"
 #include "functions/MathModule.h"
@@ -95,7 +94,7 @@ Value TestDatetimeFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestDatetimeFunctions::testYEARFRAC()
 {
-  
+
   // basis 0 US
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 0)", Value( 0.4972222222 ) );
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-07-01\" ; 0)", Value( 0.5000000000 ) );
@@ -105,10 +104,10 @@ void TestDatetimeFunctions::testYEARFRAC()
   CHECK_EVAL( "YEARFRAC( \"2001-01-01\" ; \"2002-01-01\" ; 0)", Value( 1.0000000000 ) );
   CHECK_EVAL( "YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 0)", Value( 0.0694444444 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 0)", Value( 6.5138888889 ) );
-  
+
   // basis 1 Actual/actual
   // other values are taken from OOo-2.2.1
-  CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 1)", Value( 0.4931506849 ) ); 
+  CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 1)", Value( 0.4931506849 ) );
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-07-01\" ; 1)", Value( 0.4958904110 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2000-06-30\" ; 1)", Value( 0.4945355191 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-15\" ; \"2000-09-17\" ; 1)", Value( 0.6721311475 ) );
@@ -123,7 +122,7 @@ void TestDatetimeFunctions::testYEARFRAC()
   CHECK_EVAL( "YEARFRAC( \"2004-12-15\" ; \"2005-03-30\" ; 1)", Value( 0.2876712329 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-12-01\" ; \"2001-01-16\" ; 1)", Value( 0.1260273973 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-12-26\" ; \"2001-02-11\" ; 1)", Value( 0.1287671233 ) );
-  
+
   // basis 2 Actual/360
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2000-06-30\" ; 2)", Value( 0.5027777778 ) );
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 2)", Value( 0.5000000000 ) );
@@ -195,11 +194,11 @@ void TestDatetimeFunctions::testWEEKNUM()
 
   // type default ( type 1 )
   CHECK_EVAL( "WEEKNUM(DATE(2000;05;21))", Value( 22 ) ); //
-  CHECK_EVAL( "WEEKNUM(DATE(2005;01;01))", Value( 01 ) ); // 
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;02))", Value( 02 ) ); // 
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;03))", Value( 02 ) ); // 
-  CHECK_EVAL( "WEEKNUM(DATE(2000;01;04))", Value( 02 ) ); // 
-  CHECK_EVAL( "WEEKNUM(DATE(2006;01;01))", Value( 01 ) ); // 
+  CHECK_EVAL( "WEEKNUM(DATE(2005;01;01))", Value( 01 ) ); //
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;02))", Value( 02 ) ); //
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;03))", Value( 02 ) ); //
+  CHECK_EVAL( "WEEKNUM(DATE(2000;01;04))", Value( 02 ) ); //
+  CHECK_EVAL( "WEEKNUM(DATE(2006;01;01))", Value( 01 ) ); //
 
   // type 1
   CHECK_EVAL( "WEEKNUM(DATE(2000;05;21);1)", Value( 22 ) );
@@ -213,7 +212,7 @@ void TestDatetimeFunctions::testWEEKNUM()
   CHECK_EVAL( "WEEKNUM(DATE(2000;01;04);2)", Value( 02 ) ); // ref. OOo-2.2.0 = 2
   CHECK_EVAL( "WEEKNUM(DATE(2008;03;09);2)", Value( 10 ) );
 
-  // additional tests for method 2 
+  // additional tests for method 2
   CHECK_EVAL( "WEEKNUM(DATE(2006;01;01);2)", Value( 01 ) );
   CHECK_EVAL( "WEEKNUM(DATE(2006;01;02);2)", Value( 02 ) );
 
@@ -230,7 +229,7 @@ void TestDatetimeFunctions::testWORKDAY()
 {
   // 2001 JAN 01 02 03 04 05 06 07 08
   //          MO TU WE TH FR SA SU MO
-  //          01 02 -- --  
+  //          01 02 -- --
   CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;2)=DATE(2001;01;05)", Value( true ) );
   CHECK_EVAL( "WORKDAY(DATE(2001;01;01);2;3)=DATE(2001;01;08)", Value( true ) );
 }
@@ -332,7 +331,7 @@ void TestDatetimeFunctions::testDAYS360()
 {
   // TODO Note: Lotus 1-2-3v9.8 has a function named DAYS but with different semantics.  It supports an optional "Basis" parameter
   // with many different options.  Without the optional parameter, it defaults to a 30/360 basis, not calendar days; thus, in Lotus 1-2-3v9.8,
-  // DAYS(DATE(1993;4;16);  DATE(1993;9;25)) computes -159, not -162. 
+  // DAYS(DATE(1993;4;16);  DATE(1993;9;25)) computes -159, not -162.
 
   CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( 159 ) ); // specs. -162 but OOo and KSpread calculate 159
   CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\" ; FALSE)", Value(  59 ) ); // ref. docs
@@ -390,7 +389,7 @@ void TestDatetimeFunctions::testISOWEEKNUM()
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)",   Value( 52 ) ); // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
                                                                // then it's week 52 of the previous year
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))",     Value( 52 ) ); // Default is Monday is beginning of week (per ISO)
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))",    Value( 20 ) ); // ref OOo-2.2.0 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))",    Value( 20 ) ); // ref OOo-2.2.0
   CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)",  Value( 21 ) ); // ref OOo-2.2.0
   CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)",  Value( 20 ) ); // ref OOo-2.2.0
   CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))",     Value( 53 ) ); // ref OOo-2.2.0
@@ -399,11 +398,11 @@ void TestDatetimeFunctions::testISOWEEKNUM()
 
   // method 2 - week begins on sunday
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;01);2)", Value( 52 ) ); // January 1, 1995 was a Sunday
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);2)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);2)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;04);2)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);2)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);2)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;04);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);2)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);2)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;07);2)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;08);2)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;09);2)", Value( 2 ) );  //
@@ -413,14 +412,14 @@ void TestDatetimeFunctions::testISOWEEKNUM()
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;13);2)", Value( 2 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;14);2)", Value( 2 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;15);2)", Value( 2 ) );  //
-  
+
   // method 1 - week begins on monday
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;01);1)", Value( 1 ) );  // January 1, 1995 was a Sunday
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);1)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;02);1)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;03);1)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;04);1)", Value( 1 ) );  //
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);1)", Value( 1 ) );  // 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);1)", Value( 1 ) );  // 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;05);1)", Value( 1 ) );  //
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;06);1)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;07);1)", Value( 1 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;08);1)", Value( 2 ) );  //
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;09);1)", Value( 2 ) );  //
@@ -469,7 +468,7 @@ void TestDatetimeFunctions::testTIME()
   CHECK_EVAL( "TIME(11;125;144)*60*60*24",   Value( 47244 ) ); // Seconds and minutes roll over transitively; this is 1:07:24 PM.
   CHECK_EVAL( "TIME(11;0; -117)*60*60*24",   Value( 39483 ) ); // Negative seconds roll minutes backwards, 10:58:03 AM
   CHECK_EVAL( "TIME(11;-117;0)*60*60*24",    Value( 32580 ) ); // Negative minutes roll hours backwards, 9:03:00 AM
-  
+
   CHECK_EVAL( "TIME(11;-125;-144)*60*60*24", Value( 31956 ) ); // Negative seconds and minutes roll backwards transitively, 8:52:36 AM
                                                                // WARNING specs says -31956, but calc and kspread calculate 31956
 }
@@ -501,7 +500,7 @@ void TestDatetimeFunctions::testWEEKDAY()
   // 07 |  SA    |   SU    |  MO
 
   CHECK_EVAL( "WEEKDAY(DATE(2006;05;21))",   Value( 1 ) ); // Year-month-date format
-  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))",   Value( 7 ) ); // Saturday 
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))",   Value( 7 ) ); // Saturday
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);1)", Value( 7 ) ); // Saturday
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);2)", Value( 6 ) ); // Saturday
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);3)", Value( 5 ) ); // Saturday

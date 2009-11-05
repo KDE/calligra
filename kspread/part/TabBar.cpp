@@ -63,7 +63,7 @@ public:
 
     // read-only: no mouse drag, double-click, right-click
     bool readOnly;
-    
+
     // if true, layout is from right to left
     bool reverseLayout;
 
@@ -75,7 +75,7 @@ public:
 
     // leftmost tab (or rightmost if reverseLayout)
     int firstTab;
-    
+
     // rightmost tab (or leftmost if reverseLayout)
     int lastTab;
 
@@ -193,7 +193,7 @@ void TabBarPrivate::layoutTabs()
     f.setBold( true );
     painter.setFont( f );
     QFontMetrics fm = painter.fontMetrics();
-    
+
     if( !reverseLayout )
     {
         // left to right
@@ -243,7 +243,7 @@ void TabBarPrivate::layoutTabs()
                 lastTab = i+1;
                 break;
             }
-    }    
+    }
 }
 
 int TabBarPrivate::tabAt( const QPoint& pos )
@@ -261,7 +261,7 @@ int TabBarPrivate::tabAt( const QPoint& pos )
 void TabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text, bool active )
 {
     QPolygon polygon;
-    
+
     if( !reverseLayout )
         polygon << QPoint( rect.x(), rect.y() )
            << QPoint( rect.x(), rect.bottom()-3 )
@@ -269,7 +269,7 @@ void TabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text
            << QPoint( rect.right()-4, rect.bottom() )
            << QPoint( rect.right()-2, rect.bottom()-2 )
            << QPoint( rect.right()+5, rect.top() );
-    else      
+    else
         polygon << QPoint( rect.right(), rect.top() )
            << QPoint( rect.right(), rect.bottom()-3 )
            << QPoint( rect.right()-2, rect.bottom() )
@@ -279,7 +279,7 @@ void TabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text
 
     painter.save();
 
-    // fill it first  
+    // fill it first
     QBrush bg = tabbar->palette().background();
     if( active )
        bg = tabbar->palette().base();
@@ -324,7 +324,7 @@ void TabBarPrivate::layoutButtons()
     int bw = tabbar->height();
     int w = tabbar->width();
     offset = bw * 4;
-    
+
     if( !reverseLayout )
     {
         scrollFirstButton->setGeometry( 0, 0, bw, bw );
@@ -359,7 +359,7 @@ void TabBarPrivate::updateButtons()
 
 // creates a new tabbar
 TabBar::TabBar( QWidget* parent, const char* /*name*/ )
-    : QWidget( parent, Qt::WResizeNoErase | Qt::WNoAutoErase )
+    : QWidget( parent )
     , d( new TabBarPrivate )
 {
     d->tabbar = this;
@@ -504,7 +504,7 @@ bool TabBar::canScrollForward() const
 {
     if ( d->tabs.count() == 0 )
         return false;
-        
+
     return d->lastTab < (int)d->tabs.count();
 }
 
@@ -612,7 +612,7 @@ void TabBar::moveTab( int tab, int target )
 	d->tabs.append( tabName );
     else
         d->tabs.insert( target, tabName );
-	
+
     if( d->activeTab == tab+1 )
         d->activeTab = target+1;
 
@@ -789,7 +789,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
 
     QPoint pos = ev->pos();
     if( !d->reverseLayout) pos = pos - QPoint( d->offset,0 );
-    
+
     // check if user drags a tab to move it
     int i = d->tabAt( pos ) + 1;
     if( ( i > 0 ) && ( i != d->targetTab ) )
@@ -888,7 +888,7 @@ void TabBar::wheelEvent( QWheelEvent * e )
 
   // Find the left and right edge of the new tab.  If we're
   // going forward, and the right of the new tab isn't visible
-  // then scroll forward.  Likewise, if going back, and the 
+  // then scroll forward.  Likewise, if going back, and the
   // left of the new tab isn't visible, then scroll back.
   int activeTabRight = d->tabRects[ d->activeTab-1 ].right();
   int activeTabLeft  = d->tabRects[ d->activeTab-1 ].left();

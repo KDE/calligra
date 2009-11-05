@@ -16,12 +16,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "TestFormula.h"
 
 #include <klocale.h>
 
 #include "TestKspreadCommon.h"
-
-#include "TestFormula.h"
 
 #include "functions/LogicModule.h"
 #include "functions/MathModule.h"
