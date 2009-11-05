@@ -237,7 +237,7 @@ Qt::ItemFlags TaskStatusItemModel::flags( const QModelIndex &index ) const
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     flags &= ~( Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled );
     Node *n = node( index );
-    if ( n == 0 || m_id == -1 || ! n->isScheduled( m_id ) ) {
+    if ( ! m_readWrite || n == 0 || m_id == -1 || ! n->isScheduled( m_id ) ) {
         return flags;
     }
     if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
