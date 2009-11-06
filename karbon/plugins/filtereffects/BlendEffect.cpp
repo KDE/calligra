@@ -45,6 +45,7 @@ void BlendEffect::setBlendMode(BlendMode blendMode)
 
 QImage BlendEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
+    Q_UNUSED(context);
     return image;
 }
 
