@@ -314,7 +314,7 @@ bool ViewBase::isActive() const
     if ( hasFocus() ) {
         return true;
     }
-    foreach ( TreeViewBase *v, findChildren<TreeViewBase*>() ) {
+    foreach ( QWidget *v, findChildren<QWidget*>() ) {
         if ( v->hasFocus() ) {
             return true;
         }

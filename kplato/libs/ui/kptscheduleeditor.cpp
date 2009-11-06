@@ -38,6 +38,8 @@
 #include <QObject>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kaction.h>
 #include <kicon.h>
@@ -45,6 +47,7 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 
@@ -380,7 +383,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setModel( m_model );
     
     setRootIsDecorated( false );
-    setSelectionMode( QAbstractItemView::SingleSelection );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
@@ -417,6 +420,33 @@ void ScheduleLogTreeView::currentChanged( const QModelIndex & current, const QMo
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
 //    selectionModel()->select( current, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+}
+
+void ScheduleLogTreeView::slotEditCopy()
+{
+    QStringList lst;
+    int row = 0;
+    QString s;
+    QHeaderView *h = header();
+    foreach( const QModelIndex &i, selectionModel()->selectedRows() ) {
+        QString s;
+        for ( int section = 0; section < h->count(); ++section ) {
+            QModelIndex idx = model()->index( i.row(), h->logicalIndex( section ) );
+            if ( ! idx.isValid() || isColumnHidden( idx.column() ) ) {
+                continue;
+            }
+            if ( ! s.isEmpty() ) {
+                s += " ";
+            }
+            s = QString( "%1%2" ).arg( s ).arg( idx.data().toString(), -10 );
+        }
+        if ( ! s.isEmpty() ) {
+            lst << s;
+        }
+    }
+    if ( ! lst.isEmpty() ) {
+        QApplication::clipboard()->setText( lst.join( "\n" ) );
+    }
 }
 
 //-----------------------------------
@@ -511,6 +541,10 @@ void ScheduleLogView::slotOptions()
     kDebug();
 }
 
+void ScheduleLogView::slotEditCopy()
+{
+    m_view->slotEditCopy();
+}
 
 bool ScheduleLogView::loadContext( const KoXmlElement &context )
 {

@@ -252,6 +252,8 @@ protected:
     Calendar *currentCalendar();
     void updateView( QWidget *widget );
 
+    ViewBase *currentView() const;
+    
     ViewBase *createWelcomeView();
 
 private slots:
