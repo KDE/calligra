@@ -291,7 +291,7 @@ public:
 
     void initiateCalculation( Schedule &sch );
     bool isAvailable( Task *task );
-    void makeAppointment( Schedule *schedule );
+    void makeAppointment( Schedule *schedule, int load );
 
     bool isOverbooked() const;
     /// check if overbooked on date.
@@ -445,7 +445,7 @@ signals:
     void externalAppointmentChanged( Resource *r, Appointment *a );
 
 protected:
-    void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
+    void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end, int load );
     virtual void changed();
 
 private:
