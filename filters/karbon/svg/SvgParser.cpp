@@ -65,11 +65,11 @@ SvgParser::SvgParser( const QMap<QString, KoDataCenter*> & dataCenters )
 {
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
     // the order of the style attributes is important, don't change without reason !!!
-    m_styleAttributes << "color" << "opacity" << "display";
+    m_styleAttributes << "color" << "display";
     m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
     m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
     m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit"; 
-    m_styleAttributes << "filter";
+    m_styleAttributes << "opacity" << "filter";
 }
 
 SvgParser::~SvgParser()
@@ -1039,8 +1039,9 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     }
     else if( command == "opacity" )
     {
-        fillcolor.setAlphaF( SvgUtil::fromPercentage( params ) );
-        strokecolor.setAlphaF( SvgUtil::fromPercentage( params ) );
+        // fake shape opacity by multiplying with alpha of fill and stroke color
+        fillcolor.setAlphaF( fillcolor.alphaF() * SvgUtil::fromPercentage( params ) );
+        strokecolor.setAlphaF( strokecolor.alphaF() * SvgUtil::fromPercentage( params ) );
     }
     else if( command == "font-family" )
     {
