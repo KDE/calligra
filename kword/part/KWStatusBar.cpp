@@ -154,7 +154,9 @@ void KWStatusBar::resourceChanged(int key, const QVariant &value)
 
 void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
 {
-    // kDebug(32003) << "KWStatusBar::updateCurrentTool";
+    QWidget *root = m_statusbar->window();
+    if (root && !root->isAncestorOf(canvasController))
+        return; // ignore tool changes in other mainWindows
     if (m_controller) {
         disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)),
                 this, SLOT(updateMousePosition(const QPoint&)));
