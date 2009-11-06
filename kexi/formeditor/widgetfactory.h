@@ -140,7 +140,7 @@ protected:
   and how to deal with complex widgets (eg tabwidget).
   */
 class KFORMEDITOR_EXPORT WidgetFactory : public QObject,
-                                         protected InternalPropertyHandlerInterface
+                                         public InternalPropertyHandlerInterface
 {
     Q_OBJECT
 public:
