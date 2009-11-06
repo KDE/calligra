@@ -186,7 +186,7 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
         case Role::Minimum:
             return 0;
         case Role::Maximum:
-            return res->units();
+            return 100;
     }
     return QVariant();
 }
