@@ -659,7 +659,7 @@ KDateTime::Spec Resource::timeSpec() const
     return KDateTime::Spec::LocalZone();
 }
 
-void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
+void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load ) {
     KLocale *locale = KGlobal::locale();
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     if (!from.isValid() || !end.isValid()) {
@@ -692,7 +692,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
         //kDebug()<<m_name<<"-->"<<node->node()->name()<<" add :"<<i.first.toString()<<" to"<<i.second.toString();
-        addAppointment(node, i.first, i.second, m_units);
+        addAppointment(node, i.first, i.second, load);
         if (!(node->workStartTime.isValid()) || i.first < node->workStartTime)
             node->workStartTime = i.first;
         if (!(node->workEndTime.isValid()) || i.second > node->workEndTime)
@@ -701,7 +701,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     }
     return;
 }
-void Resource::makeAppointment(Schedule *node) {
+void Resource::makeAppointment(Schedule *node, int load) {
     //kDebug()<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
     KLocale *locale = KGlobal::locale();
     if (!node->startTime.isValid()) {
@@ -727,7 +727,7 @@ void Resource::makeAppointment(Schedule *node) {
             addAppointment(node, from, end, m_units);
             return;
         }
-        makeAppointment(node, from, end);
+        makeAppointment(node, from, end, load);
     }
     if (!cal) {
         m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
@@ -749,7 +749,7 @@ void Resource::makeAppointment(Schedule *node) {
         return;
     }
     //kDebug()<<time.toString()<<" to"<<end.toString();
-    makeAppointment(node, time, end);
+    makeAppointment(node, time, end, load);
 }
 
 Duration Resource::effort( const DateTime &start, const Duration &duration, bool backward, bool *ok) const
@@ -776,7 +776,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( limit < m_availableFrom ) {
             limit = m_availableFrom;
         }
-        DateTime t = availableBefore(start, limit);
+        DateTime t = availableBefore(start, limit, sch);
         if (t.isValid()) {
             sts = true;
             if ( t < limit && sch ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
@@ -789,7 +789,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( limit > m_availableUntil ) {
             limit = m_availableUntil;
         }
-        DateTime t = availableAfter(start, limit);
+        DateTime t = availableAfter(start, limit, sch);
         if (t.isValid()) {
             sts = true;
             if ( t > limit && sch ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
@@ -1145,14 +1145,14 @@ DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
 
 Duration ResourceRequest::effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok ) {
     resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
-    return resource()->effort(time, duration, backward, ok);
+    return resource()->effort(time, duration, backward, ok) * m_units / 100;
 }
 
 void ResourceRequest::makeAppointment( Schedule *ns )
 {
     if ( m_resource ) {
         m_resource->setCurrentSchedulePtr( resourceSchedule( ns ) );
-        m_resource->makeAppointment( ns );
+        m_resource->makeAppointment( ns, ( m_resource->units() * m_units / 100 ) );
     }
 }
 
