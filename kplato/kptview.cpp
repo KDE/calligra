@@ -1222,19 +1222,33 @@ KoPrintJob * View::createPrintJob()
     return v->createPrintJob();
 }
 
+ViewBase *View::currentView() const
+{
+    return qobject_cast<ViewBase*>( m_tab->currentWidget() );
+}
+
 void View::slotEditCut()
 {
-    //kDebug();
+    ViewBase *v = currentView();
+    if ( v ) {
+        v->slotEditCut();
+    }
 }
 
 void View::slotEditCopy()
 {
-    //kDebug();
+    ViewBase *v = currentView();
+    if ( v ) {
+        v->slotEditCopy();
+    }
 }
 
 void View::slotEditPaste()
 {
-    //kDebug();
+    ViewBase *v = currentView();
+    if ( v ) {
+        v->slotEditPaste();
+    }
 }
 
 void View::slotViewSelector( bool show )

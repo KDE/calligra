@@ -343,6 +343,14 @@ void SplitterView::saveContext( QDomElement &context ) const
     }
 }
 
+void SplitterView::slotEditCopy()
+{
+    ViewBase *v = focusView();
+    if ( v ) {
+        v->slotEditCopy();
+    }
+}
+
 } // namespace KPlato
 
 #include "kptsplitterview.moc"

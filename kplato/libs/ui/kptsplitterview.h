@@ -115,6 +115,7 @@ public:
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );
+    virtual void slotEditCopy();
 
 protected slots:
     virtual void slotGuiActivated( ViewBase *v, bool active );

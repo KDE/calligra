@@ -34,6 +34,8 @@ class KoDocument;
 
 class QPoint;
 
+class QKeyEvent;
+
 namespace KPlato
 {
 
@@ -160,6 +162,9 @@ signals:
 
     void contextMenuRequested( QModelIndex, const QPoint& );
 
+public slots:
+    void slotEditCopy();
+
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -194,6 +199,7 @@ public:
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+    void slotEditCopy();
 
 protected slots:
     virtual void slotOptions();
