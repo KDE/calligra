@@ -223,7 +223,7 @@ bool WidgetInfo::isOverriddenClassName(const QByteArray& alternateName) const
     return d->overriddenAlternateNames && d->overriddenAlternateNames->contains(alternateName);
 }
 
-void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
+void WidgetInfo::setAutoSyncForProperty(const QByteArray& propertyName, tristate flag)
 {
     if (!d->propertiesWithDisabledAutoSync) {
         if (~flag)
@@ -238,7 +238,7 @@ void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
     }
 }
 
-tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
+tristate WidgetInfo::autoSyncForProperty(const QByteArray& propertyName) const
 {
     if (!d->propertiesWithDisabledAutoSync)
         return cancelled;
@@ -258,9 +258,9 @@ QList<QByteArray> WidgetInfo::autoSaveProperties() const
     return d->inheritedClass->autoSaveProperties() + d->autoSaveProperties;
 }
 
-void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
+void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int type)
 {
-    if (!propertyName || type == (int)KoProperty::Auto)
+    if (propertyName.isEmpty() || type == (int)KoProperty::Auto)
         return;
     if (!d->customTypesForProperty) {
         d->customTypesForProperty = new QHash<QByteArray, int>();
@@ -269,7 +269,7 @@ void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
     d->customTypesForProperty->insert(propertyName, type);
 }
 
-int WidgetInfo::customTypeForProperty(const char *propertyName) const
+int WidgetInfo::customTypeForProperty(const QByteArray& propertyName) const
 {
     if (!d->customTypesForProperty || !d->customTypesForProperty->contains(propertyName))
         return KoProperty::Auto;

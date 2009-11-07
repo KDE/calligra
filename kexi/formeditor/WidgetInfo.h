@@ -41,8 +41,6 @@ class KFORMEDITOR_EXPORT WidgetInfo
 public:
     WidgetInfo(WidgetFactory *f);
 
-//2.0    WidgetInfo(WidgetFactory *f, const char* parentFactoryName, const char* inheritedClassName = 0);
-
     virtual ~WidgetInfo();
 
     //! \return a pixmap associated with the widget
@@ -123,11 +121,11 @@ public:
      e.g. KoProperty::EditorView can have autoSync flag set to false or true, but
      not all properties have to comply with that.
      \a flag equal to cancelled value means there is no overriding (the default). */
-    void setAutoSyncForProperty(const char *propertyName, tristate flag);
+    void setAutoSyncForProperty(const QByteArray& propertyName, tristate flag);
 
     /*! \return autoSync override value (true or false) for \a propertyName.
      If cancelled value is returned, there is no overriding (the default). */
-    tristate autoSyncForProperty(const char *propertyName) const;
+    tristate autoSyncForProperty(const QByteArray& propertyName) const;
 
     QByteArray parentFactoryName() const;
 
@@ -138,12 +136,12 @@ public:
     /*! Sets custom type \a type for property \a propertyName.
      This allows to override default type, especially when custom property
      and custom property editor item has to be used. */
-    void setCustomTypeForProperty(const char *propertyName, int type);
+    void setCustomTypeForProperty(const QByteArray& propertyName, int type);
 
     /*! \return custom type for property \a propertyName. If no specific custom type has been assigned,
      KoProperty::Auto is returned.
      @see setCustomTypeForProperty() */
-    int customTypeForProperty(const char *propertyName) const;
+    int customTypeForProperty(const QByteArray& propertyName) const;
 
     /*! @return list of the properties that should automatically be saved
     for a widget of @a classname class.
