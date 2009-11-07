@@ -36,10 +36,6 @@
 
 class KexiDBWidgetContextMenuExtender;
 
-/*! @internal Utility: alter background color to be a blended color
- of the background and base (usually lighter gray). Used for read-only mode. */
-void setLighterGrayBackgroundColor(QWidget* widget);
-
 //! @short Line edit widget for Kexi forms
 /*! Handles many data types. User input is validated by using validators
  and/or input masks.

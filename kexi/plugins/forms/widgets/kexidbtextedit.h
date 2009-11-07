@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,8 @@
 #include <formeditor/FormWidgetInterface.h>
 #include <ktextedit.h>
 #include <QPaintEvent>
+
+class DataSourceLabel;
 
 //! @short Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :  public KTextEdit,
@@ -82,13 +84,13 @@ public:
     //! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
     virtual void keyPressEvent(QKeyEvent *ke);
 
+    virtual bool event(QEvent *e);
+
 public slots:
-    inline void setDataSource(const QString &ds) {
-        KexiFormDataItemInterface::setDataSource(ds);
-    }
-    inline void setDataSourcePartClass(const QString &partClass) {
-        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
-    }
+    void setDataSource(const QString &ds);
+
+    void setDataSourcePartClass(const QString &partClass);
+
     virtual void setReadOnly(bool readOnly);
 //Qt4  virtual void setText( const QString & text, const QString & context );
 
@@ -112,12 +114,15 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     QMenu * createPopupMenu(const QPoint & pos);
+    void updateTextForDataSource();
 
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
     //! Used to disable slotTextChanged()
     bool m_slotTextChanged_enabled : 1;
+
+    DataSourceLabel *m_dataSourceLabel;
 };
 
 #endif

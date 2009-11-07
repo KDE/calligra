@@ -53,8 +53,17 @@ TODO: image box widgets: support transparency in clipboard (Windows)
 TODO: image box widgets: changing aspect or scale properties should repaint the widget immediately
 TODO: replace KexiDataItemChangesListener::handleAction(const QString& actionName) with signal/slot connections
 TODO: wrap passwordMode property for line edit widget in design mode, otherwise data source is displayed using *
+TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2009-11-06
+Forms
+*text editor widget:
+**disabled inline editing when data source is assigned
+**disabled inline editing for newly inserted widget
+**assigned data source name is displayed
+**"data source tag" icon is displayed to indicate there is data source assigned
 
 2009-11-05
 Forms

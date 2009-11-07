@@ -270,7 +270,6 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
         if (dataItemIface && !dataItemIface->dataSource().isEmpty() && !formWidget->editingMode()) {
             // draw "data source tag" icon
             QPainter p(this);
-//! @todo RTL...
             QStyleOptionFrameV2 option;
             initStyleOption(&option);
             
