@@ -157,8 +157,7 @@ public:
 
     //! Selects contents of the widget if there is such behaviour set (it is by default).
 //! @todo add option for not selecting the field
-
-    void selectAllOnFocusIfNeeded();
+    virtual void selectAllOnFocusIfNeeded();
 
 protected:
     QString m_dataSource;

@@ -86,6 +86,10 @@ public:
 
     virtual bool event(QEvent *e);
 
+    //! Selects contents of the widget if there is such behaviour set (it is by default).
+//! @todo add option for not selecting the field
+    virtual void selectAllOnFocusIfNeeded();
+
 public slots:
     void setDataSource(const QString &ds);
 

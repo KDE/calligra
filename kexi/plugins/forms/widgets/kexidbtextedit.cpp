@@ -321,4 +321,10 @@ void KexiDBTextEdit::createDataSourceLabel()
     m_dataSourceLabel->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
 }
 
+void KexiDBTextEdit::selectAllOnFocusIfNeeded()
+{
+//    moveCursorToEnd();
+//    selectAll();
+}
+
 #include "kexidbtextedit.moc"
