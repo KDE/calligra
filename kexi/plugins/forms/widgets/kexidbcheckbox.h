@@ -79,6 +79,8 @@ public:
     /*! Reimplemented after KexiFormDataItemInterface. */
     virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
 
+    virtual void paintEvent(QPaintEvent* e);
+
 public slots:
     void setDataSource(const QString &ds);
     inline void setDataSourcePartClass(const QString &ds) {

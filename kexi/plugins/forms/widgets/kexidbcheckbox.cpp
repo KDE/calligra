@@ -30,6 +30,8 @@ KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
         , m_tristate(TristateDefault)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setMinimumHeight(sizeHint().height());
+    setMinimumWidth(minimumHeight());
     updateTristate();
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 }
@@ -168,6 +170,21 @@ void KexiDBCheckBox::setDisplayDefaultValue(QWidget *widget, bool displayDefault
 // pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
     pal.setColor(QPalette::Active, QColorGroup::Foreground, params->textColor);
     setPalette(pal);
+}
+
+void KexiDBCheckBox::paintEvent(QPaintEvent* e)
+{
+    QPalette origPal;
+    if (editingMode()) {
+        origPal = palette();
+        QPalette pal(palette());
+        pal.setBrush(QPalette::WindowText, Qt::transparent);
+        setPalette(pal);
+    }
+    QCheckBox::paintEvent(e);
+    if (editingMode()) {
+        setPalette(origPal);
+    }
 }
 
 #include "kexidbcheckbox.moc"
