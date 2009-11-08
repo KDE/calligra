@@ -62,6 +62,9 @@ Forms
 *allow to override selectAllOnFocusIfNeeded()
 *text editor widget:
 **do nothing for selectAllOnFocusIfNeeded()
+*checkbox widget
+**better minimum size
+**better inline editing
 
 2009-11-06
 Forms
