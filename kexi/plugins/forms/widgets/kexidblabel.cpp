@@ -440,6 +440,7 @@ void KexiDBLabel::init()
     d->frameColor = palette().color(foregroundRole());
 
 //2.0    setAlignment(d->internalLabel->alignment());
+    setIndent(2);
 }
 
 #if 0 //2.0
