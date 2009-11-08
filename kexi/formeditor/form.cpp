@@ -3356,8 +3356,6 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
         connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
-
-        d->inlineEditor = editor;
     }
     d->inlineEditor->installEventFilter(this);
     d->inlineEditor->setFont(args.widget->font());

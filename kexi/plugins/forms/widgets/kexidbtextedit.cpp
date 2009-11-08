@@ -74,18 +74,13 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
         , KexiFormDataItemInterface()
         , m_menuExtender(this, this)
         , m_slotTextChanged_enabled(true)
+        , m_dataSourceLabel(0)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
     setAutoFillBackground(true); // otherwise we get transparent background...
-    m_dataSourceLabel = new DataSourceLabel(viewport());
-    m_dataSourceLabel->hide();
-    m_dataSourceLabel->move(0, 0);
-    int leftMargin, topMargin, rightMargin, bottomMargin;
-    getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
-    m_dataSourceLabel->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
 //    installEventFilter(this);
 }
 
@@ -269,11 +264,15 @@ bool KexiDBTextEdit::event(QEvent *e)
     bool res = KTextEdit::event(e);
 
     if (e->type() == QEvent::LayoutDirectionChange) {
-        m_dataSourceLabel->setLayoutDirection( layoutDirection() );
+        if (m_dataSourceLabel) {
+            m_dataSourceLabel->setLayoutDirection( layoutDirection() );
+        }
         updateTextForDataSource();
     }
     else if (e->type() == QEvent::Resize) {
-        m_dataSourceLabel->setFixedWidth(width());
+        if (m_dataSourceLabel) {
+            m_dataSourceLabel->setFixedWidth(width());
+        }
     }
     return res;
 }
@@ -281,14 +280,21 @@ bool KexiDBTextEdit::event(QEvent *e)
 void KexiDBTextEdit::updateTextForDataSource()
 {
     if (!designMode()) {
-        m_dataSourceLabel->hide();
+        if (m_dataSourceLabel) {
+            m_dataSourceLabel->hide();
+        }
         return;
     }
     setPlainText(QString());
-    m_dataSourceLabel->setText(dataSource());
-    m_dataSourceLabel->setIndent( KexiFormUtils::dataSourceTagIcon().width()
-        + (layoutDirection() == Qt::LeftToRight ? 0 : 7) );
-    m_dataSourceLabel->show();
+    if (!m_dataSourceLabel && !dataSource().isEmpty()) {
+        createDataSourceLabel();
+    }
+    if (m_dataSourceLabel) {
+        m_dataSourceLabel->setText(dataSource());
+        m_dataSourceLabel->setIndent( KexiFormUtils::dataSourceTagIcon().width()
+            + (layoutDirection() == Qt::LeftToRight ? 0 : 7) );
+        m_dataSourceLabel->setVisible(!dataSource().isEmpty());
+    }
 }
 
 void KexiDBTextEdit::setDataSource(const QString &ds)
@@ -301,6 +307,18 @@ void KexiDBTextEdit::setDataSourcePartClass(const QString &partClass)
 {
     KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     updateTextForDataSource();
+}
+
+void KexiDBTextEdit::createDataSourceLabel()
+{
+    if (m_dataSourceLabel)
+        return;
+    m_dataSourceLabel = new DataSourceLabel(viewport());
+    m_dataSourceLabel->hide();
+    m_dataSourceLabel->move(0, 0);
+    int leftMargin, topMargin, rightMargin, bottomMargin;
+    getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
+    m_dataSourceLabel->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
 }
 
 #include "kexidbtextedit.moc"

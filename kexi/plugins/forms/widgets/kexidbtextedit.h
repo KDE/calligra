@@ -115,7 +115,9 @@ protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     QMenu * createPopupMenu(const QPoint & pos);
     void updateTextForDataSource();
+    void createDataSourceLabel();
 
+private:
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 

@@ -408,8 +408,6 @@ void KexiDBComboBox::setPaletteBackgroundColor(const QColor & color)
     KexiDBAutoField::setPaletteBackgroundColor(color);
     QPalette pal(palette());
     QColorGroup cg(pal.active());
-    pal.setColor(QColorGroup::Base, Qt::red);
-    pal.setColor(QColorGroup::Background, Qt::red);
     pal.setActive(cg);
     QWidget::setPalette(pal);
     update();
