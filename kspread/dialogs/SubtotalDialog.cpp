@@ -264,7 +264,7 @@ void SubtotalDialog::fillColumnBoxes()
     m_columnBox->insertItem( index++, text );
 
     item = new QListWidgetItem( text );
-    item->setFlags( Qt::ItemIsUserCheckable );
+    item->setFlags( item->flags() | Qt::ItemIsUserCheckable );
     item->setCheckState( Qt::Unchecked );
     m_columnList->addItem( item );
   }

@@ -34,7 +34,7 @@ class KComboBox;
 class QFrame;
 class QLabel;
 class KLineEdit;
-class QTableWidget;
+class QTreeWidget;
 class QListWidget;
 class QListWidgetItem;
 class QRadioButton;
@@ -96,7 +96,7 @@ class DatabaseDialog : public KAssistantDialog
   QLabel       * m_SelectTableLabel;
   QListWidget  * m_tableView;
   KPageWidgetItem * m_columns;
-  QTableWidget * m_columnView;
+  QTreeWidget  * m_columnView;
   QLabel       * m_columnsStatus;
   KPageWidgetItem * m_options;
   KComboBox    * m_columns_1;

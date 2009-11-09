@@ -54,7 +54,7 @@
 #include <QVariant>
 #include <QWidget>
 #include <QListWidget>
-#include <QTableWidget>
+#include <QTreeWidget>
 
 using namespace KSpread;
 
@@ -184,9 +184,9 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
   TextLabel11_2->setText( i18n( "Select columns:" ) );
   columnsFrameLayout->addWidget( TextLabel11_2, 0, 0 );
 
-  m_columnView = new QTableWidget( columnsFrame );
+  m_columnView = new QTreeWidget( columnsFrame );
   m_columnView->setColumnCount( 3 );
-  m_columnView->setHorizontalHeaderLabels( QStringList() << i18n( "Column" ) <<  i18n( "Table" ) << "Data Type" );
+  m_columnView->setHeaderLabels( QStringList() << i18n( "Column" ) <<  i18n( "Table" ) << "Data Type" );
 
   columnsFrameLayout->addWidget( m_columnView, 1, 0 );
 
@@ -663,7 +663,7 @@ bool DatabaseDialog::databaseDoNext()
       for ( int i = 0; i < tableList.size(); ++i )
       {
         QListWidgetItem * item = new QListWidgetItem( tableList[i] );
-        item->setFlags( Qt::ItemIsUserCheckable );
+        item->setFlags( item->flags() | Qt::ItemIsUserCheckable );
         item->setCheckState( Qt::Unchecked );
         m_tableView->addItem( item );
       }
@@ -727,26 +727,22 @@ bool DatabaseDialog::tablesDoNext()
   }
 
   m_columnView->clear();
-  m_columnView->setSortingEnabled(false);
   QSqlRecord info;
-  int row = 0;
   for (int i = 0; i < (int) tables.size(); ++i)
   {
     info = m_dbConnection.record( tables[i] );
-    m_columnView->setRowCount(row + info.count());
-    for (int j = 0; j < (int) info.count(); ++j, ++row)
+    for (int j = 0; j < (int) info.count(); ++j)
     {
       QString name = info.fieldName(j);
-      QTableWidgetItem * checkItem = new QTableWidgetItem( name );
-      checkItem->setFlags( Qt::ItemIsUserCheckable );
-      checkItem->setCheckState( Qt::Unchecked );
-      m_columnView->setItem(row, 0, checkItem);
-      m_columnView->setItem(row, 1, new QTableWidgetItem( tables[i] ) );
       QSqlField field = info.field(name);
-      m_columnView->setItem(row, 2, new QTableWidgetItem( QVariant::typeToName(field.type()) ) );
+      QTreeWidgetItem * checkItem = new QTreeWidgetItem( QStringList() << name << tables[i] << QVariant::typeToName(field.type()));
+
+      checkItem->setFlags( checkItem->flags() | Qt::ItemIsUserCheckable );
+      checkItem->setCheckState( 0, Qt::Unchecked );
+      m_columnView->addTopLevelItem(checkItem);
     }
   }
-  m_columnView->sortItems(1);
+  m_columnView->sortItems(1, Qt::AscendingOrder);
 
   setValid(m_columns, true);
 
@@ -756,12 +752,12 @@ bool DatabaseDialog::tablesDoNext()
 bool DatabaseDialog::columnsDoNext()
 {
   QStringList columns;
-  for (int row = 0; row < m_columnView->rowCount(); ++row)
+  for (int row = 0; row < m_columnView->topLevelItemCount(); ++row)
   {
-    QTableWidgetItem* item = m_columnView->item(row, 0);
-    if (item->checkState() == Qt::Checked)
+    QTreeWidgetItem* item = m_columnView->topLevelItem(row);
+    if (item->checkState(0) == Qt::Checked)
     {
-      columns.append( m_columnView->item(row, 1)->text() + '.' + item->text());
+      columns.append( item->text(1) + '.' + item->text(0));
     }
   }
 
