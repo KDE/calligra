@@ -764,6 +764,17 @@ unsigned int MainMasterContainer::textMasterStyleCount()
     return d->rgTextMasterStyle.size();
 }
 
+TextMasterStyleAtom *MainMasterContainer::textMasterStyleAtomForTextType(int type)
+{
+    for (int i = 0;i < d->rgTextMasterStyle.size();i++) {
+        if (d->rgTextMasterStyle[i]->textType() == type) {
+            return d->rgTextMasterStyle.value(i);
+        }
+    }
+
+    return 0;
+}
+
 
 // ========== DocumentTextInfoContainer ==========
 
@@ -865,51 +876,47 @@ ViewInfoContainer::ViewInfoContainer()
 
 const unsigned int CStringAtom::id = 4026;
 
-class CStringAtom::Private
+class CStringAtom::Private : public QSharedData
 {
 public:
-    UString ustring;
+    QString string;
 };
 
 
-CStringAtom::CStringAtom()
+CStringAtom::CStringAtom() :
+        d(new Private)
 {
-    d = new Private;
+
 }
 
 CStringAtom::~CStringAtom()
 {
-    delete d;
 }
 
-UString CStringAtom::ustring() const
+QString CStringAtom::string() const
 {
-    return d->ustring;
+    return d->string;
 }
 
-void CStringAtom::setUString(const UString& ustr)
+void CStringAtom::setString(const QString& str)
 {
-    d->ustring = ustr;
+    d->string = str;
 }
 
 void CStringAtom::setData(unsigned size, const unsigned char* data)
 {
-    UString str;
-    for (unsigned k = 0; k < (size / 2); k++) {
-        unsigned uchar = readU16(data + k * 2);
-        if (uchar == 0x0d) {
-            uchar = 0x0b;
-//        std::cout << "found 0x0d in CStringAtom " << std::endl;
-        }
-        str.append(UString(uchar));
+    QTextCodec *codec = QTextCodec::codecForName("utf-16");
+    QByteArray array;
+    for (unsigned int i = 0;i < size;i++) {
+        array.append(data[i]);
     }
-    setUString(str);
+    d->string = codec->toUnicode(array);
 }
 
 void CStringAtom::dump(std::ostream& out) const
 {
     out << "CStringAtom" << std::endl;
-    out << "String : [" << ustring() << "]" << std::endl;
+    out << "String : [" << string().toLatin1().data() << "]" << std::endl;
 }
 
 // ========== DocumentAtom ==========
@@ -3452,14 +3459,14 @@ void TextPFException::dump(std::ostream& out) const
     out << "spaceAfter: " << d->spaceAfter << std::endl;
     out << "textAlignment: " << d->textAlignment << std::endl;
     out << "lineSpacing: " << d->lineSpacing << std::endl;
-    out << "bulletSize" << d->bulletSize << std::endl;
-    out << "lineSpacing" << d->lineSpacing << std::endl;
-    out << "defaultTabSize" << d->defaultTabSize << std::endl;
-    out << "fontAlign" << d->fontAlign << std::endl;
-    out << "textDirection" << d->textDirection << std::endl;
-    out << "wrapflags" << d->wrapFlags << std::endl;
+    out << "bulletSize: " << d->bulletSize << std::endl;
+    out << "lineSpacing: " << d->lineSpacing << std::endl;
+    out << "defaultTabSize: " << d->defaultTabSize << std::endl;
+    out << "fontAlign: " << d->fontAlign << std::endl;
+    out << "textDirection: " << d->textDirection << std::endl;
+    out << "wrapflags: " << d->wrapFlags << std::endl;
     QColor temp(d->bulletColor.red(), d->bulletColor.green(), d->bulletColor.blue());
-    out << "BulletColor:" << temp.name().toLatin1().data() << d->bulletColor.red() << d->bulletColor.green() << d->bulletColor.blue() << d->bulletColor.index() << std::endl;
+    out << "BulletColor: " << temp.name().toLatin1().data() << d->bulletColor.red() << d->bulletColor.green() << d->bulletColor.blue() << d->bulletColor.index() << std::endl;
 }
 
 unsigned int TextPFException::setData(unsigned int size, const unsigned char *data)
@@ -4173,9 +4180,49 @@ bool TextCFException::hasBold()
     return d->masks.bold;
 }
 
+bool TextCFException::hasUnderline()
+{
+    return d->masks.underline;
+}
+
+bool TextCFException::hasPosition()
+{
+    return d->masks.position;
+}
+
+bool TextCFException::hasEmboss()
+{
+    return d->masks.emboss;
+}
+
+bool TextCFException::hasShadow()
+{
+    return d->masks.shadow;
+}
+
 bool TextCFException::italic()
 {
     return d->fontStyle.italic;
+}
+
+bool TextCFException::underline()
+{
+    return d->fontStyle.underline;
+}
+
+int TextCFException::position()
+{
+    return d->position;
+}
+
+bool TextCFException::shadow()
+{
+    return d->fontStyle.shadow;
+}
+
+bool TextCFException::emboss()
+{
+    return d->fontStyle.emboss;
 }
 
 bool TextCFException::bold()
@@ -4215,22 +4262,22 @@ void TextCFException::dump(std::ostream& out) const
     out << "newEATypeface: " << d->masks.newEATypeface << std::endl;
     out << "csTypeface: " << d->masks.csTypeface << std::endl;
     out << "pp1ext: " << d->masks.pp1ext << std::endl;
-    out << "fontStyle.bold" << d->fontStyle.bold << std::endl;
-    out << "fontStyle.italic" << d->fontStyle.italic << std::endl;
-    out << "fontStyle.underline" << d->fontStyle.underline << std::endl;
-    out << "fontStyle.shadow" << d->fontStyle.shadow << std::endl;
-    out << "fontStyle.fehint" << d->fontStyle.fehint << std::endl;
-    out << "fontStyle.kumi" << d->fontStyle.kumi << std::endl;
-    out << "fontStyle.emboss" << d->fontStyle.emboss << std::endl;
-    out << "fontStyle.pp9rt" << d->fontStyle.pp9rt << std::endl;
+    out << "fontStyle.bold: " << d->fontStyle.bold << std::endl;
+    out << "fontStyle.italic: " << d->fontStyle.italic << std::endl;
+    out << "fontStyle.underline: " << d->fontStyle.underline << std::endl;
+    out << "fontStyle.shadow: " << d->fontStyle.shadow << std::endl;
+    out << "fontStyle.fehint: " << d->fontStyle.fehint << std::endl;
+    out << "fontStyle.kumi: " << d->fontStyle.kumi << std::endl;
+    out << "fontStyle.emboss: " << d->fontStyle.emboss << std::endl;
+    out << "fontStyle.pp9rt: " << d->fontStyle.pp9rt << std::endl;
     out << "fontSize: " << d->fontSize << std::endl;
-    out << "position" << d->position << std::endl;
-    out << "oldEAFontRef" << d->oldEAFontRef << std::endl;
-    out << "ansiFontRef" << d->ansiFontRef << std::endl;
-    out << "symbolFontRef" << d->symbolFontRef << std::endl;
-    out << "fontRef" << d->fontRef << std::endl;
+    out << "position: " << d->position << std::endl;
+    out << "oldEAFontRef: " << d->oldEAFontRef << std::endl;
+    out << "ansiFontRef: " << d->ansiFontRef << std::endl;
+    out << "symbolFontRef: " << d->symbolFontRef << std::endl;
+    out << "fontRef: " << d->fontRef << std::endl;
     QColor temp(d->color.red(), d->color.green(), d->color.blue());
-    out << "Color:" << temp.name().toLatin1().data() << d->color.red() << d->color.green() << d->color.blue() << d->color.index() << std::endl;
+    out << "Color: " << temp.name().toLatin1().data() << d->color.red() << d->color.green() << d->color.blue() << d->color.index() << std::endl;
 }
 
 
@@ -4322,6 +4369,9 @@ unsigned int TextCFException::setData(unsigned int size, const unsigned char *da
     //position (2 bytes)
     if (d->masks.position && data + 2 <= end) {
         d->position = readS16(data); data += 2; read += 2;
+        if (d->position < -100 || d->position > 100) {
+            d->position = 0;
+        }
     }
 
     return read;
@@ -4434,6 +4484,12 @@ public:
     * It MUST exist if and only if cLevels is greater than 0x0000.
     */
     QList<TextMasterStyleLevel> levels;
+
+    /**
+    * Specifies the type of text to which the formatting applies. It MUST be a
+    * TextTypeEnum enumeration value.
+    */
+    unsigned int type;
 };
 
 TextMasterStyleAtom::TextMasterStyleAtom()
@@ -4445,12 +4501,23 @@ TextMasterStyleAtom::~TextMasterStyleAtom()
 {
 }
 
+void TextMasterStyleAtom::setTextType(unsigned int type)
+{
+    d->type = type;
+}
+
+int TextMasterStyleAtom::textType()
+{
+    return d->type;
+}
+
 void TextMasterStyleAtom::setDataWithInstance(const unsigned int size,
         const unsigned char* data,
         unsigned int recInstance)
 {
     unsigned int levels = readU16(data); data += 2;
     unsigned int tempSize = size - 2;
+    setTextType(recInstance);
 
     for (unsigned int i = 0;i<levels && size > 0;i++) {
         TextMasterStyleLevel level;
@@ -6942,7 +7009,6 @@ int PPTReader::fastForwardRecords(unsigned int wantedType, unsigned int max)
     return -1;
 }
 
-
 void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
 {
     if (container == 0) return;
@@ -6997,7 +7063,6 @@ void PPTReader::loadMainMasterContainer(MainMasterContainer *container)
         if (bytes_read != header.recLen) {
             return;
         }
-
         TextMasterStyleAtom *atom = new TextMasterStyleAtom();
         atom->setParent(container);
         atom->setPosition(d->docStream->tell());
@@ -7189,6 +7254,7 @@ void PPTReader::loadRecord(Record* parent)
     unsigned long type = readU16(buffer + 2);
     unsigned long size = readU32(buffer + 4);
     unsigned long nextpos = d->docStream->tell() + size;
+
     // create the record using the factory
     Record* record = Record::create(type);
     if (record) {
@@ -7196,9 +7262,9 @@ void PPTReader::loadRecord(Record* parent)
         record->setPosition(pos);
         record->setInstance(instance);
 
-        if (record->isContainer())
+        if (record->isContainer()) {
             handleContainer(static_cast<Container*>(record), type, size);
-        else if (size <= bufferSize) { // TODO: use a varialesized buffer
+        } else if (size <= bufferSize) { // TODO: use a varialesized buffer
             if (size >= bufferSize) { // record is too large
 
             }
@@ -7725,7 +7791,7 @@ void PPTReader::handleEscherTextBox(msofbtClientTextBox* container, unsigned siz
     textObject->setType(TextObject::Other);
     unsigned long nextpos = d->docStream->tell() + size - 6;
     while (d->docStream->tell() < nextpos)
-      loadRecord(container);
+        loadRecord(container);
 }
 
 Color convertFromLong(unsigned long i)

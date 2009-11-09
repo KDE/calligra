@@ -471,6 +471,30 @@ public:
     bool hasBold();
 
     /**
+    * @brief does this class contain underline definition
+    * @return true if this class contains underline definition
+    */
+    bool hasUnderline();
+
+    /**
+    * @brief does this class contain position definition
+    * @return true if this class contains position definition
+    */
+    bool hasPosition();
+
+    /**
+    * @brief does this class contain shadow definition
+    * @return true if this class contains shadow definition
+    */
+    bool hasShadow();
+
+    /**
+    * @brief does this class contain emboss definition
+    * @return true if this class contains emboss definition
+    */
+    bool hasEmboss();
+
+    /**
     * @brief Is the character italic
     *
     * NOTE: only valid if hasItalic() is true
@@ -485,6 +509,37 @@ public:
     * @return true if the character is bold
     */
     bool bold();
+
+    /**
+    * @brief Is the character text underlined
+    *
+    * NOTE: only valid if hasUnderline() is true
+    * @return true if the character is underlined
+    */
+    bool underline();
+
+    /**
+    * @brief Is the character text embossed
+    *
+    * NOTE: only valid if hasEmboss() is true
+    * @return true if the character is embossed
+    */
+    bool emboss();
+    /**
+    * @brief Does the character text have a shadow
+    *
+    * NOTE: only valid if hasShadow() is true
+    * @return true if the character has a shadow
+    */
+    bool shadow();
+
+    /**
+    * @brief Get position of the text
+    *
+    * NOTE: only valid if hasPosition() is true
+    * @return position of the text
+    */
+    int position();
 
     /**
     * @brief Get font reference for the character
@@ -749,6 +804,7 @@ private:
 
 };
 
+
 /**
 * An atom record that specifies the character-level and paragraph-level
 * formatting of a main master slide. If this TextMasterStyleAtom is contained in
@@ -765,6 +821,8 @@ public:
     TextMasterStyleAtom(const TextMasterStyleAtom &other);
     ~TextMasterStyleAtom();
 
+    void setTextType(unsigned int type);
+    int textType();
 
     const char* name() const {
         return "TextMasterStyleAtom  ";
@@ -887,6 +945,14 @@ public:
     * @return specified TextMasterStyleAtom or 0 if none found
     */
     TextMasterStyleAtom *textMasterStyleAtom(int index);
+
+    /**
+    * @brief Get TextMasterStyleAtom for specified text type
+    * @param type type of text to find TextMasterStyleAtom for. See TextTypeEnum
+    * in [MS-PPT].pdf
+    * @return specified TextMasterStyleAtom or 0 if none found
+    */
+    TextMasterStyleAtom *textMasterStyleAtomForTextType(int type);
 
     /**
     * @brief Get pointer to slideSchemeColorSchemeAtom
@@ -1271,8 +1337,8 @@ public:
     CStringAtom();
     ~CStringAtom();
 
-    UString ustring() const;
-    void setUString(const UString& ustr);
+    QString string() const;
+    void setString(const QString& str);
 
     void setData(unsigned size, const unsigned char* data);
     const char* name() const {
@@ -1286,7 +1352,7 @@ private:
     CStringAtom& operator=(const CStringAtom&);
 
     class Private;
-    Private *d;
+    QSharedDataPointer<Private> d;
 };
 
 

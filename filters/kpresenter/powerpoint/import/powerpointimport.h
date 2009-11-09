@@ -108,14 +108,12 @@ private:
     * @param text Line to write
     * @param linePosition what is the index of the whole text (within textObject)
     * that this line starts from
-    * @param bullet does this text have a bullet
     */
     void writeTextLine(KoXmlWriter* xmlWriter,
                        TextPFException *pf,
                        TextObject *textObject,
                        const QString &text,
-                       const unsigned int linePosition,
-                       bool bullet);
+                       const unsigned int linePosition);
 
     /**
     * @brief write part of a line (bound by the same text character exception)
@@ -124,14 +122,12 @@ private:
     * @param pf paragraph exception that applies to text we are about to write
     * @param textObject text object that contains the text
     * @param text text to write
-    * @param bullet does this line have a bullet
     */
     void writeTextCFException(KoXmlWriter* xmlWriter,
                               TextCFException *cf,
                               TextPFException *pf,
                               TextObject *textObject,
-                              const QString &text,
-                              bool bullet);
+                              const QString &text);
 
     /**
     * @brief Parse all styles from given TextCFRun and TextPFRun pair
@@ -148,18 +144,20 @@ private:
     /**
     * @brief Helper method to find specified TextParagraphException from
     * MainMasterContainer
-    * @param atom index of the atom within MainMasterContainer
-    * @param level TextMasterStyleLevel index
+    * @param text type of the text whose style to get. See TextTypeEnum in
+    * [MS-PPT].pdf
+    * @param level TextMasterStyleLevel index (indentation level)
     */
-    TextPFException *masterTextPFException(unsigned int atom, unsigned int level);
+    TextPFException *masterTextPFException(int type, unsigned int level);
 
     /**
     * @brief Helper method to find specified TextCharacterException from
     * MainMasterContainer
-    * @param atom index of the atom within MainMasterContainer
-    * @param level TextMasterStyleLevel index
+    * @param text type of the text whose style to get. See TextTypeEnum in
+    * [MS-PPT].pdf
+    * @param level TextMasterStyleLevel index (indentation level)
     */
-    TextCFException *masterTextCFException(unsigned int atom, unsigned int level);
+    TextCFException *masterTextCFException(int type, unsigned int level);
 
     /**
     * @brief Convert paraspacing value to centimeters
