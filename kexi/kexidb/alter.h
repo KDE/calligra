@@ -179,11 +179,11 @@ public:
             DebugOptions() : showUID(true), showFieldDebug(false) {}
 
             //! true if UID should be added to the action debug string (the default)
-        bool showUID : 1;
+            bool showUID;
 
             //! true if the field associated with the action (if exists) should
             //! be appended to the debug string (default is false)
-        bool showFieldDebug : 1;
+            bool showFieldDebug;
         };
 
         virtual QString debugString(const DebugOptions& debugOptions = DebugOptions()) {
@@ -238,7 +238,7 @@ public:
         //! @internal used for "simplify" algorithm
         int m_order;
 
-    bool m_null : 1;
+        bool m_null;
 
         friend class AlterTableHandler;
     };
@@ -452,7 +452,7 @@ public:
         /*! Set to true on success, to false on failure. */
         tristate result;
         /*! Used only in the alter table test suite. */
-    bool simulate : 1;
+        bool simulate;
         /*! Set to true if requirements should be computed
          and the execute() method should return afterwards. */
         bool onlyComputeRequirements;
