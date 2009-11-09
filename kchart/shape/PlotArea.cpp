@@ -525,7 +525,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     
     // Find out if the data table contains labels as first row and/or column.
     // This is in the plot-area element itself.
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,p
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
                                          "data-source-has-labels" ) ) {
 
         // Yes, it does.  Now find out how.
