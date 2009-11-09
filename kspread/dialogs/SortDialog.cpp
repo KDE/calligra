@@ -29,8 +29,6 @@
 // Local
 #include "SortDialog.h"
 
-#include <q3buttongroup.h>
-
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QLabel>
@@ -92,24 +90,20 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
   layoutGroup->setTitle( i18n("Layout") );
   QVBoxLayout * layoutGroupLayout = new QVBoxLayout (layoutGroup);
 
-  Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
-  orientationGroup->layout()->setMargin(0);
-  orientationGroup->setExclusive (true);
+  QHBoxLayout * orientationGroup = new QHBoxLayout;
 
-  m_sortRow = new QRadioButton( orientationGroup );
-  m_sortRow->setText( i18n( "Sort &Rows" ) );
+  orientationGroup->addWidget(m_sortRow = new QRadioButton( i18n( "Sort &Rows" ) ));
 
-  m_sortColumn = new QRadioButton( orientationGroup );
-  m_sortColumn->setText( i18n( "Sort &Columns" ) );
+  orientationGroup->addWidget(m_sortColumn = new QRadioButton( i18n( "Sort &Columns" ) ));
 
   //First row / column contains header toggle
   m_firstRowOrColHeader = new QCheckBox( layoutGroup );
   //m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
   m_firstRowOrColHeader->setChecked(false);
-  
-  layoutGroupLayout->addWidget (orientationGroup);
+
+  layoutGroupLayout->addLayout (orientationGroup);
   layoutGroupLayout->addWidget (m_firstRowOrColHeader);
-  
+
   page1Layout->addWidget(layoutGroup,0,0);
 
 //----------------
@@ -261,7 +255,7 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
   connect (this, SIGNAL (okClicked()), this, SLOT (slotOk ()));
- 
+
   init();
 }
 
@@ -515,7 +509,7 @@ void SortDialog::slotOrientationChanged(int id)
 void SortDialog::slotOk()
 {
   Sheet * sheet = m_selection->activeSheet();
-  
+
   SortManipulator *sm = new SortManipulator ();
   sm->setSheet (sheet);
 
@@ -536,7 +530,7 @@ void SortDialog::slotOk()
   if (sort1 == sort2) sort2 = -1;
   if (sort1 == sort3) sort3 = -1;
   if (sort2 == sort3) sort3 = -1;
-  
+
   // set sorting order
   sm->addSortBy (sort1, sortAsc1);
   if (sort2 >= 0) sm->addSortBy (sort2, sortAsc2);
@@ -559,7 +553,7 @@ void SortDialog::slotOk()
       else
         tmp += list[i];
     }
-    
+
     sm->setUseCustomList (true);
     sm->setCustomList (clist);
   }

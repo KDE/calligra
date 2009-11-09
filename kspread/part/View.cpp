@@ -53,8 +53,8 @@
 #include <QToolButton>
 #include <QSqlDatabase>
 #include <QSizePolicy>
-//Added by qt3to4:
 #include <QList>
+#include <QScrollBar>
 
 // KDE includes
 #include <kactioncollection.h>
@@ -78,7 +78,6 @@
 #include <KToggleAction>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
-#include <k3listview.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kicon.h>

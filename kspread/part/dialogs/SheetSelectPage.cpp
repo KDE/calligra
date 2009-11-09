@@ -37,8 +37,8 @@ SheetSelectPage::SheetSelectPage( QWidget *parent )
   setWindowTitle(i18n("Sheets"));
 
   //disabling automated sorting
-  ListViewAvailable->setSorting(-1);
-  ListViewSelected->setSorting(-1);
+  ListViewAvailable->setSortingEnabled(false);
+  ListViewSelected->setSortingEnabled(false);
 
   //setup icons
   ButtonSelectAll->setIcon(KIcon("go-last"));
@@ -138,23 +138,19 @@ QString SheetSelectPage::printOptionForIndex(unsigned int index)
 
 void SheetSelectPage::prependAvailableSheet(const QString& sheetname)
 {
-  new Q3ListViewItem(ListViewAvailable,sheetname);
+  ListViewAvailable->insertItem(0, sheetname);
 }
 
 void SheetSelectPage::prependSelectedSheet(const QString& sheetname)
 {
-  new Q3ListViewItem(ListViewSelected,sheetname);
+  ListViewSelected->insertItem(0, sheetname);
 }
 
 QStringList SheetSelectPage::selectedSheets()
 {
   QStringList list;
-  Q3ListViewItem* item = ListViewSelected->firstChild();
-  while (item)
-  {
-    list.append(item->text(0));
-    item = item->nextSibling();
-  }
+  for (int row = 0; row < ListViewSelected->count(); ++row)
+    list.append(ListViewSelected->item(row)->text());
   return list;
 }
 
@@ -181,49 +177,27 @@ void SheetSelectPage::selectAll()
 {
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
-  QStringList list;
-  Q3ListViewItem* item = ListViewAvailable->firstChild();
-  while (item)
-  {
-    list.prepend(item->text(0));
-    item = item->nextSibling();
-  }
-  QStringList::iterator it;
-  for (it = list.begin(); it != list.end(); ++it)
-  {
-    this->prependSelectedSheet(*it);
-  }
+  for (int row = ListViewAvailable->count()-1; row >= 0; --row)
+    this->prependSelectedSheet(ListViewAvailable->item(row)->text());
 }
 
 void SheetSelectPage::select()
 {
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
-  QStringList list;
-  Q3ListViewItem* item = ListViewAvailable->firstChild();
-  while (item)
-  {
-    if (item->isSelected())
-      list.prepend(item->text(0));
-    item = item->nextSibling();
-  }
-  QStringList::iterator it;
-  for (it = list.begin(); it != list.end(); ++it)
-  {
-    this->prependSelectedSheet(*it);
-  }
+  for (int row = ListViewAvailable->count()-1; row >= 0; --row)
+    if (ListViewAvailable->item(row)->isSelected())
+      this->prependSelectedSheet(ListViewAvailable->item(row)->text());
 }
 
 void SheetSelectPage::remove()
 {
-  Q3ListViewItem* item = ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = 0;
-  while (item)
+  for (int row = 0; row < ListViewSelected->count();)
   {
-    nextitem = item->nextSibling();
-    if (item->isSelected())
-      delete item;
-    item = nextitem;
+    if (ListViewSelected->item(row)->isSelected())
+      delete ListViewSelected->takeItem(row);
+    else
+      row++;
   }
 }
 
@@ -235,150 +209,40 @@ void SheetSelectPage::removeAll()
 
 void SheetSelectPage::moveTop()
 {
-  //this creates a temporary new list (selected first, then rest)
-  // which replaces the existing one, to avoid the need of an additional sort column
-
-  QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = 0;
-//   kDebug() <<"Filling new list with selected items first";
-  while (item)
-  {
-    nextitem = item->nextSibling();
-    if (item->isSelected())
-    {
-      newlist.prepend(item);
-      ListViewSelected->takeItem(item);
-    }
-    item = nextitem;
-  }
-//   kDebug() <<"Appending the rest";
-  item = ListViewSelected->firstChild();
-  while (item)
-  {
-//     kDebug() <<" processing item" << item->text(0);
-    nextitem = item->nextSibling();
-    if (!item->isSelected())
-    {
-      newlist.prepend(item);
-      ListViewSelected->takeItem(item);
-    }
-    item = nextitem;
-  }
-
-//   kDebug() <<"Refill the view with the correctly ordered list";
-  //the view is empty now, refill in correct order (reversed!!)
-  QList<Q3ListViewItem*>::iterator it;
-  for (it = newlist.begin(); it != newlist.end(); ++it)
-  {
-//     kDebug() <<" adding" << (*it)->text(0);
-    ListViewSelected->insertItem(*it);
-  }
+  // moves the selected item to the top of the list
+  QListWidgetItem* item = ListViewSelected->takeItem(ListViewSelected->currentRow());
+  ListViewSelected->insertItem(0, item);
+  ListViewSelected->setCurrentItem(item);
 }
 
 void SheetSelectPage::moveUp()
 {
-  //this creates a temporary new list
-  // which replaces the existing one, to avoid the need of an additional sort column
-
-  QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = 0;
-  while (item)
-  {
-    nextitem = item->nextSibling();
-    if (!item->isSelected())
-    {
-      while (nextitem && nextitem->isSelected())
-      {
-        Q3ListViewItem* nextnextitem = nextitem->nextSibling();
-        newlist.prepend(nextitem);
-        ListViewSelected->takeItem(nextitem);
-        nextitem = nextnextitem;
-      }
-    }
-
-    newlist.prepend(item);
-    ListViewSelected->takeItem(item);
-    item = nextitem;
-  }
-
-//   kDebug() <<"Refill the view with the correctly ordered list";
-  //the view is empty now, refill in correct order (reversed!!)
-  QList<Q3ListViewItem*>::iterator it;
-  for (it = newlist.begin(); it != newlist.end(); ++it)
-  {
-//     kDebug() <<" adding" << (*it)->text(0);
-    ListViewSelected->insertItem(*it);
+  // moves the selected item up one row
+  int row = ListViewSelected->currentRow();
+  if (row > 0) {
+    QListWidgetItem* item = ListViewSelected->takeItem(row);
+    ListViewSelected->insertItem(row-1, item);
+    ListViewSelected->setCurrentItem(item);
   }
 }
 
 void SheetSelectPage::moveDown()
 {
-  Q3ListViewItem* item = ListViewSelected->lastItem();
-//   while (item)
-//   {
-//     nextitem = item->nextSibling();
-//     if (previousitem && previousitem->isSelected())
-//     {
-//       previousitem->moveItem(item);
-//     }
-//     previousitem = item;
-//     item = nextitem;
-//   }
-  while (item)
-  {
-    while (item && !item->isSelected() && item->itemAbove() && item->itemAbove()->isSelected())
-    {
-      Q3ListViewItem* tempitem = item->itemAbove();
-      tempitem->moveItem(item);
-    }
-    if (item)
-      item = item->itemAbove();
+  // moves the selected item down one row
+  int row = ListViewSelected->currentRow();
+  if (row < ListViewSelected->count()-1) {
+    QListWidgetItem* item = ListViewSelected->takeItem(row);
+    ListViewSelected->insertItem(row+1, item);
+    ListViewSelected->setCurrentItem(item);
   }
 }
 
 void SheetSelectPage::moveBottom()
 {
-  //this creates a temporary new list (unselected first, then rest)
-  // which replaces the existing one, to avoid the need of an additional sort column
-
-  QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = 0;
-//   kDebug() <<"Filling new list with unselected items first";
-  while (item)
-  {
-//     kDebug() <<" processing item" << item->text(0);
-    nextitem = item->nextSibling();
-    if (!item->isSelected())
-    {
-      newlist.prepend(item);
-      ListViewSelected->takeItem(item);
-    }
-    item = nextitem;
-  }
-//   kDebug() <<"Appending the rest";
-  item = ListViewSelected->firstChild();
-  while (item)
-  {
-    nextitem = item->nextSibling();
-    if (item->isSelected())
-    {
-      newlist.prepend(item);
-      ListViewSelected->takeItem(item);
-    }
-    item = nextitem;
-  }
-
-//   kDebug() <<"Refill the view with the correctly ordered list";
-  //the view is empty now, refill in correct order (reversed!!)
-  QList<Q3ListViewItem*>::iterator it;
-  for (it = newlist.begin(); it != newlist.end(); ++it)
-  {
-//     kDebug() <<" adding" << (*it)->text(0);
-    ListViewSelected->insertItem(*it);
-  }
+  // moves the selected item to the bottom of the list
+  QListWidgetItem* item = ListViewSelected->takeItem(ListViewSelected->currentRow());
+  ListViewSelected->addItem(item);
+  ListViewSelected->setCurrentItem(item);
 }
 
 #include "SheetSelectPage.moc"

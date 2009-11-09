@@ -59,7 +59,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     </widget>
    </item>
    <item rowspan="6" row="3" column="0" >
-    <widget class="K3ListView" name="ListViewAvailable" >
+    <widget class="QListWidget" name="ListViewAvailable" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -70,15 +70,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <string>&lt;b>List of all available sheets.&lt;/b>&lt;br>
 To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right-hand list, which lists all sheets that are printed.&lt;br>
 You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages, for example.</string>
-     </property>
-     <property name="resizePolicy" >
-      <enum>Q3ScrollView::Manual</enum>
-     </property>
-     <property name="selectionMode" >
-      <enum>Q3ListView::Single</enum>
-     </property>
-     <property name="fullWidth" >
-      <bool>true</bool>
      </property>
      <property name="dragEnabled" >
       <bool>true</bool>
@@ -110,7 +101,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
     </spacer>
    </item>
    <item rowspan="6" row="3" column="2" >
-    <widget class="K3ListView" name="ListViewSelected" >
+    <widget class="QListWidget" name="ListViewSelected" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -124,15 +115,6 @@ You can insert a sheet as often as you like, this way it will be printed multipl
       <string>&lt;b>List of sheets to print.&lt;/b>&lt;br>
 Only the sheets listed here will be printed in the order of listing. You can change the print order with the up and down buttons.&lt;br>
 It is even possible to print a sheet more than once. Just insert the desired sheet again and order the list to your needs.</string>
-     </property>
-     <property name="resizePolicy" >
-      <enum>Q3ScrollView::Manual</enum>
-     </property>
-     <property name="selectionMode" >
-      <enum>Q3ListView::Single</enum>
-     </property>
-     <property name="fullWidth" >
-      <bool>true</bool>
      </property>
      <property name="dragEnabled" >
       <bool>true</bool>
@@ -298,11 +280,6 @@ It is even possible to print a sheet more than once. Just insert the desired she
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
  <pixmapfunction>KIcon</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
-  </customwidget>
   <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
