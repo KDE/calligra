@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009      Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <QList>
 #include <QImage>
 #include <QPainter>
+#include <kdebug.h>
 
 // KOffice
 #include <KoXmlReader.h>
@@ -112,6 +114,9 @@ public:
     int   gapBetweenBars;
     int   gapBetweenSets;
     
+    // 2. Pie charts
+    int   pieExplodeFactor;     // in percents
+
     // ----------------------------------------------------------------
     // The embedded KD Chart
 
@@ -211,8 +216,8 @@ void PlotArea::init()
     // There need to be at least these two axes. Do not delete, but
     // hide them instead.
     Axis *xAxis = new Axis( this );
-    xAxis->setPosition( BottomAxisPosition );
     Axis *yAxis = new Axis( this );
+    xAxis->setPosition( BottomAxisPosition );
     yAxis->setPosition( LeftAxisPosition );
     yAxis->setShowMajorGrid( true );
     d->axes.append( xAxis );
@@ -337,7 +342,7 @@ int PlotArea::gapBetweenSets() const
 bool PlotArea::addAxis( Axis *axis )
 {
     if ( d->axes.contains( axis ) ) {
-    	qWarning() << "PlotArea::addAxis(): Trying to add already been added axis.";
+    	qWarning() << "PlotArea::addAxis(): Trying to add already added axis.";
     	return false;
     }
 
@@ -405,6 +410,7 @@ void PlotArea::setChartType( ChartType type )
         d->automaticallyHiddenAxisTitles.clear();
     }
 
+    // FIXME BUG: This seems buggy.
     // FIXME NOW: Make this a switch (see comment below)
     // Set the dimensionality of the data points.
     if ( d->chartType != ScatterChartType && type == ScatterChartType ) {
@@ -445,6 +451,11 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
+
+// ----------------------------------------------------------------
+//                         loading and saving
+
+
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                         KoShapeLoadingContext &context )
 {
@@ -453,12 +464,14 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     styleStack.clear();
 
-    // Find out about chart subtype.
+    // Find out about things that are in the plotarea style.
+    // 
+    // These things include chart subtype, special things for some
+    // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
-
         styleStack.setTypeProperties( "chart" );
 
         // Set subtypes stacked or percent.
@@ -481,16 +494,41 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             d->vertical = true;
         }
 
+        // Data direction: It's in the plotarea style.
+        if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
+            const QString  seriesSource
+                = styleStack.property( KoXmlNS::chart, "series-source" );
 
+            kDebug(35001) << "series-source=" << seriesSource;
+            if ( seriesSource == "rows" )
+                proxyModel()->setDataDirection( Qt::Horizontal );
+            else if ( seriesSource == "columns" )
+                proxyModel()->setDataDirection( Qt::Vertical );
+            else
+                // Use the default value for wrong values (not "rows" or "columns")
+                proxyModel()->setDataDirection( Qt::Vertical );
+        }
+
+        // Special properties for various chart types
+#if 0
+        switch () {
+        case BarChartType:
+            if ( styleStack )
+                ;
+        }
+#endif
     }
+
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
     //KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     
     // Find out if the data table contains labels as first row and/or column.
+    // This is in the plot-area element itself.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
                                          "data-source-has-labels" ) ) {
 
+        // Yes, it does.  Now find out how.
         const QString  dataSourceHasLabels
             = plotAreaElement.attributeNS( KoXmlNS::chart,
                                            "data-source-has-labels" );
@@ -513,21 +551,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         // No info about if first row / column contains labels.
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
-    }
-
-    // Data direction
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
-                                         "series-source" ) ) {
-        const QString  seriesSource
-            = plotAreaElement.attributeNS( KoXmlNS::chart, "series-source" );
-
-        if ( seriesSource == "rows" )
-            proxyModel()->setDataDirection( Qt::Horizontal );
-        else if ( seriesSource == "columns" )
-            proxyModel()->setDataDirection( Qt::Vertical );
-        else
-            // Use the default value for wrong values (not "rows" or "columns")
-            proxyModel()->setDataDirection( Qt::Vertical );
     }
 
     // Remove all axes before loading new ones
@@ -763,8 +786,6 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter,
 
 void PlotArea::setGapBetweenBars( int percent )
 {
-    // FIXME: Redundant data (dangerous!), but needed for getter method
-    // This information should instead by retrieved dynamically
     d->gapBetweenBars = percent;
 
     emit gapBetweenBarsChanged( percent );
@@ -772,8 +793,6 @@ void PlotArea::setGapBetweenBars( int percent )
 
 void PlotArea::setGapBetweenSets( int percent )
 {
-    // FIXME: Redundant data (dangerous!), but needed for getter method
-    // This information should instead by retrieved dynamically
     d->gapBetweenSets = percent;
 
     emit gapBetweenSetsChanged( percent );
@@ -781,7 +800,8 @@ void PlotArea::setGapBetweenSets( int percent )
 
 void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
-    // FIXME: Actually store this factor somewhere? :-P
+    d->pieExplodeFactor = percent;
+
     emit pieExplodeFactorChanged( dataSet, percent );
 }
 
@@ -815,6 +835,7 @@ bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
 {
     if ( !d->kdDiagrams.contains( diagram ) )
         return false;
+
     d->kdDiagrams.removeAll( diagram );
     return true;
 }
@@ -825,6 +846,7 @@ void PlotArea::update() const
     requestRepaint();
     foreach( Axis* axis, d->axes )
         axis->update();
+
     KoShape::update();
 }
 
