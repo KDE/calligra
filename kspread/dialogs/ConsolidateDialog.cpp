@@ -37,7 +37,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <Q3ListBox>
+#include <QListWidget>
 
 //KDE Includes
 #include <kcombobox.h>
@@ -107,7 +107,7 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
   grid1->addWidget(tmpQLabel, 2, 0, Qt::AlignTop);
   tmpQLabel->setText( i18n("&Entered references:") );
 
-  m_pRefs = new Q3ListBox( page );
+  m_pRefs = new QListWidget( page );
   grid1->addWidget( m_pRefs, 2, 1);
   tmpQLabel->setBuddy(m_pRefs);
 
@@ -612,11 +612,11 @@ void ConsolidateDialog::slotAdd()
 
 void ConsolidateDialog::slotRemove()
 {
-  int i = m_pRefs->currentItem();
+  int i = m_pRefs->currentRow();
   if ( i < 0 )
     return;
 
-  m_pRefs->removeItem( i );
+  delete m_pRefs->takeItem( i );
 
   if ( m_pRefs->count() == 0 )
     enableButton( Ok, false );
@@ -628,7 +628,7 @@ QStringList ConsolidateDialog::refs()
   int c = m_pRefs->count();
 
   for( int i = 0; i < c; i++ )
-    list.append( m_pRefs->text( i ) );
+    list.append( m_pRefs->item( i )->text() );
 
   return list;
 }
@@ -659,7 +659,7 @@ void ConsolidateDialog::slotReturnPressed()
 
   if ( !txt.isEmpty() )
   {
-    m_pRefs->insertItem( txt );
+    m_pRefs->addItem( txt );
     enableButton( Ok, true );
   }
 }

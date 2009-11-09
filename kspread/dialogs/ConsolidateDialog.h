@@ -30,14 +30,13 @@
 #define KSPREAD_CONSOLIDATE_DIALOG
 
 #include <QStringList>
-//Added by qt3to4:
 #include <kdialog.h>
 
 class KLineEdit;
 class QPushButton;
 class KComboBox;
 class QCheckBox;
-class Q3ListBox;
+class QListWidget;
 
 namespace KSpread
 {
@@ -67,7 +66,7 @@ protected:
 protected:
   Selection* m_selection;
   KLineEdit* m_pRef;
-  Q3ListBox* m_pRefs;
+  QListWidget* m_pRefs;
   KComboBox* m_pFunction;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;

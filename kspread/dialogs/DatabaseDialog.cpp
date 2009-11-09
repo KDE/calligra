@@ -33,7 +33,6 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klineedit.h>
-#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
@@ -54,6 +53,8 @@
 #include <qsqlrecord.h>
 #include <QVariant>
 #include <QWidget>
+#include <QListWidget>
+#include <QTableWidget>
 
 using namespace KSpread;
 
@@ -166,9 +167,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
   m_SelectTableLabel->setText( i18n( "Select tables:" ) );
   tablesFrameLayout->addWidget( m_SelectTableLabel, 1, 0 );
 
-  m_tableView = new K3ListView( tablesFrame );
-  m_tableView->addColumn( i18n( "Table" ) );
-  m_tableView->setRootIsDecorated( false );
+  m_tableView = new QListWidget( tablesFrame );
   tablesFrameLayout->addWidget( m_tableView, 2, 0 );
 
   tablesFrameLayout->setRowStretch(4, 1);
@@ -185,11 +184,9 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
   TextLabel11_2->setText( i18n( "Select columns:" ) );
   columnsFrameLayout->addWidget( TextLabel11_2, 0, 0 );
 
-  m_columnView = new K3ListView( columnsFrame );
-  m_columnView->addColumn( i18n( "Column" ) );
-  m_columnView->addColumn( i18n( "Table" ) );
-  m_columnView->addColumn( i18n( "Data Type" ) );
-  m_columnView->setRootIsDecorated( false );
+  m_columnView = new QTableWidget( columnsFrame );
+  m_columnView->setColumnCount( 3 );
+  m_columnView->setHorizontalHeaderLabels( QStringList() << i18n( "Column" ) <<  i18n( "Table" ) << "Data Type" );
 
   columnsFrameLayout->addWidget( m_columnView, 1, 0 );
 
@@ -354,9 +351,9 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
   connect( m_driver, SIGNAL( activated(int) ), this, SLOT( databaseDriverChanged(int) ) );
   connect( m_host, SIGNAL( textChanged(const QString &) ), this, SLOT( databaseHostChanged(const QString &) ) );
   connect( m_databaseName, SIGNAL( textChanged(const QString &) ), this, SLOT( databaseNameChanged(const QString &) ) );
-  connect( m_tableView, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
-           this, SLOT( popupTableViewMenu(Q3ListViewItem *, const QPoint &, int ) ) );
-  connect( m_tableView, SIGNAL( clicked( Q3ListViewItem * ) ), this, SLOT( tableViewClicked( Q3ListViewItem * ) ) );
+  /*connect( m_tableView, SIGNAL( contextMenuRequested( Q3ListViewItem *, const QPoint &, int ) ),
+           this, SLOT( popupTableViewMenu(Q3ListViewItem *, const QPoint &, int ) ) );*/
+  connect( m_tableView, SIGNAL( itemClicked( QListWidgetItem * ) ), this, SLOT( tableViewClicked( QListWidgetItem * ) ) );
 
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItems( 0, QSqlDatabase::drivers() );
@@ -665,10 +662,10 @@ bool DatabaseDialog::databaseDoNext()
 
       for ( int i = 0; i < tableList.size(); ++i )
       {
-        Q3CheckListItem * item = new Q3CheckListItem( m_tableView, tableList[i],
-                                                    Q3CheckListItem::CheckBox );
-        item->setOn(false);
-        m_tableView->insertItem( item );
+        QListWidgetItem * item = new QListWidgetItem( tableList[i] );
+        item->setFlags( Qt::ItemIsUserCheckable );
+        item->setCheckState( Qt::Unchecked );
+        m_tableView->addItem( item );
       }
 
       m_tableView->setEnabled( true );
@@ -713,12 +710,12 @@ bool DatabaseDialog::tablesDoNext()
   QStringList tables;
 
   {
-    Q3ListViewItem * item = (Q3CheckListItem *) m_tableView->firstChild();
-    for (; item; item = item->nextSibling())
+    for (int i = 0; i < m_tableView->count(); ++i)
     {
-      if (((Q3CheckListItem * ) item)->isOn())
+      QListWidgetItem* item = m_tableView->item(i);
+      if (item->checkState() == Qt::Checked)
       {
-        tables.append(((Q3CheckListItem * ) item)->text());
+        tables.append(item->text());
       }
     }
   }
@@ -730,25 +727,26 @@ bool DatabaseDialog::tablesDoNext()
   }
 
   m_columnView->clear();
+  m_columnView->setSortingEnabled(false);
   QSqlRecord info;
+  int row = 0;
   for (int i = 0; i < (int) tables.size(); ++i)
   {
     info = m_dbConnection.record( tables[i] );
-    for (int j = 0; j < (int) info.count(); ++j)
+    m_columnView->setRowCount(row + info.count());
+    for (int j = 0; j < (int) info.count(); ++j, ++row)
     {
       QString name = info.fieldName(j);
-      Q3CheckListItem * checkItem = new Q3CheckListItem( m_columnView, name,
-                                 Q3CheckListItem::CheckBox );
-      checkItem->setOn(false);
-      m_columnView->insertItem( checkItem );
-      checkItem->setText( 1, tables[i] );
+      QTableWidgetItem * checkItem = new QTableWidgetItem( name );
+      checkItem->setFlags( Qt::ItemIsUserCheckable );
+      checkItem->setCheckState( Qt::Unchecked );
+      m_columnView->setItem(row, 0, checkItem);
+      m_columnView->setItem(row, 1, new QTableWidgetItem( tables[i] ) );
       QSqlField field = info.field(name);
-      checkItem->setText( 2, QVariant::typeToName(field.type()) );
+      m_columnView->setItem(row, 2, new QTableWidgetItem( QVariant::typeToName(field.type()) ) );
     }
   }
-  m_columnView->setSorting(1, true);
-  m_columnView->sort();
-  m_columnView->setSorting( -1 );
+  m_columnView->sortItems(1);
 
   setValid(m_columns, true);
 
@@ -758,11 +756,12 @@ bool DatabaseDialog::tablesDoNext()
 bool DatabaseDialog::columnsDoNext()
 {
   QStringList columns;
-  for (Q3ListViewItem * item = m_columnView->firstChild(); item; item = item->nextSibling())
+  for (int row = 0; row < m_columnView->rowCount(); ++row)
   {
-    if (((Q3CheckListItem * ) item)->isOn())
+    QTableWidgetItem* item = m_columnView->item(row, 0);
+    if (item->checkState() == Qt::Checked)
     {
-      columns.append( item->text(1) + '.' + ((Q3CheckListItem * ) item)->text());
+      columns.append( m_columnView->item(row, 1)->text() + '.' + item->text());
     }
   }
 
@@ -953,18 +952,17 @@ bool DatabaseDialog::optionsDoNext()
 
   query += "\nFROM ";
 
-  Q3ListViewItem * item = (Q3CheckListItem *) m_tableView->firstChild();
   bool b = false;
-  while ( item )
+  for (int i = 0; i < m_tableView->count(); ++i)
   {
-    if (((Q3CheckListItem * ) item)->isOn())
+    QListWidgetItem* item = m_tableView->item(i);
+    if (item->checkState() == Qt::Checked)
     {
       if ( b )
         query += ", ";
       b = true;
-      query += ((Q3CheckListItem * ) item)->text();
+      query += item->text();
     }
-    item = item->nextSibling();
   }
 
   if ( ( !m_operatorValue_1->text().isEmpty() )
@@ -1092,12 +1090,12 @@ void DatabaseDialog::databaseDriverChanged(int index)
     setValid(m_database, false);
 }
 
-void DatabaseDialog::popupTableViewMenu( Q3ListViewItem *, const QPoint &, int )
+/*void DatabaseDialog::popupTableViewMenu( Q3ListViewItem *, const QPoint &, int )
 {
   // TODO: popup menu with "Select All", "Inverse selection", "remove selection"
-}
+}*/
 
-void DatabaseDialog::tableViewClicked( Q3ListViewItem * )
+void DatabaseDialog::tableViewClicked( QListWidgetItem * )
 {
 //   if ( item )
 //   {

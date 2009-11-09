@@ -23,7 +23,6 @@
 #define KSPREAD_DATABASE_DIALOG
 
 #include <QRect>
-//Added by qt3to4:
 #include <QFrame>
 #include <QLabel>
 
@@ -35,11 +34,12 @@ class KComboBox;
 class QFrame;
 class QLabel;
 class KLineEdit;
-class Q3ListViewItem;
+class QTableWidget;
+class QListWidget;
+class QListWidgetItem;
 class QRadioButton;
 class KTextEdit;
 
-class K3ListView;
 class KPageWidgetItem;
 class KPushButton;
 
@@ -66,8 +66,8 @@ class DatabaseDialog : public KAssistantDialog
   void databaseNameChanged( const QString & s );
   void databaseHostChanged( const QString & s );
   void databaseDriverChanged( int );
-  void popupTableViewMenu( Q3ListViewItem *, const QPoint &, int );
-  void tableViewClicked( Q3ListViewItem * );
+  //void popupTableViewMenu( QListWidgetItem *, const QPoint &, int );
+  void tableViewClicked( QListWidgetItem * );
   void accept();
 
  protected:
@@ -94,9 +94,9 @@ class DatabaseDialog : public KAssistantDialog
   KPushButton  * m_connectButton;
   QLabel       * m_tableStatus;
   QLabel       * m_SelectTableLabel;
-  K3ListView    * m_tableView;
+  QListWidget  * m_tableView;
   KPageWidgetItem * m_columns;
-  K3ListView    * m_columnView;
+  QTableWidget * m_columnView;
   QLabel       * m_columnsStatus;
   KPageWidgetItem * m_options;
   KComboBox    * m_columns_1;
