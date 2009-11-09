@@ -23,8 +23,7 @@
 // Local
 #include "PasteInsertDialog.h"
 
-#include <q3buttongroup.h>
-
+#include <QGroupBox>
 #include <QVBoxLayout>
 #include <klocale.h>
 
@@ -53,13 +52,13 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
   lay1->setMargin(KDialog::marginHint());
   lay1->setSpacing(KDialog::spacingHint());
 
-  Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
-  grp->setRadioButtonExclusive( true );
-  grp->layout();
-  lay1->addWidget(grp);
-  rb1 = new QRadioButton( i18n("Move towards right"), grp );
-  rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
+  QGroupBox *grp = new QGroupBox( i18n("Insert"),page );
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->addWidget(rb1 = new QRadioButton( i18n("Move towards right") ));
+  vbox->addWidget(rb2 = new QRadioButton( i18n("Move towards bottom") ));
   rb1->setChecked(true);
+  grp->setLayout(vbox);
+  lay1->addWidget(grp);
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }

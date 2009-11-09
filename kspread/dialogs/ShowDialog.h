@@ -27,8 +27,8 @@
 
 #include <kdialog.h>
 
-class Q3ListBox;
-class Q3ListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 
 namespace KSpread
 {
@@ -43,11 +43,11 @@ public:
 
 public slots:
   void slotOk();
-  void slotDoubleClicked(Q3ListBoxItem *);
+  void slotDoubleClicked(QListWidgetItem *);
 protected:
   View* m_pView;
 
-  Q3ListBox * list;
+  QListWidget * list;
 };
 
 } // namespace KSpread

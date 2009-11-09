@@ -171,7 +171,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
     </spacer>
    </item>
    <item rowspan="2" row="0" column="0" >
-    <widget class="Q3ListBox" name="family_combo" >
+    <widget class="QListWidget" name="family_combo" >
      <property name="whatsThis" >
       <string>This box lists all your available font families. Click on one family to set it in the current cell.</string>
      </property>
@@ -206,11 +206,6 @@ The default font is set for all cells in the Format -> Style Manager menu with t
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <customwidgets>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>QFrame</extends>
-   <header>q3listbox.h</header>
-  </customwidget>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>

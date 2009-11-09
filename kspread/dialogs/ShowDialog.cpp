@@ -27,8 +27,7 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-//Added by qt3to4:
-#include <q3listbox.h>
+#include <QListWidget>
 
 #include <klocale.h>
 
@@ -59,27 +58,27 @@ ShowDialog::ShowDialog( View* parent, const char* name )
   QLabel *label = new QLabel( i18n("Select hidden sheets to show:"), page );
   lay1->addWidget( label );
 
-  list=new Q3ListBox(page);
+  list=new QListWidget(page);
   lay1->addWidget( list );
 
-  list->setSelectionMode(Q3ListBox::Multi);
+  list->setSelectionMode(QAbstractItemView::MultiSelection);
   QString text;
   QStringList::Iterator it;
   QStringList tabsList=m_pView->doc()->map()->hiddenSheets();
   for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     	{
     	text=*it;
-    	list->insertItem(text);
+    	list->addItem(text);
     	}
   if(!list->count())
   	enableButtonOk(false);
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
+  connect( list, SIGNAL(itemDoubleClicked(QListWidgetItem *)),this,SLOT(slotDoubleClicked(QListWidgetItem *)));
   resize( 200, 150 );
   setFocus();
 }
 
-void ShowDialog::slotDoubleClicked(Q3ListBoxItem *)
+void ShowDialog::slotDoubleClicked(QListWidgetItem *)
 {
     slotOk();
 }
@@ -90,11 +89,11 @@ void ShowDialog::slotOk()
 {
     QStringList listSheet;
 
-    for (int i=0; i < list->numRows(); i++)
+    for (int i=0; i < list->count(); i++)
     {
-        if (list->isSelected(i))
+        if (list->item(i)->isSelected())
         {
-            listSheet.append( list->text(i));
+            listSheet.append( list->item(i)->text());
         }
     }
 

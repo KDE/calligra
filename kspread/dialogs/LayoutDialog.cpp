@@ -38,7 +38,7 @@
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
-#include <q3listbox.h>
+#include <QListWidget>
 #include <QFontDatabase>
 #include <QPainter>
 #include <QRadioButton>
@@ -977,7 +977,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget( customFormatEdit, 0, 1 );
     customFormatEdit->setHidden( true );
 
-    listFormat=new Q3ListBox(grp);
+    listFormat=new QListWidget(grp);
     grid->addWidget(listFormat,1,1,8,1);
     listFormat->setWhatsThis( i18n( "Displays choices of format for the fraction, date or time formats." ) );
     layout->addWidget(grp);
@@ -1131,7 +1131,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     connect(textFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
     connect(customFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
 
-    connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
+    connect(listFormat,SIGNAL(itemSelectionChanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
@@ -1198,27 +1198,27 @@ void CellFormatPageFloat::slotChangeState()
             list+=i18n("One digit 5/9");
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");
-            listFormat->insertStringList(list);
+            listFormat->addItems(list);
             if (cellFormatType == Format::fraction_half)
-                listFormat->setCurrentItem(0);
+                listFormat->setCurrentRow(0);
             else if (cellFormatType == Format::fraction_quarter)
-                listFormat->setCurrentItem(1);
+                listFormat->setCurrentRow(1);
             else if (cellFormatType == Format::fraction_eighth )
-                listFormat->setCurrentItem(2);
+                listFormat->setCurrentRow(2);
             else if (cellFormatType == Format::fraction_sixteenth )
-                listFormat->setCurrentItem(3);
+                listFormat->setCurrentRow(3);
             else if (cellFormatType == Format::fraction_tenth )
-                listFormat->setCurrentItem(4);
+                listFormat->setCurrentRow(4);
             else if (cellFormatType == Format::fraction_hundredth )
-                listFormat->setCurrentItem(5);
+                listFormat->setCurrentRow(5);
             else if (cellFormatType == Format::fraction_one_digit )
-                listFormat->setCurrentItem(6);
+                listFormat->setCurrentRow(6);
             else if (cellFormatType == Format::fraction_two_digits )
-                listFormat->setCurrentItem(7);
+                listFormat->setCurrentRow(7);
             else if (cellFormatType == Format::fraction_three_digits )
-                listFormat->setCurrentItem(8);
+                listFormat->setCurrentRow(8);
             else
-                listFormat->setCurrentItem(0);
+                listFormat->setCurrentRow(0);
         }
     else if (time->isChecked())
         {
@@ -1243,30 +1243,30 @@ void CellFormatPageFloat::slotChangeState()
             list+= ( fmt->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]:ss)") );
             list+= ( fmt->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]:mm:ss)") );
             list+= ( fmt->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)") );
-            listFormat->insertStringList(list);
+            listFormat->addItems(list);
 
             if ( cellFormatType == Format::Time )
-                listFormat->setCurrentItem(0);
+                listFormat->setCurrentRow(0);
             else if (cellFormatType == Format::SecondeTime)
-                listFormat->setCurrentItem(1);
+                listFormat->setCurrentRow(1);
             else if (cellFormatType == Format::Time1)
-                listFormat->setCurrentItem(2);
+                listFormat->setCurrentRow(2);
             else if (cellFormatType == Format::Time2)
-                listFormat->setCurrentItem(3);
+                listFormat->setCurrentRow(3);
             else if (cellFormatType == Format::Time3)
-                listFormat->setCurrentItem(4);
+                listFormat->setCurrentRow(4);
             else if (cellFormatType == Format::Time4)
-                listFormat->setCurrentItem(5);
+                listFormat->setCurrentRow(5);
             else if (cellFormatType == Format::Time5)
-                listFormat->setCurrentItem(6);
+                listFormat->setCurrentRow(6);
             else if (cellFormatType == Format::Time6)
-                listFormat->setCurrentItem(7);
+                listFormat->setCurrentRow(7);
             else if (cellFormatType == Format::Time7)
-                listFormat->setCurrentItem(8);
+                listFormat->setCurrentRow(8);
             else if (cellFormatType == Format::Time8)
-                listFormat->setCurrentItem(9);
+                listFormat->setCurrentRow(9);
             else
-                listFormat->setCurrentItem(0);
+                listFormat->setCurrentRow(0);
         }
 
     if (customFormat->isChecked())
@@ -1341,65 +1341,65 @@ void CellFormatPageFloat::init()
     list+=fmt->dateFormat( tmpDate, Format::Date25);
     list+=fmt->dateFormat( tmpDate, Format::Date26);
 
-    listFormat->insertStringList(list);
+    listFormat->addItems(list);
     if ( cellFormatType == Format::ShortDate )
-        listFormat->setCurrentItem(0);
+        listFormat->setCurrentRow(0);
     else if (cellFormatType == Format::TextDate)
-        listFormat->setCurrentItem(1);
+        listFormat->setCurrentRow(1);
     else if (cellFormatType == Format::Date1)
-        listFormat->setCurrentItem(2);
+        listFormat->setCurrentRow(2);
     else if (cellFormatType == Format::Date2)
-        listFormat->setCurrentItem(3);
+        listFormat->setCurrentRow(3);
     else if (cellFormatType == Format::Date3)
-        listFormat->setCurrentItem(4);
+        listFormat->setCurrentRow(4);
     else if (cellFormatType == Format::Date4)
-        listFormat->setCurrentItem(5);
+        listFormat->setCurrentRow(5);
     else if (cellFormatType == Format::Date5)
-        listFormat->setCurrentItem(6);
+        listFormat->setCurrentRow(6);
     else if (cellFormatType == Format::Date6)
-        listFormat->setCurrentItem(7);
+        listFormat->setCurrentRow(7);
     else if (cellFormatType == Format::Date7)
-        listFormat->setCurrentItem(8);
+        listFormat->setCurrentRow(8);
     else if (cellFormatType == Format::Date8)
-        listFormat->setCurrentItem(9);
+        listFormat->setCurrentRow(9);
     else if (cellFormatType == Format::Date9)
-        listFormat->setCurrentItem(10);
+        listFormat->setCurrentRow(10);
     else if (cellFormatType == Format::Date10)
-        listFormat->setCurrentItem(11);
+        listFormat->setCurrentRow(11);
     else if (cellFormatType == Format::Date11)
-        listFormat->setCurrentItem(12);
+        listFormat->setCurrentRow(12);
     else if (cellFormatType == Format::Date12)
-        listFormat->setCurrentItem(13);
+        listFormat->setCurrentRow(13);
     else if (cellFormatType == Format::Date13)
-        listFormat->setCurrentItem(14);
+        listFormat->setCurrentRow(14);
     else if (cellFormatType == Format::Date14)
-        listFormat->setCurrentItem(15);
+        listFormat->setCurrentRow(15);
     else if (cellFormatType == Format::Date15)
-        listFormat->setCurrentItem(16);
+        listFormat->setCurrentRow(16);
     else if (cellFormatType == Format::Date16)
-        listFormat->setCurrentItem(17);
+        listFormat->setCurrentRow(17);
     else if (cellFormatType == Format::Date17)
-        listFormat->setCurrentItem(18);
+        listFormat->setCurrentRow(18);
     else if (cellFormatType == Format::Date18)
-        listFormat->setCurrentItem(19);
+        listFormat->setCurrentRow(19);
     else if (cellFormatType == Format::Date19)
-        listFormat->setCurrentItem(20);
+        listFormat->setCurrentRow(20);
     else if (cellFormatType == Format::Date20)
-        listFormat->setCurrentItem(21);
+        listFormat->setCurrentRow(21);
     else if (cellFormatType == Format::Date21)
-        listFormat->setCurrentItem(22);
+        listFormat->setCurrentRow(22);
     else if (cellFormatType == Format::Date22)
-        listFormat->setCurrentItem(23);
+        listFormat->setCurrentRow(23);
     else if (cellFormatType == Format::Date23)
-        listFormat->setCurrentItem(24);
+        listFormat->setCurrentRow(24);
     else if (cellFormatType == Format::Date24)
-        listFormat->setCurrentItem(25);
+        listFormat->setCurrentRow(25);
     else if (cellFormatType == Format::Date25)
-        listFormat->setCurrentItem(26);
+        listFormat->setCurrentRow(26);
     else if (cellFormatType == Format::Date26)
-        listFormat->setCurrentItem(27);
+        listFormat->setCurrentRow(27);
     else
-        listFormat->setCurrentItem(0);
+        listFormat->setCurrentRow(0);
 
 }
 
@@ -1424,7 +1424,7 @@ void CellFormatPageFloat::updateFormatType ()
   else if (date->isChecked())
   {
     newFormatType = Format::ShortDate;
-    switch (listFormat->currentItem())
+    switch (listFormat->currentRow())
     {
       case 0: newFormatType = Format::ShortDate; break;
       case 1: newFormatType = Format::TextDate; break;
@@ -1463,7 +1463,7 @@ void CellFormatPageFloat::updateFormatType ()
   else if (fraction->isChecked())
   {
     newFormatType = Format::fraction_half;
-    switch (listFormat->currentItem())
+    switch (listFormat->currentRow())
     {
       case 0: newFormatType = Format::fraction_half; break;
       case 1: newFormatType = Format::fraction_quarter; break;
@@ -1479,7 +1479,7 @@ void CellFormatPageFloat::updateFormatType ()
   else if (time->isChecked())
   {
     newFormatType = Format::Time;
-    switch (listFormat->currentItem())
+    switch (listFormat->currentRow())
     {
       case 0: newFormatType = Format::Time; break;
       case 1: newFormatType = Format::SecondeTime; break;
@@ -1774,7 +1774,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   tmpListFont = fontDataBase->families();
   delete fontDataBase;
 
-  family_combo->insertStringList(tmpListFont);
+  family_combo->addItems(tmpListFont);
   selFont = dlg->font;
 
    if ( dlg->bTextFontFamily )
@@ -1782,18 +1782,18 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
         selFont.setFamily( dlg->fontFamily );
         // kDebug(36001) <<"Family =" << dlg->fontFamily;
 
-        if ( !family_combo->findItem(dlg->fontFamily))
+        if ( family_combo->findItems(dlg->fontFamily, Qt::MatchExactly).size() == 0 )
                 {
-                family_combo->insertItem("",0);
-                family_combo->setCurrentItem(0);
+                family_combo->insertItem(0, "");
+                family_combo->setCurrentRow(0);
                 }
         else
-                family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->fontFamily)));
+                family_combo->setCurrentItem(family_combo->findItems(dlg->fontFamily, Qt::MatchExactly)[0]);
    }
    else
    {
-        family_combo->insertItem("",0);
-        family_combo->setCurrentItem(0);
+        family_combo->insertItem(0, "");
+        family_combo->setCurrentRow(0);
    }
 
   connect( family_combo, SIGNAL(highlighted(const QString &)),
@@ -1855,7 +1855,7 @@ void CellFormatPageFont::apply( CustomStyle * style )
     style->setFontSize( selFont.pointSize() );
 
   if ( ( selFont.family() != dlg->fontFamily )
-       && !family_combo->currentText().isEmpty() )
+       && family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty() )
     style->setFontFamily( selFont.family() );
 
   style->setFontBold( weight_combo->currentIndex() != 0 && selFont.bold() );
@@ -1873,7 +1873,7 @@ void CellFormatPageFont::apply(StyleCommand* _obj)
     if ( ( size_combo->currentIndex() != 0 )
          && ( dlg->fontSize != selFont.pointSize() ) )
       _obj->setFontSize( selFont.pointSize() );
-    if ( ( selFont.family() != dlg->fontFamily ) && ( !family_combo->currentText().isEmpty() ) )
+    if ( ( selFont.family() != dlg->fontFamily ) && ( family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty() ) )
       _obj->setFontFamily( selFont.family() );
     if ( weight_combo->currentIndex() != 0 )
       _obj->setFontBold( selFont.bold() );

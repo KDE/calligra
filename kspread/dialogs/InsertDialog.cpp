@@ -27,9 +27,8 @@
 // Local
 #include "InsertDialog.h"
 
-#include <q3buttongroup.h>
-
 #include <QRadioButton>
+#include <QGroupBox>
 #include <QVBoxLayout>
 
 
@@ -62,29 +61,29 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
   lay1->setMargin(KDialog::marginHint());
   lay1->setSpacing(KDialog::spacingHint());
 
-  Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
-  grp->setRadioButtonExclusive( true );
-  grp->layout();
-  lay1->addWidget(grp);
+  QGroupBox *grp = new QGroupBox(i18n("Insert"),page);
+  QVBoxLayout *vbox = new QVBoxLayout;
   if( insRem==Insert)
   {
-    rb1 = new QRadioButton( i18n("Move towards right"), grp );
-    rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-    rb3 = new QRadioButton( i18n("Insert rows"), grp );
-    rb4 = new QRadioButton( i18n("Insert columns"), grp );
+    vbox->addWidget(rb1 = new QRadioButton( i18n("Move towards right") ) );
+    vbox->addWidget(rb2 = new QRadioButton( i18n("Move towards bottom") ) );
+    vbox->addWidget(rb3 = new QRadioButton( i18n("Insert rows") ) );
+    vbox->addWidget(rb4 = new QRadioButton( i18n("Insert columns") ) );
     setWindowTitle( i18n("Insert Cells") );
   }
   else if(insRem==Remove)
   {
     grp->setTitle(i18n("Remove"));
-    rb1 = new QRadioButton( i18n("Move towards left"), grp );
-    rb2 = new QRadioButton( i18n("Move towards top"), grp );
-    rb3 = new QRadioButton( i18n("Remove rows"), grp );
-    rb4 = new QRadioButton( i18n("Remove columns"), grp );
+    vbox->addWidget(rb1 = new QRadioButton( i18n("Move towards left") ) );
+    vbox->addWidget(rb2 = new QRadioButton( i18n("Move towards top") ) );
+    vbox->addWidget(rb3 = new QRadioButton( i18n("Remove rows") ) );
+    vbox->addWidget(rb4 = new QRadioButton( i18n("Remove columns") ) );
     setWindowTitle( i18n("Remove Cells") );
   }
   else
     kDebug(36001) <<"Error in kspread_dlg_InsertDialog";
+  grp->setLayout(vbox);
+  lay1->addWidget(grp);
 
   rb1->setChecked(true);
 

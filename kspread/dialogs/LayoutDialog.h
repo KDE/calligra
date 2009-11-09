@@ -58,7 +58,7 @@ class QLabel;
 class QWidget;
 class KLineEdit;
 class QFrame;
-class Q3ListBox;
+class QListWidget;
 class QCheckBox;
 class KColorButton;
 class KComboBox;
@@ -238,7 +238,7 @@ protected:
     QRadioButton *time;
     QRadioButton *textFormat;
     QRadioButton *customFormat;
-    Q3ListBox *listFormat;
+    QListWidget  *listFormat;
     KLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
