@@ -287,9 +287,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             document()->gridData().paintGrid(painter, *(viewConverter()), viewConverter()->viewToDocument(vm.clipRect));
             painter.restore();
 
-            // Paint the decorations on the selected(?) shapes.
-            // (The question mark is because I'm not sure if this is
-            // the actual case.)
+            // paint whatever the tool wants to paint
             m_toolProxy->paint(painter, *(viewConverter()));
             painter.restore();
 
@@ -304,7 +302,6 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
 
     painter.end();
 }
-
 
 void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
@@ -327,7 +324,6 @@ void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &view
 
     painter.restore();
 }
-
 
 void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const
 {
@@ -359,7 +355,6 @@ void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRec
                     zoomY, 0, -1);
     painter.restore();
 }
-
 
 void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
                                const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
