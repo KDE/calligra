@@ -1796,7 +1796,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
         family_combo->setCurrentRow(0);
    }
 
-  connect( family_combo, SIGNAL(highlighted(const QString &)),
+  connect( family_combo, SIGNAL(currentTextChanged(const QString &)),
            SLOT(family_chosen_slot(const QString &)) );
 
   QStringList lst;
