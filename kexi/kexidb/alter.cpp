@@ -344,9 +344,9 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
                 if (!actionsLikeThis)
                     actionsLikeThis = createActionDict(fieldActions, uid());   //fieldName() );
                 AlterTableHandler::ChangeFieldPropertyAction* newRenameAction
-                = new AlterTableHandler::ChangeFieldPropertyAction(*this);
-                KexiDBDbg << "ChangeFieldPropertyAction::simplifyActions(): insert into '"
-                << fieldName() << "' dict:"  << newRenameAction->debugString();
+                    = new AlterTableHandler::ChangeFieldPropertyAction(*this);
+                KexiDBDbg << "insert into" << fieldName()
+                    << "dict:"  << newRenameAction->debugString();
                 actionsLikeThis->insert(m_propertyName.toLatin1(), newRenameAction);
                 return;
             }
@@ -375,7 +375,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
     if (!nextActionsLikeThis || !nextActionsLikeThis->value(m_propertyName.toLatin1())) {
         //no such action, add this
         AlterTableHandler::ChangeFieldPropertyAction* newAction
-        = new AlterTableHandler::ChangeFieldPropertyAction(*this);
+            = new AlterTableHandler::ChangeFieldPropertyAction(*this);
         if (!nextActionsLikeThis)
             nextActionsLikeThis = createActionDict(fieldActions, uid());  //fieldName() );
         nextActionsLikeThis->insert(m_propertyName.toLatin1(), newAction);
@@ -511,7 +511,7 @@ void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &field
 {
     //! @todo not checked
     AlterTableHandler::RemoveFieldAction* newAction
-    = new AlterTableHandler::RemoveFieldAction(*this);
+        = new AlterTableHandler::RemoveFieldAction(*this);
     ActionDict *actionsLikeThis = fieldActions.value(uid());   //fieldName().toLatin1() ];
     if (!actionsLikeThis)
         actionsLikeThis = createActionDict(fieldActions, uid());   //fieldName() );
@@ -656,7 +656,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
     //ok, insert this action
     //! @todo not checked
     AlterTableHandler::InsertFieldAction* newAction
-    = new AlterTableHandler::InsertFieldAction(*this);
+        = new AlterTableHandler::InsertFieldAction(*this);
     if (!actionsForThisField)
         actionsForThisField = createActionDict(fieldActions, uid());
     actionsForThisField->insert(":insert:", newAction);   //special
