@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-typedef QMap<QByteArray, QList<QByteArray>* > StringListMap;
+typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
 
 namespace KoProperty
 {
@@ -47,27 +47,8 @@ public:
             informAboutClearing(0),
             m_visiblePropertiesCount(0)
     {}
+
     ~SetPrivate() {}
-
-    Set *q;
-// PropertyList properties;
-    //groups of properties:
-    // list of group name: (list of property names)
-    StringListMap propertiesOfGroup;
-    QList<QByteArray>  groupNames;
-    QHash<QByteArray, QString>  groupDescriptions;
-    QHash<QByteArray, QString>  groupIcons;
-    // map of property: group
-
-    bool ownProperty : 1;
-    bool readOnly : 1;
-// static Property nonConstNull;
-    QByteArray prevSelection;
-    QString typeName;
-
-    //! Used in Set::informAboutClearing(Property*) to declare that the property wants
-    //! to be informed that the set has been cleared (all properties are deleted)
-    bool* informAboutClearing;
 
     inline uint visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
@@ -75,7 +56,8 @@ public:
         return hash.value(name.toLower());
     }
 
-    inline Property& propertyOrNull(const QByteArray &name) const {
+    inline Property& propertyOrNull(const QByteArray &name) const
+    {
         Property *p = property(name);
         if (p)
             return *p;
@@ -143,7 +125,6 @@ public:
         informAboutClearing = 0;
         emit q->aboutToBeCleared();
         m_visiblePropertiesCount = 0;
-        qDeleteAll(propertiesOfGroup);
         propertiesOfGroup.clear();
         groupNames.clear();
         groupForProperties.clear();
@@ -173,11 +154,14 @@ public:
     // Copy all attributes except complex ones
     void copyAttributesFrom(const SetPrivate& other)
     {
+        Set *origSet = q;
         *this = other;
+        q = origSet;
         // do not copy too deeply
         list.clear();
         hash.clear();
         groupForProperties.clear();
+        m_visiblePropertiesCount = 0;
     }
 
     // Copy all properties from the other set
@@ -204,6 +188,26 @@ public:
     inline QList<Property*>::ConstIterator listConstEnd() const {
         return list.constEnd();
     }
+
+    Set *q;
+
+    //groups of properties:
+    // list of group name: (list of property names)
+    ByteArrayListMap propertiesOfGroup;
+    QList<QByteArray>  groupNames;
+    QHash<QByteArray, QString>  groupDescriptions;
+    QHash<QByteArray, QString>  groupIcons;
+    // map of property: group
+
+    bool ownProperty;
+    bool readOnly;
+    QByteArray prevSelection;
+    QString typeName;
+
+    //! Used in Set::informAboutClearing(Property*) to declare that the property wants
+    //! to be informed that the set has been cleared (all properties are deleted)
+    bool* informAboutClearing;
+
 private:
     //! a list of properties, preserving their order, owner of Property objects
     QList<Property*> list;
@@ -410,17 +414,16 @@ Set::addToGroup(const QByteArray &group, Property *property)
         return;
 
     //do not add the same property to the group twice
-    QByteArray groupLower(group.toLower());
+    const QByteArray groupLower(group.toLower());
     if (d->groupForProperty(property) == groupLower) {
         kWarning() << "Group" << group << "already contains property" << property->name();
         return;
     }
-    QList<QByteArray> *list = d->propertiesOfGroup.value(groupLower);
-    if (!list) {
-        list = new QList<QByteArray>();
-        d->propertiesOfGroup.insert(groupLower, list);
-        d->groupNames.append(property->name());
+    QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ groupLower ];
+    if (propertiesOfGroup.isEmpty()) {
+        d->groupNames.append(groupLower);
     }
+    propertiesOfGroup.append(property->name());
     d->addPropertyToGroup(property, groupLower);
 }
 
@@ -432,15 +435,14 @@ Set::removeFromGroup(Property *property)
     const QByteArray group( d->groupForProperty(property) );
     if (group.isEmpty())
         return;
-    QList<QByteArray> *propertiesOfGroup = d->propertiesOfGroup.value(group);
-    propertiesOfGroup->removeAt(propertiesOfGroup->indexOf(property->name()));
-    if (propertiesOfGroup->isEmpty()) {
+    QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ group ];
+    propertiesOfGroup.removeAt( propertiesOfGroup.indexOf(property->name()) );
+    if (propertiesOfGroup.isEmpty()) {
         //remove group as well
         d->propertiesOfGroup.remove(group);
         const int i = d->groupNames.indexOf(group);
         if (i != -1)
             d->groupNames.removeAt(i);
-        delete propertiesOfGroup;
     }
     d->removePropertyFromGroup(property);
 }
@@ -454,8 +456,7 @@ Set::groupNames() const
 const QList<QByteArray>
 Set::propertyNamesForGroup(const QByteArray &group) const
 {
-    QList<QByteArray> *list = d->propertiesOfGroup.value(group);
-    return list ? *list : QList<QByteArray>();
+    return d->propertiesOfGroup.value(group);
 }
 
 void
@@ -556,12 +557,7 @@ Set::operator= (const Set & set)
         return *this;
 
     clear();
-
     d->copyAttributesFrom(*set.d);
-/*moved
-    d->ownProperty = set.d->ownProperty;
-    d->prevSelection = set.d->prevSelection;
-    d->groupDescriptions = set.d->groupDescriptions;*/
     d->copyPropertiesFrom(set.d->listConstIterator(), set.d->listConstEnd(), set);
     return *this;
 }
