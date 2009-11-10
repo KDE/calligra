@@ -27,7 +27,6 @@
 #include <kdebug.h>
 
 #include <QPaintEvent>
-#include <QStyleOptionFrameV2>
 #include <QPainter>
 #include <QLabel>
 
@@ -80,7 +79,8 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
     setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-    setAutoFillBackground(true); // otherwise we get transparent background...
+//hmm disabled again because this makes the widget disappear entirely
+//    setAutoFillBackground(true); // otherwise we get transparent background...
 //    installEventFilter(this);
 }
 
@@ -195,7 +195,7 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 void KexiDBTextEdit::paintEvent(QPaintEvent *pe)
 {
     KTextEdit::paintEvent(pe);
-    QPainter p(this);
+    QPainter p(viewport());
     KexiDBTextWidgetInterface::paint(this, &p, toPlainText().isEmpty(), alignment(), hasFocus());
 }
 
