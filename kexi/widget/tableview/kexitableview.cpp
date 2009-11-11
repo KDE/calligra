@@ -245,7 +245,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 #endif
 
 //! \todo replace lineedit with table_field icon
-    setContextMenuTitle(KIcon("lineedit"), i18n("Row"));   // the default
+//2.0    setContextMenuTitle(KIcon("lineedit"), i18n("Row"));   // the default
+    // cannot display anything here - most actions in the context menu
+    // are related to a single cell (Cut, Copy..) and others to entire row (Delete Row):
+    setContextMenuEnabled(false);
 
 #ifdef Q_WS_WIN
     d->rowHeight = fontMetrics().lineSpacing() + 4;
