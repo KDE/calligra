@@ -119,7 +119,8 @@ private:
     int profilePosition( const QString &profileName );
 
 private:
-    QMap<QString, Profile *> m_profiles;
+    typedef QMap<QString, Profile *> ProfileMap;
+    ProfileMap m_profiles;
 
     KComboBox *m_comboBox;
     QCheckBox *m_usePath;

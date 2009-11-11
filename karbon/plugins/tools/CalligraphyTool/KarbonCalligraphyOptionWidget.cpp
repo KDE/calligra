@@ -436,9 +436,11 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
     }
 
     m_changingProfile = true;
-    foreach (const QString &name, m_profiles.keys())
+    ProfileMap::const_iterator it = m_profiles.constBegin();
+    ProfileMap::const_iterator lastIt = m_profiles.constEnd();
+    for( ; it != lastIt; ++it )
     {
-        m_comboBox->addItem( name );
+        m_comboBox->addItem( it.key() );
     }
     m_changingProfile = false;
 
@@ -554,10 +556,7 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 {
     kDebug(38000) << "removing profile" << name;
-    QString dbg;
-    foreach (const QString &n, m_profiles.keys())
-            dbg += n + ' ';
-    kDebug(38000) << dbg;
+
     int index = profilePosition(name);
     if ( index < 0 ) return; // no such profile
 
@@ -617,9 +616,11 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 int KarbonCalligraphyOptionWidget::profilePosition( const QString &profileName )
 {
     int res = 0;
-    foreach (const QString &name, m_profiles.keys())
+    ProfileMap::const_iterator it = m_profiles.constBegin();
+    ProfileMap::const_iterator lastIt = m_profiles.constEnd();
+    for( ; it != lastIt; ++it )
     {
-        if (name == profileName)
+        if (it.key() == profileName)
             return res;
         ++res;
     }
