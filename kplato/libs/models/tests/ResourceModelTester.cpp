@@ -108,7 +108,7 @@ void ResourceModelTester::initTestCase()
 
 
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( m_resource ) );
+    gr->addResourceRequest( new ResourceRequest( m_resource, 100 ) );
     m_task->addRequest( gr );
 
     m_model.setProject( m_project );
