@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -126,9 +126,9 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
         details += "<p>" + obj->errorMsg();
 
     if (!obj->serverErrorMsg().isEmpty())
-        details += "<p><b><nobr>" + i18n("Message from server:") + "</nobr></b><br>" + obj->serverErrorMsg();
+        details += "<p><b>" + i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
     if (!obj->recentSQLString().isEmpty())
-        details += "<p><b><nobr>" + i18n("SQL statement:") + QString("</nobr></b><br><tt>%1</tt>").arg(obj->recentSQLString());
+        details += "<p><b>" + i18n("SQL statement:") + QString("</b> <tt>%1</tt>").arg(obj->recentSQLString());
     int serverResult;
     QString serverResultName;
     if (obj->serverResult() != 0) {
@@ -138,11 +138,22 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
         serverResult = obj->previousServerResult();
         serverResultName = obj->previousServerResultName();
     }
-    if (!serverResultName.isEmpty())
-        details += (QString("<p><b><nobr>") + i18n("Server result name:") + "</nobr></b><br>" + serverResultName);
-    if (!details.isEmpty()
-            && (!obj->serverErrorMsg().isEmpty() || !obj->recentSQLString().isEmpty() || !serverResultName.isEmpty() || serverResult != 0)) {
-        details += (QString("<p><b><nobr>") + i18n("Server result number:") + "</nobr></b><br>" + QString::number(serverResult));
+    if (   !details.isEmpty()
+        && (   !obj->serverErrorMsg().isEmpty()
+            || !obj->recentSQLString().isEmpty()
+            || !serverResultName.isEmpty()
+            || serverResult != 0)
+           )
+    {
+        details += (QString("<p><b>") + i18n("Server result:") + "</b> " + QString::number(serverResult));
+        if (!serverResultName.isEmpty()) {
+            details += QString("(%1)").arg(serverResultName);
+        }
+    }
+    else {
+        if (!serverResultName.isEmpty()) {
+            details += (QString("<p><b>") + i18n("Server result:") + "</b> " + serverResultName);
+        }
     }
 
     if (!details.isEmpty() && !details.startsWith("<qt>")) {
