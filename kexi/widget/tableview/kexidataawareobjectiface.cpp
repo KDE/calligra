@@ -932,7 +932,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 if (!m_errorMessagePopup) {
 //     m_errorMessagePopup->close();
                     m_errorMessagePopup = new KexiArrowTip(
-                        i18n("Error: %1", m_editor->columnInfo()->field->typeName()) + "?",
+                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
                         dynamic_cast<QWidget*>(this));
                     m_errorMessagePopup->move(
                         par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0));
@@ -1201,6 +1201,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         {
             return;
         }
+        break;
     case SignalDelete:
         /*emit*/ itemDeleteRequest(m_currentItem, m_curRow, m_curCol);
         /*emit*/ currentItemDeleteRequest();
