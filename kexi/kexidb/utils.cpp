@@ -147,7 +147,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
     {
         details += (QString("<p><b>") + i18n("Server result:") + "</b> " + QString::number(serverResult));
         if (!serverResultName.isEmpty()) {
-            details += QString("(%1)").arg(serverResultName);
+            details += QString(" (%1)").arg(serverResultName);
         }
     }
     else {
