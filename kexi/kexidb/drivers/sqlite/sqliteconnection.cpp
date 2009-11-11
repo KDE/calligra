@@ -296,9 +296,45 @@ int SQLiteConnection::serverResult()
     return d->res == 0 ? Connection::serverResult() : d->res;
 }
 
+static const char* serverResultNames[] = {
+    "SQLITE_OK", // 0
+    "SQLITE_ERROR",
+    "SQLITE_INTERNAL",
+    "SQLITE_PERM",
+    "SQLITE_ABORT",
+    "SQLITE_BUSY",
+    "SQLITE_LOCKED",
+    "SQLITE_NOMEM",
+    "SQLITE_READONLY",
+    "SQLITE_INTERRUPT",
+    "SQLITE_IOERR",
+    "SQLITE_CORRUPT",
+    "SQLITE_NOTFOUND",
+    "SQLITE_FULL",
+    "SQLITE_CANTOPEN",
+    "SQLITE_PROTOCOL",
+    "SQLITE_EMPTY",
+    "SQLITE_SCHEMA",
+    "SQLITE_TOOBIG",
+    "SQLITE_CONSTRAINT",
+    "SQLITE_MISMATCH",
+    "SQLITE_MISUSE",
+    "SQLITE_NOLFS",
+    "SQLITE_AUTH",
+    "SQLITE_FORMAT",
+    "SQLITE_RANGE",
+    "SQLITE_NOTADB", // 26
+};
+
 QString SQLiteConnection::serverResultName()
 {
-    return Connection::serverResultName();
+    if (d->res >= 0 && d->res <= SQLITE_NOTADB)
+        return QString::fromLatin1(serverResultNames[d->res]);
+    else if (d->res == SQLITE_ROW)
+        return QLatin1String("SQLITE_ROW");
+    else if (d->res == SQLITE_DONE)
+        return QLatin1String("SQLITE_DONE");
+    return QString();
 }
 
 void SQLiteConnection::drv_clearServerResult()
