@@ -17,34 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTHELPER_H
-#define KARBONGRADIENTHELPER_H
+#ifndef KOGRADIENTHELPER_H
+#define KOGRADIENTHELPER_H
 
-#include <karboncommon_export.h>
+#include <flake_export.h>
 #include <QtGui/QBrush>
 
 class KoShape;
 class QGradient;
 class KoShapeBackground;
 
-class KARBONCOMMON_EXPORT KarbonGradientHelper
+class FLAKE_EXPORT KoGradientHelper
 {
 public:
-
     /// clones the given gradient
-    static QGradient * cloneGradient( const QGradient * gradient );
+    static QGradient* cloneGradient(const QGradient * gradient);
 
     /// applies given gradient stops to given shape returning the new gradient wrapped in a brush
-    static KoShapeBackground * applyFillGradientStops( KoShape * shape, const QGradientStops &stops );
-    static QBrush applyStrokeGradientStops( KoShape * shape, const QGradientStops &stops );
-    static QBrush applyGradientStops( KoShape * shape, const QGradientStops &stops, bool fillGradient );
+    static KoShapeBackground* applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QBrush applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QBrush applyGradientStops(KoShape *shape, const QGradientStops &stops, bool fillGradient);
+
     /// creates default gradient for given size
-    static QGradient * defaultGradient( const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops );
+    static QGradient * defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
+
     /// Converts gradient type, preserving as much data as possible
-    static QGradient * convertGradient( const QGradient * gradient, QGradient::Type newType );
-    
+    static QGradient * convertGradient(const QGradient *gradient, QGradient::Type newType);
+
     /// Calculates color at given position from given gradient stops
-    static QColor colorAt( qreal position, const QGradientStops &stops );
+    static QColor colorAt(qreal position, const QGradientStops &stops);
 };
 
-#endif // KARBONGRADIENTHELPER_H
+#endif // KOGRADIENTHELPER_H

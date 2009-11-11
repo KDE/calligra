@@ -18,16 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONSTYLEBUTTONBOX_H
-#define KARBONSTYLEBUTTONBOX_H
+#ifndef STYLEBUTTONBOX_H
+#define STYLEBUTTONBOX_H
 
 #include <QtGui/QWidget>
 
-#include <karbonui_export.h>
-
 class QButtonGroup;
 
-class KARBONUI_EXPORT KarbonStyleButtonBox : public QWidget
+class StyleButtonBox : public QWidget
 {
     Q_OBJECT
 
@@ -41,23 +39,22 @@ public:
         Winding  = 32
     };
     Q_DECLARE_FLAGS(StyleButtons, StyleButton)
-    
-    KarbonStyleButtonBox( QWidget* parent = 0L );
-    virtual ~KarbonStyleButtonBox();
+
+    explicit StyleButtonBox(QWidget* parent = 0L);
+    virtual ~StyleButtonBox();
 
 public slots:
     /// shows specified buttons
     void showButtons(StyleButtons buttons);
 
 signals:
-    void buttonPressed( int buttonId );
+    void buttonPressed(int buttonId);
 
 private:
     class Private;
     Private * const d;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KarbonStyleButtonBox::StyleButtons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(StyleButtonBox::StyleButtons)
 
-#endif // KARBONSTYLEBUTTONBOX_H
-
+#endif // STYLEBUTTONBOX_H

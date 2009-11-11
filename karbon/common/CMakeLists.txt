@@ -2,7 +2,6 @@ set(karboncommon_LIB_SRCS
     KarbonDocument.cpp
     KarbonGlobal.cpp
     KarbonCursor.cpp
-    KarbonGradientHelper.cpp
     KarbonOutlinePaintingStrategy.cpp
 
     commands/KarbonLayerReorderCommand.cpp

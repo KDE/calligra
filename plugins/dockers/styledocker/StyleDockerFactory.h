@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,19 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBON_DOCKERS_PLUGIN_H
-#define KARBON_DOCKERS_PLUGIN_H
+#ifndef STYLEDOCKERFACTORY_H
+#define STYLEDOCKERFACTORY_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <KoDockFactory.h>
 
-class KarbonDockersPlugin : public QObject 
+class StyleDockerFactory : public KoDockFactory
 {
-    Q_OBJECT
-
 public:
-    KarbonDockersPlugin( QObject * parent,  const QVariantList & );
-    ~KarbonDockersPlugin() {}
+    StyleDockerFactory();
+
+    virtual QString id() const;
+    virtual KoDockFactory::DockPosition defaultDockPosition() const;
+    virtual QDockWidget* createDockWidget();
+    virtual bool isCollapsable() const;
 };
 
-#endif // KARBON_DOCKERS_PLUGIN_H
+#endif // STYLEDOCKERFACTORY_H

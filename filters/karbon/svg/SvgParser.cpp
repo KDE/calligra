@@ -28,7 +28,6 @@
 
 #include <KarbonGlobal.h>
 #include <KarbonPart.h>
-#include <KarbonGradientHelper.h>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>

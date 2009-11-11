@@ -49,7 +49,6 @@
 #include <KoPatternBackground.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
-#include <KarbonGradientHelper.h>
 
 #include <kgenericfactory.h>
 

@@ -25,17 +25,9 @@
 namespace Karbon
 {
 
-    enum StyleType
-    {
-        Background,  ///< the background / fill style is active
-        Foreground  ///< the foreground / border style is active
-    };
-
     enum KarbonCanvasResource
     {
         FirstKarbonResource = KoCanvasResource::KarbonStart,
-
-        ActiveStyle ///< the actual active style see StyleType for valid values
     };
 }
 

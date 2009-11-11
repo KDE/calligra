@@ -246,8 +246,7 @@ static const char* const buttonwinding[]={
 #endif
 
 
-#include "KarbonStyleButtonBox.h"
-#include "KarbonPart.h"
+#include "StyleButtonBox.h"
 
 #include <klocale.h>
 #include <kicon.h>
@@ -258,99 +257,98 @@ static const char* const buttonwinding[]={
 #include <QtGui/QButtonGroup>
 #include <QtGui/QGridLayout>
 
-class KarbonStyleButtonBox::Private
+class StyleButtonBox::Private
 {
 public:
     Private()
-        : group(0), rowCount(1), columnCount(6)
-    {
-    };
-    
-    QButtonGroup * group;
+    : group(0)
+    , rowCount(1)
+    , columnCount(6)
+    {}
+
+    QButtonGroup* group;
     int rowCount;
     int columnCount;
 };
 
-KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
-    : QWidget( parent ), d( new Private() )
+StyleButtonBox::StyleButtonBox(QWidget* parent)
+: QWidget(parent)
+, d(new Private())
 {
-    //setMinimumSize( 45, 70 );
-    setContentsMargins( 0, 0, 0, 0 );
+    //setMinimumSize(45, 70);
+    setContentsMargins(0, 0, 0, 0);
 
-    QGridLayout * layout = new QGridLayout( this );
-    d->group = new QButtonGroup( this );
+    QGridLayout * layout = new QGridLayout(this);
+    d->group = new QButtonGroup(this);
 
     // The button for no fill
-    QToolButton* button = new QToolButton( this );
-    //button->setIcon( QPixmap( (const char **) buttonnone ) );
-    button->setIcon( KIcon( "edit-delete" ) );
-    button->setToolTip( i18nc( "No stroke or fill", "None" ) );
-    d->group->addButton( button, None );
+    QToolButton* button = new QToolButton(this);
+    //button->setIcon(QPixmap((const char **) buttonnone));
+    button->setIcon(KIcon("edit-delete"));
+    button->setToolTip(i18nc("No stroke or fill", "None"));
+    d->group->addButton(button, None);
 
     // The button for solid fill
-    button = new QToolButton( this );
-    button->setIcon( QPixmap( (const char **) buttonsolid ) );
-    button->setToolTip( i18nc( "Solid color stroke or fill", "Solid" ) );
-    d->group->addButton( button, Solid );
+    button = new QToolButton(this);
+    button->setIcon(QPixmap((const char **) buttonsolid));
+    button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
+    d->group->addButton(button, Solid);
 
     // The button for gradient fill
-    button = new QToolButton( this );
-    button->setIcon( QPixmap( (const char **) buttongradient ) );
-    button->setToolTip( i18n( "Gradient" ) );
-    d->group->addButton( button, Gradient );
+    button = new QToolButton(this);
+    button->setIcon(QPixmap((const char **) buttongradient));
+    button->setToolTip(i18n("Gradient"));
+    d->group->addButton(button, Gradient);
 
     // The button for pattern fill
-    button = new QToolButton( this );
-    button->setIcon( QPixmap( (const char **) buttonpattern ) );
-    button->setToolTip( i18n( "Pattern" ) );
-    d->group->addButton( button, Pattern );
+    button = new QToolButton(this);
+    button->setIcon(QPixmap((const char **) buttonpattern));
+    button->setToolTip(i18n("Pattern"));
+    d->group->addButton(button, Pattern);
 
     // The button for even-odd fill rule
-    button = new QToolButton( this );
-    button->setIcon( QPixmap( (const char **) buttonevenodd ) );
-    button->setToolTip( i18n( "Even-Odd Fill" ) );
-    d->group->addButton( button, EvenOdd );
+    button = new QToolButton(this);
+    button->setIcon(QPixmap((const char **) buttonevenodd));
+    button->setToolTip(i18n("Even-Odd Fill"));
+    d->group->addButton(button, EvenOdd);
 
     // The button for winding fill-rule
-    button = new QToolButton( this );
-    button->setIcon( QPixmap( (const char **) buttonwinding ) );
-    button->setToolTip( i18n( "Winding Fill" ) );
-    d->group->addButton( button, Winding );
+    button = new QToolButton(this);
+    button->setIcon(QPixmap((const char **) buttonwinding));
+    button->setToolTip(i18n("Winding Fill"));
+    d->group->addButton(button, Winding);
 
     int index = 1;
-    for( int row = 0; row < d->rowCount; ++row )
-    {
-        for( int col = 0; col < d->columnCount; ++col )
-        {
-            layout->addWidget( d->group->button( index ), row, col );
+    for(int row = 0; row < d->rowCount; ++row) {
+        for(int col = 0; col < d->columnCount; ++col) {
+            layout->addWidget(d->group->button(index), row, col);
             index = index<<1;
-            if( index > Winding )
+            if(index > Winding)
                 break;
         }
-        if( index > Winding )
+        if(index > Winding)
             break;
     }
-    
-    layout->setMargin( 0 );
-    layout->setSpacing( 1 );
-    layout->setColumnStretch( 0, 1 );
-    layout->setColumnStretch( 1, 1 );
-    layout->setRowStretch( 3, 1 );
 
-    connect( d->group, SIGNAL( buttonClicked( int ) ), this, SIGNAL( buttonPressed( int ) ) );
+    layout->setMargin(0);
+    layout->setSpacing(1);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 1);
+    layout->setRowStretch(3, 1);
+
+    connect(d->group, SIGNAL(buttonClicked(int)), this, SIGNAL(buttonPressed(int)));
 }
 
-KarbonStyleButtonBox::~KarbonStyleButtonBox()
+StyleButtonBox::~StyleButtonBox()
 {
     delete d;
 }
 
-void KarbonStyleButtonBox::showButtons(StyleButtons buttons)
+void StyleButtonBox::showButtons(StyleButtons buttons)
 {
-    foreach( QAbstractButton * b, d->group->buttons() ) {
-        b->setVisible( buttons & d->group->id( b ) );
+    foreach(QAbstractButton * b, d->group->buttons()) {
+        b->setVisible(buttons & d->group->id(b));
     }
 }
 
-#include "KarbonStyleButtonBox.moc"
-
+#include "StyleButtonBox.moc"

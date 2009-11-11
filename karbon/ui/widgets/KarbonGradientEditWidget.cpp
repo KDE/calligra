@@ -21,7 +21,6 @@
 
 #include "KarbonGradientEditWidget.h"
 #include "KarbonGradientWidget.h"
-#include "KarbonGradientHelper.h"
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>

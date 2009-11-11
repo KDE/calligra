@@ -20,13 +20,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONSTYLEPREVIEW_H
-#define KARBONSTYLEPREVIEW_H
+#ifndef STYLEPREVIEW_H
+#define STYLEPREVIEW_H
 
 #include <KoCheckerBoardPainter.h>
 #include <QFrame>
-
-#include <karbonui_export.h>
 
 class QEvent;
 class QPaintEvent;
@@ -35,16 +33,16 @@ class KoShapeBorderModel;
 class KoShapeBackground;
 
 /// A widget to preview stroke and fill of a shape
-class KARBONUI_EXPORT KarbonStylePreview : public QFrame
+class StylePreview : public QFrame
 {
     Q_OBJECT
 
 public:
     /// Constructs preview widget with given parent
-    explicit KarbonStylePreview( QWidget* parent = 0L );
+    explicit StylePreview(QWidget* parent = 0L);
 
     /// Destroys the preview widget
-    ~KarbonStylePreview();
+    ~StylePreview();
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -55,9 +53,9 @@ public:
      * @param stroke the stroke to preview
      * @param fill the fill to preview
      */
-    void update( KoShapeBorderModel * stroke, KoShapeBackground * fill );
+    void update(KoShapeBorderModel * stroke, KoShapeBackground * fill);
 
-    virtual bool eventFilter( QObject* object, QEvent* event );
+    virtual bool eventFilter(QObject* object, QEvent* event);
 
     /**
      * Returns whether the stroke (true) or the fill (false) is selected.
@@ -66,20 +64,20 @@ public:
 
 signals:
     /// Is emitted as soon as the stroke was changed
-    void strokeChanged( const KoShapeBorderModel & );
+    void strokeChanged(const KoShapeBorderModel &);
     /// Is emitted as soon as the fill was changed
-    void fillChanged( const QBrush& );
+    void fillChanged(const QBrush&);
     /// Is emitted as soon as the fill is selected
     void fillSelected();
     /// Is emitted as soon as the stroke is selected
     void strokeSelected();
 
 protected:
-    virtual void paintEvent( QPaintEvent* event );
+    virtual void paintEvent(QPaintEvent* event);
 
 private:
-    void drawFill( QPainter & painter, const KoShapeBackground * fill );
-    void drawStroke( QPainter & painter, const KoShapeBorderModel* );
+    void drawFill(QPainter & painter, const KoShapeBackground * fill);
+    void drawStroke(QPainter & painter, const KoShapeBorderModel*);
 
     bool m_strokeWidget; ///< shows if stroke or fill is selected
     KoShapeBackground * m_background; ///< the fill to preview
@@ -89,5 +87,4 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-#endif // KARBONSTYLEPREVIEW_H
-
+#endif // STYLEPREVIEW_H

@@ -17,32 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonStyleDockerFactory.h"
-#include "KarbonStyleDocker.h"
+#include "StyleDockerFactory.h"
+#include "StyleDocker.h"
 
-KarbonStyleDockerFactory::KarbonStyleDockerFactory()
+StyleDockerFactory::StyleDockerFactory()
 {
 }
 
-QString KarbonStyleDockerFactory::id() const
+QString StyleDockerFactory::id() const
 {
     return QString("StyleDocker");
 }
 
-KoDockFactory::DockPosition KarbonStyleDockerFactory::defaultDockPosition() const
+KoDockFactory::DockPosition StyleDockerFactory::defaultDockPosition() const
 {
     return DockRight;
 }
 
-QDockWidget* KarbonStyleDockerFactory::createDockWidget()
+QDockWidget* StyleDockerFactory::createDockWidget()
 {
-    KarbonStyleDocker * widget = new KarbonStyleDocker();
+    StyleDocker * widget = new StyleDocker();
     widget->setObjectName(id());
 
     return widget;
 }
 
-bool KarbonStyleDockerFactory::isCollapsable() const
+bool StyleDockerFactory::isCollapsable() const
 {
     return false;
 }
