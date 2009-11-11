@@ -150,7 +150,7 @@ void FilterEffectScene::initialize(KoFilterEffectStack *effectStack)
 void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
 {
     const bool isFirstItem = m_items.count() == 0;
-    QString defaultInput = isFirstItem ? "SourceGraphic" : m_items.last()->outputName();
+    const QString defaultInput = isFirstItem ? "SourceGraphic" : m_items.last()->outputName();
     
     QList<QString> inputs = effect->inputs();
     for (int i = inputs.count(); i < effect->requiredInputCount(); ++i) {
@@ -158,9 +158,8 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
     }
     
     QSet<QString> defaultItems;
-    foreach(QString input, inputs) {
-        if (input.isEmpty())
-            input = defaultInput;
+    foreach(const QString &currentInput, inputs) {
+        const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
         if (m_defaultInputs.contains(input) && ! defaultItems.contains(input)) {
             DefaultInputItem * item = new DefaultInputItem(input, effect);
             addSceneItem(item);
@@ -173,9 +172,8 @@ void FilterEffectScene::createEffectItems(KoFilterEffect *effect)
     
     // create connections
     int index = 0;
-    foreach(QString input, inputs) {
-        if (input.isEmpty())
-            input = defaultInput;
+    foreach(const QString &currentInput, inputs) {
+        const QString &input = currentInput.isEmpty() ? defaultInput : currentInput;
         EffectItemBase * outputItem = m_outputs.value(input, 0);
         if (outputItem) {
             ConnectionItem * connectionItem = new ConnectionItem(outputItem, effectItem, index);
