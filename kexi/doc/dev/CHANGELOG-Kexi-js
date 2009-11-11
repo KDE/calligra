@@ -16,23 +16,13 @@ TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) 
 
 ===================== Kexi 2.0 Alpha =====================
 
-TODO Form editor:
- - FormManager::FormManager: register factory (port to koproperty2)
- - port KFDPixmapEdit, PropertyFactory
- - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
- - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
-TODO: setting "enabled" property to false does not work
-TODO: fix the rectangle and repainting when inserting widgets with specified size
-TODO: inserting tab widget does not work
-TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
- - setting alignment property (e.g. for text box) does not work because it is numeric now
-
 TODO KoProperty:
 - mising border below the last item when its editor is visible
 - when started to change the editor's value:
 -- "revert" button should appear
 -- if the property has parent, the item for the parent should be repainted
 - (??) fix or reimplement spin box widgets: look bad with oxygen and probably other styles
+- fix setting font values: in form designer we need to leave andreenter the item to apply the changes
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
@@ -41,8 +31,18 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
            (esp. the project navigator) without loading any plugins in advance
+- use semantic API for any i18n string, e.g. i18n("Do you want to clear the contents of table %1?", tableName)
 
 Forms TODO
+TODO Form editor:
+ - FormManager::FormManager: register factory (port to koproperty2)
+ - port KFDPixmapEdit, PropertyFactory
+ - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
+ - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
+TODO: setting "enabled" property to false does not work
+TODO: inserting tab widget does not work
+TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
+ - setting alignment property (e.g. for text box) does not work because it is numeric now
 TODO: clearing widget's dataSource property sets datasource to "" in XML instead of clrearing it completely; the same for form's dataSource and dataSourcePartClass properties
 TODO: make label display data source name
 TODO: make data-aware widgets display a small icon indicating there is data source set
@@ -54,8 +54,24 @@ TODO: image box widgets: changing aspect or scale properties should repaint the 
 TODO: replace KexiDataItemChangesListener::handleAction(const QString& actionName) with signal/slot connections
 TODO: wrap passwordMode property for line edit widget in design mode, otherwise data source is displayed using *
 TODO: use KRichTextWidget or KRichTextEdit instead of KTextEdit
+TODO: text editor: autofill disabled because this makes the widget disappear entirely; now fix the background color because it is getting transparent on mouse out in design mode
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
+
+2009-11-11
+Table View
+*fix row deleting (typo)
+*do not display context menu title - most actions are related to a single cell (Cut, Copy..) and others to entire row (Delete Row)
+*display "Save Row" and "Cancel Row Changes" buttons on the context toolbar (appears also in forms)
+
+KexiDB
+*make detailed description of database operation's error more compact
+*SQLite: show server result name, e.g. "SQLITE_CONSTRAINT"
+
+2009-11-10
+KoProperty
+*fix implementation of copy constructor of the Set class (possible crashes, appearing e.g. on saving in Table Designer)
+*fix propety groups handling in Set
 
 2009-11-09
 Forms

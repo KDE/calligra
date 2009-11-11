@@ -466,8 +466,10 @@ CCPASTEUR:
 - add dynamic resize for dict members like Connection::m_tables
 - make KexiDB really ASYNC, multithreaded!
 - implement relationships (foreign key information) between tables + storage
--- Support tree standard types of integrity rules as described at http://allenbrowne.com/ser-64.html
+-- Support three standard types of integrity rules as described at http://allenbrowne.com/ser-64.html
     plus: Cascade to Null Relations
+-- SQLite now supports it: http://sqlite.org/foreignkeys.html
+-- support composite foreign keys (SQLite now supports them too)
 - implement GROUP BY clause + storage
 - add schema to kexi__* tables on createTable()
 - add support for creation temporary databases
@@ -579,6 +581,7 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - tables can use queries as a row source for lookup fields, what can lead to infinite recursion;
   FIX this by either: 1) not allowing to use such table in a query (see kexi/to_fix/Ksiazka_adresowa2_recursive_query_deadlock.kexi)
   or 2) delayed loading of query column
+- parse server-specific messages like "column t is not unique" in sqlite with and use this
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
