@@ -91,7 +91,10 @@ void KexiDataAwareView::initActions()
         << KexiStandardAction::sortDescending(this, SLOT(sortDescending()), this);
     }
     KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
-    viewActions << (a = dynamic_cast<KAction*>(ac->action("edit_find")));
+    viewActions
+        << dynamic_cast<KAction*>(ac->action("data_save_row"))
+        << dynamic_cast<KAction*>(ac->action("data_cancel_row_changes"))
+        << dynamic_cast<KAction*>(ac->action("edit_find"));
     setViewActions(viewActions);
 
     plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
