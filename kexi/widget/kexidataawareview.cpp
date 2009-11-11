@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,7 +81,15 @@ void KexiDataAwareView::initActions()
 {
     // - setup local actions
     QList<QAction*> viewActions;
-    KAction* a;
+    KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
+    viewActions
+        << dynamic_cast<KAction*>(ac->action("data_save_row"))
+        << dynamic_cast<KAction*>(ac->action("data_cancel_row_changes"));
+    
+    KAction *a = new KAction(this);
+    a->setSeparator(true);
+    viewActions << a;
+
     if (m_dataAwareObject->isSortingEnabled()) {
 //  a = new KAction(this);
 //  a->setSeparator(true);
@@ -90,10 +98,7 @@ void KexiDataAwareView::initActions()
         << KexiStandardAction::sortAscending(this, SLOT(sortAscending()), this)
         << KexiStandardAction::sortDescending(this, SLOT(sortDescending()), this);
     }
-    KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
     viewActions
-        << dynamic_cast<KAction*>(ac->action("data_save_row"))
-        << dynamic_cast<KAction*>(ac->action("data_cancel_row_changes"))
         << dynamic_cast<KAction*>(ac->action("edit_find"));
     setViewActions(viewActions);
 
@@ -172,10 +177,11 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     const bool editing = m_dataAwareObject->rowEditing();
     const bool sorting = m_dataAwareObject->isSortingEnabled();
     const int rows = m_dataAwareObject->rows();
+    const bool insertRowFocusedWithoutEditing = !editing && row == rows;
 
-    setAvailable("edit_cut", !ro);
+    setAvailable("edit_cut", !ro && !insertRowFocusedWithoutEditing);
     setAvailable("edit_paste", !ro);
-    setAvailable("edit_delete", !ro); // && !(inserting && row==rows));
+    setAvailable("edit_delete", !ro && !insertRowFocusedWithoutEditing);
     setAvailable("edit_delete_row", !ro && !(deleting && row == rows));
     setAvailable("edit_insert_empty_row", !ro && emptyInserting);
     setAvailable("edit_clear_table", !ro && deleting && rows > 0);
