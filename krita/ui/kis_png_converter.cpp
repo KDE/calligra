@@ -541,6 +541,16 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             m_img -> addAnnotation(annotation);
         }
     }
+    
+    // Read resolution
+    int unit_type;
+    png_uint_32 x_resolution, y_resolution;
+    
+    png_get_pHYs(png_ptr, info_ptr,&x_resolution,&y_resolution, &unit_type);
+    if (unit_type == PNG_RESOLUTION_METER)
+    {
+        m_img->setResolution((double) POINT_TO_CM(x_resolution)/100.0, (double) POINT_TO_CM(y_resolution)/100.0 );
+    }
 
     double coeff = quint8_MAX / (double)(pow(2, color_nb_bits) - 1);
     KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), UCHAR_MAX);
@@ -985,6 +995,12 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 #endif
     }
 
+    // Save resolution
+    int unit_type;
+    png_uint_32 x_resolution, y_resolution;
+    
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(img->xRes()) * 100.0, CM_TO_POINT(img->yRes()) * 100.0, PNG_RESOLUTION_METER);
+    
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);
