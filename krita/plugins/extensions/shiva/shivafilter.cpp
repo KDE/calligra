@@ -73,13 +73,19 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
     if (config) {
         QMap<QString, QVariant> map = config->getProperties();
         for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
+            dbgPlugins << it.key() << " " << it.value();
             const GTLCore::Metadata::Entry* entry = kernel.metadata()->parameter(it.key().toAscii().data());
             if (entry and entry->asParameterEntry()) {
-                kernel.setParameter(it.key().toAscii().data(), qvariantToValue(it.value(), entry->asParameterEntry()->valueType()));
+                GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
+                if(val.isValid())
+                {
+                    kernel.setParameter(it.key().toAscii().data(), val);
+                }
             }
         }
     }
     {
+        dbgPlugins << "Compile: " << m_source->name().c_str();
         QMutexLocker l(shivaMutex);
         kernel.compile();
         if (kernel.isCompiled()) {
