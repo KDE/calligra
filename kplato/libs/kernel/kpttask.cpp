@@ -2342,7 +2342,7 @@ DateTime Task::workStartAfter(const DateTime &dt) {
             return t.isValid() ? t : dt;
         }
     } else {
-        DateTime t = m_requests.availableAfter(dt, m_currentSchedule);
+        DateTime t = m_requests.workStartAfter(dt, m_currentSchedule);
         m_currentSchedule->logDebug( "workStartAfter: " + dt.toString() + " = " + t.toString() );
         return t.isValid() ? t : dt;
     }
@@ -2357,8 +2357,8 @@ DateTime Task::workFinishBefore(const DateTime &dt)
             return t.isValid() ? t : dt;
         }
     } else {
-        DateTime t = m_requests.availableBefore(dt, m_currentSchedule);
-        //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
+        DateTime t = m_requests.workFinishBefore(dt, m_currentSchedule);
+        m_currentSchedule->logDebug( "workFinishBefore: " + dt.toString() + " = " + t.toString() );
         return t.isValid() ? t : dt;
     }
     return dt;

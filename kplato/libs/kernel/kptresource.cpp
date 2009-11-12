@@ -728,12 +728,12 @@ void Resource::makeAppointment(Schedule *node, int load) {
             return;
         }
         makeAppointment(node, from, end, load);
+        return;
     }
     if (!cal) {
         m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return; 
     }
-    //TODO: units and standard non-working days
     DateTime time = node->startTime;
     DateTime end = node->endTime;
     time = availableAfter(time, end);
@@ -823,11 +823,6 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     if (time >= lmt) {
         return t;
     }
-    if (type() == Type_Material) {
-        t = time > m_availableFrom ? time : m_availableFrom;
-        //kDebug()<<time.toString()<<"="<<t.toString()<<""<<m_name;
-        return t;
-    }
     Calendar *cal = calendar();
     if (cal == 0) {
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
@@ -853,11 +848,6 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
         lmt = limit;
     }
     if (time <= lmt) {
-        return t;
-    }
-    if (type() == Type_Material) {
-        t = time < m_availableUntil ? time : m_availableUntil;
-        //kDebug()<<time.toString()<<"="<<t.toString()<<""<<m_name;
         return t;
     }
     Calendar *cal = calendar();
@@ -1126,11 +1116,17 @@ Schedule *ResourceRequest::resourceSchedule( Schedule *ns )
 }
 
 DateTime ResourceRequest::workTimeAfter(const DateTime &dt) {
-    return m_resource->availableAfter( dt, DateTime(), 0 );
+    if ( m_resource->type() == Resource::Type_Work ) {
+        return m_resource->availableAfter( dt, DateTime(), 0 );
+    }
+    return DateTime();
 }
 
 DateTime ResourceRequest::workTimeBefore(const DateTime &dt) {
-    return m_resource->availableBefore( dt, DateTime(), 0 );
+    if ( m_resource->type() == Resource::Type_Work ) {
+        return m_resource->availableBefore( dt, DateTime(), 0 );
+    }
+    return DateTime();
 }
 
 DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
@@ -1286,177 +1282,18 @@ int ResourceGroupRequest::workUnits() const {
 }
 
 int ResourceGroupRequest::workAllocation() const {
-    return qMax( m_units, m_resourceRequests.count() );
-}
-
-Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const {
-    Duration e;
-    bool sts=false;
-    if (ok) *ok = sts;
-    foreach (ResourceRequest *r, m_resourceRequests) {
-        e += r->effort(time, duration, ns, backward, &sts);
-        if (sts && ok) *ok = sts;
-        //kDebug()<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString();
+    if ( m_group->type() == ResourceGroup::Type_Work ) {
+        return qMax( m_units, m_resourceRequests.count() );
     }
-    //kDebug()<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString();
-    return e;
-}
-
-int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
-    DateTime t1, t2 = time;
-    if (backward) {
-        foreach (ResourceRequest *r, m_resourceRequests) {
-            t1 = r->resource()->availableFrom();
-            if (!t2.isValid() || t2 > t1)
-                t2 = t1;
-        }
-        //kDebug()<<"bw"<<time.toString()<<":"<<t2.daysTo(time);
-        return t2.daysTo(time);
-    }
-    foreach (ResourceRequest *r, m_resourceRequests) {
-        t1 = r->resource()->availableUntil();
-        if (!t2.isValid() || t2 < t1)
-            t2 = t1;
-    }
-    //kDebug()<<"fw"<<time.toString()<<":"<<time.daysTo(t2);
-    return time.daysTo(t2);
+    return 0;
 }
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
-    //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_group->name()<<""<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
-    KLocale *locale = KGlobal::locale();
-    Duration e;
-    if (_effort == Duration::zeroDuration) {
-        return e;
+    Duration dur;
+    if ( m_parent ) {
+        dur = m_parent->duration( m_resourceRequests, time, _effort, ns, backward );
     }
-    DateTime logtime = time;
-    bool sts=true;
-    bool match = false;
-    DateTime start = time;
-    int inc = backward ? -1 : 1;
-    DateTime end = start;
-    Duration e1;
-    Duration d(1, 0, 0); // 1 day
-    int nDays = numDays(time, backward) + 1;
-    for (int i=0; !match && i <= nDays; ++i) {
-        // days
-        end = end.addDays(inc);
-        e1 = effort(start, d, ns, backward, &sts);
-        //kDebug()<<"["<<i<<"of"<<nDays<<"]"<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match"<<_effort.toString();
-        if (e + e1 < _effort) {
-            e += e1;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else {
-            end = start;
-            break;
-        }
-    }
-    if ( ! match ) {
-        ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
-        logtime = start;
-        d = Duration(0, 1, 0); // 1 hour
-        for (int i=0; !match && i < 24; ++i) {
-            // hours
-            end = end.addSecs(inc*60*60);
-            e1 = effort(start, d, ns, backward, &sts);
-            if (e + e1 < _effort) {
-                e += e1;
-                start = end;
-            } else if (e + e1 == _effort) {
-                e += e1;
-                match = true;
-            } else {
-                end = start;
-                break;
-            }
-            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
-        }
-        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
-    }
-    if ( ! match ) {
-        ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
-        logtime = start;
-        d = Duration(0, 0, 1); // 1 minute
-        for (int i=0; !match && i < 60; ++i) {
-            //minutes
-            end = end.addSecs(inc*60);
-            e1 = effort(start, d, ns, backward, &sts);
-            if (e + e1 < _effort) {
-                e += e1;
-                start = end;
-            } else if (e + e1 == _effort) {
-                e += e1;
-                match = true;
-            } else if (e + e1 > _effort) {
-                end = start;
-                break;
-            }
-            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
-        }
-        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
-    }
-    if ( ! match ) {
-        ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
-        logtime = start;
-        d = Duration(0, 0, 0, 1); // 1 second
-        for (int i=0; !match && i < 60 && sts; ++i) {
-            //seconds
-            end = end.addSecs(inc);
-            e1 = effort(start, d, ns, backward, &sts);
-            if (e + e1 < _effort) {
-                e += e1;
-                start = end;
-            } else if (e + e1 == _effort) {
-                e += e1;
-                match = true;
-            } else if (e + e1 > _effort) {
-                end = start;
-                break;
-            }
-            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
-        }
-    }
-    if ( ! match ) {
-        ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
-        d = Duration(0, 0, 0, 0, 1); // 1 millisecond
-        for (int i=0; !match && i < 1000; ++i) {
-            //milliseconds
-            end.setTime(end.time().addMSecs(inc));
-            e1 = effort(start, d, ns, backward, &sts);
-            if (e + e1 < _effort) {
-                e += e1;
-                start = end;
-            } else if (e + e1 == _effort) {
-                e += e1;
-                match = true;
-            } else if (e + e1 > _effort) {
-                break;
-            }
-            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
-        }
-    }
-    if (!match) {
-        ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
-        foreach (ResourceRequest *r, m_resourceRequests) {
-            Resource *res = r->resource();
-            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( res->availableFrom() ), locale->formatDateTime( res->availableUntil() ) ) );
-        }
-
-    }
-    DateTime t;
-    if (e != Duration::zeroDuration) {
-        t = backward ? availableAfter(end, ns) : availableBefore(end, ns);
-    }
-    end = t.isValid() ? t : time;
-    //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_group->name()<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort:"<<_effort.toString(Duration::Format_Day);
-    return (end>time?end-time:time-end);
+    return dur;
 }
 
 DateTime ResourceGroupRequest::workTimeAfter(const DateTime &time) {
@@ -1730,22 +1567,18 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
     if (isEmpty()) {
         return effort;
     }
-    Duration dur;
-    int total = workAllocation();
+    Duration dur = effort;
+    QList<ResourceRequest*> lst;
     foreach (ResourceGroupRequest *r, m_requests) {
-        if (r->isEmpty())
-            continue;
-        if (r->group()->type() == ResourceGroup::Type_Work) {
-            Duration e = ( effort * r->workAllocation() ) / total;
-            r->allocateDynamicRequests( time, e, ns, backward );
-            Duration d = r->duration(time, e, ns, backward);
-            if (d > dur)
-                dur = d;
+        r->allocateDynamicRequests( time, effort, ns, backward );
+        if ( r->group()->type() == ResourceGroup::Type_Work ) {
+            lst << r->resourceRequests();
         } else if (r->group()->type() == ResourceGroup::Type_Material) {
             //TODO
-            if (dur == Duration::zeroDuration)
-                dur = effort;
         }
+    }
+    if ( ! lst.isEmpty() ) {
+        dur = duration( lst, time, effort, ns, backward );
     }
     return dur;
 }
@@ -1800,6 +1633,37 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time, Schedu
     return end;
 }
 
+DateTime ResourceRequestCollection::workStartAfter(const DateTime &time, Schedule *ns) {
+    DateTime start;
+    foreach (ResourceGroupRequest *r, m_requests) {
+        if ( r->group()->type() != ResourceGroup::Type_Work ) {
+            continue;
+        }
+        DateTime t = r->availableAfter(time, ns);
+        if (t.isValid() && (!start.isValid() || t < start))
+            start = t;
+    }
+    if (start.isValid() && start < time)
+        start = time;
+    //kDebug()<<time.toString()<<"="<<start.toString();
+    return start;
+}
+
+DateTime ResourceRequestCollection::workFinishBefore(const DateTime &time, Schedule *ns) {
+    DateTime end;
+    foreach (ResourceGroupRequest *r, m_requests) {
+        if ( r->group()->type() != ResourceGroup::Type_Work ) {
+            continue;
+        }
+        DateTime t = r->availableBefore(time, ns);
+        if (t.isValid() && (!end.isValid() ||t > end))
+            end = t;
+    }
+    if (!end.isValid() || end > time)
+        end = time;
+    return end;
+}
+
 
 void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
     //kDebug();
@@ -1836,6 +1700,176 @@ void ResourceRequestCollection::resetDynamicAllocations()
     foreach ( ResourceGroupRequest *g, m_requests ) {
         g->resetDynamicAllocations();
     }
+}
+
+Duration ResourceRequestCollection::effort(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const {
+    Duration e;
+    bool sts=false;
+    if (ok) *ok = sts;
+    foreach (ResourceRequest *r, lst) {
+        e += r->effort(time, duration, ns, backward, &sts);
+        if (sts && ok) *ok = sts;
+        //kDebug()<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString();
+    }
+    //kDebug()<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString();
+    return e;
+}
+
+int ResourceRequestCollection::numDays(const QList<ResourceRequest*> &lst, const DateTime &time, bool backward) const {
+    DateTime t1, t2 = time;
+    if (backward) {
+        foreach (ResourceRequest *r, lst) {
+            t1 = r->resource()->availableFrom();
+            if (!t2.isValid() || t2 > t1)
+                t2 = t1;
+        }
+        //kDebug()<<"bw"<<time.toString()<<":"<<t2.daysTo(time);
+        return t2.daysTo(time);
+    }
+    foreach (ResourceRequest *r, lst) {
+        t1 = r->resource()->availableUntil();
+        if (!t2.isValid() || t2 < t1)
+            t2 = t1;
+    }
+    //kDebug()<<"fw"<<time.toString()<<":"<<time.daysTo(t2);
+    return time.daysTo(t2);
+}
+
+Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
+    //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_group->name()<<""<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
+    KLocale *locale = KGlobal::locale();
+    Duration e;
+    if (_effort == Duration::zeroDuration) {
+        return e;
+    }
+    DateTime logtime = time;
+    bool sts=true;
+    bool match = false;
+    DateTime start = time;
+    int inc = backward ? -1 : 1;
+    DateTime end = start;
+    Duration e1;
+    Duration d(1, 0, 0); // 1 day
+    int nDays = numDays(lst, time, backward) + 1;
+    for (int i=0; !match && i <= nDays; ++i) {
+        // days
+        end = end.addDays(inc);
+        e1 = effort(lst, start, d, ns, backward, &sts);
+        //kDebug()<<"["<<i<<"of"<<nDays<<"]"<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match"<<_effort.toString();
+        if (e + e1 < _effort) {
+            e += e1;
+            start = end;
+        } else if (e + e1 == _effort) {
+            e += e1;
+            match = true;
+        } else {
+            end = start;
+            break;
+        }
+    }
+    if ( ! match ) {
+        ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+        
+        logtime = start;
+        d = Duration(0, 1, 0); // 1 hour
+        for (int i=0; !match && i < 24; ++i) {
+            // hours
+            end = end.addSecs(inc*60*60);
+            e1 = effort(lst, start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        }
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
+    }
+    if ( ! match ) {
+        ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+        
+        logtime = start;
+        d = Duration(0, 0, 1); // 1 minute
+        for (int i=0; !match && i < 60; ++i) {
+            //minutes
+            end = end.addSecs(inc*60);
+            e1 = effort(lst, start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        }
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
+    }
+    if ( ! match ) {
+        ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+        
+        logtime = start;
+        d = Duration(0, 0, 0, 1); // 1 second
+        for (int i=0; !match && i < 60 && sts; ++i) {
+            //seconds
+            end = end.addSecs(inc);
+            e1 = effort(lst, start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        }
+    }
+    if ( ! match ) {
+        ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+        
+        d = Duration(0, 0, 0, 0, 1); // 1 millisecond
+        for (int i=0; !match && i < 1000; ++i) {
+            //milliseconds
+            end.setTime(end.time().addMSecs(inc));
+            e1 = effort(lst, start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                break;
+            }
+            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        }
+    }
+    if (!match) {
+        ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
+        foreach (ResourceRequest *r, lst) {
+            Resource *res = r->resource();
+            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( res->availableFrom() ), locale->formatDateTime( res->availableUntil() ) ) );
+        }
+
+    }
+    DateTime t;
+    if (e != Duration::zeroDuration) {
+        t = backward ? availableAfter(end, ns) : availableBefore(end, ns);
+    }
+    end = t.isValid() ? t : time;
+    //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_group->name()<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort:"<<_effort.toString(Duration::Format_Day);
+    return (end>time?end-time:time-end);
 }
 
 #ifndef NDEBUG

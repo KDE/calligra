@@ -33,9 +33,28 @@
 namespace KPlato
 {
 
+void ProjectTester::printDebug( Calendar *c, const QString &str, bool full ) const {
+    qDebug()<<"Debug info: Calendar"<<c->name()<<str;
+    for ( int wd = 1; wd <= 7; ++wd ) {
+        CalendarDay *d = c->weekday( wd );
+        qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
+        foreach ( TimeInterval *t,  d->workingIntervals() ) {
+            qDebug()<<"      interval:"<<t->first<<t->second;
+        }
+    }
+    foreach ( const CalendarDay *d, c->days() ) {
+        qDebug()<<"   "<<d->date()<<":";
+        foreach ( TimeInterval *t,  d->workingIntervals() ) {
+            qDebug()<<"      interval:"<<t->first<<t->second;
+        }
+    }
+}
+
 void ProjectTester::printDebug( Resource *r, const QString &str, bool full ) const {
     qDebug()<<"Debug info: Resource"<<r->name()<<str;
-    qDebug()<<"Available:"<<r->availableFrom().toString()<<r->availableUntil().toString();
+    qDebug()<<"Group:"<<r->parentGroup()->name()<<"Type:"<<r->parentGroup()->typeToString();
+    qDebug()<<"Available:"<<r->availableFrom().toString()<<r->availableUntil().toString()<<r->units()<<"%";
+    qDebug()<<"Type:"<<r->typeToString();
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
     foreach ( Appointment *a, r->externalAppointmentList() ) {
         qDebug()<<"   appointment:"<<a->startTime().toString()<<a->endTime().toString();
@@ -71,7 +90,7 @@ void ProjectTester::printDebug( Project *p, Task *t, const QString &str, bool fu
     foreach ( ResourceGroupRequest *gr, t->requests().requests() ) {
         qDebug()<<"Group request:"<<gr->group()->name()<<gr->units();
         foreach ( ResourceRequest *rr, gr->resourceRequests() ) {
-            qDebug()<<"  Resource request:"<<rr->resource()->name()<<rr->units()<<rr->resource()->availableFrom().toString()<<rr->resource()->availableUntil().toString();
+            qDebug()<<"  Resource request:"<<rr->resource()->name()<<rr->units()<<"%"<<rr->resource()->availableFrom().toString()<<rr->resource()->availableUntil().toString();
         }
     }
     Schedule *s = t->currentSchedule();
@@ -236,7 +255,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
-    s = "Calculate forward, Task: ASAP, Resource 50% load ------------------";
+    s = "Calculate forward, Task: ASAP, Resource 50% available -----------------";
     r->setUnits( 50 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
@@ -251,9 +270,28 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 1, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
     
+    s = "Calculate forward, Task: ASAP, Resource 50% available, Request 50% load ---------";
+    r->setUnits( 50 );
+    rr->setUnits( 50 );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+//    printDebug( m_project, t, s );
+    
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 3, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+    
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
     r->setUnits( 100 );
+    rr->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
@@ -857,6 +895,7 @@ void ProjectTester::scheduleFullday()
     Resource *r = new Resource();
     r->setName( "R1" );
     r->setCalendar( c );
+    r->setAvailableUntil( r->availableFrom().addDays( 21 ) );
     m_project->addResource( g, r );
 
     Task *t = m_project->createTask( m_project );
@@ -867,15 +906,17 @@ void ProjectTester::scheduleFullday()
     t->estimate()->setType( Estimate::Type_Effort );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     t->addRequest( gr );
 
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-//    printDebug( m_project, t, s );
-//    printSchedulingLog( *sm, s );
+//     printDebug( c, s );
+//     printDebug( m_project, t, s );
+//     printDebug( r, s, true );
+//     printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 14 )) );
@@ -910,12 +951,12 @@ void ProjectTester::scheduleFullday()
     r = new Resource();
     r->setName( "R2" );
     r->setCalendar( c2 );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
 
     r = new Resource();
     r->setName( "R3" );
     r->setCalendar( c3 );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
 
     m_project->calculate( *sm );
 
@@ -963,7 +1004,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     t->estimate()->setType( Estimate::Type_Effort );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     t->addRequest( gr );
 
     ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
@@ -1051,7 +1092,7 @@ void ProjectTester::reschedule()
     task1->estimate()->setType( Estimate::Type_Effort );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     task1->addRequest( gr );
 
     Task *task2 = project.createTask( &project );
@@ -1062,7 +1103,7 @@ void ProjectTester::reschedule()
     task2->estimate()->setType( Estimate::Type_Effort );
     
     gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     task2->addRequest( gr );
 
     Task *task3 = project.createTask( &project );
@@ -1073,7 +1114,7 @@ void ProjectTester::reschedule()
     task3->estimate()->setType( Estimate::Type_Effort );
     
     gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( r ) );
+    gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     task3->addRequest( gr );
 
     Relation *rel = new Relation( task1, task2 );
@@ -1126,6 +1167,82 @@ void ProjectTester::reschedule()
 
     QCOMPARE( task3->startTime(), c->firstAvailableAfter( task2->endTime(), targetend ) );
     QCOMPARE( task3->endTime(), task3->startTime() + Duration( 0, 8, 0 ) );
+}
+
+void ProjectTester::materialResource()
+{
+    Project project;
+    project.setName( "P1" );
+    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetend = DateTime( targetstart.addDays( 7 ) );
+    project.setConstraintStartTime( targetstart );
+    project.setConstraintEndTime( targetend);
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    project.addCalendar( c );
+    
+    Task *task1 = project.createTask( &project );
+    task1->setName( "T1" );
+    project.addTask( task1, &project );
+    task1->estimate()->setUnit( Duration::Unit_h );
+    task1->estimate()->setExpectedEstimate( 8.0 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+
+    QString s = "Calculate forward, Task: ASAP, Working + material resource --------";
+    qDebug()<<s;
+    ResourceGroup *g = new ResourceGroup();
+    project.addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "Work" );
+    r->setAvailableFrom( targetstart );
+    r->setCalendar( c );
+    project.addResource( g, r );
+
+    ResourceGroup *mg = new ResourceGroup();
+    mg->setType( ResourceGroup::Type_Material );
+    project.addResourceGroup( mg );
+    Resource *mr = new Resource();
+    mr->setType( Resource::Type_Material );
+    mr->setName( "Material" );
+    mr->setAvailableFrom( targetstart );
+    mr->setCalendar( c );
+    project.addResource( mg, mr );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    task1->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+
+    ResourceGroupRequest *mgr = new ResourceGroupRequest( mg );
+    task1->addRequest( mgr );
+    ResourceRequest *mrr = new ResourceRequest( mr, 100 );
+    mgr->addResourceRequest( mrr );
+
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+    project.calculate( *sm );
+
+    printDebug( r, s);
+    printDebug( mr, s);
+    printDebug( &project, task1, s);
+     printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->earlyStart(), targetstart );
+    QVERIFY( task1->lateStart() >=  task1->earlyStart() );
+    QVERIFY( task1->earlyFinish() <= task1->endTime() );
+    QVERIFY( task1->lateFinish() >= task1->endTime() );
+    
+    QCOMPARE( task1->startTime(), DateTime( r->availableFrom().date(), t1 ) );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( task1->schedulingError() == false );
 }
 
 } //namespace KPlato
