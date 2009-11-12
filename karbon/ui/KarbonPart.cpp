@@ -247,8 +247,11 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     {
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
-        pageLayout().loadOdf( *style );
-        setPageSize( QSizeF( pageLayout().width, pageLayout().height ) );
+        if( style )
+        {
+            pageLayout().loadOdf( *style );
+            setPageSize( QSizeF( pageLayout().width, pageLayout().height ) );
+        }
     }
     else
     {
