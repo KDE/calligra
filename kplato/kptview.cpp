@@ -200,7 +200,8 @@ View::View( Part* part, QWidget* parent )
     actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
     // ------ View
-
+    actionCollection()->addAction( KStandardAction::Redisplay, "view_refresh" , this, SLOT( slotRefreshView() ) );
+    
     actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
     actionCollection()->addAction("view_show_selector", actionViewSelector );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
@@ -1248,6 +1249,14 @@ void View::slotEditPaste()
     ViewBase *v = currentView();
     if ( v ) {
         v->slotEditPaste();
+    }
+}
+
+void View::slotRefreshView()
+{
+    ViewBase *v = currentView();
+    if ( v ) {
+        v->slotRefreshView();
     }
 }
 

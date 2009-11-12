@@ -244,7 +244,8 @@ public slots:
     virtual void slotEditCopy() {}
     virtual void slotEditCut() {}
     virtual void slotEditPaste() {}
-
+    virtual void slotRefreshView() {}
+    
 signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );

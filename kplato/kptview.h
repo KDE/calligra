@@ -146,6 +146,7 @@ public slots:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
+    void slotRefreshView();
     void slotViewSelector( bool show );
 
     void slotAddTask();

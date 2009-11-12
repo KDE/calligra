@@ -700,8 +700,20 @@ void TaskStatusItemModel::slotNodeChanged( Node *node )
     if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
     }
-    int row = node->parentNode()->findChildNode( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    QString wbs = node->wbsCode();
+    int row = -1;
+    if ( m_notstarted.value( wbs ) == node ) {
+        row = m_notstarted.keys().indexOf( wbs );
+    } else if ( m_running.value( wbs ) == node ) {
+        row = m_running.keys().indexOf( wbs );
+    } else if ( m_finished.value( wbs ) == node ) {
+        row = m_finished.keys().indexOf( wbs );
+    } else if ( m_upcoming.value( wbs ) == node ) {
+        row = m_upcoming.keys().indexOf( wbs );
+    }
+    if ( row >= 0 ) {
+        emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    }
 }
 
 void TaskStatusItemModel::slotWbsDefinitionChanged()

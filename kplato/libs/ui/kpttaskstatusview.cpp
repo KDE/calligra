@@ -306,6 +306,10 @@ void TaskStatusView::slotSplitView()
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
 }
 
+void TaskStatusView::slotRefreshView()
+{
+    model()->refresh();
+}
 
 void TaskStatusView::slotOptions()
 {
