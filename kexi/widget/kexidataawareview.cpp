@@ -83,8 +83,8 @@ void KexiDataAwareView::initActions()
     QList<QAction*> viewActions;
     KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
     viewActions
-        << dynamic_cast<KAction*>(ac->action("data_save_row"))
-        << dynamic_cast<KAction*>(ac->action("data_cancel_row_changes"));
+        << ac->action("data_save_row")
+        << ac->action("data_cancel_row_changes");
     
     KAction *a = new KAction(this);
     a->setSeparator(true);
@@ -99,7 +99,7 @@ void KexiDataAwareView::initActions()
         << KexiStandardAction::sortDescending(this, SLOT(sortDescending()), this);
     }
     viewActions
-        << dynamic_cast<KAction*>(ac->action("edit_find"));
+        << ac->action("edit_find");
     setViewActions(viewActions);
 
     plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
@@ -180,6 +180,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
     const bool insertRowFocusedWithoutEditing = !editing && row == rows;
 
     setAvailable("edit_cut", !ro && !insertRowFocusedWithoutEditing);
+    setAvailable("edit_copy", !insertRowFocusedWithoutEditing);
     setAvailable("edit_paste", !ro);
     setAvailable("edit_delete", !ro && !insertRowFocusedWithoutEditing);
     setAvailable("edit_delete_row", !ro && !(deleting && row == rows));
