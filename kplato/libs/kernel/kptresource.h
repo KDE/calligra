@@ -626,10 +626,6 @@ public:
     */
     int workAllocation() const;
 
-    Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 ) const;
-
-    int numDays( const DateTime &time, bool backward ) const;
-
     /**
      * Returns the duration needed to do the effort  effort
      * starting at start.
@@ -749,7 +745,9 @@ public:
     DateTime availableBefore( const DateTime &time, Schedule *ns );
     DateTime workTimeAfter(const DateTime &dt) const;
     DateTime workTimeBefore(const DateTime &dt) const;
-    
+    DateTime workStartAfter(const DateTime &time, Schedule *ns);
+    DateTime workFinishBefore(const DateTime &time, Schedule *ns);
+
     /**
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.
@@ -765,6 +763,10 @@ public:
 
     void changed();
     
+    Duration effort(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const;
+    int numDays(const QList<ResourceRequest*> &lst, const DateTime &time, bool backward) const;
+    Duration duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward);
+
 protected:
     struct Interval
     {
