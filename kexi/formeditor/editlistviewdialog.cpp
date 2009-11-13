@@ -57,7 +57,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     //// Setup the icon toolbar /////////////////
     Q3VBoxLayout *vlayout = new Q3VBoxLayout(layout, 3);
     QToolButton *newRow = new QToolButton(m_contentsPageItem->widget());
-    newRow->setIconSet(KIcon("edit_add"));
+    newRow->setIconSet(KIcon("list-add"));
     newRow->setTextLabel(i18n("&Add Item"), true);
     vlayout->addWidget(newRow);
     m_buttons.insert(BNewRow, newRow);
