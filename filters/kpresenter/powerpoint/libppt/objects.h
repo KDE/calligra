@@ -20,7 +20,6 @@
 #ifndef LIBPPT_OBJECTS
 #define LIBPPT_OBJECTS
 
-#include "ustring.h"
 #include <string>
 #include <QString>
 #include <QColor>
@@ -143,8 +142,10 @@ public:
     /**
     * @brief Assign a style atom for this text object
     * @param atom Style atom
+    * @param atom9 Extended style atom
     */
-    void setStyleTextProperty(const StyleTextPropAtom *atom);
+    void setStyleTextProperty(const StyleTextPropAtom *atom,
+                              const StyleTextProp9Atom *atom9);
 
     /**
     * @brief Get text (e.g. T1) style that applies to given pair of
@@ -192,6 +193,28 @@ public:
     * @return This object's StyleTextPropAtom
     */
     StyleTextPropAtom *styleTextProperty();
+
+    /**
+    * @brief Get text extendend style atom
+    * @return This object's StyleTextProp9Atom
+    */
+    StyleTextProp9Atom *styleTextProperty9();
+
+    /**
+    * @brief Find StyleTextProp9 that matches the specified TextCFException
+    *
+    * [MS-PPT].pdf 2.9.67 StyleTextProp9Atom says the following:
+    * An array of StyleTextProp9 structures that specifies additional formatting
+    * for the corresponding text. Each item in the array specifies formatting
+    * for a sequence of consecutive character runs of the corresponding text
+    * that share the same value of the fontStyle.pp9rt field of the
+    * TextCFException record. If a TextCFException record does not specify a
+    * fontStyle.pp9rt field, its value is assumed to be 0x0000. An item at index
+    * i MUST be ignored if i % 16 is not equal to the value of the
+    * fontstyle.pp9rt field of the next such sequence. The length, in bytes, of
+    * the array is specified by rh.recLen.
+    */
+    StyleTextProp9 *findStyleTextProp9(TextCFException *cf);
 
     /**
     * @brief Get the actual text

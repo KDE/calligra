@@ -1461,7 +1461,6 @@ void PowerPointImport::processTextObjectForBody(TextObject* textObject, KoXmlWri
     xmlWriter->addAttribute("presentation:class", classStr);
     xmlWriter->startElement("draw:text-box");
 
-
     StyleTextPropAtom *atom = textObject->styleTextProperty();
     if (atom) {
         //Paragraph formatting that applies to substring
@@ -1992,6 +1991,14 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
 
 
+    TextPFException9 *pf9 = 0;
+    if (cf) {
+        StyleTextProp9 *prop9 = textObject->findStyleTextProp9(cf->textCFException());
+        if (prop9) {
+            pf9 = prop9->pf9();
+        }
+    }
+
     for (int i = 0;i < indent + 1;i++) {
         TextCFException *levelCF = masterTextCFException(type,
                                    i);
@@ -2005,18 +2012,28 @@ void PowerPointImport::processTextExceptionsForStyle(TextCFRun *cf,
             continue;
         }
 
-        elementWriter.startElement("text:list-level-style-bullet");
+        if (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme()) {
+            elementWriter.startElement("text:list-level-style-number");
+        } else {
+            elementWriter.startElement("text:list-level-style-bullet");
+        }
+
         elementWriter.addAttribute("text:level", i + 1);
 
-
-        if (pf && i == pf->textPFException()->indent() &&
-                pf->textPFException()->hasBulletChar()) {
-            elementWriter.addAttribute("text:bullet-char", pf->textPFException()->bulletChar());
+        if (pf9 && pf9->bulletHasScheme() && pf9->bulletScheme()) {
+            elementWriter.addAttribute("style:num-suffix", ".");
+            elementWriter.addAttribute("style:num-format", 1);
         } else {
-            if (levelPF->hasBulletChar()) {
-                elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
+            if (pf && i == pf->textPFException()->indent() &&
+                    pf->textPFException()->hasBulletChar()) {
+                elementWriter.addAttribute("text:bullet-char", pf->textPFException()->bulletChar());
+            } else {
+                if (levelPF->hasBulletChar()) {
+                    elementWriter.addAttribute("text:bullet-char", levelPF->bulletChar());
+                }
             }
         }
+
 
         elementWriter.startElement("style:list-level-properties");
 
@@ -2116,19 +2133,14 @@ void PowerPointImport::processTextObjectForStyle(TextObject* textObject,
     //TODO this can be easily optimized by calculating proper increments to i
     //from both exception's character count
     for (int i = 0;i < textObject->text().length();i++) {
-        if (cf == atom->findTextCFRun(i) && pf == atom->findTextPFRun(i)) {
+        if (cf == atom->findTextCFRun(i) && pf == atom->findTextPFRun(i) && i > 0) {
             continue;
         }
 
         pf = atom->findTextPFRun(i);
         cf = atom->findTextCFRun(i);
 
-        if (cf && pf) {
-            processTextExceptionsForStyle(cf, pf, styles, textObject);
-        } else {
-            kWarning() << "Failed to find pf or cf for text at position!" << i << pf << cf;
-            return;
-        }
+        processTextExceptionsForStyle(cf, pf, styles, textObject);
     }
 
 }

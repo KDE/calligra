@@ -37,6 +37,8 @@ public:
 
     double pageWidth;
     double pageHeight;
+
+    unsigned int slideId;
 };
 
 Slide::Slide(Presentation* pr)
@@ -46,6 +48,7 @@ Slide::Slide(Presentation* pr)
     d->rootObject = new GroupObject;
     d->pageWidth = 0.0;
     d->pageHeight = 0.0;
+    d->slideId = 0;
 }
 
 Slide::~Slide()
@@ -139,4 +142,14 @@ double Slide::pageHeight() const
 void Slide::setPageHeight(double pageHeight)
 {
     d->pageHeight = pageHeight;
+}
+
+unsigned int Slide::slideId()
+{
+    return d->slideId;
+}
+
+void Slide::setSlideId(unsigned int id)
+{
+    d->slideId = id;
 }

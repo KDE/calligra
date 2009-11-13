@@ -257,6 +257,12 @@ public:
     StyleTextPropAtom *atom;
 
     /**
+    * @brief Extended text style that applies to this object
+    *
+    */
+    StyleTextProp9Atom *atom9;
+
+    /**
     * @brief Struct that contains precalculated style names based on
     * TextCFException and TextPFException combinations.
     *
@@ -310,6 +316,7 @@ public:
 TextObject::Private::Private()
         : type(0)
         , atom(0)
+        , atom9(0)
 {
 
 }
@@ -317,13 +324,21 @@ TextObject::Private::Private()
 TextObject::Private::~Private()
 {
     delete atom;
+    delete atom9;
 }
 
 
-void TextObject::setStyleTextProperty(const StyleTextPropAtom *atom)
+void TextObject::setStyleTextProperty(const StyleTextPropAtom *atom,
+                                      const StyleTextProp9Atom *atom9)
 {
     //We don't know the lifespan of this atom so we'll make a copy of it
-    d->atom =  new StyleTextPropAtom(*atom);
+    if (atom) {
+        d->atom =  new StyleTextPropAtom(*atom);
+    }
+
+    if (atom9) {
+        d->atom9 =  new StyleTextProp9Atom(*atom9);
+    }
 }
 
 
@@ -424,6 +439,30 @@ StyleTextPropAtom *TextObject::styleTextProperty()
     return d->atom;
 }
 
+StyleTextProp9Atom *TextObject::styleTextProperty9()
+{
+    return d->atom9;
+}
+
+StyleTextProp9 *TextObject::findStyleTextProp9(TextCFException *cf)
+{
+    if (!d->atom || !d->atom9) {
+        return 0;
+    }
+
+    for (unsigned int i = 0;i < d->atom->textCFRunCount();i++) {
+        TextCFRun *run = d->atom->textCFRun(i);
+        if (!run || !run->textCFException()) {
+            continue;
+        }
+
+        if (run->textCFException() == cf) {
+            return d->atom9->styleTextProp9(i);
+        }
+    }
+
+    return 0;
+}
 
 void TextObject::setType(unsigned int type)
 {

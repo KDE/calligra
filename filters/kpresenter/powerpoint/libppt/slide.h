@@ -46,7 +46,8 @@ public:
     void setPageWidth(double pageWidth) ;
     double pageHeight() const;
     void setPageHeight(double pageHeight) ;
-
+    unsigned int slideId();
+    void setSlideId(unsigned int id);
 private:
     // no copy or assign
     Slide(const Slide&);

@@ -24,6 +24,7 @@
 #include "ustring.h"
 #include <QtCore/QSharedDataPointer>
 #include <QtGui/QColor>
+#include "slide.h"
 
 namespace Libppt
 {
@@ -564,6 +565,13 @@ public:
     * @return color for the character
     */
     ColorIndexStruct color();
+
+    /**
+    * @brief An unsigned integer that specifies the run grouping of additional
+    * text properties in StyleTextProp9Atom record.
+    *
+    */
+    unsigned int pp9rt();
 private:
     class Private;
     QSharedDataPointer<Private> d;
@@ -745,7 +753,6 @@ public:
     */
     unsigned int textAlignment();
 
-
     void dump(std::ostream& out) const;
 
 private:
@@ -858,6 +865,183 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 };
+
+/**
+* @brief A structure that specifies additional text properties
+*
+*/
+class TextSIException
+{
+public:
+    TextSIException();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+* @brief A structure that specifies additional character-level formatting.
+*
+*/
+class TextCFException9
+{
+public:
+    TextCFException9();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+* @brief A structure that specifies additional paragraph-level formatting.
+*
+*/
+class TextPFException9
+{
+public:
+    TextPFException9();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+    bool bulletBlip();
+    bool bulletHasScheme();
+    bool bulletScheme();
+
+    int bulletBlipRef();
+    int fBulletHasAutoNumber();
+    unsigned int scheme();
+    int startNum();
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+* @brief A structure that specifies additional paragraph-level formatting,
+* character-level formatting, and text properties for a text run.
+*
+*/
+class StyleTextProp9
+{
+public:
+    StyleTextProp9();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+    TextPFException9 *pf9();
+    TextCFException9 *cf9();
+    TextSIException *si();
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+
+/**
+* @brief An atom record that specifies additional text formatting.
+*
+* When this record is contained in an OutlineTextProps9Entry structure, let the
+* corresponding text be as specified in the OutlineTextPropsHeaderExAtom record
+* contained in the OutlineTextProps9Entry structure that contains this
+* StyleTextProp9Atom record.
+*
+* When this record is contained in a
+* PP9ShapeBinaryTagExtension record, let the corresponding text be specified by
+* the TextHeaderAtom record contained in the OfficeArtSpContainer ([MS-ODRAW]
+* section 2.2.14) that contains this StyleTextProp9Atom record.
+*
+* Let the corresponding shape be as specified in the corresponding text.
+*
+* Let the corresponding main master be as specified in the corresponding text.
+*
+* If the corresponding shape is a placeholder shape, character-level and
+* paragraph-level formatting not specified by this StyleTextProp9Atom record
+* inherit from the TextMasterStyle9Atom records contained in the corresponding
+* main master.
+*/
+class StyleTextProp9Atom
+{
+public:
+    StyleTextProp9Atom();
+    StyleTextProp9Atom(const StyleTextProp9Atom &atom);
+    ~StyleTextProp9Atom();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+    int styleTextProp9Count();
+    StyleTextProp9 *styleTextProp9(unsigned int index);
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+* @brief An atom record that specifies a reference to text contained in the
+* SlideListWithTextContainer record.
+*
+* Let the corresponding slide persist be specified by the SlidePersistAtom
+* record contained in the SlideListWithTextContainer record whose slideId field
+* is equal to slideIdRef. Let the corresponding text be specified by the
+* TextHeaderAtom record referenced by rh.recInstance.
+*
+*
+*/
+class OutlineTextPropsHeaderExAtom
+{
+public:
+    OutlineTextPropsHeaderExAtom();
+    unsigned int setData(unsigned int size,
+                         const unsigned char* data);
+    void dump(std::ostream& out) const;
+    unsigned int instance();
+    unsigned int slideIdRef();
+    unsigned int txType();
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+* @brief A structure that specifies additional text properties for a single
+* placeholder shape position on a slide.
+*
+*/
+class OutlineTextProps9Entry
+{
+public:
+    OutlineTextProps9Entry();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+    OutlineTextPropsHeaderExAtom * outlineTextHeaderAtom();
+    StyleTextProp9Atom *styleTextProp9Atom();
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+
+/**
+* @brief A container record that specifies additional text properties for
+* outline text.
+*
+*/
+class OutlineTextProps9Container
+{
+public:
+    OutlineTextProps9Container();
+    unsigned int setData(unsigned int size, const unsigned char* data);
+    void dump(std::ostream& out) const;
+    int OutlineTextProps9EntryCount();
+    OutlineTextProps9Entry *entry(unsigned int index);
+    StyleTextProp9Atom *styleTextProp9Atom(unsigned int slideId,
+                                           unsigned int textIndex);
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+
 
 /**
 * @brief Specifies a SlideSchemeColorSchemeAtom or
@@ -1041,7 +1225,6 @@ public:
     const char* name() const {
         return "ProgBinaryTagContainer";
     }
-
 private:
     // no copy or assign
     ProgBinaryTagContainer(const ProgBinaryTagContainer&);
@@ -1302,6 +1485,22 @@ private:
     msofbtSolverContainer(const msofbtSolverContainer&);
     msofbtSolverContainer& operator=(const msofbtSolverContainer&);
 };
+
+class BinaryTagExtension: public Record
+{
+public:
+    static const unsigned int id;
+    BinaryTagExtension();
+    const char* name() const {
+        return "BinaryTagExtension";
+    }
+
+private:
+    // no copy or assign
+    BinaryTagExtension(const BinaryTagExtension&);
+    BinaryTagExtension& operator=(const BinaryTagExtension&);
+};
+
 
 class BookmarkEntityAtom : public Record
 {
@@ -1966,7 +2165,7 @@ public:
     * @brief Get TextException that applies to a run of characters
     * @return TextException that applies to a run of characters
     */
-    TextCFException * textCFException();
+    TextCFException *textCFException();
 private:
     class Private;
     QSharedDataPointer<Private> d;
@@ -3424,6 +3623,9 @@ protected:
     void handleEscherClientDataAtom(msofbtClientDataAtom* r);
     void handleEscherClientAnchorAtom(msofbtClientAnchorAtom* r);
     void handleEscherChildAnchorAtom(msofbtChildAnchorAtom* r);
+    void handleProgBinaryTagContainer(ProgBinaryTagContainer* r,
+                                      unsigned int size);
+
 
     void loadMainMasterContainer(MainMasterContainer *container);
 
@@ -3443,13 +3645,6 @@ protected:
     * @param r FontEntityAtom to create font from
     */
     void handleFontEntityAtom(FontEntityAtom* r);
-
-    /**
-    * @brief Converts ColorIndexStruct to QColor
-    * @param color ColorIndexStruct to convert
-    * @return color converted to QColor
-    */
-    QColor colorIndexStructToQColor(const ColorIndexStruct &color);
 private:
     // no copy or assign
     PPTReader(const PPTReader&);
