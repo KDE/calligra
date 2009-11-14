@@ -48,6 +48,7 @@
 #include <KoImageSelectionWidget.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoCutController.h>
+#include <KoStandardAction.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
@@ -323,6 +324,9 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
 
     action = m_document->gridData().gridToggleAction(m_canvas);
     actionCollection()->addAction("view_grid", action);
+
+    KToggleAction *guides = KoStandardAction::showGuides(this, SLOT(setGuideVisibility(bool)), actionCollection());
+    guides->setChecked(m_document->guidesData().showGuideLines());
 
     // -------------- Frame menu
     action  = new KAction(i18n("Create Linked Copy"), this);
@@ -1217,6 +1221,11 @@ void KWView::insertImage()
     }
 }
 
+void KWView::setGuideVisibility(bool on)
+{
+    m_document->guidesData().setShowGuideLines(on);
+    kwcanvas()->update();
+}
 
 // end of actions
 

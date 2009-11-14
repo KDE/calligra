@@ -177,6 +177,8 @@ private slots:
     void updateStatusBarAction();
     /// insert image
     void insertImage();
+    /// show guides menu option uses this
+    void setGuideVisibility(bool on);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
