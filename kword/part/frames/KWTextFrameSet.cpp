@@ -164,7 +164,13 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         data->setDocument(m_document, false);
         data->setEndPosition(-1);
         data->foul();
-        updateTextLayout();
+        if (m_allowLayoutRequests) {
+            KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
+            if (lay) {
+                lay->scheduleLayout();
+                emit lay->shapeAdded(frame->shape());
+            }
+        }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 }
