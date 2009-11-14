@@ -71,6 +71,7 @@
 #include <KoPageLayoutDialog.h>
 #include <KoRuler.h>
 #include <KoToolManager.h>
+#include <KoStandardAction.h>
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
@@ -982,12 +983,9 @@ void KarbonView::initActions()
     KToggleAction *gridAction = d->part->gridData().gridToggleAction(d->canvas);
     actionCollection()->addAction("view_grid", gridAction);
 
-    d->showGuidesAction  = new KToggleAction(KIcon("guides"), i18n("Show Guides"), this);
-    actionCollection()->addAction("view_show_guides", d->showGuidesAction );
-    d->showGuidesAction->setCheckedState(KGuiItem(i18n("Hide Guides")));
-    d->showGuidesAction->setToolTip(i18n("Shows or hides guides"));
+    d->showGuidesAction = KoStandardAction::showGuides(this, SLOT(showGuides()), this);
+    actionCollection()->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), d->showGuidesAction );
     d->showGuidesAction->setChecked( d->part->guidesData().showGuideLines() );
-    connect(d->showGuidesAction, SIGNAL(triggered()), this, SLOT(showGuides()));
 
     d->snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snap_to_grid", d->snapGridAction );
