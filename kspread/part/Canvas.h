@@ -209,6 +209,12 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent*);
     virtual void dragLeaveEvent(QDragLeaveEvent*);
     virtual void dropEvent(QDropEvent*);
+    /// reimplemented method from superclass
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    /// reimplemented method from superclass
+    virtual void inputMethodEvent(QInputMethodEvent *event);
+    /// reimplemented method from superclass
+    virtual void tabletEvent(QTabletEvent *e);
 
     /**
      * Checks to see if there is a size grip for a highlight range at a given position.

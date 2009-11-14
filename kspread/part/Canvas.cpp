@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2009 Thomas Zander <zander@kde.org>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2006 Robert Knight <robertknight@gmail.com>
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
@@ -587,6 +588,24 @@ void Canvas::keyPressEvent ( QKeyEvent* event )
 {
     // flake
     d->toolProxy->keyPressEvent( event );
+}
+
+void Canvas::tabletEvent(QTabletEvent *e)
+{
+    // flake
+    d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
+}
+
+QVariant Canvas::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    // flake
+    return d->toolProxy->inputMethodQuery(query, *(viewConverter()));
+}
+
+void Canvas::inputMethodEvent(QInputMethodEvent *event)
+{
+    // flake
+    d->toolProxy->inputMethodEvent(event);
 }
 
 bool Canvas::highlightRangeSizeGripAt(double x, double y)
