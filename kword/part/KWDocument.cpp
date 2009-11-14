@@ -179,7 +179,7 @@ void KWDocument::addShape(KoShape *shape)
         fs->setName(shape->shapeId());
         frame = new KWFrame(shape, fs);
     }
-    Q_ASSERT(frame->frameSet()); //sebsauer, 2008-08-16, seems this can happen on "Delete page" && 2x undo
+    Q_ASSERT(frame->frameSet());
     addFrameSet(frame->frameSet());
 
     foreach (KoView *view, views()) {
@@ -740,7 +740,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
 
-    KWFrame *lastFrame = fs->frames()[ fs->frameCount()-1 ];
+    KWFrame *lastFrame = fs->frames().last();
 
     QString masterPageName;
     if (fs == mainFrameSet()) {
@@ -757,13 +757,13 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     }
 
     KWPage page = m_pageManager.page(lastFrame->shape());
-    int pageDiff =  m_pageManager.pageCount() - 1 - page.pageNumber();
+    int pageDiff = m_pageManager.pageCount() - page.pageNumber();
     if (page.pageSide() == KWPage::PageSpread)
         pageDiff--;
     if (pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
         // its enough to just create a new frame.
-        m_frameLayout.createNewFrameForPage(fs, page.pageNumber() +
-                                            (lastFrame->frameOnBothSheets() ? 1 : 2));
+        m_frameLayout.createNewFrameForPage(fs, page.pageNumber()
+                + (lastFrame->frameOnBothSheets() ? 1 : 2));
     } else {
         KWPage newPage = appendPage(masterPageName);
         if (m_magicCurtain)
