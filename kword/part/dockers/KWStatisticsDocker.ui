@@ -84,7 +84,7 @@
    <item row="1" column="0" colspan="3">
     <widget class="QCheckBox" name="autoRefresh">
      <property name="text">
-      <string>Automatically recount</string>
+      <string>Automatically update</string>
      </property>
     </widget>
    </item>
