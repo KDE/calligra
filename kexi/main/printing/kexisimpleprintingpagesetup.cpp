@@ -348,7 +348,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup(KexiMainWindow *mainWin
     connect(m_contents->printPreviewButton, SIGNAL(clicked()), this, SLOT(printPreview()));
 
     m_contents->iconLabel->setFixedWidth(32 + 6);
-    m_contents->iconLabel->setPixmap(DesktopIcon("document", 32));
+    m_contents->iconLabel->setPixmap(DesktopIcon("application-x-font-ttf", 32));
     Q3WhatsThis::add(m_contents->headerTitleFontButton, i18n("Changes font for title text."));
     connect(m_contents->headerTitleFontButton, SIGNAL(clicked()),
             this, SLOT(slotChangeTitleFont()));

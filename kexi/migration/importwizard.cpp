@@ -67,7 +67,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 {
     setModal(true);
     setWindowTitle(i18n("Import Database"));
-    setWindowIcon(KIcon("database_import"));
+    setWindowIcon(KIcon("document-import-database"));
     m_prjSet = 0;
     m_fileBasedDstWasPresented = false;
     m_setupFileBasedSrcNeeded = true;

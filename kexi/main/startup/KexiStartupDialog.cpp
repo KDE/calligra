@@ -409,7 +409,7 @@ void KexiStartupDialog::setupPageTemplates()
       d->templatesSectionID_custom2 = itemID++;
       templPageFrame = d->templatesWidget->addPage (
         i18n("Business Databases"), i18n("New Business Database Project Templates"),
-        DesktopIcon( "business_user" ));
+        DesktopIcon( "user-identity" ));
       tmplyr = new QVBoxLayout(templPageFrame, 0, KDialog::spacingHint());
       d->viewBusinessTempl = new TemplatesPage( Vertical, templPageFrame, "business_page" );
       tmplyr->addWidget( d->viewBusinessTempl );
@@ -462,13 +462,13 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
           //add items (on demand):
           d->viewTemplates->addItem("cd_catalog", i18n("CD Catalog"),
             i18n("Easy-to-use database for storing information about your CD collection."),
-            DesktopIcon("cdrom_unmount"));
+            DesktopIcon("media-optical"));
           d->viewTemplates->addItem("expenses", i18n("Expenses"),
             i18n("A database for managing your personal expenses."),
-            DesktopIcon("kcalc"));
+            DesktopIcon("accessories-calculator"));
           d->viewTemplates->addItem("image_gallery", i18n("Image Gallery"),
             i18n("A database for archiving your image collection in a form of gallery."),
-            DesktopIcon("icons"));
+            DesktopIcon("folder-image"));
         }
       }
       else if (idx==d->templatesSectionID_custom2) {//business

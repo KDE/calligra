@@ -132,7 +132,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     a->setShortcut(Qt::CTRL + Qt::Key_O);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileOpen()));
     filemenu->addAction(a);
-    a = new QAction(KIcon("document-save"), i18n("Save As..."), this);
+    a = new QAction(KIcon("document-save-as"), i18n("Save As..."), this);
     a->setShortcut(Qt::CTRL + Qt::Key_S);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileSave()));
     filemenu->addAction(a);
