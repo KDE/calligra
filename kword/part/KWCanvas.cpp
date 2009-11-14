@@ -240,6 +240,11 @@ void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
     m_toolProxy->inputMethodEvent(event);
 }
 
+KoGuidesData *KWCanvas::guidesData()
+{
+    return &m_document->guidesData();
+}
+
 #ifdef DEBUG_REPAINT
 # include <stdlib.h>
 #endif
@@ -284,7 +289,9 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             painter.save();
             painter.translate(-vm.distance.x(), -vm.distance.y());
             painter.setRenderHint(QPainter::Antialiasing, false);
-            document()->gridData().paintGrid(painter, *(viewConverter()), viewConverter()->viewToDocument(vm.clipRect));
+            const QRectF clipRect = viewConverter()->viewToDocument(vm.clipRect);
+            document()->gridData().paintGrid(painter, *(viewConverter()), clipRect);
+            document()->guidesData().paintGuides(painter, *(viewConverter()), clipRect);
             painter.restore();
 
             // paint whatever the tool wants to paint

@@ -98,6 +98,11 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
+    connect(m_verticalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
+    connect(m_horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
+            m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
+
     pageSetupChanged();
 
     QTimer::singleShot(0, this, SLOT(setupUnitActions()));

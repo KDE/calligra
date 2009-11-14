@@ -99,6 +99,8 @@ public:
     virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
+    /// reimplemented method from superclass
+    virtual KoGuidesData *guidesData();
     // getters
     /// return the document that this canvas works on
     KWDocument *document() const {
