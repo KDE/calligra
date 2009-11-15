@@ -91,9 +91,13 @@ KexiRelationsConnection::drawConnection(QPainter *p)
     int ry = d->detailsTable->globalY(d->detailsField);
 
     QFont f(KexiUtils::smallFont(d->scrollArea));
+    f.setBold(true);
+    p->setFont(f);
     QFontMetrics fm(f);
-    int side1x = 0, side1y = sy - fm.height(),
-                             sideNx = 0, sideNy = ry - fm.height();
+    int side1x = 0;
+    int side1y = sy - fm.height();
+    int sideNx = 0;
+    int sideNy = ry - fm.height();
 //! @todo details char can be also just a '1' for some cases
     QChar sideNChar(0x221E); //infinity char
     uint sideNCharWidth = 2 + 2 + fm.width(sideNChar);
@@ -178,7 +182,7 @@ KexiRelationsConnection::drawConnection(QPainter *p)
         sideNx = lx + 1;
 //  sideNy = ry - 6;
 
-        QLine mainLine(lx + sideNCharWidth, ry, rx - side1CharWidth, sy);
+        QLineF mainLine(lx + sideNCharWidth, qreal(ry) + 0.5, rx - side1CharWidth, qreal(sy) + 0.5);
         p->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing, true);
         p->drawLine(mainLine);
         if (d->selected) {

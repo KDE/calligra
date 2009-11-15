@@ -194,7 +194,7 @@ QSize KexiRelationsTableFieldList::sizeHint() const
 
     QSize s(
         qMax(maxWidth, fm.width(schema()->name() + " ")),
-        rowCount*firstChild()->totalHeight() + 4);
+        rowCount*firstChild()->totalHeight() + 8);
     return s;
 }
 
