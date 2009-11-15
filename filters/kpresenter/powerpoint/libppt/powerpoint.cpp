@@ -35,6 +35,11 @@
 #include <QtGui/QColor>
 #include <QtCore/QSharedData>
 #include <QtCore/QTextCodec>
+
+#ifdef Q_CC_MSVC
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
+
 // Use anonymous namespace to cover following functions
 namespace
 {
