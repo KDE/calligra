@@ -94,6 +94,7 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
     d->fieldList->setObjectName("KexiRelationsTableFieldList");
     //d->tableHeader->setFocusProxy( d->fieldList );
     d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->fieldList->setHScrollBarMode(Q3ScrollView::AlwaysOff);
 
     d->fieldList->setMaximumSize(d->fieldList->sizeHint());
 
