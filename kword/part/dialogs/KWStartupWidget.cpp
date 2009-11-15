@@ -35,9 +35,9 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     m_columns = columns;
     m_layout = KoPageLayout::standardLayout();
-    m_layout.leftMargin   = MM_TO_POINT(30);
-    m_layout.rightMargin  = MM_TO_POINT(30);
-    m_layout.topMargin    = MM_TO_POINT(25);
+    m_layout.leftMargin = MM_TO_POINT(30);
+    m_layout.rightMargin = MM_TO_POINT(30);
+    m_layout.topMargin = MM_TO_POINT(25);
     m_layout.bottomMargin = MM_TO_POINT(25);
     m_doc = doc;
 
