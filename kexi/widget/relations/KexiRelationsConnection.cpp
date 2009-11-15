@@ -59,13 +59,13 @@ KexiRelationsConnection::KexiRelationsConnection(
         : d(new Private)
 {
     d->scrollArea = scrollArea;
-// kDebug() << "KexiRelationsConnection::KexiRelationsConnection()";
+// kDebug();
 
     d->masterTable = masterTbl;
     if (!masterTbl || !detailsTbl) {
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection(): expect sig11";
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << masterTbl;
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << detailsTbl;
+        kDebug() << "expect sig11";
+        kDebug() << masterTbl;
+        kDebug() << detailsTbl;
     }
 
     d->detailsTable = detailsTbl;
@@ -229,7 +229,7 @@ KexiRelationsConnection::connectionRect()
 // return QRect(sx - 1, sy - 1, (rx + d->detailsTable->width()) - sx + 1, ry - sy + 1);
 // QRect rect(left - 150, top - 150, dx + 150, dy + 150);
     QRect rect(left - 30, top - 30, dx + 60, dy + 60);
-// kDebug() << "KexiRelationsConnection::connectionRect():" << d->oldRect << "," << rect;
+// kDebug() << d->oldRect << "," << rect;
 
     d->oldRect = rect;
 
@@ -277,23 +277,23 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
     float my = y2 - y1;
     float mag = sqrt(mx * mx + my * my);
     float u = (((p.x() - x1) * (x2 - x1)) + ((p.y() - y1) * (y2 - y1))) / (mag * mag);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): u: " << u;
+    kDebug() << "u: " << u;
 
     float iX = x1 + u * (x2 - x1);
     float iY = y1 + u * (y2 - y1);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): px: " << p.x();
-    kDebug() << "KexiRelationsConnection::matchesPoint(): py: " << p.y();
-    kDebug() << "KexiRelationsConnection::matchesPoint(): ix: " << iX;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): iy: " << iY;
+    kDebug() << "px: " << p.x();
+    kDebug() << "py: " << p.y();
+    kDebug() << "ix: " << iX;
+    kDebug() << "iy: " << iY;
 
     float dX = iX - p.x();
     float dY = iY - p.y();
 
-    kDebug() << "KexiRelationsConnection::matchesPoint(): dx: " << dX;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): dy: " << dY;
+    kDebug() << "dx: " << dX;
+    kDebug() << "dy: " << dY;
 
     float distance = sqrt(dX * dX + dY * dY);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): distance: " << distance;
+    kDebug() << "distance: " << distance;
 
     if (distance <= tolerance)
         return true;

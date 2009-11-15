@@ -33,8 +33,8 @@
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <kdebug.h>
-#include <kiconloader.h>
+#include <KDebug>
+#include <KIconLoader>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -131,11 +131,11 @@ void KexiRelationsTableContainer::moved()
 
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
-// kDebug() << "KexiRelationsTableContainer::globalY()";
+// kDebug();
 // QPoint o = mapFromGlobal(QPoint(0, (d->fieldList->globalY(field))/*+d->parent->contentsY()*/));
 
     QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
-// kDebug() << "KexiRelationsTableContainer::globalY() db2";
+// kDebug() << "db2";
 //Qt 4 return d->scrollArea->viewport()->mapFromGlobal(o).y();
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }

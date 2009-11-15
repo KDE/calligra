@@ -32,8 +32,8 @@
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
 
-#include <kdebug.h>
-#include <kiconloader.h>
+#include <KDebug>
+#include <KIconLoader>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -124,7 +124,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 {
-    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Press Event";
+    kDebug();
     static_cast<KexiRelationsTableContainer*>(parentWidget())->setFocus();
     ev->accept();
     if (ev->button() == Qt::LeftButton) {
@@ -145,7 +145,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 {
-    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Release Event";
+    kDebug();
     if (m_dragging && ev->button() & Qt::LeftButton) {
         setCursor(Qt::ArrowCursor);
         m_dragging = false;
@@ -223,7 +223,7 @@ KexiRelationsTableFieldList::globalY(const QString &item)
 bool
 KexiRelationsTableFieldList::acceptDrag(QDropEvent *ev) const
 {
-// kDebug() << "KexiRelationsTableFieldList::acceptDrag()";
+// kDebug();
     Q3ListViewItem *receiver = itemAt(ev->pos() - QPoint(0, contentsY()));
     if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
         return false;
@@ -256,7 +256,7 @@ KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
         return;
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query")
         return;
-//  kDebug() << "KexiRelationsTableFieldList::slotDropped() srcfield: " << srcField;
+//  kDebug() << "srcfield:" << srcField;
 
     QString rcvField = recever->text(0);
 
@@ -268,8 +268,7 @@ KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
 
     m_scrollArea->addConnection(s);
 
-    kDebug() << "KexiRelationsTableFieldList::slotDropped() " << srcTable << ":" << srcField << " "
-    << schema()->name() << ":" << rcvField;
+    kDebug() << srcTable << ":" << srcField << schema()->name() << ":" << rcvField;
     ev->accept();
 }
 
@@ -307,7 +306,7 @@ QRect KexiRelationsTableFieldList::drawItemHighlighter(QPainter *painter, Q3List
 bool KexiRelationsTableFieldList::eventFilter(QObject *o, QEvent *ev)
 {
     if (o == verticalScrollBar() || o == horizontalScrollBar()) {
-        kDebug() << "KexiRelationsTableFieldList::eventFilter" << ev->type();
+        kDebug() << ev->type();
     }
     return KexiFieldListView::eventFilter(o, ev);
 }

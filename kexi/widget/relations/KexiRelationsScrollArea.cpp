@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include <KDebug>
 
 #include <qstringlist.h>
 #include <qlayout.h>
@@ -180,11 +180,11 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
     if (!t)
         return 0;
 
-    kDebug() << "KexiRelationsScrollArea::addTable(): " << t->name(); // << ", " << viewport();
+    kDebug() << t->name(); // << ", " << viewport();
 
     KexiRelationsTableContainer* c = tableContainer(t);
     if (c) {
-        kWarning() << "KexiRelationsScrollArea::addTable(): table already added";
+        kWarning() << "table already added";
         return c;
     }
 
@@ -259,7 +259,7 @@ void
 KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
 {
     SourceConnection conn = _conn;
-    kDebug() << "KexiRelationsScrollArea::addConnection()";
+    kDebug();
 
     KexiRelationsTableContainer *master = d->tables[conn.masterTable];
     KexiRelationsTableContainer *details = d->tables[conn.detailsTable];
@@ -300,7 +300,7 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
         }
     }
 
-// kDebug() << "KexiRelationsScrollArea::addConnection(): finalSRC = " << d->tables[conn.srcTable];
+// kDebug() << "finalSRC =" << d->tables[conn.srcTable];
 
     KexiRelationsConnection *connView = new KexiRelationsConnection(master, details, conn, this);
     d->connectionViews.insert(connView);
@@ -319,7 +319,7 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
     */
 #if 0
     if (!interactive) {
-        kDebug() << "KexiRelationsScrollArea::addConnection: adding self";
+        kDebug() << "adding self";
         RelationList l = d->relation->projectRelations();
         l.append(conn);
         d->relation->updateRelationList(this, l);
@@ -476,7 +476,7 @@ KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
 //  invalidateActions();
 
         if (ev->button() == Qt::RightButton) {//show popup
-            kDebug() << "KexiRelationsScrollArea::contentsMousePressEvent(): context";
+            kDebug() << "context";
             emit connectionContextMenuRequest(ev->globalPos());
         }
         return;
@@ -542,7 +542,7 @@ KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent* event)
 void
 KexiRelationsScrollArea::keyPressEvent(QKeyEvent *ev)
 {
-    kDebug() << "KexiRelationsScrollArea::keyPressEvent()";
+    kDebug();
 
     if (ev->key() == Qt::Key_Delete) {
         removeSelectedObject();
@@ -609,16 +609,14 @@ KexiRelationsScrollArea::removeSelectedObject()
                     && (*it).rcvTable == d->selectedConnection->connection().rcvTable
                     && (*it).srcField == d->selectedConnection->connection().srcField
                     && (*it).rcvField == d->selectedConnection->connection().rcvField) {
-                kDebug() << "KexiRelationsScrollArea::removeSelectedConnection(): matching found!";
+                kDebug() << "matching found!";
 //   l.remove(it);
             } else {
                 nl.append(*it);
             }
         }
 
-        kDebug() << "KexiRelationsScrollArea::removeSelectedConnection(): d2";
         d->relation->updateRelationList(this, nl);
-        kDebug() << "KexiRelationsScrollArea::removeSelectedConnection(): d3";
 #endif
 //  invalidateActions();
     } else if (d->focusedTableContainer) {
@@ -689,7 +687,7 @@ KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& 
 //Qt 4 updateContents(conn->connectionRect());
     d->areaWidget->update(conn->connectionRect());
     delete conn;
-    kDebug() << "KexiRelationsScrollArea::removeConnection()";
+    kDebug();
 }
 
 void KexiRelationsScrollArea::slotTableViewGotFocus()

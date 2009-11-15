@@ -28,7 +28,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <KDebug>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 #include <KMenu>
@@ -213,7 +213,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         return;
     if (!d->scrollArea->tableContainer(t)) {
         KexiRelationsTableContainer *c = d->scrollArea->addTableContainer(t, rect);
-        kDebug() << "KexiRelationsView::slotAddTable(): adding table " << t->name();
+        kDebug() << "adding table" << t->name();
         if (!c)
             return;
         connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&, const QStringList&)),
@@ -229,7 +229,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
     }
     if (i < count) {
         int oi = d->tableCombo->currentIndex();
-        kDebug() << "KexiRelationsView::slotAddTable(): removing a table from the combo box";
+        kDebug() << "removing a table from the combo box";
         d->tableCombo->removeItem(i);
         if (d->tableCombo->count() > 0) {
             if (oi >= d->tableCombo->count()) {
