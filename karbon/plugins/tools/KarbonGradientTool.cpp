@@ -36,7 +36,7 @@
 #include <KoSnapGuide.h>
 #include <KoSnapStrategy.h>
 #include <KoGradientBackground.h>
-#include <KoGradientHelper.h>
+#include <KarbonGradientHelper.h>
 #include <KoShapeBackground.h>
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
@@ -486,7 +486,7 @@ void KarbonGradientTool::initialize()
     GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_strategies.values().first();
     GradientStrategy::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     GradientStrategy::setGrabSensitivity( m_canvas->resourceProvider()->grabSensitivity() );
-    m_gradient = KoGradientHelper::cloneGradient( strategy->gradient() );
+    m_gradient = KoFlake::cloneGradient( strategy->gradient() );
     if( m_gradientWidget )
     {
         m_gradientWidget->setGradient( *m_gradient );
@@ -607,14 +607,14 @@ void KarbonGradientTool::gradientChanged()
             KoGradientBackground * oldFill = dynamic_cast<KoGradientBackground*>( shape->background() );
             if( oldFill )
             {
-                QGradient * g = KoGradientHelper::convertGradient( oldFill->gradient(), type );
+                QGradient * g = KarbonGradientHelper::convertGradient( oldFill->gradient(), type );
                 g->setSpread( spread );
                 g->setStops( stops );
                 newFill = new KoGradientBackground( g, oldFill->matrix() );
             }
             else
             {
-                QGradient * g = KoGradientHelper::defaultGradient( shape->size(), type, spread, stops );
+                QGradient * g = KarbonGradientHelper::defaultGradient( shape->size(), type, spread, stops );
                 newFill = new KoGradientBackground( g );
             }
             newFills.append( newFill );
@@ -635,7 +635,7 @@ void KarbonGradientTool::gradientChanged()
             QBrush newGradient;
             if( newBorder->lineBrush().gradient() )
             {
-                QGradient * g = KoGradientHelper::convertGradient( newBorder->lineBrush().gradient(), type );
+                QGradient * g = KarbonGradientHelper::convertGradient( newBorder->lineBrush().gradient(), type );
                 g->setSpread( spread );
                 g->setStops( stops );
                 newGradient = QBrush( *g );
@@ -643,7 +643,7 @@ void KarbonGradientTool::gradientChanged()
             }
             else
             {
-                QGradient * g = KoGradientHelper::defaultGradient( shape->size(), type, spread, stops );
+                QGradient * g = KarbonGradientHelper::defaultGradient( shape->size(), type, spread, stops );
                 newGradient = QBrush( *g );
                 delete g;
             }

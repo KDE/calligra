@@ -17,35 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOGRADIENTHELPER_H
-#define KOGRADIENTHELPER_H
+#ifndef KARBONGGRADIENTHELPER_H
+#define KARBONGGRADIENTHELPER_H
 
-#include <flake_export.h>
+#include <karboncommon_export.h>
 #include <QtGui/QBrush>
 
 class KoShape;
 class QGradient;
 class KoShapeBackground;
 
-class FLAKE_EXPORT KoGradientHelper
+namespace KarbonGradientHelper
 {
-public:
-    /// clones the given gradient
-    static QGradient* cloneGradient(const QGradient * gradient);
-
     /// applies given gradient stops to given shape returning the new gradient wrapped in a brush
-    static KoShapeBackground* applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
-    static QBrush applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops);
-    static QBrush applyGradientStops(KoShape *shape, const QGradientStops &stops, bool fillGradient);
+    KARBONCOMMON_EXPORT QBrush applyGradientStops(KoShape *shape, const QGradientStops &stops, bool fillGradient);
 
     /// creates default gradient for given size
-    static QGradient * defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
+    KARBONCOMMON_EXPORT QGradient *defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops);
 
     /// Converts gradient type, preserving as much data as possible
-    static QGradient * convertGradient(const QGradient *gradient, QGradient::Type newType);
+    KARBONCOMMON_EXPORT QGradient *convertGradient(const QGradient *gradient, QGradient::Type newType);
 
     /// Calculates color at given position from given gradient stops
-    static QColor colorAt(qreal position, const QGradientStops &stops);
+    KARBONCOMMON_EXPORT QColor colorAt(qreal position, const QGradientStops &stops);
 };
 
-#endif // KOGRADIENTHELPER_H
+#endif

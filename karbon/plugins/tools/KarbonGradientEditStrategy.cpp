@@ -25,7 +25,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeBorderCommand.h>
 #include <KoGradientBackground.h>
-#include <KoGradientHelper.h>
+#include <KarbonGradientHelper.h>
 
 #include <QBrush>
 #include <QGradient>
@@ -297,7 +297,7 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
         if( distToLine > m_handleRadius*m_handleRadius )
             return false;
 
-        QColor newColor = KoGradientHelper::colorAt( scalar, m_stops );
+        QColor newColor = KarbonGradientHelper::colorAt( scalar, m_stops );
         m_stops.append( QGradientStop( scalar, newColor ) );
     }
     else if( m_selection == Stop )

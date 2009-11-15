@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoGradientHelper.h"
+#include "KarbonGradientHelper.h"
 
 #include <KoShape.h>
 #include <KoLineBorder.h>
@@ -26,102 +26,7 @@
 #include <QtGui/QGradient>
 #include <math.h>
 
-QGradient * KoGradientHelper::cloneGradient(const QGradient *gradient)
-{
-    if (! gradient)
-        return 0;
-
-    QGradient *clone = 0;
-
-    switch (gradient->type()) {
-        case QGradient::LinearGradient:
-        {
-            const QLinearGradient *lg = static_cast<const QLinearGradient*>(gradient);
-            clone = new QLinearGradient(lg->start(), lg->finalStop());
-            break;
-        }
-        case QGradient::RadialGradient:
-        {
-            const QRadialGradient *rg = static_cast<const QRadialGradient*>(gradient);
-            clone = new QRadialGradient(rg->center(), rg->radius(), rg->focalPoint());
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            const QConicalGradient *cg = static_cast<const QConicalGradient*>(gradient);
-            clone = new QConicalGradient(cg->center(), cg->angle());
-            break;
-        }
-        default:
-            return 0;
-    }
-
-    clone->setSpread(gradient->spread());
-    clone->setStops(gradient->stops());
-
-    return clone;
-}
-
-KoShapeBackground * KoGradientHelper::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
-{
-    if (! shape || ! stops.count())
-        return 0;
-
-    KoGradientBackground *newGradient = 0;
-    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
-    if (oldGradient) {
-        // just copy the gradient and set the new stops
-        QGradient *g = cloneGradient(oldGradient->gradient());
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-        newGradient->setMatrix(oldGradient->matrix());
-    }
-    else {
-        // no gradient yet, so create a new one
-        QSizeF size = shape->size();
-        QLinearGradient *g = new QLinearGradient();
-        g->setStart(QPointF(0, 0));
-        g->setFinalStop(QPointF(size.width(), size.height()));
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-    }
-    return newGradient;
-}
-
-QBrush KoGradientHelper::applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops)
-{
-    if (! shape || ! stops.count())
-        return QBrush();
-
-    QBrush gradientBrush;
-    KoLineBorder *border = dynamic_cast<KoLineBorder*>(shape->border());
-    if (border)
-        gradientBrush = border->lineBrush();
-
-    QGradient *newGradient = 0;
-    const QGradient *oldGradient = gradientBrush.gradient();
-    if (oldGradient) {
-        // just copy the new gradient stops
-        newGradient = cloneGradient(oldGradient);
-        newGradient->setStops(stops);
-    }
-    else {
-        // no gradient yet, so create a new one
-        QSizeF size = shape->size();
-        QLinearGradient *g = new QLinearGradient();
-        g->setStart(QPointF(0, 0));
-        g->setFinalStop(QPointF(size.width(), size.height()));
-        g->setStops(stops);
-        newGradient = g;
-    }
-
-    QBrush brush(*newGradient);
-    delete newGradient;
-
-    return brush;
-}
-
-QGradient* KoGradientHelper::defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
+QGradient* KarbonGradientHelper::defaultGradient(const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)
 {
     QGradient *gradient = 0;
     switch (type) {
@@ -146,7 +51,7 @@ QGradient* KoGradientHelper::defaultGradient(const QSizeF &size, QGradient::Type
     return gradient;
 }
 
-QGradient* KoGradientHelper::convertGradient(const QGradient * gradient, QGradient::Type newType)
+QGradient* KarbonGradientHelper::convertGradient(const QGradient * gradient, QGradient::Type newType)
 {
     QPointF start, stop;
     // try to preserve gradient positions
@@ -208,7 +113,7 @@ QGradient* KoGradientHelper::convertGradient(const QGradient * gradient, QGradie
     return newGradient;
 }
 
-QColor KoGradientHelper::colorAt(qreal position, const QGradientStops &stops)
+QColor KarbonGradientHelper::colorAt(qreal position, const QGradientStops &stops)
 {
     if (! stops.count())
         return QColor();

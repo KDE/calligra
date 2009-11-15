@@ -21,7 +21,7 @@
 */
 
 #include "KarbonSmallStylePreview.h"
-#include <KoGradientHelper.h>
+#include <KarbonGradientHelper.h>
 #include <KoGradientBackground.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
@@ -91,7 +91,7 @@ protected:
             if( gradientFill )
             {
                 const QGradient * gradient = gradientFill->gradient();
-                QGradient * defGradient = KoGradientHelper::defaultGradient( size(), gradient->type(), gradient->spread(), gradient->stops() );
+                QGradient * defGradient = KarbonGradientHelper::defaultGradient( size(), gradient->type(), gradient->spread(), gradient->stops() );
                 QBrush brush( *defGradient );
                 delete defGradient;
                 painter.setBrush( brush );
@@ -169,7 +169,7 @@ protected:
                 QBrush brush = line->lineBrush();
                 if( brush.gradient() )
                 {
-                    QGradient * defGradient = KoGradientHelper::defaultGradient( size(), brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops() );
+                    QGradient * defGradient = KarbonGradientHelper::defaultGradient( size(), brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops() );
                     QBrush brush( *defGradient );
                     delete defGradient;
                     painter.setBrush( brush );

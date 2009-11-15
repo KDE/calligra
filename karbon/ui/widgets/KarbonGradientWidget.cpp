@@ -28,7 +28,7 @@
 
 #include "KarbonGradientWidget.h"
 #include "KarbonCursor.h"
-#include <KoGradientHelper.h>
+#include <KarbonGradientHelper.h>
 
 #include <KLocale>
 #include <KIconLoader>
@@ -216,7 +216,7 @@ void KarbonGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
     {
         // no color stop hit -> new color stop
         qreal newStopPosition = static_cast<qreal>( e->x()-m_pntArea.left() ) / m_pntArea.width();
-        QColor newStopColor = KoGradientHelper::colorAt( newStopPosition, m_stops );
+        QColor newStopColor = KarbonGradientHelper::colorAt( newStopPosition, m_stops );
         int result = KColorDialog::getColor( newStopColor, this );
         if ( result == KColorDialog::Accepted ) {
             m_stops.append( QGradientStop(newStopPosition, newStopColor) );
