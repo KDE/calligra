@@ -58,6 +58,12 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2009-11-14..15
+Query Designer
+*disable horizontal scrollbars in table containers
+Table View
+*fixed geometry of combo box popup
+
 2009-11-11
 Table View
 *fix row deleting (typo)
