@@ -26,12 +26,8 @@
 #include <QVariant>
 #include "WidgetInfo.h"
 
-//! Disable list widget because we need to replace it with QTreeWidget 
-//! which uses very different API compared to Q3ListView.
-//! @todo re-add QTreeWidget
-#define KEXI_FORMS_NO_LIST_WIDGET
-
 class QWidget;
+class QListWidget;
 class QMenu;
 class QDomElement;
 class QDomDocument;

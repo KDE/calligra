@@ -34,7 +34,9 @@
 #include <kactioncollection.h>
 
 #include "richtextdialog.h"
-#include "editlistviewdialog.h"
+#ifndef KEXI_FORMS_NO_LIST_WIDGET
+# include "editlistviewdialog.h"
+#endif
 #include "resizehandle.h"
 //#include "formmanager.h"
 #include "form.h"

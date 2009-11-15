@@ -4,6 +4,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/wi
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
+# Disable list widget because we need to replace it with QTreeWidget 
+# which uses very different API compared to Q3ListView.
+# todo: re-add QTreeWidget?
+add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
+
 ########### next target ###############
 
 set(kformdesigner_LIB_SRCS 
@@ -24,7 +29,7 @@ set(kformdesigner_LIB_SRCS
    events.cpp
    richtextdialog.cpp
    tabstopdialog.cpp
-   editlistviewdialog.cpp
+#KEXI_FORMS_NO_LIST_WIDGET:   editlistviewdialog.cpp
    utils.cpp
 #todo   kfdpixmapedit.cpp
    widgetwithsubpropertiesinterface.cpp
