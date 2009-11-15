@@ -139,6 +139,8 @@ void KexiComboBoxPopup::init()
     setFrameStyle(Box | Plain);
 
     d->tv = new KexiComboBoxPopup_KexiTableView(this);
+    d->tv->setFrameShape(QFrame::NoFrame);
+    d->tv->setLineWidth(0);
     installEventFilter(this);
 
     connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*, int, int)),
