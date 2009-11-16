@@ -92,7 +92,7 @@ public:
     void setName( const QString& n );
     const QString &name() const { return m_name;}
     void setType( Type type );
-    //void setType(const QString &type);
+    void setType(const QString &type);
     Type type() const { return m_type; }
     QString typeToString( bool trans = false ) const;
     static QStringList typeToStringList( bool trans = false );
