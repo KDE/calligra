@@ -473,9 +473,16 @@ void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
     m_group = 0;
 }
 
+void ResourceItemModel::slotLayoutChanged()
+{
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
+}
+
 void ResourceItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
         
@@ -499,6 +506,7 @@ void ResourceItemModel::setProject( Project *project )
     }
     m_project = project;
     if ( m_project ) {
+        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
         

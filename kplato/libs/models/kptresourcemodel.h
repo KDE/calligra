@@ -134,7 +134,8 @@ protected slots:
     void slotResourceToBeRemoved( const Resource *resource );
     void slotResourceRemoved( const Resource *resource );
     void slotCalendarChanged( Calendar* cal );
-    
+    void slotLayoutChanged();
+
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
     
