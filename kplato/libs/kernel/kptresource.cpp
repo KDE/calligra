@@ -102,6 +102,16 @@ void ResourceGroup::setType( Type type )
      changed();
 }
 
+void ResourceGroup::setType(const QString &type)
+{
+    if (type == "Work")
+        setType( Type_Work );
+    else if (type == "Material")
+        setType( Type_Material );
+    else
+        setType( Type_Work );
+}
+
 QString ResourceGroup::typeToString( bool trans ) const {
     return typeToStringList( trans ).at( m_type );
 }
@@ -177,6 +187,7 @@ bool ResourceGroup::load(KoXmlElement &element, XMLLoaderObject &status ) {
     //kDebug();
     setId(element.attribute("id"));
     m_name = element.attribute("name");
+    setType(element.attribute("type"));
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -206,6 +217,7 @@ void ResourceGroup::save(QDomElement &element)  const {
 
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
+    me.setAttribute("type", typeToString());
 
     foreach (Resource *r, m_resources) {
         r->save(me);
