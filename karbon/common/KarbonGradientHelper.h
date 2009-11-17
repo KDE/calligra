@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGGRADIENTHELPER_H
-#define KARBONGGRADIENTHELPER_H
+#ifndef KARBONGRADIENTHELPER_H
+#define KARBONGRADIENTHELPER_H
 
 #include <karboncommon_export.h>
 #include <QtGui/QBrush>
@@ -42,4 +42,4 @@ namespace KarbonGradientHelper
     KARBONCOMMON_EXPORT QColor colorAt(qreal position, const QGradientStops &stops);
 };
 
-#endif
+#endif // KARBONGRADIENTHELPER_H
