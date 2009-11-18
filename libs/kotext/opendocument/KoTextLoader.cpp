@@ -358,6 +358,8 @@ void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &c
     Q_UNUSED(cursor)
     QString id = element.attributeNS(KoXmlNS::text,"change-id");
     int changeId = d->changeTracker->getLoadedChangeId(id);
+    if (!changeId)
+        return;
     d->currentChangeId = changeId;
 
     //debug
@@ -655,15 +657,17 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }else if(isTextNS && localName == "change") {
             QString id = ts.attributeNS(KoXmlNS::text,"change-id");
             int changeId = d->changeTracker->getLoadedChangeId(id);
-            KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
-            deleteChangemarker->setChangeId(changeId);
-            KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-            changeElement->setEnabled(true);
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+	    if (changeId) {
+                KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+                deleteChangemarker->setChangeId(changeId);
+                KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                changeElement->setEnabled(true);
+                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
 
-            if(layout){
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                if(layout){
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                    textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+		}
             }
         }else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
