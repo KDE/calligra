@@ -30,6 +30,7 @@
 #include <KDateTime>
 #include <KGlobal>
 #include <KLocale>
+#include <KUser>
 
 //Qt includes
 #include <QList>
@@ -117,8 +118,8 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     changeElement->setPrevFormat(prevFormat);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
-    changeElement->setCreator(QString(" "));
-
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.property(KUser::FullName).toString());
     changeElement->setEnabled(d->m_enabled);
 
     d->m_changes.insert(d->m_changeId, changeElement);
@@ -137,7 +138,8 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 //    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
-    changeElement->setCreator(QString(" "));
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.property(KUser::FullName).toString());
 
     changeElement->setEnabled(d->m_enabled);
 
@@ -156,7 +158,8 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::deleteChange);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
-    changeElement->setCreator(QString(" "));
+    KUser user(KUser::UseRealUserID);
+    changeElement->setCreator(user.property(KUser::FullName).toString());
     //TODO preserve formating info there. this will do for now
     changeElement->setDeleteData(selection.toPlainText());
 
