@@ -59,6 +59,7 @@ namespace QTest {
             result += ")";
             return qstrdup( result.data() );
         }
+        return 0;
     }
 }
 
