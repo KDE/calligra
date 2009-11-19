@@ -1,11 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KWordPluginScripting" library="krossmodulekword" version="8">
+<kpartgui name="KWordPluginScripting" library="krossmodulekword" version="9">
 <MenuBar>
-	<Menu name="tools"><text>&amp;Tools</text>
-		<Separator/>
-		<Action name="executescriptfile"/>
-		<Action name="scripts"/>
-		<Action name="scriptmanager"/>
-	</Menu>
 </MenuBar>
 </kpartgui>
