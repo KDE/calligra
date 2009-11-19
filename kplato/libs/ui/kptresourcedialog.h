@@ -78,6 +78,7 @@ protected slots:
     void slotButtonClicked(int button);
 
 private:
+    Project &m_project;
     Resource *m_original;
     Resource m_resource;
     ResourceDialogImpl *dia;

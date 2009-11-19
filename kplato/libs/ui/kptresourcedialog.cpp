@@ -113,6 +113,7 @@ void ResourceDialogImpl::slotChooseResource()
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
     : KDialog(parent),
+      m_project( project ),
       m_original(resource),
       m_resource(resource),
       m_calculationNeeded(false)
@@ -197,8 +198,8 @@ void ResourceDialog::slotOk() {
     m_resource.setType((Resource::Type)(dia->type->currentIndex()));
     m_resource.setUnits(dia->units->value());
 
-    m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
-    m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
+    m_resource.setNormalRate(m_project.locale()->readMoney(dia->rateEdit->text()));
+    m_resource.setOvertimeRate(m_project.locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setCalendar(m_calendars[dia->calendarList->currentIndex()]);
     m_resource.setAvailableFrom(dia->availableFrom->dateTime());
     m_resource.setAvailableUntil(dia->availableUntil->dateTime());
