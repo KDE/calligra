@@ -24,6 +24,7 @@ Name[tr]=KPlato iCalendar Dışarıya Aktarma Filtresi
 Name[uk]=Фільтр експорту до iCalendar KPlato
 Name[wa]=Passete d' ebagaedje iCalendar di KPlato
 Name[x-test]=xxKPlato iCalendar Export Filterxx
+Name[zh_CN]=KPlato iCalendar 导出过滤器
 Name[zh_TW]=KPlato iCalendar 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
