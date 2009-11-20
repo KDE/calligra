@@ -34,7 +34,8 @@
 const qreal M_PI = 3.1415927;
 
 KarbonCalligraphicShape::KarbonCalligraphicShape( qreal caps )
-    : m_caps( caps )
+    : m_lastWasFlip(false),
+    m_caps(caps)
 {
     setShapeId( KoPathShapeId );
     setFillRule( Qt::WindingFill );
