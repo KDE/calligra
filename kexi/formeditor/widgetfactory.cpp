@@ -53,6 +53,14 @@
 
 using namespace KFormDesigner;
 
+InternalPropertyHandlerInterface::InternalPropertyHandlerInterface()
+{
+}
+
+InternalPropertyHandlerInterface::~InternalPropertyHandlerInterface()
+{
+}
+
 ///// InlineEditorCreationArguments //////////////////////////
 
 WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(

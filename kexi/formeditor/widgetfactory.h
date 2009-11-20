@@ -52,6 +52,10 @@ class WidgetLibrary;
 class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
 {
 protected:
+    InternalPropertyHandlerInterface();
+    
+    virtual ~InternalPropertyHandlerInterface();
+    
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
