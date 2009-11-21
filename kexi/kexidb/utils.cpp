@@ -160,7 +160,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
         if (details.startsWith("<p>"))
             details = QString::fromLatin1("<qt>") + details;
         else
-            details = QString::fromLatin1("<qt><p>") + details;
+            details = QString::fromLatin1("<p>") + details;
     }
 }
 

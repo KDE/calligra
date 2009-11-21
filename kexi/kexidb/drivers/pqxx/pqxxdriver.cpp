@@ -127,10 +127,10 @@ bool pqxxSqlDriver::isSystemDatabaseName(const QString& n) const
 //==================================================================================
 //
 QString pqxxSqlDriver::escapeString(const QString& str) const
-{    //Cannot use pqxx or libpq escape functions as they require a db connection
-//to escape using the char encoding of the database
-//see http://www.postgresql.org/docs/8.1/static/libpq-exec.html#LIBPQ-EXEC-ESCAPE-STRING
-
+{
+    //Cannot use pqxx or libpq escape functions as they require a db connection
+    //to escape using the char encoding of the database
+    //see http://www.postgresql.org/docs/8.1/static/libpq-exec.html#LIBPQ-EXEC-ESCAPE-STRING
 /*    return QString::fromLatin1("'")
     + QString::fromAscii(_internalWork->esc(std::string(str.toAscii().constData())).c_str())
            + QString::fromLatin1("'");

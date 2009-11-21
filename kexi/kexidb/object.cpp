@@ -48,7 +48,7 @@ Object::~Object()
     m_previousServerResultNum2 = serverResult(); \
     m_previousServerResultName2 = serverResultName(); \
     KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " \
-    << m_previousServerResultName2 <<endl
+        << m_previousServerResultName2
 
 void Object::setError(int code, const QString &msg)
 {
