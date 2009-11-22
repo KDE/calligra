@@ -112,11 +112,11 @@ void KexiDataAwarePropertySet::slotReloadRequested()
 void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 {
     if (!set || row >= (uint)m_sets.size()) {
-        kWarning() << "KexiDataAwarePropertySet::set() invalid args: rew=" << row << " propertyset=" << set;
+        kWarning() << "invalid args: rew=" << row << "propertyset=" << set;
         return;
     }
     if (set->parent() && set->parent() != this) {
-        kWarning() << "KexiDataAwarePropertySet::set() propertyset's parent must be NULL or this KexiDataAwarePropertySet";
+        kWarning() << "property set's parent must be NULL or this KexiDataAwarePropertySet";
         return;
     }
 

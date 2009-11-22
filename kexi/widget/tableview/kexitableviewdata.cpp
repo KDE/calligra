@@ -527,16 +527,14 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
 
     kDebug() << "column #" << colnum << " = " << newval.toString();
     if (!col) {
-        kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #"
-        << colnum << " not found! col==0";
+        kWarning() << "column #" << colnum << "not found! col==0";
         return false;
     }
     if (!d->pRowEditBuffer)
         d->pRowEditBuffer = new KexiDB::RowEditBuffer(isDBAware());
     if (d->pRowEditBuffer->isDBAware()) {
         if (!(col->columnInfo())) {
-            kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #"
-            << colnum << " not found!";
+            kWarning() << "column #" << colnum << " not found!";
             return false;
         }
         d->pRowEditBuffer->insert(*col->columnInfo(), newval);
@@ -711,7 +709,7 @@ bool KexiTableViewData::deleteRow(KexiDB::RecordData& record, bool repaint)
     int index = indexOf(&record);
     if (index == -1) {
         //aah - this shouldn't be!
-        kWarning() << "KexiTableViewData::deleteRow(): !removeRef() - IMPL. ERROR?";
+        kWarning() << "!removeRef() - IMPL. ERROR?";
         d->result.success = false;
         return false;
     }

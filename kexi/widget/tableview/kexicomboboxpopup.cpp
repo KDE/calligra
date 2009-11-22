@@ -158,7 +158,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     if (column && !field)
         field = column->field();
     if (!field) {
-        kWarning() << "KexiComboBoxPopup::setData(): !field";
+        kWarning() << "!field";
         return;
     }
 
@@ -221,7 +221,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
                 KexiDB::QueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
                 if (!ci) {
-                    kWarning() << "KexiComboBoxPopup::setData(): " << *it << " >= fieldsExpandedSize";
+                    kWarning() << *it << ">= fieldsExpandedSize";
                     continue;
                 }
                 KexiDB::VariableExpr *fieldExpr
@@ -269,7 +269,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
         return;
     }
 
-    kWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)";
+    kWarning() << "no column relatedData \n - moving to setData(KexiDB::Field &)";
 
     // case 3: enum hints
     d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column

@@ -1000,7 +1000,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
     const int realFieldNumber = fieldNumberForColumn(m_curCol);
     if (realFieldNumber < 0) {
-        kWarning() << "KexiDataAwareObjectInterface::acceptEditor(): fieldNumberForColumn(m_curCol) < 0";
+        kWarning() << "fieldNumberForColumn(m_curCol) < 0";
         return false;
     }
 
@@ -1565,8 +1565,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
             //get the stored value
             const int realFieldNumber = fieldNumberForColumn(col);
             if (realFieldNumber < 0) {
-                kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
-                "fieldNumberForColumn(m_curCol) < 0";
+                kWarning() << "fieldNumberForColumn(m_curCol) < 0";
                 return 0;
             }
             const QVariant *storedValue = &m_currentItem->at(realFieldNumber);
@@ -1586,8 +1585,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
     //not db-aware data:
     const int realFieldNumber = fieldNumberForColumn(col);
     if (realFieldNumber < 0) {
-        kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
-        "fieldNumberForColumn(m_curCol) < 0";
+        kWarning() << "fieldNumberForColumn(m_curCol) < 0";
         return 0;
     }
     return &m_currentItem->at(realFieldNumber);
@@ -1890,7 +1888,7 @@ void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
  \a firstCharacter is in/out parameter. If \a matchAnyPartOfField is true and \a matchWholeField is false,
  \a firstCharacter >= 0, the search will be performed after skipping first \a firstCharacter characters.
 
- If \a forward is false, we are searching backwart from \a firstCharacter position. \a firstCharacter == -1
+ If \a forward is false, we are searching backward from \a firstCharacter position. \a firstCharacter == -1
  means then the last character. \a firstCharacter == INT_MAX means "before first" place, so searching fails
  immediately.
  On success, true is returned and \a firstCharacter is set to position of the matched string. */

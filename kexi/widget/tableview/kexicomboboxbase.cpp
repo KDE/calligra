@@ -223,7 +223,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     if (column() && column()->isRelatedDataEditable())
         return str; //new value entered and that's allowed
 
-    kWarning() << "KexiComboBoxBase::valueForString(): no related row found, ID will be painted!";
+    kWarning() << "no related row found, ID will be painted!";
     if (allowNulls)
         return QString();
     return str; //for sanity but it's weird to show id to the user
