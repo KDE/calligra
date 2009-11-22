@@ -58,6 +58,12 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2009-11-24
+Table View
+*fix painting drop down button for combobox editor
+TODO: use tableview's appearance parameters for color
+TODO: fix painting for styles like windows, cleanlooks...
+
 2009-11-14..15
 Query Designer
 *disable horizontal scrollbars in table containers
