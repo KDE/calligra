@@ -42,7 +42,12 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     m_reportDesigner = r;
     setPos(0, 0);
 
-    setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
+#if QT_VERSION >= 0x040600
+      setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
+#else
+      setFlags (ItemIsSelectable | ItemIsMovable);
+#endif
+
     setPen(QPen(Qt::black, 5));
     setAcceptsHoverEvents(true);
 
