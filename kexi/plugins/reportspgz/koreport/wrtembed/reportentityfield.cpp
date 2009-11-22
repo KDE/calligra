@@ -37,7 +37,6 @@
 
 void ReportEntityField::init(QGraphicsScene * scene)
 {
-    setFlags(ItemIsSelectable | ItemIsMovable);
     if (scene)
         scene->addItem(this);
 

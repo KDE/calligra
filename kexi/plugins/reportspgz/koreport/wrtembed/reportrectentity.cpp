@@ -41,6 +41,14 @@ ReportRectEntity::ReportRectEntity(ReportDesigner *r)
     m_psize = 0;
 
     setAcceptsHoverEvents(true);
+
+    kDebug() << QT_VERSION;
+    
+#if QT_VERSION >= 0x040600
+      setFlags(ItemIsSelectable | ItemIsMovable | ItemSendsGeometryChanges);
+#else
+      setFlags (ItemIsSelectable | ItemIsMovable);
+#endif
 }
 
 void ReportRectEntity::init(KRPos* p, KRSize* s, KoProperty::Set* se)
@@ -89,6 +97,7 @@ void ReportRectEntity::setSceneRect(QRectF r)
 
 void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+  kDebug();
     //Update and show properties
     m_ppos->setScenePos(QPointF(sceneRect().x(), sceneRect().y()));
     m_reportDesigner->changeSet(m_pset);
@@ -107,6 +116,8 @@ void ReportRectEntity::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 
 void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
+    //kDebug() << m_grabAction;
+    
     qreal w, h;
 
     QPointF p  = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
@@ -156,7 +167,7 @@ void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void ReportRectEntity::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
-    m_grabAction = 0;
+    //m_grabAction = 0;
 
     if (isSelected()) {
         m_grabAction = grabHandle(event->pos());
@@ -189,6 +200,7 @@ void ReportRectEntity::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
             unsetCursor();
         }
     }
+    //kDebug() << m_grabAction;
 }
 
 void ReportRectEntity::drawHandles(QPainter *painter)
@@ -261,6 +273,7 @@ int ReportRectEntity::grabHandle(QPointF pos)
 
 QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+  //kDebug() << change;
     if (change == ItemPositionChange && scene()) {
         QPointF newPos = value.toPointF();
 

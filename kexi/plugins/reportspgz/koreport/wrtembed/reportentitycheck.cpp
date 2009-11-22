@@ -16,8 +16,6 @@
 
 void ReportEntityCheck::init(QGraphicsScene * scene)
 {
-    setFlags(ItemIsSelectable | ItemIsMovable);
-
     if (scene)
         scene->addItem(this);
 

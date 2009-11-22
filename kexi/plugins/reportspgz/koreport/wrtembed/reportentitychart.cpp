@@ -36,16 +36,13 @@
 
 
 
-void ReportEntityChart::init(QGraphicsScene* s, ReportDesigner *r)
+void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
 {
-    m_reportDesigner = r;
+    m_reportDesigner = designer;
     setPos(0, 0);
 
-    setFlags(ItemIsSelectable | ItemIsMovable);
-    setAcceptsHoverEvents(true);
-
-    if (s)
-        s->addItem(this);
+    if (scene)
+        scene->addItem(this);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
