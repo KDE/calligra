@@ -69,9 +69,9 @@ public:
     Q3ScrollView *view;
 
     QLabel *editingIndicatorLabel;
-    bool editingIndicatorEnabled : 1;
-    bool editingIndicatorVisible : 1;
-    bool isInsertingEnabled : 1;
+    bool editingIndicatorEnabled;
+    bool editingIndicatorVisible;
+    bool isInsertingEnabled;
 };
 
 //--------------------------------------------------

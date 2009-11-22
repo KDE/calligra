@@ -61,8 +61,8 @@ public:
     QPixmap tableIcon, queryIcon;
     int tablesCount;
     int prevIndex; //!< Used in slotActivated()
-    bool showTables : 1;
-    bool showQueries : 1;
+    bool showTables;
+    bool showQueries;
 };
 
 //------------------------

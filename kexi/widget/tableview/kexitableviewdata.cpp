@@ -231,22 +231,22 @@ public:
 
     QVector<int> visibleColumnsIDs, globalColumnsIDs;
 
-    bool readOnly : 1;
+    bool readOnly;
 
-    bool insertingEnabled : 1;
+    bool insertingEnabled;
 
     /*! Used in acceptEditor() to avoid infinite recursion,
      eg. when we're calling KexiTableviewData::acceptRowEdit() during cell accepting phase. */
-//  bool inside_acceptEditor : 1;
+//  bool inside_acceptEditor;
 
     //! @see KexiTableviewData::containsROWIDInfo()
-    bool containsROWIDInfo : 1;
+    bool containsROWIDInfo;
 
     //! true if ascending sort order is set
-    bool ascendingOrder : 1;
+    bool ascendingOrder;
 
     //! true if descending sort order is set
-    bool descendingOrder : 1;
+    bool descendingOrder;
 
     int autoIncrementedColumn;
 };

@@ -790,24 +790,24 @@ protected:
 //  KexiDB::RowEditBuffer *m_rowEditBuffer;
 
     //! true if m_data member is owned by this object
-    bool m_owner : 1;
+    bool m_owner;
 
     /*! true if currently selected row is edited */
-    bool m_rowEditing : 1;
+    bool m_rowEditing;
 
     /*! true if new row is edited; implies: rowEditing==true. */
-    bool m_newRowEditing : 1;
+    bool m_newRowEditing;
 
     /*! 'sorting by column' availability flag for widget */
-    bool m_isSortingEnabled : 1;
+    bool m_isSortingEnabled;
 
     /*! true if filtering is enabled for the view. */
-    bool m_isFilteringEnabled : 1;
+    bool m_isFilteringEnabled;
 
     /*! Public version of 'acceptsRowEditAfterCellAcceptin' flag (available for a user).
      It's OR'es together with above flag.
     */
-    bool m_acceptsRowEditAfterCellAccepting : 1;
+    bool m_acceptsRowEditAfterCellAccepting;
 
     /*! Used in acceptEditor() to avoid infinite recursion,
      eg. when we're calling acceptRowEdit() during cell accepting phase. */
@@ -820,10 +820,10 @@ protected:
     /*! @internal if true, this object automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit
      (i.e. after acceptEditor()). */
-    bool m_internal_acceptsRowEditAfterCellAccepting : 1;
+    bool m_internal_acceptsRowEditAfterCellAccepting;
 
     /*! true, if inserting empty rows are enabled (false by default) */
-    bool m_emptyRowInsertingEnabled : 1;
+    bool m_emptyRowInsertingEnabled;
 
     /*! Contains 1 if the object is readOnly, 0 if not;
      otherwise (-1 means "do not know") the 'readOnly' flag from object's
@@ -834,29 +834,29 @@ protected:
 //! @todo really keep this here and not in KexiTableView?
     /*! true if currently double click action was is performed
     (so accept/cancel editor shoudn't be executed) */
-    bool m_contentsMousePressEvent_dblClick : 1;
+    bool m_contentsMousePressEvent_dblClick;
 
     /*! like for readOnly: 1 if inserting is enabled */
     int m_insertingEnabled;
 
     /*! true, if initDataContents() should be called on show event. */
-    bool m_initDataContentsOnShow : 1;
+    bool m_initDataContentsOnShow;
 
     /*! Set to true in setCursorPosition() to indicate that cursor position was set
      before show() and it shouldn't be changed on show().
      Only used if initDataContentsOnShow is true. */
-    bool m_cursorPositionSetExplicityBeforeShow : 1;
+    bool m_cursorPositionSetExplicityBeforeShow;
 
     /*! true if spreadSheetMode is enabled. False by default.
      @see KexiTableView::setSpreadSheetMode() */
-    bool m_spreadSheetMode : 1;
+    bool m_spreadSheetMode;
 
     /*! true, if this table accepts dropping data on the rows (false by default). */
-    bool m_dropsAtRowEnabled : 1;
+    bool m_dropsAtRowEnabled;
 
     /*! true, if this entire (visible) row should be updated when boving to other row.
      False by default. For table view with 'row highlighting' flag enabled, it is true. */
-    bool m_updateEntireRowWhenMovingToOtherRow : 1;
+    bool m_updateEntireRowWhenMovingToOtherRow;
 
     DeletionPolicy m_deletionPolicy;
 
@@ -872,12 +872,12 @@ protected:
     /*! Navigation panel, used if navigationPanelEnabled is true. */
     KexiRecordNavigator *m_navPanel; //!< main navigation widget
 
-    bool m_navPanelEnabled : 1;
+    bool m_navPanelEnabled;
 
     /*! true, if certical header shouldn't be increased in
      KexiTableView::slotRowInserted() because it was already done
      in KexiTableView::createEditor(). */
-    bool m_verticalHeaderAlreadyAdded : 1;
+    bool m_verticalHeaderAlreadyAdded;
 
     /*! Row number that over which user drags a mouse pointer.
      Used to indicate dropping possibility for that row.
@@ -894,10 +894,10 @@ protected:
     QIcon m_contextMenuTitleIcon;
 
     /*! True if context menu is enabled. */
-    bool m_contextMenuEnabled : 1;
+    bool m_contextMenuEnabled;
 
     //! Used by updateAfterCancelRowEdit()
-    bool m_alsoUpdateNextRow : 1;
+    bool m_alsoUpdateNextRow;
 
     /*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
      It is set in slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)) slot
@@ -911,10 +911,10 @@ protected:
 
     /*! Used to enable/disable execution of vScrollBarValueChanged()
      when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */
-    bool m_vScrollBarValueChanged_enabled : 1;
+    bool m_vScrollBarValueChanged_enabled;
 
     /*! True, if vscrollbar tooltips are enabled (true by default). */
-    bool m_scrollbarToolTipsEnabled : 1;
+    bool m_scrollbarToolTipsEnabled;
 
 /*replaced by QToolTip
     QLabel* m_scrollBarTip; //!< scrollbar tooltip
@@ -928,7 +928,7 @@ protected:
         PositionOfValue() : firstCharacter(0), lastCharacter(0), exists(false) {}
         uint firstCharacter;
         uint lastCharacter;
-        bool exists : 1;
+        bool exists;
     };
 
     /*! Used to mark recently found value. Updated on successful execution of find().

@@ -149,22 +149,22 @@ protected:
 
     QVariant m_userEnteredValue; //!< value (usually a text) entered by hand (by the user)
 
-    bool m_internalEditorValueChanged : 1; //!< true if user has text or other value inside editor
-    bool m_slotInternalEditorValueChanged_enabled : 1; //!< Used in slotInternalEditorValueChanged()
-    bool m_setValueOrTextInInternalEditor_enabled : 1; //!< Used in setValueOrTextInInternalEditor() and slotItemSelected()
-    bool m_mouseBtnPressedWhenPopupVisible : 1; //!< Used only by KexiComboBoxTableEdit
-    bool m_insideCreatePopup : 1; //!< true if we're inside createPopup(); used in slotItemSelected()
+    bool m_internalEditorValueChanged; //!< true if user has text or other value inside editor
+    bool m_slotInternalEditorValueChanged_enabled; //!< Used in slotInternalEditorValueChanged()
+    bool m_setValueOrTextInInternalEditor_enabled; //!< Used in setValueOrTextInInternalEditor() and slotItemSelected()
+    bool m_mouseBtnPressedWhenPopupVisible; //!< Used only by KexiComboBoxTableEdit
+    bool m_insideCreatePopup; //!< true if we're inside createPopup(); used in slotItemSelected()
     //! Set to false as soon as the item corresponding with the current
     //! value is selected in the popup table. This avoids selecting item
     //! for origValue() and thus loosing the recent choice.
-    bool m_updatePopupSelectionOnShow : 1; 
-    bool m_moveCursorToEndInInternalEditor_enabled : 1;
-    bool m_selectAllInInternalEditor_enabled : 1;
-    bool m_setValueInInternalEditor_enabled : 1;
+    bool m_updatePopupSelectionOnShow; 
+    bool m_moveCursorToEndInInternalEditor_enabled;
+    bool m_selectAllInInternalEditor_enabled;
+    bool m_setValueInInternalEditor_enabled;
     //! Used in setValueInternal() to control whether
     //! we want to set visible value on setValueInternal()
     //! - true for table view's combo box
-    bool m_setVisibleValueOnSetValueInternal : 1;
+    bool m_setVisibleValueOnSetValueInternal;
 };
 
 #endif

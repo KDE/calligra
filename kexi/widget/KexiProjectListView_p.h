@@ -36,8 +36,8 @@ public:
 
     virtual bool isExecuteArea(const QPoint& point);
 
-    bool nameEndsWithAsterisk : 1;
-    bool enableExecuteArea : 1; //!< used in isExecuteArea()
+    bool nameEndsWithAsterisk;
+    bool enableExecuteArea; //!< used in isExecuteArea()
 public slots:
     virtual void rename(Q3ListViewItem *item, int c);
 protected:

@@ -208,11 +208,11 @@ bool KexiComboBoxTableEdit::valueChanged()
 
 void KexiComboBoxTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
-// d->currentEditorWidth = w;
+/*2.x
     if (!column()->isReadOnly()) {
         if (w > d->button->width())
             w -= d->button->width();
-    }
+    }*/
     p->drawRect(x, y, w, h);
 }
 

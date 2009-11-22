@@ -100,35 +100,35 @@ public:
         QColor alternateBackgroundColor;
 
         /*! true if background altering should be enabled, true by default */
-        bool backgroundAltering : 1;
+        bool backgroundAltering;
 
         /*! true if full-row-selection mode is set,
          what means that all cells of the current row are always selected, instead of single cell.
          This mode is usable for read-only table views, when we're interested only in navigating
          by rows. False by default, even for read-only table views.
         */
-        bool fullRowSelection : 1;
+        bool fullRowSelection;
 
         /*! true if fullgrid is enabled. True by default.
          It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
-        bool gridEnabled : 1;
+        bool gridEnabled;
 
         /*! \if the navigation panel is enabled (visible) for the view.
          True by default. */
-        bool navigatorEnabled : 1;
+        bool navigatorEnabled;
 
         /*! true if "row highlight" behaviour is enabled. False by default. */
-        bool rowHighlightingEnabled : 1;
+        bool rowHighlightingEnabled;
 
         /*! true if "row highlight over " behaviour is enabled. False by default. */
-        bool rowMouseOverHighlightingEnabled : 1;
+        bool rowMouseOverHighlightingEnabled;
 
         /*! true if selection of a row should be kept when a user moved mouse
          pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
          True by default. It is set to false for comboboxpopup table, to mimic original
          combobox look and feel. */
-        bool persistentSelections : 1;
+        bool persistentSelections;
 
         /*! color for row highlight, default is intermediate (33%/60%) between
          active highlight and base color. */

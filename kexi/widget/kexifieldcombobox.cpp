@@ -63,7 +63,7 @@ public:
     QString tableOrQueryName;
     QString fieldOrExpression;
     QMap<QString, QString> captions;
-    bool table : 1;
+    bool table;
 };
 
 //------------------------

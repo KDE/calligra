@@ -45,7 +45,9 @@ protected:
     void styleChanged();
 
     int m_fixForHeight;
-    bool m_drawComplexControl : 1;
+
+    bool m_drawComplexControl;
+
     //! fake combo used only to pass it as 'this' for QStyle
     //! (because styles use \<static_cast\>)
     KComboBox *m_paintedCombo;

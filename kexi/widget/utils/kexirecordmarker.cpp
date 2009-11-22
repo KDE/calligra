@@ -84,7 +84,7 @@ public:
     int editRow;
     int rows;
     QBrush selectionBackgroundBrush;
-    bool showInsertRow : 1;
+    bool showInsertRow;
 };
 
 //----------------------------------------------------------------
