@@ -88,11 +88,16 @@ void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
         option.initFrom(this);
         option.rect = r;
         option.subControls = QStyle::SC_ComboBoxArrow;
-//  style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, this);
+        style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, this);
 //  p.drawPixmap( r, style()->standardPixmap(QStyle::SP_ArrowDown, &option) );
 
         //style().drawPrimitive( QStyle::PE_ArrowDown, p, r, colorGroup(), flags);
     }
+//! @todo use tableview's appearance parameters for color
+    QPen linePen(Qt::black);
+    linePen.setWidth(1);
+    p.setPen(linePen);
+    p.drawLine(r.topLeft(), r.topRight());
 }
 
 bool KexiComboBoxDropDownButton::event(QEvent *event)
