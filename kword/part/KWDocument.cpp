@@ -273,7 +273,8 @@ void KWDocument::removePage(int pageNumber)
 
 void KWDocument::firePageSetupChanged()
 {
-    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
+    if (inlineTextObjectManager())
+        inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
 }
 

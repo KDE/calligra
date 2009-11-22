@@ -80,13 +80,10 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         KoTextDocument doc(m_document);
         doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
-        Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
         KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
-        Q_ASSERT(changeTracker);
         doc.setChangeTracker(changeTracker);
         KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(m_kwordDocument->dataCenterMap()["UndoStack"]);
-        Q_ASSERT(undoStack);
         doc.setUndoStack(undoStack);
     }
     m_document->setUseDesignMetrics(true);
@@ -148,14 +145,11 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         if (m_kwordDocument) {
             KoTextDocument doc(m_document);
             KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
-            Q_ASSERT(styleManager);
             doc.setStyleManager(styleManager);
             KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
-            Q_ASSERT(changeTracker);
             doc.setChangeTracker(changeTracker);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
             KoUndoStack *undoStack = dynamic_cast<KoUndoStack *>(m_kwordDocument->dataCenterMap()["UndoStack"]);
-            Q_ASSERT(undoStack);
             doc.setUndoStack(undoStack);
         }
         data->setDocument(m_document, false);
