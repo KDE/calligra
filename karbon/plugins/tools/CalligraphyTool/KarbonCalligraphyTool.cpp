@@ -358,7 +358,7 @@ void KarbonCalligraphyTool::activate( bool )
 
 void KarbonCalligraphyTool::deactivate()
 {
-    if ( m_lastShape )
+    if ( m_lastShape && m_canvas->shapeManager()->shapes().contains(m_lastShape))
     {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
