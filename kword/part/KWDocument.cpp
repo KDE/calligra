@@ -375,7 +375,7 @@ void KWDocument::removeFrame(KWFrame *frame)
     removeFrameFromViews(frame);
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
-    if (page != pageManager()->last())
+    if (page != pageManager()->last() || page == pageManager()->begin())
         return; // can only delete last page.
     foreach (KWFrameSet *fs, m_frameSets) {
         foreach (KWFrame *f, fs->frames()) {
