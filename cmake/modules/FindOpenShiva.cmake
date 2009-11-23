@@ -14,8 +14,16 @@ if(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
   EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.10 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
 
   if(_return_VALUE STREQUAL "0")
-    set(OPENSHIVA_FOUND TRUE)
-    set(HAVE_OPENSHIVA TRUE)
+
+    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --max-version=0.9.12 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+
+    if(_return_VALUE STREQUAL "0")
+      set(OPENSHIVA_FOUND TRUE)
+      set(HAVE_OPENSHIVA TRUE)
+    else(_return_VALUE STREQUAL "0")
+      message(STATUS "OpenShiva <= 0.9.12 not found")
+    endif(_return_VALUE STREQUAL "0")
+
   else(_return_VALUE STREQUAL "0")
     message(STATUS "OpenShiva >= 0.9.10 not found")
   endif(_return_VALUE STREQUAL "0")
