@@ -326,14 +326,16 @@ EffortCostMap Account::plannedCost(const QDate &start, const QDate &end, long id
             ec += n->plannedEffortCostPrDay(start, end, id);
         }
         if (cp->startup()) {
-            if (n->startTime( id ).date() >= start &&
-                n->startTime( id ).date() <= end)
+            if ( ( ! start.isValid() || n->startTime( id ).date() >= start ) &&
+                 ( ! end.isValid() || n->startTime( id ).date() <= end ) ) {
                 ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            }
         }
         if (cp->shutdown()) {
-            if (n->endTime( id ).date() >= start &&
-                n->endTime( id ).date() <= end)
+            if ( ( ! start.isValid() || n->endTime( id ).date() >= start ) &&
+                 ( ! end.isValid() || n->endTime( id ).date() <= end ) ) {
                 ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            }
         }
     }
     if (isDefaultAccount()) {
@@ -343,20 +345,19 @@ EffortCostMap Account::plannedCost(const QDate &start, const QDate &end, long id
                 continue;
             }
             if (n->runningAccount() == 0) {
-                kDebug()<<"default, running:"<<n->name();
                 ec += n->plannedEffortCostPrDay(start, end, id);
             }
             if (n->startupAccount() == 0) {
-                kDebug()<<"default, startup:"<<n->name();
-                if (n->startTime( id ).date() >= start &&
-                    n->startTime( id ).date() <= end)
+                if ( ( ! start.isValid() || n->startTime( id ).date() >= start ) &&
+                     ( ! end.isValid() || n->startTime( id ).date() <= end ) ) {
                     ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+                }
             }
             if (n->shutdownAccount() == 0) {
-                kDebug()<<"default, shutdown:"<<n->name();
-                if (n->endTime( id ).date() >= start &&
-                    n->endTime( id ).date() <= end)
+                if ( ( ! start.isValid() || n->endTime( id ).date() >= start ) &&
+                     ( ! end.isValid() || n->endTime( id ).date() <= end ) ) {
                     ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+                }
             }
         }
     }
@@ -380,14 +381,16 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
             ec += n->actualEffortCostPrDay(start, end, id);
         }
         if (cp->startup()) {
-            if (n->startTime( id ).date() >= start &&
-                n->startTime( id ).date() <= end)
+            if ( ( ! start.isValid() || n->startTime( id ).date() >= start ) &&
+                 ( ! end.isValid() || n->startTime( id ).date() <= end ) ) {
                 ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            }
         }
         if (cp->shutdown()) {
-            if (n->endTime( id ).date() >= start &&
-                n->endTime( id ).date() <= end)
+            if ( ( ! start.isValid() || n->endTime( id ).date() >= start ) &&
+                 ( ! end.isValid() || n->endTime( id ).date() <= end ) ) {
                 ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            }
         }
     }
     if (isDefaultAccount()) {
@@ -402,15 +405,17 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
             }
             if (n->startupAccount() == 0) {
                 kDebug()<<"default, starup:"<<n->name();
-                if (n->startTime( id ).date() >= start &&
-                    n->startTime( id ).date() <= end)
+                if ( ( ! start.isValid() || n->startTime( id ).date() >= start ) &&
+                     ( ! end.isValid() || n->startTime( id ).date() <= end ) ) {
                     ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+                }
             }
             if (n->shutdownAccount() == 0) {
                 kDebug()<<"default, shutdown:"<<n->name();
-                if (n->endTime( id ).date() >= start &&
-                    n->endTime( id ).date() <= end)
+                if ( ( ! start.isValid() || n->endTime( id ).date() >= start ) &&
+                     ( ! end.isValid() || n->endTime( id ).date() <= end ) ) {
                     ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+                }
             }
         }
     }

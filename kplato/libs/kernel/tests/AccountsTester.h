@@ -34,12 +34,15 @@ class AccountsTester : public QObject
     Q_OBJECT
 private slots:
     void init();
-    void add();
-    
+    void defaultAccount();
+    void costPlaces();
+
 private:
     Project project;
     Task *t;
     Resource *r;
+    ScheduleManager *sm;
+    Account *topaccount;
     
     QDate today;
     QDate tomorrow;

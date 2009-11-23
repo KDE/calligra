@@ -24,6 +24,8 @@
 #include "kptnode.h"
 #include "kpttask.h"
 
+#include "debug.cpp"
+
 namespace KPlato
 {
 
@@ -43,9 +45,9 @@ void AccountsTester::init()
     t->estimate()->setUnit( Duration::Unit_d );
     t->estimate()->setExpectedEstimate( 1.0 );
     
-    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    sm = project.createScheduleManager( "Test Plan" );
     project.addScheduleManager( sm );
-    
+
     // standard worktime defines 8 hour day as default
     Calendar *c = new Calendar();
     c->setDefault( true );
@@ -88,8 +90,8 @@ void AccountsTester::init()
     
 
 }
-void AccountsTester::add() {
-    Account *a = new Account( "Test Account" );
+void AccountsTester::defaultAccount() {
+    Account *a = new Account( "Default Account" );
     project.accounts().insert( a );
     project.accounts().setDefaultAccount( a );
     
@@ -134,8 +136,61 @@ void AccountsTester::add() {
     ec = project.accounts().actualCost( *a, t->startTime().date(), tomorrow );
     QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 6.0 );
     QCOMPARE( ec.totalCost(), 600.0 );
+    
+    t->setStartupCost( 200 );
+    ec = project.accounts().actualCost( *a, t->startTime().date(), tomorrow );
+    QCOMPARE( ec.totalCost(), 800.0 );
+    
+    t->setShutdownCost( 300 );
+    ec = project.accounts().actualCost( *a, t->startTime().date(), tomorrow );
+    QCOMPARE( ec.totalCost(), 1100.0 );
 }
 
+void AccountsTester::costPlaces() {
+    EffortCostMap ec;
+    Account *top = new Account( "Top account" );
+    project.accounts().insert( top );
+
+    Account *a = new Account( "Running account" );
+    project.accounts().insert( a, top );
+    a->addRunning( *t );
+    ec = a->plannedCost( sm->id() );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 800.0 );
+
+    a = new Account( "Startup account" );
+    project.accounts().insert( a, top );
+    a->addStartup( *t );
+    t->setStartupCost( 200.0 );
+    ec = a->plannedCost( sm->id() );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 200.0 );
+
+    a = new Account( "Shutdown cost" );
+    project.accounts().insert( a, top );
+    a->addShutdown( *t );
+    t->setShutdownCost( 300.0 );
+    ec = a->plannedCost( sm->id() );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 300.0 );
+
+    ec = top->plannedCost( sm->id() );
+
+//    Debug::print( top, sm->id(), "All planned cost in child accounts--------" );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 1300.0 );
+    
+    a = new Account( "All cost in one account" );
+    project.accounts().insert( a );
+    a->addRunning( *t );
+    a->addStartup( *t );
+    a->addShutdown( *t );
+    ec = a->plannedCost( sm->id() );
+//    Debug::print( a, sm->id(), "All planned cost in one account-----------" );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 1300.0 );
+
+}
 
 } //namespace KPlato
 
