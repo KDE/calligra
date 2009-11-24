@@ -47,6 +47,7 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
+#include <KColorScheme>
 
 #include <kdebug.h>
 
@@ -280,9 +281,10 @@ void ReportResizeBar::mouseMoveEvent(QMouseEvent * e)
 ReportSectionTitle::ReportSectionTitle(QWidget*parent) : QLabel(parent)
 {
     setFrameStyle(QFrame::Panel | QFrame::Raised);
-    setMaximumHeight(minimumSizeHint().height());
-    setMinimumHeight(minimumSizeHint().height());
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //setMaximumHeight(minimumSizeHint().height());
+    //setMinimumHeight(minimumSizeHint().height());
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 ReportSectionTitle::~ReportSectionTitle()
@@ -293,4 +295,17 @@ ReportSectionTitle::~ReportSectionTitle()
 void ReportSectionTitle::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit(doubleClicked());
+}
+
+void ReportSectionTitle::paintEvent(QPaintEvent * event)
+{
+    QPainter painter(this);
+    KColorScheme colorScheme(QPalette::Active);
+
+    QLinearGradient linearGrad(QPointF(0, 0), QPointF(width(), 0));
+    linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor));
+    linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor));
+     
+    painter.fillRect(rect(), linearGrad);
+    QLabel::paintEvent(event);
 }

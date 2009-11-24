@@ -35,6 +35,7 @@
 #include "reportentityshape.h"
 #include "reportentitycheck.h"
 #include "reportsectiondetailgroup.h"
+#include "reportpropertiesbutton.h"
 
 // dialogs
 #include "sectioneditor.h"
@@ -135,7 +136,7 @@ public:
     KoRuler *hruler;
     KoZoomHandler *zoom;
     QVBoxLayout *vboxlayout;
-    QPushButton *pageButton;
+    ReportPropertiesButton *pageButton;
 };
 
 ReportDesigner::ReportDesigner(QWidget * parent)
@@ -177,7 +178,7 @@ void ReportDesigner::init()
     d->zoom = new KoZoomHandler();
     d->hruler = new KoRuler(this, Qt::Horizontal, d->zoom);
 
-    d->pageButton = new QPushButton(this);
+    d->pageButton = new ReportPropertiesButton(this);
 
     //Messy, but i cant find another way
     delete d->hruler->tabChooser();
@@ -187,15 +188,15 @@ void ReportDesigner::init()
     d->grid->addWidget(d->hruler, 0, 1);
     d->grid->addLayout(d->vboxlayout, 1, 0, 1, 2);
 
-    d->pageButton->setMaximumSize(QSize(22, 22));
-    d->pageButton->setMinimumSize(QSize(22, 22));
+    d->pageButton->setMaximumSize(QSize(19, 22));
+    d->pageButton->setMinimumSize(QSize(19, 22));
 
     detail = new ReportSectionDetail(this);
     d->vboxlayout->insertWidget(0, detail);
 
     setLayout(d->grid);
 
-    connect(d->pageButton, SIGNAL(pressed()), this, SLOT(slotPageButton_Pressed()));
+    connect(d->pageButton, SIGNAL(released()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*m_set);
 
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
@@ -1155,6 +1156,12 @@ unsigned int ReportDesigner::selectionCount()
 
 void ReportDesigner::changeSet(KoProperty::Set *s)
 {
+    //Set the checked state of the report proerties button
+    if (s ==m_set)
+      d->pageButton->setCheckState(Qt::Checked);
+    else
+      d->pageButton->setCheckState(Qt::Unchecked);
+    
     m_itmset = s;
     emit(propertySetChanged());
 }

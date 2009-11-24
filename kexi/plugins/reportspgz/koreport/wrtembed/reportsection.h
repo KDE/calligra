@@ -114,7 +114,8 @@ public:
 
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent * event);
-
+    virtual void paintEvent(QPaintEvent* event);
+    
 signals:
     void doubleClicked();
 };
