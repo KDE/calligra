@@ -47,7 +47,7 @@ set(kformula_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(kformula_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-kformula.png")
 
-#kde4_add_kdeinit_executable( kformula_bin ${kformula_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( kformula_bin ${kformula_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kformula_bin komain )
 
