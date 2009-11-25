@@ -1260,7 +1260,7 @@ void SSTRecord::setData( unsigned size, const unsigned char* data, const unsigne
   // sanity check, adjust to safer condition
   if( d->count > d->strings.size() )
   {
-    std::cerr << "Warning: mismatch number of string in SST record, expected " << d->count << ", got " << d->string.size() << "!" << std::endl;
+    std::cerr << "Warning: mismatch number of string in SST record, expected " << d->count << ", got " << d->strings.size() << "!" << std::endl;
     d->count = d->strings.size();
   }
 }
