@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,29 +19,61 @@
 
 #include "kexidropdownbutton.h"
 
-#include <KDebug>
-
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
 #include <QApplication>
 #include <QKeyEvent>
+#include <QStyleOptionToolButton>
+
+#include <KDebug>
 
 #include <kexi_global.h>
+#include <kexiutils/styleproxy.h>
 
-#ifdef __GNUC__
-#warning KexiDropDownButton ported but not tested
-#else
-#pragma WARNING( KexiDropDownButton ported but not tested )
-#endif
+//! @internal A style that removes menu indicator from KexiDropDownButton.
+class KexiDropDownButtonStyle : public KexiUtils::StyleProxy
+{
+public:
+    KexiDropDownButtonStyle(QStyle *parentStyle)
+            : KexiUtils::StyleProxy(parentStyle)
+    {
+    }
+    virtual ~KexiDropDownButtonStyle() {}
+
+    virtual void drawComplexControl( ComplexControl control, const QStyleOptionComplex * option,
+        QPainter * painter, const QWidget * widget = 0 ) const
+    {
+        if (control == CC_ToolButton && qstyleoption_cast<const QStyleOptionToolButton *>(option)) {
+            QStyleOptionToolButton newOption(*qstyleoption_cast<const QStyleOptionToolButton *>(option));
+            newOption.features &= ~QStyleOptionToolButton::HasMenu;
+
+            StyleProxy::drawComplexControl(control, &newOption, painter, widget);
+            return;
+        }
+        StyleProxy::drawComplexControl(control, option, painter, widget);
+    }
+
+    virtual int styleHint( StyleHint hint, const QStyleOption * option = 0, const QWidget * widget = 0, QStyleHintReturn * returnData = 0 ) const
+    {
+        if (hint == QStyle::SH_ToolButton_PopupDelay) {
+            return 0;
+        }
+        return StyleProxy::styleHint(hint, option, widget, returnData);
+    }
+};
+
 
 KexiDropDownButton::KexiDropDownButton(QWidget *parent)
         : QToolButton(parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style());
+    s->setParent(this);
+    setStyle(s);
 //! @todo get this from a KStyle
 // setFixedWidth(QMAX(18, qApp->globalStrut().width()));
-    int fixedWidth;
+//    int fixedWidth;
     //hack
 #ifdef __GNUC__
 #warning TODO use subControlRect
@@ -56,11 +88,6 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
           QStyle::SC_ComboBoxArrow ).width();
       setFixedWidth( fixedWidth );
       */
-#ifdef __GNUC__
-#warning setPopupDelay(10/*ms*/);
-#else
-#pragma WARNING( setPopupDelay(10/*ms*/); )
-#endif
 }
 
 KexiDropDownButton::~KexiDropDownButton()
@@ -76,17 +103,17 @@ void KexiDropDownButton::paintEvent(QPaintEvent *e)
 {
     QToolButton::paintEvent(e);
     QPainter p(this);
-    /* QStyle::SFlags arrowFlags = QStyle::Style_Default;
-      if (isDown() || state()==On)
-        arrowFlags |= QStyle::Style_Down;
-      if (isEnabled())
-        arrowFlags |= QStyle::Style_Enabled;*/
-    QStyleOption option;
+    QStyleOptionToolButton option;
     option.initFrom(this);
+    //option.state |= isDown() ? QStyle::State_Sunken : QStyle::State_Raised;
     style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &p);
-    /*  style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, 0, &p,
-        QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
-        arrowFlags, QStyleOption() );*/
+
+    //! @todo use tableview's appearance parameters for color
+    QRect r = rect();
+    QPen linePen(Qt::black);
+    linePen.setWidth(1);
+    p.setPen(linePen);
+    p.drawLine(r.topLeft(), r.topRight());
 }
 
 void KexiDropDownButton::keyPressEvent(QKeyEvent * e)

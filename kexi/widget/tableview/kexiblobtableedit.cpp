@@ -197,8 +197,8 @@ KexiBlobTableEdit::value()
 void KexiBlobTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
 // d->currentEditorWidth = w;
-    if (!d->readOnly && w > d->button->width())
-        w -= d->button->width();
+/*2.x    if (!d->readOnly && w > d->button->width())
+        w -= d->button->width();*/
     p->drawRect(x, y, w, h);
 }
 
