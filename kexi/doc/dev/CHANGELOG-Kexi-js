@@ -61,6 +61,8 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 2009-11-24
 Table View
 *fix painting drop down button for combobox editor
+*fix painting drop down button for blob editor
+*remove delay for the blob editor's popup
 TODO: use tableview's appearance parameters for color
 TODO: fix painting for styles like windows, cleanlooks...
 
