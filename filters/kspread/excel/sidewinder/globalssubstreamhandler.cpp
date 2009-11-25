@@ -544,7 +544,7 @@ void GlobalsSubStreamHandler::handleExternSheet( ExternSheetRecord* record )
             UString book = d->externBookTable[bookRef];
             if (book == "\004") {
                 unsigned sheetRef = record->firstSheetRef(i);
-                if (sheetRef > d->workbook->sheetCount()) {
+                if (sheetRef >= d->workbook->sheetCount()) {
                     result = UString("Error");
                 } else {
                     result = d->workbook->sheet(sheetRef)->name();
