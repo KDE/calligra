@@ -30,6 +30,8 @@
 #include <qtest_kde.h>
 #include <kdebug.h>
 
+#include "debug.cpp"
+
 namespace KPlato
 {
 
@@ -803,9 +805,9 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-//    printDebug( m_project, t, s );
-//    printDebug( m_project, tsk2, s );
-//    printSchedulingLog( *sm, s );
+    printDebug( m_project, t, s );
+    printDebug( m_project, tsk2, s );
+    printSchedulingLog( *sm, s );
     
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QCOMPARE( t->lateStart(), tsk2->startTime() );
@@ -1230,10 +1232,10 @@ void ProjectTester::materialResource()
     project.addScheduleManager( sm );
     project.calculate( *sm );
 
-    printDebug( r, s);
-    printDebug( mr, s);
-    printDebug( &project, task1, s);
-     printSchedulingLog( *sm, s );
+//     printDebug( r, s);
+//     printDebug( mr, s);
+//     printDebug( &project, task1, s);
+//     printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->earlyStart(), targetstart );
     QVERIFY( task1->lateStart() >=  task1->earlyStart() );
@@ -1243,6 +1245,118 @@ void ProjectTester::materialResource()
     QCOMPARE( task1->startTime(), DateTime( r->availableFrom().date(), t1 ) );
     QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( task1->schedulingError() == false );
+}
+
+void ProjectTester::requiredResource()
+{
+    Project project;
+    project.setName( "P1" );
+    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetend = DateTime( targetstart.addDays( 7 ) );
+    project.setConstraintStartTime( targetstart );
+    project.setConstraintEndTime( targetend);
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    project.addCalendar( c );
+    
+    Task *task1 = project.createTask( &project );
+    task1->setName( "T1" );
+    project.addTask( task1, &project );
+    task1->estimate()->setUnit( Duration::Unit_h );
+    task1->estimate()->setExpectedEstimate( 8.0 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+
+    QString s = "Required resource: Working + required material resource --------";
+    ResourceGroup *g = new ResourceGroup();
+    project.addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "Work" );
+    r->setAvailableFrom( targetstart );
+    r->setCalendar( c );
+    project.addResource( g, r );
+
+    ResourceGroup *mg = new ResourceGroup();
+    mg->setType( ResourceGroup::Type_Material );
+    project.addResourceGroup( mg );
+    Resource *mr = new Resource();
+    mr->setType( Resource::Type_Material );
+    mr->setName( "Material" );
+    mr->setAvailableFrom( targetstart );
+    mr->setCalendar( c );
+    project.addResource( mg, mr );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    task1->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+
+    QList<Resource*> lst; lst << mr;
+    rr->setRequiredResources( lst );
+    
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+    project.calculate( *sm );
+
+//     Debug::print( r, s);
+//     Debug::print( mr, s);
+//     Debug::print( &project, task1, s);
+//     Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->earlyStart(), targetstart );
+    QVERIFY( task1->lateStart() >=  task1->earlyStart() );
+    QVERIFY( task1->earlyFinish() <= task1->endTime() );
+    QVERIFY( task1->lateFinish() >= task1->endTime() );
+    
+    QCOMPARE( task1->startTime(), DateTime( r->availableFrom().date(), t1 ) );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( task1->schedulingError() == false );
+    
+    QList<Appointment*> apps = r->appointments( sm->id() );
+    QVERIFY( apps.count() == 1 );
+    QCOMPARE( task1->startTime(), apps.first()->startTime() );
+    QCOMPARE( task1->endTime(), apps.last()->endTime() );
+
+    apps = mr->appointments( sm->id() );
+    QVERIFY( apps.count() == 1 );
+    QCOMPARE( task1->startTime(), apps.first()->startTime() );
+    QCOMPARE( task1->endTime(), apps.last()->endTime() );
+    
+    s = "Required resource limits availability --------";
+    DateTime tomorrow = targetstart.addDays( 1 );
+    mr->setAvailableFrom( tomorrow );
+    project.calculate( *sm );
+
+    Debug::print( r, s);
+    Debug::print( mr, s);
+    Debug::print( &project, task1, s);
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->earlyStart(), targetstart );
+    QVERIFY( task1->lateStart() >=  task1->earlyStart() );
+    QVERIFY( task1->earlyFinish() <= task1->endTime() );
+    QVERIFY( task1->lateFinish() >= task1->endTime() );
+    
+    QCOMPARE( task1->startTime(), DateTime( mr->availableFrom().date(), t1 ) );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( task1->schedulingError() == false );
+    
+    apps = r->appointments( sm->id() );
+    QVERIFY( apps.count() == 1 );
+    QCOMPARE( task1->startTime(), apps.first()->startTime() );
+    QCOMPARE( task1->endTime(), apps.last()->endTime() );
+
+    apps = mr->appointments( sm->id() );
+    QVERIFY( apps.count() == 1 );
+    QCOMPARE( task1->startTime(), apps.first()->startTime() );
+    QCOMPARE( task1->endTime(), apps.last()->endTime() );
 }
 
 } //namespace KPlato

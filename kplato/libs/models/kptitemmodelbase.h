@@ -23,10 +23,13 @@
 #include "kplatomodels_export.h"
 
 #include "kptglobal.h"
+#include "kpttreecombobox.h"
 
 #include <QAbstractItemModel>
 #include <QStyledItemDelegate>
 #include <QMetaEnum>
+#include <QEvent>
+#include <QComboBox>
 
 #include <KoXmlReaderForward.h>
 
@@ -35,6 +38,8 @@ class QDomElement;
 class QUndoCommand;
 class QPainter;
 class QModelIndex;
+
+class QItemSelection;
 
 /// The main namespace
 namespace KPlato
@@ -143,6 +148,22 @@ public:
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
+
+//------------------------------------
+class KPLATOMODELS_EXPORT RequieredResourceDelegate : public ItemDelegate
+{
+    Q_OBJECT
+public:
+    RequieredResourceDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+};
+
 
 class KPLATOMODELS_EXPORT DurationSpinBoxDelegate : public ItemDelegate
 {

@@ -1358,6 +1358,11 @@ KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
     return dia;
 }
 
+void DoubleTreeViewBase::expandAll()
+{
+    m_leftview->expandAll();
+}
+
 void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expanded )
 {
     //kDebug()<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );

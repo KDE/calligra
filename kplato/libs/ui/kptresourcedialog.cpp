@@ -22,6 +22,7 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcalendar.h"
+#include "kptresourcemodel.h"
 
 #include <QPushButton>
 #include <QList>
@@ -63,11 +64,38 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
     connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
     connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
     connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+    
+    connect( useRequired, SIGNAL( stateChanged( int ) ), SLOT( slotUseRequiredChanged( int ) ) );
 }
 
 
 void ResourceDialogImpl::slotChanged() {
     emit changed();
+}
+
+void ResourceDialogImpl::setCurrentIndexes( const QModelIndexList &lst )
+{
+    m_currentIndexes.clear();
+    foreach ( const QModelIndex &idx, lst ) {
+        m_currentIndexes << QPersistentModelIndex( idx );
+    }
+    useRequired->setCheckState( m_currentIndexes.isEmpty() ? Qt::Unchecked : Qt::Checked );
+    if ( useRequired->isChecked() ) {
+        required->setCurrentIndexes( m_currentIndexes );
+    }
+    required->setEnabled( useRequired->isChecked() );
+}
+
+void ResourceDialogImpl::slotUseRequiredChanged( int state )
+{
+    required->setEnabled( state );
+    if ( state ) {
+        required->setCurrentIndexes( m_currentIndexes );
+    } else {
+        m_currentIndexes = required->currentIndexes();
+        required->setCurrentIndexes( QList<QPersistentModelIndex>() );
+    }
+    slotChanged();
 }
 
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
@@ -113,6 +141,7 @@ void ResourceDialogImpl::slotChooseResource()
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
     : KDialog(parent),
+      m_project( project ),
       m_original(resource),
       m_resource(resource),
       m_calculationNeeded(false)
@@ -163,10 +192,21 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     }
     dia->calendarList->setCurrentIndex(cal);
 
+    ResourceItemSFModel *m = new ResourceItemSFModel( this );
+    m->setProject( &project );
+    dia->required->setModel( m );
+    dia->required->view()->expandAll();
+
+    QItemSelectionModel *sm = dia->required->view()->selectionModel();
+    foreach ( Resource *r, resource->requiredResources() ) {
+        sm->select( m->index( r ), QItemSelectionModel::Select | QItemSelectionModel::Rows );
+    }
+    dia->setCurrentIndexes( sm->selectedRows() );
+
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
-
+    connect(dia->required, SIGNAL(changed()), SLOT(enableButtonOk()));
 }
 
 
@@ -197,11 +237,18 @@ void ResourceDialog::slotOk() {
     m_resource.setType((Resource::Type)(dia->type->currentIndex()));
     m_resource.setUnits(dia->units->value());
 
-    m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
-    m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
+    m_resource.setNormalRate(m_project.locale()->readMoney(dia->rateEdit->text()));
+    m_resource.setOvertimeRate(m_project.locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setCalendar(m_calendars[dia->calendarList->currentIndex()]);
     m_resource.setAvailableFrom(dia->availableFrom->dateTime());
     m_resource.setAvailableUntil(dia->availableUntil->dateTime());
+    ResourceItemSFModel *m = static_cast<ResourceItemSFModel*>( dia->required->model() );
+    QList<Resource*> lst;
+    foreach ( const QModelIndex &i, dia->required->currentIndexes() ) {
+        Resource *r = m->resource( i );
+        if ( r ) lst << r;
+    }
+    m_resource.setRequiredResources( lst );
     accept();
 }
 
@@ -260,6 +307,10 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
     if (resource.calendar(true) != original->calendar(true)) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyResourceCalendarCmd(original, resource.calendar(true)));
+    }
+    if (resource.requiredResources() != original->requiredResources()) {
+        if (!m) m = new MacroCommand(n);
+        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredResources()));
     }
     return m;
 }

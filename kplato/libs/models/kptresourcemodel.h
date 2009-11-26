@@ -24,6 +24,7 @@
 
 #include <kptitemmodelbase.h>
 
+#include <QSortFilterProxyModel>
 #include <QMetaEnum>
 
 class QPoint;
@@ -119,6 +120,7 @@ public:
     QAbstractItemDelegate *createDelegate( int col, QWidget *parent ) const;
     
     QObject *object( const QModelIndex &index ) const;
+    Resource *resource( const QModelIndex &index ) const;
     QModelIndex insertGroup( ResourceGroup *g );
     QModelIndex insertResource( ResourceGroup *g, Resource *r, Resource *after = 0 );
 
@@ -165,6 +167,25 @@ private:
 
 };
 
+class KPLATOMODELS_EXPORT ResourceItemSFModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    ResourceItemSFModel( QObject *parent = 0 );
+
+    void setProject( Project *project );
+    Resource *resource( const QModelIndex &index ) const;
+    using QAbstractProxyModel::index;
+    QModelIndex index( Resource *r ) const;
+
+    Qt::ItemFlags flags( const QModelIndex & index ) const;
+    
+    void addFilteredResource( const Resource *r );
+protected:
+    bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
+    
+    QList<const Resource*> m_filteredResources;
+};
 
 }  //KPlato namespace
 

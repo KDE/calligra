@@ -30,6 +30,7 @@
 #include <QMimeData>
 #include <QModelIndex>
 #include <QWidget>
+#include <QPair>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -110,9 +111,38 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return node->requestNameList().join(",");
+        case Qt::EditRole: {
+            QStringList sl;
+            foreach ( Resource *r, node->requests().requestedResources() ) {
+                sl << r->name();
+            }
+            return sl.join( "," );
+        }
+        case Qt::ToolTipRole: {
+            QMap<QString, QStringList> lst;
+            foreach ( ResourceRequest *rr, node->requests().resourceRequests() ) {
+                QStringList sl;
+                foreach( Resource *r, rr->requiredResources() ) {
+                    sl << r->name();
+                }
+                lst.insert( rr->resource()->name(), sl );
+            }
+            if ( lst.isEmpty() ) {
+                return i18nc( "@info:tooltip", "No resources has been allocated" );
+            }
+            QStringList sl;
+            for ( QMap<QString, QStringList>::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
+                if ( it.value().isEmpty() ) {
+                    sl << it.key();
+                } else {
+                    sl << i18nc( "1=resource name, 2=list of resources", "%1 (%2)", it.key(), it.value().join(", ") );
+                }
+            }
+            if ( sl.count() == 1 ) {
+                return i18nc( "@info:tooltip 1=resource name", "Allocated resource: %1", sl.first() );
+            }
+            return i18nc( "@info:tooltip 1=list of resources", "Allocated resources: %1", sl.join( "\n" ) );
+        }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

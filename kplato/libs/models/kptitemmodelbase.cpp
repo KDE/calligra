@@ -21,15 +21,21 @@
 
 #include "kptproject.h"
 #include "kptdurationspinbox.h"
+#include "kptresourcemodel.h"
+#include "kptresourceallocationmodel.h"
 
 #include <QApplication>
 #include <QComboBox>
 #include <QKeyEvent>
 #include <QModelIndex>
+#include <QItemSelection>
 #include <QStyleOptionViewItem>
 #include <QTimeEdit>
 #include <QPainter>
 #include <QToolTip>
+#include <QTreeView>
+#include <QHeaderView>
+#include <QStylePainter>
 
 #include <KComboBox>
 #include <klineedit.h>
@@ -306,7 +312,69 @@ void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
     editor->setGeometry(r);
 }
 
-//----------------------
+//---------------------------
+RequieredResourceDelegate::RequieredResourceDelegate( QObject *parent )
+    : ItemDelegate( parent )
+{
+}
+
+QWidget *RequieredResourceDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &index) const
+{
+    if ( index.data( Qt::CheckStateRole ).toInt() == Qt::Unchecked ) {
+        return 0;
+    }
+    TreeComboBox *editor = new TreeComboBox(parent);
+    editor->installEventFilter(const_cast<RequieredResourceDelegate*>(this));
+    ResourceItemSFModel *m = new ResourceItemSFModel( editor );
+    editor->setModel( m );
+    return editor;
+}
+
+void RequieredResourceDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    TreeComboBox *box = static_cast<TreeComboBox*>(editor);
+    ResourceItemSFModel *pm = static_cast<ResourceItemSFModel*>( box->model() );
+    ResourceItemModel *rm = qobject_cast<ResourceItemModel*>( pm->sourceModel() );
+    Q_ASSERT( rm );
+    const ResourceAllocationItemModel *model = qobject_cast<const ResourceAllocationItemModel*>( index.model() );
+    Q_ASSERT( model );
+    rm->setProject( model->project() );
+    pm->addFilteredResource( model->resource( index ) );
+    QItemSelectionModel *sm = box->view()->selectionModel();
+    sm->clearSelection();
+    foreach ( const Resource *r, model->required( index ) ) {
+        QModelIndex i = pm->mapFromSource( rm->index( r ) );
+        sm->select( i, QItemSelectionModel::Select | QItemSelectionModel::Rows );
+    }
+    box->setCurrentIndexes( sm->selectedRows() );
+    box->view()->expandAll();
+}
+
+void RequieredResourceDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    TreeComboBox *box = static_cast<TreeComboBox*>(editor);
+
+    QAbstractProxyModel *pm = static_cast<QAbstractProxyModel*>( box->model() );
+    ResourceItemModel *rm = qobject_cast<ResourceItemModel*>( pm->sourceModel() );
+    QList<Resource*> lst;
+    foreach ( const QModelIndex &i, box->currentIndexes() ) {
+        lst << rm->resource( pm->mapToSource( i ) );
+    }
+    ResourceAllocationItemModel *mdl = qobject_cast<ResourceAllocationItemModel*>( model );
+    Q_ASSERT( mdl );
+    mdl->setRequired( index, lst );
+}
+
+void RequieredResourceDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    QRect r = option.rect;
+    r.setWidth( qMax( 100, r.width() ) );
+    editor->setGeometry(r);
+}
+
+//-------------------------------
 DurationSpinBoxDelegate::DurationSpinBoxDelegate( QObject *parent )
     : ItemDelegate( parent )
 {

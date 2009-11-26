@@ -136,6 +136,8 @@ public:
     virtual bool isOverbooked() const { return false; }
     virtual bool isOverbooked( const KDateTime & /*start*/, const KDateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
+    /// Returns the first booked interval to @p node that intersects @p interval (limited to @p interval)
+    virtual DateTimeInterval firstBookedInterval( const DateTimeInterval &interval, const Schedule *node ) const;
 
     /// Return the resources that has appointments to this schedule
     virtual QList<Resource*> resources() const;

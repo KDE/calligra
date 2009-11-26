@@ -530,7 +530,8 @@ signals:
 
 public slots:
     void edit( const QModelIndex &index );
-
+    void expandAll();
+    
 protected slots:
     void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
     void slotToRightView( const QModelIndex &index );

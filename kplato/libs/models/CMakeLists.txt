@@ -14,6 +14,8 @@ add_subdirectory( tests )
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS
+    kpttreecombobox.cpp
+
     kcalendar/kdatetable.cpp
     kcalendar/kdatepicker.cpp
     

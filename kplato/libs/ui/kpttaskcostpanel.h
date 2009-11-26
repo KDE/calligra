@@ -24,6 +24,7 @@
 
 #include "ui_kpttaskcostpanelbase.h"
 
+class KLocale;
 
 namespace KPlato
 {
@@ -67,6 +68,7 @@ private:
     Account *m_oldrunning;
     Account *m_oldstartup;
     Account *m_oldshutdown;
+    const KLocale *m_locale;
 };
 
 } //KPlato namespace

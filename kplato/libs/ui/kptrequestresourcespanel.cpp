@@ -63,61 +63,59 @@ MacroCommand *RequestResourcesPanel::buildCommand()
     }
     MacroCommand *cmd = new MacroCommand( i18n( "Modify resource allocations" ) );
     Project *p = m_view->project();
-    const QMap<QString, int> &rmap = m_view->resourceCache();
+    const QMap<const Resource*, ResourceRequest*> &rmap = m_view->resourceCache();
 
     // First remove all that should be removed
-    for( QMap<QString, int>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
-        Resource *r = p->findResource( rit.key() );
-        if ( r == 0 ) {
-            continue;
-        }
-        if ( rit.value() == 0 ) {
-            ResourceRequest *rr = t->requests().find( r );
+    for( QMap<const Resource*, ResourceRequest*>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
+        if ( rit.value()->units() == 0 ) {
+            ResourceRequest *rr = t->requests().find( rit.key() );
             if ( rr ) {
                 cmd->addCommand( new RemoveResourceRequestCmd( rr->parent(), rr ) );
             }
         }
     }
+
+    QMap<const ResourceGroup*, ResourceGroupRequest*> groups;
     // Add/modify
-    const QMap<QString, int> &gmap = m_view->groupCache();
-    for( QMap<QString, int>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
-        ResourceGroup *g = p->findResourceGroup( git.key() );
-        if ( g == 0 ) {
-            continue;
-        }
-        ResourceGroupRequest *gr = t->requests().find( g );
+    const QMap<const ResourceGroup*, ResourceGroupRequest*> &gmap = m_view->groupCache();
+    for( QMap<const ResourceGroup*, ResourceGroupRequest*>::const_iterator git = gmap.constBegin(); git != gmap.constEnd(); ++git ) {
+        ResourceGroupRequest *gr = t->requests().find( git.key() );
         if ( gr == 0 ) {
-            if ( git.value() > 0 ) {
-                gr = new ResourceGroupRequest( g, git.value() );
+            if ( git.value()->units() > 0 ) {
+                gr = new ResourceGroupRequest( const_cast<ResourceGroup*>( git.key() ), git.value()->units() );
                 cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
+                groups[ git.key() ] = gr;
             } // else nothing
         } else {
-            cmd->addCommand( new ModifyResourceGroupRequestUnitsCmd( gr, gr->units(), git.value() ) );
+            cmd->addCommand( new ModifyResourceGroupRequestUnitsCmd( gr, gr->units(), git.value()->units() ) );
         }
     }
-    QMap<ResourceGroup*, ResourceGroupRequest*> groups;
-    for( QMap<QString, int>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
-        Resource *r = p->findResource( rit.key() );
-        if ( r == 0 ) {
-            continue;
-        }
-        if ( rit.value() > 0 ) {
-            ResourceRequest *rr = t->requests().find( r );
+    for( QMap<const Resource*, ResourceRequest*>::const_iterator rit = rmap.constBegin(); rit != rmap.constEnd(); ++rit ) {
+        Resource *resource = const_cast<Resource*>( rit.key() );
+        ResourceGroup *group = resource->parentGroup();
+        if ( rit.value()->units() > 0 ) {
+            ResourceRequest *rr = t->requests().find( resource );
             if ( rr == 0 ) {
-                ResourceGroupRequest *gr = t->requests().find( r->parentGroup() );
+                ResourceGroupRequest *gr = t->requests().find( group );
                 if ( gr == 0 ) {
-                    if ( groups.contains( r->parentGroup() ) ) {
-                        gr = groups[ r->parentGroup() ];
+                    if ( groups.contains( group ) ) {
+                        gr = groups[ group ];
                     } else {
-                        gr = new ResourceGroupRequest( r->parentGroup(), 0 );
-                        groups[ r->parentGroup() ] = gr;
+                        gr = new ResourceGroupRequest( group, 0 );
+                        groups[ group ] = gr;
                         cmd->addCommand( new AddResourceGroupRequestCmd( *t, gr ) );
                     }
                 }
-                ResourceRequest *rr = new ResourceRequest( r, rit.value() );
+                ResourceRequest *rr = new ResourceRequest( resource, rit.value()->units() );
+                rr->setRequiredResources( rit.value()->requiredResources() );
                 cmd->addCommand( new AddResourceRequestCmd( gr, rr ) );
-            } else if ( rit.value() != rr->units() ) {
-                cmd->addCommand( new ModifyResourceRequestUnitsCmd( rr, rr->units(), rit.value() ) );
+            } else {
+                if ( rit.value()->units() != rr->units() ) {
+                    cmd->addCommand( new ModifyResourceRequestUnitsCmd( rr, rr->units(), rit.value()->units() ) );
+                }
+                if ( rit.value()->requiredResources() != rr->requiredResources() ) {
+                    cmd->addCommand( new ModifyResourceRequestRequiredCmd( rr, rit.value()->requiredResources() ) );
+                }
             }
         }
     }

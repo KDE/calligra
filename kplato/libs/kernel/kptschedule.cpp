@@ -221,6 +221,26 @@ void Schedule::calcResourceOverbooked()
     }
 }
 
+DateTimeInterval Schedule::firstBookedInterval( const DateTimeInterval &interval, const Schedule *node  ) const
+{
+    QList<Appointment*> lst = m_appointments;
+    switch ( m_calculationMode ) {
+        case CalculateForward: lst = m_forward; break;
+        case CalculateBackward: lst = m_backward; break;
+        default: break;
+    }
+    foreach ( Appointment *a, lst ) {
+        if ( a->node() == node ) {
+            AppointmentIntervalList i = a->intervals( interval.first, interval.second );
+            if ( i.isEmpty() ) {
+                break;
+            }
+            return DateTimeInterval( i.values().first().startTime(), i.values().first().endTime() );
+        }
+    }
+    return DateTimeInterval();
+}
+
 QStringList Schedule::overbookedResources() const
 {
     QStringList rl;

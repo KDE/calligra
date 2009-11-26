@@ -49,6 +49,8 @@ public slots:
     void slotCalculationNeeded(const QString&);
     void slotChooseResource();
     
+    void setCurrentIndexes( const QModelIndexList &lst );
+
 signals:
     void changed();
     void calculate();
@@ -56,6 +58,11 @@ signals:
 protected slots:
     void slotAvailableFromChanged(const QDateTime& dt);
     void slotAvailableUntilChanged(const QDateTime& dt);
+    
+    void slotUseRequiredChanged( int state );
+
+private:
+    QList<QPersistentModelIndex> m_currentIndexes;
 };
 
 class KPLATOUI_EXPORT ResourceDialog : public KDialog {
@@ -78,6 +85,7 @@ protected slots:
     void slotButtonClicked(int button);
 
 private:
+    Project &m_project;
     Resource *m_original;
     Resource m_resource;
     ResourceDialogImpl *dia;

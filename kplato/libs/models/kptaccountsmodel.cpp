@@ -582,7 +582,7 @@ EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )
 
 EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
 {
-    qDebug()<<"fetchActualCost:"<<account->name();
+    kDebug()<<account->name();
     EffortCostMap ec;
     if ( account->isElement() ) {
         ec = account->actualCost( id() );
@@ -600,7 +600,7 @@ EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
     if ( ! m_actualEnd.isValid() || e > m_actualEnd ) {
         m_actualEnd = e;
     }
-    qDebug()<<"fetchActualCost:"<<account->name()<<ec.totalEffort().toDouble(Duration
+    kDebug()<<account->name()<<ec.totalEffort().toDouble(Duration
 ::Unit_h)<<ec.totalCost();
     return ec;
 }

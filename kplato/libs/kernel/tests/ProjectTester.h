@@ -59,6 +59,7 @@ private slots:
     void reschedule();
 
     void materialResource();
+    void requiredResource();
     
 private:
     void printDebug( Calendar *c, const QString &s = QString(), bool full = false ) const;

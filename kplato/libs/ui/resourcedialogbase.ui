@@ -1,372 +1,392 @@
-<ui version="4.0" >
- <author>Dag Andersen &lt;danders@get2net.dk></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
  <class>KPlato::ResourceDialogBase</class>
- <widget class="QWidget" name="KPlato::ResourceDialogBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KPlato::ResourceDialogBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>358</width>
-    <height>363</height>
+    <height>337</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
-   <property name="margin" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame" >
-     <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="groupLabel">
+       <property name="text">
+        <string>Group:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="textLabel1">
+       <property name="text">
+        <string>Name:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>nameEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="nameEdit">
+         <property name="focusPolicy">
+          <enum>Qt::WheelFocus</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="chooseBtn">
+         <property name="toolTip">
+          <string>Choose resource from address book</string>
+         </property>
+         <property name="text">
+          <string>Choose...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="textLabel1_2">
+       <property name="text">
+        <string>Initials:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>initialsEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <layout class="QHBoxLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="initialsEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>32767</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel1_2_2">
+         <property name="text">
+          <string>&lt;p align=&quot;right&quot;&gt;Email:&lt;/p&gt;</string>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+         <property name="buddy">
+          <cstring>emailEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="emailEdit">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="group"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
-         <string>Name:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-        <property name="buddy" >
-         <cstring>nameEdit</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="nameEdit" >
-          <property name="focusPolicy" >
-           <enum>Qt::WheelFocus</enum>
-          </property>
-          <property name="text" >
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="chooseBtn" >
-          <property name="toolTip" >
-           <string>Choose resource from address book</string>
-          </property>
-          <property name="text" >
-           <string>Choose...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="textLabel1_2" >
-        <property name="text" >
-         <string>Initials:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-        <property name="buddy" >
-         <cstring>initialsEdit</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="initialsEdit" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize" >
-           <size>
-            <width>100</width>
-            <height>32767</height>
-           </size>
-          </property>
-          <property name="text" >
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="textLabel1_2_2" >
-          <property name="text" >
-           <string>&lt;p align="right">Email:&lt;/p></string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>emailEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="emailEdit" >
-          <property name="text" >
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="groupLabel" >
-        <property name="text" >
-         <string>Group:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QComboBox" name="group" />
-      </item>
-     </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string/>
-     </property>
-     <property name="flat" >
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2" >
-      <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="textLabel7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Resource type:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>type</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="type">
+       <item>
+        <property name="text">
+         <string>Work</string>
         </property>
-        <property name="margin" >
-         <number>0</number>
+       </item>
+       <item>
+        <property name="text">
+         <string>Material</string>
         </property>
-        <item>
-         <widget class="QLabel" name="textLabel7" >
-          <property name="text" >
-           <string>Resource type:</string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>type</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="type" >
-          <item>
-           <property name="text" >
-            <string>Work</string>
-           </property>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Material</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="textLabel2" >
-          <property name="text" >
-           <string>&lt;p align="right">Calendar:&lt;/p></string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>calendarList</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="calendarList" />
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <widget class="QLabel" name="textLabel3" >
-          <property name="text" >
-           <string>Available:</string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>units</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QSpinBox" name="units" >
-          <property name="enabled" >
-           <bool>true</bool>
-          </property>
-          <property name="focusPolicy" >
-           <enum>Qt::WheelFocus</enum>
-          </property>
-          <property name="suffix" >
-           <string>%</string>
-          </property>
-          <property name="maximum" >
-           <number>9999</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" >
-         <widget class="QLabel" name="textLabel1_3" >
-          <property name="text" >
-           <string>&lt;p align="right">From:&lt;/p></string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>availableFrom</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3" >
-         <widget class="QDateTimeEdit" name="availableFrom" >
-          <property name="calendarPopup" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="2" >
-         <widget class="QLabel" name="textLabel1_3_2" >
-          <property name="text" >
-           <string>&lt;p align="right">Until:&lt;/p></string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-          <property name="buddy" >
-           <cstring>availableUntil</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3" >
-         <widget class="QDateTimeEdit" name="availableUntil" >
-          <property name="calendarPopup" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="textLabel2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>&lt;p align=&quot;right&quot;&gt;Calendar:&lt;/p&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>calendarList</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QComboBox" name="calendarList"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="textLabel3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Available:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>units</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="units">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::WheelFocus</enum>
+       </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="textLabel1_3">
+       <property name="text">
+        <string>&lt;p align=&quot;right&quot;&gt;From:&lt;/p&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>availableFrom</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QDateTimeEdit" name="availableFrom">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="textLabel1_3_2">
+       <property name="text">
+        <string>&lt;p align=&quot;right&quot;&gt;Until:&lt;/p&gt;</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>availableUntil</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QDateTimeEdit" name="availableUntil">
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCheckBox" name="useRequired">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>23</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Required resources:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPlato::TreeComboBox" name="required">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>100</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Cost</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="margin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="textLabel3_2" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="textLabel3_2">
+        <property name="text">
          <string>Hourly rate:</string>
         </property>
-        <property name="wordWrap" >
+        <property name="wordWrap">
          <bool>false</bool>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>rateEdit</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="rateEdit" >
-        <property name="focusPolicy" >
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="rateEdit">
+        <property name="focusPolicy">
          <enum>Qt::WheelFocus</enum>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="textLabel4_2" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="textLabel4_2">
+        <property name="text">
          <string>Overtime rate:</string>
         </property>
-        <property name="wordWrap" >
+        <property name="wordWrap">
          <bool>false</bool>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>overtimeEdit</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="overtimeEdit" >
-        <property name="focusPolicy" >
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="overtimeEdit">
+        <property name="focusPolicy">
          <enum>Qt::WheelFocus</enum>
         </property>
-        <property name="text" >
+        <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
+      <item row="1" column="2">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType" >
+        <property name="sizeType">
          <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
-          <width>111</width>
+          <width>0</width>
           <height>23</height>
          </size>
         </property>
@@ -375,10 +395,30 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
-  <tabstops>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KPlato::TreeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kpttreecombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
   <tabstop>group</tabstop>
   <tabstop>nameEdit</tabstop>
   <tabstop>chooseBtn</tabstop>
@@ -389,12 +429,13 @@
   <tabstop>units</tabstop>
   <tabstop>availableFrom</tabstop>
   <tabstop>availableUntil</tabstop>
+  <tabstop>required</tabstop>
   <tabstop>rateEdit</tabstop>
   <tabstop>overtimeEdit</tabstop>
  </tabstops>
  <includes>
-  <include location="local" >kdatetimewidget.h</include>
-  <include location="local" >kdatewidget.h</include>
+  <include location="local">kdatetimewidget.h</include>
+  <include location="local">kdatewidget.h</include>
  </includes>
  <resources/>
  <connections/>

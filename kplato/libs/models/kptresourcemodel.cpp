@@ -975,6 +975,11 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
     return o;
 }
 
+Resource *ResourceItemModel::resource( const QModelIndex &index ) const
+{
+    return qobject_cast<Resource*>( object( index ) );
+}
+
 void ResourceItemModel::slotCalendarChanged( Calendar* )
 {
     foreach ( Resource *r, m_project->resourceList() ) {
@@ -1167,6 +1172,56 @@ QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Re
     return QModelIndex();
 }
 
+//-------------------
+ResourceItemSFModel::ResourceItemSFModel( QObject *parent )
+    : QSortFilterProxyModel( parent )
+{
+    setDynamicSortFilter( true );
+    setSourceModel( new ResourceItemModel( this ) );
+}
+
+void ResourceItemSFModel::setProject( Project *project )
+{
+    static_cast<ResourceItemModel*>( sourceModel() )->setProject( project );
+}
+
+Resource *ResourceItemSFModel::resource( const QModelIndex &idx ) const
+{
+    return static_cast<ResourceItemModel*>( sourceModel() )->resource( mapToSource( idx ) );
+}
+
+QModelIndex ResourceItemSFModel::index( Resource *r ) const
+{
+    return mapFromSource( static_cast<ResourceItemModel*>( sourceModel() )->index( r ) );
+}
+
+Qt::ItemFlags ResourceItemSFModel::flags( const QModelIndex & index ) const
+{
+    Qt::ItemFlags f = QSortFilterProxyModel::flags( index );
+    if ( index.isValid() && ! parent( index ).isValid() ) {
+        // group, not selectable
+        f &= ~Qt::ItemIsSelectable;
+    }
+    return f;
+}
+
+void ResourceItemSFModel::addFilteredResource( const Resource *r )
+{
+    if ( ! m_filteredResources.contains( r ) ) {
+        m_filteredResources << r;
+    }
+}
+
+bool ResourceItemSFModel::filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const
+{
+    //TODO make this general filter
+    ResourceItemModel *m = static_cast<ResourceItemModel*>( sourceModel() );
+    if ( m->index( source_row, ResourceModel::ResourceType, source_parent ).data( Role::EnumListValue ).toInt() == ResourceGroup::Type_Work ) {
+        return false;
+    }
+    QModelIndex idx = m->index( source_row, 0, source_parent );
+    return ! m_filteredResources.contains( m->resource( idx ) );
+}
 
 } // namespace KPlato
 

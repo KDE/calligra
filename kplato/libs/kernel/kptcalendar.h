@@ -53,7 +53,49 @@ class Project;
 class Schedule;
 class XMLLoaderObject;
 
-typedef QPair<DateTime, DateTime> DateTimeInterval;
+class KPLATOKERNEL_EXPORT DateTimeInterval : public QPair<DateTime, DateTime>
+{
+public:
+    DateTimeInterval()
+    : QPair<DateTime, DateTime>()
+    {}
+    DateTimeInterval( const DateTime &t1, const DateTime &t2 )
+    : QPair<DateTime, DateTime>( t1, t2 )
+    {}
+    DateTimeInterval &operator=( const DateTimeInterval &other ) {
+        first = other.first; second = other.second;
+        return *this;
+    }
+    bool isValid() const { return first.isValid() && second.isValid(); }
+    void limitTo( const DateTime &start, const DateTime &end ) {
+        if ( ! first.isValid() || ( start.isValid() && start > first ) ) {
+            first = start;
+        }
+        if ( ! second.isValid() || ( end.isValid() && end < second ) ) {
+            second = end;
+        }
+        if ( isValid() && first > second ) {
+            first = second = DateTime();
+        }
+    }
+    void limitTo( const DateTimeInterval &interval ) {
+        limitTo( interval.first, interval.second );
+    }
+
+    DateTimeInterval limitedTo( const DateTime &start, const DateTime &end ) const {
+        DateTimeInterval i = *this;
+        i.limitTo( start, end );
+        return i;
+    }
+    DateTimeInterval limitedTo( const DateTimeInterval &interval ) const {
+        return limitedTo( interval.first, interval.second );
+    }
+    QString toString() const {
+        return QString( "%1 to %2" )
+                    .arg( first.isValid()?first.toString():"''" )
+                    .arg( second.isValid()?second.toString():"''" );
+    }
+};
 
 /// TimeInterval is defined as a start time and a length.
 /// The end time (start + length) must not exceed midnight

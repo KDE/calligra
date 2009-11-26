@@ -661,6 +661,19 @@ private:
 
 };
 
+class KPLATOKERNEL_EXPORT ModifyResourceRequestRequiredCmd : public NamedCommand
+{
+public:
+    ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ResourceRequest *m_request;
+    QList<Resource*> m_oldvalue, m_newvalue;
+
+};
+
 class KPLATOKERNEL_EXPORT ModifyResourceGroupRequestUnitsCmd : public NamedCommand
 {
 public:
@@ -962,6 +975,18 @@ private:
     Resource *m_resource;
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
+};
+class KPLATOKERNEL_EXPORT ModifyRequiredResourcesCmd : public NamedCommand
+{
+public:
+    ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QList<Resource*> m_newvalue;
+    QList<Resource*> m_oldvalue;
 };
 
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand

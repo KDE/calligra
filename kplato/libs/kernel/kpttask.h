@@ -705,12 +705,14 @@ private:
     DateTime scheduleSuccessors(const QList<Relation*> &list, int use);
     DateTime schedulePredeccessors(const QList<Relation*> &list, int use);
     
-    // Check appointments if specified in currentschedule
-    DateTime workStartAfter(const DateTime &dt);
-    DateTime workFinishBefore(const DateTime &dt);
-    // Don't check for appointments
-    DateTime workTimeAfter(const DateTime &dt) const;
-    DateTime workTimeBefore(const DateTime &dt) const;
+    /// Fixed duration: Returns @p dt
+    /// Duration with calendar: Returns first available after @p dt
+    /// Has working resource(s) allocated: Returns the earliest time a resource can start work after @p dt, and checks appointments if @p sch is not null.
+    DateTime workTimeAfter(const DateTime &dt, NodeSchedule *sch = 0) const;
+    /// Fixed duration: Returns @p dt
+    /// Duration with calendar: Returns first available before @p dt
+    /// Has working resource(s) allocated: Returns the latest time a resource can finish work, and checks appointments if @p sch is not null.
+    DateTime workTimeBefore(const DateTime &dt, NodeSchedule *sch = 0) const;
     
 private:
     QList<ResourceGroup*> m_resource;

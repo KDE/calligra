@@ -37,6 +37,8 @@ class Project;
 class Task;
 class Resource;
 class ResourceGroup;
+class ResourceRequest;
+class ResourceGroupRequest;
 
 /**
  The ResourceAllocationModel gives access to resource requests
@@ -54,7 +56,8 @@ public:
         RequestName = 0,
         RequestType,
         RequestAllocation,
-        RequestMaximum
+        RequestMaximum,
+        RequestRequired
     };
     
     const QMetaEnum columnMap() const;
@@ -70,6 +73,7 @@ public:
     QVariant type( const Resource *res, int role ) const;
     QVariant allocation( const ResourceGroup *group, const Resource *res, int role ) const;
     QVariant maximum( const Resource *res, int role ) const;
+    QVariant required( const Resource *res, int role ) const;
     
     QVariant name( const ResourceGroup *res, int role ) const;
     QVariant type( const ResourceGroup *res, int role ) const;
@@ -119,8 +123,12 @@ public:
     
     QObject *object( const QModelIndex &index ) const;
 
-    const QMap<QString, int> &resourceCache() const { return m_resourceCache; }
-    const QMap<QString, int> &groupCache() const { return m_groupCache; }
+    const QMap<const Resource*, ResourceRequest*> &resourceCache() const { return m_resourceCache; }
+    const QMap<const ResourceGroup*, ResourceGroupRequest*> &groupCache() const { return m_groupCache; }
+    
+    Resource *resource( const QModelIndex &idx ) const;
+    void setRequired( const QModelIndex &idx, const QList<Resource*> &lst );
+    const QList<Resource*> &required( const QModelIndex &idx ) const;
     
 protected slots:
     void slotResourceChanged( Resource* );
@@ -144,12 +152,15 @@ protected:
     bool setAllocation( ResourceGroup *res, const QVariant &value, int role );
     bool setAllocation( Resource *res, const QVariant &value, int role );
 
+    bool setRequired( const QModelIndex &idx, const QVariant &value, int role );
+    QVariant required( const QModelIndex &idx, int role ) const;
+    
 private:
     ResourceAllocationModel m_model;
 
-    QMap<QString, int> m_resourceCache;
-    QMap<QString, int> m_groupCache;
-
+    QMap<const Resource*, ResourceRequest*> m_resourceCache;
+    QMap<const Resource*, int> m_requiredChecked;
+    QMap<const ResourceGroup*, ResourceGroupRequest*> m_groupCache;
 };
 
 

@@ -55,8 +55,8 @@ public:
 
     QObject *currentObject() const;
 
-    const QMap<QString, int> &resourceCache() const { return model()->resourceCache(); }
-    const QMap<QString, int> &groupCache() const { return model()->groupCache(); }
+    const QMap<const Resource*, ResourceRequest*> &resourceCache() const { return model()->resourceCache(); }
+    const QMap<const ResourceGroup*, ResourceGroupRequest*> &groupCache() const { return model()->groupCache(); }
 
 signals:
     void dataChanged();

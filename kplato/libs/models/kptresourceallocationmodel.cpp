@@ -187,6 +187,9 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
             return 0;
         case Role::Maximum:
             return 100;
+        case Qt::CheckStateRole:
+            return Qt::Unchecked;
+
     }
     return QVariant();
 }
@@ -237,6 +240,29 @@ QVariant ResourceAllocationModel::maximum( const Resource *res, int role ) const
     return QVariant();
 }
 
+QVariant ResourceAllocationModel::required( const Resource *res, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            QStringList lst;
+            foreach ( Resource *r, res->requiredResources() ) {
+                lst << r->name();
+            }
+            return lst.join( "," );
+        }
+        case Qt::EditRole:
+            return QVariant();//Not used
+        case Qt::ToolTipRole:
+            return QVariant();
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant ResourceAllocationModel::maximum( const ResourceGroup *res, int role ) const
 {
     switch ( role ) {
@@ -265,6 +291,7 @@ QVariant ResourceAllocationModel::data( const ResourceGroup *group, const Resour
         case RequestType: result = type( resource, role ); break;
         case RequestAllocation: result = allocation( group, resource, role ); break;
         case RequestMaximum: result = maximum( resource, role ); break;
+        case RequestRequired: result = required( resource, role ); break;
         default:
             kDebug()<<"data: invalid display value: property="<<property;
             break;
@@ -306,6 +333,7 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestType: return i18n( "Type" );
             case RequestAllocation: return i18n( "Allocation" );
             case RequestMaximum: return i18n( "Maximum" );
+            case RequestRequired: return i18nc( "@title:column", "Required Resources" );
             default: return QVariant();
         }
     } else if ( role == Qt::TextAlignmentRole ) {
@@ -319,6 +347,7 @@ QVariant ResourceAllocationModel::headerData( int section, int role )
             case RequestType: return ToolTip::resourceType();
             case RequestAllocation: return i18n( "Resource allocation" );
             case RequestMaximum: return i18n( "Maximum amount of units or resources that can be allocated" );
+            case RequestRequired: return i18nc( "@info:tootip", "Required Resources" );
             default: return QVariant();
         }
     }
@@ -456,16 +485,26 @@ void ResourceAllocationItemModel::setTask( Task *task )
 
 void ResourceAllocationItemModel::filldata( Task *task )
 {
+    qDeleteAll( m_resourceCache );
     m_resourceCache.clear();
+    qDeleteAll( m_groupCache );
     m_groupCache.clear();
+    m_requiredChecked.clear();
     if ( task ) {
         foreach ( const ResourceGroup *g, m_project->resourceGroups() ) {
             const ResourceGroupRequest *gr = task->requests().find( g );
-            m_groupCache[ g->id() ] = gr ? gr->units() : 0;
+            if ( gr ) {
+                m_groupCache[ g ] = new ResourceGroupRequest( *gr );
+            }
         }
         foreach ( const Resource *r, m_project->resourceList() ) {
             const ResourceRequest *rr = task->requests().find( r );
-            m_resourceCache[ r->id() ] = rr ? rr->units() : 0;
+            if ( rr ) {
+                m_resourceCache[ r ] = new ResourceRequest( *rr );
+                if ( ! m_resourceCache[ r ]->requiredResources().isEmpty() ) {
+                    m_requiredChecked[ r ] = Qt::Checked;
+                }
+            }
         }
     }
 }
@@ -485,6 +524,13 @@ Qt::ItemFlags ResourceAllocationItemModel::flags( const QModelIndex &index ) con
         case ResourceAllocationModel::RequestAllocation:
             flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
             break;
+        case ResourceAllocationModel::RequestRequired: {
+            Resource *r = resource( index );
+            if ( m_resourceCache.contains( r ) && m_resourceCache[ r ]->units() > 0 ) {
+                flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
+            }
+            break;
+        }
         default:
             flags &= ~Qt::ItemIsEditable;
             break;
@@ -584,21 +630,29 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *group, co
     if ( m_model.task() == 0 ) {
         return QVariant();
     }
-    if ( ! m_resourceCache.contains( res->id() ) ) {
+    if ( ! m_resourceCache.contains( res ) ) {
+        if ( role == Qt::EditRole ) {
+            ResourceRequest *req = m_model.task()->requests().find( res );
+            if ( req == 0 ) {
+                req = new ResourceRequest( const_cast<Resource*>( res ), 0 );
+            }
+            const_cast<ResourceAllocationItemModel*>( this )->m_resourceCache.insert( res, req );
+            return req->units();
+        }
         return m_model.allocation( group, res, role );
     }
     switch ( role ) {
         case Qt::DisplayRole: {
             // xgettext: no-c-format
-            return i18nc( "<value>%", "%1%", m_resourceCache[ res->id() ] );
+            return i18nc( "<value>%", "%1%", m_resourceCache[ res ]->units() );
         }
         case Qt::EditRole:
-            return m_resourceCache[ res->id() ];
+            return m_resourceCache[ res ]->units();
         case Qt::ToolTipRole: {
-            return i18np( "Not allocated", "Allocated units: %2", m_resourceCache[ res->id() ], allocation( group, res, Qt::DisplayRole ).toString() );
+            return i18np( "Not allocated", "Allocated units: %2", m_resourceCache[ res ]->units(), allocation( group, res, Qt::DisplayRole ).toString() );
         }
         case Qt::CheckStateRole:
-            return m_resourceCache[ res->id() ] == 0 ? Qt::Unchecked : Qt::Checked;
+            return m_resourceCache[ res ]->units() == 0 ? Qt::Unchecked : Qt::Checked;
         default:
             return m_model.allocation( group, res, role );
     }
@@ -610,13 +664,13 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *res, int 
     if ( m_model.task() == 0 ) {
         return QVariant();
     }
-    if ( ! m_groupCache.contains( res->id() ) ) {
+    if ( ! m_groupCache.contains( res ) ) {
         return m_model.allocation( res, role );
     }
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return qMax( m_groupCache[ res->id() ], allocation( res, Role::Minimum ).toInt() );
+            return qMax( m_groupCache[ res ]->units(), allocation( res, Role::Minimum ).toInt() );
         case Qt::ToolTipRole:
             return i18np( "%1 resource allocated", "%1 resources allocated", allocation( res, Qt::DisplayRole ).toInt() );
         case Role::Minimum: {
@@ -628,20 +682,22 @@ QVariant ResourceAllocationItemModel::allocation( const ResourceGroup *res, int 
     return QVariant();
 }
 
-
 bool ResourceAllocationItemModel::setAllocation( Resource *res, const QVariant &value, int role )
 {
     //qDebug()<<"ResourceAllocationItemModel::setAllocation:"<<res->name()<<value<<role;
     switch ( role ) {
         case Qt::EditRole: {
-            m_resourceCache[ res->id() ] = value.toInt();
+            m_resourceCache[ res ]->setUnits( value.toInt() );
             return true;
         }
         case Qt::CheckStateRole:
-            if ( m_resourceCache[ res->id() ] == 0 ) {
-                m_resourceCache[ res->id() ] = res->units();
+            if ( ! m_resourceCache.contains( res ) ) {
+                m_resourceCache[ res ] = new ResourceRequest( res, 0 );
+            }
+            if ( m_resourceCache[ res ]->units() == 0 ) {
+                m_resourceCache[ res ]->setUnits( res->units() );
             } else {
-                m_resourceCache[ res->id() ] = 0;
+                m_resourceCache[ res ]->setUnits( 0 );
             }
             return true;
     }
@@ -652,12 +708,61 @@ bool ResourceAllocationItemModel::setAllocation( ResourceGroup *res, const QVari
 {
     switch ( role ) {
         case Qt::EditRole:
-            m_groupCache[ res->id() ] = value.toInt();
+            if ( ! m_groupCache.contains( res ) ) {
+                m_groupCache[ res ] = new ResourceGroupRequest( res, 0 );
+            }
+            m_groupCache[ res ]->setUnits( value.toInt() );
             return true;
     }
     return false;
 }
 
+QVariant ResourceAllocationItemModel::required( const QModelIndex &idx, int role ) const
+{
+    if ( m_model.task() == 0 ) {
+        return QVariant();
+    }
+    Resource *res = resource( idx );
+    if ( res == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole: {
+            QStringList lst;
+            if ( m_requiredChecked[ res ] ) {
+                foreach ( const Resource *r, required( idx ) ) {
+                    lst << r->name();
+                }
+            }
+            return lst.isEmpty() ? i18n( "None" ) : lst.join( "," );
+        }
+        case Qt::EditRole: break;
+        case Qt::ToolTipRole: break;
+        case Qt::CheckStateRole:
+            return m_requiredChecked[ res ];
+        default:
+            break;
+    }
+    return QVariant();
+}
+
+bool ResourceAllocationItemModel::setRequired( const QModelIndex &idx, const QVariant &value, int role )
+{
+    Resource *res = resource( idx );
+    if ( res == 0 ) {
+        return false;
+    }
+    switch ( role ) {
+        case Qt::CheckStateRole:
+            m_requiredChecked[ res ] = value.toInt();
+            if ( value.toInt() == Qt::Unchecked ) {
+                m_resourceCache[ res ]->setRequiredResources( QList<Resource*>() );
+            }
+            emit dataChanged( idx, idx );
+            return true;
+    }
+    return false;
+}
 
 QVariant ResourceAllocationItemModel::notUsed( const ResourceGroup *, int role ) const
 {
@@ -690,6 +795,9 @@ QVariant ResourceAllocationItemModel::data( const QModelIndex &index, int role )
     if ( r ) {
         if ( index.column() == ResourceAllocationModel::RequestAllocation ) {
             return allocation( r->parentGroup(), r, role );
+        }
+        if ( index.column() == ResourceAllocationModel::RequestRequired ) {
+            return required( index, role );
         }
         result = m_model.data( r->parentGroup(), r, index.column(), role );
     } else {
@@ -727,6 +835,8 @@ bool ResourceAllocationItemModel::setData( const QModelIndex &index, const QVari
                     return true;
                 }
                 return false;
+            case ResourceAllocationModel::RequestRequired:
+                return setRequired( index, value, role );
             default:
                 //qWarning("data: invalid display value column %d", index.column());
                 return false;
@@ -773,6 +883,7 @@ QAbstractItemDelegate *ResourceAllocationItemModel::createDelegate( int col, QWi
 {
     switch ( col ) {
         case ResourceAllocationModel::RequestAllocation: return new SpinBoxDelegate( parent );
+        case ResourceAllocationModel::RequestRequired: return new RequieredResourceDelegate( parent );
         default: break;
     }
     return 0;
@@ -805,6 +916,31 @@ void ResourceAllocationItemModel::slotResourceGroupChanged( ResourceGroup *res )
         int row = p->resourceGroups().indexOf( res );
         emit dataChanged( createIndex( row, 0, res ), createIndex( row, columnCount() - 1, res ) );
     }
+}
+
+Resource *ResourceAllocationItemModel::resource( const QModelIndex &idx ) const
+{
+    return qobject_cast<Resource*>( object( idx ) );
+}
+
+void ResourceAllocationItemModel::setRequired( const QModelIndex &idx, const QList<Resource*> &lst )
+{
+    Resource *r = resource( idx );
+    Q_ASSERT( r );
+    if ( m_resourceCache.contains( r ) ) {
+        m_resourceCache[ r ]->setRequiredResources( lst );
+        emit dataChanged( idx, idx );
+    }
+}
+
+const QList<Resource*> &ResourceAllocationItemModel::required( const QModelIndex &idx ) const
+{
+    Resource *r = resource( idx );
+    Q_ASSERT( r );
+    if ( m_resourceCache.contains( r ) ) {
+        return m_resourceCache[ r ]->requiredResources();
+    }
+    return r->requiredResources();
 }
 
 } // namespace KPlato

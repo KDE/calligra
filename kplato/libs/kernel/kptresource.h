@@ -60,6 +60,7 @@ class NodeSchedule;
 class ResourceSchedule;
 class Schedule;
 class XMLLoaderObject;
+class DateTimeInterval;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -281,7 +282,6 @@ public:
     Appointment *appointmentAt( int index, long id = -1 ) const { return appointments( id ).value( index ); }
     int indexOf( Appointment *a, long id = -1 ) const { return appointments( id ).indexOf( a ); }
     
-    Appointment *findAppointment( Node *node );
     /// Adds appointment to current schedule
     virtual bool addAppointment( Appointment *appointment );
     /// Adds appointment to schedule sch
@@ -291,7 +291,7 @@ public:
 
     void initiateCalculation( Schedule &sch );
     bool isAvailable( Task *task );
-    void makeAppointment( Schedule *schedule, int load );
+    void makeAppointment( Schedule *schedule, int load, const QList<Resource*> &required = QList<Resource*>() );
 
     bool isOverbooked() const;
     /// check if overbooked on date.
@@ -345,13 +345,13 @@ public:
     /// The current schedule is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, bool *ok = 0 ) const;
+    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>(), bool *ok = 0 ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The schedule @p sch is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, bool *ok = 0 ) const;
+    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>(), bool *ok = 0 ) const;
 
 
     /**
@@ -437,6 +437,13 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
+    QList<Resource*> requiredResources() const { return m_required; }
+    void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
+
+    /// Used by Project::load() after all resources have been loaded
+    /// to translate resource ids to resources
+    void resolveRequiredResources( Project &project );
+
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
     void externalAppointmentAdded( Resource*, Appointment* );
@@ -445,7 +452,8 @@ signals:
     void externalAppointmentChanged( Resource *r, Appointment *a );
 
 protected:
-    void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end, int load );
+    DateTimeInterval requiredAvailable(Schedule *node, const DateTime &start, const DateTime &end ) const;
+    void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required = QList<Resource*>() );
     virtual void changed();
 
 private:
@@ -473,8 +481,9 @@ private:
     cost;
     
     Calendar *m_calendar;
-    QList<ResourceRequest*>
-    m_requests;
+    QList<ResourceRequest*> m_requests;
+    QList<Resource*> m_required;
+    QStringList m_requiredIds;
     
     Schedule *m_currentSchedule;
 
@@ -518,6 +527,7 @@ class KPLATOKERNEL_EXPORT ResourceRequest
 {
 public:
     explicit ResourceRequest( Resource *resource = 0, int units = 1 );
+    explicit ResourceRequest( const ResourceRequest &r );
 
     ~ResourceRequest();
 
@@ -555,12 +565,12 @@ public:
     void makeAppointment( Schedule *schedule );
     Task *task() const;
 
-    Schedule *resourceSchedule( Schedule *ns );
+    Schedule *resourceSchedule( Schedule *ns, Resource *resource = 0 );
     DateTime availableAfter(const DateTime &time, Schedule *ns);
     DateTime availableBefore(const DateTime &time, Schedule *ns);
     Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 );
-    DateTime workTimeAfter(const DateTime &dt);
-    DateTime workTimeBefore(const DateTime &dt);
+    DateTime workTimeAfter(const DateTime &dt, Schedule *ns = 0);
+    DateTime workTimeBefore(const DateTime &dt, Schedule *ns = 0);
 
     /// Resource is allocated dynamically by the group request
     bool isDynamicallyAllocated() const { return m_dynamic; }
@@ -570,14 +580,20 @@ public:
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward );
 
+    const QList<Resource*> &requiredResources() const { return m_required; }
+    void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
+
 protected:
     void changed();
 
+    void setCurrentSchedulePtr( Schedule *ns );
+    
 private:
     Resource *m_resource;
     int m_units;
     ResourceGroupRequest *m_parent;
     bool m_dynamic;
+    QList<Resource*> m_required;
 
 #ifndef NDEBUG
 public:
@@ -589,6 +605,7 @@ class KPLATOKERNEL_EXPORT ResourceGroupRequest
 {
 public:
     explicit ResourceGroupRequest( ResourceGroup *group = 0, int units = 0 );
+    explicit ResourceGroupRequest( const ResourceGroupRequest &group );
     ~ResourceGroupRequest();
 
     void setParent( ResourceRequestCollection *parent ) { m_parent = parent;}
@@ -634,8 +651,8 @@ public:
 
     DateTime availableAfter( const DateTime &time, Schedule *ns );
     DateTime availableBefore( const DateTime &time, Schedule *ns );
-    DateTime workTimeAfter(const DateTime &dt);
-    DateTime workTimeBefore(const DateTime &dt);
+    DateTime workTimeAfter(const DateTime &dt, Schedule *ns = 0);
+    DateTime workTimeBefore(const DateTime &dt, Schedule *ns = 0);
 
     /**
      * Makes appointments for task @param task to the 
@@ -716,6 +733,8 @@ public:
     /// Return a list of allocated resources, allocations to groups are not included by default.
     QStringList requestNameList( bool includeGroup = false ) const;
     QList<Resource*> requestedResources() const;
+    /// Return a list of all resource requests
+    QList<ResourceRequest*> resourceRequests() const;
     
     //bool load(KoXmlElement &element, Project &project);
     void save( QDomElement &element ) const;
@@ -743,8 +762,8 @@ public:
 
     DateTime availableAfter( const DateTime &time, Schedule *ns );
     DateTime availableBefore( const DateTime &time, Schedule *ns );
-    DateTime workTimeAfter(const DateTime &dt) const;
-    DateTime workTimeBefore(const DateTime &dt) const;
+    DateTime workTimeAfter(const DateTime &dt, Schedule *ns = 0) const;
+    DateTime workTimeBefore(const DateTime &dt, Schedule *ns = 0) const;
     DateTime workStartAfter(const DateTime &time, Schedule *ns);
     DateTime workFinishBefore(const DateTime &time, Schedule *ns);
 

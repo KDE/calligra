@@ -1314,6 +1314,22 @@ void ModifyResourceRequestUnitsCmd::unexecute()
     m_request->setUnits( m_oldvalue );
 }
 
+ModifyResourceRequestRequiredCmd::ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const QString& name )
+    : NamedCommand( name ),
+    m_request( request ),
+    m_newvalue( value )
+{
+    m_oldvalue = request->requiredResources();
+}
+void ModifyResourceRequestRequiredCmd::execute()
+{
+    m_request->setRequiredResources( m_newvalue );
+}
+void ModifyResourceRequestRequiredCmd::unexecute()
+{
+    m_request->setRequiredResources( m_oldvalue );
+}
+
 ModifyResourceGroupRequestUnitsCmd::ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const QString& name )
     : NamedCommand( name ),
     m_request( request ),
@@ -1915,6 +1931,22 @@ void ModifyResourceCalendarCmd::unexecute()
     m_resource->setCalendar( m_oldvalue );
 //    setSchScheduled();
 
+}
+
+ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name )
+        : NamedCommand( name ),
+        m_resource( resource ),
+        m_newvalue( value )
+{
+    m_oldvalue = resource->requiredResources();
+}
+void ModifyRequiredResourcesCmd::execute()
+{
+    m_resource->setRequiredResources( m_newvalue );
+}
+void ModifyRequiredResourcesCmd::unexecute()
+{
+    m_resource->setRequiredResources( m_oldvalue );
 }
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )

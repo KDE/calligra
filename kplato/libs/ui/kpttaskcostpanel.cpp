@@ -36,36 +36,36 @@ namespace KPlato
 TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const char *n)
     : TaskCostPanelImpl(p, n),
       m_task(task),
-      m_accounts(accounts) {
-      
+      m_accounts(accounts),
+      m_locale( 0 )
+{
+    const Project *project = qobject_cast<const Project*>( task.projectNode() );
+    if ( project ) {
+        m_locale = project->locale();
+    }
+    if ( m_locale == 0 ) {
+        m_locale = KGlobal::locale();
+    }
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();
     setStartValues(task);
 }
 
 void TaskCostPanel::setStartValues(Task &task) {
-    const KLocale *locale = 0;
-    const Project *project = qobject_cast<const Project*>( task.projectNode() );
-    if ( project ) {
-        locale = project->locale();
-    }
-    if ( locale == 0 ) {
-        locale = KGlobal::locale();
-    }
     runningAccount->addItems(m_accountList);
     m_oldrunning = m_accounts.findRunningAccount(task);
     if (m_oldrunning) {
         setCurrentItem(runningAccount, m_oldrunning->name());
     }
     
-    startupCost->setText(locale->formatMoney(task.startupCost()));
+    startupCost->setText(m_locale->formatMoney(task.startupCost()));
     startupAccount->addItems(m_accountList);
     m_oldstartup = m_accounts.findStartupAccount(task);
     if (m_oldstartup) {
         setCurrentItem(startupAccount, m_oldstartup->name());
     }
     
-    shutdownCost->setText(locale->formatMoney(task.shutdownCost()));
+    shutdownCost->setText(m_locale->formatMoney(task.shutdownCost()));
     shutdownAccount->addItems(m_accountList);
     m_oldshutdown = m_accounts.findShutdownAccount(task);
     if (m_oldshutdown) {
@@ -102,12 +102,12 @@ MacroCommand *TaskCostPanel::buildCommand() {
         cmd->addCommand(new NodeModifyShutdownAccountCmd(m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
     }
-    double money = KGlobal::locale()->readMoney(startupCost->text());
+    double money = m_locale->readMoney(startupCost->text());
     if (money != m_task.startupCost()) {
         cmd->addCommand(new NodeModifyStartupCostCmd(m_task, money));
         modified = true;
     }
-    money = KGlobal::locale()->readMoney(shutdownCost->text());
+    money = m_locale->readMoney(shutdownCost->text());
     if (money != m_task.shutdownCost()) {
         cmd->addCommand(new NodeModifyShutdownCostCmd(m_task, money));
         modified = true;
