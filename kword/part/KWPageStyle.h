@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,17 +32,26 @@
 class KWPageStylePrivate;
 
 /**
- * A container for all information for the page wide style.
+ * A page style represents a set of all the properties that change the layout and size
+ * of a page and the text area on it.
  *
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
  *
- * \note that the margins are stored in a \a KoPageLayout instance.
+ * KWord has one KWPageManager per document, the manager collects all page styles by
+ * name and allows pages to follow this named style. This means that changing a page
+ * style will update all pages that are using that page style with the new properties.
  *
- * \note once you created an instance of \a KWPageStyle you may like to use the
- * KWPageManager::addPageStyle() method to let KWord handle the ownership else
- * you are responsible for deleting the instance and taking care that no \a KWPage
- * instance or something else still keeps a (then dangling) pointer to it.
+ * The KWPageStyle object is a value class, you can pass it by reference and create it
+ * on the stack. You should never use 'new' on the KWPageStyle.
+ * The KWPageStyle is a so called QExplicitlySharedDataPointer, which is best explained
+ * with a code example;
+ * @code
+ * KWPageStyle style1("mystyle");
+ * KWPageStyle style2 = style1;
+ * style1.setHeaderPolicy(KWord::HFTypeEvenOdd); // set it on one
+ * Q_ASSERT(style2.headerPolicy() == KWord::HFTypeEvenOdd); // the other changes too
+ * @endcode
  */
 class KWORD_TEST_EXPORT KWPageStyle
 {
