@@ -20,6 +20,7 @@
 #include "kptrelationmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptduration.h"
 #include "kptproject.h"

@@ -20,6 +20,7 @@
 #include "kptpertcpmmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptnode.h"
@@ -249,6 +250,8 @@ QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orienta
         }
     }
     if ( role == Qt::ToolTipRole ) {
+        return m_nodemodel.headerData( section, role );
+    } else if ( role == Qt::WhatsThisRole ) {
         return m_nodemodel.headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);
@@ -757,6 +760,8 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
         }
     }
     if ( role == Qt::ToolTipRole ) {
+        return m_nodemodel.headerData( section, role );
+    } else if ( role == Qt::WhatsThisRole ) {
         return m_nodemodel.headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);

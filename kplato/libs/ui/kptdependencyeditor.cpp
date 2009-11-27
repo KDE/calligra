@@ -20,6 +20,7 @@
 #include "kptdependencyeditor.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptitemmodelbase.h"
 #include "kptcommand.h"
 #include "kptproject.h"

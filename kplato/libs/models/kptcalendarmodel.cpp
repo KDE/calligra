@@ -20,6 +20,7 @@
 #include "kptcalendarmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"

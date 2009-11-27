@@ -21,6 +21,7 @@
 #include "kpttaskstatusmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptschedule.h"

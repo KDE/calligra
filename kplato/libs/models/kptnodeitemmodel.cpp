@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "kptnodeitemmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptduration.h"
 #include "kptproject.h"
@@ -1883,6 +1884,13 @@ QVariant NodeModel::headerData( int section, int role )
             default: return QVariant();
         }
     }
+    if ( role == Qt::WhatsThisRole ) {
+        switch ( section ) {
+            case NodeNegativeFloat: return WhatsThis::nodeNegativeFloat();
+
+            default: return QVariant();
+        }
+    }
     return QVariant();
 }
 
@@ -2782,6 +2790,8 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
         }
     }
     if ( role == Qt::ToolTipRole ) {
+        return NodeModel::headerData( section, role );
+    } else if ( role == Qt::WhatsThisRole ) {
         return NodeModel::headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);

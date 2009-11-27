@@ -21,6 +21,7 @@
 
 #include "kptdocuments.h"
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 
 #include <kdebug.h>
 #include <QMimeData>

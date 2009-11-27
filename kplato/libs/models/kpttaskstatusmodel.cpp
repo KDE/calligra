@@ -20,6 +20,7 @@
 #include "kpttaskstatusmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptitemmodelbase.h"
 #include "kpttaskcompletedelegate.h"
 #include "kptcommand.h"

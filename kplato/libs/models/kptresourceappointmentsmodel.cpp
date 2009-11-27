@@ -20,6 +20,7 @@
 #include "kptresourceappointmentsmodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptappointment.h"
 #include "kptcommand.h"
 #include "kpteffortcostmap.h"

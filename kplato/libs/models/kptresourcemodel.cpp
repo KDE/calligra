@@ -19,6 +19,7 @@
 
 #include "kptresourcemodel.h"
 
+#include "kptcommonstrings.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"

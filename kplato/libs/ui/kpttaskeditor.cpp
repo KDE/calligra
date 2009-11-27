@@ -20,6 +20,7 @@
 #include "kpttaskeditor.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 #include "kptnodeitemmodel.h"
 #include "kptcommand.h"
 #include "kptproject.h"

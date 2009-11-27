@@ -20,6 +20,7 @@
 #include "kptworkpackagemodel.h"
 
 #include "kptglobal.h"
+#include "kptcommonstrings.h"
 
 #include <QModelIndex>
 
