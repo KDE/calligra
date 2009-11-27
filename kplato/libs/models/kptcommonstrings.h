@@ -148,6 +148,11 @@ struct KPLATOMODELS_EXPORT WhatsThis
     static QString  nodeStartFloat();
     static QString  nodeFinishFloat();
 
+    static QString scheduleOverbooking();
+    static QString scheduleDistribution();
+    static QString schedulingDirection();
+    static QString scheduleScheduler();
+
 }; //namespace WhatsThis
 
 

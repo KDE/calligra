@@ -24,8 +24,6 @@
 namespace KPlato
 {
 
-// namespace ToolTip
-// {
     QString ToolTip::nodeName() { return i18n( "The name of the task" ); }
     QString ToolTip::nodeType() { return i18n( "Task type" ); }
     QString ToolTip::nodeResponsible() { return i18n( "The responsible person for this task" ); }
@@ -56,10 +54,19 @@ namespace KPlato
     QString ToolTip::nodePessimisticDuration() { return i18n( "The pessimistic duration" ); }
 
     QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed without affecting the project completion time" ); }
+    
     QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fulfil a timing constraint" ); }
+    QString WhatsThis::nodeNegativeFloat() { return i18nc( "@info:whatsthis", "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." ); }
+
     QString ToolTip::nodeFreeFloat() { return i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" ); }
+    QString WhatsThis::nodeFreeFloat() { return i18nc( "@info:whatsthis", "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." ); }
+
     QString ToolTip::nodeStartFloat() { return i18n( "The duration from Early Start to Late Start" ); }
+    QString WhatsThis::nodeStartFloat() { return i18nc( "@info:whatsthis", "Start float is the duration from Early Start to Late Start." ); }
+
     QString ToolTip::nodeFinishFloat() { return i18n( "The duration from Early Finish to Late Finish" ); }
+    QString WhatsThis::nodeFinishFloat() { return i18nc( "@info:whatsthis", "Finish float is the duration from Early Finish to Late Finish." ); }
+
     QString ToolTip::nodeAssignment() { return i18n( "The resources assigned to the task" ); }
 
     QString ToolTip::nodeStatus() { return i18n( "Task status" ); }
@@ -115,13 +122,42 @@ namespace KPlato
 
     QString ToolTip::scheduleName() { return i18n( "The name of the schedule" ); }
     QString ToolTip::scheduleState() { return i18n( "The schedules state" ); }
+
     QString ToolTip::scheduleOverbooking() { return i18n( "Controles resource overbooking when scheduling" ); }
+    QString WhatsThis::scheduleOverbooking() { return i18nc( "@info:whatsthis", 
+            "<para>Controles resource overbooking when scheduling.</para>"
+            "<para>If overbooking is allowed, a resource may be booked (on working days) to work more than it is available. This can happen if the resource is allocated to multiple tasks or are booked on other projects.</para>"
+            "<para>If overbooking is to be avoided, resources will not be booked more than they are availabile. On resource conflict, tasks will be delayed until the resource is available.</para>"
+            );
+    }
+
     QString ToolTip::scheduleDistribution() { return i18n( "The distribution to be used during scheduling" ); }
+    QString WhatsThis::scheduleDistribution() { return i18nc( "@info:whatsthis",
+        "<para>The distribution to be used during scheduling</para>"
+        "<para>If distribution is 'None', the tasks estimate is used as is during scheduling.</para>"
+        "<para>If distribution is 'PERT', the estimate used is calculated based on the entered optimistic- (O), pessimistic-(P) and most likely (M) estimate. The formulay used for this is (O + 4 * M + P) / 6.<para>"
+        );
+    }
+
     QString ToolTip::scheduleCalculate() { return i18n( "Defines the schedules to be calculated" ); }
     QString ToolTip::scheduleStart() { return i18n( "The scheduled start time" ); }
     QString ToolTip::scheduleFinish() { return i18n( "The scheduled finish time" ); }
     QString ToolTip::schedulingDirection() { return i18n( "The scheduling direction" ); }
+    QString WhatsThis::schedulingDirection() { return i18nc( "@info:whatsthis",
+        "<para>The scheduling direction.</para>"
+        "<para>If direction is Forward, the project is scheduled starting at the projects earliest start time specified in the main project dialog.</para>"
+        "<para>If direction is Backward, the project is scheduled starting at the projects latest finish time specified in the main project dialog.</para>"
+        );
+    }
+
     QString ToolTip::scheduleScheduler() { return i18n( "The scheduler used for calculating the project schedule" ); }
+    QString WhatsThis::scheduleScheduler() { return i18nc( "@info:whatsthis", 
+        "<para>The scheduler used for calculating the project schedule.</para>"
+        "<para>The default built-in scheduler is the Network Scheduler.</para>"
+        "<para>Other schedulers presently available is RCPS if libRCPS is installed on your system. "
+        "RCPS is a genetics based resource constrained project scheduler.</para>"
+        );
+    }
 
     QString ToolTip::documentUrl() { return i18n( "The url of the document" ); }
     QString ToolTip::documentType() { return i18n( "The type of the document" ); }
@@ -135,17 +171,6 @@ namespace KPlato
     QString ToolTip::relationChild() { return i18n( "The name of the dependent task" ); }
     QString ToolTip::relationType() { return i18n( "The type of relation" ); }
     QString ToolTip::relationLag() { return i18n( "The relations time lag" ); }
-
-//} //namespace ToolTip
-
-// namespace WhatsThis
-// {
-    QString WhatsThis::nodeNegativeFloat() { return i18n( "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." ); }
-    QString WhatsThis::nodeFreeFloat() { return i18n( "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." ); }
-    QString WhatsThis::nodeStartFloat() { return i18n( "Start float is the duration from Early Start to Late Start." ); }
-    QString WhatsThis::nodeFinishFloat() { return i18n( "Finish float is the duration from Early Finish to Late Finish." ); }
-
-//} //namespace WhatsThis
 
 
 } //namespace KPlato
