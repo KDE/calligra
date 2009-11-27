@@ -834,7 +834,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
     if ( sch ) {
         QStringList lst; foreach ( Resource *r, required ) { lst << r->name(); }
-        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours, required: %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( lst.join(",") ) );
+        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( lst.isEmpty() ? "" : lst.join(",") ) );
     }
     bool sts=false;
     Duration e;
@@ -889,7 +889,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
     if (ok) *ok = sts;
     if ( sch ) {
-        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours = : %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
+        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours = %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
     }
     return e;
 }

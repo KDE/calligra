@@ -168,6 +168,12 @@ bool Schedule::usePert() const
     return false;
 }
 
+void Schedule::setAllowOverbooking( bool state )
+{
+    if ( m_parent )
+        m_parent->setAllowOverbooking( state );
+}
+
 bool Schedule::allowOverbooking() const
 {
     if ( m_parent ) {
@@ -1056,6 +1062,12 @@ bool MainSchedule::isBaselined() const
 bool MainSchedule::usePert() const
 {
     return m_manager == 0 ? false : m_manager->usePert();
+}
+
+void MainSchedule::setAllowOverbooking( bool state )
+{
+    if ( m_manager )
+        m_manager->setAllowOverbooking( state );
 }
 
 bool MainSchedule::allowOverbooking() const

@@ -757,6 +757,15 @@ void Node::moveLatestFinish(DateTime &time) {
 }
 
 void Node::initiateCalculation(MainSchedule &sch) {
+    m_visitedForward = false;
+    m_visitedBackward = false;
+    m_durationForward = Duration::zeroDuration;
+    m_durationBackward = Duration::zeroDuration;
+    m_earlyStart = DateTime();
+    m_lateStart = DateTime();
+    m_earlyFinish = DateTime();
+    m_lateFinish = DateTime();
+
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->initiateCalculation(sch);

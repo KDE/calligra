@@ -77,7 +77,7 @@ void AccountsTester::init()
     project.setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     project.calculate( *sm );
     
-    QCOMPARE( t->earlyStart(), project.startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( project.startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );

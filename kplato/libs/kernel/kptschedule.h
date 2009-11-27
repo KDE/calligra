@@ -97,6 +97,7 @@ public:
     
     virtual bool isBaselined() const;
     virtual bool usePert() const;
+    virtual void setAllowOverbooking( bool state );
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
 
@@ -414,6 +415,7 @@ public:
     virtual bool isDeleted() const { return m_deleted; }
     
     virtual bool isBaselined() const;
+    virtual void setAllowOverbooking( bool state );
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
     virtual bool usePert() const;

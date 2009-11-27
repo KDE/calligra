@@ -248,7 +248,7 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -263,7 +263,7 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -281,7 +281,7 @@ void ProjectTester::schedule()
     
 //    printDebug( m_project, t, s );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -301,7 +301,7 @@ void ProjectTester::schedule()
 //    printDebug( m_project, t, s);
 //    printSchedulingLog( *sm, s );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -318,7 +318,7 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -335,7 +335,7 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
@@ -410,10 +410,11 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+//    Debug::print( m_project, t, s );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
-    QCOMPARE( t->earlyFinish(), t->endTime() );
-    QCOMPARE( t->lateFinish(), m_project->endTime() );
+    QCOMPARE( t->earlyFinish(),t->earlyStart() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->lateFinish(), t->requests().workTimeBefore( m_project->endTime() ) );
 
     QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
@@ -429,16 +430,15 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    //printDebug( m_project, t, s );
+//    printDebug( m_project, t, s );
 
-    QVERIFY( t->earlyStart() <= t->constraintStartTime() );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
     QCOMPARE( t->earlyFinish(), t->endTime() );
     QVERIFY( t->lateFinish() <= m_project->constraintEndTime() );
     
     QVERIFY( t->endTime() <= t->lateFinish() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 )  );
-    QVERIFY( t->schedulingError() == false );
+    QVERIFY( t->schedulingError() == true );
 
     // Calculate forward
     s = "Calculate forwards, Task: FinishNotLater -----------------------------------";
@@ -805,11 +805,11 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    printDebug( m_project, t, s );
-    printDebug( m_project, tsk2, s );
-    printSchedulingLog( *sm, s );
-    
-    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+//     Debug::print( m_project, t, s );
+//     Debug::print( m_project, tsk2, s );
+//     Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->constraintStartTime() ) );
     QCOMPARE( t->lateStart(), tsk2->startTime() );
     QCOMPARE( t->earlyFinish(), DateTime( tomorrow, t2 ) );
     QCOMPARE( t->lateFinish(), t->lateFinish() );
@@ -818,18 +818,13 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->earlyFinish() );
     QVERIFY( t->schedulingError() == false );
 
-    //NOTE: lateStart will be earlier than earlyFinish in this test because
-    //      T2 will be scheduled to run earlier than T1 if scheduled ALAP:
-    //      T1 is scheduled first so is scheduled to run as late as possible,
-    //      T2 will then have to be scheduled to run earlier because the resource
-    //      is booked by T1.
     QCOMPARE( tsk2->earlyStart(), t->earlyStart() );
-    QCOMPARE( tsk2->lateStart(), DateTime( today, t1 ) );
-    QCOMPARE( tsk2->earlyFinish(), DateTime( tomorrow.addDays( 2 ), t2 ) );
-    QCOMPARE( tsk2->lateFinish(), tsk2->earlyFinish() );
+    QCOMPARE( tsk2->lateStart(), t->earlyFinish() + Duration( 0, 16, 0 ) );
+    QCOMPARE( tsk2->earlyFinish(), DateTime( tomorrow, t2 ) );
+    QCOMPARE( tsk2->lateFinish(), t->lateFinish() );
 
     QCOMPARE( tsk2->startTime(), DateTime( tomorrow.addDays( 1 ), t1 ) );
-    QCOMPARE( tsk2->endTime(), tsk2->earlyFinish() );
+    QCOMPARE( tsk2->endTime(), tsk2->lateFinish() );
     QVERIFY( tsk2->schedulingError() == false );
     
     QCOMPARE( m_project->endTime(), tsk2->endTime() );
@@ -855,7 +850,7 @@ void ProjectTester::schedule()
 //    printDebug( m_project, tsk2, s );
 //    printSchedulingLog( *sm, s );
 
-    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->constraintStartTime() ) );
     QCOMPARE( t->lateStart(), DateTime( today, t1 ) );
     QCOMPARE( t->earlyFinish(), DateTime( tomorrow, t2 ) );
     QCOMPARE( t->lateFinish(), t->lateFinish() );
@@ -864,7 +859,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->earlyFinish() );
     QVERIFY( t->schedulingError() == false );
 
-    QCOMPARE( tsk2->earlyStart(), t->earlyFinish() );
+    QCOMPARE( tsk2->earlyStart(), tsk2->requests().workTimeAfter( t->earlyFinish() ) );
     QCOMPARE( tsk2->lateStart(), DateTime( tomorrow.addDays( 1 ), t1 ) );
     QCOMPARE( tsk2->earlyFinish(), DateTime( tomorrow.addDays( 2 ), t2 ) );
     QCOMPARE( tsk2->lateFinish(), tsk2->earlyFinish() );
@@ -1237,7 +1232,7 @@ void ProjectTester::materialResource()
 //     printDebug( &project, task1, s);
 //     printSchedulingLog( *sm, s );
 
-    QCOMPARE( task1->earlyStart(), targetstart );
+    QCOMPARE( task1->earlyStart(), task1->requests().workTimeAfter( targetstart ) );
     QVERIFY( task1->lateStart() >=  task1->earlyStart() );
     QVERIFY( task1->earlyFinish() <= task1->endTime() );
     QVERIFY( task1->lateFinish() >= task1->endTime() );
@@ -1310,7 +1305,7 @@ void ProjectTester::requiredResource()
 //     Debug::print( &project, task1, s);
 //     Debug::printSchedulingLog( *sm, s );
 
-    QCOMPARE( task1->earlyStart(), targetstart );
+    QCOMPARE( task1->earlyStart(), task1->requests().workTimeAfter( targetstart ) );
     QVERIFY( task1->lateStart() >=  task1->earlyStart() );
     QVERIFY( task1->earlyFinish() <= task1->endTime() );
     QVERIFY( task1->lateFinish() >= task1->endTime() );
@@ -1334,12 +1329,12 @@ void ProjectTester::requiredResource()
     mr->setAvailableFrom( tomorrow );
     project.calculate( *sm );
 
-    Debug::print( r, s);
-    Debug::print( mr, s);
-    Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::print( r, s);
+//     Debug::print( mr, s);
+//     Debug::print( &project, task1, s);
+//     Debug::printSchedulingLog( *sm, s );
 
-    QCOMPARE( task1->earlyStart(), targetstart );
+    QCOMPARE( task1->earlyStart(), task1->requests().workTimeAfter( targetstart ) );
     QVERIFY( task1->lateStart() >=  task1->earlyStart() );
     QVERIFY( task1->earlyFinish() <= task1->endTime() );
     QVERIFY( task1->lateFinish() >= task1->endTime() );
