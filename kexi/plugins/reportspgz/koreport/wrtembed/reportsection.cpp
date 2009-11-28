@@ -88,7 +88,6 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     QObject::connect(m_resizeBar, SIGNAL(barDragged(int)), this, SLOT(slotResizeBarDragged(int)));
     QObject::connect(m_reportDesigner, SIGNAL(pagePropertyChanged(KoProperty::Set &)), this, SLOT(slotPageOptionsChanged(KoProperty::Set &)));
     QObject::connect(m_scene, SIGNAL(clicked()), this, (SLOT(slotSceneClicked())));
-    QObject::connect(m_scene, SIGNAL(lostFocus()), this, (SLOT(slotSceneLostFocus())));
 
     glayout->addWidget(m_title, 0, 0, 1, 2);
     glayout->addWidget(m_sectionRuler, 1, 0);
@@ -229,14 +228,8 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
 void ReportSection::slotSceneClicked()
 {
-    m_title->update();
+    m_reportDesigner->setActiveScene(m_scene);
     m_reportDesigner->changeSet(m_sectionData->properties());
-}
-
-void ReportSection::slotSceneLostFocus()
-{
-  m_reportDesigner->setActiveScene(0);
-  m_title->update();  
 }
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
@@ -292,7 +285,7 @@ void ReportSectionTitle::paintEvent(QPaintEvent * event)
     
     ReportSection* _section = dynamic_cast<ReportSection*>(parent());
 
-    if (_section->m_scene->hasFocus()) {
+    if (_section->m_scene == _section->m_reportDesigner->activeScene()) {
       linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor));
       linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor));
     }

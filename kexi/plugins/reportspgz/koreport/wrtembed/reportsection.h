@@ -75,7 +75,6 @@ private slots:
     void slotPageOptionsChanged(KoProperty::Set &);
     void slotSceneClicked();
     void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
-    void slotSceneLostFocus();
 
 protected:
     ReportSectionTitle * m_title;

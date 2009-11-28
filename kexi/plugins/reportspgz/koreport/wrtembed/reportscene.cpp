@@ -130,9 +130,6 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
 
 void ReportScene::mousePressEvent(QGraphicsSceneMouseEvent * e)
 {
-  kDebug();
-    m_rd->setActiveScene(this);
-
     // clear the selection if Shift Key has not been pressed and it's a left mouse button   and
     // if the right mouse button has been pressed over an item which is not part of selected items
     if (((e->modifiers() & Qt::ShiftModifier) == 0 && e->button() == Qt::LeftButton)   ||

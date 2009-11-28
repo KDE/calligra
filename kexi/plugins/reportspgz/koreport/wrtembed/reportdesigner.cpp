@@ -1153,7 +1153,10 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
 
 unsigned int ReportDesigner::selectionCount()
 {
+  if (activeScene())
     return activeScene()->selectedItems().count();
+  else
+    return 0;
 }
 
 void ReportDesigner::changeSet(KoProperty::Set *s)
@@ -1378,6 +1381,9 @@ void ReportDesigner::setActiveScene(QGraphicsScene* a)
     if (d->activeScene && d->activeScene != a)
         d->activeScene->clearSelection();
     d->activeScene = a;
+    
+    //Trigger an update so that the last scene redraws its title;
+    update();
 }
 
 KoZoomHandler* ReportDesigner::zoomHandler()
