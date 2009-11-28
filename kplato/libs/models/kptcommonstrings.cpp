@@ -56,7 +56,7 @@ namespace KPlato
     QString ToolTip::nodePositiveFloat() { return i18n( "The duration by which a tasks start can be delayed without affecting the project completion time" ); }
     
     QString ToolTip::nodeNegativeFloat() { return i18n( "The duration by which the duration of a task or path has to be reduced in order to fulfil a timing constraint" ); }
-    QString WhatsThis::nodeNegativeFloat() { return i18nc( "@info:whatsthis", "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." ); }
+    QString WhatsThis::nodeNegativeFloat() { return i18nc( "@info:whatsthis", "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfil a timing constraint." ); }
 
     QString ToolTip::nodeFreeFloat() { return i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" ); }
     QString WhatsThis::nodeFreeFloat() { return i18nc( "@info:whatsthis", "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." ); }
@@ -123,11 +123,11 @@ namespace KPlato
     QString ToolTip::scheduleName() { return i18n( "The name of the schedule" ); }
     QString ToolTip::scheduleState() { return i18n( "The schedules state" ); }
 
-    QString ToolTip::scheduleOverbooking() { return i18n( "Controles resource overbooking when scheduling" ); }
+    QString ToolTip::scheduleOverbooking() { return i18n( "Controls resource overbooking when scheduling" ); }
     QString WhatsThis::scheduleOverbooking() { return i18nc( "@info:whatsthis", 
-            "<para>Controles resource overbooking when scheduling.</para>"
+            "<para>Controls resource overbooking when scheduling.</para>"
             "<para>If overbooking is allowed, a resource may be booked (on working days) to work more than it is available. This can happen if the resource is allocated to multiple tasks or are booked on other projects.</para>"
-            "<para>If overbooking is to be avoided, resources will not be booked more than they are availabile. On resource conflict, tasks will be delayed until the resource is available.</para>"
+            "<para>If overbooking is to be avoided, resources will not be booked more than they are available. On resource conflict, tasks will be delayed until the resource is available.</para>"
             );
     }
 
@@ -135,7 +135,7 @@ namespace KPlato
     QString WhatsThis::scheduleDistribution() { return i18nc( "@info:whatsthis",
         "<para>The distribution to be used during scheduling</para>"
         "<para>If distribution is 'None', the tasks estimate is used as is during scheduling.</para>"
-        "<para>If distribution is 'PERT', the estimate used is calculated based on the entered optimistic- (O), pessimistic-(P) and most likely (M) estimate. The formulay used for this is (O + 4 * M + P) / 6.<para>"
+        "<para>If distribution is 'PERT', the estimate used is calculated based on the entered optimistic- (O), pessimistic-(P) and most likely (M) estimate. The formula used for this is (O + 4 * M + P) / 6.<para>"
         );
     }
 

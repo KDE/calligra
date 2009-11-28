@@ -265,13 +265,13 @@ public:
     virtual bool resourceOverbooked( long id = CURRENTSCHEDULE ) const;
     /// The requested resource is not available
     bool resourceNotAvailable( long id = CURRENTSCHEDULE ) const;
-    /// The task cannot be scheduled to fullfill all the constraints
+    /// The task cannot be scheduled to fullfil all the constraints
     virtual bool schedulingError( long id = CURRENTSCHEDULE ) const;
     /// The node has not been scheduled
     bool notScheduled( long id = CURRENTSCHEDULE ) const;
     /// Return a list of overbooked resources
     virtual QStringList overbookedResources( long id = CURRENTSCHEDULE ) const;
-    /// The assigned resources can not fullfill the estimated effort.
+    /// The assigned resources can not fullfil the estimated effort.
     virtual bool effortMetError( long /*id*/ = CURRENTSCHEDULE ) const { return false; }
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;

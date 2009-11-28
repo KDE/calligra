@@ -214,9 +214,9 @@ public:
     QVariant resourceIsOverbooked( const Node *node, int role ) const;
     /// Set if the requested resource is not available
     QVariant resourceIsNotAvailable( const Node *node, int role ) const;
-    /// Set if the task cannot be scheduled to fullfill all the constraints
+    /// Set if the task cannot be scheduled to fullfil all the constraints
     QVariant schedulingConstraintsError( const Node *node, int role ) const;
-    /// Resources could not fullfill estimate
+    /// Resources could not fullfil estimate
     QVariant effortNotMet( const Node *node, int role ) const;
 
     QVariant wbsCode( const Node *node, int role ) const;

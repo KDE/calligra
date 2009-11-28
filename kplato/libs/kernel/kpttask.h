@@ -484,7 +484,7 @@ public:
     Duration positiveFloat( long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which the duration of an activity or path 
-     * has to be reduced in order to fullfill a timing- or dependency constraint.
+     * has to be reduced in order to fullfil a timing- or dependency constraint.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     Duration negativeFloat( long id = CURRENTSCHEDULE ) const;
@@ -518,7 +518,7 @@ public:
     virtual void setCurrentSchedule(long id);
     
     /**
-     * The assigned resources can not fullfill the estimated effort.
+     * The assigned resources can not fullfil the estimated effort.
      * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
     virtual bool effortMetError( long id = CURRENTSCHEDULE ) const;

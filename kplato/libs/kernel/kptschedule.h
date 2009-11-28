@@ -290,7 +290,7 @@ protected:
     bool resourceOverbooked;
     /// Set if the requested resource is not available
     bool resourceNotAvailable;
-    /// Set if the task cannot be scheduled to fullfill all the constraints
+    /// Set if the task cannot be scheduled to fullfil all the constraints
     bool schedulingError;
     /// Set if the node has not been scheduled
     bool notScheduled;
