@@ -1075,16 +1075,18 @@ void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCont
         pop.addSeparator();
         popDelete = pop.addAction(i18n("Delete"));
     }
-
-    QAction * ret = pop.exec(e->screenPos());
-    if (ret == popCut)
-        slotEditCut();
-    else if (ret == popCopy)
-        slotEditCopy();
-    else if (ret == popPaste)
-        slotEditPaste(s, e->scenePos());
-    else if (ret == popDelete)
-        slotEditDelete();
+    
+    if (pop.actions().count() > 0) {
+      QAction * ret = pop.exec(e->screenPos());
+      if (ret == popCut)
+	  slotEditCut();
+      else if (ret == popCopy)
+	  slotEditCopy();
+      else if (ret == popPaste)
+	  slotEditPaste(s, e->scenePos());
+      else if (ret == popDelete)
+	  slotEditDelete();
+    }
 }
 
 void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent * e)
