@@ -200,7 +200,7 @@ void ReportSection::initFromXML(QDomNode & section)
 
 QSize ReportSection::sizeHint() const
 {
-    return QSize(m_scene->width()  + m_sectionRuler->frameSize().width(), m_title->frameSize().height() + m_sceneView->sizeHint().height() + m_resizeBar->frameSize().height());;
+    return QSize(m_scene->width()  + m_sectionRuler->frameSize().width(), m_title->frameSize().height() + m_sceneView->sizeHint().height() + m_resizeBar->frameSize().height());
 }
 
 void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
@@ -254,8 +254,6 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
 ReportResizeBar::ReportResizeBar(QWidget * parent, Qt::WFlags f)
         : QFrame(parent, f)
 {
-    //setMinimumHeight(5);
-    //setMaximumHeight(5);
     setCursor(QCursor(Qt::SizeVerCursor));
     setFrameStyle(QFrame::HLine);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
