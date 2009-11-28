@@ -175,7 +175,6 @@ void ReportEntityLabel::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityLabel::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug();
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

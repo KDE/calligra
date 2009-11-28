@@ -86,9 +86,7 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     m_resizeBar = new ReportResizeBar(this);
 
     QObject::connect(m_resizeBar, SIGNAL(barDragged(int)), this, SLOT(slotResizeBarDragged(int)));
-
     QObject::connect(m_reportDesigner, SIGNAL(pagePropertyChanged(KoProperty::Set &)), this, SLOT(slotPageOptionsChanged(KoProperty::Set &)));
-
     QObject::connect(m_scene, SIGNAL(clicked()), this, (SLOT(slotSceneClicked())));
     QObject::connect(m_scene, SIGNAL(lostFocus()), this, (SLOT(slotSceneLostFocus())));
 
@@ -96,8 +94,6 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     glayout->addWidget(m_sectionRuler, 1, 0);
     glayout->addWidget(m_sceneView , 1, 1);
     glayout->addWidget(m_resizeBar, 2, 0, 1, 2);
-
-    m_title->setMinimumWidth(m_reportDesigner->pageWidthPx() + m_sectionRuler->frameSize().width());
 
     setLayout(glayout);
     slotResizeBarDragged(0);
@@ -115,7 +111,6 @@ void ReportSection::setTitle(const QString & s)
 
 void ReportSection::slotResizeBarDragged(int delta)
 {
-
     if (m_sceneView->designer() && m_sceneView->designer()->propertySet()->property("PageSize").value().toString() == "Labels") {
         return; // we don't want to allow this on reports that are for labels
     }
@@ -155,8 +150,6 @@ void ReportSection::buildXML(QDomDocument & doc, QDomElement & section)
             it != list.end(); it++) {
         ReportEntity::buildXML((*it), doc, section);
     }
-
-
 }
 
 void ReportSection::initFromXML(QDomNode & section)
@@ -236,19 +229,19 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
 void ReportSection::slotSceneClicked()
 {
-    m_title->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_title->update();
     m_reportDesigner->changeSet(m_sectionData->properties());
 }
 
 void ReportSection::slotSceneLostFocus()
 {
-    m_title->setFrameStyle(QFrame::Panel | QFrame::Raised);
+  m_reportDesigner->setActiveScene(0);
+  m_title->update();  
 }
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug();
-    //Handle Position
+    //Handle Background Color
     if (p.name() == "BackgroundColor") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());
     }
@@ -280,10 +273,8 @@ void ReportResizeBar::mouseMoveEvent(QMouseEvent * e)
 
 ReportSectionTitle::ReportSectionTitle(QWidget*parent) : QLabel(parent)
 {
-    setFrameStyle(QFrame::Panel | QFrame::Raised);
-    //setMaximumHeight(minimumSizeHint().height());
-    //setMinimumHeight(minimumSizeHint().height());
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
@@ -292,19 +283,23 @@ ReportSectionTitle::~ReportSectionTitle()
 
 }
 
-void ReportSectionTitle::mouseDoubleClickEvent(QMouseEvent * event)
-{
-    emit(doubleClicked());
-}
-
 void ReportSectionTitle::paintEvent(QPaintEvent * event)
 {
     QPainter painter(this);
     KColorScheme colorScheme(QPalette::Active);
-
+    
     QLinearGradient linearGrad(QPointF(0, 0), QPointF(width(), 0));
-    linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor));
-    linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor));
+    
+    ReportSection* _section = dynamic_cast<ReportSection*>(parent());
+
+    if (_section->m_scene->hasFocus()) {
+      linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor));
+      linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor));
+    }
+    else {
+      linearGrad.setColorAt(0, colorScheme.background(KColorScheme::NormalBackground));
+      linearGrad.setColorAt(1, colorScheme.foreground(KColorScheme::InactiveText));
+    }
      
     painter.fillRect(rect(), linearGrad);
     QLabel::paintEvent(event);

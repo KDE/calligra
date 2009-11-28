@@ -110,7 +110,7 @@ void ReportRectEntity::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     //Keep the size and position in sync
     m_ppos->setScenePos(pos());
     m_psize->setSceneSize(QSizeF(rect().width(), rect().height()));
-    m_reportDesigner->changeSet(m_pset);
+
     QGraphicsItem::mouseReleaseEvent(event);
 }
 

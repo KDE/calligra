@@ -87,7 +87,8 @@ protected:
 
 private:
     KRSectionData *m_sectionData;
-
+    
+    friend class ReportSectionTitle;
 };
 
 class ReportResizeBar : public QFrame
@@ -113,11 +114,7 @@ public:
     ~ReportSectionTitle();
 
 protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent * event);
     virtual void paintEvent(QPaintEvent* event);
-    
-signals:
-    void doubleClicked();
 };
 
 #endif
