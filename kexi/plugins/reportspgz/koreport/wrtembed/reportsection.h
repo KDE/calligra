@@ -30,6 +30,7 @@
 #include <koproperty/Property.h>
 #include <krsectiondata.h>
 #include <QGraphicsScene>
+
 #include "reportscene.h"
 
 typedef QList<QGraphicsItem*> QGraphicsItemList;
@@ -98,8 +99,6 @@ public:
 
 signals:
     void barDragged(int delta);
-    void barPress();
-    void barRelease();
     
 protected:
     void mouseMoveEvent(QMouseEvent * e);

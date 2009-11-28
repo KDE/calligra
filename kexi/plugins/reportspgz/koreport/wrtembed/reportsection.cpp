@@ -59,6 +59,8 @@
 ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
         : QWidget(rptdes)
 {
+    Q_UNUSED(name)
+    
     m_sectionData = new KRSectionData();
     QObject::connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
     int dpiY = KoDpi::dpiY();
@@ -123,11 +125,9 @@ void ReportSection::slotResizeBarDragged(int delta)
     m_sectionRuler->setRulerLength(h);
 
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
-    //sceneview->setSceneRect(0, 0, scene->width(), h);
     m_sceneView->resizeContents(QSize(m_scene->width(), h));
 
     m_reportDesigner->setModified(true);
-    //_rd->adjustSize();
 }
 
 void ReportSection::buildXML(QDomDocument & doc, QDomElement & section)
@@ -205,6 +205,8 @@ QSize ReportSection::sizeHint() const
 
 void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 {
+    Q_UNUSED(set)
+    
     KoUnit unit = m_reportDesigner->pageUnit();
 
     //update items position with unit
@@ -234,6 +236,8 @@ void ReportSection::slotSceneClicked()
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
+    Q_UNUSED(s)
+    
     //Handle Background Color
     if (p.name() == "BackgroundColor") {
         m_scene->setBackgroundBrush(p.value().value<QColor>());
@@ -250,10 +254,11 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
 ReportResizeBar::ReportResizeBar(QWidget * parent, Qt::WFlags f)
         : QFrame(parent, f)
 {
-    setMinimumHeight(5);
-    setMaximumHeight(5);
+    //setMinimumHeight(5);
+    //setMaximumHeight(5);
     setCursor(QCursor(Qt::SizeVerCursor));
     setFrameStyle(QFrame::HLine);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 }
 
 void ReportResizeBar::mouseMoveEvent(QMouseEvent * e)
@@ -286,12 +291,12 @@ void ReportSectionTitle::paintEvent(QPaintEvent * event)
     ReportSection* _section = dynamic_cast<ReportSection*>(parent());
 
     if (_section->m_scene == _section->m_reportDesigner->activeScene()) {
-      linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor));
-      linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor));
+      linearGrad.setColorAt(0, colorScheme.decoration(KColorScheme::HoverColor).color());
+      linearGrad.setColorAt(1, colorScheme.decoration(KColorScheme::FocusColor).color());
     }
     else {
-      linearGrad.setColorAt(0, colorScheme.background(KColorScheme::NormalBackground));
-      linearGrad.setColorAt(1, colorScheme.foreground(KColorScheme::InactiveText));
+      linearGrad.setColorAt(0, colorScheme.background(KColorScheme::NormalBackground).color());
+      linearGrad.setColorAt(1, colorScheme.foreground(KColorScheme::InactiveText).color());
     }
      
     painter.fillRect(rect(), linearGrad);
