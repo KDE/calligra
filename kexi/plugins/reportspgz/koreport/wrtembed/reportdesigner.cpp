@@ -1068,7 +1068,7 @@ void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCont
         popCut = pop.addAction(i18n("Cut"));
         popCopy = pop.addAction(i18n("Copy"));
     }
-    if (m_sectionData->copy_list.count() > 0)
+    if (!m_sectionData->copy_list.isEmpty())
         popPaste = pop.addAction(i18n("Paste"));
 
     if (itemsSelected) {
@@ -1294,7 +1294,7 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
 {
     Q_UNUSED(pos);
     // paste a new item of the copy we have in the specified location
-    if (m_sectionData->copy_list.count() > 0) {
+    if (!m_sectionData->copy_list.isEmpty()) {
         QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
@@ -1390,6 +1390,7 @@ QString ReportDesigner::suggestEntityName(const QString &n) const
     ReportSection *sec;
     int itemCount = 0;
     //Count items in the main sections
+//! @todo use const int value somewhere instead of 12?
     for (int i = 1; i <= 12; ++i) {
         sec = getSection((KRSectionData::Section) i);
         if (sec) {
