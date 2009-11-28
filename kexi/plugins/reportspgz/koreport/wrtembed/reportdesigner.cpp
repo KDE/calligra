@@ -1391,7 +1391,7 @@ QString ReportDesigner::suggestEntityName(const QString &n) const
     int itemCount = 0;
     //Count items in the main sections
 //! @todo use const int value somewhere instead of 12?
-    for (int i = 1; i <= 12; ++i) {
+    for (int i = 1; i <= KRSectionData::PageFootAny; ++i) {
         sec = getSection((KRSectionData::Section) i);
         if (sec) {
             const QGraphicsItemList l = sec->items();
