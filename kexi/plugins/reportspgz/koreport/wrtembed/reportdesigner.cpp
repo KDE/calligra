@@ -890,8 +890,8 @@ void ReportDesigner::createProperties()
     m_set->addProperty(m_interpreter);
     m_set->addProperty(m_script);
     
-    KoProperty::Property* _customHeight;
-    KoProperty::Property* _customWidth;
+//    KoProperty::Property* _customHeight;
+//    KoProperty::Property* _customWidth;
 
 }
 
