@@ -133,7 +133,7 @@ void ShowColRow::slotDoubleClicked(QListWidgetItem *)
 void ShowColRow::slotOk()
 {
   Region region;
-  for(unsigned int i=0; i < list->count(); i++)
+  for(unsigned int i=0; i < (unsigned int)list->count(); i++)
   {
     if (list->item(i)->isSelected())
     {
