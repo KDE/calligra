@@ -48,9 +48,30 @@
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
 #include <KColorScheme>
+#include <QBitmap>
 
 #include <kdebug.h>
 
+static char *arrow_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    11    12       2            1",
+/* colors */
+". c None",
+"# c #555555",
+/*   data   */
+"...........",
+"...#####...",
+"...#####...",
+"...#####...",
+"...#####...",
+"...#####...",
+"###########",
+".#########.",
+"..#######.-",
+"...#####...",
+"....###....",
+".....#....."
+};
 
 //
 // ReportSection method implementations
@@ -272,6 +293,7 @@ ReportSectionTitle::ReportSectionTitle(QWidget*parent) : QLabel(parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFrameStyle(QFrame::Panel | QFrame::Raised);
     setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setMinimumHeight(20);
 }
 
 ReportSectionTitle::~ReportSectionTitle()
@@ -298,5 +320,11 @@ void ReportSectionTitle::paintEvent(QPaintEvent * event)
     }
      
     painter.fillRect(rect(), linearGrad);
-    QLabel::paintEvent(event);
+    
+    painter.setPen(Qt::black);
+    painter.setBackgroundMode(Qt::TransparentMode);
+    painter.drawPixmap(QPoint(25,(height() - 12) / 2), QPixmap(arrow_xpm));
+    
+    painter.drawText(rect().adjusted(40, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, text());
+    QFrame::paintEvent(event);
 }
