@@ -312,7 +312,10 @@ SvgGradientHelper* SvgParser::findGradient( const QString &id, const QString &hr
     if( !m_defs.contains( id ) )
         return 0L;
 
-    KoXmlElement e = m_defs[ id ];
+    const KoXmlElement &e = m_defs[ id ];
+    if(!e.tagName().contains("Gradient"))
+        return 0L;
+    
     if(e.childNodesCount() == 0)
     {
         QString mhref = e.attribute("xlink:href").mid(1);
@@ -355,6 +358,9 @@ SvgPatternHelper* SvgParser::findPattern( const QString &id )
     SvgPatternHelper pattern;
     
     const KoXmlElement &e = m_defs[ id ];
+    if(e.tagName() != "pattern")
+        return 0;
+    
     // are we referencing another pattern ?
     if (e.hasAttribute("xlink:href")) {
         QString mhref = e.attribute("xlink:href").mid(1);
@@ -533,8 +539,11 @@ double SvgParser::parseUnitXY( const QString &unit )
     }
 }
 
-void SvgParser::parseColor( QColor &color, const QString &s )
+bool SvgParser::parseColor( QColor &color, const QString &s )
 {
+    if( s.isEmpty() || s == "none")
+        return false;
+    
     if( s.startsWith( "rgb(" ) )
     {
         QString parse = s.trimmed();
@@ -573,6 +582,8 @@ void SvgParser::parseColor( QColor &color, const QString &s )
         // QColor understands #RRGGBB and svg color names
         color.setNamedColor( s.trimmed() );
     }
+    
+    return true;
 }
 
 void SvgParser::parseColorStops( QGradient *gradient, const KoXmlElement &e )
@@ -907,7 +918,7 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
         else if( params.startsWith( "url(" ) )
         {
             unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.lastIndexOf(')');
+            unsigned int end = params.indexOf(')', start);
             QString key = params.mid( start, end - start );
             // try to find referenced gradient
             SvgGradientHelper * gradHelper = findGradient( key );
@@ -929,9 +940,14 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
                 }
                 else
                 {
-                    // no referenced fill found, reset fill
-                    gc->fillType = SvgGraphicsContext::None;
+                    // no referenced fill found -> reset fill id 
                     gc->fillId.clear();
+                    kDebug() << params.mid(end+1).trimmed();
+                    // check if there is a fallback color
+                    if( parseColor(fillcolor, params.mid(end+1).trimmed()) )
+                        gc->fillType = SvgGraphicsContext::Solid;
+                    else
+                        gc->fillType = SvgGraphicsContext::None;
                 }
             }
         }
@@ -958,7 +974,7 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
         else if( params.startsWith( "url(" ) )
         {
             unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.lastIndexOf(')');
+            unsigned int end = params.indexOf(')', start);
             QString key = params.mid( start, end - start );
             // try to find referenced gradient
             SvgGradientHelper * gradHelper = findGradient( key );
@@ -970,9 +986,13 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
             }
             else
             {
-                // no referenced stroke found, reset stroke
-                gc->strokeType = SvgGraphicsContext::None;
+                // no referenced stroke found -> reset stroke id 
                 gc->strokeId.clear();
+                // check if there is a fallback color
+                if( parseColor(strokecolor, params.mid(end+1).trimmed()) )
+                    gc->fillType = SvgGraphicsContext::Solid;
+                else
+                    gc->fillType = SvgGraphicsContext::None;
             }
         }
         else
@@ -1155,7 +1175,7 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
         if( params != "none" && params.startsWith( "url(" ) )
         {
             unsigned int start = params.indexOf('#') + 1;
-            unsigned int end = params.lastIndexOf(')');
+            unsigned int end = params.indexOf(')', start);
             gc->filterId = params.mid( start, end - start );
         }
     }

@@ -86,7 +86,7 @@ protected:
     /// parses a length attribute in xy-direction
     double parseUnitXY( const QString &unit );
     /// Parses a color attribute
-    void parseColor( QColor &, const QString & );
+    bool parseColor( QColor &, const QString & );
     /// Parses a transform attribute
     QMatrix parseTransform( const QString &transform );
     /// Parse a image
