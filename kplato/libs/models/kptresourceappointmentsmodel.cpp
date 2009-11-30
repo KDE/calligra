@@ -1946,6 +1946,13 @@ AppointmentInterval *ResourceAppointmentsRowModel::interval( const QModelIndex &
     return 0;
 }
 
+Node *ResourceAppointmentsRowModel::node( const QModelIndex &idx ) const
+{
+    Appointment *a = appointment( idx );
+    return ( a && a->node() ? a->node()->node() : 0 );
+}
+
+
 //---------------------------------------------
 ResourceAppointmentsGanttModel::ResourceAppointmentsGanttModel( QObject *parent )
     : ResourceAppointmentsRowModel( parent )

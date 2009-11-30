@@ -924,9 +924,27 @@ void ResourceAppointmentsGanttView::setupGui()
     createOptionAction();
 }
 
+Node *ResourceAppointmentsGanttView::currentNode() const
+{
+    QModelIndex idx = treeView()->selectionModel()->currentIndex();
+    return m_model->node( idx );
+}
+
 void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
 {
     kDebug();
+    QString name;
+    if ( idx.isValid() ) {
+        Node *n = m_model->node( idx );
+        if ( n ) {
+            name = "taskview_popup";
+        }
+    }
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    emit requestPopupMenu( name, pos );
 }
 
 void ResourceAppointmentsGanttView::slotOptions()
