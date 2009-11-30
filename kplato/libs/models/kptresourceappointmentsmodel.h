@@ -209,6 +209,9 @@ public:
     QModelIndex index( Resource *r ) const;
     QModelIndex index( Appointment *a ) const;
 
+    /// If @p idx is an appointment, return the node, else 0
+    Node *node( const QModelIndex &idx ) const;
+    
     class Private;
 
 protected slots:

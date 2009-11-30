@@ -344,6 +344,8 @@ public:
 
     GanttTreeView *treeView() const { return static_cast<GanttTreeView*>( m_gantt->leftView() ); }
 
+    Node *currentNode() const;
+
 signals:
     void itemDoubleClicked();
 
