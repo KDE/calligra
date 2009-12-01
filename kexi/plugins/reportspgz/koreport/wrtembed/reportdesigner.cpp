@@ -1225,9 +1225,7 @@ void ReportDesigner::slotEditCut()
     if (selectionCount() > 0) {
         //First delete any items that are curerntly in the list
         //so as not to leak memory
-        for (int i = 0; i < m_sectionData->cut_list.count(); i++) {
-            delete m_sectionData->cut_list[i];
-        }
+        qDeleteAll(m_sectionData->cut_list);
         m_sectionData->cut_list.clear();
 
         QGraphicsItem * item = activeScene()->selectedItems().first();
