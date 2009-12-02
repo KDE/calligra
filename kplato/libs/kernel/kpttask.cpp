@@ -1004,7 +1004,9 @@ DateTime Task::calculateEarlyFinish(int use) {
                 cs->earlyStart = workTimeAfter( cs->earlyStart );
                 m_durationForward = duration(cs->earlyStart, use, false);
                 m_earlyFinish = cs->earlyStart + m_durationForward;
+#ifndef NDEBUG
                 cs->logDebug("ASAP/ALAP: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + m_earlyFinish.toString() );
+#endif
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->earlyStart;
                     cs->endTime = m_earlyFinish;
@@ -1014,7 +1016,9 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->setAllowOverbooking( true );
                     m_durationForward = duration(cs->earlyStart, use, false);
                     cs->setAllowOverbooking( false );
+#ifndef NDEBUG
                     cs->logDebug("ASAP/ALAP earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
+#endif
                 }
                 break;
             }
@@ -1056,7 +1060,9 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->setAllowOverbooking( true );
                     m_durationForward = duration(cs->earlyStart, use, false);
                     cs->setAllowOverbooking( false );
+#ifndef NDEBUG
                     cs->logDebug("MSO/SNE earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
+#endif
                 }
                 break;
             }
@@ -1217,7 +1223,9 @@ DateTime Task::calculateLateStart(int use) {
                 cs->lateFinish = workTimeBefore( cs->lateFinish );
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 m_lateStart = cs->lateFinish - m_durationBackward;
+#ifndef NDEBUG
                 cs->logDebug("ASAP/ALAP: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + m_lateStart.toString() );
+#endif
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_lateStart;
                     cs->endTime = cs->lateFinish;
@@ -1227,7 +1235,9 @@ DateTime Task::calculateLateStart(int use) {
                     cs->setAllowOverbooking( true );
                     m_durationBackward = duration(cs->lateFinish, use, true);
                     cs->setAllowOverbooking( false );
+#ifndef NDEBUG
                     cs->logDebug("ASAP/ALAP latest start possible: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + (cs->lateFinish-m_durationBackward).toString() );
+#endif
                 }
                 break;
             case Node::MustStartOn:
@@ -1426,7 +1436,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             // cs->startTime calculated above
             //kDebug()<<m_name<<"ASAP:"<<cs->startTime<<"earliest:"<<cs->earlyStart;
             cs->startTime = workTimeAfter( cs->startTime, cs );
+#ifndef NDEBUG
             cs->logDebug( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
+#endif
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
@@ -1783,18 +1795,24 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->schedulingError = true;
                 cs->negativeFloat = e - cs->lateFinish;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+#ifndef NDEBUG
                 cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
+#endif
             } else if ( e > cs->endTime ) {
                 cs->schedulingError = true;
                 cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to schedule within successors start time",  constraintToString() ) );
+#ifndef NDEBUG
                 cs->logDebug( "ASAP: succ. start=" + cs->endTime.toString() + " end time=" + e.toString() );
+#endif
             }
             if ( cs->lateFinish > e ) {
                 DateTime w = workTimeBefore( cs->lateFinish );
                 if ( w > e ) {
                     cs->positiveFloat = w - e;
                 }
+#ifndef NDEBUG
                 cs->logDebug( "ASAP: positiveFloat=" + cs->positiveFloat.toString() );
+#endif
             }
             cs->endTime = e;
             makeAppointments();
@@ -1811,10 +1829,14 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+#ifndef NDEBUG
                 cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
+#endif
             } else if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
+#ifndef NDEBUG
                 cs->logDebug( "ALAP: positiveFloat=" + cs->positiveFloat.toString() );
+#endif
             }
             //kDebug()<<m_name<<": lateStart="<<cs->startTime;
             makeAppointments();
@@ -2053,7 +2075,9 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
     }
     if (!time.isValid()) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Calculate duration: Start time is not valid" );
+#endif
         return Duration::zeroDuration;
     }
     //kDebug()<<m_name<<": Use="<<use;
@@ -2102,15 +2126,21 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
     
     Duration l;
     if ( duration == Duration::zeroDuration ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Calculate length: estimate == 0" );
+#endif
         return l;
     }
     Calendar *cal = m_estimate->calendar();
     if ( cal == 0) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Calculate length: No calendar, return estimate " + duration.toString() );
+#endif
         return duration;
     }
+#ifndef NDEBUG
     m_currentSchedule->logDebug( "Calculate length from: " + time.toString() );
+#endif
     DateTime logtime = time;
     bool sts=true;
     bool match = false;
@@ -2136,8 +2166,9 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         }
     }
     if ( ! match ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
-        
+#endif
         logtime = start;
         for (int i=0; !match && i < 24; ++i) {
             // hours
@@ -2158,8 +2189,9 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
-        
+#endif
         logtime = start;
         for (int i=0; !match && i < 60; ++i) {
             //minutes
@@ -2180,8 +2212,9 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" l="<<l.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
-        
+#endif
         logtime = start;
         for (int i=0; !match && i < 60 && sts; ++i) {
             //seconds
@@ -2201,8 +2234,9 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         }
     }
     if ( ! match ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " l " + l.toString() + " (" + (duration - l).toString() + ')' );
-        
+#endif
         for (int i=0; !match && i < 1000; ++i) {
             //milliseconds
             end.setTime(end.time().addMSecs(inc));
@@ -2214,7 +2248,9 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 l += l1;
                 match = true;
             } else {
+#ifndef NDEBUG
                 m_currentSchedule->logDebug( "Got more than asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+#endif
                 break;
             }
             //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
@@ -2234,13 +2270,17 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 t = cal->firstAvailableBefore(end, projectNode()->constraintStartTime());
             }
         }
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Moved end to work: " + end.toString() + " -> " + t.toString() );
+#endif
     }
     end = t.isValid() ? t : time;
     //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_name<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" duration:"<<duration.toString(Duration::Format_Day);
     l = end>time ? end-time : time-end;
     if ( match ) {
+#ifndef NDEBUG
         m_currentSchedule->logDebug( "Calculated length: " + time.toString() + " - " + end.toString() + " = " + l.toString() );
+#endif
     }
     return l;
 }
