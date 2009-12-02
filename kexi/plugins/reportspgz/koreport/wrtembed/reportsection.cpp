@@ -81,9 +81,10 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
         : QWidget(rptdes)
 {
     Q_UNUSED(name)
-    
+
     m_sectionData = new KRSectionData();
-    QObject::connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
     int dpiY = KoDpi::dpiY();
 
     m_reportDesigner = rptdes;
@@ -264,7 +265,8 @@ void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property
         m_scene->setBackgroundBrush(p.value().value<QColor>());
     }
 
-    if (m_reportDesigner) m_reportDesigner->setModified(true);
+    if (m_reportDesigner)
+        m_reportDesigner->setModified(true);
 
     m_scene->update();
 }

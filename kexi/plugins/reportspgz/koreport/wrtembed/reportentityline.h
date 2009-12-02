@@ -59,7 +59,7 @@ protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     
 private slots:
-    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
+    void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

@@ -54,7 +54,8 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     if (s)
         s->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -151,7 +152,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
     parent.appendChild(entity);
 }
 
-void ReportEntityLine::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     //TODO KoProperty does not support QPointF
     if (p.name() == "Start") {

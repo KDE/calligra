@@ -199,7 +199,8 @@ void ReportDesigner::init()
     connect(d->pageButton, SIGNAL(released()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*m_set);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     changeSet(m_set);
 }

@@ -44,7 +44,8 @@ void ReportEntityText::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
 
@@ -181,7 +182,7 @@ void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 }
 
 
-void ReportEntityText::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityText::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     kDebug();
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
@@ -200,6 +201,8 @@ void ReportEntityText::propertyChanged(KoProperty::Set &s, KoProperty::Property 
 
     //setSceneRect(_pos.toScene(), _size.toScene());
 
-    if (m_reportDesigner) m_reportDesigner->setModified(true);
-    if (scene()) scene()->update();
+    if (m_reportDesigner)
+        m_reportDesigner->setModified(true);
+    if (scene())
+        scene()->update();
 }

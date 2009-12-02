@@ -43,7 +43,8 @@ void ReportEntityLabel::init(QGraphicsScene * scene)
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     kDebug() << getTextRect();
 
-    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -173,7 +174,7 @@ void ReportEntityLabel::buildXML(QDomDocument & doc, QDomElement & parent)
     parent.appendChild(entity);
 }
 
-void ReportEntityLabel::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityLabel::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {

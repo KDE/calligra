@@ -44,7 +44,8 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setMaxLength(5);
     ReportRectEntity::init(&m_pos, &m_size, m_set);
@@ -163,9 +164,9 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
     parent.appendChild(entity);
 }
 
-void ReportEntityBarcode::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityBarcode::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << "ReportEntityBarcode::propertyChanged " << s.typeName() << ":" << p.name();
+    kDebug() << s.typeName() << ":" << p.name();
 
     //Handle Position
     if (p.name() == "Position") {

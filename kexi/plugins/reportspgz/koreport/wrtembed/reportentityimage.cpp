@@ -49,7 +49,8 @@ void ReportEntityImage::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -151,7 +152,7 @@ void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
     parent.appendChild(entity);
 }
 
-void ReportEntityImage::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityImage::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     kDebug() << s.typeName() << ":" << p.name() << ":" << p.value();
 

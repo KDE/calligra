@@ -44,7 +44,8 @@ void ReportEntityChart::init(QGraphicsScene* scene, ReportDesigner *designer)
     if (scene)
         scene->addItem(this);
 
-    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)),
+        this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
@@ -212,7 +213,7 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     parent.appendChild(entity);
 }
 
-void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
+void ReportEntityChart::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     kDebug() << s.typeName() << ":" << p.name() << ":" << p.value();
 

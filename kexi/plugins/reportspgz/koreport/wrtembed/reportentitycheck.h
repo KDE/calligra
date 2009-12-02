@@ -25,7 +25,7 @@ private:
     void init(QGraphicsScene*);
 
 private slots:
-    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
+    void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
