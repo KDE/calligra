@@ -161,8 +161,8 @@ void TableTool::activate( bool temporary )
 
 void TableTool::deactivate()
 {
-    d->tableShape = 0;
     CellToolBase::deactivate();
+    d->tableShape = 0;
 }
 
 QPointF TableTool::offset() const
