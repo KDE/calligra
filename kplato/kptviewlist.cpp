@@ -191,6 +191,16 @@ void ViewListItem::save( QDomElement &element ) const
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
     : QTreeWidget( parent )
 {
+    setWhatsThis( i18nc( "@info:whatsthis",
+        "<para>This is the list of available views and editors.</para>"
+        "<para>You can configure the list by using the context menu:"
+        "<list>"
+        "<item>Rename categories or views</item>"
+        "<item>Configure. Move, remove, rename or edit tool tip for categories or views</item>"
+        "<item>Insert categories and views</item>"
+        "</list>"
+    ) );
+
     header() ->hide();
     setRootIsDecorated( false );
     setItemDelegate( new ViewCategoryDelegate( this, this ) );
