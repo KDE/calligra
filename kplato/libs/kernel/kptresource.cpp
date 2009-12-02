@@ -702,20 +702,27 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 {
     Q_ASSERT( m_currentSchedule );
     DateTimeInterval interval( start, end );
+#ifndef NDEBUG
     if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available in interval: %1" ).arg( interval.toString() ) );
-
+#endif
     DateTimeInterval x = interval.limitedTo( m_availableFrom, m_availableUntil );
     if ( calendar() == 0 ) {
+#ifndef NDEBUG
         if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available: no calendar, %1" ).arg( x.toString() ) );
+#endif
         return x;
     }
     DateTimeInterval i = m_currentSchedule->firstBookedInterval( x, node );
     if ( i.isValid() ) {
+#ifndef NDEBUG
         if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available: booked, %1" ).arg( i.toString() ) );
+#endif
         return i; 
     }
     i = calendar()->firstInterval(x.first, x.second, m_currentSchedule);
+#ifndef NDEBUG
     if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required first available in %1:  %2" ).arg( x.toString() ).arg( i.toString() ) );
+#endif
     return i;
 }
 
@@ -731,10 +738,12 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return;
     }
+#ifndef NDEBUG
     if ( m_currentSchedule ) {
         QStringList lst; foreach ( Resource *r, required ) { lst << r->name(); }
         m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ) );
     }
+#endif
     DateTime time = from;
     while (time < end) {
         //kDebug()<<time<<" to"<<end;
@@ -832,10 +841,6 @@ Duration Resource::effort( const DateTime &start, const Duration &duration, bool
 // the amount of effort we can do within the duration
 Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required, bool *ok) const {
     //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
-    if ( sch ) {
-        QStringList lst; foreach ( Resource *r, required ) { lst << r->name(); }
-        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( lst.isEmpty() ? "" : lst.join(",") ) );
-    }
     bool sts=false;
     Duration e;
     if (duration == 0) {
@@ -861,10 +866,14 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         }
         if (t.isValid()) {
             sts = true;
-            if ( t < limit && sch ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
+#ifndef NDEBUG
+            if ( sch && t < limit && sch ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
+#endif
             e = (cal->effort(limit, t, sch) * m_units)/100;
         } else {
-            sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
+#ifndef NDEBUG
+            if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
+#endif
         }
     } else {
         DateTime limit = start + duration;
@@ -880,17 +889,21 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         }
         if (t.isValid()) {
             sts = true;
-            if ( t > limit && sch ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
+#ifndef NDEBUG
+            if ( sch && t > limit && sch ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
+#endif
             e = (cal->effort(t, limit, sch) * m_units)/100;
         } else {
-            sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
+#ifndef NDEBUG
+            if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
+#endif
         }
     }
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
     if (ok) *ok = sts;
-    if ( sch ) {
-        sch->logDebug( QString( "Resource %1 effort: %2 for %3 hours = %4" ).arg( m_name ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
-    }
+#ifndef NDEBUG
+    if ( sch ) sch->logDebug( QString( "effort: %2 for %3 hours = %4" ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
+#endif
     return e;
 }
 
@@ -946,14 +959,20 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
         return t;
     }
     if (!m_availableUntil.isValid()) {
-        sch->logDebug( "availabelUntil is invalid" );
+#ifndef NDEBUG
+        if ( sch ) sch->logDebug( "availabelUntil is invalid" );
+#endif
         t = time;
     } else {
         t = m_availableUntil < time ? m_availableUntil : time;
     }
-    if ( t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
+#ifndef NDEBUG
+    if ( sch && t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
+#endif
     t = cal->firstAvailableBefore(t, lmt, sch );
-    if ( t.isValid() && t < lmt ) sch->logDebug( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
+#ifndef NDEBUG
+    if ( sch && t.isValid() && t < lmt ) sch->logDebug( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
+#endif
     return t;
 }
 
@@ -1460,6 +1479,9 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
 
 DateTime ResourceGroupRequest::workTimeAfter(const DateTime &time, Schedule *ns) {
     DateTime start;
+    if ( m_resourceRequests.isEmpty() ) {
+        return start;
+    }
     foreach (ResourceRequest *r, m_resourceRequests) {
         DateTime t = r->workTimeAfter( time, ns );
         if (t.isValid() && (!start.isValid() || t < start))
@@ -1473,6 +1495,9 @@ DateTime ResourceGroupRequest::workTimeAfter(const DateTime &time, Schedule *ns)
 
 DateTime ResourceGroupRequest::workTimeBefore(const DateTime &time, Schedule *ns) {
     DateTime end;
+    if ( m_resourceRequests.isEmpty() ) {
+        return end;
+    }
     foreach (ResourceRequest *r, m_resourceRequests) {
         DateTime t = r->workTimeBefore( time, ns );
         if (t.isValid() && (!end.isValid() ||t > end))
@@ -1485,6 +1510,9 @@ DateTime ResourceGroupRequest::workTimeBefore(const DateTime &time, Schedule *ns
 
 DateTime ResourceGroupRequest::availableAfter(const DateTime &time, Schedule *ns) {
     DateTime start;
+    if ( m_resourceRequests.isEmpty() ) {
+        return start;
+    }
     foreach (ResourceRequest *r, m_resourceRequests) {
         DateTime t = r->availableAfter(time, ns);
         if (t.isValid() && (!start.isValid() || t < start))
@@ -1498,6 +1526,9 @@ DateTime ResourceGroupRequest::availableAfter(const DateTime &time, Schedule *ns
 
 DateTime ResourceGroupRequest::availableBefore(const DateTime &time, Schedule *ns) {
     DateTime end;
+    if ( m_resourceRequests.isEmpty() ) {
+        return end;
+    }
     foreach (ResourceRequest *r, m_resourceRequests) {
         DateTime t = r->availableBefore(time, ns);
         if (t.isValid() && (!end.isValid() || t > end))
@@ -1940,8 +1971,9 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
     }
     if ( ! match ) {
-        ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
+#ifndef NDEBUG
+        if ( ns ) ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+#endif
         logtime = start;
         d = Duration(0, 1, 0); // 1 hour
         for (int i=0; !match && i < 24; ++i) {
@@ -1963,8 +1995,9 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
+#ifndef NDEBUG
+        if ( ns ) ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+#endif
         logtime = start;
         d = Duration(0, 0, 1); // 1 minute
         for (int i=0; !match && i < 60; ++i) {
@@ -1986,8 +2019,9 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
+#ifndef NDEBUG
+        if ( ns ) ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+#endif
         logtime = start;
         d = Duration(0, 0, 0, 1); // 1 second
         for (int i=0; !match && i < 60 && sts; ++i) {
@@ -2008,8 +2042,9 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
     }
     if ( ! match ) {
-        ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
-        
+#ifndef NDEBUG
+        if ( ns ) ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+#endif
         d = Duration(0, 0, 0, 0, 1); // 1 millisecond
         for (int i=0; !match && i < 1000; ++i) {
             //milliseconds
