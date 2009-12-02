@@ -33,6 +33,8 @@ RecalculateDialogImpl::RecalculateDialogImpl (QWidget *parent)
     ct.setTime( QTime( ct.time().hour(), ct.time().minute() ) ); // clear secs/msecs
     dateTimeEdit->setDateTime( ct );
     btnCurrent->setChecked( true );
+    dateTimeEdit->setEnabled( false );
+    connect( btnFrom, SIGNAL( toggled( bool ) ), dateTimeEdit, SLOT( setEnabled( bool ) ) );
 }
 
 
