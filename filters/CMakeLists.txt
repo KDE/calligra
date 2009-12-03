@@ -36,6 +36,7 @@ set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
 macro_optional_add_subdirectory( generic_wrapper )
 macro_optional_add_subdirectory( libkowmf )
+macro_optional_add_subdirectory( libmsooxml )
 
 if(SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)

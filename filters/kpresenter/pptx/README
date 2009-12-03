@@ -1,0 +1,22 @@
+This is the MS Office PowerPoint 12+ import/export filter for KPresenter
+
+<temporary>
+A. Important styles inserted by hand into styles.xml, within:
+- office:styles
+- office:automatic-styles
+- office:master-styles
+
+B. .. and into content.xml, within:
+- office:automatic-styles
+
+C. Ids changed to match the generated elements:
+sample.odp:                generated:
+----------                 ---------
+dp1 (drawing-page)     ->  A1
+dp3 (drawing-page)     ->  A2
+
+D. PptxXmlSlideReader: we expect two draw:frame elements per page:
+- the first has hardcoded presentation:style-name="pr1"
+- the second has hardcoded presentation:style-name="pr2"
+
+</temporary>

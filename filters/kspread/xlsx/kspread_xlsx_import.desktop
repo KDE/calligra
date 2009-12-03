@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Name=MS Excel 2007 Import Filter for KSpread
+X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
+X-KDE-Import=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template
+X-KDE-Weight=1
+X-KDE-Library=libxlsximport
+X-KDE-LibraryMajor=0
+X-KDE-LibraryMinor=1
+X-KDE-LibraryDependencies=
+X-KDE-ServiceTypes=KOfficeFilter

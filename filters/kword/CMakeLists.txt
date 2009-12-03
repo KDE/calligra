@@ -45,3 +45,4 @@ if(WV2_FOUND)
 	add_subdirectory(msword-odf)
 endif(WV2_FOUND)
 
+add_subdirectory( docx )

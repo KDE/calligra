@@ -9,6 +9,7 @@ add_subdirectory( gnumeric )
 add_subdirectory( opencalc )
 add_subdirectory( qpro )
 add_subdirectory( excel )
+add_subdirectory( xlsx )
 
 if(NOT WIN32)
     add_subdirectory( html )

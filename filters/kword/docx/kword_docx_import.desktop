@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Name=MS Word 2007 Import Filter for KWord
+X-KDE-Export=application/vnd.oasis.opendocument.text
+X-KDE-Import=application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template
+X-KDE-Weight=1
+X-KDE-Library=libdocximport
+X-KDE-LibraryMajor=0
+X-KDE-LibraryMinor=1
+X-KDE-LibraryDependencies=
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,0 +1,43 @@
+This is the MS Office Word 12+ import/export filter for KWord
+
+Started on May 2009
+
+Naming convention:
+We call it "docx" because the format differs from the real OpenXML format
+approved by ISO as ISO/IEC 29500:2008.
+
+More information:
+*http://en.wikipedia.org/wiki/OpenXML
+
+Reference sample documents:
+*simple: http://openxmldeveloper.org/articles/OpenXMLsamples.aspx
+*advanced: http://openxmldeveloper.org/articles/DeveloperWorkshopContent.aspx
+*http://katana.oooninja.com/w/reference_sample_documents
+*http://odf-converter.sourceforge.net/documentation.html
+
+Format specifications document:
+*Free, from ECMA - http://www.ecma-international.org/publications/standards/Ecma-376.htm.
+ The ISO approval process changed the specifications, but MS Office 2007 format, 
+ if implemented with compliance to any paper, it is compliant with the ECMA documents.
+**Documentation used so far in KOffice implementation:
+***ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference.pdf
+*Paid from ISO:
+ http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=51463 
+ but as already said, ISO/IEC 29500:2008 heavily differs from MS Office 2007 format,
+ so it is safe ignore it to date.
+
+other projects/documents:
+*odf-converter project:
+**http://odf-converter.svn.sourceforge.net/viewvc/odf-converter/trunk/docs/Developer documentation/
+***http://odf-converter.svn.sourceforge.net/viewvc/odf-converter/trunk/docs/Developer documentation/ConversionMap-Wordprocessing-OpenDocument-OpenXML.xls
+***http://odf-converter.svn.sourceforge.net/viewvc/odf-converter/trunk/docs/Developer documentation/ConversionMap-Wordprocessing-OpenXML-OpenDocument.xls
+***MSOOXML-to-ODF xsl files: http://odf-converter.svn.sourceforge.net/viewvc/odf-converter/trunk/source/Word/Converter/resources/oox2odf/
+*docx4j project (an open source Java library for manipulating OpenXML WordprocessingML documents):
+**http://dev.plutext.org/blog/category/docx4j/
+
+More on "MSOOXML!=OOXML" flaws:
+*http://ooxmlisdefectivebydesign.blogspot.com/
+*google for more yourself...
+
+Notes:
+*odf-converter merges the xml parts of the input file and thus following XSLT query like key('Part', 'word/document.xml') is possible

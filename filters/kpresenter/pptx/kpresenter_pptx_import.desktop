@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Name=MS PowerPoint 2007 Import Filter for KPresenter
+X-KDE-Export=application/vnd.oasis.opendocument.presentation
+X-KDE-Import=application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template
+X-KDE-Weight=1
+X-KDE-Library=libpptximport
+X-KDE-LibraryMajor=0
+X-KDE-LibraryMinor=1
+X-KDE-LibraryDependencies=
+X-KDE-ServiceTypes=KOfficeFilter

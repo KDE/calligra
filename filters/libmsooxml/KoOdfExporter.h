@@ -21,7 +21,8 @@
 #ifndef KOODFEXPORTER_H
 #define KOODFEXPORTER_H
 
-#include "KoFilter.h"
+#include "msooxml_export.h"
+#include <KoFilter.h>
 
 class KoXmlWriter;
 class KoStore;
@@ -58,9 +59,11 @@ struct KoOdfWriters
  * After the constructor, when running the @ref convert() method it's
  * guaranteed to be valid, so no need to check against 0.
  *
+ * @todo Move to libs, e.g. komain
+ *
  * @author Jarosław Staniek <staniek@kde.org>
  */
-class KoOdfExporter : public KoFilter
+class MSOOXML_EXPORT KoOdfExporter : public KoFilter
 {
     Q_OBJECT
 public:
