@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <KoGenStyle.h>
-
+#include <KoFontFace.h>
 
 wvWare::U8 KWordReplacementHandler::hardLineBreak()
 {
@@ -682,7 +682,7 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     QString fontName = getFont( chp->ftcAscii );
     if ( !fontName.isEmpty() )
     {
-        m_mainStyles->addFontFace( fontName );
+        m_mainStyles->addFontFace( KoFontFace(fontName) );
     }
 
     //add text string and formatting style to m_paragraph

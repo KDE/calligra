@@ -42,6 +42,7 @@
 #include <klocale.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
+#include <KoFontFace.h>
 //Added by qt3to4:
 #include <QList>
 #include <QBuffer>
@@ -273,7 +274,7 @@ void Document::processStyles()
             QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
             if ( !fontName.isEmpty() )
             {
-                m_mainStyles->addFontFace( fontName );
+                m_mainStyles->addFontFace( KoFontFace(fontName) );
                 userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
             }
 
