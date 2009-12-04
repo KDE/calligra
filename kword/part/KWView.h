@@ -95,6 +95,9 @@ public:
     const KWPage currentPage() const;
     void setCurrentPage(const KWPage &page);
 
+    /// go to page
+    void goToPage(const KWPage &page);
+
     virtual KoZoomController *zoomController() const { return m_zoomController; }
 
 public slots:
@@ -179,6 +182,10 @@ private slots:
     void insertImage();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
+    /// go to previous page
+    void goToPreviousPage();
+    /// go to next page
+    void goToNextPage();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

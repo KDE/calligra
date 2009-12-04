@@ -69,6 +69,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
+#include <KoCanvasController.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -270,6 +271,14 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
+
+    action = new KAction(i18n("Previous Page"), this);
+    actionCollection()->addAction("page_previous", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(goToPreviousPage()));
+
+    action = new KAction(i18n("Next Page"), this);
+    actionCollection()->addAction("page_next", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(goToNextPage()));
 
     // -------------- Edit actions
     action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
@@ -1285,6 +1294,29 @@ void KWView::setCurrentPage(const KWPage &currentPage)
         m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     }
+}
+
+void KWView::goToNextPage()
+{
+    KWPage page = currentPage().next();
+    if (page.isValid())
+        goToPage(page);
+}
+
+void KWView::goToPreviousPage()
+{
+    KWPage page = currentPage().previous();
+    if (page.isValid())
+        goToPage(page);
+}
+
+void KWView::goToPage(const KWPage &page)
+{
+    KoCanvasController *controller = m_gui->canvasController();
+    QPoint origPos = controller->scrollBarValue();
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()));
+    origPos.setY((int)pos.y());
+    controller->setScrollBarValue(origPos);
 }
 
 void KWView::showEvent(QShowEvent *e)
