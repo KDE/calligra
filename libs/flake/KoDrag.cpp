@@ -45,9 +45,7 @@ KoDrag::KoDrag()
 
 KoDrag::~KoDrag()
 {
-    if (m_mimeData == 0) {
-        delete m_mimeData;
-    }
+    delete m_mimeData;
 }
 
 bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
