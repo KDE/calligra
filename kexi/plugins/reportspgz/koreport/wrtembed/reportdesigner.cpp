@@ -226,18 +226,19 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
         it = nlist.item(i);
         // at this level all the children we get should be Elements
         if (it.isElement()) {
-            QString n = it.nodeName();
+            QString n = it.nodeName().toLower();
+	    
             if (n == "title") {
                 setReportTitle(it.firstChild().nodeValue());
-//TODO            } else if (n == "datasource") {
-//                setReportDataSource(it.firstChild().nodeValue());
-//                m_externalData->setValue(it.toElement().attribute("external"));
             } else if (n == "script") {
-                m_interpreter->setValue(it.toElement().attribute("interpreter"));
+                m_interpreter->setValue(it.toElement().attribute("Interpreter"));
                 m_script->setValue(it.firstChild().nodeValue());
             } else if (n == "grid") {
-                setGridOptions(it.toElement().attribute("visible").toInt() == 0 ? false : true, it.toElement().attribute("divisions").toInt());
-            }
+                m_showGrid->setValue(it.toElement().attribute("ShowGrid").toInt() == 0 ? false : true);
+		m_gridSnap->setValue(it.toElement().attribute("GridSnap").toInt() == 0 ? false : true);
+		m_gridDivisions->setValue(it.toElement().attribute("GridDivisions").toInt());
+		m_unit->setValue(it.toElement().attribute("PageUnit"));
+	    }
 
             //TODO Load page options
             else if (n == "size") {
@@ -262,10 +263,8 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
             } else if (n == "labeltype") {
                 //TODO Labels
                 //rd->pageOptions->setLabelType ( it.firstChild().nodeValue() );
-            } else if (n == "portrait") {
-                propertySet()->property("Orientation").setValue("Portrait");
-            } else if (n == "landscape") {
-                propertySet()->property("Orientation").setValue("Landscape");
+            } else if (n == "orientation") {
+                propertySet()->property("Orientation").setValue(it.firstChild().nodeValue());
             } else if (n == "topmargin") {
                 propertySet()->property("TopMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "bottommargin") {
@@ -597,6 +596,31 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
     }
 }
 
+QDomElement ReportDesigner::propertyToElement(QDomDocument* d, KoProperty::Property* p)
+{
+  QDomElement e = d->createElement(p->name());
+  e.appendChild(d->createTextNode(p->value().toString()));
+  return e;
+}
+
+void ReportDesigner::addPropertyAsAttribute(QDomElement* e, KoProperty::Property* p)
+{
+    switch(p->value().type()) {
+	case QVariant::Int :
+	    e->setAttribute(p->name(), p->value().toInt());
+	    break;
+	case QVariant::Double:
+	    e->setAttribute(p->name(), p->value().toDouble());
+	    break;
+	case QVariant::Bool:
+	    e->setAttribute(p->name(), p->value().toInt());
+	    break;
+	default:
+	    e->setAttribute(p->name(), p->value().toString());
+	    break;
+    }
+}
+
 QDomElement ReportDesigner::document()
 {
     QDomDocument doc = QDomDocument("");
@@ -604,19 +628,17 @@ QDomElement ReportDesigner::document()
     doc.appendChild(root);
 
     //title
-    QDomElement title = doc.createElement("title");
-    title.appendChild(doc.createTextNode(reportTitle()));
-    root.appendChild(title);
+    root.appendChild(propertyToElement(&doc, m_title));
 
-    QDomElement scr = doc.createElement("script");
-    scr.setAttribute("interpreter", m_interpreter->value().toString());
-    scr.appendChild(doc.createTextNode(m_script->value().toString()));
+    QDomElement scr = propertyToElement(&doc, m_script);
+    addPropertyAsAttribute(&scr, m_interpreter);
     root.appendChild(scr);
 
     QDomElement grd = doc.createElement("grid");
-    grd.setAttribute("visible", m_showGrid->value().toBool());
-    grd.setAttribute("divisions", m_gridDivisions->value().toInt());
-    grd.setAttribute("snap", m_gridSnap->value().toBool());
+    addPropertyAsAttribute(&grd, m_showGrid);
+    addPropertyAsAttribute(&grd, m_gridDivisions);
+    addPropertyAsAttribute(&grd, m_gridSnap);
+    addPropertyAsAttribute(&grd, m_unit);
     root.appendChild(grd);
 
     // pageOptions
@@ -639,22 +661,15 @@ QDomElement ReportDesigner::document()
         size.appendChild(doc.createTextNode(m_pageSize->value().toString()));
     }
     root.appendChild(size);
+    
     // -- orientation
-    root.appendChild(doc.createElement(m_orientation->value().toString().toLower()));
+    root.appendChild(propertyToElement(&doc, m_orientation));
+    
     // -- margins
-    QDomElement margin;
-    margin = doc.createElement("topmargin");
-    margin.appendChild(doc.createTextNode(QString::number(m_topMargin->value().toDouble())));
-    root.appendChild(margin);
-    margin = doc.createElement("bottommargin");
-    margin.appendChild(doc.createTextNode(QString::number(m_bottomMargin->value().toDouble())));
-    root.appendChild(margin);
-    margin = doc.createElement("rightmargin");
-    margin.appendChild(doc.createTextNode(QString::number(m_rightMargin->value().toDouble())));
-    root.appendChild(margin);
-    margin = doc.createElement("leftmargin");
-    margin.appendChild(doc.createTextNode(QString::number(m_leftMargin->value().toDouble())));
-    root.appendChild(margin);
+    root.appendChild(propertyToElement(&doc, m_topMargin));
+    root.appendChild(propertyToElement(&doc, m_bottomMargin));
+    root.appendChild(propertyToElement(&doc, m_rightMargin));
+    root.appendChild(propertyToElement(&doc, m_leftMargin));
 
     QDomElement section;
 
@@ -853,11 +868,15 @@ void ReportDesigner::createProperties()
     m_orientation = new KoProperty::Property("Orientation", keys, strings, "Portrait", "Page Orientation");
 
     keys.clear();strings.clear();
-    keys = KoUnit::listOfUnitName();
+    
     strings = KoUnit::listOfUnitName();
+    QString unit;
+    foreach (unit, strings) {
+	unit = unit.mid(unit.indexOf("(") + 1, 2);
+	keys << unit;
+    }
 
-    KoUnit u(KoUnit::Centimeter);
-    m_unit = new KoProperty::Property("PageUnit", keys, strings, KoUnit::unitDescription(u), "Page Unit");
+    m_unit = new KoProperty::Property("PageUnit", keys, strings, "cm", "Page Unit");
 
     m_showGrid = new KoProperty::Property("ShowGrid", true, "Show Grid", "Show Grid");
     m_gridSnap = new KoProperty::Property("GridSnap", true, "Grid Snap", "Grid Snap");
@@ -1037,8 +1056,7 @@ KoUnit ReportDesigner::pageUnit() const
     QString u;
     bool found;
 
-    u = m_set->property("PageUnit").value().toString();
-    u = u.mid(u.indexOf("(") + 1, 2);
+    u = m_unit->value().toString();
 
     KoUnit unit = KoUnit::unit(u, &found);
     if (!found) {
@@ -1542,3 +1560,4 @@ QList<QAction*> ReportDesigner::actions()
     return actList;
 
 }
+

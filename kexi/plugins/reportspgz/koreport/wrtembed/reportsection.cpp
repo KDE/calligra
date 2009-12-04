@@ -103,6 +103,7 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     m_title->setText(i18n("Detail"));
 
     m_sectionRuler = new KoRuler(this, Qt::Vertical, m_reportDesigner->zoomHandler());
+    m_sectionRuler->setUnit(m_reportDesigner->pageUnit());
     m_scene = new ReportScene(m_reportDesigner->pageWidthPx(), dpiY, rptdes);
     m_sceneView = new ReportSceneView(rptdes, m_scene, this, "scene view");
     m_sceneView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

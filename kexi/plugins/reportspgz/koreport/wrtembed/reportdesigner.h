@@ -81,10 +81,8 @@ public:
     void deleteDetail();
 
     void setReportTitle(const QString &);
-//    void setReportDataSource(const QString &);
     void setGridOptions(bool, int);
     QString reportTitle();
-//    QString reportDataSource();
 
     QDomElement document();
 
@@ -195,8 +193,6 @@ private:
     KoProperty::Set* m_set;
     KoProperty::Set* m_itmset;
     KoProperty::Property* m_title;
-//    KoProperty::Property* m_dataSource;
-//    KoProperty::Property* m_externalData;
     KoProperty::Property* m_pageSize;
     KoProperty::Property* m_orientation;
     KoProperty::Property* m_unit;
@@ -215,6 +211,9 @@ private:
 
     ReportWriterSectionData * m_sectionData;
     unsigned int selectionCount();
+    
+    static QDomElement propertyToElement(QDomDocument*, KoProperty::Property*);
+    static void addPropertyAsAttribute(QDomElement*, KoProperty::Property*);
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
