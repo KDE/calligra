@@ -92,10 +92,10 @@ class ORTextStyleData
 {
 public:
     QFont font;
-    Qt::Alignment textFlags;
-    QColor bgColor;
-    QColor fgColor;
-    int bgOpacity;
+    Qt::Alignment alignment;
+    QColor backgroundColor;
+    QColor foregroundColor;
+    int backgroundOpacity;
 
 };
 
@@ -103,7 +103,7 @@ class ORLineStyleData
 {
 public:
     int weight;
-    QColor lnColor;
+    QColor lineColor;
     Qt::PenStyle style;
 };
 
@@ -124,8 +124,8 @@ public:
 
     QMap<ORDataData, qreal> _subtotCheckPoints;
 
-    KRSectionData * head;
-    KRSectionData * foot;
+    KRSectionData *head;
+    KRSectionData *foot;
 };
 
 

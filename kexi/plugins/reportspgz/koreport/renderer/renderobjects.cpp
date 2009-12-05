@@ -238,7 +238,7 @@ OROTextBox::OROTextBox()
 {
     m_flags = 0;
 
-    m_lineStyle.lnColor = Qt::black;
+    m_lineStyle.lineColor = Qt::black;
     m_lineStyle.weight = 0;
     m_lineStyle.style = Qt::NoPen;
 }

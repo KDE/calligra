@@ -132,11 +132,11 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
                     OROTextBox * tb = (OROTextBox*) prim;
 
                     style = "position: absolute; ";
-                    style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
+                    style += "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; ";
                     style += "top: " + QString::number(tb->position().y()) + "pt; ";
                     style += "left: " + QString::number(tb->position().x()) + "pt; ";
                     style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
-                    style += "color: " + tb->textStyle().fgColor.name() + "; ";
+                    style += "color: " + tb->textStyle().foregroundColor.name() + "; ";
                     //TODO opaque text + translucent background
                     //it looks a pain to implement
                     //http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background

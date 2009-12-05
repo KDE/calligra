@@ -53,22 +53,22 @@ public:
     static QStringList labelNames();
 
 protected:
-    QString _name;
-    QString _paper;
+    QString m_name;
+    QString m_paper;
 
-    int _columns;
-    int _rows;
+    int m_columns;
+    int m_rows;
 
-    int _width;
-    int _height;
+    int m_width;
+    int m_height;
 
-    int _startx;
-    int _starty;
+    int m_startx;
+    int m_starty;
 
-    int _xgap;
-    int _ygap;
+    int m_xgap;
+    int m_ygap;
 
-    bool _null;
+    bool m_null;
 };
 
 #endif

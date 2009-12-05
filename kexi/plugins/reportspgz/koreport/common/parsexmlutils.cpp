@@ -50,17 +50,17 @@ bool parseReportTextStyleData(const QDomElement & elemSource, ORTextStyleData & 
 {
     if (elemSource.tagName() == "textstyle") {
         QDomNode  nodeCursor = elemSource.firstChild();
-        ts.bgOpacity = 255;
+        ts.backgroundOpacity = 255;
         while (!nodeCursor.isNull()) {
 
             if (nodeCursor.isElement()) {
                 QDomElement elemThis = nodeCursor.toElement();
                 if (elemThis.tagName() == "bgcolor") {
-                    ts.bgColor = elemThis.text();
+                    ts.backgroundColor = elemThis.text();
                 } else if (elemThis.tagName() == "fgcolor") {
-                    ts.fgColor = elemThis.text();
+                    ts.foregroundColor = elemThis.text();
                 } else if (elemThis.tagName() == "bgopacity") {
-                    ts.bgOpacity = elemThis.text().toInt();
+                    ts.backgroundOpacity = elemThis.text().toInt();
                 } else if (elemThis.tagName() == "font") {
                     parseReportFont(elemThis, ts.font);
                 } else {
@@ -87,7 +87,7 @@ bool parseReportLineStyleData(const QDomElement & elemSource, ORLineStyleData & 
             if (nodeCursor.isElement()) {
                 QDomElement elemThis = nodeCursor.toElement();
                 if (elemThis.tagName() == "color") {
-                    ls.lnColor = elemThis.text();
+                    ls.lineColor = elemThis.text();
                 } else if (elemThis.tagName() == "weight") {
                     ls.weight = elemThis.text().toInt();
                 } else if (elemThis.tagName() == "style") {

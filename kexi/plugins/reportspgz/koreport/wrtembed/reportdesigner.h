@@ -75,7 +75,7 @@ public:
     void insertSection(KRSectionData::Section);
 
     ReportSectionDetail* detailSection() const {
-        return detail;
+        return m_detail;
     }
     void setDetail(ReportSectionDetail *rsd);
     void deleteDetail();
@@ -159,20 +159,20 @@ public slots:
 protected:
     virtual void closeEvent(QCloseEvent * e);
 
-    ReportSection * reportHead;
-    ReportSection * pageHeadFirst;
-    ReportSection * pageHeadOdd;
-    ReportSection * pageHeadEven;
-    ReportSection * pageHeadLast;
-    ReportSection * pageHeadAny;
+    ReportSection *m_reportHead;
+    ReportSection *m_pageHeadFirst;
+    ReportSection *m_pageHeadOdd;
+    ReportSection *m_pageHeadEven;
+    ReportSection *m_pageHeadLast;
+    ReportSection *m_pageHeadAny;
 
-    ReportSection * pageFootFirst;
-    ReportSection * pageFootOdd;
-    ReportSection * pageFootEven;
-    ReportSection * pageFootLast;
-    ReportSection * pageFootAny;
-    ReportSection * reportFoot;
-    ReportSectionDetail * detail;
+    ReportSection *m_pageFootFirst;
+    ReportSection *m_pageFootOdd;
+    ReportSection *m_pageFootEven;
+    ReportSection *m_pageFootLast;
+    ReportSection *m_pageFootAny;
+    ReportSection *m_reportFoot;
+    ReportSectionDetail *m_detail;
 
 private:
     class Private;
@@ -209,7 +209,7 @@ private:
     KoProperty::Property* m_interpreter;
     KoProperty::Property* m_script;
 
-    ReportWriterSectionData * m_sectionData;
+    ReportWriterSectionData *m_sectionData;
     unsigned int selectionCount() const;
 
 private slots:

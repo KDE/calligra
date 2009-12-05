@@ -31,8 +31,8 @@
 class KexiMigrateReportData : public KoReportData
 {
 private:
-    QString         m_qstrName;
-    QString         m_qstrQuery;
+    QString m_qstrName;
+    QString m_qstrQuery;
     bool m_valid;
     KexiDB::TableSchema m_TableSchema;
     KexiDB::TableOrQuerySchema *m_schema;

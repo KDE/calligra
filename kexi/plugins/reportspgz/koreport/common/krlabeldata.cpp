@@ -61,9 +61,9 @@ KRLabelData::KRLabelData(QDomNode & element)
 
             ORTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
-                m_backgroundColor->setValue(ts.bgColor);
-                m_foregroundColor->setValue(ts.fgColor);
-                m_backgroundOpacity->setValue(ts.bgOpacity);
+                m_backgroundColor->setValue(ts.backgroundColor);
+                m_foregroundColor->setValue(ts.foregroundColor);
+                m_backgroundOpacity->setValue(ts.backgroundOpacity);
                 m_font->setValue(ts.font);
 
             }
@@ -71,7 +71,7 @@ KRLabelData::KRLabelData(QDomNode & element)
             ORLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
-                m_lineColor->setValue(ls.lnColor);
+                m_lineColor->setValue(ls.lineColor);
                 m_lineStyle->setValue(ls.style);
             }
         } else {
@@ -172,10 +172,10 @@ Qt::Alignment KRLabelData::textFlags() const
 ORTextStyleData KRLabelData::textStyle()
 {
     ORTextStyleData d;
-    d.bgColor = m_backgroundColor->value().value<QColor>();
-    d.fgColor = m_foregroundColor->value().value<QColor>();
+    d.backgroundColor = m_backgroundColor->value().value<QColor>();
+    d.foregroundColor = m_foregroundColor->value().value<QColor>();
     d.font = m_font->value().value<QFont>();
-    d.bgOpacity = m_backgroundOpacity->value().toInt();
+    d.backgroundOpacity = m_backgroundOpacity->value().toInt();
     return d;
 }
 
@@ -183,7 +183,7 @@ ORLineStyleData KRLabelData::lineStyle()
 {
     ORLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
-    ls.lnColor = m_lineColor->value().value<QColor>();
+    ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();
     return ls;
 }

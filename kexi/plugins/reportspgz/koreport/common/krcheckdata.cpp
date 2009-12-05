@@ -32,7 +32,7 @@ KRCheckData::KRCheckData(QDomNode &element)
             ORLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
-                m_lineColor->setValue(ls.lnColor);
+                m_lineColor->setValue(ls.lineColor);
                 m_lineStyle->setValue(ls.style);
             }
         } else if (n == "fgcolor") {
@@ -82,7 +82,7 @@ ORLineStyleData KRCheckData::lineStyle()
 {
     ORLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
-    ls.lnColor = m_lineColor->value().value<QColor>();
+    ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();
     return ls;
 }

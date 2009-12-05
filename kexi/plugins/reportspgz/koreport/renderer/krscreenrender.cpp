@@ -60,8 +60,8 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             m_painter->save();
             //Background
 
-            QColor bg = tb->textStyle().bgColor;
-            bg.setAlpha(tb->textStyle().bgOpacity);
+            QColor bg = tb->textStyle().backgroundColor;
+            bg.setAlpha(tb->textStyle().backgroundOpacity);
 
             //_painter->setBackgroundMode(Qt::OpaqueMode);
             m_painter->setBackground(bg);
@@ -70,11 +70,11 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             //Text
             m_painter->setBackgroundMode(Qt::TransparentMode);
             m_painter->setFont(tb->textStyle().font);
-            m_painter->setPen(tb->textStyle().fgColor);
+            m_painter->setPen(tb->textStyle().foregroundColor);
             m_painter->drawText(rc, tb->flags(), tb->text());
 
             //outer line
-            m_painter->setPen(QPen(tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style));
+            m_painter->setPen(QPen(tb->lineStyle().lineColor, tb->lineStyle().weight, tb->lineStyle().style));
             m_painter->drawRect(rc);
 
             //Reset back to defaults for next element
@@ -85,7 +85,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             QPointF s = ln->startPoint();
             QPointF e = ln->endPoint();
             //QPen pen ( _painter->pen() );
-            QPen pen(ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
+            QPen pen(ln->lineStyle().lineColor, ln->lineStyle().weight, ln->lineStyle().style);
 
             m_painter->save();
             m_painter->setRenderHint(QPainter::Antialiasing, true);
@@ -155,7 +155,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
                 m_painter->setPen(QPen(QColor(224, 224, 224)));
             } else {
-                m_painter->setPen(QPen(chk->lineStyle().lnColor, chk->lineStyle().weight, chk->lineStyle().style));
+                m_painter->setPen(QPen(chk->lineStyle().lineColor, chk->lineStyle().weight, chk->lineStyle().style));
             }
 
             qreal ox = sz.width()/5;

@@ -27,20 +27,20 @@
 
 void KRReportData::init()
 {
-    pghead_first = pghead_odd = pghead_even = pghead_last = pghead_any = NULL;
-    pgfoot_first = pgfoot_odd = pgfoot_even = pgfoot_last = pgfoot_any = NULL;
-    rpthead = rptfoot = NULL;
+    m_pgheadFirst = m_pgheadOdd = m_pgheadEven = m_pgheadLast = m_pgheadAny = NULL;
+    m_pgfootFirst = m_pgfootOdd = m_pgfootEven = m_pgfootLast = m_pgfootAny = NULL;
+    m_rpthead = m_rptfoot = NULL;
 }
 
 KRReportData::KRReportData()
- : detailsection(0)
+ : m_detailsection(0)
 {
     init();
     m_valid = true;
 }
 
 KRReportData::KRReportData(const QDomElement & elemSource)
- : detailsection(0)
+ : m_detailsection(0)
 {
     m_valid = false;
     init();
@@ -120,14 +120,14 @@ KRReportData::KRReportData(const QDomElement & elemSource)
         } else if (elemThis.tagName() == "rpthead") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
-                rpthead = sd;
+                m_rpthead = sd;
 //TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
             } else
                 delete sd;
         } else if (elemThis.tagName() == "rptfoot") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
-                rptfoot = sd;
+                m_rptfoot = sd;
 //TODO Track Totals?    reportTarget.trackTotal += sd->trackTotal;
             } else
                 delete sd;
@@ -135,15 +135,15 @@ KRReportData::KRReportData(const QDomElement & elemSource)
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
                 if (sd->extra() == "firstpage")
-                    pghead_first = sd;
+                    m_pgheadFirst = sd;
                 else if (sd->extra() == "odd")
-                    pghead_odd = sd;
+                    m_pgheadOdd = sd;
                 else if (sd->extra() == "even")
-                    pghead_even = sd;
+                    m_pgheadEven = sd;
                 else if (sd->extra() == "lastpage")
-                    pghead_last = sd;
+                    m_pgheadLast = sd;
                 else if (sd->extra().isEmpty())
-                    pghead_any = sd;
+                    m_pgheadAny = sd;
                 else {
                     //TODO qDebug("don't know which page this page header is for: %s",(const char*)sd->extra);
                     delete sd;
@@ -155,15 +155,15 @@ KRReportData::KRReportData(const QDomElement & elemSource)
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
                 if (sd->extra() == "firstpage")
-                    pgfoot_first = sd;
+                    m_pgfootFirst = sd;
                 else if (sd->extra() == "odd")
-                    pgfoot_odd = sd;
+                    m_pgfootOdd = sd;
                 else if (sd->extra() == "even")
-                    pgfoot_even = sd;
+                    m_pgfootEven = sd;
                 else if (sd->extra() == "lastpage")
-                    pgfoot_last = sd;
+                    m_pgfootLast = sd;
                 else if (sd->extra().isEmpty())
-                    pgfoot_any = sd;
+                    m_pgfootAny = sd;
                 else {
                     //TODO qDebug("don't know which page this page footer is for: %s",(const char*)sd->extra);
                     delete sd;
@@ -175,7 +175,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
             KRDetailSectionData * dsd = new KRDetailSectionData(elemThis);
 
             if (dsd->isValid()) {
-                detailsection = dsd;
+                m_detailsection = dsd;
                 //reportTarget.trackTotal += dsd->trackTotal;
             } else {
                 delete dsd;
@@ -206,9 +206,9 @@ QList<KRObjectData*> KRReportData::objects() const
         }
     }
 
-    if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->m_groupList.count();
-        foreach(ORDetailGroupSectionData* g, detailsection->m_groupList) {
+    if (m_detailsection) {
+        kDebug() << "Number of groups: " << m_detailsection->m_groupList.count();
+        foreach(ORDetailGroupSectionData* g, m_detailsection->m_groupList) {
             if (g->head) {
                 obs << g->head->objects();
             }
@@ -216,8 +216,8 @@ QList<KRObjectData*> KRReportData::objects() const
                 obs << g->foot->objects();
             }
         }
-        if (detailsection->m_detailSection)
-            obs << detailsection->m_detailSection->objects();
+        if (m_detailsection->m_detailSection)
+            obs << m_detailsection->m_detailSection->objects();
     }
 
     kDebug() << "Object List:";
@@ -250,9 +250,9 @@ QList<KRSectionData*> KRReportData::sections() const
         }
     }
 
-    if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->m_groupList.count();
-        foreach(ORDetailGroupSectionData* g, detailsection->m_groupList) {
+    if (m_detailsection) {
+        kDebug() << "Number of groups: " << m_detailsection->m_groupList.count();
+        foreach(ORDetailGroupSectionData* g, m_detailsection->m_groupList) {
             if (g->head) {
                 secs << g->head;
             }
@@ -260,8 +260,8 @@ QList<KRSectionData*> KRReportData::sections() const
                 secs << g->foot;
             }
         }
-        if (detailsection->m_detailSection)
-            secs << detailsection->m_detailSection;
+        if (m_detailsection->m_detailSection)
+            secs << m_detailsection->m_detailSection;
     }
 
     return secs;
@@ -284,40 +284,40 @@ KRSectionData* KRReportData::section(KRSectionData::Section s) const
     KRSectionData *sec;
     switch (s) {
     case KRSectionData::PageHeadAny:
-        sec = pghead_any;
+        sec = m_pgheadAny;
         break;
     case KRSectionData::PageHeadEven:
-        sec = pghead_even;
+        sec = m_pgheadEven;
         break;
     case KRSectionData::PageHeadOdd:
-        sec = pghead_odd;
+        sec = m_pgheadOdd;
         break;
     case KRSectionData::PageHeadFirst:
-        sec = pghead_first;
+        sec = m_pgheadFirst;
         break;
     case KRSectionData::PageHeadLast:
-        sec = pghead_last;
+        sec = m_pgheadLast;
         break;
     case KRSectionData::PageFootAny:
-        sec = pgfoot_any;
+        sec = m_pgfootAny;
         break;
     case KRSectionData::PageFootEven:
-        sec = pgfoot_even;
+        sec = m_pgfootEven;
         break;
     case KRSectionData::PageFootOdd:
-        sec = pgfoot_odd;
+        sec = m_pgfootOdd;
         break;
     case KRSectionData::PageFootFirst:
-        sec = pgfoot_first;
+        sec = m_pgfootFirst;
         break;
     case KRSectionData::PageFootLast:
-        sec = pgfoot_last;
+        sec = m_pgfootLast;
         break;
     case KRSectionData::ReportHead:
-        sec = rpthead;
+        sec = m_rpthead;
         break;
     case KRSectionData::ReportFoot:
-        sec = rptfoot;
+        sec = m_rptfoot;
         break;
     default:
         sec = NULL;

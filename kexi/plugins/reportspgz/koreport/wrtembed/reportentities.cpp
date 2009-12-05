@@ -125,15 +125,15 @@ void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, O
     QDomElement element = doc.createElement("textstyle");
 
     QDomElement bgcolor = doc.createElement("bgcolor");
-    bgcolor.appendChild(doc.createTextNode(ts.bgColor.name()));
+    bgcolor.appendChild(doc.createTextNode(ts.backgroundColor.name()));
     element.appendChild(bgcolor);
 
     QDomElement fgcolor = doc.createElement("fgcolor");
-    fgcolor.appendChild(doc.createTextNode(ts.fgColor.name()));
+    fgcolor.appendChild(doc.createTextNode(ts.foregroundColor.name()));
     element.appendChild(fgcolor);
 
     QDomElement bgopacity = doc.createElement("bgopacity");
-    bgopacity.appendChild(doc.createTextNode(QString::number(ts.bgOpacity)));
+    bgopacity.appendChild(doc.createTextNode(QString::number(ts.backgroundOpacity)));
     element.appendChild(bgopacity);
 
     buildXMLFont(doc, element, ts.font);
@@ -146,7 +146,7 @@ void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, O
     QDomElement element = doc.createElement("linestyle");
 
     QDomElement color = doc.createElement("color");
-    color.appendChild(doc.createTextNode(ls.lnColor.name()));
+    color.appendChild(doc.createTextNode(ls.lineColor.name()));
     element.appendChild(color);
 
     QDomElement weight = doc.createElement("weight");

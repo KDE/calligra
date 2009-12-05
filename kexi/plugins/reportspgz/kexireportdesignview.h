@@ -46,22 +46,23 @@ public:
     void triggerAction(const QString &);
     
 private:
-    ReportDesigner *_rd;
-    KoProperty::Set *_set;
+    ReportDesigner *m_reportDesigner;
+    KoProperty::Set *m_propertySet;
     KexiReportPart::TempData* tempData() const;
-    QScrollArea * scr;
+    QScrollArea * m_scrollArea;
 
     //Actions
-    KAction *editCutAction;
-    KAction *editCopyAction;
-    KAction *editPasteAction;
-    KAction *editDeleteAction;
-    KAction *sectionEdit;
-    KAction *parameterEdit;
-    KAction *itemRaiseAction;
-    KAction *itemLowerAction;
+    KAction *m_editCutAction;
+    KAction *m_editCopyAction;
+    KAction *m_editPasteAction;
+    KAction *m_editDeleteAction;
+    KAction *m_sectionEdit;
+    KAction *m_parameterEdit;
+    KAction *m_itemRaiseAction;
+    KAction *m_itemLowerAction;
 
-    KexiSourceSelector *srcsel;
+    KexiSourceSelector *m_sourceSelector;
+    
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);
@@ -70,10 +71,8 @@ protected:
 private slots:
     void slotDesignerPropertySetChanged();
 
-    public slots:
+public slots:
     void slotSetData(KoReportData*);
-
-
 };
 
 #endif

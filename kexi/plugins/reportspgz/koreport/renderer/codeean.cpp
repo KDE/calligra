@@ -463,11 +463,11 @@ void renderCodeUPCA(OROPage * page, const QRectF & r, const QString & _str, int 
 
     QFont font("Arial", 6);
     ORTextStyleData ts;
-    ts.bgColor = Qt::white;
+    ts.backgroundColor = Qt::white;
     ts.font = font;
-    ts.fgColor = Qt::black;
-    ts.bgOpacity = 255;
-    ts.textFlags = Qt::AlignRight | Qt::AlignTop;
+    ts.foregroundColor = Qt::black;
+    ts.backgroundOpacity = 255;
+    ts.alignment = Qt::AlignRight | Qt::AlignTop;
 
     OROTextBox * tb = new OROTextBox();
     tb->setPosition(QPointF(r.left(), r.top() + draw_height - 12));
@@ -835,11 +835,11 @@ void renderCodeUPCE(OROPage * page, const QRectF & r, const QString & _str, int 
                                         val[1], val[2], val[3], val[4], val[5], val[6]);
     QFont font("Arial", 6);
     ORTextStyleData ts;
-    ts.bgColor = Qt::white;
+    ts.backgroundColor = Qt::white;
     ts.font = font;
-    ts.fgColor = Qt::black;
-    ts.bgOpacity = 255;
-    ts.textFlags = Qt::AlignRight | Qt::AlignTop;
+    ts.foregroundColor = Qt::black;
+    ts.backgroundOpacity = 255;
+    ts.alignment = Qt::AlignRight | Qt::AlignTop;
 
     OROTextBox * tb = new OROTextBox();
     tb->setPosition(QPointF(r.left(), r.top() + draw_height - 12));

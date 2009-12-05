@@ -33,7 +33,7 @@ static LabelSizeInfo s_labels[] = {
 LabelSizeInfo LabelSizeInfo::find(const QString & name)
 {
     int i = 0;
-    while (!s_labels[i].isNull() && s_labels[i]._name != name)
+    while (!s_labels[i].isNull() && s_labels[i].m_name != name)
         i++;
     return s_labels[i];
 }
@@ -42,7 +42,7 @@ QStringList LabelSizeInfo::labelNames()
 {
     QStringList l;
     for (int i = 0; !s_labels[i].isNull(); i++)
-        l.append(s_labels[i]._name);
+        l.append(s_labels[i].m_name);
     return l;
 }
 
@@ -50,39 +50,39 @@ LabelSizeInfo::LabelSizeInfo(const QString & n, const QString & p, int c,
                              int r, int w, int h, int sx, int sy, int xg,
                              int yg)
 {
-    _name = n;
-    _paper = p;
+    m_name = n;
+    m_paper = p;
 
-    _columns = c;
-    _rows = r;
+    m_columns = c;
+    m_rows = r;
 
-    _width = w;
-    _height = h;
+    m_width = w;
+    m_height = h;
 
-    _startx = sx;
-    _starty = sy;
+    m_startx = sx;
+    m_starty = sy;
 
-    _xgap = xg;
-    _ygap = yg;
+    m_xgap = xg;
+    m_ygap = yg;
 
-    _null = FALSE;
+    m_null = FALSE;
 }
 
 LabelSizeInfo::LabelSizeInfo()
 {
-    _columns = 0;
-    _rows = 0;
+    m_columns = 0;
+    m_rows = 0;
 
-    _width = 0;
-    _height = 0;
+    m_width = 0;
+    m_height = 0;
 
-    _startx = 0;
-    _starty = 0;
+    m_startx = 0;
+    m_starty = 0;
 
-    _xgap = 0;
-    _ygap = 0;
+    m_xgap = 0;
+    m_ygap = 0;
 
-    _null = TRUE;
+    m_null = TRUE;
 }
 
 LabelSizeInfo::~LabelSizeInfo()
@@ -91,54 +91,54 @@ LabelSizeInfo::~LabelSizeInfo()
 
 QString LabelSizeInfo::name() const
 {
-    return _name;
+    return m_name;
 }
 
 QString LabelSizeInfo::paper() const
 {
-    return _paper;
+    return m_paper;
 }
 
 int LabelSizeInfo::columns() const
 {
-    return _columns;
+    return m_columns;
 }
 int LabelSizeInfo::rows() const
 {
-    return _rows;
+    return m_rows;
 }
 
 int LabelSizeInfo::width() const
 {
-    return _width;
+    return m_width;
 }
 
 int LabelSizeInfo::height() const
 {
-    return _height;
+    return m_height;
 }
 
 int LabelSizeInfo::startX() const
 {
-    return _startx;
+    return m_startx;
 }
 
 int LabelSizeInfo::startY() const
 {
-    return _starty;
+    return m_starty;
 }
 
 int LabelSizeInfo::xGap() const
 {
-    return _xgap;
+    return m_xgap;
 }
 
 int LabelSizeInfo::yGap() const
 {
-    return _ygap;
+    return m_ygap;
 }
 
 bool LabelSizeInfo::isNull() const
 {
-    return _null;
+    return m_null;
 }

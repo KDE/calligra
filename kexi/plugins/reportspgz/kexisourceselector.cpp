@@ -27,8 +27,8 @@
 KexiSourceSelector::KexiSourceSelector ( QWidget* parent, KexiDB::Connection *conn ) : QWidget(parent) {
 
     m_conn = conn;
-    m_kdbd = 0;
-    m_kmd = 0;
+    m_kexiDBData = 0;
+    m_kexiMigrateData = 0;
     
     m_layout = new QVBoxLayout(this);
     m_sourceType = new QComboBox(this);
@@ -121,23 +121,23 @@ QDomElement KexiSourceSelector::connectionData()
 
 KoReportData* KexiSourceSelector::sourceData()
 {
-    if (m_kdbd) {
-        delete m_kdbd;
-        m_kdbd = 0;
+    if (m_kexiDBData) {
+        delete m_kexiDBData;
+        m_kexiDBData = 0;
     }
 
-    if (m_kmd) {
-        delete m_kmd;
-        m_kmd = 0;
+    if (m_kexiMigrateData) {
+        delete m_kexiMigrateData;
+        m_kexiMigrateData = 0;
     }
 
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "internal" ) {
-        m_kdbd = new KexiDBReportData(m_internalSource->currentText(), m_conn);
-        return m_kdbd;
+        m_kexiDBData = new KexiDBReportData(m_internalSource->currentText(), m_conn);
+        return m_kexiDBData;
     }
     if (m_sourceType->itemData(m_sourceType->currentIndex()).toString() == "external" ) {
-        m_kmd = new KexiMigrateReportData(m_externalSource->text());
-        return m_kmd;
+        m_kexiMigrateData = new KexiMigrateReportData(m_externalSource->text());
+        return m_kexiMigrateData;
     }
 
     return 0;

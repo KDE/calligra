@@ -231,7 +231,7 @@ void SectionEditor::init(ReportDesigner * rw)
 
     if (m_reportSectionDetail) {
         for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); i++) {
-            lbGroups->insertItem(m_reportSectionDetail->section(i)->column());
+            lbGroups->insertItem(m_reportSectionDetail->groupSection(i)->column());
         }
     }
 }
@@ -263,7 +263,7 @@ void SectionEditor::btnEdit_clicked()
     if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx < 0) return;
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
 
         dgsd->cbColumn->clear();
@@ -353,7 +353,7 @@ void SectionEditor::btnMoveUp_clicked()
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx - 1);
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->isGroupHeaderVisible();
         bool showgf = rsdg->isGroupFooterVisible();
         m_reportSectionDetail->removeSection(idx);
@@ -372,7 +372,7 @@ void SectionEditor::brnMoveDown_clicked()
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx + 1);
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->isGroupHeaderVisible();
         bool showgf = rsdg->isGroupFooterVisible();
         m_reportSectionDetail->removeSection(idx);

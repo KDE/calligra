@@ -51,8 +51,8 @@ class KexiSourceSelector : public QWidget
         KLineEdit *m_externalSource;
         KPushButton *m_setData;
 
-        KexiDBReportData *m_kdbd;
-        KexiMigrateReportData *m_kmd;
+        KexiDBReportData *m_kexiDBData;
+        KexiMigrateReportData *m_kexiMigrateData;
 
     private slots:
         void setDataClicked();

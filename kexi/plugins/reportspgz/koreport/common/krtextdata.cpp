@@ -25,7 +25,7 @@
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
-KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
+KRTextData::KRTextData(QDomNode & element) : m_bottomPadding(0.0)
 {
     createProperties();
     QDomNodeList nl = element.childNodes();
@@ -54,7 +54,7 @@ KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();
         } else if (n == "bottompad") {
-            bpad = node.firstChild().nodeValue().toDouble() / 100.0;
+            m_bottomPadding = node.firstChild().nodeValue().toDouble() / 100.0;
         } else if (n == "left") {
             m_horizontalAlignment->setValue("Left");
         } else if (n == "hcenter") {
@@ -76,16 +76,16 @@ KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
 
             ORTextStyleData ts;
             if (parseReportTextStyleData(node.toElement(), ts)) {
-                m_backgroundColor->setValue(ts.bgColor);
-                m_foregroundColor->setValue(ts.fgColor);
-                m_backgroundOpacity->setValue(ts.bgOpacity);
+                m_backgroundColor->setValue(ts.backgroundColor);
+                m_foregroundColor->setValue(ts.foregroundColor);
+                m_backgroundOpacity->setValue(ts.backgroundOpacity);
                 m_font->setValue(ts.font);
             }
         } else if (n == "linestyle") {
             ORLineStyleData ls;
             if (parseReportLineStyleData(node.toElement(), ls)) {
                 m_lineWeight->setValue(ls.weight);
-                m_lineColor->setValue(ls.lnColor);
+                m_lineColor->setValue(ls.lineColor);
                 m_lineStyle->setValue(ls.style);
             }
         } else {
@@ -183,23 +183,23 @@ QString KRTextData::column() const
 
 qreal KRTextData::bottomPadding() const
 {
-    return bpad;
+    return m_bottomPadding;
 }
 
 void KRTextData::setBottomPadding(qreal bp)
 {
-    if (bpad != bp) {
-        bpad = bp;
+    if (m_bottomPadding != bp) {
+        m_bottomPadding = bp;
     }
 }
 
 ORTextStyleData KRTextData::textStyle()
 {
     ORTextStyleData d;
-    d.bgColor = m_backgroundColor->value().value<QColor>();
-    d.fgColor = m_foregroundColor->value().value<QColor>();
+    d.backgroundColor = m_backgroundColor->value().value<QColor>();
+    d.foregroundColor = m_foregroundColor->value().value<QColor>();
     d.font = m_font->value().value<QFont>();
-    d.bgOpacity = m_backgroundOpacity->value().toInt();
+    d.backgroundOpacity = m_backgroundOpacity->value().toInt();
     return d;
 }
 
@@ -207,7 +207,7 @@ ORLineStyleData KRTextData::lineStyle()
 {
     ORLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
-    ls.lnColor = m_lineColor->value().value<QColor>();
+    ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();
     return ls;
 }

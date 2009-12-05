@@ -56,7 +56,7 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
         : ReportRectEntity(rw)
 {
     init(scene);
-    m_size.setSceneSize(QSizeF(min_width_total*m_dpiX, min_height*m_dpiY));
+    m_size.setSceneSize(QSizeF(m_minWidthTotal*m_dpiX, m_minHeight*m_dpiY));
     setSceneRect(m_pos.toScene(), m_size.toScene());
 
     m_name->setValue(m_reportDesigner->suggestEntityName("Barcode"));

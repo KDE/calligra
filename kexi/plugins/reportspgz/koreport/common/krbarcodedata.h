@@ -64,9 +64,9 @@ protected:
 
     // all these values are in inches and
     // are for internal use only
-    qreal min_width_data;
-    qreal min_width_total;
-    qreal min_height;
+    qreal m_minWidthData;
+    qreal m_minWidthTotal;
+    qreal m_minHeight;
 
 private:
     virtual void createProperties();

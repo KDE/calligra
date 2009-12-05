@@ -137,7 +137,7 @@ void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
 
     // bottompad
     QDomElement bottompad = doc.createElement("bottompad");
-    qreal h = bpad * 100.0;
+    qreal h = m_bottomPadding * 100.0;
     bottompad.appendChild(doc.createTextNode(QString::number((int) h)));
     entity.appendChild(bottompad);
 

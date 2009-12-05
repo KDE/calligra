@@ -43,7 +43,7 @@ KRLineData::KRLineData(QDomNode & element)
             m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "linestyle") {
             if (!parseReportLineStyleData(node.toElement(), ls)) {
-                ls.lnColor = Qt::black;
+                ls.lineColor = Qt::black;
                 ls.weight = 1;
                 ls.style = Qt::SolidLine;
             }
@@ -68,7 +68,7 @@ KRLineData::KRLineData(QDomNode & element)
     m_start.setPointPos(QPointF(sx, sy));
     m_end.setPointPos(QPointF(ex, ey));
     m_lineWeight->setValue(ls.weight);
-    m_lineColor->setValue(ls.lnColor);
+    m_lineColor->setValue(ls.lineColor);
     m_lineStyle->setValue(ls.style);
 
 }
@@ -96,7 +96,7 @@ ORLineStyleData KRLineData::lineStyle()
 {
     ORLineStyleData ls;
     ls.weight = m_lineWeight->value().toInt();
-    ls.lnColor = m_lineColor->value().value<QColor>();
+    ls.lineColor = m_lineColor->value().value<QColor>();
     ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();
     return ls;
 }

@@ -92,45 +92,45 @@ void KRBarcodeData::setMaxLength(int i)
             int N = 2; // narrow mult for wide line
             int X = 1; // narrow line width
             int I = 1; // interchange line width
-            min_width_data = (((C + 2) * ((3 * N) + 6) * X) + ((C + 1) * I)) / 100.0;
-            min_height = min_width_data * 0.15;
-            /*if(min_height < 0.25)*/ min_height = 0.25;
-            min_width_total = min_width_data + 0.22; // added a little buffer to make sure we don't loose any
+            m_minWidthData = (((C + 2) * ((3 * N) + 6) * X) + ((C + 1) * I)) / 100.0;
+            m_minHeight = m_minWidthData * 0.15;
+            /*if(min_height < 0.25)*/ m_minHeight = 0.25;
+            m_minWidthTotal = m_minWidthData + 0.22; // added a little buffer to make sure we don't loose any
             // of our required quiet zone in conversions
         } else if (m_format->value().toString() == "3of9+") {
             int C = i * 2; // number of characters
             int N = 2; // narrow mult for wide line
             int X = 1; // 1px narrow line
             int I = 1; // 1px narrow line interchange
-            min_width_data = (((C + 2) * ((3 * N) + 6) * X) + ((C + 1) * I)) / 100.0;
-            min_height = min_width_data * 0.15;
-            /*if(min_height < 0.25)*/ min_height = 0.25;
-            min_width_total = min_width_data + 0.22; // added a little buffer to make sure we don't loose any
+            m_minWidthData = (((C + 2) * ((3 * N) + 6) * X) + ((C + 1) * I)) / 100.0;
+            m_minHeight = m_minWidthData * 0.15;
+            /*if(min_height < 0.25)*/ m_minHeight = 0.25;
+            m_minWidthTotal = m_minWidthData + 0.22; // added a little buffer to make sure we don't loose any
             // of our required quiet zone in conversions
         } else if (m_format->value().toString() == "128") {
             int C = i; // assuming 1:1 ratio of data passed in to data actually used in encoding
             int X = 1; // 1px wide
-            min_width_data = (((11 * C) + 35) * X) / 100.0;       // assuming CODE A or CODE B
-            min_height = min_width_data * 0.15;
-            /*if(min_height < 0.25)*/ min_height = 0.25;
-            min_width_total = min_width_data + 0.22; // added a little bugger to make sure we don't loose any
+            m_minWidthData = (((11 * C) + 35) * X) / 100.0;       // assuming CODE A or CODE B
+            m_minHeight = m_minWidthData * 0.15;
+            /*if(min_height < 0.25)*/ m_minHeight = 0.25;
+            m_minWidthTotal = m_minWidthData + 0.22; // added a little bugger to make sure we don't loose any
             // of our required quiet zone in conversions
         } else if (m_format->value().toString() == "upc-a") {
-            min_width_data = 0.95;
-            min_width_total = 1.15;
-            min_height = 0.25;
+            m_minWidthData = 0.95;
+            m_minWidthTotal = 1.15;
+            m_minHeight = 0.25;
         } else if (m_format->value().toString() == "upc-e") {
-            min_width_data = 0.52;
-            min_width_total = 0.70;
-            min_height = 0.25;
+            m_minWidthData = 0.52;
+            m_minWidthTotal = 0.70;
+            m_minHeight = 0.25;
         } else if (m_format->value().toString() == "ean13") {
-            min_width_data = 0.95;
-            min_width_total = 1.15;
-            min_height = 0.25;
+            m_minWidthData = 0.95;
+            m_minWidthTotal = 1.15;
+            m_minHeight = 0.25;
         } else if (m_format->value().toString() == "ean8") {
-            min_width_data = 0.67;
-            min_width_total = 0.90;
-            min_height = 0.25;
+            m_minWidthData = 0.67;
+            m_minWidthTotal = 0.90;
+            m_minHeight = 0.25;
         } else {
             kDebug() << "Unknown format encountered: " << m_format->value().toString();
         }

@@ -56,7 +56,7 @@ void ReportSectionDetail::setPageBreak(int pb)
     m_pageBreak = pb;
 }
 
-ReportSection * ReportSectionDetail::details() const
+ReportSection * ReportSectionDetail::detailSection() const
 {
     return m_detail;
 }
@@ -172,7 +172,7 @@ int ReportSectionDetail::groupSectionCount() const
     return groupList.count();
 }
 
-ReportSectionDetailGroup * ReportSectionDetail::section(int i) const
+ReportSectionDetailGroup * ReportSectionDetail::groupSection(int i) const
 {
     return groupList.at(i);
 }
