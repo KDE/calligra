@@ -58,6 +58,14 @@ TODO: text editor: autofill disabled because this makes the widget disappear ent
 
 ~~~~~~~~~~~~~~~~ 2.2 alpha 1 ~~~~~~~~~~~~~~~~
 
+2009-12-05
+Reports
+*Qt-ify: remove get prefix form some accessort
+*add more constness (a lot more needed)
+*remove abbreviations like head and foot
+**TODO: let's remove these from the file format ("head", "foot")?
+*showGroupHeader -> setGroupVisible, etc.
+
 2009-11-24
 Table View
 *fix painting drop down button for combobox editor
