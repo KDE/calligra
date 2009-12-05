@@ -7,7 +7,7 @@ target_link_libraries(recordsxml2cpp ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY})
 add_custom_command(
     OUTPUT records.cpp
     COMMAND recordsxml2cpp ${CMAKE_CURRENT_SOURCE_DIR}/records.xml
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/records.xml ${CMAKE_CURRENT_BINARY_DIR}/recordsxml2cpp
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/records.xml recordsxml2cpp
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     VERBATIM)
 
