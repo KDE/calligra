@@ -26,6 +26,7 @@
 #include <QtGui/QDesktopWidget>
 
 #include <kdebug.h>
+#include <kcursor.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasController.h>
@@ -168,6 +169,8 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->move( presentationRect.topLeft() );
     m_canvas->resize( presentationRect.size() );
 
+    KCursor::setAutoHideCursor( m_canvas, true );
+
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
@@ -215,6 +218,8 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
+    KCursor::setAutoHideCursor( m_canvas, false );
+    m_canvas->setMouseTracking( true );
     m_view->setActivePage( page );
 
     // only delete after the new page has been set
