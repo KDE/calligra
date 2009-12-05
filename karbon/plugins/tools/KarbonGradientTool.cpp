@@ -33,8 +33,6 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeBorderCommand.h>
 #include <KoResourceServerProvider.h>
-#include <KoSnapGuide.h>
-#include <KoSnapStrategy.h>
 #include <KoGradientBackground.h>
 #include <KarbonGradientHelper.h>
 #include <KoShapeBackground.h>
@@ -358,7 +356,7 @@ void KarbonGradientTool::activate( bool temporary )
 
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = m_canvas->snapGuide()->enabledSnapStrategies();
-    m_canvas->snapGuide()->enableSnapStrategies( KoSnapStrategy::BoundingBox );
+    m_canvas->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBox);
     m_canvas->snapGuide()->reset();
     
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));

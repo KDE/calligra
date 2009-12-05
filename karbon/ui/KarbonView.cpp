@@ -103,7 +103,6 @@
 #include <KoCopyController.h>
 #include <KoPasteController.h>
 #include <KoSnapGuide.h>
-#include <KoSnapStrategy.h>
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 #include <KoImageCollection.h>
@@ -813,7 +812,7 @@ void KarbonView::pathSnapToGrid()
     part()->gridData().setSnapToGrid(true);
     
     KoSnapGuide snapGuide(d->canvas);
-    snapGuide.enableSnapStrategies(KoSnapStrategy::Grid);
+    snapGuide.enableSnapStrategies(KoSnapGuide::Grid);
     snapGuide.setSnapDistance(INT_MAX);
     
     foreach( KoShape* shape, selectedShapes )

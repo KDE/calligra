@@ -21,6 +21,7 @@
 #define KARBONGRADIENTTOOL_H
 
 #include <KoTool.h>
+#include <KoSnapGuide.h>
 #include <QtGui/QGradient>
 #include <QtCore/QMultiMap>
 
@@ -73,7 +74,7 @@ private:
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     KarbonGradientEditWidget * m_gradientWidget;
     QUndoCommand * m_currentCmd;
-    int m_oldSnapStrategies; ///< the previously enables snap strategies
+    KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 
 #endif // KARBONGRADIENTTOOL_H
