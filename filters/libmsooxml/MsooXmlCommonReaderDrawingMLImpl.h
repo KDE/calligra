@@ -451,7 +451,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
 #else
+#ifdef __GNUC__
 #warning TODO: docx
+#endif
 #endif
 
         (void)drawFrameBuf.releaseWriter();
