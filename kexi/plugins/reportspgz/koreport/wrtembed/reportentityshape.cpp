@@ -143,7 +143,3 @@ void ReportEntityShape::slotPropertyChanged(KoProperty::Set &s, KoProperty::Prop
     if (scene())
         scene()->update();
 }
-
-
-
-

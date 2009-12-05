@@ -70,11 +70,11 @@ public:
     
     void setReportData(KoReportData* kodata);
     
-    ReportSection* getSection(KRSectionData::Section) const;
+    ReportSection* section(KRSectionData::Section) const;
     void removeSection(KRSectionData::Section);
     void insertSection(KRSectionData::Section);
 
-    ReportSectionDetail* detailSection() {
+    ReportSectionDetail* detailSection() const {
         return detail;
     }
     void setDetail(ReportSectionDetail *rsd);
@@ -82,43 +82,43 @@ public:
 
     void setReportTitle(const QString &);
     void setGridOptions(bool, int);
-    QString reportTitle();
+    QString reportTitle() const;
 
-    QDomElement document();
+    QDomElement document() const;
 
-    bool isModified();
+    bool isModified() const;
 
-    KexiDB::Connection *theConn() {
+    KexiDB::Connection *theConn() const {
         return m_conn;
     }
-    bool isConnected() {
+    bool isConnected() const {
         return m_conn &&  m_conn->isConnected();
     }
 
     /**
     \return a list of fields in the selected query
     */
-    QStringList fieldList();
+    QStringList fieldList() const;
 
      /**
     \return a list of object scripts in the database
     */
-    QStringList scriptList();
+    QStringList scriptList() const;
     
     /**
     \return the page width in pixels for the current paper size
     */
     int pageWidthPx() const;
 
-    QGraphicsScene* activeScene();
+    QGraphicsScene* activeScene() const;
     void setActiveScene(QGraphicsScene* a);
-    KoProperty::Set* propertySet() {
+    KoProperty::Set* propertySet() const {
         return m_set;
     }
 
     virtual QSize sizeHint() const;
 
-    KoZoomHandler* zoomHandler();
+    KoZoomHandler* zoomHandler() const;
 
     KoUnit pageUnit() const;
 
@@ -126,7 +126,7 @@ public:
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
     void changeSet(KoProperty::Set *);
-    KoProperty::Set* itemPropertySet() {
+    KoProperty::Set* itemPropertySet() const {
         kDebug(); return m_itmset;
     }
 
@@ -184,7 +184,7 @@ private:
     KexiDB::Connection *m_conn;
     KoReportData *m_kordata;
     
-    QStringList pageFormats();
+    QStringList pageFormats() const;
 
     virtual void resizeEvent(QResizeEvent * event);
 
@@ -210,10 +210,7 @@ private:
     KoProperty::Property* m_script;
 
     ReportWriterSectionData * m_sectionData;
-    unsigned int selectionCount();
-    
-    static QDomElement propertyToElement(QDomDocument*, KoProperty::Property*);
-    static void addPropertyAsAttribute(QDomElement*, KoProperty::Property*);
+    unsigned int selectionCount() const;
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);

@@ -45,17 +45,17 @@ public:
     void setPageBreak(int);
     int pageBreak() const;
 
-    ReportSection * getDetail();
+    ReportSection * details() const;
 
     void buildXML(QDomDocument & doc, QDomElement & section);
     void initFromXML(QDomNode & node);
 
-    ReportDesigner * reportDesigner();
+    ReportDesigner * reportDesigner() const;
 
-    int groupSectionCount();
-    ReportSectionDetailGroup * getSection(int i);
+    int groupSectionCount() const;
+    ReportSectionDetailGroup * section(int i) const;
     void insertSection(int idx, ReportSectionDetailGroup * rsd);
-    int findSection(const QString & name);
+    int indexOfSection(const QString & name) const;
     void removeSection(int idx, bool del = FALSE);
     virtual QSize sizeHint() const;
     

@@ -863,7 +863,7 @@ ORODocument* ORPreRender::generate()
     // Do this check now so we don't have to undo a lot of work later if it fails
     LabelSizeInfo label;
     if (d->_reportData->page.getPageSize() == "Labels") {
-        label = LabelSizeInfo::getByName(d->_reportData->page.getLabelType());
+        label = LabelSizeInfo::find(d->_reportData->page.getLabelType());
         if (label.isNull())
             return 0;
     }

@@ -194,13 +194,13 @@ KRReportData::~KRReportData()
 {
 }
 
-QList<KRObjectData*> KRReportData::objects()
+QList<KRObjectData*> KRReportData::objects() const
 {
     QList<KRObjectData*> obs;
     KRSectionData *sec;
 
-    for (int i = 0; i < 12 ; ++i) {
-        sec = section((KRSectionData::Section)(i + 1));
+    for (int i = 1; i <= KRSectionData::PageFootAny; i++) {
+        sec = section((KRSectionData::Section)i);
         if (sec) {
             obs << sec->objects();
         }
@@ -227,7 +227,7 @@ QList<KRObjectData*> KRReportData::objects()
     return obs;
 }
 
-KRObjectData* KRReportData::object(const QString& n)
+KRObjectData* KRReportData::object(const QString& n) const
 {
     QList<KRObjectData*> obs = objects();
 
@@ -239,7 +239,7 @@ KRObjectData* KRReportData::object(const QString& n)
     return 0;
 }
 
-QList<KRSectionData*> KRReportData::sections()
+QList<KRSectionData*> KRReportData::sections() const
 {
     QList<KRSectionData*> secs;
     KRSectionData *sec;
@@ -267,7 +267,7 @@ QList<KRSectionData*> KRReportData::sections()
     return secs;
 }
 
-KRSectionData* KRReportData::section(const QString& sn)
+KRSectionData* KRReportData::section(const QString& sn) const
 {
     QList<KRSectionData*> secs = sections();
 
@@ -279,7 +279,7 @@ KRSectionData* KRReportData::section(const QString& sn)
     return 0;
 }
 
-KRSectionData* KRReportData::section(KRSectionData::Section s)
+KRSectionData* KRReportData::section(KRSectionData::Section s) const
 {
     KRSectionData *sec;
     switch (s) {

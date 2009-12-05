@@ -210,20 +210,20 @@ void SectionEditor::init(ReportDesigner * rw)
     this->m_reportDesigner = NULL;
     // set all the properties
 
-    cbReportHeader->setChecked(rw->getSection(KRSectionData::ReportHead) != NULL);
-    cbReportFooter->setChecked(rw->getSection(KRSectionData::ReportFoot) != NULL);
+    cbReportHeader->setChecked(rw->section(KRSectionData::ReportHead) != NULL);
+    cbReportFooter->setChecked(rw->section(KRSectionData::ReportFoot) != NULL);
 
-    cbHeadFirst->setChecked(rw->getSection(KRSectionData::PageHeadFirst) != NULL);
-    cbHeadOdd->setChecked(rw->getSection(KRSectionData::PageHeadOdd) != NULL);
-    cbHeadEven->setChecked(rw->getSection(KRSectionData::PageHeadEven) != NULL);
-    cbHeadLast->setChecked(rw->getSection(KRSectionData::PageHeadLast) != NULL);
-    cbHeadAny->setChecked(rw->getSection(KRSectionData::PageHeadAny) != NULL);
+    cbHeadFirst->setChecked(rw->section(KRSectionData::PageHeadFirst) != NULL);
+    cbHeadOdd->setChecked(rw->section(KRSectionData::PageHeadOdd) != NULL);
+    cbHeadEven->setChecked(rw->section(KRSectionData::PageHeadEven) != NULL);
+    cbHeadLast->setChecked(rw->section(KRSectionData::PageHeadLast) != NULL);
+    cbHeadAny->setChecked(rw->section(KRSectionData::PageHeadAny) != NULL);
 
-    cbFootFirst->setChecked(rw->getSection(KRSectionData::PageFootFirst) != NULL);
-    cbFootOdd->setChecked(rw->getSection(KRSectionData::PageFootOdd) != NULL);
-    cbFootEven->setChecked(rw->getSection(KRSectionData::PageFootEven) != NULL);
-    cbFootLast->setChecked(rw->getSection(KRSectionData::PageFootLast) != NULL);
-    cbFootAny->setChecked(rw->getSection(KRSectionData::PageFootAny) != NULL);
+    cbFootFirst->setChecked(rw->section(KRSectionData::PageFootFirst) != NULL);
+    cbFootOdd->setChecked(rw->section(KRSectionData::PageFootOdd) != NULL);
+    cbFootEven->setChecked(rw->section(KRSectionData::PageFootEven) != NULL);
+    cbFootLast->setChecked(rw->section(KRSectionData::PageFootLast) != NULL);
+    cbFootAny->setChecked(rw->section(KRSectionData::PageFootAny) != NULL);
 
     // now set the rw value
     this->m_reportDesigner = rw;
@@ -231,7 +231,7 @@ void SectionEditor::init(ReportDesigner * rw)
 
     if (m_reportSectionDetail) {
         for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); i++) {
-            lbGroups->insertItem(m_reportSectionDetail->getSection(i)->column());
+            lbGroups->insertItem(m_reportSectionDetail->section(i)->column());
         }
     }
 }
@@ -263,7 +263,7 @@ void SectionEditor::btnEdit_clicked()
     if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx < 0) return;
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
         DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
 
         dgsd->cbColumn->clear();
@@ -271,8 +271,8 @@ void SectionEditor::btnEdit_clicked()
         dgsd->cbColumn->setEditText(rsdg->column());
 
         dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
-        dgsd->cbHead->setChecked(rsdg->isGroupHeadShowing());
-        dgsd->cbFoot->setChecked(rsdg->isGroupFootShowing());
+        dgsd->cbHead->setChecked(rsdg->isGroupHeaderVisible());
+        dgsd->cbFoot->setChecked(rsdg->isGroupFooterVisible());
 
         bool exitLoop = false;
         while (!exitLoop) {
@@ -282,7 +282,7 @@ void SectionEditor::btnEdit_clicked()
                 bool showgf = dgsd->cbFoot->isChecked();
                 bool breakafterfoot = dgsd->breakAfterFooter->isChecked();
 
-                if (column != rsdg->column() && m_reportSectionDetail->findSection(column) != -1) {
+                if (column != rsdg->column() && m_reportSectionDetail->indexOfSection(column) != -1) {
                     QMessageBox::warning(this, i18n("Error Encountered"),
                                          i18n("Unable to add a new group because its name would not be unique"));
                 } else {
@@ -290,8 +290,8 @@ void SectionEditor::btnEdit_clicked()
                     lbGroups->changeItem(column, idx);
 
                     rsdg->setColumn(column);
-                    rsdg->showGroupHead(showgh);
-                    rsdg->showGroupFoot(showgf);
+                    rsdg->setGroupHeaderVisible(showgh);
+                    rsdg->setGroupFooterVisible(showgf);
                     if (breakafterfoot)
                         rsdg->setPageBreak(ReportSectionDetailGroup::BreakAfterGroupFooter);
                     else
@@ -314,12 +314,14 @@ void SectionEditor::btnAdd_clicked()
         // lets add a new section
         QString name;
         int i = 0;
-        while (i < 100 && m_reportSectionDetail->findSection(name) != -1) {
+        while (i < 100 && m_reportSectionDetail->indexOfSection(name) != -1) {
             i++;
             name = QString().sprintf("unnamed%d", i);
         }
-        if (m_reportSectionDetail->findSection(name) != -1) {
-            QMessageBox::warning(this, i18n("Error Encountered"), i18n("Unable to add a new group because its name would not be unique"));
+        if (m_reportSectionDetail->indexOfSection(name) != -1) {
+            QMessageBox::warning(
+                this, i18n("Error Encountered"),
+                i18n("Unable to add a new group because its name would not be unique"));
             return;
         }
         ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup(name, m_reportSectionDetail, m_reportSectionDetail);
@@ -351,13 +353,13 @@ void SectionEditor::btnMoveUp_clicked()
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx - 1);
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
-        bool showgh = rsdg->isGroupHeadShowing();
-        bool showgf = rsdg->isGroupFootShowing();
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
+        bool showgh = rsdg->isGroupHeaderVisible();
+        bool showgf = rsdg->isGroupFooterVisible();
         m_reportSectionDetail->removeSection(idx);
         m_reportSectionDetail->insertSection(idx - 1, rsdg);
-        rsdg->showGroupHead(showgh);
-        rsdg->showGroupFoot(showgf);
+        rsdg->setGroupHeaderVisible(showgh);
+        rsdg->setGroupFooterVisible(showgf);
     }
 }
 
@@ -370,12 +372,12 @@ void SectionEditor::brnMoveDown_clicked()
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx + 1);
-        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
-        bool showgh = rsdg->isGroupHeadShowing();
-        bool showgf = rsdg->isGroupFootShowing();
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->section(idx);
+        bool showgh = rsdg->isGroupHeaderVisible();
+        bool showgf = rsdg->isGroupFooterVisible();
         m_reportSectionDetail->removeSection(idx);
         m_reportSectionDetail->insertSection(idx + 1, rsdg);
-        rsdg->showGroupHead(showgh);
-        rsdg->showGroupFoot(showgf);
+        rsdg->setGroupHeaderVisible(showgh);
+        rsdg->setGroupFooterVisible(showgf);
     }
 }

@@ -42,8 +42,8 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
     }
     m_head = new ReportSection(rd /*, _rsd*/);
     m_foot = new ReportSection(rd /*, _rsd*/);
-    showGroupHead(false);
-    showGroupFoot(false);
+    setGroupHeaderVisible(false);
+    setGroupFooterVisible(false);
 
     setColumn(column);
 }
@@ -56,9 +56,9 @@ ReportSectionDetailGroup::~ReportSectionDetailGroup()
     delete m_foot;
 }
 
-void ReportSectionDetailGroup::showGroupHead(bool yes)
+void ReportSectionDetailGroup::setGroupHeaderVisible(bool yes)
 {
-    if (isGroupHeadShowing() != yes) {
+    if (isGroupHeaderVisible() != yes) {
         if (m_reportSectionDetail && m_reportSectionDetail->reportDesigner()) m_reportSectionDetail->reportDesigner()->setModified(true);
     }
     if (yes) m_head->show();
@@ -66,9 +66,9 @@ void ReportSectionDetailGroup::showGroupHead(bool yes)
     m_reportSectionDetail->adjustSize();
 }
 
-void ReportSectionDetailGroup::showGroupFoot(bool yes)
+void ReportSectionDetailGroup::setGroupFooterVisible(bool yes)
 {
-    if (isGroupFootShowing() != yes) {
+    if (isGroupFooterVisible() != yes) {
         if (m_reportSectionDetail && m_reportSectionDetail->reportDesigner()) m_reportSectionDetail->reportDesigner()->setModified(true);
     }
     if (yes) m_foot->show();
@@ -81,11 +81,11 @@ void ReportSectionDetailGroup::setPageBreak(int pb)
     m_pageBreak = pb;
 }
 
-bool ReportSectionDetailGroup::isGroupHeadShowing()
+bool ReportSectionDetailGroup::isGroupHeaderVisible() const
 {
     return m_head->isVisible();
 }
-bool ReportSectionDetailGroup::isGroupFootShowing()
+bool ReportSectionDetailGroup::isGroupFooterVisible() const
 {
     return m_foot->isVisible();
 }
@@ -109,11 +109,11 @@ void ReportSectionDetailGroup::setColumn(const QString & s)
     m_foot->setTitle(m_column + " Group Footer");
 }
 
-ReportSection * ReportSectionDetailGroup::getGroupHead()
+ReportSection * ReportSectionDetailGroup::groupHeader() const
 {
     return m_head;
 }
-ReportSection * ReportSectionDetailGroup::getGroupFoot()
+ReportSection * ReportSectionDetailGroup::groupFooter() const
 {
     return m_foot;
 }

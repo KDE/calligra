@@ -21,7 +21,7 @@
 
 #include "labelsizeinfo.h"
 
-static LabelSizeInfo __labels[] = {
+static LabelSizeInfo s_labels[] = {
 //"LABEL_NAME","Paper Size","COLUMNS","ROWS","WIDTH","HEIGHT","STARTXOFFSET","STARTYOFFSET","HORIZONTALGAP","VERTICALGAP"
     LabelSizeInfo("Avery 5263", "Letter", 2, 5, 400, 200, 25, 50, 0, 0),
     LabelSizeInfo("Avery 5264", "Letter", 2, 3, 400, 333, 25, 75, 0, 0),
@@ -30,19 +30,19 @@ static LabelSizeInfo __labels[] = {
     LabelSizeInfo()               // Null Label Size
 };
 
-const LabelSizeInfo & LabelSizeInfo::getByName(const QString & name)
+LabelSizeInfo LabelSizeInfo::find(const QString & name)
 {
     int i = 0;
-    while (!__labels[i].isNull() && __labels[i]._name != name)
+    while (!s_labels[i].isNull() && s_labels[i]._name != name)
         i++;
-    return __labels[i];
+    return s_labels[i];
 }
 
-QStringList LabelSizeInfo::getLabelNames()
+QStringList LabelSizeInfo::labelNames()
 {
     QStringList l;
-    for (int i = 0; !__labels[i].isNull(); i++)
-        l.append(__labels[i]._name);
+    for (int i = 0; !s_labels[i].isNull(); i++)
+        l.append(s_labels[i]._name);
     return l;
 }
 
@@ -89,53 +89,56 @@ LabelSizeInfo::~LabelSizeInfo()
 {
 }
 
-const QString & LabelSizeInfo::name()
+QString LabelSizeInfo::name() const
 {
     return _name;
 }
 
-const QString & LabelSizeInfo::paper()
+QString LabelSizeInfo::paper() const
 {
     return _paper;
 }
 
-const int LabelSizeInfo::columns()
+int LabelSizeInfo::columns() const
 {
     return _columns;
 }
-const int LabelSizeInfo::rows()
+int LabelSizeInfo::rows() const
 {
     return _rows;
 }
 
-const int LabelSizeInfo::width()
+int LabelSizeInfo::width() const
 {
     return _width;
 }
-const int LabelSizeInfo::height()
+
+int LabelSizeInfo::height() const
 {
     return _height;
 }
 
-const int LabelSizeInfo::startX()
+int LabelSizeInfo::startX() const
 {
     return _startx;
 }
-const int LabelSizeInfo::startY()
+
+int LabelSizeInfo::startY() const
 {
     return _starty;
 }
 
-const int LabelSizeInfo::xGap()
+int LabelSizeInfo::xGap() const
 {
     return _xgap;
 }
-const int LabelSizeInfo::yGap()
+
+int LabelSizeInfo::yGap() const
 {
     return _ygap;
 }
 
-bool LabelSizeInfo::isNull()
+bool LabelSizeInfo::isNull() const
 {
     return _null;
 }
