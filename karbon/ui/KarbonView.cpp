@@ -812,7 +812,7 @@ void KarbonView::pathSnapToGrid()
     part()->gridData().setSnapToGrid(true);
     
     KoSnapGuide snapGuide(d->canvas);
-    snapGuide.enableSnapStrategies(KoSnapGuide::Grid);
+    snapGuide.enableSnapStrategies(KoSnapGuide::GridSnapping);
     snapGuide.setSnapDistance(INT_MAX);
     
     foreach( KoShape* shape, selectedShapes )
