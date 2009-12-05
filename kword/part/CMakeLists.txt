@@ -77,7 +77,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate komain koaction)
+target_link_libraries(kwordprivate komain )
 target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kwordprivate
