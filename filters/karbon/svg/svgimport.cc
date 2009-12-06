@@ -147,7 +147,7 @@ void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QLis
     bool onlyTopLevelGroups = true;
     foreach( KoShape * shape, toplevelShapes )
     {
-        if( ! dynamic_cast<KoShapeGroup*>( shape ) )
+        if( ! dynamic_cast<KoShapeGroup*>( shape ) || shape->filterEffectStack() )
         {
             onlyTopLevelGroups = false;
             break;
