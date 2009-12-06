@@ -31,6 +31,7 @@
 RootSection::RootSection() : SectionGroup(0), m_undoStack(new KoUndoStack(0)), m_viewManager(new ViewManager(this)), m_sectionsSaver(new SectionsIO(this))
 {
   connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
+  connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
 }
 
 RootSection::~RootSection()
@@ -50,8 +51,9 @@ SectionsIO* RootSection::sectionsIO()
 
 void RootSection::addCommand(Section* _section, QUndoCommand* _command)
 {
+  kDebug() << _command << " is added for section " << _section;
+  m_commandsMap[_command] =_section;
   m_undoStack->push(_command);
-  m_sectionsSaver->push(_section);
 }
 
 void RootSection::createActions(KActionCollection* _actionCollection) {
@@ -62,6 +64,19 @@ void RootSection::createActions(KActionCollection* _actionCollection) {
 KoUndoStack* RootSection::undoStack()
 {
   return m_undoStack;
+}
+
+void RootSection::undoIndexChanged(int idx)
+{
+  const QUndoCommand* command = m_undoStack->command(idx - 1);
+  kDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
+  Section* section = m_commandsMap[command];
+  if(not section)
+  {
+    
+  }
+  m_sectionsSaver->push(section);
+  kDebug() << "save section: " << section;
 }
 
 #include "RootSection.moc"
