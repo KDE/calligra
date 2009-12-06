@@ -27,16 +27,13 @@
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
 
-class QButtonGroup;
-class QBoxLayout;
 class QToolButton;
-class ToolArea;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;
 
 /**
- * KoToolBox is a dock widget that can order tools according to type and
+ * ToolBox is a dock widget that can order tools according to type and
  * priority.
  *
  * The ToolBox is a container for tool buttons which are themselves
@@ -78,7 +75,7 @@ public slots:
      * @param canvas the currently active canvas.
      * @param id an id to identify the button to activate.
      */
-    void setActiveTool(const KoCanvasController *canvas, int id);
+    void setActiveTool(KoCanvasController *canvas, int id);
 
     /**
      * Show only the dynamic buttons that have a code from parameter codes.
@@ -104,10 +101,10 @@ private:
     Private * const d;
 };
 
-class KoToolBoxDocker : public QDockWidget, public KoCanvasObserver
+class ToolBoxDocker : public QDockWidget, public KoCanvasObserver
 {
 public:
-    KoToolBoxDocker(ToolBox *toolBox);
+    ToolBoxDocker(ToolBox *toolBox);
 
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);

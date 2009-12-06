@@ -58,7 +58,7 @@ KoDockFactory::DockPosition ToolBoxFactory::defaultDockPosition() const
 QDockWidget* ToolBoxFactory::createDockWidget()
 {
     ToolBox *box = new ToolBox(d->canvas);
-    KoToolBoxDocker *docker = new KoToolBoxDocker(box);
+    ToolBoxDocker *docker = new ToolBoxDocker(box);
     docker->setWindowTitle(d->appName);
     docker->setObjectName("ToolBox_"+ d->appName);
 
