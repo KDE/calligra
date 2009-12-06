@@ -570,7 +570,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
 
 void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
-                             GBool interpolate, int *maskColors, GBool inlineImg)
+                             GBool /*interpolate*/, int *maskColors, GBool inlineImg)
 {
     drawImage(state, ref, str, width, height, colorMap, maskColors, inlineImg);
 }
