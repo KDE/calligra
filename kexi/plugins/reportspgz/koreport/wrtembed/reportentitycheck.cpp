@@ -61,6 +61,9 @@ ReportEntityCheck::~ReportEntityCheck()
 
 void ReportEntityCheck::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
     // store any values we plan on changing so we can restore them
     QFont f = painter->font();
     QPen  p = painter->pen();
@@ -165,7 +168,8 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityCheck::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << endl;
+    Q_UNUSED(s)
+   
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

@@ -62,7 +62,8 @@ KRImageData::KRImageData(QDomNode & element)
             setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else if (n == "rect") {
             QDomNodeList rnl = node.childNodes();
-            qreal x, y, w, h = 0.0;
+            qreal x, y, w, h;
+	    x = y = w = h = 0.0;
             for (int ri = 0; ri < rnl.count(); ri++) {
                 node = rnl.item(ri);
                 n = node.nodeName();

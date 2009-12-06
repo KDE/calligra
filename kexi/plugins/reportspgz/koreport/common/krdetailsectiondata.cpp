@@ -40,9 +40,6 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 
     bool have_detail = false;
 
-    KRSectionData * old_head = 0;
-    KRSectionData * old_foot = 0;
-
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();

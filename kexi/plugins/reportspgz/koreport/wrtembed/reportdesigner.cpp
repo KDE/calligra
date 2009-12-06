@@ -587,6 +587,12 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
             rs->setTitle(i18n("Report Footer"));
             m_reportFoot = rs;
             break;
+	//These sections cannot be inserted this way
+	case KRSectionData::None:
+	case KRSectionData::GroupHead:
+	case KRSectionData::GroupFoot:
+	case KRSectionData::Detail:
+	    break;
         }
 
         rs->show();

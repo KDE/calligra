@@ -139,6 +139,7 @@ void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value
 }
 void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 {
+    Q_UNUSED(value);
     m_groups.remove(key);
     m_functions->setWhere(where());
 }
@@ -161,11 +162,6 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
         QVariant result = m_action->callFunction(section->name() + "_onrender");
         displayErrors();
     }
-}
-
-void KRScriptHandler::populateEngineParameters(KexiDB::Cursor *q)
-{
-
 }
 
 #if !KDE_IS_VERSION(4,2,88)

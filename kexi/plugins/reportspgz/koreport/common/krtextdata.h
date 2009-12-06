@@ -45,7 +45,6 @@ public:
     virtual KRTextData * toText();
     virtual int type() const;
 
-    void setTextFlags(Qt::Alignment);
     Qt::Alignment textFlags() const;
     QFont font() const {
         return m_font->value().value<QFont>();

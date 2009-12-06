@@ -69,7 +69,7 @@ ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene)
 }
 
 ReportEntityLine::ReportEntityLine(QDomNode & entity, ReportDesigner * d, QGraphicsScene * scene)
-        : ReportEntity(d), KRLineData(entity)
+        : KRLineData(entity), ReportEntity(d)
 {
     init(scene, d);
     setLine(m_start.toScene().x(), m_start.toScene().y(), m_end.toScene().x(), m_end.toScene().y());
@@ -90,7 +90,9 @@ ReportEntityLine* ReportEntityLine::clone()
 void ReportEntityLine::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                              QWidget *widget)
 {
-    //Q3CanvasLine::drawShape(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
     painter->setRenderHint(QPainter::Antialiasing, true);
     QPen p = painter->pen();
     painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
@@ -154,6 +156,8 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityLine::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
+    Q_UNUSED(s);
+    
     //TODO KoProperty does not support QPointF
     if (p.name() == "Start") {
         //setLine ( _start.toScene().x(), _start.toScene().y(), line().p1().x(), line().p1().y() );
@@ -175,6 +179,7 @@ void ReportEntityLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     m_reportDesigner->changeSet(m_set);
     setSelected(true);
+    QGraphicsLineItem::mousePressEvent(event);
 }
 
 QVariant ReportEntityLine::itemChange(GraphicsItemChange change, const QVariant &value)

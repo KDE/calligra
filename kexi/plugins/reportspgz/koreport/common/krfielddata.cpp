@@ -196,10 +196,6 @@ ORTextStyleData KRFieldData::textStyle()
     return d;
 }
 
-void KRFieldData::setTextFlags(Qt::Alignment f)
-{
-}
-
 QString KRFieldData::controlSource() const
 {
     return m_controlSource->value().toString();

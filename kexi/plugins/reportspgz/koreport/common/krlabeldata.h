@@ -51,7 +51,6 @@ public:
         return m_font->value().value<QFont>();
     }
     Qt::Alignment textFlags() const;
-    void setTextFlags(Qt::Alignment);
     void setText(const QString&);
     ORTextStyleData textStyle();
     ORLineStyleData lineStyle();

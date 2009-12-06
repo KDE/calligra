@@ -24,6 +24,8 @@ ReportPropertiesButton::ReportPropertiesButton(QWidget* parent) :  QCheckBox(par
 
 void ReportPropertiesButton::paintEvent(QPaintEvent* event)
 {
+    Q_UNUSED(event);
+    
     QPainter painter(this);
     KColorScheme colorScheme(QPalette::Active, KColorScheme::Window);
     
@@ -33,6 +35,5 @@ void ReportPropertiesButton::paintEvent(QPaintEvent* event)
     if (checkState()) {
       painter.fillRect(7, 7, width() - 14, height() - 14, colorScheme.foreground(KColorScheme::InactiveText));
     }
-    //QCheckBox::paintEvent(event);
 }
 

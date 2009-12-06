@@ -30,6 +30,8 @@
 ReportSectionDetail::ReportSectionDetail(ReportDesigner * rptdes, const char * name)
         : QWidget(rptdes)
 {
+    Q_UNUSED(name);
+    
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pageBreak = BreakNone;
     m_vboxlayout = new QVBoxLayout(this);

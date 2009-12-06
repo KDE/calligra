@@ -62,7 +62,8 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
     m_name->setValue(m_reportDesigner->suggestEntityName("Barcode"));
 }
 
-ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene) : ReportRectEntity(rw), KRBarcodeData(element)
+ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
+	: KRBarcodeData(element), ReportRectEntity(rw)
 {
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());
@@ -90,6 +91,9 @@ QRect ReportEntityBarcode::getTextRect()
 
 void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
 

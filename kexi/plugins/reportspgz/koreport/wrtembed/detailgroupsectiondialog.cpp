@@ -31,8 +31,9 @@
 DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
         : QDialog(parent, fl)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(modal);
     setupUi(this);
-
 
     // signals and slots connections
     connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));

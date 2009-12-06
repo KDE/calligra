@@ -55,7 +55,6 @@ public slots:
     void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
     void slotEnteredGroup(const QString&, const QVariant&);
     void slotExitedGroup(const QString&, const QVariant&);
-    void populateEngineParameters(KexiDB::Cursor *q);
     void setPageNumber(int p) {m_constants->setPageNumber(p);}
     void setPageTotal(int t) {m_constants->setPageTotal(t);}
     void newPage();

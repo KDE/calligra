@@ -171,11 +171,6 @@ void KRTextData::createProperties()
 
 }
 
-void KRTextData::setTextFlags(Qt::Alignment f)
-{
-
-}
-
 QString KRTextData::column() const
 {
     return m_controlSource->value().toString();

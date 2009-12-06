@@ -80,11 +80,6 @@ KRLabelData::KRLabelData(QDomNode & element)
     }
 }
 
-void KRLabelData::setTextFlags(Qt::Alignment f)
-{
-
-}
-
 QString KRLabelData::text() const
 {
     return m_text->value().toString();

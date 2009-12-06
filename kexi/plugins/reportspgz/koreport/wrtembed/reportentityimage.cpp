@@ -68,7 +68,8 @@ ReportEntityImage::ReportEntityImage(ReportDesigner * rw, QGraphicsScene* scene)
     m_name->setValue(m_reportDesigner->suggestEntityName("Image"));
 }
 
-ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene): ReportRectEntity(rw), KRImageData(element)
+ReportEntityImage::ReportEntityImage(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene)
+	: KRImageData(element), ReportRectEntity(rw)
 {
     init(scene);
 }
@@ -90,6 +91,9 @@ ReportEntityImage::~ReportEntityImage()
 
 void ReportEntityImage::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
 

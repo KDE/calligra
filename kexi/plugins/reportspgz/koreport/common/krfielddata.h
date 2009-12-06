@@ -45,7 +45,7 @@ public:
     virtual int type() const;
 
     Qt::Alignment textFlags() const;
-    void setTextFlags(Qt::Alignment);
+
     QFont font() const {
         return m_font->value().value<QFont>();
     }

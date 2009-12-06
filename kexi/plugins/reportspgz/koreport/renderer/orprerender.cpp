@@ -232,7 +232,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
         if (m_kodata/* && !curs->eof()*/) {
             QStringList keys;
             QStringList keyValues;
-            bool    status;
+            bool status = false;
             int i = 0, pos = 0, cnt = 0;
             ORDetailGroupSectionData * grp = 0;
 
