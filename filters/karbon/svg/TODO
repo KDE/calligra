@@ -8,11 +8,7 @@ SVG export
 
 SVG import
 - fix text
-- embedded svg elements
-- visibility
 - text on path shape -> see above for export
 - pattern strokes
 - clipping, masking
-- filters
 - css styling
-- object/group opacity
