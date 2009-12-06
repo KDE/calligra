@@ -3,6 +3,7 @@ Type=Service
 Name=MS Word 2007 Import Filter for KWord
 Name[pt]=Filtro de Importação de Microsoft Word 2007 para o KWord
 Name[pt_BR]=Filtro de Importação de Microsoft Word 2007 para o KWord
+Name[sv]=Microsoft Word 2007-importfilter för Kword
 Name[uk]=Фільтр імпорту MS Word 2007 для KWord
 Name[x-test]=xxMS Word 2007 Import Filter for KWordxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
