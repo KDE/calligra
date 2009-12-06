@@ -179,7 +179,7 @@ void KarbonFilterEffectsTool::activate( bool temporary )
         return;
     }
     
-    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
     d->fillConfigSelector(d->currentShape);
 }
 
@@ -256,7 +256,7 @@ void KarbonFilterEffectsTool::filterSelected(int index)
 
 void KarbonFilterEffectsTool::selectionChanged()
 {
-    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    d->currentShape = m_canvas->shapeManager()->selection()->firstSelectedShape(KoFlake::TopLevelSelection);
     d->fillConfigSelector(d->currentShape);
 }
 
