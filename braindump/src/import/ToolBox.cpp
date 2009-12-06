@@ -35,6 +35,8 @@
 
 #include "math.h"
 
+namespace {
+
 class SectionLayout : public QLayout
 {
 public:
@@ -152,6 +154,8 @@ private:
     SectionLayout *m_layout;
     QString m_name;
 };
+
+}
 
 // Priorities for a specific columnwidth for section depending on the width of the docker.
 static const int rowPriorities[][6] = {
