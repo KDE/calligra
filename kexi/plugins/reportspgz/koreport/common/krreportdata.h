@@ -89,7 +89,7 @@ public:
     }
     
     KRDetailSectionData* detail() const {
-        return m_detailsection;
+        return m_detailSection;
     }
     
     void setName(const QString&n){m_name = n;}
@@ -105,22 +105,22 @@ protected:
 
     ReportPageOptions page;
 
-    KRSectionData * m_pgheadFirst;
-    KRSectionData * m_pgheadOdd;
-    KRSectionData * m_pgheadEven;
-    KRSectionData * m_pgheadLast;
-    KRSectionData * m_pgheadAny;
+    KRSectionData * m_pageHeaderFirst;
+    KRSectionData * m_pageHeaderOdd;
+    KRSectionData * m_pageHeaderEven;
+    KRSectionData * m_pageHeaderLast;
+    KRSectionData * m_pageHeaderAny;
 
-    KRSectionData * m_rpthead;
-    KRSectionData * m_rptfoot;
+    KRSectionData * m_reportHeader;
+    KRSectionData * m_reportFooter;
 
-    KRSectionData * m_pgfootFirst;
-    KRSectionData * m_pgfootOdd;
-    KRSectionData * m_pgfootEven;
-    KRSectionData * m_pgfootLast;
-    KRSectionData * m_pgfootAny;
+    KRSectionData * m_pageFooterFirst;
+    KRSectionData * m_pageFooterOdd;
+    KRSectionData * m_pageFooterEven;
+    KRSectionData * m_pageFooterLast;
+    KRSectionData * m_pageFooterAny;
 
-    KRDetailSectionData* m_detailsection;
+    KRDetailSectionData* m_detailSection;
 private:
     bool m_valid;
     void init();

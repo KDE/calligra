@@ -51,22 +51,22 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
                 node = nl.item(i);
                 if (node.nodeName() == "column") {
                     dgsd->column = node.firstChild().nodeValue();
-                    if (dgsd->head) {
-                        dgsd->head->setExtra(dgsd->column);
+                    if (dgsd->groupHeader) {
+                        dgsd->groupHeader->setExtra(dgsd->column);
                     }
-                    if (dgsd->foot) {
-                        dgsd->foot->setExtra(dgsd->column);
+                    if (dgsd->groupFooter) {
+                        dgsd->groupFooter->setExtra(dgsd->column);
                     }
                 } else if (node.nodeName() == "pagebreak") {
                     QDomElement elemThis = node.toElement();
                     QString n = elemThis.attribute("when");
                     if ("after foot" == n)
-                        dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFoot;
+                        dgsd->pagebreak = ORDetailGroupSectionData::BreakAfterGroupFooter;
                 } else if (node.nodeName() == "head") {
                     KRSectionData * sd = new KRSectionData(node.toElement());
                     if (sd->isValid()) {
-                        dgsd->head = sd;
-                        dgsd->head->setExtra(dgsd->column);
+                        dgsd->groupHeader = sd;
+                        dgsd->groupHeader->setExtra(dgsd->column);
                         //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
                         //for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
                         // dgsd->_subtotCheckPoints[*it] = 0.0;
@@ -75,8 +75,8 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
                 } else if (node.nodeName() == "foot") {
                     KRSectionData * sd = new KRSectionData(node.toElement());
                     if (sd->isValid()) {
-                        dgsd->foot = sd;
-                        dgsd->foot->setExtra(dgsd->column);
+                        dgsd->groupFooter = sd;
+                        dgsd->groupFooter->setExtra(dgsd->column);
                         //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
                         //for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
                         // dgsd->_subtotCheckPoints[*it] = 0.0;

@@ -43,26 +43,26 @@ bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
 
     sht->setSheetName(document->title());
 
-    bool renderedPageHead = false;
-    bool renderedPageFoot = false;
+    bool renderedPageHeader = false;
+    bool renderedPageFooter = false;
 
     // Render Each Section
     for (long s = 0; s < document->sections(); s++) {
         OROSection *section = document->section(s);
         section->sortPrimatives(OROSection::SortX);
 
-        if (section->type() == KRSectionData::GroupHead ||
-                section->type() == KRSectionData::GroupFoot ||
+        if (section->type() == KRSectionData::GroupHeader ||
+                section->type() == KRSectionData::GroupFooter ||
                 section->type() == KRSectionData::Detail ||
-                section->type() == KRSectionData::ReportHead ||
-                section->type() == KRSectionData::ReportFoot ||
-                (section->type() == KRSectionData::PageHeadAny && !renderedPageHead) ||
-                (section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
-            if (section->type() == KRSectionData::PageHeadAny)
-                renderedPageHead = true;
+                section->type() == KRSectionData::ReportHeader ||
+                section->type() == KRSectionData::ReportFooter ||
+                (section->type() == KRSectionData::PageHeaderAny && !renderedPageHeader) ||
+                (section->type() == KRSectionData::PageFooterAny && !renderedPageFooter && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+            if (section->type() == KRSectionData::PageHeaderAny)
+                renderedPageHeader = true;
 
-            if (section->type() == KRSectionData::PageFootAny)
-                renderedPageFoot = true;
+            if (section->type() == KRSectionData::PageFooterAny)
+                renderedPageFooter = true;
 
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {

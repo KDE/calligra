@@ -156,32 +156,32 @@ void ORPreRenderPrivate::createNewPage()
 
     m_yOffset = m_topMargin;
 
-    if (m_pageCounter == 1 && m_reportData->m_pgheadFirst != 0)
-        renderSection(* (m_reportData->m_pgheadFirst));
-    else if (lastPage == true && m_reportData->m_pgheadLast != 0)
-        renderSection(* (m_reportData->m_pgheadLast));
-    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pgheadOdd != 0)
-        renderSection(* (m_reportData->m_pgheadOdd));
-    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pgheadEven != 0)
-        renderSection(* (m_reportData->m_pgheadEven));
-    else if (m_reportData->m_pgheadAny != 0)
-        renderSection(* (m_reportData->m_pgheadAny));
+    if (m_pageCounter == 1 && m_reportData->m_pageHeaderFirst != 0)
+        renderSection(* (m_reportData->m_pageHeaderFirst));
+    else if (lastPage == true && m_reportData->m_pageHeaderLast != 0)
+        renderSection(* (m_reportData->m_pageHeaderLast));
+    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pageHeaderOdd != 0)
+        renderSection(* (m_reportData->m_pageHeaderOdd));
+    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageHeaderAny != 0)
+        renderSection(* (m_reportData->m_pageHeaderAny));
+    else if (m_reportData->m_pageHeaderAny != 0)
+        renderSection(* (m_reportData->m_pageHeaderAny));
 }
 
 qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
 {
     qreal retval = 0.0;
 
-    if (lastPage && m_reportData->m_pgfootLast != 0)
-        retval = renderSectionSize(* (m_reportData->m_pgfootLast));
-    else if (m_pageCounter == 1 && m_reportData->m_pgfootFirst)
-        retval = renderSectionSize(* (m_reportData->m_pgfootFirst));
-    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pgfootOdd)
-        retval = renderSectionSize(* (m_reportData->m_pgfootOdd));
-    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pgfootEven)
-        retval = renderSectionSize(* (m_reportData->m_pgfootEven));
-    else if (m_reportData->m_pgfootAny != 0)
-        retval = renderSectionSize(* (m_reportData->m_pgfootAny));
+    if (lastPage && m_reportData->m_pageFooterLast != 0)
+        retval = renderSectionSize(* (m_reportData->m_pageFooterLast));
+    else if (m_pageCounter == 1 && m_reportData->m_pageFooterFirst)
+        retval = renderSectionSize(* (m_reportData->m_pageFooterFirst));
+    else if ((m_pageCounter % 2) == 1 && m_reportData->m_pageFooterOdd)
+        retval = renderSectionSize(* (m_reportData->m_pageFooterOdd));
+    else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageFooterEven)
+        retval = renderSectionSize(* (m_reportData->m_pageFooterEven));
+    else if (m_reportData->m_pageFooterAny != 0)
+        retval = renderSectionSize(* (m_reportData->m_pageFooterAny));
 
     kDebug() << retval;
     return retval;
@@ -195,26 +195,26 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
 
     kDebug() << offset;
 
-    if (lastPage && m_reportData->m_pgfootLast != 0) {
+    if (lastPage && m_reportData->m_pageFooterLast != 0) {
         kDebug() << "Last Footer";
-        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pgfootLast));
-        retval = renderSection(* (m_reportData->m_pgfootLast));
-    } else if (m_pageCounter == 1 && m_reportData->m_pgfootFirst) {
+        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterLast));
+        retval = renderSection(* (m_reportData->m_pageFooterLast));
+    } else if (m_pageCounter == 1 && m_reportData->m_pageFooterFirst) {
         kDebug() << "First Footer";
-        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pgfootFirst));
-        retval = renderSection(* (m_reportData->m_pgfootFirst));
-    } else if ((m_pageCounter % 2) == 1 && m_reportData->m_pgfootOdd) {
+        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterFirst));
+        retval = renderSection(* (m_reportData->m_pageFooterFirst));
+    } else if ((m_pageCounter % 2) == 1 && m_reportData->m_pageFooterOdd) {
         kDebug() << "Odd Footer";
-        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pgfootOdd));
-        retval = renderSection(* (m_reportData->m_pgfootOdd));
-    } else if ((m_pageCounter % 2) == 0 && m_reportData->m_pgfootEven) {
+        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterOdd));
+        retval = renderSection(* (m_reportData->m_pageFooterOdd));
+    } else if ((m_pageCounter % 2) == 0 && m_reportData->m_pageFooterEven) {
         kDebug() << "Even Footer";
-        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pgfootEven));
-        retval = renderSection(* (m_reportData->m_pgfootEven));
-    } else if (m_reportData->m_pgfootAny != 0) {
+        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterEven));
+        retval = renderSection(* (m_reportData->m_pageFooterEven));
+    } else if (m_reportData->m_pageFooterAny != 0) {
         kDebug() << "Any Footer";
-        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pgfootAny));
-        retval = renderSection(* (m_reportData->m_pgfootAny));
+        m_yOffset = offset - renderSectionSize(* (m_reportData->m_pageFooterAny));
+        retval = renderSection(* (m_reportData->m_pageFooterAny));
     }
 
     return retval;
@@ -259,8 +259,8 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 kDebug() << "EMIT1";
                 emit(enteredGroup(keys[i], keyValues[i]));
 
-                if (grp->head)
-                    renderSection(* (grp->head));
+                if (grp->groupHeader)
+                    renderSection(* (grp->groupHeader));
             }
 
             do {
@@ -311,13 +311,13 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 do_break = false;
                                 grp = detailData.m_groupList[i];
                               
-                                if (grp->foot) {
-                                    if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
+                                if (grp->groupFooter) {
+                                    if (renderSectionSize(* (grp->groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
                                         createNewPage();
-                                    renderSection(* (grp->foot));
+                                    renderSection(* (grp->groupFooter));
                                 }
 
-                                if (ORDetailGroupSectionData::BreakAfterGroupFoot == grp->pagebreak)
+                                if (ORDetailGroupSectionData::BreakAfterGroupFooter == grp->pagebreak)
                                     do_break = true;
                             }
                             // step ahead to where we should be and print the needed headers
@@ -329,15 +329,15 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 for (i = pos; i < cnt; i++) {
                                     grp = detailData.m_groupList[i];
                             
-                                    if (grp->head) {
-                                        if (renderSectionSize(* (grp->head)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight) {
+                                    if (grp->groupHeader) {
+                                        if (renderSectionSize(* (grp->groupHeader)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight) {
                                             m_kodata->movePrevious();
                                             createNewPage();
                                             m_kodata->moveNext();
                                         }
 
 
-                                        renderSection(* (grp->head));
+                                        renderSection(* (grp->groupHeader));
                                     }
                                
                                     if (!keys[i].isEmpty())
@@ -359,10 +359,10 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 for (i = cnt - 1; i >= 0; i--) {
                     grp = detailData.m_groupList[i];
 
-                    if (grp->foot) {
-                        if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
+                    if (grp->groupFooter) {
+                        if (renderSectionSize(* (grp->groupFooter)) + finishCurPageSize() + m_bottomMargin + m_yOffset >= m_maxHeight)
                             createNewPage();
-                        renderSection(* (grp->foot));
+                        renderSection(* (grp->groupFooter));
                         emit(exitedGroup(keys[i], keyValues[i]));
                     }
                 }
@@ -971,7 +971,7 @@ ORODocument* ORPreRender::generate()
             numRows = label.columns();
         }
 
-        KRDetailSectionData * detailData = d->m_reportData->m_detailsection;
+        KRDetailSectionData * detailData = d->m_reportData->m_detailSection;
         if (detailData->m_detailSection != 0) {
             KoReportData *mydata = d->m_kodata;
 
@@ -1001,19 +1001,19 @@ ORODocument* ORPreRender::generate()
 
     } else {
 // Normal Print Run
-        if (d->m_reportData->m_rpthead != 0) {
-            d->renderSection(* (d->m_reportData->m_rpthead));
+        if (d->m_reportData->m_reportHeader != 0) {
+            d->renderSection(* (d->m_reportData->m_reportHeader));
         }
 
-        if (d->m_reportData->m_detailsection) {
-            d->renderDetailSection(* (d->m_reportData->m_detailsection));
+        if (d->m_reportData->m_detailSection) {
+            d->renderDetailSection(* (d->m_reportData->m_detailSection));
         }
 
-        if (d->m_reportData->m_rptfoot != 0) {
-            if (d->renderSectionSize(* (d->m_reportData->m_rptfoot)) + d->finishCurPageSize(true) + d->m_bottomMargin + d->m_yOffset >= d->m_maxHeight) {
+        if (d->m_reportData->m_reportFooter != 0) {
+            if (d->renderSectionSize(* (d->m_reportData->m_reportFooter)) + d->finishCurPageSize(true) + d->m_bottomMargin + d->m_yOffset >= d->m_maxHeight) {
                 d->createNewPage();
             }
-            d->renderSection(* (d->m_reportData->m_rptfoot));
+            d->renderSection(* (d->m_reportData->m_reportFooter));
         }
     }
     d->finishCurPage(true);

@@ -37,8 +37,8 @@ ORDetailGroupSectionData::ORDetailGroupSectionData()
 {
     pagebreak = BreakNone;
     _subtotCheckPoints.clear();
-    head = 0;
-    foot = 0;
+    groupHeader = 0;
+    groupFooter = 0;
 }
 
 

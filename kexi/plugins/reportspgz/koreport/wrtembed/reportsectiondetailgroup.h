@@ -46,9 +46,9 @@ public:
     QString column();
 
     void setGroupHeaderVisible(bool yes = TRUE);
-    bool isGroupHeaderVisible() const;
+    bool groupHeaderVisible() const;
     void setGroupFooterVisible(bool yes = TRUE);
-    bool isGroupFooterVisible() const;
+    bool groupFooterVisible() const;
     void setPageBreak(int);
     int  pageBreak() const;
 
@@ -58,8 +58,8 @@ public:
 protected:
     QString m_column;
 
-    ReportSection * m_head;
-    ReportSection * m_foot;
+    ReportSection * m_groupHeader;
+    ReportSection * m_groupFooter;
 
     ReportSectionDetail * m_reportSectionDetail;
 

@@ -43,14 +43,15 @@ KRSectionData::KRSectionData()
 
 KRSectionData::KRSectionData(const QDomElement & elemSource)
 {
+    //TODO surely this could be wriiten in a more sane way!!!!
+    
     createProperties();
     m_name = elemSource.tagName();
     setObjectName(m_name);
 
-    if (m_name != "rpthead" && m_name != "rptfoot" &&
-            m_name != "pghead" && m_name != "pgfoot" &&
-            m_name != "grouphead" && m_name != "groupfoot" &&
-            m_name != "head" && m_name != "foot" &&
+    if (m_name != "reportheader" && m_name != "reportfooter" &&
+            m_name != "pageheader" && m_name != "pagefooter" &&
+            m_name != "groupheader" && m_name != "groupfooter" &&
             m_name != "detail") {
         m_valid = false;
         return;
@@ -59,23 +60,23 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
 
     m_type = None;
 
-    if (m_name == "rpthead")
-        m_type = ReportHead;
+    if (m_name == "reportheader")
+        m_type = ReportHeader;
 
-    if (m_name == "rptfoot")
-        m_type = ReportFoot;
+    if (m_name == "reportfooter")
+        m_type = ReportFooter;
 
-    if (m_name == "pghead")
-        m_type = PageHeadAny;
+    if (m_name == "pageheader")
+        m_type = PageHeaderAny;
 
-    if (m_name == "pgfoot")
-        m_type = PageFootAny;
+    if (m_name == "pagefooter")
+        m_type = PageFooterAny;
 
-    if (m_name == "grouphead")
-        m_type = GroupHead;
+    if (m_name == "groupheader")
+        m_type = GroupHeader;
 
-    if (m_name == "groupfoot")
-        m_type = GroupFoot;
+    if (m_name == "groupfooter")
+        m_type = GroupFooter;
 
     if (m_name == "detail")
         m_type = Detail;
@@ -91,37 +92,37 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
         } else if (elemThis.tagName() == "bgcolor") {
             m_backgroundColor->setValue(QColor(elemThis.text()));
         } else if (elemThis.tagName() == "firstpage") {
-            if (m_name == "pghead" || m_name == "pgfoot")
+            if (m_name == "pageheader" || m_name == "pagefooter")
                 m_extra = elemThis.tagName();
 
-            if (m_name == "pghead")
-                m_type = PageHeadFirst;
-            if (m_name == "pgfoot")
-                m_type = PageFootFirst;
+            if (m_name == "pageheader")
+                m_type = PageHeaderFirst;
+            if (m_name == "pagefooter")
+                m_type = PageFooterFirst;
         } else if (elemThis.tagName() == "odd") {
-            if (m_name == "pghead" || m_name == "pgfoot")
+            if (m_name == "pageheader" || m_name == "pagefooter")
                 m_extra = elemThis.tagName();
 
-            if (m_name == "pghead")
-                m_type = PageHeadOdd;
-            if (m_name == "pgfoot")
-                m_type = PageFootOdd;
+            if (m_name == "pageheader")
+                m_type = PageHeaderOdd;
+            if (m_name == "pagefooter")
+                m_type = PageFooterOdd;
         } else if (elemThis.tagName() == "even") {
-            if (m_name == "pghead" || m_name == "pgfoot")
+            if (m_name == "pageheader" || m_name == "pagefooter")
                 m_extra = elemThis.tagName();
 
-            if (m_name == "pghead")
-                m_type = PageHeadEven;
-            if (m_name == "pgfoot")
-                m_type = PageFootEven;
+            if (m_name == "pageheader")
+                m_type = PageHeaderEven;
+            if (m_name == "pagefooter")
+                m_type = PageFooterEven;
         } else if (elemThis.tagName() == "lastpage") {
-            if (m_name == "pghead" || m_name == "pgfoot")
+            if (m_name == "pageheader" || m_name == "pagefooter")
                 m_extra = elemThis.tagName();
 
-            if (m_name == "pghead")
-                m_type = PageHeadLast;
-            if (m_name == "pgfoot")
-                m_type = PageFootLast;
+            if (m_name == "pageheader")
+                m_type = PageHeaderLast;
+            if (m_name == "pagefooter")
+                m_type = PageFooterLast;
         } else if (elemThis.tagName() == "label") {
             KRLabelData * label = new KRLabelData(elemThis);
             m_objects.append(label);

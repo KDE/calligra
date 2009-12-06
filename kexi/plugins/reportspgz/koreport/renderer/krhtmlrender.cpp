@@ -103,17 +103,17 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
     for (long s = 0; s < document->sections(); s++) {
         OROSection *section = document->section(s);
 
-        if (section->type() == KRSectionData::GroupHead ||
-                section->type() == KRSectionData::GroupFoot ||
+        if (section->type() == KRSectionData::GroupHeader ||
+                section->type() == KRSectionData::GroupFooter ||
                 section->type() == KRSectionData::Detail ||
-                section->type() == KRSectionData::ReportHead ||
-                section->type() == KRSectionData::ReportFoot ||
-                (section->type() == KRSectionData::PageHeadAny && !renderedPageHead) ||
-                (section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
-            if (section->type() == KRSectionData::PageHeadAny)
+                section->type() == KRSectionData::ReportHeader ||
+                section->type() == KRSectionData::ReportFooter ||
+                (section->type() == KRSectionData::PageHeaderAny && !renderedPageHead) ||
+                (section->type() == KRSectionData::PageFooterAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+            if (section->type() == KRSectionData::PageHeaderAny)
                 renderedPageHead = true;
 
-            if (section->type() == KRSectionData::PageFootAny)
+            if (section->type() == KRSectionData::PageFooterAny)
                 renderedPageFoot = true;
 
             style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
@@ -218,8 +218,8 @@ QString KRHtmlRender::renderTable(ORODocument *document)
     QString body;
     QString tr;
 
-    bool renderedPageHead = false;
-    bool renderedPageFoot = false;
+    bool renderedPageHeader = false;
+    bool renderedPageFooter = false;
 
     QDir d(m_tempDirName);
 
@@ -229,18 +229,18 @@ QString KRHtmlRender::renderTable(ORODocument *document)
         OROSection *section = document->section(s);
         section->sortPrimatives(OROSection::SortX);
 
-        if (section->type() == KRSectionData::GroupHead ||
-                section->type() == KRSectionData::GroupFoot ||
+        if (section->type() == KRSectionData::GroupHeader ||
+                section->type() == KRSectionData::GroupFooter ||
                 section->type() == KRSectionData::Detail ||
-                section->type() == KRSectionData::ReportHead ||
-                section->type() == KRSectionData::ReportFoot ||
-                (section->type() == KRSectionData::PageHeadAny && !renderedPageHead) ||
-                (section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
-            if (section->type() == KRSectionData::PageHeadAny)
-                renderedPageHead = true;
+                section->type() == KRSectionData::ReportHeader ||
+                section->type() == KRSectionData::ReportFooter ||
+                (section->type() == KRSectionData::PageHeaderAny && !renderedPageHeader) ||
+                (section->type() == KRSectionData::PageFooterAny && !renderedPageFooter && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+            if (section->type() == KRSectionData::PageHeaderAny)
+                renderedPageHeader = true;
 
-            if (section->type() == KRSectionData::PageFootAny)
-                renderedPageFoot = true;
+            if (section->type() == KRSectionData::PageFooterAny)
+                renderedPageFooter = true;
 
             tr = "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
             //Render the objects in each section

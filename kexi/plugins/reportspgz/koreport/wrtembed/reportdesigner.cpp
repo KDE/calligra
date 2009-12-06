@@ -158,9 +158,9 @@ void ReportDesigner::init()
 
     //setSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
-    m_reportHead = m_reportFoot = 0;
-    m_pageHeadFirst = m_pageHeadOdd = m_pageHeadEven = m_pageHeadLast = m_pageHeadAny = 0;
-    m_pageFootFirst = m_pageFootOdd = m_pageFootEven = m_pageFootLast = m_pageFootAny = 0;
+    m_reportHeader = m_reportFooter = 0;
+    m_pageHeaderFirst = m_pageHeaderOdd = m_pageHeaderEven = m_pageHeaderLast = m_pageHeaderAny = 0;
+    m_pageFooterFirst = m_pageFooterOdd = m_pageFooterEven = m_pageFooterLast = m_pageFooterAny = 0;
 
     d->grid = new QGridLayout(this);
     d->grid->setSpacing(0);
@@ -273,99 +273,99 @@ ReportDesigner::ReportDesigner(QWidget *parent, QDomElement data) : QWidget(pare
                 propertySet()->property("LeftMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "rightmargin") {
                 propertySet()->property("RightMargin").setValue(it.firstChild().nodeValue().toDouble());
-            } else if (n == "rpthead") {
-                if (section(KRSectionData::ReportHead) == 0) {
-                    insertSection(KRSectionData::ReportHead);
-                    section(KRSectionData::ReportHead)->initFromXML(it);
+            } else if (n == "reportheader") {
+                if (section(KRSectionData::ReportHeader) == 0) {
+                    insertSection(KRSectionData::ReportHeader);
+                    section(KRSectionData::ReportHeader)->initFromXML(it);
                 } else {
                     kDebug() << "While loading xml tried to add more than one rpthead";
                 }
-            } else if (n == "rptfoot") {
-                if (section(KRSectionData::ReportFoot) == 0) {
-                    insertSection(KRSectionData::ReportFoot);
-                    section(KRSectionData::ReportFoot)->initFromXML(it);
+            } else if (n == "reportfooter") {
+                if (section(KRSectionData::ReportFooter) == 0) {
+                    insertSection(KRSectionData::ReportFooter);
+                    section(KRSectionData::ReportFooter)->initFromXML(it);
                 } else {
                     kDebug() << "While loading xml tried to add more than one rpthead";
                 }
-            } else if (n == "pghead") {
+            } else if (n == "pageheader") {
                 // we need to determine which page this is for
                 // firstpage | odd | even | lastpage
                 // or any if none was specified
                 ReportSection * rs = 0;
                 if (!it.namedItem("firstpage").isNull()) {
-                    if (section(KRSectionData::PageHeadFirst) == 0) {
-                        insertSection(KRSectionData::PageHeadFirst);
-                        rs = section(KRSectionData::PageHeadFirst);
+                    if (section(KRSectionData::PageHeaderFirst) == 0) {
+                        insertSection(KRSectionData::PageHeaderFirst);
+                        rs = section(KRSectionData::PageHeaderFirst);
                     } else {
                         kDebug() << "tried to load more than one page head first";
                     }
                 } else if (!it.namedItem("odd").isNull()) {
-                    if (section(KRSectionData::PageHeadOdd) == 0) {
-                        insertSection(KRSectionData::PageHeadOdd);
-                        rs = section(KRSectionData::PageHeadOdd);
+                    if (section(KRSectionData::PageHeaderOdd) == 0) {
+                        insertSection(KRSectionData::PageHeaderOdd);
+                        rs = section(KRSectionData::PageHeaderOdd);
                     } else {
                         kDebug() << "tried to load more than one page head odd";
                     }
                 } else if (!it.namedItem("even").isNull()) {
-                    if (section(KRSectionData::PageHeadEven) == 0) {
-                        insertSection(KRSectionData::PageHeadEven);
-                        rs = section(KRSectionData::PageHeadEven);
+                    if (section(KRSectionData::PageHeaderEven) == 0) {
+                        insertSection(KRSectionData::PageHeaderEven);
+                        rs = section(KRSectionData::PageHeaderEven);
                     } else {
                         kDebug() << "tried to load more than one page head even";
                     }
                 } else if (!it.namedItem("lastpage").isNull()) {
-                    if (section(KRSectionData::PageHeadLast) == 0) {
-                        insertSection(KRSectionData::PageHeadLast);
-                        rs = section(KRSectionData::PageHeadLast);
+                    if (section(KRSectionData::PageHeaderLast) == 0) {
+                        insertSection(KRSectionData::PageHeaderLast);
+                        rs = section(KRSectionData::PageHeaderLast);
                     } else {
                         kDebug() << "tried to load more than one page head last";
                     }
                 } else {
                     // we have an any pghead
-                    if (section(KRSectionData::PageHeadAny) == 0) {
-                        insertSection(KRSectionData::PageHeadAny);
-                        rs = section(KRSectionData::PageHeadAny);
+                    if (section(KRSectionData::PageHeaderAny) == 0) {
+                        insertSection(KRSectionData::PageHeaderAny);
+                        rs = section(KRSectionData::PageHeaderAny);
                     } else {
                         kDebug() << "tried to load more than one page head any";
                     }
                 }
                 if (rs) rs->initFromXML(it);
-            } else if (n == "pgfoot") {
+            } else if (n == "pagefooter") {
                 // we need to determine which page this is for
                 ReportSection * rs = 0;
                 if (!it.namedItem("firstpage").isNull()) {
-                    if (section(KRSectionData::PageFootFirst) == 0) {
-                        insertSection(KRSectionData::PageFootFirst);
-                        rs = section(KRSectionData::PageFootFirst);
+                    if (section(KRSectionData::PageFooterFirst) == 0) {
+                        insertSection(KRSectionData::PageFooterFirst);
+                        rs = section(KRSectionData::PageFooterFirst);
                     } else {
                         kDebug() << "tried to load more than one page foot first";
                     }
                 } else if (!it.namedItem("odd").isNull()) {
-                    if (section(KRSectionData::PageFootOdd) == 0) {
-                        insertSection(KRSectionData::PageFootOdd);
-                        rs = section(KRSectionData::PageFootOdd);
+                    if (section(KRSectionData::PageFooterOdd) == 0) {
+                        insertSection(KRSectionData::PageFooterOdd);
+                        rs = section(KRSectionData::PageFooterOdd);
                     } else {
                         kDebug() << "tried to load more than one page foot odd";
                     }
                 } else if (!it.namedItem("even").isNull()) {
-                    if (section(KRSectionData::PageFootEven) == 0) {
-                        insertSection(KRSectionData::PageFootEven);
-                        rs = section(KRSectionData::PageFootEven);
+                    if (section(KRSectionData::PageFooterEven) == 0) {
+                        insertSection(KRSectionData::PageFooterEven);
+                        rs = section(KRSectionData::PageFooterEven);
                     } else {
                         kDebug() << "tried to load more than one page foot even";
                     }
                 } else if (!it.namedItem("lastpage").isNull()) {
-                    if (section(KRSectionData::PageFootLast) == 0) {
-                        insertSection(KRSectionData::PageFootLast);
-                        rs = section(KRSectionData::PageFootLast);
+                    if (section(KRSectionData::PageFooterLast) == 0) {
+                        insertSection(KRSectionData::PageFooterLast);
+                        rs = section(KRSectionData::PageFooterLast);
                     } else {
                         kDebug() << "tried to load more than one page foot last";
                     }
                 } else {
                     // we have the any page foot
-                    if (section(KRSectionData::PageFootAny) == 0) {
-                        insertSection(KRSectionData::PageFootAny);
-                        rs = section(KRSectionData::PageFootAny);
+                    if (section(KRSectionData::PageFooterAny) == 0) {
+                        insertSection(KRSectionData::PageFooterAny);
+                        rs = section(KRSectionData::PageFooterAny);
                     } else {
                         kDebug() << "tried to load more than one page foot any";
                     }
@@ -431,41 +431,41 @@ ReportSection * ReportDesigner::section(KRSectionData::Section s) const
 {
     ReportSection *sec;
     switch (s) {
-    case KRSectionData::PageHeadAny:
-        sec = m_pageHeadAny;
+    case KRSectionData::PageHeaderAny:
+        sec = m_pageHeaderAny;
         break;
-    case KRSectionData::PageHeadEven:
-        sec = m_pageHeadEven;
+    case KRSectionData::PageHeaderEven:
+        sec = m_pageHeaderEven;
         break;
-    case KRSectionData::PageHeadOdd:
-        sec = m_pageHeadOdd;
+    case KRSectionData::PageHeaderOdd:
+        sec = m_pageHeaderOdd;
         break;
-    case KRSectionData::PageHeadFirst:
-        sec = m_pageHeadFirst;
+    case KRSectionData::PageHeaderFirst:
+        sec = m_pageHeaderFirst;
         break;
-    case KRSectionData::PageHeadLast:
-        sec = m_pageHeadLast;
+    case KRSectionData::PageHeaderLast:
+        sec = m_pageHeaderLast;
         break;
-    case KRSectionData::PageFootAny:
-        sec = m_pageFootAny;
+    case KRSectionData::PageFooterAny:
+        sec = m_pageFooterAny;
         break;
-    case KRSectionData::PageFootEven:
-        sec = m_pageFootEven;
+    case KRSectionData::PageFooterEven:
+        sec = m_pageFooterEven;
         break;
-    case KRSectionData::PageFootOdd:
-        sec = m_pageFootOdd;
+    case KRSectionData::PageFooterOdd:
+        sec = m_pageFooterOdd;
         break;
-    case KRSectionData::PageFootFirst:
-        sec = m_pageFootFirst;
+    case KRSectionData::PageFooterFirst:
+        sec = m_pageFooterFirst;
         break;
-    case KRSectionData::PageFootLast:
-        sec = m_pageFootLast;
+    case KRSectionData::PageFooterLast:
+        sec = m_pageFooterLast;
         break;
-    case KRSectionData::ReportHead:
-        sec = m_reportHead;
+    case KRSectionData::ReportHeader:
+        sec = m_reportHeader;
         break;
-    case KRSectionData::ReportFoot:
-        sec = m_reportFoot;
+    case KRSectionData::ReportFooter:
+        sec = m_reportFooter;
         break;
     default:
         sec = NULL;
@@ -479,41 +479,41 @@ void ReportDesigner::removeSection(KRSectionData::Section s)
         delete sec;
 
         switch (s) {
-        case KRSectionData::PageHeadAny:
-            m_pageHeadAny = NULL;
+        case KRSectionData::PageHeaderAny:
+            m_pageHeaderAny = NULL;
             break;
-        case KRSectionData::PageHeadEven:
-            sec = m_pageHeadEven = NULL;
+        case KRSectionData::PageHeaderEven:
+            sec = m_pageHeaderEven = NULL;
             break;
-        case KRSectionData::PageHeadOdd:
-            m_pageHeadOdd = NULL;
+        case KRSectionData::PageHeaderOdd:
+            m_pageHeaderOdd = NULL;
             break;
-        case KRSectionData::PageHeadFirst:
-            m_pageHeadFirst = NULL;
+        case KRSectionData::PageHeaderFirst:
+            m_pageHeaderFirst = NULL;
             break;
-        case KRSectionData::PageHeadLast:
-            m_pageHeadLast = NULL;
+        case KRSectionData::PageHeaderLast:
+            m_pageHeaderLast = NULL;
             break;
-        case KRSectionData::PageFootAny:
-            m_pageFootAny = NULL;
+        case KRSectionData::PageFooterAny:
+            m_pageFooterAny = NULL;
             break;
-        case KRSectionData::PageFootEven:
-            m_pageFootEven = NULL;
+        case KRSectionData::PageFooterEven:
+            m_pageFooterEven = NULL;
             break;
-        case KRSectionData::PageFootOdd:
-            m_pageFootOdd = NULL;
+        case KRSectionData::PageFooterOdd:
+            m_pageFooterOdd = NULL;
             break;
-        case KRSectionData::PageFootFirst:
-            m_pageFootFirst = NULL;
+        case KRSectionData::PageFooterFirst:
+            m_pageFooterFirst = NULL;
             break;
-        case KRSectionData::PageFootLast:
-            m_pageFootLast = NULL;
+        case KRSectionData::PageFooterLast:
+            m_pageFooterLast = NULL;
             break;
-        case KRSectionData::ReportHead:
-            m_reportHead = NULL;
+        case KRSectionData::ReportHeader:
+            m_reportHeader = NULL;
             break;
-        case KRSectionData::ReportFoot:
-            m_reportFoot = NULL;
+        case KRSectionData::ReportFooter:
+            m_reportFooter = NULL;
             break;
         default:
             sec = NULL;
@@ -532,65 +532,65 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
             if (section((KRSectionData::Section)(i)) != NULL)
                 idx++;
         }
-        if (s > KRSectionData::ReportHead)
+        if (s > KRSectionData::ReportHeader)
             idx++;
         kDebug() << idx;
         ReportSection *rs = new ReportSection(this);
         d->vboxlayout->insertWidget(idx, rs);
 
         switch (s) {
-        case KRSectionData::PageHeadAny:
+        case KRSectionData::PageHeaderAny:
             rs->setTitle(i18n("Page Header (Any)"));
-            m_pageHeadAny = rs;
+            m_pageHeaderAny = rs;
             break;
-        case KRSectionData::PageHeadEven:
+        case KRSectionData::PageHeaderEven:
             rs->setTitle(i18n("Page Header (Even)"));
-            m_pageHeadEven = rs;
+            m_pageHeaderEven = rs;
             break;
-        case KRSectionData::PageHeadOdd:
+        case KRSectionData::PageHeaderOdd:
             rs->setTitle(i18n("Page Header (Odd)"));
-            m_pageHeadOdd = rs;
+            m_pageHeaderOdd = rs;
             break;
-        case KRSectionData::PageHeadFirst:
+        case KRSectionData::PageHeaderFirst:
             rs->setTitle(i18n("Page Header (First)"));
-            m_pageHeadFirst = rs;
+            m_pageHeaderFirst = rs;
             break;
-        case KRSectionData::PageHeadLast:
+        case KRSectionData::PageHeaderLast:
             rs->setTitle(i18n("Page Header (Last)"));
-            m_pageHeadLast = rs;
+            m_pageHeaderLast = rs;
             break;
-        case KRSectionData::PageFootAny:
+        case KRSectionData::PageFooterAny:
             rs->setTitle(i18n("Page Footer (Any)"));
-            m_pageFootAny = rs;
+            m_pageFooterAny = rs;
             break;
-        case KRSectionData::PageFootEven:
+        case KRSectionData::PageFooterEven:
             rs->setTitle(i18n("Page Footer (Even)"));
-            m_pageFootEven = rs;
+            m_pageFooterEven = rs;
             break;
-        case KRSectionData::PageFootOdd:
+        case KRSectionData::PageFooterOdd:
             rs->setTitle(i18n("Page Footer (Odd)"));
-            m_pageFootOdd = rs;
+            m_pageFooterOdd = rs;
             break;
-        case KRSectionData::PageFootFirst:
+        case KRSectionData::PageFooterFirst:
             rs->setTitle(i18n("Page Footer (First)"));
-            m_pageFootFirst = rs;
+            m_pageFooterFirst = rs;
             break;
-        case KRSectionData::PageFootLast:
+        case KRSectionData::PageFooterLast:
             rs->setTitle(i18n("Page Footer (Last)"));
-            m_pageFootLast = rs;
+            m_pageFooterLast = rs;
             break;
-        case KRSectionData::ReportHead:
+        case KRSectionData::ReportHeader:
             rs->setTitle(i18n("Report Header"));
-            m_reportHead = rs;
+            m_reportHeader = rs;
             break;
-        case KRSectionData::ReportFoot:
+        case KRSectionData::ReportFooter:
             rs->setTitle(i18n("Report Footer"));
-            m_reportFoot = rs;
+            m_reportFooter = rs;
             break;
 	//These sections cannot be inserted this way
 	case KRSectionData::None:
-	case KRSectionData::GroupHead:
-	case KRSectionData::GroupFoot:
+	case KRSectionData::GroupHeader:
+	case KRSectionData::GroupFooter:
 	case KRSectionData::Detail:
 	    break;
         }
@@ -680,44 +680,44 @@ QDomElement ReportDesigner::document() const
     QDomElement section;
 
     // report head
-    if (m_reportHead) {
-        section = doc.createElement("rpthead");
-        m_reportHead->buildXML(doc, section);
+    if (m_reportHeader) {
+        section = doc.createElement("reportheader");
+        m_reportHeader->buildXML(doc, section);
         root.appendChild(section);
     }
 
     // page head first
-    if (m_pageHeadFirst) {
-        section = doc.createElement("pghead");
+    if (m_pageHeaderFirst) {
+        section = doc.createElement("pageheader");
         section.appendChild(doc.createElement("firstpage"));
-        m_pageHeadFirst->buildXML(doc, section);
+        m_pageHeaderFirst->buildXML(doc, section);
         root.appendChild(section);
     }
     // page head odd
-    if (m_pageHeadOdd) {
-        section = doc.createElement("pghead");
+    if (m_pageHeaderOdd) {
+        section = doc.createElement("pageheader");
         section.appendChild(doc.createElement("odd"));
-        m_pageHeadOdd->buildXML(doc, section);
+        m_pageHeaderOdd->buildXML(doc, section);
         root.appendChild(section);
     }
     // page head even
-    if (m_pageHeadEven) {
-        section = doc.createElement("pghead");
+    if (m_pageHeaderEven) {
+        section = doc.createElement("pageheader");
         section.appendChild(doc.createElement("even"));
-        m_pageHeadEven->buildXML(doc, section);
+        m_pageHeaderEven->buildXML(doc, section);
         root.appendChild(section);
     }
     // page head last
-    if (m_pageHeadLast) {
-        section = doc.createElement("pghead");
+    if (m_pageHeaderLast) {
+        section = doc.createElement("pageheader");
         section.appendChild(doc.createElement("lastpage"));
-        m_pageHeadLast->buildXML(doc, section);
+        m_pageHeaderLast->buildXML(doc, section);
         root.appendChild(section);
     }
     // page head any
-    if (m_pageHeadAny) {
-        section = doc.createElement("pghead");
-        m_pageHeadAny->buildXML(doc, section);
+    if (m_pageHeaderAny) {
+        section = doc.createElement("pageheader");
+        m_pageHeaderAny->buildXML(doc, section);
         root.appendChild(section);
     }
 
@@ -726,44 +726,44 @@ QDomElement ReportDesigner::document() const
     root.appendChild(section);
 
     // page foot first
-    if (m_pageFootFirst) {
-        section = doc.createElement("pgfoot");
+    if (m_pageFooterFirst) {
+        section = doc.createElement("pagefooter");
         section.appendChild(doc.createElement("firstpage"));
-        m_pageFootFirst->buildXML(doc, section);
+        m_pageFooterFirst->buildXML(doc, section);
         root.appendChild(section);
     }
     // page foot odd
-    if (m_pageFootOdd) {
-        section = doc.createElement("pgfoot");
+    if (m_pageFooterOdd) {
+        section = doc.createElement("pagefooter");
         section.appendChild(doc.createElement("odd"));
-        m_pageFootOdd->buildXML(doc, section);
+        m_pageFooterOdd->buildXML(doc, section);
         root.appendChild(section);
     }
     // page foot even
-    if (m_pageFootEven) {
-        section = doc.createElement("pgfoot");
+    if (m_pageFooterEven) {
+        section = doc.createElement("pagefooter");
         section.appendChild(doc.createElement("even"));
-        m_pageFootEven->buildXML(doc, section);
+        m_pageFooterEven->buildXML(doc, section);
         root.appendChild(section);
     }
     // page foot last
-    if (m_pageFootLast) {
-        section = doc.createElement("pgfoot");
+    if (m_pageFooterLast) {
+        section = doc.createElement("pagefooter");
         section.appendChild(doc.createElement("lastpage"));
-        m_pageFootLast->buildXML(doc, section);
+        m_pageFooterLast->buildXML(doc, section);
         root.appendChild(section);
     }
     // page foot any
-    if (m_pageFootAny) {
-        section = doc.createElement("pgfoot");
-        m_pageFootAny->buildXML(doc, section);
+    if (m_pageFooterAny) {
+        section = doc.createElement("pagefooter");
+        m_pageFooterAny->buildXML(doc, section);
         root.appendChild(section);
     }
 
     // report foot
-    if (m_reportFoot) {
-        section = doc.createElement("rptfoot");
-        m_reportFoot->buildXML(doc, section);
+    if (m_reportFooter) {
+        section = doc.createElement("pagefooter");
+        m_reportFooter->buildXML(doc, section);
         root.appendChild(section);
     }
 
@@ -968,30 +968,30 @@ QSize ReportDesigner::sizeHint() const
     int w = 0;
     int h = 0;
 
-    if (m_pageFootAny)
-        h += m_pageFootAny->sizeHint().height();
-    if (m_pageFootEven)
-        h += m_pageFootEven->sizeHint().height();
-    if (m_pageFootFirst)
-        h += m_pageFootFirst->sizeHint().height();
-    if (m_pageFootLast)
-        h += m_pageFootLast->sizeHint().height();
-    if (m_pageFootOdd)
-        h += m_pageFootOdd->sizeHint().height();
-    if (m_pageHeadAny)
-        h += m_pageHeadAny->sizeHint().height();
-    if (m_pageHeadEven)
-        h += m_pageHeadEven->sizeHint().height();
-    if (m_pageHeadFirst)
-        h += m_pageHeadFirst->sizeHint().height();
-    if (m_pageHeadLast)
-        h += m_pageHeadLast->sizeHint().height();
-    if (m_pageHeadOdd)
-        h += m_pageHeadOdd->sizeHint().height();
-    if (m_reportHead)
-        h += m_reportHead->sizeHint().height();
-    if (m_reportFoot) {
-        h += m_reportFoot->sizeHint().height();
+    if (m_pageFooterAny)
+        h += m_pageFooterAny->sizeHint().height();
+    if (m_pageFooterEven)
+        h += m_pageFooterEven->sizeHint().height();
+    if (m_pageFooterFirst)
+        h += m_pageFooterFirst->sizeHint().height();
+    if (m_pageFooterLast)
+        h += m_pageFooterLast->sizeHint().height();
+    if (m_pageFooterOdd)
+        h += m_pageFooterOdd->sizeHint().height();
+    if (m_pageHeaderAny)
+        h += m_pageHeaderAny->sizeHint().height();
+    if (m_pageHeaderEven)
+        h += m_pageHeaderEven->sizeHint().height();
+    if (m_pageHeaderFirst)
+        h += m_pageHeaderFirst->sizeHint().height();
+    if (m_pageHeaderLast)
+        h += m_pageHeaderLast->sizeHint().height();
+    if (m_pageHeaderOdd)
+        h += m_pageHeaderOdd->sizeHint().height();
+    if (m_reportHeader)
+        h += m_reportHeader->sizeHint().height();
+    if (m_reportFooter) {
+        h += m_reportFooter->sizeHint().height();
 
     }
     if (m_detail) {
@@ -1039,12 +1039,12 @@ void ReportDesigner::setDetail(ReportSectionDetail *rsd)
 {
     if (m_detail == NULL) {
         int idx = 0;
-        if (m_pageHeadFirst) idx++;
-        if (m_pageHeadOdd) idx++;
-        if (m_pageHeadEven) idx++;
-        if (m_pageHeadLast) idx++;
-        if (m_pageHeadAny) idx++;
-        if (m_reportHead) idx++;
+        if (m_pageHeaderFirst) idx++;
+        if (m_pageHeaderOdd) idx++;
+        if (m_pageHeaderEven) idx++;
+        if (m_pageHeaderLast) idx++;
+        if (m_pageHeaderAny) idx++;
+        if (m_reportHeader) idx++;
         m_detail = rsd;
         d->vboxlayout->insertWidget(idx, m_detail);
     }
@@ -1420,7 +1420,7 @@ QString ReportDesigner::suggestEntityName(const QString &n) const
     ReportSection *sec;
     int itemCount = 0;
     //Count items in the main sections
-    for (int i = 1; i <= KRSectionData::PageFootAny; i++) {
+    for (int i = 1; i <= KRSectionData::PageFooterAny; i++) {
         sec = section((KRSectionData::Section) i);
         if (sec) {
             const QGraphicsItemList l = sec->items();
@@ -1462,7 +1462,7 @@ bool ReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) 
     bool unique = true;
 
     //Check items in the main sections
-    for (int i = 1; i <= KRSectionData::PageFootAny; i++) {
+    for (int i = 1; i <= KRSectionData::PageFooterAny; i++) {
         sec = section((KRSectionData::Section)i);
         if (sec) {
             const QGraphicsItemList l = sec->items();

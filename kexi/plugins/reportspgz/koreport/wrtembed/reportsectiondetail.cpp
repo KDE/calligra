@@ -88,14 +88,14 @@ void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
         }
 
         //group head
-        if (rsdg->isGroupHeaderVisible()) {
-            QDomElement ghead = doc.createElement("head");
+        if (rsdg->groupHeaderVisible()) {
+            QDomElement ghead = doc.createElement("groupheader");
             rsdg->groupHeader()->buildXML(doc, ghead);
             grp.appendChild(ghead);
         }
         // group foot
-        if (rsdg->isGroupFooterVisible()) {
-            QDomElement gfoot = doc.createElement("foot");
+        if (rsdg->groupFooterVisible()) {
+            QDomElement gfoot = doc.createElement("groupfooter");
             rsdg->groupFooter()->buildXML(doc, gfoot);
             grp.appendChild(gfoot);
         }
@@ -139,11 +139,11 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
                     QString n = elemThis.attribute("when");
                     if ("after foot" == n)
                         rsdg->setPageBreak(ReportSectionDetailGroup::BreakAfterGroupFooter);
-                } else if (gnode.nodeName() == "head") {
+                } else if (gnode.nodeName() == "groupheader") {
                     rsdg->groupHeader()->initFromXML(gnode);
                     rsdg->setGroupHeaderVisible(true);
                     show_head = true;
-                } else if (gnode.nodeName() == "foot") {
+                } else if (gnode.nodeName() == "groupfooter") {
                     rsdg->groupFooter()->initFromXML(gnode);
                     rsdg->setGroupFooterVisible(true);
                     show_foot = true;
@@ -239,8 +239,8 @@ QSize ReportSectionDetail::sizeHint() const
     ReportSectionDetailGroup * rsdg = 0;
     for (int gi = 0; gi < (int) groupList.count(); gi++) {
         rsdg = groupList.at(gi);
-        if (rsdg->isGroupHeaderVisible()) s += rsdg->groupHeader()->size();
-        if (rsdg->isGroupFooterVisible()) s += rsdg->groupFooter()->size();
+        if (rsdg->groupHeaderVisible()) s += rsdg->groupHeader()->size();
+        if (rsdg->groupFooterVisible()) s += rsdg->groupFooter()->size();
     }
     return s += m_detail->size();
 }

@@ -23,7 +23,7 @@
 // KRSectionData is used to store the information about a specific
 // section.
 // A section has a name and optionally extra data. `name'
-// rpthead, rptfoot, pghead, pgfoot, grphead, grpfoot or detail.
+// reportheader, reportfooter, pageheader, pagefooter, groupheader, groupfooter or detail.
 // In the case of pghead and pgfoot extra would contain the page
 // designation (firstpage, odd, even or lastpage).
 //
@@ -49,20 +49,20 @@ class KRSectionData : public QObject
 public:
     enum Section {
         None = 0,
-        PageHeadFirst = 1,
-        PageHeadOdd,
-        PageHeadEven,
-        PageHeadLast,
-        PageHeadAny,
-        ReportHead,
-        ReportFoot,
-        PageFootFirst,
-        PageFootOdd,
-        PageFootEven,
-        PageFootLast,
-        PageFootAny,
-        GroupHead,
-        GroupFoot,
+        PageHeaderFirst = 1,
+        PageHeaderOdd,
+        PageHeaderEven,
+        PageHeaderLast,
+        PageHeaderAny,
+        ReportHeader,
+        ReportFooter,
+        PageFooterFirst,
+        PageFooterOdd,
+        PageFooterEven,
+        PageFooterLast,
+        PageFooterAny,
+        GroupHeader,
+        GroupFooter,
         Detail
     };
 

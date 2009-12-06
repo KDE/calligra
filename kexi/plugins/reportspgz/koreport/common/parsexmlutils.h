@@ -115,7 +115,7 @@ public:
 
     enum PageBreak {
         BreakNone = 0,
-        BreakAfterGroupFoot = 1
+        BreakAfterGroupFooter = 1
     };
 
     //QString name;
@@ -124,8 +124,8 @@ public:
 
     QMap<ORDataData, qreal> _subtotCheckPoints;
 
-    KRSectionData *head;
-    KRSectionData *foot;
+    KRSectionData *groupHeader;
+    KRSectionData *groupFooter;
 };
 
 

@@ -159,19 +159,19 @@ public slots:
 protected:
     virtual void closeEvent(QCloseEvent * e);
 
-    ReportSection *m_reportHead;
-    ReportSection *m_pageHeadFirst;
-    ReportSection *m_pageHeadOdd;
-    ReportSection *m_pageHeadEven;
-    ReportSection *m_pageHeadLast;
-    ReportSection *m_pageHeadAny;
+    ReportSection *m_reportHeader;
+    ReportSection *m_pageHeaderFirst;
+    ReportSection *m_pageHeaderOdd;
+    ReportSection *m_pageHeaderEven;
+    ReportSection *m_pageHeaderLast;
+    ReportSection *m_pageHeaderAny;
 
-    ReportSection *m_pageFootFirst;
-    ReportSection *m_pageFootOdd;
-    ReportSection *m_pageFootEven;
-    ReportSection *m_pageFootLast;
-    ReportSection *m_pageFootAny;
-    ReportSection *m_reportFoot;
+    ReportSection *m_pageFooterFirst;
+    ReportSection *m_pageFooterOdd;
+    ReportSection *m_pageFooterEven;
+    ReportSection *m_pageFooterLast;
+    ReportSection *m_pageFooterAny;
+    ReportSection *m_reportFooter;
     ReportSectionDetail *m_detail;
 
 private:
