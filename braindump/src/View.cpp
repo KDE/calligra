@@ -289,7 +289,8 @@ void View::setActiveSection( Section* page )
 {
   m_activeSection = page;
 
-
+  m_doc->setCurrentSection(page);
+  
   if(m_activeSection)
   {
     QList<KoShape*> shapes;
