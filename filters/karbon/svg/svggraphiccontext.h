@@ -40,6 +40,8 @@ public:
         fillRule = Qt::WindingFill;
         fillColor = QColor( Qt::black ); // default is black fill as per svg spec
         
+        opacity = 1.0;
+        
         currentColor = Qt::black;
         forcePercentage = false;
 
@@ -56,7 +58,8 @@ public:
     KoLineBorder stroke;    ///< the current stroke
 
     QString filterId;       ///< the current filter id
-
+    qreal opacity;          ///< the shapes opacity
+    
     QMatrix matrix;         ///< the current transformation matrix
     QFont   font;           ///< the current font
     QColor  currentColor;   ///< the current color

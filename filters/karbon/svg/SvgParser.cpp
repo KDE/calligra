@@ -165,7 +165,8 @@ void SvgParser::addGraphicContext()
 
     gc->filterId = QString(); // filters are not inherited
     gc->display = true; // display is not inherited
-
+    gc->opacity = 1.0; // opacity is not inherited
+    
     m_gc.push( gc );
 }
 
@@ -1058,9 +1059,7 @@ void SvgParser::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     }
     else if( command == "opacity" )
     {
-        // fake shape opacity by multiplying with alpha of fill and stroke color
-        fillcolor.setAlphaF( fillcolor.alphaF() * SvgUtil::fromPercentage( params ) );
-        strokecolor.setAlphaF( strokecolor.alphaF() * SvgUtil::fromPercentage( params ) );
+        gc->opacity = SvgUtil::fromPercentage( params );
     }
     else if( command == "font-family" )
     {
@@ -1242,6 +1241,7 @@ void SvgParser::parseStyle( KoShape *obj, const SvgStyles &styles )
     
     if( ! gc->display )
         obj->setVisible( false );
+    obj->setTransparency(1.0-gc->opacity);
 }
 
 void SvgParser::applyFillStyle( KoShape * shape )

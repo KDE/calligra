@@ -183,8 +183,7 @@ void SvgExport::saveGroup( KoShapeContainer * group )
     printIndentation( m_body, m_indent++ );
     *m_body << "<g" << getID( group );
     *m_body << getTransform( group->transformation(), " transform" );
-    if( ! group->isVisible() )
-        *m_body << " display=\"none\"";
+    getStyle( group, m_body );
     *m_body << ">" << endl;
 
     QList<KoShape*> sortedShapes = group->childShapes();
@@ -556,11 +555,12 @@ void SvgExport::getStyle( KoShape * shape, QTextStream * stream )
     getEffects( shape, stream );
     if( ! shape->isVisible() )
         *stream << " display=\"none\"";
+    if( shape->transparency() > 0.0 )
+        *stream << " opacity=\"" << 1.0-shape->transparency() << "\"";
 }
 
 void SvgExport::getFill( KoShape * shape, QTextStream *stream )
 {
-
     if( ! shape->background() )
     {
         *stream << " fill=\"none\"";
@@ -571,7 +571,8 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
     if( cbg )
     {
         *stream << " fill=\"" << cbg->color().name() << "\"";
-        *stream << " fill-opacity=\"" << cbg->color().alphaF() << "\"";
+        if(cbg->color().alphaF() < 1.0)
+            *stream << " fill-opacity=\"" << cbg->color().alphaF() << "\"";
     }
     KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
     if( gbg )
@@ -591,10 +592,9 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
     KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
     if( path && shape->background() )
     {
+        // non-zero is default, so only write fillrule if evenodd is set
         if( path->fillRule() == Qt::OddEvenFill )
             *stream << " fill-rule=\"evenodd\"";
-        else
-            *stream << " fill-rule=\"nonzero\"";
     }
 }
 
@@ -613,7 +613,8 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
         *stream << line->color().name();
     *stream << "\"";
 
-    *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
+    if(line->color().alphaF() < 1.0)
+        *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
     *stream << " stroke-width=\"" << SvgUtil::toUserSpace(line->lineWidth()) << "\"";
 
     if( line->capStyle() == Qt::FlatCap )
