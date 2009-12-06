@@ -425,14 +425,8 @@ void KarbonView::fileImportGraphic()
 {
     debugView("");
 
-    QStringList filter;
-    filter << part()->nativeFormatMimeType();
-    filter << "image/svg+xml";
-    filter << "application/x-karbon";
-    filter << "application/x-wpg";
-    filter << "image/x-wmf";
-    filter << "image/x-eps";
-    filter << "application/postscript";
+    QByteArray nativeMimeType = part()->nativeFormatMimeType();
+    QStringList filter = KoFilterManager::mimeFilter( nativeMimeType, KoFilterManager::Import);
     
     QStringList imageFilter;
     // add filters for all formats supported by QImage
@@ -467,8 +461,8 @@ void KarbonView::fileImportGraphic()
         // get mime type from file
         KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
         if (mimeType) {
-            if (mimeType->is(importPart.nativeFormatMimeType())) {
-                currentMimeFilter = importPart.nativeFormatMimeType();
+            if (mimeType->is(nativeMimeType)) {
+                currentMimeFilter = nativeMimeType;
             } else {
                 foreach(const QString &filter, imageFilter) {
                     if (mimeType->is(filter)) {
@@ -520,7 +514,7 @@ void KarbonView::fileImportGraphic()
     }
     
     // check if we are loading our native format
-    if (importPart.nativeFormatMimeType() == currentMimeFilter) {
+    if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
         success = importPart.loadNativeFormat( fname );
         if ( !success ) {
