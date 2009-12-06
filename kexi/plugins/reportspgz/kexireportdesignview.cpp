@@ -92,8 +92,10 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData ( const KexiDB::SchemaDat
 
 }
 
-tristate KexiReportDesignView::storeData ( bool dontAsk ) {
-
+tristate KexiReportDesignView::storeData ( bool dontAsk ) 
+{
+    Q_UNUSED(dontAsk);
+    
     QDomDocument doc ( "pgz_kexireport" );
     QDomElement root = doc.createElement ( "report" );
     QDomElement conndata = m_sourceSelector->connectionData();
@@ -107,8 +109,6 @@ tristate KexiReportDesignView::storeData ( bool dontAsk ) {
 
     QString src  = doc.toString();
     kDebug() << src;
-
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     if ( storeDataBlock ( src, "pgzreport_layout" ) ) {
         kDebug() << "Saved OK";
@@ -131,7 +131,10 @@ tristate KexiReportDesignView::beforeSwitchTo ( Kexi::ViewMode mode, bool &dontS
     return true;
 }
 
-tristate KexiReportDesignView::afterSwitchFrom ( Kexi::ViewMode mode ) {
+tristate KexiReportDesignView::afterSwitchFrom ( Kexi::ViewMode mode ) 
+{
+    Q_UNUSED(mode);
+    
     kDebug() << tempData()->document;
     if ( tempData()->document.isEmpty() ) {
         m_reportDesigner = new ReportDesigner ( this );

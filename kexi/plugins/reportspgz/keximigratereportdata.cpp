@@ -74,7 +74,6 @@ QStringList KexiMigrateReportData::fieldNames() {
     KexiDB::QueryColumnInfo::Vector flds;
     QStringList names;
     
-    uint x = -1;
     flds = m_schema->columns();
     
     for ( int i = 0; i < flds.size() ; ++i ) {

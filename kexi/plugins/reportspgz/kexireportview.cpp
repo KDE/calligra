@@ -210,7 +210,9 @@ void KexiReportView::slotExportHTML()
 
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    //kDebug() << tempData()->document;
+    Q_UNUSED(mode);
+    Q_UNUSED(dontStore);
+    
     return true;
 }
 

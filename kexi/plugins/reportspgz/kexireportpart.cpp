@@ -69,8 +69,10 @@ KexiReportPart::~KexiReportPart()
 KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
                                      KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
-    kDebug();
-    KexiView* view;
+    Q_UNUSED(window);
+    Q_UNUSED(item);
+    
+    KexiView* view = 0;
 
     if (viewMode == Kexi::DataViewMode) {
         view = new KexiReportView(parent);
