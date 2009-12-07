@@ -73,6 +73,9 @@ public:
   void removeHyperlink();
   void setHyperlink( const UString& displayName, const UString& location, const UString& targetFrameName );
   
+  UString note() const;
+  void setNote( const UString &n );
+  
 private:
   // no copy or assign
   Cell( const Cell& );

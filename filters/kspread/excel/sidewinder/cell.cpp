@@ -44,6 +44,7 @@ public:
   UString hyperlinkDisplayName;
   UString hyperlinkLocation;
   UString hyperlinkTargetFrameName;
+  UString note;
 };
 
 }
@@ -210,4 +211,14 @@ void Cell::setHyperlink( const UString& displayName, const UString& location, co
   d->hyperlinkLocation = location;
   d->hyperlinkTargetFrameName = targetFrameName;
   d->hasHyperlink = true;
+}
+
+UString Cell::note() const
+{
+  return d->note;
+}
+
+void Cell::setNote( const UString &n )
+{
+  d->note = n;
 }

@@ -167,6 +167,9 @@ public:
 
     // mapping from cell position to shared formulas
     std::map<std::pair<unsigned, unsigned>, FormulaTokens> sharedFormulas;
+    
+    // mapping from object id's to object instances
+    std::map<unsigned long, Object*> sharedObjects;
 };
 
 WorksheetSubStreamHandler::WorksheetSubStreamHandler( Sheet* sheet, const GlobalsSubStreamHandler* globals )
@@ -238,9 +241,35 @@ void WorksheetSubStreamHandler::handleRecord( Record* record )
         handleTopMargin(static_cast<TopMarginRecord*>(record));
     else if (type == HLinkRecord::id)
         handleLink(static_cast<HLinkRecord*>(record));
+    else if (type == NoteRecord::id)
+        handleNote(static_cast<NoteRecord*>(record));
+    else if (type == ObjRecord::id)
+        handleObj(static_cast<ObjRecord*>(record));
+    else if (type == BOFRecord::id)
+        handleBOF( static_cast<BOFRecord*>( record ) );
+    else if (type == DefaultRowHeightRecord::id)
+        handleDefaultRowHeight(static_cast<DefaultRowHeightRecord*>(record));
+    else if (type == DefaultColWidthRecord::id)
+        handleDefaultColWidth(static_cast<DefaultColWidthRecord*>(record));
+    else if (type == 0xA)
+        {} //EofRecord
+    else if (type == 0x200)
+        {} //DimensionsRecord
+
+else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
+  
     else {
         printf( "Unhandled worksheet record with type %i\n", type );
     }
+}
+
+void WorksheetSubStreamHandler::handleBOF( BOFRecord* record )
+{
+    if (!record) return;
+
+    //if (record->type() == BOFRecord::Worksheet) {
+    //    d->version = record->version();
+    //}
 }
 
 void WorksheetSubStreamHandler::handleBlank( BlankRecord* record )
@@ -687,11 +716,45 @@ void WorksheetSubStreamHandler::handleLink( HLinkRecord* record )
     if (!record) return;
     if (!d->sheet) return;
 
-    //TODO we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
+    //FIXME we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
     Cell *cell = d->sheet->cell( record->m_firstColumn, record->m_firstRow );
     if( cell ) {
         cell->setHyperlink( record->m_displayName, record->m_location, record->m_targetFrameName );
     }
+}
+
+void WorksheetSubStreamHandler::handleNote( NoteRecord* record )
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    Cell *cell = d->sheet->cell( record->column(), record->row() );
+    if( cell ) {
+      NoteObject *obj = static_cast<NoteObject*>( d->sharedObjects[ record->idObj() ] );
+      if( obj ) {
+        cell->setNote( obj->note() );
+      }
+    }
+}
+
+void WorksheetSubStreamHandler::handleObj( ObjRecord* record )
+{
+    if (!record) return;
+    if (!record->m_object) return;
+    d->sharedObjects[ record->m_object->id() ] = record->m_object;
+}
+
+void WorksheetSubStreamHandler::handleDefaultRowHeight( DefaultRowHeightRecord* record )
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    d->sheet->setDefaultRowHeight( record->miyRw() );
+}
+
+void WorksheetSubStreamHandler::handleDefaultColWidth( DefaultColWidthRecord* record )
+{
+    if (!record) return;
+    if (!d->sheet) return;
+    d->sheet->setDefaultColWidth( record->cchdefColWidth() );
 }
 
 typedef std::vector<UString> UStringStack;
