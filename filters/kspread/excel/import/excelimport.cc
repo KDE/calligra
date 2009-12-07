@@ -711,7 +711,7 @@ static QString convertTime( double serialNo, const QString& valueFormat )
   QTime tt;
   tt = tt.addMSecs( qRound( (serialNo-(int)serialNo) * 86400 * 1000 ) );
   qDebug()<<tt;
-  return tt.toString( "'PT'hh'H'mm'M'ss,zzz'0S'" );
+  return tt.toString( "'PT'hh'H'mm'M'ss'S'" );
 }
 
 void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWriter )
