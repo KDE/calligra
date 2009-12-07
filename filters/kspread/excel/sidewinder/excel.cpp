@@ -1297,7 +1297,7 @@ void SSTRecord::dump( std::ostream& out ) const
 const unsigned ObjRecord::id = 0x5D;
 
 ObjRecord::ObjRecord() : Record(), m_object(0) {}
-ObjRecord::~ObjRecord() {}
+ObjRecord::~ObjRecord() { delete m_object; }
 
 void ObjRecord::dump( std::ostream& out ) const
 {
