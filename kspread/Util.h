@@ -49,10 +49,12 @@ class Sheet;
 namespace Util
 {
     /**
-     * Call this function to decode the text of a column label to an integer
-     * i.e. AA->27
+     * Call this function to decode the text of a column label to an integer,
+     * e.g. 1 for A and 27 for AA.
+     * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
+     * 0 is returned if no characters match.
      */
-    KSPREAD_EXPORT int decodeColumnLabelText( const QString &_col );
+    KSPREAD_EXPORT int decodeColumnLabelText( const QString &labelText );
 
     /**
      * Call this function to encode an integer to the text of the column label

@@ -41,20 +41,31 @@ using namespace KSpread;
 
 //used in Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
-int KSpread::Util::decodeColumnLabelText( const QString &_col )
+int KSpread::Util::decodeColumnLabelText( const QString &labelText )
 {
     int col = 0;
-    int offset='a'-'A';
+    const int offset = 'a'-'A';
     int counterColumn = 0;
-    for ( int i=0; i < _col.length(); i++ )
+    const uint totalLength = labelText.length();
+    uint labelTextLength;
+    for ( labelTextLength = 0; labelTextLength < totalLength; labelTextLength++ )
     {
-        counterColumn = (int) ::pow(26.0 , static_cast<int>(_col.length() - i - 1));
-        if( _col[i] >= 'A' && _col[i] <= 'Z' )
-            col += counterColumn * ( _col[i].toLatin1() - 'A' + 1);  // okay here (Werner)
-        else if( _col[i] >= 'a' && _col[i] <= 'z' )
-            col += counterColumn * ( _col[i].toLatin1() - 'A' - offset + 1 );
-        else
-            kDebug(36001) <<"Util::decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'';
+        const char c = labelText[labelTextLength].toLatin1();
+        if (! ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ) )
+            break;
+    }
+    if ( labelTextLength == 0 ) {
+        kWarning(36001) << "No column label text found for col:" << labelText;
+        return 0;
+    }
+    for ( uint i = 0; i < labelTextLength; i++ )
+    {
+        const char c = labelText[i].toLatin1();
+        counterColumn = (int) ::pow(26.0 , static_cast<int>(labelTextLength - i - 1));
+        if( c >= 'A' && c <= 'Z' )
+            col += counterColumn * (c - 'A' + 1);  // okay here (Werner)
+        else if( c >= 'a' && c <= 'z' )
+            col += counterColumn * ( c - 'A' - offset + 1 );
     }
     return col;
 }
