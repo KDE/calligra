@@ -41,7 +41,26 @@ UString readByteString(const void* p, unsigned length, unsigned maxSize, bool* e
     return str;
 }
 
-UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+UString readTerminatedUnicodeChars(const void* p, unsigned* pSize)
+{
+    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+
+    UString str;
+    unsigned offset = 0;
+    unsigned size = offset;
+    while( true ) {
+        unsigned uchar = readU16( data + offset );
+        size += 2;
+        if( uchar == '\0' ) break;
+        offset += 2;
+        str.append( UString(UChar(uchar)) );
+    }
+
+    if (pSize) *pSize = size;
+    return str;
+}
+
+UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition, unsigned offset, bool unicode, bool asianPhonetics, bool richText)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
@@ -50,12 +69,6 @@ UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
         return UString::null;
     }
 
-    unsigned char flags = data[0];
-    unsigned offset = 1;
-
-    bool unicode = flags & 0x01;
-    bool asianPhonetics = flags & 0x04;
-    bool richText = flags & 0x08;
     unsigned formatRuns = 0;
     unsigned asianPhoneticsSize = 0;
 
@@ -118,6 +131,24 @@ UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
 
     if (pSize) *pSize = size;
     return str;
+}
+    
+UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+{
+    const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
+
+    if (maxSize < 1) {
+        if (*error) *error = true;
+        return UString::null;
+    }
+
+    unsigned char flags = data[0];
+    unsigned offset = 1;
+    bool unicode = flags & 0x01;
+    bool asianPhonetics = flags & 0x04;
+    bool richText = flags & 0x08;
+    
+    return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText );
 }
 
 std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )

@@ -62,6 +62,14 @@ static inline unsigned long readU32( const void* p )
     return ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24);
 }
 
+static inline long readS32( const void* p )
+{
+    long val = readU32( p );
+    if (val & 0x800000)
+        val = val - 0x1000000;
+    return val;
+}
+
 typedef double& data_64;
 static inline void convert_64 (data_64 convert)
 {
@@ -111,8 +119,9 @@ static inline double readFloat64( const void*p )
  */
 enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
 
-
 UString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
+UString readTerminatedUnicodeChars(const void* data, unsigned* size = 0);
+UString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1, unsigned offset = 0, bool unicode = true, bool asianPhonetics = false, bool richText = false);
 UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
 
 std::ostream& operator<<( std::ostream& s, Swinder::UString ustring );
