@@ -77,7 +77,6 @@
 #include "dialogs/CSVDialog.h"
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
-#include "dialogs/FormulaDialog.h"
 #include "dialogs/GoalSeekDialog.h"
 #include "dialogs/GotoDialog.h"
 #include "dialogs/InsertDialog.h"
@@ -142,6 +141,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
         , d(new Private(this))
 {
     d->cellEditor = 0;
+    d->formulaDialog = 0;
     d->specialCharDialog = 0;
     d->locationComboBox = 0;
     d->initialized = false;
@@ -813,6 +813,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
 CellToolBase::~CellToolBase()
 {
+    delete d->formulaDialog;
     delete d->popupListChoose;
     qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
@@ -1403,6 +1404,9 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     // widget is gone. Otherwise we may get painting errors.
     delete d->cellEditor;
     d->cellEditor = 0;
+
+    delete d->formulaDialog;
+    d->formulaDialog = 0;
 
     if (saveChanges) {
         applyUserInput(expandMatrix);
@@ -2663,9 +2667,12 @@ void CellToolBase::specialChar(QChar character, const QString& fontName)
 
 void CellToolBase::insertFormula()
 {
-    createEditor();
-    FormulaDialog * dialog = new FormulaDialog(m_canvas->canvasWidget(), selection(), editor());
-    dialog->show(); // dialog deletes itself later
+    if( ! d->formulaDialog ) {
+        if( ! createEditor() )
+            return;
+        d->formulaDialog = new FormulaDialog(m_canvas->canvasWidget(), selection(), editor());
+    }
+    d->formulaDialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::insertFromDatabase()
