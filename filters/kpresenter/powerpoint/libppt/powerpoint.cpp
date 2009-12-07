@@ -140,7 +140,7 @@ RecordHeader::RecordHeader()
 void RecordHeader::setData(const unsigned char *data)
 {
     recVer = (readU16(data) & 0xF000) >> 12;
-    recInstance = readU16(data) >> 4;
+    recInstance = readU16(data) & 0x0FFF;
     recType = readU16(data + 2);
     recLen = readU32(data + 4);
 }
@@ -8165,7 +8165,7 @@ void PPTReader::loadRecord(Record* parent)
     unsigned bytes_read = d->docStream->read(buffer, 8);
     if (bytes_read != 8) return;
 
-    unsigned instance = readU16(buffer) >> 4;
+    unsigned instance = readU16(buffer) & 0x0FFF;
     unsigned long type = readU16(buffer + 2);
     unsigned long size = readU32(buffer + 4);
     unsigned long nextpos = d->docStream->tell() + size;
