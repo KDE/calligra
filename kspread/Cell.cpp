@@ -1467,7 +1467,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             if ( ok )
                 day = value.right( value.length() - p2 - 1 ).toInt( &ok );
 
-            kDebug(36003) <<"day:" << value.right( value.length() - p2 );
+            kDebug(36003) <<"day:" << value.right( value.length() - p2 - 1 );
 
             if ( ok )
             {
