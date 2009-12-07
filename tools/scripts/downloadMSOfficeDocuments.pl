@@ -28,7 +28,10 @@ my %mimetypes = (
 	"ppt", "application/vnd.ms-powerpoint",
 	"doc", "application/msword",
 	"xls", "application/vnd.ms-excel",
-	"rtf", "application/rtf"
+	"rtf", "application/rtf",
+        "ods", "application/vnd.oasis.opendocument.spreadsheet",
+        "odt", "application/vnd.oasis.opendocument.text",
+        "odp", "application/vnd.oasis.opendocument.presentation"
 );
 
 if (!defined $mimetypes{$type}) {
@@ -36,8 +39,10 @@ if (!defined $mimetypes{$type}) {
 }
 my $mimetype = $mimetypes{$type};
 
+#used to dispatch web requests
 my $ua = LWP::UserAgent->new;
 $ua->timeout(10); # seconds
+$ua->env_proxy;
 my $agentstring = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)';
 $ua->agent($agentstring);
 my @pages;
@@ -47,10 +52,13 @@ sub callback {
 	return if $tag ne 'a';
 	push(@pages, values %attr);
 }
+#extracts links from an HTML document
 my $p = HTML::LinkExtor->new(\&callback);
 
 my $runningjobs = 0;
 sub startJob {
+
+#Shifts the first value of the array off and returns it, shortening the array by 1 and moving everything down. 
 	my $uri = shift;
         if ($runningjobs >= $maxjobs) {
 		wait;
@@ -61,13 +69,14 @@ sub startJob {
 		my $localuri = $uri;
 		my $localua = LWP::UserAgent->new;
 		$localua->timeout(10); # seconds
+		$localua->env_proxy;
 		$localua->agent($agentstring);
 		my $res = $localua->request(HTTP::Request->new(HEAD => $localuri));
 		if ($res->content_type() eq $mimetype) {
 			my $filename = uri_unescape($localuri);
 			$filename =~ s#^http://##;
 			$filename = uri_escape($filename, '/:\!&*$?;:= \'"');
-			print $localuri."\n";
+	                print $localuri."\n";
 			$ua->get($localuri, ':content_file'  => $filename);
 		}
 		exit;
@@ -77,6 +86,7 @@ sub startJob {
 my @jobs;
 my %done;
 sub addJob {
+#Shifts the first value of the array off and returns it, shortening the array by 1 and moving everything down. 
 	my $uri = shift;
 	if (exists $done{$uri}) {
 		return;
