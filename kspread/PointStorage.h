@@ -699,8 +699,8 @@ public:
      */
     T nextInRow( int col, int row, int* newCol = 0 ) const
     {
-        Q_ASSERT( 1 <= col && col <= KS_colMax );
-        Q_ASSERT( 1 <= row && row <= KS_rowMax );
+        Q_ASSERT( 0 <= col && col <= KS_colMax );
+        Q_ASSERT( 0 <= row && row <= KS_rowMax );
         // is the row not present?
         if ( row > m_rows.count() )
         {
