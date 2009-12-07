@@ -388,7 +388,7 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
               if( ifmt >= 164 && ifmt <= 392 ) { // custom format
                 valueFormat = d->formatsTable[ifmt];
               } else {              
-                printf( "Unhandled format with index %i. Using general format.", xf.formatIndex() );
+                printf( "Unhandled format with index %i. Using general format.\n", xf.formatIndex() );
                 valueFormat = "General";
               }
             } break;
