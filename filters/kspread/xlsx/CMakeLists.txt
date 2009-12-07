@@ -19,6 +19,7 @@ target_link_libraries(
     msooxml
     koodf
     komain
+    kspreadcommon
 )
 
 install(TARGETS xlsximport DESTINATION ${PLUGIN_INSTALL_DIR})

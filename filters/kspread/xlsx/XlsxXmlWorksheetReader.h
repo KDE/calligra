@@ -66,6 +66,8 @@ protected:
     uint m_columnCount;
     //! for table:table-row
     uint m_currentRow;
+    //! for table:table-cell
+    int m_currentColumn;
     //! Used in read_f() and read_v()
     QString m_value;
     //! Set in read_f() and used in read_c()
@@ -84,6 +86,7 @@ private:
 
     void saveColumnStyle(const QString& widthString);
     KoFilter::ConversionStatus saveRowStyle(const QString& heightString);
+    void appendTableCells(uint cells);
 
 #include <MsooXmlCommonReaderMethods.h>
 

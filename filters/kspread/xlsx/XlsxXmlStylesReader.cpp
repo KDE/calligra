@@ -193,7 +193,7 @@ public:
         insert(QLatin1String(""), XlsxCellFormat::NoVerticalAlignment);
         insert(QLatin1String("bottom"), XlsxCellFormat::BottomVerticalAlignment);
         insert(QLatin1String("center"), XlsxCellFormat::CenterVerticalAlignment);
-        insert(QLatin1String("distributed"), XlsxCellFormat::DistributeVerticalAlignment);
+        insert(QLatin1String("distributed"), XlsxCellFormat::DistributedVerticalAlignment);
         insert(QLatin1String("justify"), XlsxCellFormat::JustifyVerticalAlignment);
         insert(QLatin1String("top"), XlsxCellFormat::TopVerticalAlignment);
     }
@@ -205,28 +205,53 @@ void XlsxCellFormat::setVerticalAlignment(const QString& alignment)
     verticalAlignment = s_ST_VerticalAlignmentValues->value(alignment);
 }
 
+// http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
 void XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
 {
 //! CASE #S1600
 //! @todo FillHorizontalAlignment, JustifyHorizontalAlignment
     QByteArray odfHorizontalAlignment;
+    bool wrapOption = false;
     switch (horizontalAlignment) {
     case CenterHorizontalAlignment:
     case CenterContinuousHorizontalAlignment:
     case DistributedHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "center", KoGenStyle::ParagraphType);
+        if (horizontalAlignment == DistributedHorizontalAlignment)
+            wrapOption = true;
         break;
+    case GeneralHorizontalAlignment: // ok?
     case LeftHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "start", KoGenStyle::ParagraphType);
         break;
     case RightHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "end", KoGenStyle::ParagraphType);
         break;
-    case GeneralHorizontalAlignment:
-    case FillHorizontalAlignment:
     case JustifyHorizontalAlignment:
+        cellStyle->addProperty("fo:text-align", "justify", KoGenStyle::ParagraphType);
+        break;
+    case FillHorizontalAlignment:
     default:;
     }
+
+    switch (verticalAlignment) {
+    case CenterVerticalAlignment:
+        cellStyle->addProperty("style:vertical-align", "middle");
+        break;
+    case TopVerticalAlignment:
+        cellStyle->addProperty("style:vertical-align", "top");
+        break;
+    case NoVerticalAlignment:
+    case JustifyVerticalAlignment: // ok?
+    case DistributedVerticalAlignment:
+    case BottomVerticalAlignment:
+        if (verticalAlignment == DistributedVerticalAlignment)
+            wrapOption = true;
+    default:;
+    }
+
+//! @todo take alignment/@wrapText into account
+    cellStyle->addProperty("fo:wrap-option", wrapOption ? "wrap" : "no-wrap");
 }
 
 //----------------------------------------------------------

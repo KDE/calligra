@@ -113,7 +113,7 @@ public:
         NoVerticalAlignment = 0,
         BottomVerticalAlignment,
         CenterVerticalAlignment,
-        DistributeVerticalAlignment,
+        DistributedVerticalAlignment,
         JustifyVerticalAlignment,
         TopVerticalAlignment
     };

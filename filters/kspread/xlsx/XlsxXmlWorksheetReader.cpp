@@ -32,6 +32,8 @@
 #include <KoOdfGraphicStyles.h>
 #include <styles/KoCharacterStyle.h>
 
+#include <kspread/Util.h>
+
 #include <QBrush>
 #include <QRegExp>
 
@@ -87,6 +89,7 @@ void XlsxXmlWorksheetReader::init()
     m_defaultNamespace = "";
     m_columnCount = 0;
     m_currentRow = 0;
+    m_currentColumn = -1;
 }
 
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -176,7 +179,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
  - rowBreaks (Horizontal Page Breaks (Row)) §18.3.1.74
  - scenarios (Scenarios) §18.3.1.76
  - sheetCalcPr (Sheet Calculation Properties) §18.3.1.79
- - sheetData (Sheet Data) §18.3.1.80
+ - [done] sheetData (Sheet Data) §18.3.1.80
  - sheetFormatPr (Sheet Format Properties) §18.3.1.81
  - sheetPr (Sheet Properties) §18.3.1.82
  - sheetProtection (Sheet Protection Options) §18.3.1.85
@@ -414,6 +417,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::saveRowStyle(const QString& _
     return KoFilter::OK;
 }
 
+void XlsxXmlWorksheetReader::appendTableCells(uint cells)
+{
+    if (cells == 0)
+        return;
+    body->startElement("table:table-cell");
+    if (cells > 1)
+        body->addAttribute("table:number-columns-repeated", QByteArray::number(cells));
+    body->endElement(); // table:table-cell
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL row
 //! row handler (Row)
@@ -445,6 +458,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         if (!ok)
             return KoFilter::WrongFormat;
     }
+    if (!spans.isEmpty()) {
+
+    }
     if ((m_currentRow + 1) < rNumber) {
         body->startElement("table:table-row");
         const KoFilter::ConversionStatus saveRowStyleStatus = saveRowStyle(QString());
@@ -455,9 +471,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         if (skipRows > 1) {
             body->addAttribute("table:number-rows-repeated", QString::number(skipRows));
         }
-        body->startElement("table:table-cell");
-        body->addAttribute("table:number-columns-repeated", "256");
-        body->endElement(); // table:table-cell
+        appendTableCells(256);
         body->endElement(); // table:table-row
     }
 
@@ -466,14 +480,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     if (saveRowStyleStatus != KoFilter::OK)
         return saveRowStyleStatus;
 
+    m_currentColumn = -1;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(c)
+            TRY_READ_IF(c) // modifies m_currentColumn
             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+    if (m_currentColumn < 255) {
+        // output empty cells after the last filled cell
+        appendTableCells( 256 - m_currentColumn - 1 );
     }
 
     body->endElement(); // table:table-row
@@ -539,6 +558,17 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs( attributes() );
     TRY_READ_ATTR_WITHOUT_NS(r)
+    uint referencedColumn = -1;
+    if (!r.isEmpty()) {
+        referencedColumn = KSpread::Util::decodeColumnLabelText(r) - 1;
+        kDebug() << "referencedColumn:" << r << referencedColumn;
+        if (m_currentColumn == -1 && referencedColumn > 0) {
+            // output empty cells before the first filled cell
+            appendTableCells( referencedColumn );
+        }
+        m_currentColumn = referencedColumn;
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(s)
     TRY_READ_ATTR_WITHOUT_NS(t)
     m_value.clear();
