@@ -345,8 +345,9 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
     XFRecord xf = xformat(index);
 
     UString valueFormat = this->valueFormat(xf.formatIndex());
-    if (valueFormat.isEmpty())
-        switch(xf.formatIndex()) {
+    if (valueFormat.isEmpty()) {
+        const unsigned ifmt = xf.formatIndex();
+        switch(ifmt) {
             case  0:  valueFormat = "General"; break;
             case  1:  valueFormat = "0"; break;
             case  2:  valueFormat = "0.00"; break;
@@ -383,7 +384,15 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
             case 47:  valueFormat = "mm:ss.0"; break;
             case 48:  valueFormat = "##0.0E+0"; break;
             case 49:  valueFormat = "@"; break;
-            default: valueFormat = "General"; break;
+            default: {
+              if( ifmt >= 164 && ifmt <= 392 ) { // custom format
+                valueFormat = d->formatsTable[ifmt];
+              } else {              
+                printf( "Unhandled format with index %i. Using general format.", xf.formatIndex() );
+                valueFormat = "General";
+              }
+            } break;
+      }
     }
 
     format.setValueFormat(valueFormat);
@@ -475,6 +484,16 @@ void GlobalsSubStreamHandler::handleRecord( Record* record )
         handleSST( static_cast<SSTRecord*>( record ) );
     else if (type == XFRecord::id)
         handleXF( static_cast<XFRecord*>( record ) );
+    else if (type == 0x40)
+        {} //BackupRecord
+    else if (type == 0x22)
+        {} //Date1904Record
+    else if (type == 0xA)
+        {} //EofRecord
+    //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
+    else {
+        printf( "Unhandled global record with type %i\n", type );
+    }
 }
 
 void GlobalsSubStreamHandler::handleBOF( BOFRecord* record )
