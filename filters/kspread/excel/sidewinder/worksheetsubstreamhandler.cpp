@@ -26,7 +26,129 @@
 #include "cell.h"
 #include "sheet.h"
 
+#define SWINDER_XLS2RAW
+
 namespace Swinder {
+
+class HLinkRecord : public Record
+{
+public:
+  unsigned long m_firstRow;
+  unsigned long m_firstColumn;
+  unsigned long m_lastRow;
+  unsigned long m_lastColumn;
+  UString m_displayName;
+  UString m_targetFrameName;
+  UString m_location;
+
+  static const unsigned id;
+  virtual unsigned rtti() const { return this->id; }
+  virtual const char* name() const { return "HLink"; }
+  virtual void dump( std::ostream& ) const {}
+  static Record *createRecord() { return new HLinkRecord; }
+  HLinkRecord() : Record(), m_firstRow(0), m_firstColumn(0), m_lastRow(0), m_lastColumn(0) {}
+  virtual ~HLinkRecord() {}
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions ) {
+      if (size < 8) {
+          setIsValid(false);
+          return;
+      }
+
+      m_firstRow = readU16(data);
+      m_lastRow = readU16(data + 2);
+      m_firstColumn = readU16(data + 4);
+      m_lastColumn = readU16(data + 6);
+      
+      const unsigned char* startHyperlinkObject = data + 16 /* skip CLDID */ + 8;
+      const unsigned long streamVersion = readU32(startHyperlinkObject);
+      if( streamVersion != 2 ) {
+          printf( "Invalid stream version %i in HLinkRecord.\n", streamVersion );
+          setIsValid(false);
+          return;
+      }
+
+      // 10 bits options + 22 bits reserved
+      const unsigned long opts = readU32(startHyperlinkObject + 4);
+      const bool hlstmfHasMonikor = opts & 0x01;
+      const bool hlstmfIsAbsolute = opts & 0x02;
+      const bool hlstmfISiteGaveDisplayName = opts & 0x04;
+      bool hlstmfHasLocationStr = opts & 0x08;
+      const bool hlstmfHasDisplayName = opts & 0x10;
+      const bool hlstmfHasGUID = opts & 0x20;
+      const bool hlstmfHasCreationTime = opts & 0x60;
+      const bool hlstmfHasFrameName = opts & 0xC0;
+      const bool hlstmfMonikerSavedAsStr = opts & 0x180;
+      const bool hlstmfAbsFromGetdataRel = opts & 0x300;
+
+      Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
+
+      startHyperlinkObject += 8;
+      
+      unsigned long length = 0;
+      unsigned sizeReaded = 0;
+
+      if( hlstmfHasDisplayName ) {
+          length = readU32(startHyperlinkObject);
+          m_displayName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+          printf("displayName=%s\n", m_displayName.ascii() );
+          startHyperlinkObject += 4 + sizeReaded;
+      }
+      
+      if( hlstmfHasFrameName ) {
+          length = readU32(startHyperlinkObject);
+          m_targetFrameName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+          printf("targetFrameName=%s\n", m_targetFrameName.ascii() );
+          startHyperlinkObject += 4 + sizeReaded;
+      }
+
+      if( hlstmfHasMonikor ) {
+          if( hlstmfMonikerSavedAsStr ) { // moniker
+            length = readU32(startHyperlinkObject);
+            UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+            printf("moniker=%s\n", moniker.ascii() );
+            startHyperlinkObject += 4 + sizeReaded;
+          } else { // oleMoniker
+            const unsigned long clsid = readU32(startHyperlinkObject);
+            startHyperlinkObject += 16; // the clsid is actually 16 byte long but we only need the first 4 to differ
+            switch( clsid ) {
+              case 0x79EAC9E0: { // URLMoniker
+                length = readU32(startHyperlinkObject);
+                m_location = readTerminatedUnicodeChars(startHyperlinkObject + 4, &sizeReaded);
+                printf("url=%s\n", m_location.ascii() );
+                startHyperlinkObject += length + 4;
+              } break;
+              case 0x00000303: { // FileMoniker
+                printf( "TODO: HLinkRecord FileMoniker" );
+                return; // abort
+              } break;
+              case 0x00000309: { // CompositeMoniker
+                printf( "TODO: HLinkRecord CompositeMoniker" );
+                return; // abort
+              } break;
+              case 0x00000305: { // AntiMoniker
+                printf( "TODO: HLinkRecord AntiMoniker" );
+                return; // abort
+              } break;
+              case 0x00000304: { // ItemMoniker
+                printf( "TODO: HLinkRecord ItemMoniker" );
+                return; // abort
+              } break;
+            }
+          }
+      }
+      
+      if( hlstmfHasLocationStr ) {
+          length = readU32(startHyperlinkObject);
+          m_location = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+          printf("location=%s\n", m_location.ascii() );
+          startHyperlinkObject += 4 + sizeReaded;
+      }
+
+      // ignore (16 bytes) guid and fileTime (8 bytes)
+  }
+};
+
+const unsigned HLinkRecord::id = 0x01B8;
 
 class WorksheetSubStreamHandler::Private
 {
@@ -54,6 +176,8 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler( Sheet* sheet, const Global
     d->globals = globals;
     d->lastFormulaCell = 0;
     d->formulaStringCell = 0;
+    
+    RecordRegistry::registerRecordClass(HLinkRecord::id, HLinkRecord::createRecord);
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
@@ -112,6 +236,11 @@ void WorksheetSubStreamHandler::handleRecord( Record* record )
         handleString(static_cast<StringRecord*>(record));
     else if (type == TopMarginRecord::id)
         handleTopMargin(static_cast<TopMarginRecord*>(record));
+    else if (type == HLinkRecord::id)
+        handleLink(static_cast<HLinkRecord*>(record));
+    else {
+        printf( "Unhandled worksheet record with type %i\n", type );
+    }
 }
 
 void WorksheetSubStreamHandler::handleBlank( BlankRecord* record )
@@ -551,6 +680,18 @@ void WorksheetSubStreamHandler::handleTopMargin( TopMarginRecord* record )
     // convert from inches to points
     double margin = record->topMargin() * 72.0;
     d->sheet->setTopMargin(margin);
+}
+
+void WorksheetSubStreamHandler::handleLink( HLinkRecord* record )
+{
+    if (!record) return;
+    if (!d->sheet) return;
+
+    //TODO we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
+    Cell *cell = d->sheet->cell( record->m_firstColumn, record->m_firstRow );
+    if( cell ) {
+        cell->setHyperlink( record->m_displayName, record->m_location, record->m_targetFrameName );
+    }
 }
 
 typedef std::vector<UString> UStringStack;

@@ -31,6 +31,7 @@ class Workbook::Private
 public:
   std::vector<Sheet*> sheets;
   bool passwordProtected;
+  QHash<PropertyType, QVariant> properties;
 };
 
 Workbook::Workbook()
@@ -80,6 +81,21 @@ Sheet* Workbook::sheet( unsigned index )
   return d->sheets[index];
 }
 
+bool Workbook::hasProperty( PropertyType type ) const
+{
+  return d->properties.contains( type );
+}
+
+QVariant Workbook::property( PropertyType type, const QVariant &defaultValue ) const
+{
+    return d->properties.contains( type ) ? d->properties[ type ] : defaultValue;
+}
+
+void Workbook::setProperty( PropertyType type, const QVariant &value )
+{
+    d->properties[ type ] = value;
+}
+  
 bool Workbook::isPasswordProtected() const
 {
   return d->passwordProtected;

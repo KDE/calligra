@@ -40,6 +40,10 @@ public:
   unsigned columnSpan;
   unsigned rowSpan;
   bool covered;
+  bool hasHyperlink;
+  UString hyperlinkDisplayName;
+  UString hyperlinkLocation;
+  UString hyperlinkTargetFrameName;
 };
 
 }
@@ -56,6 +60,7 @@ Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
   d->columnSpan = 1;
   d->rowSpan    = 1;
   d->covered    = false;
+  d->hasHyperlink = false;
 }
 
 Cell::~Cell()
@@ -169,4 +174,40 @@ bool Cell::isCovered() const
 void Cell::setCovered( bool covered )
 {
   d->covered = covered;
+}
+
+bool Cell::hasHyperlink() const
+{
+    return d->hasHyperlink;
+}
+
+UString Cell::hyperlinkDisplayName() const
+{
+  return d->hyperlinkDisplayName;
+}
+
+UString Cell::hyperlinkLocation() const
+{
+  return d->hyperlinkLocation;
+}
+
+UString Cell::hyperlinkTargetFrameName() const
+{
+  return d->hyperlinkTargetFrameName;
+}
+
+void Cell::removeHyperlink()
+{
+    d->hyperlinkDisplayName = UString();
+    d->hyperlinkLocation = UString();
+    d->hyperlinkTargetFrameName = UString();
+    d->hasHyperlink = false;
+}
+
+void Cell::setHyperlink( const UString& displayName, const UString& location, const UString& targetFrameName )
+{
+  d->hyperlinkDisplayName = displayName;
+  d->hyperlinkLocation = location;
+  d->hyperlinkTargetFrameName = targetFrameName;
+  d->hasHyperlink = true;
 }
