@@ -69,6 +69,7 @@ public:
 
   bool createStyles( KoOdfWriteStore* store );
   bool createContent( KoOdfWriteStore* store );
+  bool createMeta( KoOdfWriteStore* store );
   bool createManifest( KoOdfWriteStore* store );
 
   int sheetFormatIndex;
@@ -160,6 +161,15 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
   if ( !d->createContent( &oasisStore ) )
   {
     kWarning() << "Couldn't open the file 'content.xml'.";
+    delete d->workbook;
+    delete storeout;
+    return KoFilter::CreationError;
+  }
+
+  // store meta content
+  if ( !d->createMeta( &oasisStore ) )
+  {
+    kWarning() << "Couldn't open the file 'meta.xml'.";
     delete d->workbook;
     delete storeout;
     return KoFilter::CreationError;
@@ -283,10 +293,84 @@ bool ExcelImport::Private::createStyles( KoOdfWriteStore* store )
   return store->store()->close();
 }
 
+bool ExcelImport::Private::createMeta( KoOdfWriteStore* store )
+{
+  if ( !store->store()->open( "meta.xml" ) )
+    return false;
+
+  KoStoreDevice dev( store->store() );
+  KoXmlWriter* metaWriter = new KoXmlWriter( &dev );
+  metaWriter->startDocument( "office:document-meta" );
+  metaWriter->startElement( "office:document-meta" );
+  metaWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
+  metaWriter->addAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+  metaWriter->addAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
+  metaWriter->addAttribute( "xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0" );
+  metaWriter->startElement( "office:meta" );
+
+  if( workbook->hasProperty( Workbook::PIDSI_TITLE ) ) {
+    metaWriter->startElement( "dc:title" ); 
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_TITLE ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_SUBJECT ) ) {
+    metaWriter->startElement( "dc:subject", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_SUBJECT ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_AUTHOR ) ) {
+    metaWriter->startElement( "dc:creator", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_AUTHOR ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_KEYWORDS ) ) {
+    metaWriter->startElement( "meta:keyword", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_KEYWORDS ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_COMMENTS ) ) {
+    metaWriter->startElement( "meta:comments", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_COMMENTS ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_REVNUMBER ) ) {
+    metaWriter->startElement( "meta:editing-cycles", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_REVNUMBER ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_LASTPRINTED_DTM ) ) {
+    metaWriter->startElement( "dc:print-date", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_LASTPRINTED_DTM ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_CREATE_DTM ) ) {
+    metaWriter->startElement( "meta:creation-date", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_CREATE_DTM ).toString() );
+    metaWriter->endElement();
+  }
+  if( workbook->hasProperty( Workbook::PIDSI_LASTSAVED_DTM ) ) {
+    metaWriter->startElement( "dc:date", false );
+    metaWriter->addTextNode( workbook->property( Workbook::PIDSI_LASTSAVED_DTM ).toString() );
+    metaWriter->endElement();
+  }
+
+  //if( workbook->hasProperty( Workbook::PIDSI_TEMPLATE )  ) metaWriter->addAttribute( "dc:", workbook->property( Workbook::PIDSI_TEMPLATE ).toString() );
+  //if( workbook->hasProperty( Workbook::PIDSI_LASTAUTHOR )  ) metaWriter->addAttribute( "dc:", workbook->property( Workbook::PIDSI_LASTAUTHOR ).toString() );
+  //if( workbook->hasProperty( Workbook::PIDSI_EDITTIME )  ) metaWriter->addAttribute( "dc:date", workbook->property( Workbook::PIDSI_EDITTIME ).toString() );
+
+  metaWriter->endElement(); // office:meta
+  metaWriter->endElement(); // office:document-meta
+  metaWriter->endDocument();
+
+  delete metaWriter;
+  return store->store()->close();
+}
+
 bool ExcelImport::Private::createManifest( KoOdfWriteStore* store )
 {
   KoXmlWriter* manifestWriter = store->manifestWriter( "application/vnd.oasis.opendocument.spreadsheet" );
 
+  manifestWriter->addManifestEntry( "meta.xml", "text/xml" );
   manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
   manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 

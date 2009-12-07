@@ -18,7 +18,9 @@
 */
 
 #ifndef SWINDER_WORKBOOK_H
-#define SWINDER_WORKBOOK_H
+#define SWINDER_WORKBOOK_H 
+
+#include <QtCore/QVariant>
 
 namespace Swinder
 {
@@ -28,7 +30,7 @@ class Sheet;
 class Workbook
 {
 public:
-
+    
   /*
    * Constructs a new workbook.
    */
@@ -68,7 +70,26 @@ public:
    */
   Sheet* sheet( unsigned index );
 
+  enum PropertyType {
+    PIDSI_TITLE = 0x02,
+    PIDSI_SUBJECT = 0x03,
+    PIDSI_AUTHOR = 0x04,
+    PIDSI_KEYWORDS = 0x05,
+    PIDSI_COMMENTS = 0x06,
+    PIDSI_TEMPLATE = 0x07,
+    PIDSI_LASTAUTHOR = 0x08,
+    PIDSI_REVNUMBER = 0x09,
+    PIDSI_EDITTIME = 0x0a,
+    PIDSI_LASTPRINTED_DTM = 0x0b,
+    PIDSI_CREATE_DTM = 0x0c,
+    PIDSI_LASTSAVED_DTM = 0x0d,
+    PIDSI_APPNAME = 0x12,
+  };
 
+  bool hasProperty( PropertyType type ) const;
+  QVariant property( PropertyType type, const QVariant &defaultValue = QVariant() ) const;
+  void setProperty( PropertyType type, const QVariant &value );
+  
   bool isPasswordProtected() const;
   void setPasswordProtected( bool p );
 
