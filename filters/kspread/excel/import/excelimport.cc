@@ -635,25 +635,61 @@ static bool isDateFormat( const QString& valueFormat )
   return false;
 }
 
+// extract and return locale and remove locale from time string.
+QString extractLocale( QString &time )
+{
+  QString locale;
+  if( time.startsWith("[$-") ) {
+    int pos = time.indexOf(']');
+    if( pos > 3 ) {
+      locale = time.mid(3, pos - 3);
+      time = time.mid(pos + 1);
+      pos = time.lastIndexOf(';');
+      if( pos >= 0 ) {       
+        time = time.left(pos);        
+      }
+    }
+  }
+  return locale;
+}
+
+// Remove via the "\" char escaped characters from the string.
+QString removeEscaped( QString &s )
+{
+  while(true) {
+    int pos = s.indexOf('\\');
+    if( pos < 0 )
+      break;
+    s = s.left(pos) + s.mid(pos + 2);
+  }
+  return s;
+}
+
 static bool isTimeFormat( const QString& valueFormat )
 {
   QString vf = valueFormat;
+  QString locale = extractLocale(vf);
+  Q_UNUSED( locale );
+  removeEscaped(vf);
 
-  if( vf == "h:mm AM/PM" ) return true;
-  if( vf == "h:mm:ss AM/PM" ) return true;
-  if( vf == "h:mm" ) return true;
-  if( vf == "h:mm:ss" ) return true;
-  if( vf == "[h]:mm:ss" ) return true;
-  if( vf == "[h]:mm" ) return true;
-  if( vf == "[mm]:ss" ) return true;
-  if( vf == "M/D/YY h:mm" ) return true;
-  if( vf == "[ss]" ) return true;
-  if( vf == "mm:ss" ) return true;
-  if( vf == "mm:ss.0" ) return true;
-  if( vf == "[mm]:ss" ) return true;
-  if( vf == "[ss]" ) return true;
+  // if( vf == "h:mm AM/PM" ) return true;
+  // if( vf == "h:mm:ss AM/PM" ) return true;
+  // if( vf == "h:mm" ) return true;
+  // if( vf == "h:mm:ss" ) return true;
+  // if( vf == "[h]:mm:ss" ) return true;
+  // if( vf == "[h]:mm" ) return true;
+  // if( vf == "[mm]:ss" ) return true;
+  // if( vf == "M/D/YY h:mm" ) return true;
+  // if( vf == "[ss]" ) return true;
+  // if( vf == "mm:ss" ) return true;
+  // if( vf == "mm:ss.0" ) return true;
+  // if( vf == "[mm]:ss" ) return true;
+  // if( vf == "[ss]" ) return true;
 
-  return false;
+  // if there is still a time formatting picture item that was not escaped
+  // and therefore removed above, then we have a time format here.
+  QRegExp ex( "(h|H|m|s)" );
+  return ( ex.indexIn(vf) >= 0 );
 }
 
 static QString convertDate( double serialNo )
@@ -664,12 +700,18 @@ static QString convertDate( double serialNo )
   return dd.toString( "yyyy-MM-dd" );
 }
 
-static QString convertTime( double serialNo )
+static QString convertTime( double serialNo, const QString& valueFormat )
 {
+  QString vf = valueFormat;
+  QString locale = extractLocale(vf);
+  Q_UNUSED( locale ); //TODO http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx
+  Q_UNUSED( vf ); //TODO
+
   // reference is midnight 30 Dec 1899
   QTime tt;
   tt = tt.addMSecs( qRound( (serialNo-(int)serialNo) * 86400 * 1000 ) );
-  return tt.toString( "PThhHmmMss,zzz0S" );
+  qDebug()<<tt;
+  return tt.toString( "'PT'hh'H'mm'M'ss,zzz'0S'" );
 }
 
 void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWriter )
@@ -706,7 +748,6 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
     QString valueFormat = string( cell->format().valueFormat() );
 
     bool handled = false;
-
     if( isPercentageFormat( valueFormat ) )
     {
       handled = true;
@@ -725,7 +766,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
     if( isTimeFormat( valueFormat ) )
     {
       handled = true;
-      QString timeValue = convertTime( value.asFloat() );
+      QString timeValue = convertTime( value.asFloat(), valueFormat );
       xmlWriter->addAttribute( "office:value-type", "time" );
       xmlWriter->addAttribute( "office:time-value", timeValue );
     }
@@ -744,10 +785,31 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
     xmlWriter->addAttribute( "office:string-value", str );
     xmlWriter->startElement( "text:p" );
     xmlWriter->addTextNode( str );
+    
+    if( cell->hasHyperlink() ) {
+      QString displayName = string( cell->hyperlinkDisplayName() );
+      QString location = string(cell->hyperlinkLocation());
+      if( displayName.isEmpty() )
+        displayName = str;
+      xmlWriter->startElement( "text:a" );
+      xmlWriter->addAttribute( "xlink:href", location );
+      if( ! cell->hyperlinkTargetFrameName().isEmpty() )    
+        xmlWriter->addAttribute( "office:target-frame-name", string(cell->hyperlinkTargetFrameName()) );
+      xmlWriter->addTextNode( displayName );
+      xmlWriter->endElement(); // text:a
+    }
+
     xmlWriter->endElement(); //  text:p
   }
 
-  // TODO: handle formula
+  const UString note = cell->note();
+  if( ! note.isEmpty() ) {
+    xmlWriter->startElement( "office:annotation" );
+    xmlWriter->startElement( "text:p" );
+    xmlWriter->addTextNode( string(note) );
+    xmlWriter->endElement(); // text:p
+    xmlWriter->endElement(); // office:annotation
+  }
 
   xmlWriter->endElement(); //  table:[covered-]table-cell
 }
@@ -924,9 +986,6 @@ static void processDateFormatSeparator( KoXmlWriter* xmlWriter, const QString& s
 QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
 {
   QRegExp numberRegEx("(0+)(\\.0+)?(E\\+0+)?");
-  QRegExp percentageRegEx("(0+)(\\.0+)?%");
-  QRegExp dateRegEx("(m{1,3}|d{1,2}|yy|yyyy)(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy)(?:(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy))?");
-
   if( numberRegEx.exactMatch(valueFormat) )
   {
     if( numberRegEx.cap(3).length() )
@@ -934,11 +993,15 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
     else
       return KoOdfNumberStyles::saveOdfNumberStyle(*styles, valueFormat, "", "");
   }
-  else if( percentageRegEx.exactMatch(valueFormat) )
+  
+  QRegExp percentageRegEx("(0+)(\\.0+)?%");
+  if( percentageRegEx.exactMatch(valueFormat) )
   {
     return KoOdfNumberStyles::saveOdfPercentageStyle(*styles, valueFormat, "", "");
   }
-  else if( dateRegEx.exactMatch(valueFormat) )
+
+  QRegExp dateRegEx("(m{1,3}|d{1,2}|yy|yyyy)(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy)(?:(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy))?");
+  if( dateRegEx.exactMatch(valueFormat) )
   {
     KoGenStyle style(KoGenStyle::StyleNumericDate);
     QBuffer buffer;
@@ -959,6 +1022,129 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
 
     return styles->lookup(style, "N");
   }
+
+  QString vf = valueFormat;
+  QString locale = extractLocale(vf);
+  Q_UNUSED( locale );
+  removeEscaped(vf);
+  QRegExp timeRegEx( "(h|hh|H|HH|m|s)" );
+  if( timeRegEx.indexIn(vf) >= 0 ) {
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
+
+    // look for hours, minutes or seconds. Not for AM/PM cause we need at least one value before.
+    QString numberText;
+    int lastPos = -1;
+    while( ++lastPos < vf.count() ) {
+      if( vf[lastPos] == 'h' || vf[lastPos] == 'H' || vf[lastPos] == 'm' || vf[lastPos] == 's' ) break;
+      numberText += vf[lastPos];
+    }
+    if( ! numberText.isEmpty() ) {
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( numberText );
+      xmlWriter.endElement();  // number:text
+      numberText.clear();
+    }
+    if( lastPos < vf.count() ) {
+      // take over hours if defined
+      if( vf[lastPos] == 'h' || vf[lastPos] == 'H' ) {
+        const bool isLong = ++lastPos < vf.count() && ( vf[lastPos] == 'h' || vf[lastPos] == 'H' );
+        if( ! isLong ) --lastPos;
+        xmlWriter.startElement( "number:hours" );
+        xmlWriter.addAttribute( "number:style", isLong ? "long" : "short" );
+        xmlWriter.endElement();  // number:hours
+
+        // look for minutes, seconds or AM/PM definition
+        while( ++lastPos < vf.count() ) {
+          if( vf[lastPos] == 'm' || vf[lastPos] == 's' ) break;
+          const QString s = vf.mid(lastPos);
+          if( s.startsWith("AM/PM") || s.startsWith("am/pm") ) break;
+          numberText += vf[lastPos];
+        }    
+        if( ! numberText.isEmpty() ) {
+          xmlWriter.startElement( "number:text");
+          xmlWriter.addTextNode( numberText );
+          xmlWriter.endElement();  // number:text
+
+          numberText.clear();
+        }    
+      }
+    }
+
+    if( lastPos < vf.count() ) {
+
+      // taker over minutes if defined
+      if( vf[lastPos] == 'm' ) {
+        const bool isLong = ++lastPos < vf.count() && vf[lastPos] == 'm';
+        if( ! isLong ) --lastPos;
+        xmlWriter.startElement( "number:minutes" );
+        xmlWriter.addAttribute( "number:style", isLong ? "long" : "short" );
+        xmlWriter.endElement();  // number:hours
+
+        // look for seconds or AM/PM definition
+        while( ++lastPos < vf.count() ) {
+          if( vf[lastPos] == 's' ) break;
+          const QString s = vf.mid(lastPos);
+          if( s.startsWith("AM/PM") || s.startsWith("am/pm") ) break;
+          numberText += vf[lastPos];
+        }    
+        if( ! numberText.isEmpty() ) {
+          xmlWriter.startElement( "number:text");
+          xmlWriter.addTextNode( numberText );
+          xmlWriter.endElement();  // number:text
+          numberText.clear();
+        }    
+      }
+    }
+
+    if( lastPos < vf.count() ) {
+      // taker over seconds if defined
+      if( vf[lastPos] == 's' ) {
+        const bool isLong = ++lastPos < vf.count() && vf[lastPos] == 's';
+        if( ! isLong ) --lastPos;
+        xmlWriter.startElement( "number:seconds" );
+        xmlWriter.addAttribute( "number:style", isLong ? "long" : "short" );
+        xmlWriter.endElement();  // number:hours
+
+        // look for AM/PM definition
+        while( ++lastPos < vf.count() ) {
+          const QString s = vf.mid(lastPos);
+          if( s.startsWith("AM/PM") || s.startsWith("am/pm") ) break;
+          numberText += vf[lastPos];
+        }    
+        if( ! numberText.isEmpty() ) {
+          xmlWriter.startElement( "number:text");
+          xmlWriter.addTextNode( numberText );
+          xmlWriter.endElement();  // number:text
+          numberText.clear();
+        }    
+      }
+
+      // take over AM/PM definition if defined
+      const QString s = vf.mid(lastPos);
+      if( s.startsWith("AM/PM") || s.startsWith("am/pm") ) {
+        xmlWriter.startElement( "number:am-pm" );
+        xmlWriter.endElement();  // number:am-pm
+        lastPos += 4;
+      }
+    }
+
+    // and take over remaining text
+    if( ++lastPos < vf.count() ) {
+      xmlWriter.startElement( "number:text");
+      xmlWriter.addTextNode( vf.mid(lastPos) );
+      xmlWriter.endElement();  // number:text
+    }    
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+    return styles->lookup(style, "N");
+  }
+  
+  
+  /*
   else if( valueFormat == "h:mm AM/PM" )
   {
     KoGenStyle style(KoGenStyle::StyleNumericTime);
@@ -1243,7 +1429,9 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
     return styles->lookup(style, "N");
   }
   else
-  {
-    return "";
+  {    
   }
+  */
+
+  return "";
 }
