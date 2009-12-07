@@ -56,6 +56,9 @@ public:
   double rightMargin;
   double topMargin;
   double bottomMargin;
+  
+  long defaultRowHeight;
+  long defaultColWidth;
 };
 
 }
@@ -76,6 +79,8 @@ Sheet::Sheet( Workbook* wb )
   d->topMargin    = 72;  // 1 inch
   d->bottomMargin = 72;  // 1 inch
   d->autoCalc = true;
+  d->defaultRowHeight = -1;
+  d->defaultColWidth = -1;
 }
 
 Sheet::~Sheet()
@@ -309,6 +314,26 @@ void Sheet::setBottomMargin( double m )
   d->bottomMargin = m;
 }
 
+long Sheet::defaultRowHeight() const
+{
+  return d->defaultRowHeight;
+}
+
+void Sheet::setDefaultRowHeight( long i )
+{
+  d->defaultRowHeight = i;
+}
+
+long Sheet::defaultColWidth() const
+{
+  return d->defaultColWidth;
+}
+
+void Sheet::setDefaultColWidth( long i )
+{
+  d->defaultColWidth = i;
+}
+
 class Column::Private
 {
 public:
@@ -436,3 +461,4 @@ void Row::setVisible( bool b )
 {
   d->visible = b;
 }
+  

@@ -131,6 +131,11 @@ public:
   unsigned maxRow() const;
   unsigned maxColumn() const;
 
+  long defaultRowHeight() const;
+  void setDefaultRowHeight( long );
+  long defaultColWidth() const;
+  void setDefaultColWidth( long );
+    
 private:
   // no copy or assign
   Sheet( const Sheet& );

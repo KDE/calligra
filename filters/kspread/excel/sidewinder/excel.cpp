@@ -28,11 +28,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <QDebug>
+#include <QDateTime>
+
 #include "pole.h"
 #include "swinder.h"
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
 #include "utils.h"
+
+#define SWINDER_XLS2RAW
 
 // Use anonymous namespace to cover following functions
 namespace{
@@ -1287,6 +1292,117 @@ void SSTRecord::dump( std::ostream& out ) const
     stringAt( i ) << std::endl;
 }
 
+// ========== Obj ==========
+
+const unsigned ObjRecord::id = 0x5D;
+
+ObjRecord::ObjRecord() : Record(), m_object(0) {}
+ObjRecord::~ObjRecord() {}
+
+void ObjRecord::dump( std::ostream& out ) const
+{
+  Q_ASSERT( m_object );
+  out << "Obj" << std::endl;
+  out << "  id: " << m_object->id() << std::endl;
+  out << "  type: " << m_object->type() << std::endl;
+}
+
+void ObjRecord::setData( unsigned size, const unsigned char* data, const unsigned* continuePositions )
+{
+  printf("ObjRecord::setData ******************************************************************\n");
+  if (size < 8) {
+      setIsValid(false);
+      return;
+  }
+  
+  // FtCmo struct
+  const unsigned char* startFtCmo = data;
+
+  const unsigned long ftcmo = readU16(startFtCmo);
+  Q_ASSERT( ftcmo ==  0x15 );
+  const unsigned long cbcmo = readU16(startFtCmo + 2);
+  Q_ASSERT( cbcmo ==  0x12 );
+
+  // cmo struct
+  const unsigned long ot = readU16(startFtCmo + 4);
+  const unsigned long id = readU16(startFtCmo + 6);
+  const unsigned long opts = readU16(startFtCmo + 8);
+  const bool fLocked = opts & 0x01;
+  const bool reserved = opts & 0x02;
+  const bool fDefaultSize = opts & 0x04;
+  const bool fPublished = opts & 0x08;
+  const bool fPrint = opts & 0x10;
+  const bool unused1 = opts & 0x20;
+  const bool unused2 = opts & 0x60;
+  const bool fDisabled = opts & 0xC0;
+  const bool fUIObj = opts & 0x180;
+  const bool fRecalcObj = opts & 0x300;    
+  const bool unused3 = opts & 0x600;
+  const bool unused4 = opts & 0xC00;
+  const bool fRecalcObjAlways = opts & 0x1800;
+  const bool unused5 = opts & 0x3000;
+  const bool unused6 = opts & 0x6000;
+  const bool unused7 = opts & 0xC000;
+  const unsigned long unused8 = readU32(startFtCmo + 10);
+  const unsigned long unused9 = readU32(startFtCmo + 14);
+  const unsigned long unused10 = readU32(startFtCmo + 18);
+
+  const unsigned char* startPict = data + 22;
+  switch( ot ) {
+    case Object::Group: // gmo
+      startPict += 6;
+      break;
+    case Object::Picture: // pictFormat and pictFlags
+      startPict += 12;
+      break;
+    case Object::Checkbox: // cbls
+      startPict += 16;
+      break;
+    case Object::RadioButton: // cbls and rbo
+      startPict += 26;
+      break;
+    case Object::SpinControl: // sbs
+    case Object::Scrollbar: // sbs
+    case Object::List: // sbs
+    case Object::DropdownList: // sbs
+      startPict += 24;
+      break;
+    case Object::Note: { // nts
+      m_object = new NoteObject(id);
+      const unsigned long ft = readU16(startPict);
+      Q_ASSERT(ft == 0x000D);
+      const unsigned long cb = readU16(startPict + 2);
+      Q_ASSERT(cb == 0x0016);
+      startPict += 20; // skip guid
+      const unsigned long isShared = readU16(startPict); // 0x0000 = Not shared, 0x0001 = Shared.
+      Q_ASSERT( isShared == 0x0000 || isShared == 0x0001 );
+      startPict += 6; // includes 4 unused bytes
+
+      //TODO the TxO record has the text... what we propably need to do is to determinate the TextObject
+      // by the offset this noote object has...
+      //static_cast<NoteObject*>(m_object)->setNote(  );
+
+    } break;
+    default:
+      printf( "Unexpected objecttype %i in ObjRecord", ot );
+      setIsValid(false);
+      delete m_object;
+      m_object = 0;
+      return;
+  }
+
+  // FtMacro
+  //const unsigned long FtMacro_ft = readU16(startPict);
+  //Q_ASSERT( FtMacro_ft == 0x0004 );
+  // ObjFmla
+  //const unsigned long cbFmla = readU16(startPict + 2);
+  //startPict += 4;
+  //if( cbFmla > 0x0000 ) {
+  //  startPict += 6;
+  //}
+  //rgce variable...    
+}
+  
 // ========== XF ==========
 
 const unsigned int XFRecord::id = 0x00e0;
@@ -1871,6 +1987,7 @@ static Record* createRKRecord() { return new RKRecord(); }
 static Record* createRStringRecord() { return new RStringRecord(); }
 static Record* createSSTRecord() { return new SSTRecord(); }
 static Record* createXFRecord() { return new XFRecord(); }
+static Record* createObjRecord() { return new ObjRecord(); }
 
 static void registerAllRecordClasses()
 {
@@ -1887,11 +2004,12 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(RStringRecord::id, createRStringRecord);
     RecordRegistry::registerRecordClass(SSTRecord::id, createSSTRecord);
     RecordRegistry::registerRecordClass(XFRecord::id, createXFRecord);
+    RecordRegistry::registerRecordClass(ObjRecord::id, createObjRecord);
 }
 
 bool ExcelReader::load( Workbook* workbook, const char* filename )
 {
-    registerAllRecordClasses();
+  registerAllRecordClasses();
 
   POLE::Storage storage( filename );
   if( !storage.open() )
@@ -1900,13 +2018,13 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     return false;
   }
 
-#ifdef SWINDER_XLS2RAW
+//#ifdef SWINDER_XLS2RAW
   std::list<std::string> entries = storage.entries();
   std::cout << "Streams:" << std::endl;
   for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
     std::cout << "    /" << *it << std::endl;
   }
-#endif
+//#endif
 
   unsigned streamVersion = Swinder::Excel97;
   POLE::Stream* stream;

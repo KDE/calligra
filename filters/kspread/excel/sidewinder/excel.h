@@ -27,6 +27,7 @@
 #include "swinder.h"
 #include "formulas.h"
 #include "records.h"
+#include "objects.h"
 
 namespace Swinder
 {
@@ -803,6 +804,20 @@ private:
 
    class Private;
    Private *d;
+};
+
+class ObjRecord : public Record
+{
+public:
+  Object *m_object;
+  static const unsigned id;
+  static Record *createRecord() { return new ObjRecord; }
+  ObjRecord();
+  virtual ~ObjRecord();
+  virtual unsigned rtti() const { return this->id; }
+  virtual const char* name() const { return "Obj"; }
+  virtual void dump( std::ostream& ) const;
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );
 };
 
 /**
