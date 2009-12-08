@@ -1310,7 +1310,7 @@ void ObjRecord::dump( std::ostream& out ) const
 void ObjRecord::setData( unsigned size, const unsigned char* data, const unsigned* continuePositions )
 {
   printf("ObjRecord::setData ******************************************************************\n");
-  if (size < 18) {
+  if (size < 32) {
       setIsValid(false);
       return;
   }
