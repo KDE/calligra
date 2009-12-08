@@ -26,7 +26,7 @@
 #include "cell.h"
 #include "sheet.h"
 
-#define SWINDER_XLS2RAW
+//#define SWINDER_XLS2RAW
 
 namespace Swinder {
 

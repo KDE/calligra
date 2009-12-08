@@ -603,24 +603,6 @@ static bool isPercentageFormat( const QString& valueFormat )
   return valueFormat[valueFormat.length()-1] == QChar('%');
 }
 
-// extract and return locale and remove locale from time string.
-QString extractLocale( QString &time )
-{
-  QString locale;
-  if( time.startsWith("[$-") ) {
-    int pos = time.indexOf(']');
-    if( pos > 3 ) {
-      locale = time.mid(3, pos - 3);
-      time = time.mid(pos + 1);
-      pos = time.lastIndexOf(';');
-      if( pos >= 0 ) {       
-        time = time.left(pos);        
-      }
-    }
-  }
-  return locale;
-}
-
 // Remove via the "\" char escaped characters from the string.
 QString removeEscaped( const QString &text, bool removeOnlyEscapeChar = false )
 {
@@ -638,6 +620,46 @@ QString removeEscaped( const QString &text, bool removeOnlyEscapeChar = false )
     }
   }
   return s;
+}
+
+static bool isCurrencyFormat( const QString& valueFormat )
+{
+  QString vf = removeEscaped(valueFormat);
+
+  // dollar is special cause it starts with a $
+  QRegExp dollarRegEx( "^\"\\$\"[#,]*[\\d]+(|.[0]+)$" );
+  if (dollarRegEx.indexIn(vf)>=0)
+    return true;
+
+  // everything else either has a [$ at the begin or at the end
+  QRegExp beginRegEx( "^[$[\\w]+\\-[0-9\\w]+\\]" );
+  if (beginRegEx.indexIn(vf)>=0)
+    return true;
+  
+  // we need to have such regex's cause [$ can also be a conditional formatting
+  QRegExp endRegEx( "[$[\\w]+.*\\-[0-9\\w]+\\]$" );
+  if (endRegEx.indexIn(vf)>=0)
+    return true;
+
+  return false;
+}
+
+// extract and return locale and remove locale from time string.
+QString extractLocale( QString &time )
+{
+  QString locale;
+  if( time.startsWith("[$-") ) {
+    int pos = time.indexOf(']');
+    if( pos > 3 ) {
+      locale = time.mid(3, pos - 3);
+      time = time.mid(pos + 1);
+      pos = time.lastIndexOf(';');
+      if( pos >= 0 ) {       
+        time = time.left(pos);        
+      }
+    }
+  }
+  return locale;
 }
 
 static bool isDateFormat( const Value &value, const QString& valueFormat )
@@ -710,6 +732,12 @@ static bool isTimeFormat( const Value &value, const QString& valueFormat )
   return ( ex.indexIn(vf) >= 0 ) && value.asFloat() < 1.0;
 }
 
+static QString convertCurrency( double currency, const QString& valueFormat )
+{
+  Q_UNUSED( valueFormat );
+  return QString::number( currency, 'g', 15 );
+}
+
 static QString convertDate( double serialNo, const QString& valueFormat )
 {
   QString vf = valueFormat;
@@ -769,34 +797,32 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   }
   else if( value.isFloat() || value.isInteger() )
   {
-    QString valueFormat = string( cell->format().valueFormat() );
+    const QString valueFormat = string( cell->format().valueFormat() );
 
-    bool handled = false;
     if( isPercentageFormat( valueFormat ) )
     {
-      handled = true;
       xmlWriter->addAttribute( "office:value-type", "percentage" );
       xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );
     }
-
-    if( isDateFormat( value, valueFormat ) )
+    else if( isCurrencyFormat( valueFormat ) )
     {
-      handled = true;
-      QString dateValue = convertDate( value.asFloat(), valueFormat );
+      const QString currencyValue = convertCurrency( value.asFloat(), valueFormat );
+      xmlWriter->addAttribute( "office:value-type", "currency" );
+      xmlWriter->addAttribute( "office:value", currencyValue );
+    }
+    else if( isDateFormat( value, valueFormat ) )
+    {
+      const QString dateValue = convertDate( value.asFloat(), valueFormat );
       xmlWriter->addAttribute( "office:value-type", "date" );
       xmlWriter->addAttribute( "office:date-value", dateValue );
     }
-
-    if( isTimeFormat( value, valueFormat ) )
+    else if( isTimeFormat( value, valueFormat ) )
     {
-      handled = true;
-      QString timeValue = convertTime( value.asFloat(), valueFormat );
+      const QString timeValue = convertTime( value.asFloat(), valueFormat );
       xmlWriter->addAttribute( "office:value-type", "time" );
       xmlWriter->addAttribute( "office:time-value", timeValue );
     }
-
-    // fallback
-    if( !handled )
+    else // fallback
     {
       xmlWriter->addAttribute( "office:value-type", "float" );
       xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );

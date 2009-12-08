@@ -37,7 +37,7 @@
 #include "worksheetsubstreamhandler.h"
 #include "utils.h"
 
-#define SWINDER_XLS2RAW
+//#define SWINDER_XLS2RAW
 
 // Use anonymous namespace to cover following functions
 namespace{
@@ -2025,13 +2025,13 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     return false;
   }
 
-//#ifdef SWINDER_XLS2RAW
+#ifdef SWINDER_XLS2RAW
   std::list<std::string> entries = storage.entries();
   std::cout << "Streams:" << std::endl;
   for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
     std::cout << "    /" << *it << std::endl;
   }
-//#endif
+#endif
 
   unsigned streamVersion = Swinder::Excel97;
   POLE::Stream* stream;
