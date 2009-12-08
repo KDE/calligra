@@ -1029,8 +1029,8 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
     }
     //kDebug()<<"tospec:"<<s.toString()<<" -"<<e.toString();
     // Multiple days
-    for ( QDate date = start.date(); date <= e.date(); date = date.addDays(1) ) {
-        if (date > start.date()) {
+    for ( QDate date = s.date(); date <= e.date(); date = date.addDays(1) ) {
+        if (date > s.date()) {
             startTime = QTime(0, 0, 0);
         }
         if (date < e.date()) {
