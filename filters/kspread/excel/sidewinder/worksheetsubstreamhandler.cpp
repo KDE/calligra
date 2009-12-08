@@ -80,7 +80,7 @@ public:
       const bool hlstmfMonikerSavedAsStr = opts & 0x180;
       const bool hlstmfAbsFromGetdataRel = opts & 0x300;
 
-      Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
+      //Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
 
       startHyperlinkObject += 8;
       
@@ -118,19 +118,19 @@ public:
                 startHyperlinkObject += length + 4;
               } break;
               case 0x00000303: { // FileMoniker
-                printf( "TODO: HLinkRecord FileMoniker" );
+                printf( "TODO: HLinkRecord FileMoniker\n" );
                 return; // abort
               } break;
               case 0x00000309: { // CompositeMoniker
-                printf( "TODO: HLinkRecord CompositeMoniker" );
+                printf( "TODO: HLinkRecord CompositeMoniker\n" );
                 return; // abort
               } break;
               case 0x00000305: { // AntiMoniker
-                printf( "TODO: HLinkRecord AntiMoniker" );
+                printf( "TODO: HLinkRecord AntiMoniker\n" );
                 return; // abort
               } break;
               case 0x00000304: { // ItemMoniker
-                printf( "TODO: HLinkRecord ItemMoniker" );
+                printf( "TODO: HLinkRecord ItemMoniker\n" );
                 return; // abort
               } break;
             }
@@ -255,9 +255,7 @@ void WorksheetSubStreamHandler::handleRecord( Record* record )
         {} //EofRecord
     else if (type == 0x200)
         {} //DimensionsRecord
-
-else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
-  
+    //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
         printf( "Unhandled worksheet record with type %i\n", type );
     }
