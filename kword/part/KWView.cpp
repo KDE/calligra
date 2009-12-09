@@ -161,6 +161,7 @@ QWidget *KWView::canvas() const
 
 void KWView::updateReadWrite(bool readWrite)
 {
+    Q_UNUSED(readWrite);
     // TODO
 }
 

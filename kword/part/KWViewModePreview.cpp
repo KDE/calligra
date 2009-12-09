@@ -45,11 +45,13 @@ QSizeF KWViewModePreview::contentsSize() const
 
 QPointF KWViewModePreview::documentToView(const QPointF & point) const
 {
+    Q_UNUSED(point);
     return QPointF();
 }
 
 QPointF KWViewModePreview::viewToDocument(const QPointF & point) const
 {
+    Q_UNUSED(point);
     return QPointF();
 }
 
@@ -60,5 +62,6 @@ void KWViewModePreview::updatePageCache()
 
 QList<KWViewMode::ViewMap> KWViewModePreview::clipRectToDocument(const QRect &viewRect) const
 {
+    Q_UNUSED(viewRect);
     return QList<KWViewMode::ViewMap>();
 }

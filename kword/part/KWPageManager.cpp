@@ -84,7 +84,9 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
             kWarning(32001) << "you requested to change the page number to a number that already exist, all will end soon";
             return;
         }
+#ifdef DEBUG_PAGES
         const int oldPageNumber = page.pageNumber; // debug only
+#endif
         if (page.pageNumber >= from)
             page.pageNumber += diff;
 #ifdef DEBUG_PAGES

@@ -206,8 +206,10 @@ void KWDocument::removeShape(KoShape *shape)
     }
 }
 
-void KWDocument::paintContent(QPainter&, const QRect& rect)
+void KWDocument::paintContent(QPainter& painter, const QRect& rect)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
     // TODO
 }
 
