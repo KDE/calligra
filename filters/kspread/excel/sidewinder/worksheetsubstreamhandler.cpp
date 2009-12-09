@@ -49,6 +49,7 @@ public:
   HLinkRecord() : Record(), m_firstRow(0), m_firstColumn(0), m_lastRow(0), m_lastColumn(0) {}
   virtual ~HLinkRecord() {}
   virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions ) {
+      Q_UNUSED(continuePositions);
       if (size < 8) {
           setIsValid(false);
           return;
@@ -62,7 +63,7 @@ public:
       const unsigned char* startHyperlinkObject = data + 16 /* skip CLDID */ + 8;
       const unsigned long streamVersion = readU32(startHyperlinkObject);
       if( streamVersion != 2 ) {
-          printf( "Invalid stream version %i in HLinkRecord.\n", streamVersion );
+          printf( "Invalid stream version %i in HLinkRecord.\n", (int)streamVersion );
           setIsValid(false);
           return;
       }
@@ -71,15 +72,20 @@ public:
       const unsigned long opts = readU32(startHyperlinkObject + 4);
       const bool hlstmfHasMonikor = opts & 0x01;
       const bool hlstmfIsAbsolute = opts & 0x02;
+      Q_UNUSED(hlstmfIsAbsolute);
       const bool hlstmfISiteGaveDisplayName = opts & 0x04;
+      Q_UNUSED(hlstmfISiteGaveDisplayName);
       bool hlstmfHasLocationStr = opts & 0x08;
       const bool hlstmfHasDisplayName = opts & 0x10;
       const bool hlstmfHasGUID = opts & 0x20;
+      Q_UNUSED(hlstmfHasGUID);
       const bool hlstmfHasCreationTime = opts & 0x60;
+      Q_UNUSED(hlstmfHasCreationTime);
       const bool hlstmfHasFrameName = opts & 0xC0;
       const bool hlstmfMonikerSavedAsStr = opts & 0x180;
+      Q_UNUSED(hlstmfMonikerSavedAsStr);
       const bool hlstmfAbsFromGetdataRel = opts & 0x300;
-
+      Q_UNUSED(hlstmfAbsFromGetdataRel);
       //Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
 
       startHyperlinkObject += 8;
