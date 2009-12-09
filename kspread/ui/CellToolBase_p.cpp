@@ -113,15 +113,23 @@ void CellToolBase::Private::updateLocationComboBox()
         locationComboBox->lineEdit()->setText(address);
 }
 
+#define ACTION_EXEC( name, command ) { \
+    QAction *a = q->action(name); \
+    const bool blocked = a->blockSignals(true); \
+    a->command; \
+    a->blockSignals(blocked); \
+    }
+
 void CellToolBase::Private::updateActions(const Cell& cell)
 {
     const Style style = cell.style();
 
     // -- font actions --
-    q->action("bold")->setChecked(style.bold());
-    q->action("italic")->setChecked(style.italic());
-    q->action("underline")->setChecked(style.underline());
-    q->action("strikeOut")->setChecked(style.strikeOut());
+    ACTION_EXEC("bold", setChecked(style.bold()));
+    ACTION_EXEC("italic", setChecked(style.italic()));
+    ACTION_EXEC("underline", setChecked(style.underline()));
+    ACTION_EXEC("strikeOut", setChecked(style.strikeOut()));
+
     // workaround for bug #59291 (crash upon starting from template)
     // certain Qt and Fontconfig combination fail miserably if can not
     // find the font name (e.g. not installed in the system)
@@ -136,20 +144,20 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     }
     static_cast<KFontSizeAction*>(q->action("fontSize"))->setFontSize(style.fontSize());
     // -- horizontal alignment actions --
-    q->action("alignLeft")->setChecked(style.halign() == Style::Left);
-    q->action("alignCenter")->setChecked(style.halign() == Style::Center);
-    q->action("alignRight")->setChecked(style.halign() == Style::Right);
+    ACTION_EXEC("alignLeft", setChecked(style.halign() == Style::Left));
+    ACTION_EXEC("alignCenter", setChecked(style.halign() == Style::Center));
+    ACTION_EXEC("alignRight", setChecked(style.halign() == Style::Right));
     // -- vertical alignment actions --
-    q->action("alignTop")->setChecked(style.valign() == Style::Top);
-    q->action("alignMiddle")->setChecked(style.valign() == Style::Middle);
-    q->action("alignBottom")->setChecked(style.valign() == Style::Bottom);
+    ACTION_EXEC("alignTop", setChecked(style.valign() == Style::Top));
+    ACTION_EXEC("alignMiddle", setChecked(style.valign() == Style::Middle));
+    ACTION_EXEC("alignBottom", setChecked(style.valign() == Style::Bottom));
 
-    q->action("verticalText")->setChecked(style.verticalText());
-    q->action("wrapText")->setChecked(style.wrapText());
+    ACTION_EXEC("verticalText", setChecked(style.verticalText()));
+    ACTION_EXEC("wrapText", setChecked(style.wrapText()));
 
     Format::Type ft = style.formatType();
-    q->action("percent")->setChecked(ft == Format::Percentage);
-    q->action("currency")->setChecked(ft == Format::Money);
+    ACTION_EXEC("percent", setChecked(ft == Format::Percentage));
+    ACTION_EXEC("currency", setChecked(ft == Format::Money));
 
     if (!q->selection()->activeSheet()->isProtected() || style.notProtected()) {
         q->action("clearComment")->setEnabled(!cell.comment().isEmpty());
