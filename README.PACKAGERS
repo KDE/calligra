@@ -19,10 +19,9 @@ Table Of Contents
 2. Development files
  2.1. KexiDB development files
  2.2. Krita development files 
-3. Scripting support
-4. Microsoft Access Import (optional, recommended)
-5. Quick command-line tests of Kexi installation
-6. Debug information
+3. Microsoft Access Import (optional, recommended)
+4. Quick command-line tests of Kexi installation
+5. debug information
 
 
 
@@ -89,8 +88,7 @@ as described in the Microsoft Access import plugin section below.
 
 2.2. Krita development files 
 
-Location: koffice/krita/core, koffice/krita/sdk,
-koffice/krita/kritacolor, koffice/krita/ui
+Location: koffice/krita/image, koffice/krita/ui
 
 These directories contain header files that are installed and can be
 used by plugin developers to extend Krita with new tools, colorspaces,
@@ -98,60 +96,7 @@ paint-ops and more.  If your distribution packages development files
 separately, it may be a good idea to make a package with these headers.
 
 
-3. Scripting support
---------------------
-
-Preliminary support for Ruby and Python scripting is available for
-Krita and Kexi.
-It can be disabled by passing the '--disable-scripting' option to
-'configure'.
-
-The 'Kross' scripting library (koffice/lib/kross) provides access to
-the Python and Ruby scripting languages by the dynamically loaded
-plugins.
-
-Build time dependencies:
-  Python and Ruby development packages need to be installed in order
-  to build KOffice with full scripting support.  In addition, the Ruby
-  interpreter is also required at build time.
-
-Run time dependencies:
-  Kross detects which of these libraries is installed dynamically, at
-  run-time.  Therefore, KOffice packages need not have any run-time
-  dependencies on any scripting interpreter.
-
-The scripting language plugins can be found in:
-  koffice/lib/kross/python; and
-  koffice/lib/kross/ruby.
-They install as:
-  lib/kde4/krosspython.{la,so}; and
-  lib/kde4/krossruby.{la,so}
-
-It is recommended to put each interpreter plugin into a separate
-package, and the user decide if they would like support for each
-language individually.
-
-For example, the Python scripting package may contain:
-  lib/kde4/krosspython.so
-  lib/kde4/krosspython.la
-  share/apps/kexi/scripts/exportxhtml/ExportXHTML.py
-  share/apps/kexi/scripts/exportxhtml/ExportXHTML.rc
-  share/apps/kexi/scripts/importxhtml/ImportXHTML.py
-  share/apps/kexi/scripts/importxhtml/ImportXHTML.rc
-  share/apps/kexi/scripts/projectdocumentor/ProjectDocumentor.py
-  share/apps/kexi/scripts/projectdocumentor/ProjectDocumentor.rc
-  share/apps/krita/scripts/invert.py
-  share/apps/krita/scripts/reshapehisto.py
-
-and the Ruby scripting package may contain:
-  lib/kde4/krossruby.so
-  lib/kde4/krossruby.la
-  share/apps/krita/scripts/ruby/invert.rb
-  share/apps/krita/scripts/ruby/changecs.rb
-  share/apps/krita/scripts/ruby/randompaint.rb
-
-
-4. Microsoft Access Import (optional, recommended)
+3. Microsoft Access Import (optional, recommended)
 -------------------------------------
 
 A plugin to allow the import of MS Access (.mdb) files is available
@@ -180,7 +125,7 @@ headers using the --with-kexidb-includes=... and the
 --with-kexidb-libraries=... options.
 
 
-5. Quick command-line tests of Kexi installation
+4. Quick command-line tests of Kexi installation
 ------------------------------------------------
 
 If you don't want to click through Kexi interface but still want 
@@ -195,7 +140,7 @@ This will:
 - open it,
 - create a new empty form
 
-6. Debug information
+5. Debug information
 --------------------
 
 For alpha and beta packages, please build with debug output enabled, but for
