@@ -7,6 +7,7 @@ Name[pt_BR]=Filtro de Importação do Microsoft PowerPoint 2007 para o KPresente
 Name[sv]=Microsoft PowerPoint 2007-importfilter för Kpresenter
 Name[uk]=Фільтр імпорту MS PowerPoint 2007 для KPresenter
 Name[x-test]=xxMS PowerPoint 2007 Import Filter for KPresenterxx
+Name[zh_TW]=KPresenter 的 Microsoft PowerPoint 2007 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template
 X-KDE-Weight=1
