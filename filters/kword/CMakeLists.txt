@@ -19,7 +19,6 @@ if (NOT TINY)
 
     #html FIXME: export dialog is Qt 3 version ui file
     if(NOT WIN32)
-        add_subdirectory( ascii )
         add_subdirectory( html )
         if (TARGET kowmf)
             add_subdirectory( mswrite )
@@ -40,6 +39,7 @@ if (NOT TINY)
     
 endif (NOT TINY)
 
+add_subdirectory( ascii )
 add_subdirectory( rtf )
 if(WV2_FOUND)
 	add_subdirectory(msword-odf)
