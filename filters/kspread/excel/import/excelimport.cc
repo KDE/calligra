@@ -1082,7 +1082,7 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
     bool hasDenominatorValue = false;
     const int denominatorValue = denominator.toInt(&hasDenominatorValue);
     
-    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    KoGenStyle style(KoGenStyle::StyleNumericFraction );
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level    
@@ -1108,7 +1108,7 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
 
   QRegExp dateRegEx( "(d|M|y)" ); // we don't check for 'm' cause this can be 'month' or 'minute' and if nothing else is defined we assume 'minute'...
   if( dateRegEx.indexIn(_vf) >= 0 ) {
-    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    KoGenStyle style(KoGenStyle::StyleNumericDate);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
