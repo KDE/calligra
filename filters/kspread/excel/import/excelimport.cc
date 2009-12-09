@@ -732,6 +732,13 @@ static bool isTimeFormat( const Value &value, const QString& valueFormat )
   return ( ex.indexIn(vf) >= 0 ) && value.asFloat() < 1.0;
 }
 
+static bool isFractionFormat( const QString& valueFormat )
+{
+  QRegExp ex( "^#[?]+/[0-9?]+$" );
+  QString vf = removeEscaped(valueFormat);
+  return ex.indexIn(vf) >= 0;
+}
+
 static QString convertCurrency( double currency, const QString& valueFormat )
 {
   Q_UNUSED( valueFormat );
@@ -764,6 +771,11 @@ static QString convertTime( double serialNo, const QString& valueFormat )
   tt = tt.addMSecs( qRound( (serialNo-(int)serialNo) * 86400 * 1000 ) );
   qDebug()<<tt;
   return tt.toString( "'PT'hh'H'mm'M'ss'S'" );
+}
+
+static QString convertFraction( double serialNo, const QString& valueFormat )
+{
+  return QString::number( serialNo, 'g', 15 );
 }
 
 void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWriter )
@@ -821,6 +833,12 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
       const QString timeValue = convertTime( value.asFloat(), valueFormat );
       xmlWriter->addAttribute( "office:value-type", "time" );
       xmlWriter->addAttribute( "office:time-value", timeValue );
+    }
+    else if( isFractionFormat( valueFormat ) )
+    {
+      const QString fractionValue = convertFraction( value.asFloat(), valueFormat );
+      xmlWriter->addAttribute( "office:value-type", "float" );
+      xmlWriter->addAttribute( "office:value", fractionValue );      
     }
     else // fallback
     {
@@ -1053,6 +1071,34 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
   if( percentageRegEx.exactMatch(valueFormat) )
   {
     return KoOdfNumberStyles::saveOdfPercentageStyle(*styles, valueFormat, "", "");
+  }
+
+  const QString escapedValueFormat = removeEscaped(valueFormat);
+  QRegExp fractionRegEx( "^#([?]+)/([0-9?]+)$" );
+  if( fractionRegEx.indexIn(escapedValueFormat) >= 0 )
+  {
+    const int minlength = fractionRegEx.cap(1).length(); // numerator
+    const QString denominator = fractionRegEx.cap(2); // denominator
+    bool hasDenominatorValue = false;
+    const int denominatorValue = denominator.toInt(&hasDenominatorValue);
+    
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level    
+    
+    xmlWriter.startElement( "number:fraction" );
+    //xmlWriter.addAttribute( "number:min-integer-digits", 0 );
+    xmlWriter.addAttribute( "number:min-numerator-digits", minlength );
+    if( hasDenominatorValue )
+      xmlWriter.addAttribute( "number:number:denominator-value", denominatorValue );
+    else
+      xmlWriter.addAttribute( "number:min-denominator-digits", denominator.length() );
+    xmlWriter.endElement(); // number:fraction
+    
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents); 
+    return styles->lookup(style, "N");
   }
 
   QString vf = valueFormat;
