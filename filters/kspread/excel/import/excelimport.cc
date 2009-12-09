@@ -1091,7 +1091,7 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
     xmlWriter.startElement( "number:fraction" );
     xmlWriter.addAttribute( "number:min-numerator-digits", minlength );
     if( hasDenominatorValue ) {
-      QRegExp rx( "/([0-9]*)$" );
+      QRegExp rx( "/[?]*([0-9]*)[?]*$" );
       if(rx.indexIn(escapedValueFormat) >= 0)
         xmlWriter.addAttribute( "number:min-integer-digits", rx.cap(1).length() );
       xmlWriter.addAttribute( "number:number:denominator-value", denominatorValue );
