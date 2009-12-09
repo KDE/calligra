@@ -775,6 +775,7 @@ static QString convertTime( double serialNo, const QString& valueFormat )
 
 static QString convertFraction( double serialNo, const QString& valueFormat )
 {
+  Q_UNUSED( valueFormat );
   return QString::number( serialNo, 'g', 15 );
 }
 
@@ -1088,12 +1089,15 @@ QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
     KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level    
     
     xmlWriter.startElement( "number:fraction" );
-    //xmlWriter.addAttribute( "number:min-integer-digits", 0 );
     xmlWriter.addAttribute( "number:min-numerator-digits", minlength );
-    if( hasDenominatorValue )
+    if( hasDenominatorValue ) {
+      QRegExp rx( "[0-9]*" );
+      if(rx.indexIn(escapedValueFormat) >= 0)
+        xmlWriter.addAttribute( "number:min-integer-digits", rx.cap(1).length() );
       xmlWriter.addAttribute( "number:number:denominator-value", denominatorValue );
-    else
+    } else {
       xmlWriter.addAttribute( "number:min-denominator-digits", denominator.length() );
+    }
     xmlWriter.endElement(); // number:fraction
     
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
