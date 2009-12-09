@@ -258,15 +258,15 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 unsigned bitOffset = offset%8;
                 unsigned mask = (1 << bits)-1;
                 if (firstByte == lastByte) {
-                    out << "(readU8(data";
+                    out << "((readU8(data";
                 } else {
-                    out << "(readU16(data";
+                    out << "((readU16(data";
                 }
                 if (dynamicOffset) out << " + curOffset";
                 if (firstByte) out << " + " << firstByte;
                 out << ")";
                 if (bitOffset) out << " >> " << bitOffset;
-                out << ") & 0x" << hex << mask << dec;
+                out << ") & 0x" << hex << mask << dec << ")";
                 if (field.attribute("type") == "bool") out << " != 0";
                 out << ");\n";
             }
