@@ -29,13 +29,17 @@
 #include <kcombobox.h>
 #include <kmessagebox.h>
 
-#include <ExportDialogUI.h>
 #include <ExportDialog.h>
 
 AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
     : KDialog(parent),
-      m_dialog(new ExportDialogUI(this))
+      m_dialog(new QWidget(this))
 {
+    m_ui.setupUi(m_dialog);
+    m_radioGroup.addButton(m_ui.radioEndOfLineLF);
+    m_radioGroup.addButton(m_ui.radioEndOfLineCRLF);
+    m_radioGroup.addButton(m_ui.radioEndOfLineCR);
+
     setButtons( Ok|Cancel );
     setCaption( i18n("KWord's Plain Text Export Filter") );
 	setDefaultButton(KDialog::No);
@@ -51,7 +55,7 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
 
-    m_dialog->comboBoxEncoding->addItems(encodings);
+    m_ui.comboBoxEncoding->addItems(encodings);
 
     setMainWidget(m_dialog);
 
@@ -64,11 +68,11 @@ AsciiExportDialog :: ~AsciiExportDialog(void)
 
 QTextCodec* AsciiExportDialog::getCodec(void) const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
+    const QString strCodec( KGlobal::charsets()->encodingForName( m_ui.comboBoxEncoding->currentText() ) );
     kDebug(30502) <<"Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )
@@ -96,11 +100,12 @@ QTextCodec* AsciiExportDialog::getCodec(void) const
 QString AsciiExportDialog::getEndOfLine(void) const
 {
     QString strReturn;
-    if (m_dialog->radioEndOfLineLF==m_dialog->buttonGroupEndOfLine->selected())
+    QAbstractButton* checkedButton = m_radioGroup.checkedButton();
+    if (m_ui.radioEndOfLineLF == checkedButton)
         strReturn="\n";
-    else if (m_dialog->radioEndOfLineCRLF==m_dialog->buttonGroupEndOfLine->selected())
+    else if (m_ui.radioEndOfLineCRLF == checkedButton)
         strReturn="\r\n";
-    else if (m_dialog->radioEndOfLineCR==m_dialog->buttonGroupEndOfLine->selected())
+    else if (m_ui.radioEndOfLineCR == checkedButton)
         strReturn="\r";
     else
         strReturn="\n";

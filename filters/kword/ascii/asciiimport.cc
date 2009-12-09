@@ -401,7 +401,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
                 lastChar=strLine[lastPos];
                 if (lastChar.isNull())
                     break;
-                else if (skippingQuotes.find(lastChar)==-1)
+                else if (skippingQuotes.indexOf(lastChar)==-1)
                     break;
                 else
                     lastPos--;
@@ -410,7 +410,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
             lastChar=strLine[lastPos];
             if (lastChar.isNull())
                 continue;
-            else if (stoppingPunctuation.find(lastChar)!=-1)
+            else if (stoppingPunctuation.indexOf(lastChar)!=-1)
                 break;
         }
 #if 1
@@ -962,7 +962,7 @@ bool ASCIIImport::IsListItem( QString FirstLine, QChar mark )
 
 
 
-     int k = FirstLine.find(mark);
+     int k = FirstLine.indexOf(mark);
 
      if( k < 0) return false;  // list item mark not on line
 

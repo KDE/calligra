@@ -21,11 +21,11 @@
 #ifndef _IMPORT_DIALOG_H
 #define _IMPORT_DIALOG_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
+#include <QtGui/QButtonGroup>
 
 #include <kdialog.h>
-
-class ImportDialogUI;
+#include <ui_ImportDialogUI.h>
 
 class AsciiImportDialog : public KDialog
 {
@@ -36,7 +36,9 @@ public:
     QTextCodec* getCodec(void) const;
     int getParagraphStrategy(void) const;
 private:
-    ImportDialogUI* m_dialog;
+    QWidget* const m_dialog;
+    Ui::ImportDialogUI m_ui;
+    QButtonGroup m_radioGroup;
 };
 
 #endif /* _IMPORT_DIALOG_H */

@@ -21,11 +21,11 @@
 #ifndef EXPORT_DIALOG_H
 #define EXPORT_DIALOG_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
+#include <QtGui/QButtonGroup>
 
 #include <kdialog.h>
-
-class ExportDialogUI;
+#include <ui_ExportDialogUI.h>
 
 class AsciiExportDialog : public KDialog
 {
@@ -37,7 +37,9 @@ public:
     QString getEndOfLine(void) const;
     QTextCodec* getCodec(void) const;
 private:
-    ExportDialogUI* m_dialog;
+    QWidget* const m_dialog;
+    Ui::ExportDialogUI m_ui;
+    QButtonGroup m_radioGroup;
 };
 
 #endif /* EXPORT_DIALOG_H */

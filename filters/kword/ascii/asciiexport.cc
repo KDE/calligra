@@ -391,7 +391,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                 case 1: // Normal text
                 {
                     QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
-                    strText = strText.replace(QChar(10), m_eol, true);
+                    strText = strText.replace(QChar(10), m_eol, Qt::CaseSensitive);
                     *m_streamOut << strText;
                     break;
                 }
@@ -409,7 +409,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                             QList<ParaData>::ConstIterator it;
                             QList<ParaData>::ConstIterator end(paraList->constEnd());
                             for (it=paraList->constBegin();it!=end;++it)
-                                notestr += (*it).text.trimmed().replace(QChar(10), m_eol, true) + m_eol;
+                                notestr += (*it).text.trimmed().replace(QChar(10), m_eol, Qt::CaseSensitive) + m_eol;
 
                             *m_streamOut << "[";
                             if (automatic) {

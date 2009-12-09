@@ -29,13 +29,18 @@
 #include <kcombobox.h>
 #include <kmessagebox.h>
 
-#include <ImportDialogUI.h>
+#include <ui_ImportDialogUI.h>
 #include <ImportDialog.h>
 
 AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     : KDialog(parent),
-      m_dialog(new ImportDialogUI(this))
+      m_dialog(this)
 {
+    m_ui.setupUi(m_dialog);
+    m_radioGroup.addButton(m_ui.radioParagraphAsIs);
+    m_radioGroup.addButton(m_ui.radioParagraphSentence);
+    m_radioGroup.addButton(m_ui.radioParagraphOldWay);
+
     setButtons( Ok|Cancel);
     setCaption( i18n("KWord's Plain Text Import Filter") );
 	setDefaultButton(KDialog::No);
@@ -51,7 +56,7 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
 
-    m_dialog->comboBoxEncoding->addItems(encodings);
+    m_ui.comboBoxEncoding->addItems(encodings);
 
     setMainWidget(m_dialog);
 }
@@ -63,11 +68,11 @@ AsciiImportDialog :: ~AsciiImportDialog(void)
 
 QTextCodec* AsciiImportDialog::getCodec(void) const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
+    const QString strCodec( KGlobal::charsets()->encodingForName( m_ui.comboBoxEncoding->currentText() ) );
     kDebug(30502) <<"Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )
@@ -94,15 +99,16 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
 
 int AsciiImportDialog::getParagraphStrategy(void) const
 {
-    if (m_dialog->radioParagraphAsIs==m_dialog->buttonGroupParagraph->selected())
+    QAbstractButton* checkedButton = m_radioGroup.checkedButton();
+    if (m_ui.radioParagraphAsIs == checkedButton)
     {
         return 0;
     }
-    if (m_dialog->radioParagraphSentence==m_dialog->buttonGroupParagraph->selected())
+    if (m_ui.radioParagraphSentence == checkedButton)
     {
         return 1;
     }
-    else if (m_dialog->radioParagraphOldWay==m_dialog->buttonGroupParagraph->selected())
+    else if (m_ui.radioParagraphOldWay == checkedButton)
     {
         return 999;
     }

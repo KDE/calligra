@@ -1,149 +1,134 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>ImportDialogUI</class>
-<comment>Import dialog for KWord's plain text import filter</comment>
-<author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>ImportDialogUI</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>430</width>
-            <height>255</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>Plain Text Import Dialog</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
+ <comment>Import dialog for KWord's plain text import filter</comment>
+ <class>ImportDialogUI</class>
+ <widget class="QWidget" name="ImportDialogUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>430</width>
+    <height>255</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Plain Text Import Dialog</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="margin">
+    <number>11</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QLabel" name="textLabel1">
+       <property name="text">
+        <string>E&amp;ncoding:</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>comboBoxEncoding</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KComboBox" name="comboBoxEncoding">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="Spacer2_2">
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>106</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="buttonGroupParagraph">
+     <property name="title">
+      <string>End of Paragraph</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="radioParagraphAsIs">
+        <property name="text">
+         <string>&amp;As is: At the end of line</string>
         </property>
-        <property name="margin">
-            <number>11</number>
+        <property name="checked">
+         <bool>true</bool>
         </property>
-        <property name="spacing">
-            <number>6</number>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioParagraphSentence">
+        <property name="text">
+         <string>&amp;Sentence: If the end of line is the end of a sentence</string>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout3</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>E&amp;ncoding:</string>
-                    </property>
-                    <property name="textFormat">
-                        <enum>Qt::PlainText</enum>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>comboBoxEncoding</cstring>
-                    </property>
-                </widget>
-                <widget class="KComboBox">
-                    <property name="name">
-                        <cstring>comboBoxEncoding</cstring>
-                    </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer2_2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>106</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroupParagraph</cstring>
-            </property>
-            <property name="title">
-                <string>End of Paragraph</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioParagraphAsIs</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;As is: At the end of line</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioParagraphSentence</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Sentence: If the end of line is the end of a sentence</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioParagraphOldWay</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Old &amp;method: If the line is empty or has less than 40 characters</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-    </vbox>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcombobox.h</includehint>
-    <includehint>klineedit.h</includehint>
-</includehints>
-</UI>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioParagraphOldWay">
+        <property name="text">
+         <string>Old &amp;method: If the line is empty or has less than 40 characters</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="Spacer2">
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">kcombobox.h</include>
+  <include location="local">klineedit.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>
