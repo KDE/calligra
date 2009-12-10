@@ -70,6 +70,14 @@ static inline long readS32( const void* p )
     return val;
 }
 
+static inline double readFixed32( const void* p )
+{
+    const unsigned char* ptr = (const unsigned char*) p;
+    unsigned a = readU16(ptr);
+    unsigned b = readU16(ptr+2);
+    return a + (b / 65536.0);
+}
+
 typedef double& data_64;
 static inline void convert_64 (data_64 convert)
 {

@@ -35,7 +35,7 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType = 
 {
     if (xmlType == "unsigned") return "unsigned";
     else if (xmlType == "signed") return "int";
-    else if (xmlType == "float") return "double";
+    else if (xmlType == "float" || xmlType == "fixed") return "double";
     else if (xmlType == "bool") return "bool";
     else if (xmlType == "bytestring" || xmlType == "unicodestring") return "UString";
     return "ERROR";
@@ -240,6 +240,8 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     out << "readS" << bits;
                 else if (field.attribute("type") == "float")
                     out << "readFloat" << bits;
+                else if (field.attribute("type") == "fixed")
+                    out << "readFixed" << bits;
                 else
                     qFatal("Unsupported type %s", qPrintable(field.attribute("type")));
 
@@ -253,6 +255,8 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << ";\n";
             } else {
                 out << indent << f.setterName() << "(" << setterArgs;
+                if (f.isEnum)
+                    out << "static_cast<" << f.type << ">(";
                 unsigned firstByte = offset/8;
                 unsigned lastByte = (offset+bits-1)/8;
                 unsigned bitOffset = offset%8;
@@ -268,6 +272,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 if (bitOffset) out << " >> " << bitOffset;
                 out << ") & 0x" << hex << mask << dec << ")";
                 if (field.attribute("type") == "bool") out << " != 0";
+                if (f.isEnum) out << ")";
                 out << ");\n";
             }
         }
