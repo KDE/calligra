@@ -490,11 +490,11 @@ ChartShape::~ChartShape()
     delete d->subTitle;
     delete d->footer;
 
-    delete d->internalModel;    // Ok to call even when 0.
-    delete d->proxyModel;
-
-    delete d->plotArea;
     delete d->legend;
+    delete d->plotArea;
+
+    delete d->proxyModel;
+    delete d->internalModel;    // Ok to call even when 0.
 
     delete d->document;
 

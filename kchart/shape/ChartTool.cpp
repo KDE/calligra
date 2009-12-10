@@ -233,6 +233,17 @@ void ChartTool::activate( bool )
 void ChartTool::deactivate()
 {
     d->shape = 0;
+
+    // Tell the config widget to delete all open dialogs.
+    //
+    // The reason why we want to do that explicitly here is because
+    // they are connected to the models, which may disappear when the
+    // chart shape is destructed.
+    foreach (QWidget *w, optionWidgets()) {
+        ChartConfigWidget *configWidget = dynamic_cast<ChartConfigWidget*>(w);
+        if ( configWidget )
+            configWidget->deleteSubDialogs();
+    }
 }
 
 
