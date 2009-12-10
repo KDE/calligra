@@ -132,7 +132,19 @@ const char* FormulaToken::idAsString() const
         case Float:        s = "Float"; break;
         case Area3d:       s = "Area3d"; break;
         case AreaErr3d:    s = "AreaErr3d"; break;
-        default:           s = "Unknown"; break;
+        case NatFormula:   s = "NatFormula"; break;
+        case Sheet:        s = "Sheet"; break;
+        case EndSheet:     s = "EndSheet"; break;
+        case MemArea:      s = "MemArea"; break;
+        case MemErr:       s = "MemErr"; break;
+        case MemNoMem:     s = "MemNoMem"; break;
+        case MemFunc:      s = "MemFunc"; break;
+        case MemAreaN:     s = "MemAreaN"; break;
+        case MemNoMemN:    s = "MemNoMemN"; break;
+        default:
+          s = "Unknown";
+          printf( "Unhandled formula id as string=%i\n", d->id );
+          break;
     }
 
     return s;
@@ -218,6 +230,7 @@ unsigned FormulaToken::size() const
 
         default:
             // WARNING this is unhandled case
+            printf( "Unhandled formula token with id %i\n", d->id );
             break;
     }
 
