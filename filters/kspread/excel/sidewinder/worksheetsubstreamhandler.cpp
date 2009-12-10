@@ -804,11 +804,11 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
     for (unsigned c=0; c < tokens.size(); c++) {
         FormulaToken token = tokens[c];
 
-//#ifdef SWINDER_XLS2RAW
-        std::cout << ">>>>>>>> Formula Token " << c << ": ";
+#ifdef SWINDER_XLS2RAW
+        std::cout << "Formula Token " << c << ": ";
         std::cout <<  token.id() << "  ";
         std::cout << token.idAsString() << std::endl;
-//#endif
+#endif
 
         switch (token.id()) {
             case FormulaToken::Add:
@@ -961,7 +961,6 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
                     str.append(stack[stack.size()-1]);
                     str.append(UString(")"));
                     stack[stack.size()-1] = str;
-printf( ">>>>>>>>>aaa>> %s\n",str.ascii() );
                 }
                 break;
             }
