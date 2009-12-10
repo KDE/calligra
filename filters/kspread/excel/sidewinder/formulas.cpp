@@ -371,10 +371,10 @@ static const FunctionEntry FunctionEntries[] = {
     { "DAY",             1 },     // 67
     { "MONTH",           1 },     // 68
     { "YEAR",            1 },     // 69
-    { "DAYOFWEEK",       0 },     // 70
+    { "WEEKDAY",         0 },     // 70
     { "HOUR",            1 },     // 71
-    { "MIN",             1 },     // 72
-    { "SEC",             1 },     // 73
+    { "MINUTE",          1 },     // 72
+    { "SECOND",          1 },     // 73
     { "NOW",             0 },     // 74
     { "AREAS",           1 },     // 75
     { "ROWS",            1 },     // 76
@@ -389,13 +389,13 @@ static const FunctionEntry FunctionEntries[] = {
     { "STEP",            0 },     // 85
     { "TYPE",            1 },     // 86
     { "ECHO",            0 },
-    { "SETNAME",         0 },
+    { "SETNAME",         0 },     // deprecated...
     { "CALLER",          0 },
     { "DEREF",           0 },
     { "WINDOWS",         0 },
     { "SERIES",          4 },
     { "DOCUMENTS",       0 },
-    { "ACTIVECELL",      0 },
+    { "ACTIVECELL",      0 },     // deprecated...
     { "SELECTION",       0 },
     { "RESULT",          0 },
     { "ATAN2",           2 },     // 97
@@ -407,9 +407,9 @@ static const FunctionEntry FunctionEntries[] = {
     { "LINKS",           0 },
     { "INPUT",           0 },
     { "ISREF",           1 },     // 105
-    { "GETFORMULA",      0 },
-    { "GETNAME",         0 },
-    { "SETVALUE",        0 },
+    { "GETFORMULA",      0 },     // deprecated...
+    { "GETNAME",         0 },     // deprecated...
+    { "SETVALUE",        0 },     // deprecated...
     { "LOG",             0 },     // 109
     { "EXEC",            0 },
     { "CHAR",            1 },     // 111
@@ -433,14 +433,14 @@ static const FunctionEntry FunctionEntries[] = {
     { "ISBLANK",         1 },     // 129
     { "T",               1 },     // 130
     { "N",               1 },     // 131
-    { "FOPEN",           0 },
-    { "FCLOSE",          0 },
-    { "FSIZE",           0 },
-    { "FREADLN",         0 },
-    { "FREAD",           0 },
-    { "FWRITELN",        0 },
-    { "FWRITE",          0 },
-    { "FPOS",            0 },
+    { "FOPEN",           0 },     // not portable, insecure, deprecated
+    { "FCLOSE",          0 },     // not portable, insecure, deprecated
+    { "FSIZE",           0 },     // not portable, insecure, deprecated
+    { "FREADLN",         0 },     // not portable, insecure, deprecated
+    { "FREAD",           0 },     // not portable, insecure, deprecated
+    { "FWRITELN",        0 },     // not portable, insecure, deprecated
+    { "FWRITE",          0 },     // not portable, insecure, deprecated
+    { "FPOS",            0 },     // not portable, insecure, deprecated
     { "DATEVALUE",       1 },     // 140
     { "TIMEVALUE",       1 },     // 141
     { "SLN",             3 },     // 142
@@ -452,22 +452,22 @@ static const FunctionEntry FunctionEntries[] = {
     { "INDIRECT",        0 },     // 148
     { "REGISTER",        0 },
     { "CALL",            0 },
-    { "ADDBAR",          0 },
-    { "ADDMENU",         0 },
-    { "ADDCOMMAND",      0 },
-    { "ENABLECOMMAND",   0 },
-    { "CHECKCOMMAND",    0 },
-    { "RENAMECOMMAND",   0 },
-    { "SHOWBAR",         0 },
-    { "DELETEMENU",      0 },
-    { "DELETECOMMAND",   0 },
-    { "GETCHARTITEM",    0 },
-    { "DIALOGBOX",       0 },
+    { "ADDBAR",          0 },     // deprecated
+    { "ADDMENU",         0 },     // deprecated
+    { "ADDCOMMAND",      0 },     // deprecated
+    { "ENABLECOMMAND",   0 },     // deprecated
+    { "CHECKCOMMAND",    0 },     // deprecated
+    { "RENAMECOMMAND",   0 },     // deprecated
+    { "SHOWBAR",         0 },     // deprecated
+    { "DELETEMENU",      0 },     // deprecated
+    { "DELETECOMMAND",   0 },     // deprecated
+    { "GETCHARTITEM",    0 },     // deprecated
+    { "DIALOGBOX",       0 },     // deprecated
     { "CLEAN",           1 },     // 162
     { "MDETERM",         1 },     // 163
     { "MINVERSE",        1 },     // 164
     { "MMULT",           2 },     // 165
-    { "FILES",           0 },
+    { "FILES",           0 },     // not portable, insecure, deprecated
     { "IPMT",            0 },     // 167
     { "PPMT",            0 },     // 168
     { "COUNTA",          0 },     // 169
