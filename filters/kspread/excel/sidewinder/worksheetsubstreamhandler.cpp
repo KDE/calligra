@@ -936,7 +936,7 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, con
             break;
 
         case FormulaToken::Array:
-            // FIXME handle this !
+            stack.push_back(token.array(row, col));
             break;
 
         case FormulaToken::Ref:

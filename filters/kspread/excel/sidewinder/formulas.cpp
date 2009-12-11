@@ -928,6 +928,7 @@ UString FormulaToken::areaMap(unsigned row, unsigned col)
     buf[0] = d->data[0];
     unsigned ptg = readU8(buf);
     const int type = (ptg & 0x20 ? 1 : 0) + (ptg & 0x60 ? 2 : 0);
+    //Q_ASSERT(type == 1 || type == 2 || type == 3);
     buf[0] = d->data[5];
     buf[1] = d->data[6];
     unsigned cce = readU16(buf);
@@ -945,10 +946,13 @@ UString FormulaToken::areaMap(unsigned row, unsigned col)
     switch (type) {
     case 0x01: // REFERENCE, specifies a reference to a range.
         result = ref(row, col);
+        break;
     case 0x02: // VALUE, specifies a single value of a simple type. The type can be a Boolean, a number, a string, or an error code.
         result = value().asString();
+        break;
     case 0x03: // ARRAY, specifies an array of values.
-        result = area(row, col);
+        result = array(row, col);
+        break;
     }
 
     //d->data.erase(d->data.begin(), d->data.begin() + cce);
@@ -1112,12 +1116,18 @@ UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /
     return result;
 }
 
+UString FormulaToken::array(unsigned row, unsigned col) const                                                                           
+{   
+    //TODO
+    return UString();
+}
+
 std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
 {
     if (version() == Excel97) {
         return std::make_pair(readU16(&d->data[1]), readU16(&d->data[3]));
     } else {
-        return std::make_pair(readU16(&d->data[1]), (unsigned)d->data[3]);
+        return std::make_pair(readU16(&d->data[0]), (unsigned)d->data[2]);
     }
 }
 
