@@ -56,7 +56,9 @@ void KarbonCalligraphicShape::appendPoint( const QPointF &point,
     KarbonCalligraphicPoint *calligraphicPoint =
             new KarbonCalligraphicPoint( p, angle, width );
 
-    m_handles.append( p );
+    QList<QPointF> handles = this->handles();
+    handles.append( p );
+    setHandles(handles);
     m_points.append(calligraphicPoint);
     appendPointToPath(*calligraphicPoint);
 
@@ -322,9 +324,10 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 
     simplifyPath();
 
-    m_handles.clear();
+    QList<QPointF> handles;
     foreach( KarbonCalligraphicPoint *p, m_points )
-        m_handles.append( p->point() );
+        handles.append( p->point() );
+    setHandles(handles);
 
     setPosition( pos );
 }
