@@ -144,9 +144,8 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
     }
 }
 
-bool CalculationSettings::saveOdf(KoXmlWriter &settingsWriter) const
+bool CalculationSettings::saveOdf(KoXmlWriter &/*settingsWriter*/) const
 {
-    Q_UNUSED(settingsWriter);
     return true;
 }
 
