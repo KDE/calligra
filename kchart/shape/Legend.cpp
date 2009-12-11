@@ -570,7 +570,7 @@ KDChart::Legend *Legend::kdLegend() const
     return d->kdLegend;
 }
 
-void Legend::update()
+void Legend::legendUpdate()
 {
     d->pixmapRepaintRequested = true;
     // FIXME: Update legend properly by implementing all *DataChanged() slots

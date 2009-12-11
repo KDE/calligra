@@ -74,7 +74,7 @@ public:
     
     KDChart::Legend *kdLegend() const;
     
-    void update();
+    void legendUpdate();
 
 private:
     class Private;

@@ -181,18 +181,18 @@ PlotArea::PlotArea( ChartShape *parent )
     connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
              this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( modelResetComplete() ),
-             this,                   SLOT( update() ) );
+             this,                   SLOT( plotAreaUpdate() ) );
     // FIXME: The following signatures don't match.  Bug?
     connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
              this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
              this,                   SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsInserted( const QModelIndex, int, int ) ),
-             this,                   SLOT( update() ) );
+             this,                   SLOT( plotAreaUpdate() ) );
     connect( d->shape->proxyModel(), SIGNAL( columnsRemoved( const QModelIndex, int, int ) ),
-             this,                   SLOT( update() ) );
+             this,                   SLOT( plotAreaUpdate() ) );
     connect( d->shape->proxyModel(), SIGNAL( dataChanged() ),
-             this,                   SLOT( update() ) );
+             this,                   SLOT( plotAreaUpdate() ) );
 }
 
 PlotArea::~PlotArea()
@@ -201,7 +201,7 @@ PlotArea::~PlotArea()
 }
 
 
-void PlotArea::init()
+void PlotArea::plotAreaInit()
 {
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
@@ -840,7 +840,7 @@ bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
     return true;
 }
 
-void PlotArea::update() const
+void PlotArea::plotAreaUpdate() const
 {
     parent()->legend()->update();
     requestRepaint();

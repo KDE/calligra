@@ -247,10 +247,11 @@ void KChartCanvas::wheelEvent( QWheelEvent *e )
 
 void KChartCanvas::resizeEvent( QResizeEvent *e )
 {
+    Q_UNUSED(e);
     adjustOrigin();
 }
 
-QVariant KChartCanvas::inputMethodQuery( Qt::InputMethodQuery query )
+QVariant KChartCanvas::inputMethodQuery( Qt::InputMethodQuery query ) const
 {
     return m_toolProxy->inputMethodQuery( query, *( viewConverter() ) );
 }

@@ -390,7 +390,7 @@ ChartShape::ChartShape()
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer.
     addChild( d->plotArea );
-    d->plotArea->init();
+    d->plotArea->plotAreaInit();
     d->plotArea->setZIndex( 0 );
     setClipping( d->plotArea, true );
 

@@ -167,10 +167,10 @@ public:
 
 
 ChartConfigWidget::Private::Private( QWidget *parent )
-    : newAxisDialog( parent )
+    : tableEditorDialog( 0 )
+    , newAxisDialog( parent )
     , axisScalingDialog( parent )
     , cellRegionDialog( parent )
-    , tableEditorDialog( 0 )
       
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
@@ -479,7 +479,7 @@ KAction* ChartConfigWidget::createAction()
 void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
     ChartType     type = LastChartType;
-    ChartSubtype  subtype = NoChartSubtype  ;
+    ChartSubtype  subtype = NoChartSubtype;
     
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;
@@ -1035,6 +1035,7 @@ void ChartConfigWidget::slotShowTableEditor( bool show )
 
 void ChartConfigWidget::setLegendOrientation( int boxEntryIndex )
 {
+    Q_UNUSED(boxEntryIndex);
     //emit legendOrientationChanged( ( Qt::Orientation ) ( d->ui.orientation->itemData( boxEntryIndex ).toInt() ) );
 }
 /*
@@ -1051,6 +1052,7 @@ void ChartConfigWidget::setLegendShowTitle( bool show )
 */
 void ChartConfigWidget::setLegendAlignment( int boxEntryIndex )
 {
+    Q_UNUSED(boxEntryIndex);
     if (    d->fixedPosition == KDChart::Position::North
          || d->fixedPosition == KDChart::Position::South ) {
         //d->lastHorizontalAlignment = d->ui.alignment->currentIndex();
@@ -1063,6 +1065,7 @@ void ChartConfigWidget::setLegendAlignment( int boxEntryIndex )
 
 void ChartConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
 {
+    Q_UNUSED(buttonGroupIndex);
     d->lastFixedPosition = d->fixedPosition;
     //d->fixedPosition = buttonIndexToFixedPosition[ buttonGroupIndex ];
     //emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
@@ -1070,6 +1073,7 @@ void ChartConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
 
 void ChartConfigWidget::updateFixedPosition( LegendPosition position )
 {
+    Q_UNUSED(position);
 /*
     if (    position == KDChart::Position::North
          || position == KDChart::Position::South ) {

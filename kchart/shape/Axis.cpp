@@ -293,16 +293,16 @@ void Axis::Private::registerKDChartModel( KDChartModel *model )
     // updated before KDChart is notified about the new model, which
     // ends up in wrong assumptions about the model's size, etc.
 
-    //QObject::connect( model, SIGNAL( modelReset() ), plotArea, SLOT( update() ) );
+    //QObject::connect( model, SIGNAL( modelReset() ), plotArea, SLOT( plotAreaUpdate() ) );
 
     QObject::connect( model,    SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( update() ) );
+                      plotArea, SLOT( plotAreaUpdate() ) );
     QObject::connect( model,    SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( update() ) );
+                      plotArea, SLOT( plotAreaUpdate() ) );
     QObject::connect( model,    SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( update() ) );
+                      plotArea, SLOT( plotAreaUpdate() ) );
     QObject::connect( model,    SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                      plotArea, SLOT( update() ) );
+                      plotArea, SLOT( plotAreaUpdate() ) );
     
     QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
                       model,                  SLOT( emitReset() ) );
@@ -313,16 +313,16 @@ void Axis::Private::registerKDChartModel( KDChartModel *model )
 void Axis::Private::deregisterKDChartModel( KDChartModel *model )
 {
     // See comment above about the uncommenting.
-    //QObject::disconnect( model, SIGNAL( modelReset() ), plotArea, SLOT( update() ) );
+    //QObject::disconnect( model, SIGNAL( modelReset() ), plotArea, SLOT( plotAreaUpdate() ) );
 
     QObject::disconnect( model,    SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                         plotArea, SLOT( update() ) );
+                         plotArea, SLOT( plotAreaUpdate() ) );
     QObject::disconnect( model,    SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                         plotArea, SLOT( update() ) );
+                         plotArea, SLOT( plotAreaUpdate() ) );
     QObject::disconnect( model,    SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), 
-                         plotArea, SLOT( update() ) );
+                         plotArea, SLOT( plotAreaUpdate() ) );
     QObject::disconnect( model,    SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), 
-                         plotArea, SLOT( update() ) );
+                         plotArea, SLOT( plotAreaUpdate() ) );
     
     QObject::disconnect( plotArea->proxyModel(), SIGNAL( modelReset() ),
                          model,                  SLOT( emitReset() ) );

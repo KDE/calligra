@@ -55,8 +55,7 @@ public:
     PlotArea( ChartShape *parent );
     ~PlotArea();
     
-    // FIXME: hides the normal KoShape::init()
-    void init();
+    void plotAreaInit();
     
     ChartProxyModel *proxyModel() const;
 
@@ -106,12 +105,10 @@ public:
     
     void relayout() const;
     
-    using KoShape::update;
-
 public slots:
     void requestRepaint() const;
     void dataSetCountChanged();
-    void update() const;
+    void plotAreaUpdate() const;
     
 signals:
     void gapBetweenBarsChanged( int );

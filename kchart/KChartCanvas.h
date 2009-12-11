@@ -91,7 +91,7 @@ protected:
     void tabletEvent( QTabletEvent *e );
     void wheelEvent( QWheelEvent *e );
     void resizeEvent( QResizeEvent *e );
-    virtual QVariant inputMethodQuery( Qt::InputMethodQuery query );
+    virtual QVariant inputMethodQuery( Qt::InputMethodQuery query ) const;
     virtual void inputMethodEvent( QInputMethodEvent *e );
 
 private:
