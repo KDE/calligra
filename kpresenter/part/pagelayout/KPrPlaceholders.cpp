@@ -236,7 +236,6 @@ void KPrPlaceholders::applyStyle( KPrPlaceholderShape * shape, const QString & p
         QTextCursor newCursor( newData->document() );
         newCursor.select( QTextCursor::Document );
         KoTextDocument textDocument( newData->document() );
-        KoStyleManager * styleManager = textDocument.styleManager();
 
         QTextBlockFormat blockFormat( cursor.blockFormat() );
         // TODO check if needed

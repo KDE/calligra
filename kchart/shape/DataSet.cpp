@@ -673,8 +673,8 @@ int DataSet::size() const
 
 void DataSet::yDataChanged( const QRect &rect ) const
 {    
-    int  start;
-    int  end;
+    int  start = -1;
+    int  end = -1;
     
     QVector<QRect> yDataRegionRects = d->yDataRegion.rects();
     

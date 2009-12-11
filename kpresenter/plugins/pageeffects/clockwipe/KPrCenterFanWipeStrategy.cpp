@@ -38,6 +38,7 @@ KPrCenterFanWipeStrategy::~KPrCenterFanWipeStrategy()
 
 void KPrCenterFanWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED(data);
     timeLine.setFrameRange( 0, 180 );
 }
 
@@ -47,8 +48,6 @@ void KPrCenterFanWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPag
     int height = data.m_widget->height();
     QRect rect( 0, 0, width, height );
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
-
-    double maxRadius = sqrt(width*width/4 + height*height/4);
 
     QPainterPath clipPath;
     for(int i = 0; i<m_fanCount; i++) {

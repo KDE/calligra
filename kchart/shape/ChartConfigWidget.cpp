@@ -478,8 +478,8 @@ KAction* ChartConfigWidget::createAction()
 
 void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
-    ChartType     type;
-    ChartSubtype  subtype;
+    ChartType     type = LastChartType;
+    ChartSubtype  subtype = NoChartSubtype  ;
     
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;

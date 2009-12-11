@@ -90,6 +90,7 @@ bool KPrSoundCollection::completeLoading(KoStore *store)
 // use a KoSharedSavingData in the context to save which sounds need to be saved
 bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context )
 {
+    Q_UNUSED(context);
     foreach(KPrSoundData *sound, d->sounds) {
         if(sound->isTaggedForSaving())
         {

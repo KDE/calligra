@@ -40,6 +40,7 @@ KPrDoubleSweepWipeStrategy::~KPrDoubleSweepWipeStrategy()
 
 void KPrDoubleSweepWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED(data);
     timeLine.setFrameRange( 0, 360 );
 }
 

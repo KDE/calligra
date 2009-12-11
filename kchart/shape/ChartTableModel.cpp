@@ -92,7 +92,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
     
-    const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
+    ///const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
 
     //QTextStream stream(stdout);
     //stream << node;
@@ -183,6 +183,8 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
 
 bool ChartTableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 {
+    Q_UNUSED(bodyWriter);
+    Q_UNUSED(mainStyles);
     return true;
 }
 

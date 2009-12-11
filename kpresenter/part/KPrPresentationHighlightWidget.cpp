@@ -48,6 +48,7 @@ KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
 /** paintEvent call with the update in the mouseMoveEvent */
 void KPrPresentationHighlightWidget::paintEvent( QPaintEvent * event )
 {
+    Q_UNUSED(event);
     QPainter painter( this );
     QPen myPen;
     QColor c( Qt::black );

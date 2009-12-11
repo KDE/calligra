@@ -158,8 +158,10 @@ QMap<QString, int> KPrPageEffectFactory::subTypesByName() const
 
 void KPrPageEffectFactory::addStrategy( KPrPageEffectStrategy * strategy )
 {
+#ifndef NDEBUG
     bool inserted = d->strategies.insert( strategy ).second;
     Q_ASSERT( inserted == true );
+#endif
     d->subTypes.append( strategy->subType() );
     QPair<QString, bool> tag( strategy->smilType(), strategy->reverse() );
     if ( !d->tags.contains( tag ) ) {

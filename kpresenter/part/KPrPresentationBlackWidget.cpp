@@ -40,6 +40,7 @@ KPrPresentationBlackWidget::~KPrPresentationBlackWidget()
 
 void KPrPresentationBlackWidget::paintEvent( QPaintEvent * event )
 {
+    Q_UNUSED(event);
     QPainter painter( this );
     painter.fillRect(0,0,m_size.width(), m_size.height(), Qt::black );
 }

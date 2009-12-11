@@ -106,6 +106,8 @@ public:
     
     void relayout() const;
     
+    using KoShape::update;
+
 public slots:
     void requestRepaint() const;
     void dataSetCountChanged();

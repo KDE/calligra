@@ -431,6 +431,7 @@ void KChartView::extraCreateTemplate()
 void KChartView::selectionChanged()
 {
     KoSelection *selection = m_canvas->shapeManager()->selection();
+    Q_UNUSED(selection);
     emit selectionChange();
 }
 
@@ -445,6 +446,9 @@ void KChartView::documentViewRectChanged( const QRectF &viewRect )
 
 void KChartView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 {
+    Q_UNUSED(mode);
+    Q_UNUSED(zoom);
+
     QRectF documentViewRect = m_canvas->documentViewRect();
     m_zoomController->setDocumentSize( documentViewRect.size() );
     m_canvasController->setPreferredCenter( m_zoomHandler->documentToView( documentViewRect ).center().toPoint() );

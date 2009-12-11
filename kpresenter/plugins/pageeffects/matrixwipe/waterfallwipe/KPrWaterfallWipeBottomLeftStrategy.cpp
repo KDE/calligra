@@ -32,11 +32,17 @@ KPrWaterfallWipeBottomLeftStrategy::~KPrWaterfallWipeBottomLeftStrategy()
 
 int KPrWaterfallWipeBottomLeftStrategy::squareIndex(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(columns);
     return x + (rows - y - 1);
 }
 
 KPrMatrixWipeStrategy::Direction KPrWaterfallWipeBottomLeftStrategy::squareDirection(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(columns);
+    Q_UNUSED(rows);
+
     return m_direction;
 }
 

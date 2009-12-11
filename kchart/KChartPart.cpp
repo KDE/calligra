@@ -159,6 +159,8 @@ KoView* KChartPart::createViewInstance( QWidget* parent )
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
 #if 0
     int  numDatasets;
 

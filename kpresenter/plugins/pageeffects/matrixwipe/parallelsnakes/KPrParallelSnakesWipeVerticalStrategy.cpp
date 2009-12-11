@@ -73,6 +73,8 @@ int KPrParallelSnakesWipeVerticalStrategy::squareIndex(int x, int y, int columns
 
 KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeVerticalStrategy::squareDirection(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(y);
+    Q_UNUSED(rows);
     bool reverse = false;
     if (x >= columns / 2) reverse = !reverse;
     if (x & 1) reverse = !reverse;

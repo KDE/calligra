@@ -63,6 +63,7 @@ void KPrPlaceholderTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KPrPlaceholderTool::activate( bool temporary )
 {
+    Q_UNUSED(temporary);
     QList<KPrPlaceholderShape *> selectedShapes;
 
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() ) {

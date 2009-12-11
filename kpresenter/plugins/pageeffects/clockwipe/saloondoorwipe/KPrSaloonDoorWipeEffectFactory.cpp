@@ -55,7 +55,7 @@ static const char* s_subTypes[] = {
 
 QString KPrSaloonDoorWipeEffectFactory::subTypeName(int subType) const
 {
-    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+    if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return i18n( s_subTypes[subType] );
     } else {
         return i18n( "Unknown subtype" );

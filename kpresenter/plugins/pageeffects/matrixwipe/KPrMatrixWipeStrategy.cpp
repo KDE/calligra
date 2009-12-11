@@ -45,6 +45,7 @@ void KPrMatrixWipeStrategy::setNeedEvenSquares(bool hor, bool vert)
 
 void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED(data);
     timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(m_squaresPerRow, m_squaresPerCol) );
 }
 
@@ -121,5 +122,9 @@ void KPrMatrixWipeStrategy::next( const KPrPageEffect::Data &data )
 
 KPrMatrixWipeStrategy::Direction KPrMatrixWipeStrategy::squareDirection(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(columns);
+    Q_UNUSED(rows);
     return NotSmooth;
 }

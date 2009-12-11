@@ -31,6 +31,7 @@ KPrSnakeWipeBottomLeftDiagonalStrategy::~KPrSnakeWipeBottomLeftDiagonalStrategy(
 
 int KPrSnakeWipeBottomLeftDiagonalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(columns);
     return m_indices[x * rows + (rows - y - 1)];
 }
 

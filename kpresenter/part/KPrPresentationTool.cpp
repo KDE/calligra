@@ -81,6 +81,8 @@ bool KPrPresentationTool::wantsAutoScroll()
 
 void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
@@ -110,14 +112,17 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 
 void KPrPresentationTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
 }
 
 void KPrPresentationTool::mouseMoveEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
 }
 
 void KPrPresentationTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
 }
 
 void KPrPresentationTool::keyPressEvent( QKeyEvent *event )

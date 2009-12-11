@@ -20,6 +20,7 @@
  */
 
 #include "KPrPresentationStrategy.h"
+#include <QtGlobal>
 
 KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyBase( tool )
@@ -32,6 +33,7 @@ KPrPresentationStrategy::~KPrPresentationStrategy()
 
 bool KPrPresentationStrategy::keyPressEvent( QKeyEvent * event )
 {
+    Q_UNUSED(event);
     return false;
 }
 

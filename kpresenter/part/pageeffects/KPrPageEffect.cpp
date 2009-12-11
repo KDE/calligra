@@ -100,4 +100,5 @@ void KPrPageEffect::saveOdfSmilAttributes( KoGenStyle & style ) const
 
 void KPrPageEffect::loadOdf( const KoXmlElement & element )
 {
+    Q_UNUSED(element);
 }

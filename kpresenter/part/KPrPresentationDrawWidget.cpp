@@ -55,6 +55,7 @@ KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
 
 void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
+    Q_UNUSED(event);
     QPainter painter( this );
     QBrush brush( Qt::SolidPattern );
     QPen pen( brush, m_penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin );
@@ -86,6 +87,7 @@ void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
 
 void KPrPresentationDrawWidget::mouseReleaseEvent( QMouseEvent* e )
 {
+    Q_UNUSED(e);
     m_draw = false;
 }
 

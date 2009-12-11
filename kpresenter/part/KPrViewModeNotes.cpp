@@ -55,6 +55,9 @@ KPrViewModeNotes::~KPrViewModeNotes()
 
 void KPrViewModeNotes::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
 {
+#ifdef NDEBUG
+    Q_UNUSED(canvas);
+#endif
     Q_ASSERT( m_canvas == canvas );
 
     QPainter painter(m_canvas);

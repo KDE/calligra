@@ -38,6 +38,9 @@ int KPrSnakeWipeBottomRightVerticalStrategy::squareIndex(int x, int y, int colum
 
 KPrMatrixWipeStrategy::Direction KPrSnakeWipeBottomRightVerticalStrategy::squareDirection(int x, int y, int columns, int rows)
 {
+    Q_UNUSED(y);
+    Q_UNUSED(columns);
+    Q_UNUSED(rows);
     if (x & 1) return BottomToTop;
     else return TopToBottom;
 }

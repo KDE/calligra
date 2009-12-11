@@ -60,6 +60,7 @@ KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()
 
 void KPrViewModePreviewPageEffect::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
 {
+    Q_UNUSED(event);
     QPainter p(canvas);
     QRect framerect = canvas->rect();
 

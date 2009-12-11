@@ -83,7 +83,8 @@ void KPrViewModePresentation::paintEvent( KoPACanvas * canvas,  QPaintEvent* eve
 
 void KPrViewModePresentation::tabletEvent( QTabletEvent *event, const QPointF &point )
 {
-
+    Q_UNUSED(event);
+    Q_UNUSED(point);
 }
 
 void KPrViewModePresentation::mousePressEvent( QMouseEvent *event, const QPointF &point )
