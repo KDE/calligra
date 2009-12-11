@@ -31,6 +31,44 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL hyperlink
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
+{
+    READ_PROLOGUE
+    
+    QString link_target;
+    MSOOXML::Utils::XmlWriteBuffer linkBuf;
+    body = linkBuf.setWriter(body);
+          
+    if (isStartElement()) {
+        if (attributes().hasAttribute("r:id")) {
+            QString id(attributes().value("r:id").toString());
+            link_target = m_context->relationships->link_target(id);
+            kDebug() << "link_target = " << link_target;
+        }
+            
+        while (!atEnd()) {
+            readNext();
+            TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(r)            
+            BREAK_IF_END_OF(CURRENT_EL);
+        }
+    }
+    
+    if (isEndElement()) {
+        body = linkBuf.originalWriter();
+        body->startElement("text:a");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        (void)linkBuf.releaseWriter();
+        body->endElement();
+    }
+
+    READ_EPILOGUE    
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL t
 //! t handler (Text)
 /*! ECMA-376, 17.3.3.31, p.389.
@@ -676,6 +714,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
                 kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
                 TRY_READ_WITH_ARGS( p, read_p_Skip; )
             }
+            ELSE_TRY_READ_IF(hyperlink)
 // CASE #400.1
             ELSE_TRY_READ_IF(pPr)
 // CASE #400.2

@@ -28,6 +28,7 @@
 
 #include <QXmlStreamReader>
 #include <QStack>
+#include <QUrl>
 
 #include <KLocale>
 #include <KDebug>

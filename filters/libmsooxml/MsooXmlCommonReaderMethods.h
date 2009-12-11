@@ -29,6 +29,7 @@
 protected:
     void initInternal();
 
+    KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_rPr();
