@@ -1115,9 +1115,9 @@ UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /
 std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
 {
     if (version() == Excel97) {
-        return std::make_pair(readU16(&d->data[0]), readU16(&d->data[2]));
+        return std::make_pair(readU16(&d->data[1]), readU16(&d->data[3]));
     } else {
-        return std::make_pair(readU16(&d->data[0]), (unsigned)d->data[2]);
+        return std::make_pair(readU16(&d->data[1]), (unsigned)d->data[3]);
     }
 }
 
