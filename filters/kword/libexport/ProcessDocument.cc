@@ -424,6 +424,7 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
 
 static void ProcessNoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 {
+    Q_UNUSED(leader);
     VariableData *variable = (VariableData *) tagData;
 
     QString note;

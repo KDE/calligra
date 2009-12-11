@@ -189,7 +189,7 @@ QDomElement KWDWriter::createTableCell(int tableno, int nrow,
 
 QDomElement KWDWriter::fetchTableCell(int tableno, int rowno, int colno) {
 	QDomNodeList e=docroot().elementsByTagName("FRAMESET");
-	for (unsigned int i=0;i<e.count();i++) {
+        for (int i=0;i<e.count();i++) {
 	     QDomElement k=e.item(i).toElement();
 	     if (k.attribute("grpMgr") == QString("Table %1").arg(tableno))
 		     if (k.attribute("row") == QString("%1").arg(rowno))
@@ -227,7 +227,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	   //and add empty cells for missing ones.
 
 	// first, see how big the table is (cols & rows)
-	for (unsigned i=0;i<nl.count();i++) {
+        for (int i=0;i<nl.count();i++) {
 	    QDomElement k=nl.item(i).toElement();
 	    	if (k.attribute("grpMgr") == QString("Table %1").arg(tableno)) {
 	    	  ncols=MAX(ncols,k.attribute("col").toInt()+1);
@@ -253,7 +253,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement e=fetchTableCell(tableno,currow,curcol);
 	      if (e.isNull()) {
 	              // a missing cell !
-	              kDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).latin1();
+                      kDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).toLatin1();
 	              createTableCell(tableno,currow,curcol,1,
 		      			QRect(x+step_x*curcol,y+step_y*currow,step_x,step_y)
 				);

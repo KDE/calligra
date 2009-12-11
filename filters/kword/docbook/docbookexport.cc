@@ -787,7 +787,7 @@ KoFilter::ConversionStatus DocBookExport::convert( const QByteArray& from, const
     kError (30507) << "to = " << to << ", from = " << from << endl;
 #endif
 
-    if ( to != "text/sgml" && to != "text/docbook" || from != "application/x-kword" )
+    if ( (to != "text/sgml" && to != "text/docbook") || from != "application/x-kword" )
     {
         return KoFilter::NotImplemented;
     }

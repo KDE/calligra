@@ -49,7 +49,7 @@ QString HtmlCssWorker::escapeCssIdentifier(const QString& strText) const
         // The processing of the character itself is done below
     }
 
-    for (uint i=0; i<strText.length(); i++)
+    for (int i=0; i<strText.length(); i++)
     {
         const QChar qch(strText.at(i));
         const ushort ch=qch.unicode();
@@ -594,6 +594,7 @@ void HtmlCssWorker::openSpan(const FormatData& formatOrigin, const FormatData& f
 
 void HtmlCssWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
 {
+    Q_UNUSED(formatOrigin);
     if ( 2==format.text.verticalAlignment )
     {
         *m_streamOut << "</sup>"; //Superscript

@@ -310,7 +310,7 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
 
   // calc length of each format tag
   uint formatListCount = m_formatList.count();
-  for( uint j=0; j<formatListCount; j++ )
+  for( int j=0; j<formatListCount; j++ )
   {
     int nextpos;
     AmiProFormat& format = m_formatList[j];

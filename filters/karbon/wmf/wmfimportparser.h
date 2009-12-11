@@ -41,6 +41,7 @@ public:
     /**
      * play WMF file on a KarbonDocument. Return true on success.
      */
+    using KoWmfRead::play;
     bool play( KarbonDocument& doc );
 
 

@@ -117,6 +117,7 @@ namespace MSWrite
 
 	private:
 		bool readFromDevice (void);	friend class InternalParser;
+                using SectionTableGenerated::writeToDevice;
 		bool writeToDevice (const bool needed);	friend class InternalGenerator;
 	};
 

@@ -106,7 +106,7 @@ static QString AmiProEscape( const QString& text )
 {
   QString result;
 
-  for( unsigned i=0; i<text.length(); i++ )
+  for( int i=0; i<text.length(); i++ )
   {
     QChar ch = text[i];
     switch( ch.unicode() )

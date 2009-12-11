@@ -1193,7 +1193,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     const uint row=abiPropsMap["top-attach"].getValue().toUInt();
     const uint col=abiPropsMap["left-attach"].getValue().toUInt();
 
-    if ( col >= stackItem->m_doubleArray.size() )
+    if ( col >= (uint)stackItem->m_doubleArray.size() )
     {
         // We do not know the right position of this column, so improvise. (### TODO)
         // We play on the fact that QByteArray uses shallow copies by default.

@@ -48,6 +48,8 @@ public:
     KoWmfPaint();
     ~KoWmfPaint() { }
 
+    using KoWmfRead::play;
+
     /**
      * play WMF file on a QPaintDevice. Return true on success.
      * Use absolute or relative coordinate :

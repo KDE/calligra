@@ -140,7 +140,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
     // Tell KoStore not to touch the file names
     storeout->disallowNameExpansion();
     KoOdfWriteStore odfStore( storeout );
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
+    //KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
     KoEmbeddedDocumentSaver embeddedSaver;
     KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
 
@@ -1316,7 +1316,7 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
 
     enum Position { Above, On, Under };
 
-    int position = element.attribute( "position", "0" ).toInt();
+    //int position = element.attribute( "position", "0" ).toInt();
     int alignment = element.attribute( "alignment", "0" ).toInt();
     /* TODO reactivate when we have a shadow implementation
     bool shadow = ( element.attribute( "shadow" ).toInt() == 1 );

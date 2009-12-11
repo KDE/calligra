@@ -921,6 +921,7 @@ static void FreeCellParaLists ( QList<ParaData> &paraList )
 // like ProcessFramesetTag, but only handle footnotes
 static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
+    Q_UNUSED(tagData);
     QString frameName;
     int frameType = -1, frameInfo = -1;
     bool visible = false;

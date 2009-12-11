@@ -120,6 +120,8 @@ QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QStri
 
 bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const
 {
+    Q_UNUSED(outExtension);
+    Q_UNUSED(image);
     QImage qimage(loadAndConvertToImage(strName,inExtension));
     
     if (qimage.isNull())
