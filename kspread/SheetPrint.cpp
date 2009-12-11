@@ -383,6 +383,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                             const QRect& cellRange, const QRectF& view,
                             QRegion& clipRegion )
 {
+    Q_UNUSED(view);
 //     kDebug() <<"topLeft:" << topLeft <<" cellRange:" << cellRange;
     // topLeft: starting coordinate (document coordinate system)
     // cellRange: cell range to be printed

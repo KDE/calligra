@@ -399,6 +399,7 @@ static Value getPay (ValueCalc *calc, Value rate,
   return calc->div (val1, val2);
 }
 
+#if 0 // Not used?
 //
 // helper: getPrinc
 //
@@ -414,7 +415,7 @@ static Value getPrinc (ValueCalc *calc, Value start,
   // result = val2 + val3
   return calc->add (val2, val3);
 }
-
+#endif
 //
 // helper: eurofactor
 //

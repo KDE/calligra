@@ -764,6 +764,9 @@ QString Style::saveOdfStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
                 valueType = "float";
             }
             break;
+       case Format::DateTime:
+       default:
+            ;
     }
     if ( !styleName.isEmpty() )
     {

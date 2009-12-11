@@ -4089,6 +4089,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
+    Q_UNUSED(_store);
 #if 0 // KSPREAD_KOPART_EMBEDDING
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
@@ -4180,8 +4181,10 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
 bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
-    int i = 0;
+    Q_UNUSED(_store);
+    Q_UNUSED(_path);
 #if 0 // KSPREAD_KOPART_EMBEDDING
+    int i = 0;
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
         if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )

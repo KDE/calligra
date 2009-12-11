@@ -951,6 +951,7 @@ void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
 
 void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
 {
+    Q_UNUSED(event);
     if (m_currentStrategy) {
         m_currentStrategy->cancelInteraction();
         delete m_currentStrategy;
@@ -1434,7 +1435,11 @@ bool CellToolBase::eventFilter (QObject *obj, QEvent *event)
 
 void CellToolBase::activeSheetChanged(Sheet* sheet)
 {
+#ifdef NDEBUG
+    Q_UNUSED(sheet);
+#else
     Q_ASSERT(selection()->activeSheet() == sheet);
+#endif
     if (!selection()->referenceSelectionMode()) {
         return;
     }

@@ -236,6 +236,7 @@ void PageLayoutDialog::accept()
         const QList<Sheet*> sheets = d->sheet->map()->sheetList();
         for (int i = 0; i < sheets.count(); ++i) {
             PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings, macroCommand);
+            Q_UNUSED(command);
         }
         d->sheet->doc()->addCommand(macroCommand);
     }

@@ -1296,6 +1296,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 // Function: TRANSPOSE
 Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *)
 {
+    Q_UNUSED(calc);
     Value matrix = args[0];
     const int cols = matrix.columns();
     const int rows = matrix.rows();

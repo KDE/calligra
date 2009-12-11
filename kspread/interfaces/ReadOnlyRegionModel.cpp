@@ -59,6 +59,8 @@ int ReadOnlyRegionModel::rowCount(const QModelIndex& parent) const
 
 QModelIndex ReadOnlyRegionModel::index(int row, int column, const QModelIndex& parent) const
 {
+    Q_UNUSED(row);
+    Q_UNUSED(column);
     Q_UNUSED(parent);
     return QModelIndex();
 }

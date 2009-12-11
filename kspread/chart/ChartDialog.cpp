@@ -29,6 +29,7 @@ using namespace KSpread;
 ChartDialog::ChartDialog(const QList<KChart::ChartShape*> &charts, QWidget *parent)
     : KPageDialog(parent)
 {
+    Q_UNUSED(charts);
     connect(this, SIGNAL( okClicked() ), this, SLOT( okClicked() ));
     connect(this, SIGNAL( cancelClicked() ), this, SLOT( cancelClicked() ));
 }

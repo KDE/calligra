@@ -97,6 +97,7 @@ void ScriptingSheetsListView::initialize()
                 continue;
             QRect area = sheet->usedArea();
             bool enabled = area.isValid();
+            Q_UNUSED(enabled);
             QList< QStandardItem* > items;
 
             QStandardItem* nameitem = new QStandardItem( sheet->sheetName() );

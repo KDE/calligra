@@ -1479,7 +1479,8 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
   int M, N;
 
   // stores count of elements in array
-  int count_Y = 0, count_X = 0;
+  // int count_Y = 0;
+  int count_X = 0;
 
   //
   int nCase=0;
@@ -1697,9 +1698,9 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
       //
       // Fill result matrix
       //
-      for (int c=0; c<cols_newX; c++)
+      for (uint c=0; c<cols_newX; c++)
       {
-        for (int r=0; r<rows_newX; r++)
+        for (uint r=0; r<rows_newX; r++)
         {
           double result=0.0;
           result = exp(newX.element(c,r).asFloat()*m+b);

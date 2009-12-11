@@ -86,6 +86,7 @@ KoShape* TableShapeFactory::createDefaultShape() const
 
 KoShape* TableShapeFactory::createShape( const KoProperties* params ) const
 {
+    Q_UNUSED(params);
     TableShape* shape = new TableShape();
     return shape;
 }

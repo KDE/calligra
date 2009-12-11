@@ -187,6 +187,7 @@ int TableTool::maxRow() const
 
 SheetView* TableTool::sheetView(const Sheet* sheet) const
 {
+    Q_UNUSED(sheet);
     return d->tableShape->sheetView();
 }
 

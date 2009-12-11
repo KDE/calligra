@@ -1076,6 +1076,7 @@ void CellView::paintText( QPainter& painter,
                           const QPointF& coordinate,
                           QPaintDevice* paintDevice, const Cell& cell )
 {
+    Q_UNUSED(paintDevice);
   QColor textColorPrint = d->style.fontColor();
 
   // Resolve the text color if invalid (=default).
@@ -2456,10 +2457,14 @@ void CellView::Private::truncateHorizontalText(const QFont& font, const QFontMet
 
 void CellView::Private::truncateVerticalText(const QFont& font, const QFontMetricsF& fontMetrics)
 {
+    Q_UNUSED(font);
+    Q_UNUSED(fontMetrics);
 }
 
 void CellView::Private::truncateAngledText(const QFont& font, const QFontMetricsF& fontMetrics)
 {
+    Q_UNUSED(font);
+    Q_UNUSED(fontMetrics);
 }
 
 QTextOption CellView::Private::textOptions() const

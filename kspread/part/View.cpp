@@ -1302,6 +1302,8 @@ void View::setSelectionLeftBorderColor( const QColor & color )
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+#else
+    Q_UNUSED(color);
 #endif
     manipulator->add( *selection() );
     manipulator->execute();
@@ -1790,6 +1792,10 @@ void View::togglePageBorders( bool mode )
 
 void View::viewZoom( KoZoomMode::Mode mode, qreal zoom )
 {
+    Q_UNUSED(zoom);
+#ifdef NDEBUG
+    Q_UNUSED(mode);
+#endif
     Q_ASSERT( mode == KoZoomMode::ZOOM_CONSTANT );
     selection()->emitCloseEditor(true); // save changes
     doc()->refreshInterface();
@@ -1981,6 +1987,7 @@ void View::refreshView()
   d->adjustActions( !sheet->isProtected() );
 
   bool active = sheet->getShowFormula();
+  Q_UNUSED(active);
   if ( sheet && !sheet->isProtected() )
   {
       // FIXME Stefan: action move

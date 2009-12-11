@@ -1084,6 +1084,7 @@ Cell CellStorage::firstInRow(int row, Visiting visiting) const
 
 Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
     int newRow = 0;
     int tmpRow = 0;
     d->formulaStorage->lastInColumn( col, &tmpRow );
@@ -1097,6 +1098,7 @@ Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 
 Cell CellStorage::lastInRow(int row, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
     int newCol = 0;
     int tmpCol = 0;
     d->formulaStorage->lastInRow( row, &tmpCol );
@@ -1110,6 +1112,7 @@ Cell CellStorage::lastInRow(int row, Visiting visiting) const
 
 Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
     int newRow = 0;
     int tmpRow = 0;
     d->formulaStorage->nextInColumn( col, row, &tmpRow );
@@ -1144,6 +1147,7 @@ Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 
 Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
     int newRow = 0;
     int tmpRow = 0;
     d->formulaStorage->prevInColumn( col, row, &tmpRow );
@@ -1157,6 +1161,7 @@ Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 
 Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
     int newCol = 0;
     int tmpCol = 0;
     d->formulaStorage->prevInRow( col, row, &tmpCol );

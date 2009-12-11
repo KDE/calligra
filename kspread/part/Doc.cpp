@@ -248,8 +248,8 @@ void Doc::initConfig()
     setUndoRedoLimit( undo );
 #endif
 
-    const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
 #ifdef KSPREAD_DOC_ZOOM
+    const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
     setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 #endif // KSPREAD_DOC_ZOOM
 }
@@ -287,6 +287,7 @@ int Doc::supportedSpecialFormats() const
 
 bool Doc::completeSaving( KoStore* _store )
 {
+    Q_UNUSED(_store);
     return true;
 }
 
@@ -350,6 +351,7 @@ bool Doc::saveOdf( SavingContext &documentContext )
 bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
                             QString* /*plainText*/ )
 {
+    Q_UNUSED(saveFlag);
     KoStore * store = documentContext.odfStore.store();
     KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
 
@@ -789,7 +791,10 @@ void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 
 void Doc::paintContent( QPainter& painter, const QRect& rect)
 {
-#ifdef KSPREAD_DOC_ZOOM
+#ifndef KSPREAD_DOC_ZOOM
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+#else
 //     kDebug(36001) <<"paintContent() called on" << rect;
 
 //     ElapsedTime et( "Doc::paintContent1" );
@@ -832,7 +837,12 @@ void Doc::paintContent( QPainter& painter, const QRect& rect)
 
 void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor )
 {
-#ifdef KSPREAD_DOC_ZOOM
+#ifndef KSPREAD_DOC_ZOOM
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(sheet);
+    Q_UNUSED(drawCursor);
+#else
     Q_UNUSED( drawCursor );
 
     if ( isLoading() )
@@ -871,7 +881,12 @@ void Doc::paintUpdates()
 void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
                             View* view, const Region& region )
 {
-#ifdef KSPREAD_DOC_ZOOM
+#ifndef KSPREAD_DOC_ZOOM
+    Q_UNUSED(painter);
+    Q_UNUSED(viewRect);
+    Q_UNUSED(view);
+    Q_UNUSED(region);
+#else
     //
     // Clip away children
     //

@@ -198,6 +198,8 @@ void TextModule::removeFunctions()
 // Function: ASC
 Value func_asc (valVector args, ValueCalc *calc, FuncExtra *)
 {
+    Q_UNUSED(args);
+    Q_UNUSED(calc);
   return Value( QString( "FIXME ASC()" ) );
 }
 
@@ -394,6 +396,8 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: JIS
 Value func_jis (valVector args, ValueCalc *calc, FuncExtra *)
 {
+    Q_UNUSED(args);
+    Q_UNUSED(calc);
   return Value( QString( "FIXME JIS()" ) );
 }
 
