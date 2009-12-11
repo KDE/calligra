@@ -72,14 +72,13 @@ QPainterPath KWCopyShape::outline() const
     return m_original->outline();
 }
 
-void KWCopyShape::saveOdf(KoShapeSavingContext &/*context*/) const
+void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 {
     // TODO
 }
 
-bool KWCopyShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &/*context*/)
+bool KWCopyShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element)
     return false; // TODO
 }
 

@@ -396,8 +396,6 @@ void KWDLoader::loadFrameSets(const KoXmlElement &framesets)
 
 void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote)
 {
-    Q_UNUSED(loadFrames);
-    Q_UNUSED(loadFootnote);
     QString fsname = framesetElem.attribute("name");
 
     switch (framesetElem.attribute("frameType").toInt()) {
@@ -533,8 +531,6 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
 
 void KWDLoader::fill(KWFrameSet *fs, const KoXmlElement &framesetElem)
 {
-    Q_UNUSED(fs);
-    Q_UNUSED(framesetElem);
     //m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) ); // TODO
     //m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) ); TODO
 

@@ -260,7 +260,6 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context, bool hasMai
 // helper function to create a KWTextFrameSet for a header/footer.
 void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
 {
-    Q_UNUSED(hfType);
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
     fs->setAllowLayout(false);
@@ -283,7 +282,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
 //1.6: KWOasisLoader::loadOasisHeaderFooter
 void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, HFLoadType headerFooter)
 {
-    Q_UNUSED(masterPageStyle);
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header" : "footer");
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
