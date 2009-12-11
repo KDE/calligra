@@ -513,8 +513,6 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
 
 QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& cell, int currentcolumn, int currentrow)
 {
-    QColorGroup defaultColorGroup = QApplication::palette().active();
-
     QDomElement cell_style;
 
     cell_style = gnumeric_doc.createElement("gmr:Style");
