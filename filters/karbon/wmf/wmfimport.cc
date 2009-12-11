@@ -76,6 +76,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
     storeout->disallowNameExpansion();
     KoOdfWriteStore odfStore( storeout );
     KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
+    Q_UNUSED(manifestWriter);
     KoEmbeddedDocumentSaver embeddedSaver;
     KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
 

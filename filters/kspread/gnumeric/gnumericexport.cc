@@ -70,6 +70,8 @@ GNUMERICExport::GNUMERICExport(QObject* parent, const QStringList&)
  */
 bool GNUMERICExport::hasBorder( const Cell& cell, int currentcolumn, int currentrow)
 {
+    Q_UNUSED(currentcolumn);
+    Q_UNUSED(currentrow);
     const Style style = cell.style();
     if ( ( (style.leftBorderPen().width() != 0) &&
            (style.leftBorderPen().style() != Qt::NoPen ) ) ||
@@ -95,6 +97,9 @@ const QString GNUMERICExport::ColorToString(int red, int green, int blue)
 
 QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,const Cell& cell, int currentcolumn, int currentrow)
 {
+    Q_UNUSED(currentcolumn);
+    Q_UNUSED(currentrow);
+
     QDomElement border_style;
     QDomElement border;
 
@@ -633,6 +638,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,const Cell& c
             cell_style.setAttribute("Shade","18");
             break;
         case Qt::TexturePattern:
+        default:
             // Not supported by Gnumeric
             cell_style.setAttribute("Shade","0");
             break;

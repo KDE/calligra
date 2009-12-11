@@ -446,8 +446,8 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
   foreach(Sheet* sheet, ksdoc->map()->sheetList())
   {
     SheetStyle ts;
-    int maxCols         = 1;
-    int maxRows         = 1;
+    //int maxCols         = 1;
+    //int maxRows         = 1;
 
     ts.visible = !sheet->isHidden();
 
