@@ -33,73 +33,73 @@
 using namespace KSpread;
 
 SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
-  : KDialog( parent ),
-    m_selection(selection)
+        : KDialog(parent),
+        m_selection(selection)
 {
-  setButtons( Ok|Cancel );
-  setCaption( i18n( "Special Paste" ) );
-  QWidget* widget = new QWidget( this );
-  setupUi( widget );
-  setMainWidget( widget );
+    setButtons(Ok | Cancel);
+    setCaption(i18n("Special Paste"));
+    QWidget* widget = new QWidget(this);
+    setupUi(widget);
+    setMainWidget(widget);
 
-  connect( this, SIGNAL( okClicked() ),
-           this, SLOT( slotOk() ) );
-  connect( formatButton, SIGNAL( toggled( bool ) ),
-           this, SLOT( slotToggled( bool ) ) );
-  connect( commentButton, SIGNAL( toggled( bool ) ),
-           this, SLOT( slotToggled( bool ) ) );
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+    connect(formatButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggled(bool)));
+    connect(commentButton, SIGNAL(toggled(bool)),
+            this, SLOT(slotToggled(bool)));
 }
 
 void SpecialPasteDialog::slotOk()
 {
-  Paste::Mode sp = Paste::Normal;
-  Paste::Operation op = Paste::OverWrite;
+    Paste::Mode sp = Paste::Normal;
+    Paste::Operation op = Paste::OverWrite;
 
     /* if( everythingButton->isChecked() )
-	sp = cb->isChecked() ? NormalAndTranspose : Normal;
+    sp = cb->isChecked() ? NormalAndTranspose : Normal;
     else if( textButton->isChecked() )
-	sp = cb->isChecked() ? TextAndTranspose : Text;
+    sp = cb->isChecked() ? TextAndTranspose : Text;
     else if( formatButton->isChecked() )
-	sp = cb->isChecked() ? FormatAndTranspose : Format;
+    sp = cb->isChecked() ? FormatAndTranspose : Format;
     else if( noBorderButton->isChecked() )
     sp = cb->isChecked() ? NoBorderAndTranspose : NoBorder; */
 
-    if( everythingButton->isChecked() )
-      sp = Paste::Normal;
-    else if( textButton->isChecked() )
-      sp = Paste::Text;
-    else if( formatButton->isChecked() )
-      sp = Paste::Format;
-    else if( noBorderButton->isChecked() )
-      sp = Paste::NoBorder;
-    else if( commentButton->isChecked() )
-      sp = Paste::Comment;
-    else if( resultButton->isChecked() )
-      sp = Paste::Result;
+    if (everythingButton->isChecked())
+        sp = Paste::Normal;
+    else if (textButton->isChecked())
+        sp = Paste::Text;
+    else if (formatButton->isChecked())
+        sp = Paste::Format;
+    else if (noBorderButton->isChecked())
+        sp = Paste::NoBorder;
+    else if (commentButton->isChecked())
+        sp = Paste::Comment;
+    else if (resultButton->isChecked())
+        sp = Paste::Result;
 
-    if( overwriteButton->isChecked() )
-      op = Paste::OverWrite;
-    if( additionButton->isChecked() )
-      op = Paste::Add;
-    if( substractionButton->isChecked() )
-      op = Paste::Sub;
-    if( multiplicationButton->isChecked() )
-      op = Paste::Mul;
-    if( divisionButton->isChecked() )
-      op = Paste::Div;
+    if (overwriteButton->isChecked())
+        op = Paste::OverWrite;
+    if (additionButton->isChecked())
+        op = Paste::Add;
+    if (substractionButton->isChecked())
+        op = Paste::Sub;
+    if (multiplicationButton->isChecked())
+        op = Paste::Mul;
+    if (divisionButton->isChecked())
+        op = Paste::Div;
 
-    m_selection->activeSheet()->paste( m_selection->lastRange(), true, sp, op );
+    m_selection->activeSheet()->paste(m_selection->lastRange(), true, sp, op);
     m_selection->emitModified();
     accept();
 }
 
-void SpecialPasteDialog::slotToggled( bool b )
+void SpecialPasteDialog::slotToggled(bool b)
 {
-    overwriteButton->setEnabled( !b );
-    additionButton->setEnabled( !b );
-    substractionButton->setEnabled( !b );
-    multiplicationButton->setEnabled( !b );
-    divisionButton->setEnabled( !b );
+    overwriteButton->setEnabled(!b);
+    additionButton->setEnabled(!b);
+    substractionButton->setEnabled(!b);
+    multiplicationButton->setEnabled(!b);
+    divisionButton->setEnabled(!b);
 }
 
 #include "SpecialPasteDialog.moc"

@@ -36,29 +36,27 @@
 // round to get at most 10-digits number
 static Value RoundNumber(const Value& v)
 {
-  if(v.isNumber())
-  {
-    double d = numToDouble(v.asFloat());
-    if(fabs(d) < DBL_EPSILON)
-      d = 0.0;
-    return Value( ROUND(d) );
-  }
-  else
-    return v;
+    if (v.isNumber()) {
+        double d = numToDouble(v.asFloat());
+        if (fabs(d) < DBL_EPSILON)
+            d = 0.0;
+        return Value(ROUND(d));
+    } else
+        return v;
 }
 
 Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 {
     Formula f(m_doc->map()->sheet(0));
     QString expr = formula;
-    if ( expr[0] != '=' )
-        expr.prepend( '=' );
-    f.setExpression( expr );
+    if (expr[0] != '=')
+        expr.prepend('=');
+    f.setExpression(expr);
     Value result = f.eval();
 
-    if(result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger())
         ex = Value(ex.asFloat());
-    if(result.isInteger() && ex.isFloat())
+    if (result.isInteger() && ex.isFloat())
         result = Value(result.asFloat());
 
     return RoundNumber(result);
@@ -82,8 +80,8 @@ void TestDatabaseFunctions::initTestCase()
     // B18:B31
     storage->setValue(2, 18, Value("Constellation"));
     QList<QString> constellations = QList<QString>() << "Cancer" << "Canis Major" << "Canis Minor"
-            << "Carina" << "Draco" << "Eridanus" << "Gemini" << "Hercules" << "Orion" << "Phoenix"
-            << "Scorpio" << "Ursa Major" << "Ursa Minor";
+                                    << "Carina" << "Draco" << "Eridanus" << "Gemini" << "Hercules" << "Orion" << "Phoenix"
+                                    << "Scorpio" << "Ursa Major" << "Ursa Minor";
     for (int i = 0; i < constellations.count(); ++i)
         storage->setValue(2, 19 + i, Value(constellations[i]));
     // C18:C31

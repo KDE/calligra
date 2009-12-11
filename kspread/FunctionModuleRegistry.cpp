@@ -62,7 +62,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
 
 
 FunctionModuleRegistry::FunctionModuleRegistry()
-    : d(new Private)
+        : d(new Private)
 {
     d->repositoryInitialized = false;
     loadFunctions();
@@ -82,11 +82,11 @@ void FunctionModuleRegistry::loadFunctions()
 {
     const QString serviceType = QString::fromLatin1("KSpread/Plugin");
     const QString query = QString::fromLatin1("([X-KSpread-Version] >= 2) and "
-                                              "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
+                          "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    foreach (KPluginInfo pluginInfo, pluginInfos) {
+    foreach(KPluginInfo pluginInfo, pluginInfos) {
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
             kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
@@ -101,7 +101,7 @@ void FunctionModuleRegistry::loadFunctions()
         if (pluginInfo.isPluginEnabled()) {
             // Module already registered?
             if (contains(module->id())) {
-                continue; 
+                continue;
             }
             add(module);
             // Is the function repository already initialized?

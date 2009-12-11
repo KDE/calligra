@@ -73,25 +73,25 @@ using namespace KSpread;
 class Map::Private
 {
 public:
-  Doc* doc;
+    Doc* doc;
 
-  /**
-   * List of all sheets in this map.
-   */
-  QList<Sheet*> lstSheets;
-  QList<Sheet*> lstDeletedSheets;
+    /**
+     * List of all sheets in this map.
+     */
+    QList<Sheet*> lstSheets;
+    QList<Sheet*> lstDeletedSheets;
 
-  /**
-   * Password to protect the map from being changed.
-   */
-  QByteArray strPassword;
+    /**
+     * Password to protect the map from being changed.
+     */
+    QByteArray strPassword;
 
-  // used to give every Sheet a unique default name.
-  int tableId;
+    // used to give every Sheet a unique default name.
+    int tableId;
 
-  // used to determine the loading progress
-  int overallRowCount;
-  int loadedRowsCounter;
+    // used to determine the loading progress
+    int overallRowCount;
+    int loadedRowsCounter;
 
     LoadingInfo* loadingInfo;
     bool readwrite;
@@ -119,15 +119,15 @@ public:
 };
 
 
-Map::Map ( Doc* doc, const char* name)
-  : QObject( doc ),
-    d(new Private)
+Map::Map(Doc* doc, const char* name)
+        : QObject(doc),
+        d(new Private)
 {
-  setObjectName( name ); // necessary for D-Bus
-  d->doc = doc;
-  d->tableId = 1;
-  d->overallRowCount = 0;
-  d->loadedRowsCounter = 0;
+    setObjectName(name);   // necessary for D-Bus
+    d->doc = doc;
+    d->tableId = 1;
+    d->overallRowCount = 0;
+    d->loadedRowsCounter = 0;
     d->loadingInfo = 0;
     d->readwrite = true;
 
@@ -158,9 +158,9 @@ Map::Map ( Doc* doc, const char* name)
 
     d->isLoading = false;
 
-  new MapAdaptor(this);
+    new MapAdaptor(this);
     if (doc) {
-        QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
+        QDBusConnection::sessionBus().registerObject('/' + doc->objectName() + '/' + objectName(), this);
     }
 
     connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
@@ -187,12 +187,12 @@ Map::~Map()
 
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
-  delete d;
+    delete d;
 }
 
 Doc* Map::doc() const
 {
-  return d->doc;
+    return d->doc;
 }
 
 void Map::setReadWrite(bool readwrite)
@@ -301,76 +301,69 @@ CalculationSettings* Map::calculationSettings() const
     return d->calculationSettings;
 }
 
-void Map::setProtected( QByteArray const & passwd )
+void Map::setProtected(QByteArray const & passwd)
 {
-  d->strPassword = passwd;
+    d->strPassword = passwd;
 }
 
 Sheet* Map::createSheet()
 {
-  QString name( i18n("Sheet%1", d->tableId++) );
-  Sheet* sheet = new Sheet(this, name);
-  return sheet;
+    QString name(i18n("Sheet%1", d->tableId++));
+    Sheet* sheet = new Sheet(this, name);
+    return sheet;
 }
 
-void Map::addSheet( Sheet *_sheet )
+void Map::addSheet(Sheet *_sheet)
 {
-  d->lstSheets.append( _sheet );
-  emit sheetAdded(_sheet);
+    d->lstSheets.append(_sheet);
+    emit sheetAdded(_sheet);
 }
 
-Sheet *Map::addNewSheet ()
+Sheet *Map::addNewSheet()
 {
-  Sheet *t = createSheet ();
-  addSheet (t);
-  return t;
+    Sheet *t = createSheet();
+    addSheet(t);
+    return t;
 }
 
-void Map::moveSheet( const QString & _from, const QString & _to, bool _before )
+void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
 {
-  Sheet* sheetfrom = findSheet( _from );
-  Sheet* sheetto = findSheet( _to );
+    Sheet* sheetfrom = findSheet(_from);
+    Sheet* sheetto = findSheet(_to);
 
-  int from = d->lstSheets.indexOf( sheetfrom ) ;
-  int to = d->lstSheets.indexOf( sheetto ) ;
-  if ( !_before )
-  ++to;
+    int from = d->lstSheets.indexOf(sheetfrom) ;
+    int to = d->lstSheets.indexOf(sheetto) ;
+    if (!_before)
+        ++to;
 
-  if ( to > (int)d->lstSheets.count() )
-  {
-    d->lstSheets.append( sheetfrom );
-    d->lstSheets.removeAt( from );
-  }
-  else if ( from < to )
-  {
-    d->lstSheets.insert( to, sheetfrom );
-    d->lstSheets.removeAt( from );
-  }
-  else
-  {
-    d->lstSheets.removeAt( from );
-    d->lstSheets.insert( to, sheetfrom );
-  }
+    if (to > (int)d->lstSheets.count()) {
+        d->lstSheets.append(sheetfrom);
+        d->lstSheets.removeAt(from);
+    } else if (from < to) {
+        d->lstSheets.insert(to, sheetfrom);
+        d->lstSheets.removeAt(from);
+    } else {
+        d->lstSheets.removeAt(from);
+        d->lstSheets.insert(to, sheetfrom);
+    }
 }
 
-void Map::loadOdfSettings( KoOasisSettings &settings )
+void Map::loadOdfSettings(KoOasisSettings &settings)
 {
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
-    KoOasisSettings::Items firstView = viewMap.entry( 0 );
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
+    KoOasisSettings::Items firstView = viewMap.entry(0);
 
-    KoOasisSettings::NamedMap sheetsMap = firstView.namedMap( "Tables" );
-    kDebug()<<" loadOdfSettings( KoOasisSettings &settings ) exist :"<< !sheetsMap.isNull();
-    if ( !sheetsMap.isNull() )
-    {
-      foreach ( Sheet* sheet, d->lstSheets )
-      {
-        sheet->loadOdfSettings( sheetsMap );
-      }
+    KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
+    kDebug() << " loadOdfSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
+    if (!sheetsMap.isNull()) {
+        foreach(Sheet* sheet, d->lstSheets) {
+            sheet->loadOdfSettings(sheetsMap);
+        }
     }
 
-    QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
-    kDebug()<<" loadOdfSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet;
+    QString activeSheet = firstView.parseConfigItemString("ActiveTable");
+    kDebug() << " loadOdfSettings( KoOasisSettings &settings ) activeSheet :" << activeSheet;
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
@@ -378,44 +371,41 @@ void Map::loadOdfSettings( KoOasisSettings &settings )
     }
 }
 
-void Map::saveOdfSettings( KoXmlWriter &settingsWriter )
+void Map::saveOdfSettings(KoXmlWriter &settingsWriter)
 {
-    settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
+    settingsWriter.addConfigItem("ViewId", QString::fromLatin1("View1"));
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>( d->doc->views().first() );
-    if ( view ) // no view if embedded document
-    {
+    View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>(d->doc->views().first());
+    if (view) { // no view if embedded document
         // save current sheet selection before to save marker, otherwise current pos is not saved
         view->saveCurrentSheetSelection();
         //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        settingsWriter.addConfigItem( "ActiveTable",  view->activeSheet()->sheetName() );
+        settingsWriter.addConfigItem("ActiveTable",  view->activeSheet()->sheetName());
     }
 
     //<config:config-item-map-named config:name="Tables">
-    settingsWriter.startElement("config:config-item-map-named" );
-    settingsWriter.addAttribute("config:name","Tables" );
-    foreach ( Sheet* sheet, d->lstSheets )
-    {
-      settingsWriter.startElement( "config:config-item-map-entry" );
-      settingsWriter.addAttribute( "config:name", sheet->sheetName() );
-      if ( view )
-      {
-        QPoint marker = view->markerFromSheet( sheet );
-        QPointF offset = view->offsetFromSheet( sheet );
-        settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
-        settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
-        settingsWriter.addConfigItem( "xOffset", offset.x() );
-        settingsWriter.addConfigItem( "yOffset", offset.y() );
-      }
-      sheet->saveOdfSettings( settingsWriter );
-      settingsWriter.endElement();
+    settingsWriter.startElement("config:config-item-map-named");
+    settingsWriter.addAttribute("config:name", "Tables");
+    foreach(Sheet* sheet, d->lstSheets) {
+        settingsWriter.startElement("config:config-item-map-entry");
+        settingsWriter.addAttribute("config:name", sheet->sheetName());
+        if (view) {
+            QPoint marker = view->markerFromSheet(sheet);
+            QPointF offset = view->offsetFromSheet(sheet);
+            settingsWriter.addConfigItem("CursorPositionX", marker.x());
+            settingsWriter.addConfigItem("CursorPositionY", marker.y());
+            settingsWriter.addConfigItem("xOffset", offset.x());
+            settingsWriter.addConfigItem("yOffset", offset.y());
+        }
+        sheet->saveOdfSettings(settingsWriter);
+        settingsWriter.endElement();
     }
     settingsWriter.endElement();
 }
 
 
-bool Map::saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext )
+bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 {
     // Saving the custom cell styles including the default cell style.
     d->styleManager->saveOdf(savingContext.mainStyles());
@@ -432,18 +422,16 @@ bool Map::saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext
     defaultRowStyle.setDefaultStyle(true);
     savingContext.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
 
-    if ( !d->strPassword.isEmpty() )
-    {
-        xmlWriter.addAttribute("table:structure-protected", "true" );
-        QByteArray str = KCodecs::base64Encode( d->strPassword );
+    if (!d->strPassword.isEmpty()) {
+        xmlWriter.addAttribute("table:structure-protected", "true");
+        QByteArray str = KCodecs::base64Encode(d->strPassword);
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
-        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
+        xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }
 
     OdfSavingContext tableContext(savingContext);
 
-    foreach ( Sheet* sheet, d->lstSheets )
-    {
+    foreach(Sheet* sheet, d->lstSheets) {
         sheet->saveOdf(tableContext);
     }
 
@@ -454,7 +442,7 @@ bool Map::saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext
     return true;
 }
 
-QDomElement Map::save( QDomDocument& doc )
+QDomElement Map::save(QDomDocument& doc)
 {
     QDomElement spread = doc.documentElement();
 
@@ -472,42 +460,37 @@ QDomElement Map::save( QDomDocument& doc )
     QDomElement s = d->styleManager->save(doc);
     spread.appendChild(s);
 
-    QDomElement mymap = doc.createElement( "map" );
-  // Save visual info for the first view, such as active sheet and active cell
-  // It looks like a hack, but reopening a document creates only one view anyway (David)
-  View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>(d->doc->views().first());
-  if ( view ) // no view if embedded document
-  {
-    Canvas * canvas = view->canvasWidget();
-    mymap.setAttribute( "activeTable",  canvas->activeSheet()->sheetName() );
-    mymap.setAttribute( "markerColumn", view->selection()->marker().x() );
-    mymap.setAttribute( "markerRow",    view->selection()->marker().y() );
-    mymap.setAttribute( "xOffset",      canvas->xOffset() );
-    mymap.setAttribute( "yOffset",      canvas->yOffset() );
-  }
-
-  if ( !d->strPassword.isNull() )
-  {
-    if ( d->strPassword.size() > 0 )
-    {
-      QByteArray str = KCodecs::base64Encode( d->strPassword );
-      mymap.setAttribute( "protected", QString( str.data() ) );
+    QDomElement mymap = doc.createElement("map");
+    // Save visual info for the first view, such as active sheet and active cell
+    // It looks like a hack, but reopening a document creates only one view anyway (David)
+    View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>(d->doc->views().first());
+    if (view) { // no view if embedded document
+        Canvas * canvas = view->canvasWidget();
+        mymap.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
+        mymap.setAttribute("markerColumn", view->selection()->marker().x());
+        mymap.setAttribute("markerRow",    view->selection()->marker().y());
+        mymap.setAttribute("xOffset",      canvas->xOffset());
+        mymap.setAttribute("yOffset",      canvas->yOffset());
     }
-    else
-      mymap.setAttribute( "protected", "" );
-  }
 
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    QDomElement e = sheet->saveXML( doc );
-    if ( e.isNull() )
-      return e;
-    mymap.appendChild( e );
-  }
-  return mymap;
+    if (!d->strPassword.isNull()) {
+        if (d->strPassword.size() > 0) {
+            QByteArray str = KCodecs::base64Encode(d->strPassword);
+            mymap.setAttribute("protected", QString(str.data()));
+        } else
+            mymap.setAttribute("protected", "");
+    }
+
+    foreach(Sheet* sheet, d->lstSheets) {
+        QDomElement e = sheet->saveXML(doc);
+        if (e.isNull())
+            return e;
+        mymap.appendChild(e);
+    }
+    return mymap;
 }
 
-bool Map::loadOdf( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
+bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 {
     d->isLoading = true;
     loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
@@ -551,38 +534,32 @@ bool Map::loadOdf( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
     }
 
     d->calculationSettings->loadOdf(body); // table::calculation-settings
-    if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
-    {
-        QByteArray passwd( "" );
-        if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
-        {
-            QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString() );
-            QByteArray str( p.toLatin1() );
-            passwd = KCodecs::base64Decode( str );
+    if (body.hasAttributeNS(KoXmlNS::table, "structure-protected")) {
+        QByteArray passwd("");
+        if (body.hasAttributeNS(KoXmlNS::table, "protection-key")) {
+            QString p = body.attributeNS(KoXmlNS::table, "protection-key", QString());
+            QByteArray str(p.toLatin1());
+            passwd = KCodecs::base64Decode(str);
         }
         d->strPassword = passwd;
     }
 
-    KoXmlNode sheetNode = KoXml::namedItemNS( body, KoXmlNS::table, "table" );
+    KoXmlNode sheetNode = KoXml::namedItemNS(body, KoXmlNS::table, "table");
     // sanity check
-    if ( sheetNode.isNull() ) return false;
+    if (sheetNode.isNull()) return false;
 
     d->overallRowCount = 0;
-    while ( !sheetNode.isNull() )
-    {
+    while (!sheetNode.isNull()) {
         KoXmlElement sheetElement = sheetNode.toElement();
-        if( !sheetElement.isNull() )
-        {
+        if (!sheetElement.isNull()) {
             //kDebug()<<"  Map::loadOdf tableElement is not null";
             //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName();
 
             // make it slightly faster
             KoXml::load(sheetElement);
 
-            if( sheetElement.nodeName() == "table:table" )
-            {
-                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )
-                {
+            if (sheetElement.nodeName() == "table:table") {
+                if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     Sheet* sheet = addNewSheet();
                     sheet->setSheetName(sheetElement.attributeNS(KoXmlNS::table, "name", QString()), true);
                     d->overallRowCount += KoXml::childNodesCount(sheetElement);
@@ -597,27 +574,22 @@ bool Map::loadOdf( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = d->styleManager->loadOdfAutoStyles( odfContext.stylesReader(), conditionalStyles );
+    Styles autoStyles = d->styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles);
 
     // load the sheet
     sheetNode = body.firstChild();
-    while ( !sheetNode.isNull() )
-    {
+    while (!sheetNode.isNull()) {
         KoXmlElement sheetElement = sheetNode.toElement();
-        if( !sheetElement.isNull() )
-        {
+        if (!sheetElement.isNull()) {
             // make it slightly faster
             KoXml::load(sheetElement);
 
             //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
-            if( sheetElement.nodeName() == "table:table" )
-            {
-                if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )
-                {
-                    QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString() );
-                    Sheet* sheet = findSheet( name );
-                    if( sheet )
-                    {
+            if (sheetElement.nodeName() == "table:table") {
+                if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
+                    QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
+                    Sheet* sheet = findSheet(name);
+                    if (sheet) {
                         sheet->loadOdf(sheetElement, tableContext, autoStyles, conditionalStyles);
                     }
                 }
@@ -641,7 +613,7 @@ bool Map::loadOdf( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 }
 
 
-bool Map::loadXML( const KoXmlElement& mymap )
+bool Map::loadXML(const KoXmlElement& mymap)
 {
     d->isLoading = true;
     loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
@@ -651,40 +623,34 @@ bool Map::loadXML( const KoXmlElement& mymap )
     const QPointF offset(mymap.attribute("xOffset").toDouble(), mymap.attribute("yOffset").toDouble());
     loadingInfo()->setScrollingOffset(findSheet(activeSheet), offset);
 
-  KoXmlNode n = mymap.firstChild();
-  if ( n.isNull() )
-  {
-      // We need at least one sheet !
-      doc()->setErrorMessage( i18n("This document has no sheets (tables).") );
-      d->isLoading = false;
-      return false;
-  }
-  while( !n.isNull() )
-  {
-    KoXmlElement e = n.toElement();
-    if ( !e.isNull() && e.tagName() == "table" )
-    {
-      Sheet *t = addNewSheet();
-      if ( !t->loadXML( e ) ) {
+    KoXmlNode n = mymap.firstChild();
+    if (n.isNull()) {
+        // We need at least one sheet !
+        doc()->setErrorMessage(i18n("This document has no sheets (tables)."));
         d->isLoading = false;
         return false;
-      }
     }
-    n = n.nextSibling();
-  }
-
-  if ( mymap.hasAttribute( "protected" ) )
-  {
-    QString passwd = mymap.attribute( "protected" );
-
-    if ( passwd.length() > 0 )
-    {
-      QByteArray str( passwd.toLatin1() );
-      d->strPassword = KCodecs::base64Decode( str );
+    while (!n.isNull()) {
+        KoXmlElement e = n.toElement();
+        if (!e.isNull() && e.tagName() == "table") {
+            Sheet *t = addNewSheet();
+            if (!t->loadXML(e)) {
+                d->isLoading = false;
+                return false;
+            }
+        }
+        n = n.nextSibling();
     }
-    else
-      d->strPassword = QByteArray( "" );
-  }
+
+    if (mymap.hasAttribute("protected")) {
+        QString passwd = mymap.attribute("protected");
+
+        if (passwd.length() > 0) {
+            QByteArray str(passwd.toLatin1());
+            d->strPassword = KCodecs::base64Decode(str);
+        } else
+            d->strPassword = QByteArray("");
+    }
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
@@ -692,66 +658,61 @@ bool Map::loadXML( const KoXmlElement& mymap )
     }
 
     d->isLoading = false;
-  return true;
+    return true;
 }
 
-Sheet* Map::findSheet( const QString & _name ) const
+Sheet* Map::findSheet(const QString & _name) const
 {
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if ( _name.toLower() == sheet->sheetName().toLower() )
-      return sheet;
-  }
-  return 0;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (_name.toLower() == sheet->sheetName().toLower())
+            return sheet;
+    }
+    return 0;
 }
 
-Sheet * Map::nextSheet( Sheet * currentSheet ) const
+Sheet * Map::nextSheet(Sheet * currentSheet) const
 {
-  if( currentSheet == d->lstSheets.last())
-    return currentSheet;
-  int index = 0;
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if ( sheet == currentSheet )
-      return d->lstSheets.value( ++index );
-    ++index;
-  }
-  return 0;
+    if (currentSheet == d->lstSheets.last())
+        return currentSheet;
+    int index = 0;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (sheet == currentSheet)
+            return d->lstSheets.value(++index);
+        ++index;
+    }
+    return 0;
 }
 
-Sheet * Map::previousSheet( Sheet * currentSheet ) const
+Sheet * Map::previousSheet(Sheet * currentSheet) const
 {
-  if( currentSheet == d->lstSheets.first())
-    return currentSheet;
-  int index = 0;
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if ( sheet  == currentSheet )
-      return d->lstSheets.value( --index );
-    ++index;
-  }
-  return 0;
+    if (currentSheet == d->lstSheets.first())
+        return currentSheet;
+    int index = 0;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (sheet  == currentSheet)
+            return d->lstSheets.value(--index);
+        ++index;
+    }
+    return 0;
 }
 
-bool Map::saveChildren( KoStore * _store )
+bool Map::saveChildren(KoStore * _store)
 {
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    // set the child document's url to an internal url (ex: "tar:/0/1")
-    if ( !sheet->saveChildren( _store, sheet->sheetName() ) )
-      return false;
-  }
-  return true;
+    foreach(Sheet* sheet, d->lstSheets) {
+        // set the child document's url to an internal url (ex: "tar:/0/1")
+        if (!sheet->saveChildren(_store, sheet->sheetName()))
+            return false;
+    }
+    return true;
 }
 
-bool Map::loadChildren( KoStore * _store )
+bool Map::loadChildren(KoStore * _store)
 {
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if ( !sheet->loadChildren( _store ) )
-      return false;
-  }
-  return true;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (!sheet->loadChildren(_store))
+            return false;
+    }
+    return true;
 }
 
 void Map::removeSheet(Sheet* sheet)
@@ -772,55 +733,53 @@ void Map::reviveSheet(Sheet* sheet)
 // FIXME cache this for faster operation
 QStringList Map::visibleSheets() const
 {
-  QStringList result;
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if( !sheet->isHidden() )
-      result.append( sheet->sheetName() );
-  }
-  return result;
+    QStringList result;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (!sheet->isHidden())
+            result.append(sheet->sheetName());
+    }
+    return result;
 }
 
 // FIXME cache this for faster operation
 QStringList Map::hiddenSheets() const
 {
-  QStringList result;
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    if( sheet->isHidden() )
-      result.append( sheet->sheetName() );
-  }
-  return result;
+    QStringList result;
+    foreach(Sheet* sheet, d->lstSheets) {
+        if (sheet->isHidden())
+            result.append(sheet->sheetName());
+    }
+    return result;
 }
 
-void Map::password( QByteArray & passwd ) const
+void Map::password(QByteArray & passwd) const
 {
-  passwd = d->strPassword;
+    passwd = d->strPassword;
 }
 
 bool Map::isProtected() const
 {
-  return !d->strPassword.isNull();
+    return !d->strPassword.isNull();
 }
 
-bool Map::checkPassword( QByteArray const & passwd ) const
+bool Map::checkPassword(QByteArray const & passwd) const
 {
-  return ( passwd == d->strPassword );
+    return (passwd == d->strPassword);
 }
 
-Sheet* Map::sheet( int index ) const
+Sheet* Map::sheet(int index) const
 {
-  return d->lstSheets.value( index );
+    return d->lstSheets.value(index);
 }
 
 QList<Sheet*>& Map::sheetList() const
 {
-  return d->lstSheets;
+    return d->lstSheets;
 }
 
 int Map::count() const
 {
-  return d->lstSheets.count();
+    return d->lstSheets.count();
 }
 
 void Map::increaseLoadedRowsCounter(int number)
@@ -859,13 +818,13 @@ void Map::addDamage(Damage* damage)
 
 #ifndef NDEBUG
     if (damage->type() == Damage::Cell) {
-        kDebug(36007) <<"Adding\t" << *static_cast<CellDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<CellDamage*>(damage);
     } else if (damage->type() == Damage::Sheet) {
-        kDebug(36007) <<"Adding\t" << *static_cast<SheetDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<SheetDamage*>(damage);
     } else if (damage->type() == Damage::Selection) {
-        kDebug(36007) <<"Adding\t" << *static_cast<SelectionDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<SelectionDamage*>(damage);
     } else {
-        kDebug(36007) <<"Adding\t" << *damage;
+        kDebug(36007) << "Adding\t" << *damage;
     }
 #endif
 
@@ -894,38 +853,38 @@ void Map::handleDamages(const QList<Damage*>& damages)
     WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
 
     QList<Damage*>::ConstIterator end(damages.end());
-    for(QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
         Damage* damage = *it;
-        if(!damage) continue;
+        if (!damage) continue;
 
-        if(damage->type() == Damage::Cell) {
+        if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            kDebug(36007) <<"Processing\t" << *cellDamage;
+            kDebug(36007) << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region region = cellDamage->region();
 
             if ((cellDamage->changes() & CellDamage::Binding) &&
-                 !workbookChanges.testFlag(WorkbookDamage::Value)) {
+                    !workbookChanges.testFlag(WorkbookDamage::Value)) {
                 bindingChangedRegion.add(region, damagedSheet);
             }
             if ((cellDamage->changes() & CellDamage::Formula) &&
-                   !workbookChanges.testFlag(WorkbookDamage::Formula)) {
+                    !workbookChanges.testFlag(WorkbookDamage::Formula)) {
                 formulaChangedRegion.add(region, damagedSheet);
             }
             if ((cellDamage->changes() & CellDamage::NamedArea) &&
-                   !workbookChanges.testFlag(WorkbookDamage::Formula)) {
+                    !workbookChanges.testFlag(WorkbookDamage::Formula)) {
                 namedAreaChangedRegion.add(region, damagedSheet);
             }
             if ((cellDamage->changes() & CellDamage::Value) &&
-                   !workbookChanges.testFlag(WorkbookDamage::Value)) {
+                    !workbookChanges.testFlag(WorkbookDamage::Value)) {
                 valueChangedRegion.add(region, damagedSheet);
             }
             continue;
         }
 
-        if(damage->type() == Damage::Sheet) {
+        if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            kDebug(36007) <<"Processing\t" << *sheetDamage;
+            kDebug(36007) << "Processing\t" << *sheetDamage;
 //             Sheet* damagedSheet = sheetDamage->sheet();
 
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
@@ -933,9 +892,9 @@ void Map::handleDamages(const QList<Damage*>& damages)
             continue;
         }
 
-        if(damage->type() == Damage::Workbook) {
+        if (damage->type() == Damage::Workbook) {
             WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
-            kDebug(36007) <<"Processing\t" << *damage;
+            kDebug(36007) << "Processing\t" << *damage;
 
             workbookChanges |= workbookDamage->changes();
             if (workbookDamage->changes() & WorkbookDamage::Formula) {

@@ -42,7 +42,7 @@ public:
 
 public slots:
     void slotOk();
-    void slotToggled( bool );
+    void slotToggled(bool);
 
 private:
     Selection* m_selection;

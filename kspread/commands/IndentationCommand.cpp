@@ -33,25 +33,22 @@
 using namespace KSpread;
 
 IndentationCommand::IndentationCommand()
-  : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
-    setText( i18n( "Increase Indentation" ) );
+    setText(i18n("Increase Indentation"));
 }
 
 bool IndentationCommand::mainProcessing()
 {
     Style style;
-    if ( !m_reverse )
-    {
+    if (!m_reverse) {
         // increase the indentation
-        style.setIndentation( m_sheet->map()->settings()->indentValue() );
-    }
-    else // m_reverse
-    {
+        style.setIndentation(m_sheet->map()->settings()->indentValue());
+    } else { // m_reverse
         // decrease the indentation
-        style.setIndentation( -m_sheet->map()->settings()->indentValue() );
+        style.setIndentation(-m_sheet->map()->settings()->indentValue());
     }
-    m_sheet->cellStorage()->setStyle( *this, style );
+    m_sheet->cellStorage()->setStyle(*this, style);
     return true;
 }
 
@@ -62,9 +59,9 @@ bool IndentationCommand::postProcessing()
 
 void IndentationCommand::setReverse(bool reverse)
 {
-  AbstractRegionCommand::setReverse(reverse);
-  if ( !m_reverse )
-    setText( i18n( "Increase Indentation" ) );
-  else
-    setText( i18n( "Decrease Indentation" ) );
+    AbstractRegionCommand::setReverse(reverse);
+    if (!m_reverse)
+        setText(i18n("Increase Indentation"));
+    else
+        setText(i18n("Decrease Indentation"));
 }

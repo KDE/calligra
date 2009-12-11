@@ -49,61 +49,60 @@ class Sheet;
 
 class SortDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  enum Orientation
-  {
-    SortColumns=0,
-    SortRows=1
-  };
-  
-  explicit SortDialog(QWidget* parent, Selection* selection);
-  ~SortDialog();
- 
- protected:
+public:
+    enum Orientation {
+        SortColumns = 0,
+        SortRows = 1
+    };
+
+    explicit SortDialog(QWidget* parent, Selection* selection);
+    ~SortDialog();
+
+protected:
     Orientation guessDataOrientation();
     QRect       sourceArea();
- 
- private slots:
-  void sortKey2textChanged( int );
-  void useCustomListsStateChanged( int );
-  void firstRowHeaderChanged( int );
-  virtual void slotOk();
-  void slotOrientationChanged(int id);
 
- private:
-  void init();
+private slots:
+    void sortKey2textChanged(int);
+    void useCustomListsStateChanged(int);
+    void firstRowHeaderChanged(int);
+    virtual void slotOk();
+    void slotOrientationChanged(int id);
 
-  Selection    * m_selection;
+private:
+    void init();
 
-  QStringList    m_listColumn;
-  QStringList    m_listRow;
+    Selection    * m_selection;
 
-  QWidget      * m_page1;
-  QWidget      * m_page2;
+    QStringList    m_listColumn;
+    QStringList    m_listRow;
 
-  KTabWidget   * m_tabWidget;
+    QWidget      * m_page1;
+    QWidget      * m_page2;
 
-  KComboBox    * m_sortKey1;
-  KComboBox    * m_sortOrder1;
-  KComboBox    * m_sortKey2;
-  KComboBox    * m_sortOrder2;
-  KComboBox    * m_sortKey3;
-  KComboBox    * m_sortOrder3;
+    KTabWidget   * m_tabWidget;
 
-  QCheckBox    * m_useCustomLists;
-  KComboBox    * m_customList;
+    KComboBox    * m_sortKey1;
+    KComboBox    * m_sortOrder1;
+    KComboBox    * m_sortKey2;
+    KComboBox    * m_sortOrder2;
+    KComboBox    * m_sortKey3;
+    KComboBox    * m_sortOrder3;
 
-  QRadioButton * m_sortColumn;
-  QRadioButton * m_sortRow;
+    QCheckBox    * m_useCustomLists;
+    KComboBox    * m_customList;
 
-  QCheckBox    * m_copyLayout;
-  QCheckBox    * m_firstRowOrColHeader;
-  QCheckBox    * m_respectCase;
+    QRadioButton * m_sortColumn;
+    QRadioButton * m_sortRow;
 
-  /*KComboBox    * m_outputSheet;
-  KLineEdit    * m_outputCell;*/
+    QCheckBox    * m_copyLayout;
+    QCheckBox    * m_firstRowOrColHeader;
+    QCheckBox    * m_respectCase;
+
+    /*KComboBox    * m_outputSheet;
+    KLineEdit    * m_outputCell;*/
 };
 
 } // namespace KSpread

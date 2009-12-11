@@ -39,42 +39,39 @@ class Database::Private : public QSharedData
 {
 public:
     Private()
-        : source( 0 )
-        , sort( 0 )
-        , filter(new Filter())
-        , subtotalRules( 0 )
-        , isSelection( false )
-        , onUpdateKeepStyles( false )
-        , onUpdateKeepSize( true )
-        , hasPersistentData( true )
-        , orientation( Row )
-        , containsHeader( true )
-        , displayFilterButtons( false )
-        , refreshDelay( 0 )
-    {
+            : source(0)
+            , sort(0)
+            , filter(new Filter())
+            , subtotalRules(0)
+            , isSelection(false)
+            , onUpdateKeepStyles(false)
+            , onUpdateKeepSize(true)
+            , hasPersistentData(true)
+            , orientation(Row)
+            , containsHeader(true)
+            , displayFilterButtons(false)
+            , refreshDelay(0) {
     }
 
     Private(const Private& other)
-        : QSharedData(other)
-        , source(/*other.source ? new DatabaseSource(*other.source) : */0)
-        , sort(/*other.sort ? new Sort(*other.sort) : */0)
-        , filter(other.filter ? new Filter(*other.filter) : 0)
-        , subtotalRules(/*other.subtotalRules ? new SubtotalRules(*other.subtotalRules) : */0)
-        , name(other.name)
-        , isSelection(other.isSelection)
-        , onUpdateKeepStyles(other.onUpdateKeepStyles)
-        , onUpdateKeepSize(other.onUpdateKeepSize)
-        , hasPersistentData(other.hasPersistentData)
-        , orientation(other.orientation)
-        , containsHeader(other.containsHeader)
-        , displayFilterButtons(other.displayFilterButtons)
-        , targetRangeAddress(other.targetRangeAddress)
-        , refreshDelay(other.refreshDelay)
-    {
+            : QSharedData(other)
+            , source(/*other.source ? new DatabaseSource(*other.source) : */0)
+            , sort(/*other.sort ? new Sort(*other.sort) : */0)
+            , filter(other.filter ? new Filter(*other.filter) : 0)
+            , subtotalRules(/*other.subtotalRules ? new SubtotalRules(*other.subtotalRules) : */0)
+            , name(other.name)
+            , isSelection(other.isSelection)
+            , onUpdateKeepStyles(other.onUpdateKeepStyles)
+            , onUpdateKeepSize(other.onUpdateKeepSize)
+            , hasPersistentData(other.hasPersistentData)
+            , orientation(other.orientation)
+            , containsHeader(other.containsHeader)
+            , displayFilterButtons(other.displayFilterButtons)
+            , targetRangeAddress(other.targetRangeAddress)
+            , refreshDelay(other.refreshDelay) {
     }
 
-    virtual ~Private()
-    {
+    virtual ~Private() {
 //         delete source;
 //         delete sort;
         delete filter;
@@ -86,13 +83,13 @@ public:
     Filter* filter;
     SubtotalRules* subtotalRules;
     QString name;
-    bool isSelection                    : 1;
-    bool onUpdateKeepStyles             : 1;
-    bool onUpdateKeepSize               : 1;
-    bool hasPersistentData              : 1;
-    enum { Row, Column } orientation    : 1;
-    bool containsHeader                 : 1;
-    bool displayFilterButtons           : 1;
+bool isSelection                    : 1;
+bool onUpdateKeepStyles             : 1;
+bool onUpdateKeepSize               : 1;
+bool hasPersistentData              : 1;
+enum { Row, Column } orientation    : 1;
+bool containsHeader                 : 1;
+bool displayFilterButtons           : 1;
     Region targetRangeAddress;
     int refreshDelay;
 
@@ -101,18 +98,18 @@ private:
 };
 
 Database::Database()
-    : d( new Private )
+        : d(new Private)
 {
 }
 
-Database::Database( const QString& name )
-    : d( new Private )
+Database::Database(const QString& name)
+        : d(new Private)
 {
     d->name = name;
 }
 
 Database::Database(const Database& other)
-    : d(other.d)
+        : d(other.d)
 {
 }
 
@@ -155,7 +152,7 @@ bool Database::displayFilterButtons() const
     return d->displayFilterButtons;
 }
 
-void Database::setDisplayFilterButtons( bool enable )
+void Database::setDisplayFilterButtons(bool enable)
 {
     d->displayFilterButtons = enable;
 }
@@ -165,9 +162,9 @@ const KSpread::Region& Database::range() const
     return d->targetRangeAddress;
 }
 
-void Database::setRange( const Region& region )
+void Database::setRange(const Region& region)
 {
-    Q_ASSERT( region.isContiguous() );
+    Q_ASSERT(region.isContiguous());
     d->targetRangeAddress = region;
 }
 
@@ -196,103 +193,81 @@ bool Database::loadOdf(const KoXmlElement& element, const Map* map)
 {
     if (element.hasAttributeNS(KoXmlNS::table, "name"))
         d->name = element.attributeNS(KoXmlNS::table, "name", QString());
-    if (element.hasAttributeNS(KoXmlNS::table, "is-selection"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "is-selection")) {
         if (element.attributeNS(KoXmlNS::table, "is-selection", "false") == "true")
             d->isSelection = true;
         else
             d->isSelection = false;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-styles"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-styles")) {
         if (element.attributeNS(KoXmlNS::table, "on-update-keep-styles", "false") == "true")
             d->onUpdateKeepStyles = true;
         else
             d->onUpdateKeepStyles = false;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-size"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-size")) {
         if (element.attributeNS(KoXmlNS::table, "on-update-keep-size", "true") == "false")
             d->onUpdateKeepSize = false;
         else
             d->onUpdateKeepSize = true;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "has-persistent-data"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "has-persistent-data")) {
         if (element.attributeNS(KoXmlNS::table, "has-persistent-data", "true") == "false")
             d->hasPersistentData = false;
         else
             d->hasPersistentData = true;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "orientation"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "orientation")) {
         if (element.attributeNS(KoXmlNS::table, "orientation", "row") == "column")
             d->orientation = Private::Column;
         else
             d->orientation = Private::Row;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "contains-header"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "contains-header")) {
         if (element.attributeNS(KoXmlNS::table, "contains-header", "true") == "false")
             d->containsHeader = false;
         else
             d->containsHeader = true;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "display-filter-buttons"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "display-filter-buttons")) {
         if (element.attributeNS(KoXmlNS::table, "display-filter-buttons", "false") == "true")
             d->displayFilterButtons = true;
         else
             d->displayFilterButtons = false;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "target-range-address"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
         d->targetRangeAddress = Region(Region::loadOdf(address), map);
         if (!d->targetRangeAddress.isValid())
             return false;
     }
-    if (element.hasAttributeNS(KoXmlNS::table, "refresh-delay"))
-    {
+    if (element.hasAttributeNS(KoXmlNS::table, "refresh-delay")) {
         bool ok = false;
         d->refreshDelay = element.attributeNS(KoXmlNS::table, "refresh-delay", QString()).toInt(&ok);
         if (!ok || d->refreshDelay < 0)
             return false;
     }
     KoXmlElement child;
-    forEachElement(child, element)
-    {
+    forEachElement(child, element) {
         if (child.namespaceURI() != KoXmlNS::table)
             continue;
-        if (child.localName() == "database-source-sql")
-        {
+        if (child.localName() == "database-source-sql") {
             // TODO
-        }
-        else if (child.localName() == "database-source-table")
-        {
+        } else if (child.localName() == "database-source-table") {
             // TODO
-        }
-        else if (child.localName() == "database-source-query")
-        {
+        } else if (child.localName() == "database-source-query") {
             // TODO
-        }
-        else if (child.localName() == "sort")
-        {
+        } else if (child.localName() == "sort") {
             // TODO
-        }
-        else if (child.localName() == "filter")
-        {
+        } else if (child.localName() == "filter") {
             d->filter = new Filter();
-            if (!d->filter->loadOdf(child, map))
-            {
+            if (!d->filter->loadOdf(child, map)) {
                 delete d->filter;
                 d->filter = 0;
                 return false;
             }
-        }
-        else if (child.localName() == "subtotal-rules")
-        {
+        } else if (child.localName() == "subtotal-rules") {
             // TODO
         }
     }
@@ -335,12 +310,12 @@ void Database::saveOdf(KoXmlWriter& xmlWriter) const
     xmlWriter.endElement();
 }
 
-void Database::operator=( const Database& other )
+void Database::operator=(const Database & other)
 {
     d = other.d;
 }
 
-bool Database::operator==( const Database& other ) const
+bool Database::operator==(const Database& other) const
 {
     // NOTE Stefan: Don't compare targetRangeAddress.
     if (d->name != other.d->name)
@@ -372,7 +347,7 @@ bool Database::operator==( const Database& other ) const
     return true;
 }
 
-bool Database::operator<( const Database& other ) const
+bool Database::operator<(const Database& other) const
 {
     return (d < other.d);
 }

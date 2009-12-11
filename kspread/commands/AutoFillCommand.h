@@ -52,8 +52,8 @@ public:
      */
     virtual ~AutoFillCommand();
 
-    void setSourceRange( const QRect& range );
-    void setTargetRange( const QRect& range );
+    void setSourceRange(const QRect& range);
+    void setTargetRange(const QRect& range);
 
     /**
      * Executes the actual operation.
@@ -68,12 +68,14 @@ public:
     static QStringList *shortDay;
 
 private:
-    void fillSequence( const QList<Cell>& _srcList,
-                       const QList<Cell>& _destList,
-                       const AutoFillSequence& _seqList,
-                       bool down = true );
+    void fillSequence(const QList<Cell>& _srcList,
+                      const QList<Cell>& _destList,
+                      const AutoFillSequence& _seqList,
+                      bool down = true);
     // dummy
-    virtual Value newValue( Element*, int, int, bool*, Format::Type* ) { return Value(); }
+    virtual Value newValue(Element*, int, int, bool*, Format::Type*) {
+        return Value();
+    }
 
 private:
     QRect m_sourceRange;

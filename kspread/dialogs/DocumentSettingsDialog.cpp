@@ -66,8 +66,8 @@ public:
 
 
 DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* parent)
-    : KPageDialog(parent)
-    , d(new Private)
+        : KPageDialog(parent)
+        , d(new Private)
 {
     setObjectName("DocumentSettingsDialog");
     setCaption(i18n("Document Settings"));
@@ -75,7 +75,7 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
     setButtons(Ok | Cancel/* | Default | Reset*/);
     setDefaultButton(Ok);
 
-    connect(this, SIGNAL(okClicked()), this,SLOT(slotApply()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
 //     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
 //     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
@@ -105,36 +105,36 @@ void DocumentSettingsDialog::slotReset()
 }
 
 
-parameterLocale::parameterLocale(Selection* selection, KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
+parameterLocale::parameterLocale(Selection* selection, KVBox *box , char * /*name*/)
+        : QObject(box->parent())
 {
     m_selection = selection;
-    m_bUpdateLocale=false;
+    m_bUpdateLocale = false;
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
-  KVBox* tmpQGroupBox = box;
+    KVBox* tmpQGroupBox = box;
 
-  KLocale* locale = selection->activeSheet()->map()->calculationSettings()->locale();
+    KLocale* locale = selection->activeSheet()->map()->calculationSettings()->locale();
 
-  m_language=new QLabel( tmpQGroupBox );
-  m_number=new QLabel( tmpQGroupBox );
-  m_date=new QLabel( tmpQGroupBox );
-  m_shortDate=new QLabel( tmpQGroupBox );
-  m_time=new QLabel( tmpQGroupBox );
-  m_money=new QLabel( tmpQGroupBox );
+    m_language = new QLabel(tmpQGroupBox);
+    m_number = new QLabel(tmpQGroupBox);
+    m_date = new QLabel(tmpQGroupBox);
+    m_shortDate = new QLabel(tmpQGroupBox);
+    m_time = new QLabel(tmpQGroupBox);
+    m_money = new QLabel(tmpQGroupBox);
 
-  updateToMatchLocale(locale);
+    updateToMatchLocale(locale);
 
-  m_updateButton=new QPushButton ( i18n("&Use System's Locale Settings"), tmpQGroupBox);
-  connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
+    m_updateButton = new QPushButton(i18n("&Use System's Locale Settings"), tmpQGroupBox);
+    connect(m_updateButton, SIGNAL(clicked()), this, SLOT(updateDefaultSystemConfig()));
 
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    box->layout()->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
 void parameterLocale::apply()
 {
     if (m_bUpdateLocale) {
         const QList<Sheet*> sheets = m_selection->activeSheet()->map()->sheetList();
-        foreach (Sheet* sheet, sheets) {
+        foreach(Sheet* sheet, sheets) {
             sheet->updateLocale();
         }
     }
@@ -142,20 +142,20 @@ void parameterLocale::apply()
 
 void parameterLocale::updateDefaultSystemConfig()
 {
-    m_bUpdateLocale=true;
+    m_bUpdateLocale = true;
     KLocale* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
     static_cast<Localization*>(locale)->defaultSystemConfig();
-    updateToMatchLocale( locale );
+    updateToMatchLocale(locale);
 }
 
 void parameterLocale::updateToMatchLocale(KLocale* locale)
 {
-  m_language->setText( i18n("Language: %1", locale->language() ));
-  m_number->setText( i18n("Default number format: %1", locale->formatNumber(12.55) )); // krazy:exclude=i18ncheckarg
-  m_date->setText( i18n("Long date format: %1", locale->formatDate( QDate::currentDate() )));
-  m_shortDate->setText( i18n("Short date format: %1", locale->formatDate( QDate::currentDate() ,KLocale::ShortDate) ));
-  m_time->setText( i18n("Time format: %1", locale->formatTime( QTime::currentTime() ) ));
-  m_money->setText( i18n("Currency format: %1", locale->formatMoney(12.55) ));
+    m_language->setText(i18n("Language: %1", locale->language()));
+    m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg
+    m_date->setText(i18n("Long date format: %1", locale->formatDate(QDate::currentDate())));
+    m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate() , KLocale::ShortDate)));
+    m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
+    m_money->setText(i18n("Currency format: %1", locale->formatMoney(12.55)));
 }
 
 #include "DocumentSettingsDialog.moc"

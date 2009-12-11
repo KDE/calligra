@@ -30,17 +30,17 @@ public:
     KSpread::MoveTo moveTo;
     MethodOfCalc calcMethod;
     double indentValue;
-    bool verticalScrollBar      : 1;
-    bool horizontalScrollBar    : 1;
-    bool columnHeader           : 1;
-    bool rowHeader              : 1;
-    bool showStatusBar          : 1;
-    bool showTabBar             : 1;
-    bool captureAllArrowKeys    : 1;
+bool verticalScrollBar      : 1;
+bool horizontalScrollBar    : 1;
+bool columnHeader           : 1;
+bool rowHeader              : 1;
+bool showStatusBar          : 1;
+bool showTabBar             : 1;
+bool captureAllArrowKeys    : 1;
 };
 
 ApplicationSettings::ApplicationSettings()
-    : d(new Private)
+        : d(new Private)
 {
     d->gridColor = Qt::lightGray;
     d->pageBorderColor = Qt::red;
@@ -107,7 +107,7 @@ bool ApplicationSettings::showColumnHeader() const
 
 void ApplicationSettings::setShowRowHeader(bool show)
 {
-    d->rowHeader=show;
+    d->rowHeader = show;
 }
 
 bool ApplicationSettings::showRowHeader() const

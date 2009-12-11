@@ -114,10 +114,10 @@ void CellToolBase::Private::updateLocationComboBox()
 }
 
 #define ACTION_EXEC( name, command ) { \
-    QAction *a = q->action(name); \
-    const bool blocked = a->blockSignals(true); \
-    a->command; \
-    a->blockSignals(blocked); \
+        QAction *a = q->action(name); \
+        const bool blocked = a->blockSignals(true); \
+        a->command; \
+        a->blockSignals(blocked); \
     }
 
 void CellToolBase::Private::updateActions(const Cell& cell)
@@ -1326,14 +1326,15 @@ void CellToolBase::Private::createPopupMenuActions()
     popupMenuActions.insert("listChoose", action);
 }
 
-void CellToolBase::Private::relayoutDocker (bool wide) {
+void CellToolBase::Private::relayoutDocker(bool wide)
+{
     // user input is moved accordingly to the "wide" param, the rest stays in one place
     if (userInput->hasFocus()) return;  // do nothing while the user input has focus
-    widgetLayout->removeWidget (userInput);
+    widgetLayout->removeWidget(userInput);
     if (wide)
-      widgetLayout->addWidget (userInput, 0, 3);
+        widgetLayout->addWidget(userInput, 0, 3);
     else
-      widgetLayout->addWidget (userInput, 1, 0, 1, 5);
+        widgetLayout->addWidget(userInput, 1, 0, 1, 5);
     hasWideLayout = wide;
 }
 

@@ -37,8 +37,12 @@ public:
     DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Database>::garbageCollection(); }
+    virtual void triggerGarbageCollection() {
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    }
+    virtual void garbageCollection() {
+        RectStorage<Database>::garbageCollection();
+    }
 };
 
 } // namespace KSpread

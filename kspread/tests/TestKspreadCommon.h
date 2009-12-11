@@ -30,14 +30,14 @@ using namespace KSpread;
 
 namespace QTest
 {
-  template<>
-  char *toString(const Value& value)
-  {
+template<>
+char *toString(const Value& value)
+{
     QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
+    QTextStream ts(&message, QIODevice::WriteOnly);
     ts << value;
     return qstrdup(message.toLatin1());
-  }
+}
 }
 
 

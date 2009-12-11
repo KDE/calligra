@@ -49,73 +49,77 @@ class KSPREAD_EXPORT StyleManager
     friend class StyleManagerDialog;
 
 public:
-  StyleManager();
-  ~StyleManager();
+    StyleManager();
+    ~StyleManager();
 
-  QDomElement save( QDomDocument & doc );
-  bool loadXML( KoXmlElement const & styles );
+    QDomElement save(QDomDocument & doc);
+    bool loadXML(KoXmlElement const & styles);
 
-  void saveOdf( KoGenStyles &mainStyles );
-  void loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
+    void saveOdf(KoGenStyles &mainStyles);
+    void loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
 
-  CustomStyle * defaultStyle() const { return m_defaultStyle; }
+    CustomStyle * defaultStyle() const {
+        return m_defaultStyle;
+    }
 
-  /**
-   * Searches for a style named \p name in the map of styles.
-   * On OpenDocument loading, it searches the name in the map sorted
-   * by the OpenDocument internal name .
-   * \return the custom style named \p name
-   */
-  CustomStyle * style( QString const & name ) const;
+    /**
+     * Searches for a style named \p name in the map of styles.
+     * On OpenDocument loading, it searches the name in the map sorted
+     * by the OpenDocument internal name .
+     * \return the custom style named \p name
+     */
+    CustomStyle * style(QString const & name) const;
 
-  void resetDefaultStyle ();
+    void resetDefaultStyle();
 
-  bool checkCircle( QString const & name, QString const & parent );
-  bool validateStyleName( QString const & name, CustomStyle * style );
-  void changeName( QString const & oldName, QString const & newName );
+    bool checkCircle(QString const & name, QString const & parent);
+    bool validateStyleName(QString const & name, CustomStyle * style);
+    void changeName(QString const & oldName, QString const & newName);
 
-  void insertStyle (CustomStyle *style);
+    void insertStyle(CustomStyle *style);
 
-  void takeStyle( CustomStyle * style );
-  void createBuiltinStyles();
+    void takeStyle(CustomStyle * style);
+    void createBuiltinStyles();
 
-  QStringList styleNames() const;
-  int count() const { return m_styles.count(); }
+    QStringList styleNames() const;
+    int count() const {
+        return m_styles.count();
+    }
 
-  /**
-   * Loads OpenDocument auto styles.
-   * The auto styles are preloaded, because an auto style could be shared
-   * among cells. So, preloading prevents a multiple loading of the same
-   * auto style.
-   * This method is called before the cell loading process.
-   * @param stylesReader repository of styles
-   * @return a hash of styles with the OpenDocument internal name as key
-   */
-  Styles loadOdfAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles );
+    /**
+     * Loads OpenDocument auto styles.
+     * The auto styles are preloaded, because an auto style could be shared
+     * among cells. So, preloading prevents a multiple loading of the same
+     * auto style.
+     * This method is called before the cell loading process.
+     * @param stylesReader repository of styles
+     * @return a hash of styles with the OpenDocument internal name as key
+     */
+    Styles loadOdfAutoStyles(KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles);
 
-  /**
-   * Releases unused auto styles.
-   * If there are auto styles, which are not used by any cell (uncommon case)
-   * this method makes sure, that these get deleted.
-   * This method is called after the cell loading porcess.
-   * @param autoStyles a hash of styles with the OpenDocument internal name as
-   *                   key
-   * @see loadOdfAutoStyles
-   */
-  void releaseUnusedAutoStyles( Styles autoStyles );
+    /**
+     * Releases unused auto styles.
+     * If there are auto styles, which are not used by any cell (uncommon case)
+     * this method makes sure, that these get deleted.
+     * This method is called after the cell loading porcess.
+     * @param autoStyles a hash of styles with the OpenDocument internal name as
+     *                   key
+     * @see loadOdfAutoStyles
+     */
+    void releaseUnusedAutoStyles(Styles autoStyles);
 
-  /// OpenDocument name to internal name (on loading) or vice versa (on saving)
-  QString openDocumentName(const QString&) const;
+    /// OpenDocument name to internal name (on loading) or vice versa (on saving)
+    QString openDocumentName(const QString&) const;
 
- private:
-  void dump() const;
+private:
+    void dump() const;
 
-  CustomStyle * m_defaultStyle;
-  CustomStyles  m_styles; // builtin and custom made styles
+    CustomStyle * m_defaultStyle;
+    CustomStyles  m_styles; // builtin and custom made styles
 
-  // OpenDocument name to internal name (on loading) or vice versa (on saving)
-  // NOTE: Temporary! Only valid while loading or saving OpenDocument files.
-  QHash<QString, QString>  m_oasisStyles;
+    // OpenDocument name to internal name (on loading) or vice versa (on saving)
+    // NOTE: Temporary! Only valid while loading or saving OpenDocument files.
+    QHash<QString, QString>  m_oasisStyles;
 };
 
 } // namespace KSpread

@@ -164,40 +164,37 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
 #if 0 // UNDOREDOLIMIT
-    int const newUndo=m_undoRedoLimit->value();
-    if( newUndo!=m_oldNbRedo )
-    {
-        config->group( "Misc" ).writeEntry( "UndoRedo", newUndo );
+    int const newUndo = m_undoRedoLimit->value();
+    if (newUndo != m_oldNbRedo) {
+        config->group("Misc").writeEntry("UndoRedo", newUndo);
         view->doc()->map()->settings()->setUndoRedoLimit(newUndo);
-        m_oldNbRedo=newUndo;
+        m_oldNbRedo = newUndo;
     }
 #endif
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
-    KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
-    switch(typeCompletion->currentIndex())
-    {
-        case 0:
-            tmpCompletion=KGlobalSettings::CompletionNone;
-            break;
-        case 1:
-            tmpCompletion=KGlobalSettings::CompletionShell;
-            break;
-        case 2:
-            tmpCompletion=KGlobalSettings::CompletionPopup;
-            break;
-        case 3:
-            tmpCompletion=KGlobalSettings::CompletionAuto;
-            break;
-        case 4:
-            tmpCompletion=KGlobalSettings::CompletionMan;
-            break;
+    KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionNone;
+    switch (typeCompletion->currentIndex()) {
+    case 0:
+        tmpCompletion = KGlobalSettings::CompletionNone;
+        break;
+    case 1:
+        tmpCompletion = KGlobalSettings::CompletionShell;
+        break;
+    case 2:
+        tmpCompletion = KGlobalSettings::CompletionPopup;
+        break;
+    case 3:
+        tmpCompletion = KGlobalSettings::CompletionAuto;
+        break;
+    case 4:
+        tmpCompletion = KGlobalSettings::CompletionMan;
+        break;
     }
 
 
-    if(comboChanged)
-    {
+    if (comboChanged) {
         view->doc()->map()->settings()->setCompletionMode(tmpCompletion);
-        parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
+        parameterGroup.writeEntry("Completion Mode", (int)tmpCompletion);
     }
 #endif
 }
@@ -251,9 +248,9 @@ void PreferenceDialog::Private::applyOpenSaveOptions()
 
     int value = fileOptions.m_recentFilesEntries->value();
     if (value != oldRecentFilesEntries) {
-       parameterGroup.writeEntry("NbRecentFile", value);
-       view->changeNbOfRecentFiles(value);
-       oldRecentFilesEntries = value;
+        parameterGroup.writeEntry("NbRecentFile", value);
+        view->changeNbOfRecentFiles(value);
+        oldRecentFilesEntries = value;
     }
 
     value = fileOptions.m_autoSaveDelay->value();
@@ -295,8 +292,8 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
 
 
 PreferenceDialog::PreferenceDialog(View* view)
-    : KPageDialog(view)
-    , d(new Private)
+        : KPageDialog(view)
+        , d(new Private)
 {
     setObjectName("PreferenceDialog");
     setCaption(i18n("Configure KSpread"));
@@ -306,8 +303,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     d->view = view;
 
-    connect(this, SIGNAL(okClicked()), this,SLOT(slotApply()));
-    connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
     QWidget* widget = 0;
@@ -455,29 +452,29 @@ void PreferenceDialog::unitChanged(int index)
 
 
 #if 0 // UNDOREDOLIMIT
-  m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
+m_oldNbRedo = config->group("Misc").readEntry("UndoRedo", m_oldNbRedo);
 
-  m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
-  m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
-  m_undoRedoLimit->setRange(10, 60, 1);
+m_undoRedoLimit = new KIntNumInput(m_oldNbRedo, tmpQGroupBox);
+m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
+m_undoRedoLimit->setRange(10, 60, 1);
 #endif
 
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
-  QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
+QLabel *label = new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
-  typeCompletion=new KComboBox(tmpQGroupBox);
-  label->setBuddy(typeCompletion);
-  typeCompletion->setWhatsThis( i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
+typeCompletion = new KComboBox(tmpQGroupBox);
+label->setBuddy(typeCompletion);
+typeCompletion->setWhatsThis(i18n("Lets you choose the (auto) text completion mode from a range of options in the drop down selection box."));
 
-  listType+=i18n("None");
-  listType+=i18n("Manual");
-  listType+=i18n("Popup");
-  listType+=i18n("Automatic");
-  listType+=i18n("Semi-Automatic");
-  typeCompletion->insertItems( 0,listType);
-  typeCompletion->setCurrentIndex(0);
-  comboChanged=false;
-  connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
+listType += i18n("None");
+listType += i18n("Manual");
+listType += i18n("Popup");
+listType += i18n("Automatic");
+listType += i18n("Semi-Automatic");
+typeCompletion->insertItems(0, listType);
+typeCompletion->setCurrentIndex(0);
+comboChanged = false;
+connect(typeCompletion, SIGNAL(activated(const QString &)), this, SLOT(slotTextComboChanged(const QString &)));
 #endif
 
 #include "PreferenceDialog.moc"

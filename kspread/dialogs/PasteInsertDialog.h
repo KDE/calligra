@@ -40,10 +40,10 @@ public:
 public slots:
     void slotOk();
 private:
-  Selection* m_selection;
-  QRadioButton *rb1;
-  QRadioButton *rb2;
-  QRect  rect;
+    Selection* m_selection;
+    QRadioButton *rb1;
+    QRadioButton *rb2;
+    QRect  rect;
 };
 
 } // namespace KSpread

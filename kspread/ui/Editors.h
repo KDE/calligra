@@ -68,57 +68,57 @@ class View;
 class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
 public:
-  /**
-   * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
-   *
-   * @param textEdit The QTextEdit widget which the highlighter should operate on
-   * @param selection The Selection object
-   */
-  FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
-  virtual ~FormulaEditorHighlighter();
+    /**
+     * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
+     *
+     * @param textEdit The QTextEdit widget which the highlighter should operate on
+     * @param selection The Selection object
+     */
+    FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
+    virtual ~FormulaEditorHighlighter();
 
 
-  /**
-   * Called automatically by KTextEditor to highlight text when modified.
-   */
-  virtual void highlightBlock(const QString& text);
-  /**
-   *
-   */
-  const Tokens& formulaTokens() const;
-  /**
-   *
-   */
-  uint rangeCount() const;
-  /**
-   * Returns true if any of the ranges or cells in the Formula.have changed since the
-   * last call to @ref FormulaEditorHighlighter::rangeChanged()
-   */
-  bool rangeChanged() const;
+    /**
+     * Called automatically by KTextEditor to highlight text when modified.
+     */
+    virtual void highlightBlock(const QString& text);
+    /**
+     *
+     */
+    const Tokens& formulaTokens() const;
+    /**
+     *
+     */
+    uint rangeCount() const;
+    /**
+     * Returns true if any of the ranges or cells in the Formula.have changed since the
+     * last call to @ref FormulaEditorHighlighter::rangeChanged()
+     */
+    bool rangeChanged() const;
 
-  /**
-   * Sets the highlighter's range changed flag to false.
-   */
-  void resetRangeChanged();
+    /**
+     * Sets the highlighter's range changed flag to false.
+     */
+    void resetRangeChanged();
 
 
 
 protected:
-  /**
-  * Returns the position of the brace matching the one found at position pos
-  */
-  int findMatchingBrace(int pos);
-  /**
-  * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
-  * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
-  */
-  void handleBrace(uint index);
+    /**
+    * Returns the position of the brace matching the one found at position pos
+    */
+    int findMatchingBrace(int pos);
+    /**
+    * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
+    * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
+    */
+    void handleBrace(uint index);
 
 private:
-    Q_DISABLE_COPY( FormulaEditorHighlighter )
+    Q_DISABLE_COPY(FormulaEditorHighlighter)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 
@@ -138,19 +138,19 @@ class FunctionCompletion : public QObject
 
 public:
 
-    FunctionCompletion( CellEditor* editor );
+    FunctionCompletion(CellEditor* editor);
     ~FunctionCompletion();
 
     /**
     * Handles various keyboard and mouse actions which may occur on the autocompletion popup list
     */
-    bool eventFilter( QObject *o, QEvent *e );
+    bool eventFilter(QObject *o, QEvent *e);
 
     /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
     * @param choices A list of possible function names which match the characters that the user has already entered.
     */
-    void showCompletion( const QStringList &choices );
+    void showCompletion(const QStringList &choices);
 
 public slots:
     /**
@@ -159,19 +159,19 @@ public slots:
     void doneCompletion();
 
 private slots:
-    void itemSelected( QListWidgetItem* item = 0 );
+    void itemSelected(QListWidgetItem* item = 0);
 
 signals:
     /**
     * Emitted, if the user selects a function name from the list.
     */
-    void selectedCompletion( const QString& item );
+    void selectedCompletion(const QString& item);
 
 private:
     class Private;
     Private * const d;
-    FunctionCompletion( const FunctionCompletion& );
-    FunctionCompletion& operator=( const FunctionCompletion& );
+    FunctionCompletion(const FunctionCompletion&);
+    FunctionCompletion& operator=(const FunctionCompletion&);
 };
 
 
@@ -197,8 +197,8 @@ public:
     const Cell& cell() const;
     Selection* selection() const;
 
-    void handleKeyPressEvent( QKeyEvent* _ev );
-    void handleInputMethodEvent( QInputMethodEvent  * _ev );
+    void handleKeyPressEvent(QKeyEvent* _ev);
+    void handleInputMethodEvent(QInputMethodEvent  * _ev);
     void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
 
     int cursorPosition() const;
@@ -238,20 +238,20 @@ private slots:
     void  slotSelectionDestroyed();
 
 protected:
-    void resizeEvent( QResizeEvent* );
+    void resizeEvent(QResizeEvent*);
     /**
      * Steals some key events from the KLineEdit and sends
      * it to the KSpread::Canvas ( its parent ) instead.
      */
-    bool eventFilter( QObject* o, QEvent* e );
+    bool eventFilter(QObject* o, QEvent* e);
 
 protected slots:
     void checkFunctionAutoComplete();
     void triggerFunctionAutoComplete();
-    void functionAutoComplete( const QString& item );
+    void functionAutoComplete(const QString& item);
 
 private:
-    Q_DISABLE_COPY( CellEditor )
+    Q_DISABLE_COPY(CellEditor)
 
     class Private;
     Private * const d;
@@ -270,8 +270,8 @@ public:
     void setSelection(Selection* selection);
 
 public slots:
-    void slotAddAreaName( const QString & );
-    void slotRemoveAreaName( const QString & );
+    void slotAddAreaName(const QString &);
+    void slotRemoveAreaName(const QString &);
 private:
     LocationEditWidget *m_locationWidget;
 };
@@ -288,14 +288,14 @@ class LocationEditWidget : public KLineEdit
 public:
     LocationEditWidget(QWidget *parent, Selection* selection);
 
-    void addCompletionItem( const QString &_item );
-    void removeCompletionItem( const QString &_item );
+    void addCompletionItem(const QString &_item);
+    void removeCompletionItem(const QString &_item);
 
 private slots:
     void slotActivateItem();
 
 protected:
-    virtual void keyPressEvent( QKeyEvent * _ev );
+    virtual void keyPressEvent(QKeyEvent * _ev);
 private:
     Selection* m_selection;
     KCompletion completionList;
@@ -316,7 +316,7 @@ public:
     void setCellTool(CellToolBase* cellTool);
 
 Q_SIGNALS:
-    void textChanged (const QString &text);
+    void textChanged(const QString &text);
 
 public Q_SLOTS:
     void applyChanges();
@@ -328,9 +328,9 @@ protected:
     void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
 
-    void adjustHeight ();
+    void adjustHeight();
 private slots:
-    void slotTextChanged ();
+    void slotTextChanged();
 
 private:
     Q_DISABLE_COPY(ExternalEditor)
@@ -340,21 +340,21 @@ private:
 };
 
 #if 0 // KSPREAD_DISCARD_FORMULA_BAR
-  /**
- * The widget that appears above the sheet and allows to
- * edit the cells content.
- */
+/**
+* The widget that appears above the sheet and allows to
+* edit the cells content.
+*/
 class EditWidget : public KLineEdit
 {
     Q_OBJECT
 public:
-    EditWidget( QWidget *parent, Canvas *canvas,
-                QAbstractButton *cancelButton, QAbstractButton *okButton);
+    EditWidget(QWidget *parent, Canvas *canvas,
+               QAbstractButton *cancelButton, QAbstractButton *okButton);
 
-    virtual void setText( const QString& t );
+    virtual void setText(const QString& t);
 
     // Go into edit mode (enable the buttons)
-    void setEditMode( bool mode );
+    void setEditMode(bool mode);
 
     void showEditWidget(bool _show);
 
@@ -363,8 +363,8 @@ public slots:
     void slotDoneEdit();
 
 protected:
-    virtual void keyPressEvent ( QKeyEvent* _ev );
-    virtual void focusOutEvent( QFocusEvent* ev );
+    virtual void keyPressEvent(QKeyEvent* _ev);
+    virtual void focusOutEvent(QFocusEvent* ev);
 
 private:
     QAbstractButton* m_pCancelButton;
@@ -381,34 +381,34 @@ private:
  */
 class KSPREAD_EXPORT RegionSelector : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
-  enum DisplayMode { Widget, Dialog };
+    enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
+    enum DisplayMode { Widget, Dialog };
 
-  RegionSelector(QWidget* parent = 0);
-  ~RegionSelector();
+    RegionSelector(QWidget* parent = 0);
+    ~RegionSelector();
 
-  void setSelectionMode( SelectionMode mode );
-  void setSelection(Selection* selection);
-  void setDialog( QDialog* dialog );
-  void setLabel( const QString& text );
+    void setSelectionMode(SelectionMode mode);
+    void setSelection(Selection* selection);
+    void setDialog(QDialog* dialog);
+    void setLabel(const QString& text);
 
-  KTextEdit* textEdit() const;
+    KTextEdit* textEdit() const;
 
 protected:
-  bool eventFilter( QObject* obj, QEvent* event );
+    bool eventFilter(QObject* obj, QEvent* event);
 
 protected Q_SLOTS:
-  void switchDisplayMode( bool state );
-  void choiceChanged();
+    void switchDisplayMode(bool state);
+    void choiceChanged();
 
 private:
-    Q_DISABLE_COPY( RegionSelector )
+    Q_DISABLE_COPY(RegionSelector)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

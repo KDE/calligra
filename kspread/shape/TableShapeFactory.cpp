@@ -37,12 +37,12 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY( spreadsheetshape, KGenericFactory<TableShapePlugin>( "TableShape" ) )
+K_EXPORT_COMPONENT_FACTORY(spreadsheetshape, KGenericFactory<TableShapePlugin>("TableShape"))
 
-TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
+TableShapePlugin::TableShapePlugin(QObject * parent,  const QStringList&)
 {
-    KoShapeRegistry::instance()->add( new TableShapeFactory( parent ) );
-    KoToolRegistry::instance()->add( new TableToolFactory( parent ) );
+    KoShapeRegistry::instance()->add(new TableShapeFactory(parent));
+    KoToolRegistry::instance()->add(new TableToolFactory(parent));
 }
 
 
@@ -53,12 +53,12 @@ public:
 };
 
 
-TableShapeFactory::TableShapeFactory( QObject* parent )
-    : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
-    , d(new Private)
+TableShapeFactory::TableShapeFactory(QObject* parent)
+        : KoShapeFactory(parent, TableShapeId, i18n("Table"))
+        , d(new Private)
 {
     setToolTip(i18n("Table Shape"));
-    setIcon( "spreadsheetshape" );
+    setIcon("spreadsheetshape");
     setOdfElementNames(KoXmlNS::table, QStringList() << "table");
 }
 
@@ -84,7 +84,7 @@ KoShape* TableShapeFactory::createDefaultShape() const
     return shape;
 }
 
-KoShape* TableShapeFactory::createShape( const KoProperties* params ) const
+KoShape* TableShapeFactory::createShape(const KoProperties* params) const
 {
     Q_UNUSED(params);
     TableShape* shape = new TableShape();

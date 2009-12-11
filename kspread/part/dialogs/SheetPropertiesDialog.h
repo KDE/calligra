@@ -31,8 +31,10 @@ namespace KSpread
 
 class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
 {
- public:
-  explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+public:
+    explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class SheetPropertiesDialog : public KDialog
@@ -41,56 +43,56 @@ class SheetPropertiesDialog : public KDialog
 
 public:
 
-    SheetPropertiesDialog( QWidget* parent = 0 );
+    SheetPropertiesDialog(QWidget* parent = 0);
 
     ~SheetPropertiesDialog();
 
 
     Qt::LayoutDirection layoutDirection() const;
 
-    void setLayoutDirection( Qt::LayoutDirection dir );
+    void setLayoutDirection(Qt::LayoutDirection dir);
 
     bool autoCalc() const;
 
-    void setAutoCalculationEnabled( bool b );
+    void setAutoCalculationEnabled(bool b);
 
     bool showGrid() const;
 
-    void setShowGrid( bool b );
+    void setShowGrid(bool b);
 
     bool showPageBorders() const;
 
-    void setShowPageBorders( bool b );
+    void setShowPageBorders(bool b);
 
     bool showFormula() const;
 
-    void setShowFormula( bool b );
+    void setShowFormula(bool b);
 
     bool hideZero() const;
 
-    void setHideZero( bool b );
+    void setHideZero(bool b);
 
     bool showFormulaIndicator() const;
 
-    void setShowFormulaIndicator( bool b );
+    void setShowFormulaIndicator(bool b);
 
     bool showCommentIndicator() const;
 
-    void setShowCommentIndicator( bool b );
+    void setShowCommentIndicator(bool b);
 
     bool columnAsNumber() const;
 
-    void setColumnAsNumber( bool b );
+    void setColumnAsNumber(bool b);
 
     bool lcMode() const;
 
-    void setLcMode( bool b );
+    void setLcMode(bool b);
 
     bool capitalizeFirstLetter() const;
 
-    void setCapitalizeFirstLetter( bool b );
+    void setCapitalizeFirstLetter(bool b);
 public slots:
-	virtual void slotDefault();
+    virtual void slotDefault();
 private:
     SheetPropertiesWidget* m_widget;
 };

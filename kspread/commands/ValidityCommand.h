@@ -35,7 +35,7 @@ class ValidityCommand : public AbstractRegionCommand
 {
 public:
     ValidityCommand();
-    void setValidity( Validity validity );
+    void setValidity(Validity validity);
 
 protected:
     virtual bool process(Element* element);

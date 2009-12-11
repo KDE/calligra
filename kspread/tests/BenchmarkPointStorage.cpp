@@ -40,38 +40,33 @@ void PointStorageBenchmark::testInsertionPerformance()
     int rows = 10000;
     long counter = 0;
     start = Time::stamp();
-    for ( int r = row; r <= rows; ++r )
-    {
-        for ( int c = col; c <= cols; c += 1 )
-        {
-            storage.insert( c, r, c );
+    for (int r = row; r <= rows; ++r) {
+        for (int c = col; c <= cols; c += 1) {
+            storage.insert(c, r, c);
             counter += 1;
         }
     }
-    ticks = Time::elapsed( start );
-    qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
+    ticks = Time::elapsed(start);
+    qDebug() << qPrintable(Time::printAverage(ticks, counter));
 
     qDebug() << "measuring random singular insertion...";
     storage.clear();
     counter = 0;
-    while ( counter < Time::iterations )
-    {
+    while (counter < Time::iterations) {
         col = 1 + rand() % 1000;
         row = 1 + rand() % 1000;
         cols = col + 1;
         rows = row + 1;
         start = Time::stamp();
-        for ( int r = row; r <= rows; ++r )
-        {
-            for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
-            {
-                storage.insert( c, r, c );
+        for (int r = row; r <= rows; ++r) {
+            for (int c = col; c <= cols && counter < Time::iterations; c += 1) {
+                storage.insert(c, r, c);
                 counter += 1;
             }
         }
-        ticks += Time::elapsed( start );
+        ticks += Time::elapsed(start);
     }
-    qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
+    qDebug() << qPrintable(Time::printAverage(ticks, counter));
 }
 
 void PointStorageBenchmark::testLookupPerformance()
@@ -88,26 +83,23 @@ void PointStorageBenchmark::testLookupPerformance()
         8000, 8000,    // hopelessly large
         10, 32757,     // some complete columns; KS_colMax-10, because of max lookup range of width 10 below
         32757, 10      // some complete rows; KS_rowMax-10, because of max lookup range of height 10 below
-        };
+    };
 
     PointStorage<int> storage;
 
-    for (uint sc = 0; sc < sizeof(scenarios)/sizeof(scenarios[0])/2; sc++)
-    {
+    for (uint sc = 0; sc < sizeof(scenarios) / sizeof(scenarios[0]) / 2; sc++) {
         int maxrow = scenarios[sc*2];
         int maxcol = scenarios[sc*2+1];
 
         storage.clear();
-        for ( int r = 0; r < maxrow; ++r )
-        {
-            for ( int c = 0; c < maxcol; ++c )
-            {
+        for (int r = 0; r < maxrow; ++r) {
+            for (int c = 0; c < maxcol; ++c) {
                 storage.m_data << c;
-                storage.m_cols << ( c + 1 );
+                storage.m_cols << (c + 1);
             }
             storage.m_rows << r*maxcol;
         }
-    //     qDebug() << endl << qPrintable( storage.dump() );
+        //     qDebug() << endl << qPrintable( storage.dump() );
         QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
         qDebug() << "start measuring..." << prefix;
 
@@ -119,144 +111,133 @@ void PointStorageBenchmark::testLookupPerformance()
         int cols = 0;
         int rows = 0;
         long counter = 0;
-        while ( counter < Time::iterations )
-        {
+        while (counter < Time::iterations) {
             col = 1 + rand() % maxcol;
             row = 1 + rand() % maxrow;
-            cols = col + 1 * ( rand() % 10 );
+            cols = col + 1 * (rand() % 10);
             rows = row + rand() % 10;
             start = Time::stamp();
-            for ( int r = row; r <= rows && counter < Time::iterations; ++r )
-            {
-                for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
-                {
-                    v = storage.lookup( c, r );
+            for (int r = row; r <= rows && counter < Time::iterations; ++r) {
+                for (int c = col; c <= cols && counter < Time::iterations; c += 1) {
+                    v = storage.lookup(c, r);
                     counter += 1;
                 }
             }
-            ticks += Time::elapsed( start );
+            ticks += Time::elapsed(start);
         }
-        qDebug() << qPrintable( Time::printAverage( ticks, counter, prefix ) );
+        qDebug() << qPrintable(Time::printAverage(ticks, counter, prefix));
     }
 }
 
 void PointStorageBenchmark::testInsertColumnsPerformance()
 {
     PointStorage<int> storage;
-    for ( int c = 0; c < KS_colMax; ++c )
-    {
+    for (int c = 0; c < KS_colMax; ++c) {
         storage.m_data << 1;
         storage.m_cols << 1;
     }
     storage.m_rows << 0;
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.insertColumns( 42, 3 );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.insertColumns(42, 3);
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testDeleteColumnsPerformance()
 {
     PointStorage<int> storage;
-    for ( int c = 0; c < KS_colMax; ++c )
-    {
+    for (int c = 0; c < KS_colMax; ++c) {
         storage.m_data << 1;
         storage.m_cols << 1;
     }
     storage.m_rows << 0;
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.removeColumns( 42, 3 );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.removeColumns(42, 3);
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testInsertRowsPerformance()
 {
     PointStorage<int> storage;
-    for ( int r = 0; r < KS_rowMax; ++r )
-    {
+    for (int r = 0; r < KS_rowMax; ++r) {
         storage.m_data << 1;
         storage.m_cols << 1;
         storage.m_rows << r;
     }
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.insertRows( 42, 3 );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.insertRows(42, 3);
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testDeleteRowsPerformance()
 {
     PointStorage<int> storage;
-    for ( int r = 0; r < KS_rowMax; ++r )
-    {
+    for (int r = 0; r < KS_rowMax; ++r) {
         storage.m_data << 1;
         storage.m_cols << 1;
         storage.m_rows << r;
     }
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.removeRows( 42, 3 );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.removeRows(42, 3);
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testShiftLeftPerformance()
 {
     PointStorage<int> storage;
-    for ( int c = 0; c < KS_colMax; ++c )
-    {
+    for (int c = 0; c < KS_colMax; ++c) {
         storage.m_data << 1;
         storage.m_cols << 1;
     }
     storage.m_rows << 0;
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.removeShiftLeft( QRect( 42, 1, 3, 1) );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.removeShiftLeft(QRect(42, 1, 3, 1));
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testShiftRightPerformance()
 {
     PointStorage<int> storage;
-    for ( int c = 0; c < KS_colMax; ++c )
-    {
+    for (int c = 0; c < KS_colMax; ++c) {
         storage.m_data << 1;
         storage.m_cols << 1;
     }
     storage.m_rows << 0;
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10000; ++i )
-        storage.insertShiftRight( QRect( 42, 1, 3, 1) );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+    for (int i = 1; i < 10000; ++i)
+        storage.insertShiftRight(QRect(42, 1, 3, 1));
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10000));
 }
 
 void PointStorageBenchmark::testShiftUpPerformance()
 {
     PointStorage<int> storage;
-    for ( int r = 0; r < KS_rowMax; ++r )
-    {
+    for (int r = 0; r < KS_rowMax; ++r) {
         storage.m_data << 1;
         storage.m_cols << 1;
         storage.m_rows << r;
     }
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 10; ++i )
-        storage.removeShiftUp( QRect( 1, 42, 1, 3) );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10 ) );
+    for (int i = 1; i < 10; ++i)
+        storage.removeShiftUp(QRect(1, 42, 1, 3));
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 10));
 }
 
 void PointStorageBenchmark::testShiftDownPerformance()
 {
     PointStorage<int> storage;
-    for ( int r = 0; r < KS_rowMax; ++r )
-    {
+    for (int r = 0; r < KS_rowMax; ++r) {
         storage.m_data << 1;
         storage.m_cols << 1;
         storage.m_rows << r;
@@ -264,9 +245,9 @@ void PointStorageBenchmark::testShiftDownPerformance()
     storage.m_rows << 0;
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 1000; ++i )
-        storage.insertShiftDown( QRect( 1, 42, 1, 3) );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
+    for (int i = 1; i < 1000; ++i)
+        storage.insertShiftDown(QRect(1, 42, 1, 3));
+    qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 1000));
 }
 
 void PointStorageBenchmark::testIterationPerformance()
@@ -287,38 +268,34 @@ void PointStorageBenchmark::testIterationPerformance()
         10, 32757,     // some complete columns; KS_colMax-10, because of max lookup range of width 10 below
         32757, 10      // some complete rows; KS_rowMax-10, because of max lookup range of height 10 below
 #endif
-        };
+    };
 
     PointStorage<int> storage;
 
-    for (uint sc = 0; sc < sizeof(scenarios)/sizeof(scenarios[0])/2; sc++)
-    {
+    for (uint sc = 0; sc < sizeof(scenarios) / sizeof(scenarios[0]) / 2; sc++) {
         int maxrow = scenarios[sc*2];
         int maxcol = scenarios[sc*2+1];
 
         storage.clear();
-        for ( int r = 0; r < maxrow; ++r )
-        {
-            for ( int c = 0; c < maxcol; ++c )
-            {
+        for (int r = 0; r < maxrow; ++r) {
+            for (int c = 0; c < maxcol; ++c) {
                 storage.m_data << c;
-                storage.m_cols << ( c + 1 );
+                storage.m_cols << (c + 1);
             }
             storage.m_rows << r*maxcol;
         }
-    //     qDebug() << endl << qPrintable( storage.dump() );
+        //     qDebug() << endl << qPrintable( storage.dump() );
         QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
         qDebug() << "start measuring..." << prefix;
 
         Time::tval start = 0;
         int v;
         start = Time::stamp();
-        for ( int i = 0; i < storage.count(); ++i )
-        {
-            v = storage.data( i );
+        for (int i = 0; i < storage.count(); ++i) {
+            v = storage.data(i);
         }
-        Time::tval ticks = Time::elapsed( start );
-        qDebug() << qPrintable( Time::printAverage( ticks, storage.count(), prefix ) );
+        Time::tval ticks = Time::elapsed(start);
+        qDebug() << qPrintable(Time::printAverage(ticks, storage.count(), prefix));
     }
 }
 

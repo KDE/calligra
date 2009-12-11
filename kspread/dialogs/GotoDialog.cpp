@@ -42,45 +42,45 @@
 using namespace KSpread;
 
 GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-  setCaption( i18n("Goto Cell") );
-  setObjectName("GotoDialog");
-  setModal( true );
-  setButtons( Ok|Cancel );
+    setCaption(i18n("Goto Cell"));
+    setObjectName("GotoDialog");
+    setModal(true);
+    setButtons(Ok | Cancel);
 
-  m_selection = selection;
-  QWidget *page = new QWidget();
-  setMainWidget( page );
-  QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
+    m_selection = selection;
+    QWidget *page = new QWidget();
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout(page);
+    lay1->setMargin(KDialog::marginHint());
+    lay1->setSpacing(KDialog::spacingHint());
 
-  QLabel *label = new QLabel(i18n("Enter cell:"), page);
-  lay1->addWidget(label);
+    QLabel *label = new QLabel(i18n("Enter cell:"), page);
+    lay1->addWidget(label);
 
-  m_nameCell = new KComboBox( page );
-  m_nameCell->setEditable(true);
-  lay1->addWidget(m_nameCell);
+    m_nameCell = new KComboBox(page);
+    m_nameCell->setEditable(true);
+    lay1->addWidget(m_nameCell);
 
-  const Sheet* sheet = m_selection->activeSheet();
-  if( sheet && selection ) {
-    Cell cell(sheet, selection->cursor());
-    m_nameCell->addItem( cell.name() );
-    m_nameCell->addItem( cell.fullName() );
-  }
-  NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
-  m_nameCell->addItems( manager->areaNames() );
-  m_nameCell->setFocus();
+    const Sheet* sheet = m_selection->activeSheet();
+    if (sheet && selection) {
+        Cell cell(sheet, selection->cursor());
+        m_nameCell->addItem(cell.name());
+        m_nameCell->addItem(cell.fullName());
+    }
+    NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
+    m_nameCell->addItems(manager->areaNames());
+    m_nameCell->setFocus();
 
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
-           this, SLOT(textChanged ( const QString & )));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(m_nameCell, SIGNAL(textChanged(const QString &)),
+            this, SLOT(textChanged(const QString &)));
 
-  resize( QSize(320,50).expandedTo( minimumSizeHint() ) );
+    resize(QSize(320, 50).expandedTo(minimumSizeHint()));
 }
 
-void GotoDialog::textChanged ( const QString &_text )
+void GotoDialog::textChanged(const QString &_text)
 {
     enableButtonOk(!_text.isEmpty());
 }
@@ -89,16 +89,13 @@ void GotoDialog::slotOk()
 {
     QString tmp_upper = m_nameCell->currentText();
     Region region(tmp_upper, m_selection->activeSheet()->map(), m_selection->activeSheet());
-    if ( region.isValid() )
-    {
-      if ( region.firstSheet() != m_selection->activeSheet() )
-          m_selection->emitVisibleSheetRequested( region.firstSheet() );
-      m_selection->initialize(region);
-      accept();
-    }
-    else
-    {
-      m_nameCell->setItemText(m_nameCell->currentIndex(), "");
+    if (region.isValid()) {
+        if (region.firstSheet() != m_selection->activeSheet())
+            m_selection->emitVisibleSheetRequested(region.firstSheet());
+        m_selection->initialize(region);
+        accept();
+    } else {
+        m_nameCell->setItemText(m_nameCell->currentIndex(), "");
     }
 }
 

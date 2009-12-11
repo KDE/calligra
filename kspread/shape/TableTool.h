@@ -33,7 +33,7 @@ class TableTool : public CellToolBase
     Q_OBJECT
 
 public:
-    explicit TableTool( KoCanvasBase* canvas );
+    explicit TableTool(KoCanvasBase* canvas);
     ~TableTool();
 
     virtual void repaintDecorations();
@@ -41,7 +41,7 @@ public:
     virtual Selection* selection();
 
 public Q_SLOTS:
-    virtual void activate( bool temporary = false );
+    virtual void activate(bool temporary = false);
     virtual void deactivate();
 
 protected:
@@ -52,8 +52,8 @@ protected:
     virtual SheetView* sheetView(const Sheet* sheet) const;
 
 private Q_SLOTS:
-    void changeColumns( int num );
-    void changeRows( int num );
+    void changeColumns(int num);
+    void changeRows(int num);
     void sheetActivated(const QString& sheetName);
     void sheetsBtnClicked();
     void importDocument();
@@ -64,7 +64,7 @@ private:
     virtual QWidget* createOptionWidget();
 
 private:
-    Q_DISABLE_COPY( TableTool )
+    Q_DISABLE_COPY(TableTool)
 
     class Private;
     Private * const d;

@@ -35,134 +35,140 @@ class Region;
 
 class KSPREAD_EXPORT Damage
 {
-  public:
+public:
     virtual ~Damage() {}
 
-    typedef enum
-    {
-      Nothing = 0,
-      Document,
-      Workbook,
-      Sheet,
-      Range,
-      Cell,
-      Selection
+    typedef enum {
+        Nothing = 0,
+        Document,
+        Workbook,
+        Sheet,
+        Range,
+        Cell,
+        Selection
     } Type;
 
-    virtual Type type() const { return Nothing; }
+    virtual Type type() const {
+        return Nothing;
+    }
 };
 
 class KSPREAD_EXPORT CellDamage : public Damage
 {
-  public:
-    enum Change
-    {
-      Appearance = 0x01, ///< triggers a layout update and then a repaint
-      Binding    = 0x02, ///< on value changes; always triggered; for binding updates
-      Formula    = 0x04, ///< triggers a dependency update
-      NamedArea  = 0x10, ///< triggers a named area update
-      /// This indicates a value change. It is not triggered while a recalculation is in progress.
-      /// RecalcManager takes over in this case. Otherwise, circular dependencies would cause
-      /// infinite loops and the cells would be recalculated in arbitrary order.
-      Value      = 0x20
+public:
+    enum Change {
+        Appearance = 0x01, ///< triggers a layout update and then a repaint
+        Binding    = 0x02, ///< on value changes; always triggered; for binding updates
+        Formula    = 0x04, ///< triggers a dependency update
+        NamedArea  = 0x10, ///< triggers a named area update
+        /// This indicates a value change. It is not triggered while a recalculation is in progress.
+        /// RecalcManager takes over in this case. Otherwise, circular dependencies would cause
+        /// infinite loops and the cells would be recalculated in arbitrary order.
+        Value      = 0x20
     };
-    Q_DECLARE_FLAGS( Changes, Change )
+    Q_DECLARE_FLAGS(Changes, Change)
 
-    CellDamage( const KSpread::Cell& cell, Changes changes );
-    CellDamage( KSpread::Sheet* sheet, const Region& region, Changes changes );
+    CellDamage(const KSpread::Cell& cell, Changes changes);
+    CellDamage(KSpread::Sheet* sheet, const Region& region, Changes changes);
 
     virtual ~CellDamage();
 
-    virtual Type type() const { return Damage::Cell; }
+    virtual Type type() const {
+        return Damage::Cell;
+    }
 
     KSpread::Sheet* sheet() const;
     const Region& region() const;
 
     Changes changes() const;
 
-  private:
-    Q_DISABLE_COPY( CellDamage )
+private:
+    Q_DISABLE_COPY(CellDamage)
 
     class Private;
     Private * const d;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS( CellDamage::Changes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
 
 
 class KSPREAD_EXPORT SheetDamage : public Damage
 {
-  public:
+public:
 
-    enum Change
-    {
-      None              = 0x00,
-      ContentChanged    = 0x01,
-      PropertiesChanged = 0x02,
-      Hidden            = 0x04,
-      Shown             = 0x10,
-      ColumnsChanged    = 0x20,
-      RowsChanged       = 0x40
+    enum Change {
+        None              = 0x00,
+        ContentChanged    = 0x01,
+        PropertiesChanged = 0x02,
+        Hidden            = 0x04,
+        Shown             = 0x10,
+        ColumnsChanged    = 0x20,
+        RowsChanged       = 0x40
     };
-    Q_DECLARE_FLAGS( Changes, Change )
+    Q_DECLARE_FLAGS(Changes, Change)
 
-    SheetDamage( KSpread::Sheet* sheet, Changes changes );
+    SheetDamage(KSpread::Sheet* sheet, Changes changes);
 
     virtual ~SheetDamage();
 
-    virtual Type type() const { return Damage::Sheet; }
+    virtual Type type() const {
+        return Damage::Sheet;
+    }
 
     KSpread::Sheet* sheet() const;
 
     Changes changes() const;
 
-  private:
-    Q_DISABLE_COPY( SheetDamage )
+private:
+    Q_DISABLE_COPY(SheetDamage)
 
     class Private;
     Private * const d;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS( SheetDamage::Changes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
 
 
 class WorkbookDamage : public Damage
 {
-  public:
-    enum Change
-    {
-      None       = 0x00,
-      Formula    = 0x01,
-      Value      = 0x02
+public:
+    enum Change {
+        None       = 0x00,
+        Formula    = 0x01,
+        Value      = 0x02
     };
-    Q_DECLARE_FLAGS( Changes, Change )
+    Q_DECLARE_FLAGS(Changes, Change)
 
-    WorkbookDamage( KSpread::Map* map, Changes changes );
+    WorkbookDamage(KSpread::Map* map, Changes changes);
     virtual ~WorkbookDamage();
 
-    virtual Type type() const { return Damage::Workbook; }
+    virtual Type type() const {
+        return Damage::Workbook;
+    }
     KSpread::Map* map() const;
     Changes changes() const;
 
-  private:
-    Q_DISABLE_COPY( WorkbookDamage )
+private:
+    Q_DISABLE_COPY(WorkbookDamage)
 
     class Private;
     Private * const d;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS( WorkbookDamage::Changes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
 
 
 class KSPREAD_EXPORT SelectionDamage : public Damage
 {
-  public:
-    SelectionDamage( const Region& region );
+public:
+    SelectionDamage(const Region& region);
     virtual ~SelectionDamage();
 
-    virtual Type type() const { return Damage::Selection; }
+    virtual Type type() const {
+        return Damage::Selection;
+    }
 
     const Region& region() const;
 
-  private:
-    Q_DISABLE_COPY( SelectionDamage )
+private:
+    Q_DISABLE_COPY(SelectionDamage)
 
     class Private;
     Private * const d;
@@ -175,9 +181,9 @@ class KSPREAD_EXPORT SelectionDamage : public Damage
   kDebug support
 ****************************************************************************/
 
-kdbgstream operator<<( kdbgstream str, const KSpread::Damage& d );
-kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d );
-kdbgstream operator<<( kdbgstream str, const KSpread::SheetDamage& d );
-kdbgstream operator<<( kdbgstream str, const KSpread::SelectionDamage& d );
+kdbgstream operator<<(kdbgstream str, const KSpread::Damage& d);
+kdbgstream operator<<(kdbgstream str, const KSpread::CellDamage& d);
+kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d);
+kdbgstream operator<<(kdbgstream str, const KSpread::SelectionDamage& d);
 
 #endif // KSPREAD_DAMAGES

@@ -45,7 +45,7 @@ public:
 
 
 ToolRegistry::ToolRegistry()
-    : d(new Private)
+        : d(new Private)
 {
     // Add the built-in cell tool.
     KoToolRegistry::instance()->add(new CellToolFactory(this, "KSpreadCellToolId", i18n("Cell Tool")));
@@ -67,11 +67,11 @@ void ToolRegistry::loadTools()
 {
     const QString serviceType = QString::fromLatin1("KSpread/Plugin");
     const QString query = QString::fromLatin1("([X-KSpread-Version] >= 2) and "
-                                              "([X-KDE-PluginInfo-Category] == 'Tool')");
+                          "([X-KDE-PluginInfo-Category] == 'Tool')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    foreach (KPluginInfo pluginInfo, pluginInfos) {
+    foreach(KPluginInfo pluginInfo, pluginInfos) {
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
             kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();

@@ -49,46 +49,43 @@ namespace KSpread
 
 class ElapsedTime
 {
- public:
-  enum OutputMode { Default, PrintOnlyTime };
+public:
+    enum OutputMode { Default, PrintOnlyTime };
 
 #ifdef NDEBUG
 
-  ElapsedTime() {}
-  explicit ElapsedTime(QString const& , OutputMode = Default) {}
+    ElapsedTime() {}
+    explicit ElapsedTime(QString const& , OutputMode = Default) {}
 
 #else // NDEBUG
 
-  ElapsedTime()
-  {
-    m_time.start();
-  }
+    ElapsedTime() {
+        m_time.start();
+    }
 
-  explicit ElapsedTime( QString const & name, OutputMode mode = Default )
-    : m_name( name )
-  {
-    m_time.start();
-    if ( mode != PrintOnlyTime )
-      kDebug(36001) << QString("*** (" + name + ")... Starting measuring...").toLatin1().data();
-  }
+    explicit ElapsedTime(QString const & name, OutputMode mode = Default)
+            : m_name(name) {
+        m_time.start();
+        if (mode != PrintOnlyTime)
+            kDebug(36001) << QString("*** (" + name + ")... Starting measuring...").toLatin1().data();
+    }
 
-  ~ElapsedTime()
-  {
-    uint milliSec = m_time.elapsed();
-    uint min = (uint) ( milliSec / ( 1000 * 60 ) );
-    milliSec -= ( min * 60 * 1000 );
-    uint sec = (uint) ( milliSec / 1000 );
-    milliSec -= sec * 1000;
+    ~ElapsedTime() {
+        uint milliSec = m_time.elapsed();
+        uint min = (uint)(milliSec / (1000 * 60));
+        milliSec -= (min * 60 * 1000);
+        uint sec = (uint)(milliSec / 1000);
+        milliSec -= sec * 1000;
 
-    if ( m_name.isNull() )
-      kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec).toLatin1().data();
-    else
-      kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec).toLatin1().data();
-  }
+        if (m_name.isNull())
+            kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec).toLatin1().data();
+        else
+            kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec).toLatin1().data();
+    }
 
- private:
-  QTime   m_time;
-  QString m_name;
+private:
+    QTime   m_time;
+    QString m_name;
 
 #endif // NDEBUG
 };
@@ -97,13 +94,11 @@ class ElapsedTime
  * This namespace collects enumerations related to
  * pasting operations.
  */
-namespace Paste
-{
-  /**
-   * The pasted content
-   */
-  enum Mode
-  {
+namespace Paste {
+/**
+ * The pasted content
+ */
+enum Mode {
     Normal /** Everything */,
     Text /** Text only */,
     Format /** Format only */,
@@ -114,18 +109,17 @@ namespace Paste
     TextAndTranspose /** */,
     FormatAndTranspose /** */,
     NoBorderAndTranspose /** */
-  };
-  /**
-   * The current cell value treatment.
-   */
-  enum Operation
-  {
+};
+/**
+ * The current cell value treatment.
+ */
+enum Operation {
     OverWrite /** Overwrite */,
     Add /** Add */,
     Mul /** Multiply */,
     Sub /** Subtract */,
     Div /** Divide */
-  };
+};
 } // namespace Paste
 
 // necessary due to QDock* enums (Werner)
@@ -133,16 +127,16 @@ enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
 enum ModifyType {
-  MT_NONE = 0,
-  MT_MOVE,
-  MT_RESIZE_UP,
-  MT_RESIZE_DN,
-  MT_RESIZE_LF,
-  MT_RESIZE_RT,
-  MT_RESIZE_LU,
-  MT_RESIZE_LD,
-  MT_RESIZE_RU,
-  MT_RESIZE_RD
+    MT_NONE = 0,
+    MT_MOVE,
+    MT_RESIZE_UP,
+    MT_RESIZE_DN,
+    MT_RESIZE_LF,
+    MT_RESIZE_RT,
+    MT_RESIZE_LU,
+    MT_RESIZE_LD,
+    MT_RESIZE_RU,
+    MT_RESIZE_RD
 };
 
 enum PropValue {

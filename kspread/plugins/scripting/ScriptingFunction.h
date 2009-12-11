@@ -52,126 +52,126 @@
  */
 class ScriptingFunction : public QObject
 {
-        Q_OBJECT
+    Q_OBJECT
 
-        /**
-        * The name the function has.
-        */
-        Q_PROPERTY(QString name READ name)
+    /**
+    * The name the function has.
+    */
+    Q_PROPERTY(QString name READ name)
 
-        /**
-        * Set the name of the return-type. Could be e.g. "String", "int", "bool" or "float".
-        */
-        Q_PROPERTY(QString typeName READ typeName WRITE setTypeName)
+    /**
+    * Set the name of the return-type. Could be e.g. "String", "int", "bool" or "float".
+    */
+    Q_PROPERTY(QString typeName READ typeName WRITE setTypeName)
 
-        /**
-        * Minimum number of parameters the function expects.
-        */
-        Q_PROPERTY(int minparam READ minParam WRITE setMinParam)
+    /**
+    * Minimum number of parameters the function expects.
+    */
+    Q_PROPERTY(int minparam READ minParam WRITE setMinParam)
 
-        /**
-        * Maximum number of parameters the function expects.
-        */
-        Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam)
+    /**
+    * Maximum number of parameters the function expects.
+    */
+    Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam)
 
-        /**
-        * The comment that describes what the function does.
-        */
-        Q_PROPERTY(QString comment READ comment WRITE setComment)
+    /**
+    * The comment that describes what the function does.
+    */
+    Q_PROPERTY(QString comment READ comment WRITE setComment)
 
-        /**
-        * The syntax string the function looks like.
-        */
-        Q_PROPERTY(QString syntax READ syntax WRITE setSyntax)
+    /**
+    * The syntax string the function looks like.
+    */
+    Q_PROPERTY(QString syntax READ syntax WRITE setSyntax)
 
-        /**
-        * The error-message if there was an error.
-        */
-        Q_PROPERTY(QString error READ error WRITE setError)
+    /**
+    * The error-message if there was an error.
+    */
+    Q_PROPERTY(QString error READ error WRITE setError)
 
-        /**
-        * The result of the function call.
-        */
-        Q_PROPERTY(QVariant result READ result WRITE setResult)
+    /**
+    * The result of the function call.
+    */
+    Q_PROPERTY(QVariant result READ result WRITE setResult)
 
-    public:
-        explicit ScriptingFunction(QObject* parent);
-        virtual ~ScriptingFunction();
+public:
+    explicit ScriptingFunction(QObject* parent);
+    virtual ~ScriptingFunction();
 
-        /// \return the name the function has.
-        QString name() const;
-        /// Set the name the function has.
-        void setName(const QString& name);
+    /// \return the name the function has.
+    QString name() const;
+    /// Set the name the function has.
+    void setName(const QString& name);
 
-        /// \return the name the function has.
-        QString typeName() const;
-        /// Set the name the function has.
-        void setTypeName(const QString& typeName);
+    /// \return the name the function has.
+    QString typeName() const;
+    /// Set the name the function has.
+    void setTypeName(const QString& typeName);
 
-        /// \return the minimum number of parameters the function expects.
-        int minParam() const;
-        /// Set the minimum number of parameters the function expects.
-        void setMinParam(int minparam);
-        /// \return the maximum number of parameters the function expects.
-        int maxParam() const;
-        /// Set the maximum number of parameters the function expects.
-        void setMaxParam(int maxparam);
+    /// \return the minimum number of parameters the function expects.
+    int minParam() const;
+    /// Set the minimum number of parameters the function expects.
+    void setMinParam(int minparam);
+    /// \return the maximum number of parameters the function expects.
+    int maxParam() const;
+    /// Set the maximum number of parameters the function expects.
+    void setMaxParam(int maxparam);
 
-        /// \return the comment that describes what the function does.
-        QString comment() const;
-        /// Set the comment that describes what the function does.
-        void setComment(const QString& comment);
+    /// \return the comment that describes what the function does.
+    QString comment() const;
+    /// Set the comment that describes what the function does.
+    void setComment(const QString& comment);
 
-        /// \return the syntax string the function looks like.
-        QString syntax() const;
-        /// Set the syntax string the function looks like.
-        void setSyntax(const QString& syntax);
+    /// \return the syntax string the function looks like.
+    QString syntax() const;
+    /// Set the syntax string the function looks like.
+    void setSyntax(const QString& syntax);
 
-        /// \return the error-message if there was an error.
-        QString error() const;
-        /// Set the error-message.
-        void setError(const QString& error = QString());
+    /// \return the error-message if there was an error.
+    QString error() const;
+    /// Set the error-message.
+    void setError(const QString& error = QString());
 
-        /// \return the result of the function call.
-        QVariant result() const;
-        /// Set the result of the function call.
-        void setResult(const QVariant& result);
+    /// \return the result of the function call.
+    QVariant result() const;
+    /// Set the result of the function call.
+    void setResult(const QVariant& result);
 
-    public slots:
+public slots:
 
-        /**
-        * Add an example to demonstrate the usage of the function.
-        */
-        void addExample(const QString& example);
+    /**
+    * Add an example to demonstrate the usage of the function.
+    */
+    void addExample(const QString& example);
 
-        /**
-        * Add details about a parameter the function may expect.
-        *
-        * Valid values for \p typeName are String, Int, Float, Double,
-        * Boolean, Date, Range or Any while the \p comment is a
-        * describing string.
-        */
-        void addParameter(const QString& typeName, const QString& comment);
+    /**
+    * Add details about a parameter the function may expect.
+    *
+    * Valid values for \p typeName are String, Int, Float, Double,
+    * Boolean, Date, Range or Any while the \p comment is a
+    * describing string.
+    */
+    void addParameter(const QString& typeName, const QString& comment);
 
-        /**
-        * Register this function.
-        */
-        bool registerFunction();
+    /**
+    * Register this function.
+    */
+    bool registerFunction();
 
-    signals:
+signals:
 
-        /**
-        * This signal is emitted if the function got called.
-        */
-        void called(QVariantList args);
+    /**
+    * This signal is emitted if the function got called.
+    */
+    void called(QVariantList args);
 
-    private:
-        Q_DISABLE_COPY( ScriptingFunction )
+private:
+    Q_DISABLE_COPY(ScriptingFunction)
 
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

@@ -48,64 +48,64 @@ class Sheet;
 class KSPREAD_EXPORT RecalcManager
 {
 public:
-  /**
-   * Creates a RecalcManager. It is used for a whole map.
-   *
-   * \param map The Map which this RecalcManager belongs to.
-   */
-  explicit RecalcManager( const Map* map );
+    /**
+     * Creates a RecalcManager. It is used for a whole map.
+     *
+     * \param map The Map which this RecalcManager belongs to.
+     */
+    explicit RecalcManager(const Map* map);
 
-  /**
-   * Destructor.
-   */
-  ~RecalcManager();
+    /**
+     * Destructor.
+     */
+    ~RecalcManager();
 
-  /**
-   * Recalculates the cells referring to cells in \p region .
-   * The cells are recalculated sorted by the reference depth in ascending order.
-   *
-   * \see recalc()
-   */
-  void regionChanged(const Region& region);
+    /**
+     * Recalculates the cells referring to cells in \p region .
+     * The cells are recalculated sorted by the reference depth in ascending order.
+     *
+     * \see recalc()
+     */
+    void regionChanged(const Region& region);
 
-  /**
-   * Recalculates the sheet \p sheet .
-   * The cells are recalculated sorted by the reference depth in ascending order.
-   *
-   * \see recalc()
-   */
-  void recalcSheet(Sheet* const sheet);
+    /**
+     * Recalculates the sheet \p sheet .
+     * The cells are recalculated sorted by the reference depth in ascending order.
+     *
+     * \see recalc()
+     */
+    void recalcSheet(Sheet* const sheet);
 
-  /**
-   * Recalculates the whole map.
-   * The cells are recalculated sorted by the reference depth in ascending order.
-   *
-   * \see recalc()
-   */
-  void recalcMap();
+    /**
+     * Recalculates the whole map.
+     * The cells are recalculated sorted by the reference depth in ascending order.
+     *
+     * \see recalc()
+     */
+    void recalcMap();
 
-  /**
-   * Returns the recalculation state.
-   * \return \c true, if recalculations are in progress
-   */
-  bool isActive() const;
+    /**
+     * Returns the recalculation state.
+     * \return \c true, if recalculations are in progress
+     */
+    bool isActive() const;
 
-  /**
-   * Prints out the cell depths in the current recalculation event.
-   */
-  void dump() const;
+    /**
+     * Prints out the cell depths in the current recalculation event.
+     */
+    void dump() const;
 
 protected:
-  /**
-   * Iterates over the map of cell with their reference depths
-   * and calls recalcCell().
-   *
-   * \see recalcCell()
-   */
-  void recalc();
+    /**
+     * Iterates over the map of cell with their reference depths
+     * and calls recalcCell().
+     *
+     * \see recalcCell()
+     */
+    void recalc();
 
 private:
-    Q_DISABLE_COPY( RecalcManager )
+    Q_DISABLE_COPY(RecalcManager)
 
     class Private;
     Private * const d;

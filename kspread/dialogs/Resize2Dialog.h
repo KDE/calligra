@@ -36,36 +36,36 @@ class Selection;
 
 class ResizeRow: public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit ResizeRow(QWidget* parent, Selection* selection);
-  double rowHeight;
+    explicit ResizeRow(QWidget* parent, Selection* selection);
+    double rowHeight;
 
 protected slots:
-  virtual void slotOk();
-  virtual void slotDefault();
+    virtual void slotOk();
+    virtual void slotDefault();
 
 protected:
-  Selection* m_selection;
-  KoUnitDoubleSpinBox *m_pHeight;
+    Selection* m_selection;
+    KoUnitDoubleSpinBox *m_pHeight;
 };
 
 class ResizeColumn: public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit ResizeColumn(QWidget* parent, Selection* selection);
-  double columnWidth;
+    explicit ResizeColumn(QWidget* parent, Selection* selection);
+    double columnWidth;
 
 protected slots:
-  virtual void slotOk();
-  virtual void slotDefault();
+    virtual void slotOk();
+    virtual void slotDefault();
 
 protected:
-  Selection* m_selection;
-  KoUnitDoubleSpinBox *m_pWidth;
+    Selection* m_selection;
+    KoUnitDoubleSpinBox *m_pWidth;
 };
 
 } // namespace KSpread

@@ -42,133 +42,132 @@
 /// \internal implementation of the ScriptingFunction
 class ScriptingFunctionImpl : public KSpread::Function
 {
-    public:
+public:
 
-        static KSpread::Value callback(KSpread::valVector args, KSpread::ValueCalc* calc, KSpread::FuncExtra* extra)
-        {
-            Q_UNUSED(calc);
-            Q_ASSERT(extra && extra->function);
-            ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
+    static KSpread::Value callback(KSpread::valVector args, KSpread::ValueCalc* calc, KSpread::FuncExtra* extra) {
+        Q_UNUSED(calc);
+        Q_ASSERT(extra && extra->function);
+        ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >(extra->function);
 
-            kDebug() <<"ScriptingFunctionImpl::callback";
+        kDebug() << "ScriptingFunctionImpl::callback";
 
-            if( ! funcimpl->m_function) {
-                kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
-                KSpread::Value err = KSpread::Value::errorNA();
-                err.setError( '#' + i18n("No such script.") );
-                return err;
+        if (! funcimpl->m_function) {
+            kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
+            KSpread::Value err = KSpread::Value::errorNA();
+            err.setError('#' + i18n("No such script."));
+            return err;
+        }
+
+        kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
+
+        KSpread::FunctionDescription *description = KSpread::FunctionRepository::self()->functionInfo(funcimpl->name());
+        kDebug() << "0 ==================> name=" << description->name() << " type=" << description->type();
+
+        QVariantList list;
+        for (int i = 0; i < args.size(); ++i) {
+            switch (description->param(i).type()) {
+            case KSpread::KSpread_Int:
+                list << int(args[i].asInteger());
+                break;
+            case KSpread::KSpread_Float: {
+                list << double(args[i].asFloat());
             }
-
-            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
-
-KSpread::FunctionDescription *description = KSpread::FunctionRepository::self()->functionInfo( funcimpl->name() );
-kDebug()<<"0 ==================> name="<<description->name()<<" type="<<description->type();
-
-            QVariantList list;
-            for(int i = 0; i < args.size(); ++i) {
-                switch( description->param(i).type() ) {
-                    case KSpread::KSpread_Int:
-                        list << int( args[i].asInteger() );
-                        break;
-                    case KSpread::KSpread_Float: {
-                        list << double( args[i].asFloat() );
-                    } break;
-                    case KSpread::KSpread_String:
-                        list << args[i].asString();
-                        break;
-                    case KSpread::KSpread_Boolean:
-                        list << args[i].asBoolean();
-                        break;
-                    case KSpread::KSpread_Any:
-                    default:
-                        list << args[i].asVariant();
-                        break;
-                }
-                //kDebug()<<"1 ==================> helpText="<<description->param(i).helpText()<<" type="<<description->param(i).type();
-            }
-
-/*
-            for(int i = 0; i < size; ++i) {
-kDebug()<<"2 ==================> "<<args[i].asString();
-                //TODO needs to be more generic!
-                //list << args[i].asVariant();
+            break;
+            case KSpread::KSpread_String:
                 list << args[i].asString();
+                break;
+            case KSpread::KSpread_Boolean:
+                list << args[i].asBoolean();
+                break;
+            case KSpread::KSpread_Any:
+            default:
+                list << args[i].asVariant();
+                break;
             }
-*/
-            funcimpl->m_function->setError( QString() );
-            funcimpl->m_function->setResult( QVariant() );
-
-            if( ! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list)) ) {
-                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( '#' + i18n("No such script function.") );
-                return err;
-            }
-
-            const QString error = funcimpl->m_function->error();
-            if( ! error.isEmpty() ) {
-                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( '#' + error );
-                return err;
-            }
-
-            QVariant result = funcimpl->m_function->result();
-            if( ! result.isValid() ) {
-                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( '#' + i18n("No return value.") );
-                return err;
-            }
-
-            KSpread::Value resultvalue;
-            switch( description->type() ) {
-                case KSpread::KSpread_Int:
-                    resultvalue = KSpread::Value( result.toInt() );
-                    break;
-                case KSpread::KSpread_Float:
-                    resultvalue = KSpread::Value( (double) result.toDouble() );
-                    break;
-                case KSpread::KSpread_String:
-                    resultvalue = KSpread::Value( result.toString() );
-                    break;
-                case KSpread::KSpread_Boolean:
-                    resultvalue = KSpread::Value( result.toBool() );
-                    break;
-                case KSpread::KSpread_Any:
-                default:
-                    //TODO make more generic
-                    //resultvalue = KSpread::Value( result );
-                    resultvalue = KSpread::Value( result.toString() );
-                    break;
-            }
-
-            //kDebug() <<"result=" << result.toString();
-            //return KSpread::Value( result.toString() );
-            return resultvalue;
+            //kDebug()<<"1 ==================> helpText="<<description->param(i).helpText()<<" type="<<description->param(i).type();
         }
 
-        ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
+        /*
+                    for(int i = 0; i < size; ++i) {
+        kDebug()<<"2 ==================> "<<args[i].asString();
+                        //TODO needs to be more generic!
+                        //list << args[i].asVariant();
+                        list << args[i].asString();
+                    }
+        */
+        funcimpl->m_function->setError(QString());
+        funcimpl->m_function->setResult(QVariant());
+
+        if (! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list))) {
+            KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+            err.setError('#' + i18n("No such script function."));
+            return err;
+        }
+
+        const QString error = funcimpl->m_function->error();
+        if (! error.isEmpty()) {
+            KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+            err.setError('#' + error);
+            return err;
+        }
+
+        QVariant result = funcimpl->m_function->result();
+        if (! result.isValid()) {
+            KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+            err.setError('#' + i18n("No return value."));
+            return err;
+        }
+
+        KSpread::Value resultvalue;
+        switch (description->type()) {
+        case KSpread::KSpread_Int:
+            resultvalue = KSpread::Value(result.toInt());
+            break;
+        case KSpread::KSpread_Float:
+            resultvalue = KSpread::Value((double) result.toDouble());
+            break;
+        case KSpread::KSpread_String:
+            resultvalue = KSpread::Value(result.toString());
+            break;
+        case KSpread::KSpread_Boolean:
+            resultvalue = KSpread::Value(result.toBool());
+            break;
+        case KSpread::KSpread_Any:
+        default:
+            //TODO make more generic
+            //resultvalue = KSpread::Value( result );
+            resultvalue = KSpread::Value(result.toString());
+            break;
+        }
+
+        //kDebug() <<"result=" << result.toString();
+        //return KSpread::Value( result.toString() );
+        return resultvalue;
+    }
+
+    ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
             : KSpread::Function(function->name(), ScriptingFunctionImpl::callback)
-            , m_function(function)
-        {
-            setNeedsExtra(true);
+            , m_function(function) {
+        setNeedsExtra(true);
 
-            // if there exists no "Scripts" group yet, add it
-            KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-            if( ! repo->groups().contains( i18n("Scripts") ) )
-                repo->addGroup( i18n("Scripts") );
+        // if there exists no "Scripts" group yet, add it
+        KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
+        if (! repo->groups().contains(i18n("Scripts")))
+            repo->addGroup(i18n("Scripts"));
 
-            // register ourself at the repository
-            repo->add(this);
+        // register ourself at the repository
+        repo->add(this);
 
-            // create a new description for the function
-            KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(description);
-            desc->setGroup( i18n("Scripts") );
-            repo->add(desc);
-        }
+        // create a new description for the function
+        KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(description);
+        desc->setGroup(i18n("Scripts"));
+        repo->add(desc);
+    }
 
-        virtual ~ScriptingFunctionImpl() {}
+    virtual ~ScriptingFunctionImpl() {}
 
-    private:
-        QPointer<ScriptingFunction> m_function;
+private:
+    QPointer<ScriptingFunction> m_function;
 };
 
 /***************************************************************************
@@ -178,27 +177,27 @@ kDebug()<<"2 ==================> "<<args[i].asString();
 /// \internal d-pointer class.
 class ScriptingFunction::Private
 {
-    public:
-        QString name;
-        QString typeName;
-        int minparam;
-        int maxparam;
-        QString comment;
-        QString syntax;
-        QString error;
-        QVariant result;
-        QDomDocument document;
-        QDomElement funcElement;
-        QDomElement helpElement;
+public:
+    QString name;
+    QString typeName;
+    int minparam;
+    int maxparam;
+    QString comment;
+    QString syntax;
+    QString error;
+    QVariant result;
+    QDomDocument document;
+    QDomElement funcElement;
+    QDomElement helpElement;
 
-        Private() : minparam(0), maxparam(-1) {}
+    Private() : minparam(0), maxparam(-1) {}
 };
 
 ScriptingFunction::ScriptingFunction(QObject* parent)
-    : QObject(parent)
-    , d(new Private())
+        : QObject(parent)
+        , d(new Private())
 {
-    kDebug() <<"ScriptingFunction::ScriptingFunction";
+    kDebug() << "ScriptingFunction::ScriptingFunction";
     d->typeName = "String";
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
@@ -206,31 +205,79 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
 
 ScriptingFunction::~ScriptingFunction()
 {
-    kDebug() <<"ScriptingFunction::~ScriptingFunction";
+    kDebug() << "ScriptingFunction::~ScriptingFunction";
     delete d;
 }
 
-QString ScriptingFunction::name() const { return d->name; }
-void ScriptingFunction::setName(const QString& name) { d->name = name; }
-QString ScriptingFunction::typeName() const { return d->typeName; }
-void ScriptingFunction::setTypeName(const QString& typeName) { d->typeName = typeName; }
-int ScriptingFunction::minParam() const { return d->minparam; }
-void ScriptingFunction::setMinParam(int minparam) { d->minparam = minparam; }
-int ScriptingFunction::maxParam() const { return d->maxparam; }
-void ScriptingFunction::setMaxParam(int maxparam) { d->maxparam = maxparam; }
-QString ScriptingFunction::comment() const { return d->comment; }
-void ScriptingFunction::setComment(const QString& comment) { d->comment = comment; }
-QString ScriptingFunction::syntax() const { return d->syntax; }
-void ScriptingFunction::setSyntax(const QString& syntax) { d->syntax = syntax; }
-QVariant ScriptingFunction::result() const { return d->result; }
-void ScriptingFunction::setResult(const QVariant& result) { d->result = result; }
-QString ScriptingFunction::error() const { return d->error; }
-void ScriptingFunction::setError(const QString& error) { d->error = error; }
+QString ScriptingFunction::name() const
+{
+    return d->name;
+}
+void ScriptingFunction::setName(const QString& name)
+{
+    d->name = name;
+}
+QString ScriptingFunction::typeName() const
+{
+    return d->typeName;
+}
+void ScriptingFunction::setTypeName(const QString& typeName)
+{
+    d->typeName = typeName;
+}
+int ScriptingFunction::minParam() const
+{
+    return d->minparam;
+}
+void ScriptingFunction::setMinParam(int minparam)
+{
+    d->minparam = minparam;
+}
+int ScriptingFunction::maxParam() const
+{
+    return d->maxparam;
+}
+void ScriptingFunction::setMaxParam(int maxparam)
+{
+    d->maxparam = maxparam;
+}
+QString ScriptingFunction::comment() const
+{
+    return d->comment;
+}
+void ScriptingFunction::setComment(const QString& comment)
+{
+    d->comment = comment;
+}
+QString ScriptingFunction::syntax() const
+{
+    return d->syntax;
+}
+void ScriptingFunction::setSyntax(const QString& syntax)
+{
+    d->syntax = syntax;
+}
+QVariant ScriptingFunction::result() const
+{
+    return d->result;
+}
+void ScriptingFunction::setResult(const QVariant& result)
+{
+    d->result = result;
+}
+QString ScriptingFunction::error() const
+{
+    return d->error;
+}
+void ScriptingFunction::setError(const QString& error)
+{
+    d->error = error;
+}
 
 void ScriptingFunction::addExample(const QString& example)
 {
     QDomElement helpExampleElem = d->document.createElement("Example");
-    helpExampleElem.appendChild( d->document.createTextNode(example) );
+    helpExampleElem.appendChild(d->document.createTextNode(example));
     d->helpElement.appendChild(helpExampleElem);
 }
 
@@ -238,37 +285,37 @@ void ScriptingFunction::addParameter(const QString& typeName, const QString& com
 {
     QDomElement paramElem = d->document.createElement("Parameter");
     QDomElement paramCommentElem = d->document.createElement("Comment");
-    paramCommentElem.appendChild( d->document.createTextNode(comment) );
+    paramCommentElem.appendChild(d->document.createTextNode(comment));
     paramElem.appendChild(paramCommentElem);
     QDomElement paramTypeElem = d->document.createElement("Type");
-    paramTypeElem.appendChild( d->document.createTextNode(typeName) );
+    paramTypeElem.appendChild(d->document.createTextNode(typeName));
     paramElem.appendChild(paramTypeElem);
     d->funcElement.appendChild(paramElem);
 }
 
 bool ScriptingFunction::registerFunction()
 {
-    kDebug() <<"ScriptingFunction::registerFunction";
+    kDebug() << "ScriptingFunction::registerFunction";
 
-    if( d->name.isEmpty() ) {
+    if (d->name.isEmpty()) {
         kWarning() << "ScriptingFunction::registerFunction() name is empty!";
         return false;
     }
 
     QDomElement nameelem = d->document.createElement("Name");
-    nameelem.appendChild( d->document.createTextNode(d->name) );
+    nameelem.appendChild(d->document.createTextNode(d->name));
     d->funcElement.appendChild(nameelem);
 
     QDomElement typeelem = d->document.createElement("Type");
-    typeelem.appendChild( d->document.createTextNode(d->typeName) );
+    typeelem.appendChild(d->document.createTextNode(d->typeName));
     d->funcElement.appendChild(typeelem);
 
     QDomElement helpTextElem = d->document.createElement("Text");
-    helpTextElem.appendChild( d->document.createTextNode(d->comment) );
+    helpTextElem.appendChild(d->document.createTextNode(d->comment));
     d->helpElement.appendChild(helpTextElem);
 
     QDomElement helpSyntaxElem = d->document.createElement("Syntax");
-    helpSyntaxElem.appendChild( d->document.createTextNode(d->syntax) );
+    helpSyntaxElem.appendChild(d->document.createTextNode(d->syntax));
     d->helpElement.appendChild(helpSyntaxElem);
 
     d->funcElement.appendChild(d->helpElement);

@@ -30,7 +30,7 @@
 using namespace KSpread;
 
 CSVDataCommand::CSVDataCommand()
-    : AbstractDataManipulator()
+        : AbstractDataManipulator()
 {
 }
 
@@ -65,8 +65,7 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
     const int rowidx = row - element->rect().top();
 
     Value value;
-    switch (m_dataTypes.value(colidx))
-    {
+    switch (m_dataTypes.value(colidx)) {
     case KoCsvImportDialog::Generic:
         value = m_value.element(colidx, rowidx);
         *parse = true;
@@ -89,7 +88,7 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
 bool CSVDataCommand::wantChange(Element* element, int col, int row)
 {
     Q_UNUSED(row)
-    return (m_dataTypes.value(col- element->rect().left()) != KoCsvImportDialog::None);
+    return (m_dataTypes.value(col - element->rect().left()) != KoCsvImportDialog::None);
 }
 
 bool CSVDataCommand::preProcessing()

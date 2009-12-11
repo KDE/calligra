@@ -36,58 +36,57 @@ KIconLoader* Factory::s_iconLoader = 0;
 // DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
 
-Factory::Factory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+Factory::Factory(QObject* parent, const char* name)
+        : KoFactory(parent, name)
 {
-  //kDebug(36001) <<"Factory::Factory()";
-  // Create our instance, so that it becomes KGlobal::instance if the
-  // main app is KSpread.
-  (void)global();
+    //kDebug(36001) <<"Factory::Factory()";
+    // Create our instance, so that it becomes KGlobal::instance if the
+    // main app is KSpread.
+    (void)global();
 //   (void)dcopObject();
 }
 
 Factory::~Factory()
 {
-  //kDebug(36001) <<"Factory::~Factory()";
-  delete s_aboutData;
-  s_aboutData=0;
-  delete s_global;
-  s_global = 0;
-  delete s_iconLoader;
-  s_iconLoader = 0;
+    //kDebug(36001) <<"Factory::~Factory()";
+    delete s_aboutData;
+    s_aboutData = 0;
+    delete s_global;
+    s_global = 0;
+    delete s_iconLoader;
+    s_iconLoader = 0;
 //   delete s_dcopObject;
 //   s_dcopObject = 0;
 }
 
-KParts::Part* Factory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & )
+KParts::Part* Factory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
 {
-  bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
-  Doc *doc = new Doc( parentWidget, parent, !bWantKoDocument );
+    Doc *doc = new Doc(parentWidget, parent, !bWantKoDocument);
 
-  if ( !bWantKoDocument )
-    doc->setReadWrite( false );
+    if (!bWantKoDocument)
+        doc->setReadWrite(false);
 
-  return doc;
+    return doc;
 }
 
 KAboutData* Factory::aboutData()
 {
-  if( !s_aboutData )
-      s_aboutData = newAboutData();
-  return s_aboutData;
+    if (!s_aboutData)
+        s_aboutData = newAboutData();
+    return s_aboutData;
 }
 
 const KComponentData &Factory::global()
 {
-    if ( !s_global )
-    {
-      s_global = new KComponentData(aboutData());
+    if (!s_global) {
+        s_global = new KComponentData(aboutData());
 
-      s_global->dirs()->addResourceType( "kspread_template", "data", "kspread/templates/");
-      s_global->dirs()->addResourceType( "toolbar", "data", "koffice/toolbar/");
-      s_global->dirs()->addResourceType( "functions", "data", "kspread/functions/");
-      s_global->dirs()->addResourceType( "sheet-styles", "data", "kspread/sheetstyles/");
+        s_global->dirs()->addResourceType("kspread_template", "data", "kspread/templates/");
+        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
+        s_global->dirs()->addResourceType("functions", "data", "kspread/functions/");
+        s_global->dirs()->addResourceType("sheet-styles", "data", "kspread/sheetstyles/");
 
     }
     return *s_global;
@@ -95,14 +94,13 @@ const KComponentData &Factory::global()
 
 KIconLoader* Factory::iconLoader()
 {
-  if( !s_iconLoader )
-  {
-      // Tell the iconloader about share/apps/koffice/icons
-      s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
-      s_iconLoader->addAppDir("koffice");
-  }
+    if (!s_iconLoader) {
+        // Tell the iconloader about share/apps/koffice/icons
+        s_iconLoader = new KIconLoader(global().componentName(), global().dirs());
+        s_iconLoader->addAppDir("koffice");
+    }
 
-  return s_iconLoader;
+    return s_iconLoader;
 }
 
 // DCOPObject* Factory::dcopObject()

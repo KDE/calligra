@@ -42,9 +42,9 @@ public:
 };
 
 DragAndDropStrategy::DragAndDropStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                                         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
-    , d(new Private)
+        const QPointF documentPos, Qt::KeyboardModifiers modifiers)
+        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        , d(new Private)
 {
     d->lastPoint = documentPos;
     const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();

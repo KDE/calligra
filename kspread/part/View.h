@@ -89,7 +89,7 @@ class KSPREAD_EXPORT View : public KoView
 public:
 
     /** Creates a new view */
-    View( QWidget *_parent, Doc *doc );
+    View(QWidget *_parent, Doc *doc);
 
     /** Destroys the view */
     ~View();
@@ -120,9 +120,9 @@ public:
     /** \return the zoom handler */
     KoZoomHandler* zoomHandler() const;
 
-    void setZoom( int zoom, bool updateViews ); // change the zoom value
+    void setZoom(int zoom, bool updateViews);   // change the zoom value
 
-    void addSheet( Sheet *_t );
+    void addSheet(Sheet *_t);
     //void removesheet( Sheet *_t );
     void removeAllSheets();
 
@@ -132,7 +132,7 @@ public:
     /**
      * \return the SheetView for \p sheet
      */
-    SheetView* sheetView( const Sheet* sheet ) const;
+    SheetView* sheetView(const Sheet* sheet) const;
 
     virtual QWidget *canvas() const;
 
@@ -167,12 +167,12 @@ public:
     /**
      * @return marker for @p sheet
      */
-    QPoint markerFromSheet( Sheet* sheet ) const;
+    QPoint markerFromSheet(Sheet* sheet) const;
 
     /**
      * @return scroll offset for @p sheet
      */
-    QPointF offsetFromSheet( Sheet* sheet ) const;
+    QPointF offsetFromSheet(Sheet* sheet) const;
 
     /**
      * Save current sheet selection.
@@ -208,10 +208,10 @@ public Q_SLOTS:
     void recalcWorkSheet();
     void paperLayoutDlg();
     void resetPrintRange();
-    void togglePageBorders( bool );
-    void toggleProtectSheet( bool );
-    void toggleProtectDoc( bool );
-    void viewZoom( KoZoomMode::Mode mode, qreal zoom );
+    void togglePageBorders(bool);
+    void toggleProtectSheet(bool);
+    void toggleProtectDoc(bool);
+    void viewZoom(KoZoomMode::Mode mode, qreal zoom);
 
     void insertSheet();
     void duplicateSheet();
@@ -237,7 +237,7 @@ public Q_SLOTS:
 
     void copyAsText();
 
-    void moveSheet( unsigned sheet, unsigned target );
+    void moveSheet(unsigned sheet, unsigned target);
 
     /**
      * Shows the sheet properties dialog.
@@ -250,7 +250,7 @@ public Q_SLOTS:
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
      */
-    void changeSheet( const QString& _name );
+    void changeSheet(const QString& _name);
 
     /**
      * Switch the active sheet to the next visible sheet. Does nothing if the current
@@ -309,21 +309,21 @@ public Q_SLOTS:
     /**
      * Shows the status bar if b is true, otherwise the status bar will be hidden.
      */
-    void showStatusBar( bool b );
+    void showStatusBar(bool b);
 
     /**
      * Shows the tab bar if b is true, otherwise the tab bar will be hidden.
      */
-    void showTabBar( bool b );
+    void showTabBar(bool b);
 
     /**
      * Shows context menu when tabbar is double-clicked.
      */
-    void popupTabBarMenu( const QPoint& );
+    void popupTabBarMenu(const QPoint&);
 
-    void handleDamages( const QList<Damage*>& damages );
+    void handleDamages(const QList<Damage*>& damages);
 
-    void initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point );
+    void initialiseMarkerFromSheet(Sheet *_sheet, const QPoint &point);
 
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)
@@ -336,17 +336,17 @@ protected slots:
 public slots:
     // Document signals
     void slotRefreshView();
-    void slotUpdateView( Sheet *_sheet );
-    void slotUpdateView( Sheet *_sheet, const Region& );
-    void slotUpdateColumnHeader( Sheet *_sheet );
-    void slotUpdateRowHeader( Sheet *_sheet );
+    void slotUpdateView(Sheet *_sheet);
+    void slotUpdateView(Sheet *_sheet, const Region&);
+    void slotUpdateColumnHeader(Sheet *_sheet);
+    void slotUpdateRowHeader(Sheet *_sheet);
     void slotChangeSelection(const Region&);
     void slotScrollChoice(const Region&);
-    void slotAddSheet( Sheet *_sheet );
-    void slotSheetRenamed( Sheet* sheet, const QString& old_name );
-    void slotSheetHidden( Sheet*_sheet );
-    void slotSheetShown( Sheet*_sheet );
-    void slotSheetRemoved( Sheet*_sheet );
+    void slotAddSheet(Sheet *_sheet);
+    void slotSheetRenamed(Sheet* sheet, const QString& old_name);
+    void slotSheetHidden(Sheet*_sheet);
+    void slotSheetShown(Sheet*_sheet);
+    void slotSheetRemoved(Sheet*_sheet);
     void shapeSelectionChanged();
     void editDeleteSelection();
 
@@ -358,8 +358,8 @@ public:
 
 protected:
 
-    virtual void keyPressEvent ( QKeyEvent * _ev );
-    virtual void resizeEvent( QResizeEvent *_ev );
+    virtual void keyPressEvent(QKeyEvent * _ev);
+    virtual void resizeEvent(QResizeEvent *_ev);
 
     /**
      * Activates the formula editor for the current cell.
@@ -368,9 +368,9 @@ protected:
      */
     void activateFormulaEditor();
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
+    virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
 
     virtual KoPrintJob * createPrintJob();
 
@@ -383,7 +383,7 @@ private Q_SLOTS:
     void reviveSheet(Sheet* sheet);
 
 private:
-    Q_DISABLE_COPY( View )
+    Q_DISABLE_COPY(View)
 
     class Private;
     Private * const d;

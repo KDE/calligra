@@ -32,8 +32,7 @@ namespace KSpread
 {
 class Selection;
 
-namespace Plugins
-{
+namespace Plugins {
 
 /**
  * \class SolverDialog
@@ -41,22 +40,22 @@ namespace Plugins
  */
 class SolverDialog : public KDialog, public Ui::Solver, public Ui::SolverDetails
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  /**
-   * Constructor.
-   * \p view The view pointer. Used to access the cells.
-   * \p parent the parent widget
-   */
-  SolverDialog( Selection* selection, QWidget* parent );
+    /**
+     * Constructor.
+     * \p view The view pointer. Used to access the cells.
+     * \p parent the parent widget
+     */
+    SolverDialog(Selection* selection, QWidget* parent);
 
 protected Q_SLOTS:
-  /**
-   * Deletes the dialog.
-   * Called after one of button is clicked and the dialog will be closed.
-   */
-  void finishDialog();
+    /**
+     * Deletes the dialog.
+     * Called after one of button is clicked and the dialog will be closed.
+     */
+    void finishDialog();
 };
 
 } // namespace Plugins

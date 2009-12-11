@@ -33,9 +33,8 @@ namespace KSpread
 class FormulaStorage : public PointStorage<Formula>
 {
 public:
-    FormulaStorage& operator=( const PointStorage<Formula>& o )
-    {
-        PointStorage<Formula>::operator=( o );
+    FormulaStorage& operator=(const PointStorage<Formula>& o) {
+        PointStorage<Formula>::operator=(o);
         return *this;
     }
 };

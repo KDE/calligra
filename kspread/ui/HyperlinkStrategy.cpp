@@ -48,8 +48,8 @@ public:
 HyperlinkStrategy::HyperlinkStrategy(KoTool* parent, KoCanvasBase* m_canvas, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
-    : AbstractSelectionStrategy(parent, m_canvas, selection, documentPos, modifiers)
-    , d(new Private)
+        : AbstractSelectionStrategy(parent, m_canvas, selection, documentPos, modifiers)
+        , d(new Private)
 {
     d->lastPoint = documentPos;
     d->textRect = textRect;
@@ -107,7 +107,7 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                 // this will also start local programs, so adding a "don't warn again"
                 // checkbox will probably be too dangerous
                 const int answer = KMessageBox::warningYesNo(m_canvas->canvasWidget(), question,
-                                                                i18n("Open Link?"));
+                                   i18n("Open Link?"));
                 if (answer != KMessageBox::Yes) {
                     return;
                 }

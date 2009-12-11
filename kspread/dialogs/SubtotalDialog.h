@@ -37,30 +37,34 @@ class Sheet;
 
 class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  SubtotalDialog(QWidget* parent, Selection* selection);
-  ~SubtotalDialog();
+public:
+    SubtotalDialog(QWidget* parent, Selection* selection);
+    ~SubtotalDialog();
 
-  QRect const & selection() const { return m_range; }
-  Sheet * sheet() const { return m_pSheet; }
+    QRect const & selection() const {
+        return m_range;
+    }
+    Sheet * sheet() const {
+        return m_pSheet;
+    }
 
- private slots:
-  void slotOk();
-  void slotCancel();
-  void slotUser1();
+private slots:
+    void slotOk();
+    void slotCancel();
+    void slotUser1();
 
- private:
-  Selection *      m_selection;
-  Sheet *          m_pSheet;
-  QRect            m_range;
+private:
+    Selection *      m_selection;
+    Sheet *          m_pSheet;
+    QRect            m_range;
 
-  void fillColumnBoxes();
-  void fillFunctionBox();
-  void removeSubtotalLines();
-  bool addSubtotal( int mainCol, int column, int row, int topRow,
-                    bool addRow, QString const & text );
+    void fillColumnBoxes();
+    void fillFunctionBox();
+    void removeSubtotalLines();
+    bool addSubtotal(int mainCol, int column, int row, int topRow,
+                     bool addRow, QString const & text);
 };
 
 } // namespace KSpread

@@ -32,7 +32,9 @@ class BorderColorCommand : public AbstractRegionCommand
 {
 public:
     BorderColorCommand();
-    void setColor( const QColor& color ) { m_color = color; }
+    void setColor(const QColor& color) {
+        m_color = color;
+    }
 
 protected:
     virtual bool preProcessing();
@@ -41,7 +43,7 @@ protected:
 
 private:
     QColor m_color;
-    QList< QPair<QRectF,SharedSubStyle> > m_undoData;
+    QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
 }  // namespace KSpread

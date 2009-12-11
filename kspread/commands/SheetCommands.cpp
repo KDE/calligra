@@ -30,100 +30,97 @@ using namespace KSpread;
 
 // ----- RenameSheetCommand -----
 
-RenameSheetCommand::RenameSheetCommand( Sheet* s, const QString &name )
+RenameSheetCommand::RenameSheetCommand(Sheet* s, const QString &name)
 {
-  sheet = s;
-  if( s ) oldName = s->sheetName();
-  newName = name;
-  setText(i18n("Rename Sheet"));
+    sheet = s;
+    if (s) oldName = s->sheetName();
+    newName = name;
+    setText(i18n("Rename Sheet"));
 }
 
 void RenameSheetCommand::redo()
 {
-  if( sheet )
-    sheet->setSheetName( newName );
+    if (sheet)
+        sheet->setSheetName(newName);
 }
 
 void RenameSheetCommand::undo()
 {
-  if( sheet )
-    sheet->setSheetName( oldName );
+    if (sheet)
+        sheet->setSheetName(oldName);
 }
 
 // ----- HideSheetCommand -----
 
-HideSheetCommand::HideSheetCommand( Sheet* sheet )
+HideSheetCommand::HideSheetCommand(Sheet* sheet)
 {
-  map = sheet->map();
-  sheetName = sheet->sheetName();
-  QString n =  i18n("Hide Sheet %1", sheetName );
-  if( n.length() > 64 ) n = i18n("Hide Sheet");
-  setText(n);
+    map = sheet->map();
+    sheetName = sheet->sheetName();
+    QString n =  i18n("Hide Sheet %1", sheetName);
+    if (n.length() > 64) n = i18n("Hide Sheet");
+    setText(n);
 }
 
 void HideSheetCommand::redo()
 {
-  Sheet* sheet = map->findSheet( sheetName );
-  if( !sheet ) return;
+    Sheet* sheet = map->findSheet(sheetName);
+    if (!sheet) return;
 
-  sheet->hideSheet( true );
+    sheet->hideSheet(true);
 }
 
 void HideSheetCommand::undo()
 {
-  Sheet* sheet = map->findSheet( sheetName );
-  if( !sheet ) return;
+    Sheet* sheet = map->findSheet(sheetName);
+    if (!sheet) return;
 
-  sheet->hideSheet( false );
+    sheet->hideSheet(false);
 }
 
 // ----- ShowSheetCommand -----
 
 ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
-    : QUndoCommand(parent)
+        : QUndoCommand(parent)
 {
-  map = sheet->map();
-  sheetName = sheet->sheetName();
-  QString n =  i18n("Show Sheet %1", sheetName );
-  if( n.length() > 64 ) n = i18n("Show Sheet");
-  setText(n);
+    map = sheet->map();
+    sheetName = sheet->sheetName();
+    QString n =  i18n("Show Sheet %1", sheetName);
+    if (n.length() > 64) n = i18n("Show Sheet");
+    setText(n);
 }
 
 void ShowSheetCommand::redo()
 {
-  Sheet* sheet = map->findSheet( sheetName );
-  if( !sheet ) return;
+    Sheet* sheet = map->findSheet(sheetName);
+    if (!sheet) return;
 
-  sheet->hideSheet( false );
+    sheet->hideSheet(false);
 }
 
 void ShowSheetCommand::undo()
 {
-  Sheet* sheet = map->findSheet( sheetName );
-  if( !sheet ) return;
+    Sheet* sheet = map->findSheet(sheetName);
+    if (!sheet) return;
 
-  sheet->hideSheet( true );
+    sheet->hideSheet(true);
 }
 
 
 // ----- AddSheetCommand -----
 
 AddSheetCommand::AddSheetCommand(Sheet* sheet)
-    : QUndoCommand(i18n("Add Sheet"))
-    , m_sheet(sheet)
-    , m_firstrun(true)
+        : QUndoCommand(i18n("Add Sheet"))
+        , m_sheet(sheet)
+        , m_firstrun(true)
 {
 }
 
 void AddSheetCommand::redo()
 {
-    if (m_firstrun)
-    {
+    if (m_firstrun) {
         m_sheet->map()->addSheet(m_sheet);
         m_firstrun = false;
-    }
-    else
-    {
+    } else {
         m_sheet->map()->reviveSheet(m_sheet);
     }
 }
@@ -139,10 +136,10 @@ void AddSheetCommand::undo()
 // ----- DuplicateSheetCommand -----
 
 DuplicateSheetCommand::DuplicateSheetCommand()
-    : QUndoCommand(i18n("Duplicate Sheet"))
-    , m_oldSheet(0)
-    , m_newSheet(0)
-    , m_firstrun(true)
+        : QUndoCommand(i18n("Duplicate Sheet"))
+        , m_oldSheet(0)
+        , m_newSheet(0)
+        , m_firstrun(true)
 {
 }
 
@@ -154,14 +151,11 @@ void DuplicateSheetCommand::setSheet(Sheet* sheet)
 void DuplicateSheetCommand::redo()
 {
     // Once created the sheet stays alive forever. See comment in undo.
-    if (m_firstrun)
-    {
+    if (m_firstrun) {
         m_newSheet = new Sheet(*m_oldSheet);
         m_newSheet->map()->addSheet(m_newSheet);
         m_firstrun = false;
-    }
-    else
-    {
+    } else {
         m_newSheet->map()->reviveSheet(m_newSheet);
     }
 }
@@ -176,7 +170,7 @@ void DuplicateSheetCommand::undo()
 
 // ----- RemoveSheetCommand -----
 
-RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
+RemoveSheetCommand::RemoveSheetCommand(Sheet* s)
 {
     sheet = s;
     map = sheet->map();
@@ -185,12 +179,12 @@ RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
 
 void RemoveSheetCommand::redo()
 {
-    sheet->map()->removeSheet( sheet );
+    sheet->map()->removeSheet(sheet);
 }
 
 void RemoveSheetCommand::undo()
 {
-    sheet->map()->reviveSheet( sheet );
+    sheet->map()->reviveSheet(sheet);
 }
 
 // ----- SheetPropertiesCommand -----
@@ -213,89 +207,89 @@ SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
     setText(i18n("Change Sheet Properties"));
 }
 
-void SheetPropertiesCommand::setLayoutDirection( Qt::LayoutDirection dir )
+void SheetPropertiesCommand::setLayoutDirection(Qt::LayoutDirection dir)
 {
     newDirection = dir;
 }
 
-void SheetPropertiesCommand::setAutoCalculationEnabled( bool b )
+void SheetPropertiesCommand::setAutoCalculationEnabled(bool b)
 {
     newAutoCalc = b;
 }
 
-void SheetPropertiesCommand::setShowGrid( bool b )
+void SheetPropertiesCommand::setShowGrid(bool b)
 {
     newShowGrid = b;
 }
 
-void SheetPropertiesCommand::setShowPageBorders( bool b )
+void SheetPropertiesCommand::setShowPageBorders(bool b)
 {
     newShowPageBorders = b;
 }
 
-void SheetPropertiesCommand::setShowFormula( bool b )
+void SheetPropertiesCommand::setShowFormula(bool b)
 {
     newShowFormula = b;
 }
 
-void SheetPropertiesCommand::setHideZero( bool b  )
+void SheetPropertiesCommand::setHideZero(bool b)
 {
     newHideZero = b;
 }
 
-void SheetPropertiesCommand::setShowFormulaIndicator( bool b )
+void SheetPropertiesCommand::setShowFormulaIndicator(bool b)
 {
     newShowFormulaIndicator = b;
 }
 
-void SheetPropertiesCommand::setShowCommentIndicator( bool b )
+void SheetPropertiesCommand::setShowCommentIndicator(bool b)
 {
-  newShowCommentIndicator = b;
+    newShowCommentIndicator = b;
 }
 
-void SheetPropertiesCommand::setColumnAsNumber( bool b  )
+void SheetPropertiesCommand::setColumnAsNumber(bool b)
 {
     newColumnAsNumber = b;
 }
 
-void SheetPropertiesCommand::setLcMode( bool b  )
+void SheetPropertiesCommand::setLcMode(bool b)
 {
     newLcMode = b;
 }
 
-void SheetPropertiesCommand::setCapitalizeFirstLetter( bool b )
+void SheetPropertiesCommand::setCapitalizeFirstLetter(bool b)
 {
     newCapitalizeFirstLetter = b;
 }
 
 void SheetPropertiesCommand::redo()
 {
-    sheet->setLayoutDirection( newDirection );
-    sheet->setAutoCalculationEnabled( newAutoCalc );
-    sheet->setShowGrid( newShowGrid );
-    sheet->setShowPageBorders( newShowPageBorders );
-    sheet->setShowFormula( newShowFormula );
-    sheet->setHideZero( newHideZero );
-    sheet->setShowFormulaIndicator( newShowFormulaIndicator );
-    sheet->setShowCommentIndicator( newShowCommentIndicator );
-    sheet->setShowColumnNumber( newColumnAsNumber );
-    sheet->setLcMode( newLcMode );
-    sheet->setFirstLetterUpper( newCapitalizeFirstLetter );
-    sheet->map()->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
+    sheet->setLayoutDirection(newDirection);
+    sheet->setAutoCalculationEnabled(newAutoCalc);
+    sheet->setShowGrid(newShowGrid);
+    sheet->setShowPageBorders(newShowPageBorders);
+    sheet->setShowFormula(newShowFormula);
+    sheet->setHideZero(newHideZero);
+    sheet->setShowFormulaIndicator(newShowFormulaIndicator);
+    sheet->setShowCommentIndicator(newShowCommentIndicator);
+    sheet->setShowColumnNumber(newColumnAsNumber);
+    sheet->setLcMode(newLcMode);
+    sheet->setFirstLetterUpper(newCapitalizeFirstLetter);
+    sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::PropertiesChanged));
 }
 
 void SheetPropertiesCommand::undo()
 {
-    sheet->setLayoutDirection( oldDirection );
-    sheet->setAutoCalculationEnabled( oldAutoCalc );
-    sheet->setShowGrid( oldShowGrid );
-    sheet->setShowPageBorders( oldShowPageBorders );
-    sheet->setShowFormula( oldShowFormula );
-    sheet->setHideZero( oldHideZero );
-    sheet->setShowFormulaIndicator( oldShowFormulaIndicator );
-    sheet->setShowCommentIndicator( oldShowCommentIndicator );
-    sheet->setShowColumnNumber( oldColumnAsNumber );
-    sheet->setLcMode( oldLcMode );
-    sheet->setFirstLetterUpper( oldCapitalizeFirstLetter );
-    sheet->map()->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
+    sheet->setLayoutDirection(oldDirection);
+    sheet->setAutoCalculationEnabled(oldAutoCalc);
+    sheet->setShowGrid(oldShowGrid);
+    sheet->setShowPageBorders(oldShowPageBorders);
+    sheet->setShowFormula(oldShowFormula);
+    sheet->setHideZero(oldHideZero);
+    sheet->setShowFormulaIndicator(oldShowFormulaIndicator);
+    sheet->setShowCommentIndicator(oldShowCommentIndicator);
+    sheet->setShowColumnNumber(oldColumnAsNumber);
+    sheet->setLcMode(oldLcMode);
+    sheet->setFirstLetterUpper(oldCapitalizeFirstLetter);
+    sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::PropertiesChanged));
 }

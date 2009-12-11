@@ -41,14 +41,14 @@ public:
     QString link() const;
 
 public slots:
-    void setText( const QString& text );
-    void setLink( const QString& link );
+    void setText(const QString& text);
+    void setLink(const QString& link);
 
 protected slots:
     void slotOk();
 
 private:
-    Q_DISABLE_COPY( LinkDialog )
+    Q_DISABLE_COPY(LinkDialog)
 
     class Private;
     Private * const d;

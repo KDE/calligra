@@ -53,51 +53,51 @@ class Selection;
 
 class GoalSeekDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-   GoalSeekDialog(QWidget* parent, Selection* selection);
-   ~GoalSeekDialog();
+public:
+    GoalSeekDialog(QWidget* parent, Selection* selection);
+    ~GoalSeekDialog();
 
- public slots:
-  void buttonOkClicked();
-  void buttonCancelClicked();
+public slots:
+    void buttonOkClicked();
+    void buttonCancelClicked();
 
- protected:
-  virtual void closeEvent ( QCloseEvent * );
+protected:
+    virtual void closeEvent(QCloseEvent *);
 
-  QGridLayout * GoalSeekDialogLayout;
-  QGridLayout * m_startFrameLayout;
-  QGridLayout * m_resultFrameLayout;
+    QGridLayout * GoalSeekDialogLayout;
+    QGridLayout * m_startFrameLayout;
+    QGridLayout * m_resultFrameLayout;
 
- private:
-  Selection   * m_selection;
-  Cell          m_sourceCell;
-  Cell          m_targetCell;
-  double        m_result;
-  int           m_maxIter;
-  bool          m_restored;
-  double        m_oldSource;
+private:
+    Selection   * m_selection;
+    Cell          m_sourceCell;
+    Cell          m_targetCell;
+    double        m_result;
+    int           m_maxIter;
+    bool          m_restored;
+    double        m_oldSource;
 
-  QString       m_oldText;
-  QString       m_sheetName;
+    QString       m_oldText;
+    QString       m_sheetName;
 
-  QFrame      * m_startFrame;
-  QPushButton * m_buttonOk;
-  QPushButton * m_buttonCancel;
-  QFrame      * m_resultFrame;
-  QLabel      * m_newValueDesc;
-  QLabel      * m_currentValueLabel;
-  QLabel      * m_newValue;
-  QLabel      * m_currentValue;
-  QLabel      * m_resultText;
+    QFrame      * m_startFrame;
+    QPushButton * m_buttonOk;
+    QPushButton * m_buttonCancel;
+    QFrame      * m_resultFrame;
+    QLabel      * m_newValueDesc;
+    QLabel      * m_currentValueLabel;
+    QLabel      * m_newValue;
+    QLabel      * m_currentValue;
+    QLabel      * m_resultText;
 
-  RegionSelector* m_selector1;
-  RegionSelector* m_selector2;
-  RegionSelector* m_selector3;
+    RegionSelector* m_selector1;
+    RegionSelector* m_selector2;
+    RegionSelector* m_selector3;
 
-  void startCalc(double _start, double _goal);
-  void chooseCleanup();
+    void startCalc(double _start, double _goal);
+    void chooseCleanup();
 };
 
 } // namespace KSpread

@@ -42,28 +42,28 @@ class Selection;
 */
 class CSVDialog : public KoCsvImportDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum Mode { Clipboard, File, Column };
+    enum Mode { Clipboard, File, Column };
 
-  CSVDialog(QWidget* parent, Selection* selection, Mode mode);
-  ~CSVDialog();
+    CSVDialog(QWidget* parent, Selection* selection, Mode mode);
+    ~CSVDialog();
 
-  bool canceled();
+    bool canceled();
 
 protected Q_SLOTS:
-  void init();
+    void init();
 
 protected:
-  void accept();
+    void accept();
 
 private:
-  Selection* m_selection;
-  bool    m_canceled;
-  QRect   m_targetRect;
-  Mode    m_mode;
-  QString m_filename;
+    Selection* m_selection;
+    bool    m_canceled;
+    QRect   m_targetRect;
+    Mode    m_mode;
+    QString m_filename;
 };
 
 } // namespace KSpread

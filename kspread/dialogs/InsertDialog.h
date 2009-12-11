@@ -42,20 +42,20 @@ class InsertDialog : public KDialog
 public:
     enum Mode { Insert, Remove };
 
-    InsertDialog(QWidget* parent, Selection* selection, Mode _mode );
+    InsertDialog(QWidget* parent, Selection* selection, Mode _mode);
 
 public slots:
     void slotOk();
 
 private:
-  Selection* m_selection;
+    Selection* m_selection;
 
-  QRadioButton *rb1;
-  QRadioButton *rb2;
-  QRadioButton *rb3;
-  QRadioButton *rb4;
-  QRect  rect;
-  Mode insRem;
+    QRadioButton *rb1;
+    QRadioButton *rb2;
+    QRadioButton *rb3;
+    QRadioButton *rb4;
+    QRect  rect;
+    Mode insRem;
 };
 
 } // namespace KSpread

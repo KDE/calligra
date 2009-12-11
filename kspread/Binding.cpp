@@ -36,19 +36,21 @@ class Binding::Private : public QSharedData
 {
 public:
     Private() : model(0) {}
-    ~Private() { delete model; }
+    ~Private() {
+        delete model;
+    }
 
     BindingModel* model;
 };
 
 
 Binding::Binding()
-    : d(new Private)
+        : d(new Private)
 {
 }
 
 Binding::Binding(const Region& region)
-    : d(new Private)
+        : d(new Private)
 {
     Q_ASSERT(region.isValid());
     d->model = new BindingModel(this);
@@ -56,7 +58,7 @@ Binding::Binding(const Region& region)
 }
 
 Binding::Binding(const Binding& other)
-    : d(other.d)
+        : d(other.d)
 {
 }
 
@@ -92,14 +94,12 @@ void Binding::update(const Region& region)
     const QRect range = d->model->region().firstRange();
     const Sheet* sheet = d->model->region().firstSheet();
     Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-    {
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         if (sheet != (*it)->sheet())
             continue;
         rect = range & (*it)->rect();
-        rect.translate( -offset.x(), -offset.y() );
-        if (rect.isValid())
-        {
+        rect.translate(-offset.x(), -offset.y());
+        if (rect.isValid()) {
             d->model->emitDataChanged(rect);
             changedRegion.add(rect, (*it)->sheet());
         }
@@ -107,7 +107,7 @@ void Binding::update(const Region& region)
     d->model->emitChanged(changedRegion);
 }
 
-void Binding::operator=(const Binding& other)
+void Binding::operator=(const Binding & other)
 {
     d = other.d;
 }
@@ -170,8 +170,8 @@ bool BindingModel::setCellRegion(const QString& regionName)
 /////// BindingModel
 
 BindingModel::BindingModel(Binding* binding, QObject *parent)
-    : QAbstractTableModel(parent)
-    , m_binding(binding)
+        : QAbstractTableModel(parent)
+        , m_binding(binding)
 {
 }
 
@@ -207,37 +207,35 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     const QPoint offset = m_region.firstRange().topLeft();
     const Sheet* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(offset.x() + index.column(),
-                                                     offset.y() + index.row());
+                        offset.y() + index.row());
     // KoChart::Value is either:
     //  - a double (interpreted as a value)
     //  - a QString (interpreted as a label)
     //  - a QDateTime (interpreted as a date/time value)
     //  - Invalid (interpreted as empty)
     QVariant variant;
-    switch (value.type())
-    {
-        case Value::Float:
-        case Value::Integer:
-            if (value.format() == Value::fmt_DateTime ||
-                 value.format() == Value::fmt_Date ||
-                 value.format() == Value::fmt_Time)
-            {
-                variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
-                break;
-            }
-        case Value::Boolean:
-        case Value::Complex:
-        case Value::Array:
-            variant.setValue<double>(numToDouble (value.asFloat()));
+    switch (value.type()) {
+    case Value::Float:
+    case Value::Integer:
+        if (value.format() == Value::fmt_DateTime ||
+                value.format() == Value::fmt_Date ||
+                value.format() == Value::fmt_Time) {
+            variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
             break;
-        case Value::String:
-        case Value::Error:
-            variant.setValue<QString>(value.asString());
-            break;
-        case Value::Empty:
-        case Value::CellRange:
-        default:
-            break;
+        }
+    case Value::Boolean:
+    case Value::Complex:
+    case Value::Array:
+        variant.setValue<double>(numToDouble(value.asFloat()));
+        break;
+    case Value::String:
+    case Value::Error:
+        variant.setValue<QString>(value.asString());
+        break;
+    case Value::Empty:
+    case Value::CellRange:
+    default:
+        break;
     }
     //kDebug() << index.column() <<"," << index.row() <<"," << variant;
     return variant;
@@ -250,7 +248,7 @@ const KSpread::Region& BindingModel::region() const
 
 QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ( (m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
     const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;

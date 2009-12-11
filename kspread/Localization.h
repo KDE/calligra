@@ -35,8 +35,8 @@ class Localization : public KLocale
 public:
     Localization();
 
-    void load( const KoXmlElement& element );
-    QDomElement save( QDomDocument& doc ) const;
+    void load(const KoXmlElement& element);
+    QDomElement save(QDomDocument& doc) const;
     void defaultSystemConfig();
 };
 

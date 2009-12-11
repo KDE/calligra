@@ -38,9 +38,9 @@ class SheetSelectWidget;
  */
 class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
 {
-  Q_OBJECT
-  public:
-    SheetSelectPage( QWidget *parent = 0 );
+    Q_OBJECT
+public:
+    SheetSelectPage(QWidget *parent = 0);
 //     ~SheetSelectPage();
 
     /**
@@ -51,7 +51,7 @@ class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
     /**
      * @return false if no sheet is selected for printing.
      */
-    bool isValid( QString& msg );
+    bool isValid(QString& msg);
 
     /**
      * @return list of sheets that will be printed, in correct order.
@@ -76,7 +76,7 @@ class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
      */
     static QString printOptionForIndex(unsigned int index);
 
-  public slots:
+public slots:
 
     /**
      * Inserts given sheet to the list of available sheets.
@@ -88,7 +88,7 @@ class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
      */
     void prependSelectedSheet(const QString& sheetname);
 
-  protected slots:
+protected slots:
 
     // The following slots just implement the code for the buttons
 

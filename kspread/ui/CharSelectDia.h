@@ -35,12 +35,12 @@ class CharSelectDia : public KDialog
 public:
 
     // constructor
-    CharSelectDia( QWidget *parent, const char *name, const QChar &_chr,
-                     const QString &_font, bool _modal=true );
+    CharSelectDia(QWidget *parent, const char *name, const QChar &_chr,
+                  const QString &_font, bool _modal = true);
 
     //constructor when you want to insert multi char
-    CharSelectDia( QWidget *parent, const char *name, const QString &_font,
-                     const QChar &_chr, bool _modal=true );
+    CharSelectDia(QWidget *parent, const char *name, const QString &_font,
+                  const QChar &_chr, bool _modal = true);
     ~CharSelectDia();
     /**
      * Shows the selection dialog and returns true if user pressed ok, after filling the font and character parameters.
@@ -48,7 +48,7 @@ public:
      * @param character will be filled when the user pressed Ok with the selected character.
      * @param parent the parent widget this dialog will be associated with.
      */
-    static bool selectChar( QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
+    static bool selectChar(QString &font, QChar &character, QWidget* parent = 0, const char* name = 0);
 
 signals:
     /**
@@ -56,7 +56,7 @@ signals:
      * @param character the character that the user selected
      * @param font the font name that was selected when the user inserted the character.
      */
-    void insertChar(QChar character ,const QString &font);
+    void insertChar(QChar character , const QString &font);
 
 private:
     void initDialog(const QChar &_chr, const QString &_font);

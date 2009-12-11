@@ -41,9 +41,9 @@
 using namespace KSpread;
 
 StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-    : KDialog(parent)
-    , m_selection(selection)
-    , m_styleManager(manager)
+        : KDialog(parent)
+        , m_selection(selection)
+        , m_styleManager(manager)
 {
     setButtons(Apply | User1 | User2 | User3 | Close);
     setButtonText(User3, i18n("&New..."));
@@ -103,18 +103,14 @@ void StyleManagerDialog::fillComboBox()
     CustomStyles::const_iterator iter = m_styleManager->m_styles.constBegin();
     CustomStyles::const_iterator end  = m_styleManager->m_styles.constEnd();
 
-    while (entries.count() != m_styleManager->m_styles.count() + 1)
-    {
-        if (entries.find(iter.value()) == entries.end())
-        {
+    while (entries.count() != m_styleManager->m_styles.count() + 1) {
+        if (entries.find(iter.value()) == entries.end()) {
             if (iter.value()->parentName().isNull())
                 entries[iter.value()] = new QTreeWidgetItem(entries[m_styleManager->defaultStyle()],
-                                                            QStringList(iter.value()->name()));
-            else
-            {
+                        QStringList(iter.value()->name()));
+            else {
                 CustomStyle* parentStyle = m_styleManager->style(iter.value()->parentName());
-                if (parentStyle)
-                {
+                if (parentStyle) {
                     Map::const_iterator i = entries.constFind(parentStyle);
                     if (i != entries.constEnd())
                         entries[iter.value()] = new QTreeWidgetItem(i.value(), QStringList(iter.value()->name()));
@@ -135,8 +131,7 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
     if (mode != 2) // NOT "Hierarchical"
         m_styleList->setRootIsDecorated(false);
-    else // "Hierarchical"
-    {
+    else { // "Hierarchical"
         m_styleList->setRootIsDecorated(true);
         fillComboBox();
         return;
@@ -148,21 +143,17 @@ void StyleManagerDialog::slotDisplayMode(int mode)
     CustomStyles::iterator iter = m_styleManager->m_styles.begin();
     CustomStyles::iterator end  = m_styleManager->m_styles.end();
 
-    while (iter != end)
-    {
+    while (iter != end) {
         CustomStyle* styleData = iter.value();
-        if (!styleData || styleData->name().isEmpty())
-        {
+        if (!styleData || styleData->name().isEmpty()) {
             ++iter;
             continue;
         }
 
-        if (mode == 1) // "Custom Styles"
-        {
+        if (mode == 1) { // "Custom Styles"
             if (styleData->type() == Style::CUSTOM)
                 new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
-        }
-        else
+        } else
             new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
 
         ++iter;
@@ -174,23 +165,19 @@ void StyleManagerDialog::slotOk()
     kDebug() ;
     QTreeWidgetItem* item = m_styleList->currentItem();
 
-    if (!item)
-    {
+    if (!item) {
         accept();
         return;
     }
 
     QString name(item->text(0));
-    if (name == i18n("Default"))
-    {
+    if (name == i18n("Default")) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
         command->setDefault();
         command->add(*m_selection);
         command->execute(m_selection->canvas());
-    }
-    else
-    {
+    } else {
         StyleCommand* command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
         command->setParentName(name);
@@ -204,21 +191,18 @@ void StyleManagerDialog::slotNew()
 {
     CustomStyle* parentStyle = 0;
     QTreeWidgetItem* item = m_styleList->currentItem();
-    if (item)
-    {
+    if (item) {
         const QString name = item->text(0);
         if (name == i18n("Default"))
             parentStyle = m_styleManager->defaultStyle();
         else
             parentStyle = m_styleManager->style(name);
-    }
-    else
+    } else
         parentStyle = m_styleManager->defaultStyle();
 
     int i = 1;
     QString newName(i18n("style%1" , m_styleManager->count() + i));
-    while (m_styleManager->style(newName) != 0)
-    {
+    while (m_styleManager->style(newName) != 0) {
         ++i;
         newName = i18n("style%1" , m_styleManager->count() + i);
     }
@@ -229,13 +213,12 @@ void StyleManagerDialog::slotNew()
     CellFormatDialog dlg(this, m_selection, style, m_styleManager);
     dlg.exec();
 
-    if (style->type() == Style::TENTATIVE)
-    {
+    if (style->type() == Style::TENTATIVE) {
         delete style;
         return;
     }
 
-    m_styleManager->m_styles[ style->name() ] = style;
+    m_styleManager->m_styles[ style->name()] = style;
 
     slotDisplayMode(m_displayBox->currentIndex());
 }
@@ -300,8 +283,7 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
         style = m_styleManager->defaultStyle();
     else
         style = m_styleManager->style(name);
-    if (!style)
-    {
+    if (!style) {
         enableButton(KDialog::User1, false);
         return;
     }

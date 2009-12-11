@@ -52,8 +52,7 @@
 
 using namespace KSpread;
 
-struct Entry
-{
+struct Entry {
     QString xml;
     QString image;
     QString config;
@@ -74,13 +73,13 @@ public:
 };
 
 AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , d(new Private())
+        : KDialog(parent)
+        , d(new Private())
 {
     setCaption(i18n("Sheet Style"));
     setObjectName("AutoAutoFormatDialog");
     setModal(true);
-    setButtons(Ok|Cancel);
+    setButtons(Ok | Cancel);
 
     d->selection = selection;
     QWidget *page = mainWidget();
@@ -102,8 +101,7 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
 
     int index = 0;
     QStringList::ConstIterator it = lst.begin();
-    for(; it != lst.end(); ++it)
-    {
+    for (; it != lst.end(); ++it) {
         KConfig config(*it, KConfig::SimpleConfig);
         const KConfigGroup sheetStyleGroup = config.group("Sheet-Style");
 
@@ -134,16 +132,14 @@ void AutoFormatDialog::slotActivated(int index)
     enableButtonOk(true);
 
     QString image = Factory::global().dirs()->findResource("sheet-styles", d->entries[index].image);
-    if (image.isEmpty())
-    {
+    if (image.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find image %1.", d->entries[index].image));
         enableButtonOk(false);
         return;
     }
 
     QPixmap pixmap(image);
-    if (pixmap.isNull())
-    {
+    if (pixmap.isNull()) {
         KMessageBox::error(this, i18n("Could not load image %1.", image));
         enableButtonOk(false);
         return;
@@ -154,8 +150,7 @@ void AutoFormatDialog::slotActivated(int index)
 void AutoFormatDialog::slotOk()
 {
     QString xml = Factory::global().dirs()->findResource("sheet-styles", d->entries[d->combo->currentIndex()].xml);
-    if (xml.isEmpty())
-    {
+    if (xml.isEmpty()) {
         KMessageBox::error(this, i18n("Could not find sheet-style XML file '%1'.", d->entries[d->combo->currentIndex()].xml));
         return;
     }
@@ -166,8 +161,7 @@ void AutoFormatDialog::slotOk()
     doc.setContent(&file);
     file.close();
 
-    if (!d->parseXML(doc))
-    {
+    if (!d->parseXML(doc)) {
         KMessageBox::error(this, i18n("Parsing error in sheet-style XML file %1.", d->entries[d->combo->currentIndex()].xml));
         return;
     }
@@ -192,10 +186,8 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
         styles.append(Style());
 
     KoXmlElement e = doc.documentElement().firstChild().toElement();
-    for(; !e.isNull(); e = e.nextSibling().toElement())
-    {
-        if (e.tagName() == "cell")
-        {
+    for (; !e.isNull(); e = e.nextSibling().toElement()) {
+        if (e.tagName() == "cell") {
             Style style;
             KoXmlElement tmpElement(e.namedItem("format").toElement());
             if (!style.loadXML(tmpElement))
@@ -203,7 +195,7 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
 
             int row = e.attribute("row").toInt();
             int column = e.attribute("column").toInt();
-            int i = (row-1)*4 + (column-1);
+            int i = (row - 1) * 4 + (column - 1);
             if (i < 0 || i >= 16)
                 return false;
 

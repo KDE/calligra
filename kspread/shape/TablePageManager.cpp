@@ -41,8 +41,8 @@ public:
 };
 
 TablePageManager::TablePageManager(TableShape* master)
-    : PageManager(master->sheet())
-    , d(new Private)
+        : PageManager(master->sheet())
+        , d(new Private)
 {
     d->master = master;
 }

@@ -39,34 +39,34 @@
 #include <kross/core/manager.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )
+K_EXPORT_COMPONENT_FACTORY(krossmodulekspread, KSpreadScriptingFactory("krossmodulekspread"))
 
 /// \internal d-pointer class.
 class ScriptingPart::Private
 {
-	public:
+public:
 };
 
 ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
-    : KoScriptingPart(new ScriptingModule(parent), list)
-    , d(new Private())
+        : KoScriptingPart(new ScriptingModule(parent), list)
+        , d(new Private())
 {
     setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data","kspread/kpartplugins/scripting.rc"), true);
-    kDebug() <<"Scripting plugin. Class:" << metaObject()->className() <<", Parent:" << parent->metaObject()->className();
+    setXMLFile(KStandardDirs::locate("data", "kspread/kpartplugins/scripting.rc"), true);
+    kDebug() << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if( args ) {
+    if (args) {
         QStringList errors;
         foreach(QString ba, args->getOptionList("scriptfile")) {
             QUrl url(ba);
             QFileInfo fi(url.path());
             const QString file = fi.absoluteFilePath();
-            if( ! fi.exists() ) {
+            if (! fi.exists()) {
                 errors << i18n("Scriptfile \"%1\" does not exist.", file);
                 continue;
             }
-            if( ! fi.isExecutable() ) {
+            if (! fi.isExecutable()) {
                 errors << i18n("Scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.", file);
                 continue;
             }
@@ -76,20 +76,21 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
                 tmpDirs.append("/tmp/");
                 tmpDirs.append("/var/tmp/");
                 bool inTemp = false;
-                foreach(QString tmpDir, tmpDirs)
-                    if( file.startsWith(tmpDir) ) {
+                foreach(QString tmpDir, tmpDirs) {
+                    if (file.startsWith(tmpDir)) {
                         inTemp = true;
                         break;
                     }
-                if( inTemp ) {
+                }
+                if (inTemp) {
                     errors << i18n("Scriptfile \"%1\" is in a temporary directory. Execution denied.", file);
                     continue;
                 }
             }
-            if( ! Kross::Manager::self().executeScriptFile(url) )
+            if (! Kross::Manager::self().executeScriptFile(url))
                 errors << i18n("Failed to execute scriptfile \"%1\"", file);
         }
-        if( errors.count() > 0 )
+        if (errors.count() > 0)
             KMessageBox::errorList(module()->view(), i18n("Errors on execution of scripts."), errors);
     }
 }

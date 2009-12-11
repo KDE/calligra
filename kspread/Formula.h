@@ -45,66 +45,66 @@ typedef QHash<Cell, Cell> CellIndirection;
  */
 class KSPREAD_EXPORT Token
 {
-  public:
+public:
     /**
      * token types
      */
-    enum Type
-    {
-      Unknown = 0, ///< unknown type
-      Boolean,     ///< True, False (also i18n-ized)
-      Integer,     ///< 14, 3, 1977
-      Float,       ///< 3.141592, 1e10, 5.9e-7
-      String,      ///< "KOffice", "The quick brown fox..."
-      Operator,    ///< +, *, /, -
-      Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
-      Range,       ///< C1:C100
-      Identifier,  ///< function name or named area
-      Error        ///< error, like #REF!, #VALUE!, ...
+    enum Type {
+        Unknown = 0, ///< unknown type
+        Boolean,     ///< True, False (also i18n-ized)
+        Integer,     ///< 14, 3, 1977
+        Float,       ///< 3.141592, 1e10, 5.9e-7
+        String,      ///< "KOffice", "The quick brown fox..."
+        Operator,    ///< +, *, /, -
+        Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
+        Range,       ///< C1:C100
+        Identifier,  ///< function name or named area
+        Error        ///< error, like #REF!, #VALUE!, ...
     };
 
     /**
      * operator types
      */
-    enum Op
-    {
-      InvalidOp = 0,  ///< invalid operator
-      Plus,           ///<  + (addition)
-      Minus,          ///<  - (subtraction, negation)
-      Asterisk,       ///<  * (multiplication)
-      Slash,          ///<  / (division)
-      Caret,          ///<  ^ (power)
-      LeftPar,        ///<  (
-      RightPar,       ///<  )
-      Comma,          ///<  ,
-      Semicolon,      ///<  ; (argument separator)
-      Ampersand,      ///<  & (string concat)
-      Equal,          ///<  =
-      NotEqual,       ///<  <>
-      Less,           ///<  <
-      Greater,        ///<  >
-      LessEqual,      ///<  <=
-      GreaterEqual,   ///<  >=
-      Percent,        ///<  %
-      CurlyBra,       ///<  { (array start)
-      CurlyKet,       ///<  } (array end)
-      Pipe            ///<  | (array row separator)
+    enum Op {
+        InvalidOp = 0,  ///< invalid operator
+        Plus,           ///<  + (addition)
+        Minus,          ///<  - (subtraction, negation)
+        Asterisk,       ///<  * (multiplication)
+        Slash,          ///<  / (division)
+        Caret,          ///<  ^ (power)
+        LeftPar,        ///<  (
+        RightPar,       ///<  )
+        Comma,          ///<  ,
+        Semicolon,      ///<  ; (argument separator)
+        Ampersand,      ///<  & (string concat)
+        Equal,          ///<  =
+        NotEqual,       ///<  <>
+        Less,           ///<  <
+        Greater,        ///<  >
+        LessEqual,      ///<  <=
+        GreaterEqual,   ///<  >=
+        Percent,        ///<  %
+        CurlyBra,       ///<  { (array start)
+        CurlyKet,       ///<  } (array end)
+        Pipe            ///<  | (array row separator)
     };
 
     /**
      * Creates a token.
      */
-    explicit Token( Type type = Unknown, const QString& text = QString(), int pos = -1 );
+    explicit Token(Type type = Unknown, const QString& text = QString(), int pos = -1);
 
     static const Token null;
 
-    Token( const Token& );
-    Token& operator=( const Token& );
+    Token(const Token&);
+    Token& operator=(const Token&);
 
     /**
      * Returns type of the token.
      */
-    Type type() const { return m_type; }
+    Type type() const {
+        return m_type;
+    }
 
     /**
      * Returns text associated with the token.
@@ -113,59 +113,83 @@ class KSPREAD_EXPORT Token
      * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
      * etc.
      */
-    QString text() const { return m_text; }
+    QString text() const {
+        return m_text;
+    }
 
-    int pos() const { return m_pos; }
+    int pos() const {
+        return m_pos;
+    }
 
     /**
      * Returns true if token is a boolean token.
      */
-    bool isBoolean() const { return m_type == Boolean; }
+    bool isBoolean() const {
+        return m_type == Boolean;
+    }
 
     /**
      * Returns true if token is a integer token.
      */
-    bool isInteger() const { return m_type == Integer; }
+    bool isInteger() const {
+        return m_type == Integer;
+    }
 
     /**
      * Returns true if token is a floating-point token.
      */
-    bool isFloat() const { return m_type == Float; }
+    bool isFloat() const {
+        return m_type == Float;
+    }
 
     /**
      * Returns true if token is either integer or floating-point token.
      */
-    bool isNumber() const { return (m_type == Integer) || (m_type == Float); }
+    bool isNumber() const {
+        return (m_type == Integer) || (m_type == Float);
+    }
 
     /**
      * Returns true if token is a string token.
      */
-    bool isString() const { return m_type == String; }
+    bool isString() const {
+        return m_type == String;
+    }
 
     /**
      * Returns true if token is an operator token.
      */
-    bool isOperator() const { return m_type == Operator; }
+    bool isOperator() const {
+        return m_type == Operator;
+    }
 
     /**
      * Returns true if token is a cell reference token.
      */
-    bool isCell() const { return m_type == Cell; }
+    bool isCell() const {
+        return m_type == Cell;
+    }
 
     /**
      * Returns true if token is a range reference token.
      */
-    bool isRange() const { return m_type == Range; }
+    bool isRange() const {
+        return m_type == Range;
+    }
 
     /**
      * Returns true if token is an identifier.
      */
-    bool isIdentifier() const { return m_type == Identifier; }
+    bool isIdentifier() const {
+        return m_type == Identifier;
+    }
 
     /**
      * Returns true if token is a error token.
      */
-    bool isError() const { return m_type == Error; }
+    bool isError() const {
+        return m_type == Error;
+    }
 
     /**
      * Returns boolean value for an boolean token.
@@ -228,7 +252,7 @@ class KSPREAD_EXPORT Token
      */
     QString description() const;
 
-  protected:
+protected:
 
     Type m_type;
     QString m_text;
@@ -243,11 +267,15 @@ class KSPREAD_EXPORT Token
 class Tokens: public QVector<Token>
 {
 public:
-  Tokens(): QVector<Token>(), m_valid(true) {}
-  bool valid() const { return m_valid; }
-  void setValid( bool v ){ m_valid = v; }
+    Tokens(): QVector<Token>(), m_valid(true) {}
+    bool valid() const {
+        return m_valid;
+    }
+    void setValid(bool v) {
+        m_valid = v;
+    }
 protected:
-  bool m_valid;
+    bool m_valid;
 };
 
 
@@ -261,16 +289,16 @@ protected:
  */
 class KSPREAD_EXPORT Formula
 {
-  public:
+public:
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    Formula( Sheet *sheet, const Cell& cell );
+    Formula(Sheet *sheet, const Cell& cell);
 
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    explicit Formula( Sheet *sheet );
+    explicit Formula(Sheet *sheet);
 
     /**
      * Creates a formula that is not owned by any sheet.
@@ -281,7 +309,7 @@ class KSPREAD_EXPORT Formula
     /**
      * Copy constructor.
      */
-    Formula( const Formula& );
+    Formula(const Formula&);
 
     /**
      * Destroys the formula.
@@ -300,7 +328,7 @@ class KSPREAD_EXPORT Formula
     /**
      * Sets the expression for this formula.
      */
-    void setExpression( const QString& expr );
+    void setExpression(const QString& expr);
 
     /**
      * Gets the expression of this formula.
@@ -334,41 +362,43 @@ class KSPREAD_EXPORT Formula
      * different cells. If this mapping is non-empty this does mean
      * that intermediate results can't be cached.
      */
-    Value eval( CellIndirection cellIndirections = CellIndirection() ) const;
+    Value eval(CellIndirection cellIndirections = CellIndirection()) const;
 
     /**
      * Given an expression, this function separates it into tokens.
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */
-    Tokens scan( const QString& expr, const KLocale* locale = 0 ) const;
+    Tokens scan(const QString& expr, const KLocale* locale = 0) const;
 
     /**
      * Assignment operator.
      */
-    Formula& operator=( const Formula& );
+    Formula& operator=(const Formula&);
 
-    bool operator==( const Formula& ) const;
-    inline bool operator!=( const Formula& o ) const { return !operator==( o ); }
+    bool operator==(const Formula&) const;
+    inline bool operator!=(const Formula& o) const {
+        return !operator==(o);
+    }
 
     QString dump() const;
 
-  protected:
+protected:
 
-    void compile( const Tokens& tokens ) const;
+    void compile(const Tokens& tokens) const;
 
     /**
      * helper function: return true for valid named area
      */
-    bool isNamedArea( const QString& expr ) const;
+    bool isNamedArea(const QString& expr) const;
 
     /**
      * helper function for recursive evaluations; makes sure one cell
      * is not evaluated more than once resulting in infinite loops
      */
-    Value evalRecursive( CellIndirection cellIndirections, QHash<Cell, Value>& values ) const;
+    Value evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value>& values) const;
 
-  private:
+private:
     class Private;
     QSharedDataPointer<Private> d;
 };
@@ -376,19 +406,19 @@ class KSPREAD_EXPORT Formula
 /**
  * Dumps the formula, should be used only to assist debugging.
  */
-QTextStream& operator<<( QTextStream& ts, Formula formula );
+QTextStream& operator<<(QTextStream& ts, Formula formula);
 
 
 /**
  * helper function: return operator of given token text
  * e.g. "*" yields Operator::Asterisk, and so on
  */
-Token::Op matchOperator( const QString& text );
+Token::Op matchOperator(const QString& text);
 
 /**
  * helper function: return true for valid identifier character
  */
-bool isIdentifier( QChar ch );
+bool isIdentifier(QChar ch);
 
 /***************************************************************************
   QHash/QSet support
@@ -401,6 +431,6 @@ inline uint qHash(const Formula& formula)
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::Formula, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(KSpread::Formula, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_FORMULA

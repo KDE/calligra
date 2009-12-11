@@ -37,31 +37,33 @@ class GenValidationStyles;
 class GenValidationStyle
 {
 public:
-    explicit GenValidationStyle(Validity *_val=0) { initVal( _val ); }
+    explicit GenValidationStyle(Validity *_val = 0) {
+        initVal(_val);
+    }
 
 
-    bool operator<( const GenValidationStyle &other ) const {
-        if ( allowEmptyCell != other.allowEmptyCell ) return ( allowEmptyCell < other.allowEmptyCell );
-        if ( condition != other.condition ) return ( condition < other.condition );
-        if ( titleInfo != other.titleInfo ) return ( titleInfo < other.titleInfo );
-        if ( displayValidationInformation != other.displayValidationInformation ) return ( displayValidationInformation < other.displayValidationInformation );
-        if ( messageInfo != other.messageInfo ) return ( messageInfo < other.messageInfo );
-        if ( messageType != other.messageType ) return ( messageType < other.messageType );
-        if ( displayMessage != other.displayMessage ) return ( displayMessage < other.displayMessage );
-        if ( message != other.message ) return ( message < other.message );
-        if ( title != other.title ) return ( title < other.title );
+    bool operator<(const GenValidationStyle &other) const {
+        if (allowEmptyCell != other.allowEmptyCell) return (allowEmptyCell < other.allowEmptyCell);
+        if (condition != other.condition) return (condition < other.condition);
+        if (titleInfo != other.titleInfo) return (titleInfo < other.titleInfo);
+        if (displayValidationInformation != other.displayValidationInformation) return (displayValidationInformation < other.displayValidationInformation);
+        if (messageInfo != other.messageInfo) return (messageInfo < other.messageInfo);
+        if (messageType != other.messageType) return (messageType < other.messageType);
+        if (displayMessage != other.displayMessage) return (displayMessage < other.displayMessage);
+        if (message != other.message) return (message < other.message);
+        if (title != other.title) return (title < other.title);
 
         return false;
     }
 private:
-    QString createValidationCondition( Validity* _val );
-    QString createTextValidationCondition( Validity* _val );
-    QString createTimeValidationCondition( Validity* _val );
-    QString createDateValidationCondition( Validity* _val );
-    QString createNumberValidationCondition( Validity* _val );
-    QString createListValidationCondition( Validity* _val );
+    QString createValidationCondition(Validity* _val);
+    QString createTextValidationCondition(Validity* _val);
+    QString createTimeValidationCondition(Validity* _val);
+    QString createDateValidationCondition(Validity* _val);
+    QString createNumberValidationCondition(Validity* _val);
+    QString createListValidationCondition(Validity* _val);
 
-    void initVal( Validity *_val );
+    void initVal(Validity *_val);
 
     QString allowEmptyCell;
     QString condition;
@@ -80,13 +82,13 @@ class KSPREAD_EXPORT GenValidationStyles
 public:
     GenValidationStyles();
     ~GenValidationStyles();
-    QString lookup( const GenValidationStyle& style );
+    QString lookup(const GenValidationStyle& style);
 
     typedef QMap<GenValidationStyle, QString> StyleMap;
-    void writeStyle( KoXmlWriter& writer );
+    void writeStyle(KoXmlWriter& writer);
 
 private:
-    QString makeUniqueName( const QString& base ) const;
+    QString makeUniqueName(const QString& base) const;
 
     /// style definition -> name
     StyleMap m_styles;

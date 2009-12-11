@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Joseph Wenninger <jowenn@kde.org>
@@ -47,8 +47,8 @@ using namespace KSpread;
  *
  ************************************************/
 
-ViewAdaptor::ViewAdaptor( View* t )
-    : QDBusAbstractAdaptor( t )
+ViewAdaptor::ViewAdaptor(View* t)
+        : QDBusAbstractAdaptor(t)
 {
     setAutoRelaySignals(true);
     m_view = t;
@@ -78,7 +78,7 @@ QString ViewAdaptor::sheet() const
 
 void ViewAdaptor::changeNbOfRecentFiles(int _nb)
 {
-    if(_nb<0)
+    if (_nb < 0)
         return;
     m_view->changeNbOfRecentFiles(_nb);
 }
@@ -148,7 +148,7 @@ void ViewAdaptor::nextSheet()
 
 bool ViewAdaptor::showSheet(const QString& sheetName)
 {
-   return m_view->showSheet(sheetName);
+    return m_view->showSheet(sheetName);
 }
 
 void ViewAdaptor::previousSheet()
@@ -300,81 +300,81 @@ void ViewAdaptor::copyAsText()
 
 void ViewAdaptor::setSelection(const QRect& selection)
 {
-  m_view->selection()->initialize(selection);//,m_view->activeSheet());
+    m_view->selection()->initialize(selection);//,m_view->activeSheet());
 }
 
 QRect ViewAdaptor::selection()
 {
-  return m_view->selection()->lastRange();
+    return m_view->selection()->lastRange();
 }
 
 #if 0 // -> cell tool
-void ViewAdaptor::setSelectionMoneyFormat( bool b )
+void ViewAdaptor::setSelectionMoneyFormat(bool b)
 {
-  m_view->moneyFormat(b);
+    m_view->moneyFormat(b);
 }
 
-void ViewAdaptor::setSelectionPercent( bool b )
+void ViewAdaptor::setSelectionPercent(bool b)
 {
-  m_view->percent(b);
+    m_view->percent(b);
 }
 
-void ViewAdaptor::setSelectionMultiRow( bool enable )
+void ViewAdaptor::setSelectionMultiRow(bool enable)
 {
-  m_view->wrapText(enable);
+    m_view->wrapText(enable);
 }
 
 void ViewAdaptor::setSelectionSize(int size)
 {
-  m_view->setSelectionFontSize(size);
+    m_view->setSelectionFontSize(size);
 }
 
 void ViewAdaptor::setSelectionUpper()
 {
-  m_view->upper();
+    m_view->upper();
 }
 
 void ViewAdaptor::setSelectionLower()
 {
-  m_view->lower();
+    m_view->lower();
 }
 
 void ViewAdaptor::setSelectionFirstLetterUpper()
 {
-  m_view->firstLetterUpper();
+    m_view->firstLetterUpper();
 }
 
 void ViewAdaptor::setSelectionVerticalText(bool enable)
 {
-  m_view->verticalText(enable);
+    m_view->verticalText(enable);
 }
 #endif
 
 void ViewAdaptor::setSelectionComment(const QString& comment)
 {
-  m_view->setSelectionComment(comment);
+    m_view->setSelectionComment(comment);
 }
 
 #if 0 // -> cell tool
 void ViewAdaptor::setSelectionAngle(int value)
 {
-  m_view->setSelectionAngle(value);
+    m_view->setSelectionAngle(value);
 }
 #endif
 
-void ViewAdaptor::setSelectionTextColor( const QColor& txtColor )
+void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
 {
-  m_view->setSelectionTextColor(txtColor);
+    m_view->setSelectionTextColor(txtColor);
 }
 
-void ViewAdaptor::setSelectionBgColor( const QColor& bgColor )
+void ViewAdaptor::setSelectionBgColor(const QColor& bgColor)
 {
-  m_view->setSelectionBackgroundColor(bgColor);
+    m_view->setSelectionBackgroundColor(bgColor);
 }
 
-void ViewAdaptor::setSelectionBorderColor( const QColor& bdColor )
+void ViewAdaptor::setSelectionBorderColor(const QColor& bdColor)
 {
-  m_view->setSelectionBorderColor(bdColor);
+    m_view->setSelectionBorderColor(bdColor);
 }
 
 #if 0 // -> cell tool
@@ -385,69 +385,69 @@ void ViewAdaptor::deleteSelection()
 
 void ViewAdaptor::copySelection()
 {
-  m_view->copySelection();
+    m_view->copySelection();
 }
 
 void ViewAdaptor::cutSelection()
 {
-  m_view->cutSelection();
+    m_view->cutSelection();
 }
 #endif
 
 void ViewAdaptor::setLeftBorderColor(const QColor& color)
 {
-  m_view->setSelectionLeftBorderColor(color);
+    m_view->setSelectionLeftBorderColor(color);
 }
 
 void ViewAdaptor::setTopBorderColor(const QColor& color)
 {
-  m_view->setSelectionTopBorderColor(color);
+    m_view->setSelectionTopBorderColor(color);
 }
 
 void ViewAdaptor::setRightBorderColor(const QColor& color)
 {
-  m_view->setSelectionRightBorderColor(color);
+    m_view->setSelectionRightBorderColor(color);
 }
 
 void ViewAdaptor::setBottomBorderColor(const QColor& color)
 {
-  m_view->setSelectionBottomBorderColor(color);
+    m_view->setSelectionBottomBorderColor(color);
 }
 
 void ViewAdaptor::setAllBorderColor(const QColor& color)
 {
-  m_view->setSelectionAllBorderColor(color);
+    m_view->setSelectionAllBorderColor(color);
 }
 
 void ViewAdaptor::setOutlineBorderColor(const QColor& color)
 {
-  m_view->setSelectionOutlineBorderColor(color);
+    m_view->setSelectionOutlineBorderColor(color);
 }
 
 #if 0 // -> cell tool
 void ViewAdaptor::removeBorder()
 {
-  m_view->borderRemove();
+    m_view->borderRemove();
 }
 
 void ViewAdaptor::increaseIndent()
 {
-  m_view->increaseIndent();
+    m_view->increaseIndent();
 }
 
 void ViewAdaptor::decreaseIndent()
 {
-  m_view->increaseIndent();
+    m_view->increaseIndent();
 }
 
 void ViewAdaptor::increasePrecision()
 {
-  m_view->increasePrecision();
+    m_view->increasePrecision();
 }
 
 void ViewAdaptor::decreasePrecision()
 {
-  m_view->decreasePrecision();
+    m_view->decreasePrecision();
 }
 
 void ViewAdaptor::subtotals()

@@ -65,8 +65,7 @@ void PageLayoutDialog::Private::setup()
     const QPair<int, int> repeatedColumns = settings->repeatedColumns();
     sheetPage.columnsCheckBox->setChecked(repeatedColumns.first && repeatedColumns.second);
     const int maxColumn = qMax(usedArea.width(), repeatedColumns.second);
-    for (int col = 1; col <= maxColumn; ++col)
-    {
+    for (int col = 1; col <= maxColumn; ++col) {
         const QString number = Cell::columnName(col);
         sheetPage.startColumnComboBox->addItem(number);
         sheetPage.endColumnComboBox->addItem(number, col);
@@ -84,8 +83,7 @@ void PageLayoutDialog::Private::setup()
     const QPair<int, int> repeatedRows = settings->repeatedRows();
     sheetPage.rowsCheckBox->setChecked(repeatedRows.first && repeatedRows.second);
     const int maxRow = qMax(usedArea.height(), repeatedRows.second);
-    for (int row = 1; row <= maxRow; ++row)
-    {
+    for (int row = 1; row <= maxRow; ++row) {
         const QString number = QString::number(row);
         sheetPage.startRowComboBox->addItem(number);
         sheetPage.endRowComboBox->addItem(number, row);
@@ -101,12 +99,10 @@ void PageLayoutDialog::Private::setup()
 
     // Setup the fixed zoom comboboxes.
     QStringList zoomLevels;
-    for (int zoomLevel = 25; zoomLevel <= 500; zoomLevel += 25)
-    {
+    for (int zoomLevel = 25; zoomLevel <= 500; zoomLevel += 25) {
         zoomLevels.append(i18n("%1%", zoomLevel));
         if (qRound(settings->zoom() * 100) > zoomLevel &&
-            qRound(settings->zoom() * 100) < zoomLevel + 25)
-        {
+                qRound(settings->zoom() * 100) < zoomLevel + 25) {
             zoomLevels.append(i18n("%1%", qRound(settings->zoom() * 100)));
         }
     }
@@ -123,26 +119,22 @@ void PageLayoutDialog::Private::setup()
         limits.append(QString("%1").arg(limit));
     sheetPage.horizontalComboBox->insertItems(0, limits);
     sheetPage.verticalComboBox->insertItems(0, limits);
-    if (pageLimits.width() > 20)
-    {
+    if (pageLimits.width() > 20) {
         sheetPage.horizontalComboBox->addItem(QString("%1").arg(pageLimits.width()));
         sheetPage.horizontalComboBox->setCurrentIndex(20);
-    }
-    else
+    } else
         sheetPage.horizontalComboBox->setCurrentIndex(qMax(0, pageLimits.width()));
-    if (pageLimits.height() > 20)
-    {
+    if (pageLimits.height() > 20) {
         sheetPage.verticalComboBox->addItem(QString("%1").arg(pageLimits.height()));
         sheetPage.verticalComboBox->setCurrentIndex(20);
-    }
-    else
+    } else
         sheetPage.verticalComboBox->setCurrentIndex(qMax(0, pageLimits.height()));
 }
 
 
 PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
-    : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
-    , d(new Private)
+        : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
+        , d(new Private)
 {
     setFaceType(KPageDialog::Tabbed);
     showPageSpread(false);
@@ -192,25 +184,21 @@ void PageLayoutDialog::accept()
     settings.setCenterVertically(d->sheetPage.verticalCheckBox->isChecked());
 
     // Set the repeated columns.
-    if (d->sheetPage.columnsCheckBox->isChecked())
-    {
+    if (d->sheetPage.columnsCheckBox->isChecked()) {
         // TODO Stefan: Check if width of repeated columns exceeds page width.
         const int startColumn = Util::decodeColumnLabelText(d->sheetPage.startColumnComboBox->currentText());
         const int endColumn = Util::decodeColumnLabelText(d->sheetPage.endColumnComboBox->currentText());
         settings.setRepeatedColumns(qMakePair(qMin(startColumn, endColumn), qMax(startColumn, endColumn)));
-    }
-    else
+    } else
         settings.setRepeatedColumns(QPair<int, int>());
 
     // Set the repeated rows.
-    if (d->sheetPage.rowsCheckBox->isChecked())
-    {
+    if (d->sheetPage.rowsCheckBox->isChecked()) {
         // TODO Stefan: Check if height of repeated rows exceeds page height.
         const int startRow = d->sheetPage.startRowComboBox->currentText().toInt();
         const int endRow = d->sheetPage.endRowComboBox->currentText().toInt();
         settings.setRepeatedRows(qMakePair(qMin(startRow, endRow), qMax(startRow, endRow)));
-    }
-    else
+    } else
         settings.setRepeatedRows(QPair<int, int>());
 
     bool isValid = false;
@@ -219,8 +207,7 @@ void PageLayoutDialog::accept()
         settings.setZoom(1.0);
 
     QSize pageLimits;
-    if (d->sheetPage.pageLimitsButton->isChecked())
-    {
+    if (d->sheetPage.pageLimitsButton->isChecked()) {
         pageLimits.setWidth(d->sheetPage.horizontalComboBox->currentText().toInt(&isValid));
         if (!isValid)
             pageLimits.setWidth(0);
@@ -239,8 +226,7 @@ void PageLayoutDialog::accept()
             Q_UNUSED(command);
         }
         d->sheet->doc()->addCommand(macroCommand);
-    }
-    else {
+    } else {
         PageLayoutCommand* command = new PageLayoutCommand(d->sheet, settings);
         d->sheet->doc()->addCommand(command);
     }

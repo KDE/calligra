@@ -32,11 +32,11 @@
 using namespace KSpread;
 
 // prototypes (sorted alphabetically)
-Value func_bitand (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_bitor (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_bitxor (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_bitlshift (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_bitrshift (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitand(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitor(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitxor(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitlshift(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bitrshift(valVector args, ValueCalc *calc, FuncExtra *);
 
 #ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
 K_PLUGIN_FACTORY(BitOpsModulePluginFactory,
@@ -46,7 +46,7 @@ K_EXPORT_PLUGIN(BitOpsModulePluginFactory("BitOpsModule"))
 #endif
 
 BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent, "bitops", i18n("Bit Operation Functions"))
+        : FunctionModule(parent, "bitops", i18n("Bit Operation Functions"))
 {
 }
 
@@ -57,24 +57,24 @@ QString BitOpsModule::descriptionFileName() const
 
 void BitOpsModule::registerFunctions()
 {
-  FunctionRepository* repo = FunctionRepository::self();
-  Function *f;
+    FunctionRepository* repo = FunctionRepository::self();
+    Function *f;
 
-  f = new Function ("BITAND", func_bitand);
-  f->setParamCount (2);
-  repo->add (f);
-  f = new Function ("BITOR", func_bitor);
-  f->setParamCount (2);
-  repo->add (f);
-  f = new Function ("BITXOR", func_bitxor);
-  f->setParamCount (2);
-  repo->add (f);
-  f = new Function ("BITLSHIFT", func_bitlshift);
-  f->setParamCount (2);
-  repo->add (f);
-  f = new Function ("BITRSHIFT", func_bitrshift);
-  f->setParamCount (2);
-  repo->add (f);
+    f = new Function("BITAND", func_bitand);
+    f->setParamCount(2);
+    repo->add(f);
+    f = new Function("BITOR", func_bitor);
+    f->setParamCount(2);
+    repo->add(f);
+    f = new Function("BITXOR", func_bitxor);
+    f->setParamCount(2);
+    repo->add(f);
+    f = new Function("BITLSHIFT", func_bitlshift);
+    f->setParamCount(2);
+    repo->add(f);
+    f = new Function("BITRSHIFT", func_bitrshift);
+    f->setParamCount(2);
+    repo->add(f);
 }
 
 void BitOpsModule::removeFunctions()
@@ -85,53 +85,53 @@ void BitOpsModule::removeFunctions()
 
 
 // Function: BITAND
-Value func_bitand (valVector args, ValueCalc *, FuncExtra *)
+Value func_bitand(valVector args, ValueCalc *, FuncExtra *)
 {
-  const quint64 x = args[0].asInteger();
-  const quint64 y = args[1].asInteger();
-  return Value( static_cast<qint64>( x & y ) );
+    const quint64 x = args[0].asInteger();
+    const quint64 y = args[1].asInteger();
+    return Value(static_cast<qint64>(x & y));
 }
 
 // Function: BITOR
-Value func_bitor (valVector args, ValueCalc *, FuncExtra *)
+Value func_bitor(valVector args, ValueCalc *, FuncExtra *)
 {
-  const quint64 x = args[0].asInteger();
-  const quint64 y = args[1].asInteger();
-  return Value( static_cast<qint64>( x | y ) );
+    const quint64 x = args[0].asInteger();
+    const quint64 y = args[1].asInteger();
+    return Value(static_cast<qint64>(x | y));
 }
 
 // Function: BITXOR
-Value func_bitxor (valVector args, ValueCalc *, FuncExtra *)
+Value func_bitxor(valVector args, ValueCalc *, FuncExtra *)
 {
-  const quint64 x = args[0].asInteger();
-  const quint64 y = args[1].asInteger();
-  return Value( static_cast<qint64>( x ^ y ) );
+    const quint64 x = args[0].asInteger();
+    const quint64 y = args[1].asInteger();
+    return Value(static_cast<qint64>(x ^ y));
 }
 
 // Function: BITLSHIFT
-Value func_bitlshift (valVector args, ValueCalc *, FuncExtra *)
+Value func_bitlshift(valVector args, ValueCalc *, FuncExtra *)
 {
-  const quint64 x = args[0].asInteger();
-  const int numshift = args[1].asInteger();
-  if ( numshift == 0 )
-      return Value( static_cast<qint64>( x ) );
-  else if ( numshift > 0 )
-      return Value( static_cast<qint64>( x << numshift ) );
-  else // negative left shift, becomes right shift
-      return Value( static_cast<qint64>( x >> ( -1 * numshift ) ) );
+    const quint64 x = args[0].asInteger();
+    const int numshift = args[1].asInteger();
+    if (numshift == 0)
+        return Value(static_cast<qint64>(x));
+    else if (numshift > 0)
+        return Value(static_cast<qint64>(x << numshift));
+    else // negative left shift, becomes right shift
+        return Value(static_cast<qint64>(x >>(-1 * numshift)));
 }
 
 // Function: BITRSHIFT
-Value func_bitrshift (valVector args, ValueCalc *, FuncExtra *)
+Value func_bitrshift(valVector args, ValueCalc *, FuncExtra *)
 {
-  const quint64 x = args[0].asInteger();
-  const int numshift = args[1].asInteger();
-  if ( numshift == 0 )
-      return Value( static_cast<qint64>( x ) );
-  else if ( numshift > 0 )
-      return Value( static_cast<qint64>( x >> numshift ) );
-  else // negative right shift, becomes left shift
-      return Value( static_cast<qint64>( x << ( -1 * numshift ) ) );
+    const quint64 x = args[0].asInteger();
+    const int numshift = args[1].asInteger();
+    if (numshift == 0)
+        return Value(static_cast<qint64>(x));
+    else if (numshift > 0)
+        return Value(static_cast<qint64>(x >> numshift));
+    else // negative right shift, becomes left shift
+        return Value(static_cast<qint64>(x << (-1 * numshift)));
 }
 
 #include "BitOpsModule.moc"

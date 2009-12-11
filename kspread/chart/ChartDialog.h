@@ -47,14 +47,14 @@ public:
      * @param selectedCharts all charts that this dialog will show for user modification
      * @param parent a parent widget for the purpose of centering the dialog
      */
-    explicit ChartDialog(const QList<KChart::ChartShape*> &selectedCharts, QWidget *parent=0);
+    explicit ChartDialog(const QList<KChart::ChartShape*> &selectedCharts, QWidget *parent = 0);
     ~ChartDialog();
 
     /**
      * Create a list of factories that will be able to create widgets to configure shapes.
      * @param document the parent document these panels will work for.
      */
-    static QList<KoShapeConfigFactory*> panels( Doc* document );
+    static QList<KoShapeConfigFactory*> panels(Doc* document);
 
 private slots:
     void okClicked();
@@ -65,7 +65,8 @@ private:
 
 /// A simple class useful for finding out if a series of data object will cause a
 /// normal or a tri-state checkbox. For example.
-class GuiHelper {
+class GuiHelper
+{
 public:
     /// the different states
     enum State {
@@ -76,11 +77,11 @@ public:
     };
     /// constructor
     GuiHelper() : m_state(Unset) { }
-     /// Add a new state
+    /// Add a new state
     void addState(State state) {
-        if(m_state == Unset)
+        if (m_state == Unset)
             m_state = state;
-        else if(m_state != state)
+        else if (m_state != state)
             m_state = TriState;
     }
 
@@ -90,13 +91,13 @@ public:
      * @param hide if true the checkbox will be hidden when there was no 'addState' called
      */
     void updateCheckBox(QCheckBox *checkbox, bool hide) {
-        if(m_state == Unset) {
-            if(hide)
+        if (m_state == Unset) {
+            if (hide)
                 checkbox->setVisible(false);
             checkbox->setEnabled(false);
             checkbox->setTristate(true);
             checkbox->setCheckState(Qt::PartiallyChecked);
-        } else if(m_state == TriState) {
+        } else if (m_state == TriState) {
             checkbox->setTristate(true);
             checkbox->setCheckState(Qt::PartiallyChecked);
         } else {

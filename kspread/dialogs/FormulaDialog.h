@@ -61,7 +61,7 @@ private:
      * Turns the @p text into a parameter that koscript can understand. The type
      * of this parameter is extracted by looking at parameter number @p param in @ref #m_desc.
      */
-    QString createParameter( const QString& _text, int param );
+    QString createParameter(const QString& _text, int param);
     /**
      * Reads the text out of @ref #firstElement and friends and creates a parameter
      * list for the function.
@@ -81,32 +81,32 @@ private slots:
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.
      */
-    void slotSelected( const QString& function = QString() );
+    void slotSelected(const QString& function = QString());
     /**
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.
      */
-    void slotIndexSelected( const QModelIndex& index );
+    void slotIndexSelected(const QModelIndex& index);
     /**
      * Called if the user clicked on one of the "related function"
      * This will switch the active function and show help page
      * of the function as well.
      */
-    void slotShowFunction( const QString& function );
+    void slotShowFunction(const QString& function);
     /**
      * Called if the user double clicked on some method name.
      * That will switch into editing mode, allowing the user
      * to enter the parameters for the function.
      */
-    void slotDoubleClicked( QModelIndex item = QModelIndex() );
+    void slotDoubleClicked(QModelIndex item = QModelIndex());
     /**
      * Called if a category of methods has been selected.
      */
-    void slotActivated(const QString& category );
+    void slotActivated(const QString& category);
     /**
      * Called if the text of @ref #firstElement, @ref #secondElement etc. changes.
      */
-    void slotChangeText(const QString& text );
+    void slotChangeText(const QString& text);
     /**
      * Connected to @ref View to get notified if the selection in the
      * sheet changes.
@@ -120,7 +120,7 @@ private slots:
     /**
      * Called if the user changes some character in @ref #searchFunct.
      */
-    void slotSearchText(const QString& text );
+    void slotSearchText(const QString& text);
     /**
      * Called if the user pressed return in @ref #searchFunct.
      */
@@ -130,9 +130,9 @@ public:
     /**
      * Find out which widget got focus.
      */
-    bool eventFilter( QObject* obj, QEvent* ev );
+    bool eventFilter(QObject* obj, QEvent* ev);
 protected:
-       virtual void closeEvent ( QCloseEvent * );
+    virtual void closeEvent(QCloseEvent *);
 private:
     Selection* m_selection;
     CellEditor* m_editor;

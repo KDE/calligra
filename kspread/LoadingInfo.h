@@ -32,8 +32,7 @@ class Sheet;
 class LoadingInfo
 {
 public:
-    enum FileFormat
-    {
+    enum FileFormat {
         OpenDocument,
         NativeFormat,
         Gnumeric,
@@ -41,38 +40,54 @@ public:
     };
 
     LoadingInfo()
-        : m_fileFormat(Unknown)
-        , m_initialActiveSheet(0)
-        , m_loadTemplate(false) {}
+            : m_fileFormat(Unknown)
+            , m_initialActiveSheet(0)
+            , m_loadTemplate(false) {}
     ~LoadingInfo() {}
 
-    FileFormat fileFormat() const { return m_fileFormat; }
-    void setFileFormat(FileFormat format) { m_fileFormat = format; }
+    FileFormat fileFormat() const {
+        return m_fileFormat;
+    }
+    void setFileFormat(FileFormat format) {
+        m_fileFormat = format;
+    }
 
-    Sheet* initialActiveSheet() const { return m_initialActiveSheet; }
-    void setInitialActiveSheet(Sheet* sheet) { m_initialActiveSheet = sheet; }
+    Sheet* initialActiveSheet() const {
+        return m_initialActiveSheet;
+    }
+    void setInitialActiveSheet(Sheet* sheet) {
+        m_initialActiveSheet = sheet;
+    }
 
     /**
      * @return the cursor positions
      */
-    const QMap<Sheet*, QPoint>& cursorPositions() const { return m_cursorPositions; }
+    const QMap<Sheet*, QPoint>& cursorPositions() const {
+        return m_cursorPositions;
+    }
 
     /**
      * Stores the cursor position @p point for @p sheet .
      */
-    void setCursorPosition( Sheet* sheet, const QPoint& point ) { m_cursorPositions.insert( sheet, point );}
+    void setCursorPosition(Sheet* sheet, const QPoint& point) {
+        m_cursorPositions.insert(sheet, point);
+    }
 
     /**
      * @return scrolling offsets
      */
-    const QMap<Sheet*, QPointF>& scrollingOffsets() const { return m_scrollingOffsets; }
+    const QMap<Sheet*, QPointF>& scrollingOffsets() const {
+        return m_scrollingOffsets;
+    }
 
     /**
      * Stores the scrolling offset @p point for @p sheet .
      */
-    void setScrollingOffset( Sheet* sheet, const QPointF& point ) { m_scrollingOffsets.insert( sheet, point );}
+    void setScrollingOffset(Sheet* sheet, const QPointF& point) {
+        m_scrollingOffsets.insert(sheet, point);
+    }
 
-    void setLoadTemplate( bool _b ) {
+    void setLoadTemplate(bool _b) {
         m_loadTemplate = _b;
     }
     bool loadTemplate() const {

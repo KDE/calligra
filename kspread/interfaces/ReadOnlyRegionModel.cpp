@@ -33,8 +33,8 @@ public:
 };
 
 ReadOnlyRegionModel::ReadOnlyRegionModel(const Region& region)
-    : QAbstractProxyModel(region.firstSheet())
-    , d(new Private)
+        : QAbstractProxyModel(region.firstSheet())
+        , d(new Private)
 {
     Q_ASSERT(region.isContiguous());
     d->region = region;

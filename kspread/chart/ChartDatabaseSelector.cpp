@@ -46,9 +46,9 @@ public:
     Ui::ChartDatabaseSelector widget;
 };
 
-ChartDatabaseSelector::ChartDatabaseSelector( Doc* doc )
-    : KoShapeConfigWidgetBase()
-    , d( new Private )
+ChartDatabaseSelector::ChartDatabaseSelector(Doc* doc)
+        : KoShapeConfigWidgetBase()
+        , d(new Private)
 {
     d->doc = doc;
     d->selection = 0;
@@ -82,9 +82,9 @@ void ChartDatabaseSelector::save()
         return;
     Binding binding(region);
     d->shape->setModel(binding.model(), selectedRegion.rects());
-    d->shape->setFirstRowIsLabel( d->widget.m_firstRowAsLabel->isChecked() );
-    d->shape->setFirstColumnIsLabel( d->widget.m_firstColumnAsLabel->isChecked() );
-    d->shape->setDataDirection( d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical );
+    d->shape->setFirstRowIsLabel(d->widget.m_firstRowAsLabel->isChecked());
+    d->shape->setFirstColumnIsLabel(d->widget.m_firstColumnAsLabel->isChecked());
+    d->shape->setDataDirection(d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical);
     region.firstSheet()->cellStorage()->setBinding(region, binding);
 }
 
@@ -93,12 +93,12 @@ KAction* ChartDatabaseSelector::createAction()
     return 0;
 }
 
-void ChartDatabaseSelector::showEvent( QShowEvent* event )
+void ChartDatabaseSelector::showEvent(QShowEvent* event)
 {
-    Q_UNUSED( event );
-    Q_ASSERT( m_resourceProvider );
-    d->selection = static_cast<Selection*>(m_resourceProvider->resource(CanvasResource::Selection ).value<void*>());
-    d->widget.m_cellRegion->setText( d->selection->Region::name() );
+    Q_UNUSED(event);
+    Q_ASSERT(m_resourceProvider);
+    d->selection = static_cast<Selection*>(m_resourceProvider->resource(CanvasResource::Selection).value<void*>());
+    d->widget.m_cellRegion->setText(d->selection->Region::name());
 }
 
 

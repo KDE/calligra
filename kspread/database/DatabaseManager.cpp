@@ -43,7 +43,7 @@ int DatabaseManager::Private::s_id = 1;
 
 
 DatabaseManager::DatabaseManager(const Map* map)
-    : d(new Private)
+        : d(new Private)
 {
     d->map = map;
 }
@@ -62,12 +62,10 @@ bool DatabaseManager::loadOdf(const KoXmlElement& body)
 {
     const KoXmlNode databaseRanges = KoXml::namedItemNS(body, KoXmlNS::table, "database-ranges");
     KoXmlElement element;
-    forEachElement(element, databaseRanges)
-    {
+    forEachElement(element, databaseRanges) {
         if (element.namespaceURI() != KoXmlNS::table)
             continue;
-        if (element.localName() == "database-range")
-        {
+        if (element.localName() == "database-range") {
             Database database;
             if (!database.loadOdf(element, d->map))
                 return false;
@@ -94,8 +92,7 @@ void DatabaseManager::saveOdf(KoXmlWriter& xmlWriter) const
         return;
 
     xmlWriter.startElement("table:database-ranges");
-    for (int i = 0; i < databases.count(); ++i)
-    {
+    for (int i = 0; i < databases.count(); ++i) {
         Database database = databases[i].second;
         database.setRange(Region(databases[i].first.toRect(), database.range().firstSheet()));
         if (!database.range().isValid())

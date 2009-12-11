@@ -36,8 +36,8 @@ public:
 
 SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
-    , d(new Private)
+        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        , d(new Private)
 {
     const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));

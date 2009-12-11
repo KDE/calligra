@@ -51,8 +51,8 @@ public:
 };
 
 SpellCheckCommand::SpellCheckCommand(Selection* selection, KoCanvasBase* canvasBase)
-    : BackgroundChecker(canvasBase->canvasWidget())
-    , d(new Private)
+        : BackgroundChecker(canvasBase->canvasWidget())
+        , d(new Private)
 {
     d->canvasBase = canvasBase;
     d->selection = selection;

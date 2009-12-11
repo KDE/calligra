@@ -48,8 +48,8 @@
 
 class SHA1
 {
- public:
-  static bool getHash( QString const & text, QByteArray & hash );
+public:
+    static bool getHash(QString const & text, QByteArray & hash);
 };
 
 #endif

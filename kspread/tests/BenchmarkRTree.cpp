@@ -31,60 +31,56 @@
 using namespace std;
 using namespace KSpread;
 
-int main( int argc, char** argv )
+int main(int argc, char** argv)
 {
-  QCoreApplication app(argc,argv);
+    QCoreApplication app(argc, argv);
 
-  RTree<double> tree;
+    RTree<double> tree;
 
-  cout << "Insertion performance test..." << endl;
+    cout << "Insertion performance test..." << endl;
 
-  const int max_x = 100;
-  const int step_x = 1;
-  const int max_y = 1000;
-  const int step_y = 1;
-  int counter = 0;
-  Time::tval start = Time::stamp();
-  for ( int y = 1; y <= max_y; y += step_y ) // equals row insertion into table
-  {
-    for ( int x = 1; x <= max_x; x += step_x ) // equals cell insertion into row
-    {
-      tree.insert( QRect(x,y,step_x,step_y), 42 );
-      ++counter;
+    const int max_x = 100;
+    const int step_x = 1;
+    const int max_y = 1000;
+    const int step_y = 1;
+    int counter = 0;
+    Time::tval start = Time::stamp();
+    for (int y = 1; y <= max_y; y += step_y) { // equals row insertion into table
+        for (int x = 1; x <= max_x; x += step_x) { // equals cell insertion into row
+            tree.insert(QRect(x, y, step_x, step_y), 42);
+            ++counter;
+        }
     }
-  }
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), counter ) ) << endl;
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), counter)) << endl;
 
-  cout << "Row insertion performance test (5 rows at row 1)..." << endl;
-  start = Time::stamp();
-  tree.insertRows(1,5);
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
+    cout << "Row insertion performance test (5 rows at row 1)..." << endl;
+    start = Time::stamp();
+    tree.insertRows(1, 5);
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), 1)) << endl;
 
-  cout << "Column insertion performance test (5 columns at column 1)..." << endl;
-  start = Time::stamp();
-  tree.insertColumns(1,5);
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
+    cout << "Column insertion performance test (5 columns at column 1)..." << endl;
+    start = Time::stamp();
+    tree.insertColumns(1, 5);
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), 1)) << endl;
 
-  cout << "Row deletion performance test (5 rows at row 1)..." << endl;
-  start = Time::stamp();
-  tree.removeRows(1,5);
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
+    cout << "Row deletion performance test (5 rows at row 1)..." << endl;
+    start = Time::stamp();
+    tree.removeRows(1, 5);
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), 1)) << endl;
 
-  cout << "Column deletion performance test (5 columns at column 1)..." << endl;
-  start = Time::stamp();
-  tree.removeColumns(1,5);
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
+    cout << "Column deletion performance test (5 columns at column 1)..." << endl;
+    start = Time::stamp();
+    tree.removeColumns(1, 5);
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), 1)) << endl;
 
-  cout << "Lookup performance test..." << endl;
-  start = Time::stamp();
-  counter = 0;
-  for ( int y = 1; y <= max_y; y += step_y )
-  {
-    for ( int x = 1; x <= max_x; x += step_x )
-    {
-      if ( !tree.contains(QPoint(x,y)).isEmpty() ) counter++;
+    cout << "Lookup performance test..." << endl;
+    start = Time::stamp();
+    counter = 0;
+    for (int y = 1; y <= max_y; y += step_y) {
+        for (int x = 1; x <= max_x; x += step_x) {
+            if (!tree.contains(QPoint(x, y)).isEmpty()) counter++;
+        }
     }
-  }
-  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), counter ) ) << endl;
-  return 0;
+    cout << "\t " << qPrintable(Time::printAverage(Time::elapsed(start), counter)) << endl;
+    return 0;
 }

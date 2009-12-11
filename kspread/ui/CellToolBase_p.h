@@ -157,7 +157,7 @@ public:
     void createPopupMenuActions();
 
     /** Relayout the tool option docker. */
-    void relayoutDocker (bool wide);
+    void relayoutDocker(bool wide);
 private:
     CellToolBase* q;
 };

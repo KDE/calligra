@@ -30,10 +30,10 @@ class TableToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    explicit TableToolFactory( QObject* parent );
+    explicit TableToolFactory(QObject* parent);
     ~TableToolFactory();
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoTool* createTool(KoCanvasBase* canvas);
 };
 
 } // namespace

@@ -77,7 +77,7 @@ public:
     Cluster();
     ~Cluster();
 
-    Cell* lookup( int x, int y ) const;
+    Cell* lookup(int x, int y) const;
 
     /**
      * Removes all cells from the sheet and frees memory that
@@ -89,18 +89,18 @@ public:
      * Inserts a cell at the requested position. If there is already
      * a cell, then @ref #remove is called on it.
      */
-    void insert( Cell* cell, int x, int y );
+    void insert(Cell* cell, int x, int y);
     /**
      * Removes the cell at the given position, if there is any.
      */
-    void remove( int x, int y );
+    void remove(int x, int y);
 
-    void setAutoDelete( bool );
+    void setAutoDelete(bool);
     bool autoDelete() const;
 
     Cell* firstCell() const;
 
-    bool insertShiftRight( const QPoint& marker );
+    bool insertShiftRight(const QPoint& marker);
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() one position downwards.
@@ -108,14 +108,14 @@ public:
      * @return false if a cell would drop out of the sheet because of that.
      *         In this case the shift is not performed.
      */
-    bool insertShiftDown( const QPoint& marker );
+    bool insertShiftDown(const QPoint& marker);
 
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() + 1 one position upwards.
      */
-    void removeShiftUp( const QPoint& marker );
-    void removeShiftLeft( const QPoint& marker );
+    void removeShiftUp(const QPoint& marker);
+    void removeShiftLeft(const QPoint& marker);
 
     /**
      * Moves all columns beginning with @p col one position
@@ -124,8 +124,8 @@ public:
      *
      * @see #removeColumn
      */
-    bool insertColumn( int col );
-    bool insertRow( int row );
+    bool insertColumn(int col);
+    bool insertRow(int row);
 
     /**
      * Removes all elements from the column and
@@ -134,125 +134,125 @@ public:
      *
      * @see #clearColumn
      */
-    void removeColumn( int col );
-    void removeRow( int row );
+    void removeColumn(int col);
+    void removeRow(int row);
 
     /**
      * Removes all elements from the column.
      *
      */
-    void clearColumn( int col );
-    void clearRow( int row );
+    void clearColumn(int col);
+    void clearRow(int row);
 
-  /** Retrieve a range of values stored in a Value.
-  The range is two-leveled with similar structure and reasoning as the
-  storage of cells themselves.
-  */
-  Value valueRange (int col1, int row1, int col2, int row2) const;
+    /** Retrieve a range of values stored in a Value.
+    The range is two-leveled with similar structure and reasoning as the
+    storage of cells themselves.
+    */
+    Value valueRange(int col1, int row1, int col2, int row2) const;
 
-  /**
-   * Retrieve the first used cell in a given column.  Can be used in conjunction
-   * with getNextCellDown to loop through a column.
-   *
-   * @param col The column to get the first cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this column
-   */
-  Cell* getFirstCellColumn(int col) const;
+    /**
+     * Retrieve the first used cell in a given column.  Can be used in conjunction
+     * with getNextCellDown to loop through a column.
+     *
+     * @param col The column to get the first cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this column
+     */
+    Cell* getFirstCellColumn(int col) const;
 
-  /**
-   * Retrieve the last used cell in a given column.  Can be used in conjunction
-   * with getNextCellUp to loop through a column.
-   *
-   * @param col The column to get the cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this column
-   */
-  Cell* getLastCellColumn(int col) const;
+    /**
+     * Retrieve the last used cell in a given column.  Can be used in conjunction
+     * with getNextCellUp to loop through a column.
+     *
+     * @param col The column to get the cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this column
+     */
+    Cell* getLastCellColumn(int col) const;
 
-  /**
-   * Retrieve the first used cell in a given row.  Can be used in conjunction
-   * with getNextCellRight to loop through a row.
-   *
-   * @param row The row to get the first cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this row
-   */
-  Cell* getFirstCellRow(int row) const;
+    /**
+     * Retrieve the first used cell in a given row.  Can be used in conjunction
+     * with getNextCellRight to loop through a row.
+     *
+     * @param row The row to get the first cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this row
+     */
+    Cell* getFirstCellRow(int row) const;
 
-  /**
-   * Retrieve the last used cell in a given row.  Can be used in conjunction
-   * with getNextCellLeft to loop through a row.
-   *
-   * @param row The row to get the last cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this row
-   */
-  Cell* getLastCellRow(int row) const;
+    /**
+     * Retrieve the last used cell in a given row.  Can be used in conjunction
+     * with getNextCellLeft to loop through a row.
+     *
+     * @param row The row to get the last cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this row
+     */
+    Cell* getLastCellRow(int row) const;
 
-  /**
-   * Retrieves the next used cell above the given col/row pair.  The given
-   * col/row pair does not need to reference a used cell.
-   *
-   * @param col column to start looking through
-   * @param row the row above which to start looking.
-   *
-   * @return Returns the next used cell above this one, or 0 if there are none
-   */
-  Cell* getNextCellUp(int col, int row) const;
+    /**
+     * Retrieves the next used cell above the given col/row pair.  The given
+     * col/row pair does not need to reference a used cell.
+     *
+     * @param col column to start looking through
+     * @param row the row above which to start looking.
+     *
+     * @return Returns the next used cell above this one, or 0 if there are none
+     */
+    Cell* getNextCellUp(int col, int row) const;
 
-  /**
-   * Retrieves the next used cell below the given col/row pair.  The given
-   * col/row pair does not need to reference a used cell.
-   *
-   * @param col column to start looking through
-   * @param row the row below which to start looking.
-   *
-   * @return Returns the next used cell below this one, or 0 if there are none
-   */
-  Cell* getNextCellDown(int col, int row) const;
+    /**
+     * Retrieves the next used cell below the given col/row pair.  The given
+     * col/row pair does not need to reference a used cell.
+     *
+     * @param col column to start looking through
+     * @param row the row below which to start looking.
+     *
+     * @return Returns the next used cell below this one, or 0 if there are none
+     */
+    Cell* getNextCellDown(int col, int row) const;
 
-  /**
-   * Retrieves the next used cell to the right of the given col/row pair.
-   * The given col/row pair does not need to reference a used cell.
-   *
-   * @param col the column after which should be searched
-   * @param row the row to search through
-   *
-   * @return Returns the next used cell to the right of this one, or 0 if
-   * there are none
-   */
-  Cell* getNextCellRight(int col, int row) const;
+    /**
+     * Retrieves the next used cell to the right of the given col/row pair.
+     * The given col/row pair does not need to reference a used cell.
+     *
+     * @param col the column after which should be searched
+     * @param row the row to search through
+     *
+     * @return Returns the next used cell to the right of this one, or 0 if
+     * there are none
+     */
+    Cell* getNextCellRight(int col, int row) const;
 
-  /**
-   * Retrieves the next used cell to the left of the given col/row pair.
-   * The given col/row pair does not need to reference a used cell.
-   *
-   * @param col the column before which should be searched
-   * @param row the row to search through
-   *
-   * @return Returns the next used cell to the left of this one, or 0 if
-   * there are none
-   */
-  Cell* getNextCellLeft(int col, int row) const;
+    /**
+     * Retrieves the next used cell to the left of the given col/row pair.
+     * The given col/row pair does not need to reference a used cell.
+     *
+     * @param col the column before which should be searched
+     * @param row the row to search through
+     *
+     * @return Returns the next used cell to the left of this one, or 0 if
+     * there are none
+     */
+    Cell* getNextCellLeft(int col, int row) const;
 
 private:
     /**
      * @param work is set to true if the method found some clusters
      *        which belong to the shifted row.
      */
-    bool insertShiftRight( const QPoint& marker, bool& work );
-    bool insertShiftDown( const QPoint& marker, bool& work );
+    bool insertShiftRight(const QPoint& marker, bool& work);
+    bool insertShiftDown(const QPoint& marker, bool& work);
 
-    void removeShiftUp( const QPoint& marker, bool& work );
-    void removeShiftLeft( const QPoint& marker, bool& work );
+    void removeShiftUp(const QPoint& marker, bool& work);
+    void removeShiftLeft(const QPoint& marker, bool& work);
 
     /** helper method used by valueRange */
-    Value makeArray (int col1, int row1, int col2, int row2) const;
+    Value makeArray(int col1, int row1, int col2, int row2) const;
 
     Cell*** m_cluster;
     Cell* m_first;
@@ -270,22 +270,24 @@ public:
     ColumnCluster();
     ~ColumnCluster();
 
-    const ColumnFormat* lookup( int col ) const;
-    ColumnFormat* lookup( int col );
+    const ColumnFormat* lookup(int col) const;
+    ColumnFormat* lookup(int col);
 
     void clear();
 
-    void insertElement( ColumnFormat*, int col );
-    void removeElement( int col );
+    void insertElement(ColumnFormat*, int col);
+    void removeElement(int col);
 
-    bool insertColumn( int col );
-    bool removeColumn( int col );
+    bool insertColumn(int col);
+    bool removeColumn(int col);
 
-    void setAutoDelete( bool );
+    void setAutoDelete(bool);
     bool autoDelete() const;
 
-    ColumnFormat* first() const { return m_first; }
-    ColumnFormat* next( int col ) const;
+    ColumnFormat* first() const {
+        return m_first;
+    }
+    ColumnFormat* next(int col) const;
 
     void operator=(const ColumnCluster& other);
 
@@ -308,21 +310,23 @@ public:
     RowCluster();
     ~RowCluster();
 
-    const RowFormat* lookup( int col ) const;
-    RowFormat* lookup( int col );
+    const RowFormat* lookup(int col) const;
+    RowFormat* lookup(int col);
 
     void clear();
 
-    void insertElement( RowFormat*, int row );
-    void removeElement( int row );
+    void insertElement(RowFormat*, int row);
+    void removeElement(int row);
 
-    bool insertRow( int row );
-    bool removeRow( int row );
+    bool insertRow(int row);
+    bool removeRow(int row);
 
-    void setAutoDelete( bool );
+    void setAutoDelete(bool);
     bool autoDelete() const;
 
-    RowFormat* first()const { return m_first; }
+    RowFormat* first()const {
+        return m_first;
+    }
 
     void operator=(const RowCluster& other);
 

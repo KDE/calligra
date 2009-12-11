@@ -94,16 +94,15 @@ public:
      * The current action associated with the mouse.
      * Default is 'NoAction'.
      */
-    enum MouseActions
-    {
-      NoAction,       /**< No mouse action (default) */
-      Mark,           /**< Marking action */
-      ResizeCell,     /**< Merging cell */
-      AutoFill,       /**< Autofilling */
-      ResizeSelection /**< Resizing the selection */
+    enum MouseActions {
+        NoAction,       /**< No mouse action (default) */
+        Mark,           /**< Marking action */
+        ResizeCell,     /**< Merging cell */
+        AutoFill,       /**< Autofilling */
+        ResizeSelection /**< Resizing the selection */
     };
 
-    explicit Canvas( View* view );
+    explicit Canvas(View* view);
     ~Canvas();
 
     View* view() const;
@@ -111,22 +110,26 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from KoCanvasBase
-    virtual void gridSize( qreal* horizontal, qreal* vertical ) const;
+    virtual void gridSize(qreal* horizontal, qreal* vertical) const;
     /// reimplemented method from KoCanvasBase
     virtual bool snapToGrid() const;
     /// reimplemented method from KoCanvasBase
-    virtual void addCommand( QUndoCommand* command );
+    virtual void addCommand(QUndoCommand* command);
     /// reimplemented method from KoCanvasBase
     virtual KoShapeManager* shapeManager() const;
     /// reimplemented method from KoCanvasBase
-    virtual void updateCanvas( const QRectF& rc );
+    virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method from KoCanvasBase
     virtual KoToolProxy* toolProxy() const;
     /// reimplemented method from KoCanvasBase
     virtual const KoViewConverter* viewConverter() const;
     /// reimplemented method from KoCanvasBase
-    virtual QWidget* canvasWidget() { return this; }
-    virtual const QWidget* canvasWidget() const { return this; }
+    virtual QWidget* canvasWidget() {
+        return this;
+    }
+    virtual const QWidget* canvasWidget() const {
+        return this;
+    }
     /// reimplemented method from KoCanvasBase
     virtual KoUnit unit() const;
     /// reimplemented method from KoCanvasBase
@@ -172,39 +175,39 @@ public:
     void scrollToCell(const QPoint& location) const;
 
 public Q_SLOTS:
-    void setDocumentOffset( const QPoint& offset );
-    void setDocumentSize( const QSizeF& size );
+    void setDocumentOffset(const QPoint& offset);
+    void setDocumentSize(const QSizeF& size);
 #if 0
-    void slotScrollVert( int _value );
-    void slotScrollHorz( int _value );
+    void slotScrollVert(int _value);
+    void slotScrollHorz(int _value);
 
     /**
      * Updates the scrollbar.
      * If the maximum used column index @p maxColumn was increased,
      * the scrollbar range will be increased accordingly.
      */
-    void slotMaxColumn( int maxColumn );
+    void slotMaxColumn(int maxColumn);
 
     /**
      * Updates the scrollbar.
      * If the maximum used column index @p maxRow was increased,
      * the scrollbar range will be increased accordingly.
      */
-    void slotMaxRow( int maxRow );
+    void slotMaxRow(int maxRow);
 #endif
 
 Q_SIGNALS:
-    void documentSizeChanged( const QSize& );
+    void documentSizeChanged(const QSize&);
 
 protected:
-    virtual void keyPressEvent ( QKeyEvent* _ev );
-    virtual void paintEvent ( QPaintEvent* _ev );
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-    virtual void mouseDoubleClickEvent( QMouseEvent* );
-    virtual void focusInEvent( QFocusEvent* );
-    virtual void focusOutEvent( QFocusEvent* );
+    virtual void keyPressEvent(QKeyEvent* _ev);
+    virtual void paintEvent(QPaintEvent* _ev);
+    virtual void mousePressEvent(QMouseEvent* _ev);
+    virtual void mouseReleaseEvent(QMouseEvent* _ev);
+    virtual void mouseMoveEvent(QMouseEvent* _ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent*);
+    virtual void focusInEvent(QFocusEvent*);
+    virtual void focusOutEvent(QFocusEvent*);
     virtual void dragEnterEvent(QDragEnterEvent*);
     virtual void dragMoveEvent(QDragMoveEvent*);
     virtual void dragLeaveEvent(QDragLeaveEvent*);
@@ -235,7 +238,7 @@ private slots:
     void slotAutoScroll(const QPoint &scrollDist);
 
 private:
-    virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
     ColumnHeader* columnHeader() const;
     RowHeader* rowHeader() const;
@@ -248,7 +251,7 @@ private:
      *
      * @param area The area (in pixels) on the Canvas widget
      */
-    QRect viewToCellCoordinates( const QRectF& area ) const;
+    QRect viewToCellCoordinates(const QRectF& area) const;
 
     /**
      * Calculates the region in view coordinates occupied by a range of cells on
@@ -257,22 +260,22 @@ private:
      *
      * \param cellRange The range of cells on the current sheet.
      */
-    QRectF cellCoordinatesToView( const QRect& cellRange ) const;
+    QRectF cellCoordinatesToView(const QRect& cellRange) const;
 
 private:
-  void startTheDrag();
+    void startTheDrag();
 
-  /**
-   * Determines the cell at @p point and shows its tooltip.
-   * @param point the position for which a tooltip is requested
-   */
-  void showToolTip( const QPoint& point );
+    /**
+     * Determines the cell at @p point and shows its tooltip.
+     * @param point the position for which a tooltip is requested
+     */
+    void showToolTip(const QPoint& point);
 
 private:
-    Q_DISABLE_COPY( Canvas )
+    Q_DISABLE_COPY(Canvas)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

@@ -34,12 +34,12 @@
 using namespace KSpread;
 
 StyleCommand::StyleCommand(QUndoCommand* parent)
-    : AbstractRegionCommand(parent)
-    , m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
-    , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
-    , m_horizontalPenChanged( false )
-    , m_verticalPenChanged( false )
-    , m_style( new Style() )
+        : AbstractRegionCommand(parent)
+        , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
+        , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
+        , m_horizontalPenChanged(false)
+        , m_verticalPenChanged(false)
+        , m_style(new Style())
 {
 }
 
@@ -51,87 +51,78 @@ StyleCommand::~StyleCommand()
 bool StyleCommand::process(Element* element)
 {
     const QRect range = element->rect();
-    if ( !m_reverse ) // (re)do
-    {
-        if ( m_firstrun )
-        {
+    if (!m_reverse) { // (re)do
+        if (m_firstrun) {
             const QRect rect = range.adjusted(m_style->hasAttribute(Style::LeftPen) ? -1 : 0,
                                               m_style->hasAttribute(Style::TopPen) ? -1 : 0,
                                               m_style->hasAttribute(Style::RightPen) ? 1 : 0,
                                               m_style->hasAttribute(Style::BottomPen) ? 1 : 0);
-            const QList< QPair<QRectF,SharedSubStyle> > rawUndoData
-                    = m_sheet->styleStorage()->undoData( Region(rect) );
-            for ( int i = 0; i < rawUndoData.count(); ++i )
-            {
+            const QList< QPair<QRectF, SharedSubStyle> > rawUndoData
+            = m_sheet->styleStorage()->undoData(Region(rect));
+            for (int i = 0; i < rawUndoData.count(); ++i) {
 //                 if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
 //                      rawUndoData[i].second->type() == Style::DefaultStyleKey ||
 //                      rawUndoData[i].second->type() == Style::NamedStyleKey )
-                    m_undoData << rawUndoData[i];
+                m_undoData << rawUndoData[i];
             }
         }
         // special handling for the border
-        bool hasLeftPen = m_style->hasAttribute( Style::LeftPen );
-        bool hasRightPen = m_style->hasAttribute( Style::RightPen );
-        bool hasTopPen = m_style->hasAttribute( Style::TopPen );
-        bool hasBottomPen = m_style->hasAttribute( Style::BottomPen );
+        bool hasLeftPen = m_style->hasAttribute(Style::LeftPen);
+        bool hasRightPen = m_style->hasAttribute(Style::RightPen);
+        bool hasTopPen = m_style->hasAttribute(Style::TopPen);
+        bool hasBottomPen = m_style->hasAttribute(Style::BottomPen);
         const QPen leftPen = m_style->leftBorderPen();
         const QPen rightPen = m_style->rightBorderPen();
         const QPen topPen = m_style->topBorderPen();
         const QPen bottomPen = m_style->bottomBorderPen();
-        m_style->clearAttribute( Style::LeftPen );
-        m_style->clearAttribute( Style::RightPen );
-        m_style->clearAttribute( Style::TopPen );
-        m_style->clearAttribute( Style::BottomPen );
+        m_style->clearAttribute(Style::LeftPen);
+        m_style->clearAttribute(Style::RightPen);
+        m_style->clearAttribute(Style::TopPen);
+        m_style->clearAttribute(Style::BottomPen);
 
         // use the horizontal/vertical pens
-        if ( m_horizontalPenChanged )
-        {
-            m_style->setTopBorderPen( m_horizontalPen );
-            m_style->setBottomBorderPen( m_horizontalPen );
+        if (m_horizontalPenChanged) {
+            m_style->setTopBorderPen(m_horizontalPen);
+            m_style->setBottomBorderPen(m_horizontalPen);
             hasTopPen = hasBottomPen = true;
         }
-        if ( m_verticalPenChanged )
-        {
-            m_style->setLeftBorderPen( m_verticalPen );
-            m_style->setRightBorderPen( m_verticalPen );
+        if (m_verticalPenChanged) {
+            m_style->setLeftBorderPen(m_verticalPen);
+            m_style->setRightBorderPen(m_verticalPen);
             hasLeftPen = hasRightPen = true;
         }
 
         // special handling for indentation: reset the indentation first
-        if ( m_style->hasAttribute( Style::Indentation ) )
-        {
+        if (m_style->hasAttribute(Style::Indentation)) {
             Style style;
-            style.setIndentation( 0 );
-            m_sheet->cellStorage()->setStyle( Region(range), style );
+            style.setIndentation(0);
+            m_sheet->cellStorage()->setStyle(Region(range), style);
         }
 
         // special handling for precision: reset the precision first
-        if ( m_style->hasAttribute( Style::Precision ) )
-        {
+        if (m_style->hasAttribute(Style::Precision)) {
             Style style;
-            style.setPrecision( 0 ); // insert storage default
-            m_sheet->cellStorage()->setStyle( Region(range), style );
+            style.setPrecision(0);   // insert storage default
+            m_sheet->cellStorage()->setStyle(Region(range), style);
         }
 
         // set the actual style
-        m_sheet->cellStorage()->setStyle( Region(range), *m_style );
+        m_sheet->cellStorage()->setStyle(Region(range), *m_style);
 
         // prepare to restore pens
-        m_style->clearAttribute( Style::LeftPen );
-        m_style->clearAttribute( Style::RightPen );
-        m_style->clearAttribute( Style::TopPen );
-        m_style->clearAttribute( Style::BottomPen );
+        m_style->clearAttribute(Style::LeftPen);
+        m_style->clearAttribute(Style::RightPen);
+        m_style->clearAttribute(Style::TopPen);
+        m_style->clearAttribute(Style::BottomPen);
 
         // set the outer border styles
         Style style;
-        if ( hasLeftPen )
-        {
-            style.setLeftBorderPen( leftPen );
-            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
+        if (hasLeftPen) {
+            style.setLeftBorderPen(leftPen);
+            m_sheet->cellStorage()->setStyle(Region(QRect(range.left(), range.top(), 1, range.height())), style);
             m_style->setLeftBorderPen(leftPen); // restore pen
             // reset the border of the adjacent cell
-            if (range.left() > 1)
-            {
+            if (range.left() > 1) {
                 Style tmpStyle;
                 tmpStyle.setRightBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left() - 1, range.top(), 1, range.height()));
@@ -139,15 +130,13 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( hasRightPen )
-        {
+        if (hasRightPen) {
             style.clear();
-            style.setRightBorderPen( rightPen );
-            m_sheet->cellStorage()->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
+            style.setRightBorderPen(rightPen);
+            m_sheet->cellStorage()->setStyle(Region(QRect(range.right(), range.top(), 1, range.height())), style);
             m_style->setRightBorderPen(rightPen); // restore pen
             // reset the border of the adjacent cell
-            if (range.right() < KS_colMax)
-            {
+            if (range.right() < KS_colMax) {
                 Style tmpStyle;
                 tmpStyle.setLeftBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.right() + 1, range.top(), 1, range.height()));
@@ -155,15 +144,13 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( hasTopPen )
-        {
+        if (hasTopPen) {
             style.clear();
-            style.setTopBorderPen( topPen );
-            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
+            style.setTopBorderPen(topPen);
+            m_sheet->cellStorage()->setStyle(Region(QRect(range.left(), range.top(), range.width(), 1)), style);
             m_style->setTopBorderPen(topPen); // restore pen
             // reset the border of the adjacent cell
-            if (range.top() > 1)
-            {
+            if (range.top() > 1) {
                 Style tmpStyle;
                 tmpStyle.setBottomBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left(), range.top() - 1, range.width(), 1));
@@ -171,15 +158,13 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( hasBottomPen )
-        {
+        if (hasBottomPen) {
             style.clear();
-            style.setBottomBorderPen( bottomPen );
-            m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
+            style.setBottomBorderPen(bottomPen);
+            m_sheet->cellStorage()->setStyle(Region(QRect(range.left(), range.bottom(), range.width(), 1)), style);
             m_style->setBottomBorderPen(bottomPen); // restore pen
             // reset the border of the adjacent cell
-            if (range.bottom() < KS_rowMax)
-            {
+            if (range.bottom() < KS_rowMax) {
                 Style tmpStyle;
                 tmpStyle.setTopBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left(), range.bottom() + 1, range.width(), 1));
@@ -193,20 +178,18 @@ bool StyleCommand::process(Element* element)
 
 bool StyleCommand::preProcessing()
 {
-    if (m_firstrun)
-    {
-        if ( m_style->isDefault() )
-            setText( i18n( "Reset Style" ) );
+    if (m_firstrun) {
+        if (m_style->isDefault())
+            setText(i18n("Reset Style"));
         else
-            setText( i18n( "Change Style" ) );
+            setText(i18n("Change Style"));
 
         // special handling for precision
-        if ( m_style->hasAttribute( Style::Precision ) )
-        {
-            if ( m_style->precision() == -1 ) // Style default
-                m_style->setPrecision( 0 ); // storage default
-            else if ( m_style->precision() == 0 )
-                m_style->setPrecision( -1 ); // anything resulting in zero, but not storage default
+        if (m_style->hasAttribute(Style::Precision)) {
+            if (m_style->precision() == -1)   // Style default
+                m_style->setPrecision(0);   // storage default
+            else if (m_style->precision() == 0)
+                m_style->setPrecision(-1);   // anything resulting in zero, but not storage default
         }
     }
     return AbstractRegionCommand::preProcessing();
@@ -214,21 +197,17 @@ bool StyleCommand::preProcessing()
 
 bool StyleCommand::mainProcessing()
 {
-    if ( !m_reverse )
-    {
-    }
-    else // m_reverse
-    {
+    if (!m_reverse) {
+    } else { // m_reverse
         Style style;
         style.setDefault();
         // special handling for indentation
-        style.setIndentation( 0 ); // reset to zero
+        style.setIndentation(0);   // reset to zero
         // special handling for precision
-        style.setPrecision( 0 ); // reset to storage default
-        m_sheet->cellStorage()->setStyle( *this, style );
-        for ( int i = 0; i < m_undoData.count(); ++i )
-        {
-            m_sheet->styleStorage()->insert( m_undoData[i].first.toRect(), m_undoData[i].second );
+        style.setPrecision(0);   // reset to storage default
+        m_sheet->cellStorage()->setStyle(*this, style);
+        for (int i = 0; i < m_undoData.count(); ++i) {
+            m_sheet->styleStorage()->insert(m_undoData[i].first.toRect(), m_undoData[i].second);
         }
     }
     return AbstractRegionCommand::mainProcessing();

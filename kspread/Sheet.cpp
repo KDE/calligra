@@ -95,13 +95,13 @@
 #include "interfaces/SheetAdaptor.h"
 #include <QtDBus/QtDBus>
 
-namespace KSpread {
+namespace KSpread
+{
 
 static QString createObjectName(const QString& sheetName)
 {
     QString objectName;
-    for (int i = 0; i < sheetName.count(); ++i)
-    {
+    for (int i = 0; i < sheetName.count(); ++i) {
         if (sheetName[i].isLetterOrNumber() || sheetName[i] == '_')
             objectName.append(sheetName[i]);
         else
@@ -114,109 +114,109 @@ static QString createObjectName(const QString& sheetName)
 class Sheet::Private
 {
 public:
-  Map* workbook;
+    Map* workbook;
 
-  SheetAdaptor* dbus;
+    SheetAdaptor* dbus;
 
-  QString name;
-  int id;
+    QString name;
+    int id;
 
-  Qt::LayoutDirection layoutDirection;
+    Qt::LayoutDirection layoutDirection;
 
-  // true if sheet is hidden
-  bool hide;
+    // true if sheet is hidden
+    bool hide;
 
-  // password of protected sheet
-  QByteArray password;
+    // password of protected sheet
+    QByteArray password;
 
-  bool showGrid;
-  bool showFormula;
-  bool showFormulaIndicator;
-  bool showCommentIndicator;
-  bool autoCalc;
-  bool lcMode;
-  bool showColumnNumber;
-  bool hideZero;
-  bool firstLetterUpper;
+    bool showGrid;
+    bool showFormula;
+    bool showFormulaIndicator;
+    bool showCommentIndicator;
+    bool autoCalc;
+    bool lcMode;
+    bool showColumnNumber;
+    bool hideZero;
+    bool firstLetterUpper;
 
-  // clusters to hold objects
-  CellStorage* cellStorage;
-  RowCluster rows;
-  ColumnCluster columns;
-  QList<KoShape*> shapes;
+    // clusters to hold objects
+    CellStorage* cellStorage;
+    RowCluster rows;
+    ColumnCluster columns;
+    QList<KoShape*> shapes;
 
-  // hold the print object
-  SheetPrint* print;
+    // hold the print object
+    SheetPrint* print;
 
-  // cells that need painting
-  Region paintDirtyList;
+    // cells that need painting
+    Region paintDirtyList;
 
-  // Indicates whether the sheet should paint the page breaks.
-  // Doing so costs some time, so by default it should be turned off.
-  bool showPageBorders;
+    // Indicates whether the sheet should paint the page breaks.
+    // Doing so costs some time, so by default it should be turned off.
+    bool showPageBorders;
 
-  // Max range of canvas in x and y direction.
-  //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
-  QSizeF documentSize;
+    // Max range of canvas in x and y direction.
+    //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
+    QSizeF documentSize;
 };
 
 int Sheet::s_id = 0;
-QHash<int,Sheet*>* Sheet::s_mapSheets;
+QHash<int, Sheet*>* Sheet::s_mapSheets;
 
-Sheet* Sheet::find( int _id )
+Sheet* Sheet::find(int _id)
 {
-  if ( !s_mapSheets )
-    return 0;
+    if (!s_mapSheets)
+        return 0;
 
-  return (*s_mapSheets)[ _id ];
+    return (*s_mapSheets)[ _id ];
 }
 
 Sheet::Sheet(Map* map, const QString& sheetName)
-    : KoShapeUserData()
-    , KoShapeControllerBase()
-    , d( new Private )
+        : KoShapeUserData()
+        , KoShapeControllerBase()
+        , d(new Private)
 {
-  if ( s_mapSheets == 0 )
-    s_mapSheets = new QHash<int,Sheet*>;
+    if (s_mapSheets == 0)
+        s_mapSheets = new QHash<int, Sheet*>;
 
-  d->workbook = map;
+    d->workbook = map;
 
-  d->id = s_id++;
-  s_mapSheets->insert( d->id, this );
+    d->id = s_id++;
+    s_mapSheets->insert(d->id, this);
 
-  d->layoutDirection = Qt::LeftToRight;
+    d->layoutDirection = Qt::LeftToRight;
 
-  d->name = sheetName;
+    d->name = sheetName;
 
-  // Set a valid object name, so that we can offer scripting.
-  setObjectName(createObjectName(d->name));
-  new SheetAdaptor(this);
+    // Set a valid object name, so that we can offer scripting.
+    setObjectName(createObjectName(d->name));
+    new SheetAdaptor(this);
     if (d->workbook->doc()) {
         QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                                                     '/' + d->workbook->objectName() +
-                                                     '/' + this->objectName(), this);
+                '/' + d->workbook->objectName() +
+                '/' + this->objectName(), this);
     }
 
-  d->cellStorage = new CellStorage( this );
-  d->rows.setAutoDelete( true );
-  d->columns.setAutoDelete( true );
+    d->cellStorage = new CellStorage(this);
+    d->rows.setAutoDelete(true);
+    d->columns.setAutoDelete(true);
 
-  d->documentSize = QSizeF( KS_colMax * d->workbook->defaultColumnFormat()->width(),
-                            KS_rowMax * d->workbook->defaultRowFormat()->height() );
+    d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat()->width(),
+                             KS_rowMax * d->workbook->defaultRowFormat()->height());
 
-  d->hide = false;
-  d->showGrid=true;
-  d->showFormula=false;
-  d->showFormulaIndicator=true;
-  d->showCommentIndicator=true;
-  d->showPageBorders = false;
+    d->hide = false;
+    d->showGrid = true;
+    d->showFormula = false;
+    d->showFormulaIndicator = true;
+    d->showCommentIndicator = true;
+    d->showPageBorders = false;
 
-  d->lcMode=false;
-  d->showColumnNumber=false;
-  d->hideZero=false;
-  d->firstLetterUpper=false;
-  d->autoCalc=true;
-  d->print = new SheetPrint( this );
+    d->lcMode = false;
+    d->showColumnNumber = false;
+    d->hideZero = false;
+    d->firstLetterUpper = false;
+    d->autoCalc = true;
+    d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
@@ -228,9 +228,9 @@ Sheet::Sheet(Map* map, const QString& sheetName)
 }
 
 Sheet::Sheet(const Sheet& other)
-    : KoShapeUserData()
-    , KoShapeControllerBase()
-    , d(new Private)
+        : KoShapeUserData()
+        , KoShapeControllerBase()
+        , d(new Private)
 {
     d->workbook = other.d->workbook;
 
@@ -243,10 +243,10 @@ Sheet::Sheet(const Sheet& other)
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
     new SheetAdaptor(this);
-    if (d->workbook->doc() ) {
+    if (d->workbook->doc()) {
         QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                                                     '/' + d->workbook->objectName() +
-                                                     '/' + this->objectName(), this);
+                '/' + d->workbook->objectName() +
+                '/' + this->objectName(), this);
     }
 
     d->id = s_id++;
@@ -275,9 +275,8 @@ Sheet::Sheet(const Sheet& other)
     //I think this should use saveOdf and loadOdf for copying
     KoShape* shape;
     const QList<KoShape*> shapes = other.d->shapes;
-    for (int i = 0; i < shapes.count(); ++i)
-    {
-        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShapeAndInit( 0 );
+    for (int i = 0; i < shapes.count(); ++i) {
+        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShapeAndInit(0);
         shape->copySettings(shapes[i]);
         addShape(shape);
     }
@@ -315,17 +314,17 @@ Sheet::~Sheet()
 
 QString Sheet::sheetName() const
 {
-  return d->name;
+    return d->name;
 }
 
 Map* Sheet::map() const
 {
-  return d->workbook;
+    return d->workbook;
 }
 
 Doc* Sheet::doc() const
 {
-  return d->workbook->doc();
+    return d->workbook->doc();
 }
 
 void Sheet::addShape(KoShape* shape)
@@ -375,22 +374,22 @@ QList<KoShape*> Sheet::shapes() const
 
 Qt::LayoutDirection Sheet::layoutDirection() const
 {
-  return d->layoutDirection;
+    return d->layoutDirection;
 }
 
-void Sheet::setLayoutDirection( Qt::LayoutDirection dir )
+void Sheet::setLayoutDirection(Qt::LayoutDirection dir)
 {
-  d->layoutDirection = dir;
+    d->layoutDirection = dir;
 }
 
 bool Sheet::isHidden() const
 {
-  return d->hide;
+    return d->hide;
 }
 
-void Sheet::setHidden( bool hidden )
+void Sheet::setHidden(bool hidden)
 {
-  d->hide = hidden;
+    d->hide = hidden;
 }
 
 bool Sheet::getShowGrid() const
@@ -398,9 +397,9 @@ bool Sheet::getShowGrid() const
     return d->showGrid;
 }
 
-void Sheet::setShowGrid( bool _showGrid )
+void Sheet::setShowGrid(bool _showGrid)
 {
-    d->showGrid=_showGrid;
+    d->showGrid = _showGrid;
 }
 
 bool Sheet::getShowFormula() const
@@ -408,9 +407,9 @@ bool Sheet::getShowFormula() const
     return d->showFormula;
 }
 
-void Sheet::setShowFormula( bool _showFormula )
+void Sheet::setShowFormula(bool _showFormula)
 {
-    d->showFormula=_showFormula;
+    d->showFormula = _showFormula;
 }
 
 bool Sheet::getShowFormulaIndicator() const
@@ -418,9 +417,9 @@ bool Sheet::getShowFormulaIndicator() const
     return d->showFormulaIndicator;
 }
 
-void Sheet::setShowFormulaIndicator( bool _showFormulaIndicator )
+void Sheet::setShowFormulaIndicator(bool _showFormulaIndicator)
 {
-    d->showFormulaIndicator=_showFormulaIndicator;
+    d->showFormulaIndicator = _showFormulaIndicator;
 }
 
 bool Sheet::getShowCommentIndicator() const
@@ -430,7 +429,7 @@ bool Sheet::getShowCommentIndicator() const
 
 void Sheet::setShowCommentIndicator(bool _indic)
 {
-    d->showCommentIndicator=_indic;
+    d->showCommentIndicator = _indic;
 }
 
 bool Sheet::getLcMode() const
@@ -438,9 +437,9 @@ bool Sheet::getLcMode() const
     return d->lcMode;
 }
 
-void Sheet::setLcMode( bool _lcMode )
+void Sheet::setLcMode(bool _lcMode)
 {
-    d->lcMode=_lcMode;
+    d->lcMode = _lcMode;
 }
 
 bool Sheet::isAutoCalculationEnabled() const
@@ -456,8 +455,7 @@ void Sheet::setAutoCalculationEnabled(bool enable)
 
     d->autoCalc = enable;
     //If enabling automatic calculation, make sure that the dependencies are up-to-date
-    if (enable == true)
-    {
+    if (enable == true) {
         Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), this);
 //        region = map()->dependencyManager()->reduceToProvidingRegion(region);
         map()->dependencyManager()->regionChanged(region);
@@ -470,9 +468,9 @@ bool Sheet::getShowColumnNumber() const
     return d->showColumnNumber;
 }
 
-void Sheet::setShowColumnNumber( bool _showColumnNumber )
+void Sheet::setShowColumnNumber(bool _showColumnNumber)
 {
-    d->showColumnNumber=_showColumnNumber;
+    d->showColumnNumber = _showColumnNumber;
 }
 
 bool Sheet::getHideZero() const
@@ -480,9 +478,9 @@ bool Sheet::getHideZero() const
     return d->hideZero;
 }
 
-void Sheet::setHideZero( bool _hideZero )
+void Sheet::setHideZero(bool _hideZero)
 {
-    d->hideZero=_hideZero;
+    d->hideZero = _hideZero;
 }
 
 bool Sheet::getFirstLetterUpper() const
@@ -490,9 +488,9 @@ bool Sheet::getFirstLetterUpper() const
     return d->firstLetterUpper;
 }
 
-void Sheet::setFirstLetterUpper( bool _firstUpper )
+void Sheet::setFirstLetterUpper(bool _firstUpper)
 {
-    d->firstLetterUpper=_firstUpper;
+    d->firstLetterUpper = _firstUpper;
 }
 
 bool Sheet::isShowPageBorders() const
@@ -500,19 +498,19 @@ bool Sheet::isShowPageBorders() const
     return d->showPageBorders;
 }
 
-const ColumnFormat* Sheet::columnFormat( int _column ) const
+const ColumnFormat* Sheet::columnFormat(int _column) const
 {
-    const ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0 )
+    const ColumnFormat *p = d->columns.lookup(_column);
+    if (p != 0)
         return p;
 
     return map()->defaultColumnFormat();
 }
 
-const RowFormat* Sheet::rowFormat( int _row ) const
+const RowFormat* Sheet::rowFormat(int _row) const
 {
-    const RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0 )
+    const RowFormat *p = d->rows.lookup(_row);
+    if (p != 0)
         return p;
 
     return map()->defaultRowFormat();
@@ -563,7 +561,7 @@ const ValueStorage* Sheet::valueStorage() const
     return d->cellStorage->valueStorage();
 }
 
-void Sheet::password( QByteArray & passwd ) const
+void Sheet::password(QByteArray & passwd) const
 {
     passwd = d->password;
 }
@@ -573,14 +571,14 @@ bool Sheet::isProtected() const
     return !d->password.isNull();
 }
 
-void Sheet::setProtected( QByteArray const & passwd )
+void Sheet::setProtected(QByteArray const & passwd)
 {
-  d->password = passwd;
+    d->password = passwd;
 }
 
-bool Sheet::checkPassword( QByteArray const & passwd ) const
+bool Sheet::checkPassword(QByteArray const & passwd) const
 {
-    return ( passwd == d->password );
+    return (passwd == d->password);
 }
 
 SheetPrint* Sheet::print() const
@@ -603,32 +601,31 @@ QSizeF Sheet::documentSize() const
     return d->documentSize;
 }
 
-void Sheet::adjustDocumentWidth( double deltaWidth )
+void Sheet::adjustDocumentWidth(double deltaWidth)
 {
     d->documentSize.rwidth() += deltaWidth;
-    emit documentSizeChanged( d->documentSize );
+    emit documentSizeChanged(d->documentSize);
 }
 
-void Sheet::adjustDocumentHeight( double deltaHeight )
+void Sheet::adjustDocumentHeight(double deltaHeight)
 {
     d->documentSize.rheight() += deltaHeight;
-    emit documentSizeChanged( d->documentSize );
+    emit documentSizeChanged(d->documentSize);
 }
 
-int Sheet::leftColumn( double _xpos, double &_left ) const
+int Sheet::leftColumn(double _xpos, double &_left) const
 {
     _left = 0.0;
     int col = 1;
     double x = columnFormat(col)->visibleWidth();
-    while (x < _xpos && col < KS_colMax)
-    {
+    while (x < _xpos && col < KS_colMax) {
         _left += columnFormat(col)->visibleWidth();
         x += columnFormat(++col)->visibleWidth();
     }
     return col;
 }
 
-int Sheet::rightColumn( double _xpos ) const
+int Sheet::rightColumn(double _xpos) const
 {
     int col = 1;
     double x = columnFormat(col)->visibleWidth();
@@ -637,20 +634,19 @@ int Sheet::rightColumn( double _xpos ) const
     return col;
 }
 
-int Sheet::topRow( double _ypos, double & _top ) const
+int Sheet::topRow(double _ypos, double & _top) const
 {
     _top = 0.0;
     int row = 1;
     double y = rowFormat(row)->visibleHeight();
-    while (y < _ypos && row < KS_rowMax)
-    {
+    while (y < _ypos && row < KS_rowMax) {
         _top += rowFormat(row)->visibleHeight();
         y += rowFormat(++row)->visibleHeight();
     }
     return row;
 }
 
-int Sheet::bottomRow( double _ypos ) const
+int Sheet::bottomRow(double _ypos) const
 {
     int row = 1;
     double y = rowFormat(row)->visibleHeight();
@@ -689,7 +685,7 @@ QRect Sheet::documentToCellCoordinates(const QRectF& area) const
     return QRect(left, top, right - left + 1, bottom - top + 1);
 }
 
-double Sheet::columnPosition( int _col ) const
+double Sheet::columnPosition(int _col) const
 {
     const int max = qMin(_col, KS_colMax);
     double x = 0.0;
@@ -699,7 +695,7 @@ double Sheet::columnPosition( int _col ) const
 }
 
 
-double Sheet::rowPosition( int _row ) const
+double Sheet::rowPosition(int _row) const
 {
     const int max = qMin(_row, KS_rowMax);
     double y = 0.0;
@@ -719,216 +715,197 @@ ColumnFormat* Sheet::firstCol() const
     return d->columns.first();
 }
 
-ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
+ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
 {
     Q_ASSERT(_column >= 1 && _column <= KS_colMax);
-    ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0 || !force_creation )
+    ColumnFormat *p = d->columns.lookup(_column);
+    if (p != 0 || !force_creation)
         return p;
 
-    p = new ColumnFormat( *map()->defaultColumnFormat() );
-    p->setSheet( this );
-    p->setColumn( _column );
+    p = new ColumnFormat(*map()->defaultColumnFormat());
+    p->setSheet(this);
+    p->setColumn(_column);
 
-    d->columns.insertElement( p, _column );
+    d->columns.insertElement(p, _column);
 
     return p;
 }
 
-RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
+RowFormat* Sheet::nonDefaultRowFormat(int _row, bool force_creation)
 {
     Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
-    RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0 || !force_creation )
+    RowFormat *p = d->rows.lookup(_row);
+    if (p != 0 || !force_creation)
         return p;
 
-    p = new RowFormat( *map()->defaultRowFormat() );
-    p->setSheet( this );
-    p->setRow( _row );
+    p = new RowFormat(*map()->defaultRowFormat());
+    p->setSheet(this);
+    p->setRow(_row);
 
-    d->rows.insertElement( p, _row );
+    d->rows.insertElement(p, _row);
 
     return p;
 }
 
-void Sheet::changeCellTabName( QString const & old_name, QString const & new_name )
+void Sheet::changeCellTabName(QString const & old_name, QString const & new_name)
 {
-    for ( int c = 0; c < formulaStorage()->count(); ++c )
-    {
-        if ( formulaStorage()->data( c ).expression().contains( old_name ) )
-        {
-            int nb = formulaStorage()->data( c ).expression().count( old_name + '!' );
+    for (int c = 0; c < formulaStorage()->count(); ++c) {
+        if (formulaStorage()->data(c).expression().contains(old_name)) {
+            int nb = formulaStorage()->data(c).expression().count(old_name + '!');
             QString tmp = old_name + '!';
             int len = tmp.length();
-            tmp = formulaStorage()->data( c ).expression();
+            tmp = formulaStorage()->data(c).expression();
 
-            for ( int i = 0; i < nb; ++i )
-            {
-                int pos = tmp.indexOf( old_name + '!' );
-                tmp.replace( pos, len, new_name + '!' );
+            for (int i = 0; i < nb; ++i) {
+                int pos = tmp.indexOf(old_name + '!');
+                tmp.replace(pos, len, new_name + '!');
             }
-            Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
-            Formula formula( this, cell );
-            formula.setExpression( tmp );
-            cell.setFormula( formula );
+            Cell cell(this, formulaStorage()->col(c), formulaStorage()->row(c));
+            Formula formula(this, cell);
+            formula.setExpression(tmp);
+            cell.setFormula(formula);
             cell.makeFormula();
         }
     }
 }
 
-void Sheet::insertShiftRight( const QRect& rect )
+void Sheet::insertShiftRight(const QRect& rect)
 {
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        for ( int i = rect.top(); i <= rect.bottom(); ++i )
-        {
-            sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                      Sheet::ColumnInsert, sheetName(),
-                                      rect.right() - rect.left() + 1 );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        for (int i = rect.top(); i <= rect.bottom(); ++i) {
+            sheet->changeNameCellRef(QPoint(rect.left(), i), false,
+                                     Sheet::ColumnInsert, sheetName(),
+                                     rect.right() - rect.left() + 1);
         }
     }
 }
 
-void Sheet::insertShiftDown( const QRect& rect )
+void Sheet::insertShiftDown(const QRect& rect)
 {
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        for ( int i = rect.left(); i <= rect.right(); ++i )
-        {
-            sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                      Sheet::RowInsert, sheetName(),
-                                      rect.bottom() - rect.top() + 1 );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        for (int i = rect.left(); i <= rect.right(); ++i) {
+            sheet->changeNameCellRef(QPoint(i, rect.top()), false,
+                                     Sheet::RowInsert, sheetName(),
+                                     rect.bottom() - rect.top() + 1);
         }
     }
 }
 
-void Sheet::removeShiftUp( const QRect& rect )
+void Sheet::removeShiftUp(const QRect& rect)
 {
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        for ( int i = rect.left(); i <= rect.right(); ++i )
-        {
-            sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                      Sheet::RowRemove, sheetName(),
-                                      rect.bottom() - rect.top() + 1 );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        for (int i = rect.left(); i <= rect.right(); ++i) {
+            sheet->changeNameCellRef(QPoint(i, rect.top()), false,
+                                     Sheet::RowRemove, sheetName(),
+                                     rect.bottom() - rect.top() + 1);
         }
     }
 }
 
-void Sheet::removeShiftLeft( const QRect& rect )
+void Sheet::removeShiftLeft(const QRect& rect)
 {
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        for ( int i = rect.top(); i <= rect.bottom(); ++i )
-        {
-            sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                      Sheet::ColumnRemove, sheetName(),
-                                      rect.right() - rect.left() + 1 );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        for (int i = rect.top(); i <= rect.bottom(); ++i) {
+            sheet->changeNameCellRef(QPoint(rect.left(), i), false,
+                                     Sheet::ColumnRemove, sheetName(),
+                                     rect.right() - rect.left() + 1);
         }
     }
 }
 
-void Sheet::insertColumns( int col, int number )
+void Sheet::insertColumns(int col, int number)
 {
     double deltaWidth = 0.0;
-    for( int i=0; i<number; i++ )
-    {
-        deltaWidth -= columnFormat( KS_colMax )->width();
-        d->columns.insertColumn( col );
-        deltaWidth += columnFormat( col+i )->width();
+    for (int i = 0; i < number; i++) {
+        deltaWidth -= columnFormat(KS_colMax)->width();
+        d->columns.insertColumn(col);
+        deltaWidth += columnFormat(col + i)->width();
     }
     // Adjust document width (plus widths of new columns; minus widths of removed columns).
-    adjustDocumentWidth( deltaWidth );
+    adjustDocumentWidth(deltaWidth);
 
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        sheet->changeNameCellRef( QPoint( col, 1 ), true,
-                                  Sheet::ColumnInsert, sheetName(),
-                                  number );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->changeNameCellRef(QPoint(col, 1), true,
+                                 Sheet::ColumnInsert, sheetName(),
+                                 number);
     }
     //update print settings
-    d->print->insertColumn( col, number );
+    d->print->insertColumn(col, number);
 }
 
-void Sheet::insertRows( int row, int number )
+void Sheet::insertRows(int row, int number)
 {
     double deltaHeight = 0.0;
-    for( int i=0; i<number; i++ )
-    {
-        deltaHeight -= rowFormat( KS_rowMax )->height();
-        d->rows.insertRow( row );
-        deltaHeight += rowFormat( row )->height();
+    for (int i = 0; i < number; i++) {
+        deltaHeight -= rowFormat(KS_rowMax)->height();
+        d->rows.insertRow(row);
+        deltaHeight += rowFormat(row)->height();
     }
     // Adjust document height (plus heights of new rows; minus heights of removed rows).
-    adjustDocumentHeight( deltaHeight );
+    adjustDocumentHeight(deltaHeight);
 
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        sheet->changeNameCellRef( QPoint( 1, row ), true,
-                                  Sheet::RowInsert, sheetName(),
-                                  number );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->changeNameCellRef(QPoint(1, row), true,
+                                 Sheet::RowInsert, sheetName(),
+                                 number);
     }
     //update print settings
-    d->print->insertRow( row, number );
+    d->print->insertRow(row, number);
 }
 
-void Sheet::removeColumns( int col, int number )
+void Sheet::removeColumns(int col, int number)
 {
     double deltaWidth = 0.0;
-    for ( int i = 0; i < number; ++i )
-    {
-        deltaWidth -= columnFormat( col )->width();
-        d->columns.removeColumn( col );
-        deltaWidth += columnFormat( KS_colMax )->width();
+    for (int i = 0; i < number; ++i) {
+        deltaWidth -= columnFormat(col)->width();
+        d->columns.removeColumn(col);
+        deltaWidth += columnFormat(KS_colMax)->width();
     }
     // Adjust document width (plus widths of new columns; minus widths of removed columns).
-    adjustDocumentWidth( deltaWidth );
+    adjustDocumentWidth(deltaWidth);
 
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-        sheet->changeNameCellRef( QPoint( col, 1 ), true,
-                                  Sheet::ColumnRemove, sheetName(),
-                                  number );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->changeNameCellRef(QPoint(col, 1), true,
+                                 Sheet::ColumnRemove, sheetName(),
+                                 number);
     }
     //update print settings
-    d->print->removeColumn( col, number );
+    d->print->removeColumn(col, number);
 }
 
-void Sheet::removeRows( int row, int number )
+void Sheet::removeRows(int row, int number)
 {
     double deltaHeight = 0.0;
-    for( int i=0; i<number; i++ )
-    {
-        deltaHeight -= rowFormat( row )->height();
-        d->rows.removeRow( row );
-        deltaHeight += rowFormat( KS_rowMax )->height();
+    for (int i = 0; i < number; i++) {
+        deltaHeight -= rowFormat(row)->height();
+        d->rows.removeRow(row);
+        deltaHeight += rowFormat(KS_rowMax)->height();
     }
     // Adjust document height (plus heights of new rows; minus heights of removed rows).
-    adjustDocumentHeight( deltaHeight );
+    adjustDocumentHeight(deltaHeight);
 
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-      sheet->changeNameCellRef( QPoint( 1, row ), true,
-                                Sheet::RowRemove, sheetName(),
-                                number );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->changeNameCellRef(QPoint(1, row), true,
+                                 Sheet::RowRemove, sheetName(),
+                                 number);
     }
 
     //update print settings
-    d->print->removeRow( row, number );
+    d->print->removeRow(row, number);
 }
 
 void Sheet::emitHideRow()
 {
     emit visibleSizeChanged();
-    emit sig_updateRowHeader( this );
-    emit sig_updateView( this );
+    emit sig_updateRowHeader(this);
+    emit sig_updateView(this);
 }
 
 void Sheet::emitHideColumn()
 {
     emit visibleSizeChanged();
-    emit sig_updateColumnHeader( this );
-    emit sig_updateView( this );
+    emit sig_updateColumnHeader(this);
+    emit sig_updateView(this);
 }
 
 QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
@@ -942,55 +919,46 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
     if (isColumnFixed)
         newPoint.append('$');
     if (ref == ColumnInsert &&
-        col + nbCol <= KS_colMax &&
-        col >= pos.x() &&    // Column after the new one : +1
-        ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-    {
-        newPoint += Cell::columnName( col + nbCol );
-    }
-    else if (ref == ColumnRemove &&
-                col > pos.x() &&    // Column after the deleted one : -1
-                ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-    {
-        newPoint += Cell::columnName( col - nbCol );
-    }
-    else
-        newPoint += Cell::columnName( col );
+            col + nbCol <= KS_colMax &&
+            col >= pos.x() &&    // Column after the new one : +1
+            (fullRowOrColumn || row == pos.y())) {  // All rows or just one
+        newPoint += Cell::columnName(col + nbCol);
+    } else if (ref == ColumnRemove &&
+               col > pos.x() &&    // Column after the deleted one : -1
+               (fullRowOrColumn || row == pos.y())) {  // All rows or just one
+        newPoint += Cell::columnName(col - nbCol);
+    } else
+        newPoint += Cell::columnName(col);
 
     // Update row
     if (isRowFixed)
         newPoint.append('$');
     if (ref == RowInsert &&
-        row + nbCol <= KS_rowMax &&
-        row >= pos.y() &&   // Row after the new one : +1
-        ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-    {
-        newPoint += QString::number( row + nbCol );
-    }
-    else if (ref == RowRemove &&
-             row > pos.y() &&   // Row after the deleted one : -1
-             ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-    {
-        newPoint += QString::number( row - nbCol );
-    }
-    else
-        newPoint += QString::number( row );
+            row + nbCol <= KS_rowMax &&
+            row >= pos.y() &&   // Row after the new one : +1
+            (fullRowOrColumn || col == pos.x())) {  // All columns or just one
+        newPoint += QString::number(row + nbCol);
+    } else if (ref == RowRemove &&
+               row > pos.y() &&   // Row after the deleted one : -1
+               (fullRowOrColumn || col == pos.x())) {  // All columns or just one
+        newPoint += QString::number(row - nbCol);
+    } else
+        newPoint += QString::number(row);
 
-    if( ( ( ref == ColumnRemove
+    if (((ref == ColumnRemove
             && col == pos.x() // Column is the deleted one : error
-            && ( fullRowOrColumn || row == pos.y() ) ) ||
-        ( ref == RowRemove
-            && row == pos.y() // Row is the deleted one : error
-            && ( fullRowOrColumn || col == pos.x() ) ) ||
-        ( ref == ColumnInsert
-            && col + nbCol > KS_colMax
-            && col >= pos.x()     // Column after the new one : +1
-            && ( fullRowOrColumn || row == pos.y() ) ) ||
-        ( ref == RowInsert
-            && row + nbCol > KS_rowMax
-            && row >= pos.y() // Row after the new one : +1
-            && ( fullRowOrColumn || col == pos.x() ) ) ) )
-    {
+            && (fullRowOrColumn || row == pos.y())) ||
+            (ref == RowRemove
+             && row == pos.y() // Row is the deleted one : error
+             && (fullRowOrColumn || col == pos.x())) ||
+            (ref == ColumnInsert
+             && col + nbCol > KS_colMax
+             && col >= pos.x()     // Column after the new one : +1
+             && (fullRowOrColumn || row == pos.y())) ||
+            (ref == RowInsert
+             && row + nbCol > KS_rowMax
+             && row >= pos.y() // Row after the new one : +1
+             && (fullRowOrColumn || col == pos.x())))) {
         newPoint = '#' + i18n("Dependency") + '!';
     }
     return newPoint;
@@ -999,153 +967,132 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
 void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                               const QString& tabname, int nbCol)
 {
-    for (int c = 0; c < formulaStorage()->count(); ++c)
-    {
+    for (int c = 0; c < formulaStorage()->count(); ++c) {
         QString newText('=');
         const Tokens tokens = formulaStorage()->data(c).tokens();
-        for (int t = 0; t < tokens.count(); ++t)
-        {
+        for (int t = 0; t < tokens.count(); ++t) {
             const Token token = tokens[t];
-            switch (token.type())
-            {
-                case Token::Cell:
-                case Token::Range:
-                {
-                    if (map()->namedAreaManager()->contains(token.text()))
-                    {
-                        newText.append(token.text()); // simply keep the area name
-                        break;
-                    }
-                    const Region region(token.text(), map());
-                    if (!region.isValid() || !region.isContiguous())
-                    {
-                        newText.append(token.text());
-                        break;
-                    }
-                    if (!region.firstSheet() && tabname != sheetName())
-                    {
-                        // nothing to do here
-                        newText.append(token.text());
-                        break;
-                    }
-                    // actually only one element in here, but we need extended access to the element
-                    Region::ConstIterator end(region.constEnd());
-                    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-                    {
-                        Region::Element* element = (*it);
-                        if (element->type() == Region::Element::Point)
-                        {
-                            if (element->sheet())
-                                newText.append(element->sheet()->sheetName() + '!');
-                            QString newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
-                                                                       nbCol,
-                                                                       element->rect().topLeft(),
-                                                                       element->isColumnFixed(),
-                                                                       element->isRowFixed());
-                            newText.append(newPoint);
-                        }
-                        else // (element->type() == Region::Element::Range)
-                        {
-                            if (element->sheet())
-                                newText.append(element->sheet()->sheetName() + '!');
-                            QString newPoint;
-                            newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
-                                                               nbCol, element->rect().topLeft(),
-                                                               element->isColumnFixed(),
-                                                               element->isRowFixed());
-                            newText.append(newPoint + ':');
-                            newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
-                                                               nbCol, element->rect().bottomRight(),
-                                                               element->isColumnFixed(),
-                                                               element->isRowFixed());
-                            newText.append(newPoint);
-                        }
-                    }
+            switch (token.type()) {
+            case Token::Cell:
+            case Token::Range: {
+                if (map()->namedAreaManager()->contains(token.text())) {
+                    newText.append(token.text()); // simply keep the area name
                     break;
                 }
-                default:
-                {
+                const Region region(token.text(), map());
+                if (!region.isValid() || !region.isContiguous()) {
                     newText.append(token.text());
                     break;
                 }
+                if (!region.firstSheet() && tabname != sheetName()) {
+                    // nothing to do here
+                    newText.append(token.text());
+                    break;
+                }
+                // actually only one element in here, but we need extended access to the element
+                Region::ConstIterator end(region.constEnd());
+                for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
+                    Region::Element* element = (*it);
+                    if (element->type() == Region::Element::Point) {
+                        if (element->sheet())
+                            newText.append(element->sheet()->sheetName() + '!');
+                        QString newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                           nbCol,
+                                           element->rect().topLeft(),
+                                           element->isColumnFixed(),
+                                           element->isRowFixed());
+                        newText.append(newPoint);
+                    } else { // (element->type() == Region::Element::Range)
+                        if (element->sheet())
+                            newText.append(element->sheet()->sheetName() + '!');
+                        QString newPoint;
+                        newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                                           nbCol, element->rect().topLeft(),
+                                                           element->isColumnFixed(),
+                                                           element->isRowFixed());
+                        newText.append(newPoint + ':');
+                        newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                                           nbCol, element->rect().bottomRight(),
+                                                           element->isColumnFixed(),
+                                                           element->isRowFixed());
+                        newText.append(newPoint);
+                    }
+                }
+                break;
+            }
+            default: {
+                newText.append(token.text());
+                break;
+            }
             }
         }
 
-      Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
-      Formula formula( this, cell );
-      formula.setExpression( newText );
-      cell.setFormula( formula );
+        Cell cell(this, formulaStorage()->col(c), formulaStorage()->row(c));
+        Formula formula(this, cell);
+        formula.setExpression(newText);
+        cell.setFormula(formula);
     }
 }
 
 #if 0
-void Sheet::replace( const QString &_find, const QString &_replace, long options,
-                            Canvas *canvas )
+void Sheet::replace(const QString &_find, const QString &_replace, long options,
+                    Canvas *canvas)
 {
-  Selection* selection = canvas->view()->selection();
+    Selection* selection = canvas->view()->selection();
 
     // Identify the region of interest.
-    QRect region( selection->lastRange() );
-    QPoint marker( selection->marker() );
+    QRect region(selection->lastRange());
+    QPoint marker(selection->marker());
 
-    if (options & KReplaceDialog::SelectedText)
-    {
+    if (options & KReplaceDialog::SelectedText) {
 
         // Complete rows selected ?
-        if ( Region::Range(region).isRow() )
-        {
+        if (Region::Range(region).isRow()) {
         }
         // Complete columns selected ?
-        else if ( Region::Range(region).isColumn() )
-        {
+        else if (Region::Range(region).isColumn()) {
         }
-    }
-    else
-    {
+    } else {
         // All cells.
-        region.setCoords( 1, 1, d->maxRow, d->maxColumn );
+        region.setCoords(1, 1, d->maxRow, d->maxColumn);
     }
 
     // Create the class that handles all the actual replace stuff, and connect it to its
     // local slots.
-    KReplace dialog( _find, _replace, options );
+    KReplace dialog(_find, _replace, options);
     QObject::connect(
-        &dialog, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
-        canvas, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
+        &dialog, SIGNAL(highlight(const QString &, int, int, const QRect &)),
+        canvas, SLOT(highlight(const QString &, int, int, const QRect &)));
     QObject::connect(
-        &dialog, SIGNAL( replace( const QString &, int, int,int, const QRect & ) ),
-        canvas, SLOT( replace( const QString &, int, int,int, const QRect & ) ) );
+        &dialog, SIGNAL(replace(const QString &, int, int, int, const QRect &)),
+        canvas, SLOT(replace(const QString &, int, int, int, const QRect &)));
 
     // Now do the replacing...
-    if ( !doc()->undoLocked() )
-    {
-        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell( doc(), this, region );
-        doc()->addCommand( undo );
+    if (!doc()->undoLocked()) {
+        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell(doc(), this, region);
+        doc()->addCommand(undo);
     }
 
-    QRect cellRegion( 0, 0, 0, 0 );
+    QRect cellRegion(0, 0, 0, 0);
     bool bck = options & KFind::FindBackwards;
 
     int colStart = !bck ? region.left() : region.right();
     int colEnd = !bck ? region.right() : region.left();
-    int rowStart = !bck ? region.top() :region.bottom();
+    int rowStart = !bck ? region.top() : region.bottom();
     int rowEnd = !bck ? region.bottom() : region.top();
-    if ( options & KFind::FromCursor ) {
+    if (options & KFind::FromCursor) {
         colStart = marker.x();
         rowStart =  marker.y();
     }
     Cell *cell;
-    for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
-    {
-        for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
-        {
-            cell = Cell( this, col, row );
-            if ( !cell.isDefault() && !cell.isPartOfMerged() && !cell.isFormula() )
-            {
+    for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row) {
+        for (int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col) {
+            cell = Cell(this, col, row);
+            if (!cell.isDefault() && !cell.isPartOfMerged() && !cell.isFormula()) {
                 QString text = cell.userInput();
-                cellRegion.setTop( row );
-                cellRegion.setLeft( col );
-                if (!dialog.replace( text, cellRegion ))
+                cellRegion.setTop(row);
+                cellRegion.setLeft(col);
+                if (!dialog.replace(text, cellRegion))
                     return;
             }
         }
@@ -1154,140 +1101,135 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 #endif
 
 // helper function for Sheet::areaIsEmpty
-bool Sheet::cellIsEmpty( const Cell& cell, TestType _type)
+bool Sheet::cellIsEmpty(const Cell& cell, TestType _type)
 {
-  if ( !cell.isPartOfMerged())
-  {
-    switch( _type )
-    {
-    case Text :
-      if ( !cell.userInput().isEmpty())
-        return false;
-      break;
-    case Validity:
-      if ( !cell.validity().isEmpty() )
-        return false;
-      break;
-    case Comment:
-      if ( !cell.comment().isEmpty())
-        return false;
-      break;
-    case ConditionalCellAttribute:
-      if ( cell.conditions().conditionList().count() > 0)
-        return false;
-      break;
+    if (!cell.isPartOfMerged()) {
+        switch (_type) {
+        case Text :
+            if (!cell.userInput().isEmpty())
+                return false;
+            break;
+        case Validity:
+            if (!cell.validity().isEmpty())
+                return false;
+            break;
+        case Comment:
+            if (!cell.comment().isEmpty())
+                return false;
+            break;
+        case ConditionalCellAttribute:
+            if (cell.conditions().conditionList().count() > 0)
+                return false;
+            break;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
 // TODO: convert into a manipulator, similar to the Dilation one
 bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
-  Region::ConstIterator endOfList = region.constEnd();
-  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
-    QRect range = (*it)->rect();
-    // Complete rows selected ?
-    if ((*it)->isRow())
-    {
-      for ( int row = range.top(); row <= range.bottom(); ++row ) {
-        Cell cell = d->cellStorage->firstInRow( row );
-        while( !cell.isNull() ) {
-          if (!cellIsEmpty (cell, _type))
-            return false;
-          cell = d->cellStorage->nextInRow( cell.column(), row );
+    Region::ConstIterator endOfList = region.constEnd();
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
+        QRect range = (*it)->rect();
+        // Complete rows selected ?
+        if ((*it)->isRow()) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                Cell cell = d->cellStorage->firstInRow(row);
+                while (!cell.isNull()) {
+                    if (!cellIsEmpty(cell, _type))
+                        return false;
+                    cell = d->cellStorage->nextInRow(cell.column(), row);
+                }
+            }
         }
-      }
-    }
-    // Complete columns selected ?
-    else if ((*it)->isColumn()) {
-      for ( int col = range.left(); col <= range.right(); ++col ) {
-        Cell cell = d->cellStorage->firstInColumn( col );
-        while( !cell.isNull() ) {
-          if (!cellIsEmpty (cell, _type))
-            return false;
-          cell = d->cellStorage->nextInColumn( col, cell.row() );
-        }
-      }
-    }
-    else {
-      Cell cell;
-      int right  = range.right();
-      int bottom = range.bottom();
-      for ( int x = range.left(); x <= right; ++x )
-        for ( int y = range.top(); y <= bottom; ++y ) {
-          cell = Cell( this, x, y );
-          if (!cellIsEmpty (cell, _type))
-            return false;
+        // Complete columns selected ?
+        else if ((*it)->isColumn()) {
+            for (int col = range.left(); col <= range.right(); ++col) {
+                Cell cell = d->cellStorage->firstInColumn(col);
+                while (!cell.isNull()) {
+                    if (!cellIsEmpty(cell, _type))
+                        return false;
+                    cell = d->cellStorage->nextInColumn(col, cell.row());
+                }
+            }
+        } else {
+            Cell cell;
+            int right  = range.right();
+            int bottom = range.bottom();
+            for (int x = range.left(); x <= right; ++x)
+                for (int y = range.top(); y <= bottom; ++y) {
+                    cell = Cell(this, x, y);
+                    if (!cellIsEmpty(cell, _type))
+                        return false;
+                }
         }
     }
-  }
-  return true;
+    return true;
 }
 
 QString Sheet::guessColumnTitle(QRect& area, int col)
 {
-  if ( (!Region(area, this).isValid()) || (col < area.left()) || (col > area.right()))
-    return QString();
+    if ((!Region(area, this).isValid()) || (col < area.left()) || (col > area.right()))
+        return QString();
 
-  //The current guess logic is fairly simple - if the top row of the given area
-  //appears to contain headers (ie. there is text in each column) the text in the column at
-  //the top row of the area is returned.
+    //The current guess logic is fairly simple - if the top row of the given area
+    //appears to contain headers (ie. there is text in each column) the text in the column at
+    //the top row of the area is returned.
 
-/*  for (int i=area.left();i<=area.right();i++)
-  {
-    Value cellValue=value(i,area.top());
+    /*  for (int i=area.left();i<=area.right();i++)
+      {
+        Value cellValue=value(i,area.top());
 
-    if (!cellValue.isString())
-      return QString();
-  }*/
+        if (!cellValue.isString())
+          return QString();
+      }*/
 
-  Value cellValue = cellStorage()->value( col, area.top() );
-  return cellValue.asString();
+    Value cellValue = cellStorage()->value(col, area.top());
+    return cellValue.asString();
 }
 
 QString Sheet::guessRowTitle(QRect& area, int row)
 {
-  if ( (!Region(area, this).isValid()) || (row < area.top()) || (row > area.bottom()) )
-    return QString();
+    if ((!Region(area, this).isValid()) || (row < area.top()) || (row > area.bottom()))
+        return QString();
 
-  //The current guess logic is fairly simple - if the leftmost column of the given area
-  //appears to contain headers (ie. there is text in each row) the text in the row at
-  //the leftmost column of the area is returned.
-  /*for (int i=area.top();i<=area.bottom();i++)
-  {
-    Value cellValue=value(area.left(),i);
+    //The current guess logic is fairly simple - if the leftmost column of the given area
+    //appears to contain headers (ie. there is text in each row) the text in the row at
+    //the leftmost column of the area is returned.
+    /*for (int i=area.top();i<=area.bottom();i++)
+    {
+      Value cellValue=value(area.left(),i);
 
-    if (!cellValue.isString())
-      return QString();
-  }*/
+      if (!cellValue.isString())
+        return QString();
+    }*/
 
-  Value cellValue = cellStorage()->value( area.left(), row );
-  return cellValue.asString();
+    Value cellValue = cellStorage()->value(area.left(), row);
+    return cellValue.asString();
 }
 
-static QString cellAsText( const Cell& cell, bool addTab )
+static QString cellAsText(const Cell& cell, bool addTab)
 {
     QString result;
-    if( !cell.isDefault() ) {
+    if (!cell.isDefault()) {
         result += cell.displayText();
     }
-    if( addTab ) {
+    if (addTab) {
         result += '\t';
     }
     return result;
 }
 
-QString Sheet::copyAsText( Selection* selection )
+QString Sheet::copyAsText(Selection* selection)
 {
     // Only one cell selected? => copy active cell
-    if ( selection->isSingular() )
-    {
-        Cell cell( this, selection->marker() );
+    if (selection->isSingular()) {
+        Cell cell(this, selection->marker());
         return cell.displayText();
     }
 
-    QRect lastRange( selection->lastRange() );
+    QRect lastRange(selection->lastRange());
 
     // Find area
     int top = lastRange.bottom();
@@ -1296,94 +1238,88 @@ QString Sheet::copyAsText( Selection* selection )
     int right = lastRange.left();
 
     QString result;
-    for ( int y = top; y <= bottom; ++y)
-    {
-        for ( int x = left; x <= right; ++x)
-        {
-            Cell cell( this, x, y );
-            result += cellAsText( cell, x != right );
+    for (int y = top; y <= bottom; ++y) {
+        for (int x = left; x <= right; ++x) {
+            Cell cell(this, x, y);
+            result += cellAsText(cell, x != right);
         }
         result += '\n';
     }
     return result;
 }
 
-void Sheet::copySelection( Selection* selection )
+void Sheet::copySelection(Selection* selection)
 {
     QDomDocument doc = saveCellRegion(*selection);
 
     // Save to buffer
     QBuffer buffer;
-    buffer.open( QIODevice::WriteOnly );
-    QTextStream str( &buffer );
-    str.setCodec( "UTF-8" );
+    buffer.open(QIODevice::WriteOnly);
+    QTextStream str(&buffer);
+    str.setCodec("UTF-8");
     str << doc;
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText( copyAsText(selection) );
-    mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
+    mimeData->setText(copyAsText(selection));
+    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
-    QApplication::clipboard()->setMimeData( mimeData );
+    QApplication::clipboard()->setMimeData(mimeData);
 }
 
-void Sheet::cutSelection( Selection* selection )
+void Sheet::cutSelection(Selection* selection)
 {
     QDomDocument doc = saveCellRegion(*selection, true);
-    doc.documentElement().setAttribute( "cut", selection->Region::name() );
+    doc.documentElement().setAttribute("cut", selection->Region::name());
 
     // Save to buffer
     QBuffer buffer;
-    buffer.open( QIODevice::WriteOnly );
-    QTextStream str( &buffer );
-    str.setCodec( "UTF-8" );
+    buffer.open(QIODevice::WriteOnly);
+    QTextStream str(&buffer);
+    str.setCodec("UTF-8");
     str << doc;
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText( copyAsText(selection) );
-    mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
+    mimeData->setText(copyAsText(selection));
+    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
-    QApplication::clipboard()->setMimeData( mimeData );
+    QApplication::clipboard()->setMimeData(mimeData);
 
     DeleteCommand* command = new DeleteCommand();
-    command->setText( i18n( "Cut" ) );
-    command->setSheet( this );
-    command->add( *selection );
+    command->setText(i18n("Cut"));
+    command->setSheet(this);
+    command->add(*selection);
     command->execute();
 }
 
-void Sheet::paste( const QRect& pasteArea, bool makeUndo,
-                   Paste::Mode mode, Paste::Operation operation,
-                   bool insert, int insertTo, bool pasteFC,
-                   QClipboard::Mode clipboardMode )
+void Sheet::paste(const QRect& pasteArea, bool makeUndo,
+                  Paste::Mode mode, Paste::Operation operation,
+                  bool insert, int insertTo, bool pasteFC,
+                  QClipboard::Mode clipboardMode)
 {
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData( clipboardMode );
-    if ( !mimeData )
+    const QMimeData* mimeData = QApplication::clipboard()->mimeData(clipboardMode);
+    if (!mimeData)
         return;
 
     QByteArray b;
 
-    if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
-    {
-      b = mimeData->data( "application/x-kspread-snippet" );
-    }
-    else if( mimeData->hasText() )
-    {
-      // ### Stefan: Is this still true for Qt4?
-      // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
-      // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
-      QString _text = QApplication::clipboard()->text( clipboardMode );
-      pasteTextPlain( _text, pasteArea );
-      return;
-    }
-    else
-      // TODO: complain about unrecognized type ?
-      return;
+    if (mimeData->hasFormat("application/x-kspread-snippet")) {
+        b = mimeData->data("application/x-kspread-snippet");
+    } else if (mimeData->hasText()) {
+        // ### Stefan: Is this still true for Qt4?
+        // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
+        // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
+        QString _text = QApplication::clipboard()->text(clipboardMode);
+        pasteTextPlain(_text, pasteArea);
+        return;
+    } else
+        // TODO: complain about unrecognized type ?
+        return;
 
     // Do the actual pasting.
-    paste( b, pasteArea, makeUndo, mode, operation, insert, insertTo, pasteFC );
-    emit sig_updateView( this );
+    paste(b, pasteArea, makeUndo, mode, operation, insert, insertTo, pasteFC);
+    emit sig_updateView(this);
 }
 
 void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
@@ -1391,55 +1327,54 @@ void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
 //  QString tmp;
 //  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
 
-  if (_text.isEmpty())
-    return;
+    if (_text.isEmpty())
+        return;
 
-  int mx = pasteArea.left();
-  int my = pasteArea.top();
+    int mx = pasteArea.left();
+    int my = pasteArea.top();
 
-  // split the text into lines and put them into an array value
-  QStringList list = _text.split( '\n' );
-  Value value( Value::Array );
-  int which = 0;
-  QStringList::iterator it;
-  for (it = list.begin(); it != list.end(); ++it)
-    value.setElement (0, which++, Value (*it));
+    // split the text into lines and put them into an array value
+    QStringList list = _text.split('\n');
+    Value value(Value::Array);
+    int which = 0;
+    QStringList::iterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        value.setElement(0, which++, Value(*it));
 
-  Region range (mx, my, 1, list.size());
+    Region range(mx, my, 1, list.size());
 
-  // create a manipulator, configure it and execute it
-  DataManipulator *manipulator = new DataManipulator;
-  manipulator->setSheet (this);
-  manipulator->setParsing (false);
-  manipulator->setValue (value);
-  manipulator->add (range);
-  manipulator->execute ();
+    // create a manipulator, configure it and execute it
+    DataManipulator *manipulator = new DataManipulator;
+    manipulator->setSheet(this);
+    manipulator->setParsing(false);
+    manipulator->setValue(value);
+    manipulator->add(range);
+    manipulator->execute();
 }
 
-void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
-                   Paste::Mode mode, Paste::Operation operation,
-                   bool insert, int insertTo, bool pasteFC )
+void Sheet::paste(const QByteArray& b, const QRect& pasteArea, bool makeUndo,
+                  Paste::Mode mode, Paste::Operation operation,
+                  bool insert, int insertTo, bool pasteFC)
 {
-    kDebug(36005) <<"Parsing" << b.size() <<" bytes";
+    kDebug(36005) << "Parsing" << b.size() << " bytes";
 
     QString errorMsg;
     int errorLine;
     int errorColumn;
     KoXmlDocument doc;
-    if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
-    {
-      // an error occurred
-      kDebug(36005) <<"Sheet::paste(const QByteArray&): an error occurred" << endl
-               << "line: " << errorLine << " col: " << errorColumn
-               << ' ' << errorMsg;
-      return;
+    if (!doc.setContent(b, false, &errorMsg, &errorLine, &errorColumn)) {
+        // an error occurred
+        kDebug(36005) << "Sheet::paste(const QByteArray&): an error occurred" << endl
+        << "line: " << errorLine << " col: " << errorColumn
+        << ' ' << errorMsg;
+        return;
     }
 
     int mx = pasteArea.left();
     int my = pasteArea.top();
 
-    loadSelection( doc, pasteArea, mx - 1, my - 1, makeUndo,
-                   mode, operation, insert, insertTo, pasteFC );
+    loadSelection(doc, pasteArea, mx - 1, my - 1, makeUndo,
+                  mode, operation, insert, insertTo, pasteFC);
 }
 
 bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
@@ -1447,36 +1382,33 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
                           Paste::Mode mode, Paste::Operation operation, bool insert,
                           int insertTo, bool pasteFC)
 {
-  //kDebug(36001) <<"loadSelection called. pasteArea=" << pasteArea;
+    //kDebug(36001) <<"loadSelection called. pasteArea=" << pasteArea;
 
-  if (!isLoading() && makeUndo)
-  {
-    loadSelectionUndo( doc, pasteArea, _xshift, _yshift, insert, insertTo );
-  }
-
-  KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
-  if ( root.hasAttribute( "cut" ) )
-  {
-    const Region cutRegion(root.attribute( "cut" ), map(), this);
-    if ( cutRegion.isValid() )
-    {
-      Cell destination( this, pasteArea.topLeft() );
-      map()->dependencyManager()->regionMoved( cutRegion, destination );
+    if (!isLoading() && makeUndo) {
+        loadSelectionUndo(doc, pasteArea, _xshift, _yshift, insert, insertTo);
     }
-  }
 
-  int rowsInClpbrd    =  root.attribute( "rows" ).toInt();
-  int columnsInClpbrd =  root.attribute( "columns" ).toInt();
+    KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
+    if (root.hasAttribute("cut")) {
+        const Region cutRegion(root.attribute("cut"), map(), this);
+        if (cutRegion.isValid()) {
+            Cell destination(this, pasteArea.topLeft());
+            map()->dependencyManager()->regionMoved(cutRegion, destination);
+        }
+    }
 
-  // find size of rectangle that we want to paste to (either clipboard size or current selection)
-  const int pasteWidth = ( pasteArea.width() >= columnsInClpbrd
+    int rowsInClpbrd    =  root.attribute("rows").toInt();
+    int columnsInClpbrd =  root.attribute("columns").toInt();
+
+    // find size of rectangle that we want to paste to (either clipboard size or current selection)
+    const int pasteWidth = (pasteArea.width() >= columnsInClpbrd
                             && Region::Range(pasteArea).isRow() == false
-                            && root.namedItem( "rows" ).toElement().isNull() )
-    ? pasteArea.width() : columnsInClpbrd;
-  const int pasteHeight = ( pasteArea.height() >= rowsInClpbrd
-                            && Region::Range(pasteArea).isColumn() == false
-                            && root.namedItem( "columns" ).toElement().isNull())
-    ? pasteArea.height() : rowsInClpbrd;
+                            && root.namedItem("rows").toElement().isNull())
+                           ? pasteArea.width() : columnsInClpbrd;
+    const int pasteHeight = (pasteArea.height() >= rowsInClpbrd
+                             && Region::Range(pasteArea).isColumn() == false
+                             && root.namedItem("columns").toElement().isNull())
+                            ? pasteArea.height() : rowsInClpbrd;
 
 //   kDebug(36005) <<"loadSelection: paste area has size"
 //             << pasteHeight << " rows * "
@@ -1486,143 +1418,123 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 //   kDebug(36005) <<"xshift:" << _xshift <<" _yshift:" << _yshift;
 
 #if 0
-  Region recalcRegion;
+    Region recalcRegion;
 #endif
-  KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
-  for (; !e.isNull(); e = e.nextSibling().toElement())
-  {
-    // entire columns given
-    if (e.tagName() == "columns" && !isProtected())
-    {
-        _yshift = 0;
+    KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
+    for (; !e.isNull(); e = e.nextSibling().toElement()) {
+        // entire columns given
+        if (e.tagName() == "columns" && !isProtected()) {
+            _yshift = 0;
 
-        // Clear the existing columns
-        int col = e.attribute("column").toInt();
-        int width = e.attribute("count").toInt();
-        if (!insert)
-        {
-            for ( int i = col; i < col + width; ++i )
-            {
-                Cell cell = d->cellStorage->firstInColumn( _xshift + i );
-                QPoint cellPosition;
-                while( !cell.isNull() )
-                {
-                    QPoint cellPosition = cell.cellPosition();
-                    d->cellStorage->take( cellPosition.x(), cellPosition.y() );
-                    cell = d->cellStorage->nextInColumn( cellPosition.x(), cellPosition.y() );
+            // Clear the existing columns
+            int col = e.attribute("column").toInt();
+            int width = e.attribute("count").toInt();
+            if (!insert) {
+                for (int i = col; i < col + width; ++i) {
+                    Cell cell = d->cellStorage->firstInColumn(_xshift + i);
+                    QPoint cellPosition;
+                    while (!cell.isNull()) {
+                        QPoint cellPosition = cell.cellPosition();
+                        d->cellStorage->take(cellPosition.x(), cellPosition.y());
+                        cell = d->cellStorage->nextInColumn(cellPosition.x(), cellPosition.y());
+                    }
+                    d->columns.removeElement(_xshift + i);
                 }
-                d->columns.removeElement( _xshift + i );
+            }
+
+            // Insert column formats
+            KoXmlElement c = e.firstChild().toElement();
+            for (; !c.isNull(); c = c.nextSibling().toElement()) {
+                if (c.tagName() == "column") {
+                    ColumnFormat *cl = new ColumnFormat();
+                    cl->setSheet(this);
+                    if (cl->load(c, _xshift, mode))
+                        insertColumnFormat(cl);
+                    else
+                        delete cl;
+                }
             }
         }
 
-        // Insert column formats
-        KoXmlElement c = e.firstChild().toElement();
-        for ( ; !c.isNull(); c = c.nextSibling().toElement() )
-        {
-            if ( c.tagName() == "column" )
-            {
-                ColumnFormat *cl = new ColumnFormat();
-                cl->setSheet( this );
-                if (cl->load(c, _xshift, mode))
-                    insertColumnFormat( cl );
-                else
-                    delete cl;
+        // entire rows given
+        if (e.tagName() == "rows" && !isProtected()) {
+            _xshift = 0;
+
+            // Clear the existing rows
+            int row = e.attribute("row").toInt();
+            int height = e.attribute("count").toInt();
+            if (!insert) {
+                for (int i = row; i < row + height; ++i) {
+                    Cell cell = d->cellStorage->firstInRow(_yshift + i);
+                    QPoint cellPosition;
+                    while (!cell.isNull()) {
+                        QPoint cellPosition = cell.cellPosition();
+                        d->cellStorage->take(cellPosition.x(), cellPosition.y());
+                        cell = d->cellStorage->nextInRow(cellPosition.x(), cellPosition.y());
+                    }
+                    d->rows.removeElement(_yshift + i);
+                }
+            }
+
+            // Insert row formats
+            KoXmlElement c = e.firstChild().toElement();
+            for (; !c.isNull(); c = c.nextSibling().toElement()) {
+                if (c.tagName() == "row") {
+                    RowFormat *cl = new RowFormat();
+                    cl->setSheet(this);
+                    if (cl->load(c, _yshift, mode))
+                        insertRowFormat(cl);
+                    else
+                        delete cl;
+                }
             }
         }
-    }
 
-    // entire rows given
-    if (e.tagName() == "rows" && !isProtected())
-    {
-        _xshift = 0;
+        Cell refreshCell;
+        Cell cell;
+        Cell cellBackup;
+        if (e.tagName() == "cell") {
+            int row = e.attribute("row").toInt() + _yshift;
+            int col = e.attribute("column").toInt() + _xshift;
 
-        // Clear the existing rows
-        int row = e.attribute("row").toInt();
-        int height = e.attribute("count").toInt();
-        if ( !insert )
-        {
-          for( int i = row; i < row + height; ++i )
-          {
-            Cell cell = d->cellStorage->firstInRow( _yshift + i );
-            QPoint cellPosition;
-            while( !cell.isNull() )
-            {
-                QPoint cellPosition = cell.cellPosition();
-                d->cellStorage->take( cellPosition.x(), cellPosition.y() );
-                cell = d->cellStorage->nextInRow( cellPosition.x(), cellPosition.y() );
-            }
-            d->rows.removeElement( _yshift + i );
-          }
-        }
-
-        // Insert row formats
-        KoXmlElement c = e.firstChild().toElement();
-        for( ; !c.isNull(); c = c.nextSibling().toElement() )
-        {
-            if ( c.tagName() == "row" )
-            {
-                RowFormat *cl = new RowFormat();
-                cl->setSheet( this );
-                if (cl->load(c, _yshift, mode))
-                    insertRowFormat( cl );
-                else
-                    delete cl;
-            }
-        }
-    }
-
-    Cell refreshCell;
-    Cell cell;
-    Cell cellBackup;
-    if (e.tagName() == "cell")
-    {
-      int row = e.attribute( "row" ).toInt() + _yshift;
-      int col = e.attribute( "column" ).toInt() + _xshift;
-
-      // tile the selection with the clipboard contents
-      for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
-      {
-        for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
-        {
+            // tile the selection with the clipboard contents
+            for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd) {
+                for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd) {
 //           kDebug(36005) <<"loadSelection: cell at" << (col+coff) << ',' << (row+roff)
 //                     << " with roff,coff= " << roff << ',' << coff
 //                     << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
-          cell = Cell( this, col + coff, row + roff );
-          if (isProtected() && !cell.style().notProtected())
-          {
-            continue;
-          }
+                    cell = Cell(this, col + coff, row + roff);
+                    if (isProtected() && !cell.style().notProtected()) {
+                        continue;
+                    }
 
-          cellBackup = Cell(this, cell.column(), cell.row()); // FIXME
-          cellBackup.copyAll(cell);
+                    cellBackup = Cell(this, cell.column(), cell.row()); // FIXME
+                    cellBackup.copyAll(cell);
 
-          if (!cell.load(e, _xshift + coff, _yshift + roff, mode, operation, pasteFC))
-          {
-            cell.copyAll(cellBackup);
-          }
+                    if (!cell.load(e, _xshift + coff, _yshift + roff, mode, operation, pasteFC)) {
+                        cell.copyAll(cellBackup);
+                    }
 #if 0
-          else
-          {
-            if (cell.isFormula())
-            {
-              recalcRegion.add(QPoint(cell.column(), cell.row()), cell.sheet());
-            }
-          }
+                    else {
+                        if (cell.isFormula()) {
+                            recalcRegion.add(QPoint(cell.column(), cell.row()), cell.sheet());
+                        }
+                    }
 #endif
+                }
+            }
         }
-      }
     }
-  }
 
 #if 0
     // recalculate cells
-    map()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
+    map()->addDamage(new CellDamage(this, recalcRegion, CellDamage::Appearance | CellDamage::Value));
 #endif
 
-    emit sig_updateView( this );
-    emit sig_updateColumnHeader( this );
-    emit sig_updateRowHeader( this );
+    emit sig_updateView(this);
+    emit sig_updateColumnHeader(this);
+    emit sig_updateRowHeader(this);
 
     return true;
 }
@@ -1631,132 +1543,117 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
                               int _xshift, int _yshift,
                               bool insert, int insertTo)
 {
-  KoXmlElement root = d.documentElement(); // "spreadsheet-snippet"
+    KoXmlElement root = d.documentElement(); // "spreadsheet-snippet"
 
-  int rowsInClpbrd    = root.attribute( "rows" ).toInt();
-  int columnsInClpbrd = root.attribute( "columns" ).toInt();
+    int rowsInClpbrd    = root.attribute("rows").toInt();
+    int columnsInClpbrd = root.attribute("columns").toInt();
 
-  // find rect that we paste to
-  const int pasteWidth = (loadArea.width() >= columnsInClpbrd &&
-                          Region::Range(loadArea).isRow() == false &&
-                          root.namedItem( "rows" ).toElement().isNull())
-      ? loadArea.width() : columnsInClpbrd;
-  const int pasteHeight = (loadArea.height() >= rowsInClpbrd &&
-                           Region::Range(loadArea).isColumn() == false &&
-                           root.namedItem( "columns" ).toElement().isNull())
-      ? loadArea.height() : rowsInClpbrd;
+    // find rect that we paste to
+    const int pasteWidth = (loadArea.width() >= columnsInClpbrd &&
+                            Region::Range(loadArea).isRow() == false &&
+                            root.namedItem("rows").toElement().isNull())
+                           ? loadArea.width() : columnsInClpbrd;
+    const int pasteHeight = (loadArea.height() >= rowsInClpbrd &&
+                             Region::Range(loadArea).isColumn() == false &&
+                             root.namedItem("columns").toElement().isNull())
+                            ? loadArea.height() : rowsInClpbrd;
 
-  uint numCols = 0;
-  uint numRows = 0;
+    uint numCols = 0;
+    uint numRows = 0;
 
-  Region region;
-  for (KoXmlNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
-  {
-    KoXmlElement e = n.toElement(); // "columns", "rows" or "cell"
-    if (e.tagName() == "columns")
-    {
-      _yshift = 0;
-      int col = e.attribute("column").toInt();
-      int width = e.attribute("count").toInt();
-      for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
-      {
-        uint overlap = qMax(0, (col - 1 + coff + width) - pasteWidth);
-        uint effWidth = width - overlap;
-        region.add(QRect(_xshift + col + coff, 1, effWidth, KS_rowMax));
-        numCols += effWidth;
-      }
-    }
-    else if (e.tagName() == "rows")
-    {
-      _xshift = 0;
-      int row = e.attribute("row").toInt();
-      int height = e.attribute("count").toInt();
-      for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
-      {
-        uint overlap = qMax(0, (row - 1 + roff + height) - pasteHeight);
-        uint effHeight = height - overlap;
-        region.add(QRect(1, _yshift + row + roff, KS_colMax, effHeight));
-        numRows += effHeight;
-      }
-    }
-    else if (!e.isNull())
-    {
-      // store the cols/rows for the insertion
-      int col = e.attribute("column").toInt();
-      int row = e.attribute("row").toInt();
-      for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
-      {
-        for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
-        {
-          region.add(QPoint(_xshift + col + coff, _yshift + row + roff));
+    Region region;
+    for (KoXmlNode n = root.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement e = n.toElement(); // "columns", "rows" or "cell"
+        if (e.tagName() == "columns") {
+            _yshift = 0;
+            int col = e.attribute("column").toInt();
+            int width = e.attribute("count").toInt();
+            for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd) {
+                uint overlap = qMax(0, (col - 1 + coff + width) - pasteWidth);
+                uint effWidth = width - overlap;
+                region.add(QRect(_xshift + col + coff, 1, effWidth, KS_rowMax));
+                numCols += effWidth;
+            }
+        } else if (e.tagName() == "rows") {
+            _xshift = 0;
+            int row = e.attribute("row").toInt();
+            int height = e.attribute("count").toInt();
+            for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd) {
+                uint overlap = qMax(0, (row - 1 + roff + height) - pasteHeight);
+                uint effHeight = height - overlap;
+                region.add(QRect(1, _yshift + row + roff, KS_colMax, effHeight));
+                numRows += effHeight;
+            }
+        } else if (!e.isNull()) {
+            // store the cols/rows for the insertion
+            int col = e.attribute("column").toInt();
+            int row = e.attribute("row").toInt();
+            for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd) {
+                for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd) {
+                    region.add(QPoint(_xshift + col + coff, _yshift + row + roff));
+                }
+            }
         }
-      }
     }
-  }
 
-    UndoCellPaste *undo = new UndoCellPaste(this, _xshift, _yshift, region, insert, insertTo );
-    doc()->addCommand( undo );
+    UndoCellPaste *undo = new UndoCellPaste(this, _xshift, _yshift, region, insert, insertTo);
+    doc()->addCommand(undo);
 
-  if (insert)
-  {
-    QRect rect = region.boundingRect();
-    // shift cells to the right
-    if (insertTo == -1 && numCols == 0 && numRows == 0)
-    {
-        rect.setWidth(rect.width());
-        ShiftManipulator* manipulator = new ShiftManipulator();
-        manipulator->setSheet( this );
-        manipulator->setRegisterUndo( false );
-        manipulator->setDirection( ShiftManipulator::ShiftRight );
-        manipulator->add( Region(rect) );
-        manipulator->execute();
-        delete manipulator;
+    if (insert) {
+        QRect rect = region.boundingRect();
+        // shift cells to the right
+        if (insertTo == -1 && numCols == 0 && numRows == 0) {
+            rect.setWidth(rect.width());
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet(this);
+            manipulator->setRegisterUndo(false);
+            manipulator->setDirection(ShiftManipulator::ShiftRight);
+            manipulator->add(Region(rect));
+            manipulator->execute();
+            delete manipulator;
+        }
+        // shift cells to the bottom
+        else if (insertTo == 1 && numCols == 0 && numRows == 0) {
+            rect.setHeight(rect.height());
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet(this);
+            manipulator->setRegisterUndo(false);
+            manipulator->setDirection(ShiftManipulator::ShiftBottom);
+            manipulator->add(Region(rect));
+            manipulator->execute();
+            delete manipulator;
+        }
+        // insert columns
+        else if (insertTo == 0 && numCols == 0 && numRows > 0) {
+            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            manipulator->setSheet(this);
+            manipulator->setRegisterUndo(false);
+            manipulator->add(Region(rect));
+            manipulator->execute();
+            delete manipulator;
+        }
+        // insert rows
+        else if (insertTo == 0 && numCols > 0 && numRows == 0) {
+            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            manipulator->setSheet(this);
+            manipulator->setRegisterUndo(false);
+            manipulator->add(Region(rect));
+            manipulator->execute();
+            delete manipulator;
+        }
     }
-    // shift cells to the bottom
-    else if (insertTo == 1 && numCols == 0 && numRows == 0)
-    {
-        rect.setHeight(rect.height());
-        ShiftManipulator* manipulator = new ShiftManipulator();
-        manipulator->setSheet( this );
-        manipulator->setRegisterUndo( false );
-        manipulator->setDirection( ShiftManipulator::ShiftBottom );
-        manipulator->add( Region(rect) );
-        manipulator->execute();
-        delete manipulator;
-    }
-    // insert columns
-    else if (insertTo == 0 && numCols == 0 && numRows > 0)
-    {
-        InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
-        manipulator->setSheet( this );
-        manipulator->setRegisterUndo( false );
-        manipulator->add( Region(rect) );
-        manipulator->execute();
-        delete manipulator;
-    }
-    // insert rows
-    else if (insertTo == 0 && numCols > 0 && numRows == 0)
-    {
-        InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
-        manipulator->setSheet( this );
-        manipulator->setRegisterUndo( false );
-        manipulator->add( Region(rect) );
-        manipulator->execute();
-        delete manipulator;
-    }
-  }
 }
 
 bool Sheet::testAreaPasteInsert() const
 {
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData( QClipboard::Clipboard );
-    if ( !mimeData )
+    const QMimeData* mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    if (!mimeData)
         return false;
 
     QByteArray byteArray;
 
-    if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
-        byteArray = mimeData->data( "application/x-kspread-snippet" );
+    if (mimeData->hasFormat("application/x-kspread-snippet"))
+        byteArray = mimeData->data("application/x-kspread-snippet");
     else
         return false;
 
@@ -1764,27 +1661,25 @@ bool Sheet::testAreaPasteInsert() const
     int errorLine;
     int errorColumn;
     KoXmlDocument d;
-    if ( !d.setContent( byteArray, false, &errorMsg, &errorLine, &errorColumn ) )
-    {
-      // an error occurred
-      kDebug() <<"Sheet::testAreaPasteInsert(): an error occurred" << endl
-               << "line: " << errorLine << " col: " << errorColumn
-               << ' ' << errorMsg;
-      return false;
+    if (!d.setContent(byteArray, false, &errorMsg, &errorLine, &errorColumn)) {
+        // an error occurred
+        kDebug() << "Sheet::testAreaPasteInsert(): an error occurred" << endl
+        << "line: " << errorLine << " col: " << errorColumn
+        << ' ' << errorMsg;
+        return false;
     }
 
     KoXmlElement e = d.documentElement();
-    if ( !e.namedItem( "columns" ).toElement().isNull() )
+    if (!e.namedItem("columns").toElement().isNull())
         return false;
 
-    if ( !e.namedItem( "rows" ).toElement().isNull() )
+    if (!e.namedItem("rows").toElement().isNull())
         return false;
 
     KoXmlElement c = e.firstChild().toElement();
-    for( ; !c.isNull(); c = c.nextSibling().toElement() )
-    {
-        if ( c.tagName() == "cell" )
-                return true;
+    for (; !c.isNull(); c = c.nextSibling().toElement()) {
+        if (c.tagName() == "cell")
+            return true;
     }
     return false;
 }
@@ -1794,219 +1689,194 @@ void Sheet::deleteCells(const Region& region)
     // A list of all cells we want to delete.
     QStack<Cell> cellStack;
 
-  Region::ConstIterator endOfList = region.constEnd();
-  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
+    Region::ConstIterator endOfList = region.constEnd();
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
+        QRect range = (*it)->rect();
 
-    // The RecalcManager needs a valid sheet.
-    if ( !(*it)->sheet() )
-      (*it)->setSheet( this );
+        // The RecalcManager needs a valid sheet.
+        if (!(*it)->sheet())
+            (*it)->setSheet(this);
 
-    int right  = range.right();
-    int left   = range.left();
-    int bottom = range.bottom();
-    int col;
-    for ( int row = range.top(); row <= bottom; ++row )
-    {
-      Cell cell = d->cellStorage->firstInRow( row );
-      while ( !cell.isNull() )
-      {
-        col = cell.column();
-        if ( col < left )
-        {
-          cell = d->cellStorage->nextInRow( left - 1, row );
-          continue;
+        int right  = range.right();
+        int left   = range.left();
+        int bottom = range.bottom();
+        int col;
+        for (int row = range.top(); row <= bottom; ++row) {
+            Cell cell = d->cellStorage->firstInRow(row);
+            while (!cell.isNull()) {
+                col = cell.column();
+                if (col < left) {
+                    cell = d->cellStorage->nextInRow(left - 1, row);
+                    continue;
+                }
+                if (col > right)
+                    break;
+
+                if (!cell.isDefault())
+                    cellStack.push(cell);
+
+                cell = d->cellStorage->nextInRow(col, row);
+            }
         }
-        if ( col > right )
-          break;
-
-        if ( !cell.isDefault() )
-          cellStack.push( cell );
-
-        cell = d->cellStorage->nextInRow( col, row );
-      }
     }
-  }
 
     // Remove the cells from the sheet
-    while ( !cellStack.isEmpty() )
-    {
-      Cell cell = cellStack.pop();
-      d->cellStorage->take( cell.column(), cell.row() );
+    while (!cellStack.isEmpty()) {
+        Cell cell = cellStack.pop();
+        d->cellStorage->take(cell.column(), cell.row());
     }
 }
 
 void Sheet::updateView()
 {
-  emit sig_updateView( this );
+    emit sig_updateView(this);
 }
 
 void Sheet::updateView(const Region& region)
 {
-  emit sig_updateView( this, region );
+    emit sig_updateView(this, region);
 }
 
 bool Sheet::testListChoose(Selection* selection)
 {
-  const QPoint marker( selection->marker() );
-  const QString text = Cell( this, marker ).userInput();
+    const QPoint marker(selection->marker());
+    const QString text = Cell(this, marker).userInput();
 
-  Region::ConstIterator end( selection->constEnd() );
-  for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
-  {
-    const QRect range = (*it)->rect();
- 
-    int bottom = range.bottom();
-    if (bottom > d->cellStorage->rows()) bottom = d->cellStorage->rows();
-    for (int row = range.top(); row <= bottom; ++row)
-    {
-      int col = range.left() - 1;
-      while (1) {
-        const Cell cell = d->cellStorage->nextInRow (col, row);
-        if (cell.isNull()) break;
-        col = cell.column();
-        if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+    Region::ConstIterator end(selection->constEnd());
+    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
+        const QRect range = (*it)->rect();
 
-        if ( !cell.isPartOfMerged() && !( col == marker.x() && row == marker.y() ) )
-        {
-          if ( !cell.isFormula() && !cell.value().isNumber() &&
-               !cell.value().asString().isEmpty() &&
-               !cell.isTime() && !cell.isDate() )
-          {
-            if ( cell.userInput() != text )
-              return true;
-          }
+        int bottom = range.bottom();
+        if (bottom > d->cellStorage->rows()) bottom = d->cellStorage->rows();
+        for (int row = range.top(); row <= bottom; ++row) {
+            int col = range.left() - 1;
+            while (1) {
+                const Cell cell = d->cellStorage->nextInRow(col, row);
+                if (cell.isNull()) break;
+                col = cell.column();
+                if (cell.isDefault() || (col == 0) || (col > range.right())) break;
+
+                if (!cell.isPartOfMerged() && !(col == marker.x() && row == marker.y())) {
+                    if (!cell.isFormula() && !cell.value().isNumber() &&
+                            !cell.value().asString().isEmpty() &&
+                            !cell.isTime() && !cell.isDate()) {
+                        if (cell.userInput() != text)
+                            return true;
+                    }
+                }
+            }
         }
-      }
     }
-  }
-  return false;
+    return false;
 }
 
 
 // era: absolute references
 QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
 {
-  QDomDocument dd( "spreadsheet-snippet" );
-  dd.appendChild( dd.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement root = dd.createElement( "spreadsheet-snippet" );
-  dd.appendChild(root);
+    QDomDocument dd("spreadsheet-snippet");
+    dd.appendChild(dd.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+    QDomElement root = dd.createElement("spreadsheet-snippet");
+    dd.appendChild(root);
 
-  // find the upper left corner of the selection
-  QRect boundingRect = region.boundingRect();
-  int left = boundingRect.left();
-  int top = boundingRect.top();
+    // find the upper left corner of the selection
+    QRect boundingRect = region.boundingRect();
+    int left = boundingRect.left();
+    int top = boundingRect.top();
 
-  // for tiling the clipboard content in the selection
-  root.setAttribute( "rows", boundingRect.height() );
-  root.setAttribute( "columns", boundingRect.width() );
+    // for tiling the clipboard content in the selection
+    root.setAttribute("rows", boundingRect.height());
+    root.setAttribute("columns", boundingRect.width());
 
-  Region::ConstIterator endOfList = region.constEnd();
-  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
+    Region::ConstIterator endOfList = region.constEnd();
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
+        QRect range = (*it)->rect();
 
-    //
-    // Entire rows selected?
-    //
-    if ((*it)->isRow())
-    {
-      QDomElement rows = dd.createElement("rows");
-      rows.setAttribute( "count", range.height() );
-      rows.setAttribute( "row", range.top() - top + 1 );
-      root.appendChild( rows );
+        //
+        // Entire rows selected?
+        //
+        if ((*it)->isRow()) {
+            QDomElement rows = dd.createElement("rows");
+            rows.setAttribute("count", range.height());
+            rows.setAttribute("row", range.top() - top + 1);
+            root.appendChild(rows);
 
-      // Save all cells.
-      for ( int row = range.top(); row <= range.bottom(); ++row )
-      {
-          Cell cell = d->cellStorage->firstInRow( row );
-          for ( ; !cell.isNull(); cell = d->cellStorage->nextInRow( cell.column(), cell.row() ) )
-          {
-              if ( !cell.isPartOfMerged() )
-                  root.appendChild(cell.save(dd, 0, top - 1, era));
-          }
-      }
+            // Save all cells.
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                Cell cell = d->cellStorage->firstInRow(row);
+                for (; !cell.isNull(); cell = d->cellStorage->nextInRow(cell.column(), cell.row())) {
+                    if (!cell.isPartOfMerged())
+                        root.appendChild(cell.save(dd, 0, top - 1, era));
+                }
+            }
 
-      // TODO Stefan: Inefficient, use cluster functionality
-      // Save the row formats if there are any
-      const RowFormat* format;
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        format = rowFormat( row );
-        if (format && !format->isDefault())
-        {
-          QDomElement e = format->save(dd, top - 1);
-          if (!e.isNull())
-          {
-            rows.appendChild( e );
-          }
+            // TODO Stefan: Inefficient, use cluster functionality
+            // Save the row formats if there are any
+            const RowFormat* format;
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                format = rowFormat(row);
+                if (format && !format->isDefault()) {
+                    QDomElement e = format->save(dd, top - 1);
+                    if (!e.isNull()) {
+                        rows.appendChild(e);
+                    }
+                }
+            }
+            continue;
         }
-      }
-      continue;
-    }
 
-    //
-    // Entire columns selected?
-    //
-    if ((*it)->isColumn())
-    {
-      QDomElement columns = dd.createElement("columns");
-      columns.setAttribute( "count", range.width() );
-      columns.setAttribute( "column", range.left() - left + 1 );
-      root.appendChild( columns );
+        //
+        // Entire columns selected?
+        //
+        if ((*it)->isColumn()) {
+            QDomElement columns = dd.createElement("columns");
+            columns.setAttribute("count", range.width());
+            columns.setAttribute("column", range.left() - left + 1);
+            root.appendChild(columns);
 
-      // Save all cells.
-      for ( int row = range.top(); row <= range.bottom(); ++row )
-      {
-          Cell cell = d->cellStorage->firstInRow( row );
-          for ( ; !cell.isNull(); cell = d->cellStorage->nextInRow( cell.column(), cell.row() ) )
-          {
-              if ( !cell.isPartOfMerged() )
-                  root.appendChild(cell.save(dd, left - 1, 0, era));
-          }
-      }
+            // Save all cells.
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                Cell cell = d->cellStorage->firstInRow(row);
+                for (; !cell.isNull(); cell = d->cellStorage->nextInRow(cell.column(), cell.row())) {
+                    if (!cell.isPartOfMerged())
+                        root.appendChild(cell.save(dd, left - 1, 0, era));
+                }
+            }
 
-      // TODO Stefan: Inefficient, use the cluster functionality
-      // Save the column formats if there are any
-      const ColumnFormat* format;
-      for (int col = range.left(); col <= range.right(); ++col)
-      {
-        format = columnFormat(col);
-        if (format && !format->isDefault())
-        {
-          QDomElement e = format->save(dd, left - 1);
-          if (!e.isNull())
-          {
-            columns.appendChild(e);
-          }
+            // TODO Stefan: Inefficient, use the cluster functionality
+            // Save the column formats if there are any
+            const ColumnFormat* format;
+            for (int col = range.left(); col <= range.right(); ++col) {
+                format = columnFormat(col);
+                if (format && !format->isDefault()) {
+                    QDomElement e = format->save(dd, left - 1);
+                    if (!e.isNull()) {
+                        columns.appendChild(e);
+                    }
+                }
+            }
+            continue;
         }
-      }
-      continue;
-    }
 
-    // Save all cells.
-    Cell cell;
-    for (int col = range.left(); col <= range.right(); ++col)
-    {
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        cell = Cell( this, col, row );
-        root.appendChild(cell.save(dd, left - 1, top - 1, era));
-      }
+        // Save all cells.
+        Cell cell;
+        for (int col = range.left(); col <= range.right(); ++col) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                cell = Cell(this, col, row);
+                root.appendChild(cell.save(dd, left - 1, top - 1, era));
+            }
+        }
     }
-  }
-  return dd;
+    return dd;
 }
 
-QDomElement Sheet::saveXML( QDomDocument& dd )
+QDomElement Sheet::saveXML(QDomDocument& dd)
 {
-    QDomElement sheet = dd.createElement( "table" );
+    QDomElement sheet = dd.createElement("table");
 
     // backward compatibility
     QString sheetName;
-    for (int i = 0; i < d->name.count(); ++i)
-    {
+    for (int i = 0; i < d->name.count(); ++i) {
         if (d->name[i].isLetterOrNumber() || d->name[i] == ' ' || d->name[i] == '.')
             sheetName.append(d->name[i]);
         else
@@ -2015,214 +1885,191 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute("name", sheetName);
 
     //Laurent: for oasis format I think that we must use style:direction...
-    sheet.setAttribute( "layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr" );
-    sheet.setAttribute( "columnnumber", (int)getShowColumnNumber());
-    sheet.setAttribute( "borders", (int)isShowPageBorders());
-    sheet.setAttribute( "hide", (int)isHidden());
-    sheet.setAttribute( "hidezero", (int)getHideZero());
-    sheet.setAttribute( "firstletterupper", (int)getFirstLetterUpper());
-    sheet.setAttribute( "grid", (int)getShowGrid() );
-    sheet.setAttribute( "printGrid", (int)print()->settings()->printGrid() );
-    sheet.setAttribute( "printCommentIndicator", (int)print()->settings()->printCommentIndicator() );
-    sheet.setAttribute( "printFormulaIndicator", (int)print()->settings()->printFormulaIndicator() );
-    sheet.setAttribute( "showFormula", (int)getShowFormula());
-    sheet.setAttribute( "showFormulaIndicator", (int)getShowFormulaIndicator());
-    sheet.setAttribute( "showCommentIndicator", (int)getShowCommentIndicator());
-    sheet.setAttribute( "lcmode", (int)getLcMode());
-    sheet.setAttribute( "autoCalc", (int)isAutoCalculationEnabled());
-    sheet.setAttribute( "borders1.2", 1);
+    sheet.setAttribute("layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr");
+    sheet.setAttribute("columnnumber", (int)getShowColumnNumber());
+    sheet.setAttribute("borders", (int)isShowPageBorders());
+    sheet.setAttribute("hide", (int)isHidden());
+    sheet.setAttribute("hidezero", (int)getHideZero());
+    sheet.setAttribute("firstletterupper", (int)getFirstLetterUpper());
+    sheet.setAttribute("grid", (int)getShowGrid());
+    sheet.setAttribute("printGrid", (int)print()->settings()->printGrid());
+    sheet.setAttribute("printCommentIndicator", (int)print()->settings()->printCommentIndicator());
+    sheet.setAttribute("printFormulaIndicator", (int)print()->settings()->printFormulaIndicator());
+    sheet.setAttribute("showFormula", (int)getShowFormula());
+    sheet.setAttribute("showFormulaIndicator", (int)getShowFormulaIndicator());
+    sheet.setAttribute("showCommentIndicator", (int)getShowCommentIndicator());
+    sheet.setAttribute("lcmode", (int)getLcMode());
+    sheet.setAttribute("autoCalc", (int)isAutoCalculationEnabled());
+    sheet.setAttribute("borders1.2", 1);
     QByteArray pwd;
-    password (pwd);
-    if ( !pwd.isNull() )
-    {
-      if ( pwd.size() > 0 )
-      {
-        QByteArray str = KCodecs::base64Encode(pwd);
-        sheet.setAttribute( "protected", QString( str.data() ) );
-      }
-      else
-        sheet.setAttribute( "protected", "" );
+    password(pwd);
+    if (!pwd.isNull()) {
+        if (pwd.size() > 0) {
+            QByteArray str = KCodecs::base64Encode(pwd);
+            sheet.setAttribute("protected", QString(str.data()));
+        } else
+            sheet.setAttribute("protected", "");
     }
 
     // paper parameters
-    QDomElement paper = dd.createElement( "paper" );
-    paper.setAttribute( "format", print()->paperFormatString() );
-    paper.setAttribute( "orientation", print()->orientationString() );
-    sheet.appendChild( paper );
+    QDomElement paper = dd.createElement("paper");
+    paper.setAttribute("format", print()->paperFormatString());
+    paper.setAttribute("orientation", print()->orientationString());
+    sheet.appendChild(paper);
 
-    QDomElement borders = dd.createElement( "borders" );
+    QDomElement borders = dd.createElement("borders");
     KoPageLayout pageLayout = print()->settings()->pageLayout();
-    borders.setAttribute( "left", pageLayout.leftMargin );
-    borders.setAttribute( "top", pageLayout.topMargin );
-    borders.setAttribute( "right", pageLayout.rightMargin );
-    borders.setAttribute( "bottom", pageLayout.bottomMargin );
-    paper.appendChild( borders );
+    borders.setAttribute("left", pageLayout.leftMargin);
+    borders.setAttribute("top", pageLayout.topMargin);
+    borders.setAttribute("right", pageLayout.rightMargin);
+    borders.setAttribute("bottom", pageLayout.bottomMargin);
+    paper.appendChild(borders);
 
-    QDomElement head = dd.createElement( "head" );
-    paper.appendChild( head );
-    if ( !print()->headLeft().isEmpty() )
-    {
-      QDomElement left = dd.createElement( "left" );
-      head.appendChild( left );
-      left.appendChild( dd.createTextNode( print()->headLeft() ) );
+    QDomElement head = dd.createElement("head");
+    paper.appendChild(head);
+    if (!print()->headLeft().isEmpty()) {
+        QDomElement left = dd.createElement("left");
+        head.appendChild(left);
+        left.appendChild(dd.createTextNode(print()->headLeft()));
     }
-    if ( !print()->headMid().isEmpty() )
-    {
-      QDomElement center = dd.createElement( "center" );
-      head.appendChild( center );
-      center.appendChild( dd.createTextNode( print()->headMid() ) );
+    if (!print()->headMid().isEmpty()) {
+        QDomElement center = dd.createElement("center");
+        head.appendChild(center);
+        center.appendChild(dd.createTextNode(print()->headMid()));
     }
-    if ( !print()->headRight().isEmpty() )
-    {
-      QDomElement right = dd.createElement( "right" );
-      head.appendChild( right );
-      right.appendChild( dd.createTextNode( print()->headRight() ) );
+    if (!print()->headRight().isEmpty()) {
+        QDomElement right = dd.createElement("right");
+        head.appendChild(right);
+        right.appendChild(dd.createTextNode(print()->headRight()));
     }
-    QDomElement foot = dd.createElement( "foot" );
-    paper.appendChild( foot );
-    if ( !print()->footLeft().isEmpty() )
-    {
-      QDomElement left = dd.createElement( "left" );
-      foot.appendChild( left );
-      left.appendChild( dd.createTextNode( print()->footLeft() ) );
+    QDomElement foot = dd.createElement("foot");
+    paper.appendChild(foot);
+    if (!print()->footLeft().isEmpty()) {
+        QDomElement left = dd.createElement("left");
+        foot.appendChild(left);
+        left.appendChild(dd.createTextNode(print()->footLeft()));
     }
-    if ( !print()->footMid().isEmpty() )
-    {
-      QDomElement center = dd.createElement( "center" );
-      foot.appendChild( center );
-      center.appendChild( dd.createTextNode( print()->footMid() ) );
+    if (!print()->footMid().isEmpty()) {
+        QDomElement center = dd.createElement("center");
+        foot.appendChild(center);
+        center.appendChild(dd.createTextNode(print()->footMid()));
     }
-    if ( !print()->footRight().isEmpty() )
-    {
-      QDomElement right = dd.createElement( "right" );
-      foot.appendChild( right );
-      right.appendChild( dd.createTextNode( print()->footRight() ) );
+    if (!print()->footRight().isEmpty()) {
+        QDomElement right = dd.createElement("right");
+        foot.appendChild(right);
+        right.appendChild(dd.createTextNode(print()->footRight()));
     }
 
     // print range
-    QDomElement printrange = dd.createElement( "printrange-rect" );
+    QDomElement printrange = dd.createElement("printrange-rect");
     QRect _printRange = print()->printRange();
     int left = _printRange.left();
     int right = _printRange.right();
     int top = _printRange.top();
     int bottom = _printRange.bottom();
     //If whole rows are selected, then we store zeros, as KS_colMax may change in future
-    if ( left == 1 && right == KS_colMax )
-    {
-      left = 0;
-      right = 0;
+    if (left == 1 && right == KS_colMax) {
+        left = 0;
+        right = 0;
     }
     //If whole columns are selected, then we store zeros, as KS_rowMax may change in future
-    if ( top == 1 && bottom == KS_rowMax )
-    {
-      top = 0;
-      bottom = 0;
+    if (top == 1 && bottom == KS_rowMax) {
+        top = 0;
+        bottom = 0;
     }
-    printrange.setAttribute( "left-rect", left );
-    printrange.setAttribute( "right-rect", right );
-    printrange.setAttribute( "bottom-rect", bottom );
-    printrange.setAttribute( "top-rect", top );
-    sheet.appendChild( printrange );
+    printrange.setAttribute("left-rect", left);
+    printrange.setAttribute("right-rect", right);
+    printrange.setAttribute("bottom-rect", bottom);
+    printrange.setAttribute("top-rect", top);
+    sheet.appendChild(printrange);
 
     // Print repeat columns
-    QDomElement printRepeatColumns = dd.createElement( "printrepeatcolumns" );
-    printRepeatColumns.setAttribute( "left", print()->printRepeatColumns().first );
-    printRepeatColumns.setAttribute( "right", print()->printRepeatColumns().second );
-    sheet.appendChild( printRepeatColumns );
+    QDomElement printRepeatColumns = dd.createElement("printrepeatcolumns");
+    printRepeatColumns.setAttribute("left", print()->printRepeatColumns().first);
+    printRepeatColumns.setAttribute("right", print()->printRepeatColumns().second);
+    sheet.appendChild(printRepeatColumns);
 
     // Print repeat rows
-    QDomElement printRepeatRows = dd.createElement( "printrepeatrows" );
-    printRepeatRows.setAttribute( "top", print()->printRepeatRows().first );
-    printRepeatRows.setAttribute( "bottom", print()->printRepeatRows().second );
-    sheet.appendChild( printRepeatRows );
+    QDomElement printRepeatRows = dd.createElement("printrepeatrows");
+    printRepeatRows.setAttribute("top", print()->printRepeatRows().first);
+    printRepeatRows.setAttribute("bottom", print()->printRepeatRows().second);
+    sheet.appendChild(printRepeatRows);
 
     //Save print zoom
-    sheet.setAttribute( "printZoom", print()->zoom() );
+    sheet.setAttribute("printZoom", print()->zoom());
 
     //Save page limits
-    sheet.setAttribute( "printPageLimitX", print()->pageLimitX() );
-    sheet.setAttribute( "printPageLimitY", print()->pageLimitY() );
+    sheet.setAttribute("printPageLimitX", print()->pageLimitX());
+    sheet.setAttribute("printPageLimitY", print()->pageLimitY());
 
     // Save all cells.
     const QRect usedArea = this->usedArea();
-    for ( int row = 1; row <= usedArea.height(); ++row )
-    {
-        Cell cell = d->cellStorage->firstInRow( row );
-        while (!cell.isNull())
-        {
-            QDomElement e = cell.save( dd );
-            if ( !e.isNull() )
-                sheet.appendChild( e );
-            cell = d->cellStorage->nextInRow( cell.column(), row );
+    for (int row = 1; row <= usedArea.height(); ++row) {
+        Cell cell = d->cellStorage->firstInRow(row);
+        while (!cell.isNull()) {
+            QDomElement e = cell.save(dd);
+            if (!e.isNull())
+                sheet.appendChild(e);
+            cell = d->cellStorage->nextInRow(cell.column(), row);
         }
     }
 
     // Save all RowFormat objects.
     RowFormat* rowFormat = firstRow();
-    int styleIndex = styleStorage()->nextRowStyleIndex( 0 );
-    while ( rowFormat || styleIndex )
-    {
-        if ( rowFormat && ( !styleIndex || rowFormat->row() <= styleIndex ) )
-        {
-            QDomElement e = rowFormat->save( dd );
-            if ( e.isNull() )
+    int styleIndex = styleStorage()->nextRowStyleIndex(0);
+    while (rowFormat || styleIndex) {
+        if (rowFormat && (!styleIndex || rowFormat->row() <= styleIndex)) {
+            QDomElement e = rowFormat->save(dd);
+            if (e.isNull())
                 return QDomElement();
-            sheet.appendChild( e );
-            if ( rowFormat->row() == styleIndex )
-                styleIndex = styleStorage()->nextRowStyleIndex( styleIndex );
+            sheet.appendChild(e);
+            if (rowFormat->row() == styleIndex)
+                styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
             rowFormat = rowFormat->next();
-        }
-        else if ( styleIndex )
-        {
+        } else if (styleIndex) {
             RowFormat rowFormat(*map()->defaultRowFormat());
-            rowFormat.setSheet( this );
-            rowFormat.setRow( styleIndex );
-            QDomElement e = rowFormat.save( dd );
-            if ( e.isNull() )
+            rowFormat.setSheet(this);
+            rowFormat.setRow(styleIndex);
+            QDomElement e = rowFormat.save(dd);
+            if (e.isNull())
                 return QDomElement();
-            sheet.appendChild( e );
-            styleIndex = styleStorage()->nextRowStyleIndex( styleIndex );
+            sheet.appendChild(e);
+            styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
         }
     }
 
     // Save all ColumnFormat objects.
     ColumnFormat* columnFormat = firstCol();
-    styleIndex = styleStorage()->nextColumnStyleIndex( 0 );
-    while ( columnFormat || styleIndex )
-    {
-        if ( columnFormat && ( !styleIndex || columnFormat->column() <= styleIndex ) )
-        {
-            QDomElement e = columnFormat->save( dd );
-            if ( e.isNull() )
+    styleIndex = styleStorage()->nextColumnStyleIndex(0);
+    while (columnFormat || styleIndex) {
+        if (columnFormat && (!styleIndex || columnFormat->column() <= styleIndex)) {
+            QDomElement e = columnFormat->save(dd);
+            if (e.isNull())
                 return QDomElement();
-            sheet.appendChild( e );
-            if ( columnFormat->column() == styleIndex )
-                styleIndex = styleStorage()->nextColumnStyleIndex( styleIndex );
+            sheet.appendChild(e);
+            if (columnFormat->column() == styleIndex)
+                styleIndex = styleStorage()->nextColumnStyleIndex(styleIndex);
             columnFormat = columnFormat->next();
-        }
-        else if ( styleIndex )
-        {
+        } else if (styleIndex) {
             ColumnFormat columnFormat(*map()->defaultColumnFormat());
-            columnFormat.setSheet( this );
-            columnFormat.setColumn( styleIndex );
-            QDomElement e = columnFormat.save( dd );
-            if ( e.isNull() )
+            columnFormat.setSheet(this);
+            columnFormat.setColumn(styleIndex);
+            QDomElement e = columnFormat.save(dd);
+            if (e.isNull())
                 return QDomElement();
-            sheet.appendChild( e );
-            styleIndex = styleStorage()->nextColumnStyleIndex( styleIndex );
+            sheet.appendChild(e);
+            styleIndex = styleStorage()->nextColumnStyleIndex(styleIndex);
         }
     }
 #if 0 // KSPREAD_KOPART_EMBEDDING
-    foreach ( EmbeddedObject* object,doc()->embeddedObjects() )
-    {
-       if ( object->sheet() == this )
-       {
-         QDomElement e = object->save( dd );
+    foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
+        if (object->sheet() == this) {
+            QDomElement e = object->save(dd);
 
-         if ( e.isNull() )
-           return QDomElement();
-         sheet.appendChild( e );
-       }
+            if (e.isNull())
+                return QDomElement();
+            sheet.appendChild(e);
+        }
     }
 #endif // KSPREAD_KOPART_EMBEDDING
     return sheet;
@@ -2233,199 +2080,179 @@ bool Sheet::isLoading()
     return map()->isLoading();
 }
 
-void Sheet::checkContentDirection( QString const & name )
+void Sheet::checkContentDirection(QString const & name)
 {
-  /* set sheet's direction to RTL if sheet name is an RTL string */
-  if ( (name.isRightToLeft()) )
-    setLayoutDirection( Qt::RightToLeft );
-  else
-    setLayoutDirection( Qt::LeftToRight );
+    /* set sheet's direction to RTL if sheet name is an RTL string */
+    if ((name.isRightToLeft()))
+        setLayoutDirection(Qt::RightToLeft);
+    else
+        setLayoutDirection(Qt::LeftToRight);
 
-  emit sig_refreshView();
+    emit sig_refreshView();
 }
 
-bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
+bool Sheet::loadSheetStyleFormat(KoXmlElement *style)
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
-    KoXmlNode header = KoXml::namedItemNS( *style, KoXmlNS::style, "header" );
+    KoXmlNode header = KoXml::namedItemNS(*style, KoXmlNS::style, "header");
 
-    if ( !header.isNull() )
-    {
-        kDebug(36003) <<"Header exists";
-        KoXmlNode part = KoXml::namedItemNS( header, KoXmlNS::style, "region-left" );
-        if ( !part.isNull() )
-        {
-            hleft = getPart( part );
-            kDebug(36003) <<"Header left:" << hleft;
+    if (!header.isNull()) {
+        kDebug(36003) << "Header exists";
+        KoXmlNode part = KoXml::namedItemNS(header, KoXmlNS::style, "region-left");
+        if (!part.isNull()) {
+            hleft = getPart(part);
+            kDebug(36003) << "Header left:" << hleft;
+        } else
+            kDebug(36003) << "Style:region:left doesn't exist!";
+        part = KoXml::namedItemNS(header, KoXmlNS::style, "region-center");
+        if (!part.isNull()) {
+            hmiddle = getPart(part);
+            kDebug(36003) << "Header middle:" << hmiddle;
         }
-        else
-            kDebug(36003) <<"Style:region:left doesn't exist!";
-        part = KoXml::namedItemNS( header, KoXmlNS::style, "region-center" );
-        if ( !part.isNull() )
-        {
-            hmiddle = getPart( part );
-            kDebug(36003) <<"Header middle:" << hmiddle;
-        }
-        part = KoXml::namedItemNS( header, KoXmlNS::style, "region-right" );
-        if ( !part.isNull() )
-        {
-            hright = getPart( part );
-            kDebug(36003) <<"Header right:" << hright;
+        part = KoXml::namedItemNS(header, KoXmlNS::style, "region-right");
+        if (!part.isNull()) {
+            hright = getPart(part);
+            kDebug(36003) << "Header right:" << hright;
         }
     }
     //TODO implement it under kspread
-    KoXmlNode headerleft = KoXml::namedItemNS( *style, KoXmlNS::style, "header-left" );
-    if ( !headerleft.isNull() )
-    {
+    KoXmlNode headerleft = KoXml::namedItemNS(*style, KoXmlNS::style, "header-left");
+    if (!headerleft.isNull()) {
         KoXmlElement e = headerleft.toElement();
-        if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
-            kDebug(36003)<<"header.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style,"display" );
+        if (e.hasAttributeNS(KoXmlNS::style, "display"))
+            kDebug(36003) << "header.hasAttribute( style:display ) :" << e.hasAttributeNS(KoXmlNS::style, "display");
         else
-            kDebug(36003)<<"header left doesn't has attribute  style:display";
+            kDebug(36003) << "header left doesn't has attribute  style:display";
     }
     //TODO implement it under kspread
-    KoXmlNode footerleft = KoXml::namedItemNS( *style, KoXmlNS::style, "footer-left" );
-    if ( !footerleft.isNull() )
-    {
+    KoXmlNode footerleft = KoXml::namedItemNS(*style, KoXmlNS::style, "footer-left");
+    if (!footerleft.isNull()) {
         KoXmlElement e = footerleft.toElement();
-        if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
-            kDebug(36003)<<"footer.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style,"display" );
+        if (e.hasAttributeNS(KoXmlNS::style, "display"))
+            kDebug(36003) << "footer.hasAttribute( style:display ) :" << e.hasAttributeNS(KoXmlNS::style, "display");
         else
-            kDebug(36003)<<"footer left doesn't has attribute  style:display";
+            kDebug(36003) << "footer left doesn't has attribute  style:display";
     }
 
-    KoXmlNode footer = KoXml::namedItemNS( *style, KoXmlNS::style, "footer" );
+    KoXmlNode footer = KoXml::namedItemNS(*style, KoXmlNS::style, "footer");
 
-    if ( !footer.isNull() )
-    {
-        KoXmlNode part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-left" );
-        if ( !part.isNull() )
-        {
-            fleft = getPart( part );
-            kDebug(36003) <<"Footer left:" << fleft;
+    if (!footer.isNull()) {
+        KoXmlNode part = KoXml::namedItemNS(footer, KoXmlNS::style, "region-left");
+        if (!part.isNull()) {
+            fleft = getPart(part);
+            kDebug(36003) << "Footer left:" << fleft;
         }
-        part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-center" );
-        if ( !part.isNull() )
-        {
-            fmiddle = getPart( part );
-            kDebug(36003) <<"Footer middle:" << fmiddle;
+        part = KoXml::namedItemNS(footer, KoXmlNS::style, "region-center");
+        if (!part.isNull()) {
+            fmiddle = getPart(part);
+            kDebug(36003) << "Footer middle:" << fmiddle;
         }
-        part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-right" );
-        if ( !part.isNull() )
-        {
-            fright = getPart( part );
-            kDebug(36003) <<"Footer right:" << fright;
+        part = KoXml::namedItemNS(footer, KoXmlNS::style, "region-right");
+        if (!part.isNull()) {
+            fright = getPart(part);
+            kDebug(36003) << "Footer right:" << fright;
         }
     }
 
-    print()->setHeadFootLine( hleft, hmiddle, hright,
-                              fleft, fmiddle, fright );
+    print()->setHeadFootLine(hleft, hmiddle, hright,
+                             fleft, fmiddle, fright);
     return true;
 }
 
-void Sheet::replaceMacro( QString & text, const QString & old, const QString & newS )
+void Sheet::replaceMacro(QString & text, const QString & old, const QString & newS)
 {
-  int n = text.indexOf( old );
-  if ( n != -1 )
-    text = text.replace( n, old.length(), newS );
+    int n = text.indexOf(old);
+    if (n != -1)
+        text = text.replace(n, old.length(), newS);
 }
 
-QString Sheet::getPart( const KoXmlNode & part )
+QString Sheet::getPart(const KoXmlNode & part)
 {
-  QString result;
-  KoXmlElement e = KoXml::namedItemNS( part, KoXmlNS::text, "p" );
-  while ( !e.isNull() )
-  {
-    QString text = e.text();
-    kDebug() <<"PART:" << text;
+    QString result;
+    KoXmlElement e = KoXml::namedItemNS(part, KoXmlNS::text, "p");
+    while (!e.isNull()) {
+        QString text = e.text();
+        kDebug() << "PART:" << text;
 
-    KoXmlElement macro = KoXml::namedItemNS( e, KoXmlNS::text, "time" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<time>" );
+        KoXmlElement macro = KoXml::namedItemNS(e, KoXmlNS::text, "time");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<time>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "date" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<date>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "date");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<date>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "page-number" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<page>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "page-number");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<page>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "page-count" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<pages>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "page-count");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<pages>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "sheet-name" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<sheet>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "sheet-name");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<sheet>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "title" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<name>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "title");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<name>");
 
-    macro = KoXml::namedItemNS( e, KoXmlNS::text, "file-name" );
-    if ( !macro.isNull() )
-      replaceMacro( text, macro.text(), "<file>" );
+        macro = KoXml::namedItemNS(e, KoXmlNS::text, "file-name");
+        if (!macro.isNull())
+            replaceMacro(text, macro.text(), "<file>");
 
-    //add support for multi line into kspread
-    if ( !result.isEmpty() )
-      result += '\n';
-    result += text;
-    e = e.nextSibling().toElement();
-  }
+        //add support for multi line into kspread
+        if (!result.isEmpty())
+            result += '\n';
+        result += text;
+        e = e.nextSibling().toElement();
+    }
 
-  return result;
+    return result;
 }
 
 
-bool Sheet::loadOdf( const KoXmlElement& sheetElement,
-                       OdfLoadingContext& tableContext,
-                       const Styles& autoStyles,
-                       const QHash<QString, Conditions>& conditionalStyles )
+bool Sheet::loadOdf(const KoXmlElement& sheetElement,
+                    OdfLoadingContext& tableContext,
+                    const Styles& autoStyles,
+                    const QHash<QString, Conditions>& conditionalStyles)
 {
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
-    setLayoutDirection( Qt::LeftToRight );
-    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
-    {
-        QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString() );
+    setLayoutDirection(Qt::LeftToRight);
+    if (sheetElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
+        QString stylename = sheetElement.attributeNS(KoXmlNS::table, "style-name", QString());
         //kDebug(36003)<<" style of table :"<<stylename;
-        const KoXmlElement *style = odfContext.stylesReader().findStyle( stylename, "table" );
-        Q_ASSERT( style );
+        const KoXmlElement *style = odfContext.stylesReader().findStyle(stylename, "table");
+        Q_ASSERT(style);
         //kDebug(36003)<<" style :"<<style;
-        if ( style )
-        {
-            KoXmlElement properties( KoXml::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
-            if ( !properties.isNull() )
-            {
-                if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
-                {
-                    bool visible = (properties.attributeNS( KoXmlNS::table, "display", QString() ) == "true" ? true : false );
-                    setHidden (!visible);
+        if (style) {
+            KoXmlElement properties(KoXml::namedItemNS(*style, KoXmlNS::style, "table-properties"));
+            if (!properties.isNull()) {
+                if (properties.hasAttributeNS(KoXmlNS::table, "display")) {
+                    bool visible = (properties.attributeNS(KoXmlNS::table, "display", QString()) == "true" ? true : false);
+                    setHidden(!visible);
                 }
             }
-            if ( style->hasAttributeNS( KoXmlNS::style, "master-page-name" ) )
-            {
-                QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString() );
+            if (style->hasAttributeNS(KoXmlNS::style, "master-page-name")) {
+                QString masterPageStyleName = style->attributeNS(KoXmlNS::style, "master-page-name", QString());
                 //kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName;
                 KoXmlElement *masterStyle = odfContext.stylesReader().masterPages()[masterPageStyleName];
                 //kDebug()<<"stylesReader.styles()[masterPageStyleName] :"<<masterStyle;
-                if ( masterStyle )
-                {
-                    loadSheetStyleFormat( masterStyle );
-                    if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
-                    {
-                        QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString() );
+                if (masterStyle) {
+                    loadSheetStyleFormat(masterStyle);
+                    if (masterStyle->hasAttributeNS(KoXmlNS::style, "page-layout-name")) {
+                        QString masterPageLayoutStyleName = masterStyle->attributeNS(KoXmlNS::style, "page-layout-name", QString());
                         //kDebug(36003)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName;
-                        const KoXmlElement *masterLayoutStyle = odfContext.stylesReader().findStyle( masterPageLayoutStyleName );
-                      if ( masterLayoutStyle )
-                      {
-                        //kDebug(36003)<<"masterLayoutStyle :"<<masterLayoutStyle;
-                        KoStyleStack styleStack;
-                        styleStack.setTypeProperties( "page-layout" );
-                        styleStack.push( *masterLayoutStyle );
-                        loadOdfMasterLayoutPage( styleStack );
-                      }
+                        const KoXmlElement *masterLayoutStyle = odfContext.stylesReader().findStyle(masterPageLayoutStyleName);
+                        if (masterLayoutStyle) {
+                            //kDebug(36003)<<"masterLayoutStyle :"<<masterLayoutStyle;
+                            KoStyleStack styleStack;
+                            styleStack.setTypeProperties("page-layout");
+                            styleStack.push(*masterLayoutStyle);
+                            loadOdfMasterLayoutPage(styleStack);
+                        }
                     }
                 }
             }
@@ -2446,66 +2273,51 @@ bool Sheet::loadOdf( const KoXmlElement& sheetElement,
     // Some spreadsheet programs may support more rows than
     // KSpread so limit the number of repeated rows.
     // FIXME POSSIBLE DATA LOSS!
-    while( !rowNode.isNull() && rowIndex <= KS_rowMax )
-    {
-        kDebug(36003)<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol;
+    while (!rowNode.isNull() && rowIndex <= KS_rowMax) {
+        kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
         KoXmlElement rowElement = rowNode.toElement();
-        if( !rowElement.isNull() )
-        {
+        if (!rowElement.isNull()) {
             // slightly faster
             KoXml::load(rowElement);
 
-            kDebug(36003)<<" Sheet::loadOdf rowElement.tagName() :"<<rowElement.localName();
-            if ( rowElement.namespaceURI() == KoXmlNS::table )
-            {
-                if ( rowElement.localName() == "table-header-columns" )
-                {
-                  KoXmlNode headerColumnNode = rowElement.firstChild();
-                  while ( !headerColumnNode.isNull() )
-                  {
-                    // NOTE Handle header cols as ordinary ones
-                    //      as long as they're not supported.
-                    loadColumnFormat( headerColumnNode.toElement(), odfContext.stylesReader(),
-                                      indexCol, columnStyleRegions );
-                    headerColumnNode = headerColumnNode.nextSibling();
-                  }
-                }
-                else if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
-                {
-                    kDebug(36003)<<" table-column found : index column before"<< indexCol;
-                    loadColumnFormat( rowElement, odfContext.stylesReader(), indexCol, columnStyleRegions );
-                    kDebug(36003)<<" table-column found : index column after"<< indexCol;
-                    maxColumn = qMax( maxColumn, indexCol - 1 );
-                }
-                else if ( rowElement.localName() == "table-header-rows" )
-                {
-                  KoXmlNode headerRowNode = rowElement.firstChild();
-                  while ( !headerRowNode.isNull() )
-                  {
-                    // NOTE Handle header rows as ordinary ones
-                    //      as long as they're not supported.
-                    loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   tableContext, rowStyleRegions,
-                                   cellStyleRegions );
-                    headerRowNode = headerRowNode.nextSibling();
-                  }
-                }
-                else if( rowElement.localName() == "table-row" )
-                {
-                    kDebug(36003)<<" table-row found :index row before"<<rowIndex;
-                    loadRowFormat( rowElement, rowIndex, tableContext,
-                                   rowStyleRegions, cellStyleRegions );
-                    kDebug(36003)<<" table-row found :index row after"<<rowIndex;
-                }
-                else if ( rowElement.localName() == "shapes" )
-                {
+            kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
+            if (rowElement.namespaceURI() == KoXmlNS::table) {
+                if (rowElement.localName() == "table-header-columns") {
+                    KoXmlNode headerColumnNode = rowElement.firstChild();
+                    while (!headerColumnNode.isNull()) {
+                        // NOTE Handle header cols as ordinary ones
+                        //      as long as they're not supported.
+                        loadColumnFormat(headerColumnNode.toElement(), odfContext.stylesReader(),
+                                         indexCol, columnStyleRegions);
+                        headerColumnNode = headerColumnNode.nextSibling();
+                    }
+                } else if (rowElement.localName() == "table-column" && indexCol <= KS_colMax) {
+                    kDebug(36003) << " table-column found : index column before" << indexCol;
+                    loadColumnFormat(rowElement, odfContext.stylesReader(), indexCol, columnStyleRegions);
+                    kDebug(36003) << " table-column found : index column after" << indexCol;
+                    maxColumn = qMax(maxColumn, indexCol - 1);
+                } else if (rowElement.localName() == "table-header-rows") {
+                    KoXmlNode headerRowNode = rowElement.firstChild();
+                    while (!headerRowNode.isNull()) {
+                        // NOTE Handle header rows as ordinary ones
+                        //      as long as they're not supported.
+                        loadRowFormat(headerRowNode.toElement(), rowIndex,
+                                      tableContext, rowStyleRegions,
+                                      cellStyleRegions);
+                        headerRowNode = headerRowNode.nextSibling();
+                    }
+                } else if (rowElement.localName() == "table-row") {
+                    kDebug(36003) << " table-row found :index row before" << rowIndex;
+                    loadRowFormat(rowElement, rowIndex, tableContext,
+                                  rowStyleRegions, cellStyleRegions);
+                    kDebug(36003) << " table-row found :index row after" << rowIndex;
+                } else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
                     KoShapeLoadingContext shapeLoadingContext(odfContext, dataCenterMap());
                     KoXmlElement element;
-                    forEachElement(element, rowElement)
-                    {
+                    forEachElement(element, rowElement) {
                         if (element.namespaceURI() != KoXmlNS::draw)
                             continue;
                         KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeLoadingContext);
@@ -2526,76 +2338,66 @@ bool Sheet::loadOdf( const KoXmlElement& sheetElement,
     }
 
     // insert the styles into the storage (column defaults)
-    kDebug(36003) <<"Inserting column default cell styles ...";
-    loadOdfInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    kDebug(36003) << "Inserting column default cell styles ...";
+    loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
     // insert the styles into the storage (row defaults)
-    kDebug(36003) <<"Inserting row default cell styles ...";
-    loadOdfInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    kDebug(36003) << "Inserting row default cell styles ...";
+    loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
     // insert the styles into the storage
-    kDebug(36003) <<"Inserting cell styles ...";
-    loadOdfInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    kDebug(36003) << "Inserting cell styles ...";
+    loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
 
-    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
-    {
+    if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
-        QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString() );
+        QString range = sheetElement.attributeNS(KoXmlNS::table, "print-ranges", QString());
         Region region(Region::loadOdf(range));
         if (!region.firstSheet() || sheetName() == region.firstSheet()->sheetName())
-          print()->setPrintRange(region.firstRange());
+            print()->setPrintRange(region.firstRange());
     }
 
 
-    if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString() ) == "true" )
-    {
-        QByteArray passwd( "" );
-        if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
-        {
-            QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString() );
-            QByteArray str( p.toLatin1() );
-            kDebug(30518) <<"Decoding password:" << str;
-            passwd = KCodecs::base64Decode( str );
+    if (sheetElement.attributeNS(KoXmlNS::table, "protected", QString()) == "true") {
+        QByteArray passwd("");
+        if (sheetElement.hasAttributeNS(KoXmlNS::table, "protection-key")) {
+            QString p = sheetElement.attributeNS(KoXmlNS::table, "protection-key", QString());
+            QByteArray str(p.toLatin1());
+            kDebug(30518) << "Decoding password:" << str;
+            passwd = KCodecs::base64Decode(str);
         }
-        kDebug(30518) <<"Password hash: '" << passwd << '\'';
-        setProtected (passwd);
+        kDebug(30518) << "Password hash: '" << passwd << '\'';
+        setProtected(passwd);
     }
     return true;
 }
 
-void Sheet::loadOdfMasterLayoutPage( KoStyleStack &styleStack )
+void Sheet::loadOdfMasterLayoutPage(KoStyleStack &styleStack)
 {
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 
-    if ( styleStack.hasProperty( KoXmlNS::fo, "page-width" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "page-width")) {
         pageLayout.width = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "page-width"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "page-height" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "page-height")) {
         pageLayout.height = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "page-height"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-top")) {
         pageLayout.topMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-top"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-bottom")) {
         pageLayout.bottomMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-left")) {
         pageLayout.leftMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-right" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-right")) {
         pageLayout.rightMargin = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-right"));
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) )
-    {
-        kDebug(36003)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasProperty( KoXmlNS::style,"writing-mode" );
-        setLayoutDirection (( styleStack.property( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? Qt::LeftToRight : Qt::RightToLeft);
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {
+        kDebug(36003) << "styleStack.hasAttribute( style:writing-mode ) :" << styleStack.hasProperty(KoXmlNS::style, "writing-mode");
+        setLayoutDirection((styleStack.property(KoXmlNS::style, "writing-mode") == "lr-tb") ? Qt::LeftToRight : Qt::RightToLeft);
         //TODO
         //<value>lr-tb</value>
         //<value>rl-tb</value>
@@ -2607,84 +2409,63 @@ void Sheet::loadOdfMasterLayoutPage( KoStyleStack &styleStack )
         //<value>page</value>
 
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "print-orientation" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::style, "print-orientation")) {
         pageLayout.orientation = (styleStack.property(KoXmlNS::style, "print-orientation") == "landscape")
-                               ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+                                 ? KoPageFormat::Landscape : KoPageFormat::Portrait;
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "num-format" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::style, "num-format")) {
         //not implemented into kspread
         //These attributes specify the numbering style to use.
         //If a numbering style is not specified, the numbering style is inherited from
         //the page style. See section 6.7.8 for information on these attributes
-        kDebug(36003)<<" num-format :"<<styleStack.property( KoXmlNS::style,"num-format" );
+        kDebug(36003) << " num-format :" << styleStack.property(KoXmlNS::style, "num-format");
 
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         //TODO
-        kDebug(36003)<<" fo:background-color :"<<styleStack.property( KoXmlNS::fo,"background-color" );
+        kDebug(36003) << " fo:background-color :" << styleStack.property(KoXmlNS::fo, "background-color");
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "print" ) )
-    {
+    if (styleStack.hasProperty(KoXmlNS::style, "print")) {
         //todo parsing
-        QString str = styleStack.property( KoXmlNS::style, "print" );
-        kDebug(36003)<<" style:print :"<<str;
+        QString str = styleStack.property(KoXmlNS::style, "print");
+        kDebug(36003) << " style:print :" << str;
 
-        if (str.contains( "headers" ) )
-        {
+        if (str.contains("headers")) {
             //TODO implement it into kspread
         }
-        if ( str.contains( "grid" ) )
-        {
-          print()->settings()->setPrintGrid( true );
+        if (str.contains("grid")) {
+            print()->settings()->setPrintGrid(true);
         }
-        if ( str.contains( "annotations" ) )
-        {
+        if (str.contains("annotations")) {
             //TODO it's not implemented
         }
-        if ( str.contains( "objects" ) )
-        {
+        if (str.contains("objects")) {
             //TODO it's not implemented
         }
-        if ( str.contains( "charts" ) )
-        {
+        if (str.contains("charts")) {
             //TODO it's not implemented
         }
-        if ( str.contains( "drawings" ) )
-        {
+        if (str.contains("drawings")) {
             //TODO it's not implemented
         }
-        if ( str.contains( "formulas" ) )
-        {
+        if (str.contains("formulas")) {
             d->showFormula = true;
         }
-        if ( str.contains( "zero-values" ) )
-        {
+        if (str.contains("zero-values")) {
             //TODO it's not implemented
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "table-centering" ) )
-    {
-        QString str = styleStack.property( KoXmlNS::style, "table-centering" );
+    if (styleStack.hasProperty(KoXmlNS::style, "table-centering")) {
+        QString str = styleStack.property(KoXmlNS::style, "table-centering");
         //TODO not implemented into kspread
-        kDebug(36003)<<" styleStack.attribute( style:table-centering ) :"<<str;
+        kDebug(36003) << " styleStack.attribute( style:table-centering ) :" << str;
 #if 0
-        if ( str == "horizontal" )
-        {
-        }
-        else if ( str == "vertical" )
-        {
-        }
-        else if ( str == "both" )
-        {
-        }
-        else if ( str == "none" )
-        {
-        }
-        else
-            kDebug(36003)<<" table-centering unknown :"<<str;
+        if (str == "horizontal") {
+        } else if (str == "vertical") {
+        } else if (str == "both") {
+        } else if (str == "none") {
+        } else
+            kDebug(36003) << " table-centering unknown :" << str;
 #endif
     }
     print()->settings()->setPageLayout(pageLayout);
@@ -2693,110 +2474,95 @@ void Sheet::loadOdfMasterLayoutPage( KoStyleStack &styleStack )
 
 bool Sheet::loadColumnFormat(const KoXmlElement& column,
                              const KoOdfStylesReader& stylesReader, int & indexCol,
-                             QHash<QString, QRegion>& columnStyleRegions )
+                             QHash<QString, QRegion>& columnStyleRegions)
 {
 //   kDebug(36003)<<"bool Sheet::loadColumnFormat(const KoXmlElement& column, const KoOdfStylesReader& stylesReader, unsigned int & indexCol ) index Col :"<<indexCol;
 
     bool isNonDefaultColumn = false;
 
     int number = 1;
-    if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
-    {
+    if (column.hasAttributeNS(KoXmlNS::table, "number-columns-repeated")) {
         bool ok = true;
-        int n = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt( &ok );
-        if ( ok )
-          // Some spreadsheet programs may support more rows than KSpread so
-          // limit the number of repeated rows.
-          // FIXME POSSIBLE DATA LOSS!
-          number = qMin(n, KS_colMax - indexCol + 1);
-        kDebug(36003) <<"Repeated:" << number;
+        int n = column.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
+        if (ok)
+            // Some spreadsheet programs may support more rows than KSpread so
+            // limit the number of repeated rows.
+            // FIXME POSSIBLE DATA LOSS!
+            number = qMin(n, KS_colMax - indexCol + 1);
+        kDebug(36003) << "Repeated:" << number;
     }
 
-    if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
-    {
-      const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString() );
-      if ( !styleName.isEmpty() )
-      {
-          columnStyleRegions[styleName] += QRect( indexCol, 1, number, KS_rowMax );
-      }
+    if (column.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
+        const QString styleName = column.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
+        if (!styleName.isEmpty()) {
+            columnStyleRegions[styleName] += QRect(indexCol, 1, number, KS_rowMax);
+        }
     }
 
     enum { Visible, Collapsed, Filtered } visibility = Visible;
-    if ( column.hasAttributeNS( KoXmlNS::table, "visibility" ) )
-    {
-      const QString string = column.attributeNS( KoXmlNS::table, "visibility", "visible" );
-      if ( string == "collapse" )
-        visibility = Collapsed;
-      else if ( string == "filter" )
-        visibility = Filtered;
-      isNonDefaultColumn = true;
+    if (column.hasAttributeNS(KoXmlNS::table, "visibility")) {
+        const QString string = column.attributeNS(KoXmlNS::table, "visibility", "visible");
+        if (string == "collapse")
+            visibility = Collapsed;
+        else if (string == "filter")
+            visibility = Filtered;
+        isNonDefaultColumn = true;
     }
 
     KoStyleStack styleStack;
-    if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
-    {
-      QString str = column.attributeNS( KoXmlNS::table, "style-name", QString() );
-      const KoXmlElement *style = stylesReader.findStyle( str, "table-column" );
-      if ( style )
-      {
-        styleStack.push( *style );
-        isNonDefaultColumn = true;
-      }
+    if (column.hasAttributeNS(KoXmlNS::table, "style-name")) {
+        QString str = column.attributeNS(KoXmlNS::table, "style-name", QString());
+        const KoXmlElement *style = stylesReader.findStyle(str, "table-column");
+        if (style) {
+            styleStack.push(*style);
+            isNonDefaultColumn = true;
+        }
     }
     styleStack.setTypeProperties("table-column"); //style for column
 
     double width = -1.0;
-    if ( styleStack.hasProperty( KoXmlNS::style, "column-width" ) )
-    {
-        width = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "column-width" ) , -1.0 );
-        kDebug(36003)<<" style:column-width : width :"<<width;
+    if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
+        width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width") , -1.0);
+        kDebug(36003) << " style:column-width : width :" << width;
         isNonDefaultColumn = true;
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasProperty( KoXmlNS::fo, "break-before" ) )
-    {
-        QString str = styleStack.property( KoXmlNS::fo, "break-before" );
-        if ( str == "page" )
-        {
+    if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
+        QString str = styleStack.property(KoXmlNS::fo, "break-before");
+        if (str == "page") {
             insertPageBreak = true;
-        }
-        else
-            kDebug(36003)<<" str :"<<str;
+        } else
+            kDebug(36003) << " str :" << str;
         isNonDefaultColumn = true;
     }
 
     // If it's a default column, we can return here.
     // This saves the iteration, which can be caused by column cell default styles,
     // but which are not inserted here.
-    if (!isNonDefaultColumn)
-    {
+    if (!isNonDefaultColumn) {
         indexCol += number;
         return true;
     }
 
-    for ( int i = 0; i < number; ++i )
-    {
-        kDebug(36003)<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ?"<<visibility;
+    for (int i = 0; i < number; ++i) {
+        kDebug(36003) << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
 
         const ColumnFormat* columnFormat;
-        if ( isNonDefaultColumn )
-        {
-          ColumnFormat* cf = nonDefaultColumnFormat( indexCol );
-          columnFormat = cf;
+        if (isNonDefaultColumn) {
+            ColumnFormat* cf = nonDefaultColumnFormat(indexCol);
+            columnFormat = cf;
 
-          if ( width != -1.0 ) //safe
-            cf->setWidth( width );
-        // if ( insertPageBreak )
-        //   columnFormat->setPageBreak( true )
-          if ( visibility == Collapsed )
-            cf->setHidden( true );
-          else if (visibility == Filtered)
-              cf->setFiltered(true);
-        }
-        else
-        {
-          columnFormat = this->columnFormat( indexCol );
+            if (width != -1.0)   //safe
+                cf->setWidth(width);
+            // if ( insertPageBreak )
+            //   columnFormat->setPageBreak( true )
+            if (visibility == Collapsed)
+                cf->setHidden(true);
+            else if (visibility == Filtered)
+                cf->setFiltered(true);
+        } else {
+            columnFormat = this->columnFormat(indexCol);
         }
         ++indexCol;
     }
@@ -2804,126 +2570,109 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     return true;
 }
 
-void Sheet::loadOdfInsertStyles( const Styles& autoStyles,
-                                   const QHash<QString, QRegion>& styleRegions,
-                                   const QHash<QString, Conditions>& conditionalStyles,
-                                   const QRect& usedArea )
+void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
+                                const QHash<QString, QRegion>& styleRegions,
+                                const QHash<QString, Conditions>& conditionalStyles,
+                                const QRect& usedArea)
 {
     const QList<QString> styleNames = styleRegions.keys();
-    for ( int i = 0; i < styleNames.count(); ++i )
-    {
-        if ( !autoStyles.contains( styleNames[i] ) && !map()->styleManager()->style( styleNames[i] ) )
-        {
+    for (int i = 0; i < styleNames.count(); ++i) {
+        if (!autoStyles.contains(styleNames[i]) && !map()->styleManager()->style(styleNames[i])) {
             kWarning(36003) << "\t" << styleNames[i] << " not used";
             continue;
         }
-        const bool hasConditions = conditionalStyles.contains( styleNames[i] );
-        const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion( usedArea );
-        foreach ( const QRect& rect, styleRegion.rects() )
-        {
-            if ( autoStyles.contains( styleNames[i] ) )
-            {
-                kDebug(36003) <<"\tautomatic:" << styleNames[i] <<" at" << rect;
+        const bool hasConditions = conditionalStyles.contains(styleNames[i]);
+        const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion(usedArea);
+        foreach(const QRect& rect, styleRegion.rects()) {
+            if (autoStyles.contains(styleNames[i])) {
+                kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << rect;
                 Style style;
                 style.setDefault(); // "overwrite" existing style
-                style.merge( autoStyles[styleNames[i]] );
-                cellStorage()->setStyle( Region(rect), style );
-            }
-            else
-            {
-                const CustomStyle* namedStyle = map()->styleManager()->style( styleNames[i] );
-                kDebug(36003) <<"\tcustom:" << namedStyle->name() <<" at" << rect;
+                style.merge(autoStyles[styleNames[i]]);
+                cellStorage()->setStyle(Region(rect), style);
+            } else {
+                const CustomStyle* namedStyle = map()->styleManager()->style(styleNames[i]);
+                kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << rect;
                 Style style;
                 style.setDefault(); // "overwrite" existing style
-                style.merge( *namedStyle );
-                cellStorage()->setStyle( Region(rect), style );
+                style.merge(*namedStyle);
+                cellStorage()->setStyle(Region(rect), style);
             }
-            if ( hasConditions )
-                cellStorage()->setConditions( Region(rect), conditionalStyles[styleNames[i]] );
+            if (hasConditions)
+                cellStorage()->setConditions(Region(rect), conditionalStyles[styleNames[i]]);
         }
     }
 }
 
-bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
-                           OdfLoadingContext& tableContext,
-                           QHash<QString, QRegion>& rowStyleRegions,
-                           QHash<QString, QRegion>& cellStyleRegions )
+bool Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
+                          OdfLoadingContext& tableContext,
+                          QHash<QString, QRegion>& rowStyleRegions,
+                          QHash<QString, QRegion>& cellStyleRegions)
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     bool isNonDefaultRow = false;
 
     KoStyleStack styleStack;
-    if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
-    {
-      QString str = row.attributeNS( KoXmlNS::table, "style-name", QString() );
-      const KoXmlElement *style = odfContext.stylesReader().findStyle( str, "table-row" );
-      if ( style )
-      {
-        styleStack.push( *style );
-        isNonDefaultRow = true;
-      }
+    if (row.hasAttributeNS(KoXmlNS::table, "style-name")) {
+        QString str = row.attributeNS(KoXmlNS::table, "style-name", QString());
+        const KoXmlElement *style = odfContext.stylesReader().findStyle(str, "table-row");
+        if (style) {
+            styleStack.push(*style);
+            isNonDefaultRow = true;
+        }
     }
-    styleStack.setTypeProperties( "table-row" );
+    styleStack.setTypeProperties("table-row");
 
     int number = 1;
-    if ( row.hasAttributeNS( KoXmlNS::table, "number-rows-repeated" ) )
-    {
+    if (row.hasAttributeNS(KoXmlNS::table, "number-rows-repeated")) {
         bool ok = true;
-        int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString() ).toInt( &ok );
-        if ( ok )
+        int n = row.attributeNS(KoXmlNS::table, "number-rows-repeated", QString()).toInt(&ok);
+        if (ok)
             // Some spreadsheet programs may support more rows than KSpread so
             // limit the number of repeated rows.
             // FIXME POSSIBLE DATA LOSS!
-            number = qMin( n, KS_rowMax - rowIndex + 1 );
+            number = qMin(n, KS_rowMax - rowIndex + 1);
     }
 
-    if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
-    {
-      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString() );
-      if ( !styleName.isEmpty() )
-      {
-          rowStyleRegions[styleName] += QRect( 1, rowIndex, KS_colMax, number );
-      }
+    if (row.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
+        const QString styleName = row.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
+        if (!styleName.isEmpty()) {
+            rowStyleRegions[styleName] += QRect(1, rowIndex, KS_colMax, number);
+        }
     }
 
     double height = -1.0;
-    if ( styleStack.hasProperty( KoXmlNS::style, "row-height" ) )
-    {
-        height = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "row-height" ) , -1.0 );
-    //    kDebug(36003)<<" properties style:row-height : height :"<<height;
+    if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
+        height = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height") , -1.0);
+        //    kDebug(36003)<<" properties style:row-height : height :"<<height;
         isNonDefaultRow = true;
     }
 
     enum { Visible, Collapsed, Filtered } visibility = Visible;
-    if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
-    {
-      const QString string = row.attributeNS( KoXmlNS::table, "visibility", "visible" );
-      if ( string == "collapse" )
-        visibility = Collapsed;
-      else if ( string == "filter" )
-        visibility = Filtered;
-      isNonDefaultRow = true;
+    if (row.hasAttributeNS(KoXmlNS::table, "visibility")) {
+        const QString string = row.attributeNS(KoXmlNS::table, "visibility", "visible");
+        if (string == "collapse")
+            visibility = Collapsed;
+        else if (string == "filter")
+            visibility = Filtered;
+        isNonDefaultRow = true;
     }
 
     bool insertPageBreak = false;
-    if ( styleStack.hasProperty( KoXmlNS::fo, "break-before" ) )
-    {
-        QString str = styleStack.property( KoXmlNS::fo, "break-before" );
-        if ( str == "page" )
-        {
+    if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
+        QString str = styleStack.property(KoXmlNS::fo, "break-before");
+        if (str == "page") {
             insertPageBreak = true;
         }
-      //  else
-      //      kDebug(36003)<<" str :"<<str;
+        //  else
+        //      kDebug(36003)<<" str :"<<str;
         isNonDefaultRow = true;
     }
 
 //     kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
-    if (isNonDefaultRow)
-    {
-        for (int r = 0; r < number; ++r)
-        {
+    if (isNonDefaultRow) {
+        for (int r = 0; r < number; ++r) {
             RowFormat* rowFormat = nonDefaultRowFormat(rowIndex + r);
             if (height != -1.0)
                 rowFormat->setHeight(height);
@@ -2938,8 +2687,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
 
     KoXmlElement cellElement;
-    forEachElement(cellElement, row)
-    {
+    forEachElement(cellElement, row) {
         if (cellElement.namespaceURI() != KoXmlNS::table)
             continue;
         if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
@@ -2967,13 +2715,10 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         if (!cell.validity().isEmpty())
             cellStorage()->setValidity(Region(columnIndex, rowIndex, numberColumns, number, this), cell.validity());
 
-        if (cell.isFormula() || !cell.userInput().isEmpty() || !cell.value().isEmpty())
-        {
+        if (cell.isFormula() || !cell.userInput().isEmpty() || !cell.value().isEmpty()) {
             // Row-wise filling of PointStorages is faster than column-wise filling.
-            for (int r = rowIndex; r <= endRow; ++r)
-            {
-                for (int c = 0; c < numberColumns; ++c)
-                {
+            for (int r = rowIndex; r <= endRow; ++r) {
+                for (int c = 0; c < numberColumns; ++c) {
                     Cell target(this, columnIndex + c, r);
                     target.setFormula(cell.formula());
                     target.setUserInput(cell.userInput());
@@ -2993,18 +2738,16 @@ QRect Sheet::usedArea() const
     int maxRows = d->cellStorage->rows();
 
     const RowFormat * row = firstRow();
-    while ( row )
-    {
-        if ( row->row() > maxRows )
+    while (row) {
+        if (row->row() > maxRows)
             maxRows = row->row();
 
         row = row->next();
     }
 
     const ColumnFormat* col = firstCol();
-    while ( col )
-    {
-        if ( col->column() > maxCols )
+    while (col) {
+        if (col->column() > maxCols)
             maxCols = col->column();
 
         col = col->next();
@@ -3018,13 +2761,12 @@ QRect Sheet::usedArea() const
     maxCols = qMax(maxCols, shapesCellRange.right());
     maxRows = qMax(maxRows, shapesCellRange.bottom());
 
-    return QRect( 1, 1, maxCols, maxRows );
+    return QRect(1, 1, maxCols, maxRows);
 }
 
 bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tableContext) const
 {
-    if ( *rowFormat( row1 ) != *rowFormat( row2 ) )
-    {
+    if (*rowFormat(row1) != *rowFormat(row2)) {
 //         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
         return false;
     }
@@ -3035,14 +2777,12 @@ bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tabl
     Cell cell2 = cellStorage()->firstInRow(row2);
     if (cell1.isNull() != cell2.isNull())
         return false;
-    while (!cell1.isNull())
-    {
+    while (!cell1.isNull()) {
         if (cell1.column() != cell2.column())
             return false;
         if (cell1.column() > maxCols)
             break;
-        if (!cell1.compareData(cell2))
-        {
+        if (!cell1.compareData(cell2)) {
 //             kDebug(36003) <<"\t Cell at column" << col <<" in row" << row2 <<" differs from the one in row" << row1;
             return false;
         }
@@ -3054,101 +2794,95 @@ bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tabl
     return true;
 }
 
-void Sheet::saveOdfHeaderFooter( KoXmlWriter &xmlWriter ) const
+void Sheet::saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const
 {
     QString headerLeft = print()->headLeft();
-    QString headerCenter= print()->headMid();
+    QString headerCenter = print()->headMid();
     QString headerRight = print()->headRight();
 
     QString footerLeft = print()->footLeft();
-    QString footerCenter= print()->footMid();
+    QString footerCenter = print()->footMid();
     QString footerRight = print()->footRight();
 
-    xmlWriter.startElement( "style:header");
-    if ( ( !headerLeft.isEmpty() )
-         || ( !headerCenter.isEmpty() )
-         || ( !headerRight.isEmpty() ) )
-    {
-        xmlWriter.startElement( "style:region-left" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( headerLeft, xmlWriter );
+    xmlWriter.startElement("style:header");
+    if ((!headerLeft.isEmpty())
+            || (!headerCenter.isEmpty())
+            || (!headerRight.isEmpty())) {
+        xmlWriter.startElement("style:region-left");
+        xmlWriter.startElement("text:p");
+        convertPart(headerLeft, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement();
 
-        xmlWriter.startElement( "style:region-center" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( headerCenter, xmlWriter );
+        xmlWriter.startElement("style:region-center");
+        xmlWriter.startElement("text:p");
+        convertPart(headerCenter, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement();
 
-        xmlWriter.startElement( "style:region-right" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( headerRight, xmlWriter );
+        xmlWriter.startElement("style:region-right");
+        xmlWriter.startElement("text:p");
+        convertPart(headerRight, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement();
-    }
-    else
-    {
-       xmlWriter.startElement( "text:p" );
+    } else {
+        xmlWriter.startElement("text:p");
 
-       xmlWriter.startElement( "text:sheet-name" );
-       xmlWriter.addTextNode( "???" );
-       xmlWriter.endElement();
+        xmlWriter.startElement("text:sheet-name");
+        xmlWriter.addTextNode("???");
+        xmlWriter.endElement();
 
-       xmlWriter.endElement();
+        xmlWriter.endElement();
     }
     xmlWriter.endElement();
 
 
-    xmlWriter.startElement( "style:footer");
-    if ( ( !footerLeft.isEmpty() )
-         || ( !footerCenter.isEmpty() )
-         || ( !footerRight.isEmpty() ) )
-    {
-        xmlWriter.startElement( "style:region-left" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( footerLeft, xmlWriter );
+    xmlWriter.startElement("style:footer");
+    if ((!footerLeft.isEmpty())
+            || (!footerCenter.isEmpty())
+            || (!footerRight.isEmpty())) {
+        xmlWriter.startElement("style:region-left");
+        xmlWriter.startElement("text:p");
+        convertPart(footerLeft, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement(); //style:region-left
 
-        xmlWriter.startElement( "style:region-center" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( footerCenter, xmlWriter );
+        xmlWriter.startElement("style:region-center");
+        xmlWriter.startElement("text:p");
+        convertPart(footerCenter, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement();
 
-        xmlWriter.startElement( "style:region-right" );
-        xmlWriter.startElement( "text:p" );
-        convertPart( footerRight, xmlWriter );
+        xmlWriter.startElement("style:region-right");
+        xmlWriter.startElement("text:p");
+        convertPart(footerRight, xmlWriter);
         xmlWriter.endElement();
         xmlWriter.endElement();
-    }
-    else
-    {
-       xmlWriter.startElement( "text:p" );
+    } else {
+        xmlWriter.startElement("text:p");
 
-       xmlWriter.startElement( "text:sheet-name" );
-       xmlWriter.addTextNode( "Page " ); // ???
-       xmlWriter.endElement();
+        xmlWriter.startElement("text:sheet-name");
+        xmlWriter.addTextNode("Page ");   // ???
+        xmlWriter.endElement();
 
-       xmlWriter.startElement( "text:page-number" );
-       xmlWriter.addTextNode( "1" ); // ???
-       xmlWriter.endElement();
+        xmlWriter.startElement("text:page-number");
+        xmlWriter.addTextNode("1");   // ???
+        xmlWriter.endElement();
 
-       xmlWriter.endElement();
+        xmlWriter.endElement();
     }
     xmlWriter.endElement();
 
 
 }
 
-void Sheet::addText( const QString & text, KoXmlWriter & writer ) const
+void Sheet::addText(const QString & text, KoXmlWriter & writer) const
 {
-    if ( !text.isEmpty() )
-        writer.addTextNode( text );
+    if (!text.isEmpty())
+        writer.addTextNode(text);
 }
 
-void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
+void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
 {
     QString text;
     QString var;
@@ -3156,188 +2890,158 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
     bool inVar = false;
     uint i = 0;
     uint l = part.length();
-    while ( i < l )
-    {
-        if ( inVar || part[i] == '<' )
-        {
+    while (i < l) {
+        if (inVar || part[i] == '<') {
             inVar = true;
             var += part[i];
-            if ( part[i] == '>' )
-            {
+            if (part[i] == '>') {
                 inVar = false;
-                if ( var == "<page>" )
-                {
-                    addText( text, xmlWriter );
-                    xmlWriter.startElement( "text:page-number" );
-                    xmlWriter.addTextNode( "1" );
+                if (var == "<page>") {
+                    addText(text, xmlWriter);
+                    xmlWriter.startElement("text:page-number");
+                    xmlWriter.addTextNode("1");
                     xmlWriter.endElement();
-                }
-                else if ( var == "<pages>" )
-                {
-                    addText( text, xmlWriter );
-                    xmlWriter.startElement( "text:page-count" );
-                    xmlWriter.addTextNode( "99" ); //TODO I think that it can be different from 99
+                } else if (var == "<pages>") {
+                    addText(text, xmlWriter);
+                    xmlWriter.startElement("text:page-count");
+                    xmlWriter.addTextNode("99");   //TODO I think that it can be different from 99
                     xmlWriter.endElement();
-                }
-                else if ( var == "<date>" )
-                {
-                    addText( text, xmlWriter );
+                } else if (var == "<date>") {
+                    addText(text, xmlWriter);
                     //text:p><text:date style:data-style-name="N2" text:date-value="2005-10-02">02/10/2005</text:date>, <text:time>10:20:12</text:time></text:p> "add style" => create new style
 #if 0 //FIXME
-                    KoXmlElement t = dd.createElement( "text:date" );
-                    t.setAttribute( "text:date-value", "0-00-00" );
+                    KoXmlElement t = dd.createElement("text:date");
+                    t.setAttribute("text:date-value", "0-00-00");
                     // todo: "style:data-style-name", "N2"
-                    t.appendChild( dd.createTextNode( QDate::currentDate().toString() ) );
-                    parent.appendChild( t );
+                    t.appendChild(dd.createTextNode(QDate::currentDate().toString()));
+                    parent.appendChild(t);
 #endif
-                }
-                else if ( var == "<time>" )
-                {
-                    addText( text, xmlWriter );
+                } else if (var == "<time>") {
+                    addText(text, xmlWriter);
 
-                    xmlWriter.startElement( "text:time" );
-                    xmlWriter.addTextNode( QTime::currentTime().toString() );
+                    xmlWriter.startElement("text:time");
+                    xmlWriter.addTextNode(QTime::currentTime().toString());
                     xmlWriter.endElement();
-                }
-                else if ( var == "<file>" ) // filepath + name
-                {
-                    addText( text, xmlWriter );
-                    xmlWriter.startElement( "text:file-name" );
-                    xmlWriter.addAttribute( "text:display", "full" );
-                    xmlWriter.addTextNode( "???" );
+                } else if (var == "<file>") { // filepath + name
+                    addText(text, xmlWriter);
+                    xmlWriter.startElement("text:file-name");
+                    xmlWriter.addAttribute("text:display", "full");
+                    xmlWriter.addTextNode("???");
                     xmlWriter.endElement();
-                }
-                else if ( var == "<name>" ) // filename
-                {
-                    addText( text, xmlWriter );
+                } else if (var == "<name>") { // filename
+                    addText(text, xmlWriter);
 
-                    xmlWriter.startElement( "text:title" );
-                    xmlWriter.addTextNode( "???" );
+                    xmlWriter.startElement("text:title");
+                    xmlWriter.addTextNode("???");
                     xmlWriter.endElement();
-                }
-                else if ( var == "<author>" )
-                {
+                } else if (var == "<author>") {
                     Doc* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
-                    text += docInfo->authorInfo( "creator" );
-                    addText( text, xmlWriter );
-                }
-                else if ( var == "<email>" )
-                {
+                    text += docInfo->authorInfo("creator");
+                    addText(text, xmlWriter);
+                } else if (var == "<email>") {
                     Doc* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
-                    text += docInfo->authorInfo( "email" );
-                    addText( text, xmlWriter );
+                    text += docInfo->authorInfo("email");
+                    addText(text, xmlWriter);
 
-                }
-                else if ( var == "<org>" )
-                {
+                } else if (var == "<org>") {
                     Doc* sdoc = doc();
                     KoDocumentInfo* docInfo    = sdoc->documentInfo();
 
-                    text += docInfo->authorInfo( "company" );
-                    addText( text, xmlWriter );
+                    text += docInfo->authorInfo("company");
+                    addText(text, xmlWriter);
 
-                }
-                else if ( var == "<sheet>" )
-                {
-                    addText( text, xmlWriter );
+                } else if (var == "<sheet>") {
+                    addText(text, xmlWriter);
 
-                    xmlWriter.startElement( "text:sheet-name" );
-                    xmlWriter.addTextNode( "???" );
+                    xmlWriter.startElement("text:sheet-name");
+                    xmlWriter.addTextNode("???");
                     xmlWriter.endElement();
-                }
-                else
-                {
+                } else {
                     // no known variable:
                     text += var;
-                    addText( text, xmlWriter );
+                    addText(text, xmlWriter);
                 }
 
                 text = "";
                 var  = "";
             }
-        }
-        else
-        {
+        } else {
             text += part[i];
         }
         ++i;
     }
-    if ( !text.isEmpty() || !var.isEmpty() )
-    {
+    if (!text.isEmpty() || !var.isEmpty()) {
         //we don't have var at the end =>store it
-        addText( text+var, xmlWriter );
+        addText(text + var, xmlWriter);
     }
-    kDebug(36003)<<" text end :"<<text<<" var :"<<var;
+    kDebug(36003) << " text end :" << text << " var :" << var;
 }
 
 
-void Sheet::loadOdfSettings( const KoOasisSettings::NamedMap &settings )
+void Sheet::loadOdfSettings(const KoOasisSettings::NamedMap &settings)
 {
     // Find the entry in the map that applies to this sheet (by name)
-    KoOasisSettings::Items items = settings.entry( sheetName() );
-    if ( items.isNull() )
+    KoOasisSettings::Items items = settings.entry(sheetName());
+    if (items.isNull())
         return;
-    setHideZero (items.parseConfigItemBool( "ShowZeroValues" ));
-    setShowGrid (items.parseConfigItemBool( "ShowGrid" ));
-    setFirstLetterUpper (items.parseConfigItemBool( "FirstLetterUpper" ));
+    setHideZero(items.parseConfigItemBool("ShowZeroValues"));
+    setShowGrid(items.parseConfigItemBool("ShowGrid"));
+    setFirstLetterUpper(items.parseConfigItemBool("FirstLetterUpper"));
 
-    int cursorX = items.parseConfigItemInt( "CursorPositionX" );
-    int cursorY = items.parseConfigItemInt( "CursorPositionY" );
+    int cursorX = items.parseConfigItemInt("CursorPositionX");
+    int cursorY = items.parseConfigItemInt("CursorPositionY");
     map()->loadingInfo()->setCursorPosition(this, QPoint(cursorX, cursorY));
 
-    double offsetX = items.parseConfigItemDouble( "xOffset" );
-    double offsetY = items.parseConfigItemDouble( "yOffset" );
+    double offsetX = items.parseConfigItemDouble("xOffset");
+    double offsetY = items.parseConfigItemDouble("yOffset");
     map()->loadingInfo()->setScrollingOffset(this, QPointF(offsetX, offsetY));
 
-    setShowFormulaIndicator (items.parseConfigItemBool( "ShowFormulaIndicator" ));
-    setShowCommentIndicator (items.parseConfigItemBool( "ShowCommentIndicator" ));
-    setShowPageBorders (items.parseConfigItemBool( "ShowPageBorders" ));
-    setLcMode (items.parseConfigItemBool( "lcmode" ));
-    setAutoCalculationEnabled (items.parseConfigItemBool( "autoCalc" ));
-    setShowColumnNumber (items.parseConfigItemBool( "ShowColumnNumber" ));
+    setShowFormulaIndicator(items.parseConfigItemBool("ShowFormulaIndicator"));
+    setShowCommentIndicator(items.parseConfigItemBool("ShowCommentIndicator"));
+    setShowPageBorders(items.parseConfigItemBool("ShowPageBorders"));
+    setLcMode(items.parseConfigItemBool("lcmode"));
+    setAutoCalculationEnabled(items.parseConfigItemBool("autoCalc"));
+    setShowColumnNumber(items.parseConfigItemBool("ShowColumnNumber"));
 }
 
-void Sheet::saveOdfSettings( KoXmlWriter &settingsWriter ) const
+void Sheet::saveOdfSettings(KoXmlWriter &settingsWriter) const
 {
-  //not into each page into oo spec
-  settingsWriter.addConfigItem( "ShowZeroValues", getHideZero() );
-  settingsWriter.addConfigItem( "ShowGrid", getShowGrid() );
-  //not define into oo spec
-  settingsWriter.addConfigItem( "FirstLetterUpper", getFirstLetterUpper());
-  settingsWriter.addConfigItem( "ShowFormulaIndicator", getShowFormulaIndicator() );
-  settingsWriter.addConfigItem( "ShowCommentIndicator", getShowCommentIndicator() );
-  settingsWriter.addConfigItem( "ShowPageBorders", isShowPageBorders() );
-  settingsWriter.addConfigItem( "lcmode", getLcMode() );
-  settingsWriter.addConfigItem( "autoCalc", isAutoCalculationEnabled() );
-  settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
+    //not into each page into oo spec
+    settingsWriter.addConfigItem("ShowZeroValues", getHideZero());
+    settingsWriter.addConfigItem("ShowGrid", getShowGrid());
+    //not define into oo spec
+    settingsWriter.addConfigItem("FirstLetterUpper", getFirstLetterUpper());
+    settingsWriter.addConfigItem("ShowFormulaIndicator", getShowFormulaIndicator());
+    settingsWriter.addConfigItem("ShowCommentIndicator", getShowCommentIndicator());
+    settingsWriter.addConfigItem("ShowPageBorders", isShowPageBorders());
+    settingsWriter.addConfigItem("lcmode", getLcMode());
+    settingsWriter.addConfigItem("autoCalc", isAutoCalculationEnabled());
+    settingsWriter.addConfigItem("ShowColumnNumber", getShowColumnNumber());
 }
 
 bool Sheet::saveOdf(OdfSavingContext& tableContext)
 {
     KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
     KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
-    xmlWriter.startElement( "table:table" );
-    xmlWriter.addAttribute( "table:name", sheetName() );
-    xmlWriter.addAttribute( "table:style-name", saveOdfSheetStyleName(mainStyles )  );
+    xmlWriter.startElement("table:table");
+    xmlWriter.addAttribute("table:name", sheetName());
+    xmlWriter.addAttribute("table:style-name", saveOdfSheetStyleName(mainStyles));
     QByteArray pwd;
-    password (pwd);
-    if ( !pwd.isEmpty() )
-    {
-        xmlWriter.addAttribute("table:protected", "true" );
-        QByteArray str = KCodecs::base64Encode( pwd );
+    password(pwd);
+    if (!pwd.isEmpty()) {
+        xmlWriter.addAttribute("table:protected", "true");
+        QByteArray str = KCodecs::base64Encode(pwd);
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
-        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
+        xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }
     QRect _printRange = print()->printRange();
-    if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
-    {
+    if (_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {
         const Region region(_printRange, this);
-        if (region.isValid())
-        {
+        if (region.isValid()) {
             kDebug(36003) << region;
             xmlWriter.addAttribute("table:print-ranges", region.saveOdf());
         }
@@ -3345,7 +3049,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
 
     // flake
     // Create a dict of cell anchored shapes with the cell as key.
-    foreach (KoShape* shape, d->shapes) {
+    foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
             double dummy;
             const QPointF position = shape->position();
@@ -3356,15 +3060,13 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     }
 
     const QRect usedArea = this->usedArea();
-    saveOdfColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
+    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
 
     // flake
     // Save the remaining shapes, those that are anchored in the page.
-    if (!d->shapes.isEmpty())
-    {
+    if (!d->shapes.isEmpty()) {
         xmlWriter.startElement("table:shapes");
-        foreach (KoShape* shape, d->shapes)
-        {
+        foreach(KoShape* shape, d->shapes) {
             if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
                 continue;
             shape->saveOdf(tableContext.shapeContext);
@@ -3376,49 +3078,48 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     return true;
 }
 
-void Sheet::saveOdfPrintStyleLayout( KoGenStyle &style ) const
+void Sheet::saveOdfPrintStyleLayout(KoGenStyle &style) const
 {
     QString printParameter;
-    if ( print()->settings()->printGrid() )
-        printParameter="grid ";
-    if ( print()->settings()->printObjects() )
-      printParameter+="objects ";
-    if ( print()->settings()->printCharts() )
-      printParameter+="charts ";
-    if ( getShowFormula() )
-        printParameter+="formulas ";
-    if ( !printParameter.isEmpty() )
-    {
-        printParameter+="drawings zero-values"; //default print style attributes in OO
-        style.addProperty( "style:print", printParameter );
+    if (print()->settings()->printGrid())
+        printParameter = "grid ";
+    if (print()->settings()->printObjects())
+        printParameter += "objects ";
+    if (print()->settings()->printCharts())
+        printParameter += "charts ";
+    if (getShowFormula())
+        printParameter += "formulas ";
+    if (!printParameter.isEmpty()) {
+        printParameter += "drawings zero-values"; //default print style attributes in OO
+        style.addProperty("style:print", printParameter);
     }
 }
 
-QString Sheet::saveOdfSheetStyleName( KoGenStyles &mainStyles )
+QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 {
-    KoGenStyle pageStyle( KoGenStyle::StyleAutoTable, "table"/*FIXME I don't know if name is sheet*/ );
+    KoGenStyle pageStyle(KoGenStyle::StyleAutoTable, "table"/*FIXME I don't know if name is sheet*/);
 
-    KoGenStyle pageMaster( KoGenStyle::StyleMaster );
-    pageMaster.addAttribute( "style:page-layout-name", print()->saveOdfSheetStyleLayout( mainStyles ) );
+    KoGenStyle pageMaster(KoGenStyle::StyleMaster);
+    pageMaster.addAttribute("style:page-layout-name", print()->saveOdfSheetStyleLayout(mainStyles));
 
     QBuffer buffer;
-    buffer.open( QIODevice::WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     saveOdfHeaderFooter(elementWriter);
 
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    pageMaster.addChildElement( "headerfooter", elementContents );
-    pageStyle.addAttribute( "style:master-page-name", mainStyles.lookup( pageMaster, "Standard" ) );
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    pageMaster.addChildElement("headerfooter", elementContents);
+    pageStyle.addAttribute("style:master-page-name", mainStyles.lookup(pageMaster, "Standard"));
 
-    pageStyle.addProperty( "table:display", !isHidden() );
-    return mainStyles.lookup( pageStyle, "ta" );
+    pageStyle.addProperty("table:display", !isHidden());
+    return mainStyles.lookup(pageStyle, "ta");
 }
 
 
-void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                                int maxCols, int maxRows, OdfSavingContext& tableContext)
+void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+                              int maxCols, int maxRows, OdfSavingContext& tableContext)
 {
-    kDebug(36003) <<"Sheet::saveOdfColRowCell:" << d->name;
+    kDebug(36003) << "Sheet::saveOdfColRowCell:" << d->name;
 
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
@@ -3430,14 +3131,13 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     maxCols = qMax(1, maxCols);
     maxRows = qMax(1, maxRows);
     maxMaxRows = qMax(1, maxMaxRows);
-    kDebug(36003) <<"\t Sheet dimension:" << maxCols <<" x" << maxRows;
+    kDebug(36003) << "\t Sheet dimension:" << maxCols << " x" << maxRows;
 
     // saving the columns
     //
     int i = 1;
-    while ( i <= maxCols )
-    {
-        const ColumnFormat* column = columnFormat( i );
+    while (i <= maxCols) {
+        const ColumnFormat* column = columnFormat(i);
 //         kDebug(36003) << "Sheet::saveOdfColRowCell: first col loop:"
 //                       << "i:" << i
 //                       << "column:" << (column ? column->column() : 0);
@@ -3448,95 +3148,87 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         int j = i;
         int count = 1;
 
-        while ( j <= maxCols )
-        {
-          const ColumnFormat* nextColumn = d->columns.next(j);
-          const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
-          const QMap<int, Style>::iterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
-          const int nextStyleColumnIndex = nextColumnDefaultStyle == tableContext.columnDefaultStyles.end()
-                                         ? 0 : nextColumnDefaultStyle.key();
-          // j becomes the index of the adjacent column
-          ++j;
+        while (j <= maxCols) {
+            const ColumnFormat* nextColumn = d->columns.next(j);
+            const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
+            const QMap<int, Style>::iterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
+            const int nextStyleColumnIndex = nextColumnDefaultStyle == tableContext.columnDefaultStyles.end()
+                                             ? 0 : nextColumnDefaultStyle.key();
+            // j becomes the index of the adjacent column
+            ++j;
 
 //           kDebug(36003) <<"Sheet::saveOdfColRowCell: second col loop:"
 //                         << "j:" << j
 //                         << "next column:" << (nextColumn ? nextColumn->column() : 0)
 //                         << "next styled column:" << nextStyleColumnIndex;
 
-          // no next or not the adjacent column?
-          if ( ( !nextColumn && !nextStyleColumnIndex ) ||
-               ( nextColumnIndex != j && nextStyleColumnIndex != j ) )
-          {
-            // if the origin column was a default column,
-            if (column->isDefault() && style.isDefault())
-            {
-              // we count the default columns
-              if ( !nextColumn && !nextStyleColumnIndex )
-                count = maxCols - i + 1;
-              else if ( nextColumn && ( !nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex ) )
-                count = nextColumn->column() - i + 1;
-              else
-                count = nextStyleColumnIndex - i + 1;
+            // no next or not the adjacent column?
+            if ((!nextColumn && !nextStyleColumnIndex) ||
+                    (nextColumnIndex != j && nextStyleColumnIndex != j)) {
+                // if the origin column was a default column,
+                if (column->isDefault() && style.isDefault()) {
+                    // we count the default columns
+                    if (!nextColumn && !nextStyleColumnIndex)
+                        count = maxCols - i + 1;
+                    else if (nextColumn && (!nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex))
+                        count = nextColumn->column() - i + 1;
+                    else
+                        count = nextStyleColumnIndex - i + 1;
+                }
+                // otherwise we just stop here to process the adjacent
+                // column in the next iteration of the outer loop
+                break;
             }
-            // otherwise we just stop here to process the adjacent
-            // column in the next iteration of the outer loop
-            break;
-          }
 
-          // stop, if the next column differs from the current one
-          if ((nextColumn && (*column != *nextColumn)) || (!nextColumn && !column->isDefault()))
-              break;
-          if ( style != tableContext.columnDefaultStyles.value( j ) )
-              break;
-          ++count;
+            // stop, if the next column differs from the current one
+            if ((nextColumn && (*column != *nextColumn)) || (!nextColumn && !column->isDefault()))
+                break;
+            if (style != tableContext.columnDefaultStyles.value(j))
+                break;
+            ++count;
         }
 
-        xmlWriter.startElement( "table:table-column" );
-        if (!column->isDefault())
-        {
+        xmlWriter.startElement("table:table-column");
+        if (!column->isDefault()) {
             KoGenStyle currentColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
             currentColumnStyle.addPropertyPt("style:column-width", column->width());
             currentColumnStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
             xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentColumnStyle, "co"));
         }
-        if ( !column->isDefault() || !style.isDefault() )
-        {
-          if ( !style.isDefault() )
-          {
-              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfStyle
-              const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
-                                                                map()->styleManager());
-              xmlWriter.addAttribute("table:default-cell-style-name", name);
-          }
+        if (!column->isDefault() || !style.isDefault()) {
+            if (!style.isDefault()) {
+                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfStyle
+                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
+                                                   map()->styleManager());
+                xmlWriter.addAttribute("table:default-cell-style-name", name);
+            }
 
-          if ( column->isHidden() )
-              xmlWriter.addAttribute( "table:visibility", "collapse" );
-          else if (column->isFiltered())
-              xmlWriter.addAttribute("table:visibility", "filter");
+            if (column->isHidden())
+                xmlWriter.addAttribute("table:visibility", "collapse");
+            else if (column->isFiltered())
+                xmlWriter.addAttribute("table:visibility", "filter");
         }
         if (count > 1)
             xmlWriter.addAttribute("table:number-columns-repeated", count);
         xmlWriter.endElement();
 
         kDebug(36003) << "Sheet::saveOdfColRowCell: column" << i
-                      << "repeated" << count-1 << "time(s)";
+        << "repeated" << count - 1 << "time(s)";
 
         i += count;
     }
 
     // saving the rows and the cells
     // we have to loop through all rows of the used area
-    for ( i = 1; i <= maxRows; ++i )
-    {
-        const RowFormat* row = rowFormat( i );
+    for (i = 1; i <= maxRows; ++i) {
+        const RowFormat* row = rowFormat(i);
 
         // default cell style for row
         const Style style = tableContext.rowDefaultStyles.value(i);
 
-        xmlWriter.startElement( "table:table-row" );
+        xmlWriter.startElement("table:table-row");
 
-        if (!row->isDefault())
-        {
+        if (!row->isDefault()) {
             KoGenStyle currentRowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
             currentRowStyle.addPropertyPt("style:row-height", row->height());
             currentRowStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
@@ -3545,8 +3237,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
 
         int repeated = 1;
         // empty row?
-        if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) // row is empty
-        {
+        if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
@@ -3557,91 +3248,84 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             // or
             //   next row with different Format
             while (j <= maxRows && !d->cellStorage->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(this, j)) {
-              const RowFormat* nextRow = rowFormat( j );
+                const RowFormat* nextRow = rowFormat(j);
 //               kDebug(36003) <<"Sheet::saveOdfColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row();
 
-              // if the reference row has the default row format
-              if (row->isDefault() && style.isDefault())
-              {
-                // if the next is not default, stop here
-                if (!nextRow->isDefault() || !tableContext.rowDefaultStyles.value(j).isDefault())
-                  break;
-                // otherwise, jump to the next
-                ++j;
-                continue;
-              }
+                // if the reference row has the default row format
+                if (row->isDefault() && style.isDefault()) {
+                    // if the next is not default, stop here
+                    if (!nextRow->isDefault() || !tableContext.rowDefaultStyles.value(j).isDefault())
+                        break;
+                    // otherwise, jump to the next
+                    ++j;
+                    continue;
+                }
 
-              // stop, if the next row differs from the current one
-              if ((nextRow && *row != *nextRow ) || (!nextRow && !row->isDefault()))
-                  break;
-              if (style != tableContext.rowDefaultStyles.value(j))
-                  break;
-              // otherwise, process the next
-              ++j;
+                // stop, if the next row differs from the current one
+                if ((nextRow && *row != *nextRow) || (!nextRow && !row->isDefault()))
+                    break;
+                if (style != tableContext.rowDefaultStyles.value(j))
+                    break;
+                // otherwise, process the next
+                ++j;
             }
             repeated = j - i;
 
-            if ( repeated > 1 )
+            if (repeated > 1)
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
-            if (!style.isDefault())
-            {
-              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
-              const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
+            if (!style.isDefault()) {
+                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
+                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                    map()->styleManager());
-              xmlWriter.addAttribute("table:default-cell-style-name", name);
+                xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
-            if ( row->isHidden() ) // never true for the default row
-              xmlWriter.addAttribute( "table:visibility", "collapse" );
+            if (row->isHidden())   // never true for the default row
+                xmlWriter.addAttribute("table:visibility", "collapse");
             else if (row->isFiltered()) // never true for the default row
-                xmlWriter.addAttribute( "table:visibility", "filter" );
+                xmlWriter.addAttribute("table:visibility", "filter");
 
             // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
             //              RelaxNG schema does not allow that.
-            xmlWriter.startElement( "table:table-cell" );
+            xmlWriter.startElement("table:table-cell");
             // Fill the row with empty cells, if there's a row default cell style.
             if (!style.isDefault())
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols));
             // Fill the row with empty cells up to the last column with a default cell style.
-            else if (!tableContext.columnDefaultStyles.isEmpty())
-            {
+            else if (!tableContext.columnDefaultStyles.isEmpty()) {
                 const int col = (--tableContext.columnDefaultStyles.constEnd()).key();
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
             }
             xmlWriter.endElement();
 
             kDebug(36003) << "Sheet::saveOdfColRowCell: empty row" << i
-                          << "repeated" << repeated << "time(s)";
+            << "repeated" << repeated << "time(s)";
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
-        }
-        else // row is not empty
-        {
-            if (!style.isDefault())
-            {
+        } else { // row is not empty
+            if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
                 const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
-                                                     map()->styleManager());
+                                                   map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
-            if ( row->isHidden() ) // never true for the default row
-              xmlWriter.addAttribute( "table:visibility", "collapse" );
+            if (row->isHidden())   // never true for the default row
+                xmlWriter.addAttribute("table:visibility", "collapse");
             else if (row->isFiltered()) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + 1;
             while (compareRows(i, j, maxCols, tableContext) && j <= maxRows) {
-              j++;
-              repeated++;
+                j++;
+                repeated++;
             }
-            if ( repeated > 1 )
-            {
-              kDebug(36003) << "Sheet::saveOdfColRowCell: NON-empty row" << i
-                            << "repeated" << repeated << "times";
+            if (repeated > 1) {
+                kDebug(36003) << "Sheet::saveOdfColRowCell: NON-empty row" << i
+                << "repeated" << repeated << "times";
 
-              xmlWriter.addAttribute("table:number-rows-repeated", repeated);
+                xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
             saveOdfCells(xmlWriter, mainStyles, i, maxCols, tableContext);
@@ -3653,10 +3337,8 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     }
 
     // Fill in rows with empty cells, if there's a column default cell style.
-    if (!tableContext.columnDefaultStyles.isEmpty())
-    {
-        if (maxMaxRows > maxRows)
-        {
+    if (!tableContext.columnDefaultStyles.isEmpty()) {
+        if (maxMaxRows > maxRows) {
             xmlWriter.startElement("table:table-row");
             if (maxMaxRows > maxRows + 1)
                 xmlWriter.addAttribute("table:number-rows-repeated", maxMaxRows - maxRows);
@@ -3670,23 +3352,22 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
 }
 
 void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                           OdfSavingContext& tableContext)
+                         OdfSavingContext& tableContext)
 {
     int i = 1;
-    Cell cell( this, i, row );
-    Cell nextCell = d->cellStorage->nextInRow( i, row );
+    Cell cell(this, i, row);
+    Cell nextCell = d->cellStorage->nextInRow(i, row);
     // handle situations where the row contains shapes and nothing else
     if (cell.isDefault() && nextCell.isNull()) {
-        int nextShape = tableContext.nextAnchoredShape (this, row, i);
+        int nextShape = tableContext.nextAnchoredShape(this, row, i);
         if (nextShape)
-            nextCell = Cell (this, nextShape, row);
+            nextCell = Cell(this, nextShape, row);
     }
     // while
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull())
-    {
+    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull()) {
 //         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
@@ -3697,24 +3378,22 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())
-          break;
+            break;
 
-        cell = Cell( this, i, row );
+        cell = Cell(this, i, row);
         // if we have a shape anchored to an empty cell, ensure that the cell gets also processed
-        int nextShape = tableContext.nextAnchoredShape (this, row, column);
+        int nextShape = tableContext.nextAnchoredShape(this, row, column);
         if (nextShape && ((nextShape < i) || cell.isDefault())) {
-          cell = Cell (this, nextShape, row);
-          i = nextShape;
+            cell = Cell(this, nextShape, row);
+            i = nextShape;
         }
 
-        nextCell = d->cellStorage->nextInRow( i, row );
+        nextCell = d->cellStorage->nextInRow(i, row);
     }
 
     // Fill the row with empty cells, if there's a row default cell style.
-    if (tableContext.rowDefaultStyles.contains(row))
-    {
-        if (maxCols >= i)
-        {
+    if (tableContext.rowDefaultStyles.contains(row)) {
+        if (maxCols >= i) {
             xmlWriter.startElement("table:table-cell");
             if (maxCols > i)
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols - i + 1));
@@ -3722,11 +3401,9 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         }
     }
     // Fill the row with empty cells up to the last column with a default cell style.
-    else if (!tableContext.columnDefaultStyles.isEmpty())
-    {
+    else if (!tableContext.columnDefaultStyles.isEmpty()) {
         const int col = (--tableContext.columnDefaultStyles.constEnd()).key();
-        if (col >= i)
-        {
+        if (col >= i) {
             xmlWriter.startElement("table:table-cell");
             if (col > i)
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col - i + 1));
@@ -3735,60 +3412,50 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
     }
 }
 
-bool Sheet::loadXML( const KoXmlElement& sheet )
+bool Sheet::loadXML(const KoXmlElement& sheet)
 {
     bool ok = false;
     QString sname = sheetName();
     if (!map()->loadingInfo()->loadTemplate()) {
-        sname = sheet.attribute( "name" );
-        if ( sname.isEmpty() )
-        {
-            doc()->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
+        sname = sheet.attribute("name");
+        if (sname.isEmpty()) {
+            doc()->setErrorMessage(i18n("Invalid document. Sheet name is empty."));
             return false;
         }
     }
 
     bool detectDirection = true;
-    setLayoutDirection( Qt::LeftToRight );
-    QString layoutDir = sheet.attribute( "layoutDirection" );
-    if( !layoutDir.isEmpty() )
-    {
-        if( layoutDir == "rtl" )
-        {
+    setLayoutDirection(Qt::LeftToRight);
+    QString layoutDir = sheet.attribute("layoutDirection");
+    if (!layoutDir.isEmpty()) {
+        if (layoutDir == "rtl") {
             detectDirection = false;
-            setLayoutDirection( Qt::RightToLeft );
-        }
-        else if( layoutDir == "ltr" )
-        {
+            setLayoutDirection(Qt::RightToLeft);
+        } else if (layoutDir == "ltr") {
             detectDirection = false;
-            setLayoutDirection( Qt::LeftToRight );
-        }
-        else
-            kDebug()<<" Direction not implemented :"<<layoutDir;
+            setLayoutDirection(Qt::LeftToRight);
+        } else
+            kDebug() << " Direction not implemented :" << layoutDir;
     }
-    if( detectDirection )
-        checkContentDirection( sname );
+    if (detectDirection)
+        checkContentDirection(sname);
 
     /* older versions of KSpread allowed all sorts of characters that
     the parser won't actually understand.  Replace these with '_'
     Also, the initial character cannot be a space.
     */
-    while (sname[0] == ' ')
-    {
-        sname.remove(0,1);
+    while (sname[0] == ' ') {
+        sname.remove(0, 1);
     }
-    for (int i=0; i < sname.length(); i++)
-    {
-        if ( !(sname[i].isLetterOrNumber() ||
-               sname[i] == ' ' || sname[i] == '.' || sname[i] == '_') )
-        {
+    for (int i = 0; i < sname.length(); i++) {
+        if (!(sname[i].isLetterOrNumber() ||
+                sname[i] == ' ' || sname[i] == '.' || sname[i] == '_')) {
             sname[i] = '_';
         }
     }
 
     // validate sheet name, if it differs from the current one
-    if ( sname != sheetName() )
-    {
+    if (sname != sheetName()) {
         /* make sure there are no name collisions with the altered name */
         QString testName = sname;
         QString baseName = sname;
@@ -3796,248 +3463,209 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
 
         /* so we don't panic over finding ourself in the following test*/
         sname.clear();
-        while (map()->findSheet(testName) != 0)
-        {
+        while (map()->findSheet(testName) != 0) {
             nameSuffix++;
             testName = baseName + '_' + QString::number(nameSuffix);
         }
         sname = testName;
 
-        kDebug(36001) <<"Sheet::loadXML: table name =" << sname;
+        kDebug(36001) << "Sheet::loadXML: table name =" << sname;
         setObjectName(sname.toUtf8());
-        setSheetName (sname, true);
+        setSheetName(sname, true);
     }
 
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
-    if( sheet.hasAttribute( "grid" ) )
-    {
-        setShowGrid ((int)sheet.attribute("grid").toInt( &ok ));
+    if (sheet.hasAttribute("grid")) {
+        setShowGrid((int)sheet.attribute("grid").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "printGrid" ) )
-    {
-        print()->settings()->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
+    if (sheet.hasAttribute("printGrid")) {
+        print()->settings()->setPrintGrid((bool)sheet.attribute("printGrid").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "printCommentIndicator" ) )
-    {
-        print()->settings()->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
+    if (sheet.hasAttribute("printCommentIndicator")) {
+        print()->settings()->setPrintCommentIndicator((bool)sheet.attribute("printCommentIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "printFormulaIndicator" ) )
-    {
-        print()->settings()->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
+    if (sheet.hasAttribute("printFormulaIndicator")) {
+        print()->settings()->setPrintFormulaIndicator((bool)sheet.attribute("printFormulaIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "hide" ) )
-    {
-        setHidden ( (bool)sheet.attribute("hide").toInt( &ok ));
+    if (sheet.hasAttribute("hide")) {
+        setHidden((bool)sheet.attribute("hide").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "showFormula" ) )
-    {
-        setShowFormula ((bool)sheet.attribute("showFormula").toInt( &ok ));
+    if (sheet.hasAttribute("showFormula")) {
+        setShowFormula((bool)sheet.attribute("showFormula").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
     //Compatibility with KSpread 1.1.x
-    if( sheet.hasAttribute( "formular" ) )
-    {
-        setShowFormula ((bool)sheet.attribute("formular").toInt( &ok ));
+    if (sheet.hasAttribute("formular")) {
+        setShowFormula((bool)sheet.attribute("formular").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "showFormulaIndicator" ) )
-    {
-        setShowFormulaIndicator ( (bool)sheet.attribute("showFormulaIndicator").toInt( &ok ));
+    if (sheet.hasAttribute("showFormulaIndicator")) {
+        setShowFormulaIndicator((bool)sheet.attribute("showFormulaIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "showCommentIndicator" ) )
-    {
-        setShowCommentIndicator ( (bool)sheet.attribute("showCommentIndicator").toInt( &ok ));
+    if (sheet.hasAttribute("showCommentIndicator")) {
+        setShowCommentIndicator((bool)sheet.attribute("showCommentIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "borders" ) )
-    {
-        setShowPageBorders ((bool)sheet.attribute("borders").toInt( &ok ));
+    if (sheet.hasAttribute("borders")) {
+        setShowPageBorders((bool)sheet.attribute("borders").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "lcmode" ) )
-    {
-        setLcMode ((bool)sheet.attribute("lcmode").toInt( &ok ));
+    if (sheet.hasAttribute("lcmode")) {
+        setLcMode((bool)sheet.attribute("lcmode").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if ( sheet.hasAttribute( "autoCalc" ) )
-    {
-        setAutoCalculationEnabled (( bool )sheet.attribute( "autoCalc" ).toInt( &ok ));
+    if (sheet.hasAttribute("autoCalc")) {
+        setAutoCalculationEnabled((bool)sheet.attribute("autoCalc").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "columnnumber" ) )
-    {
-        setShowColumnNumber ((bool)sheet.attribute("columnnumber").toInt( &ok ));
+    if (sheet.hasAttribute("columnnumber")) {
+        setShowColumnNumber((bool)sheet.attribute("columnnumber").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "hidezero" ) )
-    {
-        setHideZero ((bool)sheet.attribute("hidezero").toInt( &ok ));
+    if (sheet.hasAttribute("hidezero")) {
+        setHideZero((bool)sheet.attribute("hidezero").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
-    if( sheet.hasAttribute( "firstletterupper" ) )
-    {
-        setFirstLetterUpper ((bool)sheet.attribute("firstletterupper").toInt( &ok ));
+    if (sheet.hasAttribute("firstletterupper")) {
+        setFirstLetterUpper((bool)sheet.attribute("firstletterupper").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
 
     // Load the paper layout
-    KoXmlElement paper = sheet.namedItem( "paper" ).toElement();
-    if ( !paper.isNull() )
-    {
+    KoXmlElement paper = sheet.namedItem("paper").toElement();
+    if (!paper.isNull()) {
         KoPageLayout pageLayout = KoPageLayout::standardLayout();
         pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
         pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
-                               ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+                                 ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
         // <borders>
-        KoXmlElement borders = paper.namedItem( "borders" ).toElement();
-        if ( !borders.isNull() )
-        {
-            pageLayout.leftMargin   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
-            pageLayout.rightMargin  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
-            pageLayout.topMargin    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
-            pageLayout.bottomMargin = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
+        KoXmlElement borders = paper.namedItem("borders").toElement();
+        if (!borders.isNull()) {
+            pageLayout.leftMargin   = MM_TO_POINT(borders.attribute("left").toFloat());
+            pageLayout.rightMargin  = MM_TO_POINT(borders.attribute("right").toFloat());
+            pageLayout.topMargin    = MM_TO_POINT(borders.attribute("top").toFloat());
+            pageLayout.bottomMargin = MM_TO_POINT(borders.attribute("bottom").toFloat());
         }
         print()->settings()->setPageLayout(pageLayout);
 
         QString hleft, hright, hcenter;
         QString fleft, fright, fcenter;
         // <head>
-        KoXmlElement head = paper.namedItem( "head" ).toElement();
-        if ( !head.isNull() )
-        {
-            KoXmlElement left = head.namedItem( "left" ).toElement();
-            if ( !left.isNull() )
+        KoXmlElement head = paper.namedItem("head").toElement();
+        if (!head.isNull()) {
+            KoXmlElement left = head.namedItem("left").toElement();
+            if (!left.isNull())
                 hleft = left.text();
-            KoXmlElement center = head.namedItem( "center" ).toElement();
-            if ( !center.isNull() )
+            KoXmlElement center = head.namedItem("center").toElement();
+            if (!center.isNull())
                 hcenter = center.text();
-            KoXmlElement right = head.namedItem( "right" ).toElement();
-            if ( !right.isNull() )
+            KoXmlElement right = head.namedItem("right").toElement();
+            if (!right.isNull())
                 hright = right.text();
         }
         // <foot>
-        KoXmlElement foot = paper.namedItem( "foot" ).toElement();
-        if ( !foot.isNull() )
-        {
-            KoXmlElement left = foot.namedItem( "left" ).toElement();
-            if ( !left.isNull() )
+        KoXmlElement foot = paper.namedItem("foot").toElement();
+        if (!foot.isNull()) {
+            KoXmlElement left = foot.namedItem("left").toElement();
+            if (!left.isNull())
                 fleft = left.text();
-            KoXmlElement center = foot.namedItem( "center" ).toElement();
-            if ( !center.isNull() )
+            KoXmlElement center = foot.namedItem("center").toElement();
+            if (!center.isNull())
                 fcenter = center.text();
-            KoXmlElement right = foot.namedItem( "right" ).toElement();
-            if ( !right.isNull() )
+            KoXmlElement right = foot.namedItem("right").toElement();
+            if (!right.isNull())
                 fright = right.text();
         }
-        print()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+        print()->setHeadFootLine(hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
     // load print range
-    KoXmlElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
-    if ( !printrange.isNull() )
-    {
-        int left = printrange.attribute( "left-rect" ).toInt();
-        int right = printrange.attribute( "right-rect" ).toInt();
-        int bottom = printrange.attribute( "bottom-rect" ).toInt();
-        int top = printrange.attribute( "top-rect" ).toInt();
-        if ( left == 0 ) //whole row(s) selected
-        {
+    KoXmlElement printrange = sheet.namedItem("printrange-rect").toElement();
+    if (!printrange.isNull()) {
+        int left = printrange.attribute("left-rect").toInt();
+        int right = printrange.attribute("right-rect").toInt();
+        int bottom = printrange.attribute("bottom-rect").toInt();
+        int top = printrange.attribute("top-rect").toInt();
+        if (left == 0) { //whole row(s) selected
             left = 1;
             right = KS_colMax;
         }
-        if ( top == 0 ) //whole column(s) selected
-        {
+        if (top == 0) { //whole column(s) selected
             top = 1;
             bottom = KS_rowMax;
         }
-        print()->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
+        print()->setPrintRange(QRect(QPoint(left, top), QPoint(right, bottom)));
     }
 
     // load print zoom
-    if( sheet.hasAttribute( "printZoom" ) )
-    {
-        double zoom = sheet.attribute( "printZoom" ).toDouble( &ok );
-        if ( ok )
-        {
-            print()->setZoom( zoom );
+    if (sheet.hasAttribute("printZoom")) {
+        double zoom = sheet.attribute("printZoom").toDouble(&ok);
+        if (ok) {
+            print()->setZoom(zoom);
         }
     }
 
     // load page limits
-    if( sheet.hasAttribute( "printPageLimitX" ) )
-    {
-        int pageLimit = sheet.attribute( "printPageLimitX" ).toInt( &ok );
-        if ( ok )
-        {
-            print()->setPageLimitX( pageLimit );
+    if (sheet.hasAttribute("printPageLimitX")) {
+        int pageLimit = sheet.attribute("printPageLimitX").toInt(&ok);
+        if (ok) {
+            print()->setPageLimitX(pageLimit);
         }
     }
 
     // load page limits
-    if( sheet.hasAttribute( "printPageLimitY" ) )
-    {
-        int pageLimit = sheet.attribute( "printPageLimitY" ).toInt( &ok );
-        if ( ok )
-        {
-            print()->setPageLimitY( pageLimit );
+    if (sheet.hasAttribute("printPageLimitY")) {
+        int pageLimit = sheet.attribute("printPageLimitY").toInt(&ok);
+        if (ok) {
+            print()->setPageLimitY(pageLimit);
         }
     }
 
     // Load the cells
     KoXmlNode n = sheet.firstChild();
-    while( !n.isNull() )
-    {
+    while (!n.isNull()) {
         KoXmlElement e = n.toElement();
-        if ( !e.isNull() )
-        {
-            QString tagName=e.tagName();
-            if ( tagName == "cell" )
+        if (!e.isNull()) {
+            QString tagName = e.tagName();
+            if (tagName == "cell")
                 Cell(this, 1, 1).load(e, 0, 0); // col, row will get overridden in all cases
-            else if ( tagName == "row" )
-            {
+            else if (tagName == "row") {
                 RowFormat *rl = new RowFormat();
-                rl->setSheet( this );
-                if ( rl->load( e ) )
-                    insertRowFormat( rl );
+                rl->setSheet(this);
+                if (rl->load(e))
+                    insertRowFormat(rl);
                 else
                     delete rl;
-            }
-            else if ( tagName == "column" )
-            {
+            } else if (tagName == "column") {
                 ColumnFormat *cl = new ColumnFormat();
-                cl->setSheet( this );
-                if ( cl->load( e ) )
-                    insertColumnFormat( cl );
+                cl->setSheet(this);
+                if (cl->load(e))
+                    insertColumnFormat(cl);
                 else
                     delete cl;
             }
 #if 0 // KSPREAD_KOPART_EMBEDDING
-            else if ( tagName == "object" )
-            {
-                EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject( doc(), this );
-                if ( ch->load( e ) )
-                    insertObject( ch );
-                else
-                {
+            else if (tagName == "object") {
+                EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject(doc(), this);
+                if (ch->load(e))
+                    insertObject(ch);
+                else {
                     ch->embeddedObject()->setDeleted(true);
                     delete ch;
                 }
-            }
-            else if ( tagName == "chart" )
-            {
-                EmbeddedChart *ch = new EmbeddedChart( doc(), this );
-                if ( ch->load( e ) )
-                    insertObject( ch );
-                else
-                {
+            } else if (tagName == "chart") {
+                EmbeddedChart *ch = new EmbeddedChart(doc(), this);
+                if (ch->load(e))
+                    insertObject(ch);
+                else {
                     ch->embeddedObject()->setDeleted(true);
                     delete ch;
                 }
@@ -4048,55 +3676,47 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
     }
 
     // load print repeat columns
-    KoXmlElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
-    if ( !printrepeatcolumns.isNull() )
-    {
-        int left = printrepeatcolumns.attribute( "left" ).toInt();
-        int right = printrepeatcolumns.attribute( "right" ).toInt();
-        print()->setPrintRepeatColumns( qMakePair( left, right ) );
+    KoXmlElement printrepeatcolumns = sheet.namedItem("printrepeatcolumns").toElement();
+    if (!printrepeatcolumns.isNull()) {
+        int left = printrepeatcolumns.attribute("left").toInt();
+        int right = printrepeatcolumns.attribute("right").toInt();
+        print()->setPrintRepeatColumns(qMakePair(left, right));
     }
 
     // load print repeat rows
-    KoXmlElement printrepeatrows = sheet.namedItem( "printrepeatrows" ).toElement();
-    if ( !printrepeatrows.isNull() )
-    {
-        int top = printrepeatrows.attribute( "top" ).toInt();
-        int bottom = printrepeatrows.attribute( "bottom" ).toInt();
-        print()->setPrintRepeatRows( qMakePair( top, bottom ) );
+    KoXmlElement printrepeatrows = sheet.namedItem("printrepeatrows").toElement();
+    if (!printrepeatrows.isNull()) {
+        int top = printrepeatrows.attribute("top").toInt();
+        int bottom = printrepeatrows.attribute("bottom").toInt();
+        print()->setPrintRepeatRows(qMakePair(top, bottom));
     }
 
-    if( !sheet.hasAttribute( "borders1.2" ) )
-    {
+    if (!sheet.hasAttribute("borders1.2")) {
         convertObscuringBorders();
     }
 
-    if ( sheet.hasAttribute( "protected" ) )
-    {
-        QString passwd = sheet.attribute( "protected" );
+    if (sheet.hasAttribute("protected")) {
+        QString passwd = sheet.attribute("protected");
 
-        if ( passwd.length() > 0 )
-        {
-            QByteArray str( passwd.toLatin1() );
-            setProtected (KCodecs::base64Decode( str ));
-        }
-        else
-            setProtected (QByteArray( "" ));
+        if (passwd.length() > 0) {
+            QByteArray str(passwd.toLatin1());
+            setProtected(KCodecs::base64Decode(str));
+        } else
+            setProtected(QByteArray(""));
     }
 
     return true;
 }
 
 
-bool Sheet::loadChildren( KoStore* _store )
+bool Sheet::loadChildren(KoStore* _store)
 {
     Q_UNUSED(_store);
 #if 0 // KSPREAD_KOPART_EMBEDDING
-    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-    {
-        if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
-        {
-            kDebug() <<"KSpreadSheet::loadChildren";
-            if ( !dynamic_cast<EmbeddedKOfficeObject*>( object )->embeddedObject()->loadDocument( _store ) )
+    foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
+        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+            kDebug() << "KSpreadSheet::loadChildren";
+            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->loadDocument(_store))
                 return false;
         }
     }
@@ -4105,66 +3725,65 @@ bool Sheet::loadChildren( KoStore* _store )
 }
 
 
-void Sheet::setShowPageBorders( bool b )
+void Sheet::setShowPageBorders(bool b)
 {
-    if ( b == d->showPageBorders )
+    if (b == d->showPageBorders)
         return;
 
     d->showPageBorders = b;
-    emit sig_updateView( this );
+    emit sig_updateView(this);
 }
 
-void Sheet::insertColumnFormat( ColumnFormat *l )
+void Sheet::insertColumnFormat(ColumnFormat *l)
 {
-    d->columns.insertElement( l, l->column() );
+    d->columns.insertElement(l, l->column());
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     }
 }
 
-void Sheet::insertRowFormat( RowFormat *l )
+void Sheet::insertRowFormat(RowFormat *l)
 {
-    d->rows.insertElement( l, l->row() );
+    d->rows.insertElement(l, l->row());
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
 }
 
-void Sheet::deleteColumnFormat( int column )
+void Sheet::deleteColumnFormat(int column)
 {
-    d->columns.removeElement( column );
+    d->columns.removeElement(column);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     }
 }
 
-void Sheet::deleteRowFormat( int row )
+void Sheet::deleteRowFormat(int row)
 {
-    d->rows.removeElement( row );
+    d->rows.removeElement(row);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
 }
 
-void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
+void Sheet::emit_updateRow(RowFormat *_format, int _row, bool repaint)
 {
     Q_UNUSED(_format);
     if (map()->isLoading()) {
         return;
     }
 
-    if ( repaint )
-    {
+    if (repaint) {
         //All the cells in this row, or below this row will need to be repainted
         //So add that region of the sheet to the paint dirty list.
-        setRegionPaintDirty( Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax)) ) );
+        setRegionPaintDirty(Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax))));
 
-      emit sig_updateRowHeader( this );
-      emit sig_updateView( this );
+        emit sig_updateRowHeader(this);
+        emit sig_updateView(this);
     }
 }
 
-void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
+void Sheet::emit_updateColumn(ColumnFormat *_format, int _column)
 {
     Q_UNUSED(_format);
     if (map()->isLoading()) {
@@ -4173,24 +3792,22 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
-    setRegionPaintDirty( Region( QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax) ) ) );
+    setRegionPaintDirty(Region(QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax))));
 
-    emit sig_updateColumnHeader( this );
-    emit sig_updateView( this );
+    emit sig_updateColumnHeader(this);
+    emit sig_updateView(this);
 }
 
-bool Sheet::saveChildren( KoStore* _store, const QString &_path )
+bool Sheet::saveChildren(KoStore* _store, const QString &_path)
 {
     Q_UNUSED(_store);
     Q_UNUSED(_path);
 #if 0 // KSPREAD_KOPART_EMBEDDING
     int i = 0;
-    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-    {
-        if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
-        {
-            QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-            if ( !dynamic_cast<EmbeddedKOfficeObject*>( object )->embeddedObject()->document()->saveToStore( _store, path ) )
+    foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
+        if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
+            QString path = QString("%1/%2").arg(_path).arg(i++);
+            if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
                 return false;
         }
     }
@@ -4201,7 +3818,7 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 void Sheet::hideSheet(bool _hide)
 {
     setHidden(_hide);
-    if(_hide)
+    if (_hide)
         emit sig_SheetHidden(this);
     else
         emit sig_SheetShown(this);
@@ -4209,27 +3826,26 @@ void Sheet::hideSheet(bool _hide)
 
 bool Sheet::setSheetName(const QString& name, bool init)
 {
-    if ( map()->findSheet( name ) )
+    if (map()->findSheet(name))
         return false;
 
-    if ( isProtected() )
-      return false;
+    if (isProtected())
+        return false;
 
-    if ( d->name == name )
+    if (d->name == name)
         return true;
 
     QString old_name = d->name;
     d->name = name;
 
-    if ( init )
+    if (init)
         return true;
 
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
-      sheet->changeCellTabName( old_name, name );
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->changeCellTabName(old_name, name);
     }
 
-    emit sig_nameChanged( this, old_name );
+    emit sig_nameChanged(this, old_name);
 
     setObjectName(name.toUtf8());
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
@@ -4240,65 +3856,60 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
 void Sheet::updateLocale()
 {
-    setRegionPaintDirty( Region( QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax))));
+    setRegionPaintDirty(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))));
 
-    for ( int c = 0; c < valueStorage()->count(); ++c )
-    {
-        Cell cell( this, valueStorage()->col( c ), valueStorage()->row( c ) );
+    for (int c = 0; c < valueStorage()->count(); ++c) {
+        Cell cell(this, valueStorage()->col(c), valueStorage()->row(c));
         QString text = cell.userInput();
-        cell.parseUserInput( text );
+        cell.parseUserInput(text);
     }
-    emit sig_updateView( this );
+    emit sig_updateView(this);
 }
 
 void Sheet::convertObscuringBorders()
 {
     // FIXME Stefan: Verify that this is not needed anymore.
 #if 0
-  /* a word of explanation here:
-     beginning with KSpread 1.2 (actually, cvs of Mar 28, 2002), border information
-     is stored differently.  Previously, for a cell obscuring a region, the entire
-     region's border's data would be stored in the obscuring cell.  This caused
-     some data loss in certain situations.  After that date, each cell stores
-     its own border data, and prints it even if it is an obscured cell (as long
-     as that border isn't across an obscuring border).
-     Anyway, this function is used when loading a file that was stored with the
-     old way of borders.  All new files have the sheet attribute "borders1.2" so
-     if that isn't in the file, all the border data will be converted here.
-     It's a bit of a hack but I can't think of a better way and it's not *that*
-     bad of a hack.:-)
-  */
-  Cell c = d->cellStorage->firstCell();
-  QPen topPen, bottomPen, leftPen, rightPen;
-  for( ;c; c = c->nextCell() )
-  {
-    if (c->extraXCells() > 0 || c->extraYCells() > 0)
-    {
-      const Style* style = this->style( c->column(), c->row() );
-      topPen = style->topBorderPen();
-      leftPen = style->leftBorderPen();
-      rightPen = style->rightBorderPen();
-      bottomPen = style->bottomBorderPen();
+    /* a word of explanation here:
+       beginning with KSpread 1.2 (actually, cvs of Mar 28, 2002), border information
+       is stored differently.  Previously, for a cell obscuring a region, the entire
+       region's border's data would be stored in the obscuring cell.  This caused
+       some data loss in certain situations.  After that date, each cell stores
+       its own border data, and prints it even if it is an obscured cell (as long
+       as that border isn't across an obscuring border).
+       Anyway, this function is used when loading a file that was stored with the
+       old way of borders.  All new files have the sheet attribute "borders1.2" so
+       if that isn't in the file, all the border data will be converted here.
+       It's a bit of a hack but I can't think of a better way and it's not *that*
+       bad of a hack.:-)
+    */
+    Cell c = d->cellStorage->firstCell();
+    QPen topPen, bottomPen, leftPen, rightPen;
+    for (;c; c = c->nextCell()) {
+        if (c->extraXCells() > 0 || c->extraYCells() > 0) {
+            const Style* style = this->style(c->column(), c->row());
+            topPen = style->topBorderPen();
+            leftPen = style->leftBorderPen();
+            rightPen = style->rightBorderPen();
+            bottomPen = style->bottomBorderPen();
 
-      c->format()->setTopBorderStyle(Qt::NoPen);
-      c->format()->setLeftBorderStyle(Qt::NoPen);
-      c->format()->setRightBorderStyle(Qt::NoPen);
-      c->format()->setBottomBorderStyle(Qt::NoPen);
+            c->format()->setTopBorderStyle(Qt::NoPen);
+            c->format()->setLeftBorderStyle(Qt::NoPen);
+            c->format()->setRightBorderStyle(Qt::NoPen);
+            c->format()->setBottomBorderStyle(Qt::NoPen);
 
-      for (int x = c->column(); x < c->column() + c->extraXCells(); x++)
-      {
-        Cell( this, x, c->row() )->setTopBorderPen(topPen);
-        Cell( this, x, c->row() + c->extraYCells() )->
-          setBottomBorderPen(bottomPen);
-      }
-      for (int y = c->row(); y < c->row() + c->extraYCells(); y++)
-      {
-        Cell( this, c->column(), y )->setLeftBorderPen(leftPen);
-        Cell( this, c->column() + c->extraXCells(), y )->
-          setRightBorderPen(rightPen);
-      }
+            for (int x = c->column(); x < c->column() + c->extraXCells(); x++) {
+                Cell(this, x, c->row())->setTopBorderPen(topPen);
+                Cell(this, x, c->row() + c->extraYCells())->
+                setBottomBorderPen(bottomPen);
+            }
+            for (int y = c->row(); y < c->row() + c->extraYCells(); y++) {
+                Cell(this, c->column(), y)->setLeftBorderPen(leftPen);
+                Cell(this, c->column() + c->extraXCells(), y)->
+                setRightBorderPen(rightPen);
+            }
+        }
     }
-  }
 #endif
 }
 
@@ -4306,21 +3917,21 @@ void Sheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void Sheet::setRegionPaintDirty( const Region & region )
+void Sheet::setRegionPaintDirty(const Region & region)
 {
-    if ( isLoading() )
+    if (isLoading())
         return;
     if (!region.isValid())
         return;
 
-    map()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
+    map()->addDamage(new CellDamage(this, region, CellDamage::Appearance));
 
 //     kDebug(36004) <<"setRegionPaintDirty"<< static_cast<const Region*>(&region)->name(this);
 }
 
-void Sheet::setRegionPaintDirty( const QRect& rect )
+void Sheet::setRegionPaintDirty(const QRect& rect)
 {
-  setRegionPaintDirty( Region( rect ) );
+    setRegionPaintDirty(Region(rect));
 }
 
 #ifndef NDEBUG
@@ -4329,16 +3940,13 @@ void Sheet::printDebug()
     int iMaxColumn = d->cellStorage->columns();
     int iMaxRow = d->cellStorage->rows();
 
-    kDebug(36001) <<"Cell | Content | Value  [UserInput]";
+    kDebug(36001) << "Cell | Content | Value  [UserInput]";
     Cell cell;
-    for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow )
-    {
-        for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
-        {
-            cell = Cell( this, currentcolumn, currentrow );
-            if ( !cell.isEmpty() )
-            {
-                QString cellDescr = Cell::name( currentcolumn, currentrow ).rightJustified( 4 );
+    for (int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow) {
+        for (int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++) {
+            cell = Cell(this, currentcolumn, currentrow);
+            if (!cell.isEmpty()) {
+                QString cellDescr = Cell::name(currentcolumn, currentrow).rightJustified(4);
                 //QString cellDescr = "Cell ";
                 //cellDescr += QString::number(currentrow).rightJustified(3,'0') + ',';
                 //cellDescr += QString::number(currentcolumn).rightJustified(3,'0') + ' ';
@@ -4346,10 +3954,10 @@ void Sheet::printDebug()
                 QString valueType;
                 QTextStream stream(&valueType);
                 stream << cell.value().type();
-                cellDescr += valueType.rightJustified( 7 );
+                cellDescr += valueType.rightJustified(7);
                 cellDescr += " | ";
-                cellDescr += map()->converter()->asString( cell.value() ).asString().rightJustified( 5 );
-                cellDescr += QString("  [%1]").arg( cell.userInput() );
+                cellDescr += map()->converter()->asString(cell.value()).asString().rightJustified(5);
+                cellDescr += QString("  [%1]").arg(cell.userInput());
                 kDebug(36001) << cellDescr;
             }
         }

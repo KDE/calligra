@@ -40,8 +40,8 @@ class TabBarPrivate;
  * The TabBar class provides a tab bar, for use to switch active
  * page/sheet in a document.
  *
- * The tab bar is typically used in the main view. 
- * It is the small widget on the bottom left corner. 
+ * The tab bar is typically used in the main view.
+ * It is the small widget on the bottom left corner.
  * Pages/sheets are displayed as tabs, clicking on
  * one of the tab will activate the corresponding sheet (this is actually
  * done in main view). Current active page/sheet is marked by bold text.
@@ -67,18 +67,18 @@ class TabBarPrivate;
 class TabBar : public QWidget
 {
     Q_OBJECT
-    
-    Q_PROPERTY( QString activeTab READ activeTab WRITE setActiveTab )
-    Q_PROPERTY( bool readOnly READ readOnly WRITE setReadOnly )
-    Q_PROPERTY( QStringList tabs READ tabs WRITE setTabs )
-    Q_PROPERTY( unsigned count READ count )
-    
+
+    Q_PROPERTY(QString activeTab READ activeTab WRITE setActiveTab)
+    Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly)
+    Q_PROPERTY(QStringList tabs READ tabs WRITE setTabs)
+    Q_PROPERTY(unsigned count READ count)
+
 public:
 
     /**
      * Creates a new tabbar.
      */
-    explicit TabBar( QWidget* parent = 0, const char *name = 0 );
+    explicit TabBar(QWidget* parent = 0, const char *name = 0);
 
     /**
      * Destroy the tabbar.
@@ -89,13 +89,13 @@ public:
      * Returns true if the tab bar is read only.
      */
     bool readOnly() const;
-    
+
     /**
-     * Returns true if tabs and scroll buttons will be laid out in a mirrored 
+     * Returns true if tabs and scroll buttons will be laid out in a mirrored
      * (right to left) fashion.
      */
     bool reverseLayout() const;
-    
+
     /**
      * Returns all the tab as list of strings.
      */
@@ -129,14 +129,14 @@ public:
     /**
      * Ensures that specified tab is visible.
      */
-    void ensureVisible( const QString& tab );
+    void ensureVisible(const QString& tab);
 
 public slots:
 
     /**
      * Replaces all tabs with the list of strings.
      */
-    void setTabs( const QStringList& list );
+    void setTabs(const QStringList& list);
 
     /**
      * Sets the tab bar to be read only.
@@ -145,31 +145,31 @@ public slots:
      * This means that signal tabMoved, contextMenu and doubleClicked
      * would not be emitted.
      */
-    void setReadOnly( bool ro );
+    void setReadOnly(bool ro);
 
     /**
      * If reverse is true, dialogs and scroll buttonswidgets will be laid out in a mirrored
      * as if the sheet is in right to left languages (such as Arabic and Hebrew)
      */
-    void setReverseLayout( bool reverse );
+    void setReverseLayout(bool reverse);
 
     /**
      * Adds a tab to the tab bar.
      */
-    void addTab( const QString& text );
+    void addTab(const QString& text);
 
     /**
      * Removes a tab from the bar. If the tab was the active one then
      * no tab will be active.
      * It is recommended to call setActiveTab after a call to this function.
      */
-    void removeTab( const QString& text );
+    void removeTab(const QString& text);
 
     /**
      * Renames a tab.
      */
-    void renameTab( const QString& old_name, const QString& new_name );
-    
+    void renameTab(const QString& old_name, const QString& new_name);
+
     /**
      * Moves a tab to another position and reorder other tabs.
      *
@@ -180,7 +180,7 @@ public slots:
      * Example 2: for these tabs: X - Y - Z, moveTab(0,3) will
      * move tab X after tab Z so that the result is Y - Z - X.
      */
-    void moveTab( int tab, int target );
+    void moveTab(int tab, int target);
 
     /**
      * Scrolls one tab back. Does nothing if the leftmost tab (rightmost tab
@@ -191,7 +191,7 @@ public slots:
     void scrollBack();
 
     /**
-     * Scrolls one tab forward. Does nothing if the rightmost tab (leftmost tab 
+     * Scrolls one tab forward. Does nothing if the rightmost tab (leftmost tab
      * when reverseLayout is true) is already the last tab.
      *
      * \sa canScrollForward
@@ -207,7 +207,7 @@ public slots:
     void scrollFirst();
 
     /**
-     * Scrolls to the last tab. Does nothing if the rightmost tab (leftmost tab 
+     * Scrolls to the last tab. Does nothing if the rightmost tab (leftmost tab
      * when reverseLayout is true) is already the last tab.
      *
      * \sa canScrollForward
@@ -217,21 +217,21 @@ public slots:
     /**
      * Sets active tab.
      */
-    void setActiveTab( const QString& text );
+    void setActiveTab(const QString& text);
 
     /**
      * Removes all tabs.
      */
     void clear();
-    
+
     QSize sizeHint() const;
 
 signals:
 
     /**
-     * Emitted if the active tab changed. 
+     * Emitted if the active tab changed.
      */
-    void tabChanged( const QString& _text );
+    void tabChanged(const QString& _text);
 
     /**
      * This signal is emitted whenever a tab is dragged, moved and
@@ -243,13 +243,13 @@ signals:
      * is possible. Call moveTab (from the slot connected to this signal)
      * to perform the actual tab reorder.
      */
-    void tabMoved( unsigned tab, unsigned target );
+    void tabMoved(unsigned tab, unsigned target);
 
     /**
      * This signal is emitted whenever the tab bar is right-clicked.
      * Typically it is used to popup a context menu.
      */
-    void contextMenu( const QPoint& pos );
+    void contextMenu(const QPoint& pos);
 
     /**
      * This signal is emitted whenever the tab bar is double-clicked.
@@ -261,20 +261,20 @@ protected slots:
     void autoScrollForward();
 
 protected:
-    virtual void paintEvent ( QPaintEvent* ev );
-    virtual void resizeEvent( QResizeEvent* ev );
-    virtual void mousePressEvent ( QMouseEvent* ev );
-    virtual void mouseReleaseEvent ( QMouseEvent* ev );
-    virtual void mouseDoubleClickEvent ( QMouseEvent* ev );
-    virtual void mouseMoveEvent ( QMouseEvent* ev );
-    virtual void wheelEvent ( QWheelEvent * e );
+    virtual void paintEvent(QPaintEvent* ev);
+    virtual void resizeEvent(QResizeEvent* ev);
+    virtual void mousePressEvent(QMouseEvent* ev);
+    virtual void mouseReleaseEvent(QMouseEvent* ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent* ev);
+    virtual void mouseMoveEvent(QMouseEvent* ev);
+    virtual void wheelEvent(QWheelEvent * e);
 
 private:
     TabBarPrivate * const d;
 
     // don't allow copy or assignment
-    TabBar( const TabBar& );
-    TabBar& operator=( const TabBar& );
+    TabBar(const TabBar&);
+    TabBar& operator=(const TabBar&);
 };
 
 } // namespace KSpread

@@ -37,7 +37,7 @@
 #include <Region.h>
 
 ScriptingSheetsListView::ScriptingSheetsListView(ScriptingModule* module, QWidget* parent)
-    : QWidget(parent), m_module(module), m_initialized(false), m_selectiontype(SingleSelect), m_editortype(Disabled)
+        : QWidget(parent), m_module(module), m_initialized(false), m_selectiontype(SingleSelect), m_editortype(Disabled)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
@@ -49,7 +49,7 @@ ScriptingSheetsListView::ScriptingSheetsListView(ScriptingModule* module, QWidge
     m_view->setSortingEnabled(false);
     m_view->setItemsExpandable(false);
     m_view->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    m_view->setModel( new QStandardItemModel(this) );
+    m_view->setModel(new QStandardItemModel(this));
     layout->addWidget(m_view);
 }
 
@@ -59,31 +59,31 @@ ScriptingSheetsListView::~ScriptingSheetsListView()
 
 void ScriptingSheetsListView::setSelectionType(const QString& selectiontype)
 {
-    QMetaEnum e = metaObject()->enumerator( metaObject()->indexOfEnumerator("SelectionType") );
-    int v = e.keysToValue( selectiontype.toUtf8() );
-    if( v >= 0 ) m_selectiontype = (SelectionType) v;
+    QMetaEnum e = metaObject()->enumerator(metaObject()->indexOfEnumerator("SelectionType"));
+    int v = e.keysToValue(selectiontype.toUtf8());
+    if (v >= 0) m_selectiontype = (SelectionType) v;
 }
 
 void ScriptingSheetsListView::setEditorType(const QString& editortype)
 {
-    QMetaEnum e = metaObject()->enumerator( metaObject()->indexOfEnumerator("EditorType") );
-    int v = e.keysToValue( editortype.toUtf8() );
-    if( v >= 0 ) m_editortype = (EditorType) v;
+    QMetaEnum e = metaObject()->enumerator(metaObject()->indexOfEnumerator("EditorType"));
+    int v = e.keysToValue(editortype.toUtf8());
+    if (v >= 0) m_editortype = (EditorType) v;
 }
 
 void ScriptingSheetsListView::initialize()
 {
-    if( m_initialized )
+    if (m_initialized)
         finalize();
 
-    kDebug()<<"ScriptingSheetsListView::initialize()";
+    kDebug() << "ScriptingSheetsListView::initialize()";
 
     QStringList headers;
     headers << i18n("Sheet");
-    switch( m_editortype ) {
-        case Disabled: break;
-        case Cell: headers << i18n("Cell"); break;
-        case Range: headers << i18n("Range"); break;
+    switch (m_editortype) {
+    case Disabled: break;
+    case Cell: headers << i18n("Cell"); break;
+    case Range: headers << i18n("Range"); break;
     }
 
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
@@ -91,42 +91,42 @@ void ScriptingSheetsListView::initialize()
     KSpread::Doc* doc = m_module->kspreadDoc();
     KSpread::View* view = m_module->kspreadView();
     KSpread::Sheet* activeSheet = view ? view->activeSheet() : 0;
-    if( doc && doc->map() ) {
+    if (doc && doc->map()) {
         foreach(KSpread::Sheet* sheet, doc->map()->sheetList()) {
-            if( ! sheet || sheet->isHidden() )
+            if (! sheet || sheet->isHidden())
                 continue;
             QRect area = sheet->usedArea();
             bool enabled = area.isValid();
             Q_UNUSED(enabled);
             QList< QStandardItem* > items;
 
-            QStandardItem* nameitem = new QStandardItem( sheet->sheetName() );
+            QStandardItem* nameitem = new QStandardItem(sheet->sheetName());
             nameitem->setEditable(false);
-            if( m_selectiontype == MultiSelect ) {
+            if (m_selectiontype == MultiSelect) {
                 nameitem->setCheckable(true);
-                nameitem->setCheckState( (activeSheet == sheet) ? Qt::Checked : Qt::Unchecked );
+                nameitem->setCheckState((activeSheet == sheet) ? Qt::Checked : Qt::Unchecked);
             }
             items << nameitem;
 
-            if( m_editortype != Disabled ) {
+            if (m_editortype != Disabled) {
                 QString range;
                 foreach(QVariant v, m_prevlist) {
                     QVariantList l = v.toList();
-                    if( l.count() < 1 || l[0].toString() != sheet->sheetName() )
+                    if (l.count() < 1 || l[0].toString() != sheet->sheetName())
                         continue;
-                    if( l.count() >= 2 )
-                        if( m_selectiontype == MultiSelect )
-                            nameitem->setCheckState( l[1].toBool() ? Qt::Checked : Qt::Unchecked );
-                    if( l.count() >= 3 ) {
+                    if (l.count() >= 2)
+                        if (m_selectiontype == MultiSelect)
+                            nameitem->setCheckState(l[1].toBool() ? Qt::Checked : Qt::Unchecked);
+                    if (l.count() >= 3) {
                         QStringList rangelist;
-                        for(int i = 2; i < l.count(); ++i) {
+                        for (int i = 2; i < l.count(); ++i) {
                             const QRect rect = l[i].toRect();
-                            if( rect.isNull() )
+                            if (rect.isNull())
                                 continue;
                             KSpread::Region region(rect, sheet);
-                            for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+                            for (KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                                 const QString n = (*it)->name(sheet);
-                                if( ! n.isEmpty() )
+                                if (! n.isEmpty())
                                     rangelist.append(n);
                             }
                         }
@@ -134,18 +134,18 @@ void ScriptingSheetsListView::initialize()
                     }
                     break;
                 }
-                if( range.isEmpty() && area.isValid() )
+                if (range.isEmpty() && area.isValid())
                     range = KSpread::Region(area, sheet).name(sheet);
-                if( m_editortype == Cell ) {
+                if (m_editortype == Cell) {
                     int p = range.indexOf(':');
-                    range = p>0 ? range.left(p) : "A1";
+                    range = p > 0 ? range.left(p) : "A1";
                 }
                 items << new QStandardItem(range);
             }
 
             model->appendRow(items);
-            if( activeSheet == sheet )
-                m_view->setCurrentIndex( nameitem->index() );
+            if (activeSheet == sheet)
+                m_view->setCurrentIndex(nameitem->index());
         }
     }
 
@@ -154,8 +154,8 @@ void ScriptingSheetsListView::initialize()
 
 void ScriptingSheetsListView::finalize()
 {
-    if( m_initialized ) {
-        kDebug()<<"ScriptingSheetsListView::finalize()";
+    if (m_initialized) {
+        kDebug() << "ScriptingSheetsListView::finalize()";
 
         m_prevlist = sheets();
         QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
@@ -173,54 +173,54 @@ void ScriptingSheetsListView::showEvent(QShowEvent* event)
 
 QString ScriptingSheetsListView::sheet()
 {
-    if( ! m_initialized )
+    if (! m_initialized)
         initialize();
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
-    QStandardItem* current = model->itemFromIndex( m_view->currentIndex() );
-    QStandardItem* nameitem = current ? model->item(current->row(),0) : 0;
+    QStandardItem* current = model->itemFromIndex(m_view->currentIndex());
+    QStandardItem* nameitem = current ? model->item(current->row(), 0) : 0;
     return nameitem ? nameitem->text() : QString();
 }
 
 QString ScriptingSheetsListView::editor()
 {
-    if( ! m_initialized )
+    if (! m_initialized)
         initialize();
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
-    QStandardItem* current = model->itemFromIndex( m_view->currentIndex() );
-    QStandardItem* rangeitem = current ? model->item(current->row(),1) : 0;
+    QStandardItem* current = model->itemFromIndex(m_view->currentIndex());
+    QStandardItem* rangeitem = current ? model->item(current->row(), 1) : 0;
     return rangeitem ? rangeitem->text() : QString();
 }
 
 QVariantList ScriptingSheetsListView::sheets()
 {
-    if( ! m_initialized )
+    if (! m_initialized)
         initialize();
 
     QVariantList list;
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
     const int rowcount = model->rowCount();
-    for(int row = 0; row < rowcount; ++row) {
-        QStandardItem* nameitem = model->item(row,0);
-        if( ! nameitem )
+    for (int row = 0; row < rowcount; ++row) {
+        QStandardItem* nameitem = model->item(row, 0);
+        if (! nameitem)
             continue;
 
         bool enabled = nameitem->checkState() == Qt::Checked;
 
         const QString sheetname = nameitem->text();
         KSpread::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
-        if( ! sheet )
+        if (! sheet)
             continue;
 
         QVariantList l;
         l << sheetname << enabled;
 
-        QStandardItem* rangeitem = model->item(row,1);
-        if( rangeitem ) {
+        QStandardItem* rangeitem = model->item(row, 1);
+        if (rangeitem) {
             const QString range = rangeitem->text();
             KSpread::Region region(range, m_module->kspreadDoc()->map(), sheet);
-            for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+            for (KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();
-                if( ! rect.isNull() )
+                if (! rect.isNull())
                     l << rect;
             }
         }

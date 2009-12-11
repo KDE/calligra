@@ -36,20 +36,20 @@ class Selection;
 
 class ShowColRow: public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  enum Type { Column, Row };
-  ShowColRow(QWidget* parent, Selection* selection, Type _type);
+    enum Type { Column, Row };
+    ShowColRow(QWidget* parent, Selection* selection, Type _type);
 
 public slots:
-  void slotOk();
-  void slotDoubleClicked(QListWidgetItem *);
+    void slotOk();
+    void slotDoubleClicked(QListWidgetItem *);
 
 protected:
-  Selection* m_selection;
-  QListWidget * list;
-  Type typeShow;
-  QList<int> listInt;
+    Selection* m_selection;
+    QListWidget * list;
+    Type typeShow;
+    QList<int> listInt;
 };
 
 } // namespace KSpread

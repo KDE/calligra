@@ -30,38 +30,36 @@
 using namespace KSpread;
 
 ValidityCommand::ValidityCommand()
-  : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
 }
 
-bool ValidityCommand::process( Element* element )
+bool ValidityCommand::process(Element* element)
 {
-    if ( !m_reverse )
-    {
+    if (!m_reverse) {
         // create undo
-        if ( m_firstrun )
-            m_undoData += m_sheet->validityStorage()->undoData( Region(element->rect()) );
-        m_sheet->cellStorage()->setValidity( Region(element->rect()), m_validity );
+        if (m_firstrun)
+            m_undoData += m_sheet->validityStorage()->undoData(Region(element->rect()));
+        m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
     }
     return true;
 }
 
 bool ValidityCommand::mainProcessing()
 {
-    if ( m_reverse )
-    {
-        m_sheet->cellStorage()->setValidity( *this, Validity() );
-        for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->cellStorage()->setValidity( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+    if (m_reverse) {
+        m_sheet->cellStorage()->setValidity(*this, Validity());
+        for (int i = 0; i < m_undoData.count(); ++i)
+            m_sheet->cellStorage()->setValidity(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
     }
     return AbstractRegionCommand::mainProcessing();
 }
 
-void ValidityCommand::setValidity( Validity validity )
+void ValidityCommand::setValidity(Validity validity)
 {
     m_validity = validity;
-    if ( m_validity.isEmpty() )
-        setText( i18n( "Remove Validity Check" ) );
+    if (m_validity.isEmpty())
+        setText(i18n("Remove Validity Check"));
     else
-        setText( i18n( "Add Validity Check" ) );
+        setText(i18n("Add Validity Check"));
 }

@@ -32,7 +32,7 @@ class TableShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    TableShapePlugin( QObject * parent,  const QStringList & );
+    TableShapePlugin(QObject * parent,  const QStringList &);
     ~TableShapePlugin() {}
 };
 
@@ -40,7 +40,7 @@ class TableShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    TableShapeFactory( QObject* parent );
+    TableShapeFactory(QObject* parent);
     ~TableShapeFactory();
 
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);

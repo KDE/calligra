@@ -46,27 +46,26 @@ class Cell;
 class Map;
 class Sheet;
 
-namespace Util
-{
-    /**
-     * Call this function to decode the text of a column label to an integer,
-     * e.g. 1 for A and 27 for AA.
-     * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
-     * 0 is returned if no characters match.
-     */
-    KSPREAD_EXPORT int decodeColumnLabelText( const QString &labelText );
+namespace Util {
+/**
+ * Call this function to decode the text of a column label to an integer,
+ * e.g. 1 for A and 27 for AA.
+ * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
+ * 0 is returned if no characters match.
+ */
+KSPREAD_EXPORT int decodeColumnLabelText(const QString &labelText);
 
-    /**
-     * Call this function to encode an integer to the text of the column label
-     * i.e. 27->AA
-     */
-    KSPREAD_EXPORT QString encodeColumnLabelText( int column );
+/**
+ * Call this function to encode an integer to the text of the column label
+ * i.e. 27->AA
+ */
+KSPREAD_EXPORT QString encodeColumnLabelText(int column);
 
-    //Return true when it's a reference to cell from sheet.
-    KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
+//Return true when it's a reference to cell from sheet.
+KSPREAD_EXPORT bool localReferenceAnchor(const QString &_ref);
 
-    // TODO Stefan: used nowhere
-    int         penCompare( QPen const & pen1, QPen const & pen2 );
+// TODO Stefan: used nowhere
+int         penCompare(QPen const & pen1, QPen const & pen2);
 }
 
 /**
@@ -74,27 +73,26 @@ namespace Util
  * This namespace collects methods related to KSpread's old native file format
  * encoding/decoding.
  */
-namespace NativeFormat
-{
-    /**
-     * \ingroup NativeFormat
-     */
-    QDomElement createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
+namespace NativeFormat {
+/**
+ * \ingroup NativeFormat
+ */
+QDomElement createElement(const QString & tagName, const QFont & font, QDomDocument & doc);
 
-    /**
-     * \ingroup NativeFormat
-     */
-    QDomElement createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
+/**
+ * \ingroup NativeFormat
+ */
+QDomElement createElement(const QString & tagname, const QPen & pen, QDomDocument & doc);
 
-    /**
-     * \ingroup NativeFormat
-     */
-    QFont       toFont( KoXmlElement & element );
+/**
+ * \ingroup NativeFormat
+ */
+QFont       toFont(KoXmlElement & element);
 
-    /**
-     * \ingroup NativeFormat
-     */
-    QPen        toPen( KoXmlElement & element );
+/**
+ * \ingroup NativeFormat
+ */
+QPen        toPen(KoXmlElement & element);
 }
 
 /**
@@ -102,55 +100,54 @@ namespace NativeFormat
  * This namespace collects methods related to OpenDocument
  * encoding/decoding.
  */
-namespace Odf
-{
-    /**
-     * \ingroup OpenDocument
-     * Creates OpenDocument pen attributes of the QPen \p pen .
-     * \return the OpenDocument pen attributes
-     */
-    QString encodePen( const QPen& pen );
+namespace Odf {
+/**
+ * \ingroup OpenDocument
+ * Creates OpenDocument pen attributes of the QPen \p pen .
+ * \return the OpenDocument pen attributes
+ */
+QString encodePen(const QPen& pen);
 
-    /**
-     * \ingroup OpenDocument
-     * Creates a QPen of OpenDocument pen attributes \p str .
-     * \return the created QPen
-     */
-    QPen decodePen( const QString &str );
+/**
+ * \ingroup OpenDocument
+ * Creates a QPen of OpenDocument pen attributes \p str .
+ * \return the created QPen
+ */
+QPen decodePen(const QString &str);
 
-    /**
-     * \ingroup OpenDocument
-     * Converts an OpenDocument representation of a formula to a localized formula.
-     * @param expr The expression to convert from OpenDocument format.
-     * @param locale The locale to which the expression should be converted.
-     * \note Use Region::loadOdf() for plain cell references.
-     */
-    // TODO check visibility
-    KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
+/**
+ * \ingroup OpenDocument
+ * Converts an OpenDocument representation of a formula to a localized formula.
+ * @param expr The expression to convert from OpenDocument format.
+ * @param locale The locale to which the expression should be converted.
+ * \note Use Region::loadOdf() for plain cell references.
+ */
+// TODO check visibility
+KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
 
-    /**
-     * \ingroup OpenDocument
-     * Converts a localized formula to an OpenDocument representation of a formula.
-     * @param expr The expression to convert to OpenDocument format.
-     * @param locale The locale from which the expression should be converted.
-     * \note Use Region::saveOdf() for plain cell references.
-     */
-    KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+/**
+ * \ingroup OpenDocument
+ * Converts a localized formula to an OpenDocument representation of a formula.
+ * @param expr The expression to convert to OpenDocument format.
+ * @param locale The locale from which the expression should be converted.
+ * \note Use Region::saveOdf() for plain cell references.
+ */
+KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    KSPREAD_EXPORT QString convertRefToRange( const QString & sheet, const QRect & rect );
+/**
+ * \ingroup OpenDocument
+ */
+KSPREAD_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    KSPREAD_EXPORT QString convertRefToBase( const QString & sheet, const QRect & rect );
+/**
+ * \ingroup OpenDocument
+ */
+KSPREAD_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
 
-    /**
-     * \ingroup OpenDocument
-     */
-    KSPREAD_EXPORT QString convertRangeToRef( const QString & sheetName, const QRect & _area );
+/**
+ * \ingroup OpenDocument
+ */
+KSPREAD_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 }
 
 } // namespace KSpread

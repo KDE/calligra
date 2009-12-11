@@ -35,17 +35,17 @@ namespace KSpread
 class LinkCommand : public QUndoCommand
 {
 public:
-  LinkCommand( const Cell& cell, const QString& text, const QString& link );
+    LinkCommand(const Cell& cell, const QString& text, const QString& link);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
-  Cell cell;
-  QString oldText;
-  QString oldLink;
-  QString newText;
-  QString newLink;
+    Cell cell;
+    QString oldText;
+    QString oldLink;
+    QString newText;
+    QString newLink;
 };
 
 } // namespace KSpread

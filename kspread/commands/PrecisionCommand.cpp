@@ -31,25 +31,22 @@
 using namespace KSpread;
 
 PrecisionCommand::PrecisionCommand()
-  : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
-    setText( i18n( "Increase Precision" ) );
+    setText(i18n("Increase Precision"));
 }
 
 bool PrecisionCommand::mainProcessing()
 {
     Style style;
-    if ( !m_reverse )
-    {
+    if (!m_reverse) {
         // increase the precision
-        style.setPrecision( 1 );
-    }
-    else // m_reverse
-    {
+        style.setPrecision(1);
+    } else { // m_reverse
         // decrease the precision
-        style.setPrecision( -1 );
+        style.setPrecision(-1);
     }
-    m_sheet->cellStorage()->setStyle( *this, style );
+    m_sheet->cellStorage()->setStyle(*this, style);
     return true;
 }
 
@@ -61,8 +58,8 @@ bool PrecisionCommand::postProcessing()
 void PrecisionCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
-    if ( !m_reverse )
-        setText( i18n( "Increase Precision" ) );
+    if (!m_reverse)
+        setText(i18n("Increase Precision"));
     else
-        setText( i18n( "Decrease Precision" ) );
+        setText(i18n("Decrease Precision"));
 }

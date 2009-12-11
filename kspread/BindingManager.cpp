@@ -36,7 +36,7 @@ public:
 };
 
 BindingManager::BindingManager(const Map* map)
-    : d(new Private)
+        : d(new Private)
 {
     d->map = map;
 }
@@ -87,8 +87,7 @@ void BindingManager::regionChanged(const Region& region)
     Sheet* sheet;
     QList< QPair<QRectF, Binding> > bindings;
     Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-    {
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
         bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(Region((*it)->rect(), sheet));
         for (int j = 0; j < bindings.count(); ++j)
@@ -101,8 +100,7 @@ void BindingManager::updateAllBindings()
     QList< QPair<QRectF, Binding> > bindings;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<Sheet*> sheets = d->map->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
-    {
+    for (int i = 0; i < sheets.count(); ++i) {
         bindings = sheets[i]->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheets[i]));
         for (int j = 0; j < bindings.count(); ++j)
             bindings[j].second.update(Region(bindings[j].first.toRect(), sheets[i]));

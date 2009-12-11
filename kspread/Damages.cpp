@@ -32,94 +32,94 @@ using namespace KSpread;
 class WorkbookDamage::Private
 {
 public:
-  KSpread::Map* map;
-  Changes changes;
+    KSpread::Map* map;
+    Changes changes;
 };
 
 class SheetDamage::Private
 {
 public:
-  KSpread::Sheet* sheet;
-  Changes changes;
+    KSpread::Sheet* sheet;
+    Changes changes;
 };
 
 class CellDamage::Private
 {
 public:
-  KSpread::Sheet* sheet;
-  Region region;
-  Changes changes;
+    KSpread::Sheet* sheet;
+    Region region;
+    Changes changes;
 };
 
 class SelectionDamage::Private
 {
 public:
-  Region region;
+    Region region;
 };
 
-CellDamage::CellDamage( const KSpread::Cell& cell, Changes changes )
-  : d( new Private )
+CellDamage::CellDamage(const KSpread::Cell& cell, Changes changes)
+        : d(new Private)
 {
-  d->sheet = cell.sheet();
-  if ( Region::isValid( QPoint( cell.column(), cell.row() ) ) )
-    d->region = Region( cell.column(), cell.row(), d->sheet );
-  d->changes = changes;
+    d->sheet = cell.sheet();
+    if (Region::isValid(QPoint(cell.column(), cell.row())))
+        d->region = Region(cell.column(), cell.row(), d->sheet);
+    d->changes = changes;
 }
 
-CellDamage::CellDamage( KSpread::Sheet* sheet, const Region& region, Changes changes )
-  : d( new Private )
+CellDamage::CellDamage(KSpread::Sheet* sheet, const Region& region, Changes changes)
+        : d(new Private)
 {
-  d->sheet = sheet;
-  d->region = region;
-  d->changes = changes;
+    d->sheet = sheet;
+    d->region = region;
+    d->changes = changes;
 }
 
 CellDamage::~CellDamage()
 {
-  delete d;
+    delete d;
 }
 
 Sheet* CellDamage::sheet() const
 {
-  return d->sheet;
+    return d->sheet;
 }
 
 const KSpread::Region& CellDamage::region() const
 {
-  return d->region;
+    return d->region;
 }
 
 CellDamage::Changes CellDamage::changes() const
 {
-  return d->changes;
+    return d->changes;
 }
 
 
-SheetDamage::SheetDamage( KSpread::Sheet* sheet, Changes changes )
-  : d( new Private )
+SheetDamage::SheetDamage(KSpread::Sheet* sheet, Changes changes)
+        : d(new Private)
 {
-  d->sheet = sheet;
-  d->changes = changes;
+    d->sheet = sheet;
+    d->changes = changes;
 }
 
 SheetDamage::~SheetDamage()
 {
-  delete d;
+    delete d;
 }
 
 Sheet* SheetDamage::sheet() const
 {
-  return d->sheet;
+    return d->sheet;
 }
 
 SheetDamage::Changes SheetDamage::changes() const
 {
-  return d->changes;
+    return d->changes;
 }
 
 
-WorkbookDamage::WorkbookDamage( KSpread::Map* map, Changes changes )
-    : d( new Private )
+WorkbookDamage::WorkbookDamage(KSpread::Map* map, Changes changes)
+        : d(new Private)
 {
     d->map = map;
     d->changes = changes;
@@ -141,20 +141,20 @@ WorkbookDamage::Changes WorkbookDamage::changes() const
 }
 
 
-SelectionDamage::SelectionDamage( const Region& region )
-  : d( new Private )
+SelectionDamage::SelectionDamage(const Region& region)
+        : d(new Private)
 {
-  d->region = region;
+    d->region = region;
 }
 
 SelectionDamage::~SelectionDamage()
 {
-  delete d;
+    delete d;
 }
 
 const KSpread::Region& SelectionDamage::region() const
 {
-  return d->region;
+    return d->region;
 }
 
 
@@ -162,46 +162,44 @@ const KSpread::Region& SelectionDamage::region() const
   kDebug support
 ****************************************************************************/
 
-kdbgstream operator<<( kdbgstream str, const KSpread::Damage& d )
+kdbgstream operator<<(kdbgstream str, const KSpread::Damage& d)
 {
-    switch ( d.type() )
-    {
-        case Damage::Nothing:   return str << "NoDamage";
-        case Damage::Document:  return str << "Document";
-        case Damage::Workbook:  return str << "Workbook";
-        case Damage::Sheet:     return str << "Sheet";
-        case Damage::Range:     return str << "Range";
-        case Damage::Cell:      return str << "Cell";
-        case Damage::Selection: return str << "Selection";
+    switch (d.type()) {
+    case Damage::Nothing:   return str << "NoDamage";
+    case Damage::Document:  return str << "Document";
+    case Damage::Workbook:  return str << "Workbook";
+    case Damage::Sheet:     return str << "Sheet";
+    case Damage::Range:     return str << "Range";
+    case Damage::Cell:      return str << "Cell";
+    case Damage::Selection: return str << "Selection";
     }
     return str;
 }
 
-kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d )
+kdbgstream operator<<(kdbgstream str, const KSpread::CellDamage& d)
 {
-    str << "CellDamage: " << d.region().name( d.sheet() );
-    if ( d.changes() & CellDamage::Appearance ) str << " Appearance";
-    if ( d.changes() & CellDamage::Binding )    str << " Binding";
-    if ( d.changes() & CellDamage::Formula )    str << " Formula";
-    if ( d.changes() & CellDamage::Value )      str << " Value";
+    str << "CellDamage: " << d.region().name(d.sheet());
+    if (d.changes() & CellDamage::Appearance) str << " Appearance";
+    if (d.changes() & CellDamage::Binding)    str << " Binding";
+    if (d.changes() & CellDamage::Formula)    str << " Formula";
+    if (d.changes() & CellDamage::Value)      str << " Value";
     return str;
 }
 
-kdbgstream operator<<( kdbgstream str, const KSpread::SheetDamage& d )
+kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d)
 {
-    str << "SheetDamage: " << ( d.sheet() ? d.sheet()->sheetName() : "NULL POINTER!" );
-    switch ( d.changes() )
-    {
-      case SheetDamage::None:               return str << " None";
-      case SheetDamage::ContentChanged:     return str << " Content";
-      case SheetDamage::PropertiesChanged:  return str << " Properties";
-      case SheetDamage::Hidden:             return str << " Hidden";
-      case SheetDamage::Shown:              return str << " Shown";
+    str << "SheetDamage: " << (d.sheet() ? d.sheet()->sheetName() : "NULL POINTER!");
+    switch (d.changes()) {
+    case SheetDamage::None:               return str << " None";
+    case SheetDamage::ContentChanged:     return str << " Content";
+    case SheetDamage::PropertiesChanged:  return str << " Properties";
+    case SheetDamage::Hidden:             return str << " Hidden";
+    case SheetDamage::Shown:              return str << " Shown";
     }
     return str;
 }
 
-kdbgstream operator<<( kdbgstream str, const KSpread::SelectionDamage& d )
+kdbgstream operator<<(kdbgstream str, const KSpread::SelectionDamage& d)
 {
     str << "SelectionDamage: " << d.region().name();
     return str;

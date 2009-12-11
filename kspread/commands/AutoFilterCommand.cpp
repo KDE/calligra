@@ -32,9 +32,9 @@
 using namespace KSpread;
 
 AutoFilterCommand::AutoFilterCommand()
-    : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
-    setText( i18n( "Auto-Filter" ) );
+    setText(i18n("Auto-Filter"));
 }
 
 AutoFilterCommand::~AutoFilterCommand()
@@ -52,6 +52,6 @@ void AutoFilterCommand::redo()
 
 void AutoFilterCommand::undo()
 {
-    m_sheet->cellStorage()->setDatabase( *this, Database() );
+    m_sheet->cellStorage()->setDatabase(*this, Database());
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

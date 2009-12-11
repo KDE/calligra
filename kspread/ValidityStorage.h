@@ -37,8 +37,12 @@ public:
     ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Validity>::garbageCollection(); }
+    virtual void triggerGarbageCollection() {
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    }
+    virtual void garbageCollection() {
+        RectStorage<Validity>::garbageCollection();
+    }
 };
 
 } // namespace KSpread

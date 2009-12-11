@@ -86,18 +86,18 @@ public:
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p col , \p row .
      */
-    Cell( const Sheet* sheet, int column, int row );
+    Cell(const Sheet* sheet, int column, int row);
 
     /**
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p pos .
      */
-    Cell( const Sheet* sheet, const QPoint& pos );
+    Cell(const Sheet* sheet, const QPoint& pos);
 
     /**
      * Copy constructor.
      */
-    Cell( const Cell& other );
+    Cell(const Cell& other);
 
     /**
      * Destructor.
@@ -166,19 +166,19 @@ public:
      * Given the cell position, this static function returns the name of the cell.
      * Example: name(5,4) will return "E4".
      */
-    static QString name( int col, int row );
+    static QString name(int col, int row);
 
     /**
      * Given the sheet and cell position, this static function returns the full name
      * of the cell, i.e. with the name of the sheet.
      */
-    static QString fullName( const Sheet *s, int col, int row );
+    static QString fullName(const Sheet *s, int col, int row);
 
     /**
      * Given the column number, this static function returns the corresponding
      * column name, i.e. the first column is "A", the second is "B", and so on.
      */
-    static QString columnName( uint column );
+    static QString columnName(uint column);
 
     /**
      * \return the output text, e.g. the result of a formula
@@ -190,14 +190,14 @@ public:
      */
     QString comment() const;
 
-    void setComment( const QString& comment );
+    void setComment(const QString& comment);
 
     /**
      * \return the conditions associated with this cell
      */
     Conditions conditions() const;
 
-    void setConditions( const Conditions& conditions );
+    void setConditions(const Conditions& conditions);
 
     /**
      * \return the database associated with this cell
@@ -213,7 +213,7 @@ public:
     /**
      * Sets \p formula as associated formula of this cell.
      */
-    void setFormula( const Formula& formula );
+    void setFormula(const Formula& formula);
 
     /**
      * Returns the link associated with cell. It is empty if this cell
@@ -227,7 +227,7 @@ public:
      * Possible choices for link are URL (web, ftp), e-mail address, local file,
      * or another cell.
      */
-    void setLink( const QString& link );
+    void setLink(const QString& link);
 
     /**
      * \return the Style associated with this Cell
@@ -240,14 +240,14 @@ public:
      */
     Style effectiveStyle() const;
 
-    void setStyle( const Style& style );
+    void setStyle(const Style& style);
 
     /**
      * \return the validity checks associated with this cell
      */
     Validity validity() const;
 
-    void setValidity( Validity validity );
+    void setValidity(Validity validity);
 
     /**
      * Returns the value that this cell holds. It could be from the user
@@ -264,7 +264,7 @@ public:
      *
      * \see setUserInput, parseUserInput
      */
-    void setValue( const Value& value );
+    void setValue(const Value& value);
 
     /**
      * Return the text the user entered. This could be a value (e.g. "14.03")
@@ -279,7 +279,7 @@ public:
      *
      * \see parseUserInput, setValue
      */
-    void setUserInput( const QString& text );
+    void setUserInput(const QString& text);
 
     /**
      * Sets the user input and parses it.
@@ -290,16 +290,16 @@ public:
      *
      * \see setUserInput, setValue
      */
-    void parseUserInput( const QString& text );
+    void parseUserInput(const QString& text);
 
     /**
      * \ingroup NativeFormat
      */
-    bool load( const KoXmlElement& cell,
-               int _xshift, int _yshift,
-               Paste::Mode pm = Paste::Normal,
-               Paste::Operation op = Paste::OverWrite,
-               bool paste = false );
+    bool load(const KoXmlElement& cell,
+              int _xshift, int _yshift,
+              Paste::Mode pm = Paste::Normal,
+              Paste::Operation op = Paste::OverWrite,
+              bool paste = false);
 
     /**
      * \ingroup NativeFormat
@@ -336,23 +336,23 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOdf( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
-                    int row, int column, int &repeated,
-                   OdfSavingContext& savingContext);
+    bool saveOdf(KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
+                 int row, int column, int &repeated,
+                 OdfSavingContext& savingContext);
 
     /**
      * Copies the format from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyFormat( const Cell& cell );
+    void copyFormat(const Cell& cell);
 
     /**
      * Copies the content from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyContent( const Cell& cell );
+    void copyContent(const Cell& cell);
 
     /**
      * Copies the format and the content from \p cell .
@@ -360,7 +360,7 @@ public:
      * @see copyContent( const Cell& cell )
      * @see copyFormat( const Cell& cell )
      */
-    void copyAll( const Cell& cell);
+    void copyAll(const Cell& cell);
 
     /**
      * @return the width of this cell as double
@@ -418,7 +418,7 @@ public:
      * @param _y tells to occupy _y additional cells in the vertical
      *
      */
-    void mergeCells( int _col, int _row, int _x, int _y );
+    void mergeCells(int _col, int _row, int _x, int _y);
 
     /**
      * @return true if the cell is forced to obscure other cells.
@@ -482,7 +482,7 @@ public:
      *
      * @return the merged text.
      */
-    QString pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op );
+    QString pasteOperation(const QString &new_text, const QString &old_text, Paste::Operation op);
 
     //
     //END Cut & paste
@@ -526,21 +526,21 @@ public:
     /**
      * Assignment.
      */
-    Cell& operator=( const Cell& other );
+    Cell& operator=(const Cell& other);
 
     /**
      * Tests whether this cell's location is less than the \p other 's.
      * (QMap support)
      * \note Does not compare the cell attributes/data.
      */
-    bool operator<( const Cell& other ) const;
+    bool operator<(const Cell& other) const;
 
     /**
      * Tests for equality with \p other 's location only.
      * (QHash support)
      * \note Does not compare the cell attributes/data.
      */
-    bool operator==( const Cell& other ) const;
+    bool operator==(const Cell& other) const;
 
     /**
      * Is null.
@@ -558,7 +558,7 @@ public:
     /**
      * Tests for equality of all cell attributes/data to those in \p other .
      */
-    bool compareData( const Cell& other ) const;
+    bool compareData(const Cell& other) const;
 
 protected:
     /**
@@ -566,17 +566,17 @@ protected:
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
-    void loadOdfCellText( const KoXmlElement& parent );
+    void loadOdfCellText(const KoXmlElement& parent);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
+    void loadOdfObjects(const KoXmlElement& e, KoOdfLoadingContext& odfContext);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfAnnotation( KoXmlWriter &xmlwriter );
+    void saveOdfAnnotation(KoXmlWriter &xmlwriter);
 
 private:
     class Private;
@@ -590,28 +590,28 @@ private:
     /**
      * \ingroup NativeFormat
      */
-    bool saveCellResult( QDomDocument& doc, QDomElement& result, QString str );
+    bool saveCellResult(QDomDocument& doc, QDomElement& result, QString str);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfValue (KoXmlWriter &xmlWriter);
+    void saveOdfValue(KoXmlWriter &xmlWriter);
 
     /**
      * \ingroup OpenDocument
      * @return the OASIS style's name
      */
-    QString saveOdfCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles );
+    QString saveOdfCellStyle(KoGenStyle &currentCellStyle, KoGenStyles &mainStyles);
 };
 
-inline uint qHash( const Cell& cell )
+inline uint qHash(const Cell& cell)
 {
-    return ( static_cast<uint>( cell.column() ) << 16 ) + static_cast<uint>( cell.row() );
+    return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
 }
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::Cell, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(KSpread::Cell, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************

@@ -29,38 +29,36 @@
 using namespace KSpread;
 
 CondtionCommand::CondtionCommand()
-  : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
 }
 
-bool CondtionCommand::process( Element* element )
+bool CondtionCommand::process(Element* element)
 {
-    if ( !m_reverse )
-    {
+    if (!m_reverse) {
         // create undo
-        if ( m_firstrun )
-            m_undoData += m_sheet->conditionsStorage()->undoData( Region(element->rect()) );
-        m_sheet->cellStorage()->setConditions( Region(element->rect()), m_conditions );
+        if (m_firstrun)
+            m_undoData += m_sheet->conditionsStorage()->undoData(Region(element->rect()));
+        m_sheet->cellStorage()->setConditions(Region(element->rect()), m_conditions);
     }
     return true;
 }
 
 bool CondtionCommand::mainProcessing()
 {
-    if ( m_reverse )
-    {
-        m_sheet->cellStorage()->setConditions( *this, Conditions() );
-        for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->cellStorage()->setConditions( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+    if (m_reverse) {
+        m_sheet->cellStorage()->setConditions(*this, Conditions());
+        for (int i = 0; i < m_undoData.count(); ++i)
+            m_sheet->cellStorage()->setConditions(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
     }
     return AbstractRegionCommand::mainProcessing();
 }
 
-void CondtionCommand::setConditionList(  const QLinkedList<Conditional>& list )
+void CondtionCommand::setConditionList(const QLinkedList<Conditional>& list)
 {
-    m_conditions.setConditionList( list );
-    if ( m_conditions.isEmpty() )
-        setText( i18n( "Remove Conditional Formatting" ) );
+    m_conditions.setConditionList(list);
+    if (m_conditions.isEmpty())
+        setText(i18n("Remove Conditional Formatting"));
     else
-        setText( i18n( "Add Conditional Formatting" ) );
+        setText(i18n("Add Conditional Formatting"));
 }

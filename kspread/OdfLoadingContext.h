@@ -35,7 +35,7 @@ class OdfLoadingContext
 {
 public:
     OdfLoadingContext(KoOdfLoadingContext& odfContext)
-        : odfContext(odfContext) {}
+            : odfContext(odfContext) {}
 
 public:
     KoOdfLoadingContext& odfContext;

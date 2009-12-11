@@ -40,39 +40,39 @@
 using namespace KSpread;
 
 CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-    setCaption( i18n("Cell Comment") );
-    setModal( true );
-    setButtons( Ok|Cancel);
+    setCaption(i18n("Cell Comment"));
+    setModal(true);
+    setButtons(Ok | Cancel);
 
     m_selection = selection;
 
     QWidget *page = new QWidget();
-    setMainWidget( page );
-    QVBoxLayout *lay1 = new QVBoxLayout( page );
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout(page);
     lay1->setMargin(KDialog::marginHint());
     lay1->setSpacing(KDialog::spacingHint());
 
-    multiLine = new KTextEdit( page );
+    multiLine = new KTextEdit(page);
     lay1->addWidget(multiLine);
 
     multiLine->setFocus();
 
     const QString comment = Cell(m_selection->activeSheet(), m_selection->marker()).comment();
-    if ( !comment.isEmpty() )
-        multiLine->setText( comment );
+    if (!comment.isEmpty())
+        multiLine->setText(comment);
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(multiLine, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
     slotTextChanged();
-    resize( 400, height() );
+    resize(400, height());
 }
 
 void CommentDialog::slotTextChanged()
 {
-    enableButtonOk( !multiLine->toPlainText().isEmpty());
+    enableButtonOk(!multiLine->toPlainText().isEmpty());
 }
 
 void CommentDialog::slotOk()

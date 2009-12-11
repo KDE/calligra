@@ -35,8 +35,8 @@ public:
 
 AutoFillStrategy::AutoFillStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
                                    const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
-    , d(new Private)
+        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        , d(new Private)
 {
     d->autoFillSource = selection->lastRange();
 }

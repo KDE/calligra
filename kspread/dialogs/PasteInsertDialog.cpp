@@ -37,42 +37,42 @@
 using namespace KSpread;
 
 PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-  setCaption( i18n("Paste Inserting Cells") );
-  setObjectName("PasteInsertDialog");
-  setModal( true );
-  setButtons( Ok|Cancel );
-  m_selection = selection;
-  rect = selection->lastRange();
+    setCaption(i18n("Paste Inserting Cells"));
+    setObjectName("PasteInsertDialog");
+    setModal(true);
+    setButtons(Ok | Cancel);
+    m_selection = selection;
+    rect = selection->lastRange();
 
-  QWidget *page = new QWidget();
-  setMainWidget( page );
-  QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
+    QWidget *page = new QWidget();
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout(page);
+    lay1->setMargin(KDialog::marginHint());
+    lay1->setSpacing(KDialog::spacingHint());
 
-  QGroupBox *grp = new QGroupBox( i18n("Insert"),page );
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->addWidget(rb1 = new QRadioButton( i18n("Move towards right") ));
-  vbox->addWidget(rb2 = new QRadioButton( i18n("Move towards bottom") ));
-  rb1->setChecked(true);
-  grp->setLayout(vbox);
-  lay1->addWidget(grp);
+    QGroupBox *grp = new QGroupBox(i18n("Insert"), page);
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(rb1 = new QRadioButton(i18n("Move towards right")));
+    vbox->addWidget(rb2 = new QRadioButton(i18n("Move towards bottom")));
+    rb1->setChecked(true);
+    grp->setLayout(vbox);
+    lay1->addWidget(grp);
 
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
 
 void PasteInsertDialog::slotOk()
 {
-    if( rb1->isChecked() )
-      m_selection->activeSheet()->paste( m_selection->lastRange(),
-                                     true, Paste::Normal, Paste::OverWrite,
-                                     true, -1 );
-    else if( rb2->isChecked() )
-      m_selection->activeSheet()->paste( m_selection->lastRange(),
-                                     true, Paste::Normal, Paste::OverWrite,
-                                     true, +1 );
+    if (rb1->isChecked())
+        m_selection->activeSheet()->paste(m_selection->lastRange(),
+                                          true, Paste::Normal, Paste::OverWrite,
+                                          true, -1);
+    else if (rb2->isChecked())
+        m_selection->activeSheet()->paste(m_selection->lastRange(),
+                                          true, Paste::Normal, Paste::OverWrite,
+                                          true, + 1);
 
     accept();
 }

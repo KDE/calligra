@@ -52,30 +52,30 @@ class ValueStorage;
 class KSPREAD_EXPORT Value
 {
 
-  public:
+public:
 
     enum Type {
-      Empty,
-      Boolean,
-      Integer,
-      Float,
-      Complex,
-      String,
-      Array,
-      CellRange, // not used yet
-      Error
+        Empty,
+        Boolean,
+        Integer,
+        Float,
+        Complex,
+        String,
+        Array,
+        CellRange, // not used yet
+        Error
     };
 
     enum Format {
-      fmt_None,
-      fmt_Boolean,
-      fmt_Number,
-      fmt_Percent,
-      fmt_Money,
-      fmt_DateTime,
-      fmt_Date,
-      fmt_Time,
-      fmt_String
+        fmt_None,
+        fmt_Boolean,
+        fmt_Number,
+        fmt_Percent,
+        fmt_Money,
+        fmt_DateTime,
+        fmt_Date,
+        fmt_Time,
+        fmt_String
     };
     /**
      * Creates an empty value, i.e holds nothing.
@@ -85,7 +85,7 @@ class KSPREAD_EXPORT Value
     /**
      * Creates a value of certain type.
      */
-    explicit Value( Type _type );
+    explicit Value(Type _type);
 
     /**
      * Destroys the value.
@@ -95,7 +95,7 @@ class KSPREAD_EXPORT Value
     /**
      * Creates a copy from another value.
      */
-    Value( const Value& _value );
+    Value(const Value& _value);
 
     /**
      * Assigns from another value.
@@ -103,59 +103,59 @@ class KSPREAD_EXPORT Value
      * Because the data is implicitly shared, such assignment is very fast and
      * doesn't consume additional memory.
      */
-    Value& operator= ( const Value& _value );
+    Value& operator= (const Value& _value);
 
     /**
      * Creates a boolean value.
      */
-    explicit Value( bool b );
+    explicit Value(bool b);
 
     /**
      * Creates an integer value.
      */
-    explicit Value( qint64 i );
+    explicit Value(qint64 i);
 
     /**
      * Creates an integer value.
      */
-    explicit Value( int i );
+    explicit Value(int i);
 
     /**
      * Creates a floating-point value.
      */
-    explicit Value( double f );
-    
+    explicit Value(double f);
+
     /**
      * Creates a floating-point value.
      */
-    explicit Value( long double f );
+    explicit Value(long double f);
 
 #ifdef KSPREAD_HIGH_PRECISION_SUPPORT
     /**
      * Creates a floating-point value.
      */
-    explicit Value( Number f );
+    explicit Value(Number f);
 #endif // KSPREAD_HIGH_PRECISION_SUPPORT
 
     /**
      * Creates a complex number value.
      */
-    explicit Value( const complex<Number>& c );
+    explicit Value(const complex<Number>& c);
 
     /**
      * Creates a string value.
      */
-    explicit Value( const QString& s );
+    explicit Value(const QString& s);
 
     /**
      * Creates a string value.
      */
-    explicit Value (const char *s);
+    explicit Value(const char *s);
 
     /**
      * Creates an array value using the data from \p array.
      */
-    explicit Value( const ValueStorage& array );
+    explicit Value(const ValueStorage& array);
 
     /**
      * Creates a floating-point value from date/time.
@@ -190,58 +190,76 @@ class KSPREAD_EXPORT Value
     /**
      * Sets format information for this value.
      */
-    void setFormat( Format fmt );
+    void setFormat(Format fmt);
 
     /**
      * Returns true if empty.
      */
-    bool isEmpty() const { return type() == Empty; }
+    bool isEmpty() const {
+        return type() == Empty;
+    }
 
     /**
      * Returns true, if the type of this value is Boolean.
      */
-    bool isBoolean() const { return type() == Boolean; }
+    bool isBoolean() const {
+        return type() == Boolean;
+    }
 
     /**
      * Returns true, if the type of this value is integer.
      */
-    bool isInteger() const { return type() == Integer; }
+    bool isInteger() const {
+        return type() == Integer;
+    }
 
     /**
      * Returns true, if the type of this value is floating-point.
      */
-    bool isFloat() const { return type() == Float; }
+    bool isFloat() const {
+        return type() == Float;
+    }
 
     /**
      * Returns true, if the type of this value is the complex number type.
      */
-    bool isComplex() const { return type() == Complex; }
+    bool isComplex() const {
+        return type() == Complex;
+    }
 
     /**
      * Returns true, if the type of this value is either
      * integer, floating-point or complex number.
      */
-    bool isNumber() const { return (type() == Integer) || (type() == Float) || (type() == Complex); }
+    bool isNumber() const {
+        return (type() == Integer) || (type() == Float) || (type() == Complex);
+    }
 
     /**
      * Returns true, if the type of this value is string.
      */
-    bool isString() const { return type() == String; }
+    bool isString() const {
+        return type() == String;
+    }
 
     /**
      * Returns true, if the type of this value is array.
      */
-    bool isArray() const { return type() == Array; }
+    bool isArray() const {
+        return type() == Array;
+    }
 
     /**
      * Returns true, if this value holds error information.
      */
-    bool isError() const { return type() == Error; }
+    bool isError() const {
+        return type() == Error;
+    }
 
     /**
      * Sets this value to hold error message.
      */
-    void setError( const QString& msg );
+    void setError(const QString& msg);
 
     /**
      * Returns the boolean value of this value.
@@ -301,7 +319,7 @@ class KSPREAD_EXPORT Value
     /**
      * Returns an element in the array value.
      */
-    Value element( unsigned column, unsigned row ) const;
+    Value element(unsigned column, unsigned row) const;
 
     /**
      * Returns an array element given by its index denoting its position in the
@@ -309,12 +327,12 @@ class KSPREAD_EXPORT Value
      * Usable to iterate over the array.
      * \see count()
      */
-    Value element( unsigned index ) const;
+    Value element(unsigned index) const;
 
     /**
      * Sets an element in the array value. Do not use if isArray() is false.
      */
-    void setElement( unsigned column, unsigned row, const Value& value );
+    void setElement(unsigned column, unsigned row, const Value& value);
 
     /**
      * If this value is an array, return the number of columns.
@@ -425,38 +443,40 @@ class KSPREAD_EXPORT Value
      * Returns true if it is OK to compare this value with v.
      * If this function returns false, then return value of compare is undefined.
      */
-    bool allowComparison( const Value& v ) const;
+    bool allowComparison(const Value& v) const;
 
     /**
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
      */
-    int compare( const Value& v ) const;
+    int compare(const Value& v) const;
 
     /**
      * Returns true if this value is equal to v.
      */
-    bool equal( const Value& v ) const;
+    bool equal(const Value& v) const;
 
     /**
      * Returns true if this value is less than v.
      */
-    bool less( const Value& v ) const;
+    bool less(const Value& v) const;
 
     /**
      * Returns true if this value is greater than v.
      */
-    bool greater( const Value& v ) const;
+    bool greater(const Value& v) const;
 
     // comparison operator - returns true only if strictly identical, unlike equal()/compare()
-    bool operator==( const Value& v ) const;
-    inline bool operator!=( const Value& other ) const { return !operator==( other ); }
+    bool operator==(const Value& v) const;
+    inline bool operator!=(const Value& other) const {
+        return !operator==(other);
+    }
 
-    static int compare( Number v1, Number v2 );
+    static int compare(Number v1, Number v2);
 
     bool isZero() const;
 
-    static bool isZero( Number v );
+    static bool isZero(Number v);
 
 private:
     class Private;
@@ -471,15 +491,15 @@ uint qHash(const Value& value);
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::Value, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(KSpread::Value, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   QTextStream support
 ****************************************************************************/
 
-KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
-KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
+KSPREAD_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value::Type type);
+KSPREAD_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value value);
 
 /***************************************************************************
   kDebug support

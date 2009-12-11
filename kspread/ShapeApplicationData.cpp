@@ -28,8 +28,8 @@ public:
 };
 
 ShapeApplicationData::ShapeApplicationData()
-    : KoShapeApplicationData()
-    , d(new Private)
+        : KoShapeApplicationData()
+        , d(new Private)
 {
     d->anchoredToCell = true;
 }

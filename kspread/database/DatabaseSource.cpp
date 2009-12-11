@@ -30,7 +30,7 @@ public:
 };
 
 DatabaseSource::DatabaseSource()
-    : d( new Private )
+        : d(new Private)
 {
 }
 

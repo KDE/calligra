@@ -33,8 +33,7 @@ class QStringList;
 
 namespace KSpread
 {
-namespace Plugins
-{
+namespace Plugins {
 
 /**
  * \class Solver Function Optimizer
@@ -42,44 +41,43 @@ namespace Plugins
  */
 class KSPREAD_EXPORT Solver : public KParts::Plugin
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  struct Parameters
-  {
-    QList<Cell> cells;
-  };
+    struct Parameters {
+        QList<Cell> cells;
+    };
 
-  /**
-   * Constructor.
-   */
-  Solver( QObject* parent, const QStringList& args );
+    /**
+     * Constructor.
+     */
+    Solver(QObject* parent, const QStringList& args);
 
-  /**
-   * Destructor.
-   */
-  ~Solver();
+    /**
+     * Destructor.
+     */
+    ~Solver();
 
-  double evaluate( const gsl_vector* vector, void* parameters );
+    double evaluate(const gsl_vector* vector, void* parameters);
 
 protected Q_SLOTS:
-  /**
-   * Called when the Solver action is triggered.
-   * Opens the dialog.
-   */
-  void showDialog();
+    /**
+     * Called when the Solver action is triggered.
+     * Opens the dialog.
+     */
+    void showDialog();
 
-  /**
-   * This method does the real work.
-   * Uses the parameters of the dialog to optimize the given function.
-   */
-  void optimize();
+    /**
+     * This method does the real work.
+     * Uses the parameters of the dialog to optimize the given function.
+     */
+    void optimize();
 
 private:
-    Q_DISABLE_COPY( Solver )
+    Q_DISABLE_COPY(Solver)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace Plugins

@@ -33,7 +33,7 @@
 using namespace KSpread;
 
 ApplyFilterCommand::ApplyFilterCommand()
-    : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
     setText(i18n("Apply Filter"));
 }
@@ -51,17 +51,13 @@ void ApplyFilterCommand::redo()
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
-    for (int i = start + 1; i <= end; ++i)
-    {
+    for (int i = start + 1; i <= end; ++i) {
         const bool isFiltered = !database.filter().evaluate(database, i);
 //         kDebug() <<"Filtering column/row" << i <<"?" << isFiltered;
-        if (database.orientation() == Qt::Vertical)
-        {
+        if (database.orientation() == Qt::Vertical) {
             m_undoData[i] = sheet->rowFormat(i)->isFiltered();
             sheet->nonDefaultRowFormat(i)->setFiltered(isFiltered);
-        }
-        else // database.orientation() == Qt::Horizontal
-        {
+        } else { // database.orientation() == Qt::Horizontal
             m_undoData[i] = sheet->columnFormat(i)->isFiltered();
             sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
         }
@@ -85,8 +81,7 @@ void ApplyFilterCommand::undo()
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
-    for (int i = start + 1; i <= end; ++i)
-    {
+    for (int i = start + 1; i <= end; ++i) {
         if (database.orientation() == Qt::Vertical)
             sheet->nonDefaultRowFormat(i)->setFiltered(m_undoData[i]);
         else // database.orientation() == Qt::Horizontal

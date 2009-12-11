@@ -40,7 +40,9 @@ public:
     ResizeColumnManipulator(QUndoCommand* parent = 0);
     ~ResizeColumnManipulator();
 
-    void setSize(double size) { m_newSize = size; }
+    void setSize(double size) {
+        m_newSize = size;
+    }
 
 protected:
     virtual bool process(Element*);
@@ -58,16 +60,18 @@ private:
  */
 class ResizeRowManipulator : public AbstractRegionCommand
 {
-  public:
+public:
     ResizeRowManipulator(QUndoCommand* parent = 0);
     ~ResizeRowManipulator();
 
-    void setSize(double size) { m_newSize = size; }
+    void setSize(double size) {
+        m_newSize = size;
+    }
 
-  protected:
+protected:
     virtual bool process(Element*);
 
-  private:
+private:
     double m_newSize;
     QHash<int, double> m_oldSizes;
 };
@@ -79,26 +83,30 @@ class ResizeRowManipulator : public AbstractRegionCommand
  */
 class AdjustColumnRowManipulator : public AbstractRegionCommand
 {
-  public:
+public:
     AdjustColumnRowManipulator(QUndoCommand* parent = 0);
     virtual ~AdjustColumnRowManipulator();
 
     virtual bool process(Element*);
     virtual bool preProcessing();
 
-    void setAdjustColumn(bool state) { m_adjustColumn = state; }
-    void setAdjustRow(bool state) { m_adjustRow = state; }
+    void setAdjustColumn(bool state) {
+        m_adjustColumn = state;
+    }
+    void setAdjustRow(bool state) {
+        m_adjustRow = state;
+    }
 
-  protected:
+protected:
     QString name() const;
 
-    QSizeF textSize( const QString& text, const Style& style ) const;
-    double adjustColumnHelper( const Cell& cell );
-    double adjustRowHelper( const Cell& cell );
+    QSizeF textSize(const QString& text, const Style& style) const;
+    double adjustColumnHelper(const Cell& cell);
+    double adjustRowHelper(const Cell& cell);
 
-  private:
-    bool m_adjustColumn : 1;
-    bool m_adjustRow    : 1;
+private:
+bool m_adjustColumn : 1;
+bool m_adjustRow    : 1;
     QMap<int, double> m_newWidths;
     QMap<int, double> m_oldWidths;
     QMap<int, double> m_newHeights;
@@ -113,7 +121,7 @@ class AdjustColumnRowManipulator : public AbstractRegionCommand
  */
 class HideShowManipulator : public AbstractRegionCommand
 {
-  public:
+public:
     HideShowManipulator();
     virtual ~HideShowManipulator();
 
@@ -121,15 +129,19 @@ class HideShowManipulator : public AbstractRegionCommand
     virtual bool preProcessing();
     virtual bool postProcessing();
 
-    void setManipulateColumns(bool state) { m_manipulateColumns = state; }
-    void setManipulateRows(bool state) { m_manipulateRows = state; }
+    void setManipulateColumns(bool state) {
+        m_manipulateColumns = state;
+    }
+    void setManipulateRows(bool state) {
+        m_manipulateRows = state;
+    }
 
-  protected:
+protected:
     QString name() const;
 
-  private:
-    bool m_manipulateColumns : 1;
-    bool m_manipulateRows    : 1;
+private:
+bool m_manipulateColumns : 1;
+bool m_manipulateRows    : 1;
 };
 
 
@@ -144,7 +156,7 @@ public:
     InsertDeleteColumnManipulator();
     virtual ~InsertDeleteColumnManipulator();
 
-    virtual void setReverse( bool reverse );
+    virtual void setReverse(bool reverse);
 
 protected:
     virtual bool process(Element*);
@@ -169,7 +181,7 @@ public:
     InsertDeleteRowManipulator();
     virtual ~InsertDeleteRowManipulator();
 
-    virtual void setReverse( bool reverse );
+    virtual void setReverse(bool reverse);
 
 protected:
     virtual bool process(Element*);

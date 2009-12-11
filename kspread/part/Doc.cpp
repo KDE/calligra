@@ -109,23 +109,23 @@ typedef QMap<QString, QDomElement> SavedDocParts;
 class Doc::Private
 {
 public:
-  Map *map;
-  QMap<QString, KoDataCenter *>  dataCenterMap;
+    Map *map;
+    QMap<QString, KoDataCenter *>  dataCenterMap;
 
-  static QList<Doc*> s_docs;
-  static int s_docId;
+    static QList<Doc*> s_docs;
+    static int s_docId;
 
-  // true if loading is in process, otherwise false.
-  // This flag is used to avoid updates etc. during loading.
-  bool isLoading;
+    // true if loading is in process, otherwise false.
+    // This flag is used to avoid updates etc. during loading.
+    bool isLoading;
 
-  KCompletion listCompletion;
+    KCompletion listCompletion;
 
-  // document properties
-  int syntaxVersion;
-  bool configLoadFromFile       : 1;
-  QStringList spellListIgnoreAll;
-  SavedDocParts savedDocParts;
+    // document properties
+    int syntaxVersion;
+bool configLoadFromFile       : 1;
+    QStringList spellListIgnoreAll;
+    SavedDocParts savedDocParts;
 };
 
 /*****************************************************************************
@@ -137,28 +137,28 @@ public:
 QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
-    : KoDocument( parentWidget, parent, singleViewMode )
-    , d( new Private )
+Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
+        : KoDocument(parentWidget, parent, singleViewMode)
+        , d(new Private)
 {
-  d->map = new Map( this, "Map" );
+    d->map = new Map(this, "Map");
 
-  d->configLoadFromFile = false;
+    d->configLoadFromFile = false;
 
-  documents().append( this );
+    documents().append(this);
 
-  setComponentData( Factory::global(), false );
-  setTemplateType( "kspread_template" );
+    setComponentData(Factory::global(), false);
+    setTemplateType("kspread_template");
 
-  d->isLoading = false;
+    d->isLoading = false;
 
-  // default document properties
-  d->syntaxVersion = CURRENT_SYNTAX_VERSION;
+    // default document properties
+    d->syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     // Ask every shapefactory to populate the dataCenterMap
     // Init chart shape factory with KSpread's specific configuration panels.
-    QList<KoShapeConfigFactory*> panels = ChartDialog::panels( this );
-    foreach (QString id, KoShapeRegistry::instance()->keys()) {
+    QList<KoShapeConfigFactory*> panels = ChartDialog::panels(this);
+    foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->populateDataCenterMap(d->dataCenterMap);
         if (id == ChartShapeId) {
@@ -172,19 +172,19 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
 Doc::~Doc()
 {
-  //don't save config when kword is embedded into konqueror
-  if(isReadWrite())
-    saveConfig();
+    //don't save config when kword is embedded into konqueror
+    if (isReadWrite())
+        saveConfig();
 
-  delete d->map;
-  qDeleteAll( d->dataCenterMap );
+    delete d->map;
+    qDeleteAll(d->dataCenterMap);
 
-  delete d;
+    delete d;
 }
 
 QList<Doc*> Doc::documents()
 {
-  return Private::s_docs;
+    return Private::s_docs;
 }
 
 void Doc::setReadWrite(bool readwrite)
@@ -193,10 +193,10 @@ void Doc::setReadWrite(bool readwrite)
     KoDocument::setReadWrite(readwrite);
 }
 
-void Doc::openTemplate (const KUrl& url)
+void Doc::openTemplate(const KUrl& url)
 {
-    map()->loadingInfo()->setLoadTemplate( true );
-    KoDocument::openTemplate( url );
+    map()->loadingInfo()->setLoadTemplate(true);
+    KoDocument::openTemplate(url);
     map()->deleteLoadingInfo();
     initConfig();
 }
@@ -204,9 +204,9 @@ void Doc::openTemplate (const KUrl& url)
 void Doc::initEmpty()
 {
     KSharedConfigPtr config = Factory::global().config();
-    const int page = config->group( "Parameters" ).readEntry( "NbPage", 1 );
+    const int page = config->group("Parameters").readEntry("NbPage", 1);
 
-    for ( int i = 0; i < page; ++i )
+    for (int i = 0; i < page; ++i)
         map()->addNewSheet();
 
     resetURL();
@@ -216,9 +216,9 @@ void Doc::initEmpty()
     KoDocument::initEmpty();
 }
 
-Map *Doc::map () const
+Map *Doc::map() const
 {
-  return d->map;
+    return d->map;
 }
 
 QMap<QString, KoDataCenter *> Doc::dataCenterMap() const
@@ -228,11 +228,11 @@ QMap<QString, KoDataCenter *> Doc::dataCenterMap() const
 
 void Doc::saveConfig()
 {
-    if ( isEmbedded() ||!isReadWrite())
+    if (isEmbedded() || !isReadWrite())
         return;
     KSharedConfigPtr config = Factory::global().config();
 #ifdef KSPREAD_DOC_ZOOM
-    config->group( "Parameters" ).writeEntry( "Zoom", zoomInPercent() );
+    config->group("Parameters").writeEntry("Zoom", zoomInPercent());
 #endif // KSPREAD_DOC_ZOOM
 }
 
@@ -240,23 +240,23 @@ void Doc::initConfig()
 {
     KSharedConfigPtr config = Factory::global().config();
 
-    const int page = config->group( "KSpread Page Layout" ).readEntry( "Default unit page", 0 );
-    setUnit( KoUnit( (KoUnit::Unit) page ) );
+    const int page = config->group("KSpread Page Layout").readEntry("Default unit page", 0);
+    setUnit(KoUnit((KoUnit::Unit) page));
 
 #if 0 // UNDOREDOLIMIT
-    const int undo = config->group( "Misc" ).readEntry( "UndoRedo", 30 );
-    setUndoRedoLimit( undo );
+    const int undo = config->group("Misc").readEntry("UndoRedo", 30);
+    setUndoRedoLimit(undo);
 #endif
 
 #ifdef KSPREAD_DOC_ZOOM
-    const int zoom = config->group( "Parameters" ).readEntry( "Zoom", 100 );
-    setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    const int zoom = config->group("Parameters").readEntry("Zoom", 100);
+    setZoomAndResolution(zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
 #endif // KSPREAD_DOC_ZOOM
 }
 
 int Doc::syntaxVersion() const
 {
-  return d->syntaxVersion;
+    return d->syntaxVersion;
 }
 
 bool Doc::isLoading() const
@@ -267,17 +267,17 @@ bool Doc::isLoading() const
 
 KCompletion& Doc::completion()
 {
-  return d->listCompletion;
+    return d->listCompletion;
 }
 
-KoView* Doc::createViewInstance( QWidget* parent)
+KoView* Doc::createViewInstance(QWidget* parent)
 {
-    return new View( parent, this );
+    return new View(parent, this);
 }
 
-bool Doc::saveChildren( KoStore* _store )
+bool Doc::saveChildren(KoStore* _store)
 {
-  return map()->saveChildren( _store );
+    return map()->saveChildren(_store);
 }
 
 int Doc::supportedSpecialFormats() const
@@ -285,7 +285,7 @@ int Doc::supportedSpecialFormats() const
     return KoDocument::supportedSpecialFormats();
 }
 
-bool Doc::completeSaving( KoStore* _store )
+bool Doc::completeSaving(KoStore* _store)
 {
     Q_UNUSED(_store);
     return true;
@@ -296,60 +296,56 @@ QDomDocument Doc::saveXML()
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
-    if (!isAutosaving())
-    {
-        foreach ( KoView* view, views() )
-            static_cast<View *>( view )->selection()->emitCloseEditor( true );
+    if (!isAutosaving()) {
+        foreach(KoView* view, views())
+        static_cast<View *>(view)->selection()->emitCloseEditor(true);
     }
 
-    QDomDocument doc = KoDocument::createDomDocument( "kspread", "spreadsheet", CURRENT_DTD_VERSION );
+    QDomDocument doc = KoDocument::createDomDocument("kspread", "spreadsheet", CURRENT_DTD_VERSION);
     QDomElement spread = doc.documentElement();
-    spread.setAttribute( "editor", "KSpread" );
-    spread.setAttribute( "mime", "application/x-kspread" );
-    spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
+    spread.setAttribute("editor", "KSpread");
+    spread.setAttribute("mime", "application/x-kspread");
+    spread.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
 
-    if( !d->spellListIgnoreAll.isEmpty() )
-    {
-        QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
-        spread.appendChild( spellCheckIgnore );
-        for ( QStringList::Iterator it = d->spellListIgnoreAll.begin(); it != d->spellListIgnoreAll.end(); ++it )
-        {
-            QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
-            spellCheckIgnore.appendChild( spellElem );
-            spellElem.setAttribute( "word", *it );
+    if (!d->spellListIgnoreAll.isEmpty()) {
+        QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
+        spread.appendChild(spellCheckIgnore);
+        for (QStringList::Iterator it = d->spellListIgnoreAll.begin(); it != d->spellListIgnoreAll.end(); ++it) {
+            QDomElement spellElem = doc.createElement("SPELLCHECKIGNOREWORD");
+            spellCheckIgnore.appendChild(spellElem);
+            spellElem.setAttribute("word", *it);
         }
     }
 
     SavedDocParts::const_iterator iter = d->savedDocParts.constBegin();
     SavedDocParts::const_iterator end  = d->savedDocParts.constEnd();
-    while ( iter != end )
-    {
-      // save data we loaded in the beginning and which has no owner back to file
-      spread.appendChild( iter.value() );
-      ++iter;
+    while (iter != end) {
+        // save data we loaded in the beginning and which has no owner back to file
+        spread.appendChild(iter.value());
+        ++iter;
     }
 
-    QDomElement e = map()->save( doc );
-    spread.appendChild( e );
+    QDomElement e = map()->save(doc);
+    spread.appendChild(e);
 
-    setModified( false );
+    setModified(false);
 
     return doc;
 }
 
-bool Doc::loadChildren( KoStore* _store )
+bool Doc::loadChildren(KoStore* _store)
 {
-    return map()->loadChildren( _store );
+    return map()->loadChildren(_store);
 }
 
-bool Doc::saveOdf( SavingContext &documentContext )
+bool Doc::saveOdf(SavingContext &documentContext)
 {
     ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
     return saveOdfHelper(documentContext, SaveAll);
 }
 
-bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
-                            QString* /*plainText*/ )
+bool Doc::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
+                        QString* /*plainText*/)
 {
     Q_UNUSED(saveFlag);
     KoStore * store = documentContext.odfStore.store();
@@ -357,41 +353,40 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
-    if (!isAutosaving())
-    {
-      foreach ( KoView* view, views() )
-        static_cast<View *>( view )->selection()->emitCloseEditor( true );
+    if (!isAutosaving()) {
+        foreach(KoView* view, views())
+        static_cast<View *>(view)->selection()->emitCloseEditor(true);
     }
 
-    KoStoreDevice dev( store );
+    KoStoreDevice dev(store);
     KoGenStyles mainStyles;//for compile
 
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
 
     KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
-    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, documentContext.embeddedSaver );
+    KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
     //todo fixme just add a element for testing saving content.xml
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:spreadsheet" );
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:spreadsheet");
 
     // Saving the map.
-    map()->saveOdf( *contentWriter, savingContext );
+    map()->saveOdf(*contentWriter, savingContext);
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     documentContext.odfStore.closeContentWriter();
 
     //add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
+    manifestWriter->addManifestEntry("content.xml",  "text/xml");
 
-    mainStyles.saveOdfStylesDotXml( store, manifestWriter );
+    mainStyles.saveOdfStylesDotXml(store, manifestWriter);
 
-    if(!store->open("settings.xml"))
+    if (!store->open("settings.xml"))
         return false;
 
     KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
@@ -401,20 +396,20 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     saveUnitOdf(settingsWriter);
 
-    saveOdfSettings( *settingsWriter );
+    saveOdfSettings(*settingsWriter);
 
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "configuration-settings");
-    settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
+    settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join(","));
     settingsWriter->endElement(); // config:config-item-set
     settingsWriter->endElement(); // office:settings
     settingsWriter->endElement(); // Root:element
     settingsWriter->endDocument();
     delete settingsWriter;
 
-    if(!store->close())
+    if (!store->close())
         return false;
 
     if (!savingContext.saveDataCenter(store, manifestWriter)) {
@@ -423,373 +418,345 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    setModified( false );
+    setModified(false);
 
     return true;
 }
 
-void Doc::loadOdfSettings( const KoXmlDocument&settingsDoc )
+void Doc::loadOdfSettings(const KoXmlDocument&settingsDoc)
 {
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    if ( !viewSettings.isNull() )
-    {
+    KoOasisSettings settings(settingsDoc);
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    if (!viewSettings.isNull()) {
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
     }
-    map()->loadOdfSettings( settings );
-    loadOdfIgnoreList( settings );
+    map()->loadOdfSettings(settings);
+    loadOdfIgnoreList(settings);
 }
 
-void Doc::saveOdfSettings( KoXmlWriter &settingsWriter )
+void Doc::saveOdfSettings(KoXmlWriter &settingsWriter)
 {
     settingsWriter.startElement("config:config-item-map-indexed");
     settingsWriter.addAttribute("config:name", "Views");
-    settingsWriter.startElement( "config:config-item-map-entry" );
-    map()->saveOdfSettings( settingsWriter );
+    settingsWriter.startElement("config:config-item-map-entry");
+    map()->saveOdfSettings(settingsWriter);
     settingsWriter.endElement();
     settingsWriter.endElement();
 }
 
 
-void Doc::loadOdfIgnoreList( const KoOasisSettings& settings )
+void Doc::loadOdfIgnoreList(const KoOasisSettings& settings)
 {
-    KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
-    if ( !configurationSettings.isNull() )
-    {
-        const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
+    KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
+    if (!configurationSettings.isNull()) {
+        const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         //kDebug()<<" ignorelist :"<<ignorelist;
-        d->spellListIgnoreAll = ignorelist.split( ',', QString::SkipEmptyParts );
+        d->spellListIgnoreAll = ignorelist.split(',', QString::SkipEmptyParts);
     }
 }
 
 
-bool Doc::loadOdf( KoOdfReadStore & odfStore )
+bool Doc::loadOdf(KoOdfReadStore & odfStore)
 {
     QTime dt;
     dt.start();
 
-    emit sigProgress( 0 );
+    emit sigProgress(0);
     d->isLoading = true;
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( realBody.isNull() )
-    {
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ));
+    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+    if (realBody.isNull()) {
+        setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         map()->deleteLoadingInfo();
         return false;
     }
-    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
-    if ( body.isNull() )
-    {
+    if (body.isNull()) {
         kError(32001) << "No office:spreadsheet found!" << endl;
         KoXmlElement childElem;
         QString localName;
-        forEachElement( childElem, realBody ) {
+        forEachElement(childElem, realBody) {
             localName = childElem.localName();
         }
-        if ( localName.isEmpty() )
-            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        if (localName.isEmpty())
+            setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
         else
-            setErrorMessage( i18n( "This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType( localName ) ) );
+            setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType(localName)));
         map()->deleteLoadingInfo();
         return false;
     }
 
-    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
 
     // TODO check versions and mimetypes etc.
 
     // all <sheet:sheet> goes to workbook
-    if ( !map()->loadOdf( body, context ) )
-    {
+    if (!map()->loadOdf(body, context)) {
         d->isLoading = false;
         map()->deleteLoadingInfo();
         return false;
     }
 
-    if ( !odfStore.settingsDoc().isNull() )
-    {
-        loadOdfSettings( odfStore.settingsDoc() );
+    if (!odfStore.settingsDoc().isNull()) {
+        loadOdfSettings(odfStore.settingsDoc());
     }
     initConfig();
     emit sigProgress(-1);
 
     //display loading time
-    kDebug(36001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
+    kDebug(36001) << "Loading took" << (float)(dt.elapsed()) / 1000.0 << " seconds";
 
     return true;
 }
 
-bool Doc::loadXML( const KoXmlDocument& doc, KoStore* )
+bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 {
-  QTime dt;
-  dt.start();
+    QTime dt;
+    dt.start();
 
-  emit sigProgress( 0 );
-  d->isLoading = true;
-  d->spellListIgnoreAll.clear();
-  // <spreadsheet>
-  KoXmlElement spread = doc.documentElement();
+    emit sigProgress(0);
+    d->isLoading = true;
+    d->spellListIgnoreAll.clear();
+    // <spreadsheet>
+    KoXmlElement spread = doc.documentElement();
 
-  if ( spread.attribute( "mime" ) != "application/x-kspread" && spread.attribute( "mime" ) != "application/vnd.kde.kspread" )
-  {
-    d->isLoading = false;
-    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime") ) );
-    return false;
-  }
+    if (spread.attribute("mime") != "application/x-kspread" && spread.attribute("mime") != "application/vnd.kde.kspread") {
+        d->isLoading = false;
+        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime")));
+        return false;
+    }
 
     bool ok = false;
-    int version = spread.attribute( "syntaxVersion" ).toInt( &ok );
+    int version = spread.attribute("syntaxVersion").toInt(&ok);
     d->syntaxVersion = ok ? version : 0;
-  if ( d->syntaxVersion > CURRENT_SYNTAX_VERSION )
-  {
-      int ret = KMessageBox::warningContinueCancel(
-          0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                  "When you open it with this version of KSpread, some information may be lost.",d->syntaxVersion),
-          i18n("File Format Mismatch"), KStandardGuiItem::cont() );
-      if ( ret == KMessageBox::Cancel )
-      {
-          setErrorMessage( "USER_CANCELED" );
-          return false;
-      }
-  }
-
-  // <locale>
-  KoXmlElement loc = spread.namedItem( "locale" ).toElement();
-  if ( !loc.isNull() )
-      static_cast<Localization*>(map()->calculationSettings()->locale())->load( loc );
-
-  emit sigProgress( 5 );
-
-  KoXmlElement defaults = spread.namedItem( "defaults" ).toElement();
-  if ( !defaults.isNull() )
-  {
-    double dim = defaults.attribute( "row-height" ).toDouble( &ok );
-    if ( !ok )
-      return false;
-    map()->setDefaultRowHeight(dim);
-
-    dim = defaults.attribute( "col-width" ).toDouble( &ok );
-
-    if ( !ok )
-      return false;
-
-    map()->setDefaultColumnWidth(dim);
-  }
-
-  KoXmlElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
-  if ( !ignoreAll.isNull())
-  {
-      KoXmlElement spellWord=spread.namedItem("SPELLCHECKIGNORELIST").toElement();
-
-      spellWord=spellWord.firstChild().toElement();
-      while ( !spellWord.isNull() )
-      {
-          if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
-          {
-              d->spellListIgnoreAll.append(spellWord.attribute("word"));
-          }
-          spellWord=spellWord.nextSibling().toElement();
-      }
-  }
-
-  emit sigProgress( 40 );
-  // In case of reload (e.g. from konqueror)
-  qDeleteAll(map()->sheetList());
-  map()->sheetList().clear();
-
-  KoXmlElement styles = spread.namedItem( "styles" ).toElement();
-  if ( !styles.isNull() )
-  {
-    if ( !map()->styleManager()->loadXML( styles ) )
-    {
-      setErrorMessage( i18n( "Styles cannot be loaded." ) );
-      d->isLoading = false;
-      return false;
+    if (d->syntaxVersion > CURRENT_SYNTAX_VERSION) {
+        int ret = KMessageBox::warningContinueCancel(
+                      0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
+                              "When you open it with this version of KSpread, some information may be lost.", d->syntaxVersion),
+                      i18n("File Format Mismatch"), KStandardGuiItem::cont());
+        if (ret == KMessageBox::Cancel) {
+            setErrorMessage("USER_CANCELED");
+            return false;
+        }
     }
-  }
 
-  // <map>
-  KoXmlElement mymap = spread.namedItem( "map" ).toElement();
-  if ( mymap.isNull() )
-  {
-      setErrorMessage( i18n("Invalid document. No map tag.") );
-      d->isLoading = false;
-      return false;
-  }
-  if ( !map()->loadXML( mymap ) )
-  {
-      d->isLoading = false;
-      return false;
-  }
+    // <locale>
+    KoXmlElement loc = spread.namedItem("locale").toElement();
+    if (!loc.isNull())
+        static_cast<Localization*>(map()->calculationSettings()->locale())->load(loc);
+
+    emit sigProgress(5);
+
+    KoXmlElement defaults = spread.namedItem("defaults").toElement();
+    if (!defaults.isNull()) {
+        double dim = defaults.attribute("row-height").toDouble(&ok);
+        if (!ok)
+            return false;
+        map()->setDefaultRowHeight(dim);
+
+        dim = defaults.attribute("col-width").toDouble(&ok);
+
+        if (!ok)
+            return false;
+
+        map()->setDefaultColumnWidth(dim);
+    }
+
+    KoXmlElement ignoreAll = spread.namedItem("SPELLCHECKIGNORELIST").toElement();
+    if (!ignoreAll.isNull()) {
+        KoXmlElement spellWord = spread.namedItem("SPELLCHECKIGNORELIST").toElement();
+
+        spellWord = spellWord.firstChild().toElement();
+        while (!spellWord.isNull()) {
+            if (spellWord.tagName() == "SPELLCHECKIGNOREWORD") {
+                d->spellListIgnoreAll.append(spellWord.attribute("word"));
+            }
+            spellWord = spellWord.nextSibling().toElement();
+        }
+    }
+
+    emit sigProgress(40);
+    // In case of reload (e.g. from konqueror)
+    qDeleteAll(map()->sheetList());
+    map()->sheetList().clear();
+
+    KoXmlElement styles = spread.namedItem("styles").toElement();
+    if (!styles.isNull()) {
+        if (!map()->styleManager()->loadXML(styles)) {
+            setErrorMessage(i18n("Styles cannot be loaded."));
+            d->isLoading = false;
+            return false;
+        }
+    }
+
+    // <map>
+    KoXmlElement mymap = spread.namedItem("map").toElement();
+    if (mymap.isNull()) {
+        setErrorMessage(i18n("Invalid document. No map tag."));
+        d->isLoading = false;
+        return false;
+    }
+    if (!map()->loadXML(mymap)) {
+        d->isLoading = false;
+        return false;
+    }
 
     // named areas
-    const KoXmlElement areaname = spread.namedItem( "areaname" ).toElement();
+    const KoXmlElement areaname = spread.namedItem("areaname").toElement();
     if (!areaname.isNull())
         map()->namedAreaManager()->loadXML(areaname);
 
-  //Backwards compatibility with older versions for paper layout
-  if ( d->syntaxVersion < 1 )
-  {
-    KoXmlElement paper = spread.namedItem( "paper" ).toElement();
-    if ( !paper.isNull() )
-    {
-      loadPaper( paper );
-    }
-  }
-
-  emit sigProgress( 85 );
-
-  KoXmlElement element( spread.firstChild().toElement() );
-  while ( !element.isNull() )
-  {
-    QString tagName( element.tagName() );
-
-    if ( tagName != "locale" && tagName != "map" && tagName != "styles"
-         && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname"
-         && tagName != "paper" )
-    {
-      // belongs to a plugin, load it and save it for later use
-      d->savedDocParts[ tagName ] = KoXml::asQDomElement(QDomDocument(), element);
+    //Backwards compatibility with older versions for paper layout
+    if (d->syntaxVersion < 1) {
+        KoXmlElement paper = spread.namedItem("paper").toElement();
+        if (!paper.isNull()) {
+            loadPaper(paper);
+        }
     }
 
-    element = element.nextSibling().toElement();
-  }
+    emit sigProgress(85);
 
-  emit sigProgress( 90 );
-  initConfig();
-  emit sigProgress(-1);
+    KoXmlElement element(spread.firstChild().toElement());
+    while (!element.isNull()) {
+        QString tagName(element.tagName());
 
-   kDebug(36001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
+        if (tagName != "locale" && tagName != "map" && tagName != "styles"
+                && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname"
+                && tagName != "paper") {
+            // belongs to a plugin, load it and save it for later use
+            d->savedDocParts[ tagName ] = KoXml::asQDomElement(QDomDocument(), element);
+        }
 
-  emit sig_refreshView();
+        element = element.nextSibling().toElement();
+    }
 
-  return true;
+    emit sigProgress(90);
+    initConfig();
+    emit sigProgress(-1);
+
+    kDebug(36001) << "Loading took" << (float)(dt.elapsed()) / 1000.0 << " seconds";
+
+    emit sig_refreshView();
+
+    return true;
 }
 
-void Doc::loadPaper( KoXmlElement const & paper )
+void Doc::loadPaper(KoXmlElement const & paper)
 {
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
     pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
     pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
-                           ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+                             ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
     // <borders>
-    KoXmlElement borders = paper.namedItem( "borders" ).toElement();
-    if ( !borders.isNull() )
-    {
-        pageLayout.leftMargin   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
-        pageLayout.rightMargin  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
-        pageLayout.topMargin    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
-        pageLayout.bottomMargin = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
+    KoXmlElement borders = paper.namedItem("borders").toElement();
+    if (!borders.isNull()) {
+        pageLayout.leftMargin   = MM_TO_POINT(borders.attribute("left").toFloat());
+        pageLayout.rightMargin  = MM_TO_POINT(borders.attribute("right").toFloat());
+        pageLayout.topMargin    = MM_TO_POINT(borders.attribute("top").toFloat());
+        pageLayout.bottomMargin = MM_TO_POINT(borders.attribute("bottom").toFloat());
     }
 
     //apply to all sheet
-    foreach ( Sheet* sheet, map()->sheetList() )
-    {
+    foreach(Sheet* sheet, map()->sheetList()) {
         sheet->printSettings()->setPageLayout(pageLayout);
     }
 
-  QString hleft, hright, hcenter;
-  QString fleft, fright, fcenter;
-  // <head>
-  KoXmlElement head = paper.namedItem( "head" ).toElement();
-  if ( !head.isNull() )
-  {
-    KoXmlElement left = head.namedItem( "left" ).toElement();
-    if ( !left.isNull() )
-      hleft = left.text();
-    KoXmlElement center = head.namedItem( "center" ).toElement();
-    if ( !center.isNull() )
-      hcenter = center.text();
-    KoXmlElement right = head.namedItem( "right" ).toElement();
-    if ( !right.isNull() )
-      hright = right.text();
-  }
-  // <foot>
-  KoXmlElement foot = paper.namedItem( "foot" ).toElement();
-  if ( !foot.isNull() )
-  {
-    KoXmlElement left = foot.namedItem( "left" ).toElement();
-    if ( !left.isNull() )
-      fleft = left.text();
-    KoXmlElement center = foot.namedItem( "center" ).toElement();
-    if ( !center.isNull() )
-      fcenter = center.text();
-    KoXmlElement right = foot.namedItem( "right" ).toElement();
-    if ( !right.isNull() )
-      fright = right.text();
-  }
-  //The macro "<sheet>" formerly was typed as "<table>"
-  hleft   = hleft.replace(   "<table>", "<sheet>" );
-  hcenter = hcenter.replace( "<table>", "<sheet>" );
-  hright  = hright.replace(  "<table>", "<sheet>" );
-  fleft   = fleft.replace(   "<table>", "<sheet>" );
-  fcenter = fcenter.replace( "<table>", "<sheet>" );
-  fright  = fright.replace(  "<table>", "<sheet>" );
+    QString hleft, hright, hcenter;
+    QString fleft, fright, fcenter;
+    // <head>
+    KoXmlElement head = paper.namedItem("head").toElement();
+    if (!head.isNull()) {
+        KoXmlElement left = head.namedItem("left").toElement();
+        if (!left.isNull())
+            hleft = left.text();
+        KoXmlElement center = head.namedItem("center").toElement();
+        if (!center.isNull())
+            hcenter = center.text();
+        KoXmlElement right = head.namedItem("right").toElement();
+        if (!right.isNull())
+            hright = right.text();
+    }
+    // <foot>
+    KoXmlElement foot = paper.namedItem("foot").toElement();
+    if (!foot.isNull()) {
+        KoXmlElement left = foot.namedItem("left").toElement();
+        if (!left.isNull())
+            fleft = left.text();
+        KoXmlElement center = foot.namedItem("center").toElement();
+        if (!center.isNull())
+            fcenter = center.text();
+        KoXmlElement right = foot.namedItem("right").toElement();
+        if (!right.isNull())
+            fright = right.text();
+    }
+    //The macro "<sheet>" formerly was typed as "<table>"
+    hleft   = hleft.replace("<table>", "<sheet>");
+    hcenter = hcenter.replace("<table>", "<sheet>");
+    hright  = hright.replace("<table>", "<sheet>");
+    fleft   = fleft.replace("<table>", "<sheet>");
+    fcenter = fcenter.replace("<table>", "<sheet>");
+    fright  = fright.replace("<table>", "<sheet>");
 
-  foreach ( Sheet* sheet, map()->sheetList() )
-  {
-    sheet->print()->setHeadFootLine( hleft, hcenter, hright,
-                                     fleft, fcenter, fright);
-  }
+    foreach(Sheet* sheet, map()->sheetList()) {
+        sheet->print()->setHeadFootLine(hleft, hcenter, hright,
+                                        fleft, fcenter, fright);
+    }
 }
 
-bool Doc::completeLoading( KoStore* store )
+bool Doc::completeLoading(KoStore* store)
 {
-  kDebug(36001) <<"------------------------ COMPLETING --------------------";
+    kDebug(36001) << "------------------------ COMPLETING --------------------";
 
-  d->isLoading = false;
+    d->isLoading = false;
 
-  foreach ( KoView* view, views() )
-    static_cast<View *>( view )->initialPosition();
+    foreach(KoView* view, views())
+    static_cast<View *>(view)->initialPosition();
 
-  kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
+    kDebug(36001) << "------------------------ COMPLETION DONE --------------------";
 
-  setModified( false );
-  bool ok=map()->completeLoading(store);
-  foreach(KoDataCenter *dataCenter, d->dataCenterMap)
-  {
-    ok = ok && dataCenter->completeLoading(store);
-  }
-  return ok;
+    setModified(false);
+    bool ok = map()->completeLoading(store);
+    foreach(KoDataCenter *dataCenter, d->dataCenterMap) {
+        ok = ok && dataCenter->completeLoading(store);
+    }
+    return ok;
 }
 
 
-bool Doc::docData( QString const & xmlTag, QDomElement & data )
+bool Doc::docData(QString const & xmlTag, QDomElement & data)
 {
-  SavedDocParts::iterator iter = d->savedDocParts.find( xmlTag );
-  if ( iter == d->savedDocParts.end() )
-    return false;
-  data = iter.value();
-  d->savedDocParts.erase( iter );
-  return true;
+    SavedDocParts::iterator iter = d->savedDocParts.find(xmlTag);
+    if (iter == d->savedDocParts.end())
+        return false;
+    data = iter.value();
+    d->savedDocParts.erase(iter);
+    return true;
 }
 
-void Doc::addIgnoreWordAllList( const QStringList & _lst)
+void Doc::addIgnoreWordAllList(const QStringList & _lst)
 {
-  d->spellListIgnoreAll = _lst;
+    d->spellListIgnoreAll = _lst;
 }
 
 QStringList Doc::spellListIgnoreAll() const
 {
-  return d->spellListIgnoreAll;
+    return d->spellListIgnoreAll;
 }
 
-void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
+void Doc::newZoomAndResolution(bool updateViews, bool /*forPrint*/)
 {
-/*    layout();
-    updateAllFrames();*/
-    if ( updateViews )
-    {
+    /*    layout();
+        updateAllFrames();*/
+    if (updateViews) {
         emit sig_refreshView();
     }
 }
 
-void Doc::paintContent( QPainter& painter, const QRect& rect)
+void Doc::paintContent(QPainter& painter, const QRect& rect)
 {
 #ifndef KSPREAD_DOC_ZOOM
     Q_UNUSED(painter);
@@ -801,41 +768,41 @@ void Doc::paintContent( QPainter& painter, const QRect& rect)
 
     // choose sheet: the first or the active
     Sheet* sheet = 0;
-    if ( !d->activeSheet )
-        sheet = map()->sheet( 0 );
+    if (!d->activeSheet)
+        sheet = map()->sheet(0);
     else
         sheet = d->activeSheet;
-    if ( !sheet )
+    if (!sheet)
         return;
 
     // save current zoom
     double oldZoom = m_zoom;
     // set the resolution once
-    setZoom( 1.0 / m_zoomedResolutionX);
+    setZoom(1.0 / m_zoomedResolutionX);
 
     // KSpread support zoom, therefore no need to scale with worldMatrix
     // Save the translation though.
     QMatrix matrix = painter.matrix();
-    matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
+    matrix.setMatrix(1, 0, 0, 1, matrix.dx(), matrix.dy());
 
     // Unscale the rectangle.
     QRect prect = rect;
-    prect.setWidth( (int) (prect.width() * painter.matrix().m11()) );
-    prect.setHeight( (int) (prect.height() * painter.matrix().m22()) );
+    prect.setWidth((int)(prect.width() * painter.matrix().m11()));
+    prect.setHeight((int)(prect.height() * painter.matrix().m22()));
 
     // paint the content, now zoom is correctly set
-    kDebug(36001)<<"paintContent-------------------------------------";
+    kDebug(36001) << "paintContent-------------------------------------";
     painter.save();
-    painter.setMatrix( matrix );
-    paintContent( painter, prect, sheet, false );
+    painter.setMatrix(matrix);
+    paintContent(painter, prect, sheet, false);
     painter.restore();
 
     // restore zoom
-    setZoom( oldZoom );
+    setZoom(oldZoom);
 #endif // KSPREAD_DOC_ZOOM
 }
 
-void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor )
+void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor)
 {
 #ifndef KSPREAD_DOC_ZOOM
     Q_UNUSED(painter);
@@ -843,28 +810,28 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool
     Q_UNUSED(sheet);
     Q_UNUSED(drawCursor);
 #else
-    Q_UNUSED( drawCursor );
+    Q_UNUSED(drawCursor);
 
-    if ( isLoading() )
+    if (isLoading())
         return;
     //    ElapsedTime et( "Doc::paintContent2" );
 
     double xpos;
     double ypos;
-    int left_col   = sheet->leftColumn( unzoomItX( rect.x() ), xpos );
-    int right_col  = sheet->rightColumn( unzoomItX( rect.right() ) );
-    int top_row    = sheet->topRow( unzoomItY( rect.y() ), ypos );
-    int bottom_row = sheet->bottomRow( unzoomItY( rect.bottom() ) );
+    int left_col   = sheet->leftColumn(unzoomItX(rect.x()), xpos);
+    int right_col  = sheet->rightColumn(unzoomItX(rect.right()));
+    int top_row    = sheet->topRow(unzoomItY(rect.y()), ypos);
+    int bottom_row = sheet->bottomRow(unzoomItY(rect.bottom()));
 
     QPen pen;
-    pen.setWidth( 1 );
-    painter.setPen( pen );
+    pen.setWidth(1);
+    painter.setPen(pen);
 
     /* Update the entire visible area. */
     Region region;
-    region.add( QRect( left_col, top_row,
-                       right_col - left_col + 1,
-                       bottom_row - top_row + 1), sheet );
+    region.add(QRect(left_col, top_row,
+                     right_col - left_col + 1,
+                     bottom_row - top_row + 1), sheet);
 
     paintCellRegions(painter, rect, 0, region);
 #endif // KSPREAD_DOC_ZOOM
@@ -872,14 +839,13 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, Sheet* sheet, bool
 
 void Doc::paintUpdates()
 {
-  foreach ( KoView* view, views() )
-  {
-    static_cast<View *>( view )->paintUpdates();
-  }
+    foreach(KoView* view, views()) {
+        static_cast<View *>(view)->paintUpdates();
+    }
 }
 
-void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
-                            View* view, const Region& region )
+void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
+                           View* view, const Region& region)
 {
 #ifndef KSPREAD_DOC_ZOOM
     Q_UNUSED(painter);
@@ -891,8 +857,8 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
     // Clip away children
     //
     QRegion rgn = painter.clipRegion();
-    if ( rgn.isEmpty() )
-        rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
+    if (rgn.isEmpty())
+        rgn = QRegion(QRect(0, 0, viewRect.width(), viewRect.height()));
 
 //   QMatrix matrix;
 //   if ( view ) {
@@ -904,27 +870,26 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
 //   else {
 //     matrix = painter.matrix();
 //   }
-    painter.setClipRegion( rgn );
+    painter.setClipRegion(rgn);
 
     Region::ConstIterator endOfList(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-    {
-        paintRegion(painter, viewToDocument( viewRect ), view,(*it)->rect(), (*it)->sheet());
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
+        paintRegion(painter, viewToDocument(viewRect), view, (*it)->rect(), (*it)->sheet());
     }
 #endif // KSPREAD_DOC_ZOOM
 }
 
-void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
-                       View* view, const QRect &cellRegion, const Sheet* sheet )
+void Doc::paintRegion(QPainter &painter, const QRectF &viewRegion,
+                      View* view, const QRect &cellRegion, const Sheet* sheet)
 {
     // cellRegion has cell coordinates (col,row) while viewRegion has
     // world coordinates.  cellRegion is the cells to update and
     // viewRegion is the area actually onscreen.
 
-    if ( cellRegion.left() <= 0 || cellRegion.top() <= 0 )
+    if (cellRegion.left() <= 0 || cellRegion.top() <= 0)
         return;
 
-    const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
+    const QRectF viewRegionF(viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height());
 
     // Get the world coordinates of the upper left corner of the
     // cellRegion The view is 0, when cellRegion is called from
@@ -934,56 +899,55 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
     // offset is 0.
     //
     QPointF topLeft;
-    if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
-        topLeft = QPointF( sheet->columnPosition( cellRegion.left() ),
-                           sheet->rowPosition( cellRegion.top() ) );
+    if (view == 0)   //Most propably we are embedded and inactive, so no offset
+        topLeft = QPointF(sheet->columnPosition(cellRegion.left()),
+                          sheet->rowPosition(cellRegion.top()));
     else
-        topLeft = QPointF( sheet->columnPosition( cellRegion.left() ) - view->canvasWidget()->xOffset(),
-                           sheet->rowPosition( cellRegion.top() ) - view->canvasWidget()->yOffset() );
+        topLeft = QPointF(sheet->columnPosition(cellRegion.left()) - view->canvasWidget()->xOffset(),
+                          sheet->rowPosition(cellRegion.top()) - view->canvasWidget()->yOffset());
 
-    SheetView sheetView( sheet ); // FIXME Stefan: make member, otherwise cache lost
-    if ( view )
-    {
-        sheetView.setPaintDevice( view->canvasWidget() );
-        sheetView.setViewConverter( view->zoomHandler() );
+    SheetView sheetView(sheet);   // FIXME Stefan: make member, otherwise cache lost
+    if (view) {
+        sheetView.setPaintDevice(view->canvasWidget());
+        sheetView.setViewConverter(view->zoomHandler());
     }
-    sheetView.setPaintCellRange( cellRegion );
-    sheetView.paintCells( view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft );
+    sheetView.setPaintCellRange(cellRegion);
+    sheetView.paintCells(view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft);
 }
 
 void Doc::addStringCompletion(const QString &stringCompletion)
 {
-  if ( d->listCompletion.items().contains(stringCompletion) == 0 )
-    d->listCompletion.addItem( stringCompletion );
+    if (d->listCompletion.items().contains(stringCompletion) == 0)
+        d->listCompletion.addItem(stringCompletion);
 }
 
 void Doc::refreshInterface()
 {
-  emit sig_refreshView();
+    emit sig_refreshView();
 }
 
 void Doc::updateBorderButton()
 {
-  foreach ( KoView* view, views() )
-    static_cast<View*>( view )->updateBorderButton();
+    foreach(KoView* view, views())
+    static_cast<View*>(view)->updateBorderButton();
 }
 
-void Doc::addIgnoreWordAll( const QString & word)
+void Doc::addIgnoreWordAll(const QString & word)
 {
     if (d->spellListIgnoreAll.indexOf(word) == -1)
-        d->spellListIgnoreAll.append( word );
+        d->spellListIgnoreAll.append(word);
 }
 
-void Doc::clearIgnoreWordAll( )
+void Doc::clearIgnoreWordAll()
 {
     d->spellListIgnoreAll.clear();
 }
 
-void Doc::addView( KoView *_view )
+void Doc::addView(KoView *_view)
 {
-  KoDocument::addView( _view );
-  foreach ( KoView* view, views() )
-    static_cast<View*>( view )->selection()->emitCloseEditor(true);
+    KoDocument::addView(_view);
+    foreach(KoView* view, views())
+    static_cast<View*>(view)->selection()->emitCloseEditor(true);
 }
 
 void Doc::loadConfigFromFile()
@@ -996,18 +960,17 @@ bool Doc::configLoadFromFile() const
     return d->configLoadFromFile;
 }
 
-void Doc::repaint( const QRectF& rect )
+void Doc::repaint(const QRectF& rect)
 {
     QRectF r;
-    foreach ( KoView* koview, views() )
-    {
-        const View* view = static_cast<View*>( koview );
+    foreach(KoView* koview, views()) {
+        const View* view = static_cast<View*>(koview);
         Canvas* canvas = view->canvasWidget();
 
-        r = view->zoomHandler()->documentToView( rect );
-        r.translate( -canvas->xOffset() * view->zoomHandler()->zoomedResolutionX(),
-                     -canvas->yOffset() * view->zoomHandler()->zoomedResolutionY() );
-        canvas->update( r.toRect() );
+        r = view->zoomHandler()->documentToView(rect);
+        r.translate(-canvas->xOffset() * view->zoomHandler()->zoomedResolutionX(),
+                    -canvas->yOffset() * view->zoomHandler()->zoomedResolutionY());
+        canvas->update(r.toRect());
     }
 }
 
@@ -1015,13 +978,13 @@ void Doc::repaint( const QRectF& rect )
 #if 0 // UNDOREDOLIMIT
 int Doc::undoRedoLimit() const
 {
-  return d->commandHistory->undoLimit();
+    return d->commandHistory->undoLimit();
 }
 
 void Doc::setUndoRedoLimit(int val)
 {
-  d->commandHistory->setUndoLimit(val);
-  d->commandHistory->setRedoLimit(val);
+    d->commandHistory->setUndoLimit(val);
+    d->commandHistory->setRedoLimit(val);
 }
 #endif
 

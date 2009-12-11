@@ -37,9 +37,9 @@ public:
 };
 
 AbstractSelectionStrategy::AbstractSelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                                     const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : KoInteractionStrategy(parent, canvas)
-    , d(new Private)
+        const QPointF documentPos, Qt::KeyboardModifiers modifiers)
+        : KoInteractionStrategy(parent, canvas)
+        , d(new Private)
 {
     Q_UNUSED(modifiers)
     d->selection = selection;
@@ -62,15 +62,13 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     int col = d->selection->activeSheet()->leftColumn(position.x(), xpos);
     int row = d->selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
-    if (col > KS_colMax || row > KS_rowMax)
-    {
+    if (col > KS_colMax || row > KS_rowMax) {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
         return;
     }
     // Test whether mouse is over the Selection.handle
     const QRectF selectionHandle = d->selection->selectionHandleArea(m_canvas->viewConverter());
-    if (selectionHandle.contains(position))
-    {
+    if (selectionHandle.contains(position)) {
         // If the cursor is over the handle, than it might be already on the next cell.
         // Recalculate the cell position!
         col = d->selection->activeSheet()->leftColumn(position.x() - m_canvas->viewConverter()->viewToDocumentX(2.0), xpos);

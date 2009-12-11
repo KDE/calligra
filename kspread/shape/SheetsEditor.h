@@ -25,33 +25,33 @@
 
 namespace KSpread
 {
-    class TableShape;
-    class Sheet;
+class TableShape;
+class Sheet;
 
-    class SheetsEditor : public QWidget
-    {
-            Q_OBJECT
-        public:
-            explicit SheetsEditor(TableShape* tableShape, QWidget* parent = 0);
-            virtual ~SheetsEditor();
+class SheetsEditor : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit SheetsEditor(TableShape* tableShape, QWidget* parent = 0);
+    virtual ~SheetsEditor();
 
-        private Q_SLOTS:
-            void sheetAdded(Sheet* sheet);
-            void sheetNameChanged(Sheet* sheet, const QString& old_name);
+private Q_SLOTS:
+    void sheetAdded(Sheet* sheet);
+    void sheetNameChanged(Sheet* sheet, const QString& old_name);
 
-            void selectionChanged();
-            void itemChanged(QListWidgetItem* item);
+    void selectionChanged();
+    void itemChanged(QListWidgetItem* item);
 
-            void renameClicked();
-            void addClicked();
-            void removeClicked();
+    void renameClicked();
+    void addClicked();
+    void removeClicked();
 
-        private:
-            Q_DISABLE_COPY( SheetsEditor )
+private:
+    Q_DISABLE_COPY(SheetsEditor)
 
-            class Private;
-            Private * const d;
-    };
+    class Private;
+    Private * const d;
+};
 
 } // namespace KSpread
 

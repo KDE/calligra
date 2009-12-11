@@ -50,12 +50,16 @@ public:
     /**
      * \return the Sheet this AbstractRegionCommand works on
      */
-    Sheet* sheet() const { return m_sheet; }
+    Sheet* sheet() const {
+        return m_sheet;
+    }
 
     /**
      * Sets \p sheet to be the Sheet to work on.
      */
-    void setSheet( Sheet* sheet ) { m_sheet = sheet; }
+    void setSheet(Sheet* sheet) {
+        m_sheet = sheet;
+    }
 
     /**
      * Executes the actual operation and adds the manipulator to the undo history, if desired.
@@ -80,25 +84,33 @@ public:
      * \see redo
      * \see undo
      */
-    virtual void setReverse( bool reverse ) { m_reverse = reverse; }
+    virtual void setReverse(bool reverse) {
+        m_reverse = reverse;
+    }
 
     /**
      * If \p registerUndo is \c true , this manipulator registers an
      * undo operation for the document.
      */
-    void setRegisterUndo( bool registerUndo ) { m_register = registerUndo; }
+    void setRegisterUndo(bool registerUndo) {
+        m_register = registerUndo;
+    }
 
 protected:
     /**
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by mainProcessing() .
      */
-    virtual bool process( Element* ) { return true; }
+    virtual bool process(Element*) {
+        return true;
+    }
 
     /**
      * Preprocessing of the region.
      */
-    virtual bool preProcessing() { return true; }
+    virtual bool preProcessing() {
+        return true;
+    }
 
     /**
      * Processes the region. Calls process(Element*).
@@ -108,7 +120,9 @@ protected:
     /**
      * Postprocessing of the region.
      */
-    virtual bool postProcessing() { return true; }
+    virtual bool postProcessing() {
+        return true;
+    }
 
     /**
      * Checks all cells, that should be processed, for protection and matrix locks.
@@ -119,11 +133,11 @@ protected:
 
 protected:
     Sheet*  m_sheet;
-    bool    m_reverse   : 1;
-    bool    m_firstrun  : 1;
-    bool    m_register  : 1;
-    bool    m_success   : 1;
-    bool    m_checkLock : 1;
+bool    m_reverse   : 1;
+bool    m_firstrun  : 1;
+bool    m_register  : 1;
+bool    m_success   : 1;
+bool    m_checkLock : 1;
 };
 
 } // namespace KSpread

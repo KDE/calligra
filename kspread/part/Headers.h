@@ -40,29 +40,31 @@ class ColumnHeader : public QWidget
 {
     Q_OBJECT
 public:
-    ColumnHeader( QWidget *_parent, Canvas *_canvas, View *_view  );
+    ColumnHeader(QWidget *_parent, Canvas *_canvas, View *_view);
     virtual ~ColumnHeader();
 
-    int markerColumn() const { return  m_iSelectionAnchor; }
-    void equalizeColumn( double resize );
+    int markerColumn() const {
+        return  m_iSelectionAnchor;
+    }
+    void equalizeColumn(double resize);
 
-    void updateColumns( int from, int to );
+    void updateColumns(int from, int to);
 
 private slots:
     void slotAutoScroll(const QPoint& distance);
 
 protected:
-    virtual void paintEvent ( QPaintEvent* _ev );
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-    virtual void wheelEvent( QWheelEvent* );
-    virtual void focusOutEvent( QFocusEvent* ev );
-    virtual void resizeEvent( QResizeEvent * _ev );
-    void paintSizeIndicator( int mouseX );
+    virtual void paintEvent(QPaintEvent* _ev);
+    virtual void mousePressEvent(QMouseEvent* _ev);
+    virtual void mouseReleaseEvent(QMouseEvent* _ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
+    virtual void mouseMoveEvent(QMouseEvent* _ev);
+    virtual void wheelEvent(QWheelEvent*);
+    virtual void focusOutEvent(QFocusEvent* ev);
+    virtual void resizeEvent(QResizeEvent * _ev);
+    void paintSizeIndicator(int mouseX);
 
-    void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text, double width ) const;
+    void drawText(QPainter& painter, const QFont& font, const QPointF& location, const QString& text, double width) const;
 
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
@@ -129,27 +131,29 @@ class RowHeader : public QWidget
 {
     Q_OBJECT
 public:
-    RowHeader( QWidget *_parent, Canvas *_canvas, View *_view );
+    RowHeader(QWidget *_parent, Canvas *_canvas, View *_view);
     virtual ~RowHeader();
 
-    int markerRow() const { return  m_iSelectionAnchor; }
-    void equalizeRow( double resize );
-    void updateRows( int from, int to );
+    int markerRow() const {
+        return  m_iSelectionAnchor;
+    }
+    void equalizeRow(double resize);
+    void updateRows(int from, int to);
 
 private slots:
     void slotAutoScroll(const QPoint& distance);
 
 protected:
-    virtual void paintEvent ( QPaintEvent* _ev );
-    virtual void mousePressEvent( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-    virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
-    virtual void wheelEvent( QWheelEvent* );
-    virtual void focusOutEvent( QFocusEvent* ev );
-    void paintSizeIndicator( int mouseY );
+    virtual void paintEvent(QPaintEvent* _ev);
+    virtual void mousePressEvent(QMouseEvent* _ev);
+    virtual void mouseReleaseEvent(QMouseEvent* _ev);
+    virtual void mouseMoveEvent(QMouseEvent* _ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
+    virtual void wheelEvent(QWheelEvent*);
+    virtual void focusOutEvent(QFocusEvent* ev);
+    void paintSizeIndicator(int mouseY);
 
-    void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text ) const;
+    void drawText(QPainter& painter, const QFont& font, const QPointF& location, const QString& text) const;
 
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
@@ -191,10 +195,10 @@ public:
     virtual ~SelectAllButton();
 
 protected:
-    virtual void paintEvent( QPaintEvent* event );
-    virtual void mousePressEvent( QMouseEvent* event );
-    virtual void mouseReleaseEvent( QMouseEvent* event );
-    virtual void wheelEvent( QWheelEvent* );
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void wheelEvent(QWheelEvent*);
 
 private Q_SLOTS:
     void toolChanged(const QString& toolId);

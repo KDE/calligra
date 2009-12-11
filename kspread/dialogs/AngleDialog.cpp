@@ -41,36 +41,36 @@
 using namespace KSpread;
 
 AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-  setCaption( i18n("Change Angle") );
-  setModal( true );
-  setButtons( Ok|Cancel|Default );
+    setCaption(i18n("Change Angle"));
+    setModal(true);
+    setButtons(Ok | Cancel | Default);
 
-  m_selection = selection;
+    m_selection = selection;
 
-  QWidget *page = new QWidget();
-  setMainWidget( page );
+    QWidget *page = new QWidget();
+    setMainWidget(page);
 
-  QVBoxLayout *lay = new QVBoxLayout( page );
-  lay->setMargin(0);
-  lay->setSpacing(spacingHint());
-  m_pAngle = new KIntNumInput( page );
-  m_pAngle->setRange( -90, 90, 1 );
-  m_pAngle->setLabel( i18n("Angle:") );
-  m_pAngle->setSuffix(" ");
-  lay->addWidget( m_pAngle );
+    QVBoxLayout *lay = new QVBoxLayout(page);
+    lay->setMargin(0);
+    lay->setSpacing(spacingHint());
+    m_pAngle = new KIntNumInput(page);
+    m_pAngle->setRange(-90, 90, 1);
+    m_pAngle->setLabel(i18n("Angle:"));
+    m_pAngle->setSuffix(" ");
+    lay->addWidget(m_pAngle);
 
-  QWidget* spacer = new QWidget( page );
-  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding ) );
-  lay->addWidget( spacer );
+    QWidget* spacer = new QWidget(page);
+    spacer->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
+    lay->addWidget(spacer);
 
-  m_pAngle->setFocus();
+    m_pAngle->setFocus();
 
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()) );
-  int angle = - Cell(m_selection->activeSheet(), m_selection->marker()).style().angle();
-  m_pAngle->setValue( angle );
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
+    int angle = - Cell(m_selection->activeSheet(), m_selection->marker()).style().angle();
+    m_pAngle->setValue(angle);
 }
 
 void AngleDialog::slotOk()
@@ -94,7 +94,7 @@ void AngleDialog::slotOk()
 
 void AngleDialog::slotDefault()
 {
-    m_pAngle->setValue( 0 );
+    m_pAngle->setValue(0);
 }
 
 

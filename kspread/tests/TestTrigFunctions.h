@@ -34,15 +34,15 @@ class TestTrigFunctions: public QObject
 
 private slots:
     void initTestCase();
-  void testCOS();
-  void testCOSH();
-  void testPI();
-  void testSIN();
-  void testSINH();
-  void testTAN();
+    void testCOS();
+    void testCOSH();
+    void testPI();
+    void testSIN();
+    void testSINH();
+    void testTAN();
 
 private:
-  Value evaluate(const QString&);
+    Value evaluate(const QString&);
 };
 
 } // namespace KSpread

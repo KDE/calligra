@@ -32,7 +32,7 @@ class Doc;
 
 class TestStatisticalFunctions : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 private slots:
     void initTestCase();
@@ -41,7 +41,7 @@ private slots:
     void testAVEDEV();
     void testAVERAGE();
     void testAVERAGEA();
-    void testBETADIST();    
+    void testBETADIST();
     void testBETAINV();
 //     void testBINO(); // kspread version of BINOMDIST with 3 Parameters
     void testBINOMDIST();
@@ -54,8 +54,8 @@ private slots:
     void testDEVSQ();
 //     void testDEVSQA(); // no ODF-test available
     void testEXPONDIST();
-    void testFDIST();    
-    void testFINV();   
+    void testFDIST();
+    void testFINV();
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
@@ -122,7 +122,7 @@ private slots:
 //     void testSUMX2MY2();
     void testTDIST();
     void testTINV();
-    void testTREND(); 
+    void testTREND();
     void testTRIMMEAN();
     void testTTEST();
     void testVAR();

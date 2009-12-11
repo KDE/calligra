@@ -26,8 +26,7 @@
 
 namespace KSpread
 {
-namespace Time
-{
+namespace Time {
 
 #ifdef Q_CC_GNU
 
@@ -40,54 +39,50 @@ const long iterations = 100000;
 typedef unsigned long tval;
 
 
-inline tval stamp(void) 
+inline tval stamp(void)
 {
-        tval tsc;
-        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
-        return tsc;
+    tval tsc;
+asm volatile("rdtsc" : "=a"(tsc) : : "edx");
+    return tsc;
 }
 
 inline tval elapsed(tval t)
 {
-        tval tsc;
-        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
-        if (tsc>t)
-                return tsc-t;
-        else
-                return t-tsc;
+    tval tsc;
+asm volatile("rdtsc" : "=a"(tsc) : : "edx");
+    if (tsc > t)
+        return tsc -t;
+    else
+        return t -tsc;
 }
 
-static QString printAverage( tval ticks, int counter, const QString& prefix = QString() )
+static QString printAverage(tval ticks, int counter, const QString& prefix = QString())
 {
     QString str;
     QProcess procCpuInfo;
-    procCpuInfo.start( "cat /proc/cpuinfo");
-    if ( procCpuInfo.waitForFinished() )
-    {
-        QRegExp reg( "cpu MHz\\s+:\\s+(\\d{4}.\\d{3})" );
-        reg.indexIn( procCpuInfo.readAllStandardOutput() );
+    procCpuInfo.start("cat /proc/cpuinfo");
+    if (procCpuInfo.waitForFinished()) {
+        QRegExp reg("cpu MHz\\s+:\\s+(\\d{4}.\\d{3})");
+        reg.indexIn(procCpuInfo.readAllStandardOutput());
         bool ok = true;
-        double freq = reg.cap(1).toDouble( &ok );
-        if ( ok )
-        {
+        double freq = reg.cap(1).toDouble(&ok);
+        if (ok) {
             double time = 1000.0 * ticks / counter / freq; // ns
-            if ( time < 1000.0 )
-                str = QString("%1 ns/operation").arg( QString::number( time, 'f', 2 ) );
-            else
-            {
+            if (time < 1000.0)
+                str = QString("%1 ns/operation").arg(QString::number(time, 'f', 2));
+            else {
                 time /= 1000.0; // us
-                if ( time < 1000.0 )
-                    str = QString("%1 us/operation").arg( QString::number( time, 'f', 2 ) );
-                else
-                {
+                if (time < 1000.0)
+                    str = QString("%1 us/operation").arg(QString::number(time, 'f', 2));
+                else {
                     time /= 1000.0; // ms
-                    str = QString("%1 ms/operation").arg( QString::number( time, 'f', 2 ) );
+                    str = QString("%1 ms/operation").arg(QString::number(time, 'f', 2));
                 }
             }
         }
     }
-    return QString( "%1 Average: %2/%3=%4 cycles/operation; %5" ).
-      arg(prefix). arg( ticks ).arg( counter ).arg( ticks/counter ).arg( str );
+    return QString("%1 Average: %2/%3=%4 cycles/operation; %5").
+           arg(prefix). arg(ticks).arg(counter).arg(ticks / counter).arg(str);
 }
 
 #else
@@ -100,47 +95,45 @@ static QString printAverage( tval ticks, int counter, const QString& prefix = QS
 // this depends on timing resolution
 const long iterations = 10000000;
 
-// Ideally we use QueryPerformanceCounter here, but somehow I can't manage 
+// Ideally we use QueryPerformanceCounter here, but somehow I can't manage
 // to make it work (Ariya)
 
 typedef int tval;
 
 // GetTickCount() returns elapsed time since boot in milliseconds
 
-inline tval stamp(void) 
+inline tval stamp(void)
 {
-  return GetTickCount();
+    return GetTickCount();
 }
 
 
 inline tval elapsed(tval t)
 {
-  tval tsc = GetTickCount();
-  if (tsc>t)
-    return tsc-t;
-  else
-    return t-tsc;
+    tval tsc = GetTickCount();
+    if (tsc > t)
+        return tsc -t;
+    else
+        return t -tsc;
 }
 
-static QString printAverage( tval ticks, int counter, const QString& prefix = QString() )
+static QString printAverage(tval ticks, int counter, const QString& prefix = QString())
 {
-  QString str;
-  double time = ticks * 1.0e6 / counter; // ns
-  if ( time < 1000.0 )
-    str = QString("%1 ns/operation").arg( QString::number( time, 'f', 2 ) );
-  else
-  {
-    time /= 1000.0; // us
-    if ( time < 1000.0 )
-      str = QString("%1 us/operation").arg( QString::number( time, 'f', 2 ) );
-    else
-    {
-      time /= 1000.0; // ms
-      str = QString("%1 ms/operation").arg( QString::number( time, 'f', 2 ) );
+    QString str;
+    double time = ticks * 1.0e6 / counter; // ns
+    if (time < 1000.0)
+        str = QString("%1 ns/operation").arg(QString::number(time, 'f', 2));
+    else {
+        time /= 1000.0; // us
+        if (time < 1000.0)
+            str = QString("%1 us/operation").arg(QString::number(time, 'f', 2));
+        else {
+            time /= 1000.0; // ms
+            str = QString("%1 ms/operation").arg(QString::number(time, 'f', 2));
+        }
     }
-  }
-  return QString( "%1 Average: %2/%3=%4 ticks/operation; %5" ).
-  arg(prefix). arg( ticks ).arg( counter ).arg( ticks/counter ).arg( str );
+    return QString("%1 Average: %2/%3=%4 ticks/operation; %5").
+           arg(prefix). arg(ticks).arg(counter).arg(ticks / counter).arg(str);
 }
 
 #else

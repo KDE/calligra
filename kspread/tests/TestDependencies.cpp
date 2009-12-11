@@ -53,17 +53,17 @@ void TestDependencies::testCircleRemoval()
     DependencyManager* manager = m_doc->map()->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
-    QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1,1,1,1));
+    QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
     QCOMPARE(consumers.count(), 1);
     QCOMPARE(consumers.first(), Cell(m_sheet, 1, 1));
-    QCOMPARE(manager->d->providers.value(Cell(m_sheet, 1, 1)), Region(QRect(1,1,1,1), m_sheet));
+    QCOMPARE(manager->d->providers.value(Cell(m_sheet, 1, 1)), Region(QRect(1, 1, 1, 1), m_sheet));
 
     m_storage->setFormula(1, 1, Formula()); // A1
 
     QApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value());
-    QVERIFY(manager->d->consumers.value(m_sheet)->contains(QRect(1,1,1,1)).count() == 0);
+    QVERIFY(manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1)).count() == 0);
     QVERIFY(manager->d->providers.count() == 0);
 }
 

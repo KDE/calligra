@@ -35,15 +35,15 @@ class TestOpenFormula: public QObject
 
 private Q_SLOTS:
     void initTestCase();
-  void testEvaluation();
-  void testFormulaConversion();
-  void testReferenceLoading();
-  void testReferenceSaving();
+    void testEvaluation();
+    void testFormulaConversion();
+    void testReferenceLoading();
+    void testReferenceSaving();
 
 private:
-  Value evaluate(const QString&, Value&);
-  QString convertToOpenFormula(const QString& expr);
-  QString convertFromOpenFormula(const QString& expr);
+    Value evaluate(const QString&, Value&);
+    QString convertToOpenFormula(const QString& expr);
+    QString convertFromOpenFormula(const QString& expr);
 };
 
 } // namespace KSpread

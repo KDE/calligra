@@ -34,9 +34,9 @@ namespace KSpread
 
 class FindOption : public QObject
 {
-  Q_OBJECT
- public:
-    explicit FindOption( QWidget *parent);
+    Q_OBJECT
+public:
+    explicit FindOption(QWidget *parent);
     bool searchInAllSheet() const;
 
     enum searchTypeValue { Value, Note};
@@ -61,43 +61,49 @@ private:
 
 class FindDlg : public KFindDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-    explicit FindDlg( QWidget *parent = 0,
-                      const char *name = 0,
-                      long options = 0,
-                      const QStringList &findStrings = QStringList(),
-                      bool hasSelection = false );
+public:
+    explicit FindDlg(QWidget *parent = 0,
+                     const char *name = 0,
+                     long options = 0,
+                     const QStringList &findStrings = QStringList(),
+                     bool hasSelection = false);
     ~FindDlg();
     bool searchInAllSheet() const;
-    FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
-    FindOption::searchDirectionValue searchDirection() const { return m_findOptions->searchDirection(); }
+    FindOption::searchTypeValue searchType() const {
+        return m_findOptions->searchType();
+    }
+    FindOption::searchDirectionValue searchDirection() const {
+        return m_findOptions->searchDirection();
+    }
 
- private slots:
+private slots:
     void slotAjustSize();
- private:
+private:
     FindOption *m_findOptions;
 };
 
 class SearchDlg : public KReplaceDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-    explicit SearchDlg( QWidget *parent = 0,
-                        const char *name = 0,
-                        long options = 0,
-                        const QStringList &findStrings = QStringList(),
-                        const QStringList &replaceStrings = QStringList(),
-                        bool hasSelection = false );
+public:
+    explicit SearchDlg(QWidget *parent = 0,
+                       const char *name = 0,
+                       long options = 0,
+                       const QStringList &findStrings = QStringList(),
+                       const QStringList &replaceStrings = QStringList(),
+                       bool hasSelection = false);
     ~SearchDlg();
     bool searchInAllSheet() const;
-    FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
+    FindOption::searchTypeValue searchType() const {
+        return m_findOptions->searchType();
+    }
 
- private slots:
+private slots:
     void slotAjustSize();
- private:
+private:
     FindOption *m_findOptions;
 };
 

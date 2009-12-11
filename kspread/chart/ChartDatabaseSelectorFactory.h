@@ -34,7 +34,7 @@ class ChartDatabaseSelectorFactory : public KoShapeConfigFactory
 {
 public:
     /// constructor
-    ChartDatabaseSelectorFactory( Doc* doc ) : m_doc( doc ) {}
+    ChartDatabaseSelectorFactory(Doc* doc) : m_doc(doc) {}
     ~ChartDatabaseSelectorFactory() {}
 
     /// reimplemented method from superclass
@@ -45,7 +45,9 @@ public:
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const;
     /// reimplemented method from superclass
-    int sortingOrder() const { return 1; }
+    int sortingOrder() const {
+        return 1;
+    }
 
 private:
     Doc* m_doc;

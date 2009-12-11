@@ -44,7 +44,7 @@ class KSPREAD_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.view")
 public:
-    explicit ViewAdaptor( View* );
+    explicit ViewAdaptor(View*);
     ~ViewAdaptor();
 
 public Q_SLOTS: // METHODS
@@ -161,11 +161,11 @@ public Q_SLOTS: // METHODS
 
 #if 0 // -> cell tool
     /** Set the cell formatting to look like your local currency. */
-    virtual void setSelectionMoneyFormat( bool b );
+    virtual void setSelectionMoneyFormat(bool b);
     /** Set the cell formatting to look like a percentage. */
-    virtual void setSelectionPercent( bool b );
+    virtual void setSelectionPercent(bool b);
     /** Make the cell text wrap onto multiple lines. */
-    virtual void setSelectionMultiRow( bool enable );
+    virtual void setSelectionMultiRow(bool enable);
     /** Set the font size of the selected cells to the defined size. */
     virtual void setSelectionSize(int size);
     /** Convert all letters to upper case. */
@@ -184,11 +184,11 @@ public Q_SLOTS: // METHODS
     virtual void setSelectionAngle(int value);
 #endif
     /** Set the text color of all selected cells to the defined color value. */
-    virtual void setSelectionTextColor(const QColor& txtColor );
+    virtual void setSelectionTextColor(const QColor& txtColor);
     /** Set the background color of all selected cells to the defined color value. */
-    virtual void setSelectionBgColor(const QColor& bgColor );
+    virtual void setSelectionBgColor(const QColor& bgColor);
     /** Set the border color of all selected cells to the defined color value. */
-    virtual void setSelectionBorderColor(const QColor& bdColor );
+    virtual void setSelectionBorderColor(const QColor& bdColor);
 
 #if 0 // -> cell tool
     /** Delete content of the range of cells that is selected. */
@@ -241,10 +241,10 @@ public Q_SLOTS: // METHODS
 Q_SIGNALS:
 
     /** This signal got emitted if this view got activated or deactivated. */
-    void activated( bool active );
+    void activated(bool active);
 
     /** This signal got emitted if this view got selected or unselected. */
-    void selected( bool select );
+    void selected(bool select);
 
     /** This signal got emitted if the selection changed. */
     void selectionChanged();

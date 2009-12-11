@@ -68,22 +68,22 @@ class ValueCalc;
  */
 class KSPREAD_EXPORT Map : public QObject, public KoDataCenter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  /**
-   * Created an empty map.
-   */
-  explicit Map(Doc* doc, const char* name = 0);
+    /**
+     * Created an empty map.
+     */
+    explicit Map(Doc* doc, const char* name = 0);
 
-  /**
-   * This deletes all sheets contained in this map.
-   */
-  virtual ~Map();
+    /**
+     * This deletes all sheets contained in this map.
+     */
+    virtual ~Map();
 
-  /**
-   * \return the document this map belongs to
-   */
-  Doc* doc() const;
+    /**
+     * \return the document this map belongs to
+     */
+    Doc* doc() const;
 
     /**
      * \brief Sets whether the document can be edited or is read only.
@@ -172,119 +172,119 @@ public:
     /**
      * Sets the default column width to \p width.
      */
-    void setDefaultColumnWidth( double width );
+    void setDefaultColumnWidth(double width);
 
     /**
      * Sets the default row height to \p height.
      */
-    void setDefaultRowHeight( double height );
+    void setDefaultRowHeight(double height);
 
-  /**
-   * \ingroup OpenDocument
-   */
-  void saveOdfSettings( KoXmlWriter &settingsWriter );
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOdfSettings(KoXmlWriter &settingsWriter);
 
-  /**
-   * \ingroup OpenDocument
-   */
-  void loadOdfSettings( KoOasisSettings &settings );
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOdfSettings(KoOasisSettings &settings);
 
-  /**
-   * \ingroup OpenDocument
-   */
-  bool saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext );
+    /**
+     * \ingroup OpenDocument
+     */
+    bool saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
 
-  /**
-   * \ingroup OpenDocument
-   */
-  bool loadOdf( const KoXmlElement& mymap, KoOdfLoadingContext& odfContext );
+    /**
+     * \ingroup OpenDocument
+     */
+    bool loadOdf(const KoXmlElement& mymap, KoOdfLoadingContext& odfContext);
 
-  /**
-   * \ingroup NativeFormat
-   */
-  bool loadXML( const KoXmlElement& mymap );
+    /**
+     * \ingroup NativeFormat
+     */
+    bool loadXML(const KoXmlElement& mymap);
 
-  /**
-   * \ingroup NativeFormat
-   */
-  QDomElement save( QDomDocument& doc );
+    /**
+     * \ingroup NativeFormat
+     */
+    QDomElement save(QDomDocument& doc);
 
 
-  bool loadChildren( KoStore* _store );
-  bool saveChildren( KoStore* _store );
+    bool loadChildren(KoStore* _store);
+    bool saveChildren(KoStore* _store);
 
-  void password( QByteArray & passwd ) const;
-  bool isProtected() const;
-  void setProtected( QByteArray const & passwd );
-  bool checkPassword( QByteArray const & passwd ) const;
+    void password(QByteArray & passwd) const;
+    bool isProtected() const;
+    void setProtected(QByteArray const & passwd);
+    bool checkPassword(QByteArray const & passwd) const;
 
-  /**
-   * The sheet named @p _from is being moved to the sheet @p _to.
-   * If @p  _before is true @p _from is inserted before (after otherwise)
-   * @p  _to.
-   */
-  void moveSheet( const QString & _from, const QString & _to, bool _before = true );
+    /**
+     * The sheet named @p _from is being moved to the sheet @p _to.
+     * If @p  _before is true @p _from is inserted before (after otherwise)
+     * @p  _to.
+     */
+    void moveSheet(const QString & _from, const QString & _to, bool _before = true);
 
-  /**
-   * Searches for a sheet named @p name .
-   * @return a pointer to the searched sheet
-   * @return @c 0 if nothing was found
-   */
-  Sheet* findSheet( const QString& name ) const;
+    /**
+     * Searches for a sheet named @p name .
+     * @return a pointer to the searched sheet
+     * @return @c 0 if nothing was found
+     */
+    Sheet* findSheet(const QString& name) const;
 
-  /**
-   * @return a pointer to the next sheet to @p sheet
-   */
-  Sheet* nextSheet( Sheet* sheet ) const;
+    /**
+     * @return a pointer to the next sheet to @p sheet
+     */
+    Sheet* nextSheet(Sheet* sheet) const;
 
-  /**
-   * @return a pointer to the previous sheet to @p sheet
-   */
-  Sheet* previousSheet( Sheet* ) const;
+    /**
+     * @return a pointer to the previous sheet to @p sheet
+     */
+    Sheet* previousSheet(Sheet*) const;
 
-  /**
-   * Creates a new sheet.
-   * The sheet is not added to the map nor added to the GUI.
-   * @return a pointer to a new Sheet
-   */
-  Sheet* createSheet();
+    /**
+     * Creates a new sheet.
+     * The sheet is not added to the map nor added to the GUI.
+     * @return a pointer to a new Sheet
+     */
+    Sheet* createSheet();
 
-  /**
-   * Adds @p sheet to this map.
-   * The sheet becomes the active sheet.
-  */
-  void addSheet( Sheet* sheet );
+    /**
+     * Adds @p sheet to this map.
+     * The sheet becomes the active sheet.
+    */
+    void addSheet(Sheet* sheet);
 
-  /**
-   * Creates a new sheet.
-   * Adds a new sheet to this map.
-   * @return a pointer to the new sheet
-   */
-  Sheet* addNewSheet();
+    /**
+     * Creates a new sheet.
+     * Adds a new sheet to this map.
+     * @return a pointer to the new sheet
+     */
+    Sheet* addNewSheet();
 
-  /**
-   * @return a pointer to the sheet at index @p index in this map
-   * @return @c 0 if the index exceeds the list boundaries
-   */
-  Sheet* sheet( int index ) const;
+    /**
+     * @return a pointer to the sheet at index @p index in this map
+     * @return @c 0 if the index exceeds the list boundaries
+     */
+    Sheet* sheet(int index) const;
 
-  /**
-   * @return the list of sheets in this map
-   */
-  QList<Sheet*>& sheetList() const;
+    /**
+     * @return the list of sheets in this map
+     */
+    QList<Sheet*>& sheetList() const;
 
-  /**
-   * @return amount of sheets in this map
-   */
-  int count() const;
+    /**
+     * @return amount of sheets in this map
+     */
+    int count() const;
 
     void removeSheet(Sheet* sheet);
     void reviveSheet(Sheet* sheet);
 
-  QStringList visibleSheets() const;
-  QStringList hiddenSheets() const;
+    QStringList visibleSheets() const;
+    QStringList hiddenSheets() const;
 
-  void increaseLoadedRowsCounter(int i = 1);
+    void increaseLoadedRowsCounter(int i = 1);
 
     /**
      * \ingroup OpenDocument
@@ -346,10 +346,10 @@ Q_SIGNALS:
     void sheetRevived(Sheet* sheet);
 
 private:
-    Q_DISABLE_COPY( Map )
+    Q_DISABLE_COPY(Map)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

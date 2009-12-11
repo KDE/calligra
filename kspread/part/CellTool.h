@@ -35,16 +35,16 @@ class KSPREAD_EXPORT CellTool : public CellToolBase
     Q_OBJECT
 
 public:
-    explicit CellTool( KoCanvasBase* canvas );
+    explicit CellTool(KoCanvasBase* canvas);
     ~CellTool();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 #if 0 // KSPREAD_MOUSE_STRATEGIES
-    virtual void mousePressEvent( KoPointerEvent* event ) ;
-    virtual void mouseReleaseEvent( KoPointerEvent* event );
-    virtual void mouseMoveEvent( KoPointerEvent* event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent* event );
+    virtual void mousePressEvent(KoPointerEvent* event) ;
+    virtual void mouseReleaseEvent(KoPointerEvent* event);
+    virtual void mouseMoveEvent(KoPointerEvent* event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
 #endif
 
 public Q_SLOTS:
@@ -66,7 +66,7 @@ protected Q_SLOTS:
     void definePrintRange();
 
 private:
-    Q_DISABLE_COPY( CellTool )
+    Q_DISABLE_COPY(CellTool)
 
     class Private;
     Private * const d;

@@ -25,24 +25,24 @@
 
 using namespace KSpread;
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData=newAboutData();
+    KAboutData * aboutData = newAboutData();
 
-    KCmdLineArgs::init( argc, argv, aboutData );
+    KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KoApplication app;
 
     if (!app.start())
-	return 1;
+        return 1;
     app.exec();
 
-    delete (aboutData);
+    delete(aboutData);
 
     return 0;
 }

@@ -57,22 +57,22 @@ class Selection;
 
 class parameterLocale :  public QObject
 {
- Q_OBJECT
+    Q_OBJECT
 public:
-   parameterLocale(Selection* selection, KVBox *box, char *name = 0);
- void apply();
+    parameterLocale(Selection* selection, KVBox *box, char *name = 0);
+    void apply();
 public slots:
-   void updateDefaultSystemConfig();
- protected:
-   /**
-    * Updates the GUI widgets to match the specified locale.
-    */
-   void updateToMatchLocale(KLocale* locale);
+    void updateDefaultSystemConfig();
+protected:
+    /**
+     * Updates the GUI widgets to match the specified locale.
+     */
+    void updateToMatchLocale(KLocale* locale);
 
-   QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
-   QPushButton *m_updateButton;
-   Selection* m_selection;
-   bool m_bUpdateLocale;
+    QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
+    QPushButton *m_updateButton;
+    Selection* m_selection;
+    bool m_bUpdateLocale;
 };
 
 

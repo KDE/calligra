@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    explicit ValueFormatter( const ValueConverter* converter );
+    explicit ValueFormatter(const ValueConverter* converter);
 
     /**
      * Returns the calculation settings this ValueFormatter uses.
@@ -70,13 +70,13 @@ public:
      * Creates a date format.
      * \param formatType the value format, e.g. number, date
      */
-    QString dateFormat( const QDate& date, Format::Type formatType );
+    QString dateFormat(const QDate& date, Format::Type formatType);
 
     /**
      * Creates a time format.
      * \param formatType the value format, e.g. number, date
      */
-    QString timeFormat( const QDateTime& time, Format::Type formatType );
+    QString timeFormat(const QDateTime& time, Format::Type formatType);
 
 protected:
     /**
@@ -84,7 +84,7 @@ protected:
      * in a cell with a given format type
      * \param formatType the value format, e.g. number, date
      */
-    Format::Type determineFormatting( const Value& value, Format::Type formatType );
+    Format::Type determineFormatting(const Value& value, Format::Type formatType);
 
     /**
      * Creates a number format.
@@ -93,16 +93,16 @@ protected:
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param currencySymbol the currency symbol
      */
-    QString createNumberFormat( Number value, int precision,
-                                Format::Type formatType,
-                                Style::FloatFormat floatFormat,
-                                const QString& currencySymbol );
+    QString createNumberFormat(Number value, int precision,
+                               Format::Type formatType,
+                               Style::FloatFormat floatFormat,
+                               const QString& currencySymbol);
 
     /**
      * Creates a fraction format.
      * \param formatType the value format, e.g. number, date
      */
-    QString fractionFormat( Number value, Format::Type formatType );
+    QString fractionFormat(Number value, Format::Type formatType);
 
     /**
      * Creates a complex number format.
@@ -111,17 +111,17 @@ protected:
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param currencySymbol the currency symbol
      */
-    QString complexFormat( const Value& value, int precision,
-                           Format::Type formatType,
-                           Style::FloatFormat floatFormat,
-                           const QString& currencySymbol );
+    QString complexFormat(const Value& value, int precision,
+                          Format::Type formatType,
+                          Style::FloatFormat floatFormat,
+                          const QString& currencySymbol);
 
     /**
      * Removes the trailing zeros and the decimal symbol \p decimalSymbol in
      * \p string , if necessary.
      * \return the truncated string
      */
-    QString removeTrailingZeros( const QString& string, const QString& decimalSymbol );
+    QString removeTrailingZeros(const QString& string, const QString& decimalSymbol);
 
 private:
     const ValueConverter* m_converter;

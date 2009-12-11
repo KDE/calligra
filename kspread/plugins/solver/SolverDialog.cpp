@@ -24,37 +24,37 @@
 
 using namespace KSpread::Plugins;
 
-SolverDialog::SolverDialog( Selection* selection, QWidget* parent )
-  : KDialog( parent )
+SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
+        : KDialog(parent)
 {
-  setCaption( i18n("Function Optimizer") );
-  setButtons( Ok|Cancel|Details );
-  setAttribute( Qt::WA_DeleteOnClose );
+    setCaption(i18n("Function Optimizer"));
+    setButtons(Ok | Cancel | Details);
+    setAttribute(Qt::WA_DeleteOnClose);
 
-  QWidget* widget = new QWidget( this );
-  Ui::Solver::setupUi( widget );
-  setMainWidget( widget );
-  setModal( false );
-  function->setSelection( selection );
-  function->setDialog( this );
-  function->setSelectionMode( RegionSelector::SingleCell );
-  parameters->setSelection( selection );
-  parameters->setDialog( this );
-  parameters->setSelectionMode( RegionSelector::MultipleCells );
+    QWidget* widget = new QWidget(this);
+    Ui::Solver::setupUi(widget);
+    setMainWidget(widget);
+    setModal(false);
+    function->setSelection(selection);
+    function->setDialog(this);
+    function->setSelectionMode(RegionSelector::SingleCell);
+    parameters->setSelection(selection);
+    parameters->setDialog(this);
+    parameters->setSelectionMode(RegionSelector::MultipleCells);
 
-  QWidget* detailsWidget = new QWidget( this );
-  Ui::SolverDetails::setupUi( detailsWidget );
-  setDetailsWidget( detailsWidget );
+    QWidget* detailsWidget = new QWidget(this);
+    Ui::SolverDetails::setupUi(detailsWidget);
+    setDetailsWidget(detailsWidget);
 
-  connect( this, SIGNAL( okClicked() ),
-           this, SLOT( finishDialog() ) );
-  connect( this, SIGNAL( cancelClicked() ),
-           this, SLOT( finishDialog() ) );
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(finishDialog()));
+    connect(this, SIGNAL(cancelClicked()),
+            this, SLOT(finishDialog()));
 }
 
 void SolverDialog::finishDialog()
 {
-  deleteLater();
+    deleteLater();
 }
 
 #include "SolverDialog.moc"

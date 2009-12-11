@@ -41,8 +41,8 @@
 using namespace KSpread;
 
 AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , m_selection(selection)
+        : KDialog(parent)
+        , m_selection(selection)
 {
     setButtons(Ok | Cancel);
     setCaption(i18n("Add Named Area"));
@@ -85,19 +85,17 @@ void AddNamedAreaDialog::slotOk()
         return; // nothing to do
 
     NamedAreaCommand* command = 0;
-    if (m_selection->activeSheet()->map()->namedAreaManager()->contains(name))
-    {
+    if (m_selection->activeSheet()->map()->namedAreaManager()->contains(name)) {
         const QString question = i18n("The named area '%1' already exists.\n"
                                       "Do you want to replace it?", name);
         int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
-                                                        KStandardGuiItem::overwrite());
+                     KStandardGuiItem::overwrite());
         if (result == KMessageBox::Cancel)
             return;
 
         command = new NamedAreaCommand();
         command->setText(i18n("Replace Named Area"));
-    }
-    else
+    } else
         command = new NamedAreaCommand();
     command->setSheet(m_selection->activeSheet());
     command->setAreaName(name);

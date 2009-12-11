@@ -34,13 +34,13 @@ class TestBitopsFunctions: public QObject
 
 private slots:
     void initTestCase();
-  void testBITAND();
-  void testBITOR();
-  void testBITXOR();
-  void testBITLSHIFT();
-  void testBITRSHIFT();
+    void testBITAND();
+    void testBITOR();
+    void testBITXOR();
+    void testBITLSHIFT();
+    void testBITRSHIFT();
 private:
-  Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString&, Value& ex);
 };
 
 } // namespace KSpread

@@ -36,7 +36,7 @@ public:
 
 
 PageManager::PageManager(Sheet* sheet)
-    : d(new Private)
+        : d(new Private)
 {
     d->sheet = sheet;
     d->settings = *sheet->printSettings();
@@ -56,13 +56,11 @@ void PageManager::layoutPages()
     int pageNumber = 1;
     preparePage(pageNumber);
 
-    if (settings.pageOrder() == PrintSettings::LeftToRight)
-    {
+    if (settings.pageOrder() == PrintSettings::LeftToRight) {
 //         kDebug() << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
-        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
-        {
+        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
             if (!(*it)->isValid())
                 continue;
 
@@ -72,8 +70,7 @@ void PageManager::layoutPages()
 
             int rows = 0;
             double height = 0.0;
-            for (int row = printRange.top(); row <= printRange.bottom(); ++row)
-            {
+            for (int row = printRange.top(); row <= printRange.bottom(); ++row) {
                 rows++;
                 height += sheet->rowFormat(row)->visibleHeight();
 
@@ -88,8 +85,7 @@ void PageManager::layoutPages()
                 int columns = 0;
                 double width = 0.0;
                 // 2. iterate over the columns and create the pages
-                for (int col = printRange.left(); col < printRange.right(); ++col)
-                {
+                for (int col = printRange.left(); col < printRange.right(); ++col) {
                     columns++;
                     width += sheet->columnFormat(col)->visibleWidth();
 
@@ -124,14 +120,11 @@ void PageManager::layoutPages()
                 height = 0.0;
             }
         }
-    }
-    else // if (settings.pageOrder() == PrintSettings::TopToBottom)
-    {
+    } else { // if (settings.pageOrder() == PrintSettings::TopToBottom)
 //         kDebug() << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
         Region::ConstIterator end = settings.printRegion().constEnd();
-        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
-        {
+        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
             if (!(*it)->isValid())
                 continue;
 
@@ -141,8 +134,7 @@ void PageManager::layoutPages()
 
             int columns = 0;
             double width = 0.0;
-            for (int col = printRange.left(); col <= printRange.right(); ++col)
-            {
+            for (int col = printRange.left(); col <= printRange.right(); ++col) {
                 columns++;
                 width += sheet->columnFormat(col)->visibleWidth();
 
@@ -157,8 +149,7 @@ void PageManager::layoutPages()
                 int rows = 0;
                 double height = 0.0;
                 // 2. iterate over the rows and create the pages
-                for (int row = printRange.top(); row < printRange.bottom(); ++row)
-                {
+                for (int row = printRange.top(); row < printRange.bottom(); ++row) {
                     rows++;
                     height += sheet->rowFormat(row)->visibleHeight();
 

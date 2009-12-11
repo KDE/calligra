@@ -27,23 +27,23 @@
 
 using namespace KSpread;
 
-TableToolFactory::TableToolFactory( QObject* parent )
-    : KoToolFactory( parent, "TableToolFactoryId", i18n( "Table tool" ) )
+TableToolFactory::TableToolFactory(QObject* parent)
+        : KoToolFactory(parent, "TableToolFactoryId", i18n("Table tool"))
 {
-    setToolTip( i18n( "Table editing tool" ) );
-    setIcon( "spreadsheetshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( TableShapeId );
+    setToolTip(i18n("Table editing tool"));
+    setIcon("spreadsheetshape");
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(TableShapeId);
 }
 
 TableToolFactory::~TableToolFactory()
 {
 }
 
-KoTool* TableToolFactory::createTool( KoCanvasBase* canvas )
+KoTool* TableToolFactory::createTool(KoCanvasBase* canvas)
 {
-    return new TableTool( canvas );
+    return new TableTool(canvas);
 }
 
 #include "TableToolFactory.moc"

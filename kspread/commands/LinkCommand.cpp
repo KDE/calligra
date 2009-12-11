@@ -28,34 +28,34 @@
 
 using namespace KSpread;
 
-LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& link )
+LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link)
 {
-  cell = c;
-  oldText = cell.userInput();
-  oldLink = cell.link();
-  newText = text;
-  newLink = link;
+    cell = c;
+    oldText = cell.userInput();
+    oldLink = cell.link();
+    newText = text;
+    newLink = link;
 
-  setText(newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link"));
+    setText(newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link"));
 }
 
 void LinkCommand::redo()
 {
-  if( !cell ) return;
+    if (!cell) return;
 
-  if( !newText.isEmpty() )
-    cell.parseUserInput( newText );
-  cell.setLink( newLink  );
+    if (!newText.isEmpty())
+        cell.parseUserInput(newText);
+    cell.setLink(newLink);
 
-  cell.sheet()->map()->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
+    cell.sheet()->map()->addDamage(new CellDamage(cell, CellDamage::Appearance));
 }
 
 void LinkCommand::undo()
 {
-  if( !cell ) return;
+    if (!cell) return;
 
-  cell.parseUserInput( oldText );
-  cell.setLink( oldLink );
+    cell.parseUserInput(oldText);
+    cell.setLink(oldLink);
 
-  cell.sheet()->map()->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
+    cell.sheet()->map()->addDamage(new CellDamage(cell, CellDamage::Appearance));
 }

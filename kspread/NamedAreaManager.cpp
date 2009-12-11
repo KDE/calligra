@@ -48,8 +48,7 @@
 
 using namespace KSpread;
 
-struct NamedArea
-{
+struct NamedArea {
     QString name;
     Sheet* sheet;
     QRect range;
@@ -63,7 +62,7 @@ public:
 };
 
 NamedAreaManager::NamedAreaManager(const Map* map)
-    : d(new Private)
+        : d(new Private)
 {
     d->map = map;
     connect(this, SIGNAL(namedAreaAdded(const QString&)),
@@ -98,7 +97,7 @@ void NamedAreaManager::remove(const QString& name)
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
     const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();
-    foreach (Sheet* sheet, sheets) {
+    foreach(Sheet* sheet, sheets) {
         const QString tmp = '\'' + name + '\'';
         const FormulaStorage* const storage = sheet->formulaStorage();
         for (int c = 0; c < storage->count(); ++c) {
@@ -112,8 +111,7 @@ void NamedAreaManager::remove(const QString& name)
 void NamedAreaManager::remove(Sheet* sheet)
 {
     const QList<NamedArea> namedAreas = d->namedAreas.values();
-    for (int i = 0; i < namedAreas.count(); ++i)
-    {
+    for (int i = 0; i < namedAreas.count(); ++i) {
         if (namedAreas[i].sheet == sheet)
             remove(namedAreas[i].name);
     }
@@ -149,12 +147,10 @@ void NamedAreaManager::regionChanged(const Region& region)
     Sheet* sheet;
     QList< QPair<QRectF, QString> > namedAreas;
     Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-    {
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
         namedAreas = sheet->cellStorage()->namedAreas(Region((*it)->rect(), sheet));
-        for (int j = 0; j < namedAreas.count(); ++j)
-        {
+        for (int j = 0; j < namedAreas.count(); ++j) {
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
             emit namedAreaModified(namedAreas[j].second);
         }
@@ -166,11 +162,9 @@ void NamedAreaManager::updateAllNamedAreas()
     QList< QPair<QRectF, QString> > namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<Sheet*> sheets = d->map->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
-    {
+    for (int i = 0; i < sheets.count(); ++i) {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
-        for (int j = 0; j < namedAreas.count(); ++j)
-        {
+        for (int j = 0; j < namedAreas.count(); ++j) {
             d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
             emit namedAreaModified(namedAreas[j].second);
         }
@@ -180,16 +174,13 @@ void NamedAreaManager::updateAllNamedAreas()
 void NamedAreaManager::loadOdf(const KoXmlElement& body)
 {
     KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
-    if (!namedAreas.isNull())
-    {
-        kDebug(36003) <<"Loading named areas...";
+    if (!namedAreas.isNull()) {
+        kDebug(36003) << "Loading named areas...";
         KoXmlElement element;
-        forEachElement (element, namedAreas)
-        {
+        forEachElement(element, namedAreas) {
             if (element.namespaceURI() != KoXmlNS::table)
                 continue;
-            if (element.localName() == "named-range")
-            {
+            if (element.localName() == "named-range") {
                 if (!element.hasAttributeNS(KoXmlNS::table, "name"))
                     continue;
                 if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
@@ -198,20 +189,17 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 // TODO: what is: sheet:base-cell-address
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
-                kDebug(36003) <<"Named area found, name:" << name <<", area:" << range;
+                kDebug(36003) << "Named area found, name:" << name << ", area:" << range;
 
                 Region region(Region::loadOdf(range), d->map);
-                if (!region.isValid())
-                {
-                    kDebug(36003) <<"invalid area";
+                if (!region.isValid()) {
+                    kDebug(36003) << "invalid area";
                     continue;
                 }
 
                 insert(region, name);
-            }
-            else if (element.localName() == "named-expression")
-            {
-                kDebug(36003) <<"Named expression found.";
+            } else if (element.localName() == "named-expression") {
+                kDebug(36003) << "Named expression found.";
                 // TODO
             }
         }
@@ -225,8 +213,7 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
     Region region;
     xmlWriter.startElement("table:named-expressions");
     const QList<NamedArea> namedAreas = d->namedAreas.values();
-    for (int i = 0; i < namedAreas.count(); ++i)
-    {
+    for (int i = 0; i < namedAreas.count(); ++i) {
         region = Region(namedAreas[i].range, namedAreas[i].sheet);
         xmlWriter.startElement("table:named-range");
         xmlWriter.addAttribute("table:name", namedAreas[i].name);
@@ -240,10 +227,8 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
 void NamedAreaManager::loadXML(const KoXmlElement& parent)
 {
     KoXmlElement element;
-    forEachElement(element, parent)
-    {
-        if (element.tagName() == "reference")
-        {
+    forEachElement(element, parent) {
+        if (element.tagName() == "reference") {
             Sheet* sheet = 0;
             QString tabname;
             QString refname;
@@ -260,8 +245,7 @@ void NamedAreaManager::loadXML(const KoXmlElement& parent)
             if (!referenceName.isNull())
                 refname = referenceName.text();
             KoXmlElement rect = element.namedItem("rect").toElement();
-            if (!rect.isNull())
-            {
+            if (!rect.isNull()) {
                 bool ok;
                 if (rect.hasAttribute("left-rect"))
                     left = rect.attribute("left-rect").toInt(&ok);
@@ -281,8 +265,7 @@ QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
 {
     QDomElement element = doc.createElement("areaname");
     const QList<NamedArea> namedAreas = d->namedAreas.values();
-    for (int i = 0; i < namedAreas.count(); ++i)
-    {
+    for (int i = 0; i < namedAreas.count(); ++i) {
         QDomElement e = doc.createElement("reference");
         QDomElement tabname = doc.createElement("tabname");
         tabname.appendChild(doc.createTextNode(namedAreas[i].sheet->sheetName()));
@@ -294,7 +277,7 @@ QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
 
         QDomElement rect = doc.createElement("rect");
         rect.setAttribute("left-rect", (namedAreas[i].range).left());
-        rect.setAttribute("right-rect",(namedAreas[i].range).right());
+        rect.setAttribute("right-rect", (namedAreas[i].range).right());
         rect.setAttribute("top-rect", (namedAreas[i].range).top());
         rect.setAttribute("bottom-rect", (namedAreas[i].range).bottom());
         e.appendChild(rect);

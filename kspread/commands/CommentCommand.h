@@ -33,7 +33,7 @@ class CommentCommand : public AbstractRegionCommand
 {
 public:
     CommentCommand(QUndoCommand* parent = 0);
-    void setComment( const QString& comment );
+    void setComment(const QString& comment);
 
 protected:
     virtual bool process(Element* element);

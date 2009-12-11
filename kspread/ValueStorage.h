@@ -30,18 +30,15 @@ class ValueStorage : public PointStorage<Value>
 {
 public:
     ValueStorage()
-        : PointStorage<Value>()
-    {
+            : PointStorage<Value>() {
     }
 
-    ValueStorage( const PointStorage<Value>& o )
-        : PointStorage<Value>( o )
-    {
+    ValueStorage(const PointStorage<Value>& o)
+            : PointStorage<Value>(o) {
     }
 
-    ValueStorage& operator=( const PointStorage<Value>& o )
-    {
-        PointStorage<Value>::operator=( o );
+    ValueStorage& operator=(const PointStorage<Value>& o) {
+        PointStorage<Value>::operator=(o);
         return *this;
     }
 };

@@ -114,7 +114,7 @@ public:
     /**
      * Removes the circular dependency flag from \p region and all their dependencies.
      */
-    void removeCircularDependencyFlags( const Region& region, Direction direction );
+    void removeCircularDependencyFlags(const Region& region, Direction direction);
 
     /**
      * For debugging/testing purposes.

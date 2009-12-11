@@ -101,8 +101,7 @@ void PrintManager::Private::setZoomFactor()
     const QSize pageLimits = settings.pageLimits();
 
     // if there are no page limits, take the usual zoom factor
-    if (!pageLimits.isValid())
-    {
+    if (!pageLimits.isValid()) {
         zoom = settings.zoom();
         return;
     }
@@ -112,8 +111,7 @@ void PrintManager::Private::setZoomFactor()
     double zoomY = 1.0;
     // iterate over the print ranges
     Region::ConstIterator end = settings.printRegion().constEnd();
-    for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
-    {
+    for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it) {
         if (!(*it)->isValid())
             continue;
 
@@ -134,8 +132,7 @@ double PrintManager::Private::printWidth() const
     const PrintSettings settings = q->printSettings();
     double width = settings.printWidth();
     const QPair<int, int> repeatedColumns = settings.repeatedColumns();
-    if (repeatedColumns.first > 0)
-    {
+    if (repeatedColumns.first > 0) {
         const int startColumn = qMin(repeatedColumns.first, repeatedColumns.second);
         const int endColumn = qMax(repeatedColumns.first, repeatedColumns.second);
         for (int col = startColumn; col <= endColumn; ++col)
@@ -150,8 +147,7 @@ double PrintManager::Private::printHeight() const
     const PrintSettings settings = q->printSettings();
     double height = settings.printHeight();
     const QPair<int, int> repeatedRows = settings.repeatedRows();
-    if (repeatedRows.first > 0)
-    {
+    if (repeatedRows.first > 0) {
         const int startRow = qMin(repeatedRows.first, repeatedRows.second);
         const int endRow = qMax(repeatedRows.first, repeatedRows.second);
         for (int row = startRow; row <= endRow; ++row)
@@ -162,8 +158,8 @@ double PrintManager::Private::printHeight() const
 
 
 PrintManager::PrintManager(Sheet* sheet)
-    : PageManager(sheet)
-    , d(new Private(this))
+        : PageManager(sheet)
+        , d(new Private(this))
 {
     d->sheetView = new SheetView(sheet);
     d->setZoomFactor();

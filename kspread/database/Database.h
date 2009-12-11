@@ -52,12 +52,12 @@ public:
      * Constructor.
      * Creates a database named \p name.
      */
-    Database( const QString& name );
+    Database(const QString& name);
 
     /**
      * Copy Constructor.
      */
-    Database( const Database& other );
+    Database(const Database& other);
 
     /**
      * Destructor.
@@ -92,7 +92,7 @@ public:
     /**
      * Sets whether the range contains a header column/row
      */
-    void setContainsHeader( bool enable );
+    void setContainsHeader(bool enable);
 
     /**
      * \return \c true if filter buttons should be displayed
@@ -102,7 +102,7 @@ public:
     /**
      * Sets whether filter buttons should be displayed.
      */
-    void setDisplayFilterButtons( bool enable );
+    void setDisplayFilterButtons(bool enable);
 
     /**
      * \return the actual database cell range
@@ -113,7 +113,7 @@ public:
      * Sets the actual database cell range.
      * \p region has to be contiguous.
      */
-    void setRange( const Region& region );
+    void setRange(const Region& region);
 
     /**
      * Shows the associated popup menu.
@@ -126,9 +126,9 @@ public:
     bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
-    void operator=( const Database& other );
-    bool operator==( const Database& other ) const;
-    bool operator<( const Database& other ) const;
+    void operator=(const Database& other);
+    bool operator==(const Database& other) const;
+    bool operator<(const Database& other) const;
 
     void dump() const;
 

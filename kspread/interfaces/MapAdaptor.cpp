@@ -33,32 +33,31 @@
 
 using namespace KSpread;
 
-MapAdaptor::MapAdaptor( Map* map )
-    : QDBusAbstractAdaptor( map )
+MapAdaptor::MapAdaptor(Map* map)
+        : QDBusAbstractAdaptor(map)
 {
     setAutoRelaySignals(true);
     m_map = map;
 }
 
-QString MapAdaptor::sheet( const QString& name )
+QString MapAdaptor::sheet(const QString& name)
 {
-    Sheet* t = m_map->findSheet( name );
-    if ( !t )
+    Sheet* t = m_map->findSheet(name);
+    if (!t)
         return QString();
 
     return t->objectName();
 }
 
-QString MapAdaptor::sheetByIndex( int index )
+QString MapAdaptor::sheetByIndex(int index)
 {
-    Sheet* t = m_map->sheetList().at( index );
-    if ( !t )
-    {
-        kDebug(36001) <<"+++++ No table found at index" << index;
+    Sheet* t = m_map->sheetList().at(index);
+    if (!t) {
+        kDebug(36001) << "+++++ No table found at index" << index;
         return QString();
     }
 
-    kDebug(36001) <<"+++++++ Returning table" << t->QObject::objectName();
+    kDebug(36001) << "+++++++ Returning table" << t->QObject::objectName();
 
     return t->objectName();
 }
@@ -70,29 +69,31 @@ int MapAdaptor::sheetCount() const
 
 QStringList MapAdaptor::sheetNames() const
 {
-  QStringList names;
-  foreach ( Sheet* sheet, m_map->sheetList() )
-    names.append( sheet->objectName() );
-  return names;
+    QStringList names;
+    foreach(Sheet* sheet, m_map->sheetList()) {
+        names.append(sheet->objectName());
+    }
+    return names;
 }
 
 QStringList MapAdaptor::sheets()
 {
-  QStringList t;
-  foreach ( Sheet* sheet, m_map->sheetList() )
-    t.append( sheet->objectName() );
-  return t;
+    QStringList t;
+    foreach(Sheet* sheet, m_map->sheetList()) {
+        t.append(sheet->objectName());
+    }
+    return t;
 }
 
-QString MapAdaptor::insertSheet( const QString& name )
+QString MapAdaptor::insertSheet(const QString& name)
 {
-    if ( m_map->findSheet( name ) )
-        return sheet( name );
+    if (m_map->findSheet(name))
+        return sheet(name);
 
-    Sheet* t = m_map->addNewSheet ();
-    t->setSheetName( name );
+    Sheet* t = m_map->addNewSheet();
+    t->setSheetName(name);
 
-    return sheet( name );
+    return sheet(name);
 }
 
 // bool MapAdaptor::processDynamic(const DCOPCString &fun, const QByteArray &/*data*/,
@@ -102,14 +103,14 @@ QString MapAdaptor::insertSheet( const QString& name )
 //     uint len = fun.length();
 //     if ( len < 3 )
 //         return false;
-// 
+//
 //     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
 //         return false;
-// 
+//
 //     Sheet* t = m_map->findSheet( fun.left( len - 2 ).data() );
 //     if ( !t )
 //         return false;
-// 
+//
 //     replyType = "DCOPRef";
 //     QDataStream out( &replyData,QIODevice::WriteOnly );
 //     out.setVersion(QDataStream::Qt_3_1);

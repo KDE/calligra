@@ -59,8 +59,8 @@ public:
 static const int numBuiltinLists = 4;
 
 ListDialog::ListDialog(QWidget* parent)
-    : KDialog(parent)
-    , d(new Private)
+        : KDialog(parent)
+        , d(new Private)
 {
     setCaption(i18n("Custom Lists"));
     setButtons(Ok | Cancel);
@@ -266,8 +266,8 @@ void ListDialog::slotRemove()
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this,
-                                                 i18n("Do you really want to remove this list?"),
-                                                 i18n("Remove List"), KStandardGuiItem::del());
+              i18n("Do you really want to remove this list?"),
+              i18n("Remove List"), KStandardGuiItem::del());
     if (ret == Cancel) { // reponse = No
         return;
     }

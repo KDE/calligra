@@ -34,15 +34,15 @@ class TestLogicFunctions: public QObject
 
 private slots:
     void initTestCase();
-  void testAND();
-  void testFALSE();
-  void testIF();
-  void testNOT();
-  void testOR();
-  void testTRUE();
-  void testXOR();
+    void testAND();
+    void testFALSE();
+    void testIF();
+    void testNOT();
+    void testOR();
+    void testTRUE();
+    void testXOR();
 private:
-  Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString&, Value& ex);
 };
 
 } // namespace KSpread

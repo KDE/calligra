@@ -35,33 +35,33 @@ class TestEngineeringFunctions: public QObject
 
 private slots:
     void initTestCase();
-  void testCOMPLEX();
-  void testERF();
-  void testERFC();
-  void testIMABS();
-  void testIMAGINARY();
-  void testIMARGUMENT();
-  void testIMCONJUGATE();
-  void testIMCOS();
-  void testIMCOSH();
-  void testIMDIV();
-  void testIMEXP();
-  void testIMLN();
-  void testIMLOG10();
-  void testIMLOG2();
-  void testIMPOWER();
-  void testIMPRODUCT();
-  void testIMREAL();
-  void testIMSIN();
-  void testIMSINH();
-  void testIMSQRT();
-  void testIMSUB();
-  void testIMSUM();
-  void testIMTAN();
-  void testIMTANH();
+    void testCOMPLEX();
+    void testERF();
+    void testERFC();
+    void testIMABS();
+    void testIMAGINARY();
+    void testIMARGUMENT();
+    void testIMCONJUGATE();
+    void testIMCOS();
+    void testIMCOSH();
+    void testIMDIV();
+    void testIMEXP();
+    void testIMLN();
+    void testIMLOG10();
+    void testIMLOG2();
+    void testIMPOWER();
+    void testIMPRODUCT();
+    void testIMREAL();
+    void testIMSIN();
+    void testIMSINH();
+    void testIMSQRT();
+    void testIMSUB();
+    void testIMSUM();
+    void testIMTAN();
+    void testIMTANH();
 
 private:
-  Value evaluate(const QString&);
+    Value evaluate(const QString&);
 };
 
 } // namespace KSpread

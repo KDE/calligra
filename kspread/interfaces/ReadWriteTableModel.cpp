@@ -34,8 +34,8 @@ public:
 };
 
 ReadWriteTableModel::ReadWriteTableModel(Sheet* sheet, int columns, int rows)
-    : ReadOnlyTableModel(sheet, columns, rows)
-    , d(new Private)
+        : ReadOnlyTableModel(sheet, columns, rows)
+        , d(new Private)
 {
 }
 

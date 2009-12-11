@@ -43,8 +43,7 @@ class PreferenceDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    enum
-    {
+    enum {
         InterfacePage = 2,
         OpenSavePage = 4,
         SpellCheckerPage = 8,

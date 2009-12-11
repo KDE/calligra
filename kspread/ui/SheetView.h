@@ -55,7 +55,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView( const Sheet* sheet );
+    explicit SheetView(const Sheet* sheet);
 
     /**
      * Destructor.
@@ -70,7 +70,7 @@ public:
     /**
      * Sets the KoViewConverter used by this SheetView.
      */
-    void setViewConverter( const KoViewConverter* viewConverter );
+    void setViewConverter(const KoViewConverter* viewConverter);
 
     /**
      * \return the view in which the Sheet is painted
@@ -80,7 +80,7 @@ public:
     /**
      * Sets the paint device used by this SheetView.
      */
-    void setPaintDevice( QPaintDevice* paintDevice );
+    void setPaintDevice(QPaintDevice* paintDevice);
 
     /**
      * \return the paint device on which the Sheet is painted
@@ -93,18 +93,18 @@ public:
      *
      * \return the CellView for the position
      */
-    const CellView& cellView( int col, int row );
+    const CellView& cellView(int col, int row);
 
     /**
      * Set the cell range, that should be painted to \p rect .
      * It also adjusts the cache size linear to the size of \p rect .
      */
-    void setPaintCellRange( const QRect& rect );
+    void setPaintCellRange(const QRect& rect);
 
     /**
      * Invalidates all cached CellViews in \p region .
      */
-    void invalidateRegion( const Region& region );
+    void invalidateRegion(const Region& region);
 
     /**
      * Invalidates all CellViews, the cached and the default.
@@ -114,14 +114,14 @@ public:
     /**
      * Paints the cells.
      */
-    void paintCells( QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
-                     const QPointF& topLeft );
+    void paintCells(QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
+                    const QPointF& topLeft);
 
 public Q_SLOTS:
-    void updateAccessedCellRange( const QPoint& location = QPoint() );
+    void updateAccessedCellRange(const QPoint& location = QPoint());
 
 Q_SIGNALS:
-    void visibleSizeChanged( const QSizeF& );
+    void visibleSizeChanged(const QSizeF&);
 
 private:
     /**
@@ -129,13 +129,13 @@ private:
      * Invalidates all cached CellViews in \p range .
      * \internal
      */
-    void invalidateRange( const QRect& range );
+    void invalidateRange(const QRect& range);
 
     /**
      * Marks other CellViews in \p range as obscured by the CellView at \p position .
      * Used by CellView.
      */
-    void obscureCells( const QRect& range, const QPoint& position );
+    void obscureCells(const QRect& range, const QPoint& position);
 
     /**
      * Returns the default CellView.
@@ -143,7 +143,7 @@ private:
      */
     const CellView& defaultCellView() const;
 
-    Q_DISABLE_COPY( SheetView )
+    Q_DISABLE_COPY(SheetView)
 
     class Private;
     Private * const d;

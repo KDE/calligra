@@ -53,14 +53,14 @@ using namespace KSpread;
 ****************************************************************************/
 
 AbstractRegionCommand::AbstractRegionCommand(QUndoCommand* parent)
-  : Region(),
-    QUndoCommand(parent),
-    m_sheet(0),
-    m_reverse(false),
-    m_firstrun(true),
-    m_register(true),
-    m_success(true),
-    m_checkLock(false)
+        : Region(),
+        QUndoCommand(parent),
+        m_sheet(0),
+        m_reverse(false),
+        m_firstrun(true),
+        m_register(true),
+        m_success(true),
+        m_checkLock(false)
 {
 }
 
@@ -70,12 +70,12 @@ AbstractRegionCommand::~AbstractRegionCommand()
 
 bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
 {
-    if ( !m_firstrun )
+    if (!m_firstrun)
         return false;
-    if ( !isApproved() )
+    if (!isApproved())
         return false;
     // registering in undo history?
-    if ( m_register )
+    if (m_register)
         canvas ? canvas->addCommand(this) : m_sheet->doc()->addCommand(this);
     else
         redo();
@@ -84,34 +84,30 @@ bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
 
 void AbstractRegionCommand::redo()
 {
-    if ( !m_sheet )
-    {
+    if (!m_sheet) {
         kWarning() << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
-                   << "Manipulating all sheets of the region." << endl;
+        << "Manipulating all sheets of the region." << endl;
     }
 
     bool successfully = true;
     successfully = preProcessing();
-    if ( !successfully )
-    {
+    if (!successfully) {
         m_success = false;
         return;   // do nothing if pre-processing fails
     }
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    m_sheet->setRegionPaintDirty( *this );
+    m_sheet->setRegionPaintDirty(*this);
 
     successfully = mainProcessing();
-    if ( !successfully )
-    {
+    if (!successfully) {
         m_success = false;
         kWarning() << "AbstractRegionCommand::redo(): processing was not successful!";
     }
 
     successfully = true;
     successfully = postProcessing();
-    if ( !successfully )
-    {
+    if (!successfully) {
         m_success = false;
         kWarning() << "AbstractRegionCommand::redo(): postprocessing was not successful!";
     }
@@ -123,37 +119,32 @@ void AbstractRegionCommand::redo()
 
 void AbstractRegionCommand::undo()
 {
-  m_reverse = !m_reverse;
-  redo();
-  m_reverse = !m_reverse;
+    m_reverse = !m_reverse;
+    redo();
+    m_reverse = !m_reverse;
 }
 
 bool AbstractRegionCommand::isApproved() const
 {
-    Region::ConstIterator endOfList( constEnd() );
-    for ( Region::ConstIterator it = constBegin(); it != endOfList; ++it )
-    {
+    Region::ConstIterator endOfList(constEnd());
+    for (Region::ConstIterator it = constBegin(); it != endOfList; ++it) {
         const QRect range = (*it)->rect();
 
-        for ( int col = range.left(); col <= range.right(); ++col )
-        {
-            for ( int row = range.top(); row <= range.bottom(); ++row )
-            {
-                Cell cell( m_sheet, col, row );
-                if ( m_sheet->isProtected() && !cell.style().notProtected() )
-                {
-                    KPassivePopup::message( i18n( "Processing is not possible, "
-                                                  "because some cells are protected." ),
-                                            QApplication::activeWindow() );
+        for (int col = range.left(); col <= range.right(); ++col) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                Cell cell(m_sheet, col, row);
+                if (m_sheet->isProtected() && !cell.style().notProtected()) {
+                    KPassivePopup::message(i18n("Processing is not possible, "
+                                                "because some cells are protected."),
+                                           QApplication::activeWindow());
                     return false;
                 }
 
                 // check for matrix locks
-                if ( m_checkLock && cell.isLocked() )
-                {
-                    KPassivePopup::message( i18n( "Processing is not possible, because some "
-                                                  "cells are locked as elements of a matrix." ),
-                                            QApplication::activeWindow() );
+                if (m_checkLock && cell.isLocked()) {
+                    KPassivePopup::message(i18n("Processing is not possible, because some "
+                                                "cells are locked as elements of a matrix."),
+                                           QApplication::activeWindow());
                     return false;
                 }
             }
@@ -164,11 +155,10 @@ bool AbstractRegionCommand::isApproved() const
 
 bool AbstractRegionCommand::mainProcessing()
 {
-  bool successfully = true;
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    successfully = successfully && process(*it);
-  }
-  return successfully;
+    bool successfully = true;
+    Region::Iterator endOfList(cells().end());
+    for (Region::Iterator it = cells().begin(); it != endOfList; ++it) {
+        successfully = successfully && process(*it);
+    }
+    return successfully;
 }

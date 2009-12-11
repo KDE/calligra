@@ -89,9 +89,9 @@ class View;
 class KSPREAD_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase
 {
     Q_OBJECT
-    Q_PROPERTY( QString sheetName READ sheetName )
-    Q_PROPERTY( bool autoCalc READ isAutoCalculationEnabled WRITE setAutoCalculationEnabled )
-    Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
+    Q_PROPERTY(QString sheetName READ sheetName)
+    Q_PROPERTY(bool autoCalc READ isAutoCalculationEnabled WRITE setAutoCalculationEnabled)
+    Q_PROPERTY(bool showGrid READ getShowGrid WRITE setShowGrid)
 
 public:
     enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
@@ -181,7 +181,7 @@ public:
      * Sets the layout direction of the sheet. For example, for Arabic or Hebrew
      * documents, it is possibly to layout the sheet from right to left.
      */
-    void setLayoutDirection( Qt::LayoutDirection dir );
+    void setLayoutDirection(Qt::LayoutDirection dir);
 
     /**
      * Returns, if the grid shall be shown on the screen
@@ -191,7 +191,7 @@ public:
     /**
      * Sets, if the grid shall be shown on the screen
      */
-    void setShowGrid( bool _showGrid );
+    void setShowGrid(bool _showGrid);
 
     /**
      * Sets, if formula shall be shown instead of the result
@@ -216,7 +216,7 @@ public:
      * If b is true, comment indicator is visible, otherwise
      * it will be hidden.
      */
-    void setShowCommentIndicator( bool b );
+    void setShowCommentIndicator(bool b);
 
     bool getLcMode() const;
 
@@ -246,7 +246,7 @@ public:
     /**
      * Hides or shows this sheets
      */
-    void setHidden( bool hidden );
+    void setHidden(bool hidden);
 
     /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
@@ -262,7 +262,7 @@ public:
      * @see isShowPageBorders
      * @see Sheet::Private::showPageBorders
      */
-    void setShowPageBorders( bool _b );
+    void setShowPageBorders(bool _b);
 
     //
     //END Methods related to sheet properties
@@ -276,25 +276,25 @@ public:
      * \ingroup NativeFormat
      * Saves the sheet and all it's children in XML format
      */
-    QDomElement saveXML( QDomDocument& );
+    QDomElement saveXML(QDomDocument&);
 
     /**
      * \ingroup NativeFormat
      * Loads the sheet and all it's children in XML format
      */
-    bool loadXML( const KoXmlElement& );
+    bool loadXML(const KoXmlElement&);
 
     /**
      * \ingroup NativeFormat
      * Saves a children
      */
-    bool saveChildren( KoStore* _store, const QString &_path );
+    bool saveChildren(KoStore* _store, const QString &_path);
 
     /**
      * \ingroup NativeFormat
      * Loads a children
      */
-    bool loadChildren( KoStore* _store );
+    bool loadChildren(KoStore* _store);
 
     //
     //END Methods related to KSpread's old file format
@@ -307,10 +307,10 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool loadOdf( const KoXmlElement& sheet,
-                    OdfLoadingContext& odfContext,
-                    const Styles& autoStyles,
-                    const QHash<QString, Conditions>& conditionalStyles );
+    bool loadOdf(const KoXmlElement& sheet,
+                 OdfLoadingContext& odfContext,
+                 const Styles& autoStyles,
+                 const QHash<QString, Conditions>& conditionalStyles);
 
     /**
      * \ingroup OpenDocument
@@ -320,22 +320,22 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfHeaderFooter( KoXmlWriter &xmlWriter ) const;
+    void saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const;
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfSettings( const KoOasisSettings::NamedMap &settings );
+    void loadOdfSettings(const KoOasisSettings::NamedMap &settings);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfSettings( KoXmlWriter &settingsWriter ) const;
+    void saveOdfSettings(KoXmlWriter &settingsWriter) const;
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfPrintStyleLayout( KoGenStyle &style ) const;
+    void saveOdfPrintStyleLayout(KoGenStyle &style) const;
 
     //
     //END Methods related to the OpenDocument file format
@@ -348,7 +348,7 @@ public:
     /**
      * \ingroup Protection
      */
-    void password( QByteArray & passwd ) const ;
+    void password(QByteArray & passwd) const ;
 
     /**
      * \ingroup Protection
@@ -358,12 +358,12 @@ public:
     /**
      * \ingroup Protection
      */
-    void setProtected( QByteArray const & passwd );
+    void setProtected(QByteArray const & passwd);
 
     /**
      * \ingroup Protection
      */
-    bool checkPassword( QByteArray const & passwd ) const;
+    bool checkPassword(QByteArray const & passwd) const;
 
     //
     //END Methods related to protection
@@ -377,21 +377,21 @@ public:
      * \return the row format of row \p _row . The default row format,
      * if no special one exists.
      */
-    const RowFormat* rowFormat( int _row ) const;
+    const RowFormat* rowFormat(int _row) const;
 
     /**
      * If no special RowFormat exists for this row, then a new one is created.
      *
      * @return a non default RowFormat for this row.
      */
-    RowFormat* nonDefaultRowFormat( int _row, bool force_creation = true );
+    RowFormat* nonDefaultRowFormat(int _row, bool force_creation = true);
 
     /**
      * \return the first non-default row format
      */
     RowFormat* firstRow() const;
 
-    void setDefaultHeight( double height );
+    void setDefaultHeight(double height);
 
     //
     //END Methods related to row formats
@@ -405,21 +405,21 @@ public:
      * \return the column format of column \p _column . The default column format,
      * if no special one exists.
      */
-    const ColumnFormat* columnFormat( int _column ) const;
+    const ColumnFormat* columnFormat(int _column) const;
 
     /**
      * If no special ColumnFormat exists for this column, then a new one is created.
      *
      * @return a non default ColumnFormat for this column.
      */
-    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = true );
+    ColumnFormat* nonDefaultColumnFormat(int _column, bool force_creation = true);
 
     /**
      * \return the first non-default row format
      */
     ColumnFormat* firstCol() const;
 
-    void setDefaultWidth( double width );
+    void setDefaultWidth(double width);
 
     //
     //END Methods related to column formats
@@ -468,7 +468,7 @@ public:
      *
      * \return the row for the given position \p _ypos
      */
-    int topRow( double _ypos, double &_top ) const;
+    int topRow(double _ypos, double &_top) const;
 
     /**
      * Determines the row for a given position \p _ypos . If the position is
@@ -478,7 +478,7 @@ public:
      *
      * \return the row for the given position \p _ypos
      */
-    int bottomRow( double _ypos ) const;
+    int bottomRow(double _ypos) const;
 
     /**
      * Determines the column for a given position \p _xpos . If the position is
@@ -490,7 +490,7 @@ public:
      *
      * \return the column for the given position \p _xpos
      */
-    int leftColumn( double _xpos, double &_left ) const;
+    int leftColumn(double _xpos, double &_left) const;
 
     /**
      * Determines the column for a given position \p _xpos . If the position is
@@ -500,7 +500,7 @@ public:
      *
      * \return the column for the given position \p _xpos
      */
-    int rightColumn( double _xpos ) const;
+    int rightColumn(double _xpos) const;
 
     /**
      * Calculates the region in document coordinates occupied by a range of cells.
@@ -522,7 +522,7 @@ public:
      * to avoid rounding problems
      * @param col the column's index
      */
-    double columnPosition( int col ) const;
+    double columnPosition(int col) const;
 
     /**
      * @return the top corner of the row as double.
@@ -530,7 +530,7 @@ public:
      * to avoid rounding problems
      * @param _row the row's index
      */
-    double rowPosition( int _row ) const;
+    double rowPosition(int _row) const;
 
     /**
      * \return the document size
@@ -541,13 +541,13 @@ public:
      * Adjusts the internal reference of the sum of the widths of all columns.
      * Used in resizing of columns.
      */
-    void adjustDocumentWidth( double deltaWidth );
+    void adjustDocumentWidth(double deltaWidth);
 
     /**
      * Adjusts the internal reference of the sum of the heights of all rows.
      * Used in resizing of rows.
      */
-    void adjustDocumentHeight( double deltaHeight );
+    void adjustDocumentHeight(double deltaHeight);
 
     /**
      * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
@@ -579,11 +579,11 @@ public:
     /**
      * @param selection the selection of cells to work on
      */
-    void copySelection( Selection* selection );
+    void copySelection(Selection* selection);
     /**
      * @param selection the selection of cells to work on
      */
-    void cutSelection( Selection* selection );
+    void cutSelection(Selection* selection);
 
     /**
      * @return @c true if there are text value in cell
@@ -622,14 +622,14 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QRect & pasteArea, bool makeUndo = true,
-                Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
-                bool insert = false, int insertTo = 0, bool pasteFC = false,
-                QClipboard::Mode clipboardMode = QClipboard::Clipboard );
+    void paste(const QRect & pasteArea, bool makeUndo = true,
+               Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
+               bool insert = false, int insertTo = 0, bool pasteFC = false,
+               QClipboard::Mode clipboardMode = QClipboard::Clipboard);
 
-    void paste( const QByteArray & data, const QRect & pasteArea,
-                bool makeUndo = false, Paste::Mode= Paste::Normal, Paste::Operation = Paste::OverWrite,
-                bool insert = false, int insertTo = 0, bool pasteFC = false );
+    void paste(const QByteArray & data, const QRect & pasteArea,
+               bool makeUndo = false, Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
+               bool insert = false, int insertTo = 0, bool pasteFC = false);
 
     /**
      * A function which allows to paste a text plain from the clipboard
@@ -648,25 +648,25 @@ public:
      * Helper method.
      * \see ShiftManipulator
      */
-    void insertShiftRight( const QRect& rect );
+    void insertShiftRight(const QRect& rect);
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void insertShiftDown( const QRect& rect );
+    void insertShiftDown(const QRect& rect);
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void removeShiftUp( const QRect& rect );
+    void removeShiftUp(const QRect& rect);
 
     /**
      * Helper method.
      * \see ShiftManipulator
      */
-    void removeShiftLeft( const QRect& rect );
+    void removeShiftLeft(const QRect& rect);
 
     /**
      * Helper method.
@@ -674,7 +674,7 @@ public:
      * Moves all columns which are >= \p col \p number positions to the right
      * and inserts a new and empty column.
      */
-    void insertColumns( int row, int numbers );
+    void insertColumns(int row, int numbers);
 
     /**
      * Helper method.
@@ -682,21 +682,21 @@ public:
      * Moves all rows which are >= \p row \p number positions down
      * and inserts a new and empty row.
      */
-    void insertRows( int row, int numbers );
+    void insertRows(int row, int numbers);
 
     /**
      * Helper method.
      * \see InsertDeleteColumnManipulator
      * Deletes \p number columns beginning at \p col .
      */
-    void removeColumns( int row, int numbers );
+    void removeColumns(int row, int numbers);
 
     /**
      * Helper method.
      * \see InsertDeleteRowManipulator
      * Deletes \p number rows beginning at \p row .
      */
-    void removeRows( int row, int numbers );
+    void removeRows(int row, int numbers);
 
     /**
      * Updates vertical border and view.
@@ -738,22 +738,22 @@ public:
     /**
      * Insert the non-default column format \p columnFormat.
      */
-    void insertColumnFormat( ColumnFormat* columnFormat );
+    void insertColumnFormat(ColumnFormat* columnFormat);
 
     /**
      * Inserts the non-default row format \p rowFormat.
      */
-    void insertRowFormat( RowFormat* rowFormat );
+    void insertRowFormat(RowFormat* rowFormat);
 
     /**
      * Deletes the column format at \p column.
      */
-    void deleteColumnFormat( int column );
+    void deleteColumnFormat(int column);
 
     /**
      * Deletes the row format at \p row.
      */
-    void deleteRowFormat( int row );
+    void deleteRowFormat(int row);
 
     /**
      * @param era set this to true if you want to encode relative references
@@ -769,13 +769,13 @@ public:
      * insertTo used just for insert/paste an area
      * @see paste
      */
-    bool loadSelection( const KoXmlDocument& doc, const QRect &pasteArea,
-                        int _xshift, int _yshift, bool makeUndo,
-                        Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
-                        bool insert = false, int insertTo = 0, bool paste = false );
+    bool loadSelection(const KoXmlDocument& doc, const QRect &pasteArea,
+                       int _xshift, int _yshift, bool makeUndo,
+                       Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
+                       bool insert = false, int insertTo = 0, bool paste = false);
 
-    void loadSelectionUndo( const KoXmlDocument & doc, const QRect &loadArea,
-                            int _xshift, int _yshift,bool insert,int insertTo);
+    void loadSelectionUndo(const KoXmlDocument & doc, const QRect &loadArea,
+                           int _xshift, int _yshift, bool insert, int insertTo);
 
     /**
      * Used when you insert and paste cell
@@ -824,13 +824,13 @@ public:
     //BEGIN UNSORTED METHODS !!!
     //
 
-    void emit_updateRow( RowFormat* rowFormat, int _row, bool repaint = true );
-    void emit_updateColumn( ColumnFormat* columnFormat, int _column );
+    void emit_updateRow(RowFormat* rowFormat, int _row, bool repaint = true);
+    void emit_updateColumn(ColumnFormat* columnFormat, int _column);
 
     void updateLocale();
 
 
-  SheetPrint * print() const;
+    SheetPrint * print() const;
     PrintSettings* printSettings() const;
     void setPrintSettings(const PrintSettings& settings);
 
@@ -845,21 +845,21 @@ public:
 
 signals:
     void sig_refreshView();
-    void sig_updateView( Sheet *_sheet );
-    void sig_updateView( Sheet *_sheet, const Region& );
-    void sig_updateColumnHeader( Sheet *_sheet );
-    void sig_updateRowHeader( Sheet *_sheet );
+    void sig_updateView(Sheet *_sheet);
+    void sig_updateView(Sheet *_sheet, const Region&);
+    void sig_updateColumnHeader(Sheet *_sheet);
+    void sig_updateRowHeader(Sheet *_sheet);
     /**
      * @see setSheetName
      */
-    void sig_nameChanged( Sheet* sheet, const QString& old_name );
+    void sig_nameChanged(Sheet* sheet, const QString& old_name);
 
-    void sig_SheetHidden( Sheet* sheet);
-    void sig_SheetShown( Sheet* sheet);
-    void sig_SheetRemoved( Sheet* sheet);
-    void sig_SheetActivated( Sheet* );
-    void sig_RefreshView( Sheet* );
-    void documentSizeChanged( const QSizeF& );
+    void sig_SheetHidden(Sheet* sheet);
+    void sig_SheetShown(Sheet* sheet);
+    void sig_SheetRemoved(Sheet* sheet);
+    void sig_SheetActivated(Sheet*);
+    void sig_RefreshView(Sheet*);
+    void documentSizeChanged(const QSizeF&);
     void visibleSizeChanged();
 
 protected:
@@ -868,7 +868,7 @@ protected:
      * When you change name sheet Sheet1 -> Price
      * for all cell which refere to Sheet1, this function changes the name.
      */
-    void changeCellTabName( QString const & old_name,QString const & new_name );
+    void changeCellTabName(QString const & old_name, QString const & new_name);
 
     //
     //////////////////////////////////////////////////////////////////////////
@@ -879,10 +879,10 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
-                        OdfLoadingContext& odfContext,
-                        QHash<QString, QRegion>& rowStyleRegions,
-                        QHash<QString, QRegion>& cellStyleRegions );
+    bool loadRowFormat(const KoXmlElement& row, int &rowIndex,
+                       OdfLoadingContext& odfContext,
+                       QHash<QString, QRegion>& rowStyleRegions,
+                       QHash<QString, QRegion>& cellStyleRegions);
 
     /**
      * \ingroup OpenDocument
@@ -891,7 +891,7 @@ protected:
      */
     bool loadColumnFormat(const KoXmlElement& row,
                           const KoOdfStylesReader& stylesReader, int & indexCol,
-                          QHash<QString, QRegion>& columnStyleRegions );
+                          QHash<QString, QRegion>& columnStyleRegions);
 
     /**
      * \ingroup OpenDocument
@@ -900,47 +900,47 @@ protected:
      * \p autoStyles , and custom styles in the StyleManager.
      * The region is restricted to \p usedArea .
      */
-    void loadOdfInsertStyles( const Styles& autoStyles,
-                                const QHash<QString, QRegion>& styleRegions,
-                                const QHash<QString, Conditions>& conditionalStyles,
-                                const QRect& usedArea );
+    void loadOdfInsertStyles(const Styles& autoStyles,
+                             const QHash<QString, QRegion>& styleRegions,
+                             const QHash<QString, Conditions>& conditionalStyles,
+                             const QRect& usedArea);
 
     /**
      * \ingroup OpenDocument
      */
-    bool loadSheetStyleFormat( KoXmlElement *style );
+    bool loadSheetStyleFormat(KoXmlElement *style);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfMasterLayoutPage( KoStyleStack &styleStack );
+    void loadOdfMasterLayoutPage(KoStyleStack &styleStack);
 
     /**
      * \ingroup OpenDocument
      */
-    QString saveOdfSheetStyleName( KoGenStyles &mainStyles );
+    QString saveOdfSheetStyleName(KoGenStyles &mainStyles);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                              int maxCols, int maxRows, OdfSavingContext& tableContext);
+    void saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+                           int maxCols, int maxRows, OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
     void saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                        OdfSavingContext& tableContext);
+                      OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
-    void convertPart( const QString & part, KoXmlWriter & writer ) const;
+    void convertPart(const QString & part, KoXmlWriter & writer) const;
 
     /**
      * \ingroup OpenDocument
      */
-    void addText( const QString & text, KoXmlWriter & writer ) const;
+    void addText(const QString & text, KoXmlWriter & writer) const;
 
     /**
      * \ingroup OpenDocument
@@ -950,12 +950,12 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    QString getPart( const KoXmlNode & part );
+    QString getPart(const KoXmlNode & part);
 
     /**
      * \ingroup OpenDocument
      */
-    void replaceMacro( QString & text, const QString & old, const QString & newS );
+    void replaceMacro(QString & text, const QString & old, const QString & newS);
 
     //
     //END Methods related to the OpenDocument file format
@@ -964,15 +964,15 @@ protected:
     //
 
     // helper function for areaIsEmpty
-    bool cellIsEmpty( const Cell& cell, TestType _type );
+    bool cellIsEmpty(const Cell& cell, TestType _type);
 
     QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                                     int NbCol, const QPoint& point, bool isColumnFixed,
                                     bool isRowFixed);
 
-    static Sheet* find( int _id );
+    static Sheet* find(int _id);
     static int s_id;
-    static QHash<int,Sheet*>* s_mapSheets;
+    static QHash<int, Sheet*>* s_mapSheets;
 
 private:
     /**
@@ -983,7 +983,7 @@ private:
     /**
      * \ingroup NativeFormat
      */
-    void checkContentDirection( QString const & name );
+    void checkContentDirection(QString const & name);
 
     // disable assignment operator
     void operator=(const Sheet& other);

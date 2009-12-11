@@ -45,38 +45,38 @@ class Sheet;
 
 class ConsolidateDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  ConsolidateDialog(QWidget* parent, Selection* selection);
-  virtual ~ConsolidateDialog();
-  QStringList refs();
+    ConsolidateDialog(QWidget* parent, Selection* selection);
+    virtual ~ConsolidateDialog();
+    QStringList refs();
 
 public slots:
-  virtual void slotOk();
-  virtual void slotCancel();
-  void slotAdd();
-  void slotRemove();
+    virtual void slotOk();
+    virtual void slotCancel();
+    void slotAdd();
+    void slotRemove();
 
-  void slotSelectionChanged();
-  void slotReturnPressed();
+    void slotSelectionChanged();
+    void slotReturnPressed();
 
 protected:
     void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 
 protected:
-  Selection* m_selection;
-  KLineEdit* m_pRef;
-  QListWidget* m_pRefs;
-  KComboBox* m_pFunction;
-  QPushButton* m_pAdd;
-  QPushButton* m_pRemove;
-  QCheckBox* m_pRow;
-  QCheckBox* m_pCol;
-  QCheckBox* m_pCopy;
+    Selection* m_selection;
+    KLineEdit* m_pRef;
+    QListWidget* m_pRefs;
+    KComboBox* m_pFunction;
+    QPushButton* m_pAdd;
+    QPushButton* m_pRemove;
+    QCheckBox* m_pRow;
+    QCheckBox* m_pCol;
+    QCheckBox* m_pCopy;
 
-  QString evaluate( const QString& formula, Sheet* sheet );
+    QString evaluate(const QString& formula, Sheet* sheet);
 
-  enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
+    enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
 };
 
 } // namespace KSpread

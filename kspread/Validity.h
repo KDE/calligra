@@ -64,15 +64,13 @@ class KSPREAD_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.
-    enum Action
-    {
+    enum Action {
         Stop,       ///< Stop
         Warning,    ///< Warn
         Information ///< Inform
     };
     /// The type of the restriction.
-    enum Restriction
-    {
+    enum Restriction {
         None,       ///< No restriction
         Number,     ///< Restrict to numbers
         Text,       ///< Restrict to texts
@@ -93,7 +91,7 @@ public:
      * Copy Constructor.
      * Copies the validity \p other .
      */
-    Validity( const Validity& other );
+    Validity(const Validity& other);
 
     /**
      * Destructor.
@@ -109,26 +107,26 @@ public:
      * Tests whether the content of \p cell is allowed.
      * \return \c true if the content is valid
      */
-    bool testValidity( const Cell* cell ) const;
+    bool testValidity(const Cell* cell) const;
 
     /**
      * \ingroup NativeFormat
      * Loads validity checks.
      */
-    bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
+    bool loadXML(Cell* const cell, const KoXmlElement& validityElement);
 
     /**
      * \ingroup NativeFormat
      * Saves validity checks.
      */
-    QDomElement saveXML( QDomDocument& doc ) const;
+    QDomElement saveXML(QDomDocument& doc) const;
 
     /**
      * \ingroup OpenDocument
      * Loads validity checks.
      */
     void loadOdfValidation(Cell* const cell, const QString& validationName,
-                             OdfLoadingContext& tableContext);
+                           OdfLoadingContext& tableContext);
 
     Action action() const;
     bool allowEmptyCell() const;
@@ -148,29 +146,33 @@ public:
     const QString& titleInfo() const;
     const QStringList& validityList() const;
 
-    void setAction( Action action );
-    void setAllowEmptyCell( bool allow );
-    void setCondition( Conditional::Type condition );
-    void setDisplayMessage( bool display );
-    void setDisplayValidationInformation( bool display );
-    void setMaximumDate( const QDate& date );
-    void setMaximumTime( const QTime& time );
-    void setMaximumValue( double value );
-    void setMessage( const QString& message );
-    void setMessageInfo( const QString& info );
-    void setMinimumDate( const QDate& date );
-    void setMinimumTime( const QTime& time );
-    void setMinimumValue( double value );
-    void setRestriction( Restriction restriction );
-    void setTitle( const QString& title );
-    void setTitleInfo( const QString& info );
-    void setValidityList( const QStringList& list );
+    void setAction(Action action);
+    void setAllowEmptyCell(bool allow);
+    void setCondition(Conditional::Type condition);
+    void setDisplayMessage(bool display);
+    void setDisplayValidationInformation(bool display);
+    void setMaximumDate(const QDate& date);
+    void setMaximumTime(const QTime& time);
+    void setMaximumValue(double value);
+    void setMessage(const QString& message);
+    void setMessageInfo(const QString& info);
+    void setMinimumDate(const QDate& date);
+    void setMinimumTime(const QTime& time);
+    void setMinimumValue(double value);
+    void setRestriction(Restriction restriction);
+    void setTitle(const QString& title);
+    void setTitleInfo(const QString& info);
+    void setValidityList(const QStringList& list);
 
     /// \note fake implementation to make QMap happy
-    bool operator<( const Validity& ) const { return true; }
-    void operator=( const Validity& );
-    bool operator==( const Validity& other ) const;
-    inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
+    bool operator<(const Validity&) const {
+        return true;
+    }
+    void operator=(const Validity&);
+    bool operator==(const Validity& other) const;
+    inline bool operator!=(const Validity& other) const {
+        return !operator==(other);
+    }
 
     static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
 
@@ -179,13 +181,13 @@ private:
      * \ingroup OpenDocument
      * Helper method for loadOdfValidation().
      */
-    void loadOdfValidationCondition( QString &valExpression );
+    void loadOdfValidationCondition(QString &valExpression);
 
     /**
      * \ingroup OpenDocument
      * Helper method for loadOdfValidation().
      */
-    void loadOdfValidationValue( const QStringList &listVal );
+    void loadOdfValidationValue(const QStringList &listVal);
 
     class Private;
     QSharedDataPointer<Private> d;
@@ -193,6 +195,6 @@ private:
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::Validity, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(KSpread::Validity, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_VALIDITY

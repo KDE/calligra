@@ -55,8 +55,8 @@
 using namespace KSpread;
 
 NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , m_selection(selection)
+        : KDialog(parent)
+        , m_selection(selection)
 {
     setButtons(KDialog::Ok | KDialog::Close | KDialog::User1 | KDialog::User2 | KDialog::User3);
     setButtonsOrientation(Qt::Vertical);
@@ -87,8 +87,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     for (int i = 0; i < namedAreas.count(); ++i)
         m_list->addItem(namedAreas[i]);
 
-    if (m_list->count() == 0)
-    {
+    if (m_list->count() == 0) {
         enableButtonOk(false);
         enableButton(KDialog::User1, false);
         enableButton(KDialog::User2, false);
@@ -104,8 +103,8 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     connect(m_list, SIGNAL(currentTextChanged(const QString&)),
             this, SLOT(displayAreaValues(const QString&)));
 
-    if ( m_list->count() > 0 )
-        m_list->setCurrentItem( m_list->item(0) );
+    if (m_list->count() > 0)
+        m_list->setCurrentItem(m_list->item(0));
 
     m_list->setFocus();
 }
@@ -118,13 +117,11 @@ void NamedAreaDialog::displayAreaValues(QString const & areaName)
 
 void NamedAreaDialog::slotOk()
 {
-    if (m_list->count() > 0)
-    {
+    if (m_list->count() > 0) {
         QListWidgetItem* item = m_list->currentItem();
         Region region = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(item->text());
         Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(item->text());
-        if (!sheet || !region.isValid())
-        {
+        if (!sheet || !region.isValid()) {
             return;
         }
 
@@ -155,7 +152,7 @@ void NamedAreaDialog::slotNew()
 
     m_list->addItem(dialog.areaName());
     QList<QListWidgetItem*> items = m_list->findItems(dialog.areaName(),
-                                                      Qt::MatchExactly | Qt::MatchCaseSensitive);
+                                    Qt::MatchExactly | Qt::MatchCaseSensitive);
     m_list->setCurrentItem(items.first());
     displayAreaValues(dialog.areaName());
 
@@ -185,7 +182,7 @@ void NamedAreaDialog::slotRemove()
 {
     const QString question = i18n("Do you really want to remove this named area?");
     int result = KMessageBox::warningContinueCancel(this, question, i18n("Remove Named Area"),
-                                                    KStandardGuiItem::del());
+                 KStandardGuiItem::del());
     if (result == KMessageBox::Cancel)
         return;
 
@@ -195,29 +192,26 @@ void NamedAreaDialog::slotRemove()
     command->setAreaName(item->text());
     command->setReverse(true);
     command->setSheet(m_selection->activeSheet());
-    if (!command->execute(m_selection->canvas()))
-    {
+    if (!command->execute(m_selection->canvas())) {
         delete command;
         return;
     }
     m_list->takeItem(m_list->row(item));
 
-    if (m_list->count() == 0)
-    {
+    if (m_list->count() == 0) {
         enableButtonOk(false);
         enableButton(KDialog::User1, false);
         enableButton(KDialog::User2, false);
         displayAreaValues(QString());
-    }
-    else
+    } else
         displayAreaValues(m_list->currentItem()->text());
 }
 
 
 
 EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , m_selection(selection)
+        : KDialog(parent)
+        , m_selection(selection)
 {
     setButtons(Ok | Cancel);
     setModal(true);
@@ -253,8 +247,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     gridLayout->addWidget(m_areaNameEdit, 0, 1);
 
     const QList<Sheet*> sheetList = m_selection->activeSheet()->map()->sheetList();
-    for (int i = 0; i < sheetList.count(); ++i)
-    {
+    for (int i = 0; i < sheetList.count(); ++i) {
         Sheet* sheet = sheetList.at(i);
         if (!sheet)
             continue;
@@ -301,8 +294,7 @@ void EditNamedAreaDialog::slotOk()
         return;
 
     QUndoCommand* macroCommand = 0;
-    if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text())
-    {
+    if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text()) {
         macroCommand = new QUndoCommand(i18n("Replace Named Area"));
         // remove the old named area
         NamedAreaCommand* command = new NamedAreaCommand(macroCommand);

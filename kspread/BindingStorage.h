@@ -37,8 +37,12 @@ public:
     BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Binding>::garbageCollection(); }
+    virtual void triggerGarbageCollection() {
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    }
+    virtual void garbageCollection() {
+        RectStorage<Binding>::garbageCollection();
+    }
 };
 
 } // namespace KSpread

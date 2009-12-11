@@ -37,8 +37,12 @@ public:
     ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Conditions>::garbageCollection(); }
+    virtual void triggerGarbageCollection() {
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    }
+    virtual void garbageCollection() {
+        RectStorage<Conditions>::garbageCollection();
+    }
 };
 
 } // namespace KSpread

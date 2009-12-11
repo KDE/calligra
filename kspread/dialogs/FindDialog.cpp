@@ -30,45 +30,45 @@
 
 using namespace KSpread;
 
-FindOption::FindOption( QWidget *parent)
+FindOption::FindOption(QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(parent);
-    m_moreOptions = new QPushButton( i18n( "More Options" ), parent );
-    layout->addWidget(  m_moreOptions );
+    m_moreOptions = new QPushButton(i18n("More Options"), parent);
+    layout->addWidget(m_moreOptions);
 
-    connect( m_moreOptions, SIGNAL( clicked () ), this, SLOT( slotMoreOptions() ) );
+    connect(m_moreOptions, SIGNAL(clicked()), this, SLOT(slotMoreOptions()));
 
-    m_findExtension = new QWidget( parent );
-    layout->addWidget( m_findExtension );
-    QVBoxLayout *layout1 = new QVBoxLayout( m_findExtension );
-    m_searchInAllSheet = new QCheckBox( i18n( "Search entire sheet" ),m_findExtension );
-    layout1->addWidget( m_searchInAllSheet );
+    m_findExtension = new QWidget(parent);
+    layout->addWidget(m_findExtension);
+    QVBoxLayout *layout1 = new QVBoxLayout(m_findExtension);
+    m_searchInAllSheet = new QCheckBox(i18n("Search entire sheet"), m_findExtension);
+    layout1->addWidget(m_searchInAllSheet);
 
-    QHBoxLayout *comboLayout = new QHBoxLayout( m_findExtension );
-    QLabel *label = new QLabel( i18n( "Search in:" ), m_findExtension );
-    comboLayout->addWidget( label );
+    QHBoxLayout *comboLayout = new QHBoxLayout(m_findExtension);
+    QLabel *label = new QLabel(i18n("Search in:"), m_findExtension);
+    comboLayout->addWidget(label);
 
-    m_searchIn = new KComboBox( m_findExtension );
-    comboLayout->addWidget( m_searchIn );
-    layout1->addLayout( comboLayout );
+    m_searchIn = new KComboBox(m_findExtension);
+    comboLayout->addWidget(m_searchIn);
+    layout1->addLayout(comboLayout);
 
     QStringList lst;
-    lst << i18n( "Cell Values" );
-    lst << i18n( "Comments" );
-    m_searchIn->insertItems( 0, lst );
+    lst << i18n("Cell Values");
+    lst << i18n("Comments");
+    m_searchIn->insertItems(0, lst);
 
-    comboLayout = new QHBoxLayout( m_findExtension );
-    label = new QLabel( i18n( "Search direction:" ), m_findExtension );
-    comboLayout->addWidget( label );
+    comboLayout = new QHBoxLayout(m_findExtension);
+    label = new QLabel(i18n("Search direction:"), m_findExtension);
+    comboLayout->addWidget(label);
 
-    m_searchDirection = new KComboBox( m_findExtension );
-    comboLayout->addWidget( m_searchDirection );
-    layout1->addLayout( comboLayout );
+    m_searchDirection = new KComboBox(m_findExtension);
+    comboLayout->addWidget(m_searchDirection);
+    layout1->addLayout(comboLayout);
 
     lst.clear();
-    lst << i18n( "Across then Down" );
-    lst << i18n( "Down then Across" );
-    m_searchDirection->insertItems( 0, lst );
+    lst << i18n("Across then Down");
+    lst << i18n("Down then Across");
+    m_searchDirection->insertItems(0, lst);
 
     m_findExtension->hide();
     emit adjustSize();
@@ -77,9 +77,9 @@ FindOption::FindOption( QWidget *parent)
 FindOption::searchTypeValue FindOption::searchType() const
 {
     int pos = m_searchIn->currentIndex();
-    if ( pos == 0 )
+    if (pos == 0)
         return Value;
-    else if ( pos == 1 )
+    else if (pos == 1)
         return Note;
     else
         return Value;
@@ -88,9 +88,9 @@ FindOption::searchTypeValue FindOption::searchType() const
 FindOption::searchDirectionValue FindOption::searchDirection() const
 {
     int pos = m_searchDirection->currentIndex();
-    if ( pos == 0 )
+    if (pos == 0)
         return Row;
-    else if ( pos == 1 )
+    else if (pos == 1)
         return Column;
     else
         return Row;
@@ -99,15 +99,12 @@ FindOption::searchDirectionValue FindOption::searchDirection() const
 
 void FindOption::slotMoreOptions()
 {
-    if ( m_findExtension->isHidden() )
-    {
+    if (m_findExtension->isHidden()) {
         m_findExtension->show();
-        m_moreOptions->setText( i18n( "Fewer Options" ));
-    }
-    else
-    {
+        m_moreOptions->setText(i18n("Fewer Options"));
+    } else {
         m_findExtension->hide();
-        m_moreOptions->setText( i18n( "More Options" ));
+        m_moreOptions->setText(i18n("More Options"));
     }
     emit adjustSize();
 }
@@ -117,18 +114,18 @@ bool FindOption::searchInAllSheet() const
     return m_searchInAllSheet->isChecked();
 }
 
-FindDlg::FindDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection )
-    : KFindDialog(parent,options,findStrings,hasSelection  )
+FindDlg::FindDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, bool hasSelection)
+        : KFindDialog(parent, options, findStrings, hasSelection)
 {
-    setObjectName( name );
-    m_findOptions = new FindOption( findExtension() );
-    connect( m_findOptions, SIGNAL( adjustSize() ), SLOT( slotAjustSize() ) );
+    setObjectName(name);
+    m_findOptions = new FindOption(findExtension());
+    connect(m_findOptions, SIGNAL(adjustSize()), SLOT(slotAjustSize()));
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
 FindDlg::~FindDlg()
 {
-  // no need to delete child widgets, Qt does it all for us
+    // no need to delete child widgets, Qt does it all for us
 }
 
 void FindDlg::slotAjustSize()
@@ -142,18 +139,18 @@ bool FindDlg::searchInAllSheet() const
 }
 
 
-SearchDlg::SearchDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection )
-    : KReplaceDialog(parent,options,findStrings,replaceStrings,hasSelection  )
+SearchDlg::SearchDlg(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection)
+        : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
 {
-    setObjectName( name );
-    m_findOptions = new FindOption( findExtension() );
-    connect( m_findOptions, SIGNAL( adjustSize() ), SLOT( slotAjustSize() ) );
+    setObjectName(name);
+    m_findOptions = new FindOption(findExtension());
+    connect(m_findOptions, SIGNAL(adjustSize()), SLOT(slotAjustSize()));
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
 SearchDlg::~SearchDlg()
 {
-  // no need to delete child widgets, Qt does it all for us
+    // no need to delete child widgets, Qt does it all for us
 }
 
 void SearchDlg::slotAjustSize()

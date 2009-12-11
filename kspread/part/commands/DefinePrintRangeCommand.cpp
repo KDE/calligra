@@ -32,7 +32,7 @@ using namespace KSpread;
 
 
 DefinePrintRangeCommand::DefinePrintRangeCommand()
-    : AbstractRegionCommand()
+        : AbstractRegionCommand()
 {
     setText(i18n("Define Print Range"));
 }

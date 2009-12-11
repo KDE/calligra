@@ -40,8 +40,8 @@ public:
 };
 
 ReadOnlyTableModel::ReadOnlyTableModel(Sheet* sheet, int columns, int rows)
-    : QAbstractTableModel(sheet)
-    , d(new Private)
+        : QAbstractTableModel(sheet)
+        , d(new Private)
 {
     d->sheet = sheet;
     d->size = (columns && rows) ? QSize(columns, rows) : QSize(KS_colMax, KS_rowMax);
@@ -72,7 +72,7 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
     if (role == Qt::DisplayRole) {
         // Display a formula if warranted.  If not, simply display the value.
         if (cell.isFormula() && d->sheet->getShowFormula() &&
-            !(d->sheet->isProtected() && style.hideFormula())) {
+                !(d->sheet->isProtected() && style.hideFormula())) {
             return QVariant(cell.userInput());
         } else if (d->sheet->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0.0) {
             // Hide zero.
@@ -81,9 +81,9 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
             // Format the value appropriately and set the display text.
             // The format of the resulting value is used below to determine the alignment.
             Value value = d->sheet->map()->formatter()->formatText(cell.value(), style.formatType(),
-                                                                   style.precision(), style.floatFormat(),
-                                                                   style.prefix(), style.postfix(),
-                                                                   style.currency().symbol());
+                          style.precision(), style.floatFormat(),
+                          style.prefix(), style.postfix(),
+                          style.currency().symbol());
             return value.asString();
         }
     } else if (role == Qt::EditRole) {

@@ -26,14 +26,14 @@ using namespace KSpread;
 class DatabaseSourceSql::Private
 {
 public:
-    Private() : parseSqlStatement( false ) {}
+    Private() : parseSqlStatement(false) {}
 
     QString sqlStatement;
     bool parseSqlStatement;
 };
 
 DatabaseSourceSql::DatabaseSourceSql()
-    : d( new Private )
+        : d(new Private)
 {
 }
 

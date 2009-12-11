@@ -41,49 +41,49 @@ class KSPREAD_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.sheet")
 public:
-    explicit SheetAdaptor( Sheet* );
+    explicit SheetAdaptor(Sheet*);
     ~SheetAdaptor();
 
 public Q_SLOTS: // METHODS
 
     /** Return the cellname for x,y (where x is the row and y is the column). For
     example for x=5 and y=2 the string "B5" got returned. */
-    virtual QString cellName( int x, int y );
+    virtual QString cellName(int x, int y);
     /** Return the x,y-point for the cellname. */
-    virtual QPoint cellLocation( const QString& cellname );
+    virtual QPoint cellLocation(const QString& cellname);
     /** Return the row-number for the cellname. For example for the cellname "B5"
     the integer 5 got returned. */
-    virtual int cellRow( const QString& cellname );
+    virtual int cellRow(const QString& cellname);
     /** Return the column-number for the cellname. For example for the cellname "B5"
     the integer 2 got returned. */
-    virtual int cellColumn( const QString& cellname );
+    virtual int cellColumn(const QString& cellname);
 
     /** Return the text for the row x and for the column y. */
-    virtual QString text( int x, int y );
+    virtual QString text(int x, int y);
     /** Return the text for a cellname. */
-    virtual QString text( const QString& cellname );
+    virtual QString text(const QString& cellname);
     /** Set the text of the cell with row x and column y. If the parse argument is
     true, the passed text got parsed (e.g. a text like "123" will be recognised
     as numeric value. */
-    virtual bool setText( int x, int y, const QString& text, bool parse = true );
+    virtual bool setText(int x, int y, const QString& text, bool parse = true);
     /** Set the text of the cell defined with cellname. */
-    virtual bool setText( const QString& cellname, const QString& text, bool parse = true );
+    virtual bool setText(const QString& cellname, const QString& text, bool parse = true);
 
     /** Return the value the cell at row x and column y has. The returned value is
     a variant and could be e.g. a number, a bool or a text depending on the format
     and the content the cell has. */
-    virtual QVariant value( int x, int y );
+    virtual QVariant value(int x, int y);
     /** Return the value for the cell defined with cellname. */
-    virtual QVariant value( const QString& cellname );
+    virtual QVariant value(const QString& cellname);
     /** Set the value in the cell at row x and column y. */
-    virtual bool setValue( int x, int y, const QVariant& value );
+    virtual bool setValue(int x, int y, const QVariant& value);
     /** Set the value in the cell defined with cellname. */
-    virtual bool setValue( const QString& cellname, const QVariant& value );
+    virtual bool setValue(const QString& cellname, const QVariant& value);
 
     /** Return the name of the sheet. */
     virtual QString sheetName() const;
     /** Set the name of the sheet. */
-    virtual bool setSheetName( const QString & name);
+    virtual bool setSheetName(const QString & name);
 
     //virtual QString column( int _col );
     //virtual QString row( int _row );
@@ -95,19 +95,19 @@ public Q_SLOTS: // METHODS
 
     /** Inserts nbCol number of new columns at the position col. All columns which
     are >= col are moved to the right. */
-    virtual void insertColumn( int col, int nbCol = 1 );
+    virtual void insertColumn(int col, int nbCol = 1);
     /** Inserts nbRow number of new rows at the position row. All rows which
     are >= row are moved down. */
-    virtual void insertRow( int row, int nbRow = 1 );
+    virtual void insertRow(int row, int nbRow = 1);
     /** Remove nbCol number of columns from the position col. */
-    virtual void removeColumn( int col, int nbCol = 1 );
+    virtual void removeColumn(int col, int nbCol = 1);
     /** Remove nbRow number of columns from the position row. */
-    virtual void removeRow( int row, int nbRow = 1);
+    virtual void removeRow(int row, int nbRow = 1);
 
     /** Returns true if the sheet is hidden else false is returned. */
     virtual bool isHidden() const;
     /** Hide the sheet if the argument hidden is true or show it if hidden is false. */
-    virtual void setHidden( bool hidden );
+    virtual void setHidden(bool hidden);
 
     //virtual bool showGrid() const;
     //virtual bool showFormula() const;

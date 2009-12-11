@@ -38,17 +38,17 @@ class KSPREAD_EXPORT MapAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")
 public:
-    explicit MapAdaptor( Map* );
+    explicit MapAdaptor(Map*);
 
 //     virtual bool processDynamic(const DCOPCString &fun, const QByteArray &data,
-// 				DCOPCString& replyType, QByteArray &replyData);
+//     DCOPCString& replyType, QByteArray &replyData);
 
 public Q_SLOTS: // METHODS
 
     /** Return the objectName of the sheet with the defined sheet name. */
-    virtual QString sheet( const QString& name );
+    virtual QString sheet(const QString& name);
     /** Return the objectName of the sheet with the defined index. */
-    virtual QString sheetByIndex( int index );
+    virtual QString sheetByIndex(int index);
     /** Return the number of available sheets. */
     virtual int sheetCount() const;
     /** Return a list of available sheet names. */
@@ -56,7 +56,7 @@ public Q_SLOTS: // METHODS
     /** Return a list of available sheet objectName's. */
     virtual QStringList sheets();
     /** Insert a new sheet with the defined sheet name. */
-    virtual QString insertSheet( const QString& name );
+    virtual QString insertSheet(const QString& name);
 
 private:
     Map* m_map;

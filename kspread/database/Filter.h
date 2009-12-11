@@ -38,8 +38,7 @@ class Map;
 class Filter
 {
 public:
-    enum Comparison
-    {
+    enum Comparison {
         Match,
         NotMatch,
         Equal,
@@ -56,14 +55,12 @@ public:
         BottomPercent
     };
 
-    enum Composition
-    {
+    enum Composition {
         AndComposition,
         OrComposition
     };
 
-    enum Mode
-    {
+    enum Mode {
         Text,
         Number
     };
@@ -85,7 +82,7 @@ public:
 
     void addCondition(Composition composition,
                       int fieldNumber, Comparison comparison, const QString& value,
-                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text );
+                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text);
     void addSubFilter(Composition composition, const Filter& filter);
 
     QHash<QString, Comparison> conditions(int fieldNumber) const;
@@ -103,7 +100,9 @@ public:
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
     bool operator==(const Filter& other) const;
-    inline bool operator!=(const Filter& other) const { return !operator==(other); }
+    inline bool operator!=(const Filter& other) const {
+        return !operator==(other);
+    }
 
     void dump() const;
 

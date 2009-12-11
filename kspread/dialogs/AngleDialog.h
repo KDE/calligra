@@ -3,13 +3,13 @@
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 1999-2002 Laurent Montel <montel@kde.org>
-             (C) 1998-1999 Torben Weis <weis@kde.org> 
+             (C) 1998-1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -34,16 +34,16 @@ class Selection;
 
 class AngleDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  AngleDialog(QWidget* parent, Selection* selection);
+    AngleDialog(QWidget* parent, Selection* selection);
 
 public slots:
-  void slotOk();
-  void slotDefault();
+    void slotOk();
+    void slotDefault();
 protected:
-  Selection* m_selection;
-  KIntNumInput *m_pAngle;
+    Selection* m_selection;
+    KIntNumInput *m_pAngle;
 };
 
 } // namespace KSpread

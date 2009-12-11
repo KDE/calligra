@@ -36,18 +36,18 @@ class View;
 
 class ShowDialog: public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  ShowDialog( View* parent, const char* name );
+    ShowDialog(View* parent, const char* name);
 
 
 public slots:
-  void slotOk();
-  void slotDoubleClicked(QListWidgetItem *);
+    void slotOk();
+    void slotDoubleClicked(QListWidgetItem *);
 protected:
-  View* m_pView;
+    View* m_pView;
 
-  QListWidget * list;
+    QListWidget * list;
 };
 
 } // namespace KSpread

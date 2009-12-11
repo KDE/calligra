@@ -43,11 +43,11 @@ class CalculationSettings::Private
 {
 public:
     KLocale* locale;
-    bool caseSensitiveComparisons : 1;
-    bool precisionAsShown         : 1;
-    bool wholeCellSearchCriteria  : 1;
-    bool automaticFindLabels      : 1;
-    bool useRegularExpressions    : 1;
+bool caseSensitiveComparisons : 1;
+bool precisionAsShown         : 1;
+bool wholeCellSearchCriteria  : 1;
+bool automaticFindLabels      : 1;
+bool useRegularExpressions    : 1;
     int refYear; // the reference year two-digit years are relative to
     QDate refDate; // the reference date all dates are relative to
     // The precision used for decimal numbers, if the default cell style's
@@ -63,7 +63,7 @@ public:
  *****************************************************************************/
 
 CalculationSettings::CalculationSettings()
-    : d(new Private)
+        : d(new Private)
 {
     d->locale = new Localization();
     d->caseSensitiveComparisons = true;
@@ -72,7 +72,7 @@ CalculationSettings::CalculationSettings()
     d->automaticFindLabels      = true;
     d->useRegularExpressions    = true;
     d->refYear = 1930;
-    d->refDate = QDate( 1899, 12, 30 );
+    d->refDate = QDate(1899, 12, 30);
     d->precision = 8;
 }
 
@@ -84,79 +84,60 @@ CalculationSettings::~CalculationSettings()
 
 void CalculationSettings::loadOdf(const KoXmlElement& body)
 {
-    KoXmlNode settings = KoXml::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
-    kDebug() <<"Calculation settings found?"<< !settings.isNull();
-    if ( !settings.isNull() )
-    {
+    KoXmlNode settings = KoXml::namedItemNS(body, KoXmlNS::table, "calculation-settings");
+    kDebug() << "Calculation settings found?" << !settings.isNull();
+    if (!settings.isNull()) {
         KoXmlElement element = settings.toElement();
-        if ( element.hasAttributeNS( KoXmlNS::table,  "case-sensitive" ) )
-        {
+        if (element.hasAttributeNS(KoXmlNS::table,  "case-sensitive")) {
             d->caseSensitiveComparisons = true;
-            QString value = element.attributeNS( KoXmlNS::table, "case-sensitive", "true" );
-            if ( value == "false" )
+            QString value = element.attributeNS(KoXmlNS::table, "case-sensitive", "true");
+            if (value == "false")
                 d->caseSensitiveComparisons = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "precision-as-shown" ) )
-        {
+        } else if (element.hasAttributeNS(KoXmlNS::table, "precision-as-shown")) {
             d->precisionAsShown = false;
-            QString value = element.attributeNS( KoXmlNS::table, "precision-as-shown", "false" );
-            if ( value == "true" )
+            QString value = element.attributeNS(KoXmlNS::table, "precision-as-shown", "false");
+            if (value == "true")
                 d->precisionAsShown = true;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell" ) )
-        {
+        } else if (element.hasAttributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell")) {
             d->wholeCellSearchCriteria = true;
-            QString value = element.attributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true" );
-            if ( value == "false" )
+            QString value = element.attributeNS(KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true");
+            if (value == "false")
                 d->wholeCellSearchCriteria = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "automatic-find-labels" ) )
-        {
+        } else if (element.hasAttributeNS(KoXmlNS::table, "automatic-find-labels")) {
             d->automaticFindLabels = true;
-            QString value = element.attributeNS( KoXmlNS::table, "automatic-find-labels", "true" );
-            if ( value == "false" )
+            QString value = element.attributeNS(KoXmlNS::table, "automatic-find-labels", "true");
+            if (value == "false")
                 d->automaticFindLabels = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "use-regular-expressions" ) )
-        {
+        } else if (element.hasAttributeNS(KoXmlNS::table, "use-regular-expressions")) {
             d->useRegularExpressions = true;
-            QString value = element.attributeNS( KoXmlNS::table, "use-regular-expressions", "true" );
-            if ( value == "false" )
+            QString value = element.attributeNS(KoXmlNS::table, "use-regular-expressions", "true");
+            if (value == "false")
                 d->useRegularExpressions = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "null-year" ) )
-        {
+        } else if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
             d->refYear = 1930;
-            QString value = element.attributeNS( KoXmlNS::table, "null-year", "1930" );
-            if ( value == "false" )
+            QString value = element.attributeNS(KoXmlNS::table, "null-year", "1930");
+            if (value == "false")
                 d->refYear = false;
         }
 
-        forEachElement( element, settings )
-        {
-            if ( element.namespaceURI() != KoXmlNS::table )
+        forEachElement(element, settings) {
+            if (element.namespaceURI() != KoXmlNS::table)
                 continue;
-            else if ( element.tagName() ==  "null-date" )
-            {
-                d->refDate = QDate( 1899, 12, 30 );
-                QString valueType = element.attributeNS( KoXmlNS::table, "value-type", "date" );
-                if( valueType == "date" )
-                {
-                    QString value = element.attributeNS( KoXmlNS::table, "date-value", "1899-12-30" );
-                    QDate date = QDate::fromString( value, Qt::ISODate );
-                    if ( date.isValid() )
+            else if (element.tagName() ==  "null-date") {
+                d->refDate = QDate(1899, 12, 30);
+                QString valueType = element.attributeNS(KoXmlNS::table, "value-type", "date");
+                if (valueType == "date") {
+                    QString value = element.attributeNS(KoXmlNS::table, "date-value", "1899-12-30");
+                    QDate date = QDate::fromString(value, Qt::ISODate);
+                    if (date.isValid())
                         d->refDate = date;
-                }
-                else
-                {
-                    kDebug() <<"CalculationSettings: Error on loading null date."
-                             << "Value type """ << valueType << """ not handled"
-                             << ", falling back to default." << endl;
+                } else {
+                    kDebug() << "CalculationSettings: Error on loading null date."
+                    << "Value type """ << valueType << """ not handled"
+                    << ", falling back to default." << endl;
                     // NOTE Stefan: I don't know why different types are possible here!
                 }
-            }
-            else if ( element.tagName() ==  "iteration" )
-            {
+            } else if (element.tagName() ==  "iteration") {
                 // TODO
             }
         }
@@ -174,12 +155,12 @@ KLocale* CalculationSettings::locale() const
     return d->locale;
 }
 
-void CalculationSettings::setReferenceYear( int year )
+void CalculationSettings::setReferenceYear(int year)
 {
-    if ( year < 100)
-       d->refYear = 1900 + year;
+    if (year < 100)
+        d->refYear = 1900 + year;
     else
-       d->refYear = year;
+        d->refYear = year;
 }
 
 int CalculationSettings::referenceYear() const
@@ -187,10 +168,10 @@ int CalculationSettings::referenceYear() const
     return d->refYear;
 }
 
-void CalculationSettings::setReferenceDate( const QDate& date )
+void CalculationSettings::setReferenceDate(const QDate& date)
 {
-    if ( !date.isValid() ) return;
-    d->refDate.setDate( date.year(), date.month(), date.day() );
+    if (!date.isValid()) return;
+    d->refDate.setDate(date.year(), date.month(), date.day());
 }
 
 QDate CalculationSettings::referenceDate() const
@@ -198,9 +179,9 @@ QDate CalculationSettings::referenceDate() const
     return d->refDate;
 }
 
-void CalculationSettings::setDefaultDecimalPrecision( int precision )
+void CalculationSettings::setDefaultDecimalPrecision(int precision)
 {
-    d->precision = ( precision < 0 ) ? 8 : precision;
+    d->precision = (precision < 0) ? 8 : precision;
 }
 
 int CalculationSettings::defaultDecimalPrecision() const

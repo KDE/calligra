@@ -72,178 +72,180 @@ class UndoAction;
  */
 class KSPREAD_EXPORT Doc : public KoDocument
 {
-  Q_OBJECT
-  Q_PROPERTY( int syntaxVersion READ syntaxVersion )
+    Q_OBJECT
+    Q_PROPERTY(int syntaxVersion READ syntaxVersion)
 #if 0 // UNDOREDOLIMIT
-  Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
+    Q_PROPERTY(int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit)
 #endif
 
 public:
-  /**
-   * Creates a new document.
-   * @param parentWidget the parent widget
-   * @param parent the parent object
-   * @param singleViewMode enables single view mode, if @c true
-   */
-  explicit Doc( QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    /**
+     * Creates a new document.
+     * @param parentWidget the parent widget
+     * @param parent the parent object
+     * @param singleViewMode enables single view mode, if @c true
+     */
+    explicit Doc(QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
 
-  /**
-   * Destroys the document.
-   */
-  ~Doc();
+    /**
+     * Destroys the document.
+     */
+    ~Doc();
 
-  /**
-   * \ingroup OpenDocument
-   */
-  enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
+    /**
+     * \ingroup OpenDocument
+     */
+    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
 
-  /**
-   * @return list of all documents
-   */
-  static QList<Doc*> documents();
+    /**
+     * @return list of all documents
+     */
+    static QList<Doc*> documents();
 
     virtual void setReadWrite(bool readwrite = true);
 
-  /**
-   * @return the MIME type of KSpread document
-   */
-  virtual QByteArray mimeType() const { return MIME_TYPE; }
+    /**
+     * @return the MIME type of KSpread document
+     */
+    virtual QByteArray mimeType() const {
+        return MIME_TYPE;
+    }
 
     // KoShapeControllerBase interface
     virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
-  /**
-   * @return the Map that belongs to this Document
-   */
-  Map *map () const;
+    /**
+     * @return the Map that belongs to this Document
+     */
+    Map *map() const;
 
-  /**
-   * Returns the syntax version of the currently opened file
-   */
-  int syntaxVersion( ) const;
+    /**
+     * Returns the syntax version of the currently opened file
+     */
+    int syntaxVersion() const;
 
-  virtual bool completeSaving( KoStore* _store );
-
-
-  /**
-   * \ingroup NativeFormat
-   * Main saving method.
-   */
-  virtual QDomDocument saveXML();
-
-  /**
-   * \ingroup NativeFormat
-   * Main loading method.
-   */
-  virtual bool loadXML( const KoXmlDocument& doc, KoStore *store );
+    virtual bool completeSaving(KoStore* _store);
 
 
-  /**
-   * \ingroup OpenDocument
-   * Save the whole document, or just the selection, into OASIS format
-   * When saving the selection, also return the data as plain text and/or plain picture,
-   * which are used to insert into the KMultipleDrag drag object.
-   *
-   * @param store the KoStore to save into
-   * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
-   * @param saveFlag either the whole document, or only the selected text/objects.
-   * @param plainText must be set when saveFlag==SaveSelected.
-   *        It returns the plain text format of the saved data, when available.
-   */
-  bool saveOdfHelper( SavingContext &documentContext, SaveFlag saveFlag,
-                        QString* plainText = 0 );
+    /**
+     * \ingroup NativeFormat
+     * Main saving method.
+     */
+    virtual QDomDocument saveXML();
 
-  /**
-   * \ingroup OpenDocument
-   * Main saving method.
-   */
-  virtual bool saveOdf( SavingContext &documentContext );
-
-  /**
-   * \ingroup OpenDocument
-   * Main loading method.
-   * @see Map::loadOdf
-   */
-  virtual bool loadOdf( KoOdfReadStore & odfStore );
-
-  /**
-   * \ingroup OpenDocument
-   */
-  void loadOdfCalculationSettings( const KoXmlElement& body );
+    /**
+     * \ingroup NativeFormat
+     * Main loading method.
+     */
+    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
 
 
-  virtual int supportedSpecialFormats() const;
+    /**
+     * \ingroup OpenDocument
+     * Save the whole document, or just the selection, into OASIS format
+     * When saving the selection, also return the data as plain text and/or plain picture,
+     * which are used to insert into the KMultipleDrag drag object.
+     *
+     * @param store the KoStore to save into
+     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
+     * @param saveFlag either the whole document, or only the selected text/objects.
+     * @param plainText must be set when saveFlag==SaveSelected.
+     *        It returns the plain text format of the saved data, when available.
+     */
+    bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
+                       QString* plainText = 0);
 
-  virtual bool loadChildren( KoStore* _store );
+    /**
+     * \ingroup OpenDocument
+     * Main saving method.
+     */
+    virtual bool saveOdf(SavingContext &documentContext);
 
-  virtual void addView( KoView *_view );
+    /**
+     * \ingroup OpenDocument
+     * Main loading method.
+     * @see Map::loadOdf
+     */
+    virtual bool loadOdf(KoOdfReadStore & odfStore);
 
-  /**
-   * updates all properties after zoom changed
-   */
-  void newZoomAndResolution( bool updateViews, bool forPrint );
-
-  /**
-   * @return true if the document is currently loading.
-   */
-  bool isLoading() const;
-
-  bool docData( QString const & xmlTag, QDomElement & data );
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOdfCalculationSettings(const KoXmlElement& body);
 
 
-  /**
-   * \ingroup Painting
-   * Primary entry point for painting.  Use this function to paint groups of cells
-   *
-   * @param painter the painter object to use.  This should already be
-   *                initialized with the world matrix.  The begin and end calls
-   *                should surround this function.
-   *
-   * @param viewRect the document coordinates showing what is actually visible in
-   *                 the screen
-   *
-   * @param view the view of the region -- may be 0 but no selection markers
-   *        can be passed in that case.
-   *
-   * @param region a list of rectangles indicating the cell ranges needing
-   *               painted.
-   */
-  void paintCellRegions(QPainter& painter, const QRect &viewRect,
-                        View* view, const Region& region);
+    virtual int supportedSpecialFormats() const;
 
-  /**
-   * \ingroup Painting
-   */
-  virtual void paintContent( QPainter & painter, const QRect & rect);
+    virtual bool loadChildren(KoStore* _store);
 
-  /**
-   * \ingroup Painting
-   */
-  void paintContent( QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true );
+    virtual void addView(KoView *_view);
 
-  KCompletion& completion();
-  void addStringCompletion(const QString & stringCompletion);
+    /**
+     * updates all properties after zoom changed
+     */
+    void newZoomAndResolution(bool updateViews, bool forPrint);
 
-  void initConfig();
-  void saveConfig();
+    /**
+     * @return true if the document is currently loading.
+     */
+    bool isLoading() const;
 
-  void updateBorderButton();
+    bool docData(QString const & xmlTag, QDomElement & data);
 
-    void addIgnoreWordAll( const QString & word);
-    void clearIgnoreWordAll( );
-    void addIgnoreWordAllList( const QStringList & _lst);
+
+    /**
+     * \ingroup Painting
+     * Primary entry point for painting.  Use this function to paint groups of cells
+     *
+     * @param painter the painter object to use.  This should already be
+     *                initialized with the world matrix.  The begin and end calls
+     *                should surround this function.
+     *
+     * @param viewRect the document coordinates showing what is actually visible in
+     *                 the screen
+     *
+     * @param view the view of the region -- may be 0 but no selection markers
+     *        can be passed in that case.
+     *
+     * @param region a list of rectangles indicating the cell ranges needing
+     *               painted.
+     */
+    void paintCellRegions(QPainter& painter, const QRect &viewRect,
+                          View* view, const Region& region);
+
+    /**
+     * \ingroup Painting
+     */
+    virtual void paintContent(QPainter & painter, const QRect & rect);
+
+    /**
+     * \ingroup Painting
+     */
+    void paintContent(QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true);
+
+    KCompletion& completion();
+    void addStringCompletion(const QString & stringCompletion);
+
+    void initConfig();
+    void saveConfig();
+
+    void updateBorderButton();
+
+    void addIgnoreWordAll(const QString & word);
+    void clearIgnoreWordAll();
+    void addIgnoreWordAllList(const QStringList & _lst);
     QStringList spellListIgnoreAll() const ;
 
-/* Function specific when we load config from file */
-  void loadConfigFromFile();
-  bool configLoadFromFile() const;
+    /* Function specific when we load config from file */
+    void loadConfigFromFile();
+    bool configLoadFromFile() const;
 
-  // repaint (update) all views
-  void repaint( const QRectF& );
+    // repaint (update) all views
+    void repaint(const QRectF&);
 
 #if 0 // UNDOREDOLIMIT
-  int undoRedoLimit() const;
-  void setUndoRedoLimit(int _val);
+    int undoRedoLimit() const;
+    void setUndoRedoLimit(int _val);
 #endif
 
 public Q_SLOTS:
@@ -252,77 +254,77 @@ public Q_SLOTS:
     virtual void initEmpty();
 
 Q_SIGNALS:
-  /**
-   * Emitted if all views have to be updated.
-   */
-  void sig_updateView();
+    /**
+     * Emitted if all views have to be updated.
+     */
+    void sig_updateView();
 
-  /**
-   * Emitted if all interfaces have to be updated.
-   */
-  void sig_refreshView();
+    /**
+     * Emitted if all interfaces have to be updated.
+     */
+    void sig_refreshView();
 
 protected Q_SLOTS:
-  virtual void openTemplate( const KUrl& url );
+    virtual void openTemplate(const KUrl& url);
 
 protected:
-  KoView* createViewInstance( QWidget* parent );
+    KoView* createViewInstance(QWidget* parent);
 
-  /**
-   * @reimp Overloaded function of KoDocument.
-   */
-  virtual bool completeLoading( KoStore* );
+    /**
+     * @reimp Overloaded function of KoDocument.
+     */
+    virtual bool completeLoading(KoStore*);
 
-  /**
-   * @reimp Overloaded function of KoDocument.
-   */
-  virtual bool saveChildren( KoStore* _store );
+    /**
+     * @reimp Overloaded function of KoDocument.
+     */
+    virtual bool saveChildren(KoStore* _store);
 
 private:
-    Q_DISABLE_COPY( Doc )
+    Q_DISABLE_COPY(Doc)
 
     class Private;
     Private * const d;
 
-  /* helper functions for painting */
+    /* helper functions for painting */
 
-  /**
-   * \ingroup Painting
-   * This function is called at the end of an operation and is responsible
-   * for painting any changes that have occurred in the meantime
-   */
-  void paintUpdates();
+    /**
+     * \ingroup Painting
+     * This function is called at the end of an operation and is responsible
+     * for painting any changes that have occurred in the meantime
+     */
+    void paintUpdates();
 
-  /**
-   * \ingroup Painting
-   */
-  void paintRegion(QPainter& painter, const QRectF &viewRegion,
-                   View* view, const QRect &paintRegion,
-                   const Sheet* sheet);
+    /**
+     * \ingroup Painting
+     */
+    void paintRegion(QPainter& painter, const QRectF &viewRegion,
+                     View* view, const QRect &paintRegion,
+                     const Sheet* sheet);
 
-  void loadPaper( KoXmlElement const & paper );
+    void loadPaper(KoXmlElement const & paper);
 
-  /**
-   * \ingroup OpenDocument
-   * Saves the Document related settings.
-   * The actual saving takes place in Map::saveOdfSettings.
-   * @see Map::saveOdfSettings
-   */
-  void saveOdfSettings( KoXmlWriter &settingsWriter );
+    /**
+     * \ingroup OpenDocument
+     * Saves the Document related settings.
+     * The actual saving takes place in Map::saveOdfSettings.
+     * @see Map::saveOdfSettings
+     */
+    void saveOdfSettings(KoXmlWriter &settingsWriter);
 
-  /**
-   * \ingroup OpenDocument
-   * Loads the Document related settings.
-   * The actual loading takes place in Map::loadOdfSettings.
-   * @see Map::loadOdfSettings
-   */
-  void loadOdfSettings( const KoXmlDocument&settingsDoc );
+    /**
+     * \ingroup OpenDocument
+     * Loads the Document related settings.
+     * The actual loading takes place in Map::loadOdfSettings.
+     * @see Map::loadOdfSettings
+     */
+    void loadOdfSettings(const KoXmlDocument&settingsDoc);
 
-  /**
-   * \ingroup OpenDocument
-   * Load the spell checker ignore list.
-   */
-  void loadOdfIgnoreList( const KoOasisSettings& settings );
+    /**
+     * \ingroup OpenDocument
+     * Load the spell checker ignore list.
+     */
+    void loadOdfIgnoreList(const KoOasisSettings& settings);
 };
 
 } // namespace KSpread

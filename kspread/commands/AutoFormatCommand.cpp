@@ -64,8 +64,7 @@ bool AutoFormatCommand::preProcessing()
 
 bool AutoFormatCommand::mainProcessing()
 {
-    if (m_reverse)
-    {
+    if (m_reverse) {
         m_sheet->cellStorage()->undo(m_undoData);
         return true;
     }
@@ -80,12 +79,10 @@ bool AutoFormatCommand::process(Element* element)
     if (!m_styles[0].isDefault())
         m_sheet->cellStorage()->setStyle(Region(rect.topLeft()), m_styles[0]);
     // Top row
-    for (int col = rect.left() + 1; col <= rect.right(); ++col)
-    {
+    for (int col = rect.left() + 1; col <= rect.right(); ++col) {
         int pos = 1 + ((col - rect.left() - 1) % 2);
         Cell cell(m_sheet, col, rect.top());
-        if (!cell.isPartOfMerged())
-        {
+        if (!cell.isPartOfMerged()) {
             Style style;
             if (!m_styles[pos].isDefault())
                 style = m_styles[pos];
@@ -99,12 +96,10 @@ bool AutoFormatCommand::process(Element* element)
     }
 
     // Left column
-    for (int row = rect.top() + 1; row <= rect.bottom(); ++row)
-    {
+    for (int row = rect.top() + 1; row <= rect.bottom(); ++row) {
         int pos = 4 + ((row - rect.top() - 1) % 2) * 4;
         Cell cell(m_sheet, rect.left(), row);
-        if (!cell.isPartOfMerged())
-        {
+        if (!cell.isPartOfMerged()) {
             Style style;
             if (!m_styles[pos].isDefault())
                 style = m_styles[pos];
@@ -118,14 +113,11 @@ bool AutoFormatCommand::process(Element* element)
     }
 
     // Body
-    for (int col = rect.left() + 1; col <= rect.right(); ++col)
-    {
-        for (int row = rect.top() + 1; row <= rect.bottom(); ++row)
-        {
+    for (int col = rect.left() + 1; col <= rect.right(); ++col) {
+        for (int row = rect.top() + 1; row <= rect.bottom(); ++row) {
             int pos = 5 + ((row - rect.top() - 1) % 2) * 4 + ((col - rect.left() - 1) % 2);
             Cell cell(m_sheet, col, row);
-            if (!cell.isPartOfMerged())
-            {
+            if (!cell.isPartOfMerged()) {
                 if (!m_styles[pos].isDefault())
                     m_sheet->cellStorage()->setStyle(Region(col, row), m_styles[pos]);
 
@@ -135,20 +127,18 @@ bool AutoFormatCommand::process(Element* element)
                 else
                     style = m_styles[ 6 + ((row - rect.top() - 1) % 2) * 4 ];
 
-                if (!style.isDefault())
-                {
+                if (!style.isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setLeftBorderPen(style.leftBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(col, row), tmpStyle);
                 }
 
                 if (row == rect.top() + 1)
-                    style = m_styles[ 5 + ((col - rect.left() - 1) % 2) ];
+                    style = m_styles[ 5 + ((col - rect.left() - 1) % 2)];
                 else
-                    style = m_styles[ 9 + ((col - rect.left() - 1) % 2) ];
+                    style = m_styles[ 9 + ((col - rect.left() - 1) % 2)];
 
-                if (!style.isDefault())
-                {
+                if (!style.isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setTopBorderPen(style.topBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(col, row), tmpStyle);
@@ -158,33 +148,23 @@ bool AutoFormatCommand::process(Element* element)
     }
 
     // Outer right border
-    for (int row = rect.top(); row <= rect.bottom(); ++row)
-    {
+    for (int row = rect.top(); row <= rect.bottom(); ++row) {
         Cell cell(m_sheet, rect.right(), row);
-        if (!cell.isPartOfMerged())
-        {
-            if (row == rect.top())
-            {
-                if (!m_styles[3].isDefault())
-                {
+        if (!cell.isPartOfMerged()) {
+            if (row == rect.top()) {
+                if (!m_styles[3].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[3].leftBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
                 }
-            }
-            else if (row == rect.right())
-            {
-                if (!m_styles[11].isDefault())
-                {
+            } else if (row == rect.right()) {
+                if (!m_styles[11].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[11].leftBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
                 }
-            }
-            else
-            {
-                if (!m_styles[7].isDefault())
-                {
+            } else {
+                if (!m_styles[7].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[7].leftBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
@@ -194,33 +174,23 @@ bool AutoFormatCommand::process(Element* element)
     }
 
     // Outer bottom border
-    for (int col = rect.left(); col <= rect.right(); ++col)
-    {
+    for (int col = rect.left(); col <= rect.right(); ++col) {
         Cell cell(m_sheet, col, rect.bottom());
-        if(!cell.isPartOfMerged())
-        {
-            if (col == rect.left())
-            {
-                if (!m_styles[12].isDefault())
-                {
+        if (!cell.isPartOfMerged()) {
+            if (col == rect.left()) {
+                if (!m_styles[12].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[12].topBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);
                 }
-            }
-            else if (col == rect.right())
-            {
-                if (!m_styles[14].isDefault())
-                {
+            } else if (col == rect.right()) {
+                if (!m_styles[14].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[14].topBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);
                 }
-            }
-            else
-            {
-                if (!m_styles[13].isDefault())
-                {
+            } else {
+                if (!m_styles[13].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[13].topBorderPen());
                     m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);

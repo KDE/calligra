@@ -19,5 +19,5 @@
 
 #include "Factory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkspreadpart, KSpread::Factory )
+K_EXPORT_COMPONENT_FACTORY(libkspreadpart, KSpread::Factory)
 

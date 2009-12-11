@@ -38,13 +38,13 @@ class TableShape : public QObject, public KoShape
     Q_OBJECT
 
 public:
-    explicit TableShape( int columns = 2, int rows = 8 );
+    explicit TableShape(int columns = 2, int rows = 8);
     virtual ~TableShape();
 
     int columns() const;
     int rows() const;
-    void setColumns( int columns );
-    void setRows( int rows );
+    void setColumns(int columns);
+    void setRows(int rows);
 
     // KoShape interface
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
@@ -76,10 +76,10 @@ protected:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
 private Q_SLOTS:
-    void handleDamages( const QList<Damage*>& damages );
+    void handleDamages(const QList<Damage*>& damages);
 
 private:
-    Q_DISABLE_COPY( TableShape )
+    Q_DISABLE_COPY(TableShape)
 
     class Private;
     Private * const d;

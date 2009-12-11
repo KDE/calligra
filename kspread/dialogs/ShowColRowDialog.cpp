@@ -43,86 +43,79 @@
 using namespace KSpread;
 
 ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-  setModal( true );
-  setButtons( Ok|Cancel );
-  m_selection = selection;
-  typeShow=_type;
+    setModal(true);
+    setButtons(Ok | Cancel);
+    m_selection = selection;
+    typeShow = _type;
 
-  QWidget *page = new QWidget();
-  setMainWidget( page );
-  QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
+    QWidget *page = new QWidget();
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout(page);
+    lay1->setMargin(KDialog::marginHint());
+    lay1->setSpacing(KDialog::spacingHint());
 
-  QLabel *label = new QLabel( page );
+    QLabel *label = new QLabel(page);
 
-  if(_type==Column) {
-    setWindowTitle( i18n("Show Columns") );
+    if (_type == Column) {
+        setWindowTitle(i18n("Show Columns"));
         label->setText(i18n("Select hidden columns to show:"));
-  }
-  else if(_type==Row) {
-    setWindowTitle( i18n("Show Rows") );
+    } else if (_type == Row) {
+        setWindowTitle(i18n("Show Rows"));
         label->setText(i18n("Select hidden rows to show:"));
-  }
+    }
 
-  list=new QListWidget(page);
+    list = new QListWidget(page);
 
-  lay1->addWidget( label );
-  lay1->addWidget( list );
+    lay1->addWidget(label);
+    lay1->addWidget(list);
 
-  bool showColNumber=m_selection->activeSheet()->getShowColumnNumber();
-  if(_type==Column)
-        {
-        ColumnFormat *col=m_selection->activeSheet()->firstCol();
+    bool showColNumber = m_selection->activeSheet()->getShowColumnNumber();
+    if (_type == Column) {
+        ColumnFormat *col = m_selection->activeSheet()->firstCol();
 
         QString text;
         QStringList listCol;
-        for( ; col; col = col->next() )
-	  {
-	    if(col->isHidden())
-	      listInt.append(col->column());
-	  }
+        for (; col; col = col->next()) {
+            if (col->isHidden())
+                listInt.append(col->column());
+        }
         qSort(listInt);
         QList<int>::Iterator it;
-        for( it = listInt.begin(); it != listInt.end(); ++it )
-	  {
-	    if(!showColNumber)
-	      listCol+=i18n("Column: %1",Cell::columnName(*it));
-	    else
-	      listCol+=i18n("Column: %1",text.setNum(*it));
-	  }
-        list->addItems(listCol);
+        for (it = listInt.begin(); it != listInt.end(); ++it) {
+            if (!showColNumber)
+                listCol += i18n("Column: %1", Cell::columnName(*it));
+            else
+                listCol += i18n("Column: %1", text.setNum(*it));
         }
-  else if(_type==Row)
-        {
-        RowFormat *row=m_selection->activeSheet()->firstRow();
+        list->addItems(listCol);
+    } else if (_type == Row) {
+        RowFormat *row = m_selection->activeSheet()->firstRow();
 
         QString text;
         QStringList listRow;
-        for( ; row; row = row->next() )
-	  {
-	    if(row->isHidden())
-	      listInt.append(row->row());
-	  }
+        for (; row; row = row->next()) {
+            if (row->isHidden())
+                listInt.append(row->row());
+        }
         qSort(listInt);
         QList<int>::Iterator it;
-        for( it = listInt.begin(); it != listInt.end(); ++it )
-	  listRow+=i18n("Row: %1",text.setNum(*it));
+        for (it = listInt.begin(); it != listInt.end(); ++it)
+            listRow += i18n("Row: %1", text.setNum(*it));
 
         list->addItems(listRow);
-        }
+    }
 
-  if(!list->count())
-      enableButtonOk(false);
+    if (!list->count())
+        enableButtonOk(false);
 
-  //selection multiple
-  list->setSelectionMode(QAbstractItemView::MultiSelection);
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( list, SIGNAL(itemDoubleClicked(QListWidgetItem *)),this,SLOT(slotDoubleClicked(QListWidgetItem *)));
-  resize( 200, 150 );
-  setFocus();
+    //selection multiple
+    list->setSelectionMode(QAbstractItemView::MultiSelection);
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotDoubleClicked(QListWidgetItem *)));
+    resize(200, 150);
+    setFocus();
 }
 
 void ShowColRow::slotDoubleClicked(QListWidgetItem *)
@@ -132,37 +125,31 @@ void ShowColRow::slotDoubleClicked(QListWidgetItem *)
 
 void ShowColRow::slotOk()
 {
-  Region region;
-  for(unsigned int i=0; i < (unsigned int)list->count(); i++)
-  {
-    if (list->item(i)->isSelected())
-    {
-      if (typeShow == Column)
-      {
-        region.add(QRect(listInt.at(i), 1, 1, KS_rowMax));
-      }
-      if (typeShow == Row)
-      {
-        region.add(QRect(1, listInt.at(i), KS_colMax, 1));
-      }
+    Region region;
+    for (unsigned int i = 0; i < (unsigned int)list->count(); i++) {
+        if (list->item(i)->isSelected()) {
+            if (typeShow == Column) {
+                region.add(QRect(listInt.at(i), 1, 1, KS_rowMax));
+            }
+            if (typeShow == Row) {
+                region.add(QRect(1, listInt.at(i), KS_colMax, 1));
+            }
+        }
     }
-  }
 
-  HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet( m_selection->activeSheet() );
-  if (typeShow == Column)
-  {
-    manipulator->setManipulateColumns(true);
-  }
-  if (typeShow == Row)
-  {
-    manipulator->setManipulateRows(true);
-  }
-  manipulator->setReverse(true);
-  manipulator->add(region);
-  manipulator->execute(m_selection->canvas());
+    HideShowManipulator* manipulator = new HideShowManipulator();
+    manipulator->setSheet(m_selection->activeSheet());
+    if (typeShow == Column) {
+        manipulator->setManipulateColumns(true);
+    }
+    if (typeShow == Row) {
+        manipulator->setManipulateRows(true);
+    }
+    manipulator->setReverse(true);
+    manipulator->add(region);
+    manipulator->execute(m_selection->canvas());
 
-  accept();
+    accept();
 }
 
 #include "ShowColRowDialog.moc"

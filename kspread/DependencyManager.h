@@ -41,15 +41,15 @@ class KSPREAD_EXPORT DependencyManager : public QObject
 
 public:
     /** constructor */
-    DependencyManager( const Map* map );
+    DependencyManager(const Map* map);
     /** destructor */
-    ~DependencyManager ();
+    ~DependencyManager();
 
     /** clear all data */
-    void reset ();
+    void reset();
 
     /** handle the fact that cell's contents have changed */
-    void regionChanged (const Region& region);
+    void regionChanged(const Region& region);
 
     /** Updates the whole map. */
     void updateAllDependencies(const Map* map);
@@ -64,13 +64,13 @@ public:
      * Returns the region, that consumes the value of \p cell.
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion( const Cell& cell ) const;
+    Region consumingRegion(const Cell& cell) const;
 
     /**
      * Returns the region, that is reduced to those parts of \p region, that provide values.
      * \return region providing values for others
      */
-    Region reduceToProvidingRegion( const Region& region ) const;
+    Region reduceToProvidingRegion(const Region& region) const;
 
     /**
      * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
@@ -78,7 +78,7 @@ public:
      * \param movedRegion the region, that was moved
      * \param destination the new upper left corner of the region
      */
-    void regionMoved( const Region& movedRegion, const Cell& destination );
+    void regionMoved(const Region& movedRegion, const Cell& destination);
 
 public Q_SLOTS:
     void namedAreaModified(const QString&);
@@ -91,10 +91,10 @@ protected:
      *
      * \see regionMoved()
      */
-    void updateFormula( const Cell& cell, const Region::Element* oldLocation, const Region::Point& offset );
+    void updateFormula(const Cell& cell, const Region::Element* oldLocation, const Region::Point& offset);
 
 private:
-    Q_DISABLE_COPY( DependencyManager )
+    Q_DISABLE_COPY(DependencyManager)
 
     class Private;
     Private * const d;

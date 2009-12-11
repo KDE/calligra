@@ -53,7 +53,7 @@ public slots:
     void changeIndexType(int);
 
 protected:
-    void displayOrNotListOfValidity( bool _displayList);
+    void displayOrNotListOfValidity(bool _displayList);
 
     Selection* m_selection;
 

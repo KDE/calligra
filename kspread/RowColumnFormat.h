@@ -44,14 +44,14 @@ class KSPREAD_EXPORT RowFormat
 {
 public:
     RowFormat();
-    RowFormat( const RowFormat& other );
+    RowFormat(const RowFormat& other);
     ~RowFormat();
 
-    void setSheet( Sheet* sheet );
+    void setSheet(Sheet* sheet);
 
     QDomElement save(QDomDocument&, int yshift = 0) const;
     bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
-    bool loadOdf( const KoXmlElement& row, KoXmlElement * rowStyle );
+    bool loadOdf(const KoXmlElement& row, KoXmlElement * rowStyle);
 
     /**
      * \return the row's height
@@ -70,7 +70,7 @@ public:
      * @param _h is calculated in display pixels as double value. The function cares for zooming.
      * Use this function when setting the height, to not get rounding problems.
      */
-    void setHeight( double _h );
+    void setHeight(double _h);
 
     /**
      * @reimp
@@ -81,17 +81,17 @@ public:
      * @return the row for this RowFormat. May be 0 if this is the default format.
      */
     int row() const;
-    void setRow( int row );
+    void setRow(int row);
 
     RowFormat* next() const;
     RowFormat* previous() const;
-    void setNext( RowFormat* c );
-    void setPrevious( RowFormat* c );
+    void setNext(RowFormat* c);
+    void setPrevious(RowFormat* c);
 
     /**
      * Sets the hide flag
      */
-    void setHidden( bool _hide, bool repaint = true );
+    void setHidden(bool _hide, bool repaint = true);
     bool isHidden() const;
 
     void setFiltered(bool filtered);
@@ -99,8 +99,10 @@ public:
 
     bool isHiddenOrFiltered() const;
 
-    bool operator==( const RowFormat& other ) const;
-    inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
+    bool operator==(const RowFormat& other) const;
+    inline bool operator!=(const RowFormat& other) const {
+        return !operator==(other);
+    }
 
 private:
     // do not allow assignment
@@ -117,10 +119,10 @@ class KSPREAD_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();
-    ColumnFormat( const ColumnFormat& other );
+    ColumnFormat(const ColumnFormat& other);
     ~ColumnFormat();
 
-    void setSheet( Sheet* sheet );
+    void setSheet(Sheet* sheet);
 
     QDomElement save(QDomDocument&, int xshift = 0) const;
     bool load(const KoXmlElement& row, int xshift = 0, Paste::Mode mode = Paste::Normal);
@@ -143,7 +145,7 @@ public:
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
      */
-    void setWidth( double _w );
+    void setWidth(double _w);
 
     /**
      * @reimp
@@ -154,14 +156,14 @@ public:
      * @return the column of this ColumnFormat. May be 0 if this is the default format.
      */
     int column() const;
-    void setColumn( int column );
+    void setColumn(int column);
 
     ColumnFormat* next() const;
     ColumnFormat* previous() const;
-    void setNext( ColumnFormat* c );
-    void setPrevious( ColumnFormat* c );
+    void setNext(ColumnFormat* c);
+    void setPrevious(ColumnFormat* c);
 
-    void setHidden( bool _hide );
+    void setHidden(bool _hide);
     bool isHidden() const;
 
     void setFiltered(bool filtered);
@@ -169,8 +171,10 @@ public:
 
     bool isHiddenOrFiltered() const;
 
-    bool operator==( const ColumnFormat& other ) const;
-    inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }
+    bool operator==(const ColumnFormat& other) const;
+    inline bool operator!=(const ColumnFormat& other) const {
+        return !operator==(other);
+    }
 
 private:
     // do not allow assignment

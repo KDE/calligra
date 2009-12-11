@@ -218,7 +218,9 @@ public:
      * Equality operator.
      */
     bool operator==(const PrintSettings& other) const;
-    inline bool operator!=(const PrintSettings& other) const { return !operator==(other); }
+    inline bool operator!=(const PrintSettings& other) const {
+        return !operator==(other);
+    }
 
 private:
     class Private;

@@ -31,9 +31,9 @@ public:
 };
 
 MergeStrategy::MergeStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                                   const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
-    , d(new Private)
+                             const QPointF documentPos, Qt::KeyboardModifiers modifiers)
+        : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+        , d(new Private)
 {
     d->initialSelection = selection->lastRange();
 }

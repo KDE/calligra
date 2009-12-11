@@ -22,14 +22,16 @@
 
 #include <KoPrintingDialog.h>
 
-namespace KSpread {
+namespace KSpread
+{
 class View;
 class SheetSelectPage;
 
 /**
  * Manages printing on the document level.
  */
-class PrintJob : public KoPrintingDialog {
+class PrintJob : public KoPrintingDialog
+{
 public:
     PrintJob(View *view);
     virtual ~PrintJob();

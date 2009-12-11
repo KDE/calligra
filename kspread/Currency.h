@@ -59,7 +59,9 @@ public:
 
 
     bool operator==(Currency const & other) const;
-    inline bool operator!=(Currency const & other) const { return !operator==(other); }
+    inline bool operator!=(Currency const & other) const {
+        return !operator==(other);
+    }
 
     QString code(Format format = Native) const;
     QString country() const;

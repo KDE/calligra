@@ -46,62 +46,69 @@ class UndoResizeColRow;
 class Selection;
 
 struct rowSize {
-int rowNumber;
-double rowHeight;
+    int rowNumber;
+    double rowHeight;
 };
 
 struct columnSize {
-int columnNumber;
-double columnWidth;
+    int columnNumber;
+    double columnWidth;
 };
 
 struct textOfCell {
-int row;
-int col;
-QString text;
+    int row;
+    int col;
+    QString text;
 };
 
 struct layoutTextCell {
-int row;
-int col;
-Style * l;
-QString text;
+    int row;
+    int col;
+    Style * l;
+    QString text;
 };
 
 struct layoutCell {
-int row;
-int col;
-Style *l;
+    int row;
+    int col;
+    Style *l;
 };
 
 struct layoutColumn {
-int col;
-ColumnFormat *l;
+    int col;
+    ColumnFormat *l;
 };
 
 struct layoutRow {
-int row;
-RowFormat *l;
+    int row;
+    RowFormat *l;
 };
 
 struct styleCell {
-  int row;
-  int col;
-  QString action;
+    int row;
+    int col;
+    QString action;
 };
 
 class FormulaOfCell
 {
 public:
     FormulaOfCell(): m_sheetName(0) {}
-    FormulaOfCell( QString & sheetName, int col, int row, QString & formula )
-        : m_sheetName( sheetName ), m_col( col ), m_row( row ), m_formula( formula )
-    {}
+    FormulaOfCell(QString & sheetName, int col, int row, QString & formula)
+            : m_sheetName(sheetName), m_col(col), m_row(row), m_formula(formula) {}
 
-    QString sheetName() const { return m_sheetName; }
-    QString formula() const { return m_formula; }
-    int col() const { return m_col; }
-    int row() const { return m_row; }
+    QString sheetName() const {
+        return m_sheetName;
+    }
+    QString formula() const {
+        return m_formula;
+    }
+    int col() const {
+        return m_col;
+    }
+    int row() const {
+        return m_row;
+    }
 
 private:
     QString m_sheetName;
@@ -131,10 +138,10 @@ protected:
 class UndoInsertRemoveAction : public UndoAction
 {
 public:
-    explicit UndoInsertRemoveAction( Doc *_doc );
+    explicit UndoInsertRemoveAction(Doc *_doc);
     virtual ~UndoInsertRemoveAction();
 
-    void saveFormulaReference( Sheet *_sheet, int col, int row, QString & formula );
+    void saveFormulaReference(Sheet *_sheet, int col, int row, QString & formula);
 
 protected:
     void undoFormulaReference();
@@ -144,7 +151,7 @@ protected:
 class UndoRemoveColumn : public UndoInsertRemoveAction
 {
 public:
-    UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0 );
+    UndoRemoveColumn(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0);
     virtual ~UndoRemoveColumn();
 
     virtual void undo();
@@ -162,7 +169,7 @@ protected:
 class UndoInsertColumn : public UndoInsertRemoveAction
 {
 public:
-    UndoInsertColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0 );
+    UndoInsertColumn(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0);
     virtual ~UndoInsertColumn();
 
     virtual void undo();
@@ -177,7 +184,7 @@ protected:
 class UndoRemoveRow : public UndoInsertRemoveAction
 {
 public:
-    UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow=0 );
+    UndoRemoveRow(Doc *_doc, Sheet *_sheet, int _row, int _nbRow = 0);
     virtual ~UndoRemoveRow();
 
     virtual void undo();
@@ -195,7 +202,7 @@ protected:
 class UndoInsertRow : public UndoInsertRemoveAction
 {
 public:
-    UndoInsertRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow=0 );
+    UndoInsertRow(Doc *_doc, Sheet *_sheet, int _row, int _nbRow = 0);
     virtual ~UndoInsertRow();
 
     virtual void undo();
@@ -210,12 +217,12 @@ protected:
 class UndoHideColumn : public UndoAction
 {
 public:
-    UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>listCol=QLinkedList<int>() );
+    UndoHideColumn(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0, QLinkedList<int>listCol = QLinkedList<int>());
     virtual ~UndoHideColumn();
 
     virtual void undo();
     virtual void redo();
-    void createList( QLinkedList<int>&list,Sheet *_tab );
+    void createList(QLinkedList<int>&list, Sheet *_tab);
 
 protected:
     QString m_sheetName;
@@ -227,13 +234,13 @@ protected:
 class UndoHideRow : public UndoAction
 {
 public:
-    UndoHideRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>_listRow=QLinkedList<int>() );
+    UndoHideRow(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0, QLinkedList<int>_listRow = QLinkedList<int>());
     virtual ~UndoHideRow();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( QLinkedList<int>&list,Sheet *_tab );
+    void createList(QLinkedList<int>&list, Sheet *_tab);
 
     QString m_sheetName;
     int m_iRow;
@@ -244,13 +251,13 @@ protected:
 class UndoShowColumn : public UndoAction
 {
 public:
-    UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>_list=QLinkedList<int>() );
+    UndoShowColumn(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0, QLinkedList<int>_list = QLinkedList<int>());
     virtual ~UndoShowColumn();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( QLinkedList<int>&list,Sheet *_tab );
+    void createList(QLinkedList<int>&list, Sheet *_tab);
 
     QString m_sheetName;
     int m_iColumn;
@@ -261,14 +268,14 @@ protected:
 class UndoShowRow : public UndoAction
 {
 public:
-    UndoShowRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>list=QLinkedList<int>() );
+    UndoShowRow(Doc *_doc, Sheet *_sheet, int _column, int _nbCol = 0, QLinkedList<int>list = QLinkedList<int>());
     virtual ~UndoShowRow();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QLinkedList<int>&list,Sheet *_tab );
+    void createList(QLinkedList<int>&list, Sheet *_tab);
     QString m_sheetName;
     int m_iRow;
     int m_iNbRow;
@@ -278,7 +285,7 @@ protected:
 class UndoPaperLayout : public UndoAction
 {
 public:
-    UndoPaperLayout( Doc *_doc, Sheet *_sheet );
+    UndoPaperLayout(Doc *_doc, Sheet *_sheet);
     virtual ~UndoPaperLayout();
 
     virtual void undo();
@@ -316,14 +323,14 @@ protected:
 class UndoCellFormat : public UndoAction
 {
 public:
-    UndoCellFormat( Doc *_doc, Sheet *_sheet, const Region &_selection, const QString &_title );
+    UndoCellFormat(Doc *_doc, Sheet *_sheet, const Region &_selection, const QString &_title);
     virtual ~UndoCellFormat();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void copyFormat( QLinkedList<layoutCell> &list,QLinkedList<layoutColumn> &listCol,QLinkedList<layoutRow> &listRow, Sheet* sheet );
+    void copyFormat(QLinkedList<layoutCell> &list, QLinkedList<layoutColumn> &listCol, QLinkedList<layoutRow> &listRow, Sheet* sheet);
 
     Region m_region;
     QLinkedList<layoutCell> m_lstFormats;
@@ -339,7 +346,7 @@ protected:
 class UndoChangeAngle : public UndoAction
 {
 public:
-    UndoChangeAngle( Doc *_doc, Sheet *_sheet, const Region &_selection );
+    UndoChangeAngle(Doc *_doc, Sheet *_sheet, const Region &_selection);
     virtual ~UndoChangeAngle();
 
     virtual void undo();
@@ -347,8 +354,8 @@ public:
 
 protected:
 
-   UndoCellFormat* m_layoutUndo;
-   UndoResizeColRow* m_resizeUndo;
+    UndoCellFormat* m_layoutUndo;
+    UndoResizeColRow* m_resizeUndo;
 
 };
 
@@ -362,7 +369,7 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( QByteArray &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
+    void createListCell(QByteArray &listCell, QLinkedList<columnSize> &listCol, QLinkedList<rowSize> &listRow, Sheet* sheet);
 
     Region m_region;
     QByteArray m_data;
@@ -378,7 +385,7 @@ protected:
 class UndoDragDrop : public UndoAction
 {
 public:
-    UndoDragDrop(Sheet * _sheet, const Region& _source, const Region& _target, Selection* _currentSelection );
+    UndoDragDrop(Sheet * _sheet, const Region& _source, const Region& _target, Selection* _currentSelection);
     virtual ~UndoDragDrop();
 
     virtual void undo();
@@ -394,22 +401,22 @@ protected:
     Sheet*  m_sheet;
     Selection* m_currentSelection; //used to update the selected cells properly
 
-    void saveCellRect( QByteArray & cells, Sheet * sheet,
-                       const Region& region );
+    void saveCellRect(QByteArray & cells, Sheet * sheet,
+                      const Region& region);
 };
 
 #if 0
 class UndoResizeColRow : public UndoAction
 {
 public:
-    UndoResizeColRow( Doc *_doc, Sheet *_sheet, const Region &_selection );
+    UndoResizeColRow(Doc *_doc, Sheet *_sheet, const Region &_selection);
     virtual ~UndoResizeColRow();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
+    void createList(QLinkedList<columnSize> &listCol, QLinkedList<rowSize> &listRow, Sheet* sheet);
 
     Region m_region;
     QLinkedList<columnSize> m_lstColumn;
@@ -422,33 +429,33 @@ protected:
 class UndoChangeAreaTextCell : public UndoAction
 {
 public:
-    UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const Region &_selection );
+    UndoChangeAreaTextCell(Doc *_doc, Sheet *_sheet, const Region &_selection);
     virtual ~UndoChangeAreaTextCell();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QMap<QPoint,QString> &list, Sheet* sheet );
+    void createList(QMap<QPoint, QString> &list, Sheet* sheet);
 
     Region m_region;
-    QMap<QPoint,QString> m_lstTextCell;
-    QMap<QPoint,QString> m_lstRedoTextCell;
+    QMap<QPoint, QString> m_lstTextCell;
+    QMap<QPoint, QString> m_lstRedoTextCell;
     QString m_sheetName;
 };
 
 class UndoSort : public UndoAction
 {
 public:
-    UndoSort( Doc *_doc, Sheet *_sheet, const QRect &_selection);
+    UndoSort(Doc *_doc, Sheet *_sheet, const QRect &_selection);
     virtual ~UndoSort();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void copyAll( QLinkedList<layoutTextCell> & list, QLinkedList<layoutColumn> & listCol,
-                  QLinkedList<layoutRow> & listRow, Sheet * sheet );
+    void copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutColumn> & listCol,
+                 QLinkedList<layoutRow> & listRow, Sheet * sheet);
 
     QRect m_rctRect;
     QLinkedList<layoutTextCell> m_lstFormats;
@@ -464,7 +471,7 @@ protected:
 class UndoMergedCell : public UndoAction
 {
 public:
-    UndoMergedCell( Doc *_doc, Sheet *_sheet, int _column, int _row, int _extraX,int _extraY);
+    UndoMergedCell(Doc *_doc, Sheet *_sheet, int _column, int _row, int _extraX, int _extraY);
     virtual ~UndoMergedCell();
 
     virtual void undo();
@@ -483,13 +490,13 @@ protected:
 class UndoAutofill : public UndoAction
 {
 public:
-    UndoAutofill( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoAutofill(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoAutofill();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( QByteArray &list, Sheet* sheet );
+    void createListCell(QByteArray &list, Sheet* sheet);
     QRect m_selection;
     QByteArray m_data;
     QByteArray m_dataRedo;
@@ -499,7 +506,7 @@ protected:
 class UndoInsertCellCol : public UndoInsertRemoveAction
 {
 public:
-    UndoInsertCellCol( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoInsertCellCol(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoInsertCellCol();
 
     virtual void undo();
@@ -513,7 +520,7 @@ protected:
 class UndoInsertCellRow : public UndoInsertRemoveAction
 {
 public:
-    UndoInsertCellRow( Doc *_doc, Sheet *_sheet,const QRect &_rect );
+    UndoInsertCellRow(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoInsertCellRow();
 
     virtual void undo();
@@ -527,7 +534,7 @@ protected:
 class UndoRemoveCellCol : public UndoInsertRemoveAction
 {
 public:
-    UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoRemoveCellCol(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoRemoveCellCol();
 
     virtual void undo();
@@ -542,7 +549,7 @@ protected:
 class UndoRemoveCellRow : public UndoInsertRemoveAction
 {
 public:
-    UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoRemoveCellRow(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoRemoveCellRow();
 
     virtual void undo();
@@ -557,13 +564,13 @@ protected:
 class UndoConditional : public UndoAction
 {
 public:
-    UndoConditional( Doc *_doc, Sheet *_sheet, const Region & _selection );
+    UndoConditional(Doc *_doc, Sheet *_sheet, const Region & _selection);
     virtual ~UndoConditional();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( QByteArray &list, Sheet* sheet );
+    void createListCell(QByteArray &list, Sheet* sheet);
     Region m_region;
     QByteArray m_data;
     QByteArray m_dataRedo;
@@ -583,7 +590,7 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( QByteArray &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
+    void createListCell(QByteArray &listCell, QLinkedList<columnSize> &listCol, QLinkedList<rowSize> &listRow, Sheet* sheet);
 
     Region m_region;
     QByteArray m_data;
@@ -603,14 +610,14 @@ protected:
 class UndoStyleCell : public UndoAction
 {
 public:
-    UndoStyleCell( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoStyleCell(Doc *_doc, Sheet *_sheet, const QRect &_rect);
     virtual ~UndoStyleCell();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createListCell( QLinkedList<styleCell> &listCell, Sheet* sheet );
+    void createListCell(QLinkedList<styleCell> &listCell, Sheet* sheet);
     QRect m_selection;
     QLinkedList<styleCell> m_lstStyleCell;
     QLinkedList<styleCell> m_lstRedoStyleCell;
@@ -619,14 +626,14 @@ protected:
 
 class UndoInsertData : public UndoChangeAreaTextCell
 {
- public:
-    UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection );
+public:
+    UndoInsertData(Doc * _doc, Sheet * _sheet, QRect & _selection);
 };
 
 class Undo
 {
 public:
-    Undo( Doc *_doc );
+    Undo(Doc *_doc);
     ~Undo();
 
     void undo();
@@ -637,10 +644,14 @@ public:
     void unlock();
     bool isLocked() const ;
 
-    bool hasUndoActions()const { return !m_stckUndo.isEmpty(); }
-    bool hasRedoActions()const { return !m_stckRedo.isEmpty(); }
+    bool hasUndoActions()const {
+        return !m_stckUndo.isEmpty();
+    }
+    bool hasRedoActions()const {
+        return !m_stckRedo.isEmpty();
+    }
 
-    void appendUndo( UndoAction *_action );
+    void appendUndo(UndoAction *_action);
 
     QString getUndoName();
     QString getRedoName();

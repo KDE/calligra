@@ -42,49 +42,121 @@ public:
 
     // SetSelectionFontWorker
     // SetSelectionSizeWorker
-    void setFontFamily(const QString& font) { m_style->setFontFamily( font ); }
-    void setFontSize(int size) { m_style->setFontSize( size ); }
-    void setFontBold(bool bold) { m_style->setFontBold( bold ); }
-    void setFontItalic(uint italic) { m_style->setFontItalic( italic ); }
-    void setFontStrike(uint strike) { m_style->setFontStrikeOut( strike ); }
-    void setFontUnderline(uint underline) { m_style->setFontUnderline( underline ); }
+    void setFontFamily(const QString& font) {
+        m_style->setFontFamily(font);
+    }
+    void setFontSize(int size) {
+        m_style->setFontSize(size);
+    }
+    void setFontBold(bool bold) {
+        m_style->setFontBold(bold);
+    }
+    void setFontItalic(uint italic) {
+        m_style->setFontItalic(italic);
+    }
+    void setFontStrike(uint strike) {
+        m_style->setFontStrikeOut(strike);
+    }
+    void setFontUnderline(uint underline) {
+        m_style->setFontUnderline(underline);
+    }
     // SetSelectionAngleWorker
-    void setAngle(int angle) { m_style->setAngle( angle ); }
+    void setAngle(int angle) {
+        m_style->setAngle(angle);
+    }
     // SetSelectionTextColorWorker
-    void setFontColor(const QColor& textColor) { m_style->setFontColor( textColor ); }
+    void setFontColor(const QColor& textColor) {
+        m_style->setFontColor(textColor);
+    }
     // SetSelectionBgColorWorker
-    void setBackgroundColor(const QColor& bgColor) { m_style->setBackgroundColor( bgColor ); }
+    void setBackgroundColor(const QColor& bgColor) {
+        m_style->setBackgroundColor(bgColor);
+    }
     // SetSelectionBorderAllWorker
-    void setTopBorderPen(const QPen& pen) { m_style->setTopBorderPen( pen ); }
-    void setBottomBorderPen(const QPen& pen) { m_style->setBottomBorderPen( pen ); }
-    void setLeftBorderPen(const QPen& pen) { m_style->setLeftBorderPen( pen ); }
-    void setRightBorderPen(const QPen& pen) { m_style->setRightBorderPen( pen ); }
-    void setHorizontalPen(const QPen& pen) { m_horizontalPen = pen; m_horizontalPenChanged = true; }
-    void setVerticalPen(const QPen& pen) { m_verticalPen = pen; m_verticalPenChanged = true; }
-    void setFallDiagonalPen(const QPen& pen) { m_style->setFallDiagonalPen( pen ); }
-    void setGoUpDiagonalPen(const QPen& pen) { m_style->setGoUpDiagonalPen( pen ); }
+    void setTopBorderPen(const QPen& pen) {
+        m_style->setTopBorderPen(pen);
+    }
+    void setBottomBorderPen(const QPen& pen) {
+        m_style->setBottomBorderPen(pen);
+    }
+    void setLeftBorderPen(const QPen& pen) {
+        m_style->setLeftBorderPen(pen);
+    }
+    void setRightBorderPen(const QPen& pen) {
+        m_style->setRightBorderPen(pen);
+    }
+    void setHorizontalPen(const QPen& pen) {
+        m_horizontalPen = pen; m_horizontalPenChanged = true;
+    }
+    void setVerticalPen(const QPen& pen) {
+        m_verticalPen = pen; m_verticalPenChanged = true;
+    }
+    void setFallDiagonalPen(const QPen& pen) {
+        m_style->setFallDiagonalPen(pen);
+    }
+    void setGoUpDiagonalPen(const QPen& pen) {
+        m_style->setGoUpDiagonalPen(pen);
+    }
     // SetSelectionAlignWorker
-    void setHorizontalAlignment(Style::HAlign align) { m_style->setHAlign( align ); }
+    void setHorizontalAlignment(Style::HAlign align) {
+        m_style->setHAlign(align);
+    }
     // SetSelectionAlignWorker
-    void setVerticalAlignment(Style::VAlign align) { m_style->setVAlign( align ); }
+    void setVerticalAlignment(Style::VAlign align) {
+        m_style->setVAlign(align);
+    }
 
-    void setBackgroundBrush(const QBrush& brush) { m_style->setBackgroundBrush( brush ); }
-    void setIndentation(double indent) { m_style->setIndentation( indent ); }
-    void setMultiRow(bool multiRow) { m_style->setWrapText( multiRow ); }
-    void setVerticalText(bool verticalText) { m_style->setVerticalText( verticalText ); }
-    void setDontPrintText(bool dontPrintText) { m_style->setDontPrintText( dontPrintText ); }
-    void setNotProtected(bool notProtected) { m_style->setNotProtected( notProtected ); }
-    void setHideAll(bool hideAll) { m_style->setHideAll( hideAll ); }
-    void setHideFormula(bool hideFormula) { m_style->setHideFormula( hideFormula ); }
-    void setPrefix(const QString& prefix) { m_style->setPrefix( prefix ); }
-    void setPostfix(const QString& postfix) { m_style->setPostfix( postfix ); }
-    void setPrecision(int precision) { m_style->setPrecision( precision ); }
-    void setFloatFormat(Style::FloatFormat floatFormat) { m_style->setFloatFormat( floatFormat ); }
-    void setFloatColor(Style::FloatColor floatColor) { m_style->setFloatColor( floatColor ); }
-    void setFormatType(Format::Type formatType) { m_style->setFormatType( formatType ); }
-    void setCurrency(const Currency& currency) { m_style->setCurrency( currency ); }
-    void setParentName(const QString& name) { m_style->setParentName(name); }
-    void setDefault() { m_style->setDefault(); }
+    void setBackgroundBrush(const QBrush& brush) {
+        m_style->setBackgroundBrush(brush);
+    }
+    void setIndentation(double indent) {
+        m_style->setIndentation(indent);
+    }
+    void setMultiRow(bool multiRow) {
+        m_style->setWrapText(multiRow);
+    }
+    void setVerticalText(bool verticalText) {
+        m_style->setVerticalText(verticalText);
+    }
+    void setDontPrintText(bool dontPrintText) {
+        m_style->setDontPrintText(dontPrintText);
+    }
+    void setNotProtected(bool notProtected) {
+        m_style->setNotProtected(notProtected);
+    }
+    void setHideAll(bool hideAll) {
+        m_style->setHideAll(hideAll);
+    }
+    void setHideFormula(bool hideFormula) {
+        m_style->setHideFormula(hideFormula);
+    }
+    void setPrefix(const QString& prefix) {
+        m_style->setPrefix(prefix);
+    }
+    void setPostfix(const QString& postfix) {
+        m_style->setPostfix(postfix);
+    }
+    void setPrecision(int precision) {
+        m_style->setPrecision(precision);
+    }
+    void setFloatFormat(Style::FloatFormat floatFormat) {
+        m_style->setFloatFormat(floatFormat);
+    }
+    void setFloatColor(Style::FloatColor floatColor) {
+        m_style->setFloatColor(floatColor);
+    }
+    void setFormatType(Format::Type formatType) {
+        m_style->setFormatType(formatType);
+    }
+    void setCurrency(const Currency& currency) {
+        m_style->setCurrency(currency);
+    }
+    void setParentName(const QString& name) {
+        m_style->setParentName(name);
+    }
+    void setDefault() {
+        m_style->setDefault();
+    }
 
 protected:
     virtual bool process(Element*);
@@ -100,7 +172,7 @@ private:
     bool m_verticalPenChanged;
 
     Style* m_style;
-    QList< QPair<QRectF,SharedSubStyle> > m_undoData;
+    QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
 }  // namespace KSpread

@@ -29,11 +29,10 @@
 
 using namespace KSpread;
 
-static char encodeTokenType( const Token& token )
+static char encodeTokenType(const Token& token)
 {
-  char result = '?';
-  switch( token.type() )
-  {
+    char result = '?';
+    switch (token.type()) {
     case Token::Boolean:    result = 'b'; break;
     case Token::Integer:    result = 'i'; break;
     case Token::Float:      result = 'f'; break;
@@ -42,52 +41,50 @@ static char encodeTokenType( const Token& token )
     case Token::Range:      result = 'r'; break;
     case Token::Identifier: result = 'x'; break;
     default: break;
-  }
-  return result;
+    }
+    return result;
 }
 
-static QString describeTokenCodes( const QString& tokenCodes )
+static QString describeTokenCodes(const QString& tokenCodes)
 {
-  QString result;
+    QString result;
 
-  if( tokenCodes.isEmpty() )
-    result = "(invalid)";
-  else
-    for( int i = 0; i < tokenCodes.length(); i++ )
-    {
-      switch( tokenCodes[i].unicode() )
-      {
-        case 'b': result.append( "Boolean" ); break;
-        case 'i': result.append( "integer" ); break;
-        case 'f': result.append( "float" ); break;
-        case 'o': result.append( "operator" ); break;
-        case 'c': result.append( "cell" ); break;
-        case 'r': result.append( "range" ); break;
-        case 'x': result.append( "identifier" ); break;
-        default:  result.append( "unknown" ); break;
-      }
-      if( i < tokenCodes.length()-1 ) result.append( ", " );
-    }
+    if (tokenCodes.isEmpty())
+        result = "(invalid)";
+    else
+        for (int i = 0; i < tokenCodes.length(); i++) {
+            switch (tokenCodes[i].unicode()) {
+            case 'b': result.append("Boolean"); break;
+            case 'i': result.append("integer"); break;
+            case 'f': result.append("float"); break;
+            case 'o': result.append("operator"); break;
+            case 'c': result.append("cell"); break;
+            case 'r': result.append("range"); break;
+            case 'x': result.append("identifier"); break;
+            default:  result.append("unknown"); break;
+            }
+            if (i < tokenCodes.length() - 1) result.append(", ");
+        }
 
-  return result.prepend("{").append("}");
+    return result.prepend("{").append("}");
 }
 
 #define CHECK_TOKENIZE(x,y) QCOMPARE(tokenizeFormula(x), QString(y))
 
 static QString tokenizeFormula(const QString& formula)
 {
-  Formula f;
-  QString expr = formula;
-  expr.prepend( '=' );
-  f.setExpression( expr );
-  Tokens tokens = f.tokens();
+    Formula f;
+    QString expr = formula;
+    expr.prepend('=');
+    f.setExpression(expr);
+    Tokens tokens = f.tokens();
 
-  QString resultCodes;
-  if( tokens.valid() )
-    for( int i = 0; i < tokens.count(); i++ )
-      resultCodes.append( encodeTokenType( tokens[i] ) );
+    QString resultCodes;
+    if (tokens.valid())
+        for (int i = 0; i < tokens.count(); i++)
+            resultCodes.append(encodeTokenType(tokens[i]));
 
-  return resultCodes;
+    return resultCodes;
 }
 
 
@@ -96,19 +93,19 @@ static QString tokenizeFormula(const QString& formula)
 
 Value TestFormula::evaluate(const QString& formula, Value& ex)
 {
-  Formula f;
-  QString expr = formula;
-  if ( expr[0] != '=' )
-    expr.prepend( '=' );
-  f.setExpression( expr );
-  Value result = f.eval();
+    Formula f;
+    QString expr = formula;
+    if (expr[0] != '=')
+        expr.prepend('=');
+    f.setExpression(expr);
+    Value result = f.eval();
 
-  if(result.isFloat() && ex.isInteger())
-    ex = Value(ex.asFloat());
-  if(result.isInteger() && ex.isFloat())
-    result = Value(result.asFloat());
+    if (result.isFloat() && ex.isInteger())
+        ex = Value(ex.asFloat());
+    if (result.isInteger() && ex.isFloat())
+        result = Value(result.asFloat());
 
-  return result;
+    return result;
 }
 
 void TestFormula::initTestCase()
@@ -121,209 +118,209 @@ void TestFormula::initTestCase()
 
 void TestFormula::testTokenizer()
 {
-  // simple, single-token formulas
-  CHECK_TOKENIZE( "True", "x" );
-  CHECK_TOKENIZE( "False", "x" );
-  CHECK_TOKENIZE( "36", "i" );
-  CHECK_TOKENIZE( "0", "i" );
-  CHECK_TOKENIZE( "3.14159", "f" );
-  CHECK_TOKENIZE( ".25", "f" );
-  CHECK_TOKENIZE( "1e-9", "f" );
-  CHECK_TOKENIZE( "2e3", "f" );
-  CHECK_TOKENIZE( ".3333e0", "f" );
+    // simple, single-token formulas
+    CHECK_TOKENIZE("True", "x");
+    CHECK_TOKENIZE("False", "x");
+    CHECK_TOKENIZE("36", "i");
+    CHECK_TOKENIZE("0", "i");
+    CHECK_TOKENIZE("3.14159", "f");
+    CHECK_TOKENIZE(".25", "f");
+    CHECK_TOKENIZE("1e-9", "f");
+    CHECK_TOKENIZE("2e3", "f");
+    CHECK_TOKENIZE(".3333e0", "f");
 
-  // cell/range/identifier
-  CHECK_TOKENIZE( "A1", "c" );
-  CHECK_TOKENIZE( "Sheet1!A1", "c" );
-  CHECK_TOKENIZE( "'Sheet1'!A1", "c" );
-  CHECK_TOKENIZE( "'Sheet One'!A1", "c" );
-  CHECK_TOKENIZE( "2006!A1", "c" );
-  CHECK_TOKENIZE( "2006bak!A1", "c" );
-  CHECK_TOKENIZE( "2006bak2!A1", "c" );
-  CHECK_TOKENIZE( "'2006bak2'!A1", "c" );
-  CHECK_TOKENIZE( "A1:B100", "r" );
-  CHECK_TOKENIZE( "Sheet1!A1:B100", "r" );
-  CHECK_TOKENIZE( "'Sheet One'!A1:B100", "r" );
-  CHECK_TOKENIZE( "SIN", "x" );
+    // cell/range/identifier
+    CHECK_TOKENIZE("A1", "c");
+    CHECK_TOKENIZE("Sheet1!A1", "c");
+    CHECK_TOKENIZE("'Sheet1'!A1", "c");
+    CHECK_TOKENIZE("'Sheet One'!A1", "c");
+    CHECK_TOKENIZE("2006!A1", "c");
+    CHECK_TOKENIZE("2006bak!A1", "c");
+    CHECK_TOKENIZE("2006bak2!A1", "c");
+    CHECK_TOKENIZE("'2006bak2'!A1", "c");
+    CHECK_TOKENIZE("A1:B100", "r");
+    CHECK_TOKENIZE("Sheet1!A1:B100", "r");
+    CHECK_TOKENIZE("'Sheet One'!A1:B100", "r");
+    CHECK_TOKENIZE("SIN", "x");
 
-  // log2 and log10 are cell references and function identifiers
-  CHECK_TOKENIZE( "LOG2", "c" );
-  CHECK_TOKENIZE( "LOG10:11", "r" );
-  CHECK_TOKENIZE( "LOG2(2)", "xoio" );
-  CHECK_TOKENIZE( "LOG10(10)", "xoio" );
+    // log2 and log10 are cell references and function identifiers
+    CHECK_TOKENIZE("LOG2", "c");
+    CHECK_TOKENIZE("LOG10:11", "r");
+    CHECK_TOKENIZE("LOG2(2)", "xoio");
+    CHECK_TOKENIZE("LOG10(10)", "xoio");
 
-  // operators
-  CHECK_TOKENIZE( "+", "o" );
-  CHECK_TOKENIZE( "-", "o" );
-  CHECK_TOKENIZE( "*", "o" );
-  CHECK_TOKENIZE( "/", "o" );
-  CHECK_TOKENIZE( "+", "o" );
-  CHECK_TOKENIZE( "^", "o" );
-  CHECK_TOKENIZE( "(", "o" );
-  CHECK_TOKENIZE( ")", "o" );
-  CHECK_TOKENIZE( ",", "o" );
-  CHECK_TOKENIZE( ";", "o" );
-  CHECK_TOKENIZE( "=", "o" );
-  CHECK_TOKENIZE( "<", "o" );
-  CHECK_TOKENIZE( ">", "o" );
-  CHECK_TOKENIZE( "<=", "o" );
-  CHECK_TOKENIZE( ">=", "o" );
-  CHECK_TOKENIZE( "%", "o" );
+    // operators
+    CHECK_TOKENIZE("+", "o");
+    CHECK_TOKENIZE("-", "o");
+    CHECK_TOKENIZE("*", "o");
+    CHECK_TOKENIZE("/", "o");
+    CHECK_TOKENIZE("+", "o");
+    CHECK_TOKENIZE("^", "o");
+    CHECK_TOKENIZE("(", "o");
+    CHECK_TOKENIZE(")", "o");
+    CHECK_TOKENIZE(",", "o");
+    CHECK_TOKENIZE(";", "o");
+    CHECK_TOKENIZE("=", "o");
+    CHECK_TOKENIZE("<", "o");
+    CHECK_TOKENIZE(">", "o");
+    CHECK_TOKENIZE("<=", "o");
+    CHECK_TOKENIZE(">=", "o");
+    CHECK_TOKENIZE("%", "o");
 
-  // commonly used formulas
-  CHECK_TOKENIZE( "A1+A2", "coc" );
-  CHECK_TOKENIZE( "2.5*B1", "foc" );
-  CHECK_TOKENIZE( "SUM(A1:Z10)", "xoro" );
-  CHECK_TOKENIZE( "MAX(Sheet1!Sales)", "xoro" );
-  CHECK_TOKENIZE( "-ABS(A1)", "oxoco" );
+    // commonly used formulas
+    CHECK_TOKENIZE("A1+A2", "coc");
+    CHECK_TOKENIZE("2.5*B1", "foc");
+    CHECK_TOKENIZE("SUM(A1:Z10)", "xoro");
+    CHECK_TOKENIZE("MAX(Sheet1!Sales)", "xoro");
+    CHECK_TOKENIZE("-ABS(A1)", "oxoco");
 
-  // should be correctly parsed though they are nonsense (can't be evaluated)
-  CHECK_TOKENIZE( "0E0.5", "ff" );
-  CHECK_TOKENIZE( "B3 D4:D5 Sheet1!K1", "crc" );
-  CHECK_TOKENIZE( "SIN A1", "xc" );
-  CHECK_TOKENIZE( "SIN A1:A20", "xr" );
+    // should be correctly parsed though they are nonsense (can't be evaluated)
+    CHECK_TOKENIZE("0E0.5", "ff");
+    CHECK_TOKENIZE("B3 D4:D5 Sheet1!K1", "crc");
+    CHECK_TOKENIZE("SIN A1", "xc");
+    CHECK_TOKENIZE("SIN A1:A20", "xr");
 
-  // invalid formulas, can't be parsed correctly
-  CHECK_TOKENIZE( "+1.23E", QString() );
+    // invalid formulas, can't be parsed correctly
+    CHECK_TOKENIZE("+1.23E", QString());
 
-  // empty parameter
-  CHECK_TOKENIZE( "IF(A1;A2;)", "xococoo" );
+    // empty parameter
+    CHECK_TOKENIZE("IF(A1;A2;)", "xococoo");
 
-  // function cascade
-  CHECK_TOKENIZE( "SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo" );
+    // function cascade
+    CHECK_TOKENIZE("SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo");
 }
 
 void TestFormula::testConstant()
 {
-  // simple constants
-  CHECK_EVAL( "0", Value(0) );
-  CHECK_EVAL( "1", Value(1) );
-  CHECK_EVAL( "-1", Value(-1) );
-  CHECK_EVAL( "3.14e7", Value(3.14e7) );
-  CHECK_EVAL( "3.14e-7", Value(3.14e-7) );
+    // simple constants
+    CHECK_EVAL("0", Value(0));
+    CHECK_EVAL("1", Value(1));
+    CHECK_EVAL("-1", Value(-1));
+    CHECK_EVAL("3.14e7", Value(3.14e7));
+    CHECK_EVAL("3.14e-7", Value(3.14e-7));
 }
 
 void TestFormula::testUnary()
 {
-  // unary minus
-  CHECK_EVAL( "-1", Value(-1) );
-  CHECK_EVAL( "--1", Value(1) );
-  CHECK_EVAL( "---1", Value(-1) );
-  CHECK_EVAL( "----1", Value(1) );
-  CHECK_EVAL( "-----1", Value(-1) );
-  CHECK_EVAL( "5-1", Value(4) );
-  CHECK_EVAL( "5--1", Value(6) );
-  CHECK_EVAL( "5---1", Value(4) );
-  CHECK_EVAL( "5----1", Value(6) );
-  CHECK_EVAL( "5-----1", Value(4) );
-  CHECK_EVAL( "5-----1*2.5", Value(2.5) );
-  CHECK_EVAL( "5------1*2.5", Value(7.5) );
-  CHECK_EVAL( "-SIN(0)", Value(0) );
-  CHECK_EVAL( "1.1-SIN(0)", Value(1.1) );
-  CHECK_EVAL( "1.2--SIN(0)", Value(1.2) );
-  CHECK_EVAL( "1.3---SIN(0)", Value(1.3) );
-  CHECK_EVAL( "-COS(0)", Value(-1) );
-  CHECK_EVAL( "1.1-COS(0)", Value(0.1) );
-  CHECK_EVAL( "1.2--COS(0)", Value(2.2) );
-  CHECK_EVAL( "1.3---COS(0)", Value(0.3) );
+    // unary minus
+    CHECK_EVAL("-1", Value(-1));
+    CHECK_EVAL("--1", Value(1));
+    CHECK_EVAL("---1", Value(-1));
+    CHECK_EVAL("----1", Value(1));
+    CHECK_EVAL("-----1", Value(-1));
+    CHECK_EVAL("5-1", Value(4));
+    CHECK_EVAL("5--1", Value(6));
+    CHECK_EVAL("5---1", Value(4));
+    CHECK_EVAL("5----1", Value(6));
+    CHECK_EVAL("5-----1", Value(4));
+    CHECK_EVAL("5-----1*2.5", Value(2.5));
+    CHECK_EVAL("5------1*2.5", Value(7.5));
+    CHECK_EVAL("-SIN(0)", Value(0));
+    CHECK_EVAL("1.1-SIN(0)", Value(1.1));
+    CHECK_EVAL("1.2--SIN(0)", Value(1.2));
+    CHECK_EVAL("1.3---SIN(0)", Value(1.3));
+    CHECK_EVAL("-COS(0)", Value(-1));
+    CHECK_EVAL("1.1-COS(0)", Value(0.1));
+    CHECK_EVAL("1.2--COS(0)", Value(2.2));
+    CHECK_EVAL("1.3---COS(0)", Value(0.3));
 }
 
 void TestFormula::testBinary()
 {
-  // simple binary operation
-  CHECK_EVAL( "0+0", Value(0) );
-  CHECK_EVAL( "1+1", Value(2) );
+    // simple binary operation
+    CHECK_EVAL("0+0", Value(0));
+    CHECK_EVAL("1+1", Value(2));
 
-  // power operator is left associative
-  CHECK_EVAL( "2^3", Value(8) );
-  CHECK_EVAL( "2^3^2", Value(64) );
+    // power operator is left associative
+    CHECK_EVAL("2^3", Value(8));
+    CHECK_EVAL("2^3^2", Value(64));
 
-  // lead to division by zero
-  CHECK_EVAL( "0/0", Value::errorDIV0() );
-  CHECK_EVAL( "1/0", Value::errorDIV0() );
-  CHECK_EVAL( "-4/0", Value::errorDIV0() );
-  CHECK_EVAL( "(2*3)/(6-2*3)", Value::errorDIV0() );
-  CHECK_EVAL( "1e3+7/0", Value::errorDIV0() );
-  CHECK_EVAL( "2^(99/0)", Value::errorDIV0() );
+    // lead to division by zero
+    CHECK_EVAL("0/0", Value::errorDIV0());
+    CHECK_EVAL("1/0", Value::errorDIV0());
+    CHECK_EVAL("-4/0", Value::errorDIV0());
+    CHECK_EVAL("(2*3)/(6-2*3)", Value::errorDIV0());
+    CHECK_EVAL("1e3+7/0", Value::errorDIV0());
+    CHECK_EVAL("2^(99/0)", Value::errorDIV0());
 
 }
 
 void TestFormula::testOperators()
 {
-  // no parentheses, checking operator precendences
-  CHECK_EVAL( "14+3*77", Value(245) );
-  CHECK_EVAL( "14-3*77", Value(-217) );
-  CHECK_EVAL( "26*4+81", Value(185) );
-  CHECK_EVAL( "26*4-81", Value(23) );
-  CHECK_EVAL( "30-45/3", Value(15) );
-  CHECK_EVAL( "45+45/3", Value(60) );
-  CHECK_EVAL( "4+3*2-1", Value(9) );
+    // no parentheses, checking operator precendences
+    CHECK_EVAL("14+3*77", Value(245));
+    CHECK_EVAL("14-3*77", Value(-217));
+    CHECK_EVAL("26*4+81", Value(185));
+    CHECK_EVAL("26*4-81", Value(23));
+    CHECK_EVAL("30-45/3", Value(15));
+    CHECK_EVAL("45+45/3", Value(60));
+    CHECK_EVAL("4+3*2-1", Value(9));
 }
 
 void TestFormula::testString()
 {
-  // string expansion ...
-  CHECK_EVAL( "\"2\"+5", Value(7) );
-  CHECK_EVAL( "2+\"5\"", Value(7) );
-  CHECK_EVAL( "\"2\"+\"5\"", Value(7) );
+    // string expansion ...
+    CHECK_EVAL("\"2\"+5", Value(7));
+    CHECK_EVAL("2+\"5\"", Value(7));
+    CHECK_EVAL("\"2\"+\"5\"", Value(7));
 }
 
 void TestFormula::testFunction()
 {
-  // function with no arguments
-  CHECK_EVAL( "TRUE()", Value( true ) );
+    // function with no arguments
+    CHECK_EVAL("TRUE()", Value(true));
 
-  //the built-in sine function
-  CHECK_EVAL ("SIN(0)", Value(0));
-  CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
-  CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
+    //the built-in sine function
+    CHECK_EVAL("SIN(0)", Value(0));
+    CHECK_EVAL("2+sin(\"2\"-\"2\")", Value(2));
+    CHECK_EVAL("\"1\"+sin(\"0\")", Value(1));
 
-  // function cascades
-  CHECK_EVAL( "SUM(ABS( 1);ABS( 1))", Value(2) );
-  CHECK_EVAL( "SUM(ABS( 1);ABS(-1))", Value(2) );
-  CHECK_EVAL( "SUM(ABS(-1);ABS( 1))", Value(2) );
-  CHECK_EVAL( "SUM(ABS(-1);ABS(-1))", Value(2) );
-  CHECK_EVAL( "SUM(SUM(-2;-2;-2);SUM(-2;-2;-2;-2);SUM(-2;-2;-2;-2;-2))", Value(-24) );
+    // function cascades
+    CHECK_EVAL("SUM(ABS( 1);ABS( 1))", Value(2));
+    CHECK_EVAL("SUM(ABS( 1);ABS(-1))", Value(2));
+    CHECK_EVAL("SUM(ABS(-1);ABS( 1))", Value(2));
+    CHECK_EVAL("SUM(ABS(-1);ABS(-1))", Value(2));
+    CHECK_EVAL("SUM(SUM(-2;-2;-2);SUM(-2;-2;-2;-2);SUM(-2;-2;-2;-2;-2))", Value(-24));
 }
 
 void TestFormula::testInlineArrays()
 {
 #ifdef KSPREAD_INLINE_ARRAYS
-  // inline arrays
-  CHECK_TOKENIZE( "{1;2|3;4}", "oioioioio" );
+    // inline arrays
+    CHECK_TOKENIZE("{1;2|3;4}", "oioioioio");
 
-  Value array( Value::Array );
-  array.setElement(0,0,Value((int)1));
-  array.setElement(1,0,Value((int)2));
-  array.setElement(0,1,Value((int)3));
-  array.setElement(1,1,Value((int)4));
-  CHECK_EVAL( "={1;2|3;4}", array );
+    Value array(Value::Array);
+    array.setElement(0, 0, Value((int)1));
+    array.setElement(1, 0, Value((int)2));
+    array.setElement(0, 1, Value((int)3));
+    array.setElement(1, 1, Value((int)4));
+    CHECK_EVAL("={1;2|3;4}", array);
 
-  array.setElement(1,0,Value(0.0));
-  CHECK_EVAL( "={1;SIN(0)|3;4}", array ); // "dynamic"
-  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );
+    array.setElement(1, 0, Value(0.0));
+    CHECK_EVAL("={1;SIN(0)|3;4}", array);   // "dynamic"
+    CHECK_EVAL("=SUM({1;2|3;4})", Value(10));
 #endif
 }
 
 void TestFormula::testEquality()
 {
-    CHECK_EVAL( "=1=1", Value( true ) );
-    CHECK_EVAL( "=1=0", Value( false ) );
-    CHECK_EVAL( "=3=3.0001", Value( false ) );
-    CHECK_EVAL( "=\"Hi\"=\"Bye\"", Value( false ) );
-    CHECK_EVAL( "=TRUE()=FALSE()", Value( false ) );
-    CHECK_EVAL( "=TRUE()=TRUE()", Value( true ) );
-    CHECK_EVAL( "=FALSE()=FALSE()", Value( true ) );
-    CHECK_EVAL( "=\"5\"=5", Value( false ) );
+    CHECK_EVAL("=1=1", Value(true));
+    CHECK_EVAL("=1=0", Value(false));
+    CHECK_EVAL("=3=3.0001", Value(false));
+    CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false));
+    CHECK_EVAL("=TRUE()=FALSE()", Value(false));
+    CHECK_EVAL("=TRUE()=TRUE()", Value(true));
+    CHECK_EVAL("=FALSE()=FALSE()", Value(true));
+    CHECK_EVAL("=\"5\"=5", Value(false));
     // TODO Error values have to be propagated to the result.
     //      They cannot be compared according to the OpenFormula spec.
     //      Currently, KSpread compares them though.
-    QEXPECT_FAIL( "", "Will fix after the OpenFormula spec got finalized", Continue);
-    CHECK_EVAL( "=NA()=NA()", Value::errorNA() );
+    QEXPECT_FAIL("", "Will fix after the OpenFormula spec got finalized", Continue);
+    CHECK_EVAL("=NA()=NA()", Value::errorNA());
     // Case sensitivity is enabled by default according to the OpenDocument spec.
     // The result differs from the OpenFormula test case, which explicitly makes an exception
     // for this calculation setting for whatever reason (ch 2.3) and assumes case insensivity.
-    CHECK_EVAL( "=\"Hi\"=\"HI\"", Value( false ) );
+    CHECK_EVAL("=\"Hi\"=\"HI\"", Value(false));
 }
 
 QTEST_KDEMAIN(TestFormula, GUI)

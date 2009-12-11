@@ -30,7 +30,7 @@ public:
 };
 
 DatabaseSourceTable::DatabaseSourceTable()
-    : d( new Private )
+        : d(new Private)
 {
 }
 

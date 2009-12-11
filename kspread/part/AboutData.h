@@ -27,17 +27,17 @@
 namespace KSpread
 {
 
-static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
+static const char* description = I18N_NOOP("KOffice Spreadsheet Application");
 
 // Always the same as the KOffice version
-static const char* version=KOFFICE_VERSION_STRING;
+static const char* version = KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "kspread", 0, ki18n("KSpread"),
-                                             version, ki18n(description), KAboutData::License_LGPL,
-                                             ki18n("(c) 1998-2008, The KSpread Team"), KLocalizedString(),
-               "http://www.koffice.org/kspread/");
+    KAboutData * aboutData = new KAboutData("kspread", 0, ki18n("KSpread"),
+                                            version, ki18n(description), KAboutData::License_LGPL,
+                                            ki18n("(c) 1998-2008, The KSpread Team"), KLocalizedString(),
+                                            "http://www.koffice.org/kspread/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Maintainer"), "montel@kde.org");
     aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");
@@ -79,7 +79,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
     aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     aboutData->addAuthor(ki18n("Sascha Pfau"), ki18n("Developer (functions)"), "mrpeacock@gmail.com");
-    aboutData->addAuthor(ki18n("Sebastian Sauer"),ki18n("Scripting Plugin"), "mail@dipe.org");
+    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Scripting Plugin"), "mail@dipe.org");
     // "Thanks to" section
     aboutData->addCredit(ki18n("Brad Hards"),
                          ki18n("Implemented, reviewed and tested various functions"),

@@ -22,18 +22,18 @@
 
 using namespace KSpread;
 
-bool Format::isDate( Type fmt )
+bool Format::isDate(Type fmt)
 {
     return ((fmt == Format::ShortDate) || (fmt == Format::TextDate) ||
             ((fmt >= Format::DatesBegin) && (fmt <= DatesEnd)));
 }
 
-bool Format::isTime( Type fmt )
+bool Format::isTime(Type fmt)
 {
     return ((fmt >= TimesBegin) && (fmt <= TimesEnd));
 }
 
-bool Format::isFraction( Type fmt )
+bool Format::isFraction(Type fmt)
 {
     return ((fmt >= FractionsBegin) && (fmt <= FractionsEnd));
 }

@@ -33,7 +33,7 @@ class ChartDatabaseSelector : public KoShapeConfigWidgetBase
     Q_OBJECT
 public:
     /// constructor
-    explicit ChartDatabaseSelector( Doc* doc );
+    explicit ChartDatabaseSelector(Doc* doc);
     ~ChartDatabaseSelector();
 
     /// reimplemented
@@ -43,11 +43,13 @@ public:
     /// reimplemented
     KAction *createAction();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented
+    virtual bool showOnShapeCreate() {
+        return true;
+    }
 
 protected:
-    virtual void showEvent( QShowEvent* event );
+    virtual void showEvent(QShowEvent* event);
 
 private:
     class Private;

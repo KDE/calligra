@@ -31,31 +31,31 @@
 */
 class ScriptingPart : public KoScriptingPart
 {
-        Q_OBJECT
-    public:
+    Q_OBJECT
+public:
 
-        /**
-        * Constructor.
-        * \param The parent QObject. This will be the \a KSpread::View instance
-        * this KParts plugin got loaded for. Once those view got destroyed the
-        * plugin got unloaded. Since KSpread may use multiple views, it's quit
-        * possible that multiple instances of this plugin exist the same time.
-        * \param args The optional list of arguments.
-        */
-        ScriptingPart(QObject* parent, const QStringList& args);
+    /**
+    * Constructor.
+    * \param The parent QObject. This will be the \a KSpread::View instance
+    * this KParts plugin got loaded for. Once those view got destroyed the
+    * plugin got unloaded. Since KSpread may use multiple views, it's quit
+    * possible that multiple instances of this plugin exist the same time.
+    * \param args The optional list of arguments.
+    */
+    ScriptingPart(QObject* parent, const QStringList& args);
 
-        /**
-        * Destructor.
-        */
-        virtual ~ScriptingPart();
+    /**
+    * Destructor.
+    */
+    virtual ~ScriptingPart();
 
-    private:
-        Q_DISABLE_COPY( ScriptingPart )
+private:
+    Q_DISABLE_COPY(ScriptingPart)
 
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

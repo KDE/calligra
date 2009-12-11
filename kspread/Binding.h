@@ -43,7 +43,7 @@ class KSPREAD_EXPORT Binding
 public:
     Binding();
     explicit Binding(const Region& region);
-    Binding( const Binding& other );
+    Binding(const Binding& other);
     ~Binding();
 
     bool isEmpty() const;
@@ -55,9 +55,9 @@ public:
 
     void update(const Region& region);
 
-    void operator=( const Binding& other );
-    bool operator==( const Binding& other ) const;
-    bool operator<( const Binding& other ) const;
+    void operator=(const Binding& other);
+    bool operator==(const Binding& other) const;
+    bool operator<(const Binding& other) const;
 
 private:
     class Private;
@@ -66,6 +66,6 @@ private:
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::Binding, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO(KSpread::Binding, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_BINDING

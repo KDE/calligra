@@ -29,22 +29,22 @@ namespace KSpread
 
 class TestFormula: public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
     void initTestCase();
-  void testTokenizer();
-  void testConstant();
-  void testUnary();
-  void testBinary();
-  void testOperators();
-  void testString();
-  void testFunction();
-  void testInlineArrays();
-  void testEquality();
+    void testTokenizer();
+    void testConstant();
+    void testUnary();
+    void testBinary();
+    void testOperators();
+    void testString();
+    void testFunction();
+    void testInlineArrays();
+    void testEquality();
 
 private:
-  Value evaluate(const QString&, Value&);
+    Value evaluate(const QString&, Value&);
 };
 
 } // namespace KSpread

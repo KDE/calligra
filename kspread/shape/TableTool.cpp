@@ -68,9 +68,9 @@ public:
 };
 
 
-TableTool::TableTool( KoCanvasBase* canvas )
-    : CellToolBase(canvas)
-    , d( new Private )
+TableTool::TableTool(KoCanvasBase* canvas)
+        : CellToolBase(canvas)
+        , d(new Private)
 {
     setObjectName("TableTool");
 
@@ -101,7 +101,7 @@ void TableTool::importDocument()
         return;
 #if 0 // FIXME Stefan: Port!
     d->tableShape->doc()->setModified(false);
-    if ( ! d->tableShape->doc()->importDocument(file))
+    if (! d->tableShape->doc()->importDocument(file))
         return;
 #endif
     updateSheetsList();
@@ -126,7 +126,7 @@ void TableTool::exportDocument()
 
 void TableTool::repaintDecorations()
 {
-    if(!d->tableShape) return;
+    if (!d->tableShape) return;
     // TODO Stefan: restrict to the changed area
     m_canvas->updateCanvas(d->tableShape->boundingRect());
 }
@@ -136,24 +136,22 @@ Selection* TableTool::selection()
     return d->selection;
 }
 
-void TableTool::activate( bool temporary )
+void TableTool::activate(bool temporary)
 {
     KoSelection* selection = m_canvas->shapeManager()->selection();
-    foreach ( KoShape* shape, selection->selectedShapes() )
-    {
-        d->tableShape = dynamic_cast<TableShape*>( shape );
-        if ( d->tableShape )
+    foreach(KoShape* shape, selection->selectedShapes()) {
+        d->tableShape = dynamic_cast<TableShape*>(shape);
+        if (d->tableShape)
             break;
     }
-    if ( !d->tableShape )
-    {
+    if (!d->tableShape) {
         kWarning() << "No table shape found in selection.";
         emit done();
         return;
     }
     d->selection->setActiveSheet(d->tableShape->sheet());
     d->selection->setOriginSheet(d->tableShape->sheet());
-    useCursor( Qt::ArrowCursor, true );
+    useCursor(Qt::ArrowCursor, true);
     d->tableShape->update();
 
     CellToolBase::activate(temporary);
@@ -191,35 +189,35 @@ SheetView* TableTool::sheetView(const Sheet* sheet) const
     return d->tableShape->sheetView();
 }
 
-void TableTool::changeColumns( int num )
+void TableTool::changeColumns(int num)
 {
-    d->tableShape->setColumns( num );
+    d->tableShape->setColumns(num);
     d->tableShape->update();
 }
 
-void TableTool::changeRows( int num )
+void TableTool::changeRows(int num)
 {
-    d->tableShape->setRows( num );
+    d->tableShape->setRows(num);
     d->tableShape->update();
 }
 
 void TableTool::updateSheetsList()
 {
-d->sheetComboBox->blockSignals(true);
+    d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
     Map *map = d->tableShape->map();
     foreach(Sheet* sheet, map->sheetList()) {
         if (sheet->isHidden())
             continue;
-        d->sheetComboBox->addItem( sheet->sheetName() );
+        d->sheetComboBox->addItem(sheet->sheetName());
         //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
-d->sheetComboBox->blockSignals(false);
+    d->sheetComboBox->blockSignals(false);
 }
 
 void TableTool::sheetActivated(const QString& sheetName)
 {
-    if( d->tableShape )
+    if (d->tableShape)
         d->tableShape->setSheet(sheetName);
 }
 
@@ -227,7 +225,7 @@ void TableTool::sheetsBtnClicked()
 {
     KPageDialog* dialog = new KPageDialog();
     dialog->setCaption(i18n("Sheets"));
-    dialog->setButtons( KDialog::Ok );
+    dialog->setButtons(KDialog::Ok);
     dialog->setFaceType(KPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
     dialog->setMainWidget(editor);
@@ -241,11 +239,11 @@ QWidget* TableTool::createOptionWidget()
     QWidget* masterWidget = CellToolBase::createOptionWidget();
 
     QWidget* optionWidget = new QWidget();
-    QVBoxLayout* l = new QVBoxLayout( optionWidget );
+    QVBoxLayout* l = new QVBoxLayout(optionWidget);
     l->setMargin(0);
     optionWidget->setLayout(l);
 
-    QGridLayout* layout = new QGridLayout( optionWidget );
+    QGridLayout* layout = new QGridLayout(optionWidget);
     l->addLayout(layout);
 
     QLabel* label = 0;
@@ -265,7 +263,7 @@ QWidget* TableTool::createOptionWidget()
     connect(d->sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
 
     QPushButton *sheetbtn = new QPushButton(KIcon("table"), QString(), optionWidget);
-    sheetbtn->setFixedHeight( d->sheetComboBox->sizeHint().height() );
+    sheetbtn->setFixedHeight(d->sheetComboBox->sizeHint().height());
     connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
     sheetlayout->addWidget(sheetbtn);
     label = new QLabel(i18n("Sheet:"), optionWidget);
@@ -273,37 +271,37 @@ QWidget* TableTool::createOptionWidget()
     label->setToolTip(i18n("Selected Sheet"));
     layout->addWidget(label, 0, 0);
 
-    spinBox = new QSpinBox( optionWidget );
-    spinBox->setRange( 1, KS_colMax );
-    spinBox->setValue( d->tableShape->columns() );
-    layout->addWidget( spinBox, 2, 1 );
-    connect( spinBox, SIGNAL( valueChanged(int) ), this, SLOT( changeColumns(int) ) );
+    spinBox = new QSpinBox(optionWidget);
+    spinBox->setRange(1, KS_colMax);
+    spinBox->setValue(d->tableShape->columns());
+    layout->addWidget(spinBox, 2, 1);
+    connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(changeColumns(int)));
 
-    label = new QLabel( i18n( "Columns:" ), optionWidget );
-    label->setBuddy( spinBox );
-    label->setToolTip( i18n( "Number of columns" ) );
-    layout->addWidget( label, 2, 0 );
+    label = new QLabel(i18n("Columns:"), optionWidget);
+    label->setBuddy(spinBox);
+    label->setToolTip(i18n("Number of columns"));
+    layout->addWidget(label, 2, 0);
 
-    spinBox = new QSpinBox( optionWidget );
-    spinBox->setRange( 1, KS_rowMax );
-    spinBox->setValue( d->tableShape->rows() );
-    layout->addWidget( spinBox, 3, 1 );
-    connect( spinBox, SIGNAL( valueChanged(int) ), this, SLOT( changeRows(int) ) );
+    spinBox = new QSpinBox(optionWidget);
+    spinBox->setRange(1, KS_rowMax);
+    spinBox->setValue(d->tableShape->rows());
+    layout->addWidget(spinBox, 3, 1);
+    connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(changeRows(int)));
 
-    label = new QLabel( i18n( "Rows:" ), optionWidget );
-    label->setBuddy( spinBox );
-    label->setToolTip( i18n( "Number of rows" ) );
-    layout->addWidget( label, 3, 0 );
+    label = new QLabel(i18n("Rows:"), optionWidget);
+    label->setBuddy(spinBox);
+    label->setToolTip(i18n("Number of rows"));
+    layout->addWidget(label, 3, 0);
 
 //layout->setColumnStretch( 1, 1 );
-    layout->setRowStretch( 4, 1 );
+    layout->setRowStretch(4, 1);
 
     QToolBar* tb = new QToolBar(optionWidget);
     l->addWidget(tb);
     tb->setMovable(false);
     tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tb->addAction( action("import") );
-    tb->addAction( action("export") );
+    tb->addAction(action("import"));
+    tb->addAction(action("export"));
 
     static_cast<QGridLayout*>(masterWidget->layout())->addWidget(optionWidget, 3, 0, 1, 5);
     return masterWidget;

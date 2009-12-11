@@ -39,19 +39,23 @@ class Function;
 typedef QVector<Value> valVector;
 
 struct rangeInfo {
-  int col1, col2, row1, row2;
-  int columns() { return col2 - col1 + 1; }
-  int rows() { return row2 - row1 + 1; }
+    int col1, col2, row1, row2;
+    int columns() {
+        return col2 - col1 + 1;
+    }
+    int rows() {
+        return row2 - row1 + 1;
+    }
 };
 struct FuncExtra {
-  // here we'll add all the extras a function may need
-  Function* function;
-  QVector<rangeInfo> ranges;
-  Sheet *sheet;
-  int myrow, mycol;
+    // here we'll add all the extras a function may need
+    Function* function;
+    QVector<rangeInfo> ranges;
+    Sheet *sheet;
+    int myrow, mycol;
 };
 
-typedef Value (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
+typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 
 /**
  * A function pointer and context.
@@ -59,32 +63,32 @@ typedef Value (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 class KSPREAD_EXPORT Function
 {
 public:
-  Function (const QString& name, FunctionPtr ptr);
-  virtual ~Function();
-  /**
-  setParamCount sets allowed parameter count for a function.
-  if max=0, it means max=min. If max=-1, there is no upper limit.
-  */
-  void setParamCount (int min, int max = 0);
-  /** is it okay for the function to receive this many parameters ? */
-  bool paramCountOkay (int count);
-  /** when set to true, the function can receive arrays. When set to
-  false, the auto-array mechamism will be used for arrays (so the
-  function will receive simple values, not arrays). */
-  void setAcceptArray (bool accept = true);
-  bool needsExtra ();
-  void setNeedsExtra (bool extra);
-  QString name() const;
-  QString localizedName() const;
-  QString helpText() const;
-  void setHelpText( const QString& text );
-  Value exec (valVector args, ValueCalc *calc, FuncExtra *extra = 0);
+    Function(const QString& name, FunctionPtr ptr);
+    virtual ~Function();
+    /**
+    setParamCount sets allowed parameter count for a function.
+    if max=0, it means max=min. If max=-1, there is no upper limit.
+    */
+    void setParamCount(int min, int max = 0);
+    /** is it okay for the function to receive this many parameters ? */
+    bool paramCountOkay(int count);
+    /** when set to true, the function can receive arrays. When set to
+    false, the auto-array mechamism will be used for arrays (so the
+    function will receive simple values, not arrays). */
+    void setAcceptArray(bool accept = true);
+    bool needsExtra();
+    void setNeedsExtra(bool extra);
+    QString name() const;
+    QString localizedName() const;
+    QString helpText() const;
+    void setHelpText(const QString& text);
+    Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = 0);
 
 private:
-    Q_DISABLE_COPY( Function )
+    Q_DISABLE_COPY(Function)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
@@ -95,18 +99,24 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
 class KSPREAD_EXPORT FunctionParameter
 {
 public:
-  FunctionParameter();
-  FunctionParameter( const FunctionParameter& param );
-  FunctionParameter( const QDomElement& element );
+    FunctionParameter();
+    FunctionParameter(const FunctionParameter& param);
+    FunctionParameter(const QDomElement& element);
 
-  QString helpText() const { return m_help; }
-  ParameterType type() const { return m_type; }
-  bool hasRange() const { return m_range; }
+    QString helpText() const {
+        return m_help;
+    }
+    ParameterType type() const {
+        return m_type;
+    }
+    bool hasRange() const {
+        return m_range;
+    }
 
 private:
-  QString m_help;
-  ParameterType m_type;
-  bool m_range;
+    QString m_help;
+    ParameterType m_type;
+    bool m_range;
 };
 
 /**
@@ -115,34 +125,54 @@ private:
 class KSPREAD_EXPORT FunctionDescription
 {
 public:
-  FunctionDescription();
-  FunctionDescription (const QDomElement& element);
-  FunctionDescription (const FunctionDescription& desc);
+    FunctionDescription();
+    FunctionDescription(const QDomElement& element);
+    FunctionDescription(const FunctionDescription& desc);
 
-  const QStringList& examples() { return m_examples; }
-  const QStringList& syntax() { return m_syntax; }
-  const QStringList& related() { return m_related; }
-  const QStringList& helpText() const { return m_help; }
-  QString name() const { return m_name; }
-  ParameterType type() const { return m_type; }
+    const QStringList& examples() {
+        return m_examples;
+    }
+    const QStringList& syntax() {
+        return m_syntax;
+    }
+    const QStringList& related() {
+        return m_related;
+    }
+    const QStringList& helpText() const {
+        return m_help;
+    }
+    QString name() const {
+        return m_name;
+    }
+    ParameterType type() const {
+        return m_type;
+    }
 
-  int params() const { return m_params.count(); }
-  FunctionParameter& param( int i ) { return m_params[ i ]; }
+    int params() const {
+        return m_params.count();
+    }
+    FunctionParameter& param(int i) {
+        return m_params[ i ];
+    }
 
-  void setGroup( const QString& g ) { m_group = g; }
-  QString group() const { return m_group; }
+    void setGroup(const QString& g) {
+        m_group = g;
+    }
+    QString group() const {
+        return m_group;
+    }
 
-  QString toQML() const;
+    QString toQML() const;
 
 private:
-  QString m_group;
-  QStringList m_examples;
-  QStringList m_syntax;
-  QStringList m_related;
-  QStringList m_help;
-  QString m_name;
-  ParameterType m_type;
-  QList<FunctionParameter> m_params;
+    QString m_group;
+    QStringList m_examples;
+    QStringList m_syntax;
+    QStringList m_related;
+    QStringList m_help;
+    QString m_name;
+    ParameterType m_type;
+    QList<FunctionParameter> m_params;
 };
 
 /**
@@ -151,24 +181,24 @@ private:
 class KSPREAD_EXPORT FunctionRepository
 {
 public:
-  FunctionRepository();
-  ~FunctionRepository();
+    FunctionRepository();
+    ~FunctionRepository();
 
-  static FunctionRepository *self();
+    static FunctionRepository *self();
 
-  void add (Function *function);
-  void add (FunctionDescription *desc);
+    void add(Function *function);
+    void add(FunctionDescription *desc);
     void remove(const QString& groupName);
 
-  Function *function (const QString& name);
+    Function *function(const QString& name);
 
-  FunctionDescription *functionInfo (const QString& name);
+    FunctionDescription *functionInfo(const QString& name);
 
-  /** return functions within a group, or all if no group given */
-  QStringList functionNames (const QString& group = QString());
+    /** return functions within a group, or all if no group given */
+    QStringList functionNames(const QString& group = QString());
 
-  const QStringList &groups () const;
-  void addGroup(const QString& groupname);
+    const QStringList &groups() const;
+    void addGroup(const QString& groupname);
 
     /**
      * Loads function descriptions from an XML file.
@@ -177,12 +207,12 @@ public:
 
 private:
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 
-  // no copy or assign
-  FunctionRepository( const FunctionRepository& );
-  FunctionRepository& operator=( const FunctionRepository& );
+    // no copy or assign
+    FunctionRepository(const FunctionRepository&);
+    FunctionRepository& operator=(const FunctionRepository&);
 };
 
 

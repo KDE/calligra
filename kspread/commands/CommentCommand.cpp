@@ -30,38 +30,36 @@
 using namespace KSpread;
 
 CommentCommand::CommentCommand(QUndoCommand* parent)
-    : AbstractRegionCommand(parent)
+        : AbstractRegionCommand(parent)
 {
 }
 
-bool CommentCommand::process( Element* element )
+bool CommentCommand::process(Element* element)
 {
-    if ( !m_reverse )
-    {
+    if (!m_reverse) {
         // create undo
-        if ( m_firstrun )
-            m_undoData += m_sheet->commentStorage()->undoData( Region(element->rect()) );
-        m_sheet->cellStorage()->setComment( Region(element->rect()), m_comment );
+        if (m_firstrun)
+            m_undoData += m_sheet->commentStorage()->undoData(Region(element->rect()));
+        m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
     }
     return true;
 }
 
 bool CommentCommand::mainProcessing()
 {
-    if ( m_reverse )
-    {
-        m_sheet->cellStorage()->setComment( *this, QString() );
-        for ( int i = 0; i < m_undoData.count(); ++i )
-            m_sheet->cellStorage()->setComment( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+    if (m_reverse) {
+        m_sheet->cellStorage()->setComment(*this, QString());
+        for (int i = 0; i < m_undoData.count(); ++i)
+            m_sheet->cellStorage()->setComment(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
     }
     return AbstractRegionCommand::mainProcessing();
 }
 
-void CommentCommand::setComment( const QString& comment )
+void CommentCommand::setComment(const QString& comment)
 {
     m_comment = comment;
-    if ( m_comment.isEmpty() )
-        setText( i18n( "Remove Comment" ) );
+    if (m_comment.isEmpty())
+        setText(i18n("Remove Comment"));
     else
-        setText( i18n( "Add Comment" ) );
+        setText(i18n("Add Comment"));
 }

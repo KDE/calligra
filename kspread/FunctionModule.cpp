@@ -30,8 +30,8 @@ public:
 
 
 FunctionModule::FunctionModule(QObject* parent, const QString &id, const QString& name)
-    : QObject(parent)
-    , d(new Private)
+        : QObject(parent)
+        , d(new Private)
 {
     d->id = id;
     d->name = name;

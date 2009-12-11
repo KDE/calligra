@@ -40,42 +40,41 @@
 
 using namespace KSpread;
 
-ShowDialog::ShowDialog( View* parent, const char* name )
-  : KDialog( parent )
+ShowDialog::ShowDialog(View* parent, const char* name)
+        : KDialog(parent)
 {
-  setCaption( i18n("Show Sheet") );
-  setModal( true );
-  setButtons( Ok|Cancel );
-  setObjectName( name );
+    setCaption(i18n("Show Sheet"));
+    setModal(true);
+    setButtons(Ok | Cancel);
+    setObjectName(name);
 
-  m_pView = parent;
-  QWidget *page = new QWidget(this);
-  setMainWidget( page );
-  QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(0);
-  lay1->setSpacing(spacingHint());
+    m_pView = parent;
+    QWidget *page = new QWidget(this);
+    setMainWidget(page);
+    QVBoxLayout *lay1 = new QVBoxLayout(page);
+    lay1->setMargin(0);
+    lay1->setSpacing(spacingHint());
 
-  QLabel *label = new QLabel( i18n("Select hidden sheets to show:"), page );
-  lay1->addWidget( label );
+    QLabel *label = new QLabel(i18n("Select hidden sheets to show:"), page);
+    lay1->addWidget(label);
 
-  list=new QListWidget(page);
-  lay1->addWidget( list );
+    list = new QListWidget(page);
+    lay1->addWidget(list);
 
-  list->setSelectionMode(QAbstractItemView::MultiSelection);
-  QString text;
-  QStringList::Iterator it;
-  QStringList tabsList=m_pView->doc()->map()->hiddenSheets();
-  for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-    	{
-    	text=*it;
-    	list->addItem(text);
-    	}
-  if(!list->count())
-  	enableButtonOk(false);
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( list, SIGNAL(itemDoubleClicked(QListWidgetItem *)),this,SLOT(slotDoubleClicked(QListWidgetItem *)));
-  resize( 200, 150 );
-  setFocus();
+    list->setSelectionMode(QAbstractItemView::MultiSelection);
+    QString text;
+    QStringList::Iterator it;
+    QStringList tabsList = m_pView->doc()->map()->hiddenSheets();
+    for (it = tabsList.begin(); it != tabsList.end(); ++it) {
+        text = *it;
+        list->addItem(text);
+    }
+    if (!list->count())
+        enableButtonOk(false);
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotDoubleClicked(QListWidgetItem *)));
+    resize(200, 150);
+    setFocus();
 }
 
 void ShowDialog::slotDoubleClicked(QListWidgetItem *)
@@ -89,30 +88,27 @@ void ShowDialog::slotOk()
 {
     QStringList listSheet;
 
-    for (int i=0; i < list->count(); i++)
-    {
-        if (list->item(i)->isSelected())
-        {
-            listSheet.append( list->item(i)->text());
+    for (int i = 0; i < list->count(); i++) {
+        if (list->item(i)->isSelected()) {
+            listSheet.append(list->item(i)->text());
         }
     }
 
     //m_pView->tabBar()->showSheet(listSheet);
 
-    if ( listSheet.count()==0 )
+    if (listSheet.count() == 0)
         return;
 
     Sheet *sheet;
     QUndoCommand* macroCommand = new QUndoCommand(i18n("Show Sheet"));
-    for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
-    {
-        sheet=m_pView->doc()->map()->findSheet( *it );
+    for (QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it) {
+        sheet = m_pView->doc()->map()->findSheet(*it);
         if (!sheet)
             continue;
         new ShowSheetCommand(sheet, macroCommand);
     }
     m_pView->doc()->addCommand(macroCommand);
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_pView->slotUpdateView(m_pView->activeSheet());
     accept();
 }
 

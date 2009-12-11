@@ -30,7 +30,7 @@
 using namespace KSpread;
 
 NamedAreaCommand::NamedAreaCommand(QUndoCommand* parent)
-    : AbstractRegionCommand(parent)
+        : AbstractRegionCommand(parent)
 {
     setText(i18n("Add Named Area"));
 }
@@ -61,8 +61,7 @@ bool NamedAreaCommand::preProcessing()
         return true;
 
     const Region namedArea = m_sheet->map()->namedAreaManager()->namedArea(m_areaName);
-    if (!namedArea.isEmpty())
-    {
+    if (!namedArea.isEmpty()) {
         if (namedArea == *this)
             return false;
         m_oldArea = namedArea;
@@ -74,14 +73,11 @@ bool NamedAreaCommand::preProcessing()
 bool NamedAreaCommand::mainProcessing()
 {
     kDebug() ;
-    if (!m_reverse)
-    {
+    if (!m_reverse) {
         if (!m_oldArea.isEmpty())
             m_sheet->map()->namedAreaManager()->remove(m_areaName);
         m_sheet->map()->namedAreaManager()->insert(*this, m_areaName);
-    }
-    else
-    {
+    } else {
         m_sheet->map()->namedAreaManager()->remove(m_areaName);
         if (!m_oldArea.isEmpty())
             m_sheet->map()->namedAreaManager()->insert(m_oldArea, m_areaName);
@@ -93,7 +89,7 @@ bool NamedAreaCommand::postProcessing()
 {
     // update formulas containing either the new or the old name
     Map* const map = m_sheet->map();
-    foreach (Sheet* sheet, map->sheetList()) {
+    foreach(Sheet* sheet, map->sheetList()) {
         const QString tmp = '\'' + m_areaName + '\'';
         const FormulaStorage* const storage = sheet->formulaStorage();
         for (int c = 0; c < storage->count(); ++c) {
@@ -102,7 +98,7 @@ bool NamedAreaCommand::postProcessing()
                 if (cell.makeFormula()) {
                     // recalculate cells
                     map->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
-                                                        CellDamage::Value));
+                                                  CellDamage::Value));
                 }
             }
         }

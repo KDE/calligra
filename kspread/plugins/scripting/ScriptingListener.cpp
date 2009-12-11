@@ -30,19 +30,20 @@
 
 using namespace KSpread;
 
-namespace KSpread {
-    /// \internal d-pointer class.
-    class ScriptingCellListener::Private
-    {
-        public:
-            KSpread::Sheet* sheet;
-            KSpread::Binding* cellbinding;
-    };
+namespace KSpread
+{
+/// \internal d-pointer class.
+class ScriptingCellListener::Private
+{
+public:
+    KSpread::Sheet* sheet;
+    KSpread::Binding* cellbinding;
+};
 }
 
 ScriptingCellListener::ScriptingCellListener(KSpread::Sheet *sheet, const QRect& area)
-    : QObject()
-    , d(new Private())
+        : QObject()
+        , d(new Private())
 {
     d->sheet = sheet;
     d->cellbinding = new KSpread::Binding(Region(area, sheet));
@@ -66,7 +67,7 @@ void ScriptingCellListener::slotChanged(const Region& region)
     emit regionChanged(ranges);
 
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
-        const QRect r( (*it)->rect() );
+        const QRect r((*it)->rect());
         for (int row = r.top(); row <= r.bottom(); ++row)
             for (int col = r.left(); col <= r.right(); ++col)
                 emit cellChanged(col, row);

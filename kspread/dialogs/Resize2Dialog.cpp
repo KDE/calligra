@@ -53,122 +53,120 @@
 using namespace KSpread;
 
 ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-    setCaption( i18n("Resize Row") );
-    setModal( true );
-    setButtons( Ok|Cancel|Default );
+    setCaption(i18n("Resize Row"));
+    setModal(true);
+    setButtons(Ok | Cancel | Default);
     m_selection = selection;
 
     const RowFormat* rl = m_selection->activeSheet()->rowFormat(selection->lastRange().top());
     rowHeight = rl->height();
 
     QWidget *page = new QWidget();
-    setMainWidget( page );
+    setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout( page );
+    QGridLayout* gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel( page );
-    label1->setText( i18n( "Height:" ) );
-    gridLayout->addWidget( label1, 0, 0 );
+    QLabel * label1 = new QLabel(page);
+    label1->setText(i18n("Height:"));
+    gridLayout->addWidget(label1, 0, 0);
 
-    m_pHeight = new KoUnitDoubleSpinBox( page );
-    m_pHeight->setValue( rowHeight );
+    m_pHeight = new KoUnitDoubleSpinBox(page);
+    m_pHeight->setValue(rowHeight);
     m_pHeight->setUnit(m_selection->canvas()->unit());
-    gridLayout->addWidget( m_pHeight, 0, 1 );
+    gridLayout->addWidget(m_pHeight, 0, 1);
 
     m_pHeight->setFocus();
 
     //store the visible value, for later check for changes
     rowHeight = m_pHeight->value();
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 }
 
 void ResizeRow::slotOk()
 {
-  double height = m_pHeight->value();
+    double height = m_pHeight->value();
 
-  //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-  if ( fabs( height - rowHeight ) > DBL_EPSILON )
-  {
-    ResizeRowManipulator* manipulator = new ResizeRowManipulator();
-    manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setSize(height);
-    manipulator->add(*m_selection);
-    manipulator->execute(m_selection->canvas());
-  }
-  accept();
+    //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+    if (fabs(height - rowHeight) > DBL_EPSILON) {
+        ResizeRowManipulator* manipulator = new ResizeRowManipulator();
+        manipulator->setSheet(m_selection->activeSheet());
+        manipulator->setSize(height);
+        manipulator->add(*m_selection);
+        manipulator->execute(m_selection->canvas());
+    }
+    accept();
 }
 
 void ResizeRow::slotDefault()
 {
-  Sheet* sheet = m_selection->activeSheet();
-  if (!sheet)
-    return;
-  double points = sheet->map()->defaultRowFormat()->height();
-  m_pHeight->setValue(m_selection->canvas()->unit().toUserValue(points));
+    Sheet* sheet = m_selection->activeSheet();
+    if (!sheet)
+        return;
+    double points = sheet->map()->defaultRowFormat()->height();
+    m_pHeight->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
 ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
-  : KDialog( parent )
+        : KDialog(parent)
 {
-    setCaption( i18n("Resize Column") );
-    setModal( true );
-    setButtons( Ok|Cancel|Default );
+    setCaption(i18n("Resize Column"));
+    setModal(true);
+    setButtons(Ok | Cancel | Default);
     m_selection = selection;
 
     const ColumnFormat* cl = m_selection->activeSheet()->columnFormat(selection->lastRange().left());
     columnWidth = cl->width();
 
     QWidget *page = new QWidget();
-    setMainWidget( page );
+    setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout( page );
+    QGridLayout* gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel( page );
-    label1->setText( i18n( "Width:" ) );
-    gridLayout->addWidget( label1, 0, 0 );
+    QLabel * label1 = new QLabel(page);
+    label1->setText(i18n("Width:"));
+    gridLayout->addWidget(label1, 0, 0);
 
-    m_pWidth = new KoUnitDoubleSpinBox( page );
-    m_pWidth->setValue( columnWidth );
+    m_pWidth = new KoUnitDoubleSpinBox(page);
+    m_pWidth->setValue(columnWidth);
     m_pWidth->setUnit(m_selection->canvas()->unit());
-    gridLayout->addWidget( m_pWidth, 0, 1 );
+    gridLayout->addWidget(m_pWidth, 0, 1);
 
     m_pWidth->setFocus();
 
     //store the visible value, for later check for changes
     columnWidth = m_pWidth->value();
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
 
 }
 
 void ResizeColumn::slotOk()
 {
-  double width = m_pWidth->value();
+    double width = m_pWidth->value();
 
-  //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-  if ( fabs( width - columnWidth ) > DBL_EPSILON )
-  {
-    ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
-    manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setSize(width);
-    manipulator->add(*m_selection);
-    manipulator->execute(m_selection->canvas());
-  }
-  accept();
+    //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+    if (fabs(width - columnWidth) > DBL_EPSILON) {
+        ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
+        manipulator->setSheet(m_selection->activeSheet());
+        manipulator->setSize(width);
+        manipulator->add(*m_selection);
+        manipulator->execute(m_selection->canvas());
+    }
+    accept();
 }
 
 void ResizeColumn::slotDefault()
 {
-  Sheet* sheet = m_selection->activeSheet();
-  if (!sheet)
-    return;
-  double points = sheet->map()->defaultColumnFormat()->width();
-  m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
+    Sheet* sheet = m_selection->activeSheet();
+    if (!sheet)
+        return;
+    double points = sheet->map()->defaultColumnFormat()->width();
+    m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
 

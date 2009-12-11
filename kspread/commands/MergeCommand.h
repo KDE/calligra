@@ -25,7 +25,7 @@
 namespace KSpread
 {
 
-  class Selection;
+class Selection;
 
 /**
  * \class MergeCommand
@@ -34,29 +34,37 @@ namespace KSpread
 class MergeCommand : public AbstractRegionCommand
 {
 public:
-  MergeCommand(QUndoCommand* parent = 0);
-  virtual ~MergeCommand();
+    MergeCommand(QUndoCommand* parent = 0);
+    virtual ~MergeCommand();
 
-  virtual bool preProcessing();
+    virtual bool preProcessing();
 
-  virtual void setReverse(bool reverse) { m_merge = !reverse; }
-  void setHorizontalMerge(bool state) { m_mergeHorizontal = state; }
-  void setVerticalMerge(bool state) { m_mergeVertical = state; }
+    virtual void setReverse(bool reverse) {
+        m_merge = !reverse;
+    }
+    void setHorizontalMerge(bool state) {
+        m_mergeHorizontal = state;
+    }
+    void setVerticalMerge(bool state) {
+        m_mergeVertical = state;
+    }
 
-  void setSelection (Selection *selection) { m_selection = selection; }
+    void setSelection(Selection *selection) {
+        m_selection = selection;
+    }
 protected:
-  virtual bool process(Element*);
+    virtual bool process(Element*);
 
-  virtual bool postProcessing();
+    virtual bool postProcessing();
 
-  QString name() const;
+    QString name() const;
 
-  bool m_merge;
+    bool m_merge;
 private:
-  bool m_mergeHorizontal : 1;
-  bool m_mergeVertical   : 1;
-  AbstractRegionCommand* m_unmerger; // to restore old merging
-  Selection *m_selection;
+bool m_mergeHorizontal : 1;
+bool m_mergeVertical   : 1;
+    AbstractRegionCommand* m_unmerger; // to restore old merging
+    Selection *m_selection;
 };
 
 } // namespace KSpread

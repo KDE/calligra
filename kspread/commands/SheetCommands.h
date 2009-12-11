@@ -41,28 +41,28 @@ class Sheet;
 class RenameSheetCommand : public QUndoCommand
 {
 public:
-  RenameSheetCommand( Sheet* sheet, const QString &name );
+    RenameSheetCommand(Sheet* sheet, const QString &name);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
-  Sheet* sheet;
-  QString oldName;
-  QString newName;
+    Sheet* sheet;
+    QString oldName;
+    QString newName;
 };
 
 class HideSheetCommand : public QUndoCommand
 {
 public:
-  explicit HideSheetCommand( Sheet* sheet );
+    explicit HideSheetCommand(Sheet* sheet);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
-  Map* map;
-  QString sheetName;
+    Map* map;
+    QString sheetName;
 };
 
 class ShowSheetCommand : public QUndoCommand
@@ -70,22 +70,22 @@ class ShowSheetCommand : public QUndoCommand
 public:
     explicit ShowSheetCommand(Sheet* sheet, QUndoCommand* parent = 0);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
-  Map* map;
-  QString sheetName;
+    Map* map;
+    QString sheetName;
 };
 
 
 class AddSheetCommand : public QUndoCommand
 {
 public:
-  explicit AddSheetCommand( Sheet* sheet );
+    explicit AddSheetCommand(Sheet* sheet);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
     Sheet*  m_sheet;
@@ -113,10 +113,10 @@ protected:
 class RemoveSheetCommand : public QUndoCommand
 {
 public:
-  explicit RemoveSheetCommand( Sheet* sheet );
+    explicit RemoveSheetCommand(Sheet* sheet);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
     Sheet* sheet;
@@ -131,36 +131,36 @@ protected:
 class SheetPropertiesCommand : public QUndoCommand
 {
 public:
-  SheetPropertiesCommand(Sheet* sheet);
-  void setLayoutDirection( Qt::LayoutDirection direction );
-  void setAutoCalculationEnabled( bool b );
-  void setShowGrid( bool b );
-  void setShowPageBorders( bool b );
-  void setShowFormula( bool b );
-  void setHideZero( bool b );
-  void setShowFormulaIndicator( bool b );
-  void setShowCommentIndicator( bool b );
-  void setColumnAsNumber( bool b );
-  void setLcMode( bool b );
-  void setCapitalizeFirstLetter( bool b );
+    SheetPropertiesCommand(Sheet* sheet);
+    void setLayoutDirection(Qt::LayoutDirection direction);
+    void setAutoCalculationEnabled(bool b);
+    void setShowGrid(bool b);
+    void setShowPageBorders(bool b);
+    void setShowFormula(bool b);
+    void setHideZero(bool b);
+    void setShowFormulaIndicator(bool b);
+    void setShowCommentIndicator(bool b);
+    void setColumnAsNumber(bool b);
+    void setLcMode(bool b);
+    void setCapitalizeFirstLetter(bool b);
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
 protected:
-  Sheet* sheet;
-  Map* map;
-  Qt::LayoutDirection oldDirection, newDirection;
-  bool oldAutoCalc, newAutoCalc;
-  bool oldShowGrid, newShowGrid;
-  bool oldShowPageBorders, newShowPageBorders;
-  bool oldShowFormula, newShowFormula;
-  bool oldHideZero, newHideZero;
-  bool oldShowFormulaIndicator, newShowFormulaIndicator;
-  bool oldShowCommentIndicator, newShowCommentIndicator;
-  bool oldColumnAsNumber, newColumnAsNumber;
-  bool oldLcMode, newLcMode;
-  bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;
+    Sheet* sheet;
+    Map* map;
+    Qt::LayoutDirection oldDirection, newDirection;
+    bool oldAutoCalc, newAutoCalc;
+    bool oldShowGrid, newShowGrid;
+    bool oldShowPageBorders, newShowPageBorders;
+    bool oldShowFormula, newShowFormula;
+    bool oldHideZero, newHideZero;
+    bool oldShowFormulaIndicator, newShowFormulaIndicator;
+    bool oldShowCommentIndicator, newShowCommentIndicator;
+    bool oldColumnAsNumber, newColumnAsNumber;
+    bool oldLcMode, newLcMode;
+    bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;
 };
 
 } // namespace KSpread
