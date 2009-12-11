@@ -94,6 +94,7 @@ QString Document::sendAsToString( Document::SendAs snd, bool trans )
 
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
 {
+    Q_UNUSED(status);
     m_url = KUrl( element.attribute( "url" ) );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );

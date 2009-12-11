@@ -3323,6 +3323,7 @@ WorkPackage::~WorkPackage()
 
 bool WorkPackage::loadXML(KoXmlElement &element, XMLLoaderObject &status )
 {
+    Q_UNUSED(status);
     m_ownerName = element.attribute( "owner" );
     m_ownerId = element.attribute( "owner-id" );
     return true;

@@ -364,6 +364,7 @@ bool Schedule::add( Appointment *appointment )
 
 void Schedule::takeAppointment( Appointment *appointment, int mode )
 {
+    Q_UNUSED(mode);
     //kDebug()<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
     int i = m_forward.indexOf( appointment );
     if ( i != -1 ) {
