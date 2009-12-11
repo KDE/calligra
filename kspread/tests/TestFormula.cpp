@@ -45,6 +45,7 @@ static char encodeTokenType(const Token& token)
     return result;
 }
 
+#if 0 // not used?
 static QString describeTokenCodes(const QString& tokenCodes)
 {
     QString result;
@@ -68,6 +69,7 @@ static QString describeTokenCodes(const QString& tokenCodes)
 
     return result.prepend("{").append("}");
 }
+#endif
 
 #define CHECK_TOKENIZE(x,y) QCOMPARE(tokenizeFormula(x), QString(y))
 

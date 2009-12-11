@@ -55,11 +55,13 @@ void TestDatetimeFunctions::initTestCase()
 // - corrected wrong DAYS360,EDATE and EOMONTH unittests
 // - commented out last issue on YEARFRAC
 
+#if 0 // not used?
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
 {
     return Value(ROUND(f));
 }
+#endif
 
 // round to get at most 10-digits number
 static Value RoundNumber(const Value& v)
