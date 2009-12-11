@@ -29,6 +29,9 @@ public:
         : m_pen(Qt::black)
     {
     }
+
+    using KoLineBorder::paintBorder;
+
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
     {
         KoShape::applyConversion(painter, converter);
