@@ -33,6 +33,8 @@ struct Field {
 
 static QString getFieldType(QString xmlType, unsigned bits, QString otherType = QString())
 {
+    Q_UNUSED(bits);
+    Q_UNUSED(otherType);
     if (xmlType == "unsigned") return "unsigned";
     else if (xmlType == "signed") return "int";
     else if (xmlType == "float" || xmlType == "fixed") return "double";
