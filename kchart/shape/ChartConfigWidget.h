@@ -62,6 +62,10 @@ public:
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
 
+    /// Delete all open dialogs.
+    /// This is called when e.g. the tool is deactivated.
+    void deleteSubDialogs();
+
 public slots:
     void chartSubTypeSelected( int type );
     void chartTypeSelected( QAction *action );
@@ -161,8 +165,6 @@ signals:
     void legendShowFrameChanged( bool show );
 
 private:
-    void initTableEditorDialog();
-
     void setupDialogs();
     void createActions();
     

@@ -167,9 +167,11 @@ public:
 
 
 ChartConfigWidget::Private::Private( QWidget *parent )
-    : newAxisDialog( parent ),
-      axisScalingDialog( parent ),
-      cellRegionDialog( parent )
+    : newAxisDialog( parent )
+    , axisScalingDialog( parent )
+    , cellRegionDialog( parent )
+    , tableEditorDialog( 0 )
+      
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
     lastVerticalAlignment   = 1; // Qt::AlignCenter
@@ -309,8 +311,6 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.dataSetHasChartType, SIGNAL( toggled( bool ) ),
              this,                      SLOT( ui_dataSetHasChartTypeChanged( bool ) ) );
              
-    initTableEditorDialog();
-    
     // "Plot Area" tab
     connect( d->ui.showTitle,    SIGNAL( toggled( bool ) ),
              this,               SIGNAL( showTitleChanged( bool ) ) );
@@ -377,11 +377,12 @@ ChartConfigWidget::~ChartConfigWidget()
     delete d;
 }
 
-void ChartConfigWidget::initTableEditorDialog()
+void ChartConfigWidget::deleteSubDialogs()
 {
-    // Quick-access settings
-    d->tableEditorDialog = new TableEditorDialog;
-    d->tableEditorDialog->hide();
+    if ( d->tableEditorDialog ) {
+        delete d->tableEditorDialog;
+        d->tableEditorDialog = 0;
+    }
 }
 
 void ChartConfigWidget::open( KoShape* shape )
@@ -456,7 +457,6 @@ void ChartConfigWidget::open( KoShape* shape )
     else {
 	// This part is run when the data source is not external,
 	// i.e. the data is handled by the chart shape itself.
-        d->tableEditorDialog->setProxyModel( d->shape->proxyModel() );
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
                  this,           SLOT( slotShowTableEditor( bool ) ) );
     }
@@ -1019,10 +1019,17 @@ void ChartConfigWidget::update()
 
 void ChartConfigWidget::slotShowTableEditor( bool show )
 {
-    if ( show )
+    if ( !d->tableEditorDialog ) {
+        d->tableEditorDialog = new TableEditorDialog;
+        d->tableEditorDialog->setProxyModel( d->shape->proxyModel() );
+    }
+
+    if ( show ) {
         d->tableEditorDialog->hide();
-    else
+    }
+    else {
         d->tableEditorDialog->show();
+    }
 }
 
 
