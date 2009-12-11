@@ -191,6 +191,8 @@ private:
     int m_currentListID; //tracks the id of the current list - 0 if no list
     int m_previousListID; //track previous list, in case we need to continue the numbering
     QString m_previousListStyleName;
+    
+    QList<QString> m_hyperLinkList;
 };
 
 #endif // TEXTHANDLER_H
