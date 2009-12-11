@@ -45,7 +45,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication a;
 
-    KoTextEditingPlugin *thesaurus;
+    KoTextEditingPlugin *thesaurus = 0;
 
     foreach(const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
