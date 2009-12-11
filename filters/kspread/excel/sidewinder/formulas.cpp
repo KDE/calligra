@@ -90,62 +90,62 @@ const char* FormulaToken::idAsString() const
     const char* s = 0;
 
     switch (d->id) {
-        case Matrix:       s = "Matrix"; break;
-        case Table:        s = "Table"; break;
-        case Add:          s = "Add"; break;
-        case Sub:          s = "Sub"; break;
-        case Mul:          s = "Mul"; break;
-        case Div:          s = "Div"; break;
-        case Power:        s = "Power"; break;
-        case Concat:       s = "Concat"; break;
-        case LT:           s = "LT"; break;
-        case LE:           s = "LE"; break;
-        case EQ:           s = "EQ"; break;
-        case GE:           s = "GE"; break;
-        case GT:           s = "GT"; break;
-        case NE:           s = "NE"; break;
-        case Intersect:    s = "Intersect"; break;
-        case List:         s = "List"; break;
-        case Range:        s = "Range"; break;
-        case UPlus:        s = "UPlus"; break;
-        case UMinus:       s = "UMinus"; break;
-        case Percent:      s = "Percent"; break;
-        case Paren:        s = "Paren"; break;
-        case String:       s = "String"; break;
-        case MissArg:      s = "MissArg"; break;
-        case ErrorCode:    s = "ErrorCode"; break;
-        case Bool:         s = "Bool"; break;
-        case Integer:      s = "Integer"; break;
-        case Array:        s = "Array"; break;
-        case Function:     s = "Function"; break;
-        case FunctionVar:  s = "FunctionVar"; break;
-        case Name:         s = "Name"; break;
-        case Ref:          s = "Ref"; break;
-        case RefErr:       s = "RefErr"; break;
-        case RefN:         s = "RefN"; break;
-        case Area:         s = "Area"; break;
-        case AreaErr:      s = "AreaErr"; break;
-        case AreaN:        s = "AreaN"; break;
-        case NameX:        s = "NameX"; break;
-        case Ref3d:        s = "Ref3d"; break;
-        case RefErr3d:     s = "RefErr3d"; break;
-        case Float:        s = "Float"; break;
-        case Area3d:       s = "Area3d"; break;
-        case AreaErr3d:    s = "AreaErr3d"; break;
-        case NatFormula:   s = "NatFormula"; break;
-        case Sheet:        s = "Sheet"; break;
-        case EndSheet:     s = "EndSheet"; break;
-        case MemArea:      s = "MemArea"; break;
-        case MemErr:       s = "MemErr"; break;
-        case MemNoMem:     s = "MemNoMem"; break;
-        case MemFunc:      s = "MemFunc"; break;
-        case MemAreaN:     s = "MemAreaN"; break;
-        case MemNoMemN:    s = "MemNoMemN"; break;
-        case 0:            s = ""; break; // NOPE...
-        default:
-          s = "Unknown";
-          printf( "Unhandled formula id %i as string\n", d->id );
-          break;
+    case Matrix:       s = "Matrix"; break;
+    case Table:        s = "Table"; break;
+    case Add:          s = "Add"; break;
+    case Sub:          s = "Sub"; break;
+    case Mul:          s = "Mul"; break;
+    case Div:          s = "Div"; break;
+    case Power:        s = "Power"; break;
+    case Concat:       s = "Concat"; break;
+    case LT:           s = "LT"; break;
+    case LE:           s = "LE"; break;
+    case EQ:           s = "EQ"; break;
+    case GE:           s = "GE"; break;
+    case GT:           s = "GT"; break;
+    case NE:           s = "NE"; break;
+    case Intersect:    s = "Intersect"; break;
+    case List:         s = "List"; break;
+    case Range:        s = "Range"; break;
+    case UPlus:        s = "UPlus"; break;
+    case UMinus:       s = "UMinus"; break;
+    case Percent:      s = "Percent"; break;
+    case Paren:        s = "Paren"; break;
+    case String:       s = "String"; break;
+    case MissArg:      s = "MissArg"; break;
+    case ErrorCode:    s = "ErrorCode"; break;
+    case Bool:         s = "Bool"; break;
+    case Integer:      s = "Integer"; break;
+    case Array:        s = "Array"; break;
+    case Function:     s = "Function"; break;
+    case FunctionVar:  s = "FunctionVar"; break;
+    case Name:         s = "Name"; break;
+    case Ref:          s = "Ref"; break;
+    case RefErr:       s = "RefErr"; break;
+    case RefN:         s = "RefN"; break;
+    case Area:         s = "Area"; break;
+    case AreaErr:      s = "AreaErr"; break;
+    case AreaN:        s = "AreaN"; break;
+    case NameX:        s = "NameX"; break;
+    case Ref3d:        s = "Ref3d"; break;
+    case RefErr3d:     s = "RefErr3d"; break;
+    case Float:        s = "Float"; break;
+    case Area3d:       s = "Area3d"; break;
+    case AreaErr3d:    s = "AreaErr3d"; break;
+    case NatFormula:   s = "NatFormula"; break;
+    case Sheet:        s = "Sheet"; break;
+    case EndSheet:     s = "EndSheet"; break;
+    case MemArea:      s = "MemArea"; break;
+    case MemErr:       s = "MemErr"; break;
+    case MemNoMem:     s = "MemNoMem"; break;
+    case MemFunc:      s = "MemFunc"; break;
+    case MemAreaN:     s = "MemAreaN"; break;
+    case MemNoMemN:    s = "MemNoMemN"; break;
+    case 0:            s = ""; break; // NOPE...
+    default:
+        s = "Unknown";
+        printf("Unhandled formula id %i as string\n", d->id);
+        break;
     }
 
     return s;
@@ -157,96 +157,96 @@ unsigned FormulaToken::size() const
     unsigned s = 0; // on most cases no data
 
     switch (d->id) {
-        case Add:
-        case Sub:
-        case Mul:
-        case Div:
-        case Power:
-        case Concat:
-        case LT:
-        case LE:
-        case EQ:
-        case GE:
-        case GT:
-        case NE:
-        case Intersect:
-        case List:
-        case Range:
-        case UPlus:
-        case UMinus:
-        case Percent:
-        case Paren:
-        case MissArg:
-            s = 0; break;
+    case Add:
+    case Sub:
+    case Mul:
+    case Div:
+    case Power:
+    case Concat:
+    case LT:
+    case LE:
+    case EQ:
+    case GE:
+    case GT:
+    case NE:
+    case Intersect:
+    case List:
+    case Range:
+    case UPlus:
+    case UMinus:
+    case Percent:
+    case Paren:
+    case MissArg:
+        s = 0; break;
 
-        case Attr:
-            s = 3; break;
+    case Attr:
+        s = 3; break;
 
-        case ErrorCode:
-        case Bool:
-            s = 1; break;
+    case ErrorCode:
+    case Bool:
+        s = 1; break;
 
-        case Integer:
-            s = 2; break;
+    case Integer:
+        s = 2; break;
 
-        case Array:
-            s = 7; break;
+    case Array:
+        s = 7; break;
 
-        case Function:
-            s = 2; break;
+    case Function:
+        s = 2; break;
 
-        case FunctionVar:
-            s = 3; break;
+    case FunctionVar:
+        s = 3; break;
 
-        case Matrix:
-        case Table:
-            s = (d->ver == Excel97) ? 4 : 3; break;
+    case Matrix:
+    case Table:
+        s = (d->ver == Excel97) ? 4 : 3; break;
 
-        case Name:
-            s = (d->ver == Excel97) ? 4 : 14; break;
+    case Name:
+        s = (d->ver == Excel97) ? 4 : 14; break;
 
-        case Ref:
-        case RefErr:
-        case RefN:
-            s = (d->ver == Excel97) ? 4 : 3; break;
+    case Ref:
+    case RefErr:
+    case RefN:
+        s = (d->ver == Excel97) ? 4 : 3; break;
 
-        case Area:
-        case AreaErr:
-        case AreaN:
-            s = (d->ver == Excel97) ? 8 : 6; break;
+    case Area:
+    case AreaErr:
+    case AreaN:
+        s = (d->ver == Excel97) ? 8 : 6; break;
 
-        case NameX:
-            s = (d->ver == Excel97) ? 6 : 24; break;
+    case NameX:
+        s = (d->ver == Excel97) ? 6 : 24; break;
 
-        case Ref3d:
-        case RefErr3d:
-            s = (d->ver == Excel97) ? 6 : 17; break;
+    case Ref3d:
+    case RefErr3d:
+        s = (d->ver == Excel97) ? 6 : 17; break;
 
-        case Float:
-            s = 8; break;
+    case Float:
+        s = 8; break;
 
-        case Area3d:
-        case AreaErr3d:
-            s = (d->ver == Excel97) ? 10 : 20; break;
+    case Area3d:
+    case AreaErr3d:
+        s = (d->ver == Excel97) ? 10 : 20; break;
 
-        case MemArea:
-            s = 7; break;
+    case MemArea:
+        s = 7; break;
 
-        case 0: // NOPE
-            s = 0; break;
+    case 0: // NOPE
+        s = 0; break;
 
-        case NatFormula:
-        case Sheet:
-        case EndSheet:
-        case MemErr:
-        case MemNoMem:
-        case MemFunc:
-        case MemAreaN:
-        case MemNoMemN:
-        default:
-            // WARNING this is unhandled case
-            printf( "Unhandled formula token with id %i\n", d->id );
-            break;
+    case NatFormula:
+    case Sheet:
+    case EndSheet:
+    case MemErr:
+    case MemNoMem:
+    case MemFunc:
+    case MemAreaN:
+    case MemNoMemN:
+    default:
+        // WARNING this is unhandled case
+        printf("Unhandled formula token with id %i\n", d->id);
+        break;
     }
 
     return s;
@@ -927,30 +927,30 @@ UString FormulaToken::areaMap(unsigned row, unsigned col)
     unsigned char buf[4];
     buf[0] = d->data[0];
     unsigned ptg = readU8(buf);
-    const int type = (ptg&0x20?1:0)+(ptg&0x60?2:0);
+    const int type = (ptg & 0x20 ? 1 : 0) + (ptg & 0x60 ? 2 : 0);
     buf[0] = d->data[5];
     buf[1] = d->data[6];
     unsigned cce = readU16(buf);
     //printf( "SIZE=%i\n", cce );
-    if( cce < 7 ) {
-      printf( "Error: Invalid size %i for formula areaMap of type %i\n", cce, type );
-      return UString();
+    if (cce < 7) {
+        printf("Error: Invalid size %i for formula areaMap of type %i\n", cce, type);
+        return UString();
     }
-    
-    // remove the first seven elements cause they are done 
+
+    // remove the first seven elements cause they are done
     d->data.erase(d->data.begin(), d->data.begin() + 7);
     //unsigned size, const unsigned char* data
-    
+
     UString result;
     switch (type) {
-      case 0x01: // REFERENCE, specifies a reference to a range.
+    case 0x01: // REFERENCE, specifies a reference to a range.
         result = ref(row, col);
-      case 0x02: // VALUE, specifies a single value of a simple type. The type can be a Boolean, a number, a string, or an error code.
+    case 0x02: // VALUE, specifies a single value of a simple type. The type can be a Boolean, a number, a string, or an error code.
         result = value().asString();
-      case 0x03: // ARRAY, specifies an array of values.
+    case 0x03: // ARRAY, specifies an array of values.
         result = area(row, col);
     }
-    
+
     //d->data.erase(d->data.begin(), d->data.begin() + cce);
     return result;
 }

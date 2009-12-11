@@ -43,7 +43,7 @@ public:
     ~MsooXmlRelationships();
 
     QString target(const QString& path, const QString& file, const QString& id);
-    
+
     QString link_target(const QString& id);
 
 private:

@@ -1041,33 +1041,33 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, con
             break;
         }
 
-            case FormulaToken::MemArea: {
-              UString s = token.areaMap(row, col);
-              stack.push_back( s );              
-              break;
-            }
+        case FormulaToken::MemArea: {
+            UString s = token.areaMap(row, col);
+            stack.push_back(s);
+            break;
+        }
 
-            case 0: break; // NOPE
+        case 0: break; // NOPE
 
-            case FormulaToken::NatFormula:
-            case FormulaToken::Sheet:
-            case FormulaToken::EndSheet:
-            case FormulaToken::ErrorCode:
-            case FormulaToken::Name:
-            case FormulaToken::MemErr:
-            case FormulaToken::MemNoMem:
-            case FormulaToken::MemFunc:
-            case FormulaToken::RefErr:
-            case FormulaToken::AreaErr:
-            case FormulaToken::MemAreaN:
-            case FormulaToken::MemNoMemN:
-            case FormulaToken::RefErr3d:
-            case FormulaToken::AreaErr3d:
-            default:
-                // FIXME handle this !
-                printf( "Unhandled token %s with id %i\n", token.idAsString(), token.id() );
-                stack.push_back(UString("Unknown"));
-                break;
+        case FormulaToken::NatFormula:
+        case FormulaToken::Sheet:
+        case FormulaToken::EndSheet:
+        case FormulaToken::ErrorCode:
+        case FormulaToken::Name:
+        case FormulaToken::MemErr:
+        case FormulaToken::MemNoMem:
+        case FormulaToken::MemFunc:
+        case FormulaToken::RefErr:
+        case FormulaToken::AreaErr:
+        case FormulaToken::MemAreaN:
+        case FormulaToken::MemNoMemN:
+        case FormulaToken::RefErr3d:
+        case FormulaToken::AreaErr3d:
+        default:
+            // FIXME handle this !
+            printf("Unhandled token %s with id %i\n", token.idAsString(), token.id());
+            stack.push_back(UString("Unknown"));
+            break;
         };
 
 #ifdef SWINDER_XLS2RAW

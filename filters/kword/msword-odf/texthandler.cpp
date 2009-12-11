@@ -580,15 +580,15 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     m_fieldValue = "";
 
     //check to see if we can process this field type or not
-    switch(m_fieldType) {
-        case 26:
-        case 33:
-        case 88:  // HyperLink
-            kDebug(30513) << "processing field...";
-            break;
-        default:
-            kDebug(30513) << "can't process field, just outputting text into document...";
-            m_fieldType = -1; //set m_fieldType for unprocessed field
+    switch (m_fieldType) {
+    case 26:
+    case 33:
+    case 88:  // HyperLink
+        kDebug(30513) << "processing field...";
+        break;
+    default:
+        kDebug(30513) << "can't process field, just outputting text into document...";
+        m_fieldType = -1; //set m_fieldType for unprocessed field
     }
 }//end fieldStart()
 
@@ -610,34 +610,34 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buf);
-    switch(m_fieldType) {
-        case 26:
-            writer.startElement("text:page-count");
+    switch (m_fieldType) {
+    case 26:
+        writer.startElement("text:page-count");
+        writer.endElement();
+        break;
+    case 33:
+        writer.startElement("text:page-number");
+        writer.addAttribute("text:select-page", "current");
+        writer.endElement();
+        break;
+    case 88:  // HyperLink
+        if (m_hyperLinkList.size() == 2) {
+            writer.startElement("text:a");
+            writer.addAttribute("xlink:type", "simple");
+
+            // Remove unneeded word and '"' characters from the URL
+            QString urlStr = m_hyperLinkList[0].remove(" HYPERLINK ");
+            if (urlStr.startsWith("\""))
+                urlStr = urlStr.remove(0, 1);
+            if (urlStr.endsWith("\""))
+                urlStr = urlStr.remove(urlStr.length() - 1, 1);
+
+            writer.addAttribute("xlink:href", QUrl(urlStr).toEncoded());
+            writer.addTextNode(m_hyperLinkList[1]);
             writer.endElement();
-            break;
-        case 33:
-            writer.startElement("text:page-number");
-            writer.addAttribute("text:select-page", "current");
-            writer.endElement();
-            break;
-        case 88:  // HyperLink
-            if (m_hyperLinkList.size() == 2 ) {
-                writer.startElement("text:a");
-                writer.addAttribute("xlink:type", "simple");
-                
-                // Remove unneeded word and '"' characters from the URL
-                QString urlStr = m_hyperLinkList[0].remove(" HYPERLINK ");
-                if (urlStr.startsWith("\"") )
-                    urlStr = urlStr.remove(0, 1);
-                if (urlStr.endsWith("\"") )
-                    urlStr = urlStr.remove(urlStr.length()-1, 1);
-                
-                writer.addAttribute("xlink:href", QUrl(urlStr).toEncoded());
-                writer.addTextNode(m_hyperLinkList[1]);
-                writer.endElement();
-                m_hyperLinkList.clear();
-            }
-            break;
+            m_hyperLinkList.clear();
+        }
+        break;
     }
 
     //add writer content to m_paragraph as a runOfText with no text style
@@ -661,13 +661,13 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
     if (newText.isEmpty())
         return;
 
-    // This method is called twice for each hyperlink. Save link 
+    // This method is called twice for each hyperlink. Save link
     // data to m_hyperLinkList to handle it later in fieldEnd -method.
-    if ( m_insideField && m_fieldType == 88 ) {
+    if (m_insideField && m_fieldType == 88) {
         m_hyperLinkList.append(newText);
         return;
     }
-    
+
     // text after fieldStart and before fieldSeparator is useless
     if (m_insideField && !m_fieldAfterSeparator) {
         kDebug(30513) << "Ignoring this text in first part of field.";

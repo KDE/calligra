@@ -35,27 +35,27 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
 {
     READ_PROLOGUE
-    
+
     QString link_target;
     MSOOXML::Utils::XmlWriteBuffer linkBuf;
     body = linkBuf.setWriter(body);
-          
+
     if (isStartElement()) {
         if (attributes().hasAttribute("r:id")) {
             QString id(attributes().value("r:id").toString());
             link_target = m_context->relationships->link_target(id);
             kDebug() << "link_target = " << link_target;
         }
-            
+
         while (!atEnd()) {
             readNext();
             TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
-            ELSE_TRY_READ_IF(r)            
+            ELSE_TRY_READ_IF(r)
             BREAK_IF_END_OF(CURRENT_EL);
         }
     }
-    
+
     if (isEndElement()) {
         body = linkBuf.originalWriter();
         body->startElement("text:a");
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hyperlink()
         body->endElement();
     }
 
-    READ_EPILOGUE    
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
