@@ -1031,12 +1031,19 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
                 break;
             }
 
+            case FormulaToken::MemArea: {
+              UString s = token.areaMap(row, col);
+              stack.push_back( s );              
+              break;
+            }
+
+            case 0: break; // NOPE
+
             case FormulaToken::NatFormula:
             case FormulaToken::Sheet:
             case FormulaToken::EndSheet:
             case FormulaToken::ErrorCode:
             case FormulaToken::Name:
-            case FormulaToken::MemArea:
             case FormulaToken::MemErr:
             case FormulaToken::MemNoMem:
             case FormulaToken::MemFunc:
@@ -1048,6 +1055,7 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
             case FormulaToken::AreaErr3d:
             default:
                 // FIXME handle this !
+                printf( "Unhandled token %s with id %i\n", token.idAsString(), token.id() );
                 stack.push_back(UString("Unknown"));
                 break;
         };
