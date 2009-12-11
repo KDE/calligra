@@ -47,60 +47,60 @@
 
 using namespace KSpread;
 
-CSVExportDialog::CSVExportDialog( QWidget * parent )
-  : KDialog( parent),
-    m_dialog( new ExportDialogUI( this ) ),
-    m_delimiter( "," ),
-    m_textquote('"')
+CSVExportDialog::CSVExportDialog(QWidget * parent)
+        : KDialog(parent),
+        m_dialog(new ExportDialogUI(this)),
+        m_delimiter(","),
+        m_textquote('"')
 {
-    setButtons( KDialog::Ok | KDialog::Cancel );
-  setDefaultButton(KDialog::No);
-  kapp->restoreOverrideCursor();
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::No);
+    kapp->restoreOverrideCursor();
 
-  QStringList encodings;
-  encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" , "UTF-8" );
-  encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name()) );
-  encodings += KGlobal::charsets()->descriptiveEncodingNames();
-  // Add a few non-standard encodings, which might be useful for text files
-  const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
-  encodings << description.arg("Apple Roman"); // Apple
-  encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
-  encodings << description.arg("CP 1258"); // Windows
+    QStringList encodings;
+    encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
+    encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
+    encodings += KGlobal::charsets()->descriptiveEncodingNames();
+    // Add a few non-standard encodings, which might be useful for text files
+    const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
+    encodings << description.arg("Apple Roman"); // Apple
+    encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
+    encodings << description.arg("CP 1258"); // Windows
 
-  m_dialog->comboBoxEncoding->addItems(encodings);
+    m_dialog->comboBoxEncoding->addItems(encodings);
 
-  setButtonsOrientation ( Qt::Vertical );
+    setButtonsOrientation(Qt::Vertical);
 
-  setMainWidget(m_dialog);
+    setMainWidget(m_dialog);
 
-  // Invalid 'Other' delimiters
-  // - Quotes
-  // - CR,LF,Vetical-tab,Formfeed,ASCII bel
-  QRegExp rx( "^[^\"'\r\n\v\f\a]{0,1}$" );
-  m_delimiterValidator = new QRegExpValidator( rx, m_dialog->m_delimiterBox );
-  m_dialog->m_delimiterEdit->setValidator( m_delimiterValidator );
+    // Invalid 'Other' delimiters
+    // - Quotes
+    // - CR,LF,Vetical-tab,Formfeed,ASCII bel
+    QRegExp rx("^[^\"'\r\n\v\f\a]{0,1}$");
+    m_delimiterValidator = new QRegExpValidator(rx, m_dialog->m_delimiterBox);
+    m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);
 
-  connect( m_dialog->m_delimiterBox, SIGNAL( clicked(int) ),
-           this, SLOT( delimiterClicked( int ) ) );
-  connect( m_dialog->m_delimiterEdit, SIGNAL( returnPressed() ),
-           this, SLOT( returnPressed() ) );
-  connect( m_dialog->m_delimiterEdit, SIGNAL( textChanged ( const QString & ) ),
-           this, SLOT(textChanged ( const QString & ) ) );
-  connect( m_dialog->m_comboQuote, SIGNAL( activated( const QString & ) ),
-           this, SLOT( textquoteSelected( const QString & ) ) );
-  connect( m_dialog->m_selectionOnly, SIGNAL( toggled( bool ) ),
-           this, SLOT( selectionOnlyChanged( bool ) ) );
-  connect( this,SIGNAL(okClicked()),SLOT(slotOk()));
-  connect( this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
+    connect(m_dialog->m_delimiterBox, SIGNAL(clicked(int)),
+            this, SLOT(delimiterClicked(int)));
+    connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
+            this, SLOT(returnPressed()));
+    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged(const QString &)),
+            this, SLOT(textChanged(const QString &)));
+    connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
+            this, SLOT(textquoteSelected(const QString &)));
+    connect(m_dialog->m_selectionOnly, SIGNAL(toggled(bool)),
+            this, SLOT(selectionOnlyChanged(bool)));
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()));
 
-  loadSettings();
+    loadSettings();
 }
 
 CSVExportDialog::~CSVExportDialog()
 {
-  saveSettings();
-  kapp->setOverrideCursor(Qt::WaitCursor);
-  delete m_delimiterValidator;
+    saveSettings();
+    kapp->setOverrideCursor(Qt::WaitCursor);
+    delete m_delimiterValidator;
 }
 
 void CSVExportDialog::loadSettings()
@@ -116,7 +116,7 @@ void CSVExportDialog::loadSettings()
 
     // update widgets
     if (!codecText.isEmpty()) {
-      m_dialog->comboBoxEncoding->setCurrentIndex(m_dialog->comboBoxEncoding->findText(codecText));
+        m_dialog->comboBoxEncoding->setCurrentIndex(m_dialog->comboBoxEncoding->findText(codecText));
     }
     if (m_delimiter == ",")
         m_dialog->m_radioComma->setChecked(true);
@@ -155,163 +155,154 @@ void CSVExportDialog::saveSettings()
     configGroup.sync();
 }
 
-void CSVExportDialog::fillSheet( Map * map )
+void CSVExportDialog::fillSheet(Map * map)
 {
-  m_dialog->m_sheetList->clear();
-  Q3CheckListItem * item;
+    m_dialog->m_sheetList->clear();
+    Q3CheckListItem * item;
 
-  foreach( Sheet* sheet, map->sheetList() )
-  {
-    item = new Q3CheckListItem( m_dialog->m_sheetList,
-                                sheet->sheetName(),
-                                Q3CheckListItem::CheckBox );
-    item->setOn(true);
-    m_dialog->m_sheetList->insertItem( item );
-  }
+    foreach(Sheet* sheet, map->sheetList()) {
+        item = new Q3CheckListItem(m_dialog->m_sheetList,
+                                   sheet->sheetName(),
+                                   Q3CheckListItem::CheckBox);
+        item->setOn(true);
+        m_dialog->m_sheetList->insertItem(item);
+    }
 
-  m_dialog->m_sheetList->setSorting(0, true);
-  m_dialog->m_sheetList->sort();
-  m_dialog->m_sheetList->setSorting( -1 );
+    m_dialog->m_sheetList->setSorting(0, true);
+    m_dialog->m_sheetList->sort();
+    m_dialog->m_sheetList->setSorting(-1);
 }
 
 QChar CSVExportDialog::getDelimiter() const
 {
-  return m_delimiter[0];
+    return m_delimiter[0];
 }
 
 QChar CSVExportDialog::getTextQuote() const
 {
-  return m_textquote;
+    return m_textquote;
 }
 
 bool CSVExportDialog::printAlwaysSheetDelimiter() const
 {
-  return m_dialog->m_delimiterAboveAll->isChecked();
+    return m_dialog->m_delimiterAboveAll->isChecked();
 }
 
 QString CSVExportDialog::getSheetDelimiter() const
 {
-  return m_dialog->m_sheetDelimiter->text();
+    return m_dialog->m_sheetDelimiter->text();
 }
 
 bool CSVExportDialog::exportSheet(QString const & sheetName) const
 {
-  for (Q3ListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling())
-  {
-    if (((Q3CheckListItem * ) item)->isOn())
-    {
-      if ( ((Q3CheckListItem * ) item)->text() == sheetName )
-        return true;
+    for (Q3ListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling()) {
+        if (((Q3CheckListItem *) item)->isOn()) {
+            if (((Q3CheckListItem *) item)->text() == sheetName)
+                return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 void CSVExportDialog::slotOk()
 {
-  accept();
+    accept();
 }
 
 void CSVExportDialog::slotCancel()
 {
-  reject();
+    reject();
 }
 
 void CSVExportDialog::returnPressed()
 {
-  if ( m_dialog->m_delimiterBox->id( m_dialog->m_delimiterBox->selected() ) != 4 )
-    return;
+    if (m_dialog->m_delimiterBox->id(m_dialog->m_delimiterBox->selected()) != 4)
+        return;
 
-  m_delimiter = m_dialog->m_delimiterEdit->text();
+    m_delimiter = m_dialog->m_delimiterEdit->text();
 }
 
-void CSVExportDialog::textChanged ( const QString & )
+void CSVExportDialog::textChanged(const QString &)
 {
 
-  if ( m_dialog->m_delimiterEdit->text().isEmpty() )
-  {
-    enableButtonOk( ! m_dialog->m_radioOther->isChecked() );
-    return;
-  }
+    if (m_dialog->m_delimiterEdit->text().isEmpty()) {
+        enableButtonOk(! m_dialog->m_radioOther->isChecked());
+        return;
+    }
 
-  m_dialog->m_radioOther->setChecked ( true );
-  delimiterClicked(4);
+    m_dialog->m_radioOther->setChecked(true);
+    delimiterClicked(4);
 }
 
-void CSVExportDialog::delimiterClicked( int id )
+void CSVExportDialog::delimiterClicked(int id)
 {
-  enableButtonOk( true );
+    enableButtonOk(true);
 
-  //Erase "Other Delimiter" text box if the user has selected one of
-  //the standard options instead (comma, semicolon, tab or space)
-  if (id != 4)
-  	m_dialog->m_delimiterEdit->setText("");
+    //Erase "Other Delimiter" text box if the user has selected one of
+    //the standard options instead (comma, semicolon, tab or space)
+    if (id != 4)
+        m_dialog->m_delimiterEdit->setText("");
 
-  switch (id)
-  {
+    switch (id) {
     case 0: // comma
-      m_delimiter = ",";
-      break;
+        m_delimiter = ",";
+        break;
     case 1: // semicolon
-      m_delimiter = ";";
-      break;
+        m_delimiter = ";";
+        break;
     case 2: // tab
-      m_delimiter = "\t";
-      break;
+        m_delimiter = "\t";
+        break;
     case 3: // space
-      m_delimiter = " ";
-      break;
+        m_delimiter = " ";
+        break;
     case 4: // other
-      enableButtonOk( ! m_dialog->m_delimiterEdit->text().isEmpty() );
-      m_delimiter = m_dialog->m_delimiterEdit->text();
-      break;
-  }
+        enableButtonOk(! m_dialog->m_delimiterEdit->text().isEmpty());
+        m_delimiter = m_dialog->m_delimiterEdit->text();
+        break;
+    }
 }
 
-void CSVExportDialog::textquoteSelected( const QString & mark )
+void CSVExportDialog::textquoteSelected(const QString & mark)
 {
-  m_textquote = mark[0];
+    m_textquote = mark[0];
 }
 
-void CSVExportDialog::selectionOnlyChanged( bool on )
+void CSVExportDialog::selectionOnlyChanged(bool on)
 {
-  m_dialog->m_sheetList->setEnabled( !on );
-  m_dialog->m_delimiterLineBox->setEnabled( !on );
+    m_dialog->m_sheetList->setEnabled(!on);
+    m_dialog->m_delimiterLineBox->setEnabled(!on);
 
-  if ( on )
-    m_dialog->m_tabWidget->setCurrentIndex( 1 );
+    if (on)
+        m_dialog->m_tabWidget->setCurrentIndex(1);
 }
 
 bool CSVExportDialog::exportSelectionOnly() const
 {
-  return m_dialog->m_selectionOnly->isChecked();
+    return m_dialog->m_selectionOnly->isChecked();
 }
 
 QTextCodec* CSVExportDialog::getCodec(void) const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30502) <<"Encoding:" << strCodec;
+    const QString strCodec(KGlobal::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
+    kDebug(30502) << "Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
+    QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
-    if ( codec )
-    {
+    if (codec) {
         ok = true;
-    }
-    else
-    {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+    } else {
+        codec = KGlobal::charsets()->codecForName(strCodec, ok);
     }
 
     // Still nothing?
-    if ( !codec || !ok )
-    {
+    if (!codec || !ok) {
         // Default: UTF-8
         kWarning(30502) << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
+        KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
         return 0;
     }
 
@@ -321,14 +312,14 @@ QTextCodec* CSVExportDialog::getCodec(void) const
 QString CSVExportDialog::getEndOfLine(void) const
 {
     QString strReturn;
-    if (m_dialog->radioEndOfLineLF==m_dialog->buttonGroupEndOfLine->selected())
-        strReturn="\n";
-    else if (m_dialog->radioEndOfLineCRLF==m_dialog->buttonGroupEndOfLine->selected())
-        strReturn="\r\n";
-    else if (m_dialog->radioEndOfLineCR==m_dialog->buttonGroupEndOfLine->selected())
-        strReturn="\r";
+    if (m_dialog->radioEndOfLineLF == m_dialog->buttonGroupEndOfLine->selected())
+        strReturn = "\n";
+    else if (m_dialog->radioEndOfLineCRLF == m_dialog->buttonGroupEndOfLine->selected())
+        strReturn = "\r\n";
+    else if (m_dialog->radioEndOfLineCR == m_dialog->buttonGroupEndOfLine->selected())
+        strReturn = "\r";
     else
-        strReturn="\n";
+        strReturn = "\n";
 
     return strReturn;
 }

@@ -29,9 +29,9 @@
  *  true to construct a modal dialog.
  */
 LatexExportIface::LatexExportIface(KSpreadLatexExportDiaImpl* dia)
-    :	DCOPObject("FilterConfigDia")
+        : DCOPObject("FilterConfigDia")
 {
-	_dialog = dia;
+    _dialog = dia;
 }
 
 LatexExportIface::~LatexExportIface()
@@ -40,6 +40,6 @@ LatexExportIface::~LatexExportIface()
 
 void LatexExportIface::useDefaultConfig()
 {
-	_dialog->accept();
+    _dialog->accept();
 }
 

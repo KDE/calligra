@@ -29,25 +29,25 @@ bool Paragraph::analyze(QList<Element*>* body)
 
 bool Paragraph::generate(QDomElement& paragraphNode, QDomDocument& doc)
 {
-	/* FRAMESET */
-	QDomElement textNode = doc.createElement("TEXT");
-	
-	/* required attributes */
-	/*framesetNode.setAttribute("frameType", TEXTFRAME);
-	framesetNode.setAttribute("frameInfo", NORMALTEXT);*/
+    /* FRAMESET */
+    QDomElement textNode = doc.createElement("TEXT");
 
-	paragraphNode.appendChild(textNode);
+    /* required attributes */
+    /*framesetNode.setAttribute("frameType", TEXTFRAME);
+    framesetNode.setAttribute("frameInfo", NORMALTEXT);*/
 
-	/* FRAME */
-	//QDomElement frameNode = doc.createElement("FRAME");
-	
-	/* required attributes */
-	/*frameNode.setAttribute("newFrameBehavior", "0");
-	frameNode.setAttribute("left", _leftMargin);
-	frameNode.setAttribute("right", _rightMargin);
-	frameNode.setAttribute("top", _topMargin);
-	frameNode.setAttribute("bottom", _bottomMargin);
-	framesetNode.appendChild(frameNode);*/
-	
+    paragraphNode.appendChild(textNode);
+
+    /* FRAME */
+    //QDomElement frameNode = doc.createElement("FRAME");
+
+    /* required attributes */
+    /*frameNode.setAttribute("newFrameBehavior", "0");
+    frameNode.setAttribute("left", _leftMargin);
+    frameNode.setAttribute("right", _rightMargin);
+    frameNode.setAttribute("top", _topMargin);
+    frameNode.setAttribute("bottom", _bottomMargin);
+    framesetNode.appendChild(frameNode);*/
+
 }
 

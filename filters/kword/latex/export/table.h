@@ -26,8 +26,8 @@
 #include <QString>
 #include <QList>
 #include <QTextStream>
-#include "element.h"		/* Child class */
-#include "layout.h"		/* Cell flow   */
+#include "element.h"  /* Child class */
+#include "layout.h"  /* Cell flow   */
 
 /***********************************************************************/
 /* Class: Table                                                        */
@@ -40,68 +40,76 @@
  */
 class Table: public QList<Element*>, public Element
 {
-	/* MARKUP DATA */
-	//QString _name;
-	//QString _grpMgr;
+    /* MARKUP DATA */
+    //QString _name;
+    //QString _grpMgr;
 
-	/* USEFUL DATA */
-	int     _maxRow, _maxCol;	/* Size of the table (nb of cell) */
+    /* USEFUL DATA */
+    int     _maxRow, _maxCol; /* Size of the table (nb of cell) */
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 */
+public:
+    /**
+     * Constructors
+     *
+     */
 
-		/**
-		 * Creates a new instance of Table.
-		 */
-		Table();
-		/**
-		 * Creates a new instance of Table.
-		 *
-		 * @param grpMng The group manager.
-		 */
-		explicit Table(QString grpMng);
+    /**
+     * Creates a new instance of Table.
+     */
+    Table();
+    /**
+     * Creates a new instance of Table.
+     *
+     * @param grpMng The group manager.
+     */
+    explicit Table(QString grpMng);
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of frames.
-		 */
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of frames.
+     */
 
-		virtual ~Table();
+    virtual ~Table();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		//QString getName  () const { return _name;   }
-		//QString getGrpMgr() const { return _grpMgr; }
-		int     getMaxRow() const { return _maxRow; }
-		int     getMaxCol() const { return _maxCol; }
+    //QString getName  () const { return _name;   }
+    //QString getGrpMgr() const { return _grpMgr; }
+    int     getMaxRow() const {
+        return _maxRow;
+    }
+    int     getMaxCol() const {
+        return _maxCol;
+    }
 
-		EEnv    getCellFlow (int);
-		double  getCellSize (int);
+    EEnv    getCellFlow(int);
+    double  getCellSize(int);
 
-		/**
-		 * Modifiers
-		 */
-		void setMaxRow(int r) { _maxRow = r; }
-		void setMaxCol(int c) { _maxCol = c; }
+    /**
+     * Modifiers
+     */
+    void setMaxRow(int r) {
+        _maxRow = r;
+    }
+    void setMaxCol(int c) {
+        _maxCol = c;
+    }
 
-		/**
-		 * Helpful functions
-		 */
-		Element* searchCell(int, int);
-		void     append    (Element*);
-		void     generate  (QTextStream&);
+    /**
+     * Helpful functions
+     */
+    Element* searchCell(int, int);
+    void     append(Element*);
+    void     generate(QTextStream&);
 
-	private:
-		void generateCell(QTextStream&, int, int);
-		void generateTableHeader(QTextStream&);
-		void generateTopLineBorder(QTextStream&, int);
-		void generateBottomLineBorder(QTextStream&, int);
+private:
+    void generateCell(QTextStream&, int, int);
+    void generateTableHeader(QTextStream&);
+    void generateTopLineBorder(QTextStream&, int);
+    void generateBottomLineBorder(QTextStream&, int);
 };
 
 #endif /* __KWORD_TABLE_H__ */

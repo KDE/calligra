@@ -31,7 +31,8 @@ class KoStyleStack;
 class QDomDocument;
 class KZip;
 
-class ooNS {
+class ooNS
+{
 public:
     static const char* const office;
     static const char* const style;
@@ -50,45 +51,45 @@ public:
 
 namespace OoUtils
 {
-    QString expandWhitespace(const KoXmlElement& tag);
+QString expandWhitespace(const KoXmlElement& tag);
 
-    bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
+bool parseBorder(const QString & tag, double * width, int * style, QColor * color);
 
-    ///////// Paragraph properties /////////
+///////// Paragraph properties /////////
 
-    // Convert fo:margin-left, fo:margin-right and fo:text-indent to <INDENTS>
-    void importIndents( QDomElement& parentElement, const KoStyleStack& styleStack );
+// Convert fo:margin-left, fo:margin-right and fo:text-indent to <INDENTS>
+void importIndents(QDomElement& parentElement, const KoStyleStack& styleStack);
 
-    // Convert fo:line-height, style:line-height-at-least and style:line-spacing to <LINESPACING>
-    void importLineSpacing( QDomElement& parentElement, const KoStyleStack& styleStack );
+// Convert fo:line-height, style:line-height-at-least and style:line-spacing to <LINESPACING>
+void importLineSpacing(QDomElement& parentElement, const KoStyleStack& styleStack);
 
-    // Convert fo:margin-top and fo:margin-bottom to <OFFSETS>
-    void importTopBottomMargin( QDomElement& parentElement, const KoStyleStack& styleStack );
+// Convert fo:margin-top and fo:margin-bottom to <OFFSETS>
+void importTopBottomMargin(QDomElement& parentElement, const KoStyleStack& styleStack);
 
-    // Convert style:tab-stops to <TABULATORS>
-    void importTabulators( QDomElement& parentElement, const KoStyleStack& styleStack );
+// Convert style:tab-stops to <TABULATORS>
+void importTabulators(QDomElement& parentElement, const KoStyleStack& styleStack);
 
-    // Convert fo:border* to <*BORDER>
-    void importBorders( QDomElement& parentElement, const KoStyleStack& styleStack );
+// Convert fo:border* to <*BORDER>
+void importBorders(QDomElement& parentElement, const KoStyleStack& styleStack);
 
-    /////////// Text properties ///////////
+/////////// Text properties ///////////
 
-    // From style:text-underline to kword/kpresenter's underline/underlinestyleline
-    void importUnderline( const QString& text_underline, QString& underline, QString& styleline );
+// From style:text-underline to kword/kpresenter's underline/underlinestyleline
+void importUnderline(const QString& text_underline, QString& underline, QString& styleline);
 
-    // From style:text-position (for subscript/superscript)
-    // to kword/kpresenter's value/relativetextsize
-    void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
+// From style:text-position (for subscript/superscript)
+// to kword/kpresenter's value/relativetextsize
+void importTextPosition(const QString& text_position, QString& value, QString& relativetextsize);
 
-    void createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KZip* zip);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KoStore* store );
+void createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo);
+KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KZip* zip);
+KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KoStore* store);
 
-    /// Load an OASIS thumbnail
-    KoFilter::ConversionStatus loadThumbnail( QImage& thumbnail, KZip* zip );
+/// Load an OASIS thumbnail
+KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip* zip);
 
-    // Internal
-    KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName);
+// Internal
+KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName);
 }
 
 #endif /* OOUTILS_H */

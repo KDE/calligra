@@ -28,15 +28,15 @@ class Q3ButtonGroup;
 
 class EpsExportDlg : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit EpsExportDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit EpsExportDlg(QWidget* parent = 0L, const char* name = 0L);
 
-	uint psLevel() const;
+    uint psLevel() const;
 
 private:
-	Q3ButtonGroup* m_psLevelButtons;
+    Q3ButtonGroup* m_psLevelButtons;
 };
 
 #endif

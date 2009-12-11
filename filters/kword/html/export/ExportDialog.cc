@@ -37,28 +37,28 @@
 #include <ExportDialog.h>
 
 HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
-    : KDialog(parent),
-      m_dialog(new ExportDialogUI(this))
+        : KDialog(parent),
+        m_dialog(new ExportDialogUI(this))
 {
-    setButtons( Ok|Cancel );
-    setCaption( i18n("KWord's HTML Export Filter") );
-	setDefaultButton(KDialog::No);
+    setButtons(Ok | Cancel);
+    setCaption(i18n("KWord's HTML Export Filter"));
+    setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
     QStringList encodingList;
 
-    encodingList += i18nc( "Descriptive encoding name", "Recommended ( %1 )" , "UTF-8" );
-    encodingList += i18nc( "Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()) );
+    encodingList += i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
+    encodingList += i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
     encodingList += KGlobal::charsets()->descriptiveEncodingNames();
 
-    m_dialog->comboBoxEncoding->addItems( encodingList );
+    m_dialog->comboBoxEncoding->addItems(encodingList);
 
-    m_dialog->KURL_ExternalCSS->setMode( KFile::ExistingOnly );
+    m_dialog->KURL_ExternalCSS->setMode(KFile::ExistingOnly);
 
-     connect(m_dialog->radioModeEnhanced, SIGNAL( toggled( bool ) ),
-             SLOT( setCSSEnabled( bool ) ) );
-     connect(m_dialog->checkExternalCSS, SIGNAL( toggled( bool ) ),
-             m_dialog->KURL_ExternalCSS, SLOT( setEnabled( bool ) ) );
+    connect(m_dialog->radioModeEnhanced, SIGNAL(toggled(bool)),
+            SLOT(setCSSEnabled(bool)));
+    connect(m_dialog->checkExternalCSS, SIGNAL(toggled(bool)),
+            m_dialog->KURL_ExternalCSS, SLOT(setEnabled(bool)));
 
     setMainWidget(m_dialog);
 }
@@ -68,46 +68,42 @@ HtmlExportDialog :: ~HtmlExportDialog(void)
     kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
-void HtmlExportDialog::setCSSEnabled( bool b )
+void HtmlExportDialog::setCSSEnabled(bool b)
 {
-    m_dialog->checkExternalCSS->setEnabled( b );
-    m_dialog->KURL_ExternalCSS->setEnabled( b && m_dialog->checkExternalCSS->isChecked() );
+    m_dialog->checkExternalCSS->setEnabled(b);
+    m_dialog->KURL_ExternalCSS->setEnabled(b && m_dialog->checkExternalCSS->isChecked());
 }
 
 bool HtmlExportDialog::isXHtml(void) const
 {
-    if(m_dialog->radioDocType1==m_dialog->buttonGroup1->selected())
+    if (m_dialog->radioDocType1 == m_dialog->buttonGroup1->selected())
         return false;
-    else if(m_dialog->radioDocType2==m_dialog->buttonGroup1->selected())
+    else if (m_dialog->radioDocType2 == m_dialog->buttonGroup1->selected())
         return true;
     return true;
 }
 
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30503) <<"Encoding:" << strCodec;
+    const QString strCodec(KGlobal::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
+    kDebug(30503) << "Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
+    QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
-    if ( codec )
-    {
+    if (codec) {
         ok = true;
-    }
-    else
-    {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+    } else {
+        codec = KGlobal::charsets()->codecForName(strCodec, ok);
     }
 
     // Still nothing?
-    if ( !codec || !ok )
-    {
+    if (!codec || !ok) {
         // Default: UTF-8
         kWarning(30503) << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
+        KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
         return 0;
     }
 
@@ -116,23 +112,15 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
 
 HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const
 {
-    if( m_dialog->radioModeEnhanced->isChecked() )
-    {
-      if( m_dialog->checkExternalCSS->isChecked() )
-        {
+    if (m_dialog->radioModeEnhanced->isChecked()) {
+        if (m_dialog->checkExternalCSS->isChecked()) {
             return CustomCSS;
-        }
-        else
-        {
+        } else {
             return DefaultCSS;
         }
-    }
-    else if ( m_dialog->radioModeBasic->isChecked() )
-    {
+    } else if (m_dialog->radioModeBasic->isChecked()) {
         return Basic;
-    }
-    else if ( m_dialog->radioModeLight->isChecked() )
-    {
+    } else if (m_dialog->radioModeLight->isChecked()) {
         return Light;
     }
     return DefaultCSS;//Our default

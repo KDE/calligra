@@ -124,7 +124,7 @@ private:
     class WinObjHandle
     {
     public:
-        virtual ~WinObjHandle () {}
+        virtual ~WinObjHandle() {}
         virtual void apply(KWmf &p) = 0;
     };
 
@@ -170,10 +170,10 @@ private:
         S16 opcode,
         U32 words,
         QDataStream &operands);
-/*
-    // draw multiple polygons
-    void opPolypolygon(U32 words, QDataStream &operands);
-*/
+    /*
+        // draw multiple polygons
+        void opPolypolygon(U32 words, QDataStream &operands);
+    */
     void opArc(U32 words, QDataStream &operands);
     // create a logical brush
     void opBrushCreateIndirect(U32 words, QDataStream &operands);
@@ -206,16 +206,16 @@ private:
     void opWindowSetOrg(U32 words, QDataStream &operands);
     // set window extents
     void opWindowSetExt(U32 words, QDataStream &operands);
-/*
-    // set background pen color
-    void opsetBkColor(U32 words, QDataStream &operands);
-    // set background pen mode
-    void opsetBkMode(U32 words, QDataStream &operands);
-    // Set raster operation mode
-    void opsetRop(U32 words, QDataStream &operands);
-    // Escape (enhanced command set)
-    void opescape(U32 words, QDataStream &operands);
-*/
+    /*
+        // set background pen color
+        void opsetBkColor(U32 words, QDataStream &operands);
+        // set background pen mode
+        void opsetBkMode(U32 words, QDataStream &operands);
+        // Set raster operation mode
+        void opsetRop(U32 words, QDataStream &operands);
+        // Escape (enhanced command set)
+        void opescape(U32 words, QDataStream &operands);
+    */
 };
 
 #endif

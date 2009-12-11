@@ -23,14 +23,13 @@
 
 namespace KSpread
 {
-namespace QuattroPro
-{
+namespace QuattroPro {
 
 class Formula : public QpFormula
 {
 public:
-   Formula(QpRecFormulaCell& pCell, QpTableNames& pTable);
-   ~Formula();
+    Formula(QpRecFormulaCell& pCell, QpTableNames& pTable);
+    ~Formula();
 };
 
 }

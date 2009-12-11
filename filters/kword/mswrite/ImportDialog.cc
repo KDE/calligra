@@ -36,15 +36,15 @@
 #include <QCheckBox>
 
 MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
-    : KDialog(parent),
-      m_dialog(new ImportDialogUI(this))
+        : KDialog(parent),
+        m_dialog(new ImportDialogUI(this))
 {
-    setCaption( i18n("KWord's MS Write Import Filter") );
-    setButtons( Ok|Cancel );
- 	setDefaultButton(KDialog::No);
-	kapp->restoreOverrideCursor();
+    setCaption(i18n("KWord's MS Write Import Filter"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(KDialog::No);
+    kapp->restoreOverrideCursor();
 
-   m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->availableEncodingNames());
+    m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->availableEncodingNames());
     //m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->descriptiveEncodingNames());
 
     resize(size()); // Is this right?
@@ -52,7 +52,7 @@ MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
     setMainWidget(m_dialog);
 
     connect(m_dialog->comboBoxEncoding, SIGNAL(activated(int)), this,
-        SLOT(comboBoxEncodingActivated(int)));
+            SLOT(comboBoxEncodingActivated(int)));
 }
 
 MSWriteImportDialog :: ~MSWriteImportDialog(void)
@@ -62,57 +62,51 @@ MSWriteImportDialog :: ~MSWriteImportDialog(void)
 
 QTextCodec* MSWriteImportDialog::getCodec(void) const
 {
-    QTextCodec* codec=NULL;
+    QTextCodec* codec = NULL;
 
-    if (m_dialog->radioEncodingDefault==m_dialog->buttonGroupEncoding->selected())
-    {
-        kDebug(30509) <<"Encoding: CP 1252";
-        codec=QTextCodec::codecForName("CP 1252");
+    if (m_dialog->radioEncodingDefault == m_dialog->buttonGroupEncoding->selected()) {
+        kDebug(30509) << "Encoding: CP 1252";
+        codec = QTextCodec::codecForName("CP 1252");
     }
     /*else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
     {
         kDebug(30503) <<"Encoding: Locale";
         codec=QTextCodec::codecForLocale();
     }*/
-    else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
-    {
-        QString strCodec=m_dialog->comboBoxEncoding->currentText();
-        kDebug(30509) <<"Encoding:" << strCodec;
-        if (strCodec.isEmpty())
-        {
-            codec=QTextCodec::codecForLocale();
-        }
-        else
-        {
+    else if (m_dialog->radioEncodingOther == m_dialog->buttonGroupEncoding->selected()) {
+        QString strCodec = m_dialog->comboBoxEncoding->currentText();
+        kDebug(30509) << "Encoding:" << strCodec;
+        if (strCodec.isEmpty()) {
+            codec = QTextCodec::codecForLocale();
+        } else {
             // We do not use QTextCodec::codecForName here
             //   because we fear subtle problems
-            codec=KGlobal::charsets()->codecForName(strCodec);
+            codec = KGlobal::charsets()->codecForName(strCodec);
         }
     }
 
-    if (!codec)
-    {
+    if (!codec) {
         // Default: UTF-8
         kWarning(30509) << "No codec set, assuming UTF-8";
-        codec=QTextCodec::codecForName("UTF-8");
+        codec = QTextCodec::codecForName("UTF-8");
     }
 
     return codec;
 }
 
-bool MSWriteImportDialog::getSimulateLinespacing (void) const
+bool MSWriteImportDialog::getSimulateLinespacing(void) const
 {
-	 return (m_dialog->checkBoxLinespacing->isChecked ());
+    return (m_dialog->checkBoxLinespacing->isChecked());
 }
 
-bool MSWriteImportDialog::getSimulateImageOffset (void) const
+bool MSWriteImportDialog::getSimulateImageOffset(void) const
 {
-	 return (m_dialog->checkBoxImageOffset->isChecked ());
+    return (m_dialog->checkBoxImageOffset->isChecked());
 }
 
 void MSWriteImportDialog::comboBoxEncodingActivated(int)
 {
-	 m_dialog->buttonGroupEncoding->setButton(1); // Select the "Other Encoding" button
+    m_dialog->buttonGroupEncoding->setButton(1); // Select the "Other Encoding" button
 }
 
 

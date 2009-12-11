@@ -33,68 +33,56 @@
 QString HtmlDocStructWorker::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
 {
     QString strResult;
-    switch (typeList)
-    {
+    switch (typeList) {
     case CounterData::STYLE_CUSTOMBULLET:
     default:
     case CounterData::STYLE_NONE:
     case CounterData::STYLE_CIRCLEBULLET:
     case CounterData::STYLE_SQUAREBULLET:
-    case CounterData::STYLE_DISCBULLET:
-        {
-            ordered=false;
-            strResult="<ul>\n";
-            break;
-        }
+    case CounterData::STYLE_DISCBULLET: {
+        ordered = false;
+        strResult = "<ul>\n";
+        break;
+    }
     case CounterData::STYLE_NUM:
     case CounterData::STYLE_ALPHAB_L:
     case CounterData::STYLE_ALPHAB_U:
     case CounterData::STYLE_ROM_NUM_L:
     case CounterData::STYLE_ROM_NUM_U:
-    case CounterData::STYLE_CUSTOM:
-        {
-            ordered=true;
-            strResult="<ol>\n";
-            break;
-        }
+    case CounterData::STYLE_CUSTOM: {
+        ordered = true;
+        strResult = "<ol>\n";
+        break;
+    }
     }
     return strResult;
 }
 
 void HtmlDocStructWorker::openFormatData(const FormatData& formatOrigin,
-    const FormatData& format, const bool force, const bool allowBold)
+        const FormatData& format, const bool force, const bool allowBold)
 {
     // TODO/FIXME: find another way to find fixed fonts
     // TODO/FIXME: (leaves out "Typewriter", "Monospace", "Mono")
-    if (format.text.fontName.contains("ourier"))
-    {
+    if (format.text.fontName.contains("ourier")) {
         *m_streamOut << "<tt>"; // teletype
     }
 
-    if (force || (formatOrigin.text.italic!=format.text.italic))
-    {
-        if (format.text.italic)
-        {
+    if (force || (formatOrigin.text.italic != format.text.italic)) {
+        if (format.text.italic) {
             *m_streamOut << "<i>";
         }
     }
 
-    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
-    {
-        if (allowBold && (format.text.weight >= 75))
-        {
+    if (force || ((formatOrigin.text.weight >= 75) != (format.text.weight >= 75))) {
+        if (allowBold && (format.text.weight >= 75)) {
             *m_streamOut << "<b>";
         }
     }
 
-    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
-    {
-        if (1==format.text.verticalAlignment)
-        {
+    if (force || (formatOrigin.text.verticalAlignment != format.text.verticalAlignment)) {
+        if (1 == format.text.verticalAlignment) {
             *m_streamOut << "<sub>"; //Subscript
-        }
-        else if (2==format.text.verticalAlignment)
-        {
+        } else if (2 == format.text.verticalAlignment) {
             *m_streamOut << "<sup>"; //Superscript
         }
     }
@@ -103,63 +91,54 @@ void HtmlDocStructWorker::openFormatData(const FormatData& formatOrigin,
 }
 
 void HtmlDocStructWorker::closeFormatData(const FormatData& formatOrigin,
-    const FormatData& format, const bool force, const bool allowBold)
+        const FormatData& format, const bool force, const bool allowBold)
 {
-    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
-    {
-        if (2==format.text.verticalAlignment)
-        {
+    if (force || (formatOrigin.text.verticalAlignment != format.text.verticalAlignment)) {
+        if (2 == format.text.verticalAlignment) {
             *m_streamOut << "</sup>"; //Superscript
-        }
-        else if (1==format.text.verticalAlignment)
-        {
+        } else if (1 == format.text.verticalAlignment) {
             *m_streamOut << "</sub>"; //Subscript
         }
     }
 
-    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
-    {
-        if (allowBold && (format.text.weight >= 75))
-        {
+    if (force || ((formatOrigin.text.weight >= 75) != (format.text.weight >= 75))) {
+        if (allowBold && (format.text.weight >= 75)) {
             *m_streamOut << "</b>";
         }
     }
 
-    if (force || (formatOrigin.text.italic!=format.text.italic))
-    {
-        if (format.text.italic)
-        {
+    if (force || (formatOrigin.text.italic != format.text.italic)) {
+        if (format.text.italic) {
             *m_streamOut << "</i>";
         }
     }
 
-    if (format.text.fontName.contains("ourier")) // Courier?
-    {
+    if (format.text.fontName.contains("ourier")) { // Courier?
         *m_streamOut << "</tt>"; // teletype
     }
 }
 
 void HtmlDocStructWorker::openParagraph(const QString& strTag,
-    const LayoutData& layout,QChar::Direction /*direction*/)
+                                        const LayoutData& layout, QChar::Direction /*direction*/)
 {
     *m_streamOut << '<' << strTag << ">";
-    openFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
+    openFormatData(layout.formatData, layout.formatData, true, (strTag[0] != 'h'));
 }
 
 void HtmlDocStructWorker::closeParagraph(const QString& strTag,
-    const LayoutData& layout)
+        const LayoutData& layout)
 {
-    closeFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
+    closeFormatData(layout.formatData, layout.formatData, true, (strTag[0] != 'h'));
     *m_streamOut << "</" << strTag << ">\n";
 }
 
 void HtmlDocStructWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    openFormatData(formatOrigin,format,false,true);
+    openFormatData(formatOrigin, format, false, true);
 }
 
 void HtmlDocStructWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    closeFormatData(formatOrigin,format,false,true);
+    closeFormatData(formatOrigin, format, false, true);
 }
 

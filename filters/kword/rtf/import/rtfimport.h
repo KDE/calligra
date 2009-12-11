@@ -34,11 +34,10 @@ class DomNode;
 class RTFImport;
 
 /// RTF property (control word table entry)
-struct RTFProperty
-{
+struct RTFProperty {
     const char *onlyValidIn;
     const char *name;
-    void (RTFImport::*cwproc)( struct RTFProperty * );
+    void (RTFImport::*cwproc)(struct RTFProperty *);
     /// offset of formatting property
     int offset;
     /// default value
@@ -46,28 +45,25 @@ struct RTFProperty
 };
 
 /// RTF field description
-struct RTFField
-{
+struct RTFField {
     const char *id;
-    int		type;
-    int		subtype;
+    int  type;
+    int  subtype;
     const char *value;
 };
 
 struct RTFTextState;
 
 /// RTF destination
-struct RTFDestination
-{
+struct RTFDestination {
     const char *group;
     const char *name;
-    void (RTFImport::*destproc)( RTFProperty * );
+    void (RTFImport::*destproc)(RTFProperty *);
     RTFTextState* target;
 };
 
 /// Paragraph border
-struct RTFBorder
-{
+struct RTFBorder {
     enum BorderStyle { Solid, Dashes, Dots, DashDot, DashDotDot, None = 16 };
 
     BorderStyle style;
@@ -77,8 +73,7 @@ struct RTFBorder
 };
 
 /// Tabulator
-struct RTFTab
-{
+struct RTFTab {
     enum TabType { Left, Centered, FlushRight, Decimal };
     enum LeaderType { None, Dots, Hyphens, Underline, ThickLine };
 
@@ -88,8 +83,7 @@ struct RTFTab
 };
 
 /// Font table entry
-struct RTFFont
-{
+struct RTFFont {
     QString name;
     QFont::StyleHint styleHint;
     int fixedPitch;
@@ -97,8 +91,7 @@ struct RTFFont
 };
 
 /// RTF embedded picture
-struct RTFPicture
-{
+struct RTFPicture {
     enum PictureType { BMP, WMF, MacPict, EMF, PNG, JPEG };
 
     QByteArray bits;
@@ -114,8 +107,7 @@ struct RTFPicture
 };
 
 /// Paragraph-formatting properties
-struct RTFLayout
-{
+struct RTFLayout {
     enum Alignment { Left, Right, Justified, Centered };
 
     QStack<RTFTab> tablist;
@@ -134,11 +126,11 @@ struct RTFLayout
 };
 
 /// Character-formatting properties
-struct RTFFormat
-{
+struct RTFFormat {
     enum VertAlign { Normal = 0, SubScript, SuperScript };
-    enum Underline { UnderlineNone=0, UnderlineSimple, UnderlineThick, UnderlineDouble, UnderlineWordByWord,
-        UnderlineWave, UnderlineDash, UnderlineDot, UnderlineDashDot, UnderlineDashDotDot };
+    enum Underline { UnderlineNone = 0, UnderlineSimple, UnderlineThick, UnderlineDouble, UnderlineWordByWord,
+                     UnderlineWave, UnderlineDash, UnderlineDot, UnderlineDashDot, UnderlineDashDotDot
+                   };
 
     VertAlign vertAlign;
     Underline underline;
@@ -150,25 +142,24 @@ struct RTFFormat
 };
 
 /// Comparison operator \since 1.4
-inline bool operator == ( const RTFFormat& f1, const RTFFormat& f2 )
+inline bool operator == (const RTFFormat& f1, const RTFFormat& f2)
 {
     return f1.vertAlign == f2.vertAlign && f1.underline == f2.underline
-        && f1.font == f2.font && f1.fontSize == f2.fontSize && f1.baseline == f2.baseline
-        && f1.color == f2.color && f1.bgcolor == f2.color && f1.underlinecolor == f2.underlinecolor
-        && f1.uc == f2.uc
-        && f1.bold == f2.bold && f1.italic == f2.italic && f1.strike == f2.strike && f1.striked == f2.striked
-        && f1.hidden == f2.hidden && f1.caps == f2.caps && f1.smallCaps == f2.smallCaps
-        ;
+           && f1.font == f2.font && f1.fontSize == f2.fontSize && f1.baseline == f2.baseline
+           && f1.color == f2.color && f1.bgcolor == f2.color && f1.underlinecolor == f2.underlinecolor
+           && f1.uc == f2.uc
+           && f1.bold == f2.bold && f1.italic == f2.italic && f1.strike == f2.strike && f1.striked == f2.striked
+           && f1.hidden == f2.hidden && f1.caps == f2.caps && f1.smallCaps == f2.smallCaps
+           ;
 }
 /// Comparison operator \since 1.4
-inline bool operator != ( const RTFFormat& f1, const RTFFormat& f2 )
+inline bool operator != (const RTFFormat& f1, const RTFFormat& f2)
 {
-    return ! ( f1 == f2 );
+    return !(f1 == f2);
 }
 
 /// Style sheet entry
-struct RTFStyle
-{
+struct RTFStyle {
     QString name;
     RTFFormat format;
     RTFLayout layout;
@@ -176,24 +167,21 @@ struct RTFStyle
 };
 
 /// Section-formatting properties
-struct RTFSectionLayout
-{
+struct RTFSectionLayout {
     int headerMargin;
     int footerMargin;
     bool titlePage;
 };
 
 /// Table cell definition
-struct RTFTableCell
-{
+struct RTFTableCell {
     RTFBorder borders[4];
     int bgcolor;
     int x;
 };
 
 /// Table-formatting properties
-struct RTFTableRow
-{
+struct RTFTableRow {
     QVector<RTFTableCell> cells;
     QStringList frameSets;
     RTFLayout::Alignment alignment;
@@ -202,16 +190,14 @@ struct RTFTableRow
 };
 
 /// KWord format
-struct KWFormat
-{
+struct KWFormat {
     RTFFormat fmt;
     QString xmldata;
     uint id, pos, len;
 };
 
 /// RTF rich text state (text and tables)
-struct RTFTextState
-{
+struct RTFTextState {
     /// paragraphs
     DomNode node;
     /// table cell(s)
@@ -225,8 +211,7 @@ struct RTFTextState
 };
 
 /// RTF group state (formatting properties)
-struct RTFGroupState
-{
+struct RTFGroupState {
     RTFTableRow tableRow;
     RTFTableCell tableCell;
     RTFFormat format;
@@ -244,7 +229,7 @@ class RTFImport : public KoFilter
     Q_OBJECT
 
 public:
-    RTFImport( QObject* parent, const QStringList& );
+    RTFImport(QObject* parent, const QStringList&);
 
     /**
      * Convert document from RTF to KWord format.
@@ -252,217 +237,217 @@ public:
      * @param to the mimetype for KWord
      * @return true if the document was successfully converted
      */
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
     /**
      * Skip the keyword, as we do not need to do anything with it
      * (either because it is supported anyway or because we cannot support it.)
      */
-    void ignoreKeyword( RTFProperty * );
+    void ignoreKeyword(RTFProperty *);
     /**
      * Set document codepage.
      * @note Mac's code pages > 10000 are not supported
      */
-    void setCodepage( RTFProperty * );
+    void setCodepage(RTFProperty *);
     /**
      * Set document codepage to Mac (also known as MacRoman or as Apple Roman)
      */
-    void setMacCodepage( RTFProperty * );
+    void setMacCodepage(RTFProperty *);
     /**
      * Set document codepage to CP1252
      * @note Old RTF files have a \\ansi keyword but no \\ansicpg keyword
      */
-    void setAnsiCodepage( RTFProperty * );
+    void setAnsiCodepage(RTFProperty *);
     /**
      * Set document codepage to IBM 850
      */
-    void setPcaCodepage( RTFProperty * );
+    void setPcaCodepage(RTFProperty *);
     /**
      * Set document codepage to IBM 435.
      * @note As Qt does not support IBM 435, this is currently approximated as IBM 850
      */
-    void setPcCodepage( RTFProperty * );
+    void setPcCodepage(RTFProperty *);
     /**
      * Sets the value of a boolean RTF property specified by token.
      * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
-    void setToggleProperty( RTFProperty * );
+    void setToggleProperty(RTFProperty *);
     /**
      * Sets a boolean RTF property specified by token.
      * @param property the property to set
      * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
-    void setFlagProperty( RTFProperty *property );
+    void setFlagProperty(RTFProperty *property);
     /**
      * Sets the charset.
      * @param property the property to set
      * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
-    void setCharset( RTFProperty *property );
+    void setCharset(RTFProperty *property);
     /**
      * Sets the value of a numeric RTF property specified by token.
      * @param property the property to set
      * @deprecated not portable, as it assumes that an enum is a char
      */
-    void setNumericProperty( RTFProperty *property );
+    void setNumericProperty(RTFProperty *property);
     /**
      * Sets an enumeration (flag) RTF property specified by token.
      * @param property the property to set
      * @deprecated not portable, as it assumes that an enum is a char
      */
-    void setEnumProperty( RTFProperty *property );
+    void setEnumProperty(RTFProperty *property);
     /**
      * Set font style hint
      */
-    void setFontStyleHint( RTFProperty* property );
+    void setFontStyleHint(RTFProperty* property);
     /**
      * Set the picture type
      * (BMP, PNG...)
      */
-    void setPictureType( RTFProperty* property );
+    void setPictureType(RTFProperty* property);
     /**
      * Sets the enumaration value for \\ul-type keywords
      * \\ul switches on simple underline
      * \\ul0 switches off all underlines
      */
-    void setSimpleUnderlineProperty( RTFProperty* );
+    void setSimpleUnderlineProperty(RTFProperty*);
     /**
      * Set underline properties
      * @param property the property to set
      */
-    void setUnderlineProperty( RTFProperty* property );
+    void setUnderlineProperty(RTFProperty* property);
     /**
      * Sets the value of a border property specified by token.
      * @param property the property to set
      */
-    void setBorderProperty( RTFProperty *property );
+    void setBorderProperty(RTFProperty *property);
     /**
      * Sets the value of a border color specified by token.
      * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
-    void setBorderColor( RTFProperty * );
+    void setBorderColor(RTFProperty *);
     /**
      * Sets the value of a border property specified by token.
      * @param property the property to set
      */
-    void setBorderStyle( RTFProperty *property );
+    void setBorderStyle(RTFProperty *property);
     /**
      * Sets the value of the font baseline (superscript).
      */
-    void setUpProperty( RTFProperty * );
+    void setUpProperty(RTFProperty *);
     /**
      * Reset character-formatting properties.
      */
-    void setPlainFormatting( RTFProperty * = 0L );
+    void setPlainFormatting(RTFProperty * = 0L);
     /**
      * Reset paragraph-formatting properties
      */
-    void setParagraphDefaults( RTFProperty * = 0L );
+    void setParagraphDefaults(RTFProperty * = 0L);
     /**
      * Reset section-formatting properties.
      */
-    void setSectionDefaults( RTFProperty * = 0L );
+    void setSectionDefaults(RTFProperty * = 0L);
     /**
      * Reset table-formatting properties.
      */
-    void setTableRowDefaults( RTFProperty * = 0L );
+    void setTableRowDefaults(RTFProperty * = 0L);
     /**
      * Select which border is the current one.
      * @param property the property to set
      */
-    void selectLayoutBorder( RTFProperty * property );
+    void selectLayoutBorder(RTFProperty * property);
     /**
      * Select which border is the current one, in case of a cell
      * @param property the property to set
      */
-    void selectLayoutBorderFromCell( RTFProperty * property );
-    void insertParagraph( RTFProperty * = 0L );
-    void insertPageBreak( RTFProperty * );
-    void insertTableCell( RTFProperty * );
+    void selectLayoutBorderFromCell(RTFProperty * property);
+    void insertParagraph(RTFProperty * = 0L);
+    void insertPageBreak(RTFProperty *);
+    void insertTableCell(RTFProperty *);
     /**
      * Finish table row and calculate cell borders.
      */
-    void insertTableRow( RTFProperty * = 0L );
+    void insertTableRow(RTFProperty * = 0L);
     /**
      * Inserts a table cell definition.
      */
-    void insertCellDef( RTFProperty * );
+    void insertCellDef(RTFProperty *);
     /**
      * Inserts a tabulator definition.
      */
-    void insertTabDef( RTFProperty * );
+    void insertTabDef(RTFProperty *);
     /**
      * Inserts a single (Unicode) character in UTF8 format.
      * @param ch the character to write to the current destination
      */
-    void insertUTF8( int ch );
+    void insertUTF8(int ch);
     /// Insert special character (as plain text).
-    void insertSymbol( RTFProperty *property );
+    void insertSymbol(RTFProperty *property);
     /// Insert special character (hexadecimal escape value).
-    void insertHexSymbol( RTFProperty * );
+    void insertHexSymbol(RTFProperty *);
     /// Insert unicode character (keyword \\u).
-    void insertUnicodeSymbol( RTFProperty * );
+    void insertUnicodeSymbol(RTFProperty *);
     /**
      * Insert a date or time field
      */
-    void insertDateTime( RTFProperty *property );
+    void insertDateTime(RTFProperty *property);
     /**
      * Insert a page number field
      */
-    void insertPageNumber( RTFProperty * );
+    void insertPageNumber(RTFProperty *);
     /**
      * Parse the picture identifier
      */
-    void parseBlipUid( RTFProperty* );
+    void parseBlipUid(RTFProperty*);
     /**
      * Parse recursive fields.
      * @note The {\\fldrslt ...} group will be used for
      * unsupported and embedded fields.
      */
-    void parseField( RTFProperty* );
-    void parseFldinst( RTFProperty* );
-    void parseFldrslt( RTFProperty* );
+    void parseField(RTFProperty*);
+    void parseFldinst(RTFProperty*);
+    void parseFldrslt(RTFProperty*);
     /**
      * Font table destination callback
      */
-    void parseFontTable( RTFProperty * );
+    void parseFontTable(RTFProperty *);
     /**
      * This function parses footnotes
      * \todo Endnotes
      */
-    void parseFootNote( RTFProperty * );
+    void parseFootNote(RTFProperty *);
     /**
      * Style sheet destination callback.
      */
-    void parseStyleSheet( RTFProperty * );
+    void parseStyleSheet(RTFProperty *);
     /**
      * Color table destination callback.
      */
-    void parseColorTable( RTFProperty * );
+    void parseColorTable(RTFProperty *);
     /**
      * Picture destination callback.
      */
-    void parsePicture( RTFProperty * );
+    void parsePicture(RTFProperty *);
     /**
      * Rich text destination callback.
      */
-    void parseRichText( RTFProperty * );
+    void parseRichText(RTFProperty *);
     /**
      * Plain text destination callback.
      */
-    void parsePlainText( RTFProperty * );
+    void parsePlainText(RTFProperty *);
     /**
      * Do nothing special for this group
      */
-    void parseGroup( RTFProperty * );
+    void parseGroup(RTFProperty *);
     /**
      * Discard all tokens until the current group is closed.
      */
-    void skipGroup( RTFProperty * );
+    void skipGroup(RTFProperty *);
     /**
      * Change the destination.
      */
-    void changeDestination( RTFProperty *property );
+    void changeDestination(RTFProperty *property);
 
     /**
      * Reset formatting properties to their default settings.
@@ -472,14 +457,14 @@ public:
      * Add anchor to current destination (see KWord DTD).
      * @param instance the frameset number in the document
      */
-    void addAnchor( const char *instance );
+    void addAnchor(const char *instance);
     /**
      * Add format information to document node.
      * @param node the document node (destination)
      * @param format the format information
      * @param baseFormat the format information is based on this format
      */
-    void addFormat( DomNode &node, const KWFormat& format, const RTFFormat* baseFormat );
+    void addFormat(DomNode &node, const KWFormat& format, const RTFFormat* baseFormat);
     /**
      * Add layout information to document node.
      * @param node the document node (destination)
@@ -487,22 +472,22 @@ public:
      * @param layout the paragraph layout information
      * @param frameBreak paragraph is always the last in a frame if true
      */
-    void addLayout( DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak );
+    void addLayout(DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak);
     /**
      * Add paragraph information to document node.
      * @param node the document node (destination)
      * @param frameBreak paragraph is always the last in a frame if true
      */
-    void addParagraph( DomNode &node, bool frameBreak );
-    void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt=0);
-    void addImportedPicture( const QString& rawFileName );
+    void addParagraph(DomNode &node, bool frameBreak);
+    void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt = 0);
+    void addImportedPicture(const QString& rawFileName);
     /**
      *  Add a date/time field and split it for KWord
      * @param format format of the date/time
      * @param isDate is it a date field? (For the default format, if needed)
      * @param fmt ???
      */
-    void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
+    void addDateTime(const QString& format, const bool isDate, RTFFormat& fmt);
     /**
      * Finish table and recalculate cell borders.
      */
@@ -512,7 +497,7 @@ public:
      * @param name the internal name of the part
      * @param node the data to write
      */
-    void writeOutPart( const char *name, const DomNode &node );
+    void writeOutPart(const char *name, const DomNode &node);
 
 
     RTFTokenizer token;
@@ -529,7 +514,7 @@ public:
      * @note this is mainly to avoid dangling or NULL pointers
      */
     RTFTextState m_dummyTextState;
-    QMap<int,QString> fontTable;
+    QMap<int, QString> fontTable;
     QVector<RTFStyle> styleSheet;
     QVector<QColor> colorTable;
     QStack<RTFGroupState> stateStack;
@@ -562,7 +547,7 @@ public:
 protected:
     QTextCodec* textCodec; ///< currently used QTextCodec by the RTF file
     QTextCodec* utf8TextCodec; ///< QTextCodec for UTF-8 (used in \\u)
-    QMap<QString,int> debugUnknownKeywords;
+    QMap<QString, int> debugUnknownKeywords;
     bool m_batch; ///< Should the filter system be in batch mode (i.e. non-interactive)
 };
 

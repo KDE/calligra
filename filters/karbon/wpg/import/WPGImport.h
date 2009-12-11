@@ -23,16 +23,17 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-class WPGImport : public KoFilter {
+class WPGImport : public KoFilter
+{
 
     Q_OBJECT
 
 public:
 
-    WPGImport ( QObject *parent, const QStringList& );
+    WPGImport(QObject *parent, const QStringList&);
     virtual ~WPGImport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 };
 

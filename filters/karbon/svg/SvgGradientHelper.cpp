@@ -20,7 +20,7 @@
 #include "SvgGradientHelper.h"
 
 SvgGradientHelper::SvgGradientHelper()
-: m_gradient(0), m_gradientUnits(ObjectBoundingBox)
+        : m_gradient(0), m_gradientUnits(ObjectBoundingBox)
 {
 }
 
@@ -29,27 +29,27 @@ SvgGradientHelper::~SvgGradientHelper()
     delete m_gradient;
 }
 
-SvgGradientHelper::SvgGradientHelper( const SvgGradientHelper &other )
-: m_gradient(0), m_gradientUnits(ObjectBoundingBox)
+SvgGradientHelper::SvgGradientHelper(const SvgGradientHelper &other)
+        : m_gradient(0), m_gradientUnits(ObjectBoundingBox)
 {
     m_gradientUnits = other.m_gradientUnits;
     m_gradientTransform = other.m_gradientTransform;
-    copyGradient( other.m_gradient );
+    copyGradient(other.m_gradient);
 }
 
-SvgGradientHelper & SvgGradientHelper::operator = ( const SvgGradientHelper & rhs )
+SvgGradientHelper & SvgGradientHelper::operator = (const SvgGradientHelper & rhs)
 {
-    if( this == &rhs )
+    if (this == &rhs)
         return *this;
 
     m_gradientUnits = rhs.m_gradientUnits;
     m_gradientTransform = rhs.m_gradientTransform;
-    copyGradient( rhs.m_gradient );
+    copyGradient(rhs.m_gradient);
 
     return *this;
 }
 
-void SvgGradientHelper::setGradientUnits( Units units )
+void SvgGradientHelper::setGradientUnits(Units units)
 {
     m_gradientUnits = units;
 }
@@ -64,26 +64,25 @@ QGradient * SvgGradientHelper::gradient()
     return m_gradient;
 }
 
-void SvgGradientHelper::setGradient( QGradient * g )
+void SvgGradientHelper::setGradient(QGradient * g)
 {
     delete m_gradient;
     m_gradient = g;
 }
 
-void SvgGradientHelper::copyGradient( QGradient * other )
+void SvgGradientHelper::copyGradient(QGradient * other)
 {
     delete m_gradient;
-    m_gradient = duplicateGradient( other, QMatrix() );
+    m_gradient = duplicateGradient(other, QMatrix());
 }
 
-QBrush SvgGradientHelper::adjustedFill( const QRectF &bound )
+QBrush SvgGradientHelper::adjustedFill(const QRectF &bound)
 {
     QBrush brush;
 
-    QGradient * g = adjustedGradient( bound );
-    if( g )
-    {
-        brush = QBrush( *g );
+    QGradient * g = adjustedGradient(bound);
+    if (g) {
+        brush = QBrush(*g);
         delete g;
     }
 
@@ -95,62 +94,58 @@ QMatrix SvgGradientHelper::transform() const
     return m_gradientTransform;
 }
 
-void SvgGradientHelper::setTransform( const QMatrix &transform )
+void SvgGradientHelper::setTransform(const QMatrix &transform)
 {
     m_gradientTransform = transform;
 }
 
-QGradient * SvgGradientHelper::adjustedGradient( const QRectF &bound ) const
+QGradient * SvgGradientHelper::adjustedGradient(const QRectF &bound) const
 {
     QMatrix matrix;
-    matrix.scale( 0.01 * bound.width(), 0.01 * bound.height() );
+    matrix.scale(0.01 * bound.width(), 0.01 * bound.height());
 
-    return duplicateGradient( m_gradient, matrix );
+    return duplicateGradient(m_gradient, matrix);
 }
 
-QGradient * SvgGradientHelper::duplicateGradient( const QGradient * originalGradient, const QMatrix &transform ) const
+QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradient, const QMatrix &transform) const
 {
-    if( ! originalGradient )
+    if (! originalGradient)
         return 0;
 
     QGradient * duplicatedGradient = 0;
 
-    switch( originalGradient->type() )
-    {
-    case QGradient::ConicalGradient:
-        {
-            const QConicalGradient * o = static_cast<const QConicalGradient*>( originalGradient );
-            QConicalGradient * g = new QConicalGradient();
-            g->setAngle( o->angle() );
-            g->setCenter( transform.map( o->center() ) );
-            duplicatedGradient = g;
-        }
-        break;
-    case QGradient::LinearGradient:
-        {
-            const QLinearGradient * o = static_cast<const QLinearGradient*>( originalGradient );
-            QLinearGradient * g = new QLinearGradient();
-            g->setStart( transform.map( o->start() ) );
-            g->setFinalStop( transform.map( o->finalStop() ) );
-            duplicatedGradient = g;
-        }
-        break;
-    case QGradient::RadialGradient:
-        {
-            const QRadialGradient * o = static_cast<const QRadialGradient*>( originalGradient );
-            QRadialGradient * g = new QRadialGradient();
-            g->setCenter( transform.map( o->center() ) );
-            g->setFocalPoint( transform.map( o->focalPoint() ) );
-            g->setRadius( transform.map( QPointF(o->radius(),0.0) ).x() );
-            duplicatedGradient = g;
-        }
-        break;
+    switch (originalGradient->type()) {
+    case QGradient::ConicalGradient: {
+        const QConicalGradient * o = static_cast<const QConicalGradient*>(originalGradient);
+        QConicalGradient * g = new QConicalGradient();
+        g->setAngle(o->angle());
+        g->setCenter(transform.map(o->center()));
+        duplicatedGradient = g;
+    }
+    break;
+    case QGradient::LinearGradient: {
+        const QLinearGradient * o = static_cast<const QLinearGradient*>(originalGradient);
+        QLinearGradient * g = new QLinearGradient();
+        g->setStart(transform.map(o->start()));
+        g->setFinalStop(transform.map(o->finalStop()));
+        duplicatedGradient = g;
+    }
+    break;
+    case QGradient::RadialGradient: {
+        const QRadialGradient * o = static_cast<const QRadialGradient*>(originalGradient);
+        QRadialGradient * g = new QRadialGradient();
+        g->setCenter(transform.map(o->center()));
+        g->setFocalPoint(transform.map(o->focalPoint()));
+        g->setRadius(transform.map(QPointF(o->radius(), 0.0)).x());
+        duplicatedGradient = g;
+    }
+    break;
     default:
         return 0;
     }
 
-    duplicatedGradient->setStops( originalGradient->stops() );
-    duplicatedGradient->setSpread( originalGradient->spread() );
+    duplicatedGradient->setStops(originalGradient->stops());
+    duplicatedGradient->setSpread(originalGradient->spread());
 
     return duplicatedGradient;
 }

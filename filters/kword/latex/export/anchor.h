@@ -40,51 +40,59 @@
  */
 class Anchor: public Format
 {
-	QString _type;
-	QString _instance;
+    QString _type;
+    QString _instance;
 
-	public:
+public:
 
-		/**
-		 * Constructors
-		 */
-		
-		/**
-		 * Creates a new instances of Anchor.
-		 *
-		 * @param para the parent class.
-		 */
-		Anchor(Para* para = 0);
-		//Anchor(TextZone);
+    /**
+     * Constructors
+     */
 
-		/**
-		 * Destructor
-		 *
-		 * Nothing to do
-		 */
-		virtual ~Anchor();
+    /**
+     * Creates a new instances of Anchor.
+     *
+     * @param para the parent class.
+     */
+    Anchor(Para* para = 0);
+    //Anchor(TextZone);
 
-		/**
-		 * Accessors
-		 */
-		QString getType    () const { return _type; }
-		QString getInstance() const { return _instance; }
+    /**
+     * Destructor
+     *
+     * Nothing to do
+     */
+    virtual ~Anchor();
 
-		/**
-		 * Modifiers
-		 */
-		void setType    (QString type) { _type   = type; }
-		void setInstance(QString inst) { _instance = inst; }
+    /**
+     * Accessors
+     */
+    QString getType() const {
+        return _type;
+    }
+    QString getInstance() const {
+        return _instance;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Modifiers
+     */
+    void setType(QString type) {
+        _type   = type;
+    }
+    void setInstance(QString inst) {
+        _instance = inst;
+    }
 
-		void analyze (const QDomNode);
+    /**
+     * Helpful functions
+     */
 
-		void generate(QTextStream&);
+    void analyze(const QDomNode);
 
-	//private:
+    void generate(QTextStream&);
+
+    //private:
 };
 
 

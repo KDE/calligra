@@ -24,27 +24,26 @@
 #include <kpr2odp.h>
 
 typedef KGenericFactory<Kpr2Odp> Kpr2OdpFactory;
-K_EXPORT_COMPONENT_FACTORY( libkpr2odp, Kpr2OdpFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkpr2odp, Kpr2OdpFactory("kofficefilters"))
 
-Kpr2Odp::Kpr2Odp(QObject *parent,const QStringList&) :
-    KoFilter(parent)
+Kpr2Odp::Kpr2Odp(QObject *parent, const QStringList&) :
+        KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus Kpr2Odp::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus Kpr2Odp::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( from != "application/x-kpresenter"
-         || to != "application/vnd.oasis.opendocument.presentation" )
+    if (from != "application/x-kpresenter"
+            || to != "application/vnd.oasis.opendocument.presentation")
         return KoFilter::NotImplemented;
 
-    KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
-    if ( !inpdev )
-    {
+    KoStoreDevice* inpdev = m_chain->storageFile("root", KoStore::Read);
+    if (!inpdev) {
         kError(30502) << "Unable to open input stream";
         return KoFilter::StorageCreationError;
     }
 
-    inpdoc.setContent( inpdev );
+    inpdoc.setContent(inpdev);
 
     //convert it.
 

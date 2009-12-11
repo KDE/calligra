@@ -34,16 +34,16 @@ FileHeader* FileHeader::_instance = 0;
 /*******************************************/
 FileHeader::FileHeader()
 {
-	_hasHeader    = false;
-	_hasFooter    = false;
-	_hasColor     = false;
-	_hasUnderline = false;
-	_hasEnumerate = false;
-	_hasGraphics  = false;
-	_hasTable     = false;
-	_standardPage = 0;
-	_processing   = TP_NORMAL;
-	//setFileHeader(this);		/* for xmlParser class. */
+    _hasHeader    = false;
+    _hasFooter    = false;
+    _hasColor     = false;
+    _hasUnderline = false;
+    _hasEnumerate = false;
+    _hasGraphics  = false;
+    _hasTable     = false;
+    _standardPage = 0;
+    _processing   = TP_NORMAL;
+    //setFileHeader(this);  /* for xmlParser class. */
 }
 
 /*******************************************/
@@ -51,7 +51,7 @@ FileHeader::FileHeader()
 /*******************************************/
 FileHeader::~FileHeader()
 {
-	kDebug(30522) <<"FileHeader Destructor";
+    kDebug(30522) << "FileHeader Destructor";
 }
 
 /*******************************************/
@@ -59,17 +59,17 @@ FileHeader::~FileHeader()
 /*******************************************/
 void FileHeader::analyzePaperParam(const QDomNode node)
 {
-	setFormat(getAttr(node, "format").toInt());
-	_width = getAttr(node, "width").toInt();
-	_height = getAttr(node, "height").toInt();
-	setOrientation(getAttr(node, "orientation").toInt());
-	setColumns(getAttr(node, "columns").toInt());
-	_columnSpacing = getAttr(node, "columnspacing").toInt();
-	setHeadType(getAttr(node, "hType").toInt());
-	setFootType(getAttr(node, "fType").toInt());
-	_headBody = getAttr(node, "spHeadBody").toInt();
-	_footBody = getAttr(node, "spFootBody").toInt();
-	//getAttr(node, "zoom").toInt();
+    setFormat(getAttr(node, "format").toInt());
+    _width = getAttr(node, "width").toInt();
+    _height = getAttr(node, "height").toInt();
+    setOrientation(getAttr(node, "orientation").toInt());
+    setColumns(getAttr(node, "columns").toInt());
+    _columnSpacing = getAttr(node, "columnspacing").toInt();
+    setHeadType(getAttr(node, "hType").toInt());
+    setFootType(getAttr(node, "fType").toInt());
+    _headBody = getAttr(node, "spHeadBody").toInt();
+    _footBody = getAttr(node, "spFootBody").toInt();
+    //getAttr(node, "zoom").toInt();
 }
 
 /*******************************************/
@@ -77,14 +77,14 @@ void FileHeader::analyzePaperParam(const QDomNode node)
 /*******************************************/
 void FileHeader::analyzePaper(const QDomNode node)
 {
-	analyzePaperParam(node);
+    analyzePaperParam(node);
 
-	// Analyze child markups --> PAPERBORDERS
-	QDomNode childNode = getChild(node, "PAPERBORDERS");
-	_leftBorder = getAttr(childNode, "left").toInt();
-	_rightBorder = getAttr(childNode, "right").toInt();
-	_bottomBorder = getAttr(childNode, "bottom").toInt();
-	_topBorder = getAttr(childNode, "top").toInt();
+    // Analyze child markups --> PAPERBORDERS
+    QDomNode childNode = getChild(node, "PAPERBORDERS");
+    _leftBorder = getAttr(childNode, "left").toInt();
+    _rightBorder = getAttr(childNode, "right").toInt();
+    _bottomBorder = getAttr(childNode, "bottom").toInt();
+    _topBorder = getAttr(childNode, "top").toInt();
 }
 
 /*******************************************/
@@ -92,12 +92,12 @@ void FileHeader::analyzePaper(const QDomNode node)
 /*******************************************/
 void FileHeader::analyzeAttributes(const QDomNode node)
 {
-	setProcessing(getAttr(node, "processing").toInt());
-	setStandardPge(getAttr(node, "standardpage").toInt());
-	setTOC(getAttr(node, "hasTOC").toInt());
-	_hasHeader = getAttr(node, "hasHeader").toInt();
-	_hasFooter = getAttr(node, "hasFooter").toInt();
-	setUnit(getAttr(node, "unit").toInt());
+    setProcessing(getAttr(node, "processing").toInt());
+    setStandardPge(getAttr(node, "standardpage").toInt());
+    setTOC(getAttr(node, "hasTOC").toInt());
+    _hasHeader = getAttr(node, "hasHeader").toInt();
+    _hasFooter = getAttr(node, "hasFooter").toInt();
+    setUnit(getAttr(node, "unit").toInt());
 }
 
 /*******************************************/
@@ -105,16 +105,16 @@ void FileHeader::analyzeAttributes(const QDomNode node)
 /*******************************************/
 void FileHeader::generate(QTextStream &out)
 {
-	kDebug(30522) <<"GENERATION OF THE FILE HEADER";
-	if(Config::instance()->mustUseLatin1())
-		generateLatinPreamble(out);
-	else if(Config::instance()->mustUseUnicode())
-		generateUnicodePreamble(out);
+    kDebug(30522) << "GENERATION OF THE FILE HEADER";
+    if (Config::instance()->mustUseLatin1())
+        generateLatinPreamble(out);
+    else if (Config::instance()->mustUseUnicode())
+        generateUnicodePreamble(out);
 
-	generatePackage(out);
-	if(getFormat() == TF_CUSTOM)
-		generatePaper(out);
-	out << "%%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%%%" << endl << endl;
+    generatePackage(out);
+    if (getFormat() == TF_CUSTOM)
+        generatePaper(out);
+    out << "%%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%%%" << endl << endl;
 }
 
 /*******************************************/
@@ -122,20 +122,20 @@ void FileHeader::generate(QTextStream &out)
 /*******************************************/
 void FileHeader::generatePaper(QTextStream &out)
 {
-	QString unit;
+    QString unit;
 
-	out << "% Format of paper" << endl;
-	kDebug(30522) <<"Generate custom size paper";
-	/* paper size */
-	out << "\\setlength{\\paperwidth}{"  << _width  << "pt}" << endl;
-	out << "\\setlength{\\paperheight}{" << _height << "pt}" << endl;
-	/* FileHeader and footer */
-	out << "\\setlength{\\headsep}{" << _headBody << "pt}" << endl;
-	out << "\\setlength{\\footskip}{" << _footBody + _bottomBorder << "pt}" << endl;
-	/* Margin */
-	out << "\\setlength{\\topmargin}{" << _topBorder << "pt}" << endl;
-	out << "\\setlength{\\textwidth}{" << _width - _rightBorder - _leftBorder << "pt}" << endl;
-	out << endl;
+    out << "% Format of paper" << endl;
+    kDebug(30522) << "Generate custom size paper";
+    /* paper size */
+    out << "\\setlength{\\paperwidth}{"  << _width  << "pt}" << endl;
+    out << "\\setlength{\\paperheight}{" << _height << "pt}" << endl;
+    /* FileHeader and footer */
+    out << "\\setlength{\\headsep}{" << _headBody << "pt}" << endl;
+    out << "\\setlength{\\footskip}{" << _footBody + _bottomBorder << "pt}" << endl;
+    /* Margin */
+    out << "\\setlength{\\topmargin}{" << _topBorder << "pt}" << endl;
+    out << "\\setlength{\\textwidth}{" << _width - _rightBorder - _leftBorder << "pt}" << endl;
+    out << endl;
 }
 
 /*******************************************/
@@ -143,68 +143,66 @@ void FileHeader::generatePaper(QTextStream &out)
 /*******************************************/
 void FileHeader::generateLatinPreamble(QTextStream &out)
 {
-	out << "%% Generated by KWord. Don't modify this file but the file *.kwd." << endl;
-	out << "%% Send an email to rjacolin@ifrance.com for bugs, wishes, .... Thank you." << endl;
-	out << "%% Compile this file with : latex filename.tex" << endl;
-	out << "%% a dvi file will be generated." << endl;
-	out << "%% The file uses the latex style (not the kword style). " << endl;
-	out << "\\documentclass[";
-	switch(getFormat())
-	{
-		case TF_A3:
-			out << "";
-			break;
-		case TF_A4:
-			out << "a4paper, ";
-			break;
-		case TF_A5:
-			out << "a5paper, ";
-			break;
-		case TF_USLETTER:
-			out << "letterpaper, ";
-			break;
-		case TF_USLEGAL:
-			out << "legalpaper, ";
-			break;
-		case TF_SCREEN:
-			out << "";
-			break;
-		case TF_CUSTOM:
-			out << "";
-			break;
-		case TF_B3:
-			out << "";
-			break;
-		case TF_USEXECUTIVE:
-			out << "executivepaper, ";
-			break;
-	}
-	if(getOrientation() == TO_LANDSCAPE)
-		out << "landscape, ";
-	/* To change : will use a special latexcommand to able to
-	 * obtain more than one column :))
-	 */
-	switch(getColumns())
-	{
-		case TC_1:
-			//out << "onecolumn, ";
-			break;
-		case TC_2:
-			out << "twocolumn, ";
-			break;
-		case TC_MORE:
-			out << "";
-			break;
-		case TC_NONE:
-			break;
-	}
-	
-	out << Config::instance()->getDefaultFontSize() << "pt";
-	if(Config::instance()->getQuality() == "draft")
-		out << ", draft";
-	out << "]{";
-	out << Config::instance()->getClass() << "}" << endl;
-	out << "\\usepackage[" << Config::instance()->getEncoding() << "]{inputenc}" << endl << endl;
+    out << "%% Generated by KWord. Don't modify this file but the file *.kwd." << endl;
+    out << "%% Send an email to rjacolin@ifrance.com for bugs, wishes, .... Thank you." << endl;
+    out << "%% Compile this file with : latex filename.tex" << endl;
+    out << "%% a dvi file will be generated." << endl;
+    out << "%% The file uses the latex style (not the kword style). " << endl;
+    out << "\\documentclass[";
+    switch (getFormat()) {
+    case TF_A3:
+        out << "";
+        break;
+    case TF_A4:
+        out << "a4paper, ";
+        break;
+    case TF_A5:
+        out << "a5paper, ";
+        break;
+    case TF_USLETTER:
+        out << "letterpaper, ";
+        break;
+    case TF_USLEGAL:
+        out << "legalpaper, ";
+        break;
+    case TF_SCREEN:
+        out << "";
+        break;
+    case TF_CUSTOM:
+        out << "";
+        break;
+    case TF_B3:
+        out << "";
+        break;
+    case TF_USEXECUTIVE:
+        out << "executivepaper, ";
+        break;
+    }
+    if (getOrientation() == TO_LANDSCAPE)
+        out << "landscape, ";
+    /* To change : will use a special latexcommand to able to
+     * obtain more than one column :))
+     */
+    switch (getColumns()) {
+    case TC_1:
+        //out << "onecolumn, ";
+        break;
+    case TC_2:
+        out << "twocolumn, ";
+        break;
+    case TC_MORE:
+        out << "";
+        break;
+    case TC_NONE:
+        break;
+    }
+
+    out << Config::instance()->getDefaultFontSize() << "pt";
+    if (Config::instance()->getQuality() == "draft")
+        out << ", draft";
+    out << "]{";
+    out << Config::instance()->getClass() << "}" << endl;
+    out << "\\usepackage[" << Config::instance()->getEncoding() << "]{inputenc}" << endl << endl;
 }
 
 /*******************************************/
@@ -212,70 +210,68 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
 /*******************************************/
 void FileHeader::generateUnicodePreamble(QTextStream &out)
 {
-	out << "%% Generated by KWord. Don't modify this file but the file *.kwd." << endl;
-	out << "%% Send an email to rjacolin@ifrance.com for bugs, wishes, .... Thank you." << endl;
-	out << "%% Compile this file with : lambda filename.tex" << endl;
-	out << "%% a dvi file will be generated." << endl;
-	out << "%% Use odvips to convert it and to see it with gv" << endl;
-	out << "%% The file uses the latex style (not the kword style). " << endl;
-	out << "\\ocp\\TexUTF=inutf8" << endl;
-	out << "\\InputTranslation currentfile \\TexUTF" << endl;
-	out << "\\documentclass[";
-	switch(getFormat())
-	{
-		case TF_A3:
-			out << "";
-			break;
-		case TF_A4:
-			out << "a4paper, ";
-			break;
-		case TF_A5:
-			out << "a5paper, ";
-			break;
-		case TF_USLETTER:
-			out << "letterpaper, ";
-			break;
-		case TF_USLEGAL:
-			out << "legalpaper, ";
-			break;
-		case TF_SCREEN:
-			out << "";
-			break;
-		case TF_CUSTOM:
-			out << "";
-			break;
-		case TF_B3:
-			out << "";
-			break;
-		case TF_USEXECUTIVE:
-			out << "executivepaper, ";
-			break;
-	}
-	if(getOrientation() == TO_LANDSCAPE)
-		out << "landscape, ";
-	/* To change : will use a special latexcommand to able to
-	 * obtain more than one column :))
-	 */
-	switch(getColumns())
-	{
-		case TC_1:
-			//out << "onecolumn, ";
-			break;
-		case TC_2:
-			out << "twocolumn, ";
-			break;
-		case TC_MORE:
-			out << "";
-			break;
-		case TC_NONE:
-			break;
-	}
-	
-	out << Config::instance()->getDefaultFontSize() << "pt";
-	if(Config::instance()->getQuality() == "draft")
-		out << ", draft";
-	out << "]{";
-	out << Config::instance()->getClass() << "}" << endl;
+    out << "%% Generated by KWord. Don't modify this file but the file *.kwd." << endl;
+    out << "%% Send an email to rjacolin@ifrance.com for bugs, wishes, .... Thank you." << endl;
+    out << "%% Compile this file with : lambda filename.tex" << endl;
+    out << "%% a dvi file will be generated." << endl;
+    out << "%% Use odvips to convert it and to see it with gv" << endl;
+    out << "%% The file uses the latex style (not the kword style). " << endl;
+    out << "\\ocp\\TexUTF=inutf8" << endl;
+    out << "\\InputTranslation currentfile \\TexUTF" << endl;
+    out << "\\documentclass[";
+    switch (getFormat()) {
+    case TF_A3:
+        out << "";
+        break;
+    case TF_A4:
+        out << "a4paper, ";
+        break;
+    case TF_A5:
+        out << "a5paper, ";
+        break;
+    case TF_USLETTER:
+        out << "letterpaper, ";
+        break;
+    case TF_USLEGAL:
+        out << "legalpaper, ";
+        break;
+    case TF_SCREEN:
+        out << "";
+        break;
+    case TF_CUSTOM:
+        out << "";
+        break;
+    case TF_B3:
+        out << "";
+        break;
+    case TF_USEXECUTIVE:
+        out << "executivepaper, ";
+        break;
+    }
+    if (getOrientation() == TO_LANDSCAPE)
+        out << "landscape, ";
+    /* To change : will use a special latexcommand to able to
+     * obtain more than one column :))
+     */
+    switch (getColumns()) {
+    case TC_1:
+        //out << "onecolumn, ";
+        break;
+    case TC_2:
+        out << "twocolumn, ";
+        break;
+    case TC_MORE:
+        out << "";
+        break;
+    case TC_NONE:
+        break;
+    }
+
+    out << Config::instance()->getDefaultFontSize() << "pt";
+    if (Config::instance()->getQuality() == "draft")
+        out << ", draft";
+    out << "]{";
+    out << Config::instance()->getClass() << "}" << endl;
 }
 
 
@@ -284,43 +280,41 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
 /*******************************************/
 void FileHeader::generatePackage(QTextStream &out)
 {
-	out << "% Package(s) to include" << endl;
-	if(Config::instance()->mustUseUnicode())
-		out << "\\usepackage{omega}" << endl;
-	if(getFormat() == TF_A4)
-		out << "\\usepackage[a4paper]{geometry}" << endl;
-	if(hasFooter() || hasHeader())
-		out << "\\usepackage{fancyhdr}" << endl;
-	if(hasColor())
-		out << "\\usepackage{color}" << endl;
-	if(hasUnderline())
-		out << "\\usepackage{ulem}" << endl;
-	if(hasEnumerate())
-		out << "\\usepackage{enumerate}" << endl;
-	if(hasGraphics())
-		out << "\\usepackage{graphics}" << endl;
-	if(hasTable())
-	{
-		out << "\\usepackage{array}" << endl;
-		out << "\\usepackage{multirow}" << endl;
-	}
-	QStringList langs = Config::instance()->getLanguagesList();
-	if(langs.count() > 0)
-	{
-		out << "\\usepackage[" << langs.join( ", " ) << "]{babel}" << endl;
-	}
-	out << "\\usepackage{textcomp}" << endl;
-	out << endl;
+    out << "% Package(s) to include" << endl;
+    if (Config::instance()->mustUseUnicode())
+        out << "\\usepackage{omega}" << endl;
+    if (getFormat() == TF_A4)
+        out << "\\usepackage[a4paper]{geometry}" << endl;
+    if (hasFooter() || hasHeader())
+        out << "\\usepackage{fancyhdr}" << endl;
+    if (hasColor())
+        out << "\\usepackage{color}" << endl;
+    if (hasUnderline())
+        out << "\\usepackage{ulem}" << endl;
+    if (hasEnumerate())
+        out << "\\usepackage{enumerate}" << endl;
+    if (hasGraphics())
+        out << "\\usepackage{graphics}" << endl;
+    if (hasTable()) {
+        out << "\\usepackage{array}" << endl;
+        out << "\\usepackage{multirow}" << endl;
+    }
+    QStringList langs = Config::instance()->getLanguagesList();
+    if (langs.count() > 0) {
+        out << "\\usepackage[" << langs.join(", ") << "]{babel}" << endl;
+    }
+    out << "\\usepackage{textcomp}" << endl;
+    out << endl;
 
-	if(langs.count() > 1)
-			out <<"\\selectlanguage{" << Config::instance()->getDefaultLanguage() 
-				<< "}" << endl << endl;
+    if (langs.count() > 1)
+        out << "\\selectlanguage{" << Config::instance()->getDefaultLanguage()
+        << "}" << endl << endl;
 }
 
 FileHeader* FileHeader::instance()
 {
-	if(_instance == 0)
-		_instance = new FileHeader();
-	return _instance;
+    if (_instance == 0)
+        _instance = new FileHeader();
+    return _instance;
 }
 

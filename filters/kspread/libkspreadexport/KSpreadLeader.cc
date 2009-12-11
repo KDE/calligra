@@ -22,338 +22,349 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KSpread;
 
-Leader::Leader(KoFilterChain *filterChain) {
-	m_worker = NULL;
-	m_filterChain = filterChain;
+Leader::Leader(KoFilterChain *filterChain)
+{
+    m_worker = NULL;
+    m_filterChain = filterChain;
 }
 
 
-Leader::Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker) {
-	m_worker = newWorker;
-	m_filterChain = filterChain;
+Leader::Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker)
+{
+    m_worker = newWorker;
+    m_filterChain = filterChain;
 }
 
 
-Leader::~Leader() {
+Leader::~Leader()
+{
 }
 
 
-KSpreadBaseWorker *Leader::getWorker() const {
-	return m_worker;
+KSpreadBaseWorker *Leader::getWorker() const
+{
+    return m_worker;
 }
 
 
-void Leader::setWorker(KSpreadBaseWorker *newWorker) {
-	m_worker = newWorker;
+void Leader::setWorker(KSpreadBaseWorker *newWorker)
+{
+    m_worker = newWorker;
 }
 
 
-KoFilter::ConversionStatus Leader::convert() {
-	KoFilter::ConversionStatus status;
+KoFilter::ConversionStatus Leader::convert()
+{
+    KoFilter::ConversionStatus status;
 
-	// Validate the filter chain and the worker
-	if (!m_filterChain) {
-		kWarning(30508) << "koFilterChain is NULL!";
-		return KoFilter::StupidError;
-	}
-	if (!m_worker) {
-		kWarning(30508) << "the KSpreadWorker is NULL!";
-		return KoFilter::StupidError;
-	}
+    // Validate the filter chain and the worker
+    if (!m_filterChain) {
+        kWarning(30508) << "koFilterChain is NULL!";
+        return KoFilter::StupidError;
+    }
+    if (!m_worker) {
+        kWarning(30508) << "the KSpreadWorker is NULL!";
+        return KoFilter::StupidError;
+    }
 
-	// Gather data about the filter itself
-	KSpreadFilterProperty docProperty;
-	docProperty["outputfile"] = m_filterChain->outputFile();
-	status = m_worker->startDocument(docProperty);
-	if (status != KoFilter::OK)
-		return status;
+    // Gather data about the filter itself
+    KSpreadFilterProperty docProperty;
+    docProperty["outputfile"] = m_filterChain->outputFile();
+    status = m_worker->startDocument(docProperty);
+    if (status != KoFilter::OK)
+        return status;
 
-	// Get the document in memory
-	KSpreadDoc *document = (KSpreadDoc *) m_filterChain->inputDocument();
-	if (!document) {
-		kWarning(30508) << "the KSpreadDoc is NULL!";
-		return KoFilter::StupidError;
-	}
-	if ( !::qt_cast<const KSpread::Doc *>( document ) ) {
-		kWarning(30508) << "the document is not a KSpreadDoc!";
-		return KoFilter::StupidError;
-	}
-	if (document->mimeType() != "application/x-kspread") {
-		kWarning(30508) << "the mime type document is not application/x-kspread!";
-		return KoFilter::StupidError;
-	}
-	KoDocumentInfo *info = document->documentInfo();
-	if (!document) {
-		kWarning(30508) << "the KoDocumentInfo is NULL!";
-		return KoFilter::StupidError;
-	}
+    // Get the document in memory
+    KSpreadDoc *document = (KSpreadDoc *) m_filterChain->inputDocument();
+    if (!document) {
+        kWarning(30508) << "the KSpreadDoc is NULL!";
+        return KoFilter::StupidError;
+    }
+    if (!::qt_cast<const KSpread::Doc *>(document)) {
+        kWarning(30508) << "the document is not a KSpreadDoc!";
+        return KoFilter::StupidError;
+    }
+    if (document->mimeType() != "application/x-kspread") {
+        kWarning(30508) << "the mime type document is not application/x-kspread!";
+        return KoFilter::StupidError;
+    }
+    KoDocumentInfo *info = document->documentInfo();
+    if (!document) {
+        kWarning(30508) << "the KoDocumentInfo is NULL!";
+        return KoFilter::StupidError;
+    }
 
-	// Gather data about the document info
-	status = doInfo(info);
-	if (status != KoFilter::OK)
-		return status;
+    // Gather data about the document info
+    status = doInfo(info);
+    if (status != KoFilter::OK)
+        return status;
 
-	// Gather data about the spread book
-	status = doSpreadBook(document);
-	if (status != KoFilter::OK)
-		return status;
+    // Gather data about the spread book
+    status = doSpreadBook(document);
+    if (status != KoFilter::OK)
+        return status;
 
-	// Gather data about the spread sheet
-	KSpreadSheet *spreadSheet = document->map()->firstTable();
-	while (spreadSheet != 0) {
-		status = doSpreadSheet(spreadSheet);
-		if (status != KoFilter::OK)
-			return status;
+    // Gather data about the spread sheet
+    KSpreadSheet *spreadSheet = document->map()->firstTable();
+    while (spreadSheet != 0) {
+        status = doSpreadSheet(spreadSheet);
+        if (status != KoFilter::OK)
+            return status;
 
-		// Gather data about the cell
-		for (int row = 1; row <= m_maxCellRow; ++row) {
-			for (int column = 1; column <= m_maxCellColumn; ++column) {
-				Cell spreadCell( spreadSheet, column, row );
-				status = doSpreadCell(spreadCell, column, row);
-				if (status != KoFilter::OK)
-					return status;
-			}
-		}
+        // Gather data about the cell
+        for (int row = 1; row <= m_maxCellRow; ++row) {
+            for (int column = 1; column <= m_maxCellColumn; ++column) {
+                Cell spreadCell(spreadSheet, column, row);
+                status = doSpreadCell(spreadCell, column, row);
+                if (status != KoFilter::OK)
+                    return status;
+            }
+        }
 
-		spreadSheet = document->map()->nextTable();
-	}
+        spreadSheet = document->map()->nextTable();
+    }
 
-	return status;
+    return status;
 }
 
 
-KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info) {
-	KoFilter::ConversionStatus status;
+KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info)
+{
+    KoFilter::ConversionStatus status;
 
 #if 0 // this was never used, it's been removed now
-	// Gather data about the document log
-	KSpreadFilterProperty docInfoLogProperty;
-	KoDocumentInfoLog *infoLog = (KoDocumentInfoLog *) info->page("log");
-	docInfoLogProperty["oldlog"] = infoLog->oldLog();
-	docInfoLogProperty["newlog"] = infoLog->newLog();
-	status = m_worker->startInfoLog(docInfoLogProperty);
-	if (status != KoFilter::OK)
-		return status;
+    // Gather data about the document log
+    KSpreadFilterProperty docInfoLogProperty;
+    KoDocumentInfoLog *infoLog = (KoDocumentInfoLog *) info->page("log");
+    docInfoLogProperty["oldlog"] = infoLog->oldLog();
+    docInfoLogProperty["newlog"] = infoLog->newLog();
+    status = m_worker->startInfoLog(docInfoLogProperty);
+    if (status != KoFilter::OK)
+        return status;
 #endif
 
-	// Gather data about the document author
-	KSpreadFilterProperty docInfoAuthorProperty;
-	KoDocumentInfoAuthor *infoAuthor = (KoDocumentInfoAuthor *) info->page("author");
-	docInfoAuthorProperty["fullname"] = infoAuthor->fullName();
-	docInfoAuthorProperty["initial"] = infoAuthor->initial();
-	docInfoAuthorProperty["title"] = infoAuthor->title();
-	docInfoAuthorProperty["company"] = infoAuthor->company();
-	docInfoAuthorProperty["email"] = infoAuthor->email();
-	docInfoAuthorProperty["telephone"] = infoAuthor->telephone();
-	docInfoAuthorProperty["fax"] = infoAuthor->fax();
-	docInfoAuthorProperty["country"] = infoAuthor->country();
-	docInfoAuthorProperty["postalcode"] = infoAuthor->postalCode();
-	docInfoAuthorProperty["city"] = infoAuthor->city();
-	docInfoAuthorProperty["street"] = infoAuthor->street();
-	status = m_worker->startInfoAuthor(docInfoAuthorProperty);
-	if (status != KoFilter::OK)
-		return status;
+    // Gather data about the document author
+    KSpreadFilterProperty docInfoAuthorProperty;
+    KoDocumentInfoAuthor *infoAuthor = (KoDocumentInfoAuthor *) info->page("author");
+    docInfoAuthorProperty["fullname"] = infoAuthor->fullName();
+    docInfoAuthorProperty["initial"] = infoAuthor->initial();
+    docInfoAuthorProperty["title"] = infoAuthor->title();
+    docInfoAuthorProperty["company"] = infoAuthor->company();
+    docInfoAuthorProperty["email"] = infoAuthor->email();
+    docInfoAuthorProperty["telephone"] = infoAuthor->telephone();
+    docInfoAuthorProperty["fax"] = infoAuthor->fax();
+    docInfoAuthorProperty["country"] = infoAuthor->country();
+    docInfoAuthorProperty["postalcode"] = infoAuthor->postalCode();
+    docInfoAuthorProperty["city"] = infoAuthor->city();
+    docInfoAuthorProperty["street"] = infoAuthor->street();
+    status = m_worker->startInfoAuthor(docInfoAuthorProperty);
+    if (status != KoFilter::OK)
+        return status;
 
-	// Gather data about the document about
-	KSpreadFilterProperty docInfoAboutProperty;
-	KoDocumentInfoAbout *infoAbout = (KoDocumentInfoAbout *) info->page("about");
-	docInfoAboutProperty["title"] = infoAbout->title();
-	docInfoAboutProperty["author"] = infoAbout->abstract();
-	status = m_worker->startInfoAbout(docInfoAboutProperty);
-	return status;
+    // Gather data about the document about
+    KSpreadFilterProperty docInfoAboutProperty;
+    KoDocumentInfoAbout *infoAbout = (KoDocumentInfoAbout *) info->page("about");
+    docInfoAboutProperty["title"] = infoAbout->title();
+    docInfoAboutProperty["author"] = infoAbout->abstract();
+    status = m_worker->startInfoAbout(docInfoAboutProperty);
+    return status;
 }
 
 
-KoFilter::ConversionStatus Leader::doSpreadBook(KSpreadDoc *document) {
-	KSpreadFilterProperty docSpreadBookProperty;
-	docSpreadBookProperty["spreadsheetcount"] = QString::number(document->map()->count());
-	docSpreadBookProperty["decimalsymbol"] = document->locale()->decimalSymbol();
-	docSpreadBookProperty["thousandsseparator"] = document->locale()->thousandsSeparator();
-	docSpreadBookProperty["currencysymbol"] = document->locale()->currencySymbol();
-	docSpreadBookProperty["monetarydecimalsymbol"] = document->locale()->monetaryDecimalSymbol();
-	docSpreadBookProperty["monetarythousandsseparator"] = document->locale()->monetaryThousandsSeparator();
-	docSpreadBookProperty["positivesign"] = document->locale()->positiveSign();
-	docSpreadBookProperty["negativesign"] = document->locale()->negativeSign();
-	docSpreadBookProperty["fracdigits"] = QString::number(document->locale()->fracDigits());
-	docSpreadBookProperty["positiveprefixcurrencysymbol"] = (document->locale()->positivePrefixCurrencySymbol()==0?"false":"true");
-	docSpreadBookProperty["negativeprefixcurrencysymbol"] = (document->locale()->negativePrefixCurrencySymbol()==0?"false":"true");
-	docSpreadBookProperty["use12clock"] = (document->locale()->use12Clock()==0?"false":"true");
-	docSpreadBookProperty["weekstartsmonday"] = (document->locale()->weekStartsMonday()==0?"false":"true");
-	docSpreadBookProperty["weekstartday"] = QString::number(document->locale()->weekStartDay());
-	docSpreadBookProperty["language"] = document->locale()->language();
-	docSpreadBookProperty["country"] = document->locale()->country();
-	docSpreadBookProperty["encoding"] = document->locale()->encoding();
-	docSpreadBookProperty["dateformat"] = document->locale()->dateFormat();
-	docSpreadBookProperty["dateformatshort"] = document->locale()->dateFormatShort();
-	docSpreadBookProperty["timeformat"] = document->locale()->timeFormat();
-	docSpreadBookProperty["defaultlanguage"] = KLocale::defaultLanguage();
-	docSpreadBookProperty["defaultcountry"] = KLocale::defaultCountry();
-	docSpreadBookProperty["defaultgridpencolorname"] = document->defaultGridPen().color().name();
-	docSpreadBookProperty["defaultgridpencolorred"] = QString::number(document->defaultGridPen().color().Qt::red());
-	docSpreadBookProperty["defaultgridpencolorgreen"] = QString::number(document->defaultGridPen().color().Qt::green());
-	docSpreadBookProperty["defaultgridpencolorblue"] = QString::number(document->defaultGridPen().color().Qt::blue());
-	docSpreadBookProperty["defaultgridpenwidth"] = QString::number(document->defaultGridPen().width());
-	docSpreadBookProperty["showverticalscrollbar"] = (document->getShowVerticalScrollBar()==0?"false":"true");
-	docSpreadBookProperty["showhorizontalscrollbar"] = (document->getShowHorizontalScrollBar()==0?"false":"true");
-	docSpreadBookProperty["showcolheader"] = (document->getShowColHeader()==0?"false":"true");
-	docSpreadBookProperty["showrowheader"] = (document->getShowRowHeader()==0?"false":"true");
-	docSpreadBookProperty["indentvalue"] = QString::number(document->getIndentValue());
-	docSpreadBookProperty["movetovalue"] = QString::number(document->getMoveToValue());
-	docSpreadBookProperty["showmessageerror"] = (document->getShowMessageError()==0?"false":"true");
-	docSpreadBookProperty["showtabbar"] = (document->getShowTabBar()==0?"false":"true");
-	docSpreadBookProperty["pagebordercolorname"] = document->pageBorderColor().name();
-	docSpreadBookProperty["pagebordercolorred"] = QString::number(document->pageBorderColor().Qt::red());
-	docSpreadBookProperty["pagebordercolorgreen"] = QString::number(document->pageBorderColor().Qt::green());
-	docSpreadBookProperty["pagebordercolorblue"] = QString::number(document->pageBorderColor().Qt::blue());
-	docSpreadBookProperty["showcommentindicator"] = (document->getShowCommentIndicator()==0?"false":"true");
-	docSpreadBookProperty["showformulabar"] = (document->getShowFormulaBar()==0?"false":"true");
-	docSpreadBookProperty["dontcheckupperword"] = (document->dontCheckUpperWord()==0?"false":"true");
-	docSpreadBookProperty["dontchecktitlecase"] = (document->dontCheckTitleCase()==0?"false":"true");
-	docSpreadBookProperty["showstatusbar"] = (document->getShowStatusBar()==0?"false":"true");
-	docSpreadBookProperty["unitname"] = document->getUnitName();
-	docSpreadBookProperty["syntaxversion"] = QString::number(document->syntaxVersion());
-	return m_worker->startSpreadBook(docSpreadBookProperty);
+KoFilter::ConversionStatus Leader::doSpreadBook(KSpreadDoc *document)
+{
+    KSpreadFilterProperty docSpreadBookProperty;
+    docSpreadBookProperty["spreadsheetcount"] = QString::number(document->map()->count());
+    docSpreadBookProperty["decimalsymbol"] = document->locale()->decimalSymbol();
+    docSpreadBookProperty["thousandsseparator"] = document->locale()->thousandsSeparator();
+    docSpreadBookProperty["currencysymbol"] = document->locale()->currencySymbol();
+    docSpreadBookProperty["monetarydecimalsymbol"] = document->locale()->monetaryDecimalSymbol();
+    docSpreadBookProperty["monetarythousandsseparator"] = document->locale()->monetaryThousandsSeparator();
+    docSpreadBookProperty["positivesign"] = document->locale()->positiveSign();
+    docSpreadBookProperty["negativesign"] = document->locale()->negativeSign();
+    docSpreadBookProperty["fracdigits"] = QString::number(document->locale()->fracDigits());
+    docSpreadBookProperty["positiveprefixcurrencysymbol"] = (document->locale()->positivePrefixCurrencySymbol() == 0 ? "false" : "true");
+    docSpreadBookProperty["negativeprefixcurrencysymbol"] = (document->locale()->negativePrefixCurrencySymbol() == 0 ? "false" : "true");
+    docSpreadBookProperty["use12clock"] = (document->locale()->use12Clock() == 0 ? "false" : "true");
+    docSpreadBookProperty["weekstartsmonday"] = (document->locale()->weekStartsMonday() == 0 ? "false" : "true");
+    docSpreadBookProperty["weekstartday"] = QString::number(document->locale()->weekStartDay());
+    docSpreadBookProperty["language"] = document->locale()->language();
+    docSpreadBookProperty["country"] = document->locale()->country();
+    docSpreadBookProperty["encoding"] = document->locale()->encoding();
+    docSpreadBookProperty["dateformat"] = document->locale()->dateFormat();
+    docSpreadBookProperty["dateformatshort"] = document->locale()->dateFormatShort();
+    docSpreadBookProperty["timeformat"] = document->locale()->timeFormat();
+    docSpreadBookProperty["defaultlanguage"] = KLocale::defaultLanguage();
+    docSpreadBookProperty["defaultcountry"] = KLocale::defaultCountry();
+    docSpreadBookProperty["defaultgridpencolorname"] = document->defaultGridPen().color().name();
+    docSpreadBookProperty["defaultgridpencolorred"] = QString::number(document->defaultGridPen().color().Qt::red());
+    docSpreadBookProperty["defaultgridpencolorgreen"] = QString::number(document->defaultGridPen().color().Qt::green());
+    docSpreadBookProperty["defaultgridpencolorblue"] = QString::number(document->defaultGridPen().color().Qt::blue());
+    docSpreadBookProperty["defaultgridpenwidth"] = QString::number(document->defaultGridPen().width());
+    docSpreadBookProperty["showverticalscrollbar"] = (document->getShowVerticalScrollBar() == 0 ? "false" : "true");
+    docSpreadBookProperty["showhorizontalscrollbar"] = (document->getShowHorizontalScrollBar() == 0 ? "false" : "true");
+    docSpreadBookProperty["showcolheader"] = (document->getShowColHeader() == 0 ? "false" : "true");
+    docSpreadBookProperty["showrowheader"] = (document->getShowRowHeader() == 0 ? "false" : "true");
+    docSpreadBookProperty["indentvalue"] = QString::number(document->getIndentValue());
+    docSpreadBookProperty["movetovalue"] = QString::number(document->getMoveToValue());
+    docSpreadBookProperty["showmessageerror"] = (document->getShowMessageError() == 0 ? "false" : "true");
+    docSpreadBookProperty["showtabbar"] = (document->getShowTabBar() == 0 ? "false" : "true");
+    docSpreadBookProperty["pagebordercolorname"] = document->pageBorderColor().name();
+    docSpreadBookProperty["pagebordercolorred"] = QString::number(document->pageBorderColor().Qt::red());
+    docSpreadBookProperty["pagebordercolorgreen"] = QString::number(document->pageBorderColor().Qt::green());
+    docSpreadBookProperty["pagebordercolorblue"] = QString::number(document->pageBorderColor().Qt::blue());
+    docSpreadBookProperty["showcommentindicator"] = (document->getShowCommentIndicator() == 0 ? "false" : "true");
+    docSpreadBookProperty["showformulabar"] = (document->getShowFormulaBar() == 0 ? "false" : "true");
+    docSpreadBookProperty["dontcheckupperword"] = (document->dontCheckUpperWord() == 0 ? "false" : "true");
+    docSpreadBookProperty["dontchecktitlecase"] = (document->dontCheckTitleCase() == 0 ? "false" : "true");
+    docSpreadBookProperty["showstatusbar"] = (document->getShowStatusBar() == 0 ? "false" : "true");
+    docSpreadBookProperty["unitname"] = document->getUnitName();
+    docSpreadBookProperty["syntaxversion"] = QString::number(document->syntaxVersion());
+    return m_worker->startSpreadBook(docSpreadBookProperty);
 }
 
 
-KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet) {
-	KSpreadFilterProperty docSpreadSheetProperty;
-	docSpreadSheetProperty["name"] = spreadSheet->tableName();
-	docSpreadSheetProperty["sizemaxx"] = QString::number(spreadSheet->sizeMaxX());
-	docSpreadSheetProperty["sizemaxy"] = QString::number(spreadSheet->sizeMaxY());
-	docSpreadSheetProperty["showgrid"] = (spreadSheet->getShowGrid()==0?"false":"true");
-	docSpreadSheetProperty["showformula"] = (spreadSheet->getShowFormula()==0?"false":"true");
-	docSpreadSheetProperty["showformulaindicator"] = (spreadSheet->getShowFormulaIndicator()==0?"false":"true");
-	docSpreadSheetProperty["lcmode"] = (spreadSheet->getLcMode()==0?"false":"true");
-	docSpreadSheetProperty["autocalc"] = (spreadSheet->isAutomaticCalculationEnabled()==0?"false":"true");
-	docSpreadSheetProperty["showcolumnnumber"] = (spreadSheet->getShowColumnNumber()==0?"false":"true");
-	docSpreadSheetProperty["hidezero"] = (spreadSheet->getHideZero()==0?"false":"true");
-	docSpreadSheetProperty["firstletterupper"] = (spreadSheet->getFirstLetterUpper()==0?"false":"true");
-	docSpreadSheetProperty["ishidden"] = (spreadSheet->isHidden()==0?"false":"true");
-	docSpreadSheetProperty["showpageborders"] = (spreadSheet->isShowPageBorders()==0?"false":"true");
-	docSpreadSheetProperty["printablewidth"] = QString::number(spreadSheet->printableWidth());
-	docSpreadSheetProperty["printableheight"] = QString::number(spreadSheet->printableHeight());
-	docSpreadSheetProperty["paperwidth"] = QString::number(spreadSheet->paperWidth());
-	docSpreadSheetProperty["paperheight"] = QString::number(spreadSheet->paperHeight());
-	docSpreadSheetProperty["leftborder"] = QString::number(spreadSheet->leftBorder());
-	docSpreadSheetProperty["rightborder"] = QString::number(spreadSheet->rightBorder());
-	docSpreadSheetProperty["topborder"] = QString::number(spreadSheet->topBorder());
-	docSpreadSheetProperty["bottomborder"] = QString::number(spreadSheet->bottomBorder());
-	docSpreadSheetProperty["headleft"] = spreadSheet->headLeft();
-	docSpreadSheetProperty["headmid"] = spreadSheet->headMid();
-	docSpreadSheetProperty["headright"] = spreadSheet->headRight();
-	docSpreadSheetProperty["footleft"] = spreadSheet->footLeft();
-	docSpreadSheetProperty["footmid"] = spreadSheet->footMid();
-	docSpreadSheetProperty["footright"] = spreadSheet->footRight();
-	docSpreadSheetProperty["orientation"] = spreadSheet->orientationString();
-	docSpreadSheetProperty["paperformat"] = spreadSheet->paperFormatString();
-	docSpreadSheetProperty["printgrid"] = (spreadSheet->getPrintGrid()==0?"false":"true");
-	docSpreadSheetProperty["printcomment"] = (spreadSheet->getPrintCommentIndicator()==0?"false":"true");
-	docSpreadSheetProperty["printformula"] = (spreadSheet->getPrintFormulaIndicator()==0?"false":"true");
-	updateMaxCells(spreadSheet);
-	docSpreadSheetProperty["maxcellrow"] = QString::number(m_maxCellRow);
-	docSpreadSheetProperty["maxcellcolumn"] = QString::number(m_maxCellColumn);
-	return m_worker->startSpreadSheet(docSpreadSheetProperty);
+KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet)
+{
+    KSpreadFilterProperty docSpreadSheetProperty;
+    docSpreadSheetProperty["name"] = spreadSheet->tableName();
+    docSpreadSheetProperty["sizemaxx"] = QString::number(spreadSheet->sizeMaxX());
+    docSpreadSheetProperty["sizemaxy"] = QString::number(spreadSheet->sizeMaxY());
+    docSpreadSheetProperty["showgrid"] = (spreadSheet->getShowGrid() == 0 ? "false" : "true");
+    docSpreadSheetProperty["showformula"] = (spreadSheet->getShowFormula() == 0 ? "false" : "true");
+    docSpreadSheetProperty["showformulaindicator"] = (spreadSheet->getShowFormulaIndicator() == 0 ? "false" : "true");
+    docSpreadSheetProperty["lcmode"] = (spreadSheet->getLcMode() == 0 ? "false" : "true");
+    docSpreadSheetProperty["autocalc"] = (spreadSheet->isAutomaticCalculationEnabled() == 0 ? "false" : "true");
+    docSpreadSheetProperty["showcolumnnumber"] = (spreadSheet->getShowColumnNumber() == 0 ? "false" : "true");
+    docSpreadSheetProperty["hidezero"] = (spreadSheet->getHideZero() == 0 ? "false" : "true");
+    docSpreadSheetProperty["firstletterupper"] = (spreadSheet->getFirstLetterUpper() == 0 ? "false" : "true");
+    docSpreadSheetProperty["ishidden"] = (spreadSheet->isHidden() == 0 ? "false" : "true");
+    docSpreadSheetProperty["showpageborders"] = (spreadSheet->isShowPageBorders() == 0 ? "false" : "true");
+    docSpreadSheetProperty["printablewidth"] = QString::number(spreadSheet->printableWidth());
+    docSpreadSheetProperty["printableheight"] = QString::number(spreadSheet->printableHeight());
+    docSpreadSheetProperty["paperwidth"] = QString::number(spreadSheet->paperWidth());
+    docSpreadSheetProperty["paperheight"] = QString::number(spreadSheet->paperHeight());
+    docSpreadSheetProperty["leftborder"] = QString::number(spreadSheet->leftBorder());
+    docSpreadSheetProperty["rightborder"] = QString::number(spreadSheet->rightBorder());
+    docSpreadSheetProperty["topborder"] = QString::number(spreadSheet->topBorder());
+    docSpreadSheetProperty["bottomborder"] = QString::number(spreadSheet->bottomBorder());
+    docSpreadSheetProperty["headleft"] = spreadSheet->headLeft();
+    docSpreadSheetProperty["headmid"] = spreadSheet->headMid();
+    docSpreadSheetProperty["headright"] = spreadSheet->headRight();
+    docSpreadSheetProperty["footleft"] = spreadSheet->footLeft();
+    docSpreadSheetProperty["footmid"] = spreadSheet->footMid();
+    docSpreadSheetProperty["footright"] = spreadSheet->footRight();
+    docSpreadSheetProperty["orientation"] = spreadSheet->orientationString();
+    docSpreadSheetProperty["paperformat"] = spreadSheet->paperFormatString();
+    docSpreadSheetProperty["printgrid"] = (spreadSheet->getPrintGrid() == 0 ? "false" : "true");
+    docSpreadSheetProperty["printcomment"] = (spreadSheet->getPrintCommentIndicator() == 0 ? "false" : "true");
+    docSpreadSheetProperty["printformula"] = (spreadSheet->getPrintFormulaIndicator() == 0 ? "false" : "true");
+    updateMaxCells(spreadSheet);
+    docSpreadSheetProperty["maxcellrow"] = QString::number(m_maxCellRow);
+    docSpreadSheetProperty["maxcellcolumn"] = QString::number(m_maxCellColumn);
+    return m_worker->startSpreadSheet(docSpreadSheetProperty);
 }
 
 
-KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int column, int row) {
-	KSpreadFilterProperty docSpreadCellProperty;
-	docSpreadCellProperty["column"] = QString::number(column);
-	docSpreadCellProperty["row"] = QString::number(row);
-	docSpreadCellProperty["width"] = QString::number(spreadCell->width());
-	docSpreadCellProperty["height"] = QString::number(spreadCell->height());
-	docSpreadCellProperty["empty"] = (spreadCell->isEmpty()==0?"false":"true");
-	if (!spreadCell->isEmpty()) {
-		docSpreadCellProperty["text"] = spreadCell->userInput();
-		docSpreadCellProperty["strouttext"] = spreadCell->displayText();
-		docSpreadCellProperty["action"] = spreadCell->action();
-		docSpreadCellProperty["date"] = (spreadCell->isDate()==0?"false":"true");
-		docSpreadCellProperty["time"] = (spreadCell->isTime()==0?"false":"true");
-		docSpreadCellProperty["textwidth"] = QString::number(spreadCell->textWidth());
-		docSpreadCellProperty["textheight"] = QString::number(spreadCell->textHeight());
-		docSpreadCellProperty["forceextracells"] = (spreadCell->isForceExtraCells()==0?"false":"true");
-		docSpreadCellProperty["mergedxcells"] = QString::number(spreadCell->mergedXCells());
-		docSpreadCellProperty["mergedycells"] = QString::number(spreadCell->mergedYCells());
-		docSpreadCellProperty["extraxcells"] = QString::number(spreadCell->extraXCells());
-		docSpreadCellProperty["extraycells"] = QString::number(spreadCell->extraYCells());
-		docSpreadCellProperty["extrawidth"] = QString::number(spreadCell->extraWidth());
-		docSpreadCellProperty["extraheight"] = QString::number(spreadCell->extraHeight());
-		docSpreadCellProperty["formula"] = (spreadCell->isFormula()==0?"false":"true");
-		docSpreadCellProperty["haserror"] = (spreadCell->hasError()==0?"false":"true");
-		docSpreadCellProperty["alignx"] = QString::number(spreadCell->effectiveAlignX());
-		docSpreadCellProperty["name"] = spreadCell->name();
-		docSpreadCellProperty["fullname"] = spreadCell->fullName();
-		docSpreadCellProperty["content"] = QString::number(spreadCell->content());
-		docSpreadCellProperty["style"] = QString::number(spreadCell->style());
-		docSpreadCellProperty["valuedate"] = spreadCell->valueDate().toString();
-		docSpreadCellProperty["valuetime"] = spreadCell->valueTime().toString();
-		docSpreadCellProperty["leftborderwidth"] = QString::number(spreadCell->leftBorderPen(column, row).width());
-		docSpreadCellProperty["leftbordercolorname"] = spreadCell->leftBorderPen(column, row).color().name();
-		docSpreadCellProperty["leftbordercolorred"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::red());
-		docSpreadCellProperty["leftbordercolorgreen"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::green());
-		docSpreadCellProperty["leftbordercolorblue"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::blue());
-		docSpreadCellProperty["topborderwidth"] = QString::number(spreadCell->topBorderPen(column, row).width());
-		docSpreadCellProperty["topbordercolorname"] = spreadCell->topBorderPen(column, row).color().name();
-		docSpreadCellProperty["topbordercolorred"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::red());
-		docSpreadCellProperty["topbordercolorgreen"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::green());
-		docSpreadCellProperty["topbordercolorblue"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::blue());
-		docSpreadCellProperty["rightborderwidth"] = QString::number(spreadCell->rightBorderPen(column, row).width());
-		docSpreadCellProperty["rightbordercolorname"] = spreadCell->rightBorderPen(column, row).color().name();
-		docSpreadCellProperty["rightbordercolorred"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::red());
-		docSpreadCellProperty["rightbordercolorgreen"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::green());
-		docSpreadCellProperty["rightbordercolorblue"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::blue());
-		docSpreadCellProperty["bottomborderwidth"] = QString::number(spreadCell->bottomBorderPen(column, row).width());
-		docSpreadCellProperty["bottombordercolorname"] = spreadCell->bottomBorderPen(column, row).color().name();
-		docSpreadCellProperty["bottombordercolorred"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::red());
-		docSpreadCellProperty["bottombordercolorgreen"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::green());
-		docSpreadCellProperty["bottombordercolorblue"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::blue());
-		docSpreadCellProperty["bgcolorname"] = spreadCell->bgColor(column, row).name();
-		docSpreadCellProperty["bgcolorred"] = QString::number(spreadCell->bgColor(column, row).Qt::red());
-		docSpreadCellProperty["bgcolorgreen"] = QString::number(spreadCell->bgColor(column, row).Qt::green());
-		docSpreadCellProperty["bgcolorblue"] = QString::number(spreadCell->bgColor(column, row).Qt::blue());
-		docSpreadCellProperty["bgbrushstyle"] = QString::number(spreadCell->backGroundBrush(column, row).style());
-		docSpreadCellProperty["valueempty"] = (spreadCell->value().isEmpty()==0?"false":"true");
-		docSpreadCellProperty["valueboolean"] = (spreadCell->value().isBoolean()==0?"false":"true");
-		docSpreadCellProperty["valueinteger"] = (spreadCell->value().isInteger()==0?"false":"true");
-		docSpreadCellProperty["valuefloat"] = (spreadCell->value().isFloat()==0?"false":"true");
-		docSpreadCellProperty["valuenumber"] = (spreadCell->value().isNumber()==0?"false":"true");
-		docSpreadCellProperty["valuestring"] = (spreadCell->value().isString()==0?"false":"true");
-		docSpreadCellProperty["valueerror"] = (spreadCell->value().isError()==0?"false":"true");
-		docSpreadCellProperty["valueasboolean"] = (spreadCell->value().asBoolean()==0?"false":"true");
-		docSpreadCellProperty["valueasinteger"] = QString::number(spreadCell->value().asInteger());
-		docSpreadCellProperty["valueasfloat"] = QString::number(spreadCell->value().asFloat());
-		docSpreadCellProperty["valueasstring"] = spreadCell->value().asString();
-		docSpreadCellProperty["valueasdatetime"] = spreadCell->value().asDateTime().toString();
-		docSpreadCellProperty["valueaserror"] = spreadCell->value().errorMessage();
-	}
-	return m_worker->startSpreadCell(docSpreadCellProperty);
+KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int column, int row)
+{
+    KSpreadFilterProperty docSpreadCellProperty;
+    docSpreadCellProperty["column"] = QString::number(column);
+    docSpreadCellProperty["row"] = QString::number(row);
+    docSpreadCellProperty["width"] = QString::number(spreadCell->width());
+    docSpreadCellProperty["height"] = QString::number(spreadCell->height());
+    docSpreadCellProperty["empty"] = (spreadCell->isEmpty() == 0 ? "false" : "true");
+    if (!spreadCell->isEmpty()) {
+        docSpreadCellProperty["text"] = spreadCell->userInput();
+        docSpreadCellProperty["strouttext"] = spreadCell->displayText();
+        docSpreadCellProperty["action"] = spreadCell->action();
+        docSpreadCellProperty["date"] = (spreadCell->isDate() == 0 ? "false" : "true");
+        docSpreadCellProperty["time"] = (spreadCell->isTime() == 0 ? "false" : "true");
+        docSpreadCellProperty["textwidth"] = QString::number(spreadCell->textWidth());
+        docSpreadCellProperty["textheight"] = QString::number(spreadCell->textHeight());
+        docSpreadCellProperty["forceextracells"] = (spreadCell->isForceExtraCells() == 0 ? "false" : "true");
+        docSpreadCellProperty["mergedxcells"] = QString::number(spreadCell->mergedXCells());
+        docSpreadCellProperty["mergedycells"] = QString::number(spreadCell->mergedYCells());
+        docSpreadCellProperty["extraxcells"] = QString::number(spreadCell->extraXCells());
+        docSpreadCellProperty["extraycells"] = QString::number(spreadCell->extraYCells());
+        docSpreadCellProperty["extrawidth"] = QString::number(spreadCell->extraWidth());
+        docSpreadCellProperty["extraheight"] = QString::number(spreadCell->extraHeight());
+        docSpreadCellProperty["formula"] = (spreadCell->isFormula() == 0 ? "false" : "true");
+        docSpreadCellProperty["haserror"] = (spreadCell->hasError() == 0 ? "false" : "true");
+        docSpreadCellProperty["alignx"] = QString::number(spreadCell->effectiveAlignX());
+        docSpreadCellProperty["name"] = spreadCell->name();
+        docSpreadCellProperty["fullname"] = spreadCell->fullName();
+        docSpreadCellProperty["content"] = QString::number(spreadCell->content());
+        docSpreadCellProperty["style"] = QString::number(spreadCell->style());
+        docSpreadCellProperty["valuedate"] = spreadCell->valueDate().toString();
+        docSpreadCellProperty["valuetime"] = spreadCell->valueTime().toString();
+        docSpreadCellProperty["leftborderwidth"] = QString::number(spreadCell->leftBorderPen(column, row).width());
+        docSpreadCellProperty["leftbordercolorname"] = spreadCell->leftBorderPen(column, row).color().name();
+        docSpreadCellProperty["leftbordercolorred"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::red());
+        docSpreadCellProperty["leftbordercolorgreen"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::green());
+        docSpreadCellProperty["leftbordercolorblue"] = QString::number(spreadCell->leftBorderPen(column, row).color().Qt::blue());
+        docSpreadCellProperty["topborderwidth"] = QString::number(spreadCell->topBorderPen(column, row).width());
+        docSpreadCellProperty["topbordercolorname"] = spreadCell->topBorderPen(column, row).color().name();
+        docSpreadCellProperty["topbordercolorred"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::red());
+        docSpreadCellProperty["topbordercolorgreen"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::green());
+        docSpreadCellProperty["topbordercolorblue"] = QString::number(spreadCell->topBorderPen(column, row).color().Qt::blue());
+        docSpreadCellProperty["rightborderwidth"] = QString::number(spreadCell->rightBorderPen(column, row).width());
+        docSpreadCellProperty["rightbordercolorname"] = spreadCell->rightBorderPen(column, row).color().name();
+        docSpreadCellProperty["rightbordercolorred"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::red());
+        docSpreadCellProperty["rightbordercolorgreen"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::green());
+        docSpreadCellProperty["rightbordercolorblue"] = QString::number(spreadCell->rightBorderPen(column, row).color().Qt::blue());
+        docSpreadCellProperty["bottomborderwidth"] = QString::number(spreadCell->bottomBorderPen(column, row).width());
+        docSpreadCellProperty["bottombordercolorname"] = spreadCell->bottomBorderPen(column, row).color().name();
+        docSpreadCellProperty["bottombordercolorred"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::red());
+        docSpreadCellProperty["bottombordercolorgreen"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::green());
+        docSpreadCellProperty["bottombordercolorblue"] = QString::number(spreadCell->bottomBorderPen(column, row).color().Qt::blue());
+        docSpreadCellProperty["bgcolorname"] = spreadCell->bgColor(column, row).name();
+        docSpreadCellProperty["bgcolorred"] = QString::number(spreadCell->bgColor(column, row).Qt::red());
+        docSpreadCellProperty["bgcolorgreen"] = QString::number(spreadCell->bgColor(column, row).Qt::green());
+        docSpreadCellProperty["bgcolorblue"] = QString::number(spreadCell->bgColor(column, row).Qt::blue());
+        docSpreadCellProperty["bgbrushstyle"] = QString::number(spreadCell->backGroundBrush(column, row).style());
+        docSpreadCellProperty["valueempty"] = (spreadCell->value().isEmpty() == 0 ? "false" : "true");
+        docSpreadCellProperty["valueboolean"] = (spreadCell->value().isBoolean() == 0 ? "false" : "true");
+        docSpreadCellProperty["valueinteger"] = (spreadCell->value().isInteger() == 0 ? "false" : "true");
+        docSpreadCellProperty["valuefloat"] = (spreadCell->value().isFloat() == 0 ? "false" : "true");
+        docSpreadCellProperty["valuenumber"] = (spreadCell->value().isNumber() == 0 ? "false" : "true");
+        docSpreadCellProperty["valuestring"] = (spreadCell->value().isString() == 0 ? "false" : "true");
+        docSpreadCellProperty["valueerror"] = (spreadCell->value().isError() == 0 ? "false" : "true");
+        docSpreadCellProperty["valueasboolean"] = (spreadCell->value().asBoolean() == 0 ? "false" : "true");
+        docSpreadCellProperty["valueasinteger"] = QString::number(spreadCell->value().asInteger());
+        docSpreadCellProperty["valueasfloat"] = QString::number(spreadCell->value().asFloat());
+        docSpreadCellProperty["valueasstring"] = spreadCell->value().asString();
+        docSpreadCellProperty["valueasdatetime"] = spreadCell->value().asDateTime().toString();
+        docSpreadCellProperty["valueaserror"] = spreadCell->value().errorMessage();
+    }
+    return m_worker->startSpreadCell(docSpreadCellProperty);
 }
 
 
-void Leader::updateMaxCells(KSpreadSheet *spreadSheet) {
-	m_maxCellColumn = 0;
-	m_maxCellRow = 0;
+void Leader::updateMaxCells(KSpreadSheet *spreadSheet)
+{
+    m_maxCellColumn = 0;
+    m_maxCellRow = 0;
 
-	int maxColumn = spreadSheet->maxColumn();
-	int maxRow = spreadSheet->maxRow();
+    int maxColumn = spreadSheet->maxColumn();
+    int maxRow = spreadSheet->maxRow();
 
-	// Go through all the SpreadSheet to find out the minimum rectangle of cells
-	// Maybe we should have something which does that in the KSpreadSheet class,
-	// it would be easy to keep track of this each time a new Cellis instanciated.
-	for (int row = 1; row < maxRow; ++row) {
-		bool usedColumn = false;
-		for (int column = 1; column < maxColumn; ++column) {
-			Cell cell( spreadSheet, column, row);
-			if (!cell.isDefault() && !cell.isEmpty()) {
-				if (column > m_maxCellColumn) {
-					m_maxCellColumn = column;
-				}
-				usedColumn = true;
-			}
-		}
-		if (usedColumn) {
-			m_maxCellRow = row;
-		}
-	}
+    // Go through all the SpreadSheet to find out the minimum rectangle of cells
+    // Maybe we should have something which does that in the KSpreadSheet class,
+    // it would be easy to keep track of this each time a new Cellis instanciated.
+    for (int row = 1; row < maxRow; ++row) {
+        bool usedColumn = false;
+        for (int column = 1; column < maxColumn; ++column) {
+            Cell cell(spreadSheet, column, row);
+            if (!cell.isDefault() && !cell.isEmpty()) {
+                if (column > m_maxCellColumn) {
+                    m_maxCellColumn = column;
+                }
+                usedColumn = true;
+            }
+        }
+        if (usedColumn) {
+            m_maxCellRow = row;
+        }
+    }
 }

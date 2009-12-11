@@ -30,7 +30,8 @@ namespace KSpread
 class Sheet;
 }
 
-class QpImport : public KoFilter {
+class QpImport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -38,7 +39,7 @@ public:
     QpImport(QObject* parent, const QStringList&);
     virtual ~QpImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
     void InitTableName(int pIdx, QString& pResult);
 
 protected:
@@ -48,13 +49,13 @@ protected:
 class QpTableList : public QpTableNames
 {
 public:
-   QpTableList();
-   ~QpTableList();
+    QpTableList();
+    ~QpTableList();
 
-   void          table(unsigned pIdx, KSpread::Sheet* pTable);
-   KSpread::Sheet* table(unsigned pIdx);
+    void          table(unsigned pIdx, KSpread::Sheet* pTable);
+    KSpread::Sheet* table(unsigned pIdx);
 protected:
-  KSpread::Sheet* cTable[cNameCnt];
+    KSpread::Sheet* cTable[cNameCnt];
 };
 
 #endif // QPROIMPORT_H

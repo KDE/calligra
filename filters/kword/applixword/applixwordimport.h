@@ -31,19 +31,19 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-typedef struct
-{
-  int c;
-  int m;
-  int y;
-  int k;
+typedef struct {
+    int c;
+    int m;
+    int y;
+    int k;
 
-  int r;
-  int g;
-  int b;
+    int r;
+    int g;
+    int b;
 }t_mycolor;
 
-class APPLIXWORDImport : public KoFilter {
+class APPLIXWORDImport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -51,14 +51,14 @@ public:
     APPLIXWORDImport(QObject *parent, const QStringList&);
     virtual ~APPLIXWORDImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-    QChar   specCharfind     (QChar , QChar );
-    QString readTagLine      (QTextStream &, QFile &);
-    void    replaceSpecial   (QString &);
-    QString nextLine         (QTextStream &);
-    int     readHeader       (QTextStream &stream, QFile &);
+    QChar   specCharfind(QChar , QChar);
+    QString readTagLine(QTextStream &, QFile &);
+    void    replaceSpecial(QString &);
+    QString nextLine(QTextStream &);
+    int     readHeader(QTextStream &stream, QFile &);
 
 private:
     int m_stepsize;

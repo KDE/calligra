@@ -31,30 +31,31 @@
 #include <kwdwriter.h>
 
 typedef KGenericFactory<HTMLImport> HTMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libhtmlimport, HTMLImportFactory("kofficefilters"))
 
 
 HTMLImport::HTMLImport(QObject* parent, const QStringList &) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 // 123
 }
 
-KoFilter::ConversionStatus HTMLImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QByteArray& to)
 {
-	if(to!="application/x-kword" || from!="text/html")
-		return KoFilter::NotImplemented;
+    if (to != "application/x-kword" || from != "text/html")
+        return KoFilter::NotImplemented;
 
-	KoStore *k= KoStore::createStore(m_chain->outputFile(), KoStore::Write, "application/x-kword");
-	KWDWriter *w= new KWDWriter(k);
-	KHTMLReader h(w);
-	KUrl url;
-	url.setPath(m_chain->inputFile());
-	bool b= h.filter(url);
-	delete(w);
-	delete(k);
+    KoStore *k = KoStore::createStore(m_chain->outputFile(), KoStore::Write, "application/x-kword");
+    KWDWriter *w = new KWDWriter(k);
+    KHTMLReader h(w);
+    KUrl url;
+    url.setPath(m_chain->inputFile());
+    bool b = h.filter(url);
+    delete(w);
+    delete(k);
 
-        if ( b )
-            return KoFilter::OK;
-        else
-            return KoFilter::StupidError;
+    if (b)
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }

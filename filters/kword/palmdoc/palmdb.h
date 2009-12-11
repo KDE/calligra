@@ -27,44 +27,76 @@
 
 class PalmDB
 {
-  public:
+public:
 
     PalmDB();
     virtual ~PalmDB();
 
-    virtual bool load( const char* filename );
-    virtual bool save( const char* filename );
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
 
-    QString name(){ return m_name; }
-    void setName( const QString& n ){ m_name = n; }
+    QString name() {
+        return m_name;
+    }
+    void setName(const QString& n) {
+        m_name = n;
+    }
 
-    int attributes(){ return m_attributes; }
-    void setAttributes( int a ){ m_attributes = a; }
+    int attributes() {
+        return m_attributes;
+    }
+    void setAttributes(int a) {
+        m_attributes = a;
+    }
 
-    int version(){ return m_version; }
-    void setVersion( int v ){ m_version = v; }
+    int version() {
+        return m_version;
+    }
+    void setVersion(int v) {
+        m_version = v;
+    }
 
-    QDateTime creationDate(){ return m_creationDate; }
-    void setCreationDate( QDateTime d ){ m_creationDate = d; }
+    QDateTime creationDate() {
+        return m_creationDate;
+    }
+    void setCreationDate(QDateTime d) {
+        m_creationDate = d;
+    }
 
-    QDateTime modificationDate(){ return m_modificationDate; }
-    void setModificationDate( QDateTime d ){ m_modificationDate = d; }
+    QDateTime modificationDate() {
+        return m_modificationDate;
+    }
+    void setModificationDate(QDateTime d) {
+        m_modificationDate = d;
+    }
 
-    QDateTime lastBackupDate(){ return m_lastBackupDate; }
-    void setLastBackupDate( QDateTime d ){ m_lastBackupDate = d; }
+    QDateTime lastBackupDate() {
+        return m_lastBackupDate;
+    }
+    void setLastBackupDate(QDateTime d) {
+        m_lastBackupDate = d;
+    }
 
-    QString type(){ return m_type; }
-    QString creator(){ return m_creator; }
+    QString type() {
+        return m_type;
+    }
+    QString creator() {
+        return m_creator;
+    }
 
-    void setType( const QString& t );
-    void setCreator( const QString& c );
+    void setType(const QString& t);
+    void setCreator(const QString& c);
 
-    int uniqueIDSeed(){ return m_uniqueIDSeed; }
-    void setUniqueIDSeed( int i ){ m_uniqueIDSeed= i; }
+    int uniqueIDSeed() {
+        return m_uniqueIDSeed;
+    }
+    void setUniqueIDSeed(int i) {
+        m_uniqueIDSeed = i;
+    }
 
     QList<QByteArray*> records;
 
-  private:
+private:
 
     QString m_name;
     int m_attributes, m_version;

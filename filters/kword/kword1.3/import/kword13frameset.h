@@ -34,15 +34,15 @@ class QTextStream;
 class KWord13Frameset
 {
 public:
-    KWord13Frameset( int frameType, int frameInfo, const QString& name );
-    virtual ~KWord13Frameset( void );
+    KWord13Frameset(int frameType, int frameInfo, const QString& name);
+    virtual ~KWord13Frameset(void);
 public:
     virtual bool addParagraph(const KWord13Paragraph& para);
-    virtual bool setKey( const QString& key );
-    virtual void xmldump( QTextStream& iostream );
+    virtual bool setKey(const QString& key);
+    virtual void xmldump(QTextStream& iostream);
 public:
     int m_numFrames; ///< Number of frames
-    QMap<QString,QString> m_frameData; ///< Data of frames (### TODO: do better!)
+    QMap<QString, QString> m_frameData; ///< Data of frames (### TODO: do better!)
 protected:
     int m_frameType;
     int m_frameInfo;
@@ -52,11 +52,11 @@ protected:
 class KWordTextFrameset : public KWord13Frameset
 {
 public:
-    KWordTextFrameset( int frameType, int frameInfo, const QString& name );
-    virtual ~KWordTextFrameset( void );
+    KWordTextFrameset(int frameType, int frameInfo, const QString& name);
+    virtual ~KWordTextFrameset(void);
 public:
     virtual bool addParagraph(const KWord13Paragraph& para);
-    virtual void xmldump( QTextStream& iostream );
+    virtual void xmldump(QTextStream& iostream);
 public:
     KWord13ParagraphGroup m_paragraphGroup;
 };
@@ -64,11 +64,11 @@ public:
 class KWord13PictureFrameset : public KWord13Frameset
 {
 public:
-    KWord13PictureFrameset( int frameType, int frameInfo, const QString& name );
-    virtual ~KWord13PictureFrameset( void );
+    KWord13PictureFrameset(int frameType, int frameInfo, const QString& name);
+    virtual ~KWord13PictureFrameset(void);
 public:
-    virtual bool setKey( const QString& key );
-    virtual void xmldump( QTextStream& iostream );
+    virtual bool setKey(const QString& key);
+    virtual void xmldump(QTextStream& iostream);
 public:
     QString m_pictureKey;
 };

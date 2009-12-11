@@ -24,58 +24,58 @@
 
 #define DPI 72.0
 
-double SvgUtil::fromUserSpace( double value )
+double SvgUtil::fromUserSpace(double value)
 {
     return (value * DPI) / 90.0;
 }
 
-double SvgUtil::toUserSpace( double value )
+double SvgUtil::toUserSpace(double value)
 {
     return (value * 90.0) / DPI;
 }
 
-double SvgUtil::toPercentage( QString s )
+double SvgUtil::toPercentage(QString s)
 {
-    if( s.endsWith( '%' ) )
-        return s.remove( '%' ).toDouble();
+    if (s.endsWith('%'))
+        return s.remove('%').toDouble();
     else
         return s.toDouble() * 100.0;
 }
 
-double SvgUtil::fromPercentage( QString s )
+double SvgUtil::fromPercentage(QString s)
 {
-    if( s.endsWith( '%' ) )
-        return s.remove( '%' ).toDouble() / 100.0;
+    if (s.endsWith('%'))
+        return s.remove('%').toDouble() / 100.0;
     else
         return s.toDouble();
 }
 
-QPointF SvgUtil::objectToUserSpace( const QPointF &position, const QRectF &objectBound )
+QPointF SvgUtil::objectToUserSpace(const QPointF &position, const QRectF &objectBound)
 {
-    qreal x = objectBound.left() + position.x() * objectBound.width(); 
-    qreal y = objectBound.top() + position.y() * objectBound.height(); 
-    return QPointF( x, y );
+    qreal x = objectBound.left() + position.x() * objectBound.width();
+    qreal y = objectBound.top() + position.y() * objectBound.height();
+    return QPointF(x, y);
 }
 
-QSizeF SvgUtil::objectToUserSpace( const QSizeF &size, const QRectF &objectBound )
+QSizeF SvgUtil::objectToUserSpace(const QSizeF &size, const QRectF &objectBound)
 {
-    qreal w = size.width() * objectBound.width(); 
-    qreal h = size.height() * objectBound.height(); 
-    return QSizeF( w, h );
+    qreal w = size.width() * objectBound.width();
+    qreal h = size.height() * objectBound.height();
+    return QSizeF(w, h);
 }
 
-QPointF SvgUtil::userSpaceToObject( const QPointF &position, const QRectF &objectBound )
+QPointF SvgUtil::userSpaceToObject(const QPointF &position, const QRectF &objectBound)
 {
     qreal x = 0.0;
-    if( objectBound.width() != 0 )
+    if (objectBound.width() != 0)
         x = (position.x() - objectBound.x()) / objectBound.width();
     qreal y = 0.0;
-    if( objectBound.height() != 0 )
+    if (objectBound.height() != 0)
         y = (position.y() - objectBound.y()) / objectBound.height();
     return QPointF(x, y);
 }
 
-QSizeF SvgUtil::userSpaceToObject( const QSizeF &size, const QRectF &objectBound )
+QSizeF SvgUtil::userSpaceToObject(const QSizeF &size, const QRectF &objectBound)
 {
     qreal w = objectBound.width() != 0 ? size.width() / objectBound.width() : 0.0;
     qreal h = objectBound.height() != 0 ? size.height() / objectBound.height() : 0.0;

@@ -28,10 +28,10 @@
 
 #ifndef KWMF_EXPORT
 # if defined(MAKE_KWMF_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define KWMF_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KWMF_EXPORT KDE_IMPORT
 # endif
 #endif

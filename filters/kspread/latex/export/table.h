@@ -46,141 +46,221 @@ class Row;
  */
 class Table: public XmlParser, Config
 {
-	QList<Row*> _rows;
-	QList<Column*> _columns;
-	QList<Cell*> _cells;
-	
-	/* USEFUL DATA */
-	int _maxRow, _maxCol;	/* Size of the table (nb of cell) */
-	bool _columnNumber;
-	bool _borders;
-	bool _hide;
-	bool _hideZero;
-	bool _firstletterupper;
-	bool _grid;
-	bool _printGrid;
-	bool _printCommentIndicator;
-	bool _printFormulaIndicator;
-	bool _showFormula;
-	bool _showFormulaIndicator;
-	bool _lcMode;
-	QString _name;
+    QList<Row*> _rows;
+    QList<Column*> _columns;
+    QList<Cell*> _cells;
 
-	/** PAPER DATA */
-	QString _format;
-	QString _orientation;
-	long _borderRight;
-	long _borderLeft;
-	long _borderBottom;
-	long _borderTop;
+    /* USEFUL DATA */
+    int _maxRow, _maxCol; /* Size of the table (nb of cell) */
+    bool _columnNumber;
+    bool _borders;
+    bool _hide;
+    bool _hideZero;
+    bool _firstletterupper;
+    bool _grid;
+    bool _printGrid;
+    bool _printCommentIndicator;
+    bool _printFormulaIndicator;
+    bool _showFormula;
+    bool _showFormulaIndicator;
+    bool _lcMode;
+    QString _name;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 */
+    /** PAPER DATA */
+    QString _format;
+    QString _orientation;
+    long _borderRight;
+    long _borderLeft;
+    long _borderBottom;
+    long _borderTop;
 
-		/**
-		 * Creates a new instance of Table.
-		 */
-		Table();
-		
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of frames.
-		 */
+public:
+    /**
+     * Constructors
+     *
+     */
 
-		virtual ~Table();
+    /**
+     * Creates a new instance of Table.
+     */
+    Table();
 
-		/**
-		 * getters
-		 */
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of frames.
+     */
 
-		int getMaxRow() const { return _maxRow; }
-		int getMaxColumn() const { return _maxCol; }
-		QString getName() const { return _name; }
-		QString getFormat() const { return _format; }
-		QString getOrientation() const { return _orientation; }
-		long getBorderRight() const { return _borderRight; }
-		long getBorderLeft() const { return _borderLeft; }
-		long getBorderBottom() const { return _borderBottom; }
-		long getBorderTop() const { return _borderTop; }
+    virtual ~Table();
 
-		bool isColumnNumber() const { return _columnNumber; }
-		bool isBorders() const { return _borders; }
-		bool isHide() const { return _hide; }
-		bool isHideZero() const { return _hideZero; }
-		bool isFirstletterupper() const { return _firstletterupper; }
-		bool isGrid() const { return _grid; }
-		bool isPrintGrid() const { return _printGrid; }
-		bool isPrintCommentIndicator() const { return _printCommentIndicator; }
-		bool isPrintFormulaIndicator() const { return _printFormulaIndicator; }
-		bool isShowFormula() const { return _showFormula; }
-		bool isShowFormulaIndicator() const { return _showFormulaIndicator; }
-		bool isLCMode() const { return _lcMode; }
+    /**
+     * getters
+     */
 
-		/**
-		 * setters
-		 */
-		void setMaxRow(int r);
-		void setMaxColumn(int c);
-		void setName(QString name) { _name = name; }
-		void setFormat(QString format) { _format = format; }
-		void setOrientation(QString orient) { _orientation = orient; }
-		void setBorderRight(long br) { _borderRight = br; }
-		void setBorderLeft(long bl) { _borderLeft = bl; }
-		void setBorderBottom(long bb) { _borderBottom = bb; }
-		void setBorderTop(long bt) { _borderTop = bt; }
+    int getMaxRow() const {
+        return _maxRow;
+    }
+    int getMaxColumn() const {
+        return _maxCol;
+    }
+    QString getName() const {
+        return _name;
+    }
+    QString getFormat() const {
+        return _format;
+    }
+    QString getOrientation() const {
+        return _orientation;
+    }
+    long getBorderRight() const {
+        return _borderRight;
+    }
+    long getBorderLeft() const {
+        return _borderLeft;
+    }
+    long getBorderBottom() const {
+        return _borderBottom;
+    }
+    long getBorderTop() const {
+        return _borderTop;
+    }
 
-		void setColumnNumber() { _columnNumber = true; }
-		void setBorders() { _borders = true; }
-		void setHide() { _hide = true; }
-		void setHideZero() { _hideZero = true; }
-		void setFirstletterupper() { _firstletterupper = true; }
-		void setGrid() { _grid = true; }
-		void setPrintGrid() { _printGrid = true; }
-		void setPrintCommentIndicator() { _printCommentIndicator = true; }
-		void setPrintFormulaIndicator() { _printFormulaIndicator = true; }
-		void setShowFormula() { _showFormula = true; }
-		void setShowFormulaIndicator() { _showFormulaIndicator = true; }
-		void setLCMode() { _lcMode = true; }
-	
-		/**
-		 * Helpful functions
-		 */
+    bool isColumnNumber() const {
+        return _columnNumber;
+    }
+    bool isBorders() const {
+        return _borders;
+    }
+    bool isHide() const {
+        return _hide;
+    }
+    bool isHideZero() const {
+        return _hideZero;
+    }
+    bool isFirstletterupper() const {
+        return _firstletterupper;
+    }
+    bool isGrid() const {
+        return _grid;
+    }
+    bool isPrintGrid() const {
+        return _printGrid;
+    }
+    bool isPrintCommentIndicator() const {
+        return _printCommentIndicator;
+    }
+    bool isPrintFormulaIndicator() const {
+        return _printFormulaIndicator;
+    }
+    bool isShowFormula() const {
+        return _showFormula;
+    }
+    bool isShowFormulaIndicator() const {
+        return _showFormulaIndicator;
+    }
+    bool isLCMode() const {
+        return _lcMode;
+    }
 
-		/**
-		 * Return one specific cell.
-		 * 
-		 * @param col Cell column.
-		 * @param row Row cell.
-		 */
-		Cell* searchCell(int col,int row);
-		
-		/**
-		 * Return one specific column which describes the format of the column.
-		 * 
-		 * @param col the column.
-		 */
-		Column* searchColumn(int col);
+    /**
+     * setters
+     */
+    void setMaxRow(int r);
+    void setMaxColumn(int c);
+    void setName(QString name) {
+        _name = name;
+    }
+    void setFormat(QString format) {
+        _format = format;
+    }
+    void setOrientation(QString orient) {
+        _orientation = orient;
+    }
+    void setBorderRight(long br) {
+        _borderRight = br;
+    }
+    void setBorderLeft(long bl) {
+        _borderLeft = bl;
+    }
+    void setBorderBottom(long bb) {
+        _borderBottom = bb;
+    }
+    void setBorderTop(long bt) {
+        _borderTop = bt;
+    }
 
-		/**
-		 * Return one specific row which describes the format of the row.
-		 *
-		 * @param row The row number.
-		 */
-		Row* searchRow(int row);
-                
-		void     analyze (const QDomNode);
-		void     analyzePaper (const QDomNode);
-		void     generate  (QTextStream&);
+    void setColumnNumber() {
+        _columnNumber = true;
+    }
+    void setBorders() {
+        _borders = true;
+    }
+    void setHide() {
+        _hide = true;
+    }
+    void setHideZero() {
+        _hideZero = true;
+    }
+    void setFirstletterupper() {
+        _firstletterupper = true;
+    }
+    void setGrid() {
+        _grid = true;
+    }
+    void setPrintGrid() {
+        _printGrid = true;
+    }
+    void setPrintCommentIndicator() {
+        _printCommentIndicator = true;
+    }
+    void setPrintFormulaIndicator() {
+        _printFormulaIndicator = true;
+    }
+    void setShowFormula() {
+        _showFormula = true;
+    }
+    void setShowFormulaIndicator() {
+        _showFormulaIndicator = true;
+    }
+    void setLCMode() {
+        _lcMode = true;
+    }
 
-	private:
-		void generateCell(QTextStream&, int, int);
-		void generateTableHeader(QTextStream&);
-		void generateTopLineBorder(QTextStream&, int);
-		void generateBottomLineBorder(QTextStream&, int);
+    /**
+     * Helpful functions
+     */
+
+    /**
+     * Return one specific cell.
+     *
+     * @param col Cell column.
+     * @param row Row cell.
+     */
+    Cell* searchCell(int col, int row);
+
+    /**
+     * Return one specific column which describes the format of the column.
+     *
+     * @param col the column.
+     */
+    Column* searchColumn(int col);
+
+    /**
+     * Return one specific row which describes the format of the row.
+     *
+     * @param row The row number.
+     */
+    Row* searchRow(int row);
+
+    void     analyze(const QDomNode);
+    void     analyzePaper(const QDomNode);
+    void     generate(QTextStream&);
+
+private:
+    void generateCell(QTextStream&, int, int);
+    void generateTableHeader(QTextStream&);
+    void generateTopLineBorder(QTextStream&, int);
+    void generateBottomLineBorder(QTextStream&, int);
 };
 
 #endif /* __KSPREAD_LATEX_TABLE_H__ */

@@ -25,15 +25,16 @@
 #include <Q3CString>
 
 
-class APPLIXGRAPHICImport : public KoFilter {
+class APPLIXGRAPHICImport : public KoFilter
+{
 
     Q_OBJECT
 
 public:
-    APPLIXGRAPHICImport (QObject* parent, const QStringList&);
+    APPLIXGRAPHICImport(QObject* parent, const QStringList&);
     virtual ~APPLIXGRAPHICImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 
@@ -42,32 +43,32 @@ public:
 // Kleinstes Objekt
 class applixGraphicsLine
 {
-  public:
-   int offX;
-   int offY;
-   int reColor;
-   int thickNess;
-   int ptX[5];
-   int ptY[5];
-   QString str;
+public:
+    int offX;
+    int offY;
+    int reColor;
+    int thickNess;
+    int ptX[5];
+    int ptY[5];
+    QString str;
 
-   applixGraphicsLine ();   // Constructor
+    applixGraphicsLine();    // Constructor
 };
 
 class applixGraphicsRect : public applixGraphicsLine
 {
-  public:
-   int bf[7];
-   int lf[7];
+public:
+    int bf[7];
+    int lf[7];
 
-   int sh[6];
+    int sh[6];
 
-   int pa[8];
-   int vs[3];
+    int pa[8];
+    int vs[3];
 
-   int xr[2]; //XYRAD
+    int xr[2]; //XYRAD
 
-   applixGraphicsRect (); // Constructor
+    applixGraphicsRect();  // Constructor
 };
 
 #endif // APPLIXGRAPHICIMPORT_H

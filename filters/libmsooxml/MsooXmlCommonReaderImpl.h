@@ -265,7 +265,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
     ReadMethod caller = m_calls.top();
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = new KoCharacterStyle();
@@ -309,12 +309,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
         if (strike == QLatin1String("sngStrike")) {
             m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
             m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-        }
-        else if (strike == QLatin1String("dblStrike")) {
+        } else if (strike == QLatin1String("dblStrike")) {
             m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
             m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-        }
-        else {
+        } else {
             // empty or "noStrike"
         }
         TRY_READ_ATTR_WITHOUT_NS(u)
@@ -329,7 +327,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rPr()
         readNext();
         // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
         if (QUALIFIED_NAME_IS(t)) {
-            const QString currentTextStyleName( mainStyles->lookup(m_currentTextStyle) );
+            const QString currentTextStyleName(mainStyles->lookup(m_currentTextStyle));
             body->startElement("text:span", false);
             body->addAttribute("text:style-name", currentTextStyleName);
             TRY_READ(t)
@@ -389,7 +387,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_i()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_u()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 //! @todo more styles
     MSOOXML::Utils::setupUnderLineStyle(val, m_currentTextStyleProperties);
@@ -428,11 +426,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_u()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sz()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 // CASE #1164
     bool ok;
-    const qreal pointSize = qreal( val.toUInt(&ok) ) / 2.0; /* half-points */
+    const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0;   /* half-points */
     if (ok) {
         m_currentTextStyleProperties->setFontPointSize(pointSize);
     }
@@ -448,13 +446,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sz()
 
 void MSOOXML_CURRENT_CLASS::readStrikeValue(KoCharacterStyle::LineType type)
 {
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
-    if (   val == MsooXmlReader::constOn
-        || val == MsooXmlReader::constTrue
-        || val == MsooXmlReader::const1
-        || val.isEmpty())
-    {
+    if (val == MsooXmlReader::constOn
+            || val == MsooXmlReader::constTrue
+            || val == MsooXmlReader::const1
+            || val.isEmpty()) {
         m_currentTextStyleProperties->setStrikeOutType(type);
         m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
 //! @todo m_currentTextStyleProperties->strikeOutWidth() ??
@@ -495,13 +492,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_dstrike()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_color()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
 //! @todo more styles
     if (val == MsooXmlReader::constAuto) {
 //! @todo set use-window-font-color="true" (currently no way to do this using KoCharacterStyle)
-    }
-    else {
+    } else {
         QColor color(MSOOXML::Utils::ST_HexColorRGB_to_QColor(val));
         if (color.isValid()) {
             m_currentTextStyleProperties->setForeground(QBrush(color));
@@ -520,9 +516,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_color()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_highlight()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
-    m_currentTextStyleProperties->setBackground( MSOOXML::Utils::ST_HighlightColor_to_QColor(val) );
+    m_currentTextStyleProperties->setBackground(MSOOXML::Utils::ST_HighlightColor_to_QColor(val));
     readNext();
     READ_EPILOGUE
 }
@@ -534,8 +530,7 @@ void MSOOXML_CURRENT_CLASS::setParentParagraphStyleName(const QXmlStreamAttribut
     if (pStyle.isEmpty()) {
 //! CASE #412
 //! @todo
-    }
-    else {
+    } else {
 //! CASE #411
         if (isDefaultTocStyle(pStyle)) {
             pStyle = QLatin1String("Contents") + pStyle.mid(3);
@@ -598,9 +593,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
 {
     READ_PROLOGUE
 //    if (!m_currentParagraphStyleCreated) {
-        // add automatic style for the paragraph
+    // add automatic style for the paragraph
 //    }
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     setParentParagraphStyleName(attrs);
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
@@ -616,11 +611,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pPr()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-/* moved to buffer in read_p()
-#ifndef SETUP_PARA_STYLE_IN_READ_P // for DOCX
-    setupParagraphStyle();
-#endif
-*/
+    /* moved to buffer in read_p()
+    #ifndef SETUP_PARA_STYLE_IN_READ_P // for DOCX
+        setupParagraphStyle();
+    #endif
+    */
     READ_EPILOGUE
 }
 
@@ -693,8 +688,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
 
     if (args & read_p_Skip) {
         kDebug() << "SKIP!";
-    }
-    else {
+    } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::StyleAuto, "paragraph");
 //        m_currentParagraphStyleNumber++;
@@ -712,7 +706,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
             if (QUALIFIED_NAME_IS(p)) {
 // CASE #301: avoid nested paragaraphs
                 kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
-                TRY_READ_WITH_ARGS( p, read_p_Skip; )
+                TRY_READ_WITH_ARGS(p, read_p_Skip;)
             }
             ELSE_TRY_READ_IF(hyperlink)
 // CASE #400.1
@@ -727,20 +721,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_p()
 
     if (args & read_p_Skip) {
         //nothing
-    }
-    else {
+    } else {
         body = textPBuf.originalWriter();
         body->startElement("text:p", false);
 //#ifndef SETUP_PARA_STYLE_IN_READ_P // for DOCX
         setupParagraphStyle();
 //#endif
-/*        if (!m_paragraphStyleNameWritten) {
-            // no style, set default
-            body->addAttribute("text:style-name", "Standard");
-        }*/
+        /*        if (!m_paragraphStyleNameWritten) {
+                    // no style, set default
+                    body->addAttribute("text:style-name", "Standard");
+                }*/
         (void)textPBuf.releaseWriter();
         body->endElement(); //text:p
-kDebug() << "/text:p";
+        kDebug() << "/text:p";
     }
     READ_EPILOGUE
 }
@@ -818,8 +811,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     READ_PROLOGUE
 
 #ifdef DOCXXMLDOCREADER_H
-        m_currentDrawStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
-        m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
+    m_currentDrawStyle = KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic");
+    m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
 #endif
 
     while (!atEnd()) {
@@ -865,7 +858,7 @@ void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
  - Floating - The drawing object is anchored within the text, but can be
    absolutely positioned in the document relative to the page.
 
- When this element encapsulates the DrawingML object's information, 
+ When this element encapsulates the DrawingML object's information,
  then all child elements shall dictate the positioning of this object
  as a floating object on the page.
 
@@ -912,7 +905,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
     m_docPrName.clear();
     m_docPrDescr.clear();
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
     READ_ATTR_WITHOUT_NS(distT)
     distToODF("fo:margin-top", distT);
@@ -946,10 +939,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
                     return KoFilter::WrongFormat;
                 saveStyleWrap("run-through");
                 m_currentDrawStyle.addProperty(QLatin1String("style:run-through"),
-                    (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
-                    KoGenStyle::GraphicType);
-            }
-            else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
+                                               (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
+                                               KoGenStyle::GraphicType);
+            } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top
                 // and bottom of this object, but not its left or right edges.
@@ -973,7 +965,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
 //! CASE #1425
 void MSOOXML_CURRENT_CLASS::readWrap()
 {
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(wrapText)
     if (wrapText == "bothSides")
         saveStyleWrap("parallel");
@@ -1101,7 +1093,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
  This element specifies the horizontal positioning of a floating
  DrawingML object within a WordprocessingML document.
  This positioning is specified in two parts:
- 
+
  - Positioning Base - The relativeFrom attribute on this element
    specifies the part of the document from which the positioning
    shall be calculated.
@@ -1122,7 +1114,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
     READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromH)
 
@@ -1145,7 +1137,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
  This element specifies the vertical positioning of a floating
  DrawingML object within a WordprocessingML document.
  This positioning is specified in two parts:
- 
+
  - Positioning Base - The relativeFrom attribute on this element
    specifies the part of the document from which the positioning
    shall be calculated.
@@ -1166,7 +1158,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.5 ST_RelFromV (Vertical Relative Positioning), p. 3512
     READ_ATTR_WITHOUT_NS_INTO(relativeFrom, m_relativeFromV)
 
@@ -1205,28 +1197,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align()
     READ_PROLOGUE
     if (CALLER_IS(positionH)) {
 //! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
-/*center
-inside
-left
-outside
-right*/
+        /*center
+        inside
+        left
+        outside
+        right*/
         m_alignH = text().toString();
-    }
-    else if (CALLER_IS(positionV)) {
+    } else if (CALLER_IS(positionV)) {
 //! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
-/*bottom
-center
-inside
-outside
-top*/
+        /*bottom
+        center
+        inside
+        outside
+        top*/
         m_alignV = text().toString();
     }
 
     SKIP_EVERYTHING
-/*    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }*/
+    /*    while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL);
+        }*/
     READ_EPILOGUE
 }
 
@@ -1257,8 +1248,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
         if (CALLER_IS(positionH)) {
             STRING_TO_INT(text().toString(), m_posOffsetH)
             m_hasPosOffsetH = true;
-        }
-        else if (CALLER_IS(positionV)) {
+        } else if (CALLER_IS(positionV)) {
             STRING_TO_INT(text().toString(), m_posOffsetV)
             m_hasPosOffsetV = true;
         }
@@ -1286,7 +1276,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset()
  - Floating - The drawing object is anchored within the text, but can be
    absolutely positioned in the document relative to the page.
 
- When this element encapsulates the DrawingML object's information, 
+ When this element encapsulates the DrawingML object's information,
  then all child elements shall dictate the positioning of this object
  as a floating object on the page.
 
@@ -1354,7 +1344,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_docPrName)
     TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_docPrDescr)
 //! @todo support docPr/@hidden (maybe to style:text-properties/@text:display)
@@ -1533,8 +1523,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill()
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:blip")) {
                 TRY_READ(blip)
-            }
-            else if (qualifiedName() == QLatin1String("a:stretch")) {
+            } else if (qualifiedName() == QLatin1String("a:stretch")) {
                 TRY_READ(stretch)
             }
 //! @todo add ELSE_WRONG_FORMAT
@@ -1593,22 +1582,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     READ_PROLOGUE
 
     m_xlinkHref.clear();
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
     kDebug() << "embed:" << r_embed;
     if (!r_embed.isEmpty()) {
-        const QString sourceName( m_context->relationships->target(m_context->path, m_context->file, r_embed) );
+        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
         const QString destinationName(
-            QLatin1String("Pictures/") + sourceName.mid( sourceName.lastIndexOf('/') + 1 ) );
+            QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1));
         if (m_copiedFiles.contains(sourceName)) {
             kDebug() << sourceName << "already copied - skipping";
-        }
-        else {
+        } else {
 //! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
             const KoFilter::ConversionStatus status = m_context->import->copyFile(sourceName, destinationName);
             if (status != KoFilter::OK) {
@@ -1694,10 +1682,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 
 //    const QXmlStreamAttributes attrs( attributes() );
 //! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
-/*    TRY_READ_ATTR_WITHOUT_NS(r, b)
-    TRY_READ_ATTR_WITHOUT_NS(r, l)
-    TRY_READ_ATTR_WITHOUT_NS(r, r)
-    TRY_READ_ATTR_WITHOUT_NS(r, t)*/
+    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
+        TRY_READ_ATTR_WITHOUT_NS(r, l)
+        TRY_READ_ATTR_WITHOUT_NS(r, r)
+        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
 //MSOOXML_EXPORT double ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     m_fillImageRenderingStyle = QLatin1String("stretch");

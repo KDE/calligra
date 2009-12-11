@@ -17,8 +17,8 @@
 
 RTFTokenizer::RTFTokenizer()
 {
-    tokenText.resize( 4113 );
-    fileBuffer.resize( 4096 );
+    tokenText.resize(4113);
+    fileBuffer.resize(4096);
     infile = 0L;
 }
 
@@ -26,7 +26,7 @@ RTFTokenizer::RTFTokenizer()
  * Open tokenizer from file.
  * @param in the input file
  */
-void RTFTokenizer::open( QFile *in )
+void RTFTokenizer::open(QFile *in)
 {
     fileBufferPtr = 0L;
     fileBufferEnd = 0L;
@@ -36,12 +36,12 @@ void RTFTokenizer::open( QFile *in )
 
 int RTFTokenizer::nextChar()
 {
-    if ( fileBufferPtr == fileBufferEnd ) {
-        int n = infile->read( fileBuffer.data(), fileBuffer.size() );
-        fileBufferPtr = ( uchar* ) fileBuffer.data();
+    if (fileBufferPtr == fileBufferEnd) {
+        int n = infile->read(fileBuffer.data(), fileBuffer.size());
+        fileBufferPtr = (uchar*) fileBuffer.data();
         fileBufferEnd = fileBufferPtr;
 
-        if ( n <= 0 )
+        if (n <= 0)
             return -1;
 
         fileBufferEnd = fileBufferPtr + n;
@@ -56,21 +56,20 @@ int RTFTokenizer::nextChar()
 void RTFTokenizer::next()
 {
     int ch;
-    value=0;
+    value = 0;
     if (!infile)
-	return;
+        return;
 
     do {
         int n = nextChar();
 
-        if ( n <= 0 ) {
+        if (n <= 0) {
             ch = '}';
             break;
         }
 
         ch = n;
-    }
-    while (ch == '\n' || ch == '\r' && ch != 0);
+    } while (ch == '\n' || ch == '\r' && ch != 0);
 
     // Skip one byte for prepend '@' to destinations
     text = (tokenText.data() + 1);
@@ -80,84 +79,77 @@ void RTFTokenizer::next()
 
 
     if (ch == '{')
-	type = RTFTokenizer::OpenGroup;
+        type = RTFTokenizer::OpenGroup;
     else if (ch == '}')
-	type = RTFTokenizer::CloseGroup;
-    else if (ch == '\\')
-    {
-	type = RTFTokenizer::ControlWord;
+        type = RTFTokenizer::CloseGroup;
+    else if (ch == '\\') {
+        type = RTFTokenizer::ControlWord;
 
         int n = nextChar();
 
-        if ( n <= 0 ) {
+        if (n <= 0) {
             // Return CloseGroup on EOF
             type = RTFTokenizer::CloseGroup;
             return;
         }
-	ch = n;
+        ch = n;
 
-	// Type is either control word or control symbol
-	if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
-	{
-	    int v = 0;
+        // Type is either control word or control symbol
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+            int v = 0;
 
-	    // Read alphabetic string (command)
-	    while (_text < ( uchar* )tokenText.data()+tokenText.size()-3 && 
-                  ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) )
-	    {
-		*_text++ = ch;
+            // Read alphabetic string (command)
+            while (_text < (uchar*)tokenText.data() + tokenText.size() - 3 &&
+                    ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {
+                *_text++ = ch;
 
                 int n = nextChar();
-                if ( n <= 0 ) {
+                if (n <= 0) {
                     ch = ' ';
                     break;
                 }
                 ch = n;
-	    }
+            }
 
-	    // Read numeric parameter (param)
-	    bool isneg = (ch == '-');
+            // Read numeric parameter (param)
+            bool isneg = (ch == '-');
 
-	    if (isneg) {
+            if (isneg) {
                 int n = nextChar();
-                if ( n <= 0 ) {
+                if (n <= 0) {
                     type = RTFTokenizer::CloseGroup;
                     return;
                 }
-		ch = n;
-	    }
+                ch = n;
+            }
 
-	    while (ch >= '0' && ch <= '9') {
-		v	 = (10 * v) + ch - '0';
-		hasParam = true;
+            while (ch >= '0' && ch <= '9') {
+                v  = (10 * v) + ch - '0';
+                hasParam = true;
 
                 int n = nextChar();
 
-                if ( n <= 0 )
+                if (n <= 0)
                     n = ' ';
                 ch = n;
             }
-	    value = isneg ? -v : v;
+            value = isneg ? -v : v;
 
-	    // If delimiter is a space, it's part of the control word
-	    if (ch != ' ')
-	    {
-		--fileBufferPtr;
-	    }
+            // If delimiter is a space, it's part of the control word
+            if (ch != ' ') {
+                --fileBufferPtr;
+            }
 
             *_text = 0; // Just put an end of string for the test, it can then be over-written again
-            if ( !memcmp( tokenText.data()+1, "bin", 4 ) )
-            {   // We have \bin, so we need to read the bytes
-                kDebug(30515) <<"Token:" << tokenText;
-                if (value > 0)
-                {
-                    kDebug(30515) <<"\\bin" << value;
+            if (!memcmp(tokenText.data() + 1, "bin", 4)) {  // We have \bin, so we need to read the bytes
+                kDebug(30515) << "Token:" << tokenText;
+                if (value > 0) {
+                    kDebug(30515) << "\\bin" << value;
                     type = RTFTokenizer::BinaryData;
                     binaryData.resize(value);
-                    for (int i=0; i<value; i++)
-                    {
+                    for (int i = 0; i < value; i++) {
                         int n = nextChar();
-                        if ( n <= 0 ) {
+                        if (n <= 0) {
                             type = RTFTokenizer::CloseGroup;
                             break;
                         }
@@ -167,56 +159,48 @@ void RTFTokenizer::next()
                 }
             }
 
-	}
-	else if (ch=='\'')
-	{
-	    // Got hex value, for example \'2d
+        } else if (ch == '\'') {
+            // Got hex value, for example \'2d
 
-	    type = RTFTokenizer::ControlWord;
-	    *_text++ = ch;
+            type = RTFTokenizer::ControlWord;
+            *_text++ = ch;
 
-	    for(int i=0;i<2;i++)
-	    {
-		int n = nextChar();
+            for (int i = 0;i < 2;i++) {
+                int n = nextChar();
 
-		if ( n <= 0 ) {
-		    if ( i == 0 ) {
-		        type = RTFTokenizer::CloseGroup;
-		        return;
-		    } else {
+                if (n <= 0) {
+                    if (i == 0) {
+                        type = RTFTokenizer::CloseGroup;
+                        return;
+                    } else {
                         ch = ' ';
-			break;
-		    }
-		}
+                        break;
+                    }
+                }
 
-		ch = n;
+                ch = n;
 
-		hasParam = true;
-		value<<=4;
-		value=value|((ch + ((ch & 16) ? 0 : 9)) & 0xf);
-	    }
+                hasParam = true;
+                value <<= 4;
+                value = value | ((ch + ((ch & 16) ? 0 : 9)) & 0xf);
+            }
+        } else {
+            type = RTFTokenizer::ControlWord;
+            *_text++ = ch;
         }
-	else
-	{
-	    type = RTFTokenizer::ControlWord;
-	    *_text++ = ch;
-	}
-    }
-    else
-    {
-	type = RTFTokenizer::PlainText;
+    } else {
+        type = RTFTokenizer::PlainText;
 
-	// Everything until next backslash, opener or closer
-	while ( ch != '\\' && ch != '{' && ch != '}' && ch != '\n' &&
-		ch != '\r')
-	{
-	    *_text++ = ch;
-            if(fileBufferPtr >= fileBufferEnd) {
+        // Everything until next backslash, opener or closer
+        while (ch != '\\' && ch != '{' && ch != '}' && ch != '\n' &&
+                ch != '\r') {
+            *_text++ = ch;
+            if (fileBufferPtr >= fileBufferEnd) {
                 fileBufferPtr++;
                 break;
             }
-	    ch = *fileBufferPtr++;
-	}
+            ch = *fileBufferPtr++;
+        }
         --fileBufferPtr; // give back the last char
     }
     *_text++ = 0;

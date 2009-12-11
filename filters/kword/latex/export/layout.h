@@ -28,28 +28,26 @@
 #include <kdebug.h>
 #include "textformat.h"
 
-enum _EType
-{
-	TL_NONE,		/* NONE       */
-	TL_ARABIC,		/* 1, 2, ...  */
-	TL_LLETTER,		/* a, b, ...  */
-	TL_CLETTER,		/* A, B, ...  */
-	TL_LLNUMBER,		/* i, ii, ... */
-	TL_CLNUMBER,		/* I, II, ... */
-	TL_CUSTOM_SIMPLE,	/* */
-	TL_CUSTOM_COMPLEX,	/* */
-	TL_CIRCLE_BULLET,	/* o */
-	TL_SQUARE_BULLET,	/* * */
-	TL_DISC_BULLET		/* o */
+enum _EType {
+    TL_NONE,  /* NONE       */
+    TL_ARABIC,  /* 1, 2, ...  */
+    TL_LLETTER,  /* a, b, ...  */
+    TL_CLETTER,  /* A, B, ...  */
+    TL_LLNUMBER,  /* i, ii, ... */
+    TL_CLNUMBER,  /* I, II, ... */
+    TL_CUSTOM_SIMPLE, /* */
+    TL_CUSTOM_COMPLEX, /* */
+    TL_CIRCLE_BULLET, /* o */
+    TL_SQUARE_BULLET, /* * */
+    TL_DISC_BULLET  /* o */
 };
 
-enum _EEnv
-{
-	ENV_NONE,
-	ENV_LEFT,
-	ENV_RIGHT,
-	ENV_CENTER,
-	ENV_JUSTIFY	/* default in latex */
+enum _EEnv {
+    ENV_NONE,
+    ENV_LEFT,
+    ENV_RIGHT,
+    ENV_CENTER,
+    ENV_JUSTIFY /* default in latex */
 };
 
 typedef enum _EType EType;
@@ -65,86 +63,144 @@ typedef enum _EEnv EEnv;
  */
 class Layout: public TextFormat
 {
-	QString      _name;
-	QString      _following;
-	EType        _counterType;
-	int          _counterDepth;
-	int          _counterBullet;
-	int          _counterStart;
-	int          _numberingType;
-	EEnv         _env;
-	static QString _last_name;
-	static EType   _last_counter;
-	bool           _useHardBreakAfter;
-	bool           _useHardBreak;
-	bool           _keepLinesTogether;
-	
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Layout.
-		 */
-		Layout();
+    QString      _name;
+    QString      _following;
+    EType        _counterType;
+    int          _counterDepth;
+    int          _counterBullet;
+    int          _counterStart;
+    int          _numberingType;
+    EEnv         _env;
+    static QString _last_name;
+    static EType   _last_counter;
+    bool           _useHardBreakAfter;
+    bool           _useHardBreak;
+    bool           _keepLinesTogether;
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do.
-		 */
-		virtual ~Layout() {
-			kDebug(30522) <<"Destruction of a layout.";
-		}
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Layout.
+     */
+    Layout();
 
-		/**
-		 * Accessors
-		 */
-		bool    isChapter          () const { return (_numberingType == 1); }
-		bool    isList             () const { return (_numberingType == 0); }
-		bool    isEnum             () const { return (_counterType != TL_NONE); }
-		bool    isLastSame         () const { return (_name == _last_name); }
-		bool    isNextSame         () const { return (_following == _name); }
-		QString getLastName        () const { return _last_name;     }
-		EType   getLastCounter     () const { return _last_counter;  }
-		EType   getCounterType     () const { return _counterType;   }
-		int     getCounterDepth    () const { return _counterDepth;  }
-		int     getCounterBullet   () const { return _counterBullet; }
-		int     getCounterStart    () const { return _counterStart;  }
-		int     getNumberingType   () const { return _numberingType; }
-		EEnv    getEnv             () const { return _env;           }
-		bool    isHardBreakAfter   () const { return _useHardBreakAfter; }
-		bool    isHardBreak        () const { return _useHardBreak;      }
-		bool    isKeppLinesTogether() const { return _keepLinesTogether; }
+    /*
+     * Destructor
+     *
+     * Nothing to do.
+     */
+    virtual ~Layout() {
+        kDebug(30522) << "Destruction of a layout.";
+    }
 
-		/**
-		 * Modifiers
-		 */
-		void setName         (QString name) { _name = name; }
-		void setLastName     ()             { _last_name   = _name; }
-		void setLastCounter  ()             { _last_counter= _counterType; }
-		void setFollowing    (QString name) { _following = name; }
-		void setCounterType  (int ct)       { _counterType   = (EType) ct; }
-		void setCounterDepth (int cd)       { _counterDepth  = cd; }
-		void setCounterBullet(int cb)       { _counterBullet = cb; }
-		void setCounterStart (int cs)       { _counterStart  = cs; }
-		void setNumberingType(int nt)       { _numberingType = nt; }
-		void setEnv          (int env)      { _env = (EEnv) env;   }
-		void useHardBreakAfter()            { _useHardBreakAfter = true; }
-		void useHardBreak     ()            { _useHardBreak      = true; }
-		void keepLinesTogether()            { _keepLinesTogether = true; }
+    /**
+     * Accessors
+     */
+    bool    isChapter() const {
+        return (_numberingType == 1);
+    }
+    bool    isList() const {
+        return (_numberingType == 0);
+    }
+    bool    isEnum() const {
+        return (_counterType != TL_NONE);
+    }
+    bool    isLastSame() const {
+        return (_name == _last_name);
+    }
+    bool    isNextSame() const {
+        return (_following == _name);
+    }
+    QString getLastName() const {
+        return _last_name;
+    }
+    EType   getLastCounter() const {
+        return _last_counter;
+    }
+    EType   getCounterType() const {
+        return _counterType;
+    }
+    int     getCounterDepth() const {
+        return _counterDepth;
+    }
+    int     getCounterBullet() const {
+        return _counterBullet;
+    }
+    int     getCounterStart() const {
+        return _counterStart;
+    }
+    int     getNumberingType() const {
+        return _numberingType;
+    }
+    EEnv    getEnv() const {
+        return _env;
+    }
+    bool    isHardBreakAfter() const {
+        return _useHardBreakAfter;
+    }
+    bool    isHardBreak() const {
+        return _useHardBreak;
+    }
+    bool    isKeppLinesTogether() const {
+        return _keepLinesTogether;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Modifiers
+     */
+    void setName(QString name) {
+        _name = name;
+    }
+    void setLastName()             {
+        _last_name   = _name;
+    }
+    void setLastCounter()             {
+        _last_counter = _counterType;
+    }
+    void setFollowing(QString name) {
+        _following = name;
+    }
+    void setCounterType(int ct)       {
+        _counterType   = (EType) ct;
+    }
+    void setCounterDepth(int cd)       {
+        _counterDepth  = cd;
+    }
+    void setCounterBullet(int cb)       {
+        _counterBullet = cb;
+    }
+    void setCounterStart(int cs)       {
+        _counterStart  = cs;
+    }
+    void setNumberingType(int nt)       {
+        _numberingType = nt;
+    }
+    void setEnv(int env)      {
+        _env = (EEnv) env;
+    }
+    void useHardBreakAfter()            {
+        _useHardBreakAfter = true;
+    }
+    void useHardBreak()            {
+        _useHardBreak      = true;
+    }
+    void keepLinesTogether()            {
+        _keepLinesTogether = true;
+    }
 
-		void analyzeLayout  (const QDomNode);
+    /**
+     * Helpful functions
+     */
 
-	private:
-		void analyzeCounter  (const QDomNode);
-		void analyzeFollowing(const QDomNode);
-		void analyzeName     (const QDomNode);
-		void analyzeEnv      (const QDomNode);
-		void analyzeBreakLine(const QDomNode);
+    void analyzeLayout(const QDomNode);
+
+private:
+    void analyzeCounter(const QDomNode);
+    void analyzeFollowing(const QDomNode);
+    void analyzeName(const QDomNode);
+    void analyzeEnv(const QDomNode);
+    void analyzeBreakLine(const QDomNode);
 };
 
 #endif /* __KWORD_LAYOUT_H__ */

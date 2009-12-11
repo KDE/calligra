@@ -33,7 +33,7 @@ class XlsxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    XlsxImport( QObject * parent, const QStringList & );
+    XlsxImport(QObject * parent, const QStringList &);
     virtual ~XlsxImport();
 
 protected:
@@ -42,7 +42,7 @@ protected:
     virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
-        MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage);
+            MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage);
 };
 
 #endif

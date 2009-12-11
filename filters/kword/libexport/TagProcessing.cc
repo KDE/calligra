@@ -44,194 +44,168 @@
 // #define DEBUG_KWORD_IGNORED_TAGS
 
 
-void ProcessSubtags ( const QDomNode             &parentNode,
-                      QList<TagProcessing>  &tagProcessingList,
-                      KWEFKWordLeader            *leader)
+void ProcessSubtags(const QDomNode             &parentNode,
+                    QList<TagProcessing>  &tagProcessingList,
+                    KWEFKWordLeader            *leader)
 {
     //kDebug(30508) <<"Starting ProcessSubtags for node:" << parentNode.nodeName();
 
     QDomNode childNode;
 
-    for ( childNode = parentNode.firstChild (); !childNode.isNull (); childNode = childNode.nextSibling () )
-    {
-        if ( childNode.isElement () )
-        {
+    for (childNode = parentNode.firstChild(); !childNode.isNull(); childNode = childNode.nextSibling()) {
+        if (childNode.isElement()) {
             bool found = false;
 
             QList<TagProcessing>::Iterator  tagProcessingIt;
 
-            for ( tagProcessingIt = tagProcessingList.begin ();
-                  tagProcessingIt != tagProcessingList.end ();
-                  tagProcessingIt++ )
-            {
-                if ( childNode.nodeName () == (*tagProcessingIt).name )
-                {
+            for (tagProcessingIt = tagProcessingList.begin();
+                    tagProcessingIt != tagProcessingList.end();
+                    tagProcessingIt++) {
+                if (childNode.nodeName() == (*tagProcessingIt).name) {
                     found = true;
 
-                    if ( (*tagProcessingIt).processor != NULL )
-                    {
-                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, leader );
+                    if ((*tagProcessingIt).processor != NULL) {
+                        ((*tagProcessingIt).processor)(childNode, (*tagProcessingIt).data, leader);
                     }
 #ifdef DEBUG_KWORD_IGNORED_TAGS
-                    else
-                    {
-                        kDebug(30508) <<"Ignoring" << childNode.nodeName ()
-                            << " tag in " << parentNode.nodeName () << endl;
+                    else {
+                        kDebug(30508) << "Ignoring" << childNode.nodeName()
+                        << " tag in " << parentNode.nodeName() << endl;
                     }
 #endif
                     break;
                 }
             }
 
-            if ( !found )
-            {
-                kDebug(30508) <<"Unexpected tag" << childNode.nodeName ()
-                    << " in " << parentNode.nodeName () << "!" << endl;
+            if (!found) {
+                kDebug(30508) << "Unexpected tag" << childNode.nodeName()
+                << " in " << parentNode.nodeName() << "!" << endl;
             }
         }
     }
     //kDebug(30508) <<"Ending ProcessSubtags for node:" << parentNode.nodeName();
 }
 
-void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
+void AllowNoSubtags(const QDomNode& myNode, KWEFKWordLeader *leader)
 {
 #ifdef DEBUG_KWORD_TAGS
     QString outputText;
     QList<TagProcessing> tagProcessingList;
-    ProcessSubtags (myNode, tagProcessingList, leader);
+    ProcessSubtags(myNode, tagProcessingList, leader);
 #else
-    @_UNUSED( leader ):
+    @_UNUSED(leader):
 #endif
 }
 
-AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
-    : name (n), data (d)
+AttrProcessing::AttrProcessing(const QString& n, const QString& t, void *d)
+        : name(n), data(d)
 {
-    if ( t == "int" )
+    if (t == "int")
         type = AttrInt;
-    else if ( t == "QString" )
+    else if (t == "QString")
         type = AttrQString;
-    else if ( t == "double" )
+    else if (t == "double")
         type = AttrDouble;
-    else if ( t == "bool" )
+    else if (t == "bool")
         type = AttrBool;
-    else if ( t.isEmpty() )
+    else if (t.isEmpty())
         type = AttrNull;
-    else
-    {
+    else {
         kWarning(30508) << "Unknown type: " << t << " for element " << n << " assuming NULL";
         type = AttrNull;
     }
 }
 
 
-void ProcessAttributes ( const QDomNode              &myNode,
-                         QList<AttrProcessing>  &attrProcessingList )
+void ProcessAttributes(const QDomNode              &myNode,
+                       QList<AttrProcessing>  &attrProcessingList)
 {
     //kDebug(30508) <<"Starting ProcessAttributes for node:" << myNode.nodeName();
 
-    QDomNamedNodeMap myAttribs ( myNode.attributes () );
+    QDomNamedNodeMap myAttribs(myNode.attributes());
     //kDebug(30508) <<"Attributes =" << myAttribs.length ();
-    for ( uint i = 0; i <  myAttribs.length (); i++ )
-    {
-        QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
+    for (uint i = 0; i <  myAttribs.length(); i++) {
+        QDomAttr myAttrib(myAttribs.item(i).toAttr());
 
-        if ( !myAttrib.isNull () )
-        {
+        if (!myAttrib.isNull()) {
             bool found = false;
 
             QList<AttrProcessing>::Iterator attrProcessingIt;
 
-            for ( attrProcessingIt = attrProcessingList.begin ();
-                  attrProcessingIt != attrProcessingList.end ();
-                  attrProcessingIt++ )
-            {
-              //kDebug(30508) <<"NAME:" << myAttrib.name () <<" ==" << (*attrProcessingIt).name;
-                if ( myAttrib.name () == (*attrProcessingIt).name )
-                {
+            for (attrProcessingIt = attrProcessingList.begin();
+                    attrProcessingIt != attrProcessingList.end();
+                    attrProcessingIt++) {
+                //kDebug(30508) <<"NAME:" << myAttrib.name () <<" ==" << (*attrProcessingIt).name;
+                if (myAttrib.name() == (*attrProcessingIt).name) {
                     found = true;
 
-                    if ( (*attrProcessingIt).data != NULL )
-                    {
-                        switch ( (*attrProcessingIt).type )
-                        {
-                        case AttrProcessing::AttrQString:
-                            {
-                                *((QString *) (*attrProcessingIt).data) = myAttrib.value ();
-                                break;
+                    if ((*attrProcessingIt).data != NULL) {
+                        switch ((*attrProcessingIt).type) {
+                        case AttrProcessing::AttrQString: {
+                            *((QString *)(*attrProcessingIt).data) = myAttrib.value();
+                            break;
+                        }
+                        case AttrProcessing::AttrInt: {
+                            *((int *)(*attrProcessingIt).data) = myAttrib.value().toInt();
+                            break;
+                        }
+                        case AttrProcessing::AttrDouble: {
+                            *((double *)(*attrProcessingIt).data) = myAttrib.value().toDouble();
+                            break;
+                        }
+                        case AttrProcessing::AttrBool: {
+                            const QString strAttr(myAttrib.value().simplified());
+                            bool flag;
+                            if ((strAttr == "yes") || (strAttr == "1") || (strAttr == "true")) {
+                                flag = true;
+                            } else if ((strAttr == "no") || (strAttr == "0") || (strAttr == "false")) {
+                                flag = false;
+                            } else {
+                                flag = false;
+                                kWarning(30508) << "Unknown value for a boolean: " << strAttr
+                                << " in tag " << myNode.nodeName() << ", attribute "
+                                << myAttrib.name() << endl;
                             }
-                        case AttrProcessing::AttrInt:
-                            {
-                                *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
-                                break;
-                            }
-                        case AttrProcessing::AttrDouble:
-                            {
-                                *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
-                                break;
-                            }
-                        case AttrProcessing::AttrBool:
-                            {
-                                const QString strAttr ( myAttrib.value().simplified() );
-                                bool flag;
-                                if ((strAttr=="yes")||(strAttr=="1")||(strAttr=="true"))
-                                {
-                                    flag=true;
-                                }
-                                else if ((strAttr=="no")||(strAttr=="0")||(strAttr=="false"))
-                                {
-                                    flag=false;
-                                }
-                                else
-                                {
-                                    flag=false;
-                                    kWarning(30508) << "Unknown value for a boolean: " << strAttr
-                                        << " in tag " << myNode.nodeName () << ", attribute "
-                                        << myAttrib.name() << endl;
-                                }
-                                *((bool *) (*attrProcessingIt).data) = flag;
-                                break;
-                            }
+                            *((bool *)(*attrProcessingIt).data) = flag;
+                            break;
+                        }
                         case AttrProcessing::AttrNull:
                             break;
-                        default:
-                            {
-                                kDebug(30508) <<"Unexpected data type" << int( (*attrProcessingIt).type )
-                                    << " in " << myNode.nodeName ()
-                                    << " attribute " << (*attrProcessingIt).name
-                                    << endl;
-                                break;
-                            }
+                        default: {
+                            kDebug(30508) << "Unexpected data type" << int((*attrProcessingIt).type)
+                            << " in " << myNode.nodeName()
+                            << " attribute " << (*attrProcessingIt).name
+                            << endl;
+                            break;
+                        }
                         }
                     }
 #ifdef DEBUG_KWORD_IGNORED_TAGS
-                    else
-                    {
-                        kDebug(30508) <<"Ignoring" << myNode.nodeName()
-                            << " attribute " << (*attrProcessingIt).name
-                            << endl;
+                    else {
+                        kDebug(30508) << "Ignoring" << myNode.nodeName()
+                        << " attribute " << (*attrProcessingIt).name
+                        << endl;
                     }
 #endif
                     break;
                 }
             }
 
-            if ( !found )
-            {
-                kWarning(30508) << "Unexpected attribute " << myAttrib.name ()
-                    << " in " << myNode.nodeName () << "!" << endl;
+            if (!found) {
+                kWarning(30508) << "Unexpected attribute " << myAttrib.name()
+                << " in " << myNode.nodeName() << "!" << endl;
             }
         }
     }
     //kDebug(30508) <<"Ending ProcessAttributes for node:" << myNode.nodeName();
 }
 
-void AllowNoAttributes ( const QDomNode & myNode )
+void AllowNoAttributes(const QDomNode & myNode)
 {
 #ifdef DEBUG_KWORD_TAGS
     QList<AttrProcessing> attrProcessingList;
-    ProcessAttributes (myNode, attrProcessingList);
+    ProcessAttributes(myNode, attrProcessingList);
 #else
-    Q_UNUSED( myNode );
+    Q_UNUSED(myNode);
 #endif
 }

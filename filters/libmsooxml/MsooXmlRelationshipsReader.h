@@ -27,7 +27,8 @@
 #include "MsooXmlReader.h"
 #include <QMap>
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 //! A context structure for MsooXmlRelationshipsReader
 class MsooXmlRelationshipsReaderContext : public MSOOXML::MsooXmlReaderContext
@@ -60,7 +61,7 @@ protected:
     KoFilter::ConversionStatus read_Relationships();
     KoFilter::ConversionStatus read_Relationship();
 
-    typedef KoFilter::ConversionStatus (MsooXmlRelationshipsReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(MsooXmlRelationshipsReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     MsooXmlRelationshipsReaderContext* m_context;

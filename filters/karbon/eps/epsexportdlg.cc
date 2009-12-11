@@ -28,33 +28,33 @@
 #include "epsexportdlg.h"
 
 
-EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
-	: KDialog( parent)
+EpsExportDlg::EpsExportDlg(QWidget* parent, const char* name)
+        : KDialog(parent)
 {
-	setButtons(Ok | Cancel);
-	setDefaultButton(Ok);
-	setModal(true);
-	setCaption(i18n( "EPS Export" ));
-	KVBox* page = new KVBox(this);
-	setMainWidget(page);
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    setCaption(i18n("EPS Export"));
+    KVBox* page = new KVBox(this);
+    setMainWidget(page);
 
-	m_psLevelButtons = new Q3ButtonGroup( 1, Qt::Horizontal,
-		i18n( "Options" ), page );
+    m_psLevelButtons = new Q3ButtonGroup(1, Qt::Horizontal,
+                                         i18n("Options"), page);
 
-	QRadioButton* radio;
-	radio = new QRadioButton( i18n( "PostScript level 1" ), m_psLevelButtons );
-	radio = new QRadioButton( i18n( "PostScript level 2" ), m_psLevelButtons );
-	radio = new QRadioButton( i18n( "PostScript level 3" ), m_psLevelButtons );
+    QRadioButton* radio;
+    radio = new QRadioButton(i18n("PostScript level 1"), m_psLevelButtons);
+    radio = new QRadioButton(i18n("PostScript level 2"), m_psLevelButtons);
+    radio = new QRadioButton(i18n("PostScript level 3"), m_psLevelButtons);
 
-	m_psLevelButtons->setRadioButtonExclusive( true );
-	m_psLevelButtons->setButton( 2 );
+    m_psLevelButtons->setRadioButtonExclusive(true);
+    m_psLevelButtons->setButton(2);
 }
 
 uint
 EpsExportDlg::psLevel() const
 {
-	return static_cast<uint>(
-		m_psLevelButtons->id( m_psLevelButtons->selected() ) );
+    return static_cast<uint>(
+               m_psLevelButtons->id(m_psLevelButtons->selected()));
 }
 
 #include "epsexportdlg.moc"

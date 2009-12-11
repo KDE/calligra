@@ -31,237 +31,203 @@
 #include "kword13picture.h"
 #include "kword13document.h"
 
-KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
+KWord13Document::KWord13Document(void) : m_previewFile(0)
 {
-    m_normalTextFramesetList.setAutoDelete( true );
-    m_tableFramesetList.setAutoDelete( true );
-    m_otherFramesetList.setAutoDelete( true );
-    m_headerFooterFramesetList.setAutoDelete( true );
-    m_footEndNoteFramesetList.setAutoDelete( true );
-    m_pictureFramesetList.setAutoDelete( true );
-    m_pictureDict.setAutoDelete( true );
+    m_normalTextFramesetList.setAutoDelete(true);
+    m_tableFramesetList.setAutoDelete(true);
+    m_otherFramesetList.setAutoDelete(true);
+    m_headerFooterFramesetList.setAutoDelete(true);
+    m_footEndNoteFramesetList.setAutoDelete(true);
+    m_pictureFramesetList.setAutoDelete(true);
+    m_pictureDict.setAutoDelete(true);
 }
 
-KWord13Document::~KWord13Document( void )
+KWord13Document::~KWord13Document(void)
 {
     delete m_previewFile;
 }
 
-void KWord13Document::xmldump( QIODevice* io )
+void KWord13Document::xmldump(QIODevice* io)
 {
-    QTextStream iostream( io );
-    iostream.setEncoding( QTextStream::UnicodeUTF8 );
-    
+    QTextStream iostream(io);
+    iostream.setEncoding(QTextStream::UnicodeUTF8);
+
     iostream << "<?xml encoding='UTF-8'?>\n";
     iostream << "<kworddocument>\n";
-    
-    for ( QMap<QString,QString>::ConstIterator it = m_documentProperties.constBegin();
-        it != m_documentProperties.constEnd();
-        ++it)
-    {
-        iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.value() ) << "\"/>\n";
+
+    for (QMap<QString, QString>::ConstIterator it = m_documentProperties.constBegin();
+            it != m_documentProperties.constEnd();
+            ++it) {
+        iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump(it.value()) << "\"/>\n";
     }
-    
+
     iostream << " <documentinfo>\n";
-    for ( QMap<QString,QString>::ConstIterator it11 = m_documentInfo.constBegin();
-        it11 != m_documentInfo.constEnd();
-        ++it11)
-    {
-        iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump( it11.value() ) << "\"/>\n";
+    for (QMap<QString, QString>::ConstIterator it11 = m_documentInfo.constBegin();
+            it11 != m_documentInfo.constEnd();
+            ++it11) {
+        iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump(it11.value()) << "\"/>\n";
     }
     iostream << " </documentinfo>\n";
-    
+
     iostream << " <normalframesets>\n";
-    for ( KWordTextFrameset* item = m_normalTextFramesetList.first();
-        item;
-        item = m_normalTextFramesetList.next() )
-    {
-        item->xmldump( iostream );
+    for (KWordTextFrameset* item = m_normalTextFramesetList.first();
+            item;
+            item = m_normalTextFramesetList.next()) {
+        item->xmldump(iostream);
     }
     iostream << " </normalframesets>\n";
-    
+
     iostream << " <tableframesets>\n";
-    for ( KWordTextFrameset* item12 = m_tableFramesetList.first();
-        item12;
-        item12 = m_tableFramesetList.next() )
-    {
-        item12->xmldump( iostream );
+    for (KWordTextFrameset* item12 = m_tableFramesetList.first();
+            item12;
+            item12 = m_tableFramesetList.next()) {
+        item12->xmldump(iostream);
     }
     iostream << " </tableframesets>\n";
-    
+
     iostream << " <headerfooterframesets>\n";
-    for ( KWordTextFrameset* item2 = m_headerFooterFramesetList.first();
-        item2;
-        item2 = m_headerFooterFramesetList.next() )
-    {
-        item2->xmldump( iostream );
+    for (KWordTextFrameset* item2 = m_headerFooterFramesetList.first();
+            item2;
+            item2 = m_headerFooterFramesetList.next()) {
+        item2->xmldump(iostream);
     }
     iostream << " </headerfooterframesets>\n";
-    
+
     iostream << " <footendnoteframesets>\n";
-    for ( KWordTextFrameset* item3 = m_footEndNoteFramesetList.first();
-        item3;
-        item3 = m_footEndNoteFramesetList.next() )
-    {
-        item3->xmldump( iostream );
+    for (KWordTextFrameset* item3 = m_footEndNoteFramesetList.first();
+            item3;
+            item3 = m_footEndNoteFramesetList.next()) {
+        item3->xmldump(iostream);
     }
     iostream << " </footendnoteframesets>\n";
-    
+
     iostream << " <otherframesets>\n";
-    for ( KWord13Frameset* item4 = m_otherFramesetList.first();
-        item4;
-        item4 = m_otherFramesetList.next() )
-    {
-        item4->xmldump( iostream );
+    for (KWord13Frameset* item4 = m_otherFramesetList.first();
+            item4;
+            item4 = m_otherFramesetList.next()) {
+        item4->xmldump(iostream);
     }
     iostream << " </otherframesets>\n";
-    
+
     iostream << " <pictureframesets>\n";
-    for ( KWord13Frameset* item5 = m_pictureFramesetList.first();
-        item5;
-        item5 = m_pictureFramesetList.next() )
-    {
-        item5->xmldump( iostream );
+    for (KWord13Frameset* item5 = m_pictureFramesetList.first();
+            item5;
+            item5 = m_pictureFramesetList.next()) {
+        item5->xmldump(iostream);
     }
     iostream << " </pictureframesets>\n";
-    
+
     iostream << " <styles>\n";
-    
-    for ( Q3ValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
-        it2 != m_styles.end();
-        ++it2)
-    {
-        (*it2).xmldump( iostream );
+
+    for (Q3ValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
+            it2 != m_styles.end();
+            ++it2) {
+        (*it2).xmldump(iostream);
     }
-    
+
     iostream << " </styles>\n";
-    
+
     iostream << " <pictures>\n";
-    
-    for ( Q3DictIterator<KWord13Picture> it3( m_pictureDict ) ; it3.current(); ++it3 )
-    {
+
+    for (Q3DictIterator<KWord13Picture> it3(m_pictureDict) ; it3.current(); ++it3) {
         iostream << "  <key>" << it3.currentKey() << "</key>";
     }
-    
+
     iostream << " </pictures>\n";
-    
+
     iostream << "</kworddocument>\n";
 }
 
-QString KWord13Document::getDocumentInfo( const QString& name ) const
+QString KWord13Document::getDocumentInfo(const QString& name) const
 {
-    QMap<QString,QString>::ConstIterator it ( m_documentInfo.find( name ) );
-    if ( it == m_documentInfo.end() )
-    {
+    QMap<QString, QString>::ConstIterator it(m_documentInfo.find(name));
+    if (it == m_documentInfo.end()) {
         // Property does not exist
         return QString();
-    }
-    else
-    {
+    } else {
         return it.value();
     }
 }
 
-QString KWord13Document::getProperty( const QString& name, const QString& oldName ) const
+QString KWord13Document::getProperty(const QString& name, const QString& oldName) const
 {
-    const QString result ( getPropertyInternal( name ) );
-    
-    if ( result.isEmpty() && !oldName.isEmpty() )
-    {
+    const QString result(getPropertyInternal(name));
+
+    if (result.isEmpty() && !oldName.isEmpty()) {
         // The result is empty result and we have an old name, so try the old name
-        return getPropertyInternal( oldName );
-    }
-    else
-    {
+        return getPropertyInternal(oldName);
+    } else {
         return result;
     }
 }
 
-QString KWord13Document::getPropertyInternal( const QString& name ) const
+QString KWord13Document::getPropertyInternal(const QString& name) const
 {
-    QMap<QString,QString>::ConstIterator it ( m_documentProperties.find( name ) );
-    if ( it == m_documentProperties.end() )
-    {
+    QMap<QString, QString>::ConstIterator it(m_documentProperties.find(name));
+    if (it == m_documentProperties.end()) {
         // Property does not exist
         return QString();
-    }
-    else
-    {
+    } else {
         return it.value();
     }
 }
 
-QDateTime KWord13Document::lastPrintingDate( void ) const
+QDateTime KWord13Document::lastPrintingDate(void) const
 {
-    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:lastPrintingDate" ) );
-    
+    const QString strDate(getPropertyInternal("VARIABLESETTINGS:lastPrintingDate"));
+
     QDateTime dt;
-    
-    if ( strDate.isEmpty() )
-    {
+
+    if (strDate.isEmpty()) {
         // The printing date only exists in syntax 3, so we have no fallback.
-        kDebug(30520) <<"No syntax 3 printing date!";
-    }
-    else
-    {
-        dt = QDateTime::fromString( strDate, Qt::ISODate );
+        kDebug(30520) << "No syntax 3 printing date!";
+    } else {
+        dt = QDateTime::fromString(strDate, Qt::ISODate);
     }
     return dt;
 }
 
-QDateTime KWord13Document::creationDate( void ) const
+QDateTime KWord13Document::creationDate(void) const
 {
-    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:creationDate" ) );
-    
+    const QString strDate(getPropertyInternal("VARIABLESETTINGS:creationDate"));
+
     QDateTime dt;
-    
-    if ( strDate.isEmpty() )
-    {
-        kDebug(30520) <<"No syntax 3 creation date!";
-        const int year = getPropertyInternal( "VARIABLESETTINGS:createFileYear" ).toInt();
-        const int month = getPropertyInternal( "VARIABLESETTINGS:createFileMonth" ).toInt();
-        const int day = getPropertyInternal( "VARIABLESETTINGS:createFileDay" ).toInt();
-        
-        if ( QDate::isValid( year, month, day) )
-        {
-            dt.setDate( QDate ( year, month, day) );
+
+    if (strDate.isEmpty()) {
+        kDebug(30520) << "No syntax 3 creation date!";
+        const int year = getPropertyInternal("VARIABLESETTINGS:createFileYear").toInt();
+        const int month = getPropertyInternal("VARIABLESETTINGS:createFileMonth").toInt();
+        const int day = getPropertyInternal("VARIABLESETTINGS:createFileDay").toInt();
+
+        if (QDate::isValid(year, month, day)) {
+            dt.setDate(QDate(year, month, day));
+        } else {
+            kDebug(30520) << "No syntax 2 creation date!";
         }
-        else
-        {
-            kDebug(30520) <<"No syntax 2 creation date!";
-        }
-    }
-    else
-    {
-        dt = QDateTime::fromString( strDate, Qt::ISODate );
+    } else {
+        dt = QDateTime::fromString(strDate, Qt::ISODate);
     }
     return dt;
 }
 
-QDateTime KWord13Document::modificationDate( void ) const
+QDateTime KWord13Document::modificationDate(void) const
 {
-    const QString strDate( getPropertyInternal( "VARIABLESETTINGS:modificationDate" ) );
-    
+    const QString strDate(getPropertyInternal("VARIABLESETTINGS:modificationDate"));
+
     QDateTime dt;
-    
-    if ( strDate.isEmpty() )
-    {
-        kDebug(30520) <<"No syntax 3 modification date!";
-        const int year = getPropertyInternal( "VARIABLESETTINGS:modifyFileYear" ).toInt();
-        const int month = getPropertyInternal( "VARIABLESETTINGS:modifyFileMonth" ).toInt();
-        const int day = getPropertyInternal( "VARIABLESETTINGS:modifyFileDay" ).toInt();
-        if ( QDate::isValid( year, month, day) )
-        {
-            dt.setDate( QDate ( year, month, day) );
+
+    if (strDate.isEmpty()) {
+        kDebug(30520) << "No syntax 3 modification date!";
+        const int year = getPropertyInternal("VARIABLESETTINGS:modifyFileYear").toInt();
+        const int month = getPropertyInternal("VARIABLESETTINGS:modifyFileMonth").toInt();
+        const int day = getPropertyInternal("VARIABLESETTINGS:modifyFileDay").toInt();
+        if (QDate::isValid(year, month, day)) {
+            dt.setDate(QDate(year, month, day));
+        } else {
+            kDebug(30520) << "No syntax 2 modification date!";
         }
-        else
-        {
-            kDebug(30520) <<"No syntax 2 modification date!";
-        }
-    }
-    else
-    {
-        dt = QDateTime::fromString( strDate, Qt::ISODate );
+    } else {
+        dt = QDateTime::fromString(strDate, Qt::ISODate);
     }
     return dt;
 }

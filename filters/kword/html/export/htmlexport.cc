@@ -53,74 +53,68 @@
 #include <htmlexport.moc>
 
 typedef KGenericFactory<HTMLExport> HTMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libhtmlexport, HTMLExportFactory("kofficefilters"))
 
 //
 // HTMLExport
 //
 
 HTMLExport::HTMLExport(QObject* parent, const QStringList &) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ((from != "application/x-kword") || (to != "text/html"))
-    {
+    if ((from != "application/x-kword") || (to != "text/html")) {
         return KoFilter::NotImplemented;
     }
 
-    bool batch=false;
-    if ( m_chain->manager() )
+    bool batch = false;
+    if (m_chain->manager())
         batch = m_chain->manager()->getBatchMode();
 
     HtmlWorker* worker;
 
-    if (batch)
-    {
-        worker=new HtmlCssWorker();
+    if (batch) {
+        worker = new HtmlCssWorker();
         worker->setXML(true);
         worker->setCodec(QTextCodec::codecForName("UTF-8"));
-    }
-    else
-    {
+    } else {
         HtmlExportDialog dialog;
 
-        if (!dialog.exec())
-        {
-            kDebug(30503) <<"Dialog was aborted! Aborting filter!";
+        if (!dialog.exec()) {
+            kDebug(30503) << "Dialog was aborted! Aborting filter!";
             return KoFilter::UserCancelled;
         }
 
         const HtmlExportDialog::Mode mode = dialog.getMode();
-        switch (mode)
-        {
+        switch (mode) {
         case HtmlExportDialog::Light:
-        worker=new HtmlDocStructWorker();
-        break;
+            worker = new HtmlDocStructWorker();
+            break;
         case HtmlExportDialog::Basic:
-        worker=new HtmlBasicWorker();
-        break;
+            worker = new HtmlBasicWorker();
+            break;
         case HtmlExportDialog::CustomCSS:
-        worker=new HtmlBasicWorker( dialog.cssURL() );
-        break;
+            worker = new HtmlBasicWorker(dialog.cssURL());
+            break;
         default: // Default CSS
-        worker=new HtmlCssWorker();
+            worker = new HtmlCssWorker();
         }
 
         worker->setXML(dialog.isXHtml());
         worker->setCodec(dialog.getCodec());
     }
 
-    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-    if (!leader)
-    {
+    if (!leader) {
         kError(30503) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }
-    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
+    KoFilter::ConversionStatus result = leader->convert(m_chain, from, to);
 
     delete leader;
     delete worker;

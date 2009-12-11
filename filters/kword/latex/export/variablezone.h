@@ -40,35 +40,35 @@
 class VariableZone: public VariableFormat
 {
 
-	public:
-		/* ==== Constructors ==== */
+public:
+    /* ==== Constructors ==== */
 
-		/**
-		 *  Creates a new instance of VariableZone.
-		 *
-		 * @param para which is the parent class.
-		 */
-		explicit VariableZone(Para* para);
-		
-		/**
-		 * Creates a new instance of TextZOne.
-		 *
-		 * @param text the text in this zone.
-		 * @param para which is the parent class.
-		 */
-		VariableZone(QString text, Para* para);
+    /**
+     *  Creates a new instance of VariableZone.
+     *
+     * @param para which is the parent class.
+     */
+    explicit VariableZone(Para* para);
 
-		/* ==== Destructor ==== */
-		virtual ~VariableZone();
+    /**
+     * Creates a new instance of TextZOne.
+     *
+     * @param text the text in this zone.
+     * @param para which is the parent class.
+     */
+    VariableZone(QString text, Para* para);
 
-		/* ==== Getters ==== */
+    /* ==== Destructor ==== */
+    virtual ~VariableZone();
 
-		/* ==== Setters ==== */
+    /* ==== Getters ==== */
 
-		/* ==== Helpful functions ==== */
+    /* ==== Setters ==== */
 
-		void analyze(const QDomNode);
-		void generate(QTextStream&);
+    /* ==== Helpful functions ==== */
+
+    void analyze(const QDomNode);
+    void generate(QTextStream&);
 
 };
 

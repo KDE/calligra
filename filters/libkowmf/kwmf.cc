@@ -128,15 +128,13 @@ void KWmf::invokeHandler(
 {
     typedef void (KWmf::*method)(U32 words, QDataStream &operands);
 
-    typedef struct
-    {
+    typedef struct {
         const char *name;
         unsigned short opcode;
         method handler;
     } opcodeEntry;
 
-    static const opcodeEntry funcTab[] =
-    {
+    static const opcodeEntry funcTab[] = {
         { "ANIMATEPALETTE",       0x0436, 0 },
         { "ARC",                  0x0817, &KWmf::opArc },
         { "BITBLT",               0x0922, 0 },
@@ -149,7 +147,7 @@ void KWmf::invokeHandler(
         { "CREATEREGION",         0x06FF, 0 },
         { "DELETEOBJECT",         0x01F0, &KWmf::opObjectDelete },
         { "DIBBITBLT",            0x0940, 0 },
-        { "DIBCREATEPATTERNBRUSH",0x0142, 0 },
+        { "DIBCREATEPATTERNBRUSH", 0x0142, 0 },
         { "DIBSTRETCHBLT",        0x0b41, 0 },
         { "ELLIPSE",              0x0418, &KWmf::opEllipse },
         { "ESCAPE",               0x0626, &KWmf::opNoop },
@@ -212,10 +210,8 @@ void KWmf::invokeHandler(
 
     // Scan lookup table for operation.
 
-    for (i = 0; funcTab[i].name; i++)
-    {
-        if (funcTab[i].opcode == opcode)
-        {
+    for (i = 0; funcTab[i].name; i++) {
+        if (funcTab[i].opcode == opcode) {
             break;
         }
     }
@@ -223,30 +219,26 @@ void KWmf::invokeHandler(
     // Invoke handler.
 
     result = funcTab[i].handler;
-    if (!result)
-    {
+    if (!result) {
         if (funcTab[i].name)
             kError(s_area) << "invokeHandler: unsupported opcode: " <<
-                funcTab[i].name <<
-                " operands: " << words << endl;
+            funcTab[i].name <<
+            " operands: " << words << endl;
         else
             kError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
-                QString::number(opcode, 16) <<
-                " operands: " << words << endl;
+            QString::number(opcode, 16) <<
+            " operands: " << words << endl;
 
         // Skip data we cannot use.
 
-        for (i = 0; i < words; i++)
-        {
+        for (i = 0; i < words; i++) {
             S16 discard;
 
             operands >> discard;
         }
-    }
-    else
-    {
-        kDebug(s_area) <<"invokeHandler: opcode:" << funcTab[i].name <<
-            " operands: " << words << endl;
+    } else {
+        kDebug(s_area) << "invokeHandler: opcode:" << funcTab[i].name <<
+        " operands: " << words << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
         // via a temporary datastream. This adds overhead, but eliminates the
@@ -254,10 +246,9 @@ void KWmf::invokeHandler(
         // of data (thus speeding development, and possibly adding some
         // future-proofing).
 
-        if (words)
-        {
+        if (words) {
             QByteArray *record = new QByteArray();
-	    record->resize( words*2 );
+            record->resize(words*2);
             QDataStream *body;
 
             operands.readRawData(record->data(), words * 2);
@@ -266,9 +257,7 @@ void KWmf::invokeHandler(
             (this->*result)(words, *body);
             delete body;
             delete record;
-        }
-        else
-        {
+        } else {
             QDataStream *body = new QDataStream();
 
             (this->*result)(words, *body);
@@ -301,8 +290,7 @@ bool KWmf::parse(
     const QString &file)
 {
     QFile in(file);
-    if (!in.open(QIODevice::ReadOnly))
-    {
+    if (!in.open(QIODevice::ReadOnly)) {
         kError(s_area) << "Unable to open input file!" << endl;
         in.close();
         return false;
@@ -324,61 +312,55 @@ bool KWmf::parse(
     startedAt = stream.device()->pos();
     stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
 
-    typedef struct _RECT
-    {
+    typedef struct _RECT {
         S16 left;
         S16 top;
         S16 right;
         S16 bottom;
     } RECT;
 
-    typedef struct _RECTL
-    {
+    typedef struct _RECTL {
         S32 left;
         S32 top;
         S32 right;
         S32 bottom;
     } RECTL;
 
-    typedef struct _SIZE
-    {
+    typedef struct _SIZE {
         S16 width;
         S16 height;
     } SIZE;
 
-    typedef struct _SIZEL
-    {
+    typedef struct _SIZEL {
         S32 width;
         S32 height;
     } SIZEL;
 
-    struct WmfEnhMetaHeader
-    {
+    struct WmfEnhMetaHeader {
         S32 iType;                  // Record type EMR_HEADER
         S32 nSize;                  // Record size in bytes.  This may be greater
-                                    // than the sizeof(ENHMETAHEADER).
+        // than the sizeof(ENHMETAHEADER).
         RECTL rclBounds;            // Inclusive-inclusive bounds in device units
         RECTL rclFrame;             // Inclusive-inclusive Picture Frame of metafile
-                                    // in .01 mm units
+        // in .01 mm units
         S32 dSignature;             // Signature.  Must be ENHMETA_SIGNATURE.
         S32 nVersion;               // Version number
         S32 nBytes;                 // Size of the metafile in bytes
         S32 nRecords;               // Number of records in the metafile
         S16 nHandles;               // Number of handles in the handle table
-                                    // Handle index zero is reserved.
+        // Handle index zero is reserved.
         S16 sReserved;              // Reserved.  Must be zero.
         S32 nDescription;           // Number of chars in the unicode description string
-                                    // This is 0 if there is no description string
+        // This is 0 if there is no description string
         S32 offDescription;         // Offset to the metafile description record.
-                                    // This is 0 if there is no description string
+        // This is 0 if there is no description string
         S32 nPalEntries;            // Number of entries in the metafile palette.
         SIZEL szlDevice;            // Size of the reference device in pels
         SIZEL szlMillimeters;       // Size of the reference device in millimeters
     };
-    #define ENHMETA_SIGNATURE       0x464D4520
+#define ENHMETA_SIGNATURE       0x464D4520
 
-    struct WmfMetaHeader
-    {
+    struct WmfMetaHeader {
         S16 mtType;
         S16 mtHeaderSize;
         S16 mtVersion;
@@ -388,8 +370,7 @@ bool KWmf::parse(
         S16 mtNoParameters;
     };
 
-    struct WmfPlaceableHeader
-    {
+    struct WmfPlaceableHeader {
         S32 key;
         S16 hmf;
         RECT bbox;
@@ -397,7 +378,7 @@ bool KWmf::parse(
         S32 reserved;
         S16 checksum;
     };
-    #define APMHEADER_KEY 0x9AC6CDD7L
+#define APMHEADER_KEY 0x9AC6CDD7L
 
     WmfPlaceableHeader pheader;
     WmfEnhMetaHeader eheader;
@@ -409,8 +390,7 @@ bool KWmf::parse(
 
     stream >> pheader.key;
     isPlaceable = (pheader.key == (S32)APMHEADER_KEY);
-    if (isPlaceable)
-    {
+    if (isPlaceable) {
         stream >> pheader.hmf;
         stream >> pheader.bbox.left;
         stream >> pheader.bbox.top;
@@ -420,12 +400,11 @@ bool KWmf::parse(
         stream >> pheader.reserved;
         stream >> pheader.checksum;
         checksum = 0;
-        S16 *ptr = (S16 *)&pheader;
+        S16 *ptr = (S16 *) & pheader;
 
         // XOR in each of the S16s.
 
-        for (unsigned i = 0; i < sizeof(WmfPlaceableHeader)/sizeof(S16); i++)
-        {
+        for (unsigned i = 0; i < sizeof(WmfPlaceableHeader) / sizeof(S16); i++) {
             checksum ^= ptr[i];
         }
         if (pheader.checksum != checksum)
@@ -441,9 +420,7 @@ bool KWmf::parse(
             m_windowFlipY = 1;
         else
             m_windowFlipY = -1;
-    }
-    else
-    {
+    } else {
         stream.device()->seek(startedAt);
         m_dpi = (unsigned)((double)576 / m_dpi);
         m_windowOrgX = 0;
@@ -467,8 +444,7 @@ bool KWmf::parse(
     stream >> eheader.rclFrame.bottom;
     stream >> eheader.dSignature;
     isEnhanced = (eheader.dSignature == ENHMETA_SIGNATURE);
-    if (isEnhanced) // is it really enhanced ?
-    {
+    if (isEnhanced) { // is it really enhanced ?
         stream >> eheader.nVersion;
         stream >> eheader.nBytes;
         stream >> eheader.nRecords;
@@ -501,9 +477,7 @@ bool KWmf::parse(
         debug("NOT YET IMPLEMENTED, SORRY.");
         */
         return false;
-    }
-    else // no, not enhanced
-    {
+    } else { // no, not enhanced
         //    debug("WMF Header");
         //----- Read as standard metafile header
         stream.device()->seek(fileAt);
@@ -540,16 +514,14 @@ void KWmf::opBrushCreateIndirect(
     U32 /*words*/,
     QDataStream &operands)
 {
-    static Qt::BrushStyle hatchedStyleTab[] =
-    {
+    static Qt::BrushStyle hatchedStyleTab[] = {
         Qt::HorPattern,
         Qt::FDiagPattern,
         Qt::BDiagPattern,
         Qt::CrossPattern,
         Qt::DiagCrossPattern
     };
-    static Qt::BrushStyle styleTab[] =
-    {
+    static Qt::BrushStyle styleTab[] = {
         Qt::SolidPattern,
         Qt::NoBrush,
         Qt::FDiagPattern,   // hatched
@@ -568,31 +540,23 @@ void KWmf::opBrushCreateIndirect(
 
     operands >> arg >> color;
     handle->m_color = getColor(color);
-    if (arg == 2)
-    {
+    if (arg == 2) {
         operands >> arg;
-        if (arg >= 0 && arg < 6)
-        {
+        if (arg >= 0 && arg < 6) {
             style = hatchedStyleTab[arg];
-        }
-        else
-        {
+        } else {
             kError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
             style = Qt::SolidPattern;
         }
-    }
-    else
-    if (arg >= 0 && arg < 9)
-    {
-        style = styleTab[arg];
-        operands >> discard;
-    }
-    else
-    {
-        kError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
-        style = Qt::SolidPattern;
-        operands >> discard;
-    }
+    } else
+        if (arg >= 0 && arg < 9) {
+            style = styleTab[arg];
+            operands >> discard;
+        } else {
+            kError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
+            style = Qt::SolidPattern;
+            operands >> discard;
+        }
     handle->m_style = style;
 }
 
@@ -672,8 +636,7 @@ void KWmf::opPenCreateIndirect(
     U32 /*words*/,
     QDataStream &operands)
 {
-    static Qt::PenStyle styleTab[] =
-    {
+    static Qt::PenStyle styleTab[] = {
         Qt::SolidLine,
         Qt::DashLine,
         Qt::DotLine,
@@ -689,12 +652,9 @@ void KWmf::opPenCreateIndirect(
     S32 color;
 
     operands >> arg;
-    if (arg >= 0 && arg < 8)
-    {
+    if (arg >= 0 && arg < 8) {
         handle->m_style = styleTab[arg];
-    }
-    else
-    {
+    } else {
         kError(s_area) << "createPenIndirect: invalid pen " << arg << endl;
         handle->m_style = Qt::SolidLine;
     }
@@ -730,8 +690,7 @@ void KWmf::opPolygon(
     operands >> tmp;
     QPolygon points(tmp);
 
-    for (int i = 0; i < tmp; i++)
-    {
+    for (int i = 0; i < tmp; i++) {
         points.setPoint(i, normalisePoint(operands));
     }
     gotPolygon(m_dc, points);
@@ -746,8 +705,7 @@ void KWmf::opPolyline(
     operands >> tmp;
     QPolygon points(tmp);
 
-    for (int i = 0; i < tmp; i++)
-    {
+    for (int i = 0; i < tmp; i++) {
         points.setPoint(i, normalisePoint(operands));
     }
     gotPolyline(m_dc, points);
@@ -780,8 +738,7 @@ void KWmf::opRestoreDc(
     S16 i;
 
     operands >> pop;
-    for (i = 0; i < pop; i++)
-    {
+    for (i = 0; i < pop; i++) {
         m_dc = m_savedDcs.pop();
     }
 }
@@ -839,19 +796,16 @@ void KWmf::skip(
     U32 words,
     QDataStream &operands)
 {
-    if ((int)words < 0)
-    {
+    if ((int)words < 0) {
         kError(s_area) << "skip: " << (int)words << endl;
         return;
     }
-    if (words)
-    {
+    if (words) {
         U32 i;
         S16 discard;
 
-        kDebug(s_area) <<"skip:" << words;
-        for (i = 0; i < words; i++)
-        {
+        kDebug(s_area) << "skip:" << words;
+        for (i = 0; i < words; i++) {
             operands >> discard;
         }
     }
@@ -881,19 +835,16 @@ void KWmf::walk(
     S16 opcode;
     U32 length = 0;
 
-    while (length < words)
-    {
+    while (length < words) {
         operands >> wordCount;
         operands >> opcode;
 
         // If we get some duff data, protect ourselves.
-        if (length + wordCount > words)
-        {
+        if (length + wordCount > words) {
             wordCount = words - length;
         }
         length += wordCount;
-        if (opcode == 0)
-        {
+        if (opcode == 0) {
             // This appears to be an EOF marker.
             break;
         }

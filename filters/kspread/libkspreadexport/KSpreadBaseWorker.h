@@ -30,16 +30,16 @@ typedef QMap<QString, QString> KSpreadFilterProperty;
 class KSpreadBaseWorker
 {
 public:
-	KSpreadBaseWorker();
-	virtual ~KSpreadBaseWorker();
+    KSpreadBaseWorker();
+    virtual ~KSpreadBaseWorker();
 
-	virtual KoFilter::ConversionStatus startDocument(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startInfoLog(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startInfoAuthor(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startInfoAbout(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startSpreadBook(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startSpreadSheet(KSpreadFilterProperty property);
-	virtual KoFilter::ConversionStatus startSpreadCell(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startDocument(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startInfoLog(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startInfoAuthor(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startInfoAbout(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startSpreadBook(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startSpreadSheet(KSpreadFilterProperty property);
+    virtual KoFilter::ConversionStatus startSpreadCell(KSpreadFilterProperty property);
 };
 
 #endif /* KSPREAD_BASE_WORKER_H */

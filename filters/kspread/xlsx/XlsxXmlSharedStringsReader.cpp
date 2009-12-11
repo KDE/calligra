@@ -34,25 +34,24 @@
 #include <MsooXmlReader_p.h>
 
 XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings)
-    : strings(&_strings)
+        : strings(&_strings)
 {
 }
 
-class XlsxXmlSharedStringsReader::Private {
+class XlsxXmlSharedStringsReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
 private:
 };
 
 XlsxXmlSharedStringsReader::XlsxXmlSharedStringsReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -98,13 +97,13 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::readInternal()
         return KoFilter::WrongFormat;
     }
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( QString(), MSOOXML::Schemas::spreadsheetml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::spreadsheetml));
         return KoFilter::WrongFormat;
     }
@@ -125,7 +124,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
 //! @todo use uniqueCount attr?
 //    TRY_READ_ATTR_WITHOUT_NS(uniqueCount)

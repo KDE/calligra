@@ -26,8 +26,8 @@ Comment::Comment()
 
 Comment::Comment(const char* comment)
 {
-	if(comment != NULL)
-		_comment = comment;
+    if (comment != NULL)
+        _comment = comment;
 }
 
 Comment::~Comment()
@@ -36,5 +36,5 @@ Comment::~Comment()
 
 void Comment::print(int tab)
 {
-	cout << getComment().latin1() << endl;
+    cout << getComment().latin1() << endl;
 }

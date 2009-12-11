@@ -25,9 +25,10 @@ class QString;
 class KIntNumInput;
 class KDoubleNumInput;
 
-namespace KFormula {
-    class Container;
-    class DocumentWrapper;
+namespace KFormula
+{
+class Container;
+class DocumentWrapper;
 }
 
 #include <qdom.h>
@@ -40,7 +41,7 @@ class PNGExportDia : public KDialog
     Q_OBJECT
 
 public:
-    PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent=0L );
+    PNGExportDia(const QDomDocument &dom, const QString &outFile, QWidget *parent = 0L);
     ~PNGExportDia();
 
 public slots:
@@ -48,10 +49,10 @@ public slots:
 
 protected slots:
 
-    void widthChanged( int  );
-    void heightChanged( int );
-    void percentWidthChanged( double );
-    void percentHeightChanged( double );
+    void widthChanged(int);
+    void heightChanged(int);
+    void percentWidthChanged(double);
+    void percentHeightChanged(double);
 
     void proportionalClicked();
 

@@ -28,123 +28,135 @@
 
 //#define SWINDER_XLS2RAW
 
-namespace Swinder {
+namespace Swinder
+{
 
 class HLinkRecord : public Record
 {
 public:
-  unsigned long m_firstRow;
-  unsigned long m_firstColumn;
-  unsigned long m_lastRow;
-  unsigned long m_lastColumn;
-  UString m_displayName;
-  UString m_targetFrameName;
-  UString m_location;
+    unsigned long m_firstRow;
+    unsigned long m_firstColumn;
+    unsigned long m_lastRow;
+    unsigned long m_lastColumn;
+    UString m_displayName;
+    UString m_targetFrameName;
+    UString m_location;
 
-  static const unsigned id;
-  virtual unsigned rtti() const { return this->id; }
-  virtual const char* name() const { return "HLink"; }
-  virtual void dump( std::ostream& ) const {}
-  static Record *createRecord() { return new HLinkRecord; }
-  HLinkRecord() : Record(), m_firstRow(0), m_firstColumn(0), m_lastRow(0), m_lastColumn(0) {}
-  virtual ~HLinkRecord() {}
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned* /* continuePositions */ ) {
-      if (size < 8) {
-          setIsValid(false);
-          return;
-      }
+    static const unsigned id;
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "HLink";
+    }
+    virtual void dump(std::ostream&) const {}
+    static Record *createRecord() {
+        return new HLinkRecord;
+    }
+    HLinkRecord() : Record(), m_firstRow(0), m_firstColumn(0), m_lastRow(0), m_lastColumn(0) {}
+    virtual ~HLinkRecord() {}
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */) {
+        if (size < 8) {
+            setIsValid(false);
+            return;
+        }
 
-      m_firstRow = readU16(data);
-      m_lastRow = readU16(data + 2);
-      m_firstColumn = readU16(data + 4);
-      m_lastColumn = readU16(data + 6);
-      
-      const unsigned char* startHyperlinkObject = data + 16 /* skip CLDID */ + 8;
-      const unsigned long streamVersion = readU32(startHyperlinkObject);
-      if( streamVersion != 2 ) {
-          std::cerr << "Invalid stream version " << streamVersion << " in HLinkRecord" << std::endl;
-          setIsValid(false);
-          return;
-      }
+        m_firstRow = readU16(data);
+        m_lastRow = readU16(data + 2);
+        m_firstColumn = readU16(data + 4);
+        m_lastColumn = readU16(data + 6);
 
-      // 10 bits options + 22 bits reserved
-      const unsigned long opts = readU32(startHyperlinkObject + 4);
-      const bool hlstmfHasMonikor = opts & 0x01;
-      //const bool hlstmfIsAbsolute = opts & 0x02;
-      //const bool hlstmfISiteGaveDisplayName = opts & 0x04;
-      bool hlstmfHasLocationStr = opts & 0x08;
-      const bool hlstmfHasDisplayName = opts & 0x10;
-      //const bool hlstmfHasGUID = opts & 0x20;
-      //const bool hlstmfHasCreationTime = opts & 0x60;
-      const bool hlstmfHasFrameName = opts & 0xC0;
-      const bool hlstmfMonikerSavedAsStr = opts & 0x180;
-      //const bool hlstmfAbsFromGetdataRel = opts & 0x300;
-      //Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
+        const unsigned char* startHyperlinkObject = data + 16 /* skip CLDID */ + 8;
+        const unsigned long streamVersion = readU32(startHyperlinkObject);
+        if (streamVersion != 2) {
+            std::cerr << "Invalid stream version " << streamVersion << " in HLinkRecord" << std::endl;
+            setIsValid(false);
+            return;
+        }
 
-      startHyperlinkObject += 8;
-      
-      unsigned long length = 0;
-      unsigned sizeReaded = 0;
+        // 10 bits options + 22 bits reserved
+        const unsigned long opts = readU32(startHyperlinkObject + 4);
+        const bool hlstmfHasMonikor = opts & 0x01;
+        //const bool hlstmfIsAbsolute = opts & 0x02;
+        //const bool hlstmfISiteGaveDisplayName = opts & 0x04;
+        bool hlstmfHasLocationStr = opts & 0x08;
+        const bool hlstmfHasDisplayName = opts & 0x10;
+        //const bool hlstmfHasGUID = opts & 0x20;
+        //const bool hlstmfHasCreationTime = opts & 0x60;
+        const bool hlstmfHasFrameName = opts & 0xC0;
+        const bool hlstmfMonikerSavedAsStr = opts & 0x180;
+        //const bool hlstmfAbsFromGetdataRel = opts & 0x300;
+        //Q_ASSERT( !hlstmfMonikerSavedAsStr || hlstmfHasMonikor );
 
-      if( hlstmfHasDisplayName ) {
-          length = readU32(startHyperlinkObject);
-          m_displayName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-          printf("displayName=%s\n", m_displayName.ascii() );
-          startHyperlinkObject += 4 + sizeReaded;
-      }
-      
-      if( hlstmfHasFrameName ) {
-          length = readU32(startHyperlinkObject);
-          m_targetFrameName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-          printf("targetFrameName=%s\n", m_targetFrameName.ascii() );
-          startHyperlinkObject += 4 + sizeReaded;
-      }
+        startHyperlinkObject += 8;
 
-      if( hlstmfHasMonikor ) {
-          if( hlstmfMonikerSavedAsStr ) { // moniker
+        unsigned long length = 0;
+        unsigned sizeReaded = 0;
+
+        if (hlstmfHasDisplayName) {
             length = readU32(startHyperlinkObject);
-            UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-            printf("moniker=%s\n", moniker.ascii() );
+            m_displayName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+            printf("displayName=%s\n", m_displayName.ascii());
             startHyperlinkObject += 4 + sizeReaded;
-          } else { // oleMoniker
-            const unsigned long clsid = readU32(startHyperlinkObject);
-            startHyperlinkObject += 16; // the clsid is actually 16 byte long but we only need the first 4 to differ
-            switch( clsid ) {
-              case 0x79EAC9E0: { // URLMoniker
-                length = readU32(startHyperlinkObject);
-                m_location = readTerminatedUnicodeChars(startHyperlinkObject + 4, &sizeReaded);
-                printf("url=%s\n", m_location.ascii() );
-                startHyperlinkObject += length + 4;
-              } break;
-              case 0x00000303: { // FileMoniker
-                printf( "TODO: HLinkRecord FileMoniker\n" );
-                return; // abort
-              } break;
-              case 0x00000309: { // CompositeMoniker
-                printf( "TODO: HLinkRecord CompositeMoniker\n" );
-                return; // abort
-              } break;
-              case 0x00000305: { // AntiMoniker
-                printf( "TODO: HLinkRecord AntiMoniker\n" );
-                return; // abort
-              } break;
-              case 0x00000304: { // ItemMoniker
-                printf( "TODO: HLinkRecord ItemMoniker\n" );
-                return; // abort
-              } break;
-            }
-          }
-      }
-      
-      if( hlstmfHasLocationStr ) {
-          length = readU32(startHyperlinkObject);
-          m_location = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
-          printf("location=%s\n", m_location.ascii() );
-          startHyperlinkObject += 4 + sizeReaded;
-      }
+        }
 
-      // ignore (16 bytes) guid and fileTime (8 bytes)
-  }
+        if (hlstmfHasFrameName) {
+            length = readU32(startHyperlinkObject);
+            m_targetFrameName = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+            printf("targetFrameName=%s\n", m_targetFrameName.ascii());
+            startHyperlinkObject += 4 + sizeReaded;
+        }
+
+        if (hlstmfHasMonikor) {
+            if (hlstmfMonikerSavedAsStr) {  // moniker
+                length = readU32(startHyperlinkObject);
+                UString moniker = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+                printf("moniker=%s\n", moniker.ascii());
+                startHyperlinkObject += 4 + sizeReaded;
+            } else { // oleMoniker
+                const unsigned long clsid = readU32(startHyperlinkObject);
+                startHyperlinkObject += 16; // the clsid is actually 16 byte long but we only need the first 4 to differ
+                switch (clsid) {
+                case 0x79EAC9E0: { // URLMoniker
+                    length = readU32(startHyperlinkObject);
+                    m_location = readTerminatedUnicodeChars(startHyperlinkObject + 4, &sizeReaded);
+                    printf("url=%s\n", m_location.ascii());
+                    startHyperlinkObject += length + 4;
+                }
+                break;
+                case 0x00000303: { // FileMoniker
+                    printf("TODO: HLinkRecord FileMoniker\n");
+                    return; // abort
+                }
+                break;
+                case 0x00000309: { // CompositeMoniker
+                    printf("TODO: HLinkRecord CompositeMoniker\n");
+                    return; // abort
+                }
+                break;
+                case 0x00000305: { // AntiMoniker
+                    printf("TODO: HLinkRecord AntiMoniker\n");
+                    return; // abort
+                }
+                break;
+                case 0x00000304: { // ItemMoniker
+                    printf("TODO: HLinkRecord ItemMoniker\n");
+                    return; // abort
+                }
+                break;
+                }
+            }
+        }
+
+        if (hlstmfHasLocationStr) {
+            length = readU32(startHyperlinkObject);
+            m_location = readUnicodeChars(startHyperlinkObject + 4, length, -1, 0, &sizeReaded);
+            printf("location=%s\n", m_location.ascii());
+            startHyperlinkObject += 4 + sizeReaded;
+        }
+
+        // ignore (16 bytes) guid and fileTime (8 bytes)
+    }
 };
 
 const unsigned HLinkRecord::id = 0x01B8;
@@ -166,19 +178,19 @@ public:
 
     // mapping from cell position to shared formulas
     std::map<std::pair<unsigned, unsigned>, FormulaTokens> sharedFormulas;
-    
+
     // mapping from object id's to object instances
     std::map<unsigned long, Object*> sharedObjects;
 };
 
-WorksheetSubStreamHandler::WorksheetSubStreamHandler( Sheet* sheet, const GlobalsSubStreamHandler* globals )
-    : d(new Private)
+WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals)
+        : d(new Private)
 {
     d->sheet = sheet;
     d->globals = globals;
     d->lastFormulaCell = 0;
     d->formulaStringCell = 0;
-    
+
     RecordRegistry::registerRecordClass(HLinkRecord::id, HLinkRecord::createRecord);
 }
 
@@ -187,7 +199,7 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
     delete d;
 }
 
-void WorksheetSubStreamHandler::handleRecord( Record* record )
+void WorksheetSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
 
@@ -245,22 +257,20 @@ void WorksheetSubStreamHandler::handleRecord( Record* record )
     else if (type == ObjRecord::id)
         handleObj(static_cast<ObjRecord*>(record));
     else if (type == BOFRecord::id)
-        handleBOF( static_cast<BOFRecord*>( record ) );
+        handleBOF(static_cast<BOFRecord*>(record));
     else if (type == DefaultRowHeightRecord::id)
         handleDefaultRowHeight(static_cast<DefaultRowHeightRecord*>(record));
     else if (type == DefaultColWidthRecord::id)
         handleDefaultColWidth(static_cast<DefaultColWidthRecord*>(record));
-    else if (type == 0xA)
-        {} //EofRecord
-    else if (type == 0x200)
-        {} //DimensionsRecord
+    else if (type == 0xA) {} //EofRecord
+    else if (type == 0x200) {} //DimensionsRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        printf( "Unhandled worksheet record with type %i\n", type );
+        printf("Unhandled worksheet record with type %i\n", type);
     }
 }
 
-void WorksheetSubStreamHandler::handleBOF( BOFRecord* record )
+void WorksheetSubStreamHandler::handleBOF(BOFRecord* record)
 {
     if (!record) return;
 
@@ -269,7 +279,7 @@ void WorksheetSubStreamHandler::handleBOF( BOFRecord* record )
     //}
 }
 
-void WorksheetSubStreamHandler::handleBlank( BlankRecord* record )
+void WorksheetSubStreamHandler::handleBlank(BlankRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -279,12 +289,12 @@ void WorksheetSubStreamHandler::handleBlank( BlankRecord* record )
     unsigned xfIndex = record->xfIndex();
 
     Cell* cell = d->sheet->cell(column, row, true);
-    if(cell) {
+    if (cell) {
         cell->setFormat(d->globals->convertedFormat(xfIndex));
     }
 }
 
-void WorksheetSubStreamHandler::handleBoolErr( BoolErrRecord* record )
+void WorksheetSubStreamHandler::handleBoolErr(BoolErrRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -300,17 +310,17 @@ void WorksheetSubStreamHandler::handleBoolErr( BoolErrRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleBottomMargin( BottomMarginRecord* record )
+void WorksheetSubStreamHandler::handleBottomMargin(BottomMarginRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
 
     // convert from inches to points
     double margin = record->bottomMargin() * 72.0;
-    d->sheet->setBottomMargin( margin );
+    d->sheet->setBottomMargin(margin);
 }
 
-void WorksheetSubStreamHandler::handleCalcMode( CalcModeRecord* record )
+void WorksheetSubStreamHandler::handleCalcMode(CalcModeRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -318,7 +328,7 @@ void WorksheetSubStreamHandler::handleCalcMode( CalcModeRecord* record )
     d->sheet->setAutoCalc(record->calcMode() != CalcModeRecord::Manual);
 }
 
-void WorksheetSubStreamHandler::handleColInfo( ColInfoRecord* record )
+void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -332,14 +342,14 @@ void WorksheetSubStreamHandler::handleColInfo( ColInfoRecord* record )
     for (unsigned i = firstColumn; i <= lastColumn; i++) {
         Column* column = d->sheet->column(i, true);
         if (column) {
-            column->setWidth( width / 120 );
+            column->setWidth(width / 120);
             column->setFormat(d->globals->convertedFormat(xfIndex));
             column->setVisible(!hidden);
         }
     }
 }
 
-void WorksheetSubStreamHandler::handleDataTable( DataTableRecord* record )
+void WorksheetSubStreamHandler::handleDataTable(DataTableRecord* record)
 {
     if (!record) return;
     if (!d->lastFormulaCell) return;
@@ -355,7 +365,7 @@ void WorksheetSubStreamHandler::handleDataTable( DataTableRecord* record )
     d->lastFormulaCell = 0;
 }
 
-void WorksheetSubStreamHandler::handleDimension( DimensionRecord* record )
+void WorksheetSubStreamHandler::handleDimension(DimensionRecord* record)
 {
     if (!record) return;
 
@@ -363,7 +373,7 @@ void WorksheetSubStreamHandler::handleDimension( DimensionRecord* record )
     // about the used range of the sheet
 }
 
-void WorksheetSubStreamHandler::handleFormula( FormulaRecord* record )
+void WorksheetSubStreamHandler::handleFormula(FormulaRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -390,7 +400,7 @@ void WorksheetSubStreamHandler::handleFormula( FormulaRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleFooter( FooterRecord* record )
+void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -406,18 +416,18 @@ void WorksheetSubStreamHandler::handleFooter( FooterRecord* record )
         len = footer.find(UString("&C")) - pos;
         if (len > 0) {
             left = footer.substr(pos, len);
-            footer = footer.substr(pos+len, footer.length());
+            footer = footer.substr(pos + len, footer.length());
         }
     }
 
     // center part
     pos = footer.find(UString("&C"));
-    if( pos >= 0 ) {
+    if (pos >= 0) {
         pos += 2;
         len = footer.find(UString("&R")) - pos;
-        if(len > 0) {
+        if (len > 0) {
             center = footer.substr(pos, len);
-            footer = footer.substr(pos+len, footer.length());
+            footer = footer.substr(pos + len, footer.length());
         }
     }
 
@@ -433,7 +443,7 @@ void WorksheetSubStreamHandler::handleFooter( FooterRecord* record )
     d->sheet->setRightFooter(right);
 }
 
-void WorksheetSubStreamHandler::handleHeader( HeaderRecord* record )
+void WorksheetSubStreamHandler::handleHeader(HeaderRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -449,7 +459,7 @@ void WorksheetSubStreamHandler::handleHeader( HeaderRecord* record )
         len = header.find(UString("&C")) - pos;
         if (len > 0) {
             left = header.substr(pos, len);
-            header = header.substr(pos+len, header.length());
+            header = header.substr(pos + len, header.length());
         }
     }
 
@@ -460,7 +470,7 @@ void WorksheetSubStreamHandler::handleHeader( HeaderRecord* record )
         len = header.find(UString("&R")) - pos;
         if (len > 0) {
             center = header.substr(pos, len);
-            header = header.substr(pos+len, header.length());
+            header = header.substr(pos + len, header.length());
         }
     }
 
@@ -476,7 +486,7 @@ void WorksheetSubStreamHandler::handleHeader( HeaderRecord* record )
     d->sheet->setRightHeader(right);
 }
 
-void WorksheetSubStreamHandler::handleLabel( LabelRecord* record )
+void WorksheetSubStreamHandler::handleLabel(LabelRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -493,7 +503,7 @@ void WorksheetSubStreamHandler::handleLabel( LabelRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleLabelSST( LabelSSTRecord* record )
+void WorksheetSubStreamHandler::handleLabelSST(LabelSSTRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -512,17 +522,17 @@ void WorksheetSubStreamHandler::handleLabelSST( LabelSSTRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleLeftMargin( LeftMarginRecord* record )
+void WorksheetSubStreamHandler::handleLeftMargin(LeftMarginRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
 
     // convert from inches to points
     double margin = record->leftMargin() * 72.0;
-    d->sheet->setLeftMargin( margin );
+    d->sheet->setLeftMargin(margin);
 }
 
-void WorksheetSubStreamHandler::handleMergedCells( MergedCellsRecord* record )
+void WorksheetSubStreamHandler::handleMergedCells(MergedCellsRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -547,7 +557,7 @@ void WorksheetSubStreamHandler::handleMergedCells( MergedCellsRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleMulBlank( MulBlankRecord* record )
+void WorksheetSubStreamHandler::handleMulBlank(MulBlankRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -564,7 +574,7 @@ void WorksheetSubStreamHandler::handleMulBlank( MulBlankRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleMulRK( MulRKRecord* record )
+void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -583,12 +593,12 @@ void WorksheetSubStreamHandler::handleMulRK( MulRKRecord* record )
             else
                 value.setValue(record->asFloat(i));
             cell->setValue(value);
-            cell->setFormat(d->globals->convertedFormat(record->xfIndex(column-firstColumn)));
+            cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
         }
     }
 }
 
-void WorksheetSubStreamHandler::handleNumber( NumberRecord* record )
+void WorksheetSubStreamHandler::handleNumber(NumberRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -605,7 +615,7 @@ void WorksheetSubStreamHandler::handleNumber( NumberRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleRightMargin( RightMarginRecord* record )
+void WorksheetSubStreamHandler::handleRightMargin(RightMarginRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -615,7 +625,7 @@ void WorksheetSubStreamHandler::handleRightMargin( RightMarginRecord* record )
     d->sheet->setRightMargin(margin);
 }
 
-void WorksheetSubStreamHandler::handleRK( RKRecord* record )
+void WorksheetSubStreamHandler::handleRK(RKRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -637,7 +647,7 @@ void WorksheetSubStreamHandler::handleRK( RKRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleRow( RowRecord* record )
+void WorksheetSubStreamHandler::handleRow(RowRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -655,7 +665,7 @@ void WorksheetSubStreamHandler::handleRow( RowRecord* record )
     }
 }
 
-void WorksheetSubStreamHandler::handleRString( RStringRecord* record )
+void WorksheetSubStreamHandler::handleRString(RStringRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -666,16 +676,16 @@ void WorksheetSubStreamHandler::handleRString( RStringRecord* record )
     UString label = record->label();
 
     Cell* cell = d->sheet->cell(column, row, true);
-    if(cell) {
+    if (cell) {
         cell->setValue(Value(label));
         cell->setFormat(d->globals->convertedFormat(xfIndex));
     }
 }
 
-void WorksheetSubStreamHandler::handleSharedFormula( SharedFormulaRecord* record )
+void WorksheetSubStreamHandler::handleSharedFormula(SharedFormulaRecord* record)
 {
-    if(!record) return;
-    if(!d->lastFormulaCell) return;
+    if (!record) return;
+    if (!d->lastFormulaCell) return;
 
     unsigned row = d->lastFormulaCell->row();
     unsigned column = d->lastFormulaCell->column();
@@ -688,7 +698,7 @@ void WorksheetSubStreamHandler::handleSharedFormula( SharedFormulaRecord* record
     d->lastFormulaCell = 0;
 }
 
-void WorksheetSubStreamHandler::handleString( StringRecord* record )
+void WorksheetSubStreamHandler::handleString(StringRecord* record)
 {
     if (!record) return;
     if (!d->formulaStringCell) return;
@@ -697,7 +707,7 @@ void WorksheetSubStreamHandler::handleString( StringRecord* record )
     d->formulaStringCell = 0;
 }
 
-void WorksheetSubStreamHandler::handleTopMargin( TopMarginRecord* record )
+void WorksheetSubStreamHandler::handleTopMargin(TopMarginRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
@@ -708,62 +718,62 @@ void WorksheetSubStreamHandler::handleTopMargin( TopMarginRecord* record )
     d->sheet->setTopMargin(margin);
 }
 
-void WorksheetSubStreamHandler::handleLink( HLinkRecord* record )
+void WorksheetSubStreamHandler::handleLink(HLinkRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
 
     //FIXME we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
-    Cell *cell = d->sheet->cell( record->m_firstColumn, record->m_firstRow );
-    if( cell ) {
-        cell->setHyperlink( record->m_displayName, record->m_location, record->m_targetFrameName );
+    Cell *cell = d->sheet->cell(record->m_firstColumn, record->m_firstRow);
+    if (cell) {
+        cell->setHyperlink(record->m_displayName, record->m_location, record->m_targetFrameName);
     }
 }
 
-void WorksheetSubStreamHandler::handleNote( NoteRecord* record )
+void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    Cell *cell = d->sheet->cell( record->column(), record->row() );
-    if( cell ) {
-      NoteObject *obj = static_cast<NoteObject*>( d->sharedObjects[ record->idObj() ] );
-      if( obj ) {
-        cell->setNote( obj->note() );
-      }
+    Cell *cell = d->sheet->cell(record->column(), record->row());
+    if (cell) {
+        NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[ record->idObj()]);
+        if (obj) {
+            cell->setNote(obj->note());
+        }
     }
 }
 
-void WorksheetSubStreamHandler::handleObj( ObjRecord* record )
+void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
     if (!record->m_object) return;
-    d->sharedObjects[ record->m_object->id() ] = record->m_object;
+    d->sharedObjects[ record->m_object->id()] = record->m_object;
 }
 
-void WorksheetSubStreamHandler::handleDefaultRowHeight( DefaultRowHeightRecord* record )
+void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultRowHeight( record->miyRw() );
+    d->sheet->setDefaultRowHeight(record->miyRw());
 }
 
-void WorksheetSubStreamHandler::handleDefaultColWidth( DefaultColWidthRecord* record )
+void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    d->sheet->setDefaultColWidth( record->cchdefColWidth() );
+    d->sheet->setDefaultColWidth(record->cchdefColWidth());
 }
 
 typedef std::vector<UString> UStringStack;
 
-static void mergeTokens( UStringStack* stack, unsigned count, UString mergeString )
+static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString)
 {
     if (!stack) return;
     if (stack->size() < count) return;
 
     UString s1, s2;
 
-    while(count) {
+    while (count) {
         count--;
 
         UString last = (*stack)[stack->size()-1];
@@ -773,18 +783,18 @@ static void mergeTokens( UStringStack* stack, unsigned count, UString mergeStrin
 
         if (count) {
             tmp = mergeString;
-            tmp.append( s1 );
+            tmp.append(s1);
             s1 = tmp;
         }
 
-        stack->resize(stack->size()-1);
+        stack->resize(stack->size() - 1);
     }
 
     stack->push_back(s1);
 }
 
 #ifdef SWINDER_XLS2RAW
-static void dumpStack( std::vector<UString> stack )
+static void dumpStack(std::vector<UString> stack)
 {
     std::cout << std::endl;
     std::cout << "Stack now is: " ;
@@ -797,11 +807,11 @@ static void dumpStack( std::vector<UString> stack )
 }
 #endif
 
-UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens )
+UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, const FormulaTokens& tokens)
 {
     UStringStack stack;
 
-    for (unsigned c=0; c < tokens.size(); c++) {
+    for (unsigned c = 0; c < tokens.size(); c++) {
         FormulaToken token = tokens[c];
 
 #ifdef SWINDER_XLS2RAW
@@ -811,225 +821,225 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
 #endif
 
         switch (token.id()) {
-            case FormulaToken::Add:
-                mergeTokens(&stack, 2, UString("+"));
-                break;
+        case FormulaToken::Add:
+            mergeTokens(&stack, 2, UString("+"));
+            break;
 
-            case FormulaToken::Sub:
-                mergeTokens(&stack, 2, UString("-"));
-                break;
+        case FormulaToken::Sub:
+            mergeTokens(&stack, 2, UString("-"));
+            break;
 
-            case FormulaToken::Mul:
-                mergeTokens(&stack, 2, UString("*"));
-                break;
+        case FormulaToken::Mul:
+            mergeTokens(&stack, 2, UString("*"));
+            break;
 
-            case FormulaToken::Div:
-                mergeTokens(&stack, 2, UString("/"));
-                break;
+        case FormulaToken::Div:
+            mergeTokens(&stack, 2, UString("/"));
+            break;
 
-            case FormulaToken::Power:
-                mergeTokens(&stack, 2, UString("^"));
-                break;
+        case FormulaToken::Power:
+            mergeTokens(&stack, 2, UString("^"));
+            break;
 
-            case FormulaToken::Concat:
-                mergeTokens(&stack, 2, UString("&"));
-                break;
+        case FormulaToken::Concat:
+            mergeTokens(&stack, 2, UString("&"));
+            break;
 
-            case FormulaToken::LT:
-                mergeTokens(&stack, 2, UString("<"));
-                break;
+        case FormulaToken::LT:
+            mergeTokens(&stack, 2, UString("<"));
+            break;
 
-            case FormulaToken::LE:
-                mergeTokens(&stack, 2, UString("<="));
-                break;
+        case FormulaToken::LE:
+            mergeTokens(&stack, 2, UString("<="));
+            break;
 
-            case FormulaToken::EQ:
-                mergeTokens(&stack, 2, UString("="));
-                break;
+        case FormulaToken::EQ:
+            mergeTokens(&stack, 2, UString("="));
+            break;
 
-            case FormulaToken::GE:
-                mergeTokens(&stack, 2, UString(">="));
-                break;
+        case FormulaToken::GE:
+            mergeTokens(&stack, 2, UString(">="));
+            break;
 
-            case FormulaToken::GT:
-                mergeTokens(&stack, 2, UString(">"));
-                break;
+        case FormulaToken::GT:
+            mergeTokens(&stack, 2, UString(">"));
+            break;
 
-            case FormulaToken::NE:
-                mergeTokens(&stack, 2, UString("<>"));
-                break;
+        case FormulaToken::NE:
+            mergeTokens(&stack, 2, UString("<>"));
+            break;
 
-            case FormulaToken::Intersect:
-                mergeTokens(&stack, 2, UString(" "));
-                break;
+        case FormulaToken::Intersect:
+            mergeTokens(&stack, 2, UString(" "));
+            break;
 
-            case FormulaToken::List:
-                mergeTokens(&stack, 2, UString(";"));
-                break;
+        case FormulaToken::List:
+            mergeTokens(&stack, 2, UString(";"));
+            break;
 
-            case FormulaToken::Range:
-                mergeTokens(&stack, 2, UString(";"));
-                break;
+        case FormulaToken::Range:
+            mergeTokens(&stack, 2, UString(";"));
+            break;
 
-            case FormulaToken::UPlus: {
-                UString str("+");
+        case FormulaToken::UPlus: {
+            UString str("+");
+            str.append(stack[stack.size()-1]);
+            stack[stack.size()-1] = str;
+            break;
+        }
+
+        case FormulaToken::UMinus: {
+            UString str("-");
+            str.append(stack[ stack.size()-1 ]);
+            stack[stack.size()-1] = str;
+            break;
+        }
+
+        case FormulaToken::Percent:
+            stack[stack.size()-1].append(UString("%"));
+            break;
+
+        case FormulaToken::Paren: {
+            UString str("(");
+            str.append(stack[ stack.size()-1 ]);
+            str.append(UString(")"));
+            stack[stack.size()-1] = str;
+            break;
+        }
+
+        case FormulaToken::MissArg:
+            // just ignore
+            stack.push_back(UString(" "));
+            break;
+
+        case FormulaToken::String: {
+            UString str('\"');
+            str.append(token.value().asString());
+            str.append(UString('\"'));
+            stack.push_back(str);
+            break;
+        }
+
+        case FormulaToken::Bool:
+            if (token.value().asBoolean())
+                stack.push_back(UString("TRUE"));
+            else
+                stack.push_back(UString("FALSE"));
+            break;
+
+        case FormulaToken::Integer:
+            stack.push_back(UString::from(token.value().asInteger()));
+            break;
+
+        case FormulaToken::Float:
+            stack.push_back(UString::from(token.value().asFloat()));
+            break;
+
+        case FormulaToken::Array:
+            // FIXME handle this !
+            break;
+
+        case FormulaToken::Ref:
+            stack.push_back(token.ref(row, col));
+            break;
+
+        case FormulaToken::RefN:
+            stack.push_back(token.refn(row, col));
+            break;
+
+        case FormulaToken::Ref3d:
+            stack.push_back(token.ref3d(d->globals->externSheets(), row, col));
+            break;
+
+        case FormulaToken::Area:
+            stack.push_back(token.area(row, col));
+            break;
+
+        case FormulaToken::AreaN:
+            stack.push_back(token.area(row, col, true));
+            break;
+
+        case FormulaToken::Area3d:
+            stack.push_back(token.area3d(d->globals->externSheets(), row, col));
+            break;
+
+        case FormulaToken::Function: {
+            mergeTokens(&stack, token.functionParams(), UString(";"));
+            if (stack.size()) {
+                UString str(token.functionName() ? token.functionName() : "??");
+                str.append(UString("("));
                 str.append(stack[stack.size()-1]);
-                stack[stack.size()-1] = str;
-                break;
-            }
-
-            case FormulaToken::UMinus: {
-                UString str("-");
-                str.append(stack[ stack.size()-1 ]);
-                stack[stack.size()-1] = str;
-                break;
-            }
-
-            case FormulaToken::Percent:
-                stack[stack.size()-1].append(UString("%"));
-                break;
-
-            case FormulaToken::Paren: {
-                UString str("(");
-                str.append(stack[ stack.size()-1 ]);
                 str.append(UString(")"));
                 stack[stack.size()-1] = str;
-                break;
             }
+            break;
+        }
 
-            case FormulaToken::MissArg:
-                // just ignore
-                stack.push_back(UString(" "));
-                break;
-
-            case FormulaToken::String: {
-                UString str('\"');
-                str.append(token.value().asString());
-                str.append(UString('\"'));
-                stack.push_back(str);
-                break;
-            }
-
-            case FormulaToken::Bool:
-                if (token.value().asBoolean())
-                    stack.push_back(UString("TRUE"));
-                else
-                    stack.push_back(UString("FALSE"));
-                break;
-
-            case FormulaToken::Integer:
-                stack.push_back(UString::from(token.value().asInteger()));
-                break;
-
-            case FormulaToken::Float:
-                stack.push_back(UString::from(token.value().asFloat()));
-                break;
-
-            case FormulaToken::Array:
-                // FIXME handle this !
-                break;
-
-            case FormulaToken::Ref:
-                stack.push_back(token.ref(row, col));
-                break;
-
-            case FormulaToken::RefN:
-                stack.push_back(token.refn(row, col));
-                break;
-
-            case FormulaToken::Ref3d:
-                stack.push_back(token.ref3d(d->globals->externSheets(), row, col));
-                break;
-
-            case FormulaToken::Area:
-                stack.push_back(token.area(row, col));
-                break;
-
-            case FormulaToken::AreaN:
-                stack.push_back(token.area(row, col, true));
-                break;
-
-            case FormulaToken::Area3d:
-                stack.push_back(token.area3d(d->globals->externSheets(), row, col));
-                break;
-
-            case FormulaToken::Function: {
+        case FormulaToken::FunctionVar:
+            if (token.functionIndex() != 255) {
                 mergeTokens(&stack, token.functionParams(), UString(";"));
                 if (stack.size()) {
-                    UString str(token.functionName() ? token.functionName() : "??");
+                    UString str;
+                    if (token.functionIndex() != 255)
+                        str = token.functionName() ? token.functionName() : "??";
                     str.append(UString("("));
                     str.append(stack[stack.size()-1]);
                     str.append(UString(")"));
                     stack[stack.size()-1] = str;
                 }
-                break;
+            } else {
+                unsigned count = token.functionParams() - 1;
+                mergeTokens(&stack, count, UString(";"));
+                if (stack.size()) {
+                    UString str;
+                    str.append(UString("("));
+                    str.append(stack[ stack.size()-1 ]);
+                    str.append(UString(")"));
+                    stack[stack.size()-1] = str;
+                }
             }
+            break;
 
-            case FormulaToken::FunctionVar:
-                if (token.functionIndex() != 255) {
-                    mergeTokens(&stack, token.functionParams(), UString(";"));
-                    if (stack.size()) {
-                        UString str;
-                        if (token.functionIndex() != 255)
-                            str = token.functionName() ? token.functionName() : "??";
-                        str.append(UString("("));
-                        str.append(stack[stack.size()-1]);
-                        str.append(UString(")"));
-                        stack[stack.size()-1] = str;
-                    }
-                } else {
-                    unsigned count = token.functionParams()-1;
-                    mergeTokens(&stack, count, UString(";"));
-                    if(stack.size()) {
-                        UString str;
-                        str.append(UString("("));
-                        str.append(stack[ stack.size()-1 ]);
-                        str.append(UString(")"));
-                        stack[stack.size()-1] = str;
-                    }
+        case FormulaToken::Attr:
+            if (token.attr() & 0x10) { // SUM
+                mergeTokens(&stack, 1, UString(";"));
+                if (stack.size()) {
+                    UString str("SUM");
+                    str.append(UString("("));
+                    str.append(stack[ stack.size()-1 ]);
+                    str.append(UString(")"));
+                    stack[stack.size()-1] = str;
                 }
-                break;
-
-            case FormulaToken::Attr:
-                if (token.attr() & 0x10) { // SUM
-                    mergeTokens(&stack, 1, UString(";"));
-                    if (stack.size()) {
-                        UString str("SUM");
-                        str.append(UString("("));
-                        str.append(stack[ stack.size()-1 ]);
-                        str.append(UString(")"));
-                        stack[stack.size()-1] = str;
-                    }
-                }
-                break;
-
-            case FormulaToken::NameX:
-                // FIXME this handling of names is completely broken
-                stack.push_back(d->globals->nameFromIndex(token.nameIndex()-1));
-                break;
-
-            case FormulaToken::Matrix: {
-                std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-
-                std::map<std::pair<unsigned, unsigned>, FormulaTokens>::iterator sharedFormula = d->sharedFormulas.find(formulaCellPos);
-                if (sharedFormula != d->sharedFormulas.end()) {
-                    stack.push_back(decodeFormula(row, col, sharedFormula->second));
-                } else {
-                    stack.push_back(UString("Error"));
-                }
-                break;
             }
+            break;
 
-            case FormulaToken::Table: {
-                std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-                std::map<std::pair<unsigned, unsigned>, DataTableRecord>::iterator datatable = d->dataTables.find(formulaCellPos);
-                if (datatable != d->dataTables.end()) {
-                    stack.push_back(dataTableFormula(row, col, &datatable->second));
-                } else {
-                    stack.push_back(UString("Error"));
-                }
-                break;
+        case FormulaToken::NameX:
+            // FIXME this handling of names is completely broken
+            stack.push_back(d->globals->nameFromIndex(token.nameIndex() - 1));
+            break;
+
+        case FormulaToken::Matrix: {
+            std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
+
+            std::map<std::pair<unsigned, unsigned>, FormulaTokens>::iterator sharedFormula = d->sharedFormulas.find(formulaCellPos);
+            if (sharedFormula != d->sharedFormulas.end()) {
+                stack.push_back(decodeFormula(row, col, sharedFormula->second));
+            } else {
+                stack.push_back(UString("Error"));
             }
+            break;
+        }
+
+        case FormulaToken::Table: {
+            std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
+            std::map<std::pair<unsigned, unsigned>, DataTableRecord>::iterator datatable = d->dataTables.find(formulaCellPos);
+            if (datatable != d->dataTables.end()) {
+                stack.push_back(dataTableFormula(row, col, &datatable->second));
+            } else {
+                stack.push_back(UString("Error"));
+            }
+            break;
+        }
 
             case FormulaToken::MemArea: {
               UString s = token.areaMap(row, col);
@@ -1075,70 +1085,70 @@ UString WorksheetSubStreamHandler::decodeFormula( unsigned row, unsigned col, co
     return result;
 }
 
-UString WorksheetSubStreamHandler::dataTableFormula( unsigned row, unsigned col, const DataTableRecord* record )
+UString WorksheetSubStreamHandler::dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record)
 {
     UString result("MULTIPLE.OPERATIONS(");
 
     unsigned formulaRow = 0, formulaCol = 0;
     switch (record->direction()) {
-        case DataTableRecord::InputRow:
-            formulaRow = row;
-            formulaCol = record->firstColumn() - 1;
-            break;
-        case DataTableRecord::InputColumn:
-            formulaRow = record->firstRow() - 1;
-            formulaCol = col;
-            break;
-        case DataTableRecord::Input2D:
-            formulaRow = record->firstRow() - 1;
-            formulaCol = record->firstColumn() - 1;
-            break;
+    case DataTableRecord::InputRow:
+        formulaRow = row;
+        formulaCol = record->firstColumn() - 1;
+        break;
+    case DataTableRecord::InputColumn:
+        formulaRow = record->firstRow() - 1;
+        formulaCol = col;
+        break;
+    case DataTableRecord::Input2D:
+        formulaRow = record->firstRow() - 1;
+        formulaCol = record->firstColumn() - 1;
+        break;
     }
 
-    result.append( UString("[.$") );
-    result.append( Cell::columnLabel( formulaCol ) );
-    result.append( UString("$") );
-    result.append( UString::from( formulaRow+1 ) );
-    result.append( UString("]") );
+    result.append(UString("[.$"));
+    result.append(Cell::columnLabel(formulaCol));
+    result.append(UString("$"));
+    result.append(UString::from(formulaRow + 1));
+    result.append(UString("]"));
 
     if (record->direction() == DataTableRecord::Input2D) {
-        result.append( UString(";[.$") );
-        result.append( Cell::columnLabel( record->inputColumn2() ) );
-        result.append( UString("$") );
-        result.append( UString::from( record->inputRow2()+1 ) );
-        result.append( UString("]") );
+        result.append(UString(";[.$"));
+        result.append(Cell::columnLabel(record->inputColumn2()));
+        result.append(UString("$"));
+        result.append(UString::from(record->inputRow2() + 1));
+        result.append(UString("]"));
     } else {
-        result.append( UString(";[.$") );
-        result.append( Cell::columnLabel( record->inputColumn1() ) );
-        result.append( UString("$") );
-        result.append( UString::from( record->inputRow1()+1 ) );
-        result.append( UString("]") );
+        result.append(UString(";[.$"));
+        result.append(Cell::columnLabel(record->inputColumn1()));
+        result.append(UString("$"));
+        result.append(UString::from(record->inputRow1() + 1));
+        result.append(UString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputColumn) {
-        result.append( UString(";[.$") );
-        result.append( Cell::columnLabel( record->firstColumn()-1 ) );
-        result.append( UString::from( row+1 ) );
-        result.append( UString("]") );
+        result.append(UString(";[.$"));
+        result.append(Cell::columnLabel(record->firstColumn() - 1));
+        result.append(UString::from(row + 1));
+        result.append(UString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D) {
-        result.append( UString(";[.$") );
-        result.append( Cell::columnLabel( record->inputColumn1() ) );
-        result.append( UString("$") );
-        result.append( UString::from( record->inputRow1()+1 ) );
-        result.append( UString("]") );
+        result.append(UString(";[.$"));
+        result.append(Cell::columnLabel(record->inputColumn1()));
+        result.append(UString("$"));
+        result.append(UString::from(record->inputRow1() + 1));
+        result.append(UString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputRow) {
-        result.append( UString(";[.") );
-        result.append( Cell::columnLabel( col ) );
-        result.append( UString("$") );
-        result.append( UString::from( record->firstRow()-1+1 ) );
-        result.append( UString("]") );
+        result.append(UString(";[."));
+        result.append(Cell::columnLabel(col));
+        result.append(UString("$"));
+        result.append(UString::from(record->firstRow() - 1 + 1));
+        result.append(UString("]"));
     }
 
-    result.append( UString(")") );
+    result.append(UString(")"));
 
 #ifdef SWINDER_XLS2RAW
     std::cout << "DATATABLE Result: " << result << std::endl;

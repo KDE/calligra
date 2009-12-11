@@ -31,20 +31,22 @@ class KSpreadLatexExportDiaImpl : public LatexExportDia
 {
     Q_OBJECT
 
-	private:
+private:
     QString _fileOut;
     KoStore* _in;
     KConfig* _config;
 
-	public:
-    explicit KSpreadLatexExportDiaImpl( KoStore*, QWidget* parent = 0,
-					const char* name = 0, 
-					bool modal = false, Qt::WFlags fl = 0 );
+public:
+    explicit KSpreadLatexExportDiaImpl(KoStore*, QWidget* parent = 0,
+                                       const char* name = 0,
+                                       bool modal = false, Qt::WFlags fl = 0);
     virtual ~KSpreadLatexExportDiaImpl();
 
-    void setOutputFile(QString file) { _fileOut = file; }
-	
-	public slots:
+    void setOutputFile(QString file) {
+        _fileOut = file;
+    }
+
+public slots:
     virtual void reject();
     virtual void accept();
     virtual void addLanguage();

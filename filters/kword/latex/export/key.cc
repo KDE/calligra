@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug() stream */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "key.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -29,8 +29,8 @@
 /*******************************************/
 Key::Key(eKeyType type): _type(type)
 {
-	_name = "";
-	_filename = "";
+    _name = "";
+    _filename = "";
 }
 
 /*******************************************/
@@ -38,7 +38,7 @@ Key::Key(eKeyType type): _type(type)
 /*******************************************/
 Key::~Key()
 {
-	kDebug(30522) <<"Destruction of a key.";
+    kDebug(30522) << "Destruction of a key.";
 }
 
 /*******************************************/
@@ -46,20 +46,20 @@ Key::~Key()
 /*******************************************/
 void Key::analyze(const QDomNode node)
 {
-	/* Markup type: Paragraph */
+    /* Markup type: Paragraph */
 
-	kDebug(30522) <<"**** KEY ****";
-	kDebug(30522) << getAttr(node,"name");
-	setName(getAttr(node, "name"));
-	setFilename(getAttr(node, "filename"));
-	setHour(getAttr(node, "hour").toInt());
-	setMSec(getAttr(node, "msec").toInt());
-	setDay(getAttr(node, "day").toInt());
-	setMinute(getAttr(node, "minute").toInt());
-	setSecond(getAttr(node, "second").toInt());
-	setMonth(getAttr(node, "month").toInt());
-	setYear(getAttr(node, "year").toInt());
-	kDebug(30522) <<"**** END KEY ****";
+    kDebug(30522) << "**** KEY ****";
+    kDebug(30522) << getAttr(node, "name");
+    setName(getAttr(node, "name"));
+    setFilename(getAttr(node, "filename"));
+    setHour(getAttr(node, "hour").toInt());
+    setMSec(getAttr(node, "msec").toInt());
+    setDay(getAttr(node, "day").toInt());
+    setMinute(getAttr(node, "minute").toInt());
+    setSecond(getAttr(node, "second").toInt());
+    setMonth(getAttr(node, "month").toInt());
+    setYear(getAttr(node, "year").toInt());
+    kDebug(30522) << "**** END KEY ****";
 }
 
 /*******************************************/
@@ -71,7 +71,7 @@ void Key::analyze(const QDomNode node)
 void Key::generate(QTextStream &out)
 {
 
-	kDebug(30522) <<"  GENERATION KEY";
+    kDebug(30522) << "  GENERATION KEY";
 
-	kDebug(30522) <<"PARA KEY";
+    kDebug(30522) << "PARA KEY";
 }

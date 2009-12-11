@@ -29,14 +29,14 @@ class WPExport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     WPExport(QObject* parent, const QStringList&);
     WPExport();
 
     virtual ~WPExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __WPEXPORT_H

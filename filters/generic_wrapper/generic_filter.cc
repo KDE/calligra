@@ -34,47 +34,46 @@
 #include <kshell.h>
 
 typedef KGenericFactory<GenericFilter> GenericFilterFactory;
-K_EXPORT_COMPONENT_FACTORY( libgenerickofilter, GenericFilterFactory )
+K_EXPORT_COMPONENT_FACTORY(libgenerickofilter, GenericFilterFactory)
 
 
 GenericFilter::GenericFilter(QObject *parent, const QStringList&) :
-    KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const QByteArray &to )
+KoFilter::ConversionStatus GenericFilter::convert(const QByteArray &from, const QByteArray &to)
 {
 
     //find the right script to use
-		KService::List offers = KServiceTypeTrader::self()->query("KOfficeGenericFilter",
-                                "(Type == 'Service') and ('KOfficeGenericFilter' in ServiceTypes) and (exist Exec)");
+    KService::List offers = KServiceTypeTrader::self()->query("KOfficeGenericFilter",
+                            "(Type == 'Service') and ('KOfficeGenericFilter' in ServiceTypes) and (exist Exec)");
 
     if (offers.isEmpty())
         return KoFilter::NotImplemented;
 
-	KService::List::ConstIterator it;
-    for (it=offers.constBegin(); it!=offers.constEnd(); ++it)
-    {
-        kDebug() <<"Got a filter script, exec:" << (*it)->exec() <<
-            ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
-            ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
-        if ((*it)->property("X-KDE-Wrapper-Import").toString()==from
-            && (*it)->property("X-KDE-Wrapper-Export").toString()==to)
-        {
-            m_exec=(*it)->exec();
-            m_from=from;
-            m_to=to;
+    KService::List::ConstIterator it;
+    for (it = offers.constBegin(); it != offers.constEnd(); ++it) {
+        kDebug() << "Got a filter script, exec:" << (*it)->exec() <<
+        ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
+        ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
+        if ((*it)->property("X-KDE-Wrapper-Import").toString() == from
+                && (*it)->property("X-KDE-Wrapper-Export").toString() == to) {
+            m_exec = (*it)->exec();
+            m_from = from;
+            m_to = to;
             break;
         }
     }
 
     //decide between import/export
-    if( m_to == "application/x-kword" || m_to == "application/x-karbon" ||
-        m_to == "application/x-kspread" || m_to == "application/x-kivio" ||
-        m_to == "application/x-kchart" || m_to == "application/x-kpresenter" )
+    if (m_to == "application/x-kword" || m_to == "application/x-karbon" ||
+            m_to == "application/x-kspread" || m_to == "application/x-kivio" ||
+            m_to == "application/x-kchart" || m_to == "application/x-kpresenter")
         return doImport();
-    else if ( m_from == "application/x-kword" || m_from == "application/x-karbon" ||
-              m_from == "application/x-kspread" || m_from == "application/x-kivio" ||
-              m_from == "application/x-kchart" || m_from == "application/x-kpresenter" )
+    else if (m_from == "application/x-kword" || m_from == "application/x-karbon" ||
+             m_from == "application/x-kspread" || m_from == "application/x-kivio" ||
+             m_from == "application/x-kchart" || m_from == "application/x-kpresenter")
         return doExport();
     else
         return KoFilter::NotImplemented;
@@ -88,28 +87,24 @@ KoFilter::ConversionStatus GenericFilter::doImport()
 
     m_out = KoStore::createStore(&tempFile, KoStore::Write);
 
-    if (!m_out || !m_out->open("root"))
-    {
+    if (!m_out || !m_out->open("root")) {
         kError() << "Unable to create output store!" << endl;
         m_out->close();
         return KoFilter::StorageCreationError;
-    }
-    else
-    {
+    } else {
         QString exec = m_exec + ' ' + KShell::quoteArg(m_chain->inputFile()) + ' '
                        + KShell::quoteArg(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
-        kDebug() <<"Executing:" << exec;
+        kDebug() << "Executing:" << exec;
 
         QFile outFile(m_chain->outputFile());
         outFile.open(QIODevice::ReadOnly);
         QByteArray outData = outFile.readAll();
-        if (outData.size()==0) {
+        if (outData.size() == 0) {
             m_out->close();
             return KoFilter::UnexpectedEOF;
-        }
-        else {
+        } else {
             m_out->write(outData);
             m_out->close();
         }

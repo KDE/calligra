@@ -23,24 +23,23 @@
 #define __KWORD_PARA_H__
 
 #include <QString>
-#include <QStack>		/* historic list */
-#include <QList>		/* for list of format */
+#include <QStack>  /* historic list */
+#include <QList>  /* for list of format */
 #include <QTextStream>
 
-#include "layout.h"		/* set of information about the paragraph style. */
-#include "element.h"		/* to use the father class. */
-#include "format.h"		/* child class */
+#include "layout.h"  /* set of information about the paragraph style. */
+#include "element.h"  /* to use the father class. */
+#include "format.h"  /* child class */
 
-enum EP_INFO
-{
-	EP_NONE,
-	EP_FOOTNOTE
+enum EP_INFO {
+    EP_NONE,
+    EP_FOOTNOTE
 };
 
 /*enum EP_HARDBRK
 {
-	EP_FLOW,
-	EP_NEXT
+ EP_FLOW,
+ EP_NEXT
 };*/
 
 class TextFrame;
@@ -56,143 +55,151 @@ class TextFrame;
  */
 class Para: public Layout
 {
-	/* MARKUP DATA */
-	QString        _text;
-	QString*       _name;
-	EP_INFO        _info;
-	//EP_HARDBRK     _hardbrk;
-	QList<Format*>* _lines;
+    /* MARKUP DATA */
+    QString        _text;
+    QString*       _name;
+    EP_INFO        _info;
+    //EP_HARDBRK     _hardbrk;
+    QList<Format*>* _lines;
 
-	/* TO MANAGE THE LIST */
+    /* TO MANAGE THE LIST */
 
-	/* USEFUL DATA */
-	TextFrame*             	_element;		/* Father frame */
-	unsigned int          	_currentPos;	/* Beginning of the text to use the good format */
-	static QStack<EType*> _historicList;	/* opened lists but not closed */
-	int                   	_nbLines;		/* Nb of lines in a cell (table) */
-	static int				_tabulation;	/* Size of the para tabulation (for lists). */
+    /* USEFUL DATA */
+    TextFrame*              _element;  /* Father frame */
+    unsigned int           _currentPos; /* Beginning of the text to use the good format */
+    static QStack<EType*> _historicList; /* opened lists but not closed */
+    int                    _nbLines;  /* Nb of lines in a cell (table) */
+    static int    _tabulation; /* Size of the para tabulation (for lists). */
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Para.
-		 *
-		 * @param textFrame The text frame this paragraph is belonging to.
-		 */
-		Para(TextFrame *textFrame = 0);
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Para.
+     *
+     * @param textFrame The text frame this paragraph is belonging to.
+     */
+    Para(TextFrame *textFrame = 0);
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of little zones.
-		 */
-		virtual ~Para();
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of little zones.
+     */
+    virtual ~Para();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		/**
-		 * @return true if the paragraph has a colored word.
-		 */
-		//bool     isColored    () const;
-		/**
-		 * @return true if the paragraph has a underlined word.
-		 */
-		//bool     isUlined     () const;
-		//Para*    getNext      () const { return _next;      }
-		//Para*    getPrevious  () const { return _previous;  }
-		/**
-		 *  @return the paragraph's name.
-		 */
-		QString* getName      () const { return _name;      }
-		/**
-		 * @return the paragraph's type (contents or footnote).
-		 */
-		EP_INFO  getInfo      () const { return _info;      }
-		/**
-		 * @return the frame the paragraph belonging to.
-		 */
-		TextFrame*   getFrame     () const { return _element;   }
-		/**
-		 * @return the frame type (Header, footer, body, footnote or table, ...).
-		 */
-		SSect    getFrameType () const;
-		/**
-		 * @return the next format type (picture, text, variable, footnote).
-		 */
-		EFormat  getTypeFormat(const QDomNode) const;
-		/**
-		 * @return count the number of characters in the paragraph.
-		 */
-		int getNbCharPara() const;
+    /**
+     * @return true if the paragraph has a colored word.
+     */
+    //bool     isColored    () const;
+    /**
+     * @return true if the paragraph has a underlined word.
+     */
+    //bool     isUlined     () const;
+    //Para*    getNext      () const { return _next;      }
+    //Para*    getPrevious  () const { return _previous;  }
+    /**
+     *  @return the paragraph's name.
+     */
+    QString* getName() const {
+        return _name;
+    }
+    /**
+     * @return the paragraph's type (contents or footnote).
+     */
+    EP_INFO  getInfo() const {
+        return _info;
+    }
+    /**
+     * @return the frame the paragraph belonging to.
+     */
+    TextFrame*   getFrame() const {
+        return _element;
+    }
+    /**
+     * @return the frame type (Header, footer, body, footnote or table, ...).
+     */
+    SSect    getFrameType() const;
+    /**
+     * @return the next format type (picture, text, variable, footnote).
+     */
+    EFormat  getTypeFormat(const QDomNode) const;
+    /**
+     * @return count the number of characters in the paragraph.
+     */
+    int getNbCharPara() const;
 
-		bool notEmpty() const { return (_lines == 0) ? false : (_lines->count() != 0); }
-		/**
-		 * Modifiers
-		 */
-		//void setNext    (Para *p)  { _next      = p;    }
-		//void setPrevious(Para *p)  { _previous  = p;    }
+    bool notEmpty() const {
+        return (_lines == 0) ? false : (_lines->count() != 0);
+    }
+    /**
+     * Modifiers
+     */
+    //void setNext    (Para *p)  { _next      = p;    }
+    //void setPrevious(Para *p)  { _previous  = p;    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		/**
-		 * Get information from a markup tree.
-		 */
-		void analyze         (const QDomNode);
+    /**
+     * Get information from a markup tree.
+     */
+    void analyze(const QDomNode);
 
-		/**
-		 * Write the paragraph in a file.
-		 */
-		void generate        (QTextStream&);
+    /**
+     * Write the paragraph in a file.
+     */
+    void generate(QTextStream&);
 
-		/**
-		 * If the paragraph has a different environment, change it
-		 */
-		void generateBeginEnv(QTextStream&);
+    /**
+     * If the paragraph has a different environment, change it
+     */
+    void generateBeginEnv(QTextStream&);
 
-		/**
-		 * If the next paragraph has a different environment, close it
-		 */
-		void generateEndEnv(QTextStream&);
+    /**
+     * If the next paragraph has a different environment, close it
+     */
+    void generateEndEnv(QTextStream&);
 
-		/**
-		 * If the paragraph is a title, generate the command.
-		 */
-		void generateTitle    (QTextStream&);
+    /**
+     * If the paragraph is a title, generate the command.
+     */
+    void generateTitle(QTextStream&);
 
-		/**
-		 * Write the markup to begin a list
-		 */
-		void openList         (QTextStream&);
+    /**
+     * Write the markup to begin a list
+     */
+    void openList(QTextStream&);
 
-		/**
-		 * Write the markup to close a list
-		 */
-		void closeList        (QTextStream&, Para*);
+    /**
+     * Write the markup to close a list
+     */
+    void closeList(QTextStream&, Para*);
 
-	private:
-		void analyzeParam     (const QDomNode);
-		void analyzeName      (const QDomNode);
-		void analyzeInfo      (const QDomNode);
-		//void analyzeBrk       (const QDomNode);
-		void analyzeLayoutPara(const QDomNode);
-		void analyzeFormat    (const QDomNode);
-		void analyzeFormats   (const QDomNode);
+private:
+    void analyzeParam(const QDomNode);
+    void analyzeName(const QDomNode);
+    void analyzeInfo(const QDomNode);
+    //void analyzeBrk       (const QDomNode);
+    void analyzeLayoutPara(const QDomNode);
+    void analyzeFormat(const QDomNode);
+    void analyzeFormats(const QDomNode);
 
-		/**
-		 * Write the paragraph style, format.
-		 */
-		void generateDebut    (QTextStream&);
-		void generateFin      (QTextStream&);
+    /**
+     * Write the paragraph style, format.
+     */
+    void generateDebut(QTextStream&);
+    void generateFin(QTextStream&);
 
-		/**
-		 * Write the markup to close a list
-		 */
-		void closeList        (EType, QTextStream&);
+    /**
+     * Write the markup to close a list
+     */
+    void closeList(EType, QTextStream&);
 
 };
 

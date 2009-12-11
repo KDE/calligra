@@ -33,7 +33,7 @@ LatexParser::LatexParser()
 
 LatexParser::LatexParser(const QString& fileIn)
 {
-	_filename= fileIn;
+    _filename = fileIn;
 }
 
 LatexParser::~LatexParser()
@@ -42,6 +42,6 @@ LatexParser::~LatexParser()
 
 QList<Element*>* LatexParser::parse()
 {
-	texparse(_filename);
-	return _root;
+    texparse(_filename);
+    return _root;
 }

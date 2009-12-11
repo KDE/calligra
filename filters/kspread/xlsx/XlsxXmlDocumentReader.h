@@ -36,9 +36,9 @@ class XlsxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     XlsxXmlDocumentReaderContext(XlsxImport& _import,
-        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        const QVector<QString>& _sharedStrings, const XlsxStyles& _styles,
-        MSOOXML::MsooXmlRelationships& _relationships);
+                                 const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+                                 const QVector<QString>& _sharedStrings, const XlsxStyles& _styles,
+                                 MSOOXML::MsooXmlRelationships& _relationships);
     XlsxImport *import;
     const QMap<QString, MSOOXML::DrawingMLTheme*> *themes;
     const QVector<QString>* sharedStrings;
@@ -63,7 +63,7 @@ protected:
     KoFilter::ConversionStatus read_sheets();
     KoFilter::ConversionStatus read_sheet();
 
-    typedef KoFilter::ConversionStatus (XlsxXmlDocumentReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(XlsxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     XlsxXmlDocumentReaderContext* m_context;

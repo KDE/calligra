@@ -36,33 +36,33 @@ class Sheet;
 class GNUMERICFilter : public KoFilter
 {
     Q_OBJECT
- public:
+public:
     GNUMERICFilter(QObject* parent, const QStringList&);
     virtual ~GNUMERICFilter() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
- private:
-  class GnumericDate : public QDate
-  {
-   public:
-    static uint greg2jul( int y, int m, int d );
-    static void jul2greg( double num, int & y, int & m, int & d );
-    static QTime getTime( double num );
+    enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
+private:
+    class GnumericDate : public QDate
+    {
+    public:
+        static uint greg2jul(int y, int m, int d);
+        static void jul2greg(double num, int & y, int & m, int & d);
+        static QTime getTime(double num);
 
-  };
+    };
 
-  void dateInit();
-  QString convertVars( QString const & str, KSpread::Sheet * table ) const;
-  void ParsePrintInfo( QDomNode const & printInfo, KSpread::Sheet * table );
-  void ParseFormat(QString const & formatString, const KSpread::Cell& kspread_cell);
-  void setStyleInfo(QDomNode * sheet, KSpread::Sheet * table);
-  bool setType( const KSpread::Cell& kspread_cell, QString const & formatString, QString & cell_content );
-  void convertFormula( QString & formula ) const;
-    void importBorder( QDomElement  border, borderStyle _style, const KSpread::Cell&cell);
-    void ParseBorder( QDomElement & gmr_styleborder, const KSpread::Cell& kspread_cell );
-    double parseAttribute( const QDomElement &_element );
+    void dateInit();
+    QString convertVars(QString const & str, KSpread::Sheet * table) const;
+    void ParsePrintInfo(QDomNode const & printInfo, KSpread::Sheet * table);
+    void ParseFormat(QString const & formatString, const KSpread::Cell& kspread_cell);
+    void setStyleInfo(QDomNode * sheet, KSpread::Sheet * table);
+    bool setType(const KSpread::Cell& kspread_cell, QString const & formatString, QString & cell_content);
+    void convertFormula(QString & formula) const;
+    void importBorder(QDomElement  border, borderStyle _style, const KSpread::Cell&cell);
+    void ParseBorder(QDomElement & gmr_styleborder, const KSpread::Cell& kspread_cell);
+    double parseAttribute(const QDomElement &_element);
 
     void setText(KSpread::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };

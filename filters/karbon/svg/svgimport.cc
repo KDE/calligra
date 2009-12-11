@@ -42,12 +42,12 @@
 
 #include <QtCore/QFileInfo>
 
-K_PLUGIN_FACTORY( SvgImportFactory, registerPlugin<SvgImport>(); )
-K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
+K_PLUGIN_FACTORY(SvgImportFactory, registerPlugin<SvgImport>();)
+K_EXPORT_PLUGIN(SvgImportFactory("kofficefilters"))
 
 
 SvgImport::SvgImport(QObject*parent, const QVariantList&)
-    : KoFilter(parent), m_document(0)
+        : KoFilter(parent), m_document(0)
 {
 }
 
@@ -58,33 +58,32 @@ SvgImport::~SvgImport()
 KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if( to != "application/vnd.oasis.opendocument.graphics" )
+    if (to != "application/vnd.oasis.opendocument.graphics")
         return KoFilter::NotImplemented;
-    if( from != "image/svg+xml" && from != "image/svg+xml-compressed" )
+    if (from != "image/svg+xml" && from != "image/svg+xml-compressed")
         return KoFilter::NotImplemented;
 
     //Find the last extension
     QString strExt;
-    QString fileIn ( m_chain->inputFile() );
-    const int result=fileIn.lastIndexOf('.');
-    if (result>=0)
-        strExt=fileIn.mid(result).toLower();
+    QString fileIn(m_chain->inputFile());
+    const int result = fileIn.lastIndexOf('.');
+    if (result >= 0)
+        strExt = fileIn.mid(result).toLower();
 
     QString strMime; // Mime type of the compressor
-    if ((strExt==".gz")      //in case of .svg.gz (logical extension)
-        ||(strExt==".svgz")) //in case of .svgz (extension used prioritary)
-        strMime="application/x-gzip"; // Compressed with gzip
-    else if (strExt==".bz2") //in case of .svg.bz2 (logical extension)
-        strMime="application/x-bzip2"; // Compressed with bzip2
+    if ((strExt == ".gz")    //in case of .svg.gz (logical extension)
+            || (strExt == ".svgz")) //in case of .svgz (extension used prioritary)
+        strMime = "application/x-gzip"; // Compressed with gzip
+    else if (strExt == ".bz2") //in case of .svg.bz2 (logical extension)
+        strMime = "application/x-bzip2"; // Compressed with bzip2
     else
-        strMime="text/plain";
+        strMime = "text/plain";
 
     /*kDebug(30514) <<"File extension: -" << strExt <<"- Compression:" << strMime;*/
 
-    QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
+    QIODevice* in = KFilterDev::deviceForFile(fileIn, strMime);
 
-    if (!in->open(QIODevice::ReadOnly))
-    {
+    if (!in->open(QIODevice::ReadOnly)) {
         kError(30514) << "Cannot open file! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
@@ -95,110 +94,102 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
 
     KoXmlDocument inputDoc;
 
-    const bool parsed = inputDoc.setContent( in, &errormessage, &line, &col );
+    const bool parsed = inputDoc.setContent(in, &errormessage, &line, &col);
 
     in->close();
     delete in;
 
-    if ( ! parsed )
-    {
+    if (! parsed) {
         kError(30514) << "Error while parsing file: "
-                << "at line " << line << " column: " << col
-                << " message: " << errormessage << endl;
+        << "at line " << line << " column: " << col
+        << " message: " << errormessage << endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }
 
     KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
-    if( ! part )
+    if (! part)
         return KoFilter::CreationError;
 
     m_document = &part->document();
 
     // Do the conversion!
-    convert( inputDoc.documentElement() );
+    convert(inputDoc.documentElement());
 
     return KoFilter::OK;
 }
 
-void SvgImport::convert( const KoXmlElement &rootElement )
+void SvgImport::convert(const KoXmlElement &rootElement)
 {
-    if( ! m_document )
+    if (! m_document)
         return;
-    
+
     // set default page size to A4
-    QSizeF pageSize( 550.0, 841.0 );
-    
-    SvgParser parser( m_document->dataCenterMap() );
+    QSizeF pageSize(550.0, 841.0);
 
-    parser.setXmlBaseDir( QFileInfo( m_chain->inputFile() ).filePath() );
+    SvgParser parser(m_document->dataCenterMap());
 
-    QList<KoShape*> toplevelShapes = parser.parseSvg( rootElement, &pageSize );
+    parser.setXmlBaseDir(QFileInfo(m_chain->inputFile()).filePath());
+
+    QList<KoShape*> toplevelShapes = parser.parseSvg(rootElement, &pageSize);
     // parse the root svg element
-    buildDocument( toplevelShapes, parser.shapes() );
-    
+    buildDocument(toplevelShapes, parser.shapes());
+
     // set the page size
-    m_document->setPageSize( pageSize );
+    m_document->setPageSize(pageSize);
 }
 
-void SvgImport::buildDocument( const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes )
+void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes)
 {
     // if we have only top level groups, make them layers
     bool onlyTopLevelGroups = true;
-    foreach( KoShape * shape, toplevelShapes )
-    {
-        if( ! dynamic_cast<KoShapeGroup*>( shape ) || shape->filterEffectStack() )
-        {
+    foreach(KoShape * shape, toplevelShapes) {
+        if (! dynamic_cast<KoShapeGroup*>(shape) || shape->filterEffectStack()) {
             onlyTopLevelGroups = false;
             break;
         }
     }
 
     // add all shapes to the document
-    foreach( KoShape * shape, shapes )
-        m_document->add( shape );
+    foreach(KoShape * shape, shapes) {
+        m_document->add(shape);
+    }
 
     KoShapeLayer * oldLayer = 0;
-    if( m_document->layers().count() )
+    if (m_document->layers().count())
         oldLayer = m_document->layers().first();
 
-    if( onlyTopLevelGroups )
-    {
-        foreach( KoShape * shape, toplevelShapes )
-        {
+    if (onlyTopLevelGroups) {
+        foreach(KoShape * shape, toplevelShapes) {
             // ungroup toplevel groups
-            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( shape );
+            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
             QList<KoShape*> children = group->childShapes();
-            KoShapeUngroupCommand cmd( group, children, QList<KoShape*>() << group );
+            KoShapeUngroupCommand cmd(group, children, QList<KoShape*>() << group);
             cmd.redo();
-            
+
             KoShapeLayer * layer = new KoShapeLayer();
-            foreach( KoShape * child, children )
-            {
-                m_document->add( child );
-                layer->addChild( child );
+            foreach(KoShape * child, children) {
+                m_document->add(child);
+                layer->addChild(child);
             }
-            if( ! group->name().isEmpty() )
-                layer->setName( group->name() );
+            if (! group->name().isEmpty())
+                layer->setName(group->name());
             layer->setVisible(group->isVisible());
             layer->setZIndex(group->zIndex());
-            m_document->insertLayer( layer );
+            m_document->insertLayer(layer);
             delete group;
         }
-    }
-    else
-    {
+    } else {
         KoShapeLayer * layer = new KoShapeLayer();
-        foreach( KoShape * shape, toplevelShapes )
-        {
-            m_document->add( shape );
-            layer->addChild( shape );
+        foreach(KoShape * shape, toplevelShapes) {
+            m_document->add(shape);
+            layer->addChild(shape);
         }
-        m_document->insertLayer( layer );
+        m_document->insertLayer(layer);
     }
 
-    if( oldLayer ) {
-        m_document->removeLayer( oldLayer );
+    if (oldLayer) {
+        m_document->removeLayer(oldLayer);
         delete oldLayer;
     }
 }

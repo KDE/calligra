@@ -1,11 +1,11 @@
-/* POLE - Portable library to access OLE Storage 
+/* POLE - Portable library to access OLE Storage
    Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -34,63 +34,64 @@ class Storage
 
 public:
 
-  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError, 
-    StupidWorkaroundForBrokenCompiler=255 };
+    enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError,
+           StupidWorkaroundForBrokenCompiler = 255
+         };
 
-  enum { ReadOnly, WriteOnly, ReadWrite };
+    enum { ReadOnly, WriteOnly, ReadWrite };
 
-  Storage();
+    Storage();
 
-  ~Storage();
+    ~Storage();
 
-  /**
-   * Opens the specified file, using the mode m.
-   *
-   * @return true if successful, otherwise false.
-   */
-  bool open( const char* filename, int m = ReadOnly );
+    /**
+     * Opens the specified file, using the mode m.
+     *
+     * @return true if successful, otherwise false.
+     */
+    bool open(const char* filename, int m = ReadOnly);
 
-  /**
-   * Flushes the buffer to the disk.
-   */
-  void flush();
+    /**
+     * Flushes the buffer to the disk.
+     */
+    void flush();
 
-  /**
-   * Closes the storage.
-   *
-   * If it was opened using WriteOnly or ReadWrite, this function
-   * also flushes the buffer.
-   */
-  void close();
+    /**
+     * Closes the storage.
+     *
+     * If it was opened using WriteOnly or ReadWrite, this function
+     * also flushes the buffer.
+     */
+    void close();
 
-  std::list<std::string> listDirectory();
+    std::list<std::string> listDirectory();
 
-  bool enterDirectory( const std::string& directory );
+    bool enterDirectory(const std::string& directory);
 
-  void leaveDirectory();
+    void leaveDirectory();
 
-  std::string path();
+    std::string path();
 
-  /**
-   * Creates an input/output stream for specified name. You should 
-   * delete the stream because it is not owned by the storage.
-   *
-   * If name does not exist or is a directory, this function
-   * will return null.
-   */
-  Stream* stream( const std::string& name );
+    /**
+     * Creates an input/output stream for specified name. You should
+     * delete the stream because it is not owned by the storage.
+     *
+     * If name does not exist or is a directory, this function
+     * will return null.
+     */
+    Stream* stream(const std::string& name);
 
-  int result;
+    int result;
 
 protected:
 
-  StorageIO* io;
+    StorageIO* io;
 
 private:
 
-  // no copy or assign
-  Storage( const Storage& );
-  Storage& operator=( const Storage& );
+    // no copy or assign
+    Storage(const Storage&);
+    Storage& operator=(const Storage&);
 
 };
 
@@ -98,9 +99,9 @@ class StreamIO;
 
 class Stream
 {
-  public:
+public:
 
-    Stream( StreamIO* io );
+    Stream(StreamIO* io);
 
     ~Stream();
 
@@ -108,19 +109,19 @@ class Stream
 
     unsigned long tell();
 
-    void seek( unsigned long pos ); 
+    void seek(unsigned long pos);
 
     int getch();
 
-    unsigned long read( unsigned char* data, unsigned long maxlen );
+    unsigned long read(unsigned char* data, unsigned long maxlen);
 
-  private:
+private:
 
     StreamIO* io;
 
     // no copy or assign
-    Stream( const Stream& );
-    Stream& operator=( const Stream& );
+    Stream(const Stream&);
+    Stream& operator=(const Stream&);
 };
 
 

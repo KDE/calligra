@@ -30,31 +30,32 @@
 #include "kspreadlatexexportdiaImpl.h"
 
 typedef KGenericFactory<LATEXExport> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkspreadlatexexport, LATEXExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkspreadlatexexport, LATEXExportFactory("kofficefilters"))
 
 
 LATEXExport::LATEXExport(QObject* parent, const QStringList&) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QByteArray& to)
 {
     QString config;
 
-    if(to != "text/x-tex" || from != "application/x-kspread")
+    if (to != "text/x-tex" || from != "application/x-kspread")
         return KoFilter::NotImplemented;
 
     KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
-    if(!in || !in->open("root")) {
+    if (!in || !in->open("root")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
-		kDebug(30522) <<"In the kspread latex export filter...";
+    kDebug(30522) << "In the kspread latex export filter...";
     /* input file Reading */
     in->close();
 
-		KSpreadLatexExportDiaImpl* dialog = new KSpreadLatexExportDiaImpl(in);
+    KSpreadLatexExportDiaImpl* dialog = new KSpreadLatexExportDiaImpl(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();

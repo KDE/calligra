@@ -44,13 +44,14 @@
 
 class Document;
 
-namespace wvWare {
-    class Style;
-    class Parser;
-    class FunctorBase;
-    namespace Word97 {
-        class PAP;
-    }
+namespace wvWare
+{
+class Style;
+class Parser;
+class FunctorBase;
+namespace Word97 {
+class PAP;
+}
 }
 
 class KWordReplacementHandler : public wvWare::InlineReplacementHandler
@@ -66,33 +67,37 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles );
+    KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
 
     //////// TextHandler interface
 
-    virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
+    virtual void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep);
     virtual void sectionEnd();
-    virtual void headersFound( const wvWare::HeaderFunctor& parseHeaders );
-    virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UChar character,
-                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote );
+    virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
+    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UChar character,
+                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote);
 
-    virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
+    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
     virtual void paragraphEnd();
-    virtual void fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
-    virtual void fieldSeparator( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
-    virtual void fieldEnd( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
-    virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+    virtual void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 
-    virtual void tableRowFound( const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
+    virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
 
 #ifdef IMAGE_IMPORT
-    virtual void pictureFound( const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
-                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+    virtual void pictureFound(const wvWare::PictureFunctor& picture, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
+                              wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 #endif // IMAGE_IMPORT
     ///////// Our own interface, also used by processStyles
 
-    Document* document() const { return m_document; }
-    void setDocument( Document * document ) { m_document = document; }
+    Document* document() const {
+        return m_document;
+    }
+    void setDocument(Document * document) {
+        m_document = document;
+    }
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
@@ -116,17 +121,17 @@ public:
 signals:
     void sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
-    void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
-    void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
-    void headersFound( const wvWare::FunctorBase* parsingFunctor, int data );
+    void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
+    void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
+    void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);
-    void pictureFound( const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
-            const wvWare::FunctorBase* pictureFunctor );
-    void updateListDepth( int );
+    void pictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
+                      const wvWare::FunctorBase* pictureFunctor);
+    void updateListDepth(int);
 
 protected:
-    QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
-    QDomElement insertAnchor( const QString& fsname );
+    QDomElement insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format);
+    QDomElement insertAnchor(const QString& fsname);
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
 
 private:
@@ -143,14 +148,13 @@ private:
     //int m_listStyleNumber; //number of styles created for lists
 
     //save/restore for processing footnotes (very similar to the wv2 method)
-    struct State
-    {
-        State( KWord::Table* curTab, Paragraph* para, QString lStyleName,
-               int curListDepth, int curListID, int preListID, QString preLStyleName ) :
-               currentTable( curTab ), paragraph( para ), listStyleName( lStyleName ),
-               currentListDepth( curListDepth ), currentListID( curListID ),
-               previousListID( preListID ), previousListStyleName( preLStyleName ) {}
-                                       
+    struct State {
+        State(KWord::Table* curTab, Paragraph* para, QString lStyleName,
+              int curListDepth, int curListID, int preListID, QString preLStyleName) :
+                currentTable(curTab), paragraph(para), listStyleName(lStyleName),
+                currentListDepth(curListDepth), currentListID(curListID),
+                previousListID(preListID), previousListStyleName(preLStyleName) {}
+
         KWord::Table* currentTable;
         Paragraph* paragraph;
         QString listStyleName;
@@ -159,7 +163,7 @@ private:
         int previousListID;
         QString previousListStyleName;
     };
-          
+
     std::stack<State> m_oldStates;
     void saveState();
     void restoreState();
@@ -180,7 +184,7 @@ private:
     bool m_insideField;
     bool m_fieldAfterSeparator;
     int m_fieldType; //0 if we're not in a field, -1 for a field we can't handle,
-            //anything else is the type of the field
+    //anything else is the type of the field
     bool m_insideFootnote;
     KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
     QBuffer* m_footnoteBuffer; //buffer for the footnote data

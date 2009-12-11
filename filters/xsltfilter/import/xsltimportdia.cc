@@ -47,64 +47,59 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
-    : XSLTDialog( parent, name_, modal, fl )
+XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl)
+        : XSLTDialog(parent, name_, modal, fl)
 {
-	int i = 0;
-	_out = out;
-	_format = format;
-	setCaption(i18n("Import XSLT Configuration"));
-	
-	/* Recent files */
-	_config = new KConfig("xsltdialog");
+    int i = 0;
+    _out = out;
+    _format = format;
+    setCaption(i18n("Import XSLT Configuration"));
+
+    /* Recent files */
+    _config = new KConfig("xsltdialog");
     grp = KConfigGroup(_config, "XSLT import filter");
-	QString value;
-	while(i < 10)
-	{
-		value = grp.readPathEntry( QString("Recent%1").arg(i), QString() );
-		kDebug() <<"recent :" << value;
-		if(!value.isEmpty())
-		{
-			_recentList.append( value );
-			recentBox->addItem(value);
-		}
-		else
-			i = 10;
-		i = i + 1;
-	}
+    QString value;
+    while (i < 10) {
+        value = grp.readPathEntry(QString("Recent%1").arg(i), QString());
+        kDebug() << "recent :" << value;
+        if (!value.isEmpty()) {
+            _recentList.append(value);
+            recentBox->addItem(value);
+        } else
+            i = 10;
+        i = i + 1;
+    }
 
-	/* Common xslt files box */
-	QString appName = KGlobal::mainComponent().componentName();
-	kDebug() <<"app name =" << appName;
-	
-	QString filenames = QString("xsltfilter") + QDir::separator() + QString("import") +
-			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
-	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
-	kDebug() <<"There are" << commonFilesList.size() <<" entries like" << filenames;
-	
-	QStringList tempList;
-	QString name;
-	QString file;
+    /* Common xslt files box */
+    QString appName = KGlobal::mainComponent().componentName();
+    kDebug() << "app name =" << appName;
 
-	for(QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it)
-	{
-		tempList = QStringList::split("/", (*it));
-		file = tempList.last();
-		tempList.pop_back();
-		name = tempList.last();
-		tempList.pop_back();
-		kDebug() << name <<"" << file;
-		if(!_namesList.contains(name) && file == "main.xsl")
-		{
-			_filesList.append(file);
-			_namesList.append(name);
-			_dirsList.append(tempList.join("/"));
-			kDebug() << file <<" get";
-		}
-	}
-	
-	xsltList->insertStringList(_namesList);
-	kapp->restoreOverrideCursor();
+    QString filenames = QString("xsltfilter") + QDir::separator() + QString("import") +
+                        QDir::separator() + appName + QDir::separator() + "*/*.xsl";
+    QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
+    kDebug() << "There are" << commonFilesList.size() << " entries like" << filenames;
+
+    QStringList tempList;
+    QString name;
+    QString file;
+
+    for (QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it) {
+        tempList = QStringList::split("/", (*it));
+        file = tempList.last();
+        tempList.pop_back();
+        name = tempList.last();
+        tempList.pop_back();
+        kDebug() << name << "" << file;
+        if (!_namesList.contains(name) && file == "main.xsl") {
+            _filesList.append(file);
+            _namesList.append(name);
+            _dirsList.append(tempList.join("/"));
+            kDebug() << file << " get";
+        }
+    }
+
+    xsltList->insertStringList(_namesList);
+    kapp->restoreOverrideCursor();
 }
 
 /*
@@ -113,7 +108,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 XSLTImportDia::~XSLTImportDia()
 {
     // no need to delete child widgets, Qt does it all for us
-	delete _config;
+    delete _config;
 }
 
 /**
@@ -122,8 +117,8 @@ XSLTImportDia::~XSLTImportDia()
  */
 void XSLTImportDia::cancelSlot()
 {
-	kDebug() <<"import cancelled";
-	reject();
+    kDebug() << "import cancelled";
+    reject();
 }
 
 /**
@@ -134,22 +129,20 @@ void XSLTImportDia::cancelSlot()
 void XSLTImportDia::chooseSlot()
 {
 
-	/* Use dir from currently selected file */
+    /* Use dir from currently selected file */
     QString dir;
-    if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
-        dir = QFileInfo( _currentFile.path() ).absoluteFilePath();
+    if (_currentFile.isLocalFile() && QFile::exists(_currentFile.path()))
+        dir = QFileInfo(_currentFile.path()).absoluteFilePath();
 
     KFileDialog *dialog = new KFileDialog(dir, QString(), 0L);
-    dialog->setCaption( i18n("Open Document") );
-    dialog->setMimeFilter( KoFilterManager::mimeFilter( _format, KoFilterManager::Import ) );
-	KUrl u;
+    dialog->setCaption(i18n("Open Document"));
+    dialog->setMimeFilter(KoFilterManager::mimeFilter(_format, KoFilterManager::Import));
+    KUrl u;
 
-    if(dialog->exec() == QDialog::Accepted)
-    {
+    if (dialog->exec() == QDialog::Accepted) {
         u = dialog->selectedUrl();
         KRecentDocument::add(dialog->selectedUrl().url(), !dialog->selectedUrl().isLocalFile());
-    } else //revert state
-    {
+    } else { //revert state
         //if (bEmpty) openEmpty();
         //if (bTemplates) openTemplate();
     }
@@ -162,13 +155,12 @@ void XSLTImportDia::chooseSlot()
 
     bool ok = !url.isEmpty();
     if (local) // additional checks for local files
-        ok = ok && (QFileInfo( filename ).isFile() ||
-                    (QFileInfo( filename ).isSymLink() &&
-                     !QFileInfo( filename ).readLink().isEmpty() &&
-                     QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) );
+        ok = ok && (QFileInfo(filename).isFile() ||
+                    (QFileInfo(filename).isSymLink() &&
+                     !QFileInfo(filename).readLink().isEmpty() &&
+                     QFileInfo(QFileInfo(filename).readLink()).isFile()));
 
-    if ( ok )
-    {
+    if (ok) {
         _currentFile = u;
         okSlot();
     }
@@ -180,8 +172,8 @@ void XSLTImportDia::chooseSlot()
  */
 void XSLTImportDia::chooseRecentSlot()
 {
-	kDebug() <<"recent slot :" << recentBox->currentText();
-	_currentFile = recentBox->currentText();
+    kDebug() << "recent slot :" << recentBox->currentText();
+    _currentFile = recentBox->currentText();
 }
 
 /**
@@ -190,10 +182,10 @@ void XSLTImportDia::chooseRecentSlot()
  */
 void XSLTImportDia::chooseCommonSlot()
 {
-	int num = xsltList->currentItem();
-	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
-			xsltList->currentText() + QDir::separator() + _filesList[num];
-	kDebug() <<"common slot :" << _currentFile.url();
+    int num = xsltList->currentItem();
+    _currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
+                   xsltList->currentText() + QDir::separator() + _filesList[num];
+    kDebug() << "common slot :" << _currentFile.url();
 }
 
 /**
@@ -202,58 +194,56 @@ void XSLTImportDia::chooseCommonSlot()
  */
 void XSLTImportDia::okSlot()
 {
-  	kapp->setOverrideCursor(QCursor(Qt::WaitCursor));
-	hide();
-	if(_currentFile.url().isEmpty())
-		return;
-	kDebug() <<"XSLT FILTER --> BEGIN";
-	_out->open("root");
-	QString stylesheet = _currentFile.directory() + '/' + _currentFile.fileName();
+    kapp->setOverrideCursor(QCursor(Qt::WaitCursor));
+    hide();
+    if (_currentFile.url().isEmpty())
+        return;
+    kDebug() << "XSLT FILTER --> BEGIN";
+    _out->open("root");
+    QString stylesheet = _currentFile.directory() + '/' + _currentFile.fileName();
 
-	/* Add the current file in the recent list if is not and save the list. */
-	if(_recentList.contains(stylesheet) == 0)
-	{
-		kDebug() <<"Style sheet add to recent list";
-		/* Remove the older stylesheet used */
-		if(_recentList.size() >= 10)
-			_recentList.pop_back();
+    /* Add the current file in the recent list if is not and save the list. */
+    if (_recentList.contains(stylesheet) == 0) {
+        kDebug() << "Style sheet add to recent list";
+        /* Remove the older stylesheet used */
+        if (_recentList.size() >= 10)
+            _recentList.pop_back();
 
-		/* Add the new */
-		_recentList.prepend(stylesheet);
+        /* Add the new */
+        _recentList.prepend(stylesheet);
 
-		/* Save the new list */
-		kDebug() <<"Recent list save" << _recentList.size() <<" entrie(s)";
-		int i = 0;
-		while(_recentList.size() > 0)
-		{
-			kDebug() <<"save :" << _recentList.first();
-			grp.writePathEntry( QString("Recent%1").arg(i), _recentList.first());
-			_recentList.pop_front();
-			i = i + 1;
-		}
-		/* Write config on disk */
-		_config->sync();
-	}
-	
-	/* Create a temp file */
-	KTemporaryFile tempFile;
-	tempFile.setPrefix("xsltimport-");
-	tempFile.setSuffix("kwd");
-	tempFile.open();
+        /* Save the new list */
+        kDebug() << "Recent list save" << _recentList.size() << " entrie(s)";
+        int i = 0;
+        while (_recentList.size() > 0) {
+            kDebug() << "save :" << _recentList.first();
+            grp.writePathEntry(QString("Recent%1").arg(i), _recentList.first());
+            _recentList.pop_front();
+            i = i + 1;
+        }
+        /* Write config on disk */
+        _config->sync();
+    }
 
-	/* Generate the data in the temp file */
-	XSLTProc* xsltproc = new XSLTProc(_fileIn, tempFile.fileName(), stylesheet);
-	xsltproc->parse();
+    /* Create a temp file */
+    KTemporaryFile tempFile;
+    tempFile.setPrefix("xsltimport-");
+    tempFile.setSuffix("kwd");
+    tempFile.open();
 
-	/* Save the temp file in the store */
-	tempFile.seek(0);
-	_out->write(tempFile.readAll());
-	
-	delete xsltproc;
+    /* Generate the data in the temp file */
+    XSLTProc* xsltproc = new XSLTProc(_fileIn, tempFile.fileName(), stylesheet);
+    xsltproc->parse();
 
-	_out->close();
+    /* Save the temp file in the store */
+    tempFile.seek(0);
+    _out->write(tempFile.readAll());
 
-	kDebug() <<"XSLT FILTER --> END";
-	reject();
+    delete xsltproc;
+
+    _out->close();
+
+    kDebug() << "XSLT FILTER --> END";
+    reject();
 }
 

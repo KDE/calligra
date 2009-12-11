@@ -35,27 +35,27 @@ class KoWmfHandle
 {
 public:
     virtual ~KoWmfHandle() {}
-    virtual void apply( KoWmfRead * ) = 0;
+    virtual void apply(KoWmfRead *) = 0;
 };
 
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply( KoWmfRead * );
+    virtual void apply(KoWmfRead *);
     QBrush brush;
 };
 
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual void apply( KoWmfRead * );
+    virtual void apply(KoWmfRead *);
     QPen pen;
 };
 
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply( KoWmfRead * );
+    virtual void apply(KoWmfRead *);
     QBrush brush;
     QPixmap image;
 };
@@ -63,7 +63,7 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual void apply( KoWmfRead * );
+    virtual void apply(KoWmfRead *);
     QFont font;
     int rotation;
 };

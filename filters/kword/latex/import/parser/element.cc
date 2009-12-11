@@ -21,7 +21,7 @@
 
 Element::Element()
 {
-	_type = LATEX_NONE;
+    _type = LATEX_NONE;
 }
 
 Element::~Element()

@@ -28,11 +28,10 @@
 #include "map.h"
 #include "config.h"
 
-enum EGenerate
-{
-	E_LATEX,
-	E_KWORD,
-	E_CONFIG
+enum EGenerate {
+    E_LATEX,
+    E_KWORD,
+    E_CONFIG
 };
 
 /***********************************************************************/
@@ -46,50 +45,50 @@ enum EGenerate
 class Spreadsheet: public XmlParser, Config
 {
 
-	//Paper _paper;
-	Map _map;
-	//Locale _locale;
-	//AreaName _areaname;
+    //Paper _paper;
+    Map _map;
+    //Locale _locale;
+    //AreaName _areaname;
 
-	public:
-		/**
-		 * Constructor
-		 *
-		 * Creates a new instance of Spreadsheet.
-		 */
-		Spreadsheet();
+public:
+    /**
+     * Constructor
+     *
+     * Creates a new instance of Spreadsheet.
+     */
+    Spreadsheet();
 
-		/**
-		 * Destructor
-		 *
-		 * Remove the list of headers, footers and the body.
-		 */
-		virtual ~Spreadsheet();
+    /**
+     * Destructor
+     *
+     * Remove the list of headers, footers and the body.
+     */
+    virtual ~Spreadsheet();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		void analyze(const QDomNode);
-		void analyze_attr(const QDomNode);
+    void analyze(const QDomNode);
+    void analyze_attr(const QDomNode);
 
-		void generate(QTextStream&, bool);
+    void generate(QTextStream&, bool);
 
-	private:
-		/**
-		 * Generate the second part of the preamble
-		 */
-		void generatePreamble(QTextStream&);
+private:
+    /**
+     * Generate the second part of the preamble
+     */
+    void generatePreamble(QTextStream&);
 
-		/**
-		 * Generate the header
-		 */
-		void  generateTypeHeader(QTextStream&);
+    /**
+     * Generate the header
+     */
+    void  generateTypeHeader(QTextStream&);
 
-		/**
-		 * Generate the footer
-		 */
-		void  generateTypeFooter(QTextStream&);
+    /**
+     * Generate the footer
+     */
+    void  generateTypeFooter(QTextStream&);
 };
 
 #endif /* __KSPREAD_LATEX_SPREADSHEET_H__ */

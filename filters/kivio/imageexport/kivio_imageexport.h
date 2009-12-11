@@ -27,8 +27,8 @@ namespace Kivio
 
 class ImageExport : public KoFilter
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     ImageExport(KoFilter *, const char *, const QStringList&);
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

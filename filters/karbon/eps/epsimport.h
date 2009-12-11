@@ -26,13 +26,13 @@
 
 class EpsImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	EpsImport( QObject* parent, const QStringList& );
-	virtual ~EpsImport();
+    EpsImport(QObject* parent, const QStringList&);
+    virtual ~EpsImport();
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

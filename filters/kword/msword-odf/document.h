@@ -44,11 +44,12 @@
 
 class KoStoreDevice;
 
-namespace wvWare {
-    class Parser;
-    namespace Word97 {
-        class BRC;
-    }
+namespace wvWare
+{
+class Parser;
+namespace Word97 {
+class BRC;
+}
 }
 class KoFilterChain;
 class KWordReplacementHandler;
@@ -61,18 +62,24 @@ class Document : public QObject, public wvWare::SubDocumentHandler
     Q_OBJECT
 public:
     Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-            KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter);
+             KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter);
     virtual ~Document();
 
-    KWordTextHandler *textHandler() const { return m_textHandler; }
+    KWordTextHandler *textHandler() const {
+        return m_textHandler;
+    }
 
-    bool hasParser() const { return m_parser != 0L; }
-    bool bodyFound() const { return m_bodyFound; }
+    bool hasParser() const {
+        return m_parser != 0L;
+    }
+    bool bodyFound() const {
+        return m_bodyFound;
+    }
 
     virtual void bodyStart();
     virtual void bodyEnd();
 
-    virtual void headerStart( wvWare::HeaderData::Type type );
+    virtual void headerStart(wvWare::HeaderData::Type type);
     virtual void headerEnd();
 
     virtual void footnoteStart();
@@ -85,10 +92,9 @@ public:
     void finishDocument();
 
     typedef const wvWare::FunctorBase* FunctorPtr;
-    struct SubDocument
-    {
-        SubDocument( FunctorPtr ptr, int d, const QString& n, const QString& extra )
-            : functorPtr(ptr), data(d), name(n), extraName(extra) {}
+    struct SubDocument {
+        SubDocument(FunctorPtr ptr, int d, const QString& n, const QString& extra)
+                : functorPtr(ptr), data(d), name(n), extraName(extra) {}
         ~SubDocument() {}
         FunctorPtr functorPtr;
         int data;
@@ -105,17 +111,17 @@ public slots:
 
     // Add to our parsing queue, for headers, footers, footnotes, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
-    void slotSubDocFound( const wvWare::FunctorBase* functor, int data );
+    void slotSubDocFound(const wvWare::FunctorBase* functor, int data);
 
-    void slotFootnoteFound( const wvWare::FunctorBase* functor, int data );
+    void slotFootnoteFound(const wvWare::FunctorBase* functor, int data);
 
-    void slotHeadersFound( const wvWare::FunctorBase* functor, int data );
+    void slotHeadersFound(const wvWare::FunctorBase* functor, int data);
 
     void slotTableFound(KWord::Table* table);
 
     // Write out the frameset and add the key to the PICTURES tag
-    void slotPictureFound( const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
-            const wvWare::FunctorBase* );
+    void slotPictureFound(const QString& frameName, const QString& pictureName, KoXmlWriter* writer,
+                          const wvWare::FunctorBase*);
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
@@ -125,8 +131,8 @@ public slots:
 private:
     void processStyles();
     void processAssociatedStrings();
-    enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
+    enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 };
+    void generateFrameBorder(QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd);
 
     // Handlers for different data types in the document.
     KWordTextHandler*        m_textHandler;

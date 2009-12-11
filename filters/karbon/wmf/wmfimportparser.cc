@@ -42,36 +42,34 @@
 bug : see motar.wmf
 */
 
-WMFImportParser::WMFImportParser() : KoWmfRead() {
+WMFImportParser::WMFImportParser() : KoWmfRead()
+{
 }
 
 
-bool WMFImportParser::play( KarbonDocument& doc )
+bool WMFImportParser::play(KarbonDocument& doc)
 {
     mDoc = &doc;
     mScaleX = mScaleY = 1;
 
     // Play the wmf file
-    if( ! KoWmfRead::play( ) )
+    if (! KoWmfRead::play())
         return false;
 
     KoShapeLayer * layer = 0;
     // check if we have to insert a default layer
-    if( mDoc->layers().count() == 0 )
-    {
+    if (mDoc->layers().count() == 0) {
         layer = new KoShapeLayer();
-        mDoc->insertLayer( layer );
-    }
-    else
+        mDoc->insertLayer(layer);
+    } else
         layer = mDoc->layers().first();
 
     uint zIndex = 0;
     // add all toplevel shapes to the layer
-    foreach( KoShape * shape, mDoc->shapes() )
-    {
-        shape->setZIndex( zIndex++ );
-        if( ! shape->parent() )
-            layer->addChild( shape );
+    foreach(KoShape * shape, mDoc->shapes()) {
+        shape->setZIndex(zIndex++);
+        if (! shape->parent())
+            layer->addChild(shape);
     }
 
     return true;
@@ -81,26 +79,26 @@ bool WMFImportParser::play( KarbonDocument& doc )
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
-bool WMFImportParser::begin() {
+bool WMFImportParser::begin()
+{
     QRect bounding = boundingRect();
 
     mBackgroundMode = Qt::TransparentMode;
-    mCurrentOrg.setX( bounding.left() );
-    mCurrentOrg.setY( bounding.top() );
+    mCurrentOrg.setX(bounding.left());
+    mCurrentOrg.setY(bounding.top());
 
-    if ( isStandard() ) {
-        mDoc->setUnit( KoUnit( KoUnit::Point ) );
-        mDoc->setPageSize( bounding.size() );
-    }
-    else {
+    if (isStandard()) {
+        mDoc->setUnit(KoUnit(KoUnit::Point));
+        mDoc->setPageSize(bounding.size());
+    } else {
         // Placeable Wmf store the boundingRect() in pixel and the default DPI
         // The placeable format doesn't have information on which Unit to use
         // so we choose millimeters by default
-        mDoc->setUnit( KoUnit( KoUnit::Millimeter ) );
-        mDoc->setPageSize( QSizeF( INCH_TO_POINT( (double)bounding.width() / defaultDpi() ),
-                                   INCH_TO_POINT( (double)bounding.height() / defaultDpi() ) ) );
+        mDoc->setUnit(KoUnit(KoUnit::Millimeter));
+        mDoc->setPageSize(QSizeF(INCH_TO_POINT((double)bounding.width() / defaultDpi()),
+                                 INCH_TO_POINT((double)bounding.height() / defaultDpi())));
     }
-    if ( (bounding.width() != 0) && (bounding.height() != 0) ) {
+    if ((bounding.width() != 0) && (bounding.height() != 0)) {
         mScaleX = mDoc->pageSize().width() / (double)bounding.width();
         mScaleY = mDoc->pageSize().height() / (double)bounding.height();
     }
@@ -114,312 +112,338 @@ bool WMFImportParser::begin() {
 }
 
 
-bool WMFImportParser::end() {
+bool WMFImportParser::end()
+{
     return true;
 }
 
 
-void WMFImportParser::save() {
+void WMFImportParser::save()
+{
 }
 
 
-void WMFImportParser::restore() {
+void WMFImportParser::restore()
+{
 }
 
 
-void WMFImportParser::setFont( const QFont &font ) {
+void WMFImportParser::setFont(const QFont &font)
+{
     mFont = font;
 }
 
 
-void WMFImportParser::setPen( const QPen &pen ) {
+void WMFImportParser::setPen(const QPen &pen)
+{
     mPen = pen;
 }
 
 
-const QPen &WMFImportParser::pen() const {
+const QPen &WMFImportParser::pen() const
+{
     return mPen;
 }
 
 
-void WMFImportParser::setBrush( const QBrush &brush ) {
+void WMFImportParser::setBrush(const QBrush &brush)
+{
     mBrush = brush;
 }
 
 
-void WMFImportParser::setBackgroundColor( const QColor &c ) {
+void WMFImportParser::setBackgroundColor(const QColor &c)
+{
     mBackgroundColor = c;
 }
 
 
-void WMFImportParser::setBackgroundMode( Qt::BGMode mode ) {
+void WMFImportParser::setBackgroundMode(Qt::BGMode mode)
+{
     mBackgroundMode = mode;
 }
 
 
 
-void WMFImportParser::setWindowOrg( int left, int top ) {
-    mCurrentOrg.setX( left );
-    mCurrentOrg.setY( top );
+void WMFImportParser::setWindowOrg(int left, int top)
+{
+    mCurrentOrg.setX(left);
+    mCurrentOrg.setY(top);
 }
 
 
-void WMFImportParser::setWindowExt( int width, int height ) {
+void WMFImportParser::setWindowExt(int width, int height)
+{
     // the wmf file can change width/height during the drawing
-    if ( (width != 0) && (height != 0) ) {
+    if ((width != 0) && (height != 0)) {
         mScaleX = mDoc->pageSize().width() / (double)width;
         mScaleY = mDoc->pageSize().height() / (double)height;
     }
 }
 
 
-void WMFImportParser::setMatrix( const QMatrix &matrix, bool combine ) {
+void WMFImportParser::setMatrix(const QMatrix &matrix, bool combine)
+{
     kDebug(30504) << "matrix =" << matrix;
     kDebug(30504) << "combine =" << combine;
 }
 
 
-void WMFImportParser::setClipRegion( const QRegion & ) {
+void WMFImportParser::setClipRegion(const QRegion &)
+{
 }
 
 
-QRegion WMFImportParser::clipRegion() {
+QRegion WMFImportParser::clipRegion()
+{
     return mClippingRegion;
 }
 
 
-void WMFImportParser::moveTo( int left, int top ) {
-    mCurrentPoint.setX( left );
-    mCurrentPoint.setY( top );
+void WMFImportParser::moveTo(int left, int top)
+{
+    mCurrentPoint.setX(left);
+    mCurrentPoint.setY(top);
 }
 
 
-void WMFImportParser::lineTo( int left, int top ) {
-    KoPathShape * line = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-    if( ! line )
+void WMFImportParser::lineTo(int left, int top)
+{
+    KoPathShape * line = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+    if (! line)
         return;
-    
-    line->moveTo( QPointF( coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y()) ) );
-    line->lineTo( QPointF( coordX(left), coordY(top) ) );
+
+    line->moveTo(QPointF(coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y())));
+    line->lineTo(QPointF(coordX(left), coordY(top)));
     line->normalize();
 
-    appendPen( *line );
+    appendPen(*line);
 
-    mDoc->add( line );
-    mCurrentPoint.setX( left );
-    mCurrentPoint.setY( top );
+    mDoc->add(line);
+    mCurrentPoint.setX(left);
+    mCurrentPoint.setY(top);
 }
 
 
-void WMFImportParser::drawRect( int left, int top, int width, int height ) {
-    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+void WMFImportParser::drawRect(int left, int top, int width, int height)
+{
+    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
-    if( ! rectangle )
+    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>(createShape(KoRectangleShapeId));
+    if (! rectangle)
         return;
-    
-    rectangle->setPosition( bound.topLeft() );
-    rectangle->setSize( bound.size() );
 
-    appendPen( *rectangle );
-    appendBrush( *rectangle );
+    rectangle->setPosition(bound.topLeft());
+    rectangle->setSize(bound.size());
 
-    mDoc->add( rectangle );
+    appendPen(*rectangle);
+    appendBrush(*rectangle);
+
+    mDoc->add(rectangle);
 }
 
 
-void WMFImportParser::drawRoundRect( int left, int top, int width, int height, int roundw, int roundh ) {
-    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+void WMFImportParser::drawRoundRect(int left, int top, int width, int height, int roundw, int roundh)
+{
+    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
-    if( ! rectangle )
+    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>(createShape(KoRectangleShapeId));
+    if (! rectangle)
         return;
-    
-    rectangle->setPosition( bound.topLeft() );
-    rectangle->setSize( bound.size() );
-    rectangle->setCornerRadiusX( 2.0 * qAbs( roundw )  );
-    rectangle->setCornerRadiusY( 2.0 * qAbs( roundh ) );
 
-    appendPen( *rectangle );
-    appendBrush( *rectangle );
+    rectangle->setPosition(bound.topLeft());
+    rectangle->setSize(bound.size());
+    rectangle->setCornerRadiusX(2.0 * qAbs(roundw));
+    rectangle->setCornerRadiusY(2.0 * qAbs(roundh));
 
-    mDoc->add( rectangle );
+    appendPen(*rectangle);
+    appendBrush(*rectangle);
+
+    mDoc->add(rectangle);
 }
 
 
-void WMFImportParser::drawEllipse( int left, int top, int width, int height ) {
-    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+void WMFImportParser::drawEllipse(int left, int top, int width, int height)
+{
+    QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
-    KoEllipseShape *ellipse = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
-    if( ! ellipse )
+    KoEllipseShape *ellipse = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    if (! ellipse)
         return;
-    
-    ellipse->setPosition( bound.topLeft() );
-    ellipse->setSize( bound.size() );
 
-    appendPen( *ellipse );
-    appendBrush( *ellipse );
+    ellipse->setPosition(bound.topLeft());
+    ellipse->setSize(bound.size());
 
-    mDoc->add( ellipse );
+    appendPen(*ellipse);
+    appendBrush(*ellipse);
+
+    mDoc->add(ellipse);
 }
 
 
-void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen ) {
+void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
+{
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
 
-    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * arc = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
-    if( ! arc )
+    KoEllipseShape * arc = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    if (! arc)
         return;
 
-    arc->setType( KoEllipseShape::Arc );
-    arc->setStartAngle( start );
-    arc->setEndAngle( end );
-    arc->setPosition( bound.topLeft() );
-    arc->setSize( bound.size() );
+    arc->setType(KoEllipseShape::Arc);
+    arc->setStartAngle(start);
+    arc->setEndAngle(end);
+    arc->setPosition(bound.topLeft());
+    arc->setSize(bound.size());
 
-    appendPen( *arc );
+    appendPen(*arc);
     //appendBrush( *arc );
 
-    mDoc->add( arc );
+    mDoc->add(arc);
 }
 
 
-void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen ) {
+void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
+{
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
 
-    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * pie = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
-    if( ! pie )
+    KoEllipseShape * pie = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    if (! pie)
         return;
 
-    pie->setType( KoEllipseShape::Pie );
-    pie->setStartAngle( start );
-    pie->setEndAngle( end );
-    pie->setPosition( bound.topLeft() );
-    pie->setSize( bound.size() );
+    pie->setType(KoEllipseShape::Pie);
+    pie->setStartAngle(start);
+    pie->setEndAngle(end);
+    pie->setPosition(bound.topLeft());
+    pie->setSize(bound.size());
 
-    appendPen( *pie );
-    appendBrush( *pie );
+    appendPen(*pie);
+    appendBrush(*pie);
 
-    mDoc->add( pie );
+    mDoc->add(pie);
 }
 
 
-void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLen ) {
+void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen)
+{
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
 
-    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+    QRectF bound = QRectF(QPointF(coordX(x), coordY(y)), QSizeF(scaleW(w), scaleH(h))).normalized();
 
-    KoEllipseShape * chord = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
-    if( ! chord )
+    KoEllipseShape * chord = static_cast<KoEllipseShape*>(createShape(KoEllipseShapeId));
+    if (! chord)
         return;
 
-    chord->setType( KoEllipseShape::Chord );
-    chord->setStartAngle( start );
-    chord->setEndAngle( end );
-    chord->setPosition( bound.topLeft() );
-    chord->setSize( bound.size() );
+    chord->setType(KoEllipseShape::Chord);
+    chord->setStartAngle(start);
+    chord->setEndAngle(end);
+    chord->setPosition(bound.topLeft());
+    chord->setSize(bound.size());
 
-    appendPen( *chord );
-    appendBrush( *chord );
+    appendPen(*chord);
+    appendBrush(*chord);
 
-    mDoc->add( chord );
+    mDoc->add(chord);
 }
 
 
-void WMFImportParser::drawPolyline( const QPolygon &pa ) {
-    KoPathShape *polyline = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-    if( ! polyline )
+void WMFImportParser::drawPolyline(const QPolygon &pa)
+{
+    KoPathShape *polyline = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+    if (! polyline)
         return;
-    
-    appendPen( *polyline );
-    appendPoints( *polyline, pa );
 
-    mDoc->add( polyline );
+    appendPen(*polyline);
+    appendPoints(*polyline, pa);
+
+    mDoc->add(polyline);
 }
 
 
-void WMFImportParser::drawPolygon( const QPolygon &pa, bool winding ) {
-    KoPathShape *polygon = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-    if( ! polygon )
+void WMFImportParser::drawPolygon(const QPolygon &pa, bool winding)
+{
+    KoPathShape *polygon = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+    if (! polygon)
         return;
-    
-    appendPen( *polygon );
-    appendBrush( *polygon );
-    appendPoints( *polygon, pa );
+
+    appendPen(*polygon);
+    appendBrush(*polygon);
+    appendPoints(*polygon, pa);
 
     polygon->close();
-    polygon->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
-    mDoc->add( polygon );
+    polygon->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+    mDoc->add(polygon);
 }
 
 
-void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
-    KoPathShape *path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-    if( ! path )
+void WMFImportParser::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+{
+    KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+    if (! path)
         return;
 
-    if ( listPa.count() > 0 ) {
-        appendPen( *path );
-        appendBrush( *path );
-        appendPoints( *path, listPa.first() );
+    if (listPa.count() > 0) {
+        appendPen(*path);
+        appendBrush(*path);
+        appendPoints(*path, listPa.first());
         path->close();
-        path->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
-        foreach( const QPolygon & pa, listPa )
-        {
-            KoPathShape *newPath = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-            if( ! newPath )
+        path->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+        foreach(const QPolygon & pa, listPa) {
+            KoPathShape *newPath = static_cast<KoPathShape*>(createShape(KoPathShapeId));
+            if (! newPath)
                 continue;
 
-            appendPoints( *newPath, pa );
+            appendPoints(*newPath, pa);
             newPath->close();
-            path->combine( newPath );
+            path->combine(newPath);
         }
 
-        mDoc->add( path );
+        mDoc->add(path);
     }
 }
 
 
-void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
-    KoImageData * data = mDoc->imageCollection()->createImageData( image );
-    if( ! data )
+void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
+{
+    KoImageData * data = mDoc->imageCollection()->createImageData(image);
+    if (! data)
         return;
 
-    PictureShape * pic = static_cast<PictureShape*>( createShape( PICTURESHAPEID ) );
-    if( ! pic )
+    PictureShape * pic = static_cast<PictureShape*>(createShape(PICTURESHAPEID));
+    if (! pic)
         return;
 
-    pic->setUserData( data );
-    pic->setPosition( QPointF(x,y) );
-    if( sw < 0 )
+    pic->setUserData(data);
+    pic->setPosition(QPointF(x, y));
+    if (sw < 0)
         sw = image.width();
-    if( sh < 0 )
+    if (sh < 0)
         sh = image.height();
-    pic->setSize( QSizeF(sw,sh) );
+    pic->setSize(QSizeF(sw, sh));
 
     kDebug(30504) << "image data size =" << data->pixmap().size();
     kDebug(30504) << "source image size =" << image.size();
-    kDebug(30504) << "source position =" << QPointF( sx, sy );
-    kDebug(30504) << "source size =" << QPointF( scaleW(sw), scaleH(sh) );
+    kDebug(30504) << "source position =" << QPointF(sx, sy);
+    kDebug(30504) << "source size =" << QPointF(scaleW(sw), scaleH(sh));
 
-    mDoc->add( pic );
+    mDoc->add(pic);
 }
 
 
-void WMFImportParser::drawText( int x, int y, int , int , int flags, const QString& text, double rotation ) {
+void WMFImportParser::drawText(int x, int y, int , int , int flags, const QString& text, double rotation)
+{
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 
-    if ( flags & CurrentPosition ) {
+    if (flags & CurrentPosition) {
         // (left, top) position = current logical position
         x = mCurrentPoint.x();
         y = mCurrentPoint.y();
@@ -427,95 +451,91 @@ void WMFImportParser::drawText( int x, int y, int , int , int flags, const QStri
 
     // adjust font size
     QFont font = mFont;
-    font.setPointSizeF( coordY( mFont.pointSize() ) );
+    font.setPointSizeF(coordY(mFont.pointSize()));
 
-    ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
-    if( ! textShape )
+    ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
+    if (! textShape)
         return;
 
-    textShape->setFont( font );
-    textShape->setText( text );
+    textShape->setFont(font);
+    textShape->setText(text);
 
     // determine y-offset from given baseline position
     qreal yOffset = 0.0;
-    if( flags & AlignBottom )
+    if (flags & AlignBottom)
         yOffset -= textShape->baselineOffset();
 
-    textShape->setPosition( QPointF( coordX(x), coordY(y)+yOffset ) );
+    textShape->setPosition(QPointF(coordX(x), coordY(y) + yOffset));
 
     // set text anchor
     qreal xOffset = 0.0;
-    if( flags & AlignHCenter ) {
-        textShape->setTextAnchor( ArtisticTextShape::AnchorMiddle );
+    if (flags & AlignHCenter) {
+        textShape->setTextAnchor(ArtisticTextShape::AnchorMiddle);
         xOffset = -0.5 * textShape->size().width();
     }
 
-    if ( rotation ) {
+    if (rotation) {
         // we rotate around the anchor point
-        QPointF anchor( -xOffset, -yOffset );
+        QPointF anchor(-xOffset, -yOffset);
         QMatrix matrix;
-        matrix.translate( anchor.x(), anchor.y() );
-        matrix.rotate ( rotation );
-        matrix.translate( -anchor.x(), -anchor.y() );
-        textShape->applyTransformation( matrix );
+        matrix.translate(anchor.x(), anchor.y());
+        matrix.rotate(rotation);
+        matrix.translate(-anchor.x(), -anchor.y());
+        textShape->applyTransformation(matrix);
     }
 
-    textShape->setBackground( new KoColorBackground( mPen.color() ) );
+    textShape->setBackground(new KoColorBackground(mPen.color()));
 
-    mDoc->add( textShape );
+    mDoc->add(textShape);
 }
 
 
 //-----------------------------------------------------------------------------
 // Utilities
 
-void WMFImportParser::appendPen( KoShape& obj )
+void WMFImportParser::appendPen(KoShape& obj)
 {
     double width = mPen.width() * mScaleX;
 
-    KoLineBorder * border = new KoLineBorder( ((width < 0.99) ? 1 : width), mPen.color() );
-    border->setLineStyle( mPen.style(), mPen.dashPattern() );
-    border->setCapStyle( mPen.capStyle() );
-    border->setJoinStyle( mPen.joinStyle() );
+    KoLineBorder * border = new KoLineBorder(((width < 0.99) ? 1 : width), mPen.color());
+    border->setLineStyle(mPen.style(), mPen.dashPattern());
+    border->setCapStyle(mPen.capStyle());
+    border->setJoinStyle(mPen.joinStyle());
 
-    obj.setBorder( border );
+    obj.setBorder(border);
 }
 
 
-void WMFImportParser::appendBrush( KoShape& obj )
+void WMFImportParser::appendBrush(KoShape& obj)
 {
-    switch( mBrush.style() )
-    {
-        case Qt::NoBrush:
-            obj.setBackground( 0 );
-            break;
-        case Qt::TexturePattern:
-        {
-            KoImageCollection * imageCollection = mDoc->imageCollection();
-            if( imageCollection )
-            {
-                KoPatternBackground * bg = new KoPatternBackground( imageCollection );
-                bg->setPattern( mBrush.textureImage() );
-                bg->setMatrix( mBrush.matrix() );
-                obj.setBackground( bg );
-            }
-            break;
+    switch (mBrush.style()) {
+    case Qt::NoBrush:
+        obj.setBackground(0);
+        break;
+    case Qt::TexturePattern: {
+        KoImageCollection * imageCollection = mDoc->imageCollection();
+        if (imageCollection) {
+            KoPatternBackground * bg = new KoPatternBackground(imageCollection);
+            bg->setPattern(mBrush.textureImage());
+            bg->setMatrix(mBrush.matrix());
+            obj.setBackground(bg);
         }
-        case Qt::LinearGradientPattern:
-        case Qt::RadialGradientPattern:
-        case Qt::ConicalGradientPattern:
-        {
-            KoGradientBackground * bg = new KoGradientBackground( *mBrush.gradient() );
-            bg->setMatrix( mBrush.matrix() );
-            obj.setBackground( bg );
-            break;
-        }
-        default:
-            obj.setBackground( new KoColorBackground( mBrush.color(), mBrush.style() ) );
+        break;
+    }
+    case Qt::LinearGradientPattern:
+    case Qt::RadialGradientPattern:
+    case Qt::ConicalGradientPattern: {
+        KoGradientBackground * bg = new KoGradientBackground(*mBrush.gradient());
+        bg->setMatrix(mBrush.matrix());
+        obj.setBackground(bg);
+        break;
+    }
+    default:
+        obj.setBackground(new KoColorBackground(mBrush.color(), mBrush.style()));
     }
 }
 
-void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
+void  WMFImportParser::setCompositionMode(QPainter::CompositionMode)
 {
     //TODO
 }
@@ -523,53 +543,52 @@ void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
 void WMFImportParser::appendPoints(KoPathShape &path, const QPolygon& pa)
 {
     // list of point array
-    if ( pa.size() > 0 ) {
-        path.moveTo( QPointF( coordX(pa.point(0).x()), coordY(pa.point(0).y()) ) );
+    if (pa.size() > 0) {
+        path.moveTo(QPointF(coordX(pa.point(0).x()), coordY(pa.point(0).y())));
     }
-    for ( int i=1 ; i < pa.size() ; i++ ) {
-        path.lineTo( QPointF( coordX(pa.point(i).x()), coordY(pa.point(i).y()) ) );
+    for (int i = 1 ; i < pa.size() ; i++) {
+        path.lineTo(QPointF(coordX(pa.point(i).x()), coordY(pa.point(i).y())));
     }
     path.normalize();
 }
 
-double WMFImportParser::coordX( int left )
+double WMFImportParser::coordX(int left)
 {
     return ((double)(left - mCurrentOrg.x()) * mScaleX);
 }
 
-double WMFImportParser::coordY( int top )
+double WMFImportParser::coordY(int top)
 {
     return ((double)(top - mCurrentOrg.y()) * mScaleY);
 }
 
-double WMFImportParser::scaleW( int width )
+double WMFImportParser::scaleW(int width)
 {
     return (width * mScaleX);
 }
 
-double WMFImportParser::scaleH( int height )
+double WMFImportParser::scaleH(int height)
 {
     return (height * mScaleY);
 }
 
-KoShape * WMFImportParser::createShape( const QString &shapeID )
+KoShape * WMFImportParser::createShape(const QString &shapeID)
 {
-    KoShapeFactory * factory = KoShapeRegistry::instance()->get( shapeID );
-    if( ! factory )
-    {
+    KoShapeFactory * factory = KoShapeRegistry::instance()->get(shapeID);
+    if (! factory) {
         kWarning(30514) << "Could not find factory for shape id" << shapeID;
         return 0;
     }
 
-    KoShape * shape = factory->createDefaultShapeAndInit( mDoc->dataCenterMap() );
-    if( shape && shape->shapeId().isEmpty() )
-        shape->setShapeId( factory->id() );
+    KoShape * shape = factory->createDefaultShapeAndInit(mDoc->dataCenterMap());
+    if (shape && shape->shapeId().isEmpty())
+        shape->setShapeId(factory->id());
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-    if( path && shapeID == KoPathShapeId )
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (path && shapeID == KoPathShapeId)
         path->clear();
     // reset tranformation that might come from the default shape
-    shape->setTransformation( QMatrix() );
+    shape->setTransformation(QMatrix());
 
     return shape;
 }

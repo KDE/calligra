@@ -37,49 +37,48 @@
 
 class Document;
 
-namespace wvWare {
-    namespace Word97 {
-        class TC;
-        class SHD;
-    }
+namespace wvWare
+{
+namespace Word97 {
+class TC;
+class SHD;
+}
 }
 class KoRect;
 
 namespace KWord
 {
-    typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
-    typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
+typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
+typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
 
-    // Data for a given row table. This struct is used by the Table struct.
-    struct Row
-    {
-        Row() : functorPtr( 0L ), tap( 0L )  {} // QValueList wants that one
-        Row( TableRowFunctorPtr ptr, TAPptr _tap ) : functorPtr(ptr), tap(_tap) {}
-        ~Row() {}
+// Data for a given row table. This struct is used by the Table struct.
+struct Row {
+    Row() : functorPtr(0L), tap(0L)  {}     // QValueList wants that one
+    Row(TableRowFunctorPtr ptr, TAPptr _tap) : functorPtr(ptr), tap(_tap) {}
+    ~Row() {}
 
-        // Each row has: a functor to call to parse it and a TAP (table row properties)
-        TableRowFunctorPtr functorPtr;
-        TAPptr tap;
-    };
+    // Each row has: a functor to call to parse it and a TAP (table row properties)
+    TableRowFunctorPtr functorPtr;
+    TAPptr tap;
+};
 
-    // Data for a given table, stored between the 'tableRowFound' callback
-    // during text parsing and the final generation of table cells.
-    struct Table
-    {
-        QString name; // kword's grpMgr attribute
-        QList<Row> rows; // need to use QValueList to benefit from implicit sharing
+// Data for a given table, stored between the 'tableRowFound' callback
+// during text parsing and the final generation of table cells.
+struct Table {
+    QString name; // kword's grpMgr attribute
+    QList<Row> rows; // need to use QValueList to benefit from implicit sharing
 
-        // Word has a very flexible concept of columns: each row can vary the
-        // edges of each column. We must map this onto a set of fixed-width columns
-        // by defining columns on each edge, and then using joined cells to model
-        // the original Word cells. We accumulate all the known edges for a given
-        // table in an array.
-        // Important: don't use unsigned int. Value can be negative (relative to margin...).
-        QList<int> m_cellEdges;
+    // Word has a very flexible concept of columns: each row can vary the
+    // edges of each column. We must map this onto a set of fixed-width columns
+    // by defining columns on each edge, and then using joined cells to model
+    // the original Word cells. We accumulate all the known edges for a given
+    // table in an array.
+    // Important: don't use unsigned int. Value can be negative (relative to margin...).
+    QList<int> m_cellEdges;
 
-        void cacheCellEdge( int cellEdge );
-        int columnNumber( int cellEdge ) const;
-    };
+    void cacheCellEdge(int cellEdge);
+    int columnNumber(int cellEdge) const;
+};
 }
 
 class KWordTableHandler : public QObject, public wvWare::TableHandler
@@ -89,16 +88,20 @@ public:
     KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
 
     //////// TableHandler interface
-    virtual void tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
+    virtual void tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
     virtual void tableRowEnd();
     virtual void tableCellStart();
     virtual void tableCellEnd();
 
     ///////// Our own interface
-    Document* document() const { return m_document; }
-    void setDocument( Document * document ) { m_document = document; }
+    Document* document() const {
+        return m_document;
+    }
+    void setDocument(Document * document) {
+        m_document = document;
+    }
 
-    void tableStart( KWord::Table* table);
+    void tableStart(KWord::Table* table);
     void tableEnd();
 
 protected:

@@ -33,7 +33,7 @@ class PptxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    PptxImport( QObject * parent, const QStringList & );
+    PptxImport(QObject * parent, const QStringList &);
     virtual ~PptxImport();
 
 protected:
@@ -42,7 +42,7 @@ protected:
     virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
-        QString& errorMessage);
+            QString& errorMessage);
 };
 
 #endif

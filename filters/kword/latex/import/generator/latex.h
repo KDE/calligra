@@ -26,22 +26,20 @@ class Element;
 class Latex
 {
 
-	public:
-		static Latex* instance()
-		{
-			if(_instance == 0)
-				_instance = new Latex();
-			return _instance;
-		}
+public:
+    static Latex* instance() {
+        if (_instance == 0)
+            _instance = new Latex();
+        return _instance;
+    }
 
-		Element* getEnv(QList<Element*>* root, const char* name);
-		Element* getCommand(QList<Element*>* root, const char* name);
+    Element* getEnv(QList<Element*>* root, const char* name);
+    Element* getCommand(QList<Element*>* root, const char* name);
 
-	private:
-		static Latex* _instance;
-		Latex()
-		{
-		}
+private:
+    static Latex* _instance;
+    Latex() {
+    }
 };
 
 #endif /* __LATEX_IMPORT_LATEXUTILS__ */

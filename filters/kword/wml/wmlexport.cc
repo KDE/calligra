@@ -33,11 +33,11 @@
 #include "wmlexport.h"
 
 typedef KGenericFactory<WMLExport> WMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmlexport, WMLExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libwmlexport, WMLExportFactory("kofficefilters"))
 
 class WMLWorker : public KWEFBaseWorker
 {
-  public:
+public:
     WMLWorker(void)  { }
     virtual ~WMLWorker(void) { }
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -45,8 +45,8 @@ class WMLWorker : public KWEFBaseWorker
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
-  private:
+                                 const ValueListFormatData& paraFormatDataList);
+private:
     QString filename;
     QString result;
     bool m_bold, m_italic, m_underline;
@@ -54,107 +54,105 @@ class WMLWorker : public KWEFBaseWorker
 
 bool WMLWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
-  filename = filenameOut;
-  return true;
+    filename = filenameOut;
+    return true;
 }
 
 bool WMLWorker::doCloseFile(void)
 {
-  QFile out( filename );
-  if( !out.open( QIODevice::WriteOnly ) )
-    return false;
-  QTextStream stream;
-  stream.setDevice( &out );
-  stream << result;
-  return true;
+    QFile out(filename);
+    if (!out.open(QIODevice::WriteOnly))
+        return false;
+    QTextStream stream;
+    stream.setDevice(&out);
+    stream << result;
+    return true;
 }
 
 bool WMLWorker::doOpenDocument(void)
 {
-  result = "<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\"\n";
-  result += "      \"http://www.wapforum.org/DTD/wml_1.1.xml\" >\n";
-  result += "<!-- Created using KWord, see www.koffice.org/kword -->\n";
-  result += "<wml>\n";
-  result += "<card>\n";
+    result = "<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\"\n";
+    result += "      \"http://www.wapforum.org/DTD/wml_1.1.xml\" >\n";
+    result += "<!-- Created using KWord, see www.koffice.org/kword -->\n";
+    result += "<wml>\n";
+    result += "<card>\n";
 
-  m_bold = m_italic = m_underline = false;
+    m_bold = m_italic = m_underline = false;
 
-  return true;
+    return true;
 }
 
 bool WMLWorker::doCloseDocument(void)
 {
-  result += "</card>\n";
-  result += "</wml>";
-  return true;
+    result += "</card>\n";
+    result += "</wml>";
+    return true;
 }
 
 bool WMLWorker::doFullParagraph(const QString& paraText,
-  const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
+                                const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-  QString wmlText;
-  QString text = paraText;
+    QString wmlText;
+    QString text = paraText;
 
-  ValueListFormatData::ConstIterator it;
-  for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )
-  {
-    const FormatData& formatData = *it;
+    ValueListFormatData::ConstIterator it;
+    for (it = paraFormatDataList.begin(); it != paraFormatDataList.end(); ++it) {
+        const FormatData& formatData = *it;
 
-    // only if the format is for text (id==1)
-    if( formatData.id == 1 )
-    {
-      QString partialText;
-      partialText = text.mid( formatData.pos, formatData.len );
+        // only if the format is for text (id==1)
+        if (formatData.id == 1) {
+            QString partialText;
+            partialText = text.mid(formatData.pos, formatData.len);
 
-      // escape the text
-      partialText = KWEFUtil::EscapeSgmlText( NULL, partialText, true, true );
+            // escape the text
+            partialText = KWEFUtil::EscapeSgmlText(NULL, partialText, true, true);
 
-      // apply formatting
-      m_bold = formatData.text.weight >= 75;
-      m_italic = formatData.text.italic;
-      m_underline = formatData.text.underline;
+            // apply formatting
+            m_bold = formatData.text.weight >= 75;
+            m_italic = formatData.text.italic;
+            m_underline = formatData.text.underline;
 
-      if( m_bold ) partialText = "<b>" + partialText + "</b>";
-      if( m_italic ) partialText = "<i>" + partialText + "</i>";
-      if( m_underline ) partialText = "<u>" + partialText + "</u>";
+            if (m_bold) partialText = "<b>" + partialText + "</b>";
+            if (m_italic) partialText = "<i>" + partialText + "</i>";
+            if (m_underline) partialText = "<u>" + partialText + "</u>";
 
 
-      wmlText += partialText;
+            wmlText += partialText;
+        }
     }
-  }
 
-  // sentinel check
-  QString align = layout.alignment.lower();
-  if( ( align!="left" ) && ( align!="right" ) && ( align!="center" ) )
-    align = "left";
+    // sentinel check
+    QString align = layout.alignment.lower();
+    if ((align != "left") && (align != "right") && (align != "center"))
+        align = "left";
 
-  result += "<p align=\"" + align + "\">" + wmlText + "</p>\n";
+    result += "<p align=\"" + align + "\">" + wmlText + "</p>\n";
 
-  return true;
+    return true;
 }
 
-WMLExport::WMLExport( QObject* parent, const QStringList& ):
-                     KoFilter(parent)
+WMLExport::WMLExport(QObject* parent, const QStringList&):
+        KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus WMLExport::convert( const QByteArray& from,
-  const QByteArray& to )
+KoFilter::ConversionStatus WMLExport::convert(const QByteArray& from,
+        const QByteArray& to)
 {
-  // check for proper conversion
-  if( to!= "text/vnd.wap.wml" || from != "application/x-kword" )
-     return KoFilter::NotImplemented;
+    // check for proper conversion
+    if (to != "text/vnd.wap.wml" || from != "application/x-kword")
+        return KoFilter::NotImplemented;
 
-  WMLWorker* worker = new WMLWorker();
-  KWEFKWordLeader* leader = new KWEFKWordLeader( worker );
+    WMLWorker* worker = new WMLWorker();
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-  KoFilter::ConversionStatus result;
-  result = leader->convert( m_chain, from, to );
+    KoFilter::ConversionStatus result;
+    result = leader->convert(m_chain, from, to);
 
-  delete worker;
-  delete leader;
+    delete worker;
+    delete leader;
 
-  return result;
+    return result;
 }
 
 #include "wmlexport.moc"

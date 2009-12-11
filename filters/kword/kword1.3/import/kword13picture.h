@@ -29,11 +29,11 @@ class KoStore;
 class KWord13Picture
 {
 public:
-    explicit KWord13Picture( void );
-    ~KWord13Picture( void );
+    explicit KWord13Picture(void);
+    ~KWord13Picture(void);
 public:
-    bool loadPicture( KoStore* store );
-    QString getOasisPictureName( void ) const;
+    bool loadPicture(KoStore* store);
+    QString getOasisPictureName(void) const;
 public:
     QString m_storeName; ///< Name of the file in store
     KTemporaryFile* m_tempFile; ///< Temporary file

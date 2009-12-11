@@ -27,24 +27,28 @@
 
 class Env: public Element
 {
-	QList<Element*> _children;
-	QString _name;
+    QList<Element*> _children;
+    QString _name;
 
-	public:
-		Env();
+public:
+    Env();
 
-		explicit Env(const char*);
+    explicit Env(const char*);
 
-		explicit Env(const QString&);
+    explicit Env(const QString&);
 
-		~Env();
+    ~Env();
 
-		QString getName() const { return _name; }
+    QString getName() const {
+        return _name;
+    }
 
-		void setName(QString name) { _name = name; }
-		void setChildren(QList<Element*>*);
-	
-		void print(int tab = 0);
+    void setName(QString name) {
+        _name = name;
+    }
+    void setChildren(QList<Element*>*);
+
+    void print(int tab = 0);
 };
 
 #endif /* __LATEXPARSER_ENV_H__ */

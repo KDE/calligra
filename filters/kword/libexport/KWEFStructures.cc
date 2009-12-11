@@ -33,35 +33,34 @@
 #include <QList>
 
 
-TableCell::~TableCell ( void )
+TableCell::~TableCell(void)
 {
 #if 0
-    if ( paraList) delete paraList;
+    if (paraList) delete paraList;
 #endif
 }
 
-void Table::addCell ( int c, int r, int _cols, int _rows, QList<ParaData> &p, FrameData &frameData )
+void Table::addCell(int c, int r, int _cols, int _rows, QList<ParaData> &p, FrameData &frameData)
 {
-   if ( c + _cols > cols )
-   {
-      cols = c + _cols;
-   }
+    if (c + _cols > cols) {
+        cols = c + _cols;
+    }
 
-   cellList << TableCell ( c, r, _cols, _rows, new QList<ParaData> (p), frameData );
+    cellList << TableCell(c, r, _cols, _rows, new QList<ParaData> (p), frameData);
 }
 
 bool TabulatorData::operator == (const TabulatorData& other) const
 {
-    return ((m_type==other.m_type)
-        && (m_ptpos==other.m_ptpos)
-        && (m_filling==other.m_filling)
-        && (m_width==other.m_width));
+    return ((m_type == other.m_type)
+            && (m_ptpos == other.m_ptpos)
+            && (m_filling == other.m_filling)
+            && (m_width == other.m_width));
 }
 
 void VariableData::setLink(const QString& linkName, const QString& hrefName)
 {
-    propertyMap["link:linkName"]=linkName;
-    propertyMap["link:hrefName"]=hrefName;
+    propertyMap["link:linkName"] = linkName;
+    propertyMap["link:hrefName"] = hrefName;
 }
 
 QString VariableData::getLinkName(void) const
@@ -76,26 +75,26 @@ QString VariableData::getHrefName(void) const
 
 void VariableData::setPgNum(const QString& subtype, const QString& value)
 {
-    propertyMap["pgnum:subtype"]=subtype;
-    propertyMap["pgnum:value"]=value;
+    propertyMap["pgnum:subtype"] = subtype;
+    propertyMap["pgnum:value"] = value;
 }
 
 bool VariableData::isPageNumber(void) const
 {
-    const int num=propertyMap["pgnum:subtype"].toInt();
-    return (num==0);
+    const int num = propertyMap["pgnum:subtype"].toInt();
+    return (num == 0);
 }
 
 bool VariableData::isPageCount(void) const
 {
-    const int num=propertyMap["pgnum:subtype"].toInt();
-    return (num==1);
+    const int num = propertyMap["pgnum:subtype"].toInt();
+    return (num == 1);
 }
 
 void VariableData::setField(const QString& name, const QString& value)
 {
-    propertyMap["field:name"]=name;
-    propertyMap["field:value"]=value;
+    propertyMap["field:name"] = name;
+    propertyMap["field:value"] = value;
 }
 
 QString VariableData::getFieldName(void) const
@@ -108,7 +107,7 @@ QString VariableData::getFieldValue(void) const
     return propertyMap["field:value"];
 }
 
-void VariableData::setFootnote( const QString& notetype, const QString& automatic,const QString& value, QList<ParaData>* para)
+void VariableData::setFootnote(const QString& notetype, const QString& automatic, const QString& value, QList<ParaData>* para)
 {
     propertyMap["footnote:value"] = value;
     propertyMap["footnote:auto"]  = automatic;
@@ -118,7 +117,7 @@ void VariableData::setFootnote( const QString& notetype, const QString& automati
 
 bool VariableData::getFootnoteAuto(void) const
 {
-    return propertyMap["footnote:auto"]=="auto";
+    return propertyMap["footnote:auto"] == "auto";
 }
 
 QString VariableData::getFootnoteValue(void) const
@@ -126,58 +125,55 @@ QString VariableData::getFootnoteValue(void) const
     return propertyMap["footnote:value"];
 }
 
-bool VariableData::getFootnoteType( void ) const
+bool VariableData::getFootnoteType(void) const
 {
     return propertyMap["footnote:notetype"] == "footnote";
 }
- 
+
 QList<ParaData>* VariableData::getFootnotePara(void) const
 {
     return footnotePara;
 }
 
-void VariableData::setGenericData( const QString& key, const QString& data )
+void VariableData::setGenericData(const QString& key, const QString& data)
 {
     propertyMap[ key ] = data ;
 }
 
-QString VariableData::getGenericData( const QString& key ) const
+QString VariableData::getGenericData(const QString& key) const
 {
     return propertyMap[ key ];
 }
 
 Bookmark::Bookmark()
- : m_startparag(-1), m_endparag(-1), m_cursorIndexStart(-1), m_cursorIndexEnd(-1)
+        : m_startparag(-1), m_endparag(-1), m_cursorIndexStart(-1), m_cursorIndexEnd(-1)
 {
 }
 
-void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)
+void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
 {
     ValueListFormatData::Iterator  paraFormatDataIt;
-    int lastPos=0;   // last position
+    int lastPos = 0; // last position
 
-    for (paraFormatDataIt = paraFormatDataList.begin ();
-        paraFormatDataIt != paraFormatDataList.end ();
-        paraFormatDataIt++)
-    {
-        if ( (*paraFormatDataIt).pos > lastPos )
-        {
+    for (paraFormatDataIt = paraFormatDataList.begin();
+            paraFormatDataIt != paraFormatDataList.end();
+            paraFormatDataIt++) {
+        if ((*paraFormatDataIt).pos > lastPos) {
 #if 0
-            kDebug (30508) <<"CreateMissingFormatData: lastPos =" << lastPos
-                            << ", pos = " << (*paraFormatDataIt).pos
-                            << ", len = " << (*paraFormatDataIt).len << " (bad)" << endl;
+            kDebug(30508) << "CreateMissingFormatData: lastPos =" << lastPos
+            << ", pos = " << (*paraFormatDataIt).pos
+            << ", len = " << (*paraFormatDataIt).len << " (bad)" << endl;
 #endif
 
             // We must add a FormatData
-            paraFormatDataList.insert ( paraFormatDataIt,
-                FormatData ( lastPos, (*paraFormatDataIt).pos - lastPos, true ) );
+            paraFormatDataList.insert(paraFormatDataIt,
+                                      FormatData(lastPos, (*paraFormatDataIt).pos - lastPos, true));
         }
 #if 0
-        else
-        {
-            kDebug (30508) <<"CreateMissingFormatData: lastPos =" << lastPos
-                            << ", pos = " << (*paraFormatDataIt).pos
-                            << ", len = " << (*paraFormatDataIt).len << " (ok)" << endl;
+        else {
+            kDebug(30508) << "CreateMissingFormatData: lastPos =" << lastPos
+            << ", pos = " << (*paraFormatDataIt).pos
+            << ", len = " << (*paraFormatDataIt).len << " (ok)" << endl;
         }
 #endif
 
@@ -190,21 +186,19 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
     }
 
     // Add the last one if needed
-    if ( (int) paraText.length () > lastPos )
-    {
+    if ((int) paraText.length() > lastPos) {
 #if 0
-        kDebug (30508) <<"CreateMissingFormatData: lastPos =" << lastPos
-                        << ", total len = " << paraText.length () << " (bad)" << endl;
+        kDebug(30508) << "CreateMissingFormatData: lastPos =" << lastPos
+        << ", total len = " << paraText.length() << " (bad)" << endl;
 #endif
 
-        paraFormatDataList.append (
-            FormatData ( lastPos, paraText.length () - lastPos, true ) );
+        paraFormatDataList.append(
+            FormatData(lastPos, paraText.length() - lastPos, true));
     }
 #if 0
-    else
-    {
-        kDebug (30508) <<"CreateMissingFormatData: lastPos =" << lastPos
-                        << ", total len = " << paraText.length () << " (ok)" << endl;
+    else {
+        kDebug(30508) << "CreateMissingFormatData: lastPos =" << lastPos
+        << ", total len = " << paraText.length() << " (ok)" << endl;
     }
 #endif
 }

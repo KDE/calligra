@@ -270,31 +270,31 @@ Value FormulaToken::value() const
 
     // FIXME sanity check: verify size of data
     switch (d->id) {
-        case ErrorCode:
-            result = errorAsValue(buf[0]);
-            break;
+    case ErrorCode:
+        result = errorAsValue(buf[0]);
+        break;
 
-        case Bool:
-            result = Value(buf[0] != 0);
-            break;
+    case Bool:
+        result = Value(buf[0] != 0);
+        break;
 
-        case Integer:
-            result = Value((int)readU16(buf));
-            break;
+    case Integer:
+        result = Value((int)readU16(buf));
+        break;
 
-        case Float:
-            result = Value(readFloat64(buf));
-            break;
+    case Float:
+        result = Value(readFloat64(buf));
+        break;
 
-        case String: {
-            EString estr = (version() == Excel97) ?
+    case String: {
+        EString estr = (version() == Excel97) ?
                        EString::fromUnicodeString(buf, false, d->data.size()) :
                        EString::fromByteString(buf, false, d->data.size());
-            result = Value(estr.str());
-            break;
-        }
+        result = Value(estr.str());
+        break;
+    }
 
-        default: break;
+    default: break;
     }
 
     delete [] buf;

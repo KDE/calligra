@@ -30,60 +30,76 @@
 
 class Command: public Element
 {
-	public:
-		Command();
-		/**
-		 * Create a command which match to \\today
-		 */
-		explicit Command(const char* command);
+public:
+    Command();
+    /**
+     * Create a command which match to \\today
+     */
+    explicit Command(const char* command);
 
-		/**
-		 * Create a command which match to \\renewcommand{\\headrulewidth}{opt}
-		 */
-		Command(const char* name, QList<QList<Element*>* >* groups);
+    /**
+     * Create a command which match to \\renewcommand{\\headrulewidth}{opt}
+     */
+    Command(const char* name, QList<QList<Element*>* >* groups);
 
-		/**
-		 * Create a command which match to  
-		 * \\put(1,1){\\circle[}}.
-		 */
-		Command(const char* name, QList<QList<Param*>* >* options,
-				Qlist<QList<Element*>* >* groups);
+    /**
+     * Create a command which match to
+     * \\put(1,1){\\circle[}}.
+     */
+    Command(const char* name, QList<QList<Param*>* >* options,
+            Qlist<QList<Element*>* >* groups);
 
-		/**
-		 * Create a command which match to \\parpic(3cm,3cm)[f]{text} or
-		 * \\documentclass[11pt]{guidepra}
-		 */
-		Command(const char* name, QList<QList<Param*>* >* params, QList<Param*>* options, QList<QList<Element*>* >* groups);
+    /**
+     * Create a command which match to \\parpic(3cm,3cm)[f]{text} or
+     * \\documentclass[11pt]{guidepra}
+     */
+    Command(const char* name, QList<QList<Param*>* >* params, QList<Param*>* options, QList<QList<Element*>* >* groups);
 
-		~Command();
+    ~Command();
 
-		QString getName() const { return _name; }
+    QString getName() const {
+        return _name;
+    }
 
-		QList<QList<Param*>* > getParams() const { return _params; }
-		
-		QList<Param*> getOptions() const { return _options; }
-		
-		QList<QList<Element*>* > getChildren() const { return _elements; }
+    QList<QList<Param*>* > getParams() const {
+        return _params;
+    }
 
-		void setName(const char* name) { _name = name; }
-		void addParam(const char* param);
-		//void addParam(QString key, QString value) { _params.append(new Param(key, value)); }
-		//void addParams(QPtrList<Param> params) { _params = params; }
-		void addGroups(QList<QList<Element*>* >* elts) { _elements = *elts; }
+    QList<Param*> getOptions() const {
+        return _options;
+    }
 
-		void addOption(const char* option);
-		void addOption(QString key, QString value) { _options.append(new Param(key, value)); }
-	
-		void addChild(QList<Element*>* elt) { _elements.append(elt); }
+    QList<QList<Element*>* > getChildren() const {
+        return _elements;
+    }
 
-		/* useful method */
-		void print(int tab = 0);
+    void setName(const char* name) {
+        _name = name;
+    }
+    void addParam(const char* param);
+    //void addParam(QString key, QString value) { _params.append(new Param(key, value)); }
+    //void addParams(QPtrList<Param> params) { _params = params; }
+    void addGroups(QList<QList<Element*>* >* elts) {
+        _elements = *elts;
+    }
 
-	private:
-		QString _name;
-		QList<QList<Param*>* > _params;
-		QList<Param*> _options;
-		Qlist<QList<Element*>* > _elements;
+    void addOption(const char* option);
+    void addOption(QString key, QString value) {
+        _options.append(new Param(key, value));
+    }
+
+    void addChild(QList<Element*>* elt) {
+        _elements.append(elt);
+    }
+
+    /* useful method */
+    void print(int tab = 0);
+
+private:
+    QString _name;
+    QList<QList<Param*>* > _params;
+    QList<Param*> _options;
+    Qlist<QList<Element*>* > _elements;
 
 };
 

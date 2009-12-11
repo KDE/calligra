@@ -38,12 +38,14 @@ public:
     AbiProps(QString newValue) : m_value(newValue) {}
     virtual ~AbiProps() {}
 public:
-    inline QString getValue(void) const { return m_value; }
+    inline QString getValue(void) const {
+        return m_value;
+    }
 private:
     QString m_value;
 };
 
-class AbiPropsMap : public QMap<QString,AbiProps>
+class AbiPropsMap : public QMap<QString, AbiProps>
 {
 public:
     AbiPropsMap() {}
@@ -80,6 +82,6 @@ inline double PicaToPoints(const double d)
  * @param atleast was there a + character after the unit to denote an "at-least" property
  * @return the value as double (in points)
  */
-double ValueWithLengthUnit( const QString& _str, bool* atleast = NULL );
+double ValueWithLengthUnit(const QString& _str, bool* atleast = NULL);
 
 #endif // _IMPORT_HELPERS_H

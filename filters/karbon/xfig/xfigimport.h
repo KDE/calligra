@@ -42,53 +42,50 @@ class XFIGImport : public KoFilter
     Q_OBJECT
 
 public:
-    XFIGImport( QObject* parent );
+    XFIGImport(QObject* parent);
     virtual ~XFIGImport();
 
-    virtual bool filterImport( const QString &file, KoDocument *,
-                               const QString &from, const QString &to,
-                               const QString &config=QString() );
+    virtual bool filterImport(const QString &file, KoDocument *,
+                              const QString &from, const QString &to,
+                              const QString &config = QString());
 
 private:
-  void parseColorObject (istream& fin);
-  void parseArc (istream& fin, GDocument* doc);
-  void parseEllipse (istream& fin, GDocument* doc);
-  void parsePolyline (istream& fin, GDocument* doc);
-  void parseSpline (istream& fin, GDocument* doc);
-  void parseText (istream& fin, GDocument* doc);
-  void parseCompoundObject (istream& fin, GDocument* doc);
-  void buildDocument (GDocument *doc);
+    void parseColorObject(istream& fin);
+    void parseArc(istream& fin, GDocument* doc);
+    void parseEllipse(istream& fin, GDocument* doc);
+    void parsePolyline(istream& fin, GDocument* doc);
+    void parseSpline(istream& fin, GDocument* doc);
+    void parseText(istream& fin, GDocument* doc);
+    void parseCompoundObject(istream& fin, GDocument* doc);
+    void buildDocument(GDocument *doc);
 
-  void setProperties (GObject* obj, int pen_color, int style, int thickness,
-                      int area_fill, int fill_color);
+    void setProperties(GObject* obj, int pen_color, int style, int thickness,
+                       int area_fill, int fill_color);
 
-  float fig_resolution;
-  int coordinate_system;
-  int version;
-  Q3IntDict<QColor> colorTable;
+    float fig_resolution;
+    int coordinate_system;
+    int version;
+    Q3IntDict<QColor> colorTable;
 
-  // An object and the depth. Used for sorting objects
-  // in the object list
-  struct GObjectListItem
-  {
-      GObjectListItem() : object(0L) {} // for QValueList
+    // An object and the depth. Used for sorting objects
+    // in the object list
+    struct GObjectListItem {
+        GObjectListItem() : object(0L) {} // for QValueList
 
-      GObjectListItem( int d, GObject * obj ) :
-          object(obj), depth(d) {}
+        GObjectListItem(int d, GObject * obj) :
+                object(obj), depth(d) {}
 
-      GObject * object;
-      int depth;
-      bool operator < (const GObjectListItem & item ) const
-      {
-          // We want to sort by decreasing depths
-          return depth > item.depth;
-      }
-      bool operator == (const GObjectListItem & item ) const
-      {
-          return depth == item.depth;
-      }
-  };
-  QList<GObjectListItem> objList;
+        GObject * object;
+        int depth;
+        bool operator < (const GObjectListItem & item) const {
+            // We want to sort by decreasing depths
+            return depth > item.depth;
+        }
+        bool operator == (const GObjectListItem & item) const {
+            return depth == item.depth;
+        }
+    };
+    QList<GObjectListItem> objList;
 };
 
 #endif

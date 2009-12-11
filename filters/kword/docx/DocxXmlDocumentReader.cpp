@@ -39,24 +39,23 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
     MSOOXML::MsooXmlRelationships& _relationships)
-    : MSOOXML::MsooXmlReaderContext(&_relationships),
-      import(&_import), path(_path), file(_file)
+        : MSOOXML::MsooXmlReaderContext(&_relationships),
+        import(&_import), path(_path), file(_file)
 {
 }
 
-class DocxXmlDocumentReader::Private {
+class DocxXmlDocumentReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
 };
 
 DocxXmlDocumentReader::DocxXmlDocumentReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
-    , d(new Private)
+        : MSOOXML::MsooXmlCommonReader(writers)
+        , d(new Private)
 {
     init();
 }
@@ -91,19 +90,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     if (!expectNS(MSOOXML::Schemas::wordprocessingml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/    
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "w", MSOOXML::Schemas::wordprocessingml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
         return KoFilter::WrongFormat;
     }
@@ -138,7 +137,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     READ_PROLOGUE
 
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
-    for (int i=0; i<namespaces.count(); i++) {
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 

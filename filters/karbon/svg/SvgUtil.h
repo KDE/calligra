@@ -32,46 +32,46 @@ public:
     /**
      * Converts given value from userspace units to points.
      */
-    static double fromUserSpace( double value );
+    static double fromUserSpace(double value);
 
     /**
      * Converts given value from points to userspace units.
      */
-    static double toUserSpace( double value );
+    static double toUserSpace(double value);
 
     /**
      * Parses the given string containing a percentage number.
      * @param s the input string containing the percentage
      * @return the percentage number normalized to 0..100
      */
-    static double toPercentage( QString s );
+    static double toPercentage(QString s);
 
     /**
      * Parses the given string containing a percentage number.
      * @param s the input string containing the percentage
      * @return the percentage number normalized to 0..1
      */
-    static double fromPercentage( QString s );
+    static double fromPercentage(QString s);
 
     /**
      * Converts position from objectBoundingBox units to userSpace units.
      */
-    static QPointF objectToUserSpace( const QPointF &position, const QRectF &objectBound );
+    static QPointF objectToUserSpace(const QPointF &position, const QRectF &objectBound);
 
     /**
      * Converts size from objectBoundingBox units to userSpace units.
      */
-    static QSizeF objectToUserSpace( const QSizeF &size, const QRectF &objectBound );
+    static QSizeF objectToUserSpace(const QSizeF &size, const QRectF &objectBound);
 
     /**
      * Converts position from userSpace units to objectBoundingBox units.
      */
-    static QPointF userSpaceToObject( const QPointF &position, const QRectF &objectBound );
+    static QPointF userSpaceToObject(const QPointF &position, const QRectF &objectBound);
 
     /**
      * Converts size from userSpace units to objectBoundingBox units.
      */
-    static QSizeF userSpaceToObject( const QSizeF &size, const QRectF &objectBound );
+    static QSizeF userSpaceToObject(const QSizeF &size, const QRectF &objectBound);
 
 };
 

@@ -29,10 +29,10 @@ class KFormula13Import : public KoFilter
 {
     Q_OBJECT
 public:
-    KFormula13Import( QObject* parent, const QStringList& );
+    KFormula13Import(QObject* parent, const QStringList&);
     ~KFormula13Import();
 
-    KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // KFORMULA13IMPORT_H

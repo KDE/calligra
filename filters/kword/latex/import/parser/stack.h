@@ -27,9 +27,8 @@
 
 #define GROUP_STACK_SIZE 10
 
-typedef struct _Stack
-{
-	int name;
+typedef struct _Stack {
+    int name;
 } Stack;
 
 /*static Stack *stack = 0;

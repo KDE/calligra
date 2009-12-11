@@ -32,32 +32,32 @@ public:
     ~SvgFilterHelper();
 
     /// Set the filter units type
-    void setFilterUnits( Units filterUnits );
+    void setFilterUnits(Units filterUnits);
     /// Returns the filter units type
     Units filterUnits() const;
 
     /// Set the filter primitive units type
-    void setPrimitiveUnits( Units primitiveUnits );
+    void setPrimitiveUnits(Units primitiveUnits);
     /// Returns the filter primitive units type
     Units primitiveUnits() const;
 
     /// Sets filter position
-    void setPosition( const QPointF & position );
+    void setPosition(const QPointF & position);
     /// Returns filter position (objectBound is used when filterUnits == ObjectBoundingBox)
-    QPointF position( const QRectF & objectBound ) const;
+    QPointF position(const QRectF & objectBound) const;
 
     /// Sets filter size
-    void setSize( const QSizeF & size );
+    void setSize(const QSizeF & size);
     /// Returns filter size (objectBound is used when filterUnits == ObjectBoundingBox)
-    QSizeF size( const QRectF & objectBound ) const;
+    QSizeF size(const QRectF & objectBound) const;
 
     /// Sets the dom element containing the filter
-    void setContent( const KoXmlElement &content );
+    void setContent(const KoXmlElement &content);
     /// Return the filer element
     KoXmlElement content() const;
 
-    static QPointF toUserSpace( const QPointF &position, const QRectF &objectBound );
-    static QSizeF toUserSpace( const QSizeF &size, const QRectF &objectBound );
+    static QPointF toUserSpace(const QPointF &position, const QRectF &objectBound);
+    static QSizeF toUserSpace(const QSizeF &size, const QRectF &objectBound);
 private:
     Units m_filterUnits;
     Units m_primitiveUnits;

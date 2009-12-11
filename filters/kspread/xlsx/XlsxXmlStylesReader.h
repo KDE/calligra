@@ -61,9 +61,9 @@ public:
 //! @todo QString scheme;
 //! @todo QString scheme;
 //! @todo vertAlign
-    bool bold : 1;
-    bool italic : 1;
-    bool strike : 1;
+bool bold : 1;
+bool italic : 1;
+bool strike : 1;
 
     static ST_UnderlineValue ST_UnderlineValue_fromString(const QString& s);
     void setUnderline(const QString& s);
@@ -76,11 +76,15 @@ public:
     //! @todo implement more styling
     void setupCellTextStyle(KoGenStyle* cellStyle) const;
 
-    void setSize(qreal size) { m_defaultSize = false; m_size = size; }
-    qreal size() const { return m_size; }
+    void setSize(qreal size) {
+        m_defaultSize = false; m_size = size;
+    }
+    qreal size() const {
+        return m_size;
+    }
 private:
     qreal m_size;
-    bool m_defaultSize : 1;
+bool m_defaultSize : 1;
 };
 
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
@@ -195,7 +199,7 @@ protected:
     uint m_fontStyleIndex;
     uint m_cellFormatIndex;
 
-    typedef KoFilter::ConversionStatus (XlsxXmlStylesReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(XlsxXmlStylesReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     XlsxXmlStylesReaderContext* m_context;

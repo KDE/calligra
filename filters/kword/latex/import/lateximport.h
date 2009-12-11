@@ -33,13 +33,13 @@
 class LATEXImport : public KoFilter
 {
 
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		LATEXImport(QObject* parent, const QStringList&);
-		virtual ~LATEXImport() {}
+public:
+    LATEXImport(QObject* parent, const QStringList&);
+    virtual ~LATEXImport() {}
 
-		virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif /* __LATEXIMPORT_H__ */

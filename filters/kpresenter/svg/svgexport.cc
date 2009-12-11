@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Laurent Montel <montel@kde.org>
    code based on svgexport.cc from Inge Wallin <inge@lysator.liu.se>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -35,10 +35,10 @@
 
 
 typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkpresentersvgexport, SvgExportFactory( "svgexport" ) )
+K_EXPORT_COMPONENT_FACTORY(libkpresentersvgexport, SvgExportFactory("svgexport"))
 
-SvgExport::SvgExport(QObject *parent, const QStringList&) 
-    : KoFilter(parent)
+SvgExport::SvgExport(QObject *parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
@@ -52,39 +52,36 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
 {
     KoDocument * document = m_chain->inputDocument();
 
-    if ( !document )
+    if (!document)
         return KoFilter::StupidError;
 
-    if ( strcmp(document->className(), "KPrDocument") != 0)
-    {
+    if (strcmp(document->className(), "KPrDocument") != 0) {
         kWarning() << "document isn't a KPrDocument but a "
-                     << document->className() << endl;
+        << document->className() << endl;
         return KoFilter::NotImplemented;
     }
 
     // Check for proper conversion.
-    if ( from != "application/x-kpresenter" || to != "image/svg+xml" )
-    {
+    if (from != "application/x-kpresenter" || to != "image/svg+xml") {
         kWarning() << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
     KPrDocument * kpresenterdoc = const_cast<KPrDocument *>(static_cast<const KPrDocument *>(document));
 
-    if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
-    {
+    if (kpresenterdoc->mimeType() != "application/x-kpresenter") {
         kWarning() << "Invalid document mimetype " << kpresenterdoc->mimeType();
         return KoFilter::NotImplemented;
     }
-    KoPageLayout layoutPage= kpresenterdoc->pageLayout();
-    int width =  int( layoutPage.ptWidth );
-    int height = int( layoutPage.ptHeight );
-    
+    KoPageLayout layoutPage = kpresenterdoc->pageLayout();
+    int width =  int(layoutPage.ptWidth);
+    int height = int(layoutPage.ptHeight);
+
     QSvgGenerator  picture;
     QRect rect(QPoint(0, 0), QPoint(width, height));
     picture.setFileName(path);
     picture.setSize(rect.size());
     picture.setViewBox(rect);
-    
+
     QPainter painter;
     painter.begin(&picture);
     kpresenterdoc->paintContent(painter, rect, false);

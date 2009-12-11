@@ -26,20 +26,24 @@
 
 class Comment: public Element
 {
-	public:
-		Comment();
+public:
+    Comment();
 
-		explicit Comment(const char* comment);
-		~Comment();
+    explicit Comment(const char* comment);
+    ~Comment();
 
-		QString getComment() const { return _comment; }
+    QString getComment() const {
+        return _comment;
+    }
 
-		void setComment(QString comment) { _comment = comment; }
+    void setComment(QString comment) {
+        _comment = comment;
+    }
 
-		void print(int tab = 0);
+    void print(int tab = 0);
 
-	private:
-		QString _comment;
+private:
+    QString _comment;
 
 };
 

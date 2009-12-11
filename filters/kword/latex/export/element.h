@@ -28,62 +28,55 @@
 #include "border.h"
 
 /* FRAMESET */
-enum SType
-{
-	ST_NONE,
-	ST_TEXT,
-	ST_PICTURE,
-	ST_PART,			/* This last Type mustn't be */
-	ST_FORMULA,		/* displayed where they are. */
-	ST_CLIPART,
-	ST_HLINE
+enum SType {
+    ST_NONE,
+    ST_TEXT,
+    ST_PICTURE,
+    ST_PART,   /* This last Type mustn't be */
+    ST_FORMULA,  /* displayed where they are. */
+    ST_CLIPART,
+    ST_HLINE
 };
 
-enum SSect
-{
-	SS_NONE,
-	SS_HEADERS,
-	SS_FOOTERS,
-	SS_BODY,
-	SS_FOOTNOTES,
-	SS_TABLE
+enum SSect {
+    SS_NONE,
+    SS_HEADERS,
+    SS_FOOTERS,
+    SS_BODY,
+    SS_FOOTNOTES,
+    SS_TABLE
 };
 
-enum SInfo
-{
-	SI_NONE,
-	SI_FIRST,
-	SI_ODD,
-	SI_EVEN
+enum SInfo {
+    SI_NONE,
+    SI_FIRST,
+    SI_ODD,
+    SI_EVEN
 };
 
 /* FRAME */
-enum TAround
-{
-	TA_NONE,
-	TA_FRAME,
-	TA_TEXT
+enum TAround {
+    TA_NONE,
+    TA_FRAME,
+    TA_TEXT
 };
 
-enum TCreate
-{
-	TC_EXTEND,
-	TC_CREATE,
-	TC_IGNORE
+enum TCreate {
+    TC_EXTEND,
+    TC_CREATE,
+    TC_IGNORE
 };
 
-enum TNFrame
-{
-	TF_RECONNECT,
-	TF_NOCREATION,
-	TF_COPY
+enum TNFrame {
+    TF_RECONNECT,
+    TF_NOCREATION,
+    TF_COPY
 };
 
-enum TSide
-{
-	TS_ANYSIDE,
-	TS_ODDPAGE,
-	TS_EVENPAGE
+enum TSide {
+    TS_ANYSIDE,
+    TS_ODDPAGE,
+    TS_EVENPAGE
 };
 
 /***********************************************************************/
@@ -92,84 +85,126 @@ enum TSide
 
 /**
  * This class is a element. An element is a component of a frame (text, picture,
- * formula, ...). 
+ * formula, ...).
  */
 class Element: public XmlParser, public Border
 {
-	/* FRAMESET PARAM */
-	SType   _type;
-	SSect   _section;
-	SInfo   _hinfo;
-	QString _name;
-	bool    _removable;
-	bool    _visible;
-	QString _grpMgr;
-	int     _row,
-		_col,
-		_rows,
-		_cols;
+    /* FRAMESET PARAM */
+    SType   _type;
+    SSect   _section;
+    SInfo   _hinfo;
+    QString _name;
+    bool    _removable;
+    bool    _visible;
+    QString _grpMgr;
+    int     _row,
+    _col,
+    _rows,
+    _cols;
 
-	/* USEFUL DATA */
+    /* USEFUL DATA */
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Element.
-		 *
-		 */
-		Element();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Element.
+     *
+     */
+    Element();
 
-		/* 
-		 * Destructor
-		 *
-		 */
-		virtual ~Element();
+    /*
+     * Destructor
+     *
+     */
+    virtual ~Element();
 
-		/*virtual bool  hasColor() const = 0;
-		virtual bool  hasUline() const = 0;*/
-		/**
-		 * Accessors
-		 */
-		SSect    getSection () const { return _section;        }
-		SType    getType    () const { return _type;           }
-		SInfo    getInfo    () const { return _hinfo;          }
-		QString  getName    () const { return _name;           }
-		bool     isVisible  () const { return _visible;        }
-		bool     isRemovable() const { return _removable;      }
-		QString  getGrpMgr  () const { return _grpMgr;         }
-		int      getRow     () const { return _row;            }
-		int      getCol     () const { return _col;            }
-		int      getRows    () const { return _rows;           }
-		int      getCols    () const { return _cols;           }
-		bool     isTable    () const { return (_section == SS_TABLE); }
+    /*virtual bool  hasColor() const = 0;
+    virtual bool  hasUline() const = 0;*/
+    /**
+     * Accessors
+     */
+    SSect    getSection() const {
+        return _section;
+    }
+    SType    getType() const {
+        return _type;
+    }
+    SInfo    getInfo() const {
+        return _hinfo;
+    }
+    QString  getName() const {
+        return _name;
+    }
+    bool     isVisible() const {
+        return _visible;
+    }
+    bool     isRemovable() const {
+        return _removable;
+    }
+    QString  getGrpMgr() const {
+        return _grpMgr;
+    }
+    int      getRow() const {
+        return _row;
+    }
+    int      getCol() const {
+        return _col;
+    }
+    int      getRows() const {
+        return _rows;
+    }
+    int      getCols() const {
+        return _cols;
+    }
+    bool     isTable() const {
+        return (_section == SS_TABLE);
+    }
 
-		/**
-		 * Modifiors
-		 */
-		void setType     (SType       t)   { _type      = t;   }
-		void setSection  (SSect       s)   { _section   = s;   }
-		void setVisible  (bool        v)   { _visible   = v;   }
-		void setRemovable(bool        r)   { _removable = r;   }
-		void setGrpMgr   (QString     g)   { _grpMgr    = g;   }
-		void setRow      (int         r)   { _row       = r;   }
-		void setCol      (int         c)   { _col       = c;   }
-		void setRows     (int         r)   { _rows      = r;   }
-		void setCols     (int         c)   { _cols      = c;   }
+    /**
+     * Modifiors
+     */
+    void setType(SType       t)   {
+        _type      = t;
+    }
+    void setSection(SSect       s)   {
+        _section   = s;
+    }
+    void setVisible(bool        v)   {
+        _visible   = v;
+    }
+    void setRemovable(bool        r)   {
+        _removable = r;
+    }
+    void setGrpMgr(QString     g)   {
+        _grpMgr    = g;
+    }
+    void setRow(int         r)   {
+        _row       = r;
+    }
+    void setCol(int         c)   {
+        _col       = c;
+    }
+    void setRows(int         r)   {
+        _rows      = r;
+    }
+    void setCols(int         c)   {
+        _cols      = c;
+    }
 
-		 /**
-		 * Helpful functions
-		 */
+    /**
+    * Helpful functions
+    */
 
-		/**
-		 * Get information about frameset markup only from a
-		 * markup tree.
-		 */
-		virtual void analyze(const QDomNode);
-		virtual void generate(QTextStream&) = 0;
+    /**
+     * Get information about frameset markup only from a
+     * markup tree.
+     */
+    virtual void analyze(const QDomNode);
+    virtual void generate(QTextStream&) = 0;
 
-	private:
-		void analyzeParam(const QDomNode);
+private:
+    void analyzeParam(const QDomNode);
 };
 
 #endif /* __KWORD_ELEMENT_H__ */

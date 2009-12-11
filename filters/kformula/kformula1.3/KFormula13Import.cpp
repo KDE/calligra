@@ -29,12 +29,12 @@
 #include <QFile>
 
 typedef KGenericFactory<KFormula13Import> KFormula13ImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkformula13import,
-                            KFormula13ImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkformula13import,
+                           KFormula13ImportFactory("kofficefilters"))
 
 
-KFormula13Import::KFormula13Import( QObject* parent, const QStringList& )
-                 : KoFilter(parent)
+KFormula13Import::KFormula13Import(QObject* parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
@@ -42,36 +42,34 @@ KFormula13Import::~KFormula13Import()
 {
 }
 
-KoFilter::ConversionStatus KFormula13Import::convert( const QByteArray& from,
-                                                      const QByteArray& to )
+KoFilter::ConversionStatus KFormula13Import::convert(const QByteArray& from,
+        const QByteArray& to)
 {
-    if ( to != "application/mathml+xml" || from != "application/x-kformula" )
+    if (to != "application/mathml+xml" || from != "application/x-kformula")
         return KoFilter::NotImplemented;
 
-    KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
-    if( !in )
-    {
+    KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
+    if (!in) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ),
-                            i18n( "KFormula Import Error" ) );
+        KMessageBox::error(0, i18n("Failed to read data."),
+                           i18n("KFormula Import Error"));
         return KoFilter::StorageCreationError;
     }
 
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-    if( !out )
-    {
+    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
+    if (!out) {
         kError(30506) << "KFormula13 Import unable to open output file! (Root)";
-        KMessageBox::error( NULL, i18n("Unable to save main document."),
-                            i18n("KFormula1.3 Import Filter"), 0 );
+        KMessageBox::error(NULL, i18n("Unable to save main document."),
+                           i18n("KFormula1.3 Import Filter"), 0);
         return KoFilter::StorageCreationError;
     }
 
     KFormula13ContentHandler handler;
-    QXmlInputSource source( in );
+    QXmlInputSource source(in);
     QXmlSimpleReader reader;
-    reader.setContentHandler( &handler );
-    reader.parse( &source );
-    
+    reader.setContentHandler(&handler);
+    reader.parse(&source);
+
     return KoFilter::OK;
 }
 

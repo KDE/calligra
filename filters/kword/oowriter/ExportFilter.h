@@ -46,7 +46,7 @@
 
 class KZip;
 
-class StyleMap : public QMap<QString,LayoutData>
+class StyleMap : public QMap<QString, LayoutData>
 {
 public:
     explicit StyleMap(void) {}
@@ -57,11 +57,12 @@ class OOWriterWorker : public KWEFBaseWorker
 {
 public:
     OOWriterWorker(void);
-    virtual ~OOWriterWorker(void) { delete m_streamOut; }
+    virtual ~OOWriterWorker(void) {
+        delete m_streamOut;
+    }
 public:
     /// What is the type of the frameset anchor
-    enum AnchorType
-    {
+    enum AnchorType {
         AnchorUnknown = 0, // ### TODO: is this really needed?
         AnchorInlined, ///< The frameset is inlined
         AnchorNonInlined, ///< the frameset is not inlined
@@ -73,50 +74,50 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
+                                 const ValueListFormatData& paraFormatDataList);
     virtual bool doFullPaperFormat(const int format,
-        const double width, const double height, const int orientation);
-    virtual bool doFullPaperBorders (const double top, const double left,
-        const double bottom, const double right);
+                                   const double width, const double height, const int orientation);
+    virtual bool doFullPaperBorders(const double top, const double left,
+                                    const double bottom, const double right);
     /**
      * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
      */
-    virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );        
+    virtual bool doFullPaperFormatOther(const int columns, const double columnspacing, const int numPages);
     virtual bool doOpenStyles(void);
     virtual bool doCloseStyles(void);
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
-    virtual bool doOpenBody (void);
-    virtual bool doDeclareNonInlinedFramesets( QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors ); 
+    virtual bool doOpenBody(void);
+    virtual bool doDeclareNonInlinedFramesets(QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors);
 private:
-    void processParagraphData (const QString& paraText,
-        const TextFormatting& formatLayout,
-        const ValueListFormatData& paraFormatDataList);
-    void processNormalText ( const QString& paraText,
-        const TextFormatting& formatLayout,
-        const FormatData& formatData);
-    void processFootnote( const VariableData& variable );
-    void processNote( const VariableData& variable );
-    void processVariable ( const QString& paraText,
-        const TextFormatting& formatLayout,
-        const FormatData& formatData);
-    void processAnchor ( const QString& paraText,
-        const TextFormatting& formatLayout,
-        const FormatData& formatData);
-    void processTextImage ( const QString&,
-        const TextFormatting& formatLayout,
-        const FormatData& formatData);
+    void processParagraphData(const QString& paraText,
+                              const TextFormatting& formatLayout,
+                              const ValueListFormatData& paraFormatDataList);
+    void processNormalText(const QString& paraText,
+                           const TextFormatting& formatLayout,
+                           const FormatData& formatData);
+    void processFootnote(const VariableData& variable);
+    void processNote(const VariableData& variable);
+    void processVariable(const QString& paraText,
+                         const TextFormatting& formatLayout,
+                         const FormatData& formatData);
+    void processAnchor(const QString& paraText,
+                       const TextFormatting& formatLayout,
+                       const FormatData& formatData);
+    void processTextImage(const QString&,
+                          const TextFormatting& formatLayout,
+                          const FormatData& formatData);
     QString textFormatToStyle(const TextFormatting& formatOrigin,
-        const TextFormatting& formatData, const bool force, QString& key);
+                              const TextFormatting& formatData, const bool force, QString& key);
     QString layoutToParagraphStyle(const LayoutData& layoutOrigin,
-        const LayoutData& layout, const bool force, QString& styleKey);
+                                   const LayoutData& layout, const bool force, QString& styleKey);
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
-    QString cellToProperties( const TableCell& cell, QString& key) const;
-    bool makeTableRows( const QString& tableName, const Table& table, int firstRowNumber );
-    bool makeTable( const FrameAnchor& anchor, const AnchorType anchorType );
-    bool makePicture( const FrameAnchor& anchor, const AnchorType anchorType );
+    QString cellToProperties(const TableCell& cell, QString& key) const;
+    bool makeTableRows(const QString& tableName, const Table& table, int firstRowNumber);
+    bool makeTable(const FrameAnchor& anchor, const AnchorType anchorType);
+    bool makePicture(const FrameAnchor& anchor, const AnchorType anchorType);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void declareFont(const QString& fontName);
     void writeFontDeclaration(void);
@@ -139,11 +140,11 @@ private:
     QTextStream* m_streamOut;
     QString m_pagesize;
     StyleMap m_styleMap;
-    double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
+    double m_paperBorderTop, m_paperBorderLeft, m_paperBorderBottom, m_paperBorderRight;
     KWEFDocumentInfo m_docInfo; ///< document information
     QByteArray m_contentBody; ///< office:body element of content.xml
     KZip* m_zip; ///< Output OOWriter file
-    QMap<QString,QString> m_fontNames; ///< List of used font names (the data() are extra attributes for font declaration time.)
+    QMap<QString, QString> m_fontNames; ///< List of used font names (the data() are extra attributes for font declaration time.)
 
     ulong m_pictureNumber; ///< Number of picture (increment *before* use)
     ulong m_automaticParagraphStyleNumber; ///< Number of paragraph-based automatic styles (increment *before* use)
@@ -151,7 +152,7 @@ private:
     ulong m_footnoteNumber; ///< Number of footnote (for text:id) (increment *before* use)
     ulong m_tableNumber; ///< Number of table (for table:name) (increment *before* use)
     ulong m_textBoxNumber; ///< Number of a textbox (for draw:text-box) (increment *before* use)
-    
+
 
     QString m_styles; ///< Normal paragraph styles (in OO format)
     QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
@@ -162,8 +163,8 @@ private:
     double m_paperHeight;
     int m_paperOrientation;
 
-    QMap<QString,QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
-    QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
+    QMap<QString, QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
+    QMap<QString, QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
     VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
     int m_numPages; ///< Number of pages @note if the input file comes from a filter, this data is often missing.
     double m_columnspacing; ///< Spacing between columns

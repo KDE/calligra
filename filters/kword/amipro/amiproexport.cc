@@ -33,10 +33,10 @@
 #include <amiproexport.h>
 
 typedef KGenericFactory<AmiProExport> AmiProExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libamiproexport, AmiProExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libamiproexport, AmiProExportFactory("kofficefilters"))
 class AmiProWorker : public KWEFBaseWorker
 {
-  public:
+public:
     AmiProWorker(void)  { }
     virtual ~AmiProWorker(void) { }
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -44,8 +44,8 @@ class AmiProWorker : public KWEFBaseWorker
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
-  private:
+                                 const ValueListFormatData& paraFormatDataList);
+private:
     QString filename;
     QString result;
     bool m_bold, m_italic, m_underline, m_underlineDouble;
@@ -54,143 +54,140 @@ class AmiProWorker : public KWEFBaseWorker
 
 bool AmiProWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
-  filename = filenameOut;
+    filename = filenameOut;
 
-  return true;
+    return true;
 }
 
 bool AmiProWorker::doCloseFile(void)
 {
-  QFile out( filename );
-  if( !out.open( QIODevice::WriteOnly ) )
-    return false;
-  QTextStream stream;
-  stream.setDevice( &out );
-  stream << result;
-  return true;
+    QFile out(filename);
+    if (!out.open(QIODevice::WriteOnly))
+        return false;
+    QTextStream stream;
+    stream.setDevice(&out);
+    stream << result;
+    return true;
 }
 
 bool AmiProWorker::doOpenDocument(void)
 {
-  result = "[ver]\n\t4\n";
-  result += "[sty]\n\t\n";
-  result += "[lay]\n";
-  result += "\tStandard\n";
-  result += "\t516\n";
-  result += "\t[rght]\n";
+    result = "[ver]\n\t4\n";
+    result += "[sty]\n\t\n";
+    result += "[lay]\n";
+    result += "\tStandard\n";
+    result += "\t516\n";
+    result += "\t[rght]\n";
 
-  // don't ask me, I have no idea what these numbers are
-  int magic[] = { 16833, 11908, 1, 1440, 1440, 1, 1440, 1440,
-   0, 1, 0, 1, 0, 2, 1, 1440, 10465, 12, 1, 720, 1, 1440,
-   1, 2160, 1, 2880, 1, 3600, 1, 4320, 1, 5040, 1, 5760,
-   1, 6480, 1, 7200, 1, 7920, 1, 8640 };
-  for( uint i=0; i<sizeof(magic)/sizeof(magic[0]); i++ )
-    result += "\t\t" + QString::number(magic[i]) + '\n';
+    // don't ask me, I have no idea what these numbers are
+    int magic[] = { 16833, 11908, 1, 1440, 1440, 1, 1440, 1440,
+                    0, 1, 0, 1, 0, 2, 1, 1440, 10465, 12, 1, 720, 1, 1440,
+                    1, 2160, 1, 2880, 1, 3600, 1, 4320, 1, 5040, 1, 5760,
+                    1, 6480, 1, 7200, 1, 7920, 1, 8640
+                  };
+    for (uint i = 0; i < sizeof(magic) / sizeof(magic[0]); i++)
+        result += "\t\t" + QString::number(magic[i]) + '\n';
 
-  result += "[elay]\n";
-  result += "[edoc]\n";
+    result += "[elay]\n";
+    result += "[edoc]\n";
 
-  m_bold = m_italic = m_underline = m_underlineDouble =
-  m_strike = m_subscript = m_superscript = false;
+    m_bold = m_italic = m_underline = m_underlineDouble =
+                                          m_strike = m_subscript = m_superscript = false;
 
-  return true;
+    return true;
 }
 
 bool AmiProWorker::doCloseDocument(void)
 {
-  result += ">\n\n";
-  return true;
+    result += ">\n\n";
+    return true;
 }
 
-static QString AmiProEscape( const QString& text )
+static QString AmiProEscape(const QString& text)
 {
-  QString result;
+    QString result;
 
-  for( int i=0; i<text.length(); i++ )
-  {
-    QChar ch = text[i];
-    switch( ch.unicode() )
-    {
-      case '<': result += "<<"; break;
-      case '>': result += "<;>"; break;
-      case '[': result += "<[>"; break;
-      case '@': result += "@@"; break;
-      case '\'': result += "</R>"; break;
-      default: result += ch; break;
+    for (int i = 0; i < text.length(); i++) {
+        QChar ch = text[i];
+        switch (ch.unicode()) {
+        case '<': result += "<<"; break;
+        case '>': result += "<;>"; break;
+        case '[': result += "<[>"; break;
+        case '@': result += "@@"; break;
+        case '\'': result += "</R>"; break;
+        default: result += ch; break;
+        }
     }
-  }
 
-  return result;
+    return result;
 }
 
 bool AmiProWorker::doFullParagraph(const QString& paraText,
-  const LayoutData& /*layout*/, const ValueListFormatData& paraFormatDataList)
+                                   const LayoutData& /*layout*/, const ValueListFormatData& paraFormatDataList)
 {
-  QString amiproText = "";
-  QString text = paraText;
+    QString amiproText = "";
+    QString text = paraText;
 
-  ValueListFormatData::ConstIterator it;
-  for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )
-  {
-    const FormatData& formatData = *it;
+    ValueListFormatData::ConstIterator it;
+    for (it = paraFormatDataList.begin(); it != paraFormatDataList.end(); ++it) {
+        const FormatData& formatData = *it;
 
-    // only if the format is for text (id==1)
-    if( formatData.id == 1 )
-    {
-      QString partialText;
-      partialText = text.mid( formatData.pos, formatData.len );
+        // only if the format is for text (id==1)
+        if (formatData.id == 1) {
+            QString partialText;
+            partialText = text.mid(formatData.pos, formatData.len);
 
-      partialText = AmiProEscape( partialText );
+            partialText = AmiProEscape(partialText);
 
-      // apply formatting
-      m_bold = formatData.text.weight >= 75;
-      m_italic = formatData.text.italic;
-      m_underline = formatData.text.underline;
-      m_underlineDouble = formatData.text.underlineValue == "double";
-      m_subscript = formatData.text.verticalAlignment == 1;
-      m_superscript = formatData.text.verticalAlignment == 2;
-      m_strike = formatData.text.strikeout;
+            // apply formatting
+            m_bold = formatData.text.weight >= 75;
+            m_italic = formatData.text.italic;
+            m_underline = formatData.text.underline;
+            m_underlineDouble = formatData.text.underlineValue == "double";
+            m_subscript = formatData.text.verticalAlignment == 1;
+            m_superscript = formatData.text.verticalAlignment == 2;
+            m_strike = formatData.text.strikeout;
 
-      if( m_bold ) partialText = "<+!>" + partialText + "<-!>";
-      if( m_italic ) partialText = "<+\">" + partialText + "<-\">";
-      if( m_underline && !m_underlineDouble ) partialText = "<+#>" + partialText + "<-#>";
-      if( m_underlineDouble ) partialText = "<+)>" + partialText + "<-)>";
-      if( m_subscript ) partialText = "<+'>" + partialText + "<-'>";
-      if( m_superscript ) partialText = "<+&>" + partialText + "<-&>";
-      if( m_strike) partialText = "<+%>" + partialText + "<-%>";
+            if (m_bold) partialText = "<+!>" + partialText + "<-!>";
+            if (m_italic) partialText = "<+\">" + partialText + "<-\">";
+            if (m_underline && !m_underlineDouble) partialText = "<+#>" + partialText + "<-#>";
+            if (m_underlineDouble) partialText = "<+)>" + partialText + "<-)>";
+            if (m_subscript) partialText = "<+'>" + partialText + "<-'>";
+            if (m_superscript) partialText = "<+&>" + partialText + "<-&>";
+            if (m_strike) partialText = "<+%>" + partialText + "<-%>";
 
-      amiproText += partialText;
+            amiproText += partialText;
+        }
     }
-  }
 
-  result += amiproText + "\n\n";
+    result += amiproText + "\n\n";
 
-  return true;
+    return true;
 }
 
-AmiProExport::AmiProExport( QObject* parent, const QStringList& ):
-                     KoFilter(parent)
+AmiProExport::AmiProExport(QObject* parent, const QStringList&):
+        KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
-AmiProExport::convert( const QByteArray& from,
-  const QByteArray& to )
+AmiProExport::convert(const QByteArray& from,
+                      const QByteArray& to)
 {
-  // check for proper conversion
-  if( to!= "application/x-amipro" || from != "application/x-kword" )
-     return KoFilter::NotImplemented;
+    // check for proper conversion
+    if (to != "application/x-amipro" || from != "application/x-kword")
+        return KoFilter::NotImplemented;
 
-  AmiProWorker* worker = new AmiProWorker();
-  KWEFKWordLeader* leader = new KWEFKWordLeader( worker );
+    AmiProWorker* worker = new AmiProWorker();
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-  KoFilter::ConversionStatus result;
-  result = leader->convert( m_chain, from, to );
+    KoFilter::ConversionStatus result;
+    result = leader->convert(m_chain, from, to);
 
-  delete worker;
-  delete leader;
+    delete worker;
+    delete leader;
 
-  return result;
+    return result;
 }
 
 #include "amiproexport.moc"

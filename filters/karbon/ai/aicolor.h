@@ -23,34 +23,35 @@
 #include <QString>
 
 /**
-  *@author 
+  *@author
   */
 
-class AIColor {
-  public:
-     typedef enum { CT_CMYK, CT_CMYK_Key, CT_Gray } ColorType;
+class AIColor
+{
+public:
+    typedef enum { CT_CMYK, CT_CMYK_Key, CT_Gray } ColorType;
 
-  private:
+private:
     ColorType ctype;
 
     union {
-      struct {
-        double cvalue, mvalue, yvalue, kvalue;
-        char *colorname;
+        struct {
+            double cvalue, mvalue, yvalue, kvalue;
+            char *colorname;
+            double graydata;
+        } cmykdata;
         double graydata;
-      } cmykdata;
-      double graydata;
     } cdata;
 public:
-	AIColor();
-	~AIColor();
-  AIColor( const AIColor& );
-  AIColor( double c, double m, double y, double k );
-  AIColor( double c, double m, double y, double k, const char *colorname, double gray );
-  AIColor( double gray );
+    AIColor();
+    ~AIColor();
+    AIColor(const AIColor&);
+    AIColor(double c, double m, double y, double k);
+    AIColor(double c, double m, double y, double k, const char *colorname, double gray);
+    AIColor(double gray);
 
-  void toRGB (double &r, double &g, double &b);
-  void toCMYK (double &c, double &m, double &y, double &k);
+    void toRGB(double &r, double &g, double &b);
+    void toCMYK(double &c, double &m, double &y, double &k);
 
 };
 

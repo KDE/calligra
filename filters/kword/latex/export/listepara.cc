@@ -19,63 +19,59 @@
 **
 */
 
-#include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kDebug() stream */
+#include <stdlib.h>  /* for atoi function */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "listepara.h"
 
 ListPara::ListPara()
 {
-	kDebug(30522) <<"Create liste para empty";
-	_start  = 0;
-	_end    = 0;
-	_size   = 0;
+    kDebug(30522) << "Create liste para empty";
+    _start  = 0;
+    _end    = 0;
+    _size   = 0;
 }
 
 ListPara::~ListPara()
 {
-	kDebug(30522) <<"Destruction of a list of parag";
-	vider();
-	kDebug(30522) <<"ok";
+    kDebug(30522) << "Destruction of a list of parag";
+    vider();
+    kDebug(30522) << "ok";
 }
 
 void ListPara::initialiser(Para *elt)
 {
-	kDebug(30522) <<"initialise a list of parag at" << elt;
-	_end = _start = elt;
+    kDebug(30522) << "initialise a list of parag at" << elt;
+    _end = _start = elt;
 }
 
 void ListPara::add(Para *elt)
 {
-	if(_start == 0)
-	{
-		initialiser(elt);
-		_size = 1;
-	}
-	else
-	{
-		kDebug(30522) <<"add a parag.";
-		_end->setNext(elt);
-		elt->setPrevious(_end);
-		_end  = elt;
-		_size = _size + 1;
-	}
+    if (_start == 0) {
+        initialiser(elt);
+        _size = 1;
+    } else {
+        kDebug(30522) << "add a parag.";
+        _end->setNext(elt);
+        elt->setPrevious(_end);
+        _end  = elt;
+        _size = _size + 1;
+    }
 }
 
 void ListPara::rem()
 {
-	Para *first_saved = 0;
+    Para *first_saved = 0;
 
-	first_saved = _start;
-	_start      = _start->getNext();
-	delete first_saved;
-	_size  = _size - 1;
+    first_saved = _start;
+    _start      = _start->getNext();
+    delete first_saved;
+    _size  = _size - 1;
 }
 
 void ListPara::vider()
 {
-	while(_start != 0)
-	{
-		rem();
-	}
+    while (_start != 0) {
+        rem();
+    }
 }
 

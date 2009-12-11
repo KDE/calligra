@@ -38,123 +38,190 @@
  */
 class FileHeader: public XmlParser
 {
-	public:
-		enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN,
-			TF_CUSTOM, TF_B3, TF_USEXECUTIVE };
-		enum TUnit { TMillimeter, TCentimeter, TPoint, TInch };
-		enum TOrient { TO_PORTRAIT, TO_LANDSCAPE };
-		enum TColonne { TC_NONE, TC_1, TC_2, TC_MORE };
-		enum THeadfoot { TH_ALL = 0, TH_XXX = 1, TH_FIRST = 2, TH_EVODD = 3 };
-		enum TProcType { TP_NORMAL, TP_DTP };
+public:
+    enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN,
+                   TF_CUSTOM, TF_B3, TF_USEXECUTIVE
+                 };
+    enum TUnit { TMillimeter, TCentimeter, TPoint, TInch };
+    enum TOrient { TO_PORTRAIT, TO_LANDSCAPE };
+    enum TColonne { TC_NONE, TC_1, TC_2, TC_MORE };
+    enum THeadfoot { TH_ALL = 0, TH_XXX = 1, TH_FIRST = 2, TH_EVODD = 3 };
+    enum TProcType { TP_NORMAL, TP_DTP };
 
-		static FileHeader* instance(void);
+    static FileHeader* instance(void);
 
-	private:
-		/* PAPER */
-		TFormat   _format;
-		double    _width,
-				_height;
-		TOrient   _orientation;
-		TColonne  _colonne;
-		double    _columnSpacing;
-		THeadfoot _headType;
-		THeadfoot _footType;
-		TProcType _processing;
-		int       _standardPage;
-		double    _footBody;
-		double    _headBody;
+private:
+    /* PAPER */
+    TFormat   _format;
+    double    _width,
+    _height;
+    TOrient   _orientation;
+    TColonne  _colonne;
+    double    _columnSpacing;
+    THeadfoot _headType;
+    THeadfoot _footType;
+    TProcType _processing;
+    int       _standardPage;
+    double    _footBody;
+    double    _headBody;
 
-		/* PAPERBORDERS */
-		double    _leftBorder,
-				_rightBorder,
-				_bottomBorder,
-				_topBorder;
+    /* PAPERBORDERS */
+    double    _leftBorder,
+    _rightBorder,
+    _bottomBorder,
+    _topBorder;
 
-		/* ATTRIBUTES */
-		TUnit    _unite;
-		bool     _hasHeader;
-		bool     _hasFooter;
-		bool     _hasTOC;
+    /* ATTRIBUTES */
+    TUnit    _unite;
+    bool     _hasHeader;
+    bool     _hasFooter;
+    bool     _hasTOC;
 
-		/* FOOTNOTEMGR */
+    /* FOOTNOTEMGR */
 
-		/* DIVERSE */
-		/* for special packages to include */
-		bool     _hasColor;
-		bool     _hasUnderline;
-		bool     _hasEnumerate;
-		bool     _hasGraphics;
-		bool     _hasTable;
+    /* DIVERSE */
+    /* for special packages to include */
+    bool     _hasColor;
+    bool     _hasUnderline;
+    bool     _hasEnumerate;
+    bool     _hasGraphics;
+    bool     _hasTable;
 
-	public:
-		
-		/**
-		 * Destructor
-		 */
-		virtual ~FileHeader();
+public:
 
-		/**
-		 * Accessors
-		 */
-		TFormat   getFormat        () const { return _format;         }
-		TOrient   getOrientation   () const { return _orientation;    }
-		TColonne  getColumns       () const { return _colonne;        }
-		THeadfoot getHeadType      () const { return _headType;       }
-		THeadfoot getFootType      () const { return _footType;       }
-		TUnit     getUnit          () const { return _unite;          }
-		TProcType getProcessing    () const { return _processing;     }
-		int       getStandardPge   () const { return _standardPage;   }
-		bool      hasHeader        () const { return _hasHeader;      }
-		bool      hasFooter        () const { return _hasFooter;      }
-		bool      hasTOC           () const { return _hasTOC;         }
-		bool      hasColor         () const { return _hasColor;       }
-		bool      hasUnderline     () const { return _hasUnderline;   }
-		bool      hasEnumerate     () const { return _hasEnumerate;   }
-		bool      hasGraphics      () const { return _hasGraphics;    }
-		bool      hasTable         () const { return _hasTable;       }
+    /**
+     * Destructor
+     */
+    virtual ~FileHeader();
 
-		/**
-		 * Modifiors
-		 */
-		void setFormat     (TFormat f)  { _format       = f;              }
-		void setFormat     (int f)      { _format       = (TFormat) f;    }
-		void setOrientation(TOrient o)  { _orientation  = o;              }
-		void setOrientation(int o)      { _orientation  = (TOrient) o;    }
-		void setColumns    (TColonne c) { _colonne      = c;              }
-		void setColumns    (int c)      { _colonne      = (TColonne) c;   }
-		void setUnit       (int u)      { _unite        = (TUnit) u;      }
-		void setProcessing (int p)      { _processing   = (TProcType) p;  }
-		void setStandardPge(int s)      { _standardPage = s;              }
-		void setTOC        (int t)      { _hasTOC       = t;              }
-		void setHeadType   (int ht)     { _headType     = (THeadfoot) ht; }
-		void setFootType   (int ft)     { _footType     = (THeadfoot) ft; }
-		void useColor      ()           { _hasColor     = true;           }
-		void useUnderline  ()           { _hasUnderline = true;           }
-		void useEnumerate  ()           { _hasEnumerate = true;           }
-		void useGraphics   ()           { _hasGraphics  = true;           }
-		void useTable      ()           { _hasTable     = true;           }
+    /**
+     * Accessors
+     */
+    TFormat   getFormat() const {
+        return _format;
+    }
+    TOrient   getOrientation() const {
+        return _orientation;
+    }
+    TColonne  getColumns() const {
+        return _colonne;
+    }
+    THeadfoot getHeadType() const {
+        return _headType;
+    }
+    THeadfoot getFootType() const {
+        return _footType;
+    }
+    TUnit     getUnit() const {
+        return _unite;
+    }
+    TProcType getProcessing() const {
+        return _processing;
+    }
+    int       getStandardPge() const {
+        return _standardPage;
+    }
+    bool      hasHeader() const {
+        return _hasHeader;
+    }
+    bool      hasFooter() const {
+        return _hasFooter;
+    }
+    bool      hasTOC() const {
+        return _hasTOC;
+    }
+    bool      hasColor() const {
+        return _hasColor;
+    }
+    bool      hasUnderline() const {
+        return _hasUnderline;
+    }
+    bool      hasEnumerate() const {
+        return _hasEnumerate;
+    }
+    bool      hasGraphics() const {
+        return _hasGraphics;
+    }
+    bool      hasTable() const {
+        return _hasTable;
+    }
 
-		void analyzePaper     (const QDomNode);
-		void analyzeAttributes (const QDomNode);
+    /**
+     * Modifiors
+     */
+    void setFormat(TFormat f)  {
+        _format       = f;
+    }
+    void setFormat(int f)      {
+        _format       = (TFormat) f;
+    }
+    void setOrientation(TOrient o)  {
+        _orientation  = o;
+    }
+    void setOrientation(int o)      {
+        _orientation  = (TOrient) o;
+    }
+    void setColumns(TColonne c) {
+        _colonne      = c;
+    }
+    void setColumns(int c)      {
+        _colonne      = (TColonne) c;
+    }
+    void setUnit(int u)      {
+        _unite        = (TUnit) u;
+    }
+    void setProcessing(int p)      {
+        _processing   = (TProcType) p;
+    }
+    void setStandardPge(int s)      {
+        _standardPage = s;
+    }
+    void setTOC(int t)      {
+        _hasTOC       = t;
+    }
+    void setHeadType(int ht)     {
+        _headType     = (THeadfoot) ht;
+    }
+    void setFootType(int ft)     {
+        _footType     = (THeadfoot) ft;
+    }
+    void useColor()           {
+        _hasColor     = true;
+    }
+    void useUnderline()           {
+        _hasUnderline = true;
+    }
+    void useEnumerate()           {
+        _hasEnumerate = true;
+    }
+    void useGraphics()           {
+        _hasGraphics  = true;
+    }
+    void useTable()           {
+        _hasTable     = true;
+    }
 
-		void generate         (QTextStream &);
+    void analyzePaper(const QDomNode);
+    void analyzeAttributes(const QDomNode);
 
-	protected:
-		/**
-		 * Constructor
-		 */
-		FileHeader();		/* Ensure singleton */
+    void generate(QTextStream &);
 
-		static FileHeader* _instance; /* singleton */
+protected:
+    /**
+     * Constructor
+     */
+    FileHeader();  /* Ensure singleton */
 
-	private:
+    static FileHeader* _instance; /* singleton */
 
-		void analyzePaperParam(const QDomNode);
+private:
 
-		void generatePaper    (QTextStream&);
-		void generateLatinPreamble(QTextStream&);
-		void generateUnicodePreamble(QTextStream&);
-		void generatePackage  (QTextStream&);
+    void analyzePaperParam(const QDomNode);
+
+    void generatePaper(QTextStream&);
+    void generateLatinPreamble(QTextStream&);
+    void generateUnicodePreamble(QTextStream&);
+    void generatePackage(QTextStream&);
 
 };
 

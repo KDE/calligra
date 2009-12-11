@@ -35,8 +35,8 @@ class ExportSizeDia : public KDialog
     Q_OBJECT
 
 public:
-    ExportSizeDia( int width, int height, 
-		  QWidget *parent=0L);
+    ExportSizeDia(int width, int height,
+                  QWidget *parent = 0L);
     ~ExportSizeDia();
 
     int  width() const;
@@ -49,10 +49,10 @@ public slots:
 
 protected slots:
 
-    void widthChanged( int  );
-    void heightChanged( int );
-    void percentWidthChanged( double );
-    void percentHeightChanged( double );
+    void widthChanged(int);
+    void heightChanged(int);
+    void percentWidthChanged(double);
+    void percentHeightChanged(double);
 
     void proportionalClicked();
 

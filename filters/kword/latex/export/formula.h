@@ -33,79 +33,100 @@
 
 /**
  * This class hold a formula. The formula must be generated not for this
- * filter but from the kformula lib. So I keep only a string of the formula. 
+ * filter but from the kformula lib. So I keep only a string of the formula.
  */
 class Formula: public Element
 {
-	/* DATA MARKUP */
-	int      _left,
-		 _top,
-		 _right,
-		 _bottom;
-	TAround  _runaround;
-	double   _runaroundGap;
-	TCreate  _autoCreate;
-	TNFrame  _newFrameBehaviour;
-	TSide   _sheetSide;
+    /* DATA MARKUP */
+    int      _left,
+    _top,
+    _right,
+    _bottom;
+    TAround  _runaround;
+    double   _runaroundGap;
+    TCreate  _autoCreate;
+    TNFrame  _newFrameBehaviour;
+    TSide   _sheetSide;
 
-	/* CHILDREN MARKUPS */
-	QString  _formula;
+    /* CHILDREN MARKUPS */
+    QString  _formula;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Formula.
-		 */
-		Formula();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Formula.
+     */
+    Formula();
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do.
-		 */
-		virtual ~Formula() {
-			kDebug(30522) <<"Destruction of a formula"; }
+    /*
+     * Destructor
+     *
+     * Nothing to do.
+     */
+    virtual ~Formula() {
+        kDebug(30522) << "Destruction of a formula";
+    }
 
-		/**
-		 * Accessors
-		 */
-		/*bool    hasColor      () const;
-		bool    hasUline      () const;*/
-		TAround getRunAround  () const { return _runaround;         }
-		double  getAroundGap  () const { return _runaroundGap;      }
-		TCreate getAutoCreate () const { return _autoCreate;        }
-		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
-		TSide   getSheetSide  () const { return _sheetSide;         }
+    /**
+     * Accessors
+     */
+    /*bool    hasColor      () const;
+    bool    hasUline      () const;*/
+    TAround getRunAround() const {
+        return _runaround;
+    }
+    double  getAroundGap() const {
+        return _runaroundGap;
+    }
+    TCreate getAutoCreate() const {
+        return _autoCreate;
+    }
+    TNFrame getNewFrame() const {
+        return _newFrameBehaviour;
+    }
+    TSide   getSheetSide() const {
+        return _sheetSide;
+    }
 
-		void getFormula(QDomNode, int);
+    void getFormula(QDomNode, int);
 
-		/**
-		 * Modifiers
-		 */
-		void setRunAround (const int a)    { _runaround = (TAround) a;  }
-		void setAroundGap (const double r) { _runaroundGap = r;         }
-		void setAutoCreate(const int a)    { _autoCreate = (TCreate) a; }
-		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
-		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
+    /**
+     * Modifiers
+     */
+    void setRunAround(const int a)    {
+        _runaround = (TAround) a;
+    }
+    void setAroundGap(const double r) {
+        _runaroundGap = r;
+    }
+    void setAutoCreate(const int a)    {
+        _autoCreate = (TCreate) a;
+    }
+    void setNewFrame(const int n)    {
+        _newFrameBehaviour = (TNFrame) n;
+    }
+    void setSheetSide(const int s)    {
+        _sheetSide = (TSide) s;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		/**
-		 * Get information from a markup tree and put the formula
-		 * in a QString.
-		 */
-		void analyze(const QDomNode);
+    /**
+     * Get information from a markup tree and put the formula
+     * in a QString.
+     */
+    void analyze(const QDomNode);
 
-		/**
-		 * Write the formula in a file.
-		 */
-		void generate(QTextStream&);
+    /**
+     * Write the formula in a file.
+     */
+    void generate(QTextStream&);
 
-	private:
-		void analyzeParamFrame(const QDomNode);
+private:
+    void analyzeParamFrame(const QDomNode);
 };
 
 #endif /* __KWORD_LATEXFORMULA_H__ */

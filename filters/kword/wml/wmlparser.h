@@ -25,43 +25,43 @@
 
 class WMLFormat
 {
-  public:
+public:
     int pos, len;
     bool bold, italic, underline;
     enum { Normal, Big, Small } fontsize;
     QString link, href;
     WMLFormat();
-    WMLFormat( const WMLFormat& );
-    WMLFormat& operator= ( const WMLFormat& );
-    void assign( const WMLFormat& );
+    WMLFormat(const WMLFormat&);
+    WMLFormat& operator= (const WMLFormat&);
+    void assign(const WMLFormat&);
 };
 
 class WMLLayout
 {
-  public:
+public:
     enum { Left, Center, Right } align;
     WMLLayout();
-    WMLLayout( const WMLLayout& );
-    WMLLayout& operator=( const WMLLayout& );
-    void assign( const WMLLayout& );
+    WMLLayout(const WMLLayout&);
+    WMLLayout& operator=(const WMLLayout&);
+    void assign(const WMLLayout&);
 };
 
 typedef QList<WMLFormat> WMLFormatList;
 
 class WMLParser
 {
-  public:
-    WMLParser(){}
-    virtual ~WMLParser(){}
-    virtual void parse( const char* filename );
+public:
+    WMLParser() {}
+    virtual ~WMLParser() {}
+    virtual void parse(const char* filename);
 
     virtual bool doOpenDocument();
     virtual bool doCloseDocument();
-    virtual bool doOpenCard( const QString& id, const QString& title );
+    virtual bool doOpenCard(const QString& id, const QString& title);
     virtual bool doCloseCard();
-    virtual bool doParagraph( const QString&, WMLFormatList, WMLLayout );
+    virtual bool doParagraph(const QString&, WMLFormatList, WMLLayout);
     virtual bool doBeginTable();
-    virtual bool doTableCell( unsigned row, unsigned col );
+    virtual bool doTableCell(unsigned row, unsigned col);
     virtual bool doEndTable();
 };
 

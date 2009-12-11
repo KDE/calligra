@@ -26,10 +26,10 @@
 
 class Group: public Element, public QList<Element*>
 {
-	public:
-		Group();
+public:
+    Group();
 
-		~Group();
+    ~Group();
 
 };
 

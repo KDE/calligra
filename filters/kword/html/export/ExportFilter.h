@@ -37,14 +37,16 @@ class HtmlWorker : public KWEFBaseWorker
 {
 public:
     HtmlWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
-    virtual ~HtmlWorker(void) { delete m_streamOut; delete m_ioDevice; }
+    virtual ~HtmlWorker(void) {
+        delete m_streamOut; delete m_ioDevice;
+    }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
+                                 const ValueListFormatData& paraFormatDataList);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doOpenTextFrameSet(void);
     virtual bool doCloseTextFrameSet(void);
@@ -53,25 +55,35 @@ public:
     virtual bool doOpenBody(void); ///< HTML's \<body\>
     virtual bool doCloseBody(void); ///< HTML's \</body\>
 protected:
-    virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
+    virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered) = 0;
     /**
      * \note QChar::Direction is needed because the text flow can only
      * be detected from the actual string data
      */
     virtual void openParagraph(const QString& strTag,
-        const LayoutData& layout, QChar::Direction direction=QChar::DirL)=0;
+                               const LayoutData& layout, QChar::Direction direction = QChar::DirL) = 0;
     virtual void closeParagraph(const QString& strTag,
-        const LayoutData& layout)=0;
-    virtual void openSpan(const FormatData& formatOrigin, const FormatData& format)=0;
-    virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format)=0;
+                                const LayoutData& layout) = 0;
+    virtual void openSpan(const FormatData& formatOrigin, const FormatData& format) = 0;
+    virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format) = 0;
     virtual void writeDocType(void);
 
-    virtual QString customCSSURL(void) const { return QString(); }
+    virtual QString customCSSURL(void) const {
+        return QString();
+    }
 public:
-    inline bool isXML  (void) const { return m_xml; }
-    inline void setXML (const bool flag ) { m_xml=flag; }
-    inline QTextCodec* getCodec(void) const { return m_codec; }
-    inline void setCodec(QTextCodec* codec) { m_codec=codec; }
+    inline bool isXML(void) const {
+        return m_xml;
+    }
+    inline void setXML(const bool flag) {
+        m_xml = flag;
+    }
+    inline QTextCodec* getCodec(void) const {
+        return m_codec;
+    }
+    inline void setCodec(QTextCodec* codec) {
+        m_codec = codec;
+    }
 protected:
     QString escapeHtmlText(const QString& strText) const;
     /**
@@ -84,10 +96,10 @@ protected:
      */
     QString getAdditionalFileName(const QString& additionalName);
 private:
-    void ProcessParagraphData ( const QString& strTag, const QString &paraText,
-        const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
+    void ProcessParagraphData(const QString& strTag, const QString &paraText,
+                              const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     void formatTextParagraph(const QString& strText,
-        const FormatData& formatOrigin, const FormatData& format);
+                             const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor);
 protected:

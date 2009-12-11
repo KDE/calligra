@@ -29,7 +29,8 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-class HTMLImport : public KoFilter {
+class HTMLImport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -37,7 +38,7 @@ public:
     HTMLImport(QObject* parent, const QStringList &);
     virtual ~HTMLImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // HTMLIMPORT_H

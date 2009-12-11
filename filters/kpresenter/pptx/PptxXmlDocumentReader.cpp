@@ -37,21 +37,20 @@
 
 PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
     PptxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        PptxSlideProperties& _masterSlideProperties, MSOOXML::MsooXmlRelationships& _relationships)
-    : import(&_import), themes(&_themes), masterSlideProperties(&_masterSlideProperties),
-      relationships(&_relationships)
+    PptxSlideProperties& _masterSlideProperties, MSOOXML::MsooXmlRelationships& _relationships)
+        : import(&_import), themes(&_themes), masterSlideProperties(&_masterSlideProperties),
+        relationships(&_relationships)
 {
 }
 
-class PptxXmlDocumentReader::Private {
+class PptxXmlDocumentReader::Private
+{
 public:
     Private()
-     : slideNumber(0)
-     , slideReader(0)
-    {
+            : slideNumber(0)
+            , slideReader(0) {
     }
-    ~Private()
-    {
+    ~Private() {
         delete slideReader;
     }
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
@@ -60,9 +59,9 @@ private:
 };
 
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -106,19 +105,19 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::presentationml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "p", MSOOXML::Schemas::presentationml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("p", MSOOXML::Schemas::presentationml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::presentationml));
         return KoFilter::WrongFormat;
     }
@@ -142,7 +141,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
     kDebug() << "id:" << id << "r:id:" << r_id;
@@ -163,7 +162,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->relationships);
 
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-        d->slideReader, path + "/" + file, &context);
+                d->slideReader, path + "/" + file, &context);
 
     if (result != KoFilter::OK) {
         raiseError(d->slideReader->errorString());
@@ -225,7 +224,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
     READ_PROLOGUE
 
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
-    for (int i=0; i<namespaces.count(); i++) {
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 

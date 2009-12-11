@@ -32,10 +32,10 @@ class MSWordOdfImport : public KoFilter
 {
     Q_OBJECT
 public:
-    MSWordOdfImport( QObject* parent, const QStringList& );
+    MSWordOdfImport(QObject* parent, const QStringList&);
     virtual ~MSWordOdfImport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
     // checks from FIB if document is encrypted

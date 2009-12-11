@@ -24,80 +24,87 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 
-KoWmfRead::KoWmfRead() {
+KoWmfRead::KoWmfRead()
+{
     mKwmf = new KoWmfReadPrivate();
 }
 
-KoWmfRead::~KoWmfRead() {
+KoWmfRead::~KoWmfRead()
+{
     delete mKwmf;
 }
 
 
-bool KoWmfRead::load( const QString& filename )
+bool KoWmfRead::load(const QString& filename)
 {
-    QFile file( filename );
+    QFile file(filename);
 
-    if ( !file.open( QIODevice::ReadOnly ) )
-    {
-        kDebug() <<"KoWmfRead : Cannot open file" << QFile::encodeName(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        kDebug() << "KoWmfRead : Cannot open file" << QFile::encodeName(filename);
         return false;
     }
 
-    bool ret = mKwmf->load( file.readAll() );
+    bool ret = mKwmf->load(file.readAll());
     file.close();
 
     return ret;
 }
 
 
-bool KoWmfRead::load( const QByteArray& array )
+bool KoWmfRead::load(const QByteArray& array)
 {
-    return mKwmf->load( array );
+    return mKwmf->load(array);
 }
 
 
-bool KoWmfRead::play(  )
+bool KoWmfRead::play()
 {
-    return mKwmf->play( this );
+    return mKwmf->play(this);
 }
 
 
-bool KoWmfRead::isValid( void ) const {
+bool KoWmfRead::isValid(void) const
+{
     return mKwmf->mValid;
 }
 
 
-bool KoWmfRead::isStandard( void ) const {
+bool KoWmfRead::isStandard(void) const
+{
     return mKwmf->mStandard;
 }
 
 
-bool KoWmfRead::isPlaceable( void ) const {
+bool KoWmfRead::isPlaceable(void) const
+{
     return mKwmf->mPlaceable;
 }
 
 
-bool KoWmfRead::isEnhanced( void ) const {
+bool KoWmfRead::isEnhanced(void) const
+{
     return mKwmf->mEnhanced;
 }
 
 
-QRect KoWmfRead::boundingRect( void ) const {
+QRect KoWmfRead::boundingRect(void) const
+{
     return mKwmf->mBBox;
 }
 
 
-int KoWmfRead::defaultDpi( void ) const {
-    if ( mKwmf->mPlaceable ) {
+int KoWmfRead::defaultDpi(void) const
+{
+    if (mKwmf->mPlaceable) {
         return mKwmf->mDpi;
-    }
-    else {
+    } else {
         return  0;
     }
 }
 
 
-void KoWmfRead::setDebug( int nbrFunc ) {
+void KoWmfRead::setDebug(int nbrFunc)
+{
     mKwmf->mNbrFunc = nbrFunc;
 }
 

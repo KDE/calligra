@@ -29,14 +29,14 @@ class WMLExport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     WMLExport(QObject* parent, const QStringList&);
     WMLExport();
 
     virtual ~WMLExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __WMLEXPORT_H

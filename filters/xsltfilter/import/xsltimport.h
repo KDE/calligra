@@ -33,14 +33,14 @@
 class XSLTImport : public KoFilter
 {
 
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-    	XSLTImport(QObject* parent, const QStringList&);
-		virtual ~XSLTImport() {}
+public:
+    XSLTImport(QObject* parent, const QStringList&);
+    virtual ~XSLTImport() {}
 
-		virtual KoFilter::ConversionStatus convert( const QByteArray& from,
-							const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from,
+            const QByteArray& to);
 };
 
 #endif /* __XSLTIMPORT_H__ */

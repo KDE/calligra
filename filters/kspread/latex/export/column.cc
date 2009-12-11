@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug stream */
+#include <kdebug.h>  /* for kDebug stream */
 
 #include "column.h"
 //Added by qt3to4:
@@ -30,7 +30,7 @@
 /*******************************************/
 Column::Column(): Format()
 {
-	setCol(0);
+    setCol(0);
 }
 
 /*******************************************/
@@ -42,9 +42,9 @@ Column::~Column()
 
 void Column::analyze(const QDomNode node)
 {
-	_col = getAttr(node, "column").toLong();
-	_width = getAttr(node, "width").toDouble();
-	Format::analyze(getChild(node, "format"));
+    _col = getAttr(node, "column").toLong();
+    _width = getAttr(node, "width").toDouble();
+    Format::analyze(getChild(node, "format"));
 }
 
 /*******************************************/
@@ -52,17 +52,16 @@ void Column::analyze(const QDomNode node)
 /*******************************************/
 void Column::generate(QTextStream& out)
 {
-	//generateLeftBorder(out);
-	if(getBrushStyle() >= 1)
-	{
-		out << ">{\\columncolor";
-		generateColor(out);
-		out << "}";
-	}
-	//generateRightBorder(out);
-		
-	out << "m{" << getWidth() << "pt}";
-	
+    //generateLeftBorder(out);
+    if (getBrushStyle() >= 1) {
+        out << ">{\\columncolor";
+        generateColor(out);
+        out << "}";
+    }
+    //generateRightBorder(out);
+
+    out << "m{" << getWidth() << "pt}";
+
 }
 
 

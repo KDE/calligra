@@ -22,7 +22,7 @@
 #define SWINDER_FORMAT_H
 
 #include "ustring.h"
-#include <cstdio>	// for sscanf
+#include <cstdio> // for sscanf
 
 namespace Swinder
 {
@@ -38,83 +38,96 @@ class Color
 {
 public:
 
-  unsigned red, green, blue;
+    unsigned red, green, blue;
 
-  /**
-   * Constructs a default color with the RGB value (0, 0, 0), i.e black.
-   */
-  Color(){ red = green = blue = 0; }
+    /**
+     * Constructs a default color with the RGB value (0, 0, 0), i.e black.
+     */
+    Color() {
+        red = green = blue = 0;
+    }
 
-  /**
-   * Creates a copy of another color.
-   */
-  Color( const Color& c )
-    { red = c.red; green = c.green; blue = c.blue; }
+    /**
+     * Creates a copy of another color.
+     */
+    Color(const Color& c) {
+        red = c.red; green = c.green; blue = c.blue;
+    }
 
-  /**
-   * Creates a color based on given red, green and blue values.
-   */
-  Color( unsigned r, unsigned g, unsigned b )
-    { red = r; green = g; blue = b; }
+    /**
+     * Creates a color based on given red, green and blue values.
+     */
+    Color(unsigned r, unsigned g, unsigned b) {
+        red = r; green = g; blue = b;
+    }
 
-  /**
-   * Creates a color based on given red, green and blue values, encoded as \#RRGGBB in a string.
-   */
-  explicit Color( const char* c )
-    { std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue); }
+    /**
+     * Creates a color based on given red, green and blue values, encoded as \#RRGGBB in a string.
+     */
+    explicit Color(const char* c) {
+        std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue);
+    }
 
-  friend inline bool operator==(const Color&, const Color&);
-  friend inline bool operator!=(const Color&, const Color&);
+    friend inline bool operator==(const Color&, const Color&);
+    friend inline bool operator!=(const Color&, const Color&);
 };
 
 /**
     Returns true if c1 is equal to c2; otherwise returns false.
 */
 inline bool operator==(const Color& c1, const Color& c2)
-{ return c1.red == c2.red && c1.green == c2.green && c1.blue == c2.blue; }
+{
+    return c1.red == c2.red && c1.green == c2.green && c1.blue == c2.blue;
+}
 
 /**
     Returns true if c1 is not equal to c2; otherwise returns false.
 */
 inline bool operator!=(const Color& c1, const Color& c2)
-{ return c1.red != c2.red || c1.green != c2.green || c1.blue != c2.blue; }
+{
+    return c1.red != c2.red || c1.green != c2.green || c1.blue != c2.blue;
+}
 
 class Pen
 {
 public:
 
-  unsigned style;
+    unsigned style;
 
-  float width;
+    float width;
 
-  Color color;
+    Color color;
 
-  enum {
-    NoLine,         // no line at all
-    SolidLine,      // a simple solid line
-    DashLine,       // dashes separated by a few pixels
-    DotLine,        // dots separated by a few pixels
-    DashDotLine,    // alternate dots and dashes
-    DashDotDotLine  // one dash, two dots, one dash, two dots
-  };
+    enum {
+        NoLine,         // no line at all
+        SolidLine,      // a simple solid line
+        DashLine,       // dashes separated by a few pixels
+        DotLine,        // dots separated by a few pixels
+        DashDotLine,    // alternate dots and dashes
+        DashDotDotLine  // one dash, two dots, one dash, two dots
+    };
 
-  Pen(): style( SolidLine ), width( 0 ){}
+    Pen(): style(SolidLine), width(0) {}
 
-  friend inline bool operator==(const Pen&, const Pen&);
-  friend inline bool operator!=(const Pen&, const Pen&);
+    friend inline bool operator==(const Pen&, const Pen&);
+    friend inline bool operator!=(const Pen&, const Pen&);
 };
 
 /**
     Returns true if p1 is equal to p2; otherwise returns false.
 */
 inline bool operator==(const Pen& p1, const Pen& p2)
-{ return p1.style == p2.style && p1.width == p1.width && p1.color == p2.color; }
+{
+    return p1.style == p2.style && p1.width == p1.width && p1.color == p2.color;
+}
 
 /**
     Returns true if p1 is not equal to p2; otherwise returns false.
 */
 inline bool operator!=(const Pen& p1, const Pen& p2)
-{ return p1.style != p2.style || p1.width != p1.width || p1.color != p2.color; }
+{
+    return p1.style != p2.style || p1.width != p1.width || p1.color != p2.color;
+}
 
 
 /**
@@ -129,139 +142,139 @@ class FormatFont
 {
 public:
 
-  /**
-   * Creates a default font information.
-   */
-  FormatFont();
+    /**
+     * Creates a default font information.
+     */
+    FormatFont();
 
-  /**
-   * Destroys the font information
-   */
-  ~FormatFont();
+    /**
+     * Destroys the font information
+     */
+    ~FormatFont();
 
-  /**
-   * Creates a copy of font information.
-   */
-  FormatFont( const FormatFont& );
+    /**
+     * Creates a copy of font information.
+     */
+    FormatFont(const FormatFont&);
 
-  /**
-   * Assigns from another font information.
-   */
-  FormatFont& operator=( const FormatFont& );
+    /**
+     * Assigns from another font information.
+     */
+    FormatFont& operator=(const FormatFont&);
 
-  /**
-   * Assigns from another font information.
-   */
-  FormatFont& assign( const FormatFont& );
+    /**
+     * Assigns from another font information.
+     */
+    FormatFont& assign(const FormatFont&);
 
-  /**
-   * Returns true if it is a default font information.
-   */
-  bool isNull() const;
+    /**
+     * Returns true if it is a default font information.
+     */
+    bool isNull() const;
 
-  /**
-   * Returns the name of font family, e.g "Helvetica".
-   */
-  UString fontFamily() const;
+    /**
+     * Returns the name of font family, e.g "Helvetica".
+     */
+    UString fontFamily() const;
 
-  /**
-   * Sets a new family for the font information.
-   */
-  void setFontFamily( const UString& fontFamily );
+    /**
+     * Sets a new family for the font information.
+     */
+    void setFontFamily(const UString& fontFamily);
 
-  /**
-   * Returns the size of font (in points).
-   */
-  double fontSize() const;
+    /**
+     * Returns the size of font (in points).
+     */
+    double fontSize() const;
 
-  /**
-   * Sets the size of font (in points).
-   */
-  void setFontSize( double fs );
+    /**
+     * Sets the size of font (in points).
+     */
+    void setFontSize(double fs);
 
-  /**
-   * Returns the color of the font.
-   */
-  Color color() const;
+    /**
+     * Returns the color of the font.
+     */
+    Color color() const;
 
-  /**
-   * Sets the color of the font.
-   */
-  void setColor( const Color& color );
+    /**
+     * Sets the color of the font.
+     */
+    void setColor(const Color& color);
 
-  /**
-   * Returns true if bold has been set.
-   */
-  bool bold() const;
+    /**
+     * Returns true if bold has been set.
+     */
+    bool bold() const;
 
-  /**
-   * If b is true, bold is set on; otherwise bold is set off.
-   */
-  void setBold( bool b );
+    /**
+     * If b is true, bold is set on; otherwise bold is set off.
+     */
+    void setBold(bool b);
 
-  /**
-   * Returns true if italic has been set.
-   */
-  bool italic() const;
+    /**
+     * Returns true if italic has been set.
+     */
+    bool italic() const;
 
-  /**
-   * If i is true, italic is set on; otherwise italic is set off.
-   */
-  void setItalic( bool i );
+    /**
+     * If i is true, italic is set on; otherwise italic is set off.
+     */
+    void setItalic(bool i);
 
-  /**
-   * Returns true if underline has been set.
-   */
-  bool underline() const;
+    /**
+     * Returns true if underline has been set.
+     */
+    bool underline() const;
 
-  /**
-   * If u is true, underline is set on; otherwise underline is set off.
-   */
-  void setUnderline( bool u );
+    /**
+     * If u is true, underline is set on; otherwise underline is set off.
+     */
+    void setUnderline(bool u);
 
-  /**
-   * Returns true if strikeout has been set.
-   */
-  bool strikeout() const;
+    /**
+     * Returns true if strikeout has been set.
+     */
+    bool strikeout() const;
 
-  /**
-   * If s is true, strikeout is set on; otherwise strikeout is set off.
-   */
-  void setStrikeout( bool s );
+    /**
+     * If s is true, strikeout is set on; otherwise strikeout is set off.
+     */
+    void setStrikeout(bool s);
 
-  /**
-   * Returns true if subscript has been set.
-   */
-  bool subscript() const;
+    /**
+     * Returns true if subscript has been set.
+     */
+    bool subscript() const;
 
-  /**
-   * If s is true, subscript is set on; otherwise subscript is set off.
-   */
-  void setSubscript( bool s );
+    /**
+     * If s is true, subscript is set on; otherwise subscript is set off.
+     */
+    void setSubscript(bool s);
 
-  /**
-   * Returns true if superscript has been set.
-   */
-  bool superscript() const;
+    /**
+     * Returns true if superscript has been set.
+     */
+    bool superscript() const;
 
-  /**
-   * If s is true, superscript is set on; otherwise superscript is set off.
-   */
-  void setSuperscript( bool s );
+    /**
+     * If s is true, superscript is set on; otherwise superscript is set off.
+     */
+    void setSuperscript(bool s);
 
-  /**
-   * Returns true if this font is equal to f; otherwise returns false.
-   */
-  bool operator==(const FormatFont& f) const;
+    /**
+     * Returns true if this font is equal to f; otherwise returns false.
+     */
+    bool operator==(const FormatFont& f) const;
 
-  /**
-   * Returns true if this font is not equal to f; otherwise returns false.
-   */
-  bool operator!=(const FormatFont& f) const;
+    /**
+     * Returns true if this font is not equal to f; otherwise returns false.
+     */
+    bool operator!=(const FormatFont& f) const;
 
 private:
-  class Private;
-  Private *d;
+    class Private;
+    Private *d;
 };
 
 
@@ -277,121 +290,121 @@ class FormatAlignment
 {
 public:
 
-  /**
-   * Creates a default alignment information.
-   */
-  FormatAlignment();
+    /**
+     * Creates a default alignment information.
+     */
+    FormatAlignment();
 
-  /**
-   * Destroys the alignment information
-   */
-  ~FormatAlignment();
+    /**
+     * Destroys the alignment information
+     */
+    ~FormatAlignment();
 
-  /**
-   * Creates a copy of alignment information.
-   */
-  FormatAlignment( const FormatAlignment& );
+    /**
+     * Creates a copy of alignment information.
+     */
+    FormatAlignment(const FormatAlignment&);
 
-  /**
-   * Assigns from another alignment information.
-   */
-  FormatAlignment& operator=( const FormatAlignment& );
+    /**
+     * Assigns from another alignment information.
+     */
+    FormatAlignment& operator=(const FormatAlignment&);
 
-  /**
-   * Assigns from another alignment information.
-   */
-  FormatAlignment& assign( const FormatAlignment& );
+    /**
+     * Assigns from another alignment information.
+     */
+    FormatAlignment& assign(const FormatAlignment&);
 
-  /**
-   * Returns true if it is a default alignment information.
-   */
-  bool isNull() const;
+    /**
+     * Returns true if it is a default alignment information.
+     */
+    bool isNull() const;
 
-  /**
-   * Returns horizontal alignment. Possible values are
-   * Format::Left, Format::Right and Format::Center.
-   *
-   * \sa setAlignX
-   */
-  unsigned alignX() const;
+    /**
+     * Returns horizontal alignment. Possible values are
+     * Format::Left, Format::Right and Format::Center.
+     *
+     * \sa setAlignX
+     */
+    unsigned alignX() const;
 
-  /**
-   * Sets the horizontal alignment.
-   *
-   * \sa alignX
-   */
-  void setAlignX( unsigned xa );
+    /**
+     * Sets the horizontal alignment.
+     *
+     * \sa alignX
+     */
+    void setAlignX(unsigned xa);
 
-  /**
-   * Returns horizontal alignment. Possible values are
-   * Format::Top, Format::Middle and Format::Bottom.
-   *
-   * \sa setAlignY
-   */
-  unsigned alignY() const;
+    /**
+     * Returns horizontal alignment. Possible values are
+     * Format::Top, Format::Middle and Format::Bottom.
+     *
+     * \sa setAlignY
+     */
+    unsigned alignY() const;
 
-  /**
-   * Sets the horizontal alignment.
-   *
-   * \sa alignY
-   */
-   void setAlignY( unsigned xa );
+    /**
+     * Sets the horizontal alignment.
+     *
+     * \sa alignY
+     */
+    void setAlignY(unsigned xa);
 
-  /**
-   * Returns true if the text should be wrapped at right border.
-   *
-   * \sa setWrap
-   */
-   bool wrap() const;
+    /**
+     * Returns true if the text should be wrapped at right border.
+     *
+     * \sa setWrap
+     */
+    bool wrap() const;
 
-  /**
-   * Sets whether the text should be wrapped at right border.
-   *
-   * \sa setWrap
-   */
-   void setWrap( bool w );
+    /**
+     * Sets whether the text should be wrapped at right border.
+     *
+     * \sa setWrap
+     */
+    void setWrap(bool w);
 
-  /**
-   * Returns the indentation level.
-   *
-   * \sa setIndentLevel
-   */
-   unsigned indentLevel() const;
+    /**
+     * Returns the indentation level.
+     *
+     * \sa setIndentLevel
+     */
+    unsigned indentLevel() const;
 
-  /**
-   * Sets the indentation level.
-   *
-   * \sa indentLevel
-   */
-   void setIndentLevel( unsigned i );
+    /**
+     * Sets the indentation level.
+     *
+     * \sa indentLevel
+     */
+    void setIndentLevel(unsigned i);
 
-  /**
-   * Returns the text rotation angle.
-   *
-   * \sa setRotationAngle
-   */
-   unsigned rotationAngle() const;
+    /**
+     * Returns the text rotation angle.
+     *
+     * \sa setRotationAngle
+     */
+    unsigned rotationAngle() const;
 
-  /**
-   * Sets the text rotation angle.
-   *
-   * \sa rotationAngle
-   */
-   void setRotationAngle( unsigned r );
+    /**
+     * Sets the text rotation angle.
+     *
+     * \sa rotationAngle
+     */
+    void setRotationAngle(unsigned r);
 
-  /**
-   * Returns true if this alignment is equal to f; otherwise returns false.
-   */
-  bool operator==(const FormatAlignment& f) const;
+    /**
+     * Returns true if this alignment is equal to f; otherwise returns false.
+     */
+    bool operator==(const FormatAlignment& f) const;
 
-  /**
-   * Returns true if this alignment is not equal to f; otherwise returns false.
-   */
-  bool operator!=(const FormatAlignment& f) const;
+    /**
+     * Returns true if this alignment is not equal to f; otherwise returns false.
+     */
+    bool operator!=(const FormatAlignment& f) const;
 
 private:
-  class Private;
-  Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -401,109 +414,109 @@ private:
 class FormatBackground
 {
 public:
-  /**
-   * Creates a default background information.
-   */
-  FormatBackground();
+    /**
+     * Creates a default background information.
+     */
+    FormatBackground();
 
-  /**
-   * Destroys the background information.
-   */
-  ~FormatBackground();
+    /**
+     * Destroys the background information.
+     */
+    ~FormatBackground();
 
-  /**
-   * Creates a copy of background information.
-   */
-  FormatBackground( const FormatBackground& );
+    /**
+     * Creates a copy of background information.
+     */
+    FormatBackground(const FormatBackground&);
 
-  /**
-   * Assigns from another background information.
-   */
-  FormatBackground& operator=( const FormatBackground& );
+    /**
+     * Assigns from another background information.
+     */
+    FormatBackground& operator=(const FormatBackground&);
 
-  /**
-   * Assigns from another background information.
-   */
-  FormatBackground& assign( const FormatBackground& );
+    /**
+     * Assigns from another background information.
+     */
+    FormatBackground& assign(const FormatBackground&);
 
-  /**
-   * Returns true if it is a default background information.
-   */
-  bool isNull() const;
+    /**
+     * Returns true if it is a default background information.
+     */
+    bool isNull() const;
 
-  enum {
-    SolidPattern,
-    Dense1Pattern,
-    Dense2Pattern,
-    Dense3Pattern,
-    Dense4Pattern,
-    Dense5Pattern,
-    Dense6Pattern,
-    Dense7Pattern,
-    HorPattern,		// Horizonatal lines
-    VerPattern,		// Vertical lines
-    CrossPattern,	// Horizontal and Vertical lines
-    BDiagPattern,	// Left-bottom to right-top diagonal lines
-    FDiagPattern,	// Left-top to right-bottom diagonal lines
-    DiagCrossPattern,	// Crossing diagonal lines
-    EmptyPattern
-  };
+    enum {
+        SolidPattern,
+        Dense1Pattern,
+        Dense2Pattern,
+        Dense3Pattern,
+        Dense4Pattern,
+        Dense5Pattern,
+        Dense6Pattern,
+        Dense7Pattern,
+        HorPattern,  // Horizonatal lines
+        VerPattern,  // Vertical lines
+        CrossPattern, // Horizontal and Vertical lines
+        BDiagPattern, // Left-bottom to right-top diagonal lines
+        FDiagPattern, // Left-top to right-bottom diagonal lines
+        DiagCrossPattern, // Crossing diagonal lines
+        EmptyPattern
+    };
 
-  /**
-   * Returns pattern for this background.
-   *
-   * \sa setPattern
-   */
-  unsigned pattern() const;
+    /**
+     * Returns pattern for this background.
+     *
+     * \sa setPattern
+     */
+    unsigned pattern() const;
 
-  /**
-   * Set the pattern for this background.
-   *
-   * \sa pattern
-   */
-  void setPattern( unsigned );
+    /**
+     * Set the pattern for this background.
+     *
+     * \sa pattern
+     */
+    void setPattern(unsigned);
 
-  /**
-   * Returns the background color of the background area.
-   *
-   * \sa setBackgroundColor
-   */
-  Color backgroundColor() const;
+    /**
+     * Returns the background color of the background area.
+     *
+     * \sa setBackgroundColor
+     */
+    Color backgroundColor() const;
 
-  /**
-   * Set the background color.
-   *
-   * \sa backgroundColor
-   */
-  void setBackgroundColor( const Color& );
+    /**
+     * Set the background color.
+     *
+     * \sa backgroundColor
+     */
+    void setBackgroundColor(const Color&);
 
-  /**
-   * Returns the foreground color of the background area.
-   *
-   * \sa setForegroundColor
-   */
-  Color foregroundColor() const;
+    /**
+     * Returns the foreground color of the background area.
+     *
+     * \sa setForegroundColor
+     */
+    Color foregroundColor() const;
 
-  /**
-   * Sets the foreground color.
-   *
-   * \sa foregroundColor
-   */
-  void setForegroundColor( const Color& );
+    /**
+     * Sets the foreground color.
+     *
+     * \sa foregroundColor
+     */
+    void setForegroundColor(const Color&);
 
-  /**
-   * Returns true if this background is equal to f; otherwise returns false.
-   */
-  bool operator==(const FormatBackground& f) const;
+    /**
+     * Returns true if this background is equal to f; otherwise returns false.
+     */
+    bool operator==(const FormatBackground& f) const;
 
-  /**
-   * Returns true if this background is not equal to f; otherwise returns false.
-   */
-  bool operator!=(const FormatBackground& f) const;
+    /**
+     * Returns true if this background is not equal to f; otherwise returns false.
+     */
+    bool operator!=(const FormatBackground& f) const;
 
 private:
-  class Private;
-  Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -515,105 +528,105 @@ class FormatBorders
 {
 public:
 
-  /**
-   * Creates a default border information.
-   */
-  FormatBorders();
+    /**
+     * Creates a default border information.
+     */
+    FormatBorders();
 
-  /**
-   * Destroys the border information
-   */
-  ~FormatBorders();
+    /**
+     * Destroys the border information
+     */
+    ~FormatBorders();
 
-  /**
-   * Creates a copy of border information.
-   */
-  FormatBorders( const FormatBorders& );
+    /**
+     * Creates a copy of border information.
+     */
+    FormatBorders(const FormatBorders&);
 
-  /**
-   * Assigns from another border information.
-   */
-  FormatBorders& operator=( const FormatBorders& );
+    /**
+     * Assigns from another border information.
+     */
+    FormatBorders& operator=(const FormatBorders&);
 
-  /**
-   * Assigns from another border information.
-   */
-  FormatBorders& assign( const FormatBorders& );
+    /**
+     * Assigns from another border information.
+     */
+    FormatBorders& assign(const FormatBorders&);
 
-  /**
-   * Returns true if it is a default border information.
-   */
-  bool isNull() const;
+    /**
+     * Returns true if it is a default border information.
+     */
+    bool isNull() const;
 
-  /**
-   * Returns pen style, width and color for left border.
-   *
-   * \sa setLeftBorder
-   */
-  const Pen& leftBorder() const;
+    /**
+     * Returns pen style, width and color for left border.
+     *
+     * \sa setLeftBorder
+     */
+    const Pen& leftBorder() const;
 
-  /**
-   * Sets pen style, width and color for left border.
-   *
-   * \sa leftBorder
-   */
-  void setLeftBorder( const Pen& pen );
+    /**
+     * Sets pen style, width and color for left border.
+     *
+     * \sa leftBorder
+     */
+    void setLeftBorder(const Pen& pen);
 
-  /**
-   * Returns pen style, width and color for right border.
-   *
-   * \sa setRightBorder
-   */
-  const Pen& rightBorder() const;
+    /**
+     * Returns pen style, width and color for right border.
+     *
+     * \sa setRightBorder
+     */
+    const Pen& rightBorder() const;
 
-  /**
-   * Sets pen style, width and color for right border.
-   *
-   * \sa rightBorder
-   */
-  void setRightBorder( const Pen& pen );
+    /**
+     * Sets pen style, width and color for right border.
+     *
+     * \sa rightBorder
+     */
+    void setRightBorder(const Pen& pen);
 
-  /**
-   * Returns pen style, width and color for top border.
-   *
-   * \sa setTopBorder
-   */
-  const Pen& topBorder() const;
+    /**
+     * Returns pen style, width and color for top border.
+     *
+     * \sa setTopBorder
+     */
+    const Pen& topBorder() const;
 
-  /**
-   * Sets pen style, width and color for top border.
-   *
-   * \sa topBorder
-   */
-  void setTopBorder( const Pen& pen );
+    /**
+     * Sets pen style, width and color for top border.
+     *
+     * \sa topBorder
+     */
+    void setTopBorder(const Pen& pen);
 
-  /**
-   * Returns pen style, width and color for bottom border.
-   *
-   * \sa setBottomBorder
-   */
-  const Pen& bottomBorder() const;
+    /**
+     * Returns pen style, width and color for bottom border.
+     *
+     * \sa setBottomBorder
+     */
+    const Pen& bottomBorder() const;
 
-  /**
-   * Sets pen style, width and color for bottom border.
-   *
-   * \sa bottomBorder
-   */
-  void setBottomBorder( const Pen& pen );
+    /**
+     * Sets pen style, width and color for bottom border.
+     *
+     * \sa bottomBorder
+     */
+    void setBottomBorder(const Pen& pen);
 
-  /**
-   * Returns true if this background is equal to f; otherwise returns false.
-   */
-  bool operator==(const FormatBorders& f) const;
+    /**
+     * Returns true if this background is equal to f; otherwise returns false.
+     */
+    bool operator==(const FormatBorders& f) const;
 
-  /**
-   * Returns true if this background is not equal to f; otherwise returns false.
-   */
-  bool operator!=(const FormatBorders& f) const;
+    /**
+     * Returns true if this background is not equal to f; otherwise returns false.
+     */
+    bool operator!=(const FormatBorders& f) const;
 
 private:
-  class Private;
-  Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -642,117 +655,117 @@ class Format
 {
 public:
 
-  /**
-   * Creates a default format.
-   */
-  Format();
+    /**
+     * Creates a default format.
+     */
+    Format();
 
-  /**
-   * Destroys the format.
-   */
-  ~Format();
+    /**
+     * Destroys the format.
+     */
+    ~Format();
 
-  /**
-   * Creates a copy from another format.
-   */
-  Format( const Format& f );
+    /**
+     * Creates a copy from another format.
+     */
+    Format(const Format& f);
 
-  /**
-   * Assigns from another format.
-   */
-  Format& operator= ( const Format& f );
+    /**
+     * Assigns from another format.
+     */
+    Format& operator= (const Format& f);
 
-  /**
-   * Assigns from another value.
-   */
-  Format& assign( const Format& f );
+    /**
+     * Assigns from another value.
+     */
+    Format& assign(const Format& f);
 
-  /**
-   * Returns true if it is a default format information.
-   */
-  bool isNull() const;
+    /**
+     * Returns true if it is a default format information.
+     */
+    bool isNull() const;
 
-  /**
-   * Returns a constant reference to the formatting information of this format.
-   */
-  FormatFont& font() const;
+    /**
+     * Returns a constant reference to the formatting information of this format.
+     */
+    FormatFont& font() const;
 
-  /**
-   * Sets new font information for this format.
-   */
-  void setFont( const FormatFont& font );
+    /**
+     * Sets new font information for this format.
+     */
+    void setFont(const FormatFont& font);
 
-  /**
-   * Returns a constant reference to the alignment information of this format.
-   */
-  FormatAlignment& alignment() const;
+    /**
+     * Returns a constant reference to the alignment information of this format.
+     */
+    FormatAlignment& alignment() const;
 
-  /**
-   * Sets new alignment information for this format.
-   */
-  void setAlignment( const FormatAlignment& alignment );
+    /**
+     * Sets new alignment information for this format.
+     */
+    void setAlignment(const FormatAlignment& alignment);
 
-  /**
-   * Returns a reference to the borders information of this format.
-   */
-  FormatBorders& borders() const;
+    /**
+     * Returns a reference to the borders information of this format.
+     */
+    FormatBorders& borders() const;
 
-  /**
-   * Sets new borders information for this format.
-   */
-  void setBorders( const FormatBorders& border );
+    /**
+     * Sets new borders information for this format.
+     */
+    void setBorders(const FormatBorders& border);
 
-  /**
-   * Retursn a reference to the background information of this format.
-   */
-  FormatBackground& background() const;
+    /**
+     * Retursn a reference to the background information of this format.
+     */
+    FormatBackground& background() const;
 
-  /**
-   * Sets new background information for this format.
-   */
-  void setBackground( const FormatBackground& );
+    /**
+     * Sets new background information for this format.
+     */
+    void setBackground(const FormatBackground&);
 
-  /**
-   * Returns the formatting string to display the value of this format.
-   */
-  UString valueFormat() const;
+    /**
+     * Returns the formatting string to display the value of this format.
+     */
+    UString valueFormat() const;
 
-  /**
-   * Sets the new formatting string to display the value of this format.
-   */
-  void setValueFormat( const UString& valueFormat );
+    /**
+     * Sets the new formatting string to display the value of this format.
+     */
+    void setValueFormat(const UString& valueFormat);
 
-  enum { Left, Center, Right };
+    enum { Left, Center, Right };
 
-  enum { Top, Middle, Bottom };
+    enum { Top, Middle, Bottom };
 
-  /**
-   * Applies another format to this format. Basically this will merge
-   * the formatting information of f into the current format.
-   * For example, if current format is "Bold, Italic" and f is
-   * "Left border", the current format would become "Bold, Italic, left border".
-   *
-   * If parts of the formatting information in f are already specified in the
-   * current format, then it will override the current format.
-   * For example, if current format is "Bold, right-aligned" and f is "Italic",
-   * the result is "Italic, right-aligned".
-   *
-   */
-  Format& apply( const Format& f );
+    /**
+     * Applies another format to this format. Basically this will merge
+     * the formatting information of f into the current format.
+     * For example, if current format is "Bold, Italic" and f is
+     * "Left border", the current format would become "Bold, Italic, left border".
+     *
+     * If parts of the formatting information in f are already specified in the
+     * current format, then it will override the current format.
+     * For example, if current format is "Bold, right-aligned" and f is "Italic",
+     * the result is "Italic, right-aligned".
+     *
+     */
+    Format& apply(const Format& f);
 
-  /**
-   * Returns true if this format is equal to f; otherwise returns false.
-   */
-  bool operator==(const Format& f) const;
+    /**
+     * Returns true if this format is equal to f; otherwise returns false.
+     */
+    bool operator==(const Format& f) const;
 
-  /**
-   * Returns true if this format is not equal to f; otherwise returns false.
-   */
-  bool operator!=(const Format& f) const;
+    /**
+     * Returns true if this format is not equal to f; otherwise returns false.
+     */
+    bool operator!=(const Format& f) const;
 
 private:
-  class Private;
-  Private* d; // can't never be 0
+    class Private;
+    Private* d; // can't never be 0
 };
 
 }

@@ -41,67 +41,90 @@ class Column;
  */
 class Cell: public Format
 {
-	
-	/* USEFUL DATA */
-	long _row;
-	long _col;
-	QString _text;
-	QString _textDataType;
-	QString _result;
-	QString _resultDataType;
 
-		
-	public:
-		/**
-		 * Constructors
-		 *
-		 */
+    /* USEFUL DATA */
+    long _row;
+    long _col;
+    QString _text;
+    QString _textDataType;
+    QString _result;
+    QString _resultDataType;
 
-		/**
-		 * Creates a new instance of Cell.
-		 */
-		Cell();
 
-		Cell(long row, long col)
-		{
-			_row = row;
-			_col = col;
-		}
-		
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of frames.
-		 */
+public:
+    /**
+     * Constructors
+     *
+     */
 
-		virtual ~Cell();
+    /**
+     * Creates a new instance of Cell.
+     */
+    Cell();
 
-		/* ==== getters ==== */
+    Cell(long row, long col) {
+        _row = row;
+        _col = col;
+    }
 
-		long     getRow() const { return _row; }
-		long     getCol() const { return _col; }
-		QString  getText() const { return _text; }
-		QString  getTextDataType() const { return _textDataType; }
-		QString  getResult() const { return _result; }
-		QString  getResultDataType() const { return _resultDataType; }
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of frames.
+     */
 
-		/* ==== setters ==== */
-		void setRow(int r) { _row = r; }
-		void setCol(int c) { _col = c; }
-		void setText(QString text) { _text = text; }
-		void setTextDataType(QString dt) { _textDataType = dt; }
-		void setResult(QString result) { _result = result; }
-		void setResultDataType(QString dt) { _resultDataType = dt; }
-	
-		/**
-		 * Helpful functions
-		 */
-		void     analyze (const QDomNode);
-		void     analyzeText (const QDomNode);
-		void     analyzeResult (const QDomNode);
-		void     generate  (QTextStream&, Table*);
-		
-	private:
+    virtual ~Cell();
+
+    /* ==== getters ==== */
+
+    long     getRow() const {
+        return _row;
+    }
+    long     getCol() const {
+        return _col;
+    }
+    QString  getText() const {
+        return _text;
+    }
+    QString  getTextDataType() const {
+        return _textDataType;
+    }
+    QString  getResult() const {
+        return _result;
+    }
+    QString  getResultDataType() const {
+        return _resultDataType;
+    }
+
+    /* ==== setters ==== */
+    void setRow(int r) {
+        _row = r;
+    }
+    void setCol(int c) {
+        _col = c;
+    }
+    void setText(QString text) {
+        _text = text;
+    }
+    void setTextDataType(QString dt) {
+        _textDataType = dt;
+    }
+    void setResult(QString result) {
+        _result = result;
+    }
+    void setResultDataType(QString dt) {
+        _resultDataType = dt;
+    }
+
+    /**
+     * Helpful functions
+     */
+    void     analyze(const QDomNode);
+    void     analyzeText(const QDomNode);
+    void     analyzeResult(const QDomNode);
+    void     generate(QTextStream&, Table*);
+
+private:
 
 };
 

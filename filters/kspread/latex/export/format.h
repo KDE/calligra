@@ -41,146 +41,214 @@ class Row;
  */
 class Format: public XmlParser
 {
-	long _align;
-	long _alignY;
-	QColor _bgColor;
-	long _multirow;
-	bool _verticalText;
-	double _angle;
-	QColor _brushColor;
-	int _brushStyle;
-	int _indent;
-	bool _dontprinttext;
+    long _align;
+    long _alignY;
+    QColor _bgColor;
+    long _multirow;
+    bool _verticalText;
+    double _angle;
+    QColor _brushColor;
+    int _brushStyle;
+    int _indent;
+    bool _dontprinttext;
 
-	/* pen */
-	double _penWidth;
-	int _penStyle;
-	QColor _penColor;
+    /* pen */
+    double _penWidth;
+    int _penStyle;
+    QColor _penColor;
 
-	/* font */
-	int _size;
-	QString _family;
-	int _weight;
+    /* font */
+    int _size;
+    QString _family;
+    int _weight;
 
-	/* borders */
-	Pen *_bottomBorder;
-	Pen *_topBorder;
-	Pen *_leftBorder;
-	Pen *_rightBorder;
-	
-	/* */
-	bool _isValidFormat;
+    /* borders */
+    Pen *_bottomBorder;
+    Pen *_topBorder;
+    Pen *_leftBorder;
+    Pen *_rightBorder;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Format.
-		 *
-		 * @param Para the parent class of the format.
-		 */
-		Format();
+    /* */
+    bool _isValidFormat;
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do
-		 */
-		virtual ~Format();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Format.
+     *
+     * @param Para the parent class of the format.
+     */
+    Format();
 
-		/**
-		 * getters
-		 */
-		long getMultirow() const { return _multirow; }
-		long getAlign() const { return _align; }
-		long getAlignY() const { return _alignY; }
-		QColor getBgColor() const { return _bgColor; }
-		bool getVerticalText() const { return _verticalText; }
-		double getAngle() const { return _angle; }
-		QColor getBrushColor() const { return _brushColor; }
-		int getBrushStyle() const { return _brushStyle; }
-		int getIndent() const { return _indent; }
-		bool getDontPrintText() const { return _dontprinttext; }
-	
-		bool hasBorder() const { return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder()); }
-		bool hasTopBorder() const;
-		//Pen* getTopBorder() const { return _topBorder; }
-		bool hasBottomBorder() const;
-		//Pen* getBottomBorder() const { return _bottomBorder; }
-		bool hasLeftBorder() const;
-		//Pen* getLeftBorder() const { return _leftBorder; }
-		bool hasRightBorder() const;
-		//Pen* getRightBorder() const { return _rightBorder; }
-		
-		/* pen */
-		double getPenWidth() const { return _penWidth; }
-		int getPenStyle()    const { return _penStyle; }
-		QColor getPenColor() const { return _penColor; }
-		
-		/* font */
-		int getFontSize() const { return _size; }
-		QString getFontFamily() const { return _family; }
-		int getFontWeight() const { return _weight; }
-		bool isValidFormat() const { return _isValidFormat; }
+    /*
+     * Destructor
+     *
+     * Nothing to do
+     */
+    virtual ~Format();
 
-		/**
-		 * setters
-		 */
-		void setAlign(long a) { _align = a; }
-		void setAlignY(long a) { _alignY = a; }
-		void setBgColor(QColor b) { _bgColor = b; }
-		void setMultirow(long mr)  { _multirow = mr; }
-		void setVerticalText(bool vt) { _verticalText = vt; }
-		void setAngle(double a) { _angle = a; }
-		void setBrushColor(QString bc) { _brushColor.setNamedColor(bc); }
-		void setBrushStyle(int bs) { _brushStyle = bs; }
-		void setIndent(int indent) { _indent = indent; }
-		void setDontPrintText(bool dpt) { _dontprinttext = dpt; }
+    /**
+     * getters
+     */
+    long getMultirow() const {
+        return _multirow;
+    }
+    long getAlign() const {
+        return _align;
+    }
+    long getAlignY() const {
+        return _alignY;
+    }
+    QColor getBgColor() const {
+        return _bgColor;
+    }
+    bool getVerticalText() const {
+        return _verticalText;
+    }
+    double getAngle() const {
+        return _angle;
+    }
+    QColor getBrushColor() const {
+        return _brushColor;
+    }
+    int getBrushStyle() const {
+        return _brushStyle;
+    }
+    int getIndent() const {
+        return _indent;
+    }
+    bool getDontPrintText() const {
+        return _dontprinttext;
+    }
 
-		/* pen */
-		void setPenWidth(double pw) { _penWidth = pw; }
-		void setPenStyle(int ps)    { _penStyle = ps; }
-		void setPenColor(QString pc) { _penColor.setNamedColor(pc); }
+    bool hasBorder() const {
+        return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder());
+    }
+    bool hasTopBorder() const;
+    //Pen* getTopBorder() const { return _topBorder; }
+    bool hasBottomBorder() const;
+    //Pen* getBottomBorder() const { return _bottomBorder; }
+    bool hasLeftBorder() const;
+    //Pen* getLeftBorder() const { return _leftBorder; }
+    bool hasRightBorder() const;
+    //Pen* getRightBorder() const { return _rightBorder; }
 
-		/* font */
-		void setFontSize(int s) { _size = s; }
-		void setFontFamily(QString f) { _family = f; }
-		void setFontWeight(int w) { _weight = w; }
+    /* pen */
+    double getPenWidth() const {
+        return _penWidth;
+    }
+    int getPenStyle()    const {
+        return _penStyle;
+    }
+    QColor getPenColor() const {
+        return _penColor;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /* font */
+    int getFontSize() const {
+        return _size;
+    }
+    QString getFontFamily() const {
+        return _family;
+    }
+    int getFontWeight() const {
+        return _weight;
+    }
+    bool isValidFormat() const {
+        return _isValidFormat;
+    }
 
-		/**
-		 * Get information from a markup tree (only param of a format).
-		 */
-		virtual void analyze(const QDomNode);
-		virtual void analyzePen(const QDomNode);
-		virtual void analyzeFont(const QDomNode);
+    /**
+     * setters
+     */
+    void setAlign(long a) {
+        _align = a;
+    }
+    void setAlignY(long a) {
+        _alignY = a;
+    }
+    void setBgColor(QColor b) {
+        _bgColor = b;
+    }
+    void setMultirow(long mr)  {
+        _multirow = mr;
+    }
+    void setVerticalText(bool vt) {
+        _verticalText = vt;
+    }
+    void setAngle(double a) {
+        _angle = a;
+    }
+    void setBrushColor(QString bc) {
+        _brushColor.setNamedColor(bc);
+    }
+    void setBrushStyle(int bs) {
+        _brushStyle = bs;
+    }
+    void setIndent(int indent) {
+        _indent = indent;
+    }
+    void setDontPrintText(bool dpt) {
+        _dontprinttext = dpt;
+    }
 
-		/**
-		 * Generate the cell format inherited from the row or the column format or
-		 * use its own format.
-		 *
-		 * @param out The output stream.
-		 * @param col The column of this cell.
-		 * @param row The row of this cell.
-		 */
-		void generate(QTextStream& out, Column* col = NULL, Row* row = NULL);
+    /* pen */
+    void setPenWidth(double pw) {
+        _penWidth = pw;
+    }
+    void setPenStyle(int ps)    {
+        _penStyle = ps;
+    }
+    void setPenColor(QString pc) {
+        _penColor.setNamedColor(pc);
+    }
 
-		/**
-		 * Generate the text cell format (color and font).
-		 */
-		void generateTextFormat(QTextStream& out, QString text);
+    /* font */
+    void setFontSize(int s) {
+        _size = s;
+    }
+    void setFontFamily(QString f) {
+        _family = f;
+    }
+    void setFontWeight(int w) {
+        _weight = w;
+    }
 
-		/**
-		 * Generate the color format for a column or a row.
-		 *
-		 * The command can be either columncolor or rowcolor.
-		 * 
-		 * @param out The output stream
-		 */
-		void generateColor(QTextStream& out);
+    /**
+     * Helpful functions
+     */
+
+    /**
+     * Get information from a markup tree (only param of a format).
+     */
+    virtual void analyze(const QDomNode);
+    virtual void analyzePen(const QDomNode);
+    virtual void analyzeFont(const QDomNode);
+
+    /**
+     * Generate the cell format inherited from the row or the column format or
+     * use its own format.
+     *
+     * @param out The output stream.
+     * @param col The column of this cell.
+     * @param row The row of this cell.
+     */
+    void generate(QTextStream& out, Column* col = NULL, Row* row = NULL);
+
+    /**
+     * Generate the text cell format (color and font).
+     */
+    void generateTextFormat(QTextStream& out, QString text);
+
+    /**
+     * Generate the color format for a column or a row.
+     *
+     * The command can be either columncolor or rowcolor.
+     *
+     * @param out The output stream
+     */
+    void generateColor(QTextStream& out);
 };
 
 #endif /* __KSPREAD_LATEX_FORMAT_H__ */

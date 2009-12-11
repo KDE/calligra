@@ -28,19 +28,19 @@ class KWordLatexExportDia;
 
 class LatexExportAdaptor: public QDBusAbstractAdaptor
 {
-  Q_OBJECT
-  Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kword.latex")
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kword.latex")
 
-	public:
+public:
     explicit LatexExportAdaptor(KWordLatexExportDia* dia);
-		
+
     ~LatexExportAdaptor();
 
 public Q_SLOTS: // METHODS
-	Q_SCRIPTABLE void useDefaultConfig();
+    Q_SCRIPTABLE void useDefaultConfig();
 
-	private:
-		KWordLatexExportDia* _dialog;
+private:
+    KWordLatexExportDia* _dialog;
 };
 
 #endif /* __LATEXEXPORTADAPTOR_H__ */

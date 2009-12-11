@@ -35,10 +35,10 @@ DESCRIPTION
 #include <KoEmbeddedDocumentSaver.h>
 
 typedef KGenericFactory<WMFImport> WMFImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libwmfimport, WMFImportFactory("kofficefilters"))
 
 
-WMFImport::WMFImport( QObject *parent, const QStringList&) :
+WMFImport::WMFImport(QObject *parent, const QStringList&) :
         KoFilter(parent)
 {
 }
@@ -47,46 +47,45 @@ WMFImport::~WMFImport()
 {
 }
 
-KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if( to != "application/vnd.oasis.opendocument.graphics" || from != "image/x-wmf" )
+    if (to != "application/vnd.oasis.opendocument.graphics" || from != "image/x-wmf")
         return KoFilter::NotImplemented;
 
     WMFImportParser wmfParser;
-    if( !wmfParser.load( QString(m_chain->inputFile()) ) ) {
+    if (!wmfParser.load(QString(m_chain->inputFile()))) {
         return KoFilter::WrongFormat;
     }
 
     // Do the conversion!
     KarbonDocument document;
-    if (!wmfParser.play( document )) {
+    if (!wmfParser.play(document)) {
         return KoFilter::WrongFormat;
     }
 
     // create output store
-    KoStore* storeout = KoStore::createStore( m_chain->outputFile(), KoStore::Write, to, KoStore::Zip );
+    KoStore* storeout = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
 
-    if ( !storeout )
-    {
+    if (!storeout) {
         kWarning() << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
 
     // Tell KoStore not to touch the file names
     storeout->disallowNameExpansion();
-    KoOdfWriteStore odfStore( storeout );
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
+    KoOdfWriteStore odfStore(storeout);
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter(to);
     Q_UNUSED(manifestWriter);
     KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
-    bool success = document.saveOdf( documentContext );
+    bool success = document.saveOdf(documentContext);
 
     // cleanup
     odfStore.closeManifestWriter();
     delete storeout;
 
-    if( ! success )
+    if (! success)
         return KoFilter::CreationError;
     else
         return KoFilter::OK;

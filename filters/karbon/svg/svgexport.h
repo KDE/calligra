@@ -53,37 +53,37 @@ class SvgExport : public KoFilter
     Q_OBJECT
 
 public:
-    SvgExport( QObject* parent, const QStringList& );
+    SvgExport(QObject* parent, const QStringList&);
     virtual ~SvgExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    void saveDocument( KarbonDocument& document );
-    void saveLayer( KoShapeLayer * layer );
-    void saveGroup( KoShapeContainer * group );
-    void saveShape( KoShape * shape );
-    void savePath( KoPathShape * path );
-    void saveEllipse( KoEllipseShape * ellipse );
-    void saveRectangle( KoRectangleShape * rectangle );
+    void saveDocument(KarbonDocument& document);
+    void saveLayer(KoShapeLayer * layer);
+    void saveGroup(KoShapeContainer * group);
+    void saveShape(KoShape * shape);
+    void savePath(KoPathShape * path);
+    void saveEllipse(KoEllipseShape * ellipse);
+    void saveRectangle(KoRectangleShape * rectangle);
 
     void saveImage(KoShape *picture);
-    void saveText( ArtisticTextShape * text );
+    void saveText(ArtisticTextShape * text);
 
-    void getStyle( KoShape * shape, QTextStream * stream );
-    void getFill( KoShape * shape, QTextStream *stream );
-    void getStroke( KoShape * shape, QTextStream *stream );
-    void getEffects( KoShape *shape, QTextStream *stream );
-    void getColorStops( const QGradientStops & colorStops );
-    void getGradient( const QGradient * gradient, const QMatrix &gradientTransform );
-    void getPattern( KoPatternBackground * pattern, KoShape * shape );
-    QString getTransform( const QMatrix &matrix, const QString &attributeName );
+    void getStyle(KoShape * shape, QTextStream * stream);
+    void getFill(KoShape * shape, QTextStream *stream);
+    void getStroke(KoShape * shape, QTextStream *stream);
+    void getEffects(KoShape *shape, QTextStream *stream);
+    void getColorStops(const QGradientStops & colorStops);
+    void getGradient(const QGradient * gradient, const QMatrix &gradientTransform);
+    void getPattern(KoPatternBackground * pattern, KoShape * shape);
+    QString getTransform(const QMatrix &matrix, const QString &attributeName);
 
-    QString getID( const KoShape *obj );
-    QString createID( const KoShape * obj );
+    QString getID(const KoShape *obj);
+    QString createID(const KoShape * obj);
 
     /// Checks if the matrix only has translation set
-    bool isTranslation( const QMatrix & );
+    bool isTranslation(const QMatrix &);
 
     QTextStream* m_stream;
     QTextStream* m_defs;

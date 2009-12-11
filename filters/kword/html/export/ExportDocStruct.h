@@ -33,16 +33,16 @@ public:
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag,
-        const LayoutData& layout,QChar::Direction direction=QChar::DirL);
+                               const LayoutData& layout, QChar::Direction direction = QChar::DirL);
     virtual void closeParagraph(const QString& strTag,
-        const LayoutData& layout);
+                                const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
 private:
     void openFormatData(const FormatData& formatOrigin,
-        const FormatData& format, const bool force, const bool allowBold);
+                        const FormatData& format, const bool force, const bool allowBold);
     void closeFormatData(const FormatData& formatOrigin,
-        const FormatData& format, const bool force, const bool allowBold);
+                         const FormatData& format, const bool force, const bool allowBold);
 };
 
 #endif /* EXPORTDOCSTRUCT_H */

@@ -49,60 +49,53 @@ QString StyleDataMap::getDefaultStyle(void)
 }
 
 void StyleDataMap::defineNewStyleFromOld(const QString& strName, const QString& strOld,
-    const int level, const QString& strProps)
+        const int level, const QString& strProps)
 {
-    if (strOld.isEmpty())
-    {
-        defineNewStyle(strName,level,strProps);
+    if (strOld.isEmpty()) {
+        defineNewStyle(strName, level, strProps);
         return;
     }
 
-    StyleDataMap::Iterator it=find(strOld);
-    if (it==end())
-    {
-        defineNewStyle(strName,level,strProps);
-    }
-    else
-    {
-        QString strAllProps=it.data().m_props;
-        strAllProps+=strProps;
-        defineNewStyle(strName,level,strAllProps);
+    StyleDataMap::Iterator it = find(strOld);
+    if (it == end()) {
+        defineNewStyle(strName, level, strProps);
+    } else {
+        QString strAllProps = it.data().m_props;
+        strAllProps += strProps;
+        defineNewStyle(strName, level, strAllProps);
     }
 }
 
 
 void StyleDataMap::defineNewStyle(const QString& strName, const int level,
-    const QString& strProps)
+                                  const QString& strProps)
 {
     // Despite its name, this method can be called multiple times
     // We must take care that KWord just gets one style only one time.
-    StyleDataMap::Iterator it=find(strName);
-    if (it==end())
-    {
+    StyleDataMap::Iterator it = find(strName);
+    if (it == end()) {
         // The style does not exist yet, so we must define it.
-        it=insert(strName,StyleData());
+        it = insert(strName, StyleData());
     }
-    StyleData& styleData=it.data();
-    styleData.m_level=level;
-    styleData.m_props+=getDefaultStyle();
-    if (!strProps.isEmpty())
-    {
-        styleData.m_props+=strProps;
-        styleData.m_props+=';'; // Security if other properties are appended later
+    StyleData& styleData = it.data();
+    styleData.m_level = level;
+    styleData.m_props += getDefaultStyle();
+    if (!strProps.isEmpty()) {
+        styleData.m_props += strProps;
+        styleData.m_props += ';'; // Security if other properties are appended later
     }
 }
 
 StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
 {
     // We are using a style but we are not sure if it is defined
-    StyleDataMap::Iterator it=find(strName);
-    if (it==end())
-    {
+    StyleDataMap::Iterator it = find(strName);
+    if (it == end()) {
         // The style is not yet defined!
         StyleData data;
-        data.m_level=-1;
-        data.m_props=getDefaultStyle();
-        it=insert(strName,data);
+        data.m_level = -1;
+        data.m_props = getDefaultStyle();
+        it = insert(strName, data);
     }
     return it;
 }
@@ -111,18 +104,18 @@ void StyleDataMap::defineDefaultStyles(void)
 {
     // Add a few of AbiWord predefined style sheets
     // AbiWord file: src/text/ptbl/xp/pt_PT_Styles.cpp
-    defineNewStyle("Normal",-1,QString());
+    defineNewStyle("Normal", -1, QString());
     // TODO: font should be "Arial"
     // TODO: "keep with next"
     QString strHeading("font-weight: bold; margin-top: 22pt; margin-bottom: 3pt; ");
-    defineNewStyle("Heading 1",1,strHeading+"font-size: 17pt");
-    defineNewStyle("Heading 2",2,strHeading+"font-size: 14pt");
-    defineNewStyle("Heading 3",3,strHeading+"font-size: 12pt");
-    defineNewStyle("Block Text",-1,"margin-left: 1in; margin-right: 1in; margin-bottom: 6pt");
+    defineNewStyle("Heading 1", 1, strHeading + "font-size: 17pt");
+    defineNewStyle("Heading 2", 2, strHeading + "font-size: 14pt");
+    defineNewStyle("Heading 3", 3, strHeading + "font-size: 12pt");
+    defineNewStyle("Block Text", -1, "margin-left: 1in; margin-right: 1in; margin-bottom: 6pt");
     QFontInfo fixedInfo(KGlobalSettings::fixedFont());
-    QString strPlainText=QString("font-family: %1")
-        .arg(fixedInfo.family()); // TODO: should be "Courier New"
-    kDebug(30506) <<"Plain Text:" << strPlainText;
-    defineNewStyle("Plain Text",-1,strPlainText);
+    QString strPlainText = QString("font-family: %1")
+                           .arg(fixedInfo.family()); // TODO: should be "Courier New"
+    kDebug(30506) << "Plain Text:" << strPlainText;
+    defineNewStyle("Plain Text", -1, strPlainText);
     // TODO: all list and numbered types
 }

@@ -23,25 +23,25 @@
 
 Env::Env()
 {
-	setType(Element::LATEX_ENV);
+    setType(Element::LATEX_ENV);
 }
 
 Env::Env(const char* command)
 {
-	setType(Element::LATEX_ENV);
-	/* Parse the command name */
-	QString pattern = QString(command);
-	int pos = pattern.find("{");
-	/* Remove \begin{ at the beginning and the } at the end. */
-	if(pos != -1)
-		_name = pattern.mid(pos + 1, pattern.length() - pos - 2);
-	_name = _name.trimmed();
+    setType(Element::LATEX_ENV);
+    /* Parse the command name */
+    QString pattern = QString(command);
+    int pos = pattern.find("{");
+    /* Remove \begin{ at the beginning and the } at the end. */
+    if (pos != -1)
+        _name = pattern.mid(pos + 1, pattern.length() - pos - 2);
+    _name = _name.trimmed();
 }
 
 Env::Env(const QString& name) : _name(name)
 {
-	setType(Element::LATEX_ENV);
-	_name = _name.trimmed();
+    setType(Element::LATEX_ENV);
+    _name = _name.trimmed();
 }
 
 Env::~Env()
@@ -50,18 +50,17 @@ Env::~Env()
 
 void Env::setChildren(QList<Element*>* children)
 {
-	if(children != NULL)
-		_children = *children;
+    if (children != NULL)
+        _children = *children;
 }
 
 void Env::print(int tab)
 {
-	cout << "ENV " << qPrintable(getName()) << "{" << endl;
-	
-	Element* elt;
-	for ( elt = _children.first(); elt; elt = _children.next() )
-	{
-		elt->print(tab);
-	}
-	cout << "}" << endl;
+    cout << "ENV " << qPrintable(getName()) << "{" << endl;
+
+    Element* elt;
+    for (elt = _children.first(); elt; elt = _children.next()) {
+        elt->print(tab);
+    }
+    cout << "}" << endl;
 }

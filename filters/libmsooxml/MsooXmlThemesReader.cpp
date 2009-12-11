@@ -111,7 +111,7 @@ DrawingMLFormatScheme::DrawingMLFormatScheme()
 }
 
 DrawingMLPatternFillStyle::DrawingMLPatternFillStyle()
- : backgroundColor(0), foregroundColor(0)
+        : backgroundColor(0), foregroundColor(0)
 {
 }
 
@@ -122,17 +122,17 @@ DrawingMLTheme::DrawingMLTheme()
 // ---------------------------------------------------
 
 MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t)
-    : MsooXmlReaderContext()
-    , theme(&t)
+        : MsooXmlReaderContext()
+        , theme(&t)
 {
 }
 
 // ---------------------------------------------------
 
 MsooXmlThemesReader::MsooXmlThemesReader(KoOdfWriters *writers)
-    : MsooXmlReader(writers)
-    , m_currentColor(0)
-    , m_context(0)
+        : MsooXmlReader(writers)
+        , m_currentColor(0)
+        , m_context(0)
 {
     init();
 }
@@ -173,8 +173,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::readInternal()
     if (isStartElement()) {
         TRY_READ_IF(theme)
         ELSE_WRONG_FORMAT
-    }
-    else {
+    } else {
         return KoFilter::WrongFormat;
     }
     kDebug() << "===========finished============";
@@ -203,17 +202,17 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
         return KoFilter::WrongFormat;
     }
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS_INTO(name, m_context->theme->name)
     kDebug() << "name:" << m_context->theme->name;
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( MSOOXML_CURRENT_NS, Schemas::drawingml::main ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration(MSOOXML_CURRENT_NS, Schemas::drawingml::main))) {
         raiseError(i18n("Namespace \"%1\" not found", Schemas::drawingml::main));
         return KoFilter::WrongFormat;
     }
@@ -372,7 +371,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
         BIND_READ_METHOD("folHlink", color)
     }
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS_INTO(name, m_context->theme->colorScheme.name)
 
     while (!atEnd()) {
@@ -389,7 +388,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
                 if (!m_currentColor) {
                     return KoFilter::InternalError;
                 }
-kDebug() << "inserting color for" << this->name();
+                kDebug() << "inserting color for" << this->name();
                 m_context->theme->colorScheme.insert(this->name().toString(), m_currentColor);
                 m_currentColor = 0;
             }
@@ -515,7 +514,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
     std::auto_ptr<DrawingMLColorSchemeItem> color(new DrawingMLColorSchemeItem);
     m_currentColor = 0;
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(val)
     color.get()->color = Utils::ST_HexColorRGB_to_QColor(val);
@@ -585,7 +584,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
     std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem);
     m_currentColor = 0;
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(lastClr)
     color.get()->lastColor = Utils::ST_HexColorRGB_to_QColor(lastClr);

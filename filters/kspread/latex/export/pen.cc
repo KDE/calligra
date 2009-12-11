@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-//#include "fileheader.h"	/* for the use of _header (color and underlined) */
+//#include "fileheader.h" /* for the use of _header (color and underlined) */
 #include "pen.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -35,13 +35,13 @@ Pen::Pen()
 /* Get the set of info about a text format */
 void Pen::analyze(const QDomNode node)
 {
-	/* <pen width="0" style="1" color="#000000" /> */
-	setWidth(getAttr(node, "width").toDouble());
-	setStyle(getAttr(node, "style").toInt());
-	setColor(getAttr(node, "color"));
+    /* <pen width="0" style="1" color="#000000" /> */
+    setWidth(getAttr(node, "width").toDouble());
+    setStyle(getAttr(node, "style").toInt());
+    setColor(getAttr(node, "color"));
 }
 
 void Pen::generate(QTextStream&)
 {
-	
+
 }

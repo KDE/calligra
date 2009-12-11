@@ -4,7 +4,8 @@
 #include <QFile>
 #include <QTextStream>
 
-static inline QString ucFirst(QString s) {
+static inline QString ucFirst(QString s)
+{
     return s[0].toUpper() + s.mid(1);
 }
 
@@ -102,11 +103,11 @@ void processEnumsForHeader(QDomNodeList fieldList, QTextStream& out)
                 out << "        " << en.attribute("name");
                 if (en.hasAttribute("value"))
                     out << " = " << en.attribute("value");
-                if (j != enumNodes.size()-1) out << ",";
+                if (j != enumNodes.size() - 1) out << ",";
                 out << "\n";
             }
             out << "    };\n\n"
-                << "    static UString " << f.attribute("name") << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
+            << "    static UString " << f.attribute("name") << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
         }
     }
 }
@@ -120,14 +121,14 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
 
     // add id field and rtti method
     out << "    static const unsigned id;\n\n"
-        << "    virtual unsigned rtti() const { return this->id; }\n\n";
+    << "    virtual unsigned rtti() const { return this->id; }\n\n";
 
     // constructor and destructor
     out << "    " << className << "();\n    virtual ~" << className << "();\n\n";
 
     // copy and assignment
     out << "    " << className << "( const " << className << "& record );\n"
-        << "    " << className << "& operator=( const " << className << "& record );\n\n";
+    << "    " << className << "& operator=( const " << className << "& record );\n\n";
 
     // enums
     QDomNodeList fieldNodes = e.elementsByTagName("field");
@@ -136,11 +137,11 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     processEnumsForHeader(cfieldNodes, out);
 
     // getters and setters
-    foreach (const Field& f, fields) {
+    foreach(const Field& f, fields) {
         out << "    " << f.type << " " << f.getterName() << "(";
         if (f.isArray) out << " unsigned index ";
         out << ") const;\n"
-            << "    void " << f.setterName() << "(";
+        << "    void " << f.setterName() << "(";
         if (f.isArray) out << " unsigned index,";
         out << " " << f.type << " " << f.name << " );\n\n";
     }
@@ -183,11 +184,11 @@ static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, 
     if (size != 0) {
         out << indent << "if (size < ";
         if (dynamicOffset) out << "curOffset + ";
-        if (offset) out << (offset/8) << " + ";
+        if (offset) out << (offset / 8) << " + ";
         out << (size / 8) << ") {\n"
-            << indent << "    setIsValid(false);\n"
-            << indent << "    return;\n"
-            << indent << "}\n";
+        << indent << "    setIsValid(false);\n"
+        << indent << "    return;\n"
+        << indent << "}\n";
     }
 }
 
@@ -197,9 +198,9 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         unsigned bits = field.attribute("size").toUInt();
         QString name = field.attribute("name");
         if (!name.startsWith("reserved")) {
-            if (bits >= 8 && offset%8 != 0)
+            if (bits >= 8 && offset % 8 != 0)
                 qFatal("Unaligned byte-or-larger field");
-            if (bits >= 16 && bits%8 != 0)
+            if (bits >= 16 && bits % 8 != 0)
                 qFatal("Fields of 16 bits and larger must always be an exact number of bytes");
 
             Field& f = fieldsMap[name];
@@ -208,9 +209,9 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     qFatal("Unaligned string");
 
                 if (!dynamicOffset)
-                    out << indent << "curOffset = " << (offset/8) << ";\n";
+                    out << indent << "curOffset = " << (offset / 8) << ";\n";
                 else
-                    if (offset) out << indent << "curOffset += " << (offset/8) << ";\n";
+                    if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
                 out << indent << f.setterName() << "(" << setterArgs;
                 dynamicOffset = true; offset = 0;
 
@@ -220,11 +221,11 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     out << "readByteString(";
 
                 out << "data + curOffset, " << field.attribute("length") << ", size - curOffset"
-                    << ", &stringLengthError, &stringSize));\n";
+                << ", &stringLengthError, &stringSize));\n";
                 out << indent << "if (stringLengthError) {\n"
-                    << indent << "    setIsValid(false);\n"
-                    << indent << "    return;\n"
-                    << indent << "}\n";
+                << indent << "    setIsValid(false);\n"
+                << indent << "    return;\n"
+                << indent << "}\n";
                 out << indent << "curOffset += stringSize;\n";
                 sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
             } else if (bits % 8 == 0) {
@@ -249,7 +250,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
 
                 out << "(data";
                 if (dynamicOffset) out << " + curOffset";
-                if (offset) out << " + " << (offset/8);
+                if (offset) out << " + " << (offset / 8);
                 out << ")";
                 if (field.attribute("type") == "bool") out << " != 0";
                 if (f.isEnum) out << ")";
@@ -259,10 +260,10 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << indent << f.setterName() << "(" << setterArgs;
                 if (f.isEnum)
                     out << "static_cast<" << f.type << ">(";
-                unsigned firstByte = offset/8;
-                unsigned lastByte = (offset+bits-1)/8;
-                unsigned bitOffset = offset%8;
-                unsigned mask = (1 << bits)-1;
+                unsigned firstByte = offset / 8;
+                unsigned lastByte = (offset + bits - 1) / 8;
+                unsigned bitOffset = offset % 8;
+                unsigned mask = (1 << bits) - 1;
                 if (firstByte == lastByte) {
                     out << "((readU8(data";
                 } else {
@@ -283,9 +284,9 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (offset % 8 != 0)
             qFatal("Ifs should always be byte-aligned");
         if (!dynamicOffset)
-            out << indent << "curOffset = " << (offset/8) << ";\n";
+            out << indent << "curOffset = " << (offset / 8) << ";\n";
         else
-            if (offset) out << indent << "curOffset += " << (offset/8) << ";\n";
+            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
 
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
 
@@ -299,7 +300,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (offset % 8 != 0)
             qFatal("Ifs should contain an integer number of bytes");
 
-        if (offset) out << indent << "    curOffset += " << (offset/8) << ";\n";
+        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
         out << indent << "}\n";
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
@@ -308,9 +309,9 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             qFatal("Arrays should always be byte-aligned");
 
         if (!dynamicOffset)
-            out << indent << "curOffset = " << (offset/8) << ";\n";
+            out << indent << "curOffset = " << (offset / 8) << ";\n";
         else
-            if (offset) out << indent << "curOffset += " << (offset/8) << ";\n";
+            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
 
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
@@ -337,7 +338,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (offset % 8 != 0)
             qFatal("Arrays should contain an integer number of bytes");
 
-        if (offset) out << indent << "    curOffset += " << (offset/8) << ";\n";
+        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
         out << indent << "}\n";
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
@@ -353,10 +354,10 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
             if (!f.isStringLength) {
                 out << indent << "out << \"";
                 if (getterArgs.length() == 0) {
-                    out << QString(19-name.length(), ' ');
+                    out << QString(19 - name.length(), ' ');
                     out << ucFirst(name) << " : \" << ";
                 } else {
-                    out << QString(15-name.length(), ' ');
+                    out << QString(15 - name.length(), ' ');
                     out << ucFirst(name);
                     out << " \" << std::setw(3) << " << getterArgs << " <<\" : \" << ";
                 }
@@ -394,7 +395,7 @@ void processEnumsForImplementation(QDomNodeList fieldList, QString className, QT
         if (enumNodes.size()) {
             QString name = ucFirst(f.attribute("name"));
             out << "UString " << className << "::" << f.attribute("name") << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
-                << "    switch (" << f.attribute("name") << ") {\n";
+            << "    switch (" << f.attribute("name") << ") {\n";
             for (int j = 0; j < enumNodes.size(); j++) {
                 QDomElement en = enumNodes.at(j).toElement();
                 out << "        case " << en.attribute("name") << ": return UString(\"" << en.attribute("name") << "\");\n";
@@ -418,8 +419,8 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
 
     // private class
     out << "class " << className << "::Private\n{\n"
-        << "public:\n";
-    foreach (const Field& f, fields) {
+    << "public:\n";
+    foreach(const Field& f, fields) {
         if (f.isArray)
             out << "    std::vector<" << f.type << "> " << f.name << ";\n";
         else if (!f.isStringLength)
@@ -430,7 +431,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     // constructor
     out << className << "::" << className << "()\n";
     out << "    : d(new Private)\n{\n";
-    foreach (const Field& f, fields) {
+    foreach(const Field& f, fields) {
         if (f.isArray || f.isStringLength) continue;
         QString val;
         if (f.type == "unsigned" || f.type == "int") {
@@ -448,13 +449,13 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
 
     // copy constructor
     out << className << "::" << className << "( const " << className << "& record )\n"
-        << "    : Record(record), d(new Private)\n{\n"
-        << "    *this = record;\n}\n\n";
+    << "    : Record(record), d(new Private)\n{\n"
+    << "    *this = record;\n}\n\n";
 
     // assignment operator
     out << className << "& " << className << "::operator=( const " << className << "& record )\n{\n"
-        << "    *d = *record.d;\n"
-        << "    return *this;\n}\n\n";
+    << "    *d = *record.d;\n"
+    << "    return *this;\n}\n\n";
 
     // enums
     QDomNodeList fieldNodes = e.elementsByTagName("field");
@@ -463,7 +464,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     processEnumsForImplementation(cfieldNodes, className, out);
 
     // getters and setters
-    foreach (const Field& f, fields) {
+    foreach(const Field& f, fields) {
         if (f.isStringLength) continue;
 
         if (f.isEnum) out << className << "::";
@@ -480,7 +481,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         out << " = " << f.name << ";\n";
 
         if (f.isArrayLength) {
-            foreach (const Field& af, f.arrayFields) {
+            foreach(const Field& af, f.arrayFields) {
                 out << "    d->" << af.name << ".resize(" << f.name << ");\n";
             }
         }
@@ -494,7 +495,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         QString type = f.attribute("ctype");
         if (type.isEmpty()) type = className + "::" + ucFirst(f.attribute("name"));
         out << type << " " << className << "::" << f.attribute("name") << "() const\n{\n"
-            << "    return " << f.attribute("value") << ";\n}\n\n";
+        << "    return " << f.attribute("value") << ";\n}\n\n";
     }
 
     // setData method
@@ -503,7 +504,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         out << "    unsigned curOffset;\n";
     if (containsStrings) {
         out << "    bool stringLengthError = false;\n"
-            << "    unsigned stringSize;\n";
+        << "    unsigned stringSize;\n";
     }
     unsigned offset = 0;
     bool dynamicOffset = false;
@@ -514,7 +515,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
 
     // dump method
     out << "void " << className << "::dump( std::ostream& out ) const\n{\n"
-        << "    out << \"" << e.attribute("name") << "\" << std::endl;\n";
+    << "    out << \"" << e.attribute("name") << "\" << std::endl;\n";
     for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
         processFieldElementForDump("    ", out, child, fieldsMap);
     out << "}\n\n";
@@ -552,17 +553,17 @@ int main(int argc, char** argv)
     QTextStream cppOut(&cppFile);
 
     hOut << "// This file was automatically generated from records.xml\n"
-         << "#ifndef SWINDER_RECORDS_H\n"
-         << "#define SWINDER_RECORDS_H\n\n"
-         << "#include \"utils.h\"\n\n"
-         << "namespace Swinder {\n\n"
-         << "void registerRecordClasses();\n\n";
+    << "#ifndef SWINDER_RECORDS_H\n"
+    << "#define SWINDER_RECORDS_H\n\n"
+    << "#include \"utils.h\"\n\n"
+    << "namespace Swinder {\n\n"
+    << "void registerRecordClasses();\n\n";
 
     cppOut << "// This file was automatically generated from records.xml\n"
-           << "#include \"records.h\"\n"
-           << "#include <vector>\n"
-           << "#include <iomanip>\n\n"
-           << "namespace Swinder {\n\n";
+    << "#include \"records.h\"\n"
+    << "#include <vector>\n"
+    << "#include <iomanip>\n\n"
+    << "namespace Swinder {\n\n";
 
     QDomNodeList records = doc.elementsByTagName("record");
     for (int i = 0; i < records.size(); i++) {

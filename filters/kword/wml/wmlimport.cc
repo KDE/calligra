@@ -30,243 +30,237 @@
 #include <wmlparser.h>
 
 typedef KGenericFactory<WMLImport> WMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmlimport, WMLImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libwmlimport, WMLImportFactory("kofficefilters"))
 
-WMLImport::WMLImport( QObject* parent, const QStringList& ):
-                     KoFilter(parent)
+WMLImport::WMLImport(QObject* parent, const QStringList&):
+        KoFilter(parent)
 {
 }
 
 // converts WML to KWord document
 class WMLConverter: public WMLParser
 {
-  public:
+public:
     QString root;
     QString documentInfo;
     WMLConverter();
-    virtual void parse( const char* filename );
-    virtual bool doOpenCard( QString, QString );
+    virtual void parse(const char* filename);
+    virtual bool doOpenCard(QString, QString);
     virtual bool doCloseCard();
-    virtual bool doParagraph( QString text, WMLFormatList formatList,
-      WMLLayout layout );
-  private:
+    virtual bool doParagraph(QString text, WMLFormatList formatList,
+                             WMLLayout layout);
+private:
     QString m_title;
 };
 
 WMLConverter::WMLConverter()
 {
-  root = "";
+    root = "";
 }
 
-static QString WMLFormatAsXML( WMLFormat format )
+static QString WMLFormatAsXML(WMLFormat format)
 {
-  QString result;
+    QString result;
 
-  if( format.href.isEmpty() )
-  {
+    if (format.href.isEmpty()) {
+        QFont font = KoGlobal::defaultFont();
+        QString fontFamily = font.family();
+        QString fontSize = QString::number(
+                               format.fontsize == WMLFormat::Big ? font.pointSizeFloat() + 3 :
+                               format.fontsize == WMLFormat::Small ? font.pointSizeFloat() - 3 : font.pointSizeFloat());
+        QString boldness = format.bold ? "75" : "50";
+        QString italic = format.italic ? "1" : "0";
+        QString underline = format.underline ? "1" : "0";
+
+        result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
+                 "\" len=\"" + QString::number(format.len) + "\">\n";
+        result.append("  <FONT name=\"" + fontFamily + "\" />\n");
+        result.append("  <SIZE value=\"" + fontSize + "\" />\n");
+        result.append("  <WEIGHT value=\"" + boldness + "\" />\n");
+        result.append("  <ITALIC value=\"" + italic  + "\" />\n");
+        result.append("  <UNDERLINE value=\"" + underline + "\" />\n");
+        result.append("</FORMAT>\n");
+    } else {
+        // hyperlink
+        result.append("<FORMAT id=\"4\" pos=\"" + QString::number(format.pos) +
+                      "\" len=\"" + QString::number(format.len) + "\">\n");
+        result.append("<VARIABLE>\n");
+        result.append("  <TYPE key=\"STRING\" type=\"9\" text=\"" + format.link + "\" />\n");
+        result.append("  <LINK linkName=\"" + format.link + "\" hrefName=\"" +
+                      format.href + "\" />\n");
+        result.append("</VARIABLE>\n");
+        result.append("</FORMAT>\n");
+    }
+
+
+    return result;
+}
+
+static QString WMLLayoutAsXML(WMLLayout layout)
+{
+    QString result;
+
+    QString align = "left";
+    if (layout.align == WMLLayout::Center) align = "center";
+    if (layout.align == WMLLayout::Right) align = "right";
+
     QFont font = KoGlobal::defaultFont();
     QString fontFamily = font.family();
-    QString fontSize = QString::number(
-      format.fontsize == WMLFormat::Big ? font.pointSizeFloat()+3 :
-      format.fontsize == WMLFormat::Small ? font.pointSizeFloat()-3 : font.pointSizeFloat() );
-    QString boldness = format.bold ? "75" : "50";
-    QString italic = format.italic ? "1" : "0";
-    QString underline = format.underline ? "1" : "0";
+    QString fontSize = QString::number(font.pointSizeFloat());
 
-    result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
-       "\" len=\"" + QString::number(format.len) + "\">\n";
-    result.append( "  <FONT name=\"" + fontFamily + "\" />\n" );
-    result.append( "  <SIZE value=\"" + fontSize + "\" />\n" );
-    result.append( "  <WEIGHT value=\"" + boldness + "\" />\n" );
-    result.append( "  <ITALIC value=\"" + italic  + "\" />\n" );
-    result.append( "  <UNDERLINE value=\"" + underline + "\" />\n" );
-    result.append( "</FORMAT>\n" );
-  }
-  else
-  {
-    // hyperlink
-    result.append( "<FORMAT id=\"4\" pos=\"" + QString::number(format.pos) +
-     "\" len=\"" + QString::number(format.len) + "\">\n");
-    result.append( "<VARIABLE>\n" );
-    result.append( "  <TYPE key=\"STRING\" type=\"9\" text=\"" + format.link + "\" />\n" );
-    result.append( "  <LINK linkName=\"" + format.link + "\" hrefName=\"" +
-      format.href + "\" />\n" );
-    result.append( "</VARIABLE>\n" );
-    result.append( "</FORMAT>\n" );
-  }
+    result.append("<LAYOUT>\n");
+    result.append("  <NAME value=\"Standard\" />\n");
+    result.append("  <FLOW align=\"" + align + "\" />\n");
+    result.append("  <LINESPACING value=\"0\" />\n");
+    result.append("  <LEFTBORDER width=\"0\" style=\"0\" />\n");
+    result.append("  <RIGHTBORDER width=\"0\" style=\"0\" />\n");
+    result.append("  <TOPBORDER width=\"0\" style=\"0\" />\n");
+    result.append("  <BOTTOMBORDER width=\"0\" style=\"0\" />\n");
+    result.append("  <INDENTS />\n");
+    result.append("  <OFFSETS />\n");
+    result.append("  <PAGEBREAKING />\n");
+    result.append("  <COUNTER />\n");
+    result.append("  <FORMAT id=\"1\">\n");
+    result.append("    <WEIGHT value=\"50\" />\n");
+    result.append("    <ITALIC value=\"0\" />\n");
+    result.append("    <UNDERLINE value=\"0\" />\n");
+    result.append("    <STRIKEOUT value=\"0\" />\n");
+    result.append("    <CHARSET value=\"0\" />\n");
+    result.append("    <VERTALIGN value=\"0\" />\n");
+    result.append("    <FONT name=\"" + fontFamily + "\" />\n");
+    result.append("    <SIZE value=\"" + fontSize + "\" />\n");
+    result.append("  </FORMAT>\n");
+    result.append("</LAYOUT>\n");
 
-
-  return result;
-}
-
-static QString WMLLayoutAsXML( WMLLayout layout )
-{
-  QString result;
-
-  QString align = "left";
-  if( layout.align == WMLLayout::Center ) align = "center";
-  if( layout.align == WMLLayout::Right ) align = "right";
-
-  QFont font = KoGlobal::defaultFont();
-  QString fontFamily = font.family();
-  QString fontSize = QString::number( font.pointSizeFloat() );
-
-  result.append( "<LAYOUT>\n" );
-  result.append( "  <NAME value=\"Standard\" />\n" );
-  result.append( "  <FLOW align=\"" + align + "\" />\n" );
-  result.append( "  <LINESPACING value=\"0\" />\n" );
-  result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
-  result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
-  result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );
-  result.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
-  result.append( "  <INDENTS />\n" );
-  result.append( "  <OFFSETS />\n" );
-  result.append( "  <PAGEBREAKING />\n" );
-  result.append( "  <COUNTER />\n" );
-  result.append( "  <FORMAT id=\"1\">\n" );
-  result.append( "    <WEIGHT value=\"50\" />\n" );
-  result.append( "    <ITALIC value=\"0\" />\n" );
-  result.append( "    <UNDERLINE value=\"0\" />\n" );
-  result.append( "    <STRIKEOUT value=\"0\" />\n" );
-  result.append( "    <CHARSET value=\"0\" />\n" );
-  result.append( "    <VERTALIGN value=\"0\" />\n" );
-  result.append( "    <FONT name=\"" + fontFamily + "\" />\n" );
-  result.append( "    <SIZE value=\"" + fontSize + "\" />\n" );
-  result.append( "  </FORMAT>\n" );
-  result.append( "</LAYOUT>\n" );
-
-  return result;
+    return result;
 }
 
 // use the first card title (or id) as document title
-bool WMLConverter::doOpenCard( QString id, QString title )
+bool WMLConverter::doOpenCard(QString id, QString title)
 {
-  if( m_title.isEmpty() )
-    m_title = ( !title.isEmpty() ) ? title : id;
+    if (m_title.isEmpty())
+        m_title = (!title.isEmpty()) ? title : id;
 
-  return true;
+    return true;
 }
 
 // FIXME is this right ?
 bool WMLConverter::doCloseCard()
 {
-  // add extra paragraph between cards
-  return doParagraph( " ", WMLFormatList(), WMLLayout() );
+    // add extra paragraph between cards
+    return doParagraph(" ", WMLFormatList(), WMLLayout());
 }
 
-bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
-  WMLLayout layout  )
+bool WMLConverter::doParagraph(QString atext, WMLFormatList formatList,
+                               WMLLayout layout)
 {
-  QString text, formats;
+    QString text, formats;
 
-  // encode the text for XML-ness
-  text = atext;
-  text.replace( '&', "&amp;" );
-  text.replace( '<', "&lt;" );
-  text.replace( '>', "&gt;" );
+    // encode the text for XML-ness
+    text = atext;
+    text.replace('&', "&amp;");
+    text.replace('<', "&lt;");
+    text.replace('>', "&gt;");
 
-  // formats, taken from formatList
-  WMLFormatList::iterator it;
-  for( it=formatList.begin(); it!=formatList.end(); ++it )
-  {
-    WMLFormat& format = *it;
-    formats.append( WMLFormatAsXML(format) );
-  }
+    // formats, taken from formatList
+    WMLFormatList::iterator it;
+    for (it = formatList.begin(); it != formatList.end(); ++it) {
+        WMLFormat& format = *it;
+        formats.append(WMLFormatAsXML(format));
+    }
 
-  // assemble
-  root.append( "<PARAGRAPH>\n" );
-  root.append( "<TEXT>" + text + "</TEXT>\n" );
-  root.append( "<FORMATS>" + formats + "</FORMATS>\n" );
-  root.append( WMLLayoutAsXML( layout) );
-  root.append( "</PARAGRAPH>\n" );
+    // assemble
+    root.append("<PARAGRAPH>\n");
+    root.append("<TEXT>" + text + "</TEXT>\n");
+    root.append("<FORMATS>" + formats + "</FORMATS>\n");
+    root.append(WMLLayoutAsXML(layout));
+    root.append("</PARAGRAPH>\n");
 
-  return true;
+    return true;
 }
 
-void WMLConverter::parse( const char* filename )
+void WMLConverter::parse(const char* filename)
 {
-  WMLParser::parse( filename );
+    WMLParser::parse(filename);
 
-  QString prolog;
-  prolog += "<!DOCTYPE DOC>\n";
-  prolog += "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\" >\n";
-  prolog += "<PAPER width=\"595\" spHeadBody=\"9\" format=\"1\" height=\"841\" fType=\"0\" orientation=\"0\" hType=\"0\" columnspacing=\"2\" spFootBody=\"9\" columns=\"1\" >\n";
-  prolog += "<PAPERBORDERS right=\"28\" left=\"28\" bottom=\"42\" top=\"42\" />\n";
-  prolog += "</PAPER>\n";
-  prolog += "<ATTRIBUTES hasTOC=\"0\" standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n";
-  prolog += "<FRAMESETS>\n";
-  prolog += "<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\" >\n";
-   prolog += "<FRAME runaround=\"1\" copy=\"0\" right=\"567\" newFrameBehavior=\"0\" left=\"28\" bottom=\"799\" runaroundGap=\"2\" top=\"42\" />\n";
+    QString prolog;
+    prolog += "<!DOCTYPE DOC>\n";
+    prolog += "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\" >\n";
+    prolog += "<PAPER width=\"595\" spHeadBody=\"9\" format=\"1\" height=\"841\" fType=\"0\" orientation=\"0\" hType=\"0\" columnspacing=\"2\" spFootBody=\"9\" columns=\"1\" >\n";
+    prolog += "<PAPERBORDERS right=\"28\" left=\"28\" bottom=\"42\" top=\"42\" />\n";
+    prolog += "</PAPER>\n";
+    prolog += "<ATTRIBUTES hasTOC=\"0\" standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n";
+    prolog += "<FRAMESETS>\n";
+    prolog += "<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\" >\n";
+    prolog += "<FRAME runaround=\"1\" copy=\"0\" right=\"567\" newFrameBehavior=\"0\" left=\"28\" bottom=\"799\" runaroundGap=\"2\" top=\"42\" />\n";
 
-  QString epilog;
-  epilog = "</FRAMESET>\n";
-  epilog += "</FRAMESETS>\n";
-  epilog += "</DOC>\n";
+    QString epilog;
+    epilog = "</FRAMESET>\n";
+    epilog += "</FRAMESETS>\n";
+    epilog += "</DOC>\n";
 
-  root.prepend( prolog );
-  root.append( epilog );
+    root.prepend(prolog);
+    root.append(epilog);
 
-  // document information (only title though)
-  documentInfo = "<!DOCTYPE document-info>\n";
-  documentInfo += "<document-info>\n";
-  documentInfo += "<log><text></text></log>\n";
-  documentInfo += "<author>\n";
-  documentInfo += "<full-name></full-name>\n";
-  documentInfo += "<title></title>\n";
-  documentInfo += "<company></company>\n";
-  documentInfo += "<email></email>\n";
-  documentInfo += "<telephone></telephone>\n";
-  documentInfo += "</author>\n";
-  documentInfo += "<about>\n";
-  documentInfo += "<abstract></abstract>\n";
-  documentInfo += "<title>" + m_title + "</title>\n";
-  documentInfo += "</about>\n";
-  documentInfo += "</document-info>";
+    // document information (only title though)
+    documentInfo = "<!DOCTYPE document-info>\n";
+    documentInfo += "<document-info>\n";
+    documentInfo += "<log><text></text></log>\n";
+    documentInfo += "<author>\n";
+    documentInfo += "<full-name></full-name>\n";
+    documentInfo += "<title></title>\n";
+    documentInfo += "<company></company>\n";
+    documentInfo += "<email></email>\n";
+    documentInfo += "<telephone></telephone>\n";
+    documentInfo += "</author>\n";
+    documentInfo += "<about>\n";
+    documentInfo += "<abstract></abstract>\n";
+    documentInfo += "<title>" + m_title + "</title>\n";
+    documentInfo += "</about>\n";
+    documentInfo += "</document-info>";
 
 }
 
-KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus WMLImport::convert(const QByteArray& from, const QByteArray& to)
 {
-  // check for proper conversion
-  if( to!= "application/x-kword" || from != "text/vnd.wap.wml" )
-     return KoFilter::NotImplemented;
+    // check for proper conversion
+    if (to != "application/x-kword" || from != "text/vnd.wap.wml")
+        return KoFilter::NotImplemented;
 
-  // parse/convert input file
-  WMLConverter filter;
-  filter.parse( QFile::encodeName(m_chain->inputFile()) );
+    // parse/convert input file
+    WMLConverter filter;
+    filter.parse(QFile::encodeName(m_chain->inputFile()));
 
-  // check for error
-  // FIXME better error handling/reporting
-  if( filter.root.isEmpty() )
-    return KoFilter::StupidError;
+    // check for error
+    // FIXME better error handling/reporting
+    if (filter.root.isEmpty())
+        return KoFilter::StupidError;
 
-  QString root = filter.root;
+    QString root = filter.root;
 
-  // prepare storage
-  KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+    // prepare storage
+    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
 
-  // store output document
-  if( out )
-    {
-      QByteArray cstring = root.toUtf8();
-      cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-      out->write( (const char*) cstring, cstring.length() );
+    // store output document
+    if (out) {
+        QByteArray cstring = root.toUtf8();
+        cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        out->write((const char*) cstring, cstring.length());
     }
 
 
-  QString documentInfo = filter.documentInfo;
+    QString documentInfo = filter.documentInfo;
 
-  // store document info
-  out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
-  if ( out )
-    {
-       QByteArray cstring = documentInfo.toUtf8();
-       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+    // store document info
+    out = m_chain->storageFile("documentinfo.xml", KoStore::Write);
+    if (out) {
+        QByteArray cstring = documentInfo.toUtf8();
+        cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-       out->write( (const char*) cstring, cstring.length() );
-     }
+        out->write((const char*) cstring, cstring.length());
+    }
 
-  return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 #include "wmlimport.moc"

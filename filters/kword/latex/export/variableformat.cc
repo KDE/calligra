@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include "fileheader.h"		/* for the use of _fileHeader (color and underlined) */
+#include "fileheader.h"  /* for the use of _fileHeader (color and underlined) */
 #include "variableformat.h"
 
 /*******************************************/
@@ -31,10 +31,10 @@
 /*******************************************/
 /*int VariableFormat::getColorBlue () const
 {
-	if(_textcolor!= 0)
-		return _textcolor->blue();
-	else
-		return 0;
+ if(_textcolor!= 0)
+  return _textcolor->blue();
+ else
+  return 0;
 }*/
 
 /*******************************************/
@@ -42,10 +42,10 @@
 /*******************************************/
 /*int VariableFormat::getColorGreen() const
 {
-	if(_textcolor!= 0)
-		return _textcolor->green();
-	else
-		return 0;
+ if(_textcolor!= 0)
+  return _textcolor->green();
+ else
+  return 0;
 }*/
 
 /*******************************************/
@@ -53,10 +53,10 @@
 /*******************************************/
 /*int VariableFormat::getColorRed  () const
 {
-	if(_textcolor!= 0)
-		return _textcolor->red();
-	else
-		return 0;
+ if(_textcolor!= 0)
+  return _textcolor->red();
+ else
+  return 0;
 }*/
 
 /*******************************************/
@@ -64,10 +64,10 @@
 /*******************************************/
 /*void VariableFormat::setColor (const int r, const int g, const int b)
 {
-	if(_textcolor == 0)
-		_textcolor = new QColor(r, g, b);
-	else
-		_textcolor->setRgb(r, g, b);
+ if(_textcolor == 0)
+  _textcolor = new QColor(r, g, b);
+ else
+  _textcolor->setRgb(r, g, b);
 }*/
 
 /*******************************************/
@@ -77,38 +77,38 @@
 /*******************************************/
 void VariableFormat::analyzeFormat(const QDomNode node)
 {
-	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	
-	/* Parameter analysis */
-	analyzeParam(node);
-	kDebug(30522) <<"ANALYZE A FORMAT";
-	
-	/* Child markup analysis */
-	if(isChild(node, "FONT"))
-		analyzeFont(getChild(node, "FONT"));
-	if(isChild(node, "ITALIC"))
-		analyzeItalic(getChild(node, "ITALIC"));
-	if(isChild(node, "UNDERLINE"))
-		analyzeUnderlined(getChild(node, "UNDERLINE"));
-	if(isChild(node, "WEIGHT"))
-		analyzeWeight(getChild(node, "WEIGHT"));
-	if(isChild(node, "VERTALIGN"))
-		analyzeAlign(getChild(node, "VERTALIGN"));
-	if(isChild(node, "STRIKEOUT"))
-		analyzeStrikeout(getChild(node, "STRIKEOUT"));
-	if(isChild(node, "COLOR"))
-		analyzeColor(getChild(node, "COLOR"));
-	if(isChild(node, "SIZE"))
-		analyzeSize(getChild(node, "SIZE"));
-	if(isChild(node, "DATE"))
-		analyzeDate(getChild(node, "DATE"));
-	if(isChild(node, "FOOTNOTE"))
-		analyzeFootnote(getChild(node, "FOOTNOTE"));
-	if(isChild(node, "NOTE"))
-		analyzeNote(getChild(node, "NOTE"));
-	if(isChild(node, "TYPE"))
-		analyzeType(getChild(node, "TYPE"));
-	kDebug(30522) <<"END OF A FORMAT";
+    /* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
+
+    /* Parameter analysis */
+    analyzeParam(node);
+    kDebug(30522) << "ANALYZE A FORMAT";
+
+    /* Child markup analysis */
+    if (isChild(node, "FONT"))
+        analyzeFont(getChild(node, "FONT"));
+    if (isChild(node, "ITALIC"))
+        analyzeItalic(getChild(node, "ITALIC"));
+    if (isChild(node, "UNDERLINE"))
+        analyzeUnderlined(getChild(node, "UNDERLINE"));
+    if (isChild(node, "WEIGHT"))
+        analyzeWeight(getChild(node, "WEIGHT"));
+    if (isChild(node, "VERTALIGN"))
+        analyzeAlign(getChild(node, "VERTALIGN"));
+    if (isChild(node, "STRIKEOUT"))
+        analyzeStrikeout(getChild(node, "STRIKEOUT"));
+    if (isChild(node, "COLOR"))
+        analyzeColor(getChild(node, "COLOR"));
+    if (isChild(node, "SIZE"))
+        analyzeSize(getChild(node, "SIZE"));
+    if (isChild(node, "DATE"))
+        analyzeDate(getChild(node, "DATE"));
+    if (isChild(node, "FOOTNOTE"))
+        analyzeFootnote(getChild(node, "FOOTNOTE"));
+    if (isChild(node, "NOTE"))
+        analyzeNote(getChild(node, "NOTE"));
+    if (isChild(node, "TYPE"))
+        analyzeType(getChild(node, "TYPE"));
+    kDebug(30522) << "END OF A FORMAT";
 }
 
 /*******************************************/
@@ -118,10 +118,10 @@ void VariableFormat::analyzeFormat(const QDomNode node)
 /*******************************************/
 void VariableFormat::analyzeDate(const QDomNode node)
 {
-	setDay(getAttr(node, "day").toInt());
-	setMonth(getAttr(node, "month").toInt());
-	setYear(getAttr(node, "year").toInt());
-	setFix(getAttr(node, "fix").toInt());
+    setDay(getAttr(node, "day").toInt());
+    setMonth(getAttr(node, "month").toInt());
+    setYear(getAttr(node, "year").toInt());
+    setFix(getAttr(node, "fix").toInt());
 }
 
 /*******************************************/
@@ -131,23 +131,23 @@ void VariableFormat::analyzeDate(const QDomNode node)
 /*******************************************/
 void VariableFormat::analyzeTime(const QDomNode node)
 {
-	setHour(getAttr(node, "day").toInt());
-	setMinute(getAttr(node, "month").toInt());
-	setSeconde(getAttr(node, "year").toInt());
-	setFix(getAttr(node, "fix").toInt());
+    setHour(getAttr(node, "day").toInt());
+    setMinute(getAttr(node, "month").toInt());
+    setSeconde(getAttr(node, "year").toInt());
+    setFix(getAttr(node, "fix").toInt());
 }
 
 void VariableFormat::analyzeFootnote(const QDomNode node)
 {
-	setNumberingtype(getAttr(node, "numberingtype"));
-	setNotetype(getAttr(node, "notetype"));
-	setFrameset(getAttr(node, "frameset"));
-	setValue(getAttr(node, "value"));
+    setNumberingtype(getAttr(node, "numberingtype"));
+    setNotetype(getAttr(node, "notetype"));
+    setFrameset(getAttr(node, "frameset"));
+    setValue(getAttr(node, "value"));
 }
 
 void VariableFormat::analyzeNote(const QDomNode node)
 {
-	setNote(getAttr(node, "note"));
+    setNote(getAttr(node, "note"));
 }
 
 /*******************************************/
@@ -157,8 +157,8 @@ void VariableFormat::analyzeNote(const QDomNode node)
 /*******************************************/
 void VariableFormat::analyzeType(const QDomNode node)
 {
-	setKey(getAttr(node, "key"));
-	setType(getAttr(node, "type").toInt());
-	setText(getAttr(node, "text"));
+    setKey(getAttr(node, "key"));
+    setType(getAttr(node, "type").toInt());
+    setText(getAttr(node, "text"));
 }
 

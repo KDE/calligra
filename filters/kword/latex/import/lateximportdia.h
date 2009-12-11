@@ -20,7 +20,7 @@
 /*
    This file is based on the file :
     koffice/filters/kword/html/htmlexportdia.h
-	Copyright (C) 2001 Nicolas Goutte <goutte@kde.org>
+ Copyright (C) 2001 Nicolas Goutte <goutte@kde.org>
 
    which was based on the old file:
     /home/kde/koffice/filters/kspread/csv/csvfilterdia.h
@@ -50,35 +50,39 @@
 
 class LATEXImportDia : public KDialog, public DCOPObject
 {
-	K_DCOP
-	
-	Q_OBJECT
-	
-	QString _fileIn;
-	QByteArray _arrayIn;
-	KoStore* _out;	/* the zipped file containing all pictures, part, ... */
+    K_DCOP
 
-	public:
-		explicit LATEXImportDia(KoStore*, QWidget *parent=0L);
+    Q_OBJECT
 
-		virtual ~LATEXImportDia() {}
-		void createDialog();
+    QString _fileIn;
+    QByteArray _arrayIn;
+    KoStore* _out; /* the zipped file containing all pictures, part, ... */
 
-		virtual void state();
-		void setInputFile(QString file)  { _fileIn = file; }
-		//void setOutputFile(QString file) { _fileOut = file; }
+public:
+    explicit LATEXImportDia(KoStore*, QWidget *parent = 0L);
 
-	private:
-		QButtonGroup* styleBox,       *langBox,        *docBox;
-		QRadioButton*  latexStyleRBtn, *kwordStyleRBtn;	/* Document style */
-		QRadioButton*  unicodeRBtn,    *latin1RBtn;		/* Language       */
-		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Latex file     */
-	
-	k_dcop:
-		void useDefaultConfig() { slotOk(); }
+    virtual ~LATEXImportDia() {}
+    void createDialog();
 
-	public slots:
-		virtual void slotOk();
+    virtual void state();
+    void setInputFile(QString file)  {
+        _fileIn = file;
+    }
+    //void setOutputFile(QString file) { _fileOut = file; }
+
+private:
+    QButtonGroup* styleBox,       *langBox,        *docBox;
+    QRadioButton*  latexStyleRBtn, *kwordStyleRBtn; /* Document style */
+    QRadioButton*  unicodeRBtn,    *latin1RBtn;  /* Language       */
+    QRadioButton*  newDocRBtn,     *embededRBtn; /* Latex file     */
+
+k_dcop:
+    void useDefaultConfig() {
+        slotOk();
+    }
+
+public slots:
+    virtual void slotOk();
 };
 
 #endif /* __LATEXIMPORTDIA_H__ */

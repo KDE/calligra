@@ -41,39 +41,39 @@ class OoDrawImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoDrawImport( QObject* parent, const QStringList & );
+    OoDrawImport(QObject* parent, const QStringList &);
     virtual ~OoDrawImport();
 
-    virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );
+    virtual KoFilter::ConversionStatus convert(QByteArray const & from, QByteArray const & to);
 
 private:
-	void createDocumentInfo( QDomDocument &docinfo );
+    void createDocumentInfo(QDomDocument &docinfo);
 
-	void createStyleMap( QDomDocument &docstyles );
-	void insertStyles( const QDomElement& styles );
-	void insertDraws( const QDomElement& styles );
-	void fillStyleStack( const QDomElement& object );
-	void addStyles( const QDomElement* style );
-	void storeObjectStyles( const QDomElement& object );
-	void appendPen( VObject &obj );
-	void appendBrush( VObject &obj );
-	void appendPoints(VPath &path, const QDomElement& object);
-	void convert();
-	void parseGroup( VGroup *parent, const QDomElement& object );
-	void parseColor( VColor &color, const QString &s );
-	double ymirror( double y );
-	KoRect parseViewBox( const QDomElement& object );
+    void createStyleMap(QDomDocument &docstyles);
+    void insertStyles(const QDomElement& styles);
+    void insertDraws(const QDomElement& styles);
+    void fillStyleStack(const QDomElement& object);
+    void addStyles(const QDomElement* style);
+    void storeObjectStyles(const QDomElement& object);
+    void appendPen(VObject &obj);
+    void appendBrush(VObject &obj);
+    void appendPoints(VPath &path, const QDomElement& object);
+    void convert();
+    void parseGroup(VGroup *parent, const QDomElement& object);
+    void parseColor(VColor &color, const QString &s);
+    double ymirror(double y);
+    KoRect parseViewBox(const QDomElement& object);
 
-	KoFilter::ConversionStatus openFile();
-	KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
+    KoFilter::ConversionStatus openFile();
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
 
-	KarbonDocument			m_document;
-	QDomDocument			m_content;
-	QDomDocument			m_meta;
-	QDomDocument			m_settings;
-	Q3Dict<QDomElement>		m_styles, m_draws;
-	KoStyleStack			m_styleStack;
-	KZip * m_zip;
+    KarbonDocument   m_document;
+    QDomDocument   m_content;
+    QDomDocument   m_meta;
+    QDomDocument   m_settings;
+    Q3Dict<QDomElement>  m_styles, m_draws;
+    KoStyleStack   m_styleStack;
+    KZip * m_zip;
 
 };
 

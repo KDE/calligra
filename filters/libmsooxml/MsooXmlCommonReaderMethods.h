@@ -27,7 +27,7 @@
 // included by DocxXmlDocumentReader and PptxXmlSlideReader
 
 protected:
-    void initInternal();
+void initInternal();
 
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_p();
@@ -63,45 +63,45 @@ protected:
     KoFilter::ConversionStatus read_wrapTight();
     KoFilter::ConversionStatus read_wrapThrough();
 
-    void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
+void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
 
-    //! Used by read_strike() and read_dstrike()
-    void readStrikeValue(KoCharacterStyle::LineType type);
+//! Used by read_strike() and read_dstrike()
+void readStrikeValue(KoCharacterStyle::LineType type);
 
-    //! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
-    void distToODF(const char * odfEl, const QString emuValue);
+//! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
+void distToODF(const char * odfEl, const QString emuValue);
 
-    //! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
-    void saveStyleWrap(const char * style);
+//! Sets style:wrap attribute of style:style/style:graphic-properties element. Used in read_anchor()
+void saveStyleWrap(const char * style);
 
-    //! Used by read_wrap*()
-    void readWrap();
+//! Used by read_wrap*()
+void readWrap();
 
-    //! ODF 1.1., 15.14.9 Fill Image Rendering Style
-    //! Set by read_stretch()
-    QString m_fillImageRenderingStyle;
+//! ODF 1.1., 15.14.9 Fill Image Rendering Style
+//! Set by read_stretch()
+QString m_fillImageRenderingStyle;
 
-    QString m_xlinkHref; //!< set by read_blip()
-    QString m_cNvPrId; //!< set by read_cNvPr()
-    QString m_cNvPrName; //!< set by read_cNvPr()
-    QString m_cNvPrDescr; //!< set by read_cNvPr()
-    QString m_docPrName; //!< set by read_docPr()
-    QString m_docPrDescr; //!< set by read_docPr()
+QString m_xlinkHref; //!< set by read_blip()
+QString m_cNvPrId; //!< set by read_cNvPr()
+QString m_cNvPrName; //!< set by read_cNvPr()
+QString m_cNvPrDescr; //!< set by read_cNvPr()
+QString m_docPrName; //!< set by read_docPr()
+QString m_docPrDescr; //!< set by read_docPr()
 
-    QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
+QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 
-    QString m_relativeFromV; //!< used by read_positionV()
-    QString m_relativeFromH; //!< used by read_positionH()
-    QString m_alignV; //!< used by read_align()
-    QString m_alignH; //!< used by read_align()
-    int m_posOffsetV; //!< used by read_posOffset()
-    bool m_hasPosOffsetV; //!< used by read_posOffset()
-    int m_posOffsetH; //!< used by read_posOffset()
-    bool m_hasPosOffsetH; //!< used by read_posOffset()
+QString m_relativeFromV; //!< used by read_positionV()
+QString m_relativeFromH; //!< used by read_positionH()
+QString m_alignV; //!< used by read_align()
+QString m_alignH; //!< used by read_align()
+int m_posOffsetV; //!< used by read_posOffset()
+bool m_hasPosOffsetV; //!< used by read_posOffset()
+int m_posOffsetH; //!< used by read_posOffset()
+bool m_hasPosOffsetH; //!< used by read_posOffset()
 
 //! @todo set it
-    bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
+bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
 //! @todo set it
-    bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
+bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
 
 #endif

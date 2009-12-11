@@ -34,10 +34,10 @@
 #include "genericimageexport.h"
 
 typedef KGenericFactory<GenericImageExport> GenericImageExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkpresentergenericimageexport, GenericImageExportFactory( "genericimageexport" ) )
+K_EXPORT_COMPONENT_FACTORY(libkpresentergenericimageexport, GenericImageExportFactory("genericimageexport"))
 
 GenericImageExport::GenericImageExport(QObject *parent, const QStringList&)
-    : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
@@ -51,88 +51,81 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
     KoDocument * document = m_chain->inputDocument();
 
-    if ( !document )
+    if (!document)
         return KoFilter::StupidError;
 
-    if ( strcmp(document->className(), "KPrDocument") != 0)
-    {
+    if (strcmp(document->className(), "KPrDocument") != 0) {
         kWarning() << "document isn't a KPrDocument but a "
-                    << document->className();
+        << document->className();
         return KoFilter::NotImplemented;
     }
 
     // Check for proper conversion.
-    if ( from != "application/x-kpresenter" || 
-		    (to != "image/bmp" && 
-		     to != "image/jpeg" && 
-		     to != "video/x-mng" && 
-		     to != "image/png" && 
-		     to !="image/x-xbitmap" && 
-		     to!="image/x-xpixmap" ))
-    {
+    if (from != "application/x-kpresenter" ||
+            (to != "image/bmp" &&
+             to != "image/jpeg" &&
+             to != "video/x-mng" &&
+             to != "image/png" &&
+             to != "image/x-xbitmap" &&
+             to != "image/x-xpixmap")) {
         kWarning() << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
     KPrDocument * kpresenterdoc = const_cast<KPrDocument *>(static_cast<const KPrDocument *>(document));
 
-    if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
-    {
+    if (kpresenterdoc->mimeType() != "application/x-kpresenter") {
         kWarning() << "Invalid document mimetype " << kpresenterdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
-    KoPageLayout layoutPage= kpresenterdoc->pageLayout();
-    width =  int( layoutPage.ptWidth );
-    height = int( layoutPage.ptHeight );
+    KoPageLayout layoutPage = kpresenterdoc->pageLayout();
+    width =  int(layoutPage.ptWidth);
+    height = int(layoutPage.ptHeight);
     bool ret = false;
-    ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,0);
+    ExportSizeDia  *exportDialog = new ExportSizeDia(width, height, 0);
     if (exportDialog->exec()) {
         width  = exportDialog->width();
         height = exportDialog->height();
         ret = true;
     }
     delete exportDialog;
-    if ( ret )
-    {
-        KPrView* view = kpresenterdoc->views().isEmpty() ? 0 : static_cast<KPrView*>( kpresenterdoc->views().first() );
-        if ( view ) // no view if embedded document
-        {
+    if (ret) {
+        KPrView* view = kpresenterdoc->views().isEmpty() ? 0 : static_cast<KPrView*>(kpresenterdoc->views().first());
+        if (view) { // no view if embedded document
             KPrCanvas * canvas = view->getCanvas();
-            canvas->drawPageInPix( pixmap, view->getCurrPgNum()-1, 0, true, width,height );
-        }
-        else //when it's embedded we use just it.
-        {
+            canvas->drawPageInPix(pixmap, view->getCurrPgNum() - 1, 0, true, width, height);
+        } else { //when it's embedded we use just it.
             pixmap = QPixmap(width, height);
             QPainter  painter(&pixmap);
             kpresenterdoc->paintContent(painter, pixmap.rect(), false);
         }
-        if( !saveImage( m_chain->outputFile(),to))
+        if (!saveImage(m_chain->outputFile(), to))
             return KoFilter::CreationError;
         return KoFilter::OK;
     }
     return KoFilter::UserCancelled;
 }
 
-bool GenericImageExport::saveImage(const QString& fileName, const QByteArray& to )
+bool GenericImageExport::saveImage(const QString& fileName, const QByteArray& to)
 {
     const char * format = NULL;
-    if(to=="image/bmp")
-      format="XBM";
-    else if(to=="image/jpeg")
-      format="JPEG";
-    else if(to=="video/x-mng")
-      format="MNG";
-    else if(to=="image/png")
-      format="PNG";
-    else if(to=="image/x-xbitmap")
-      format="XBM";
-    else if(to=="image/x-xpixmap")
-      format="XPM";
-    bool ret = pixmap.save( fileName, format );
+    if (to == "image/bmp")
+        format = "XBM";
+    else if (to == "image/jpeg")
+        format = "JPEG";
+    else if (to == "video/x-mng")
+        format = "MNG";
+    else if (to == "image/png")
+        format = "PNG";
+    else if (to == "image/x-xbitmap")
+        format = "XBM";
+    else if (to == "image/x-xpixmap")
+        format = "XPM";
+    bool ret = pixmap.save(fileName, format);
     // Save the image.
-    if ( !ret ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ),
-                            i18n( "%1 Export Error",format ) );
+    if (!ret) {
+        KMessageBox::error(0, i18n("Failed to write file."),
+                           i18n("%1 Export Error", format));
     }
     return ret;
 }

@@ -29,51 +29,52 @@ class QString;
 class Q3CString;
 
 /**
-  *@author 
+  *@author
   */
 
-class AIElement {
+class AIElement
+{
 public:
     enum Type {
-	Invalid,
-//	List,
-	String,
-	Int,
-  UInt,
-	Double,
-	CString,
-  // Custom Types
-  Operator,
-  Reference,
-  ElementArray,
-  Block,
-  ByteArray,
-  Byte
+        Invalid,
+// List,
+        String,
+        Int,
+        UInt,
+        Double,
+        CString,
+        // Custom Types
+        Operator,
+        Reference,
+        ElementArray,
+        Block,
+        ByteArray,
+        Byte
     };
 
     AIElement();
     ~AIElement();
-    explicit AIElement( const AIElement& );
-    explicit AIElement( const QString&, Type type = String );
-    explicit AIElement( const Q3CString& );
-    explicit AIElement( const char* );
+    explicit AIElement(const AIElement&);
+    explicit AIElement(const QString&, Type type = String);
+    explicit AIElement(const Q3CString&);
+    explicit AIElement(const char*);
 //    AIElement( const QValueList<AIElement>& );
-    explicit AIElement( const QVector<AIElement>&, Type type = ElementArray);
-    explicit AIElement( int );
-    explicit AIElement( uint );
-    explicit AIElement( double );
-    explicit AIElement( const QByteArray& );
-    explicit AIElement( uchar );
+    explicit AIElement(const QVector<AIElement>&, Type type = ElementArray);
+    explicit AIElement(int);
+    explicit AIElement(uint);
+    explicit AIElement(double);
+    explicit AIElement(const QByteArray&);
+    explicit AIElement(uchar);
 
-    AIElement& operator= ( const AIElement& );
-    bool operator==( const AIElement& ) const;
-    bool operator!=( const AIElement& ) const;
+    AIElement& operator= (const AIElement&);
+    bool operator==(const AIElement&) const;
+    bool operator!=(const AIElement&) const;
 
     Type type() const;
     const char* typeName() const;
 
-    bool canCast( Type ) const;
-    bool cast( Type );
+    bool canCast(Type) const;
+    bool cast(Type);
 
     bool isValid() const;
 
@@ -81,9 +82,9 @@ public:
 
     const QString toString() const;
     const Q3CString toCString() const;
-    int toInt( bool * ok=0 ) const;
-    uint toUInt( bool * ok=0 ) const;
-    double toDouble( bool * ok=0 ) const;
+    int toInt(bool * ok = 0) const;
+    uint toUInt(bool * ok = 0) const;
+    double toDouble(bool * ok = 0) const;
 //    const QValueList<AIElement> toList() const;
     const QVector<AIElement> toElementArray() const;
     const QVector<AIElement> toBlock() const;
@@ -92,7 +93,7 @@ public:
     const QString toReference() const;
     const QString toOperator() const;
     const QByteArray toByteArray() const;
-    uchar toByte( bool * ok=0 ) const;
+    uchar toByte(bool * ok = 0) const;
 
 //    QValueListConstIterator<AIElement> listBegin() const;
 //    QValueListConstIterator<AIElement> listEnd() const;
@@ -111,8 +112,8 @@ public:
     QByteArray& asByteArray();
     uchar& asByte();
 
-    static const char* typeToName( Type typ );
-    static Type nameToType( const char* name );
+    static const char* typeToName(Type typ);
+    static Type nameToType(const char* name);
 
 private:
     void detach();
@@ -121,19 +122,18 @@ private:
     {
     public:
         Private();
-        Private( Private* );
+        Private(Private*);
         ~Private();
 
         void clear();
 
         Type typ;
-        union
-        {
-	    uint u;
-	    int i;
-	    double d;
-      uchar b;
-	    void *ptr;
+        union {
+            uint u;
+            int i;
+            double d;
+            uchar b;
+            void *ptr;
         } value;
     };
 

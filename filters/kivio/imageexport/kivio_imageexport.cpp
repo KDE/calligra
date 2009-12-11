@@ -43,136 +43,136 @@
 #include "kivio_imageexportdialog.h"
 
 typedef KGenericFactory<Kivio::ImageExport> KivioImageExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkivioimageexport, KivioImageExportFactory("KivioImageExport") )
+K_EXPORT_COMPONENT_FACTORY(libkivioimageexport, KivioImageExportFactory("KivioImageExport"))
 
 namespace Kivio
 {
 
 ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
-  : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
-  if(from != "application/x-kivio") {
-    return KoFilter::BadMimeType;
-  }
+    if (from != "application/x-kivio") {
+        return KoFilter::BadMimeType;
+    }
 
-  QString format;
+    QString format;
 
-  if(to == "image/png") {
-    format = "PNG";
-  } else if(to == "image/jpeg") {
-    format = "JPEG";
-  } else if(to == "image/bmp") {
-    format = "BMP";
-  } else if(to == "image/x-eps") {
-    format = "EPS";
-  } else if(to == "image/x-portable-bitmap") {
-    format = "PBM";
-  } else if(to == "image/x-pcx") {
-    format = "PCX";
-  } else if(to == "image/x-portable-pixmap") {
-    format = "PPM";
-  } else if(to == "image/x-rgb") {
-    format = "RGB";
-  } else if(to == "image/x-xpixmap") {
-    format = "XPM";
-  } else if(to == "image/jpeg2000") {
-    format = "JP2";
-  } else {
-    return KoFilter::BadMimeType;
-  }
+    if (to == "image/png") {
+        format = "PNG";
+    } else if (to == "image/jpeg") {
+        format = "JPEG";
+    } else if (to == "image/bmp") {
+        format = "BMP";
+    } else if (to == "image/x-eps") {
+        format = "EPS";
+    } else if (to == "image/x-portable-bitmap") {
+        format = "PBM";
+    } else if (to == "image/x-pcx") {
+        format = "PCX";
+    } else if (to == "image/x-portable-pixmap") {
+        format = "PPM";
+    } else if (to == "image/x-rgb") {
+        format = "RGB";
+    } else if (to == "image/x-xpixmap") {
+        format = "XPM";
+    } else if (to == "image/jpeg2000") {
+        format = "JP2";
+    } else {
+        return KoFilter::BadMimeType;
+    }
 
-  KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
+    KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
 
-  if (!storeIn) {
-    KMessageBox::error(0, i18n("Failed to read data."), i18n( "Export Error" ));
-    return KoFilter::FileNotFound;
-  }
+    if (!storeIn) {
+        KMessageBox::error(0, i18n("Failed to read data."), i18n("Export Error"));
+        return KoFilter::FileNotFound;
+    }
 
-  // Get the XML tree.
-  QDomDocument domIn;
-  domIn.setContent(storeIn);
+    // Get the XML tree.
+    QDomDocument domIn;
+    domIn.setContent(storeIn);
 
-  KivioDoc doc;
+    KivioDoc doc;
 
-  if(!doc.loadXML(0, domIn)) {
-    KMessageBox::error(0, i18n("Malformed XML data."), i18n("Export Error"));
-    return KoFilter::WrongFormat;
-  }
+    if (!doc.loadXML(0, domIn)) {
+        KMessageBox::error(0, i18n("Malformed XML data."), i18n("Export Error"));
+        return KoFilter::WrongFormat;
+    }
 
-  ImageExportDialog dlg;
+    ImageExportDialog dlg;
 
-  QStringList pageNames;
-  QList<KivioPage*> pageList = doc.map()->pageList();
-  
-  foreach(KivioPage* page, pageList) {
-    pageNames.append(page->pageName());
-  }
+    QStringList pageNames;
+    QList<KivioPage*> pageList = doc.map()->pageList();
 
-  KoZoomHandler zoom;
+    foreach(KivioPage* page, pageList) {
+        pageNames.append(page->pageName());
+    }
 
-  dlg.setPageList(pageNames);
-  KivioPage* page = doc.map()->firstPage();
-  QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
-  dlg.setInitialCustomSize(size);
+    KoZoomHandler zoom;
 
-  if(dlg.exec() != QDialog::Accepted) {
-    return KoFilter::UserCancelled;
-  }
+    dlg.setPageList(pageNames);
+    KivioPage* page = doc.map()->firstPage();
+    QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
+    dlg.setInitialCustomSize(size);
 
-  page = doc.map()->findPage(dlg.selectedPage());
+    if (dlg.exec() != QDialog::Accepted) {
+        return KoFilter::UserCancelled;
+    }
 
-  if(!page) {
-    kDebug() <<"The page named" << dlg.selectedPage() <<" wasn't found!!";
-    return KoFilter::InternalError;
-  }
+    page = doc.map()->findPage(dlg.selectedPage());
 
-  if(dlg.usePageBorders()) {
-    size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
-  } else {
-    size = zoom.zoomSize(page->getRectForAllStencils().size());
-  }
+    if (!page) {
+        kDebug() << "The page named" << dlg.selectedPage() << " wasn't found!!";
+        return KoFilter::InternalError;
+    }
 
-  if(dlg.useCustomSize()) {
-    QSize customSize = dlg.customSize();
-    float zw = (float)customSize.width() / (float)size.width();
-    float zh = (float)customSize.height() / (float)size.height();
-    float z = qMin(zw, zh);
+    if (dlg.usePageBorders()) {
+        size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
+    } else {
+        size = zoom.zoomSize(page->getRectForAllStencils().size());
+    }
 
-    zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
-    size = customSize;
-  }
+    if (dlg.useCustomSize()) {
+        QSize customSize = dlg.customSize();
+        float zw = (float)customSize.width() / (float)size.width();
+        float zh = (float)customSize.height() / (float)size.height();
+        float z = qMin(zw, zh);
 
-  int border = dlg.margin();
+        zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
+        size = customSize;
+    }
 
-  size.setWidth(size.width() + (border * 2));
-  size.setHeight(size.height() + (border * 2));
+    int border = dlg.margin();
 
-  QPixmap pixmap = QPixmap(size);
-  pixmap.fill(Qt::white);
-  KivioScreenPainter kpainter;
-  kpainter.start(&pixmap);
+    size.setWidth(size.width() + (border * 2));
+    size.setHeight(size.height() + (border * 2));
 
-  int translationX = border;
-  int translationY = border;
+    QPixmap pixmap = QPixmap(size);
+    pixmap.fill(Qt::white);
+    KivioScreenPainter kpainter;
+    kpainter.start(&pixmap);
 
-  if(!dlg.usePageBorders()) {
-    QPoint point = zoom.zoomPoint(page->getRectForAllStencils().topLeft());
-    translationX += point.x();
-    translationY += point.y();
-  }
+    int translationX = border;
+    int translationY = border;
 
-  kpainter.setTranslation(-translationX, -translationY);
-  page->printContent(kpainter, &zoom);
+    if (!dlg.usePageBorders()) {
+        QPoint point = zoom.zoomPoint(page->getRectForAllStencils().topLeft());
+        translationX += point.x();
+        translationY += point.y();
+    }
 
-  if(!pixmap.save(m_chain->outputFile(), format.local8Bit())) {
-    return KoFilter::CreationError;
-  }
+    kpainter.setTranslation(-translationX, -translationY);
+    page->printContent(kpainter, &zoom);
 
-  return KoFilter::OK;
+    if (!pixmap.save(m_chain->outputFile(), format.local8Bit())) {
+        return KoFilter::CreationError;
+    }
+
+    return KoFilter::OK;
 }
 
 }

@@ -34,55 +34,55 @@ class Cell
 {
 public:
 
-  Cell( Sheet* sheet, unsigned column, unsigned row );
-  virtual ~Cell();
+    Cell(Sheet* sheet, unsigned column, unsigned row);
+    virtual ~Cell();
 
-  Sheet* sheet();
+    Sheet* sheet();
 
-  unsigned column() const;
-  unsigned row() const;
+    unsigned column() const;
+    unsigned row() const;
 
-  UString name() const;
-  static UString name( unsigned column, unsigned row );
+    UString name() const;
+    static UString name(unsigned column, unsigned row);
 
-  UString columnLabel() const;
-  static UString columnLabel( unsigned column );
+    UString columnLabel() const;
+    static UString columnLabel(unsigned column);
 
-  Value value() const;
-  void setValue( const Value& value );
+    Value value() const;
+    void setValue(const Value& value);
 
-  UString formula() const;
-  void setFormula( const UString& formula );
+    UString formula() const;
+    void setFormula(const UString& formula);
 
-  Format format() const;
-  void setFormat( const Format& format );
+    Format format() const;
+    void setFormat(const Format& format);
 
-  unsigned columnSpan() const;
-  void setColumnSpan( unsigned span );
+    unsigned columnSpan() const;
+    void setColumnSpan(unsigned span);
 
-  unsigned rowSpan() const;
-  void setRowSpan( unsigned span );
+    unsigned rowSpan() const;
+    void setRowSpan(unsigned span);
 
-  bool isCovered() const;
-  void setCovered( bool covered );
+    bool isCovered() const;
+    void setCovered(bool covered);
 
-  bool hasHyperlink() const;
-  UString hyperlinkDisplayName() const;
-  UString hyperlinkLocation() const;
-  UString hyperlinkTargetFrameName() const;
-  void removeHyperlink();
-  void setHyperlink( const UString& displayName, const UString& location, const UString& targetFrameName );
-  
-  UString note() const;
-  void setNote( const UString &n );
-  
+    bool hasHyperlink() const;
+    UString hyperlinkDisplayName() const;
+    UString hyperlinkLocation() const;
+    UString hyperlinkTargetFrameName() const;
+    void removeHyperlink();
+    void setHyperlink(const UString& displayName, const UString& location, const UString& targetFrameName);
+
+    UString note() const;
+    void setNote(const UString &n);
+
 private:
-  // no copy or assign
-  Cell( const Cell& );
-  Cell& operator=( const Cell& );
+    // no copy or assign
+    Cell(const Cell&);
+    Cell& operator=(const Cell&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 
 };
 

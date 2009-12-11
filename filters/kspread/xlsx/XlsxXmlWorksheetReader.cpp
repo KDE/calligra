@@ -51,9 +51,9 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const QVector<QString>& _sharedStrings,
     const XlsxStyles& _styles)
-    : worksheetNumber(_worksheetNumber)
-    , worksheetName(_worksheetName), themes(&_themes)
-    , sharedStrings(&_sharedStrings), styles(&_styles)
+        : worksheetNumber(_worksheetNumber)
+        , worksheetName(_worksheetName), themes(&_themes)
+        , sharedStrings(&_sharedStrings), styles(&_styles)
 {
 }
 
@@ -61,20 +61,19 @@ const char* XlsxXmlWorksheetReader::officeValue = "office:value";
 const char* XlsxXmlWorksheetReader::officeDateValue = "office:date-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
 
-class XlsxXmlWorksheetReader::Private {
+class XlsxXmlWorksheetReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlCommonReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -122,19 +121,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "", MSOOXML::Schemas::spreadsheetml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("", MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::spreadsheetml));
         return KoFilter::WrongFormat;
     }
@@ -203,11 +202,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     m_tableStyle = KoGenStyle(KoGenStyle::StyleAutoTable, "table");
 //! @todo hardcoded master page name
     m_tableStyle.addAttribute("style:master-page-name",
-        QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
+                              QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
 //! @todo table:display="true" hardcoded
     m_tableStyle.addProperty("table:display", XlsxXmlWorksheetReader::constTrue);
 
-    const QString currentTableStyleName( mainStyles->lookup(m_tableStyle) );
+    const QString currentTableStyleName(mainStyles->lookup(m_tableStyle));
     body->addAttribute("table:style-name", currentTableStyleName);
 
     while (!atEnd()) {
@@ -241,7 +240,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(defaultRowHeight, m_defaultRowHeight) // in pt
 
     while (!atEnd()) {
@@ -297,7 +296,7 @@ void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
     tableColumnStyle.addProperty("style:column-width", widthString);
     tableColumnStyle.addProperty("fo:break-before", "auto");
 
-    const QString currentTableColumnStyleName( mainStyles->lookup(tableColumnStyle) );
+    const QString currentTableColumnStyleName(mainStyles->lookup(tableColumnStyle));
     body->addAttribute("table:style-name", currentTableColumnStyleName);
 }
 
@@ -322,7 +321,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     m_columnCount++;
     body->startElement("table:table-column"); // CASE #S2500?
@@ -412,7 +411,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::saveRowStyle(const QString& _
             return KoFilter::WrongFormat;
         tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
     }
-    const QString currentTableRowStyleName( mainStyles->lookup(tableRowStyle) );
+    const QString currentTableRowStyleName(mainStyles->lookup(tableRowStyle));
     body->addAttribute("table:style-name", currentTableRowStyleName);
     return KoFilter::OK;
 }
@@ -445,7 +444,7 @@ void XlsxXmlWorksheetReader::appendTableCells(uint cells)
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(spans)
     TRY_READ_ATTR_WITHOUT_NS(ht)
@@ -492,7 +491,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     }
     if (m_currentColumn < 255) {
         // output empty cells after the last filled cell
-        appendTableCells( 256 - m_currentColumn - 1 );
+        appendTableCells(256 - m_currentColumn - 1);
     }
 
     body->endElement(); // table:table-row
@@ -556,7 +555,7 @@ static QByteArray convertFormula(const QByteArray& formula)
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
     uint referencedColumn = -1;
     if (!r.isEmpty()) {
@@ -564,7 +563,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         kDebug() << "referencedColumn:" << r << referencedColumn;
         if (m_currentColumn == -1 && referencedColumn > 0) {
             // output empty cells before the first filled cell
-            appendTableCells( referencedColumn );
+            appendTableCells(referencedColumn);
         }
         m_currentColumn = referencedColumn;
     }
@@ -622,42 +621,36 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             );
             valueType = MsooXmlReader::constString;
             // no valueAttr
-        }
-        else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
+        } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
 //! @todo handle value properly
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constString;
             // no valueAttr
-        }
-        else if (t == QLatin1String("b")) {
+        } else if (t == QLatin1String("b")) {
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constBoolean;
             valueAttr = XlsxXmlWorksheetReader::officeBooleanValue;
-        }
-        else if (t == QLatin1String("d")) {
+        } else if (t == QLatin1String("d")) {
 //! @todo handle value properly
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constDate;
             valueAttr = XlsxXmlWorksheetReader::officeDateValue;
-        }
-        else if (t == QLatin1String("str")) {
+        } else if (t == QLatin1String("str")) {
 //! @todo handle value properly
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constString;
             // no valueAttr
-        }
-        else if (t == QLatin1String("n") || t.isEmpty() /* already checked if numeric */) {
+        } else if (t == QLatin1String("n") || t.isEmpty() /* already checked if numeric */) {
             if (!t.isEmpty()) { // sanity check
                 if (!valueIsNumeric(m_value)) {
-                    raiseError( i18n("Expected integer of floating point number") );
+                    raiseError(i18n("Expected integer of floating point number"));
                     return KoFilter::WrongFormat;
                 }
             }
             body->addTextSpan(m_value);
             valueType = MsooXmlReader::constFloat;
             valueAttr = XlsxXmlWorksheetReader::officeValue;
-        }
-        else {
+        } else {
             raiseUnexpectedAttributeValueError(t, "c@t");
             return KoFilter::WrongFormat;
         }
@@ -693,7 +686,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
 //! @todo hardcoded master style name
             cellStyle.addAttribute("style:parent-style-name",
-                QLatin1String("Excel_20_Built-in_20_Normal"));
+                                   QLatin1String("Excel_20_Built-in_20_Normal"));
 
             KoCharacterStyle cellCharacterStyle;
             fontStyle->setupCharacterStyle(&cellCharacterStyle);
@@ -703,7 +696,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
             cellFormat->setupCellStyle(&cellStyle);
 
-            const QString cellStyleName( mainStyles->lookup(cellStyle) );
+            const QString cellStyleName(mainStyles->lookup(cellStyle));
             body->addAttribute("table:style-name", cellStyleName);
         }
 
@@ -732,7 +725,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 {
     READ_PROLOGUE
     readNext();
-    m_formula = convertFormula( text().toString().toLatin1() );
+    m_formula = convertFormula(text().toString().toLatin1());
     kDebug() << m_formula;
 
     while (!atEnd()) {

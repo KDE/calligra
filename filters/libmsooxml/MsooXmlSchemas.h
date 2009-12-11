@@ -26,10 +26,12 @@
 
 #include "msooxml_export.h"
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 //! MSOOXML Schemas
-class MSOOXML_EXPORT Schemas {
+class MSOOXML_EXPORT Schemas
+{
 public:
     //! Content types
     static const char* const contentTypes;
@@ -47,7 +49,8 @@ public:
     static const char* const presentationml;
 
     //! DrawingML
-    class MSOOXML_EXPORT drawingml {
+    class MSOOXML_EXPORT drawingml
+    {
     public:
         //! A.4 DrawingML - Framework
         static const char* const main;
@@ -65,7 +68,8 @@ public:
 
 
     //! A.6 Shared MLs
-    class MSOOXML_EXPORT officeDocument {
+    class MSOOXML_EXPORT officeDocument
+    {
     public:
         static const char* const math;
         static const char* const bibliography;

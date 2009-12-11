@@ -35,7 +35,7 @@ class QPolygon;
 #include <QPolygon>
 
 class Msod :
-    private KWmf
+            private KWmf
 {
 public:
 
@@ -110,8 +110,7 @@ private:
     unsigned m_requestedShapeId;
     bool m_isRequiredDrawing;
     const char *m_delayStream;
-    struct
-    {
+    struct {
         unsigned type;
         char *data;
         unsigned length;
@@ -129,24 +128,20 @@ private:
 public:
 
     // Common Header (MSOBFH)
-    typedef struct
-    {
-        union
-        {
+    typedef struct {
+        union {
             quint32 info;
-            struct
-            {
-                quint32 ver: 4;
-                quint32 inst: 12;
-                quint32 fbt: 16;
+            struct {
+            quint32 ver: 4;
+            quint32 inst: 12;
+            quint32 fbt: 16;
             } fields;
         } opcode;
         quint32 cbLength;
     } Header;
 
 private:
-    typedef enum
-    {
+    typedef enum {
         msoblipERROR,               // An error occurred during loading.
         msoblipUNKNOWN,             // An unknown blip type.
         msoblipEMF,                 // Windows Enhanced Metafile.
@@ -167,8 +162,12 @@ private:
         QString extension;
         unsigned length;
         const char *data;
-        Image() { data = 0L; }
-        ~Image() { delete [] data; }
+        Image() {
+            data = 0L;
+        }
+        ~Image() {
+            delete [] data;
+        }
     };
     QVector<Image*> m_images;
 
@@ -282,16 +281,13 @@ private:
     private:
         Msod &m_parent;
 
-        typedef struct
-        {
-            union
-            {
+        typedef struct {
+            union {
                 quint16 info;
-                struct
-                {
-                    quint16 pid: 14;
-                    quint16 fBid: 1;
-                    quint16 fComplex: 1;
+                struct {
+                quint16 pid: 14;
+                quint16 fBid: 1;
+                quint16 fComplex: 1;
                 } fields;
             } opcode;
             quint32 value;

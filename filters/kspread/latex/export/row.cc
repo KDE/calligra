@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug stream */
+#include <kdebug.h>  /* for kDebug stream */
 
 #include "row.h"
 //Added by qt3to4:
@@ -30,7 +30,7 @@
 /*******************************************/
 Row::Row(): Format()
 {
-	setRow(0);
+    setRow(0);
 }
 
 /*******************************************/
@@ -42,9 +42,9 @@ Row::~Row()
 
 void Row::analyze(const QDomNode node)
 {
-	_row = getAttr(node, "row").toLong();
-	_height = getAttr(node, "height").toDouble();
-	Format::analyze(getChild(node, "format"));
+    _row = getAttr(node, "row").toLong();
+    _height = getAttr(node, "height").toDouble();
+    Format::analyze(getChild(node, "format"));
 }
 
 /*******************************************/
@@ -52,16 +52,15 @@ void Row::analyze(const QDomNode node)
 /*******************************************/
 void Row::generate(QTextStream& out)
 {
-	//generateTopBorder(out);
-	if(getBrushStyle() >= 1)
-	{
-		out << "\\rowcolor";
-		generateColor(out);
-	}
-	//generateBottomBorder(out);
-		
-	//out << "m{" << getHeight() << "pt}";
-	
+    //generateTopBorder(out);
+    if (getBrushStyle() >= 1) {
+        out << "\\rowcolor";
+        generateColor(out);
+    }
+    //generateBottomBorder(out);
+
+    //out << "m{" << getHeight() << "pt}";
+
 }
 
 

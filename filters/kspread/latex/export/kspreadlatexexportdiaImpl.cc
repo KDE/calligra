@@ -55,96 +55,95 @@
  *  true to construct a modal dialog.
  */
 KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* parent,
-		const char* name_, bool modal, Qt::WFlags fl )
-    : LatexExportDia( parent, name_, modal, fl ), _in( in )
+        const char* name_, bool modal, Qt::WFlags fl)
+        : LatexExportDia(parent, name_, modal, fl), _in(in)
 {
-	int i = 0;
+    int i = 0;
 
-	kapp->restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
 
-	/* Recent files */
-	_config = new KConfig("kspreadlatexexportdialog");
-	//_config->setGroup( "KSpread latex export filter" );
-	QString value;
-	while(i < 10)
-	{
-		/*value = _config->readPathEntry( QString("Recent%1").arg(i), QString() );
-		kDebug(30522) <<"recent :" << value;
-		if(!value.isEmpty())
-		{
-			_recentList.append( value );
-			recentBox->insertItem(value);
-		}
-		else
-			i = 10;*/
-		i = i + 1;
-	}
+    /* Recent files */
+    _config = new KConfig("kspreadlatexexportdialog");
+    //_config->setGroup( "KSpread latex export filter" );
+    QString value;
+    while (i < 10) {
+        /*value = _config->readPathEntry( QString("Recent%1").arg(i), QString() );
+        kDebug(30522) <<"recent :" << value;
+        if(!value.isEmpty())
+        {
+         _recentList.append( value );
+         recentBox->insertItem(value);
+        }
+        else
+         i = 10;*/
+        i = i + 1;
+    }
 
-	new LatexExportAdaptor(this);
+    new LatexExportAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/filter/latex", this);
 
 
-	/* All these items inserted must not be translated so they are inserted here
-	 * without i18n() method. */
-	/*qualityComboBox->insertItem("final");
-  qualityComboBox->insertItem("draft");*/
+    /* All these items inserted must not be translated so they are inserted here
+     * without i18n() method. */
+    /*qualityComboBox->insertItem("final");
+     qualityComboBox->insertItem("draft");*/
 
-	classComboBox->addItem("article");
-  classComboBox->addItem("book");
-  classComboBox->addItem("letter");
-  classComboBox->addItem("report");
-  classComboBox->addItem("slides");
+    classComboBox->addItem("article");
+    classComboBox->addItem("book");
+    classComboBox->addItem("letter");
+    classComboBox->addItem("report");
+    classComboBox->addItem("slides");
 
-	encodingComboBox->addItem("unicode");
-  encodingComboBox->addItem("ansinew");
-  encodingComboBox->addItem("applemac");
-  encodingComboBox->addItem("ascii");
-  encodingComboBox->addItem("latin1");
-  encodingComboBox->addItem("latin2");
-  encodingComboBox->addItem("latin3");
-  encodingComboBox->addItem("latin5");
-  encodingComboBox->addItem("cp437");
-  encodingComboBox->addItem("cp437de");
-  encodingComboBox->addItem("cp850");
-  encodingComboBox->addItem("cp852");
-  encodingComboBox->addItem("cp865");
-  encodingComboBox->addItem("cp1250");
-  encodingComboBox->addItem("cp1252");
-  encodingComboBox->addItem("decmulti");
-  encodingComboBox->addItem("next");
+    encodingComboBox->addItem("unicode");
+    encodingComboBox->addItem("ansinew");
+    encodingComboBox->addItem("applemac");
+    encodingComboBox->addItem("ascii");
+    encodingComboBox->addItem("latin1");
+    encodingComboBox->addItem("latin2");
+    encodingComboBox->addItem("latin3");
+    encodingComboBox->addItem("latin5");
+    encodingComboBox->addItem("cp437");
+    encodingComboBox->addItem("cp437de");
+    encodingComboBox->addItem("cp850");
+    encodingComboBox->addItem("cp852");
+    encodingComboBox->addItem("cp865");
+    encodingComboBox->addItem("cp1250");
+    encodingComboBox->addItem("cp1252");
+    encodingComboBox->addItem("decmulti");
+    encodingComboBox->addItem("next");
 
-	languagesList->insertItem("american");
-	languagesList->insertItem("austrian");
-	languagesList->insertItem("bahasa");
-	languagesList->insertItem("brazil");
-	languagesList->insertItem("breton");
-	languagesList->insertItem("catalan");
-	languagesList->insertItem("croatian");
-	languagesList->insertItem("czech");
-	languagesList->insertItem("danish");
-	languagesList->insertItem("dutch");
-	languagesList->insertItem("english");
-	languagesList->insertItem("esperanto");
-	languagesList->insertItem("finnish");
-	languagesList->insertItem("francais");
-	languagesList->insertItem("french");
-	languagesList->insertItem("galician");
-	languagesList->insertItem("german");
-	languagesList->insertItem("germanb");
-	languagesList->insertItem("hungarian");
-	languagesList->insertItem("magyar");
-	languagesList->insertItem("italian");
-	languagesList->insertItem("norsk");
-	languagesList->insertItem("nynorsk");
-	languagesList->insertItem("polish");
-	languagesList->insertItem("portuges");
-	languagesList->insertItem("romanian");
-	languagesList->insertItem("russian");
-	languagesList->insertItem("spanish");
-	languagesList->insertItem("slovak" );
-	languagesList->insertItem("slovene");
-	languagesList->insertItem("swedish");
-	languagesList->insertItem("turkish");
+    languagesList->insertItem("american");
+    languagesList->insertItem("austrian");
+    languagesList->insertItem("bahasa");
+    languagesList->insertItem("brazil");
+    languagesList->insertItem("breton");
+    languagesList->insertItem("catalan");
+    languagesList->insertItem("croatian");
+    languagesList->insertItem("czech");
+    languagesList->insertItem("danish");
+    languagesList->insertItem("dutch");
+    languagesList->insertItem("english");
+    languagesList->insertItem("esperanto");
+    languagesList->insertItem("finnish");
+    languagesList->insertItem("francais");
+    languagesList->insertItem("french");
+    languagesList->insertItem("galician");
+    languagesList->insertItem("german");
+    languagesList->insertItem("germanb");
+    languagesList->insertItem("hungarian");
+    languagesList->insertItem("magyar");
+    languagesList->insertItem("italian");
+    languagesList->insertItem("norsk");
+    languagesList->insertItem("nynorsk");
+    languagesList->insertItem("polish");
+    languagesList->insertItem("portuges");
+    languagesList->insertItem("romanian");
+    languagesList->insertItem("russian");
+    languagesList->insertItem("spanish");
+    languagesList->insertItem("slovak");
+    languagesList->insertItem("slovene");
+    languagesList->insertItem("swedish");
+    languagesList->insertItem("turkish");
 }
 
 /*
@@ -161,8 +160,8 @@ KSpreadLatexExportDiaImpl::~KSpreadLatexExportDiaImpl()
  */
 void KSpreadLatexExportDiaImpl::reject()
 {
-	kDebug(30522) <<"Export cancelled";
-	QDialog::reject();
+    kDebug(30522) << "Export cancelled";
+    QDialog::reject();
 }
 
 /**
@@ -171,72 +170,70 @@ void KSpreadLatexExportDiaImpl::reject()
  */
 void KSpreadLatexExportDiaImpl::accept()
 {
-	hide();
-	kDebug(30522) <<"KSPREAD LATEX EXPORT FILTER --> BEGIN";
-	Config* config = Config::instance();
+    hide();
+    kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> BEGIN";
+    Config* config = Config::instance();
 
-	/* Document tab */
-	if(embededButton == typeGroup->selected())
-		config->setEmbeded(true);
-	else
-		config->setEmbeded(false);
-	if(kwordStyleButton == styleGroup->selected())
-		config->useKwordStyle();
-	else
-		config-> useLatexStyle();
-	/* class names are not translated */
-	config->setClass(classComboBox->currentText());
+    /* Document tab */
+    if (embededButton == typeGroup->selected())
+        config->setEmbeded(true);
+    else
+        config->setEmbeded(false);
+    if (kwordStyleButton == styleGroup->selected())
+        config->useKwordStyle();
+    else
+        config-> useLatexStyle();
+    /* class names are not translated */
+    config->setClass(classComboBox->currentText());
 
-	if(qualityComboBox->currentIndex() == 0)
-		config->setQuality("final");
-	else
-		config->setQuality("draft");
-	config->setDefaultFontSize(defaultFontSize->value());
+    if (qualityComboBox->currentIndex() == 0)
+        config->setQuality("final");
+    else
+        config->setQuality("draft");
+    config->setDefaultFontSize(defaultFontSize->value());
 
-	/* Pictures tab */
-	if(pictureCheckBox->isChecked())
-		config->convertPictures();
-	config->setPicturesDir(pathPictures->url().path());
+    /* Pictures tab */
+    if (pictureCheckBox->isChecked())
+        config->convertPictures();
+    config->setPicturesDir(pathPictures->url().path());
 
-	/* Language tab */
-	config->setEncoding(encodingComboBox->currentText());
-	for(unsigned int index = 0; index < langUsedList->count(); index++)
-	{
-		kDebug(30522) <<"lang. :" << langUsedList->item(index)->text();
-		config->addLanguage(langUsedList->item(index)->text());
-	}
+    /* Language tab */
+    config->setEncoding(encodingComboBox->currentText());
+    for (unsigned int index = 0; index < langUsedList->count(); index++) {
+        kDebug(30522) << "lang. :" << langUsedList->item(index)->text();
+        config->addLanguage(langUsedList->item(index)->text());
+    }
 
-	/* The default language is the first language in the list */
-	if(langUsedList->item(0) != NULL)
-		config->setDefaultLanguage(langUsedList->item(0)->text());
-	if( !(langUsedList->currentText().isEmpty()) )
-	{
-		kDebug(30522) <<"default lang. :" << langUsedList->currentText();
-		config->setDefaultLanguage(langUsedList->currentText());
-	}
+    /* The default language is the first language in the list */
+    if (langUsedList->item(0) != NULL)
+        config->setDefaultLanguage(langUsedList->item(0)->text());
+    if (!(langUsedList->currentText().isEmpty())) {
+        kDebug(30522) << "default lang. :" << langUsedList->currentText();
+        config->setDefaultLanguage(langUsedList->currentText());
+    }
 
-	Document doc(_in, _fileOut);
-	kDebug(30522) <<"---------- analyze file -------------";
-	doc.analyze();
-	kDebug(30522) <<"---------- generate file -------------";
-	doc.generate();
-	kDebug(30522) <<"KSPREAD LATEX EXPORT FILTER --> END";
+    Document doc(_in, _fileOut);
+    kDebug(30522) << "---------- analyze file -------------";
+    doc.analyze();
+    kDebug(30522) << "---------- generate file -------------";
+    doc.generate();
+    kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> END";
 }
 
 void KSpreadLatexExportDiaImpl::addLanguage()
 {
-	kDebug(30522) <<"add a new supported language" << languagesList->currentText();
-	QString text = languagesList->currentText();
-	languagesList->removeItem(languagesList->currentItem());
-	langUsedList->insertItem(text);
+    kDebug(30522) << "add a new supported language" << languagesList->currentText();
+    QString text = languagesList->currentText();
+    languagesList->removeItem(languagesList->currentItem());
+    langUsedList->insertItem(text);
 }
 
 void KSpreadLatexExportDiaImpl::removeLanguage()
 {
-	kDebug(30522) <<"remove a language" << langUsedList->currentText();
-	QString text = langUsedList->currentText();
-	langUsedList->removeItem(langUsedList->currentItem());
-	languagesList->insertItem(text);
+    kDebug(30522) << "remove a language" << langUsedList->currentText();
+    QString text = langUsedList->currentText();
+    langUsedList->removeItem(langUsedList->currentItem());
+    languagesList->insertItem(text);
 }
 
 #include <kspreadlatexexportdiaImpl.moc>

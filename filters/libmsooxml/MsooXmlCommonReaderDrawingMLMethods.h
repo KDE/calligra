@@ -27,20 +27,20 @@
 // included by DocxXmlDocumentReader
 
 protected:
-    KoFilter::ConversionStatus read_pic();
-    KoFilter::ConversionStatus read_nvPicPr();
-    KoFilter::ConversionStatus read_cNvPr();
-    KoFilter::ConversionStatus read_cNvPicPr();
-    KoFilter::ConversionStatus read_nvSpPr();
-    KoFilter::ConversionStatus read_cNvSpPr();
-    KoFilter::ConversionStatus read_sp();
-    KoFilter::ConversionStatus read_spPr();
-    KoFilter::ConversionStatus read_xfrm();
-    KoFilter::ConversionStatus read_off();
-    KoFilter::ConversionStatus read_ext();
+KoFilter::ConversionStatus read_pic();
+KoFilter::ConversionStatus read_nvPicPr();
+KoFilter::ConversionStatus read_cNvPr();
+KoFilter::ConversionStatus read_cNvPicPr();
+KoFilter::ConversionStatus read_nvSpPr();
+KoFilter::ConversionStatus read_cNvSpPr();
+KoFilter::ConversionStatus read_sp();
+KoFilter::ConversionStatus read_spPr();
+KoFilter::ConversionStatus read_xfrm();
+KoFilter::ConversionStatus read_off();
+KoFilter::ConversionStatus read_ext();
 
-    KoGenStyle m_currentDrawStyle; //!< set by read_drawing(), used by read_pic()
+KoGenStyle m_currentDrawStyle; //!< set by read_drawing(), used by read_pic()
 
-    int m_svgX, m_svgY; //!< set by read_off()
-    int m_svgWidth, m_svgHeight; //! set by read_ext()
+int m_svgX, m_svgY; //!< set by read_off()
+int m_svgWidth, m_svgHeight; //! set by read_ext()
 #endif

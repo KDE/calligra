@@ -32,35 +32,39 @@ class XSLTImportDia : public XSLTDialog
 {
     Q_OBJECT
 
-	QString _fileIn;
-	QString _fileOut;
-	QByteArray _arrayIn;
-	KoStore* _out;
-	/** xslt file current */
-	KUrl _currentFile;
-	QByteArray _format;
-	KConfig* _config;
+    QString _fileIn;
+    QString _fileOut;
+    QByteArray _arrayIn;
+    KoStore* _out;
+    /** xslt file current */
+    KUrl _currentFile;
+    QByteArray _format;
+    KConfig* _config;
     KConfigGroup grp;
-	/** List of the most recent xslt file used. */
-	QStringList _recentList;
+    /** List of the most recent xslt file used. */
+    QStringList _recentList;
 
-	/** Lits use for common xslt files. */
-	QStringList _dirsList;
-	QStringList _filesList;
-	QStringList _namesList;
+    /** Lits use for common xslt files. */
+    QStringList _dirsList;
+    QStringList _filesList;
+    QStringList _namesList;
 
 public:
-    XSLTImportDia(KoStore*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0 );
+    XSLTImportDia(KoStore*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0);
     ~XSLTImportDia();
 
-	void setInputFile(QString file)  { _fileIn = file; }
-	void setOutputFile(QString file) { _fileOut = file; }
+    void setInputFile(QString file)  {
+        _fileIn = file;
+    }
+    void setOutputFile(QString file) {
+        _fileOut = file;
+    }
 
 public slots:
     virtual void cancelSlot();
     virtual void chooseSlot();
-	virtual void chooseRecentSlot();
-	virtual void chooseCommonSlot();
+    virtual void chooseRecentSlot();
+    virtual void chooseCommonSlot();
     virtual void okSlot();
 
 };

@@ -37,23 +37,22 @@ class KWordGenerator;
 
 class MSWriteImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private:
-	WRIDevice *m_device;
-	MSWrite::InternalParser *m_parser;
-	KWordGenerator *m_generator;
+    WRIDevice *m_device;
+    MSWrite::InternalParser *m_parser;
+    KWordGenerator *m_generator;
 
 public:
-	MSWriteImport (QObject *parent, const QStringList &);
-	virtual ~MSWriteImport ();
+    MSWriteImport(QObject *parent, const QStringList &);
+    virtual ~MSWriteImport();
 
-	KoFilter::ConversionStatus convert (const QByteArray &from, const QByteArray &to);
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
-	void sigProgress (const int value)
-	{
-		emit KoFilter::sigProgress (value);
-	}
+    void sigProgress(const int value) {
+        emit KoFilter::sigProgress(value);
+    }
 };
 
 #endif // MSWRITEIMPORT_H

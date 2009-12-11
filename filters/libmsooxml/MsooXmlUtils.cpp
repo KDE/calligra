@@ -130,7 +130,7 @@ using namespace MSOOXML;
 //-----------------------------------------
 
 KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc,
-                                               QString& errorMessage, const QString & fileName)
+        QString& errorMessage, const QString & fileName)
 {
     // Error variables for QDomDocument::setContent
     errorMessage.clear();
@@ -143,7 +143,7 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
     QXmlInputSource source(io);
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
-    KoOdfReadStore::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    KoOdfReadStore::setupXmlReader(reader, true /*namespaceProcessing*/);
 
     bool ok = doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
@@ -159,25 +159,25 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
 }
 
 KoFilter::ConversionStatus Utils::loadAndParse(KoXmlDocument& doc, const KZip* zip,
-                                               QString& errorMessage, const QString& fileName)
+        QString& errorMessage, const QString& fileName)
 {
     KoFilter::ConversionStatus status;
-    std::auto_ptr<QIODevice> device( openDeviceForFile(zip, errorMessage, fileName, status) );
+    std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
     if (!device.get())
         return status;
-    return loadAndParse( device.get(), doc, errorMessage, fileName );
+    return loadAndParse(device.get(), doc, errorMessage, fileName);
 }
 
 KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
-                                                       const KZip* zip,
-                                                       KoOdfWriters *writers,
-                                                       QString& errorMessage,
-                                                       const QString& fileName,
-                                                       MsooXmlReaderContext* context)
+        const KZip* zip,
+        KoOdfWriters *writers,
+        QString& errorMessage,
+        const QString& fileName,
+        MsooXmlReaderContext* context)
 {
     Q_UNUSED(writers)
     KoFilter::ConversionStatus status;
-    std::auto_ptr<QIODevice> device( openDeviceForFile(zip, errorMessage, fileName, status) );
+    std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
     if (!device.get())
         return status;
     reader->setDevice(device.get());
@@ -196,7 +196,7 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
                                     KoFilter::ConversionStatus& status)
 {
     kDebug() << "Trying to open" << fileName;
-    const KArchiveEntry* entry = zip->directory()->entry( fileName );
+    const KArchiveEntry* entry = zip->directory()->entry(fileName);
     errorMessage.clear();
     if (!entry) {
         errorMessage = i18n("Entry '%1' not found.", fileName);
@@ -218,12 +218,12 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
 
 #define BLOCK_SIZE 4096
 KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessage,
-                                           const QString& sourceName,
-                                           KoStore *outputStore,
-                                           const QString& destinationName)
+        const QString& sourceName,
+        KoStore *outputStore,
+        const QString& destinationName)
 {
     KoFilter::ConversionStatus status;
-    std::auto_ptr<QIODevice> inputDevice( Utils::openDeviceForFile(zip, errorMessage, sourceName, status) );
+    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
     if (!inputDevice.get()) {
         return status;
     }
@@ -251,7 +251,7 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
 }
 #undef BLOCK_SIZE
 
-KoFilter::ConversionStatus Utils::loadThumbnail( QImage& thumbnail, KZip* zip )
+KoFilter::ConversionStatus Utils::loadThumbnail(QImage& thumbnail, KZip* zip)
 {
 //! @todo
     Q_UNUSED(thumbnail)
@@ -265,8 +265,8 @@ static bool checkTag(const KoXmlElement& el, const char* expectedTag, const char
 {
     if (el.tagName() != expectedTag) {
         kWarning()
-            << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString())
-            << "tag name=" << el.tagName() << " expected:" << expectedTag;
+        << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString())
+        << "tag name=" << el.tagName() << " expected:" << expectedTag;
         return false;
     }
     return true;
@@ -285,7 +285,7 @@ static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
 KoFilter::ConversionStatus Utils::loadContentTypes(
     const KoXmlDocument& contentTypesXML, QMultiHash<QByteArray, QByteArray>& contentTypes)
 {
-    KoXmlElement typesEl( contentTypesXML.documentElement() );
+    KoXmlElement typesEl(contentTypesXML.documentElement());
     if (!checkTag(typesEl, "Types", "documentElement")) {
         return KoFilter::WrongFormat;
     }
@@ -293,25 +293,24 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
         return KoFilter::WrongFormat;
     }
     KoXmlElement e;
-    forEachElement( e, typesEl ) {
-        const QString tagName( e.tagName() );
+    forEachElement(e, typesEl) {
+        const QString tagName(e.tagName());
         if (!checkNsUri(e, Schemas::contentTypes)) {
             return KoFilter::WrongFormat;
         }
 
         if (tagName == "Override") {
             //ContentType -> PartName mapping
-            const QByteArray atrPartName( e.attribute("PartName").toLatin1() );
-            const QByteArray atrContentType( e.attribute("ContentType").toLatin1() );
+            const QByteArray atrPartName(e.attribute("PartName").toLatin1());
+            const QByteArray atrContentType(e.attribute("ContentType").toLatin1());
             if (atrPartName.isEmpty() || atrContentType.isEmpty()) {
                 kWarning() << "Invalid data for" << tagName
-                    << "element: PartName=" << atrPartName << "ContentType=" << atrContentType;
+                << "element: PartName=" << atrPartName << "ContentType=" << atrContentType;
                 return KoFilter::WrongFormat;
             }
 //kDebug() << atrContentType << "->" << atrPartName;
             contentTypes.insert(atrContentType, atrPartName);
-        }
-        else if (tagName == "Default") {
+        } else if (tagName == "Default") {
 //! @todo
             // skip for now...
         }
@@ -357,7 +356,7 @@ public:
 QBrush Utils::ST_HighlightColor_to_QColor(const QString& colorName)
 {
     K_GLOBAL_STATIC(ST_HighlightColorMapping, s_ST_HighlightColor_to_QColor)
-    const QColor c( s_ST_HighlightColor_to_QColor->value(colorName) );
+    const QColor c(s_ST_HighlightColor_to_QColor->value(colorName));
     if (c.isValid())
         return QBrush(c);
     return QBrush(); // for "none" or anything unsupported
@@ -393,17 +392,16 @@ QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modul
         color.getRgb(&r, &g, &b);
         if (offset.valid) {
             return QColor(
-                int(floor((255 - r) * (100.0 - modulation.value) / 100.0 + r)),
-                int(floor((255 - g) * offset.value / 100.0 + g)),
-                int(floor((255 - b) * offset.value / 100.0 + b)),
-                color.alpha());
-        }
-        else {
+                       int(floor((255 - r) * (100.0 - modulation.value) / 100.0 + r)),
+                       int(floor((255 - g) * offset.value / 100.0 + g)),
+                       int(floor((255 - b) * offset.value / 100.0 + b)),
+                       color.alpha());
+        } else {
             return QColor(
-                int(floor(r * modulation.value / 100.0)),
-                int(floor(g * modulation.value / 100.0)),
-                int(floor(b * modulation.value / 100.0)),
-                color.alpha());
+                       int(floor(r * modulation.value / 100.0)),
+                       int(floor(g * modulation.value / 100.0)),
+                       int(floor(b * modulation.value / 100.0)),
+                       color.alpha());
         }
     }
     return color;
@@ -438,7 +436,7 @@ public:
 QByteArray Utils::ST_PlaceholderType_to_ODF(const QByteArray& ecmaType)
 {
     K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
-    QHash<QByteArray, QByteArray>::ConstIterator it( s_ST_PlaceholderType_to_ODF->constFind(ecmaType) );
+    QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType));
     if (it == s_ST_PlaceholderType_to_ODF->constEnd())
         return "outline";
     return it.value();
@@ -465,8 +463,7 @@ struct UnderlineStyle {
         KoCharacterStyle::LineType type_,
         KoCharacterStyle::LineWeight weight_,
         KoCharacterStyle::LineMode mode_ = KoCharacterStyle::ContinuousLineMode)
-    : style(style_), type(type_), weight(weight_), mode(mode_)
-    {
+            : style(style_), type(type_), weight(weight_), mode(mode_) {
     }
 
     KoCharacterStyle::LineStyle style;
@@ -480,40 +477,37 @@ typedef QHash<QByteArray, UnderlineStyle*> UnderlineStylesHashBase;
 class UnderlineStylesHash : public UnderlineStylesHashBase
 {
 public:
-    UnderlineStylesHash()
-    {
+    UnderlineStylesHash() {
         // default:
         insert("-",
-            new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
-                    KoCharacterStyle::AutoLineWeight)
-        );
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
         // 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681:
         insert("single",
-            new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
-                    KoCharacterStyle::AutoLineWeight)
-        );
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
 //! @todo more styles
 
         // 20.1.10.82 ST_TextUnderlineType (Text Underline Types), DrawingML ECMA-376 p.3450:
         insert("none",
-            new UnderlineStyle(KoCharacterStyle::NoLineStyle, KoCharacterStyle::NoLineType,
-                    KoCharacterStyle::AutoLineWeight)
-        );
+               new UnderlineStyle(KoCharacterStyle::NoLineStyle, KoCharacterStyle::NoLineType,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
         insert("sng",
-            new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
-                    KoCharacterStyle::AutoLineWeight)
-        );
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
 //! @todo more styles
     }
 
-    ~UnderlineStylesHash()
-    {
+    ~UnderlineStylesHash() {
         qDeleteAll(*this);
     }
 
     void setup(const QString& msooxmlName,
-               KoCharacterStyle* textStyleProperties)
-    {
+               KoCharacterStyle* textStyleProperties) {
         UnderlineStyle* style = value(msooxmlName.toLatin1());
         if (!style)
             style = value("-");
@@ -539,7 +533,7 @@ void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* te
 //-----------------------------------------
 
 Utils::XmlWriteBuffer::XmlWriteBuffer()
-    : m_origWriter(0), m_newWriter(0)
+        : m_origWriter(0), m_newWriter(0)
 {
 }
 

@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug stream */
+#include <kdebug.h>  /* for kDebug stream */
 #include "listtable.h"
 
 /*******************************************/
@@ -35,7 +35,7 @@ ListTable::ListTable()
 /*******************************************/
 ListTable::~ListTable()
 {
-	/* Just call the parent destructor */
+    /* Just call the parent destructor */
 }
 
 /*******************************************/
@@ -43,15 +43,14 @@ ListTable::~ListTable()
 /*******************************************/
 Table* ListTable::isNewTable(QString grpMgr)
 {
-	Table *current = 0;
+    Table *current = 0;
 
-	/* Parcourir les tables et tester chaque nom de table */
-	for(current = first(); current != 0; current = next())
-	{
-		if(current->getGrpMgr() == grpMgr)
-			return current;
-	}
-	return 0;
+    /* Parcourir les tables et tester chaque nom de table */
+    for (current = first(); current != 0; current = next()) {
+        if (current->getGrpMgr() == grpMgr)
+            return current;
+    }
+    return 0;
 }
 
 /*******************************************/
@@ -59,23 +58,20 @@ Table* ListTable::isNewTable(QString grpMgr)
 /*******************************************/
 void ListTable::add(Element* elt)
 {
-	Table* newTable = 0;
-	/* If the GrpMng exist in one element 
-	 * update it
-	 * else
-	 * add
-	 */
-	if((newTable = isNewTable(elt->getGrpMgr())) == 0)
-	{
-		kDebug(30522) <<"NEW TABLE !!";
-		newTable = new Table(elt->getGrpMgr());
-		newTable->append(elt);
-		append(newTable);
-	}
-	else
-	{
-		kDebug(30522) <<"UPDATE TABLE :" << elt->getGrpMgr();
-		newTable->append(elt);
-	}
+    Table* newTable = 0;
+    /* If the GrpMng exist in one element
+     * update it
+     * else
+     * add
+     */
+    if ((newTable = isNewTable(elt->getGrpMgr())) == 0) {
+        kDebug(30522) << "NEW TABLE !!";
+        newTable = new Table(elt->getGrpMgr());
+        newTable->append(elt);
+        append(newTable);
+    } else {
+        kDebug(30522) << "UPDATE TABLE :" << elt->getGrpMgr();
+        newTable->append(elt);
+    }
 }
 

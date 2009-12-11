@@ -26,20 +26,24 @@
 
 class Text: public Element
 {
-	public:
-		Text();
-		Text(const char * text);
+public:
+    Text();
+    Text(const char * text);
 
-		~Text();
+    ~Text();
 
-		QString getText() const { return _text; }
+    QString getText() const {
+        return _text;
+    }
 
-		void setText(QString text) { _text = text; }
+    void setText(QString text) {
+        _text = text;
+    }
 
-		void print(int tab = 0);
+    void print(int tab = 0);
 
-	private:
-		QString _text;
+private:
+    QString _text;
 
 };
 

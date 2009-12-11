@@ -52,21 +52,21 @@ public:
     /**
      * Load WMF file. Returns true on success.
      */
-    virtual bool load( const QString& fileName );
-    virtual bool load( const QByteArray& array );
+    virtual bool load(const QString& fileName);
+    virtual bool load(const QByteArray& array);
 
     /**
      * play the WMF file => call virtuals functions
      */
-    virtual bool play(  );
+    virtual bool play();
 
     /**
      * Returns true if the metafile is standard / placeable / enhanced / valid
      */
-    bool isStandard( void ) const;
-    bool isPlaceable( void ) const;
-    bool isEnhanced( void ) const;
-    bool isValid( void ) const;
+    bool isStandard(void) const;
+    bool isPlaceable(void) const;
+    bool isEnhanced(void) const;
+    bool isValid(void) const;
 
     /**
      * Returns the bounding rectangle
@@ -74,20 +74,20 @@ public:
      * Placeable Meta File : return the bounding box from header
      * always in logical coordinate
      */
-    virtual QRect boundingRect( void ) const;
+    virtual QRect boundingRect(void) const;
 
     /**
      * Returns the default DotPerInch for placeable meta file,
      * return 0 for Standard meta file
      */
-    int defaultDpi( void ) const;
+    int defaultDpi(void) const;
 
     /**
      * Activate debug mode.
      * nbFunc : number of functions to draw
      * nbFunc!=0 switch to debug mode with trace
      */
-    void setDebug( int nbFunc );
+    void setDebug(int nbFunc);
 
     // -------------------------------------------------------------------------
     // A virtual QPainter : inherit those virtuals functions
@@ -98,52 +98,52 @@ public:
     virtual void  restore() = 0;
 
     // Drawing tools
-    virtual void  setFont( const QFont & ) = 0;
+    virtual void  setFont(const QFont &) = 0;
     // the pen : the width of the pen is in logical coordinate
-    virtual void  setPen( const QPen &p ) = 0;
+    virtual void  setPen(const QPen &p) = 0;
     virtual const QPen &pen() const = 0;
-    virtual void  setBrush( const QBrush & ) = 0;
+    virtual void  setBrush(const QBrush &) = 0;
 
     // Drawing attributes/modes
-    virtual void  setBackgroundColor( const QColor & ) = 0;
-    virtual void  setBackgroundMode( Qt::BGMode ) = 0;
-    virtual void  setCompositionMode( QPainter::CompositionMode ) = 0;
+    virtual void  setBackgroundColor(const QColor &) = 0;
+    virtual void  setBackgroundMode(Qt::BGMode) = 0;
+    virtual void  setCompositionMode(QPainter::CompositionMode) = 0;
 
     // Change logical Coordinate
     // some wmf files call those functions several times in the middle of a drawing
     // others doesn't call setWindow* at all
-    virtual void  setWindowOrg( int left, int top ) = 0;
-    virtual void  setWindowExt( int width, int height ) = 0;
+    virtual void  setWindowOrg(int left, int top) = 0;
+    virtual void  setWindowExt(int width, int height) = 0;
 
     // Clipping
     // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
-    virtual void  setClipRegion( const QRegion & ) = 0;
+    virtual void  setClipRegion(const QRegion &) = 0;
     virtual QRegion clipRegion() = 0;
 
     // Graphics drawing functions
-    virtual void  moveTo( int x, int y ) = 0;
-    virtual void  lineTo( int x, int y ) = 0;
-    virtual void  drawRect( int x, int y, int w, int h ) = 0;
-    virtual void  drawRoundRect( int x, int y, int w, int h, int = 25, int = 25 ) = 0;
-    virtual void  drawEllipse( int x, int y, int w, int h ) = 0;
-    virtual void  drawArc( int x, int y, int w, int h, int a, int alen ) = 0;
-    virtual void  drawPie( int x, int y, int w, int h, int a, int alen ) = 0;
-    virtual void  drawChord( int x, int y, int w, int h, int a, int alen ) = 0;
-    virtual void  drawPolyline( const QPolygon &pa ) = 0;
-    virtual void  drawPolygon( const QPolygon &pa, bool winding=false ) = 0;
+    virtual void  moveTo(int x, int y) = 0;
+    virtual void  lineTo(int x, int y) = 0;
+    virtual void  drawRect(int x, int y, int w, int h) = 0;
+    virtual void  drawRoundRect(int x, int y, int w, int h, int = 25, int = 25) = 0;
+    virtual void  drawEllipse(int x, int y, int w, int h) = 0;
+    virtual void  drawArc(int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawPie(int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawChord(int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawPolyline(const QPolygon &pa) = 0;
+    virtual void  drawPolygon(const QPolygon &pa, bool winding = false) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    virtual void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false ) = 0;
-    virtual void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 ) = 0;
+    virtual void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false) = 0;
+    virtual void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    virtual void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation ) = 0;
+    virtual void  drawText(int x, int y, int w, int h, int flags, const QString &s, double rotation) = 0;
 
     // matrix transformation : only used for bitmap manipulation
-    virtual void  setMatrix( const QMatrix &, bool combine=false ) = 0;
+    virtual void  setMatrix(const QMatrix &, bool combine = false) = 0;
 
 private:
     KoWmfReadPrivate  *mKwmf;

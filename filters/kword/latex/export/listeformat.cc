@@ -24,7 +24,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug() stream */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "listeformat.h"
 
 /* PRIVATE METHODS         */
@@ -38,8 +38,8 @@
 /* Destructors             */
 FormatElt::~FormatElt()
 {
-	kDebug(30522) <<"Destruction d'un elementT";
-	remFormat();
+    kDebug(30522) << "Destruction d'un elementT";
+    remFormat();
 }
 
 /* Accessors               */
@@ -47,115 +47,109 @@ FormatElt::~FormatElt()
 /* Modifiors               */
 void FormatElt::setFormat(Format* format)
 {
-	_format = format;	
+    _format = format;
 }
 
 void FormatElt::remFormat()
 {
-	delete _format;
-	_format = 0;
+    delete _format;
+    _format = 0;
 }
 
 void FormatElt::setNext(FormatElt* next)
 {
-	_next = next;
+    _next = next;
 }
 
 void FormatElt::remNext()
 {
-	delete _next;
-	_next = 0;
+    delete _next;
+    _next = 0;
 }
 
 /* Operators               */
 FormatElt& FormatElt::operator = (const FormatElt & elt)
 {
-	_format = elt.getFormat();
-	_next   = elt.getNext();
-	return *this;
+    _format = elt.getFormat();
+    _next   = elt.getNext();
+    return *this;
 }
 
 //////////////////////////////////////////////////////////
 ListeFormat::ListeFormat()
 {
-	kDebug(30522) <<"Create format list";
-	_first  = 0;
-	_end    = 0;
-	_size   = 0;
+    kDebug(30522) << "Create format list";
+    _first  = 0;
+    _end    = 0;
+    _size   = 0;
 }
 
 ListeFormat::~ListeFormat()
 {
-	kDebug(30522) <<"Destruction of a list of format";
-	vider();
-	kDebug(30522) <<"ok";
+    kDebug(30522) << "Destruction of a list of format";
+    vider();
+    kDebug(30522) << "ok";
 }
 
 void ListeFormat::addLast(Format *elt)
 {
 
-	FormatElt *new_last = new FormatElt;
+    FormatElt *new_last = new FormatElt;
 
-	new_last->setFormat(elt);
+    new_last->setFormat(elt);
 
-	if(_first != 0)
-	{
-		_end->setNext(new_last);
-		_end = new_last;
-	}
-	else
-	{
-		/* La liste est vide => _last = _first; */
-		_end  = new_last;
-		_first = _end;
-	}	
-	_size = _size + 1;
+    if (_first != 0) {
+        _end->setNext(new_last);
+        _end = new_last;
+    } else {
+        /* La liste est vide => _last = _first; */
+        _end  = new_last;
+        _first = _end;
+    }
+    _size = _size + 1;
 }
 
 void ListeFormat::addFirst(Format* elt)
 {
-	FormatElt *new_first = new FormatElt;
+    FormatElt *new_first = new FormatElt;
 
-	new_first->setFormat(elt);
-	new_first->setNext(_first);
+    new_first->setFormat(elt);
+    new_first->setNext(_first);
 
-	_first = new_first;
-	if(_size == 0)
-	{
-		/* La liste est vide => _last = _first; */
-		_end = _first;
-	}	
-	_size = _size + 1;
+    _first = new_first;
+    if (_size == 0) {
+        /* La liste est vide => _last = _first; */
+        _end = _first;
+    }
+    _size = _size + 1;
 }
 
 void ListeFormat::remLast()
 {
-	FormatElt *new_last = new FormatElt(_first);
-	
-	for(int index = 1; index< _size - 1; new_last = new_last->getNext())
-	{ }
-	
-	delete _end;
-	_end = new_last;
-	_size = _size - 1;
+    FormatElt *new_last = new FormatElt(_first);
+
+    for (int index = 1; index < _size - 1; new_last = new_last->getNext()) { }
+
+    delete _end;
+    _end = new_last;
+    _size = _size - 1;
 }
 
 void ListeFormat::remFirst()
 {
-	FormatElt *first_saved;
+    FormatElt *first_saved;
 
-	first_saved = _first->getNext();
+    first_saved = _first->getNext();
 
-	delete _first;
-	_first = first_saved;
-	_size  = _size - 1;
+    delete _first;
+    _first = first_saved;
+    _size  = _size - 1;
 }
 
 void ListeFormat::vider()
 {
-	while(_first != 0)
-	{
-		remFirst();
-	}
+    while (_first != 0) {
+        remFirst();
+    }
 }
 

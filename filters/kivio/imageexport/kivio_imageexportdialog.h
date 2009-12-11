@@ -29,8 +29,8 @@ class ImageExportWidget;
 
 class ImageExportDialog : public KDialogBase
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     explicit ImageExportDialog(QWidget* parent = 0, const char* name = 0);
 
     void setPageList(const QStringList& pages);
@@ -42,7 +42,7 @@ class ImageExportDialog : public KDialogBase
     QSize customSize() const;
     int margin() const;
 
-  private:
+private:
     ImageExportWidget* m_mainWidget;
 };
 

@@ -56,7 +56,7 @@ public:
      *   absolute coord. reset the world transfomation Matrix (by default)
      *   relative coord. use the existing world transfomation Matrix
      */
-    bool play( QPaintDevice& target, bool relativeCoord=false );
+    bool play(QPaintDevice& target, bool relativeCoord = false);
 
 
 private:
@@ -68,16 +68,16 @@ private:
     void  restore();
 
     // Drawing tools
-    void  setFont( const QFont& font );
+    void  setFont(const QFont& font);
     // the pen : the width of the pen is in logical coordinate
-    void  setPen( const QPen& pen );
+    void  setPen(const QPen& pen);
     const QPen& pen() const;
-    void  setBrush( const QBrush& brush );
+    void  setBrush(const QBrush& brush);
 
     // Drawing attributes/modes
-    void  setBackgroundColor( const QColor& c );
-    void  setBackgroundMode( Qt::BGMode mode );
-    void  setCompositionMode( QPainter::CompositionMode mode );
+    void  setBackgroundColor(const QColor& c);
+    void  setBackgroundMode(Qt::BGMode mode);
+    void  setCompositionMode(QPainter::CompositionMode mode);
 
     /**
      * Change logical Coordinate
@@ -85,40 +85,40 @@ private:
      * others wmf files doesn't call setWindow* at all
      * negative width and height are possible
      */
-    void  setWindowOrg( int left, int top );
-    void  setWindowExt( int width, int height );
+    void  setWindowOrg(int left, int top);
+    void  setWindowExt(int width, int height);
 
     // Clipping
     // the 'CoordinateMode' is ommitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
-    void  setClipRegion( const QRegion &rec );
+    void  setClipRegion(const QRegion &rec);
     QRegion clipRegion();
 
     // Graphics drawing functions
-    void  moveTo( int x, int y );
-    void  lineTo( int x, int y );
-    void  drawRect( int x, int y, int w, int h );
-    void  drawRoundRect( int x, int y, int w, int h, int = 25, int = 25 );
-    void  drawEllipse( int x, int y, int w, int h );
-    void  drawArc( int x, int y, int w, int h, int a, int alen );
-    void  drawPie( int x, int y, int w, int h, int a, int alen );
-    void  drawChord( int x, int y, int w, int h, int a, int alen );
-    void  drawPolyline( const QPolygon& pa );
-    void  drawPolygon( const QPolygon& pa, bool winding=false );
+    void  moveTo(int x, int y);
+    void  lineTo(int x, int y);
+    void  drawRect(int x, int y, int w, int h);
+    void  drawRoundRect(int x, int y, int w, int h, int = 25, int = 25);
+    void  drawEllipse(int x, int y, int w, int h);
+    void  drawArc(int x, int y, int w, int h, int a, int alen);
+    void  drawPie(int x, int y, int w, int h, int a, int alen);
+    void  drawChord(int x, int y, int w, int h, int a, int alen);
+    void  drawPolyline(const QPolygon& pa);
+    void  drawPolygon(const QPolygon& pa, bool winding = false);
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false );
-    void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
+    void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false);
+    void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
+    void  drawText(int x, int y, int w, int h, int flags, const QString &s, double rotation);
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix( const QMatrix &, bool combine=false );
+    void  setMatrix(const QMatrix &, bool combine = false);
 
 private:
     QPainter mPainter;

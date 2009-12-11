@@ -39,9 +39,9 @@
 #include <QStack>
 
 /**
-  *@author 
+  *@author
   */
-typedef QPair<QString,QString> Parameter;
+typedef QPair<QString, QString> Parameter;
 typedef QList<Parameter*> Parameters;
 typedef QList<PathElement*> PathElements;
 
@@ -58,145 +58,151 @@ class KarbonDocumentHandler;
 
 class KarbonDocumentHandler : public DocumentHandlerBase
 {
-  private:
+private:
     KarbonAIParserBase *delegate;
-  public:
-    KarbonDocumentHandler (KarbonAIParserBase *delegate) : DocumentHandlerBase () { this->delegate = delegate; }
+public:
+    KarbonDocumentHandler(KarbonAIParserBase *delegate) : DocumentHandlerBase() {
+        this->delegate = delegate;
+    }
 
-    void gotBoundingBox (int llx, int lly, int urx, int ury);
-    void gotCreationDate (const char *val1,const char *val2);
-    void gotProcessColors (int colors);
+    void gotBoundingBox(int llx, int lly, int urx, int ury);
+    void gotCreationDate(const char *val1, const char *val2);
+    void gotProcessColors(int colors);
 };
 
 class KarbonGStateHandler : public GStateHandlerBase
 {
-  private:
+private:
     KarbonAIParserBase *delegate;
-  public:
-    KarbonGStateHandler (KarbonAIParserBase *delegate) : GStateHandlerBase() { this->delegate = delegate; }
+public:
+    KarbonGStateHandler(KarbonAIParserBase *delegate) : GStateHandlerBase() {
+        this->delegate = delegate;
+    }
 
-    void gotFillColor (AIColor &color);
-    void gotStrokeColor (AIColor &color);
+    void gotFillColor(AIColor &color);
+    void gotStrokeColor(AIColor &color);
 
-    void gotFlatness (double val);
-    void gotLineWidth (double val);
-    void gotLineCaps (int val);
-    void gotLineJoin (int val);
-    void gotMiterLimit (double val);
-    void gotWindingOrder (int val);
+    void gotFlatness(double val);
+    void gotLineWidth(double val);
+    void gotLineCaps(int val);
+    void gotLineJoin(int val);
+    void gotMiterLimit(double val);
+    void gotWindingOrder(int val);
 
 };
 
 class KarbonStructureHandler : public StructureHandlerBase
 {
-  private:
+private:
     KarbonAIParserBase *delegate;
-  public:
-    KarbonStructureHandler (KarbonAIParserBase *delegate) : StructureHandlerBase() { this->delegate = delegate; }
+public:
+    KarbonStructureHandler(KarbonAIParserBase *delegate) : StructureHandlerBase() {
+        this->delegate = delegate;
+    }
 
-   void gotBeginGroup (bool clipping);
-   void gotEndGroup (bool clipping);
-   void gotBeginCombination ();
-   void gotEndCombination ();
+    void gotBeginGroup(bool clipping);
+    void gotEndGroup(bool clipping);
+    void gotBeginCombination();
+    void gotEndCombination();
 
 };
 
 class KarbonPathHandler : public PathHandlerBase
 {
-  private:
+private:
     KarbonAIParserBase *delegate;
     FillMode m_fm;
-  public:
-    KarbonPathHandler (KarbonAIParserBase *delegate) : PathHandlerBase ()
-    {
-       m_fm = FM_EvenOdd;
-       this->delegate = delegate;
+public:
+    KarbonPathHandler(KarbonAIParserBase *delegate) : PathHandlerBase() {
+        m_fm = FM_EvenOdd;
+        this->delegate = delegate;
     }
 
-  void gotPathElement (PathElement &element);
-  void gotFillPath (bool closed, bool reset);
-  void gotStrokePath (bool closed);
-  void gotIgnorePath (bool closed, bool reset);
-  void gotClipPath (bool closed);
-  void gotFillMode (FillMode fm);
+    void gotPathElement(PathElement &element);
+    void gotFillPath(bool closed, bool reset);
+    void gotStrokePath(bool closed);
+    void gotIgnorePath(bool closed, bool reset);
+    void gotClipPath(bool closed);
+    void gotFillMode(FillMode fm);
 
 };
 
-class KarbonAIParserBase : public AIParserBase {
-  friend class KarbonDocumentHandler;
-  friend class KarbonGStateHandler;
-  friend class KarbonStructureHandler;
-  friend class KarbonPathHandler;
+class KarbonAIParserBase : public AIParserBase
+{
+    friend class KarbonDocumentHandler;
+    friend class KarbonGStateHandler;
+    friend class KarbonStructureHandler;
+    friend class KarbonPathHandler;
 
-public: 
-	KarbonAIParserBase();
-	~KarbonAIParserBase();
+public:
+    KarbonAIParserBase();
+    ~KarbonAIParserBase();
 
-  bool parse (QIODevice& fin, QDomDocument &doc);
+    bool parse(QIODevice& fin, QDomDocument &doc);
 private:
-  VPath *m_curKarbonPath;
-  KarbonDocument *m_document;
-  VLayer *m_layer;
-  VPath *m_combination;
-  QStack<VGroup*> m_groupStack;
+    VPath *m_curKarbonPath;
+    KarbonDocument *m_document;
+    VLayer *m_layer;
+    VPath *m_combination;
+    QStack<VGroup*> m_groupStack;
 
-  FillMode m_fm;
-  PathOutputType m_pot;
-  PathTransferType m_ptt;
+    FillMode m_fm;
+    PathOutputType m_pot;
+    PathTransferType m_ptt;
 
 //  BoundingBox  m_bbox;
-  KoRect m_bbox;
-  VFill m_fill;
-  VStroke m_stroke;
-/**  AIColor m_strokeColor;
-  AIColor m_fillColor;
-  double m_lineWidth;
-  double m_flatness;
-  int m_lineCaps;
-  int m_lineJoin;
-  double m_miterLimit; */
-  int m_windingOrder;
+    KoRect m_bbox;
+    VFill m_fill;
+    VStroke m_stroke;
+    /**  AIColor m_strokeColor;
+      AIColor m_fillColor;
+      double m_lineWidth;
+      double m_flatness;
+      int m_lineCaps;
+      int m_lineJoin;
+      double m_miterLimit; */
+    int m_windingOrder;
 
-  void doOutputCurrentPath2(PathOutputType type);
-  const VColor toKarbonColor (const AIColor &color);
-  void ensureLayer ();
+    void doOutputCurrentPath2(PathOutputType type);
+    const VColor toKarbonColor(const AIColor &color);
+    void ensureLayer();
 
-  VFill m_emptyFill;
-  VStroke m_emptyStroke;
+    VFill m_emptyFill;
+    VStroke m_emptyStroke;
 
 protected:
-  void setupHandlers();
-  void teardownHandlers();
+    void setupHandlers();
+    void teardownHandlers();
 
-  void parsingStarted();
-  void parsingFinished();
+    void parsingStarted();
+    void parsingFinished();
 
-  QString getParamList(Parameters& params);
+    QString getParamList(Parameters& params);
 
-  void gotPathElement (PathElement &element);
-  void gotFillPath (bool closed, bool reset, FillMode fm = FM_NonZero);
-  void gotStrokePath (bool closed);
-  void gotIgnorePath (bool closed, bool reset);
-  void gotClipPath (bool closed);
+    void gotPathElement(PathElement &element);
+    void gotFillPath(bool closed, bool reset, FillMode fm = FM_NonZero);
+    void gotStrokePath(bool closed);
+    void gotIgnorePath(bool closed, bool reset);
+    void gotClipPath(bool closed);
 
-  void gotFillColor (AIColor &color);
-  void gotStrokeColor (AIColor &color);
-  void gotBoundingBox (int llx, int lly, int urx, int ury);
+    void gotFillColor(AIColor &color);
+    void gotStrokeColor(AIColor &color);
+    void gotBoundingBox(int llx, int lly, int urx, int ury);
 
-  void gotFlatness (double val);
-  void gotLineWidth (double val);
-  void gotLineCaps (int val);
-  void gotLineJoin (int val);
-  void gotMiterLimit (double val);
-  void gotWindingOrder (int val);
-  void gotBeginGroup (bool clipping);
-  void gotEndGroup (bool clipping);
-  void gotBeginCombination ();
-  void gotEndCombination ();
+    void gotFlatness(double val);
+    void gotLineWidth(double val);
+    void gotLineCaps(int val);
+    void gotLineJoin(int val);
+    void gotMiterLimit(double val);
+    void gotWindingOrder(int val);
+    void gotBeginGroup(bool clipping);
+    void gotEndGroup(bool clipping);
+    void gotBeginCombination();
+    void gotEndCombination();
 
-  virtual void gotStartTag (const char *tagName, Parameters& params);
-  virtual void gotEndTag (const char *tagName);
-  virtual void gotSimpleTag (const char *tagName, Parameters& params);
+    virtual void gotStartTag(const char *tagName, Parameters& params);
+    virtual void gotEndTag(const char *tagName);
+    virtual void gotSimpleTag(const char *tagName, Parameters& params);
 };
 
 #endif

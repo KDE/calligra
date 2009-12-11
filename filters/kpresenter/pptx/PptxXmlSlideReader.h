@@ -32,7 +32,8 @@
 
 class PptxXmlSlideReaderContext;
 class PptxImport;
-namespace MSOOXML {
+namespace MSOOXML
+{
 class MsooXmlRelationships;
 }
 
@@ -97,7 +98,7 @@ protected:
     KoFilter::ConversionStatus read_lumMod();
     KoFilter::ConversionStatus read_lumOff();
 
-    typedef KoFilter::ConversionStatus (PptxXmlSlideReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(PptxXmlSlideReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     KoGenStyle m_currentPageStyle;

@@ -33,12 +33,12 @@
 #include <MsooXmlReader_p.h>
 
 DocxXmlStylesReader::DocxXmlStylesReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
+        : MSOOXML::MsooXmlReader(writers)
 {
 }
 
 DocxXmlStylesReader::DocxXmlStylesReader(QIODevice* io, KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(io, writers)
+        : MSOOXML::MsooXmlReader(io, writers)
 {
 }
 
@@ -65,19 +65,19 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     if (!expectNS(MSOOXML::Schemas::wordprocessingml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/    
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri() 
+//! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "w", MSOOXML::Schemas::wordprocessingml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
         return KoFilter::WrongFormat;
     }
@@ -304,23 +304,21 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPr()
 KoFilter::ConversionStatus DocxXmlStylesReader::read_lang()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
-// CASE #1100    
+    const QXmlStreamAttributes attrs(attributes());
+// CASE #1100
     TRY_READ_ATTR(bidi)
     QString language, country;
     if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(bidi, language, country)) {
         m_defaultParagraphStyle.addProperty("style:language-complex", language, KoGenStyle::TextType);
         m_defaultParagraphStyle.addProperty("style:country-complex", country, KoGenStyle::TextType);
-    }
-    else {
+    } else {
         kWarning() << "invalid value of \"bidi\" attribute:" << bidi << " - skipping";
     }
     TRY_READ_ATTR(val)
     if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(val, language, country)) {
         m_defaultParagraphStyle.addProperty("fo:language", language, KoGenStyle::TextType);
         m_defaultParagraphStyle.addProperty("fo:country", country, KoGenStyle::TextType);
-    }
-    else {
+    } else {
         kWarning() << "invalid value of \"val\" attribute:" << val << " - skipping";
     }
 
@@ -328,8 +326,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_lang()
     if (MSOOXML::Utils::ST_Lang_to_languageAndCountry(eastAsia, language, country)) {
         m_defaultParagraphStyle.addProperty("style:language-asian", language, KoGenStyle::TextType);
         m_defaultParagraphStyle.addProperty("style:country-asian", country, KoGenStyle::TextType);
-    }
-    else {
+    } else {
         kWarning() << "invalid value of \"eastAsia\" attribute:" << eastAsia << " - skipping";
     }
     //kDebug() << "bidi:" << bidi << "val:" << val << "eastAsia:" << eastAsia;
@@ -344,8 +341,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_lang()
 static QString themeFontName(const QString& asciiTheme)
 {
     if (asciiTheme.contains(QLatin1String("minor"))) {
-    }
-    else if (asciiTheme.contains(QLatin1String("major"))) {
+    } else if (asciiTheme.contains(QLatin1String("major"))) {
     }
     return QString();
 }
@@ -374,8 +370,8 @@ static QString themeFontName(const QString& asciiTheme)
 KoFilter::ConversionStatus DocxXmlStylesReader::read_rFonts()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
-// CASE #1153    
+    const QXmlStreamAttributes attrs(attributes());
+// CASE #1153
     TRY_READ_ATTR(ascii)
     m_defaultParagraphStyle.addProperty("style:font-name", ascii, KoGenStyle::TextType);
 // CASE #1155

@@ -56,10 +56,10 @@
 
 using namespace MSOOXML;
 
-MsooXmlImport::MsooXmlImport( const QString& bodyContentElement, QObject* parent )
-  : KoOdfExporter(bodyContentElement, parent),
-    m_zip(0),
-    m_outputStore(0)
+MsooXmlImport::MsooXmlImport(const QString& bodyContentElement, QObject* parent)
+        : KoOdfExporter(bodyContentElement, parent),
+        m_zip(0),
+        m_outputStore(0)
 {
 }
 
@@ -68,9 +68,9 @@ MsooXmlImport::~MsooXmlImport()
 }
 
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
-                                                         KoOdfWriters *writers)
+        KoOdfWriters *writers)
 {
-    kDebug() <<"######################## start ####################";
+    kDebug() << "######################## start ####################";
     KoFilter::ConversionStatus status = OK;
 //! @todo show this message in error details in the GUI:
     QString errorMessage;
@@ -78,16 +78,14 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     KZip zip(m_chain->inputFile());
     kDebug() << "Store created";
 
-    if ( !zip.open(QIODevice::ReadOnly) )
-    {
+    if (!zip.open(QIODevice::ReadOnly)) {
         errorMessage = i18n("Couldn't open the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
         return KoFilter::FileNotFound;
     }
 
-    if ( !zip.directory() )
-    {
+    if (!zip.directory()) {
         errorMessage = i18n("Couldn't read ZIP directory of the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
@@ -103,11 +101,10 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     m_outputStore = 0; // clear context
 
     QImage thumbnail;
-    if ( status == KoFilter::OK ) {
+    if (status == KoFilter::OK) {
         // We do not care about the failure
-        Utils::loadThumbnail( thumbnail, &zip );
-    }
-    else {
+        Utils::loadThumbnail(thumbnail, &zip);
+    } else {
         kDebug() << "openFile() != OK";
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
@@ -122,19 +119,19 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
     }
-    kDebug() <<"######################## done ####################";
+    kDebug() << "######################## done ####################";
     return status;
 }
 
 KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
-                                                   const QString& destinationName)
+        const QString& destinationName)
 {
     if (!m_zip || !m_outputStore) {
         return KoFilter::UsageError;
     }
     QString errorMessage;
     const KoFilter::ConversionStatus status = Utils::copyFile(
-        m_zip, errorMessage, sourceName, m_outputStore, destinationName);
+                m_zip, errorMessage, sourceName, m_outputStore, destinationName);
 //! @todo transmit the error to the GUI...
     kDebug() << errorMessage;
     return status;
@@ -142,7 +139,7 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
 
 static bool checkParsedXML(const char *xmlName, KoFilter::ConversionStatus status)
 {
-    if ( status != KoFilter::OK ) {
+    if (status != KoFilter::OK) {
 //! @todo transmit the error to the GUI...
         kDebug() << xmlName << "could not be parsed correctly! Aborting!";
         return false;
@@ -158,10 +155,10 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
     if (!m_zip) {
         return KoFilter::UsageError;
     }
-    const QString path = m_contentTypes.value( contentType );
+    const QString path = m_contentTypes.value(contentType);
     kDebug() << contentType << ":" << path;
     return Utils::loadAndParseDocument(
-            reader, m_zip, writers, errorMessage, path, context);
+               reader, m_zip, writers, errorMessage, path, context);
 }
 
 KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
@@ -173,7 +170,7 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
     }
     QString errorMessage;
     KoFilter::ConversionStatus status = Utils::loadAndParseDocument(
-        reader, m_zip, reader, errorMessage, path, context);
+                                            reader, m_zip, reader, errorMessage, path, context);
     if (status != KoFilter::OK)
         reader->raiseError(errorMessage);
     return status;
@@ -187,7 +184,7 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
         return KoFilter::UsageError;
     }
     KoFilter::ConversionStatus status = Utils::loadAndParseDocument(
-        reader, m_zip, reader, errorMessage, path, context);
+                                            reader, m_zip, reader, errorMessage, path, context);
     return status;
 }
 
@@ -195,23 +192,23 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
 {
     static const char *Content_Types_xml =  "[Content_Types].xml";
     KoFilter::ConversionStatus status = loadAndParse(Content_Types_xml, m_contentTypesXML, errorMessage);
-    if ( !checkParsedXML(Content_Types_xml, status) ) {
+    if (!checkParsedXML(Content_Types_xml, status)) {
         return status;
     }
 
-    status = Utils::loadContentTypes( m_contentTypesXML, m_contentTypes );
-    if ( status != KoFilter::OK ) {
+    status = Utils::loadContentTypes(m_contentTypesXML, m_contentTypes);
+    if (status != KoFilter::OK) {
         return status;
     }
 
     MsooXmlRelationships relationships(*this, writers, errorMessage);
 
     status = parseParts(writers, &relationships, errorMessage);
-    if ( status != KoFilter::OK ) {
+    if (status != KoFilter::OK) {
         return status;
     }
 //! @todo sigProgress()
-    emit sigProgress( 10 );
+    emit sigProgress(10);
 
     return KoFilter::OK;
 }

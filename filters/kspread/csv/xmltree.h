@@ -28,26 +28,30 @@ class XMLTree
 {
 
 public:
-  // Create a tree.
-  // inputFileName is only used in order to name the sheet
-  XMLTree(QDomDocument &qdoc);
-  ~XMLTree();
+    // Create a tree.
+    // inputFileName is only used in order to name the sheet
+    XMLTree(QDomDocument &qdoc);
+    ~XMLTree();
 
-  // Return the whole XML as QString
-  //const QString part();
+    // Return the whole XML as QString
+    //const QString part();
 
-  // Create a new cell
-  bool cell( const QString & contents );
+    // Create a new cell
+    bool cell(const QString & contents);
 
-  // Tell about an empty cell (doesn't create it, just skips)
-  void emptycell() { column ++; } // easy heh ? ;)
+    // Tell about an empty cell (doesn't create it, just skips)
+    void emptycell() {
+        column ++;
+    } // easy heh ? ;)
 
-  // Go to new line
-  void newline() { row ++; column = 1; }
+    // Go to new line
+    void newline() {
+        row ++; column = 1;
+    }
 
 private:
-  int row, column;
-  QDomDocument &root;
-  QDomElement doc, map, sheet;
+    int row, column;
+    QDomDocument &root;
+    QDomElement doc, map, sheet;
 };
 #endif // XMLTREE_H

@@ -26,15 +26,15 @@
 #include "document.h"
 
 Document::Document(const KoStore* in, QString fileOut):
-		XmlParser(in), _file(fileOut), _in( in )
+        XmlParser(in), _file(fileOut), _in(in)
 {
-	//kDebug(30522) << fileIn;
-	kDebug(30522) << fileOut;
-	_filename = fileOut;
-	//setFileHeader(_fileHeader);
-	//setRoot(&_document);
-	Config::instance()->setEmbeded(false);
-	//analyze_config(config);
+    //kDebug(30522) << fileIn;
+    kDebug(30522) << fileOut;
+    _filename = fileOut;
+    //setFileHeader(_fileHeader);
+    //setRoot(&_document);
+    Config::instance()->setEmbeded(false);
+    //analyze_config(config);
 }
 
 Document::~Document()
@@ -44,23 +44,21 @@ Document::~Document()
 
 void Document::analyze()
 {
-	QDomNode node;
-	node = init();
-	kDebug(30522) <<"ANALYZE A DOC";
-	_document.analyze(node);
-	kDebug(30522) <<"END ANALYZE";
+    QDomNode node;
+    node = init();
+    kDebug(30522) << "ANALYZE A DOC";
+    _document.analyze(node);
+    kDebug(30522) << "END ANALYZE";
 }
 
 void Document::generate()
 {
-	if(_file.open(QIODevice::WriteOnly))
-	{
-		kDebug(30522) <<"GENERATION";
-		_out.setDevice(&_file);
-		_document.generate(_out, !isEmbeded());
-		//_out << getDocument();
-		_file.close();
-	}
-	else
-		kDebug(30522) <<"Can't use the file ...";
+    if (_file.open(QIODevice::WriteOnly)) {
+        kDebug(30522) << "GENERATION";
+        _out.setDevice(&_file);
+        _document.generate(_out, !isEmbeded());
+        //_out << getDocument();
+        _file.close();
+    } else
+        kDebug(30522) << "Can't use the file ...";
 }

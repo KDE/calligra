@@ -37,35 +37,35 @@ class KWord13Document;
 class KWord13OasisGenerator
 {
 public:
-    explicit KWord13OasisGenerator( void );
-    ~KWord13OasisGenerator( void );
-    
-    bool prepare( KWord13Document& kwordDocument );
-    bool generate( const QString& fileName, KWord13Document& kwordDocument );
+    explicit KWord13OasisGenerator(void);
+    ~KWord13OasisGenerator(void);
+
+    bool prepare(KWord13Document& kwordDocument);
+    bool generate(const QString& fileName, KWord13Document& kwordDocument);
 protected: // Generating phase
     /**
      * @param writer output writer
      * @param frameset the frameset to generate
      * @param main true if this is the man frameset.
      */
-    void generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main );
-    void writeStylesXml( void );
-    void writeContentXml( void );
-    void writeMetaXml( void );
+    void generateTextFrameset(KoXmlWriter& writer, KWordTextFrameset* frameset, bool main);
+    void writeStylesXml(void);
+    void writeContentXml(void);
+    void writeMetaXml(void);
     void writePreviewFile(void);
-    void writePictures( void );
+    void writePictures(void);
 protected: // Preparing phase
     /// Preparing page layout
-    void preparePageLayout( void );
-    void prepareTextFrameset( KWordTextFrameset* frameset );
+    void preparePageLayout(void);
+    void prepareTextFrameset(KWordTextFrameset* frameset);
     /// Also sets the name of the automatical style
-    void declareLayout( KWord13Layout& layout );
+    void declareLayout(KWord13Layout& layout);
     /// Also sets the name of the automatical style
-    void declareStyle( KWord13Layout& layout );
-    double numberOrNull( const QString& str ) const;
-    double positiveNumberOrNull( const QString& str ) const;
-    void fillGenStyleWithFormatOne( const KWord13FormatOneData& one, KoGenStyle& gs, const bool style ) const;
-    void fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const;
+    void declareStyle(KWord13Layout& layout);
+    double numberOrNull(const QString& str) const;
+    double positiveNumberOrNull(const QString& str) const;
+    void fillGenStyleWithFormatOne(const KWord13FormatOneData& one, KoGenStyle& gs, const bool style) const;
+    void fillGenStyleWithLayout(const KWord13Layout& layout, KoGenStyle& gs, const bool style) const;
 protected:
     KWord13Document* m_kwordDocument;
     KoStore* m_store;

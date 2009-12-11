@@ -39,67 +39,71 @@
  */
 class TextZone: public TextFormat
 {
-	/* TEXT MARKUP */
-	QString _text;
+    /* TEXT MARKUP */
+    QString _text;
 
-	public:
-		/* === Constructors ==== */
+public:
+    /* === Constructors ==== */
 
-		/**
-		 *  Creates a new instance of TextZone.
-		 *
-		 * @param para which is the parent class.
-		 */
-		TextZone(Para *para = 0);
-		/**
-		 *
-		 * Creates a new instance of TextZOne.
-		 *
-		 * @param text the text in this zone.
-		 * @param para which is the parent class.
-		 */
-		explicit TextZone(const QString& text, Para *para = 0);
+    /**
+     *  Creates a new instance of TextZone.
+     *
+     * @param para which is the parent class.
+     */
+    TextZone(Para *para = 0);
+    /**
+     *
+     * Creates a new instance of TextZOne.
+     *
+     * @param text the text in this zone.
+     * @param para which is the parent class.
+     */
+    explicit TextZone(const QString& text, Para *para = 0);
 
-		/* 
-		 * Destructor
-		 *
-		 */
-		virtual ~TextZone();
+    /*
+     * Destructor
+     *
+     */
+    virtual ~TextZone();
 
-		/* ==== Getters ==== */
-		/**
-		 * @return Specify if the text must be formatted.
-		 *
-		 */
-		bool    useFormat() const;
-		QString getText()  const { return _text; }
+    /* ==== Getters ==== */
+    /**
+     * @return Specify if the text must be formatted.
+     *
+     */
+    bool    useFormat() const;
+    QString getText()  const {
+        return _text;
+    }
 
-		/* ==== Setters ==== */
-		
-		void setText(const QString& text) { _text = text; }
+    /* ==== Setters ==== */
 
-		/* ==== Helpful functions ==== */
+    void setText(const QString& text) {
+        _text = text;
+    }
 
-		/**
-		 * convert a unicode text in latin1 enconding ala latex.
-		 */
-		QString escapeLatin1(const QString&);
-		
-		void analyze(const QDomNode);
-		void analyze();
-		virtual void generate(QTextStream&);
+    /* ==== Helpful functions ==== */
 
-		void generate_format_begin(QTextStream &);
-		void generate_format_end(QTextStream &);
+    /**
+     * convert a unicode text in latin1 enconding ala latex.
+     */
+    QString escapeLatin1(const QString&);
 
-	protected:
-		void display(const QString&, QTextStream&);
+    void analyze(const QDomNode);
+    void analyze();
+    virtual void generate(QTextStream&);
 
-	private:
-		/**
-		 * convert a special character in a latex command.
-		 */
-		void convert(QString&, int, const char*);
+    void generate_format_begin(QTextStream &);
+    void generate_format_end(QTextStream &);
+
+protected:
+    void display(const QString&, QTextStream&);
+
+private:
+    /**
+     * convert a special character in a latex command.
+     */
+    void convert(QString&, int, const char*);
 };
 
 

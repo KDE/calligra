@@ -30,12 +30,12 @@ class MSWriteImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    MSWriteImportDialog(QWidget* parent=NULL);
+    MSWriteImportDialog(QWidget* parent = NULL);
     ~MSWriteImportDialog(void);
 
     QTextCodec* getCodec(void) const;
     bool getSimulateLinespacing(void) const;
-	 bool getSimulateImageOffset (void) const;
+    bool getSimulateImageOffset(void) const;
 private:
     ImportDialogUI* m_dialog;
 private slots:

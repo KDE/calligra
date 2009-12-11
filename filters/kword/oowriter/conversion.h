@@ -32,25 +32,25 @@
 
 namespace Conversion
 {
-    // Convert paragraph alignment value
-    QString importAlignment( const QString& );
-    QString exportAlignment( const QString& );
+// Convert paragraph alignment value
+QString importAlignment(const QString&);
+QString exportAlignment(const QString&);
 
-    // Convert frame wrapping (run-around)
-    // KWord-1.3 knows runaround(int) and runaroundSide(QString)
-    QPair<int,QString> importWrapping( const QString& );
-    QString exportWrapping( const QPair<int,QString>& runAroundAttribs );
+// Convert frame wrapping (run-around)
+// KWord-1.3 knows runaround(int) and runaroundSide(QString)
+QPair<int, QString> importWrapping(const QString&);
+QString exportWrapping(const QPair<int, QString>& runAroundAttribs);
 
-    // Convert overflow behavior ("what to do if the text is bigger than the frame")
-    int importOverflowBehavior( const QString& oasisOverflowBehavior );
-    QString exportOverflowBehavior( const QString& kwordAutoCreateNewFrame );
+// Convert overflow behavior ("what to do if the text is bigger than the frame")
+int importOverflowBehavior(const QString& oasisOverflowBehavior);
+QString exportOverflowBehavior(const QString& kwordAutoCreateNewFrame);
 
-    // Convert numbering format (for a list) to a kword counter type
-    int importCounterType( const QString& numFormat );
+// Convert numbering format (for a list) to a kword counter type
+int importCounterType(const QString& numFormat);
 
-    // Header-footer helpers
-    QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd );
-    int headerTypeToFrameInfo( const QString& tagName, bool hasEvenOdd );
+// Header-footer helpers
+QString headerTypeToFramesetName(const QString& tagName, bool hasEvenOdd);
+int headerTypeToFrameInfo(const QString& tagName, bool hasEvenOdd);
 }
 
 #endif

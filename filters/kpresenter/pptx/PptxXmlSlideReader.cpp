@@ -75,20 +75,19 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     uint _slideNumber, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
     MSOOXML::MsooXmlRelationships& _relationships)
-    : MSOOXML::MsooXmlReaderContext(&_relationships),
-      import(&_import), path(_path), file(_file),
-      slideNumber(_slideNumber), themes(&_themes), type(_type),
-      slideProperties(&_slideProperties)
+        : MSOOXML::MsooXmlReaderContext(&_relationships),
+        import(&_import), path(_path), file(_file),
+        slideNumber(_slideNumber), themes(&_themes), type(_type),
+        slideProperties(&_slideProperties)
 {
 }
 
-class PptxXmlSlideReader::Private {
+class PptxXmlSlideReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
@@ -99,11 +98,11 @@ public:
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
-    , m_context(0)
-    , m_currentDoubleValue(0)
-    , m_currentShapeProperties(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlCommonReader(writers)
+        , m_context(0)
+        , m_currentDoubleValue(0)
+        , m_currentShapeProperties(0)
+        , d(new Private)
 {
     init();
 }
@@ -123,17 +122,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 {
     m_context = dynamic_cast<PptxXmlSlideReaderContext*>(context);
     Q_ASSERT(m_context);
-kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
+    kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
     if (m_context->type == SlideMaster) { // will be written
         m_context->slideProperties->clear();
     }
     const KoFilter::ConversionStatus result = readInternal();
-/*    if (m_context->type == SlideMaster) {
-        if (result == KoFilter::OK) {
-            m_context->slideProperties->clear();
-        }
-    }*/
-kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
+    /*    if (m_context->type == SlideMaster) {
+            if (result == KoFilter::OK) {
+                m_context->slideProperties->clear();
+            }
+        }*/
+    kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
     m_context = 0;
     if (result == KoFilter::OK)
         return KoFilter::OK;
@@ -164,19 +163,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::presentationml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "p", MSOOXML::Schemas::presentationml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("p", MSOOXML::Schemas::presentationml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::presentationml));
         return KoFilter::WrongFormat;
     }
@@ -184,8 +183,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 
     if (m_context->type == Slide) {
         TRY_READ(sld)
-    }
-    else {
+    } else {
         TRY_READ(sldMaster)
     }
     kDebug() << "===========finished============";
@@ -251,19 +249,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldMaster()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 {
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
-    for (int i=0; i<namespaces.count(); i++) {
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
     if (m_context->type == Slide) {
         m_currentPageStyle = KoGenStyle(KoGenStyle::StyleDrawingPage, "drawing-page"); // CASE #P109
-        m_currentPageStyle.addProperty( "presentation:background-visible", true ); // CASE #P111
-        m_currentPageStyle.addProperty( "presentation:background-objects-visible", true ); // CASE #P112
+        m_currentPageStyle.addProperty("presentation:background-visible", true);   // CASE #P111
+        m_currentPageStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
     }
 
     {
         MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
-                                                    // style before style name is known
+        // style before style name is known
 //        KoXmlWriter *origBody = body;
         if (m_context->type == Slide) {
             body = drawPageBuf.setWriter(body);
@@ -278,8 +276,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             }
             if (m_context->type == Slide) {
                 BREAK_IF_END_OF(sld);
-            }
-            else {
+            } else {
                 BREAK_IF_END_OF(sldMaster);
             }
         }
@@ -290,15 +287,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 //            body = origBody;
             {
                 body->startElement("draw:page"); // CASE #P300
-        //! @todo draw:master-page-name is hardcoded for now
+                //! @todo draw:master-page-name is hardcoded for now
                 body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
-        //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
+                //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
                 body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber)); //optional; CASE #P303
                 body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
-        //! @todo presentation:use-date-time-name //optional; CASE #P304
-        //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
+                //! @todo presentation:use-date-time-name //optional; CASE #P304
+                //! @todo body->addAttribute("presentation:presentation-page-layout-name", ...); //optional; CASE #P308
 
-                const QString currentPageStyleName( mainStyles->lookup(m_currentPageStyle) );
+                const QString currentPageStyleName(mainStyles->lookup(m_currentPageStyle));
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
 
@@ -449,7 +446,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     // Specifies the placeholder index. This is used when applying templates or changing
     // layouts to match a placeholder on one template/master to another.
     TRY_READ_ATTR_WITHOUT_NS(idx)
@@ -512,9 +509,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 //                    delete body;
 //                    body = origBody;
                     body = paragraphBuf.originalWriter();
-                    for (uint i=0; i<=m_pPr_lvl; i++) {
+                    for (uint i = 0; i <= m_pPr_lvl; i++) {
                         body->startElement("text:list");
-                        if (i==0) {
+                        if (i == 0) {
 //! @todo L2 hardcoded
                             body->addAttribute("text:style-name", "L2");
                         }
@@ -522,7 +519,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
                     }
 //                    body->addCompleteElement(&paragraphBuf);
                     (void)paragraphBuf.releaseWriter();
-                    for (uint i=0; i<=m_pPr_lvl; i++) {
+                    for (uint i = 0; i <= m_pPr_lvl; i++) {
                         body->endElement(); //text:list-item
                         body->endElement(); //text:list
                     }
@@ -624,7 +621,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_solidFill()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
     // get color from theme
@@ -633,7 +630,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
 //! @todo find proper theme, not just any
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     if (m_context->type == Slide) {
-       MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
+        MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
         colorItem = theme->colorScheme.value(val);
         if (!colorItem || !colorItem->toColorItem())
             return KoFilter::WrongFormat;
@@ -649,8 +646,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
                 m_currentDoubleValue = &lumMod.value;
                 TRY_READ(lumMod);
                 lumMod.valid = true;
-            }
-            else if (QUALIFIED_NAME_IS(lumOff)) {
+            } else if (QUALIFIED_NAME_IS(lumOff)) {
                 m_currentDoubleValue = &lumOff.value;
                 TRY_READ(lumOff);
                 lumOff.valid = true;
@@ -676,7 +672,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_schemeClr()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_lumMod()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
     bool ok;
@@ -697,7 +693,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_lumMod()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_lumOff()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
     bool ok;

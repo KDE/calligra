@@ -38,50 +38,58 @@
  */
 class Row: public Format
 {
-	
-	/* USEFUL DATA */
-	long _row;
-	double _height;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 */
+    /* USEFUL DATA */
+    long _row;
+    double _height;
 
-		/**
-		 * Creates a new instance of Row.
-		 */
-		Row();
+public:
+    /**
+     * Constructors
+     *
+     */
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of frames.
-		 */
+    /**
+     * Creates a new instance of Row.
+     */
+    Row();
 
-		virtual ~Row();
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of frames.
+     */
 
-		/**
-		 * getters
-		 */
+    virtual ~Row();
 
-		long   getRow() const { return _row; }
-		double getHeight() const { return _height; }
+    /**
+     * getters
+     */
 
-		/**
-		 * setters
-		 */
-		void setRow(int r) { _row = r; }
-		void setHeight(double h) { _height = h; }
-	
-		/**
-		 * Helpful functions
-		 */
-		void     analyze (const QDomNode);
-		void     generate  (QTextStream&);
+    long   getRow() const {
+        return _row;
+    }
+    double getHeight() const {
+        return _height;
+    }
 
-	private:
+    /**
+     * setters
+     */
+    void setRow(int r) {
+        _row = r;
+    }
+    void setHeight(double h) {
+        _height = h;
+    }
+
+    /**
+     * Helpful functions
+     */
+    void     analyze(const QDomNode);
+    void     generate(QTextStream&);
+
+private:
 
 };
 

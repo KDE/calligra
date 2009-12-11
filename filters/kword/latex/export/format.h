@@ -28,15 +28,14 @@
 #include <QColor>
 #include "xmlparser.h"
 
-enum _EFormat
-{
-	EF_ERROR,		/* 0 */
-	EF_TEXTZONE,		/* 1 */
-	EF_PICTURE,		/* 2 */
-	EF_TABULATOR,		/* 3 */
-	EF_VARIABLE,		/* 4 */
-	EF_FOOTNOTE,		/* 5 */
-	EF_ANCHOR		/* 6 */
+enum _EFormat {
+    EF_ERROR,  /* 0 */
+    EF_TEXTZONE,  /* 1 */
+    EF_PICTURE,  /* 2 */
+    EF_TABULATOR,  /* 3 */
+    EF_VARIABLE,  /* 4 */
+    EF_FOOTNOTE,  /* 5 */
+    EF_ANCHOR  /* 6 */
 };
 
 typedef enum _EFormat EFormat;
@@ -55,59 +54,76 @@ class Para;
  */
 class Format: public XmlParser
 {
-	EFormat _id;
-	unsigned int _pos;
-	unsigned int _taille;		/* Length of the string */
+    EFormat _id;
+    unsigned int _pos;
+    unsigned int _taille;  /* Length of the string */
 
-	/* USEFUL DATA */
-	Para*   _para;		/* Parent class */
+    /* USEFUL DATA */
+    Para*   _para;  /* Parent class */
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Format.
-		 *
-		 * @param para the parent class of the format.
-		 */
-		Format(Para *para= 0): _id((EFormat) 0), _para(para)
-		{}
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Format.
+     *
+     * @param para the parent class of the format.
+     */
+    Format(Para *para = 0): _id((EFormat) 0), _para(para) {}
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do
-		 */
-		virtual ~Format() {}
+    /*
+     * Destructor
+     *
+     * Nothing to do
+     */
+    virtual ~Format() {}
 
-		/**
-		 * Accessors
-		 */
-		EFormat getId        () const { return _id;   }
-		Para*   getPara      () const { return _para; }
-		EFormat getFormatType() const { return _id;   }
-		unsigned int getPos       () const { return _pos;       }
-		unsigned int getLength    () const { return _taille;    }
+    /**
+     * Accessors
+     */
+    EFormat getId() const {
+        return _id;
+    }
+    Para*   getPara() const {
+        return _para;
+    }
+    EFormat getFormatType() const {
+        return _id;
+    }
+    unsigned int getPos() const {
+        return _pos;
+    }
+    unsigned int getLength() const {
+        return _taille;
+    }
 
-		/**
-		 * Modifiers
-		 */
-		void setId   (int   id)   { _id   = (EFormat) id; }
-		void setPara (Para* para) { _para = para;         }
-		void setPos        (const unsigned int pos){ _pos       = pos;  }
-		void setLength     (const unsigned int t)  { _taille    = t; }
+    /**
+     * Modifiers
+     */
+    void setId(int   id)   {
+        _id   = (EFormat) id;
+    }
+    void setPara(Para* para) {
+        _para = para;
+    }
+    void setPos(const unsigned int pos) {
+        _pos       = pos;
+    }
+    void setLength(const unsigned int t)  {
+        _taille    = t;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		/**
-		 * Get information from a markup tree (only param of a format).
-		 */
-		virtual void analyze(const QDomNode);
+    /**
+     * Get information from a markup tree (only param of a format).
+     */
+    virtual void analyze(const QDomNode);
 
-		virtual void generate(QTextStream&) = 0;
-		//virtual void generate(QTextStream&, int = 0);
+    virtual void generate(QTextStream&) = 0;
+    //virtual void generate(QTextStream&, int = 0);
 
 };
 

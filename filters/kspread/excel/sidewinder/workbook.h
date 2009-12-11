@@ -18,7 +18,7 @@
 */
 
 #ifndef SWINDER_WORKBOOK_H
-#define SWINDER_WORKBOOK_H 
+#define SWINDER_WORKBOOK_H
 
 #include <QtCore/QVariant>
 
@@ -30,76 +30,76 @@ class Sheet;
 class Workbook
 {
 public:
-    
-  /*
-   * Constructs a new workbook.
-   */
 
-  Workbook();
+    /*
+     * Constructs a new workbook.
+     */
 
-  /*
-   * Destroys the workbook.
-   */
+    Workbook();
 
-  virtual ~Workbook();
+    /*
+     * Destroys the workbook.
+     */
 
-  /*
-   * Clears the workbook, i.e. makes it as if it is just constructed.
-   */
-  void clear();
+    virtual ~Workbook();
 
-  /*
-   * Loads the workbook from file. Returns false if error occurred.
-   */
-  bool load( const char* filename );
+    /*
+     * Clears the workbook, i.e. makes it as if it is just constructed.
+     */
+    void clear();
 
-  /*
-   * Appends a new sheet.
-   */
-  void appendSheet( Sheet* sheet );
+    /*
+     * Loads the workbook from file. Returns false if error occurred.
+     */
+    bool load(const char* filename);
 
-  /*
-   * Returns the number of worksheet in this workbook. A newly created
-   * workbook has no sheet, i.e. sheetCount() returns 0.
-   */
-  unsigned sheetCount() const;
+    /*
+     * Appends a new sheet.
+     */
+    void appendSheet(Sheet* sheet);
 
-  /*
-   * Returns a worksheet at given index. If index is invalid (e.g. larger
-   * than total number of worksheet), this function returns NULL.
-   */
-  Sheet* sheet( unsigned index );
+    /*
+     * Returns the number of worksheet in this workbook. A newly created
+     * workbook has no sheet, i.e. sheetCount() returns 0.
+     */
+    unsigned sheetCount() const;
 
-  enum PropertyType {
-    PIDSI_TITLE = 0x02,
-    PIDSI_SUBJECT = 0x03,
-    PIDSI_AUTHOR = 0x04,
-    PIDSI_KEYWORDS = 0x05,
-    PIDSI_COMMENTS = 0x06,
-    PIDSI_TEMPLATE = 0x07,
-    PIDSI_LASTAUTHOR = 0x08,
-    PIDSI_REVNUMBER = 0x09,
-    PIDSI_EDITTIME = 0x0a,
-    PIDSI_LASTPRINTED_DTM = 0x0b,
-    PIDSI_CREATE_DTM = 0x0c,
-    PIDSI_LASTSAVED_DTM = 0x0d,
-    PIDSI_APPNAME = 0x12,
-  };
+    /*
+     * Returns a worksheet at given index. If index is invalid (e.g. larger
+     * than total number of worksheet), this function returns NULL.
+     */
+    Sheet* sheet(unsigned index);
 
-  bool hasProperty( PropertyType type ) const;
-  QVariant property( PropertyType type, const QVariant &defaultValue = QVariant() ) const;
-  void setProperty( PropertyType type, const QVariant &value );
-  
-  bool isPasswordProtected() const;
-  void setPasswordProtected( bool p );
+    enum PropertyType {
+        PIDSI_TITLE = 0x02,
+        PIDSI_SUBJECT = 0x03,
+        PIDSI_AUTHOR = 0x04,
+        PIDSI_KEYWORDS = 0x05,
+        PIDSI_COMMENTS = 0x06,
+        PIDSI_TEMPLATE = 0x07,
+        PIDSI_LASTAUTHOR = 0x08,
+        PIDSI_REVNUMBER = 0x09,
+        PIDSI_EDITTIME = 0x0a,
+        PIDSI_LASTPRINTED_DTM = 0x0b,
+        PIDSI_CREATE_DTM = 0x0c,
+        PIDSI_LASTSAVED_DTM = 0x0d,
+        PIDSI_APPNAME = 0x12,
+    };
+
+    bool hasProperty(PropertyType type) const;
+    QVariant property(PropertyType type, const QVariant &defaultValue = QVariant()) const;
+    void setProperty(PropertyType type, const QVariant &value);
+
+    bool isPasswordProtected() const;
+    void setPasswordProtected(bool p);
 
 private:
-  // no copy or assign
-  Workbook( const Workbook& );
-  Workbook& operator=( const Workbook& );
+    // no copy or assign
+    Workbook(const Workbook&);
+    Workbook& operator=(const Workbook&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 }

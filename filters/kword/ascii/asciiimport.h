@@ -35,30 +35,29 @@ class QDomElement;
 #define MAXLINES  1000
 #define MAXCOLUMNS 15
 
- const double ptsperline = 15.0;
- const double ptsperchar = 6.0;
- const int spacespertab = 6;
- const double leftmargin = 56.0;
+const double ptsperline = 15.0;
+const double ptsperchar = 6.0;
+const int spacespertab = 6;
+const double leftmargin = 56.0;
 
- const uint shortline = 40;  // max length of a "short" line
+const uint shortline = 40;  // max length of a "short" line
 
- struct Tabs
-    {
+struct Tabs {
     int columns;
     int indent;
     QString field[MAXCOLUMNS];
     int width[MAXCOLUMNS];
-    };
+};
 
- struct Position
-    {
+struct Position {
     double top;
     double left;
     double bottom;
     double right;
-    };
+};
 
-class ASCIIImport : public KoFilter {
+class ASCIIImport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -67,39 +66,39 @@ public:
     ASCIIImport();
     virtual ~ASCIIImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 private: // not yet changed
 #if 0
-    void WriteOutTableCell( int table_no, int row, int col, Position *pos,
-                          QString &str);
+    void WriteOutTableCell(int table_no, int row, int col, Position *pos,
+                           QString &str);
 
-    bool Table( QString *Line, int *linecount, int no_lines,
-            int table_no, QString &tbl, QString &str );
+    bool Table(QString *Line, int *linecount, int no_lines,
+               int table_no, QString &tbl, QString &str);
 
 
 
-    bool ListItem( QString *Line, int no_lines,
-             QString &str );
+    bool ListItem(QString *Line, int no_lines,
+                  QString &str);
 #endif
-    bool IsListItem( QString FirstLine, QChar mark );
+    bool IsListItem(QString FirstLine, QChar mark);
 
 private:
     void prepareDocument(QDomDocument& mainDocument, QDomElement& mainFramesetElement);
     void processParagraph(QDomDocument& mainDocument,
-        QDomElement& mainFramesetElement, const QStringList& paragraph);
+                          QDomElement& mainFramesetElement, const QStringList& paragraph);
     void writeOutParagraph(QDomDocument& mainDocument,
-        QDomElement& mainFramesetElement,  const QString& name,
-        const QString& text, const int firstindent, const int secondindent);
+                           QDomElement& mainFramesetElement,  const QString& name,
+                           const QString& text, const int firstindent, const int secondindent);
     int Indent(const QString& line) const;
     int MultSpaces(const QString& text, const int index) const;
     bool IsWhiteSpace(const QChar& c) const;
     QString readLine(QTextStream& textstream, bool& lastCharWasCr);
 private: // converting functions
     void oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
-        QDomElement& mainFramesetElement);
+                       QDomElement& mainFramesetElement);
     void asIsConvert(QTextStream& stream, QDomDocument& mainDocument,
-        QDomElement& mainFramesetElement);
+                     QDomElement& mainFramesetElement);
     void sentenceConvert(QTextStream& stream, QDomDocument& mainDocument,
-        QDomElement& mainFramesetElement);
+                         QDomElement& mainFramesetElement);
 };
 #endif // ASCIIIMPORT_H

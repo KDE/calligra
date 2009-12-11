@@ -27,7 +27,7 @@
 #include <QtGui/QPainter>
 
 SvgPatternHelper::SvgPatternHelper()
-: m_patternUnits( ObjectBoundingBox ), m_patternContentUnits( UserSpaceOnUse )
+        : m_patternUnits(ObjectBoundingBox), m_patternContentUnits(UserSpaceOnUse)
 {
 }
 
@@ -35,7 +35,7 @@ SvgPatternHelper::~SvgPatternHelper()
 {
 }
 
-void SvgPatternHelper::setPatternUnits( Units units )
+void SvgPatternHelper::setPatternUnits(Units units)
 {
     m_patternUnits = units;
 }
@@ -45,7 +45,7 @@ SvgPatternHelper::Units SvgPatternHelper::patternUnits() const
     return m_patternUnits;
 }
 
-void SvgPatternHelper::setPatternContentUnits( Units units )
+void SvgPatternHelper::setPatternContentUnits(Units units)
 {
     m_patternContentUnits = units;
 }
@@ -55,7 +55,7 @@ SvgPatternHelper::Units SvgPatternHelper::patternContentUnits() const
     return m_patternContentUnits;
 }
 
-void SvgPatternHelper::setTransform( const QMatrix &transform )
+void SvgPatternHelper::setTransform(const QMatrix &transform)
 {
     m_transform = transform;
 }
@@ -65,41 +65,35 @@ QMatrix SvgPatternHelper::transform() const
     return m_transform;
 }
 
-void SvgPatternHelper::setPosition( const QPointF & position )
+void SvgPatternHelper::setPosition(const QPointF & position)
 {
     m_position = position;
 }
 
-QPointF SvgPatternHelper::position( const QRectF & objectBound ) const
+QPointF SvgPatternHelper::position(const QRectF & objectBound) const
 {
-    if( m_patternUnits == UserSpaceOnUse )
-    {
+    if (m_patternUnits == UserSpaceOnUse) {
         return m_position;
-    }
-    else
-    {
+    } else {
         return SvgUtil::objectToUserSpace(m_position, objectBound);
     }
 }
 
-void SvgPatternHelper::setSize( const QSizeF & size )
+void SvgPatternHelper::setSize(const QSizeF & size)
 {
     m_size = size;
 }
 
-QSizeF SvgPatternHelper::size( const QRectF & objectBound ) const
+QSizeF SvgPatternHelper::size(const QRectF & objectBound) const
 {
-    if( m_patternUnits == UserSpaceOnUse )
-    {
+    if (m_patternUnits == UserSpaceOnUse) {
         return m_size;
-    }
-    else
-    {
+    } else {
         return SvgUtil::objectToUserSpace(m_size, objectBound);
     }
 }
 
-void SvgPatternHelper::setContent( const KoXmlElement &content )
+void SvgPatternHelper::setContent(const KoXmlElement &content)
 {
     m_patternContent = content;
 }
@@ -109,52 +103,51 @@ KoXmlElement SvgPatternHelper::content() const
     return m_patternContent;
 }
 
-void SvgPatternHelper::copyContent( const SvgPatternHelper &other )
+void SvgPatternHelper::copyContent(const SvgPatternHelper &other)
 {
     m_patternContent = other.m_patternContent;
 }
 
-void SvgPatternHelper::setPatternContentViewbox( const QRectF &viewBox )
+void SvgPatternHelper::setPatternContentViewbox(const QRectF &viewBox)
 {
     m_patternContentViewbox = viewBox;
 }
 
-QImage SvgPatternHelper::generateImage( const QRectF &objectBound, const QList<KoShape*> content )
+QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape*> content)
 {
     KoZoomHandler zoomHandler;
-    
-    QSizeF patternSize = size( objectBound );
+
+    QSizeF patternSize = size(objectBound);
     if (patternSize.isEmpty())
         return QImage();
-    
-    QSizeF tileSize = zoomHandler.documentToView( patternSize );
+
+    QSizeF tileSize = zoomHandler.documentToView(patternSize);
     if (tileSize.isEmpty())
         return QImage();
-    
+
     QMatrix viewMatrix;
 
-    if( ! m_patternContentViewbox.isNull() )
-    {
-        viewMatrix.translate( -m_patternContentViewbox.x(), -m_patternContentViewbox.y() );
+    if (! m_patternContentViewbox.isNull()) {
+        viewMatrix.translate(-m_patternContentViewbox.x(), -m_patternContentViewbox.y());
         const qreal xScale = patternSize.width() / m_patternContentViewbox.width();
         const qreal yScale = patternSize.height() / m_patternContentViewbox.height();
-        viewMatrix.scale( xScale, yScale );
+        viewMatrix.scale(xScale, yScale);
     }
 
     // setup the tile image
-    QImage tile( tileSize.toSize(), QImage::Format_ARGB32 );
-    tile.fill( QColor( Qt::transparent ).rgba() );
-    
+    QImage tile(tileSize.toSize(), QImage::Format_ARGB32);
+    tile.fill(QColor(Qt::transparent).rgba());
+
     // setup the painter to paint the tile content
-    QPainter tilePainter( &tile );
-    tilePainter.setClipRect( tile.rect() );
-    tilePainter.setWorldMatrix( viewMatrix );
+    QPainter tilePainter(&tile);
+    tilePainter.setClipRect(tile.rect());
+    tilePainter.setWorldMatrix(viewMatrix);
     //tilePainter.setRenderHint(QPainter::Antialiasing);
 
     // paint the content into the tile image
     KoShapePainter shapePainter;
-    shapePainter.setShapes( content );
-    shapePainter.paintShapes( tilePainter, zoomHandler );
+    shapePainter.setShapes(content);
+    shapePainter.paintShapes(tilePainter, zoomHandler);
 
     return tile;
 }

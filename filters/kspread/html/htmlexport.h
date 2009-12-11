@@ -34,48 +34,49 @@ namespace KSpread
 class Sheet;
 }
 
-class HTMLExport : public KoFilter {
+class HTMLExport : public KoFilter
+{
     Q_OBJECT
 public:
     HTMLExport(QObject* parent, const QStringList&);
     virtual ~HTMLExport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
-  private:
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+private:
     /** Writes the top of the page in HTML to @par str */
-    void openPage( KSpread::Sheet *sheet,KoDocument *document, QString &str);
+    void openPage(KSpread::Sheet *sheet, KoDocument *document, QString &str);
 
     /** Closes a page in HTML */
-    void closePage( QString &);
+    void closePage(QString &);
 
     /**
       Converts @par sheet to HTML and writes to @par str.
      */
-    void convertSheet( KSpread::Sheet *sheet, QString &str, int, int);
+    void convertSheet(KSpread::Sheet *sheet, QString &str, int, int);
 
     /** Writes a bar and a link to the top to @par str. */
-    void createSheetSeparator( QString & );
+    void createSheetSeparator(QString &);
 
     /** Writes the table of contents */
-    void writeTOC( const QStringList &, const QString &, QString & );
+    void writeTOC(const QStringList &, const QString &, QString &);
 
     /**
       Returns a filename based on the @par base filename and the options
       defined in the dialog.
     */
-    QString fileName(  const QString &base, const QString &, bool );
+    QString fileName(const QString &base, const QString &, bool);
 
     /**
       Detects which rows and columns of the given @par sheet are used and
       writes the number of them to @par row and @par column.
      */
-    void detectFilledCells( KSpread::Sheet *sheet, int &rows, int &columns );
-  private:
+    void detectFilledCells(KSpread::Sheet *sheet, int &rows, int &columns);
+private:
     ExportDialog *m_dialog;
 
-    typedef QMap<QString,int> Rows;
+    typedef QMap<QString, int> Rows;
     Rows m_rowmap;
-    typedef QMap<QString,int> Columns;
+    typedef QMap<QString, int> Columns;
     Columns m_columnmap;
 };
 

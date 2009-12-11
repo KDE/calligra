@@ -24,7 +24,7 @@
 
 QString getFootnoteFramesetName(const QString& id);
 bool ProcessField(QDomDocument& mainDocument,
-    QDomElement& variableElement, const QString& strType, const QXmlAttributes& attributes);
+                  QDomElement& variableElement, const QString& strType, const QXmlAttributes& attributes);
 
 
 #endif /* IMPORTFIELD_H */

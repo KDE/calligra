@@ -27,59 +27,55 @@
 #include <KoStoreDevice.h>
 
 #include "kword13picture.h"
-    
-KWord13Picture::KWord13Picture( void ) : m_tempFile( 0 ), m_valid( false )
+
+KWord13Picture::KWord13Picture(void) : m_tempFile(0), m_valid(false)
 {
-    
+
 }
 
-KWord13Picture::~KWord13Picture( void )
+KWord13Picture::~KWord13Picture(void)
 {
     delete m_tempFile;
 }
 
-bool KWord13Picture::loadPicture( KoStore* store )
+bool KWord13Picture::loadPicture(KoStore* store)
 {
-    kDebug(30520) <<"Loading picture:" << m_storeName;
- 
+    kDebug(30520) << "Loading picture:" << m_storeName;
+
     m_tempFile = new KTemporaryFile();
     m_tempFile->setSuffix(".bin");
- 
-    if ( !m_tempFile->open() || !store->extractFile( m_storeName, m_tempFile->fileName() ) )
-    {
+
+    if (!m_tempFile->open() || !store->extractFile(m_storeName, m_tempFile->fileName())) {
         kWarning(30520) << "Could not write temporary file!";
         delete m_tempFile;
         m_tempFile = 0;
         m_valid = false;
-    }
-    else
-    {
+    } else {
         m_valid = true;
     }
     return m_valid;
 }
 
-QString KWord13Picture::getOasisPictureName( void ) const
+QString KWord13Picture::getOasisPictureName(void) const
 {
-    if ( ! m_valid || ! m_tempFile )
+    if (! m_valid || ! m_tempFile)
         return QString();
-        
+
     // We need a 32 digit hex value of the picture number
     // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
     QString number;
-    number.fill('0',32);
+    number.fill('0', 32);
     // ### TODO: have a real counter instead of using the pointers
-    number += QString::number( (long long)( (void*) m_tempFile ) , 16 ); // in hex
+    number += QString::number((long long)((void*) m_tempFile) , 16);     // in hex
 
-    QString strExtension( m_storeName.lower() );
-    const int result = m_storeName.findRev( '.' );
-    if ( result >= 0 )
-    {
-        strExtension = m_storeName.mid( result );
+    QString strExtension(m_storeName.lower());
+    const int result = m_storeName.findRev('.');
+    if (result >= 0) {
+        strExtension = m_storeName.mid(result);
     }
-    
-    QString ooName( "Pictures/" );
-    ooName += number.right( 32 );
+
+    QString ooName("Pictures/");
+    ooName += number.right(32);
     ooName += strExtension;
 
     return ooName;

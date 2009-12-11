@@ -37,43 +37,43 @@ class EString
 {
 public:
 
-  EString();
+    EString();
 
-  EString( const EString& );
+    EString(const EString&);
 
-  EString& operator=( const EString& );
+    EString& operator=(const EString&);
 
-  ~EString();
+    ~EString();
 
-  bool unicode() const;
+    bool unicode() const;
 
-  void setUnicode( bool u );
+    void setUnicode(bool u);
 
-  bool richText() const;
+    bool richText() const;
 
-  void setRichText( bool r );
+    void setRichText(bool r);
 
-  UString str() const;
+    UString str() const;
 
-  void setStr( const UString& str );
+    void setStr(const UString& str);
 
-  // space allocate for the string, not length (use string.length() for that)
-  unsigned size() const;
-  void setSize( unsigned size ); // HACKS
+    // space allocate for the string, not length (use string.length() for that)
+    unsigned size() const;
+    void setSize(unsigned size);   // HACKS
 
 
-  static EString fromUnicodeString( const void* p, bool longString, unsigned maxsize = 0, unsigned continuePosition = 0xFFFFFFFF);
+    static EString fromUnicodeString(const void* p, bool longString, unsigned maxsize = 0, unsigned continuePosition = 0xFFFFFFFF);
 
-  static EString fromSheetName( const void* p, unsigned maxsize = 0 );
+    static EString fromSheetName(const void* p, unsigned maxsize = 0);
 
-  // from the buffer
-  // longstring means 16-bit string length, usually for label
-  // longstring=false is normally for sheet name
-  static EString fromByteString( const void* p, bool longString, unsigned maxsize = 0 );
+    // from the buffer
+    // longstring means 16-bit string length, usually for label
+    // longstring=false is normally for sheet name
+    static EString fromByteString(const void* p, bool longString, unsigned maxsize = 0);
 
 private:
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 /**
@@ -85,69 +85,69 @@ class CellInfo
 {
 public:
 
-  /**
-   * Creates a new cell information.
-   */
-  CellInfo();
+    /**
+     * Creates a new cell information.
+     */
+    CellInfo();
 
-  /**
-   * Destroys the cell information.
-   */
-  virtual ~CellInfo();
+    /**
+     * Destroys the cell information.
+     */
+    virtual ~CellInfo();
 
-  /**
-   * Returns the row associated with the cell information. It is zero based,
-   * so the first row is 0.
-   *
-   * \sa setRow, column
-   */
-  virtual unsigned row() const;
+    /**
+     * Returns the row associated with the cell information. It is zero based,
+     * so the first row is 0.
+     *
+     * \sa setRow, column
+     */
+    virtual unsigned row() const;
 
-  /**
-   * Returns the column associated with the cell information. It is zero based,
-   * so the first column is 0.
-   *
-   * \sa setColumn, row
-   */
-  virtual unsigned column() const;
+    /**
+     * Returns the column associated with the cell information. It is zero based,
+     * so the first column is 0.
+     *
+     * \sa setColumn, row
+     */
+    virtual unsigned column() const;
 
-  /**
-   * Returns the XF index for formatting of the cell.
-   *
-   * \sa setXfIndex
-   */
-  virtual unsigned xfIndex() const;
+    /**
+     * Returns the XF index for formatting of the cell.
+     *
+     * \sa setXfIndex
+     */
+    virtual unsigned xfIndex() const;
 
-  /**
-   * Sets the row associated with the cell information. It is zero based,
-   * so the first row is 0.
-   *
-   * \sa setColumn, row
-   */
-  virtual void setRow( unsigned r );
+    /**
+     * Sets the row associated with the cell information. It is zero based,
+     * so the first row is 0.
+     *
+     * \sa setColumn, row
+     */
+    virtual void setRow(unsigned r);
 
-  /**
-   * Sets the column associated with the cell information. It is zero based,
-   * so the first column is 0.
-   *
-   * \sa setRow, column
-   */
-  virtual void setColumn( unsigned c );
+    /**
+     * Sets the column associated with the cell information. It is zero based,
+     * so the first column is 0.
+     *
+     * \sa setRow, column
+     */
+    virtual void setColumn(unsigned c);
 
-  /**
-   * Sets the XF index for formatting of the cell.
-   *
-   * \sa xfIndex
-   */
-  virtual void setXfIndex( unsigned i );
+    /**
+     * Sets the XF index for formatting of the cell.
+     *
+     * \sa xfIndex
+     */
+    virtual void setXfIndex(unsigned i);
 
 private:
-   // no copy or assign
-   CellInfo( const CellInfo& );
-   CellInfo& operator=( const CellInfo& );
+    // no copy or assign
+    CellInfo(const CellInfo&);
+    CellInfo& operator=(const CellInfo&);
 
-   class Private;
-   Private* info;
+    class Private;
+    Private* info;
 };
 
 /**
@@ -159,55 +159,55 @@ class ColumnSpanInfo
 {
 public:
 
-  /**
-   * Creates a new column span information.
-   */
-  ColumnSpanInfo();
+    /**
+     * Creates a new column span information.
+     */
+    ColumnSpanInfo();
 
-  /**
-   * Destroys the column span information.
-   */
-  virtual ~ColumnSpanInfo();
+    /**
+     * Destroys the column span information.
+     */
+    virtual ~ColumnSpanInfo();
 
-  /**
-   * Returns the first column associated with the span information.
-   * Column index is zero based, so the first column is 0.
-   *
-   * \sa lastColumn, setFirstColumn
-   */
-  virtual unsigned firstColumn() const;
+    /**
+     * Returns the first column associated with the span information.
+     * Column index is zero based, so the first column is 0.
+     *
+     * \sa lastColumn, setFirstColumn
+     */
+    virtual unsigned firstColumn() const;
 
-  /**
-   * Returns the last column associated with the span information.
-   * Column index is zero based, so the first column is 0.
-   *
-   * \sa firstColumn, setLastColumn
-   */
-  virtual unsigned lastColumn() const;
+    /**
+     * Returns the last column associated with the span information.
+     * Column index is zero based, so the first column is 0.
+     *
+     * \sa firstColumn, setLastColumn
+     */
+    virtual unsigned lastColumn() const;
 
-  /**
-   * Sets the first column associated with the span information.
-   * Column index is zero based, so the first column is 0.
-   *
-   * \sa setLastColumn, firstColumn
-   */
-  virtual void setFirstColumn( unsigned c );
+    /**
+     * Sets the first column associated with the span information.
+     * Column index is zero based, so the first column is 0.
+     *
+     * \sa setLastColumn, firstColumn
+     */
+    virtual void setFirstColumn(unsigned c);
 
-  /**
-   * Sets the last column associated with the span information.
-   * Column index is zero based, so the first column is 0.
-   *
-   * \sa setFirstColumn, lastColumn
-   */
-  virtual void setLastColumn( unsigned c );
+    /**
+     * Sets the last column associated with the span information.
+     * Column index is zero based, so the first column is 0.
+     *
+     * \sa setFirstColumn, lastColumn
+     */
+    virtual void setLastColumn(unsigned c);
 
 private:
-   // no copy or assign
-   ColumnSpanInfo( const ColumnSpanInfo& );
-   ColumnSpanInfo& operator=( const ColumnSpanInfo& );
+    // no copy or assign
+    ColumnSpanInfo(const ColumnSpanInfo&);
+    ColumnSpanInfo& operator=(const ColumnSpanInfo&);
 
-   class Private;
-   Private* spaninfo;
+    class Private;
+    Private* spaninfo;
 };
 
 /**
@@ -227,66 +227,68 @@ class BOFRecord : public Record
 {
 public:
 
-  /**
-    Static ID of the BOF record.
-  */
-  static const unsigned int id;
+    /**
+      Static ID of the BOF record.
+    */
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-    Supported BOF type.
-  */
-  enum { UnknownType = 0, Workbook, Worksheet, Chart, VBModule, MacroSheet, Workspace };
+    /**
+      Supported BOF type.
+    */
+    enum { UnknownType = 0, Workbook, Worksheet, Chart, VBModule, MacroSheet, Workspace };
 
-  /**
-   * Creates a new BOF record.
-   */
-  BOFRecord();
+    /**
+     * Creates a new BOF record.
+     */
+    BOFRecord();
 
-  /**
-    Destroys the record.
-  */
-  virtual ~BOFRecord();
+    /**
+      Destroys the record.
+    */
+    virtual ~BOFRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  /**
-    Returns the version, like Excel95, Excel97, and so on.
+    /**
+      Returns the version, like Excel95, Excel97, and so on.
 
-    Note that it is possible to use expression like 'version() >= Excel97'
-    but always do that carefully.
-  */
-  unsigned version() const;
+      Note that it is possible to use expression like 'version() >= Excel97'
+      but always do that carefully.
+    */
+    unsigned version() const;
 
-  /**
-    Returns the version as string, something like "Excel97".
-  */
-  const char* versionAsString() const;
+    /**
+      Returns the version as string, something like "Excel97".
+    */
+    const char* versionAsString() const;
 
-  /**
-    Returns type of the BOF record, like Workbook, Chart, and so on.
-  */
-  unsigned type() const;
+    /**
+      Returns type of the BOF record, like Workbook, Chart, and so on.
+    */
+    unsigned type() const;
 
-  /**
-    Returns BOF type as string, something like "Worksheet".
-  */
-  const char* typeAsString() const;
+    /**
+      Returns BOF type as string, something like "Worksheet".
+    */
+    const char* typeAsString() const;
 
-  virtual const char* name() const { return "BOF"; }
+    virtual const char* name() const {
+        return "BOF";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   BOFRecord( const BOFRecord& );
-   BOFRecord& operator=( const BOFRecord& );
+    // no copy or assign
+    BOFRecord(const BOFRecord&);
+    BOFRecord& operator=(const BOFRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -296,108 +298,114 @@ class ExternBookRecord : public Record
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const{
-    return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  ExternBookRecord();
+    ExternBookRecord();
 
-  ~ExternBookRecord();
+    ~ExternBookRecord();
 
-  unsigned sheetCount() const;
+    unsigned sheetCount() const;
 
-  UString bookName() const;
+    UString bookName() const;
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
 
 
-  virtual const char* name() const { return "EXTERNBOOK"; }
+    virtual const char* name() const {
+        return "EXTERNBOOK";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   ExternBookRecord( const ExternBookRecord& );
-   ExternBookRecord& operator=( const ExternBookRecord& );
+    // no copy or assign
+    ExternBookRecord(const ExternBookRecord&);
+    ExternBookRecord& operator=(const ExternBookRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 class ExternNameRecord : public Record
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-    return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  ExternNameRecord();
+    ExternNameRecord();
 
-  ~ExternNameRecord();
+    ~ExternNameRecord();
 
-  // one-based sheet index
-  // if 0 means AddIn function
-  unsigned sheetIndex() const;
+    // one-based sheet index
+    // if 0 means AddIn function
+    unsigned sheetIndex() const;
 
-  void setSheetIndex( unsigned sheetIndex );
+    void setSheetIndex(unsigned sheetIndex);
 
-  UString externName() const;
+    UString externName() const;
 
-  void setExternName( const UString& name );
+    void setExternName(const UString& name);
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
 
 
-  virtual const char* name() const { return "EXTERNNAME"; }
+    virtual const char* name() const {
+        return "EXTERNNAME";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   ExternNameRecord( const ExternNameRecord& );
-   ExternNameRecord& operator=( const ExternNameRecord& );
+    // no copy or assign
+    ExternNameRecord(const ExternNameRecord&);
+    ExternNameRecord& operator=(const ExternNameRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 class FilepassRecord : public Record
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-    return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new FILEPASS record.
-   */
-  FilepassRecord();
+    /**
+     * Creates a new FILEPASS record.
+     */
+    FilepassRecord();
 
-  /**
-   * Destroy the record.
-   */
-  virtual ~FilepassRecord();
+    /**
+     * Destroy the record.
+     */
+    virtual ~FilepassRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  virtual const char* name() const { return "FILEPASS"; }
+    virtual const char* name() const {
+        return "FILEPASS";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   FilepassRecord( const FilepassRecord& );
-   FilepassRecord& operator=( const FilepassRecord& );
+    // no copy or assign
+    FilepassRecord(const FilepassRecord&);
+    FilepassRecord& operator=(const FilepassRecord&);
 };
 
 /**
@@ -410,47 +418,49 @@ class FormulaRecord : public Record, public CellInfo
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new formula record.
-   */
-  FormulaRecord();
+    /**
+     * Creates a new formula record.
+     */
+    FormulaRecord();
 
-  /**
-   * Destroy the record.
-   */
-  ~FormulaRecord();
+    /**
+     * Destroy the record.
+     */
+    ~FormulaRecord();
 
-  /**
-   * Gets the result of the formula.
-   */
-  Value result() const;
+    /**
+     * Gets the result of the formula.
+     */
+    Value result() const;
 
-  /**
-   * Sets the result of the formula.
-   */
-  void setResult( const Value& v );
+    /**
+     * Sets the result of the formula.
+     */
+    void setResult(const Value& v);
 
-  FormulaTokens tokens() const;
+    FormulaTokens tokens() const;
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  virtual const char* name() const { return "FORMULA"; }
+    virtual const char* name() const {
+        return "FORMULA";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-  // no copy or assign
-  FormulaRecord( const FormulaRecord& );
-  FormulaRecord& operator=( const FormulaRecord& );
+    // no copy or assign
+    FormulaRecord(const FormulaRecord&);
+    FormulaRecord& operator=(const FormulaRecord&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 
@@ -462,37 +472,39 @@ private:
 class SharedFormulaRecord : public Record
 {
 public:
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-      return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new shared formula record.
-   */
-  SharedFormulaRecord();
+    /**
+     * Creates a new shared formula record.
+     */
+    SharedFormulaRecord();
 
-  /**
-   * Destroy the record.
-   */
-  ~SharedFormulaRecord();
+    /**
+     * Destroy the record.
+     */
+    ~SharedFormulaRecord();
 
-  FormulaTokens tokens() const;
+    FormulaTokens tokens() const;
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  virtual const char* name() const { return "SHAREDFMLA"; }
+    virtual const char* name() const {
+        return "SHAREDFMLA";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-  // no copy or assign
-  SharedFormulaRecord( const SharedFormulaRecord& );
-  SharedFormulaRecord& operator=( const SharedFormulaRecord& );
+    // no copy or assign
+    SharedFormulaRecord(const SharedFormulaRecord&);
+    SharedFormulaRecord& operator=(const SharedFormulaRecord&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 /**
@@ -506,70 +518,76 @@ class MulRKRecord : public Record, public CellInfo, public ColumnSpanInfo
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new MulRK record.
-   */
-  MulRKRecord();
+    /**
+     * Creates a new MulRK record.
+     */
+    MulRKRecord();
 
-  /**
-   * Destroys the record.
-   */
-  virtual ~MulRKRecord();
+    /**
+     * Destroys the record.
+     */
+    virtual ~MulRKRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  /**
-   Returns XF index of ith column.
-   */
-  unsigned xfIndex( unsigned i ) const;
+    /**
+     Returns XF index of ith column.
+     */
+    unsigned xfIndex(unsigned i) const;
 
-  /**
-   * Returns true if the record holds an integer value.
-   *
-   * \sa asInteger
-   */
-  bool isInteger( unsigned i ) const;
+    /**
+     * Returns true if the record holds an integer value.
+     *
+     * \sa asInteger
+     */
+    bool isInteger(unsigned i) const;
 
-  /**
-   * Returns the integer value specified by the record. It is only valid
-   * when isInteger returns true.
-   *
-   * \sa isInteger, asFloat
-   */
-  int asInteger( unsigned i ) const;
+    /**
+     * Returns the integer value specified by the record. It is only valid
+     * when isInteger returns true.
+     *
+     * \sa isInteger, asFloat
+     */
+    int asInteger(unsigned i) const;
 
-  /**
-   * Returns the floating-point value specified by the record. It is only valid
-   * when isInteger returns false.
-   *
-   * \sa asInteger
-   */
-  double asFloat( unsigned i ) const;
+    /**
+     * Returns the floating-point value specified by the record. It is only valid
+     * when isInteger returns false.
+     *
+     * \sa asInteger
+     */
+    double asFloat(unsigned i) const;
 
-  unsigned encodedRK( unsigned i ) const;
+    unsigned encodedRK(unsigned i) const;
 
-  virtual const char* name() const { return "MULRK"; }
+    virtual const char* name() const {
+        return "MULRK";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   MulRKRecord( const MulRKRecord& );
-   MulRKRecord& operator=( const MulRKRecord& );
+    // no copy or assign
+    MulRKRecord(const MulRKRecord&);
+    MulRKRecord& operator=(const MulRKRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 
-   // from CellInfo, we don't need it
-   // mark as private so nobody can call them
-   virtual unsigned column() const { return CellInfo::column(); }
-   virtual unsigned xfIndex() const { return CellInfo::xfIndex(); }
+    // from CellInfo, we don't need it
+    // mark as private so nobody can call them
+    virtual unsigned column() const {
+        return CellInfo::column();
+    }
+    virtual unsigned xfIndex() const {
+        return CellInfo::xfIndex();
+    }
 };
 
 
@@ -577,33 +595,35 @@ class NameRecord : public Record
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-    return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  NameRecord();
+    NameRecord();
 
-  ~NameRecord();
+    ~NameRecord();
 
-  UString definedName() const;
+    UString definedName() const;
 
-  void setDefinedName( const UString& name );
+    void setDefinedName(const UString& name);
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  virtual const char* name() const { return "NAME"; }
+    virtual const char* name() const {
+        return "NAME";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   NameRecord( const NameRecord& );
-   NameRecord& operator=( const NameRecord& );
+    // no copy or assign
+    NameRecord(const NameRecord&);
+    NameRecord& operator=(const NameRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -615,81 +635,83 @@ class RKRecord : public Record, public CellInfo
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new RK record.
-   */
-  RKRecord();
+    /**
+     * Creates a new RK record.
+     */
+    RKRecord();
 
-  /**
-   * Destroys the record.
-   */
-  virtual ~RKRecord();
+    /**
+     * Destroys the record.
+     */
+    virtual ~RKRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  /**
-   * Returns true if the record holds an integer value.
-   *
-   * \sa asInteger, isFloat
-   */
-  bool isInteger() const;
+    /**
+     * Returns true if the record holds an integer value.
+     *
+     * \sa asInteger, isFloat
+     */
+    bool isInteger() const;
 
-  /**
-   * Returns true if the record holds a floating-point value.
-   *
-   * \sa asFloat, isInteger
-   */
-  bool isFloat() const;
+    /**
+     * Returns true if the record holds a floating-point value.
+     *
+     * \sa asFloat, isInteger
+     */
+    bool isFloat() const;
 
-  /**
-   * Returns the integer value specified by the record. It is only valid
-   * when isInteger returns true.
-   *
-   * \sa isInteger, asFloat
-   */
-  int asInteger() const;
+    /**
+     * Returns the integer value specified by the record. It is only valid
+     * when isInteger returns true.
+     *
+     * \sa isInteger, asFloat
+     */
+    int asInteger() const;
 
-  /**
-   * Returns the floating-point value specified by the record. It is only valid
-   * when isFloat returns true.
-   *
-   * \sa isFloat, asInteger
-   */
-  double asFloat() const;
+    /**
+     * Returns the floating-point value specified by the record. It is only valid
+     * when isFloat returns true.
+     *
+     * \sa isFloat, asInteger
+     */
+    double asFloat() const;
 
-  /**
-   * Sets the integer value to be specified by the record.
-   *
-   * \sa setFloat
-   */
-  void setInteger( int i );
+    /**
+     * Sets the integer value to be specified by the record.
+     *
+     * \sa setFloat
+     */
+    void setInteger(int i);
 
-  /**
-   * Sets the floating-point value to be specified by the record.
-   *
-   * \sa setFloat
-   */
-  void setFloat( double f );
+    /**
+     * Sets the floating-point value to be specified by the record.
+     *
+     * \sa setFloat
+     */
+    void setFloat(double f);
 
-  unsigned encodedRK() const;
+    unsigned encodedRK() const;
 
-  virtual const char* name() const { return "RK"; }
+    virtual const char* name() const {
+        return "RK";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   RKRecord( const RKRecord& );
-   RKRecord& operator=( const RKRecord& );
+    // no copy or assign
+    RKRecord(const RKRecord&);
+    RKRecord& operator=(const RKRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 /**
@@ -706,49 +728,51 @@ class RStringRecord : public Record, public CellInfo
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new Label record.
-   */
-  RStringRecord();
+    /**
+     * Creates a new Label record.
+     */
+    RStringRecord();
 
-  /**
-   * Destroys the record.
-   */
-  virtual ~RStringRecord();
+    /**
+     * Destroys the record.
+     */
+    virtual ~RStringRecord();
 
-  /**
-   * Returns the label string.
-   *
-   * \sa setLabel
-   */
-  UString label() const;
+    /**
+     * Returns the label string.
+     *
+     * \sa setLabel
+     */
+    UString label() const;
 
-  /**
-   * Sets the label string.
-   *
-   * \sa label
-   */
-  void setLabel( const UString& l );
+    /**
+     * Sets the label string.
+     *
+     * \sa label
+     */
+    void setLabel(const UString& l);
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  virtual const char* name() const { return "RSTRING"; }
+    virtual const char* name() const {
+        return "RSTRING";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   RStringRecord( const RStringRecord& );
-   RStringRecord& operator=( const RStringRecord& );
+    // no copy or assign
+    RStringRecord(const RStringRecord&);
+    RStringRecord& operator=(const RStringRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 
@@ -763,61 +787,69 @@ class SSTRecord : public Record
 {
 public:
 
-  static const unsigned int id;
+    static const unsigned int id;
 
-  unsigned int rtti() const {
-	  return this->id;
-  }
+    unsigned int rtti() const {
+        return this->id;
+    }
 
-  /**
-   * Creates a new SST record.
-   */
-  SSTRecord();
+    /**
+     * Creates a new SST record.
+     */
+    SSTRecord();
 
-  /**
-   * Destroys the record.
-   */
-  virtual ~SSTRecord();
+    /**
+     * Destroys the record.
+     */
+    virtual ~SSTRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
-  /**
-    Returns the number of available string in this string table.
-   */
-  unsigned count() const;
+    /**
+      Returns the number of available string in this string table.
+     */
+    unsigned count() const;
 
-  /**
-    Returns the string at specified index.
-    Note that index must be less than count().
-    If index is not valid, this will return UString::null.
-   */
-  UString stringAt( unsigned index ) const;
+    /**
+      Returns the string at specified index.
+      Note that index must be less than count().
+      If index is not valid, this will return UString::null.
+     */
+    UString stringAt(unsigned index) const;
 
-  virtual const char* name() const { return "SST"; }
+    virtual const char* name() const {
+        return "SST";
+    }
 
-  virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream& out) const;
 
 private:
-   // no copy or assign
-   SSTRecord( const SSTRecord& );
-   SSTRecord& operator=( const SSTRecord& );
+    // no copy or assign
+    SSTRecord(const SSTRecord&);
+    SSTRecord& operator=(const SSTRecord&);
 
-   class Private;
-   Private *d;
+    class Private;
+    Private *d;
 };
 
 class ObjRecord : public Record
 {
 public:
-  Object *m_object;
-  static const unsigned id;
-  static Record *createRecord() { return new ObjRecord; }
-  ObjRecord();
-  virtual ~ObjRecord();
-  virtual unsigned rtti() const { return this->id; }
-  virtual const char* name() const { return "Obj"; }
-  virtual void dump( std::ostream& ) const;
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );
+    Object *m_object;
+    static const unsigned id;
+    static Record *createRecord() {
+        return new ObjRecord;
+    }
+    ObjRecord();
+    virtual ~ObjRecord();
+    virtual unsigned rtti() const {
+        return this->id;
+    }
+    virtual const char* name() const {
+        return "Obj";
+    }
+    virtual void dump(std::ostream&) const;
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 };
 
 /**
@@ -830,514 +862,517 @@ class XFRecord : public Record
 {
 public:
 
-  static const unsigned int id;
-
-  unsigned int rtti() const {
-	  return this->id;
-  }
-
-  /**
-   * Creates a new XF record.
-   */
-  XFRecord();
-
-  /**
-   * Creates a copy of XF record.
-   */
-  XFRecord( const XFRecord& xf );
-
-  /**
-   * Assigns from another XF record.
-   */
-  XFRecord& operator=( const XFRecord& xf );
-
-  /**
-   * Destroy the record.
-   */
-  ~XFRecord();
-
-  /**
-   * Gets the index of the font for use in this XFormat. The index
-   * refers to the font table.
-   *
-   * \sa setFontIndex, FontRecord
-   */
-  unsigned fontIndex() const;
-
-  /**
-   * Sets the index of the font for use in this XFormat. The index
-   * refers to the font table.
-   *
-   * \sa fontIndex, FontRecord
-   */
-  void setFontIndex( unsigned fi );
-
-  /**
-   * Gets the index of the number format for use in this XFormat. The index
-   * refers to the format table.
-   *
-   * \sa setFormatIndex, FormatRecord
-   */
-  unsigned formatIndex() const;
-
-  /**
-   * Sets the index of the number format for use in this XFormat. The index
-   * refers to the format table.
-   *
-   * \sa formatIndex, FormatRecord
-   */
-  void setFormatIndex( unsigned fi );
-
-  /**
-   * Returns true if the cells using this format should be locked.
-   *
-   * \sa setLocked
-   */
-  bool locked() const;
-
-  /**
-   * Sets whether the cells using this format should be locked or not.
-   *
-   * \sa locked
-   */
-  void setLocked( bool l );
-
-  /**
-   * Returns true if the formula of the cells using this format
-   * should be hidden from user.
-   *
-   * \sa setFormulaHidden
-   */
-  bool formulaHidden() const;
-
-  /**
-   * Sets whether the formula of the cells using this format
-   * should be hidden or should be visible.
-   *
-   * \sa formulaHidden
-   */
-  void setFormulaHidden( bool f );
-
-  /**
-   * Returns the index of the parent stlye of this format.
-   * This refers to the index of the XFormat table which is constructed
-   * from a series of XFormat records.
-   *
-   * \sa setParentStyle
-   */
-  unsigned parentStyle() const;
-
-  /**
-   * Sets the index of the parent stlye of this format.
-   * This refers to the index of the XFormat table which is constructed
-   * from a series of XFormat records.
-   *
-   * \sa parentStyle
-   */
-  void setParentStyle( unsigned ps );
-
-  enum {
-    General = 0,
-    Left,
-    Centered,
-    Right,
-    Filled,
-    Justified,
-    CenteredSelection,
-    Distributed };
-
-  /**
-   * Gets the horizontal alignment, e.g Left.
-   */
-  unsigned horizontalAlignment() const;
-
-  /**
-   * Sets the horizontal alignment, e.g Left.
-   */
-  void setHorizontalAlignment( unsigned ha );
-
-  /**
-   * Returns human-readable string representation of the horizontal alignment.
-     For example, XFRecord::Left will return "Left".
-   */
-  const char* horizontalAlignmentAsString() const;
-
-  enum {
-    Top = 0,
-    VCentered = 1,
-    Bottom = 2,
-    VJustified = 3,
-    VDistributed = 4 };
-
-  /**
-   * Gets the vertical alignment, e.g Bottom.
-   *
-   * \sa setVerticalAlignment
-   */
-  unsigned verticalAlignment() const;
-
-  /**
-   * Sets the vertical alignment, e.g Top.
-   *
-   * \sa verticalAlignment
-   */
-  void setVerticalAlignment( unsigned va );
-
-  /**
-   * Returns human-readable string representation of the vertical alignment.
-     For example, XFRecord::Top will return "Top".
-   */
-  const char* verticalAlignmentAsString() const;
-
-  /**
-   * Returns true if text is wrapped at right border.
-   *
-   * \sa setTextWrap
-   */
-  bool textWrap() const;
-
-  /**
-   * Sets whether text should be wrapped at right border.
-   *
-   * \sa textWrap
-   */
-  void setTextWrap( bool wrap );
-
-  /**
-   * Returns the rotation angle of the text. If it is between 1 to 90,
-   * the text is rotated 1 to 90 degrees counterclockwise. If it is between
-   * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
-   *
-   * \sa setRotationAngle
-   */
-  unsigned rotationAngle() const;
-
-  /**
-   * Sets the rotation angle of the text. If it is between 1 to 90,
-   * the text is rotated 1 to 90 degrees counterclockwise. If it is between
-   * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
-   *
-   * \sa setRotationAngle
-   */
-  void setRotationAngle( unsigned angle );
-
-  /**
-   * Returns true if the letters for text are not rotated, but
-   * instead stacked top-to-bottom.
-   *
-   * \sa setStackedLetters
-   */
-  bool stackedLetters() const;
-
-  /**
-   * Sets whether the letters for text should be stacked top-to-bottom.
-   *
-   * \sa stackedLetters
-   */
-  void setStackedLetters( bool stacked );
-
-  /**
-   * Returns indent level.
-   *
-   * \sa indentLevel
-   */
-  unsigned indentLevel() const;
-
-  /**
-   * Sets indent level.
-   *
-   * \sa indentLevel
-   */
-  void setIndentLevel( unsigned i );
-
-  /**
-   * Returns true if content should be shrunk to fit into cell.
-   *
-   * \sa setShrinkContent
-   */
-  bool shrinkContent() const;
-
-  /**
-   * Sets whether content should be shrunk to fit into cell.
-   *
-   * \sa shrinkContent
-   */
-  void setShrinkContent( bool s );
-
-  enum
-  {
-    NoLine = 0,
-    Thin = 1,
-    Medium = 2,
-    Dashed = 3,
-    Dotted = 4,
-    Thick = 5,
-    Double = 6,
-    Hair = 7,
-    MediumDashed = 8,
-    ThinDashDotted = 9,
-    MediumDashDotted = 10,
-    ThinDashDotDotted = 11,
-    MediumDashDotDotted = 12,
-    SlantedMediumDashDotted = 13
-  };
-
-  /**
-   * Returns the line style for left border.
-   *
-   * \sa setLeftBorderStyle, leftBorderColor
-   */
-  unsigned leftBorderStyle() const;
-
-  /**
-   * Sets the line style for left border.
-   *
-   * \sa leftBorderStyle, setLeftBorderColor
-   */
-  void setLeftBorderStyle( unsigned style );
-
-  /**
-   * Returns the color for left border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setLeftBorderColor, leftBorderStyle
-   */
-  unsigned leftBorderColor() const;
-
-  /**
-   * Sets the color for left border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa leftBorderColor, setLeftBorderStyle
-   */
-  void setLeftBorderColor( unsigned color );
-
-  /**
-   * Returns the line style for right border.
-   *
-   * \sa setRightBorderStyle, rightBorderColor
-   */
-  unsigned rightBorderStyle() const;
-
-  /**
-   * Sets the line style for right border.
-   *
-   * \sa rightBorderStyle, setRightBorderColor
-   */
-  void setRightBorderStyle( unsigned style );
-
-  /**
-   * Returns the color for right border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setRightBorderColor, rightBorderStyle
-   */
-  unsigned rightBorderColor() const;
-
-  /**
-   * Sets the color for right border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa rightBorderColor, setRightBorderStyle
-   */
-  void setRightBorderColor( unsigned color );
-
-  /**
-   * Returns the line style for top border.
-   *
-   * \sa setTopBorderStyle, topBorderColor
-   */
-  unsigned topBorderStyle() const;
-
-  /**
-   * Sets the line style for top border.
-   *
-   * \sa topBorderStyle, setTopBorderColor
-   */
-  void setTopBorderStyle( unsigned style );
-
-  /**
-   * Returns the color for top border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setTopBorderColor, topBorderStyle
-   */
-  unsigned topBorderColor() const;
-
-  /**
-   * Sets the color for top border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa topBorderColor, setTopBorderStyle
-   */
-  void setTopBorderColor( unsigned color );
-
-  /**
-   * Returns the line style for bottom border.
-   *
-   * \sa setBottomBorderStyle, bottomBorderColor
-   */
-  unsigned bottomBorderStyle() const;
-
-  /**
-   * Sets the line style for bottom border.
-   *
-   * \sa bottomBorderStyle, setBottomBorderColor
-   */
-  void setBottomBorderStyle( unsigned style );
-
-  /**
-   * Returns the color for bottom border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setBottomBorderColor, bottomBorderStyle
-   */
-  unsigned bottomBorderColor() const;
-
-  /**
-   * Sets the color for bottom border. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa bottomBorderColor, setBottomBorderStyle
-   */
-  void setBottomBorderColor( unsigned color );
-
-  /**
-   * Returns true if there is a diagonal line from top left to right bottom.
-   *
-   * \sa diagonalStyle, diagonalColor, setDiagonalTopLeft
-   */
-  bool diagonalTopLeft() const;
-
-  /**
-   * Sets whether there should be a diagonal line from top left to right bottom.
-   *
-   * \sa diagonalTopLeft, setDiagonalStlye, setDiagonalColor
-   */
-  void setDiagonalTopLeft( bool d );
-
-  /**
-   * Returns true if there is a diagonal line from bottom left to right top.
-   *
-   * \sa diagonalStyle, diagonalColor, setDiagonalBottomLeft
-   */
-  bool diagonalBottomLeft() const;
-
-  /**
-   * Sets whether there should be a diagonal line from bottom left to right top.
-   *
-   * \sa diagonalBottomLeft, setDiagonalStlye, setDiagonalColor
-   */
-  void setDiagonalBottomLeft( bool d );
-
-  /**
-   * Returns the diagonal line style.
-   *
-   * \sa diagonalTopLeft, diagonalBottomLeft, setDiagonalStyle
-   */
-  unsigned diagonalStyle() const;
-
-  /**
-   * Sets the line style for diagonal line.
-   *
-   * \sa diagonalBorderStyle, setDiagonalTopLeft, setDiagonalBottomLeft
-   */
-  void setDiagonalStyle( unsigned style );
-
-  /**
-   * Returns the color for diagonal line. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setDiagonalColor, diagonalStyle
-   */
-  unsigned diagonalColor() const;
-
-  /**
-   * Sets the color for diagonal line. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa diagonalColor, setDiagonalStyle
-   */
-  void setDiagonalColor( unsigned color );
-
-  /**
-   * Returns fill pattern.
-   *
-   * \sa setFillPattern
-   */
-  unsigned fillPattern() const;
-
-  /**
-   * Sets fill pattern.
-   *
-   * \sa fillPattern
-   */
-  void setFillPattern( unsigned pattern );
-
-  /**
-   * Returns the fill foreground color. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setPatternForeColor, patternBackColor
-   */
-  unsigned patternForeColor() const;
-
-  /**
-   * Sets the fill foreground color. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa patternForeColor, setPatternBackColor
-   */
-  void setPatternForeColor( unsigned color );
-
-  /**
-   * Returns the fill background color. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa setPatternBackColor, patternForeColor
-   */
-  unsigned patternBackColor() const;
-
-  /**
-   * Sets the fill background color. This is an index to color palette
-   * specified in Palette record.
-   *
-   * \sa patternBackColor, setPatternForeColor
-   */
-  void setPatternBackColor( unsigned color );
-
-  virtual const char* name() const { return "XF"; }
-
-  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
-
-  virtual void dump( std::ostream& out ) const;
+    static const unsigned int id;
+
+    unsigned int rtti() const {
+        return this->id;
+    }
+
+    /**
+     * Creates a new XF record.
+     */
+    XFRecord();
+
+    /**
+     * Creates a copy of XF record.
+     */
+    XFRecord(const XFRecord& xf);
+
+    /**
+     * Assigns from another XF record.
+     */
+    XFRecord& operator=(const XFRecord& xf);
+
+    /**
+     * Destroy the record.
+     */
+    ~XFRecord();
+
+    /**
+     * Gets the index of the font for use in this XFormat. The index
+     * refers to the font table.
+     *
+     * \sa setFontIndex, FontRecord
+     */
+    unsigned fontIndex() const;
+
+    /**
+     * Sets the index of the font for use in this XFormat. The index
+     * refers to the font table.
+     *
+     * \sa fontIndex, FontRecord
+     */
+    void setFontIndex(unsigned fi);
+
+    /**
+     * Gets the index of the number format for use in this XFormat. The index
+     * refers to the format table.
+     *
+     * \sa setFormatIndex, FormatRecord
+     */
+    unsigned formatIndex() const;
+
+    /**
+     * Sets the index of the number format for use in this XFormat. The index
+     * refers to the format table.
+     *
+     * \sa formatIndex, FormatRecord
+     */
+    void setFormatIndex(unsigned fi);
+
+    /**
+     * Returns true if the cells using this format should be locked.
+     *
+     * \sa setLocked
+     */
+    bool locked() const;
+
+    /**
+     * Sets whether the cells using this format should be locked or not.
+     *
+     * \sa locked
+     */
+    void setLocked(bool l);
+
+    /**
+     * Returns true if the formula of the cells using this format
+     * should be hidden from user.
+     *
+     * \sa setFormulaHidden
+     */
+    bool formulaHidden() const;
+
+    /**
+     * Sets whether the formula of the cells using this format
+     * should be hidden or should be visible.
+     *
+     * \sa formulaHidden
+     */
+    void setFormulaHidden(bool f);
+
+    /**
+     * Returns the index of the parent stlye of this format.
+     * This refers to the index of the XFormat table which is constructed
+     * from a series of XFormat records.
+     *
+     * \sa setParentStyle
+     */
+    unsigned parentStyle() const;
+
+    /**
+     * Sets the index of the parent stlye of this format.
+     * This refers to the index of the XFormat table which is constructed
+     * from a series of XFormat records.
+     *
+     * \sa parentStyle
+     */
+    void setParentStyle(unsigned ps);
+
+    enum {
+        General = 0,
+        Left,
+        Centered,
+        Right,
+        Filled,
+        Justified,
+        CenteredSelection,
+        Distributed
+    };
+
+    /**
+     * Gets the horizontal alignment, e.g Left.
+     */
+    unsigned horizontalAlignment() const;
+
+    /**
+     * Sets the horizontal alignment, e.g Left.
+     */
+    void setHorizontalAlignment(unsigned ha);
+
+    /**
+     * Returns human-readable string representation of the horizontal alignment.
+       For example, XFRecord::Left will return "Left".
+     */
+    const char* horizontalAlignmentAsString() const;
+
+    enum {
+        Top = 0,
+        VCentered = 1,
+        Bottom = 2,
+        VJustified = 3,
+        VDistributed = 4
+    };
+
+    /**
+     * Gets the vertical alignment, e.g Bottom.
+     *
+     * \sa setVerticalAlignment
+     */
+    unsigned verticalAlignment() const;
+
+    /**
+     * Sets the vertical alignment, e.g Top.
+     *
+     * \sa verticalAlignment
+     */
+    void setVerticalAlignment(unsigned va);
+
+    /**
+     * Returns human-readable string representation of the vertical alignment.
+       For example, XFRecord::Top will return "Top".
+     */
+    const char* verticalAlignmentAsString() const;
+
+    /**
+     * Returns true if text is wrapped at right border.
+     *
+     * \sa setTextWrap
+     */
+    bool textWrap() const;
+
+    /**
+     * Sets whether text should be wrapped at right border.
+     *
+     * \sa textWrap
+     */
+    void setTextWrap(bool wrap);
+
+    /**
+     * Returns the rotation angle of the text. If it is between 1 to 90,
+     * the text is rotated 1 to 90 degrees counterclockwise. If it is between
+     * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
+     *
+     * \sa setRotationAngle
+     */
+    unsigned rotationAngle() const;
+
+    /**
+     * Sets the rotation angle of the text. If it is between 1 to 90,
+     * the text is rotated 1 to 90 degrees counterclockwise. If it is between
+     * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
+     *
+     * \sa setRotationAngle
+     */
+    void setRotationAngle(unsigned angle);
+
+    /**
+     * Returns true if the letters for text are not rotated, but
+     * instead stacked top-to-bottom.
+     *
+     * \sa setStackedLetters
+     */
+    bool stackedLetters() const;
+
+    /**
+     * Sets whether the letters for text should be stacked top-to-bottom.
+     *
+     * \sa stackedLetters
+     */
+    void setStackedLetters(bool stacked);
+
+    /**
+     * Returns indent level.
+     *
+     * \sa indentLevel
+     */
+    unsigned indentLevel() const;
+
+    /**
+     * Sets indent level.
+     *
+     * \sa indentLevel
+     */
+    void setIndentLevel(unsigned i);
+
+    /**
+     * Returns true if content should be shrunk to fit into cell.
+     *
+     * \sa setShrinkContent
+     */
+    bool shrinkContent() const;
+
+    /**
+     * Sets whether content should be shrunk to fit into cell.
+     *
+     * \sa shrinkContent
+     */
+    void setShrinkContent(bool s);
+
+    enum {
+        NoLine = 0,
+        Thin = 1,
+        Medium = 2,
+        Dashed = 3,
+        Dotted = 4,
+        Thick = 5,
+        Double = 6,
+        Hair = 7,
+        MediumDashed = 8,
+        ThinDashDotted = 9,
+        MediumDashDotted = 10,
+        ThinDashDotDotted = 11,
+        MediumDashDotDotted = 12,
+        SlantedMediumDashDotted = 13
+    };
+
+    /**
+     * Returns the line style for left border.
+     *
+     * \sa setLeftBorderStyle, leftBorderColor
+     */
+    unsigned leftBorderStyle() const;
+
+    /**
+     * Sets the line style for left border.
+     *
+     * \sa leftBorderStyle, setLeftBorderColor
+     */
+    void setLeftBorderStyle(unsigned style);
+
+    /**
+     * Returns the color for left border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setLeftBorderColor, leftBorderStyle
+     */
+    unsigned leftBorderColor() const;
+
+    /**
+     * Sets the color for left border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa leftBorderColor, setLeftBorderStyle
+     */
+    void setLeftBorderColor(unsigned color);
+
+    /**
+     * Returns the line style for right border.
+     *
+     * \sa setRightBorderStyle, rightBorderColor
+     */
+    unsigned rightBorderStyle() const;
+
+    /**
+     * Sets the line style for right border.
+     *
+     * \sa rightBorderStyle, setRightBorderColor
+     */
+    void setRightBorderStyle(unsigned style);
+
+    /**
+     * Returns the color for right border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setRightBorderColor, rightBorderStyle
+     */
+    unsigned rightBorderColor() const;
+
+    /**
+     * Sets the color for right border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa rightBorderColor, setRightBorderStyle
+     */
+    void setRightBorderColor(unsigned color);
+
+    /**
+     * Returns the line style for top border.
+     *
+     * \sa setTopBorderStyle, topBorderColor
+     */
+    unsigned topBorderStyle() const;
+
+    /**
+     * Sets the line style for top border.
+     *
+     * \sa topBorderStyle, setTopBorderColor
+     */
+    void setTopBorderStyle(unsigned style);
+
+    /**
+     * Returns the color for top border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setTopBorderColor, topBorderStyle
+     */
+    unsigned topBorderColor() const;
+
+    /**
+     * Sets the color for top border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa topBorderColor, setTopBorderStyle
+     */
+    void setTopBorderColor(unsigned color);
+
+    /**
+     * Returns the line style for bottom border.
+     *
+     * \sa setBottomBorderStyle, bottomBorderColor
+     */
+    unsigned bottomBorderStyle() const;
+
+    /**
+     * Sets the line style for bottom border.
+     *
+     * \sa bottomBorderStyle, setBottomBorderColor
+     */
+    void setBottomBorderStyle(unsigned style);
+
+    /**
+     * Returns the color for bottom border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setBottomBorderColor, bottomBorderStyle
+     */
+    unsigned bottomBorderColor() const;
+
+    /**
+     * Sets the color for bottom border. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa bottomBorderColor, setBottomBorderStyle
+     */
+    void setBottomBorderColor(unsigned color);
+
+    /**
+     * Returns true if there is a diagonal line from top left to right bottom.
+     *
+     * \sa diagonalStyle, diagonalColor, setDiagonalTopLeft
+     */
+    bool diagonalTopLeft() const;
+
+    /**
+     * Sets whether there should be a diagonal line from top left to right bottom.
+     *
+     * \sa diagonalTopLeft, setDiagonalStlye, setDiagonalColor
+     */
+    void setDiagonalTopLeft(bool d);
+
+    /**
+     * Returns true if there is a diagonal line from bottom left to right top.
+     *
+     * \sa diagonalStyle, diagonalColor, setDiagonalBottomLeft
+     */
+    bool diagonalBottomLeft() const;
+
+    /**
+     * Sets whether there should be a diagonal line from bottom left to right top.
+     *
+     * \sa diagonalBottomLeft, setDiagonalStlye, setDiagonalColor
+     */
+    void setDiagonalBottomLeft(bool d);
+
+    /**
+     * Returns the diagonal line style.
+     *
+     * \sa diagonalTopLeft, diagonalBottomLeft, setDiagonalStyle
+     */
+    unsigned diagonalStyle() const;
+
+    /**
+     * Sets the line style for diagonal line.
+     *
+     * \sa diagonalBorderStyle, setDiagonalTopLeft, setDiagonalBottomLeft
+     */
+    void setDiagonalStyle(unsigned style);
+
+    /**
+     * Returns the color for diagonal line. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setDiagonalColor, diagonalStyle
+     */
+    unsigned diagonalColor() const;
+
+    /**
+     * Sets the color for diagonal line. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa diagonalColor, setDiagonalStyle
+     */
+    void setDiagonalColor(unsigned color);
+
+    /**
+     * Returns fill pattern.
+     *
+     * \sa setFillPattern
+     */
+    unsigned fillPattern() const;
+
+    /**
+     * Sets fill pattern.
+     *
+     * \sa fillPattern
+     */
+    void setFillPattern(unsigned pattern);
+
+    /**
+     * Returns the fill foreground color. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setPatternForeColor, patternBackColor
+     */
+    unsigned patternForeColor() const;
+
+    /**
+     * Sets the fill foreground color. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa patternForeColor, setPatternBackColor
+     */
+    void setPatternForeColor(unsigned color);
+
+    /**
+     * Returns the fill background color. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa setPatternBackColor, patternForeColor
+     */
+    unsigned patternBackColor() const;
+
+    /**
+     * Sets the fill background color. This is an index to color palette
+     * specified in Palette record.
+     *
+     * \sa patternBackColor, setPatternForeColor
+     */
+    void setPatternBackColor(unsigned color);
+
+    virtual const char* name() const {
+        return "XF";
+    }
+
+    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+
+    virtual void dump(std::ostream& out) const;
 
 private:
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 
 class ExcelReader
 {
 public:
-  ExcelReader();
-  virtual ~ExcelReader();
-  bool load( Workbook* workbook, const char* filename );
+    ExcelReader();
+    virtual ~ExcelReader();
+    bool load(Workbook* workbook, const char* filename);
 
 protected:
-  virtual void handleRecord( Record* record );
+    virtual void handleRecord(Record* record);
 
 private:
-  void handleBOF( BOFRecord* record );
-  void handleEOF( EOFRecord* record );
+    void handleBOF(BOFRecord* record);
+    void handleEOF(EOFRecord* record);
 
-  // no copy or assign
-  ExcelReader( const ExcelReader& );
-  ExcelReader& operator=( const ExcelReader& );
+    // no copy or assign
+    ExcelReader(const ExcelReader&);
+    ExcelReader& operator=(const ExcelReader&);
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 

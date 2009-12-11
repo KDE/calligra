@@ -32,52 +32,52 @@ namespace Kivio
 {
 
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
-  : KDialogBase(parent, name, false, i18n("Export to Image"), Ok|Cancel)
+        : KDialogBase(parent, name, false, i18n("Export to Image"), Ok | Cancel)
 {
-  kapp->restoreOverrideCursor();
-  m_mainWidget = new ImageExportWidget(this);
-  setMainWidget(m_mainWidget);
+    kapp->restoreOverrideCursor();
+    m_mainWidget = new ImageExportWidget(this);
+    setMainWidget(m_mainWidget);
 }
 
 void ImageExportDialog::setPageList(const QStringList& pages)
 {
-  m_mainWidget->m_pageCombo->clear();
-  m_mainWidget->m_pageCombo->insertStringList(pages);
+    m_mainWidget->m_pageCombo->clear();
+    m_mainWidget->m_pageCombo->insertStringList(pages);
 }
 
 void ImageExportDialog::setInitialCustomSize(const QSize& size)
 {
-  m_mainWidget->m_widthSpinBox->setValue(size.width());
-  m_mainWidget->m_heightSpinBox->setValue(size.height());
+    m_mainWidget->m_widthSpinBox->setValue(size.width());
+    m_mainWidget->m_heightSpinBox->setValue(size.height());
 }
 
 QString ImageExportDialog::selectedPage() const
 {
-  return m_mainWidget->m_pageCombo->currentText();
+    return m_mainWidget->m_pageCombo->currentText();
 }
 
 bool ImageExportDialog::usePageBorders() const
 {
-  return (m_mainWidget->m_exportAreaCombo->currentItem() == 0);
+    return (m_mainWidget->m_exportAreaCombo->currentItem() == 0);
 }
 
 bool ImageExportDialog::useCustomSize() const
 {
-  return m_mainWidget->m_customSizeCheckBox->isChecked();
+    return m_mainWidget->m_customSizeCheckBox->isChecked();
 }
 
 QSize ImageExportDialog::customSize() const
 {
-  QSize size;
-  size.setWidth(m_mainWidget->m_widthSpinBox->value());
-  size.setHeight(m_mainWidget->m_heightSpinBox->value());
+    QSize size;
+    size.setWidth(m_mainWidget->m_widthSpinBox->value());
+    size.setHeight(m_mainWidget->m_heightSpinBox->value());
 
-  return size;
+    return size;
 }
 
 int ImageExportDialog::margin() const
 {
-  return m_mainWidget->m_marginSpinBox->value();
+    return m_mainWidget->m_marginSpinBox->value();
 }
 
 }

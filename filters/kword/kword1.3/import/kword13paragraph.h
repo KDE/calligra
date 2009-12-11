@@ -38,13 +38,13 @@ class KWord13Format;
 class KWord13Paragraph
 {
 public:
-    explicit KWord13Paragraph( void );
-    ~KWord13Paragraph( void );
+    explicit KWord13Paragraph(void);
+    ~KWord13Paragraph(void);
 public:
-    void xmldump( QTextStream& iostream );
-    void setText( const QString& str);
-    void appendText( const QString& str);
-    QString text( void ) const;
+    void xmldump(QTextStream& iostream);
+    void setText(const QString& str);
+    void appendText(const QString& str);
+    QString text(void) const;
 public:
     /// \<LAYOUT\>
     KWord13Layout m_layout;
@@ -61,7 +61,7 @@ private:
 class KWord13ParagraphGroup : public Q3ValueList <KWord13Paragraph>
 {
 public:
-    void xmldump( QTextStream& iostream );
+    void xmldump(QTextStream& iostream);
 };
 
 #endif //  _FILTER_KWORD_1_3__KWORDPARAGRAPH_H

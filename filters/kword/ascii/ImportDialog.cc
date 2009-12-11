@@ -33,26 +33,26 @@
 #include <ImportDialog.h>
 
 AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
-    : KDialog(parent),
-      m_dialog(this)
+        : KDialog(parent),
+        m_dialog(this)
 {
     m_ui.setupUi(m_dialog);
     m_radioGroup.addButton(m_ui.radioParagraphAsIs);
     m_radioGroup.addButton(m_ui.radioParagraphSentence);
     m_radioGroup.addButton(m_ui.radioParagraphOldWay);
 
-    setButtons( Ok|Cancel);
-    setCaption( i18n("KWord's Plain Text Import Filter") );
-	setDefaultButton(KDialog::No);
+    setButtons(Ok | Cancel);
+    setCaption(i18n("KWord's Plain Text Import Filter"));
+    setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
-    encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )", "UTF-8" );
-    encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
+    encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )", "UTF-8");
+    encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
-    const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
-    encodings << description.arg("Apple Roman"); // Apple 
+    const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
+    encodings << description.arg("Apple Roman"); // Apple
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
 
@@ -68,29 +68,25 @@ AsciiImportDialog :: ~AsciiImportDialog(void)
 
 QTextCodec* AsciiImportDialog::getCodec(void) const
 {
-    const QString strCodec( KGlobal::charsets()->encodingForName( m_ui.comboBoxEncoding->currentText() ) );
-    kDebug(30502) <<"Encoding:" << strCodec;
+    const QString strCodec(KGlobal::charsets()->encodingForName(m_ui.comboBoxEncoding->currentText()));
+    kDebug(30502) << "Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
+    QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
-    if ( codec )
-    {
+    if (codec) {
         ok = true;
-    }
-    else
-    {
-        codec = KGlobal::charsets()->codecForName( strCodec, ok );
+    } else {
+        codec = KGlobal::charsets()->codecForName(strCodec, ok);
     }
 
     // Still nothing?
-    if ( !codec || !ok )
-    {
+    if (!codec || !ok) {
         // Default: UTF-8
         kWarning(30502) << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
+        KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
         return 0;
     }
 
@@ -100,16 +96,12 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
 int AsciiImportDialog::getParagraphStrategy(void) const
 {
     QAbstractButton* checkedButton = m_radioGroup.checkedButton();
-    if (m_ui.radioParagraphAsIs == checkedButton)
-    {
+    if (m_ui.radioParagraphAsIs == checkedButton) {
         return 0;
     }
-    if (m_ui.radioParagraphSentence == checkedButton)
-    {
+    if (m_ui.radioParagraphSentence == checkedButton) {
         return 1;
-    }
-    else if (m_ui.radioParagraphOldWay == checkedButton)
-    {
+    } else if (m_ui.radioParagraphOldWay == checkedButton) {
         return 999;
     }
     return 0;

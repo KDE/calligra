@@ -53,22 +53,22 @@
 
 // map KWord field name to RTF field name
 // e.g authorName -> AUTHOR
-static QString mapFieldName( const QString& kwordField )
+static QString mapFieldName(const QString& kwordField)
 {
-  QString rtfField;
+    QString rtfField;
 
-  if( kwordField == "fileName" ) rtfField = "FILENAME";
-  else if( kwordField == "authorName" ) rtfField = "AUTHOR";
-  else if( kwordField == "docTitle" ) rtfField = "TITLE";
+    if (kwordField == "fileName") rtfField = "FILENAME";
+    else if (kwordField == "authorName") rtfField = "AUTHOR";
+    else if (kwordField == "docTitle") rtfField = "TITLE";
 
-  return rtfField;
+    return rtfField;
 }
 
 RTFWorker::RTFWorker():
-    m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false),
-    m_paperOrientation(false), m_paperWidth(20), m_paperHeight(20),
-    m_paperMarginTop(72), m_paperMarginLeft(72),
-    m_paperMarginBottom(72), m_paperMarginRight(72), m_startPageNumber(1)
+        m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false),
+        m_paperOrientation(false), m_paperWidth(20), m_paperHeight(20),
+        m_paperMarginTop(72), m_paperMarginLeft(72),
+        m_paperMarginBottom(72), m_paperMarginRight(72), m_startPageNumber(1)
 {
 }
 
@@ -77,8 +77,8 @@ static QString WritePositiveKeyword(const QString& keyword, const int value)
     QString str;
     str += keyword;
 
-    if (value>0) // The value of the keyword cannot be negative
-        str += QString::number( value );
+    if (value > 0) // The value of the keyword cannot be negative
+        str += QString::number(value);
     else
         str += '0';
 
@@ -103,15 +103,13 @@ QString RTFWorker::writeRow(const QString& textCellHeader, const QString& rowTex
 QString RTFWorker::writeBorder(const char whichBorder, const int borderWidth, const QColor& color)
 {
     QString str;
-    if (borderWidth > 0)
-    {
+    if (borderWidth > 0) {
         str += "\\clbrdr"; // Define border
         str += whichBorder; // t=top, l=left, b=bottom, r=right
         str += "\\brdrs\\brdrw"; // Single border; thickness
         str += QString::number(borderWidth);
-        if (color.isValid())
-        {
-            str += lookupColor("\\brdrcf",color);
+        if (color.isValid()) {
+            str += lookupColor("\\brdrcf", color);
         }
     }
     return str;
@@ -135,47 +133,43 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
     m_inTable = true;
 
     QList<TableCell>::ConstIterator itCell;
-    for (itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); itCell++)
-    {
+    for (itCell = anchor.table.cellList.begin();
+            itCell != anchor.table.cellList.end(); itCell++) {
         // ### TODO: rowspan, colspan
-        if (rowCurrent!=(*itCell).row)
-        {
+        if (rowCurrent != (*itCell).row) {
             rowCurrent = (*itCell).row;
-            textBody += writeRow( textCellHeader, rowText, firstFrameData);
+            textBody += writeRow(textCellHeader, rowText, firstFrameData);
             textBody += "\\row";
             textBody += m_eol;
             rowText.clear();
             textCellHeader.clear();
-            firstCellInRow=true;
+            firstCellInRow = true;
             debugRowCurrent ++; // DEBUG
             debugCellCurrent = 0; //DEBUG
         }
 
         const FrameData& frame = (*itCell).frame;
 
-        if (firstCellInRow) // Not yet set, so set the position of the left border.
-        {
-            firstFrameData=frame;
-            firstCellInRow=false;
+        if (firstCellInRow) { // Not yet set, so set the position of the left border.
+            firstFrameData = frame;
+            firstCellInRow = false;
         }
 
-        kDebug(30515) <<"Cell:" << debugRowCurrent <<"," << debugCellCurrent
-            << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom;
-        textCellHeader += writeBorder('t',qRound(PT_TO_TWIP(frame.tWidth)),frame.tColor);
-        textCellHeader += writeBorder('l',qRound(PT_TO_TWIP(frame.lWidth)),frame.lColor);
-        textCellHeader += writeBorder('b',qRound(PT_TO_TWIP(frame.bWidth)),frame.bColor);
-        textCellHeader += writeBorder('r',qRound(PT_TO_TWIP(frame.rWidth)),frame.rColor);
-        textCellHeader += WritePositiveKeyword("\\cellx",qRound(PT_TO_TWIP(frame.right) - m_paperMarginRight)); //right border of cell
+        kDebug(30515) << "Cell:" << debugRowCurrent << "," << debugCellCurrent
+        << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom;
+        textCellHeader += writeBorder('t', qRound(PT_TO_TWIP(frame.tWidth)), frame.tColor);
+        textCellHeader += writeBorder('l', qRound(PT_TO_TWIP(frame.lWidth)), frame.lColor);
+        textCellHeader += writeBorder('b', qRound(PT_TO_TWIP(frame.bWidth)), frame.bColor);
+        textCellHeader += writeBorder('r', qRound(PT_TO_TWIP(frame.rWidth)), frame.rColor);
+        textCellHeader += WritePositiveKeyword("\\cellx", qRound(PT_TO_TWIP(frame.right) - m_paperMarginRight)); //right border of cell
 
         QString endOfParagraph;
         QList<ParaData> *paraList = (*itCell).paraList;
         QList<ParaData>::ConstIterator it;
-                QList<ParaData>::ConstIterator end(paraList->constEnd());
-        for (it=paraList->constBegin();it!=end;++it)
-        {
+        QList<ParaData>::ConstIterator end(paraList->constEnd());
+        for (it = paraList->constBegin();it != end;++it) {
             rowText += endOfParagraph;
-            rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
+            rowText += ProcessParagraphData((*it).text, (*it).layout, (*it).formattingList);
             rowText += m_eol;
             endOfParagraph = "\\par"; // The problem is that the last paragraph ends with \cell not with \par
         }
@@ -183,7 +177,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
         debugCellCurrent ++; // DEBUG
     }
 
-    textBody += writeRow( textCellHeader, rowText, firstFrameData);
+    textBody += writeRow(textCellHeader, rowText, firstFrameData);
     textBody += "\\row\\pard";  // delimit last row
     textBody += m_eol;
     m_inTable = oldInTable;
@@ -199,31 +193,29 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     QString strExt;
     QByteArray image;
 
-    kDebug(30515) <<"RTFWorker::makeImage" << endl << anchor.picture.koStoreName;
+    kDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName;
 
-    const int pos=strImageName.findRev('.');
-    if(pos!=-1) strExt = strImageName.mid(pos+1).lower();
+    const int pos = strImageName.findRev('.');
+    if (pos != -1) strExt = strImageName.mid(pos + 1).lower();
 
     QString strTag;
-    if (strExt=="png")
-        strTag="\\pngblip";
+    if (strExt == "png")
+        strTag = "\\pngblip";
 #if 0
-    else if (strExt=="bmp")
-        strTag="\\dibitmap";
+    else if (strExt == "bmp")
+        strTag = "\\dibitmap";
 #endif
-    else if ( (strExt=="jpeg") || (strExt=="jpg") )
-        strTag="\\jpegblip";
-    else if (strExt=="wmf")
-        strTag="\\wmetafile8"; // 8 == anisotropic
-    else
-    {
+    else if ((strExt == "jpeg") || (strExt == "jpg"))
+        strTag = "\\jpegblip";
+    else if (strExt == "wmf")
+        strTag = "\\wmetafile8"; // 8 == anisotropic
+    else {
         // either without extension or format is unknown
         // let's try to convert it to PNG format
-        kDebug(30515) <<"Converting image" << anchor.picture.koStoreName;
+        kDebug(30515) << "Converting image" << anchor.picture.koStoreName;
 
-        strTag="\\pngblip";
-        if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
-        {
+        strTag = "\\pngblip";
+        if (!loadAndConvertToImage(anchor.picture.koStoreName, strExt, "PNG", image)) {
             kWarning(30515) << "Unable to convert " << anchor.picture.koStoreName;
             return QString();
         }
@@ -231,9 +223,8 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     // ### TODO: SVG, QPicture
 
     // load the image, this isn't necessary for converted image
-    if( !image.size() )
-        if (!loadSubFile(anchor.picture.koStoreName,image))
-        {
+    if (!image.size())
+        if (!loadSubFile(anchor.picture.koStoreName, image)) {
             kWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName;
             return QString();
         }
@@ -246,47 +237,42 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     // find original image width and height (in twips)
     long origWidth  = width;
     long origHeight = height;
-    if( strExt == "wmf" )
-    {
+    if (strExt == "wmf") {
         // special treatment for WMF with metaheader
         // d7cdc69a is metaheader magic id
         quint8* data = (quint8*) image.data();
-        if( ( data[0] == 0xd7 ) && ( data[1] == 0xcd ) &&
-            ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) &&
-            ( image.size() > 22 ) )
-        {
+        if ((data[0] == 0xd7) && (data[1] == 0xcd) &&
+                (data[2] == 0xc6) && (data[3] == 0x9a) &&
+                (image.size() > 22)) {
             // grab bounding box, find original size
-            unsigned left = data[6]+(data[7]<<8);
-            unsigned top = data[8]+(data[9]<<8);
-            unsigned right = data[10]+(data[11]<<8);
-            unsigned bottom = data[12]+(data[13]<<8);
-            origWidth = (long) (MM_TO_TWIP(right-left)/100);
-            origHeight = (long) (MM_TO_TWIP(bottom-top)/100);
+            unsigned left = data[6] + (data[7] << 8);
+            unsigned top = data[8] + (data[9] << 8);
+            unsigned right = data[10] + (data[11] << 8);
+            unsigned bottom = data[12] + (data[13] << 8);
+            origWidth = (long)(MM_TO_TWIP(right - left) / 100);
+            origHeight = (long)(MM_TO_TWIP(bottom - top) / 100);
 #ifdef __GNUC__
 #warning "kde4 : port it"
 #endif
 #if 0
             // throw away WMF metaheader (22 bytes)
-            for( uint i=0; i<image.size()-22; i++)
-                image.at(i)=image.at(i+22)); // As we use uint, we need at()  ( [] uses int only .)
-            image.resize( image.size()-22 );
+            for (uint i = 0; i < image.size() - 22; i++)
+                image.at(i) = image.at(i + 22)); // As we use uint, we need at()  ( [] uses int only .)
+                image.resize(image.size() - 22);
 #endif
-        }
-    }
-    else
-    {
+            }
+    } else {
         // It must be an image
-        QImage img( image );
-        if( img.isNull() )
-        {
+        QImage img(image);
+        if (img.isNull()) {
             kWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName;
             return QString();
         }
         // check resolution, assume 2835 dpm (72 dpi) if not available
         int resx = img.dotsPerMeterX();
         int resy = img.dotsPerMeterY();
-        if( resx <= 0 ) resx = 2835;
-        if( resy <= 0 ) resy = 2835;
+        if (resx <= 0) resx = 2835;
+        if (resy <= 0) resy = 2835;
 
         origWidth =  long(img.width() * 2834.65 * 20 / resx);
         origHeight = long(img.height() * 2834.65 * 20 / resy);
@@ -309,40 +295,38 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     textBody += "\\picscaley";
     textBody += QString::number(scaleY, 10);
     textBody += "\\picw";
-    textBody += QString::number(picw,10);
+    textBody += QString::number(picw, 10);
     textBody += "\\pich";
-    textBody += QString::number(pich,10);
+    textBody += QString::number(pich, 10);
     textBody += "\\picwgoal";
     textBody += QString::number(origWidth, 10);
     textBody += "\\pichgoal";
     textBody += QString::number(origHeight, 10);
 
-    textBody+=' ';
+    textBody += ' ';
     const char hex[] = "0123456789abcdef";
-    for (uint i=0; i<image.size(); i++)
-    {
-        if (!(i%40))
+    for (uint i = 0; i < image.size(); i++) {
+        if (!(i % 40))
             textBody += m_eol;
-        const char ch=image.at(i);
+        const char ch = image.at(i);
         textBody += hex[(ch>>4)&0x0f]; // Done this way to avoid signed/unsigned problems
         textBody += hex[(ch&0x0f)];
     }
 
 
-    textBody+='}';
+    textBody += '}';
 
     return textBody;
 }
 
 QString RTFWorker::formatTextParagraph(const QString& strText,
-    const FormatData& formatOrigin, const FormatData& format)
+                                       const FormatData& formatOrigin, const FormatData& format)
 {
     QString str;
 
-    if (!format.text.missing)
-    {
+    if (!format.text.missing) {
         // Opening elements
-        str+=openSpan(formatOrigin,format);
+        str += openSpan(formatOrigin, format);
     }
 
     QString strEscaped = escapeRtfText(strText);
@@ -350,24 +334,22 @@ QString RTFWorker::formatTextParagraph(const QString& strText,
     // Replace line feeds by forced line breaks
     int pos;
     QString strBr("\\line ");
-    while ((pos=strEscaped.find(QChar(10)))>-1)
-    {
-        strEscaped.replace(pos,1,strBr);
+    while ((pos = strEscaped.find(QChar(10))) > -1) {
+        strEscaped.replace(pos, 1, strBr);
     }
 
-    str+=strEscaped;
+    str += strEscaped;
 
-    if (!format.text.missing)
-    {
+    if (!format.text.missing) {
         // Closing elements
-        str+=closeSpan(formatOrigin,format);
+        str += closeSpan(formatOrigin, format);
     }
 
     return str;
 }
 
-QString RTFWorker::ProcessParagraphData ( const QString &paraText,
-    const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
+QString RTFWorker::ProcessParagraphData(const QString &paraText,
+                                        const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
     QString str;
     QString content;
@@ -379,168 +361,136 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         markup += "\\intbl";
 
 //lists
-    if (layout.counter.style)
-        {
+    if (layout.counter.style) {
         markup += "{\\pntext\\pard\\plain";
-        if( layout.formatData.text.fontSize >= 0)
-        {
-                markup += "\\fs";
-                markup += QString::number((2 * layout.formatData.text.fontSize));
-                markup += lookupFont("\\f",layout.formatData.text.fontName);
+        if (layout.formatData.text.fontSize >= 0) {
+            markup += "\\fs";
+            markup += QString::number((2 * layout.formatData.text.fontSize));
+            markup += lookupFont("\\f", layout.formatData.text.fontName);
         }
         markup += ' ';
         markup += layout.counter.text;
         markup += "\\tab}{\\*\\pn";
-        if (layout.counter.style > 5)
-        {
-        markup += "\\pnlvlblt ";
-        markup += "{\\pntxtb ";
-        if (!layout.counter.lefttext.isEmpty() && layout.counter.lefttext != "{" && layout.counter.lefttext != "}")
-        {
+        if (layout.counter.style > 5) {
+            markup += "\\pnlvlblt ";
+            markup += "{\\pntxtb ";
+            if (!layout.counter.lefttext.isEmpty() && layout.counter.lefttext != "{" && layout.counter.lefttext != "}") {
                 markup += layout.counter.lefttext;
-        }
-        switch (layout.counter.style)
-        {
-        case 6:
-        {
+            }
+            switch (layout.counter.style) {
+            case 6: {
                 //custom bullets (one char)
                 //TODO: use correct character/sign for bullet
 
-            markup += layout.counter.customCharacter;
-            break;
-        }
-        case 7:
-        {
+                markup += layout.counter.customCharacter;
+                break;
+            }
+            case 7: {
                 //custom bullets (complex)
-            markup += layout.counter.text;
-            break;
-        }
-        case 8:
-        {
+                markup += layout.counter.text;
+                break;
+            }
+            case 8: {
                 //circle bullets
                 //TODO: use correct character/sign for bullet
-            markup += "\\bullet";
-            break;
-        }
-        case 9:
-        {
+                markup += "\\bullet";
+                break;
+            }
+            case 9: {
                 //square bullets
                 //TODO: use correct character/sign for bullet
-            markup += "\\bullet";
-            break;
-        }
-        case 10:
-        {
+                markup += "\\bullet";
+                break;
+            }
+            case 10: {
                 //disc bullets
                 //TODO: make work in OO
-            markup += "\\bullet";
-            break;
-        }
-        case 11:
-        {
+                markup += "\\bullet";
+                break;
+            }
+            case 11: {
                 //disc bullets
                 //TODO: use correct character/sign for bullet
-            markup += layout.counter.text;
-            break;
-        }
-        default:
-            markup += "\\bullet";
-        }
-        markup += '}';
-        }
-        else
-        {
-            if (layout.counter.numbering!=0)
-                {
-                    markup += "\\pnlvl";
-                    markup += QString::number(layout.counter.depth + 1);
-                    markup += "\\pnprev1";
-                }
-        else if (layout.counter.style==1)
-        {
-        markup += "\\pnlvlbody";
-        }
-        else
-        {
-        markup += "\\pnlvl";
-        markup += QString::number(11 - layout.counter.style);
-        }
+                markup += layout.counter.text;
+                break;
+            }
+            default:
+                markup += "\\bullet";
+            }
+            markup += '}';
+        } else {
+            if (layout.counter.numbering != 0) {
+                markup += "\\pnlvl";
+                markup += QString::number(layout.counter.depth + 1);
+                markup += "\\pnprev1";
+            } else if (layout.counter.style == 1) {
+                markup += "\\pnlvlbody";
+            } else {
+                markup += "\\pnlvl";
+                markup += QString::number(11 - layout.counter.style);
+            }
 
-        switch (layout.counter.style)
-        {
-        case 1:
-        {
-        markup += "\\pndec";
-        break;
+            switch (layout.counter.style) {
+            case 1: {
+                markup += "\\pndec";
+                break;
+            }
+            case 2: {
+                markup += "\\pnlcltr";
+                break;
+            }
+            case 3: {
+                markup += "\\pnucltr";
+                break;
+            }
+            case 4: {
+                markup += "\\pnlcrm";
+                break;
+            }
+            case 5: {
+                markup += "\\pnucrm";
+                break;
+            }
+            default:
+                markup += "\\pndec";
+            }
+            markup += "{\\pntxtb ";
+            markup += layout.counter.lefttext;
+            markup += " }";
         }
-        case 2:
-        {
-        markup += "\\pnlcltr";
-        break;
-        }
-        case 3:
-        {
-        markup += "\\pnucltr";
-        break;
-        }
-        case 4:
-        {
-        markup += "\\pnlcrm";
-        break;
-        }
-        case 5:
-        {
-        markup += "\\pnucrm";
-        break;
-        }
-        default:
-        markup += "\\pndec";
-        }
-        markup += "{\\pntxtb ";
-        markup += layout.counter.lefttext;
-        markup += " }";
-    }
         markup += "{\\pntxta ";
         markup += layout.counter.righttext;
         markup += " }";
 
         // ### FIXME: that is too late! And why at every list paragraph? (See bug #88241)
-        if (layout.counter.start!=0)
-        {
-        markup += "\\pnstart";
-        markup += QString::number(layout.counter.start);
-        }
-        else
-        {
-        markup += "\\pnstart1";
+        if (layout.counter.start != 0) {
+            markup += "\\pnstart";
+            markup += QString::number(layout.counter.start);
+        } else {
+            markup += "\\pnstart1";
         }
         markup += "\\pnindent0\\pnhang";
 
-        if( layout.formatData.text.fontSize > 0 )
-        {
-        markup += "\\pnfs";
-        markup += QString::number((2 * layout.formatData.text.fontSize));
+        if (layout.formatData.text.fontSize > 0) {
+            markup += "\\pnfs";
+            markup += QString::number((2 * layout.formatData.text.fontSize));
         }
 
-        if( !layout.formatData.text.fontName.isEmpty() )
-        {
+        if (!layout.formatData.text.fontName.isEmpty()) {
             markup += lookupFont("\\pnf", layout.formatData.text.fontName);
         }
 
         markup += '}';
-}
+    }
 
 
     LayoutData styleLayout;
     markup += lookupStyle(layout.styleName, styleLayout);
-    markup += layoutToRtf(styleLayout,layout,true);
+    markup += layoutToRtf(styleLayout, layout, true);
 
-    if ( 1==layout.formatData.text.verticalAlignment )
-    {
+    if (1 == layout.formatData.text.verticalAlignment) {
         markup += "\\sub"; //Subscript
-    }
-    else if ( 2==layout.formatData.text.verticalAlignment )
-    {
+    } else if (2 == layout.formatData.text.verticalAlignment) {
         markup += "\\super"; //Superscript
     }
 
@@ -552,8 +502,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
 
 
-    if (!paraText.isEmpty())
-    {
+    if (!paraText.isEmpty()) {
 
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
@@ -561,101 +510,85 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 
         FormatData formatRef = layout.formatData;
 
-        for ( paraFormatDataIt = paraFormatDataList.begin ();
-              paraFormatDataIt != paraFormatDataList.end ();
-              paraFormatDataIt++ )
-        {
-            if (1==(*paraFormatDataIt).id)
-            {
+        for (paraFormatDataIt = paraFormatDataList.begin();
+                paraFormatDataIt != paraFormatDataList.end();
+                paraFormatDataIt++) {
+            if (1 == (*paraFormatDataIt).id) {
                 //Retrieve text
-                partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-                content +=formatTextParagraph(partialText, formatRef, *paraFormatDataIt);
-            }
-            else if (4==(*paraFormatDataIt).id)
-            {
+                partialText = paraText.mid((*paraFormatDataIt).pos, (*paraFormatDataIt).len);
+                content += formatTextParagraph(partialText, formatRef, *paraFormatDataIt);
+            } else if (4 == (*paraFormatDataIt).id) {
                 // ### TODO: put date/time fields into own method.
-                if ( (0==(*paraFormatDataIt).variable.m_type) // date
-                    || (2==(*paraFormatDataIt).variable.m_type) ) // time
-                {
+                if ((0 == (*paraFormatDataIt).variable.m_type) // date
+                        || (2 == (*paraFormatDataIt).variable.m_type)) { // time
                     // ### TODO: fixed/variable date
                     content += "{\\field{\\*\\fldinst ";
-                    if (0==(*paraFormatDataIt).variable.m_type)
+                    if (0 == (*paraFormatDataIt).variable.m_type)
                         content += "DATE ";
                     else
                         content += "TIME ";
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
-                    kDebug(30515) <<"Time format:" << key;
-                    if (key.startsWith("locale"))
-                    {
-                        if (key == "locale" )
-                        {
-                            if (0==(*paraFormatDataIt).variable.m_type)
+                    kDebug(30515) << "Time format:" << key;
+                    if (key.startsWith("locale")) {
+                        if (key == "locale") {
+                            if (0 == (*paraFormatDataIt).variable.m_type)
                                 key = KGlobal::locale()->dateFormat();
                             else
                                 key = KGlobal::locale()->timeFormat();
-                        }
-                        else if ( key == "localeshort" )
+                        } else if (key == "localeshort")
                             key = KGlobal::locale()->dateFormatShort();
-                        else if ( key == "localedatetime" )
-                        {
+                        else if (key == "localedatetime") {
                             key = KGlobal::locale()->dateFormat();
                             key += ' ';
                             key += KGlobal::locale()->timeFormat();
-                        }
-                        else if ( key == "localedatetimeshort" )
-                        {
+                        } else if (key == "localedatetimeshort") {
                             key = KGlobal::locale()->dateFormat();
                             key += ' ';
                             key += KGlobal::locale()->timeFormat();
                         }
 
-                        kDebug(30515) <<"Locale date in KLocale format:" << key;
+                        kDebug(30515) << "Locale date in KLocale format:" << key;
 
                         // KLocale's key differ from KWord
 
                         // Date
-                        key.replace( "%Y", "yyyy" );    // Year 4 digits
-                        key.replace( "%y", "yy" );      // Year 2 digits
-                        key.replace( "%n", "M" );       // Month 1 digit
-                        key.replace( "%m", "MM" );      // Month 2 digits
-                        key.replace( "%e", "d" );       // Day 1 digit
-                        key.replace( "%d", "dd" );      // Day 2 digits
-                        key.replace( "%b", "MMM" );     // Month 3 letters
-                        key.replace( "%B", "MMMM" );    // Month all letters
-                        key.replace( "%a", "ddd" );     // Day 3 letters
-                        key.replace( "%A", "dddd" );    // Day all letters
+                        key.replace("%Y", "yyyy");      // Year 4 digits
+                        key.replace("%y", "yy");        // Year 2 digits
+                        key.replace("%n", "M");         // Month 1 digit
+                        key.replace("%m", "MM");        // Month 2 digits
+                        key.replace("%e", "d");         // Day 1 digit
+                        key.replace("%d", "dd");        // Day 2 digits
+                        key.replace("%b", "MMM");       // Month 3 letters
+                        key.replace("%B", "MMMM");      // Month all letters
+                        key.replace("%a", "ddd");       // Day 3 letters
+                        key.replace("%A", "dddd");      // Day all letters
                         // 12h
-                        key.replace( "%p", "am/pm" );   // AM/PM (KLocale knows it only lower case)
-                        key.replace( "%I", "hh" );      // 12 hour 2 digits
-                        key.replace( "%l", "h" );       // 12 hour 1 digits
+                        key.replace("%p", "am/pm");     // AM/PM (KLocale knows it only lower case)
+                        key.replace("%I", "hh");        // 12 hour 2 digits
+                        key.replace("%l", "h");         // 12 hour 1 digits
                         // 24h
-                        key.replace( "%H", "HH" );      // 24 hour 2 digits
-                        key.replace( "%k", "H" );       // 24 hour 1 digit
+                        key.replace("%H", "HH");        // 24 hour 2 digits
+                        key.replace("%k", "H");         // 24 hour 1 digit
                         // Other times
-                        key.replace( "%M", "mm" );      // minute 2 digits (KLocale knows it with 2 digits)
-                        key.replace( "%S", "ss" );      // second 2 digits (KLocale knows it with 2 digits)
+                        key.replace("%M", "mm");        // minute 2 digits (KLocale knows it with 2 digits)
+                        key.replace("%S", "ss");        // second 2 digits (KLocale knows it with 2 digits)
 
-                        kDebug(30515) <<"Locale date in RTF format:" << key;
-                    }
-                    else if (!key.isEmpty())
-                    {
-                        const QRegExp regexp("AP",false); // Not case-sensitive
-                        if (regexp.search(key)!=-1)
-                        {
+                        kDebug(30515) << "Locale date in RTF format:" << key;
+                    } else if (!key.isEmpty()) {
+                        const QRegExp regexp("AP", false); // Not case-sensitive
+                        if (regexp.search(key) != -1) {
                             // 12h
-                            key.replace("ap","am/pm");
-                            key.replace("AP","AM/PM");
-                        }
-                        else
-                        {
+                            key.replace("ap", "am/pm");
+                            key.replace("AP", "AM/PM");
+                        } else {
                             //24h
-                            key.replace('h','H'); // MS Word uses H for 24hour times
+                            key.replace('h', 'H'); // MS Word uses H for 24hour times
                         }
                         // MS Word do not know possesive months
-                        key.replace("PPP","MMM");
-                        key.replace("PPPP","MMMM");
-                        key.replace("zzz","000"); // replace microseconds by 000
-                        kDebug(30515) <<"New format:" << key;
+                        key.replace("PPP", "MMM");
+                        key.replace("PPPP", "MMMM");
+                        key.replace("zzz", "000"); // replace microseconds by 000
+                        kDebug(30515) << "New format:" << key;
                         content += "\\@ \"";
                         content += key;
                         content += "\" ";
@@ -663,40 +596,30 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     content += "\\* MERGEFORMAT }{\\fldrslt ";
                     content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     content += "}}";
-                }
-                else if (4==(*paraFormatDataIt).variable.m_type)
-                {
+                } else if (4 == (*paraFormatDataIt).variable.m_type) {
                     QString strFieldType;
-                    if ((*paraFormatDataIt).variable.isPageNumber())
-                    {
+                    if ((*paraFormatDataIt).variable.isPageNumber()) {
                         content += "{\\field{\\*\\fldinst PAGE \\* MERGEFORMAT }{\\fldrslt ";
                         content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                         content += "}}";
-                    }
-                    else if ((*paraFormatDataIt).variable.isPageCount())
-                    {
+                    } else if ((*paraFormatDataIt).variable.isPageCount()) {
                         content += "{\\field{\\*\\fldinst NUMPAGES \\* MERGEFORMAT }{\\fldrslt ";
                         content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                         content += "}}";
-                    }
-                    else
-                    {
+                    } else {
                         // Unknown subtype, therefore write out the result
                         content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     }
-                }
-                else if (8==(*paraFormatDataIt).variable.m_type)
-                {
+                } else if (8 == (*paraFormatDataIt).variable.m_type) {
                     // Field
                     QString name = escapeRtfText((*paraFormatDataIt).variable.getFieldName());
                     QString value = escapeRtfText((*paraFormatDataIt).variable.getFieldValue());
                     QString rtfField = mapFieldName(name);
 
-                    if( rtfField.isEmpty() )
+                    if (rtfField.isEmpty())
                         // Couldn't map field name, just write out the value
                         content += escapeRtfText((*paraFormatDataIt).variable.m_text);
-                    else
-                    {
+                    else {
                         content += "{\\field";
                         content += "{\\*\\fldinst ";
                         content +=  rtfField;
@@ -705,9 +628,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         content += value;
                         content += "}}}";
                     }
-                }
-                else if (9==(*paraFormatDataIt).variable.m_type)
-                {
+                } else if (9 == (*paraFormatDataIt).variable.m_type) {
                     // A link
                     content += "{\\field";
                     content += "{\\*\\fldinst HYPERLINK ";
@@ -715,25 +636,22 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     content += '}';
                     content += "{\\fldrslt ";
                     content += "{\\ul";   // underline, ### TODO: use style Hyperlink
-                    content += lookupColor("\\cf",QColor(0,0,255));// blue
+                    content += lookupColor("\\cf", QColor(0, 0, 255));// blue
                     content += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
                     content += "}}}";
-                }
-                else if (11==(*paraFormatDataIt).variable.m_type)
-                {
+                } else if (11 == (*paraFormatDataIt).variable.m_type) {
                     // Footnote
                     QString value = (*paraFormatDataIt).variable.getFootnoteValue();
                     bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
                     QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
-                    if( paraList )
-                    {
+                    if (paraList) {
                         QString fstr;
                         QList<ParaData>::ConstIterator it;
                         QList<ParaData>::ConstIterator end(paraList->constEnd());
                         const QString prefixSaved = m_prefix;
                         m_prefix.clear();
-                        for (it=paraList->constBegin();it!=end;++it)
-                            fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
+                        for (it = paraList->constBegin();it != end;++it)
+                            fstr += ProcessParagraphData((*it).text, (*it).layout, (*it).formattingList);
                         m_prefix = prefixSaved;
 
                         content += "{\\super ";
@@ -744,24 +662,18 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         content += fstr;
                         content += "}}}";
                     }
-                }
-                else
-                {
+                } else {
                     // Generic variable
                     content += escapeRtfText((*paraFormatDataIt).variable.m_text);
                 }
-            }
-            else if (6==(*paraFormatDataIt).id)
-            {
-                kDebug(30515) <<"Found an anchor of type:" << (*paraFormatDataIt).frameAnchor.type;
+            } else if (6 == (*paraFormatDataIt).id) {
+                kDebug(30515) << "Found an anchor of type:" << (*paraFormatDataIt).frameAnchor.type;
                 // We have an image, a clipart or a table
 
-                if (6==(*paraFormatDataIt).frameAnchor.type)
-                {
+                if (6 == (*paraFormatDataIt).frameAnchor.type) {
 
 
-                    if (!content.isEmpty())
-                    {
+                    if (!content.isEmpty()) {
                         str += m_prefix;
                         str += markup;
                         str += " {";
@@ -769,15 +681,12 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         str += '}';
                         str += m_eol;
                         content.clear();
-                        if (!m_inTable)
-                        {
+                        if (!m_inTable) {
                             m_prefix = "\\par";
                         }
                     }
                     str += makeTable((*paraFormatDataIt).frameAnchor);
-                }
-                else if ((2==(*paraFormatDataIt).frameAnchor.type) || (5==(*paraFormatDataIt).frameAnchor.type))
-                {
+                } else if ((2 == (*paraFormatDataIt).frameAnchor.type) || (5 == (*paraFormatDataIt).frameAnchor.type)) {
                     content += makeImage((*paraFormatDataIt).frameAnchor);
 
                 }
@@ -788,37 +697,33 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     if (layout.pageBreakAfter)
         content += "\\page";
 
-    if (!content.isEmpty())
-    {
+    if (!content.isEmpty()) {
         str += m_prefix;
         str += markup;
         str += " {";
         str += content;
         str += '}';
         str += m_eol;
-        if (m_inTable==false)
-        {
-           m_prefix = "\\par";
+        if (m_inTable == false) {
+            m_prefix = "\\par";
         }
     }
-    if (str.isEmpty())
-    {
-     str ="\\par\\pard\\plain";
-    if (m_inTable==false)
-    {
-       m_prefix = "\\par";
-    }
+    if (str.isEmpty()) {
+        str = "\\par\\pard\\plain";
+        if (m_inTable == false) {
+            m_prefix = "\\par";
+        }
     }
     return str;
 }
 
 bool RTFWorker::doFullParagraph(const QString& paraText,
-    const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
+                                const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kDebug(30515) <<"Entering RTFWorker::doFullParagraph" << endl << paraText;
-    QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
+    kDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText;
+    QString par = ProcessParagraphData(paraText, layout, paraFormatDataList);
     m_textBody += par;
-    kDebug(30515) <<"Quitting RTFWorker::doFullParagraph";
+    kDebug(30515) << "Quitting RTFWorker::doFullParagraph";
     return true;
 }
 
@@ -826,13 +731,13 @@ bool RTFWorker::doHeader(const HeaderData& header)
 {
     QString str;
     QString content;
-    if( header.page == HeaderData::PAGE_ODD )
+    if (header.page == HeaderData::PAGE_ODD)
         str = "\\facingp{\\headerr";
-    else if( header.page == HeaderData::PAGE_EVEN )
+    else if (header.page == HeaderData::PAGE_EVEN)
         str = "\\facingp{\\headerl";
-    else if( header.page == HeaderData::PAGE_FIRST )
+    else if (header.page == HeaderData::PAGE_FIRST)
         str = "\\facingp{\\headerl";
-    else if( header.page == HeaderData::PAGE_ALL )
+    else if (header.page == HeaderData::PAGE_ALL)
         str = "{\\header";
     else
         return false;
@@ -840,18 +745,17 @@ bool RTFWorker::doHeader(const HeaderData& header)
     str += " {";
 
     QList<ParaData>::ConstIterator it;
-        QList<ParaData>::ConstIterator end(header.para.end());
-    for (it=header.para.begin();it!=end;++it)
-        content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
+    QList<ParaData>::ConstIterator end(header.para.end());
+    for (it = header.para.begin();it != end;++it)
+        content += ProcessParagraphData((*it).text, (*it).layout, (*it).formattingList);
 
-    if (content!="\\par\\pard\\plain")
-    {
-    str += content;
-    str += '}';
+    if (content != "\\par\\pard\\plain") {
+        str += content;
+        str += '}';
 
-    str += '}';
+        str += '}';
 
-    m_textBody += str;
+        m_textBody += str;
     }
     m_prefix.clear();
     return true;
@@ -861,13 +765,13 @@ bool RTFWorker::doFooter(const FooterData& footer)
 {
     QString str;
     QString content;
-    if( footer.page == FooterData::PAGE_ODD )
+    if (footer.page == FooterData::PAGE_ODD)
         str = "\\facingp{\\footerr";
-    else if( footer.page == FooterData::PAGE_EVEN )
+    else if (footer.page == FooterData::PAGE_EVEN)
         str = "\\facingp{\\footerl";
-    else if( footer.page == FooterData::PAGE_FIRST )
+    else if (footer.page == FooterData::PAGE_FIRST)
         str = "\\facingp{\\headerl";
-    else if( footer.page == FooterData::PAGE_ALL )
+    else if (footer.page == FooterData::PAGE_ALL)
         str = "{\\footer";
     else
         return false;
@@ -875,18 +779,17 @@ bool RTFWorker::doFooter(const FooterData& footer)
     str += " {";
 
     QList<ParaData>::ConstIterator it;
-        QList<ParaData>::ConstIterator end(footer.para.end());
-    for (it=footer.para.begin();it!=end;++it)
-        content += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
+    QList<ParaData>::ConstIterator end(footer.para.end());
+    for (it = footer.para.begin();it != end;++it)
+        content += ProcessParagraphData((*it).text, (*it).layout, (*it).formattingList);
 
-    if (content!="\\par\\pard\\plain")
-    {
-    str += content;
-    str += '}';
+    if (content != "\\par\\pard\\plain") {
+        str += content;
+        str += '}';
 
-    str += '}';
+        str += '}';
 
-    m_textBody += str;
+        m_textBody += str;
     }
     m_prefix.clear();
     return true;
@@ -894,35 +797,33 @@ bool RTFWorker::doFooter(const FooterData& footer)
 
 bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
-    m_ioDevice=new QFile(filenameOut);
+    m_ioDevice = new QFile(filenameOut);
 
-    if (!m_ioDevice)
-    {
+    if (!m_ioDevice) {
         kError(30515) << "No output file! Aborting!";
         return false;
     }
 
-    if ( !m_ioDevice->open (QIODevice::WriteOnly) )
-    {
+    if (!m_ioDevice->open(QIODevice::WriteOnly)) {
         kError(30515) << "Unable to open output file!";
         return false;
     }
 
-    m_streamOut=new QTextStream(m_ioDevice);
+    m_streamOut = new QTextStream(m_ioDevice);
 
     // ### TODO: should "CP 1252" be used directly? (But RTFWorker::escapeRtfText is beased on ISO-8859-1 only.)
     m_streamOut->setEncoding(QTextStream::Latin1); // We are declaring the RTF document as CP 1252, so use ISO-8859-1
 
-    m_fileName=filenameOut;
+    m_fileName = filenameOut;
 
     return true;
 }
 
 bool RTFWorker::doCloseFile(void)
 {
-    kDebug(30515) << __FILE__ <<":" << __LINE__;
+    kDebug(30515) << __FILE__ << ":" << __LINE__;
     delete m_streamOut;
-    m_streamOut=NULL;
+    m_streamOut = NULL;
     if (m_ioDevice)
         m_ioDevice->close();
     return true;
@@ -938,73 +839,66 @@ bool RTFWorker::doOpenDocument(void)
 
     // Default color table
     m_colorList
-        << QColor(0,0,0)     << QColor(0,0,255)     << QColor(0,255,255)
-        << QColor(0,255,0)   << QColor(255,0,255)   << QColor(255,0,0)
-        << QColor(255,255,0) << QColor(255,255,255) << QColor(0,0,128)
-        << QColor(0,128,128) << QColor(0,128,0)     << QColor(128,0,128)
-        << QColor(128,0,0)   << QColor(128,128,0)   << QColor(128,128,128);
+    << QColor(0, 0, 0)     << QColor(0, 0, 255)     << QColor(0, 255, 255)
+    << QColor(0, 255, 0)   << QColor(255, 0, 255)   << QColor(255, 0, 0)
+    << QColor(255, 255, 0) << QColor(255, 255, 255) << QColor(0, 0, 128)
+    << QColor(0, 128, 128) << QColor(0, 128, 0)     << QColor(128, 0, 128)
+    << QColor(128, 0, 0)   << QColor(128, 128, 0)   << QColor(128, 128, 128);
 
     return true;
 }
 
 void RTFWorker::writeFontData(void)
 {
-    kDebug(30515) <<"Fonts:" << m_fontList;
+    kDebug(30515) << "Fonts:" << m_fontList;
     *m_streamOut << "{\\fonttbl";
     uint count;
     QFontDatabase fontDatabase;
     QStringList::ConstIterator it;
-    for (count=0, it=m_fontList.constBegin();
-        it!=m_fontList.constEnd();
-        count++, it++)
-    {
-        const QString strLower( (*it).lower() );
+    for (count = 0, it = m_fontList.constBegin();
+            it != m_fontList.constEnd();
+            count++, it++) {
+        const QString strLower((*it).lower());
         *m_streamOut << "{\\f" << count;
-        if ( (strLower.find("symbol")>-1) || (strLower.find("dingbat")>-1) )
+        if ((strLower.find("symbol") > -1) || (strLower.find("dingbat") > -1))
             *m_streamOut << "\\ftech";
-        else if ( (strLower.find("script")>-1) )
+        else if ((strLower.find("script") > -1))
             *m_streamOut << "\\fscript";
 
 #if 1
-        else
-        {
+        else {
             // We do not know the font type that we have
             *m_streamOut << "\\fnil";
         }
 #else
         else
-        // QFontInfo:styleHint() does not guess anything, it just returns what is in the QFont. Nothing put in, nothing gets out.
+            // QFontInfo:styleHint() does not guess anything, it just returns what is in the QFont. Nothing put in, nothing gets out.
         {
             QFontInfo info(*it);
-            switch (info.styleHint())
-            {
+            switch (info.styleHint()) {
             case QFont::SansSerif:
-            default:
-                {
-                    *m_streamOut << "\\fswiss";
-                    break;
-                }
-            case QFont::Serif:
-                {
-                    *m_streamOut << "\\froman";
-                    break;
-                }
-            case QFont::Courier:
-                {
-                    *m_streamOut << "\\fmodern";
-                    break;
-                }
-            case QFont::OldEnglish:
-                {
-                    *m_streamOut << "\\fdecor";
-                    break;
-                }
+            default: {
+                *m_streamOut << "\\fswiss";
+                break;
+            }
+            case QFont::Serif: {
+                *m_streamOut << "\\froman";
+                break;
+            }
+            case QFont::Courier: {
+                *m_streamOut << "\\fmodern";
+                break;
+            }
+            case QFont::OldEnglish: {
+                *m_streamOut << "\\fdecor";
+                break;
+            }
             }
         }
 #endif
         // ### TODO: \fcharset would be mandatory but Qt3 does not give us the font charset. :-(
-        *m_streamOut << "\\fprq" << ( fontDatabase.isFixedPitch( *it ) ? 1 : 2 ) << " "; // font definition
-        *m_streamOut << escapeRtfText( *it );
+        *m_streamOut << "\\fprq" << (fontDatabase.isFixedPitch(*it) ? 1 : 2) << " ";     // font definition
+        *m_streamOut << escapeRtfText(*it);
         *m_streamOut <<  ";}" << m_eol; // end font table entry
     }
     *m_streamOut << "}"; // end of font table
@@ -1015,10 +909,9 @@ void RTFWorker::writeColorData(void)
     *m_streamOut << "{\\colortbl;";
     uint count;
     QList<QColor>::ConstIterator it;
-    for (count=0, it=m_colorList.constBegin();
-        it!=m_colorList.constEnd();
-        count++, it++)
-    {
+    for (count = 0, it = m_colorList.constBegin();
+            it != m_colorList.constEnd();
+            count++, it++) {
         *m_streamOut << "\\red" << (*it).red();
         *m_streamOut << "\\green" << (*it).green();
         *m_streamOut << "\\blue" << (*it).blue();
@@ -1033,24 +926,21 @@ void RTFWorker::writeStyleData(void)
 
     uint count;
     QList<LayoutData>::ConstIterator it;
-    for (count=0, it=m_styleList.constBegin();
-        it!=m_styleList.constEnd();
-        count++, it++)
-    {
+    for (count = 0, it = m_styleList.constBegin();
+            it != m_styleList.constEnd();
+            count++, it++) {
         *m_streamOut << "{";
-        if (count>0) // \s0 is not written out
+        if (count > 0) // \s0 is not written out
             *m_streamOut << "\\s" << count;
 
-        *m_streamOut << layoutToRtf((*it),(*it),true);
+        *m_streamOut << layoutToRtf((*it), (*it), true);
 
         // \snext must be the last keyword before the style name
         // Find the number of the following style
-        uint counter=0;  // counts position in style table starting at 0
+        uint counter = 0;  // counts position in style table starting at 0
         QList < LayoutData > ::ConstIterator it2;
-        for( it2 =  m_styleList.constBegin(); it2 != m_styleList.constEnd(); counter++, ++it2 )
-        {
-            if ( (*it2).styleName == (*it).styleFollowing )
-            {
+        for (it2 =  m_styleList.constBegin(); it2 != m_styleList.constEnd(); counter++, ++it2) {
+            if ((*it2).styleName == (*it).styleFollowing) {
                 *m_streamOut << "\\snext" << counter;
                 break;
             }
@@ -1071,15 +961,14 @@ bool RTFWorker::doCloseDocument(void)
     writeColorData();
     writeStyleData();
 
-    if (!m_textDocInfo.isEmpty())
-    {
+    if (!m_textDocInfo.isEmpty()) {
         *m_streamOut << "{\\info ";  // string of document information markup
         *m_streamOut << m_textDocInfo;   // add document author, title, operator
         *m_streamOut << "}";
     }
     *m_streamOut << "\\paperw" << int(m_paperWidth);
     *m_streamOut << "\\paperh" << int(m_paperHeight);
-    if (1==m_paperOrientation)
+    if (1 == m_paperOrientation)
         *m_streamOut << "\\landscape";
     *m_streamOut << "\\margl" << int(m_paperMarginLeft);
     *m_streamOut << "\\margr" << int(m_paperMarginRight);
@@ -1100,37 +989,32 @@ bool RTFWorker::doCloseDocument(void)
 bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
 
-    if ( !docInfo.title.isEmpty() )
-    {
+    if (!docInfo.title.isEmpty()) {
         m_textDocInfo += "{\\title ";
-        m_textDocInfo += escapeRtfText( docInfo.title );
+        m_textDocInfo += escapeRtfText(docInfo.title);
         m_textDocInfo += "}";
     }
 
-    if ( !docInfo.fullName.isEmpty() )
-    {
+    if (!docInfo.fullName.isEmpty()) {
         m_textDocInfo += "{\\author ";
-        m_textDocInfo += escapeRtfText( docInfo.fullName );
+        m_textDocInfo += escapeRtfText(docInfo.fullName);
         m_textDocInfo += "}";
     }
 
-    if ( !docInfo.keywords.isEmpty() )
-    {
+    if (!docInfo.keywords.isEmpty()) {
         m_textDocInfo += "{\\keywords ";
-        m_textDocInfo += escapeRtfText( docInfo.keywords );
+        m_textDocInfo += escapeRtfText(docInfo.keywords);
         m_textDocInfo += "}";
     }
-    if ( !docInfo.subject.isEmpty() )
-    {
+    if (!docInfo.subject.isEmpty()) {
         m_textDocInfo += "{\\subject ";
-        m_textDocInfo += escapeRtfText( docInfo.subject );
+        m_textDocInfo += escapeRtfText(docInfo.subject);
         m_textDocInfo += "}";
     }
 
-    if ( !docInfo.company.isEmpty() )
-    {
+    if (!docInfo.company.isEmpty()) {
         m_textDocInfo += "{\\company ";
-        m_textDocInfo += escapeRtfText( docInfo.company );
+        m_textDocInfo += escapeRtfText(docInfo.company);
         m_textDocInfo += "}";
     }
 
@@ -1141,10 +1025,9 @@ bool RTFWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     m_textDocInfo += revision.mid(10).remove('$'); // has a leading and a trailing space.
     m_textDocInfo += "}";
 
-    if ( !docInfo.abstract.isEmpty() )
-    {
+    if (!docInfo.abstract.isEmpty()) {
         m_textDocInfo += "{\\doccomm ";
-        m_textDocInfo += escapeRtfText( docInfo.abstract );
+        m_textDocInfo += escapeRtfText(docInfo.abstract);
         m_textDocInfo += "}";
     }
 
@@ -1166,14 +1049,11 @@ QString RTFWorker::openSpan(const FormatData& formatOrigin, const FormatData& fo
     QString result;
 
     result += "{";
-    result += textFormatToRtf(formatOrigin.text,format.text,false);
+    result += textFormatToRtf(formatOrigin.text, format.text, false);
 
-    if ( 1==format.text.verticalAlignment )
-    {
+    if (1 == format.text.verticalAlignment) {
         result += "\\sub"; //Subscript
-    }
-    else if ( 2==format.text.verticalAlignment )
-    {
+    } else if (2 == format.text.verticalAlignment) {
         result += "\\super"; //Superscript
     }
 
@@ -1181,7 +1061,7 @@ QString RTFWorker::openSpan(const FormatData& formatOrigin, const FormatData& fo
     return result;
 }
 
-QString RTFWorker::closeSpan(const FormatData& , const FormatData& )
+QString RTFWorker::closeSpan(const FormatData& , const FormatData&)
 {
     QString result;
     result += "}";
@@ -1191,64 +1071,60 @@ QString RTFWorker::closeSpan(const FormatData& , const FormatData& )
 // The following function encodes the kword unicode characters into
 // RTF seven bit ASCII. This affects any 8 bit characters.
 // They are encoded either with \' or with \u
-QString RTFWorker::escapeRtfText ( const QString& text ) const
+QString RTFWorker::escapeRtfText(const QString& text) const
 {
     // initialize strings
     QString escapedText;
     const uint length = text.length();
-    for ( uint i = 0; i < length; i++ )
-    {
-        QChar QCh ( text.at( i ) );  // get out one unicode char from the string
+    for (uint i = 0; i < length; i++) {
+        QChar QCh(text.at(i));       // get out one unicode char from the string
         const ushort ch = QCh.unicode();  // take unicode value of the char
 
-        if ( QCh == '\\' )  escapedText += "\\\\"; // back-slash
-        else if ( QCh == '{' )   escapedText += "\\{";
-        else if ( QCh == '}' )   escapedText += "\\}";
-        else if ( ch >= 32 && ch <= 127) // ASCII character
+        if (QCh == '\\')  escapedText += "\\\\";   // back-slash
+        else if (QCh == '{')   escapedText += "\\{";
+        else if (QCh == '}')   escapedText += "\\}";
+        else if (ch >= 32 && ch <= 127)  // ASCII character
             escapedText += QCh;
-        else if ( ch == 0x0009 ) escapedText += "\\tab "; // tabulator
-        else if ( ch == 0x00a0 ) escapedText += "\\~"; // Non-breaking space
-        else if ( ch == 0x00ad ) escapedText += "\\-"; // Soft hyphen
-        else if ( ch == 0x00b7 ) escapedText += "\\|";
-        else if ( ch == 0x2011 ) escapedText += "\\_"; // Non-breaking hyphen
-        else if ( ch == 0x2002 ) escapedText += "\\enspace ";
-        else if ( ch == 0x2003 ) escapedText += "\\emspace ";
-        else if ( ch == 0x2004 ) escapedText += "\\qmspace ";
-        else if ( ch == 0x200c ) escapedText += "\\zwnj ";
-        else if ( ch == 0x200d ) escapedText += "\\zwj ";
-        else if ( ch == 0x200e ) escapedText += "\\ltrmark ";
-        else if ( ch == 0x200f ) escapedText += "\\rtlmark ";
-        else if ( ch == 0x2013 ) escapedText += "\\endash ";
-        else if ( ch == 0x2014 ) escapedText += "\\emdash ";
-        else if ( ch == 0x2018 ) escapedText += "\\lquote ";
-        else if ( ch == 0x2019 ) escapedText += "\\rquote ";
-        else if ( ch == 0x201c ) escapedText += "\\ldblquote ";
-        else if ( ch == 0x201d ) escapedText += "\\rdblquote ";
-        else if ( ch == 0x2022 ) escapedText += "\\bullet ";
-        else if ( ch >= 160 && ch < 256) // check for characters common between ISO-8859-1 and CP1252
+        else if (ch == 0x0009) escapedText += "\\tab ";   // tabulator
+        else if (ch == 0x00a0) escapedText += "\\~";   // Non-breaking space
+        else if (ch == 0x00ad) escapedText += "\\-";   // Soft hyphen
+        else if (ch == 0x00b7) escapedText += "\\|";
+        else if (ch == 0x2011) escapedText += "\\_";   // Non-breaking hyphen
+        else if (ch == 0x2002) escapedText += "\\enspace ";
+        else if (ch == 0x2003) escapedText += "\\emspace ";
+        else if (ch == 0x2004) escapedText += "\\qmspace ";
+        else if (ch == 0x200c) escapedText += "\\zwnj ";
+        else if (ch == 0x200d) escapedText += "\\zwj ";
+        else if (ch == 0x200e) escapedText += "\\ltrmark ";
+        else if (ch == 0x200f) escapedText += "\\rtlmark ";
+        else if (ch == 0x2013) escapedText += "\\endash ";
+        else if (ch == 0x2014) escapedText += "\\emdash ";
+        else if (ch == 0x2018) escapedText += "\\lquote ";
+        else if (ch == 0x2019) escapedText += "\\rquote ";
+        else if (ch == 0x201c) escapedText += "\\ldblquote ";
+        else if (ch == 0x201d) escapedText += "\\rdblquote ";
+        else if (ch == 0x2022) escapedText += "\\bullet ";
+        else if (ch >= 160 && ch < 256)  // check for characters common between ISO-8859-1 and CP1252
         {   // NOTE: 128 to 159 in CP1252 are somewhere else in UTF-8 and do not exist in ISO-8859-1 (### TODO?)
             escapedText += "\\\'";   // escape upper page character to 7 bit
-            escapedText += QString::number ( ch, 16 );
-        }
-        else if ( ch >= 256) // check for a higher code non-ASCII character
-        {
+            escapedText += QString::number(ch, 16);
+        } else if (ch >= 256) { // check for a higher code non-ASCII character
             // encode this as decimal unicode with a replacement character.
             escapedText += "\\u";
-            escapedText += QString::number ( ch, 10 );
+            escapedText += QString::number(ch, 10);
             // We decompose the character. If it works, the first character is whitout any accent.
             // (Of course this only works with Latin letters.)
             // WARNING: QChar::decomposition is not re-entrant in Qt 3.x
-            QChar replacement ( QCh.decomposition().at(0) );
-            kDebug(30515) <<"Proposed replacement character:" << QString(replacement);
+            QChar replacement(QCh.decomposition().at(0));
+            kDebug(30515) << "Proposed replacement character:" << QString(replacement);
 
-            if (replacement.isNull() || replacement<=' ' || replacement>=char(127)
-                || replacement=='{' || replacement=='}' || replacement=='\\')
-                replacement='?'; // Not a normal ASCII character, so default to show a ? sign
+            if (replacement.isNull() || replacement <= ' ' || replacement >= char(127)
+                    || replacement == '{' || replacement == '}' || replacement == '\\')
+                replacement = '?'; // Not a normal ASCII character, so default to show a ? sign
 
             escapedText += replacement; // The \uc1 dummy character.
 
-        }
-        else
+        } else
             escapedText += QCh ;
 
     }
@@ -1258,21 +1134,21 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
 }
 
 bool RTFWorker::doFullPaperFormat(const int /*format*/,
-    const double width, const double height, const int orientation)
+                                  const double width, const double height, const int orientation)
 {
-    m_paperWidth=width*20;
-    m_paperHeight=height*20;
-    m_paperOrientation=orientation;
+    m_paperWidth = width * 20;
+    m_paperHeight = height * 20;
+    m_paperOrientation = orientation;
     return true;
 }
 
-bool RTFWorker::doFullPaperBorders (const double top, const double left,
-    const double bottom, const double right)
+bool RTFWorker::doFullPaperBorders(const double top, const double left,
+                                   const double bottom, const double right)
 {
-    m_paperMarginTop=top*20;
-    m_paperMarginLeft=left*20;
-    m_paperMarginBottom=bottom*20;
-    m_paperMarginRight=right*20;
+    m_paperMarginTop = top * 20;
+    m_paperMarginLeft = left * 20;
+    m_paperMarginBottom = bottom * 20;
+    m_paperMarginRight = right * 20;
     return true;
 }
 
@@ -1292,9 +1168,8 @@ bool RTFWorker::doFullDefineStyle(LayoutData& layout)
 static QString writeDate(const QString keyword, const QDateTime& now)
 {
     QString str;
-    if (now.isValid())
-    {
-        kDebug(30515) <<"Date" << keyword <<"" << now.toString();
+    if (now.isValid()) {
+        kDebug(30515) << "Date" << keyword << "" << now.toString();
         str += '{';
         str += keyword;
         const QDate nowDate(now.date());
@@ -1312,8 +1187,7 @@ static QString writeDate(const QString keyword, const QDateTime& now)
         str += "\\sec";
         str += QString::number(nowTime.second());
         str += '}';
-    }
-    else
+    } else
         kWarning(30515) << "Date " << keyword << " is not valid! Skipping!";
 
     return str;
@@ -1321,16 +1195,16 @@ static QString writeDate(const QString keyword, const QDateTime& now)
 
 bool RTFWorker::doVariableSettings(const VariableSettingsData& vs)
 {
-    m_textDocInfo += writeDate("\\creatim",vs.creationTime);
+    m_textDocInfo += writeDate("\\creatim", vs.creationTime);
     m_textDocInfo += writeDate("\\revtim", vs.modificationTime);
-    m_textDocInfo += writeDate("\\printim",vs.printTime);
+    m_textDocInfo += writeDate("\\printim", vs.printTime);
     m_startPageNumber = vs.startingPageNumber;
 
     return true;
 }
 
 QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
-    const TextFormatting& formatData, const bool force)
+                                   const TextFormatting& formatData, const bool force)
 {
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
@@ -1338,126 +1212,101 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     // Font name
     const QString fontName(formatData.fontName);
     if (!fontName.isEmpty()
-        && (force || (formatOrigin.fontName!=formatData.fontName)))
-    {
-        strElement+=lookupFont("\\f", fontName);
+            && (force || (formatOrigin.fontName != formatData.fontName))) {
+        strElement += lookupFont("\\f", fontName);
     }
 
-    if (force || (formatOrigin.fontSize!=formatData.fontSize))
-    {
-        const int size=formatData.fontSize;
-        if (size>0)
-        {
-            strElement+="\\fs";
-            strElement+=QString::number(2*size,10);
+    if (force || (formatOrigin.fontSize != formatData.fontSize)) {
+        const int size = formatData.fontSize;
+        if (size > 0) {
+            strElement += "\\fs";
+            strElement += QString::number(2 * size, 10);
         }
     }
 
-    if (force || (formatOrigin.italic!=formatData.italic))
-    {
+    if (force || (formatOrigin.italic != formatData.italic)) {
         // Font style
-        if ( formatData.italic )
-        {
-            strElement+="\\i";
-        }
-        else
-        {
-            strElement+="\\i0";
+        if (formatData.italic) {
+            strElement += "\\i";
+        } else {
+            strElement += "\\i0";
         }
     }
 
-    if (force || ((formatOrigin.weight>=75)!=(formatData.weight>=75)))
-    {
-        if ( formatData.weight >= 75 )
-        {
-            strElement+="\\b";
-        }
-        else
-        {
-            strElement+="\\b0";
+    if (force || ((formatOrigin.weight >= 75) != (formatData.weight >= 75))) {
+        if (formatData.weight >= 75) {
+            strElement += "\\b";
+        } else {
+            strElement += "\\b0";
         }
     }
 
-    if (force || (formatOrigin.fgColor!=formatData.fgColor))
-    {
-        if ( formatData.fgColor.isValid() )
-        {
-            strElement+=lookupColor("\\cf", formatData.fgColor);
+    if (force || (formatOrigin.fgColor != formatData.fgColor)) {
+        if (formatData.fgColor.isValid()) {
+            strElement += lookupColor("\\cf", formatData.fgColor);
         }
     }
 
-    if (force || (formatOrigin.bgColor!=formatData.bgColor))
-    {
-        if ( formatData.bgColor.isValid() )
-        {
-            strElement+=lookupColor("\\cb", formatData.bgColor);
-            strElement+=lookupColor("\\highlight", formatData.bgColor); // MS Word wants this
+    if (force || (formatOrigin.bgColor != formatData.bgColor)) {
+        if (formatData.bgColor.isValid()) {
+            strElement += lookupColor("\\cb", formatData.bgColor);
+            strElement += lookupColor("\\highlight", formatData.bgColor); // MS Word wants this
             // ### FIXME: \highlight is not allowed in style definitions (RTF 1.6)
         }
     }
 
-    if ( force
-        || ( formatOrigin.underline != formatData.underline )
-        || ( formatOrigin.underlineValue != formatData.underlineValue )
-        || ( formatOrigin.underlineStyle != formatData.underlineStyle )
-        || ( formatOrigin.underlineWord != formatData.underlineWord ) )
-    {
-        if ( formatData.underline )
-        {
+    if (force
+            || (formatOrigin.underline != formatData.underline)
+            || (formatOrigin.underlineValue != formatData.underlineValue)
+            || (formatOrigin.underlineStyle != formatData.underlineStyle)
+            || (formatOrigin.underlineWord != formatData.underlineWord)) {
+        if (formatData.underline) {
             QString underlineValue = formatData.underlineValue;
             QString underlineStyle = formatData.underlineStyle;
             bool underlineWord = formatData.underlineWord;
-            QString ul ( "\\ul" );  // fall-back: simple underline
+            QString ul("\\ul");     // fall-back: simple underline
 
-            if( underlineStyle.isEmpty() ) underlineStyle = "solid";
-            if( underlineValue == "1" ) underlineValue = "single";
+            if (underlineStyle.isEmpty()) underlineStyle = "solid";
+            if (underlineValue == "1") underlineValue = "single";
 
-            if( underlineValue == "double" )
+            if (underlineValue == "double")
                 ul = "\\uldb";
-            else if( underlineValue == "single-bold" )
+            else if (underlineValue == "single-bold")
                 ul = "\\ulth";
-            else if( underlineValue == "wave" )
+            else if (underlineValue == "wave")
                 ul = "\\ulwave";
-            else if( underlineValue == "single" )
-            {
-                if( underlineStyle == "dash" )
+            else if (underlineValue == "single") {
+                if (underlineStyle == "dash")
                     ul = "\\uldash";
-                else if( underlineStyle == "dot" )
+                else if (underlineStyle == "dot")
                     ul = "\\uld";
-                else if( underlineStyle == "dashdot" )
+                else if (underlineStyle == "dashdot")
                     ul = "\\uldashd";
-                else if( underlineStyle == "dashdotdot" )
+                else if (underlineStyle == "dashdotdot")
                     ul = "\\uldashdd";
-                else if( underlineWord )
+                else if (underlineWord)
                     ul = "\\ulw";
             };
 
-            strElement+= ul;
-            if (formatData.underlineColor.isValid())
-            {
-                strElement+=lookupColor("\\ulc",formatData.underlineColor);
+            strElement += ul;
+            if (formatData.underlineColor.isValid()) {
+                strElement += lookupColor("\\ulc", formatData.underlineColor);
             }
-        }
-        else
-        {
-            strElement+="\\ul0";
+        } else {
+            strElement += "\\ul0";
         }
     }
 
-    if ( force
-        || ( formatOrigin.strikeout != formatData.strikeout )
-        || ( formatOrigin.strikeoutType != formatData.strikeoutType ) )
-    {
-        if ( formatData.strikeout )
-        {
-            if( formatData.strikeoutType == "double" )
-                strElement+="\\striked1"; // 1 needed! (The exception that confirms the rule!)
+    if (force
+            || (formatOrigin.strikeout != formatData.strikeout)
+            || (formatOrigin.strikeoutType != formatData.strikeoutType)) {
+        if (formatData.strikeout) {
+            if (formatData.strikeoutType == "double")
+                strElement += "\\striked1"; // 1 needed! (The exception that confirms the rule!)
             else
-                strElement+="\\strike";
-        }
-        else
-        {
-            strElement+="\\strike0"; // ### TODO: \striked0 too?
+                strElement += "\\strike";
+        } else {
+            strElement += "\\strike0"; // ### TODO: \striked0 too?
         }
     }
 
@@ -1465,69 +1314,59 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
 }
 
 QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
-    const LayoutData& layout, const bool force)
+                               const LayoutData& layout, const bool force)
 {
     QString strLayout;
 
 
-    if (force || (layoutOrigin.alignment!=layout.alignment))
-    {
-        if (layout.alignment=="left")
+    if (force || (layoutOrigin.alignment != layout.alignment)) {
+        if (layout.alignment == "left")
             strLayout += "\\ql";
-        else if (layout.alignment== "right")
+        else if (layout.alignment == "right")
             strLayout += "\\qr";
-        else if (layout.alignment=="center")
+        else if (layout.alignment == "center")
             strLayout += "\\qc";
-        else if (layout.alignment=="justify")
+        else if (layout.alignment == "justify")
             strLayout += "\\qj";
-        else if ( layout.alignment=="auto")
-        {
+        else if (layout.alignment == "auto") {
             // ### TODO: what for BIDI?
             //strLayout += "\\ql";
-        }
-        else
-        {
+        } else {
             kWarning(30515) << "Unknown alignment: " << layout.alignment;
         }
     }
 
-    if ((layout.indentLeft>=0.0)
-        && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
-    {
-       strLayout += "\\li";
-       strLayout += QString::number(int(layout.indentLeft)*20, 10);
+    if ((layout.indentLeft >= 0.0)
+            && (force || (layoutOrigin.indentLeft != layout.indentLeft))) {
+        strLayout += "\\li";
+        strLayout += QString::number(int(layout.indentLeft) * 20, 10);
     }
 
-    if ((layout.indentRight>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
-    {
-       strLayout += "\\ri";
-       strLayout += QString::number(int(layout.indentRight)*20, 10);
+    if ((layout.indentRight >= 0.0)
+            && (force || (layoutOrigin.indentRight != layout.indentRight))) {
+        strLayout += "\\ri";
+        strLayout += QString::number(int(layout.indentRight) * 20, 10);
     }
 
-    if (force || (layoutOrigin.indentFirst!=layout.indentFirst))
-    {
-       strLayout += "\\fi";
-       strLayout += QString::number(int(layout.indentFirst)*20, 10);
+    if (force || (layoutOrigin.indentFirst != layout.indentFirst)) {
+        strLayout += "\\fi";
+        strLayout += QString::number(int(layout.indentFirst) * 20, 10);
     }
 
-    if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.marginBottom!=layout.marginBottom)))
-    {
-       strLayout += "\\sa";
-       strLayout += QString::number(int(layout.marginBottom)*20 ,10);
+    if ((layout.marginBottom >= 0.0)
+            && (force || (layoutOrigin.marginBottom != layout.marginBottom))) {
+        strLayout += "\\sa";
+        strLayout += QString::number(int(layout.marginBottom) * 20 , 10);
     }
 
-    if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.marginTop!=layout.marginTop)))
-    {
-       strLayout += "\\sb";
-       strLayout += QString::number(int(layout.marginTop)*20, 10);
+    if ((layout.marginTop >= 0.0)
+            && (force || (layoutOrigin.marginTop != layout.marginTop))) {
+        strLayout += "\\sb";
+        strLayout += QString::number(int(layout.marginTop) * 20, 10);
     }
 
-    if (force || (layoutOrigin.keepLinesTogether!=layout.keepLinesTogether))
-    {
-       if(layout.keepLinesTogether) strLayout += "\\keep";
+    if (force || (layoutOrigin.keepLinesTogether != layout.keepLinesTogether)) {
+        if (layout.keepLinesTogether) strLayout += "\\keep";
     }
 
     // Note: there seems to be too many problems of using a page break in a layout
@@ -1535,76 +1374,69 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
     // - AbiWord's RTF import does not like \*\pgbrk
     // ### TODO: decide if we really remove this code
 #if 0
-    if (force || (layoutOrigin.pageBreakBefore!=layout.pageBreakBefore))
-    {
-       if(layout.pageBreakBefore) strLayout += "\\pagebb";
+    if (force || (layoutOrigin.pageBreakBefore != layout.pageBreakBefore)) {
+        if (layout.pageBreakBefore) strLayout += "\\pagebb";
     }
 
     // Note: RTF doesn't specify "page break after"
     // \*\pgbrk0 is used after OpenOffice.org Writer
-    if (force || (layoutOrigin.pageBreakAfter!=layout.pageBreakAfter))
-    {
-       if(layout.pageBreakAfter) strLayout += "\\*\\pgbrk0";
+    if (force || (layoutOrigin.pageBreakAfter != layout.pageBreakAfter)) {
+        if (layout.pageBreakAfter) strLayout += "\\*\\pgbrk0";
     }
 #endif
 
     if (force
-        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
-        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
-    {
-        if ( layout.lineSpacingType==LayoutData::LS_SINGLE  )
-           ;// do nothing, single linespace is default in RTF
+            || (layoutOrigin.lineSpacingType != layout.lineSpacingType)
+            || (layoutOrigin.lineSpacing != layout.lineSpacing)) {
+        if (layout.lineSpacingType == LayoutData::LS_SINGLE)
+            ;// do nothing, single linespace is default in RTF
 
-        else if ( layout.lineSpacingType==LayoutData::LS_ONEANDHALF  )
-           strLayout += "\\sl360\\slmult1"; // one-and-half linespace
+        else if (layout.lineSpacingType == LayoutData::LS_ONEANDHALF)
+            strLayout += "\\sl360\\slmult1"; // one-and-half linespace
 
-        else if ( layout.lineSpacingType==LayoutData::LS_DOUBLE  )
-           strLayout += "\\sl480\\slmult1"; // double linespace
+        else if (layout.lineSpacingType == LayoutData::LS_DOUBLE)
+            strLayout += "\\sl480\\slmult1"; // double linespace
 
-        else if ( layout.lineSpacingType==LayoutData::LS_ATLEAST  )
-           strLayout += QString("\\sl%1\\slmult0").arg(int(layout.lineSpacing)*20);
+        else if (layout.lineSpacingType == LayoutData::LS_ATLEAST)
+            strLayout += QString("\\sl%1\\slmult0").arg(int(layout.lineSpacing) * 20);
 
-        else if ( layout.lineSpacingType==LayoutData::LS_MULTIPLE  )
-           strLayout += QString("\\sl%1\\slmult1").arg( int(layout.lineSpacing)*240 );
+        else if (layout.lineSpacingType == LayoutData::LS_MULTIPLE)
+            strLayout += QString("\\sl%1\\slmult1").arg(int(layout.lineSpacing) * 240);
 
-        else if ( layout.lineSpacingType==LayoutData::LS_CUSTOM )
-           // "Custom" in KWord is like "Exactly" in MS Word
-           strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
+        else if (layout.lineSpacingType == LayoutData::LS_CUSTOM)
+            // "Custom" in KWord is like "Exactly" in MS Word
+            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing) * 20);
 
         else
             kWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)";
     }
 
     if (!layout.tabulatorList.isEmpty()
-        && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
-    {
+            && (force || (layoutOrigin.tabulatorList != layout.tabulatorList))) {
         TabulatorList::ConstIterator it;
-        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();++it)
-        {
-            switch ((*it).m_type)
-            {
-                case 0: default:  break; // left tab is default
-                case 1:  strLayout += "\\tqc"; break;
-                case 2:  strLayout += "\\tqr"; break;
-                case 3:  strLayout += "\\tqdec"; break;
+        for (it = layout.tabulatorList.begin();it != layout.tabulatorList.end();++it) {
+            switch ((*it).m_type) {
+        case 0: default:  break; // left tab is default
+            case 1:  strLayout += "\\tqc"; break;
+            case 2:  strLayout += "\\tqr"; break;
+            case 3:  strLayout += "\\tqdec"; break;
             }
 
-            switch ((*it).m_filling)
-            {
-                case TabulatorData::TF_NONE: default: break; // without leader/filling
-                case TabulatorData::TF_DOT:  strLayout += "\\tldot"; break;
-                case TabulatorData::TF_LINE:  strLayout += "\\tlul"; break;
+            switch ((*it).m_filling) {
+        case TabulatorData::TF_NONE: default: break; // without leader/filling
+            case TabulatorData::TF_DOT:  strLayout += "\\tldot"; break;
+            case TabulatorData::TF_LINE:  strLayout += "\\tlul"; break;
 
                 // these belows are all treated as RTF's \tqul
-                case TabulatorData::TF_DASH:
-                case TabulatorData::TF_DASHDOT:
-                case TabulatorData::TF_DASHDOTDOT:
-                    strLayout += "\\tlul"; break;
+            case TabulatorData::TF_DASH:
+            case TabulatorData::TF_DASHDOT:
+            case TabulatorData::TF_DASHDOTDOT:
+                strLayout += "\\tlul"; break;
             }
 
             // must be the last
             strLayout += "\\tx";
-            strLayout += QString::number(int((*it).m_ptpos)*20, 10);
+            strLayout += QString::number(int((*it).m_ptpos) * 20, 10);
 
         }
     }
@@ -1612,16 +1444,15 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
     // shadow support
     // note shadow in KWord is more full-feature/sophisticated than RTF
     // here we just treat KWord's shadow as simple \shad mark-up
-    if( layout.shadowDistance > 0 )
-    {
-       strLayout += "\\shad";
+    if (layout.shadowDistance > 0) {
+        strLayout += "\\shad";
     }
 
     // TODO: borders
 
     // This must remain last, as it adds a terminating space.
-    strLayout+=textFormatToRtf(layoutOrigin.formatData.text,
-        layout.formatData.text,force);
+    strLayout += textFormatToRtf(layoutOrigin.formatData.text,
+                                 layout.formatData.text, force);
 
     return strLayout;
 }
@@ -1638,26 +1469,24 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
     cookedFontName.remove(regexp);
     // But we cannot have an empty name font
     if (cookedFontName.isEmpty())
-        cookedFontName=fontName;
+        cookedFontName = fontName;
 
-    kDebug(30515) <<"RTFWorker::lookupFont" << fontName <<" cooked:" << cookedFontName;
+    kDebug(30515) << "RTFWorker::lookupFont" << fontName << " cooked:" << cookedFontName;
 
-    uint counter=0;  // counts position in font table (starts at 0)
+    uint counter = 0;  // counts position in font table (starts at 0)
     QString strFont(markup); // markup for font selection
     QStringList::ConstIterator it;
 
     // search font table for this font
-    for( it = m_fontList.constBegin(); it != m_fontList.constEnd(); counter++, ++it )
-    {
-        if((*it) == cookedFontName)  // check for match
-        {
+    for (it = m_fontList.constBegin(); it != m_fontList.constEnd(); counter++, ++it) {
+        if ((*it) == cookedFontName) { // check for match
             strFont += QString::number(counter);
             kDebug(30515) << strFont;
             return strFont;
         }
     }  // end for()
 
-    kDebug(30515) <<"New font:" << cookedFontName <<" count:" << counter;
+    kDebug(30515) << "New font:" << cookedFontName << " count:" << counter;
     m_fontList << cookedFontName;
 
     strFont += QString::number(counter);
@@ -1669,22 +1498,20 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
     if (!color.isValid())
         return QString();
 
-    uint counter=1;  // counts position in color table starting at 1
+    uint counter = 1;  // counts position in color table starting at 1
     QString strColor(markup);  // Holds RTF markup for the color
 
     QList < QColor > ::ConstIterator it;
 
     // search color table for this color
-    for( it =  m_colorList.constBegin(); it != m_colorList.constEnd(); counter++, ++it )
-    {
-        if ( (*it) == color )
-        {
+    for (it =  m_colorList.constBegin(); it != m_colorList.constEnd(); counter++, ++it) {
+        if ((*it) == color) {
             strColor += QString::number(counter);
             return strColor;
         }
     }
 
-    kDebug(30515) <<"New color:" << color.name() <<" count:" << counter;
+    kDebug(30515) << "New color:" << color.name() << " count:" << counter;
     m_colorList << color;
 
     strColor += QString::number(counter);
@@ -1696,27 +1523,25 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
     if (styleName.isEmpty())
         return QString();
 
-    uint counter=0;  // counts position in style table starting at 0
+    uint counter = 0;  // counts position in style table starting at 0
     QString strMarkup("\\s");  // Holds RTF markup for the style
 
     QList < LayoutData > ::ConstIterator it;
-        QList < LayoutData > ::ConstIterator end(m_styleList.constEnd());
+    QList < LayoutData > ::ConstIterator end(m_styleList.constEnd());
 
     // search color table for this color
-    for( it =  m_styleList.constBegin(); it != end; counter++, ++it )
-    {
-        if ( (*it).styleName == styleName )
-        {
+    for (it =  m_styleList.constBegin(); it != end; counter++, ++it) {
+        if ((*it).styleName == styleName) {
             strMarkup += QString::number(counter);
-            returnLayout=(*it);
+            returnLayout = (*it);
             return strMarkup;
         }
     }
 
-    kDebug(30515) <<"New style:" << styleName <<" count:" << counter;
+    kDebug(30515) << "New style:" << styleName << " count:" << counter;
     LayoutData layout;
     m_styleList << layout;
-    returnLayout=layout;
+    returnLayout = layout;
 
     strMarkup += QString::number(counter);
     return strMarkup;

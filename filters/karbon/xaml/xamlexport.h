@@ -45,33 +45,33 @@ class VText;
 
 class XAMLExport : public KoFilter, private VVisitor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	XAMLExport( KoFilter* parent, const char* name, const QStringList& );
-	virtual ~XAMLExport() {}
+    XAMLExport(KoFilter* parent, const char* name, const QStringList&);
+    virtual ~XAMLExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-	virtual void visitVPath( VPath& composite );
-	virtual void visitVDocument( KarbonDocument& document );
-	virtual void visitVGroup( VGroup& group );
-	virtual void visitVSubpath( VSubpath& path );
-	//virtual void visitVText( VText& text );
+    virtual void visitVPath(VPath& composite);
+    virtual void visitVDocument(KarbonDocument& document);
+    virtual void visitVGroup(VGroup& group);
+    virtual void visitVSubpath(VSubpath& path);
+    //virtual void visitVText( VText& text );
 
-	void getStroke( const VStroke& stroke );
-	void getColorStops( const QVector<VColorStop*> &colorStops );
-	void getFill( const VFill& fill  );
-	void getGradient( const VGradient& grad );
-	void getHexColor( QTextStream *, const VColor& color  );
-	QString getID( VObject *obj );
+    void getStroke(const VStroke& stroke);
+    void getColorStops(const QVector<VColorStop*> &colorStops);
+    void getFill(const VFill& fill);
+    void getGradient(const VGradient& grad);
+    void getHexColor(QTextStream *, const VColor& color);
+    QString getID(VObject *obj);
 
-	QTextStream* m_stream;
-	QTextStream* m_defs;
-	QTextStream* m_body;
+    QTextStream* m_stream;
+    QTextStream* m_defs;
+    QTextStream* m_body;
 
-	QStack<XAMLGraphicsContext*>	m_gc;
+    QStack<XAMLGraphicsContext*> m_gc;
 };
 
 #endif

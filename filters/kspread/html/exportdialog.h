@@ -27,20 +27,20 @@
 class ExportWidget : public QWidget, public Ui::ExportWidget
 {
 public:
-  ExportWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    ExportWidget(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 
 class ExportDialog : public KDialog
 {
-  Q_OBJECT
-  public:
-    ExportDialog( QWidget *parent = 0 );
+    Q_OBJECT
+public:
+    ExportDialog(QWidget *parent = 0);
     ~ExportDialog();
 
-    void setSheets( const QStringList & );
+    void setSheets(const QStringList &);
     QStringList sheets() const;
 
     /**
@@ -63,9 +63,9 @@ class ExportDialog : public KDialog
     bool separateFiles() const;
 
     int pixelsBetweenCells() const;
-  protected slots:
+protected slots:
     void selectAll();
-  private:
+private:
     ExportWidget *m_mainwidget;
 };
 

@@ -52,65 +52,60 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
-    : XSLTDialog( parent, name_, modal, fl )
+XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl)
+        : XSLTDialog(parent, name_, modal, fl)
 {
-	int i = 0;
-	_in = in;
-	_format = format;
-	setCaption(i18n("Export XSLT Configuration"));
+    int i = 0;
+    _in = in;
+    _format = format;
+    setCaption(i18n("Export XSLT Configuration"));
 
-	kapp->restoreOverrideCursor();
+    kapp->restoreOverrideCursor();
 
-	/* Recent files */
-	_config = new KConfig("xsltdialog");
+    /* Recent files */
+    _config = new KConfig("xsltdialog");
     grp = KConfigGroup(_config, "XSLT export filter");
-	QString value;
-	while(i < 10)
-	{
-		value = grp.readPathEntry( QString("Recent%1").arg(i), QString() );
-		kDebug() <<"recent :" << value;
-		if(!value.isEmpty())
-		{
-			_recentList.append( value );
-			recentBox->addItem(value);
-		}
-		else
-			i = 10;
-		i = i + 1;
-	}
+    QString value;
+    while (i < 10) {
+        value = grp.readPathEntry(QString("Recent%1").arg(i), QString());
+        kDebug() << "recent :" << value;
+        if (!value.isEmpty()) {
+            _recentList.append(value);
+            recentBox->addItem(value);
+        } else
+            i = 10;
+        i = i + 1;
+    }
 
-	/* Common xslt files box */
-	QString appName = KGlobal::mainComponent().componentName();
-	kDebug() <<"app name =" << appName;
+    /* Common xslt files box */
+    QString appName = KGlobal::mainComponent().componentName();
+    kDebug() << "app name =" << appName;
 
-	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
-			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
-	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
-	kDebug() <<"There are" << commonFilesList.size() <<" entries like" << filenames;
+    QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
+                        QDir::separator() + appName + QDir::separator() + "*/*.xsl";
+    QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
+    kDebug() << "There are" << commonFilesList.size() << " entries like" << filenames;
 
-	QStringList tempList;
-	QString name;
-	QString file;
+    QStringList tempList;
+    QString name;
+    QString file;
 
-	for(QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it)
-	{
-		tempList = QStringList::split("/", (*it));
-		file = tempList.last();
-		tempList.pop_back();
-		name = tempList.last();
-		tempList.pop_back();
-		kDebug() << name <<"" << file;
-		if(!_namesList.contains(name) && file == "main.xsl")
-		{
-			_filesList.append(file);
-			_namesList.append(name);
-			_dirsList.append(tempList.join("/"));
-			kDebug() << file <<" get";
-		}
-	}
+    for (QStringList::Iterator it = commonFilesList.begin(); it != commonFilesList.end(); ++it) {
+        tempList = QStringList::split("/", (*it));
+        file = tempList.last();
+        tempList.pop_back();
+        name = tempList.last();
+        tempList.pop_back();
+        kDebug() << name << "" << file;
+        if (!_namesList.contains(name) && file == "main.xsl") {
+            _filesList.append(file);
+            _namesList.append(name);
+            _dirsList.append(tempList.join("/"));
+            kDebug() << file << " get";
+        }
+    }
 
-	xsltList->insertStringList(_namesList);
+    xsltList->insertStringList(_namesList);
 }
 
 /*
@@ -127,8 +122,8 @@ XSLTExportDia::~XSLTExportDia()
  */
 void XSLTExportDia::cancelSlot()
 {
-	kDebug() <<"export cancelled";
-	reject();
+    kDebug() << "export cancelled";
+    reject();
 }
 
 /**
@@ -139,22 +134,20 @@ void XSLTExportDia::cancelSlot()
 void XSLTExportDia::chooseSlot()
 {
 
-	/* Use dir from currently selected file */
+    /* Use dir from currently selected file */
     QString dir;
-    if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
-        dir = QFileInfo( _currentFile.path() ).absoluteFilePath();
+    if (_currentFile.isLocalFile() && QFile::exists(_currentFile.path()))
+        dir = QFileInfo(_currentFile.path()).absoluteFilePath();
 
     KFileDialog *dialog = new KFileDialog(dir, QString(), 0L);
-    dialog->setCaption( i18n("Open Document") );
-    dialog->setMimeFilter( KoFilterManager::mimeFilter( _format, KoFilterManager::Export ) );
+    dialog->setCaption(i18n("Open Document"));
+    dialog->setMimeFilter(KoFilterManager::mimeFilter(_format, KoFilterManager::Export));
     KUrl u;
 
-    if(dialog->exec() == QDialog::Accepted)
-    {
+    if (dialog->exec() == QDialog::Accepted) {
         u = dialog->selectedUrl();
         KRecentDocument::add(dialog->selectedUrl().url(), !dialog->selectedUrl().isLocalFile());
-    } else //revert state
-    {
+    } else { //revert state
         //if (bEmpty) openEmpty();
         //if (bTemplates) openTemplate();
     }
@@ -167,13 +160,12 @@ void XSLTExportDia::chooseSlot()
 
     bool ok = !url.isEmpty();
     if (local) // additional checks for local files
-        ok = ok && (QFileInfo( filename ).isFile() ||
-                    (QFileInfo( filename ).isSymLink() &&
-                     !QFileInfo( filename ).readLink().isEmpty() &&
-                     QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) );
+        ok = ok && (QFileInfo(filename).isFile() ||
+                    (QFileInfo(filename).isSymLink() &&
+                     !QFileInfo(filename).readLink().isEmpty() &&
+                     QFileInfo(QFileInfo(filename).readLink()).isFile()));
 
-    if ( ok )
-    {
+    if (ok) {
         _currentFile = u;
         okSlot();
     }
@@ -185,8 +177,8 @@ void XSLTExportDia::chooseSlot()
  */
 void XSLTExportDia::chooseRecentSlot()
 {
-	kDebug() <<"recent slot :" << recentBox->currentText();
-	_currentFile = recentBox->currentText();
+    kDebug() << "recent slot :" << recentBox->currentText();
+    _currentFile = recentBox->currentText();
 }
 
 /**
@@ -195,10 +187,10 @@ void XSLTExportDia::chooseRecentSlot()
  */
 void XSLTExportDia::chooseCommonSlot()
 {
-	int num = xsltList->currentItem();
-	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
-			xsltList->currentText() + QDir::separator() + _filesList[num];
-	kDebug() <<"common slot :" << _currentFile.url();
+    int num = xsltList->currentItem();
+    _currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
+                   xsltList->currentText() + QDir::separator() + _filesList[num];
+    kDebug() << "common slot :" << _currentFile.url();
 }
 
 /**
@@ -207,62 +199,59 @@ void XSLTExportDia::chooseCommonSlot()
  */
 void XSLTExportDia::okSlot()
 {
-	hide();
-	if(_currentFile.url().isEmpty())
-		return;
-	kDebug() <<"XSLT FILTER --> BEGIN";
-	QString stylesheet = _currentFile.directory() + QDir::separator() + _currentFile.fileName();
+    hide();
+    if (_currentFile.url().isEmpty())
+        return;
+    kDebug() << "XSLT FILTER --> BEGIN";
+    QString stylesheet = _currentFile.directory() + QDir::separator() + _currentFile.fileName();
 
-	/* Add the current file in the recent list if is not and save the list. */
-	if(_recentList.contains(stylesheet) == 0)
-	{
-		kDebug() <<"Style sheet add to recent list";
-		/* Remove the older stylesheet used */
-		if(_recentList.size() >= 10)
-			_recentList.pop_back();
+    /* Add the current file in the recent list if is not and save the list. */
+    if (_recentList.contains(stylesheet) == 0) {
+        kDebug() << "Style sheet add to recent list";
+        /* Remove the older stylesheet used */
+        if (_recentList.size() >= 10)
+            _recentList.pop_back();
 
-		/* Add the new */
-		_recentList.prepend(stylesheet);
+        /* Add the new */
+        _recentList.prepend(stylesheet);
 
-		/* Save the new list */
-		kDebug() <<"Recent list save" << _recentList.size() <<" entrie(s)";
-		int i = 0;
-		while(_recentList.size() > 0)
-		{
-			kDebug() <<"save :" << _recentList.first();
-			grp.writePathEntry( QString("Recent%1").arg(i), _recentList.first());
-			_recentList.pop_front();
-			i = i + 1;
-		}
-		/* Write config on disk */
-		_config->sync();
-	}
+        /* Save the new list */
+        kDebug() << "Recent list save" << _recentList.size() << " entrie(s)";
+        int i = 0;
+        while (_recentList.size() > 0) {
+            kDebug() << "save :" << _recentList.first();
+            grp.writePathEntry(QString("Recent%1").arg(i), _recentList.first());
+            _recentList.pop_front();
+            i = i + 1;
+        }
+        /* Write config on disk */
+        _config->sync();
+    }
 
-	/* Temp file */
-	KTemporaryFile tempFile;
-	tempFile.setPrefix("xsltexport-");
-	tempFile.setSuffix("kwd");
-	tempFile.open();
+    /* Temp file */
+    KTemporaryFile tempFile;
+    tempFile.setPrefix("xsltexport-");
+    tempFile.setSuffix("kwd");
+    tempFile.open();
 
-	const Q_LONG buflen = 4096;
-	char buffer[ buflen ];
-	Q_LONG readBytes = _in->read( buffer, buflen );
+    const Q_LONG buflen = 4096;
+    char buffer[ buflen ];
+    Q_LONG readBytes = _in->read(buffer, buflen);
 
-	while ( readBytes > 0 )
-	{
-		tempFile.write( buffer, readBytes );
-		readBytes = _in->read( buffer, buflen );
-	}
-	tempFile.flush();
+    while (readBytes > 0) {
+        tempFile.write(buffer, readBytes);
+        readBytes = _in->read(buffer, buflen);
+    }
+    tempFile.flush();
 
-	kDebug() << stylesheet;
-	XSLTProc* xsltproc = new XSLTProc(tempFile.fileName(), _fileOut, stylesheet);
-	xsltproc->parse();
+    kDebug() << stylesheet;
+    XSLTProc* xsltproc = new XSLTProc(tempFile.fileName(), _fileOut, stylesheet);
+    xsltproc->parse();
 
-	delete xsltproc;
+    delete xsltproc;
 
-	kDebug() <<"XSLT FILTER --> END";
-	reject(); // ###### accept() ? (Werner)
+    kDebug() << "XSLT FILTER --> END";
+    reject(); // ###### accept() ? (Werner)
 }
 
 #include <xsltexportdia.moc>

@@ -26,18 +26,18 @@ class KWordLatexExportDia;
 
 class LatexExportIface: public DCOPObject
 {
-		K_DCOP
+    K_DCOP
 
-	public:
+public:
     explicit LatexExportIface(KWordLatexExportDia* dia);
-		
+
     ~LatexExportIface();
 
-	k_dcop:
-		void useDefaultConfig();
+k_dcop:
+    void useDefaultConfig();
 
-	private:
-		KWordLatexExportDia* _dialog;
+private:
+    KWordLatexExportDia* _dialog;
 };
 
 #endif /* __LATEXEXPORTIFACE_H__ */

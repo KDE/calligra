@@ -35,8 +35,7 @@ class KWord13Format;
  *
  * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
-enum KWord13StackItemType
-{
+enum KWord13StackItemType {
     KWord13TypeUnknown  = 0,
     KWord13TypeBottom,      ///< Bottom of the stack
     KWord13TypeIgnore,      ///< Element is known but ignored
@@ -72,65 +71,65 @@ public:
 class KWord13StackItemStack : public Q3PtrStack<KWord13StackItem>
 {
 public:
-        KWord13StackItemStack(void) { }
-        ~KWord13StackItemStack(void) { }
+    KWord13StackItemStack(void) { }
+    ~KWord13StackItemStack(void) { }
 };
 
 class KWord13Parser : public QXmlDefaultHandler
 {
 public:
-    explicit KWord13Parser( KWord13Document* kwordDocument );
-    virtual ~KWord13Parser( void );
+    explicit KWord13Parser(KWord13Document* kwordDocument);
+    virtual ~KWord13Parser(void);
 protected: //QXml
     /// Process opening tag
-    virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
+    virtual bool startElement(const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     /// Process closing tag
-    virtual bool endElement( const QString&, const QString& , const QString& qName);
+    virtual bool endElement(const QString&, const QString& , const QString& qName);
     /// Process element's characters (between opening and closing tags)
-    virtual bool characters ( const QString & ch );
+    virtual bool characters(const QString & ch);
     virtual bool warning(const QXmlParseException& exception);
     virtual bool error(const QXmlParseException& exception);
     virtual bool fatalError(const QXmlParseException& exception);
 protected:
     /// Process children of \<FORMAT id="1"\>
-    bool startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementFormatOneProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process children of \<LAYOUT\> (with exceptions)
-    bool startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
+    bool startElementLayoutProperty(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<NAME\>
-    bool startElementName( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementName(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<FORMAT\>
-    bool startElementFormat( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementFormat(const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<LAYOUT\> and \<STYLE\>
-    bool startElementLayout( const QString&, const QXmlAttributes&, KWord13StackItem *stackItem );
+    bool startElementLayout(const QString&, const QXmlAttributes&, KWord13StackItem *stackItem);
     /// Process \<PARAGRAPH\>
-    bool startElementParagraph( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementParagraph(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<FRAME\>
-    bool startElementFrame( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementFrame(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<FRAMESET\>
-    bool startElementFrameset( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementFrameset(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
-    bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
-        KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType );
+    bool startElementDocumentAttributes(const QString& name, const QXmlAttributes& attributes,
+                                        KWord13StackItem *stackItem, const KWord13StackItemType& allowedParentType, const KWord13StackItemType& newType);
     /// Process \<KEY\>
-    bool startElementKey( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementKey(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<ANCHOR\>
-    bool startElementAnchor( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
+    bool startElementAnchor(const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
      * \note The generated key is different that one of the class KoPictureKey
      */
-    QString calculatePictureKey( const QString& filename,
-     const QString& year,  const QString& month,  const QString& day,
-     const QString& hour,  const QString& minute,  const QString& second,
-     const QString& microsecond ) const;
+    QString calculatePictureKey(const QString& filename,
+                                const QString& year,  const QString& month,  const QString& day,
+                                const QString& hour,  const QString& minute,  const QString& second,
+                                const QString& microsecond) const;
 protected:
     QString indent; //DEBUG
     KWord13StackItemStack parserStack;
     KWord13Document* m_kwordDocument;
     KWord13Paragraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
-    KWord13Format* m_currentFormat; ///< Current format 
+    KWord13Format* m_currentFormat; ///< Current format
 };
 
 #endif // KWORD_1_3_PARSER_H

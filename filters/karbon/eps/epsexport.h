@@ -42,27 +42,27 @@ class VText;
 
 class EpsExport : public KoFilter, private VVisitor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	EpsExport( QObject* parent, const QStringList& );
-	virtual ~EpsExport() {}
+    EpsExport(QObject* parent, const QStringList&);
+    virtual ~EpsExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-	virtual void visitVPath( VPath& composite );
-	virtual void visitVDocument( KarbonDocument& document );
-	virtual void visitVSubpath( VSubpath& path );
-	virtual void visitVText( VText& text );
+    virtual void visitVPath(VPath& composite);
+    virtual void visitVDocument(KarbonDocument& document);
+    virtual void visitVSubpath(VSubpath& path);
+    virtual void visitVText(VText& text);
 
-	void getStroke( const VStroke& stroke );
-	void getFill( const VFill& fill );
-	void getColor( const VColor& color );
+    void getStroke(const VStroke& stroke);
+    void getFill(const VFill& fill);
+    void getColor(const VColor& color);
 
-	QTextStream* m_stream;
+    QTextStream* m_stream;
 
-	uint m_psLevel;
+    uint m_psLevel;
 };
 
 #endif

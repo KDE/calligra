@@ -30,9 +30,9 @@
 class DialogUI : public QWidget, public Ui::DialogUI
 {
 public:
-  DialogUI( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    DialogUI(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 
@@ -40,8 +40,7 @@ class CSVDialog : public KDialog
 {
     Q_OBJECT
 public:
-    enum Header
-    {
+    enum Header {
         TEXT,       ///< Normal text
         NUMBER,     ///< Number (either like locale or like C)
         DATE,       ///< Date \todo What type exactly?
@@ -83,14 +82,14 @@ private:
 
 private slots:
     void returnPressed();
-    void formatChanged( const QString& );
+    void formatChanged(const QString&);
     void delimiterClicked(int id);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
-    void textChanged ( const QString & );
-    void ignoreDuplicatesChanged( int );
+    void textChanged(const QString &);
+    void ignoreDuplicatesChanged(int);
     void updateClicked();
-    void encodingChanged ( const QString & );
+    void encodingChanged(const QString &);
 };
 
 #endif

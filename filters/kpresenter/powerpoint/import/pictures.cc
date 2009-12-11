@@ -67,42 +67,42 @@ savePicture(POLE::Stream& stream, int position, KoStore* out, QString& mimetype)
     const char* nametemplate;
     switch (type) {
     case 0xF01A:
-        offset = (instance == 0x3D4) ?50 :66;
+        offset = (instance == 0x3D4) ? 50 : 66;
         nametemplate = "%06i.emf";
         mimetype = "application/octet-stream";
         break;
     case 0xF01B:
-        offset = (instance == 0x216) ?50 :66;
+        offset = (instance == 0x216) ? 50 : 66;
         nametemplate = "%06i.wmf";
         mimetype = "application/octet-stream";
         break;
     case 0xF01C:
-        offset = (instance == 0x542) ?50 :66;
+        offset = (instance == 0x542) ? 50 : 66;
         nametemplate = "%06i.pict";
         mimetype = "image/pict";
         break;
     case 0xF01D:
-        offset = (instance == 0x46A) ?17 :33;
+        offset = (instance == 0x46A) ? 17 : 33;
         nametemplate = "%06i.jpg";
         mimetype = "image/jpeg";
         break;
     case 0xF01E:
-        offset = (instance == 0x6E0) ?17 :33;
+        offset = (instance == 0x6E0) ? 17 : 33;
         nametemplate = "%06i.png";
         mimetype = "image/png";
         break;
     case 0xF01F:
-        offset = (instance == 0x7A8) ?17 :33;
+        offset = (instance == 0x7A8) ? 17 : 33;
         nametemplate = "%06i.dib";
         mimetype = "application/octet-stream";
         break;
     case 0xF029:
-        offset = (instance == 0x6E4) ?17 :33;
+        offset = (instance == 0x6E4) ? 17 : 33;
         nametemplate = "%06i.tiff";
         mimetype = "image/tiff";
         break;
     case 0xF02A:
-        offset = (instance == 0x46A) ?17 :33;
+        offset = (instance == 0x46A) ? 17 : 33;
         nametemplate = "%06i.jpg";
         mimetype = "image/jpeg";
         break;

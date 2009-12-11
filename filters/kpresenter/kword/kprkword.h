@@ -23,7 +23,8 @@
 #include <KoFilter.h>
 #include <qdom.h>
 
-class KprKword : public KoFilter {
+class KprKword : public KoFilter
+{
 
     Q_OBJECT
 
@@ -32,7 +33,7 @@ public:
 
     virtual ~KprKword() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
     void convert();

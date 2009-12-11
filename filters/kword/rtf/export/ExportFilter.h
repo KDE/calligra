@@ -38,7 +38,9 @@ class RTFWorker : public KWEFBaseWorker
 {
 public:
     RTFWorker(void);
-    virtual ~RTFWorker(void) { delete m_streamOut; delete m_ioDevice; }
+    virtual ~RTFWorker(void) {
+        delete m_streamOut; delete m_ioDevice;
+    }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); ///< Close file in normal conditions
@@ -51,8 +53,8 @@ public:
     virtual bool doCloseTextFrameSet(void);
     virtual bool doFullPaperFormat(const int format,
                                    const double width, const double height, const int orientation);
-    virtual bool doFullPaperBorders (const double top, const double left,
-                                     const double bottom, const double right);
+    virtual bool doFullPaperBorders(const double top, const double left,
+                                    const double bottom, const double right);
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doHeader(const HeaderData& header);
     virtual bool doFooter(const FooterData& footer);
@@ -67,9 +69,9 @@ private:
      * They are encoded either with \\' or with \\u
      * @return the escaped string
      */
-    QString escapeRtfText ( const QString& text ) const;
-    QString ProcessParagraphData ( const QString &paraText,
-                                   const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
+    QString escapeRtfText(const QString& text) const;
+    QString ProcessParagraphData(const QString &paraText,
+                                 const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     QString formatTextParagraph(const QString& strText,
                                 const FormatData& formatOrigin, const FormatData& format);
     QString makeTable(const FrameAnchor& anchor);

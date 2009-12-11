@@ -28,20 +28,19 @@ class SvgGraphicsContext
 public:
     enum StyleType { None, Solid, Gradient, Pattern };
 
-    SvgGraphicsContext()
-    {
+    SvgGraphicsContext() {
         strokeType = None;
-        stroke.setLineStyle( Qt::NoPen, QVector<qreal>() ); // default is no stroke
-        stroke.setLineWidth( 1.0 );
-        stroke.setCapStyle( Qt::FlatCap );
-        stroke.setJoinStyle( Qt::MiterJoin );
-        
+        stroke.setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
+        stroke.setLineWidth(1.0);
+        stroke.setCapStyle(Qt::FlatCap);
+        stroke.setJoinStyle(Qt::MiterJoin);
+
         fillType = Solid;
         fillRule = Qt::WindingFill;
-        fillColor = QColor( Qt::black ); // default is black fill as per svg spec
-        
+        fillColor = QColor(Qt::black);   // default is black fill as per svg spec
+
         opacity = 1.0;
-        
+
         currentColor = Qt::black;
         forcePercentage = false;
 
@@ -59,13 +58,13 @@ public:
 
     QString filterId;       ///< the current filter id
     qreal opacity;          ///< the shapes opacity
-    
+
     QMatrix matrix;         ///< the current transformation matrix
     QFont   font;           ///< the current font
     QColor  currentColor;   ///< the current color
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
 
-    QRectF currentBoundbox; ///< the current bound box used for bounding box units                                   
+    QRectF currentBoundbox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
 
     bool display;           ///< controls display of shape

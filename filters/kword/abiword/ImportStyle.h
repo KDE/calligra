@@ -33,14 +33,14 @@ public:
     QString m_props; // properties
 };
 
-class StyleDataMap : public QMap<QString,StyleData>
+class StyleDataMap : public QMap<QString, StyleData>
 {
 public:
     StyleDataMap(void);
 public:
     void defineNewStyle(const QString& strName, const int level, const QString& strProps);
     void defineNewStyleFromOld(const QString& strName, const QString& strOld,
-        const int level, const QString& strProps);
+                               const int level, const QString& strProps);
     StyleDataMap::Iterator useOrCreateStyle(const QString& strName);
     void defineDefaultStyles(void);
 private:

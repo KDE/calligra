@@ -36,111 +36,162 @@
  */
 class Config
 {
-	/* Document tab */
-	bool _useLatexStyle;
-	bool _isEmbeded;
-	QString _class;
-	QString _quality;
-	unsigned int _defaultFontSize;
-	
-	/* Pictures tab */
-	bool _convertPictures;
-	QString _picturesDir;
+    /* Document tab */
+    bool _useLatexStyle;
+    bool _isEmbeded;
+    QString _class;
+    QString _quality;
+    unsigned int _defaultFontSize;
 
-	/* Language tab */
-	//bool _useUnicode;
-	//bool _useLatin1;
-	QString _encoding;
-	QStringList _languagesList;
-	QString _defaultLanguage;
+    /* Pictures tab */
+    bool _convertPictures;
+    QString _picturesDir;
 
-	int _tabSize;	/* Size of the para indentation. */
-	int _tabulation;	/* Total size  of the indentation. */
+    /* Language tab */
+    //bool _useUnicode;
+    //bool _useLatin1;
+    QString _encoding;
+    QStringList _languagesList;
+    QString _defaultLanguage;
 
-	public:
+    int _tabSize; /* Size of the para indentation. */
+    int _tabulation; /* Total size  of the indentation. */
 
-		static const char SPACE_CHAR;
-		
-		static Config* instance(void);
-		
-		Config(const Config&);
+public:
 
-		/* 
-		 * Destructor
-		 */
-		virtual ~Config();
+    static const char SPACE_CHAR;
 
-		/* ==== Getters ==== */
+    static Config* instance(void);
 
-		/**
-		 * Return the value of a tabulation.
-		 */
-		bool isKwordStyleUsed() const { return (_useLatexStyle == false); }
-		bool isEmbeded() const { return _isEmbeded; }
-		QString getClass() const { return _class; }
-		QString getQuality() const { return _quality; }
-		unsigned int getDefaultFontSize() const { return _defaultFontSize; }
+    Config(const Config&);
 
-		bool convertPictures() const { return _convertPictures; }
-		QString getPicturesDir() const { return _picturesDir; }
-		
-		bool mustUseUnicode() const { return (_encoding == "unicode"); }
-		bool mustUseLatin1() const { return (_encoding != "unicode"); }
-		QString getEncoding() const { return _encoding; }
-		QStringList getLanguagesList() const { return _languagesList; }
-		QString getDefaultLanguage() const { return _defaultLanguage; }
-		
-		int getTabSize() const { return _tabSize; }
-		int getIndentation() const { return _tabulation; }
+    /*
+     * Destructor
+     */
+    virtual ~Config();
 
-		/* ==== Setters ==== */
+    /* ==== Getters ==== */
 
-		/**
-		 * Initialize the tab size.
-		 * @param size New size. Must be greater or equal to 0.
-		 */
-		void setTabSize(int size)
-		{
-			if(size >= 0)
-				_tabSize = size;
-		}
-		
-		void useLatexStyle() { _useLatexStyle = true;  }
-		void useKwordStyle() { _useLatexStyle = false; }
-		void setEmbeded(bool emb) { _isEmbeded = emb; }
-		/** The class can be article, book, letter, report or slides. It's the type of the
-		 * latex document. */
-		void setClass(const QString &lclass) { _class = lclass; }
-		void setQuality(const QString &quality) { _quality = quality; }
-		void setDefaultFontSize(int size) { _defaultFontSize = size; }
+    /**
+     * Return the value of a tabulation.
+     */
+    bool isKwordStyleUsed() const {
+        return (_useLatexStyle == false);
+    }
+    bool isEmbeded() const {
+        return _isEmbeded;
+    }
+    QString getClass() const {
+        return _class;
+    }
+    QString getQuality() const {
+        return _quality;
+    }
+    unsigned int getDefaultFontSize() const {
+        return _defaultFontSize;
+    }
 
-		void convertPictures(bool state) { _convertPictures = state; }
-		void setPicturesDir(const QString &dir) { _picturesDir = dir; }
+    bool convertPictures() const {
+        return _convertPictures;
+    }
+    QString getPicturesDir() const {
+        return _picturesDir;
+    }
 
-		void setEncoding(const QString &enc) { _encoding = enc; }
-		void addLanguage( const QString &l) { _languagesList.append(l); }
-		void setDefaultLanguage(const QString &l) { _defaultLanguage = l; }
-		
-		void setIndentation(int indent) { _tabulation = indent; }
-		
-		/* ==== Helpful functions ==== */
-		void indent();
-		void unindent();
+    bool mustUseUnicode() const {
+        return (_encoding == "unicode");
+    }
+    bool mustUseLatin1() const {
+        return (_encoding != "unicode");
+    }
+    QString getEncoding() const {
+        return _encoding;
+    }
+    QStringList getLanguagesList() const {
+        return _languagesList;
+    }
+    QString getDefaultLanguage() const {
+        return _defaultLanguage;
+    }
 
-		void writeIndent(QTextStream& out);
+    int getTabSize() const {
+        return _tabSize;
+    }
+    int getIndentation() const {
+        return _tabulation;
+    }
 
-	protected:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Config.
-		 * Initialize params to default values.
-		 */
-		Config(); /* Ensure singleton */
+    /* ==== Setters ==== */
 
-		static Config* _instance; /* Singleton */
+    /**
+     * Initialize the tab size.
+     * @param size New size. Must be greater or equal to 0.
+     */
+    void setTabSize(int size) {
+        if (size >= 0)
+            _tabSize = size;
+    }
 
-	private:
+    void useLatexStyle() {
+        _useLatexStyle = true;
+    }
+    void useKwordStyle() {
+        _useLatexStyle = false;
+    }
+    void setEmbeded(bool emb) {
+        _isEmbeded = emb;
+    }
+    /** The class can be article, book, letter, report or slides. It's the type of the
+     * latex document. */
+    void setClass(const QString &lclass) {
+        _class = lclass;
+    }
+    void setQuality(const QString &quality) {
+        _quality = quality;
+    }
+    void setDefaultFontSize(int size) {
+        _defaultFontSize = size;
+    }
+
+    void convertPictures(bool state) {
+        _convertPictures = state;
+    }
+    void setPicturesDir(const QString &dir) {
+        _picturesDir = dir;
+    }
+
+    void setEncoding(const QString &enc) {
+        _encoding = enc;
+    }
+    void addLanguage(const QString &l) {
+        _languagesList.append(l);
+    }
+    void setDefaultLanguage(const QString &l) {
+        _defaultLanguage = l;
+    }
+
+    void setIndentation(int indent) {
+        _tabulation = indent;
+    }
+
+    /* ==== Helpful functions ==== */
+    void indent();
+    void unindent();
+
+    void writeIndent(QTextStream& out);
+
+protected:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Config.
+     * Initialize params to default values.
+     */
+    Config(); /* Ensure singleton */
+
+    static Config* _instance; /* Singleton */
+
+private:
 
 };
 

@@ -27,20 +27,19 @@
 class XAMLGraphicsContext
 {
 public:
-	XAMLGraphicsContext()
-	{
-		stroke.setType( VStroke::none ); // default is no stroke
-		stroke.setLineWidth( 1.0 );
-		stroke.setLineCap( VStroke::capButt );
-		stroke.setLineJoin( VStroke::joinMiter );
-		fill.setColor( VColor( Qt::black ) );
-		fillRule = winding;
-	}
-	VFill		fill;
-	VFillRule	fillRule;
-	VStroke		stroke;
-	QMatrix	matrix;
-	QFont		font;
+    XAMLGraphicsContext() {
+        stroke.setType(VStroke::none);   // default is no stroke
+        stroke.setLineWidth(1.0);
+        stroke.setLineCap(VStroke::capButt);
+        stroke.setLineJoin(VStroke::joinMiter);
+        fill.setColor(VColor(Qt::black));
+        fillRule = winding;
+    }
+    VFill  fill;
+    VFillRule fillRule;
+    VStroke  stroke;
+    QMatrix matrix;
+    QFont  font;
 };
 
 #endif

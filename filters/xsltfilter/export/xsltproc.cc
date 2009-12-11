@@ -61,8 +61,8 @@
 
 #ifndef HAVE_STAT
 #  ifdef HAVE__STAT
-     /* MS C library seems to define stat and _stat. The definition
-      *         is identical. Still, mapping them to each other causes a warning. */
+/* MS C library seems to define stat and _stat. The definition
+ *         is identical. Still, mapping them to each other causes a warning. */
 #    ifndef _MSC_VER
 #      define stat(x,y) _stat(x,y)
 #    endif
@@ -71,33 +71,33 @@
 #endif
 
 xmlParserInputPtr xmlNoNetExternalEntityLoader(const char *URL,
-	                                       const char *ID,
-					       xmlParserCtxtPtr ctxt);
+        const char *ID,
+        xmlParserCtxtPtr ctxt);
 
 #if 0
 XSLTProc::XSLTProc(const char* fileIn, const char* fileOut, const char* xsltsheet)
 {
-	_fileIn = fileIn;
-	_fileOut = fileOut;
-	_stylesheet = xsltsheet;
-	nbparams = 0;
-	debug = 0;
-	repeat = 0;
-	novalid = 0;
-	output = NULL;
+    _fileIn = fileIn;
+    _fileOut = fileOut;
+    _stylesheet = xsltsheet;
+    nbparams = 0;
+    debug = 0;
+    repeat = 0;
+    novalid = 0;
+    output = NULL;
 }
 #endif
 
 XSLTProc::XSLTProc(const QString& fileIn, const QString& fileOut, const QString& xsltsheet)
 {
-	_fileIn = QFile::encodeName(fileIn);
-	_fileOut = QFile::encodeName(fileOut);
-	_stylesheet = QFile::encodeName(xsltsheet);
-	nbparams = 0;
-	debug = 0;
-	repeat = 0;
-	novalid = 0;
-	output = NULL;
+    _fileIn = QFile::encodeName(fileIn);
+    _fileOut = QFile::encodeName(fileOut);
+    _stylesheet = QFile::encodeName(xsltsheet);
+    nbparams = 0;
+    debug = 0;
+    repeat = 0;
+    novalid = 0;
+    output = NULL;
 }
 
 /*static int debug = 0;
@@ -113,63 +113,50 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
 {
     xmlDocPtr res;
 
-    if (output == NULL)
-	{
-		
-		if (repeat)
-		{
-		    int j;
+    if (output == NULL) {
 
-		    for (j = 1; j < repeat; j++)
-			{
-				res = xsltApplyStylesheet(cur, doc, params);
-				xmlFreeDoc(res);
-				xmlFreeDoc(doc);
-			    doc = xmlParseFile(filename);
-		    }
-		}
-	    res = xsltApplyStylesheet(cur, doc, params);
-		xmlFreeDoc(doc);
-	
-		if (res == NULL)
-		{
-		    fprintf(stderr, "no result for %s\n", filename);
-		    return;
-		}
+        if (repeat) {
+            int j;
+
+            for (j = 1; j < repeat; j++) {
+                res = xsltApplyStylesheet(cur, doc, params);
+                xmlFreeDoc(res);
+                xmlFreeDoc(doc);
+                doc = xmlParseFile(filename);
+            }
+        }
+        res = xsltApplyStylesheet(cur, doc, params);
+        xmlFreeDoc(doc);
+
+        if (res == NULL) {
+            fprintf(stderr, "no result for %s\n", filename);
+            return;
+        }
 #ifdef LIBXML_DEBUG_ENABLED
-		if (debug)
-	    	xmlDebugDumpDocument(stdout, res);
-		else
-		{
+        if (debug)
+            xmlDebugDumpDocument(stdout, res);
+        else {
 #endif
-	    	if (cur->methodURI == NULL)
-			{
-				xsltSaveResultToFile(stdout, res, cur);
-		    }
-			else
-			{
-				if (xmlStrEqual
-				    (cur->method, (const xmlChar *) "xhtml"))
-				{
-				    fprintf(stderr, "non standard output xhtml\n");
-				    xsltSaveResultToFile(stdout, res, cur);
-				}
-				else
-				{
-				    fprintf(stderr,
-						    "Unsupported non standard output %s\n",
-						    cur->method);
-				}
-	    	}
+            if (cur->methodURI == NULL) {
+                xsltSaveResultToFile(stdout, res, cur);
+            } else {
+                if (xmlStrEqual
+                        (cur->method, (const xmlChar *) "xhtml")) {
+                    fprintf(stderr, "non standard output xhtml\n");
+                    xsltSaveResultToFile(stdout, res, cur);
+                } else {
+                    fprintf(stderr,
+                            "Unsupported non standard output %s\n",
+                            cur->method);
+                }
+            }
 #ifdef LIBXML_DEBUG_ENABLED
-		}
+        }
 #endif
-		xmlFreeDoc(res);
-    }
-	else
-	{
-		xsltRunStylesheet(cur, doc, params, output, NULL, NULL);
-		xmlFreeDoc(doc);
+        xmlFreeDoc(res);
+    } else {
+        xsltRunStylesheet(cur, doc, params, output, NULL, NULL);
+        xmlFreeDoc(doc);
     }
 }
 
@@ -205,14 +192,13 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
 
 void XSLTProc::addParam(const QString& name, const QString& value)
 {
-	if(nbparams < NB_PARAMETER_MAX)
-	{
-		params[nbparams] = strdup(name.latin1());
-		params[nbparams + 1] = strdup(value.latin1());
-		fprintf(stderr, "%s => ", params[0]);
-		fprintf(stderr, "%s\n", params[1]);
-		nbparams = nbparams + 2;
-	}
+    if (nbparams < NB_PARAMETER_MAX) {
+        params[nbparams] = strdup(name.latin1());
+        params[nbparams + 1] = strdup(value.latin1());
+        fprintf(stderr, "%s => ", params[0]);
+        fprintf(stderr, "%s\n", params[1]);
+        nbparams = nbparams + 2;
+    }
 }
 
 int XSLTProc::parse()
@@ -232,12 +218,12 @@ int XSLTProc::parse()
     else
         xmlLoadExtDtdDefaultValue = 0;
 
-	/* Options */
-	debug = debug + 1;
-	novalid = novalid + 1;
-	output = _fileOut;
-	repeat = 20;
-	xsltMaxDepth = 5;
+    /* Options */
+    debug = debug + 1;
+    novalid = novalid + 1;
+    output = _fileOut;
+    repeat = 20;
+    xsltMaxDepth = 5;
     params[nbparams] = NULL;
 
     /*
@@ -251,56 +237,48 @@ int XSLTProc::parse()
     //exsltRegisterAll();
     xsltRegisterTestModule();
 
-    
-   	style = xmlParseFile((const char *) _stylesheet);
-  	if (style == NULL)
-	{
-		fprintf(stderr,  "cannot parse %s\n", _stylesheet.data());
-		cur = NULL;
-	}
-	else
-	{
-		cur = xsltLoadStylesheetPI(style);
-		if (cur != NULL)
-		{
-		    /* it is an embedded stylesheet */
-		    xsltProcess(style, cur, _stylesheet);
-		    xsltFreeStylesheet(cur);
-		    goto done;
-		}
-		cur = xsltParseStylesheetDoc(style);
-		if (cur != NULL)
-		{
-		    if (cur->indent == 1)
-				xmlIndentTreeOutput = 1;
-		    else
-				xmlIndentTreeOutput = 0;
-			i++;
-		}
-		else
-		{
-		    xmlFreeDoc(style);
-		    goto done;
-		}
-	}
-   
+
+    style = xmlParseFile((const char *) _stylesheet);
+    if (style == NULL) {
+        fprintf(stderr,  "cannot parse %s\n", _stylesheet.data());
+        cur = NULL;
+    } else {
+        cur = xsltLoadStylesheetPI(style);
+        if (cur != NULL) {
+            /* it is an embedded stylesheet */
+            xsltProcess(style, cur, _stylesheet);
+            xsltFreeStylesheet(cur);
+            goto done;
+        }
+        cur = xsltParseStylesheetDoc(style);
+        if (cur != NULL) {
+            if (cur->indent == 1)
+                xmlIndentTreeOutput = 1;
+            else
+                xmlIndentTreeOutput = 0;
+            i++;
+        } else {
+            xmlFreeDoc(style);
+            goto done;
+        }
+    }
+
     /*
      * disable CDATA from being built in the document tree
      */
     xmlDefaultSAXHandlerInit();
     xmlDefaultSAXHandler.cdataBlock = NULL;
 
-    if ((cur != NULL) && (cur->errors == 0))
-	{
-		doc = NULL;
+    if ((cur != NULL) && (cur->errors == 0)) {
+        doc = NULL;
         doc = xmlParseFile(_fileIn);
         if (doc == NULL)
-			fprintf(stderr, "unable to parse %s\n", _fileIn.data());
-		else
-			xsltProcess(doc, cur, _fileIn);
+            fprintf(stderr, "unable to parse %s\n", _fileIn.data());
+        else
+            xsltProcess(doc, cur, _fileIn);
     }
     if (cur != NULL)
-		xsltFreeStylesheet(cur);
+        xsltFreeStylesheet(cur);
 done:
     xsltCleanupGlobals();
     xmlCleanupParser();

@@ -32,7 +32,8 @@
 #include <KoStore.h>
 
 
-class RTFExport : public KoFilter {
+class RTFExport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -40,7 +41,7 @@ public:
     RTFExport(QObject* parent, const QStringList &);
     virtual ~RTFExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // RTFEXPORT_H

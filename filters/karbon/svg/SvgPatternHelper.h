@@ -35,43 +35,43 @@ public:
     ~SvgPatternHelper();
 
     /// Set pattern units type (affects pattern x, y, width and height)
-    void setPatternUnits( Units units );
+    void setPatternUnits(Units units);
     /// Return pattern units type
     Units patternUnits() const;
 
     /// Set pattern content units type (affects coordinates/length of pattern child shapes)
-    void setPatternContentUnits( Units units );
+    void setPatternContentUnits(Units units);
     /// Returns pattern content units type
     Units patternContentUnits() const;
 
     /// Sets the pattern transformation found in attribute "patternTransform"
-    void setTransform( const QMatrix &transform );
+    void setTransform(const QMatrix &transform);
     /// Returns the pattern transform
     QMatrix transform() const;
 
     /// Sets pattern tile position
-    void setPosition( const QPointF & position );
+    void setPosition(const QPointF & position);
     /// Returns pattern tile position (objectBound is used when patternUnits == ObjectBoundingBox)
-    QPointF position( const QRectF & objectBound ) const;
+    QPointF position(const QRectF & objectBound) const;
 
     /// Sets pattern tile size
-    void setSize( const QSizeF & size );
+    void setSize(const QSizeF & size);
     /// Returns pattern tile size (objectBound is used when patternUnits == ObjectBoundingBox)
-    QSizeF size( const QRectF & objectBound ) const;
+    QSizeF size(const QRectF & objectBound) const;
 
     /// Sets the dom element containing the pattern content
-    void setContent( const KoXmlElement &content );
+    void setContent(const KoXmlElement &content);
     /// Return the pattern content element
     KoXmlElement content() const;
 
     /// copies the content from the given pattern helper
-    void copyContent( const SvgPatternHelper &other );
+    void copyContent(const SvgPatternHelper &other);
 
     /// Sets the pattern view box (the view box content is fitted into the pattern tile)
-    void setPatternContentViewbox( const QRectF &viewBox );
+    void setPatternContentViewbox(const QRectF &viewBox);
 
     /// generates the pattern image from the given shapes and using the specified bounding box
-    QImage generateImage( const QRectF &objectBound, const QList<KoShape*> content );
+    QImage generateImage(const QRectF &objectBound, const QList<KoShape*> content);
 
 private:
 

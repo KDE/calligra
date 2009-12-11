@@ -55,70 +55,70 @@
  */
 class TextFormatting
 {
-    public:
-        TextFormatting(): italic (false), underline (false), underlineWord(false),
-            strikeout (false), strikeoutWord( false ),
-            weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
+public:
+    TextFormatting(): italic(false), underline(false), underlineWord(false),
+            strikeout(false), strikeoutWord(false),
+            weight(50), fontSize(0), verticalAlignment(0), missing(true) {}
 
-        TextFormatting(const bool newMissing) : italic (false),
-            underline (false), underlineWord(false), strikeout (false), strikeoutWord( false ),
-            weight (50), fontSize (0), verticalAlignment (0),
-            missing (newMissing) {}
+    TextFormatting(const bool newMissing) : italic(false),
+            underline(false), underlineWord(false), strikeout(false), strikeoutWord(false),
+            weight(50), fontSize(0), verticalAlignment(0),
+            missing(newMissing) {}
 
-        TextFormatting ( QString f,
-                         bool    i,
-                         bool    u,
-                         bool    s,
-                         int     w,
-                         int     sz,
-                         QColor  fg,
-                         QColor  bg,
-                         int     v) :
-            fontName (f), italic (i), underline (u), underlineWord(false),
-            strikeout(s), strikeoutWord( false ),
-            weight (w), fontSize (sz), fgColor (fg),
-            bgColor (bg), verticalAlignment (v), missing (false) {}
+    TextFormatting(QString f,
+                   bool    i,
+                   bool    u,
+                   bool    s,
+                   int     w,
+                   int     sz,
+                   QColor  fg,
+                   QColor  bg,
+                   int     v) :
+            fontName(f), italic(i), underline(u), underlineWord(false),
+            strikeout(s), strikeoutWord(false),
+            weight(w), fontSize(sz), fgColor(fg),
+            bgColor(bg), verticalAlignment(v), missing(false) {}
 
-        QString fontName;
+    QString fontName;
 
-        bool    italic;
+    bool    italic;
 
-        bool    underline;       ///< Any underline? (If true, we do not know if simple or double or what else)
+    bool    underline;       ///< Any underline? (If true, we do not know if simple or double or what else)
 
-        QString    underlineValue; ///< "value" of the underline: single, double, bold-single...
-        QString    underlineStyle; ///< underline style: solid, dash, dot dash, ....
-        bool       underlineWord;  ///< true if word-by-word (i.e spaces are not underlined)
-        QColor     underlineColor; ///< color of the line
+    QString    underlineValue; ///< "value" of the underline: single, double, bold-single...
+    QString    underlineStyle; ///< underline style: solid, dash, dot dash, ....
+    bool       underlineWord;  ///< true if word-by-word (i.e spaces are not underlined)
+    QColor     underlineColor; ///< color of the line
 
-        bool    strikeout;             ///< true if strikeout
-        QString strikeoutType;         ///< type of strikeout: single, bold, double
-        QString strikeoutLineStyle;    ///< type of the strikeout line: solid, dash, dot, ....
-	bool 	strikeoutWord;	///< \todo: not finished ###
+    bool    strikeout;             ///< true if strikeout
+    QString strikeoutType;         ///< type of strikeout: single, bold, double
+    QString strikeoutLineStyle;    ///< type of the strikeout line: solid, dash, dot, ....
+    bool  strikeoutWord; ///< \todo: not finished ###
 
-        int     weight;
-        int     fontSize;
-        QColor  fgColor;
-        QColor  bgColor;
-        int     verticalAlignment;
+    int     weight;
+    int     fontSize;
+    QColor  fgColor;
+    QColor  bgColor;
+    int     verticalAlignment;
 
-        QString fontAttribute;
-        /**
-         * Language code
-         * @note the test language "xx" in converted to "en_US"
-         */
-        QString language;
+    QString fontAttribute;
+    /**
+     * Language code
+     * @note the test language "xx" in converted to "en_US"
+     */
+    QString language;
 
-        bool    missing;   ///< true if this TextFormatting object does not correspond to a real \<FORMAT\> element
+    bool    missing;   ///< true if this TextFormatting object does not correspond to a real \<FORMAT\> element
 };
 
 
 class Picture
 {
-    public:
-        Picture () {}
+public:
+    Picture() {}
 
-        KoPictureKey key;      ///< Picture key: where the picture came from
-        QString koStoreName;   ///< Picture store name: filename within KWord archive
+    KoPictureKey key;      ///< Picture key: where the picture came from
+    QString koStoreName;   ///< Picture store name: filename within KWord archive
 };
 
 /**
@@ -161,52 +161,52 @@ struct ParaData;
 
 class KWORD_LIBEXPORT_EXPORT TableCell
 {
-   public:
-      TableCell (): col( 0 ), row( 0 ), m_cols( 0 ), m_rows( 0 ), paraList( 0 ) {}
+public:
+    TableCell(): col(0), row(0), m_cols(0), m_rows(0), paraList(0) {}
 
-      /// \since 1.4 (changes of parameters)
-      TableCell ( int c, int r, int _cols, int _rows, QList<ParaData> *p, FrameData &frameData  )
-         : col (c), row (r), m_cols( _cols ), m_rows( _rows ), paraList (p), frame (frameData) {}
+    /// \since 1.4 (changes of parameters)
+    TableCell(int c, int r, int _cols, int _rows, QList<ParaData> *p, FrameData &frameData)
+            : col(c), row(r), m_cols(_cols), m_rows(_rows), paraList(p), frame(frameData) {}
 
-      ~TableCell ();
+    ~TableCell();
 
-      int                   col;
-      int                   row;
-      int m_cols; ///< \since 1.4
-      int m_rows; ///< \since 1.4
-      QList<ParaData> *paraList;
-      FrameData   frame;
+    int                   col;
+    int                   row;
+    int m_cols; ///< \since 1.4
+    int m_rows; ///< \since 1.4
+    QList<ParaData> *paraList;
+    FrameData   frame;
 };
 
 
 class Table
 {
-   public:
-      Table () : cols (0) {}
+public:
+    Table() : cols(0) {}
 
-      /// \since 1.4 (change of parameters)
-      void addCell ( int c, int r, int _cols, int _rows, QList<ParaData> &p, FrameData &frameData );
+    /// \since 1.4 (change of parameters)
+    void addCell(int c, int r, int _cols, int _rows, QList<ParaData> &p, FrameData &frameData);
 
-      int                   cols;
-      QList<TableCell> cellList;
+    int                   cols;
+    QList<TableCell> cellList;
 };
 
 
 /// This is basically \<FRAMESET\> tag
 class FrameAnchor
 {
-   public:
-      FrameAnchor ():
-       type(-1) {}
+public:
+    FrameAnchor():
+            type(-1) {}
 
-      FrameAnchor ( const KoPictureKey& n  ) : key (n), type (-1) {}
+    FrameAnchor(const KoPictureKey& n) : key(n), type(-1) {}
 
-      KoPictureKey key; ///< Picture key
-      int     type;
-      FrameData   frame;
+    KoPictureKey key; ///< Picture key
+    int     type;
+    FrameData   frame;
 
-      Picture picture;
-      Table   table;
+    Picture picture;
+    Table   table;
 };
 
 /**
@@ -215,12 +215,12 @@ class FrameAnchor
 class KWORD_LIBEXPORT_EXPORT VariableData
 {
 public:
-    VariableData (): m_type(-1), footnotePara(0) {}
-    VariableData ( const QString& text ) : m_text(text), m_type(-1) {}
-    VariableData ( const VariableData& other ) :
-      m_key(other.m_key), m_text(other.m_text),
-      m_type(other.m_type), propertyMap(other.propertyMap),
-      footnotePara(other.footnotePara) {}
+    VariableData(): m_type(-1), footnotePara(0) {}
+    VariableData(const QString& text) : m_text(text), m_type(-1) {}
+    VariableData(const VariableData& other) :
+            m_key(other.m_key), m_text(other.m_text),
+            m_type(other.m_type), propertyMap(other.propertyMap),
+            footnotePara(other.footnotePara) {}
 public:
     /**
      * Set parameters of a LINK element
@@ -243,7 +243,7 @@ public:
     /**
      * Set parameters of a \<FOOTNOTE\> element
      */
-    void setFootnote( const QString& notetype, const QString& automatic, const QString& value, QList<ParaData>* para );
+    void setFootnote(const QString& notetype, const QString& automatic, const QString& value, QList<ParaData>* para);
     /**
      * Is the footnote an automatic one?
      * @return true for an automatical foornote, false for a manual footnote
@@ -255,46 +255,46 @@ public:
      * Get type of footnote
      * @return true for footnote, false for endnote
      */
-    bool getFootnoteType( void ) const;
+    bool getFootnoteType(void) const;
     /// Paragrapgh of the footnote
     QList<ParaData>* getFootnotePara(void) const;
 
     /**
      * Set generic variable data
      */
-    void setGenericData( const QString& key, const QString& data );
+    void setGenericData(const QString& key, const QString& data);
     /**
      * Get generic variable data
      */
-    QString getGenericData( const QString& key ) const;
+    QString getGenericData(const QString& key) const;
 
     QString m_key;
     QString m_text;
     int m_type;
 
 protected:
-    QMap<QString,QString> propertyMap;
+    QMap<QString, QString> propertyMap;
     QList<ParaData>* footnotePara;
 };
 
 class FormatData
 {
 public:
-    FormatData ()
-        : id (-1), pos (-1), len (-1), text(true) {}
+    FormatData()
+            : id(-1), pos(-1), len(-1), text(true) {}
 
-    FormatData ( const int p, const int l, const bool missing  )
-        : id (1), pos (p), len (l), text(missing) {}
+    FormatData(const int p, const int l, const bool missing)
+            : id(1), pos(p), len(l), text(missing) {}
 
-    FormatData ( const int i, const int p, const int l  )
-        : id (i), pos (p), len (l), text(false) {}
+    FormatData(const int i, const int p, const int l)
+            : id(i), pos(p), len(l), text(false) {}
 
-    FormatData ( const int p, const int l, const FrameAnchor& t )
-        : id (6), pos (p), len (l), frameAnchor (t) {}
+    FormatData(const int p, const int l, const FrameAnchor& t)
+            : id(6), pos(p), len(l), frameAnchor(t) {}
 
-    FormatData ( const FormatData& other )
-        : id(other.id), pos(other.pos), len(other.len),
-          text(other.text), frameAnchor(other.frameAnchor), variable(other.variable) {}
+    FormatData(const FormatData& other)
+            : id(other.id), pos(other.pos), len(other.len),
+            text(other.text), frameAnchor(other.frameAnchor), variable(other.variable) {}
 public:
     int id;
     int pos;    ///< Start position of text to which this format applies
@@ -309,8 +309,8 @@ public:
 class ValueListFormatData : public QList<FormatData>
 {
 public:
-    explicit ValueListFormatData (void) { }
-    virtual ~ValueListFormatData (void) { }
+    explicit ValueListFormatData(void) { }
+    virtual ~ValueListFormatData(void) { }
 };
 
 
@@ -319,18 +319,15 @@ class CounterData
 {
 public:
     CounterData()
-        : numbering (NUM_NONE), style (STYLE_NONE), depth(0), start(0), customCharacter(0)
-        {}
+            : numbering(NUM_NONE), style(STYLE_NONE), depth(0), start(0), customCharacter(0) {}
 
-    enum Numbering
-    {
+    enum Numbering {
         NUM_LIST    = 0,   ///< Numbered as a list item
         NUM_CHAPTER = 1,   ///< Numbered as a heading
         NUM_NONE    = 2    ///< No counter
     };
 
-    enum Style
-    {
+    enum Style {
         STYLE_NONE         = 0,
         STYLE_NUM          = 1,
         STYLE_ALPHAB_L     = 2,
@@ -378,8 +375,7 @@ class KWORD_LIBEXPORT_EXPORT TabulatorData
 {
 public:
 
-    enum
-    {
+    enum {
         TF_NONE       = 0,
         TF_DOT        = 1,
         TF_LINE       = 2,
@@ -412,15 +408,15 @@ public:
 class LayoutData
 {
 public:
-    LayoutData():indentFirst(0.0), indentLeft(-1.0), indentRight(-1.0), marginTop(-1.0), marginBottom(-1.0),
-        lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false),
-        keepLinesTogether(false),
-        shadowDistance(0.0), shadowDirection(0)
-        { }
+    LayoutData(): indentFirst(0.0), indentLeft(-1.0), indentRight(-1.0), marginTop(-1.0), marginBottom(-1.0),
+            lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false),
+            keepLinesTogether(false),
+            shadowDistance(0.0), shadowDirection(0) { }
 
 
     enum { LS_CUSTOM = 0, LS_SINGLE = 10, LS_ONEANDHALF = 15, LS_DOUBLE = 20,
-      LS_ATLEAST = 30, LS_MULTIPLE = 40, LS_FIXED = 50 };
+           LS_ATLEAST = 30, LS_MULTIPLE = 40, LS_FIXED = 50
+         };
 
     QString     styleName;
     QString     styleFollowing;
@@ -451,21 +447,18 @@ public:
 };
 
 
-struct ParaData
-{
+struct ParaData {
     QString                    text;
     ValueListFormatData        formattingList;
     LayoutData                 layout;
 };
 
-struct HeaderFooterData
-{
-    enum HeaderFooterPage
-    {
-      PAGE_FIRST,
-      PAGE_ODD,
-      PAGE_EVEN,
-      PAGE_ALL
+struct HeaderFooterData {
+    enum HeaderFooterPage {
+        PAGE_FIRST,
+        PAGE_ODD,
+        PAGE_EVEN,
+        PAGE_ALL
     };
 
     HeaderFooterPage page;
@@ -476,8 +469,7 @@ typedef HeaderFooterData HeaderData;
 typedef HeaderFooterData FooterData;
 
 /// data for \<FRAMESET\> which holds footnotes
-struct FootnoteData
-{
+struct FootnoteData {
     QString frameName;
     QList<ParaData> para;
 };
@@ -486,12 +478,11 @@ struct FootnoteData
 class VariableSettingsData
 {
 public:
-    VariableSettingsData () : startingPageNumber (1),
-                              displaylink (true),
-                              underlinelink (true),
-                              displaycomment (true),
-                              displayfieldcode (false)
-    {
+    VariableSettingsData() : startingPageNumber(1),
+            displaylink(true),
+            underlinelink(true),
+            displaycomment(true),
+            displayfieldcode(false) {
     }
 
     int startingPageNumber;
@@ -551,6 +542,6 @@ public:
 
 // Helper functions
 
-void CreateMissingFormatData ( QString &paraText, ValueListFormatData &paraFormatDataList );
+void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList);
 
 #endif /* EXPORTFILTERSSTRUCTURES_H */

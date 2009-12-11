@@ -34,21 +34,19 @@
 class AiImportFactory : KGenericFactory<AiImport>
 {
 public:
-	AiImportFactory( void )
-		: KGenericFactory<AiImport>( "karbonaiimport" )
-	{}
+    AiImportFactory(void)
+            : KGenericFactory<AiImport>("karbonaiimport") {}
 
 protected:
-	virtual void setupTranslations( void )
-	{
-		KGlobal::locale()->insertCatalog( "kofficefilters" );
-	}
+    virtual void setupTranslations(void) {
+        KGlobal::locale()->insertCatalog("kofficefilters");
+    }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() )
+K_EXPORT_COMPONENT_FACTORY(libkarbonaiimport, AiImportFactory())
 
-AiImport::AiImport( QObject*parent, const QStringList& )
-	: KoFilter(parent)
+AiImport::AiImport(QObject*parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
@@ -57,41 +55,37 @@ AiImport::~AiImport()
 }
 
 KoFilter::ConversionStatus
-AiImport::convert( const QByteArray& from, const QByteArray& to )
+AiImport::convert(const QByteArray& from, const QByteArray& to)
 {
-	if ( from != "application/illustrator" || to != "application/x-karbon" )
-	{
-		return KoFilter::NotImplemented;
-	}
-	QFile fileIn( m_chain->inputFile() );
-	if( !fileIn.open( QIODevice::ReadOnly ) )
-	{
-		fileIn.close();
-		return KoFilter::FileNotFound;
-	}
+    if (from != "application/illustrator" || to != "application/x-karbon") {
+        return KoFilter::NotImplemented;
+    }
+    QFile fileIn(m_chain->inputFile());
+    if (!fileIn.open(QIODevice::ReadOnly)) {
+        fileIn.close();
+        return KoFilter::FileNotFound;
+    }
 
-        QDomDocument doc ("DOC");
-	KarbonAIParserBase parser;
+    QDomDocument doc("DOC");
+    KarbonAIParserBase parser;
 
-        if (!parser.parse (fileIn, doc))
-        {
-		fileIn.close();
-		return KoFilter::CreationError;
-        }
-	QString result = doc.toString();
+    if (!parser.parse(fileIn, doc)) {
+        fileIn.close();
+        return KoFilter::CreationError;
+    }
+    QString result = doc.toString();
 
-        kDebug() << result;
-	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
-	if( !storeOut )
-	{
-		fileIn.close();
-		return KoFilter::StorageCreationError;
-	}
+    kDebug() << result;
+    KoStoreDevice* storeOut = m_chain->storageFile("root", KoStore::Write);
+    if (!storeOut) {
+        fileIn.close();
+        return KoFilter::StorageCreationError;
+    }
 
-	Q3CString cStr = result.latin1();
-	storeOut->write( cStr, cStr.size() - 1 );
+    Q3CString cStr = result.latin1();
+    storeOut->write(cStr, cStr.size() - 1);
 
-	return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 

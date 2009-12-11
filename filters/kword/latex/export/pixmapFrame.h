@@ -40,65 +40,93 @@
  */
 class PixmapFrame : public Element
 {
-	/* DATA MARKUP */
-	int _left;
-	int _top;
-	int _right;
-	int _bottom;
-	TAround  _runaround;
-	double   _runaroundGap;
-	TCreate  _autoCreate;
-	TNFrame  _newFrameBehaviour;
-	TSide   _sheetSide;
-	bool    _keepAspectRatio;
+    /* DATA MARKUP */
+    int _left;
+    int _top;
+    int _right;
+    int _bottom;
+    TAround  _runaround;
+    double   _runaroundGap;
+    TCreate  _autoCreate;
+    TNFrame  _newFrameBehaviour;
+    TSide   _sheetSide;
+    bool    _keepAspectRatio;
 
-	/* TEXT MARKUP */
-	QString _key;
-	QString _filenamePS;
+    /* TEXT MARKUP */
+    QString _key;
+    QString _filenamePS;
 
-	public:
-		PixmapFrame();
-		PixmapFrame(QString, QString);
-		virtual ~PixmapFrame();
+public:
+    PixmapFrame();
+    PixmapFrame(QString, QString);
+    virtual ~PixmapFrame();
 
-		/**
-		 * Accessors
-		 */
-		TAround getRunAround  () const { return _runaround;         }
-		double  getAroundGap  () const { return _runaroundGap;      }
-		TCreate getAutoCreate () const { return _autoCreate;        }
-		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
-		TSide   getSheetSide  () const { return _sheetSide;         }
+    /**
+     * Accessors
+     */
+    TAround getRunAround() const {
+        return _runaround;
+    }
+    double  getAroundGap() const {
+        return _runaroundGap;
+    }
+    TCreate getAutoCreate() const {
+        return _autoCreate;
+    }
+    TNFrame getNewFrame() const {
+        return _newFrameBehaviour;
+    }
+    TSide   getSheetSide() const {
+        return _sheetSide;
+    }
 
-		void getPixmap(QDomNode);
-		QString getKey       () const { return _key;        }
-		QString getFilenamePS() const { return _filenamePS; }
+    void getPixmap(QDomNode);
+    QString getKey() const {
+        return _key;
+    }
+    QString getFilenamePS() const {
+        return _filenamePS;
+    }
 
-		/**
-		 * Modifiers
-		 */
-		void setRunAround (const int a)    { _runaround = (TAround) a;  }
-		void setAroundGap (const double r) { _runaroundGap = r;         }
-		void setAutoCreate(const int a)    { _autoCreate = (TCreate) a; }
-		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
-		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
-		void setKeepAspectRatio(const QString);
+    /**
+     * Modifiers
+     */
+    void setRunAround(const int a)    {
+        _runaround = (TAround) a;
+    }
+    void setAroundGap(const double r) {
+        _runaroundGap = r;
+    }
+    void setAutoCreate(const int a)    {
+        _autoCreate = (TCreate) a;
+    }
+    void setNewFrame(const int n)    {
+        _newFrameBehaviour = (TNFrame) n;
+    }
+    void setSheetSide(const int s)    {
+        _sheetSide = (TSide) s;
+    }
+    void setKeepAspectRatio(const QString);
 
-		void setKey        (QString k) { _key        = k; }
-		void setFilenamePS (QString f) { _filenamePS = f; }
+    void setKey(QString k) {
+        _key        = k;
+    }
+    void setFilenamePS(QString f) {
+        _filenamePS = f;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		void analyze(const QDomNode);
-		void convert();
-		void generate(QTextStream&);
-		/*void generate_format_begin(QTextStream &);
-		void generate_format_end(QTextStream &);*/
+    void analyze(const QDomNode);
+    void convert();
+    void generate(QTextStream&);
+    /*void generate_format_begin(QTextStream &);
+    void generate_format_end(QTextStream &);*/
 
-	private:
-		void analyzeParamFrame(const QDomNode);
+private:
+    void analyzeParamFrame(const QDomNode);
 };
 
 #endif /* __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__ */

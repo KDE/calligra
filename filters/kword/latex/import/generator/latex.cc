@@ -24,22 +24,20 @@ Latex* Latex::_instance = 0;
 
 Element* Latex::getEnv(QList<Element*>* root, const char* name)
 {
-	Element* elt;
-        foreach(elt, root)
-	{
-		if(elt->getName() == name && elt->getType() == Element::LATEX_ENV)
-			return elt;
-	}
-	return 0;
+    Element* elt;
+    foreach(elt, root) {
+        if (elt->getName() == name && elt->getType() == Element::LATEX_ENV)
+            return elt;
+    }
+    return 0;
 }
 
 Element* Latex::getCommand(QList<Element*>* root, const char* name)
 {
-	Element* elt;
-        foreach(elt, root)
-	{
-		if(elt->getName() == name && elt->getType() == Element::LATEX_COMMAND)
-			return elt;
-	}
-	return 0;
+    Element* elt;
+    foreach(elt, root) {
+        if (elt->getName() == name && elt->getType() == Element::LATEX_COMMAND)
+            return elt;
+    }
+    return 0;
 }

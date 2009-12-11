@@ -22,28 +22,29 @@
 #ifndef SWINDER_USTRING_H_
 #define SWINDER_USTRING_H_
 
-namespace Swinder {
+namespace Swinder
+{
 
-  /**
-   * @return True if d is not a number (platform support required).
-   */
-  bool isNaN(double d);
+/**
+ * @return True if d is not a number (platform support required).
+ */
+bool isNaN(double d);
 
-  bool isPosInf(double d);
-  bool isNegInf(double d);
+bool isPosInf(double d);
+bool isNegInf(double d);
 
-  class UCharReference;
-  class UString;
-  class UConstString;
+class UCharReference;
+class UString;
+class UConstString;
 
-  /**
-   * @short Unicode character.
-   *
-   * UChar represents a 16 bit Unicode character. It's internal data
-   * representation is compatible to XChar2b and QChar. It's therefore
-   * possible to exchange data with X and Qt with shallow copies.
-   */
-  struct UChar {
+/**
+ * @short Unicode character.
+ *
+ * UChar represents a 16 bit Unicode character. It's internal data
+ * representation is compatible to XChar2b and QChar. It's therefore
+ * possible to exchange data with X and Qt with shallow copies.
+ */
+struct UChar {
     /**
      * Construct a character with value 0.
      */
@@ -63,16 +64,22 @@ namespace Swinder {
     /**
      * @return The higher byte of the character.
      */
-    unsigned char high() const { return uc >> 8; }
+    unsigned char high() const {
+        return uc >> 8;
+    }
     /**
      * @return The lower byte of the character.
      */
-    unsigned char low() const { return uc & 0xFF; }
+    unsigned char low() const {
+        return uc & 0xFF;
+    }
     /**
      * @return the 16 bit Unicode value of the character
      */
-    unsigned short unicode() const { return uc; }
-  public:
+    unsigned short unicode() const {
+        return uc;
+    }
+public:
     /**
      * @return The character converted to lower case.
      */
@@ -85,7 +92,7 @@ namespace Swinder {
      * A static instance of UChar(0).
      */
     static UChar null;
-  private:
+private:
     friend class UCharReference;
     friend class UString;
     friend bool operator==(const UChar &c1, const UChar &c2);
@@ -93,30 +100,31 @@ namespace Swinder {
     friend bool operator<(const UString& s1, const UString& s2);
 
     unsigned short uc;
-  };
+};
 
-  inline UChar::UChar() : uc(0) { }
-  inline UChar::UChar(unsigned char h , unsigned char l) : uc(h << 8 | l) { }
-  inline UChar::UChar(unsigned short u) : uc(u) { }
+inline UChar::UChar() : uc(0) { }
+inline UChar::UChar(unsigned char h , unsigned char l) : uc(h << 8 | l) { }
+inline UChar::UChar(unsigned short u) : uc(u) { }
 
-  /**
-   * @short Dynamic reference to a string character.
-   *
-   * UCharReference is the dynamic counterpart of @ref UChar. It's used when
-   * characters retrieved via index from a @ref UString are used in an
-   * assignment expression (and therefore can't be treated as being const):
-   * <pre>
-   * UString s("hello world");
-   * s[0] = 'H';
-   * </pre>
-   *
-   * If that sounds confusing your best bet is to simply forget about the
-   * existence of this class and treat it as being identical to @ref UChar.
-   */
-  class UCharReference {
+/**
+ * @short Dynamic reference to a string character.
+ *
+ * UCharReference is the dynamic counterpart of @ref UChar. It's used when
+ * characters retrieved via index from a @ref UString are used in an
+ * assignment expression (and therefore can't be treated as being const):
+ * <pre>
+ * UString s("hello world");
+ * s[0] = 'H';
+ * </pre>
+ *
+ * If that sounds confusing your best bet is to simply forget about the
+ * existence of this class and treat it as being identical to @ref UChar.
+ */
+class UCharReference
+{
     friend class UString;
     UCharReference(UString *s, unsigned int off) : str(s), offset(off) { }
-  public:
+public:
     /**
      * Set the referenced character to c.
      */
@@ -124,41 +132,54 @@ namespace Swinder {
     /**
      * Same operator as above except the argument that it takes.
      */
-    UCharReference& operator=(char c) { return operator=(UChar(c)); }
+    UCharReference& operator=(char c) {
+        return operator=(UChar(c));
+    }
     /**
      * @return Unicode value.
      */
-    unsigned short unicode() const { return ref().unicode(); }
+    unsigned short unicode() const {
+        return ref().unicode();
+    }
     /**
      * @return Lower byte.
      */
-    unsigned char low() const { return ref().uc & 0xFF; }
+    unsigned char low() const {
+        return ref().uc & 0xFF;
+    }
     /**
      * @return Higher byte.
      */
-    unsigned char high() const { return ref().uc >> 8; }
+    unsigned char high() const {
+        return ref().uc >> 8;
+    }
     /**
      * @return Character converted to lower case.
      */
-    UChar toLower() const { return ref().toLower(); }
+    UChar toLower() const {
+        return ref().toLower();
+    }
     /**
      * @return Character converted to upper case.
      */
-    UChar toUpper() const  { return ref().toUpper(); }
-  private:
+    UChar toUpper() const  {
+        return ref().toUpper();
+    }
+private:
     // not implemented, can only be constructed from UString
     UCharReference();
 
     UChar& ref() const;
     UString *str;
     int offset;
-  };
+};
 
-  /**
-   * @short 8 bit char based string class
-   */
-  class CString {
-  public:
+/**
+ * @short 8 bit char based string class
+ */
+class CString
+{
+public:
     CString() : data(0L) { }
     explicit CString(const char *c);
     CString(const CString &);
@@ -171,15 +192,18 @@ namespace Swinder {
     CString &operator+=(const CString &);
 
     int length() const;
-    const char *c_str() const { return data; }
-  private:
+    const char *c_str() const {
+        return data;
+    }
+private:
     char *data;
-  };
+};
 
-  /**
-   * @short Unicode string class
-   */
-  class UString {
+/**
+ * @short Unicode string class
+ */
+class UString
+{
     friend bool operator==(const UString&, const UString&);
     friend class UCharReference;
     friend class UConstString;
@@ -187,22 +211,30 @@ namespace Swinder {
      * @internal
      */
     struct Rep {
-      friend class UString;
-      friend bool operator==(const UString&, const UString&);
-      static Rep *create(UChar *d, int l);
-      inline UChar *data() const { return dat; }
-      inline int length() const { return len; }
+        friend class UString;
+        friend bool operator==(const UString&, const UString&);
+        static Rep *create(UChar *d, int l);
+        inline UChar *data() const {
+            return dat;
+        }
+        inline int length() const {
+            return len;
+        }
 
-      inline void ref() { rc++; }
-      inline int deref() { return --rc; }
+        inline void ref() {
+            rc++;
+        }
+        inline int deref() {
+            return --rc;
+        }
 
-      UChar *dat;
-      int len;
-      int rc;
-      static Rep null;
+        UChar *dat;
+        int len;
+        int rc;
+        static Rep null;
     };
 
-  public:
+public:
     /**
      * Constructs a null string.
      */
@@ -287,15 +319,21 @@ namespace Swinder {
     /**
      * @return A pointer to the internal Unicode data.
      */
-    const UChar* data() const { return rep->data(); }
+    const UChar* data() const {
+        return rep->data();
+    }
     /**
      * @return True if null.
      */
-    bool isNull() const { return (rep == &Rep::null); }
+    bool isNull() const {
+        return (rep == &Rep::null);
+    }
     /**
      * @return True if null or zero length.
      */
-    bool isEmpty() const { return (!rep->len); }
+    bool isEmpty() const {
+        return (!rep->len);
+    }
     /**
      * Use this if you want to make sure that this string is a plain ASCII
      * string. For example, if you don't want to lose any information when
@@ -307,7 +345,9 @@ namespace Swinder {
     /**
      * @return The length of the string.
      */
-    int length() const { return rep->length(); }
+    int length() const {
+        return rep->length();
+    }
     /**
      * Const character at specified position.
      */
@@ -350,45 +390,54 @@ namespace Swinder {
      */
     static UString null;
 
-  private:
+private:
     void attach(Rep *r);
     void detach();
     void release();
     Rep *rep;
-  };
+};
 
-  inline bool operator==(const UChar &c1, const UChar &c2) {
+inline bool operator==(const UChar &c1, const UChar &c2)
+{
     return (c1.uc == c2.uc);
-  }
-  inline bool operator!=(const UChar &c1, const UChar &c2) {
+}
+inline bool operator!=(const UChar &c1, const UChar &c2)
+{
     return !(c1 == c2);
-  }
-  bool operator==(const UString& s1, const UString& s2);
-  inline bool operator!=(const UString& s1, const UString& s2) {
+}
+bool operator==(const UString& s1, const UString& s2);
+inline bool operator!=(const UString& s1, const UString& s2)
+{
     return !Swinder::operator==(s1, s2);
-  }
-  bool operator<(const UString& s1, const UString& s2);
-  bool operator==(const UString& s1, const char *s2);
-  inline bool operator!=(const UString& s1, const char *s2) {
+}
+bool operator<(const UString& s1, const UString& s2);
+bool operator==(const UString& s1, const char *s2);
+inline bool operator!=(const UString& s1, const char *s2)
+{
     return !Swinder::operator==(s1, s2);
-  }
-  inline bool operator==(const char *s1, const UString& s2) {
+}
+inline bool operator==(const char *s1, const UString& s2)
+{
     return operator==(s2, s1);
-  }
-  inline bool operator!=(const char *s1, const UString& s2) {
+}
+inline bool operator!=(const char *s1, const UString& s2)
+{
     return !Swinder::operator==(s1, s2);
-  }
-  bool operator==(const CString& s1, const CString& s2);
-  UString operator+(const UString& s1, const UString& s2);
+}
+bool operator==(const CString& s1, const CString& s2);
+UString operator+(const UString& s1, const UString& s2);
 
 
-  class UConstString : private UString {
-    public:
-      UConstString( UChar* data, unsigned int length );
-      ~UConstString();
+class UConstString : private UString
+{
+public:
+    UConstString(UChar* data, unsigned int length);
+    ~UConstString();
 
-      const UString& string() const { return *this; }
-  };
+    const UString& string() const {
+        return *this;
+    }
+};
 
 } // namespace SWINDER_USTRING_H
 

@@ -32,15 +32,15 @@ class QTextStream;
 
 class AiImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	AiImport( QObject* parent, const QStringList& );
-	virtual ~AiImport();
+    AiImport(QObject* parent, const QStringList&);
+    virtual ~AiImport();
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
-/* private:
-   QString m_result; */
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    /* private:
+       QString m_result; */
 
 
 };

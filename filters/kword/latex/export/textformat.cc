@@ -23,83 +23,83 @@
 
 #include <kdebug.h>
 
-#include "fileheader.h"		/* for the use of FileHeader::instance() (color and underlined) */
+#include "fileheader.h"  /* for the use of FileHeader::instance() (color and underlined) */
 #include "textformat.h"
 
 /*******************************************/
 /* getColorXXXX                            */
 /*******************************************/
-int TextFormat::getColorBlue () const
+int TextFormat::getColorBlue() const
 {
-	if(_textcolor!= 0)
-		return _textcolor->blue();
-	else
-		return 0;
+    if (_textcolor != 0)
+        return _textcolor->blue();
+    else
+        return 0;
 }
 
 int TextFormat::getColorGreen() const
 {
-	if(_textcolor!= 0)
-		return _textcolor->green();
-	else
-		return 0;
+    if (_textcolor != 0)
+        return _textcolor->green();
+    else
+        return 0;
 }
 
-int TextFormat::getColorRed  () const
+int TextFormat::getColorRed() const
 {
-	if(_textcolor!= 0)
-		return _textcolor->red();
-	else
-		return 0;
+    if (_textcolor != 0)
+        return _textcolor->red();
+    else
+        return 0;
 }
 
 /*******************************************/
 /* getBkColorXXX                           */
 /*******************************************/
-int TextFormat::getBkColorBlue () const
+int TextFormat::getBkColorBlue() const
 {
-	if(_backcolor!= 0)
-		return _backcolor->blue();
-	else
-		return 0;
+    if (_backcolor != 0)
+        return _backcolor->blue();
+    else
+        return 0;
 }
 
 int TextFormat::getBkColorGreen() const
 {
-	if(_backcolor!= 0)
-		return _backcolor->green();
-	else
-		return 0;
+    if (_backcolor != 0)
+        return _backcolor->green();
+    else
+        return 0;
 }
 
-int TextFormat::getBkColorRed  () const
+int TextFormat::getBkColorRed() const
 {
-	if(_backcolor!= 0)
-		return _backcolor->red();
-	else
-		return 0;
+    if (_backcolor != 0)
+        return _backcolor->red();
+    else
+        return 0;
 }
 
 /*******************************************/
 /* setColor                                */
 /*******************************************/
-void TextFormat::setColor (const int r, const int g, const int b)
+void TextFormat::setColor(const int r, const int g, const int b)
 {
-	if(_textcolor == 0)
-		_textcolor = new QColor(r, g, b);
-	else
-		_textcolor->setRgb(r, g, b);
+    if (_textcolor == 0)
+        _textcolor = new QColor(r, g, b);
+    else
+        _textcolor->setRgb(r, g, b);
 }
 
 /*******************************************/
 /* setBkColor                              */
 /*******************************************/
-void TextFormat::setBkColor (const int r, const int g, const int b)
+void TextFormat::setBkColor(const int r, const int g, const int b)
 {
-	if(_backcolor == 0)
-		_backcolor = new QColor(r, g, b);
-	else
-		_backcolor->setRgb(r, g, b);
+    if (_backcolor == 0)
+        _backcolor = new QColor(r, g, b);
+    else
+        _backcolor->setRgb(r, g, b);
 }
 
 /*******************************************/
@@ -109,53 +109,52 @@ void TextFormat::setBkColor (const int r, const int g, const int b)
 /*******************************************/
 void TextFormat::analyzeFormat(const QDomNode node)
 {
-	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	
-	/* Parameters analysis */
-	analyzeParam(node);
-	kDebug(30522) <<"ANALYZE A FORMAT";
-	
-	/* Child markup analysis */
-	if(isChild(node, "FONT"))
-		analyzeFont(getChild(node, "FONT"));
-	if(isChild(node, "ITALIC"))
-		analyzeItalic(getChild(node, "ITALIC"));
-	if(isChild(node, "UNDERLINE"))
-		analyzeUnderlined(getChild(node, "UNDERLINE"));
-	if(isChild(node, "WEIGHT"))
-		analyzeWeight(getChild(node, "WEIGHT"));
-	if(isChild(node, "VERTALIGN"))
-		analyzeAlign(getChild(node, "VERTALIGN"));
-	if(isChild(node, "STRIKEOUT"))
-		analyzeStrikeout(getChild(node, "STRIKEOUT"));
-	if(isChild(node, "COLOR"))
-		analyzeColor(getChild(node, "COLOR"));
-	if(isChild(node, "SIZE"))
-		analyzeSize(getChild(node, "SIZE"));
-	if(isChild(node, "TEXTBACKGROUNDCOLOR"))
-		analyzeBackgroundColor(getChild(node, "TEXTBACKGROUNDCOLOR"));
+    /* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 
-	kDebug(30522) <<"END OF A FORMAT";
+    /* Parameters analysis */
+    analyzeParam(node);
+    kDebug(30522) << "ANALYZE A FORMAT";
+
+    /* Child markup analysis */
+    if (isChild(node, "FONT"))
+        analyzeFont(getChild(node, "FONT"));
+    if (isChild(node, "ITALIC"))
+        analyzeItalic(getChild(node, "ITALIC"));
+    if (isChild(node, "UNDERLINE"))
+        analyzeUnderlined(getChild(node, "UNDERLINE"));
+    if (isChild(node, "WEIGHT"))
+        analyzeWeight(getChild(node, "WEIGHT"));
+    if (isChild(node, "VERTALIGN"))
+        analyzeAlign(getChild(node, "VERTALIGN"));
+    if (isChild(node, "STRIKEOUT"))
+        analyzeStrikeout(getChild(node, "STRIKEOUT"));
+    if (isChild(node, "COLOR"))
+        analyzeColor(getChild(node, "COLOR"));
+    if (isChild(node, "SIZE"))
+        analyzeSize(getChild(node, "SIZE"));
+    if (isChild(node, "TEXTBACKGROUNDCOLOR"))
+        analyzeBackgroundColor(getChild(node, "TEXTBACKGROUNDCOLOR"));
+
+    kDebug(30522) << "END OF A FORMAT";
 }
 
 void TextFormat::analyzeBackgroundColor(const QDomNode node)
 {
-	/* <TEXTBACKGROUNDCOLOR red="0" green="0" blue="0"/> */
-	int  red   = 0, 
-	     blue  = 0,
-	     green = 0;
+    /* <TEXTBACKGROUNDCOLOR red="0" green="0" blue="0"/> */
+    int  red   = 0,
+                 blue  = 0,
+                         green = 0;
 
-	red = getAttr(node, "red").toInt();
-	green = getAttr(node, "green").toInt();
-	blue = getAttr(node, "blue").toInt();
+    red = getAttr(node, "red").toInt();
+    green = getAttr(node, "green").toInt();
+    blue = getAttr(node, "blue").toInt();
 
-	if(!(red == 255 && green == 255 && blue == 255))
-	{
-		kDebug(30522) <<"bk color =" << red <<"," << green <<"," << blue;
-		/* white color is default value */
-		setBkColor(red, green, blue);
-		FileHeader::instance()->useColor();
-	}
+    if (!(red == 255 && green == 255 && blue == 255)) {
+        kDebug(30522) << "bk color =" << red << "," << green << "," << blue;
+        /* white color is default value */
+        setBkColor(red, green, blue);
+        FileHeader::instance()->useColor();
+    }
 }
 
 /*******************************************/
@@ -165,12 +164,12 @@ void TextFormat::analyzeBackgroundColor(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeParam(const QDomNode node)
 {
-	/* <FORMAT id="1" pos="0" len="17"> */
+    /* <FORMAT id="1" pos="0" len="17"> */
 
-	//setId(getAttr(node, "id").toInt());
-	//setPos(getAttr(node, "pos").toInt());
-	//setLength(getAttr(node, "len").toInt());
-	Format::analyze(node);
+    //setId(getAttr(node, "id").toInt());
+    //setPos(getAttr(node, "pos").toInt());
+    //setLength(getAttr(node, "len").toInt());
+    Format::analyze(node);
 }
 
 /*******************************************/
@@ -180,8 +179,8 @@ void TextFormat::analyzeParam(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeFont(const QDomNode node)
 {
-	/* <FONT name="times"> */
-	setPolice(getAttr(node, "name"));
+    /* <FONT name="times"> */
+    setPolice(getAttr(node, "name"));
 }
 
 /*******************************************/
@@ -191,8 +190,8 @@ void TextFormat::analyzeFont(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeItalic(const QDomNode node)
 {
-	/* <ITALIC value="1"> */
-	setItalic(getAttr(node, "value").toInt());
+    /* <ITALIC value="1"> */
+    setItalic(getAttr(node, "value").toInt());
 }
 
 /*******************************************/
@@ -202,12 +201,12 @@ void TextFormat::analyzeItalic(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeUnderlined(const QDomNode node)
 {
-	/* <UNDERLINE value="1"> */
+    /* <UNDERLINE value="1"> */
 
-	setUnderlined(getAttr(node, "value"));
-	if(isUnderlined())
-		FileHeader::instance()->useUnderline();
-	kDebug(30522) <<"Underlined?" << isUnderlined();
+    setUnderlined(getAttr(node, "value"));
+    if (isUnderlined())
+        FileHeader::instance()->useUnderline();
+    kDebug(30522) << "Underlined?" << isUnderlined();
 }
 
 /*******************************************/
@@ -217,11 +216,11 @@ void TextFormat::analyzeUnderlined(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeStrikeout(const QDomNode node)
 {
-	/* <STRIKEOUT value="1" /> */
-	setStrikeout(getAttr(node, "value").toInt());
-	if(isStrikeout())
-		FileHeader::instance()->useUnderline();
-	kDebug(30522) <<"Strikeout?" << isUnderlined();
+    /* <STRIKEOUT value="1" /> */
+    setStrikeout(getAttr(node, "value").toInt());
+    if (isStrikeout())
+        FileHeader::instance()->useUnderline();
+    kDebug(30522) << "Strikeout?" << isUnderlined();
 }
 
 /*******************************************/
@@ -231,9 +230,9 @@ void TextFormat::analyzeStrikeout(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeWeight(const QDomNode node)
 {
-	/* <WEIGHT value="75" /> */
-	setWeight(getAttr(node, "value").toInt());
-	kDebug(30522) <<"Weight =" << getWeight();
+    /* <WEIGHT value="75" /> */
+    setWeight(getAttr(node, "value").toInt());
+    kDebug(30522) << "Weight =" << getWeight();
 }
 
 /*******************************************/
@@ -243,9 +242,9 @@ void TextFormat::analyzeWeight(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeAlign(const QDomNode node)
 {
-	/* <VERTALIGN value="0"> */
+    /* <VERTALIGN value="0"> */
 
-	setAlign(getAttr(node, "value").toInt());
+    setAlign(getAttr(node, "value").toInt());
 }
 
 /*******************************************/
@@ -255,22 +254,21 @@ void TextFormat::analyzeAlign(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeColor(const QDomNode node)
 {
-	/* <COLOR red="0" green="0" blue="0"/> */
-	int  red   = 0, 
-	     blue  = 0,
-	     green = 0;
+    /* <COLOR red="0" green="0" blue="0"/> */
+    int  red   = 0,
+                 blue  = 0,
+                         green = 0;
 
-	red = getAttr(node, "red").toInt();
-	green = getAttr(node, "green").toInt();
-	blue = getAttr(node, "blue").toInt();
+    red = getAttr(node, "red").toInt();
+    green = getAttr(node, "green").toInt();
+    blue = getAttr(node, "blue").toInt();
 
-	if(!(red == 0 && green == 0 && blue == 0))
-	{
-		/* black color is default value */
-		kDebug(30522) <<"color =" << red <<"," << green <<"," << blue;
-		setColor(red, green, blue);
-		FileHeader::instance()->useColor();
-	}
+    if (!(red == 0 && green == 0 && blue == 0)) {
+        /* black color is default value */
+        kDebug(30522) << "color =" << red << "," << green << "," << blue;
+        setColor(red, green, blue);
+        FileHeader::instance()->useColor();
+    }
 }
 
 /*******************************************/
@@ -280,7 +278,7 @@ void TextFormat::analyzeColor(const QDomNode node)
 /*******************************************/
 void TextFormat::analyzeSize(const QDomNode node)
 {
-	/* <SIZE value="11"> */
-	setSize(getAttr(node, "value").toInt());
-	kDebug(30522) <<"font size :" << getSize();
+    /* <SIZE value="11"> */
+    setSize(getAttr(node, "value").toInt());
+    kDebug(30522) << "font size :" << getSize();
 }

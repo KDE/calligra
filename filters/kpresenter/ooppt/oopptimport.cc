@@ -32,10 +32,10 @@
 #include <KDebug>
 
 typedef KGenericFactory<OOPPTImport> OOPPTImportFactory;
-K_EXPORT_COMPONENT_FACTORY( liboopptimport, OOPPTImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(liboopptimport, OOPPTImportFactory("kofficefilters"))
 
-OOPPTImport::OOPPTImport( QObject*parent, const QStringList& )
-    : KoFilter(parent)
+OOPPTImport::OOPPTImport(QObject*parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
@@ -43,20 +43,18 @@ OOPPTImport::~OOPPTImport()
 {
 }
 
-KoFilter::ConversionStatus OOPPTImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus OOPPTImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if( from != "application/vnd.ms-powerpoint")
-    {
+    if (from != "application/vnd.ms-powerpoint") {
         return KoFilter::NotImplemented;
     }
 
-    if( to == "application/vnd.oasis.opendocument.presentation" )
-    {
+    if (to == "application/vnd.oasis.opendocument.presentation") {
         // Copy filenames
         QString input = m_chain->inputFile();
         QString output = m_chain->outputFile();
 
-        QString command( "python KOfficeOODocumentConverter.py " );
+        QString command("python KOfficeOODocumentConverter.py ");
         command += KShell::quoteArg(input);
         command += ' ';
         command += KShell::quoteArg(output);
@@ -64,7 +62,7 @@ KoFilter::ConversionStatus OOPPTImport::convert( const QByteArray& from, const Q
         kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data() ;
 
         // Execute it:
-        if( ! system( QFile::encodeName(command) ) )
+        if (! system(QFile::encodeName(command)))
             return KoFilter::OK;
         else
             return KoFilter::StupidError;

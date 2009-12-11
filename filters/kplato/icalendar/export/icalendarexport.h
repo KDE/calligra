@@ -32,15 +32,18 @@ class QFile;
 class QByteArray;
 class QStringList;
 
-namespace KCal {
-    class Todo;
+namespace KCal
+{
+class Todo;
 }
-namespace KPlato {
-    class Project;
-    class Node;
+namespace KPlato
+{
+class Project;
+class Node;
 }
 
-class ICalendarExport : public KoFilter {
+class ICalendarExport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -48,11 +51,11 @@ public:
     ICalendarExport(QObject* parent, const QStringList &);
     virtual ~ICalendarExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-    KoFilter::ConversionStatus convert( const KPlato::Project &project, QFile &file );
-    void createTodos( KCal::CalendarLocal &cal, const KPlato::Node *node, long id, KCal::Todo *parent = 0  );
+    KoFilter::ConversionStatus convert(const KPlato::Project &project, QFile &file);
+    void createTodos(KCal::CalendarLocal &cal, const KPlato::Node *node, long id, KCal::Todo *parent = 0);
 };
 
 #endif // ICALENDAREXPORT_H

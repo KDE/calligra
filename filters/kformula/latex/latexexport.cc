@@ -40,54 +40,54 @@
 
 
 typedef KGenericFactory<LATEXExport> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfolatexexport, LATEXExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkfolatexexport, LATEXExportFactory("kofficefilters"))
 
 
-LATEXExport::LATEXExport( QObject* parent, const QStringList& )
-    : KoFilter(parent)
+LATEXExport::LATEXExport(QObject* parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
 
-KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( to != "text/x-tex" || from != "application/x-kformula" )
+    if (to != "text/x-tex" || from != "application/x-kformula")
         return KoFilter::NotImplemented;
 
-    KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
-    if(!in) {
+    KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
+    if (!in) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "LaTeX Export Error" ) );
+        KMessageBox::error(0, i18n("Failed to read data."), i18n("LaTeX Export Error"));
         return KoFilter::StorageCreationError;
     }
 
-    QDomDocument dom( "KFORMULA" );
-    if ( !dom.setContent( in, false ) ) {
+    QDomDocument dom("KFORMULA");
+    if (!dom.setContent(in, false)) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "LaTeX Export Error" ) );
+        KMessageBox::error(0, i18n("Malformed XML data."), i18n("LaTeX Export Error"));
         return KoFilter::WrongFormat;
     }
 
-    QFile f( m_chain->outputFile() );
-    if( !f.open( QIODevice::Truncate | QIODevice::ReadWrite ) ) {
+    QFile f(m_chain->outputFile());
+    if (!f.open(QIODevice::Truncate | QIODevice::ReadWrite)) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX Export Error" ) );
+        KMessageBox::error(0, i18n("Failed to write file."), i18n("LaTeX Export Error"));
         return KoFilter::FileNotFound;
     }
 
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper(KGlobal::config(), 0);
     KFormula::Document* doc = new KFormula::Document;
-    wrapper->document( doc );
+    wrapper->document(doc);
     KFormula::Container* formula = doc->createFormula();
-    if ( !doc->loadXML( dom ) ) {
+    if (!doc->loadXML(dom)) {
         kError(30522) << "Failed." << endl;
     }
 
     QTextStream stream(&f);
     //stream.setEncoding(QTextStream::UnicodeUTF8);
     stream << "\\documentclass{article}\n\\usepackage{amsmath}\n\\begin{document}\n\\[\n"
-           << formula->texString()
-           << "\n\\]\n\\end{document}";
+    << formula->texString()
+    << "\n\\]\n\\end{document}";
     f.close();
 
     delete formula;

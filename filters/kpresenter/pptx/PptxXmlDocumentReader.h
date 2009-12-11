@@ -28,7 +28,8 @@
 
 class PptxImport;
 class PptxSlideProperties;
-namespace MSOOXML {
+namespace MSOOXML
+{
 class MsooXmlRelationships;
 }
 
@@ -36,7 +37,7 @@ class PptxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     PptxXmlDocumentReaderContext(PptxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        PptxSlideProperties& _masterSlideProperties, MSOOXML::MsooXmlRelationships& _relationships);
+                                 PptxSlideProperties& _masterSlideProperties, MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport *import;
     const QMap<QString, MSOOXML::DrawingMLTheme*> *themes;
     PptxSlideProperties* masterSlideProperties;
@@ -61,7 +62,7 @@ protected:
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
 
-    typedef KoFilter::ConversionStatus (PptxXmlDocumentReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(PptxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     PptxXmlDocumentReaderContext* m_context;

@@ -31,20 +31,20 @@ class PalmDocImport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     PalmDocImport(QObject* parent, const QStringList&);
     PalmDocImport();
 
     virtual ~PalmDocImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-  private:
-    
-    QString processPlainParagraph( const QString& text );
-    QString processPlainDocument( const QString& plaindoc );
-    QString processDocumentInfo( const QString &title );
+private:
+
+    QString processPlainParagraph(const QString& text);
+    QString processPlainDocument(const QString& plaindoc);
+    QString processDocumentInfo(const QString &title);
 };
 
 #endif // __PALMDOCIMPORT_H

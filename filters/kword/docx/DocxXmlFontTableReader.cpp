@@ -34,19 +34,19 @@
 #include <MsooXmlReader_p.h>
 
 DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles& _styles)
-    : styles(&_styles)
+        : styles(&_styles)
 {
 }
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
 {
 }
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice* io, KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(io, writers)
-    , m_context(0)
+        : MSOOXML::MsooXmlReader(io, writers)
+        , m_context(0)
 {
 }
 
@@ -73,19 +73,19 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderCo
     if (!expectNS(MSOOXML::Schemas::wordprocessingml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/    
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
-//! @todo find out whether the namespace returned by namespaceUri() 
+//! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( "w", MSOOXML::Schemas::wordprocessingml) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
         return KoFilter::WrongFormat;
     }
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
 
  Parent elements:
  - [done] fonts (§17.8.3.11)
- 
+
  Child elements:
  - altName (Alternate Names for Font) §17.8.3.1
  - charset (Character Set Supported By Font) §17.8.3.2
@@ -165,7 +165,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
 KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 // CASE #1100
     /*! Specifies the primary name of the current font.
         This name shall be used to link the information stored
@@ -207,7 +207,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
 KoFilter::ConversionStatus DocxXmlFontTableReader::read_family()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     QString familyGeneric;
     READ_ATTR_WITH_NS_INTO(w, val, familyGeneric)
     m_currentFontFace.setFamilyGeneric(familyGeneric);
@@ -233,9 +233,9 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_family()
 KoFilter::ConversionStatus DocxXmlFontTableReader::read_pitch()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITH_NS(w, val)
-    m_currentFontFace.setPitch( w_val == "fixed" ? KoFontFace::FixedPitch : KoFontFace::VariablePitch );
+    m_currentFontFace.setPitch(w_val == "fixed" ? KoFontFace::FixedPitch : KoFontFace::VariablePitch);
 
     SKIP_EVERYTHING
     READ_EPILOGUE

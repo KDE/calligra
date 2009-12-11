@@ -38,7 +38,8 @@
 #include <KoFilter.h>
 
 
-class OOWRITERExport : public KoFilter {
+class OOWRITERExport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -46,6 +47,6 @@ public:
     OOWRITERExport(QObject* parent, const QStringList &);
     virtual ~OOWRITERExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 #endif // OOWRITEREXPORT_H

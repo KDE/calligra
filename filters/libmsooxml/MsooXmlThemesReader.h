@@ -31,13 +31,15 @@
 #include <QHash>
 #include <QColor>
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 class DrawingMLColorSchemeItem;
 class DrawingMLColorSchemeSystemItem;
 
 //! @todo add other classes inheriting DrawingMLColorSchemeItemBase
-class MSOOXML_EXPORT DrawingMLColorSchemeItemBase {
+class MSOOXML_EXPORT DrawingMLColorSchemeItemBase
+{
 public:
     DrawingMLColorSchemeItemBase();
     virtual ~DrawingMLColorSchemeItemBase();
@@ -45,13 +47,15 @@ public:
     DrawingMLColorSchemeSystemItem* toSystemItem();
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase {
+class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
+{
 public:
     DrawingMLColorSchemeItem();
     QColor color;
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase {
+class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
+{
 public:
     DrawingMLColorSchemeSystemItem();
     QColor lastColor;
@@ -61,7 +65,8 @@ public:
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
 
 //! Impelemnts color scheme, based on hash. All items are owned by this object.
-class MSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash {
+class MSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
+{
 public:
     DrawingMLColorScheme();
     ~DrawingMLColorScheme();
@@ -70,7 +75,8 @@ public:
 
 //! Font set for majorFont and minorFont.
 //! @todo add more support for latin, ea and cs: charser, panose, pitchfamily attributes (21.1.2.3.3)
-class MSOOXML_EXPORT DrawingMLFontSet {
+class MSOOXML_EXPORT DrawingMLFontSet
+{
 public:
     DrawingMLFontSet();
     //! A (script->typeface) hash with font definitions (20.1.4.1.16.)
@@ -89,7 +95,8 @@ public:
 
 //! Defines the font scheme within the theme
 //! The font scheme consists of a pair of major and minor fonts for which to use in a document.s
-class MSOOXML_EXPORT DrawingMLFontScheme {
+class MSOOXML_EXPORT DrawingMLFontScheme
+{
 public:
     DrawingMLFontScheme();
     DrawingMLFontSet majorFonts;
@@ -104,7 +111,8 @@ class DrawingMLNoFillStyle;
 //! @todo blipFill (Picture Fill) §20.1.8.14
 //! @todo gradFill (Gradient Fill) §20.1.8.33
 //! @todo grpFill (Group Fill) §20.1.8.35
-class MSOOXML_EXPORT DrawingMLFillStyleBase {
+class MSOOXML_EXPORT DrawingMLFillStyleBase
+{
 public:
     DrawingMLFillStyleBase();
     virtual ~DrawingMLFillStyleBase();
@@ -116,14 +124,16 @@ public:
 typedef QList<DrawingMLFillStyleBase*> DrawingMLFillStyleList;
 
 //! Specifies a solid fill.
-class MSOOXML_EXPORT DrawingMLSolidFillStyle : public DrawingMLFillStyleBase {
+class MSOOXML_EXPORT DrawingMLSolidFillStyle : public DrawingMLFillStyleBase
+{
 public:
     DrawingMLSolidFillStyle();
     DrawingMLColorSchemeItemBase* color;
 };
 
 //! Specifies a pattern fill.
-class MSOOXML_EXPORT DrawingMLPatternFillStyle : public DrawingMLFillStyleBase {
+class MSOOXML_EXPORT DrawingMLPatternFillStyle : public DrawingMLFillStyleBase
+{
 public:
     DrawingMLPatternFillStyle();
     DrawingMLColorSchemeItemBase* backgroundColor;
@@ -132,15 +142,17 @@ public:
 };
 
 //! Specifies empty fill.
-class MSOOXML_EXPORT DrawingMLNoFillStyle : public DrawingMLFillStyleBase {
+class MSOOXML_EXPORT DrawingMLNoFillStyle : public DrawingMLFillStyleBase
+{
 public:
     DrawingMLNoFillStyle();
 };
 
 /*! Definition of the background fill styles, effect styles, fill styles, and line styles which define the style
-matrix for a theme. 
+matrix for a theme.
 */
-class MSOOXML_EXPORT DrawingMLFormatScheme {
+class MSOOXML_EXPORT DrawingMLFormatScheme
+{
 public:
     DrawingMLFormatScheme();
     DrawingMLFillStyleList backgroundFillStyles; //!< at least 3 items (CT_BackgroundFillStyleList)
@@ -149,7 +161,8 @@ public:
 
 //! Defines a single DrawingML theme.
 //! @todo support objectDefaults and extraClrSchemeLst
-class MSOOXML_EXPORT DrawingMLTheme {
+class MSOOXML_EXPORT DrawingMLTheme
+{
 public:
     DrawingMLTheme();
     QString name;
@@ -211,10 +224,10 @@ private:
 
     MsooXmlThemesReaderContext* m_context;
 
-    typedef KoFilter::ConversionStatus (MsooXmlThemesReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(MsooXmlThemesReader::*ReadMethod)();
     QHash<QString, ReadMethod> m_readMethods;
-    bool m_clrScheme_initialized : 1;
-    bool m_color_initialized : 1;
+bool m_clrScheme_initialized : 1;
+bool m_color_initialized : 1;
 
     QStack<ReadMethod> m_calls;
 };

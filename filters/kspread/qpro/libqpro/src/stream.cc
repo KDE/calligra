@@ -32,20 +32,20 @@
 #include <QBuffer>
 
 QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
-   : cBuffer(pBuffer), cLen(pLen)
+        : cBuffer(pBuffer), cLen(pLen)
 {
-   cByteArray.setRawData( (char*)cBuffer, (int) cLen );
+    cByteArray.setRawData((char*)cBuffer, (int) cLen);
 
-   cBuf.setBuffer( cByteArray );
-   cBuf.open( QIODevice::ReadOnly );
+    cBuf.setBuffer(cByteArray);
+    cBuf.open(QIODevice::ReadOnly);
 
-   setDevice( &cBuf );
-   setByteOrder(QDataStream::LittleEndian);
+    setDevice(&cBuf);
+    setByteOrder(QDataStream::LittleEndian);
 }
 
 QpIStream::~QpIStream()
 {
-   cByteArray.resetRawData( (char*)cBuffer, (int) cLen );
+    cByteArray.resetRawData((char*)cBuffer, (int) cLen);
 }
 
 #else
@@ -59,186 +59,176 @@ namespace std {}
 using namespace std;
 
 QpIStream::QpIStream(const char* pFileName)
-   : cIn(0)
-   , cOffset(0L)
-   , cStreamBuf(0)
+        : cIn(0)
+        , cOffset(0L)
+        , cStreamBuf(0)
 {
-   filebuf* lFileBuf = new filebuf;
+    filebuf* lFileBuf = new filebuf;
 
-   cStreamBuf = lFileBuf;
+    cStreamBuf = lFileBuf;
 
-   lFileBuf->open(pFileName, ios::in);
+    lFileBuf->open(pFileName, ios::in);
 
-   if( lFileBuf->is_open())
-   {
-      cIn = new istream(cStreamBuf);
-   }
+    if (lFileBuf->is_open()) {
+        cIn = new istream(cStreamBuf);
+    }
 }
 
 QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
-   : cIn(0)
-   , cOffset(0L)
-   , cStreamBuf(0)
+        : cIn(0)
+        , cOffset(0L)
+        , cStreamBuf(0)
 {
-   cStreamBuf = new std::strstreambuf (pBuffer, pLen);
+    cStreamBuf = new std::strstreambuf(pBuffer, pLen);
 
-   cIn = new istream(cStreamBuf);
+    cIn = new istream(cStreamBuf);
 }
 
 QpIStream::~QpIStream()
 {
-   delete cIn;
-   cIn = 0;
+    delete cIn;
+    cIn = 0;
 
-   delete cStreamBuf;
-   cStreamBuf = 0;
+    delete cStreamBuf;
+    cStreamBuf = 0;
 }
 
 int
 QpIStream::get()
 {
-   int lResult;
+    int lResult;
 
-   if( (cIn==0) || cIn->rdstate())
-   {
-      lResult = EOF;
-   }
-   else
-   if((lResult=cIn->get()) == EOF)
-   {
-      // note - clear() sets bits! not clears them
-      cIn->clear(ios::eofbit|ios::failbit);
-   }
-   else
-   {
-      ++cOffset;
-   }
+    if ((cIn == 0) || cIn->rdstate()) {
+        lResult = EOF;
+    } else
+        if ((lResult = cIn->get()) == EOF) {
+            // note - clear() sets bits! not clears them
+            cIn->clear(ios::eofbit | ios::failbit);
+        } else {
+            ++cOffset;
+        }
 
-   return lResult;
+    return lResult;
 }
 
 QpIStream&
 QpIStream::read(char* pBuf, QP_INT16 pLen)
 {
-   if( cIn )
-   {
-      cIn->read(pBuf, pLen);
-   }
+    if (cIn) {
+        cIn->read(pBuf, pLen);
+    }
 
-   return *this;
+    return *this;
 }
 
 QpIStream::operator void* ()
 {
-   if( cIn == 0 )
-      return 0;
-   else
-      return *cIn;
+    if (cIn == 0)
+        return 0;
+    else
+        return *cIn;
 }
 
 int
 QpIStream::operator !()
 {
-   return ( cIn ? !*cIn : -1 );
+    return (cIn ? !*cIn : -1);
 }
 
 
 QpIStream&
 QpIStream::operator >> (QP_INT8 &pI8)
 {
-   pI8 = get();
+    pI8 = get();
 
-   return *this;
+    return *this;
 }
 
 QpIStream&
 QpIStream::operator >> (QP_UINT8 &pI8)
 {
-   pI8 = get();
+    pI8 = get();
 
-   return *this;
+    return *this;
 }
 
 QpIStream&
 QpIStream::operator >> (QP_INT16 &pI16)
 {
-   pI16 = get();
-   pI16 = pI16 | (get() << 8);
+    pI16 = get();
+    pI16 = pI16 | (get() << 8);
 
-   return *this;
+    return *this;
 }
 
 QpIStream&
 QpIStream::operator >> (QP_INT32 &pI32)
 {
-   pI32 = get();
-   pI32 = pI32 | (get() << 8);
-   pI32 = pI32 | (get() << 16);
-   pI32 = pI32 | (get() << 24);
+    pI32 = get();
+    pI32 = pI32 | (get() << 8);
+    pI32 = pI32 | (get() << 16);
+    pI32 = pI32 | (get() << 24);
 
-   return *this;
+    return *this;
 }
 
 QpIStream&
 QpIStream::operator >> (QP_INT64 &pI64)
 {
 // ??? sort out this
-/******
-   pI64 = get();
-   pI64 = pI64 | (get() << 8);
-   pI64 = pI64 | (get() << 16);
-   pI64 = pI64 | (get() << 24);
-   pI64 = pI64 | (get() << 32);
-   pI64 = pI64 | (get() << 40);
-   pI64 = pI64 | (get() << 48);
-   pI64 = pI64 | (get() << 56);
-***/
+    /******
+       pI64 = get();
+       pI64 = pI64 | (get() << 8);
+       pI64 = pI64 | (get() << 16);
+       pI64 = pI64 | (get() << 24);
+       pI64 = pI64 | (get() << 32);
+       pI64 = pI64 | (get() << 40);
+       pI64 = pI64 | (get() << 48);
+       pI64 = pI64 | (get() << 56);
+    ***/
 
-   union
-   {
-      char   lChar[8];
-      double lDble;
-   };
+    union {
+        char   lChar[8];
+        double lDble;
+    };
 
-   lDble = 0.0; // HACK: prevent gcc internal compiler error
-   lChar[0] = get();
-   lChar[1] = get();
-   lChar[2] = get();
-   lChar[3] = get();
-   lChar[4] = get();
-   lChar[5] = get();
-   lChar[6] = get();
-   lChar[7] = get();
+    lDble = 0.0; // HACK: prevent gcc internal compiler error
+    lChar[0] = get();
+    lChar[1] = get();
+    lChar[2] = get();
+    lChar[3] = get();
+    lChar[4] = get();
+    lChar[5] = get();
+    lChar[6] = get();
+    lChar[7] = get();
 
-   pI64 = lDble;
+    pI64 = lDble;
 
-   return *this;
+    return *this;
 }
 
 QpIStream&
 QpIStream::operator >> (char*& pStr)
 {
-   int lIdx=0;
-   int lMax=10;
+    int lIdx = 0;
+    int lMax = 10;
 
-   char* lStr = new char[lMax];
+    char* lStr = new char[lMax];
 
-   while( cIn->get(lStr[lIdx]), lStr[lIdx] != '\0' && cIn->good() )
-   {
-      if( ++lIdx == lMax )
-      {
-         lMax += 10;
-         char* lNew = new char[lMax];
+    while (cIn->get(lStr[lIdx]), lStr[lIdx] != '\0' && cIn->good()) {
+        if (++lIdx == lMax) {
+            lMax += 10;
+            char* lNew = new char[lMax];
 
-         memcpy(lNew, lStr, lIdx);
-         delete [] lStr;
-         lStr = lNew;
-      }
-   }
+            memcpy(lNew, lStr, lIdx);
+            delete [] lStr;
+            lStr = lNew;
+        }
+    }
 
-   pStr = lStr;
+    pStr = lStr;
 
-   return *this;
+    return *this;
 }
 
 #endif // USE_QT

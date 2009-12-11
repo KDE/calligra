@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug() stream */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "config.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -33,22 +33,22 @@ Config* Config::_instance = 0;
 /*******************************************/
 Config::Config()
 {
-	_tabSize = 4;
-	_tabulation = 0;
-	_useLatexStyle = true;
-	_isEmbeded = false;
-	_convertPictures = false;
+    _tabSize = 4;
+    _tabulation = 0;
+    _useLatexStyle = true;
+    _isEmbeded = false;
+    _convertPictures = false;
 }
 
 Config::Config(const Config &config)
 {
-	setTabSize(config.getTabSize());
-	setIndentation(config.getIndentation());
-	setClass(config.getClass());
-	setEmbeded(config.isEmbeded());
+    setTabSize(config.getTabSize());
+    setIndentation(config.getIndentation());
+    setClass(config.getClass());
+    setEmbeded(config.isEmbeded());
 
-	setEncoding(config.getEncoding());
-	if(config.isKwordStyleUsed())	useKwordStyle();
+    setEncoding(config.getEncoding());
+    if (config.isKwordStyleUsed()) useKwordStyle();
 }
 
 /*******************************************/
@@ -60,35 +60,31 @@ Config::~Config()
 
 void Config::indent()
 {
-	kDebug(30522) <<"Indent tab =" << (_tabulation + getTabSize());
-	_tabulation = _tabulation + getTabSize();
+    kDebug(30522) << "Indent tab =" << (_tabulation + getTabSize());
+    _tabulation = _tabulation + getTabSize();
 }
 
 void Config::desindent()
 {
-	if ((_tabulation - getTabSize()) > 0)
-	{
-		kDebug(30522) <<"Desindent tab =" << (_tabulation - getTabSize());
-		_tabulation = _tabulation - getTabSize();
-	}
-	else
-	{
-		kDebug(30522) <<"Desindent tab = 0";
-		_tabulation = 0;
-	}
+    if ((_tabulation - getTabSize()) > 0) {
+        kDebug(30522) << "Desindent tab =" << (_tabulation - getTabSize());
+        _tabulation = _tabulation - getTabSize();
+    } else {
+        kDebug(30522) << "Desindent tab = 0";
+        _tabulation = 0;
+    }
 }
 
 void Config::writeIndent(QTextStream& out)
 {
-	for(int index = 0; index < _tabulation; index++)
-	{
-		out << " ";
-	}
+    for (int index = 0; index < _tabulation; index++) {
+        out << " ";
+    }
 }
 
 Config* Config::instance()
 {
-	if(_instance == 0)
-		_instance = new Config();
-	return _instance;
+    if (_instance == 0)
+        _instance = new Config();
+    return _instance;
 }

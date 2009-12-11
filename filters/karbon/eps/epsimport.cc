@@ -33,10 +33,10 @@
 #include <KDebug>
 
 typedef KGenericFactory<EpsImport> EpsImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkarbonepsimport, EpsImportFactory("kofficefilters"))
 
-EpsImport::EpsImport( QObject*parent, const QStringList& )
-    : KoFilter(parent)
+EpsImport::EpsImport(QObject*parent, const QStringList&)
+        : KoFilter(parent)
 {
     kDebug() << "###   ###   EPS Import Filter";
 }
@@ -45,24 +45,22 @@ EpsImport::~EpsImport()
 {
 }
 
-KoFilter::ConversionStatus EpsImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if( from != "image/x-eps" &&
-        from != "image/eps" &&
-        from != "application/eps" &&
-        from != "application/x-eps" &&
-        from != "application/postscript" )
-    {
+    if (from != "image/x-eps" &&
+            from != "image/eps" &&
+            from != "application/eps" &&
+            from != "application/x-eps" &&
+            from != "application/postscript") {
         return KoFilter::NotImplemented;
     }
 
-    if( to == "image/svg+xml" )
-    {
+    if (to == "image/svg+xml") {
         // Copy filenames
         QString input = m_chain->inputFile();
         QString output = m_chain->outputFile();
 
-        QString command( "pstoedit -f plot-svg " );
+        QString command("pstoedit -f plot-svg ");
         command += KShell::quoteArg(input);
         command += ' ';
         command += KShell::quoteArg(output);
@@ -70,13 +68,12 @@ KoFilter::ConversionStatus EpsImport::convert( const QByteArray& from, const QBy
         kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data() ;
 
         // Execute it:
-        if( ! system( QFile::encodeName(command) ) )
+        if (! system(QFile::encodeName(command)))
             return KoFilter::OK;
         else
             return KoFilter::StupidError;
     }
-    if( to == "application/illustrator" )
-    {
+    if (to == "application/illustrator") {
 
         // Copy input filename:
         QString input = m_chain->inputFile();
@@ -85,23 +82,21 @@ KoFilter::ConversionStatus EpsImport::convert( const QByteArray& from, const QBy
         int llx = -1, lly = -1, urx = -1, ury = -1;
         BoundingBoxExtractor extractor;
 
-        QFile file (input);
+        QFile file(input);
 
-        if ( file.open(QIODevice::ReadOnly) )
-        {
-            extractor.parse (file);
+        if (file.open(QIODevice::ReadOnly)) {
+            extractor.parse(file);
             llx = extractor.llx();
             lly = extractor.lly();
             urx = extractor.urx();
             ury = extractor.ury();
-                file.close();
-        }
-        else
-            qDebug ("file could not be opened");
+            file.close();
+        } else
+            qDebug("file could not be opened");
 
         // sed filter
-        QString sedFilter = QString ("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
-                arg(llx).arg(lly).arg(urx).arg(ury);
+        QString sedFilter = QString("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
+                            arg(llx).arg(lly).arg(urx).arg(ury);
 
         // Build ghostscript call to convert ps/eps -> ai:
         QString command(
@@ -112,10 +107,10 @@ KoFilter::ConversionStatus EpsImport::convert( const QByteArray& from, const QBy
         command += " > ";
         command += KShell::quoteArg(m_chain->outputFile());
 
-        qDebug ("command to execute is (%s)", QFile::encodeName(command).data());
+        qDebug("command to execute is (%s)", QFile::encodeName(command).data());
 
         // Execute it:
-        if( !system( QFile::encodeName(command)) )
+        if (!system(QFile::encodeName(command)))
             return KoFilter::OK;
         else
             return KoFilter::StupidError;

@@ -36,10 +36,10 @@
 
 
 typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkchartsvgexport, SvgExportFactory( "svgexport" ) )
+K_EXPORT_COMPONENT_FACTORY(libkchartsvgexport, SvgExportFactory("svgexport"))
 
 SvgExport::SvgExport(QObject* parent, const QStringList&)
-    : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
@@ -52,27 +52,27 @@ KoFilter::ConversionStatus
 SvgExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for proper conversion.
-    if ( from != "application/x-kchart" || to != "image/svg+xml" )
+    if (from != "application/x-kchart" || to != "image/svg+xml")
         return KoFilter::NotImplemented;
 
     // Read the contents of the KChart file
-    KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
-    if ( !storeIn ) {
-	KMessageBox::error( 0, i18n("Failed to read data." ),
-			    i18n( "SVG Export Error" ) );
-	return KoFilter::FileNotFound;
+    KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
+    if (!storeIn) {
+        KMessageBox::error(0, i18n("Failed to read data."),
+                           i18n("SVG Export Error"));
+        return KoFilter::FileNotFound;
     }
 
     // Get the XML tree.
     KoXmlDocument  domIn;
-    domIn.setContent( storeIn );
+    domIn.setContent(storeIn);
     KoXmlElement   docNode = domIn.documentElement();
 
     // Read the document from the XML tree.
     KChart::KChartPart  kchartDoc;
-    if ( !kchartDoc.loadXML(domIn, 0) ) {
-        KMessageBox::error( 0, i18n( "Malformed XML data." ),
-			    i18n( "SVG Export Error" ) );
+    if (!kchartDoc.loadXML(domIn, 0)) {
+        KMessageBox::error(0, i18n("Malformed XML data."),
+                           i18n("SVG Export Error"));
         return KoFilter::WrongFormat;
     }
 
@@ -84,9 +84,9 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     painter.end();
 
     // Save the image.
-    if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ),
-			    i18n( "SVG Export Error" ) );
+    if (!picture.save(m_chain->outputFile(), "SVG")) {
+        KMessageBox::error(0, i18n("Failed to write file."),
+                           i18n("SVG Export Error"));
     }
 
     return KoFilter::OK;

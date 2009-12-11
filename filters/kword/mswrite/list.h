@@ -28,7 +28,7 @@
    http://sourceforge.net/projects/libmswrite/
 */
 
-/* 
+/*
  * list.h - linked list implementation
  * This file ensures that we do not have to depend on STL but don't waste
  * time and memory trying to reallocate arrays.
@@ -42,344 +42,300 @@
 #define __MSWRITE_LIST_H__
 
 #ifndef NULL
-	#define NULL 0
+#define NULL 0
 #endif
 
 #include <assert.h>
 // TODO: implement ConstIterator so that all the List<dtype>::end (void) const's can have the const etc.
 namespace MSWrite
 {
-	template <class dtype>	class List;
-	template <class dtype>	class ListIterator;
-	template <class dtype>
-	class ListElement
-	{
-	private:
-		dtype m_data;
-		ListElement *m_prev, *m_next;
+template <class dtype> class List;
+template <class dtype> class ListIterator;
+template <class dtype>
+class ListElement
+{
+private:
+    dtype m_data;
+    ListElement *m_prev, *m_next;
 
-	public:
-		ListElement ()
-		{
-			m_prev = m_next = NULL;
-		}
+public:
+    ListElement() {
+        m_prev = m_next = NULL;
+    }
 
-		ListElement (dtype &data)
-		{
-			m_prev = m_next = NULL;
-			m_data = data;
-		}
+    ListElement(dtype &data) {
+        m_prev = m_next = NULL;
+        m_data = data;
+    }
 
-		~ListElement ()
-		{
-		}
+    ~ListElement() {
+    }
 
-		dtype &getData (void) const
-		{
-			return m_data;
-		}
-		dtype &operator* (void) const
-		{
-			return m_data;
-		}
-		bool operator== (const dtype &rhs) const
-		{
-			return this->data == rhs.data;
-		}
+    dtype &getData(void) const {
+        return m_data;
+    }
+    dtype &operator*(void) const {
+        return m_data;
+    }
+    bool operator== (const dtype &rhs) const {
+        return this->data == rhs.data;
+    }
 
-		void setData (const dtype &data)
-		{
-			m_data = data;
-		}
-		dtype &operator= (const dtype &rhs)
-		{
-			if (this == &rhs)
-				return *this;
+    void setData(const dtype &data) {
+        m_data = data;
+    }
+    dtype &operator= (const dtype &rhs) {
+        if (this == &rhs)
+            return *this;
 
-			this->data = rhs.data;
-			return this->data;
-		}
+        this->data = rhs.data;
+        return this->data;
+    }
 
-		friend class List <dtype>;
-		friend class ListIterator <dtype>;
-	};
+    friend class List <dtype>;
+    friend class ListIterator <dtype>;
+};
 
-	template <class dtype>	class List;
-	template <class dtype>
-	class ListIterator
-	{
-	private:
-		bool m_forward;
-		ListElement <dtype> *m_upto;
+template <class dtype> class List;
+template <class dtype>
+class ListIterator
+{
+private:
+    bool m_forward;
+    ListElement <dtype> *m_upto;
 
-		void setPtr (ListElement <dtype> *ptr)
-		{
-			m_upto = ptr;
-		}
+    void setPtr(ListElement <dtype> *ptr) {
+        m_upto = ptr;
+    }
 
-	public:
-		ListIterator (const bool forward = true)
-		{
-			m_forward = forward;
-		}
+public:
+    ListIterator(const bool forward = true) {
+        m_forward = forward;
+    }
 
-		ListIterator <dtype> &prev (void)
-		{
-			if (m_forward)
-				m_upto = m_upto->m_prev;
-			else
-				m_upto = m_upto->m_next;
+    ListIterator <dtype> &prev(void) {
+        if (m_forward)
+            m_upto = m_upto->m_prev;
+        else
+            m_upto = m_upto->m_next;
 
-			return *this;
-		}
+        return *this;
+    }
 
-		~ListIterator ()
-		{
-		}
-		
-		ListIterator <dtype> &operator-- (void)
-		{
-			return prev ();
-		}
+    ~ListIterator() {
+    }
 
-		ListIterator <dtype> &operator-- (int)
-		{
-			return prev ();
-		}
+    ListIterator <dtype> &operator-- (void) {
+        return prev();
+    }
 
-		ListIterator <dtype> &next (void)
-		{
-			if (m_forward)
-				m_upto = m_upto->m_next;
-			else
-				m_upto = m_upto->m_prev;
+    ListIterator <dtype> &operator-- (int) {
+        return prev();
+    }
 
-			return *this;
-		}
+    ListIterator <dtype> &next(void) {
+        if (m_forward)
+            m_upto = m_upto->m_next;
+        else
+            m_upto = m_upto->m_prev;
 
-		ListIterator <dtype> &operator++ (void)
-		{
-			return next ();
-		}
+        return *this;
+    }
 
-		ListIterator <dtype> &operator++ (int)
-		{
-			return next ();
-		}
+    ListIterator <dtype> &operator++ (void) {
+        return next();
+    }
 
-		bool operator== (const ListIterator <dtype> &rhs) const
-		{
-			return this->m_upto == rhs.m_upto;
-		}
+    ListIterator <dtype> &operator++ (int) {
+        return next();
+    }
 
-		bool operator!= (const ListIterator <dtype> &rhs) const
-		{
-			return this->m_upto != rhs.m_upto;
-		}
+    bool operator== (const ListIterator <dtype> &rhs) const {
+        return this->m_upto == rhs.m_upto;
+    }
 
-		dtype &operator* (void) const
-		{
-			//return *(*m_upto);	// why doesn't this work?
-			return m_upto->m_data;
-		}
+    bool operator!= (const ListIterator <dtype> &rhs) const {
+        return this->m_upto != rhs.m_upto;
+    }
 
-		friend class List <dtype>;
-	};
+    dtype &operator*(void) const {
+        //return *(*m_upto); // why doesn't this work?
+        return m_upto->m_data;
+    }
 
-	template <class dtype>
-	class List
-	{
-	private:
-		ListElement <dtype> *m_head, *m_tail;
-		int m_num;
-		bool m_good;
+    friend class List <dtype>;
+};
 
-	public:
-		List ()
-		{
-			m_head = m_tail = (ListElement <dtype> *) NULL;
-			m_num = 0;
-			m_good = true;
-		}
+template <class dtype>
+class List
+{
+private:
+    ListElement <dtype> *m_head, *m_tail;
+    int m_num;
+    bool m_good;
 
-		virtual ~List ()
-		{
-			killself ();
-		}
+public:
+    List() {
+        m_head = m_tail = (ListElement <dtype> *) NULL;
+        m_num = 0;
+        m_good = true;
+    }
 
-		void killself (void)
-		{
-			ListElement <dtype> *e = m_head;
-			ListElement <dtype> *nexte;
-			while (e)
-			{
-				nexte = e->m_next;
-				delete e;
-				e = nexte;
-			}
-			m_head = m_tail = NULL;
-			m_num = 0;
-			m_good = true;
-		}
+    virtual ~List() {
+        killself();
+    }
 
-		bool empty (void) const
-		{
-			return m_head;
-		}
+    void killself(void) {
+        ListElement <dtype> *e = m_head;
+        ListElement <dtype> *nexte;
+        while (e) {
+            nexte = e->m_next;
+            delete e;
+            e = nexte;
+        }
+        m_head = m_tail = NULL;
+        m_num = 0;
+        m_good = true;
+    }
 
-		bool good (void) const
-		{
-			return m_good;
-		}
+    bool empty(void) const {
+        return m_head;
+    }
 
-		bool bad (void) const
-		{
-			return !good ();
-		}
+    bool good(void) const {
+        return m_good;
+    }
 
-		bool addToFront (dtype &data)
-		{
-			ListElement <dtype> *e = new ListElement <dtype> (data);
-			if (!e)
-			{
-				m_good = false;
-				return false;
-			}
+    bool bad(void) const {
+        return !good();
+    }
 
-			if (m_head)
-			{
-				e->next = m_head;
-				m_head->prev = e;
-				m_head = e;
-			}
-			// empty
-			else
-			{
-				m_head = m_tail = e;
-			}
+    bool addToFront(dtype &data) {
+        ListElement <dtype> *e = new ListElement <dtype> (data);
+        if (!e) {
+            m_good = false;
+            return false;
+        }
 
-			m_num++;
-			return true;
-		}
+        if (m_head) {
+            e->next = m_head;
+            m_head->prev = e;
+            m_head = e;
+        }
+        // empty
+        else {
+            m_head = m_tail = e;
+        }
 
-		bool addToBack (void)
-		{
-			ListElement <dtype> *e = new ListElement <dtype> ();
-			if (!e)
-			{
-				m_good = false;
-				return false;
-			}
+        m_num++;
+        return true;
+    }
 
-			if (m_tail)
-			{
-				e->m_prev = m_tail;
-				m_tail->m_next = e;
-				m_tail = e;
-			}
-			// empty
-			else
-			{
-				m_head = m_tail = e;
-			}
+    bool addToBack(void) {
+        ListElement <dtype> *e = new ListElement <dtype> ();
+        if (!e) {
+            m_good = false;
+            return false;
+        }
 
-			m_num++;
-			return true;
-		}
+        if (m_tail) {
+            e->m_prev = m_tail;
+            m_tail->m_next = e;
+            m_tail = e;
+        }
+        // empty
+        else {
+            m_head = m_tail = e;
+        }
 
-		// for efficiency, you can call the above void argument list version
-		// and initialise the data within the list yourself (avoiding a copy)
-		bool addToBack (const dtype &data)
-		{
-			if (!addToBack ())
-				return false;
-			m_tail->setData (data);
-			return true;
-		}
+        m_num++;
+        return true;
+    }
 
-		int getNumElements (void) const
-		{
-			return m_num;
-		}
+    // for efficiency, you can call the above void argument list version
+    // and initialise the data within the list yourself (avoiding a copy)
+    bool addToBack(const dtype &data) {
+        if (!addToBack())
+            return false;
+        m_tail->setData(data);
+        return true;
+    }
 
-		List <dtype> &operator= (const List <dtype> &rhs)
-		{
-			if (this == &rhs)
-				return *this;
+    int getNumElements(void) const {
+        return m_num;
+    }
 
-			killself ();
+    List <dtype> &operator= (const List <dtype> &rhs) {
+        if (this == &rhs)
+            return *this;
 
-			m_num = rhs.m_num;
-			m_good = rhs.m_good;
+        killself();
 
-			ListElement <dtype> *e = rhs.m_head;
-			while (e)
-			{
-				if (!addToBack (e->m_data)) break;
-				e = e->m_next;
-			}
+        m_num = rhs.m_num;
+        m_good = rhs.m_good;
 
-			return *this;
-		}
+        ListElement <dtype> *e = rhs.m_head;
+        while (e) {
+            if (!addToBack(e->m_data)) break;
+            e = e->m_next;
+        }
 
-		typedef ListIterator <dtype> Iterator;
-		friend class ListIterator <dtype>;
+        return *this;
+    }
 
-		ListIterator <dtype> begin (const bool forward = true) const
-		{
-			ListIterator <dtype> ret (forward);
-			if (forward)
-				ret.setPtr (m_head);
-			else
-				ret.setPtr (m_tail);
-			return ret;	// not a reference
-		}
+    typedef ListIterator <dtype> Iterator;
+    friend class ListIterator <dtype>;
 
-		ListIterator <dtype> end (void) const
-		{
-			ListIterator <dtype> ret;
-			ret.setPtr (NULL);	// true regardless of which direction
-			return ret;	// not a reference
-		}
+    ListIterator <dtype> begin(const bool forward = true) const {
+        ListIterator <dtype> ret(forward);
+        if (forward)
+            ret.setPtr(m_head);
+        else
+            ret.setPtr(m_tail);
+        return ret; // not a reference
+    }
 
-		ListIterator <dtype> erase (ListIterator <dtype> &it)
-		{
-			// regardless of iterator direction
-			ListElement <dtype> *eat = it.m_upto;
-			ListElement <dtype> *prevElement = it.m_upto->m_prev;
-			ListElement <dtype> *nextElement = it.m_upto->m_next;
-			it++;
-			delete (eat);
+    ListIterator <dtype> end(void) const {
+        ListIterator <dtype> ret;
+        ret.setPtr(NULL);  // true regardless of which direction
+        return ret; // not a reference
+    }
 
-			if (prevElement)
-				prevElement->m_next = nextElement;
-			else
-				m_head = nextElement;
+    ListIterator <dtype> erase(ListIterator <dtype> &it) {
+        // regardless of iterator direction
+        ListElement <dtype> *eat = it.m_upto;
+        ListElement <dtype> *prevElement = it.m_upto->m_prev;
+        ListElement <dtype> *nextElement = it.m_upto->m_next;
+        it++;
+        delete(eat);
 
-			if (nextElement)
-				nextElement->m_prev = prevElement;
-			else
-				m_tail = prevElement;
+        if (prevElement)
+            prevElement->m_next = nextElement;
+        else
+            m_head = nextElement;
 
-			m_num--;
-			return it;
-		}
-		
-		ListIterator <dtype> search (const dtype &value) const
-		{
-			ListIterator <dtype> it;
-			for (it = begin (); it != end (); it++)
-			{
-				if ((*it) == value)
-					break;
-			}
+        if (nextElement)
+            nextElement->m_prev = prevElement;
+        else
+            m_tail = prevElement;
 
-			// not reference
-			return it;
-		}
-	};
-}	// namespace MSWrite	{
+        m_num--;
+        return it;
+    }
 
-#endif	// #ifndef __MSWRITE_LIST_H__
+    ListIterator <dtype> search(const dtype &value) const {
+        ListIterator <dtype> it;
+        for (it = begin(); it != end(); it++) {
+            if ((*it) == value)
+                break;
+        }
+
+        // not reference
+        return it;
+    }
+};
+} // namespace MSWrite {
+
+#endif // #ifndef __MSWRITE_LIST_H__
 
 // end of list.h

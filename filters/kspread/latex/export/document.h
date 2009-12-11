@@ -23,9 +23,9 @@
 #ifndef __KSPREAD_LATEX_DOCUMENT_H__
 #define __KSPREAD_LATEX_DOCUMENT_H__
 
-#include <QFile>			/* for QFile class */
-#include <QTextStream>	/* for QTextStream class */
-#include <QString>		/* for QString class */
+#include <QFile>   /* for QFile class */
+#include <QTextStream> /* for QTextStream class */
+#include <QString>  /* for QString class */
 
 #include "xmlparser.h"
 #include "config.h"
@@ -33,32 +33,32 @@
 
 class Document : public XmlParser, Config
 {
-	QFile       _file;
-	QTextStream _out;
-	QString     _filename;
-	const KoStore*    _in;
+    QFile       _file;
+    QTextStream _out;
+    QString     _filename;
+    const KoStore*    _in;
 
-	//FileHeader  _header;
-	Spreadsheet _document;
+    //FileHeader  _header;
+    Spreadsheet _document;
 
-	/* Options */
-	
+    /* Options */
 
-	public:
-		/**
-		 * @param in tar file.
-		 * @param fileOut Output latex filename.
-		 */
-		Document(const KoStore* in, QString fileOut);
 
-		virtual ~Document();
+public:
+    /**
+     * @param in tar file.
+     * @param fileOut Output latex filename.
+     */
+    Document(const KoStore* in, QString fileOut);
 
-		/* Accesors */
-		
-		void analyze();
-		void generate();
+    virtual ~Document();
 
-	private:
+    /* Accesors */
+
+    void analyze();
+    void generate();
+
+private:
 
 };
 

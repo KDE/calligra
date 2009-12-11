@@ -28,7 +28,7 @@ DESCRIPTION
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-K_EXPORT_COMPONENT_FACTORY( libxfigimport, XFIGImportFactory )
+K_EXPORT_COMPONENT_FACTORY(libxfigimport, XFIGImportFactory)
 
 KComponentData *XFIGImportFactory::s_global = 0;
 
@@ -52,10 +52,9 @@ QObject *XFIGImportFactory::createObject(
     const char*,
     const QStringList &)
 {
-    if (parent && !parent->inherits("KoFilter"))
-    {
-	    kDebug(30502) <<"XFIGImportFactory: parent does not inherit KoFilter";
-	    return 0L;
+    if (parent && !parent->inherits("KoFilter")) {
+        kDebug(30502) << "XFIGImportFactory: parent does not inherit KoFilter";
+        return 0L;
     }
     XFIGImport *f = new XFIGImport((KoFilter*)parent, name);
     return f;

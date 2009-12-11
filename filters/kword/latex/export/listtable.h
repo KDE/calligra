@@ -31,32 +31,32 @@
  */
 class ListTable: public QList<Table*>
 {
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of ListTable.
-		 */
-		ListTable();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of ListTable.
+     */
+    ListTable();
 
-		/* 
-		 * Destructor
-		 */
-		virtual ~ListTable();
+    /*
+     * Destructor
+     */
+    virtual ~ListTable();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		Table* isNewTable(QString);
+    Table* isNewTable(QString);
 
-		/**
-		 * Modifiers
-		 */
+    /**
+     * Modifiers
+     */
 
-		void add(Element*);
+    void add(Element*);
 
-	private:
+private:
 };
 
 #endif /* __KWORD_LISTTABLE_H__ */

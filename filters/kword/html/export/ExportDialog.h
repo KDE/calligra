@@ -32,13 +32,13 @@ class HtmlExportDialog : public KDialog
 public:
 
     enum Mode {
-      Light =0,
-      Basic,
-      DefaultCSS,
-      CustomCSS
+        Light = 0,
+        Basic,
+        DefaultCSS,
+        CustomCSS
     };
 
-    HtmlExportDialog(QWidget* parent=NULL);
+    HtmlExportDialog(QWidget* parent = NULL);
     ~HtmlExportDialog(void);
     bool isXHtml(void) const;
     QTextCodec* getCodec(void) const;
@@ -46,7 +46,7 @@ public:
     QString cssURL(void) const;
 
 protected slots:
-    void setCSSEnabled( bool );
+    void setCSSEnabled(bool);
 
 private:
     ExportDialogUI* m_dialog;

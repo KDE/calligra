@@ -27,79 +27,100 @@
 
 class ListElement
 {
-	Element *_start, *_end;
-	int _size;
+    Element *_start, *_end;
+    int _size;
 
-	public:
-		ListElement();
-		virtual ~ListElement();
-		
-		void initialiser(Element*);
-		void add(Element*);
-		Element* getFirst() const { return _start; }
-		Element* getLast()  const { return _end;   }
-		int      getSize()  const { return _size;  }
+public:
+    ListElement();
+    virtual ~ListElement();
 
-	private:
+    void initialiser(Element*);
+    void add(Element*);
+    Element* getFirst() const {
+        return _start;
+    }
+    Element* getLast()  const {
+        return _end;
+    }
+    int      getSize()  const {
+        return _size;
+    }
+
+private:
 };
 
-class ElementIter {
-	Element *_courant;
-	
-	protected:
-	
-	public:
-/**
- * @name Constructors
- */
+class ElementIter
+{
+    Element *_courant;
+
+protected:
+
+public:
+    /**
+     * @name Constructors
+     */
 //@{
-	/// Default Constructor
-	ElementIter()               { _courant = 0;             }
-	/// Constructor
-	ElementIter(ListElement &l) { _courant = l.getFirst();  }
-	/// Constructor
-	ElementIter(ListElement *l) { 
-		if(l != 0)
-			_courant = l->getFirst();
-		else
-			_courant = 0;
-	}
+    /// Default Constructor
+    ElementIter()               {
+        _courant = 0;
+    }
+    /// Constructor
+    ElementIter(ListElement &l) {
+        _courant = l.getFirst();
+    }
+    /// Constructor
+    ElementIter(ListElement *l) {
+        if (l != 0)
+            _courant = l->getFirst();
+        else
+            _courant = 0;
+    }
 //@}
 
-/**
- * @name Destructors
- */
+    /**
+     * @name Destructors
+     */
 //@{
-	  /// Destructor
-	virtual ~ElementIter() { }
+    /// Destructor
+    virtual ~ElementIter() { }
 //@}
 
-/**
- * @name Accessors
- */
-//@{	
+    /**
+     * @name Accessors
+     */
+//@{
 
-	Element* getCourant()  const { return _courant; }
-	bool     isTerminate() const { return (_courant == 0); }
+    Element* getCourant()  const {
+        return _courant;
+    }
+    bool     isTerminate() const {
+        return (_courant == 0);
+    }
 //@}
 
-/**
- * @name Modifiors
- */
+    /**
+     * @name Modifiors
+     */
 //@{
-	void next()                  { _courant = _courant->getNext(); }
-	void setList(ListElement *l) { _courant = l->getFirst();       }
-	void setList(ListElement l)  { _courant = l.getFirst();        }
+    void next()                  {
+        _courant = _courant->getNext();
+    }
+    void setList(ListElement *l) {
+        _courant = l->getFirst();
+    }
+    void setList(ListElement l)  {
+        _courant = l.getFirst();
+    }
 //@}
 
-/**
- * @name Operators
- */
+    /**
+     * @name Operators
+     */
 //@{
- //@}
-/**
- * @name Functions de delegation
- */
+//@}
+    /**
+     * @name Functions de delegation
+     */
 //@{
 
 //@}

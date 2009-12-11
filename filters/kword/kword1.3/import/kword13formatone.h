@@ -37,23 +37,23 @@ class QTextStream;
 class KWord13FormatOneData
 {
 public:
-    explicit KWord13FormatOneData( void );
-    ~KWord13FormatOneData( void );
-    
+    explicit KWord13FormatOneData(void);
+    ~KWord13FormatOneData(void);
+
 public:
-    void xmldump( QTextStream& iostream );
-    
+    void xmldump(QTextStream& iostream);
+
     /**
      * @brief Get a key representating the properties
      *
      * This key helps to categorize the automatic styles
      */
-    QString key( void ) const;
+    QString key(void) const;
 
-    QString getProperty( const QString& name ) const;
+    QString getProperty(const QString& name) const;
 
 public:
-    QMap<QString,QString> m_properties;
+    QMap<QString, QString> m_properties;
 public: // OASIS-specific
     QString m_autoStyleName; ///< Name of the OASIS automatic style
 };
@@ -68,7 +68,7 @@ public:
     virtual ~KWord13FormatOne(void);
 public:
     /// Get length of format
-    virtual int length( void );
+    virtual int length(void);
     /**
      * Get a pointer to the data correponding to \<FORMAT id="1"\>
      *

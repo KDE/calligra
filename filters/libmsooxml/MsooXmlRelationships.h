@@ -28,7 +28,8 @@
 
 struct KoOdfWriters;
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 class MsooXmlImport;
 
 //! Global document relationships handler.

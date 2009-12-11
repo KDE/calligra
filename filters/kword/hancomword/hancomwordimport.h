@@ -25,18 +25,18 @@
 
 class HancomWordImport : public KoFilter
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    HancomWordImport ( QObject *parent, const QStringList& );
+    HancomWordImport(QObject *parent, const QStringList&);
     virtual ~HancomWordImport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif // HANCOMWORDIMPORT_H

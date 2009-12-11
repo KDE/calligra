@@ -19,9 +19,9 @@
 **
 */
 
-#include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kDebug() stream */
-#include <QStack>		/* for getFormula() */
+#include <stdlib.h>  /* for atoi function */
+#include <kdebug.h>  /* for kDebug() stream */
+#include <QStack>  /* for getFormula() */
 #include <qdom.h>
 #include <QTextStream>
 #include "formula.h"
@@ -35,14 +35,14 @@
 /*******************************************/
 Formula::Formula()
 {
-	_left              = 0;
-	_right             = 0;
-	_top               = 0;
-	_bottom            = 0;
-	_runaround         = TA_NONE;
-	_runaroundGap      = 0;
-	_autoCreate        = TC_EXTEND;
-	_newFrameBehaviour = TF_RECONNECT;
+    _left              = 0;
+    _right             = 0;
+    _top               = 0;
+    _bottom            = 0;
+    _runaround         = TA_NONE;
+    _runaroundGap      = 0;
+    _autoCreate        = TC_EXTEND;
+    _newFrameBehaviour = TF_RECONNECT;
 
 }
 
@@ -52,28 +52,24 @@ Formula::Formula()
 void Formula::analyze(const QDomNode node)
 {
 
-	/* Markup type: Frameset info = text, heading known */
+    /* Markup type: Frameset info = text, heading known */
 
-	/* Parameter analysis */
-	Element::analyze(node);
+    /* Parameter analysis */
+    Element::analyze(node);
 
-	kDebug(30522) <<"FRAME ANALYSIS (Formula)";
+    kDebug(30522) << "FRAME ANALYSIS (Formula)";
 
-	/* Child markup analysis */
-	for(int index= 0; index < getNbChild(node); index++)
-	{
-		if(getChildName(node, index).compare("FRAME")== 0)
-		{
-			analyzeParamFrame(node);
-		}
-		else if(getChildName(node, index).compare("FORMULA")== 0)
-		{
-			getFormula(getChild(getChild(node, "FORMULA"), "FORMULA"), 0);
-			kDebug(30522) << _formula;
-		}
+    /* Child markup analysis */
+    for (int index = 0; index < getNbChild(node); index++) {
+        if (getChildName(node, index).compare("FRAME") == 0) {
+            analyzeParamFrame(node);
+        } else if (getChildName(node, index).compare("FORMULA") == 0) {
+            getFormula(getChild(getChild(node, "FORMULA"), "FORMULA"), 0);
+            kDebug(30522) << _formula;
+        }
 
-	}
-	kDebug(30522) <<"END OF A FRAME";
+    }
+    kDebug(30522) << "END OF A FRAME";
 }
 
 /*******************************************/
@@ -83,48 +79,44 @@ void Formula::analyze(const QDomNode node)
 /*******************************************/
 void Formula::getFormula(QDomNode p, int indent)
 {
-/*	while( p.)
-	{*/
-		switch( p.nodeType() )
-		{
-			case QDomNode::TextNode:
-				_formula = _formula + QString(p.toText().data()) + ' ';
-				break;
-		/*	case TT_Space:
-				_formula = _formula + p->zText;
-				//printf("%*s\"%s\"\n", indent, "", p->zText);
-				break;
-			case TT_EOL:
-				_formula = _formula + "\n";
-				//printf("%*s\n", indent, "");
-				break;*/
-			case QDomNode::ElementNode:
-				_formula = _formula + '<' + p.nodeName();
-				QDomNamedNodeMap attr = p.attributes();
-				for(unsigned int index = 0; index < attr.length(); index++)
-				{ // The attributes
-					_formula = _formula + ' ' + attr.item(index).nodeName();
-					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
-				}
-				if(p.childNodes().length() == 0)
-					_formula = _formula + "/>\n";
-				else
-				{
-					_formula = _formula + ">\n";
-					QDomNodeList child = p.childNodes();
-					for(unsigned int index = 0; index < child.length(); index++)
-					{
-						getFormula(child.item(index), indent+3); // The child elements
-					}
-					_formula = _formula + "</" + p.nodeName() + ">\n";
-				}
-				break;
-			/*default:
-				kError(30522) << "Can't happen" << endl;
-				break;*/
-		}
-	/*	p = p.nextSibling();
-	}*/
+    /* while( p.)
+     {*/
+    switch (p.nodeType()) {
+    case QDomNode::TextNode:
+        _formula = _formula + QString(p.toText().data()) + ' ';
+        break;
+        /* case TT_Space:
+          _formula = _formula + p->zText;
+          //printf("%*s\"%s\"\n", indent, "", p->zText);
+          break;
+         case TT_EOL:
+          _formula = _formula + "\n";
+          //printf("%*s\n", indent, "");
+          break;*/
+    case QDomNode::ElementNode:
+        _formula = _formula + '<' + p.nodeName();
+        QDomNamedNodeMap attr = p.attributes();
+        for (unsigned int index = 0; index < attr.length(); index++) { // The attributes
+            _formula = _formula + ' ' + attr.item(index).nodeName();
+            _formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
+        }
+        if (p.childNodes().length() == 0)
+            _formula = _formula + "/>\n";
+        else {
+            _formula = _formula + ">\n";
+            QDomNodeList child = p.childNodes();
+            for (unsigned int index = 0; index < child.length(); index++) {
+                getFormula(child.item(index), indent + 3); // The child elements
+            }
+            _formula = _formula + "</" + p.nodeName() + ">\n";
+        }
+        break;
+        /*default:
+         kError(30522) << "Can't happen" << endl;
+         break;*/
+    }
+    /* p = p.nextSibling();
+    }*/
 }
 
 /*******************************************/
@@ -132,17 +124,17 @@ void Formula::getFormula(QDomNode p, int indent)
 /*******************************************/
 void Formula::analyzeParamFrame(const QDomNode node)
 {
-	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
+    /*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 
-	_left = getAttr(node, "left").toInt();
-	_top = getAttr(node, "top").toInt();
-	_right = getAttr(node, "right").toInt();
-	_bottom = getAttr(node, "bottom").toInt();
-	setRunAround(getAttr(node, "runaround").toInt());
-	setAroundGap(getAttr(node, "runaroundGap").toInt());
-	setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
-	setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
-	setSheetSide(getAttr(node, "sheetside").toInt());
+    _left = getAttr(node, "left").toInt();
+    _top = getAttr(node, "top").toInt();
+    _right = getAttr(node, "right").toInt();
+    _bottom = getAttr(node, "bottom").toInt();
+    setRunAround(getAttr(node, "runaround").toInt());
+    setAroundGap(getAttr(node, "runaroundGap").toInt());
+    setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
+    setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
+    setSheetSide(getAttr(node, "sheetside").toInt());
 }
 
 /*******************************************/
@@ -150,20 +142,20 @@ void Formula::analyzeParamFrame(const QDomNode node)
 /*******************************************/
 void Formula::generate(QTextStream &out)
 {
-	kDebug(30522) <<"FORMULA GENERATION";
-	QDomDocument doc;
-	doc.setContent(_formula);
+    kDebug(30522) << "FORMULA GENERATION";
+    QDomDocument doc;
+    doc.setContent(_formula);
 
-   	// a new KFormula::Document for every formula is not the best idea.
-	// better to have only one such beast for the whole document.
-	KFormula::Document formulaDoc( kapp->sessionConfig() );
+    // a new KFormula::Document for every formula is not the best idea.
+    // better to have only one such beast for the whole document.
+    KFormula::Document formulaDoc(kapp->sessionConfig());
 
-	KFormula::Container* formula = new KFormula::Container( &formulaDoc );
-	if ( !formula->load( doc ) ) {
-		kError(30522) << "Failed." << endl;
-	}
+    KFormula::Container* formula = new KFormula::Container(&formulaDoc);
+    if (!formula->load(doc)) {
+        kError(30522) << "Failed." << endl;
+    }
 
- 	out << "$" << formula->texString() << "$";
-        delete formula;
+    out << "$" << formula->texString() << "$";
+    delete formula;
 }
 

@@ -33,38 +33,38 @@ class OoImpressExport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoImpressExport( QObject * parent,const QStringList & );
+    OoImpressExport(QObject * parent, const QStringList &);
     virtual ~OoImpressExport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray & from,
-                                                const QByteArray & to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray & from,
+            const QByteArray & to);
 
 private:
     KoFilter::ConversionStatus openFile();
 
-    void exportBody( QDomDocument & doccontent, QDomElement & body );
-    void createDocumentMeta( QDomDocument & docmeta );
-    void createDocumentStyles( QDomDocument & docstyles );
-    void createDocumentContent( QDomDocument & doccontent );
-    void createDocumentManifest( QDomDocument & docmanifest );
-    void createDocumentSettings( QDomDocument & docsetting );
-    void appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendParagraph( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendText( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendLine( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendRectangle( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject = false );
-    void set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false );
-    void setLineGeometry( QDomElement & source, QDomElement & target );
-    void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
-    void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void createPictureList( QDomNode &pictures );
-    void appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    void appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target );
-    QString rotateValue( double val );
-    QString pictureKey( QDomElement &element );
-    void createHelpLine( QDomNode &helpline );
-    void createAttribute( QDomNode &attributeValue );
+    void exportBody(QDomDocument & doccontent, QDomElement & body);
+    void createDocumentMeta(QDomDocument & docmeta);
+    void createDocumentStyles(QDomDocument & docstyles);
+    void createDocumentContent(QDomDocument & doccontent);
+    void createDocumentManifest(QDomDocument & docmanifest);
+    void createDocumentSettings(QDomDocument & docsetting);
+    void appendTextbox(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendParagraph(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendText(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendLine(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendRectangle(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendEllipse(QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject = false);
+    void set2DGeometry(QDomElement & source, QDomElement & target, bool pieObject = false, bool multiPoint = false);
+    void setLineGeometry(QDomElement & source, QDomElement & target);
+    void appendPolyline(QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
+    void appendPicture(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void createPictureList(QDomNode &pictures);
+    void appendNote(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    void appendGroupObject(QDomDocument & doc, QDomElement & source, QDomElement & target);
+    QString rotateValue(double val);
+    QString pictureKey(QDomElement &element);
+    void createHelpLine(QDomNode &helpline);
+    void createAttribute(QDomNode &attributeValue);
     void appendObjects(QDomDocument & doccontent, QDomNode &objects, QDomElement &drawPage);
 
     int m_currentPage;

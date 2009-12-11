@@ -38,10 +38,10 @@ TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
 */
 
 typedef KGenericFactory<WmfExport> WmfExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwmfexport, WmfExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libwmfexport, WmfExportFactory("kofficefilters"))
 
 
-WmfExport::WmfExport( QObject*parent, const QStringList&) :
+WmfExport::WmfExport(QObject*parent, const QStringList&) :
         KoFilter(parent)
 {
 }
@@ -50,27 +50,27 @@ WmfExport::~WmfExport()
 {
 }
 
-KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if( to != "image/x-wmf" || from != "application/vnd.oasis.opendocument.graphics" ) 
+    if (to != "image/x-wmf" || from != "application/vnd.oasis.opendocument.graphics")
         return KoFilter::NotImplemented;
 
     KoDocument * doc = m_chain->inputDocument();
-    if( ! doc )
+    if (! doc)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>( doc );
-    if( ! karbonPart )
+    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(doc);
+    if (! karbonPart)
         return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
-    mWmf = new KoWmfWrite( m_chain->outputFile() );
-    if( !mWmf->begin() ) {
+    mWmf = new KoWmfWrite(m_chain->outputFile());
+    if (!mWmf->begin()) {
         delete mWmf;
         return KoFilter::WrongFormat;
     }
 
-    paintDocument( karbonPart->document() );
+    paintDocument(karbonPart->document());
 
     mWmf->end();
 
@@ -79,19 +79,20 @@ KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QBy
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument( KarbonDocument& document ) {
+void WmfExport::paintDocument(KarbonDocument& document)
+{
 
     // resolution
     mDpi = 1000;
 
     QSizeF pageSize = document.pageSize();
-    int width = static_cast<int>(POINT_TO_INCH( pageSize.width() ) * mDpi);
-    int height = static_cast<int>(POINT_TO_INCH( pageSize.height() ) * mDpi);
+    int width = static_cast<int>(POINT_TO_INCH(pageSize.width()) * mDpi);
+    int height = static_cast<int>(POINT_TO_INCH(pageSize.height()) * mDpi);
 
-    mWmf->setDefaultDpi( mDpi );
-    mWmf->setWindow( 0, 0, width, height );
+    mWmf->setDefaultDpi(mDpi);
+    mWmf->setWindow(0, 0, width, height);
 
-    if ( (pageSize.width() != 0) && (pageSize.height() != 0) ) {
+    if ((pageSize.width() != 0) && (pageSize.height() != 0)) {
         mScaleX = static_cast<double>(width) / pageSize.width();
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
@@ -100,86 +101,81 @@ void WmfExport::paintDocument( KarbonDocument& document ) {
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
-    foreach( KoShape * shape, shapes )
-    {
-        if( dynamic_cast<KoShapeContainer*>( shape ) )
+    foreach(KoShape * shape, shapes) {
+        if (dynamic_cast<KoShapeContainer*>(shape))
             continue;
-        paintShape( shape );
+        paintShape(shape);
     }
 }
 
-void WmfExport::paintShape( KoShape * shape )
+void WmfExport::paintShape(KoShape * shape)
 {
-    QList<QPolygonF> subpaths = shape->outline().toFillPolygons( shape->absoluteTransformation(0) );
+    QList<QPolygonF> subpaths = shape->outline().toFillPolygons(shape->absoluteTransformation(0));
 
-    if( ! subpaths.count() )
+    if (! subpaths.count())
         return;
 
     QList<QPolygon> polygons;
-    foreach( const QPolygonF & subpath, subpaths )
-    {
+    foreach(const QPolygonF & subpath, subpaths) {
         QPolygon p;
         uint pointCount = subpath.count();
-        for( uint i = 0; i < pointCount; ++i )
-            p.append( QPoint( coordX( subpath[i].x() ), coordY( subpath[i].y() ) ) );
+        for (uint i = 0; i < pointCount; ++i)
+            p.append(QPoint(coordX(subpath[i].x()), coordY(subpath[i].y())));
 
-        polygons.append( p );
+        polygons.append(p);
     }
-    mWmf->setPen( getPen( shape->border() ) );
+    mWmf->setPen(getPen(shape->border()));
 
-    if( polygons.count() == 1 && ! shape->background() )
-        mWmf->drawPolyline( polygons.first() );
-    else
-    {
-        QBrush fill( Qt::NoBrush );
-        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>( shape->background() );
-        if( cbg )
-            fill = QBrush( cbg->color(), cbg->style() );
-        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
-        if( gbg )
-        {
-            fill = QBrush( *gbg->gradient() );
-            fill.setMatrix( gbg->matrix() );
+    if (polygons.count() == 1 && ! shape->background())
+        mWmf->drawPolyline(polygons.first());
+    else {
+        QBrush fill(Qt::NoBrush);
+        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
+        if (cbg)
+            fill = QBrush(cbg->color(), cbg->style());
+        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
+        if (gbg) {
+            fill = QBrush(*gbg->gradient());
+            fill.setMatrix(gbg->matrix());
         }
-        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>( shape->background() );
-        if( pbg )
-        {
-            fill.setTextureImage( pbg->pattern() );
-            fill.setMatrix( pbg->matrix() );
+        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
+        if (pbg) {
+            fill.setTextureImage(pbg->pattern());
+            fill.setMatrix(pbg->matrix());
         }
-        mWmf->setBrush( fill );
-        if( polygons.count() == 1 )
-            mWmf->drawPolygon( polygons.first() );
+        mWmf->setBrush(fill);
+        if (polygons.count() == 1)
+            mWmf->drawPolygon(polygons.first());
         else
-            mWmf->drawPolyPolygon( polygons );
+            mWmf->drawPolyPolygon(polygons);
     }
 }
 
-QPen WmfExport::getPen( const KoShapeBorderModel * stroke )
+QPen WmfExport::getPen(const KoShapeBorderModel * stroke)
 {
-    const KoLineBorder * lineBorder = dynamic_cast<const KoLineBorder*>( stroke );
-    if( ! lineBorder )
-        return QPen( Qt::NoPen );
+    const KoLineBorder * lineBorder = dynamic_cast<const KoLineBorder*>(stroke);
+    if (! lineBorder)
+        return QPen(Qt::NoPen);
 
-    QPen pen( lineBorder->lineStyle() );
-    if( pen.style() > Qt::SolidLine )
-        pen.setDashPattern( lineBorder->lineDashes() );
+    QPen pen(lineBorder->lineStyle());
+    if (pen.style() > Qt::SolidLine)
+        pen.setDashPattern(lineBorder->lineDashes());
 
-    pen.setColor( lineBorder->color() );
-    pen.setCapStyle( lineBorder->capStyle() );
-    pen.setJoinStyle( lineBorder->joinStyle() );
-    pen.setWidthF( coordX(lineBorder->lineWidth()) );
-    pen.setMiterLimit( lineBorder->miterLimit() );
+    pen.setColor(lineBorder->color());
+    pen.setCapStyle(lineBorder->capStyle());
+    pen.setJoinStyle(lineBorder->joinStyle());
+    pen.setWidthF(coordX(lineBorder->lineWidth()));
+    pen.setMiterLimit(lineBorder->miterLimit());
 
     return pen;
 }
 
-int WmfExport::coordX( double left )
+int WmfExport::coordX(double left)
 {
     return (int)(left * mScaleX);
 }
 
-int WmfExport::coordY( double top )
+int WmfExport::coordY(double top)
 {
     return (int)(top * mScaleY);
 }

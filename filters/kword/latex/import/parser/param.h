@@ -24,26 +24,34 @@
 
 class Param
 {
-	public:
-		Param();
-		Param(const char* key, const char* value);
-		Param(const QString& key, const QString& value);
+public:
+    Param();
+    Param(const char* key, const char* value);
+    Param(const QString& key, const QString& value);
 
-		virtual ~Param();
+    virtual ~Param();
 
-		QString getKey() const { return _key; }
+    QString getKey() const {
+        return _key;
+    }
 
-		QString getValue() const { return _value; }
+    QString getValue() const {
+        return _value;
+    }
 
-		void setKey(QString key) { _key = key; }
+    void setKey(QString key) {
+        _key = key;
+    }
 
-		void setValue(QString value) { _value = value; }
+    void setValue(QString value) {
+        _value = value;
+    }
 
-		void print(int tab = 0);
+    void print(int tab = 0);
 
-	private:
-		QString _key;
-		QString _value;
+private:
+    QString _key;
+    QString _value;
 };
 
 #endif /* __LATEXPARSER_PARAM_H__ */

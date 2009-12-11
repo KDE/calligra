@@ -21,4 +21,4 @@
 
 #include <QString>
 
-QString EscapeXmlDump( const QString& strIn );
+QString EscapeXmlDump(const QString& strIn);

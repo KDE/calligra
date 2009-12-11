@@ -28,50 +28,49 @@ AIElement::Private::Private()
     typ = AIElement::Invalid;
 }
 
-AIElement::Private::Private( Private* d )
+AIElement::Private::Private(Private* d)
 {
-  switch( d->typ )
-	{
-		case AIElement::Invalid:
-	    break;
-		case AIElement::String:
-		case AIElement::Reference:
-		case AIElement::Operator:
-	    value.ptr = new QString( *((QString*)d->value.ptr) );
-	    break;
-		case AIElement::CString:
-	    // QCString is explicit shared
-	    value.ptr = new Q3CString( *((Q3CString*)d->value.ptr) );
-	    break;
-/*		case AIElement::List:
-	    value.ptr = new QValueList<AIElement>( *((QValueList<AIElement>*)d->value.ptr) );
-	    break; */
-		case AIElement::ElementArray:
-	    value.ptr = new QVector<AIElement>( *((QVector<AIElement>*)d->value.ptr) );
-	    break;
-		case AIElement::Block:
-	    value.ptr = new QVector<AIElement>( *((QVector<AIElement>*)d->value.ptr) );
-	    break;
-		case AIElement::ByteArray:
-	    value.ptr = new QByteArray( *((QByteArray*)d->value.ptr) );
-	    break;
-		case AIElement::Int:
-	    value.i = d->value.i;
-	    break;
-		case AIElement::UInt:
-	    value.u = d->value.u;
-	    break;
-		case AIElement::Double:
-	    value.d = d->value.d;
-	    break;
-		case AIElement::Byte:
-	    value.b = d->value.b;
-	    break;
-		default:
-	    Q_ASSERT( 0 );
-	}
+    switch (d->typ) {
+    case AIElement::Invalid:
+        break;
+    case AIElement::String:
+    case AIElement::Reference:
+    case AIElement::Operator:
+        value.ptr = new QString(*((QString*)d->value.ptr));
+        break;
+    case AIElement::CString:
+        // QCString is explicit shared
+        value.ptr = new Q3CString(*((Q3CString*)d->value.ptr));
+        break;
+        /*  case AIElement::List:
+             value.ptr = new QValueList<AIElement>( *((QValueList<AIElement>*)d->value.ptr) );
+             break; */
+    case AIElement::ElementArray:
+        value.ptr = new QVector<AIElement>(*((QVector<AIElement>*)d->value.ptr));
+        break;
+    case AIElement::Block:
+        value.ptr = new QVector<AIElement>(*((QVector<AIElement>*)d->value.ptr));
+        break;
+    case AIElement::ByteArray:
+        value.ptr = new QByteArray(*((QByteArray*)d->value.ptr));
+        break;
+    case AIElement::Int:
+        value.i = d->value.i;
+        break;
+    case AIElement::UInt:
+        value.u = d->value.u;
+        break;
+    case AIElement::Double:
+        value.d = d->value.d;
+        break;
+    case AIElement::Byte:
+        value.b = d->value.b;
+        break;
+    default:
+        Q_ASSERT(0);
+    }
 
-  typ = d->typ;
+    typ = d->typ;
 }
 
 AIElement::Private::~Private()
@@ -81,37 +80,36 @@ AIElement::Private::~Private()
 
 void AIElement::Private::clear()
 {
-  switch( typ )
-	{
-		case AIElement::String:
-		case AIElement::Operator:
-		case AIElement::Reference:
-	    delete (QString*)value.ptr;
-	    break;
-		case AIElement::CString:
-	    delete (Q3CString*)value.ptr;
-	    break;
-/*		case AIElement::List:
-	    delete (QValueList<AIElement>*)value.ptr;
-	    break; */
-		case AIElement::ElementArray:
-	    delete (QVector<AIElement>*)value.ptr;
-	    break;
-		case AIElement::Block:
-	    delete (QVector<AIElement>*)value.ptr;
-	    break;
-		case AIElement::ByteArray:
-	    delete (QByteArray*)value.ptr;
-	    break;
-		case AIElement::Invalid:
-		case AIElement::Int:
-		case AIElement::UInt:
-		case AIElement::Double:
-		case AIElement::Byte:
-	    break;
-	}
+    switch (typ) {
+    case AIElement::String:
+    case AIElement::Operator:
+    case AIElement::Reference:
+        delete(QString*)value.ptr;
+        break;
+    case AIElement::CString:
+        delete(Q3CString*)value.ptr;
+        break;
+        /*  case AIElement::List:
+             delete (QValueList<AIElement>*)value.ptr;
+             break; */
+    case AIElement::ElementArray:
+        delete(QVector<AIElement>*)value.ptr;
+        break;
+    case AIElement::Block:
+        delete(QVector<AIElement>*)value.ptr;
+        break;
+    case AIElement::ByteArray:
+        delete(QByteArray*)value.ptr;
+        break;
+    case AIElement::Invalid:
+    case AIElement::Int:
+    case AIElement::UInt:
+    case AIElement::Double:
+    case AIElement::Byte:
+        break;
+    }
 
-  typ = AIElement::Invalid;
+    typ = AIElement::Invalid;
 }
 
 /*!
@@ -132,8 +130,8 @@ AIElement::AIElement()
 */
 AIElement::~AIElement()
 {
-  if ( d->deref() )
-	  delete d;
+    if (d->deref())
+        delete d;
 }
 
 /*!
@@ -141,20 +139,20 @@ AIElement::~AIElement()
   constructor. Usually this is a deep copy, but a shallow copy is made
   if the stored data type is explicitly shared, as e.g. QImage is.
 */
-AIElement::AIElement( const AIElement& p )
+AIElement::AIElement(const AIElement& p)
 {
-  d = new Private;
-  *this = p;
+    d = new Private;
+    *this = p;
 }
 
 /*!
   Constructs a new aielement with a string value, \a val.
 */
-AIElement::AIElement( const QString& val, Type type )
+AIElement::AIElement(const QString& val, Type type)
 {
-  d = new Private;
-  d->typ = type;
-  d->value.ptr = new QString( val );
+    d = new Private;
+    d->typ = type;
+    d->value.ptr = new QString(val);
 }
 
 /*!
@@ -164,11 +162,11 @@ AIElement::AIElement( const QString& val, Type type )
   constructor, we recommend passing a deep copy (see
   QCString::copy()).
 */
-AIElement::AIElement( const Q3CString& val )
+AIElement::AIElement(const Q3CString& val)
 {
-  d = new Private;
-  d->typ = CString;
-  d->value.ptr = new Q3CString( val );
+    d = new Private;
+    d->typ = CString;
+    d->value.ptr = new Q3CString(val);
 }
 
 /*!
@@ -177,54 +175,54 @@ AIElement::AIElement( const Q3CString& val )
 
   If \a val is null, the resulting aielement has type Invalid.
 */
-AIElement::AIElement( const char* val )
+AIElement::AIElement(const char* val)
 {
-  d = new Private;
-  if ( val == 0 )
-	  return;
-  d->typ = CString;
-  d->value.ptr = new Q3CString( val );
+    d = new Private;
+    if (val == 0)
+        return;
+    d->typ = CString;
+    d->value.ptr = new Q3CString(val);
 }
 
 /*!
   Constructs a new aielement with an integer value, \a val.
 */
-AIElement::AIElement( int val )
+AIElement::AIElement(int val)
 {
-  d = new Private;
-  d->typ = Int;
-  d->value.i = val;
+    d = new Private;
+    d->typ = Int;
+    d->value.i = val;
 }
 
 /*!
   Constructs a new aielement with an unsigned integer value, \a val.
 */
-AIElement::AIElement( uint val )
+AIElement::AIElement(uint val)
 {
-  d = new Private;
-  d->typ = UInt;
-  d->value.u = val;
+    d = new Private;
+    d->typ = UInt;
+    d->value.u = val;
 }
 
 /*!
   Constructs a new aielement with an byte value, \a val.
 */
-AIElement::AIElement( uchar val )
+AIElement::AIElement(uchar val)
 {
-  d = new Private;
-  d->typ = Byte;
-  d->value.b = val;
+    d = new Private;
+    d->typ = Byte;
+    d->value.b = val;
 }
 
 
 /*!
   Constructs a new aielement with a floating point value, \a val.
 */
-AIElement::AIElement( double val )
+AIElement::AIElement(double val)
 {
-  d = new Private;
-  d->typ = Double;
-  d->value.d = val;
+    d = new Private;
+    d->typ = Double;
+    d->value.d = val;
 }
 
 /*!
@@ -237,18 +235,18 @@ AIElement::AIElement( double val )
   d->value.ptr = new QValueList<AIElement>( val );
 }  */
 
-AIElement::AIElement( const QVector<AIElement>& val, Type type )
+AIElement::AIElement(const QVector<AIElement>& val, Type type)
 {
-  d = new Private;
-  d->typ = type;
-  d->value.ptr = new QVector<AIElement>( val );
+    d = new Private;
+    d->typ = type;
+    d->value.ptr = new QVector<AIElement>(val);
 }
 
-AIElement::AIElement( const QByteArray& val )
+AIElement::AIElement(const QByteArray& val)
 {
-  d = new Private;
-  d->typ = ByteArray;
-  d->value.ptr = new QByteArray( val );
+    d = new Private;
+    d->typ = ByteArray;
+    d->value.ptr = new QByteArray(val);
 }
 
 /*!
@@ -258,17 +256,17 @@ AIElement::AIElement( const QByteArray& val )
   holds an explicitly shared type such as QImage, a shallow copy
   is performed.
 */
-AIElement& AIElement::operator= ( const AIElement& aielement )
+AIElement& AIElement::operator= (const AIElement & aielement)
 {
-  AIElement& other = (AIElement&)aielement;
+    AIElement& other = (AIElement&)aielement;
 
-  other.d->ref();
-  if ( d->deref() )
-	  delete d;
+    other.d->ref();
+    if (d->deref())
+        delete d;
 
-  d = other.d;
+    d = other.d;
 
-  return *this;
+    return *this;
 }
 
 /*!
@@ -276,11 +274,11 @@ AIElement& AIElement::operator= ( const AIElement& aielement )
 */
 void AIElement::detach()
 {
-  if ( d->count == 1 )
-	return;
+    if (d->count == 1)
+        return;
 
-  d->deref();
-  d = new Private( d );
+    d->deref();
+    d = new Private(d);
 }
 
 /*!
@@ -291,7 +289,7 @@ void AIElement::detach()
 */
 const char* AIElement::typeName() const
 {
-  return typeToName( d->typ );
+    return typeToName(d->typ);
 }
 
 /*! Convert this aielement to type Invalid and free up any resources
@@ -299,42 +297,40 @@ const char* AIElement::typeName() const
 */
 void AIElement::clear()
 {
-  if ( d->count > 1 )
-  {
-	  d->deref();
-	  d = new Private;
-	  return;
-  }
+    if (d->count > 1) {
+        d->deref();
+        d = new Private;
+        return;
+    }
 
-  d->clear();
+    d->clear();
 }
 
 static const int ntypes = 11;
-static const char* const type_map[ntypes] =
-{
-  0,
+static const char* const type_map[ntypes] = {
+    0,
 //  "QValueList<AIElement>",
-  "QString",
-  "int",
-  "uint",
-  "double",
-  "QCString",
-  "Operator",
-  "Reference",
-  "QValueVector<AIElement>",
-  "QByteArray",
-  "uchar",
+    "QString",
+    "int",
+    "uint",
+    "double",
+    "QCString",
+    "Operator",
+    "Reference",
+    "QValueVector<AIElement>",
+    "QByteArray",
+    "uchar",
 };
 
 /*!
   Converts the enum representation of the storage type, \a typ, to its
   string representation.
 */
-const char* AIElement::typeToName( Type typ )
+const char* AIElement::typeToName(Type typ)
 {
-  if ( typ >= ntypes )
-	  return 0;
-  return type_map[typ];
+    if (typ >= ntypes)
+        return 0;
+    return type_map[typ];
 }
 
 /*!
@@ -344,13 +340,13 @@ const char* AIElement::typeToName( Type typ )
   If the string representation cannot be converted to any enum
   representation, the aielement is set to \c Invalid.
 */
-AIElement::Type AIElement::nameToType( const char* name )
+AIElement::Type AIElement::nameToType(const char* name)
 {
-  for ( int i = 0; i < ntypes; i++ ) {
-	  if ( !qstrcmp( type_map[i], name ) )
-	    return (Type) i;
-  }
-  return Invalid;
+    for (int i = 0; i < ntypes; i++) {
+        if (!qstrcmp(type_map[i], name))
+            return (Type) i;
+    }
+    return Invalid;
 }
 
 /*!
@@ -362,33 +358,33 @@ AIElement::Type AIElement::nameToType( const char* name )
 */
 const QString AIElement::toString() const
 {
-  if ( d->typ == CString )
-	  return QString::fromLatin1( toCString() );
-  if ( d->typ == Int )
-	  return QString::number( toInt() );
-  if ( d->typ == UInt )
-	  return QString::number( toUInt() );
-  if ( d->typ == Double )
-	  return QString::number( toDouble() );
-  if ( d->typ == Byte )
-	  return QString::number( toByte() );
-  if ( d->typ != String )
-	  return QString();
-  return *((QString*)d->value.ptr);
+    if (d->typ == CString)
+        return QString::fromLatin1(toCString());
+    if (d->typ == Int)
+        return QString::number(toInt());
+    if (d->typ == UInt)
+        return QString::number(toUInt());
+    if (d->typ == Double)
+        return QString::number(toDouble());
+    if (d->typ == Byte)
+        return QString::number(toByte());
+    if (d->typ != String)
+        return QString();
+    return *((QString*)d->value.ptr);
 }
 
 const QString AIElement::toReference() const
 {
-  if ( d->typ != Reference )
-	  return QString();
-  return *((QString*)d->value.ptr);
+    if (d->typ != Reference)
+        return QString();
+    return *((QString*)d->value.ptr);
 }
 
 const QString AIElement::toOperator() const
 {
-  if ( d->typ != Operator )
-	  return QString();
-  return *((QString*)d->value.ptr);
+    if (d->typ != Operator)
+        return QString();
+    return *((QString*)d->value.ptr);
 }
 
 /*!
@@ -399,16 +395,16 @@ const QString AIElement::toOperator() const
 */
 const Q3CString AIElement::toCString() const
 {
-  if ( d->typ == CString )
-	  return *((Q3CString*)d->value.ptr);
-  if ( d->typ == String )
-	  return ((QString*)d->value.ptr)->latin1();
-  if ( d->typ == Operator )
-	  return ((QString*)d->value.ptr)->latin1();
-  if ( d->typ == Reference )
-	  return ((QString*)d->value.ptr)->latin1();
+    if (d->typ == CString)
+        return *((Q3CString*)d->value.ptr);
+    if (d->typ == String)
+        return ((QString*)d->value.ptr)->latin1();
+    if (d->typ == Operator)
+        return ((QString*)d->value.ptr)->latin1();
+    if (d->typ == Reference)
+        return ((QString*)d->value.ptr)->latin1();
 
-  return 0;
+    return 0;
 }
 
 
@@ -421,42 +417,42 @@ const Q3CString AIElement::toCString() const
 
   \sa asInt() canCast()
 */
-int AIElement::toInt( bool * ok ) const
+int AIElement::toInt(bool * ok) const
 {
-  if( d->typ == String )
-	  return ((QString*)d->value.ptr)->toInt( ok );
-  if ( d->typ == CString )
-	  return ((Q3CString*)d->value.ptr)->toInt( ok );
-  if ( ok )
-	  *ok = canCast( UInt );
-  if( d->typ == Int )
-	  return d->value.i;
-  if( d->typ == UInt )
-	  return (int)d->value.u;
-  if( d->typ == Byte )
-	  return (int)d->value.b;
-  if ( d->typ == Double )
-	  return (int)d->value.d;
-  return 0;
+    if (d->typ == String)
+        return ((QString*)d->value.ptr)->toInt(ok);
+    if (d->typ == CString)
+        return ((Q3CString*)d->value.ptr)->toInt(ok);
+    if (ok)
+        *ok = canCast(UInt);
+    if (d->typ == Int)
+        return d->value.i;
+    if (d->typ == UInt)
+        return (int)d->value.u;
+    if (d->typ == Byte)
+        return (int)d->value.b;
+    if (d->typ == Double)
+        return (int)d->value.d;
+    return 0;
 }
 
-uchar AIElement::toByte( bool * ok ) const
+uchar AIElement::toByte(bool * ok) const
 {
-  if( d->typ == String )
-	  return ((QString*)d->value.ptr)->toShort( ok );
-  if ( d->typ == CString )
-	  return ((Q3CString*)d->value.ptr)->toShort( ok );
-  if ( ok )
-	  *ok = canCast( UInt );
-  if( d->typ == Byte )
-	  return d->value.b;
-  if( d->typ == Int )
-	  return (uchar)d->value.i;
-  if( d->typ == UInt )
-	  return (uchar)d->value.u;
-  if ( d->typ == Double )
-	  return (uchar)d->value.d;
-  return 0;
+    if (d->typ == String)
+        return ((QString*)d->value.ptr)->toShort(ok);
+    if (d->typ == CString)
+        return ((Q3CString*)d->value.ptr)->toShort(ok);
+    if (ok)
+        *ok = canCast(UInt);
+    if (d->typ == Byte)
+        return d->value.b;
+    if (d->typ == Int)
+        return (uchar)d->value.i;
+    if (d->typ == UInt)
+        return (uchar)d->value.u;
+    if (d->typ == Double)
+        return (uchar)d->value.d;
+    return 0;
 }
 
 
@@ -469,24 +465,24 @@ uchar AIElement::toByte( bool * ok ) const
 
   \sa asUInt()
 */
-uint AIElement::toUInt( bool * ok ) const
+uint AIElement::toUInt(bool * ok) const
 {
-  if( d->typ == String )
-	  return ((QString*)d->value.ptr)->toUInt( ok );
-  if ( d->typ == CString )
-	  return ((Q3CString*)d->value.ptr)->toUInt( ok );
-  if ( ok )
-	  *ok = canCast( UInt );
-  if( d->typ == Int )
-	  return d->value.i;
-  if( d->typ == UInt )
-	  return (int)d->value.u;
-  if( d->typ == Byte )
-	  return (int)d->value.b;
-  if ( d->typ == Double )
-	  return (int)d->value.d;
+    if (d->typ == String)
+        return ((QString*)d->value.ptr)->toUInt(ok);
+    if (d->typ == CString)
+        return ((Q3CString*)d->value.ptr)->toUInt(ok);
+    if (ok)
+        *ok = canCast(UInt);
+    if (d->typ == Int)
+        return d->value.i;
+    if (d->typ == UInt)
+        return (int)d->value.u;
+    if (d->typ == Byte)
+        return (int)d->value.b;
+    if (d->typ == Double)
+        return (int)d->value.d;
 
-  return 0;
+    return 0;
 }
 
 /*!
@@ -498,23 +494,23 @@ uint AIElement::toUInt( bool * ok ) const
 
   \sa asDouble()
 */
-double AIElement::toDouble( bool * ok ) const
+double AIElement::toDouble(bool * ok) const
 {
-  if( d->typ == String )
-	  return ((QString*)d->value.ptr)->toDouble( ok );
-  if ( d->typ == CString )
-	  return ((Q3CString*)d->value.ptr)->toDouble( ok );
-  if ( ok )
-	  *ok = canCast( Double );
-  if ( d->typ == Double )
-	  return d->value.d;
-  if ( d->typ == Int )
-	  return (double)d->value.i;
-  if ( d->typ == UInt )
-	  return (double)d->value.u;
-  if ( d->typ == Byte )
-	  return (double)d->value.b;
-  return 0.0;
+    if (d->typ == String)
+        return ((QString*)d->value.ptr)->toDouble(ok);
+    if (d->typ == CString)
+        return ((Q3CString*)d->value.ptr)->toDouble(ok);
+    if (ok)
+        *ok = canCast(Double);
+    if (d->typ == Double)
+        return d->value.d;
+    if (d->typ == Int)
+        return (double)d->value.i;
+    if (d->typ == UInt)
+        return (double)d->value.u;
+    if (d->typ == Byte)
+        return (double)d->value.b;
+    return 0.0;
 }
 
 /*!
@@ -527,8 +523,8 @@ double AIElement::toDouble( bool * ok ) const
     QValueList<AIElement> list = myAIElement.toList();
     QValueList<AIElement>::Iterator it = list.begin();
     while( it != list.end() ) {
-	myProcessing( *it );
-	++it;
+ myProcessing( *it );
+ ++it;
     }
     \endcode
 
@@ -537,34 +533,34 @@ double AIElement::toDouble( bool * ok ) const
 /* const QValueList<AIElement> AIElement::toList() const
 {
   if ( d->typ == List )
-	  return *((QValueList<AIElement>*)d->value.ptr);
+   return *((QValueList<AIElement>*)d->value.ptr);
   return QValueList<AIElement>();
 } */
 
 const QVector<AIElement> AIElement::toElementArray() const
 {
-  if ( d->typ == ElementArray )
-	  return *((QVector<AIElement>*)d->value.ptr);
-  return QVector<AIElement>();
+    if (d->typ == ElementArray)
+        return *((QVector<AIElement>*)d->value.ptr);
+    return QVector<AIElement>();
 }
 
 const QVector<AIElement> AIElement::toBlock() const
 {
-  if ( d->typ == Block )
-	  return *((QVector<AIElement>*)d->value.ptr);
-  return QVector<AIElement>();
+    if (d->typ == Block)
+        return *((QVector<AIElement>*)d->value.ptr);
+    return QVector<AIElement>();
 }
 
 
 const QByteArray AIElement::toByteArray() const
 {
-  if ( d->typ == ByteArray )
-	  return *((QByteArray*)d->value.ptr);
-  return QByteArray();
+    if (d->typ == ByteArray)
+        return *((QByteArray*)d->value.ptr);
+    return QByteArray();
 }
 
 #define Q_VARIANT_AS( f ) Q##f& AIElement::as##f() { \
-   if ( d->typ != f ) *this = AIElement( to##f() ); else detach(); return *((Q##f*)d->value.ptr);}
+        if ( d->typ != f ) *this = AIElement( to##f() ); else detach(); return *((Q##f*)d->value.ptr);}
 
 Q_VARIANT_AS(String)
 //Q_VARIANT_AS(CString)
@@ -574,14 +570,14 @@ Q_VARIANT_AS(String)
 */
 int& AIElement::asInt()
 {
-  detach();
-  if ( d->typ != Int ) {
-	  int i = toInt();
-	  d->clear();
- 	  d->value.i = i;
-	  d->typ = Int;
-  }
-  return d->value.i;
+    detach();
+    if (d->typ != Int) {
+        int i = toInt();
+        d->clear();
+        d->value.i = i;
+        d->typ = Int;
+    }
+    return d->value.i;
 }
 
 /*!
@@ -589,14 +585,14 @@ int& AIElement::asInt()
 */
 uint& AIElement::asUInt()
 {
-  detach();
-  if ( d->typ != UInt ) {
-	  uint u = toUInt();
-	  d->clear();
-	  d->value.u = u;
-	  d->typ = UInt;
-  }
-  return d->value.u;
+    detach();
+    if (d->typ != UInt) {
+        uint u = toUInt();
+        d->clear();
+        d->value.u = u;
+        d->typ = UInt;
+    }
+    return d->value.u;
 }
 
 /*!
@@ -604,13 +600,13 @@ uint& AIElement::asUInt()
 */
 double& AIElement::asDouble()
 {
-  if ( d->typ != Double ) {
-	  double dbl = toDouble();
-	  d->clear();
-	  d->value.d = dbl;
-	  d->typ = Double;
-  }
-  return d->value.d;
+    if (d->typ != Double) {
+        double dbl = toDouble();
+        d->clear();
+        d->value.d = dbl;
+        d->typ = Double;
+    }
+    return d->value.d;
 }
 
 /*!
@@ -618,14 +614,14 @@ double& AIElement::asDouble()
 */
 uchar& AIElement::asByte()
 {
-  detach();
-  if ( d->typ != Byte ) {
-	  uchar b = toByte();
-	  d->clear();
- 	  d->value.b = b;
-	  d->typ = Byte;
-  }
-  return d->value.b;
+    detach();
+    if (d->typ != Byte) {
+        uchar b = toByte();
+        d->clear();
+        d->value.b = b;
+        d->typ = Byte;
+    }
+    return d->value.b;
 }
 
 
@@ -638,38 +634,38 @@ uchar& AIElement::asByte()
     QValueList<AIElement> list = myAIElement.asList();
     QValueList<AIElement>::Iterator it = list.begin();
     while( it != list.end() ) {
-	myProcessing( *it );
-	++it;
+ myProcessing( *it );
+ ++it;
     }
     \endcode
 */
 /* QValueList<AIElement>& AIElement::asList()
 {
   if ( d->typ != List )
-	  *this = AIElement( toList() );
+   *this = AIElement( toList() );
   return *((QValueList<AIElement>*)d->value.ptr);
 }  */
 
 QVector<AIElement>& AIElement::asElementArray()
 {
-  if ( d->typ != ElementArray )
-	  *this = AIElement( toElementArray() );
-  return *((QVector<AIElement>*)d->value.ptr);
+    if (d->typ != ElementArray)
+        *this = AIElement(toElementArray());
+    return *((QVector<AIElement>*)d->value.ptr);
 }
 
 QVector<AIElement>& AIElement::asBlock()
 {
-  if ( d->typ != Block )
-	  *this = AIElement( toBlock() );
-  return *((QVector<AIElement>*)d->value.ptr);
+    if (d->typ != Block)
+        *this = AIElement(toBlock());
+    return *((QVector<AIElement>*)d->value.ptr);
 }
 
 
 QByteArray& AIElement::asByteArray()
 {
-  if ( d->typ != ByteArray )
-	  *this = AIElement( toByteArray() );
-  return *((QByteArray*)d->value.ptr);
+    if (d->typ != ByteArray)
+        *this = AIElement(toByteArray());
+    return *((QByteArray*)d->value.ptr);
 }
 
 /*!
@@ -686,27 +682,27 @@ QByteArray& AIElement::asByteArray()
   <li> UInt => String, Double, Int
   </ul>
 */
-bool AIElement::canCast( Type t ) const
+bool AIElement::canCast(Type t) const
 {
-  if ( d->typ == t )
-	  return true;
-  if ( t == Int && ( d->typ == String || d->typ == Double || d->typ == UInt || d->typ == Byte) )
-	  return true;
-  if ( t == UInt && ( d->typ == String || d->typ == Double || d->typ == Int || d->typ == Byte) )
-	  return true;
-  if ( t == Double && ( d->typ == String || d->typ == Int || d->typ == UInt || d->typ == Byte) )
-	  return true;
-  if ( t == CString && d->typ == String )
-	  return true;
-  if ( t == String && ( d->typ == CString || d->typ == Int || d->typ == UInt || d->typ == Double || d->typ == Byte) )
-	  return true;
+    if (d->typ == t)
+        return true;
+    if (t == Int && (d->typ == String || d->typ == Double || d->typ == UInt || d->typ == Byte))
+        return true;
+    if (t == UInt && (d->typ == String || d->typ == Double || d->typ == Int || d->typ == Byte))
+        return true;
+    if (t == Double && (d->typ == String || d->typ == Int || d->typ == UInt || d->typ == Byte))
+        return true;
+    if (t == CString && d->typ == String)
+        return true;
+    if (t == String && (d->typ == CString || d->typ == Int || d->typ == UInt || d->typ == Double || d->typ == Byte))
+        return true;
 
-  return false;
+    return false;
 }
 
 /*!
   \brief Casts the aielement to the requested type.
-  
+
   If the cast cannot be
   done, the aielement is set to the default value of the requested type
   (e.g. an empty string if the requested type \p t is
@@ -719,85 +715,85 @@ bool AIElement::canCast( Type t ) const
   \see canCast()
 */
 
-bool AIElement::cast( Type t )
+bool AIElement::cast(Type t)
 {
-  switch ( t ) {
-/*    case AIElement::List:
-	    asList();
-	    break; */
+    switch (t) {
+        /*    case AIElement::List:
+             asList();
+             break; */
     case AIElement::ElementArray:
-	    asElementArray();
-	    break;
+        asElementArray();
+        break;
     case AIElement::Block:
-	    asBlock();
-	    break;
+        asBlock();
+        break;
     case AIElement::String:
-	    asString();
-	    break;
+        asString();
+        break;
     case AIElement::Int:
-	    asInt();
-	    break;
+        asInt();
+        break;
     case AIElement::UInt:
-	    asUInt();
-	    break;
+        asUInt();
+        break;
     case AIElement::Double:
-	    asDouble();
-	    break;
+        asDouble();
+        break;
 #ifdef __GNUC__
 #warning "KDE4: TODO how port it"
 #endif
-#if 0		
+#if 0
     case AIElement::CString:
-	    asCString();
-	    break;
-#endif		
+        asCString();
+        break;
+#endif
     case AIElement::Byte:
-	    asByte();
-	    break;
+        asByte();
+        break;
     case AIElement::ByteArray:
-	    asByteArray();
-	    break;
+        asByteArray();
+        break;
     default:
-	    case AIElement::Invalid:
-	    (*this) = AIElement();
-  }
-  return canCast( t );
+    case AIElement::Invalid:
+        (*this) = AIElement();
+    }
+    return canCast(t);
 }
 
 /*!  Compares this AIElement with \a v and returns true if they are
   equal; otherwise returns false.
 */
 
-bool AIElement::operator==( const AIElement &v ) const
+bool AIElement::operator==(const AIElement &v) const
 {
-  if ( !v.canCast( type() ) )
-	  return false;
-  switch( d->typ ) {
-/*    case List:
-	     return v.toList() == toList(); */
+    if (!v.canCast(type()))
+        return false;
+    switch (d->typ) {
+        /*    case List:
+              return v.toList() == toList(); */
     case ElementArray:
-	     return v.toElementArray() == toElementArray();
+        return v.toElementArray() == toElementArray();
     case Block:
-	     return v.toBlock() == toBlock();
+        return v.toBlock() == toBlock();
     case ByteArray:
-	     return v.toByteArray() == toByteArray();
+        return v.toByteArray() == toByteArray();
 
     case String:
-	     return v.toString() == toString();
+        return v.toString() == toString();
     case Operator:
-	     return v.toOperator() == toOperator();
+        return v.toOperator() == toOperator();
     case Reference:
-	     return v.toReference() == toReference();
+        return v.toReference() == toReference();
     case CString:
-	     return v.toCString() == toCString();
+        return v.toCString() == toCString();
     case Int:
-	     return v.toInt() == toInt();
+        return v.toInt() == toInt();
     case UInt:
-	     return v.toUInt() == toUInt();
+        return v.toUInt() == toUInt();
     case Byte:
-	     return v.toByte() == toByte();
+        return v.toByte() == toByte();
     case Invalid:
-	     break;
+        break;
     }
     return false;
 }
@@ -806,7 +802,7 @@ bool AIElement::operator==( const AIElement &v ) const
   not equal; otherwise returns false.
 */
 
-bool AIElement::operator!=( const AIElement &v ) const
+bool AIElement::operator!=(const AIElement &v) const
 {
-    return !( v == *this );
+    return !(v == *this);
 }

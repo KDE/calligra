@@ -30,8 +30,8 @@ public:
     explicit KWord13PostParsing(void);
     ~KWord13PostParsing(void);
 public:
-    bool postParsePictures( KoStore* store );
-    bool postParse( KoStore* store, KWord13Document& doc );
+    bool postParsePictures(KoStore* store);
+    bool postParse(KoStore* store, KWord13Document& doc);
 protected:
     KWord13Document* m_kwordDocument;
 };

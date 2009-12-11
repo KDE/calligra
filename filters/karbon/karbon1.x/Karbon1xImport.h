@@ -42,31 +42,31 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-    bool parseRoot( QIODevice* io );
+    bool parseRoot(QIODevice* io);
 
-    bool convert( const KoXmlDocument & );
-    bool loadXML( const KoXmlElement& doc );
+    bool convert(const KoXmlDocument &);
+    bool loadXML(const KoXmlElement& doc);
 
-    void loadGroup( KoShapeContainer * parent, const KoXmlElement &element );
-    void loadStyle( KoShape * shape, const KoXmlElement &element );
-    void loadCommon( KoShape * shape, const KoXmlElement &element );
-    void loadStroke( KoShape * shape, const KoXmlElement &element );
-    void loadFill( KoShape * shape, const KoXmlElement &element );
-    QColor loadColor( const KoXmlElement &element );
-    QVector<qreal> loadDashes( const KoXmlElement& element );
-    QBrush loadGradient( KoShape * shape, const KoXmlElement &element );
-    void loadPattern( KoShape * shape, const KoXmlElement &element );
+    void loadGroup(KoShapeContainer * parent, const KoXmlElement &element);
+    void loadStyle(KoShape * shape, const KoXmlElement &element);
+    void loadCommon(KoShape * shape, const KoXmlElement &element);
+    void loadStroke(KoShape * shape, const KoXmlElement &element);
+    void loadFill(KoShape * shape, const KoXmlElement &element);
+    QColor loadColor(const KoXmlElement &element);
+    QVector<qreal> loadDashes(const KoXmlElement& element);
+    QBrush loadGradient(KoShape * shape, const KoXmlElement &element);
+    void loadPattern(KoShape * shape, const KoXmlElement &element);
 
-    KoShape * loadPath( const KoXmlElement &element );
-    KoShape * loadEllipse( const KoXmlElement &element );
-    KoShape * loadRect( const KoXmlElement &element );
-    KoShape * loadPolyline( const KoXmlElement &element );
-    KoShape * loadPolygon( const KoXmlElement &element );
-    KoShape * loadSinus( const KoXmlElement &element );
-    KoShape * loadSpiral( const KoXmlElement &element );
-    KoShape * loadStar( const KoXmlElement &element );
-    KoShape * loadImage( const KoXmlElement &element );
-    KoShape * loadText( const KoXmlElement &element );
+    KoShape * loadPath(const KoXmlElement &element);
+    KoShape * loadEllipse(const KoXmlElement &element);
+    KoShape * loadRect(const KoXmlElement &element);
+    KoShape * loadPolyline(const KoXmlElement &element);
+    KoShape * loadPolygon(const KoXmlElement &element);
+    KoShape * loadSinus(const KoXmlElement &element);
+    KoShape * loadSpiral(const KoXmlElement &element);
+    KoShape * loadStar(const KoXmlElement &element);
+    KoShape * loadImage(const KoXmlElement &element);
+    KoShape * loadText(const KoXmlElement &element);
 
     double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);

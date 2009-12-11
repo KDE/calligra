@@ -24,7 +24,8 @@
 #include "ustring.h"
 #include <vector>
 
-namespace Swinder {
+namespace Swinder
+{
 
 class Sheet;
 class FormulaToken;
@@ -66,44 +67,44 @@ class DefaultColWidthRecord;
 class WorksheetSubStreamHandler : public SubStreamHandler
 {
 public:
-    WorksheetSubStreamHandler( Sheet* sheet, const GlobalsSubStreamHandler* globals );
+    WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals);
     virtual ~WorksheetSubStreamHandler();
 
-    virtual void handleRecord( Record* record );
+    virtual void handleRecord(Record* record);
 private:
-    void handleBOF( BOFRecord* record );
-    void handleBlank( BlankRecord* record );
-    void handleBoolErr( BoolErrRecord* record );
-    void handleBottomMargin( BottomMarginRecord* record );
-    void handleCalcMode( CalcModeRecord* record );
-    void handleColInfo( ColInfoRecord* record );
-    void handleDataTable( DataTableRecord* record );
-    void handleDimension( DimensionRecord* record );
-    void handleFormula( FormulaRecord* record );
-    void handleFooter( FooterRecord* record );
-    void handleHeader( HeaderRecord* record );
-    void handleLabel( LabelRecord* record );
-    void handleLabelSST( LabelSSTRecord* record );
-    void handleLeftMargin( LeftMarginRecord* record );
-    void handleMergedCells( MergedCellsRecord* record );
-    void handleMulBlank( MulBlankRecord* record );
-    void handleMulRK( MulRKRecord* record );
-    void handleNumber( NumberRecord* record );
-    void handleRightMargin( RightMarginRecord* record );
-    void handleRK( RKRecord* record );
-    void handleRow( RowRecord* record );
-    void handleRString( RStringRecord* record );
-    void handleSharedFormula( SharedFormulaRecord* record );
-    void handleString( StringRecord* record );
-    void handleTopMargin( TopMarginRecord* record );
-    void handleLink( HLinkRecord* record );
-    void handleNote( NoteRecord* record );
-    void handleObj( ObjRecord* record );
-    void handleDefaultRowHeight( DefaultRowHeightRecord* record );
-    void handleDefaultColWidth( DefaultColWidthRecord* record );
+    void handleBOF(BOFRecord* record);
+    void handleBlank(BlankRecord* record);
+    void handleBoolErr(BoolErrRecord* record);
+    void handleBottomMargin(BottomMarginRecord* record);
+    void handleCalcMode(CalcModeRecord* record);
+    void handleColInfo(ColInfoRecord* record);
+    void handleDataTable(DataTableRecord* record);
+    void handleDimension(DimensionRecord* record);
+    void handleFormula(FormulaRecord* record);
+    void handleFooter(FooterRecord* record);
+    void handleHeader(HeaderRecord* record);
+    void handleLabel(LabelRecord* record);
+    void handleLabelSST(LabelSSTRecord* record);
+    void handleLeftMargin(LeftMarginRecord* record);
+    void handleMergedCells(MergedCellsRecord* record);
+    void handleMulBlank(MulBlankRecord* record);
+    void handleMulRK(MulRKRecord* record);
+    void handleNumber(NumberRecord* record);
+    void handleRightMargin(RightMarginRecord* record);
+    void handleRK(RKRecord* record);
+    void handleRow(RowRecord* record);
+    void handleRString(RStringRecord* record);
+    void handleSharedFormula(SharedFormulaRecord* record);
+    void handleString(StringRecord* record);
+    void handleTopMargin(TopMarginRecord* record);
+    void handleLink(HLinkRecord* record);
+    void handleNote(NoteRecord* record);
+    void handleObj(ObjRecord* record);
+    void handleDefaultRowHeight(DefaultRowHeightRecord* record);
+    void handleDefaultColWidth(DefaultColWidthRecord* record);
 
-    UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
-    UString dataTableFormula( unsigned row, unsigned col, const DataTableRecord* record );
+    UString decodeFormula(unsigned row, unsigned col, const FormulaTokens& tokens);
+    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
 
     class Private;
     Private * const d;

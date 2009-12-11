@@ -43,227 +43,212 @@
 using namespace KSpread;
 
 typedef KGenericFactory<QpImport> QPROImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libqproimport, QPROImportFactory("kofficefilters"))
 
 // ---------------------------------------------------------------
 
 QpTableList::QpTableList()
 {
-   for( int lIdx=0; lIdx<cNameCnt; ++lIdx )
-   {
-      cTable[lIdx] = 0;
-   }
+    for (int lIdx = 0; lIdx < cNameCnt; ++lIdx) {
+        cTable[lIdx] = 0;
+    }
 }
 
 QpTableList::~QpTableList()
 {
-   // don't delete the list of tables
+    // don't delete the list of tables
 }
 
 
 void
 QpTableList::table(unsigned pIdx, Sheet* pTable)
 {
-   if(pIdx < cNameCnt)
-   {
-      cTable[pIdx] = pTable;
-   }
+    if (pIdx < cNameCnt) {
+        cTable[pIdx] = pTable;
+    }
 }
 
 Sheet*
 QpTableList::table(unsigned pIdx)
 {
-   return (pIdx < cNameCnt ? cTable[pIdx] : 0);
+    return (pIdx < cNameCnt ? cTable[pIdx] : 0);
 }
 
 
 // ---------------------------------------------------------------
 
-QpImport::QpImport( QObject* parent, const QStringList& )
- : KoFilter(parent)
+QpImport::QpImport(QObject* parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
 void
 QpImport::InitTableName(int pIdx, QString& pResult)
 {
-   if( pIdx < 26 )
-   {
-      pResult = (char)('A' + pIdx);
-   }
-   else
-   {
-      pResult = (char)('A' -1 + pIdx / 26);
-      pResult += (char)('A' + pIdx % 26);
-   }
+    if (pIdx < 26) {
+        pResult = (char)('A' + pIdx);
+    } else {
+        pResult = (char)('A' -1 + pIdx / 26);
+        pResult += (char)('A' + pIdx % 26);
+    }
 }
 
-KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    bool bSuccess=true;
+    bool bSuccess = true;
 
     KoDocument* document = m_chain->outputDocument();
-    if ( !document )
+    if (!document)
         return KoFilter::StupidError;
 
-    kDebug(30523) <<"here we go..." << document->metaObject()->className();
+    kDebug(30523) << "here we go..." << document->metaObject()->className();
 
-    if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
-    {
+    if (!::qobject_cast<const KSpread::Doc *>(document)) {   // it's safer that way :)
         kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
-    if(from!="application/x-quattropro" || to!="application/x-kspread")
-    {
+    if (from != "application/x-quattropro" || to != "application/x-kspread") {
         kWarning(30501) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
-    kDebug(30523) <<"...still here...";
+    kDebug(30523) << "...still here...";
 
     // No need for a dynamic cast here, since we use Qt's moc magic
-    Doc *ksdoc=(Doc*)document;
+    Doc *ksdoc = (Doc*)document;
 
-    if(ksdoc->mimeType()!="application/x-kspread")
-    {
+    if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
-    QpIStream lIn( QFile::encodeName(m_chain->inputFile()) );
+    QpIStream lIn(QFile::encodeName(m_chain->inputFile()));
 
-    if( !lIn )
-    {
-        KMessageBox::sorry( 0L, i18n("QPRO filter cannot open input file - please report.") );
+    if (!lIn) {
+        KMessageBox::sorry(0L, i18n("QPRO filter cannot open input file - please report."));
         return KoFilter::FileNotFound;
     }
 
-    Sheet *table=0;
+    Sheet *table = 0;
 
     QString field;
-    int value=0;
+    int value = 0;
     emit sigProgress(value);
 
-   QpRecFactory            lFactory(lIn);
-   QpTableList             lTableNames;
-   QP_UINT8                lPageIdx = 0;
+    QpRecFactory            lFactory(lIn);
+    QpTableList             lTableNames;
+    QP_UINT8                lPageIdx = 0;
 
-   QpRec*                  lRec = 0;
-   QpRecBop*               lRecBop = 0;
-   QpRecIntegerCell*       lRecInt = 0;
-   QpRecFloatingPointCell* lRecFloat = 0;
-   QpRecFormulaCell*       lRecFormula = 0;
-   QpRecLabelCell*         lRecLabel = 0;
-   QpRecPageName*          lRecPageName = 0;
+    QpRec*                  lRec = 0;
+    QpRecBop*               lRecBop = 0;
+    QpRecIntegerCell*       lRecInt = 0;
+    QpRecFloatingPointCell* lRecFloat = 0;
+    QpRecFormulaCell*       lRecFormula = 0;
+    QpRecLabelCell*         lRecLabel = 0;
+    QpRecPageName*          lRecPageName = 0;
 
-   do
-   {
-      field = "";
-      lRec  = lFactory.nextRecord();
+    do {
+        field = "";
+        lRec  = lFactory.nextRecord();
 
-      switch( lRec->type() )
-      {
-      case QpBop:
-         lRecBop = (QpRecBop*)lRec;
-         lPageIdx = lRecBop->pageIndex();
+        switch (lRec->type()) {
+        case QpBop:
+            lRecBop = (QpRecBop*)lRec;
+            lPageIdx = lRecBop->pageIndex();
 
-         // find out if we know about this table already, if not create it
-         table=lTableNames.table(lPageIdx);
+            // find out if we know about this table already, if not create it
+            table = lTableNames.table(lPageIdx);
 
-         if( table == 0 )
-         {
-            table=ksdoc->map()->addNewSheet();
-            // set up a default name for the table
-            table->setSheetName( lTableNames.name(lPageIdx)
-                               , true
-                               );
-            lTableNames.table(lPageIdx, table);
-         }
-         break;
-
-      case QpIntegerCell:
-         lRecInt = (QpRecIntegerCell*)lRec;
-         field.setNum( lRecInt->integer() );
-//cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
-         if( table )
-            setText(table, lRecInt->row()+1, ((unsigned)lRecInt->column())+1, field, false);
-         break;
-
-      case QpFormulaCell:
-         lRecFormula = (QpRecFormulaCell*)lRec;
-         {
-            QuattroPro::Formula lAnswer(*lRecFormula, lTableNames);
-
-            char*     lFormula = lAnswer.formula();
-
-            field = lFormula;
-
-            delete [] lFormula;
-         }
-
-         // check for referenced tables that haven't been created yet
-         for(unsigned lIdx=0; lIdx<lTableNames.cNameCnt; ++lIdx)
-         {
-            if(lTableNames.allocated(lIdx) && (lTableNames.table(lIdx) == 0) )
-            {
-               // we're about to reference a table that hasn't been created yet.
-               // setText gets upset about this, so create a blank table
-
-               Sheet* lNewTable=ksdoc->map()->addNewSheet();
-
-               // set up a default name for the table
-               lNewTable->setSheetName( lTableNames.name(lIdx)
-                                      , true
-                                      );
-               lTableNames.table(lIdx, lNewTable);
+            if (table == 0) {
+                table = ksdoc->map()->addNewSheet();
+                // set up a default name for the table
+                table->setSheetName(lTableNames.name(lPageIdx)
+                                    , true
+                                   );
+                lTableNames.table(lPageIdx, table);
             }
-         }
+            break;
 
-         if( table )
-            setText(table, lRecFormula->row()+1, lRecFormula->column()+1, field, false);
-         break;
+        case QpIntegerCell:
+            lRecInt = (QpRecIntegerCell*)lRec;
+            field.setNum(lRecInt->integer());
+//cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
+            if (table)
+                setText(table, lRecInt->row() + 1, ((unsigned)lRecInt->column()) + 1, field, false);
+            break;
 
-      case QpFloatingPointCell:
-         lRecFloat = (QpRecFloatingPointCell*)lRec;
-         field.setNum( lRecFloat->value() );
-         if( table )
-            setText(table, lRecFloat->row()+1, lRecFloat->column()+1, field, false);
-         break;
+        case QpFormulaCell:
+            lRecFormula = (QpRecFormulaCell*)lRec;
+            {
+                QuattroPro::Formula lAnswer(*lRecFormula, lTableNames);
 
-      case QpLabelCell:
-         lRecLabel = (QpRecLabelCell*)lRec;
-         field = "'";
-         field += lRecLabel->label();
-         if( table )
-            setText(table, lRecLabel->row()+1, lRecLabel->column()+1, field, false);
-         break;
+                char*     lFormula = lAnswer.formula();
 
-      case QpPageName:
-         lRecPageName = (QpRecPageName*)lRec;
+                field = lFormula;
 
-         if( lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx) )
-         {
-            lTableNames.table(lPageIdx)->setSheetName( lRecPageName->pageName()
+                delete [] lFormula;
+            }
+
+            // check for referenced tables that haven't been created yet
+            for (unsigned lIdx = 0; lIdx < lTableNames.cNameCnt; ++lIdx) {
+                if (lTableNames.allocated(lIdx) && (lTableNames.table(lIdx) == 0)) {
+                    // we're about to reference a table that hasn't been created yet.
+                    // setText gets upset about this, so create a blank table
+
+                    Sheet* lNewTable = ksdoc->map()->addNewSheet();
+
+                    // set up a default name for the table
+                    lNewTable->setSheetName(lTableNames.name(lIdx)
+                                            , true
+                                           );
+                    lTableNames.table(lIdx, lNewTable);
+                }
+            }
+
+            if (table)
+                setText(table, lRecFormula->row() + 1, lRecFormula->column() + 1, field, false);
+            break;
+
+        case QpFloatingPointCell:
+            lRecFloat = (QpRecFloatingPointCell*)lRec;
+            field.setNum(lRecFloat->value());
+            if (table)
+                setText(table, lRecFloat->row() + 1, lRecFloat->column() + 1, field, false);
+            break;
+
+        case QpLabelCell:
+            lRecLabel = (QpRecLabelCell*)lRec;
+            field = "'";
+            field += lRecLabel->label();
+            if (table)
+                setText(table, lRecLabel->row() + 1, lRecLabel->column() + 1, field, false);
+            break;
+
+        case QpPageName:
+            lRecPageName = (QpRecPageName*)lRec;
+
+            if (lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx)) {
+                lTableNames.table(lPageIdx)->setSheetName(lRecPageName->pageName()
 //                                                     , true
-                                                     );
-            lTableNames.name(lPageIdx, lRecPageName->pageName());
-         }
-         break;
+                                                         );
+                lTableNames.name(lPageIdx, lRecPageName->pageName());
+            }
+            break;
 
-      case QpPassword:
-        KMessageBox::sorry( 0L, i18n("Unable to open password protected files.\n"
-                                     "The password algorithm has not been published")
-                          );
+        case QpPassword:
+            KMessageBox::sorry(0L, i18n("Unable to open password protected files.\n"
+                                        "The password algorithm has not been published")
+                              );
+            delete lRec;
+            return KoFilter::NotImplemented;
+        }
+
         delete lRec;
-        return KoFilter::NotImplemented;
-      }
-
-      delete lRec;
-      lRec = 0;
-   } while( lIn );
+        lRec = 0;
+    } while (lIn);
 
     emit sigProgress(100);
-    if ( bSuccess )
+    if (bSuccess)
         return KoFilter::OK;
     else
         return KoFilter::StupidError;
@@ -279,7 +264,7 @@ void QpImport::setText(Sheet* sheet, int _row, int _column, const QString& _text
     command->execute();
 
     //refresh anchor
-    if ((!_text.isEmpty()) && (_text.at(0)=='!')) {
+    if ((!_text.isEmpty()) && (_text.at(0) == '!')) {
         sheet->updateView(KSpread::Region(_column, _row, sheet));
     }
 }

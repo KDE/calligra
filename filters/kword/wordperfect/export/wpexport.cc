@@ -35,42 +35,42 @@
 #include <wp6.h>
 
 typedef KGenericFactory<WPExport> WPExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libwpexport, WPExportFactory("kofficefilters"))
 
-WPExport::WPExport( QObject* parent, const QStringList& ):
-                     KoFilter(parent)
+WPExport::WPExport(QObject* parent, const QStringList&):
+        KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
-WPExport::convert( const QByteArray& from,
-  const QByteArray& to )
+WPExport::convert(const QByteArray& from,
+                  const QByteArray& to)
 {
-  // check for proper conversion
-  if( to!= "application/wordperfect" || from != "application/x-kword" )
-     return KoFilter::NotImplemented;
+    // check for proper conversion
+    if (to != "application/wordperfect" || from != "application/x-kword")
+        return KoFilter::NotImplemented;
 
-  // document version is determined using file extension,
-  // "WP" is for WP 5.x, "WPD" or else is for WP 6/7
-  // e.g /home/ariya/test.wp is a WP 5 document
-  // TODO ask user with a dialog box
-  QString outfile = m_chain->outputFile();
-  QString extension = QFileInfo( outfile ).extension().lower();
-  int version = ( extension == "wp" ) ? 5 : 6 ;
+    // document version is determined using file extension,
+    // "WP" is for WP 5.x, "WPD" or else is for WP 6/7
+    // e.g /home/ariya/test.wp is a WP 5 document
+    // TODO ask user with a dialog box
+    QString outfile = m_chain->outputFile();
+    QString extension = QFileInfo(outfile).extension().lower();
+    int version = (extension == "wp") ? 5 : 6 ;
 
-  KWEFBaseWorker* worker;
-  if( version == 5 ) worker = new WPFiveWorker();
-  else worker = new WPSixWorker();
+    KWEFBaseWorker* worker;
+    if (version == 5) worker = new WPFiveWorker();
+    else worker = new WPSixWorker();
 
-  KWEFKWordLeader* leader = new KWEFKWordLeader( worker );
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-  KoFilter::ConversionStatus result;
-  result = leader->convert( m_chain, from, to );
+    KoFilter::ConversionStatus result;
+    result = leader->convert(m_chain, from, to);
 
-  delete worker;
-  delete leader;
+    delete worker;
+    delete leader;
 
-  return result;
+    return result;
 }
 
 #include "wpexport.moc"

@@ -34,7 +34,7 @@
 #include <memory>
 
 KoOdfWriters::KoOdfWriters()
- : content(0), body(0), meta(0), manifest(0), mainStyles(0)
+        : content(0), body(0), meta(0), manifest(0), mainStyles(0)
 {
 }
 
@@ -49,9 +49,9 @@ public:
 
 //------------------------------------------
 
-KoOdfExporter::KoOdfExporter( const QString& bodyContentElement, QObject* parent )
- : KoFilter( parent )
- , d( new Private )
+KoOdfExporter::KoOdfExporter(const QString& bodyContentElement, QObject* parent)
+        : KoFilter(parent)
+        , d(new Private)
 {
     d->bodyContentElement = QByteArray("office:") + bodyContentElement.toLatin1();
 }
@@ -61,7 +61,7 @@ KoOdfExporter::~KoOdfExporter()
     delete d;
 }
 
-KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
     if (!acceptsSourceMimeType(from)) {
@@ -75,14 +75,14 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
 
     //create output files
     std::auto_ptr<KoStore> outputStore(
-        KoStore::createStore( m_chain->outputFile(), KoStore::Write, to, KoStore::Zip ) );
-    if ( !outputStore.get() ) {
+        KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip));
+    if (!outputStore.get()) {
         kWarning(30003) << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }
     outputStore->disallowNameExpansion();
     kDebug(30003) << "created outputStore.";
-    KoOdfWriteStore oasisStore( outputStore.get() );
+    KoOdfWriteStore oasisStore(outputStore.get());
 
     kDebug(30003) << "created oasisStore.";
 
@@ -117,9 +117,9 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(d->bodyContentElement.constData());
 
-    const KoFilter::ConversionStatus result 
-        = createDocument(outputStore.get(), &writers);
-    if ( result != KoFilter::OK )
+    const KoFilter::ConversionStatus result
+    = createDocument(outputStore.get(), &writers);
+    if (result != KoFilter::OK)
         return result;
 
     //save the office:automatic-styles & and fonts in content.xml
@@ -137,7 +137,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     realBodyWriter->addCompleteElement(&bodyBuf);
 
     //now close content & body writers
-    if ( !oasisStore.closeContentWriter() ) {
+    if (!oasisStore.closeContentWriter()) {
         kWarning(30003) << "Error closing content.";
         return KoFilter::CreationError;
     }
@@ -145,10 +145,10 @@ KoFilter::ConversionStatus KoOdfExporter::convert( const QByteArray& from, const
     kDebug(30003) << "closed content & body writers.";
 
     //create the manifest file
-    KoXmlWriter* realManifestWriter = oasisStore.manifestWriter( to );
+    KoXmlWriter* realManifestWriter = oasisStore.manifestWriter(to);
     //create the styles.xml file
-    mainStyles.saveOdfStylesDotXml( outputStore.get(), realManifestWriter );
-    realManifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    mainStyles.saveOdfStylesDotXml(outputStore.get(), realManifestWriter);
+    realManifestWriter->addManifestEntry("content.xml", "text/xml");
     realManifestWriter->addCompleteElement(&manifestBuf);
 
     kDebug(30003) << "created manifest and styles.xml";

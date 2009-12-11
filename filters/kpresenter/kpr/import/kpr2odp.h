@@ -23,7 +23,8 @@
 #include <KoFilter.h>
 #include <qdom.h>
 
-class Kpr2Odp : public KoFilter {
+class Kpr2Odp : public KoFilter
+{
 
     Q_OBJECT
 
@@ -32,7 +33,7 @@ public:
 
     virtual ~Kpr2Odp() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
     QDomDocument inpdoc;

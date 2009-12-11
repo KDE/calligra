@@ -40,12 +40,12 @@
 #include <QMap>
 
 XlsxFontStyle::XlsxFontStyle()
-    : underline(NoUnderline),
-    bold(false),
-    italic(false),
-    strike(false),
-    m_size(12.0),
-    m_defaultSize(true)
+        : underline(NoUnderline),
+        bold(false),
+        italic(false),
+        strike(false),
+        m_size(12.0),
+        m_defaultSize(true)
 {
 }
 
@@ -127,8 +127,8 @@ void XlsxFontStyle::setupCharacterStyle(KoCharacterStyle* characterStyle) const
         characterStyle->underlineWidth(weight, width);
 
         kDebug() << "underlineStyle:" << characterStyle->underlineStyle()
-            << "underlineType:" << characterStyle->underlineType()
-            << "underlineWeight:" << weight;
+        << "underlineType:" << characterStyle->underlineType()
+        << "underlineWeight:" << weight;
     }
 
     if (bold)
@@ -152,16 +152,16 @@ XlsxStyles::XlsxStyles()
 
 XlsxStyles::~XlsxStyles()
 {
-    for (int i = 0; i<fontStyles.size(); i++)
+    for (int i = 0; i < fontStyles.size(); i++)
         delete fontStyles[i];
 }
 
 //----------------------------------------------------------
 
 XlsxCellFormat::XlsxCellFormat()
- : fontId(0)
- , horizontalAlignment(GeneralHorizontalAlignment)
- , verticalAlignment(NoVerticalAlignment)
+        : fontId(0)
+        , horizontalAlignment(GeneralHorizontalAlignment)
+        , verticalAlignment(NoVerticalAlignment)
 {
 }
 
@@ -257,25 +257,24 @@ void XlsxCellFormat::setupCellStyle(KoGenStyle* cellStyle) const
 //----------------------------------------------------------
 
 XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles)
-    : styles(&_styles)
+        : styles(&_styles)
 {
 }
 
-class XlsxXmlStylesReader::Private {
+class XlsxXmlStylesReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
 private:
 };
 
 XlsxXmlStylesReader::XlsxXmlStylesReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -326,13 +325,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
         return KoFilter::WrongFormat;
     }
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( QString(), MSOOXML::Schemas::spreadsheetml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::spreadsheetml));
         return KoFilter::WrongFormat;
     }
@@ -393,7 +392,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
 
     bool ok;
@@ -502,7 +501,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_sz()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(val)
     bool ok;
     m_currentFontStyle->setSize(val.toDouble(&ok));
@@ -534,7 +533,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_currentFontStyle->name)
 
     while (true) {
@@ -561,7 +560,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_b()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     m_currentFontStyle->bold = readBooleanAttr("val");
 
     while (true) {
@@ -588,7 +587,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_i()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     m_currentFontStyle->italic = readBooleanAttr("val");
 
     while (true) {
@@ -615,7 +614,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_strike()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     m_currentFontStyle->strike = readBooleanAttr("val");
 
     while (true) {
@@ -642,7 +641,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
     Q_ASSERT(m_currentFontStyle);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     m_currentFontStyle->setUnderline(attrs.value("val").toString());
 
     while (true) {
@@ -668,7 +667,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(count)
 
     bool ok;
@@ -716,7 +715,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
         return KoFilter::WrongFormat;
     }
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(fontId)
     bool ok;
     const uint fontIdNumber = fontId.toUInt(&ok);
@@ -768,7 +767,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
     Q_ASSERT(m_currentCellFormat);
 
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     m_currentCellFormat->setHorizontalAlignment(attrs.value("horizontal").toString());
     kDebug() << "horizontalAlignment:" << m_currentCellFormat->horizontalAlignment;
     m_currentCellFormat->setVerticalAlignment(attrs.value("vertical").toString());

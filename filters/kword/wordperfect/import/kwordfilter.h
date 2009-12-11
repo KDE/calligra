@@ -23,18 +23,19 @@
 
 #include "parser.h"
 
-namespace WP {
+namespace WP
+{
 
 class KWordFilter: public Parser
 {
 
-  public:
+public:
 
     QString root;
     QString documentInfo;
 
     KWordFilter();
-    bool parse( const QString& filename );
+    bool parse(const QString& filename);
 
 };
 

@@ -23,8 +23,8 @@
 #define __KSPREAD_LATEX_MAP_H__
 
 #include <QString>
-#include <QStack>		/* historic list */
-#include <QList>		/* for list of format */
+#include <QStack>  /* historic list */
+#include <QList>  /* for list of format */
 #include <QTextStream>
 
 #include "xmlparser.h"
@@ -42,47 +42,47 @@
  */
 class Map: public XmlParser, Config
 {
-	QList<Table*> _tables;
+    QList<Table*> _tables;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Map.
-		 */
-		Map();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Map.
+     */
+    Map();
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of little zones.
-		 */
-		virtual ~Map();
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of little zones.
+     */
+    virtual ~Map();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		/**
-		 * Modifiers
-		 */
+    /**
+     * Modifiers
+     */
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		/**
-		 * Get information from a markup tree.
-		 */
-		void analyze         (const QDomNode);
+    /**
+     * Get information from a markup tree.
+     */
+    void analyze(const QDomNode);
 
-		/**
-		 * Write the paragraph in a file.
-		 */
-		void generate        (QTextStream&);
+    /**
+     * Write the paragraph in a file.
+     */
+    void generate(QTextStream&);
 
-	
-	private:
+
+private:
 
 };
 

@@ -28,10 +28,10 @@
 
 #ifndef KWORD_LIBEXPORT_EXPORT
 # if defined(MAKE_KWORDEXPORTFILTERS_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define KWORD_LIBEXPORT_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KWORD_LIBEXPORT_EXPORT KDE_IMPORT
 # endif
 #endif

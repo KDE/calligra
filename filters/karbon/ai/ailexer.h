@@ -27,96 +27,98 @@
   *@author Dirk Schönberger
   */
 typedef enum {
-  State_Comment=0,
-  State_Integer,
-  State_Float,
-  State_String,
-  State_Token,
-  State_Reference,
-  State_Start,
-  State_BlockStart,
-  State_BlockEnd,
-  State_ArrayStart,
-  State_ArrayEnd,
-  State_Byte,
-  State_ByteArray,
-  State_StringEncodedChar,
-  State_CommentEncodedChar,
-  State_ByteArray2
+    State_Comment = 0,
+    State_Integer,
+    State_Float,
+    State_String,
+    State_Token,
+    State_Reference,
+    State_Start,
+    State_BlockStart,
+    State_BlockEnd,
+    State_ArrayStart,
+    State_ArrayEnd,
+    State_Byte,
+    State_ByteArray,
+    State_StringEncodedChar,
+    State_CommentEncodedChar,
+    State_ByteArray2
 } State;
 
 typedef enum {
-  Action_Copy=1,
-  Action_CopyOutput,
-  Action_Output,
-  Action_Ignore,
-  Action_Abort,
-  Action_OutputUnget,
-  Action_InitTemp,
-  Action_CopyTemp,
-  Action_DecodeUnget,
-  Action_ByteArraySpecial
+    Action_Copy = 1,
+    Action_CopyOutput,
+    Action_Output,
+    Action_Ignore,
+    Action_Abort,
+    Action_OutputUnget,
+    Action_InitTemp,
+    Action_CopyTemp,
+    Action_DecodeUnget,
+    Action_ByteArraySpecial
 } Action;
 
-class StringBuffer {
+class StringBuffer
+{
 public:
-  StringBuffer ();
-  virtual ~StringBuffer ();
+    StringBuffer();
+    virtual ~StringBuffer();
 
-  void append (char c);
-  void clear();
-  QString toString() const;
-  uint length();
-  double toFloat();
-  int toInt();
-  const char *latin1();
-  QString mid( uint index, uint len=0xffffffff) const;
+    void append(char c);
+    void clear();
+    QString toString() const;
+    uint length();
+    double toFloat();
+    int toInt();
+    const char *latin1();
+    QString mid(uint index, uint len = 0xffffffff) const;
 private:
-  char *m_buffer;
-  uint m_length;
-  int m_capacity;
+    char *m_buffer;
+    uint m_length;
+    int m_capacity;
 
-  void ensureCapacity (int p_capacity);
+    void ensureCapacity(int p_capacity);
 };
 
-class AILexer {
-public: 
-	AILexer();
-	virtual ~AILexer();
+class AILexer
+{
+public:
+    AILexer();
+    virtual ~AILexer();
 
-  virtual bool parse (QIODevice& fin);
+    virtual bool parse(QIODevice& fin);
 private:
-  State m_curState;
-  StringBuffer m_buffer;
-  StringBuffer m_temp;
+    State m_curState;
+    StringBuffer m_buffer;
+    StringBuffer m_temp;
 
-/*  State nextState (char c);
-  Action nextAction (char c);  */
+    /*  State nextState (char c);
+      Action nextAction (char c);  */
 
-  void nextStep (char c, State* newState, Action* newAction);
+    void nextStep(char c, State* newState, Action* newAction);
 
-  void doOutput ();
-  void doHandleByteArray ();
-  uchar getByte();
-  uchar decode();
+    void doOutput();
+    void doHandleByteArray();
+    uchar getByte();
+    uchar decode();
 
 protected:
-  virtual void parsingStarted();
-  virtual void parsingFinished();
-  virtual void parsingAborted();
+    virtual void parsingStarted();
+    virtual void parsingFinished();
+    virtual void parsingAborted();
 
-  virtual void gotComment (const char *value);
-  virtual void gotIntValue (int value);
-  virtual void gotDoubleValue (double value);
-  virtual void gotStringValue (const char *value);
-  virtual void gotToken (const char *value);
-  virtual void gotReference (const char *value);
-  virtual void gotBlockStart ();
-  virtual void gotBlockEnd ();
-  virtual void gotArrayStart ();
-  virtual void gotArrayEnd ();
-  virtual void gotByte (uchar value);
-  virtual void gotByteArray (const QByteArray &data);
+    virtual void gotComment(const char *value);
+    virtual void gotIntValue(int value);
+    virtual void gotDoubleValue(double value);
+    virtual void gotStringValue(const char *value);
+    virtual void gotToken(const char *value);
+    virtual void gotReference(const char *value);
+    virtual void gotBlockStart();
+    virtual void gotBlockEnd();
+    virtual void gotArrayStart();
+    virtual void gotArrayEnd();
+    virtual void gotByte(uchar value);
+    virtual void gotByteArray(const QByteArray &data);
 };
 
 #endif

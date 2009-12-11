@@ -26,7 +26,7 @@
 #include <KWEFBaseWorker.h>
 #include "ExportFilter.h"
 
-class StyleMap : public QMap<QString,LayoutData>
+class StyleMap : public QMap<QString, LayoutData>
 {
 public:
     explicit StyleMap(void) {}
@@ -43,22 +43,22 @@ public:
     virtual bool doCloseStyles(void); ///< HTML's \</style\>
     virtual bool doFullDefineStyle(LayoutData& layout);
     virtual bool doFullPaperFormat(const int format,
-        const double width, const double height, const int orientation);
-    virtual bool doFullPaperBorders (const double top, const double left,
-        const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
+                                   const double width, const double height, const int orientation);
+    virtual bool doFullPaperBorders(const double top, const double left,
+                                    const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag, const LayoutData& layout,
-                               QChar::Direction direction=QChar::DirL);
+                               QChar::Direction direction = QChar::DirL);
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
 private:
-    QString layoutToCss(const LayoutData& layoutOrigin,const LayoutData& layout,
-        const bool force) const;
+    QString layoutToCss(const LayoutData& layoutOrigin, const LayoutData& layout,
+                        const bool force) const;
     QString escapeCssIdentifier(const QString& strText) const;
     QString textFormatToCss(const TextFormatting& formatOrigin,
-        const TextFormatting& formatData, const bool force) const;
+                            const TextFormatting& formatData, const bool force) const;
 private:
     QString m_strPageSize;
     QString m_strPaperBorders;

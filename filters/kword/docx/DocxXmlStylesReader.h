@@ -54,7 +54,7 @@ protected:
 
     KoGenStyle m_defaultParagraphStyle;
 
-    typedef KoFilter::ConversionStatus (DocxXmlStylesReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(DocxXmlStylesReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
 };

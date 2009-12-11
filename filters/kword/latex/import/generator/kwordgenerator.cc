@@ -27,19 +27,19 @@
 
 void KwordGenerator::convert(KoStore* out)
 {
-	//KTempFile temp("lateximport", ".kwd");
-	//temp.setAutoDelete(true);
-	//QFile* tempFile = temp.file();
-	/*if(out->open("root"))
-	{*/
-		Document document;
-		document.analyze(_root);
-		//QTextStream output(tempFile);
-		document.generate(out);
-		//tempFile->close();
-		//out->write(tempFile->readAll());
-		/*out->close();
-	}*/
-	
-	//temp.close();
+    //KTempFile temp("lateximport", ".kwd");
+    //temp.setAutoDelete(true);
+    //QFile* tempFile = temp.file();
+    /*if(out->open("root"))
+    {*/
+    Document document;
+    document.analyze(_root);
+    //QTextStream output(tempFile);
+    document.generate(out);
+    //tempFile->close();
+    //out->write(tempFile->readAll());
+    /*out->close();
+    }*/
+
+    //temp.close();
 }

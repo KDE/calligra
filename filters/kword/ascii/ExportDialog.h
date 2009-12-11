@@ -32,7 +32,7 @@ class AsciiExportDialog : public KDialog
     Q_OBJECT
 public:
 
-    AsciiExportDialog(QWidget* parent=NULL);
+    AsciiExportDialog(QWidget* parent = NULL);
     ~AsciiExportDialog(void);
     QString getEndOfLine(void) const;
     QTextCodec* getCodec(void) const;

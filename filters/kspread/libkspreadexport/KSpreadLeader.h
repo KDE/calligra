@@ -46,58 +46,58 @@ namespace KSpread
 class Leader
 {
 public:
-	/**
-	* Default constructor.
-	* Call setWorker() before starting to convert the KSpread document.
-	*
-	* @param filterChain the filter chain of the filter using the lib.
-	*/
-	Leader(KoFilterChain *filterChain);
+    /**
+    * Default constructor.
+    * Call setWorker() before starting to convert the KSpread document.
+    *
+    * @param filterChain the filter chain of the filter using the lib.
+    */
+    Leader(KoFilterChain *filterChain);
 
-	/**
-	* This constructor set up the Worker at initialization.
-	* convert can be called right away after instanciation of the Leader.
-	*
-	* @param filterChain the filter chain of the filter using the lib.
-	* @param newWorker implementation of a class derived from KSpreadWorker.
-	*/
-	Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker);
+    /**
+    * This constructor set up the Worker at initialization.
+    * convert can be called right away after instanciation of the Leader.
+    *
+    * @param filterChain the filter chain of the filter using the lib.
+    * @param newWorker implementation of a class derived from KSpreadWorker.
+    */
+    Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker);
 
-	/**
-	* Default destructor.
-	* It does nothing.
-	*/
-	virtual ~Leader();
+    /**
+    * Default destructor.
+    * It does nothing.
+    */
+    virtual ~Leader();
 
 private:
-	KSpreadBaseWorker *m_worker;
-	KoFilterChain *m_filterChain;
-	int m_maxCellColumn;
-	int m_maxCellRow;
-	void updateMaxCells(KSpreadSheet *spreadSheet);
+    KSpreadBaseWorker *m_worker;
+    KoFilterChain *m_filterChain;
+    int m_maxCellColumn;
+    int m_maxCellRow;
+    void updateMaxCells(KSpreadSheet *spreadSheet);
 
 protected:
-	KSpreadBaseWorker *getWorker() const;
-	KoFilter::ConversionStatus doSpreadCell(const Cell& spreadCell, int column, int row);
-	KoFilter::ConversionStatus doSpreadSheet(Sheet *spreadSheet);
-	KoFilter::ConversionStatus doSpreadBook(Doc *document);
-	KoFilter::ConversionStatus doInfo(KoDocumentInfo *info);
+    KSpreadBaseWorker *getWorker() const;
+    KoFilter::ConversionStatus doSpreadCell(const Cell& spreadCell, int column, int row);
+    KoFilter::ConversionStatus doSpreadSheet(Sheet *spreadSheet);
+    KoFilter::ConversionStatus doSpreadBook(Doc *document);
+    KoFilter::ConversionStatus doInfo(KoDocumentInfo *info);
 
 public:
-	/**
-	* Set your own implementation of the Worker.
-	*
-	* @param newWorker implementation of a class derived from KSpreadWorker.
-	*/
-	void setWorker(KSpreadBaseWorker *newWorker);
+    /**
+    * Set your own implementation of the Worker.
+    *
+    * @param newWorker implementation of a class derived from KSpreadWorker.
+    */
+    void setWorker(KSpreadBaseWorker *newWorker);
 
-	/**
-	* Start the conversion process.
-	* The callbacks of your Worker will be called at this time.
-	*
-	* @return status of the conversion.
-	*/
-	KoFilter::ConversionStatus convert();
+    /**
+    * Start the conversion process.
+    * The callbacks of your Worker will be called at this time.
+    *
+    * @return status of the conversion.
+    */
+    KoFilter::ConversionStatus convert();
 };
 
 } // namespace KSpread

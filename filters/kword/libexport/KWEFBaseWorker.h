@@ -36,55 +36,55 @@ class KWEFKWordLeader;
  */
 class KWORD_LIBEXPORT_EXPORT KWEFBaseWorker
 {
-    public:
-        explicit KWEFBaseWorker(void) : m_kwordLeader(NULL) {}
-        virtual ~KWEFBaseWorker(void) {}
-    public:
-        void registerKWordLeader(KWEFKWordLeader* leader);
-    public: // callbacks to Leader
-        bool loadSubFile(const QString& fileName, QByteArray& array) const;
-        QIODevice* getSubFileDevice(const QString& fileName) const;
-    public: // indirect callbacks to Leader:
-        QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
-        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
-    public: // leader/worker functions
-        virtual bool doOpenFile (const QString& filenameOut, const QString& to);
-        virtual bool doCloseFile (void); // Close file in normal conditions
-        virtual bool doAbortFile (void); // Close file after errors
-        virtual bool doOpenDocument (void); // Like HTML's <html>
-        virtual bool doCloseDocument (void); // Like HTML's </html>
-        virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
-        virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
-        virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
-	virtual bool doVariableSettings (const VariableSettingsData &varSettings);
-        virtual bool doFullDocument (const QList<ParaData> &);
-        virtual bool doFullAllParagraphs (const QList<ParaData>& paraList);
-        virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-            const ValueListFormatData& paraFormatDataList);
-        virtual bool doFullPaperFormat (const int format,
-            const double width, const double height, const int orientation); ///< Like AbiWord's \<papersize\>
-        virtual bool doFullPaperBorders (const double top, const double left,
-            const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
-        /**
-         * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
-         */
-        virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );
-        virtual bool doPageInfo(const int headerType, const int footerType);
-        virtual bool doHeader(const HeaderData& header);
-        virtual bool doFooter(const FooterData& footer);
-        virtual bool doOpenHead (void); ///< Like HTML's \<HEAD\>
-        virtual bool doCloseHead (void); ///< Like HTML's \</HEAD\>
-        virtual bool doOpenBody (void); ///< Like HTML's \<BODY\>
-        virtual bool doCloseBody (void); ///< Like HTML's \</BODY\>
-        virtual bool doOpenStyles (void); ///< Like HTML's \<style\>
-        virtual bool doCloseStyles (void); ///< Like HTML's \</style\>
-        virtual bool doFullDefineStyle (LayoutData& layout); ///< Defines a single style
-        virtual bool doOpenSpellCheckIgnoreList (void); ///< like AbiWord's \<ignorewords\> and KWord's \<SPELLCHECKIGNORELIST\>
-        virtual bool doCloseSpellCheckIgnoreList (void); ///< like AbiWord's \</ignorewords\> and Kwords \</SPELLCHECKIGNORELIST\>
-        virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); ///< like AbiWord's \<iw\> and Kwords \</SPELLCHECKIGNOREWORD\>
-        virtual bool doDeclareNonInlinedFramesets( QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors ); 
-    protected:
-        KWEFKWordLeader* m_kwordLeader;
+public:
+    explicit KWEFBaseWorker(void) : m_kwordLeader(NULL) {}
+    virtual ~KWEFBaseWorker(void) {}
+public:
+    void registerKWordLeader(KWEFKWordLeader* leader);
+public: // callbacks to Leader
+    bool loadSubFile(const QString& fileName, QByteArray& array) const;
+    QIODevice* getSubFileDevice(const QString& fileName) const;
+public: // indirect callbacks to Leader:
+    QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
+    bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
+public: // leader/worker functions
+    virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+    virtual bool doCloseFile(void);  // Close file in normal conditions
+    virtual bool doAbortFile(void);  // Close file after errors
+    virtual bool doOpenDocument(void);  // Like HTML's <html>
+    virtual bool doCloseDocument(void);  // Like HTML's </html>
+    virtual bool doOpenTextFrameSet(void);  // Like AbiWord's <section>
+    virtual bool doCloseTextFrameSet(void);  // Like AbiWord's </section>
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo &docInfo);
+    virtual bool doVariableSettings(const VariableSettingsData &varSettings);
+    virtual bool doFullDocument(const QList<ParaData> &);
+    virtual bool doFullAllParagraphs(const QList<ParaData>& paraList);
+    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+                                 const ValueListFormatData& paraFormatDataList);
+    virtual bool doFullPaperFormat(const int format,
+                                   const double width, const double height, const int orientation); ///< Like AbiWord's \<papersize\>
+    virtual bool doFullPaperBorders(const double top, const double left,
+                                    const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
+    /**
+     * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+     */
+    virtual bool doFullPaperFormatOther(const int columns, const double columnspacing, const int numPages);
+    virtual bool doPageInfo(const int headerType, const int footerType);
+    virtual bool doHeader(const HeaderData& header);
+    virtual bool doFooter(const FooterData& footer);
+    virtual bool doOpenHead(void);  ///< Like HTML's \<HEAD\>
+    virtual bool doCloseHead(void);  ///< Like HTML's \</HEAD\>
+    virtual bool doOpenBody(void);  ///< Like HTML's \<BODY\>
+    virtual bool doCloseBody(void);  ///< Like HTML's \</BODY\>
+    virtual bool doOpenStyles(void);  ///< Like HTML's \<style\>
+    virtual bool doCloseStyles(void);  ///< Like HTML's \</style\>
+    virtual bool doFullDefineStyle(LayoutData& layout);  ///< Defines a single style
+    virtual bool doOpenSpellCheckIgnoreList(void);  ///< like AbiWord's \<ignorewords\> and KWord's \<SPELLCHECKIGNORELIST\>
+    virtual bool doCloseSpellCheckIgnoreList(void);  ///< like AbiWord's \</ignorewords\> and Kwords \</SPELLCHECKIGNORELIST\>
+    virtual bool doFullSpellCheckIgnoreWord(const QString& ignoreword);  ///< like AbiWord's \<iw\> and Kwords \</SPELLCHECKIGNOREWORD\>
+    virtual bool doDeclareNonInlinedFramesets(QList<FrameAnchor>& pictureAnchors, QList<FrameAnchor>& tableAnchors);
+protected:
+    KWEFKWordLeader* m_kwordLeader;
 };
 
 #endif /* KWEF_BASEWORKER_H */

@@ -23,45 +23,47 @@
 
 #include <kdebug.h>
 
-KoWmfPaint::KoWmfPaint() : KoWmfRead() {
+KoWmfPaint::KoWmfPaint() : KoWmfRead()
+{
     mTarget = 0;
 }
 
 
-bool KoWmfPaint::play( QPaintDevice& target, bool relativeCoord )
+bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
 {
-    if ( mPainter.isActive() ) return false;
+    if (mPainter.isActive()) return false;
     mTarget = &target;
     mRelativeCoord = relativeCoord;
 
     // Play the wmf file
-    return KoWmfRead::play( );
+    return KoWmfRead::play();
 }
 
 
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
-bool KoWmfPaint::begin() {
-    bool ret = mPainter.begin( mTarget );
+bool KoWmfPaint::begin()
+{
+    bool ret = mPainter.begin(mTarget);
 
-    if ( ret ) {
-        if ( mRelativeCoord ) {
+    if (ret) {
+        if (mRelativeCoord) {
             mInternalWorldMatrix.reset();
-        }
-        else {
+        } else {
             // some wmf files doesn't call setwindowOrg and setWindowExt, so it's better to do :
             QRect rec = boundingRect();
-            mPainter.setWindow( rec.left(), rec.top(), rec.width(), rec.height() );
+            mPainter.setWindow(rec.left(), rec.top(), rec.width(), rec.height());
         }
     }
     return ret;
 }
 
 
-bool KoWmfPaint::end() {
-    if ( mRelativeCoord ) {
-       QRect rec = boundingRect();
+bool KoWmfPaint::end()
+{
+    if (mRelativeCoord) {
+        QRect rec = boundingRect();
 
         // Draw 2 invisible points
         // because QPicture::setBoundingRect() doesn't give expected result (QT3.1.2)
@@ -74,69 +76,77 @@ bool KoWmfPaint::end() {
 }
 
 
-void KoWmfPaint::save() {
+void KoWmfPaint::save()
+{
     mPainter.save();
 }
 
 
-void KoWmfPaint::restore() {
+void KoWmfPaint::restore()
+{
     mPainter.restore();
 }
 
 
-void KoWmfPaint::setFont( const QFont &font ) {
-    mPainter.setFont( font );
+void KoWmfPaint::setFont(const QFont &font)
+{
+    mPainter.setFont(font);
 }
 
 
-void KoWmfPaint::setPen( const QPen &pen ) {
+void KoWmfPaint::setPen(const QPen &pen)
+{
     QPen p = pen;
     int width = pen.width();
 
-    if ( dynamic_cast<QPrinter *>( mTarget ) ) {
+    if (dynamic_cast<QPrinter *>(mTarget)) {
         width = 0;
-    }
-    else {
+    } else {
         // WMF spec : width of pen in logical coordinate
         // => width of pen proportional with device context width
         QRect rec = mPainter.window();
         // QPainter documentation says this is equivalent of xFormDev, but it doesn't compile. Bug reported.
 #if 0
         QRect devRec = rec * mPainter.matrix();
-        if ( rec.width() != 0 )
-            width = ( width * devRec.width() ) / rec.width() ;
+        if (rec.width() != 0)
+            width = (width * devRec.width()) / rec.width() ;
         else
             width = 0;
 #endif
     }
 
-    p.setWidth( width );
-    mPainter.setPen( p );
+    p.setWidth(width);
+    mPainter.setPen(p);
 }
 
 
-const QPen &KoWmfPaint::pen() const {
+const QPen &KoWmfPaint::pen() const
+{
     return mPainter.pen();
 }
 
 
-void KoWmfPaint::setBrush( const QBrush &brush ) {
-    mPainter.setBrush( brush );
+void KoWmfPaint::setBrush(const QBrush &brush)
+{
+    mPainter.setBrush(brush);
 }
 
 
-void KoWmfPaint::setBackgroundColor( const QColor &c ) {
-    mPainter.setBackground( QBrush( c ) );
+void KoWmfPaint::setBackgroundColor(const QColor &c)
+{
+    mPainter.setBackground(QBrush(c));
 }
 
 
-void KoWmfPaint::setBackgroundMode( Qt::BGMode mode ) {
-    mPainter.setBackgroundMode( mode );
+void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
+{
+    mPainter.setBackgroundMode(mode);
 }
 
 
-void KoWmfPaint::setCompositionMode( QPainter::CompositionMode mode ) {
-    mPainter.setCompositionMode( mode );
+void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
+{
+    mPainter.setCompositionMode(mode);
 }
 
 
@@ -147,26 +157,27 @@ void KoWmfPaint::setCompositionMode( QPainter::CompositionMode mode ) {
 // - change the origin or the scale in the middle of the drawing
 // - negative width or height
 // and relative/absolute coordinate
-void KoWmfPaint::setWindowOrg( int left, int top ) {
-    if ( mRelativeCoord ) {
+void KoWmfPaint::setWindowOrg(int left, int top)
+{
+    if (mRelativeCoord) {
         double dx = mInternalWorldMatrix.dx();
         double dy = mInternalWorldMatrix.dy();
 
         // translation : Don't use setWindow()
-        mInternalWorldMatrix.translate( -dx, -dy );
-        mPainter.translate( -dx, -dy );
-        mInternalWorldMatrix.translate( -left, -top );
-        mPainter.translate( -left, -top );
-    }
-    else {
+        mInternalWorldMatrix.translate(-dx, -dy);
+        mPainter.translate(-dx, -dy);
+        mInternalWorldMatrix.translate(-left, -top);
+        mPainter.translate(-left, -top);
+    } else {
         QRect rec = mPainter.window();
-        mPainter.setWindow( left, top, rec.width(), rec.height() );
+        mPainter.setWindow(left, top, rec.width(), rec.height());
     }
 }
 
 
-void KoWmfPaint::setWindowExt( int w, int h ) {
-    if ( mRelativeCoord ) {
+void KoWmfPaint::setWindowExt(int w, int h)
+{
+    if (mRelativeCoord) {
         QRect r = mPainter.window();
         double dx = mInternalWorldMatrix.dx();
         double dy = mInternalWorldMatrix.dy();
@@ -174,120 +185,132 @@ void KoWmfPaint::setWindowExt( int w, int h ) {
         double sy = mInternalWorldMatrix.m22();
 
         // scale : don't use setWindow()
-        mInternalWorldMatrix.translate( -dx, -dy );
-        mPainter.translate( -dx, -dy );
-        mInternalWorldMatrix.scale( 1/sx, 1/sy );
-        mPainter.scale( 1/sx, 1/sy );
+        mInternalWorldMatrix.translate(-dx, -dy);
+        mPainter.translate(-dx, -dy);
+        mInternalWorldMatrix.scale(1 / sx, 1 / sy);
+        mPainter.scale(1 / sx, 1 / sy);
 
         sx = (double)r.width() / (double)w;
         sy = (double)r.height() / (double)h;
 
-        mInternalWorldMatrix.scale( sx, sy );
-        mPainter.scale( sx, sy );
-        mInternalWorldMatrix.translate( dx, dy );
-        mPainter.translate( dx, dy );
-    }
-    else {
+        mInternalWorldMatrix.scale(sx, sy);
+        mPainter.scale(sx, sy);
+        mInternalWorldMatrix.translate(dx, dy);
+        mPainter.translate(dx, dy);
+    } else {
         QRect rec = mPainter.window();
-        mPainter.setWindow( rec.left(), rec.top(), w, h );
+        mPainter.setWindow(rec.left(), rec.top(), w, h);
     }
 }
 
 
-void KoWmfPaint::setMatrix( const QMatrix &wm, bool combine ) {
-    mPainter.setMatrix( wm, combine );
+void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
+{
+    mPainter.setMatrix(wm, combine);
 }
 
 
-void KoWmfPaint::setClipRegion( const QRegion &rec ) {
-    mPainter.setClipRegion( rec );
+void KoWmfPaint::setClipRegion(const QRegion &rec)
+{
+    mPainter.setClipRegion(rec);
 }
 
 
-QRegion KoWmfPaint::clipRegion() {
+QRegion KoWmfPaint::clipRegion()
+{
     return mPainter.clipRegion();
 }
 
 
-void KoWmfPaint::moveTo( int x, int y ) {
-    mLastPos = QPoint( x, y );
+void KoWmfPaint::moveTo(int x, int y)
+{
+    mLastPos = QPoint(x, y);
 }
 
 
-void KoWmfPaint::lineTo( int x, int y ) {
-    mPainter.drawLine( mLastPos, QPoint( x, y ) );
+void KoWmfPaint::lineTo(int x, int y)
+{
+    mPainter.drawLine(mLastPos, QPoint(x, y));
 }
 
 
-void KoWmfPaint::drawRect( int x, int y, int w, int h ) {
-    mPainter.drawRect( x, y, w, h );
+void KoWmfPaint::drawRect(int x, int y, int w, int h)
+{
+    mPainter.drawRect(x, y, w, h);
 }
 
 
-void KoWmfPaint::drawRoundRect( int x, int y, int w, int h, int roudw, int roudh ) {
-    mPainter.drawRoundRect( x, y, w, h, roudw, roudh );
+void KoWmfPaint::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
+{
+    mPainter.drawRoundRect(x, y, w, h, roudw, roudh);
 }
 
 
-void KoWmfPaint::drawEllipse( int x, int y, int w, int h ) {
-    mPainter.drawEllipse( x, y, w, h );
+void KoWmfPaint::drawEllipse(int x, int y, int w, int h)
+{
+    mPainter.drawEllipse(x, y, w, h);
 }
 
 
-void KoWmfPaint::drawArc( int x, int y, int w, int h, int a, int alen ) {
-    mPainter.drawArc( x, y, w, h, a, alen );
+void KoWmfPaint::drawArc(int x, int y, int w, int h, int a, int alen)
+{
+    mPainter.drawArc(x, y, w, h, a, alen);
 }
 
 
-void KoWmfPaint::drawPie( int x, int y, int w, int h, int a, int alen ) {
-    mPainter.drawPie( x, y, w, h, a, alen );
+void KoWmfPaint::drawPie(int x, int y, int w, int h, int a, int alen)
+{
+    mPainter.drawPie(x, y, w, h, a, alen);
 }
 
 
-void KoWmfPaint::drawChord( int x, int y, int w, int h, int a, int alen ) {
-    mPainter.drawChord( x, y, w, h, a, alen );
+void KoWmfPaint::drawChord(int x, int y, int w, int h, int a, int alen)
+{
+    mPainter.drawChord(x, y, w, h, a, alen);
 }
 
 
-void KoWmfPaint::drawPolyline( const QPolygon &pa ) {
-    mPainter.drawPolyline( pa );
+void KoWmfPaint::drawPolyline(const QPolygon &pa)
+{
+    mPainter.drawPolyline(pa);
 }
 
 
-void KoWmfPaint::drawPolygon( const QPolygon &pa, bool winding ) {
-    if( winding )
-        mPainter.drawPolygon( pa, Qt::WindingFill );
+void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
+{
+    if (winding)
+        mPainter.drawPolygon(pa, Qt::WindingFill);
     else
-        mPainter.drawPolygon( pa, Qt::OddEvenFill );
+        mPainter.drawPolygon(pa, Qt::OddEvenFill);
 }
 
 
-void KoWmfPaint::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
+void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+{
     mPainter.save();
     QBrush brush = mPainter.brush();
 
     // define clipping region
     QRegion region;
-    foreach ( const QPolygon & pa, listPa ) {
-        region = region.xored( pa );
+    foreach(const QPolygon & pa, listPa) {
+        region = region.xored(pa);
     }
-    mPainter.setClipRegion( region );
+    mPainter.setClipRegion(region);
 
     // fill polygons
-    if ( brush != Qt::NoBrush ) {
-        mPainter.fillRect( region.boundingRect(), brush );
+    if (brush != Qt::NoBrush) {
+        mPainter.fillRect(region.boundingRect(), brush);
     }
 
     // draw polygon's border
-    mPainter.setClipping( false );
-    if ( mPainter.pen().style() != Qt::NoPen ) {
-        mPainter.setBrush( Qt::NoBrush );
-        foreach ( const QPolygon & pa, listPa )
-        {
-            if( winding )
-                mPainter.drawPolygon( pa, Qt::WindingFill );
+    mPainter.setClipping(false);
+    if (mPainter.pen().style() != Qt::NoPen) {
+        mPainter.setBrush(Qt::NoBrush);
+        foreach(const QPolygon & pa, listPa) {
+            if (winding)
+                mPainter.drawPolygon(pa, Qt::WindingFill);
             else
-                mPainter.drawPolygon( pa, Qt::OddEvenFill );
+                mPainter.drawPolygon(pa, Qt::OddEvenFill);
         }
     }
 
@@ -296,13 +319,15 @@ void KoWmfPaint::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 }
 
 
-void KoWmfPaint::drawImage( int x, int y, const QImage &img, int sx, int sy, int sw, int sh ) {
-    mPainter.drawImage( x, y, img, sx, sy, sw, sh );
+void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
+{
+    mPainter.drawImage(x, y, img, sx, sy, sw, sh);
 }
 
 
-void KoWmfPaint::drawText( int x, int y, int w, int h, int flags, const QString& s, double ) {
-    mPainter.drawText( x, y, w, h, flags, s );
+void KoWmfPaint::drawText(int x, int y, int w, int h, int flags, const QString& s, double)
+{
+    mPainter.drawText(x, y, w, h, flags, s);
 }
 
 

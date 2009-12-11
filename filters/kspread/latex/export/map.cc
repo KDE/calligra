@@ -19,8 +19,8 @@
 **
 */
 
-#include <stdlib.h>		/* for atoi function    */
-#include <kdebug.h>		/* for kDebug() stream */
+#include <stdlib.h>  /* for atoi function    */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "map.h"
 #include <QTextStream>
 
@@ -36,7 +36,7 @@ Map::Map()
 /*******************************************/
 Map::~Map()
 {
-	kDebug(30522) <<"Destruction of a map.";
+    kDebug(30522) << "Destruction of a map.";
 }
 
 /*******************************************/
@@ -44,18 +44,17 @@ Map::~Map()
 /*******************************************/
 void Map::analyze(const QDomNode node)
 {
-	/* Analysis of the parameters */
-	kDebug(30522) <<"ANALYZE A MAP";
+    /* Analysis of the parameters */
+    kDebug(30522) << "ANALYZE A MAP";
 
-	/* Analysis of the child markups */
-	for(int index = 0; index < getNbChild(node); index++)
-	{
-		// Only tables
-		Table* table = new Table();
-		table->analyze(getChild(node, index));
-		_tables.append(table);
-	}
-	kDebug(30522) <<"END OF MAP";
+    /* Analysis of the child markups */
+    for (int index = 0; index < getNbChild(node); index++) {
+        // Only tables
+        Table* table = new Table();
+        table->analyze(getChild(node, index));
+        _tables.append(table);
+    }
+    kDebug(30522) << "END OF MAP";
 }
 
 /*******************************************/
@@ -66,12 +65,12 @@ void Map::analyze(const QDomNode node)
 /*******************************************/
 void Map::generate(QTextStream &out)
 {
-	Table *table = NULL;
-	kDebug(30522) <<"  MAP GENERATION";
-        foreach(Table* table, _tables) {
-		table->generate(out);
-	}
+    Table *table = NULL;
+    kDebug(30522) << "  MAP GENERATION";
+    foreach(Table* table, _tables) {
+        table->generate(out);
+    }
 
-	kDebug(30522) <<"MAP GENERATED";
+    kDebug(30522) << "MAP GENERATED";
 }
 

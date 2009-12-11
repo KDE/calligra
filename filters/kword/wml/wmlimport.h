@@ -31,14 +31,14 @@ class WMLImport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     WMLImport(QObject* parent, const QStringList&);
     WMLImport();
 
     virtual ~WMLImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __WMLIMPORT_H

@@ -29,14 +29,14 @@ class PalmDocExport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     PalmDocExport(QObject* parent, const QStringList&);
     PalmDocExport();
 
     virtual ~PalmDocExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __PALMDOCEXPORT_H

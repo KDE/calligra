@@ -37,56 +37,55 @@ class VPath;
 
 class XAMLImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	XAMLImport(QObject* parent, const QStringList&);
-	virtual ~XAMLImport();
+    XAMLImport(QObject* parent, const QStringList&);
+    virtual ~XAMLImport();
 
-	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-	class GradientHelper
-	{
-	public:
-		GradientHelper()
-		{
-			bbox = true;
-		}
-		VGradient	gradient;
-		bool		bbox;
-		QMatrix	gradientTransform;
-	};
+    class GradientHelper
+    {
+    public:
+        GradientHelper() {
+            bbox = true;
+        }
+        VGradient gradient;
+        bool  bbox;
+        QMatrix gradientTransform;
+    };
 
-	void parseGroup( VGroup *, const QDomElement & );
-	void parseStyle( VObject *, const QDomElement & );
-	void parsePA( VObject *, XAMLGraphicsContext *, const QString &, const QString & );
-	void parseGradient( const QDomElement & );
-	void parseColorStops( VGradient *, const QDomElement & );
-	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
-	void parseColor( VColor &, const QString & );
-	QColor parseColor( const QString & );
-	double toPercentage( QString );
-	double fromPercentage( QString );
-	void setupTransform( const QDomElement & );
-	void addGraphicContext();
-	QDomDocument inpdoc;
-	QDomDocument outdoc;
-	void convert();
-	VObject* createObject( const QDomElement & );
-	void createText( VGroup *, const QDomElement & );
-	void parseFont( const QDomElement & );
-	// find object with given id in document
-	VObject* findObject( const QString &name );
-	// find object with given id in given group
-	VObject* findObject( const QString &name, VGroup * );
+    void parseGroup(VGroup *, const QDomElement &);
+    void parseStyle(VObject *, const QDomElement &);
+    void parsePA(VObject *, XAMLGraphicsContext *, const QString &, const QString &);
+    void parseGradient(const QDomElement &);
+    void parseColorStops(VGradient *, const QDomElement &);
+    double parseUnit(const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect());
+    void parseColor(VColor &, const QString &);
+    QColor parseColor(const QString &);
+    double toPercentage(QString);
+    double fromPercentage(QString);
+    void setupTransform(const QDomElement &);
+    void addGraphicContext();
+    QDomDocument inpdoc;
+    QDomDocument outdoc;
+    void convert();
+    VObject* createObject(const QDomElement &);
+    void createText(VGroup *, const QDomElement &);
+    void parseFont(const QDomElement &);
+    // find object with given id in document
+    VObject* findObject(const QString &name);
+    // find object with given id in given group
+    VObject* findObject(const QString &name, VGroup *);
 
 private:
-	KarbonDocument						m_document;
-	QStack<XAMLGraphicsContext*>	m_gc;
-	QMap<QString, GradientHelper>	m_gradients;
-	QMap<QString, QDomElement>		m_paths;
-	KoRect							m_outerRect;
+    KarbonDocument      m_document;
+    QStack<XAMLGraphicsContext*> m_gc;
+    QMap<QString, GradientHelper> m_gradients;
+    QMap<QString, QDomElement>  m_paths;
+    KoRect       m_outerRect;
 };
 
 #endif

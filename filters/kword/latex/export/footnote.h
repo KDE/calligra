@@ -40,57 +40,65 @@
  */
 class Footnote: public Format
 {
-	int     _from,   _to;
-	int     _start,  _end;
-	QString _before, _after, _space;	// TODO: Change in QChar
-	QString _ref;
+    int     _from,   _to;
+    int     _start,  _end;
+    QString _before, _after, _space; // TODO: Change in QChar
+    QString _ref;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instances of Footnote.
-		 *
-		 * @param para is the parent class
-		 */
-		Footnote(Para* para = 0);
-		//Footnote(TextZone);
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instances of Footnote.
+     *
+     * @param para is the parent class
+     */
+    Footnote(Para* para = 0);
+    //Footnote(TextZone);
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do
-		 */
-		virtual ~Footnote();
+    /*
+     * Destructor
+     *
+     * Nothing to do
+     */
+    virtual ~Footnote();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		/**
-		 * Modifiers
-		 */
-		void setFrom  (int   f) { _from   = f; }
-		void setTo    (int   t) { _to     = t; }
-		void setSpace (const QString&);
-		void setStart (int   s) { _start  = s; }
-		void setEnd   (int   e) { _end    = e; }
-		void setBefore(const QString&);
-		void setAfter (const QString&);
-		void setRef   (const QString&);
+    /**
+     * Modifiers
+     */
+    void setFrom(int   f) {
+        _from   = f;
+    }
+    void setTo(int   t) {
+        _to     = t;
+    }
+    void setSpace(const QString&);
+    void setStart(int   s) {
+        _start  = s;
+    }
+    void setEnd(int   e) {
+        _end    = e;
+    }
+    void setBefore(const QString&);
+    void setAfter(const QString&);
+    void setRef(const QString&);
 
-		/**
-		 * Helpful functions
-		 */
-		void analyze (const QDomNode);
-		void analyzeInternal(const QDomNode);
-		void analyzeRange(const QDomNode);
-		void analyzeText(const QDomNode);
-		void analyzeDescript(const QDomNode);
+    /**
+     * Helpful functions
+     */
+    void analyze(const QDomNode);
+    void analyzeInternal(const QDomNode);
+    void analyzeRange(const QDomNode);
+    void analyzeText(const QDomNode);
+    void analyzeDescript(const QDomNode);
 
-		void generate(QTextStream&);
+    void generate(QTextStream&);
 
-	//private:
+    //private:
 };
 
 

@@ -33,7 +33,7 @@ class DocxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    DocxImport( QObject * parent, const QStringList & );
+    DocxImport(QObject * parent, const QStringList &);
     virtual ~DocxImport();
 
 protected:
@@ -42,7 +42,7 @@ protected:
     virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
-        QString& errorMessage);
+            QString& errorMessage);
 };
 
 #endif

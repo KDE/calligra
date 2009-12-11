@@ -29,7 +29,8 @@
 
 #include "MsooXmlReader.h"
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 //! A class reading generic parts of MSOOXML main document's markup.
 class MSOOXML_EXPORT MsooXmlCommonReader : public MsooXmlReader
@@ -61,7 +62,7 @@ protected:
     //! true if lstStyle element has been found within the current element.
     //! Used for turning paragraphs (p) into list items instead of individual paragraphs.
 //! @todo when list style importing is implemented, this boolean could be replaced by a structure
-    bool m_lstStyleFound : 1;
+bool m_lstStyleFound : 1;
 
     //! value of recent pPr@lvl attribute; set by read_pPr()
     uint m_pPr_lvl;

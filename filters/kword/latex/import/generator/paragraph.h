@@ -33,32 +33,31 @@ class QDomElement;
  */
 class Paragraph
 {
-	public:
-		Paragraph()
-		{
-		}
-		
-		~Paragraph() { }
+public:
+    Paragraph() {
+    }
 
-		/**
-		 * Analyze the latex tree and keep data.
-		 * 
-		 * @param elt The root tree which contains an entire latex document.
-		 * 
-		 * @return <code>false</code> if the analysis failed.
-		 */
-		bool analyze(QList<Element*>* elt);
+    ~Paragraph() { }
 
-		/**
-		 * Generate a kword document.
-		 *
-		 * @return <code>true</code> if the generation succeeded.
-		 */
-		bool generate(QDomElement& paragraph, QDomDocument& doc);
+    /**
+     * Analyze the latex tree and keep data.
+     *
+     * @param elt The root tree which contains an entire latex document.
+     *
+     * @return <code>false</code> if the analysis failed.
+     */
+    bool analyze(QList<Element*>* elt);
 
-	private:
-		/** A paragraph is a list of text zones. */
-		//QPtrList<TextZone> _textzones;
+    /**
+     * Generate a kword document.
+     *
+     * @return <code>true</code> if the generation succeeded.
+     */
+    bool generate(QDomElement& paragraph, QDomDocument& doc);
+
+private:
+    /** A paragraph is a list of text zones. */
+    //QPtrList<TextZone> _textzones;
 };
 
 #endif /* __KWORD_LATEX_IMPORT_PARAGRAPH_H__ */

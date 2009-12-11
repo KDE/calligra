@@ -29,7 +29,7 @@ class QDataStream;
 
 class WPFiveWorker : public KWEFBaseWorker
 {
-  public:
+public:
     explicit WPFiveWorker(void)  { }
     virtual ~WPFiveWorker(void) { }
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -37,8 +37,8 @@ class WPFiveWorker : public KWEFBaseWorker
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
-  private:
+                                 const ValueListFormatData& paraFormatDataList);
+private:
     QString filename;
     QFile outfile;
     QDataStream output;

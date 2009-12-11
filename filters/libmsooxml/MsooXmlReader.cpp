@@ -41,27 +41,20 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
         }
         if (reader.isEndElement()) {
             dbg.nospace() << "/>)";
-        }
-        else {
+        } else {
             dbg.nospace() << ">)";
         }
-    }
-    else if (reader.isEndElement()) {
+    } else if (reader.isEndElement()) {
         dbg.nospace() << "</" << reader.qualifiedName().toString().toLocal8Bit().constData() << ">)";
-    }
-    else if (reader.isCharacters()) {
+    } else if (reader.isCharacters()) {
         dbg.nospace() << "characters:" << reader.text() << ")";
-    }
-    else if (reader.isComment()) {
+    } else if (reader.isComment()) {
         dbg.nospace() << "<!-- " << reader.text().toString().toLocal8Bit().constData() << " -->)";
-    }
-    else if (reader.isCDATA()) {
+    } else if (reader.isCDATA()) {
         dbg.nospace() << "CDATA:" << reader.text() << ")";
-    }
-    else if (reader.isWhitespace()) {
+    } else if (reader.isWhitespace()) {
         dbg.nospace() << "whitespace:" << reader.text() << ")";
-    }
-    else {
+    } else {
         dbg.nospace() << reader.tokenString() << reader.text();
     }
     return dbg.space();
@@ -70,7 +63,7 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 using namespace MSOOXML;
 
 MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships* _relationships)
- : relationships(_relationships)
+        : relationships(_relationships)
 {
 }
 
@@ -84,15 +77,15 @@ enum State {
 };
 
 MsooXmlReader::MsooXmlReader(KoOdfWriters *writers)
-    : QXmlStreamReader()
-    , KoOdfWriters(*writers)
+        : QXmlStreamReader()
+        , KoOdfWriters(*writers)
 {
     init();
 }
 
 MsooXmlReader::MsooXmlReader(QIODevice* io, KoOdfWriters *writers)
-    : QXmlStreamReader(io)
-    , KoOdfWriters(*writers)
+        : QXmlStreamReader(io)
+        , KoOdfWriters(*writers)
 {
     init();
 }
@@ -125,7 +118,8 @@ void MsooXmlReader::init()
 static const char * tokenNames[] = {
     "NoToken", "Invalid", "StartDocument", "EndDocument",
     "StartElement", "EndElement", "Characters", "Comment",
-    "DTD", "EntityReference", "ProcessingInstruction", "??"};
+    "DTD", "EntityReference", "ProcessingInstruction", "??"
+};
 
 static const char* tokenName(QXmlStreamReader::TokenType t)
 {
@@ -141,14 +135,14 @@ bool MsooXmlReader::readBooleanAttr(const char* attrName)
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 
-void MsooXmlReader::raiseError( const QString & message )
+void MsooXmlReader::raiseError(const QString & message)
 {
     QXmlStreamReader::raiseError(
         m_fileName.isEmpty() ?
-            i18n("%1 (line %2, column %3)", message,
-                 QString::number(lineNumber()), QString::number(columnNumber()))
-          : i18n("%1 (%2, line %3, column %4)", message, m_fileName,
-                 QString::number(lineNumber()), QString::number(columnNumber()))
+        i18n("%1 (line %2, column %3)", message,
+             QString::number(lineNumber()), QString::number(columnNumber()))
+        : i18n("%1 (%2, line %3, column %4)", message, m_fileName,
+               QString::number(lineNumber()), QString::number(columnNumber()))
     );
     kDebug() << errorString();
 }
@@ -157,8 +151,7 @@ QXmlStreamReader::TokenType MsooXmlReader::readNext()
 {
     if (m_readUndoed) {
         m_readUndoed = false;
-    }
-    else {
+    } else {
         m_recentType = QXmlStreamReader::readNext();
     }
     kDebug() << tokenName(m_recentType) << *this;
@@ -174,7 +167,7 @@ bool MsooXmlReader::expectElName(const char* elementName)
 {
     kDebug() << elementName << "found:" << name();
     if (!isStartElement() || name() != QLatin1String(elementName)) {
-        raiseError( i18n("Element \"%1\" not found", elementName) );
+        raiseError(i18n("Element \"%1\" not found", elementName));
         return false;
     }
     return true;
@@ -184,7 +177,7 @@ bool MsooXmlReader::expectElNameEnd(const char* elementName)
 {
     kDebug() << elementName << "found:" << name();
     if (!isEndElement() || name() != QLatin1String(elementName)) {
-        raiseError( i18n("Expected closing of element \"%1\"", elementName) );
+        raiseError(i18n("Expected closing of element \"%1\"", elementName));
         return false;
     }
     return true;
@@ -194,7 +187,7 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 {
     kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != QLatin1String(qualifiedElementName)) {
-        raiseError( i18n("Element \"%1\" not found", qualifiedElementName) );
+        raiseError(i18n("Element \"%1\" not found", qualifiedElementName));
         return false;
     }
     return true;
@@ -205,7 +198,7 @@ bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
     kDebug() << qualifiedElementName << "found:" << qualifiedName();
 //    kDebug() << kBacktrace();
     if (!isEndElement() || qualifiedName() != qualifiedElementName) {
-        raiseError( i18n("Expected closing of element \"%1\"", qualifiedElementName) );
+        raiseError(i18n("Expected closing of element \"%1\"", qualifiedElementName));
         return false;
     }
     return true;
@@ -228,5 +221,5 @@ bool MsooXmlReader::expectNS(const char* nsName)
 
 void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString& value, const char* attrName)
 {
-    raiseError( i18n("Unexpected value \"%1\" of attribute \"%2\"", value, attrName) );
+    raiseError(i18n("Unexpected value \"%1\" of attribute \"%2\"", value, attrName));
 }

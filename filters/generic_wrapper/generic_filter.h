@@ -28,14 +28,14 @@
 
 class GenericFilter : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     GenericFilter(QObject *parent, const QStringList&);
     virtual ~GenericFilter() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from,
-                                                const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from,
+            const QByteArray& to);
 private:
     KoFilter::ConversionStatus doImport();
     KoFilter::ConversionStatus doExport();

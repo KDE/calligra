@@ -36,10 +36,12 @@ class KoStyleStack;
 class QDomDocument;
 class KZip;
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 //! Content type names for handling MSOOXML formats
-class MSOOXML_EXPORT ContentTypes {
+class MSOOXML_EXPORT ContentTypes
+{
 public:
     // common officedocument namespaces
     static const char* const coreProps;

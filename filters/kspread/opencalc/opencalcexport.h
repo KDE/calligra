@@ -39,46 +39,46 @@ class Sheet;
 
 class OpenCalcExport : public KoFilter
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  OpenCalcExport( QObject* parent, const QStringList & );
-  virtual ~OpenCalcExport() {}
+public:
+    OpenCalcExport(QObject* parent, const QStringList &);
+    virtual ~OpenCalcExport() {}
 
-  virtual KoFilter::ConversionStatus convert( const QByteArray & from,
-                                              const QByteArray & to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray & from,
+            const QByteArray & to);
 
- private:
-  enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
-  OpenCalcStyles m_styles;
+private:
+    enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
+    OpenCalcStyles m_styles;
 
-  bool writeFile( const KSpread::Doc * ksdoc );
+    bool writeFile(const KSpread::Doc * ksdoc);
 
-  bool exportDocInfo( KoStore * store, const KSpread::Doc * ksdoc );
-  bool exportStyles ( KoStore * store, const KSpread::Doc * ksdoc );
-  bool exportContent( KoStore * store, const KSpread::Doc * ksdoc );
-  bool exportSettings( KoStore * store, const KSpread::Doc * ksdoc );
+    bool exportDocInfo(KoStore * store, const KSpread::Doc * ksdoc);
+    bool exportStyles(KoStore * store, const KSpread::Doc * ksdoc);
+    bool exportContent(KoStore * store, const KSpread::Doc * ksdoc);
+    bool exportSettings(KoStore * store, const KSpread::Doc * ksdoc);
 
-  bool exportBody( QDomDocument & doc, QDomElement & content, const KSpread::Doc * ksdoc );
-  void exportSheet( QDomDocument & doc, QDomElement & tabElem,
-                    const KSpread::Sheet * sheet, int maxCols, int maxRows );
-  void exportCells( QDomDocument & doc, QDomElement & rowElem,
-                    const KSpread::Sheet * sheet, int row, int maxCols );
-  void exportDefaultCellStyle( QDomDocument & doc, QDomElement & officeStyles );
-  void exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
-                             const KSpread::Doc * ksdoc );
-  void exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles,
-                           const KSpread::Doc *ksdoc );
+    bool exportBody(QDomDocument & doc, QDomElement & content, const KSpread::Doc * ksdoc);
+    void exportSheet(QDomDocument & doc, QDomElement & tabElem,
+                     const KSpread::Sheet * sheet, int maxCols, int maxRows);
+    void exportCells(QDomDocument & doc, QDomElement & rowElem,
+                     const KSpread::Sheet * sheet, int row, int maxCols);
+    void exportDefaultCellStyle(QDomDocument & doc, QDomElement & officeStyles);
+    void exportPageAutoStyles(QDomDocument & doc, QDomElement & autoStyles,
+                              const KSpread::Doc * ksdoc);
+    void exportMasterStyles(QDomDocument & doc, QDomElement & masterStyles,
+                            const KSpread::Doc *ksdoc);
 
-  bool writeMetaFile( KoStore * store, uint filesWritten );
+    bool writeMetaFile(KoStore * store, uint filesWritten);
 
-  void convertPart( QString const & part, QDomDocument & doc,
-                    QDomElement & parent, const KSpread::Doc * ksdoc );
-  void addText( QString const & text, QDomDocument & doc,
-                QDomElement & parent );
+    void convertPart(QString const & part, QDomDocument & doc,
+                     QDomElement & parent, const KSpread::Doc * ksdoc);
+    void addText(QString const & text, QDomDocument & doc,
+                 QDomElement & parent);
 
-  void createDefaultStyles();
-  QString convertFormula( QString const & formula ) const;
+    void createDefaultStyles();
+    QString convertFormula(QString const & formula) const;
 private:
     /// Pointer to the KSpread locale
     KLocale* m_locale;

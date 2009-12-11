@@ -20,7 +20,7 @@
 */
 
 #include <QTextStream>
-#include <kdebug.h>		/* for kDebug() stream */
+#include <kdebug.h>  /* for kDebug() stream */
 
 #include <config-filters.h>
 /* Needed to convert picture in eps file. Use GraphicsMagick. */
@@ -47,14 +47,14 @@ PixmapFrame::PixmapFrame()
 /*******************************************/
 PixmapFrame::~PixmapFrame()
 {
-	kDebug(30522) <<"Destruction of a pixmap";
+    kDebug(30522) << "Destruction of a pixmap";
 }
 void PixmapFrame::setKeepAspectRatio(const QString ratio)
 {
-	if(ratio == "true")
-		_keepAspectRatio = true;
-	else
-		_keepAspectRatio = false;
+    if (ratio == "true")
+        _keepAspectRatio = true;
+    else
+        _keepAspectRatio = false;
 }
 
 /*******************************************/
@@ -65,27 +65,23 @@ void PixmapFrame::setKeepAspectRatio(const QString ratio)
 /*******************************************/
 void PixmapFrame::analyze(const QDomNode node)
 {
-	/* Markup type: Frameset info = text, heading known */
+    /* Markup type: Frameset info = text, heading known */
 
-	/* Parameter analysis */
-	Element::analyze(node);
+    /* Parameter analysis */
+    Element::analyze(node);
 
-	kDebug(30522) <<"FRAME ANALYSIS (Pixmap)";
+    kDebug(30522) << "FRAME ANALYSIS (Pixmap)";
 
-	/* Child markup analysis */
-	for(int index = 0; index < getNbChild(node); index++)
-	{
-		if(getChildName(node, index).compare("FRAME")== 0)
-		{
-			analyzeParamFrame(node);
-		}
-		else if(getChildName(node, index).compare("PICTURE")== 0)
-		{
-			getPixmap(getChild(node, "PICTURE"));
-		}
+    /* Child markup analysis */
+    for (int index = 0; index < getNbChild(node); index++) {
+        if (getChildName(node, index).compare("FRAME") == 0) {
+            analyzeParamFrame(node);
+        } else if (getChildName(node, index).compare("PICTURE") == 0) {
+            getPixmap(getChild(node, "PICTURE"));
+        }
 
-	}
-	kDebug(30522) <<"END OF A FRAME";
+    }
+    kDebug(30522) << "END OF A FRAME";
 }
 
 /*******************************************/
@@ -96,20 +92,20 @@ void PixmapFrame::analyze(const QDomNode node)
 /*******************************************/
 void PixmapFrame::getPixmap(const QDomNode node)
 {
-	kDebug(30522) <<"PIXMAP";
-	setKeepAspectRatio(getAttr(node, "keepAspectRatio"));
-	QDomNode childNode = getChild(node, "KEY");
-	setKey(getAttr(childNode, "filename"));
-	FileHeader::instance()->useGraphics();
-	QString file = getKey();
-	/* Remove the extension */
-	int posExt = file.findRev('.');
-	file.truncate(posExt);
-	/* Remove the path */
-	file = file.section('/', -1);
-	setFilenamePS(file + ".eps");
-	kDebug(30522) <<"PS :" << getFilenamePS();
-	kDebug(30522) <<"END PIXMAP";
+    kDebug(30522) << "PIXMAP";
+    setKeepAspectRatio(getAttr(node, "keepAspectRatio"));
+    QDomNode childNode = getChild(node, "KEY");
+    setKey(getAttr(childNode, "filename"));
+    FileHeader::instance()->useGraphics();
+    QString file = getKey();
+    /* Remove the extension */
+    int posExt = file.findRev('.');
+    file.truncate(posExt);
+    /* Remove the path */
+    file = file.section('/', -1);
+    setFilenamePS(file + ".eps");
+    kDebug(30522) << "PS :" << getFilenamePS();
+    kDebug(30522) << "END PIXMAP";
 }
 
 /*******************************************/
@@ -117,17 +113,17 @@ void PixmapFrame::getPixmap(const QDomNode node)
 /*******************************************/
 void PixmapFrame::analyzeParamFrame(const QDomNode node)
 {
-	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
+    /*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 
-	_left = getAttr(node, "left").toInt();
-	_top = getAttr(node, "top").toInt();
-	_right = getAttr(node, "right").toInt();
-	_bottom = getAttr(node, "bottom").toInt();
-	setRunAround(getAttr(node, "runaround").toInt());
-	setAroundGap(getAttr(node, "runaroundGap").toInt());
-	setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
-	setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
-	setSheetSide(getAttr(node, "sheetside").toInt());
+    _left = getAttr(node, "left").toInt();
+    _top = getAttr(node, "top").toInt();
+    _right = getAttr(node, "right").toInt();
+    _bottom = getAttr(node, "bottom").toInt();
+    setRunAround(getAttr(node, "runaround").toInt());
+    setAroundGap(getAttr(node, "runaroundGap").toInt());
+    setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
+    setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
+    setSheetSide(getAttr(node, "sheetside").toInt());
 }
 
 /**
@@ -136,51 +132,48 @@ void PixmapFrame::analyzeParamFrame(const QDomNode node)
 void PixmapFrame::convert()
 {
 #ifdef HAVE_MAGICK
-	kDebug(30522) <<"CONVERT PICTURE IN EPS";
-	ExceptionInfo exception;
+    kDebug(30522) << "CONVERT PICTURE IN EPS";
+    ExceptionInfo exception;
 
-	Image* image;
+    Image* image;
 
-	ImageInfo
-		*image_info;
+    ImageInfo
+    *image_info;
 
-	/*
-		Initialize the image info structure and read an image.
-	*/
-	InitializeMagick(NULL);
-	GetExceptionInfo(&exception);
-	image_info = CloneImageInfo((ImageInfo *) NULL);
-	// 8 characters are deleted when reading the file picture name
-	QString filename = "file:///" + getRoot()->extractData(getKey());
-	strncpy(image_info->filename, filename.latin1(), filename.length());
-	image = ReadImage(image_info, &exception);
-	if (image == (Image *) NULL)
-		MagickError(exception.severity, exception.reason, exception.description);
-	else
-	{
-		/*
-			Write the image as EPS and destroy it.
-		  Copy image file in the same directory than the tex file.
-		*/
-		QString dir = "";
-		if( Config::instance()->getPicturesDir().isEmpty() || 
-				Config::instance()->getPicturesDir() == NULL)
-		{
-			dir = getFilename();
-			dir.truncate(getFilename().findRev('/'));
-		}
-		else
-			dir = Config::instance()->getPicturesDir();
-		kDebug(30522) <<"file" << getFilename();
-		kDebug(30522) <<"path" << dir;
-		(void) strcpy(image->filename, (dir + '/' + getFilenamePS()).latin1());
-		WriteImage(image_info, image);
-		DestroyImage(image);
-	}
-	DestroyImageInfo(image_info);
-	DestroyExceptionInfo(&exception);
-	DestroyMagick();
-	kDebug(30522) <<"CONVERTION DONE";
+    /*
+     Initialize the image info structure and read an image.
+    */
+    InitializeMagick(NULL);
+    GetExceptionInfo(&exception);
+    image_info = CloneImageInfo((ImageInfo *) NULL);
+    // 8 characters are deleted when reading the file picture name
+    QString filename = "file:///" + getRoot()->extractData(getKey());
+    strncpy(image_info->filename, filename.latin1(), filename.length());
+    image = ReadImage(image_info, &exception);
+    if (image == (Image *) NULL)
+        MagickError(exception.severity, exception.reason, exception.description);
+    else {
+        /*
+         Write the image as EPS and destroy it.
+          Copy image file in the same directory than the tex file.
+        */
+        QString dir = "";
+        if (Config::instance()->getPicturesDir().isEmpty() ||
+                Config::instance()->getPicturesDir() == NULL) {
+            dir = getFilename();
+            dir.truncate(getFilename().findRev('/'));
+        } else
+            dir = Config::instance()->getPicturesDir();
+        kDebug(30522) << "file" << getFilename();
+        kDebug(30522) << "path" << dir;
+        (void) strcpy(image->filename, (dir + '/' + getFilenamePS()).latin1());
+        WriteImage(image_info, image);
+        DestroyImage(image);
+    }
+    DestroyImageInfo(image_info);
+    DestroyExceptionInfo(&exception);
+    DestroyMagick();
+    kDebug(30522) << "CONVERTION DONE";
 #endif
 }
 
@@ -191,11 +184,11 @@ void PixmapFrame::convert()
 /*******************************************/
 void PixmapFrame::generate(QTextStream &out)
 {
-	if(Config::instance()->convertPictures())
-		convert();
-	
-	Config::instance()->writeIndent(out);
-	out << "\\includegraphics{" << getFilenamePS()<< "}" << endl;
+    if (Config::instance()->convertPictures())
+        convert();
+
+    Config::instance()->writeIndent(out);
+    out << "\\includegraphics{" << getFilenamePS() << "}" << endl;
 
 }
 

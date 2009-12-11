@@ -26,56 +26,58 @@
 
 class WMLParseState
 {
-  public:
+public:
     unsigned tableRow, tableCol;
     WMLFormat currentFormat;
     WMLFormatList formatList;
     WMLLayout currentLayout;
     WMLParseState();
-    WMLParseState( const WMLParseState& );
-    WMLParseState& operator=( const WMLParseState& );
-    void assign( const WMLParseState& );
+    WMLParseState(const WMLParseState&);
+    WMLParseState& operator=(const WMLParseState&);
+    void assign(const WMLParseState&);
 };
 
 WMLParseState::WMLParseState()
 {
-  tableRow = tableCol = 0;
+    tableRow = tableCol = 0;
 }
 
-WMLParseState::WMLParseState( const WMLParseState& state )
+WMLParseState::WMLParseState(const WMLParseState& state)
 {
-  assign( state );
+    assign(state);
 }
 
-WMLParseState& WMLParseState::operator=( const WMLParseState& state )
+WMLParseState& WMLParseState::operator=(const WMLParseState & state)
 {
-  assign( state );
-  return *this ;
+    assign(state);
+    return *this ;
 }
 
-void WMLParseState::assign( const WMLParseState& state )
+void WMLParseState::assign(const WMLParseState& state)
 {
-  tableRow = state.tableRow;
-  tableCol = state.tableCol;
-  currentFormat = state.currentFormat;
-  formatList = state.formatList;
-  currentLayout = state.currentLayout;
+    tableRow = state.tableRow;
+    tableCol = state.tableCol;
+    currentFormat = state.currentFormat;
+    formatList = state.formatList;
+    currentLayout = state.currentLayout;
 }
 
 // ContentHandler for use with the reader
 class WMLHandler: public QXmlDefaultHandler
 {
-  public:
+public:
 
-    WMLHandler( WMLParser *parser ){ m_parser = parser; }
+    WMLHandler(WMLParser *parser) {
+        m_parser = parser;
+    }
 
     bool startDocument();
-    bool startElement( const QString&, const QString&, const QString& ,
-                       const QXmlAttributes& );
-    bool endElement( const QString&, const QString&, const QString& );
-    bool characters( const QString& ch );
+    bool startElement(const QString&, const QString&, const QString& ,
+                      const QXmlAttributes&);
+    bool endElement(const QString&, const QString&, const QString&);
+    bool characters(const QString& ch);
 
-  private:
+private:
 
     WMLParser *m_parser;
 
@@ -88,7 +90,7 @@ class WMLHandler: public QXmlDefaultHandler
 
     WMLParseState m_state;
     Q3ValueStack<WMLParseState> m_stateStack;
-    
+
     bool flushParagraph();
     void pushState();
     void popState();
@@ -96,382 +98,357 @@ class WMLHandler: public QXmlDefaultHandler
 
 bool WMLHandler::startDocument()
 {
-  m_text = "";
-  m_inBlock = false;
+    m_text = "";
+    m_inBlock = false;
 
-  m_link = "";
-  m_href = "";
-  
-  return true;
+    m_link = "";
+    m_href = "";
+
+    return true;
 }
 
-bool WMLHandler::startElement( const QString&, const QString&,
-                                        const QString& qName,
-                                        const QXmlAttributes& attr )
+bool WMLHandler::startElement(const QString&, const QString&,
+                              const QString& qName,
+                              const QXmlAttributes& attr)
 {
-  QString tag = qName.lower();
+    QString tag = qName.lower();
 
-  if( tag == "wml" )
-    return m_parser->doOpenDocument();
+    if (tag == "wml")
+        return m_parser->doOpenDocument();
 
-  if( tag == "card" ) 
-  {
-    m_state = WMLParseState();
-    QString card_id = attr.value("id");
-    QString card_title = attr.value("title");
-    return m_parser->doOpenCard( card_id, card_title );
-  }
-
-  if( tag == "p" )
-  {
-    m_state.currentLayout = WMLLayout();
-    m_inBlock = true;
-    if( m_state.currentFormat.bold || 
-        m_state.currentFormat.italic ||
-        m_state.currentFormat.underline ||
-        (m_state.currentFormat.fontsize != WMLFormat::Normal) )
-      m_state.formatList.append( m_state.currentFormat );
-
-    QString align = attr.value("align").lower();
-    if( align == "right" )
-      m_state.currentLayout.align =  WMLLayout::Right;
-    if( align == "center" )
-      m_state.currentLayout.align =  WMLLayout::Center;
-
-    return true;
-  }
-
-  if(( tag == "b" ) || (tag == "strong") )
-  {
-    m_state.currentFormat.bold = true;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
- 
-  if(( tag == "i" ) || (tag == "em") )
-  {  
-    m_state.currentFormat.italic = true;
-    m_state.currentFormat.pos = m_text.length();  
-    m_state.formatList.append( m_state.currentFormat );  
-    return true;  
-  }  
-
-  if( tag == "u" )
-  {
-    m_state.currentFormat.underline = true;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "big" )
-  {
-    m_state.currentFormat.fontsize = WMLFormat::Big;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "small" ) 
-  {
-    m_state.currentFormat.fontsize = WMLFormat::Small;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "a" )
-  {
-    QString href = attr.value("href");
-    if( !href.isEmpty() )
-    {
-      m_inBlock = false;
-      m_inLink = true;
-      m_state.currentFormat.link = "";
-      m_state.currentFormat.href = href;
-      m_state.currentFormat.pos = m_text.length();
-      m_state.currentFormat.len = 1;
-      m_text.append( "#" ); // inline char
-      return true;
+    if (tag == "card") {
+        m_state = WMLParseState();
+        QString card_id = attr.value("id");
+        QString card_title = attr.value("title");
+        return m_parser->doOpenCard(card_id, card_title);
     }
-  }
 
-  // open new table
-  if( tag == "table" )
-  {
-    pushState();
-    return m_parser->doBeginTable();
-  }
+    if (tag == "p") {
+        m_state.currentLayout = WMLLayout();
+        m_inBlock = true;
+        if (m_state.currentFormat.bold ||
+                m_state.currentFormat.italic ||
+                m_state.currentFormat.underline ||
+                (m_state.currentFormat.fontsize != WMLFormat::Normal))
+            m_state.formatList.append(m_state.currentFormat);
 
-  // open table row
-  if( tag == "tr" )
-  {
-    m_state.tableRow++;
+        QString align = attr.value("align").lower();
+        if (align == "right")
+            m_state.currentLayout.align =  WMLLayout::Right;
+        if (align == "center")
+            m_state.currentLayout.align =  WMLLayout::Center;
+
+        return true;
+    }
+
+    if ((tag == "b") || (tag == "strong")) {
+        m_state.currentFormat.bold = true;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if ((tag == "i") || (tag == "em")) {
+        m_state.currentFormat.italic = true;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "u") {
+        m_state.currentFormat.underline = true;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "big") {
+        m_state.currentFormat.fontsize = WMLFormat::Big;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "small") {
+        m_state.currentFormat.fontsize = WMLFormat::Small;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "a") {
+        QString href = attr.value("href");
+        if (!href.isEmpty()) {
+            m_inBlock = false;
+            m_inLink = true;
+            m_state.currentFormat.link = "";
+            m_state.currentFormat.href = href;
+            m_state.currentFormat.pos = m_text.length();
+            m_state.currentFormat.len = 1;
+            m_text.append("#");   // inline char
+            return true;
+        }
+    }
+
+    // open new table
+    if (tag == "table") {
+        pushState();
+        return m_parser->doBeginTable();
+    }
+
+    // open table row
+    if (tag == "tr") {
+        m_state.tableRow++;
+        return true;
+    }
+
+    // open table cell, keep in sync with <p> above
+    if (tag == "td") {
+        m_state.tableCol++;
+        m_state.currentLayout = WMLLayout();
+        m_inBlock = true;
+        m_state.formatList.append(m_state.currentFormat);
+        return m_parser->doTableCell(m_state.tableRow, m_state.tableCol);
+    }
+
+    // unhandled element
     return true;
-  }
-
-  // open table cell, keep in sync with <p> above
-  if( tag == "td" )
-  {
-    m_state.tableCol++;
-    m_state.currentLayout = WMLLayout();
-    m_inBlock = true;
-    m_state.formatList.append( m_state.currentFormat );
-    return m_parser->doTableCell( m_state.tableRow, m_state.tableCol );
-  }
-
-  // unhandled element
-  return true;
 }
 
-bool WMLHandler::endElement( const QString&, const QString&, 
-  const QString& qName )
+bool WMLHandler::endElement(const QString&, const QString&,
+                            const QString& qName)
 {
-  QString tag = qName.lower();
+    QString tag = qName.lower();
 
-  if( tag == "wml" )
-    return m_parser->doCloseDocument();
+    if (tag == "wml")
+        return m_parser->doCloseDocument();
 
-  if( tag == "card" )
-  {
-    // forget </p> before </card> ?
-    m_inBlock = false;
-    if( !m_text.isEmpty() )
-      flushParagraph();
-    return m_parser->doCloseCard();
-  }
+    if (tag == "card") {
+        // forget </p> before </card> ?
+        m_inBlock = false;
+        if (!m_text.isEmpty())
+            flushParagraph();
+        return m_parser->doCloseCard();
+    }
 
-  if( tag == "p" )
-  {
-    m_inBlock = false;
-    return flushParagraph();
-  }
+    if (tag == "p") {
+        m_inBlock = false;
+        return flushParagraph();
+    }
 
-  if(( tag == "b" ) || (tag == "strong") )
-  {
-    m_state.currentFormat.bold = false; 
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
+    if ((tag == "b") || (tag == "strong")) {
+        m_state.currentFormat.bold = false;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if ((tag == "i") || (tag == "em")) {
+        m_state.currentFormat.italic = false;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "u") {
+        m_state.currentFormat.underline = false;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "big") {
+        m_state.currentFormat.fontsize = WMLFormat::Normal;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "small") {
+        m_state.currentFormat.fontsize = WMLFormat::Normal;
+        m_state.currentFormat.pos = m_text.length();
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    if (tag == "a") {
+        m_inBlock = true;
+        m_inLink = false;
+        m_state.formatList.append(m_state.currentFormat);
+        return true;
+    }
+
+    // close table
+    if (tag == "table") {
+        popState();
+        return m_parser->doEndTable();
+    }
+
+    // close table row
+    if (tag == "tr")
+        return true; //skip
+
+    // close table cell, like </p>
+    if (tag == "td") {
+        m_inBlock = false;
+        return flushParagraph();
+    }
+
+    // unhandled
     return true;
-  }
-
-  if(( tag == "i" ) || (tag == "em") )
-  {
-    m_state.currentFormat.italic = false;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "u" )
-  {
-    m_state.currentFormat.underline = false;  
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "big" )
-  {
-    m_state.currentFormat.fontsize = WMLFormat::Normal;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "small" )
-  {
-    m_state.currentFormat.fontsize = WMLFormat::Normal;
-    m_state.currentFormat.pos = m_text.length();
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  if( tag == "a" )
-  {
-    m_inBlock = true;
-    m_inLink = false;
-    m_state.formatList.append( m_state.currentFormat );
-    return true;
-  }
-
-  // close table
-  if( tag == "table" )
-  {
-    popState();
-    return m_parser->doEndTable();
-  }
-
-  // close table row
-  if( tag == "tr" )
-    return true; //skip
-
-  // close table cell, like </p>
-  if( tag == "td" )
-  {
-    m_inBlock = false;
-    return flushParagraph();
-  }
-
-  // unhandled
-  return true;
 }
 
-bool WMLHandler::characters( const QString& ch )
+bool WMLHandler::characters(const QString& ch)
 {
-  if( m_inBlock )
-    m_text.append( ch );
+    if (m_inBlock)
+        m_text.append(ch);
 
-  if( m_inLink )
-    m_state.currentFormat.link.append( ch );
+    if (m_inLink)
+        m_state.currentFormat.link.append(ch);
 
-  return true;
+    return true;
 }
 
 bool WMLHandler::flushParagraph()
 {
-  // calc length of each format tag
-  for( unsigned i=0; i<m_state.formatList.count(); i++ )
-  {
-    int nextpos;
-    WMLFormat& format = m_state.formatList[i];
-    if( i < m_state.formatList.count()-1 )
-    {
-      WMLFormat& nextformat = m_state.formatList[i+1];
-      nextpos = nextformat.pos;
+    // calc length of each format tag
+    for (unsigned i = 0; i < m_state.formatList.count(); i++) {
+        int nextpos;
+        WMLFormat& format = m_state.formatList[i];
+        if (i < m_state.formatList.count() - 1) {
+            WMLFormat& nextformat = m_state.formatList[i+1];
+            nextpos = nextformat.pos;
+        } else nextpos = m_text.length();
+        if (format.len <= 0)
+            format.len = nextpos - format.pos;
     }
-    else nextpos = m_text.length();
-    if( format.len <= 0 )
-      format.len = nextpos - format.pos;
-  }
 
-  bool result = m_parser->doParagraph( m_text, m_state.formatList, m_state.currentLayout );
+    bool result = m_parser->doParagraph(m_text, m_state.formatList, m_state.currentLayout);
 
-  // ready for next paragraph
-  m_text = "";
-  m_state.formatList.clear();
-  m_state.currentLayout = WMLLayout();
+    // ready for next paragraph
+    m_text = "";
+    m_state.formatList.clear();
+    m_state.currentLayout = WMLLayout();
 
-  // m_state.currentFormat = WMLFormat();
-  // FIXME should we reset formatting ?
+    // m_state.currentFormat = WMLFormat();
+    // FIXME should we reset formatting ?
 
-  return result;
+    return result;
 }
 
 void WMLHandler::pushState()
 {
-  m_stateStack.push( m_state );
+    m_stateStack.push(m_state);
 }
 
 void WMLHandler::popState()
 {
-  if( !m_stateStack.isEmpty() )
-    m_state = m_stateStack.pop();
+    if (!m_stateStack.isEmpty())
+        m_state = m_stateStack.pop();
 }
 
 // formatting for the text
 WMLFormat::WMLFormat()
 {
-  pos = len = 0;
-  fontsize = Normal;
-  bold = italic = underline = false;
-  link = "";
-  href = "";
+    pos = len = 0;
+    fontsize = Normal;
+    bold = italic = underline = false;
+    link = "";
+    href = "";
 }
 
-void WMLFormat::assign( const WMLFormat& f )
+void WMLFormat::assign(const WMLFormat& f)
 {
-  pos = f.pos;
-  len = f.len;
-  bold = f.bold;
-  italic = f.italic;
-  underline = f.underline;
-  fontsize = f.fontsize;
-  link = f.link;
-  href= f.href;
+    pos = f.pos;
+    len = f.len;
+    bold = f.bold;
+    italic = f.italic;
+    underline = f.underline;
+    fontsize = f.fontsize;
+    link = f.link;
+    href = f.href;
 }
 
-WMLFormat::WMLFormat( const WMLFormat& f )
+WMLFormat::WMLFormat(const WMLFormat& f)
 {
-  assign( f );
+    assign(f);
 }
 
-WMLFormat& WMLFormat::operator=( const WMLFormat& f )
+WMLFormat& WMLFormat::operator=(const WMLFormat & f)
 {
-  assign( f );
-  return *this;
+    assign(f);
+    return *this;
 }
 
 // paragraph layout info
 WMLLayout::WMLLayout()
 {
-  align = Left;
+    align = Left;
 }
 
-void WMLLayout::assign( const WMLLayout& l )
+void WMLLayout::assign(const WMLLayout& l)
 {
-  align = l.align;
+    align = l.align;
 }
 
-WMLLayout::WMLLayout( const WMLLayout& l )
+WMLLayout::WMLLayout(const WMLLayout& l)
 {
-  assign( l );
+    assign(l);
 }
 
-WMLLayout& WMLLayout::operator=( const WMLLayout& l )
+WMLLayout& WMLLayout::operator=(const WMLLayout & l)
 {
-  assign( l );
-  return *this;
+    assign(l);
+    return *this;
 }
- 
+
 // The basic WML parser
-void WMLParser::parse( const char* filename )
+void WMLParser::parse(const char* filename)
 {
-   QFile f( filename );
-   QXmlInputSource source( &f );
-   QXmlSimpleReader reader;
-   WMLHandler handler( this );
-   reader.setContentHandler( &handler );
-   reader.parse( source );
+    QFile f(filename);
+    QXmlInputSource source(&f);
+    QXmlSimpleReader reader;
+    WMLHandler handler(this);
+    reader.setContentHandler(&handler);
+    reader.parse(source);
 }
 
 bool WMLParser::doOpenDocument()
 {
-  return true;
+    return true;
 }
 
 bool WMLParser::doCloseDocument()
 {
-  return true;
+    return true;
 }
 
-bool WMLParser::doOpenCard( const QString&, const QString& )
+bool WMLParser::doOpenCard(const QString&, const QString&)
 {
-  return true;
+    return true;
 }
 
 bool WMLParser::doCloseCard()
 {
-  return true;
+    return true;
 }
 
-bool WMLParser::doParagraph( const QString&, WMLFormatList, WMLLayout )
+bool WMLParser::doParagraph(const QString&, WMLFormatList, WMLLayout)
 {
-  return true;
+    return true;
 }
 
 bool WMLParser::doBeginTable()
 {
-  return true;
+    return true;
 }
 
 bool WMLParser::doEndTable()
 {
-  return true;
+    return true;
 }
 
-bool WMLParser::doTableCell( unsigned, unsigned )
+bool WMLParser::doTableCell(unsigned, unsigned)
 {
-  return true;
+    return true;
 }

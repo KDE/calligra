@@ -43,10 +43,12 @@ public:
     /**
      * Pushes the new list-style onto the stack.
      */
-    void push( const KoXmlElement& style );
+    void push(const KoXmlElement& style);
 
     /// @return true if we're inside a list (i.e. the stack isn't empty)
-    bool hasListStyle() const { return !m_stack.isEmpty(); }
+    bool hasListStyle() const {
+        return !m_stack.isEmpty();
+    }
 
     /// @return currently applicable list style, i.e. the one on top of the stack
     /// Most list-level properties are the attributes of that element.
@@ -65,13 +67,17 @@ public:
      * This is used when a level is explicitly specified in the
      * [un]ordered-list tag (OASIS extension)
      */
-    void setInitialLevel( int initialLevel );
+    void setInitialLevel(int initialLevel);
 
     /// @return initial level
-    int initialLevel() const { return m_initialLevel; }
+    int initialLevel() const {
+        return m_initialLevel;
+    }
 
     /// @return current list level
-    int level() const { return m_initialLevel + m_stack.count(); }
+    int level() const {
+        return m_initialLevel + m_stack.count();
+    }
 
 
 private:

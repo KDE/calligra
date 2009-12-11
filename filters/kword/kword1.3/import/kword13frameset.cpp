@@ -26,12 +26,12 @@
 #include <QTextStream>
 
 
-KWord13Frameset::KWord13Frameset( int frameType, int frameInfo, const QString& name )
-    : m_numFrames(0), m_frameType( frameType ), m_frameInfo( frameInfo ), m_name( name )
-{    
+KWord13Frameset::KWord13Frameset(int frameType, int frameInfo, const QString& name)
+        : m_numFrames(0), m_frameType(frameType), m_frameInfo(frameInfo), m_name(name)
+{
 }
 
-KWord13Frameset::~KWord13Frameset( void )
+KWord13Frameset::~KWord13Frameset(void)
 {
 }
 
@@ -47,20 +47,20 @@ bool KWord13Frameset::setKey(const QString&)
     return false;
 }
 
-void KWord13Frameset::xmldump( QTextStream& iostream )
+void KWord13Frameset::xmldump(QTextStream& iostream)
 {
     iostream << "  <frameset variant=\"None\" type=\"" << m_frameType
-         << "\" info=\"" << m_frameInfo
-         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\"/>\n";
+    << "\" info=\"" << m_frameInfo
+    << "\" name=\"" << EscapeXmlDump(m_name) << "\"/>\n";
 }
 
 
-KWordTextFrameset::KWordTextFrameset( int frameType, int frameInfo, const QString& name )
-    : KWord13Frameset( frameType, frameInfo, name )
-{    
+KWordTextFrameset::KWordTextFrameset(int frameType, int frameInfo, const QString& name)
+        : KWord13Frameset(frameType, frameInfo, name)
+{
 }
 
-KWordTextFrameset::~KWordTextFrameset( void )
+KWordTextFrameset::~KWordTextFrameset(void)
 {
 }
 
@@ -70,21 +70,21 @@ bool KWordTextFrameset::addParagraph(const KWord13Paragraph& para)
     return true;
 }
 
-void KWordTextFrameset::xmldump( QTextStream& iostream )
+void KWordTextFrameset::xmldump(QTextStream& iostream)
 {
     iostream << "  <frameset variant=\"Text\" type=\"" << m_frameType
-         << "\" info=\"" << m_frameInfo
-         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\">\n";
-    m_paragraphGroup.xmldump( iostream );
+    << "\" info=\"" << m_frameInfo
+    << "\" name=\"" << EscapeXmlDump(m_name) << "\">\n";
+    m_paragraphGroup.xmldump(iostream);
     iostream << "  </frameset>\n";
 }
 
-KWord13PictureFrameset::KWord13PictureFrameset( int frameType, int frameInfo, const QString& name )
-    : KWord13Frameset( frameType, frameInfo, name )
-{    
+KWord13PictureFrameset::KWord13PictureFrameset(int frameType, int frameInfo, const QString& name)
+        : KWord13Frameset(frameType, frameInfo, name)
+{
 }
 
-KWord13PictureFrameset::~KWord13PictureFrameset( void )
+KWord13PictureFrameset::~KWord13PictureFrameset(void)
 {
 }
 
@@ -94,11 +94,11 @@ bool KWord13PictureFrameset::setKey(const QString& key)
     return true;
 }
 
-void KWord13PictureFrameset::xmldump( QTextStream& iostream )
+void KWord13PictureFrameset::xmldump(QTextStream& iostream)
 {
     iostream << "  <frameset variant=\"Picture\" type=\"" << m_frameType
-         << "\" info=\"" << m_frameInfo
-         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\">\n";
+    << "\" info=\"" << m_frameInfo
+    << "\" name=\"" << EscapeXmlDump(m_name) << "\">\n";
     iostream << "   <key>" << m_pictureKey << "</key>\n";
     iostream << "  </frameset>\n";
 }

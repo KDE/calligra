@@ -31,9 +31,9 @@ class PngExport : public KoFilter
     Q_OBJECT
 
 public:
-    PngExport( QObject* parent, const QStringList& );
+    PngExport(QObject* parent, const QStringList&);
     virtual ~PngExport() {}
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

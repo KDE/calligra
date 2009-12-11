@@ -35,38 +35,38 @@ public:
     SvgGradientHelper();
     ~SvgGradientHelper();
     /// Copy constructor
-    SvgGradientHelper( const SvgGradientHelper &other );
-    
+    SvgGradientHelper(const SvgGradientHelper &other);
+
     /// Sets the gradient units type
-    void setGradientUnits( Units units );
+    void setGradientUnits(Units units);
     /// Returns gradient units type
     Units gradientUnits() const;
 
     /// Sets the gradient
-    void setGradient( QGradient * g );
+    void setGradient(QGradient * g);
     /// Retrurns the gradient
     QGradient * gradient();
 
     /// Copies the given gradient
-    void copyGradient( QGradient * g );
+    void copyGradient(QGradient * g);
 
     /// Returns fill adjusted to the given bounding box
-    QBrush adjustedFill( const QRectF &bound );
+    QBrush adjustedFill(const QRectF &bound);
 
     /// Returns the gradient transformation
     QMatrix transform() const;
     /// Sets the gradient transformation
-    void setTransform( const QMatrix &transform );
+    void setTransform(const QMatrix &transform);
 
     /// Assigment operator
-    SvgGradientHelper & operator = ( const SvgGradientHelper & rhs );
+    SvgGradientHelper & operator = (const SvgGradientHelper & rhs);
 
-    QGradient * adjustedGradient( const QRectF &bound ) const;
+    QGradient * adjustedGradient(const QRectF &bound) const;
 
 private:
 
     /// Duplicates the given gradient and applies the given transformation
-    QGradient * duplicateGradient( const QGradient * g, const QMatrix &transform ) const;
+    QGradient * duplicateGradient(const QGradient * g, const QMatrix &transform) const;
 
     QGradient * m_gradient;
     Units m_gradientUnits;

@@ -26,14 +26,14 @@ namespace KWEFUtil
 {
 
 KWORD_LIBEXPORT_EXPORT QString EscapeSgmlText(const QTextCodec* codec, const QString& strIn,
-    const bool quot = false, const bool apos = false );
+        const bool quot = false, const bool apos = false);
 }
 
 // Deprecated! Use KWEFUtil::EscapeSgmlText
 static inline QString EscapeXmlText(const QString& strIn,
-    const bool quot = false, const bool apos = false )
+                                    const bool quot = false, const bool apos = false)
 {
-    return KWEFUtil::EscapeSgmlText(NULL,strIn,quot,apos);
+    return KWEFUtil::EscapeSgmlText(NULL, strIn, quot, apos);
 }
 
 #endif /* KWEF_UTIL_H */

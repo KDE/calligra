@@ -27,22 +27,26 @@
 
 class LatexParser
 {
-	public:
-		LatexParser();
+public:
+    LatexParser();
 
-		explicit LatexParser(const QString& fileIn);
+    explicit LatexParser(const QString& fileIn);
 
-		~LatexParser();
+    ~LatexParser();
 
-		QString getInputFile() const { return _filename; }
+    QString getInputFile() const {
+        return _filename;
+    }
 
-		void setInputFile(QString filename) { _filename = filename; }
+    void setInputFile(QString filename) {
+        _filename = filename;
+    }
 
-		QList<Element*>* parse();
-		void convert();
-			
-	private:
-		QString _filename;
+    QList<Element*>* parse();
+    void convert();
+
+private:
+    QString _filename;
 
 };
 

@@ -36,26 +36,25 @@ using namespace MSOOXML;
 
 MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(
     const QString& _path, const QString& _file, QMap<QString, QString>& _rels)
-    : path( _path ), file( _file )
-    , rels(&_rels)
+        : path(_path), file(_file)
+        , rels(&_rels)
 {
 }
 
-class MsooXmlRelationshipsReader::Private {
+class MsooXmlRelationshipsReader::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
     QString pathAndFile;
 };
 
 MsooXmlRelationshipsReader::MsooXmlRelationshipsReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -100,14 +99,14 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::relationships)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
@@ -119,7 +118,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::readInternal()
 #undef CURRENT_EL
 #define CURRENT_EL Relationships
 //! Relationships handler
-/*! 
+/*!
  No parent elements.
 
  Child elements:
@@ -143,7 +142,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationships()
 #undef CURRENT_EL
 #define CURRENT_EL Relationship
 //! Relationship handler
-/*! 
+/*!
  Parent elements:
     - [done] Relationships
 
@@ -152,7 +151,7 @@ No child elements.
 KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(Id)
 //unused:    READ_ATTR_WITHOUT_NS(Type)
     READ_ATTR_WITHOUT_NS(Target)
@@ -160,14 +159,14 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     while (Target.startsWith("../")) {
 //        kDebug() << "- Target:" << Target << "fixedPath:" << fixedPath;
         Target = Target.mid(3);
-        fixedPath.truncate( fixedPath.lastIndexOf('/') );
+        fixedPath.truncate(fixedPath.lastIndexOf('/'));
 //        kDebug() << "= Target:" << Target << "fixedPath:" << fixedPath;
     }
-/*    kDebug() << "adding rel:";
-    kDebug() << d->pathAndFile + Id;
-    kDebug() << fixedPath + '/' + Target;*/
+    /*    kDebug() << "adding rel:";
+        kDebug() << d->pathAndFile + Id;
+        kDebug() << fixedPath + '/' + Target;*/
 
-    m_context->rels->insert( d->pathAndFile + Id, fixedPath + '/' + Target );
+    m_context->rels->insert(d->pathAndFile + Id, fixedPath + '/' + Target);
 
     while (!atEnd()) {
         readNext();

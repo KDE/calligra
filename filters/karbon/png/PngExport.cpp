@@ -44,32 +44,31 @@
 #include <QImage>
 
 typedef KGenericFactory<PngExport> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonpngexport, PngExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkarbonpngexport, PngExportFactory("kofficefilters"))
 
 
-PngExport::PngExport( QObject*parent, const QStringList& )
-    : KoFilter(parent)
+PngExport::PngExport(QObject*parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
-PngExport::convert( const QByteArray& from, const QByteArray& to )
+PngExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( to != "image/png" || from != "application/vnd.oasis.opendocument.graphics" )
-    {
+    if (to != "image/png" || from != "application/vnd.oasis.opendocument.graphics") {
         return KoFilter::NotImplemented;
     }
 
     KoDocument * document = m_chain->inputDocument();
-    if( ! document )
+    if (! document)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>( document );
-    if( ! karbonPart )
+    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(document);
+    if (! karbonPart)
         return KoFilter::WrongFormat;
 
     KoShapePainter painter;
-    painter.setShapes( karbonPart->document().shapes() );
+    painter.setShapes(karbonPart->document().shapes());
 
     // get the bounding rect of the content
     QRectF shapesRect = painter.contentRect();
@@ -77,33 +76,32 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     QSizeF pointSize = shapesRect.size();
     // get the size in pixel (100% zoom)
     KoZoomHandler zoomHandler;
-    QSize pixelSize = zoomHandler.documentToView( pointSize ).toSize();
-    QColor backgroundColor( Qt::white );
+    QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
+    QColor backgroundColor(Qt::white);
 
-    if( ! m_chain->manager()->getBatchMode() )
-    {
-        PngExportOptionsWidget * widget = new PngExportOptionsWidget( pointSize );
-        widget->setUnit( karbonPart->unit() );
-        widget->setBackgroundColor( backgroundColor );
+    if (! m_chain->manager()->getBatchMode()) {
+        PngExportOptionsWidget * widget = new PngExportOptionsWidget(pointSize);
+        widget->setUnit(karbonPart->unit());
+        widget->setBackgroundColor(backgroundColor);
 
         KDialog dlg;
-        dlg.setCaption( i18n("PNG Export Options") );
-        dlg.setButtons( KDialog::Ok | KDialog::Cancel );
-        dlg.setMainWidget( widget );
-        if( dlg.exec() != QDialog::Accepted )
+        dlg.setCaption(i18n("PNG Export Options"));
+        dlg.setButtons(KDialog::Ok | KDialog::Cancel);
+        dlg.setMainWidget(widget);
+        if (dlg.exec() != QDialog::Accepted)
             return KoFilter::UserCancelled;
 
         pixelSize = widget->pixelSize();
         backgroundColor = widget->backgroundColor();
     }
-    QImage image( pixelSize, QImage::Format_ARGB32 );
+    QImage image(pixelSize, QImage::Format_ARGB32);
 
     // draw the background of the image
-    image.fill( backgroundColor.rgba() );
+    image.fill(backgroundColor.rgba());
 
     // paint the shapes
     painter.paintShapes(image);
-    image.save( m_chain->outputFile(), "PNG" );
+    image.save(m_chain->outputFile(), "PNG");
 
     return KoFilter::OK;
 }

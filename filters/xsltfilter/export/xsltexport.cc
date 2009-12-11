@@ -28,10 +28,11 @@
 #include <QByteArray>
 
 typedef KGenericFactory<XSLTExport> XSLTExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libxsltexport, XSLTExportFactory("kofficefilters"))
 
 // Check for XSLT files
-extern "C" {
+extern "C"
+{
     int check_libxsltexport() {
         return 0;
     }
@@ -39,21 +40,22 @@ extern "C" {
 
 
 XSLTExport::XSLTExport(QObject* parent, const QStringList&) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus XSLTExport::convert( const QByteArray& from, const QByteArray&)
+KoFilter::ConversionStatus XSLTExport::convert(const QByteArray& from, const QByteArray&)
 {
-    if(from != "application/x-kword" &&
-       from != "application/x-kontour" && from != "application/x-kspread" &&
-       from != "application/x-kivio" && from != "application/x-kchart" &&
-       from != "application/x-kpresenter")
+    if (from != "application/x-kword" &&
+            from != "application/x-kontour" && from != "application/x-kspread" &&
+            from != "application/x-kivio" && from != "application/x-kchart" &&
+            from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-    kDebug() <<"In the xslt filter";
+    kDebug() << "In the xslt filter";
 
     KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
 
-    if(!in) {
+    if (!in) {
         kError() << "Unable to open input file!" << endl;
         return KoFilter::FileNotFound;
     }

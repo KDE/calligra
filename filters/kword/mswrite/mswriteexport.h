@@ -33,13 +33,13 @@
 
 class MSWriteExport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	MSWriteExport (QObject* parent, const QStringList &);
-	virtual ~MSWriteExport ();
+    MSWriteExport(QObject* parent, const QStringList &);
+    virtual ~MSWriteExport();
 
-	KoFilter::ConversionStatus convert (const QByteArray &from, const QByteArray &to);
+    KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif // MSWRITEEXPORT_H

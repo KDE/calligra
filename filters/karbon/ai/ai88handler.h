@@ -26,31 +26,32 @@
   *@author Dirk Schoenberger
   */
 
-class AI88Handler {
+class AI88Handler
+{
 private:
-  AIParserBase *m_delegate;
+    AIParserBase *m_delegate;
 
-  void _handleSetDash();
-  void _handleSetStrokeColorCMYK();
-  void _handleSetFillColorCMYK();
-  void _handleSetStrokeColorGray();
-  void _handleSetFillColorGray();
-  void _handleSetStrokeColorCustom();
-  void _handleSetFillColorCustom();
-  void _handleSetFillPattern();
-  void _handleSetStrokePattern();
-  void _handlePatternDefinition();
-  void _handleGsaveIncludeDocument();
-  void _handleSetCurrentText();
-  void _handleTextBlock (TextOperation to);
-  void _handleTextOutput ();
-  void _handleFontEncoding();
+    void _handleSetDash();
+    void _handleSetStrokeColorCMYK();
+    void _handleSetFillColorCMYK();
+    void _handleSetStrokeColorGray();
+    void _handleSetFillColorGray();
+    void _handleSetStrokeColorCustom();
+    void _handleSetFillColorCustom();
+    void _handleSetFillPattern();
+    void _handleSetStrokePattern();
+    void _handlePatternDefinition();
+    void _handleGsaveIncludeDocument();
+    void _handleSetCurrentText();
+    void _handleTextBlock(TextOperation to);
+    void _handleTextOutput();
+    void _handleFontEncoding();
 
 public:
-	AI88Handler(AIParserBase *delegate);
-	~AI88Handler();
+    AI88Handler(AIParserBase *delegate);
+    ~AI88Handler();
 
-  bool handleAIOperation (AIOperation op);
+    bool handleAIOperation(AIOperation op);
 };
 
 #endif

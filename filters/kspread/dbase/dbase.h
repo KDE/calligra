@@ -30,9 +30,9 @@
 
 class DBaseField
 {
-  public:
+public:
     QString name;
-    enum { Unknown, Character, Date, Numeric, Logical, Memo } type; 
+    enum { Unknown, Character, Date, Numeric, Logical, Memo } type;
     unsigned length;
     unsigned decimals;
 };
@@ -40,21 +40,27 @@ class DBaseField
 class DBase
 {
 
-  public:
+public:
     DBase();
     ~DBase();
 
     QList<DBaseField*> fields;
 
-    bool load( const QString& filename );
-    QStringList readRecord( unsigned recno );
+    bool load(const QString& filename);
+    QStringList readRecord(unsigned recno);
     void close();
 
-    unsigned recordCount(){ return m_recordCount; }
-    int version(){ return m_version; } 
-    QDate lastUpdate(){ return m_lastUpdate; }
+    unsigned recordCount() {
+        return m_recordCount;
+    }
+    int version() {
+        return m_version;
+    }
+    QDate lastUpdate() {
+        return m_lastUpdate;
+    }
 
-  private:
+private:
 
     QFile m_file;
     QDataStream m_stream;

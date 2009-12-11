@@ -39,48 +39,48 @@
 
 class Paragraph
 {
-    public:
-         explicit Paragraph( KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0 );
-        ~Paragraph();
+public:
+    explicit Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, int outlineLevel = 0);
+    ~Paragraph();
 
-        void writeToFile( KoXmlWriter* writer );
-        void addRunOfText( QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles);
-        void openInnerParagraph();
-        void closeInnerParagraph();
-        void setParagraphProperties( wvWare::SharedPtr<const wvWare::ParagraphProperties> properties );
+    void writeToFile(KoXmlWriter* writer);
+    void addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles);
+    void openInnerParagraph();
+    void closeInnerParagraph();
+    void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
 
-        // Set the general named style that applies to this paragraph
-        void setParagraphStyle( const wvWare::Style* paragraphStyle );
-        KoGenStyle* getOdfParagraphStyle();
+    // Set the general named style that applies to this paragraph
+    void setParagraphStyle(const wvWare::Style* paragraphStyle);
+    KoGenStyle* getOdfParagraphStyle();
 
-        // Static functions for parsing wvWare properties and applying
-        // them onto a KoGenStyle.
-        static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
-                KoGenStyle* style, const wvWare::Style* parentStyle);
-        static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle);
+    // Static functions for parsing wvWare properties and applying
+    // them onto a KoGenStyle.
+    static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
+                                         KoGenStyle* style, const wvWare::Style* parentStyle);
+    static void applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle);
 
-    private:
-        wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
-        wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
+private:
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
 
-        // ODF styles.  The MS equivalents are below.
-        KoGenStyle* m_odfParagraphStyle; //pointer to KOffice structure for paragraph formatting
-        KoGenStyle* m_odfParagraphStyle2; //place to store original style when we have an inner paragraph
-        KoGenStyles* m_mainStyles; //pointer to style collection for this document
+    // ODF styles.  The MS equivalents are below.
+    KoGenStyle* m_odfParagraphStyle; //pointer to KOffice structure for paragraph formatting
+    KoGenStyle* m_odfParagraphStyle2; //place to store original style when we have an inner paragraph
+    KoGenStyles* m_mainStyles; //pointer to style collection for this document
 
-        // MS Styles
-        const wvWare::Style* m_paragraphStyle;  // style for the paragraph
-        const wvWare::Style* m_paragraphStyle2; // style when in inner paragraph
+    // MS Styles
+    const wvWare::Style* m_paragraphStyle;  // style for the paragraph
+    const wvWare::Style* m_paragraphStyle2; // style when in inner paragraph
 
-        std::vector<QString> m_textStrings; // list of text strings within a paragraph
-        std::vector<QString> m_textStrings2; // original list when in inner paragraph
-        std::vector<const KoGenStyle*> m_textStyles; // list of styles for text within a paragraph
-        std::vector<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
+    std::vector<QString> m_textStrings; // list of text strings within a paragraph
+    std::vector<QString> m_textStrings2; // original list when in inner paragraph
+    std::vector<const KoGenStyle*> m_textStyles; // list of styles for text within a paragraph
+    std::vector<const KoGenStyle*> m_textStyles2; // original list when in inner paragraph
 
-        bool m_inStylesDotXml; //let us know if we're in content.xml or styles.xml
-        bool m_isHeading; //information for writing a heading instead of a paragraph
-                          // (odt looks formats them similarly)
-        int m_outlineLevel;
+    bool m_inStylesDotXml; //let us know if we're in content.xml or styles.xml
+    bool m_isHeading; //information for writing a heading instead of a paragraph
+    // (odt looks formats them similarly)
+    int m_outlineLevel;
 }; //end class Paragraph
 
 #endif //PARAGRAPH_H

@@ -44,44 +44,41 @@
 class OOWRITERExportFactory : public KGenericFactory<OOWRITERExport>
 {
 public:
-    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport> ("kwordoowriterexport")
-    {}
+    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport> ("kwordoowriterexport") {}
 };
 
-K_EXPORT_COMPONENT_FACTORY( liboowriterexport, OOWRITERExportFactory() )
+K_EXPORT_COMPONENT_FACTORY(liboowriterexport, OOWRITERExportFactory())
 
 OOWRITERExport::OOWRITERExport(QObject* parent , const QStringList &) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus OOWRITERExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus OOWRITERExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( to != "application/vnd.sun.xml.writer" || from != "application/x-kword" )
-    {
+    if (to != "application/vnd.sun.xml.writer" || from != "application/x-kword") {
         return KoFilter::NotImplemented;
     }
 
     // We need KimageIO's help in OOWriterWorker::convertUnknownImage
 
 
-    OOWriterWorker* worker=new OOWriterWorker();
+    OOWriterWorker* worker = new OOWriterWorker();
 
-    if (!worker)
-    {
+    if (!worker) {
         kError(30506) << "Cannot create Worker! Aborting!" << endl;
         return KoFilter::StupidError;
     }
 
-    KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
+    KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-    if (!leader)
-    {
+    if (!leader) {
         kError(30506) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }
 
-    KoFilter::ConversionStatus result=leader->convert(m_chain,from,to);
+    KoFilter::ConversionStatus result = leader->convert(m_chain, from, to);
 
     delete leader;
     delete worker;

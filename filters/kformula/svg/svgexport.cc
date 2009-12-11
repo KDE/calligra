@@ -38,10 +38,10 @@
 
 
 typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfosvgexport, SvgExportFactory( "svgexport" ) )
+K_EXPORT_COMPONENT_FACTORY(libkfosvgexport, SvgExportFactory("svgexport"))
 
 SvgExport::SvgExport(QObject* parent, const QStringList&)
-    : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
@@ -54,31 +54,31 @@ KoFilter::ConversionStatus
 SvgExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for proper conversion.
-    if ( from != "application/x-kformula" || to != "image/svg+xml" )
+    if (from != "application/x-kformula" || to != "image/svg+xml")
         return KoFilter::NotImplemented;
 
     // Read the contents of the KFormula file
-    KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
-    if ( !storeIn ) {
-	KMessageBox::error( 0, i18n("Failed to read data." ),
-			    i18n( "SVG Export Error" ) );
-	return KoFilter::FileNotFound;
+    KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
+    if (!storeIn) {
+        KMessageBox::error(0, i18n("Failed to read data."),
+                           i18n("SVG Export Error"));
+        return KoFilter::FileNotFound;
     }
 
     // Get the XML tree.
     QDomDocument  domIn;
-    domIn.setContent( storeIn );
+    domIn.setContent(storeIn);
     QDomElement   docNode = domIn.documentElement();
 
     // Read the document from the XML tree.
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper(KGlobal::config(), 0);
     KFormula::Document* kformulaDoc = new KFormula::Document;
-    wrapper->document( kformulaDoc );
+    wrapper->document(kformulaDoc);
     KFormula::Container* formula = kformulaDoc->createFormula();
 
-    if ( !kformulaDoc->loadXML( domIn ) ) {
-        KMessageBox::error( 0, i18n( "Malformed XML data." ),
-			    i18n( "SVG Export Error" ) );
+    if (!kformulaDoc->loadXML(domIn)) {
+        KMessageBox::error(0, i18n("Malformed XML data."),
+                           i18n("SVG Export Error"));
         return KoFilter::WrongFormat;
     }
 
@@ -86,13 +86,13 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     Q3Picture  picture;
     QPainter  painter(&picture);
     QRect     rect(QPoint(0, 0), QPoint(500, 400));
-    formula->draw( painter, rect, false );
+    formula->draw(painter, rect, false);
     painter.end();
 
     // Save the image.
-    if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ),
-			    i18n( "SVG Export Error" ) );
+    if (!picture.save(m_chain->outputFile(), "SVG")) {
+        KMessageBox::error(0, i18n("Failed to write file."),
+                           i18n("SVG Export Error"));
     }
 
     delete formula;

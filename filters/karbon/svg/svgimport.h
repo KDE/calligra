@@ -43,10 +43,10 @@ public:
 protected:
 
     /// The main entry point for the conversion
-    void convert( const KoXmlElement &rootElement );
+    void convert(const KoXmlElement &rootElement);
 
     /// Builds the document from the given shapes list
-    void buildDocument( const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes );
+    void buildDocument(const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes);
 
 private:
     KarbonDocument * m_document;

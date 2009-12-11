@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kDebug stream */
+#include <kdebug.h>  /* for kDebug stream */
 #include "listelement.h"
 
 /*******************************************/
@@ -27,9 +27,9 @@
 /*******************************************/
 ListElement::ListElement()
 {
-	_start = 0;
-	_end   = 0;
-	_size  = 0;
+    _start = 0;
+    _end   = 0;
+    _size  = 0;
 }
 
 /*******************************************/
@@ -37,15 +37,14 @@ ListElement::ListElement()
 /*******************************************/
 ListElement::~ListElement()
 {
-	Element *elt = 0;
-	kDebug(30522) <<"Destruction of a list of elements";
-	while(_start != 0)
-	{
-		elt    = _start;
-		_start = _start->getNext();
-		delete elt;
-		_size = _size - 1;
-	}
+    Element *elt = 0;
+    kDebug(30522) << "Destruction of a list of elements";
+    while (_start != 0) {
+        elt    = _start;
+        _start = _start->getNext();
+        delete elt;
+        _size = _size - 1;
+    }
 }
 
 /*******************************************/
@@ -53,7 +52,7 @@ ListElement::~ListElement()
 /*******************************************/
 void ListElement::initialiser(Element *elt)
 {
-	_end  = _start = elt;
+    _end  = _start = elt;
 }
 
 
@@ -62,16 +61,13 @@ void ListElement::initialiser(Element *elt)
 /*******************************************/
 void ListElement::add(Element *elt)
 {
-	if(_start == 0)
-	{
-		initialiser(elt);
-		_size = 1;
-	}
-	else
-	{
-		_end->setNext(elt);
-		_end = elt;
-		_size = _size + 1;
-	}
+    if (_start == 0) {
+        initialiser(elt);
+        _size = 1;
+    } else {
+        _end->setNext(elt);
+        _end = elt;
+        _size = _size + 1;
+    }
 }
 

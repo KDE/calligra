@@ -29,10 +29,10 @@ class PngExportOptionsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit PngExportOptionsWidget( QSizeF pointSize, QWidget *parent = 0 );
+    explicit PngExportOptionsWidget(QSizeF pointSize, QWidget *parent = 0);
 
     /// Sets the initial unit to use
-    void setUnit( const KoUnit &unit );
+    void setUnit(const KoUnit &unit);
 
     /// Returns the chosen export size in pixel
     QSize pixelSize() const;
@@ -41,24 +41,24 @@ public:
     QSizeF pointSize() const;
 
     /// Sets the background color
-    void setBackgroundColor( const QColor &color );
+    void setBackgroundColor(const QColor &color);
 
     /// Returns the chosen background color
     QColor backgroundColor() const;
 
 private slots:
-    void unitWidthChanged( qreal );
-    void unitHeightChanged( qreal );
-    void pxWidthChanged( int );
-    void pxHeightChanged( int );
-    void dpiChanged( int );
-    void unitChanged( int );
-    void aspectChanged( bool );
+    void unitWidthChanged(qreal);
+    void unitHeightChanged(qreal);
+    void pxWidthChanged(int);
+    void pxHeightChanged(int);
+    void dpiChanged(int);
+    void unitChanged(int);
+    void aspectChanged(bool);
 private:
-    void updateFromPointSize( const QSizeF &pointSize );
-    void updateFromPixelSize( const QSize &pixelSize );
+    void updateFromPointSize(const QSizeF &pointSize);
+    void updateFromPixelSize(const QSize &pixelSize);
 
-    void blockChildSignals( bool block );
+    void blockChildSignals(bool block);
 
     Ui_PngExportOptionsWidget widget;
     QSizeF m_pointSize;

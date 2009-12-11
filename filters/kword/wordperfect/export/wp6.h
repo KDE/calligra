@@ -30,7 +30,7 @@ class QDataStream;
 
 class WPSixWorker : public KWEFBaseWorker
 {
-  public:
+public:
     explicit WPSixWorker(void)  { }
     virtual ~WPSixWorker(void) { }
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
@@ -38,8 +38,8 @@ class WPSixWorker : public KWEFBaseWorker
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
-  private:
+                                 const ValueListFormatData& paraFormatDataList);
+private:
     QString filename;
     QFile outfile;
     QDataStream output;

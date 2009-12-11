@@ -29,81 +29,80 @@ using namespace Swinder;
 class Workbook::Private
 {
 public:
-  std::vector<Sheet*> sheets;
-  bool passwordProtected;
-  QHash<PropertyType, QVariant> properties;
+    std::vector<Sheet*> sheets;
+    bool passwordProtected;
+    QHash<PropertyType, QVariant> properties;
 };
 
 Workbook::Workbook()
 {
-  d = new Workbook::Private();
-  d->passwordProtected = false;
+    d = new Workbook::Private();
+    d->passwordProtected = false;
 }
 
 Workbook::~Workbook()
 {
-  clear();
-  delete d;
+    clear();
+    delete d;
 }
 
 void Workbook::clear()
 {
-  // FIXME use iterator
-  for( unsigned i=0; i<sheetCount(); i++ )
-  {
-    Sheet* s = sheet( i );
-    delete s;
+    // FIXME use iterator
+    for (unsigned i = 0; i < sheetCount(); i++) {
+        Sheet* s = sheet(i);
+        delete s;
     }
-  d->sheets.clear();
+    d->sheets.clear();
 }
 
-bool Workbook::load( const char* filename )
+bool Workbook::load(const char* filename)
 {
-  ExcelReader* reader = new ExcelReader;
-  bool result = reader->load( this, filename );
-  delete reader;
-  return result;
+    ExcelReader* reader = new ExcelReader;
+    bool result = reader->load(this, filename);
+    delete reader;
+    return result;
 }
 
-void Workbook::appendSheet( Sheet* sheet )
+void Workbook::appendSheet(Sheet* sheet)
 {
-  d->sheets.push_back( sheet );
+    d->sheets.push_back(sheet);
 }
 
 unsigned Workbook::sheetCount() const
 {
-  return d->sheets.size();
+    return d->sheets.size();
 }
 
-Sheet* Workbook::sheet( unsigned index )
+Sheet* Workbook::sheet(unsigned index)
 {
-  if( index >= sheetCount() ) return (Sheet*)0;
-  return d->sheets[index];
+    if (index >= sheetCount()) return (Sheet*)0;
+    return d->sheets[index];
 }
 
-bool Workbook::hasProperty( PropertyType type ) const
+bool Workbook::hasProperty(PropertyType type) const
 {
-  return d->properties.contains( type );
+    return d->properties.contains(type);
 }
 
-QVariant Workbook::property( PropertyType type, const QVariant &defaultValue ) const
+QVariant Workbook::property(PropertyType type, const QVariant &defaultValue) const
 {
-    return d->properties.contains( type ) ? d->properties[ type ] : defaultValue;
+    return d->properties.contains(type) ? d->properties[ type ] : defaultValue;
 }
 
-void Workbook::setProperty( PropertyType type, const QVariant &value )
+void Workbook::setProperty(PropertyType type, const QVariant &value)
 {
     d->properties[ type ] = value;
 }
-  
+
 bool Workbook::isPasswordProtected() const
 {
-  return d->passwordProtected;
+    return d->passwordProtected;
 }
 
-void Workbook::setPasswordProtected( bool p )
+void Workbook::setPasswordProtected(bool p)
 {
-  d->passwordProtected = p;
+    d->passwordProtected = p;
 }
 
 

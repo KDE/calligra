@@ -26,14 +26,15 @@
   *@author Dirk Schoenberger
   */
 
-class AI3Handler {
+class AI3Handler
+{
 private:
-  AIParserBase *m_delegate;
+    AIParserBase *m_delegate;
 public:
-	AI3Handler(AIParserBase *delegate);
-	~AI3Handler();
+    AI3Handler(AIParserBase *delegate);
+    ~AI3Handler();
 
-  bool handleAIOperation (AIOperation op);
+    bool handleAIOperation(AIOperation op);
 };
 
 #endif

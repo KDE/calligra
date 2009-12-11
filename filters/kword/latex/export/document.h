@@ -25,7 +25,7 @@
 #include <QList>
 #include <QTextStream>
 
-#include "listtable.h"		/* list of tables (another kind of list of elements). */
+#include "listtable.h"  /* list of tables (another kind of list of elements). */
 #include "key.h"
 
 
@@ -39,74 +39,74 @@
  */
 class Document: public XmlParser
 {
-	public:
-		enum EGenerate { E_LATEX, E_KWORD, E_CONFIG };
+public:
+    enum EGenerate { E_LATEX, E_KWORD, E_CONFIG };
 
-	private:
-		QList<Element*> _headers;
-		QList<Element*> _footers;
-		QList<Element*> _footnotes;
-		QList<Element*> _formulas;
-		QList<Element*> _corps;
-		QList<Element*> _pixmaps;
-		QList<Key*> _keys;
+private:
+    QList<Element*> _headers;
+    QList<Element*> _footers;
+    QList<Element*> _footnotes;
+    QList<Element*> _formulas;
+    QList<Element*> _corps;
+    QList<Element*> _pixmaps;
+    QList<Key*> _keys;
 
-		ListTable      _tables;
-		EGenerate     _generation;
+    ListTable      _tables;
+    EGenerate     _generation;
 
-	public:
-		/**
-		 * Constructor
-		 *
-		 * Creates a new instance of Document.
-		 */
-		Document();
+public:
+    /**
+     * Constructor
+     *
+     * Creates a new instance of Document.
+     */
+    Document();
 
-		/**
-		 * Destructor
-		 *
-		 * Remove the list of headers, footers and the body.
-		 */
-		virtual ~Document();
+    /**
+     * Destructor
+     *
+     * Remove the list of headers, footers and the body.
+     */
+    virtual ~Document();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		/**
-		 * @return the next frame type (header, footer, body, footnote).
-		 */
-		SType getTypeFrameset(const QDomNode);
-		//FileHeader* getFileHeader() const { return _fileHeader; }
-		//void setFileHeader(FileHeader *h) { _fileHeader = h; }
+    /**
+     * @return the next frame type (header, footer, body, footnote).
+     */
+    SType getTypeFrameset(const QDomNode);
+    //FileHeader* getFileHeader() const { return _fileHeader; }
+    //void setFileHeader(FileHeader *h) { _fileHeader = h; }
 
-		void analyze(const QDomNode);
-		void analyzePixmaps(const QDomNode);
+    void analyze(const QDomNode);
+    void analyzePixmaps(const QDomNode);
 
-		void generate(QTextStream&, bool);
-		Element* searchAnchor(const QString&);
-		Element* searchFootnote(const QString&);
-		Key* searchKey(const QString& keyName);
-		/** Save the file in a temp file. */
-		QString extractData(const QString& key);
-		/** Build a DOM tree (e.g. a KOffice part) */
-		//QDomNode extractKoData(const QString& key);
-		//Pixmap*  searchPixmap(const QString&);
+    void generate(QTextStream&, bool);
+    Element* searchAnchor(const QString&);
+    Element* searchFootnote(const QString&);
+    Key* searchKey(const QString& keyName);
+    /** Save the file in a temp file. */
+    QString extractData(const QString& key);
+    /** Build a DOM tree (e.g. a KOffice part) */
+    //QDomNode extractKoData(const QString& key);
+    //Pixmap*  searchPixmap(const QString&);
 
-	private:
-		/**
-		 * Generate the second part of the preamble
-		 */
-		void generatePreamble(QTextStream&);
+private:
+    /**
+     * Generate the second part of the preamble
+     */
+    void generatePreamble(QTextStream&);
 
-		/**
-		 * Generate the header
-		 */
-		void  generateTypeHeader(QTextStream&, Element*);
-		/**
-		 * Generate the footer
-		 */
-		void  generateTypeFooter(QTextStream&, Element*);
+    /**
+     * Generate the header
+     */
+    void  generateTypeHeader(QTextStream&, Element*);
+    /**
+     * Generate the footer
+     */
+    void  generateTypeFooter(QTextStream&, Element*);
 };
 
 #endif /* __KWORD_LATEX_DOCUMENT_H__ */

@@ -30,7 +30,7 @@ DESCRIPTION
 #include <Q3CString>
 
 class MSODImport :
-    public KoEmbeddingFilter, protected Msod
+            public KoEmbeddingFilter, protected Msod
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ public:
         const QStringList&);
     virtual ~MSODImport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
 
@@ -68,11 +68,11 @@ protected:
 
 signals:
     // Communication signals to the parent filters
-    void commSignalDelayStream( const char* delay );
-    void commSignalShapeID( unsigned int& shapeID );
+    void commSignalDelayStream(const char* delay);
+    void commSignalShapeID(unsigned int& shapeID);
 
 private:
-    virtual void savePartContents( QIODevice* file );
+    virtual void savePartContents(QIODevice* file);
 
     // Debug support.
     static const int s_area;

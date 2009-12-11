@@ -26,18 +26,18 @@ class KSpreadLatexExportDiaImpl;
 
 class LatexExportIface: public DCOPObject
 {
-		K_DCOP
+    K_DCOP
 
-	public:
+public:
     LatexExportIface(KSpreadLatexExportDiaImpl* dia);
-		
+
     ~LatexExportIface();
 
-	k_dcop:
-		void useDefaultConfig();
+k_dcop:
+    void useDefaultConfig();
 
-	private:
-		KSpreadLatexExportDiaImpl* _dialog;
+private:
+    KSpreadLatexExportDiaImpl* _dialog;
 };
 
 #endif /* __LATEXEXPORTIFACE_H__ */

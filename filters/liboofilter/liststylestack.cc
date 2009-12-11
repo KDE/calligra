@@ -22,7 +22,7 @@
 #include "ooutils.h" // for ooNS
 
 ListStyleStack::ListStyleStack()
-    : m_initialLevel( 0 )
+        : m_initialLevel(0)
 {
 }
 
@@ -35,25 +35,25 @@ void ListStyleStack::pop()
     m_stack.pop();
 }
 
-void ListStyleStack::push( const KoXmlElement& style )
+void ListStyleStack::push(const KoXmlElement& style)
 {
-    m_stack.push( style );
+    m_stack.push(style);
 }
 
-void ListStyleStack::setInitialLevel( int initialLevel )
+void ListStyleStack::setInitialLevel(int initialLevel)
 {
-    Q_ASSERT( m_stack.isEmpty() );
+    Q_ASSERT(m_stack.isEmpty());
     m_initialLevel = initialLevel;
 }
 
 KoXmlElement ListStyleStack::currentListStyle() const
 {
-    Q_ASSERT( !m_stack.isEmpty() );
+    Q_ASSERT(!m_stack.isEmpty());
     return m_stack.top();
 }
 
 KoXmlElement ListStyleStack::currentListStyleProperties() const
 {
     KoXmlElement style = currentListStyle();
-    return KoXml::namedItemNS( style, ooNS::style, "properties" );
+    return KoXml::namedItemNS(style, ooNS::style, "properties");
 }

@@ -40,10 +40,10 @@
 #include <KWEFBaseWorker.h>
 
 typedef KGenericFactory<DocBookExport> DocBookExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libdocbookexport, DocBookExportFactory("kofficefilters"))
 
-DocBookExport::DocBookExport ( QObject          *parent,
-                               const QStringList & ) : KoFilter (parent)
+DocBookExport::DocBookExport(QObject          *parent,
+                             const QStringList &) : KoFilter(parent)
 {
 }
 
@@ -52,8 +52,7 @@ DocBookExport::DocBookExport ( QObject          *parent,
 #define TABLES_WITH_TITLES   0
 
 
-struct DocData
-{
+struct DocData {
     bool article;
     bool head1;
     bool head2;
@@ -67,46 +66,46 @@ struct DocData
 
 class DocBookWorker : public KWEFBaseWorker
 {
-    public:
-        DocBookWorker (void) {}
+public:
+    DocBookWorker(void) {}
 
-        bool doOpenDocument  ( void );
-        bool doCloseDocument ( void );
+    bool doOpenDocument(void);
+    bool doCloseDocument(void);
 
-        bool doOpenFile  ( const QString &, const QString & );
-        bool doCloseFile ( void );
+    bool doOpenFile(const QString &, const QString &);
+    bool doCloseFile(void);
 
-        bool doOpenBody  ( void );
-        bool doCloseBody ( void );
+    bool doOpenBody(void);
+    bool doCloseBody(void);
 
-        bool doFullDocumentInfo ( const KWEFDocumentInfo & );
+    bool doFullDocumentInfo(const KWEFDocumentInfo &);
 
-        bool doFullDocument ( const QList<ParaData> &paraList );
+    bool doFullDocument(const QList<ParaData> &paraList);
 
-    private:
-        void ProcessPictureData ( const Picture  &picture );
+private:
+    void ProcessPictureData(const Picture  &picture);
 
-        void ProcessTableData ( const Table &table );
+    void ProcessTableData(const Table &table);
 
-        void ProcessParagraphData ( const ParaData &para,
-                                    QString         tag );
+    void ProcessParagraphData(const ParaData &para,
+                              QString         tag);
 
-        void CloseItemizedList     ( void );
-        void CloseEnumeratedList   ( void );
-        void CloseAlphabeticalList ( void );
-        void CloseLists            ( void );
+    void CloseItemizedList(void);
+    void CloseEnumeratedList(void);
+    void CloseAlphabeticalList(void);
+    void CloseLists(void);
 
-        void CloseHead4           ( void );
-        void CloseHead3           ( void );
-        void CloseHead2           ( void );
-        void CloseHead1AndArticle ( void );
+    void CloseHead4(void);
+    void CloseHead3(void);
+    void CloseHead2(void);
+    void CloseHead1AndArticle(void);
 
-        void OpenArticleUnlessHead1 ( void );
+    void OpenArticleUnlessHead1(void);
 
-        QString  outputText;
-        DocData  docData;
-        QFile   *fileOut;
-        QString  exportFileName;
+    QString  outputText;
+    DocData  docData;
+    QFile   *fileOut;
+    QString  exportFileName;
 };
 
 
@@ -114,35 +113,31 @@ class DocBookWorker : public KWEFBaseWorker
 // copy of the image file into *.sgml.d/pictures/*.* from KoStore
 // pictures/*.*, and creates the necessary DocBook tags for it.
 
-void DocBookWorker::ProcessPictureData ( const Picture  &picture )
+void DocBookWorker::ProcessPictureData(const Picture  &picture)
 {
     QByteArray byteArray;
 
-    if ( loadSubFile ( picture.koStoreName,byteArray ) )
-    {
-        QFileInfo fileInfo (exportFileName);
-        QDir dir ( fileInfo.dirPath () );
-        QString subDirName = fileInfo.fileName () + ".d";
+    if (loadSubFile(picture.koStoreName, byteArray)) {
+        QFileInfo fileInfo(exportFileName);
+        QDir dir(fileInfo.dirPath());
+        QString subDirName = fileInfo.fileName() + ".d";
 
-        if ( !dir.exists (subDirName) )
-        {
-            dir.mkdir (subDirName);
+        if (!dir.exists(subDirName)) {
+            dir.mkdir(subDirName);
         }
 
-        dir.cd (subDirName);
+        dir.cd(subDirName);
 
-        if ( !dir.exists ("pictures") )
-        {
-            dir.mkdir ("pictures");
+        if (!dir.exists("pictures")) {
+            dir.mkdir("pictures");
         }
 
-        QString pictureFileName = dir.filePath (picture.koStoreName);
+        QString pictureFileName = dir.filePath(picture.koStoreName);
 
-        QFile pictureFile (pictureFileName);
+        QFile pictureFile(pictureFileName);
 
-        if ( pictureFile.open (QIODevice::WriteOnly) )
-        {
-            pictureFile.write ( byteArray, byteArray.size () );
+        if (pictureFile.open(QIODevice::WriteOnly)) {
+            pictureFile.write(byteArray, byteArray.size());
 
             QString pictureText;
 
@@ -169,17 +164,13 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 #endif
 
             outputText += pictureText;
-        }
-        else
-        {
-            kError (30507) << "Unable to open picture file " << pictureFileName << "!" << endl;
+        } else {
+            kError(30507) << "Unable to open picture file " << pictureFileName << "!" << endl;
 
-            pictureFile.close ();
+            pictureFile.close();
         }
-    }
-    else
-    {
-        kError (30507) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
+    } else {
+        kError(30507) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
     }
 }
 
@@ -187,10 +178,10 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 // ProcessTableData () takes the table data and creates the necessary
 // DocBook tags for it.
 
-void DocBookWorker::ProcessTableData ( const Table &table )
+void DocBookWorker::ProcessTableData(const Table &table)
 {
 #if 0
-    kError (30507) << "DEBUG: ProcessTableData ()" << endl;
+    kError(30507) << "DEBUG: ProcessTableData ()" << endl;
 #endif
 
     QString tableText;
@@ -207,21 +198,18 @@ void DocBookWorker::ProcessTableData ( const Table &table )
     tableText += "<INFORMALTABLE>\n";
 #endif
 
-    tableText += "  <TGROUP COLS=\"" + QString::number (table.cols) + "\">\n";
+    tableText += "  <TGROUP COLS=\"" + QString::number(table.cols) + "\">\n";
     tableText += "    <TBODY>\n";
 
     int currentRow = -1;
 
     QList<TableCell>::ConstIterator cellIt;
 
-    for ( cellIt = table.cellList.begin ();
-          cellIt != table.cellList.end ();
-          cellIt++ )
-    {
-        if ( (*cellIt).row != currentRow )
-        {
-            if ( currentRow >= 0 )
-            {
+    for (cellIt = table.cellList.begin();
+            cellIt != table.cellList.end();
+            cellIt++) {
+        if ((*cellIt).row != currentRow) {
+            if (currentRow >= 0) {
                 tableText += "      </ROW>\n";
             }
 
@@ -234,15 +222,14 @@ void DocBookWorker::ProcessTableData ( const Table &table )
         tmpBuf = outputText;
         outputText = "";
 
-        doFullDocument ( *(*cellIt).paraList );
+        doFullDocument(*(*cellIt).paraList);
 
-        tableText += "        <ENTRY>" + outputText.remove ( '\n' ) + "</ENTRY>\n";
+        tableText += "        <ENTRY>" + outputText.remove('\n') + "</ENTRY>\n";
 
         outputText = tmpBuf;
     }
 
-    if ( currentRow >= 0 )
-    {
+    if (currentRow >= 0) {
         tableText += "      </ROW>\n";
     }
 
@@ -258,7 +245,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
     outputText += tableText;
 
 #if 0
-    kError (30507) << "DEBUG: ProcessTableData (): " << tableText << endl;
+    kError(30507) << "DEBUG: ProcessTableData (): " << tableText << endl;
 #endif
 }
 
@@ -267,8 +254,8 @@ void DocBookWorker::ProcessTableData ( const Table &table )
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-void DocBookWorker::ProcessParagraphData ( const ParaData &para,
-                                           QString         tag )
+void DocBookWorker::ProcessParagraphData(const ParaData &para,
+        QString         tag)
 {
 #if !INSERT_TABLE_IN_PARA
     QList<AnchoredInsert> tmpAnchoredInsertList;
@@ -276,117 +263,102 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
 
     outputText += "<" + tag + ">";
 
-    if ( para.text.length () > 0 )
-    {
+    if (para.text.length() > 0) {
         ValueListFormatData::ConstIterator  formattingIt;
 
-        for ( formattingIt = para.formattingList.begin ();
-              formattingIt != para.formattingList.end ();
-              formattingIt++ )
-        {
-            switch ( (*formattingIt).id )
-            {
-                case 1:   // texts
-                    {
+        for (formattingIt = para.formattingList.begin();
+                formattingIt != para.formattingList.end();
+                formattingIt++) {
+            switch ((*formattingIt).id) {
+            case 1: { // texts
 
-                    bool fixedFont = false;
+                bool fixedFont = false;
 
-                    if ( (*formattingIt).text.fontName == "courier"     ||
-                         (*formattingIt).text.fontName == "Courier"     ||
-                         (*formattingIt).text.fontName == "Courier New"    )
-                    {
-                        fixedFont = true;
-                    }
+                if ((*formattingIt).text.fontName == "courier"     ||
+                        (*formattingIt).text.fontName == "Courier"     ||
+                        (*formattingIt).text.fontName == "Courier New") {
+                    fixedFont = true;
+                }
 
-                    if ( (*formattingIt).text.italic && !para.layout.formatData.text.italic )
-                    {
-                        outputText += "<EMPHASIS>";
-                    }
+                if ((*formattingIt).text.italic && !para.layout.formatData.text.italic) {
+                    outputText += "<EMPHASIS>";
+                }
 
-                    if ( (*formattingIt).text.weight > para.layout.formatData.text.weight )
-                    {
-                        outputText += "<EMPHASIS ROLE=bold>";
-                    }
+                if ((*formattingIt).text.weight > para.layout.formatData.text.weight) {
+                    outputText += "<EMPHASIS ROLE=bold>";
+                }
 
-                    if ( fixedFont )
-                    {
-                        outputText += "<LITERAL>";
-                    }
+                if (fixedFont) {
+                    outputText += "<LITERAL>";
+                }
 
-                    outputText += EscapeXmlText (para.text.mid ( (*formattingIt).pos, (*formattingIt).len ));
+                outputText += EscapeXmlText(para.text.mid((*formattingIt).pos, (*formattingIt).len));
 
-                    if ( fixedFont )
-                    {
-                        outputText += "</LITERAL>";
-                    }
+                if (fixedFont) {
+                    outputText += "</LITERAL>";
+                }
 
-                    if ( (*formattingIt).text.weight > para.layout.formatData.text.weight )
-                    {
-                        outputText += "</EMPHASIS>";
-                    }
+                if ((*formattingIt).text.weight > para.layout.formatData.text.weight) {
+                    outputText += "</EMPHASIS>";
+                }
 
-                    if ( (*formattingIt).text.italic && !para.layout.formatData.text.italic )
-                    {
-                        outputText += "</EMPHASIS>";
-                    }
-                    }
-                    break;
+                if ((*formattingIt).text.italic && !para.layout.formatData.text.italic) {
+                    outputText += "</EMPHASIS>";
+                }
+            }
+            break;
 
-               case 4:   // variables
-                    if (9 == (*formattingIt).variable.m_type)
-                    {
-                        // A link (TODO: verify the code, as the tags were copied from a XML DocBook file)
-                        outputText += "<ULINK URL=\"";
-                        outputText += EscapeXmlText ( (*formattingIt).variable.getHrefName(), true, true );
-                        outputText += "\">";
-                        outputText += EscapeXmlText ( (*formattingIt).variable.getLinkName() );
-                        outputText += "</ULINK>";
-                    }
-                    else
-                    {
-                        outputText += EscapeXmlText ( (*formattingIt).variable.m_text );
-                    }
-                    break;
+            case 4:   // variables
+                if (9 == (*formattingIt).variable.m_type) {
+                    // A link (TODO: verify the code, as the tags were copied from a XML DocBook file)
+                    outputText += "<ULINK URL=\"";
+                    outputText += EscapeXmlText((*formattingIt).variable.getHrefName(), true, true);
+                    outputText += "\">";
+                    outputText += EscapeXmlText((*formattingIt).variable.getLinkName());
+                    outputText += "</ULINK>";
+                } else {
+                    outputText += EscapeXmlText((*formattingIt).variable.m_text);
+                }
+                break;
 
-               case 6:   // anchors
+            case 6:   // anchors
 #if 0
-                  kError (30507) << "Processing anchor " << (*formattingIt).frameAnchor.name << endl;
+                kError(30507) << "Processing anchor " << (*formattingIt).frameAnchor.name << endl;
 #endif
 
 #if INSERT_TABLE_IN_PARA
-                  outputText += "</" + tag + ">\n";
+                outputText += "</" + tag + ">\n";
 
 #if 0
-                  anchoredInsertList.prepend ( AnchoredInsert ( (*formattingIt).frameAnchor.name,
-                                                                outputText.length ()                  ) );
+                anchoredInsertList.prepend(AnchoredInsert((*formattingIt).frameAnchor.name,
+                                           outputText.length()));
 #endif
 
-                  switch ( (*formattingIt).frameAnchor.type )
-                  {
-                      case 2:
-                          ProcessPictureData ( (*formattingIt).frameAnchor.picture );
-                          break;
+                switch ((*formattingIt).frameAnchor.type) {
+                case 2:
+                    ProcessPictureData((*formattingIt).frameAnchor.picture);
+                    break;
 
-                      case 6:
-                          ProcessTableData ( (*formattingIt).frameAnchor.table );
-                          break;
+                case 6:
+                    ProcessTableData((*formattingIt).frameAnchor.table);
+                    break;
 
-                      default:
-                          kError (30507) << "Unhandled anchor type "
-                                          << (*formattingIt).frameAnchor.type << "!" << endl;
-                  }
+                default:
+                    kError(30507) << "Unhandled anchor type "
+                    << (*formattingIt).frameAnchor.type << "!" << endl;
+                }
 #else
-                  tmpAnchoredInsertList << AnchoredInsert ( (*formattingIt).frameAnchor.name, 0 );
+                tmpAnchoredInsertList << AnchoredInsert((*formattingIt).frameAnchor.name, 0);
 #endif
 
-                  outputText += "<" + tag + ">";
+                outputText += "<" + tag + ">";
 
-                  break;
+                break;
 
-               default:
-                  kError (30507) << "Unhandled format id "
-                                  << (*formattingIt).id << "!" << endl;
-             }
+            default:
+                kError(30507) << "Unhandled format id "
+                << (*formattingIt).id << "!" << endl;
+            }
         }
     }
 
@@ -395,265 +367,248 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
 #if !INSERT_TABLE_IN_PARA
     QList<AnchoredInsert>::Iterator anchoredInsert;
 
-    for ( anchoredInsert = tmpAnchoredInsertList.begin ();
-          anchoredInsert != tmpAnchoredInsertList.end ();
-          anchoredInsert++ )
-    {
-        (*anchoredInsert).pos = outputText.length ();
-        anchoredInsertList.prepend (*anchoredInsert);
+    for (anchoredInsert = tmpAnchoredInsertList.begin();
+            anchoredInsert != tmpAnchoredInsertList.end();
+            anchoredInsert++) {
+        (*anchoredInsert).pos = outputText.length();
+        anchoredInsertList.prepend(*anchoredInsert);
     }
 #endif
 }
 
 
-void DocBookWorker::CloseItemizedList ( void )
+void DocBookWorker::CloseItemizedList(void)
 {
-    if ( docData.bulletList )
-    {
+    if (docData.bulletList) {
         outputText += "</ITEMIZEDLIST> <!-- End of Bullet List -->\n";
         docData.bulletList = false;
     }
 }
 
 
-void DocBookWorker::CloseEnumeratedList ( void )
+void DocBookWorker::CloseEnumeratedList(void)
 {
-    if ( docData.enumeratedList )
-    {
+    if (docData.enumeratedList) {
         outputText += "</ORDEREDLIST> <!-- End of Enumerated List -->\n";
         docData.enumeratedList = false;
     }
 }
 
 
-void DocBookWorker::CloseAlphabeticalList ( void )
+void DocBookWorker::CloseAlphabeticalList(void)
 {
-    if ( docData.alphabeticalList )
-    {
+    if (docData.alphabeticalList) {
         outputText += "</ORDEREDLIST> <!-- End of Alphabetical List -->\n";
         docData.alphabeticalList = false;
     }
 }
 
 
-void DocBookWorker::CloseLists ( void )
+void DocBookWorker::CloseLists(void)
 {
-    CloseItemizedList ();
-    CloseEnumeratedList ();
-    CloseAlphabeticalList ();
+    CloseItemizedList();
+    CloseEnumeratedList();
+    CloseAlphabeticalList();
 }
 
 
-void DocBookWorker::CloseHead4 ( void )
+void DocBookWorker::CloseHead4(void)
 {
-    CloseLists ();
+    CloseLists();
 
-    if ( docData.head4 )
-    {
+    if (docData.head4) {
         outputText += "</SECTION> <!-- End of Head 4 -->\n";
         docData.head4 = false;
     }
 }
 
 
-void DocBookWorker::CloseHead3 ( void )
+void DocBookWorker::CloseHead3(void)
 {
-    CloseHead4 ();
+    CloseHead4();
 
-    if ( docData.head3 )
-    {
+    if (docData.head3) {
         outputText += "</SECTION> <!-- End of Head 3 -->\n";
         docData.head3 = false;
     }
 }
 
 
-void DocBookWorker::CloseHead2 ( void )
+void DocBookWorker::CloseHead2(void)
 {
-    CloseHead3 ();
+    CloseHead3();
 
-    if ( docData.head2 )
-    {
+    if (docData.head2) {
         outputText += "</SECTION> <!-- End of Head 2 -->\n";
         docData.head2 = false;
     }
 }
 
 
-void DocBookWorker::CloseHead1AndArticle ( void )
+void DocBookWorker::CloseHead1AndArticle(void)
 {
-    CloseHead2 ();
+    CloseHead2();
 
-    if ( docData.article )
-    {
+    if (docData.article) {
         outputText += "</ARTICLE>\n";
         docData.article = false;
     }
 
-    if ( docData.head1 )
-    {
+    if (docData.head1) {
         outputText += "</CHAPTER> <!-- End of Head 1 -->\n";
         docData.head1 = false;
     }
 }
 
 
-void DocBookWorker::OpenArticleUnlessHead1 ( void )
+void DocBookWorker::OpenArticleUnlessHead1(void)
 {
-    if ( !docData.head1 && !docData.article )
-    {
+    if (!docData.head1 && !docData.article) {
         outputText += "<ARTICLE> <!-- Begin of Article -->\n";
         docData.article = true;
     }
 }
 
 
-bool DocBookWorker::doFullDocument ( const QList<ParaData> &paraList )
+bool DocBookWorker::doFullDocument(const QList<ParaData> &paraList)
 {
 #if 0
-    kError (30507) << "doFullDocument () - Begin" << endl;
+    kError(30507) << "doFullDocument () - Begin" << endl;
 #endif
 
     QList<ParaData>::ConstIterator paraIt;
-	QList<ParaData>::ConstIterator end(paraList.end ());
-    for ( paraIt = paraList.begin (); paraIt != end ; ++paraIt )
-    {
-        switch ( (*paraIt).layout.counter.numbering )
-        {
-            case CounterData::NUM_LIST:
-                switch ( (*paraIt).layout.counter.style )
-                {
-                    case CounterData::STYLE_CUSTOMBULLET:
-                    case CounterData::STYLE_CIRCLEBULLET:
-                    case CounterData::STYLE_SQUAREBULLET:
-                    case CounterData::STYLE_DISCBULLET:
-                    case CounterData::STYLE_CUSTOM:
-                    case CounterData::STYLE_NONE:
-                        CloseEnumeratedList ();
-                        CloseAlphabeticalList ();
+    QList<ParaData>::ConstIterator end(paraList.end());
+    for (paraIt = paraList.begin(); paraIt != end ; ++paraIt) {
+        switch ((*paraIt).layout.counter.numbering) {
+        case CounterData::NUM_LIST:
+            switch ((*paraIt).layout.counter.style) {
+            case CounterData::STYLE_CUSTOMBULLET:
+            case CounterData::STYLE_CIRCLEBULLET:
+            case CounterData::STYLE_SQUAREBULLET:
+            case CounterData::STYLE_DISCBULLET:
+            case CounterData::STYLE_CUSTOM:
+            case CounterData::STYLE_NONE:
+                CloseEnumeratedList();
+                CloseAlphabeticalList();
 
-                        OpenArticleUnlessHead1 ();
+                OpenArticleUnlessHead1();
 
-                        if ( !docData.bulletList )
-                        {
-                            outputText += "<ITEMIZEDLIST> <!-- Begin of Bullet List -->\n";
-                            docData.bulletList = true;
-                        }
-
-                        outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA" );
-                        outputText += "</LISTITEM>\n";
-                        break;
-
-                    case CounterData::STYLE_NUM:
-                    case CounterData::STYLE_ROM_NUM_L:
-                    case CounterData::STYLE_ROM_NUM_U:
-                        CloseItemizedList ();
-                        CloseAlphabeticalList ();
-
-                        OpenArticleUnlessHead1 ();
-
-                        if ( !docData.enumeratedList )
-                        {
-                            outputText += "<ORDEREDLIST NUMERATION=\"Arabic\"> <!-- Begin of Enumerated List -->\n";
-                            docData.enumeratedList = true;
-                        }
-
-                        outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA" );
-                        outputText += "</LISTITEM>\n";
-                        break;
-
-                    case CounterData::STYLE_ALPHAB_L:
-                    case CounterData::STYLE_ALPHAB_U:
-                        CloseItemizedList ();
-                        CloseEnumeratedList ();
-
-                        OpenArticleUnlessHead1 ();
-
-                        if ( !docData.alphabeticalList )
-                        {
-                            outputText += "<ORDEREDLIST NUMERATION=\"Loweralpha\"> <!-- Begin of Alphabetical List -->\n";
-                            docData.alphabeticalList = true;
-                        }
-
-                        outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA" );
-                        outputText += "</LISTITEM>\n";
-                        break;
-
-                    default:
-                        kError (30507) << "Unknown counter style " << (*paraIt).layout.counter.style << "!" << endl;
-                        CloseLists ();
-                        OpenArticleUnlessHead1 ();
-                        ProcessParagraphData (*paraIt, "PARA" );
+                if (!docData.bulletList) {
+                    outputText += "<ITEMIZEDLIST> <!-- Begin of Bullet List -->\n";
+                    docData.bulletList = true;
                 }
 
+                outputText += "<LISTITEM>\n";
+                ProcessParagraphData(*paraIt, "PARA");
+                outputText += "</LISTITEM>\n";
                 break;
 
-            case CounterData::NUM_CHAPTER:
-                switch ( (*paraIt).layout.counter.depth )
-                {
-                    case 0:
-                        CloseHead1AndArticle ();
+            case CounterData::STYLE_NUM:
+            case CounterData::STYLE_ROM_NUM_L:
+            case CounterData::STYLE_ROM_NUM_U:
+                CloseItemizedList();
+                CloseAlphabeticalList();
 
-                        outputText += "<CHAPTER> <!-- Begin of Head 1 -->\n";
-                        docData.head1 = true;
+                OpenArticleUnlessHead1();
 
-                        ProcessParagraphData (*paraIt, "TITLE" );
-                        break;
-
-                    case 1:
-                        CloseHead2 ();
-
-                        outputText += "<SECTION> <!-- Begin of Head 2 -->\n";
-                        docData.head2 = true;
-
-                        ProcessParagraphData (*paraIt, "TITLE" );
-                        break;
-
-                    case 2:
-                        CloseHead3 ();
-
-                        outputText += "<SECTION> <!-- Begin of Head 3 -->\n";
-                        docData.head3 = true;
-
-                        ProcessParagraphData (*paraIt, "TITLE" );
-                        break;
-
-                    case 3:
-                        CloseHead4 ();
-
-                        outputText += "<SECTION> <!-- Begin of Head 4 -->\n";
-                        docData.head4 = true;
-
-                        ProcessParagraphData (*paraIt, "TITLE" );
-                        break;
-
-                    default:
-                        kError (30507) << "Unexpected chapter depth " << (*paraIt).layout.counter.depth << "!" << endl;
-                        CloseLists ();
-                        OpenArticleUnlessHead1 ();
-                        ProcessParagraphData (*paraIt, "PARA" );
+                if (!docData.enumeratedList) {
+                    outputText += "<ORDEREDLIST NUMERATION=\"Arabic\"> <!-- Begin of Enumerated List -->\n";
+                    docData.enumeratedList = true;
                 }
 
+                outputText += "<LISTITEM>\n";
+                ProcessParagraphData(*paraIt, "PARA");
+                outputText += "</LISTITEM>\n";
+                break;
+
+            case CounterData::STYLE_ALPHAB_L:
+            case CounterData::STYLE_ALPHAB_U:
+                CloseItemizedList();
+                CloseEnumeratedList();
+
+                OpenArticleUnlessHead1();
+
+                if (!docData.alphabeticalList) {
+                    outputText += "<ORDEREDLIST NUMERATION=\"Loweralpha\"> <!-- Begin of Alphabetical List -->\n";
+                    docData.alphabeticalList = true;
+                }
+
+                outputText += "<LISTITEM>\n";
+                ProcessParagraphData(*paraIt, "PARA");
+                outputText += "</LISTITEM>\n";
                 break;
 
             default:
-                CloseLists ();
-                OpenArticleUnlessHead1 ();
-                ProcessParagraphData (*paraIt, "PARA" );
+                kError(30507) << "Unknown counter style " << (*paraIt).layout.counter.style << "!" << endl;
+                CloseLists();
+                OpenArticleUnlessHead1();
+                ProcessParagraphData(*paraIt, "PARA");
+            }
+
+            break;
+
+        case CounterData::NUM_CHAPTER:
+            switch ((*paraIt).layout.counter.depth) {
+            case 0:
+                CloseHead1AndArticle();
+
+                outputText += "<CHAPTER> <!-- Begin of Head 1 -->\n";
+                docData.head1 = true;
+
+                ProcessParagraphData(*paraIt, "TITLE");
+                break;
+
+            case 1:
+                CloseHead2();
+
+                outputText += "<SECTION> <!-- Begin of Head 2 -->\n";
+                docData.head2 = true;
+
+                ProcessParagraphData(*paraIt, "TITLE");
+                break;
+
+            case 2:
+                CloseHead3();
+
+                outputText += "<SECTION> <!-- Begin of Head 3 -->\n";
+                docData.head3 = true;
+
+                ProcessParagraphData(*paraIt, "TITLE");
+                break;
+
+            case 3:
+                CloseHead4();
+
+                outputText += "<SECTION> <!-- Begin of Head 4 -->\n";
+                docData.head4 = true;
+
+                ProcessParagraphData(*paraIt, "TITLE");
+                break;
+
+            default:
+                kError(30507) << "Unexpected chapter depth " << (*paraIt).layout.counter.depth << "!" << endl;
+                CloseLists();
+                OpenArticleUnlessHead1();
+                ProcessParagraphData(*paraIt, "PARA");
+            }
+
+            break;
+
+        default:
+            CloseLists();
+            OpenArticleUnlessHead1();
+            ProcessParagraphData(*paraIt, "PARA");
         }
     }
 
 #if 0
-    kError (30507) << "doFullDocument () - End" << outputText << endl;
+    kError(30507) << "doFullDocument () - End" << outputText << endl;
 #endif
     return true;
 }
 
 
-bool DocBookWorker::doOpenDocument ( void )
+bool DocBookWorker::doOpenDocument(void)
 {
     outputText += "<!DOCTYPE BOOK PUBLIC \"-//OASIS//DTD DocBook V3.1//EN\">\n";
     outputText += "<BOOK>\n";
@@ -662,7 +617,7 @@ bool DocBookWorker::doOpenDocument ( void )
 }
 
 
-bool DocBookWorker::doOpenBody ( void )
+bool DocBookWorker::doOpenBody(void)
 {
     docData.article          = false;
     docData.head1            = false;
@@ -677,15 +632,15 @@ bool DocBookWorker::doOpenBody ( void )
 }
 
 
-bool DocBookWorker::doCloseBody ( void )
+bool DocBookWorker::doCloseBody(void)
 {
-    CloseHead1AndArticle ();
+    CloseHead1AndArticle();
 
     return true;
 }
 
 
-bool DocBookWorker::doCloseDocument ( void )
+bool DocBookWorker::doCloseDocument(void)
 {
     outputText += "</BOOK>\n";
 
@@ -693,40 +648,38 @@ bool DocBookWorker::doCloseDocument ( void )
 }
 
 
-bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString & /*to*/ )
+bool DocBookWorker::doOpenFile(const QString &filenameOut, const QString & /*to*/)
 {
     fileOut = new QFile(filenameOut);
 
-    if ( !fileOut )
-    {
+    if (!fileOut) {
         kError(30507) << "No output file! Aborting!" << endl;
         return false;
     }
 
-    if ( !fileOut->open (QIODevice::WriteOnly) )
-    {
+    if (!fileOut->open(QIODevice::WriteOnly)) {
         kError(30507) << "Unable to open output file!" << endl;
 
-        fileOut->close ();
+        fileOut->close();
         delete fileOut;
         fileOut = NULL;
 
         return false;
     }
 
-    exportFileName=filenameOut;
+    exportFileName = filenameOut;
 
     return true;
 }
 
 
-bool DocBookWorker::doCloseFile ( void )
+bool DocBookWorker::doCloseFile(void)
 {
-    if ( !fileOut ) return true;
+    if (!fileOut) return true;
 
-    fileOut->write( outputText.toLocal8Bit () );
+    fileOut->write(outputText.toLocal8Bit());
 
-    fileOut->close ();
+    fileOut->close();
     delete fileOut;
     fileOut = NULL;
 
@@ -739,18 +692,17 @@ bool DocBookWorker::doCloseFile ( void )
 // the current tag level. It is used by ProcessDocumentIntoTag () to
 // assemble the diverse levels of information of the BOOKINFO tag.
 
-static void ProcessInfoData ( const QString &tagName,
-                              const QString & tagText,
-                              QString &outputText)
+static void ProcessInfoData(const QString &tagName,
+                            const QString & tagText,
+                            QString &outputText)
 {
-    if ( tagText.length () )
-    {
+    if (tagText.length()) {
         outputText += '<' + tagName + '>' + tagText + "</" + tagName + ">\n";
     }
 }
 
 
-bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
+bool DocBookWorker::doFullDocumentInfo(const KWEFDocumentInfo &docInfo)
 {
     QString bookInfoText;
     QString abstractText;
@@ -758,50 +710,49 @@ bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
     QString affiliationText;
     QString addressText;
 
-    ProcessInfoData ( "TITLE",       docInfo.title,      bookInfoText    );
-    ProcessInfoData ( "PARA",        docInfo.abstract,   abstractText    );
-    ProcessInfoData ( "SURNAME",     docInfo.fullName,   authorText      );
-    ProcessInfoData ( "JOBTITLE",    docInfo.jobTitle,   affiliationText );
-    ProcessInfoData ( "ORGNAME",     docInfo.company,    affiliationText );
-    ProcessInfoData ( "STREET",      docInfo.street,     addressText     );
-    ProcessInfoData ( "CITY",        docInfo.city,       addressText     );
-    ProcessInfoData ( "POSTCODE",    docInfo.postalCode, addressText     );
-    ProcessInfoData ( "COUNTRY",     docInfo.country,    addressText     );
-    ProcessInfoData ( "EMAIL",       docInfo.email,      addressText     );
-    ProcessInfoData ( "PHONE",       docInfo.telephone,  addressText     );
-    ProcessInfoData ( "FAX",         docInfo.fax,        addressText     );
+    ProcessInfoData("TITLE",       docInfo.title,      bookInfoText);
+    ProcessInfoData("PARA",        docInfo.abstract,   abstractText);
+    ProcessInfoData("SURNAME",     docInfo.fullName,   authorText);
+    ProcessInfoData("JOBTITLE",    docInfo.jobTitle,   affiliationText);
+    ProcessInfoData("ORGNAME",     docInfo.company,    affiliationText);
+    ProcessInfoData("STREET",      docInfo.street,     addressText);
+    ProcessInfoData("CITY",        docInfo.city,       addressText);
+    ProcessInfoData("POSTCODE",    docInfo.postalCode, addressText);
+    ProcessInfoData("COUNTRY",     docInfo.country,    addressText);
+    ProcessInfoData("EMAIL",       docInfo.email,      addressText);
+    ProcessInfoData("PHONE",       docInfo.telephone,  addressText);
+    ProcessInfoData("FAX",         docInfo.fax,        addressText);
 
-    ProcessInfoData ( "ADDRESS",     addressText,        affiliationText );
-    ProcessInfoData ( "AFFILIATION", affiliationText,    authorText      );
-    ProcessInfoData ( "ABSTRACT",    abstractText,       bookInfoText    );
-    ProcessInfoData ( "AUTHOR",      authorText,         bookInfoText    );
-    ProcessInfoData ( "BOOKINFO",    bookInfoText,       outputText      );
+    ProcessInfoData("ADDRESS",     addressText,        affiliationText);
+    ProcessInfoData("AFFILIATION", affiliationText,    authorText);
+    ProcessInfoData("ABSTRACT",    abstractText,       bookInfoText);
+    ProcessInfoData("AUTHOR",      authorText,         bookInfoText);
+    ProcessInfoData("BOOKINFO",    bookInfoText,       outputText);
 
     return true;
 }
 
 
-KoFilter::ConversionStatus DocBookExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus DocBookExport::convert(const QByteArray& from, const QByteArray& to)
 {
 #if 0
-    kError (30507) << "to = " << to << ", from = " << from << endl;
+    kError(30507) << "to = " << to << ", from = " << from << endl;
 #endif
 
-    if ( (to != "text/sgml" && to != "text/docbook") || from != "application/x-kword" )
-    {
+    if ((to != "text/sgml" && to != "text/docbook") || from != "application/x-kword") {
         return KoFilter::NotImplemented;
     }
 
 #if 1
-    kError (30507) << "let's get on with it" << endl;
+    kError(30507) << "let's get on with it" << endl;
 #endif
 
     DocBookWorker worker;
-    KWEFKWordLeader leader (&worker);
-    leader.convert (m_chain, from, to);
+    KWEFKWordLeader leader(&worker);
+    leader.convert(m_chain, from, to);
 
 #if 1
-    kError (30507) << "done here" << endl;
+    kError(30507) << "done here" << endl;
 #endif
 
     return KoFilter::OK;

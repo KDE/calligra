@@ -36,42 +36,42 @@
 
 class XSLTProc
 {
-	QByteArray    _fileIn;
-	QByteArray    _fileOut;
-	QByteArray    _stylesheet;
+    QByteArray    _fileIn;
+    QByteArray    _fileOut;
+    QByteArray    _stylesheet;
 
-	const char *params[NB_PARAMETER_MAX + 1];
-	int nbparams;
-	int debug;
-	int repeat;
-	int novalid;
-	const char *output;
+    const char *params[NB_PARAMETER_MAX + 1];
+    int nbparams;
+    int debug;
+    int repeat;
+    int novalid;
+    const char *output;
 
-	public:
-		/**
-		 * Create a new xslt processor 
-		 * @param fileIn file to parse.
-		 * @param fileOut file to generate.
-		 * @param stylesheet xsl file to convert fileIn in fileOut.
-		 */
-    	XSLTProc(const char* fileIn, const char* fileOut, const char *stylesheet);
-    	
-		XSLTProc(const QString& fileIn, const QString& fileOut, const QString& stylesheet);
+public:
+    /**
+     * Create a new xslt processor
+     * @param fileIn file to parse.
+     * @param fileOut file to generate.
+     * @param stylesheet xsl file to convert fileIn in fileOut.
+     */
+    XSLTProc(const char* fileIn, const char* fileOut, const char *stylesheet);
 
-		/**
-		 * Destroy the processor
-		 */
-	    virtual ~XSLTProc() {}
+    XSLTProc(const QString& fileIn, const QString& fileOut, const QString& stylesheet);
 
-		void addParam(const QString& name, const QString& value);
+    /**
+     * Destroy the processor
+     */
+    virtual ~XSLTProc() {}
 
-		/** Process fileIn through the stylesheet.
-		 * @return return 0 if no error occurred
-		 */
-		int parse();
+    void addParam(const QString& name, const QString& value);
 
-	private:
-		void xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur,
-					const char *filename);
+    /** Process fileIn through the stylesheet.
+     * @return return 0 if no error occurred
+     */
+    int parse();
+
+private:
+    void xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur,
+                     const char *filename);
 };
 #endif /* __XSLTPROC_H__ */

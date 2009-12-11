@@ -28,13 +28,13 @@
 using namespace MSOOXML;
 
 MsooXmlCommonReader::MsooXmlCommonReader(KoOdfWriters *writers)
- : MsooXmlReader(writers)
+        : MsooXmlReader(writers)
 {
     init();
 }
 
 MsooXmlCommonReader::MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers)
- : MsooXmlReader(io, writers)
+        : MsooXmlReader(io, writers)
 {
     init();
 }
@@ -59,7 +59,7 @@ bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
         return true;
     if (name.startsWith(QLatin1String("TOC"))) {
         const QString num(name.mid(3));
-        if (num.length()==1 && num[0].isDigit() && num[0]!='0')
+        if (num.length() == 1 && num[0].isDigit() && num[0] != '0')
             return true;
     }
     return false;
@@ -67,7 +67,7 @@ bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
 
 void MsooXmlCommonReader::setupParagraphStyle()
 {
-    QString currentParagraphStyleName( mainStyles->lookup(m_currentParagraphStyle) );
+    QString currentParagraphStyleName(mainStyles->lookup(m_currentParagraphStyle));
     if (currentParagraphStyleName.isEmpty()) {
         currentParagraphStyleName = QLatin1String("Standard");
     }

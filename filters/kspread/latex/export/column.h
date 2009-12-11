@@ -38,50 +38,58 @@
  */
 class Column: public Format
 {
-	
-	/* USEFUL DATA */
-	long _col;
-	double _width;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 */
+    /* USEFUL DATA */
+    long _col;
+    double _width;
 
-		/**
-		 * Creates a new instance of Column.
-		 */
-		Column();
+public:
+    /**
+     * Constructors
+     *
+     */
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of frames.
-		 */
+    /**
+     * Creates a new instance of Column.
+     */
+    Column();
 
-		virtual ~Column();
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of frames.
+     */
 
-		/**
-		 * getters
-		 */
+    virtual ~Column();
 
-		long   getCol() const { return _col; }
-		double getWidth() const { return _width; }
+    /**
+     * getters
+     */
 
-		/**
-		 * setters
-		 */
-		void setCol(int c) { _col = c; }
-		void setWidth(double w) { _width = w; }
-	
-		/**
-		 * Helpful functions
-		 */
-		void     analyze (const QDomNode);
-		void     generate  (QTextStream&);
+    long   getCol() const {
+        return _col;
+    }
+    double getWidth() const {
+        return _width;
+    }
 
-	private:
+    /**
+     * setters
+     */
+    void setCol(int c) {
+        _col = c;
+    }
+    void setWidth(double w) {
+        _width = w;
+    }
+
+    /**
+     * Helpful functions
+     */
+    void     analyze(const QDomNode);
+    void     generate(QTextStream&);
+
+private:
 
 };
 

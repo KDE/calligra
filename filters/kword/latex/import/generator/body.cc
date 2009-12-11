@@ -28,26 +28,26 @@ bool Body::analyze(Element* body)
 
 bool Body::generate(QDomElement& framesetsNode, QDomDocument& doc)
 {
-	/* FRAMESET */
-	QDomElement framesetNode = doc.createElement("FRAMESET");
-	
-	/* required attributes */
-	framesetNode.setAttribute("frameType", TEXTFRAME);
-	framesetNode.setAttribute("frameInfo", NORMALTEXT);
+    /* FRAMESET */
+    QDomElement framesetNode = doc.createElement("FRAMESET");
 
-	framesetsNode.appendChild(framesetNode);
+    /* required attributes */
+    framesetNode.setAttribute("frameType", TEXTFRAME);
+    framesetNode.setAttribute("frameInfo", NORMALTEXT);
 
-	/* FRAME */
-	QDomElement frameNode = doc.createElement("FRAME");
-	
-	/* required attributes */
-	frameNode.setAttribute("newFrameBehavior", "0");
-	frameNode.setAttribute("left", _leftMargin);
-	frameNode.setAttribute("right", _rightMargin);
-	frameNode.setAttribute("top", _topMargin);
-	frameNode.setAttribute("bottom", _bottomMargin);
-	framesetNode.appendChild(frameNode);
-	
-	/* PARAGRAPH */
+    framesetsNode.appendChild(framesetNode);
+
+    /* FRAME */
+    QDomElement frameNode = doc.createElement("FRAME");
+
+    /* required attributes */
+    frameNode.setAttribute("newFrameBehavior", "0");
+    frameNode.setAttribute("left", _leftMargin);
+    frameNode.setAttribute("right", _rightMargin);
+    frameNode.setAttribute("top", _topMargin);
+    frameNode.setAttribute("bottom", _bottomMargin);
+    framesetNode.appendChild(frameNode);
+
+    /* PARAGRAPH */
 }
 

@@ -24,34 +24,39 @@
 
 class Element
 {
-	public:
-		Element();
+public:
+    Element();
 
-		virtual ~Element();
+    virtual ~Element();
 
-		/* Type of commands */
-		enum EType
-		{
-			LATEX_NONE,
-			LATEX_ENV,
-			LATEX_MATH,
-			LATEX_COMMAND
-		};
+    /* Type of commands */
+    enum EType {
+        LATEX_NONE,
+        LATEX_ENV,
+        LATEX_MATH,
+        LATEX_COMMAND
+    };
 
-		/* getters */
-		EType getType() const { return _type; }
-		virtual QString getName() const { return ""; }
+    /* getters */
+    EType getType() const {
+        return _type;
+    }
+    virtual QString getName() const {
+        return "";
+    }
 
-		/* setters */
-		void setType(EType t) { _type = t; }
+    /* setters */
+    void setType(EType t) {
+        _type = t;
+    }
 
-		/* useful methods */
-		//void addParams(QPtrList<Param> params) { }
-		//void addGroups(QPtrList<QPtrList<Element> >* elts) {  }
-		virtual void print(int tab = 0) = 0;
+    /* useful methods */
+    //void addParams(QPtrList<Param> params) { }
+    //void addGroups(QPtrList<QPtrList<Element> >* elts) {  }
+    virtual void print(int tab = 0) = 0;
 
-	private:
-		EType _type;
+private:
+    EType _type;
 
 };
 

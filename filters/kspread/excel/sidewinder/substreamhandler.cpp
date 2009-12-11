@@ -18,7 +18,8 @@
  */
 #include "substreamhandler.h"
 
-namespace Swinder {
+namespace Swinder
+{
 
 SubStreamHandler::~SubStreamHandler()
 {

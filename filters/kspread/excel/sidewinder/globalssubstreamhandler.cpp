@@ -26,7 +26,8 @@
 #include "sheet.h"
 #include "workbook.h"
 
-namespace Swinder {
+namespace Swinder
+{
 
 class GlobalsSubStreamHandler::Private
 {
@@ -37,7 +38,7 @@ public:
     unsigned version;
 
     // mapping from BOF pos to actual Sheet
-    std::map<unsigned,Sheet*> bofMap;
+    std::map<unsigned, Sheet*> bofMap;
 
     // for EXTERNBOOK and EXTERNSHEET
     std::vector<UString> externBookTable;
@@ -54,10 +55,10 @@ public:
     std::vector<FontRecord> fontTable;
 
     // mapping from font index to Swinder::FormatFont
-    std::map<unsigned,FormatFont> fontCache;
+    std::map<unsigned, FormatFont> fontCache;
 
     // table of format
-    std::map<unsigned,UString> formatsTable;
+    std::map<unsigned, UString> formatsTable;
 
     // shared-string table
     std::vector<UString> stringTable;
@@ -69,8 +70,8 @@ public:
     std::vector<XFRecord> xfTable;
 };
 
-GlobalsSubStreamHandler::GlobalsSubStreamHandler( Workbook* workbook, unsigned version )
-    : d(new Private)
+GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned version)
+        : d(new Private)
 {
     d->workbook = workbook;
     d->version = version;
@@ -87,7 +88,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler( Workbook* workbook, unsigned v
         "#99cc00", "#ffcc00", "#ff9900", "#ff6600", "#666699", "#969696", "#003366",
         "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
     };
-    for (int i = 0; i < 64-8; i++) {
+    for (int i = 0; i < 64 - 8; i++) {
         d->colorTable.push_back(Color(default_palette[i]));
     }
 }
@@ -107,7 +108,7 @@ unsigned GlobalsSubStreamHandler::version() const
     return d->version;
 }
 
-Sheet* GlobalsSubStreamHandler::sheetFromPosition( unsigned position ) const
+Sheet* GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
 {
     std::map<unsigned, Sheet*>::iterator iter = d->bofMap.find(position);
     if (iter != d->bofMap.end())
@@ -116,7 +117,7 @@ Sheet* GlobalsSubStreamHandler::sheetFromPosition( unsigned position ) const
         return 0;
 }
 
-UString GlobalsSubStreamHandler::stringFromSST( unsigned index ) const
+UString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
 {
     if (index < d->stringTable.size())
         return d->stringTable[index];
@@ -129,7 +130,7 @@ unsigned GlobalsSubStreamHandler::fontCount() const
     return d->fontTable.size();
 }
 
-FontRecord GlobalsSubStreamHandler::fontRecord( unsigned index ) const
+FontRecord GlobalsSubStreamHandler::fontRecord(unsigned index) const
 {
     if (index < d->fontTable.size())
         return d->fontTable[index];
@@ -137,7 +138,7 @@ FontRecord GlobalsSubStreamHandler::fontRecord( unsigned index ) const
         return FontRecord();
 }
 
-Color GlobalsSubStreamHandler::customColor( unsigned index ) const
+Color GlobalsSubStreamHandler::customColor(unsigned index) const
 {
     if (index < d->colorTable.size())
         return d->colorTable[index];
@@ -150,7 +151,7 @@ unsigned GlobalsSubStreamHandler::xformatCount() const
     return d->xfTable.size();
 }
 
-XFRecord GlobalsSubStreamHandler::xformat( unsigned index ) const
+XFRecord GlobalsSubStreamHandler::xformat(unsigned index) const
 {
     if (index < d->xfTable.size())
         return d->xfTable[index];
@@ -158,7 +159,7 @@ XFRecord GlobalsSubStreamHandler::xformat( unsigned index ) const
         return XFRecord();
 }
 
-UString GlobalsSubStreamHandler::valueFormat( unsigned index ) const
+UString GlobalsSubStreamHandler::valueFormat(unsigned index) const
 {
     if (index < d->formatsTable.size())
         return d->formatsTable[index];
@@ -171,7 +172,7 @@ const std::vector<UString>& GlobalsSubStreamHandler::externSheets() const
     return d->externSheetTable;
 }
 
-UString GlobalsSubStreamHandler::nameFromIndex( unsigned index ) const
+UString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
     if (index < d->nameTable.size())
         return d->nameTable[index];
@@ -179,7 +180,7 @@ UString GlobalsSubStreamHandler::nameFromIndex( unsigned index ) const
         return UString();
 }
 
-FormatFont GlobalsSubStreamHandler::convertedFont( unsigned index ) const
+FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
 {
     // speed-up trick: check in the cache first
     FormatFont font = d->fontCache[index];
@@ -202,10 +203,10 @@ FormatFont GlobalsSubStreamHandler::convertedFont( unsigned index ) const
     return font;
 }
 
-Color GlobalsSubStreamHandler::convertedColor( unsigned index ) const
+Color GlobalsSubStreamHandler::convertedColor(unsigned index) const
 {
-    if (( index >= 8) && (index < 0x40))
-        return customColor(index-8);
+    if ((index >= 8) && (index < 0x40))
+        return customColor(index -8);
 
     // FIXME the following colors depend on system color settings
     // 0x0040  system window text color for border lines
@@ -221,122 +222,122 @@ Color GlobalsSubStreamHandler::convertedColor( unsigned index ) const
     // standard colors: black, white, red, green, blue,
     // yellow, magenta, cyan
     switch (index) {
-        case 0:   color = Color( 0, 0, 0 ); break;
-        case 1:   color = Color( 255, 255, 255 ); break;
-        case 2:   color = Color( 255, 0, 0 ); break;
-        case 3:   color = Color( 0, 255, 0 ); break;
-        case 4:   color = Color( 0, 0, 255 ); break;
-        case 5:   color = Color( 255, 255, 0 ); break;
-        case 6:   color = Color( 255, 0, 255 ); break;
-        case 7:   color = Color( 0, 255, 255 ); break;
-        default:  break;
+    case 0:   color = Color(0, 0, 0); break;
+    case 1:   color = Color(255, 255, 255); break;
+    case 2:   color = Color(255, 0, 0); break;
+    case 3:   color = Color(0, 255, 0); break;
+    case 4:   color = Color(0, 0, 255); break;
+    case 5:   color = Color(255, 255, 0); break;
+    case 6:   color = Color(255, 0, 255); break;
+    case 7:   color = Color(0, 255, 255); break;
+    default:  break;
     }
 
     return color;
 }
 
 // convert border style, e.g MediumDashed to a Pen
-static Pen convertBorderStyle( unsigned style )
+static Pen convertBorderStyle(unsigned style)
 {
     Pen pen;
     switch (style) {
-        case XFRecord::NoLine:
-            pen.width = 0;
-            pen.style = Pen::NoLine;
-            break;
-        case XFRecord::Thin:
-            pen.width = 0.5;
-            pen.style = Pen::SolidLine;
-            break;
-        case XFRecord::Medium:
-            pen.width = 1;
-            pen.style = Pen::SolidLine;
-            break;
-        case XFRecord::Dashed:
-            pen.width = 0.5;
-            pen.style = Pen::DashLine;
-            break;
-        case XFRecord::Dotted:
-            pen.width = 0.5;
-            pen.style = Pen::DotLine;
-            break;
-        case XFRecord::Thick:
-            pen.width = 2;
-            pen.style = Pen::SolidLine;
-            break;
-        case XFRecord::Double:
-            // FIXME no equivalent ?
-            pen.width = 2;
-            pen.style = Pen::SolidLine;
-            break;
-        case XFRecord::Hair:
-            // FIXME no equivalent ?
-            pen.width = 0.1;
-            pen.style = Pen::SolidLine;
-            break;
-        case XFRecord::MediumDashed:
-            pen.width = 1;
-            pen.style = Pen::DashLine;
-            break;
-        case XFRecord::ThinDashDotted:
-            pen.width = 0.5;
-            pen.style = Pen::DashDotLine;
-            break;
-        case XFRecord::MediumDashDotted:
-            pen.width = 1;
-            pen.style = Pen::DashDotLine;
-            break;
-        case XFRecord::ThinDashDotDotted:
-            pen.width = 0.5;
-            pen.style = Pen::DashDotDotLine;
-            break;
-        case XFRecord::MediumDashDotDotted:
-            pen.width = 1;
-            pen.style = Pen::DashDotDotLine;
-            break;
-        case XFRecord::SlantedMediumDashDotted:
-            // FIXME no equivalent ?
-            pen.width = 1;
-            pen.style = Pen::DashDotLine;
-            break;
-        default:
-            // fallback, simple solid line
-            pen.width = 0.5;
-            pen.style = Pen::SolidLine;
-            break;
+    case XFRecord::NoLine:
+        pen.width = 0;
+        pen.style = Pen::NoLine;
+        break;
+    case XFRecord::Thin:
+        pen.width = 0.5;
+        pen.style = Pen::SolidLine;
+        break;
+    case XFRecord::Medium:
+        pen.width = 1;
+        pen.style = Pen::SolidLine;
+        break;
+    case XFRecord::Dashed:
+        pen.width = 0.5;
+        pen.style = Pen::DashLine;
+        break;
+    case XFRecord::Dotted:
+        pen.width = 0.5;
+        pen.style = Pen::DotLine;
+        break;
+    case XFRecord::Thick:
+        pen.width = 2;
+        pen.style = Pen::SolidLine;
+        break;
+    case XFRecord::Double:
+        // FIXME no equivalent ?
+        pen.width = 2;
+        pen.style = Pen::SolidLine;
+        break;
+    case XFRecord::Hair:
+        // FIXME no equivalent ?
+        pen.width = 0.1;
+        pen.style = Pen::SolidLine;
+        break;
+    case XFRecord::MediumDashed:
+        pen.width = 1;
+        pen.style = Pen::DashLine;
+        break;
+    case XFRecord::ThinDashDotted:
+        pen.width = 0.5;
+        pen.style = Pen::DashDotLine;
+        break;
+    case XFRecord::MediumDashDotted:
+        pen.width = 1;
+        pen.style = Pen::DashDotLine;
+        break;
+    case XFRecord::ThinDashDotDotted:
+        pen.width = 0.5;
+        pen.style = Pen::DashDotDotLine;
+        break;
+    case XFRecord::MediumDashDotDotted:
+        pen.width = 1;
+        pen.style = Pen::DashDotDotLine;
+        break;
+    case XFRecord::SlantedMediumDashDotted:
+        // FIXME no equivalent ?
+        pen.width = 1;
+        pen.style = Pen::DashDotLine;
+        break;
+    default:
+        // fallback, simple solid line
+        pen.width = 0.5;
+        pen.style = Pen::SolidLine;
+        break;
     }
 
     return pen;
 }
 
-static unsigned convertPatternStyle( unsigned pattern )
+static unsigned convertPatternStyle(unsigned pattern)
 {
     switch (pattern) {
-        case 0x00: return FormatBackground::EmptyPattern;
-        case 0x01: return FormatBackground::SolidPattern;
-        case 0x02: return FormatBackground::Dense4Pattern;
-        case 0x03: return FormatBackground::Dense3Pattern;
-        case 0x04: return FormatBackground::Dense5Pattern;
-        case 0x05: return FormatBackground::HorPattern;
-        case 0x06: return FormatBackground::VerPattern;
-        case 0x07: return FormatBackground::FDiagPattern;
-        case 0x08: return FormatBackground::BDiagPattern;
-        case 0x09: return FormatBackground::Dense1Pattern;
-        case 0x0A: return FormatBackground::Dense2Pattern;
-        case 0x0B: return FormatBackground::HorPattern;
-        case 0x0C: return FormatBackground::VerPattern;
-        case 0x0D: return FormatBackground::FDiagPattern;
-        case 0x0E: return FormatBackground::BDiagPattern;
-        case 0x0F: return FormatBackground::CrossPattern;
-        case 0x10: return FormatBackground::DiagCrossPattern;
-        case 0x11: return FormatBackground::Dense6Pattern;
-        case 0x12: return FormatBackground::Dense7Pattern;
-        default: return FormatBackground::SolidPattern; // fallback
+    case 0x00: return FormatBackground::EmptyPattern;
+    case 0x01: return FormatBackground::SolidPattern;
+    case 0x02: return FormatBackground::Dense4Pattern;
+    case 0x03: return FormatBackground::Dense3Pattern;
+    case 0x04: return FormatBackground::Dense5Pattern;
+    case 0x05: return FormatBackground::HorPattern;
+    case 0x06: return FormatBackground::VerPattern;
+    case 0x07: return FormatBackground::FDiagPattern;
+    case 0x08: return FormatBackground::BDiagPattern;
+    case 0x09: return FormatBackground::Dense1Pattern;
+    case 0x0A: return FormatBackground::Dense2Pattern;
+    case 0x0B: return FormatBackground::HorPattern;
+    case 0x0C: return FormatBackground::VerPattern;
+    case 0x0D: return FormatBackground::FDiagPattern;
+    case 0x0E: return FormatBackground::BDiagPattern;
+    case 0x0F: return FormatBackground::CrossPattern;
+    case 0x10: return FormatBackground::DiagCrossPattern;
+    case 0x11: return FormatBackground::Dense6Pattern;
+    case 0x12: return FormatBackground::Dense7Pattern;
+    default: return FormatBackground::SolidPattern; // fallback
     }
 }
 
 // big task: convert Excel XFormat into Swinder::Format
-Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
+Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 {
     Format format;
 
@@ -347,52 +348,53 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
     UString valueFormat = this->valueFormat(xf.formatIndex());
     if (valueFormat.isEmpty()) {
         const unsigned ifmt = xf.formatIndex();
-        switch(ifmt) {
-            case  0:  valueFormat = "General"; break;
-            case  1:  valueFormat = "0"; break;
-            case  2:  valueFormat = "0.00"; break;
-            case  3:  valueFormat = "#,##0"; break;
-            case  4:  valueFormat = "#,##0.00"; break;
-            case  5:  valueFormat = "\"$\"#,##0_);(\"S\"#,##0)"; break;
-            case  6:  valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)"; break;
-            case  7:  valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)"; break;
-            case  8:  valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)"; break;
-            case  9:  valueFormat = "0%"; break;
-            case 10:  valueFormat = "0.00%"; break;
-            case 11:  valueFormat = "0.00E+00"; break;
-            case 12:  valueFormat = "#?/?"; break;
-            case 13:  valueFormat = "#\?\?/\?\?"; break;
-            case 14:  valueFormat = "M/D/YY"; break;
-            case 15:  valueFormat = "D-MMM-YY"; break;
-            case 16:  valueFormat = "D-MMM"; break;
-            case 17:  valueFormat = "MMM-YY"; break;
-            case 18:  valueFormat = "h:mm AM/PM"; break;
-            case 19:  valueFormat = "h:mm:ss AM/PM"; break;
-            case 20:  valueFormat = "h:mm"; break;
-            case 21:  valueFormat = "h:mm:ss"; break;
-            case 22:  valueFormat = "M/D/YY h:mm"; break;
-            case 37:  valueFormat = "_(#,##0_);(#,##0)"; break;
-            case 38:  valueFormat = "_(#,##0_);[Red](#,##0)"; break;
-            case 39:  valueFormat = "_(#,##0.00_);(#,##0)"; break;
-            case 40:  valueFormat = "_(#,##0.00_);[Red](#,##0)"; break;
-            case 41:  valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)"; break;
-            case 42:  valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)"; break;
-            case 43:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
-            case 44:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
-            case 45:  valueFormat = "mm:ss"; break;
-            case 46:  valueFormat = "[h]:mm:ss"; break;
-            case 47:  valueFormat = "mm:ss.0"; break;
-            case 48:  valueFormat = "##0.0E+0"; break;
-            case 49:  valueFormat = "@"; break;
-            default: {
-              if( ifmt >= 164 && ifmt <= 392 ) { // custom format
+        switch (ifmt) {
+        case  0:  valueFormat = "General"; break;
+        case  1:  valueFormat = "0"; break;
+        case  2:  valueFormat = "0.00"; break;
+        case  3:  valueFormat = "#,##0"; break;
+        case  4:  valueFormat = "#,##0.00"; break;
+        case  5:  valueFormat = "\"$\"#,##0_);(\"S\"#,##0)"; break;
+        case  6:  valueFormat = "\"$\"#,##0_);[Red](\"S\"#,##0)"; break;
+        case  7:  valueFormat = "\"$\"#,##0.00_);(\"S\"#,##0.00)"; break;
+        case  8:  valueFormat = "\"$\"#,##0.00_);[Red](\"S\"#,##0.00)"; break;
+        case  9:  valueFormat = "0%"; break;
+        case 10:  valueFormat = "0.00%"; break;
+        case 11:  valueFormat = "0.00E+00"; break;
+        case 12:  valueFormat = "#?/?"; break;
+        case 13:  valueFormat = "#\?\?/\?\?"; break;
+        case 14:  valueFormat = "M/D/YY"; break;
+        case 15:  valueFormat = "D-MMM-YY"; break;
+        case 16:  valueFormat = "D-MMM"; break;
+        case 17:  valueFormat = "MMM-YY"; break;
+        case 18:  valueFormat = "h:mm AM/PM"; break;
+        case 19:  valueFormat = "h:mm:ss AM/PM"; break;
+        case 20:  valueFormat = "h:mm"; break;
+        case 21:  valueFormat = "h:mm:ss"; break;
+        case 22:  valueFormat = "M/D/YY h:mm"; break;
+        case 37:  valueFormat = "_(#,##0_);(#,##0)"; break;
+        case 38:  valueFormat = "_(#,##0_);[Red](#,##0)"; break;
+        case 39:  valueFormat = "_(#,##0.00_);(#,##0)"; break;
+        case 40:  valueFormat = "_(#,##0.00_);[Red](#,##0)"; break;
+        case 41:  valueFormat = "_(\"$\"*#,##0_);_(\"$\"*#,##0_);_(\"$\"*\"-\");(@_)"; break;
+        case 42:  valueFormat = "_(*#,##0_);(*(#,##0);_(*\"-\");_(@_)"; break;
+        case 43:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+        case 44:  valueFormat = "_(\"$\"*#,##0.00_);_(\"$\"*#,##0.00_);_(\"$\"*\"-\");(@_)"; break;
+        case 45:  valueFormat = "mm:ss"; break;
+        case 46:  valueFormat = "[h]:mm:ss"; break;
+        case 47:  valueFormat = "mm:ss.0"; break;
+        case 48:  valueFormat = "##0.0E+0"; break;
+        case 49:  valueFormat = "@"; break;
+        default: {
+            if (ifmt >= 164 && ifmt <= 392) {  // custom format
                 valueFormat = d->formatsTable[ifmt];
-              } else {              
-                printf( "Unhandled format with index %i. Using general format.\n", xf.formatIndex() );
+            } else {
+                printf("Unhandled format with index %i. Using general format.\n", xf.formatIndex());
                 valueFormat = "General";
-              }
-            } break;
-      }
+            }
+        }
+        break;
+        }
     }
 
     format.setValueFormat(valueFormat);
@@ -400,26 +402,26 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
     format.setFont(convertedFont(xf.fontIndex()));
 
     FormatAlignment alignment;
-    switch(xf.horizontalAlignment()) {
-        case XFRecord::Left:
-            alignment.setAlignX(Format::Left); break;
-        case XFRecord::Right:
-            alignment.setAlignX(Format::Right); break;
-        case XFRecord::Centered:
-            alignment.setAlignX(Format::Center); break;
-        default: break;
-            // FIXME still unsupported: Repeat, Justified, Filled, Distributed
+    switch (xf.horizontalAlignment()) {
+    case XFRecord::Left:
+        alignment.setAlignX(Format::Left); break;
+    case XFRecord::Right:
+        alignment.setAlignX(Format::Right); break;
+    case XFRecord::Centered:
+        alignment.setAlignX(Format::Center); break;
+    default: break;
+        // FIXME still unsupported: Repeat, Justified, Filled, Distributed
     }
 
-    switch(xf.verticalAlignment()) {
-        case XFRecord::Top:
-            alignment.setAlignY(Format::Top); break;
-        case XFRecord::VCentered:
-            alignment.setAlignY(Format::Middle); break;
-        case XFRecord::Bottom:
-            alignment.setAlignY(Format::Bottom); break;
-        default: break;
-            // FIXME still unsupported: Justified, Distributed
+    switch (xf.verticalAlignment()) {
+    case XFRecord::Top:
+        alignment.setAlignY(Format::Top); break;
+    case XFRecord::VCentered:
+        alignment.setAlignY(Format::Middle); break;
+    case XFRecord::Bottom:
+        alignment.setAlignY(Format::Bottom); break;
+    default: break;
+        // FIXME still unsupported: Justified, Distributed
     }
 
     alignment.setWrap(xf.textWrap());
@@ -455,48 +457,45 @@ Format GlobalsSubStreamHandler::convertedFormat( unsigned index ) const
     return format;
 }
 
-void GlobalsSubStreamHandler::handleRecord( Record* record )
+void GlobalsSubStreamHandler::handleRecord(Record* record)
 {
     if (!record) return;
 
     unsigned type = record->rtti();
     if (type == BOFRecord::id)
-        handleBOF( static_cast<BOFRecord*>( record ) );
+        handleBOF(static_cast<BOFRecord*>(record));
     else if (type == BoundSheetRecord::id)
-        handleBoundSheet( static_cast<BoundSheetRecord*>( record ) );
+        handleBoundSheet(static_cast<BoundSheetRecord*>(record));
     else if (type == ExternBookRecord::id)
-        handleExternBook( static_cast<ExternBookRecord*>( record ) );
+        handleExternBook(static_cast<ExternBookRecord*>(record));
     else if (type == ExternNameRecord::id)
-        handleExternName( static_cast<ExternNameRecord*>( record ) );
+        handleExternName(static_cast<ExternNameRecord*>(record));
     else if (type == ExternSheetRecord::id)
-        handleExternSheet( static_cast<ExternSheetRecord*>( record ) );
+        handleExternSheet(static_cast<ExternSheetRecord*>(record));
     else if (type == FilepassRecord::id)
-        handleFilepass( static_cast<FilepassRecord*>( record ) );
+        handleFilepass(static_cast<FilepassRecord*>(record));
     else if (type == FormatRecord::id)
-        handleFormat( static_cast<FormatRecord*>( record ) );
+        handleFormat(static_cast<FormatRecord*>(record));
     else if (type == FontRecord::id)
-        handleFont( static_cast<FontRecord*>( record ) );
+        handleFont(static_cast<FontRecord*>(record));
     else if (type == NameRecord::id)
-        handleName( static_cast<NameRecord*>( record ) );
+        handleName(static_cast<NameRecord*>(record));
     else if (type == PaletteRecord::id)
-        handlePalette( static_cast<PaletteRecord*>( record ) );
+        handlePalette(static_cast<PaletteRecord*>(record));
     else if (type == SSTRecord::id)
-        handleSST( static_cast<SSTRecord*>( record ) );
+        handleSST(static_cast<SSTRecord*>(record));
     else if (type == XFRecord::id)
-        handleXF( static_cast<XFRecord*>( record ) );
-    else if (type == 0x40)
-        {} //BackupRecord
-    else if (type == 0x22)
-        {} //Date1904Record
-    else if (type == 0xA)
-        {} //EofRecord
+        handleXF(static_cast<XFRecord*>(record));
+    else if (type == 0x40) {} //BackupRecord
+    else if (type == 0x22) {} //Date1904Record
+    else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        printf( "Unhandled global record with type %i\n", type );
+        printf("Unhandled global record with type %i\n", type);
     }
 }
 
-void GlobalsSubStreamHandler::handleBOF( BOFRecord* record )
+void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
 {
     if (!record) return;
 
@@ -505,18 +504,18 @@ void GlobalsSubStreamHandler::handleBOF( BOFRecord* record )
     }
 }
 
-void GlobalsSubStreamHandler::handleBoundSheet( BoundSheetRecord* record )
+void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
 {
     if (!record) return;
 
     // only care for Worksheet, forget everything else
     if (record->sheetType() == BoundSheetRecord::Worksheet) {
         // create a new sheet
-        Sheet* sheet = new Sheet( d->workbook );
-        sheet->setName( record->sheetName() );
-        sheet->setVisible( record->sheetState() == BoundSheetRecord::Visible );
+        Sheet* sheet = new Sheet(d->workbook);
+        sheet->setName(record->sheetName());
+        sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
 
-        d->workbook->appendSheet( sheet );
+        d->workbook->appendSheet(sheet);
 
         // update bof position map
         unsigned bofPos = record->bofPosition();
@@ -524,7 +523,7 @@ void GlobalsSubStreamHandler::handleBoundSheet( BoundSheetRecord* record )
     }
 }
 
-void GlobalsSubStreamHandler::handleDateMode( DateModeRecord* record )
+void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
 {
     if (!record) return;
 
@@ -533,21 +532,21 @@ void GlobalsSubStreamHandler::handleDateMode( DateModeRecord* record )
         std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
 }
 
-void GlobalsSubStreamHandler::handleExternBook( ExternBookRecord* record )
+void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord* record)
 {
     if (!record) return;
 
     d->externBookTable.push_back(record->bookName());
 }
 
-void GlobalsSubStreamHandler::handleExternName( ExternNameRecord* record )
+void GlobalsSubStreamHandler::handleExternName(ExternNameRecord* record)
 {
     if (!record) return;
 
     d->nameTable.push_back(record->externName());
 }
 
-void GlobalsSubStreamHandler::handleExternSheet( ExternSheetRecord* record )
+void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
 {
     if (!record) return;
 
@@ -573,11 +572,11 @@ void GlobalsSubStreamHandler::handleExternSheet( ExternSheetRecord* record )
             }
         }
 
-        if(result.find(UString(" ")) != -1 || result.find(UString("'")) != -1) {
+        if (result.find(UString(" ")) != -1 || result.find(UString("'")) != -1) {
             // escape string
             UString outp("'");
             for (int idx = 0; idx < result.length(); idx++) {
-                if(result[idx] == '\'')
+                if (result[idx] == '\'')
                     outp.append(UString("''"));
                 else
                     outp.append(UString(result[idx]));
@@ -589,39 +588,39 @@ void GlobalsSubStreamHandler::handleExternSheet( ExternSheetRecord* record )
     }
 }
 
-void GlobalsSubStreamHandler::handleFilepass( FilepassRecord* record )
+void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
 {
-    if (!record ) return;
+    if (!record) return;
 
     d->passwordProtected = true;
 }
 
-void GlobalsSubStreamHandler::handleFont( FontRecord* record )
+void GlobalsSubStreamHandler::handleFont(FontRecord* record)
 {
     if (!record) return;
 
-    d->fontTable.push_back( *record );
+    d->fontTable.push_back(*record);
 
     // font #4 is never used, so add a dummy one
     if (d->fontTable.size() == 4)
-        d->fontTable.push_back( FontRecord() );
+        d->fontTable.push_back(FontRecord());
 }
 
-void GlobalsSubStreamHandler::handleFormat( FormatRecord* record )
+void GlobalsSubStreamHandler::handleFormat(FormatRecord* record)
 {
     if (!record) return;
 
     d->formatsTable[record->index()] = record->formatString();
 }
 
-void GlobalsSubStreamHandler::handleName( NameRecord* record )
+void GlobalsSubStreamHandler::handleName(NameRecord* record)
 {
     if (!record) return;
 
-    d->nameTable.push_back( record->definedName() );
+    d->nameTable.push_back(record->definedName());
 }
 
-void GlobalsSubStreamHandler::handlePalette( PaletteRecord* record )
+void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
 {
     if (!record) return;
 
@@ -630,7 +629,7 @@ void GlobalsSubStreamHandler::handlePalette( PaletteRecord* record )
         d->colorTable.push_back(Color(record->red(i), record->green(i), record->blue(i)));
 }
 
-void GlobalsSubStreamHandler::handleSST( SSTRecord* record )
+void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
 {
     if (!record) return;
 
@@ -641,7 +640,7 @@ void GlobalsSubStreamHandler::handleSST( SSTRecord* record )
     }
 }
 
-void GlobalsSubStreamHandler::handleXF( XFRecord* record )
+void GlobalsSubStreamHandler::handleXF(XFRecord* record)
 {
     if (!record) return;
 

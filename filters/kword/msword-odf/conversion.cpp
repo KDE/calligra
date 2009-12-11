@@ -34,26 +34,22 @@
 #include <QString>
 #include <klocale.h>
 
-QString Conversion::styleNameString( const wvWare::UString& str )
+QString Conversion::styleNameString(const wvWare::UString& str)
 {
-    QString string = QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+    QString string = QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
     //first replace all spaces with _20_
-    string.replace( ' ', "_20_" );
+    string.replace(' ', "_20_");
     //now remove random characters
-    for ( int i = 0; i < string.size(); i++ )
-    {
-        if ( !string[i].isLetterOrNumber() )
-        {
-            if ( string[i] != '_' )
-            {
-                string.remove( i, 1 );
+    for (int i = 0; i < string.size(); i++) {
+        if (!string[i].isLetterOrNumber()) {
+            if (string[i] != '_') {
+                string.remove(i, 1);
                 i--;
             }
         }
     }
     //if first character is a digit, it doesn't validate properly
-    if ( string[0].isDigit() )
-    {
+    if (string[0].isDigit()) {
         string.prepend("s");
     }
     return string;
@@ -61,58 +57,57 @@ QString Conversion::styleNameString( const wvWare::UString& str )
 
 QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
-    switch(number)
-    {
-        case 0:
-            if(defaultWhite)
-                return QString( "#FFFFFF" );
-        case 1://black
-            return QString( "#000000" );
-        case 2://blue
-            return QString( "#0000FF" );
-        case 3://cyan
-            return QString( "#00FFFF" );
-        case 4://green
-            return QString( "#008000" );
-        case 5://magenta
-            return QString( "#FF00FF" );
-        case 6://red
-            return QString( "#FF0000" );
-        case 7://yellow
-            return QString( "#FFFF00" );
-        case 8://white
-            return QString( "#FFFFFF" );
-        case 9://dark blue
-            return QString( "#00008B" );
-        case 10://dark cyan
-            return QString( "#008B8B" );
-        case 11://dark green
-            return QString( "#006400" );
-        case 12://dark magenta
-            return QString( "#8B008B" );
-        case 13://dark red
-            return QString( "#8B0000" );
-        case 14://dark yellow
-            return QString( "#808000" );
-        case 15://dark gray
-            return QString( "#A9A9A9" );
-        case 16://light gray
-            return QString( "#D3D3D3" );
+    switch (number) {
+    case 0:
+        if (defaultWhite)
+            return QString("#FFFFFF");
+    case 1://black
+        return QString("#000000");
+    case 2://blue
+        return QString("#0000FF");
+    case 3://cyan
+        return QString("#00FFFF");
+    case 4://green
+        return QString("#008000");
+    case 5://magenta
+        return QString("#FF00FF");
+    case 6://red
+        return QString("#FF0000");
+    case 7://yellow
+        return QString("#FFFF00");
+    case 8://white
+        return QString("#FFFFFF");
+    case 9://dark blue
+        return QString("#00008B");
+    case 10://dark cyan
+        return QString("#008B8B");
+    case 11://dark green
+        return QString("#006400");
+    case 12://dark magenta
+        return QString("#8B008B");
+    case 13://dark red
+        return QString("#8B0000");
+    case 14://dark yellow
+        return QString("#808000");
+    case 15://dark gray
+        return QString("#A9A9A9");
+    case 16://light gray
+        return QString("#D3D3D3");
 
-        default:
-            kDebug(30513) <<" unknown color:" << number;
-            if(defaultcolor == -1) //return black
-                return QString( "#000000" );
-            else //call this function again with the default color value
-                //to see if it works
-                return color(defaultcolor, -1);
+    default:
+        kDebug(30513) << " unknown color:" << number;
+        if (defaultcolor == -1) //return black
+            return QString("#000000");
+        else //call this function again with the default color value
+            //to see if it works
+            return color(defaultcolor, -1);
     }
 }
 
-int Conversion::fillPatternStyle( int ipat )
+int Conversion::fillPatternStyle(int ipat)
 {
     // See $QTDIR/doc/html/qbrush.html#setStyle
-    switch( ipat )  {
+    switch (ipat)  {
     case 0: // Automatic (Apparently it means Solid from background color instead of foreground)
     case 1: // Solid
         return Qt::SolidPattern;
@@ -188,10 +183,10 @@ int Conversion::fillPatternStyle( int ipat )
 }
 
 
-int Conversion::ditheringToGray( int ipat, bool* ok )
+int Conversion::ditheringToGray(int ipat, bool* ok)
 {
     *ok = true; // optimistic ;)
-    switch( ipat )  {
+    switch (ipat)  {
     case 2: // 5%
         return 255 - qRound(0.05 * 255);
     case 35: // 2.5 Percent
@@ -278,61 +273,61 @@ int Conversion::ditheringToGray( int ipat, bool* ok )
     }
 }
 
-void Conversion::setColorAttributes( QDomElement& element, int ico, const QString& prefix, bool defaultWhite )
+void Conversion::setColorAttributes(QDomElement& element, int ico, const QString& prefix, bool defaultWhite)
 {
-    QColor color = Conversion::color( ico, -1, defaultWhite );
-    element.setAttribute( prefix.isNull() ? "red" : prefix+"Red", color.red() );
-    element.setAttribute( prefix.isNull() ? "blue" : prefix+"Blue", color.blue() );
-    element.setAttribute( prefix.isNull() ? "green" : prefix+"Green", color.green() );
+    QColor color = Conversion::color(ico, -1, defaultWhite);
+    element.setAttribute(prefix.isNull() ? "red" : prefix + "Red", color.red());
+    element.setAttribute(prefix.isNull() ? "blue" : prefix + "Blue", color.blue());
+    element.setAttribute(prefix.isNull() ? "green" : prefix + "Green", color.green());
 }
 
 //get a correct fo:border-line-width value "innerwidth space outerwidth"
 //innerwidth = metric
 //space = metric
 //outerwidth = metric
-QString Conversion::setDoubleBorderAttributes( const wvWare::Word97::BRC& brc )
+QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
 {
     qreal w =  brc.dptLineWidth / 8.0;
-        
-    switch ( brc.brcType ) {
-        case 0: // none
-        case 1: // single
-        case 2: // thick
-        case 5: // hairline
-        case 6: // dot
-        case 7: // dash large gap
-        case 8: // dot dash
-        case 9: // dot dot dash
-        case 20: // wave
-        case 22: // dash small gap
-        case 23: // dash dot stroked
-        case 24: // emboss 3D
-        case 25: // engrave 3D
-        default:
-            return QString(); // single lines so just return blank
-        
-        case 10: // triple
-            return QString::number(w) + "pt " + QString::number(w*3) + "pt " + QString::number(w) + "pt";
-        case 13: // thin-thick-thin small gap
-        case 16: // thin-thick-thin medium gap
-        case 19: // thin-thick-thin large gap
 
-        case 3: // double
-            return QString::number(w) + "pt " + QString::number(w) + "pt " + QString::number(w) + "pt";
-        case 11: // thin-thick small gap
-            return QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w) + "pt";
-        case 12: // thick-thin small gap
-            return QString::number(w) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt";
-        case 14: // thin-thick medium gap
-            return QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w) + "pt";
-        case 15: // thick-thin medium gap
-            return QString::number(w) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt";
-        case 17: // thin-thick large gap
-            return QString::number(w*0.25) + "pt " + QString::number(w) + "pt " + QString::number(w*0.5) + "pt";
-        case 18: //  thick-thin large gap
-            return QString::number(w*0.5) + "pt " + QString::number(w) + "pt " + QString::number(w*0.25) + "pt";
-        case 21: // double wave
-            return QString::number(w*2.5) + "pt " + QString::number(w*1.25) + "pt " + QString::number(w*2.5) + "pt";
+    switch (brc.brcType) {
+    case 0: // none
+    case 1: // single
+    case 2: // thick
+    case 5: // hairline
+    case 6: // dot
+    case 7: // dash large gap
+    case 8: // dot dash
+    case 9: // dot dot dash
+    case 20: // wave
+    case 22: // dash small gap
+    case 23: // dash dot stroked
+    case 24: // emboss 3D
+    case 25: // engrave 3D
+    default:
+        return QString(); // single lines so just return blank
+
+    case 10: // triple
+        return QString::number(w) + "pt " + QString::number(w*3) + "pt " + QString::number(w) + "pt";
+    case 13: // thin-thick-thin small gap
+    case 16: // thin-thick-thin medium gap
+    case 19: // thin-thick-thin large gap
+
+    case 3: // double
+        return QString::number(w) + "pt " + QString::number(w) + "pt " + QString::number(w) + "pt";
+    case 11: // thin-thick small gap
+        return QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w) + "pt";
+    case 12: // thick-thin small gap
+        return QString::number(w) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt";
+    case 14: // thin-thick medium gap
+        return QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w) + "pt";
+    case 15: // thick-thin medium gap
+        return QString::number(w) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt";
+    case 17: // thin-thick large gap
+        return QString::number(w*0.25) + "pt " + QString::number(w) + "pt " + QString::number(w*0.5) + "pt";
+    case 18: //  thick-thin large gap
+        return QString::number(w*0.5) + "pt " + QString::number(w) + "pt " + QString::number(w*0.25) + "pt";
+    case 21: // double wave
+        return QString::number(w*2.5) + "pt " + QString::number(w*1.25) + "pt " + QString::number(w*2.5) + "pt";
     }
 }
 
@@ -340,7 +335,7 @@ QString Conversion::setDoubleBorderAttributes( const wvWare::Word97::BRC& brc )
 //width = thick, thin, or length specification
 //style = none, solid, or double
 //color = six-digit hexadecimal color value
-QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
+QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 {
     kDebug(30153) << "brc.brcType = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
@@ -352,92 +347,91 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
         w =  brc.dptLineWidth / 8.0;
     else
         w = brc.dptLineWidth;
-    
-    QString style( "solid" ); //reasonable default
-    QString color = '#' + QString::number(brc.cv|0xff000000, 16).right(6).toUpper();
 
-    switch ( brc.brcType ) {
-        case 0: // none
-            //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
-            style = "none";
-            break;
-        case 11: // thin-thick small gap
-        case 12: // thick-thin small gap
-            style = "double";
-            w *=1.5;
-            break;
-        case 17: // thin-thick large gap
-        case 18: //  thick-thin large gap
-            style = "double";
-            w *=1.75;
-            break;
-        case 14: // thin-thick medium gap
-        case 15: // thick-thin medium gap
-            style = "double";
-            w *=2.0;
-            break;
-        case 3: // double
-            style = "double";
-            w *=3;
-            break;
-        case 5: //"hairline"
-            w = 0.01;
-            break;
+    QString style("solid");   //reasonable default
+    QString color = '#' + QString::number(brc.cv | 0xff000000, 16).right(6).toUpper();
 
-        //ODF doesn't support dot dashed or wavy borders??? 
+    switch (brc.brcType) {
+    case 0: // none
+        //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
+        style = "none";
+        break;
+    case 11: // thin-thick small gap
+    case 12: // thick-thin small gap
+        style = "double";
+        w *= 1.5;
+        break;
+    case 17: // thin-thick large gap
+    case 18: //  thick-thin large gap
+        style = "double";
+        w *= 1.75;
+        break;
+    case 14: // thin-thick medium gap
+    case 15: // thick-thin medium gap
+        style = "double";
+        w *= 2.0;
+        break;
+    case 3: // double
+        style = "double";
+        w *= 3;
+        break;
+    case 5: //"hairline"
+        w = 0.01;
+        break;
 
-        case 7: // dash large gap
-        case 22: // dash small gap
-            style = "dashed"; // KWord: dashes //FIXME
-            break;
-        case 6: // dot
-            style = "dotted";
-            break;
-        case 8: // dot dash
-            style = "dashed"; //FIXME
-            break;
-        case 9: // dot dot dash
-            style = "dashed"; //FIXME
-            break;
-            
-        case 20: // wave
-            w *= 4; // Note: we can't make a wave but at least we can make it just as wide
-            break;
-        case 21: // double wave
-            w *= 6.25;
-            style = "double"; // Note: we can't make a wave but at least we can make it just as wide
-            break;
- 
-        case 10: // triple
-            w *= 5;
-            style = "double"; //Note: odf only support double so that will have to do
-            break;
+        //ODF doesn't support dot dashed or wavy borders???
 
-        case 13: // thin-thick-thin small gap
-        case 16: // thin-thick-thin medium gap
-        case 19: // thin-thick-thin large gap
-        default:
-            //if a fancy unsupported border is specified -> better a normal border than none
-            //so just leave values as defaults
-            break;
+    case 7: // dash large gap
+    case 22: // dash small gap
+        style = "dashed"; // KWord: dashes //FIXME
+        break;
+    case 6: // dot
+        style = "dotted";
+        break;
+    case 8: // dot dash
+        style = "dashed"; //FIXME
+        break;
+    case 9: // dot dot dash
+        style = "dashed"; //FIXME
+        break;
+
+    case 20: // wave
+        w *= 4; // Note: we can't make a wave but at least we can make it just as wide
+        break;
+    case 21: // double wave
+        w *= 6.25;
+        style = "double"; // Note: we can't make a wave but at least we can make it just as wide
+        break;
+
+    case 10: // triple
+        w *= 5;
+        style = "double"; //Note: odf only support double so that will have to do
+        break;
+
+    case 13: // thin-thick-thin small gap
+    case 16: // thin-thick-thin medium gap
+    case 19: // thin-thick-thin large gap
+    default:
+        //if a fancy unsupported border is specified -> better a normal border than none
+        //so just leave values as defaults
+        break;
     }
 
     QString width =  QString::number(w) + "pt";
 
-    QString value( width );
-    value.append( " " );
-    value.append( style );
-    value.append( " " );
-    value.append( color);
+    QString value(width);
+    value.append(" ");
+    value.append(style);
+    value.append(" ");
+    value.append(color);
 
     return value;
 }
 
-QString Conversion::numberFormatCode( int nfc )
+QString Conversion::numberFormatCode(int nfc)
 {
-    QString value( "" );
-    switch ( nfc )
-    {
+    QString value("");
+    switch (nfc) {
     case 1: // upper case roman
         value = 'I';
         break;
@@ -464,7 +458,7 @@ QString Conversion::numberFormatCode( int nfc )
     return value;
 }
 
-int Conversion::headerTypeToFrameInfo( unsigned char type )
+int Conversion::headerTypeToFrameInfo(unsigned char type)
 {
     switch (type) {
     case wvWare::HeaderData::HeaderEven:
@@ -483,7 +477,7 @@ int Conversion::headerTypeToFrameInfo( unsigned char type )
     return 0;
 }
 
-QString Conversion::headerTypeToFramesetName( unsigned char type )
+QString Conversion::headerTypeToFramesetName(unsigned char type)
 {
     switch (type) {
     case wvWare::HeaderData::HeaderEven:
@@ -502,7 +496,7 @@ QString Conversion::headerTypeToFramesetName( unsigned char type )
     return QString();
 }
 
-bool Conversion::isHeader( unsigned char type )
+bool Conversion::isHeader(unsigned char type)
 {
     switch (type) {
     case wvWare::HeaderData::HeaderEven:
@@ -513,38 +507,37 @@ bool Conversion::isHeader( unsigned char type )
     return false;
 }
 
-int Conversion::headerMaskToHType( unsigned char mask )
+int Conversion::headerMaskToHType(unsigned char mask)
 {
-    bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
+    bool hasFirst = (mask & wvWare::HeaderData::HeaderFirst);
     // Odd is always there. We have even!=odd only if Even is there too.
-    bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderEven );
+    bool hasEvenOdd = (mask & wvWare::HeaderData::HeaderEven);
     //kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
-    if ( hasFirst )
+    if (hasFirst)
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
 }
 
-int Conversion::headerMaskToFType( unsigned char mask )
+int Conversion::headerMaskToFType(unsigned char mask)
 {
-    bool hasFirst = ( mask & wvWare::HeaderData::FooterFirst );
-    bool hasEvenOdd = ( mask & wvWare::HeaderData::FooterEven );
+    bool hasFirst = (mask & wvWare::HeaderData::FooterFirst);
+    bool hasEvenOdd = (mask & wvWare::HeaderData::FooterEven);
     // Odd is always there. We have even!=odd only if Even is there too.
-    kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
-    if ( hasFirst )
+    kDebug(30513) << " hasEvenOdd=" << hasEvenOdd;
+    if (hasFirst)
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
 }
 
-int Conversion::fldToFieldType( const wvWare::FLD* fld )
+int Conversion::fldToFieldType(const wvWare::FLD* fld)
 {
     // assume unhandled
     int m_fieldType = -1;
 
     // sanity check
-    if( !fld ) return -1;
+    if (!fld) return -1;
 
-    switch( fld->flt )
-    {
+    switch (fld->flt) {
     case 15:    m_fieldType = 10; break;  // title
     case 17:    m_fieldType =  2; break;  // author
     case 18:    m_fieldType = -1; break;  // keywords (unhandled)
@@ -561,8 +554,8 @@ int Conversion::fldToFieldType( const wvWare::FLD* fld )
     default:    m_fieldType = -1; break;
     }
 
-    if( m_fieldType < 0 )
-        kDebug(30513) <<"unhandled field: fld.ftl:" << (int)fld->flt;
+    if (m_fieldType < 0)
+        kDebug(30513) << "unhandled field: fld.ftl:" << (int)fld->flt;
 
     return m_fieldType;
 }

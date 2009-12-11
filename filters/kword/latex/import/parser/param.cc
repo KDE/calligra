@@ -27,18 +27,18 @@ Param::Param()
 
 Param::Param(const char* key, const char* value)
 {
-	_key = key;
-	_key = _key.trimmed();
-	_value = value;
-	_value = _value.trimmed();
+    _key = key;
+    _key = _key.trimmed();
+    _value = value;
+    _value = _value.trimmed();
 }
 
 Param::Param(const QString& key, const QString& value)
 {
-	_key = key;
-	_key = _key.trimmed();
-	_value = value;
-	_value = _value.trimmed();
+    _key = key;
+    _key = _key.trimmed();
+    _value = value;
+    _value = _value.trimmed();
 }
 
 
@@ -48,7 +48,7 @@ Param::~Param()
 
 void Param::print(int)
 {
-	cout << getKey().latin1();
-	if(!getValue().isEmpty())
-			cout << "= " << getValue().latin1();
+    cout << getKey().latin1();
+    if (!getValue().isEmpty())
+        cout << "= " << getValue().latin1();
 }

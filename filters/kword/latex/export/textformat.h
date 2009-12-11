@@ -27,33 +27,30 @@
 #include <QColor>
 #include "format.h"
 
-enum _EAlign
-{
-	EA_NONE,
-	EA_SUB,
-	EA_SUPER
+enum _EAlign {
+    EA_NONE,
+    EA_SUB,
+    EA_SUPER
 };
 
 typedef enum _EAlign EAlign;
 
-enum _ETypeUnderline
-{
-	UNDERLINE_NONE,
-	UNDERLINE_SIMPLE,
-	UNDERLINE_DOUBLE,
-	UNDERLINE_WAVE
+enum _ETypeUnderline {
+    UNDERLINE_NONE,
+    UNDERLINE_SIMPLE,
+    UNDERLINE_DOUBLE,
+    UNDERLINE_WAVE
 };
 
 typedef enum _ETypeUnderline ETypeUnderline;
 
-enum _ETypeLinespacing
-{
-	LINESPACING_NONE,
-	LINESPACING_ONEANDHALF,
-	LINESPACING_DOUBLE,
-	LINESPACING_CUSTOM,
-	LINESPACING_ATLEAST,
-	LINESPACING_MULTIPLE
+enum _ETypeLinespacing {
+    LINESPACING_NONE,
+    LINESPACING_ONEANDHALF,
+    LINESPACING_DOUBLE,
+    LINESPACING_CUSTOM,
+    LINESPACING_ATLEAST,
+    LINESPACING_MULTIPLE
 };
 
 typedef enum _ETypeLinespacing ETypeLinespacing;
@@ -68,97 +65,127 @@ typedef enum _ETypeLinespacing ETypeLinespacing;
  */
 class TextFormat: public Format
 {
-	QString      _police;
-	unsigned int _size;				/* Size of the police   */
-	unsigned int _weight;			/* bold                 */
-	bool         _italic;
-	ETypeUnderline _underline;
-	bool         _strikeout;
-	EAlign       _vertalign;
-	QColor*      _textcolor;
-	QColor*      _backcolor;
-	ETypeLinespacing _linespacingType;
-	int              _spacingValue;
+    QString      _police;
+    unsigned int _size;    /* Size of the police   */
+    unsigned int _weight;   /* bold                 */
+    bool         _italic;
+    ETypeUnderline _underline;
+    bool         _strikeout;
+    EAlign       _vertalign;
+    QColor*      _textcolor;
+    QColor*      _backcolor;
+    ETypeLinespacing _linespacingType;
+    int              _spacingValue;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of TextFormat.
-		 *
-		 */
-		TextFormat(): _weight(0), _italic(false),
-				_strikeout(0)
-		{
-			_textcolor = 0;
-			_backcolor = 0;
-			_size = Config::instance()->getDefaultFontSize();
-			setPos(0);
-			setLength(0);
-			setUnderlined("0");
-		}
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of TextFormat.
+     *
+     */
+    TextFormat(): _weight(0), _italic(false),
+            _strikeout(0) {
+        _textcolor = 0;
+        _backcolor = 0;
+        _size = Config::instance()->getDefaultFontSize();
+        setPos(0);
+        setLength(0);
+        setUnderlined("0");
+    }
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of little zones.
-		 *
-		 */
-		virtual ~TextFormat() {}
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of little zones.
+     *
+     */
+    virtual ~TextFormat() {}
 
-		/* ==== Getters ==== */
-		unsigned int getSize      () const { return _size;      }
-		unsigned int getWeight    () const { return _weight;    }
-		EAlign       getAlign     () const { return _vertalign; }
-		int          getColorBlue () const;
-		int          getColorGreen() const;
-		int          getColorRed  () const;
-		ETypeUnderline getUnderlineType() const { return _underline; }
+    /* ==== Getters ==== */
+    unsigned int getSize() const {
+        return _size;
+    }
+    unsigned int getWeight() const {
+        return _weight;
+    }
+    EAlign       getAlign() const {
+        return _vertalign;
+    }
+    int          getColorBlue() const;
+    int          getColorGreen() const;
+    int          getColorRed() const;
+    ETypeUnderline getUnderlineType() const {
+        return _underline;
+    }
 
-		int          getBkColorBlue () const;
-		int          getBkColorGreen() const;
-		int          getBkColorRed  () const;
-		
-		bool         isItalic     () const { return (_italic    == true); }
-		bool         isUnderlined () const { return (_underline != UNDERLINE_NONE); }
-		bool         isStrikeout  () const { return (_strikeout == true); }
-		bool         isColor      () const { return (_textcolor != 0);    }
-		bool         isBkColored  () const { return (_backcolor != 0);    }
+    int          getBkColorBlue() const;
+    int          getBkColorGreen() const;
+    int          getBkColorRed() const;
 
-		/* ==== Setters ==== */
-		void setSize       (const unsigned int t)  { _size      = t; }
-		void setWeight     (const unsigned int w)  { _weight    = w; }
-		void setItalic     (bool i)                { _italic    = i; }
-		void setUnderlined (ETypeUnderline u)      { _underline = u; }
-		void setUnderlined (QString u)
-		{
-			if(u == "double")
-				_underline = UNDERLINE_DOUBLE;
-			else if(u == "wave")
-				_underline = UNDERLINE_WAVE;
-			else if (u == "1")
-				_underline = UNDERLINE_SIMPLE;
-			else
-				_underline = UNDERLINE_NONE;
-		}
-		void setStrikeout  (bool s)                { _strikeout = s; }
-		void setPolice     (QString p)             { _police    = p; }
-		void setAlign      (const int a)           { _vertalign = (EAlign) a; }
-		void setColor      (const int, const int, const int);
-		void setBkColor    (const int, const int, const int);
+    bool         isItalic() const {
+        return (_italic    == true);
+    }
+    bool         isUnderlined() const {
+        return (_underline != UNDERLINE_NONE);
+    }
+    bool         isStrikeout() const {
+        return (_strikeout == true);
+    }
+    bool         isColor() const {
+        return (_textcolor != 0);
+    }
+    bool         isBkColored() const {
+        return (_backcolor != 0);
+    }
 
-		/* ==== Helpful functions ==== */
-		void analyzeFormat    (const QDomNode);
-		void analyzeParam     (const QDomNode);
-		void analyzeFont      (const QDomNode);
-		void analyzeItalic    (const QDomNode);
-		void analyzeUnderlined(const QDomNode);
-		void analyzeStrikeout (const QDomNode);
-		void analyzeWeight    (const QDomNode);
-		void analyzeAlign     (const QDomNode);
-		void analyzeColor     (const QDomNode);
-		void analyzeSize      (const QDomNode);
-		void analyzeBackgroundColor(const QDomNode);
+    /* ==== Setters ==== */
+    void setSize(const unsigned int t)  {
+        _size      = t;
+    }
+    void setWeight(const unsigned int w)  {
+        _weight    = w;
+    }
+    void setItalic(bool i)                {
+        _italic    = i;
+    }
+    void setUnderlined(ETypeUnderline u)      {
+        _underline = u;
+    }
+    void setUnderlined(QString u) {
+        if (u == "double")
+            _underline = UNDERLINE_DOUBLE;
+        else if (u == "wave")
+            _underline = UNDERLINE_WAVE;
+        else if (u == "1")
+            _underline = UNDERLINE_SIMPLE;
+        else
+            _underline = UNDERLINE_NONE;
+    }
+    void setStrikeout(bool s)                {
+        _strikeout = s;
+    }
+    void setPolice(QString p)             {
+        _police    = p;
+    }
+    void setAlign(const int a)           {
+        _vertalign = (EAlign) a;
+    }
+    void setColor(const int, const int, const int);
+    void setBkColor(const int, const int, const int);
+
+    /* ==== Helpful functions ==== */
+    void analyzeFormat(const QDomNode);
+    void analyzeParam(const QDomNode);
+    void analyzeFont(const QDomNode);
+    void analyzeItalic(const QDomNode);
+    void analyzeUnderlined(const QDomNode);
+    void analyzeStrikeout(const QDomNode);
+    void analyzeWeight(const QDomNode);
+    void analyzeAlign(const QDomNode);
+    void analyzeColor(const QDomNode);
+    void analyzeSize(const QDomNode);
+    void analyzeBackgroundColor(const QDomNode);
 };
 
 #endif /* __KWORD_TEXTFORMAT_H__ */

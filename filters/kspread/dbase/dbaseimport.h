@@ -25,16 +25,17 @@
 //Added by qt3to4:
 #include <QByteArray>
 
-class DBaseImport : public KoFilter {
+class DBaseImport : public KoFilter
+{
 
     Q_OBJECT
 
 public:
 
-    DBaseImport ( QObject *parent, const QStringList& );
+    DBaseImport(QObject *parent, const QStringList&);
     virtual ~DBaseImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __DBASEIMPORT_H

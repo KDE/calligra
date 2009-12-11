@@ -91,11 +91,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //todo        body->addAttribute("presentation:style-name", styleName);
 //! @todo for pptx: maybe use KoGenStyle::StylePresentationAuto?
 #ifdef DOCXXMLDOCREADER_H
-        QString currentDrawStyleName( mainStyles->lookup(m_currentDrawStyle) );
+        QString currentDrawStyleName(mainStyles->lookup(m_currentDrawStyle));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
 //! @todo hardcoded draw:style-name = gr1
-        QString currentDrawStyleName( "gr1" );
+        QString currentDrawStyleName("gr1");
 #endif
         kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
         body->addAttribute("draw:style-name", currentDrawStyleName);
@@ -118,29 +118,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
         body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-            if (!m_xlinkHref.isEmpty()) {
-                body->startElement("draw:image");
-                body->addAttribute("xlink:href", m_xlinkHref);
-    //! @todo xlink:type?
-                body->addAttribute("xlink:type", "simple");
-    //! @todo xlink:show?
-                body->addAttribute("xlink:show", "embed");
-    //! @todo xlink:actuate?
-                body->addAttribute("xlink:actuate", "onLoad");
-    #ifdef PPTXXMLSLIDEREADER_H
-                    body->startElement("text:p");
-                    body->endElement(); //text:p
-    #endif
-                body->endElement(); //draw:image
-    #ifdef DOCXXMLDOCREADER_H
-                if (!m_cNvPrName.isEmpty()) {
-                    body->startElement("svg:title");
-                    body->addTextSpan(m_cNvPrName);
-                    body->endElement(); //svg:title
-                }
-    #endif
-                m_xlinkHref.clear();
+        if (!m_xlinkHref.isEmpty()) {
+            body->startElement("draw:image");
+            body->addAttribute("xlink:href", m_xlinkHref);
+            //! @todo xlink:type?
+            body->addAttribute("xlink:type", "simple");
+            //! @todo xlink:show?
+            body->addAttribute("xlink:show", "embed");
+            //! @todo xlink:actuate?
+            body->addAttribute("xlink:actuate", "onLoad");
+#ifdef PPTXXMLSLIDEREADER_H
+            body->startElement("text:p");
+            body->endElement(); //text:p
+#endif
+            body->endElement(); //draw:image
+#ifdef DOCXXMLDOCREADER_H
+            if (!m_cNvPrName.isEmpty()) {
+                body->startElement("svg:title");
+                body->addTextSpan(m_cNvPrName);
+                body->endElement(); //svg:title
             }
+#endif
+            m_xlinkHref.clear();
+        }
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -255,7 +255,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr()
     ReadMethod caller = m_calls.top();
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     if (CALLER_IS(nvSpPr) || CALLER_IS(nvPicPr)) { // for sanity, p:nvGrpSpPr can be also the caller
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
         kDebug() << "id:" << m_cNvPrId;
@@ -338,10 +338,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-/*        if (isStartElement()) {
-            TRY_READ_IF(...)
-//! @todo add ELSE_WRONG_FORMAT
-        }*/
+        /*        if (isStartElement()) {
+                    TRY_READ_IF(...)
+        //! @todo add ELSE_WRONG_FORMAT
+                }*/
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
@@ -385,8 +385,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) {
-    }
-    else if (m_context->type == SlideMaster) {
+    } else if (m_context->type == SlideMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
         m_context->slideProperties->shapes.append(m_currentShapeProperties);
     }
@@ -396,7 +395,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_cNvPrName.clear();
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
-                                                 // to write after the child elements are generated
+    // to write after the child elements are generated
 //    QBuffer drawFrameBuf;
 //    KoXmlWriter *origBody = body;
 #ifdef PPTXXMLSLIDEREADER_H
@@ -425,7 +424,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-     if (outputDrawFrame) {
+    if (outputDrawFrame) {
 //        delete body;
 //        body = origBody;
         body = drawFrameBuf.originalWriter();
@@ -438,13 +437,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 # ifdef HARDCODED_PRESENTATIONSTYLENAME
         d->presentationStyleNameCount++;
         body->addAttribute("presentation:style-name",
-            d->presentationStyleNameCount == 1 ? "pr1" : "pr2");
+                           d->presentationStyleNameCount == 1 ? "pr1" : "pr2");
 # endif
 
 // CASE #P476
         body->addAttribute("draw:id", m_cNvPrId);
         body->addAttribute("presentation:class",
-            MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType.toLatin1()));
+                           MSOOXML::Utils::ST_PlaceholderType_to_ODF(m_phType.toLatin1()));
 //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -527,8 +526,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_H
 //! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
-kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
-         << "d->shapeNumber" << d->shapeNumber;
+        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
+        << "d->shapeNumber" << d->shapeNumber;
         if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
             // for inheritance
             m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
@@ -540,11 +539,10 @@ kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProp
             m_svgWidth = m_currentShapeProperties->width;
             m_svgHeight = m_currentShapeProperties->height;
             kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-        }
-        else {
+        } else {
             m_currentShapeProperties = 0;
             kWarning() << QString("No shape #%1 found in master slide; shapes count = %2").arg(d->shapeNumber)
-                .arg(m_context->slideProperties->shapes.count());
+            .arg(m_context->slideProperties->shapes.count());
         }
     }
 #endif
@@ -594,8 +592,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             if (QUALIFIED_NAME_IS(off)) {
                 TRY_READ(off);
                 off_read = true;
-            }
-            else if (QUALIFIED_NAME_IS(ext)) {
+            } else if (QUALIFIED_NAME_IS(ext)) {
                 TRY_READ(ext);
                 ext_read = true;
             }
@@ -603,19 +600,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 //! @todo add ELSE_WRONG_FORMAT
     }
 
-/*//! @todo
-    if (m_context->type == Slide) { // load values from master is needed
-        if (!off_read) {
-            m_svgX = m_currentShapeProperties->x;
-            m_svgY = m_currentShapeProperties->y;
-            kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
-        }
-        if (!ext_read) {
-            m_svgWidth = m_currentShapeProperties->width;
-            m_svgHeight = m_currentShapeProperties->y;
-            kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-        }
-    }*/
+    /*//! @todo
+        if (m_context->type == Slide) { // load values from master is needed
+            if (!off_read) {
+                m_svgX = m_currentShapeProperties->x;
+                m_svgY = m_currentShapeProperties->y;
+                kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
+            }
+            if (!ext_read) {
+                m_svgWidth = m_currentShapeProperties->width;
+                m_svgHeight = m_currentShapeProperties->y;
+                kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
+            }
+        }*/
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideMaster) { // save
         if (!off_read) {
@@ -632,10 +629,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     }
 #endif
     kDebug()
-        << "svg:x" << m_svgX
-        << "svg:y" << m_svgY
-        << "svg:width" << m_svgWidth
-        << "svg:height" << m_svgHeight;
+    << "svg:x" << m_svgX
+    << "svg:y" << m_svgY
+    << "svg:width" << m_svgWidth
+    << "svg:height" << m_svgHeight;
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -670,7 +667,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(x)
     STRING_TO_INT(x, m_svgX)
@@ -701,7 +698,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
  - xfrm (§19.3.1.53)
 
  No child elements.
- 
+
  Attributes:
  - cx (Extent Length) Specifies the length of the extents rectangle in EMUs. This rectangle shall dictate
       the size of the object as displayed (the result of any scaling to the original object).
@@ -713,7 +710,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(cx)
     STRING_TO_INT(cx, m_svgWidth)

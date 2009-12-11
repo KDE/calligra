@@ -30,48 +30,46 @@ class Command;
 
 class Document
 {
-	public:
-		Document()
-		{
-		}
+public:
+    Document() {
+    }
 
-		~Document()
-		{
-		}
+    ~Document() {
+    }
 
-		/**
-		 * Analyze the latex tree and keep data.
-		 * 
-		 * @param elt The root tree which contaisn an entire latex document.
-		 * 
-		 * @return <code>false</code> if the analysis failed.
-		 */
-		bool analyze(QList<Element*>* elt);
+    /**
+     * Analyze the latex tree and keep data.
+     *
+     * @param elt The root tree which contaisn an entire latex document.
+     *
+     * @return <code>false</code> if the analysis failed.
+     */
+    bool analyze(QList<Element*>* elt);
 
-		/**
-		 * Analyze and get all information in a documentclass command.
-		 */
-		bool analyzeDocumentClass(Command* documentclass);
+    /**
+     * Analyze and get all information in a documentclass command.
+     */
+    bool analyzeDocumentClass(Command* documentclass);
 
-		/**
-		 * Generate a kword document.
-		 *
-		 * @param store The kword document zip file.
-		 *
-		 * @return <code>true</code> if the generation succeeded.
-		 */
-		bool generate(KoStore* store);
+    /**
+     * Generate a kword document.
+     *
+     * @param store The kword document zip file.
+     *
+     * @return <code>true</code> if the generation succeeded.
+     */
+    bool generate(KoStore* store);
 
-		/**
-		 * Copy the DOM tree in a file.
-		 *
-		 * @param tree The tree to copy.
-		 * @param store The KoStore that this doc is from
-		 */
-		void serialize(KoStore* store, QDomDocument tree);
+    /**
+     * Copy the DOM tree in a file.
+     *
+     * @param tree The tree to copy.
+     * @param store The KoStore that this doc is from
+     */
+    void serialize(KoStore* store, QDomDocument tree);
 
-	private:
-		Body _body;
+private:
+    Body _body;
 };
 
 #endif /* __KWORD_LATEX_IMPORT_DOCUMENT__ */

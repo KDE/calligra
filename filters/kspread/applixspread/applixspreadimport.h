@@ -30,47 +30,46 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-typedef struct
-{
-  int r;
-  int g;
-  int b;
+typedef struct {
+    int r;
+    int g;
+    int b;
 
-  int c;
-  int m;
-  int y;
-  int k;
+    int c;
+    int m;
+    int y;
+    int k;
 } t_mycolor;
 
-typedef struct
-{
-  QStringList tabname;
-  QStringList rc;
+typedef struct {
+    QStringList tabname;
+    QStringList rc;
 } t_rc;
 
 
-class APPLIXSPREADImport : public KoFilter {
+class APPLIXSPREADImport : public KoFilter
+{
 
     Q_OBJECT
 
 public:
-    APPLIXSPREADImport ( QObject *parent, const QStringList& );
+    APPLIXSPREADImport(QObject *parent, const QStringList&);
     virtual ~APPLIXSPREADImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-    QString nextLine           (QTextStream &);
-    QChar   specCharfind       (QChar , QChar );
-    void    writePen           (QString &, int, int, QString);
-    QString writeColor         (t_mycolor *);
-    void    readTypefaceTable  (QTextStream &, QStringList &);
-    void    readColormap       (QTextStream &, QList<t_mycolor*> &);
-    void    readView           (QTextStream &, QString, t_rc &);
-    void    filterSHFGBG       (QString, int *, int *, int *);
-    void    transPenFormat     (QString, int *, int *);
-    int     readHeader         (QTextStream &);
-    int     translateColumnNumber (QString);
+    QString nextLine(QTextStream &);
+    QChar   specCharfind(QChar , QChar);
+    void    writePen(QString &, int, int, QString);
+    QString writeColor(t_mycolor *);
+    void    readTypefaceTable(QTextStream &, QStringList &);
+    void    readColormap(QTextStream &, QList<t_mycolor*> &);
+    void    readView(QTextStream &, QString, t_rc &);
+    void    filterSHFGBG(QString, int *, int *, int *);
+    void    transPenFormat(QString, int *, int *);
+    int     readHeader(QTextStream &);
+    int     translateColumnNumber(QString);
 
 private:
     int m_stepsize;

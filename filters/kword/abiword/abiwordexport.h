@@ -37,7 +37,8 @@
 #include <KoFilter.h>
 
 
-class ABIWORDExport : public KoFilter {
+class ABIWORDExport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -45,6 +46,6 @@ public:
     ABIWORDExport(QObject* parent, const QStringList &);
     virtual ~ABIWORDExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 #endif // ABIWORDEXPORT_H

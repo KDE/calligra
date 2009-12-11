@@ -30,25 +30,26 @@
 #include "lateximportdia.h"
 
 typedef KGenericFactory<LATEXImport> LATEXImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkwordlateximport, LATEXImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkwordlateximport, LATEXImportFactory("kofficefilters"))
 
 
 LATEXImport::LATEXImport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus LATEXImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus LATEXImport::convert(const QByteArray& from, const QByteArray& to)
 {
     QString config;
 
-    if(from != "text/x-tex" || to != "application/x-kword")
+    if (from != "text/x-tex" || to != "application/x-kword")
         return KoFilter::NotImplemented;
 
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()),
-				KoStore::Write, "application/x-kword");
+                                        KoStore::Write, "application/x-kword");
     /*if(!out || !out->open("root")) {
         kError(30503) << "Unable to open output file!" << endl;
-				delete out;
+    delete out;
         return KoFilter::FileNotFound;
     }
 

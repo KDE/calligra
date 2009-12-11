@@ -34,18 +34,18 @@ class WPImport : public KoFilter
     Q_OBJECT
 
 
-  protected:
+protected:
 
     QString m_output;
 
-  public:
+public:
 
     WPImport(QObject* parent, const QStringList&);
     WPImport();
 
     virtual ~WPImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 };
 #endif // __WPIMPORT_H

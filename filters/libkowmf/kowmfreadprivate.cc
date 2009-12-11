@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 1998 Stefan Taferner
  *               2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
- *               2007-2008 Jan Hambrecht <jaham@gmx.net> 
+ *               2007-2008 Jan Hambrecht <jaham@gmx.net>
  * With the help of WMF documentation by Caolan Mc Namara
  *
  * This library is free software; you can redistribute it and/or
@@ -47,36 +47,36 @@ KoWmfReadPrivate::KoWmfReadPrivate()
 
 KoWmfReadPrivate::~KoWmfReadPrivate()
 {
-    if ( mObjHandleTab != 0 ) {
-        for ( int i=0 ; i < mNbrObject ; i++ ) {
-            if ( mObjHandleTab[i] != 0 )
+    if (mObjHandleTab != 0) {
+        for (int i = 0 ; i < mNbrObject ; i++) {
+            if (mObjHandleTab[i] != 0)
                 delete mObjHandleTab[i];
         }
         delete[] mObjHandleTab;
     }
-    if ( mBuffer != 0 ) {
+    if (mBuffer != 0) {
         mBuffer->close();
         delete mBuffer;
     }
 }
 
 
-bool KoWmfReadPrivate::load( const QByteArray& array )
+bool KoWmfReadPrivate::load(const QByteArray& array)
 {
     // delete previous buffer
-    if ( mBuffer != 0 ) {
+    if (mBuffer != 0) {
         mBuffer->close();
         delete mBuffer;
         mBuffer = 0;
     }
 
-    if( array.size() == 0 )
+    if (array.size() == 0)
         return false;
 
     // load into buffer
     mBuffer = new QBuffer();
-    mBuffer->setData( array );
-    mBuffer->open( QIODevice::ReadOnly );
+    mBuffer->setData(array);
+    mBuffer->open(QIODevice::ReadOnly);
 
     // read and check the header
     WmfEnhMetaHeader eheader;
@@ -85,8 +85,8 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
     unsigned short checksum;
     int filePos;
 
-    QDataStream st( mBuffer );
-    st.setByteOrder( QDataStream::LittleEndian );
+    QDataStream st(mBuffer);
+    st.setByteOrder(QDataStream::LittleEndian);
     mStackOverflow = mWinding = false;
     mTextAlign = mTextRotation = 0;
     mTextColor = Qt::black;
@@ -97,7 +97,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
 
     //----- Read placeable metafile header
     st >> pheader.key;
-    if ( pheader.key==( quint32 )APMHEADER_KEY ) {
+    if (pheader.key == (quint32)APMHEADER_KEY) {
         mPlaceable = true;
         st >> pheader.handle;
         st >> pheader.left;
@@ -107,9 +107,9 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         st >> pheader.inch;
         st >> pheader.reserved;
         st >> pheader.checksum;
-        checksum = calcCheckSum( &pheader );
-        if ( pheader.checksum!=checksum ) {
-            kWarning() << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")"; 
+        checksum = calcCheckSum(&pheader);
+        if (pheader.checksum != checksum) {
+            kWarning() << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")";
             return false;
         }
         st >> header.fileType;
@@ -120,13 +120,12 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         st >> header.maxRecordSize;
         st >> header.numOfParameters;
         mNbrObject = header.numOfObjects;
-        mBBox.setLeft( pheader.left );
-        mBBox.setTop( pheader.top );
-        mBBox.setRight( pheader.right );
-        mBBox.setBottom( pheader.bottom );
+        mBBox.setLeft(pheader.left);
+        mBBox.setTop(pheader.top);
+        mBBox.setRight(pheader.right);
+        mBBox.setBottom(pheader.bottom);
         mDpi = pheader.inch;
-    }
-    else {
+    } else {
         mBuffer->reset();
         //----- Read as enhanced metafile header
         filePos = mBuffer->pos();
@@ -141,7 +140,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         st >> eheader.frameRight;
         st >> eheader.frameBottom;
         st >> eheader.signature;
-        if ( eheader.signature==ENHMETA_SIGNATURE ) {
+        if (eheader.signature == ENHMETA_SIGNATURE) {
             mEnhanced = true;
             st >> eheader.version;
             st >> eheader.size;
@@ -155,11 +154,10 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
             st >> eheader.heightDevicePixels;
             st >> eheader.widthDeviceMM;
             st >> eheader.heightDeviceMM;
-        }
-        else {
+        } else {
             //----- Read as standard metafile header
             mStandard = true;
-            mBuffer->seek( filePos );
+            mBuffer->seek(filePos);
             st >> header.fileType;
             st >> header.headerSize;
             st >> header.version;
@@ -173,63 +171,60 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
     mOffsetFirstRecord = mBuffer->pos();
 
     //----- Test header validity
-    if ( ((header.headerSize == 9) && (header.numOfParameters == 0)) || (mPlaceable) ) {
+    if (((header.headerSize == 9) && (header.numOfParameters == 0)) || (mPlaceable)) {
         // valid wmf file
         mValid = true;
-    }
-    else {
-        kDebug() <<"KoWmfReadPrivate : incorrect file format !";
+    } else {
+        kDebug() << "KoWmfReadPrivate : incorrect file format !";
     }
 
     // check bounding rectangle for standard meta file
-    if ( (mValid) && (mStandard) ) {
+    if ((mValid) && (mStandard)) {
         quint16 numFunction = 1;
         quint32 size;
-        bool firstOrg=true, firstExt=true;
+        bool firstOrg = true, firstExt = true;
 
         // search functions setWindowOrg and setWindowExt
-        while ( numFunction ) {
+        while (numFunction) {
             filePos = mBuffer->pos();
             st >> size >> numFunction;
 
-            if ( size == 0 ) {
-                kDebug() <<"KoWmfReadPrivate : incorrect file!";
+            if (size == 0) {
+                kDebug() << "KoWmfReadPrivate : incorrect file!";
                 mValid = 0;
                 break;
             }
 
             numFunction &= 0xFF;
-            if ( numFunction == 11 ) {
+            if (numFunction == 11) {
                 qint16 top, left;
 
                 st >> top >> left;
-                if ( firstOrg ) {
+                if (firstOrg) {
                     firstOrg = false;
-                    mBBox.setLeft( left );
-                    mBBox.setTop( top );
-                }
-                else {
-                    if ( left < mBBox.left() ) mBBox.setLeft( left );
-                    if ( top < mBBox.top() ) mBBox.setTop( top );
+                    mBBox.setLeft(left);
+                    mBBox.setTop(top);
+                } else {
+                    if (left < mBBox.left()) mBBox.setLeft(left);
+                    if (top < mBBox.top()) mBBox.setTop(top);
                 }
             }
-            if ( numFunction == 12 ) {
+            if (numFunction == 12) {
                 qint16 width, height;
 
                 st >> height >> width;
-                if ( width < 0 ) width = -width;
-                if ( height < 0 ) height = -height;
-                if ( firstExt ) {
+                if (width < 0) width = -width;
+                if (height < 0) height = -height;
+                if (firstExt) {
                     firstExt = false;
-                    mBBox.setWidth( width );
-                    mBBox.setHeight( height );
-                }
-                else {
-                    if ( width > mBBox.width() ) mBBox.setWidth( width );
-                    if ( height > mBBox.height() ) mBBox.setHeight( height );
+                    mBBox.setWidth(width);
+                    mBBox.setHeight(height);
+                } else {
+                    if (width > mBBox.width()) mBBox.setWidth(width);
+                    if (height > mBBox.height()) mBBox.setHeight(height);
                 }
             }
-            mBuffer->seek( filePos + (size<<1) );
+            mBuffer->seek(filePos + (size << 1));
             // ## shouldn't we break from the loop as soon as we found what we were looking for?
         }
     }
@@ -238,28 +233,27 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
 }
 
 
-bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
+bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
 {
-    if ( !(mValid) ) {
-        kDebug() <<"KoWmfReadPrivate::play : invalid WMF file";
+    if (!(mValid)) {
+        kDebug() << "KoWmfReadPrivate::play : invalid WMF file";
         return false;
     }
 
-    if ( mNbrFunc ) {
-        if ( (mStandard) ) {
-            kDebug() <<"Standard :" << mBBox.left() <<""  << mBBox.top() <<""  << mBBox.width() <<""  << mBBox.height();
+    if (mNbrFunc) {
+        if ((mStandard)) {
+            kDebug() << "Standard :" << mBBox.left() << ""  << mBBox.top() << ""  << mBBox.width() << ""  << mBBox.height();
+        } else {
+            kDebug() << "DPI :" << mDpi << " :" << mBBox.left() << ""  << mBBox.top() << ""  << mBBox.width() << ""  << mBBox.height();
+            kDebug() << "inch :" << mBBox.width() / mDpi << "" << mBBox.height() / mDpi;
+            kDebug() << "mm :" << mBBox.width()*25.4 / mDpi << "" << mBBox.height()*25.4 / mDpi;
         }
-        else {
-            kDebug() <<"DPI :" << mDpi <<" :" << mBBox.left() <<""  << mBBox.top() <<""  << mBBox.width() <<""  << mBBox.height();
-            kDebug() <<"inch :" << mBBox.width()/mDpi <<"" << mBBox.height()/mDpi;
-            kDebug() <<"mm :" << mBBox.width()*25.4/mDpi <<"" << mBBox.height()*25.4/mDpi;
-        }
-        kDebug() << mValid <<"" << mStandard <<"" << mPlaceable;
+        kDebug() << mValid << "" << mStandard << "" << mPlaceable;
     }
 
     // stack of handle
     mObjHandleTab = new KoWmfHandle* [ mNbrObject ];
-    for ( int i=0; i < mNbrObject ; i++ ) {
+    for (int i = 0; i < mNbrObject ; i++) {
         mObjHandleTab[ i ] = 0;
     }
 
@@ -268,18 +262,18 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
     int  bufferOffset, j;
 
     // buffer with functions
-    QDataStream st( mBuffer );
-    st.setByteOrder( QDataStream::LittleEndian );
+    QDataStream st(mBuffer);
+    st.setByteOrder(QDataStream::LittleEndian);
 
     mReadWmf = readWmf;
     mWindow = mBBox;
-    if ( mReadWmf->begin() ) {
+    if (mReadWmf->begin()) {
         // play wmf functions
-        mBuffer->seek( mOffsetFirstRecord );
+        mBuffer->seek(mOffsetFirstRecord);
         numFunction = j = 1;
         mWinding = false;
 
-        while ( ( numFunction ) && ( !mStackOverflow ) ) {
+        while ((numFunction) && (!mStackOverflow)) {
             bufferOffset = mBuffer->pos();
             st >> size >> numFunction;
 
@@ -288,48 +282,48 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
              * lower 8 digits of the function => entry in the table
              */
             numFunction &= 0xFF;
-            if ( numFunction > 0x5F ) {
+            if (numFunction > 0x5F) {
                 numFunction -= 0x90;
             }
-            if ( (numFunction > 111) || (koWmfFunc[ numFunction ].method == 0) ) {
+            if ((numFunction > 111) || (koWmfFunc[ numFunction ].method == 0)) {
                 // function outside WMF specification
-                kDebug() <<"KoWmfReadPrivate::paint : BROKEN WMF file";
+                kDebug() << "KoWmfReadPrivate::paint : BROKEN WMF file";
                 mValid = false;
                 break;
             }
 
-            if ( mNbrFunc ) {
+            if (mNbrFunc) {
                 // debug mode
-                if ( (j+12) > mNbrFunc ) {
+                if ((j + 12) > mNbrFunc) {
                     // output last 12 functions
                     int offBuff = mBuffer->pos();
                     quint16 param;
 
-                    kDebug() <<  j <<" :" << numFunction <<" :";
-                    for ( quint16 i=0 ; i < (size-3) ; i++ ) {
+                    kDebug() <<  j << " :" << numFunction << " :";
+                    for (quint16 i = 0 ; i < (size - 3) ; i++) {
                         st >> param;
-                        kDebug() <<  param <<"";
+                        kDebug() <<  param << "";
                     }
                     kDebug();
-                    mBuffer->seek( offBuff );
+                    mBuffer->seek(offBuff);
                 }
-                if ( j >= mNbrFunc ) {
+                if (j >= mNbrFunc) {
                     break;
                 }
                 j++;
             }
 
             // execute the function
-            (this->*koWmfFunc[ numFunction ].method)( size, st );
+            (this->*koWmfFunc[ numFunction ].method)(size, st);
 
-            mBuffer->seek( bufferOffset + (size<<1) );
+            mBuffer->seek(bufferOffset + (size << 1));
         }
 
         mReadWmf->end();
     }
 
-    for ( int i=0 ; i < mNbrObject ; i++ ) {
-        if ( mObjHandleTab[ i ] != 0 )
+    for (int i = 0 ; i < mNbrObject ; i++) {
+        if (mObjHandleTab[ i ] != 0)
             delete mObjHandleTab[ i ];
     }
     delete[] mObjHandleTab;
@@ -342,57 +336,57 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
 //-----------------------------------------------------------------------------
 // Metafile painter methods
 
-void KoWmfReadPrivate::setWindowOrg( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
 {
     qint16 top, left;
 
     stream >> top >> left;
-    mReadWmf->setWindowOrg( left, top );
-    mWindow.setLeft( left );
-    mWindow.setTop( top );
+    mReadWmf->setWindowOrg(left, top);
+    mWindow.setLeft(left);
+    mWindow.setTop(top);
 //    kDebug() <<"Org : (" << left <<","  << top <<")";
 }
 
 /*  TODO : deeper look in negative width and height
 */
 
-void KoWmfReadPrivate::setWindowExt( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
 {
     qint16 width, height;
 
     // negative value allowed for width and height
     stream >> height >> width;
-    mReadWmf->setWindowExt( width, height );
-    mWindow.setWidth( width );
-    mWindow.setHeight( height );
+    mReadWmf->setWindowExt(width, height);
+    mWindow.setWidth(width);
+    mWindow.setHeight(height);
 //    kDebug() <<"Ext : (" << width <<","  << height <<")";
 }
 
 
-void KoWmfReadPrivate::OffsetWindowOrg( quint32, QDataStream &stream )
+void KoWmfReadPrivate::OffsetWindowOrg(quint32, QDataStream &stream)
 {
     qint16 offTop, offLeft;
 
     stream >> offTop >> offLeft;
-    mReadWmf->setWindowOrg( mWindow.left() + offLeft, mWindow.top() + offTop );
-    mWindow.setLeft( mWindow.left() + offLeft );
-    mWindow.setTop( mWindow.top() + offTop );
+    mReadWmf->setWindowOrg(mWindow.left() + offLeft, mWindow.top() + offTop);
+    mWindow.setLeft(mWindow.left() + offLeft);
+    mWindow.setTop(mWindow.top() + offTop);
 }
 
 
-void KoWmfReadPrivate::ScaleWindowExt( quint32, QDataStream &stream )
+void KoWmfReadPrivate::ScaleWindowExt(quint32, QDataStream &stream)
 {
     qint16 width, height;
     qint16 heightDenom, heightNum, widthDenom, widthNum;
 
     stream >> heightDenom >> heightNum >> widthDenom >> widthNum;
 
-    if ( ( widthDenom != 0 ) && ( heightDenom != 0 ) ) {
+    if ((widthDenom != 0) && (heightDenom != 0)) {
         width = (mWindow.width() * widthNum) / widthDenom;
         height = (mWindow.height() * heightNum) / heightDenom;
-        mReadWmf->setWindowExt( width, height );
-        mWindow.setWidth( width );
-        mWindow.setHeight( height );
+        mReadWmf->setWindowExt(width, height);
+        mWindow.setWidth(width);
+        mWindow.setHeight(height);
     }
 //    kDebug() <<"KoWmfReadPrivate::ScaleWindowExt :" << widthDenom <<"" << heightDenom;
 }
@@ -401,47 +395,47 @@ void KoWmfReadPrivate::ScaleWindowExt( quint32, QDataStream &stream )
 //-----------------------------------------------------------------------------
 // Drawing
 
-void KoWmfReadPrivate::lineTo( quint32, QDataStream& stream )
+void KoWmfReadPrivate::lineTo(quint32, QDataStream& stream)
 {
     qint16 top, left;
 
     stream >> top >> left;
-    mReadWmf->lineTo( left, top );
+    mReadWmf->lineTo(left, top);
 }
 
 
-void KoWmfReadPrivate::moveTo( quint32, QDataStream& stream )
+void KoWmfReadPrivate::moveTo(quint32, QDataStream& stream)
 {
     qint16 top, left;
 
     stream >> top >> left;
-    mReadWmf->moveTo( left, top );
+    mReadWmf->moveTo(left, top);
 }
 
 
-void KoWmfReadPrivate::ellipse( quint32, QDataStream& stream )
+void KoWmfReadPrivate::ellipse(quint32, QDataStream& stream)
 {
     qint16 top, left, right, bottom;
 
     stream >> bottom >> right >> top >> left;
-    mReadWmf->drawEllipse( left, top, right-left, bottom-top );
+    mReadWmf->drawEllipse(left, top, right - left, bottom - top);
 }
 
 
-void KoWmfReadPrivate::polygon( quint32, QDataStream& stream )
+void KoWmfReadPrivate::polygon(quint32, QDataStream& stream)
 {
     quint16 num;
 
     stream >> num;
 
-    QPolygon pa( num );
+    QPolygon pa(num);
 
-    pointArray( stream, pa );
-    mReadWmf->drawPolygon( pa, mWinding );
+    pointArray(stream, pa);
+    mReadWmf->drawPolygon(pa, mWinding);
 }
 
 
-void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
+void KoWmfReadPrivate::polyPolygon(quint32, QDataStream& stream)
 {
     quint16 numberPoly;
     quint16 sizePoly;
@@ -449,44 +443,44 @@ void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
 
     stream >> numberPoly;
 
-    for ( int i=0 ; i < numberPoly ; i++ ) {
+    for (int i = 0 ; i < numberPoly ; i++) {
         stream >> sizePoly;
-        listPa.append( QPolygon( sizePoly ) );
+        listPa.append(QPolygon(sizePoly));
     }
 
     // list of point array
-    for ( int i=0; i < numberPoly; i++ ) {
-        pointArray( stream, listPa[i] );
+    for (int i = 0; i < numberPoly; i++) {
+        pointArray(stream, listPa[i]);
     }
 
     // draw polygon's
-    mReadWmf->drawPolyPolygon( listPa, mWinding );
+    mReadWmf->drawPolyPolygon(listPa, mWinding);
     listPa.clear();
 }
 
 
-void KoWmfReadPrivate::polyline( quint32, QDataStream& stream )
+void KoWmfReadPrivate::polyline(quint32, QDataStream& stream)
 {
     quint16 num;
 
     stream >> num;
-    QPolygon pa( num );
+    QPolygon pa(num);
 
-    pointArray( stream, pa );
-    mReadWmf->drawPolyline( pa );
+    pointArray(stream, pa);
+    mReadWmf->drawPolyline(pa);
 }
 
 
-void KoWmfReadPrivate::rectangle( quint32, QDataStream& stream )
+void KoWmfReadPrivate::rectangle(quint32, QDataStream& stream)
 {
     qint16 top, left, right, bottom;
 
     stream >> bottom >> right >> top >> left;
-    mReadWmf->drawRect( left, top, right-left, bottom-top );
+    mReadWmf->drawRect(left, top, right - left, bottom - top);
 }
 
 
-void KoWmfReadPrivate::roundRect( quint32, QDataStream& stream )
+void KoWmfReadPrivate::roundRect(quint32, QDataStream& stream)
 {
     int xRnd = 0, yRnd = 0;
     quint16 widthCorner, heightCorner;
@@ -496,16 +490,16 @@ void KoWmfReadPrivate::roundRect( quint32, QDataStream& stream )
     stream >> bottom >> right >> top >> left;
 
     // convert (widthCorner, heightCorner) in percentage
-    if ( (right - left) != 0  )
+    if ((right - left) != 0)
         xRnd = (widthCorner * 100) / (right - left);
-    if ( (bottom - top) != 0  )
+    if ((bottom - top) != 0)
         yRnd = (heightCorner * 100) / (bottom - top);
 
-    mReadWmf->drawRoundRect( left, top, right-left, bottom-top, xRnd, yRnd );
+    mReadWmf->drawRoundRect(left, top, right - left, bottom - top, xRnd, yRnd);
 }
 
 
-void KoWmfReadPrivate::arc( quint32, QDataStream& stream )
+void KoWmfReadPrivate::arc(quint32, QDataStream& stream)
 {
     int xCenter, yCenter, angleStart, aLength;
     qint16  topEnd, leftEnd, topStart, leftStart;
@@ -514,15 +508,15 @@ void KoWmfReadPrivate::arc( quint32, QDataStream& stream )
     stream >> topEnd >> leftEnd >> topStart >> leftStart;
     stream >> bottom >> right >> top >> left;
 
-    xCenter = left + ((right-left) / 2);
-    yCenter = top + ((bottom-top) / 2);
-    xyToAngle ( leftStart-xCenter, yCenter-topStart, leftEnd-xCenter, yCenter-topEnd, angleStart, aLength );
+    xCenter = left + ((right - left) / 2);
+    yCenter = top + ((bottom - top) / 2);
+    xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-    mReadWmf->drawArc( left, top, right-left, bottom-top, angleStart, aLength);
+    mReadWmf->drawArc(left, top, right - left, bottom - top, angleStart, aLength);
 }
 
 
-void KoWmfReadPrivate::chord( quint32, QDataStream& stream )
+void KoWmfReadPrivate::chord(quint32, QDataStream& stream)
 {
     int xCenter, yCenter, angleStart, aLength;
     qint16  topEnd, leftEnd, topStart, leftStart;
@@ -531,15 +525,15 @@ void KoWmfReadPrivate::chord( quint32, QDataStream& stream )
     stream >> topEnd >> leftEnd >> topStart >> leftStart;
     stream >> bottom >> right >> top >> left;
 
-    xCenter = left + ((right-left) / 2);
-    yCenter = top + ((bottom-top) / 2);
-    xyToAngle ( leftStart-xCenter, yCenter-topStart, leftEnd-xCenter, yCenter-topEnd, angleStart, aLength );
+    xCenter = left + ((right - left) / 2);
+    yCenter = top + ((bottom - top) / 2);
+    xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-    mReadWmf->drawChord( left, top, right-left, bottom-top, angleStart, aLength);
+    mReadWmf->drawChord(left, top, right - left, bottom - top, angleStart, aLength);
 }
 
 
-void KoWmfReadPrivate::pie( quint32, QDataStream& stream )
+void KoWmfReadPrivate::pie(quint32, QDataStream& stream)
 {
     int xCenter, yCenter, angleStart, aLength;
     qint16  topEnd, leftEnd, topStart, leftStart;
@@ -548,15 +542,15 @@ void KoWmfReadPrivate::pie( quint32, QDataStream& stream )
     stream >> topEnd >> leftEnd >> topStart >> leftStart;
     stream >> bottom >> right >> top >> left;
 
-    xCenter = left + ((right-left) / 2);
-    yCenter = top + ((bottom-top) / 2);
-    xyToAngle ( leftStart-xCenter, yCenter-topStart, leftEnd-xCenter, yCenter-topEnd, angleStart, aLength );
+    xCenter = left + ((right - left) / 2);
+    yCenter = top + ((bottom - top) / 2);
+    xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-    mReadWmf->drawPie( left, top, right-left, bottom-top, angleStart, aLength);
+    mReadWmf->drawPie(left, top, right - left, bottom - top, angleStart, aLength);
 }
 
 
-void KoWmfReadPrivate::setPolyFillMode( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setPolyFillMode(quint32, QDataStream& stream)
 {
     quint16 winding;
 
@@ -565,28 +559,28 @@ void KoWmfReadPrivate::setPolyFillMode( quint32, QDataStream& stream )
 }
 
 
-void KoWmfReadPrivate::setBkColor( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setBkColor(quint32, QDataStream& stream)
 {
     quint32 color;
 
     stream >> color;
-    mReadWmf->setBackgroundColor( qtColor( color ) );
+    mReadWmf->setBackgroundColor(qtColor(color));
 }
 
 
-void KoWmfReadPrivate::setBkMode( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setBkMode(quint32, QDataStream& stream)
 {
     quint16 bkMode;
 
     stream >> bkMode;
-    if ( bkMode == 1 )
-        mReadWmf->setBackgroundMode( Qt::TransparentMode );
+    if (bkMode == 1)
+        mReadWmf->setBackgroundMode(Qt::TransparentMode);
     else
-        mReadWmf->setBackgroundMode( Qt::OpaqueMode );
+        mReadWmf->setBackgroundMode(Qt::OpaqueMode);
 }
 
 
-void KoWmfReadPrivate::setPixel( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setPixel(quint32, QDataStream& stream)
 {
     qint16  top, left;
     quint32 color;
@@ -595,141 +589,136 @@ void KoWmfReadPrivate::setPixel( quint32, QDataStream& stream )
 
     QPen oldPen = mReadWmf->pen();
     QPen pen = oldPen;
-    pen.setColor( qtColor( color ) );
-    mReadWmf->setPen( pen );
-    mReadWmf->moveTo( left, top );
-    mReadWmf->lineTo( left, top );
-    mReadWmf->setPen( oldPen );
+    pen.setColor(qtColor(color));
+    mReadWmf->setPen(pen);
+    mReadWmf->moveTo(left, top);
+    mReadWmf->lineTo(left, top);
+    mReadWmf->setPen(oldPen);
 }
 
 
-void KoWmfReadPrivate::setRop( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setRop(quint32, QDataStream& stream)
 {
     quint16  rop;
 
     stream >> rop;
-    mReadWmf->setCompositionMode( winToQtComposition( rop ) );
+    mReadWmf->setCompositionMode(winToQtComposition(rop));
 }
 
 
-void KoWmfReadPrivate::saveDC( quint32, QDataStream& )
+void KoWmfReadPrivate::saveDC(quint32, QDataStream&)
 {
     mReadWmf->save();
 }
 
 
-void KoWmfReadPrivate::restoreDC( quint32, QDataStream& stream )
+void KoWmfReadPrivate::restoreDC(quint32, QDataStream& stream)
 {
     qint16  num;
 
     stream >> num;
-    for ( int i=0; i > num ; i-- )
+    for (int i = 0; i > num ; i--)
         mReadWmf->restore();
 }
 
 
-void KoWmfReadPrivate::intersectClipRect( quint32, QDataStream& stream )
+void KoWmfReadPrivate::intersectClipRect(quint32, QDataStream& stream)
 {
     qint16 top, left, right, bottom;
 
     stream >> bottom >> right >> top >> left;
 
     QRegion region = mReadWmf->clipRegion();
-    QRegion newRegion( left, top, right-left, bottom-top );
-    if ( region.isEmpty() ) {
+    QRegion newRegion(left, top, right - left, bottom - top);
+    if (region.isEmpty()) {
         region = newRegion;
-    }
-    else {
-        region = region.intersect( newRegion );
+    } else {
+        region = region.intersect(newRegion);
     }
 
-    mReadWmf->setClipRegion( region );
+    mReadWmf->setClipRegion(region);
 }
 
 
-void KoWmfReadPrivate::excludeClipRect( quint32, QDataStream& stream )
+void KoWmfReadPrivate::excludeClipRect(quint32, QDataStream& stream)
 {
     qint16 top, left, right, bottom;
 
     stream >> bottom >> right >> top >> left;
 
     QRegion region = mReadWmf->clipRegion();
-    QRegion newRegion( left, top, right-left, bottom-top );
-    if ( region.isEmpty() ) {
+    QRegion newRegion(left, top, right - left, bottom - top);
+    if (region.isEmpty()) {
         region = newRegion;
-    }
-    else {
-        region = region.subtract( newRegion );
+    } else {
+        region = region.subtract(newRegion);
     }
 
-    mReadWmf->setClipRegion( region );
+    mReadWmf->setClipRegion(region);
 }
 
 
 //-----------------------------------------------------------------------------
 // Text
 
-void KoWmfReadPrivate::setTextColor( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setTextColor(quint32, QDataStream& stream)
 {
     quint32 color;
 
     stream >> color;
-    mTextColor = qtColor( color );
+    mTextColor = qtColor(color);
     // TODO: not sure if that is the right thing to do here
     // but the actual reader has to get the color somehow (jaham)
-    mReadWmf->setPen( QPen(mTextColor) );
+    mReadWmf->setPen(QPen(mTextColor));
 }
 
 
-void KoWmfReadPrivate::setTextAlign( quint32, QDataStream& stream )
+void KoWmfReadPrivate::setTextAlign(quint32, QDataStream& stream)
 {
     stream >> mTextAlign;
 }
 
 
-void KoWmfReadPrivate::textOut( quint32, QDataStream& stream )
+void KoWmfReadPrivate::textOut(quint32, QDataStream& stream)
 {
     qint16 textLength;
 
     stream >> textLength;
 
     QByteArray text;
-    text.resize( textLength );
+    text.resize(textLength);
 
-    stream.readRawData( text.data(), textLength );
+    stream.readRawData(text.data(), textLength);
 
     qint16 x, y;
 
     stream >> y;
     stream >> x;
 
-    mReadWmf->drawText( x, y, -1, -1, mTextAlign, text, static_cast<double>( mTextRotation ) );
+    mReadWmf->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 
 
-void KoWmfReadPrivate::extTextOut( quint32 , QDataStream& stream )
+void KoWmfReadPrivate::extTextOut(quint32 , QDataStream& stream)
 {
     qint16 parm[8];
-    for( int i = 0; i < 4; ++i )
+    for (int i = 0; i < 4; ++i)
         stream >> parm[i];
 
     quint16 textLength = parm[ 2 ];
 
     QByteArray text;
-    text.resize( textLength );
+    text.resize(textLength);
 
-    if ( parm[ 3 ] != 0 )       // ETO_CLIPPED flag add 4 parameters
-    {
-        for( int i = 0; i < 4; ++i )
+    if (parm[ 3 ] != 0) {       // ETO_CLIPPED flag add 4 parameters
+        for (int i = 0; i < 4; ++i)
             stream >> parm[4+i];
-        stream.readRawData( text.data(), textLength );
-    }
-    else
-    {
-        stream.readRawData( text.data(), textLength );
+        stream.readRawData(text.data(), textLength);
+    } else {
+        stream.readRawData(text.data(), textLength);
     }
 
-    mReadWmf->drawText( parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>( mTextRotation ) );
+    mReadWmf->drawText(parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 
 
@@ -737,15 +726,15 @@ void KoWmfReadPrivate::extTextOut( quint32 , QDataStream& stream )
 //-----------------------------------------------------------------------------
 // Bitmap
 
-void KoWmfReadPrivate::SetStretchBltMode( quint32, QDataStream& )
+void KoWmfReadPrivate::SetStretchBltMode(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"SetStretchBltMode : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "SetStretchBltMode : unimplemented";
     }
 }
 
 
-void KoWmfReadPrivate::dibBitBlt( quint32 size, QDataStream& stream )
+void KoWmfReadPrivate::dibBitBlt(quint32 size, QDataStream& stream)
 {
     quint32 raster;
     qint16  topSrc, leftSrc, widthSrc, heightSrc;
@@ -755,34 +744,33 @@ void KoWmfReadPrivate::dibBitBlt( quint32 size, QDataStream& stream )
     stream >> topSrc >> leftSrc >> heightSrc >> widthSrc;
     stream >> topDst >> leftDst;
 
-    if ( size > 11 ) {    // DIB image
+    if (size > 11) {      // DIB image
         QImage bmpSrc;
 
-        if ( dibToBmp( bmpSrc, stream, (size - 11) * 2 ) ) {
-            mReadWmf->setCompositionMode( winToQtComposition( raster )  );
+        if (dibToBmp(bmpSrc, stream, (size - 11) * 2)) {
+            mReadWmf->setCompositionMode(winToQtComposition(raster));
 
             mReadWmf->save();
-            if ( widthSrc < 0 ) {
+            if (widthSrc < 0) {
                 // negative width => horizontal flip
-                QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
-                mReadWmf->setMatrix( m, true );
+                QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                mReadWmf->setMatrix(m, true);
             }
-            if ( heightSrc < 0 ) {
+            if (heightSrc < 0) {
                 // negative height => vertical flip
-                QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
-                mReadWmf->setMatrix( m, true );
+                QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                mReadWmf->setMatrix(m, true);
             }
-            mReadWmf->drawImage( leftDst, topDst, bmpSrc, leftSrc, topSrc, widthSrc, heightSrc );
+            mReadWmf->drawImage(leftDst, topDst, bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
             mReadWmf->restore();
         }
-    }
-    else {
-        kDebug() <<"KoWmfReadPrivate::dibBitBlt without image not implemented";
+    } else {
+        kDebug() << "KoWmfReadPrivate::dibBitBlt without image not implemented";
     }
 }
 
 
-void KoWmfReadPrivate::dibStretchBlt( quint32 size, QDataStream& stream )
+void KoWmfReadPrivate::dibStretchBlt(quint32 size, QDataStream& stream)
 {
     quint32 raster;
     qint16  topSrc, leftSrc, widthSrc, heightSrc;
@@ -793,31 +781,31 @@ void KoWmfReadPrivate::dibStretchBlt( quint32 size, QDataStream& stream )
     stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
     stream >> heightDst >> widthDst >> topDst >> leftDst;
 
-    if ( dibToBmp( bmpSrc, stream, (size - 13) * 2 ) ) {
-        mReadWmf->setCompositionMode( winToQtComposition( raster )  );
+    if (dibToBmp(bmpSrc, stream, (size - 13) * 2)) {
+        mReadWmf->setCompositionMode(winToQtComposition(raster));
 
         mReadWmf->save();
-        if ( widthDst < 0 ) {
+        if (widthDst < 0) {
             // negative width => horizontal flip
-            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
-            mReadWmf->setMatrix( m, true );
+            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+            mReadWmf->setMatrix(m, true);
         }
-        if ( heightDst < 0 ) {
+        if (heightDst < 0) {
             // negative height => vertical flip
-            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
-            mReadWmf->setMatrix( m, true );
+            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+            mReadWmf->setMatrix(m, true);
         }
-        bmpSrc = bmpSrc.copy( leftSrc, topSrc, widthSrc, heightSrc );
+        bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
         // TODO: scale the bitmap : QImage::scale(widthDst, heightDst)
         // is actually too slow
 
-        mReadWmf->drawImage( leftDst, topDst, bmpSrc );
+        mReadWmf->drawImage(leftDst, topDst, bmpSrc);
         mReadWmf->restore();
     }
 }
 
 
-void KoWmfReadPrivate::stretchDib( quint32 size, QDataStream& stream )
+void KoWmfReadPrivate::stretchDib(quint32 size, QDataStream& stream)
 {
     quint32 raster;
     qint16  arg, topSrc, leftSrc, widthSrc, heightSrc;
@@ -828,44 +816,43 @@ void KoWmfReadPrivate::stretchDib( quint32 size, QDataStream& stream )
     stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
     stream >> heightDst >> widthDst >> topDst >> leftDst;
 
-    if ( dibToBmp( bmpSrc, stream, (size - 14) * 2 ) ) {
-        mReadWmf->setCompositionMode( winToQtComposition( raster )  );
+    if (dibToBmp(bmpSrc, stream, (size - 14) * 2)) {
+        mReadWmf->setCompositionMode(winToQtComposition(raster));
 
         mReadWmf->save();
-        if ( widthDst < 0 ) {
+        if (widthDst < 0) {
             // negative width => horizontal flip
-            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
-            mReadWmf->setMatrix( m, true );
+            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+            mReadWmf->setMatrix(m, true);
         }
-        if ( heightDst < 0 ) {
+        if (heightDst < 0) {
             // negative height => vertical flip
-            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
-            mReadWmf->setMatrix( m, true );
+            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+            mReadWmf->setMatrix(m, true);
         }
-        bmpSrc = bmpSrc.copy( leftSrc, topSrc, widthSrc, heightSrc );
+        bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
         // TODO: scale the bitmap ( QImage::scale(param[ 8 ], param[ 7 ]) is actually too slow )
 
-        mReadWmf->drawImage( leftDst, topDst, bmpSrc );
+        mReadWmf->drawImage(leftDst, topDst, bmpSrc);
         mReadWmf->restore();
     }
 }
 
 
-void KoWmfReadPrivate::dibCreatePatternBrush( quint32 size, QDataStream& stream )
+void KoWmfReadPrivate::dibCreatePatternBrush(quint32 size, QDataStream& stream)
 {
     KoWmfPatternBrushHandle* handle = new KoWmfPatternBrushHandle;
 
-    if ( addHandle( handle ) ) {
+    if (addHandle(handle)) {
         quint32 arg;
         QImage bmpSrc;
 
         stream >> arg;
-        if ( dibToBmp( bmpSrc, stream, (size - 5) * 2 ) ) {
-            handle->image = QPixmap::fromImage( bmpSrc );
-            handle->brush.setTexture( handle->image );
-        }
-        else {
-            kDebug() <<"KoWmfReadPrivate::dibCreatePatternBrush : incorrect DIB image";
+        if (dibToBmp(bmpSrc, stream, (size - 5) * 2)) {
+            handle->image = QPixmap::fromImage(bmpSrc);
+            handle->brush.setTexture(handle->image);
+        } else {
+            kDebug() << "KoWmfReadPrivate::dibCreatePatternBrush : incorrect DIB image";
         }
     }
 }
@@ -874,24 +861,24 @@ void KoWmfReadPrivate::dibCreatePatternBrush( quint32 size, QDataStream& stream 
 //-----------------------------------------------------------------------------
 // Object handle
 
-void KoWmfReadPrivate::selectObject( quint32, QDataStream& stream )
+void KoWmfReadPrivate::selectObject(quint32, QDataStream& stream)
 {
     quint16 idx;
 
     stream >> idx;
-    if ( (idx < mNbrObject) && (mObjHandleTab[ idx ] != 0) )
-        mObjHandleTab[ idx ]->apply( mReadWmf );
+    if ((idx < mNbrObject) && (mObjHandleTab[ idx ] != 0))
+        mObjHandleTab[ idx ]->apply(mReadWmf);
     else
-        kDebug() <<"KoWmfReadPrivate::selectObject : selection of an empty object";
+        kDebug() << "KoWmfReadPrivate::selectObject : selection of an empty object";
 }
 
 
-void KoWmfReadPrivate::deleteObject( quint32, QDataStream& stream )
+void KoWmfReadPrivate::deleteObject(quint32, QDataStream& stream)
 {
     quint16 idx;
 
     stream >> idx;
-    deleteHandle( idx );
+    deleteHandle(idx);
 }
 
 
@@ -900,44 +887,42 @@ void KoWmfReadPrivate::createEmptyObject()
     // allocation of an empty object (to keep object counting in sync)
     KoWmfPenHandle* handle = new KoWmfPenHandle;
 
-    addHandle( handle );
+    addHandle(handle);
 }
 
 
-void KoWmfReadPrivate::createBrushIndirect( quint32, QDataStream& stream )
+void KoWmfReadPrivate::createBrushIndirect(quint32, QDataStream& stream)
 {
     Qt::BrushStyle style;
     quint16 sty, arg2;
     quint32 color;
     KoWmfBrushHandle* handle = new KoWmfBrushHandle;
 
-    if ( addHandle( handle ) ) {
+    if (addHandle(handle)) {
         stream >> sty >> color >> arg2;
 
-        if ( sty == 2 ) {
-            if ( arg2 < 6 )
+        if (sty == 2) {
+            if (arg2 < 6)
                 style = koWmfHatchedStyleBrush[ arg2 ];
-            else
-            {
-                kDebug() <<"KoWmfReadPrivate::createBrushIndirect: invalid hatched brush" << arg2;
+            else {
+                kDebug() << "KoWmfReadPrivate::createBrushIndirect: invalid hatched brush" << arg2;
                 style = Qt::SolidPattern;
             }
-        }
-        else {
-            if ( sty < 9 )
+        } else {
+            if (sty < 9)
                 style = koWmfStyleBrush[ sty ];
             else {
-                kDebug() <<"KoWmfReadPrivate::createBrushIndirect: invalid brush" << sty;
+                kDebug() << "KoWmfReadPrivate::createBrushIndirect: invalid brush" << sty;
                 style = Qt::SolidPattern;
             }
         }
-        handle->brush.setStyle( style );
-        handle->brush.setColor( qtColor( color ) );
+        handle->brush.setStyle(style);
+        handle->brush.setColor(qtColor(color));
     }
 }
 
 
-void KoWmfReadPrivate::createPenIndirect( quint32, QDataStream& stream )
+void KoWmfReadPrivate::createPenIndirect(quint32, QDataStream& stream)
 {
     // TODO: userStyle and alternateStyle
     quint32 color;
@@ -945,50 +930,50 @@ void KoWmfReadPrivate::createPenIndirect( quint32, QDataStream& stream )
 
     KoWmfPenHandle* handle = new KoWmfPenHandle;
 
-    if ( addHandle( handle ) ) {
+    if (addHandle(handle)) {
         stream >> style >> width >> arg >> color;
 
         // set the style defaults
-        handle->pen.setStyle( Qt::SolidLine );
-        handle->pen.setCapStyle( Qt::RoundCap );
-        handle->pen.setJoinStyle( Qt::RoundJoin );
+        handle->pen.setStyle(Qt::SolidLine);
+        handle->pen.setCapStyle(Qt::RoundCap);
+        handle->pen.setJoinStyle(Qt::RoundJoin);
 
         const int PenStyleMask = 0x0000000F;
         const int PenCapMask = 0x00000F00;
         const int PenJoinMask = 0x0000F000;
 
         quint16 penStyle = style & PenStyleMask;
-        if ( penStyle < 7 )
-            handle->pen.setStyle( koWmfStylePen[ penStyle ] );
+        if (penStyle < 7)
+            handle->pen.setStyle(koWmfStylePen[ penStyle ]);
         else
-            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen" << style;
+            kDebug() << "KoWmfReadPrivate::createPenIndirect: invalid pen" << style;
 
         quint16 capStyle = (style & PenCapMask) >> 8;
-        if( capStyle < 3 )
-            handle->pen.setCapStyle( koWmfCapStylePen[ capStyle ] );
+        if (capStyle < 3)
+            handle->pen.setCapStyle(koWmfCapStylePen[ capStyle ]);
         else
-            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen cap style" << style;
+            kDebug() << "KoWmfReadPrivate::createPenIndirect: invalid pen cap style" << style;
 
         quint16 joinStyle = (style & PenJoinMask) >> 12;
-        if( joinStyle < 3 )
-            handle->pen.setJoinStyle( koWmfJoinStylePen[ joinStyle ] );
+        if (joinStyle < 3)
+            handle->pen.setJoinStyle(koWmfJoinStylePen[ joinStyle ]);
         else
-            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen join style" << style;
+            kDebug() << "KoWmfReadPrivate::createPenIndirect: invalid pen join style" << style;
 
-        handle->pen.setColor( qtColor( color ) );
-        handle->pen.setWidth( width );
+        handle->pen.setColor(qtColor(color));
+        handle->pen.setWidth(width);
     }
 }
 
 
-void KoWmfReadPrivate::createFontIndirect( quint32 size, QDataStream& stream )
+void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
 {
     qint16  pointSize, rotation;
     quint16 weight, property, fixedPitch, arg;
 
     KoWmfFontHandle* handle = new KoWmfFontHandle;
 
-    if ( addHandle( handle ) ) {
+    if (addHandle(handle)) {
         stream >> pointSize >> arg;
         stream >> rotation >> arg;
         stream >> weight >> property >> arg >> arg;
@@ -997,19 +982,19 @@ void KoWmfReadPrivate::createFontIndirect( quint32 size, QDataStream& stream )
         // text rotation (in 1/10 degree)
         // TODO: memorisation of rotation in object Font
         mTextRotation = -rotation / 10;
-        handle->font.setFixedPitch( ((fixedPitch & 0x01) == 0) );
+        handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
         // TODO: investigation why some test case need -2
         // size of font in logical point
-        handle->font.setPointSize( qAbs(pointSize) - 2 );
-        handle->font.setWeight( (weight >> 3) );
-        handle->font.setItalic( (property & 0x01) );
-        handle->font.setUnderline( (property & 0x100) );
+        handle->font.setPointSize(qAbs(pointSize) - 2);
+        handle->font.setWeight((weight >> 3));
+        handle->font.setItalic((property & 0x01));
+        handle->font.setUnderline((property & 0x100));
 
         // font name
-        int    maxChar = (size-12) * 2;
+        int    maxChar = (size - 12) * 2;
         char*  nameFont = new char[maxChar];
-        stream.readRawData( nameFont, maxChar );
-        handle->font.setFamily( nameFont );
+        stream.readRawData(nameFont, maxChar);
+        handle->font.setFamily(nameFont);
         delete[] nameFont;
     }
 }
@@ -1018,166 +1003,165 @@ void KoWmfReadPrivate::createFontIndirect( quint32 size, QDataStream& stream )
 //-----------------------------------------------------------------------------
 // Misc functions
 
-void KoWmfReadPrivate::end( quint32, QDataStream& )
+void KoWmfReadPrivate::end(quint32, QDataStream&)
 {
 }
 
-quint16 KoWmfReadPrivate::calcCheckSum( WmfPlaceableHeader* apmfh )
+quint16 KoWmfReadPrivate::calcCheckSum(WmfPlaceableHeader* apmfh)
 {
     quint16*  lpWord;
     quint16   wResult, i;
 
     // Start with the first word
-    wResult = *( lpWord = ( quint16* )( apmfh ) );
+    wResult = *(lpWord = (quint16*)(apmfh));
     // XOR in each of the other 9 words
-    for( i=1; i<=9; i++ )
-    {
+    for (i = 1; i <= 9; i++) {
         wResult ^= lpWord[ i ];
     }
     return wResult;
 }
 
 
-void KoWmfReadPrivate::notyet( quint32, QDataStream& )
+void KoWmfReadPrivate::notyet(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "unimplemented";
     }
 }
 
-void KoWmfReadPrivate::region( quint32, QDataStream& )
+void KoWmfReadPrivate::region(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"region : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "region : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::palette( quint32, QDataStream& )
+void KoWmfReadPrivate::palette(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"palette : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "palette : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::escape( quint32, QDataStream& )
+void KoWmfReadPrivate::escape(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"escape : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "escape : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::setRelAbs( quint32, QDataStream& )
+void KoWmfReadPrivate::setRelAbs(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"setRelAbs : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "setRelAbs : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::setMapMode( quint32, QDataStream& )
+void KoWmfReadPrivate::setMapMode(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"setMapMode : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "setMapMode : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::extFloodFill( quint32, QDataStream&  )
+void KoWmfReadPrivate::extFloodFill(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"extFloodFill : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "extFloodFill : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::startDoc( quint32, QDataStream&  )
+void KoWmfReadPrivate::startDoc(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"startDoc : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "startDoc : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::startPage( quint32, QDataStream&  )
+void KoWmfReadPrivate::startPage(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"startPage : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "startPage : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::endDoc( quint32, QDataStream&  )
+void KoWmfReadPrivate::endDoc(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"endDoc : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "endDoc : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::endPage( quint32, QDataStream&  )
+void KoWmfReadPrivate::endPage(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"endPage : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "endPage : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::resetDC( quint32, QDataStream&  )
+void KoWmfReadPrivate::resetDC(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"resetDC : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "resetDC : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::bitBlt( quint32, QDataStream&  )
+void KoWmfReadPrivate::bitBlt(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"bitBlt : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "bitBlt : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::setDibToDev( quint32, QDataStream&  )
+void KoWmfReadPrivate::setDibToDev(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"setDibToDev : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "setDibToDev : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createBrush( quint32, QDataStream&  )
+void KoWmfReadPrivate::createBrush(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"createBrush : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createBrush : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createPatternBrush( quint32, QDataStream&  )
+void KoWmfReadPrivate::createPatternBrush(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"createPatternBrush : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createPatternBrush : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createBitmap( quint32, QDataStream&  )
+void KoWmfReadPrivate::createBitmap(quint32, QDataStream&)
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"createBitmap : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createBitmap : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createBitmapIndirect( quint32, QDataStream&  )
+void KoWmfReadPrivate::createBitmapIndirect(quint32, QDataStream&)
 {
     createEmptyObject();
-    if ( mNbrFunc ) {
-        kDebug() <<"createBitmapIndirect : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createBitmapIndirect : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createPalette( quint32, QDataStream&  )
+void KoWmfReadPrivate::createPalette(quint32, QDataStream&)
 {
     createEmptyObject();
-    if ( mNbrFunc ) {
-        kDebug() <<"createPalette : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createPalette : unimplemented";
     }
 }
 
-void KoWmfReadPrivate::createRegion( quint32, QDataStream&  )
+void KoWmfReadPrivate::createRegion(quint32, QDataStream&)
 {
     createEmptyObject();
-    if ( mNbrFunc ) {
-        kDebug() <<"createRegion : unimplemented";
+    if (mNbrFunc) {
+        kDebug() << "createRegion : unimplemented";
     }
 }
 
@@ -1186,74 +1170,72 @@ void KoWmfReadPrivate::createRegion( quint32, QDataStream&  )
 //-----------------------------------------------------------------------------
 // Utilities and conversion Wmf -> Qt
 
-bool KoWmfReadPrivate::addHandle( KoWmfHandle* handle )
+bool KoWmfReadPrivate::addHandle(KoWmfHandle* handle)
 {
     int idx;
 
-    for ( idx=0; idx < mNbrObject ; idx++ ) {
-        if ( mObjHandleTab[ idx ] == 0 )  break;
+    for (idx = 0; idx < mNbrObject ; idx++) {
+        if (mObjHandleTab[ idx ] == 0)  break;
     }
 
-    if ( idx < mNbrObject ) {
+    if (idx < mNbrObject) {
         mObjHandleTab[ idx ] = handle;
         return true;
-    }
-    else {
+    } else {
         delete handle;
         mStackOverflow = true;
-        kDebug() <<"KoWmfReadPrivate::addHandle : stack overflow = broken file !";
+        kDebug() << "KoWmfReadPrivate::addHandle : stack overflow = broken file !";
         return false;
     }
 }
 
 
-void KoWmfReadPrivate::deleteHandle( int idx )
+void KoWmfReadPrivate::deleteHandle(int idx)
 {
-    if ( (idx < mNbrObject) && (mObjHandleTab[idx] != 0) ) {
+    if ((idx < mNbrObject) && (mObjHandleTab[idx] != 0)) {
         delete mObjHandleTab[ idx ];
         mObjHandleTab[ idx ] = 0;
-    }
-    else {
-        kDebug() <<"KoWmfReadPrivate::deletehandle() : bad index number";
+    } else {
+        kDebug() << "KoWmfReadPrivate::deletehandle() : bad index number";
     }
 }
 
 
-void KoWmfReadPrivate::pointArray( QDataStream& stream, QPolygon& pa )
+void KoWmfReadPrivate::pointArray(QDataStream& stream, QPolygon& pa)
 {
     qint16 left, top;
     int  i, max;
 
-    for ( i=0, max=pa.size() ; i < max ; i++ ) {
+    for (i = 0, max = pa.size() ; i < max ; i++) {
         stream >> left >> top;
-        pa.setPoint( i, left, top );
+        pa.setPoint(i, left, top);
     }
 }
 
 
-void KoWmfReadPrivate::xyToAngle( int xStart, int yStart, int xEnd, int yEnd, int& angleStart, int& angleLength )
+void KoWmfReadPrivate::xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int& angleStart, int& angleLength)
 {
     double aStart, aLength;
 
-    aStart = atan2( (double)yStart,  (double)xStart );
-    aLength = atan2( (double)yEnd, (double)xEnd ) - aStart;
+    aStart = atan2((double)yStart, (double)xStart);
+    aLength = atan2((double)yEnd, (double)xEnd) - aStart;
 
     angleStart = (int)((aStart * 2880) / 3.14166);
     angleLength = (int)((aLength * 2880) / 3.14166);
-    if ( angleLength < 0 ) angleLength = 5760 + angleLength;
+    if (angleLength < 0) angleLength = 5760 + angleLength;
 }
 
 
-QPainter::CompositionMode KoWmfReadPrivate::winToQtComposition( quint16 param ) const
+QPainter::CompositionMode KoWmfReadPrivate::winToQtComposition(quint16 param) const
 {
-    if ( param < 17 )
+    if (param < 17)
         return koWmfOpTab16[ param ];
     else
         return QPainter::CompositionMode_Source;
 }
 
 
-QPainter::CompositionMode  KoWmfReadPrivate::winToQtComposition( quint32 param ) const
+QPainter::CompositionMode  KoWmfReadPrivate::winToQtComposition(quint32 param) const
 {
     /* TODO: Ternary raster operations
     0x00C000CA  dest = (source AND pattern)
@@ -1262,18 +1244,18 @@ QPainter::CompositionMode  KoWmfReadPrivate::winToQtComposition( quint32 param )
     0x005A0049  dest = pattern XOR dest   */
     int i;
 
-    for ( i=0 ; i < 15 ; i++ ) {
-        if ( koWmfOpTab32[ i ].winRasterOp == param )  break;
+    for (i = 0 ; i < 15 ; i++) {
+        if (koWmfOpTab32[ i ].winRasterOp == param)  break;
     }
 
-    if ( i < 15 )
+    if (i < 15)
         return koWmfOpTab32[ i ].qtRasterOp;
     else
         return QPainter::CompositionMode_SourceOver;
 }
 
 
-bool KoWmfReadPrivate::dibToBmp( QImage& bmp, QDataStream& stream, quint32 size )
+bool KoWmfReadPrivate::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
 {
     typedef struct _BMPFILEHEADER {
         quint16 bmType;
@@ -1286,9 +1268,9 @@ bool KoWmfReadPrivate::dibToBmp( QImage& bmp, QDataStream& stream, quint32 size 
     int sizeBmp = size + 14;
 
     QByteArray pattern;           // BMP header and DIB data
-    pattern.resize( sizeBmp );
+    pattern.resize(sizeBmp);
     pattern.fill(0);
-    stream.readRawData( pattern.data() + 14, size );
+    stream.readRawData(pattern.data() + 14, size);
 
     // add BMP header
     BMPFILEHEADER* bmpHeader;
@@ -1297,11 +1279,10 @@ bool KoWmfReadPrivate::dibToBmp( QImage& bmp, QDataStream& stream, quint32 size 
     bmpHeader->bmSize = sizeBmp;
 
 //    if ( !bmp.loadFromData( (const uchar*)bmpHeader, pattern.size(), "BMP" ) ) {
-    if ( !bmp.loadFromData( pattern, "BMP" ) ) {
-        kDebug() <<"KoWmfReadPrivate::dibToBmp: invalid bitmap";
+    if (!bmp.loadFromData(pattern, "BMP")) {
+        kDebug() << "KoWmfReadPrivate::dibToBmp: invalid bitmap";
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 }

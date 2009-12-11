@@ -49,13 +49,11 @@
 class ASCIIExportFactory : public KGenericFactory<ASCIIExport>
 {
 public:
-    ASCIIExportFactory() : KGenericFactory<ASCIIExport>("kwordasciiexport")
-    {
+    ASCIIExportFactory() : KGenericFactory<ASCIIExport>("kwordasciiexport") {
     }
 
 protected:
-    virtual void setupTranslations(void)
-    {
+    virtual void setupTranslations(void) {
         KGlobal::locale()->insertCatalog("kofficefilters");
     }
 };
@@ -71,8 +69,7 @@ public:
     {
     }
 
-    virtual ~ASCIIWorker()
-    {
+    virtual ~ASCIIWorker() {
         delete m_streamOut; delete m_ioDevice;
     }
 
@@ -86,20 +83,28 @@ public:
     virtual bool doFullParagraphList(const QList<ParaData>& paraList);
     virtual bool doFullParagraph(const ParaData& para);
     virtual bool doFullParagraph(const QString& paraText,
-        const LayoutData& layout,
-        const ValueListFormatData& paraFormatDataList);
+                                 const LayoutData& layout,
+                                 const ValueListFormatData& paraFormatDataList);
 
 public:
-    QString getEndOfLine(void) const { return m_eol; }
-    void setEndOfLine(const QString& str) { m_eol = str; }
+    QString getEndOfLine(void) const {
+        return m_eol;
+    }
+    void setEndOfLine(const QString& str) {
+        m_eol = str;
+    }
 
-    QTextCodec* getCodec(void) const { return m_codec; }
-    void setCodec(QTextCodec* codec) { m_codec = codec; }
+    QTextCodec* getCodec(void) const {
+        return m_codec;
+    }
+    void setCodec(QTextCodec* codec) {
+        m_codec = codec;
+    }
 
 private:
     virtual bool ProcessTable(const Table& table);
-    virtual bool ProcessParagraphData (const QString& paraText,
-        const ValueListFormatData& paraFormatDataList);
+    virtual bool ProcessParagraphData(const QString& paraText,
+                                      const ValueListFormatData& paraFormatDataList);
 
 private:
     QIODevice* m_ioDevice;
@@ -122,30 +127,26 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
     m_ioDevice = new QFile(filenameOut);
 
-    if (!m_ioDevice)
-    {
+    if (!m_ioDevice) {
         kError(30502) << "No output file! Aborting!" << endl;
         return false;
     }
 
-    if (!m_ioDevice->open(QIODevice::WriteOnly))
-    {
+    if (!m_ioDevice->open(QIODevice::WriteOnly)) {
         kError(30502) << "Unable to open output file!" << endl;
         return false;
     }
 
     m_streamOut = new QTextStream(m_ioDevice);
-    if (!m_streamOut)
-    {
+    if (!m_streamOut) {
         kError(30502) << "Could not create output stream! Aborting!" << endl;
         m_ioDevice->close();
         return false;
     }
 
-    kDebug(30502) <<"Charset used:" << getCodec()->name();
+    kDebug(30502) << "Charset used:" << getCodec()->name();
 
-    if (!getCodec())
-    {
+    if (!getCodec()) {
         kError(30502) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
@@ -158,7 +159,7 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 bool ASCIIWorker::doCloseFile(void)
 {
     delete m_streamOut;
-    m_streamOut=NULL;
+    m_streamOut = NULL;
     if (m_ioDevice)
         m_ioDevice->close();
     return (m_ioDevice);
@@ -173,12 +174,10 @@ bool ASCIIWorker::doOpenDocument(void)
 bool ASCIIWorker::doCloseDocument(void)
 {
     // Add foot-/endnotes
-    if (!m_automaticNotes.empty())
-    {
+    if (!m_automaticNotes.empty()) {
         *m_streamOut << m_eol;
         int noteNumber = 1;
-        for (QStringList::Iterator it = m_automaticNotes.begin(); it != m_automaticNotes.end(); ++it)
-        {
+        for (QStringList::Iterator it = m_automaticNotes.begin(); it != m_automaticNotes.end(); ++it) {
             *m_streamOut << "[" << noteNumber << "] " << *it;
             noteNumber++;
         }
@@ -193,9 +192,8 @@ bool ASCIIWorker::doCloseDocument(void)
 bool ASCIIWorker::doFullParagraphList(const QList<ParaData>& paraList)
 {
     for (QList<ParaData>::ConstIterator it = paraList.begin();
-         it != paraList.end();
-         it++)
-    {
+            it != paraList.end();
+            it++) {
         if (!doFullParagraph(*it)) return false;
     }
 
@@ -208,137 +206,111 @@ bool ASCIIWorker::doFullParagraph(const ParaData& para)
 }
 
 bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
-    const ValueListFormatData& paraFormatDataList)
+                                  const ValueListFormatData& paraFormatDataList)
 {
-    kDebug(30502) <<"Entering ASCIIWorker::doFullParagraph";
+    kDebug(30502) << "Entering ASCIIWorker::doFullParagraph";
 
 #if 0
     // As KWord has only one depth of lists, we can process lists very simply.
     // --
     // Not anymore - Clarence
-    if ( layout.counter.numbering == CounterData::NUM_LIST )
-    {
+    if (layout.counter.numbering == CounterData::NUM_LIST) {
         // Are we still in a list of the right type?
-        if (!m_inList || (layout.counter.style!=m_typeList))
-        {
+        if (!m_inList || (layout.counter.style != m_typeList)) {
             // We are not yet part of a list
-            m_inList=true;
-            m_counterList=1; // Start numbering
-            m_typeList=layout.counter.style;
+            m_inList = true;
+            m_counterList = 1; // Start numbering
+            m_typeList = layout.counter.style;
         }
 
         switch (m_typeList)
-        // TODO: when we would be able to save to UTF-8,
-        //   use correct symbols
+            // TODO: when we would be able to save to UTF-8,
+            //   use correct symbols
         {
         case CounterData::STYLE_CUSTOMBULLET: // We cannot keep the custom type/style
-        default:
-            {
-                m_orderedList=false;
-                *m_streamOut << "- ";
-                break;
-            }
-        case CounterData::STYLE_NONE:
-            {
-                m_orderedList=false;
-                break;
-            }
-        case CounterData::STYLE_CIRCLEBULLET:
-            {
-                m_orderedList=false;
-                *m_streamOut << "o ";
-                break;
-            }
-        case CounterData::STYLE_SQUAREBULLET:
-            {
-                m_orderedList=false;
-                *m_streamOut << "~ "; // Not much a square
-                break;
-            }
-        case CounterData::STYLE_DISCBULLET:
-            {
-                m_orderedList=false;
-                *m_streamOut << "* "; // Not much a disc
-                break;
-            }
+        default: {
+            m_orderedList = false;
+            *m_streamOut << "- ";
+            break;
+        }
+        case CounterData::STYLE_NONE: {
+            m_orderedList = false;
+            break;
+        }
+        case CounterData::STYLE_CIRCLEBULLET: {
+            m_orderedList = false;
+            *m_streamOut << "o ";
+            break;
+        }
+        case CounterData::STYLE_SQUAREBULLET: {
+            m_orderedList = false;
+            *m_streamOut << "~ "; // Not much a square
+            break;
+        }
+        case CounterData::STYLE_DISCBULLET: {
+            m_orderedList = false;
+            *m_streamOut << "* "; // Not much a disc
+            break;
+        }
         case CounterData::STYLE_NUM:
-        case CounterData::STYLE_CUSTOM:
-            {
-                m_orderedList=true;
-                *m_streamOut << QString::number(m_counterList,10);
-                break;
-            }
-        case CounterData::STYLE_ALPHAB_L:
-            {
-                m_orderedList=true;
-                QString strTemp;
-                for (int i=m_counterList;i>0;i/=26)
-                     strTemp=QChar(0x40+i%26)+strTemp; // Lower alpha
-                *m_streamOut << strTemp;
-                break;
+        case CounterData::STYLE_CUSTOM: {
+            m_orderedList = true;
+            *m_streamOut << QString::number(m_counterList, 10);
+            break;
         }
-        case CounterData::STYLE_ALPHAB_U:
-            {
-                m_orderedList=true;
-                QString strTemp;
-                for (int i=m_counterList;i>0;i/=26)
-                     strTemp=QChar(0x40+i%26)+strTemp; // Lower alpha
-                *m_streamOut << strTemp;
-                break;
-            }
-        case CounterData::STYLE_ROM_NUM_L:
-            {
-                // For now, we do not support lower-case Roman numbering (TODO)
-                m_orderedList=true;
-                *m_streamOut << QString::number(m_counterList,10);
-                break;
-            }
-        case CounterData::STYLE_ROM_NUM_U:
-            {
-                // For now, we do not support upper-case Roman numbering (TODO)
-                m_orderedList=true;
-                *m_streamOut << QString::number(m_counterList,10);
-                break;
-            }
+        case CounterData::STYLE_ALPHAB_L: {
+            m_orderedList = true;
+            QString strTemp;
+            for (int i = m_counterList;i > 0;i /= 26)
+                strTemp = QChar(0x40 + i % 26) + strTemp; // Lower alpha
+            *m_streamOut << strTemp;
+            break;
         }
-        ProcessParagraphData ( paraText, paraFormatDataList);
+        case CounterData::STYLE_ALPHAB_U: {
+            m_orderedList = true;
+            QString strTemp;
+            for (int i = m_counterList;i > 0;i /= 26)
+                strTemp = QChar(0x40 + i % 26) + strTemp; // Lower alpha
+            *m_streamOut << strTemp;
+            break;
+        }
+        case CounterData::STYLE_ROM_NUM_L: {
+            // For now, we do not support lower-case Roman numbering (TODO)
+            m_orderedList = true;
+            *m_streamOut << QString::number(m_counterList, 10);
+            break;
+        }
+        case CounterData::STYLE_ROM_NUM_U: {
+            // For now, we do not support upper-case Roman numbering (TODO)
+            m_orderedList = true;
+            *m_streamOut << QString::number(m_counterList, 10);
+            break;
+        }
+        }
+        ProcessParagraphData(paraText, paraFormatDataList);
         m_counterList++; // Increment the list counter
-    }
-    else
-    {
-        m_inList=false; // Close an eventual list
-        if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
-        {
-            if (!layout.counter.depth)
-            {   // HEAD 1
+    } else {
+        m_inList = false; // Close an eventual list
+        if (layout.counter.numbering == CounterData::NUM_CHAPTER) {
+            if (!layout.counter.depth) {  // HEAD 1
                 *m_streamOut << "###################################" << m_eol;
                 *m_streamOut << "# ";
-                ProcessParagraphData ( paraText, paraFormatDataList);
+                ProcessParagraphData(paraText, paraFormatDataList);
                 *m_streamOut << "###################################" << m_eol;
-            }
-            else if (layout.counter.depth==1)
-            {   // HEAD 2
+            } else if (layout.counter.depth == 1) {  // HEAD 2
                 *m_streamOut << "#### ";
-                ProcessParagraphData ( paraText, paraFormatDataList);
-            }
-            else if (layout.counter.depth==2)
-            {   // HEAD 3
+                ProcessParagraphData(paraText, paraFormatDataList);
+            } else if (layout.counter.depth == 2) {  // HEAD 3
                 *m_streamOut << "## ";
-                ProcessParagraphData ( paraText, paraFormatDataList);
-            }
-            else if (layout.counter.depth==3)
-            {   // HEAD 4
+                ProcessParagraphData(paraText, paraFormatDataList);
+            } else if (layout.counter.depth == 3) {  // HEAD 4
                 *m_streamOut << "# ";
-                ProcessParagraphData ( paraText, paraFormatDataList);
+                ProcessParagraphData(paraText, paraFormatDataList);
+            } else {
+                ProcessParagraphData(paraText, paraFormatDataList);
             }
-            else
-            {
-                ProcessParagraphData ( paraText, paraFormatDataList);
-            }
-        }
-        else
-        {
-            ProcessParagraphData ( paraText, paraFormatDataList);
+        } else {
+            ProcessParagraphData(paraText, paraFormatDataList);
         }
     }
 #else
@@ -348,20 +320,19 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
     if (!ProcessParagraphData(paraText, paraFormatDataList)) return false;
 #endif
 
-    kDebug(30502) <<"Exiting ASCIIWorker::doFullParagraph";
+    kDebug(30502) << "Exiting ASCIIWorker::doFullParagraph";
     return true;
 }
 
 
 bool ASCIIWorker::ProcessTable(const Table& table)
 {
-    kDebug(30502) <<"processTable CALLED!";
+    kDebug(30502) << "processTable CALLED!";
 
     // just dump the table out (no layout for now)
     for (QList<TableCell>::ConstIterator it = table.cellList.begin();
-         it != table.cellList.end();
-         it++)
-    {
+            it != table.cellList.end();
+            it++) {
         if (!doFullParagraphList(*(*it).paraList)) return false;
     }
 
@@ -372,92 +343,76 @@ bool ASCIIWorker::ProcessTable(const Table& table)
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
-    const ValueListFormatData& paraFormatDataList)
+                                       const ValueListFormatData& paraFormatDataList)
 {
     bool lastSegmentWasText = true;
 
-    if (!paraText.isEmpty())
-    {
+    if (!paraText.isEmpty()) {
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
-        for (paraFormatDataIt = paraFormatDataList.begin ();
-             paraFormatDataIt != paraFormatDataList.end ();
-             paraFormatDataIt++)
-        {
+        for (paraFormatDataIt = paraFormatDataList.begin();
+                paraFormatDataIt != paraFormatDataList.end();
+                paraFormatDataIt++) {
             lastSegmentWasText = true;
 
-            switch ((*paraFormatDataIt).id)
-            {
-                case 1: // Normal text
-                {
-                    QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
-                    strText = strText.replace(QChar(10), m_eol, Qt::CaseSensitive);
-                    *m_streamOut << strText;
-                    break;
-                }
-                case 4: // Variable
-                {
-                    if (11==(*paraFormatDataIt).variable.m_type)
-                    {
-                        // Footnote
-                        QString value = (*paraFormatDataIt).variable.getFootnoteValue();
-                        bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                        QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
-                        if (paraList)
-                        {
-                            QString notestr;
-                            QList<ParaData>::ConstIterator it;
-                            QList<ParaData>::ConstIterator end(paraList->constEnd());
-                            for (it=paraList->constBegin();it!=end;++it)
-                                notestr += (*it).text.trimmed().replace(QChar(10), m_eol, Qt::CaseSensitive) + m_eol;
+            switch ((*paraFormatDataIt).id) {
+            case 1: { // Normal text
+                QString strText(paraText.mid((*paraFormatDataIt).pos, (*paraFormatDataIt).len));
+                strText = strText.replace(QChar(10), m_eol, Qt::CaseSensitive);
+                *m_streamOut << strText;
+                break;
+            }
+            case 4: { // Variable
+                if (11 == (*paraFormatDataIt).variable.m_type) {
+                    // Footnote
+                    QString value = (*paraFormatDataIt).variable.getFootnoteValue();
+                    bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
+                    QList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    if (paraList) {
+                        QString notestr;
+                        QList<ParaData>::ConstIterator it;
+                        QList<ParaData>::ConstIterator end(paraList->constEnd());
+                        for (it = paraList->constBegin();it != end;++it)
+                            notestr += (*it).text.trimmed().replace(QChar(10), m_eol, Qt::CaseSensitive) + m_eol;
 
-                            *m_streamOut << "[";
-                            if (automatic) {
-                                // Automatic footnote
-                                *m_streamOut << m_automaticNotes.count() + 1;
-                                m_automaticNotes.append(notestr);
-                            }
-                            else
-                            {
-                                // Manual footnote
-                                *m_streamOut << value;
-                                m_manualNotes += '[' + value + "] " + notestr;
-                            }
-                            *m_streamOut << ']';
+                        *m_streamOut << "[";
+                        if (automatic) {
+                            // Automatic footnote
+                            *m_streamOut << m_automaticNotes.count() + 1;
+                            m_automaticNotes.append(notestr);
+                        } else {
+                            // Manual footnote
+                            *m_streamOut << value;
+                            m_manualNotes += '[' + value + "] " + notestr;
                         }
+                        *m_streamOut << ']';
                     }
-                    else
-                    {
-                        // Generic variable
-                        *m_streamOut << (*paraFormatDataIt).variable.m_text;
-                    }
-                    break;
+                } else {
+                    // Generic variable
+                    *m_streamOut << (*paraFormatDataIt).variable.m_text;
                 }
-                case 6: // Frame Anchor
-                {
-                    if ((*paraFormatDataIt).frameAnchor.type == 6) // Table
-                    {
-                        if ((*paraFormatDataIt).pos)
-                            *m_streamOut << m_eol;
+                break;
+            }
+            case 6: { // Frame Anchor
+                if ((*paraFormatDataIt).frameAnchor.type == 6) { // Table
+                    if ((*paraFormatDataIt).pos)
+                        *m_streamOut << m_eol;
 
-                        if (!ProcessTable((*paraFormatDataIt).frameAnchor.table))
-                            return false;
-                    }
-                    else
-                    {
-                        kWarning(30502) << "Unsupported frame anchor type: "
-                            << (*paraFormatDataIt).frameAnchor.type << endl;
-                    }
+                    if (!ProcessTable((*paraFormatDataIt).frameAnchor.table))
+                        return false;
+                } else {
+                    kWarning(30502) << "Unsupported frame anchor type: "
+                    << (*paraFormatDataIt).frameAnchor.type << endl;
+                }
 
-                    lastSegmentWasText = false;
-                    break;
-                }
-                default:
-                {
-                    kWarning(30502) << "Not supported paragraph type: "
-                        << (*paraFormatDataIt).id << endl;
-                    break;
-                }
+                lastSegmentWasText = false;
+                break;
+            }
+            default: {
+                kWarning(30502) << "Not supported paragraph type: "
+                << (*paraFormatDataIt).id << endl;
+                break;
+            }
             }
         }
     }
@@ -470,57 +425,51 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
 
 
 ASCIIExport::ASCIIExport(QObject* parent, const QStringList&)
-           : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (to != "text/plain" || from != "application/x-kword")
-    {
+    if (to != "text/plain" || from != "application/x-kword") {
         return KoFilter::NotImplemented;
     }
     AsciiExportDialog* dialog = 0;
-    if (!m_chain->manager()->getBatchMode())
-    {
-      dialog = new AsciiExportDialog();
-      if (!dialog)
-      {
-	kError(30502) << "Dialog has not been created! Aborting!" << endl;
-	return KoFilter::StupidError;
-      }
+    if (!m_chain->manager()->getBatchMode()) {
+        dialog = new AsciiExportDialog();
+        if (!dialog) {
+            kError(30502) << "Dialog has not been created! Aborting!" << endl;
+            return KoFilter::StupidError;
+        }
 
-      if (!dialog->exec())
-      {
-	kError(30502) << "Dialog was aborted! Aborting filter!" << endl;
-	return KoFilter::UserCancelled;
-      }
+        if (!dialog->exec()) {
+            kError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+            return KoFilter::UserCancelled;
+        }
     }
     ASCIIWorker* worker = new ASCIIWorker();
 
-    if (!worker)
-    {
+    if (!worker) {
         kError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete dialog;
         return KoFilter::StupidError;
     }
     QTextCodec* codec;
     if (dialog)
-    	codec = dialog->getCodec();
+        codec = dialog->getCodec();
     else
         codec = QTextCodec::codecForName("UTF-8");
 
-    if ( !codec )
-    {
+    if (!codec) {
         kError(30502) << "No codec!" << endl;
         delete dialog;
         delete worker;
         return KoFilter::StupidError;
     }
 
-    worker->setCodec( codec );
+    worker->setCodec(codec);
     if (dialog)
-    	worker->setEndOfLine(dialog->getEndOfLine());
+        worker->setEndOfLine(dialog->getEndOfLine());
     else
         worker->setEndOfLine("\n");
 
@@ -528,14 +477,13 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QB
 
     KWEFKWordLeader* leader = new KWEFKWordLeader(worker);
 
-    if (!leader)
-    {
+    if (!leader) {
         kError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }
 
-    KoFilter::ConversionStatus result = leader->convert(m_chain,from,to);
+    KoFilter::ConversionStatus result = leader->convert(m_chain, from, to);
 
     delete leader;
     delete worker;

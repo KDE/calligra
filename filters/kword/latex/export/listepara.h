@@ -29,79 +29,98 @@
 
 class ListPara: public Para
 {
-	Para *_start, *_end;
-	int _size;
+    Para *_start, *_end;
+    int _size;
 
-	public:
-		ListPara();
-		virtual ~ListPara();
+public:
+    ListPara();
+    virtual ~ListPara();
 
-		void initialiser(Para*);
-		void add(Para*);
-		void rem();
-		
-		Para* getFirst() const { return _start; }
-		Para* getLast()  const { return _end;   }
-		int   getSize()  const { return _size;  }
+    void initialiser(Para*);
+    void add(Para*);
+    void rem();
 
-		void vider();
+    Para* getFirst() const {
+        return _start;
+    }
+    Para* getLast()  const {
+        return _end;
+    }
+    int   getSize()  const {
+        return _size;
+    }
 
-	private:
+    void vider();
+
+private:
 };
 
-class ParaIter {
-	Para *_courant;
-	
-	protected:
-	
-	public:
-/**
- * @name Constructors
- */
+class ParaIter
+{
+    Para *_courant;
+
+protected:
+
+public:
+    /**
+     * @name Constructors
+     */
 //@{
-	/// Default Constructor
-	ParaIter()            { _courant = 0;             }
-	/// Constructor
-	ParaIter(ListPara &l) { _courant = l.getFirst();  }
-	/// Constructor
-	ParaIter(ListPara *l) { 
-		if(l != 0)
-			_courant = l->getFirst();
-		else
-			_courant = 0;
-	}
+    /// Default Constructor
+    ParaIter()            {
+        _courant = 0;
+    }
+    /// Constructor
+    ParaIter(ListPara &l) {
+        _courant = l.getFirst();
+    }
+    /// Constructor
+    ParaIter(ListPara *l) {
+        if (l != 0)
+            _courant = l->getFirst();
+        else
+            _courant = 0;
+    }
 //@}
 
-/**
- * @name Destructors
- */
+    /**
+     * @name Destructors
+     */
 //@{
-	  /// Destructor
-	virtual ~ParaIter() { }
+    /// Destructor
+    virtual ~ParaIter() { }
 //@}
 
-/**
- * @name Accessors
- */
-//@{	
+    /**
+     * @name Accessors
+     */
+//@{
 
-	Para* getCourant()  const { return _courant;        }
-	bool  isTerminate() const { return (_courant == 0); }
+    Para* getCourant()  const {
+        return _courant;
+    }
+    bool  isTerminate() const {
+        return (_courant == 0);
+    }
 //@}
 
-/**
- * @name Modifiors
- */
+    /**
+     * @name Modifiors
+     */
 //@{
-	void next   ()            { _courant = _courant->getNext(); }
-	void setList(const ListPara &l) { _courant = l.getFirst();        }
+    void next()            {
+        _courant = _courant->getNext();
+    }
+    void setList(const ListPara &l) {
+        _courant = l.getFirst();
+    }
 //@}
 
-/**
- * @name Operators
- */
+    /**
+     * @name Operators
+     */
 //@{
- //@}
+//@}
 };
 
 #endif /* __KWORD_LISTPARA_H__ */

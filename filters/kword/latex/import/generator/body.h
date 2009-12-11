@@ -36,44 +36,43 @@ class QDomElement;
  */
 class Body
 {
-	public:
-		Body()
-		{
-			_leftMargin = 28;
-			_rightMargin = 28;
-			_topMargin = 42;
-			_bottomMargin = 42;
-		}
-		
-		~Body() { }
+public:
+    Body() {
+        _leftMargin = 28;
+        _rightMargin = 28;
+        _topMargin = 42;
+        _bottomMargin = 42;
+    }
 
-		/**
-		 * Analyze the latex tree and keep data.
-		 * 
-		 * @param elt The root tree which contains an entire latex document.
-		 * 
-		 * @return <code>false</code> if the analysis failed.
-		 */
-		bool analyze(Element* elt);
+    ~Body() { }
 
-		/**
-		 * Generate a kword document.
-		 *
-		 * @return <code>true</code> if the generation succeeded.
-		 */
-		bool generate(QDomElement& framesets, QDomDocument& doc);
+    /**
+     * Analyze the latex tree and keep data.
+     *
+     * @param elt The root tree which contains an entire latex document.
+     *
+     * @return <code>false</code> if the analysis failed.
+     */
+    bool analyze(Element* elt);
 
-	private:
-		/** Left margin in pt. */
-		int _leftMargin;
-		/** Right margin in pt. */
-		int _rightMargin;
-		/** Top margin in pt. */
-		int _topMargin;
-		/** Botoom margin in pt. */
-		int _bottomMargin;
-		/** The body of a document is a list of paragraphs. */
-		QList<Paragraph*> _paragraphs;
+    /**
+     * Generate a kword document.
+     *
+     * @return <code>true</code> if the generation succeeded.
+     */
+    bool generate(QDomElement& framesets, QDomDocument& doc);
+
+private:
+    /** Left margin in pt. */
+    int _leftMargin;
+    /** Right margin in pt. */
+    int _rightMargin;
+    /** Top margin in pt. */
+    int _topMargin;
+    /** Botoom margin in pt. */
+    int _bottomMargin;
+    /** The body of a document is a list of paragraphs. */
+    QList<Paragraph*> _paragraphs;
 };
 
 #endif /* __KWORD_LATEX_IMPORT_BODY_H__ */

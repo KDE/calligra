@@ -33,7 +33,8 @@
 
 class DocxImport;
 class DocxXmlDocumentReaderContext;
-namespace MSOOXML {
+namespace MSOOXML
+{
 class MsooXmlRelationships;
 }
 
@@ -52,7 +53,7 @@ public:
 protected:
     KoFilter::ConversionStatus read_body();
 
-    typedef KoFilter::ConversionStatus (DocxXmlDocumentReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(DocxXmlDocumentReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     DocxXmlDocumentReaderContext* m_context;
@@ -75,19 +76,19 @@ public:
         DocxImport& _import,
         const QString& _path, const QString& _file,
         MSOOXML::MsooXmlRelationships& _relationships
-/*        uint _slideNumber,
-        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-        PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
-        MSOOXML::MsooXmlRelationships& _relationships*/
+        /*        uint _slideNumber,
+                const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+                PptxXmlSlideReader::Type _type, PptxSlideProperties& _slideProperties,
+                MSOOXML::MsooXmlRelationships& _relationships*/
     );
     DocxImport* import;
     const QString path;
     const QString file;
-/*    const uint slideNumber;
-    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
-    PptxXmlSlideReader::Type type;
-    PptxSlideProperties* slideProperties;
-    MSOOXML::MsooXmlRelationships* relationships;*/
+    /*    const uint slideNumber;
+        const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+        PptxXmlSlideReader::Type type;
+        PptxSlideProperties* slideProperties;
+        MSOOXML::MsooXmlRelationships* relationships;*/
 };
 
 #endif //DOCXXMLDOCREADER_H

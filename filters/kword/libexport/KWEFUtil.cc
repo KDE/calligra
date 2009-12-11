@@ -26,66 +26,56 @@
 #include "KWEFUtil.h"
 
 QString KWEFUtil::EscapeSgmlText(const QTextCodec* codec,
-                      const QString& strIn,
-                      const bool quot /* = false */ ,
-                      const bool apos /* = false */ )
+                                 const QString& strIn,
+                                 const bool quot /* = false */ ,
+                                 const bool apos /* = false */)
 {
     QString strReturn;
     QChar ch;
 
     uint strInLength = strIn.length();
-    for (uint i=0; i<strInLength; i++)
-    {
-        ch=strIn[i];
-        switch (ch.unicode())
-        {
-        case 38: // &
-            {
-                strReturn+="&amp;";
-                break;
-            }
-        case 60: // <
-            {
-                strReturn+="&lt;";
-                break;
-            }
-        case 62: // >
-            {
-                strReturn+="&gt;";
-                break;
-            }
-        case 34: // "
-            {
-                if (quot)
-                    strReturn+="&quot;";
-                else
-                    strReturn+=ch;
-                break;
-            }
-        case 39: // '
-            {
-                // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
-                if (apos)
-                    strReturn+="&apos;";
-                else
-                    strReturn+=ch;
-                break;
-            }
-        default:
-            {
-                // verify that the character ch can be expressed in the
-                //   encoding in which we will write the HTML file.
-                if (codec)
-                {
-                    if (!codec->canEncode(ch))
-                    {
-                        strReturn+=QString("&#%1;").arg(ch.unicode());
-                        break;
-                    }
+    for (uint i = 0; i < strInLength; i++) {
+        ch = strIn[i];
+        switch (ch.unicode()) {
+        case 38: { // &
+            strReturn += "&amp;";
+            break;
+        }
+        case 60: { // <
+            strReturn += "&lt;";
+            break;
+        }
+        case 62: { // >
+            strReturn += "&gt;";
+            break;
+        }
+        case 34: { // "
+            if (quot)
+                strReturn += "&quot;";
+            else
+                strReturn += ch;
+            break;
+        }
+        case 39: { // '
+            // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
+            if (apos)
+                strReturn += "&apos;";
+            else
+                strReturn += ch;
+            break;
+        }
+        default: {
+            // verify that the character ch can be expressed in the
+            //   encoding in which we will write the HTML file.
+            if (codec) {
+                if (!codec->canEncode(ch)) {
+                    strReturn += QString("&#%1;").arg(ch.unicode());
+                    break;
                 }
-                strReturn+=ch;
-                break;
             }
+            strReturn += ch;
+            break;
+        }
         }
     }
 

@@ -36,7 +36,8 @@
 #include <KoFilter.h>
 #include <KoOdfExporter.h>
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 class MsooXmlRelationships;
 
@@ -65,14 +66,18 @@ public:
 
     //! Sets filename for the document being read.
     //! Only for error reporting purposes, used in raiseError().
-    void setFileName(const QString &fileName) { m_fileName = fileName; }
+    void setFileName(const QString &fileName) {
+        m_fileName = fileName;
+    }
 
     //! @return filename for the document being read.
     //! Only for error reporting purposes, used in raiseError().
-    QString fileName() const  { return m_fileName; }
+    QString fileName() const  {
+        return m_fileName;
+    }
 
     //! Reimplemented after QXmlStreamReader: adds line, column and filename information
-    void raiseError( const QString & message = QString() );
+    void raiseError(const QString & message = QString());
 
     //! Reimplemented after QXmlStreamReader for supporting undo read and for debugging purposes
     TokenType readNext();

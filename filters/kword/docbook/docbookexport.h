@@ -28,14 +28,15 @@
 #include <KoStore.h>
 
 
-class DocBookExport : public KoFilter {
+class DocBookExport : public KoFilter
+{
 
     Q_OBJECT
 
 public:
-    DocBookExport (QObject *parent, const QStringList & );
+    DocBookExport(QObject *parent, const QStringList &);
     virtual ~DocBookExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 #endif // DOCBOOKEXPORT_H

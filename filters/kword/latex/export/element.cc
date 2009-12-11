@@ -28,17 +28,17 @@
 /*******************************************/
 Element::Element()
 {
-	_type      = ST_NONE;
-	_hinfo     = SI_NONE;
-	_section   = SS_NONE;
-	_name      = "";
-	_removable = false;
-	_visible   = true;
-	_row       = 0;
-	_col       = 0;
-	_rows      = 0;
-	_cols      = 0;
-	setGrpMgr("");
+    _type      = ST_NONE;
+    _hinfo     = SI_NONE;
+    _section   = SS_NONE;
+    _name      = "";
+    _removable = false;
+    _visible   = true;
+    _row       = 0;
+    _col       = 0;
+    _rows      = 0;
+    _cols      = 0;
+    setGrpMgr("");
 }
 
 /*******************************************/
@@ -46,7 +46,7 @@ Element::Element()
 /*******************************************/
 Element::~Element()
 {
-	kDebug(30522) <<"Element Destructor";
+    kDebug(30522) << "Element Destructor";
 }
 
 /*******************************************/
@@ -54,11 +54,11 @@ Element::~Element()
 /*******************************************/
 void Element::analyze(const QDomNode node)
 {
-	/* Analyze a frameset markup */
-	
-	/* Parameter analysis */
-	kDebug(30522) <<"FRAMESET PARAMETER ANALYSIS (Element)";
-	analyzeParam(node);
+    /* Analyze a frameset markup */
+
+    /* Parameter analysis */
+    kDebug(30522) << "FRAMESET PARAMETER ANALYSIS (Element)";
+    analyzeParam(node);
 }
 
 /*******************************************/
@@ -66,50 +66,48 @@ void Element::analyze(const QDomNode node)
 /*******************************************/
 void Element::analyzeParam(const QDomNode node)
 {
-	/* <FRAMESET frameType="1" frameInfo="0" removable="0"
-	 * visible="1" name="Supercadre 1">
-	 */
-	_name = getAttr(node, "name");
-	_type = (SType) getAttr(node, "frameType").toInt();
-	switch(getAttr(node, "frameInfo").toInt())
-	{
-		case 0: _section = SS_BODY;
-			break;
-		case 1: _section = SS_HEADERS;
-			_hinfo   = SI_FIRST;
-			break;
-		case 2: _section = SS_HEADERS;
-			_hinfo   = SI_ODD;
-			break;
-		case 3: _section = SS_HEADERS;
-			_hinfo   = SI_EVEN;
-			break;
-		case 4: _section = SS_FOOTERS;
-			_hinfo   = SI_FIRST;
-			break;
-		case 5: _section = SS_FOOTERS;
-			_hinfo   = SI_ODD;
-			break;
-		case 6: _section = SS_FOOTERS;
-			_hinfo   = SI_EVEN;
-			break;
-		case 7: _section = SS_FOOTNOTES;
-			break;
-		default:
-			_section = SS_NONE;
-			kDebug(30522) <<"Error: Frame info unknown!";
-	}
-	setRemovable(getAttr(node, "removable").toInt());
-	setVisible(getAttr(node, "visible").toInt());
-	if(getAttr(node, "grpMgr")!= 0)
-	{
-		_section = SS_TABLE;
-		setGrpMgr(getAttr(node, "grpMgr"));
-	}
-	setRow(getAttr(node, "row").toInt());
-	setCol(getAttr(node, "col").toInt());
-	setRows(getAttr(node, "rows").toInt());
-	setCols(getAttr(node, "cols").toInt());
+    /* <FRAMESET frameType="1" frameInfo="0" removable="0"
+     * visible="1" name="Supercadre 1">
+     */
+    _name = getAttr(node, "name");
+    _type = (SType) getAttr(node, "frameType").toInt();
+    switch (getAttr(node, "frameInfo").toInt()) {
+    case 0: _section = SS_BODY;
+        break;
+    case 1: _section = SS_HEADERS;
+        _hinfo   = SI_FIRST;
+        break;
+    case 2: _section = SS_HEADERS;
+        _hinfo   = SI_ODD;
+        break;
+    case 3: _section = SS_HEADERS;
+        _hinfo   = SI_EVEN;
+        break;
+    case 4: _section = SS_FOOTERS;
+        _hinfo   = SI_FIRST;
+        break;
+    case 5: _section = SS_FOOTERS;
+        _hinfo   = SI_ODD;
+        break;
+    case 6: _section = SS_FOOTERS;
+        _hinfo   = SI_EVEN;
+        break;
+    case 7: _section = SS_FOOTNOTES;
+        break;
+    default:
+        _section = SS_NONE;
+        kDebug(30522) << "Error: Frame info unknown!";
+    }
+    setRemovable(getAttr(node, "removable").toInt());
+    setVisible(getAttr(node, "visible").toInt());
+    if (getAttr(node, "grpMgr") != 0) {
+        _section = SS_TABLE;
+        setGrpMgr(getAttr(node, "grpMgr"));
+    }
+    setRow(getAttr(node, "row").toInt());
+    setCol(getAttr(node, "col").toInt());
+    setRows(getAttr(node, "rows").toInt());
+    setCols(getAttr(node, "cols").toInt());
 
-	kDebug(30522) <<"END PARAM";
+    kDebug(30522) << "END PARAM";
 }

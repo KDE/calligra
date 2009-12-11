@@ -34,7 +34,7 @@ public:
     virtual ~GenericImageExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-    bool saveImage(const QString& fileName,const QByteArray& to);
+    bool saveImage(const QString& fileName, const QByteArray& to);
 protected:
     int width;
     int height;

@@ -29,14 +29,14 @@ class AmiProExport : public KoFilter
 {
     Q_OBJECT
 
-  public:
+public:
 
     AmiProExport(QObject* parent, const QStringList&);
     AmiProExport();
 
     virtual ~AmiProExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // __AMIPROEXPORT_H

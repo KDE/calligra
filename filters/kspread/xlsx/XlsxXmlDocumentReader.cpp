@@ -39,21 +39,20 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     const QVector<QString>& _sharedStrings, const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships)
-    : MSOOXML::MsooXmlReaderContext(&_relationships),
-      import(&_import), themes(&_themes), sharedStrings(&_sharedStrings),
-      styles(&_styles)
+        : MSOOXML::MsooXmlReaderContext(&_relationships),
+        import(&_import), themes(&_themes), sharedStrings(&_sharedStrings),
+        styles(&_styles)
 {
 }
 
-class XlsxXmlDocumentReader::Private {
+class XlsxXmlDocumentReader::Private
+{
 public:
     Private()
-     : worksheetNumber(0)
-     , worksheetReader(0)
-    {
+            : worksheetNumber(0)
+            , worksheetReader(0) {
     }
-    ~Private()
-    {
+    ~Private() {
         delete worksheetReader;
     }
     uint worksheetNumber;
@@ -62,9 +61,9 @@ private:
 };
 
 XlsxXmlDocumentReader::XlsxXmlDocumentReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
-    , m_context(0)
-    , d(new Private)
+        : MSOOXML::MsooXmlReader(writers)
+        , m_context(0)
+        , d(new Private)
 {
     init();
 }
@@ -108,19 +107,19 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
         return KoFilter::WrongFormat;
     }
-/*
-    const QXmlStreamAttributes attrs( attributes() );
-    for (int i=0; i<attrs.count(); i++) {
-        kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
-    }*/
+    /*
+        const QXmlStreamAttributes attrs( attributes() );
+        for (int i=0; i<attrs.count(); i++) {
+            kDebug() << "1 NS prefix:" << attrs[i].name() << "uri:" << attrs[i].namespaceUri();
+        }*/
 
-    QXmlStreamNamespaceDeclarations namespaces( namespaceDeclarations() );
-    for (int i=0; i<namespaces.count(); i++) {
+    QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
-    if (!namespaces.contains( QXmlStreamNamespaceDeclaration( QString(), MSOOXML::Schemas::spreadsheetml ) )) {
+    if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
         raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::spreadsheetml));
         return KoFilter::WrongFormat;
     }
@@ -130,9 +129,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::readInternal()
 
 //! @todo hardcoded font face list; look at fonts used by theme
     ;
-    mainStyles->addFontFace( KoFontFace("Calibri") );
-    mainStyles->addFontFace( KoFontFace("Arial") );
-    mainStyles->addFontFace( KoFontFace("Tahoma") );
+    mainStyles->addFontFace(KoFontFace("Calibri"));
+    mainStyles->addFontFace(KoFontFace("Arial"));
+    mainStyles->addFontFace(KoFontFace("Tahoma"));
 
     kDebug() << "===========finished============";
     return KoFilter::OK;
@@ -171,7 +170,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
     READ_PROLOGUE
 
     QXmlStreamNamespaceDeclarations namespaces = namespaceDeclarations();
-    for (int i=0; i<namespaces.count(); i++) {
+    for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
@@ -230,11 +229,11 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITH_NS(r, id)
     READ_ATTR_WITHOUT_NS(sheetId)
     READ_ATTR_WITHOUT_NS(name)
-kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name;
+    kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name;
 //! @todo    TRY_READ_ATTR_WITHOUT_NS(state)
 
 //! @todo implement MsooXmlRelationships with internal MsooXmlRelationshipsReader
@@ -246,9 +245,9 @@ kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name;
         d->worksheetReader = new XlsxXmlWorksheetReader(this);
     }
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name,
-        *m_context->themes, *m_context->sharedStrings, *m_context->styles);
+                                          *m_context->themes, *m_context->sharedStrings, *m_context->styles);
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-        d->worksheetReader, path, &context);
+                d->worksheetReader, path, &context);
     if (result != KoFilter::OK) {
         raiseError(d->worksheetReader->errorString());
         return result;

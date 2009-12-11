@@ -28,23 +28,23 @@
 
 class KontourImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KontourImport(QObject* parent, const QStringList&);
-	virtual ~KontourImport();
+    KontourImport(QObject* parent, const QStringList&);
+    virtual ~KontourImport();
 
-	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-	QDomDocument inpdoc;
-	QDomDocument outdoc;
-	void convert();
+    QDomDocument inpdoc;
+    QDomDocument outdoc;
+    void convert();
 
 private:
-	void parseGObject( VObject *, const QDomElement & );
-	void parseGroup( const QDomElement & );
-	KarbonDocument m_document;
+    void parseGObject(VObject *, const QDomElement &);
+    void parseGroup(const QDomElement &);
+    KarbonDocument m_document;
 };
 
 #endif // __KONTOURIMPORT_H__

@@ -31,66 +31,61 @@
 
 bool Document::analyze(QList<Element*>* root)
 {
-	bool error = true;
-	error &= analyzeDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
-	
-	/* Analyze body */
-	_body.analyze(Latex::instance()->getEnv(root, "document"));
-	return true;
+    bool error = true;
+    error &= analyzeDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
+
+    /* Analyze body */
+    _body.analyze(Latex::instance()->getEnv(root, "document"));
+    return true;
 }
 
 bool Document::analyzeDocumentClass(Command* documentclass)
 {
-	kWarning(documentclass != NULL) << "no documentclass found !";
-	QList<Param*> params = documentclass->getOptions();
-	Param* param;
-        foreach(param, params)
-	{
-		if(param->getKey() == "a4paper")
-		{
-		}
-		else if(param->getKey() == "11pt")
-		{
-		}
-	}
+    kWarning(documentclass != NULL) << "no documentclass found !";
+    QList<Param*> params = documentclass->getOptions();
+    Param* param;
+    foreach(param, params) {
+        if (param->getKey() == "a4paper") {
+        } else if (param->getKey() == "11pt") {
+        }
+    }
 }
 
 bool Document::generate(KoStore* store)
 {
-	QDomDocument doc("KWORD");
-	doc.appendChild(doc.createProcessingInstruction("xml", 
-				"version=\"1.0\" encoding=\"UTF-8\""));
-	
-	/* DOC */
-  QDomElement root = doc.createElement("DOC");
-	root.setAttribute("editor", "LaTex Import Filter");
-	root.setAttribute("mime", "application/x-kword");
-	root.setAttribute("syntaxVersion", "1");
-  doc.appendChild(root);
-	
-	/* PAPER */
-	
-	/* ATTRIBUTES */
+    QDomDocument doc("KWORD");
+    doc.appendChild(doc.createProcessingInstruction("xml",
+                    "version=\"1.0\" encoding=\"UTF-8\""));
 
-	/* FRAMESETS */
-	QDomElement body = doc.createElement("FRAMESETS");
-	root.appendChild(body);
+    /* DOC */
+    QDomElement root = doc.createElement("DOC");
+    root.setAttribute("editor", "LaTex Import Filter");
+    root.setAttribute("mime", "application/x-kword");
+    root.setAttribute("syntaxVersion", "1");
+    doc.appendChild(root);
 
-	/* generate body */
-	_body.generate(body, doc);
-	
-	kDebug(30522) <<"serialize";
-	serialize(store, doc);
-	return true;
+    /* PAPER */
+
+    /* ATTRIBUTES */
+
+    /* FRAMESETS */
+    QDomElement body = doc.createElement("FRAMESETS");
+    root.appendChild(body);
+
+    /* generate body */
+    _body.generate(body, doc);
+
+    kDebug(30522) << "serialize";
+    serialize(store, doc);
+    return true;
 }
 
 void Document::serialize(KoStore* store, QDomDocument doc)
 {
-	QByteArray str = doc.toCString();
-	qWarning(str);
-	if(store->open("root"))
-	{
-		store->write((const char *)str, str.length());
-		store->close();
-	}
+    QByteArray str = doc.toCString();
+    qWarning(str);
+    if (store->open("root")) {
+        store->write((const char *)str, str.length());
+        store->close();
+    }
 }

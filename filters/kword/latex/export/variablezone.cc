@@ -23,7 +23,7 @@
 **
 */
 
-#include <kdebug.h>				/* for kDebug() stream */
+#include <kdebug.h>    /* for kDebug() stream */
 
 #include "variablezone.h"
 #include "para.h"
@@ -36,12 +36,12 @@
 /*******************************************/
 VariableZone::VariableZone(Para* para): VariableFormat(para)
 {
-	setPara(para);
-	setSize(para->getSize());
-	setWeight(para->getWeight());
-	setItalic(para->isItalic());
-	setUnderlined(para->getUnderlineType());
-	setStrikeout(para->isStrikeout());
+    setPara(para);
+    setSize(para->getSize());
+    setWeight(para->getWeight());
+    setItalic(para->isItalic());
+    setUnderlined(para->getUnderlineType());
+    setStrikeout(para->isStrikeout());
 }
 
 /*******************************************/
@@ -49,13 +49,13 @@ VariableZone::VariableZone(Para* para): VariableFormat(para)
 /*******************************************/
 VariableZone::VariableZone(const QString& text, Para* para): VariableFormat(para)
 {
-	setText(text);
-	/*setPara(para);
-	setSize(para->getSize());
-	setWeight(para->getWeight());
-	setItalic(para->isItalic());
-	setUnderlined(para->getUnderlineType());
-	setStrikeout(para->isStrikeout());*/
+    setText(text);
+    /*setPara(para);
+    setSize(para->getSize());
+    setWeight(para->getWeight());
+    setItalic(para->isItalic());
+    setUnderlined(para->getUnderlineType());
+    setStrikeout(para->isStrikeout());*/
 }
 
 /*******************************************/
@@ -63,7 +63,7 @@ VariableZone::VariableZone(const QString& text, Para* para): VariableFormat(para
 /*******************************************/
 VariableZone::~VariableZone()
 {
-	kDebug(30522) <<"Destruction of an area";
+    kDebug(30522) << "Destruction of an area";
 }
 
 /*******************************************/
@@ -74,19 +74,19 @@ VariableZone::~VariableZone()
 /*******************************************/
 void VariableZone::analyze(const QDomNode node)
 {
-	kDebug(30522) <<"FORMAT";
-	/* Get header information (size, position)
-	 * Get infos. to format the text
-	 */
-	//if(node != 0)
-		analyzeFormat(node);
-	
-	/* Format the text */
-	setText(getText().mid(getPos(), getLength()));
-	
-	kDebug(30522) << getText().length();
-	kDebug(30522) << getText().latin1();
-	kDebug(30522) <<"END FORMAT";
+    kDebug(30522) << "FORMAT";
+    /* Get header information (size, position)
+     * Get infos. to format the text
+     */
+    //if(node != 0)
+    analyzeFormat(node);
+
+    /* Format the text */
+    setText(getText().mid(getPos(), getLength()));
+
+    kDebug(30522) << getText().length();
+    kDebug(30522) << getText().latin1();
+    kDebug(30522) << "END FORMAT";
 }
 
 /*******************************************/
@@ -97,46 +97,40 @@ void VariableZone::analyze(const QDomNode node)
 void VariableZone::generate(QTextStream &out)
 {
 
-	if(useFormat())
-		generate_format_begin(out);
+    if (useFormat())
+        generate_format_begin(out);
 
-	/* Display the text */
-	kDebug(30522) <<"type :" << getType();
-	if((getType() == VAR_DATE) && !isFix())
-		out << "\\today" << endl;
-	else if(getType() == VAR_FOOTNOTE)
-	{
-		if(getNotetype() == "footnote")
-			out << "\\,\\footnote{";
-		else if(getNotetype() == "endnote")
-			out << "\\,\\endnote{";
-		/* Get the footnote and generate it. */
-		Element* footnote = getRoot()->searchFootnote(getFrameset());
-		if(footnote != NULL)
-		{
-			footnote->generate(out);
-		}
-		Config::instance()->writeIndent(out);
-		out << "}";
-	}
-	else if(getType() == VAR_NOTE)
-	{
-		out << "\\marginpar{\\scriptsize ";
-		if(Config::instance()->mustUseLatin1())
-			display(escapeLatin1(getNote()), out);
-		else if(Config::instance()->mustUseUnicode())
-			display(getNote(), out);
-		out << "}" << endl;
-	}
-	else
-	{
-		if(Config::instance()->mustUseLatin1())
-			display(escapeLatin1(getText()), out);
-		else if(Config::instance()->mustUseUnicode())
-			display(getText(), out);
-	}
-	if(useFormat())
-		generate_format_end(out);
-	
+    /* Display the text */
+    kDebug(30522) << "type :" << getType();
+    if ((getType() == VAR_DATE) && !isFix())
+        out << "\\today" << endl;
+    else if (getType() == VAR_FOOTNOTE) {
+        if (getNotetype() == "footnote")
+            out << "\\,\\footnote{";
+        else if (getNotetype() == "endnote")
+            out << "\\,\\endnote{";
+        /* Get the footnote and generate it. */
+        Element* footnote = getRoot()->searchFootnote(getFrameset());
+        if (footnote != NULL) {
+            footnote->generate(out);
+        }
+        Config::instance()->writeIndent(out);
+        out << "}";
+    } else if (getType() == VAR_NOTE) {
+        out << "\\marginpar{\\scriptsize ";
+        if (Config::instance()->mustUseLatin1())
+            display(escapeLatin1(getNote()), out);
+        else if (Config::instance()->mustUseUnicode())
+            display(getNote(), out);
+        out << "}" << endl;
+    } else {
+        if (Config::instance()->mustUseLatin1())
+            display(escapeLatin1(getText()), out);
+        else if (Config::instance()->mustUseUnicode())
+            display(getText(), out);
+    }
+    if (useFormat())
+        generate_format_end(out);
+
 }
 

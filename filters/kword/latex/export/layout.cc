@@ -19,11 +19,11 @@
 **
 */
 
-#include <stdlib.h>	/* for atoi function */
+#include <stdlib.h> /* for atoi function */
 
-#include <kdebug.h>	/* for kDebug() stream */
+#include <kdebug.h> /* for kDebug() stream */
 
-#include "fileheader.h"	/* for _header use */
+#include "fileheader.h" /* for _header use */
 #include "layout.h"
 
 /* Static Data */
@@ -35,17 +35,17 @@ EType   Layout::_last_counter;
 /*******************************************/
 Layout::Layout()
 {
-	_last_name     =  "STANDARD";
-	_last_counter  =  TL_NONE;
-	_env           =  ENV_LEFT;
-	_counterType   =  TL_NONE;
-	_counterDepth  =  0;
-	_counterBullet =  0;
-	_counterStart  =  0;
-	_numberingType = -1;
-	_useHardBreakAfter = false;
-	_useHardBreak      = false;
-	_keepLinesTogether = false;
+    _last_name     =  "STANDARD";
+    _last_counter  =  TL_NONE;
+    _env           =  ENV_LEFT;
+    _counterType   =  TL_NONE;
+    _counterDepth  =  0;
+    _counterBullet =  0;
+    _counterStart  =  0;
+    _numberingType = -1;
+    _useHardBreakAfter = false;
+    _useHardBreak      = false;
+    _keepLinesTogether = false;
 }
 
 /*******************************************/
@@ -53,53 +53,41 @@ Layout::Layout()
 /*******************************************/
 void Layout::analyzeLayout(const QDomNode node)
 {
-	/* Markup: <FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	
-	/* No parameters for this markup */
-	kDebug(30522) <<"ANALYSIS OF THE BEGINNING OF A LAYOUT";
-	
-	/* Analyze child markups */
-	for(int index= 0; index < getNbChild(node); index++)
-	{
-		if(getChildName(node, index).compare("NAME")== 0)
-		{
-			kDebug(30522) <<"NAME:";
-			analyzeName(getChild(node, index));
-		}
-		else if(getChildName(node, index).compare("FOLLOWING")== 0)
-		{
-			kDebug(30522) <<"FOLLOWING:";
-			analyzeFollowing(getChild(node, index));
-		}
-		else if(getChildName(node, index).compare("FLOW")== 0)
-		{
-			kDebug(30522) <<"FLOW:";
-			analyzeEnv(getChild(node, index));
-		}
-		else if(getChildName(node, index).compare("PAGEBREAKING")== 0)
-		{
-			kDebug(30522) <<"PAGEBREAKING:";
-			analyzeBreakLine(getChild(node, index));
-		}
-		else if(getChildName(node, index).compare("COUNTER")== 0)
-		{
-			kDebug(30522) <<"COUNTER:";
-			analyzeCounter(getChild(node, index));
-		}
-		else if(getChildName(node, index).compare("FORMAT")== 0)
-		{
-			kDebug(30522) <<"FORMAT:";
-			analyzeFormat(getChild(node, index));
-		}
-	}
-	kDebug(30522) <<"END OF THE BEGINNING OF A LAYOUT";
+    /* Markup: <FORMAT id="1" pos="0" len="17">...</FORMAT> */
+
+    /* No parameters for this markup */
+    kDebug(30522) << "ANALYSIS OF THE BEGINNING OF A LAYOUT";
+
+    /* Analyze child markups */
+    for (int index = 0; index < getNbChild(node); index++) {
+        if (getChildName(node, index).compare("NAME") == 0) {
+            kDebug(30522) << "NAME:";
+            analyzeName(getChild(node, index));
+        } else if (getChildName(node, index).compare("FOLLOWING") == 0) {
+            kDebug(30522) << "FOLLOWING:";
+            analyzeFollowing(getChild(node, index));
+        } else if (getChildName(node, index).compare("FLOW") == 0) {
+            kDebug(30522) << "FLOW:";
+            analyzeEnv(getChild(node, index));
+        } else if (getChildName(node, index).compare("PAGEBREAKING") == 0) {
+            kDebug(30522) << "PAGEBREAKING:";
+            analyzeBreakLine(getChild(node, index));
+        } else if (getChildName(node, index).compare("COUNTER") == 0) {
+            kDebug(30522) << "COUNTER:";
+            analyzeCounter(getChild(node, index));
+        } else if (getChildName(node, index).compare("FORMAT") == 0) {
+            kDebug(30522) << "FORMAT:";
+            analyzeFormat(getChild(node, index));
+        }
+    }
+    kDebug(30522) << "END OF THE BEGINNING OF A LAYOUT";
 }
 
 void Layout::analyzeName(const QDomNode node)
 {
-	/* <NAME value="times"> */
-	kDebug(30522) <<"PARAM";
-	setName(getAttr(node, "value"));
+    /* <NAME value="times"> */
+    kDebug(30522) << "PARAM";
+    setName(getAttr(node, "value"));
 }
 
 /*******************************************/
@@ -109,9 +97,9 @@ void Layout::analyzeName(const QDomNode node)
 /*******************************************/
 void Layout::analyzeFollowing(const QDomNode node)
 {
-	/* <FOLLOWING name="times"> */
-	kDebug(30522) <<"PARAM";
-	setFollowing(getAttr(node, "name"));
+    /* <FOLLOWING name="times"> */
+    kDebug(30522) << "PARAM";
+    setFollowing(getAttr(node, "name"));
 }
 
 /*******************************************/
@@ -121,29 +109,29 @@ void Layout::analyzeFollowing(const QDomNode node)
 /*******************************************/
 void Layout::analyzeEnv(const QDomNode node)
 {
-	/* <FLOW align="0"> */
-	// ERROR: Enter first in flow ????
-	kDebug(30522) <<"PARAM";
-	if(getAttr(node,"align").compare("justify")== 0)
-		setEnv(ENV_JUSTIFY);
-	else if(getAttr(node, "align").compare("left")== 0)
-		setEnv(ENV_LEFT);
-	else if(getAttr(node, "align").compare("right")== 0)
-		setEnv(ENV_RIGHT);
-	else if(getAttr(node, "align").compare("center")== 0)
-		setEnv(ENV_CENTER);
+    /* <FLOW align="0"> */
+    // ERROR: Enter first in flow ????
+    kDebug(30522) << "PARAM";
+    if (getAttr(node, "align").compare("justify") == 0)
+        setEnv(ENV_JUSTIFY);
+    else if (getAttr(node, "align").compare("left") == 0)
+        setEnv(ENV_LEFT);
+    else if (getAttr(node, "align").compare("right") == 0)
+        setEnv(ENV_RIGHT);
+    else if (getAttr(node, "align").compare("center") == 0)
+        setEnv(ENV_CENTER);
 }
 
 void Layout::analyzeBreakLine(const QDomNode node)
 {
-	/* <NAME hardFrameBreakAfter="true"> */
-	kDebug(30522) <<"PARAM";
-	if(getAttr(node, "linesTogether") != 0)
-		keepLinesTogether();
-	else if(getAttr(node, "hardFrameBreak") != 0)
-		useHardBreak();
-	else if(getAttr(node, "hardFrameBreakAfter") != 0)
-		useHardBreakAfter();
+    /* <NAME hardFrameBreakAfter="true"> */
+    kDebug(30522) << "PARAM";
+    if (getAttr(node, "linesTogether") != 0)
+        keepLinesTogether();
+    else if (getAttr(node, "hardFrameBreak") != 0)
+        useHardBreak();
+    else if (getAttr(node, "hardFrameBreakAfter") != 0)
+        useHardBreakAfter();
 }
 
 /*******************************************/
@@ -155,16 +143,15 @@ void Layout::analyzeBreakLine(const QDomNode node)
 /*******************************************/
 void Layout::analyzeCounter(const QDomNode node)
 {
-	/* <COUNTER type="1"> */
-	kDebug(30522) <<"PARAM";
-	setCounterType(getAttr(node, "type").toInt());
-	if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
-	{
-		kDebug(30522) <<  getCounterType();
-		FileHeader::instance()->useEnumerate();
-	}
-	setCounterDepth(getAttr(node, "depth").toInt());
-	setCounterBullet(getAttr(node, "bullet").toInt());
-	setCounterStart(getAttr(node, "start").toInt());
-	setNumberingType(getAttr(node, "numberingtype").toInt());
+    /* <COUNTER type="1"> */
+    kDebug(30522) << "PARAM";
+    setCounterType(getAttr(node, "type").toInt());
+    if (getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET) {
+        kDebug(30522) <<  getCounterType();
+        FileHeader::instance()->useEnumerate();
+    }
+    setCounterDepth(getAttr(node, "depth").toInt());
+    setCounterBullet(getAttr(node, "bullet").toInt());
+    setCounterStart(getAttr(node, "start").toInt());
+    setNumberingType(getAttr(node, "numberingtype").toInt());
 }

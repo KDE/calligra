@@ -63,7 +63,7 @@ protected:
 
     KoFontFace m_currentFontFace;
 
-    typedef KoFilter::ConversionStatus (DocxXmlFontTableReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(DocxXmlFontTableReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
 };

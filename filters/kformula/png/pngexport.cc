@@ -38,35 +38,35 @@
 
 
 typedef KGenericFactory<PNGExport> PNGExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkfopngexport, PNGExportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkfopngexport, PNGExportFactory("kofficefilters"))
 
 
-PNGExport::PNGExport( QObject* parent, const QStringList& )
-    : KoFilter(parent)
+PNGExport::PNGExport(QObject* parent, const QStringList&)
+        : KoFilter(parent)
 {
 }
 
 
-KoFilter::ConversionStatus PNGExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus PNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( to != "image/png" || from != "application/x-kformula" )
+    if (to != "image/png" || from != "application/x-kformula")
         return KoFilter::NotImplemented;
 
-    KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
-    if(!in) {
+    KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
+    if (!in) {
         kapp->restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "PNG Export Error" ) );
+        KMessageBox::error(0, i18n("Failed to read data."), i18n("PNG Export Error"));
         return KoFilter::FileNotFound;
     }
 
-    QDomDocument dom( "KFORMULA" );
-    if ( !dom.setContent( in, false ) ) {
+    QDomDocument dom("KFORMULA");
+    if (!dom.setContent(in, false)) {
         kapp->restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "PNG Export Error" ) );
+        KMessageBox::error(0, i18n("Malformed XML data."), i18n("PNG Export Error"));
         return KoFilter::WrongFormat;
     }
 
-    PNGExportDia* dialog = new PNGExportDia( dom, m_chain->outputFile() );
+    PNGExportDia* dialog = new PNGExportDia(dom, m_chain->outputFile());
     dialog->exec();
     delete dialog;
     return KoFilter::OK;

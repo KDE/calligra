@@ -34,20 +34,20 @@ class Doc;
 
 class CSVExport : public KoFilter
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-  CSVExport(QObject* parent, const QStringList &);
-  virtual ~CSVExport() {}
+public:
+    CSVExport(QObject* parent, const QStringList &);
+    virtual ~CSVExport() {}
 
-  virtual KoFilter::ConversionStatus convert( const QByteArray & from, const QByteArray & to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);
 
-  private:
-  QString exportCSVCell( const KSpread::Doc* doc,KSpread::Sheet const * const sheet,
-                         int col, int row, QChar const & textQuote, QChar csvDelimiter );
+private:
+    QString exportCSVCell(const KSpread::Doc* doc, KSpread::Sheet const * const sheet,
+                          int col, int row, QChar const & textQuote, QChar csvDelimiter);
 
-  private:
-  QString m_eol; ///< End of line (LF, CR or CRLF)
+private:
+    QString m_eol; ///< End of line (LF, CR or CRLF)
 };
 
 #endif // CSVEXPORT_H

@@ -26,7 +26,8 @@
 #include "ustring.h"
 #include "format.h"
 
-namespace Swinder {
+namespace Swinder
+{
 
 class Workbook;
 class Sheet;
@@ -48,49 +49,49 @@ class XFRecord;
 class GlobalsSubStreamHandler : public SubStreamHandler
 {
 public:
-    GlobalsSubStreamHandler( Workbook* workbook, unsigned version );
+    GlobalsSubStreamHandler(Workbook* workbook, unsigned version);
     virtual ~GlobalsSubStreamHandler();
 
-    virtual void handleRecord( Record* record );
+    virtual void handleRecord(Record* record);
 
 
     bool passwordProtected() const;
     unsigned version() const;
-    Sheet* sheetFromPosition( unsigned position ) const;
-    UString stringFromSST( unsigned index ) const;
+    Sheet* sheetFromPosition(unsigned position) const;
+    UString stringFromSST(unsigned index) const;
 
     unsigned fontCount() const;//
-    FontRecord fontRecord( unsigned index ) const;//
+    FontRecord fontRecord(unsigned index) const;  //
 
-    FormatFont convertedFont( unsigned index ) const;
+    FormatFont convertedFont(unsigned index) const;
 
-    Color customColor( unsigned index ) const;//
-    Color convertedColor( unsigned index ) const;
+    Color customColor(unsigned index) const;  //
+    Color convertedColor(unsigned index) const;
 
     unsigned xformatCount() const;//
-    XFRecord xformat( unsigned index ) const;//
+    XFRecord xformat(unsigned index) const;  //
 
-    Format convertedFormat( unsigned index ) const;
+    Format convertedFormat(unsigned index) const;
 
-    UString valueFormat( unsigned index ) const;//
+    UString valueFormat(unsigned index) const;  //
 
     const std::vector<UString>& externSheets() const;
 
-    UString nameFromIndex( unsigned index ) const;
+    UString nameFromIndex(unsigned index) const;
 private:
-    void handleBOF( BOFRecord* record );
-    void handleBoundSheet( BoundSheetRecord* record );
-    void handleDateMode( DateModeRecord* record );
-    void handleExternBook( ExternBookRecord* record );
-    void handleExternName( ExternNameRecord* record );
-    void handleExternSheet( ExternSheetRecord* record );
-    void handleFilepass( FilepassRecord* record );
-    void handleFont( FontRecord* record );
-    void handleFormat( FormatRecord* record );
-    void handleName( NameRecord* record );
-    void handlePalette( PaletteRecord* record );
-    void handleSST( SSTRecord* record );
-    void handleXF( XFRecord* record );
+    void handleBOF(BOFRecord* record);
+    void handleBoundSheet(BoundSheetRecord* record);
+    void handleDateMode(DateModeRecord* record);
+    void handleExternBook(ExternBookRecord* record);
+    void handleExternName(ExternNameRecord* record);
+    void handleExternSheet(ExternSheetRecord* record);
+    void handleFilepass(FilepassRecord* record);
+    void handleFont(FontRecord* record);
+    void handleFormat(FormatRecord* record);
+    void handleName(NameRecord* record);
+    void handlePalette(PaletteRecord* record);
+    void handleSST(SSTRecord* record);
+    void handleXF(XFRecord* record);
 
     class Private;
     Private * const d;

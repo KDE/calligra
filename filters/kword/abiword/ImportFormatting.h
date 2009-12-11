@@ -50,7 +50,7 @@
  * Properties that we do not or cannot support:
  *  page-margin-footer, page-margin-header, lang, font-stretch, keep-with-next...
  */
-enum StackItemElementType{
+enum StackItemElementType {
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      ///< Bottom of the stack
     ElementTypeIgnore,      ///< Element is known but ignored
@@ -112,22 +112,22 @@ public:
 class StackItemStack : public QStack<StackItem*>
 {
 public:
-        StackItemStack(void) { }
-        virtual ~StackItemStack(void) { }
+    StackItemStack(void) { }
+    virtual ~StackItemStack(void) { }
 };
 
 class StyleData;
 
 void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
-    const QXmlAttributes& attributes, AbiPropsMap& abiPropsMap,
-    const bool allowInit);
+                        const QXmlAttributes& attributes, AbiPropsMap& abiPropsMap,
+                        const bool allowInit);
 void AddFormat(QDomElement& formatElementOut, StackItem* stackItem,
-    QDomDocument& mainDocument);
+               QDomDocument& mainDocument);
 void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
-    StackItem* stackItem, QDomDocument& mainDocument,
-    const AbiPropsMap& abiPropsMap, const int level, const bool isStyle);
+               StackItem* stackItem, QDomDocument& mainDocument,
+               const AbiPropsMap& abiPropsMap, const int level, const bool isStyle);
 void AddStyle(QDomElement& styleElement, const QString& strStyleName,
-    const StyleData& styleData, QDomDocument& mainDocument);
+              const StyleData& styleData, QDomDocument& mainDocument);
 
 
 #endif // _IMPORT_FORMATTING_H

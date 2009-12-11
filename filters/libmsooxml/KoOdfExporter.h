@@ -31,8 +31,7 @@ class KoGenStyles;
 /**
  * @brief Convenience structure encapsulating XML writers used when writing ODF document.
  */
-struct MSOOXML_EXPORT KoOdfWriters
-{
+struct MSOOXML_EXPORT KoOdfWriters {
     /**
     * Creates structure encapsulating XML writers. All members are set initially to 0.
     */
@@ -69,7 +68,7 @@ class MSOOXML_EXPORT KoOdfExporter : public KoFilter
 public:
     virtual ~KoOdfExporter();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
     /**
@@ -99,7 +98,7 @@ protected:
      * Implement it for your filter with code that fills the ODF structures with converted data.
      */
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
-                                                      KoOdfWriters *writers) = 0;
+            KoOdfWriters *writers) = 0;
 
 private:
     class Private;

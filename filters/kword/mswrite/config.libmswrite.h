@@ -29,21 +29,21 @@
 */
 
 #ifndef NDEBUG
-	#if 0	// set to 1 if debugging LibMSWrite
-		#define DEBUG_HEADER
-		#define DEBUG_FORMATINFO
-		#define DEBUG_PARA
-		//#define DEBUG_PARA_TAB	// tabulator
-		#define DEBUG_CHAR
-		#define DEBUG_FONT
-		#define DEBUG_PAGETABLE
-		#define DEBUG_PAGELAYOUT
-		#define DEBUG_OBJECT
-		#define DEBUG_IMAGE
-		#define DEBUG_INTERNALPARSER
-		#define DEBUG_INTERNALGENERATOR
+#if 0 // set to 1 if debugging LibMSWrite
+#define DEBUG_HEADER
+#define DEBUG_FORMATINFO
+#define DEBUG_PARA
+//#define DEBUG_PARA_TAB // tabulator
+#define DEBUG_CHAR
+#define DEBUG_FONT
+#define DEBUG_PAGETABLE
+#define DEBUG_PAGELAYOUT
+#define DEBUG_OBJECT
+#define DEBUG_IMAGE
+#define DEBUG_INTERNALPARSER
+#define DEBUG_INTERNALGENERATOR
 
-		#define CHECK_INTERNAL	// more consistency checks - not required if LibMSWrite was "bug free"
-	#endif
+#define CHECK_INTERNAL // more consistency checks - not required if LibMSWrite was "bug free"
+#endif
 #endif
 

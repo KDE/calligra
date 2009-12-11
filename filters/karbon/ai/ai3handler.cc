@@ -19,56 +19,59 @@
 
 #include "ai3handler.h"
 
-AI3Handler::AI3Handler(AIParserBase *delegate){
-  m_delegate = delegate;
+AI3Handler::AI3Handler(AIParserBase *delegate)
+{
+    m_delegate = delegate;
 }
-AI3Handler::~AI3Handler(){
+AI3Handler::~AI3Handler()
+{
 }
 
-bool AI3Handler::handleAIOperation (AIOperation op) {
+bool AI3Handler::handleAIOperation(AIOperation op)
+{
 //  PathElement pathElement;
 //  double fval;
-  int ival;
+    int ival;
 
-  switch (op) {
+    switch (op) {
     case AIO_SetWindingOrder :
-      ival = m_delegate->getIntValue();
-      if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotWindingOrder (ival);
-      return true;
-      break;
+        ival = m_delegate->getIntValue();
+        if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotWindingOrder(ival);
+        return true;
+        break;
     case AIO_BeginGroupNoClip :
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginGroup (false);
-      return true;
-      break;
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginGroup(false);
+        return true;
+        break;
     case AIO_EndGroupNoClip :
-      if (m_delegate->m_debug) qDebug ("got end group noclip");
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndGroup (false);
-      if (m_delegate->m_debug) qDebug ("/got end group noclip");
-      return true;
-      break;
+        if (m_delegate->m_debug) qDebug("got end group noclip");
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndGroup(false);
+        if (m_delegate->m_debug) qDebug("/got end group noclip");
+        return true;
+        break;
     case AIO_BeginCombination :
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginCombination ();
-      return true;
-      break;
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginCombination();
+        return true;
+        break;
     case AIO_EndCombination :
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndCombination ();
-      return true;
-      break;
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndCombination();
+        return true;
+        break;
     case AIO_BeginGroupClip :
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginGroup (true);
-      return true;
-      break;
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotBeginGroup(true);
+        return true;
+        break;
     case AIO_EndGroupClip :
-      if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndGroup (true);
-      return true;
-      break;
+        if (m_delegate->m_structureHandler) m_delegate->m_structureHandler->gotEndGroup(true);
+        return true;
+        break;
     case AIO_SetFillMode :
-      if (m_delegate->m_pathHandler) m_delegate->m_pathHandler->gotFillMode((FillMode) m_delegate->getIntValue());
-      return true;
-      break;
+        if (m_delegate->m_pathHandler) m_delegate->m_pathHandler->gotFillMode((FillMode) m_delegate->getIntValue());
+        return true;
+        break;
     default :
-      return false;
-  }
-  return false;
+        return false;
+    }
+    return false;
 }
 

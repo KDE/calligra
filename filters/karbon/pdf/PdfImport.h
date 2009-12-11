@@ -28,10 +28,10 @@ class PdfImport : public KoFilter
     Q_OBJECT
 
 public:
-    PdfImport( QObject* parent, const QStringList& );
+    PdfImport(QObject* parent, const QStringList&);
     virtual ~PdfImport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

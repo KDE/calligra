@@ -32,20 +32,22 @@ class KWordLatexExportDia : public LatexExportDia
 {
     Q_OBJECT
 
-	private:
+private:
     QString _fileOut;
     KoStore* _in;
     KConfig* _config;
-		LatexExportIface* _iface;
+    LatexExportIface* _iface;
 
-	public:
-    explicit KWordLatexExportDia( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = true, Qt::WFlags fl = 0 );
+public:
+    explicit KWordLatexExportDia(KoStore*, QWidget* parent = 0,
+                                 const char* name = 0, bool modal = true, Qt::WFlags fl = 0);
     virtual ~KWordLatexExportDia();
 
-    void setOutputFile(QString file) { _fileOut = file; }
-	
-	public slots:
+    void setOutputFile(QString file) {
+        _fileOut = file;
+    }
+
+public slots:
     virtual void reject();
     virtual void accept();
     virtual void addLanguage();

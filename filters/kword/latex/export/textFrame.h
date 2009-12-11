@@ -38,96 +38,133 @@
  */
 class TextFrame: public Element
 {
-	/* DATA MARKUP */
-	double  _left,
-		 	_top,
-		 	_right,
-		 	_bottom;
-	TAround _runaround;
-	double  _runaroundGap;
-	TCreate _autoCreate;
-	TNFrame _newFrameBehaviour;
-	TSide   _sheetSide;
+    /* DATA MARKUP */
+    double  _left,
+    _top,
+    _right,
+    _bottom;
+    TAround _runaround;
+    double  _runaroundGap;
+    TCreate _autoCreate;
+    TNFrame _newFrameBehaviour;
+    TSide   _sheetSide;
 
-	/* CHILD MARKUP */
-	QList<Para*> _parags;
-	//QPtrList<Para> _footnotes;
+    /* CHILD MARKUP */
+    QList<Para*> _parags;
+    //QPtrList<Para> _footnotes;
 
-	/* USEFUL DATA */
-	EEnv      _lastEnv;
-	EType     _lastTypeEnum;
+    /* USEFUL DATA */
+    EEnv      _lastEnv;
+    EType     _lastTypeEnum;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instances of a Text frame.
-		 *
-		 */
-		TextFrame();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instances of a Text frame.
+     *
+     */
+    TextFrame();
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of parag and footnotes.
-		 */
-		virtual ~TextFrame() 
-		{
-			//delete _footnotes;
-			kDebug(30522) <<"Destruction of a txt frame";
-		}
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of parag and footnotes.
+     */
+    virtual ~TextFrame() {
+        //delete _footnotes;
+        kDebug(30522) << "Destruction of a txt frame";
+    }
 
-		/**
-		 * Accessors
-		 */
-		/*bool    hasColor      () const;
-		bool    hasUline      () const;*/
-		double  getLeft       () const { return _left;              }
-		double  getRight      () const { return _right;             }
-		double  getTop        () const { return _top;               }
-		double  getBottom     () const { return _bottom;            }
-		TAround getRunAround  () const { return _runaround;         }
-		double  getAroundGap  () const { return _runaroundGap;      }
-		TCreate getAutoCreate () const { return _autoCreate;        }
-		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
-		TSide   getSheetSide  () const { return _sheetSide;         }
-		Para*   getFirstPara  () const { return _parags.getFirst(); }
-		EEnv    getNextEnv    (QList<Para*>, const int);
-		bool    isBeginEnum   (Para*, Para*);
-		bool    isCloseEnum   (Para*, Para*);
+    /**
+     * Accessors
+     */
+    /*bool    hasColor      () const;
+    bool    hasUline      () const;*/
+    double  getLeft() const {
+        return _left;
+    }
+    double  getRight() const {
+        return _right;
+    }
+    double  getTop() const {
+        return _top;
+    }
+    double  getBottom() const {
+        return _bottom;
+    }
+    TAround getRunAround() const {
+        return _runaround;
+    }
+    double  getAroundGap() const {
+        return _runaroundGap;
+    }
+    TCreate getAutoCreate() const {
+        return _autoCreate;
+    }
+    TNFrame getNewFrame() const {
+        return _newFrameBehaviour;
+    }
+    TSide   getSheetSide() const {
+        return _sheetSide;
+    }
+    Para*   getFirstPara() const {
+        return _parags.getFirst();
+    }
+    EEnv    getNextEnv(QList<Para*>, const int);
+    bool    isBeginEnum(Para*, Para*);
+    bool    isCloseEnum(Para*, Para*);
 
-		/**
-		 * Modifiors
-		 */
-		void setLeft      (const double l)    { _left   = l;               }
-		void setRight     (const double r)    { _right  = r;               }
-		void setTop       (const double t)    { _top    = t;               }
-		void setBottom    (const double b)    { _bottom = b;               }
+    /**
+     * Modifiors
+     */
+    void setLeft(const double l)    {
+        _left   = l;
+    }
+    void setRight(const double r)    {
+        _right  = r;
+    }
+    void setTop(const double t)    {
+        _top    = t;
+    }
+    void setBottom(const double b)    {
+        _bottom = b;
+    }
 
-		void setRunAround (const int a)    { _runaround = (TAround) a;  }
-		void setAroundGap (const double r) { _runaroundGap = r;         }
-		void setAutoCreate(const int a)    { _autoCreate = (TCreate) a; }
-		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
-		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
+    void setRunAround(const int a)    {
+        _runaround = (TAround) a;
+    }
+    void setAroundGap(const double r) {
+        _runaroundGap = r;
+    }
+    void setAutoCreate(const int a)    {
+        _autoCreate = (TCreate) a;
+    }
+    void setNewFrame(const int n)    {
+        _newFrameBehaviour = (TNFrame) n;
+    }
+    void setSheetSide(const int s)    {
+        _sheetSide = (TSide) s;
+    }
 
-		//Para* searchFootnote(const QString);
+    //Para* searchFootnote(const QString);
 
-		/**
-		 * Get information from a markup tree.
-		 */
-		void analyze(const QDomNode);
+    /**
+     * Get information from a markup tree.
+     */
+    void analyze(const QDomNode);
 
-		/**
-		 * Write the text in a file.
-		 */
-		void generate(QTextStream&);
+    /**
+     * Write the text in a file.
+     */
+    void generate(QTextStream&);
 
-	private:
-		/**
-		 * Get information from a markup tree (only parameters
-		 * in a frame).
-		 */
-		void analyzeParamFrame(const QDomNode);
+private:
+    /**
+     * Get information from a markup tree (only parameters
+     * in a frame).
+     */
+    void analyzeParamFrame(const QDomNode);
 
 };
 

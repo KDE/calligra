@@ -32,7 +32,8 @@
 #include <KoStore.h>
 
 
-class HTMLExport : public KoFilter {
+class HTMLExport : public KoFilter
+{
 
     Q_OBJECT
 
@@ -40,7 +41,7 @@ public:
     HTMLExport(QObject* parent, const QStringList &);
     virtual ~HTMLExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif // HTMLEXPORT_H

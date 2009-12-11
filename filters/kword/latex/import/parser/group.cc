@@ -21,7 +21,7 @@
 
 Group::Group()
 {
-	setAutoDelete(true);
+    setAutoDelete(true);
 }
 
 Group::~Group()

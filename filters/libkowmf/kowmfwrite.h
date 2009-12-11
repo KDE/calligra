@@ -47,7 +47,7 @@ class QImage;
 class KOWMF_EXPORT KoWmfWrite
 {
 public:
-    explicit KoWmfWrite( const QString& fileName );
+    explicit KoWmfWrite(const QString& fileName);
     virtual ~KoWmfWrite();
 
 
@@ -70,65 +70,65 @@ public:
      * This function set the dot per inch ratio.
      * If not specified the dpi is 1024.
      */
-    void setDefaultDpi( int dpi );
+    void setDefaultDpi(int dpi);
 
     // Drawing tools
-    void  setFont( const QFont& f );
+    void  setFont(const QFont& f);
     // the width of the pen is in logical coordinate
-    void  setPen( const QPen& p );
-    void  setBrush( const QBrush& b );
+    void  setPen(const QPen& p);
+    void  setBrush(const QBrush& b);
 
     // Drawing attributes/modes
-    void  setBackgroundColor( const QColor& r );
-    void  setBackgroundMode( Qt::BGMode );
-    void  setCompositionMode( QPainter::CompositionMode );
+    void  setBackgroundColor(const QColor& r);
+    void  setBackgroundMode(Qt::BGMode);
+    void  setCompositionMode(QPainter::CompositionMode);
 
     // Change logical Coordinate
-    void  setWindow( int left, int top , int width, int height );
+    void  setWindow(int left, int top , int width, int height);
 
     // Clipping
     // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
     // not yet implemented
-    void  setClipRegion( const QRegion& r );
-    void  clipping( bool enable );
+    void  setClipRegion(const QRegion& r);
+    void  clipping(bool enable);
 
     // Graphics drawing functions
-    void  moveTo( int left, int top );
-    void  lineTo( int left, int top );
-    void  drawRect( int left, int top, int width, int height );
-    void  drawRoundRect( int left, int top, int width, int height, int = 25, int = 25 );
-    void  drawEllipse( int left, int top, int width, int height );
-    void  drawArc( int left, int top, int width, int height, int a, int alen );
-    void  drawPie( int left, int top, int width, int height, int a, int alen );
-    void  drawChord( int left, int top, int width, int height, int a, int alen );
-    void  drawPolyline( const QPolygon& pa );
-    void  drawPolygon( const QPolygon& pa, bool winding=false );
+    void  moveTo(int left, int top);
+    void  lineTo(int left, int top);
+    void  drawRect(int left, int top, int width, int height);
+    void  drawRoundRect(int left, int top, int width, int height, int = 25, int = 25);
+    void  drawEllipse(int left, int top, int width, int height);
+    void  drawArc(int left, int top, int width, int height, int a, int alen);
+    void  drawPie(int left, int top, int width, int height, int a, int alen);
+    void  drawChord(int left, int top, int width, int height, int a, int alen);
+    void  drawPolyline(const QPolygon& pa);
+    void  drawPolygon(const QPolygon& pa, bool winding = false);
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false );
-    void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
+    void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false);
+    void  drawImage(int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented
-    void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
+    void  drawText(int x, int y, int w, int h, int flags, const QString &s, double rotation);
 
 private:
     //-----------------------------------------------------------------------------
     // Utilities and conversion Qt --> Wmf
 
     /** Convert QPointArray into qint16 position (result in mSt) */
-    void pointArray( const QPolygon& pa );
+    void pointArray(const QPolygon& pa);
 
     /** Convertion between windows color and QColor */
-    quint32 winColor( const QColor &color );
+    quint32 winColor(const QColor &color);
 
     /** Convert angle a and alen in coordinate (xStart,yStart) and (xEnd, yEnd) */
-    void angleToxy( int& xStart, int& yStart, int& xEnd, int& yEnd, int a, int alen );
+    void angleToxy(int& xStart, int& yStart, int& xEnd, int& yEnd, int a, int alen);
 
     /** Convert windows rasterOp in QT rasterOp */
-    quint16 qtRasterToWin16( QPainter::CompositionMode op ) const;
-    quint32 qtRasterToWin32( QPainter::CompositionMode op ) const;
+    quint16 qtRasterToWin16(QPainter::CompositionMode op) const;
+    quint32 qtRasterToWin32(QPainter::CompositionMode op) const;
 
 
 private:

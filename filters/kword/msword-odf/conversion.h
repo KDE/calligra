@@ -29,12 +29,13 @@
 #include <QColor>
 
 class QDomElement;
-namespace wvWare {
-    namespace Word97 {
-        class LSPD;
-        class BRC;
-    }
-    class FLD;
+namespace wvWare
+{
+namespace Word97 {
+class LSPD;
+class BRC;
+}
+class FLD;
 }
 
 // Static methods for simple MSWord->KWord conversions
@@ -42,65 +43,66 @@ namespace wvWare {
 
 namespace Conversion
 {
-    // UString -> QString conversion. Use .string() to get the QString.
-    // Always store the QString into a variable first, to avoid a deep copy.
-    inline QString string( const wvWare::UString& str ) {
-        // Let's hope there's no copying of the QConstString happening...
-        return QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
-    }
+// UString -> QString conversion. Use .string() to get the QString.
+// Always store the QString into a variable first, to avoid a deep copy.
+inline QString string(const wvWare::UString& str)
+{
+    // Let's hope there's no copying of the QConstString happening...
+    return QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
+}
 
-    //special version of string() that replaces spaces with _20_,
-    //since style names can't have spaces in them
-    QString styleNameString( const wvWare::UString& str );
+//special version of string() that replaces spaces with _20_,
+//since style names can't have spaces in them
+QString styleNameString(const wvWare::UString& str);
 
-    // Prepare text for inclusion in XML
-    void encodeText(QString &text);
+// Prepare text for inclusion in XML
+void encodeText(QString &text);
 
-    // Convert color code (ico) to QString with hex code
-    QString color(int number, int defaultcolor, bool defaultWhite = false);
+// Convert color code (ico) to QString with hex code
+QString color(int number, int defaultcolor, bool defaultWhite = false);
 
-    // Convert pattern style (ipat) to QBrush::BrushStyle
-    int fillPatternStyle( int ipat );
+// Convert pattern style (ipat) to QBrush::BrushStyle
+int fillPatternStyle(int ipat);
 
-    // Hackery for gray levels
-    int ditheringToGray( int ipat, bool* ok );
+// Hackery for gray levels
+int ditheringToGray(int ipat, bool* ok);
 
-    // Convert alignment code to string
-    //QString alignment( int jc );
+// Convert alignment code to string
+//QString alignment( int jc );
 
-    // Convert linespacing struct to string
-    QString lineSpacing( const wvWare::Word97::LSPD& lspd );
+// Convert linespacing struct to string
+QString lineSpacing(const wvWare::Word97::LSPD& lspd);
 
-    // Convert number format code to a value for the odt style:num-format attribute
-    QString numberFormatCode( int nfc );
+// Convert number format code to a value for the odt style:num-format attribute
+QString numberFormatCode(int nfc);
 
-    // Set the 3 color attributes in the XML element, from a color code (ico)
-    // prefix: if empty, the attribute names will be red/blue/green
-    // if not empty, they will be xRed/xBlue/xGreen
-    void setColorAttributes( QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false );
+// Set the 3 color attributes in the XML element, from a color code (ico)
+// prefix: if empty, the attribute names will be red/blue/green
+// if not empty, they will be xRed/xBlue/xGreen
+void setColorAttributes(QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false);
 
-    // Return an ODF attribute for border linewidths from a BRC structure
-    QString setDoubleBorderAttributes( const wvWare::Word97::BRC& brc );
+// Return an ODF attribute for border linewidths from a BRC structure
+QString setDoubleBorderAttributes(const wvWare::Word97::BRC& brc);
 
-    // Return an ODF attribute for border characteristics from a BRC structure
-    QString setBorderAttributes( const wvWare::Word97::BRC& brc );
+// Return an ODF attribute for border characteristics from a BRC structure
+QString setBorderAttributes(const wvWare::Word97::BRC& brc);
 
-    // Convert wv2's Header Type to a KWord frameInfo value
-    int headerTypeToFrameInfo( unsigned char type );
+// Convert wv2's Header Type to a KWord frameInfo value
+int headerTypeToFrameInfo(unsigned char type);
 
-    // Convert wv2's Header Type to a KWord frameset name
-    QString headerTypeToFramesetName( unsigned char type );
+// Convert wv2's Header Type to a KWord frameset name
+QString headerTypeToFramesetName(unsigned char type);
 
-    // Convert a mask of Header Types to the hType value for KWord
-    int headerMaskToHType( unsigned char mask );
+// Convert a mask of Header Types to the hType value for KWord
+int headerMaskToHType(unsigned char mask);
 
-    // Convert a mask of Header Types to the fType value for KWord
-    int headerMaskToFType( unsigned char mask );
+// Convert a mask of Header Types to the fType value for KWord
+int headerMaskToFType(unsigned char mask);
 
-    // Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
-    int fldToFieldType( const wvWare::FLD* fld );
+// Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
+int fldToFieldType(const wvWare::FLD* fld);
 
-    bool isHeader( unsigned char type );
+bool isHeader(unsigned char type);
 }
 
 #endif

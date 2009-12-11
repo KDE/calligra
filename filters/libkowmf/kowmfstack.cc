@@ -20,19 +20,23 @@
 #include "kowmfstack.h"
 #include "kowmfread.h"
 
-void KoWmfBrushHandle::apply( KoWmfRead *p ) {
-    p->setBrush( brush );
+void KoWmfBrushHandle::apply(KoWmfRead *p)
+{
+    p->setBrush(brush);
 }
 
-void KoWmfPenHandle::apply( KoWmfRead *p ) {
-    p->setPen( pen );
+void KoWmfPenHandle::apply(KoWmfRead *p)
+{
+    p->setPen(pen);
 }
 
-void KoWmfPatternBrushHandle::apply( KoWmfRead *p ) {
-    p->setBrush( brush );
+void KoWmfPatternBrushHandle::apply(KoWmfRead *p)
+{
+    p->setBrush(brush);
 }
 
-void KoWmfFontHandle::apply( KoWmfRead *p ) {
-    p->setFont( font );
+void KoWmfFontHandle::apply(KoWmfRead *p)
+{
+    p->setFont(font);
 }
 

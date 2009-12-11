@@ -19,7 +19,8 @@
 #ifndef SWINDER_SUBSTREAMHANDLER_H
 #define SWINDER_SUBSTREAMHANDLER_H
 
-namespace Swinder {
+namespace Swinder
+{
 
 class Record;
 
@@ -28,7 +29,7 @@ class SubStreamHandler
 public:
     virtual ~SubStreamHandler();
 
-    virtual void handleRecord( Record* record ) = 0;
+    virtual void handleRecord(Record* record) = 0;
 };
 
 } // namespace Swinder

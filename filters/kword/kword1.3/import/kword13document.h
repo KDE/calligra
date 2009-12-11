@@ -39,31 +39,31 @@ class KWord13Picture;
 class KWord13Document
 {
 public:
-    explicit KWord13Document( void );
-    ~KWord13Document( void );
-    
+    explicit KWord13Document(void);
+    ~KWord13Document(void);
+
 public:
-    void xmldump( QIODevice* io );
+    void xmldump(QIODevice* io);
     /// Get the "last printed" date/time
-    QDateTime lastPrintingDate( void ) const;
+    QDateTime lastPrintingDate(void) const;
     /// Get the "creation" date/time
-    QDateTime creationDate( void ) const;
+    QDateTime creationDate(void) const;
     /// Get the "modification" date/time
-    QDateTime modificationDate( void ) const;
+    QDateTime modificationDate(void) const;
     /**
      * Get a document info
      * \param name name of the document info
      */
-    QString getDocumentInfo( const QString& name ) const;
+    QString getDocumentInfo(const QString& name) const;
     /**
-     * Get a document property 
+     * Get a document property
      * \param name name of the property
      * \param oldName alternative name of the property (in old KWord syntax)
      */
-    QString getProperty( const QString& name, const QString& oldName = QString() ) const;
+    QString getProperty(const QString& name, const QString& oldName = QString()) const;
 protected:
     /// Get a document property \internal
-    QString getPropertyInternal( const QString& name ) const;
+    QString getPropertyInternal(const QString& name) const;
 public:
     QMap<QString, QString> m_documentProperties;
     QMap<QString, QString> m_documentInfo; ///< From documentinfo.xml

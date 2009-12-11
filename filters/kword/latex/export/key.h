@@ -39,83 +39,119 @@
  */
 class Key: public XmlParser
 {
-	public:
-		enum eKeyType { PIXMAP, PICTURE };
-	private:
-		/* MARKUP DATA */
-		QString _filename;
-		QString _name;
-		int _hour;
-		int _minute;
-		int _second;
-		int _msec;
-		int _day;
-		int _month;
-		int _year;
+public:
+    enum eKeyType { PIXMAP, PICTURE };
+private:
+    /* MARKUP DATA */
+    QString _filename;
+    QString _name;
+    int _hour;
+    int _minute;
+    int _second;
+    int _msec;
+    int _day;
+    int _month;
+    int _year;
 
-		eKeyType _type;
+    eKeyType _type;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Key.
-		 */
-		explicit Key(eKeyType);
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Key.
+     */
+    explicit Key(eKeyType);
 
-		/* 
-		 * Destructor
-		 *
-		 * The destructor must remove the list of little zones.
-		 */
-		virtual ~Key();
+    /*
+     * Destructor
+     *
+     * The destructor must remove the list of little zones.
+     */
+    virtual ~Key();
 
-		/**
-		 * Accessors
-		 */
+    /**
+     * Accessors
+     */
 
-		/**
-		 *  @return the paragraph's name.
-		 */
-		QString getName() const { return _name; }
-		QString getFilename() const { return _filename; }
-		int getHour() const { return _hour; }
-		int getMSec() const { return _msec; }
-		int getDay() const { return _day; }
-		int getMinute() const { return _minute; }
-		int getSecond() const { return _second; }
-		int getMonth() const { return _month; }
-		int getYear() const { return _year; }
+    /**
+     *  @return the paragraph's name.
+     */
+    QString getName() const {
+        return _name;
+    }
+    QString getFilename() const {
+        return _filename;
+    }
+    int getHour() const {
+        return _hour;
+    }
+    int getMSec() const {
+        return _msec;
+    }
+    int getDay() const {
+        return _day;
+    }
+    int getMinute() const {
+        return _minute;
+    }
+    int getSecond() const {
+        return _second;
+    }
+    int getMonth() const {
+        return _month;
+    }
+    int getYear() const {
+        return _year;
+    }
 
-		//bool notEmpty() const { return (_lines == 0) ? false : (_lines->count() != 0); }
-		/**
-		 * Modifiers
-		 */
-		void setName(QString name) { _name = name; }
-		void setFilename(QString filename) { _filename = filename; }
-		void setHour(int hour) { _hour = hour; }
-		void setMSec(int msec) { _msec = msec; }
-		void setDay(int day) { _day = day; }
-		void setMinute(int minute) { _minute = minute; }
-		void setSecond(int second) { _second = second; }
-		void setMonth(int month) { _month = month; }
-		void setYear(int year) { _year = year; }
+    //bool notEmpty() const { return (_lines == 0) ? false : (_lines->count() != 0); }
+    /**
+     * Modifiers
+     */
+    void setName(QString name) {
+        _name = name;
+    }
+    void setFilename(QString filename) {
+        _filename = filename;
+    }
+    void setHour(int hour) {
+        _hour = hour;
+    }
+    void setMSec(int msec) {
+        _msec = msec;
+    }
+    void setDay(int day) {
+        _day = day;
+    }
+    void setMinute(int minute) {
+        _minute = minute;
+    }
+    void setSecond(int second) {
+        _second = second;
+    }
+    void setMonth(int month) {
+        _month = month;
+    }
+    void setYear(int year) {
+        _year = year;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * Helpful functions
+     */
 
-		/**
-		 * Get information from a markup tree.
-		 */
-		void analyze         (const QDomNode);
+    /**
+     * Get information from a markup tree.
+     */
+    void analyze(const QDomNode);
 
-		/**
-		 * Write the paragraph in a file.
-		 */
-		void generate        (QTextStream&);
+    /**
+     * Write the paragraph in a file.
+     */
+    void generate(QTextStream&);
 
-	private:
+private:
 
 };
 

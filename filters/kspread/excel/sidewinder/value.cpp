@@ -28,7 +28,7 @@ namespace Swinder
 // helper class for Value
 class ValueData
 {
-  public:
+public:
 
     Value::Type type;
 
@@ -39,37 +39,43 @@ class ValueData
     UString s;
 
     // create empty data
-    ValueData(){
-      count = 0;
-      b = false;
-      i = 0;
-      f = 0.0;
-      s = UString::null;
-      type = Value::Empty;
-      ref();
-      }
+    ValueData() {
+        count = 0;
+        b = false;
+        i = 0;
+        f = 0.0;
+        s = UString::null;
+        type = Value::Empty;
+        ref();
+    }
 
     // destroys data
-    ~ValueData(){
-       if( this == s_null ) s_null = 0;
-       }
+    ~ValueData() {
+        if (this == s_null) s_null = 0;
+    }
 
-    void ref(){ count++; }
+    void ref() {
+        count++;
+    }
 
     // static empty data to be shared
-    static ValueData* null()
-      { if( !s_null) s_null = new ValueData; else s_null->ref(); return s_null; }
+    static ValueData* null() {
+        if (!s_null) s_null = new ValueData; else s_null->ref(); return s_null;
+    }
 
     // decrease reference count
-    void unref()
-      {  --count; if( !count ) delete this; }
+    void unref() {
+        --count; if (!count) delete this;
+    }
 
     // true if it's null (which is shared)
-    bool isNull(){ return this == s_null; }
+    bool isNull() {
+        return this == s_null;
+    }
 
     unsigned count; // reference count
 
-  private:
+private:
 
     static ValueData* s_null;
 
@@ -95,297 +101,294 @@ Value ks_error_value;
 // create an empty value
 Value::Value()
 {
-  d = ValueData::null();
+    d = ValueData::null();
 }
 
 // destructor
 Value::~Value()
 {
-  d->unref();
+    d->unref();
 }
 
 // create value of certain type
-Value::Value( Value::Type _type )
+Value::Value(Value::Type _type)
 {
-  d = new ValueData;
-  d->type = _type;
+    d = new ValueData;
+    d->type = _type;
 }
 
 // copy constructor
-Value::Value( const Value& _value )
+Value::Value(const Value& _value)
 {
-  d = ValueData::null();
-  assign( _value );
+    d = ValueData::null();
+    assign(_value);
 }
 
 // assignment operator
-Value& Value::operator=( const Value& _value )
+Value& Value::operator=(const Value & _value)
 {
-  return assign( _value );
+    return assign(_value);
 }
 
 // create a boolean value
-Value::Value( bool b )
+Value::Value(bool b)
 {
-  d = ValueData::null();
-  setValue( b );
+    d = ValueData::null();
+    setValue(b);
 }
 
 // create an integer value
-Value::Value( int i )
+Value::Value(int i)
 {
-  d = ValueData::null();
-  setValue ( i );
+    d = ValueData::null();
+    setValue(i);
 }
 
 // create a floating-point value
-Value::Value( double f )
+Value::Value(double f)
 {
-  d = ValueData::null();
-  setValue( f );
+    d = ValueData::null();
+    setValue(f);
 }
 
 // create a string value
-Value::Value( const UString& s )
+Value::Value(const UString& s)
 {
-  d = ValueData::null();
-  setValue( s );
+    d = ValueData::null();
+    setValue(s);
 }
 
 // assign value from other
 // shallow copy: only copy the data pointer
-Value& Value::assign( const Value& _value )
+Value& Value::assign(const Value& _value)
 {
-  d->unref();
-  d = _value.d;
-  d->ref();
-  return *this;
+    d->unref();
+    d = _value.d;
+    d->ref();
+    return *this;
 }
 
 // return type of the value
 Value::Type Value::type() const
 {
-  return d ? d->type : Empty;
+    return d ? d->type : Empty;
 }
 
 // set the value to boolean
-void Value::setValue( bool b )
+void Value::setValue(bool b)
 {
-  detach();
-  d->type = Boolean;
-  d->b = b;
+    detach();
+    d->type = Boolean;
+    d->b = b;
 }
 
 // get the value as boolean
 bool Value::asBoolean() const
 {
-  bool result = false;
+    bool result = false;
 
-  if( type() == Value::Boolean )
-    result = d->b;
+    if (type() == Value::Boolean)
+        result = d->b;
 
-  return result;
+    return result;
 }
 
 // set the value to integer
-void Value::setValue( int i )
+void Value::setValue(int i)
 {
-  detach();
-  d->type = Integer;
-  d->i = i;
+    detach();
+    d->type = Integer;
+    d->i = i;
 }
 
 // get the value as integer
 int Value::asInteger() const
 {
-  int result = 0;
+    int result = 0;
 
-  if( type() == Value::Integer )
-    result = d->i;
+    if (type() == Value::Integer)
+        result = d->i;
 
-  if( type() == Value::Float )
-    result = static_cast<int>(d->f);
+    if (type() == Value::Float)
+        result = static_cast<int>(d->f);
 
-  return result;
+    return result;
 }
 
-void Value::setValue( const Value& v )
+void Value::setValue(const Value& v)
 {
-  assign( v );
+    assign(v);
 }
 
 // set the value as floating-point
-void Value::setValue( double f )
+void Value::setValue(double f)
 {
-  detach();
-  d->type = Float;
-  d->f = f;
+    detach();
+    d->type = Float;
+    d->f = f;
 }
 
 // get the value as floating-point
 double Value::asFloat() const
 {
-  double result = 0.0;
+    double result = 0.0;
 
-  if( type() == Value::Float )
-    result = d->f;
+    if (type() == Value::Float)
+        result = d->f;
 
-  if( type() == Value::Integer )
-    result = static_cast<double>(d->i);
+    if (type() == Value::Integer)
+        result = static_cast<double>(d->i);
 
-  return result;
+    return result;
 }
 
 // set the value as string
-void Value::setValue( const UString& s )
+void Value::setValue(const UString& s)
 {
-  detach();
-  d->type = String;
-  d->s = s;
+    detach();
+    d->type = String;
+    d->s = s;
 }
 
 // get the value as string
 UString Value::asString() const
 {
-  UString result;
+    UString result;
 
-  if( type() == Value::String )
-    result = d->s;
+    if (type() == Value::String)
+        result = d->s;
 
-  return result;
+    return result;
 }
 
 // set error message
-void Value::setError( const UString& msg )
+void Value::setError(const UString& msg)
 {
-  detach();
-  d->type = Error;
-  d->s = msg;
+    detach();
+    d->type = Error;
+    d->s = msg;
 }
 
 // get error message
 UString Value::errorMessage() const
 {
-  UString result;
+    UString result;
 
-  if( type() == Value::Error )
-    result = d->s;
+    if (type() == Value::Error)
+        result = d->s;
 
-  return result;
+    return result;
 }
 
 // reference to empty value
 const Value& Value::empty()
 {
-  return ks_value_empty;
+    return ks_value_empty;
 }
 
 // reference to #DIV/0! error
 const Value& Value::errorDIV0()
 {
-  if( !ks_error_div0.isError() )
-    ks_error_div0.setError( UString("#DIV/0!") );
-  return ks_error_div0;
+    if (!ks_error_div0.isError())
+        ks_error_div0.setError(UString("#DIV/0!"));
+    return ks_error_div0;
 }
 
 // reference to #N/A error
 const Value& Value::errorNA()
 {
-  if( !ks_error_na.isError() )
-    ks_error_na.setError( UString("#N/A") );
-  return ks_error_na;
+    if (!ks_error_na.isError())
+        ks_error_na.setError(UString("#N/A"));
+    return ks_error_na;
 }
 
 // reference to #NAME? error
 const Value& Value::errorNAME()
 {
-  if( !ks_error_name.isError() )
-    ks_error_name.setError( UString("#NAME?") );
-  return ks_error_name;
+    if (!ks_error_name.isError())
+        ks_error_name.setError(UString("#NAME?"));
+    return ks_error_name;
 }
 
 // reference to #NUM! error
 const Value& Value::errorNUM()
 {
-  if( !ks_error_num.isError() )
-    ks_error_num.setError( UString("#NUM!") );
-  return ks_error_num;
+    if (!ks_error_num.isError())
+        ks_error_num.setError(UString("#NUM!"));
+    return ks_error_num;
 }
 
 // reference to #NULL! error
 const Value& Value::errorNULL()
 {
-  if( !ks_error_null.isError() )
-    ks_error_null.setError( UString("#NULL!") );
-  return ks_error_null;
+    if (!ks_error_null.isError())
+        ks_error_null.setError(UString("#NULL!"));
+    return ks_error_null;
 }
 
 // reference to #REF! error
 const Value& Value::errorREF()
 {
-  if( !ks_error_ref.isError() )
-    ks_error_ref.setError( UString("#REF!") );
-  return ks_error_ref;
+    if (!ks_error_ref.isError())
+        ks_error_ref.setError(UString("#REF!"));
+    return ks_error_ref;
 }
 
 // reference to #VALUE! error
 const Value& Value::errorVALUE()
 {
-  if( !ks_error_value.isError() )
-    ks_error_value.setError( UString("#VALUE!") );
-  return ks_error_value;
+    if (!ks_error_value.isError())
+        ks_error_value.setError(UString("#VALUE!"));
+    return ks_error_value;
 }
 
 // detach, create deep copy of ValueData
 void Value::detach()
 {
-  if( d->isNull() || ( d->count > 1 ) )
-  {
-    ValueData* n;
-    n = new ValueData;
+    if (d->isNull() || (d->count > 1)) {
+        ValueData* n;
+        n = new ValueData;
 
-    n->type = d->type;
-    switch( n->type )
-    {
-    case Empty: break;
-    case Boolean: n->b = d->b; break;
-    case Integer: n->i = d->i; break;
-    case Float:   n->f = d->f; break;
-    case String:  n->s = d->s; break;
-    case Error:   n->s = d->s; break;
-    default: break;
+        n->type = d->type;
+        switch (n->type) {
+        case Empty: break;
+        case Boolean: n->b = d->b; break;
+        case Integer: n->i = d->i; break;
+        case Float:   n->f = d->f; break;
+        case String:  n->s = d->s; break;
+        case Error:   n->s = d->s; break;
+        default: break;
+        }
+
+        d->unref();
+        d = n;
     }
-
-    d->unref();
-    d = n;
-  }
 }
 
-std::ostream& Swinder::operator<<( std::ostream& s, Swinder::Value value )
+std::ostream& Swinder::operator<<(std::ostream& s, Swinder::Value value)
 {
-  switch( value.type() )
-  {
+    switch (value.type()) {
     case Value::Empty:
-      s << "Empty";
-      break;
+        s << "Empty";
+        break;
     case Value::Boolean:
-      s << "Boolean: " << (value.asBoolean()?"True":"False");
-      break;
+        s << "Boolean: " << (value.asBoolean() ? "True" : "False");
+        break;
     case Value::Integer:
-      s << "Integer: " << value.asInteger();
-      break;
+        s << "Integer: " << value.asInteger();
+        break;
     case Value::Float:
-      s << "Float: " << value.asFloat();
-      break;
+        s << "Float: " << value.asFloat();
+        break;
     case Value::String:
-      s << "String: " << value.asString().ascii();
-      break;
+        s << "String: " << value.asString().ascii();
+        break;
     case Value::Error:
-      s << "Error: " << value.errorMessage().ascii();
-      break;
+        s << "Error: " << value.errorMessage().ascii();
+        break;
     default:
-      break;
-  };
+        break;
+    };
 
-  return s;
+    return s;
 }

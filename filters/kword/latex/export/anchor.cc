@@ -20,8 +20,8 @@
 **
 */
 
-#include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kDebug() stream */
+#include <stdlib.h>  /* for atoi function */
+#include <kdebug.h>  /* for kDebug() stream */
 #include "anchor.h"
 #include "element.h"
 #include "document.h"
@@ -34,37 +34,37 @@ Anchor::Anchor(Para* para): Format(para)
 
 Anchor::~Anchor()
 {
-	kDebug(30522) <<"Destruction of an anchor.";
+    kDebug(30522) << "Destruction of an anchor.";
 }
 
 void Anchor::analyze(const QDomNode node)
 {
-	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	Format::analyze(node);
+    /* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
+    Format::analyze(node);
 
-	/* Parameter analysis */
-	kDebug(30522) <<"ANALYZE AN ANCHOR";
-	
-	/* Child markup analysis */
-	_type = getAttr(getChild(node, "ANCHOR"), "type");
-	_instance = getAttr(getChild(node, "ANCHOR"), "instance");
-	kDebug(30522) <<"type =" << _type <<" instance =" << _instance;
-	
-	kDebug(30522) <<"END OF AN ANCHOR";
+    /* Parameter analysis */
+    kDebug(30522) << "ANALYZE AN ANCHOR";
+
+    /* Child markup analysis */
+    _type = getAttr(getChild(node, "ANCHOR"), "type");
+    _instance = getAttr(getChild(node, "ANCHOR"), "instance");
+    kDebug(30522) << "type =" << _type << " instance =" << _instance;
+
+    kDebug(30522) << "END OF AN ANCHOR";
 }
 
 void Anchor::generate(QTextStream &out)
 {
-	Element *elt = 0;
+    Element *elt = 0;
 
-	kDebug(30522) <<"  GENERATION ANCHOR";
-	/* search for the element in all the special element lists
-	 * and display it
-	 */
-	kDebug(30522) <<"anchor :" << _instance;
-	if((elt = getRoot()->searchAnchor(_instance)) != 0)
-		elt->generate(out);
-	kDebug(30522) <<"ANCHOR GENERATED";
+    kDebug(30522) << "  GENERATION ANCHOR";
+    /* search for the element in all the special element lists
+     * and display it
+     */
+    kDebug(30522) << "anchor :" << _instance;
+    if ((elt = getRoot()->searchAnchor(_instance)) != 0)
+        elt->generate(out);
+    kDebug(30522) << "ANCHOR GENERATED";
 }
 
 

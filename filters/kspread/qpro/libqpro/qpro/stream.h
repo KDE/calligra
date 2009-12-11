@@ -34,15 +34,15 @@ typedef qint32  QP_INT32;
 class QpStream : public QDataStream
 {
 public:
-   QpStream(unsigned char* pBuffer, unsigned int pLen);
-   ~QpStream();
+    QpStream(unsigned char* pBuffer, unsigned int pLen);
+    ~QpStream();
 
 protected:
-   QBuffer        cBuf;
-   QByteArray     cByteArray;
+    QBuffer        cBuf;
+    QByteArray     cByteArray;
 
-   unsigned char* cBuffer;
-   unsigned int   cLen;
+    unsigned char* cBuffer;
+    unsigned int   cLen;
 };
 
 #else
@@ -61,28 +61,28 @@ typedef double          QP_INT64 ;
 class QpIStream
 {
 public:
-   QpIStream(const char* pFileName);
-   QpIStream(unsigned char* pBuffer, unsigned int pLen);
-   ~QpIStream();
+    QpIStream(const char* pFileName);
+    QpIStream(unsigned char* pBuffer, unsigned int pLen);
+    ~QpIStream();
 
-   int          get();
+    int          get();
 
-   QpIStream&   read(char* pBuf, QP_INT16 pLen);
+    QpIStream&   read(char* pBuf, QP_INT16 pLen);
 
-       operator void* ();
-   int operator !();
- 
-   QpIStream& operator >> (QP_INT8  &pI8);
-   QpIStream& operator >> (QP_UINT8 &pI8);
-   QpIStream& operator >> (QP_INT16 &pI16);
-   QpIStream& operator >> (QP_INT32 &pI32);
-   QpIStream& operator >> (QP_INT64 &pI64);
-   QpIStream& operator >> (char*& pStr);
+    operator void* ();
+    int operator !();
+
+    QpIStream& operator >> (QP_INT8  &pI8);
+    QpIStream& operator >> (QP_UINT8 &pI8);
+    QpIStream& operator >> (QP_INT16 &pI16);
+    QpIStream& operator >> (QP_INT32 &pI32);
+    QpIStream& operator >> (QP_INT64 &pI64);
+    QpIStream& operator >> (char*& pStr);
 
 protected:
-   istream*      cIn;
-   long          cOffset;
-   streambuf*    cStreamBuf;
+    istream*      cIn;
+    long          cOffset;
+    streambuf*    cStreamBuf;
 };
 
 #endif

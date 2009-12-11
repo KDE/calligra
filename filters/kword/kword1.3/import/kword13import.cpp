@@ -37,80 +37,75 @@
 #include "kword13import.h"
 
 typedef KGenericFactory<KWord13Import> KWord13ImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkwordkword1dot3import, KWord13ImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkwordkword1dot3import, KWord13ImportFactory("kofficefilters"))
 
 
 KWord13Import::KWord13Import(QObject* parent, const QStringList &)
-     : KoFilter(parent)
+        : KoFilter(parent)
 {
 }
 
-bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
+bool KWord13Import::parseInfo(QIODevice* io, KWord13Document& kwordDocument)
 {
-    kDebug(30520) <<"Starting KWord13Import::parseInfo";
+    kDebug(30520) << "Starting KWord13Import::parseInfo";
     QDomDocument doc;
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    if ( ! doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
-    {
+    if (! doc.setContent(io, &errorMsg, &errorLine, &errorColumn)) {
         kError(30520) << "Parsing error in documentinfo.xml! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg;
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg;
         // ### TODO: user message
         return false;
     }
-    QDomElement docElement( doc.documentElement() );
+    QDomElement docElement(doc.documentElement());
     // In documentinfo.xml, the text data is in the grand-children of the document element
-    for ( QDomNode node = docElement.firstChild(); !node.isNull(); node = node.nextSibling() )
-    {
-        kDebug(30520) <<"Child" << node.nodeName();
-        if ( !node.isElement() )
+    for (QDomNode node = docElement.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        kDebug(30520) << "Child" << node.nodeName();
+        if (!node.isElement())
             continue; // Comment, PI...
-        const QString nodeName( node.nodeName() );
-        for ( QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling() )
-        {
-            kDebug(30520) <<"Grand-child" << node2.nodeName();
-            if ( !node2.isElement() )
+        const QString nodeName(node.nodeName());
+        for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
+            kDebug(30520) << "Grand-child" << node2.nodeName();
+            if (!node2.isElement())
                 continue;
-            const QString nodeName2 ( nodeName + ':' + node2.nodeName() );
-            QDomElement element( node2.toElement() );
+            const QString nodeName2(nodeName + ':' + node2.nodeName());
+            QDomElement element(node2.toElement());
             kwordDocument.m_documentInfo[ nodeName2 ] = element.text();
         }
     }
-    kDebug(30520) <<"Quitting KWord13Import::parseInfo";
+    kDebug(30520) << "Quitting KWord13Import::parseInfo";
     return true;
 }
 
-bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
+bool KWord13Import::parseRoot(QIODevice* io, KWord13Document& kwordDocument)
 {
-    KWord13Parser handler( &kwordDocument );
+    KWord13Parser handler(&kwordDocument);
 
     QXmlSimpleReader reader;
-    reader.setContentHandler( &handler );
-    reader.setErrorHandler( &handler );
+    reader.setContentHandler(&handler);
+    reader.setErrorHandler(&handler);
 
-    QXmlInputSource source( io ); // Read the file
+    QXmlInputSource source(io);   // Read the file
 
-    if (!reader.parse( source ))
-    {
+    if (!reader.parse(source)) {
         kWarning(30520) << "Parse Error";
         return false;
     }
     return true;
 }
 
-bool KWord13Import::postParse( KoStore* store, KWord13Document& doc )
+bool KWord13Import::postParse(KoStore* store, KWord13Document& doc)
 {
     KWord13PostParsing post;
-    return post.postParse( store, doc );
+    return post.postParse(store, doc);
 }
 
-KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus KWord13Import::convert(const QByteArray& from, const QByteArray& to)
 {
-    if ( to != "application/vnd.oasis.opendocument.text"
-        || from != "application/x-kword" )
-    {
+    if (to != "application/vnd.oasis.opendocument.text"
+            || from != "application/x-kword") {
         return KoFilter::NotImplemented;
     }
 
@@ -119,42 +114,37 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
 
     KWord13Document kwordDocument;
 
-    const QString fileName( m_chain->inputFile() );
-    if ( fileName.isEmpty() )
-    {
+    const QString fileName(m_chain->inputFile());
+    if (fileName.isEmpty()) {
         kError(30520) << "No input file name!";
         return KoFilter::StupidError;
     }
 
-    KoStore* store = KoStore::createStore( fileName, KoStore::Read );
-    if ( store && store->hasFile( "maindoc.xml" ) )
-    {
-        kDebug(30520) <<"Maindoc.xml found in KoStore!";
+    KoStore* store = KoStore::createStore(fileName, KoStore::Read);
+    if (store && store->hasFile("maindoc.xml")) {
+        kDebug(30520) << "Maindoc.xml found in KoStore!";
 
         // We do not really care about errors while reading/parsing documentinfo
-        store->open( "documentinfo.xml" );
-        KoStoreDevice ioInfo( store );
-        ioInfo.open( QIODevice::ReadOnly );
-        kDebug (30520) <<"Processing document info...";
-        if ( ! parseInfo ( &ioInfo, kwordDocument ) )
-        {
+        store->open("documentinfo.xml");
+        KoStoreDevice ioInfo(store);
+        ioInfo.open(QIODevice::ReadOnly);
+        kDebug(30520) << "Processing document info...";
+        if (! parseInfo(&ioInfo, kwordDocument)) {
             kWarning(30520) << "Parsing documentinfo.xml has failed. Ignoring!";
         }
         ioInfo.close();
         store->close();
 
         // ### TODO: error return values
-        if ( ! store->open( "maindoc.xml" ) )
-        {
+        if (! store->open("maindoc.xml")) {
             kError(30520) << "Opening root has failed";
             delete store;
             return KoFilter::StupidError;
         }
-        KoStoreDevice ioMain( store );
-        ioMain.open( QIODevice::ReadOnly );
-        kDebug (30520) <<"Processing root...";
-        if ( ! parseRoot ( &ioMain, kwordDocument ) )
-        {
+        KoStoreDevice ioMain(store);
+        ioMain.open(QIODevice::ReadOnly);
+        kDebug(30520) << "Processing root...";
+        if (! parseRoot(&ioMain, kwordDocument)) {
             kWarning(30520) << "Parsing maindoc.xml has failed! Aborting!";
             delete store;
             return KoFilter::StupidError;
@@ -162,45 +152,36 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         ioMain.close();
         store->close();
 
-        if ( store->open( "preview.png" ) )
-        {
+        if (store->open("preview.png")) {
 
-            kDebug(30520) <<"Preview found!";
-            KoStoreDevice ioPreview( store );
-            ioPreview.open( QIODevice::ReadOnly );
-            const QByteArray image ( ioPreview.readAll() );
-            if ( image.isNull() )
-            {
+            kDebug(30520) << "Preview found!";
+            KoStoreDevice ioPreview(store);
+            ioPreview.open(QIODevice::ReadOnly);
+            const QByteArray image(ioPreview.readAll());
+            if (image.isNull()) {
                 kWarning(30520) << "Loading of preview failed! Ignoring!";
-            }
-            else
-            {
+            } else {
                 kwordDocument.m_previewFile = new KTemporaryFile();
                 kwordDocument.m_previewFile->setSuffix(".png");
                 kwordDocument.m_previewFile->open(); // ### TODO check KTemporaryFile
                 // ### TODO: check if file is correctly written
-                kwordDocument.m_previewFile->write( image );
+                kwordDocument.m_previewFile->write(image);
                 kwordDocument.m_previewFile->close();
             }
             ioPreview.close();
             store->close();
+        } else {
+            kDebug(30520) << "No preview found!";
         }
-        else
-        {
-            kDebug(30520) <<"No preview found!";
-        }
-    }
-    else
-    {
+    } else {
         kWarning(30520) << "Opening store has failed. Trying raw XML file!";
         // Be sure to undefine store
         delete store;
         store = 0;
 
-        QFile file( fileName );
-        file.open( QIODevice::ReadOnly );
-        if ( ! parseRoot( &file, kwordDocument ) )
-        {
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly);
+        if (! parseRoot(&file, kwordDocument)) {
             kError(30520) << "Could not process document! Aborting!";
             file.close();
             return KoFilter::StupidError;
@@ -208,43 +189,39 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         file.close();
     }
 
-    if ( store && ! postParse( store, kwordDocument ) )
-    {
+    if (store && ! postParse(store, kwordDocument)) {
         kError(30520) << "Error during post-parsing! Aborting!";
         return  KoFilter::StupidError;
     }
 
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
-    kDebug(30520) <<"Deleting input store...";
+    kDebug(30520) << "Deleting input store...";
     delete store;
     store = 0;
-    kDebug(30520) <<"Input store deleted!";
+    kDebug(30520) << "Input store deleted!";
 
     KWord13OasisGenerator generator;
 
-    kDebug(30520) << __FILE__ <<":" << __LINE__;
+    kDebug(30520) << __FILE__ << ":" << __LINE__;
 
-    if ( ! generator.prepare( kwordDocument ) )
-    {
+    if (! generator.prepare(kwordDocument)) {
         kError(30520) << "Could not prepare the OASIS document! Aborting!";
         return KoFilter::StupidError;
     }
 
-    const QString filenameOut ( m_chain->outputFile() );
+    const QString filenameOut(m_chain->outputFile());
 
-    if ( filenameOut.isEmpty() )
-    {
+    if (filenameOut.isEmpty()) {
         kError(30520) << "Empty file name for saving as OASIS! Aborting!";
         return KoFilter::StupidError;
     }
 
-    if ( ! generator.generate( filenameOut, kwordDocument ) )
-    {
+    if (! generator.generate(filenameOut, kwordDocument)) {
         kError(30520) << "Could not save as OASIS! Aborting!";
         return KoFilter::StupidError;
     }
 
-    kDebug(30520) <<"Filter has finished!";
+    kDebug(30520) << "Filter has finished!";
 
     return KoFilter::OK;
 }

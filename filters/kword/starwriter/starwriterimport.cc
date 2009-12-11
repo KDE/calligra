@@ -38,15 +38,15 @@ K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("koffice
 // Get unsigned 24-bits integer at given offset
 static inline quint32 readU24(const QByteArray& array, quint32 p)
 {
-   quint8* ptr = (quint8*) array.data();
-   return (quint32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
+    quint8* ptr = (quint8*) array.data();
+    return (quint32)(ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
 // Get unsigned 16-bits integer at given offset
 static inline quint16 readU16(const QByteArray& array, quint32 p)
 {
-   quint8* ptr = (quint8*) array.data();
-   return (quint16) (ptr[p] + (ptr[p+1] << 8));
+    quint8* ptr = (quint8*) array.data();
+    return (quint16)(ptr[p] + (ptr[p+1] << 8));
 }
 
 StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
@@ -194,16 +194,17 @@ bool StarWriterImport::addBody()
     // 3. skipping useless sections
     char c = StarWriterDocument[p];
     while (c != 'N') {
-        len = readU24(StarWriterDocument, p+1);
+        len = readU24(StarWriterDocument, p + 1);
         p += len;
         c = StarWriterDocument[p];
-    };   // there is at least one empty paragraph!
+    }
+    ;   // there is at least one empty paragraph!
 
     // Select nodes and pass them to parseNodes()
-    len = readU24(StarWriterDocument, p+1);
+    len = readU24(StarWriterDocument, p + 1);
     QByteArray data(len);
-    for (quint32 k=0; k<len; k++)
-      data[k] = StarWriterDocument[p+k];
+    for (quint32 k = 0; k < len; k++)
+        data[k] = StarWriterDocument[p+k];
     bool retval = parseNodes(data);
 
     // add proper tags
@@ -225,8 +226,8 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
         else if (s[i] == '"') result += "&quot;";
         else if (s[i] == 0x27) result += "&apos;";
         else if (s[i] == 0x09) result += '\t';
-        // FIXME: more to add here
-        //        (manual breaks, soft-hyphens, non-breaking spaces, variables)
+    // FIXME: more to add here
+    //        (manual breaks, soft-hyphens, non-breaking spaces, variables)
         else result += QChar(s[i]);
 
     return result;
@@ -242,26 +243,26 @@ bool StarWriterImport::parseNodes(const QByteArray& n)
 
     while (p < n.size()) {
         char c = n[p];
-        len = readU24(n, p+1);
+        len = readU24(n, p + 1);
 
         s.resize(len);
         for (quint32 k = 0x00; k < len; k++)
             s[k] = n[p+k];
 
         switch (c) {
-            case 'T':
-                //if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF)) {
-                //    if (!parseGraphics(s)) return false;
-                //}
-                //else {
-                    if (!parseText(s)) return false;
-                //}
-                break;
-            case 'E':
-                if (!parseTable(s)) return false;
-                break;
-            default:
-                break;
+        case 'T':
+            //if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF)) {
+            //    if (!parseGraphics(s)) return false;
+            //}
+            //else {
+            if (!parseText(s)) return false;
+            //}
+            break;
+        case 'E':
+            if (!parseTable(s)) return false;
+            break;
+        default:
+            break;
         };
         p += len;
     };
@@ -337,85 +338,85 @@ bool StarWriterImport::parseText(const QByteArray& n)
 
 bool StarWriterImport::parseTable(const QByteArray& n)
 {
-/*
-    QByteArray s;
-    quint32 len, len2;
-    quint16 len3;
-    quint32 p, p2;
-    QString text;
-    QString tableCell, tableText, tableName;
-    quint8 row, column;
+    /*
+        QByteArray s;
+        quint32 len, len2;
+        quint16 len3;
+        quint32 p, p2;
+        QString text;
+        QString tableCell, tableText, tableName;
+        quint8 row, column;
 
-    // Set table name
-    tableName = QString("Table %1").arg(tablesNumber);
-    tablesNumber++;
+        // Set table name
+        tableName = QString("Table %1").arg(tablesNumber);
+        tablesNumber++;
 
-    // Skip useless sections and retrieve the right point
-    p = 0x13;
-    while (n[p] != 'L') {
-        len = readU24(n, p+1);
-        p += len;
-    }
-
-    row = 0;
-
-    // Read rows
-    while (n[p] == 'L') {
-        column = 0;
-
-        // Find the first 't'
-        while (n[p] != 't') p++;
-
-        // Read cells
-        while (n[p] == 't') {
-            // Get cell length
-            len2 = readU24(n, p+1);
-            p2 = p + len2;
-
-            // Find the 'T' section
-            while (n[p] != 'T') p++;
-
-            // Get cell text/value
-            len3 = readU16(n, p+0x09);
-            s.resize(len3);
-            for (quint16 k = 0x00; k < len3; k++)
-                s[k] = n[p+0x0B+k];
-            text = convertToKWordString(s);
-
-            // FIXME: check this stuff
-            QString frameName = QString("%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
-            tableText.append(QString(" <FRAMESET name=\"%1\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%2\" row=\"%3\" col=\"%4\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(frameName).arg(tableName).arg(row).arg(column));
-            tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" bleftpt=\"2.8\" brightpt=\"2.8\" btoppt=\"2.8\" bbottompt=\"2.8\" runaroundGap=\"2.8\" />\n");
-            tableText.append("  <PARAGRAPH>\n");
-            tableText.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
-            tableText.append("  </PARAGRAPH>\n");
-            tableText.append(" </FRAMESET>\n");
-
-            // Skip other sections or bytes
-            p = p2;
-
-            // Increase column pointers
-            column++;
+        // Skip useless sections and retrieve the right point
+        p = 0x13;
+        while (n[p] != 'L') {
+            len = readU24(n, p+1);
+            p += len;
         }
 
-        // Increase row pointer
-        row++;
-    }
+        row = 0;
 
-    // Add everything to tablesStuff
-    tablesStuff.append(tableText);
+        // Read rows
+        while (n[p] == 'L') {
+            column = 0;
 
-    // Add anchor to bodyStuff
-    bodyStuff.append("  <PARAGRAPH>\n");
-    bodyStuff.append("   <TEXT xml:space=\"preserve\">#</TEXT>\n");
-    bodyStuff.append("   <FORMATS>\n");
-    bodyStuff.append("    <FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
-    bodyStuff.append(QString("    <ANCHOR type=\"frameset\" instance=\"%1\" />\n").arg(tableName));
-    bodyStuff.append("    </FORMAT>\n");
-    bodyStuff.append("   </FORMATS>\n");
-    bodyStuff.append("  </PARAGRAPH>\n");
+            // Find the first 't'
+            while (n[p] != 't') p++;
 
-*/
+            // Read cells
+            while (n[p] == 't') {
+                // Get cell length
+                len2 = readU24(n, p+1);
+                p2 = p + len2;
+
+                // Find the 'T' section
+                while (n[p] != 'T') p++;
+
+                // Get cell text/value
+                len3 = readU16(n, p+0x09);
+                s.resize(len3);
+                for (quint16 k = 0x00; k < len3; k++)
+                    s[k] = n[p+0x0B+k];
+                text = convertToKWordString(s);
+
+                // FIXME: check this stuff
+                QString frameName = QString("%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
+                tableText.append(QString(" <FRAMESET name=\"%1\" frameType=\"1\" frameInfo=\"0\" removable=\"0\" visible=\"1\" grpMgr=\"%2\" row=\"%3\" col=\"%4\" rows=\"1\" cols=\"1\" protectSize=\"0\">\n").arg(frameName).arg(tableName).arg(row).arg(column));
+                tableText.append(" <FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\" runaroundSide=\"biggest\" autoCreateNewFrame=\"0\" bleftpt=\"2.8\" brightpt=\"2.8\" btoppt=\"2.8\" bbottompt=\"2.8\" runaroundGap=\"2.8\" />\n");
+                tableText.append("  <PARAGRAPH>\n");
+                tableText.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
+                tableText.append("  </PARAGRAPH>\n");
+                tableText.append(" </FRAMESET>\n");
+
+                // Skip other sections or bytes
+                p = p2;
+
+                // Increase column pointers
+                column++;
+            }
+
+            // Increase row pointer
+            row++;
+        }
+
+        // Add everything to tablesStuff
+        tablesStuff.append(tableText);
+
+        // Add anchor to bodyStuff
+        bodyStuff.append("  <PARAGRAPH>\n");
+        bodyStuff.append("   <TEXT xml:space=\"preserve\">#</TEXT>\n");
+        bodyStuff.append("   <FORMATS>\n");
+        bodyStuff.append("    <FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
+        bodyStuff.append(QString("    <ANCHOR type=\"frameset\" instance=\"%1\" />\n").arg(tableName));
+        bodyStuff.append("    </FORMAT>\n");
+        bodyStuff.append("   </FORMATS>\n");
+        bodyStuff.append("  </PARAGRAPH>\n");
+
+    */
     return true;
 }
 

@@ -56,7 +56,7 @@ protected:
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_v();
 
-    typedef KoFilter::ConversionStatus (XlsxXmlWorksheetReader::*ReadMethod) ();
+    typedef KoFilter::ConversionStatus(XlsxXmlWorksheetReader::*ReadMethod)();
     QStack<ReadMethod> m_calls;
 
     XlsxXmlWorksheetReaderContext* m_context;

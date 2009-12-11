@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -35,48 +35,48 @@ class Map;
 class ExportDialogUI : public QWidget, public Ui::ExportDialogUI
 {
 public:
-  ExportDialogUI( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    ExportDialogUI(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 
 class CSVExportDialog : public KDialog
 {
-  Q_OBJECT
- public:
-  CSVExportDialog(QWidget * parent);
-  ~CSVExportDialog();
+    Q_OBJECT
+public:
+    CSVExportDialog(QWidget * parent);
+    ~CSVExportDialog();
 
-  QChar   getDelimiter() const;
-  QChar   getTextQuote() const;
-  bool    exportSheet( QString const & sheetName ) const;
-  bool    printAlwaysSheetDelimiter() const;
-  QString getSheetDelimiter() const;  
-  bool    exportSelectionOnly() const;
+    QChar   getDelimiter() const;
+    QChar   getTextQuote() const;
+    bool    exportSheet(QString const & sheetName) const;
+    bool    printAlwaysSheetDelimiter() const;
+    QString getSheetDelimiter() const;
+    bool    exportSelectionOnly() const;
 
-  void  fillSheet( KSpread::Map * map );
-  QString getEndOfLine(void) const;
-  QTextCodec* getCodec(void) const;
+    void  fillSheet(KSpread::Map * map);
+    QString getEndOfLine(void) const;
+    QTextCodec* getCodec(void) const;
 
- private:
-  void loadSettings();
-  void saveSettings();
-  ExportDialogUI * m_dialog;
+private:
+    void loadSettings();
+    void saveSettings();
+    ExportDialogUI * m_dialog;
 
-  QValidator* m_delimiterValidator;
-  QString m_delimiter;
-  QChar   m_textquote;
+    QValidator* m_delimiterValidator;
+    QString m_delimiter;
+    QChar   m_textquote;
 
- private slots:
-  void slotOk();
-  void slotCancel();
+private slots:
+    void slotOk();
+    void slotCancel();
 
-  void returnPressed();
-  void delimiterClicked( int id );
-  void textChanged ( const QString & );
-  void textquoteSelected( const QString & mark );
-  void selectionOnlyChanged( bool );
+    void returnPressed();
+    void delimiterClicked(int id);
+    void textChanged(const QString &);
+    void textquoteSelected(const QString & mark);
+    void selectionOnlyChanged(bool);
 };
 
 #endif

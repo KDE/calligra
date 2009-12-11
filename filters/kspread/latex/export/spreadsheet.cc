@@ -19,7 +19,7 @@
 **
 */
 
-#include <stdlib.h>		/* for atoi function    */
+#include <stdlib.h>  /* for atoi function    */
 
 #include <kdebug.h>
 
@@ -41,7 +41,7 @@ Spreadsheet::Spreadsheet()
 /*******************************************/
 Spreadsheet::~Spreadsheet()
 {
-	kDebug(30522) <<"Corps Destructor";
+    kDebug(30522) << "Corps Destructor";
 }
 
 /*******************************************/
@@ -49,14 +49,14 @@ Spreadsheet::~Spreadsheet()
 /*******************************************/
 void Spreadsheet::analyze(const QDomNode node)
 {
-	kDebug(30522) << getChildName(node, 0);
-	analyze_attr(node);
-	//_paper.analyze(getChild(node, "paper"));
-	_map.analyze(getChild(node, "map"));
-	//_locale.analyze(getChild(node, "locale"));
-	//_areaname.analyze(getChild(node, "areaname"));
+    kDebug(30522) << getChildName(node, 0);
+    analyze_attr(node);
+    //_paper.analyze(getChild(node, "paper"));
+    _map.analyze(getChild(node, "map"));
+    //_locale.analyze(getChild(node, "locale"));
+    //_areaname.analyze(getChild(node, "areaname"));
 
-	kDebug(30522) <<"SPREADSHEET END";
+    kDebug(30522) << "SPREADSHEET END";
 }
 
 /*******************************************/
@@ -72,26 +72,25 @@ void Spreadsheet::analyze_attr(const QDomNode node)
 /*******************************************/
 void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 {
-	kDebug(30522) <<"DOC. GENERATION.";
+    kDebug(30522) << "DOC. GENERATION.";
 
-	if(!Config::instance()->isEmbeded())
-		generatePreamble(out);
-	kDebug(30522) <<"preamble :" << hasPreamble;
+    if (!Config::instance()->isEmbeded())
+        generatePreamble(out);
+    kDebug(30522) << "preamble :" << hasPreamble;
 
-	/* Body */
-	if(hasPreamble)
-	{
-		out << "\\begin{document}" << endl;
-		indent();
-	}
+    /* Body */
+    if (hasPreamble) {
+        out << "\\begin{document}" << endl;
+        indent();
+    }
 
-	_map.generate(out);
+    _map.generate(out);
 
-	if(hasPreamble)
-		out << "\\end{document}" << endl;
-	unindent();
-	if(getIndentation() != 0)
-			kError(30522) << "Error : indent != 0 at the end ! " << endl;
+    if (hasPreamble)
+        out << "\\end{document}" << endl;
+    unindent();
+    if (getIndentation() != 0)
+        kError(30522) << "Error : indent != 0 at the end ! " << endl;
 }
 
 /*******************************************/
@@ -99,39 +98,39 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 /*******************************************/
 void Spreadsheet::generatePreamble(QTextStream &out)
 {
-	FileHeader::instance()->generate(out);
-	/* For each header */
-	//if(getFileHeader()->hasHeader())
-	//{
-	//	kDebug(30522) <<"header :" << _headers.count();
+    FileHeader::instance()->generate(out);
+    /* For each header */
+    //if(getFileHeader()->hasHeader())
+    //{
+    // kDebug(30522) <<"header :" << _headers.count();
 
-		/* default : no rule */
-	//	out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
-	//	for(header = _headers.first(); header != 0; header = _headers.next())
-	//	{
-	//		generateTypeHeader(out, header);
-	//	}
-	//}
+    /* default : no rule */
+    // out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
+    // for(header = _headers.first(); header != 0; header = _headers.next())
+    // {
+    //  generateTypeHeader(out, header);
+    // }
+    //}
 
-	/* For each footer */
-	/*if(getFileHeader()->hasFooter())
-	{
-		kDebug(30522) <<"footer :" << _footers.count();
-*/
-		/* default : no rule */
-	/*	out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
-		for(footer = _footers.first(); footer != 0; footer = _footers.next())
-		{
-			generateTypeFooter(out, footer);
-		}
-	}*/
-	/* Specify what header/footer style to use */
-	/*if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
-		out << "\\pagestyle{fancy}" << endl;
-	else
-	{
-		out << "\\pagestyle{empty}" << endl;
-	}*/
+    /* For each footer */
+    /*if(getFileHeader()->hasFooter())
+    {
+     kDebug(30522) <<"footer :" << _footers.count();
+    */
+    /* default : no rule */
+    /* out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
+     for(footer = _footers.first(); footer != 0; footer = _footers.next())
+     {
+      generateTypeFooter(out, footer);
+     }
+    }*/
+    /* Specify what header/footer style to use */
+    /*if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
+     out << "\\pagestyle{fancy}" << endl;
+    else
+    {
+     out << "\\pagestyle{empty}" << endl;
+    }*/
 }
 
 /*******************************************/
@@ -139,45 +138,45 @@ void Spreadsheet::generatePreamble(QTextStream &out)
 /*******************************************/
 void Spreadsheet::generateTypeHeader(QTextStream &out)
 {
-	/*kDebug(30522) <<"generate header";
-	if((_fileHeader->getHeadType() == TH_ALL ||
-		_fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
-	{
-		out << "\\fancyhead[L]{}" << endl;
-		out << "\\fancyhead[C]{";
-		header->generate(out);
-		out << "}" << endl;
-		out << "\\fancyhead[R]{}" << endl;
-	}
+    /*kDebug(30522) <<"generate header";
+    if((_fileHeader->getHeadType() == TH_ALL ||
+     _fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
+    {
+     out << "\\fancyhead[L]{}" << endl;
+     out << "\\fancyhead[C]{";
+     header->generate(out);
+     out << "}" << endl;
+     out << "\\fancyhead[R]{}" << endl;
+    }
 
-	switch(header->getInfo())
-	{
-		case SI_NONE:
-		case SI_FIRST:
-			break;
-		case SI_ODD:
-			out << "\\fancyhead[RO]{}" << endl;
-			out << "\\fancyhead[CO]{";
-			header->generate(out);
-			out << "}" << endl;
-			out << "\\fancyhead[LO]{}" << endl;
-			break;
-		case SI_EVEN:
-			out << "\\fancyhead[RE]{}" << endl;
-			out << "\\fancyhead[CE]{";
-			header->generate(out);
-			out << "}" << endl;
-			out << "\\fancyhead[LE]{}" << endl;
-			break;
-	}
+    switch(header->getInfo())
+    {
+     case SI_NONE:
+     case SI_FIRST:
+      break;
+     case SI_ODD:
+      out << "\\fancyhead[RO]{}" << endl;
+      out << "\\fancyhead[CO]{";
+      header->generate(out);
+      out << "}" << endl;
+      out << "\\fancyhead[LO]{}" << endl;
+      break;
+     case SI_EVEN:
+      out << "\\fancyhead[RE]{}" << endl;
+      out << "\\fancyhead[CE]{";
+      header->generate(out);
+      out << "}" << endl;
+      out << "\\fancyhead[LE]{}" << endl;
+      break;
+    }
 
-	if(header->getInfo() == SI_FIRST)
-	{
-		out << "\\fancyhead{";
-		header->generate(out);
-		out << "}" << endl;
-		out << "\\thispagestyle{fancy}" << endl;
-	}*/
+    if(header->getInfo() == SI_FIRST)
+    {
+     out << "\\fancyhead{";
+     header->generate(out);
+     out << "}" << endl;
+     out << "\\thispagestyle{fancy}" << endl;
+    }*/
 }
 
 /*******************************************/
@@ -185,39 +184,39 @@ void Spreadsheet::generateTypeHeader(QTextStream &out)
 /*******************************************/
 void Spreadsheet::generateTypeFooter(QTextStream &out)
 {
-	/*if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
-	{
-		out << "\\fancyfoot[L]{}" << endl;
-		out << "\\fancyfoot[C]{";
-		footer->generate(out);
-		out << "}" << endl;
-		out << "\\fancyfoot[R]{}" << endl;
-	}
-	else if(_fileHeader->getFootType() == TH_EVODD)
-	{
-		switch(footer->getInfo())
-		{
-			case SI_NONE:
-			case SI_FIRST:
-				break;
-			case SI_ODD:
-				out << "\\fancyfoot[CO]{";
-				footer->generate(out);
-				out << "}";
-				break;
-			case SI_EVEN:
-				out << "\\fancyfoot[CE]{";
-				footer->generate(out);
-				out << "}";
-				break;
-		}
-	}
-	else if(_fileHeader->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
-	{
-		out << "\\fanycfoot{";
-		footer->generate(out);
-		out << "}" << endl;
-		out << "\\thispagestyle{fancy}" << endl;
-	}*/
+    /*if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
+    {
+     out << "\\fancyfoot[L]{}" << endl;
+     out << "\\fancyfoot[C]{";
+     footer->generate(out);
+     out << "}" << endl;
+     out << "\\fancyfoot[R]{}" << endl;
+    }
+    else if(_fileHeader->getFootType() == TH_EVODD)
+    {
+     switch(footer->getInfo())
+     {
+      case SI_NONE:
+      case SI_FIRST:
+       break;
+      case SI_ODD:
+       out << "\\fancyfoot[CO]{";
+       footer->generate(out);
+       out << "}";
+       break;
+      case SI_EVEN:
+       out << "\\fancyfoot[CE]{";
+       footer->generate(out);
+       out << "}";
+       break;
+     }
+    }
+    else if(_fileHeader->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
+    {
+     out << "\\fanycfoot{";
+     footer->generate(out);
+     out << "}" << endl;
+     out << "\\thispagestyle{fancy}" << endl;
+    }*/
 }
 

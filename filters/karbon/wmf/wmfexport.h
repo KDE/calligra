@@ -34,21 +34,21 @@ class WmfExport : public KoFilter
     Q_OBJECT
 
 public:
-    WmfExport( QObject* parent, const QStringList&);
+    WmfExport(QObject* parent, const QStringList&);
     virtual ~WmfExport();
 
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    void paintDocument( KarbonDocument& document );
-    void paintShape( KoShape * shape );
+    void paintDocument(KarbonDocument& document);
+    void paintShape(KoShape * shape);
 
-    QPen getPen( const KoShapeBorderModel *stroke );
+    QPen getPen(const KoShapeBorderModel *stroke);
 
     // coordinate transformation
-    // scale to wmf size 
-    int coordX( double left );
-    int coordY( double top );
+    // scale to wmf size
+    int coordX(double left);
+    int coordY(double top);
 
 private:
     KoWmfWrite *mWmf;

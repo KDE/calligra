@@ -30,13 +30,12 @@
 
 using namespace MSOOXML;
 
-class MsooXmlRelationships::Private {
+class MsooXmlRelationships::Private
+{
 public:
-    Private()
-    {
+    Private() {
     }
-    ~Private()
-    {
+    ~Private() {
     }
     KoFilter::ConversionStatus loadRels(const QString& path, const QString& file);
     MsooXmlImport* importer;
@@ -49,17 +48,17 @@ public:
 KoFilter::ConversionStatus MsooXmlRelationships::Private::loadRels(const QString& path, const QString& file)
 {
     kDebug() << (path + '/' + file) << "...";
-    loadedFiles.insert( path + '/' + file );
+    loadedFiles.insert(path + '/' + file);
     MsooXmlRelationshipsReaderContext context(path, file, rels);
     MsooXmlRelationshipsReader reader(writers);
 
-    const QString realPath( path + "/_rels/" + file + ".rels" );
+    const QString realPath(path + "/_rels/" + file + ".rels");
     return importer->loadAndParseDocument(
-        &reader, realPath, *errorMessage, &context);
+               &reader, realPath, *errorMessage, &context);
 }
 
 MsooXmlRelationships::MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage)
-    : d(new Private)
+        : d(new Private)
 {
     d->importer = &importer;
     d->writers = writers;
@@ -89,8 +88,8 @@ QString MsooXmlRelationships::link_target(const QString& id)
 
 QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
 {
-    const QString key( MsooXmlRelationshipsReader::relKey(path, file, id) );
-    const QString result( d->rels.value( key ) );
+    const QString key(MsooXmlRelationshipsReader::relKey(path, file, id));
+    const QString result(d->rels.value(key));
     if (!result.isEmpty())
         return result;
     if (d->loadedFiles.contains(path + '/' + file)) {
@@ -101,5 +100,5 @@ QString MsooXmlRelationships::target(const QString& path, const QString& file, c
         *d->errorMessage = i18n("Could not find relationships file \"%1\"", path + "/" + file);
         return QString();
     }
-    return d->rels.value( key );
+    return d->rels.value(key);
 }

@@ -27,21 +27,19 @@
 
 class KwordGenerator
 {
-	QList<Element*>* _root;
+    QList<Element*>* _root;
 
-	public:
-		KwordGenerator()
-		{
-		}
+public:
+    KwordGenerator() {
+    }
 
-		explicit KwordGenerator(QList<Element*>* root)
-		{
-			_root = root;
-		}
+    explicit KwordGenerator(QList<Element*>* root) {
+        _root = root;
+    }
 
-		~KwordGenerator() { }
+    ~KwordGenerator() { }
 
-		void convert(KoStore*);
+    void convert(KoStore*);
 
 };
 

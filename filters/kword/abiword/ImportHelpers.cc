@@ -26,7 +26,7 @@
 
 bool AbiPropsMap::setProperty(const QString& newName, const QString& newValue)
 {
-    replace(newName,AbiProps(newValue));
+    replace(newName, AbiProps(newValue));
     return true;
 }
 
@@ -36,71 +36,62 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
     if (strProps.isEmpty())
         return;
     // Split the properties (we do not want empty ones)
-    QStringList list=QStringList::split(';',strProps,false);
-    QString name,value;
+    QStringList list = QStringList::split(';', strProps, false);
+    QString name, value;
 
     QStringList::ConstIterator it;
-	QStringList::ConstIterator end(list.constEnd());
-    for (it=list.constBegin();it!=end;++it)
-    {
-        const int result=(*it).find(':');
-        if (result==-1)
-        {
-            name=(*it);
+    QStringList::ConstIterator end(list.constEnd());
+    for (it = list.constBegin();it != end;++it) {
+        const int result = (*it).find(':');
+        if (result == -1) {
+            name = (*it);
             value.clear();
             kWarning(30506) << "Property without value: " << name;
-        }
-        else
-        {
-            name=(*it).left(result);
-            value=(*it).mid(result+1);
+        } else {
+            name = (*it).left(result);
+            value = (*it).mid(result + 1);
         }
         // kDebug(30506) <<"========== (Property :" << name.trimmed()<<"=" << value.trimmed() <<":)";
         // Now set the property
-        setProperty(name.trimmed(),value.trimmed());
+        setProperty(name.trimmed(), value.trimmed());
     }
 }
 
-double ValueWithLengthUnit( const QString& _str, bool* atleast )
+double ValueWithLengthUnit(const QString& _str, bool* atleast)
 {
-    if ( atleast )
+    if (atleast)
         *atleast = false;
-    
+
     double result;
     // We search an unit (defined by a sequence of lower case characters), with possibly a + sign after it
     QRegExp unitExp("([a-z]+)\\s*(\\+?)");
-    const int pos=unitExp.search(_str);
-    if (pos==-1)
-    {
-        bool flag=false;
-        result=_str.toDouble(&flag);
+    const int pos = unitExp.search(_str);
+    if (pos == -1) {
+        bool flag = false;
+        result = _str.toDouble(&flag);
         if (!flag)
             kWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)";
-    }
-    else
-    {
-        const double rawValue=_str.left(pos).toDouble();
-        const QString strUnit ( unitExp.cap(1) );
-        if (strUnit=="cm")
-            result=CentimetresToPoints(rawValue);
-        else if (strUnit=="in")
-            result=InchesToPoints(rawValue);
-        else if (strUnit=="mm")
-            result=MillimetresToPoints(rawValue);
-        else if (strUnit=="pt")
-            result=rawValue;
-        else if(strUnit=="pi")
-            result=PicaToPoints(rawValue);
-        else
-        {
+    } else {
+        const double rawValue = _str.left(pos).toDouble();
+        const QString strUnit(unitExp.cap(1));
+        if (strUnit == "cm")
+            result = CentimetresToPoints(rawValue);
+        else if (strUnit == "in")
+            result = InchesToPoints(rawValue);
+        else if (strUnit == "mm")
+            result = MillimetresToPoints(rawValue);
+        else if (strUnit == "pt")
+            result = rawValue;
+        else if (strUnit == "pi")
+            result = PicaToPoints(rawValue);
+        else {
             kWarning(30506) << "Value " << _str << " has non-supported unit: "
-                << strUnit << " (ValueWithLengthUnit)" << endl;
-            result=rawValue;
+            << strUnit << " (ValueWithLengthUnit)" << endl;
+            result = rawValue;
         }
-        
-        if ( atleast )
-        {
-            *atleast = ( unitExp.cap(2) == "+" );
+
+        if (atleast) {
+            *atleast = (unitExp.cap(2) == "+");
         }
 
         // kDebug(30506) <<"Value:" << _str <<" Unit:" << strUnit <<" Result:" << result;

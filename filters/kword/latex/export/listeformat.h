@@ -28,67 +28,71 @@
 
 class FormatElt
 {
-	Format*    _format;
-	FormatElt* _next;
+    Format*    _format;
+    FormatElt* _next;
 
-	private:
+private:
 
-	protected:
-		
-	public:
-/**
- * @name Constructors
- */
+protected:
+
+public:
+    /**
+     * @name Constructors
+     */
 //@{
-	/// Default Constructor
-	FormatElt() { 
-		_format = 0;
-		_next   = 0;
-	}
+    /// Default Constructor
+    FormatElt() {
+        _format = 0;
+        _next   = 0;
+    }
 
-	/// Recopy Constructor
-	explicit FormatElt(FormatElt * eltt) {
-		_format = eltt->getFormat();
-		_next   = eltt->getNext();
-	}
+    /// Recopy Constructor
+    explicit FormatElt(FormatElt * eltt) {
+        _format = eltt->getFormat();
+        _next   = eltt->getNext();
+    }
 //@}
 
-/**
- * @name Destructors
- */
+    /**
+     * @name Destructors
+     */
 //@{
-	  /// Destructor
-	virtual ~FormatElt();
+    /// Destructor
+    virtual ~FormatElt();
 //@}
 
-/**
- * @name Accessors
- */
+    /**
+     * @name Accessors
+     */
 //@{
-	Format*    getFormat () const { return _format;  }
-	FormatElt* getNext () const { return _next;    }
+    Format*    getFormat() const {
+        return _format;
+    }
+    FormatElt* getNext() const {
+        return _next;
+    }
 //@}
 
-/**
- * @name Modifiors
- */
+    /**
+     * @name Modifiors
+     */
 //@{
-	void setFormat (Format*);
-	void remFormat ();
-	void setNext (FormatElt*);
-	void remNext ();
+    void setFormat(Format*);
+    void remFormat();
+    void setNext(FormatElt*);
+    void remNext();
 //@}
 
-/**
- * @name Operateurs
- */
+    /**
+     * @name Operateurs
+     */
 //@{
-	/// Operateur d'affectation
-	FormatElt& operator = (const FormatElt &);
- //@}
-/**
- * @name Fonctions de delegation
- */
+    /// Operateur d'affectation
+    FormatElt& operator = (const FormatElt &);
+//@}
+    /**
+     * @name Fonctions de delegation
+     */
 //@{
 
 //@}
@@ -96,116 +100,139 @@ class FormatElt
 
 class ListeFormat
 {
-	private:
-		FormatElt* _first;
-		FormatElt* _end;
-		int        _size;
+private:
+    FormatElt* _first;
+    FormatElt* _end;
+    int        _size;
 
-	protected:
-		
-	public:
-/**
- * @name Constructors
- */
+protected:
+
+public:
+    /**
+     * @name Constructors
+     */
 //@{
-	/// Default Constructor
-	ListeFormat();
+    /// Default Constructor
+    ListeFormat();
 //@}
 
-/**
- * @name Destructors
- */
+    /**
+     * @name Destructors
+     */
 //@{
-	virtual ~ListeFormat();
+    virtual ~ListeFormat();
 //@}
 
-/**
- * @name Accesseurs
- */
+    /**
+     * @name Accesseurs
+     */
 //@{
-	Format*    getFirst   () const { return _first->getFormat(); }
-	FormatElt* getFirstElt() const { return _first;              }
-	Format*    getLast    () const { return _end->getFormat();   }
-	bool       isVide     () const { return (_size == 0);        }
-	int        getSize    () const { return _size;               }
+    Format*    getFirst() const {
+        return _first->getFormat();
+    }
+    FormatElt* getFirstElt() const {
+        return _first;
+    }
+    Format*    getLast() const {
+        return _end->getFormat();
+    }
+    bool       isVide() const {
+        return (_size == 0);
+    }
+    int        getSize() const {
+        return _size;
+    }
 //@}
 
-/**
- * @name Modifieurs
- */
+    /**
+     * @name Modifieurs
+     */
 //@{
-	void addLast (Format*);
-	void addFirst(Format*);
-	void remLast ();
-	void remFirst();
-	
+    void addLast(Format*);
+    void addFirst(Format*);
+    void remLast();
+    void remFirst();
+
 //@}
 
-/**
- * @name Operators
- */
+    /**
+     * @name Operators
+     */
 //@{
- //@}
-/**
- * ^name Fonctions de delegation
- */
+//@}
+    /**
+     * ^name Fonctions de delegation
+     */
 //@{
-	void vider();         /* Empty the list */
+    void vider();         /* Empty the list */
 
 //@}
 };
 
-class FormatIter {
-	FormatElt *_courant;
-	
-	protected:
-	
-	public:
-/**
- * @name Constructors
- */
+class FormatIter
+{
+    FormatElt *_courant;
+
+protected:
+
+public:
+    /**
+     * @name Constructors
+     */
 //@{
-	/// Default Constructor
-	FormatIter()                 { _courant = 0;                }
-	/// Constructor
-	FormatIter(ListeFormat& l) { _courant = l.getFirstElt();  }
-	/// Constructor
-	explicit FormatIter(ListeFormat*);
+    /// Default Constructor
+    FormatIter()                 {
+        _courant = 0;
+    }
+    /// Constructor
+    FormatIter(ListeFormat& l) {
+        _courant = l.getFirstElt();
+    }
+    /// Constructor
+    explicit FormatIter(ListeFormat*);
 //@}
 
-/**
- * @name Destructors
- */
+    /**
+     * @name Destructors
+     */
 //@{
-	  /// Destructor
-	virtual ~FormatIter() { }
+    /// Destructor
+    virtual ~FormatIter() { }
 //@}
 
-/**
- * @name Accessors
- */
-//@{	
+    /**
+     * @name Accessors
+     */
+//@{
 
-	Format* getCourant()  const { return _courant->getFormat(); }
-	bool    isTerminate() const { return (_courant == 0);     }
+    Format* getCourant()  const {
+        return _courant->getFormat();
+    }
+    bool    isTerminate() const {
+        return (_courant == 0);
+    }
 //@}
 
-/**
- * @name Modifiors
- */
+    /**
+     * @name Modifiors
+     */
 //@{
-	void next   ()               { _courant = _courant->getNext(); }
-	void setList(ListeFormat* l) { _courant = l->getFirstElt();     }
+    void next()               {
+        _courant = _courant->getNext();
+    }
+    void setList(ListeFormat* l) {
+        _courant = l->getFirstElt();
+    }
 //@}
 
-/**
- * @name Operators
- */
+    /**
+     * @name Operators
+     */
 //@{
- //@}
-/**
- * @name Fonctions de delegation
- */
+//@}
+    /**
+     * @name Fonctions de delegation
+     */
 //@{
 
 //@}

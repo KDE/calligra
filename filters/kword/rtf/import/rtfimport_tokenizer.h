@@ -27,7 +27,7 @@ public:
      * Open tokenizer from file.
      * @param in the input file
      */
-    void open( QFile *in );
+    void open(QFile *in);
     /**
      * Reads the next token.
      */

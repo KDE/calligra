@@ -22,38 +22,38 @@
 #ifndef __XML2LATEXPARSER_H__
 #define __XML2LATEXPARSER_H__
 
-#include <QFile>			/* for QFile class */
-#include <QTextStream>	/* for QTextStream class */
-#include <QString>		/* for QString class */
+#include <QFile>   /* for QFile class */
+#include <QTextStream> /* for QTextStream class */
+#include <QString>  /* for QString class */
 #include "fileheader.h"
 #include "document.h"
 
 class Xml2LatexParser : public XmlParser
 {
-	QFile _file;
-	QTextStream _out;
-	/** Name of the latex file. */
-	//QString  _filename;
-	/** The KWord document exported. */
-	const KoStore* _in;
+    QFile _file;
+    QTextStream _out;
+    /** Name of the latex file. */
+    //QString  _filename;
+    /** The KWord document exported. */
+    const KoStore* _in;
 
-	/** KWord document header. */
-	//FileHeader  _header;
-	/** The root class which contains one kword document. */
-	Document    _document;
+    /** KWord document header. */
+    //FileHeader  _header;
+    /** The root class which contains one kword document. */
+    Document    _document;
 
-	public:
-		/**
-		 * @param in The document from kword.
-		 * @param fileOut Output latex filename.
-		 * @param config ???
-		 */
-		Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config);
+public:
+    /**
+     * @param in The document from kword.
+     * @param fileOut Output latex filename.
+     * @param config ???
+     */
+    Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config);
 
-		virtual ~Xml2LatexParser() {}
+    virtual ~Xml2LatexParser() {}
 
-		void analyze();
-		void generate();
+    void analyze();
+    void generate();
 
 };
 

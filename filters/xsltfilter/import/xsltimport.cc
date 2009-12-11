@@ -31,34 +31,34 @@
 
 
 typedef KGenericFactory<XSLTImport> XSLTImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libxsltimport, XSLTImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libxsltimport, XSLTImportFactory("kofficefilters"))
 
 
 XSLTImport::XSLTImport(QObject* parent, const QStringList&) :
-                     KoFilter(parent) {
+        KoFilter(parent)
+{
 }
 
-KoFilter::ConversionStatus XSLTImport::convert( const QByteArray&, const QByteArray& to )
+KoFilter::ConversionStatus XSLTImport::convert(const QByteArray&, const QByteArray& to)
 {
     QString config;
 
-    if(to != "application/x-kword" &&
-		to != "application/x-kontour" && to != "application/x-kspread" &&
-		to != "application/x-kivio" && to != "application/x-kchart" &&
-		to != "application/x-kpresenter")
+    if (to != "application/x-kword" &&
+            to != "application/x-kontour" && to != "application/x-kspread" &&
+            to != "application/x-kivio" && to != "application/x-kchart" &&
+            to != "application/x-kpresenter")
         return KoFilter::NotImplemented;
 
     // ## missing appIdentification
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
-    if(!out || !out->open("root"))
-    {
+    if (!out || !out->open("root")) {
         kError() << "Unable to create output file!" << endl;
         delete out;
         return KoFilter::FileNotFound;
     }
     /* input file Reading */
     out->close();
-    kDebug() <<"here";
+    kDebug() << "here";
     XSLTImportDia* dialog = new XSLTImportDia(out, to, 0, "Importation", true);
     dialog->setInputFile(m_chain->inputFile());
 

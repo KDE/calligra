@@ -32,69 +32,71 @@
   *@author Frank Dekervel
   */
 
-namespace DOM {
- 	class Node;
- 	class Element;
+namespace DOM
+{
+class Node;
+class Element;
 }
 
 struct HTMLReader_state {
-  QDomElement format;
-  QDomElement frameset;
-  QDomElement paragraph;
-  QDomElement layout;
-  bool in_pre_mode; // keep formatting as is.
+    QDomElement format;
+    QDomElement frameset;
+    QDomElement paragraph;
+    QDomElement layout;
+    bool in_pre_mode; // keep formatting as is.
 };
 
-class KHTMLReader: public QObject {
+class KHTMLReader: public QObject
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit KHTMLReader(KWDWriter *writer);
-	~KHTMLReader();
-	
-	bool filter(const KUrl& url);
+    explicit KHTMLReader(KWDWriter *writer);
+    ~KHTMLReader();
+
+    bool filter(const KUrl& url);
 
 private slots:
-	void completed();
+    void completed();
 
-private:	
-	void parseNode(DOM::Node n);
-        bool parseTag(DOM::Element e);
-        void parseStyle(DOM::Element e);
-	void parse_head(DOM::Element e);
-        HTMLReader_state *state();
-        HTMLReader_state *pushNewState();
-        void popState();
+private:
+    void parseNode(DOM::Node n);
+    bool parseTag(DOM::Element e);
+    void parseStyle(DOM::Element e);
+    void parse_head(DOM::Element e);
+    HTMLReader_state *state();
+    HTMLReader_state *pushNewState();
+    void popState();
 
 
-  /*      void stateSetFormat(QDomElement f);
-        void stateSetFrameset(QDomElement f);
-        void stateSetLayout(QDomElement l);
-        void stateSetParagraph(QDomElement p);*/
+    /*      void stateSetFormat(QDomElement f);
+          void stateSetFrameset(QDomElement f);
+          void stateSetLayout(QDomElement l);
+          void stateSetParagraph(QDomElement p);*/
 
-        QStack<HTMLReader_state*> _state;
-        KHTMLPart *_html;
-        KWDWriter *_writer;
+    QStack<HTMLReader_state*> _state;
+    KHTMLPart *_html;
+    KWDWriter *_writer;
 
-	void startNewLayout(bool startNewFormat=false);
-	void startNewLayout(bool startNewFormat, QDomElement layout);
-        void startNewParagraph(bool startnewformat=true, bool startnewlayout=true);
-        bool _it_worked;
+    void startNewLayout(bool startNewFormat = false);
+    void startNewLayout(bool startNewFormat, QDomElement layout);
+    void startNewParagraph(bool startnewformat = true, bool startnewlayout = true);
+    bool _it_worked;
 // -----------------------------------------------------
-        int _list_depth;
+    int _list_depth;
 // -----------------------------------------------------
-	bool parse_CommonAttributes(DOM::Element e);
-	bool parse_a(DOM::Element e);
-	bool parse_p(DOM::Element e);
-	bool parse_br(DOM::Element e);
-	bool parse_table(DOM::Element e);
-	bool parse_pre(DOM::Element e);
-	bool parse_font(DOM::Element e);
-	bool parse_ol(DOM::Element e);
-	bool parse_ul(DOM::Element e);
-	bool parse_hr(DOM::Element e);
-	bool parse_img(DOM::Element e);
+    bool parse_CommonAttributes(DOM::Element e);
+    bool parse_a(DOM::Element e);
+    bool parse_p(DOM::Element e);
+    bool parse_br(DOM::Element e);
+    bool parse_table(DOM::Element e);
+    bool parse_pre(DOM::Element e);
+    bool parse_font(DOM::Element e);
+    bool parse_ol(DOM::Element e);
+    bool parse_ul(DOM::Element e);
+    bool parse_hr(DOM::Element e);
+    bool parse_img(DOM::Element e);
 
 
 // -------------------------------------------------------

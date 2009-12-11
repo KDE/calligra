@@ -35,64 +35,64 @@ class VLayer;
 
 class XcfExport : public KoFilter, private VVisitor
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	XcfExport( QObject* parent, const QStringList& );
-	virtual ~XcfExport() {}
+    XcfExport(QObject* parent, const QStringList&);
+    virtual ~XcfExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-	virtual void visitVDocument( KarbonDocument& document );
-	virtual void visitVLayer( VLayer& layer );
+    virtual void visitVDocument(KarbonDocument& document);
+    virtual void visitVLayer(VLayer& layer);
 
 private:
-	/**
-	 * Writes a hierarchy.
-	 */
-	 void writeHierarchy();
+    /**
+     * Writes a hierarchy.
+     */
+    void writeHierarchy();
 
-	/**
-	 * Writes a level.
-	 */
-	 void writeLevel();
+    /**
+     * Writes a level.
+     */
+    void writeLevel();
 
-	/**
-	 * Calculates levels from layer and tile size.
-	 */
-	static int levels( int layerSize, int tileSize );
+    /**
+     * Calculates levels from layer and tile size.
+     */
+    static int levels(int layerSize, int tileSize);
 
 
-	/**
-	 * Tile size constants.
-	 */
-	static const unsigned m_tileWidth;
-	static const unsigned m_tileHeight;
+    /**
+     * Tile size constants.
+     */
+    static const unsigned m_tileWidth;
+    static const unsigned m_tileHeight;
 
-	/**
-	 * Output stream.
-	 */
-	QDataStream* m_stream;
+    /**
+     * Output stream.
+     */
+    QDataStream* m_stream;
 
-	/**
-	 * Image width.
-	 */
-	unsigned m_width;
+    /**
+     * Image width.
+     */
+    unsigned m_width;
 
-	/**
-	 * Image height.
-	 */
-	unsigned m_height;
+    /**
+     * Image height.
+     */
+    unsigned m_height;
 
-	/**
-	 * X-zoom factor.
-	 */
-	 double m_zoomX;
+    /**
+     * X-zoom factor.
+     */
+    double m_zoomX;
 
-	/**
-	 * Y-zoom factor.
-	 */
-	 double m_zoomY;
+    /**
+     * Y-zoom factor.
+     */
+    double m_zoomY;
 };
 
 #endif

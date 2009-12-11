@@ -26,7 +26,7 @@ Text::Text()
 
 Text::Text(const char* text)
 {
-	_text = text;
+    _text = text;
 }
 
 Text::~Text()
@@ -35,5 +35,5 @@ Text::~Text()
 
 void Text::print(int tab)
 {
-	cout << getText().latin1();
+    cout << getText().latin1();
 }

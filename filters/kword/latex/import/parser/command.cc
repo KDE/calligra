@@ -24,121 +24,115 @@
 
 Command::Command()
 {
-	setType(Element::LATEX_COMMAND);
-/*	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);*/
+    setType(Element::LATEX_COMMAND);
+    /* _options.setAutoDelete(true);
+     _params.setAutoDelete(true);*/
 }
 
 Command::Command(const char* name)
 {
-	setType(Element::LATEX_COMMAND);
-/*	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);*/
-	_name = name;
-	_name = _name.trimmed();
+    setType(Element::LATEX_COMMAND);
+    /* _options.setAutoDelete(true);
+     _params.setAutoDelete(true);*/
+    _name = name;
+    _name = _name.trimmed();
 }
 
 Command::Command(const char* name, QList<QList<Element*>* >* groups)
 {
-	setType(Element::LATEX_COMMAND);
-/*	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);*/
-	_name = name;
-	if(groups != NULL)
-		_elements = *groups;
-	_name = _name.trimmed();
+    setType(Element::LATEX_COMMAND);
+    /* _options.setAutoDelete(true);
+     _params.setAutoDelete(true);*/
+    _name = name;
+    if (groups != NULL)
+        _elements = *groups;
+    _name = _name.trimmed();
 }
 
 Command::Command(const char* name, QList<List<Param*>* >* params,
-		QList<QList<Element*>* >* groups)
+                 QList<QList<Element*>* >* groups)
 {
-	setType(Element::LATEX_COMMAND);
-/*	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);*/
-	_name = name;
-	if(groups != NULL)
-		_elements = *groups;
-	if(params != NULL)
-		_params = *params;
-	_name = _name.trimmed();
+    setType(Element::LATEX_COMMAND);
+    /* _options.setAutoDelete(true);
+     _params.setAutoDelete(true);*/
+    _name = name;
+    if (groups != NULL)
+        _elements = *groups;
+    if (params != NULL)
+        _params = *params;
+    _name = _name.trimmed();
 }
 
 Command::Command(const char* name, QList<QList<Param*>* >* params, QList<Param*>* options,
-		QList<QList<Element*>* >* groups)
+                 QList<QList<Element*>* >* groups)
 {
-	setType(Element::LATEX_COMMAND);
-/*	_options.setAutoDelete(true);
-	_params.setAutoDelete(true);*/
-	_name = name;
-	if(groups != NULL)
-		_elements = *groups;
-	if(params != NULL)
-		_params = *params;
-	if(options != NULL)
-		_options = *options;
-	_name = name;
-	_name = _name.trimmed();
+    setType(Element::LATEX_COMMAND);
+    /* _options.setAutoDelete(true);
+     _params.setAutoDelete(true);*/
+    _name = name;
+    if (groups != NULL)
+        _elements = *groups;
+    if (params != NULL)
+        _params = *params;
+    if (options != NULL)
+        _options = *options;
+    _name = name;
+    _name = _name.trimmed();
 }
 
 Command::~Command()
 {
 }
 
-void Command::addParam(const char* )
+void Command::addParam(const char*)
 {
-	/*QString test = QString(name);
-	QString key = test.left(test.find("="));
-	QString value = test.right(test.find("="));
-	addParam(key, value);*/
+    /*QString test = QString(name);
+    QString key = test.left(test.find("="));
+    QString value = test.right(test.find("="));
+    addParam(key, value);*/
 }
 
-void Command::addOption(const char* )
+void Command::addOption(const char*)
 {
-	/*QString test = QString(name);
-	QString key = test.left(test.find("="));
-	QString value = test.right(test.find("="));
-	addOption(key, value);*/
+    /*QString test = QString(name);
+    QString key = test.left(test.find("="));
+    QString value = test.right(test.find("="));
+    addOption(key, value);*/
 }
 
 void Command::print(int tab)
 {
-	cout << _name.latin1();
-	QList<Param*>* params;
-	for ( params = _params.first(); params; params = _params.next() )
-	{
-		cout << "[";
-		Param* param;
-		for ( param = params->first(); param; param = params->next() )
-		{
-			param->print(tab);
-			if(param != params->getLast())
-				cout << ", ";
-		}
-		cout << "]";
-	}
-	if(_options.count() > 0)
-	{
-		cout << " - [";
-		Param* param;
-		for ( param = _options.first(); param; param = _options.next() )
-		{
-			param->print(tab);
-			if(param != _options.getLast())
-			cout << ", ";
-		}
-		cout << "]";
-	}
-	
-	QList<Element*>* group;
-	for(group = _elements.first(); group; group = _elements.next() )
-	{
-		cout << " {";
-		Element* elt;
-		for ( elt = group->first(); elt; elt = group->next() )
-		{
-			elt->print(tab);
-		}
-		cout << "}";
-	}
-	cout << endl;
+    cout << _name.latin1();
+    QList<Param*>* params;
+    for (params = _params.first(); params; params = _params.next()) {
+        cout << "[";
+        Param* param;
+        for (param = params->first(); param; param = params->next()) {
+            param->print(tab);
+            if (param != params->getLast())
+                cout << ", ";
+        }
+        cout << "]";
+    }
+    if (_options.count() > 0) {
+        cout << " - [";
+        Param* param;
+        for (param = _options.first(); param; param = _options.next()) {
+            param->print(tab);
+            if (param != _options.getLast())
+                cout << ", ";
+        }
+        cout << "]";
+    }
+
+    QList<Element*>* group;
+    for (group = _elements.first(); group; group = _elements.next()) {
+        cout << " {";
+        Element* elt;
+        for (elt = group->first(); elt; elt = group->next()) {
+            elt->print(tab);
+        }
+        cout << "}";
+    }
+    cout << endl;
 }

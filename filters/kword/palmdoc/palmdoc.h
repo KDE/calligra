@@ -25,28 +25,34 @@
 
 class PalmDoc: public PalmDB
 {
-  public:
+public:
 
     PalmDoc();
     virtual ~PalmDoc();
 
-    virtual bool load( const char* filename );
-    virtual bool save( const char* filename );
+    virtual bool load(const char* filename);
+    virtual bool save(const char* filename);
 
-    int result(){ return m_result; }
+    int result() {
+        return m_result;
+    }
 
-    QString text(){ return m_text; }
-    void setText( const QString& t){ m_text = t; }
+    QString text() {
+        return m_text;
+    }
+    void setText(const QString& t) {
+        m_text = t;
+    }
 
     enum { OK, ReadError, InvalidFormat, WriteError };
 
-  private:
+private:
 
     int m_result;
     QString m_text;
 
-    QByteArray compress( const QString& text );
-    QString uncompress( const QByteArray& rec );
+    QByteArray compress(const QString& text);
+    QString uncompress(const QByteArray& rec);
 };
 
 #endif

@@ -20,7 +20,8 @@
 #include "utils.h"
 #include <string.h>
 
-namespace Swinder {
+namespace Swinder
+{
 
 UString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
 {
@@ -48,12 +49,12 @@ UString readTerminatedUnicodeChars(const void* p, unsigned* pSize)
     UString str;
     unsigned offset = 0;
     unsigned size = offset;
-    while( true ) {
-        unsigned uchar = readU16( data + offset );
+    while (true) {
+        unsigned uchar = readU16(data + offset);
         size += 2;
-        if( uchar == '\0' ) break;
+        if (uchar == '\0') break;
         offset += 2;
-        str.append( UString(UChar(uchar)) );
+        str.append(UString(UChar(uchar)));
     }
 
     if (pSize) *pSize = size;
@@ -92,34 +93,34 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
 
     // find out total bytes used in this string
     unsigned size = offset;
-    if (richText) size += (formatRuns*4);
+    if (richText) size += (formatRuns * 4);
     if (asianPhonetics) size += asianPhoneticsSize;
     if (size > maxSize) {
         if (*error) *error = true;
         return UString::null;
     }
     UString str;
-    for (unsigned k=0; k<length; k++) {
+    for (unsigned k = 0; k < length; k++) {
         unsigned uchar;
         if (unicode) {
-            if (size+2 > maxSize) {
+            if (size + 2 > maxSize) {
                 if (*error) *error = true;
                 return UString::null;
             }
-            uchar = readU16( data + offset );
+            uchar = readU16(data + offset);
             offset += 2;
             size += 2;
         } else {
-            if (size+1 > maxSize) {
+            if (size + 1 > maxSize) {
                 if (*error) *error = true;
                 return UString::null;
             }
             uchar = data[offset++];
             size++;
         }
-        str.append( UString(UChar(uchar)) );
-        if (offset == continuePosition && k < length-1) {
-            if (size+1 > maxSize) {
+        str.append(UString(UChar(uchar)));
+        if (offset == continuePosition && k < length - 1) {
+            if (size + 1 > maxSize) {
                 if (*error) *error = true;
                 return UString::null;
             }
@@ -132,7 +133,7 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (pSize) *pSize = size;
     return str;
 }
-    
+
 UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
@@ -147,30 +148,30 @@ UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
     bool unicode = flags & 0x01;
     bool asianPhonetics = flags & 0x04;
     bool richText = flags & 0x08;
-    
-    return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText );
+
+    return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText);
 }
 
-std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )
+std::ostream& operator<<(std::ostream& s, Swinder::UString ustring)
 {
     char* str = ustring.ascii();
     s << str;
     return s;
 }
 
-Value errorAsValue( int errorCode )
+Value errorAsValue(int errorCode)
 {
     Value result(Value::Error);
 
     switch (errorCode) {
-        case 0x00: result = Value::errorNULL();  break;
-        case 0x07: result = Value::errorDIV0();  break;
-        case 0x0f: result = Value::errorVALUE(); break;
-        case 0x17: result = Value::errorREF();   break;
-        case 0x1d: result = Value::errorNAME();  break;
-        case 0x24: result = Value::errorNUM();   break;
-        case 0x2A: result = Value::errorNA();    break;
-        default: break;
+    case 0x00: result = Value::errorNULL();  break;
+    case 0x07: result = Value::errorDIV0();  break;
+    case 0x0f: result = Value::errorVALUE(); break;
+    case 0x17: result = Value::errorREF();   break;
+    case 0x1d: result = Value::errorNAME();  break;
+    case 0x24: result = Value::errorNUM();   break;
+    case 0x2A: result = Value::errorNA();    break;
+    default: break;
     }
 
     return result;
@@ -182,37 +183,37 @@ const unsigned int Record::id = 0; // invalid of-course
 
 Record::Record()
 {
-  stream_position = 0;
-  ver = Excel97;
-  valid = true;
+    stream_position = 0;
+    ver = Excel97;
+    valid = true;
 }
 
 Record::~Record()
 {
 }
 
-Record* Record::create( unsigned type )
+Record* Record::create(unsigned type)
 {
     return RecordRegistry::createRecord(type);
 }
 
-void Record::setPosition( unsigned pos )
+void Record::setPosition(unsigned pos)
 {
-  stream_position = pos;
+    stream_position = pos;
 }
 
 unsigned Record::position() const
 {
-  return stream_position;
+    return stream_position;
 }
 
-void Record::setData( unsigned, const unsigned char*, const unsigned int* )
+void Record::setData(unsigned, const unsigned char*, const unsigned int*)
 {
 }
 
-void Record::dump( std::ostream& ) const
+void Record::dump(std::ostream&) const
 {
-  // nothing to dump
+    // nothing to dump
 }
 
 bool Record::isValid() const

@@ -37,10 +37,10 @@
 #include <poppler/GlobalParams.h>
 
 typedef KGenericFactory<PdfImport> PdfImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonpdfimport, PdfImportFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY(libkarbonpdfimport, PdfImportFactory("kofficefilters"))
 
-PdfImport::PdfImport( QObject*parent, const QStringList& )
-    : KoFilter(parent)
+PdfImport::PdfImport(QObject*parent, const QStringList&)
+        : KoFilter(parent)
 {
     kDebug(30516) << "PDF Import Filter";
 }
@@ -49,30 +49,27 @@ PdfImport::~PdfImport()
 {
 }
 
-KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(30516) << "to:" << to << " from:" << from;
 
-    if( from != "application/pdf" || to != "image/svg+xml" )
-    {
+    if (from != "application/pdf" || to != "image/svg+xml") {
         return KoFilter::NotImplemented;
     }
 
-      // read config file
+    // read config file
     globalParams = new GlobalParams();
-    if( ! globalParams )
+    if (! globalParams)
         return KoFilter::NotImplemented;
 
-    GooString * fname = new GooString( QFile::encodeName( m_chain->inputFile() ).data() );
-    PDFDoc * pdfDoc = new PDFDoc( fname, 0, 0, 0 );
-    if( ! pdfDoc )
-    {
+    GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
+    if (! pdfDoc) {
         delete globalParams;
         return KoFilter::StupidError;
     }
 
-    if( ! pdfDoc->isOk() )
-    {
+    if (! pdfDoc->isOk()) {
         delete globalParams;
         delete pdfDoc;
         return KoFilter::StupidError;
@@ -86,14 +83,13 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
 
     kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
 
-    SvgOutputDev * dev = new SvgOutputDev( m_chain->outputFile() );
-    if( dev->isOk() )
-    {
+    SvgOutputDev * dev = new SvgOutputDev(m_chain->outputFile());
+    if (dev->isOk()) {
         int rotate = 0;
         GBool useMediaBox = gTrue;
         GBool crop = gFalse;
         GBool printing = gFalse;
-        pdfDoc->displayPages( dev, firstPage, lastPage, hDPI, vDPI, rotate, useMediaBox, crop, printing );
+        pdfDoc->displayPages(dev, firstPage, lastPage, hDPI, vDPI, rotate, useMediaBox, crop, printing);
         dev->dumpContent();
     }
 

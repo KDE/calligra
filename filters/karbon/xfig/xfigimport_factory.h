@@ -29,7 +29,7 @@ DESCRIPTION
 class KComponentData;
 
 class XFIGImportFactory :
-    public KLibFactory
+            public KLibFactory
 {
     Q_OBJECT
 public:

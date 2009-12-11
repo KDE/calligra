@@ -37,49 +37,61 @@
  */
 class Pen: public XmlParser
 {
-	double _width;
-	int _style;
-	QColor _color;
+    double _width;
+    int _style;
+    QColor _color;
 
-	public:
-		/**
-		 * Constructors
-		 *
-		 * Creates a new instance of Format.
-		 */
-		Pen();
+public:
+    /**
+     * Constructors
+     *
+     * Creates a new instance of Format.
+     */
+    Pen();
 
-		/* 
-		 * Destructor
-		 *
-		 * Nothing to do
-		 */
-		virtual ~Pen() {}
+    /*
+     * Destructor
+     *
+     * Nothing to do
+     */
+    virtual ~Pen() {}
 
-		/**
-		 * getters
-		 */
-		double getWidth() const { return _width; }
-		int getStyle() const { return _style; }
-		QColor getColor() const { return _color; }
-		
-		/**
-		 * setters
-		 */
-		void setWidth(double w) { _width = w; }
-		void setStyle(int s) { _style = s; }
-		void setColor(QString color) { _color.setNamedColor(color); }
+    /**
+     * getters
+     */
+    double getWidth() const {
+        return _width;
+    }
+    int getStyle() const {
+        return _style;
+    }
+    QColor getColor() const {
+        return _color;
+    }
 
-		/**
-		 * Helpful functions
-		 */
+    /**
+     * setters
+     */
+    void setWidth(double w) {
+        _width = w;
+    }
+    void setStyle(int s) {
+        _style = s;
+    }
+    void setColor(QString color) {
+        _color.setNamedColor(color);
+    }
 
-		/**
-		 * Get information from a markup tree (only param of a format).
-		 */
-		virtual void analyze(const QDomNode);
+    /**
+     * Helpful functions
+     */
 
-		virtual void generate(QTextStream&);
+    /**
+     * Get information from a markup tree (only param of a format).
+     */
+    virtual void analyze(const QDomNode);
+
+    virtual void generate(QTextStream&);
 
 };
 

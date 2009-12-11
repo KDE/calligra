@@ -47,37 +47,36 @@
 #include <QList>
 #include <QBuffer>
 
-Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-        KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
-    : m_textHandler(0)
-    , m_tableHandler(0)
-    , m_replacementHandler(new KWordReplacementHandler)
-    , m_pictureHandler(new KWordPictureHandler(this, bodyWriter,
-                                               manifestWriter, store,
-                                               mainStyles))
-    , m_chain(chain)
-    , m_parser(wvWare::ParserFactory::createParser(fileName))
-    , m_headerFooters(0)
-    , m_bodyFound(false)
-    , m_evenOpen(false)
-    , m_oddOpen(false)
-    , m_footNoteNumber(0)
-    , m_endNoteNumber(0)
-    , m_bodyWriter(0)
-    , m_mainStyles(0)
-    , m_metaWriter(0)
-    , m_masterStyle(0)
-    , m_pageLayoutStyle(0)
-    , m_writer(0)
-    , m_hasHeader(false)
-    , m_hasFooter(false)
-    , m_buffer(0)
-    , m_bufferEven(0)
-    , m_headerCount(0)
+Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
+        : m_textHandler(0)
+        , m_tableHandler(0)
+        , m_replacementHandler(new KWordReplacementHandler)
+        , m_pictureHandler(new KWordPictureHandler(this, bodyWriter,
+                           manifestWriter, store,
+                           mainStyles))
+        , m_chain(chain)
+        , m_parser(wvWare::ParserFactory::createParser(fileName))
+        , m_headerFooters(0)
+        , m_bodyFound(false)
+        , m_evenOpen(false)
+        , m_oddOpen(false)
+        , m_footNoteNumber(0)
+        , m_endNoteNumber(0)
+        , m_bodyWriter(0)
+        , m_mainStyles(0)
+        , m_metaWriter(0)
+        , m_masterStyle(0)
+        , m_pageLayoutStyle(0)
+        , m_writer(0)
+        , m_hasHeader(false)
+        , m_hasFooter(false)
+        , m_buffer(0)
+        , m_bufferEven(0)
+        , m_headerCount(0)
 {
     kDebug(30513);
-    if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
-    {
+    if (m_parser) { // 0 in case of major error (e.g. unsupported format)
         m_bodyWriter = bodyWriter; //pointer for writing to the body
         m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
         m_metaWriter = metaWriter; //pointer for writing to meta.xml
@@ -89,24 +88,24 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
-                 this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
-        connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
-                 this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
-        connect( m_textHandler, SIGNAL( headersFound( const wvWare::FunctorBase*, int ) ),
-                 this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
+        connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
+                this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
+        connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
+                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
+        connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
+                this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
-                 this, SLOT( slotTableFound(KWord::Table*)));
-        connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ),
-                 this, SLOT( slotPictureFound( const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase* ) ) );
+                this, SLOT(slotTableFound(KWord::Table*)));
+        connect(m_textHandler, SIGNAL(pictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)),
+                this, SLOT(slotPictureFound(const QString&, const QString&, KoXmlWriter*, const wvWare::FunctorBase*)));
 
-        m_parser->setSubDocumentHandler( this );
-        m_parser->setTextHandler( m_textHandler );
-        m_parser->setTableHandler( m_tableHandler );
+        m_parser->setSubDocumentHandler(this);
+        m_parser->setTextHandler(m_textHandler);
+        m_parser->setTableHandler(m_tableHandler);
 #ifdef IMAGE_IMPORT
-        m_parser->setPictureHandler( m_pictureHandler );
+        m_parser->setPictureHandler(m_pictureHandler);
 #endif
-        m_parser->setInlineReplacementHandler( m_replacementHandler );
+        m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
         processAssociatedStrings();
@@ -135,9 +134,9 @@ void Document::finishDocument()
     kDebug(30513);
 
     //finish a header if we need to - this should only be necessary if there's an even header w/o an odd header
-    if(m_oddOpen) {
-        QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
-        m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+    if (m_oddOpen) {
+        QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
+        m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
         m_oddOpen = false;
         m_textHandler->m_headerWriter = 0;
         delete m_writer;
@@ -148,85 +147,85 @@ void Document::finishDocument()
         m_textHandler->m_writingHeader = false;
     }
 
-/*
-    const wvWare::Word97::DOP& dop = m_parser->dop();
-    //"tabStopValue", (double)dop.dxaTab / 20.0
-    //dop.nFtn = initial footnote number for document, starts at 1
-    //Conversion::numberFormatCode(dop.nfcFtnRef2)
-    //dop.nEdn = initial endnote number for document, starts at 1
-    //Conversion::numberFormatCode(dop.nfcEdnRef2)
+    /*
+        const wvWare::Word97::DOP& dop = m_parser->dop();
+        //"tabStopValue", (double)dop.dxaTab / 20.0
+        //dop.nFtn = initial footnote number for document, starts at 1
+        //Conversion::numberFormatCode(dop.nfcFtnRef2)
+        //dop.nEdn = initial endnote number for document, starts at 1
+        //Conversion::numberFormatCode(dop.nfcEdnRef2)
 
-    QDomElement elementDoc = m_mainDocument.documentElement();
+        QDomElement elementDoc = m_mainDocument.documentElement();
 
-    QDomElement element;
-    element = m_mainDocument.createElement("ATTRIBUTES");
-    element.setAttribute("processing",0); // WP
-    char allHeaders = ( wvWare::HeaderData::HeaderEven |
-                        wvWare::HeaderData::HeaderOdd |
-                        wvWare::HeaderData::HeaderFirst );
-    element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
-    char allFooters = ( wvWare::HeaderData::FooterEven |
-                        wvWare::HeaderData::FooterOdd |
-                        wvWare::HeaderData::FooterFirst );
-    element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
-    //element.setAttribute("unit","mm"); // How to figure out the unit to use?
+        QDomElement element;
+        element = m_mainDocument.createElement("ATTRIBUTES");
+        element.setAttribute("processing",0); // WP
+        char allHeaders = ( wvWare::HeaderData::HeaderEven |
+                            wvWare::HeaderData::HeaderOdd |
+                            wvWare::HeaderData::HeaderFirst );
+        element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
+        char allFooters = ( wvWare::HeaderData::FooterEven |
+                            wvWare::HeaderData::FooterOdd |
+                            wvWare::HeaderData::FooterFirst );
+        element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
+        //element.setAttribute("unit","mm"); // How to figure out the unit to use?
 
-    element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
-    elementDoc.appendChild(element);
+        element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
+        elementDoc.appendChild(element);
 
-    element = m_mainDocument.createElement("FOOTNOTESETTING");
-    elementDoc.appendChild(element);
-    element.setAttribute( "start", dop.nFtn ); // initial footnote number for document. Starts at 1.
-    element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcFtnRef2 ) );
+        element = m_mainDocument.createElement("FOOTNOTESETTING");
+        elementDoc.appendChild(element);
+        element.setAttribute( "start", dop.nFtn ); // initial footnote number for document. Starts at 1.
+        element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcFtnRef2 ) );
 
-    element = m_mainDocument.createElement("ENDNOTESETTING");
-    elementDoc.appendChild(element);
-    element.setAttribute( "start", dop.nEdn ); // initial endnote number for document. Starts at 1.
-    element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcEdnRef2 ) );
+        element = m_mainDocument.createElement("ENDNOTESETTING");
+        elementDoc.appendChild(element);
+        element.setAttribute( "start", dop.nEdn ); // initial endnote number for document. Starts at 1.
+        element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcEdnRef2 ) );
 
-    // Done at the end: write the type of headers/footers,
-    // depending on which kind of headers and footers we received.
-    QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
-    Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
-    if ( !paperElement.isNull() )
-    {
-        kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
-        paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
-        paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
-    }
+        // Done at the end: write the type of headers/footers,
+        // depending on which kind of headers and footers we received.
+        QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
+        Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
+        if ( !paperElement.isNull() )
+        {
+            kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
+            paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
+            paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
+        }
 
-    // Write out <PICTURES> tag
-    QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
-    elementDoc.appendChild( picturesElem );
-    for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
-        QDomElement keyElem = m_mainDocument.createElement("KEY");
-        picturesElem.appendChild( keyElem );
-        keyElem.setAttribute( "filename", *it );
-        keyElem.setAttribute( "name", *it );
-    }*/
+        // Write out <PICTURES> tag
+        QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
+        elementDoc.appendChild( picturesElem );
+        for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
+            QDomElement keyElem = m_mainDocument.createElement("KEY");
+            picturesElem.appendChild( keyElem );
+            keyElem.setAttribute( "filename", *it );
+            keyElem.setAttribute( "name", *it );
+        }*/
 }
 
 //write document info, author, fullname, title, about
 void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
-    wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
-    if(!strings.author().isNull()) {
+    wvWare::AssociatedStrings strings(m_parser->associatedStrings());
+    if (!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
         m_metaWriter->addTextSpan(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
-    if(!strings.title().isNull()) {
+    if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
         m_metaWriter->addTextSpan(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
-    if(!strings.subject().isNull()) {
+    if (!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
         m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
-    if(!strings.lastRevBy().isNull()) {
+    if (!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
         m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
@@ -239,24 +238,21 @@ void Document::processStyles()
 
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    kDebug(30513) <<"styles count=" << count;
+    kDebug(30513) << "styles count=" << count;
 
     //loop through each style
-    for ( unsigned int i = 0; i < count ; ++i )
-    {
+    for (unsigned int i = 0; i < count ; ++i) {
         //grab style
-        const wvWare::Style* style = styles.styleByIndex( i );
-        Q_ASSERT( style );
+        const wvWare::Style* style = styles.styleByIndex(i);
+        Q_ASSERT(style);
         QString displayName = Conversion::string(style->name());
         QString name = Conversion::styleNameString(style->name());
 
         // Process paragraph styles.
-        if ( style && style->type() == wvWare::Style::sgcPara )
-        {
-            const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
-            if ( followingStyle && followingStyle != style )
-            {
-                QString followingName = Conversion::string( followingStyle->name());
+        if (style && style->type() == wvWare::Style::sgcPara) {
+            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            if (followingStyle && followingStyle != style) {
+                QString followingName = Conversion::string(followingStyle->name());
             }
 
             //create this style & add formatting info to it
@@ -264,41 +260,39 @@ void Document::processStyles()
             KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
-            if ( parentStyle ) {
-                userStyle.addAttribute( "style:parent-style-name", 
-                        Conversion::styleNameString(parentStyle->name()));
+            const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
+            if (parentStyle) {
+                userStyle.addAttribute("style:parent-style-name",
+                                       Conversion::styleNameString(parentStyle->name()));
             }
 
             //set font name in style
-            QString fontName = m_textHandler->getFont( style->chp().ftcAscii );
-            if ( !fontName.isEmpty() )
-            {
-                m_mainStyles->addFontFace( KoFontFace(fontName) );
-                userStyle.addProperty( QString("style:font-name"), fontName, KoGenStyle::TextType );
+            QString fontName = m_textHandler->getFont(style->chp().ftcAscii);
+            if (!fontName.isEmpty()) {
+                m_mainStyles->addFontFace(KoFontFace(fontName));
+                userStyle.addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties( &style->chp(),
-                                                 &userStyle, parentStyle );
-            Paragraph::applyParagraphProperties( style->paragraphProperties(),
-                                                 &userStyle, parentStyle );
+            Paragraph::applyCharacterProperties(&style->chp(),
+                                                &userStyle, parentStyle);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(),
+                                                &userStyle, parentStyle);
 
             // Add style to main collection, using the name that it
             // had in the .doc.
             QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
             kDebug(30513) << "added style " << actualName;
-        }
-        else if (style && style->type()==wvWare::Style::sgcChp) {
+        } else if (style && style->type() == wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::StyleUser, "text");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* parentStyle = styles.styleByIndex( style->m_std->istdBase );
-            if ( parentStyle ) {
-                userStyle.addAttribute( "style:parent-style-name", 
-                        Conversion::styleNameString(parentStyle->name()));
+            const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
+            if (parentStyle) {
+                userStyle.addAttribute("style:parent-style-name",
+                                       Conversion::styleNameString(parentStyle->name()));
             }
 
             // even if we were able to process character properties in the chpx lists then we don't need to
@@ -315,7 +309,7 @@ void Document::processStyles()
 bool Document::parse()
 {
     kDebug(30513) ;
-    if ( m_parser )
+    if (m_parser)
         return m_parser->parse();
     return false;
 }
@@ -324,10 +318,10 @@ bool Document::parse()
 void Document::bodyStart()
 {
     kDebug(30513);
-    connect( m_textHandler, SIGNAL(sectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-             this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
-    connect( m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-             this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+            this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect(m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+            this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
     m_bodyFound = true;
 }
 
@@ -335,21 +329,20 @@ void Document::bodyStart()
 void Document::bodyEnd()
 {
     //close a list if we need to
-    if ( m_textHandler->listIsOpen() )
-    {
+    if (m_textHandler->listIsOpen()) {
         kDebug(30513) << "closing the final list in the document body";
         m_textHandler->closeList();
     }
 
     disconnect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-             this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> )));
+               this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
 }
 
 //sets paper size
 //sets format & orientation
 //sets column information
 //sets up borders
-void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
+void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
     //need to add master style to m_mainStyle
@@ -379,7 +372,7 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     m_pageLayoutStyle->addProperty("style:footnote-max-height", "0in");
     m_pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
     bool landscape = (sep->dmOrientPage == 2);
-    m_pageLayoutStyle->addProperty("style:print-orientation", landscape? "landscape" : "portrait");
+    m_pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
     m_pageLayoutStyle->addProperty("style:num-format", "1");
 
     // Set default left/right margins for the case when there is no
@@ -391,12 +384,12 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
     //TODO the margin between header/footer and text is just hard-coded for now
     QString header("<style:header-style>");
     header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
-    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop)/20.0));
+    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
     header.append("pt\"/>");
     header.append("</style:header-style>");
     QString footer("<style:footer-style>");
     footer.append("<style:header-footer-properties fo:margin-top=\"20pt\" fo:min-height=\"");
-    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom)/20.0));
+    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
     footer.append("pt\"/>");
     footer.append("</style:footer-style>");
     m_pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
@@ -409,22 +402,22 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
 
     // Page borders
     // FIXME: check if we can use fo:border instead of fo:border-left, etc.
-    if (sep->brcLeft.brcType != 0 ) {
-        m_pageLayoutStyle->addProperty( "fo:border-left",
-                                        Conversion::setBorderAttributes( sep->brcLeft ) );
-        
+    if (sep->brcLeft.brcType != 0) {
+        m_pageLayoutStyle->addProperty("fo:border-left",
+                                       Conversion::setBorderAttributes(sep->brcLeft));
+
     }
-    if (sep->brcTop.brcType != 0 ) {
-        m_pageLayoutStyle->addProperty( "fo:border-top",
-                                        Conversion::setBorderAttributes( sep->brcTop ) );
+    if (sep->brcTop.brcType != 0) {
+        m_pageLayoutStyle->addProperty("fo:border-top",
+                                       Conversion::setBorderAttributes(sep->brcTop));
     }
-    if (sep->brcRight.brcType != 0 ) {
-        m_pageLayoutStyle->addProperty( "fo:border-right",
-                                        Conversion::setBorderAttributes( sep->brcRight ) );
+    if (sep->brcRight.brcType != 0) {
+        m_pageLayoutStyle->addProperty("fo:border-right",
+                                       Conversion::setBorderAttributes(sep->brcRight));
     }
-    if (sep->brcBottom.brcType != 0 ) {
-        m_pageLayoutStyle->addProperty( "fo:border-bottom",
-                                        Conversion::setBorderAttributes( sep->brcBottom ) );
+    if (sep->brcBottom.brcType != 0) {
+        m_pageLayoutStyle->addProperty("fo:border-bottom",
+                                       Conversion::setBorderAttributes(sep->brcBottom));
     }
 
     // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
@@ -435,8 +428,7 @@ void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> se
         m_pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
         m_pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
         // FIXME: How should fo:margin be created in this case?
-    }
-    else {
+    } else {
         // page border offset is from the edge of the page
 
         // Add margin. This value is fetched directly from the BRC's.
@@ -464,18 +456,16 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513);
     //set the margins - depends on whether a header/footer is present
-    if(m_hasHeader) {
+    if (m_hasHeader) {
         kDebug(30513) << "setting margin for header...";
         m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
-    }
-    else if (sep->brcTop.brcType == 0 ) {
+    } else if (sep->brcTop.brcType == 0) {
         kDebug(30513) << "setting margin for no header and no top border...";
         m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
     }
-    if(m_hasFooter) {
+    if (m_hasFooter) {
         m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
-    }
-    else if (sep->brcBottom.brcType == 0 ) {
+    } else if (sep->brcBottom.brcType == 0) {
         m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
     }
     //insert the page-layout style into the collection,
@@ -493,16 +483,16 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 }
 
 //creates a frameset element with the header info
-void Document::headerStart( wvWare::HeaderData::Type type )
+void Document::headerStart(wvWare::HeaderData::Type type)
 {
-    kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")";
+    kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName(type) << ")";
     // Werner says the headers are always emitted in the order of the Type enum.
     //  Header Even, Header Odd, Footer Even, Footer Odd, Header First, Footer First
 
     m_headerCount++;
 
-    switch(type) {
-    //TODO fix first header
+    switch (type) {
+        //TODO fix first header
     case wvWare::HeaderData::HeaderFirst:
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
@@ -526,7 +516,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
         m_writer->startElement("style:header-left");
         m_hasHeader = true;
         break;
-    //TODO fix first footer
+        //TODO fix first footer
     case wvWare::HeaderData::FooterFirst:
         m_buffer = new QBuffer();
         m_buffer->open(QIODevice::WriteOnly);
@@ -563,8 +553,7 @@ void Document::headerEnd()
 {
     kDebug(30513) ;
     //close a list if we need to (you can have a list inside a header)
-    if ( m_textHandler->listIsOpen() )
-    {
+    if (m_textHandler->listIsOpen()) {
         kDebug(30513) << "closing a list in a header/footer";
         m_textHandler->closeList();
     }
@@ -573,23 +562,23 @@ void Document::headerEnd()
     //if it was a first header/footer, we wrote to this writer, but we won't do anything with it
     //handle the even flag first, because they'll both be open if the even one is, and
     //  we would want to handle the odd flag when we actually see the odd header/footer
-    if(m_evenOpen) {
+    if (m_evenOpen) {
         m_writer->endElement(); //style:header/footer-left
         m_evenOpen = false;
         delete m_writer;
         m_writer = 0;
         return;
     }
-    if(m_oddOpen) {
+    if (m_oddOpen) {
         m_writer->endElement();//style:header/footer
         //add the even header/footer stuff here
-        if(m_bufferEven) {
+        if (m_bufferEven) {
             m_writer->addCompleteElement(m_bufferEven);
             delete m_bufferEven;
             m_bufferEven = 0;
         }
-        QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
-        m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+        QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
+        m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
         m_oddOpen = false;
     }
     m_textHandler->m_headerWriter = 0;
@@ -615,106 +604,106 @@ void Document::footnoteEnd()
 //create frame for the table cell?
 //void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 //{
-    //kDebug(30513) ;
+//kDebug(30513) ;
 
-    //need to set up cell style here
-    //probably don't need generateFrameBorder()
-    //<table:table-cell> tag in content.xml
+//need to set up cell style here
+//probably don't need generateFrameBorder()
+//<table:table-cell> tag in content.xml
 
-    //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-    //framesetElement.setAttribute( "frameType", 1 /* text */ );
-    //framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
-    //framesetElement.setAttribute( "grpMgr", tableName );
-    //QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
-    //framesetElement.setAttribute( "name", name );
-    //framesetElement.setAttribute( "row", row );
-    //framesetElement.setAttribute( "col", column );
-    //framesetElement.setAttribute( "rows", rowSpan );
-    //framesetElement.setAttribute( "cols", columnSpan );
-    //m_framesetsElement.appendChild(framesetElement);
+//QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+//framesetElement.setAttribute( "frameType", 1 /* text */ );
+//framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
+//framesetElement.setAttribute( "grpMgr", tableName );
+//QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
+//framesetElement.setAttribute( "name", name );
+//framesetElement.setAttribute( "row", row );
+//framesetElement.setAttribute( "col", column );
+//framesetElement.setAttribute( "rows", rowSpan );
+//framesetElement.setAttribute( "cols", columnSpan );
+//m_framesetsElement.appendChild(framesetElement);
 
-    //QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
-    //generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
+//QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
+//generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
 
-    //m_textHandler->setFrameSetElement( framesetElement );
+//m_textHandler->setFrameSetElement( framesetElement );
 //}
 
 //add empty element to end it?
 //void Document::slotTableCellEnd()
 //{
-    //kDebug(30513) ;
-    //</table:table-cell>
+//kDebug(30513) ;
+//</table:table-cell>
 
-    //m_textHandler->setFrameSetElement( QDomElement() );
+//m_textHandler->setFrameSetElement( QDomElement() );
 //}
 
 //set up frame borders (like for a table cell?)
 //set the background fill
 //void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 //{
-    //kDebug(30513) ;
-    // Frame borders
+//kDebug(30513) ;
+// Frame borders
 
-    //figure out what this is supposed to do!
+//figure out what this is supposed to do!
 
-    /*if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
-        Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
-    if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
-        Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
-    if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
-        Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
-    if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-        Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );*/
+/*if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
+    Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
+    Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
+    Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
+    Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );*/
 
-    // Frame background brush (color and fill style)
-    //if ( shd.icoFore != 0 || shd.icoBack != 0 )
-    //{
-        // If ipat = 0 (solid fill), icoBack is the background color.
-        // But otherwise, icoFore is the one we need to set as bkColor
-        // (and icoBack is usually white; it's the other color of the pattern,
-        // something that we can't set in Qt apparently).
-        //int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-        //kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
+// Frame background brush (color and fill style)
+//if ( shd.icoFore != 0 || shd.icoBack != 0 )
+//{
+// If ipat = 0 (solid fill), icoBack is the background color.
+// But otherwise, icoFore is the one we need to set as bkColor
+// (and icoBack is usually white; it's the other color of the pattern,
+// something that we can't set in Qt apparently).
+//int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
+//kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
 
-        // Reverse-engineer MSWord's own hackery: it models various gray levels
-        // using dithering. But this looks crappy with Qt. So we go back to a QColor.
-        //bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
-        //if ( grayHack )
-        //{
-            //bool ok;
-            //int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
-            //if ( ok )
-            //{
-                //QColor color( 0, 0, grayLevel, QColor::Hsv );
-                //QString prefix = "bk";
-                //frameElementOut.setAttribute( "bkRed", color.red() );
-                //frameElementOut.setAttribute( "bkBlue", color.blue() );
-                //frameElementOut.setAttribute( "bkGreen", color.green() );
-            //}
-            //else grayHack = false;
-        //}
-        //if ( !grayHack )
-        //{
-            //Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
-            // Fill style
-            //int brushStyle = Conversion::fillPatternStyle( shd.ipat );
-            //frameElementOut.setAttribute( "bkStyle", brushStyle );
-        //}
-    //}
+// Reverse-engineer MSWord's own hackery: it models various gray levels
+// using dithering. But this looks crappy with Qt. So we go back to a QColor.
+//bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
+//if ( grayHack )
+//{
+//bool ok;
+//int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
+//if ( ok )
+//{
+//QColor color( 0, 0, grayLevel, QColor::Hsv );
+//QString prefix = "bk";
+//frameElementOut.setAttribute( "bkRed", color.red() );
+//frameElementOut.setAttribute( "bkBlue", color.blue() );
+//frameElementOut.setAttribute( "bkGreen", color.green() );
+//}
+//else grayHack = false;
+//}
+//if ( !grayHack )
+//{
+//Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
+// Fill style
+//int brushStyle = Conversion::fillPatternStyle( shd.ipat );
+//frameElementOut.setAttribute( "bkStyle", brushStyle );
+//}
+//}
 //}
 
 //create SubDocument object & add it to the queue
-void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
+void Document::slotSubDocFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
-    SubDocument subdoc( functor, data, QString(), QString() );
-    m_subdocQueue.push( subdoc );
+    SubDocument subdoc(functor, data, QString(), QString());
+    m_subdocQueue.push(subdoc);
 }
 
 void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
-    SubDocument subdoc( functor, data, QString(), QString() );
+    SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
 }
@@ -722,7 +711,7 @@ void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
 void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
-    SubDocument subdoc( functor, data, QString(), QString() );
+    SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
 }
@@ -734,9 +723,9 @@ void Document::slotTableFound(KWord::Table* table)
 
     m_tableHandler->tableStart(table);
     QList<KWord::Row> &rows = table->rows;
-    for( QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+    for (QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it) {
         KWord::TableRowFunctorPtr f = (*it).functorPtr;
-        Q_ASSERT( f );
+        Q_ASSERT(f);
         (*f)(); // call it
         delete f; // delete it
     }
@@ -750,21 +739,19 @@ void Document::slotTableFound(KWord::Table* table)
 }
 
 //add the picture SubDocument to the queue
-void Document::slotPictureFound( const QString& frameName, const QString& pictureName,
-                KoXmlWriter* writer, const wvWare::FunctorBase* pictureFunctor )
+void Document::slotPictureFound(const QString& frameName, const QString& pictureName,
+                                KoXmlWriter* writer, const wvWare::FunctorBase* pictureFunctor)
 {
     kDebug(30513) ;
     //if we have a temp writer, tell the pictureHandler
-    if ( writer )
-    {
-        m_pictureHandler->setBodyWriter( writer );
+    if (writer) {
+        m_pictureHandler->setBodyWriter(writer);
     }
-    SubDocument subdoc( pictureFunctor, 0, frameName, pictureName );
+    SubDocument subdoc(pictureFunctor, 0, frameName, pictureName);
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
-    if ( writer )
-    {
-        m_pictureHandler->setBodyWriter( m_bodyWriter );
+    if (writer) {
+        m_pictureHandler->setBodyWriter(m_bodyWriter);
     }
 }
 
@@ -774,12 +761,10 @@ void Document::processSubDocQueue()
     kDebug(30513) ;
     // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
     // This is why we need to repeat until there's nothing more do to (#79024)
-    while ( !m_subdocQueue.empty() || !m_tableQueue.empty() )
-    {
-        while ( !m_subdocQueue.empty() )
-        {
-            SubDocument subdoc( m_subdocQueue.front() );
-            Q_ASSERT( subdoc.functorPtr );
+    while (!m_subdocQueue.empty() || !m_tableQueue.empty()) {
+        while (!m_subdocQueue.empty()) {
+            SubDocument subdoc(m_subdocQueue.front());
+            Q_ASSERT(subdoc.functorPtr);
             (*subdoc.functorPtr)(); // call it
             delete subdoc.functorPtr; // delete it
             m_subdocQueue.pop();

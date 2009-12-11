@@ -41,14 +41,14 @@ class KoDataCenter;
 class SvgParser
 {
 public:
-    SvgParser( const QMap<QString, KoDataCenter*> & dataCenters );
+    SvgParser(const QMap<QString, KoDataCenter*> & dataCenters);
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes
-    QList<KoShape*> parseSvg( const KoXmlElement &e, QSizeF * fragmentSize = 0 );
+    QList<KoShape*> parseSvg(const KoXmlElement &e, QSizeF * fragmentSize = 0);
 
     /// Sets the initial xml base directory (the directory form where the file is read)
-    void setXmlBaseDir( const QString &baseDir );
+    void setXmlBaseDir(const QString &baseDir);
 
     /// Returns the list of all shapes of the svg document
     QList<KoShape*> shapes() const;
@@ -56,95 +56,95 @@ public:
 protected:
 
     typedef QMap<QString, QString> SvgStyles;
-    
+
     /// Parses a container element, returning a list of child shapes
-    QList<KoShape*> parseContainer( const KoXmlElement & );
+    QList<KoShape*> parseContainer(const KoXmlElement &);
     /// Parses a use element, returning a list of child shapes
-    QList<KoShape*> parseUse( const KoXmlElement & );
+    QList<KoShape*> parseUse(const KoXmlElement &);
     /// Parses definitions for later use
-    void parseDefs( const KoXmlElement & );
+    void parseDefs(const KoXmlElement &);
     /// Parses style attributes, applying them to the given shape
-    void parseStyle( KoShape *, const KoXmlElement & );
-    void parseStyle( KoShape *, const SvgStyles & );
+    void parseStyle(KoShape *, const KoXmlElement &);
+    void parseStyle(KoShape *, const SvgStyles &);
     /// Parses a single style attribute
-    void parsePA( SvgGraphicsContext *, const QString &, const QString & );
+    void parsePA(SvgGraphicsContext *, const QString &, const QString &);
     /// Parses a gradient element
-    bool parseGradient( const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement() );
+    bool parseGradient(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses gradient color stops
-    void parseColorStops( QGradient *, const KoXmlElement & );
+    void parseColorStops(QGradient *, const KoXmlElement &);
     /// Parses a pattern element
     //bool parsePattern( const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement() );
-    void parsePattern( SvgPatternHelper &pattern, const KoXmlElement & );
+    void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
     /// Parses a filter element
-    bool parseFilter( const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement() );
+    bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a length attribute
-    double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
+    double parseUnit(const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF());
     /// parses a length attribute in x-direction
-    double parseUnitX( const QString &unit );
+    double parseUnitX(const QString &unit);
     /// parses a length attribute in y-direction
-    double parseUnitY( const QString &unit );
+    double parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
-    double parseUnitXY( const QString &unit );
+    double parseUnitXY(const QString &unit);
     /// Parses a color attribute
-    bool parseColor( QColor &, const QString & );
+    bool parseColor(QColor &, const QString &);
     /// Parses a transform attribute
-    QMatrix parseTransform( const QString &transform );
+    QMatrix parseTransform(const QString &transform);
     /// Parse a image
-    bool parseImage( const QString &imageAttribute, QImage &image );
+    bool parseImage(const QString &imageAttribute, QImage &image);
     /// Parses a viewbox attribute into an rectangle
-    QRectF parseViewBox( QString viewbox );
+    QRectF parseViewBox(QString viewbox);
 
-    void setupTransform( const KoXmlElement & );
-    void updateContext( const KoXmlElement & );
+    void setupTransform(const KoXmlElement &);
+    void updateContext(const KoXmlElement &);
     void addGraphicContext();
     void removeGraphicContext();
 
     /// Creates an object from the given xml element
-    KoShape * createObject( const KoXmlElement &, const SvgStyles &style = SvgStyles() );
+    KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create text object from the given xml element
-    KoShape * createText( const KoXmlElement &, const QList<KoShape*> & shapes );
-    void parseFont( const KoXmlElement & );
+    KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
+    void parseFont(const KoXmlElement &);
     /// find object with given id in document
-    KoShape * findObject( const QString &name );
+    KoShape * findObject(const QString &name);
     /// find object with given id in given group
-    KoShape * findObject( const QString &name, KoShapeContainer * );
+    KoShape * findObject(const QString &name, KoShapeContainer *);
     /// find object with given if in given shape list
-    KoShape * findObject( const QString &name, const QList<KoShape*> & shapes );
+    KoShape * findObject(const QString &name, const QList<KoShape*> & shapes);
     /// find gradient with given id in gradient map
-    SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
+    SvgGradientHelper* findGradient(const QString &id, const QString &href = 0);
     /// find pattern with given id in pattern map
-    SvgPatternHelper* findPattern( const QString &id );
+    SvgPatternHelper* findPattern(const QString &id);
     /// find filter with given id in filter map
-    SvgFilterHelper* findFilter( const QString &id, const QString &href = 0 );
+    SvgFilterHelper* findFilter(const QString &id, const QString &href = 0);
 
     /// Creates style map from given xml element
-    SvgStyles collectStyles( const KoXmlElement & );
+    SvgStyles collectStyles(const KoXmlElement &);
     /// Merges two style elements, returning the merged style
-    SvgStyles mergeStyles( const SvgStyles &, const SvgStyles & );
+    SvgStyles mergeStyles(const SvgStyles &, const SvgStyles &);
 
     /// Adds list of shapes to the given group shape
-    void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );
+    void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
 
     /// Returns the next z-index
     int nextZIndex();
 
     /// Constructs an absolute file path from the fiven href and base directory
-    QString absoluteFilePath( const QString &href, const QString &xmlBase );
+    QString absoluteFilePath(const QString &href, const QString &xmlBase);
 
     /// creates a shape from the given shape id
-    KoShape * createShape( const QString &shapeID );
+    KoShape * createShape(const QString &shapeID);
 
     /// Builds the document from the given shapes list
-    void buildDocument( QList<KoShape*> shapes );
+    void buildDocument(QList<KoShape*> shapes);
 
     /// Applies the current fill style to the object
-    void applyFillStyle( KoShape * shape );
+    void applyFillStyle(KoShape * shape);
 
     /// Applies the current stroke style to the object
-    void applyStrokeStyle( KoShape * shape );
+    void applyStrokeStyle(KoShape * shape);
 
     /// Applies the current filter to the object
-    void applyFilter( KoShape * shape );
+    void applyFilter(KoShape * shape);
 
 private:
     QSizeF m_documentSize;

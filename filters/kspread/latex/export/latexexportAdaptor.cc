@@ -23,11 +23,11 @@
 #include "kspreadlatexexportdiaImpl.h"
 
 LatexExportAdaptor::LatexExportAdaptor(KSpreadLatexExportDiaImpl* dia)
-    : QDBusAbstractAdaptor(dia)
+        : QDBusAbstractAdaptor(dia)
 {
     // constructor
     setAutoRelaySignals(true);
-	_dialog = dia;
+    _dialog = dia;
 }
 
 LatexExportAdaptor::~LatexExportAdaptor()
@@ -36,7 +36,7 @@ LatexExportAdaptor::~LatexExportAdaptor()
 
 void LatexExportAdaptor::useDefaultConfig()
 {
-	_dialog->accept();
+    _dialog->accept();
 }
 
 #include "latexexportAdaptor.moc"

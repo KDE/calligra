@@ -31,7 +31,7 @@ class AsciiImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AsciiImportDialog(QWidget* parent=NULL);
+    AsciiImportDialog(QWidget* parent = NULL);
     ~AsciiImportDialog(void);
     QTextCodec* getCodec(void) const;
     int getParagraphStrategy(void) const;
