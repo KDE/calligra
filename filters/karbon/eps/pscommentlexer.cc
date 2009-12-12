@@ -97,7 +97,7 @@ bool PSCommentLexer::parse(QIODevice& fin)
     parsingStarted();
 
     while (!fin.atEnd()) {
-        c = fin.getch();
+        fin.getChar(&c);
 
 //    qDebug ("got %c", c);
 
@@ -119,7 +119,7 @@ bool PSCommentLexer::parse(QIODevice& fin)
             break;
         case Action_OutputUnget :
             doOutput();
-            fin.ungetch(c);
+            fin.ungetChar(c);
             break;
         case Action_Ignore :
             /* ignore */
@@ -137,7 +137,7 @@ bool PSCommentLexer::parse(QIODevice& fin)
             break;
         case Action_DecodeUnget :
             m_buffer.append(decode());
-            fin.ungetch(c);
+            fin.ungetChar(c);
             break;
         default :
             qWarning("unknown action: %d ", action);
@@ -155,7 +155,7 @@ void PSCommentLexer::doOutput()
     if (m_buffer.length() == 0) return;
     switch (m_curState) {
     case State_Comment :
-        gotComment(m_buffer.latin1());
+        gotComment(m_buffer.toLatin1());
         break;
     default:
         qWarning("unknown state: %d", m_curState);
@@ -299,7 +299,7 @@ int StringBuffer::toInt()
     return data.toInt();
 }
 
-const char *StringBuffer::latin1()
+const char *StringBuffer::toLatin1()
 {
     return m_buffer;
 }
@@ -317,7 +317,7 @@ BoundingBoxExtractor::~BoundingBoxExtractor() {}
 void BoundingBoxExtractor::gotComment(const char *value)
 {
     QString data(value);
-    if (data.find("%BoundingBox:") == -1) return;
+    if (data.indexOf("%BoundingBox:") == -1) return;
 
     getRectangle(value, m_llx, m_lly, m_urx, m_ury);
 }
@@ -330,7 +330,7 @@ bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, i
     if (s.contains("(atend)")) return false;
 
     QString s2 = s.remove("%BoundingBox:");
-    QStringList values = QStringList::split(" ", s2.latin1());
+    QStringList values = s2.split(' ');
     qDebug("size is %d", values.size());
 //  if (values.size() < 5) return false;
     llx = values[0].toInt();
