@@ -79,15 +79,15 @@ public:
     QPoint marker;
     QList<QColor> colors;
 
-bool multipleOccurences : 1;
-Mode selectionMode : 2;
+    bool multipleOccurences : 1;
+    Mode selectionMode : 2;
 
     int activeElement;
     int activeSubRegionStart;
     int activeSubRegionLength;
 
     KoCanvasBase* canvasBase;
-bool referenceMode : 1;
+    bool referenceMode : 1;
     Region formerSelection; // for reference selection mode
     Region oldSelection; // for select all
     Editor lastEditorWithFocus;
