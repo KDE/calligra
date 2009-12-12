@@ -191,7 +191,7 @@ XcfExport::visitVLayer(VLayer& layer)
     *m_stream << static_cast<quint32>(1);
 
     // Layer name.
-    *m_stream << layer.name().latin1();
+    *m_stream << layer.name().toLatin1();
 
     // Layer opacity.
     *m_stream << static_cast<quint32>(6);

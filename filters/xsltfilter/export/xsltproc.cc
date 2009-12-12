@@ -193,8 +193,8 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
 void XSLTProc::addParam(const QString& name, const QString& value)
 {
     if (nbparams < NB_PARAMETER_MAX) {
-        params[nbparams] = strdup(name.latin1());
-        params[nbparams + 1] = strdup(value.latin1());
+        params[nbparams] = strdup(name.toLatin1());
+        params[nbparams + 1] = strdup(value.toLatin1());
         fprintf(stderr, "%s => ", params[0]);
         fprintf(stderr, "%s\n", params[1]);
         nbparams = nbparams + 2;

@@ -35,5 +35,5 @@ Text::~Text()
 
 void Text::print(int tab)
 {
-    cout << getText().latin1();
+    cout << getText().toLatin1();
 }

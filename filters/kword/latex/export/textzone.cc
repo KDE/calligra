@@ -289,7 +289,7 @@ void TextZone::analyze(const QDomNode node)
     setText(getText().mid(getPos(), getLength()));
 
     kDebug(30522) << getText().length();
-    kDebug(30522) << getText().latin1();
+    kDebug(30522) << getText().toLatin1();
     kDebug(30522) << "END FORMAT";
 }
 
@@ -307,7 +307,7 @@ void TextZone::analyze()
     setText(getText().mid(getPos(), getLength()));
 
     kDebug(30522) << "String of" << getText().length() << " characters:";
-    kDebug(30522) << getText().latin1();
+    kDebug(30522) << getText().toLatin1();
     kDebug(30522) << "END ZONE";
 }
 

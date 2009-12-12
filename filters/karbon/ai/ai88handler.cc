@@ -344,7 +344,7 @@ void AI88Handler::_handleSetFillPattern()
     m_delegate->m_stack.pop();
 
     const QString &name = elem2.toString();
-    if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotFillPattern(name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+    if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotFillPattern(name.toLatin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 }
 
 void AI88Handler::_handleSetStrokePattern()
@@ -368,7 +368,7 @@ void AI88Handler::_handleSetStrokePattern()
     m_delegate->m_stack.pop();
 
     const QString &name = elem2.toString();
-    if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotStrokePattern(name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+    if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotStrokePattern(name.toLatin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 }
 
 
@@ -415,7 +415,7 @@ void AI88Handler::_handleSetFillColorCustom()
     double c = m_delegate->getDoubleValue();
     if (m_delegate->m_debug) qDebug("values 5 are %f %f %f %f", c, m, y, k);
 
-    AIColor color(c, m, y, k, name.latin1(), g);
+    AIColor color(c, m, y, k, name.toLatin1(), g);
 
     if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotFillColor(color);
 }
@@ -450,7 +450,7 @@ void AI88Handler::_handlePatternDefinition()
 
     const QString &name = elem2.toString();
 
-    if (m_delegate->m_documentHandler) m_delegate->m_documentHandler->gotPatternDefinition(name.latin1(), aval, llx, lly, urx, ury);
+    if (m_delegate->m_documentHandler) m_delegate->m_documentHandler->gotPatternDefinition(name.toLatin1(), aval, llx, lly, urx, ury);
 }
 
 void AI88Handler::_handleGsaveIncludeDocument()
@@ -470,7 +470,7 @@ void AI88Handler::_handleGsaveIncludeDocument()
 
     const QVector<AIElement> aval = elem.toElementArray();
 
-    if (m_delegate->m_embeddedHandler) m_delegate->m_embeddedHandler->gotGsaveIncludeDocument(aval, llx, lly, urx, ury, name.latin1());
+    if (m_delegate->m_embeddedHandler) m_delegate->m_embeddedHandler->gotGsaveIncludeDocument(aval, llx, lly, urx, ury, name.toLatin1());
 }
 
 void AI88Handler::_handleSetCurrentText()
@@ -496,7 +496,7 @@ void AI88Handler::_handleSetCurrentText()
 
     const QString &fontname = elem2.toReference();
 
-    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotFontDefinition(fontname.latin1(), size, leading, kerning, ta);
+    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotFontDefinition(fontname.toLatin1(), size, leading, kerning, ta);
 
 }
 
@@ -527,7 +527,7 @@ void AI88Handler::_handleTextOutput()
             m_delegate->m_stack.pop();
         }
     }
-    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotTextOutput(text.latin1(), length);
+    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotTextOutput(text.toLatin1(), length);
 }
 
 void AI88Handler::_handleFontEncoding()
@@ -548,7 +548,7 @@ void AI88Handler::_handleFontEncoding()
     m_delegate->m_stack.pop();
     const QVector<AIElement> encodingData = elem3.toElementArray();
 
-    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotFontEncoding(encodingData, oldFont.latin1(), newFont.latin1());
+    if (m_delegate->m_textHandler) m_delegate->m_textHandler->gotFontEncoding(encodingData, oldFont.toLatin1(), newFont.toLatin1());
 }
 
 void AI88Handler::_handleSetStrokeColorCustom()
@@ -561,7 +561,7 @@ void AI88Handler::_handleSetStrokeColorCustom()
     double c = m_delegate->getDoubleValue();
     if (m_delegate->m_debug) qDebug("values 6 are %f %f %f %f", c, m, y, k);
 
-    AIColor color(c, m, y, k, name.latin1(), g);
+    AIColor color(c, m, y, k, name.toLatin1(), g);
 
     if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotStrokeColor(color);
 }

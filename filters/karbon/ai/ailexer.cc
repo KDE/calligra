@@ -252,7 +252,7 @@ void AILexer::doOutput()
     if (m_buffer.length() == 0) return;
     switch (m_curState) {
     case State_Comment :
-        gotComment(m_buffer.latin1());
+        gotComment(m_buffer.toLatin1());
         break;
     case State_Integer :
         gotIntValue(m_buffer.toInt());
@@ -261,13 +261,13 @@ void AILexer::doOutput()
         gotDoubleValue(m_buffer.toFloat());
         break;
     case State_String :
-        gotStringValue(m_buffer.latin1());
+        gotStringValue(m_buffer.toLatin1());
         break;
     case State_Token :
-        gotToken(m_buffer.latin1());
+        gotToken(m_buffer.toLatin1());
         break;
     case State_Reference :
-        gotReference(m_buffer.latin1());
+        gotReference(m_buffer.toLatin1());
         break;
     case State_BlockStart :
         gotBlockStart();
@@ -424,7 +424,7 @@ void AILexer::doHandleByteArray()
 {
     // Special case - too short
     if (m_buffer.length() < MIN_HEXCHARS) {
-        gotToken(m_buffer.latin1());
+        gotToken(m_buffer.toLatin1());
         return;
     }
 
@@ -446,7 +446,7 @@ void AILexer::doHandleByteArray()
 
 uchar AILexer::getByte()
 {
-//  qDebug ("convert string to byte (%s)", m_buffer.latin1());
+//  qDebug ("convert string to byte (%s)", m_buffer.toLatin1());
 
     QStringList list = QStringList::split("#", m_buffer.toString());
     int radix = list[0].toShort();
@@ -530,7 +530,7 @@ int StringBuffer::toInt()
     return data.toInt();
 }
 
-const char *StringBuffer::latin1()
+const char *StringBuffer::toLatin1()
 {
     return m_buffer;
 }

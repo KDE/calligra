@@ -69,7 +69,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QByteArray& from, con
 
     // Read streams
     POLE::Storage storage;
-    storage.open(m_chain->inputFile().latin1());
+    storage.open(m_chain->inputFile().toLatin1());
 
     POLE::Stream* stream;
 

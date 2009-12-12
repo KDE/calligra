@@ -28,8 +28,8 @@
 Xml2LatexParser::Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config):
         XmlParser(config, in), _file(fileOut), _in(in)
 {
-    //kDebug(30522) << fileIn.latin1();
-    kDebug(30522) << fileOut.latin1();
+    //kDebug(30522) << fileIn.toLatin1();
+    kDebug(30522) << fileOut.toLatin1();
     _filename = fileOut;
     //setFileHeader(_fileHeader);
     setRoot(&_document);

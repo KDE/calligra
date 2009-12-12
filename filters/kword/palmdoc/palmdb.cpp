@@ -159,14 +159,14 @@ bool PalmDB::load(const char* filename)
 
     // debugging
 #ifdef PDB_DEBUG
-    qDebug("name: \"%s\"", m_name.latin1());
-    qDebug("type: \"%s\"", m_type.latin1());
-    qDebug("creator: \"%s\"", m_creator.latin1());
+    qDebug("name: \"%s\"", m_name.toLatin1());
+    qDebug("type: \"%s\"", m_type.toLatin1());
+    qDebug("creator: \"%s\"", m_creator.toLatin1());
     qDebug("attributes: 0x%04X", m_attributes);
     qDebug("version: 0x%04X", m_version);
-    qDebug("creation date: %s", m_creationDate.toString().latin1());
-    qDebug("modification date: %s", m_modificationDate.toString().latin1());
-    qDebug("last backup date: %s", m_lastBackupDate.toString().latin1());
+    qDebug("creation date: %s", m_creationDate.toString().toLatin1());
+    qDebug("modification date: %s", m_modificationDate.toString().toLatin1());
+    qDebug("last backup date: %s", m_lastBackupDate.toString().toLatin1());
     qDebug("number of records: %d", numrec);
     for (int r = 0; r < numrec; r++)
         qDebug("  rec %d at 0x%X size %d", r, recpos[r], recsize[r]);
@@ -213,7 +213,7 @@ bool PalmDB::save(const char* filename)
 
     // write database name
     setName(name());
-    const char *dbname = m_name.latin1();
+    const char *dbname = m_name.toLatin1();
     for (unsigned k = 0; k < 31; k++) {
         quint8 c = (k < m_name.length()) ? dbname[k] : 0;
         stream << c;
@@ -261,13 +261,13 @@ bool PalmDB::save(const char* filename)
 
     // write and encode database type
     quint8 dbt[4];
-    const char *dbtype = m_type.latin1();
+    const char *dbtype = m_type.toLatin1();
     for (int p = 0; p < 4; p++) dbt[p] = dbtype[p];
     stream << dbt[0] << dbt[1] << dbt[2] << dbt[3];
 
     // write and encode database creator
     quint8 dbc[4];
-    const char *dbcreator = m_creator.latin1();
+    const char *dbcreator = m_creator.toLatin1();
     for (int p = 0; p < 4; p++) dbc[p] = dbcreator[p];
     stream << dbc[0] << dbc[1] << dbc[2] << dbc[3];
 

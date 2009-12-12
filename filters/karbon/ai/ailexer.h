@@ -70,7 +70,7 @@ public:
     uint length();
     double toFloat();
     int toInt();
-    const char *latin1();
+    const char *toLatin1();
     QString mid(uint index, uint len = 0xffffffff) const;
 private:
     char *m_buffer;

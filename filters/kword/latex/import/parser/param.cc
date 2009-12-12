@@ -48,7 +48,7 @@ Param::~Param()
 
 void Param::print(int)
 {
-    cout << getKey().latin1();
+    cout << getKey().toLatin1();
     if (!getValue().isEmpty())
-        cout << "= " << getValue().latin1();
+        cout << "= " << getValue().toLatin1();
 }

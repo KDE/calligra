@@ -102,7 +102,7 @@ void Command::addOption(const char*)
 
 void Command::print(int tab)
 {
-    cout << _name.latin1();
+    cout << _name.toLatin1();
     QList<Param*>* params;
     for (params = _params.first(); params; params = _params.next()) {
         cout << "[";

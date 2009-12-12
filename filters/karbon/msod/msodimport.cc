@@ -174,7 +174,7 @@ void MSODImport::gotPicture(
 
             Q3CString destMime; // intentionally empty, the filter manager will do the rest
             KoFilter::ConversionStatus status;
-            partRef = embedPart(srcMime.latin1(), destMime, status, QString::number(key));
+            partRef = embedPart(srcMime.toLatin1(), destMime, status, QString::number(key));
 
             m_embeddeeData = 0;
             m_embeddeeLength = 0;

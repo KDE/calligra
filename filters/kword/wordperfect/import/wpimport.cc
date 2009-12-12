@@ -270,7 +270,7 @@ KoFilter::ConversionStatus WPImport::convert(const QByteArray& from, const QByte
         return KoFilter::NotImplemented;
 
     // open input file
-    const char* infile = m_chain->inputFile().latin1();
+    const char* infile = m_chain->inputFile().toLatin1();
     FILE *f = fopen(infile, "rb");
     if (!f)
         return KoFilter::StupidError;

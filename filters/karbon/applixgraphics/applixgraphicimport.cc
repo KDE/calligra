@@ -163,7 +163,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
 
     // Read Headline
     mystr = stream.readLine();
-    rueck = sscanf((const char *) mystr.latin1() ,
+    rueck = sscanf((const char *) mystr.toLatin1() ,
                    "*BEGIN GRAPHICS VERSION=%d/%d ENCODING=%dBIT",
                    &vers[0], &vers[1], &vers[2]);
     kDebug(s_area) << "Versions info:" << vers[0] << vers[1] << vers[2];
@@ -176,7 +176,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
         QMessageBox::critical(0L, "Applixgraphics header problem",
                               QString("The Applixgraphics header is not correct. "
                                       "May be it is not an applixgraphics file! <BR>"
-                                      "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
+                                      "This is the header line I did read:<BR><B>%1</B>").arg(mystr.toLatin1()),
                               "Comma");
 
         // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
@@ -222,7 +222,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                 //remove_pos = mystr.find (',');
                 //mystr.remove (0, remove_pos);
                 //agLine.offY= mystr.toInt();
-                rueck = sscanf((const char *) mystr.latin1(), "(%d,%d)",
+                rueck = sscanf((const char *) mystr.toLatin1(), "(%d,%d)",
                                &agLine.offX, &agLine.offY);
                 kDebug(s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY;
                 if (rueck <= 0) {
@@ -252,13 +252,13 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     } else if (mystr.startsWith(" THICKNESS ")) {
                         kDebug(s_area) << "  Thickness:";
                         mystr.remove(0, 11);
-                        sscanf((const char *) mystr.latin1(), "%d", &agLine.thickNess);
+                        sscanf((const char *) mystr.toLatin1(), "%d", &agLine.thickNess);
                         //
                         kDebug(s_area) <<  agLine.thickNess;
                     } else if (mystr.startsWith(" PNTS ")) {
                         kDebug(s_area) << "  Pnts    :";
                         mystr.remove(0, 6);
-                        sscanf((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
+                        sscanf((const char *) mystr.toLatin1(), "(%d,%d)(%d,%d)",
                                &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1]);
                         kDebug(s_area) << agLine.ptX[0] << "" << agLine.ptY[0] << ""  << agLine.ptX[1] << ""  << agLine.ptY[1];
                     }
@@ -306,7 +306,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                 kDebug(s_area) << " RPOL recognized:";
                 mystr.remove(0, 8);
 
-                rueck = sscanf((const char *) mystr.latin1(), "(%d,%d)",
+                rueck = sscanf((const char *) mystr.toLatin1(), "(%d,%d)",
                                &agLine.offX, &agLine.offY);
                 kDebug(s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY;
                 if (rueck <= 0) {
@@ -336,12 +336,12 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     } else if (mystr.startsWith(" NSIDES")) {
                         kDebug(s_area) << "  NSIDES:" ;
                         mystr.remove(0, 8);
-                        pos = sscanf((const char *) mystr.latin1(), "%d", &nsides);
+                        pos = sscanf((const char *) mystr.toLatin1(), "%d", &nsides);
                         kDebug(s_area) << nsides << "(" << pos << ")";
                     } else if (mystr.startsWith(" PNTS ")) {
                         kDebug(s_area) << "  Pnts    :";
                         mystr.remove(0, 6);
-                        sscanf((const char *) mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
+                        sscanf((const char *) mystr.toLatin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                                &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1],
                                &agLine.ptX[2], &agLine.ptY[2], &agLine.ptX[3], &agLine.ptY[3],
                                &agLine.ptX[4], &agLine.ptY[4]);
@@ -402,7 +402,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
 
                 kDebug(s_area) << " Habe Text erkannt (keine Werte uebernommen)";
                 mystr.remove(0, 7);
-                sscanf((const char *) mystr.latin1(), "(%d,%d)",
+                sscanf((const char *) mystr.toLatin1(), "(%d,%d)",
                        &agText.offX, &agText.offY);
                 kDebug(s_area) << "  Offset ->   x:" << agText.offX << "  y:" << agText.offY;
 
@@ -435,12 +435,12 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     } else if (mystr.startsWith(" THICKNESS ")) {
                         kDebug(s_area) << "  Thickness:";
                         mystr.remove(0, 11);
-                        sscanf((const char *) mystr.latin1(), "%d", &agText.thickNess);
+                        sscanf((const char *) mystr.toLatin1(), "%d", &agText.thickNess);
                         kDebug(s_area) <<  agText.thickNess;
                     } else if (mystr.startsWith(" PNTS ")) {
                         kDebug(s_area) << "  Pnts    :";
                         mystr.remove(0, 6);
-                        sscanf((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
+                        sscanf((const char *) mystr.toLatin1(), "(%d,%d)(%d,%d)",
                                &agText.ptX[0], &agText.ptY[0], &agText.ptX[1], &agText.ptY[1]);
                         kDebug(s_area) << agText.ptX[0] << "" << agText.ptY[0] << "" << agText.ptX[1] << "" << agText.ptY[1];
                     }
@@ -475,8 +475,8 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
 
                 kDebug(s_area) << " Habe Rectangle erkannt";
                 mystr.remove(0, 8);
-                rueck = sscanf((const char *)mystr.latin1(), "(%d,%d)",    &agRect.offX, &agRect.offY);
-                if (rueck < 1) kDebug(s_area) << "Fehler im String <" << mystr.latin1() << ">";
+                rueck = sscanf((const char *)mystr.toLatin1(), "(%d,%d)",    &agRect.offX, &agRect.offY);
+                if (rueck < 1) kDebug(s_area) << "Fehler im String <" << mystr.toLatin1() << ">";
                 kDebug(s_area) << "  Offset ->   x:" << agRect.offX << "  y:" << agRect.offY;
 
 
@@ -503,7 +503,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" BACKFILL ")) {
                         kDebug(s_area) << ("  Backfill:");
                         mystr.remove(0, 12);
-                        sscanf((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
+                        sscanf((const char *)mystr.toLatin1(), "<%d %d %d %d %d %d %d>",
                                &agRect.bf[0], &agRect.bf[1], &agRect.bf[2],
                                &agRect.bf[3], &agRect.bf[4], &agRect.bf[5],
                                &agRect.bf[6]);
@@ -517,7 +517,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" LINEFILL ")) {
                         kDebug(s_area) << "  Linefill:";
                         mystr.remove(0, 12);
-                        sscanf((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
+                        sscanf((const char *)mystr.toLatin1(), "<%d %d %d %d %d %d %d>",
                                &agRect.lf[0], &agRect.lf[1], &agRect.lf[2],
                                &agRect.lf[3], &agRect.lf[4], &agRect.lf[5],
                                &agRect.lf[6]);
@@ -531,7 +531,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" SHADOW ")) {
                         kDebug(s_area) << "  Shadow  :";
                         mystr.remove(0, 12);
-                        sscanf((const char *)mystr.latin1(), "<%d %d %d %d %d>",
+                        sscanf((const char *)mystr.toLatin1(), "<%d %d %d %d %d>",
                                &agRect.sh[0], &agRect.sh[1], &agRect.sh[2],
                                &agRect.sh[3], &agRect.sh[4]);
                         kDebug(s_area) << agRect.sh[0] << "" << agRect.sh[1] << ""  <<
@@ -542,7 +542,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" PARA ")) {
                         kDebug(s_area) << "  Para    :";
                         mystr.remove(0, 12);
-                        sscanf((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d %d>",
+                        sscanf((const char *)mystr.toLatin1(), "<%d %d %d %d %d %d %d %d>",
                                &agRect.pa[0], &agRect.pa[1], &agRect.pa[2],
                                &agRect.pa[3], &agRect.pa[4], &agRect.pa[5],
                                &agRect.pa[6], &agRect.pa[7]);
@@ -556,14 +556,14 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" THICKNESS ")) {
                         kDebug(s_area) << "  Thickness:";
                         mystr.remove(0, 11);
-                        sscanf((const char *) mystr.latin1(), "%d", &agRect.thickNess);
+                        sscanf((const char *) mystr.toLatin1(), "%d", &agRect.thickNess);
                         kDebug(s_area) << agRect.thickNess;
                     }
                     // option V_SPACE
                     else if (mystr.startsWith(" V_SPACE ")) {
                         kDebug(s_area) << "  V_Space :";
                         mystr.remove(0, 9);
-                        sscanf((const char *)mystr.latin1(), "(%d %d %d)",
+                        sscanf((const char *)mystr.toLatin1(), "(%d %d %d)",
                                &agRect.vs[0], &agRect.vs[1], &agRect.vs[2]);
                         kDebug(s_area) << agRect.vs[0] << "" << agRect.vs[1] << "" <<  agRect.vs[2];
                     }
@@ -571,7 +571,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" XYRAD ")) {
                         kDebug(s_area) << "  XYRad   :";
                         mystr.remove(0, 7);
-                        sscanf((const char *)mystr.latin1(), "<%d %d>",
+                        sscanf((const char *)mystr.toLatin1(), "<%d %d>",
                                &agRect.xr[0], &agRect.xr[1]);
                         kDebug(s_area) << agRect.xr[0] << "" << agRect.xr[1];
                     }
@@ -579,7 +579,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                     else if (mystr.startsWith(" PNTS ")) {
                         kDebug(s_area) << "  Pnts    :";
                         mystr.remove(0, 6);
-                        sscanf((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
+                        sscanf((const char *)mystr.toLatin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                                &agRect.ptX[0], &agRect.ptY[0], &agRect.ptX[1], &agRect.ptY[1],
                                &agRect.ptX[2], &agRect.ptY[2], &agRect.ptX[3], &agRect.ptY[3],
                                &agRect.ptX[4], &agRect.ptY[4]);
@@ -654,7 +654,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
 
                 kDebug(s_area) << " Habe ELL erkannt (keine Werte uebernommen";
                 mystr.remove(0, 7);
-                sscanf((const char *)mystr.latin1(), "(%d,%d)",
+                sscanf((const char *)mystr.toLatin1(), "(%d,%d)",
                        &agEll.offX, &agEll.offY);
                 kDebug(s_area) << "  Offset ->   x:" << agEll.offX << "  y:" << agEll.offY;
 
@@ -682,7 +682,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert(const QByteArray& from, 
                         kDebug(s_area) << ("  Pnts   :");
                         mystr.remove(0, 6);
                         //
-                        sscanf((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
+                        sscanf((const char *)mystr.toLatin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                                &agEll.ptX[0], &agEll.ptY[0], &agEll.ptX[1], &agEll.ptY[1],
                                &agEll.ptX[2], &agEll.ptY[2], &agEll.ptX[3], &agEll.ptY[3],
                                &agEll.ptX[4], &agEll.ptY[4]);

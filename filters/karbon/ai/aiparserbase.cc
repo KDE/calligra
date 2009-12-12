@@ -569,7 +569,7 @@ void AIParserBase::gotBlockEnd()
   m_stack.pop();
 
   const QString &name = elem2.toString();
-  if (m_gstateHandler) m_gstateHandler->gotFillPattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+  if (m_gstateHandler) m_gstateHandler->gotFillPattern (name.toLatin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 } */
 
 /*Ai88*/ /* void AIParserBase::_handleSetStrokePattern()
@@ -593,7 +593,7 @@ void AIParserBase::gotBlockEnd()
   m_stack.pop();
 
   const QString &name = elem2.toString();
-  if (m_gstateHandler) m_gstateHandler->gotStrokePattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+  if (m_gstateHandler) m_gstateHandler->gotStrokePattern (name.toLatin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 } */
 
 /*Ai88*/ /* void AIParserBase::_handleSetStrokeColorCMYK()
@@ -639,7 +639,7 @@ void AIParserBase::gotBlockEnd()
   double c = getDoubleValue();
   if (m_debug) qDebug ("values 5 are %f %f %f %f",c,m,y,k);
 
-  AIColor color (c,m,y,k,name.latin1(),g);
+  AIColor color (c,m,y,k,name.toLatin1(),g);
 
   if (m_gstateHandler) m_gstateHandler->gotFillColor (color);
 } */
@@ -735,7 +735,7 @@ void AIParserBase::_handlePSPut()
 
   const QString &name = elem2.toString();
 
-  if (m_documentHandler) m_documentHandler->gotPatternDefinition (name.latin1(), aval, llx, lly, urx, ury);
+  if (m_documentHandler) m_documentHandler->gotPatternDefinition (name.toLatin1(), aval, llx, lly, urx, ury);
 } */
 
 void AIParserBase::_handlePSDef()
@@ -757,7 +757,7 @@ void AIParserBase::_handlePSDef()
   double c = getDoubleValue();
   if (m_debug) qDebug ("values 6 are %f %f %f %f",c,m,y,k);
 
-  AIColor color (c,m,y,k,name.latin1(),g);
+  AIColor color (c,m,y,k,name.toLatin1(),g);
 
   if (m_gstateHandler) m_gstateHandler->gotStrokeColor (color);
 } */
@@ -842,7 +842,7 @@ void AIParserBase::_handleCMYKCustomColor(const char *)
 
   const QValueVector<AIElement> aval = elem.toElementArray();
 
-  if (m_embeddedHandler) m_embeddedHandler->gotGsaveIncludeDocument (aval, llx,lly,urx,ury,name.latin1());
+  if (m_embeddedHandler) m_embeddedHandler->gotGsaveIncludeDocument (aval, llx,lly,urx,ury,name.toLatin1());
 } */
 
 /*Ai88*/ /* void AIParserBase::_handleSetCurrentText() {
@@ -868,7 +868,7 @@ void AIParserBase::_handleCMYKCustomColor(const char *)
 
   const QString &fontname = elem2.toReference();
 
-  if (m_textHandler) m_textHandler->gotFontDefinition (fontname.latin1(), size, leading, kerning, ta);
+  if (m_textHandler) m_textHandler->gotFontDefinition (fontname.toLatin1(), size, leading, kerning, ta);
 } */
 
 /*Ai88*/ /* void AIParserBase::_handleTextBlock (TextOperation to) {
@@ -898,7 +898,7 @@ void AIParserBase::_handleCMYKCustomColor(const char *)
       m_stack.pop();
     }
   }
-  if (m_textHandler) m_textHandler->gotTextOutput (text.latin1(), length);
+  if (m_textHandler) m_textHandler->gotTextOutput (text.toLatin1(), length);
 } */
 
 void AIParserBase::_handleCreationDate(const char *data)
@@ -910,7 +910,7 @@ void AIParserBase::_handleCreationDate(const char *data)
         QString val1 = test.cap(1);
         QString val2 = test.cap(2);
 
-        if (m_documentHandler) m_documentHandler->gotCreationDate(val1.latin1(), val2.latin1());
+        if (m_documentHandler) m_documentHandler->gotCreationDate(val1.toLatin1(), val2.toLatin1());
     }
 }
 
@@ -1115,7 +1115,7 @@ const char *AIParserBase::getValue(const char *input)
     if (index < 0) return "";
     index++;
     while (data.at(index) == ' ') index++;
-    return data.mid(index).latin1();
+    return data.mid(index).toLatin1();
 }
 
 bool AIParserBase::getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury)
@@ -1174,7 +1174,7 @@ void AIParserBase::cleanupArrays()
   m_stack.pop();
   const QValueVector<AIElement> encodingData = elem3.toElementArray();
 
-  if (m_textHandler) m_textHandler->gotFontEncoding (encodingData, oldFont.latin1(), newFont.latin1());
+  if (m_textHandler) m_textHandler->gotFontEncoding (encodingData, oldFont.toLatin1(), newFont.toLatin1());
 } */
 
 void TextHandlerBase::gotFontEncoding(const QVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName)
@@ -1218,13 +1218,13 @@ const void elementtoa(const AIElement &/*data*/)
         case AIElement::Int :
         case AIElement::UInt :
         case AIElement::Double :
-          qDebug ("string value : %s",data.toString().latin1());
+          qDebug ("string value : %s",data.toString().toLatin1());
           break;
         case AIElement::Reference :
-          qDebug ("string value : %s",data.toReference().latin1());
+          qDebug ("string value : %s",data.toReference().toLatin1());
           break;
         case AIElement::Operator :
-          qDebug ("string value : %s",data.toOperator().latin1());
+          qDebug ("string value : %s",data.toOperator().toLatin1());
           break;
         case AIElement::ElementArray :
           arraytoa (data.toElementArray());

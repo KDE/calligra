@@ -76,13 +76,13 @@ KarbonAIParserBase::~KarbonAIParserBase()
 // generic
 void KarbonAIParserBase::parsingStarted()
 {
-//  qDebug ( getHeader().latin1() );
+//  qDebug ( getHeader().toLatin1() );
 }
 
 // generic
 void KarbonAIParserBase::parsingFinished()
 {
-//  qDebug ( getFooter().latin1() );
+//  qDebug ( getFooter().toLatin1() );
 
     // handle bounding box
     if (m_document) {
@@ -123,7 +123,7 @@ QString KarbonAIParserBase::getParamList(Parameters& params)
 // generic
 void KarbonAIParserBase::gotStartTag(const char *tagName, Parameters& params)
 {
-    qDebug("<%s%s>", tagName, getParamList(params).latin1());
+    qDebug("<%s%s>", tagName, getParamList(params).toLatin1());
 }
 
 // generic
@@ -135,7 +135,7 @@ void KarbonAIParserBase::gotEndTag(const char *tagName)
 // generic
 void KarbonAIParserBase::gotSimpleTag(const char *tagName, Parameters& params)
 {
-    qDebug("<%s%s/>", tagName, getParamList(params).latin1());
+    qDebug("<%s%s/>", tagName, getParamList(params).toLatin1());
 }
 
 // generic
@@ -451,7 +451,7 @@ bool KarbonAIParserBase::parse(QIODevice& fin, QDomDocument &doc)
 
     bool res = AIParserBase::parse(fin);
 
-//  qDebug ("document is %s",doc.toString().latin1());
+//  qDebug ("document is %s",doc.toString().toLatin1());
     if (res) {
         qDebug("before save document");
         doc = m_document->saveXML();

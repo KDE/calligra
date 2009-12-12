@@ -43,14 +43,14 @@ bool PalmDoc::load(const char* filename)
     }
 
     if (type() != "TEXt") {
-        qDebug("Type is \"%s\", not \"TEXt\", so this is not Palm DOC!", type().latin1());
+        qDebug("Type is \"%s\", not \"TEXt\", so this is not Palm DOC!", type().toLatin1());
         m_result = PalmDoc::InvalidFormat;
         return false;
     }
 
     if (creator() != "REAd") {
         qDebug("Creator is \"%s\", not \"REAd\", so this is not Palm DOC!",
-               creator().latin1());
+               creator().toLatin1());
         m_result = PalmDoc::InvalidFormat;
         return false;
     }
@@ -168,7 +168,7 @@ QByteArray PalmDoc::compress(const QString& text)
 {
     QByteArray result;
     unsigned textlen = text.length();
-    const char *ctext =  text.latin1();
+    const char *ctext =  text.toLatin1();
     unsigned int i, j;
 
     // we don't know the compressed size yet

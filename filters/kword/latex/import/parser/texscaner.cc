@@ -1217,7 +1217,7 @@ yyreduce:
     case 8:
 #line 88 "texscaner.y"
         {
-            printf("exp : env %s", ((Env*)(yyvsp[0].yyelement))->getName().latin1());
+            printf("exp : env %s", ((Env*)(yyvsp[0].yyelement))->getName().toLatin1());
             (yyval.yyelement) = (yyvsp[0].yyelement);
         }
         break;

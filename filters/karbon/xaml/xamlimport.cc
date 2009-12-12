@@ -228,7 +228,7 @@ XAMLImport::parseUnit(const QString &unit, bool horiz, bool vert, KoRect bbox)
 {
     // TODO : percentage?
     double value = 0;
-    const char *start = unit.latin1();
+    const char *start = unit.toLatin1();
     if (!start) {
         return 0;
     }
@@ -367,7 +367,7 @@ XAMLImport::parseGradient(const QDomElement &e)
 
     QString href = e.attribute("xlink:href").mid(1);
     if (!href.isEmpty()) {
-        //kDebug() <<"Indexing with href :" << href.latin1();
+        //kDebug() <<"Indexing with href :" << href.toLatin1();
         gradhelper.gradient = m_gradients[ href ].gradient;
     }
 

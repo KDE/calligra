@@ -137,7 +137,7 @@ static QByteArray WPSixEscape(const QString& text)
         int c = text[i].unicode();
         if (c < 32) result += '.';
         else if (c == 32) result += 0x80 ;   // hard space
-        else if (c < 128) result += text[i].latin1();
+        else if (c < 128) result += text[i].toLatin1();
         else result += '.';
     }
 

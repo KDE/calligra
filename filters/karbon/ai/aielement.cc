@@ -398,11 +398,11 @@ const Q3CString AIElement::toCString() const
     if (d->typ == CString)
         return *((Q3CString*)d->value.ptr);
     if (d->typ == String)
-        return ((QString*)d->value.ptr)->latin1();
+        return ((QString*)d->value.ptr)->toLatin1();
     if (d->typ == Operator)
-        return ((QString*)d->value.ptr)->latin1();
+        return ((QString*)d->value.ptr)->toLatin1();
     if (d->typ == Reference)
-        return ((QString*)d->value.ptr)->latin1();
+        return ((QString*)d->value.ptr)->toLatin1();
 
     return 0;
 }

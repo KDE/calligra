@@ -1652,7 +1652,7 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& obj
 void OoWriterImport::importFootnote(QDomDocument& doc, const KoXmlElement& object, QDomElement& formats, uint pos, const QString& localName)
 {
     const QString frameName(object.attributeNS(ooNS::text, "id", QString()));
-    KoXmlElement citationElem = KoXml::namedItemNS(object, ooNS::text, (localName + "-citation").latin1()).toElement();
+    KoXmlElement citationElem = KoXml::namedItemNS(object, ooNS::text, (localName + "-citation").toLatin1()).toElement();
 
     bool endnote = localName == "endnote";
 
@@ -1682,7 +1682,7 @@ void OoWriterImport::importFootnote(QDomDocument& doc, const KoXmlElement& objec
     // TODO importCommonFrameProperties ?
 
     // The text inside the frameset
-    KoXmlElement bodyElem = KoXml::namedItemNS(object, ooNS::text, (localName + "-body").latin1()).toElement();
+    KoXmlElement bodyElem = KoXml::namedItemNS(object, ooNS::text, (localName + "-body").toLatin1()).toElement();
     parseBodyOrSimilar(doc, bodyElem, framesetElement);
 }
 
@@ -1966,7 +1966,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
     } else if (localName.startsWith("sender-")) {
         int subtype = -1;
-        const QByteArray afterText(localName.latin1() + 5);
+        const QByteArray afterText(localName.toLatin1() + 5);
         if (afterText == "sender-company")
             subtype = 4; //VST_COMPANYNAME;
         else if (afterText == "sender-firstname")

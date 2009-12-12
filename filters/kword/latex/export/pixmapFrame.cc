@@ -148,7 +148,7 @@ void PixmapFrame::convert()
     image_info = CloneImageInfo((ImageInfo *) NULL);
     // 8 characters are deleted when reading the file picture name
     QString filename = "file:///" + getRoot()->extractData(getKey());
-    strncpy(image_info->filename, filename.latin1(), filename.length());
+    strncpy(image_info->filename, filename.toLatin1(), filename.length());
     image = ReadImage(image_info, &exception);
     if (image == (Image *) NULL)
         MagickError(exception.severity, exception.reason, exception.description);
@@ -166,7 +166,7 @@ void PixmapFrame::convert()
             dir = Config::instance()->getPicturesDir();
         kDebug(30522) << "file" << getFilename();
         kDebug(30522) << "path" << dir;
-        (void) strcpy(image->filename, (dir + '/' + getFilenamePS()).latin1());
+        (void) strcpy(image->filename, (dir + '/' + getFilenamePS()).toLatin1());
         WriteImage(image_info, image);
         DestroyImage(image);
     }

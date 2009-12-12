@@ -36,5 +36,5 @@ Comment::~Comment()
 
 void Comment::print(int tab)
 {
-    cout << getComment().latin1() << endl;
+    cout << getComment().toLatin1() << endl;
 }

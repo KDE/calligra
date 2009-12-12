@@ -82,7 +82,7 @@ AiImport::convert(const QByteArray& from, const QByteArray& to)
         return KoFilter::StorageCreationError;
     }
 
-    Q3CString cStr = result.latin1();
+    Q3CString cStr = result.toLatin1();
     storeOut->write(cStr, cStr.size() - 1);
 
     return KoFilter::OK;

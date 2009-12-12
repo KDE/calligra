@@ -49,7 +49,7 @@ KoFilter::ConversionStatus PalmDocImport::convert(const QByteArray& from, const 
 
     PalmDoc doc;
     QString inputFile(m_chain->inputFile());
-    doc.load(inputFile.latin1());
+    doc.load(inputFile.toLatin1());
 
     if (doc.result() == PalmDoc::InvalidFormat)
         return KoFilter::NotImplemented;
