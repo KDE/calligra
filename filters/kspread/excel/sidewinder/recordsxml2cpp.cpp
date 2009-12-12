@@ -538,9 +538,15 @@ int main(int argc, char** argv)
     }
     if (!f.open(QIODevice::ReadOnly))
         qFatal("Error opening file");
-    if (!doc.setContent(&f)) {
+    QString errorMsg;
+    int errorLine;
+    int errorCol;
+    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
         f.close();
-        qFatal("Error parsing file");
+        errorMsg = "Error parsing file: " + errorMsg + "\n";
+        errorMsg += QString::fromAscii("In line ")  + QString::number(errorLine)
+                  + QString::fromAscii(", column ") + QString::number(errorCol);
+        qFatal(errorMsg.toAscii());
     }
     f.close();
 
