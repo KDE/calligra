@@ -117,9 +117,10 @@ QObject* ScriptingModule::sheetByName(const QString& name)
             return sheet->findChild< KSpread::SheetAdaptor* >(); {
             }
         }
-        return 0;
     }
+    return 0;
 }
+
 QStringList ScriptingModule::sheetNames()
 {
     QStringList names;
