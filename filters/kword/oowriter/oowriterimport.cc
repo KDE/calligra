@@ -1966,7 +1966,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 8, authorElem);
     } else if (localName.startsWith("sender-")) {
         int subtype = -1;
-        const QByteArray afterText(localName.toLatin1() + 5);
+        const QByteArray afterText(localName.toLatin1());
         if (afterText == "sender-company")
             subtype = 4; //VST_COMPANYNAME;
         else if (afterText == "sender-firstname")
