@@ -681,7 +681,7 @@ void SvgExport::saveText(ArtisticTextShape * text)
         *m_body << ">" << endl;
         *m_body << text->text();
     } else {
-        KoPathShape * baseline = KoPathShape::fromQPainterPath(text->baseline());
+        KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
         QString id;
 

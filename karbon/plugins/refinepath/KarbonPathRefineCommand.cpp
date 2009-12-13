@@ -65,7 +65,7 @@ void KarbonPathRefineCommand::redo()
             // iterate over the paths subpaths
             for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
             {
-                int pointCount = d->path->pointCountSubpath( subpathIndex );
+                int pointCount = d->path->subpathPointCount( subpathIndex );
                 // iterate over the subpaths points
                 for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
                 {

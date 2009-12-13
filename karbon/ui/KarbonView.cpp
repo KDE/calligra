@@ -822,7 +822,7 @@ void KarbonView::pathSnapToGrid()
         uint subpathCount = path->subpathCount();
         for( uint i = 0; i < subpathCount; ++i )
         {
-            uint pointCount = path->pointCountSubpath(i);
+            uint pointCount = path->subpathPointCount(i);
             for( uint j = 0; j < pointCount; ++j )
             {
                 KoPathPointIndex index(i,j);

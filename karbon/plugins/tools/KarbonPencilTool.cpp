@@ -442,7 +442,7 @@ KoPathPoint* KarbonPencilTool::endPointAtPosition( const QPointF &position )
                 minDistance = d;
             }
             // check end of subpath
-            p = path->pointByIndex(KoPathPointIndex(i, path->pointCountSubpath(i)-1));
+            p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i)-1));
             d = squareDistance(position, path->shapeToDocument(p->point()));
             if (d < minDistance && d < maxDistance) {
                 nearestPoint = p;
@@ -468,7 +468,7 @@ bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     // 1. combine the new created path with the ones we hit on start/finish
     // 2. merge the endpoints of the corresponding subpaths
     
-    uint newPointCount = pathShape->pointCountSubpath(0);
+    uint newPointCount = pathShape->subpathPointCount(0);
     KoPathPointIndex newStartPointIndex(0, 0);
     KoPathPointIndex newEndPointIndex(0, newPointCount-1);
     KoPathPoint * newStartPoint = pathShape->pointByIndex(newStartPointIndex);
@@ -498,7 +498,7 @@ bool KarbonPencilTool::connectPaths( KoPathShape *pathShape, KoPathPoint *pointA
     
     if (startIndex.second == 0 && !connectToSingleSubpath) {
         pathShape->reverseSubpath(startIndex.first);
-        startIndex.second = pathShape->pointCountSubpath(startIndex.first)-1;
+        startIndex.second = pathShape->subpathPointCount(startIndex.first)-1;
     }
     if (endIndex.second > 0 && !connectToSingleSubpath) {
         pathShape->reverseSubpath(endIndex.first);

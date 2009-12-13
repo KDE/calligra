@@ -113,7 +113,7 @@ KarbonWhirlPinchCommand::KarbonWhirlPinchCommand( KoPathShape * path, qreal angl
     for( uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
     {
         QList<PointData> subpathData;
-        int pointCount = d->pathShape->pointCountSubpath( subpathIndex );
+        int pointCount = d->pathShape->subpathPointCount( subpathIndex );
         for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
         {
             KoPathPoint * p = d->pathShape->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );

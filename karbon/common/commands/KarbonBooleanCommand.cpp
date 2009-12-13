@@ -99,7 +99,7 @@ void KarbonBooleanCommand::redo()
 
         QMatrix transformation = d->pathA->transformation();
         pr = transformation.inverted().map( pr );
-        d->resultingPath = KoPathShape::fromQPainterPath( pr );
+        d->resultingPath = KoPathShape::createShapeFromPainterPath( pr );
         d->resultingPath->setBorder( d->pathA->border() );
         d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );

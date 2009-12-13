@@ -1239,7 +1239,7 @@ KoShape * KarbonImport::loadText(const KoXmlElement &element)
             if (diffLength > 0.0) {
                 // elongate path so that text fits completely on it
                 int subpathCount = path->subpathCount();
-                int subpathPointCount = path->pointCountSubpath(subpathCount - 1);
+                int subpathPointCount = path->subpathPointCount(subpathCount - 1);
                 KoPathPoint * lastPoint = path->pointByIndex(KoPathPointIndex(subpathCount - 1, subpathPointCount - 1));
                 KoPathPoint * prevLastPoint = path->pointByIndex(KoPathPointIndex(subpathCount - 1, subpathPointCount - 2));
                 if (lastPoint && prevLastPoint) {
