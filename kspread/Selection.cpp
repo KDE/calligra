@@ -99,7 +99,7 @@ public:
 ****************************************************************************/
 
 Selection::Selection(KoCanvasBase* canvasBase)
-    : KoToolSelection(canvasBase->canvasWidget())
+    : KoToolSelection(0)
     , Region(1,1)
     , d( new Private() )
 {
