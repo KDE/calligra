@@ -546,7 +546,7 @@ int main(int argc, char** argv)
         errorMsg = "Error parsing file: " + errorMsg + "\n";
         errorMsg += QString::fromAscii("In line ")  + QString::number(errorLine)
                   + QString::fromAscii(", column ") + QString::number(errorCol);
-        qFatal(errorMsg.toAscii());
+        qFatal("%s", errorMsg.toAscii().constData());
     }
     f.close();
 
