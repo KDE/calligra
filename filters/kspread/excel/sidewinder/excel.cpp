@@ -657,12 +657,14 @@ class FormulaRecord::Private
 public:
     Value result;
     FormulaTokens tokens;
+    bool shared;
 };
 
 FormulaRecord::FormulaRecord():
         Record()
 {
     d = new FormulaRecord::Private();
+    d->shared = true;
 }
 
 FormulaRecord::~FormulaRecord()
@@ -685,14 +687,21 @@ FormulaTokens FormulaRecord::tokens() const
     return d->tokens;
 }
 
+bool FormulaRecord::isShared() const
+{
+    return d->shared;
+}
+    
 void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
 {
     if (size < 20) return;
 
+    // cell
     setRow(readU16(data));
     setColumn(readU16(data + 2));
     setXfIndex(readU16(data + 4));
 
+    // val
     if (readU16(data + 12) != 0xffff) {
         // Floating-point
         setResult(Value(readFloat64(data + 6)));
@@ -715,10 +724,19 @@ void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsi
             break;
         };
     }
+    
+    unsigned opts = readU16(data + 14);
+    //const bool fAlwaysCalc = opts & 0x01;
+    //const bool reserved1 = opts & 0x02;
+    //const bool fFill = opts & 0x04;
+    d->shared = opts & 0x08;
+    //const bool reserved2 = opts & 0x10;
+    //const bool fClearErrors = opts & 0x20;
 
+    // 4 bytes chn...
+
+    // formula-variable, reconstruct all tokens...
     unsigned formula_len = readU16(data + 20);
-
-    // reconstruct all tokens
     d->tokens.clear();
     for (unsigned j = 22; j < size;) {
         unsigned ptg = data[j++];

@@ -1118,7 +1118,36 @@ UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /
 
 UString FormulaToken::array(unsigned row, unsigned col) const                                                                           
 {   
-    //TODO
+    /*
+    unsigned char buf[2];
+    buf[0] = d->data[1]; // specs say this should be at the first byte but seems its not true...
+    const unsigned opts = readU8(buf);
+    const bool reserved1 = opts & 0x01;
+    const bool reserved2 = opts & 0x02;
+    const bool reserved3 = opts & 0x04;
+    const bool reserved4 = opts & 0x08;
+    const bool reserved5 = opts & 0x10;
+    Q_ASSERT(!reserved1 && !reserved2 && !reserved3 && !reserved4 && !reserved5);
+    const int type = ((opts & 0x20) ? 1 : 0) + ((opts & 0x60) ? 2 : 0);
+    printf("%i\n",type);
+    Q_ASSERT(type == 2 || type == 3);
+    // remove the first two elements cause they are done
+    d->data.erase(d->data.begin(), d->data.begin() + 2);
+    UString result;
+    switch (type) {
+    case 0x01: // REFERENCE, specifies a reference to a range.
+        result = ref(row, col);
+        break;
+    case 0x02: // VALUE, specifies a single value of a simple type. The type can be a Boolean, a number, a string, or an error code.
+        result = value().asString();
+        break;
+    case 0x03: // ARRAY, specifies an array of values.
+        result = array(row, col);
+        break;
+    }
+    //Q_ASSERT(false);
+    return result;
+    */
     return UString();
 }
 

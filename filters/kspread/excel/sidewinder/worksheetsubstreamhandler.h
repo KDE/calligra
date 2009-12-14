@@ -103,7 +103,7 @@ private:
     void handleDefaultRowHeight(DefaultRowHeightRecord* record);
     void handleDefaultColWidth(DefaultColWidthRecord* record);
 
-    UString decodeFormula(unsigned row, unsigned col, const FormulaTokens& tokens);
+    UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
     UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
 
     class Private;

@@ -446,6 +446,11 @@ public:
 
     FormulaTokens tokens() const;
 
+    /**
+     * Returns true if this formula is a share formula.
+     */
+    bool isShared() const;
+    
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
     virtual const char* name() const {

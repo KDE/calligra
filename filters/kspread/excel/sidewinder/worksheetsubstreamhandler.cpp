@@ -382,9 +382,7 @@ void WorksheetSubStreamHandler::handleFormula(FormulaRecord* record)
     unsigned row = record->row();
     unsigned xfIndex = record->xfIndex();
     Value value = record->result();
-
-    UString formula = decodeFormula(row, column, record->tokens());
-
+    UString formula = decodeFormula(row, column, record->isShared(), record->tokens());
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
         cell->setValue(value);
@@ -692,7 +690,7 @@ void WorksheetSubStreamHandler::handleSharedFormula(SharedFormulaRecord* record)
 
     d->sharedFormulas[std::make_pair(row, column)] = record->tokens();
 
-    UString formula = decodeFormula(row, column, record->tokens());
+    UString formula = decodeFormula(row, column, true, record->tokens());
     d->lastFormulaCell->setFormula(formula);
 
     d->lastFormulaCell = 0;
@@ -807,7 +805,7 @@ static void dumpStack(std::vector<UString> stack)
 }
 #endif
 
-UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, const FormulaTokens& tokens)
+UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens)
 {
     UStringStack stack;
 
@@ -1020,23 +1018,32 @@ UString WorksheetSubStreamHandler::decodeFormula(unsigned row, unsigned col, con
 
         case FormulaToken::Matrix: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-
-            std::map<std::pair<unsigned, unsigned>, FormulaTokens>::iterator sharedFormula = d->sharedFormulas.find(formulaCellPos);
-            if (sharedFormula != d->sharedFormulas.end()) {
-                stack.push_back(decodeFormula(row, col, sharedFormula->second));
+            if( isShared ) {
+              std::map<std::pair<unsigned, unsigned>, FormulaTokens>::iterator sharedFormula = d->sharedFormulas.find(formulaCellPos);
+              if (sharedFormula != d->sharedFormulas.end()) {
+                  stack.push_back(decodeFormula(row, col, isShared, sharedFormula->second));
+              } else {
+                  stack.push_back(UString("Error"));
+              }
             } else {
-                stack.push_back(UString("Error"));
+              // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
+              // result is an reference to cells. So, we can savly ignore that case...
+              printf( "MATRIX first=%i second=%i\n",formulaCellPos.first,formulaCellPos.second );
             }
             break;
         }
 
         case FormulaToken::Table: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-            std::map<std::pair<unsigned, unsigned>, DataTableRecord>::iterator datatable = d->dataTables.find(formulaCellPos);
-            if (datatable != d->dataTables.end()) {
-                stack.push_back(dataTableFormula(row, col, &datatable->second));
+            if( isShared ) {
+              std::map<std::pair<unsigned, unsigned>, DataTableRecord>::iterator datatable = d->dataTables.find(formulaCellPos);
+              if (datatable != d->dataTables.end()) {
+                  stack.push_back(dataTableFormula(row, col, &datatable->second));
+              } else {
+                  stack.push_back(UString("Error"));
+              }
             } else {
-                stack.push_back(UString("Error"));
+              printf( "TABLE first=%i second=%i\n",formulaCellPos.first,formulaCellPos.second );
             }
             break;
         }
