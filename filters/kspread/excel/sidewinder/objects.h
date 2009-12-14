@@ -76,6 +76,28 @@ private:
 };
 
 /**
+ * Picture objects used to store bitmap, enhanced metafiles or other
+ * kind of images.
+ */
+class PictureObject : public Object
+{
+public:
+    PictureObject(unsigned long id) : Object(Picture, id) {}
+    virtual ~PictureObject() {}
+    enum Type { EnhancedMetafile, Bitmap, Unspecified };
+    /// Returns the type of the image.
+    Type type() const {
+        return m_type;
+    }
+    /// Sets the type of the image.
+    void setType(const Type &t) {
+        m_type = t;
+    }
+private:
+    Type m_type;
+};
+
+/**
  * Note objects used to store comments attached to a cell or revision.
  */
 class NoteObject : public Object

@@ -1327,9 +1327,31 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     case Object::Group: // gmo
         startPict += 6;
         break;
-    case Object::Picture: // pictFormat and pictFlags
+    case Object::Picture: { // pictFormat and pictFlags
+        m_object = new PictureObject(id);
+        const unsigned long ft = readU16(startPict);
+        const unsigned long cb = readU16(startPict + 2);
+        const unsigned long cf = readU16(startPict + 4);
+        switch (cf) {
+          case 0x0002:
+            static_cast<PictureObject*>(m_object)->setType(PictureObject::EnhancedMetafile);
+            break;
+          case 0x0009:
+            static_cast<PictureObject*>(m_object)->setType(PictureObject::Bitmap);
+            break;
+          case 0xFFFF:
+            static_cast<PictureObject*>(m_object)->setType(PictureObject::Unspecified);
+            break;
+          default:
+            std::cerr << "ObjRecord::setData: invalid ObjRecord Picture" << std::endl;
+            setIsValid(false);
+            delete m_object;
+            m_object = 0;
+            return;
+        }
         startPict += 12;
-        break;
+    }
+    break;
     case Object::Checkbox: // cbls
         startPict += 16;
         break;
