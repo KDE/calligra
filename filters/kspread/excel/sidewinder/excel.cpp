@@ -1329,8 +1329,8 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         break;
     case Object::Picture: { // pictFormat and pictFlags
         m_object = new PictureObject(id);
-        const unsigned long ft = readU16(startPict);
-        const unsigned long cb = readU16(startPict + 2);
+        //const unsigned long ft = readU16(startPict);
+        //const unsigned long cb = readU16(startPict + 2);
         const unsigned long cf = readU16(startPict + 4);
         switch (cf) {
           case 0x0002:
@@ -2035,6 +2035,19 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(ObjRecord::id, createObjRecord);
 }
 
+void printEntries(POLE::Storage &storage, const std::string path = "/", int level = 0)
+{
+    std::cout << std::setw(level) << "PATH=" << path << std::endl;
+    std::list<std::string> entries = storage.entries(path);
+    for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
+        std::cout << std::setw(level + 1) << "ENTRY=" << *it << std::endl;
+        std::string p = path == "/" ? "/" + *it + "/" : path + "/" + *it + "/";
+        if (storage.isDirectory(p) ) {
+            printEntries(storage, p, level + 1);
+        }
+    }
+}
+
 bool ExcelReader::load(Workbook* workbook, const char* filename)
 {
     registerAllRecordClasses();
@@ -2046,11 +2059,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     }
 
 #ifdef SWINDER_XLS2RAW
-    std::list<std::string> entries = storage.entries();
     std::cout << "Streams:" << std::endl;
-    for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
-        std::cout << "    /" << *it << std::endl;
-    }
+    printEntries(storage);
 #endif
 
     unsigned streamVersion = Swinder::Excel97;
@@ -2076,14 +2086,14 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
       POLE::Stream *summarystream = new POLE::Stream( &storage, "/SummaryInformation" );
       const unsigned long streamStartPosition = summarystream->tell();
       unsigned bytes_read = summarystream->read( buffer, 8 );
-      const unsigned long byteorder = readU16( buffer ); // must be 0xFFFE
-      const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
-      const unsigned long systemId = readU32( buffer + 4 );
+      //const unsigned long byteorder = readU16( buffer ); // must be 0xFFFE
+      //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
+      //const unsigned long systemId = readU32( buffer + 4 );
 
       summarystream->seek( summarystream->tell() + 16 ); // skip CLSID
       bytes_read = summarystream->read( buffer, 4 );
       const unsigned long numPropertySets = bytes_read == 4 ? readU32( buffer ) : 0; // must be 0x00000001 or 0x00000002
-      for( int i = 0; i < numPropertySets; ++ i ) {
+      for( uint i = 0; i < numPropertySets; ++ i ) {
           summarystream->seek( summarystream->tell() + 16 ); // skip FMTIDO
           bytes_read = summarystream->read( buffer, 4 );
           if( bytes_read != 4 ) break;
@@ -2095,9 +2105,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
           bytes_read = summarystream->read( buffer, 8 );
           if( bytes_read != 8 ) break;
-          unsigned long size = readU32( buffer );
+          //unsigned long size = readU32( buffer );
           unsigned long propertyCount = readU32( buffer + 4 );
-          for( int i = 0; i < propertyCount; ++i ) {
+          for( uint i = 0; i < propertyCount; ++i ) {
               bytes_read = summarystream->read( buffer, 8 );
               if( bytes_read != 8 ) break;
               Workbook::PropertyType propertyId = Workbook::PropertyType( readU32( buffer ) );
@@ -2113,7 +2123,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
               bytes_read = summarystream->read( buffer, 4 );
               if( bytes_read != 4 ) break;
               unsigned long type = readU16( buffer );
-              unsigned long padding = readU16( buffer + 2 );
+              //unsigned long padding = readU16( buffer + 2 );
               switch( propertyId ) {
                   case Workbook::PIDSI_TITLE:
                   case Workbook::PIDSI_SUBJECT:
@@ -2166,6 +2176,51 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
           summarystream->seek( p );
       }
       delete summarystream;
+    }
+
+    { // read CompObj stream
+      POLE::Stream *combObjStream = new POLE::Stream( &storage, "/CompObj" );
+      //const unsigned long streamStartPosition = combObjStream->tell();
+      // header
+      unsigned bytes_read = combObjStream->read( buffer, 28 );
+      //const unsigned long version = readU32( buffer + 5 );
+      
+      //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
+      //printEntries(storage,"CompObj");
+
+      // AnsiUserType
+      bytes_read = combObjStream->read( buffer, 4 );
+      const unsigned long length = readU32( buffer );
+      bytes_read = combObjStream->read( buffer, length );
+      UString ansiUserType = readByteString(buffer, length);
+      printf( "length=%i ansiUserType=%s\n",length,ansiUserType.ascii() );
+      
+      // AnsiClipboardFormat
+      bytes_read = combObjStream->read( buffer, 4 );
+      const unsigned long markerOrLength = readU32( buffer );
+      switch (markerOrLength) {
+        case 0x00000000: break; // Must not be present, do nothing...
+        case 0xFFFFFFFF: // fall through
+        case 0xFFFFFFFE: { // must be 4 bytes and contains a clipboard identifier
+          bytes_read = combObjStream->read( buffer, 4 );
+          //const unsigned long standardFormat = readU32( buffer );
+          // switch(standardFormat) {
+          //   case 0x00000002: standardFormat=CF_BITMAP;
+          //   case 0x00000003: standardFormat=CF_METAFILEPICT
+          //   case 0x00000008: standardFormat=CF_DIB
+          //   case 0x0000000E: standardFormat=CF_ENHMETAFILE
+          // }
+          //TODO...
+        }
+        break;
+        default:
+          bytes_read = combObjStream->read( buffer, markerOrLength );
+          UString ansiString = readByteString(buffer, markerOrLength);
+          //TODO...
+          //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+      }
+      //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
+      delete combObjStream;
     }
 
     const unsigned long stream_size = stream->size();

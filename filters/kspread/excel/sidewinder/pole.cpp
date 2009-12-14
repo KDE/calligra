@@ -274,15 +274,15 @@ bool Header::valid()
 
 void Header::load(const unsigned char* buffer)
 {
-    b_shift      = readU16(buffer + 0x1e);
-    s_shift      = readU16(buffer + 0x20);
-    num_bat      = readU32(buffer + 0x2c);
-    dirent_start = readU32(buffer + 0x30);
-    threshold    = readU32(buffer + 0x38);
-    sbat_start   = readU32(buffer + 0x3c);
-    num_sbat     = readU32(buffer + 0x40);
-    mbat_start   = readU32(buffer + 0x44);
-    num_mbat     = readU32(buffer + 0x48);
+    b_shift      = readU16(buffer + 0x1e); // sector shift
+    s_shift      = readU16(buffer + 0x20); // mini sector shift
+    num_bat      = readU32(buffer + 0x2c); // number of fat sectors
+    dirent_start = readU32(buffer + 0x30); // first directory sector location
+    threshold    = readU32(buffer + 0x38); // transaction signature number
+    sbat_start   = readU32(buffer + 0x3c); // mini stream cutoff size
+    num_sbat     = readU32(buffer + 0x40); // first mini fat sector location
+    mbat_start   = readU32(buffer + 0x44); // first mini difat sector location
+    num_mbat     = readU32(buffer + 0x48); // number of difat sectors
 
     for (unsigned i = 0; i < 8; i++)
         id[i] = buffer[i];
@@ -684,7 +684,10 @@ void DirTree::load(unsigned char* buffer, unsigned size)
 
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
-        if (name_len < 1) e.valid = false;
+
+        // the spec do not deny items with an empty name even if it makes not
+        // really sense cause the item cannot access then by name.
+        //if (name_len < 1) e.valid = false;
 
         entries.push_back(e);
     }
@@ -896,7 +899,7 @@ void StorageIO::load()
     sb_blocks = bbat->follow(sb_start);   // small files
 
     // for troubleshooting, just enable this block
-#if 0
+#ifdef POLE_DEBUG
     header->debug();
     sbat->debug();
     bbat->debug();
