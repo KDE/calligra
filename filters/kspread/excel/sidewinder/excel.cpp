@@ -2068,11 +2068,107 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         return false;
     }
 
-    unsigned long stream_size = stream->size();
-
-    unsigned int buffer_size = 65536;  // current size of the buffer
+    unsigned int buffer_size = 65536;     // current size of the buffer
     unsigned char *buffer = (unsigned char *) malloc(buffer_size);
-    unsigned char small_buffer[128]; // small, fixed size buffer
+    unsigned char small_buffer[128];  // small, fixed size buffer
+
+    { // read document meta information
+      POLE::Stream *summarystream = new POLE::Stream( &storage, "/SummaryInformation" );
+      const unsigned long streamStartPosition = summarystream->tell();
+      unsigned bytes_read = summarystream->read( buffer, 8 );
+      const unsigned long byteorder = readU16( buffer ); // must be 0xFFFE
+      const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
+      const unsigned long systemId = readU32( buffer + 4 );
+
+      summarystream->seek( summarystream->tell() + 16 ); // skip CLSID
+      bytes_read = summarystream->read( buffer, 4 );
+      const unsigned long numPropertySets = bytes_read == 4 ? readU32( buffer ) : 0; // must be 0x00000001 or 0x00000002
+      for( int i = 0; i < numPropertySets; ++ i ) {
+          summarystream->seek( summarystream->tell() + 16 ); // skip FMTIDO
+          bytes_read = summarystream->read( buffer, 4 );
+          if( bytes_read != 4 ) break;
+          const unsigned long firstPropertyOffset = readU32( buffer );
+
+          const unsigned long p = summarystream->tell();
+          const unsigned long propertysetStartPosition = streamStartPosition + firstPropertyOffset;
+          summarystream->seek( propertysetStartPosition );
+
+          bytes_read = summarystream->read( buffer, 8 );
+          if( bytes_read != 8 ) break;
+          unsigned long size = readU32( buffer );
+          unsigned long propertyCount = readU32( buffer + 4 );
+          for( int i = 0; i < propertyCount; ++i ) {
+              bytes_read = summarystream->read( buffer, 8 );
+              if( bytes_read != 8 ) break;
+              Workbook::PropertyType propertyId = Workbook::PropertyType( readU32( buffer ) );
+
+              // Offset (4 bytes): An unsigned integer representing the offset in bytes from the beginning of
+              // the PropertySet packet to the beginning of the Property field for the property represented.
+              // MUST be a multiple of 4 bytes.
+              unsigned long propertyOffset = readU32( buffer + 4 );
+
+              unsigned long p2 = summarystream->tell();
+
+              summarystream->seek( propertysetStartPosition + propertyOffset );
+              bytes_read = summarystream->read( buffer, 4 );
+              if( bytes_read != 4 ) break;
+              unsigned long type = readU16( buffer );
+              unsigned long padding = readU16( buffer + 2 );
+              switch( propertyId ) {
+                  case Workbook::PIDSI_TITLE:
+                  case Workbook::PIDSI_SUBJECT:
+                  case Workbook::PIDSI_AUTHOR:
+                  case Workbook::PIDSI_KEYWORDS:
+                  case Workbook::PIDSI_COMMENTS:
+                  case Workbook::PIDSI_TEMPLATE:
+                  case Workbook::PIDSI_LASTAUTHOR:
+                  case Workbook::PIDSI_REVNUMBER:
+                  case Workbook::PIDSI_EDITTIME:
+                  case Workbook::PIDSI_LASTPRINTED_DTM:
+                  case Workbook::PIDSI_CREATE_DTM:
+                  case Workbook::PIDSI_LASTSAVED_DTM:
+                  case Workbook::PIDSI_APPNAME:
+                      switch( type ) {
+                          case 0x001E: { //VT_LPSTR
+                              bytes_read = summarystream->read( buffer, 4 );
+                              if( bytes_read != 4 ) break;
+                              const unsigned long length = readU32( buffer );
+                              bytes_read = summarystream->read( buffer, length );
+                              if( bytes_read != length ) break;
+                              UString u = readByteString( buffer, length );
+                              const QChar *c = reinterpret_cast<const QChar*>( u.data() );
+                              QString s = QString( c, u.length() );
+                              workbook->setProperty( propertyId, s );
+                          } break;
+                          case 0x0040: { //VT_FILETIME
+                              bytes_read = summarystream->read( buffer, 8 );
+                              if( bytes_read != 8 ) break;
+                              const unsigned long dwLowDateTime = readU32( buffer );
+                              const unsigned long dwHighDateTime = readU32( buffer );
+                              long long int time = dwHighDateTime;
+                              time <<= 32;
+                              time += (unsigned long) dwLowDateTime;
+                              time -= 116444736000000000LL;
+                              QString s( QDateTime::fromTime_t( time / 10000000.0 ).toString(Qt::ISODate) );
+                              workbook->setProperty( propertyId, s );
+                          } break;
+                          default:
+                              std::cout << "Ignoring property with known id=" << propertyId << " and unknown type=" << type;
+                              break;
+                      }
+                      break;
+                 default:
+                     printf( "Ignoring property with unknown id %i and type %i\n", propertyId, type );
+                     break;
+              }
+              summarystream->seek( p2 );
+          }
+          summarystream->seek( p );
+      }
+      delete summarystream;
+    }
+
+    const unsigned long stream_size = stream->size();
     unsigned int continuePositionsSize = 128; // size of array for continue positions
     unsigned int *continuePositions = (unsigned int *) malloc(continuePositionsSize * sizeof(int));
 
