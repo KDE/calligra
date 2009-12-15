@@ -78,6 +78,12 @@ public:
      */
     QString timeFormat(const QDateTime& time, Format::Type formatType);
 
+    /**
+     * Creates a date and time format.
+     * \param formatType the value format, e.g. number, date
+     */
+    QString dateTimeFormat(const QDateTime& time, Format::Type formatType);
+
 protected:
     /**
      * Determines the formatting type that should be used to format this value

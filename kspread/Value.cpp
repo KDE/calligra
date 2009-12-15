@@ -308,7 +308,6 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
 {
     const QDate refDate(settings->referenceDate());
     const QTime refTime(0, 0);    // reference time is midnight
-
     d->type = Float;
     d->f = Number(refDate.daysTo(dt.date()));
     d->f += static_cast<double>(refTime.msecsTo(dt.time())) / 86400000.0;     // 24*60*60*1000

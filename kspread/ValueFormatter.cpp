@@ -74,7 +74,16 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         ok = true;
     }
 
-    //date
+    //datetime
+    else if (fmtType == Format::DateTime) {
+        Value dateValue = m_converter->asDateTime(value, &ok);
+        if (ok) {
+            result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType));
+            result.setFormat(Value::fmt_DateTime);
+        }
+    }
+
+    //
     else if (Format::isDate(fmtType)) {
         Value dateValue = m_converter->asDate(value, &ok);
         if (ok) {
@@ -169,7 +178,7 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
             fmtType = Format::Money;
             break;
         case Value::fmt_DateTime:
-            fmtType = Format::TextDate;
+            fmtType = Format::DateTime;
             break;
         case Value::fmt_Date:
             fmtType = Format::ShortDate;
@@ -499,6 +508,16 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType)
                      .arg(QString::number(m), 2, '0');
         }
     }
+    return result;
+}
+
+QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType)
+{
+    Q_UNUSED( fmtType );
+    QString result;
+    // pretty lame, just asssuming something for the format
+    // TODO: locale-aware formatting
+    result += dateFormat(_dt.date(), Format::ShortDate) + ' ' + timeFormat(_dt, Format::Time1);
     return result;
 }
 
