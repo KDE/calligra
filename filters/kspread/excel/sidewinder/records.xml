@@ -330,6 +330,10 @@
   <field name="idObj"   type="unsigned" size="16" />
 </record>
 
+<record name="Protect" id="0x0012">
+  <field name="locked" type="bool" size="16" />
+</record>
+
 <!-- TODO translation to ODF in excelimport.cc missing;
   DefaultRowHeight is for empty rows without data and formatting while
   DefaultColWidth is just for columns without an own width. Both are
@@ -344,8 +348,7 @@
   <field name="cchdefColWidth"   type="unsigned" size="16" />
 </record>
 
-<!-- TODO: XF -->
-
+<!-- TODO following records are missing the handle in there streams -->
 <record name="HCenter" id="0x0083">
   <field name="centered" type="bool" size="16" />
 </record>
@@ -391,10 +394,6 @@
     <enum name="FillPageProportionally" value="2" />
     <enum name="SizeFromChartRecord"    value="3" />
   </field>
-</record>
-
-<record name="Protect" id="0x0012">
-  <field name="locked" type="bool" size="16" />
 </record>
 
 <record name="Units" id="0x1001">

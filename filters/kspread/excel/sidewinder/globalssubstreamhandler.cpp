@@ -486,6 +486,8 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
         handleSST(static_cast<SSTRecord*>(record));
     else if (type == XFRecord::id)
         handleXF(static_cast<XFRecord*>(record));
+    else if (type == ProtectRecord::id)
+        handleProtect(static_cast<ProtectRecord*>(record));
     else if (type == 0x40) {} //BackupRecord
     else if (type == 0x22) {} //Date1904Record
     else if (type == 0xA) {} //EofRecord
@@ -645,6 +647,15 @@ void GlobalsSubStreamHandler::handleXF(XFRecord* record)
     if (!record) return;
 
     d->xfTable.push_back(*record);
+}
+
+void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
+{
+  if (!record) return;
+  
+  if (record->isLocked()) {
+      printf( "Warning: The workbook is protected!\n" );
+  }
 }
 
 } // namespace Swinder

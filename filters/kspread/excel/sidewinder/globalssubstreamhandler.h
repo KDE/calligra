@@ -45,6 +45,7 @@ class NameRecord;
 class PaletteRecord;
 class SSTRecord;
 class XFRecord;
+class ProtectRecord;
 
 class GlobalsSubStreamHandler : public SubStreamHandler
 {
@@ -92,6 +93,7 @@ private:
     void handlePalette(PaletteRecord* record);
     void handleSST(SSTRecord* record);
     void handleXF(XFRecord* record);
+    void handleProtect(ProtectRecord* record);
 
     class Private;
     Private * const d;
